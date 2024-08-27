@@ -1,0 +1,65 @@
+package schema
+
+import (
+	"entgo.io/contrib/entgql"
+	"entgo.io/ent"
+	"entgo.io/ent/schema"
+
+    "github.com/theopenlane/core/internal/ent/mixin"
+)
+
+// {{ . }} holds the schema definition for the {{ . }} entity
+type {{ . }} struct {
+    ent.Schema
+}
+
+// Fields of the {{ . }}
+func ({{ . }}) Fields() []ent.Field {
+    return []ent.Field{
+        // Fields go here
+    }
+}
+
+// Mixin of the {{ . }}
+func ({{ . }}) Mixin() []ent.Mixin {
+    return []ent.Mixin{
+		emixin.AuditMixin{},
+		emixin.IDMixin{},
+		mixin.SoftDeleteMixin{},
+		emixin.TagMixin{},
+    }
+}
+
+// Edges of the {{ . }}
+func ({{ . }}) Edges() []ent.Edge {
+	return []ent.Edge{
+		// Edges go here
+	}
+}
+
+// Indexes of the {{ . }}
+func ({{ . }}) Indexes() []ent.Index {
+	return []ent.Index{}
+}
+
+// Annotations of the {{ . }}
+func ({{ . }}) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entgql.QueryField(),
+		entgql.RelayConnection(),
+		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
+        // the above annotations create all the graphQL goodness; if you need the schema only and not the endpoints, use the below annotation instead
+        // if you do not need the graphql bits, also be certain to add an exclusion to scripts/files_to_skip.txt
+		entgql.Skip(entgql.SkipAll),
+	}
+}
+
+// Hooks of the {{ . }}
+func ({{ . }}) Hooks() []ent.Hook {
+	return []ent.Hook{}
+}
+
+// Interceptors of the {{ . }}
+func ({{ . }}) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{}
+}

@@ -1,0 +1,12 @@
+version: '3'
+
+tasks:
+  create:
+    desc: creates a new fga store with the testdata model
+    cmds:
+      - fga store create --name "core dev" --model model/model.fga
+
+  test:
+    desc: runs the fga model tests
+    cmds:
+      - fga model test --tests tests/tests.yaml

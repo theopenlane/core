@@ -1,0 +1,51 @@
+query GetAllWebhookHistories {
+  webhookHistories {
+    edges {
+      node {
+        createdAt
+        createdBy
+        description
+        destinationURL
+        enabled
+        failures
+        historyTime
+        id
+        lastError
+        lastResponse
+        name
+        operation
+        ownerID
+        ref
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+query GetWebhookHistories($where: WebhookHistoryWhereInput) {
+  webhookHistories(where: $where) {
+    edges {
+      node {
+        createdAt
+        createdBy
+        description
+        destinationURL
+        enabled
+        failures
+        historyTime
+        id
+        lastError
+        lastResponse
+        name
+        operation
+        ownerID
+        ref
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}

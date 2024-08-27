@@ -1,0 +1,51 @@
+query GetAllEntitlementHistories {
+  entitlementHistories {
+    edges {
+      node {
+        cancelled
+        createdAt
+        createdBy
+        expires
+        expiresAt
+        externalCustomerID
+        externalSubscriptionID
+        historyTime
+        id
+        operation
+        organizationID
+        ownerID
+        planID
+        ref
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+query GetEntitlementHistories($where: EntitlementHistoryWhereInput) {
+  entitlementHistories(where: $where) {
+    edges {
+      node {
+        cancelled
+        createdAt
+        createdBy
+        expires
+        expiresAt
+        externalCustomerID
+        externalSubscriptionID
+        historyTime
+        id
+        operation
+        organizationID
+        ownerID
+        planID
+        ref
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}

@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up organizationSetting by ID
+    """
+     organizationSetting(
+        """
+        ID of the organizationSetting
+        """
+        id: ID!
+    ):  OrganizationSetting!
+}
+
+extend type Mutation{
+    """
+    Create a new organizationSetting
+    """
+    createOrganizationSetting(
+        """
+        values of the organizationSetting
+        """
+        input: CreateOrganizationSettingInput!
+    ): OrganizationSettingCreatePayload!
+    """
+    Create multiple new organizationSettings
+    """
+    createBulkOrganizationSetting(
+        """
+        values of the organizationSetting
+        """
+        input: [CreateOrganizationSettingInput!]
+    ): OrganizationSettingBulkCreatePayload!
+    """
+    Create multiple new organizationSettings via file upload
+    """
+    createBulkCSVOrganizationSetting(
+        """
+        csv file containing values of the organizationSetting
+        """
+        input: Upload!
+    ): OrganizationSettingBulkCreatePayload!
+    """
+    Update an existing organizationSetting
+    """
+    updateOrganizationSetting(
+        """
+        ID of the organizationSetting
+        """
+        id: ID!
+        """
+        New values for the organizationSetting
+        """
+        input: UpdateOrganizationSettingInput!
+    ): OrganizationSettingUpdatePayload!
+    """
+    Delete an existing organizationSetting
+    """
+    deleteOrganizationSetting(
+        """
+        ID of the organizationSetting
+        """
+        id: ID!
+    ): OrganizationSettingDeletePayload!
+}
+
+"""
+Return response for createOrganizationSetting mutation
+"""
+type OrganizationSettingCreatePayload {
+    """
+    Created organizationSetting
+    """
+    organizationSetting: OrganizationSetting!
+}
+
+"""
+Return response for updateOrganizationSetting mutation
+"""
+type OrganizationSettingUpdatePayload {
+    """
+    Updated organizationSetting
+    """
+    organizationSetting: OrganizationSetting!
+}
+
+"""
+Return response for deleteOrganizationSetting mutation
+"""
+type OrganizationSettingDeletePayload {
+    """
+    Deleted organizationSetting ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkOrganizationSetting mutation
+"""
+type OrganizationSettingBulkCreatePayload {
+    """
+    Created organizationSettings
+    """
+    organizationSettings: [OrganizationSetting!]
+}

@@ -1,0 +1,22 @@
+{{ reserveImport "github.com/theopenlane/utils/rout" }}
+
+{{ $entity := .Field.TypeReference.Definition.Name | getEntityName  -}}
+{{ $isOrgOwned := .Field | hasOwnerField  -}}
+
+{{- if $isOrgOwned }}
+// set the organization in the auth context if its not done for us
+if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	r.logger.Errorw("failed to set organization in auth context", "error", err)
+
+	return nil, rout.NewMissingRequiredFieldError("owner_id")
+}
+{{- end }}
+
+res, err := withTransactionalMutation(ctx).{{ $entity }}.Create().SetInput(input).Save(ctx)
+if err != nil {
+	return nil, parseRequestError(err, action{action: ActionCreate, object: "{{ $entity | toLower }}"}, r.logger)
+}
+
+return &{{ $entity }}CreatePayload{
+	{{ $entity }}: res,
+}, nil

@@ -1,0 +1,51 @@
+include:
+  - docker-compose-pg.yml
+services:
+  migrate:
+    image: openfga/openfga:v1.5.9
+    container_name: migrate
+    command: migrate
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - OPENFGA_DATASTORE_ENGINE=postgres
+      - OPENFGA_DATASTORE_URI=postgres://postgres:password@postgres:5432/openfga?sslmode=disable
+    networks:
+      - default
+  openfga:
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    image: openfga/openfga:v1.5.9
+    container_name: openfga
+    environment:
+      - OPENFGA_DATASTORE_ENGINE=postgres
+      - OPENFGA_DATASTORE_URI=postgres://postgres:password@postgres:5432/openfga?sslmode=disable
+      - OPENFGA_LOG_FORMAT=json
+      - OPENFGA_DATASTORE_MAX_OPEN_CONNS=100 #see postgres container
+      - OPENFGA_PLAYGROUND_ENABLED=true
+      - OPENFGA_LIST_USERS_MAX_RESULTS=10000
+    command:
+      - run
+      - --check-query-cache-enabled
+      - --metrics-enabled
+      - --datastore-metrics-enabled
+      - --authn-method=preshared
+      - --authn-preshared-keys="QKwHEmWX99RnFh28eSRJ3GWlfb2FQkL7toh1GJpzch1mMkVeMg"
+    healthcheck:
+      test: ["CMD", "/usr/local/bin/grpc_health_probe", "-addr=openfga:8081"]
+      interval: 5s
+      timeout: 30s
+      retries: 3
+    ports:
+      # Needed for the http server
+      - "8080:8080"
+      # Needed for the grpc server (if used)
+      - "8081:8081"
+      # Needed for the playground (Do not enable in prod!)
+      - "3000:3000"
+      # Needed for the prometheus metrics
+      - "2112:2112" #prometheus metrics
+    networks:
+      - default

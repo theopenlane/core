@@ -1,0 +1,36 @@
+version: '3'
+
+tasks:
+  install:
+    desc: install dependencies
+    cmds:
+      - npm install jsonschema2mk --global
+
+  generate:
+    desc: generate the jsonschema and documentation
+    cmds:
+      - task: schema
+      - task: docs
+
+  schema:
+    desc: generate a new jsonschema and corresponding config/config.example.yaml
+    cmds:
+      - go run jsonschema/schema_generator.go
+
+  docs:
+    desc: generate documentation from the jsonschema
+    cmds:
+      - npx jsonschema2mk --schema jsonschema/datum.config.json > jsonschema/api-docs.md
+
+  ci:
+    desc: a task that runs during CI to confirm there are no changes after running generate
+    cmds:
+      - task: generate
+      - "git config --global --add safe.directory /workdir"
+      - |
+        status=$(git status --porcelain)
+        if [ -n "$status" ]; then
+        echo "detected git diff after running generate; please re-run tasks"
+        echo "$status"
+        exit 1
+        fi

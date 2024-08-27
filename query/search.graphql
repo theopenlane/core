@@ -1,0 +1,38 @@
+query Search($query: String!) {
+  search(query: $query) {
+    nodes {
+      ... on OrganizationSearchResult {
+        organizations {
+          description
+          displayName
+          id
+          name
+        }
+      }
+      ... on GroupSearchResult {
+        groups {
+          description
+          displayName
+          id
+          name
+        }
+      }
+      ... on UserSearchResult {
+        users {
+          displayName
+          email
+          firstName
+          id
+          lastName
+        }
+      }
+      ... on SubscriberSearchResult {
+        subscribers {
+          active
+          email
+          id
+        }
+      }
+    }
+  }
+}

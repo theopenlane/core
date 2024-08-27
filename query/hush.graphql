@@ -1,0 +1,160 @@
+mutation CreateBulkCSVHush($input: Upload!) {
+  createBulkCSVHush(input: $input) {
+    hushes {
+      description
+      id
+      kind
+      name
+      secretName
+      integrations {
+        id
+      }
+      organization {
+        id
+      }
+      events {
+        id
+      }
+    }
+  }
+}
+
+mutation CreateBulkHush($input: [CreateHushInput!]) {
+  createBulkHush(input: $input) {
+    hushes {
+      description
+      id
+      kind
+      name
+      secretName
+      integrations {
+        id
+      }
+      organization {
+        id
+      }
+      events {
+        id
+      }
+    }
+  }
+}
+
+mutation CreateHush($input: CreateHushInput!) {
+  createHush(input: $input) {
+    hush {
+      description
+      id
+      kind
+      name
+      secretName
+      integrations {
+        id
+      }
+      organization {
+        id
+      }
+      events {
+        id
+      }
+    }
+  }
+}
+
+query GetAllHushes {
+  hushes {
+    edges {
+      node {
+        description
+        id
+        kind
+        name
+        secretName
+        integrations {
+          id
+        }
+        organization {
+          id
+        }
+        events {
+          id
+        }
+        createdAt
+        updatedAt
+        createdBy
+        updatedBy
+      }
+    }
+  }
+}
+
+query GetHushByID($hushId: ID!) {
+  hush(id: $hushId) {
+    description
+    id
+    kind
+    name
+    secretName
+    integrations {
+      id
+    }
+    organization {
+      id
+    }
+    events {
+      id
+    }
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+  }
+}
+
+query GetHushes($where: HushWhereInput) {
+  hushes(where: $where) {
+    edges {
+      node {
+        description
+        id
+        kind
+        name
+        secretName
+        integrations {
+          id
+        }
+        organization {
+          id
+        }
+        events {
+          id
+        }
+        createdAt
+        updatedAt
+        createdBy
+        updatedBy
+      }
+    }
+  }
+}
+
+mutation UpdateHush($updateHushId: ID!, $input: UpdateHushInput!) {
+  updateHush(id: $updateHushId, input: $input) {
+    hush {
+      description
+      id
+      kind
+      name
+      secretName
+      integrations {
+        id
+      }
+      organization {
+        id
+      }
+      events {
+        id
+      }
+    }
+  }
+}

@@ -1,0 +1,42 @@
+union GlobalSearchResult =
+  | OrganizationSearchResult
+  | GroupSearchResult
+  | UserSearchResult
+  | SubscriberSearchResult
+
+
+
+type OrganizationSearchResult {
+  organizations: [Organization!]
+}
+
+type GroupSearchResult {
+  groups: [Group!]
+}
+
+type UserSearchResult {
+  users: [User!]
+}
+
+type SubscriberSearchResult {
+  subscribers: [Subscriber!]
+}
+
+type GlobalSearchResultConnection {
+  page: PageInfo!
+
+  nodes: [GlobalSearchResult!]!
+}
+
+
+extend type Query{
+    """
+    Search across organizations, groups, and users
+    """
+    search(
+        """
+        Search query
+        """
+        query: String!
+    ): GlobalSearchResultConnection
+}

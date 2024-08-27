@@ -1,0 +1,56 @@
+{{/* The line below tells Intellij/GoLand to enable the autocompletion based on the *gen.Graph type. */}}
+{{/* gotype: entgo.io/ent/entc/gen.Graph */}}
+
+{{ define "edge_cleanup" }}
+
+{{/* Add the base header for the generated file */}}
+{{ $pkg := base $.Config.Package }}
+{{ template "header" $ }}
+
+    {{/* For each schema */}}
+	{{- range $node := $.Nodes }}
+            {{/* create an EdgeCleanup function accepting an ID */}}
+			func {{ $node.Name }}EdgeCleanup(ctx context.Context, id string) error {
+            	// If a user has access to delete the object, they have access to delete all edges
+	            ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup {{ $node.Name | lower }} edge"))
+
+               {{/* For each edge */}}
+               {{- range $edge := $node.Edges }}
+                    {{/* if the edge has our custom annotation applied */}}
+                    {{- if $annotation := $edge.Annotations.ENT_CASCADE }}
+                        {{/* use the client to delete records where the edge schema has a field (provided by the annotation) containing the ID provided by the func */}}
+                        {{/* special case for child fields */}}
+                        {{- if eq $annotation.Field "Child" }}
+                        if exists, err := FromContext(ctx).{{ $edge.Type.Name }}.Query().Where({{ $edge.Type.Name | lower }}.HasParentWith({{ $edge.Type.Name | lower }}.ID(id))).Exist(ctx); err == nil && exists {
+                            if organizationCount, err := FromContext(ctx).{{ $edge.Type.Name  }}.Delete().Where({{ $edge.Type.Name  | lower }}.HasParentWith({{ $edge.Type.Name  | lower }}.ID(id))).Exec(ctx); err != nil {
+                                FromContext(ctx).Logger.Debugw("deleting child {{ $edge.Type.Name | lower }}", "count", {{ $edge.Type.Name | lower }}Count, "err", err)
+                                return err
+                            }
+                        }
+                        {{- else }}
+                        if exists, err := FromContext(ctx).{{ $edge.Type.Name }}.Query().Where(({{ $edge.Type.Name | lower }}.Has{{ $annotation.Field }}With({{ $node.Name | lower }}.ID(id)))).Exist(ctx); err == nil && exists {
+                            if {{ $edge.Type.Name | lower }}Count, err := FromContext(ctx).{{ $edge.Type.Name }}.Delete().Where({{ $edge.Type.Name | lower }}.Has{{ $annotation.Field }}With({{ $node.Name | lower }}.ID(id))).Exec(ctx); err != nil {
+                                FromContext(ctx).Logger.Debugw("deleting {{ $edge.Type.Name | lower }}", "count", {{ $edge.Type.Name | lower }}Count, "err", err)
+                                return err
+                            }
+                        }
+                        {{ end }}
+                    {{ end }}
+               {{- end }}
+               {{- if $annotation := $node.Annotations.ENT_CASCADE_THROUGH }}
+               {{- range $schema := $annotation.Schemas }}
+                    {{- $field := $schema.Through }}
+                    {{/* use the client to delete records where the edge has a field and a through schema (provided by the annotation) containing the ID provided by the func */}}
+                    if exists, err := FromContext(ctx).{{ $field }}.Query().Where(({{ $field | lower }}.Has{{ $schema.Field }}With({{ $node.Name | lower }}.ID(id)))).Exist(ctx); err == nil && exists {
+                        if {{ $field | lower }}Count, err := FromContext(ctx).{{ $field }}.Delete().Where({{ $field | lower }}.Has{{ $schema.Field }}With({{ $node.Name | lower }}.ID(id))).Exec(ctx); err != nil {
+                            FromContext(ctx).Logger.Debugw("deleting {{ $field | lower }}", "count", {{ $field | lower }}Count, "err", err)
+                            return err
+                        }
+                    }
+                    {{ end }}
+                {{ end }}
+               return nil
+            }
+    {{ end }}
+{{ end }}
+

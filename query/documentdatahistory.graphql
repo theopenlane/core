@@ -1,0 +1,43 @@
+
+
+query GetAllDocumentDataHistories {
+  documentDataHistories {
+    edges {
+      node {
+        createdAt
+        createdBy
+        data
+        historyTime
+        id
+        operation
+        ownerID
+        ref
+        tags
+        templateID
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+query GetDocumentDataHistories($where: DocumentDataHistoryWhereInput) {
+  documentDataHistories(where: $where) {
+    edges {
+      node {
+        createdAt
+        createdBy
+        data
+        historyTime
+        id
+        operation
+        ownerID
+        ref
+        tags
+        templateID
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}

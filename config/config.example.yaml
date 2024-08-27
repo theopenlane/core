@@ -1,0 +1,192 @@
+auth:
+    enabled: true
+    providers:
+        github:
+            clientEndpoint: http://localhost:17608
+            clientId: ""
+            clientSecret: ""
+            redirectUrl: /v1/github/callback
+            scopes: null
+        google:
+            clientEndpoint: http://localhost:17608
+            clientId: ""
+            clientSecret: ""
+            redirectUrl: /v1/google/callback
+            scopes: null
+        redirectUrl: http://localhost:3001/api/auth/callback/datum
+        webauthn:
+            debug: false
+            displayName: Datum
+            enabled: true
+            enforceTimeout: true
+            maxDevices: 10
+            relyingPartyId: localhost
+            requestOrigins:
+                - http://localhost:3001
+            timeout: 60000000000
+    supportedProviders: null
+    token:
+        accessDuration: 3600000000000
+        audience: https://theopenlane.io
+        generateKeys: true
+        issuer: https://auth.theopenlane.io
+        jwksEndpoint: https://api.theopenlane.io/.well-known/jwks.json
+        keys: null
+        kid: ""
+        refreshAudience: ""
+        refreshDuration: 7200000000000
+        refreshOverlap: -900000000000
+authz:
+    createNewModel: false
+    credentials:
+        apiToken: ""
+        audience: ""
+        clientId: ""
+        clientSecret: ""
+        issuer: ""
+        scopes: ""
+    enabled: true
+    hostUrl: https://authz.theopenlane.io
+    modelFile: fga/model/datum.fga
+    modelId: ""
+    storeId: ""
+    storeName: datum
+db:
+    cacheTTL: 1000000000
+    databaseName: datum
+    debug: false
+    driverName: libsql
+    enableHistory: false
+    migrationProvider: atlas
+    multiWrite: false
+    primaryDbSource: file:datum.db
+    runMigrations: true
+    secondaryDbSource: file:backup.db
+email:
+    adminEmail: admins@theopenlane.io
+    archive: ""
+    consoleUrl:
+        consoleBase: https://console.theopenlane.io
+        invite: /invite
+        reset: /password-reset
+        verify: /verify
+    datumListId: ""
+    fromEmail: no-reply@theopenlane.io
+    marketingUrl:
+        marketingBase: https://www.theopenlane.io
+        subscriberVerify: /verify
+    sendGridApiKey: ""
+    testing: true
+entConfig:
+    entityTypes: null
+    flags:
+        useListObjectServices: false
+        useListUserService: true
+geodetic:
+    baseUrl: http://localhost:1337
+    debug: false
+    enabled: true
+    endpoint: query
+posthog:
+    apiKey: ""
+    enabled: false
+    host: https://app.posthog.com
+publisherConfig:
+    address: localhost:10000
+    addresses:
+        - localhost:10000
+    appName: datum
+    debug: false
+    enabled: false
+ratelimit:
+    burst: 30
+    enabled: false
+    expires: 600000000000
+    limit: 10
+redis:
+    address: localhost:6379
+    db: 0
+    dialTimeout: 5000000000
+    enabled: true
+    maxActiveConns: 0
+    maxIdleConns: 0
+    maxRetries: 3
+    minIdleConns: 0
+    name: datum
+    password: ""
+    readTimeout: 0
+    username: ""
+    writeTimeout: 0
+refreshInterval: 600000000000
+server:
+    cacheControl:
+        enabled: true
+        etagHeaders: null
+        noCacheHeaders: null
+    cors:
+        allowOrigins: null
+        cookieInsecure: false
+        enabled: true
+        prefixes: null
+    debug: false
+    dev: false
+    enableGraphExtensions: true
+    graphPool:
+        maxCapacity: 1000
+        maxWorkers: 100
+    idleTimeout: 30000000000
+    listen: :17608
+    mime:
+        defaultContentType: application/data
+        enabled: true
+        mimeTypesFile: ""
+    readHeaderTimeout: 2000000000
+    readTimeout: 15000000000
+    redirects:
+        code: 0
+        enabled: true
+        redirects: null
+    secure:
+        contentsecuritypolicy: default-src 'self'
+        contenttypenosniff: nosniff
+        cspreportonly: false
+        enabled: true
+        hstsmaxage: 31536000
+        hstspreloadenabled: false
+        referrerpolicy: same-origin
+        xframeoptions: SAMEORIGIN
+        xssprotection: 1; mode=block
+    shutdownGracePeriod: 10000000000
+    tls:
+        autoCert: false
+        certFile: server.crt
+        certKey: server.key
+        config: null
+        enabled: false
+    writeTimeout: 15000000000
+sessions:
+    domain: ""
+    encryptionKey: encryptionsecret
+    signingKey: my-signing-secret
+totp:
+    codeLength: 6
+    enabled: true
+    issuer: datum
+    recoveryCodeCount: 16
+    recoveryCodeLength: 8
+    redis: true
+    secret: ""
+tracer:
+    enabled: false
+    environment: development
+    otlp:
+        certificate: ""
+        compression: ""
+        endpoint: localhost:4317
+        headers: null
+        insecure: true
+        timeout: 10000000000
+    provider: stdout
+    stdout:
+        disableTimestamp: false
+        pretty: true

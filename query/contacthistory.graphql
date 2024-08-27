@@ -1,0 +1,51 @@
+query GetAllContactHistories {
+  contactHistories {
+    edges {
+      node {
+        address
+        company
+        createdAt
+        createdBy
+        email
+        fullName
+        historyTime
+        id
+        operation
+        ownerID
+        phoneNumber
+        ref
+        status
+        tags
+        title
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+query GetContactHistories($where: ContactHistoryWhereInput) {
+  contactHistories(where: $where) {
+    edges {
+      node {
+        address
+        company
+        createdAt
+        createdBy
+        email
+        fullName
+        historyTime
+        id
+        operation
+        ownerID
+        phoneNumber
+        ref
+        status
+        tags
+        title
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}

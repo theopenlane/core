@@ -1,0 +1,171 @@
+mutation CreateBulkCSVEntitlement($input: Upload!) {
+  createBulkCSVEntitlement(input: $input) {
+    entitlements {
+      id
+      plan {
+        id
+        name
+      }
+      expires
+      expiresAt
+      cancelled
+      externalCustomerID
+      externalSubscriptionID
+      organization {
+        id
+        name
+      }
+    }
+  }
+}
+
+mutation CreateBulkEntitlement($input: [CreateEntitlementInput!]) {
+  createBulkEntitlement(input: $input) {
+    entitlements {
+      id
+      plan {
+        id
+        name
+      }
+      organization {
+        id
+        name
+      }
+      expires
+      expiresAt
+      cancelled
+      externalCustomerID
+      externalSubscriptionID
+    }
+  }
+}
+
+mutation CreateEntitlement($input: CreateEntitlementInput!) {
+  createEntitlement(input: $input) {
+    entitlement {
+      id
+      plan {
+        id
+        name
+      }
+      organization {
+        id
+        name
+      }
+      expires
+      expiresAt
+      cancelled
+      externalCustomerID
+      externalSubscriptionID
+    }
+  }
+}
+
+mutation DeleteEntitlement($deleteEntitlementId: ID!) {
+  deleteEntitlement(id: $deleteEntitlementId) {
+    deletedID
+  }
+}
+
+query GetAllEntitlements {
+  entitlements {
+    edges {
+      node {
+        id
+        plan {
+          id
+          name
+          features {
+            metadata
+            feature {
+              id
+              name
+            }
+          }
+        }
+        organization {
+          id
+          name
+        }
+        expires
+        expiresAt
+        cancelled
+        externalCustomerID
+        externalSubscriptionID
+      }
+    }
+  }
+}
+
+query GetEntitlementByID($entitlementId: ID!) {
+  entitlement(id: $entitlementId) {
+    id
+    plan {
+      id
+      name
+      features {
+        metadata
+        feature {
+          id
+          name
+        }
+      }
+    }
+    organization {
+      id
+      name
+    }
+    expires
+    expiresAt
+    cancelled
+    externalCustomerID
+    externalSubscriptionID
+  }
+}
+
+query GetEntitlements($where: EntitlementWhereInput) {
+  entitlements(where: $where) {
+    edges {
+      node {
+        id
+        plan {
+          id
+          name
+          features {
+            metadata
+            feature {
+              id
+              name
+            }
+          }
+        }
+        organization {
+          id
+          name
+        }
+        expires
+        expiresAt
+        cancelled
+        externalCustomerID
+        externalSubscriptionID
+      }
+    }
+  }
+}
+
+mutation UpdateEntitlement($updateEntitlementId: ID!, $input: UpdateEntitlementInput!) {
+  updateEntitlement(id: $updateEntitlementId, input: $input) {
+    entitlement {
+      id
+      plan {
+        id
+        name
+      }
+      expires
+      expiresAt
+      cancelled
+      externalCustomerID
+      externalSubscriptionID
+    }
+  }
+}

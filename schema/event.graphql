@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up event by ID
+    """
+     event(
+        """
+        ID of the event
+        """
+        id: ID!
+    ):  Event!
+}
+
+extend type Mutation{
+    """
+    Create a new event
+    """
+    createEvent(
+        """
+        values of the event
+        """
+        input: CreateEventInput!
+    ): EventCreatePayload!
+    """
+    Create multiple new events
+    """
+    createBulkEvent(
+        """
+        values of the event
+        """
+        input: [CreateEventInput!]
+    ): EventBulkCreatePayload!
+    """
+    Create multiple new events via file upload
+    """
+    createBulkCSVEvent(
+        """
+        csv file containing values of the event
+        """
+        input: Upload!
+    ): EventBulkCreatePayload!
+    """
+    Update an existing event
+    """
+    updateEvent(
+        """
+        ID of the event
+        """
+        id: ID!
+        """
+        New values for the event
+        """
+        input: UpdateEventInput!
+    ): EventUpdatePayload!
+    """
+    Delete an existing event
+    """
+    deleteEvent(
+        """
+        ID of the event
+        """
+        id: ID!
+    ): EventDeletePayload!
+}
+
+"""
+Return response for createEvent mutation
+"""
+type EventCreatePayload {
+    """
+    Created event
+    """
+    event: Event!
+}
+
+"""
+Return response for updateEvent mutation
+"""
+type EventUpdatePayload {
+    """
+    Updated event
+    """
+    event: Event!
+}
+
+"""
+Return response for deleteEvent mutation
+"""
+type EventDeletePayload {
+    """
+    Deleted event ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkEvent mutation
+"""
+type EventBulkCreatePayload {
+    """
+    Created events
+    """
+    events: [Event!]
+}

@@ -1,0 +1,250 @@
+version: "3"
+
+includes:
+  cli:
+    taskfile: ./cmd/cli/Taskfile.yaml
+    dir: ./cmd/cli
+  docker:
+    taskfile: ./docker/Taskfile.yaml
+    dir: ./docker
+    aliases: [compose]
+  fga:
+    taskfile: ./fga/Taskfile.yaml
+    dir: ./fga
+  db:
+    taskfile: ./db/Taskfile.yaml
+    dir: ./db
+    aliases: [atlas]
+  config:
+    taskfile: ./jsonschema/Taskfile.yaml
+
+env:
+  ATLAS_SQLITE_DB_URI: "sqlite://file?mode=memory&_fk=1"
+  ATLAS_POSTGRES_DB_URI: "postgres:16-alpine"
+  TEST_DB_URL: "docker://postgres:16-alpine"
+  TEST_DB_CONTAINER_EXPIRY: "2" # in minutes
+  TEST_FGA_URL: "localhost:8080"
+  ENV: config
+
+tasks:
+  default:
+    silent: true
+    cmds:
+      - task --list
+
+  generate:
+    desc: a combination of the ent, graph, and gqlgen tasks which are required to fully generate the necessary graph, server, resolvers, client, etc.
+    cmds:
+      - go generate ./...
+
+  ## Go tasks
+  go:lint:
+    desc: runs golangci-lint, the most annoying opinionated linter ever
+    cmds:
+      - golangci-lint run --config=.golangci.yaml --verbose --fast --fix
+
+  go:test:
+    desc: runs and outputs results of created go tests
+    aliases: ['go:test:psql', 'test:psql']
+    env:
+      TEST_DB_URL: "docker://postgres:16-alpine"
+    cmds:
+      - go test -v ./...
+
+  go:test:libsql:
+    desc: runs and outputs results of created go tests
+    aliases: ['test:libsql']
+    env:
+      TEST_DB_URL: "libsql://file::memory:?cache=shared"
+    cmds:
+      - go test -v ./...
+
+  go:test:cover:
+    desc: runs and outputs results of created go tests with coverage
+    aliases: [cover]
+    cmds:
+      - go test -v ./... -coverprofile=coverage.out
+      - go tool cover -html=coverage.out
+
+  go:fmt:
+    desc: format all go code
+    cmds:
+      - go fmt ./...
+
+  go:tidy:
+    desc: Runs go mod tidy on the backend
+    aliases: [tidy]
+    cmds:
+      - go mod tidy
+
+  go:build:
+    desc: Runs go build for the core server
+    cmds:
+      - go build -mod=mod -o core
+
+  go:build-cli:
+    aliases: [buildcli]
+    desc: Runs go build for the core cli
+    cmds:
+      - go build -mod=mod -o core-cli ./cmd/cli
+
+  go:all:
+    aliases: [go]
+    desc: Runs all go test and lint related tasks
+    cmds:
+      - task: go:tidy
+      - task: go:fmt
+      - task: go:lint
+      - task: go:test
+
+  # dev tasks
+  run-dev:
+    dotenv: ["{{.ENV}}/.env-dev"]
+    desc: runs the core server in dev mode
+    cmds:
+      - task: compose:redis
+      - task: compose:fga
+      - task: compose:kafka
+      - task: run-api
+
+  run-api:
+    dotenv: ["{{.ENV}}/.env-dev"]
+    desc: runs the core server in dev mode, assumes all other dependencies are running
+    cmds:
+      - go run main.go serve --debug --pretty
+
+  pr:
+    desc: runs the comprehensive roll-up tasks required to ensure all files are being committed / pushed as a part of opening a PR
+    cmds:
+      - task: generate
+      - task: config:generate
+      - task: atlas:create
+      - task: go
+      - task: fga:test
+
+  ci:
+    desc: a task that runs during CI
+    cmds:
+      - task: generate
+      - task: tidy
+      - "git config --global --add safe.directory /workdir"
+      - |
+        status=$(git status --porcelain)
+        if [ -n "$status" ]; then
+        echo "detected git diff after running generate; please re-run tasks"
+        echo "$status"
+        exit 1
+        fi
+
+  clean:local:
+    desc: cleans up core.db and core-cli local
+    cmds:
+      - "rm -f core.db"
+      - "rm -f core-cli"
+      - task: buildcli
+
+  shell:
+    desc: open a new shell to launch server as a dep
+    cmds:
+      - rm -f core.db
+      - rm -f core-cli
+      - osascript -e 'tell app "Terminal" to do script "cd {{.PWD}} && task run-dev"'
+    vars:
+      PWD:
+        sh: pwd
+
+  install:all:
+    desc: installs all dependencies for the project
+    aliases: [install]
+    cmds:
+      - task: install:tools
+      - task: brew-install
+      - task: local-setup
+
+  install:tools:
+    desc: Installs tools from tools.go
+    run: once
+    cmds:
+      - echo Installing tools from tools.go
+      - cat tools.go | grep _ | awk -F'/' '{print $NF}' | awk -F'"' '{print "which "$1}' | sh $1 | xargs rm -f
+      - cat tools.go | grep _ | awk -F'"' '{print $2}' | xargs -tI % go install %
+    sources:
+      - tools.go
+      - go.mod
+
+  update-brew:
+    desc: Update Homebrew and upgrade all packages
+    cmds:
+      - brew update && brew upgrade && brew cleanup || true
+
+  local-setup:
+    desc: Setup the project dependencies
+    cmds:
+      - command -v gcloud &> /dev/null || curl https://sdk.cloud.google.com | bash
+      - sudo npm install jsonschema2mk --global
+      - sudo npm install format-graphql
+      - go mod download
+      - pre-commit install && pre-commit install-hooks
+      - pre-commit autoupdate
+      - go mod tidy && go get -u ./... &> /dev/null
+      - pre-commit run --show-diff-on-failure --color=always --all-files
+      - task: rover:install
+
+  precommit-full:
+    desc: Lint the project against all files
+    cmds:
+      - pre-commit install && pre-commit install-hooks
+      - pre-commit autoupdate
+      - pre-commit run --show-diff-on-failure --color=always --all-files
+
+  brew-install:
+    desc: Install workstation dependencies with Brew
+    cmds:
+      - task: update-brew
+      - echo "Installing {{.DEPS}} via homebrew..."
+      - brew install {{.DEPS}} {{.CLI_ARGS}}
+      - echo "Installed {{.DEPS}} via homebrew!"
+    deps:
+      - task: brew-installed
+    status:
+      - '[ -f $(brew --prefix)/bin/{{.DEPS}} ]'
+    vars:
+      DEPS: >-
+        age helm kubernetes-cli yq jq gomplate golangci-lint openfga/tap/fga pre-commit ariga/tap/atlas rover #magic___^_^___line
+  brew-installed:
+    silent: true
+    desc: check if Homebrew is installed
+    cmds:
+      - '[ -x "$(command -v brew)" ] || (echo "Homebrew is not installed, please install it from https://brew.sh" && exit 1)'
+
+  go:dist:
+    desc: Downloads a Golang distribution
+    silent: true
+    vars:
+      GO_VERSION:
+        sh: curl -sk "https://go.dev/VERSION?m=text" | head -n 1 |  sed 's/go//g'
+      GO_URL: https://go.dev/dl/go{{.GO_VERSION}}.darwin-arm64.tar.gz
+    cmds:
+      - test -d /usr/local/go-{{.GO_VERSION}} || curl -L -o go{{.GO_VERSION}}.darwin-arm64.tar.gz {{.GO_URL}} && sudo tar -C /usr/local -xzf go{{.GO_VERSION}}.darwin-arm64.tar.gz
+    status:
+      - test -d /usr/local/go-{{.GO_VERSION}}
+
+  rover:
+    aliases:
+      - docker:rover # adding for backwards compatibility
+    desc: launches an interactive browser to navigate the configured graph schema
+    cmds:
+      - 'open "http://localhost:4000"'
+      - rover dev --skip-update-check --skip-update -u http://localhost:17608/query -s schema.graphql -n core --elv2-license=accept
+
+  rover:update:
+    desc: updates rover, if updates are available, and launches an interactive browser to navigate the configured graph schema
+    cmds:
+      - 'open "http://localhost:4000"'
+      - rover dev -u http://localhost:17608/query -s schema.graphql -n core --elv2-license=accept
+
+  rover:install:
+    desc: installs the rover plugins for supergraph and router
+    cmds:
+      - rover install --plugin supergraph@v2.8.2
+      - rover install --plugin router@v1.50.0

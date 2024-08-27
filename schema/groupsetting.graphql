@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up groupSetting by ID
+    """
+     groupSetting(
+        """
+        ID of the groupSetting
+        """
+        id: ID!
+    ):  GroupSetting!
+}
+
+extend type Mutation{
+    """
+    Create a new groupSetting
+    """
+    createGroupSetting(
+        """
+        values of the groupSetting
+        """
+        input: CreateGroupSettingInput!
+    ): GroupSettingCreatePayload!
+    """
+    Create multiple new groupSettings
+    """
+    createBulkGroupSetting(
+        """
+        values of the groupSetting
+        """
+        input: [CreateGroupSettingInput!]
+    ): GroupSettingBulkCreatePayload!
+    """
+    Create multiple new groupSettings via file upload
+    """
+    createBulkCSVGroupSetting(
+        """
+        csv file containing values of the groupSetting
+        """
+        input: Upload!
+    ): GroupSettingBulkCreatePayload!
+    """
+    Update an existing groupSetting
+    """
+    updateGroupSetting(
+        """
+        ID of the groupSetting
+        """
+        id: ID!
+        """
+        New values for the groupSetting
+        """
+        input: UpdateGroupSettingInput!
+    ): GroupSettingUpdatePayload!
+    """
+    Delete an existing groupSetting
+    """
+    deleteGroupSetting(
+        """
+        ID of the groupSetting
+        """
+        id: ID!
+    ): GroupSettingDeletePayload!
+}
+
+"""
+Return response for createGroupSetting mutation
+"""
+type GroupSettingCreatePayload {
+    """
+    Created groupSetting
+    """
+    groupSetting: GroupSetting!
+}
+
+"""
+Return response for updateGroupSetting mutation
+"""
+type GroupSettingUpdatePayload {
+    """
+    Updated groupSetting
+    """
+    groupSetting: GroupSetting!
+}
+
+"""
+Return response for deleteGroupSetting mutation
+"""
+type GroupSettingDeletePayload {
+    """
+    Deleted groupSetting ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkGroupSetting mutation
+"""
+type GroupSettingBulkCreatePayload {
+    """
+    Created groupSettings
+    """
+    groupSettings: [GroupSetting!]
+}

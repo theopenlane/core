@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up contact by ID
+    """
+     contact(
+        """
+        ID of the contact
+        """
+        id: ID!
+    ):  Contact!
+}
+
+extend type Mutation{
+    """
+    Create a new contact
+    """
+    createContact(
+        """
+        values of the contact
+        """
+        input: CreateContactInput!
+    ): ContactCreatePayload!
+    """
+    Create multiple new contacts
+    """
+    createBulkContact(
+        """
+        values of the contact
+        """
+        input: [CreateContactInput!]
+    ): ContactBulkCreatePayload!
+    """
+    Create multiple new contacts via file upload
+    """
+    createBulkCSVContact(
+        """
+        csv file containing values of the contact
+        """
+        input: Upload!
+    ): ContactBulkCreatePayload!
+    """
+    Update an existing contact
+    """
+    updateContact(
+        """
+        ID of the contact
+        """
+        id: ID!
+        """
+        New values for the contact
+        """
+        input: UpdateContactInput!
+    ): ContactUpdatePayload!
+    """
+    Delete an existing contact
+    """
+    deleteContact(
+        """
+        ID of the contact
+        """
+        id: ID!
+    ): ContactDeletePayload!
+}
+
+"""
+Return response for createContact mutation
+"""
+type ContactCreatePayload {
+    """
+    Created contact
+    """
+    contact: Contact!
+}
+
+"""
+Return response for updateContact mutation
+"""
+type ContactUpdatePayload {
+    """
+    Updated contact
+    """
+    contact: Contact!
+}
+
+"""
+Return response for deleteContact mutation
+"""
+type ContactDeletePayload {
+    """
+    Deleted contact ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkContact mutation
+"""
+type ContactBulkCreatePayload {
+    """
+    Created contacts
+    """
+    contacts: [Contact!]
+}

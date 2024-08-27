@@ -1,0 +1,137 @@
+mutation CreateBulkCSVOhAuthTooToken($input: Upload!) {
+  createBulkCSVOhAuthTooToken(input: $input) {
+    ohAuthTooTokens {
+      claimsEmail
+      claimsEmailVerified
+      claimsGroups
+      claimsPreferredUsername
+      claimsUserID
+      claimsUsername
+      clientID
+      connectorData
+      connectorID
+      id
+      lastUsed
+      nonce
+      scopes
+      integration {
+        id
+      }
+      events {
+        id
+      }
+    }
+  }
+}
+
+mutation CreateBulkOhAuthTooToken($input: [CreateOhAuthTooTokenInput!]) {
+  createBulkOhAuthTooToken(input: $input) {
+    ohAuthTooTokens {
+      claimsEmail
+      claimsEmailVerified
+      claimsGroups
+      claimsPreferredUsername
+      claimsUserID
+      claimsUsername
+      clientID
+      connectorData
+      connectorID
+      id
+      lastUsed
+      nonce
+      scopes
+      integration {
+        id
+      }
+      events {
+        id
+      }
+    }
+  }
+}
+
+mutation CreateOhAuthTooToken($input: CreateOhAuthTooTokenInput!) {
+  createOhAuthTooToken(input: $input) {
+    ohAuthTooToken {
+      claimsEmail
+      claimsEmailVerified
+      claimsGroups
+      claimsPreferredUsername
+      claimsUserID
+      claimsUsername
+      clientID
+      connectorData
+      connectorID
+      id
+      lastUsed
+      nonce
+      scopes
+      integration {
+        id
+      }
+      events {
+        id
+      }
+    }
+  }
+}
+
+mutation DeleteOhAuthTooToken($deleteOhAuthTooTokenId: ID!) {
+  deleteOhAuthTooToken(id: $deleteOhAuthTooTokenId) {
+    deletedID
+  }
+}
+
+query GetOhAuthTooTokens($where: OhAuthTooTokenWhereInput) {
+  ohAuthTooTokens(where: $where) {
+    edges {
+      node {
+        claimsEmail
+        claimsEmailVerified
+        claimsGroups
+        claimsPreferredUsername
+        claimsUserID
+        claimsUsername
+        clientID
+        connectorData
+        connectorID
+        id
+        lastUsed
+        nonce
+        scopes
+        integration {
+          id
+        }
+        events {
+          id
+        }
+      }
+    }
+  }
+}
+
+mutation UpdateOhAuthTooToken($updateOhAuthTooTokenId: ID!, $input: UpdateOhAuthTooTokenInput!) {
+  updateOhAuthTooToken(id: $updateOhAuthTooTokenId, input: $input) {
+    ohAuthTooToken {
+      claimsEmail
+      claimsEmailVerified
+      claimsGroups
+      claimsPreferredUsername
+      claimsUserID
+      claimsUsername
+      clientID
+      connectorData
+      connectorID
+      id
+      lastUsed
+      nonce
+      scopes
+      integration {
+        id
+      }
+      events {
+        id
+      }
+    }
+  }
+}

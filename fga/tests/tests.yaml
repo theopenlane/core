@@ -1,0 +1,427 @@
+name: TheOpenLane
+model_file: ../model/model.fga
+tuples:
+  # setup parent child org relationship
+  - user: organization:meow
+    relation: parent
+    object: organization:woof
+  # setup org primary owner
+  - user: user:ulid-of-owner
+    relation: owner
+    object: organization:meow
+  # setup org admin
+  - user: user:ulid-of-admin
+    relation: admin
+    object: organization:meow
+  # setup org member
+  - user: user:ulid-of-member
+    relation: member
+    object: organization:meow
+  # setup audit log viewer
+  - user: user:ulid-of-audit-log-viewer
+    relation: audit_log_viewer
+    object: organization:meow
+  # setup service user
+  - user: service:ulid-of-service-editor
+    relation: can_edit
+    object: organization:meow
+  # setup service user
+  - user: service:ulid-of-service-viewer
+    relation: can_view
+    object: organization:meow
+tests:
+  - name: organization
+    description: test organization relationships
+    tuples:
+    # add test local tuples here
+    check:
+      - user: user:ulid-of-owner
+        object: organization:meow # parent org
+        assertions:
+          member: true
+          admin: false
+          owner: true
+          can_delete: true
+          can_edit: true
+          can_view: true
+          audit_log_viewer: true
+          can_invite_members: true
+          can_invite_admins: true
+      - user: user:ulid-of-member
+        object: organization:meow # parent org
+        assertions:
+          member: true
+          admin: false
+          owner: false
+          can_delete: false
+          can_edit: false
+          can_view: true
+          audit_log_viewer: false
+          can_invite_members: true
+          can_invite_admins: false
+      - user: service:ulid-of-service-editor
+        object: organization:meow # parent org
+        assertions:
+          member: false
+          admin: false
+          owner: false
+          can_delete: false
+          can_edit: true
+          can_view: true
+          audit_log_viewer: false
+          can_invite_members: true
+          can_invite_admins: true
+      - user: service:ulid-of-service-viewer
+        object: organization:meow # parent org
+        assertions:
+          member: false
+          admin: false
+          owner: false
+          can_delete: false
+          can_edit: false
+          can_view: true
+          audit_log_viewer: false
+          can_invite_members: false
+          can_invite_admins: false
+      - user: user:ulid-of-admin
+        object: organization:meow # parent org
+        assertions:
+          member: true
+          admin: true
+          owner: false
+          can_delete: false
+          can_edit: true
+          can_view: true
+          audit_log_viewer: false
+          can_invite_members: true
+          can_invite_admins: true
+      - user: user:ulid-of-audit-log-viewer
+        object: organization:meow # parent org
+        assertions:
+          member: false
+          admin: false
+          owner: false
+          can_delete: false
+          can_edit: false
+          can_view: false
+          audit_log_viewer: true
+          can_invite_members: false
+          can_invite_admins: false
+      - user: user:ulid-of-owner
+        object: organization:dog #child org
+        assertions:
+          member: true
+          admin: false
+          owner: true
+          can_delete: true
+          can_edit: true
+          can_view: true
+          audit_log_viewer: true
+          can_invite_members: true
+          can_invite_admins: true
+      - user: user:ulid-of-member
+        object: organization:dog # child org
+        assertions:
+          member: true
+          admin: false
+          owner: false
+          can_delete: false
+          can_edit: false
+          can_view: true
+          audit_log_viewer: false
+          can_invite_members: true
+          can_invite_admins: false
+      - user: user:ulid-of-admin
+        object: organization:dog # child org
+        assertions:
+          member: true
+          admin: true
+          owner: false
+          can_delete: false
+          can_edit: true
+          can_view: true
+          audit_log_viewer: false
+          can_invite_members: true
+          can_invite_admins: true
+    list_objects:
+      - user: user:ulid-of-owner
+        type: organization
+        assertions:
+          owner:
+            - organization:dog
+            - organization:meow
+          admin:
+          member:
+            - organization:dog
+            - organization:meow
+      - user: user:ulid-of-member
+        type: organization
+        assertions:
+          owner:
+          admin:
+          member:
+            - organization:dog
+            - organization:meow
+      - user: service:ulid-of-service-editor
+        type: organization
+        assertions:
+          can_edit:
+            - organization:dog
+            - organization:meow
+          can_view:
+            - organization:dog
+            - organization:meow
+      - user: service:ulid-of-service-viewer
+        type: organization
+        assertions:
+          can_edit:
+          can_view:
+            - organization:dog
+            - organization:meow
+      - user: user:ulid-of-admin
+        type: organization
+        assertions:
+          owner:
+          admin:
+            - organization:dog
+            - organization:meow
+          member:
+            - organization:dog
+            - organization:meow
+  - name: groups
+    description: test group relationships to their parent (organization)
+    tuples:
+      # setup group with owner
+      - user: organization:meow
+        relation: parent
+        object: group:cat-lovers
+      # add group admin
+      - user: user:ulid-of-owner
+        relation: admin
+        object: group:cat-lovers
+      # add group member but not a member of the org
+      - user: user:ulid-of-cat-lover-member
+        relation: member
+        object: group:cat-lovers
+      # add audit log viewer
+      - user: user:ulid-of-audit-log-viewer
+        relation: audit_log_viewer
+        object: group:cat-lovers
+      # add group admin
+      - user: user:ulid-of-member
+        relation: member
+        object: group:cat-lovers
+    check:
+      - user: organization:meow
+        object: group:cat-lovers
+        assertions:
+          parent: true
+      - user: user:ulid-of-owner
+        object: group:cat-lovers
+        assertions:
+          admin: true
+          member: false
+          can_delete: true
+          can_edit: true
+          can_view: true
+          audit_log_viewer: true
+      - user: user:ulid-of-cat-lover-member
+        object: group:cat-lovers
+        assertions:
+          admin: false
+          member: false # not an org member so should be false
+          can_delete: false
+          can_edit: false
+          can_view: false
+          audit_log_viewer: false
+      - user: user:ulid-of-member
+        object: group:cat-lovers
+        assertions:
+          admin: false
+          member: true
+          can_delete: false
+          can_edit: false
+          can_view: true
+          audit_log_viewer: false
+      - user: service:ulid-of-service-editor
+        object: group:cat-lovers
+        assertions:
+          admin: false
+          member: false
+          can_delete: false
+          can_edit: true
+          can_view: true
+          audit_log_viewer: false
+    list_objects:
+      - user: user:ulid-of-owner
+        type: group
+        assertions:
+          admin:
+            - group:cat-lovers
+          member:
+      - user: user:ulid-of-member
+        type: group
+        assertions:
+          admin:
+          member:
+            - group:cat-lovers
+      - user: user:ulid-of-admin # user wasn't added to group
+        type: group
+        assertions:
+          admin:
+          member:
+  - name: subscription tier
+    description: subscription tiers are associated to organizations, and members are part of that organization
+    tuples:
+      # setup organization with pro tier
+      - user: organization:meow
+        relation: subscriber
+        object: subscription_tier:pro
+      # setup organization with free tier
+      - user: organization:startup
+        relation: subscriber
+        object: subscription_tier:free
+    check:
+      - user: organization:meow
+        object: subscription_tier:pro
+        assertions:
+          subscriber: true
+          subscriber_member: false
+      - user: organization:meow
+        object: subscription_tier:free
+        assertions:
+          subscriber: false
+          subscriber_member: false
+      - user: organization:startup
+        object: subscription_tier:free
+        assertions:
+          subscriber: true
+          subscriber_member: false
+      - user: user:ulid-of-member
+        object: subscription_tier:pro
+        assertions:
+          subscriber: false
+          subscriber_member: true
+      - user: user:ulid-of-owner
+        object: subscription_tier:pro
+        assertions:
+          subscriber: false
+          subscriber_member: true
+      - user: user:ulid-of-admin
+        object: subscription_tier:pro
+        assertions:
+          subscriber: false
+          subscriber_member: true
+    list_objects:
+      - user: user:ulid-of-owner
+        type: subscription_tier
+        assertions:
+          subscriber_member:
+            - subscription_tier:pro
+          subscriber:
+      - user: user:ulid-of-admin
+        type: subscription_tier
+        assertions:
+          subscriber_member:
+            - subscription_tier:pro
+          subscriber:
+      - user: user:ulid-of-member
+        type: subscription_tier
+        assertions:
+          subscriber_member:
+            - subscription_tier:pro
+          subscriber:
+      - user: organization:meow
+        type: subscription_tier
+        assertions:
+          subscriber_member:
+          subscriber:
+            - subscription_tier:pro
+      - user: organization:startup
+        type: subscription_tier
+        assertions:
+          subscriber_member:
+          subscriber:
+            - subscription_tier:free
+      - user: organization:none
+        type: subscription_tier
+        assertions:
+          subscriber_member:
+          subscriber:
+  - name: features
+    description: features tiers are associated to subscription tiers, and users can access features based on their subscription tier of their organization
+    tuples:
+      # setup organization with pro tier
+      - user: organization:meow
+        relation: subscriber
+        object: subscription_tier:pro
+      # setup organization with free tier
+      - user: organization:startup
+        relation: subscriber
+        object: subscription_tier:free
+      # setup org member
+      - user: user:ulid-of-startup-member
+        relation: member
+        object: organization:startup
+      - user: subscription_tier:free
+        relation: associated_subscription_tier
+        object: feature:asset-management
+      - user: subscription_tier:pro
+        relation: associated_subscription_tier
+        object: feature:sso
+    check:
+      - user: user:ulid-of-startup-member
+        object: feature:asset-management
+        assertions:
+          associated_subscription_tier: false
+          access: true
+      - user: user:ulid-of-admin
+        object: feature:sso
+        assertions:
+          associated_subscription_tier: false
+          access: true
+      - user: user:ulid-of-owner
+        object: feature:sso
+        assertions:
+          associated_subscription_tier: false
+          access: true
+      - user: user:ulid-of-member
+        object: feature:sso
+        assertions:
+          associated_subscription_tier: false
+          access: true
+      - user: subscription_tier:pro
+        object: feature:sso
+        assertions:
+          associated_subscription_tier: true
+          access: false
+      - user: subscription_tier:free
+        object: feature:asset-management
+        assertions:
+          associated_subscription_tier: true
+          access: false
+    list_objects:
+      - user: user:ulid-of-owner
+        type: feature
+        assertions:
+          associated_subscription_tier:
+          access:
+            - feature:sso
+      - user: user:ulid-of-startup-member
+        type: feature
+        assertions:
+          associated_subscription_tier:
+          access:
+            - feature:asset-management
+      - user: subscription_tier:free
+        type: feature
+        assertions:
+          associated_subscription_tier:
+            - feature:asset-management
+          access:
+      - user: subscription_tier:pro
+        type: feature
+        assertions:
+          associated_subscription_tier:
+            - feature:sso
+          access:

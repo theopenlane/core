@@ -1,0 +1,102 @@
+version: "3"
+
+tasks:
+  build:
+    dir: ..
+    desc: builds the core docker image
+    cmds:
+      - "docker build -f docker/Dockerfile . -t core:dev"
+
+  build:aio:
+    dir: ..
+    desc: builds the core docker image all-in-one image
+    cmds:
+      - "docker build -f ./docker/all-in-one/Dockerfile.all-in-one -t core:dev-aio ."
+
+  core:
+    dir: ..
+    desc: brings up the compose environment for the core server
+    deps: [build]
+    cmds:
+      - "docker compose -f ./docker/docker-compose-redis.yml -f ./docker/docker-compose-fga.yml -f ./docker/docker-compose-kafka.yml -f ./docker/docker-compose.yml -p core up -d"
+
+  core:down:
+    dir: ..
+    desc: brings the core compose environment down
+    cmds:
+      - "docker compose -p core down"
+
+  all:up:
+    dir: ..
+    desc: brings up the full docker compose development environment including core server, fga, and rover
+    cmds:
+      - task: core
+      - task: :rover
+
+  all:down:
+    dir: ..
+    desc: brings down both fga and core server compose environments
+    cmds:
+      - task: core:down
+
+  redis:
+    dir: ..
+    desc: brings up the compose environment for redis
+    cmds:
+      - "docker compose -f ./docker/docker-compose-redis.yml -p redis up -d"
+
+  redis:down:
+    dir: ..
+    desc: brings up the compose environment for redis
+    cmds:
+      - "docker compose -p redis down"
+
+  postgres:
+    dir: ..
+    desc: brings up the compose environment for postgres development
+    cmds:
+      - "docker compose -f ./docker/docker-compose-pg.yml -p postgres up -d"
+
+  postgres:down:
+    dir: ..
+    desc: brings the postgres compose environment down
+    cmds:
+      - docker compose -p postgres down
+
+  fga:
+    dir: ..
+    desc: brings up the compose environment for openfga development
+    cmds:
+      - "docker compose -f ./docker/docker-compose-fga.yml -p fga up -d"
+
+  fga:down:
+    dir: ..
+    desc: brings the fga compose environment down
+    cmds:
+      - docker compose -p fga down
+
+  fga:open:
+    dir: ..
+    desc: opens the fga playground in a browser
+    cmds:
+      - 'open "http://localhost:3000/playground"'
+
+  fga:up:
+    dir: ..
+    desc: brings the fga compose environment up and opens the fga playground
+    aliases: [fgaup]
+    cmds:
+      - task: fga
+      - task: fga:open
+
+  kafka:
+    dir: ..
+    desc: brings up the compose environment for kafka
+    cmds:
+      - "docker compose -f ./docker/docker-compose-kafka.yml -p kafka up --build -d"
+
+  kafka:down:
+    dir: ..
+    desc: brings the kafka compose environment down
+    cmds:
+      - docker compose -p kafka down

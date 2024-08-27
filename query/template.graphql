@@ -1,0 +1,101 @@
+mutation CreateBulkCSVTemplate($input: Upload!) {
+  createBulkCSVTemplate(input: $input) {
+    templates {
+      description
+      id
+      jsonconfig
+      name
+      uischema
+      owner {
+        id
+      }
+    }
+  }
+}
+
+mutation CreateBulkTemplate($input: [CreateTemplateInput!]) {
+  createBulkTemplate(input: $input) {
+    templates {
+      description
+      id
+      jsonconfig
+      name
+      uischema
+      owner {
+        id
+      }
+    }
+  }
+}
+
+mutation CreateTemplate($input: CreateTemplateInput!) {
+  createTemplate(input: $input) {
+    template {
+      description
+      id
+      jsonconfig
+      name
+      uischema
+      owner {
+        id
+      }
+    }
+  }
+}
+
+query GetAllTemplates {
+  templates {
+    edges {
+      node {
+        createdAt
+        createdBy
+        description
+        id
+        jsonconfig
+        name
+        uischema
+        updatedAt
+        updatedBy
+        owner {
+          id
+        }
+      }
+    }
+  }
+}
+
+query GetTemplateByID($getTemplateId: ID!) {
+  template(id: $getTemplateId) {
+    createdAt
+    createdBy
+    description
+    id
+    jsonconfig
+    name
+    uischema
+    updatedAt
+    updatedBy
+    owner {
+      id
+    }
+  }
+}
+
+mutation UpdateTemplate($updateTemplateId: ID!, $input: UpdateTemplateInput!) {
+  updateTemplate(id: $updateTemplateId, input: $input) {
+    template {
+      createdAt
+      createdBy
+      description
+      id
+      jsonconfig
+      name
+      uischema
+      updatedAt
+      updatedBy
+      owner {
+        id
+      }
+    }
+  }
+}

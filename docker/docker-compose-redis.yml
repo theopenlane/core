@@ -1,0 +1,13 @@
+services:
+  redis:
+    image: redis:7.4.0-alpine
+    container_name: redis
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning
+    volumes:
+      - 'redis_data:/data'
+volumes:
+  redis_data:
+    driver: local

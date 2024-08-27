@@ -1,0 +1,29 @@
+{{ $entity := .Field.TypeReference.Definition.Name | getEntityName -}}
+{{ $hasAfter := hasArgument "after" .Field.FieldDefinition.Arguments }}
+{{ $hasFirst := hasArgument "first" .Field.FieldDefinition.Arguments }}
+{{ $hasBefore := hasArgument "before" .Field.FieldDefinition.Arguments }}
+{{ $hasLast := hasArgument "last" .Field.FieldDefinition.Arguments }}
+{{ $hasOrderBy := hasArgument "orderBy" .Field.FieldDefinition.Arguments }}
+{{ $hasWhere := hasArgument "where" .Field.FieldDefinition.Arguments }}
+
+return withTransactionalMutation(ctx).{{ $entity }}.Query().Paginate(
+	ctx,
+	{{- if $hasAfter }}
+	after,
+	{{- end -}}
+	{{- if $hasFirst }}
+	first,
+	{{- end -}}
+	{{- if $hasBefore }}
+	before,
+	{{- end -}}
+	{{- if $hasLast }}
+	last,
+	{{- end -}}
+	{{- if $hasOrderBy }}
+	generated.With{{ $entity }}Order(orderBy),
+	{{- end -}}
+	{{- if $hasWhere }}
+	generated.With{{ $entity }}Filter(where.Filter),
+	{{- end -}}
+)
