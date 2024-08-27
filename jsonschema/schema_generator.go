@@ -20,11 +20,11 @@ const (
 	tagName        = "koanf"
 	skipper        = "-"
 	defaultTag     = "default"
-	jsonSchemaPath = "./jsonschema/datum.config.json"
+	jsonSchemaPath = "./jsonschema/core.config.json"
 	yamlConfigPath = "./config/config.example.yaml"
 	envConfigPath  = "./config/.env.example"
 	configMapPath  = "./config/configmap.yaml"
-	varPrefix      = "DATUM"
+	varPrefix      = "CORE"
 	ownerReadWrite = 0600
 )
 

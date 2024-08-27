@@ -19,7 +19,7 @@ var updateCmd = &cobra.Command{
 }
 
 func init() {
-	cmd.AddCommand(updateCmd)
+	command.AddCommand(updateCmd)
 
 	updateCmd.Flags().StringP("id", "i", "", "org setting id to update")
 	updateCmd.Flags().StringSliceP("domains", "d", []string{}, "domains associated with the org")

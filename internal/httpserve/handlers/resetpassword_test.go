@@ -10,10 +10,13 @@ import (
 	"time"
 
 	"github.com/brianvoe/gofakeit/v7"
-	mock_fga "github.com/datumforge/fgax/mockery"
 	"github.com/rShetty/asyncwait"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	mock_fga "github.com/theopenlane/iam/fgax/mockery"
+
+	"github.com/theopenlane/utils/emails"
+	"github.com/theopenlane/utils/emails/mock"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -21,8 +24,6 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/pkg/middleware/echocontext"
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/utils/emails"
-	"github.com/theopenlane/utils/emails/mock"
 )
 
 func (suite *HandlerTestSuite) TestResetPasswordHandler() {

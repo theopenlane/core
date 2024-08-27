@@ -13,7 +13,7 @@ server:
 db:
   debug: true
   driverName: postgres
-  primaryDbSource: "postgres://postgres:password@0.0.0.0:5432/datum?sslmode=disable"
+  primaryDbSource: "postgres://postgres:password@0.0.0.0:5432/core?sslmode=disable"
   multiWrite: false
   migrationProvider: "goose"
   enableHistory: true
@@ -51,7 +51,7 @@ auth:
 # authz settings
 authz:
   enabled: true
-  storeName: datum
+  storeName: openlane
   hostUrl: http://localhost:8080
   createNewModel: false
   credentials:
@@ -73,7 +73,7 @@ posthog:
   enabled: false
   apiKey: "phc_FakeKey"
 publisherConfig:
-    appName: datum
+    appName: openlane
     addresses:
         - localhost:10000
     enabled: true

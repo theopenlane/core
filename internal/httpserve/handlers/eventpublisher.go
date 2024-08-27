@@ -6,8 +6,9 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 	echo "github.com/theopenlane/echox"
 
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/utils/rout"
+
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // EventPublisher publishes an event to the configured topic in the message payload - today this can be anything but there is no event consumer on the other side yet

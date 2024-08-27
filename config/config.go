@@ -5,14 +5,17 @@ import (
 	"strings"
 	"time"
 
-	"github.com/datumforge/entx"
-	"github.com/datumforge/fgax"
-	"github.com/datumforge/geodetic/pkg/geodeticclient"
 	"github.com/knadh/koanf/parsers/yaml"
 	"github.com/knadh/koanf/providers/env"
 	"github.com/knadh/koanf/providers/file"
 	"github.com/knadh/koanf/v2"
 	"github.com/mcuadros/go-defaults"
+	dbx "github.com/theopenlane/dbx/pkg/dbxclient"
+	"github.com/theopenlane/entx"
+	"github.com/theopenlane/iam/fgax"
+
+	"github.com/theopenlane/utils/emails"
+	"github.com/theopenlane/utils/totp"
 
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
@@ -28,8 +31,6 @@ import (
 	"github.com/theopenlane/core/pkg/otelx"
 	"github.com/theopenlane/core/pkg/sessions"
 	"github.com/theopenlane/core/pkg/tokens"
-	"github.com/theopenlane/utils/emails"
-	"github.com/theopenlane/utils/totp"
 )
 
 var (
@@ -50,8 +51,8 @@ type Config struct {
 	Authz fgax.Config `json:"authz" koanf:"authz"`
 	// DB contains the database configuration for the ent client
 	DB entx.Config `json:"db" koanf:"db"`
-	// Geodetic contains the geodetic client configuration
-	Geodetic geodeticclient.Config `json:"geodetic" koanf:"geodetic"`
+	// DBx contains the dbx client configuration
+	DBx dbx.Config `json:"dbx" koanf:"dbx"`
 	// Redis contains the redis configuration for the key-value store
 	Redis cache.Config `json:"redis" koanf:"redis"`
 	// Tracer contains the tracing config for opentelemetry

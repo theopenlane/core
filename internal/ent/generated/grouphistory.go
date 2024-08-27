@@ -10,8 +10,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/datumforge/enthistory"
 	"github.com/theopenlane/core/internal/ent/generated/grouphistory"
+	"github.com/theopenlane/entx/history"
 )
 
 // GroupHistory is the model entity for the GroupHistory schema.
@@ -24,7 +24,7 @@ type GroupHistory struct {
 	// Ref holds the value of the "ref" field.
 	Ref string `json:"ref,omitempty"`
 	// Operation holds the value of the "operation" field.
-	Operation enthistory.OpType `json:"operation,omitempty"`
+	Operation history.OpType `json:"operation,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
@@ -64,7 +64,7 @@ func (*GroupHistory) scanValues(columns []string) ([]any, error) {
 		case grouphistory.FieldTags:
 			values[i] = new([]byte)
 		case grouphistory.FieldOperation:
-			values[i] = new(enthistory.OpType)
+			values[i] = new(history.OpType)
 		case grouphistory.FieldID, grouphistory.FieldRef, grouphistory.FieldCreatedBy, grouphistory.FieldUpdatedBy, grouphistory.FieldDeletedBy, grouphistory.FieldMappingID, grouphistory.FieldOwnerID, grouphistory.FieldName, grouphistory.FieldDescription, grouphistory.FieldGravatarLogoURL, grouphistory.FieldLogoURL, grouphistory.FieldDisplayName:
 			values[i] = new(sql.NullString)
 		case grouphistory.FieldHistoryTime, grouphistory.FieldCreatedAt, grouphistory.FieldUpdatedAt, grouphistory.FieldDeletedAt:
@@ -103,7 +103,7 @@ func (gh *GroupHistory) assignValues(columns []string, values []any) error {
 				gh.Ref = value.String
 			}
 		case grouphistory.FieldOperation:
-			if value, ok := values[i].(*enthistory.OpType); !ok {
+			if value, ok := values[i].(*history.OpType); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value != nil {
 				gh.Operation = *value

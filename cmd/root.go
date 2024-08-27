@@ -54,7 +54,7 @@ func initConfig() {
 
 // initCmdFlags loads the flags from the command line into the koanf instance
 func initCmdFlags(cmd *cobra.Command) error {
-	return k.Load(posflag.Provider(command.Flags(), k.Delim(), k), nil)
+	return k.Load(posflag.Provider(cmd.Flags(), k.Delim(), k), nil)
 }
 
 func setupLogging() {

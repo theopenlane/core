@@ -7,10 +7,10 @@ import (
 	"testing"
 
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/datumforge/entx"
-	mock_fga "github.com/datumforge/fgax/mockery"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"github.com/theopenlane/entx"
+	mock_fga "github.com/theopenlane/iam/fgax/mockery"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -35,7 +35,7 @@ func (suite *GraphTestSuite) TestQueryOrganization() {
 	testCases := []struct {
 		name               string
 		queryID            string
-		client             *openlaneclient.DatumClient
+		client             *openlaneclient.OpenLaneClient
 		ctx                context.Context
 		expected           *ent.Organization
 		orgMembersExpected int
@@ -181,7 +181,7 @@ func (suite *GraphTestSuite) TestMutationCreateOrganization() {
 		orgDescription           string
 		parentOrgID              string
 		settings                 *openlaneclient.CreateOrganizationSettingInput
-		client                   *openlaneclient.DatumClient
+		client                   *openlaneclient.OpenLaneClient
 		ctx                      context.Context
 		expectedDefaultOrgUpdate bool
 		errorMsg                 string
@@ -407,7 +407,7 @@ func (suite *GraphTestSuite) TestMutationUpdateOrganization() {
 	testCases := []struct {
 		name        string
 		updateInput openlaneclient.UpdateOrganizationInput
-		client      *openlaneclient.DatumClient
+		client      *openlaneclient.OpenLaneClient
 		ctx         context.Context
 		expectedRes openlaneclient.UpdateOrganization_UpdateOrganization_Organization
 		errorMsg    string

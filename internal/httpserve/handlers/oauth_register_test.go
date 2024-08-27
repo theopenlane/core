@@ -7,15 +7,16 @@ import (
 	"strings"
 	"testing"
 
-	mock_fga "github.com/datumforge/fgax/mockery"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	mock_fga "github.com/theopenlane/iam/fgax/mockery"
+
+	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/httpsling"
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/utils/rout"
+	"github.com/theopenlane/httpsling"
 )
 
 func (suite *HandlerTestSuite) TestOauthRegister() {

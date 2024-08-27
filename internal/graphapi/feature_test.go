@@ -4,11 +4,11 @@ import (
 	"context"
 	"testing"
 
-	mock_fga "github.com/datumforge/fgax/mockery"
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/core/pkg/openlaneclient"
+	mock_fga "github.com/theopenlane/iam/fgax/mockery"
 	"github.com/theopenlane/utils/ulids"
 )
 
@@ -24,7 +24,7 @@ func (suite *GraphTestSuite) TestQueryFeature() {
 	testCases := []struct {
 		name     string
 		queryID  string
-		client   *openlaneclient.DatumClient
+		client   *openlaneclient.OpenLaneClient
 		ctx      context.Context
 		errorMsg string
 	}{
@@ -100,7 +100,7 @@ func (suite *GraphTestSuite) TestQueryFeatures() {
 
 	testCases := []struct {
 		name            string
-		client          *openlaneclient.DatumClient
+		client          *openlaneclient.OpenLaneClient
 		ctx             context.Context
 		expectedResults int
 	}{
@@ -153,7 +153,7 @@ func (suite *GraphTestSuite) TestMutationCreateFeature() {
 	testCases := []struct {
 		name        string
 		request     openlaneclient.CreateFeatureInput
-		client      *openlaneclient.DatumClient
+		client      *openlaneclient.OpenLaneClient
 		ctx         context.Context
 		allowed     bool
 		expectedErr string
@@ -276,7 +276,7 @@ func (suite *GraphTestSuite) TestMutationUpdateFeature() {
 	testCases := []struct {
 		name        string
 		request     openlaneclient.UpdateFeatureInput
-		client      *openlaneclient.DatumClient
+		client      *openlaneclient.OpenLaneClient
 		ctx         context.Context
 		allowed     bool
 		expectedErr string
@@ -368,7 +368,7 @@ func (suite *GraphTestSuite) TestMutationDeleteFeature() {
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      *openlaneclient.DatumClient
+		client      *openlaneclient.OpenLaneClient
 		ctx         context.Context
 		allowed     bool
 		checkAccess bool

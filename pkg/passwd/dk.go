@@ -60,7 +60,7 @@ func VerifyDerivedKey(dk, password string) (bool, error) {
 		return false, err
 	}
 
-	vdk := argon2.IDKey([]byte(password), salt, t, m, p, uint32(len(dkb)))
+	vdk := argon2.IDKey([]byte(password), salt, t, m, p, uint32(len(dkb))) // nolint:gosec
 
 	return bytes.Equal(dkb, vdk), nil
 }
@@ -97,19 +97,19 @@ func ParseDerivedKey(encoded string) (dk, salt []byte, time, memory uint32, thre
 		return nil, nil, 0, 0, 0, newParseError("memory", parts[3], err.Error())
 	}
 
-	memory = uint32(memory64)
+	memory = uint32(memory64) // nolint:gosec
 
 	if time64, err = strconv.ParseUint(parts[4], 10, 32); err != nil {
 		return nil, nil, 0, 0, 0, newParseError("time", parts[4], err.Error())
 	}
 
-	time = uint32(time64)
+	time = uint32(time64) // nolint:gosec
 
 	if threads64, err = strconv.ParseUint(parts[5], 10, 8); err != nil {
 		return nil, nil, 0, 0, 0, newParseError("threads", parts[5], err.Error())
 	}
 
-	threads = uint8(threads64)
+	threads = uint8(threads64) // nolint:gosec
 
 	if salt, err = base64.StdEncoding.DecodeString(parts[6]); err != nil {
 		return nil, nil, 0, 0, 0, newParseError("salt", parts[6], err.Error())

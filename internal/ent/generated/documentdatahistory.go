@@ -10,9 +10,9 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/datumforge/enthistory"
 	"github.com/theopenlane/core/internal/ent/customtypes"
 	"github.com/theopenlane/core/internal/ent/generated/documentdatahistory"
+	"github.com/theopenlane/entx/history"
 )
 
 // DocumentDataHistory is the model entity for the DocumentDataHistory schema.
@@ -25,7 +25,7 @@ type DocumentDataHistory struct {
 	// Ref holds the value of the "ref" field.
 	Ref string `json:"ref,omitempty"`
 	// Operation holds the value of the "operation" field.
-	Operation enthistory.OpType `json:"operation,omitempty"`
+	Operation history.OpType `json:"operation,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
@@ -59,7 +59,7 @@ func (*DocumentDataHistory) scanValues(columns []string) ([]any, error) {
 		case documentdatahistory.FieldTags, documentdatahistory.FieldData:
 			values[i] = new([]byte)
 		case documentdatahistory.FieldOperation:
-			values[i] = new(enthistory.OpType)
+			values[i] = new(history.OpType)
 		case documentdatahistory.FieldID, documentdatahistory.FieldRef, documentdatahistory.FieldCreatedBy, documentdatahistory.FieldUpdatedBy, documentdatahistory.FieldMappingID, documentdatahistory.FieldDeletedBy, documentdatahistory.FieldOwnerID, documentdatahistory.FieldTemplateID:
 			values[i] = new(sql.NullString)
 		case documentdatahistory.FieldHistoryTime, documentdatahistory.FieldCreatedAt, documentdatahistory.FieldUpdatedAt, documentdatahistory.FieldDeletedAt:
@@ -98,7 +98,7 @@ func (ddh *DocumentDataHistory) assignValues(columns []string, values []any) err
 				ddh.Ref = value.String
 			}
 		case documentdatahistory.FieldOperation:
-			if value, ok := values[i].(*enthistory.OpType); !ok {
+			if value, ok := values[i].(*history.OpType); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value != nil {
 				ddh.Operation = *value

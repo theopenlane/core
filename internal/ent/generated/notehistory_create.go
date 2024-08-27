@@ -10,8 +10,8 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/datumforge/enthistory"
 	"github.com/theopenlane/core/internal/ent/generated/notehistory"
+	"github.com/theopenlane/entx/history"
 )
 
 // NoteHistoryCreate is the builder for creating a NoteHistory entity.
@@ -50,8 +50,8 @@ func (nhc *NoteHistoryCreate) SetNillableRef(s *string) *NoteHistoryCreate {
 }
 
 // SetOperation sets the "operation" field.
-func (nhc *NoteHistoryCreate) SetOperation(et enthistory.OpType) *NoteHistoryCreate {
-	nhc.mutation.SetOperation(et)
+func (nhc *NoteHistoryCreate) SetOperation(ht history.OpType) *NoteHistoryCreate {
+	nhc.mutation.SetOperation(ht)
 	return nhc
 }
 

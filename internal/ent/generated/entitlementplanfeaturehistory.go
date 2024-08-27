@@ -10,8 +10,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/datumforge/enthistory"
 	"github.com/theopenlane/core/internal/ent/generated/entitlementplanfeaturehistory"
+	"github.com/theopenlane/entx/history"
 )
 
 // EntitlementPlanFeatureHistory is the model entity for the EntitlementPlanFeatureHistory schema.
@@ -24,7 +24,7 @@ type EntitlementPlanFeatureHistory struct {
 	// Ref holds the value of the "ref" field.
 	Ref string `json:"ref,omitempty"`
 	// Operation holds the value of the "operation" field.
-	Operation enthistory.OpType `json:"operation,omitempty"`
+	Operation history.OpType `json:"operation,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
@@ -60,7 +60,7 @@ func (*EntitlementPlanFeatureHistory) scanValues(columns []string) ([]any, error
 		case entitlementplanfeaturehistory.FieldTags, entitlementplanfeaturehistory.FieldMetadata:
 			values[i] = new([]byte)
 		case entitlementplanfeaturehistory.FieldOperation:
-			values[i] = new(enthistory.OpType)
+			values[i] = new(history.OpType)
 		case entitlementplanfeaturehistory.FieldID, entitlementplanfeaturehistory.FieldRef, entitlementplanfeaturehistory.FieldCreatedBy, entitlementplanfeaturehistory.FieldUpdatedBy, entitlementplanfeaturehistory.FieldMappingID, entitlementplanfeaturehistory.FieldDeletedBy, entitlementplanfeaturehistory.FieldOwnerID, entitlementplanfeaturehistory.FieldPlanID, entitlementplanfeaturehistory.FieldFeatureID:
 			values[i] = new(sql.NullString)
 		case entitlementplanfeaturehistory.FieldHistoryTime, entitlementplanfeaturehistory.FieldCreatedAt, entitlementplanfeaturehistory.FieldUpdatedAt, entitlementplanfeaturehistory.FieldDeletedAt:
@@ -99,7 +99,7 @@ func (epfh *EntitlementPlanFeatureHistory) assignValues(columns []string, values
 				epfh.Ref = value.String
 			}
 		case entitlementplanfeaturehistory.FieldOperation:
-			if value, ok := values[i].(*enthistory.OpType); !ok {
+			if value, ok := values[i].(*history.OpType); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value != nil {
 				epfh.Operation = *value

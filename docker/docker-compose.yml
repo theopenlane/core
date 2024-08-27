@@ -1,6 +1,6 @@
 services:
   api:
-    image: datum:dev
+    image: core:dev
     depends_on:
       - openfga
     command:

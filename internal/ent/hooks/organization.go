@@ -6,10 +6,13 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/datumforge/entx"
-	"github.com/datumforge/fgax"
-	geodeticenums "github.com/datumforge/geodetic/pkg/enums"
-	geodetic "github.com/datumforge/geodetic/pkg/geodeticclient"
+	dbx "github.com/theopenlane/dbx/pkg/dbxclient"
+	dbxenums "github.com/theopenlane/dbx/pkg/enums"
+	"github.com/theopenlane/entx"
+	"github.com/theopenlane/iam/fgax"
+
+	"github.com/theopenlane/utils/gravatar"
+	"github.com/theopenlane/utils/marionette"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
@@ -17,8 +20,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/pkg/auth"
 	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/utils/gravatar"
-	"github.com/theopenlane/utils/marionette"
 )
 
 // HookOrganization runs on org mutations to set default values that are not provided
@@ -62,8 +63,8 @@ func HookOrganization() ent.Hook {
 					return v, err
 				}
 
-				// create the database, if the org has a dedicated db and geodetic is available
-				if orgCreated.DedicatedDb && mutation.Geodetic != nil {
+				// create the database, if the org has a dedicated db and dbx is available
+				if orgCreated.DedicatedDb && mutation.DBx != nil {
 					settings, err := orgCreated.Setting(ctx)
 					if err != nil {
 						mutation.Logger.Errorw("unable to get organization settings")
@@ -314,15 +315,15 @@ func createDatabase(ctx context.Context, orgID, geo string, mutation *generated.
 		geo = enums.Amer.String()
 	}
 
-	input := geodetic.CreateDatabaseInput{
+	input := dbx.CreateDatabaseInput{
 		OrganizationID: orgID,
 		Geo:            &geo,
-		Provider:       &geodeticenums.Turso,
+		Provider:       &dbxenums.Turso,
 	}
 
 	mutation.Logger.Infow("creating database", "org", input.OrganizationID, "geo", input.Geo, "provider", input.Provider)
 
-	if _, err := mutation.Geodetic.CreateDatabase(ctx, input); err != nil {
+	if _, err := mutation.DBx.CreateDatabase(ctx, input); err != nil {
 		mutation.Logger.Errorw("error creating database", "error", err)
 
 		return err

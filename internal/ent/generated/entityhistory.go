@@ -10,8 +10,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/datumforge/enthistory"
 	"github.com/theopenlane/core/internal/ent/generated/entityhistory"
+	"github.com/theopenlane/entx/history"
 )
 
 // EntityHistory is the model entity for the EntityHistory schema.
@@ -24,7 +24,7 @@ type EntityHistory struct {
 	// Ref holds the value of the "ref" field.
 	Ref string `json:"ref,omitempty"`
 	// Operation holds the value of the "operation" field.
-	Operation enthistory.OpType `json:"operation,omitempty"`
+	Operation history.OpType `json:"operation,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
@@ -66,7 +66,7 @@ func (*EntityHistory) scanValues(columns []string) ([]any, error) {
 		case entityhistory.FieldTags, entityhistory.FieldDomains:
 			values[i] = new([]byte)
 		case entityhistory.FieldOperation:
-			values[i] = new(enthistory.OpType)
+			values[i] = new(history.OpType)
 		case entityhistory.FieldID, entityhistory.FieldRef, entityhistory.FieldCreatedBy, entityhistory.FieldUpdatedBy, entityhistory.FieldMappingID, entityhistory.FieldDeletedBy, entityhistory.FieldOwnerID, entityhistory.FieldName, entityhistory.FieldDisplayName, entityhistory.FieldDescription, entityhistory.FieldEntityTypeID, entityhistory.FieldStatus:
 			values[i] = new(sql.NullString)
 		case entityhistory.FieldHistoryTime, entityhistory.FieldCreatedAt, entityhistory.FieldUpdatedAt, entityhistory.FieldDeletedAt:
@@ -105,7 +105,7 @@ func (eh *EntityHistory) assignValues(columns []string, values []any) error {
 				eh.Ref = value.String
 			}
 		case entityhistory.FieldOperation:
-			if value, ok := values[i].(*enthistory.OpType); !ok {
+			if value, ok := values[i].(*history.OpType); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value != nil {
 				eh.Operation = *value

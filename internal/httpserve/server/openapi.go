@@ -4,8 +4,9 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/getkin/kin-openapi/openapi3gen"
 
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/utils/rout"
+
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // NewOpenAPISpec creates a new OpenAPI 3.1.0 specification based on the configured go interfaces and the operation types appended within the individual handlers
@@ -61,7 +62,7 @@ func NewOpenAPISpec() (*openapi3.T, error) {
 			WithType("http").
 			WithScheme("bearer").
 			WithIn("header").
-			WithDescription("Bearer authnetication, the token must be a valid Datum API token"),
+			WithDescription("Bearer authentication, the token must be a valid API token"),
 	}
 
 	securityschemes["oauth2"] = &openapi3.SecuritySchemeRef{
@@ -98,10 +99,10 @@ func NewOpenAPISpec() (*openapi3.T, error) {
 	return &openapi3.T{
 		OpenAPI: "3.1.0",
 		Info: &openapi3.Info{
-			Title:   "Datum OpenAPI 3.1.0 Specifications",
+			Title:   "OpenLane OpenAPI 3.1.0 Specifications",
 			Version: "v1.0.0",
 			Contact: &openapi3.Contact{
-				Name:  "Datum",
+				Name:  "OpenLane",
 				Email: "support@theopenlane.io",
 				URL:   "https://theopenlane.io",
 			},
@@ -113,16 +114,16 @@ func NewOpenAPISpec() (*openapi3.T, error) {
 		Paths: openapi3.NewPaths(),
 		Servers: openapi3.Servers{
 			&openapi3.Server{
-				Description: "Datum API Server",
+				Description: "OpenLane API Server",
 				URL:         "https://api.theopenlane.io/v1",
 			},
 			&openapi3.Server{
-				Description: "Datum API Server (local)",
+				Description: "OpenLane API Server (local)",
 				URL:         "http://localhost:17608/v1",
 			},
 		},
 		ExternalDocs: &openapi3.ExternalDocs{
-			Description: "Documentation for Datum's API services",
+			Description: "Documentation for OpenLane's API services",
 			URL:         "https://docs.theopenlane.io",
 		},
 

@@ -21,7 +21,7 @@ var acceptCmd = &cobra.Command{
 }
 
 func init() {
-	cmd.AddCommand(acceptCmd)
+	command.AddCommand(acceptCmd)
 
 	acceptCmd.Flags().StringP("token", "t", "", "invite token")
 }

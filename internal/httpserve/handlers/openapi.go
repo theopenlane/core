@@ -3,7 +3,7 @@ package handlers
 import (
 	"github.com/getkin/kin-openapi/openapi3"
 
-	"github.com/theopenlane/core/pkg/httpsling"
+	"github.com/theopenlane/httpsling"
 )
 
 // badRequest is a wrapper for openaAPI bad request response

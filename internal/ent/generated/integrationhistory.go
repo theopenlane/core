@@ -10,8 +10,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/datumforge/enthistory"
 	"github.com/theopenlane/core/internal/ent/generated/integrationhistory"
+	"github.com/theopenlane/entx/history"
 )
 
 // IntegrationHistory is the model entity for the IntegrationHistory schema.
@@ -24,7 +24,7 @@ type IntegrationHistory struct {
 	// Ref holds the value of the "ref" field.
 	Ref string `json:"ref,omitempty"`
 	// Operation holds the value of the "operation" field.
-	Operation enthistory.OpType `json:"operation,omitempty"`
+	Operation history.OpType `json:"operation,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
@@ -60,7 +60,7 @@ func (*IntegrationHistory) scanValues(columns []string) ([]any, error) {
 		case integrationhistory.FieldTags:
 			values[i] = new([]byte)
 		case integrationhistory.FieldOperation:
-			values[i] = new(enthistory.OpType)
+			values[i] = new(history.OpType)
 		case integrationhistory.FieldID, integrationhistory.FieldRef, integrationhistory.FieldCreatedBy, integrationhistory.FieldUpdatedBy, integrationhistory.FieldMappingID, integrationhistory.FieldDeletedBy, integrationhistory.FieldOwnerID, integrationhistory.FieldName, integrationhistory.FieldDescription, integrationhistory.FieldKind:
 			values[i] = new(sql.NullString)
 		case integrationhistory.FieldHistoryTime, integrationhistory.FieldCreatedAt, integrationhistory.FieldUpdatedAt, integrationhistory.FieldDeletedAt:
@@ -99,7 +99,7 @@ func (ih *IntegrationHistory) assignValues(columns []string, values []any) error
 				ih.Ref = value.String
 			}
 		case integrationhistory.FieldOperation:
-			if value, ok := values[i].(*enthistory.OpType); !ok {
+			if value, ok := values[i].(*history.OpType); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value != nil {
 				ih.Operation = *value

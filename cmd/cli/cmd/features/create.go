@@ -19,7 +19,7 @@ var createCmd = &cobra.Command{
 }
 
 func init() {
-	cmd.AddCommand(createCmd)
+	command.AddCommand(createCmd)
 
 	createCmd.Flags().StringP("name", "n", "", "name of the feature")
 	createCmd.Flags().String("display-name", "", "human friendly name of the feature")

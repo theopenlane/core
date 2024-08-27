@@ -15,9 +15,6 @@ import (
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"github.com/datumforge/fgax"
-	"github.com/datumforge/fgax/entfga"
-	"github.com/datumforge/geodetic/pkg/geodeticclient"
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
@@ -79,6 +76,9 @@ import (
 	"github.com/theopenlane/core/pkg/analytics"
 	"github.com/theopenlane/core/pkg/sessions"
 	"github.com/theopenlane/core/pkg/tokens"
+	"github.com/theopenlane/dbx/pkg/dbxclient"
+	"github.com/theopenlane/iam/entfga"
+	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/emails"
 	"github.com/theopenlane/utils/marionette"
 	"github.com/theopenlane/utils/totp"
@@ -321,7 +321,7 @@ type (
 		Marionette    *marionette.TaskManager
 		Analytics     *analytics.EventManager
 		TOTP          *totp.Manager
-		Geodetic      *geodeticclient.Client
+		DBx           *dbxclient.Client
 		// schemaConfig contains alternative names for all tables.
 		schemaConfig SchemaConfig
 	}
@@ -437,10 +437,10 @@ func TOTP(v *totp.Manager) Option {
 	}
 }
 
-// Geodetic configures the Geodetic.
-func Geodetic(v *geodeticclient.Client) Option {
+// DBx configures the DBx.
+func DBx(v *dbxclient.Client) Option {
 	return func(c *config) {
-		c.Geodetic = v
+		c.DBx = v
 	}
 }
 

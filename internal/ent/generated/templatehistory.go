@@ -10,10 +10,10 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/datumforge/enthistory"
 	"github.com/theopenlane/core/internal/ent/customtypes"
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/entx/history"
 )
 
 // TemplateHistory is the model entity for the TemplateHistory schema.
@@ -26,7 +26,7 @@ type TemplateHistory struct {
 	// Ref holds the value of the "ref" field.
 	Ref string `json:"ref,omitempty"`
 	// Operation holds the value of the "operation" field.
-	Operation enthistory.OpType `json:"operation,omitempty"`
+	Operation history.OpType `json:"operation,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
@@ -66,7 +66,7 @@ func (*TemplateHistory) scanValues(columns []string) ([]any, error) {
 		case templatehistory.FieldTags, templatehistory.FieldJsonconfig, templatehistory.FieldUischema:
 			values[i] = new([]byte)
 		case templatehistory.FieldOperation:
-			values[i] = new(enthistory.OpType)
+			values[i] = new(history.OpType)
 		case templatehistory.FieldID, templatehistory.FieldRef, templatehistory.FieldCreatedBy, templatehistory.FieldUpdatedBy, templatehistory.FieldDeletedBy, templatehistory.FieldMappingID, templatehistory.FieldOwnerID, templatehistory.FieldName, templatehistory.FieldTemplateType, templatehistory.FieldDescription:
 			values[i] = new(sql.NullString)
 		case templatehistory.FieldHistoryTime, templatehistory.FieldCreatedAt, templatehistory.FieldUpdatedAt, templatehistory.FieldDeletedAt:
@@ -105,7 +105,7 @@ func (th *TemplateHistory) assignValues(columns []string, values []any) error {
 				th.Ref = value.String
 			}
 		case templatehistory.FieldOperation:
-			if value, ok := values[i].(*enthistory.OpType); !ok {
+			if value, ok := values[i].(*history.OpType); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value != nil {
 				th.Operation = *value

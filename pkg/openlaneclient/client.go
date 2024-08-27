@@ -10,9 +10,9 @@ import (
 	"golang.org/x/oauth2"
 
 	"github.com/theopenlane/core/pkg/auth"
-	"github.com/theopenlane/core/pkg/httpsling"
 	api "github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/sessions"
+	"github.com/theopenlane/httpsling"
 )
 
 const (
@@ -20,10 +20,10 @@ const (
 	cookieExpiryMinutes = 10 * time.Minute
 )
 
-// OpenLaneClient wraps The Open Lane API client methods to form a single client interface
+// OpenLaneClient wraps The OpenLane API client methods to form a single client interface
 type OpenLaneClient struct {
-	DatumRestClient
-	DatumGraphClient
+	OpenLaneRestClient
+	OpenLaneGraphClient
 }
 
 // A Reauthenticator generates new access and refresh pair given a valid refresh token
@@ -94,14 +94,14 @@ type APIv1 struct {
 
 // Config is the configuration for the APIv1 client
 func (c *OpenLaneClient) Config() Config {
-	api := c.DatumRestClient.(*APIv1)
+	api := c.OpenLaneRestClient.(*APIv1)
 
 	return api.Config
 }
 
 // HTTPSlingClient is the http client for the APIv1 client
 func (c *OpenLaneClient) HTTPSlingClient() *httpsling.Client {
-	api := c.DatumRestClient.(*APIv1)
+	api := c.OpenLaneRestClient.(*APIv1)
 
 	return api.HTTPSlingClient
 }

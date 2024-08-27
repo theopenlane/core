@@ -4,9 +4,9 @@ import (
 	"context"
 	"testing"
 
-	mock_fga "github.com/datumforge/fgax/mockery"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	mock_fga "github.com/theopenlane/iam/fgax/mockery"
 
 	"github.com/theopenlane/core/pkg/auth"
 	"github.com/theopenlane/core/pkg/enums"
@@ -34,7 +34,7 @@ func (suite *GraphTestSuite) TestQueryUserSetting() {
 	testCases := []struct {
 		name     string
 		queryID  string
-		client   *openlaneclient.DatumClient
+		client   *openlaneclient.OpenLaneClient
 		ctx      context.Context
 		expected *openlaneclient.GetUserSettings_UserSettings_Edges_Node
 		errorMsg string
@@ -152,7 +152,7 @@ func (suite *GraphTestSuite) TestMutationUpdateUserSetting() {
 	testCases := []struct {
 		name        string
 		updateInput openlaneclient.UpdateUserSettingInput
-		client      *openlaneclient.DatumClient
+		client      *openlaneclient.OpenLaneClient
 		ctx         context.Context
 		expectedRes openlaneclient.UpdateUserSetting_UpdateUserSetting_UserSetting
 		allowed     bool

@@ -7,11 +7,11 @@ import (
 	"github.com/theopenlane/core/pkg/models"
 )
 
-// DatumRestClient is the interface that wraps the Datum API REST client methods
-type DatumRestClient interface {
-	// Register a new user with the Datum API
+// OpenLaneRestClient is the interface that wraps the OpenLane API REST client methods
+type OpenLaneRestClient interface {
+	// Register a new user with the API
 	Register(context.Context, *models.RegisterRequest) (*models.RegisterReply, error)
-	// Login to the Datum API
+	// Login to the API
 	Login(context.Context, *models.LoginRequest) (*models.LoginReply, error)
 	// Refresh a user's access token
 	Refresh(context.Context, *models.RefreshRequest) (*models.RefreshReply, error)
@@ -19,7 +19,7 @@ type DatumRestClient interface {
 	Switch(context.Context, *models.SwitchOrganizationRequest) (*models.SwitchOrganizationReply, error)
 	// VerifyEmail verifies the email address of a user
 	VerifyEmail(context.Context, *models.VerifyRequest) (*models.VerifyReply, error)
-	// ResendEmail resends the verification email to the user
+	// ResendEmail re-sends the verification email to the user
 	ResendEmail(context.Context, *models.ResendRequest) (*models.ResendReply, error)
 	// ForgotPassword sends a password reset email to the user
 	ForgotPassword(context.Context, *models.ForgotPasswordRequest) (*models.ForgotPasswordReply, error)
@@ -29,8 +29,8 @@ type DatumRestClient interface {
 	AcceptInvite(context.Context, *models.InviteRequest) (*models.InviteReply, error)
 }
 
-// New creates a new API v1 client that implements the Datum Client interface
-func NewRestClient(config Config, opts ...ClientOption) (_ DatumRestClient, err error) {
+// New creates a new API v1 client that implements the OpenLane Client interface
+func NewRestClient(config Config, opts ...ClientOption) (_ OpenLaneRestClient, err error) {
 	c := &APIv1{
 		Config: config,
 	}
@@ -53,10 +53,10 @@ func NewRestClient(config Config, opts ...ClientOption) (_ DatumRestClient, err 
 	return c, nil
 }
 
-// Ensure the APIv1 implements the DatumClient interface
-var _ DatumRestClient = &APIv1{}
+// Ensure the APIv1 implements the OpenLaneClient interface
+var _ OpenLaneRestClient = &APIv1{}
 
-// Register a new user with the Datum API
+// Register a new user with the API
 func (s *APIv1) Register(ctx context.Context, in *models.RegisterRequest) (out *models.RegisterReply, err error) {
 	req := s.HTTPSlingClient.NewRequestBuilder(http.MethodPost, "/v1/register")
 	req.Body(in)
@@ -77,7 +77,7 @@ func (s *APIv1) Register(ctx context.Context, in *models.RegisterRequest) (out *
 	return out, nil
 }
 
-// Login to the Datum API
+// Login to the API
 func (s *APIv1) Login(ctx context.Context, in *models.LoginRequest) (out *models.LoginReply, err error) {
 	req := s.HTTPSlingClient.NewRequestBuilder(http.MethodPost, "/v1/login")
 	req.Body(in)

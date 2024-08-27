@@ -10,160 +10,160 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 data:
-  DATUM_REFRESHINTERVAL: {{ .Values.datum.refreshInterval | default "10m" }}
-  DATUM_SERVER_DEBUG: {{ .Values.datum.server.debug | default false }}
-  DATUM_SERVER_DEV: {{ .Values.datum.server.dev | default false }}
-  DATUM_SERVER_LISTEN: {{ .Values.datum.server.listen | default ":17608" }}
-  DATUM_SERVER_SHUTDOWNGRACEPERIOD: {{ .Values.datum.server.shutdownGracePeriod | default "10s" }}
-  DATUM_SERVER_READTIMEOUT: {{ .Values.datum.server.readTimeout | default "15s" }}
-  DATUM_SERVER_WRITETIMEOUT: {{ .Values.datum.server.writeTimeout | default "15s" }}
-  DATUM_SERVER_IDLETIMEOUT: {{ .Values.datum.server.idleTimeout | default "30s" }}
-  DATUM_SERVER_READHEADERTIMEOUT: {{ .Values.datum.server.readHeaderTimeout | default "2s" }}
-  DATUM_SERVER_TLS_ENABLED: {{ .Values.datum.server.tls.enabled | default false }}
-  DATUM_SERVER_TLS_CERTFILE: {{ .Values.datum.server.tls.certFile | default "server.crt" }}
-  DATUM_SERVER_TLS_CERTKEY: {{ .Values.datum.server.tls.certKey | default "server.key" }}
-  DATUM_SERVER_TLS_AUTOCERT: {{ .Values.datum.server.tls.autoCert | default false }}
-  DATUM_SERVER_CORS_ENABLED: {{ .Values.datum.server.cors.enabled | default true }}
-  DATUM_SERVER_CORS_PREFIXES: {{ .Values.datum.server.cors.prefixes }}
-  DATUM_SERVER_CORS_ALLOWORIGINS: {{ .Values.datum.server.cors.allowOrigins }}
-  DATUM_SERVER_CORS_COOKIEINSECURE: {{ .Values.datum.server.cors.cookieInsecure }}
-  DATUM_SERVER_SECURE_ENABLED: {{ .Values.datum.server.secure.enabled | default true }}
-  DATUM_SERVER_SECURE_XSSPROTECTION: {{ .Values.datum.server.secure.xssprotection | default "1; mode=block" }}
-  DATUM_SERVER_SECURE_CONTENTTYPENOSNIFF: {{ .Values.datum.server.secure.contenttypenosniff | default "nosniff" }}
-  DATUM_SERVER_SECURE_XFRAMEOPTIONS: {{ .Values.datum.server.secure.xframeoptions | default "SAMEORIGIN" }}
-  DATUM_SERVER_SECURE_HSTSPRELOADENABLED: {{ .Values.datum.server.secure.hstspreloadenabled | default false }}
-  DATUM_SERVER_SECURE_HSTSMAXAGE: {{ .Values.datum.server.secure.hstsmaxage | default 31536000 }}
-  DATUM_SERVER_SECURE_CONTENTSECURITYPOLICY: {{ .Values.datum.server.secure.contentsecuritypolicy | default "default-src 'self'" }}
-  DATUM_SERVER_SECURE_REFERRERPOLICY: {{ .Values.datum.server.secure.referrerpolicy | default "same-origin" }}
-  DATUM_SERVER_SECURE_CSPREPORTONLY: {{ .Values.datum.server.secure.cspreportonly | default false }}
-  DATUM_SERVER_REDIRECTS_ENABLED: {{ .Values.datum.server.redirects.enabled | default true }}
-  DATUM_SERVER_REDIRECTS_REDIRECTS: {{ .Values.datum.server.redirects.redirects }}
-  DATUM_SERVER_REDIRECTS_CODE: {{ .Values.datum.server.redirects.code }}
-  DATUM_SERVER_CACHECONTROL_ENABLED: {{ .Values.datum.server.cacheControl.enabled | default true }}
-  DATUM_SERVER_CACHECONTROL_NOCACHEHEADERS: {{ .Values.datum.server.cacheControl.noCacheHeaders }}
-  DATUM_SERVER_CACHECONTROL_ETAGHEADERS: {{ .Values.datum.server.cacheControl.etagHeaders }}
-  DATUM_SERVER_MIME_ENABLED: {{ .Values.datum.server.mime.enabled | default true }}
-  DATUM_SERVER_MIME_MIMETYPESFILE: {{ .Values.datum.server.mime.mimeTypesFile }}
-  DATUM_SERVER_MIME_DEFAULTCONTENTTYPE: {{ .Values.datum.server.mime.defaultContentType | default "application/data" }}
-  DATUM_SERVER_GRAPHPOOL_MAXWORKERS: {{ .Values.datum.server.graphPool.maxWorkers | default 100 }}
-  DATUM_SERVER_GRAPHPOOL_MAXCAPACITY: {{ .Values.datum.server.graphPool.maxCapacity | default 1000 }}
-  DATUM_SERVER_ENABLEGRAPHEXTENSIONS: {{ .Values.datum.server.enableGraphExtensions | default true }}
-  DATUM_ENTCONFIG_FLAGS_USELISTUSERSERVICE: {{ .Values.datum.entConfig.flags.useListUserService | default true }}
-  DATUM_ENTCONFIG_FLAGS_USELISTOBJECTSERVICES: {{ .Values.datum.entConfig.flags.useListObjectServices | default false }}
-  DATUM_ENTCONFIG_ENTITYTYPES: {{ .Values.datum.entConfig.entityTypes }}
-  DATUM_AUTH_ENABLED: {{ .Values.datum.auth.enabled | default true }}
-  DATUM_AUTH_TOKEN_KID: {{ .Values.datum.auth.token.kid }}
-  DATUM_AUTH_TOKEN_AUDIENCE: {{ .Values.datum.auth.token.audience | default "https://datum.net" }}
-  DATUM_AUTH_TOKEN_REFRESHAUDIENCE: {{ .Values.datum.auth.token.refreshAudience }}
-  DATUM_AUTH_TOKEN_ISSUER: {{ .Values.datum.auth.token.issuer | default "https://auth.datum.net" }}
-  DATUM_AUTH_TOKEN_ACCESSDURATION: {{ .Values.datum.auth.token.accessDuration | default "1h" }}
-  DATUM_AUTH_TOKEN_REFRESHDURATION: {{ .Values.datum.auth.token.refreshDuration | default "2h" }}
-  DATUM_AUTH_TOKEN_REFRESHOVERLAP: {{ .Values.datum.auth.token.refreshOverlap | default "-15m" }}
-  DATUM_AUTH_TOKEN_JWKSENDPOINT: {{ .Values.datum.auth.token.jwksEndpoint | default "https://api.datum.net/.well-known/jwks.json" }}
-  DATUM_AUTH_TOKEN_KEYS: {{ .Values.datum.auth.token.keys }}
-  DATUM_AUTH_TOKEN_GENERATEKEYS: {{ .Values.datum.auth.token.generateKeys | default true }}
-  DATUM_AUTH_SUPPORTEDPROVIDERS: {{ .Values.datum.auth.supportedProviders }}
-  DATUM_AUTH_PROVIDERS_REDIRECTURL: {{ .Values.datum.auth.providers.redirectUrl | default "http://localhost:3001/api/auth/callback/datum" }}
-  DATUM_AUTH_PROVIDERS_GITHUB_CLIENTID: {{ .Values.datum.auth.providers.github.clientId }}
-  DATUM_AUTH_PROVIDERS_GITHUB_CLIENTSECRET: {{ .Values.datum.auth.providers.github.clientSecret }}
-  DATUM_AUTH_PROVIDERS_GITHUB_CLIENTENDPOINT: {{ .Values.datum.auth.providers.github.clientEndpoint | default "http://localhost:17608" }}
-  DATUM_AUTH_PROVIDERS_GITHUB_SCOPES: {{ .Values.datum.auth.providers.github.scopes }}
-  DATUM_AUTH_PROVIDERS_GITHUB_REDIRECTURL: {{ .Values.datum.auth.providers.github.redirectUrl | default "/v1/github/callback" }}
-  DATUM_AUTH_PROVIDERS_GOOGLE_CLIENTID: {{ .Values.datum.auth.providers.google.clientId }}
-  DATUM_AUTH_PROVIDERS_GOOGLE_CLIENTSECRET: {{ .Values.datum.auth.providers.google.clientSecret }}
-  DATUM_AUTH_PROVIDERS_GOOGLE_CLIENTENDPOINT: {{ .Values.datum.auth.providers.google.clientEndpoint | default "http://localhost:17608" }}
-  DATUM_AUTH_PROVIDERS_GOOGLE_SCOPES: {{ .Values.datum.auth.providers.google.scopes }}
-  DATUM_AUTH_PROVIDERS_GOOGLE_REDIRECTURL: {{ .Values.datum.auth.providers.google.redirectUrl | default "/v1/google/callback" }}
-  DATUM_AUTH_PROVIDERS_WEBAUTHN_ENABLED: {{ .Values.datum.auth.providers.webauthn.enabled | default true }}
-  DATUM_AUTH_PROVIDERS_WEBAUTHN_DISPLAYNAME: {{ .Values.datum.auth.providers.webauthn.displayName | default "Datum" }}
-  DATUM_AUTH_PROVIDERS_WEBAUTHN_RELYINGPARTYID: {{ .Values.datum.auth.providers.webauthn.relyingPartyId | default "localhost" }}
-  DATUM_AUTH_PROVIDERS_WEBAUTHN_REQUESTORIGINS: {{ .Values.datum.auth.providers.webauthn.requestOrigins | default "http://localhost:3001" }}
-  DATUM_AUTH_PROVIDERS_WEBAUTHN_MAXDEVICES: {{ .Values.datum.auth.providers.webauthn.maxDevices | default 10 }}
-  DATUM_AUTH_PROVIDERS_WEBAUTHN_ENFORCETIMEOUT: {{ .Values.datum.auth.providers.webauthn.enforceTimeout | default true }}
-  DATUM_AUTH_PROVIDERS_WEBAUTHN_TIMEOUT: {{ .Values.datum.auth.providers.webauthn.timeout | default "60s" }}
-  DATUM_AUTH_PROVIDERS_WEBAUTHN_DEBUG: {{ .Values.datum.auth.providers.webauthn.debug | default false }}
-  DATUM_AUTHZ_ENABLED: {{ .Values.datum.authz.enabled | default true }}
-  DATUM_AUTHZ_STORENAME: {{ .Values.datum.authz.storeName | default "datum" }}
-  DATUM_AUTHZ_HOSTURL: {{ .Values.datum.authz.hostUrl | default "https://authz.datum.net" }}
-  DATUM_AUTHZ_STOREID: {{ .Values.datum.authz.storeId }}
-  DATUM_AUTHZ_MODELID: {{ .Values.datum.authz.modelId }}
-  DATUM_AUTHZ_CREATENEWMODEL: {{ .Values.datum.authz.createNewModel | default false }}
-  DATUM_AUTHZ_MODELFILE: {{ .Values.datum.authz.modelFile | default "fga/model/datum.fga" }}
-  DATUM_AUTHZ_CREDENTIALS_APITOKEN: {{ .Values.datum.authz.credentials.apiToken }}
-  DATUM_AUTHZ_CREDENTIALS_CLIENTID: {{ .Values.datum.authz.credentials.clientId }}
-  DATUM_AUTHZ_CREDENTIALS_CLIENTSECRET: {{ .Values.datum.authz.credentials.clientSecret }}
-  DATUM_AUTHZ_CREDENTIALS_AUDIENCE: {{ .Values.datum.authz.credentials.audience }}
-  DATUM_AUTHZ_CREDENTIALS_ISSUER: {{ .Values.datum.authz.credentials.issuer }}
-  DATUM_AUTHZ_CREDENTIALS_SCOPES: {{ .Values.datum.authz.credentials.scopes }}
-  DATUM_DB_DEBUG: {{ .Values.datum.db.debug | default false }}
-  DATUM_DB_DATABASENAME: {{ .Values.datum.db.databaseName | default "datum" }}
-  DATUM_DB_DRIVERNAME: {{ .Values.datum.db.driverName | default "libsql" }}
-  DATUM_DB_MULTIWRITE: {{ .Values.datum.db.multiWrite | default false }}
-  DATUM_DB_PRIMARYDBSOURCE: {{ .Values.datum.db.primaryDbSource | default "file:datum.db" }}
-  DATUM_DB_SECONDARYDBSOURCE: {{ .Values.datum.db.secondaryDbSource | default "file:backup.db" }}
-  DATUM_DB_CACHETTL: {{ .Values.datum.db.cacheTTL | default "1s" }}
-  DATUM_DB_RUNMIGRATIONS: {{ .Values.datum.db.runMigrations | default true }}
-  DATUM_DB_MIGRATIONPROVIDER: {{ .Values.datum.db.migrationProvider | default "atlas" }}
-  DATUM_DB_ENABLEHISTORY: {{ .Values.datum.db.enableHistory | default false }}
-  DATUM_GEODETIC_ENABLED: {{ .Values.datum.geodetic.enabled | default true }}
-  DATUM_GEODETIC_BASEURL: {{ .Values.datum.geodetic.baseUrl | default "http://localhost:1337" }}
-  DATUM_GEODETIC_ENDPOINT: {{ .Values.datum.geodetic.endpoint | default "query" }}
-  DATUM_GEODETIC_DEBUG: {{ .Values.datum.geodetic.debug | default false }}
-  DATUM_REDIS_ENABLED: {{ .Values.datum.redis.enabled | default true }}
-  DATUM_REDIS_ADDRESS: {{ .Values.datum.redis.address | default "localhost:6379" }}
-  DATUM_REDIS_NAME: {{ .Values.datum.redis.name | default "datum" }}
-  DATUM_REDIS_USERNAME: {{ .Values.datum.redis.username }}
-  DATUM_REDIS_PASSWORD: {{ .Values.datum.redis.password }}
-  DATUM_REDIS_DB: {{ .Values.datum.redis.db | default 0 }}
-  DATUM_REDIS_DIALTIMEOUT: {{ .Values.datum.redis.dialTimeout | default "5s" }}
-  DATUM_REDIS_READTIMEOUT: {{ .Values.datum.redis.readTimeout | default "0" }}
-  DATUM_REDIS_WRITETIMEOUT: {{ .Values.datum.redis.writeTimeout | default "0" }}
-  DATUM_REDIS_MAXRETRIES: {{ .Values.datum.redis.maxRetries | default 3 }}
-  DATUM_REDIS_MINIDLECONNS: {{ .Values.datum.redis.minIdleConns | default 0 }}
-  DATUM_REDIS_MAXIDLECONNS: {{ .Values.datum.redis.maxIdleConns | default 0 }}
-  DATUM_REDIS_MAXACTIVECONNS: {{ .Values.datum.redis.maxActiveConns | default 0 }}
-  DATUM_TRACER_ENABLED: {{ .Values.datum.tracer.enabled | default false }}
-  DATUM_TRACER_PROVIDER: {{ .Values.datum.tracer.provider | default "stdout" }}
-  DATUM_TRACER_ENVIRONMENT: {{ .Values.datum.tracer.environment | default "development" }}
-  DATUM_TRACER_STDOUT_PRETTY: {{ .Values.datum.tracer.stdout.pretty | default true }}
-  DATUM_TRACER_STDOUT_DISABLETIMESTAMP: {{ .Values.datum.tracer.stdout.disableTimestamp | default false }}
-  DATUM_TRACER_OTLP_ENDPOINT: {{ .Values.datum.tracer.otlp.endpoint | default "localhost:4317" }}
-  DATUM_TRACER_OTLP_INSECURE: {{ .Values.datum.tracer.otlp.insecure | default true }}
-  DATUM_TRACER_OTLP_CERTIFICATE: {{ .Values.datum.tracer.otlp.certificate }}
-  DATUM_TRACER_OTLP_HEADERS: {{ .Values.datum.tracer.otlp.headers }}
-  DATUM_TRACER_OTLP_COMPRESSION: {{ .Values.datum.tracer.otlp.compression }}
-  DATUM_TRACER_OTLP_TIMEOUT: {{ .Values.datum.tracer.otlp.timeout | default "10s" }}
-  DATUM_EMAIL_SENDGRIDAPIKEY: {{ .Values.datum.email.sendGridApiKey }}
-  DATUM_EMAIL_FROMEMAIL: {{ .Values.datum.email.fromEmail | default "no-reply@datum.net" }}
-  DATUM_EMAIL_TESTING: {{ .Values.datum.email.testing | default true }}
-  DATUM_EMAIL_ARCHIVE: {{ .Values.datum.email.archive }}
-  DATUM_EMAIL_DATUMLISTID: {{ .Values.datum.email.datumListId }}
-  DATUM_EMAIL_ADMINEMAIL: {{ .Values.datum.email.adminEmail | default "admins@datum.net" }}
-  DATUM_EMAIL_CONSOLEURL_CONSOLEBASE: {{ .Values.datum.email.consoleUrl.consoleBase | default "https://console.datum.net" }}
-  DATUM_EMAIL_CONSOLEURL_VERIFY: {{ .Values.datum.email.consoleUrl.verify | default "/verify" }}
-  DATUM_EMAIL_CONSOLEURL_INVITE: {{ .Values.datum.email.consoleUrl.invite | default "/invite" }}
-  DATUM_EMAIL_CONSOLEURL_RESET: {{ .Values.datum.email.consoleUrl.reset | default "/password-reset" }}
-  DATUM_EMAIL_MARKETINGURL_MARKETINGBASE: {{ .Values.datum.email.marketingUrl.marketingBase | default "https://www.datum.net" }}
-  DATUM_EMAIL_MARKETINGURL_SUBSCRIBERVERIFY: {{ .Values.datum.email.marketingUrl.subscriberVerify | default "/verify" }}
-  DATUM_SESSIONS_SIGNINGKEY: {{ .Values.datum.sessions.signingKey | default "my-signing-secret" }}
-  DATUM_SESSIONS_ENCRYPTIONKEY: {{ .Values.datum.sessions.encryptionKey | default "encryptionsecret" }}
-  DATUM_SESSIONS_DOMAIN: {{ .Values.datum.sessions.domain }}
-  DATUM_POSTHOG_ENABLED: {{ .Values.datum.posthog.enabled | default false }}
-  DATUM_POSTHOG_APIKEY: {{ .Values.datum.posthog.apiKey }}
-  DATUM_POSTHOG_HOST: {{ .Values.datum.posthog.host | default "https://app.posthog.com" }}
-  DATUM_TOTP_ENABLED: {{ .Values.datum.totp.enabled | default true }}
-  DATUM_TOTP_CODELENGTH: {{ .Values.datum.totp.codeLength | default 6 }}
-  DATUM_TOTP_ISSUER: {{ .Values.datum.totp.issuer | default "datum" }}
-  DATUM_TOTP_REDIS: {{ .Values.datum.totp.redis | default true }}
-  DATUM_TOTP_SECRET: {{ .Values.datum.totp.secret }}
-  DATUM_TOTP_RECOVERYCODECOUNT: {{ .Values.datum.totp.recoveryCodeCount | default 16 }}
-  DATUM_TOTP_RECOVERYCODELENGTH: {{ .Values.datum.totp.recoveryCodeLength | default 8 }}
-  DATUM_RATELIMIT_ENABLED: {{ .Values.datum.ratelimit.enabled | default false }}
-  DATUM_RATELIMIT_LIMIT: {{ .Values.datum.ratelimit.limit | default 10 }}
-  DATUM_RATELIMIT_BURST: {{ .Values.datum.ratelimit.burst | default 30 }}
-  DATUM_RATELIMIT_EXPIRES: {{ .Values.datum.ratelimit.expires | default "10m" }}
-  DATUM_PUBLISHERCONFIG_ENABLED: {{ .Values.datum.publisherConfig.enabled | default false }}
-  DATUM_PUBLISHERCONFIG_APPNAME: {{ .Values.datum.publisherConfig.appName | default "datum" }}
-  DATUM_PUBLISHERCONFIG_ADDRESS: {{ .Values.datum.publisherConfig.address | default "localhost:10000" }}
-  DATUM_PUBLISHERCONFIG_ADDRESSES: {{ .Values.datum.publisherConfig.addresses | default "localhost:10000" }}
-  DATUM_PUBLISHERCONFIG_DEBUG: {{ .Values.datum.publisherConfig.debug | default false }}
+  CORE_REFRESHINTERVAL: {{ .Values.core.refreshInterval | default "10m" }}
+  CORE_SERVER_DEBUG: {{ .Values.core.server.debug | default false }}
+  CORE_SERVER_DEV: {{ .Values.core.server.dev | default false }}
+  CORE_SERVER_LISTEN: {{ .Values.core.server.listen | default ":17608" }}
+  CORE_SERVER_SHUTDOWNGRACEPERIOD: {{ .Values.core.server.shutdownGracePeriod | default "10s" }}
+  CORE_SERVER_READTIMEOUT: {{ .Values.core.server.readTimeout | default "15s" }}
+  CORE_SERVER_WRITETIMEOUT: {{ .Values.core.server.writeTimeout | default "15s" }}
+  CORE_SERVER_IDLETIMEOUT: {{ .Values.core.server.idleTimeout | default "30s" }}
+  CORE_SERVER_READHEADERTIMEOUT: {{ .Values.core.server.readHeaderTimeout | default "2s" }}
+  CORE_SERVER_TLS_ENABLED: {{ .Values.core.server.tls.enabled | default false }}
+  CORE_SERVER_TLS_CERTFILE: {{ .Values.core.server.tls.certFile | default "server.crt" }}
+  CORE_SERVER_TLS_CERTKEY: {{ .Values.core.server.tls.certKey | default "server.key" }}
+  CORE_SERVER_TLS_AUTOCERT: {{ .Values.core.server.tls.autoCert | default false }}
+  CORE_SERVER_CORS_ENABLED: {{ .Values.core.server.cors.enabled | default true }}
+  CORE_SERVER_CORS_PREFIXES: {{ .Values.core.server.cors.prefixes }}
+  CORE_SERVER_CORS_ALLOWORIGINS: {{ .Values.core.server.cors.allowOrigins }}
+  CORE_SERVER_CORS_COOKIEINSECURE: {{ .Values.core.server.cors.cookieInsecure }}
+  CORE_SERVER_SECURE_ENABLED: {{ .Values.core.server.secure.enabled | default true }}
+  CORE_SERVER_SECURE_XSSPROTECTION: {{ .Values.core.server.secure.xssprotection | default "1; mode=block" }}
+  CORE_SERVER_SECURE_CONTENTTYPENOSNIFF: {{ .Values.core.server.secure.contenttypenosniff | default "nosniff" }}
+  CORE_SERVER_SECURE_XFRAMEOPTIONS: {{ .Values.core.server.secure.xframeoptions | default "SAMEORIGIN" }}
+  CORE_SERVER_SECURE_HSTSPRELOADENABLED: {{ .Values.core.server.secure.hstspreloadenabled | default false }}
+  CORE_SERVER_SECURE_HSTSMAXAGE: {{ .Values.core.server.secure.hstsmaxage | default 31536000 }}
+  CORE_SERVER_SECURE_CONTENTSECURITYPOLICY: {{ .Values.core.server.secure.contentsecuritypolicy | default "default-src 'self'" }}
+  CORE_SERVER_SECURE_REFERRERPOLICY: {{ .Values.core.server.secure.referrerpolicy | default "same-origin" }}
+  CORE_SERVER_SECURE_CSPREPORTONLY: {{ .Values.core.server.secure.cspreportonly | default false }}
+  CORE_SERVER_REDIRECTS_ENABLED: {{ .Values.core.server.redirects.enabled | default true }}
+  CORE_SERVER_REDIRECTS_REDIRECTS: {{ .Values.core.server.redirects.redirects }}
+  CORE_SERVER_REDIRECTS_CODE: {{ .Values.core.server.redirects.code }}
+  CORE_SERVER_CACHECONTROL_ENABLED: {{ .Values.core.server.cacheControl.enabled | default true }}
+  CORE_SERVER_CACHECONTROL_NOCACHEHEADERS: {{ .Values.core.server.cacheControl.noCacheHeaders }}
+  CORE_SERVER_CACHECONTROL_ETAGHEADERS: {{ .Values.core.server.cacheControl.etagHeaders }}
+  CORE_SERVER_MIME_ENABLED: {{ .Values.core.server.mime.enabled | default true }}
+  CORE_SERVER_MIME_MIMETYPESFILE: {{ .Values.core.server.mime.mimeTypesFile }}
+  CORE_SERVER_MIME_DEFAULTCONTENTTYPE: {{ .Values.core.server.mime.defaultContentType | default "application/data" }}
+  CORE_SERVER_GRAPHPOOL_MAXWORKERS: {{ .Values.core.server.graphPool.maxWorkers | default 100 }}
+  CORE_SERVER_GRAPHPOOL_MAXCAPACITY: {{ .Values.core.server.graphPool.maxCapacity | default 1000 }}
+  CORE_SERVER_ENABLEGRAPHEXTENSIONS: {{ .Values.core.server.enableGraphExtensions | default true }}
+  CORE_ENTCONFIG_FLAGS_USELISTUSERSERVICE: {{ .Values.core.entConfig.flags.useListUserService | default true }}
+  CORE_ENTCONFIG_FLAGS_USELISTOBJECTSERVICES: {{ .Values.core.entConfig.flags.useListObjectServices | default false }}
+  CORE_ENTCONFIG_ENTITYTYPES: {{ .Values.core.entConfig.entityTypes }}
+  CORE_AUTH_ENABLED: {{ .Values.core.auth.enabled | default true }}
+  CORE_AUTH_TOKEN_KID: {{ .Values.core.auth.token.kid }}
+  CORE_AUTH_TOKEN_AUDIENCE: {{ .Values.core.auth.token.audience | default "https://theopenlane.io" }}
+  CORE_AUTH_TOKEN_REFRESHAUDIENCE: {{ .Values.core.auth.token.refreshAudience }}
+  CORE_AUTH_TOKEN_ISSUER: {{ .Values.core.auth.token.issuer | default "https://auth.theopenlane.io" }}
+  CORE_AUTH_TOKEN_ACCESSDURATION: {{ .Values.core.auth.token.accessDuration | default "1h" }}
+  CORE_AUTH_TOKEN_REFRESHDURATION: {{ .Values.core.auth.token.refreshDuration | default "2h" }}
+  CORE_AUTH_TOKEN_REFRESHOVERLAP: {{ .Values.core.auth.token.refreshOverlap | default "-15m" }}
+  CORE_AUTH_TOKEN_JWKSENDPOINT: {{ .Values.core.auth.token.jwksEndpoint | default "https://api.theopenlane.io/.well-known/jwks.json" }}
+  CORE_AUTH_TOKEN_KEYS: {{ .Values.core.auth.token.keys }}
+  CORE_AUTH_TOKEN_GENERATEKEYS: {{ .Values.core.auth.token.generateKeys | default true }}
+  CORE_AUTH_SUPPORTEDPROVIDERS: {{ .Values.core.auth.supportedProviders }}
+  CORE_AUTH_PROVIDERS_REDIRECTURL: {{ .Values.core.auth.providers.redirectUrl | default "http://localhost:3001/api/auth/callback/theopenlane" }}
+  CORE_AUTH_PROVIDERS_GITHUB_CLIENTID: {{ .Values.core.auth.providers.github.clientId }}
+  CORE_AUTH_PROVIDERS_GITHUB_CLIENTSECRET: {{ .Values.core.auth.providers.github.clientSecret }}
+  CORE_AUTH_PROVIDERS_GITHUB_CLIENTENDPOINT: {{ .Values.core.auth.providers.github.clientEndpoint | default "http://localhost:17608" }}
+  CORE_AUTH_PROVIDERS_GITHUB_SCOPES: {{ .Values.core.auth.providers.github.scopes }}
+  CORE_AUTH_PROVIDERS_GITHUB_REDIRECTURL: {{ .Values.core.auth.providers.github.redirectUrl | default "/v1/github/callback" }}
+  CORE_AUTH_PROVIDERS_GOOGLE_CLIENTID: {{ .Values.core.auth.providers.google.clientId }}
+  CORE_AUTH_PROVIDERS_GOOGLE_CLIENTSECRET: {{ .Values.core.auth.providers.google.clientSecret }}
+  CORE_AUTH_PROVIDERS_GOOGLE_CLIENTENDPOINT: {{ .Values.core.auth.providers.google.clientEndpoint | default "http://localhost:17608" }}
+  CORE_AUTH_PROVIDERS_GOOGLE_SCOPES: {{ .Values.core.auth.providers.google.scopes }}
+  CORE_AUTH_PROVIDERS_GOOGLE_REDIRECTURL: {{ .Values.core.auth.providers.google.redirectUrl | default "/v1/google/callback" }}
+  CORE_AUTH_PROVIDERS_WEBAUTHN_ENABLED: {{ .Values.core.auth.providers.webauthn.enabled | default true }}
+  CORE_AUTH_PROVIDERS_WEBAUTHN_DISPLAYNAME: {{ .Values.core.auth.providers.webauthn.displayName }}
+  CORE_AUTH_PROVIDERS_WEBAUTHN_RELYINGPARTYID: {{ .Values.core.auth.providers.webauthn.relyingPartyId | default "localhost" }}
+  CORE_AUTH_PROVIDERS_WEBAUTHN_REQUESTORIGINS: {{ .Values.core.auth.providers.webauthn.requestOrigins | default "http://localhost:3001" }}
+  CORE_AUTH_PROVIDERS_WEBAUTHN_MAXDEVICES: {{ .Values.core.auth.providers.webauthn.maxDevices | default 10 }}
+  CORE_AUTH_PROVIDERS_WEBAUTHN_ENFORCETIMEOUT: {{ .Values.core.auth.providers.webauthn.enforceTimeout | default true }}
+  CORE_AUTH_PROVIDERS_WEBAUTHN_TIMEOUT: {{ .Values.core.auth.providers.webauthn.timeout | default "60s" }}
+  CORE_AUTH_PROVIDERS_WEBAUTHN_DEBUG: {{ .Values.core.auth.providers.webauthn.debug | default false }}
+  CORE_AUTHZ_ENABLED: {{ .Values.core.authz.enabled | default true }}
+  CORE_AUTHZ_STORENAME: {{ .Values.core.authz.storeName | default "openlane" }}
+  CORE_AUTHZ_HOSTURL: {{ .Values.core.authz.hostUrl | default "https://authz.theopenlane.io" }}
+  CORE_AUTHZ_STOREID: {{ .Values.core.authz.storeId }}
+  CORE_AUTHZ_MODELID: {{ .Values.core.authz.modelId }}
+  CORE_AUTHZ_CREATENEWMODEL: {{ .Values.core.authz.createNewModel | default false }}
+  CORE_AUTHZ_MODELFILE: {{ .Values.core.authz.modelFile | default "fga/model/openlane.fga" }}
+  CORE_AUTHZ_CREDENTIALS_APITOKEN: {{ .Values.core.authz.credentials.apiToken }}
+  CORE_AUTHZ_CREDENTIALS_CLIENTID: {{ .Values.core.authz.credentials.clientId }}
+  CORE_AUTHZ_CREDENTIALS_CLIENTSECRET: {{ .Values.core.authz.credentials.clientSecret }}
+  CORE_AUTHZ_CREDENTIALS_AUDIENCE: {{ .Values.core.authz.credentials.audience }}
+  CORE_AUTHZ_CREDENTIALS_ISSUER: {{ .Values.core.authz.credentials.issuer }}
+  CORE_AUTHZ_CREDENTIALS_SCOPES: {{ .Values.core.authz.credentials.scopes }}
+  CORE_DB_DEBUG: {{ .Values.core.db.debug | default false }}
+  CORE_DB_DATABASENAME: {{ .Values.core.db.databaseName | default "openlane" }}
+  CORE_DB_DRIVERNAME: {{ .Values.core.db.driverName | default "libsql" }}
+  CORE_DB_MULTIWRITE: {{ .Values.core.db.multiWrite | default false }}
+  CORE_DB_PRIMARYDBSOURCE: {{ .Values.core.db.primaryDbSource | default "file:openlane.db" }}
+  CORE_DB_SECONDARYDBSOURCE: {{ .Values.core.db.secondaryDbSource | default "file:backup.db" }}
+  CORE_DB_CACHETTL: {{ .Values.core.db.cacheTTL | default "1s" }}
+  CORE_DB_RUNMIGRATIONS: {{ .Values.core.db.runMigrations | default true }}
+  CORE_DB_MIGRATIONPROVIDER: {{ .Values.core.db.migrationProvider | default "atlas" }}
+  CORE_DB_ENABLEHISTORY: {{ .Values.core.db.enableHistory | default false }}
+  CORE_DBX_ENABLED: {{ .Values.core.dbx.enabled | default true }}
+  CORE_DBX_BASEURL: {{ .Values.core.dbx.baseUrl | default "http://localhost:1337" }}
+  CORE_DBX_ENDPOINT: {{ .Values.core.dbx.endpoint | default "query" }}
+  CORE_DBX_DEBUG: {{ .Values.core.dbx.debug | default false }}
+  CORE_REDIS_ENABLED: {{ .Values.core.redis.enabled | default true }}
+  CORE_REDIS_ADDRESS: {{ .Values.core.redis.address | default "localhost:6379" }}
+  CORE_REDIS_NAME: {{ .Values.core.redis.name | default "openlane" }}
+  CORE_REDIS_USERNAME: {{ .Values.core.redis.username }}
+  CORE_REDIS_PASSWORD: {{ .Values.core.redis.password }}
+  CORE_REDIS_DB: {{ .Values.core.redis.db | default 0 }}
+  CORE_REDIS_DIALTIMEOUT: {{ .Values.core.redis.dialTimeout | default "5s" }}
+  CORE_REDIS_READTIMEOUT: {{ .Values.core.redis.readTimeout | default "0" }}
+  CORE_REDIS_WRITETIMEOUT: {{ .Values.core.redis.writeTimeout | default "0" }}
+  CORE_REDIS_MAXRETRIES: {{ .Values.core.redis.maxRetries | default 3 }}
+  CORE_REDIS_MINIDLECONNS: {{ .Values.core.redis.minIdleConns | default 0 }}
+  CORE_REDIS_MAXIDLECONNS: {{ .Values.core.redis.maxIdleConns | default 0 }}
+  CORE_REDIS_MAXACTIVECONNS: {{ .Values.core.redis.maxActiveConns | default 0 }}
+  CORE_TRACER_ENABLED: {{ .Values.core.tracer.enabled | default false }}
+  CORE_TRACER_PROVIDER: {{ .Values.core.tracer.provider | default "stdout" }}
+  CORE_TRACER_ENVIRONMENT: {{ .Values.core.tracer.environment | default "development" }}
+  CORE_TRACER_STDOUT_PRETTY: {{ .Values.core.tracer.stdout.pretty | default true }}
+  CORE_TRACER_STDOUT_DISABLETIMESTAMP: {{ .Values.core.tracer.stdout.disableTimestamp | default false }}
+  CORE_TRACER_OTLP_ENDPOINT: {{ .Values.core.tracer.otlp.endpoint | default "localhost:4317" }}
+  CORE_TRACER_OTLP_INSECURE: {{ .Values.core.tracer.otlp.insecure | default true }}
+  CORE_TRACER_OTLP_CERTIFICATE: {{ .Values.core.tracer.otlp.certificate }}
+  CORE_TRACER_OTLP_HEADERS: {{ .Values.core.tracer.otlp.headers }}
+  CORE_TRACER_OTLP_COMPRESSION: {{ .Values.core.tracer.otlp.compression }}
+  CORE_TRACER_OTLP_TIMEOUT: {{ .Values.core.tracer.otlp.timeout | default "10s" }}
+  CORE_EMAIL_SENDGRIDAPIKEY: {{ .Values.core.email.sendGridApiKey }}
+  CORE_EMAIL_FROMEMAIL: {{ .Values.core.email.fromEmail | default "no-reply@theopenlane.io" }}
+  CORE_EMAIL_TESTING: {{ .Values.core.email.testing | default true }}
+  CORE_EMAIL_ARCHIVE: {{ .Values.core.email.archive }}
+  CORE_EMAIL_LISTID: {{ .Values.core.email.listId }}
+  CORE_EMAIL_ADMINEMAIL: {{ .Values.core.email.adminEmail | default "admins@theopenlane.io" }}
+  CORE_EMAIL_CONSOLEURL_CONSOLEBASE: {{ .Values.core.email.consoleUrl.consoleBase | default "https://console.theopenlane.io" }}
+  CORE_EMAIL_CONSOLEURL_VERIFY: {{ .Values.core.email.consoleUrl.verify | default "/verify" }}
+  CORE_EMAIL_CONSOLEURL_INVITE: {{ .Values.core.email.consoleUrl.invite | default "/invite" }}
+  CORE_EMAIL_CONSOLEURL_RESET: {{ .Values.core.email.consoleUrl.reset | default "/password-reset" }}
+  CORE_EMAIL_MARKETINGURL_MARKETINGBASE: {{ .Values.core.email.marketingUrl.marketingBase | default "https://www.theopenlane.io" }}
+  CORE_EMAIL_MARKETINGURL_SUBSCRIBERVERIFY: {{ .Values.core.email.marketingUrl.subscriberVerify | default "/verify" }}
+  CORE_SESSIONS_SIGNINGKEY: {{ .Values.core.sessions.signingKey | default "my-signing-secret" }}
+  CORE_SESSIONS_ENCRYPTIONKEY: {{ .Values.core.sessions.encryptionKey | default "encryptionsecret" }}
+  CORE_SESSIONS_DOMAIN: {{ .Values.core.sessions.domain }}
+  CORE_POSTHOG_ENABLED: {{ .Values.core.posthog.enabled | default false }}
+  CORE_POSTHOG_APIKEY: {{ .Values.core.posthog.apiKey }}
+  CORE_POSTHOG_HOST: {{ .Values.core.posthog.host | default "https://app.posthog.com" }}
+  CORE_TOTP_ENABLED: {{ .Values.core.totp.enabled | default true }}
+  CORE_TOTP_CODELENGTH: {{ .Values.core.totp.codeLength | default 6 }}
+  CORE_TOTP_ISSUER: {{ .Values.core.totp.issuer }}
+  CORE_TOTP_REDIS: {{ .Values.core.totp.redis | default true }}
+  CORE_TOTP_SECRET: {{ .Values.core.totp.secret }}
+  CORE_TOTP_RECOVERYCODECOUNT: {{ .Values.core.totp.recoveryCodeCount | default 16 }}
+  CORE_TOTP_RECOVERYCODELENGTH: {{ .Values.core.totp.recoveryCodeLength | default 8 }}
+  CORE_RATELIMIT_ENABLED: {{ .Values.core.ratelimit.enabled | default false }}
+  CORE_RATELIMIT_LIMIT: {{ .Values.core.ratelimit.limit | default 10 }}
+  CORE_RATELIMIT_BURST: {{ .Values.core.ratelimit.burst | default 30 }}
+  CORE_RATELIMIT_EXPIRES: {{ .Values.core.ratelimit.expires | default "10m" }}
+  CORE_PUBLISHERCONFIG_ENABLED: {{ .Values.core.publisherConfig.enabled | default false }}
+  CORE_PUBLISHERCONFIG_APPNAME: {{ .Values.core.publisherConfig.appName | default "openlane" }}
+  CORE_PUBLISHERCONFIG_ADDRESS: {{ .Values.core.publisherConfig.address | default "localhost:10000" }}
+  CORE_PUBLISHERCONFIG_ADDRESSES: {{ .Values.core.publisherConfig.addresses | default "localhost:10000" }}
+  CORE_PUBLISHERCONFIG_DEBUG: {{ .Values.core.publisherConfig.debug | default false }}

@@ -11,15 +11,15 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent/entc"
 	"entgo.io/ent/entc/gen"
-	"github.com/datumforge/fgax"
-	"github.com/datumforge/fgax/entfga"
+	"github.com/theopenlane/iam/entfga"
+	"github.com/theopenlane/iam/fgax"
 	"go.uber.org/zap"
 	"gocloud.dev/secrets"
 
-	"github.com/datumforge/enthistory"
-	"github.com/datumforge/entx"
-	"github.com/datumforge/entx/genhooks"
-	geodetic "github.com/datumforge/geodetic/pkg/geodeticclient"
+	dbx "github.com/theopenlane/dbx/pkg/dbxclient"
+	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/genhooks"
+	"github.com/theopenlane/entx/history"
 	"github.com/theopenlane/utils/emails"
 	"github.com/theopenlane/utils/marionette"
 	"github.com/theopenlane/utils/totp"
@@ -118,8 +118,8 @@ func main() {
 			entc.DependencyType(&totp.Manager{}),
 		),
 		entc.Dependency(
-			entc.DependencyName("Geodetic"),
-			entc.DependencyType(&geodetic.Client{}),
+			entc.DependencyName("DBx"),
+			entc.DependencyType(&dbx.Client{}),
 		),
 		entc.TemplateDir("./internal/ent/templates"),
 		entc.Extensions(
@@ -133,19 +133,19 @@ func main() {
 
 // preRun runs before the ent codegen to generate the history schemas and authz checks
 // and returns the history and fga extensions to be used in the ent codegen
-func preRun() (*enthistory.HistoryExtension, *entfga.AuthzExtension) {
+func preRun() (*history.HistoryExtension, *entfga.AuthzExtension) {
 	// generate the history schemas
-	historyExt := enthistory.New(
-		enthistory.WithAuditing(),
-		enthistory.WithImmutableFields(),
-		enthistory.WithHistoryTimeIndex(),
-		enthistory.WithNillableFields(),
-		enthistory.WithGQLQuery(),
-		enthistory.WithAuthzPolicy(),
-		enthistory.WithSchemaPath(schemaPath),
-		enthistory.WithFirstRun(true),
-		enthistory.WithAllowedRelation("audit_log_viewer"),
-		enthistory.WithUpdatedByFromSchema(enthistory.ValueTypeString, false),
+	historyExt := history.New(
+		history.WithAuditing(),
+		history.WithImmutableFields(),
+		history.WithHistoryTimeIndex(),
+		history.WithNillableFields(),
+		history.WithGQLQuery(),
+		history.WithAuthzPolicy(),
+		history.WithSchemaPath(schemaPath),
+		history.WithFirstRun(true),
+		history.WithAllowedRelation("audit_log_viewer"),
+		history.WithUpdatedByFromSchema(history.ValueTypeString, false),
 	)
 
 	if err := historyExt.GenerateSchemas(); err != nil {

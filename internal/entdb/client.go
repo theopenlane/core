@@ -11,8 +11,8 @@ import (
 	"ariga.io/entcache"
 	"entgo.io/ent/dialect"
 	entsql "entgo.io/ent/dialect/sql"
-	"github.com/datumforge/entx"
 	"github.com/pressly/goose/v3"
+	"github.com/theopenlane/entx"
 
 	"go.uber.org/zap"
 

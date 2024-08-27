@@ -9,8 +9,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/datumforge/enthistory"
 	"github.com/theopenlane/core/internal/ent/generated/hushhistory"
+	"github.com/theopenlane/entx/history"
 )
 
 // HushHistory is the model entity for the HushHistory schema.
@@ -23,7 +23,7 @@ type HushHistory struct {
 	// Ref holds the value of the "ref" field.
 	Ref string `json:"ref,omitempty"`
 	// Operation holds the value of the "operation" field.
-	Operation enthistory.OpType `json:"operation,omitempty"`
+	Operation history.OpType `json:"operation,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
@@ -57,7 +57,7 @@ func (*HushHistory) scanValues(columns []string) ([]any, error) {
 	for i := range columns {
 		switch columns[i] {
 		case hushhistory.FieldOperation:
-			values[i] = new(enthistory.OpType)
+			values[i] = new(history.OpType)
 		case hushhistory.FieldID, hushhistory.FieldRef, hushhistory.FieldCreatedBy, hushhistory.FieldUpdatedBy, hushhistory.FieldMappingID, hushhistory.FieldDeletedBy, hushhistory.FieldName, hushhistory.FieldDescription, hushhistory.FieldKind, hushhistory.FieldSecretName, hushhistory.FieldSecretValue:
 			values[i] = new(sql.NullString)
 		case hushhistory.FieldHistoryTime, hushhistory.FieldCreatedAt, hushhistory.FieldUpdatedAt, hushhistory.FieldDeletedAt:
@@ -96,7 +96,7 @@ func (hh *HushHistory) assignValues(columns []string, values []any) error {
 				hh.Ref = value.String
 			}
 		case hushhistory.FieldOperation:
-			if value, ok := values[i].(*enthistory.OpType); !ok {
+			if value, ok := values[i].(*history.OpType); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value != nil {
 				hh.Operation = *value

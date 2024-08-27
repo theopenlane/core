@@ -19,7 +19,7 @@ var createCmd = &cobra.Command{
 }
 
 func init() {
-	cmd.AddCommand(createCmd)
+	command.AddCommand(createCmd)
 
 	createCmd.Flags().StringP("name", "n", "", "name of the organization")
 	createCmd.Flags().StringP("display-name", "s", "", "display name of the organization")

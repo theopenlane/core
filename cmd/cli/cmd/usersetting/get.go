@@ -18,7 +18,7 @@ var getCmd = &cobra.Command{
 }
 
 func init() {
-	cmd.AddCommand(getCmd)
+	command.AddCommand(getCmd)
 
 	getCmd.Flags().StringP("id", "i", "", "user setting id to retrieve")
 }

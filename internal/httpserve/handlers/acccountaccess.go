@@ -3,13 +3,14 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/datumforge/fgax"
 	"github.com/getkin/kin-openapi/openapi3"
 	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/iam/fgax"
+
+	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/pkg/auth"
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/utils/rout"
 )
 
 // AccountAccessHandler checks if a subject has access to an object

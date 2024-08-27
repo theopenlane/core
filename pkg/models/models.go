@@ -5,9 +5,10 @@ import (
 
 	"github.com/go-webauthn/webauthn/protocol"
 
-	"github.com/theopenlane/core/pkg/passwd"
 	"github.com/theopenlane/utils/rout"
 	"github.com/theopenlane/utils/ulids"
+
+	"github.com/theopenlane/core/pkg/passwd"
 )
 
 // =========
@@ -170,7 +171,7 @@ var ExampleRegisterSuccessResponse = RegisterReply{
 	Reply:   rout.Reply{Success: true},
 	ID:      "1234",
 	Email:   "",
-	Message: "Welcome to Datum!",
+	Message: "Welcome to OpenLane!",
 	Token:   "",
 }
 
@@ -565,7 +566,7 @@ var ExampleInviteResponse = InviteReply{
 // OAUTH
 // =========
 
-// OauthTokenRequest to authenticate an oauth user with the Datum Server
+// OauthTokenRequest to authenticate an oauth user with the Server
 type OauthTokenRequest struct {
 	Name             string `json:"name"`
 	Email            string `json:"email"`

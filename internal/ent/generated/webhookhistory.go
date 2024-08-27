@@ -10,8 +10,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/datumforge/enthistory"
 	"github.com/theopenlane/core/internal/ent/generated/webhookhistory"
+	"github.com/theopenlane/entx/history"
 )
 
 // WebhookHistory is the model entity for the WebhookHistory schema.
@@ -24,7 +24,7 @@ type WebhookHistory struct {
 	// Ref holds the value of the "ref" field.
 	Ref string `json:"ref,omitempty"`
 	// Operation holds the value of the "operation" field.
-	Operation enthistory.OpType `json:"operation,omitempty"`
+	Operation history.OpType `json:"operation,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
@@ -74,7 +74,7 @@ func (*WebhookHistory) scanValues(columns []string) ([]any, error) {
 		case webhookhistory.FieldTags, webhookhistory.FieldSecret:
 			values[i] = new([]byte)
 		case webhookhistory.FieldOperation:
-			values[i] = new(enthistory.OpType)
+			values[i] = new(history.OpType)
 		case webhookhistory.FieldEnabled:
 			values[i] = new(sql.NullBool)
 		case webhookhistory.FieldFailures:
@@ -117,7 +117,7 @@ func (wh *WebhookHistory) assignValues(columns []string, values []any) error {
 				wh.Ref = value.String
 			}
 		case webhookhistory.FieldOperation:
-			if value, ok := values[i].(*enthistory.OpType); !ok {
+			if value, ok := values[i].(*history.OpType); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value != nil {
 				wh.Operation = *value

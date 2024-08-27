@@ -6,7 +6,7 @@ import (
 
 	"github.com/Yamashou/gqlgenc/clientv2"
 
-	"github.com/theopenlane/core/pkg/httpsling"
+	"github.com/theopenlane/httpsling"
 )
 
 // Config is the configuration for the API client

@@ -401,7 +401,7 @@ type ContactHistoryEdge {
 """
 ContactHistoryOpType is enum for the field operation
 """
-enum ContactHistoryOpType @goModel(model: "github.com/datumforge/enthistory.OpType") {
+enum ContactHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
   INSERT
   UPDATE
   DELETE
@@ -1968,7 +1968,7 @@ type DocumentDataHistoryEdge {
 """
 DocumentDataHistoryOpType is enum for the field operation
 """
-enum DocumentDataHistoryOpType @goModel(model: "github.com/datumforge/enthistory.OpType") {
+enum DocumentDataHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
   INSERT
   UPDATE
   DELETE
@@ -2482,7 +2482,7 @@ type EntitlementHistoryEdge {
 """
 EntitlementHistoryOpType is enum for the field operation
 """
-enum EntitlementHistoryOpType @goModel(model: "github.com/datumforge/enthistory.OpType") {
+enum EntitlementHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
   INSERT
   UPDATE
   DELETE
@@ -2935,7 +2935,7 @@ type EntitlementPlanFeatureHistoryEdge {
 """
 EntitlementPlanFeatureHistoryOpType is enum for the field operation
 """
-enum EntitlementPlanFeatureHistoryOpType @goModel(model: "github.com/datumforge/enthistory.OpType") {
+enum EntitlementPlanFeatureHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
   INSERT
   UPDATE
   DELETE
@@ -3329,7 +3329,7 @@ type EntitlementPlanHistoryEdge {
 """
 EntitlementPlanHistoryOpType is enum for the field operation
 """
-enum EntitlementPlanHistoryOpType @goModel(model: "github.com/datumforge/enthistory.OpType") {
+enum EntitlementPlanHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
   INSERT
   UPDATE
   DELETE
@@ -4195,7 +4195,7 @@ type EntityHistoryEdge {
 """
 EntityHistoryOpType is enum for the field operation
 """
-enum EntityHistoryOpType @goModel(model: "github.com/datumforge/enthistory.OpType") {
+enum EntityHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
   INSERT
   UPDATE
   DELETE
@@ -4591,7 +4591,7 @@ type EntityTypeHistoryEdge {
 """
 EntityTypeHistoryOpType is enum for the field operation
 """
-enum EntityTypeHistoryOpType @goModel(model: "github.com/datumforge/enthistory.OpType") {
+enum EntityTypeHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
   INSERT
   UPDATE
   DELETE
@@ -5325,7 +5325,7 @@ type EventHistoryEdge {
 """
 EventHistoryOpType is enum for the field operation
 """
-enum EventHistoryOpType @goModel(model: "github.com/datumforge/enthistory.OpType") {
+enum EventHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
   INSERT
   UPDATE
   DELETE
@@ -5862,7 +5862,7 @@ type FeatureHistoryEdge {
 """
 FeatureHistoryOpType is enum for the field operation
 """
-enum FeatureHistoryOpType @goModel(model: "github.com/datumforge/enthistory.OpType") {
+enum FeatureHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
   INSERT
   UPDATE
   DELETE
@@ -6413,7 +6413,7 @@ type FileHistoryEdge {
 """
 FileHistoryOpType is enum for the field operation
 """
-enum FileHistoryOpType @goModel(model: "github.com/datumforge/enthistory.OpType") {
+enum FileHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
   INSERT
   UPDATE
   DELETE
@@ -7077,7 +7077,7 @@ type GroupHistoryEdge {
 """
 GroupHistoryOpType is enum for the field operation
 """
-enum GroupHistoryOpType @goModel(model: "github.com/datumforge/enthistory.OpType") {
+enum GroupHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
   INSERT
   UPDATE
   DELETE
@@ -7396,7 +7396,7 @@ type GroupMembershipHistoryEdge {
 """
 GroupMembershipHistoryOpType is enum for the field operation
 """
-enum GroupMembershipHistoryOpType @goModel(model: "github.com/datumforge/enthistory.OpType") {
+enum GroupMembershipHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
   INSERT
   UPDATE
   DELETE
@@ -7891,7 +7891,7 @@ enum GroupSettingHistoryJoinPolicy @goModel(model: "github.com/theopenlane/core/
 """
 GroupSettingHistoryOpType is enum for the field operation
 """
-enum GroupSettingHistoryOpType @goModel(model: "github.com/datumforge/enthistory.OpType") {
+enum GroupSettingHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
   INSERT
   UPDATE
   DELETE
@@ -8604,7 +8604,7 @@ type HushHistoryEdge {
 """
 HushHistoryOpType is enum for the field operation
 """
-enum HushHistoryOpType @goModel(model: "github.com/datumforge/enthistory.OpType") {
+enum HushHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
   INSERT
   UPDATE
   DELETE
@@ -9163,7 +9163,7 @@ type IntegrationHistoryEdge {
 """
 IntegrationHistoryOpType is enum for the field operation
 """
-enum IntegrationHistoryOpType @goModel(model: "github.com/datumforge/enthistory.OpType") {
+enum IntegrationHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
   INSERT
   UPDATE
   DELETE
@@ -10029,7 +10029,7 @@ type NoteHistoryEdge {
 """
 NoteHistoryOpType is enum for the field operation
 """
-enum NoteHistoryOpType @goModel(model: "github.com/datumforge/enthistory.OpType") {
+enum NoteHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
   INSERT
   UPDATE
   DELETE
@@ -10551,7 +10551,7 @@ type OauthProviderHistoryEdge {
 """
 OauthProviderHistoryOpType is enum for the field operation
 """
-enum OauthProviderHistoryOpType @goModel(model: "github.com/datumforge/enthistory.OpType") {
+enum OauthProviderHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
   INSERT
   UPDATE
   DELETE
@@ -11458,7 +11458,7 @@ type OrgMembershipHistoryEdge {
 """
 OrgMembershipHistoryOpType is enum for the field operation
 """
-enum OrgMembershipHistoryOpType @goModel(model: "github.com/datumforge/enthistory.OpType") {
+enum OrgMembershipHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
   INSERT
   UPDATE
   DELETE
@@ -11990,7 +11990,7 @@ type OrganizationHistoryEdge {
 """
 OrganizationHistoryOpType is enum for the field operation
 """
-enum OrganizationHistoryOpType @goModel(model: "github.com/datumforge/enthistory.OpType") {
+enum OrganizationHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
   INSERT
   UPDATE
   DELETE
@@ -12402,7 +12402,7 @@ type OrganizationSettingHistoryEdge {
 """
 OrganizationSettingHistoryOpType is enum for the field operation
 """
-enum OrganizationSettingHistoryOpType @goModel(model: "github.com/datumforge/enthistory.OpType") {
+enum OrganizationSettingHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
   INSERT
   UPDATE
   DELETE
@@ -15636,7 +15636,7 @@ type TemplateHistoryEdge {
 """
 TemplateHistoryOpType is enum for the field operation
 """
-enum TemplateHistoryOpType @goModel(model: "github.com/datumforge/enthistory.OpType") {
+enum TemplateHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
   INSERT
   UPDATE
   DELETE
@@ -17424,7 +17424,7 @@ type UserHistoryEdge {
 """
 UserHistoryOpType is enum for the field operation
 """
-enum UserHistoryOpType @goModel(model: "github.com/datumforge/enthistory.OpType") {
+enum UserHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
   INSERT
   UPDATE
   DELETE
@@ -17957,7 +17957,7 @@ type UserSettingHistoryEdge {
 """
 UserSettingHistoryOpType is enum for the field operation
 """
-enum UserSettingHistoryOpType @goModel(model: "github.com/datumforge/enthistory.OpType") {
+enum UserSettingHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
   INSERT
   UPDATE
   DELETE
@@ -18891,7 +18891,7 @@ type WebhookHistoryEdge {
 """
 WebhookHistoryOpType is enum for the field operation
 """
-enum WebhookHistoryOpType @goModel(model: "github.com/datumforge/enthistory.OpType") {
+enum WebhookHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
   INSERT
   UPDATE
   DELETE

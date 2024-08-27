@@ -18,7 +18,7 @@ var deleteCmd = &cobra.Command{
 }
 
 func init() {
-	cmd.AddCommand(deleteCmd)
+	command.AddCommand(deleteCmd)
 
 	deleteCmd.Flags().StringP("email", "e", "", "email address of the subscriber to delete")
 	deleteCmd.Flags().StringP("organization-id", "o", "", "organization ID of the subscriber to delete, only required when using a personal access token for the request")

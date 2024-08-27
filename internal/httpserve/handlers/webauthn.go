@@ -8,13 +8,14 @@ import (
 	"github.com/go-webauthn/webauthn/protocol"
 	"github.com/go-webauthn/webauthn/webauthn"
 
+	"github.com/theopenlane/utils/rout"
+
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/pkg/auth"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	provider "github.com/theopenlane/core/pkg/providers/webauthn"
 	"github.com/theopenlane/core/pkg/sessions"
-	"github.com/theopenlane/utils/rout"
 )
 
 const (

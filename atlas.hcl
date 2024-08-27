@@ -13,8 +13,3 @@ data "remote_dir" "migrations" {
   name = "core"
 }
 
-
-variable "token" {
-  type    = string
-  default = getenv("TURSO_TOKEN")
-}

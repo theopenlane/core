@@ -19,7 +19,7 @@ var createCmd = &cobra.Command{
 }
 
 func init() {
-	cmd.AddCommand(createCmd)
+	command.AddCommand(createCmd)
 
 	// command line flags for the create command
 	createCmd.Flags().StringP("name", "n", "", "full name of the contact")

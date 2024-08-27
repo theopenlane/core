@@ -6,8 +6,8 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 
-	"github.com/datumforge/enthistory"
-	emixin "github.com/datumforge/entx/mixin"
+	"github.com/theopenlane/entx/history"
+	emixin "github.com/theopenlane/entx/mixin"
 
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/mixin"
@@ -92,7 +92,7 @@ func (TFASetting) Annotations() []schema.Annotation {
 		entgql.QueryField(),
 		entgql.RelayConnection(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
-		enthistory.Annotations{
+		history.Annotations{
 			Exclude: true,
 		},
 	}

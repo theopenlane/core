@@ -8,7 +8,7 @@ import (
 	"github.com/theopenlane/core/cmd/cli/cmd"
 )
 
-var eventGetCmd = &cobra.Command{
+var getCmd = &cobra.Command{
 	Use:   "get",
 	Short: "get details of existing events",
 	Run: func(cmd *cobra.Command, args []string) {
@@ -18,9 +18,9 @@ var eventGetCmd = &cobra.Command{
 }
 
 func init() {
-	cmd.AddCommand(eventGetCmd)
+	command.AddCommand(getCmd)
 
-	eventGetCmd.Flags().StringP("id", "i", "", "get a specific event by ID")
+	getCmd.Flags().StringP("id", "i", "", "get a specific event by ID")
 }
 
 // get retrieves all events or a specific event by ID

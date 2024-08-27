@@ -22,7 +22,7 @@ var updateCmd = &cobra.Command{
 }
 
 func init() {
-	cmd.AddCommand(updateCmd)
+	command.AddCommand(updateCmd)
 
 	updateCmd.Flags().StringP("id", "i", "", "user setting id to update")
 	updateCmd.Flags().String("status", "", "status of the user - active, inactive, suspended")

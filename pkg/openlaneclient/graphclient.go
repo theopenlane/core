@@ -11,7 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/Yamashou/gqlgenc/clientv2"
 	"github.com/theopenlane/core/pkg/enums"
-	"github.com/datumforge/enthistory"
+	"github.com/theopenlane/entx/history"
 )
 
 type OpenLaneGraphClient interface {
@@ -1525,23 +1525,23 @@ func (t *UpdateContact_UpdateContact) GetContact() *UpdateContact_UpdateContact_
 }
 
 type GetAllContactHistories_ContactHistories_Edges_Node struct {
-	Address     *string           "json:\"address,omitempty\" graphql:\"address\""
-	Company     *string           "json:\"company,omitempty\" graphql:\"company\""
-	CreatedAt   *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Email       *string           "json:\"email,omitempty\" graphql:\"email\""
-	FullName    string            "json:\"fullName\" graphql:\"fullName\""
-	HistoryTime time.Time         "json:\"historyTime\" graphql:\"historyTime\""
-	ID          string            "json:\"id\" graphql:\"id\""
-	Operation   enthistory.OpType "json:\"operation\" graphql:\"operation\""
-	OwnerID     *string           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	PhoneNumber *string           "json:\"phoneNumber,omitempty\" graphql:\"phoneNumber\""
-	Ref         *string           "json:\"ref,omitempty\" graphql:\"ref\""
-	Status      enums.UserStatus  "json:\"status\" graphql:\"status\""
-	Tags        []string          "json:\"tags,omitempty\" graphql:\"tags\""
-	Title       *string           "json:\"title,omitempty\" graphql:\"title\""
-	UpdatedAt   *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Address     *string          "json:\"address,omitempty\" graphql:\"address\""
+	Company     *string          "json:\"company,omitempty\" graphql:\"company\""
+	CreatedAt   *time.Time       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Email       *string          "json:\"email,omitempty\" graphql:\"email\""
+	FullName    string           "json:\"fullName\" graphql:\"fullName\""
+	HistoryTime time.Time        "json:\"historyTime\" graphql:\"historyTime\""
+	ID          string           "json:\"id\" graphql:\"id\""
+	Operation   history.OpType   "json:\"operation\" graphql:\"operation\""
+	OwnerID     *string          "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	PhoneNumber *string          "json:\"phoneNumber,omitempty\" graphql:\"phoneNumber\""
+	Ref         *string          "json:\"ref,omitempty\" graphql:\"ref\""
+	Status      enums.UserStatus "json:\"status\" graphql:\"status\""
+	Tags        []string         "json:\"tags,omitempty\" graphql:\"tags\""
+	Title       *string          "json:\"title,omitempty\" graphql:\"title\""
+	UpdatedAt   *time.Time       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllContactHistories_ContactHistories_Edges_Node) GetAddress() *string {
@@ -1592,7 +1592,7 @@ func (t *GetAllContactHistories_ContactHistories_Edges_Node) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetAllContactHistories_ContactHistories_Edges_Node) GetOperation() *enthistory.OpType {
+func (t *GetAllContactHistories_ContactHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
 		t = &GetAllContactHistories_ContactHistories_Edges_Node{}
 	}
@@ -1670,23 +1670,23 @@ func (t *GetAllContactHistories_ContactHistories) GetEdges() []*GetAllContactHis
 }
 
 type GetContactHistories_ContactHistories_Edges_Node struct {
-	Address     *string           "json:\"address,omitempty\" graphql:\"address\""
-	Company     *string           "json:\"company,omitempty\" graphql:\"company\""
-	CreatedAt   *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Email       *string           "json:\"email,omitempty\" graphql:\"email\""
-	FullName    string            "json:\"fullName\" graphql:\"fullName\""
-	HistoryTime time.Time         "json:\"historyTime\" graphql:\"historyTime\""
-	ID          string            "json:\"id\" graphql:\"id\""
-	Operation   enthistory.OpType "json:\"operation\" graphql:\"operation\""
-	OwnerID     *string           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	PhoneNumber *string           "json:\"phoneNumber,omitempty\" graphql:\"phoneNumber\""
-	Ref         *string           "json:\"ref,omitempty\" graphql:\"ref\""
-	Status      enums.UserStatus  "json:\"status\" graphql:\"status\""
-	Tags        []string          "json:\"tags,omitempty\" graphql:\"tags\""
-	Title       *string           "json:\"title,omitempty\" graphql:\"title\""
-	UpdatedAt   *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Address     *string          "json:\"address,omitempty\" graphql:\"address\""
+	Company     *string          "json:\"company,omitempty\" graphql:\"company\""
+	CreatedAt   *time.Time       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Email       *string          "json:\"email,omitempty\" graphql:\"email\""
+	FullName    string           "json:\"fullName\" graphql:\"fullName\""
+	HistoryTime time.Time        "json:\"historyTime\" graphql:\"historyTime\""
+	ID          string           "json:\"id\" graphql:\"id\""
+	Operation   history.OpType   "json:\"operation\" graphql:\"operation\""
+	OwnerID     *string          "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	PhoneNumber *string          "json:\"phoneNumber,omitempty\" graphql:\"phoneNumber\""
+	Ref         *string          "json:\"ref,omitempty\" graphql:\"ref\""
+	Status      enums.UserStatus "json:\"status\" graphql:\"status\""
+	Tags        []string         "json:\"tags,omitempty\" graphql:\"tags\""
+	Title       *string          "json:\"title,omitempty\" graphql:\"title\""
+	UpdatedAt   *time.Time       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetContactHistories_ContactHistories_Edges_Node) GetAddress() *string {
@@ -1737,7 +1737,7 @@ func (t *GetContactHistories_ContactHistories_Edges_Node) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetContactHistories_ContactHistories_Edges_Node) GetOperation() *enthistory.OpType {
+func (t *GetContactHistories_ContactHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
 		t = &GetContactHistories_ContactHistories_Edges_Node{}
 	}
@@ -2007,18 +2007,18 @@ func (t *UpdateDocumentData_UpdateDocumentData) GetDocumentData() *UpdateDocumen
 }
 
 type GetAllDocumentDataHistories_DocumentDataHistories_Edges_Node struct {
-	CreatedAt   *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Data        json.RawMessage   "json:\"data\" graphql:\"data\""
-	HistoryTime time.Time         "json:\"historyTime\" graphql:\"historyTime\""
-	ID          string            "json:\"id\" graphql:\"id\""
-	Operation   enthistory.OpType "json:\"operation\" graphql:\"operation\""
-	OwnerID     *string           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Ref         *string           "json:\"ref,omitempty\" graphql:\"ref\""
-	Tags        []string          "json:\"tags,omitempty\" graphql:\"tags\""
-	TemplateID  string            "json:\"templateID\" graphql:\"templateID\""
-	UpdatedAt   *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt   *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Data        json.RawMessage "json:\"data\" graphql:\"data\""
+	HistoryTime time.Time       "json:\"historyTime\" graphql:\"historyTime\""
+	ID          string          "json:\"id\" graphql:\"id\""
+	Operation   history.OpType  "json:\"operation\" graphql:\"operation\""
+	OwnerID     *string         "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref         *string         "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags        []string        "json:\"tags,omitempty\" graphql:\"tags\""
+	TemplateID  string          "json:\"templateID\" graphql:\"templateID\""
+	UpdatedAt   *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllDocumentDataHistories_DocumentDataHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -2051,7 +2051,7 @@ func (t *GetAllDocumentDataHistories_DocumentDataHistories_Edges_Node) GetID() s
 	}
 	return t.ID
 }
-func (t *GetAllDocumentDataHistories_DocumentDataHistories_Edges_Node) GetOperation() *enthistory.OpType {
+func (t *GetAllDocumentDataHistories_DocumentDataHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
 		t = &GetAllDocumentDataHistories_DocumentDataHistories_Edges_Node{}
 	}
@@ -2117,18 +2117,18 @@ func (t *GetAllDocumentDataHistories_DocumentDataHistories) GetEdges() []*GetAll
 }
 
 type GetDocumentDataHistories_DocumentDataHistories_Edges_Node struct {
-	CreatedAt   *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Data        json.RawMessage   "json:\"data\" graphql:\"data\""
-	HistoryTime time.Time         "json:\"historyTime\" graphql:\"historyTime\""
-	ID          string            "json:\"id\" graphql:\"id\""
-	Operation   enthistory.OpType "json:\"operation\" graphql:\"operation\""
-	OwnerID     *string           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Ref         *string           "json:\"ref,omitempty\" graphql:\"ref\""
-	Tags        []string          "json:\"tags,omitempty\" graphql:\"tags\""
-	TemplateID  string            "json:\"templateID\" graphql:\"templateID\""
-	UpdatedAt   *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt   *time.Time      "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string         "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Data        json.RawMessage "json:\"data\" graphql:\"data\""
+	HistoryTime time.Time       "json:\"historyTime\" graphql:\"historyTime\""
+	ID          string          "json:\"id\" graphql:\"id\""
+	Operation   history.OpType  "json:\"operation\" graphql:\"operation\""
+	OwnerID     *string         "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref         *string         "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags        []string        "json:\"tags,omitempty\" graphql:\"tags\""
+	TemplateID  string          "json:\"templateID\" graphql:\"templateID\""
+	UpdatedAt   *time.Time      "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string         "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetDocumentDataHistories_DocumentDataHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -2161,7 +2161,7 @@ func (t *GetDocumentDataHistories_DocumentDataHistories_Edges_Node) GetID() stri
 	}
 	return t.ID
 }
-func (t *GetDocumentDataHistories_DocumentDataHistories_Edges_Node) GetOperation() *enthistory.OpType {
+func (t *GetDocumentDataHistories_DocumentDataHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
 		t = &GetDocumentDataHistories_DocumentDataHistories_Edges_Node{}
 	}
@@ -3102,23 +3102,23 @@ func (t *UpdateEntitlement_UpdateEntitlement) GetEntitlement() *UpdateEntitlemen
 }
 
 type GetAllEntitlementHistories_EntitlementHistories_Edges_Node struct {
-	Cancelled              bool              "json:\"cancelled\" graphql:\"cancelled\""
-	CreatedAt              *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy              *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Expires                bool              "json:\"expires\" graphql:\"expires\""
-	ExpiresAt              *time.Time        "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
-	ExternalCustomerID     *string           "json:\"externalCustomerID,omitempty\" graphql:\"externalCustomerID\""
-	ExternalSubscriptionID *string           "json:\"externalSubscriptionID,omitempty\" graphql:\"externalSubscriptionID\""
-	HistoryTime            time.Time         "json:\"historyTime\" graphql:\"historyTime\""
-	ID                     string            "json:\"id\" graphql:\"id\""
-	Operation              enthistory.OpType "json:\"operation\" graphql:\"operation\""
-	OrganizationID         string            "json:\"organizationID\" graphql:\"organizationID\""
-	OwnerID                *string           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	PlanID                 string            "json:\"planID\" graphql:\"planID\""
-	Ref                    *string           "json:\"ref,omitempty\" graphql:\"ref\""
-	Tags                   []string          "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt              *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy              *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Cancelled              bool           "json:\"cancelled\" graphql:\"cancelled\""
+	CreatedAt              *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy              *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Expires                bool           "json:\"expires\" graphql:\"expires\""
+	ExpiresAt              *time.Time     "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
+	ExternalCustomerID     *string        "json:\"externalCustomerID,omitempty\" graphql:\"externalCustomerID\""
+	ExternalSubscriptionID *string        "json:\"externalSubscriptionID,omitempty\" graphql:\"externalSubscriptionID\""
+	HistoryTime            time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID                     string         "json:\"id\" graphql:\"id\""
+	Operation              history.OpType "json:\"operation\" graphql:\"operation\""
+	OrganizationID         string         "json:\"organizationID\" graphql:\"organizationID\""
+	OwnerID                *string        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	PlanID                 string         "json:\"planID\" graphql:\"planID\""
+	Ref                    *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags                   []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt              *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy              *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllEntitlementHistories_EntitlementHistories_Edges_Node) GetCancelled() bool {
@@ -3175,7 +3175,7 @@ func (t *GetAllEntitlementHistories_EntitlementHistories_Edges_Node) GetID() str
 	}
 	return t.ID
 }
-func (t *GetAllEntitlementHistories_EntitlementHistories_Edges_Node) GetOperation() *enthistory.OpType {
+func (t *GetAllEntitlementHistories_EntitlementHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
 		t = &GetAllEntitlementHistories_EntitlementHistories_Edges_Node{}
 	}
@@ -3247,23 +3247,23 @@ func (t *GetAllEntitlementHistories_EntitlementHistories) GetEdges() []*GetAllEn
 }
 
 type GetEntitlementHistories_EntitlementHistories_Edges_Node struct {
-	Cancelled              bool              "json:\"cancelled\" graphql:\"cancelled\""
-	CreatedAt              *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy              *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Expires                bool              "json:\"expires\" graphql:\"expires\""
-	ExpiresAt              *time.Time        "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
-	ExternalCustomerID     *string           "json:\"externalCustomerID,omitempty\" graphql:\"externalCustomerID\""
-	ExternalSubscriptionID *string           "json:\"externalSubscriptionID,omitempty\" graphql:\"externalSubscriptionID\""
-	HistoryTime            time.Time         "json:\"historyTime\" graphql:\"historyTime\""
-	ID                     string            "json:\"id\" graphql:\"id\""
-	Operation              enthistory.OpType "json:\"operation\" graphql:\"operation\""
-	OrganizationID         string            "json:\"organizationID\" graphql:\"organizationID\""
-	OwnerID                *string           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	PlanID                 string            "json:\"planID\" graphql:\"planID\""
-	Ref                    *string           "json:\"ref,omitempty\" graphql:\"ref\""
-	Tags                   []string          "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt              *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy              *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Cancelled              bool           "json:\"cancelled\" graphql:\"cancelled\""
+	CreatedAt              *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy              *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Expires                bool           "json:\"expires\" graphql:\"expires\""
+	ExpiresAt              *time.Time     "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
+	ExternalCustomerID     *string        "json:\"externalCustomerID,omitempty\" graphql:\"externalCustomerID\""
+	ExternalSubscriptionID *string        "json:\"externalSubscriptionID,omitempty\" graphql:\"externalSubscriptionID\""
+	HistoryTime            time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID                     string         "json:\"id\" graphql:\"id\""
+	Operation              history.OpType "json:\"operation\" graphql:\"operation\""
+	OrganizationID         string         "json:\"organizationID\" graphql:\"organizationID\""
+	OwnerID                *string        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	PlanID                 string         "json:\"planID\" graphql:\"planID\""
+	Ref                    *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags                   []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt              *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy              *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetEntitlementHistories_EntitlementHistories_Edges_Node) GetCancelled() bool {
@@ -3320,7 +3320,7 @@ func (t *GetEntitlementHistories_EntitlementHistories_Edges_Node) GetID() string
 	}
 	return t.ID
 }
-func (t *GetEntitlementHistories_EntitlementHistories_Edges_Node) GetOperation() *enthistory.OpType {
+func (t *GetEntitlementHistories_EntitlementHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
 		t = &GetEntitlementHistories_EntitlementHistories_Edges_Node{}
 	}
@@ -4614,7 +4614,7 @@ type GetAllEntitlementPlanFeatureHistories_EntitlementPlanFeatureHistories_Edges
 	HistoryTime time.Time              "json:\"historyTime\" graphql:\"historyTime\""
 	ID          string                 "json:\"id\" graphql:\"id\""
 	Metadata    map[string]interface{} "json:\"metadata,omitempty\" graphql:\"metadata\""
-	Operation   enthistory.OpType      "json:\"operation\" graphql:\"operation\""
+	Operation   history.OpType         "json:\"operation\" graphql:\"operation\""
 	OwnerID     *string                "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	PlanID      string                 "json:\"planID\" graphql:\"planID\""
 	Ref         *string                "json:\"ref,omitempty\" graphql:\"ref\""
@@ -4659,7 +4659,7 @@ func (t *GetAllEntitlementPlanFeatureHistories_EntitlementPlanFeatureHistories_E
 	}
 	return t.Metadata
 }
-func (t *GetAllEntitlementPlanFeatureHistories_EntitlementPlanFeatureHistories_Edges_Node) GetOperation() *enthistory.OpType {
+func (t *GetAllEntitlementPlanFeatureHistories_EntitlementPlanFeatureHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
 		t = &GetAllEntitlementPlanFeatureHistories_EntitlementPlanFeatureHistories_Edges_Node{}
 	}
@@ -4731,7 +4731,7 @@ type GetEntitlementPlanFeatureHistories_EntitlementPlanFeatureHistories_Edges_No
 	HistoryTime time.Time              "json:\"historyTime\" graphql:\"historyTime\""
 	ID          string                 "json:\"id\" graphql:\"id\""
 	Metadata    map[string]interface{} "json:\"metadata,omitempty\" graphql:\"metadata\""
-	Operation   enthistory.OpType      "json:\"operation\" graphql:\"operation\""
+	Operation   history.OpType         "json:\"operation\" graphql:\"operation\""
 	OwnerID     *string                "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	PlanID      string                 "json:\"planID\" graphql:\"planID\""
 	Ref         *string                "json:\"ref,omitempty\" graphql:\"ref\""
@@ -4776,7 +4776,7 @@ func (t *GetEntitlementPlanFeatureHistories_EntitlementPlanFeatureHistories_Edge
 	}
 	return t.Metadata
 }
-func (t *GetEntitlementPlanFeatureHistories_EntitlementPlanFeatureHistories_Edges_Node) GetOperation() *enthistory.OpType {
+func (t *GetEntitlementPlanFeatureHistories_EntitlementPlanFeatureHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
 		t = &GetEntitlementPlanFeatureHistories_EntitlementPlanFeatureHistories_Edges_Node{}
 	}
@@ -4850,7 +4850,7 @@ type GetAllEntitlementPlanHistories_EntitlementPlanHistories_Edges_Node struct {
 	ID          string                 "json:\"id\" graphql:\"id\""
 	Metadata    map[string]interface{} "json:\"metadata,omitempty\" graphql:\"metadata\""
 	Name        string                 "json:\"name\" graphql:\"name\""
-	Operation   enthistory.OpType      "json:\"operation\" graphql:\"operation\""
+	Operation   history.OpType         "json:\"operation\" graphql:\"operation\""
 	OwnerID     *string                "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Ref         *string                "json:\"ref,omitempty\" graphql:\"ref\""
 	Tags        []string               "json:\"tags,omitempty\" graphql:\"tags\""
@@ -4907,7 +4907,7 @@ func (t *GetAllEntitlementPlanHistories_EntitlementPlanHistories_Edges_Node) Get
 	}
 	return t.Name
 }
-func (t *GetAllEntitlementPlanHistories_EntitlementPlanHistories_Edges_Node) GetOperation() *enthistory.OpType {
+func (t *GetAllEntitlementPlanHistories_EntitlementPlanHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
 		t = &GetAllEntitlementPlanHistories_EntitlementPlanHistories_Edges_Node{}
 	}
@@ -4981,7 +4981,7 @@ type GetEntitlementPlanHistories_EntitlementPlanHistories_Edges_Node struct {
 	ID          string                 "json:\"id\" graphql:\"id\""
 	Metadata    map[string]interface{} "json:\"metadata,omitempty\" graphql:\"metadata\""
 	Name        string                 "json:\"name\" graphql:\"name\""
-	Operation   enthistory.OpType      "json:\"operation\" graphql:\"operation\""
+	Operation   history.OpType         "json:\"operation\" graphql:\"operation\""
 	OwnerID     *string                "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Ref         *string                "json:\"ref,omitempty\" graphql:\"ref\""
 	Tags        []string               "json:\"tags,omitempty\" graphql:\"tags\""
@@ -5038,7 +5038,7 @@ func (t *GetEntitlementPlanHistories_EntitlementPlanHistories_Edges_Node) GetNam
 	}
 	return t.Name
 }
-func (t *GetEntitlementPlanHistories_EntitlementPlanHistories_Edges_Node) GetOperation() *enthistory.OpType {
+func (t *GetEntitlementPlanHistories_EntitlementPlanHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
 		t = &GetEntitlementPlanHistories_EntitlementPlanHistories_Edges_Node{}
 	}
@@ -6229,22 +6229,22 @@ func (t *UpdateEntity_UpdateEntity) GetEntity() *UpdateEntity_UpdateEntity_Entit
 }
 
 type GetAllEntityHistories_EntityHistories_Edges_Node struct {
-	CreatedAt    *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy    *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description  *string           "json:\"description,omitempty\" graphql:\"description\""
-	DisplayName  *string           "json:\"displayName,omitempty\" graphql:\"displayName\""
-	Domains      []string          "json:\"domains,omitempty\" graphql:\"domains\""
-	EntityTypeID *string           "json:\"entityTypeID,omitempty\" graphql:\"entityTypeID\""
-	HistoryTime  time.Time         "json:\"historyTime\" graphql:\"historyTime\""
-	ID           string            "json:\"id\" graphql:\"id\""
-	Name         *string           "json:\"name,omitempty\" graphql:\"name\""
-	Operation    enthistory.OpType "json:\"operation\" graphql:\"operation\""
-	OwnerID      *string           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Ref          *string           "json:\"ref,omitempty\" graphql:\"ref\""
-	Status       *string           "json:\"status,omitempty\" graphql:\"status\""
-	Tags         []string          "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt    *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy    *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt    *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy    *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description  *string        "json:\"description,omitempty\" graphql:\"description\""
+	DisplayName  *string        "json:\"displayName,omitempty\" graphql:\"displayName\""
+	Domains      []string       "json:\"domains,omitempty\" graphql:\"domains\""
+	EntityTypeID *string        "json:\"entityTypeID,omitempty\" graphql:\"entityTypeID\""
+	HistoryTime  time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID           string         "json:\"id\" graphql:\"id\""
+	Name         *string        "json:\"name,omitempty\" graphql:\"name\""
+	Operation    history.OpType "json:\"operation\" graphql:\"operation\""
+	OwnerID      *string        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref          *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	Status       *string        "json:\"status,omitempty\" graphql:\"status\""
+	Tags         []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt    *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy    *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllEntityHistories_EntityHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -6301,7 +6301,7 @@ func (t *GetAllEntityHistories_EntityHistories_Edges_Node) GetName() *string {
 	}
 	return t.Name
 }
-func (t *GetAllEntityHistories_EntityHistories_Edges_Node) GetOperation() *enthistory.OpType {
+func (t *GetAllEntityHistories_EntityHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
 		t = &GetAllEntityHistories_EntityHistories_Edges_Node{}
 	}
@@ -6367,22 +6367,22 @@ func (t *GetAllEntityHistories_EntityHistories) GetEdges() []*GetAllEntityHistor
 }
 
 type GetEntityHistories_EntityHistories_Edges_Node struct {
-	CreatedAt    *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy    *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description  *string           "json:\"description,omitempty\" graphql:\"description\""
-	DisplayName  *string           "json:\"displayName,omitempty\" graphql:\"displayName\""
-	Domains      []string          "json:\"domains,omitempty\" graphql:\"domains\""
-	EntityTypeID *string           "json:\"entityTypeID,omitempty\" graphql:\"entityTypeID\""
-	HistoryTime  time.Time         "json:\"historyTime\" graphql:\"historyTime\""
-	ID           string            "json:\"id\" graphql:\"id\""
-	Name         *string           "json:\"name,omitempty\" graphql:\"name\""
-	Operation    enthistory.OpType "json:\"operation\" graphql:\"operation\""
-	OwnerID      *string           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Ref          *string           "json:\"ref,omitempty\" graphql:\"ref\""
-	Status       *string           "json:\"status,omitempty\" graphql:\"status\""
-	Tags         []string          "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt    *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy    *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt    *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy    *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description  *string        "json:\"description,omitempty\" graphql:\"description\""
+	DisplayName  *string        "json:\"displayName,omitempty\" graphql:\"displayName\""
+	Domains      []string       "json:\"domains,omitempty\" graphql:\"domains\""
+	EntityTypeID *string        "json:\"entityTypeID,omitempty\" graphql:\"entityTypeID\""
+	HistoryTime  time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID           string         "json:\"id\" graphql:\"id\""
+	Name         *string        "json:\"name,omitempty\" graphql:\"name\""
+	Operation    history.OpType "json:\"operation\" graphql:\"operation\""
+	OwnerID      *string        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref          *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	Status       *string        "json:\"status,omitempty\" graphql:\"status\""
+	Tags         []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt    *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy    *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetEntityHistories_EntityHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -6439,7 +6439,7 @@ func (t *GetEntityHistories_EntityHistories_Edges_Node) GetName() *string {
 	}
 	return t.Name
 }
-func (t *GetEntityHistories_EntityHistories_Edges_Node) GetOperation() *enthistory.OpType {
+func (t *GetEntityHistories_EntityHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
 		t = &GetEntityHistories_EntityHistories_Edges_Node{}
 	}
@@ -7024,17 +7024,17 @@ func (t *UpdateEntityType_UpdateEntityType) GetEntityType() *UpdateEntityType_Up
 }
 
 type GetAllEntityTypeHistories_EntityTypeHistories_Edges_Node struct {
-	CreatedAt   *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	HistoryTime time.Time         "json:\"historyTime\" graphql:\"historyTime\""
-	ID          string            "json:\"id\" graphql:\"id\""
-	Name        string            "json:\"name\" graphql:\"name\""
-	Operation   enthistory.OpType "json:\"operation\" graphql:\"operation\""
-	OwnerID     *string           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Ref         *string           "json:\"ref,omitempty\" graphql:\"ref\""
-	Tags        []string          "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt   *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID          string         "json:\"id\" graphql:\"id\""
+	Name        string         "json:\"name\" graphql:\"name\""
+	Operation   history.OpType "json:\"operation\" graphql:\"operation\""
+	OwnerID     *string        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref         *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllEntityTypeHistories_EntityTypeHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -7067,7 +7067,7 @@ func (t *GetAllEntityTypeHistories_EntityTypeHistories_Edges_Node) GetName() str
 	}
 	return t.Name
 }
-func (t *GetAllEntityTypeHistories_EntityTypeHistories_Edges_Node) GetOperation() *enthistory.OpType {
+func (t *GetAllEntityTypeHistories_EntityTypeHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
 		t = &GetAllEntityTypeHistories_EntityTypeHistories_Edges_Node{}
 	}
@@ -7127,17 +7127,17 @@ func (t *GetAllEntityTypeHistories_EntityTypeHistories) GetEdges() []*GetAllEnti
 }
 
 type GetEntityTypeHistories_EntityTypeHistories_Edges_Node struct {
-	CreatedAt   *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	HistoryTime time.Time         "json:\"historyTime\" graphql:\"historyTime\""
-	ID          string            "json:\"id\" graphql:\"id\""
-	Name        string            "json:\"name\" graphql:\"name\""
-	Operation   enthistory.OpType "json:\"operation\" graphql:\"operation\""
-	OwnerID     *string           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Ref         *string           "json:\"ref,omitempty\" graphql:\"ref\""
-	Tags        []string          "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt   *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID          string         "json:\"id\" graphql:\"id\""
+	Name        string         "json:\"name\" graphql:\"name\""
+	Operation   history.OpType "json:\"operation\" graphql:\"operation\""
+	OwnerID     *string        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref         *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetEntityTypeHistories_EntityTypeHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -7170,7 +7170,7 @@ func (t *GetEntityTypeHistories_EntityTypeHistories_Edges_Node) GetName() string
 	}
 	return t.Name
 }
-func (t *GetEntityTypeHistories_EntityTypeHistories_Edges_Node) GetOperation() *enthistory.OpType {
+func (t *GetEntityTypeHistories_EntityTypeHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
 		t = &GetEntityTypeHistories_EntityTypeHistories_Edges_Node{}
 	}
@@ -9098,7 +9098,7 @@ type GetAllEventHistories_EventHistories_Edges_Node struct {
 	HistoryTime   time.Time              "json:\"historyTime\" graphql:\"historyTime\""
 	ID            string                 "json:\"id\" graphql:\"id\""
 	Metadata      map[string]interface{} "json:\"metadata,omitempty\" graphql:\"metadata\""
-	Operation     enthistory.OpType      "json:\"operation\" graphql:\"operation\""
+	Operation     history.OpType         "json:\"operation\" graphql:\"operation\""
 	Ref           *string                "json:\"ref,omitempty\" graphql:\"ref\""
 	Tags          []string               "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt     *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -9153,7 +9153,7 @@ func (t *GetAllEventHistories_EventHistories_Edges_Node) GetMetadata() map[strin
 	}
 	return t.Metadata
 }
-func (t *GetAllEventHistories_EventHistories_Edges_Node) GetOperation() *enthistory.OpType {
+func (t *GetAllEventHistories_EventHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
 		t = &GetAllEventHistories_EventHistories_Edges_Node{}
 	}
@@ -9215,7 +9215,7 @@ type GetEventHistories_EventHistories_Edges_Node struct {
 	HistoryTime   time.Time              "json:\"historyTime\" graphql:\"historyTime\""
 	ID            string                 "json:\"id\" graphql:\"id\""
 	Metadata      map[string]interface{} "json:\"metadata,omitempty\" graphql:\"metadata\""
-	Operation     enthistory.OpType      "json:\"operation\" graphql:\"operation\""
+	Operation     history.OpType         "json:\"operation\" graphql:\"operation\""
 	Ref           *string                "json:\"ref,omitempty\" graphql:\"ref\""
 	Tags          []string               "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt     *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -9270,7 +9270,7 @@ func (t *GetEventHistories_EventHistories_Edges_Node) GetMetadata() map[string]i
 	}
 	return t.Metadata
 }
-func (t *GetEventHistories_EventHistories_Edges_Node) GetOperation() *enthistory.OpType {
+func (t *GetEventHistories_EventHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
 		t = &GetEventHistories_EventHistories_Edges_Node{}
 	}
@@ -9754,7 +9754,7 @@ type GetAllFeatureHistories_FeatureHistories_Edges_Node struct {
 	ID          string                 "json:\"id\" graphql:\"id\""
 	Metadata    map[string]interface{} "json:\"metadata,omitempty\" graphql:\"metadata\""
 	Name        string                 "json:\"name\" graphql:\"name\""
-	Operation   enthistory.OpType      "json:\"operation\" graphql:\"operation\""
+	Operation   history.OpType         "json:\"operation\" graphql:\"operation\""
 	OwnerID     *string                "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Ref         *string                "json:\"ref,omitempty\" graphql:\"ref\""
 	Tags        []string               "json:\"tags,omitempty\" graphql:\"tags\""
@@ -9816,7 +9816,7 @@ func (t *GetAllFeatureHistories_FeatureHistories_Edges_Node) GetName() string {
 	}
 	return t.Name
 }
-func (t *GetAllFeatureHistories_FeatureHistories_Edges_Node) GetOperation() *enthistory.OpType {
+func (t *GetAllFeatureHistories_FeatureHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
 		t = &GetAllFeatureHistories_FeatureHistories_Edges_Node{}
 	}
@@ -9885,7 +9885,7 @@ type GetFeatureHistories_FeatureHistories_Edges_Node struct {
 	ID          string                 "json:\"id\" graphql:\"id\""
 	Metadata    map[string]interface{} "json:\"metadata,omitempty\" graphql:\"metadata\""
 	Name        string                 "json:\"name\" graphql:\"name\""
-	Operation   enthistory.OpType      "json:\"operation\" graphql:\"operation\""
+	Operation   history.OpType         "json:\"operation\" graphql:\"operation\""
 	OwnerID     *string                "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Ref         *string                "json:\"ref,omitempty\" graphql:\"ref\""
 	Tags        []string               "json:\"tags,omitempty\" graphql:\"tags\""
@@ -9947,7 +9947,7 @@ func (t *GetFeatureHistories_FeatureHistories_Edges_Node) GetName() string {
 	}
 	return t.Name
 }
-func (t *GetFeatureHistories_FeatureHistories_Edges_Node) GetOperation() *enthistory.OpType {
+func (t *GetFeatureHistories_FeatureHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
 		t = &GetFeatureHistories_FeatureHistories_Edges_Node{}
 	}
@@ -10846,22 +10846,22 @@ func (t *UpdateFile_UpdateFile) GetFile() *UpdateFile_UpdateFile_File {
 }
 
 type GetAllFileHistories_FileHistories_Edges_Node struct {
-	Annotation    *string           "json:\"annotation,omitempty\" graphql:\"annotation\""
-	Category      *string           "json:\"category,omitempty\" graphql:\"category\""
-	ContentType   string            "json:\"contentType\" graphql:\"contentType\""
-	CreatedAt     *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	FileExtension string            "json:\"fileExtension\" graphql:\"fileExtension\""
-	FileName      string            "json:\"fileName\" graphql:\"fileName\""
-	FileSize      *int64            "json:\"fileSize,omitempty\" graphql:\"fileSize\""
-	HistoryTime   time.Time         "json:\"historyTime\" graphql:\"historyTime\""
-	ID            string            "json:\"id\" graphql:\"id\""
-	Operation     enthistory.OpType "json:\"operation\" graphql:\"operation\""
-	Ref           *string           "json:\"ref,omitempty\" graphql:\"ref\""
-	StoreKey      string            "json:\"storeKey\" graphql:\"storeKey\""
-	Tags          []string          "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt     *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Annotation    *string        "json:\"annotation,omitempty\" graphql:\"annotation\""
+	Category      *string        "json:\"category,omitempty\" graphql:\"category\""
+	ContentType   string         "json:\"contentType\" graphql:\"contentType\""
+	CreatedAt     *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	FileExtension string         "json:\"fileExtension\" graphql:\"fileExtension\""
+	FileName      string         "json:\"fileName\" graphql:\"fileName\""
+	FileSize      *int64         "json:\"fileSize,omitempty\" graphql:\"fileSize\""
+	HistoryTime   time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID            string         "json:\"id\" graphql:\"id\""
+	Operation     history.OpType "json:\"operation\" graphql:\"operation\""
+	Ref           *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	StoreKey      string         "json:\"storeKey\" graphql:\"storeKey\""
+	Tags          []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt     *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllFileHistories_FileHistories_Edges_Node) GetAnnotation() *string {
@@ -10924,7 +10924,7 @@ func (t *GetAllFileHistories_FileHistories_Edges_Node) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetAllFileHistories_FileHistories_Edges_Node) GetOperation() *enthistory.OpType {
+func (t *GetAllFileHistories_FileHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
 		t = &GetAllFileHistories_FileHistories_Edges_Node{}
 	}
@@ -10984,22 +10984,22 @@ func (t *GetAllFileHistories_FileHistories) GetEdges() []*GetAllFileHistories_Fi
 }
 
 type GetFileHistories_FileHistories_Edges_Node struct {
-	Annotation    *string           "json:\"annotation,omitempty\" graphql:\"annotation\""
-	Category      *string           "json:\"category,omitempty\" graphql:\"category\""
-	ContentType   string            "json:\"contentType\" graphql:\"contentType\""
-	CreatedAt     *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	FileExtension string            "json:\"fileExtension\" graphql:\"fileExtension\""
-	FileName      string            "json:\"fileName\" graphql:\"fileName\""
-	FileSize      *int64            "json:\"fileSize,omitempty\" graphql:\"fileSize\""
-	HistoryTime   time.Time         "json:\"historyTime\" graphql:\"historyTime\""
-	ID            string            "json:\"id\" graphql:\"id\""
-	Operation     enthistory.OpType "json:\"operation\" graphql:\"operation\""
-	Ref           *string           "json:\"ref,omitempty\" graphql:\"ref\""
-	StoreKey      string            "json:\"storeKey\" graphql:\"storeKey\""
-	Tags          []string          "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt     *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Annotation    *string        "json:\"annotation,omitempty\" graphql:\"annotation\""
+	Category      *string        "json:\"category,omitempty\" graphql:\"category\""
+	ContentType   string         "json:\"contentType\" graphql:\"contentType\""
+	CreatedAt     *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	FileExtension string         "json:\"fileExtension\" graphql:\"fileExtension\""
+	FileName      string         "json:\"fileName\" graphql:\"fileName\""
+	FileSize      *int64         "json:\"fileSize,omitempty\" graphql:\"fileSize\""
+	HistoryTime   time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID            string         "json:\"id\" graphql:\"id\""
+	Operation     history.OpType "json:\"operation\" graphql:\"operation\""
+	Ref           *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	StoreKey      string         "json:\"storeKey\" graphql:\"storeKey\""
+	Tags          []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt     *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetFileHistories_FileHistories_Edges_Node) GetAnnotation() *string {
@@ -11062,7 +11062,7 @@ func (t *GetFileHistories_FileHistories_Edges_Node) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetFileHistories_FileHistories_Edges_Node) GetOperation() *enthistory.OpType {
+func (t *GetFileHistories_FileHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
 		t = &GetFileHistories_FileHistories_Edges_Node{}
 	}
@@ -12684,21 +12684,21 @@ func (t *UpdateGroup_UpdateGroup) GetGroup() *UpdateGroup_UpdateGroup_Group {
 }
 
 type GetAllGroupHistories_GroupHistories_Edges_Node struct {
-	CreatedAt       *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description     *string           "json:\"description,omitempty\" graphql:\"description\""
-	DisplayName     string            "json:\"displayName\" graphql:\"displayName\""
-	GravatarLogoURL *string           "json:\"gravatarLogoURL,omitempty\" graphql:\"gravatarLogoURL\""
-	HistoryTime     time.Time         "json:\"historyTime\" graphql:\"historyTime\""
-	ID              string            "json:\"id\" graphql:\"id\""
-	LogoURL         *string           "json:\"logoURL,omitempty\" graphql:\"logoURL\""
-	Name            string            "json:\"name\" graphql:\"name\""
-	Operation       enthistory.OpType "json:\"operation\" graphql:\"operation\""
-	OwnerID         *string           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Ref             *string           "json:\"ref,omitempty\" graphql:\"ref\""
-	Tags            []string          "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt       *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
+	DisplayName     string         "json:\"displayName\" graphql:\"displayName\""
+	GravatarLogoURL *string        "json:\"gravatarLogoURL,omitempty\" graphql:\"gravatarLogoURL\""
+	HistoryTime     time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID              string         "json:\"id\" graphql:\"id\""
+	LogoURL         *string        "json:\"logoURL,omitempty\" graphql:\"logoURL\""
+	Name            string         "json:\"name\" graphql:\"name\""
+	Operation       history.OpType "json:\"operation\" graphql:\"operation\""
+	OwnerID         *string        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref             *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllGroupHistories_GroupHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -12755,7 +12755,7 @@ func (t *GetAllGroupHistories_GroupHistories_Edges_Node) GetName() string {
 	}
 	return t.Name
 }
-func (t *GetAllGroupHistories_GroupHistories_Edges_Node) GetOperation() *enthistory.OpType {
+func (t *GetAllGroupHistories_GroupHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
 		t = &GetAllGroupHistories_GroupHistories_Edges_Node{}
 	}
@@ -12815,21 +12815,21 @@ func (t *GetAllGroupHistories_GroupHistories) GetEdges() []*GetAllGroupHistories
 }
 
 type GetGroupHistories_GroupHistories_Edges_Node struct {
-	CreatedAt       *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description     *string           "json:\"description,omitempty\" graphql:\"description\""
-	DisplayName     string            "json:\"displayName\" graphql:\"displayName\""
-	GravatarLogoURL *string           "json:\"gravatarLogoURL,omitempty\" graphql:\"gravatarLogoURL\""
-	HistoryTime     time.Time         "json:\"historyTime\" graphql:\"historyTime\""
-	ID              string            "json:\"id\" graphql:\"id\""
-	LogoURL         *string           "json:\"logoURL,omitempty\" graphql:\"logoURL\""
-	Name            string            "json:\"name\" graphql:\"name\""
-	Operation       enthistory.OpType "json:\"operation\" graphql:\"operation\""
-	OwnerID         *string           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Ref             *string           "json:\"ref,omitempty\" graphql:\"ref\""
-	Tags            []string          "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt       *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
+	DisplayName     string         "json:\"displayName\" graphql:\"displayName\""
+	GravatarLogoURL *string        "json:\"gravatarLogoURL,omitempty\" graphql:\"gravatarLogoURL\""
+	HistoryTime     time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID              string         "json:\"id\" graphql:\"id\""
+	LogoURL         *string        "json:\"logoURL,omitempty\" graphql:\"logoURL\""
+	Name            string         "json:\"name\" graphql:\"name\""
+	Operation       history.OpType "json:\"operation\" graphql:\"operation\""
+	OwnerID         *string        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref             *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetGroupHistories_GroupHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -12886,7 +12886,7 @@ func (t *GetGroupHistories_GroupHistories_Edges_Node) GetName() string {
 	}
 	return t.Name
 }
-func (t *GetGroupHistories_GroupHistories_Edges_Node) GetOperation() *enthistory.OpType {
+func (t *GetGroupHistories_GroupHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
 		t = &GetGroupHistories_GroupHistories_Edges_Node{}
 	}
@@ -13538,17 +13538,17 @@ func (t *UpdateUserRoleInGroup_UpdateGroupMembership) GetGroupMembership() *Upda
 }
 
 type GetAllGroupMembershipHistories_GroupMembershipHistories_Edges_Node struct {
-	CreatedAt   *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	GroupID     string            "json:\"groupID\" graphql:\"groupID\""
-	HistoryTime time.Time         "json:\"historyTime\" graphql:\"historyTime\""
-	ID          string            "json:\"id\" graphql:\"id\""
-	Operation   enthistory.OpType "json:\"operation\" graphql:\"operation\""
-	Ref         *string           "json:\"ref,omitempty\" graphql:\"ref\""
-	Role        enums.Role        "json:\"role\" graphql:\"role\""
-	UpdatedAt   *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UserID      string            "json:\"userID\" graphql:\"userID\""
+	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	GroupID     string         "json:\"groupID\" graphql:\"groupID\""
+	HistoryTime time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID          string         "json:\"id\" graphql:\"id\""
+	Operation   history.OpType "json:\"operation\" graphql:\"operation\""
+	Ref         *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	Role        enums.Role     "json:\"role\" graphql:\"role\""
+	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UserID      string         "json:\"userID\" graphql:\"userID\""
 }
 
 func (t *GetAllGroupMembershipHistories_GroupMembershipHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -13581,7 +13581,7 @@ func (t *GetAllGroupMembershipHistories_GroupMembershipHistories_Edges_Node) Get
 	}
 	return t.ID
 }
-func (t *GetAllGroupMembershipHistories_GroupMembershipHistories_Edges_Node) GetOperation() *enthistory.OpType {
+func (t *GetAllGroupMembershipHistories_GroupMembershipHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
 		t = &GetAllGroupMembershipHistories_GroupMembershipHistories_Edges_Node{}
 	}
@@ -13641,17 +13641,17 @@ func (t *GetAllGroupMembershipHistories_GroupMembershipHistories) GetEdges() []*
 }
 
 type GetGroupMembershipHistories_GroupMembershipHistories_Edges_Node struct {
-	CreatedAt   *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	GroupID     string            "json:\"groupID\" graphql:\"groupID\""
-	HistoryTime time.Time         "json:\"historyTime\" graphql:\"historyTime\""
-	ID          string            "json:\"id\" graphql:\"id\""
-	Operation   enthistory.OpType "json:\"operation\" graphql:\"operation\""
-	Ref         *string           "json:\"ref,omitempty\" graphql:\"ref\""
-	Role        enums.Role        "json:\"role\" graphql:\"role\""
-	UpdatedAt   *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UserID      string            "json:\"userID\" graphql:\"userID\""
+	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	GroupID     string         "json:\"groupID\" graphql:\"groupID\""
+	HistoryTime time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID          string         "json:\"id\" graphql:\"id\""
+	Operation   history.OpType "json:\"operation\" graphql:\"operation\""
+	Ref         *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	Role        enums.Role     "json:\"role\" graphql:\"role\""
+	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UserID      string         "json:\"userID\" graphql:\"userID\""
 }
 
 func (t *GetGroupMembershipHistories_GroupMembershipHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -13684,7 +13684,7 @@ func (t *GetGroupMembershipHistories_GroupMembershipHistories_Edges_Node) GetID(
 	}
 	return t.ID
 }
-func (t *GetGroupMembershipHistories_GroupMembershipHistories_Edges_Node) GetOperation() *enthistory.OpType {
+func (t *GetGroupMembershipHistories_GroupMembershipHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
 		t = &GetGroupMembershipHistories_GroupMembershipHistories_Edges_Node{}
 	}
@@ -14195,20 +14195,20 @@ func (t *UpdateGroupSetting_UpdateGroupSetting) GetGroupSetting() *UpdateGroupSe
 }
 
 type GetAllGroupSettingHistories_GroupSettingHistories_Edges_Node struct {
-	CreatedAt    *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy    *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	GroupID      *string           "json:\"groupID,omitempty\" graphql:\"groupID\""
-	HistoryTime  time.Time         "json:\"historyTime\" graphql:\"historyTime\""
-	ID           string            "json:\"id\" graphql:\"id\""
-	JoinPolicy   enums.JoinPolicy  "json:\"joinPolicy\" graphql:\"joinPolicy\""
-	Operation    enthistory.OpType "json:\"operation\" graphql:\"operation\""
-	Ref          *string           "json:\"ref,omitempty\" graphql:\"ref\""
-	SyncToGithub *bool             "json:\"syncToGithub,omitempty\" graphql:\"syncToGithub\""
-	SyncToSlack  *bool             "json:\"syncToSlack,omitempty\" graphql:\"syncToSlack\""
-	Tags         []string          "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt    *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy    *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Visibility   enums.Visibility  "json:\"visibility\" graphql:\"visibility\""
+	CreatedAt    *time.Time       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy    *string          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	GroupID      *string          "json:\"groupID,omitempty\" graphql:\"groupID\""
+	HistoryTime  time.Time        "json:\"historyTime\" graphql:\"historyTime\""
+	ID           string           "json:\"id\" graphql:\"id\""
+	JoinPolicy   enums.JoinPolicy "json:\"joinPolicy\" graphql:\"joinPolicy\""
+	Operation    history.OpType   "json:\"operation\" graphql:\"operation\""
+	Ref          *string          "json:\"ref,omitempty\" graphql:\"ref\""
+	SyncToGithub *bool            "json:\"syncToGithub,omitempty\" graphql:\"syncToGithub\""
+	SyncToSlack  *bool            "json:\"syncToSlack,omitempty\" graphql:\"syncToSlack\""
+	Tags         []string         "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt    *time.Time       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy    *string          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Visibility   enums.Visibility "json:\"visibility\" graphql:\"visibility\""
 }
 
 func (t *GetAllGroupSettingHistories_GroupSettingHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -14247,7 +14247,7 @@ func (t *GetAllGroupSettingHistories_GroupSettingHistories_Edges_Node) GetJoinPo
 	}
 	return &t.JoinPolicy
 }
-func (t *GetAllGroupSettingHistories_GroupSettingHistories_Edges_Node) GetOperation() *enthistory.OpType {
+func (t *GetAllGroupSettingHistories_GroupSettingHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
 		t = &GetAllGroupSettingHistories_GroupSettingHistories_Edges_Node{}
 	}
@@ -14319,20 +14319,20 @@ func (t *GetAllGroupSettingHistories_GroupSettingHistories) GetEdges() []*GetAll
 }
 
 type GetGroupSettingHistories_GroupSettingHistories_Edges_Node struct {
-	CreatedAt    *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy    *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	GroupID      *string           "json:\"groupID,omitempty\" graphql:\"groupID\""
-	HistoryTime  time.Time         "json:\"historyTime\" graphql:\"historyTime\""
-	ID           string            "json:\"id\" graphql:\"id\""
-	JoinPolicy   enums.JoinPolicy  "json:\"joinPolicy\" graphql:\"joinPolicy\""
-	Operation    enthistory.OpType "json:\"operation\" graphql:\"operation\""
-	Ref          *string           "json:\"ref,omitempty\" graphql:\"ref\""
-	SyncToGithub *bool             "json:\"syncToGithub,omitempty\" graphql:\"syncToGithub\""
-	SyncToSlack  *bool             "json:\"syncToSlack,omitempty\" graphql:\"syncToSlack\""
-	Tags         []string          "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt    *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy    *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Visibility   enums.Visibility  "json:\"visibility\" graphql:\"visibility\""
+	CreatedAt    *time.Time       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy    *string          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	GroupID      *string          "json:\"groupID,omitempty\" graphql:\"groupID\""
+	HistoryTime  time.Time        "json:\"historyTime\" graphql:\"historyTime\""
+	ID           string           "json:\"id\" graphql:\"id\""
+	JoinPolicy   enums.JoinPolicy "json:\"joinPolicy\" graphql:\"joinPolicy\""
+	Operation    history.OpType   "json:\"operation\" graphql:\"operation\""
+	Ref          *string          "json:\"ref,omitempty\" graphql:\"ref\""
+	SyncToGithub *bool            "json:\"syncToGithub,omitempty\" graphql:\"syncToGithub\""
+	SyncToSlack  *bool            "json:\"syncToSlack,omitempty\" graphql:\"syncToSlack\""
+	Tags         []string         "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt    *time.Time       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy    *string          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Visibility   enums.Visibility "json:\"visibility\" graphql:\"visibility\""
 }
 
 func (t *GetGroupSettingHistories_GroupSettingHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -14371,7 +14371,7 @@ func (t *GetGroupSettingHistories_GroupSettingHistories_Edges_Node) GetJoinPolic
 	}
 	return &t.JoinPolicy
 }
-func (t *GetGroupSettingHistories_GroupSettingHistories_Edges_Node) GetOperation() *enthistory.OpType {
+func (t *GetGroupSettingHistories_GroupSettingHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
 		t = &GetGroupSettingHistories_GroupSettingHistories_Edges_Node{}
 	}
@@ -15266,18 +15266,18 @@ func (t *UpdateHush_UpdateHush) GetHush() *UpdateHush_UpdateHush_Hush {
 }
 
 type GetAllHushHistories_HushHistories_Edges_Node struct {
-	CreatedAt   *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description *string           "json:\"description,omitempty\" graphql:\"description\""
-	HistoryTime time.Time         "json:\"historyTime\" graphql:\"historyTime\""
-	ID          string            "json:\"id\" graphql:\"id\""
-	Kind        *string           "json:\"kind,omitempty\" graphql:\"kind\""
-	Name        string            "json:\"name\" graphql:\"name\""
-	Operation   enthistory.OpType "json:\"operation\" graphql:\"operation\""
-	Ref         *string           "json:\"ref,omitempty\" graphql:\"ref\""
-	SecretName  *string           "json:\"secretName,omitempty\" graphql:\"secretName\""
-	UpdatedAt   *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description *string        "json:\"description,omitempty\" graphql:\"description\""
+	HistoryTime time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID          string         "json:\"id\" graphql:\"id\""
+	Kind        *string        "json:\"kind,omitempty\" graphql:\"kind\""
+	Name        string         "json:\"name\" graphql:\"name\""
+	Operation   history.OpType "json:\"operation\" graphql:\"operation\""
+	Ref         *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	SecretName  *string        "json:\"secretName,omitempty\" graphql:\"secretName\""
+	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllHushHistories_HushHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -15322,7 +15322,7 @@ func (t *GetAllHushHistories_HushHistories_Edges_Node) GetName() string {
 	}
 	return t.Name
 }
-func (t *GetAllHushHistories_HushHistories_Edges_Node) GetOperation() *enthistory.OpType {
+func (t *GetAllHushHistories_HushHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
 		t = &GetAllHushHistories_HushHistories_Edges_Node{}
 	}
@@ -15376,18 +15376,18 @@ func (t *GetAllHushHistories_HushHistories) GetEdges() []*GetAllHushHistories_Hu
 }
 
 type GetHushHistories_HushHistories_Edges_Node struct {
-	CreatedAt   *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description *string           "json:\"description,omitempty\" graphql:\"description\""
-	HistoryTime time.Time         "json:\"historyTime\" graphql:\"historyTime\""
-	ID          string            "json:\"id\" graphql:\"id\""
-	Kind        *string           "json:\"kind,omitempty\" graphql:\"kind\""
-	Name        string            "json:\"name\" graphql:\"name\""
-	Operation   enthistory.OpType "json:\"operation\" graphql:\"operation\""
-	Ref         *string           "json:\"ref,omitempty\" graphql:\"ref\""
-	SecretName  *string           "json:\"secretName,omitempty\" graphql:\"secretName\""
-	UpdatedAt   *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description *string        "json:\"description,omitempty\" graphql:\"description\""
+	HistoryTime time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID          string         "json:\"id\" graphql:\"id\""
+	Kind        *string        "json:\"kind,omitempty\" graphql:\"kind\""
+	Name        string         "json:\"name\" graphql:\"name\""
+	Operation   history.OpType "json:\"operation\" graphql:\"operation\""
+	Ref         *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	SecretName  *string        "json:\"secretName,omitempty\" graphql:\"secretName\""
+	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetHushHistories_HushHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -15432,7 +15432,7 @@ func (t *GetHushHistories_HushHistories_Edges_Node) GetName() string {
 	}
 	return t.Name
 }
-func (t *GetHushHistories_HushHistories_Edges_Node) GetOperation() *enthistory.OpType {
+func (t *GetHushHistories_HushHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
 		t = &GetHushHistories_HushHistories_Edges_Node{}
 	}
@@ -16670,19 +16670,19 @@ func (t *UpdateIntegration_UpdateIntegration) GetIntegration() *UpdateIntegratio
 }
 
 type GetAllIntegrationHistories_IntegrationHistories_Edges_Node struct {
-	CreatedAt   *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description *string           "json:\"description,omitempty\" graphql:\"description\""
-	HistoryTime time.Time         "json:\"historyTime\" graphql:\"historyTime\""
-	ID          string            "json:\"id\" graphql:\"id\""
-	Kind        *string           "json:\"kind,omitempty\" graphql:\"kind\""
-	Name        string            "json:\"name\" graphql:\"name\""
-	Operation   enthistory.OpType "json:\"operation\" graphql:\"operation\""
-	OwnerID     *string           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Ref         *string           "json:\"ref,omitempty\" graphql:\"ref\""
-	Tags        []string          "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt   *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description *string        "json:\"description,omitempty\" graphql:\"description\""
+	HistoryTime time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID          string         "json:\"id\" graphql:\"id\""
+	Kind        *string        "json:\"kind,omitempty\" graphql:\"kind\""
+	Name        string         "json:\"name\" graphql:\"name\""
+	Operation   history.OpType "json:\"operation\" graphql:\"operation\""
+	OwnerID     *string        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref         *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllIntegrationHistories_IntegrationHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -16727,7 +16727,7 @@ func (t *GetAllIntegrationHistories_IntegrationHistories_Edges_Node) GetName() s
 	}
 	return t.Name
 }
-func (t *GetAllIntegrationHistories_IntegrationHistories_Edges_Node) GetOperation() *enthistory.OpType {
+func (t *GetAllIntegrationHistories_IntegrationHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
 		t = &GetAllIntegrationHistories_IntegrationHistories_Edges_Node{}
 	}
@@ -16787,19 +16787,19 @@ func (t *GetAllIntegrationHistories_IntegrationHistories) GetEdges() []*GetAllIn
 }
 
 type GetIntegrationHistories_IntegrationHistories_Edges_Node struct {
-	CreatedAt   *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description *string           "json:\"description,omitempty\" graphql:\"description\""
-	HistoryTime time.Time         "json:\"historyTime\" graphql:\"historyTime\""
-	ID          string            "json:\"id\" graphql:\"id\""
-	Kind        *string           "json:\"kind,omitempty\" graphql:\"kind\""
-	Name        string            "json:\"name\" graphql:\"name\""
-	Operation   enthistory.OpType "json:\"operation\" graphql:\"operation\""
-	OwnerID     *string           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Ref         *string           "json:\"ref,omitempty\" graphql:\"ref\""
-	Tags        []string          "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt   *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description *string        "json:\"description,omitempty\" graphql:\"description\""
+	HistoryTime time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID          string         "json:\"id\" graphql:\"id\""
+	Kind        *string        "json:\"kind,omitempty\" graphql:\"kind\""
+	Name        string         "json:\"name\" graphql:\"name\""
+	Operation   history.OpType "json:\"operation\" graphql:\"operation\""
+	OwnerID     *string        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref         *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetIntegrationHistories_IntegrationHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -16844,7 +16844,7 @@ func (t *GetIntegrationHistories_IntegrationHistories_Edges_Node) GetName() stri
 	}
 	return t.Name
 }
-func (t *GetIntegrationHistories_IntegrationHistories_Edges_Node) GetOperation() *enthistory.OpType {
+func (t *GetIntegrationHistories_IntegrationHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
 		t = &GetIntegrationHistories_IntegrationHistories_Edges_Node{}
 	}
@@ -17382,17 +17382,17 @@ func (t *InvitesByOrgID_Invites) GetEdges() []*InvitesByOrgID_Invites_Edges {
 }
 
 type GetAllNoteHistories_NoteHistories_Edges_Node struct {
-	CreatedAt   *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	HistoryTime time.Time         "json:\"historyTime\" graphql:\"historyTime\""
-	ID          string            "json:\"id\" graphql:\"id\""
-	Operation   enthistory.OpType "json:\"operation\" graphql:\"operation\""
-	OwnerID     *string           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Ref         *string           "json:\"ref,omitempty\" graphql:\"ref\""
-	Tags        []string          "json:\"tags,omitempty\" graphql:\"tags\""
-	Text        string            "json:\"text\" graphql:\"text\""
-	UpdatedAt   *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID          string         "json:\"id\" graphql:\"id\""
+	Operation   history.OpType "json:\"operation\" graphql:\"operation\""
+	OwnerID     *string        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref         *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	Text        string         "json:\"text\" graphql:\"text\""
+	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllNoteHistories_NoteHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -17419,7 +17419,7 @@ func (t *GetAllNoteHistories_NoteHistories_Edges_Node) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetAllNoteHistories_NoteHistories_Edges_Node) GetOperation() *enthistory.OpType {
+func (t *GetAllNoteHistories_NoteHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
 		t = &GetAllNoteHistories_NoteHistories_Edges_Node{}
 	}
@@ -17485,17 +17485,17 @@ func (t *GetAllNoteHistories_NoteHistories) GetEdges() []*GetAllNoteHistories_No
 }
 
 type GetNoteHistories_NoteHistories_Edges_Node struct {
-	CreatedAt   *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	HistoryTime time.Time         "json:\"historyTime\" graphql:\"historyTime\""
-	ID          string            "json:\"id\" graphql:\"id\""
-	Operation   enthistory.OpType "json:\"operation\" graphql:\"operation\""
-	OwnerID     *string           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Ref         *string           "json:\"ref,omitempty\" graphql:\"ref\""
-	Tags        []string          "json:\"tags,omitempty\" graphql:\"tags\""
-	Text        string            "json:\"text\" graphql:\"text\""
-	UpdatedAt   *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID          string         "json:\"id\" graphql:\"id\""
+	Operation   history.OpType "json:\"operation\" graphql:\"operation\""
+	OwnerID     *string        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref         *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags        []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	Text        string         "json:\"text\" graphql:\"text\""
+	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetNoteHistories_NoteHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -17522,7 +17522,7 @@ func (t *GetNoteHistories_NoteHistories_Edges_Node) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetNoteHistories_NoteHistories_Edges_Node) GetOperation() *enthistory.OpType {
+func (t *GetNoteHistories_NoteHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
 		t = &GetNoteHistories_NoteHistories_Edges_Node{}
 	}
@@ -17588,25 +17588,25 @@ func (t *GetNoteHistories_NoteHistories) GetEdges() []*GetNoteHistories_NoteHist
 }
 
 type GetAllOauthProviderHistories_OauthProviderHistories_Edges_Node struct {
-	AuthStyle    string            "json:\"authStyle\" graphql:\"authStyle\""
-	AuthURL      string            "json:\"authURL\" graphql:\"authURL\""
-	ClientID     string            "json:\"clientID\" graphql:\"clientID\""
-	ClientSecret string            "json:\"clientSecret\" graphql:\"clientSecret\""
-	CreatedAt    *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy    *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	HistoryTime  time.Time         "json:\"historyTime\" graphql:\"historyTime\""
-	ID           string            "json:\"id\" graphql:\"id\""
-	InfoURL      string            "json:\"infoURL\" graphql:\"infoURL\""
-	Name         string            "json:\"name\" graphql:\"name\""
-	Operation    enthistory.OpType "json:\"operation\" graphql:\"operation\""
-	OwnerID      *string           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	RedirectURL  string            "json:\"redirectURL\" graphql:\"redirectURL\""
-	Ref          *string           "json:\"ref,omitempty\" graphql:\"ref\""
-	Scopes       string            "json:\"scopes\" graphql:\"scopes\""
-	Tags         []string          "json:\"tags,omitempty\" graphql:\"tags\""
-	TokenURL     string            "json:\"tokenURL\" graphql:\"tokenURL\""
-	UpdatedAt    *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy    *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	AuthStyle    string         "json:\"authStyle\" graphql:\"authStyle\""
+	AuthURL      string         "json:\"authURL\" graphql:\"authURL\""
+	ClientID     string         "json:\"clientID\" graphql:\"clientID\""
+	ClientSecret string         "json:\"clientSecret\" graphql:\"clientSecret\""
+	CreatedAt    *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy    *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime  time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID           string         "json:\"id\" graphql:\"id\""
+	InfoURL      string         "json:\"infoURL\" graphql:\"infoURL\""
+	Name         string         "json:\"name\" graphql:\"name\""
+	Operation    history.OpType "json:\"operation\" graphql:\"operation\""
+	OwnerID      *string        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RedirectURL  string         "json:\"redirectURL\" graphql:\"redirectURL\""
+	Ref          *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	Scopes       string         "json:\"scopes\" graphql:\"scopes\""
+	Tags         []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	TokenURL     string         "json:\"tokenURL\" graphql:\"tokenURL\""
+	UpdatedAt    *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy    *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllOauthProviderHistories_OauthProviderHistories_Edges_Node) GetAuthStyle() string {
@@ -17669,7 +17669,7 @@ func (t *GetAllOauthProviderHistories_OauthProviderHistories_Edges_Node) GetName
 	}
 	return t.Name
 }
-func (t *GetAllOauthProviderHistories_OauthProviderHistories_Edges_Node) GetOperation() *enthistory.OpType {
+func (t *GetAllOauthProviderHistories_OauthProviderHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
 		t = &GetAllOauthProviderHistories_OauthProviderHistories_Edges_Node{}
 	}
@@ -17747,25 +17747,25 @@ func (t *GetAllOauthProviderHistories_OauthProviderHistories) GetEdges() []*GetA
 }
 
 type GetOauthProviderHistories_OauthProviderHistories_Edges_Node struct {
-	AuthStyle    string            "json:\"authStyle\" graphql:\"authStyle\""
-	AuthURL      string            "json:\"authURL\" graphql:\"authURL\""
-	ClientID     string            "json:\"clientID\" graphql:\"clientID\""
-	ClientSecret string            "json:\"clientSecret\" graphql:\"clientSecret\""
-	CreatedAt    *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy    *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	HistoryTime  time.Time         "json:\"historyTime\" graphql:\"historyTime\""
-	ID           string            "json:\"id\" graphql:\"id\""
-	InfoURL      string            "json:\"infoURL\" graphql:\"infoURL\""
-	Name         string            "json:\"name\" graphql:\"name\""
-	Operation    enthistory.OpType "json:\"operation\" graphql:\"operation\""
-	OwnerID      *string           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	RedirectURL  string            "json:\"redirectURL\" graphql:\"redirectURL\""
-	Ref          *string           "json:\"ref,omitempty\" graphql:\"ref\""
-	Scopes       string            "json:\"scopes\" graphql:\"scopes\""
-	Tags         []string          "json:\"tags,omitempty\" graphql:\"tags\""
-	TokenURL     string            "json:\"tokenURL\" graphql:\"tokenURL\""
-	UpdatedAt    *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy    *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	AuthStyle    string         "json:\"authStyle\" graphql:\"authStyle\""
+	AuthURL      string         "json:\"authURL\" graphql:\"authURL\""
+	ClientID     string         "json:\"clientID\" graphql:\"clientID\""
+	ClientSecret string         "json:\"clientSecret\" graphql:\"clientSecret\""
+	CreatedAt    *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy    *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime  time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID           string         "json:\"id\" graphql:\"id\""
+	InfoURL      string         "json:\"infoURL\" graphql:\"infoURL\""
+	Name         string         "json:\"name\" graphql:\"name\""
+	Operation    history.OpType "json:\"operation\" graphql:\"operation\""
+	OwnerID      *string        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RedirectURL  string         "json:\"redirectURL\" graphql:\"redirectURL\""
+	Ref          *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	Scopes       string         "json:\"scopes\" graphql:\"scopes\""
+	Tags         []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	TokenURL     string         "json:\"tokenURL\" graphql:\"tokenURL\""
+	UpdatedAt    *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy    *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetOauthProviderHistories_OauthProviderHistories_Edges_Node) GetAuthStyle() string {
@@ -17828,7 +17828,7 @@ func (t *GetOauthProviderHistories_OauthProviderHistories_Edges_Node) GetName() 
 	}
 	return t.Name
 }
-func (t *GetOauthProviderHistories_OauthProviderHistories_Edges_Node) GetOperation() *enthistory.OpType {
+func (t *GetOauthProviderHistories_OauthProviderHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
 		t = &GetOauthProviderHistories_OauthProviderHistories_Edges_Node{}
 	}
@@ -20186,21 +20186,21 @@ func (t *UpdateOrganization_UpdateOrganization) GetOrganization() *UpdateOrganiz
 }
 
 type GetAllOrganizationHistories_OrganizationHistories_Edges_Node struct {
-	AvatarRemoteURL *string           "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
-	CreatedAt       *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DedicatedDb     bool              "json:\"dedicatedDb\" graphql:\"dedicatedDb\""
-	Description     *string           "json:\"description,omitempty\" graphql:\"description\""
-	DisplayName     string            "json:\"displayName\" graphql:\"displayName\""
-	HistoryTime     time.Time         "json:\"historyTime\" graphql:\"historyTime\""
-	ID              string            "json:\"id\" graphql:\"id\""
-	Name            string            "json:\"name\" graphql:\"name\""
-	Operation       enthistory.OpType "json:\"operation\" graphql:\"operation\""
-	PersonalOrg     *bool             "json:\"personalOrg,omitempty\" graphql:\"personalOrg\""
-	Ref             *string           "json:\"ref,omitempty\" graphql:\"ref\""
-	Tags            []string          "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt       *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	AvatarRemoteURL *string        "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
+	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DedicatedDb     bool           "json:\"dedicatedDb\" graphql:\"dedicatedDb\""
+	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
+	DisplayName     string         "json:\"displayName\" graphql:\"displayName\""
+	HistoryTime     time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID              string         "json:\"id\" graphql:\"id\""
+	Name            string         "json:\"name\" graphql:\"name\""
+	Operation       history.OpType "json:\"operation\" graphql:\"operation\""
+	PersonalOrg     *bool          "json:\"personalOrg,omitempty\" graphql:\"personalOrg\""
+	Ref             *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllOrganizationHistories_OrganizationHistories_Edges_Node) GetAvatarRemoteURL() *string {
@@ -20257,7 +20257,7 @@ func (t *GetAllOrganizationHistories_OrganizationHistories_Edges_Node) GetName()
 	}
 	return t.Name
 }
-func (t *GetAllOrganizationHistories_OrganizationHistories_Edges_Node) GetOperation() *enthistory.OpType {
+func (t *GetAllOrganizationHistories_OrganizationHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
 		t = &GetAllOrganizationHistories_OrganizationHistories_Edges_Node{}
 	}
@@ -20317,21 +20317,21 @@ func (t *GetAllOrganizationHistories_OrganizationHistories) GetEdges() []*GetAll
 }
 
 type GetOrganizationHistories_OrganizationHistories_Edges_Node struct {
-	AvatarRemoteURL *string           "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
-	CreatedAt       *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DedicatedDb     bool              "json:\"dedicatedDb\" graphql:\"dedicatedDb\""
-	Description     *string           "json:\"description,omitempty\" graphql:\"description\""
-	DisplayName     string            "json:\"displayName\" graphql:\"displayName\""
-	HistoryTime     time.Time         "json:\"historyTime\" graphql:\"historyTime\""
-	ID              string            "json:\"id\" graphql:\"id\""
-	Name            string            "json:\"name\" graphql:\"name\""
-	Operation       enthistory.OpType "json:\"operation\" graphql:\"operation\""
-	PersonalOrg     *bool             "json:\"personalOrg,omitempty\" graphql:\"personalOrg\""
-	Ref             *string           "json:\"ref,omitempty\" graphql:\"ref\""
-	Tags            []string          "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt       *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	AvatarRemoteURL *string        "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
+	CreatedAt       *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DedicatedDb     bool           "json:\"dedicatedDb\" graphql:\"dedicatedDb\""
+	Description     *string        "json:\"description,omitempty\" graphql:\"description\""
+	DisplayName     string         "json:\"displayName\" graphql:\"displayName\""
+	HistoryTime     time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID              string         "json:\"id\" graphql:\"id\""
+	Name            string         "json:\"name\" graphql:\"name\""
+	Operation       history.OpType "json:\"operation\" graphql:\"operation\""
+	PersonalOrg     *bool          "json:\"personalOrg,omitempty\" graphql:\"personalOrg\""
+	Ref             *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags            []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetOrganizationHistories_OrganizationHistories_Edges_Node) GetAvatarRemoteURL() *string {
@@ -20388,7 +20388,7 @@ func (t *GetOrganizationHistories_OrganizationHistories_Edges_Node) GetName() st
 	}
 	return t.Name
 }
-func (t *GetOrganizationHistories_OrganizationHistories_Edges_Node) GetOperation() *enthistory.OpType {
+func (t *GetOrganizationHistories_OrganizationHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
 		t = &GetOrganizationHistories_OrganizationHistories_Edges_Node{}
 	}
@@ -20983,23 +20983,23 @@ func (t *UpdateOrganizationSetting_UpdateOrganizationSetting) GetOrganizationSet
 }
 
 type GetAllOrganizationSettingHistories_OrganizationSettingHistories_Edges_Node struct {
-	BillingAddress *string           "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
-	BillingContact *string           "json:\"billingContact,omitempty\" graphql:\"billingContact\""
-	BillingEmail   *string           "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
-	BillingPhone   *string           "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
-	CreatedAt      *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Domains        []string          "json:\"domains,omitempty\" graphql:\"domains\""
-	GeoLocation    *enums.Region     "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
-	HistoryTime    time.Time         "json:\"historyTime\" graphql:\"historyTime\""
-	ID             string            "json:\"id\" graphql:\"id\""
-	Operation      enthistory.OpType "json:\"operation\" graphql:\"operation\""
-	OrganizationID *string           "json:\"organizationID,omitempty\" graphql:\"organizationID\""
-	Ref            *string           "json:\"ref,omitempty\" graphql:\"ref\""
-	Tags           []string          "json:\"tags,omitempty\" graphql:\"tags\""
-	TaxIdentifier  *string           "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
-	UpdatedAt      *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	BillingAddress *string        "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
+	BillingContact *string        "json:\"billingContact,omitempty\" graphql:\"billingContact\""
+	BillingEmail   *string        "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
+	BillingPhone   *string        "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
+	CreatedAt      *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Domains        []string       "json:\"domains,omitempty\" graphql:\"domains\""
+	GeoLocation    *enums.Region  "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
+	HistoryTime    time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID             string         "json:\"id\" graphql:\"id\""
+	Operation      history.OpType "json:\"operation\" graphql:\"operation\""
+	OrganizationID *string        "json:\"organizationID,omitempty\" graphql:\"organizationID\""
+	Ref            *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags           []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	TaxIdentifier  *string        "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
+	UpdatedAt      *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllOrganizationSettingHistories_OrganizationSettingHistories_Edges_Node) GetBillingAddress() *string {
@@ -21062,7 +21062,7 @@ func (t *GetAllOrganizationSettingHistories_OrganizationSettingHistories_Edges_N
 	}
 	return t.ID
 }
-func (t *GetAllOrganizationSettingHistories_OrganizationSettingHistories_Edges_Node) GetOperation() *enthistory.OpType {
+func (t *GetAllOrganizationSettingHistories_OrganizationSettingHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
 		t = &GetAllOrganizationSettingHistories_OrganizationSettingHistories_Edges_Node{}
 	}
@@ -21128,23 +21128,23 @@ func (t *GetAllOrganizationSettingHistories_OrganizationSettingHistories) GetEdg
 }
 
 type GetOrganizationSettingHistories_OrganizationSettingHistories_Edges_Node struct {
-	BillingAddress *string           "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
-	BillingContact *string           "json:\"billingContact,omitempty\" graphql:\"billingContact\""
-	BillingEmail   *string           "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
-	BillingPhone   *string           "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
-	CreatedAt      *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Domains        []string          "json:\"domains,omitempty\" graphql:\"domains\""
-	GeoLocation    *enums.Region     "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
-	HistoryTime    time.Time         "json:\"historyTime\" graphql:\"historyTime\""
-	ID             string            "json:\"id\" graphql:\"id\""
-	Operation      enthistory.OpType "json:\"operation\" graphql:\"operation\""
-	OrganizationID *string           "json:\"organizationID,omitempty\" graphql:\"organizationID\""
-	Ref            *string           "json:\"ref,omitempty\" graphql:\"ref\""
-	Tags           []string          "json:\"tags,omitempty\" graphql:\"tags\""
-	TaxIdentifier  *string           "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
-	UpdatedAt      *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	BillingAddress *string        "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
+	BillingContact *string        "json:\"billingContact,omitempty\" graphql:\"billingContact\""
+	BillingEmail   *string        "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
+	BillingPhone   *string        "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
+	CreatedAt      *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Domains        []string       "json:\"domains,omitempty\" graphql:\"domains\""
+	GeoLocation    *enums.Region  "json:\"geoLocation,omitempty\" graphql:\"geoLocation\""
+	HistoryTime    time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID             string         "json:\"id\" graphql:\"id\""
+	Operation      history.OpType "json:\"operation\" graphql:\"operation\""
+	OrganizationID *string        "json:\"organizationID,omitempty\" graphql:\"organizationID\""
+	Ref            *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags           []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	TaxIdentifier  *string        "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
+	UpdatedAt      *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetOrganizationSettingHistories_OrganizationSettingHistories_Edges_Node) GetBillingAddress() *string {
@@ -21207,7 +21207,7 @@ func (t *GetOrganizationSettingHistories_OrganizationSettingHistories_Edges_Node
 	}
 	return t.ID
 }
-func (t *GetOrganizationSettingHistories_OrganizationSettingHistories_Edges_Node) GetOperation() *enthistory.OpType {
+func (t *GetOrganizationSettingHistories_OrganizationSettingHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
 		t = &GetOrganizationSettingHistories_OrganizationSettingHistories_Edges_Node{}
 	}
@@ -21556,17 +21556,17 @@ func (t *UpdateUserRoleInOrg_UpdateOrgMembership) GetOrgMembership() *UpdateUser
 }
 
 type GetAllOrgMembershipHistories_OrgMembershipHistories_Edges_Node struct {
-	CreatedAt      *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	HistoryTime    time.Time         "json:\"historyTime\" graphql:\"historyTime\""
-	ID             string            "json:\"id\" graphql:\"id\""
-	Operation      enthistory.OpType "json:\"operation\" graphql:\"operation\""
-	OrganizationID string            "json:\"organizationID\" graphql:\"organizationID\""
-	Ref            *string           "json:\"ref,omitempty\" graphql:\"ref\""
-	Role           enums.Role        "json:\"role\" graphql:\"role\""
-	UpdatedAt      *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UserID         string            "json:\"userID\" graphql:\"userID\""
+	CreatedAt      *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime    time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID             string         "json:\"id\" graphql:\"id\""
+	Operation      history.OpType "json:\"operation\" graphql:\"operation\""
+	OrganizationID string         "json:\"organizationID\" graphql:\"organizationID\""
+	Ref            *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	Role           enums.Role     "json:\"role\" graphql:\"role\""
+	UpdatedAt      *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UserID         string         "json:\"userID\" graphql:\"userID\""
 }
 
 func (t *GetAllOrgMembershipHistories_OrgMembershipHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -21593,7 +21593,7 @@ func (t *GetAllOrgMembershipHistories_OrgMembershipHistories_Edges_Node) GetID()
 	}
 	return t.ID
 }
-func (t *GetAllOrgMembershipHistories_OrgMembershipHistories_Edges_Node) GetOperation() *enthistory.OpType {
+func (t *GetAllOrgMembershipHistories_OrgMembershipHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
 		t = &GetAllOrgMembershipHistories_OrgMembershipHistories_Edges_Node{}
 	}
@@ -21659,17 +21659,17 @@ func (t *GetAllOrgMembershipHistories_OrgMembershipHistories) GetEdges() []*GetA
 }
 
 type GetOrgMembershipHistories_OrgMembershipHistories_Edges_Node struct {
-	CreatedAt      *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	HistoryTime    time.Time         "json:\"historyTime\" graphql:\"historyTime\""
-	ID             string            "json:\"id\" graphql:\"id\""
-	Operation      enthistory.OpType "json:\"operation\" graphql:\"operation\""
-	OrganizationID string            "json:\"organizationID\" graphql:\"organizationID\""
-	Ref            *string           "json:\"ref,omitempty\" graphql:\"ref\""
-	Role           enums.Role        "json:\"role\" graphql:\"role\""
-	UpdatedAt      *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UserID         string            "json:\"userID\" graphql:\"userID\""
+	CreatedAt      *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime    time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID             string         "json:\"id\" graphql:\"id\""
+	Operation      history.OpType "json:\"operation\" graphql:\"operation\""
+	OrganizationID string         "json:\"organizationID\" graphql:\"organizationID\""
+	Ref            *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	Role           enums.Role     "json:\"role\" graphql:\"role\""
+	UpdatedAt      *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UserID         string         "json:\"userID\" graphql:\"userID\""
 }
 
 func (t *GetOrgMembershipHistories_OrgMembershipHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -21696,7 +21696,7 @@ func (t *GetOrgMembershipHistories_OrgMembershipHistories_Edges_Node) GetID() st
 	}
 	return t.ID
 }
-func (t *GetOrgMembershipHistories_OrgMembershipHistories_Edges_Node) GetOperation() *enthistory.OpType {
+func (t *GetOrgMembershipHistories_OrgMembershipHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
 		t = &GetOrgMembershipHistories_OrgMembershipHistories_Edges_Node{}
 	}
@@ -23555,7 +23555,7 @@ type GetAllTemplateHistories_TemplateHistories_Edges_Node struct {
 	ID           string             "json:\"id\" graphql:\"id\""
 	Jsonconfig   json.RawMessage    "json:\"jsonconfig\" graphql:\"jsonconfig\""
 	Name         string             "json:\"name\" graphql:\"name\""
-	Operation    enthistory.OpType  "json:\"operation\" graphql:\"operation\""
+	Operation    history.OpType     "json:\"operation\" graphql:\"operation\""
 	OwnerID      *string            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Ref          *string            "json:\"ref,omitempty\" graphql:\"ref\""
 	Tags         []string           "json:\"tags,omitempty\" graphql:\"tags\""
@@ -23607,7 +23607,7 @@ func (t *GetAllTemplateHistories_TemplateHistories_Edges_Node) GetName() string 
 	}
 	return t.Name
 }
-func (t *GetAllTemplateHistories_TemplateHistories_Edges_Node) GetOperation() *enthistory.OpType {
+func (t *GetAllTemplateHistories_TemplateHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
 		t = &GetAllTemplateHistories_TemplateHistories_Edges_Node{}
 	}
@@ -23686,7 +23686,7 @@ type GetTemplateHistories_TemplateHistories_Edges_Node struct {
 	ID           string             "json:\"id\" graphql:\"id\""
 	Jsonconfig   json.RawMessage    "json:\"jsonconfig\" graphql:\"jsonconfig\""
 	Name         string             "json:\"name\" graphql:\"name\""
-	Operation    enthistory.OpType  "json:\"operation\" graphql:\"operation\""
+	Operation    history.OpType     "json:\"operation\" graphql:\"operation\""
 	OwnerID      *string            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Ref          *string            "json:\"ref,omitempty\" graphql:\"ref\""
 	Tags         []string           "json:\"tags,omitempty\" graphql:\"tags\""
@@ -23738,7 +23738,7 @@ func (t *GetTemplateHistories_TemplateHistories_Edges_Node) GetName() string {
 	}
 	return t.Name
 }
-func (t *GetTemplateHistories_TemplateHistories_Edges_Node) GetOperation() *enthistory.OpType {
+func (t *GetTemplateHistories_TemplateHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
 		t = &GetTemplateHistories_TemplateHistories_Edges_Node{}
 	}
@@ -25309,7 +25309,7 @@ type GetAllUserHistories_UserHistories_Edges_Node struct {
 	ID              string             "json:\"id\" graphql:\"id\""
 	LastName        *string            "json:\"lastName,omitempty\" graphql:\"lastName\""
 	LastSeen        *time.Time         "json:\"lastSeen,omitempty\" graphql:\"lastSeen\""
-	Operation       enthistory.OpType  "json:\"operation\" graphql:\"operation\""
+	Operation       history.OpType     "json:\"operation\" graphql:\"operation\""
 	Ref             *string            "json:\"ref,omitempty\" graphql:\"ref\""
 	Role            *enums.Role        "json:\"role,omitempty\" graphql:\"role\""
 	Sub             *string            "json:\"sub,omitempty\" graphql:\"sub\""
@@ -25396,7 +25396,7 @@ func (t *GetAllUserHistories_UserHistories_Edges_Node) GetLastSeen() *time.Time 
 	}
 	return t.LastSeen
 }
-func (t *GetAllUserHistories_UserHistories_Edges_Node) GetOperation() *enthistory.OpType {
+func (t *GetAllUserHistories_UserHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
 		t = &GetAllUserHistories_UserHistories_Edges_Node{}
 	}
@@ -25475,7 +25475,7 @@ type GetUserHistories_UserHistories_Edges_Node struct {
 	ID              string             "json:\"id\" graphql:\"id\""
 	LastName        *string            "json:\"lastName,omitempty\" graphql:\"lastName\""
 	LastSeen        *time.Time         "json:\"lastSeen,omitempty\" graphql:\"lastSeen\""
-	Operation       enthistory.OpType  "json:\"operation\" graphql:\"operation\""
+	Operation       history.OpType     "json:\"operation\" graphql:\"operation\""
 	Ref             *string            "json:\"ref,omitempty\" graphql:\"ref\""
 	Role            *enums.Role        "json:\"role,omitempty\" graphql:\"role\""
 	Sub             *string            "json:\"sub,omitempty\" graphql:\"sub\""
@@ -25562,7 +25562,7 @@ func (t *GetUserHistories_UserHistories_Edges_Node) GetLastSeen() *time.Time {
 	}
 	return t.LastSeen
 }
-func (t *GetUserHistories_UserHistories_Edges_Node) GetOperation() *enthistory.OpType {
+func (t *GetUserHistories_UserHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
 		t = &GetUserHistories_UserHistories_Edges_Node{}
 	}
@@ -26191,23 +26191,23 @@ func (t *UpdateUserSetting_UpdateUserSetting) GetUserSetting() *UpdateUserSettin
 }
 
 type GetAllUserSettingHistories_UserSettingHistories_Edges_Node struct {
-	CreatedAt         *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy         *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	EmailConfirmed    bool              "json:\"emailConfirmed\" graphql:\"emailConfirmed\""
-	HistoryTime       time.Time         "json:\"historyTime\" graphql:\"historyTime\""
-	ID                string            "json:\"id\" graphql:\"id\""
-	IsTfaEnabled      *bool             "json:\"isTfaEnabled,omitempty\" graphql:\"isTfaEnabled\""
-	IsWebauthnAllowed *bool             "json:\"isWebauthnAllowed,omitempty\" graphql:\"isWebauthnAllowed\""
-	Locked            bool              "json:\"locked\" graphql:\"locked\""
-	Operation         enthistory.OpType "json:\"operation\" graphql:\"operation\""
-	Ref               *string           "json:\"ref,omitempty\" graphql:\"ref\""
-	SilencedAt        *time.Time        "json:\"silencedAt,omitempty\" graphql:\"silencedAt\""
-	Status            enums.UserStatus  "json:\"status\" graphql:\"status\""
-	SuspendedAt       *time.Time        "json:\"suspendedAt,omitempty\" graphql:\"suspendedAt\""
-	Tags              []string          "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt         *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy         *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UserID            *string           "json:\"userID,omitempty\" graphql:\"userID\""
+	CreatedAt         *time.Time       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy         *string          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	EmailConfirmed    bool             "json:\"emailConfirmed\" graphql:\"emailConfirmed\""
+	HistoryTime       time.Time        "json:\"historyTime\" graphql:\"historyTime\""
+	ID                string           "json:\"id\" graphql:\"id\""
+	IsTfaEnabled      *bool            "json:\"isTfaEnabled,omitempty\" graphql:\"isTfaEnabled\""
+	IsWebauthnAllowed *bool            "json:\"isWebauthnAllowed,omitempty\" graphql:\"isWebauthnAllowed\""
+	Locked            bool             "json:\"locked\" graphql:\"locked\""
+	Operation         history.OpType   "json:\"operation\" graphql:\"operation\""
+	Ref               *string          "json:\"ref,omitempty\" graphql:\"ref\""
+	SilencedAt        *time.Time       "json:\"silencedAt,omitempty\" graphql:\"silencedAt\""
+	Status            enums.UserStatus "json:\"status\" graphql:\"status\""
+	SuspendedAt       *time.Time       "json:\"suspendedAt,omitempty\" graphql:\"suspendedAt\""
+	Tags              []string         "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt         *time.Time       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy         *string          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UserID            *string          "json:\"userID,omitempty\" graphql:\"userID\""
 }
 
 func (t *GetAllUserSettingHistories_UserSettingHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -26258,7 +26258,7 @@ func (t *GetAllUserSettingHistories_UserSettingHistories_Edges_Node) GetLocked()
 	}
 	return t.Locked
 }
-func (t *GetAllUserSettingHistories_UserSettingHistories_Edges_Node) GetOperation() *enthistory.OpType {
+func (t *GetAllUserSettingHistories_UserSettingHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
 		t = &GetAllUserSettingHistories_UserSettingHistories_Edges_Node{}
 	}
@@ -26336,23 +26336,23 @@ func (t *GetAllUserSettingHistories_UserSettingHistories) GetEdges() []*GetAllUs
 }
 
 type GetUserSettingHistories_UserSettingHistories_Edges_Node struct {
-	CreatedAt         *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy         *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	EmailConfirmed    bool              "json:\"emailConfirmed\" graphql:\"emailConfirmed\""
-	HistoryTime       time.Time         "json:\"historyTime\" graphql:\"historyTime\""
-	ID                string            "json:\"id\" graphql:\"id\""
-	IsTfaEnabled      *bool             "json:\"isTfaEnabled,omitempty\" graphql:\"isTfaEnabled\""
-	IsWebauthnAllowed *bool             "json:\"isWebauthnAllowed,omitempty\" graphql:\"isWebauthnAllowed\""
-	Locked            bool              "json:\"locked\" graphql:\"locked\""
-	Operation         enthistory.OpType "json:\"operation\" graphql:\"operation\""
-	Ref               *string           "json:\"ref,omitempty\" graphql:\"ref\""
-	SilencedAt        *time.Time        "json:\"silencedAt,omitempty\" graphql:\"silencedAt\""
-	Status            enums.UserStatus  "json:\"status\" graphql:\"status\""
-	SuspendedAt       *time.Time        "json:\"suspendedAt,omitempty\" graphql:\"suspendedAt\""
-	Tags              []string          "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt         *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy         *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UserID            *string           "json:\"userID,omitempty\" graphql:\"userID\""
+	CreatedAt         *time.Time       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy         *string          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	EmailConfirmed    bool             "json:\"emailConfirmed\" graphql:\"emailConfirmed\""
+	HistoryTime       time.Time        "json:\"historyTime\" graphql:\"historyTime\""
+	ID                string           "json:\"id\" graphql:\"id\""
+	IsTfaEnabled      *bool            "json:\"isTfaEnabled,omitempty\" graphql:\"isTfaEnabled\""
+	IsWebauthnAllowed *bool            "json:\"isWebauthnAllowed,omitempty\" graphql:\"isWebauthnAllowed\""
+	Locked            bool             "json:\"locked\" graphql:\"locked\""
+	Operation         history.OpType   "json:\"operation\" graphql:\"operation\""
+	Ref               *string          "json:\"ref,omitempty\" graphql:\"ref\""
+	SilencedAt        *time.Time       "json:\"silencedAt,omitempty\" graphql:\"silencedAt\""
+	Status            enums.UserStatus "json:\"status\" graphql:\"status\""
+	SuspendedAt       *time.Time       "json:\"suspendedAt,omitempty\" graphql:\"suspendedAt\""
+	Tags              []string         "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt         *time.Time       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy         *string          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UserID            *string          "json:\"userID,omitempty\" graphql:\"userID\""
 }
 
 func (t *GetUserSettingHistories_UserSettingHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -26403,7 +26403,7 @@ func (t *GetUserSettingHistories_UserSettingHistories_Edges_Node) GetLocked() bo
 	}
 	return t.Locked
 }
-func (t *GetUserSettingHistories_UserSettingHistories_Edges_Node) GetOperation() *enthistory.OpType {
+func (t *GetUserSettingHistories_UserSettingHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
 		t = &GetUserSettingHistories_UserSettingHistories_Edges_Node{}
 	}
@@ -27116,23 +27116,23 @@ func (t *DeleteWebhook_DeleteWebhook) GetDeletedID() string {
 }
 
 type GetAllWebhookHistories_WebhookHistories_Edges_Node struct {
-	CreatedAt      *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description    *string           "json:\"description,omitempty\" graphql:\"description\""
-	DestinationURL string            "json:\"destinationURL\" graphql:\"destinationURL\""
-	Enabled        bool              "json:\"enabled\" graphql:\"enabled\""
-	Failures       *int64            "json:\"failures,omitempty\" graphql:\"failures\""
-	HistoryTime    time.Time         "json:\"historyTime\" graphql:\"historyTime\""
-	ID             string            "json:\"id\" graphql:\"id\""
-	LastError      *string           "json:\"lastError,omitempty\" graphql:\"lastError\""
-	LastResponse   *string           "json:\"lastResponse,omitempty\" graphql:\"lastResponse\""
-	Name           string            "json:\"name\" graphql:\"name\""
-	Operation      enthistory.OpType "json:\"operation\" graphql:\"operation\""
-	OwnerID        *string           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Ref            *string           "json:\"ref,omitempty\" graphql:\"ref\""
-	Tags           []string          "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt      *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt      *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description    *string        "json:\"description,omitempty\" graphql:\"description\""
+	DestinationURL string         "json:\"destinationURL\" graphql:\"destinationURL\""
+	Enabled        bool           "json:\"enabled\" graphql:\"enabled\""
+	Failures       *int64         "json:\"failures,omitempty\" graphql:\"failures\""
+	HistoryTime    time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID             string         "json:\"id\" graphql:\"id\""
+	LastError      *string        "json:\"lastError,omitempty\" graphql:\"lastError\""
+	LastResponse   *string        "json:\"lastResponse,omitempty\" graphql:\"lastResponse\""
+	Name           string         "json:\"name\" graphql:\"name\""
+	Operation      history.OpType "json:\"operation\" graphql:\"operation\""
+	OwnerID        *string        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref            *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags           []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt      *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllWebhookHistories_WebhookHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -27201,7 +27201,7 @@ func (t *GetAllWebhookHistories_WebhookHistories_Edges_Node) GetName() string {
 	}
 	return t.Name
 }
-func (t *GetAllWebhookHistories_WebhookHistories_Edges_Node) GetOperation() *enthistory.OpType {
+func (t *GetAllWebhookHistories_WebhookHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
 		t = &GetAllWebhookHistories_WebhookHistories_Edges_Node{}
 	}
@@ -27261,23 +27261,23 @@ func (t *GetAllWebhookHistories_WebhookHistories) GetEdges() []*GetAllWebhookHis
 }
 
 type GetWebhookHistories_WebhookHistories_Edges_Node struct {
-	CreatedAt      *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy      *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description    *string           "json:\"description,omitempty\" graphql:\"description\""
-	DestinationURL string            "json:\"destinationURL\" graphql:\"destinationURL\""
-	Enabled        bool              "json:\"enabled\" graphql:\"enabled\""
-	Failures       *int64            "json:\"failures,omitempty\" graphql:\"failures\""
-	HistoryTime    time.Time         "json:\"historyTime\" graphql:\"historyTime\""
-	ID             string            "json:\"id\" graphql:\"id\""
-	LastError      *string           "json:\"lastError,omitempty\" graphql:\"lastError\""
-	LastResponse   *string           "json:\"lastResponse,omitempty\" graphql:\"lastResponse\""
-	Name           string            "json:\"name\" graphql:\"name\""
-	Operation      enthistory.OpType "json:\"operation\" graphql:\"operation\""
-	OwnerID        *string           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Ref            *string           "json:\"ref,omitempty\" graphql:\"ref\""
-	Tags           []string          "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt      *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy      *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt      *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy      *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description    *string        "json:\"description,omitempty\" graphql:\"description\""
+	DestinationURL string         "json:\"destinationURL\" graphql:\"destinationURL\""
+	Enabled        bool           "json:\"enabled\" graphql:\"enabled\""
+	Failures       *int64         "json:\"failures,omitempty\" graphql:\"failures\""
+	HistoryTime    time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID             string         "json:\"id\" graphql:\"id\""
+	LastError      *string        "json:\"lastError,omitempty\" graphql:\"lastError\""
+	LastResponse   *string        "json:\"lastResponse,omitempty\" graphql:\"lastResponse\""
+	Name           string         "json:\"name\" graphql:\"name\""
+	Operation      history.OpType "json:\"operation\" graphql:\"operation\""
+	OwnerID        *string        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref            *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	Tags           []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt      *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy      *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetWebhookHistories_WebhookHistories_Edges_Node) GetCreatedAt() *time.Time {
@@ -27346,7 +27346,7 @@ func (t *GetWebhookHistories_WebhookHistories_Edges_Node) GetName() string {
 	}
 	return t.Name
 }
-func (t *GetWebhookHistories_WebhookHistories_Edges_Node) GetOperation() *enthistory.OpType {
+func (t *GetWebhookHistories_WebhookHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
 		t = &GetWebhookHistories_WebhookHistories_Edges_Node{}
 	}

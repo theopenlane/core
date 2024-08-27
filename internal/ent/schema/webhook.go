@@ -9,9 +9,9 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
-	"github.com/datumforge/enthistory"
-	emixin "github.com/datumforge/entx/mixin"
-	"github.com/datumforge/fgax/entfga"
+	"github.com/theopenlane/entx/history"
+	emixin "github.com/theopenlane/entx/mixin"
+	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/mixin"
 )
@@ -116,7 +116,7 @@ func (Webhook) Annotations() []schema.Annotation {
 			IDField:         "OwnerID",
 			NillableIDField: true,
 		},
-		enthistory.Annotations{
+		history.Annotations{
 			Exclude: false,
 		},
 	}

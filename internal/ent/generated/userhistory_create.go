@@ -10,9 +10,9 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/datumforge/enthistory"
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/entx/history"
 )
 
 // UserHistoryCreate is the builder for creating a UserHistory entity.
@@ -51,8 +51,8 @@ func (uhc *UserHistoryCreate) SetNillableRef(s *string) *UserHistoryCreate {
 }
 
 // SetOperation sets the "operation" field.
-func (uhc *UserHistoryCreate) SetOperation(et enthistory.OpType) *UserHistoryCreate {
-	uhc.mutation.SetOperation(et)
+func (uhc *UserHistoryCreate) SetOperation(ht history.OpType) *UserHistoryCreate {
+	uhc.mutation.SetOperation(ht)
 	return uhc
 }
 

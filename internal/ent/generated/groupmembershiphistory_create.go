@@ -10,9 +10,9 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/datumforge/enthistory"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembershiphistory"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/entx/history"
 )
 
 // GroupMembershipHistoryCreate is the builder for creating a GroupMembershipHistory entity.
@@ -51,8 +51,8 @@ func (gmhc *GroupMembershipHistoryCreate) SetNillableRef(s *string) *GroupMember
 }
 
 // SetOperation sets the "operation" field.
-func (gmhc *GroupMembershipHistoryCreate) SetOperation(et enthistory.OpType) *GroupMembershipHistoryCreate {
-	gmhc.mutation.SetOperation(et)
+func (gmhc *GroupMembershipHistoryCreate) SetOperation(ht history.OpType) *GroupMembershipHistoryCreate {
+	gmhc.mutation.SetOperation(ht)
 	return gmhc
 }
 

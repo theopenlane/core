@@ -10,9 +10,9 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/datumforge/enthistory"
 	"github.com/theopenlane/core/internal/ent/generated/contacthistory"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/entx/history"
 )
 
 // ContactHistory is the model entity for the ContactHistory schema.
@@ -25,7 +25,7 @@ type ContactHistory struct {
 	// Ref holds the value of the "ref" field.
 	Ref string `json:"ref,omitempty"`
 	// Operation holds the value of the "operation" field.
-	Operation enthistory.OpType `json:"operation,omitempty"`
+	Operation history.OpType `json:"operation,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
@@ -69,7 +69,7 @@ func (*ContactHistory) scanValues(columns []string) ([]any, error) {
 		case contacthistory.FieldTags:
 			values[i] = new([]byte)
 		case contacthistory.FieldOperation:
-			values[i] = new(enthistory.OpType)
+			values[i] = new(history.OpType)
 		case contacthistory.FieldID, contacthistory.FieldRef, contacthistory.FieldCreatedBy, contacthistory.FieldUpdatedBy, contacthistory.FieldMappingID, contacthistory.FieldDeletedBy, contacthistory.FieldOwnerID, contacthistory.FieldFullName, contacthistory.FieldTitle, contacthistory.FieldCompany, contacthistory.FieldEmail, contacthistory.FieldPhoneNumber, contacthistory.FieldAddress, contacthistory.FieldStatus:
 			values[i] = new(sql.NullString)
 		case contacthistory.FieldHistoryTime, contacthistory.FieldCreatedAt, contacthistory.FieldUpdatedAt, contacthistory.FieldDeletedAt:
@@ -108,7 +108,7 @@ func (ch *ContactHistory) assignValues(columns []string, values []any) error {
 				ch.Ref = value.String
 			}
 		case contacthistory.FieldOperation:
-			if value, ok := values[i].(*enthistory.OpType); !ok {
+			if value, ok := values[i].(*history.OpType); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value != nil {
 				ch.Operation = *value

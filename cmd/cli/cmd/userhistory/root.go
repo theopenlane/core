@@ -5,9 +5,10 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/theopenlane/utils/cli/tables"
+
 	"github.com/theopenlane/core/cmd/cli/cmd"
 	"github.com/theopenlane/core/pkg/openlaneclient"
-	"github.com/theopenlane/utils/cli/tables"
 )
 
 // cmd represents the base userHistory command when called without any subcommands

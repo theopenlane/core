@@ -5,9 +5,10 @@ import (
 
 	"github.com/stretchr/testify/require"
 
+	"github.com/theopenlane/utils/ulids"
+
 	authtest "github.com/theopenlane/core/pkg/middleware/authtest"
 	"github.com/theopenlane/core/pkg/tokens"
-	"github.com/theopenlane/utils/ulids"
 )
 
 // This test generates an example token with fake RSA keys for use in examples,

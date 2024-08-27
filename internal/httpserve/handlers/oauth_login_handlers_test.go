@@ -4,10 +4,10 @@ import (
 	"testing"
 	"time"
 
-	mock_fga "github.com/datumforge/fgax/mockery"
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	mock_fga "github.com/theopenlane/iam/fgax/mockery"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"

@@ -6,9 +6,9 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
-	"github.com/datumforge/enthistory"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/entx/history"
 )
 
 // ID filters vertices based on their ID field.
@@ -277,22 +277,22 @@ func RefContainsFold(v string) predicate.UserHistory {
 }
 
 // OperationEQ applies the EQ predicate on the "operation" field.
-func OperationEQ(v enthistory.OpType) predicate.UserHistory {
+func OperationEQ(v history.OpType) predicate.UserHistory {
 	return predicate.UserHistory(sql.FieldEQ(FieldOperation, v))
 }
 
 // OperationNEQ applies the NEQ predicate on the "operation" field.
-func OperationNEQ(v enthistory.OpType) predicate.UserHistory {
+func OperationNEQ(v history.OpType) predicate.UserHistory {
 	return predicate.UserHistory(sql.FieldNEQ(FieldOperation, v))
 }
 
 // OperationIn applies the In predicate on the "operation" field.
-func OperationIn(vs ...enthistory.OpType) predicate.UserHistory {
+func OperationIn(vs ...history.OpType) predicate.UserHistory {
 	return predicate.UserHistory(sql.FieldIn(FieldOperation, vs...))
 }
 
 // OperationNotIn applies the NotIn predicate on the "operation" field.
-func OperationNotIn(vs ...enthistory.OpType) predicate.UserHistory {
+func OperationNotIn(vs ...history.OpType) predicate.UserHistory {
 	return predicate.UserHistory(sql.FieldNotIn(FieldOperation, vs...))
 }
 

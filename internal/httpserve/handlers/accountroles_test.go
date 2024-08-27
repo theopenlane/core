@@ -8,15 +8,15 @@ import (
 	"strings"
 	"testing"
 
-	mock_fga "github.com/datumforge/fgax/mockery"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	mock_fga "github.com/theopenlane/iam/fgax/mockery"
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	_ "github.com/theopenlane/core/internal/ent/generated/runtime"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
-	"github.com/theopenlane/core/pkg/httpsling"
 	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/httpsling"
 )
 
 func (suite *HandlerTestSuite) TestAccountRolesHandler() {

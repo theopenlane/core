@@ -54,7 +54,7 @@ func login(ctx context.Context) (*oauth2.Token, error) {
 	return tokens, nil
 }
 
-func passwordAuth(ctx context.Context, client *openlaneclient.DatumClient, username string) (*oauth2.Token, error) {
+func passwordAuth(ctx context.Context, client *openlaneclient.OpenLaneClient, username string) (*oauth2.Token, error) {
 	// read password from terminal if not set in environment variable
 	password := cmd.Config.String("password")
 

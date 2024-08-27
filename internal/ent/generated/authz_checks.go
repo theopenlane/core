@@ -6,6 +6,7 @@ import (
 
 	"entgo.io/ent/privacy"
 	"github.com/99designs/gqlgen/graphql"
+
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
@@ -13,9 +14,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/webhook"
-
-	"github.com/datumforge/datum/pkg/auth"
-	"github.com/datumforge/fgax"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
 )
 
 func (q *APITokenQuery) CheckAccess(ctx context.Context) error {

@@ -10,11 +10,14 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 
-	"github.com/datumforge/fgax"
-	mock_fga "github.com/datumforge/fgax/mockery"
 	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/iam/fgax"
+	mock_fga "github.com/theopenlane/iam/fgax/mockery"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zaptest"
+
+	"github.com/theopenlane/utils/emails"
+	"github.com/theopenlane/utils/marionette"
 
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	ent "github.com/theopenlane/core/internal/ent/generated"
@@ -28,8 +31,6 @@ import (
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/core/pkg/sessions"
 	"github.com/theopenlane/core/pkg/testutils"
-	"github.com/theopenlane/utils/emails"
-	"github.com/theopenlane/utils/marionette"
 )
 
 var (
@@ -47,7 +48,7 @@ type HandlerTestSuite struct {
 	suite.Suite
 	e   *echo.Echo
 	db  *ent.Client
-	api *openlaneclient.DatumClient
+	api *openlaneclient.OpenLaneClient
 	h   *handlers.Handler
 	fga *mock_fga.MockSdkClient
 	tf  *testutils.TestFixture
@@ -87,9 +88,7 @@ func (suite *HandlerTestSuite) SetupTest() {
 	}
 
 	// Start task manager
-	tmConfig := marionette.Config{
-		Logger: zap.NewNop().Sugar(),
-	}
+	tmConfig := marionette.Config{}
 
 	taskMan := marionette.New(tmConfig)
 

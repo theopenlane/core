@@ -19,7 +19,7 @@ var getCmd = &cobra.Command{
 }
 
 func init() {
-	cmd.AddCommand(getCmd)
+	command.AddCommand(getCmd)
 
 	getCmd.Flags().BoolP("active", "a", true, "filter on active subscribers")
 	getCmd.Flags().StringP("email", "e", "", "email address of the subscriber to get")

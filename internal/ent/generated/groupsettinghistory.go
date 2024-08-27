@@ -10,9 +10,9 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/datumforge/enthistory"
 	"github.com/theopenlane/core/internal/ent/generated/groupsettinghistory"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/entx/history"
 )
 
 // GroupSettingHistory is the model entity for the GroupSettingHistory schema.
@@ -25,7 +25,7 @@ type GroupSettingHistory struct {
 	// Ref holds the value of the "ref" field.
 	Ref string `json:"ref,omitempty"`
 	// Operation holds the value of the "operation" field.
-	Operation enthistory.OpType `json:"operation,omitempty"`
+	Operation history.OpType `json:"operation,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
@@ -63,7 +63,7 @@ func (*GroupSettingHistory) scanValues(columns []string) ([]any, error) {
 		case groupsettinghistory.FieldTags:
 			values[i] = new([]byte)
 		case groupsettinghistory.FieldOperation:
-			values[i] = new(enthistory.OpType)
+			values[i] = new(history.OpType)
 		case groupsettinghistory.FieldSyncToSlack, groupsettinghistory.FieldSyncToGithub:
 			values[i] = new(sql.NullBool)
 		case groupsettinghistory.FieldID, groupsettinghistory.FieldRef, groupsettinghistory.FieldCreatedBy, groupsettinghistory.FieldUpdatedBy, groupsettinghistory.FieldMappingID, groupsettinghistory.FieldDeletedBy, groupsettinghistory.FieldVisibility, groupsettinghistory.FieldJoinPolicy, groupsettinghistory.FieldGroupID:
@@ -104,7 +104,7 @@ func (gsh *GroupSettingHistory) assignValues(columns []string, values []any) err
 				gsh.Ref = value.String
 			}
 		case groupsettinghistory.FieldOperation:
-			if value, ok := values[i].(*enthistory.OpType); !ok {
+			if value, ok := values[i].(*history.OpType); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value != nil {
 				gsh.Operation = *value

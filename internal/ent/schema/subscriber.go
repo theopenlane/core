@@ -13,9 +13,9 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
-	"github.com/datumforge/enthistory"
-	emixin "github.com/datumforge/entx/mixin"
-	"github.com/datumforge/fgax/entfga"
+	"github.com/theopenlane/entx/history"
+	emixin "github.com/theopenlane/entx/mixin"
+	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -130,7 +130,7 @@ func (Subscriber) Annotations() []schema.Annotation {
 			NillableIDField: true,
 			IDField:         "OwnerID",
 		},
-		enthistory.Annotations{
+		history.Annotations{
 			Exclude: true,
 		},
 	}

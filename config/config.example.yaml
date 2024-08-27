@@ -13,10 +13,10 @@ auth:
             clientSecret: ""
             redirectUrl: /v1/google/callback
             scopes: null
-        redirectUrl: http://localhost:3001/api/auth/callback/datum
+        redirectUrl: http://localhost:3001/api/auth/callback/theopenlane
         webauthn:
             debug: false
-            displayName: Datum
+            displayName: ""
             enabled: true
             enforceTimeout: true
             maxDevices: 10
@@ -47,21 +47,26 @@ authz:
         scopes: ""
     enabled: true
     hostUrl: https://authz.theopenlane.io
-    modelFile: fga/model/datum.fga
+    modelFile: fga/model/openlane.fga
     modelId: ""
     storeId: ""
-    storeName: datum
+    storeName: openlane
 db:
     cacheTTL: 1000000000
-    databaseName: datum
+    databaseName: openlane
     debug: false
     driverName: libsql
     enableHistory: false
     migrationProvider: atlas
     multiWrite: false
-    primaryDbSource: file:datum.db
+    primaryDbSource: file:openlane.db
     runMigrations: true
     secondaryDbSource: file:backup.db
+dbx:
+    baseUrl: http://localhost:1337
+    debug: false
+    enabled: true
+    endpoint: query
 email:
     adminEmail: admins@theopenlane.io
     archive: ""
@@ -70,8 +75,8 @@ email:
         invite: /invite
         reset: /password-reset
         verify: /verify
-    datumListId: ""
     fromEmail: no-reply@theopenlane.io
+    listId: ""
     marketingUrl:
         marketingBase: https://www.theopenlane.io
         subscriberVerify: /verify
@@ -82,11 +87,6 @@ entConfig:
     flags:
         useListObjectServices: false
         useListUserService: true
-geodetic:
-    baseUrl: http://localhost:1337
-    debug: false
-    enabled: true
-    endpoint: query
 posthog:
     apiKey: ""
     enabled: false
@@ -95,7 +95,7 @@ publisherConfig:
     address: localhost:10000
     addresses:
         - localhost:10000
-    appName: datum
+    appName: openlane
     debug: false
     enabled: false
 ratelimit:
@@ -112,7 +112,7 @@ redis:
     maxIdleConns: 0
     maxRetries: 3
     minIdleConns: 0
-    name: datum
+    name: openlane
     password: ""
     readTimeout: 0
     username: ""
@@ -171,7 +171,7 @@ sessions:
 totp:
     codeLength: 6
     enabled: true
-    issuer: datum
+    issuer: ""
     recoveryCodeCount: 16
     recoveryCodeLength: 8
     redis: true

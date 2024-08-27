@@ -6,9 +6,10 @@ import (
 
 	"entgo.io/ent"
 
+	"github.com/theopenlane/utils/ulids"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/utils/ulids"
 )
 
 // HookEntityCreate runs on entity mutations to set default values that are not provided

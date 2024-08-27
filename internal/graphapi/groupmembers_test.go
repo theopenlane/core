@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"testing"
 
-	mock_fga "github.com/datumforge/fgax/mockery"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	mock_fga "github.com/theopenlane/iam/fgax/mockery"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -35,7 +35,7 @@ func (suite *GraphTestSuite) TestQueryGroupMembers() {
 	testCases := []struct {
 		name        string
 		queryID     string
-		client      *openlaneclient.DatumClient
+		client      *openlaneclient.OpenLaneClient
 		ctx         context.Context
 		allowed     bool
 		expected    *ent.GroupMembership
@@ -153,7 +153,7 @@ func (suite *GraphTestSuite) TestMutationCreateGroupMembers() {
 		groupID string
 		userID  string
 		role    enums.Role
-		client  *openlaneclient.DatumClient
+		client  *openlaneclient.OpenLaneClient
 		ctx     context.Context
 		allowed bool
 		check   bool
@@ -332,7 +332,7 @@ func (suite *GraphTestSuite) TestMutationUpdateGroupMembers() {
 	testCases := []struct {
 		name    string
 		role    enums.Role
-		client  *openlaneclient.DatumClient
+		client  *openlaneclient.OpenLaneClient
 		ctx     context.Context
 		allowed bool
 		check   bool
@@ -439,7 +439,7 @@ func (suite *GraphTestSuite) TestMutationDeleteGroupMembers() {
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      *openlaneclient.DatumClient
+		client      *openlaneclient.OpenLaneClient
 		ctx         context.Context
 		allowed     bool
 		checkAccess bool

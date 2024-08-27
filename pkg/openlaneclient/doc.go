@@ -1,2 +1,2 @@
-// Package openlaneclient contains the client to interact with the open lane server
+// Package openlaneclient contains the client to interact with the openlane server
 package openlaneclient

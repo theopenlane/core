@@ -9,7 +9,7 @@ import (
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
-var createcmd = &cobra.Command{
+var createCmd = &cobra.Command{
 	Use:   "create",
 	Short: "create a new webhook",
 	Run: func(cmd *cobra.Command, args []string) {
@@ -19,12 +19,12 @@ var createcmd = &cobra.Command{
 }
 
 func init() {
-	cmd.AddCommand(createcmd)
+	command.AddCommand(createCmd)
 
-	createcommand.Flags().StringP("name", "n", "", "name of the webhook")
-	createcommand.Flags().StringP("description", "d", "", "description of the webhook")
-	createcommand.Flags().StringP("url", "u", "", "the destination url the webhook is sent to")
-	createcommand.Flags().BoolP("enabled", "e", true, "if the webhook is enabled")
+	createCmd.Flags().StringP("name", "n", "", "name of the webhook")
+	createCmd.Flags().StringP("description", "d", "", "description of the webhook")
+	createCmd.Flags().StringP("url", "u", "", "the destination url the webhook is sent to")
+	createCmd.Flags().BoolP("enabled", "e", true, "if the webhook is enabled")
 }
 
 // createValidation validates the required fields for the command

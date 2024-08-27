@@ -50,7 +50,7 @@ tasks:
     desc: a task to login the verified user
     aliases: [login]
     env:
-      DATUM_PASSWORD: mattisthebest1234
+      CORE_PASSWORD: mattisthebest1234
     cmds:
       - go run main.go login -u mitb@theopenlane.io
 

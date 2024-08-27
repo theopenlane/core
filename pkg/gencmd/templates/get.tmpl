@@ -18,7 +18,7 @@ var getCmd = &cobra.Command{
 }
 
 func init() {
-	cmd.AddCommand(getCmd)
+	command.AddCommand(getCmd)
 
 	{{- if not .HistoryCmd }}
 	getCmd.Flags().StringP("id", "i", "", "{{ .Name | ToLowerCamel }} id to query")

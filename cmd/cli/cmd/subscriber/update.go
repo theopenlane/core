@@ -19,7 +19,7 @@ var updateCmd = &cobra.Command{
 }
 
 func init() {
-	cmd.AddCommand(updateCmd)
+	command.AddCommand(updateCmd)
 
 	updateCmd.Flags().StringP("email", "e", "", "email address of the subscriber to update")
 	updateCmd.Flags().StringP("phone-number", "p", "", "phone number to add or update on the subscriber")

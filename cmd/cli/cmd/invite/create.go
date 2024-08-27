@@ -20,7 +20,7 @@ var createCmd = &cobra.Command{
 }
 
 func init() {
-	cmd.AddCommand(createCmd)
+	command.AddCommand(createCmd)
 
 	createCmd.Flags().StringP("email", "e", "", "destination email for the invitation")
 	createCmd.Flags().StringP("role", "r", "member", "role for the user in the organization (admin, member)")

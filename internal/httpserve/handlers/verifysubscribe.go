@@ -13,13 +13,14 @@ import (
 	ph "github.com/posthog/posthog-go"
 	echo "github.com/theopenlane/echox"
 
+	"github.com/theopenlane/utils/marionette"
+	"github.com/theopenlane/utils/rout"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/pkg/auth"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/tokens"
-	"github.com/theopenlane/utils/marionette"
-	"github.com/theopenlane/utils/rout"
 )
 
 // VerifySubscriptionHandler is the handler for the subscription verification endpoint

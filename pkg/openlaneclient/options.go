@@ -6,7 +6,7 @@ import (
 
 	"github.com/Yamashou/gqlgenc/clientv2"
 
-	"github.com/theopenlane/core/pkg/httpsling"
+	"github.com/theopenlane/httpsling"
 )
 
 // ClientOption allows us to configure the APIv1 client when it is created

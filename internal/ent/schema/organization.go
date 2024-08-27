@@ -11,10 +11,10 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
-	"github.com/datumforge/entx"
-	emixin "github.com/datumforge/entx/mixin"
+	"github.com/theopenlane/entx"
+	emixin "github.com/theopenlane/entx/mixin"
 
-	"github.com/datumforge/fgax/entfga"
+	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"

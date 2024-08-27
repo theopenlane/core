@@ -10,8 +10,8 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/datumforge/enthistory"
 	"github.com/theopenlane/core/internal/ent/generated/featurehistory"
+	"github.com/theopenlane/entx/history"
 )
 
 // FeatureHistoryCreate is the builder for creating a FeatureHistory entity.
@@ -50,8 +50,8 @@ func (fhc *FeatureHistoryCreate) SetNillableRef(s *string) *FeatureHistoryCreate
 }
 
 // SetOperation sets the "operation" field.
-func (fhc *FeatureHistoryCreate) SetOperation(et enthistory.OpType) *FeatureHistoryCreate {
-	fhc.mutation.SetOperation(et)
+func (fhc *FeatureHistoryCreate) SetOperation(ht history.OpType) *FeatureHistoryCreate {
+	fhc.mutation.SetOperation(ht)
 	return fhc
 }
 

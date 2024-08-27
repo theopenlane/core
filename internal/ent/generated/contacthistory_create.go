@@ -10,9 +10,9 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/datumforge/enthistory"
 	"github.com/theopenlane/core/internal/ent/generated/contacthistory"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/entx/history"
 )
 
 // ContactHistoryCreate is the builder for creating a ContactHistory entity.
@@ -51,8 +51,8 @@ func (chc *ContactHistoryCreate) SetNillableRef(s *string) *ContactHistoryCreate
 }
 
 // SetOperation sets the "operation" field.
-func (chc *ContactHistoryCreate) SetOperation(et enthistory.OpType) *ContactHistoryCreate {
-	chc.mutation.SetOperation(et)
+func (chc *ContactHistoryCreate) SetOperation(ht history.OpType) *ContactHistoryCreate {
+	chc.mutation.SetOperation(ht)
 	return chc
 }
 

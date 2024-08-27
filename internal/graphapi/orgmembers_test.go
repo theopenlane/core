@@ -4,9 +4,9 @@ import (
 	"context"
 	"testing"
 
-	mock_fga "github.com/datumforge/fgax/mockery"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	mock_fga "github.com/theopenlane/iam/fgax/mockery"
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
@@ -36,7 +36,7 @@ func (suite *GraphTestSuite) TestQueryOrgMembers() {
 	testCases := []struct {
 		name        string
 		queryID     string
-		client      *openlaneclient.DatumClient
+		client      *openlaneclient.OpenLaneClient
 		ctx         context.Context
 		allowed     bool
 		expectedLen int

@@ -3,7 +3,7 @@ package hooks
 import (
 	"strings"
 
-	"github.com/datumforge/fgax"
+	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/pkg/enums"
 )

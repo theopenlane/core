@@ -10,8 +10,8 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/datumforge/enthistory"
 	"github.com/theopenlane/core/internal/ent/generated/filehistory"
+	"github.com/theopenlane/entx/history"
 )
 
 // FileHistoryCreate is the builder for creating a FileHistory entity.
@@ -50,8 +50,8 @@ func (fhc *FileHistoryCreate) SetNillableRef(s *string) *FileHistoryCreate {
 }
 
 // SetOperation sets the "operation" field.
-func (fhc *FileHistoryCreate) SetOperation(et enthistory.OpType) *FileHistoryCreate {
-	fhc.mutation.SetOperation(et)
+func (fhc *FileHistoryCreate) SetOperation(ht history.OpType) *FileHistoryCreate {
+	fhc.mutation.SetOperation(ht)
 	return fhc
 }
 

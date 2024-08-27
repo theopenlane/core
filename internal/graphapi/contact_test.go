@@ -5,10 +5,10 @@ import (
 	"testing"
 
 	"github.com/brianvoe/gofakeit/v7"
-	mock_fga "github.com/datumforge/fgax/mockery"
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	mock_fga "github.com/theopenlane/iam/fgax/mockery"
 	"github.com/theopenlane/utils/rout"
 	"github.com/theopenlane/utils/ulids"
 
@@ -30,7 +30,7 @@ func (suite *GraphTestSuite) TestQueryContact() {
 		name     string
 		queryID  string
 		allowed  bool
-		client   *openlaneclient.DatumClient
+		client   *openlaneclient.OpenLaneClient
 		ctx      context.Context
 		expected *ent.Contact
 		errorMsg string
@@ -127,7 +127,7 @@ func (suite *GraphTestSuite) TestQueryContacts() {
 
 	testCases := []struct {
 		name            string
-		client          *openlaneclient.DatumClient
+		client          *openlaneclient.OpenLaneClient
 		ctx             context.Context
 		expectedResults int
 	}{
@@ -180,7 +180,7 @@ func (suite *GraphTestSuite) TestMutationCreateContact() {
 	testCases := []struct {
 		name        string
 		request     openlaneclient.CreateContactInput
-		client      *openlaneclient.DatumClient
+		client      *openlaneclient.OpenLaneClient
 		ctx         context.Context
 		allowed     bool
 		expectedErr string
@@ -323,7 +323,7 @@ func (suite *GraphTestSuite) TestMutationUpdateContact() {
 	testCases := []struct {
 		name        string
 		request     openlaneclient.UpdateContactInput
-		client      *openlaneclient.DatumClient
+		client      *openlaneclient.OpenLaneClient
 		ctx         context.Context
 		allowed     bool
 		expectedErr string
@@ -474,7 +474,7 @@ func (suite *GraphTestSuite) TestMutationDeleteContact() {
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      *openlaneclient.DatumClient
+		client      *openlaneclient.OpenLaneClient
 		ctx         context.Context
 		allowed     bool
 		checkAccess bool

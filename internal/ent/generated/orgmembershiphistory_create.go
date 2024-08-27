@@ -10,9 +10,9 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/datumforge/enthistory"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembershiphistory"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/entx/history"
 )
 
 // OrgMembershipHistoryCreate is the builder for creating a OrgMembershipHistory entity.
@@ -51,8 +51,8 @@ func (omhc *OrgMembershipHistoryCreate) SetNillableRef(s *string) *OrgMembership
 }
 
 // SetOperation sets the "operation" field.
-func (omhc *OrgMembershipHistoryCreate) SetOperation(et enthistory.OpType) *OrgMembershipHistoryCreate {
-	omhc.mutation.SetOperation(et)
+func (omhc *OrgMembershipHistoryCreate) SetOperation(ht history.OpType) *OrgMembershipHistoryCreate {
+	omhc.mutation.SetOperation(ht)
 	return omhc
 }
 

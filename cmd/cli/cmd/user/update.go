@@ -19,7 +19,7 @@ var updateCmd = &cobra.Command{
 }
 
 func init() {
-	cmd.AddCommand(updateCmd)
+	command.AddCommand(updateCmd)
 
 	updateCmd.Flags().StringP("id", "i", "", "user id to update")
 	updateCmd.Flags().StringP("first-name", "f", "", "first name of the user")

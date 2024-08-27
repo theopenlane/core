@@ -10,7 +10,7 @@ import (
 	"time"
 
 	"github.com/theopenlane/core/pkg/enums"
-	"github.com/datumforge/enthistory"
+	"github.com/theopenlane/entx/history"
 )
 
 type GlobalSearchResult interface {
@@ -347,16 +347,16 @@ type ContactEdge struct {
 }
 
 type ContactHistory struct {
-	ID          string            `json:"id"`
-	HistoryTime time.Time         `json:"historyTime"`
-	Ref         *string           `json:"ref,omitempty"`
-	Operation   enthistory.OpType `json:"operation"`
-	CreatedAt   *time.Time        `json:"createdAt,omitempty"`
-	UpdatedAt   *time.Time        `json:"updatedAt,omitempty"`
-	CreatedBy   *string           `json:"createdBy,omitempty"`
-	UpdatedBy   *string           `json:"updatedBy,omitempty"`
-	DeletedAt   *time.Time        `json:"deletedAt,omitempty"`
-	DeletedBy   *string           `json:"deletedBy,omitempty"`
+	ID          string         `json:"id"`
+	HistoryTime time.Time      `json:"historyTime"`
+	Ref         *string        `json:"ref,omitempty"`
+	Operation   history.OpType `json:"operation"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// The organization id that owns the object
@@ -440,10 +440,10 @@ type ContactHistoryWhereInput struct {
 	RefEqualFold    *string  `json:"refEqualFold,omitempty"`
 	RefContainsFold *string  `json:"refContainsFold,omitempty"`
 	// operation field predicates
-	Operation      *enthistory.OpType  `json:"operation,omitempty"`
-	OperationNeq   *enthistory.OpType  `json:"operationNEQ,omitempty"`
-	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
-	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -1510,14 +1510,14 @@ type DocumentDataEdge struct {
 }
 
 type DocumentDataHistory struct {
-	ID          string            `json:"id"`
-	HistoryTime time.Time         `json:"historyTime"`
-	Ref         *string           `json:"ref,omitempty"`
-	Operation   enthistory.OpType `json:"operation"`
-	CreatedAt   *time.Time        `json:"createdAt,omitempty"`
-	UpdatedAt   *time.Time        `json:"updatedAt,omitempty"`
-	CreatedBy   *string           `json:"createdBy,omitempty"`
-	UpdatedBy   *string           `json:"updatedBy,omitempty"`
+	ID          string         `json:"id"`
+	HistoryTime time.Time      `json:"historyTime"`
+	Ref         *string        `json:"ref,omitempty"`
+	Operation   history.OpType `json:"operation"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	// tags associated with the object
 	Tags      []string   `json:"tags,omitempty"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
@@ -1593,10 +1593,10 @@ type DocumentDataHistoryWhereInput struct {
 	RefEqualFold    *string  `json:"refEqualFold,omitempty"`
 	RefContainsFold *string  `json:"refContainsFold,omitempty"`
 	// operation field predicates
-	Operation      *enthistory.OpType  `json:"operation,omitempty"`
-	OperationNeq   *enthistory.OpType  `json:"operationNEQ,omitempty"`
-	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
-	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -1926,14 +1926,14 @@ type EntitlementEdge struct {
 }
 
 type EntitlementHistory struct {
-	ID          string            `json:"id"`
-	HistoryTime time.Time         `json:"historyTime"`
-	Ref         *string           `json:"ref,omitempty"`
-	Operation   enthistory.OpType `json:"operation"`
-	CreatedAt   *time.Time        `json:"createdAt,omitempty"`
-	UpdatedAt   *time.Time        `json:"updatedAt,omitempty"`
-	CreatedBy   *string           `json:"createdBy,omitempty"`
-	UpdatedBy   *string           `json:"updatedBy,omitempty"`
+	ID          string         `json:"id"`
+	HistoryTime time.Time      `json:"historyTime"`
+	Ref         *string        `json:"ref,omitempty"`
+	Operation   history.OpType `json:"operation"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	// tags associated with the object
 	Tags      []string   `json:"tags,omitempty"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
@@ -2019,10 +2019,10 @@ type EntitlementHistoryWhereInput struct {
 	RefEqualFold    *string  `json:"refEqualFold,omitempty"`
 	RefContainsFold *string  `json:"refContainsFold,omitempty"`
 	// operation field predicates
-	Operation      *enthistory.OpType  `json:"operation,omitempty"`
-	OperationNeq   *enthistory.OpType  `json:"operationNEQ,omitempty"`
-	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
-	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -2327,16 +2327,16 @@ type EntitlementPlanFeatureEdge struct {
 }
 
 type EntitlementPlanFeatureHistory struct {
-	ID          string            `json:"id"`
-	HistoryTime time.Time         `json:"historyTime"`
-	Ref         *string           `json:"ref,omitempty"`
-	Operation   enthistory.OpType `json:"operation"`
-	CreatedAt   *time.Time        `json:"createdAt,omitempty"`
-	UpdatedAt   *time.Time        `json:"updatedAt,omitempty"`
-	CreatedBy   *string           `json:"createdBy,omitempty"`
-	UpdatedBy   *string           `json:"updatedBy,omitempty"`
-	DeletedAt   *time.Time        `json:"deletedAt,omitempty"`
-	DeletedBy   *string           `json:"deletedBy,omitempty"`
+	ID          string         `json:"id"`
+	HistoryTime time.Time      `json:"historyTime"`
+	Ref         *string        `json:"ref,omitempty"`
+	Operation   history.OpType `json:"operation"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// The organization id that owns the object
@@ -2410,10 +2410,10 @@ type EntitlementPlanFeatureHistoryWhereInput struct {
 	RefEqualFold    *string  `json:"refEqualFold,omitempty"`
 	RefContainsFold *string  `json:"refContainsFold,omitempty"`
 	// operation field predicates
-	Operation      *enthistory.OpType  `json:"operation,omitempty"`
-	OperationNeq   *enthistory.OpType  `json:"operationNEQ,omitempty"`
-	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
-	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -2648,16 +2648,16 @@ type EntitlementPlanFeatureWhereInput struct {
 }
 
 type EntitlementPlanHistory struct {
-	ID          string            `json:"id"`
-	HistoryTime time.Time         `json:"historyTime"`
-	Ref         *string           `json:"ref,omitempty"`
-	Operation   enthistory.OpType `json:"operation"`
-	CreatedAt   *time.Time        `json:"createdAt,omitempty"`
-	UpdatedAt   *time.Time        `json:"updatedAt,omitempty"`
-	CreatedBy   *string           `json:"createdBy,omitempty"`
-	UpdatedBy   *string           `json:"updatedBy,omitempty"`
-	DeletedAt   *time.Time        `json:"deletedAt,omitempty"`
-	DeletedBy   *string           `json:"deletedBy,omitempty"`
+	ID          string         `json:"id"`
+	HistoryTime time.Time      `json:"historyTime"`
+	Ref         *string        `json:"ref,omitempty"`
+	Operation   history.OpType `json:"operation"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// The organization id that owns the object
@@ -2737,10 +2737,10 @@ type EntitlementPlanHistoryWhereInput struct {
 	RefEqualFold    *string  `json:"refEqualFold,omitempty"`
 	RefContainsFold *string  `json:"refContainsFold,omitempty"`
 	// operation field predicates
-	Operation      *enthistory.OpType  `json:"operation,omitempty"`
-	OperationNeq   *enthistory.OpType  `json:"operationNEQ,omitempty"`
-	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
-	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -3379,16 +3379,16 @@ type EntityEdge struct {
 }
 
 type EntityHistory struct {
-	ID          string            `json:"id"`
-	HistoryTime time.Time         `json:"historyTime"`
-	Ref         *string           `json:"ref,omitempty"`
-	Operation   enthistory.OpType `json:"operation"`
-	CreatedAt   *time.Time        `json:"createdAt,omitempty"`
-	UpdatedAt   *time.Time        `json:"updatedAt,omitempty"`
-	CreatedBy   *string           `json:"createdBy,omitempty"`
-	UpdatedBy   *string           `json:"updatedBy,omitempty"`
-	DeletedAt   *time.Time        `json:"deletedAt,omitempty"`
-	DeletedBy   *string           `json:"deletedBy,omitempty"`
+	ID          string         `json:"id"`
+	HistoryTime time.Time      `json:"historyTime"`
+	Ref         *string        `json:"ref,omitempty"`
+	Operation   history.OpType `json:"operation"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// The organization id that owns the object
@@ -3478,10 +3478,10 @@ type EntityHistoryWhereInput struct {
 	RefEqualFold    *string  `json:"refEqualFold,omitempty"`
 	RefContainsFold *string  `json:"refContainsFold,omitempty"`
 	// operation field predicates
-	Operation      *enthistory.OpType  `json:"operation,omitempty"`
-	OperationNeq   *enthistory.OpType  `json:"operationNEQ,omitempty"`
-	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
-	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -3710,16 +3710,16 @@ type EntityTypeEdge struct {
 }
 
 type EntityTypeHistory struct {
-	ID          string            `json:"id"`
-	HistoryTime time.Time         `json:"historyTime"`
-	Ref         *string           `json:"ref,omitempty"`
-	Operation   enthistory.OpType `json:"operation"`
-	CreatedAt   *time.Time        `json:"createdAt,omitempty"`
-	UpdatedAt   *time.Time        `json:"updatedAt,omitempty"`
-	CreatedBy   *string           `json:"createdBy,omitempty"`
-	UpdatedBy   *string           `json:"updatedBy,omitempty"`
-	DeletedAt   *time.Time        `json:"deletedAt,omitempty"`
-	DeletedBy   *string           `json:"deletedBy,omitempty"`
+	ID          string         `json:"id"`
+	HistoryTime time.Time      `json:"historyTime"`
+	Ref         *string        `json:"ref,omitempty"`
+	Operation   history.OpType `json:"operation"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// The organization id that owns the object
@@ -3799,10 +3799,10 @@ type EntityTypeHistoryWhereInput struct {
 	RefEqualFold    *string  `json:"refEqualFold,omitempty"`
 	RefContainsFold *string  `json:"refContainsFold,omitempty"`
 	// operation field predicates
-	Operation      *enthistory.OpType  `json:"operation,omitempty"`
-	OperationNeq   *enthistory.OpType  `json:"operationNEQ,omitempty"`
-	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
-	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -4339,14 +4339,14 @@ type EventEdge struct {
 }
 
 type EventHistory struct {
-	ID          string            `json:"id"`
-	HistoryTime time.Time         `json:"historyTime"`
-	Ref         *string           `json:"ref,omitempty"`
-	Operation   enthistory.OpType `json:"operation"`
-	CreatedAt   *time.Time        `json:"createdAt,omitempty"`
-	UpdatedAt   *time.Time        `json:"updatedAt,omitempty"`
-	CreatedBy   *string           `json:"createdBy,omitempty"`
-	UpdatedBy   *string           `json:"updatedBy,omitempty"`
+	ID          string         `json:"id"`
+	HistoryTime time.Time      `json:"historyTime"`
+	Ref         *string        `json:"ref,omitempty"`
+	Operation   history.OpType `json:"operation"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	// tags associated with the object
 	Tags          []string               `json:"tags,omitempty"`
 	EventID       *string                `json:"eventID,omitempty"`
@@ -4418,10 +4418,10 @@ type EventHistoryWhereInput struct {
 	RefEqualFold    *string  `json:"refEqualFold,omitempty"`
 	RefContainsFold *string  `json:"refContainsFold,omitempty"`
 	// operation field predicates
-	Operation      *enthistory.OpType  `json:"operation,omitempty"`
-	OperationNeq   *enthistory.OpType  `json:"operationNEQ,omitempty"`
-	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
-	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -4764,16 +4764,16 @@ type FeatureEdge struct {
 }
 
 type FeatureHistory struct {
-	ID          string            `json:"id"`
-	HistoryTime time.Time         `json:"historyTime"`
-	Ref         *string           `json:"ref,omitempty"`
-	Operation   enthistory.OpType `json:"operation"`
-	CreatedAt   *time.Time        `json:"createdAt,omitempty"`
-	UpdatedAt   *time.Time        `json:"updatedAt,omitempty"`
-	CreatedBy   *string           `json:"createdBy,omitempty"`
-	UpdatedBy   *string           `json:"updatedBy,omitempty"`
-	DeletedAt   *time.Time        `json:"deletedAt,omitempty"`
-	DeletedBy   *string           `json:"deletedBy,omitempty"`
+	ID          string         `json:"id"`
+	HistoryTime time.Time      `json:"historyTime"`
+	Ref         *string        `json:"ref,omitempty"`
+	Operation   history.OpType `json:"operation"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// The organization id that owns the object
@@ -4853,10 +4853,10 @@ type FeatureHistoryWhereInput struct {
 	RefEqualFold    *string  `json:"refEqualFold,omitempty"`
 	RefContainsFold *string  `json:"refContainsFold,omitempty"`
 	// operation field predicates
-	Operation      *enthistory.OpType  `json:"operation,omitempty"`
-	OperationNeq   *enthistory.OpType  `json:"operationNEQ,omitempty"`
-	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
-	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -5250,16 +5250,16 @@ type FileEdge struct {
 }
 
 type FileHistory struct {
-	ID          string            `json:"id"`
-	HistoryTime time.Time         `json:"historyTime"`
-	Ref         *string           `json:"ref,omitempty"`
-	Operation   enthistory.OpType `json:"operation"`
-	CreatedAt   *time.Time        `json:"createdAt,omitempty"`
-	UpdatedAt   *time.Time        `json:"updatedAt,omitempty"`
-	CreatedBy   *string           `json:"createdBy,omitempty"`
-	UpdatedBy   *string           `json:"updatedBy,omitempty"`
-	DeletedAt   *time.Time        `json:"deletedAt,omitempty"`
-	DeletedBy   *string           `json:"deletedBy,omitempty"`
+	ID          string         `json:"id"`
+	HistoryTime time.Time      `json:"historyTime"`
+	Ref         *string        `json:"ref,omitempty"`
+	Operation   history.OpType `json:"operation"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags          []string `json:"tags,omitempty"`
 	FileName      string   `json:"fileName"`
@@ -5334,10 +5334,10 @@ type FileHistoryWhereInput struct {
 	RefEqualFold    *string  `json:"refEqualFold,omitempty"`
 	RefContainsFold *string  `json:"refContainsFold,omitempty"`
 	// operation field predicates
-	Operation      *enthistory.OpType  `json:"operation,omitempty"`
-	OperationNeq   *enthistory.OpType  `json:"operationNEQ,omitempty"`
-	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
-	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -5812,16 +5812,16 @@ type GroupEdge struct {
 }
 
 type GroupHistory struct {
-	ID          string            `json:"id"`
-	HistoryTime time.Time         `json:"historyTime"`
-	Ref         *string           `json:"ref,omitempty"`
-	Operation   enthistory.OpType `json:"operation"`
-	CreatedAt   *time.Time        `json:"createdAt,omitempty"`
-	UpdatedAt   *time.Time        `json:"updatedAt,omitempty"`
-	CreatedBy   *string           `json:"createdBy,omitempty"`
-	UpdatedBy   *string           `json:"updatedBy,omitempty"`
-	DeletedAt   *time.Time        `json:"deletedAt,omitempty"`
-	DeletedBy   *string           `json:"deletedBy,omitempty"`
+	ID          string         `json:"id"`
+	HistoryTime time.Time      `json:"historyTime"`
+	Ref         *string        `json:"ref,omitempty"`
+	Operation   history.OpType `json:"operation"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// The organization id that owns the object
@@ -5909,10 +5909,10 @@ type GroupHistoryWhereInput struct {
 	RefEqualFold    *string  `json:"refEqualFold,omitempty"`
 	RefContainsFold *string  `json:"refContainsFold,omitempty"`
 	// operation field predicates
-	Operation      *enthistory.OpType  `json:"operation,omitempty"`
-	OperationNeq   *enthistory.OpType  `json:"operationNEQ,omitempty"`
-	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
-	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -6095,19 +6095,19 @@ type GroupMembershipEdge struct {
 }
 
 type GroupMembershipHistory struct {
-	ID          string            `json:"id"`
-	HistoryTime time.Time         `json:"historyTime"`
-	Ref         *string           `json:"ref,omitempty"`
-	Operation   enthistory.OpType `json:"operation"`
-	CreatedAt   *time.Time        `json:"createdAt,omitempty"`
-	UpdatedAt   *time.Time        `json:"updatedAt,omitempty"`
-	CreatedBy   *string           `json:"createdBy,omitempty"`
-	UpdatedBy   *string           `json:"updatedBy,omitempty"`
-	DeletedAt   *time.Time        `json:"deletedAt,omitempty"`
-	DeletedBy   *string           `json:"deletedBy,omitempty"`
-	Role        enums.Role        `json:"role"`
-	GroupID     string            `json:"groupID"`
-	UserID      string            `json:"userID"`
+	ID          string         `json:"id"`
+	HistoryTime time.Time      `json:"historyTime"`
+	Ref         *string        `json:"ref,omitempty"`
+	Operation   history.OpType `json:"operation"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
+	Role        enums.Role     `json:"role"`
+	GroupID     string         `json:"groupID"`
+	UserID      string         `json:"userID"`
 }
 
 func (GroupMembershipHistory) IsNode() {}
@@ -6173,10 +6173,10 @@ type GroupMembershipHistoryWhereInput struct {
 	RefEqualFold    *string  `json:"refEqualFold,omitempty"`
 	RefContainsFold *string  `json:"refContainsFold,omitempty"`
 	// operation field predicates
-	Operation      *enthistory.OpType  `json:"operation,omitempty"`
-	OperationNeq   *enthistory.OpType  `json:"operationNEQ,omitempty"`
-	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
-	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -6482,14 +6482,14 @@ type GroupSettingEdge struct {
 }
 
 type GroupSettingHistory struct {
-	ID          string            `json:"id"`
-	HistoryTime time.Time         `json:"historyTime"`
-	Ref         *string           `json:"ref,omitempty"`
-	Operation   enthistory.OpType `json:"operation"`
-	CreatedAt   *time.Time        `json:"createdAt,omitempty"`
-	UpdatedAt   *time.Time        `json:"updatedAt,omitempty"`
-	CreatedBy   *string           `json:"createdBy,omitempty"`
-	UpdatedBy   *string           `json:"updatedBy,omitempty"`
+	ID          string         `json:"id"`
+	HistoryTime time.Time      `json:"historyTime"`
+	Ref         *string        `json:"ref,omitempty"`
+	Operation   history.OpType `json:"operation"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	// tags associated with the object
 	Tags      []string   `json:"tags,omitempty"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
@@ -6569,10 +6569,10 @@ type GroupSettingHistoryWhereInput struct {
 	RefEqualFold    *string  `json:"refEqualFold,omitempty"`
 	RefContainsFold *string  `json:"refContainsFold,omitempty"`
 	// operation field predicates
-	Operation      *enthistory.OpType  `json:"operation,omitempty"`
-	OperationNeq   *enthistory.OpType  `json:"operationNEQ,omitempty"`
-	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
-	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -7069,16 +7069,16 @@ type HushEdge struct {
 }
 
 type HushHistory struct {
-	ID          string            `json:"id"`
-	HistoryTime time.Time         `json:"historyTime"`
-	Ref         *string           `json:"ref,omitempty"`
-	Operation   enthistory.OpType `json:"operation"`
-	CreatedAt   *time.Time        `json:"createdAt,omitempty"`
-	UpdatedAt   *time.Time        `json:"updatedAt,omitempty"`
-	CreatedBy   *string           `json:"createdBy,omitempty"`
-	UpdatedBy   *string           `json:"updatedBy,omitempty"`
-	DeletedAt   *time.Time        `json:"deletedAt,omitempty"`
-	DeletedBy   *string           `json:"deletedBy,omitempty"`
+	ID          string         `json:"id"`
+	HistoryTime time.Time      `json:"historyTime"`
+	Ref         *string        `json:"ref,omitempty"`
+	Operation   history.OpType `json:"operation"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// the logical name of the corresponding hush secret or it's general grouping
 	Name string `json:"name"`
 	// a description of the hush value or purpose, such as github PAT
@@ -7160,10 +7160,10 @@ type HushHistoryWhereInput struct {
 	RefEqualFold    *string  `json:"refEqualFold,omitempty"`
 	RefContainsFold *string  `json:"refContainsFold,omitempty"`
 	// operation field predicates
-	Operation      *enthistory.OpType  `json:"operation,omitempty"`
-	OperationNeq   *enthistory.OpType  `json:"operationNEQ,omitempty"`
-	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
-	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -7527,14 +7527,14 @@ type IntegrationEdge struct {
 }
 
 type IntegrationHistory struct {
-	ID          string            `json:"id"`
-	HistoryTime time.Time         `json:"historyTime"`
-	Ref         *string           `json:"ref,omitempty"`
-	Operation   enthistory.OpType `json:"operation"`
-	CreatedAt   *time.Time        `json:"createdAt,omitempty"`
-	UpdatedAt   *time.Time        `json:"updatedAt,omitempty"`
-	CreatedBy   *string           `json:"createdBy,omitempty"`
-	UpdatedBy   *string           `json:"updatedBy,omitempty"`
+	ID          string         `json:"id"`
+	HistoryTime time.Time      `json:"historyTime"`
+	Ref         *string        `json:"ref,omitempty"`
+	Operation   history.OpType `json:"operation"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	// tags associated with the object
 	Tags      []string   `json:"tags,omitempty"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
@@ -7619,10 +7619,10 @@ type IntegrationHistoryWhereInput struct {
 	RefEqualFold    *string  `json:"refEqualFold,omitempty"`
 	RefContainsFold *string  `json:"refContainsFold,omitempty"`
 	// operation field predicates
-	Operation      *enthistory.OpType  `json:"operation,omitempty"`
-	OperationNeq   *enthistory.OpType  `json:"operationNEQ,omitempty"`
-	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
-	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -8220,16 +8220,16 @@ type NoteEdge struct {
 }
 
 type NoteHistory struct {
-	ID          string            `json:"id"`
-	HistoryTime time.Time         `json:"historyTime"`
-	Ref         *string           `json:"ref,omitempty"`
-	Operation   enthistory.OpType `json:"operation"`
-	CreatedAt   *time.Time        `json:"createdAt,omitempty"`
-	UpdatedAt   *time.Time        `json:"updatedAt,omitempty"`
-	CreatedBy   *string           `json:"createdBy,omitempty"`
-	UpdatedBy   *string           `json:"updatedBy,omitempty"`
-	DeletedAt   *time.Time        `json:"deletedAt,omitempty"`
-	DeletedBy   *string           `json:"deletedBy,omitempty"`
+	ID          string         `json:"id"`
+	HistoryTime time.Time      `json:"historyTime"`
+	Ref         *string        `json:"ref,omitempty"`
+	Operation   history.OpType `json:"operation"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// The organization id that owns the object
@@ -8301,10 +8301,10 @@ type NoteHistoryWhereInput struct {
 	RefEqualFold    *string  `json:"refEqualFold,omitempty"`
 	RefContainsFold *string  `json:"refContainsFold,omitempty"`
 	// operation field predicates
-	Operation      *enthistory.OpType  `json:"operation,omitempty"`
-	OperationNeq   *enthistory.OpType  `json:"operationNEQ,omitempty"`
-	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
-	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -8626,14 +8626,14 @@ type OauthProviderEdge struct {
 }
 
 type OauthProviderHistory struct {
-	ID          string            `json:"id"`
-	HistoryTime time.Time         `json:"historyTime"`
-	Ref         *string           `json:"ref,omitempty"`
-	Operation   enthistory.OpType `json:"operation"`
-	CreatedAt   *time.Time        `json:"createdAt,omitempty"`
-	UpdatedAt   *time.Time        `json:"updatedAt,omitempty"`
-	CreatedBy   *string           `json:"createdBy,omitempty"`
-	UpdatedBy   *string           `json:"updatedBy,omitempty"`
+	ID          string         `json:"id"`
+	HistoryTime time.Time      `json:"historyTime"`
+	Ref         *string        `json:"ref,omitempty"`
+	Operation   history.OpType `json:"operation"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	// tags associated with the object
 	Tags      []string   `json:"tags,omitempty"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
@@ -8723,10 +8723,10 @@ type OauthProviderHistoryWhereInput struct {
 	RefEqualFold    *string  `json:"refEqualFold,omitempty"`
 	RefContainsFold *string  `json:"refContainsFold,omitempty"`
 	// operation field predicates
-	Operation      *enthistory.OpType  `json:"operation,omitempty"`
-	OperationNeq   *enthistory.OpType  `json:"operationNEQ,omitempty"`
-	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
-	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -9447,19 +9447,19 @@ type OrgMembershipEdge struct {
 }
 
 type OrgMembershipHistory struct {
-	ID             string            `json:"id"`
-	HistoryTime    time.Time         `json:"historyTime"`
-	Ref            *string           `json:"ref,omitempty"`
-	Operation      enthistory.OpType `json:"operation"`
-	CreatedAt      *time.Time        `json:"createdAt,omitempty"`
-	UpdatedAt      *time.Time        `json:"updatedAt,omitempty"`
-	CreatedBy      *string           `json:"createdBy,omitempty"`
-	UpdatedBy      *string           `json:"updatedBy,omitempty"`
-	DeletedAt      *time.Time        `json:"deletedAt,omitempty"`
-	DeletedBy      *string           `json:"deletedBy,omitempty"`
-	Role           enums.Role        `json:"role"`
-	OrganizationID string            `json:"organizationID"`
-	UserID         string            `json:"userID"`
+	ID             string         `json:"id"`
+	HistoryTime    time.Time      `json:"historyTime"`
+	Ref            *string        `json:"ref,omitempty"`
+	Operation      history.OpType `json:"operation"`
+	CreatedAt      *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt      *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy      *string        `json:"createdBy,omitempty"`
+	UpdatedBy      *string        `json:"updatedBy,omitempty"`
+	DeletedAt      *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy      *string        `json:"deletedBy,omitempty"`
+	Role           enums.Role     `json:"role"`
+	OrganizationID string         `json:"organizationID"`
+	UserID         string         `json:"userID"`
 }
 
 func (OrgMembershipHistory) IsNode() {}
@@ -9525,10 +9525,10 @@ type OrgMembershipHistoryWhereInput struct {
 	RefEqualFold    *string  `json:"refEqualFold,omitempty"`
 	RefContainsFold *string  `json:"refContainsFold,omitempty"`
 	// operation field predicates
-	Operation      *enthistory.OpType  `json:"operation,omitempty"`
-	OperationNeq   *enthistory.OpType  `json:"operationNEQ,omitempty"`
-	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
-	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -9848,14 +9848,14 @@ type OrganizationEdge struct {
 }
 
 type OrganizationHistory struct {
-	ID          string            `json:"id"`
-	HistoryTime time.Time         `json:"historyTime"`
-	Ref         *string           `json:"ref,omitempty"`
-	Operation   enthistory.OpType `json:"operation"`
-	CreatedAt   *time.Time        `json:"createdAt,omitempty"`
-	UpdatedAt   *time.Time        `json:"updatedAt,omitempty"`
-	CreatedBy   *string           `json:"createdBy,omitempty"`
-	UpdatedBy   *string           `json:"updatedBy,omitempty"`
+	ID          string         `json:"id"`
+	HistoryTime time.Time      `json:"historyTime"`
+	Ref         *string        `json:"ref,omitempty"`
+	Operation   history.OpType `json:"operation"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	// tags associated with the object
 	Tags      []string   `json:"tags,omitempty"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
@@ -9945,10 +9945,10 @@ type OrganizationHistoryWhereInput struct {
 	RefEqualFold    *string  `json:"refEqualFold,omitempty"`
 	RefContainsFold *string  `json:"refContainsFold,omitempty"`
 	// operation field predicates
-	Operation      *enthistory.OpType  `json:"operation,omitempty"`
-	OperationNeq   *enthistory.OpType  `json:"operationNEQ,omitempty"`
-	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
-	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -10165,14 +10165,14 @@ type OrganizationSettingEdge struct {
 }
 
 type OrganizationSettingHistory struct {
-	ID          string            `json:"id"`
-	HistoryTime time.Time         `json:"historyTime"`
-	Ref         *string           `json:"ref,omitempty"`
-	Operation   enthistory.OpType `json:"operation"`
-	CreatedAt   *time.Time        `json:"createdAt,omitempty"`
-	UpdatedAt   *time.Time        `json:"updatedAt,omitempty"`
-	CreatedBy   *string           `json:"createdBy,omitempty"`
-	UpdatedBy   *string           `json:"updatedBy,omitempty"`
+	ID          string         `json:"id"`
+	HistoryTime time.Time      `json:"historyTime"`
+	Ref         *string        `json:"ref,omitempty"`
+	Operation   history.OpType `json:"operation"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	// tags associated with the object
 	Tags      []string   `json:"tags,omitempty"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
@@ -10258,10 +10258,10 @@ type OrganizationSettingHistoryWhereInput struct {
 	RefEqualFold    *string  `json:"refEqualFold,omitempty"`
 	RefContainsFold *string  `json:"refContainsFold,omitempty"`
 	// operation field predicates
-	Operation      *enthistory.OpType  `json:"operation,omitempty"`
-	OperationNeq   *enthistory.OpType  `json:"operationNEQ,omitempty"`
-	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
-	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -11610,16 +11610,16 @@ type TemplateEdge struct {
 }
 
 type TemplateHistory struct {
-	ID          string            `json:"id"`
-	HistoryTime time.Time         `json:"historyTime"`
-	Ref         *string           `json:"ref,omitempty"`
-	Operation   enthistory.OpType `json:"operation"`
-	CreatedAt   *time.Time        `json:"createdAt,omitempty"`
-	UpdatedAt   *time.Time        `json:"updatedAt,omitempty"`
-	CreatedBy   *string           `json:"createdBy,omitempty"`
-	UpdatedBy   *string           `json:"updatedBy,omitempty"`
-	DeletedAt   *time.Time        `json:"deletedAt,omitempty"`
-	DeletedBy   *string           `json:"deletedBy,omitempty"`
+	ID          string         `json:"id"`
+	HistoryTime time.Time      `json:"historyTime"`
+	Ref         *string        `json:"ref,omitempty"`
+	Operation   history.OpType `json:"operation"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// The organization id that owns the object
@@ -11707,10 +11707,10 @@ type TemplateHistoryWhereInput struct {
 	RefEqualFold    *string  `json:"refEqualFold,omitempty"`
 	RefContainsFold *string  `json:"refContainsFold,omitempty"`
 	// operation field predicates
-	Operation      *enthistory.OpType  `json:"operation,omitempty"`
-	OperationNeq   *enthistory.OpType  `json:"operationNEQ,omitempty"`
-	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
-	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -12974,16 +12974,16 @@ type UserEdge struct {
 }
 
 type UserHistory struct {
-	ID          string            `json:"id"`
-	HistoryTime time.Time         `json:"historyTime"`
-	Ref         *string           `json:"ref,omitempty"`
-	Operation   enthistory.OpType `json:"operation"`
-	CreatedAt   *time.Time        `json:"createdAt,omitempty"`
-	UpdatedAt   *time.Time        `json:"updatedAt,omitempty"`
-	CreatedBy   *string           `json:"createdBy,omitempty"`
-	UpdatedBy   *string           `json:"updatedBy,omitempty"`
-	DeletedAt   *time.Time        `json:"deletedAt,omitempty"`
-	DeletedBy   *string           `json:"deletedBy,omitempty"`
+	ID          string         `json:"id"`
+	HistoryTime time.Time      `json:"historyTime"`
+	Ref         *string        `json:"ref,omitempty"`
+	Operation   history.OpType `json:"operation"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags      []string `json:"tags,omitempty"`
 	Email     string   `json:"email"`
@@ -13078,10 +13078,10 @@ type UserHistoryWhereInput struct {
 	RefEqualFold    *string  `json:"refEqualFold,omitempty"`
 	RefContainsFold *string  `json:"refContainsFold,omitempty"`
 	// operation field predicates
-	Operation      *enthistory.OpType  `json:"operation,omitempty"`
-	OperationNeq   *enthistory.OpType  `json:"operationNEQ,omitempty"`
-	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
-	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -13384,14 +13384,14 @@ type UserSettingEdge struct {
 }
 
 type UserSettingHistory struct {
-	ID          string            `json:"id"`
-	HistoryTime time.Time         `json:"historyTime"`
-	Ref         *string           `json:"ref,omitempty"`
-	Operation   enthistory.OpType `json:"operation"`
-	CreatedAt   *time.Time        `json:"createdAt,omitempty"`
-	UpdatedAt   *time.Time        `json:"updatedAt,omitempty"`
-	CreatedBy   *string           `json:"createdBy,omitempty"`
-	UpdatedBy   *string           `json:"updatedBy,omitempty"`
+	ID          string         `json:"id"`
+	HistoryTime time.Time      `json:"historyTime"`
+	Ref         *string        `json:"ref,omitempty"`
+	Operation   history.OpType `json:"operation"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	// tags associated with the object
 	Tags      []string   `json:"tags,omitempty"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
@@ -13476,10 +13476,10 @@ type UserSettingHistoryWhereInput struct {
 	RefEqualFold    *string  `json:"refEqualFold,omitempty"`
 	RefContainsFold *string  `json:"refContainsFold,omitempty"`
 	// operation field predicates
-	Operation      *enthistory.OpType  `json:"operation,omitempty"`
-	OperationNeq   *enthistory.OpType  `json:"operationNEQ,omitempty"`
-	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
-	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
@@ -14138,14 +14138,14 @@ type WebhookEdge struct {
 }
 
 type WebhookHistory struct {
-	ID          string            `json:"id"`
-	HistoryTime time.Time         `json:"historyTime"`
-	Ref         *string           `json:"ref,omitempty"`
-	Operation   enthistory.OpType `json:"operation"`
-	CreatedAt   *time.Time        `json:"createdAt,omitempty"`
-	UpdatedAt   *time.Time        `json:"updatedAt,omitempty"`
-	CreatedBy   *string           `json:"createdBy,omitempty"`
-	UpdatedBy   *string           `json:"updatedBy,omitempty"`
+	ID          string         `json:"id"`
+	HistoryTime time.Time      `json:"historyTime"`
+	Ref         *string        `json:"ref,omitempty"`
+	Operation   history.OpType `json:"operation"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
 	// tags associated with the object
 	Tags      []string   `json:"tags,omitempty"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
@@ -14239,10 +14239,10 @@ type WebhookHistoryWhereInput struct {
 	RefEqualFold    *string  `json:"refEqualFold,omitempty"`
 	RefContainsFold *string  `json:"refContainsFold,omitempty"`
 	// operation field predicates
-	Operation      *enthistory.OpType  `json:"operation,omitempty"`
-	OperationNeq   *enthistory.OpType  `json:"operationNEQ,omitempty"`
-	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
-	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
 	// created_at field predicates
 	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`

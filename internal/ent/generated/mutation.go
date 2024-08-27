@@ -11,7 +11,6 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/datumforge/enthistory"
 	"github.com/theopenlane/core/internal/ent/customtypes"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
@@ -72,6 +71,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/webhook"
 	"github.com/theopenlane/core/internal/ent/generated/webhookhistory"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/entx/history"
 )
 
 const (
@@ -3105,7 +3105,7 @@ type ContactHistoryMutation struct {
 	id            *string
 	history_time  *time.Time
 	ref           *string
-	operation     *enthistory.OpType
+	operation     *history.OpType
 	created_at    *time.Time
 	updated_at    *time.Time
 	created_by    *string
@@ -3319,12 +3319,12 @@ func (m *ContactHistoryMutation) ResetRef() {
 }
 
 // SetOperation sets the "operation" field.
-func (m *ContactHistoryMutation) SetOperation(et enthistory.OpType) {
-	m.operation = &et
+func (m *ContactHistoryMutation) SetOperation(ht history.OpType) {
+	m.operation = &ht
 }
 
 // Operation returns the value of the "operation" field in the mutation.
-func (m *ContactHistoryMutation) Operation() (r enthistory.OpType, exists bool) {
+func (m *ContactHistoryMutation) Operation() (r history.OpType, exists bool) {
 	v := m.operation
 	if v == nil {
 		return
@@ -3335,7 +3335,7 @@ func (m *ContactHistoryMutation) Operation() (r enthistory.OpType, exists bool) 
 // OldOperation returns the old "operation" field's value of the ContactHistory entity.
 // If the ContactHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ContactHistoryMutation) OldOperation(ctx context.Context) (v enthistory.OpType, err error) {
+func (m *ContactHistoryMutation) OldOperation(ctx context.Context) (v history.OpType, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldOperation is only allowed on UpdateOne operations")
 	}
@@ -4324,7 +4324,7 @@ func (m *ContactHistoryMutation) SetField(name string, value ent.Value) error {
 		m.SetRef(v)
 		return nil
 	case contacthistory.FieldOperation:
-		v, ok := value.(enthistory.OpType)
+		v, ok := value.(history.OpType)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -5924,7 +5924,7 @@ type DocumentDataHistoryMutation struct {
 	id            *string
 	history_time  *time.Time
 	ref           *string
-	operation     *enthistory.OpType
+	operation     *history.OpType
 	created_at    *time.Time
 	updated_at    *time.Time
 	created_by    *string
@@ -6133,12 +6133,12 @@ func (m *DocumentDataHistoryMutation) ResetRef() {
 }
 
 // SetOperation sets the "operation" field.
-func (m *DocumentDataHistoryMutation) SetOperation(et enthistory.OpType) {
-	m.operation = &et
+func (m *DocumentDataHistoryMutation) SetOperation(ht history.OpType) {
+	m.operation = &ht
 }
 
 // Operation returns the value of the "operation" field in the mutation.
-func (m *DocumentDataHistoryMutation) Operation() (r enthistory.OpType, exists bool) {
+func (m *DocumentDataHistoryMutation) Operation() (r history.OpType, exists bool) {
 	v := m.operation
 	if v == nil {
 		return
@@ -6149,7 +6149,7 @@ func (m *DocumentDataHistoryMutation) Operation() (r enthistory.OpType, exists b
 // OldOperation returns the old "operation" field's value of the DocumentDataHistory entity.
 // If the DocumentDataHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *DocumentDataHistoryMutation) OldOperation(ctx context.Context) (v enthistory.OpType, err error) {
+func (m *DocumentDataHistoryMutation) OldOperation(ctx context.Context) (v history.OpType, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldOperation is only allowed on UpdateOne operations")
 	}
@@ -6858,7 +6858,7 @@ func (m *DocumentDataHistoryMutation) SetField(name string, value ent.Value) err
 		m.SetRef(v)
 		return nil
 	case documentdatahistory.FieldOperation:
-		v, ok := value.(enthistory.OpType)
+		v, ok := value.(history.OpType)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -9848,7 +9848,7 @@ type EntitlementHistoryMutation struct {
 	id                       *string
 	history_time             *time.Time
 	ref                      *string
-	operation                *enthistory.OpType
+	operation                *history.OpType
 	created_at               *time.Time
 	updated_at               *time.Time
 	created_by               *string
@@ -10062,12 +10062,12 @@ func (m *EntitlementHistoryMutation) ResetRef() {
 }
 
 // SetOperation sets the "operation" field.
-func (m *EntitlementHistoryMutation) SetOperation(et enthistory.OpType) {
-	m.operation = &et
+func (m *EntitlementHistoryMutation) SetOperation(ht history.OpType) {
+	m.operation = &ht
 }
 
 // Operation returns the value of the "operation" field in the mutation.
-func (m *EntitlementHistoryMutation) Operation() (r enthistory.OpType, exists bool) {
+func (m *EntitlementHistoryMutation) Operation() (r history.OpType, exists bool) {
 	v := m.operation
 	if v == nil {
 		return
@@ -10078,7 +10078,7 @@ func (m *EntitlementHistoryMutation) Operation() (r enthistory.OpType, exists bo
 // OldOperation returns the old "operation" field's value of the EntitlementHistory entity.
 // If the EntitlementHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *EntitlementHistoryMutation) OldOperation(ctx context.Context) (v enthistory.OpType, err error) {
+func (m *EntitlementHistoryMutation) OldOperation(ctx context.Context) (v history.OpType, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldOperation is only allowed on UpdateOne operations")
 	}
@@ -11041,7 +11041,7 @@ func (m *EntitlementHistoryMutation) SetField(name string, value ent.Value) erro
 		m.SetRef(v)
 		return nil
 	case entitlementhistory.FieldOperation:
-		v, ok := value.(enthistory.OpType)
+		v, ok := value.(history.OpType)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -14399,7 +14399,7 @@ type EntitlementPlanFeatureHistoryMutation struct {
 	id            *string
 	history_time  *time.Time
 	ref           *string
-	operation     *enthistory.OpType
+	operation     *history.OpType
 	created_at    *time.Time
 	updated_at    *time.Time
 	created_by    *string
@@ -14609,12 +14609,12 @@ func (m *EntitlementPlanFeatureHistoryMutation) ResetRef() {
 }
 
 // SetOperation sets the "operation" field.
-func (m *EntitlementPlanFeatureHistoryMutation) SetOperation(et enthistory.OpType) {
-	m.operation = &et
+func (m *EntitlementPlanFeatureHistoryMutation) SetOperation(ht history.OpType) {
+	m.operation = &ht
 }
 
 // Operation returns the value of the "operation" field in the mutation.
-func (m *EntitlementPlanFeatureHistoryMutation) Operation() (r enthistory.OpType, exists bool) {
+func (m *EntitlementPlanFeatureHistoryMutation) Operation() (r history.OpType, exists bool) {
 	v := m.operation
 	if v == nil {
 		return
@@ -14625,7 +14625,7 @@ func (m *EntitlementPlanFeatureHistoryMutation) Operation() (r enthistory.OpType
 // OldOperation returns the old "operation" field's value of the EntitlementPlanFeatureHistory entity.
 // If the EntitlementPlanFeatureHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *EntitlementPlanFeatureHistoryMutation) OldOperation(ctx context.Context) (v enthistory.OpType, err error) {
+func (m *EntitlementPlanFeatureHistoryMutation) OldOperation(ctx context.Context) (v history.OpType, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldOperation is only allowed on UpdateOne operations")
 	}
@@ -15390,7 +15390,7 @@ func (m *EntitlementPlanFeatureHistoryMutation) SetField(name string, value ent.
 		m.SetRef(v)
 		return nil
 	case entitlementplanfeaturehistory.FieldOperation:
-		v, ok := value.(enthistory.OpType)
+		v, ok := value.(history.OpType)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -15697,7 +15697,7 @@ type EntitlementPlanHistoryMutation struct {
 	id            *string
 	history_time  *time.Time
 	ref           *string
-	operation     *enthistory.OpType
+	operation     *history.OpType
 	created_at    *time.Time
 	updated_at    *time.Time
 	created_by    *string
@@ -15909,12 +15909,12 @@ func (m *EntitlementPlanHistoryMutation) ResetRef() {
 }
 
 // SetOperation sets the "operation" field.
-func (m *EntitlementPlanHistoryMutation) SetOperation(et enthistory.OpType) {
-	m.operation = &et
+func (m *EntitlementPlanHistoryMutation) SetOperation(ht history.OpType) {
+	m.operation = &ht
 }
 
 // Operation returns the value of the "operation" field in the mutation.
-func (m *EntitlementPlanHistoryMutation) Operation() (r enthistory.OpType, exists bool) {
+func (m *EntitlementPlanHistoryMutation) Operation() (r history.OpType, exists bool) {
 	v := m.operation
 	if v == nil {
 		return
@@ -15925,7 +15925,7 @@ func (m *EntitlementPlanHistoryMutation) Operation() (r enthistory.OpType, exist
 // OldOperation returns the old "operation" field's value of the EntitlementPlanHistory entity.
 // If the EntitlementPlanHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *EntitlementPlanHistoryMutation) OldOperation(ctx context.Context) (v enthistory.OpType, err error) {
+func (m *EntitlementPlanHistoryMutation) OldOperation(ctx context.Context) (v history.OpType, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldOperation is only allowed on UpdateOne operations")
 	}
@@ -16802,7 +16802,7 @@ func (m *EntitlementPlanHistoryMutation) SetField(name string, value ent.Value) 
 		m.SetRef(v)
 		return nil
 	case entitlementplanhistory.FieldOperation:
-		v, ok := value.(enthistory.OpType)
+		v, ok := value.(history.OpType)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -18966,7 +18966,7 @@ type EntityHistoryMutation struct {
 	id             *string
 	history_time   *time.Time
 	ref            *string
-	operation      *enthistory.OpType
+	operation      *history.OpType
 	created_at     *time.Time
 	updated_at     *time.Time
 	created_by     *string
@@ -19180,12 +19180,12 @@ func (m *EntityHistoryMutation) ResetRef() {
 }
 
 // SetOperation sets the "operation" field.
-func (m *EntityHistoryMutation) SetOperation(et enthistory.OpType) {
-	m.operation = &et
+func (m *EntityHistoryMutation) SetOperation(ht history.OpType) {
+	m.operation = &ht
 }
 
 // Operation returns the value of the "operation" field in the mutation.
-func (m *EntityHistoryMutation) Operation() (r enthistory.OpType, exists bool) {
+func (m *EntityHistoryMutation) Operation() (r history.OpType, exists bool) {
 	v := m.operation
 	if v == nil {
 		return
@@ -19196,7 +19196,7 @@ func (m *EntityHistoryMutation) Operation() (r enthistory.OpType, exists bool) {
 // OldOperation returns the old "operation" field's value of the EntityHistory entity.
 // If the EntityHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *EntityHistoryMutation) OldOperation(ctx context.Context) (v enthistory.OpType, err error) {
+func (m *EntityHistoryMutation) OldOperation(ctx context.Context) (v history.OpType, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldOperation is only allowed on UpdateOne operations")
 	}
@@ -20171,7 +20171,7 @@ func (m *EntityHistoryMutation) SetField(name string, value ent.Value) error {
 		m.SetRef(v)
 		return nil
 	case entityhistory.FieldOperation:
-		v, ok := value.(enthistory.OpType)
+		v, ok := value.(history.OpType)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -21667,7 +21667,7 @@ type EntityTypeHistoryMutation struct {
 	id            *string
 	history_time  *time.Time
 	ref           *string
-	operation     *enthistory.OpType
+	operation     *history.OpType
 	created_at    *time.Time
 	updated_at    *time.Time
 	created_by    *string
@@ -21875,12 +21875,12 @@ func (m *EntityTypeHistoryMutation) ResetRef() {
 }
 
 // SetOperation sets the "operation" field.
-func (m *EntityTypeHistoryMutation) SetOperation(et enthistory.OpType) {
-	m.operation = &et
+func (m *EntityTypeHistoryMutation) SetOperation(ht history.OpType) {
+	m.operation = &ht
 }
 
 // Operation returns the value of the "operation" field in the mutation.
-func (m *EntityTypeHistoryMutation) Operation() (r enthistory.OpType, exists bool) {
+func (m *EntityTypeHistoryMutation) Operation() (r history.OpType, exists bool) {
 	v := m.operation
 	if v == nil {
 		return
@@ -21891,7 +21891,7 @@ func (m *EntityTypeHistoryMutation) Operation() (r enthistory.OpType, exists boo
 // OldOperation returns the old "operation" field's value of the EntityTypeHistory entity.
 // If the EntityTypeHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *EntityTypeHistoryMutation) OldOperation(ctx context.Context) (v enthistory.OpType, err error) {
+func (m *EntityTypeHistoryMutation) OldOperation(ctx context.Context) (v history.OpType, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldOperation is only allowed on UpdateOne operations")
 	}
@@ -22557,7 +22557,7 @@ func (m *EntityTypeHistoryMutation) SetField(name string, value ent.Value) error
 		m.SetRef(v)
 		return nil
 	case entitytypehistory.FieldOperation:
-		v, ok := value.(enthistory.OpType)
+		v, ok := value.(history.OpType)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -25166,7 +25166,7 @@ type EventHistoryMutation struct {
 	id             *string
 	history_time   *time.Time
 	ref            *string
-	operation      *enthistory.OpType
+	operation      *history.OpType
 	created_at     *time.Time
 	updated_at     *time.Time
 	created_by     *string
@@ -25374,12 +25374,12 @@ func (m *EventHistoryMutation) ResetRef() {
 }
 
 // SetOperation sets the "operation" field.
-func (m *EventHistoryMutation) SetOperation(et enthistory.OpType) {
-	m.operation = &et
+func (m *EventHistoryMutation) SetOperation(ht history.OpType) {
+	m.operation = &ht
 }
 
 // Operation returns the value of the "operation" field in the mutation.
-func (m *EventHistoryMutation) Operation() (r enthistory.OpType, exists bool) {
+func (m *EventHistoryMutation) Operation() (r history.OpType, exists bool) {
 	v := m.operation
 	if v == nil {
 		return
@@ -25390,7 +25390,7 @@ func (m *EventHistoryMutation) Operation() (r enthistory.OpType, exists bool) {
 // OldOperation returns the old "operation" field's value of the EventHistory entity.
 // If the EventHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *EventHistoryMutation) OldOperation(ctx context.Context) (v enthistory.OpType, err error) {
+func (m *EventHistoryMutation) OldOperation(ctx context.Context) (v history.OpType, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldOperation is only allowed on UpdateOne operations")
 	}
@@ -26056,7 +26056,7 @@ func (m *EventHistoryMutation) SetField(name string, value ent.Value) error {
 		m.SetRef(v)
 		return nil
 	case eventhistory.FieldOperation:
-		v, ok := value.(enthistory.OpType)
+		v, ok := value.(history.OpType)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -27905,7 +27905,7 @@ type FeatureHistoryMutation struct {
 	id            *string
 	history_time  *time.Time
 	ref           *string
-	operation     *enthistory.OpType
+	operation     *history.OpType
 	created_at    *time.Time
 	updated_at    *time.Time
 	created_by    *string
@@ -28117,12 +28117,12 @@ func (m *FeatureHistoryMutation) ResetRef() {
 }
 
 // SetOperation sets the "operation" field.
-func (m *FeatureHistoryMutation) SetOperation(et enthistory.OpType) {
-	m.operation = &et
+func (m *FeatureHistoryMutation) SetOperation(ht history.OpType) {
+	m.operation = &ht
 }
 
 // Operation returns the value of the "operation" field in the mutation.
-func (m *FeatureHistoryMutation) Operation() (r enthistory.OpType, exists bool) {
+func (m *FeatureHistoryMutation) Operation() (r history.OpType, exists bool) {
 	v := m.operation
 	if v == nil {
 		return
@@ -28133,7 +28133,7 @@ func (m *FeatureHistoryMutation) Operation() (r enthistory.OpType, exists bool) 
 // OldOperation returns the old "operation" field's value of the FeatureHistory entity.
 // If the FeatureHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *FeatureHistoryMutation) OldOperation(ctx context.Context) (v enthistory.OpType, err error) {
+func (m *FeatureHistoryMutation) OldOperation(ctx context.Context) (v history.OpType, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldOperation is only allowed on UpdateOne operations")
 	}
@@ -29010,7 +29010,7 @@ func (m *FeatureHistoryMutation) SetField(name string, value ent.Value) error {
 		m.SetRef(v)
 		return nil
 	case featurehistory.FieldOperation:
-		v, ok := value.(enthistory.OpType)
+		v, ok := value.(history.OpType)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -31002,7 +31002,7 @@ type FileHistoryMutation struct {
 	id             *string
 	history_time   *time.Time
 	ref            *string
-	operation      *enthistory.OpType
+	operation      *history.OpType
 	created_at     *time.Time
 	updated_at     *time.Time
 	created_by     *string
@@ -31216,12 +31216,12 @@ func (m *FileHistoryMutation) ResetRef() {
 }
 
 // SetOperation sets the "operation" field.
-func (m *FileHistoryMutation) SetOperation(et enthistory.OpType) {
-	m.operation = &et
+func (m *FileHistoryMutation) SetOperation(ht history.OpType) {
+	m.operation = &ht
 }
 
 // Operation returns the value of the "operation" field in the mutation.
-func (m *FileHistoryMutation) Operation() (r enthistory.OpType, exists bool) {
+func (m *FileHistoryMutation) Operation() (r history.OpType, exists bool) {
 	v := m.operation
 	if v == nil {
 		return
@@ -31232,7 +31232,7 @@ func (m *FileHistoryMutation) Operation() (r enthistory.OpType, exists bool) {
 // OldOperation returns the old "operation" field's value of the FileHistory entity.
 // If the FileHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *FileHistoryMutation) OldOperation(ctx context.Context) (v enthistory.OpType, err error) {
+func (m *FileHistoryMutation) OldOperation(ctx context.Context) (v history.OpType, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldOperation is only allowed on UpdateOne operations")
 	}
@@ -32160,7 +32160,7 @@ func (m *FileHistoryMutation) SetField(name string, value ent.Value) error {
 		m.SetRef(v)
 		return nil
 	case filehistory.FieldOperation:
-		v, ok := value.(enthistory.OpType)
+		v, ok := value.(history.OpType)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -34311,7 +34311,7 @@ type GroupHistoryMutation struct {
 	id                *string
 	history_time      *time.Time
 	ref               *string
-	operation         *enthistory.OpType
+	operation         *history.OpType
 	created_at        *time.Time
 	updated_at        *time.Time
 	created_by        *string
@@ -34523,12 +34523,12 @@ func (m *GroupHistoryMutation) ResetRef() {
 }
 
 // SetOperation sets the "operation" field.
-func (m *GroupHistoryMutation) SetOperation(et enthistory.OpType) {
-	m.operation = &et
+func (m *GroupHistoryMutation) SetOperation(ht history.OpType) {
+	m.operation = &ht
 }
 
 // Operation returns the value of the "operation" field in the mutation.
-func (m *GroupHistoryMutation) Operation() (r enthistory.OpType, exists bool) {
+func (m *GroupHistoryMutation) Operation() (r history.OpType, exists bool) {
 	v := m.operation
 	if v == nil {
 		return
@@ -34539,7 +34539,7 @@ func (m *GroupHistoryMutation) Operation() (r enthistory.OpType, exists bool) {
 // OldOperation returns the old "operation" field's value of the GroupHistory entity.
 // If the GroupHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *GroupHistoryMutation) OldOperation(ctx context.Context) (v enthistory.OpType, err error) {
+func (m *GroupHistoryMutation) OldOperation(ctx context.Context) (v history.OpType, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldOperation is only allowed on UpdateOne operations")
 	}
@@ -35416,7 +35416,7 @@ func (m *GroupHistoryMutation) SetField(name string, value ent.Value) error {
 		m.SetRef(v)
 		return nil
 	case grouphistory.FieldOperation:
-		v, ok := value.(enthistory.OpType)
+		v, ok := value.(history.OpType)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -36875,7 +36875,7 @@ type GroupMembershipHistoryMutation struct {
 	id            *string
 	history_time  *time.Time
 	ref           *string
-	operation     *enthistory.OpType
+	operation     *history.OpType
 	created_at    *time.Time
 	updated_at    *time.Time
 	created_by    *string
@@ -37082,12 +37082,12 @@ func (m *GroupMembershipHistoryMutation) ResetRef() {
 }
 
 // SetOperation sets the "operation" field.
-func (m *GroupMembershipHistoryMutation) SetOperation(et enthistory.OpType) {
-	m.operation = &et
+func (m *GroupMembershipHistoryMutation) SetOperation(ht history.OpType) {
+	m.operation = &ht
 }
 
 // Operation returns the value of the "operation" field in the mutation.
-func (m *GroupMembershipHistoryMutation) Operation() (r enthistory.OpType, exists bool) {
+func (m *GroupMembershipHistoryMutation) Operation() (r history.OpType, exists bool) {
 	v := m.operation
 	if v == nil {
 		return
@@ -37098,7 +37098,7 @@ func (m *GroupMembershipHistoryMutation) Operation() (r enthistory.OpType, exist
 // OldOperation returns the old "operation" field's value of the GroupMembershipHistory entity.
 // If the GroupMembershipHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *GroupMembershipHistoryMutation) OldOperation(ctx context.Context) (v enthistory.OpType, err error) {
+func (m *GroupMembershipHistoryMutation) OldOperation(ctx context.Context) (v history.OpType, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldOperation is only allowed on UpdateOne operations")
 	}
@@ -37722,7 +37722,7 @@ func (m *GroupMembershipHistoryMutation) SetField(name string, value ent.Value) 
 		m.SetRef(v)
 		return nil
 	case groupmembershiphistory.FieldOperation:
-		v, ok := value.(enthistory.OpType)
+		v, ok := value.(history.OpType)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -39235,7 +39235,7 @@ type GroupSettingHistoryMutation struct {
 	id             *string
 	history_time   *time.Time
 	ref            *string
-	operation      *enthistory.OpType
+	operation      *history.OpType
 	created_at     *time.Time
 	updated_at     *time.Time
 	created_by     *string
@@ -39446,12 +39446,12 @@ func (m *GroupSettingHistoryMutation) ResetRef() {
 }
 
 // SetOperation sets the "operation" field.
-func (m *GroupSettingHistoryMutation) SetOperation(et enthistory.OpType) {
-	m.operation = &et
+func (m *GroupSettingHistoryMutation) SetOperation(ht history.OpType) {
+	m.operation = &ht
 }
 
 // Operation returns the value of the "operation" field in the mutation.
-func (m *GroupSettingHistoryMutation) Operation() (r enthistory.OpType, exists bool) {
+func (m *GroupSettingHistoryMutation) Operation() (r history.OpType, exists bool) {
 	v := m.operation
 	if v == nil {
 		return
@@ -39462,7 +39462,7 @@ func (m *GroupSettingHistoryMutation) Operation() (r enthistory.OpType, exists b
 // OldOperation returns the old "operation" field's value of the GroupSettingHistory entity.
 // If the GroupSettingHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *GroupSettingHistoryMutation) OldOperation(ctx context.Context) (v enthistory.OpType, err error) {
+func (m *GroupSettingHistoryMutation) OldOperation(ctx context.Context) (v history.OpType, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldOperation is only allowed on UpdateOne operations")
 	}
@@ -40283,7 +40283,7 @@ func (m *GroupSettingHistoryMutation) SetField(name string, value ent.Value) err
 		m.SetRef(v)
 		return nil
 	case groupsettinghistory.FieldOperation:
-		v, ok := value.(enthistory.OpType)
+		v, ok := value.(history.OpType)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -41984,7 +41984,7 @@ type HushHistoryMutation struct {
 	id            *string
 	history_time  *time.Time
 	ref           *string
-	operation     *enthistory.OpType
+	operation     *history.OpType
 	created_at    *time.Time
 	updated_at    *time.Time
 	created_by    *string
@@ -42193,12 +42193,12 @@ func (m *HushHistoryMutation) ResetRef() {
 }
 
 // SetOperation sets the "operation" field.
-func (m *HushHistoryMutation) SetOperation(et enthistory.OpType) {
-	m.operation = &et
+func (m *HushHistoryMutation) SetOperation(ht history.OpType) {
+	m.operation = &ht
 }
 
 // Operation returns the value of the "operation" field in the mutation.
-func (m *HushHistoryMutation) Operation() (r enthistory.OpType, exists bool) {
+func (m *HushHistoryMutation) Operation() (r history.OpType, exists bool) {
 	v := m.operation
 	if v == nil {
 		return
@@ -42209,7 +42209,7 @@ func (m *HushHistoryMutation) Operation() (r enthistory.OpType, exists bool) {
 // OldOperation returns the old "operation" field's value of the HushHistory entity.
 // If the HushHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *HushHistoryMutation) OldOperation(ctx context.Context) (v enthistory.OpType, err error) {
+func (m *HushHistoryMutation) OldOperation(ctx context.Context) (v history.OpType, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldOperation is only allowed on UpdateOne operations")
 	}
@@ -42971,7 +42971,7 @@ func (m *HushHistoryMutation) SetField(name string, value ent.Value) error {
 		m.SetRef(v)
 		return nil
 	case hushhistory.FieldOperation:
-		v, ok := value.(enthistory.OpType)
+		v, ok := value.(history.OpType)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -44808,7 +44808,7 @@ type IntegrationHistoryMutation struct {
 	id            *string
 	history_time  *time.Time
 	ref           *string
-	operation     *enthistory.OpType
+	operation     *history.OpType
 	created_at    *time.Time
 	updated_at    *time.Time
 	created_by    *string
@@ -45018,12 +45018,12 @@ func (m *IntegrationHistoryMutation) ResetRef() {
 }
 
 // SetOperation sets the "operation" field.
-func (m *IntegrationHistoryMutation) SetOperation(et enthistory.OpType) {
-	m.operation = &et
+func (m *IntegrationHistoryMutation) SetOperation(ht history.OpType) {
+	m.operation = &ht
 }
 
 // Operation returns the value of the "operation" field in the mutation.
-func (m *IntegrationHistoryMutation) Operation() (r enthistory.OpType, exists bool) {
+func (m *IntegrationHistoryMutation) Operation() (r history.OpType, exists bool) {
 	v := m.operation
 	if v == nil {
 		return
@@ -45034,7 +45034,7 @@ func (m *IntegrationHistoryMutation) Operation() (r enthistory.OpType, exists bo
 // OldOperation returns the old "operation" field's value of the IntegrationHistory entity.
 // If the IntegrationHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *IntegrationHistoryMutation) OldOperation(ctx context.Context) (v enthistory.OpType, err error) {
+func (m *IntegrationHistoryMutation) OldOperation(ctx context.Context) (v history.OpType, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldOperation is only allowed on UpdateOne operations")
 	}
@@ -45812,7 +45812,7 @@ func (m *IntegrationHistoryMutation) SetField(name string, value ent.Value) erro
 		m.SetRef(v)
 		return nil
 	case integrationhistory.FieldOperation:
-		v, ok := value.(enthistory.OpType)
+		v, ok := value.(history.OpType)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -48719,7 +48719,7 @@ type NoteHistoryMutation struct {
 	id            *string
 	history_time  *time.Time
 	ref           *string
-	operation     *enthistory.OpType
+	operation     *history.OpType
 	created_at    *time.Time
 	updated_at    *time.Time
 	created_by    *string
@@ -48927,12 +48927,12 @@ func (m *NoteHistoryMutation) ResetRef() {
 }
 
 // SetOperation sets the "operation" field.
-func (m *NoteHistoryMutation) SetOperation(et enthistory.OpType) {
-	m.operation = &et
+func (m *NoteHistoryMutation) SetOperation(ht history.OpType) {
+	m.operation = &ht
 }
 
 // Operation returns the value of the "operation" field in the mutation.
-func (m *NoteHistoryMutation) Operation() (r enthistory.OpType, exists bool) {
+func (m *NoteHistoryMutation) Operation() (r history.OpType, exists bool) {
 	v := m.operation
 	if v == nil {
 		return
@@ -48943,7 +48943,7 @@ func (m *NoteHistoryMutation) Operation() (r enthistory.OpType, exists bool) {
 // OldOperation returns the old "operation" field's value of the NoteHistory entity.
 // If the NoteHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *NoteHistoryMutation) OldOperation(ctx context.Context) (v enthistory.OpType, err error) {
+func (m *NoteHistoryMutation) OldOperation(ctx context.Context) (v history.OpType, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldOperation is only allowed on UpdateOne operations")
 	}
@@ -49609,7 +49609,7 @@ func (m *NoteHistoryMutation) SetField(name string, value ent.Value) error {
 		m.SetRef(v)
 		return nil
 	case notehistory.FieldOperation:
-		v, ok := value.(enthistory.OpType)
+		v, ok := value.(history.OpType)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -51402,7 +51402,7 @@ type OauthProviderHistoryMutation struct {
 	id            *string
 	history_time  *time.Time
 	ref           *string
-	operation     *enthistory.OpType
+	operation     *history.OpType
 	created_at    *time.Time
 	updated_at    *time.Time
 	created_by    *string
@@ -51619,12 +51619,12 @@ func (m *OauthProviderHistoryMutation) ResetRef() {
 }
 
 // SetOperation sets the "operation" field.
-func (m *OauthProviderHistoryMutation) SetOperation(et enthistory.OpType) {
-	m.operation = &et
+func (m *OauthProviderHistoryMutation) SetOperation(ht history.OpType) {
+	m.operation = &ht
 }
 
 // Operation returns the value of the "operation" field in the mutation.
-func (m *OauthProviderHistoryMutation) Operation() (r enthistory.OpType, exists bool) {
+func (m *OauthProviderHistoryMutation) Operation() (r history.OpType, exists bool) {
 	v := m.operation
 	if v == nil {
 		return
@@ -51635,7 +51635,7 @@ func (m *OauthProviderHistoryMutation) Operation() (r enthistory.OpType, exists 
 // OldOperation returns the old "operation" field's value of the OauthProviderHistory entity.
 // If the OauthProviderHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *OauthProviderHistoryMutation) OldOperation(ctx context.Context) (v enthistory.OpType, err error) {
+func (m *OauthProviderHistoryMutation) OldOperation(ctx context.Context) (v history.OpType, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldOperation is only allowed on UpdateOne operations")
 	}
@@ -52665,7 +52665,7 @@ func (m *OauthProviderHistoryMutation) SetField(name string, value ent.Value) er
 		m.SetRef(v)
 		return nil
 	case oauthproviderhistory.FieldOperation:
-		v, ok := value.(enthistory.OpType)
+		v, ok := value.(history.OpType)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -55518,7 +55518,7 @@ type OrgMembershipHistoryMutation struct {
 	id              *string
 	history_time    *time.Time
 	ref             *string
-	operation       *enthistory.OpType
+	operation       *history.OpType
 	created_at      *time.Time
 	updated_at      *time.Time
 	created_by      *string
@@ -55725,12 +55725,12 @@ func (m *OrgMembershipHistoryMutation) ResetRef() {
 }
 
 // SetOperation sets the "operation" field.
-func (m *OrgMembershipHistoryMutation) SetOperation(et enthistory.OpType) {
-	m.operation = &et
+func (m *OrgMembershipHistoryMutation) SetOperation(ht history.OpType) {
+	m.operation = &ht
 }
 
 // Operation returns the value of the "operation" field in the mutation.
-func (m *OrgMembershipHistoryMutation) Operation() (r enthistory.OpType, exists bool) {
+func (m *OrgMembershipHistoryMutation) Operation() (r history.OpType, exists bool) {
 	v := m.operation
 	if v == nil {
 		return
@@ -55741,7 +55741,7 @@ func (m *OrgMembershipHistoryMutation) Operation() (r enthistory.OpType, exists 
 // OldOperation returns the old "operation" field's value of the OrgMembershipHistory entity.
 // If the OrgMembershipHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *OrgMembershipHistoryMutation) OldOperation(ctx context.Context) (v enthistory.OpType, err error) {
+func (m *OrgMembershipHistoryMutation) OldOperation(ctx context.Context) (v history.OpType, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldOperation is only allowed on UpdateOne operations")
 	}
@@ -56365,7 +56365,7 @@ func (m *OrgMembershipHistoryMutation) SetField(name string, value ent.Value) er
 		m.SetRef(v)
 		return nil
 	case orgmembershiphistory.FieldOperation:
-		v, ok := value.(enthistory.OpType)
+		v, ok := value.(history.OpType)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -60154,7 +60154,7 @@ type OrganizationHistoryMutation struct {
 	id                     *string
 	history_time           *time.Time
 	ref                    *string
-	operation              *enthistory.OpType
+	operation              *history.OpType
 	created_at             *time.Time
 	updated_at             *time.Time
 	created_by             *string
@@ -60367,12 +60367,12 @@ func (m *OrganizationHistoryMutation) ResetRef() {
 }
 
 // SetOperation sets the "operation" field.
-func (m *OrganizationHistoryMutation) SetOperation(et enthistory.OpType) {
-	m.operation = &et
+func (m *OrganizationHistoryMutation) SetOperation(ht history.OpType) {
+	m.operation = &ht
 }
 
 // Operation returns the value of the "operation" field in the mutation.
-func (m *OrganizationHistoryMutation) Operation() (r enthistory.OpType, exists bool) {
+func (m *OrganizationHistoryMutation) Operation() (r history.OpType, exists bool) {
 	v := m.operation
 	if v == nil {
 		return
@@ -60383,7 +60383,7 @@ func (m *OrganizationHistoryMutation) Operation() (r enthistory.OpType, exists b
 // OldOperation returns the old "operation" field's value of the OrganizationHistory entity.
 // If the OrganizationHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *OrganizationHistoryMutation) OldOperation(ctx context.Context) (v enthistory.OpType, err error) {
+func (m *OrganizationHistoryMutation) OldOperation(ctx context.Context) (v history.OpType, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldOperation is only allowed on UpdateOne operations")
 	}
@@ -61303,7 +61303,7 @@ func (m *OrganizationHistoryMutation) SetField(name string, value ent.Value) err
 		m.SetRef(v)
 		return nil
 	case organizationhistory.FieldOperation:
-		v, ok := value.(enthistory.OpType)
+		v, ok := value.(history.OpType)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -63170,7 +63170,7 @@ type OrganizationSettingHistoryMutation struct {
 	id              *string
 	history_time    *time.Time
 	ref             *string
-	operation       *enthistory.OpType
+	operation       *history.OpType
 	created_at      *time.Time
 	updated_at      *time.Time
 	created_by      *string
@@ -63385,12 +63385,12 @@ func (m *OrganizationSettingHistoryMutation) ResetRef() {
 }
 
 // SetOperation sets the "operation" field.
-func (m *OrganizationSettingHistoryMutation) SetOperation(et enthistory.OpType) {
-	m.operation = &et
+func (m *OrganizationSettingHistoryMutation) SetOperation(ht history.OpType) {
+	m.operation = &ht
 }
 
 // Operation returns the value of the "operation" field in the mutation.
-func (m *OrganizationSettingHistoryMutation) Operation() (r enthistory.OpType, exists bool) {
+func (m *OrganizationSettingHistoryMutation) Operation() (r history.OpType, exists bool) {
 	v := m.operation
 	if v == nil {
 		return
@@ -63401,7 +63401,7 @@ func (m *OrganizationSettingHistoryMutation) Operation() (r enthistory.OpType, e
 // OldOperation returns the old "operation" field's value of the OrganizationSettingHistory entity.
 // If the OrganizationSettingHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *OrganizationSettingHistoryMutation) OldOperation(ctx context.Context) (v enthistory.OpType, err error) {
+func (m *OrganizationSettingHistoryMutation) OldOperation(ctx context.Context) (v history.OpType, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldOperation is only allowed on UpdateOne operations")
 	}
@@ -64432,7 +64432,7 @@ func (m *OrganizationSettingHistoryMutation) SetField(name string, value ent.Val
 		m.SetRef(v)
 		return nil
 	case organizationsettinghistory.FieldOperation:
-		v, ok := value.(enthistory.OpType)
+		v, ok := value.(history.OpType)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -71803,7 +71803,7 @@ type TemplateHistoryMutation struct {
 	id            *string
 	history_time  *time.Time
 	ref           *string
-	operation     *enthistory.OpType
+	operation     *history.OpType
 	created_at    *time.Time
 	updated_at    *time.Time
 	created_by    *string
@@ -72015,12 +72015,12 @@ func (m *TemplateHistoryMutation) ResetRef() {
 }
 
 // SetOperation sets the "operation" field.
-func (m *TemplateHistoryMutation) SetOperation(et enthistory.OpType) {
-	m.operation = &et
+func (m *TemplateHistoryMutation) SetOperation(ht history.OpType) {
+	m.operation = &ht
 }
 
 // Operation returns the value of the "operation" field in the mutation.
-func (m *TemplateHistoryMutation) Operation() (r enthistory.OpType, exists bool) {
+func (m *TemplateHistoryMutation) Operation() (r history.OpType, exists bool) {
 	v := m.operation
 	if v == nil {
 		return
@@ -72031,7 +72031,7 @@ func (m *TemplateHistoryMutation) Operation() (r enthistory.OpType, exists bool)
 // OldOperation returns the old "operation" field's value of the TemplateHistory entity.
 // If the TemplateHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TemplateHistoryMutation) OldOperation(ctx context.Context) (v enthistory.OpType, err error) {
+func (m *TemplateHistoryMutation) OldOperation(ctx context.Context) (v history.OpType, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldOperation is only allowed on UpdateOne operations")
 	}
@@ -72895,7 +72895,7 @@ func (m *TemplateHistoryMutation) SetField(name string, value ent.Value) error {
 		m.SetRef(v)
 		return nil
 	case templatehistory.FieldOperation:
-		v, ok := value.(enthistory.OpType)
+		v, ok := value.(history.OpType)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -75892,7 +75892,7 @@ type UserHistoryMutation struct {
 	id                *string
 	history_time      *time.Time
 	ref               *string
-	operation         *enthistory.OpType
+	operation         *history.OpType
 	created_at        *time.Time
 	updated_at        *time.Time
 	created_by        *string
@@ -76110,12 +76110,12 @@ func (m *UserHistoryMutation) ResetRef() {
 }
 
 // SetOperation sets the "operation" field.
-func (m *UserHistoryMutation) SetOperation(et enthistory.OpType) {
-	m.operation = &et
+func (m *UserHistoryMutation) SetOperation(ht history.OpType) {
+	m.operation = &ht
 }
 
 // Operation returns the value of the "operation" field in the mutation.
-func (m *UserHistoryMutation) Operation() (r enthistory.OpType, exists bool) {
+func (m *UserHistoryMutation) Operation() (r history.OpType, exists bool) {
 	v := m.operation
 	if v == nil {
 		return
@@ -76126,7 +76126,7 @@ func (m *UserHistoryMutation) Operation() (r enthistory.OpType, exists bool) {
 // OldOperation returns the old "operation" field's value of the UserHistory entity.
 // If the UserHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *UserHistoryMutation) OldOperation(ctx context.Context) (v enthistory.OpType, err error) {
+func (m *UserHistoryMutation) OldOperation(ctx context.Context) (v history.OpType, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldOperation is only allowed on UpdateOne operations")
 	}
@@ -77326,7 +77326,7 @@ func (m *UserHistoryMutation) SetField(name string, value ent.Value) error {
 		m.SetRef(v)
 		return nil
 	case userhistory.FieldOperation:
-		v, ok := value.(enthistory.OpType)
+		v, ok := value.(history.OpType)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -79331,7 +79331,7 @@ type UserSettingHistoryMutation struct {
 	id                  *string
 	history_time        *time.Time
 	ref                 *string
-	operation           *enthistory.OpType
+	operation           *history.OpType
 	created_at          *time.Time
 	updated_at          *time.Time
 	created_by          *string
@@ -79546,12 +79546,12 @@ func (m *UserSettingHistoryMutation) ResetRef() {
 }
 
 // SetOperation sets the "operation" field.
-func (m *UserSettingHistoryMutation) SetOperation(et enthistory.OpType) {
-	m.operation = &et
+func (m *UserSettingHistoryMutation) SetOperation(ht history.OpType) {
+	m.operation = &ht
 }
 
 // Operation returns the value of the "operation" field in the mutation.
-func (m *UserSettingHistoryMutation) Operation() (r enthistory.OpType, exists bool) {
+func (m *UserSettingHistoryMutation) Operation() (r history.OpType, exists bool) {
 	v := m.operation
 	if v == nil {
 		return
@@ -79562,7 +79562,7 @@ func (m *UserSettingHistoryMutation) Operation() (r enthistory.OpType, exists bo
 // OldOperation returns the old "operation" field's value of the UserSettingHistory entity.
 // If the UserSettingHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *UserSettingHistoryMutation) OldOperation(ctx context.Context) (v enthistory.OpType, err error) {
+func (m *UserSettingHistoryMutation) OldOperation(ctx context.Context) (v history.OpType, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldOperation is only allowed on UpdateOne operations")
 	}
@@ -80594,7 +80594,7 @@ func (m *UserSettingHistoryMutation) SetField(name string, value ent.Value) erro
 		m.SetRef(v)
 		return nil
 	case usersettinghistory.FieldOperation:
-		v, ok := value.(enthistory.OpType)
+		v, ok := value.(history.OpType)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -84317,7 +84317,7 @@ type WebhookHistoryMutation struct {
 	id              *string
 	history_time    *time.Time
 	ref             *string
-	operation       *enthistory.OpType
+	operation       *history.OpType
 	created_at      *time.Time
 	updated_at      *time.Time
 	created_by      *string
@@ -84535,12 +84535,12 @@ func (m *WebhookHistoryMutation) ResetRef() {
 }
 
 // SetOperation sets the "operation" field.
-func (m *WebhookHistoryMutation) SetOperation(et enthistory.OpType) {
-	m.operation = &et
+func (m *WebhookHistoryMutation) SetOperation(ht history.OpType) {
+	m.operation = &ht
 }
 
 // Operation returns the value of the "operation" field in the mutation.
-func (m *WebhookHistoryMutation) Operation() (r enthistory.OpType, exists bool) {
+func (m *WebhookHistoryMutation) Operation() (r history.OpType, exists bool) {
 	v := m.operation
 	if v == nil {
 		return
@@ -84551,7 +84551,7 @@ func (m *WebhookHistoryMutation) Operation() (r enthistory.OpType, exists bool) 
 // OldOperation returns the old "operation" field's value of the WebhookHistory entity.
 // If the WebhookHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *WebhookHistoryMutation) OldOperation(ctx context.Context) (v enthistory.OpType, err error) {
+func (m *WebhookHistoryMutation) OldOperation(ctx context.Context) (v history.OpType, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldOperation is only allowed on UpdateOne operations")
 	}
@@ -85716,7 +85716,7 @@ func (m *WebhookHistoryMutation) SetField(name string, value ent.Value) error {
 		m.SetRef(v)
 		return nil
 	case webhookhistory.FieldOperation:
-		v, ok := value.(enthistory.OpType)
+		v, ok := value.(history.OpType)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}

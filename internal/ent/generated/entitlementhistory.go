@@ -10,8 +10,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/datumforge/enthistory"
 	"github.com/theopenlane/core/internal/ent/generated/entitlementhistory"
+	"github.com/theopenlane/entx/history"
 )
 
 // EntitlementHistory is the model entity for the EntitlementHistory schema.
@@ -24,7 +24,7 @@ type EntitlementHistory struct {
 	// Ref holds the value of the "ref" field.
 	Ref string `json:"ref,omitempty"`
 	// Operation holds the value of the "operation" field.
-	Operation enthistory.OpType `json:"operation,omitempty"`
+	Operation history.OpType `json:"operation,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
@@ -68,7 +68,7 @@ func (*EntitlementHistory) scanValues(columns []string) ([]any, error) {
 		case entitlementhistory.FieldTags:
 			values[i] = new([]byte)
 		case entitlementhistory.FieldOperation:
-			values[i] = new(enthistory.OpType)
+			values[i] = new(history.OpType)
 		case entitlementhistory.FieldExpires, entitlementhistory.FieldCancelled:
 			values[i] = new(sql.NullBool)
 		case entitlementhistory.FieldID, entitlementhistory.FieldRef, entitlementhistory.FieldCreatedBy, entitlementhistory.FieldUpdatedBy, entitlementhistory.FieldMappingID, entitlementhistory.FieldDeletedBy, entitlementhistory.FieldOwnerID, entitlementhistory.FieldPlanID, entitlementhistory.FieldOrganizationID, entitlementhistory.FieldExternalCustomerID, entitlementhistory.FieldExternalSubscriptionID:
@@ -109,7 +109,7 @@ func (eh *EntitlementHistory) assignValues(columns []string, values []any) error
 				eh.Ref = value.String
 			}
 		case entitlementhistory.FieldOperation:
-			if value, ok := values[i].(*enthistory.OpType); !ok {
+			if value, ok := values[i].(*history.OpType); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value != nil {
 				eh.Operation = *value

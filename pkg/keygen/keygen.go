@@ -21,7 +21,7 @@ const (
 	idxmax   = 63 / idxbits
 )
 
-// Defaults for the length of key IDs and secrets in Datum
+// Defaults for the length of key IDs and secrets
 const (
 	KeyIDLength  = 32
 	SecretLength = 64
@@ -72,7 +72,7 @@ func generate(n int, chars string) string {
 			cache, remain = CryptoRandInt(), idxmax
 		}
 
-		if idx := int(cache & idxmask); idx < len(chars) {
+		if idx := int(cache & idxmask); idx < len(chars) { // nolint:gosec
 			sb.WriteByte(chars[idx])
 
 			i--

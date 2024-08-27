@@ -6,9 +6,9 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 
-	"github.com/datumforge/enthistory"
-	"github.com/datumforge/entx"
-	emixin "github.com/datumforge/entx/mixin"
+	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/history"
+	emixin "github.com/theopenlane/entx/mixin"
 )
 
 // Webauthn holds the schema definition for the Webauthn entity
@@ -77,7 +77,7 @@ func (Webauthn) Annotations() []schema.Annotation {
 		entgql.Skip(entgql.SkipAll),
 		entx.SchemaGenSkip(true),
 		entx.QueryGenSkip(true),
-		enthistory.Annotations{
+		history.Annotations{
 			Exclude: true,
 		},
 	}

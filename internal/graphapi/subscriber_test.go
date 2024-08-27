@@ -4,12 +4,12 @@ import (
 	"context"
 	"testing"
 
-	mock_fga "github.com/datumforge/fgax/mockery"
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/core/pkg/auth"
 	"github.com/theopenlane/core/pkg/openlaneclient"
+	mock_fga "github.com/theopenlane/iam/fgax/mockery"
 )
 
 func (suite *GraphTestSuite) TestQuerySubscriber() {
@@ -32,7 +32,7 @@ func (suite *GraphTestSuite) TestQuerySubscriber() {
 	testCases := []struct {
 		name        string
 		email       string
-		client      *openlaneclient.DatumClient
+		client      *openlaneclient.OpenLaneClient
 		ctx         context.Context
 		shouldCheck bool
 		wantErr     bool
@@ -139,7 +139,7 @@ func (suite *GraphTestSuite) TestQuerySubscribers() {
 
 	testCases := []struct {
 		name        string
-		client      *openlaneclient.DatumClient
+		client      *openlaneclient.OpenLaneClient
 		ctx         context.Context
 		numExpected int
 		check       bool
@@ -203,7 +203,7 @@ func (suite *GraphTestSuite) TestMutationCreateSubscriber() {
 		name    string
 		email   string
 		ownerID string
-		client  *openlaneclient.DatumClient
+		client  *openlaneclient.OpenLaneClient
 		ctx     context.Context
 		wantErr bool
 	}{
@@ -291,7 +291,7 @@ func (suite *GraphTestSuite) TestUpdateSubscriber() {
 		name        string
 		email       string
 		updateInput openlaneclient.UpdateSubscriberInput
-		client      *openlaneclient.DatumClient
+		client      *openlaneclient.OpenLaneClient
 		ctx         context.Context
 		shouldCheck bool
 		wantErr     bool
@@ -399,7 +399,7 @@ func (suite *GraphTestSuite) TestDeleteSubscriber() {
 		name           string
 		email          string
 		organizationID string
-		client         *openlaneclient.DatumClient
+		client         *openlaneclient.OpenLaneClient
 		ctx            context.Context
 		wantErr        bool
 	}{

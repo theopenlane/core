@@ -5,6 +5,7 @@ package graphapi
 import (
 	"time"
 
+	"entgo.io/contrib/entgql"
 	"github.com/theopenlane/core/internal/ent/generated"
 )
 
@@ -52,7 +53,7 @@ type AuditLogConnection struct {
 	// A list of edges.
 	Edges []*AuditLogEdge `json:"edges,omitempty"`
 	// Information to aid in pagination.
-	PageInfo *generated.PageInfo `json:"pageInfo"`
+	PageInfo *entgql.PageInfo[string] `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
 	TotalCount int `json:"totalCount"`
 }
@@ -62,7 +63,7 @@ type AuditLogEdge struct {
 	// The item at the end of the edge.
 	Node *AuditLog `json:"node,omitempty"`
 	// A cursor for use in pagination.
-	Cursor generated.Cursor `json:"cursor"`
+	Cursor entgql.Cursor[string] `json:"cursor"`
 }
 
 type AuditLogWhereInput struct {
@@ -315,8 +316,8 @@ type FileUpdatePayload struct {
 }
 
 type GlobalSearchResultConnection struct {
-	Page  *generated.PageInfo  `json:"page"`
-	Nodes []GlobalSearchResult `json:"nodes"`
+	Page  *entgql.PageInfo[string] `json:"page"`
+	Nodes []GlobalSearchResult     `json:"nodes"`
 }
 
 // Return response for createBulkGroup mutation

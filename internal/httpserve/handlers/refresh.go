@@ -6,10 +6,11 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 	echo "github.com/theopenlane/echox"
 
+	"github.com/theopenlane/utils/rout"
+
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/auth"
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/utils/rout"
 )
 
 // RefreshHandler allows users to refresh their access token using their refresh token

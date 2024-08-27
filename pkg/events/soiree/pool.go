@@ -125,27 +125,27 @@ func (p *PondPool) IdleWorkers() int {
 
 // SubmittedTasks returns the number of tasks submitted to the pool
 func (p *PondPool) SubmittedTasks() int {
-	return int(p.pool.SubmittedTasks())
+	return int(p.pool.SubmittedTasks()) // nolint:gosec
 }
 
 // WaitingTasks returns the number of tasks waiting in the pool
 func (p *PondPool) WaitingTasks() int {
-	return int(p.pool.WaitingTasks())
+	return int(p.pool.WaitingTasks()) // nolint:gosec
 }
 
 // SuccessfulTasks returns the number of tasks that completed successfully
 func (p *PondPool) SuccessfulTasks() int {
-	return int(p.pool.SuccessfulTasks())
+	return int(p.pool.SuccessfulTasks()) // nolint:gosec
 }
 
 // FailedTasks returns the number of tasks that completed with a panic
 func (p *PondPool) FailedTasks() int {
-	return int(p.pool.FailedTasks())
+	return int(p.pool.FailedTasks()) // nolint:gosec
 }
 
 // CompletedTasks returns the number of tasks that completed either successfully or with a panic
 func (p *PondPool) CompletedTasks() int {
-	return int(p.pool.CompletedTasks())
+	return int(p.pool.CompletedTasks()) // nolint:gosec
 }
 
 // StopAndWaitFor stops this pool and waits until either all tasks in the queue are completed

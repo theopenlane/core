@@ -3,15 +3,16 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/datumforge/fgax"
 	"github.com/getkin/kin-openapi/openapi3"
 	ph "github.com/posthog/posthog-go"
 	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/iam/fgax"
+
+	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/auth"
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/utils/rout"
 )
 
 // SwitchHandler is responsible for handling requests to the `/switch` endpoint, and changing the user's logged in organization context

@@ -10,8 +10,8 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/datumforge/enthistory"
 	"github.com/theopenlane/core/internal/ent/generated/organizationhistory"
+	"github.com/theopenlane/entx/history"
 )
 
 // OrganizationHistoryCreate is the builder for creating a OrganizationHistory entity.
@@ -50,8 +50,8 @@ func (ohc *OrganizationHistoryCreate) SetNillableRef(s *string) *OrganizationHis
 }
 
 // SetOperation sets the "operation" field.
-func (ohc *OrganizationHistoryCreate) SetOperation(et enthistory.OpType) *OrganizationHistoryCreate {
-	ohc.mutation.SetOperation(et)
+func (ohc *OrganizationHistoryCreate) SetOperation(ht history.OpType) *OrganizationHistoryCreate {
+	ohc.mutation.SetOperation(ht)
 	return ohc
 }
 

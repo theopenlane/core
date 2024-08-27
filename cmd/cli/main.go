@@ -28,7 +28,7 @@ import (
 	_ "github.com/theopenlane/core/cmd/cli/cmd/reset"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/search"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/subscriber"
-	_ "github.com/theopenlane/core/cmd/cli/cmd/switch"
+	_ "github.com/theopenlane/core/cmd/cli/cmd/switchcontext"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/template"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/user"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/usersetting"

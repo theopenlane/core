@@ -21,7 +21,7 @@ var createCmd = &cobra.Command{
 }
 
 func init() {
-	cmd.AddCommand(createCmd)
+	command.AddCommand(createCmd)
 
 	createCmd.Flags().StringSliceP("emails", "e", []string{}, "email address of the subscriber()")
 }

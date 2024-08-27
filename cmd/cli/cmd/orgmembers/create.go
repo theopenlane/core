@@ -19,7 +19,7 @@ var createCmd = &cobra.Command{
 }
 
 func init() {
-	cmd.AddCommand(createCmd)
+	command.AddCommand(createCmd)
 
 	createCmd.Flags().StringP("org-id", "o", "", "organization id")
 	createCmd.Flags().StringP("user-id", "u", "", "user id")

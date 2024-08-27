@@ -10,8 +10,8 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/datumforge/enthistory"
 	"github.com/theopenlane/core/internal/ent/generated/webhookhistory"
+	"github.com/theopenlane/entx/history"
 )
 
 // WebhookHistoryCreate is the builder for creating a WebhookHistory entity.
@@ -50,8 +50,8 @@ func (whc *WebhookHistoryCreate) SetNillableRef(s *string) *WebhookHistoryCreate
 }
 
 // SetOperation sets the "operation" field.
-func (whc *WebhookHistoryCreate) SetOperation(et enthistory.OpType) *WebhookHistoryCreate {
-	whc.mutation.SetOperation(et)
+func (whc *WebhookHistoryCreate) SetOperation(ht history.OpType) *WebhookHistoryCreate {
+	whc.mutation.SetOperation(ht)
 	return whc
 }
 

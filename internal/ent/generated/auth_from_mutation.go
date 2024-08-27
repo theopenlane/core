@@ -7,9 +7,9 @@ package generated
 import (
 	"context"
 
-	"github.com/datumforge/entx"
-	"github.com/datumforge/fgax"
-	"github.com/datumforge/fgax/entfga"
+	"github.com/theopenlane/entx"
+	"github.com/theopenlane/iam/entfga"
+	"github.com/theopenlane/iam/fgax"
 )
 
 func (m *GroupMembershipMutation) CreateTuplesFromCreate(ctx context.Context) error {

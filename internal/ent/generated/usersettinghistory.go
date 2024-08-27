@@ -10,9 +10,9 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/datumforge/enthistory"
 	"github.com/theopenlane/core/internal/ent/generated/usersettinghistory"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/entx/history"
 )
 
 // UserSettingHistory is the model entity for the UserSettingHistory schema.
@@ -25,7 +25,7 @@ type UserSettingHistory struct {
 	// Ref holds the value of the "ref" field.
 	Ref string `json:"ref,omitempty"`
 	// Operation holds the value of the "operation" field.
-	Operation enthistory.OpType `json:"operation,omitempty"`
+	Operation history.OpType `json:"operation,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
@@ -71,7 +71,7 @@ func (*UserSettingHistory) scanValues(columns []string) ([]any, error) {
 		case usersettinghistory.FieldTags:
 			values[i] = new([]byte)
 		case usersettinghistory.FieldOperation:
-			values[i] = new(enthistory.OpType)
+			values[i] = new(history.OpType)
 		case usersettinghistory.FieldLocked, usersettinghistory.FieldEmailConfirmed, usersettinghistory.FieldIsWebauthnAllowed, usersettinghistory.FieldIsTfaEnabled:
 			values[i] = new(sql.NullBool)
 		case usersettinghistory.FieldID, usersettinghistory.FieldRef, usersettinghistory.FieldCreatedBy, usersettinghistory.FieldUpdatedBy, usersettinghistory.FieldMappingID, usersettinghistory.FieldDeletedBy, usersettinghistory.FieldUserID, usersettinghistory.FieldStatus, usersettinghistory.FieldPhoneNumber:
@@ -112,7 +112,7 @@ func (ush *UserSettingHistory) assignValues(columns []string, values []any) erro
 				ush.Ref = value.String
 			}
 		case usersettinghistory.FieldOperation:
-			if value, ok := values[i].(*enthistory.OpType); !ok {
+			if value, ok := values[i].(*history.OpType); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value != nil {
 				ush.Operation = *value

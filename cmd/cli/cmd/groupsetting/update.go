@@ -20,7 +20,7 @@ var updateCmd = &cobra.Command{
 }
 
 func init() {
-	cmd.AddCommand(updateCmd)
+	command.AddCommand(updateCmd)
 
 	updateCmd.Flags().StringP("id", "i", "", "group setting id to update")
 	updateCmd.Flags().StringP("visibility", "v", "", "visibility of the group")

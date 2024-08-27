@@ -7,15 +7,16 @@ import (
 	echo "github.com/theopenlane/echox"
 	"go.uber.org/zap"
 
+	"github.com/theopenlane/utils/emails"
+	"github.com/theopenlane/utils/marionette"
+	"github.com/theopenlane/utils/totp"
+
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/pkg/analytics"
 	"github.com/theopenlane/core/pkg/events/kafka/publisher"
 	"github.com/theopenlane/core/pkg/sessions"
 	"github.com/theopenlane/core/pkg/tokens"
-	"github.com/theopenlane/utils/emails"
-	"github.com/theopenlane/utils/marionette"
-	"github.com/theopenlane/utils/totp"
 )
 
 // Handler contains configuration options for handlers

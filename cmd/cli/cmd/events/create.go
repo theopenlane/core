@@ -11,7 +11,7 @@ import (
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
-var eventCreateCmd = &cobra.Command{
+var createCmd = &cobra.Command{
 	Use:   "create",
 	Short: "create a new event",
 	Run: func(cmd *cobra.Command, args []string) {
@@ -21,12 +21,12 @@ var eventCreateCmd = &cobra.Command{
 }
 
 func init() {
-	cmd.AddCommand(eventCreateCmd)
+	command.AddCommand(createCmd)
 
-	eventCreateCmd.Flags().StringP("type", "t", "", "type of the event")
-	eventCreateCmd.Flags().StringP("metadata", "m", "", "metadata for the event")
-	eventCreateCmd.Flags().StringSliceP("user-ids", "u", []string{}, "user id associated with the event")
-	eventCreateCmd.Flags().StringP("event-json", "j", "", "json payload for the template")
+	createCmd.Flags().StringP("type", "t", "", "type of the event")
+	createCmd.Flags().StringP("metadata", "m", "", "metadata for the event")
+	createCmd.Flags().StringSliceP("user-ids", "u", []string{}, "user id associated with the event")
+	createCmd.Flags().StringP("event-json", "j", "", "json payload for the template")
 }
 
 // createValidation validates the required fields for the command

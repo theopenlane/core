@@ -5,10 +5,12 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
+
 	"github.com/theopenlane/core/cmd/cli/cmd"
 
-	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/utils/cli/tables"
+
+	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
 var command = &cobra.Command{

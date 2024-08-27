@@ -10,8 +10,8 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/datumforge/enthistory"
 	"github.com/theopenlane/core/internal/ent/generated/entityhistory"
+	"github.com/theopenlane/entx/history"
 )
 
 // EntityHistoryCreate is the builder for creating a EntityHistory entity.
@@ -50,8 +50,8 @@ func (ehc *EntityHistoryCreate) SetNillableRef(s *string) *EntityHistoryCreate {
 }
 
 // SetOperation sets the "operation" field.
-func (ehc *EntityHistoryCreate) SetOperation(et enthistory.OpType) *EntityHistoryCreate {
-	ehc.mutation.SetOperation(et)
+func (ehc *EntityHistoryCreate) SetOperation(ht history.OpType) *EntityHistoryCreate {
+	ehc.mutation.SetOperation(ht)
 	return ehc
 }
 

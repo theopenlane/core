@@ -5,7 +5,7 @@ import (
 
 	echo "github.com/theopenlane/echox"
 
-	"github.com/theopenlane/core/pkg/httpsling"
+	"github.com/theopenlane/httpsling"
 )
 
 // registerOAuthRegisterHandler registers the oauth register handler used by the UI to register

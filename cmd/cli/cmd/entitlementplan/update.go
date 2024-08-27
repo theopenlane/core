@@ -19,7 +19,7 @@ var updateCmd = &cobra.Command{
 }
 
 func init() {
-	cmd.AddCommand(updateCmd)
+	command.AddCommand(updateCmd)
 
 	updateCmd.Flags().StringP("id", "i", "", "plan id to update")
 	updateCmd.Flags().String("display-name", "", "human friendly name of the plan")

@@ -20,7 +20,7 @@ var updateCmd = &cobra.Command{
 }
 
 func init() {
-	cmd.AddCommand(updateCmd)
+	command.AddCommand(updateCmd)
 
 	updateCmd.Flags().StringP("group-id", "g", "", "group id")
 	updateCmd.Flags().StringP("user-id", "u", "", "user id")

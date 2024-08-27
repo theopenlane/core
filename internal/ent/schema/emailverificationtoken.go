@@ -10,10 +10,10 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
-	"github.com/datumforge/enthistory"
-	"github.com/datumforge/entx"
+	"github.com/theopenlane/entx"
 
-	emixin "github.com/datumforge/entx/mixin"
+	"github.com/theopenlane/entx/history"
+	emixin "github.com/theopenlane/entx/mixin"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -90,7 +90,7 @@ func (EmailVerificationToken) Annotations() []schema.Annotation {
 		entgql.Skip(entgql.SkipAll),
 		entx.SchemaGenSkip(true),
 		entx.QueryGenSkip(true),
-		enthistory.Annotations{
+		history.Annotations{
 			Exclude: true,
 		},
 	}

@@ -12,8 +12,8 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 
-	"github.com/datumforge/fgax"
-	mock_fga "github.com/datumforge/fgax/mockery"
+	"github.com/theopenlane/iam/fgax"
+	mock_fga "github.com/theopenlane/iam/fgax/mockery"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 
@@ -53,9 +53,9 @@ type GraphTestSuite struct {
 // client contains all the clients the test need to interact with
 type client struct {
 	db           *ent.Client
-	api          *openlaneclient.DatumClient
-	apiWithPAT   *openlaneclient.DatumClient
-	apiWithToken *openlaneclient.DatumClient
+	api          *openlaneclient.OpenLaneClient
+	apiWithPAT   *openlaneclient.OpenLaneClient
+	apiWithToken *openlaneclient.OpenLaneClient
 	fga          *mock_fga.MockSdkClient
 }
 
@@ -92,9 +92,7 @@ func (suite *GraphTestSuite) SetupTest() {
 	}
 
 	// setup task manager
-	tmConfig := marionette.Config{
-		Logger: zap.NewNop().Sugar(),
-	}
+	tmConfig := marionette.Config{}
 
 	taskMan := marionette.New(tmConfig)
 

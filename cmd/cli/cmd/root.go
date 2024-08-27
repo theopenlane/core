@@ -48,7 +48,7 @@ var (
 // RootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
 	Use:   appName,
-	Short: "the open lane cli",
+	Short: "the openlane cli",
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 		initConfiguration(cmd)
 	},
@@ -156,7 +156,7 @@ func loadEnvVars() {
 }
 
 func loadFlags(cmd *cobra.Command) {
-	err := Config.Load(posflag.Provider(command.Flags(), Config.Delim(), Config), nil)
+	err := Config.Load(posflag.Provider(cmd.Flags(), Config.Delim(), Config), nil)
 
 	cobra.CheckErr(err)
 }

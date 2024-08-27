@@ -19,7 +19,7 @@ var createCmd = &cobra.Command{
 }
 
 func init() {
-	cmd.AddCommand(createCmd)
+	command.AddCommand(createCmd)
 
 	createCmd.Flags().StringP("email", "e", "", "email of the user")
 	createCmd.Flags().StringP("password", "p", "", "password of the user")

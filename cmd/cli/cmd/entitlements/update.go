@@ -23,7 +23,7 @@ The command requires the entitlement id associated with the entitlement and the 
 }
 
 func init() {
-	cmd.AddCommand(updateCmd)
+	command.AddCommand(updateCmd)
 
 	updateCmd.Flags().StringP("id", "i", "", "entitlement id to update")
 	updateCmd.Flags().DurationP("expires_at", "e", 0, "expiration time of the entitlement")

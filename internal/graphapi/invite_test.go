@@ -5,10 +5,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/datumforge/fgax"
-	mock_fga "github.com/datumforge/fgax/mockery"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"github.com/theopenlane/iam/fgax"
+	mock_fga "github.com/theopenlane/iam/fgax/mockery"
 
 	"github.com/theopenlane/core/pkg/auth"
 	"github.com/theopenlane/core/pkg/enums"
@@ -27,7 +27,7 @@ func (suite *GraphTestSuite) TestQueryInvite() {
 	testCases := []struct {
 		name        string
 		queryID     string
-		client      *openlaneclient.DatumClient
+		client      *openlaneclient.OpenLaneClient
 		ctx         context.Context
 		shouldCheck bool
 		wantErr     bool
@@ -106,7 +106,7 @@ func (suite *GraphTestSuite) TestMutationCreateInvite() {
 		recipient        string
 		orgID            string
 		role             enums.Role
-		client           *openlaneclient.DatumClient
+		client           *openlaneclient.OpenLaneClient
 		ctx              context.Context
 		accessAllowed    bool
 		skipMockCheck    bool
@@ -298,7 +298,7 @@ func (suite *GraphTestSuite) TestMutationDeleteInvite() {
 	testCases := []struct {
 		name          string
 		queryID       string
-		client        *openlaneclient.DatumClient
+		client        *openlaneclient.OpenLaneClient
 		ctx           context.Context
 		skipMockCheck bool
 		allowed       bool

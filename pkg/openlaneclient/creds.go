@@ -6,8 +6,8 @@ import (
 
 	"github.com/theopenlane/utils/rout"
 
-	"github.com/theopenlane/core/pkg/httpsling"
 	"github.com/theopenlane/core/pkg/sessions"
+	"github.com/theopenlane/httpsling"
 )
 
 // Credentials provides a basic interface for loading credentials

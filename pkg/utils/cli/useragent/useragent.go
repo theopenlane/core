@@ -9,7 +9,7 @@ import (
 
 // GetUserAgent returns the user agent string for the CLI
 func GetUserAgent() string {
-	product := "datum-cli"
+	product := "openlane-cli"
 	productVersion := constants.CLIVersion
 
 	userAgent := fmt.Sprintf("%s/%s (%s) %s (%s)",

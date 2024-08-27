@@ -9,8 +9,8 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/datumforge/enthistory"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/entx/history"
 )
 
 const (
@@ -134,7 +134,7 @@ var (
 )
 
 // OperationValidator is a validator for the "operation" field enum values. It is called by the builders before save.
-func OperationValidator(o enthistory.OpType) error {
+func OperationValidator(o history.OpType) error {
 	switch o.String() {
 	case "INSERT", "UPDATE", "DELETE":
 		return nil
@@ -286,10 +286,10 @@ func ByRole(opts ...sql.OrderTermOption) OrderOption {
 }
 
 var (
-	// enthistory.OpType must implement graphql.Marshaler.
-	_ graphql.Marshaler = (*enthistory.OpType)(nil)
-	// enthistory.OpType must implement graphql.Unmarshaler.
-	_ graphql.Unmarshaler = (*enthistory.OpType)(nil)
+	// history.OpType must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*history.OpType)(nil)
+	// history.OpType must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*history.OpType)(nil)
 )
 
 var (

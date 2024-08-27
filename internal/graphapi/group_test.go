@@ -6,9 +6,9 @@ import (
 	"testing"
 
 	"github.com/brianvoe/gofakeit/v7"
-	mock_fga "github.com/datumforge/fgax/mockery"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	mock_fga "github.com/theopenlane/iam/fgax/mockery"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/auth"
@@ -30,7 +30,7 @@ func (suite *GraphTestSuite) TestQueryGroup() {
 	testCases := []struct {
 		name     string
 		queryID  string
-		client   *openlaneclient.DatumClient
+		client   *openlaneclient.OpenLaneClient
 		ctx      context.Context
 		allowed  bool
 		expected *ent.Group
@@ -280,7 +280,7 @@ func (suite *GraphTestSuite) TestMutationCreateGroup() {
 		displayName string
 		owner       string
 		settings    *openlaneclient.CreateGroupSettingInput
-		client      *openlaneclient.DatumClient
+		client      *openlaneclient.OpenLaneClient
 		ctx         context.Context
 		allowed     bool
 		list        bool
@@ -463,7 +463,7 @@ func (suite *GraphTestSuite) TestMutationUpdateGroup() {
 		allowed     bool
 		updateInput openlaneclient.UpdateGroupInput
 		expectedRes openlaneclient.UpdateGroup_UpdateGroup_Group
-		client      *openlaneclient.DatumClient
+		client      *openlaneclient.OpenLaneClient
 		ctx         context.Context
 		list        bool
 		errorMsg    string
@@ -644,7 +644,7 @@ func (suite *GraphTestSuite) TestMutationDeleteGroup() {
 	testCases := []struct {
 		name     string
 		groupID  string
-		client   *openlaneclient.DatumClient
+		client   *openlaneclient.OpenLaneClient
 		ctx      context.Context
 		allowed  bool
 		errorMsg string

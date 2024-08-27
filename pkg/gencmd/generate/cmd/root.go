@@ -38,7 +38,7 @@ func initConfiguration(cmd *cobra.Command) {
 }
 
 func loadFlags(cmd *cobra.Command) {
-	err := Config.Load(posflag.Provider(command.Flags(), Config.Delim(), Config), nil)
+	err := Config.Load(posflag.Provider(cmd.Flags(), Config.Delim(), Config), nil)
 
 	cobra.CheckErr(err)
 }

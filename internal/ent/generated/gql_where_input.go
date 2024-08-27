@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/datumforge/enthistory"
 	"github.com/theopenlane/core/internal/ent/customtypes"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
@@ -65,6 +64,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/webhook"
 	"github.com/theopenlane/core/internal/ent/generated/webhookhistory"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/entx/history"
 )
 
 // APITokenWhereInput represents a where input for filtering APIToken queries.
@@ -1712,10 +1712,10 @@ type ContactHistoryWhereInput struct {
 	RefContainsFold *string  `json:"refContainsFold,omitempty"`
 
 	// "operation" field predicates.
-	Operation      *enthistory.OpType  `json:"operation,omitempty"`
-	OperationNEQ   *enthistory.OpType  `json:"operationNEQ,omitempty"`
-	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
-	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNEQ   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
 
 	// "created_at" field predicates.
 	CreatedAt       *time.Time  `json:"createdAt,omitempty"`
@@ -3340,10 +3340,10 @@ type DocumentDataHistoryWhereInput struct {
 	RefContainsFold *string  `json:"refContainsFold,omitempty"`
 
 	// "operation" field predicates.
-	Operation      *enthistory.OpType  `json:"operation,omitempty"`
-	OperationNEQ   *enthistory.OpType  `json:"operationNEQ,omitempty"`
-	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
-	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNEQ   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
 
 	// "created_at" field predicates.
 	CreatedAt       *time.Time  `json:"createdAt,omitempty"`
@@ -4902,10 +4902,10 @@ type EntitlementHistoryWhereInput struct {
 	RefContainsFold *string  `json:"refContainsFold,omitempty"`
 
 	// "operation" field predicates.
-	Operation      *enthistory.OpType  `json:"operation,omitempty"`
-	OperationNEQ   *enthistory.OpType  `json:"operationNEQ,omitempty"`
-	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
-	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNEQ   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
 
 	// "created_at" field predicates.
 	CreatedAt       *time.Time  `json:"createdAt,omitempty"`
@@ -7366,10 +7366,10 @@ type EntitlementPlanFeatureHistoryWhereInput struct {
 	RefContainsFold *string  `json:"refContainsFold,omitempty"`
 
 	// "operation" field predicates.
-	Operation      *enthistory.OpType  `json:"operation,omitempty"`
-	OperationNEQ   *enthistory.OpType  `json:"operationNEQ,omitempty"`
-	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
-	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNEQ   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
 
 	// "created_at" field predicates.
 	CreatedAt       *time.Time  `json:"createdAt,omitempty"`
@@ -8094,10 +8094,10 @@ type EntitlementPlanHistoryWhereInput struct {
 	RefContainsFold *string  `json:"refContainsFold,omitempty"`
 
 	// "operation" field predicates.
-	Operation      *enthistory.OpType  `json:"operation,omitempty"`
-	OperationNEQ   *enthistory.OpType  `json:"operationNEQ,omitempty"`
-	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
-	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNEQ   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
 
 	// "created_at" field predicates.
 	CreatedAt       *time.Time  `json:"createdAt,omitempty"`
@@ -9832,10 +9832,10 @@ type EntityHistoryWhereInput struct {
 	RefContainsFold *string  `json:"refContainsFold,omitempty"`
 
 	// "operation" field predicates.
-	Operation      *enthistory.OpType  `json:"operation,omitempty"`
-	OperationNEQ   *enthistory.OpType  `json:"operationNEQ,omitempty"`
-	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
-	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNEQ   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
 
 	// "created_at" field predicates.
 	CreatedAt       *time.Time  `json:"createdAt,omitempty"`
@@ -11304,10 +11304,10 @@ type EntityTypeHistoryWhereInput struct {
 	RefContainsFold *string  `json:"refContainsFold,omitempty"`
 
 	// "operation" field predicates.
-	Operation      *enthistory.OpType  `json:"operation,omitempty"`
-	OperationNEQ   *enthistory.OpType  `json:"operationNEQ,omitempty"`
-	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
-	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNEQ   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
 
 	// "created_at" field predicates.
 	CreatedAt       *time.Time  `json:"createdAt,omitempty"`
@@ -12848,10 +12848,10 @@ type EventHistoryWhereInput struct {
 	RefContainsFold *string  `json:"refContainsFold,omitempty"`
 
 	// "operation" field predicates.
-	Operation      *enthistory.OpType  `json:"operation,omitempty"`
-	OperationNEQ   *enthistory.OpType  `json:"operationNEQ,omitempty"`
-	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
-	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNEQ   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
 
 	// "created_at" field predicates.
 	CreatedAt       *time.Time  `json:"createdAt,omitempty"`
@@ -14262,10 +14262,10 @@ type FeatureHistoryWhereInput struct {
 	RefContainsFold *string  `json:"refContainsFold,omitempty"`
 
 	// "operation" field predicates.
-	Operation      *enthistory.OpType  `json:"operation,omitempty"`
-	OperationNEQ   *enthistory.OpType  `json:"operationNEQ,omitempty"`
-	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
-	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNEQ   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
 
 	// "created_at" field predicates.
 	CreatedAt       *time.Time  `json:"createdAt,omitempty"`
@@ -15984,10 +15984,10 @@ type FileHistoryWhereInput struct {
 	RefContainsFold *string  `json:"refContainsFold,omitempty"`
 
 	// "operation" field predicates.
-	Operation      *enthistory.OpType  `json:"operation,omitempty"`
-	OperationNEQ   *enthistory.OpType  `json:"operationNEQ,omitempty"`
-	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
-	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNEQ   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
 
 	// "created_at" field predicates.
 	CreatedAt       *time.Time  `json:"createdAt,omitempty"`
@@ -17692,10 +17692,10 @@ type GroupHistoryWhereInput struct {
 	RefContainsFold *string  `json:"refContainsFold,omitempty"`
 
 	// "operation" field predicates.
-	Operation      *enthistory.OpType  `json:"operation,omitempty"`
-	OperationNEQ   *enthistory.OpType  `json:"operationNEQ,omitempty"`
-	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
-	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNEQ   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
 
 	// "created_at" field predicates.
 	CreatedAt       *time.Time  `json:"createdAt,omitempty"`
@@ -19056,10 +19056,10 @@ type GroupMembershipHistoryWhereInput struct {
 	RefContainsFold *string  `json:"refContainsFold,omitempty"`
 
 	// "operation" field predicates.
-	Operation      *enthistory.OpType  `json:"operation,omitempty"`
-	OperationNEQ   *enthistory.OpType  `json:"operationNEQ,omitempty"`
-	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
-	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNEQ   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
 
 	// "created_at" field predicates.
 	CreatedAt       *time.Time  `json:"createdAt,omitempty"`
@@ -20340,10 +20340,10 @@ type GroupSettingHistoryWhereInput struct {
 	RefContainsFold *string  `json:"refContainsFold,omitempty"`
 
 	// "operation" field predicates.
-	Operation      *enthistory.OpType  `json:"operation,omitempty"`
-	OperationNEQ   *enthistory.OpType  `json:"operationNEQ,omitempty"`
-	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
-	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNEQ   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
 
 	// "created_at" field predicates.
 	CreatedAt       *time.Time  `json:"createdAt,omitempty"`
@@ -21720,10 +21720,10 @@ type HushHistoryWhereInput struct {
 	RefContainsFold *string  `json:"refContainsFold,omitempty"`
 
 	// "operation" field predicates.
-	Operation      *enthistory.OpType  `json:"operation,omitempty"`
-	OperationNEQ   *enthistory.OpType  `json:"operationNEQ,omitempty"`
-	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
-	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNEQ   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
 
 	// "created_at" field predicates.
 	CreatedAt       *time.Time  `json:"createdAt,omitempty"`
@@ -23188,10 +23188,10 @@ type IntegrationHistoryWhereInput struct {
 	RefContainsFold *string  `json:"refContainsFold,omitempty"`
 
 	// "operation" field predicates.
-	Operation      *enthistory.OpType  `json:"operation,omitempty"`
-	OperationNEQ   *enthistory.OpType  `json:"operationNEQ,omitempty"`
-	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
-	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNEQ   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
 
 	// "created_at" field predicates.
 	CreatedAt       *time.Time  `json:"createdAt,omitempty"`
@@ -25306,10 +25306,10 @@ type NoteHistoryWhereInput struct {
 	RefContainsFold *string  `json:"refContainsFold,omitempty"`
 
 	// "operation" field predicates.
-	Operation      *enthistory.OpType  `json:"operation,omitempty"`
-	OperationNEQ   *enthistory.OpType  `json:"operationNEQ,omitempty"`
-	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
-	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNEQ   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
 
 	// "created_at" field predicates.
 	CreatedAt       *time.Time  `json:"createdAt,omitempty"`
@@ -26974,10 +26974,10 @@ type OauthProviderHistoryWhereInput struct {
 	RefContainsFold *string  `json:"refContainsFold,omitempty"`
 
 	// "operation" field predicates.
-	Operation      *enthistory.OpType  `json:"operation,omitempty"`
-	OperationNEQ   *enthistory.OpType  `json:"operationNEQ,omitempty"`
-	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
-	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNEQ   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
 
 	// "created_at" field predicates.
 	CreatedAt       *time.Time  `json:"createdAt,omitempty"`
@@ -29294,10 +29294,10 @@ type OrgMembershipHistoryWhereInput struct {
 	RefContainsFold *string  `json:"refContainsFold,omitempty"`
 
 	// "operation" field predicates.
-	Operation      *enthistory.OpType  `json:"operation,omitempty"`
-	OperationNEQ   *enthistory.OpType  `json:"operationNEQ,omitempty"`
-	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
-	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNEQ   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
 
 	// "created_at" field predicates.
 	CreatedAt       *time.Time  `json:"createdAt,omitempty"`
@@ -31212,10 +31212,10 @@ type OrganizationHistoryWhereInput struct {
 	RefContainsFold *string  `json:"refContainsFold,omitempty"`
 
 	// "operation" field predicates.
-	Operation      *enthistory.OpType  `json:"operation,omitempty"`
-	OperationNEQ   *enthistory.OpType  `json:"operationNEQ,omitempty"`
-	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
-	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNEQ   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
 
 	// "created_at" field predicates.
 	CreatedAt       *time.Time  `json:"createdAt,omitempty"`
@@ -32830,10 +32830,10 @@ type OrganizationSettingHistoryWhereInput struct {
 	RefContainsFold *string  `json:"refContainsFold,omitempty"`
 
 	// "operation" field predicates.
-	Operation      *enthistory.OpType  `json:"operation,omitempty"`
-	OperationNEQ   *enthistory.OpType  `json:"operationNEQ,omitempty"`
-	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
-	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNEQ   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
 
 	// "created_at" field predicates.
 	CreatedAt       *time.Time  `json:"createdAt,omitempty"`
@@ -36370,10 +36370,10 @@ type TemplateHistoryWhereInput struct {
 	RefContainsFold *string  `json:"refContainsFold,omitempty"`
 
 	// "operation" field predicates.
-	Operation      *enthistory.OpType  `json:"operation,omitempty"`
-	OperationNEQ   *enthistory.OpType  `json:"operationNEQ,omitempty"`
-	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
-	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNEQ   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
 
 	// "created_at" field predicates.
 	CreatedAt       *time.Time  `json:"createdAt,omitempty"`
@@ -38374,10 +38374,10 @@ type UserHistoryWhereInput struct {
 	RefContainsFold *string  `json:"refContainsFold,omitempty"`
 
 	// "operation" field predicates.
-	Operation      *enthistory.OpType  `json:"operation,omitempty"`
-	OperationNEQ   *enthistory.OpType  `json:"operationNEQ,omitempty"`
-	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
-	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNEQ   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
 
 	// "created_at" field predicates.
 	CreatedAt       *time.Time  `json:"createdAt,omitempty"`
@@ -40248,10 +40248,10 @@ type UserSettingHistoryWhereInput struct {
 	RefContainsFold *string  `json:"refContainsFold,omitempty"`
 
 	// "operation" field predicates.
-	Operation      *enthistory.OpType  `json:"operation,omitempty"`
-	OperationNEQ   *enthistory.OpType  `json:"operationNEQ,omitempty"`
-	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
-	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNEQ   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
 
 	// "created_at" field predicates.
 	CreatedAt       *time.Time  `json:"createdAt,omitempty"`
@@ -41882,10 +41882,10 @@ type WebhookHistoryWhereInput struct {
 	RefContainsFold *string  `json:"refContainsFold,omitempty"`
 
 	// "operation" field predicates.
-	Operation      *enthistory.OpType  `json:"operation,omitempty"`
-	OperationNEQ   *enthistory.OpType  `json:"operationNEQ,omitempty"`
-	OperationIn    []enthistory.OpType `json:"operationIn,omitempty"`
-	OperationNotIn []enthistory.OpType `json:"operationNotIn,omitempty"`
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNEQ   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
 
 	// "created_at" field predicates.
 	CreatedAt       *time.Time  `json:"createdAt,omitempty"`

@@ -6,8 +6,8 @@ import (
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
 
-	"github.com/datumforge/fgax"
-	geodetic "github.com/datumforge/geodetic/pkg/geodeticclient"
+	dbx "github.com/theopenlane/dbx/pkg/dbxclient"
+	"github.com/theopenlane/iam/fgax"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/entdb"
@@ -98,10 +98,10 @@ func serve(ctx context.Context) error {
 	)
 
 	// Setup Geodetic client
-	if so.Config.Settings.Geodetic.Enabled {
-		gc := so.Config.Settings.Geodetic.NewDefaultClient()
+	if so.Config.Settings.DBx.Enabled {
+		gc := so.Config.Settings.DBx.NewDefaultClient()
 
-		entOpts = append(entOpts, ent.Geodetic(gc.(*geodetic.Client)))
+		entOpts = append(entOpts, ent.DBx(gc.(*dbx.Client)))
 	}
 
 	// add otp manager, after redis is setup

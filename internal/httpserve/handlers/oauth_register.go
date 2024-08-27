@@ -8,12 +8,13 @@ import (
 	echo "github.com/theopenlane/echox"
 	"golang.org/x/oauth2"
 
+	"github.com/theopenlane/utils/rout"
+
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/providers/github"
 	"github.com/theopenlane/core/pkg/providers/google"
-	"github.com/theopenlane/utils/rout"
 )
 
 // OauthRegister returns the TokenResponse for a verified authenticated external oauth user

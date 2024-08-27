@@ -5,12 +5,13 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/datumforge/fgax"
+	"github.com/theopenlane/iam/fgax"
+
+	sliceutil "github.com/theopenlane/utils/slice"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/pkg/auth"
-	sliceutil "github.com/theopenlane/utils/slice"
 )
 
 // HookCreateAPIToken runs on api token mutations and sets the owner id

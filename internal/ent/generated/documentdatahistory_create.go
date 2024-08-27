@@ -10,9 +10,9 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/datumforge/enthistory"
 	"github.com/theopenlane/core/internal/ent/customtypes"
 	"github.com/theopenlane/core/internal/ent/generated/documentdatahistory"
+	"github.com/theopenlane/entx/history"
 )
 
 // DocumentDataHistoryCreate is the builder for creating a DocumentDataHistory entity.
@@ -51,8 +51,8 @@ func (ddhc *DocumentDataHistoryCreate) SetNillableRef(s *string) *DocumentDataHi
 }
 
 // SetOperation sets the "operation" field.
-func (ddhc *DocumentDataHistoryCreate) SetOperation(et enthistory.OpType) *DocumentDataHistoryCreate {
-	ddhc.mutation.SetOperation(et)
+func (ddhc *DocumentDataHistoryCreate) SetOperation(ht history.OpType) *DocumentDataHistoryCreate {
+	ddhc.mutation.SetOperation(ht)
 	return ddhc
 }
 

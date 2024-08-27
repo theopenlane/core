@@ -21,7 +21,7 @@ var createCmd = &cobra.Command{
 }
 
 func init() {
-	cmd.AddCommand(createCmd)
+	command.AddCommand(createCmd)
 
 	createCmd.Flags().StringP("name", "n", "", "name of the template")
 	createCmd.Flags().StringP("description", "d", "", "description of the template")

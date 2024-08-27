@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"entgo.io/ent"
-	"github.com/datumforge/entx"
+	"github.com/theopenlane/entx"
 )
 
 // isDeleteOp checks if the mutation is a deletion operation.

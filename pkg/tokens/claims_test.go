@@ -5,8 +5,9 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/theopenlane/core/pkg/tokens"
 	"github.com/theopenlane/utils/ulids"
+
+	"github.com/theopenlane/core/pkg/tokens"
 )
 
 func TestClaimsParseOrgID(t *testing.T) {

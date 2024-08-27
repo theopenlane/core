@@ -21,7 +21,7 @@ var createCmd = &cobra.Command{
 }
 
 func init() {
-	cmd.AddCommand(createCmd)
+	command.AddCommand(createCmd)
 
 	createCmd.Flags().StringP("organization_id", "o", "", "organization id associated with the entitlement")
 	createCmd.Flags().StringP("plan_id", "p", "", "plan_id associated with the entitlement")

@@ -8,14 +8,19 @@ import (
 	"fmt"
 	"os"
 
-	echoprometheus "github.com/datumforge/echo-prometheus/v5"
-	"github.com/datumforge/echozap"
-	"github.com/datumforge/entx"
-	"github.com/datumforge/fgax"
 	"github.com/redis/go-redis/v9"
+	echoprometheus "github.com/theopenlane/echo-prometheus"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/echox/middleware"
+	"github.com/theopenlane/echozap"
+	"github.com/theopenlane/entx"
+	"github.com/theopenlane/iam/fgax"
 	"go.uber.org/zap"
+
+	"github.com/theopenlane/utils/emails"
+	"github.com/theopenlane/utils/marionette"
+	"github.com/theopenlane/utils/totp"
+	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi"
@@ -24,7 +29,6 @@ import (
 	"github.com/theopenlane/core/pkg/analytics"
 	"github.com/theopenlane/core/pkg/cache"
 	"github.com/theopenlane/core/pkg/events/kafka/publisher"
-	"github.com/theopenlane/core/pkg/httpsling"
 	authmw "github.com/theopenlane/core/pkg/middleware/auth"
 	"github.com/theopenlane/core/pkg/middleware/cachecontrol"
 	"github.com/theopenlane/core/pkg/middleware/cors"
@@ -36,10 +40,7 @@ import (
 	"github.com/theopenlane/core/pkg/providers/webauthn"
 	"github.com/theopenlane/core/pkg/sessions"
 	"github.com/theopenlane/core/pkg/tokens"
-	"github.com/theopenlane/utils/emails"
-	"github.com/theopenlane/utils/marionette"
-	"github.com/theopenlane/utils/totp"
-	"github.com/theopenlane/utils/ulids"
+	"github.com/theopenlane/httpsling"
 )
 
 type ServerOption interface {
@@ -296,7 +297,7 @@ func WithTaskManager() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
 		// Start task manager
 		tmConfig := marionette.Config{
-			Logger: s.Config.Logger,
+			// Logger: s.Config.Logger,
 		}
 
 		tm := marionette.New(tmConfig)

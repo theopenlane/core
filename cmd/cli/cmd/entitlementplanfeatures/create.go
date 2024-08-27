@@ -19,7 +19,7 @@ var createCmd = &cobra.Command{
 }
 
 func init() {
-	cmd.AddCommand(createCmd)
+	command.AddCommand(createCmd)
 
 	createCmd.Flags().StringP("plan-id", "p", "", "plan id to use for the plan feature")
 	createCmd.Flags().StringP("feature-id", "f", "", "feature id to use for the plan feature")

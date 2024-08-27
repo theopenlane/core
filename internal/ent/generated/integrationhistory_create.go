@@ -10,8 +10,8 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/datumforge/enthistory"
 	"github.com/theopenlane/core/internal/ent/generated/integrationhistory"
+	"github.com/theopenlane/entx/history"
 )
 
 // IntegrationHistoryCreate is the builder for creating a IntegrationHistory entity.
@@ -50,8 +50,8 @@ func (ihc *IntegrationHistoryCreate) SetNillableRef(s *string) *IntegrationHisto
 }
 
 // SetOperation sets the "operation" field.
-func (ihc *IntegrationHistoryCreate) SetOperation(et enthistory.OpType) *IntegrationHistoryCreate {
-	ihc.mutation.SetOperation(et)
+func (ihc *IntegrationHistoryCreate) SetOperation(ht history.OpType) *IntegrationHistoryCreate {
+	ihc.mutation.SetOperation(ht)
 	return ihc
 }
 

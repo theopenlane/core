@@ -20,7 +20,7 @@ tasks:
   docs:
     desc: generate documentation from the jsonschema
     cmds:
-      - npx jsonschema2mk --schema jsonschema/datum.config.json > jsonschema/api-docs.md
+      - npx jsonschema2mk --schema jsonschema/core.config.json > jsonschema/api-docs.md
 
   ci:
     desc: a task that runs during CI to confirm there are no changes after running generate

@@ -8,10 +8,14 @@ import (
 	"testing"
 	"time"
 
-	mock_fga "github.com/datumforge/fgax/mockery"
 	"github.com/rShetty/asyncwait"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	mock_fga "github.com/theopenlane/iam/fgax/mockery"
+
+	"github.com/theopenlane/utils/emails"
+	"github.com/theopenlane/utils/emails/mock"
+	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	_ "github.com/theopenlane/core/internal/ent/generated/runtime"
@@ -19,12 +23,9 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/pkg/auth"
 	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/httpsling"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/openlaneclient"
-	"github.com/theopenlane/utils/emails"
-	"github.com/theopenlane/utils/emails/mock"
-	"github.com/theopenlane/utils/rout"
+	"github.com/theopenlane/httpsling"
 )
 
 func (suite *HandlerTestSuite) TestRegisterHandler() {

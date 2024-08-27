@@ -10,8 +10,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/datumforge/enthistory"
 	"github.com/theopenlane/core/internal/ent/generated/featurehistory"
+	"github.com/theopenlane/entx/history"
 )
 
 // FeatureHistory is the model entity for the FeatureHistory schema.
@@ -24,7 +24,7 @@ type FeatureHistory struct {
 	// Ref holds the value of the "ref" field.
 	Ref string `json:"ref,omitempty"`
 	// Operation holds the value of the "operation" field.
-	Operation enthistory.OpType `json:"operation,omitempty"`
+	Operation history.OpType `json:"operation,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
@@ -64,7 +64,7 @@ func (*FeatureHistory) scanValues(columns []string) ([]any, error) {
 		case featurehistory.FieldTags, featurehistory.FieldMetadata:
 			values[i] = new([]byte)
 		case featurehistory.FieldOperation:
-			values[i] = new(enthistory.OpType)
+			values[i] = new(history.OpType)
 		case featurehistory.FieldEnabled:
 			values[i] = new(sql.NullBool)
 		case featurehistory.FieldID, featurehistory.FieldRef, featurehistory.FieldCreatedBy, featurehistory.FieldUpdatedBy, featurehistory.FieldDeletedBy, featurehistory.FieldMappingID, featurehistory.FieldOwnerID, featurehistory.FieldName, featurehistory.FieldDisplayName, featurehistory.FieldDescription:
@@ -105,7 +105,7 @@ func (fh *FeatureHistory) assignValues(columns []string, values []any) error {
 				fh.Ref = value.String
 			}
 		case featurehistory.FieldOperation:
-			if value, ok := values[i].(*enthistory.OpType); !ok {
+			if value, ok := values[i].(*history.OpType); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value != nil {
 				fh.Operation = *value

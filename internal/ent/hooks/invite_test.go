@@ -8,10 +8,11 @@ import (
 	"github.com/stretchr/testify/require"
 	"go.uber.org/zap"
 
+	"github.com/theopenlane/utils/ulids"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/auth"
 	"github.com/theopenlane/core/pkg/middleware/echocontext"
-	"github.com/theopenlane/utils/ulids"
 )
 
 func TestSetRequestor(t *testing.T) {

@@ -1,6 +1,6 @@
 # object
 
-Config contains the configuration for the datum server
+Config contains the configuration for the core server
 
 
 **Properties**
@@ -10,13 +10,13 @@ Config contains the configuration for the datum server
 |**refreshInterval**|`integer`|RefreshInterval determines how often to reload the config<br/>||
 |[**server**](#server)|`object`|Server settings for the echo server<br/>|yes|
 |[**entConfig**](#entconfig)|`object`|Config holds the configuration for the ent server<br/>||
-|[**auth**](#auth)|`object`|Auth settings including oauth2 providers and datum token configuration<br/>|yes|
+|[**auth**](#auth)|`object`|Auth settings including oauth2 providers and token configuration<br/>|yes|
 |[**authz**](#authz)|`object`||yes|
 |[**db**](#db)|`object`||yes|
-|[**geodetic**](#geodetic)|`object`|||
+|[**dbx**](#dbx)|`object`|||
 |[**redis**](#redis)|`object`|Config for the redis client used to store key-value pairs<br/>||
 |[**tracer**](#tracer)|`object`|Config defines the configuration settings for opentelemetry tracing<br/>||
-|[**email**](#email)|`object`|Config for sending emails via SendGrid and managing marketing contacts<br/>||
+|[**email**](#email)|`object`|||
 |[**sessions**](#sessions)|`object`|Config contains the configuration for the session store<br/>||
 |[**posthog**](#posthog)|`object`|Config is the configuration for PostHog<br/>||
 |[**totp**](#totp)|`object`|||
@@ -237,7 +237,7 @@ Flags contains the flags for the server to allow use to test different code path
 <a name="auth"></a>
 ## auth: object
 
-Auth settings including oauth2 providers and datum token configuration
+Auth settings including oauth2 providers and token configuration
 
 
 **Properties**
@@ -296,7 +296,7 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**redirectUrl**|`string`|RedirectURL is the URL that the OAuth2 client will redirect to after authentication with datum<br/>||
+|**redirectUrl**|`string`|RedirectURL is the URL that the OAuth2 client will redirect to after authentication is complete<br/>||
 |[**github**](#authprovidersgithub)|`object`|ProviderConfig represents the configuration settings for a Github Oauth Provider<br/>|yes|
 |[**google**](#authprovidersgoogle)|`object`|ProviderConfig represents the configuration settings for a Google Oauth Provider<br/>|yes|
 |[**webauthn**](#authproviderswebauthn)|`object`|ProviderConfig represents the configuration settings for a Webauthn Provider<br/>|yes|
@@ -425,15 +425,15 @@ ProviderConfig represents the configuration settings for a Webauthn Provider
 |**enableHistory**|`boolean`|enable history data to be logged to the database<br/>|no|
 
 **Additional Properties:** not allowed  
-<a name="geodetic"></a>
-## geodetic: object
+<a name="dbx"></a>
+## dbx: object
 
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**enabled**|`boolean`|Enable the geodetic client<br/>||
-|**baseUrl**|`string`|Base URL for the geodetic service<br/>||
+|**enabled**|`boolean`|Enable the dbx client<br/>||
+|**baseUrl**|`string`|Base URL for the dbx service<br/>||
 |**endpoint**|`string`|Endpoint for the graphql api<br/>||
 |**debug**|`boolean`|Enable debug mode<br/>||
 
@@ -521,51 +521,42 @@ OTLP settings for the otlp provider
 <a name="email"></a>
 ## email: object
 
-Config for sending emails via SendGrid and managing marketing contacts
-
-
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**sendGridApiKey**|`string`|SendGridAPIKey is the SendGrid API key to authenticate with the service<br/>||
-|**fromEmail**|`string`|FromEmail is the default email to send from<br/>||
-|**testing**|`boolean`|Testing is a bool flag to indicate we shouldn't be sending live emails, and instead should be writing out fixtures<br/>||
-|**archive**|`string`|Archive is only supported in testing mode and is what is tied through the mock to write out fixtures<br/>||
-|**datumListId**|`string`|DatumListID is the UUID SendGrid spits out when you create marketing lists<br/>||
-|**adminEmail**|`string`|AdminEmail is an internal group email configured within datum for email testing and visibility<br/>||
-|[**consoleUrl**](#emailconsoleurl)|`object`|ConsoleURLConfig for the datum registration<br/>||
-|[**marketingUrl**](#emailmarketingurl)|`object`|MarketingURLConfig for the datum marketing emails<br/>||
+|**sendGridApiKey**|`string`|||
+|**fromEmail**|`string`|||
+|**testing**|`boolean`|||
+|**archive**|`string`|||
+|**listId**|`string`|||
+|**adminEmail**|`string`|||
+|[**consoleUrl**](#emailconsoleurl)|`object`|||
+|[**marketingUrl**](#emailmarketingurl)|`object`|||
 
 **Additional Properties:** not allowed  
 <a name="emailconsoleurl"></a>
 ### email\.consoleUrl: object
 
-ConsoleURLConfig for the datum registration
-
-
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**consoleBase**|`string`|ConsoleBase is the base URL used for URL links in emails<br/>||
-|**verify**|`string`|Verify is the path to the verify endpoint used in verification emails<br/>||
-|**invite**|`string`|Invite is the path to the invite endpoint used in invite emails<br/>||
-|**reset**|`string`|Reset is the path to the reset endpoint used in password reset emails<br/>||
+|**consoleBase**|`string`|||
+|**verify**|`string`|||
+|**invite**|`string`|||
+|**reset**|`string`|||
 
 **Additional Properties:** not allowed  
 <a name="emailmarketingurl"></a>
 ### email\.marketingUrl: object
 
-MarketingURLConfig for the datum marketing emails
-
-
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**marketingBase**|`string`|MarketingBase is the base URL used for marketing links in emails<br/>||
-|**subscriberVerify**|`string`|SubscriberVerify is the path to the subscriber verify endpoint used in verification emails<br/>||
+|**marketingBase**|`string`|||
+|**subscriberVerify**|`string`|||
 
 **Additional Properties:** not allowed  
 <a name="sessions"></a>
@@ -605,13 +596,13 @@ Config is the configuration for PostHog
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**enabled**|`boolean`|Enabled is a flag to enable or disable the OTP service<br/>||
-|**codeLength**|`integer`|CodeLength is the length of the OTP code<br/>||
-|**issuer**|`string`|Issuer is the issuer for TOTP codes<br/>||
-|**redis**|`boolean`|WithRedis configures the service with a redis client<br/>||
-|**secret**|`string`|Secret stores a versioned secret key for cryptography functions<br/>||
-|**recoveryCodeCount**|`integer`|RecoveryCodeCount is the number of recovery codes to generate<br/>||
-|**recoveryCodeLength**|`integer`|RecoveryCodeLength is the length of a recovery code<br/>||
+|**enabled**|`boolean`|||
+|**codeLength**|`integer`|||
+|**issuer**|`string`|||
+|**redis**|`boolean`|||
+|**secret**|`string`|||
+|**recoveryCodeCount**|`integer`|||
+|**recoveryCodeLength**|`integer`|||
 
 **Additional Properties:** not allowed  
 <a name="ratelimit"></a>

@@ -10,8 +10,8 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/datumforge/enthistory"
 	"github.com/theopenlane/core/internal/ent/generated/hushhistory"
+	"github.com/theopenlane/entx/history"
 )
 
 // HushHistoryCreate is the builder for creating a HushHistory entity.
@@ -50,8 +50,8 @@ func (hhc *HushHistoryCreate) SetNillableRef(s *string) *HushHistoryCreate {
 }
 
 // SetOperation sets the "operation" field.
-func (hhc *HushHistoryCreate) SetOperation(et enthistory.OpType) *HushHistoryCreate {
-	hhc.mutation.SetOperation(et)
+func (hhc *HushHistoryCreate) SetOperation(ht history.OpType) *HushHistoryCreate {
+	hhc.mutation.SetOperation(ht)
 	return hhc
 }
 

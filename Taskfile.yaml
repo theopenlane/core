@@ -25,6 +25,7 @@ env:
   TEST_DB_CONTAINER_EXPIRY: "2" # in minutes
   TEST_FGA_URL: "localhost:8080"
   ENV: config
+  GODEBUG: gotypesalias=0 # remove once the backport fixes the types.Alias bug
 
 tasks:
   default:

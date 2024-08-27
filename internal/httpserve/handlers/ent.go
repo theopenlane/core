@@ -232,7 +232,7 @@ func (h *Handler) addCredentialToUser(ctx context.Context, user *ent.User, crede
 		SetBackupEligible(credential.Flags.BackupEligible).
 		SetUserPresent(credential.Flags.UserPresent).
 		SetUserVerified(credential.Flags.UserVerified).
-		SetSignCount(int32(credential.Authenticator.SignCount)).
+		SetSignCount(int32(credential.Authenticator.SignCount)). // nolint:gosec
 		Save(ctx)
 	if err != nil {
 		h.Logger.Errorw("error creating email verification token", "error", err)

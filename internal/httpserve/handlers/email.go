@@ -115,7 +115,7 @@ func (h *Handler) SendPasswordResetSuccessEmail(user *User) error {
 	return h.EmailManager.Send(msg)
 }
 
-// SendOrgInvitationEmail sends an email inviting a user to join Datum and an existing organization
+// SendOrgInvitationEmail sends an email inviting a user to join an existing organization
 func (h *Handler) SendOrgInvitationEmail(i *emails.Invite) error {
 	data := emails.InviteData{
 		InviterName: i.Requestor,

@@ -9,7 +9,7 @@ import (
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
-var integrationCreateCmd = &cobra.Command{
+var createCmd = &cobra.Command{
 	Use:   "create",
 	Short: "create a new integration",
 	Run: func(cmd *cobra.Command, args []string) {
@@ -19,12 +19,12 @@ var integrationCreateCmd = &cobra.Command{
 }
 
 func init() {
-	cmd.AddCommand(integrationCreateCmd)
+	command.AddCommand(createCmd)
 
-	integrationCreateCmd.Flags().StringP("name", "n", "", "name of the integration")
-	integrationCreateCmd.Flags().StringP("description", "d", "", "description of the integration")
-	integrationCreateCmd.Flags().StringP("kind", "k", "", "the kind of integration")
-	integrationCreateCmd.Flags().StringP("webhook-id", "w", "", "the webhook id to associate with the integration")
+	createCmd.Flags().StringP("name", "n", "", "name of the integration")
+	createCmd.Flags().StringP("description", "d", "", "description of the integration")
+	createCmd.Flags().StringP("kind", "k", "", "the kind of integration")
+	createCmd.Flags().StringP("webhook-id", "w", "", "the webhook id to associate with the integration")
 }
 
 // createValidation validates the required fields for the command

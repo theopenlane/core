@@ -4,10 +4,10 @@ import (
 	"context"
 	"testing"
 
-	mock_fga "github.com/datumforge/fgax/mockery"
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	mock_fga "github.com/theopenlane/iam/fgax/mockery"
 
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/utils/rout"
@@ -29,7 +29,7 @@ func (suite *GraphTestSuite) TestQueryTFASetting() {
 	testCases := []struct {
 		name     string
 		userID   string
-		client   *openlaneclient.DatumClient
+		client   *openlaneclient.OpenLaneClient
 		ctx      context.Context
 		errorMsg string
 	}{
@@ -91,7 +91,7 @@ func (suite *GraphTestSuite) TestMutationCreateTFASetting() {
 		name   string
 		userID string
 		input  openlaneclient.CreateTFASettingInput
-		client *openlaneclient.DatumClient
+		client *openlaneclient.OpenLaneClient
 		ctx    context.Context
 		errMsg string
 	}{
@@ -180,7 +180,7 @@ func (suite *GraphTestSuite) TestMutationUpdateTFASetting() {
 	testCases := []struct {
 		name   string
 		input  openlaneclient.UpdateTFASettingInput
-		client *openlaneclient.DatumClient
+		client *openlaneclient.OpenLaneClient
 		ctx    context.Context
 		errMsg string
 	}{

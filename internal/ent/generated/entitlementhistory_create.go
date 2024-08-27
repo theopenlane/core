@@ -10,8 +10,8 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/datumforge/enthistory"
 	"github.com/theopenlane/core/internal/ent/generated/entitlementhistory"
+	"github.com/theopenlane/entx/history"
 )
 
 // EntitlementHistoryCreate is the builder for creating a EntitlementHistory entity.
@@ -50,8 +50,8 @@ func (ehc *EntitlementHistoryCreate) SetNillableRef(s *string) *EntitlementHisto
 }
 
 // SetOperation sets the "operation" field.
-func (ehc *EntitlementHistoryCreate) SetOperation(et enthistory.OpType) *EntitlementHistoryCreate {
-	ehc.mutation.SetOperation(et)
+func (ehc *EntitlementHistoryCreate) SetOperation(ht history.OpType) *EntitlementHistoryCreate {
+	ehc.mutation.SetOperation(ht)
 	return ehc
 }
 

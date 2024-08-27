@@ -10,8 +10,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/datumforge/enthistory"
 	"github.com/theopenlane/core/internal/ent/generated/entitlementplanhistory"
+	"github.com/theopenlane/entx/history"
 )
 
 // EntitlementPlanHistory is the model entity for the EntitlementPlanHistory schema.
@@ -24,7 +24,7 @@ type EntitlementPlanHistory struct {
 	// Ref holds the value of the "ref" field.
 	Ref string `json:"ref,omitempty"`
 	// Operation holds the value of the "operation" field.
-	Operation enthistory.OpType `json:"operation,omitempty"`
+	Operation history.OpType `json:"operation,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
@@ -64,7 +64,7 @@ func (*EntitlementPlanHistory) scanValues(columns []string) ([]any, error) {
 		case entitlementplanhistory.FieldTags, entitlementplanhistory.FieldMetadata:
 			values[i] = new([]byte)
 		case entitlementplanhistory.FieldOperation:
-			values[i] = new(enthistory.OpType)
+			values[i] = new(history.OpType)
 		case entitlementplanhistory.FieldID, entitlementplanhistory.FieldRef, entitlementplanhistory.FieldCreatedBy, entitlementplanhistory.FieldUpdatedBy, entitlementplanhistory.FieldMappingID, entitlementplanhistory.FieldDeletedBy, entitlementplanhistory.FieldOwnerID, entitlementplanhistory.FieldDisplayName, entitlementplanhistory.FieldName, entitlementplanhistory.FieldDescription, entitlementplanhistory.FieldVersion:
 			values[i] = new(sql.NullString)
 		case entitlementplanhistory.FieldHistoryTime, entitlementplanhistory.FieldCreatedAt, entitlementplanhistory.FieldUpdatedAt, entitlementplanhistory.FieldDeletedAt:
@@ -103,7 +103,7 @@ func (eph *EntitlementPlanHistory) assignValues(columns []string, values []any) 
 				eph.Ref = value.String
 			}
 		case entitlementplanhistory.FieldOperation:
-			if value, ok := values[i].(*enthistory.OpType); !ok {
+			if value, ok := values[i].(*history.OpType); !ok {
 				return fmt.Errorf("unexpected type %T for field operation", values[i])
 			} else if value != nil {
 				eph.Operation = *value

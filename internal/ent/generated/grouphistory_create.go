@@ -10,8 +10,8 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/datumforge/enthistory"
 	"github.com/theopenlane/core/internal/ent/generated/grouphistory"
+	"github.com/theopenlane/entx/history"
 )
 
 // GroupHistoryCreate is the builder for creating a GroupHistory entity.
@@ -50,8 +50,8 @@ func (ghc *GroupHistoryCreate) SetNillableRef(s *string) *GroupHistoryCreate {
 }
 
 // SetOperation sets the "operation" field.
-func (ghc *GroupHistoryCreate) SetOperation(et enthistory.OpType) *GroupHistoryCreate {
-	ghc.mutation.SetOperation(et)
+func (ghc *GroupHistoryCreate) SetOperation(ht history.OpType) *GroupHistoryCreate {
+	ghc.mutation.SetOperation(ht)
 	return ghc
 }
 

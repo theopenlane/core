@@ -4,10 +4,10 @@ import (
 	"context"
 	"testing"
 
-	mock_fga "github.com/datumforge/fgax/mockery"
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	mock_fga "github.com/theopenlane/iam/fgax/mockery"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/openlaneclient"
@@ -26,7 +26,7 @@ func (suite *GraphTestSuite) TestQueryEntityType() {
 	testCases := []struct {
 		name     string
 		queryID  string
-		client   *openlaneclient.DatumClient
+		client   *openlaneclient.OpenLaneClient
 		ctx      context.Context
 		allowed  bool
 		expected *ent.EntityType
@@ -108,7 +108,7 @@ func (suite *GraphTestSuite) TestQueryEntityTypes() {
 
 	testCases := []struct {
 		name            string
-		client          *openlaneclient.DatumClient
+		client          *openlaneclient.OpenLaneClient
 		ctx             context.Context
 		expectedResults int
 	}{
@@ -161,7 +161,7 @@ func (suite *GraphTestSuite) TestMutationCreateEntityType() {
 	testCases := []struct {
 		name        string
 		request     openlaneclient.CreateEntityTypeInput
-		client      *openlaneclient.DatumClient
+		client      *openlaneclient.OpenLaneClient
 		ctx         context.Context
 		allowed     bool
 		expectedErr string
@@ -250,7 +250,7 @@ func (suite *GraphTestSuite) TestMutationUpdateEntityType() {
 	testCases := []struct {
 		name        string
 		request     openlaneclient.UpdateEntityTypeInput
-		client      *openlaneclient.DatumClient
+		client      *openlaneclient.OpenLaneClient
 		ctx         context.Context
 		allowed     bool
 		expectedErr string
@@ -331,7 +331,7 @@ func (suite *GraphTestSuite) TestMutationDeleteEntityType() {
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      *openlaneclient.DatumClient
+		client      *openlaneclient.OpenLaneClient
 		ctx         context.Context
 		allowed     bool
 		checkAccess bool

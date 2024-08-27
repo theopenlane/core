@@ -8,8 +8,9 @@ import (
 
 	echo "github.com/theopenlane/echox"
 
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/utils/rout"
+
+	"github.com/theopenlane/core/internal/ent/generated"
 )
 
 var (

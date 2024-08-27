@@ -19,7 +19,7 @@ var getCmd = &cobra.Command{
 }
 
 func init() {
-	cmd.AddCommand(getCmd)
+	command.AddCommand(getCmd)
 
 	getCmd.Flags().StringP("group-id", "g", "", "group id to query")
 }

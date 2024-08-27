@@ -7,8 +7,8 @@ import (
 	"entgo.io/ent/entc/gen"
 	"github.com/spf13/cobra"
 
-	"github.com/theopenlane/core/cmd/cli/gencmd"
-	"github.com/theopenlane/core/cmd/cli/gencmd/generate/prompts"
+	"github.com/theopenlane/core/pkg/gencmd"
+	"github.com/theopenlane/core/pkg/gencmd/generate/prompts"
 )
 
 const (

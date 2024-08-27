@@ -23,7 +23,7 @@ func (u *Uint8) UnmarshalGQL(v interface{}) error {
 		return err
 	}
 
-	*u = Uint8(i)
+	*u = Uint8(i) // nolint:gosec
 
 	return nil
 }

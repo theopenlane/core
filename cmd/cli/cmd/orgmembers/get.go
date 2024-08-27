@@ -19,7 +19,7 @@ var getCmd = &cobra.Command{
 }
 
 func init() {
-	cmd.AddCommand(getCmd)
+	command.AddCommand(getCmd)
 
 	getCmd.Flags().StringP("org-id", "o", "", "org id to query")
 }

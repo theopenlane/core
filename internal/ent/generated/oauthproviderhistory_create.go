@@ -10,9 +10,9 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/datumforge/enthistory"
 	"github.com/theopenlane/core/internal/ent/customtypes"
 	"github.com/theopenlane/core/internal/ent/generated/oauthproviderhistory"
+	"github.com/theopenlane/entx/history"
 )
 
 // OauthProviderHistoryCreate is the builder for creating a OauthProviderHistory entity.
@@ -51,8 +51,8 @@ func (ophc *OauthProviderHistoryCreate) SetNillableRef(s *string) *OauthProvider
 }
 
 // SetOperation sets the "operation" field.
-func (ophc *OauthProviderHistoryCreate) SetOperation(et enthistory.OpType) *OauthProviderHistoryCreate {
-	ophc.mutation.SetOperation(et)
+func (ophc *OauthProviderHistoryCreate) SetOperation(ht history.OpType) *OauthProviderHistoryCreate {
+	ophc.mutation.SetOperation(ht)
 	return ophc
 }
 

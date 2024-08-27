@@ -20,7 +20,7 @@ var deleteCmd = &cobra.Command{
 }
 
 func init() {
-	cmd.AddCommand(deleteCmd)
+	command.AddCommand(deleteCmd)
 
 	deleteCmd.Flags().StringP("group-id", "g", "", "group id")
 	deleteCmd.Flags().StringP("user-id", "u", "", "user id")

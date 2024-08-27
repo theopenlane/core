@@ -8,12 +8,13 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 	echo "github.com/theopenlane/echox"
 
+	"github.com/theopenlane/utils/marionette"
+	"github.com/theopenlane/utils/rout"
+
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/auth"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/utils/marionette"
-	"github.com/theopenlane/utils/rout"
 )
 
 // ForgotPassword will send an forgot password email if the provided email exists

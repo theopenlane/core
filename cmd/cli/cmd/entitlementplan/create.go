@@ -19,7 +19,7 @@ var createCmd = &cobra.Command{
 }
 
 func init() {
-	cmd.AddCommand(createCmd)
+	command.AddCommand(createCmd)
 
 	createCmd.Flags().StringP("name", "n", "", "short name of the plan, must be unique")
 	createCmd.Flags().String("display-name", "", "human friendly name of the plan")

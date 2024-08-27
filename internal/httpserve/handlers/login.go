@@ -7,11 +7,12 @@ import (
 	ph "github.com/posthog/posthog-go"
 	echo "github.com/theopenlane/echox"
 
+	"github.com/theopenlane/utils/rout"
+
 	"github.com/theopenlane/core/pkg/auth"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/passwd"
-	"github.com/theopenlane/utils/rout"
 )
 
 // LoginHandler validates the user credentials and returns a valid cookie
@@ -89,7 +90,7 @@ func (h *Handler) LoginHandler(ctx echo.Context) error {
 // BindLoginHandler binds the login request to the OpenAPI schema
 func (h *Handler) BindLoginHandler() *openapi3.Operation {
 	login := openapi3.NewOperation()
-	login.Description = "Login is oriented towards human users who use their email and password for authentication. Login verifies the password submitted for the user is correct by looking up the user by email and using the argon2 derived key verification process to confirm the password matches. Upon authentication an access token and a refresh token with the authorized claims of the user are returned. The user can use the access token to authenticate to Datum systems. The access token has an expiration and the refresh token can be used with the refresh endpoint to get a new access token without the user having to log in again. The refresh token overlaps with the access token to provide a seamless authentication experience and the user can refresh their access token so long as the refresh token is valid"
+	login.Description = "Login is oriented towards human users who use their email and password for authentication. Login verifies the password submitted for the user is correct by looking up the user by email and using the argon2 derived key verification process to confirm the password matches. Upon authentication an access token and a refresh token with the authorized claims of the user are returned. The user can use the access token to authenticate to our systems. The access token has an expiration and the refresh token can be used with the refresh endpoint to get a new access token without the user having to log in again. The refresh token overlaps with the access token to provide a seamless authentication experience and the user can refresh their access token so long as the refresh token is valid"
 	login.OperationID = "LoginHandler"
 
 	h.AddRequestBody("LoginRequest", models.ExampleLoginSuccessRequest, login)

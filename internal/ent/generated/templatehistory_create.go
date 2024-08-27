@@ -10,10 +10,10 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/datumforge/enthistory"
 	"github.com/theopenlane/core/internal/ent/customtypes"
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/entx/history"
 )
 
 // TemplateHistoryCreate is the builder for creating a TemplateHistory entity.
@@ -52,8 +52,8 @@ func (thc *TemplateHistoryCreate) SetNillableRef(s *string) *TemplateHistoryCrea
 }
 
 // SetOperation sets the "operation" field.
-func (thc *TemplateHistoryCreate) SetOperation(et enthistory.OpType) *TemplateHistoryCreate {
-	thc.mutation.SetOperation(et)
+func (thc *TemplateHistoryCreate) SetOperation(ht history.OpType) *TemplateHistoryCreate {
+	thc.mutation.SetOperation(ht)
 	return thc
 }
 

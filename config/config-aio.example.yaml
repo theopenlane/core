@@ -28,7 +28,7 @@ auth:
 # authz settings
 authz:
   enabled: true
-  storeName: datum
+  storeName: openlane
 
 # email settings
 email:

@@ -18,7 +18,7 @@ var deleteCmd = &cobra.Command{
 }
 
 func init() {
-	cmd.AddCommand(deleteCmd)
+	command.AddCommand(deleteCmd)
 
 	deleteCmd.Flags().StringP("id", "i", "", "contact id to delete")
 }
