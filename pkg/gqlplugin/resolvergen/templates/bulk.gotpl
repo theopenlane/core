@@ -1,0 +1,3 @@
+{{ $entity := .Field.TypeReference.Definition.Name | getEntityName  -}}
+
+return r.bulkCreate{{ $entity }}(ctx, input)

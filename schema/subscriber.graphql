@@ -1,0 +1,108 @@
+extend type Query {
+    """
+    Look up subscriber by Email
+    """
+     subscriber(
+        """
+        Email of the subscriber
+        """
+        email: String!
+    ):  Subscriber!
+}
+
+extend type Mutation{
+    """
+    Create a new subscriber
+    """
+    createSubscriber(
+        """
+        values of the subscriber
+        """
+        input: CreateSubscriberInput!
+    ): SubscriberCreatePayload!
+    """
+    Create new subscribers
+    """
+    createBulkSubscriber(
+        """
+        values of the subscriber
+        """
+        input: [CreateSubscriberInput!]
+    ): SubscriberBulkCreatePayload!
+        """
+    Create new subscribers via CSV file
+    """
+    createBulkCSVSubscriber(
+        """
+        values of the subscriber
+        """
+        input: Upload!
+    ): SubscriberBulkCreatePayload!
+    """
+    Update an existing subscriber
+    """
+    updateSubscriber(
+        """
+        Email of the subscriber
+        """
+        email: String!
+        """
+        New values for the subscriber
+        """
+        input: UpdateSubscriberInput!
+    ): SubscriberUpdatePayload!
+    """
+    Delete an existing subscriber by Email
+    """
+    deleteSubscriber(
+        """
+        Email of the subscriber
+        """
+        email: String!
+        """
+        OwnerID of the subscriber
+        """
+        ownerID: ID
+    ): SubscriberDeletePayload!
+}
+
+"""
+Return response for createSubscriber mutation
+"""
+type SubscriberCreatePayload {
+    """
+    Created subscriber
+    """
+    subscriber: Subscriber!
+}
+
+"""
+Return response for updateSubscriber mutation
+"""
+type SubscriberUpdatePayload {
+    """
+    Updated subscriber
+    """
+    subscriber: Subscriber!
+}
+
+"""
+Return response for deleteSubscriber mutation
+"""
+type SubscriberDeletePayload {
+    """
+    Deleted subscriber email
+    """
+    email: String!
+}
+
+"""
+Return response for createBulkSubscriber mutation
+"""
+type SubscriberBulkCreatePayload {
+    """
+    Created subscribers
+    """
+    subscribers: [Subscriber!]
+}
+

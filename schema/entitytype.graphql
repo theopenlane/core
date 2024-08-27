@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up entityType by ID
+    """
+     entityType(
+        """
+        ID of the entityType
+        """
+        id: ID!
+    ):  EntityType!
+}
+
+extend type Mutation{
+    """
+    Create a new entityType
+    """
+    createEntityType(
+        """
+        values of the entityType
+        """
+        input: CreateEntityTypeInput!
+    ): EntityTypeCreatePayload!
+    """
+    Create multiple new entityTypes
+    """
+    createBulkEntityType(
+        """
+        values of the entityType
+        """
+        input: [CreateEntityTypeInput!]
+    ): EntityTypeBulkCreatePayload!
+    """
+    Create multiple new entityTypes via file upload
+    """
+    createBulkCSVEntityType(
+        """
+        csv file containing values of the entityType
+        """
+        input: Upload!
+    ): EntityTypeBulkCreatePayload!
+    """
+    Update an existing entityType
+    """
+    updateEntityType(
+        """
+        ID of the entityType
+        """
+        id: ID!
+        """
+        New values for the entityType
+        """
+        input: UpdateEntityTypeInput!
+    ): EntityTypeUpdatePayload!
+    """
+    Delete an existing entityType
+    """
+    deleteEntityType(
+        """
+        ID of the entityType
+        """
+        id: ID!
+    ): EntityTypeDeletePayload!
+}
+
+"""
+Return response for createEntityType mutation
+"""
+type EntityTypeCreatePayload {
+    """
+    Created entityType
+    """
+    entityType: EntityType!
+}
+
+"""
+Return response for updateEntityType mutation
+"""
+type EntityTypeUpdatePayload {
+    """
+    Updated entityType
+    """
+    entityType: EntityType!
+}
+
+"""
+Return response for deleteEntityType mutation
+"""
+type EntityTypeDeletePayload {
+    """
+    Deleted entityType ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkEntityType mutation
+"""
+type EntityTypeBulkCreatePayload {
+    """
+    Created entityTypes
+    """
+    entityTypes: [EntityType!]
+}

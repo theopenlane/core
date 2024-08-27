@@ -1,0 +1,161 @@
+mutation CreateBulkCSVFile($input: Upload!) {
+  createBulkCSVFile(input: $input) {
+    files {
+      annotation
+      category
+      contentType
+      fileExtension
+      fileName
+      fileSize
+      id
+      storeKey
+      user {
+        id
+      }
+      organization {
+        id
+      }
+      group {
+        id
+      }
+    }
+  }
+}
+
+mutation CreateBulkFile($input: [CreateFileInput!]) {
+  createBulkFile(input: $input) {
+    files {
+      annotation
+      category
+      contentType
+      fileExtension
+      fileName
+      fileSize
+      id
+      storeKey
+      user {
+        id
+      }
+      organization {
+        id
+      }
+      group {
+        id
+      }
+    }
+  }
+}
+
+mutation CreateFile($input: CreateFileInput!) {
+  createFile(input: $input) {
+    file {
+      annotation
+      category
+      contentType
+      fileExtension
+      fileName
+      fileSize
+      id
+      storeKey
+      user {
+        id
+      }
+      organization {
+        id
+      }
+      group {
+        id
+      }
+    }
+  }
+}
+
+mutation DeleteFile($deleteFileId: ID!) {
+  deleteFile(id: $deleteFileId) {
+    deletedID
+  }
+}
+
+query GetAllFiles {
+  files {
+    edges {
+      node {
+        annotation
+        category
+        contentType
+        createdAt
+        createdBy
+        fileExtension
+        fileName
+        fileSize
+        id
+        storeKey
+        updatedAt
+        updatedBy
+        user {
+          id
+        }
+        organization {
+          id
+        }
+        group {
+          id
+        }
+      }
+    }
+  }
+}
+
+query GetFiles($where: FileWhereInput) {
+  files(where: $where) {
+    edges {
+      node {
+        annotation
+        category
+        contentType
+        createdAt
+        createdBy
+        fileExtension
+        fileName
+        fileSize
+        id
+        storeKey
+        updatedAt
+        updatedBy
+        user {
+          id
+        }
+        organization {
+          id
+        }
+        group {
+          id
+        }
+      }
+    }
+  }
+}
+
+mutation UpdateFile($updateFileId: ID!, $input: UpdateFileInput!) {
+  updateFile(id: $updateFileId, input: $input) {
+    file {
+      id
+      fileName
+      fileExtension
+      fileSize
+      contentType
+      storeKey
+      category
+      annotation
+      user {
+        id
+      }
+      organization {
+        id
+      }
+      group {
+        id
+      }
+    }
+  }
+}

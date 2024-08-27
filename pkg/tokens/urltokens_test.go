@@ -7,8 +7,9 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/theopenlane/core/pkg/tokens"
 	ulids "github.com/theopenlane/utils/ulids"
+
+	"github.com/theopenlane/core/pkg/tokens"
 )
 
 var rusty = "rusty.shackleford@gmail.com"

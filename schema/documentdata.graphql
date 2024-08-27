@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up documentData by ID
+    """
+     documentData(
+        """
+        ID of the documentData
+        """
+        id: ID!
+    ):  DocumentData!
+}
+
+extend type Mutation{
+    """
+    Create a new documentData
+    """
+    createDocumentData(
+        """
+        values of the documentData
+        """
+        input: CreateDocumentDataInput!
+    ): DocumentDataCreatePayload!
+    """
+    Create multiple new documentData
+    """
+    createBulkDocumentData(
+        """
+        values of the documentData
+        """
+        input: [CreateDocumentDataInput!]
+    ): DocumentDataBulkCreatePayload!
+    """
+    Create multiple new documentData via file upload
+    """
+    createBulkCSVDocumentData(
+        """
+        csv file containing values of the documentData
+        """
+        input: Upload!
+    ): DocumentDataBulkCreatePayload!
+    """
+    Update an existing documentData
+    """
+    updateDocumentData(
+        """
+        ID of the documentData
+        """
+        id: ID!
+        """
+        New values for the documentData
+        """
+        input: UpdateDocumentDataInput!
+    ): DocumentDataUpdatePayload!
+    """
+    Delete an existing documentData
+    """
+    deleteDocumentData(
+        """
+        ID of the documentData
+        """
+        id: ID!
+    ): DocumentDataDeletePayload!
+}
+
+"""
+Return response for createDocumentData mutation
+"""
+type DocumentDataCreatePayload {
+    """
+    Created documentData
+    """
+    documentData: DocumentData!
+}
+
+"""
+Return response for updateDocumentData mutation
+"""
+type DocumentDataUpdatePayload {
+    """
+    Updated documentData
+    """
+    documentData: DocumentData!
+}
+
+"""
+Return response for deleteDocumentData mutation
+"""
+type DocumentDataDeletePayload {
+    """
+    Deleted documentData ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkDocumentData mutation
+"""
+type DocumentDataBulkCreatePayload {
+    """
+    Created documentData
+    """
+    documentData: [DocumentData!]
+}

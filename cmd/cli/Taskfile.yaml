@@ -1,0 +1,82 @@
+version: "3"
+
+tasks:
+  generate:all:history:
+    desc: generates a new cli cmd for all missing history commands from the query/ directory
+    vars:
+      SCHEMAS:
+        sh: ls -d ../../query/* | cut -f1 |grep history | sed -e "s/query\///" |sed -e "s/.graphql//" | sed -e "s/history/History/" | sed -e "s/..\/..\///"
+    cmds:
+      - for: {var: SCHEMAS, as: SCHEMA}
+        cmd: go run gencmd/generate/main.go generate --name={{ .SCHEMA }} --read-only
+
+  generate:all:history:force:
+    desc: regenerates the cli cmd for all history commands from the query/ directory, this will overwrite any changes made to the generated files
+    vars:
+      SCHEMAS:
+        sh: ls -d ../../query/* | cut -f1 |grep history | sed -e "s/query\///" |sed -e "s/.graphql//" | sed -e "s/history/History/" | sed -e "s/..\/..\///"
+    cmds:
+      - for: {var: SCHEMAS, as: SCHEMA}
+        cmd: go run gencmd/generate/main.go generate --name={{ .SCHEMA }} --read-only --force
+
+  generate:
+    desc: generates a new cli cmd
+    interactive: true
+    cmds:
+      - go run gencmd/generate/main.go generate
+
+  generate:ro:
+    desc: generates a new cli cmd with only the read cmds
+    interactive: true
+    cmds:
+      - go run gencmd/generate/main.go generate --read-only
+
+  org:create:
+    desc: creates an organization against a running local instance of the server - see the CLI help commands for other variables
+    aliases: [createorg]
+    cmds:
+      - go run main.go org create -n your_new_org -d "my new org again"
+
+  user:verify:
+    desc: a task to register a user, parse out the token response, and submit it to the verify endpoint
+    aliases: [verifyuser]
+    cmds:
+      - curl http://localhost:17608/v1/verify?token={{.VERIFY_TOKEN}}
+    vars:
+      VERIFY_TOKEN:
+        sh: go run main.go register --email="mitb@theopenlane.io" --first-name="matt" --last-name="anderson" --password="mattisthebest1234" | jq -r .token
+
+  login:creds:
+    desc: a task to login the verified user
+    aliases: [login]
+    env:
+      CORE_PASSWORD: mattisthebest1234
+    cmds:
+      - go run main.go login -u mitb@theopenlane.io
+
+  user:all:
+    desc: a task to register, verify, and login a new user
+    cmds:
+      - task: verifyuser
+      - task: login
+
+  login:google:
+    desc: a task to login with google oauth
+    aliases: [google]
+    cmds:
+      - go run main.go login -o google
+
+  login:github:
+    desc: a task to login with google oauth
+    aliases: [github]
+    cmds:
+      - go run main.go login -o github
+
+  template:create:
+    desc: a task to create new root templates
+    vars:
+      MODELS:
+        sh: ls -d ../../jsonschema/models/* | cut -f5 -d'/'
+    cmds:
+      - for: {var: MODELS, as: MODEL}
+        cmd: go run main.go template create -n {{ .MODEL }} -t ROOTTEMPLATE --jsonconfig="../../jsonschema/models/{{ .MODEL }}/generate/{{ .MODEL }}.json"

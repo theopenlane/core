@@ -1,0 +1,23 @@
+model:
+  package: coreclient
+  filename: ./pkg/coreclient/models.go
+client:
+  package: coreclient
+  filename: ./pkg/coreclient/graphclient.go
+models:
+  Int:
+    model: github.com/99designs/gqlgen/graphql.Int64
+  ID:
+    model:
+      - github.com/99designs/gqlgen/graphql.String
+  JSON:
+    model:
+      - github.com/theopenlane/entx.RawMessage
+      - github.com/theopenlane/core/internal/ent/customtypes.JSONObject
+schema: ["schema.graphql"]
+query: ["query/*.graphql"]
+generate:
+  clientV2: true
+  clientInterfaceName: "OpenLaneGraphClient"
+  query: false
+  mutation: false

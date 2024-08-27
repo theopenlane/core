@@ -1,0 +1,1010 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/theopenlane/core/config/config.-config",
+  "$defs": {
+    "[]string": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "cache.Config": {
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enabled to enable redis client in the server"
+        },
+        "address": {
+          "type": "string",
+          "description": "Address is the host:port to connect to redis"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the connecting client"
+        },
+        "username": {
+          "type": "string",
+          "description": "Username to connect to redis"
+        },
+        "password": {
+          "type": "string",
+          "description": "Password, must match the password specified in the server configuration"
+        },
+        "db": {
+          "type": "integer",
+          "description": "DB to be selected after connecting to the server, 0 uses the default"
+        },
+        "dialTimeout": {
+          "type": "integer",
+          "description": "Dial timeout for establishing new connections, defaults to 5s"
+        },
+        "readTimeout": {
+          "type": "integer",
+          "description": "Timeout for socket reads. If reached, commands will fail\nwith a timeout instead of blocking. Supported values:\n  - `0` - default timeout (3 seconds).\n  - `-1` - no timeout (block indefinitely).\n  - `-2` - disables SetReadDeadline calls completely."
+        },
+        "writeTimeout": {
+          "type": "integer",
+          "description": "Timeout for socket writes. If reached, commands will fail\nwith a timeout instead of blocking.  Supported values:\n  - `0` - default timeout (3 seconds).\n  - `-1` - no timeout (block indefinitely).\n  - `-2` - disables SetWriteDeadline calls completely."
+        },
+        "maxRetries": {
+          "type": "integer",
+          "description": "MaxRetries before giving up.\nDefault is 3 retries; -1 (not 0) disables retries."
+        },
+        "minIdleConns": {
+          "type": "integer",
+          "description": "MinIdleConns is useful when establishing new connection is slow.\nDefault is 0. the idle connections are not closed by default."
+        },
+        "maxIdleConns": {
+          "type": "integer",
+          "description": "Maximum number of idle connections.\nDefault is 0. the idle connections are not closed by default."
+        },
+        "maxActiveConns": {
+          "type": "integer",
+          "description": "Maximum number of connections allocated by the pool at a given time.\nWhen zero, there is no limit on the number of connections in the pool."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "Config for the redis client used to store key-value pairs"
+    },
+    "cachecontrol.Config": {
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "noCacheHeaders": {
+          "$ref": "#/$defs/map[string]string",
+          "description": "noCacheHeaders is the header \u003c-\u003e match map pair to match in http for entity headers to remove"
+        },
+        "etagHeaders": {
+          "$ref": "#/$defs/[]string",
+          "description": "etagHeaders is the string of entity headers to remove"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "Config is the config values for the cache-control middleware"
+    },
+    "config.Auth": {
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enabled authentication on the server, not recommended to disable"
+        },
+        "token": {
+          "$ref": "#/$defs/tokens.Config",
+          "description": "Token contains the token config settings for the issued tokens"
+        },
+        "supportedProviders": {
+          "$ref": "#/$defs/[]string",
+          "description": "SupportedProviders are the supported oauth providers that have been configured"
+        },
+        "providers": {
+          "$ref": "#/$defs/handlers.OauthProviderConfig",
+          "description": "Providers contains supported oauth2 providers configuration"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "token"
+      ],
+      "description": "Auth settings including oauth2 providers and token configuration"
+    },
+    "config.PondPool": {
+      "properties": {
+        "maxWorkers": {
+          "type": "integer",
+          "description": "MaxWorkers is the maximum number of workers in the pool"
+        },
+        "maxCapacity": {
+          "type": "integer",
+          "description": "MaxCapacity is the maximum number of tasks that can be queued"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "PondPool contains the settings for the goroutine pool"
+    },
+    "config.Server": {
+      "properties": {
+        "debug": {
+          "type": "boolean",
+          "description": "Debug enables debug mode for the server"
+        },
+        "dev": {
+          "type": "boolean",
+          "description": "Dev enables echo's dev mode options"
+        },
+        "listen": {
+          "type": "string",
+          "description": "Listen sets the listen address to serve the echo server on"
+        },
+        "shutdownGracePeriod": {
+          "type": "integer",
+          "description": "ShutdownGracePeriod sets the grace period for in flight requests before shutting down"
+        },
+        "readTimeout": {
+          "type": "integer",
+          "description": "ReadTimeout sets the maximum duration for reading the entire request including the body"
+        },
+        "writeTimeout": {
+          "type": "integer",
+          "description": "WriteTimeout sets the maximum duration before timing out writes of the response"
+        },
+        "idleTimeout": {
+          "type": "integer",
+          "description": "IdleTimeout sets the maximum amount of time to wait for the next request when keep-alives are enabled"
+        },
+        "readHeaderTimeout": {
+          "type": "integer",
+          "description": "ReadHeaderTimeout sets the amount of time allowed to read request headers"
+        },
+        "tls": {
+          "$ref": "#/$defs/config.TLS",
+          "description": "TLS contains the tls configuration settings"
+        },
+        "cors": {
+          "$ref": "#/$defs/cors.Config",
+          "description": "CORS contains settings to allow cross origin settings and insecure cookies"
+        },
+        "secure": {
+          "$ref": "#/$defs/secure.Config",
+          "description": "Secure contains settings for the secure middleware"
+        },
+        "redirects": {
+          "$ref": "#/$defs/redirect.Config",
+          "description": "Redirect contains settings for the redirect middleware"
+        },
+        "cacheControl": {
+          "$ref": "#/$defs/cachecontrol.Config",
+          "description": "CacheControl contains settings for the cache control middleware"
+        },
+        "mime": {
+          "$ref": "#/$defs/mime.Config",
+          "description": "Mime contains settings for the mime middleware"
+        },
+        "graphPool": {
+          "$ref": "#/$defs/config.PondPool",
+          "description": "GraphPool contains settings for the goroutine pool used by the graph resolvers"
+        },
+        "enableGraphExtensions": {
+          "type": "boolean",
+          "description": "EnableGraphExtensions enables the graph extensions for the graph resolvers"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "listen"
+      ],
+      "description": "Server settings for the echo server"
+    },
+    "config.TLS": {
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enabled turns on TLS settings for the server"
+        },
+        "certFile": {
+          "type": "string",
+          "description": "CertFile location for the TLS server"
+        },
+        "certKey": {
+          "type": "string",
+          "description": "CertKey file location for the TLS server"
+        },
+        "autoCert": {
+          "type": "boolean",
+          "description": "AutoCert generates the cert with letsencrypt, this does not work on localhost"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "TLS settings for the server for secure connections"
+    },
+    "cors.Config": {
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enable or disable the CORS middleware"
+        },
+        "prefixes": {
+          "$ref": "#/$defs/map[string][]string",
+          "description": "Prefixes is a map of prefixes to allowed origins"
+        },
+        "allowOrigins": {
+          "$ref": "#/$defs/[]string",
+          "description": "AllowOrigins is a list of allowed origins"
+        },
+        "cookieInsecure": {
+          "type": "boolean",
+          "description": "CookieInsecure sets the cookie to be insecure"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "Config holds the cors configuration settings"
+    },
+    "dbxclient.Config": {
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enable the dbx client"
+        },
+        "baseUrl": {
+          "type": "string",
+          "description": "Base URL for the dbx service"
+        },
+        "endpoint": {
+          "type": "string",
+          "description": "Endpoint for the graphql api"
+        },
+        "debug": {
+          "type": "boolean",
+          "description": "Enable debug mode"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "emails.Config": {
+      "properties": {
+        "sendGridApiKey": {
+          "type": "string"
+        },
+        "fromEmail": {
+          "type": "string"
+        },
+        "testing": {
+          "type": "boolean"
+        },
+        "archive": {
+          "type": "string"
+        },
+        "listId": {
+          "type": "string"
+        },
+        "adminEmail": {
+          "type": "string"
+        },
+        "consoleUrl": {
+          "$ref": "#/$defs/emails.ConsoleURLConfig"
+        },
+        "marketingUrl": {
+          "$ref": "#/$defs/emails.MarketingURLConfig"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "emails.ConsoleURLConfig": {
+      "properties": {
+        "consoleBase": {
+          "type": "string"
+        },
+        "verify": {
+          "type": "string"
+        },
+        "invite": {
+          "type": "string"
+        },
+        "reset": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "emails.MarketingURLConfig": {
+      "properties": {
+        "marketingBase": {
+          "type": "string"
+        },
+        "subscriberVerify": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "entconfig.Config": {
+      "properties": {
+        "flags": {
+          "$ref": "#/$defs/entconfig.Flags",
+          "description": "flags for the server"
+        },
+        "entityTypes": {
+          "$ref": "#/$defs/[]string",
+          "description": "EntityTypes is the list of entity types to create by default for the organization"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "Config holds the configuration for the ent server"
+    },
+    "entconfig.Flags": {
+      "properties": {
+        "useListUserService": {
+          "type": "boolean",
+          "description": "use list services endpoint for object access"
+        },
+        "useListObjectServices": {
+          "type": "boolean",
+          "description": "use list object services endpoint for object access"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "Flags contains the flags for the server to allow use to test different code paths"
+    },
+    "entx.Config": {
+      "properties": {
+        "debug": {
+          "type": "boolean",
+          "description": "debug enables printing the debug database logs"
+        },
+        "databaseName": {
+          "type": "string",
+          "description": "the name of the database to use with otel tracing"
+        },
+        "driverName": {
+          "type": "string",
+          "description": "sql driver name"
+        },
+        "multiWrite": {
+          "type": "boolean",
+          "description": "enables writing to two databases simultaneously"
+        },
+        "primaryDbSource": {
+          "type": "string",
+          "description": "dsn of the primary database"
+        },
+        "secondaryDbSource": {
+          "type": "string",
+          "description": "dsn of the secondary database if multi-write is enabled"
+        },
+        "cacheTTL": {
+          "type": "integer",
+          "description": "cache results for subsequent requests"
+        },
+        "runMigrations": {
+          "type": "boolean",
+          "description": "run migrations on startup"
+        },
+        "migrationProvider": {
+          "type": "string",
+          "description": "migration provider to use for running migrations"
+        },
+        "enableHistory": {
+          "type": "boolean",
+          "description": "enable history data to be logged to the database"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "primaryDbSource"
+      ]
+    },
+    "fgax.Config": {
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "enables authorization checks with openFGA"
+        },
+        "storeName": {
+          "type": "string",
+          "description": "name of openFGA store"
+        },
+        "hostUrl": {
+          "type": "string",
+          "description": "host url with scheme of the openFGA API"
+        },
+        "storeId": {
+          "type": "string",
+          "description": "id of openFGA store"
+        },
+        "modelId": {
+          "type": "string",
+          "description": "id of openFGA model"
+        },
+        "createNewModel": {
+          "type": "boolean",
+          "description": "force create a new model"
+        },
+        "modelFile": {
+          "type": "string",
+          "description": "path to the fga model file"
+        },
+        "credentials": {
+          "$ref": "#/$defs/fgax.Credentials",
+          "description": "credentials for the openFGA client"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "hostUrl"
+      ]
+    },
+    "fgax.Credentials": {
+      "properties": {
+        "apiToken": {
+          "type": "string",
+          "description": "api token for the openFGA client"
+        },
+        "clientId": {
+          "type": "string",
+          "description": "client id for the openFGA client"
+        },
+        "clientSecret": {
+          "type": "string",
+          "description": "client secret for the openFGA client"
+        },
+        "audience": {
+          "type": "string",
+          "description": "audience for the openFGA client"
+        },
+        "issuer": {
+          "type": "string",
+          "description": "issuer for the openFGA client"
+        },
+        "scopes": {
+          "type": "string",
+          "description": "scopes for the openFGA client"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "github.ProviderConfig": {
+      "properties": {
+        "clientId": {
+          "type": "string",
+          "description": "ClientID is the public identifier for the GitHub oauth2 client"
+        },
+        "clientSecret": {
+          "type": "string",
+          "description": "ClientSecret is the secret for the GitHub oauth2 client"
+        },
+        "clientEndpoint": {
+          "type": "string",
+          "description": "ClientEndpoint is the endpoint for the GitHub oauth2 client"
+        },
+        "scopes": {
+          "$ref": "#/$defs/[]string",
+          "description": "Scopes are the scopes that the GitHub oauth2 client will request"
+        },
+        "redirectUrl": {
+          "type": "string",
+          "description": "RedirectURL is the URL that the GitHub oauth2 client will redirect to after authentication with Github"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "clientId",
+        "clientSecret",
+        "scopes",
+        "redirectUrl"
+      ],
+      "description": "ProviderConfig represents the configuration settings for a Github Oauth Provider"
+    },
+    "google.ProviderConfig": {
+      "properties": {
+        "clientId": {
+          "type": "string",
+          "description": "ClientID is the public identifier for the Google oauth2 client"
+        },
+        "clientSecret": {
+          "type": "string",
+          "description": "ClientSecret is the secret for the Google oauth2 client"
+        },
+        "clientEndpoint": {
+          "type": "string",
+          "description": "ClientEndpoint is the endpoint for the Google oauth2 client"
+        },
+        "scopes": {
+          "$ref": "#/$defs/[]string",
+          "description": "Scopes are the scopes that the Google oauth2 client will request"
+        },
+        "redirectUrl": {
+          "type": "string",
+          "description": "RedirectURL is the URL that the Google oauth2 client will redirect to after authentication with Google"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "clientId",
+        "clientSecret",
+        "scopes",
+        "redirectUrl"
+      ],
+      "description": "ProviderConfig represents the configuration settings for a Google Oauth Provider"
+    },
+    "handlers.OauthProviderConfig": {
+      "properties": {
+        "redirectUrl": {
+          "type": "string",
+          "description": "RedirectURL is the URL that the OAuth2 client will redirect to after authentication is complete"
+        },
+        "github": {
+          "$ref": "#/$defs/github.ProviderConfig",
+          "description": "Github contains the configuration settings for the Github Oauth Provider"
+        },
+        "google": {
+          "$ref": "#/$defs/google.ProviderConfig",
+          "description": "Google contains the configuration settings for the Google Oauth Provider"
+        },
+        "webauthn": {
+          "$ref": "#/$defs/webauthn.ProviderConfig",
+          "description": "Webauthn contains the configuration settings for the Webauthn Oauth Provider"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "OauthProviderConfig represents the configuration for OAuth providers such as Github and Google"
+    },
+    "kafkaconfig.Config": {
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enabled is a flag to determine if the Kafka event source is enabled"
+        },
+        "appName": {
+          "type": "string",
+          "description": "AppName is the name of the application that is publishing events"
+        },
+        "address": {
+          "type": "string",
+          "description": "Address is the address of the Kafka broker"
+        },
+        "addresses": {
+          "$ref": "#/$defs/[]string",
+          "description": "Addresses is a list of addresses of the Kafka brokers"
+        },
+        "debug": {
+          "type": "boolean",
+          "description": "Debug is a flag to determine if the Kafka client should run in debug mode"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "Config is the configuration for the Kafka event source"
+    },
+    "map[string][]string": {
+      "additionalProperties": {
+        "$ref": "#/$defs/[]string"
+      },
+      "type": "object"
+    },
+    "map[string]string": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "type": "object"
+    },
+    "mime.Config": {
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enabled indicates if the mime middleware should be enabled"
+        },
+        "mimeTypesFile": {
+          "type": "string",
+          "description": "MimeTypesFile is the file to load mime types from"
+        },
+        "defaultContentType": {
+          "type": "string",
+          "description": "DefaultContentType is the default content type to set if no mime type is found"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "Config defines the config for Mime middleware"
+    },
+    "otelx.Config": {
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enabled to enable tracing"
+        },
+        "provider": {
+          "type": "string",
+          "description": "Provider to use for tracing"
+        },
+        "environment": {
+          "type": "string",
+          "description": "Environment to set for the service"
+        },
+        "stdout": {
+          "$ref": "#/$defs/otelx.StdOut",
+          "description": "StdOut settings for the stdout provider"
+        },
+        "otlp": {
+          "$ref": "#/$defs/otelx.OTLP",
+          "description": "OTLP settings for the otlp provider"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "Config defines the configuration settings for opentelemetry tracing"
+    },
+    "otelx.OTLP": {
+      "properties": {
+        "endpoint": {
+          "type": "string",
+          "description": "Endpoint to send the traces to"
+        },
+        "insecure": {
+          "type": "boolean",
+          "description": "Insecure to disable TLS"
+        },
+        "certificate": {
+          "type": "string",
+          "description": "Certificate to use for TLS"
+        },
+        "headers": {
+          "$ref": "#/$defs/[]string",
+          "description": "Headers to send with the request"
+        },
+        "compression": {
+          "type": "string",
+          "description": "Compression to use for the request"
+        },
+        "timeout": {
+          "type": "integer",
+          "description": "Timeout for the request"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "OTLP settings for the otlp provider"
+    },
+    "otelx.StdOut": {
+      "properties": {
+        "pretty": {
+          "type": "boolean",
+          "description": "Pretty enables pretty printing of the output"
+        },
+        "disableTimestamp": {
+          "type": "boolean",
+          "description": "DisableTimestamp disables the timestamp in the output"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "StdOut settings for the stdout provider"
+    },
+    "posthog.Config": {
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enabled is a flag to enable or disable PostHog"
+        },
+        "apiKey": {
+          "type": "string",
+          "description": "APIKey is the PostHog API Key"
+        },
+        "host": {
+          "type": "string",
+          "description": "Host is the PostHog API Host"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "Config is the configuration for PostHog"
+    },
+    "ratelimit.Config": {
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "limit": {
+          "type": "number"
+        },
+        "burst": {
+          "type": "integer"
+        },
+        "expires": {
+          "type": "integer"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "Config defines the configuration settings for the default rate limiter"
+    },
+    "redirect.Config": {
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enabled indicates if the redirect middleware should be enabled"
+        },
+        "redirects": {
+          "$ref": "#/$defs/map[string]string",
+          "description": "Redirects is a map of paths to redirect to"
+        },
+        "code": {
+          "type": "integer",
+          "description": "Code is the HTTP status code to use for the redirect"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "Config contains the types used in executing redirects via the redirect middleware"
+    },
+    "secure.Config": {
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enabled indicates if the secure middleware should be enabled"
+        },
+        "xssprotection": {
+          "type": "string",
+          "description": "XSSProtection is the value to set the X-XSS-Protection header to - default is 1; mode=block"
+        },
+        "contenttypenosniff": {
+          "type": "string",
+          "description": "ContentTypeNosniff is the value to set the X-Content-Type-Options header to - default is nosniff"
+        },
+        "xframeoptions": {
+          "type": "string",
+          "description": "XFrameOptions is the value to set the X-Frame-Options header to - default is SAMEORIGIN"
+        },
+        "hstspreloadenabled": {
+          "type": "boolean",
+          "description": "HSTSPreloadEnabled is a boolean to enable HSTS preloading - default is false"
+        },
+        "hstsmaxage": {
+          "type": "integer",
+          "description": "HSTSMaxAge is the max age to set the HSTS header to - default is 31536000"
+        },
+        "contentsecuritypolicy": {
+          "type": "string",
+          "description": "ContentSecurityPolicy is the value to set the Content-Security-Policy header to - default is default-src 'self'"
+        },
+        "referrerpolicy": {
+          "type": "string",
+          "description": "ReferrerPolicy is the value to set the Referrer-Policy header to - default is same-origin"
+        },
+        "cspreportonly": {
+          "type": "boolean",
+          "description": "CSPReportOnly is a boolean to enable the Content-Security-Policy-Report-Only header - default is false"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "Config contains the types used in the mw middleware"
+    },
+    "sessions.Config": {
+      "properties": {
+        "signingKey": {
+          "type": "string",
+          "description": "SigningKey must be a 16, 32, or 64 character string used to encode the cookie"
+        },
+        "encryptionKey": {
+          "type": "string",
+          "description": "EncryptionKey must be a 16, 32, or 64 character string used to encode the cookie"
+        },
+        "domain": {
+          "type": "string",
+          "description": "Domain is the domain for the cookie, leave empty to use the default value of the server"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "Config contains the configuration for the session store"
+    },
+    "tokens.Config": {
+      "properties": {
+        "kid": {
+          "type": "string",
+          "description": "KID represents the Key ID used in the configuration."
+        },
+        "audience": {
+          "type": "string",
+          "description": "Audience represents the target audience for the tokens."
+        },
+        "refreshAudience": {
+          "type": "string",
+          "description": "RefreshAudience represents the audience for refreshing tokens."
+        },
+        "issuer": {
+          "type": "string",
+          "description": "Issuer represents the issuer of the tokens"
+        },
+        "accessDuration": {
+          "type": "integer",
+          "description": "AccessDuration represents the duration of the access token is valid for"
+        },
+        "refreshDuration": {
+          "type": "integer",
+          "description": "RefreshDuration represents the duration of the refresh token is valid for"
+        },
+        "refreshOverlap": {
+          "type": "integer",
+          "description": "RefreshOverlap represents the overlap time for a refresh and access token"
+        },
+        "jwksEndpoint": {
+          "type": "string",
+          "description": "JWKSEndpoint represents the endpoint for the JSON Web Key Set"
+        },
+        "keys": {
+          "$ref": "#/$defs/map[string]string",
+          "description": "Keys represents the key pairs used for signing the tokens"
+        },
+        "generateKeys": {
+          "type": "boolean",
+          "description": "GenerateKeys is a boolean to determine if the keys should be generated"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "kid",
+        "audience",
+        "issuer",
+        "keys"
+      ],
+      "description": "Config defines the configuration settings for authentication tokens used in the server"
+    },
+    "totp.Config": {
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "codeLength": {
+          "type": "integer"
+        },
+        "issuer": {
+          "type": "string"
+        },
+        "redis": {
+          "type": "boolean"
+        },
+        "secret": {
+          "type": "string"
+        },
+        "recoveryCodeCount": {
+          "type": "integer"
+        },
+        "recoveryCodeLength": {
+          "type": "integer"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "webauthn.ProviderConfig": {
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enabled is the provider enabled"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "DisplayName is the site display name"
+        },
+        "relyingPartyId": {
+          "type": "string",
+          "description": "RelyingPartyID is the relying party identifier\nset to localhost for development, no port"
+        },
+        "requestOrigins": {
+          "$ref": "#/$defs/[]string",
+          "description": "RequestOrigins the origin domain(s) for authentication requests\ninclude the scheme and port"
+        },
+        "maxDevices": {
+          "type": "integer",
+          "description": "MaxDevices is the maximum number of devices that can be associated with a user"
+        },
+        "enforceTimeout": {
+          "type": "boolean",
+          "description": "EnforceTimeout at the Relying Party / Server. This means if enabled and the user takes too long that even if the browser does not\nenforce a timeout, the server will"
+        },
+        "timeout": {
+          "type": "integer",
+          "description": "Timeout is the timeout in seconds"
+        },
+        "debug": {
+          "type": "boolean",
+          "description": "Debug enables debug mode"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "displayName",
+        "relyingPartyId",
+        "requestOrigins"
+      ],
+      "description": "ProviderConfig represents the configuration settings for a Webauthn Provider"
+    }
+  },
+  "properties": {
+    "refreshInterval": {
+      "type": "integer",
+      "description": "RefreshInterval determines how often to reload the config"
+    },
+    "server": {
+      "$ref": "#/$defs/config.Server",
+      "description": "Server contains the echo server settings"
+    },
+    "entConfig": {
+      "$ref": "#/$defs/entconfig.Config",
+      "description": "EntConfig contains the ent configuration used by the ent middleware"
+    },
+    "auth": {
+      "$ref": "#/$defs/config.Auth",
+      "description": "Auth contains the authentication token settings and provider(s)"
+    },
+    "authz": {
+      "$ref": "#/$defs/fgax.Config",
+      "description": "Authz contains the authorization settings for fine grained access control"
+    },
+    "db": {
+      "$ref": "#/$defs/entx.Config",
+      "description": "DB contains the database configuration for the ent client"
+    },
+    "dbx": {
+      "$ref": "#/$defs/dbxclient.Config",
+      "description": "DBx contains the dbx client configuration"
+    },
+    "redis": {
+      "$ref": "#/$defs/cache.Config",
+      "description": "Redis contains the redis configuration for the key-value store"
+    },
+    "tracer": {
+      "$ref": "#/$defs/otelx.Config",
+      "description": "Tracer contains the tracing config for opentelemetry"
+    },
+    "email": {
+      "$ref": "#/$defs/emails.Config",
+      "description": "Email contains email sending configuration for the server"
+    },
+    "sessions": {
+      "$ref": "#/$defs/sessions.Config",
+      "description": "Sessions config for user sessions and cookies"
+    },
+    "posthog": {
+      "$ref": "#/$defs/posthog.Config",
+      "description": "PostHog contains the configuration for the PostHog analytics"
+    },
+    "totp": {
+      "$ref": "#/$defs/totp.Config",
+      "description": "TOTP contains the configuration for the TOTP provider"
+    },
+    "ratelimit": {
+      "$ref": "#/$defs/ratelimit.Config",
+      "description": "Ratelimit contains the configuration for the rate limiter"
+    },
+    "publisherConfig": {
+      "$ref": "#/$defs/kafkaconfig.Config",
+      "description": "EventPublisher contains the configuration for the event publisher"
+    }
+  },
+  "additionalProperties": false,
+  "type": "object",
+  "description": "Config contains the configuration for the core server"
+}

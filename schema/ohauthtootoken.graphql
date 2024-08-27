@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up ohAuthTooToken by ID
+    """
+     ohAuthTooToken(
+        """
+        ID of the ohAuthTooToken
+        """
+        id: ID!
+    ):  OhAuthTooToken!
+}
+
+extend type Mutation{
+    """
+    Create a new ohAuthTooToken
+    """
+    createOhAuthTooToken(
+        """
+        values of the ohAuthTooToken
+        """
+        input: CreateOhAuthTooTokenInput!
+    ): OhAuthTooTokenCreatePayload!
+    """
+    Create multiple new ohAuthTooTokens
+    """
+    createBulkOhAuthTooToken(
+        """
+        values of the ohAuthTooToken
+        """
+        input: [CreateOhAuthTooTokenInput!]
+    ): OhAuthTooTokenBulkCreatePayload!
+    """
+    Create multiple new ohAuthTooTokens via file upload
+    """
+    createBulkCSVOhAuthTooToken(
+        """
+        csv file containing values of the ohAuthTooToken
+        """
+        input: Upload!
+    ): OhAuthTooTokenBulkCreatePayload!
+    """
+    Update an existing ohAuthTooToken
+    """
+    updateOhAuthTooToken(
+        """
+        ID of the ohAuthTooToken
+        """
+        id: ID!
+        """
+        New values for the ohAuthTooToken
+        """
+        input: UpdateOhAuthTooTokenInput!
+    ): OhAuthTooTokenUpdatePayload!
+    """
+    Delete an existing ohAuthTooToken
+    """
+    deleteOhAuthTooToken(
+        """
+        ID of the ohAuthTooToken
+        """
+        id: ID!
+    ): OhAuthTooTokenDeletePayload!
+}
+
+"""
+Return response for createOhAuthTooToken mutation
+"""
+type OhAuthTooTokenCreatePayload {
+    """
+    Created ohAuthTooToken
+    """
+    ohAuthTooToken: OhAuthTooToken!
+}
+
+"""
+Return response for updateOhAuthTooToken mutation
+"""
+type OhAuthTooTokenUpdatePayload {
+    """
+    Updated ohAuthTooToken
+    """
+    ohAuthTooToken: OhAuthTooToken!
+}
+
+"""
+Return response for deleteOhAuthTooToken mutation
+"""
+type OhAuthTooTokenDeletePayload {
+    """
+    Deleted ohAuthTooToken ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkOhAuthTooToken mutation
+"""
+type OhAuthTooTokenBulkCreatePayload {
+    """
+    Created ohAuthTooTokens
+    """
+    ohAuthTooTokens: [OhAuthTooToken!]
+}

@@ -10,8 +10,9 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 
-	"github.com/theopenlane/core/pkg/tokens"
 	"github.com/theopenlane/utils/ulids"
+
+	"github.com/theopenlane/core/pkg/tokens"
 )
 
 const (

@@ -1,0 +1,7 @@
+extend input CreateEntityInput {
+  note: CreateNoteInput
+}
+
+extend input UpdateEntityInput {
+  note:  CreateNoteInput
+}

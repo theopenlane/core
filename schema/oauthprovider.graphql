@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up oauthProvider by ID
+    """
+     oauthProvider(
+        """
+        ID of the oauthProvider
+        """
+        id: ID!
+    ):  OauthProvider!
+}
+
+extend type Mutation{
+    """
+    Create a new oauthProvider
+    """
+    createOauthProvider(
+        """
+        values of the oauthProvider
+        """
+        input: CreateOauthProviderInput!
+    ): OauthProviderCreatePayload!
+    """
+    Create multiple new oauthProviders
+    """
+    createBulkOauthProvider(
+        """
+        values of the oauthProvider
+        """
+        input: [CreateOauthProviderInput!]
+    ): OauthProviderBulkCreatePayload!
+    """
+    Create multiple new oauthProviders via file upload
+    """
+    createBulkCSVOauthProvider(
+        """
+        csv file containing values of the oauthProvider
+        """
+        input: Upload!
+    ): OauthProviderBulkCreatePayload!
+    """
+    Update an existing oauthProvider
+    """
+    updateOauthProvider(
+        """
+        ID of the oauthProvider
+        """
+        id: ID!
+        """
+        New values for the oauthProvider
+        """
+        input: UpdateOauthProviderInput!
+    ): OauthProviderUpdatePayload!
+    """
+    Delete an existing oauthProvider
+    """
+    deleteOauthProvider(
+        """
+        ID of the oauthProvider
+        """
+        id: ID!
+    ): OauthProviderDeletePayload!
+}
+
+"""
+Return response for createOauthProvider mutation
+"""
+type OauthProviderCreatePayload {
+    """
+    Created oauthProvider
+    """
+    oauthProvider: OauthProvider!
+}
+
+"""
+Return response for updateOauthProvider mutation
+"""
+type OauthProviderUpdatePayload {
+    """
+    Updated oauthProvider
+    """
+    oauthProvider: OauthProvider!
+}
+
+"""
+Return response for deleteOauthProvider mutation
+"""
+type OauthProviderDeletePayload {
+    """
+    Deleted oauthProvider ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkOauthProvider mutation
+"""
+type OauthProviderBulkCreatePayload {
+    """
+    Created oauthProviders
+    """
+    oauthProviders: [OauthProvider!]
+}

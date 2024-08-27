@@ -5,8 +5,9 @@ import (
 
 	echo "github.com/theopenlane/echox"
 
-	"github.com/theopenlane/core/pkg/middleware/echocontext"
 	"github.com/theopenlane/utils/ulids"
+
+	"github.com/theopenlane/core/pkg/middleware/echocontext"
 )
 
 type AuthenticationType string

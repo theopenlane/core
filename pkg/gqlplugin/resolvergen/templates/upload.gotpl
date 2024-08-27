@@ -1,0 +1,10 @@
+{{ $entity := .Field.TypeReference.Definition.Name | getEntityName  -}}
+
+data, err := unmarshalBulkData[generated.Create{{ $entity }}Input](input)
+if err != nil {
+	r.logger.Errorw("failed to unmarshal bulk data", "error", err)
+
+	return nil, err
+}
+
+return r.bulkCreate{{ $entity }}(ctx, data)

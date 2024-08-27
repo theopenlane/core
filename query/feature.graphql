@@ -1,0 +1,98 @@
+mutation CreateBulkCSVFeature($input: Upload!) {
+  createBulkCSVFeature(input: $input) {
+    features {
+      description
+      enabled
+      id
+      name
+      displayName
+      tags
+    }
+  }
+}
+
+mutation CreateBulkFeature($input: [CreateFeatureInput!]) {
+  createBulkFeature(input: $input) {
+    features {
+      description
+      enabled
+      id
+      name
+      displayName
+      tags
+    }
+  }
+}
+
+mutation CreateFeature($input: CreateFeatureInput!) {
+  createFeature(input: $input) {
+    feature {
+      description
+      enabled
+      id
+      name
+      displayName
+      tags
+    }
+  }
+}
+
+mutation DeleteFeature($deleteFeatureId: ID!) {
+  deleteFeature(id: $deleteFeatureId) {
+    deletedID
+  }
+}
+
+query GetAllFeatures {
+  features {
+    edges {
+      node {
+        description
+        enabled
+        id
+        name
+        displayName
+        tags
+      }
+    }
+  }
+}
+
+query GetFeatureByID($featureId: ID!) {
+  feature(id: $featureId) {
+    description
+    enabled
+    id
+    name
+    displayName
+    tags
+  }
+}
+
+query GetFeatures($where: FeatureWhereInput) {
+  features(where: $where) {
+    edges {
+      node {
+        description
+        enabled
+        id
+        name
+        displayName
+        tags
+      }
+    }
+  }
+}
+
+mutation UpdateFeature($updateFeatureId: ID!, $input: UpdateFeatureInput!) {
+  updateFeature(id: $updateFeatureId, input: $input) {
+    feature {
+      description
+      enabled
+      id
+      name
+      displayName
+      tags
+    }
+  }
+}

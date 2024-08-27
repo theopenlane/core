@@ -1,0 +1,22 @@
+services:
+  api:
+    image: core:dev
+    depends_on:
+      - openfga
+    command:
+      - serve
+      - --debug
+      - --pretty
+      - --config=/config/.config.yaml
+    volumes:
+      - type: bind
+        source: ../config/.config.yaml
+        target: /config/.config.yaml
+    ports:
+      - "17608:17608"
+    restart: unless-stopped
+    environment:
+      - CORE_REDIS_ADDRESS=redis:6379
+      - CORE_AUTHZ_HOST_URL=openfga:8080
+    networks:
+      - default

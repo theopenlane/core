@@ -1,0 +1,47 @@
+model
+  schema 1.1
+type user
+type service
+type role
+  relations
+    define assignee: [user]
+type organization
+  relations
+    # main roles
+    define admin: [user] or admin from parent
+    define member: [user] or owner or admin or member from parent
+    define owner: [user] or owner from parent
+    define parent: [organization]
+    # main permission sets based on roles
+    define can_delete: [service] or owner or can_delete from parent
+    define can_edit: [service] or admin or owner or can_edit from parent
+    define can_view: [service] or member or admin or owner or can_edit or can_view from parent
+    # additional fine-grained permissions
+    ## allow owner and assigned users to view audit logs
+    define audit_log_viewer: [user] or owner or audit_log_viewer from parent
+    ## allow members to invite other members
+    define can_invite_members: [user] or member or can_edit or can_invite_members from parent
+    ## onnly allow users with edit access to the org to invite other admins
+    define can_invite_admins: [user] or can_edit or can_invite_admins from parent
+    # additional relations
+    define user_in_context: [user]
+type group
+  relations
+    # main roles
+    define admin: [user] and member from parent
+    define member: [user] and member from parent
+    define parent: [organization]
+    # main permission sets based on roles
+    define can_delete: [service] or admin or can_delete from parent
+    define can_edit: [service] or admin or can_edit from parent
+    define can_view: [service] or member or admin or can_view from parent
+    # additional fine-grained permissions
+    define audit_log_viewer: [user] or audit_log_viewer from parent
+type subscription_tier
+  relations
+    define subscriber: [organization]
+    define subscriber_member: member from subscriber
+type feature
+  relations
+    define associated_subscription_tier: [subscription_tier]
+    define access: [user, service] or subscriber_member from associated_subscription_tier

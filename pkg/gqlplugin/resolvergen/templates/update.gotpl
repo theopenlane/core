@@ -1,0 +1,28 @@
+{{ $entity := .Field.TypeReference.Definition.Name | getEntityName  -}}
+{{ $isOrgOwned := .Field | hasOwnerField  -}}
+
+res, err := withTransactionalMutation(ctx).{{ $entity }}.Get(ctx, id)
+if err != nil {
+	return nil, parseRequestError(err, action{action: ActionUpdate, object: "{{ $entity | toLower }}"}, r.logger)
+}
+
+{{- if $isOrgOwned }}
+// set the organization in the auth context if its not done for us
+if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	r.logger.Errorw("failed to set organization in auth context", "error", err)
+
+	return nil, ErrPermissionDenied
+}
+{{- end }}
+
+// setup update request
+req := res.Update().SetInput(input){{- range $appendField := .AppendFields }}.{{ $appendField }}(input.{{ $appendField }}){{- end }}
+
+res, err = req.Save(ctx)
+if err != nil {
+	return nil, parseRequestError(err, action{action: ActionUpdate, object: "{{ $entity | toLower }}"}, r.logger)
+}
+
+return &{{ $entity }}UpdatePayload{
+	{{ $entity }}: res,
+	}, nil

@@ -1,0 +1,338 @@
+query GetEvents($where: EventWhereInput) {
+  events(where: $where) {
+    edges {
+      node {
+        eventID
+        id
+        correlationID
+        eventType
+        metadata
+      }
+    }
+  }
+}
+
+query GetEventByID($eventId: ID!) {
+  event(id: $eventId) {
+    id
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    eventID
+    correlationID
+    eventType
+    metadata
+    user {
+      id
+    }
+    group {
+      id
+    }
+    integration {
+      id
+    }
+    organization {
+      id
+    }
+    invite {
+      id
+    }
+    feature {
+      id
+    }
+    personalAccessToken {
+      id
+    }
+    oauth2token {
+      id
+    }
+    hush {
+      id
+    }
+    orgmembership {
+      id
+    }
+    groupmembership {
+      id
+    }
+    entitlement {
+      id
+    }
+    webhook {
+      id
+    }
+  }
+}
+
+query GetAllEvents {
+  events {
+    edges {
+      node {
+        id
+        createdAt
+        updatedAt
+        createdBy
+        updatedBy
+        eventID
+        correlationID
+        eventType
+        metadata
+        user {
+          id
+        }
+        group {
+          id
+        }
+        integration {
+          id
+        }
+        organization {
+          id
+        }
+        invite {
+          id
+        }
+        feature {
+          id
+        }
+        personalAccessToken {
+          id
+        }
+        oauth2token {
+          id
+        }
+        hush {
+        id
+        }
+        orgmembership {
+          id
+        }
+        groupmembership {
+          id
+        }
+        entitlement {
+          id
+        }
+        webhook {
+          id
+        }
+      }
+    }
+  }
+}
+
+mutation CreateEvent($input: CreateEventInput!) {
+  createEvent(input: $input) {
+    event {
+      id
+      eventID
+      correlationID
+      eventType
+      metadata
+      user {
+        id
+      }
+      group {
+        id
+      }
+      integration {
+        id
+      }
+      organization {
+        id
+      }
+      invite {
+        id
+      }
+      feature {
+        id
+      }
+      personalAccessToken {
+        id
+      }
+      oauth2token {
+        id
+      }
+      hush {
+      id
+      }
+      orgmembership {
+        id
+      }
+      groupmembership {
+        id
+      }
+      entitlement {
+        id
+      }
+      webhook {
+        id
+      }
+    }
+  }
+}
+
+mutation CreateBulkEvent($input: [CreateEventInput!]) {
+  createBulkEvent(input: $input) {
+    events {
+        id
+      eventID
+      correlationID
+      eventType
+      metadata
+      user {
+        id
+      }
+      group {
+        id
+      }
+      integration {
+        id
+      }
+      organization {
+        id
+      }
+      invite {
+        id
+      }
+      feature {
+        id
+      }
+      personalAccessToken {
+        id
+      }
+      oauth2token {
+        id
+      }
+      hush {
+      id
+      }
+      orgmembership {
+        id
+      }
+      groupmembership {
+        id
+      }
+      entitlement {
+        id
+      }
+      webhook {
+        id
+      }
+    }
+  }
+}
+
+mutation CreateBulkCSVEvent($input: Upload!) {
+  createBulkCSVEvent(input: $input) {
+   events {
+  id
+      eventID
+      correlationID
+      eventType
+      metadata
+      user {
+        id
+      }
+      group {
+        id
+      }
+      integration {
+        id
+      }
+      organization {
+        id
+      }
+      invite {
+        id
+      }
+      feature {
+        id
+      }
+      personalAccessToken {
+        id
+      }
+      oauth2token {
+        id
+      }
+      hush {
+      id
+      }
+      orgmembership {
+        id
+      }
+      groupmembership {
+        id
+      }
+      entitlement {
+        id
+      }
+      webhook {
+        id
+      }
+    }
+  }
+}
+
+mutation UpdateEvent($updateEventId: ID!, $input: UpdateEventInput!) {
+  updateEvent(id: $updateEventId, input: $input) {
+    event {
+      id
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      eventID
+      correlationID
+      eventType
+      metadata
+      user {
+        id
+      }
+      group {
+        id
+      }
+      integration {
+        id
+      }
+      organization {
+        id
+      }
+      invite {
+        id
+      }
+      feature {
+        id
+      }
+      personalAccessToken {
+        id
+      }
+      oauth2token {
+        id
+      }
+      hush {
+       id
+      }
+      orgmembership {
+        id
+      }
+      groupmembership {
+        id
+      }
+      entitlement {
+        id
+      }
+      webhook {
+        id
+      }
+    }
+  }
+}
+
+
+mutation DeleteEvent($deleteEventId: ID!) {
+  deleteEvent(id: $deleteEventId) {
+    deletedID
+  }
+}

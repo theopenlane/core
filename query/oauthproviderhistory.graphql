@@ -1,0 +1,57 @@
+
+
+query GetAllOauthProviderHistories {
+  oauthProviderHistories {
+    edges {
+      node {
+        authStyle
+        authURL
+        clientID
+        clientSecret
+        createdAt
+        createdBy
+        historyTime
+        id
+        infoURL
+        name
+        operation
+        ownerID
+        redirectURL
+        ref
+        scopes
+        tags
+        tokenURL
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+query GetOauthProviderHistories($where: OauthProviderHistoryWhereInput) {
+  oauthProviderHistories(where: $where) {
+    edges {
+      node {
+        authStyle
+        authURL
+        clientID
+        clientSecret
+        createdAt
+        createdBy
+        historyTime
+        id
+        infoURL
+        name
+        operation
+        ownerID
+        redirectURL
+        ref
+        scopes
+        tags
+        tokenURL
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}

@@ -32,6 +32,7 @@ func TestAlpha(t *testing.T) {
 		val := keygen.Alpha(16)
 		vals[val] = struct{}{}
 	}
+
 	require.Len(t, vals, 10000, "there is a very low chance that a duplicate value was generated")
 }
 
@@ -55,6 +56,7 @@ func TestAlphaNumeric(t *testing.T) {
 		val := keygen.AlphaNumeric(16)
 		vals[val] = struct{}{}
 	}
+
 	require.Len(t, vals, 10000, "there is a very low chance that a duplicate value was generated")
 }
 
@@ -83,6 +85,7 @@ func TestCryptoRandInt(t *testing.T) {
 		val := keygen.CryptoRandInt()
 		nums[val] = struct{}{}
 	}
+
 	require.Len(t, nums, 10000, "there is a very low chance that a duplicate value was generated")
 }
 

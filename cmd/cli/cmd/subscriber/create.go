@@ -1,0 +1,74 @@
+package subscribers
+
+import (
+	"context"
+	"os"
+
+	"github.com/99designs/gqlgen/graphql"
+	"github.com/spf13/cobra"
+
+	"github.com/theopenlane/core/cmd/cli/cmd"
+	"github.com/theopenlane/core/pkg/openlaneclient"
+)
+
+var createCmd = &cobra.Command{
+	Use:   "create",
+	Short: "add subscribers to a organization",
+	Run: func(cmd *cobra.Command, args []string) {
+		err := create(cmd.Context())
+		cobra.CheckErr(err)
+	},
+}
+
+func init() {
+	command.AddCommand(createCmd)
+
+	createCmd.Flags().StringSliceP("emails", "e", []string{}, "email address of the subscriber()")
+}
+
+// createValidation validates the required fields for the command
+func createValidation() (input []*openlaneclient.CreateSubscriberInput, err error) {
+	email := cmd.Config.Strings("emails")
+	if len(email) == 0 {
+		return input, cmd.NewRequiredFieldMissingError("emails")
+	}
+
+	for _, e := range email {
+		input = append(input, &openlaneclient.CreateSubscriberInput{
+			Email: e,
+		})
+	}
+
+	return input, nil
+}
+
+func create(ctx context.Context) error {
+	// setup http client
+	client, err := cmd.SetupClientWithAuth(ctx)
+	cobra.CheckErr(err)
+	defer cmd.StoreSessionCookies(client)
+
+	if cmd.InputFile != "" {
+		input, err := os.OpenFile(cmd.InputFile, os.O_RDWR|os.O_CREATE, os.ModePerm)
+		cobra.CheckErr(err)
+
+		defer input.Close()
+
+		in := graphql.Upload{
+			File: input,
+		}
+
+		o, err := client.CreateBulkCSVSubscriber(ctx, in)
+		cobra.CheckErr(err)
+
+		return consoleOutput(o)
+	}
+
+	input, err := createValidation()
+	cobra.CheckErr(err)
+
+	o, err := client.CreateBulkSubscriber(ctx, input)
+	cobra.CheckErr(err)
+
+	return consoleOutput(o)
+}

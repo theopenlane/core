@@ -1,0 +1,132 @@
+mutation CreateBulkCSVEntitlementPlan($input: Upload!) {
+  createBulkCSVEntitlementPlan(input: $input) {
+    entitlementPlans {
+      id
+      name
+      displayName
+      metadata
+      tags
+      version
+      description
+    }
+  }
+}
+
+mutation CreateBulkEntitlementPlan($input: [CreateEntitlementPlanInput!]) {
+  createBulkEntitlementPlan(input: $input) {
+    entitlementPlans {
+      id
+      name
+      displayName
+      metadata
+      tags
+      version
+      description
+    }
+  }
+}
+
+mutation CreateEntitlementPlan($input: CreateEntitlementPlanInput!) {
+  createEntitlementPlan(input: $input) {
+    entitlementPlan {
+      id
+      name
+      displayName
+      metadata
+      tags
+      version
+      description
+    }
+  }
+}
+
+mutation DeleteEntitlementPlan($deleteEntitlementPlanId: ID!) {
+  deleteEntitlementPlan(id: $deleteEntitlementPlanId) {
+    deletedID
+  }
+}
+
+query GetAllEntitlementPlans {
+  entitlementPlans {
+    edges {
+      node {
+        id
+        name
+        displayName
+        metadata
+        tags
+        version
+        description
+        features {
+          feature {
+            id
+            metadata
+            name
+          }
+          metadata
+          tags
+        }
+      }
+    }
+  }
+}
+
+query GetEntitlementPlanByID($entitlementPlanId: ID!) {
+  entitlementPlan(id: $entitlementPlanId) {
+    id
+    name
+    displayName
+    metadata
+    tags
+    version
+    description
+    features {
+      feature {
+        id
+        metadata
+        name
+      }
+      metadata
+      tags
+    }
+  }
+}
+
+query GetEntitlementPlans($where: EntitlementPlanWhereInput) {
+  entitlementPlans(where: $where) {
+    edges {
+      node {
+        id
+        name
+        displayName
+        metadata
+        tags
+        version
+        description
+        features {
+          feature {
+            id
+            metadata
+            name
+          }
+          metadata
+          tags
+        }
+      }
+    }
+  }
+}
+
+mutation UpdateEntitlementPlan($updateEntitlementPlanId: ID!, $input: UpdateEntitlementPlanInput!) {
+  updateEntitlementPlan(id: $updateEntitlementPlanId, input: $input) {
+    entitlementPlan {
+      id
+      name
+      displayName
+      metadata
+      tags
+      version
+      description
+    }
+  }
+}

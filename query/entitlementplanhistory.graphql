@@ -1,0 +1,47 @@
+query GetAllEntitlementPlanHistories {
+  entitlementPlanHistories {
+    edges {
+      node {
+        createdAt
+        createdBy
+        description
+        displayName
+        historyTime
+        id
+        metadata
+        name
+        operation
+        ownerID
+        ref
+        tags
+        updatedAt
+        updatedBy
+        version
+      }
+    }
+  }
+}
+
+query GetEntitlementPlanHistories($where: EntitlementPlanHistoryWhereInput) {
+  entitlementPlanHistories(where: $where) {
+    edges {
+      node {
+        createdAt
+        createdBy
+        description
+        displayName
+        historyTime
+        id
+        metadata
+        name
+        operation
+        ownerID
+        ref
+        tags
+        updatedAt
+        updatedBy
+        version
+      }
+    }
+  }
+}
