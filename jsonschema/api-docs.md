@@ -17,7 +17,7 @@ Config contains the configuration for the core server
 |[**redis**](#redis)|`object`|Config for the redis client used to store key-value pairs<br/>||
 |[**tracer**](#tracer)|`object`|Config defines the configuration settings for opentelemetry tracing<br/>||
 |[**email**](#email)|`object`|||
-|[**sessions**](#sessions)|`object`|Config contains the configuration for the session store<br/>||
+|[**sessions**](#sessions)|`object`|||
 |[**posthog**](#posthog)|`object`|Config is the configuration for PostHog<br/>||
 |[**totp**](#totp)|`object`|||
 |[**ratelimit**](#ratelimit)|`object`|Config defines the configuration settings for the default rate limiter<br/>||
@@ -245,7 +245,7 @@ Auth settings including oauth2 providers and token configuration
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
 |**enabled**|`boolean`|Enabled authentication on the server, not recommended to disable<br/>|no|
-|[**token**](#authtoken)|`object`|Config defines the configuration settings for authentication tokens used in the server<br/>|yes|
+|[**token**](#authtoken)|`object`||yes|
 |[**supportedProviders**](#authsupportedproviders)|`string[]`||no|
 |[**providers**](#authproviders)|`object`|OauthProviderConfig represents the configuration for OAuth providers such as Github and Google<br/>|no|
 
@@ -253,23 +253,20 @@ Auth settings including oauth2 providers and token configuration
 <a name="authtoken"></a>
 ### auth\.token: object
 
-Config defines the configuration settings for authentication tokens used in the server
-
-
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**kid**|`string`|KID represents the Key ID used in the configuration.<br/>|yes|
-|**audience**|`string`|Audience represents the target audience for the tokens.<br/>|yes|
-|**refreshAudience**|`string`|RefreshAudience represents the audience for refreshing tokens.<br/>|no|
-|**issuer**|`string`|Issuer represents the issuer of the tokens<br/>|yes|
-|**accessDuration**|`integer`|AccessDuration represents the duration of the access token is valid for<br/>|no|
-|**refreshDuration**|`integer`|RefreshDuration represents the duration of the refresh token is valid for<br/>|no|
-|**refreshOverlap**|`integer`|RefreshOverlap represents the overlap time for a refresh and access token<br/>|no|
-|**jwksEndpoint**|`string`|JWKSEndpoint represents the endpoint for the JSON Web Key Set<br/>|no|
+|**kid**|`string`||yes|
+|**audience**|`string`||yes|
+|**refreshAudience**|`string`||no|
+|**issuer**|`string`||yes|
+|**accessDuration**|`integer`||no|
+|**refreshDuration**|`integer`||no|
+|**refreshOverlap**|`integer`||no|
+|**jwksEndpoint**|`string`||no|
 |[**keys**](#authtokenkeys)|`object`||yes|
-|**generateKeys**|`boolean`|GenerateKeys is a boolean to determine if the keys should be generated<br/>|no|
+|**generateKeys**|`boolean`||no|
 
 **Additional Properties:** not allowed  
 <a name="authtokenkeys"></a>
@@ -297,26 +294,23 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
 |**redirectUrl**|`string`|RedirectURL is the URL that the OAuth2 client will redirect to after authentication is complete<br/>||
-|[**github**](#authprovidersgithub)|`object`|ProviderConfig represents the configuration settings for a Github Oauth Provider<br/>|yes|
-|[**google**](#authprovidersgoogle)|`object`|ProviderConfig represents the configuration settings for a Google Oauth Provider<br/>|yes|
-|[**webauthn**](#authproviderswebauthn)|`object`|ProviderConfig represents the configuration settings for a Webauthn Provider<br/>|yes|
+|[**github**](#authprovidersgithub)|`object`||yes|
+|[**google**](#authprovidersgoogle)|`object`||yes|
+|[**webauthn**](#authproviderswebauthn)|`object`||yes|
 
 **Additional Properties:** not allowed  
 <a name="authprovidersgithub"></a>
 #### auth\.providers\.github: object
 
-ProviderConfig represents the configuration settings for a Github Oauth Provider
-
-
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**clientId**|`string`|ClientID is the public identifier for the GitHub oauth2 client<br/>|yes|
-|**clientSecret**|`string`|ClientSecret is the secret for the GitHub oauth2 client<br/>|yes|
-|**clientEndpoint**|`string`|ClientEndpoint is the endpoint for the GitHub oauth2 client<br/>|no|
+|**clientId**|`string`||yes|
+|**clientSecret**|`string`||yes|
+|**clientEndpoint**|`string`||no|
 |[**scopes**](#authprovidersgithubscopes)|`string[]`||yes|
-|**redirectUrl**|`string`|RedirectURL is the URL that the GitHub oauth2 client will redirect to after authentication with Github<br/>|yes|
+|**redirectUrl**|`string`||yes|
 
 **Additional Properties:** not allowed  
 <a name="authprovidersgithubscopes"></a>
@@ -328,18 +322,15 @@ ProviderConfig represents the configuration settings for a Github Oauth Provider
 <a name="authprovidersgoogle"></a>
 #### auth\.providers\.google: object
 
-ProviderConfig represents the configuration settings for a Google Oauth Provider
-
-
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**clientId**|`string`|ClientID is the public identifier for the Google oauth2 client<br/>|yes|
-|**clientSecret**|`string`|ClientSecret is the secret for the Google oauth2 client<br/>|yes|
-|**clientEndpoint**|`string`|ClientEndpoint is the endpoint for the Google oauth2 client<br/>|no|
+|**clientId**|`string`||yes|
+|**clientSecret**|`string`||yes|
+|**clientEndpoint**|`string`||no|
 |[**scopes**](#authprovidersgooglescopes)|`string[]`||yes|
-|**redirectUrl**|`string`|RedirectURL is the URL that the Google oauth2 client will redirect to after authentication with Google<br/>|yes|
+|**redirectUrl**|`string`||yes|
 
 **Additional Properties:** not allowed  
 <a name="authprovidersgooglescopes"></a>
@@ -351,21 +342,18 @@ ProviderConfig represents the configuration settings for a Google Oauth Provider
 <a name="authproviderswebauthn"></a>
 #### auth\.providers\.webauthn: object
 
-ProviderConfig represents the configuration settings for a Webauthn Provider
-
-
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**enabled**|`boolean`|Enabled is the provider enabled<br/>|no|
-|**displayName**|`string`|DisplayName is the site display name<br/>|yes|
-|**relyingPartyId**|`string`|RelyingPartyID is the relying party identifier<br/>set to localhost for development, no port<br/>|yes|
+|**enabled**|`boolean`||no|
+|**displayName**|`string`||yes|
+|**relyingPartyId**|`string`||yes|
 |[**requestOrigins**](#authproviderswebauthnrequestorigins)|`string[]`||yes|
-|**maxDevices**|`integer`|MaxDevices is the maximum number of devices that can be associated with a user<br/>|no|
-|**enforceTimeout**|`boolean`|EnforceTimeout at the Relying Party / Server. This means if enabled and the user takes too long that even if the browser does not<br/>enforce a timeout, the server will<br/>|no|
-|**timeout**|`integer`|Timeout is the timeout in seconds<br/>|no|
-|**debug**|`boolean`|Debug enables debug mode<br/>|no|
+|**maxDevices**|`integer`||no|
+|**enforceTimeout**|`boolean`||no|
+|**timeout**|`integer`||no|
+|**debug**|`boolean`||no|
 
 **Additional Properties:** not allowed  
 <a name="authproviderswebauthnrequestorigins"></a>
@@ -562,16 +550,13 @@ OTLP settings for the otlp provider
 <a name="sessions"></a>
 ## sessions: object
 
-Config contains the configuration for the session store
-
-
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**signingKey**|`string`|SigningKey must be a 16, 32, or 64 character string used to encode the cookie<br/>||
-|**encryptionKey**|`string`|EncryptionKey must be a 16, 32, or 64 character string used to encode the cookie<br/>||
-|**domain**|`string`|Domain is the domain for the cookie, leave empty to use the default value of the server<br/>||
+|**signingKey**|`string`|||
+|**encryptionKey**|`string`|||
+|**domain**|`string`|||
 
 **Additional Properties:** not allowed  
 <a name="posthog"></a>

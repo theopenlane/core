@@ -9,9 +9,10 @@ import (
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/rout"
 
+	"github.com/theopenlane/iam/auth"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
-	"github.com/theopenlane/core/pkg/auth"
 )
 
 // HistoryAccess is a traversal interceptor that checks if the user has the required role for the organization

@@ -10,9 +10,10 @@ import (
 	"github.com/99designs/keyring"
 	"golang.org/x/oauth2"
 
+	"github.com/theopenlane/iam/tokens"
+
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/openlaneclient"
-	"github.com/theopenlane/core/pkg/tokens"
 )
 
 const (

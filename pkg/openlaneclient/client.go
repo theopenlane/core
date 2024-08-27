@@ -9,10 +9,11 @@ import (
 
 	"golang.org/x/oauth2"
 
-	"github.com/theopenlane/core/pkg/auth"
-	api "github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/core/pkg/sessions"
 	"github.com/theopenlane/httpsling"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/sessions"
+
+	api "github.com/theopenlane/core/pkg/models"
 )
 
 const (

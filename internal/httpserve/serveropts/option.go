@@ -17,10 +17,15 @@ import (
 	"github.com/theopenlane/iam/fgax"
 	"go.uber.org/zap"
 
+	"github.com/theopenlane/iam/totp"
 	"github.com/theopenlane/utils/emails"
 	"github.com/theopenlane/utils/marionette"
-	"github.com/theopenlane/utils/totp"
 	"github.com/theopenlane/utils/ulids"
+
+	"github.com/theopenlane/httpsling"
+	"github.com/theopenlane/iam/providers/webauthn"
+	"github.com/theopenlane/iam/sessions"
+	"github.com/theopenlane/iam/tokens"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi"
@@ -37,10 +42,6 @@ import (
 	"github.com/theopenlane/core/pkg/middleware/ratelimit"
 	"github.com/theopenlane/core/pkg/middleware/redirect"
 	"github.com/theopenlane/core/pkg/middleware/secure"
-	"github.com/theopenlane/core/pkg/providers/webauthn"
-	"github.com/theopenlane/core/pkg/sessions"
-	"github.com/theopenlane/core/pkg/tokens"
-	"github.com/theopenlane/httpsling"
 )
 
 type ServerOption interface {

@@ -9,9 +9,10 @@ import (
 
 	sliceutil "github.com/theopenlane/utils/slice"
 
+	"github.com/theopenlane/iam/auth"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/core/pkg/auth"
 )
 
 // HookCreateAPIToken runs on api token mutations and sets the owner id

@@ -7,12 +7,13 @@ import (
 	"entgo.io/ent"
 	"github.com/99designs/gqlgen/graphql"
 
-	"github.com/theopenlane/utils/totp"
+	"github.com/theopenlane/iam/totp"
+
+	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
-	"github.com/theopenlane/core/pkg/auth"
 )
 
 func HookEnableTFA() ent.Hook {

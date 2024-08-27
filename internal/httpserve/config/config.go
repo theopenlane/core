@@ -10,9 +10,10 @@ import (
 	"golang.org/x/crypto/acme"
 	"golang.org/x/crypto/acme/autocert"
 
+	"github.com/theopenlane/iam/sessions"
+
 	"github.com/theopenlane/core/config"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
-	"github.com/theopenlane/core/pkg/sessions"
 )
 
 var (

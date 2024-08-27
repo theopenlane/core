@@ -6,9 +6,10 @@ import (
 	"entgo.io/ent"
 	"github.com/theopenlane/iam/fgax"
 
+	"github.com/theopenlane/iam/auth"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/pkg/auth"
 )
 
 // HasOrgMutationAccess is a rule that returns allow decision if user has edit or delete access

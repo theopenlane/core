@@ -3,7 +3,7 @@ package handlers
 import (
 	echo "github.com/theopenlane/echox"
 
-	"github.com/theopenlane/core/pkg/auth"
+	"github.com/theopenlane/iam/auth"
 )
 
 // UserInfo returns the user information for the authenticated user

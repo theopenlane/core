@@ -6,8 +6,9 @@ import (
 	"entgo.io/ent/entql"
 	"github.com/theopenlane/entx"
 
+	"github.com/theopenlane/iam/auth"
+
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/pkg/auth"
 )
 
 // AllowIfSelf determines whether a query or mutation operation should be allowed based on whether the requested data is for the viewer

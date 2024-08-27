@@ -10,13 +10,14 @@ import (
 
 	"github.com/theopenlane/utils/rout"
 
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/tokens"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/pkg/auth"
 	api "github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/core/pkg/tokens"
 )
 
 // SessionSkipperFunc is the function that determines if the session check should be skipped

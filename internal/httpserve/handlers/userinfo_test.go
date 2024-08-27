@@ -11,9 +11,10 @@ import (
 	"github.com/stretchr/testify/require"
 	mock_fga "github.com/theopenlane/iam/fgax/mockery"
 
+	"github.com/theopenlane/iam/auth"
+
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/pkg/auth"
 	"github.com/theopenlane/core/pkg/middleware/echocontext"
 )
 

@@ -10,7 +10,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	_ "github.com/theopenlane/core/internal/ent/generated/runtime"
-	"github.com/theopenlane/core/pkg/auth"
+	"github.com/theopenlane/iam/auth"
 )
 
 // CreateUser is the resolver for the createUser field.
