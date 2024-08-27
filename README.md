@@ -7,11 +7,7 @@
 
 </div>
 
-This repository houses the core server and orchestration elements which are at the heart of the [Core](https://theopenlane.io) cloud service. We have no plans to ever gate / silo elements of the code that may fall under our "enterprise licensing" (or any other commercial license we offer) and intend to keep the code Apache 2.0 licensed and free for use, forever. Given that, if you find value in anything we're doing here, our cloud services, or use this software yourself (for any purpose) - don't be afraid to become a contributor! If you have any questions please reach out to `contribute@theopenlane.io`.
-
-## What is The OpenLane?
-
-Coming Soon
+This repository houses the core server and orchestration elements which are at the heart of the [OpenLane](https://theopenlane.io) cloud service. We have no plans to ever gate / silo elements of the code that may fall under our "enterprise licensing" (or any other commercial license we offer) and intend to keep the code Apache 2.0 licensed and free for use, forever. Given that, if you find value in anything we're doing here, our cloud services, or use this software yourself (for any purpose) - don't be afraid to become a contributor! If you have any questions please reach out to `contribute@theopenlane.io`.
 
 ## Features
 
@@ -88,7 +84,7 @@ Please read the [contributing](.github/CONTRIBUTING.md) guide as well as the [De
 
 ## Licensing
 
-This repository contains `core` which is open source software under [Apache 2.0](LICENSE). Core is a product produced from this open source software exclusively by The Open Lane, Inc. This product is produced under our published commercial terms (which are subject to change), and any logos or trademarks in this repository or the broader [theopenlane](https://github.com/theopenlane) organization are not covered under the Apache License.
+This repository contains `core` which is open source software under [Apache 2.0](LICENSE). The OpenLane is a product produced from this open source software exclusively by The Open Lane, Inc. This product is produced under our published commercial terms (which are subject to change), and any logos or trademarks in this repository or the broader [theopenlane](https://github.com/theopenlane) organization are not covered under the Apache License.
 
 Others are allowed to make their own distribution of this software or include this software in other commercial offerings, but cannot use any of the The OpenLane logos, trademarks, cloud services, etc.
 
