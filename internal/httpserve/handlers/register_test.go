@@ -17,6 +17,9 @@ import (
 	"github.com/theopenlane/utils/emails/mock"
 	"github.com/theopenlane/utils/rout"
 
+	"github.com/theopenlane/httpsling"
+	"github.com/theopenlane/iam/auth"
+
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	_ "github.com/theopenlane/core/internal/ent/generated/runtime"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
@@ -24,8 +27,6 @@ import (
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/openlaneclient"
-	"github.com/theopenlane/httpsling"
-	"github.com/theopenlane/iam/auth"
 )
 
 func (suite *HandlerTestSuite) TestRegisterHandler() {

@@ -7,10 +7,11 @@ import (
 	"github.com/lestrrat-go/jwx/v2/jwk"
 	"github.com/theopenlane/echox/middleware"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	api "github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/iam/tokens"
+
+	ent "github.com/theopenlane/core/internal/ent/generated"
+	api "github.com/theopenlane/core/pkg/models"
 )
 
 // AuthOption allows users to optionally supply configuration to the Authorization middleware.

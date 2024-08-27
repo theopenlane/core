@@ -5,9 +5,10 @@ import (
 
 	"entgo.io/ent"
 
+	"github.com/theopenlane/iam/auth"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/iam/auth"
 )
 
 const (

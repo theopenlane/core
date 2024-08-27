@@ -11,10 +11,11 @@ import (
 	"github.com/theopenlane/utils/marionette"
 	"github.com/theopenlane/utils/rout"
 
+	"github.com/theopenlane/iam/auth"
+
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/iam/auth"
 )
 
 // ForgotPassword will send an forgot password email if the provided email exists

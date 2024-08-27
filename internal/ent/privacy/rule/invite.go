@@ -6,9 +6,10 @@ import (
 
 	"github.com/theopenlane/iam/fgax"
 
+	"github.com/theopenlane/iam/auth"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/iam/auth"
 )
 
 const (

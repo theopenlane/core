@@ -11,15 +11,16 @@ import (
 
 	"github.com/samber/lo"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/privacy/token"
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/iam/providers/github"
 	"github.com/theopenlane/iam/providers/google"
 	oauth "github.com/theopenlane/iam/providers/oauth2"
 	"github.com/theopenlane/iam/providers/webauthn"
 	"github.com/theopenlane/iam/sessions"
+
+	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/privacy/token"
+	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // OauthProviderConfig represents the configuration for OAuth providers such as Github and Google

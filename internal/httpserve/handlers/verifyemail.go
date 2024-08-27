@@ -12,11 +12,12 @@ import (
 
 	"github.com/theopenlane/utils/rout"
 
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/tokens"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/iam/tokens"
 )
 
 // VerifyEmail is the handler for the email verification endpoint

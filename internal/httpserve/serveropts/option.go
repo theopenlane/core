@@ -22,6 +22,11 @@ import (
 	"github.com/theopenlane/utils/marionette"
 	"github.com/theopenlane/utils/ulids"
 
+	"github.com/theopenlane/httpsling"
+	"github.com/theopenlane/iam/providers/webauthn"
+	"github.com/theopenlane/iam/sessions"
+	"github.com/theopenlane/iam/tokens"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi"
 	"github.com/theopenlane/core/internal/httpserve/config"
@@ -37,10 +42,6 @@ import (
 	"github.com/theopenlane/core/pkg/middleware/ratelimit"
 	"github.com/theopenlane/core/pkg/middleware/redirect"
 	"github.com/theopenlane/core/pkg/middleware/secure"
-	"github.com/theopenlane/httpsling"
-	"github.com/theopenlane/iam/providers/webauthn"
-	"github.com/theopenlane/iam/sessions"
-	"github.com/theopenlane/iam/tokens"
 )
 
 type ServerOption interface {

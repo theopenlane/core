@@ -11,12 +11,13 @@ import (
 	"github.com/theopenlane/utils/emails"
 	"github.com/theopenlane/utils/marionette"
 
+	"github.com/theopenlane/iam/sessions"
+	"github.com/theopenlane/iam/tokens"
+
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/pkg/analytics"
 	"github.com/theopenlane/core/pkg/events/kafka/publisher"
-	"github.com/theopenlane/iam/sessions"
-	"github.com/theopenlane/iam/tokens"
 )
 
 // Handler contains configuration options for handlers

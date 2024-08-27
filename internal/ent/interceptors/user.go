@@ -10,13 +10,14 @@ import (
 
 	"github.com/theopenlane/iam/fgax"
 
+	"github.com/theopenlane/iam/auth"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/user"
-	"github.com/theopenlane/iam/auth"
 )
 
 // TraverseUser returns an ent interceptor for user that filters users based on the context of the query

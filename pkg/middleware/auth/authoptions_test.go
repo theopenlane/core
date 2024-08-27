@@ -8,8 +8,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/theopenlane/core/pkg/middleware/auth"
 	"github.com/theopenlane/iam/tokens"
+
+	"github.com/theopenlane/core/pkg/middleware/auth"
 )
 
 func TestDefaultAuthOptions(t *testing.T) {

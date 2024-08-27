@@ -12,10 +12,11 @@ import (
 	"entgo.io/ent/schema/mixin"
 	"github.com/theopenlane/entx"
 
+	"github.com/theopenlane/iam/auth"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
-	"github.com/theopenlane/iam/auth"
 )
 
 // SoftDeleteMixin implements the soft delete pattern for schemas.

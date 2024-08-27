@@ -9,11 +9,12 @@ import (
 
 	"github.com/theopenlane/utils/rout"
 
+	"github.com/theopenlane/iam/auth"
+
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/iam/auth"
 )
 
 // ResendEmail will resend an email verification email if the provided email exists

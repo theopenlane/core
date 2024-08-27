@@ -9,9 +9,10 @@ import (
 	"github.com/theopenlane/utils/marionette"
 	"github.com/theopenlane/utils/sendgrid"
 
+	"github.com/theopenlane/iam/tokens"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/iam/tokens"
 )
 
 // HookSubscriber runs on subscriber create mutations

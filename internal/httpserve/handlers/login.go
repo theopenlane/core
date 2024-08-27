@@ -9,10 +9,11 @@ import (
 
 	"github.com/theopenlane/utils/rout"
 
+	"github.com/theopenlane/iam/auth"
+
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/passwd"
-	"github.com/theopenlane/iam/auth"
 )
 
 // LoginHandler validates the user credentials and returns a valid cookie

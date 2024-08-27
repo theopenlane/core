@@ -10,11 +10,12 @@ import (
 
 	"github.com/theopenlane/utils/rout"
 
+	"github.com/theopenlane/iam/providers/github"
+	"github.com/theopenlane/iam/providers/google"
+
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/iam/providers/github"
-	"github.com/theopenlane/iam/providers/google"
 )
 
 // OauthRegister returns the TokenResponse for a verified authenticated external oauth user

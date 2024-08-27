@@ -6,9 +6,10 @@ import (
 	"entgo.io/ent"
 	"github.com/theopenlane/iam/fgax"
 
+	"github.com/theopenlane/iam/auth"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
-	"github.com/theopenlane/iam/auth"
 )
 
 // InterceptorGroup is middleware to change the Group query

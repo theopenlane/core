@@ -3,12 +3,13 @@ package hooks
 import (
 	"context"
 
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/httpserve/authmanager"
-	"github.com/theopenlane/core/pkg/middleware/echocontext"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/iam/tokens"
+
+	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/httpserve/authmanager"
+	"github.com/theopenlane/core/pkg/middleware/echocontext"
 )
 
 // newAuthSession creates a new auth session struct

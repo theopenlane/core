@@ -9,8 +9,9 @@ import (
 
 	"github.com/theopenlane/utils/rout"
 
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/iam/auth"
+
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // AccountAccessHandler checks if a subject has access to an object

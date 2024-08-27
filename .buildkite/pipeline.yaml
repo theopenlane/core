@@ -49,7 +49,7 @@ steps:
           TEST_DB_URL: "libsql://file::memory:?cache=shared"
         plugins:
           - docker#v5.11.0:
-              image: golang:1.22.6
+              image: golang:1.23.0
               command: ["go", "test", "-coverprofile=coverage.out", "./..."]
               environment:
                 - "TEST_DB_URL"
@@ -68,7 +68,7 @@ steps:
           - "sqlite://file:ent?mode=memory&cache=shared"
         plugins:
           - docker#v5.11.0:
-              image: golang:1.22.6
+              image: golang:1.23.0
               command: ["go", "test", "-coverprofile=coverage.out", "./..."]
               environment:
                 - "TEST_DB_URL"
@@ -135,7 +135,7 @@ steps:
         artifact_paths: "bin/${APP_NAME}"
         plugins:
           - docker#v5.11.0:
-              image: "golang:1.22.6"
+              image: "golang:1.23.0"
               environment:
                 - CGO_ENABLED=0
                 - GOOS=linux
@@ -145,7 +145,7 @@ steps:
         artifact_paths: "bin/${APP_NAME}-cli"
         plugins:
           - docker#v5.11.0:
-              image: "golang:1.22.6"
+              image: "golang:1.23.0"
               environment:
                 - GOOS=darwin
                 - GOARCH=arm64

@@ -19,6 +19,9 @@ import (
 	"github.com/theopenlane/utils/emails"
 	"github.com/theopenlane/utils/marionette"
 
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/sessions"
+
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/entdb"
@@ -29,8 +32,6 @@ import (
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/core/pkg/testutils"
-	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/iam/sessions"
 )
 
 var (

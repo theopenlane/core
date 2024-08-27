@@ -11,10 +11,11 @@ import (
 
 	"github.com/theopenlane/utils/gravatar"
 
+	"github.com/theopenlane/iam/auth"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/iam/auth"
 )
 
 // HookGroup runs on group mutations to set default values that are not provided
