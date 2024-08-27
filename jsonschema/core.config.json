@@ -481,24 +481,19 @@
     "github.ProviderConfig": {
       "properties": {
         "clientId": {
-          "type": "string",
-          "description": "ClientID is the public identifier for the GitHub oauth2 client"
+          "type": "string"
         },
         "clientSecret": {
-          "type": "string",
-          "description": "ClientSecret is the secret for the GitHub oauth2 client"
+          "type": "string"
         },
         "clientEndpoint": {
-          "type": "string",
-          "description": "ClientEndpoint is the endpoint for the GitHub oauth2 client"
+          "type": "string"
         },
         "scopes": {
-          "$ref": "#/$defs/[]string",
-          "description": "Scopes are the scopes that the GitHub oauth2 client will request"
+          "$ref": "#/$defs/[]string"
         },
         "redirectUrl": {
-          "type": "string",
-          "description": "RedirectURL is the URL that the GitHub oauth2 client will redirect to after authentication with Github"
+          "type": "string"
         }
       },
       "additionalProperties": false,
@@ -508,30 +503,24 @@
         "clientSecret",
         "scopes",
         "redirectUrl"
-      ],
-      "description": "ProviderConfig represents the configuration settings for a Github Oauth Provider"
+      ]
     },
     "google.ProviderConfig": {
       "properties": {
         "clientId": {
-          "type": "string",
-          "description": "ClientID is the public identifier for the Google oauth2 client"
+          "type": "string"
         },
         "clientSecret": {
-          "type": "string",
-          "description": "ClientSecret is the secret for the Google oauth2 client"
+          "type": "string"
         },
         "clientEndpoint": {
-          "type": "string",
-          "description": "ClientEndpoint is the endpoint for the Google oauth2 client"
+          "type": "string"
         },
         "scopes": {
-          "$ref": "#/$defs/[]string",
-          "description": "Scopes are the scopes that the Google oauth2 client will request"
+          "$ref": "#/$defs/[]string"
         },
         "redirectUrl": {
-          "type": "string",
-          "description": "RedirectURL is the URL that the Google oauth2 client will redirect to after authentication with Google"
+          "type": "string"
         }
       },
       "additionalProperties": false,
@@ -541,8 +530,7 @@
         "clientSecret",
         "scopes",
         "redirectUrl"
-      ],
-      "description": "ProviderConfig represents the configuration settings for a Google Oauth Provider"
+      ]
     },
     "handlers.OauthProviderConfig": {
       "properties": {
@@ -801,63 +789,49 @@
     "sessions.Config": {
       "properties": {
         "signingKey": {
-          "type": "string",
-          "description": "SigningKey must be a 16, 32, or 64 character string used to encode the cookie"
+          "type": "string"
         },
         "encryptionKey": {
-          "type": "string",
-          "description": "EncryptionKey must be a 16, 32, or 64 character string used to encode the cookie"
+          "type": "string"
         },
         "domain": {
-          "type": "string",
-          "description": "Domain is the domain for the cookie, leave empty to use the default value of the server"
+          "type": "string"
         }
       },
       "additionalProperties": false,
-      "type": "object",
-      "description": "Config contains the configuration for the session store"
+      "type": "object"
     },
     "tokens.Config": {
       "properties": {
         "kid": {
-          "type": "string",
-          "description": "KID represents the Key ID used in the configuration."
+          "type": "string"
         },
         "audience": {
-          "type": "string",
-          "description": "Audience represents the target audience for the tokens."
+          "type": "string"
         },
         "refreshAudience": {
-          "type": "string",
-          "description": "RefreshAudience represents the audience for refreshing tokens."
+          "type": "string"
         },
         "issuer": {
-          "type": "string",
-          "description": "Issuer represents the issuer of the tokens"
+          "type": "string"
         },
         "accessDuration": {
-          "type": "integer",
-          "description": "AccessDuration represents the duration of the access token is valid for"
+          "type": "integer"
         },
         "refreshDuration": {
-          "type": "integer",
-          "description": "RefreshDuration represents the duration of the refresh token is valid for"
+          "type": "integer"
         },
         "refreshOverlap": {
-          "type": "integer",
-          "description": "RefreshOverlap represents the overlap time for a refresh and access token"
+          "type": "integer"
         },
         "jwksEndpoint": {
-          "type": "string",
-          "description": "JWKSEndpoint represents the endpoint for the JSON Web Key Set"
+          "type": "string"
         },
         "keys": {
-          "$ref": "#/$defs/map[string]string",
-          "description": "Keys represents the key pairs used for signing the tokens"
+          "$ref": "#/$defs/map[string]string"
         },
         "generateKeys": {
-          "type": "boolean",
-          "description": "GenerateKeys is a boolean to determine if the keys should be generated"
+          "type": "boolean"
         }
       },
       "additionalProperties": false,
@@ -867,8 +841,7 @@
         "audience",
         "issuer",
         "keys"
-      ],
-      "description": "Config defines the configuration settings for authentication tokens used in the server"
+      ]
     },
     "totp.Config": {
       "properties": {
@@ -900,36 +873,28 @@
     "webauthn.ProviderConfig": {
       "properties": {
         "enabled": {
-          "type": "boolean",
-          "description": "Enabled is the provider enabled"
+          "type": "boolean"
         },
         "displayName": {
-          "type": "string",
-          "description": "DisplayName is the site display name"
+          "type": "string"
         },
         "relyingPartyId": {
-          "type": "string",
-          "description": "RelyingPartyID is the relying party identifier\nset to localhost for development, no port"
+          "type": "string"
         },
         "requestOrigins": {
-          "$ref": "#/$defs/[]string",
-          "description": "RequestOrigins the origin domain(s) for authentication requests\ninclude the scheme and port"
+          "$ref": "#/$defs/[]string"
         },
         "maxDevices": {
-          "type": "integer",
-          "description": "MaxDevices is the maximum number of devices that can be associated with a user"
+          "type": "integer"
         },
         "enforceTimeout": {
-          "type": "boolean",
-          "description": "EnforceTimeout at the Relying Party / Server. This means if enabled and the user takes too long that even if the browser does not\nenforce a timeout, the server will"
+          "type": "boolean"
         },
         "timeout": {
-          "type": "integer",
-          "description": "Timeout is the timeout in seconds"
+          "type": "integer"
         },
         "debug": {
-          "type": "boolean",
-          "description": "Debug enables debug mode"
+          "type": "boolean"
         }
       },
       "additionalProperties": false,
@@ -938,8 +903,7 @@
         "displayName",
         "relyingPartyId",
         "requestOrigins"
-      ],
-      "description": "ProviderConfig represents the configuration settings for a Webauthn Provider"
+      ]
     }
   },
   "properties": {
