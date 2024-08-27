@@ -1,0 +1,61 @@
+# Add 'bug' label to any PR where the head branch name starts with `bug` or has a `bug` section in the name
+bug:
+  - head-branch: ["^bug", "bug"]
+# Add 'enhancement' label to any PR where the head branch name starts with `enhancement` or has a `enhancement` section in the name
+enhancement:
+  - head-branch: ["^enhancement", "enhancement", "^feature", "feature", "^enhance", "enhance", "^feat", "feat"]
+# Add 'breaking-change' label to any PR where the head branch name starts with `breaking-change` or has a `breaking-change` section in the name
+breaking-change:
+  - head-branch: ["^breaking-change", "breaking-change"]
+ci:
+  - changed-files:
+      - any-glob-to-any-file: .github/**
+      - any-glob-to-any-file: .buildkite/**
+mixin:
+  - changed-files:
+      - any-glob-to-any-file: internal/ent/mixin/*
+privacy:
+  - changed-files:
+      - any-glob-to-any-file: internal/ent/privacy/*
+dbschema:
+  - changed-files:
+      - any-glob-to-any-file: internal/ent/schema/*
+graphqlschema:
+  - changed-files:
+      - any-glob-to-any-file: schema/**
+migrations:
+  - changed-files:
+      - any-glob-to-any-file: db/**
+local-development:
+  - changed-files:
+      - any-glob-to-any-file: scripts/**
+      - any-glob-to-any-file: Taskfile.yaml
+      - any-glob-to-any-file: docker/**
+cli:
+  - changed-files:
+      - any-glob-to-any-file: cmd/cli/**
+authorization:
+  - changed-files:
+      - any-glob-to-any-file: fga/**
+httpserve:
+  - changed-files:
+      - any-glob-to-any-file: internal/httpserve/**
+graphapi:
+  - changed-files:
+      - any-glob-to-any-file: internal/graphapi/**
+codegenerators:
+  - changed-files:
+      - any-glob-to-any-file: gen_schema.go
+      - any-glob-to-any-file: generate.go
+      - any-glob-to-any-file: gqlgen.yml
+      - any-glob-to-any-file: gqlgenc.yml
+      - any-glob-to-any-file: internal/ent/entc.go
+      - any-glob-to-any-file: internal/ent/templates/**
+coreclient:
+  - changed-files:
+      - any-glob-to-any-file: internal/coreclient/**
+      - any-glob-to-any-file: query/**
+config:
+  - changed-files:
+      - any-glob-to-any-file: config/**
+      - any-glob-to-any-file: jsonschema/**
