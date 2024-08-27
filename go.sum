@@ -539,10 +539,14 @@ github.com/theopenlane/echox v0.1.0 h1:y4Z2shaODCLwXHsHBrY/EkH/2sIuo49xdIfxx7h+Z
 github.com/theopenlane/echox v0.1.0/go.mod h1:RaynhPvY9qbLOVlcO7Js1NqZ66+CP9hVBa0c7ehNYA4=
 github.com/theopenlane/echozap v0.1.0 h1:qoD1tEGQoTMPrzleOymk6auLHJcQmzPLprCEvoXNKDE=
 github.com/theopenlane/echozap v0.1.0/go.mod h1:E3Fkzb6QvEsx9KxxpUv9dpxUvKjxAEUZSEtkYeCXLok=
+github.com/theopenlane/entx v0.1.4 h1:dxP/+LUdMXBhbMoFq3ITkJv6vINxii1306BSrxHckn4=
+github.com/theopenlane/entx v0.1.4/go.mod h1:MxnlrB6Eid2BDwB5kKz7p9QP/Bm0/kpbr8z76CQvjw4=
 github.com/theopenlane/gqlgen-plugins v0.1.0 h1:DL3knGQ+pcoXceSFvmgWzzlgIyPRgl71tYPTySP+vHk=
 github.com/theopenlane/gqlgen-plugins v0.1.0/go.mod h1:sP0nCjrE3KoVT4qfYqMrSK1XZa3Bx2oTIRSdEF7F5l0=
 github.com/theopenlane/httpsling v0.1.0 h1:IHWUSo213stJTmHOHjNIg5b3npgpchzMdPMY7jAkimI=
 github.com/theopenlane/httpsling v0.1.0/go.mod h1:wOyNfO4moIbmP4stQc9Kasgp+Q4sODo3LOLwvjUe/PA=
+github.com/theopenlane/iam v0.1.3 h1:JadqAppJHSFdo84KmG4kYyDt3FP4aaq5FnzqE6B8yX0=
+github.com/theopenlane/iam v0.1.3/go.mod h1:KZd/k1nEHSzS9wQeQHLqRabJuH3XkF5g8aGqzRhjSmQ=
 github.com/theopenlane/utils v0.1.2 h1:kFbzvGgz/7b2CNZ/ycAzMBTmCqBJUld/UJxsfXCOgbw=
 github.com/theopenlane/utils v0.1.2/go.mod h1:37sJeeuIsmMbMFE2nKglmEQUJenTccxh5WxkJtyuZUw=
 github.com/tursodatabase/libsql-client-go v0.0.0-20240812094001-348a4e45b535 h1:iLjJLq2A5J6L9zrhyNn+fpmxFvtEpYB4XLMr0rX3epI=
