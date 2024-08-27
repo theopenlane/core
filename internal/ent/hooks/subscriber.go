@@ -11,7 +11,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/core/pkg/tokens"
+	"github.com/theopenlane/iam/tokens"
 )
 
 // HookSubscriber runs on subscriber create mutations

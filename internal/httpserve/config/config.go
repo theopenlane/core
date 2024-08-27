@@ -12,7 +12,7 @@ import (
 
 	"github.com/theopenlane/core/config"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
-	"github.com/theopenlane/core/pkg/sessions"
+	"github.com/theopenlane/iam/sessions"
 )
 
 var (

@@ -20,7 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
-	"github.com/theopenlane/core/pkg/auth"
+	"github.com/theopenlane/iam/auth"
 )
 
 type UserOwnedMixin struct {

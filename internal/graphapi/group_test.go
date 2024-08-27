@@ -11,9 +11,9 @@ import (
 	mock_fga "github.com/theopenlane/iam/fgax/mockery"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/pkg/auth"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
+	"github.com/theopenlane/iam/auth"
 )
 
 func (suite *GraphTestSuite) TestQueryGroup() {

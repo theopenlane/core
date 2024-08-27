@@ -11,8 +11,8 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/pkg/auth"
 	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/iam/auth"
 )
 
 // SwitchHandler is responsible for handling requests to the `/switch` endpoint, and changing the user's logged in organization context

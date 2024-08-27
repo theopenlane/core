@@ -8,7 +8,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/pkg/auth"
+	"github.com/theopenlane/iam/auth"
 )
 
 // CanCreateGroupsInOrg is a rule that returns allow decision if user has edit access in the organization

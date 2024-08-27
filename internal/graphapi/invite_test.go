@@ -10,9 +10,9 @@ import (
 	"github.com/theopenlane/iam/fgax"
 	mock_fga "github.com/theopenlane/iam/fgax/mockery"
 
-	"github.com/theopenlane/core/pkg/auth"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
+	"github.com/theopenlane/iam/auth"
 )
 
 func (suite *GraphTestSuite) TestQueryInvite() {

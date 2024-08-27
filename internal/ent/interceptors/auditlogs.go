@@ -11,7 +11,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
-	"github.com/theopenlane/core/pkg/auth"
+	"github.com/theopenlane/iam/auth"
 )
 
 // HistoryAccess is a traversal interceptor that checks if the user has the required role for the organization

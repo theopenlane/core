@@ -8,7 +8,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
-	"github.com/theopenlane/core/pkg/auth"
+	"github.com/theopenlane/iam/auth"
 )
 
 // InterceptorGroup is middleware to change the Group query

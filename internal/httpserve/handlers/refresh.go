@@ -9,8 +9,8 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/pkg/auth"
 	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/iam/auth"
 )
 
 // RefreshHandler allows users to refresh their access token using their refresh token

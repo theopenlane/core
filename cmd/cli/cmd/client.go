@@ -12,7 +12,7 @@ import (
 
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/openlaneclient"
-	"github.com/theopenlane/core/pkg/tokens"
+	"github.com/theopenlane/iam/tokens"
 )
 
 const (

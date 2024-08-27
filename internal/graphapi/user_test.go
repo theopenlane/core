@@ -13,8 +13,8 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/graphapi"
-	auth "github.com/theopenlane/core/pkg/auth"
 	"github.com/theopenlane/core/pkg/openlaneclient"
+	auth "github.com/theopenlane/iam/auth"
 )
 
 func (suite *GraphTestSuite) TestQueryUser() {

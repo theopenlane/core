@@ -21,8 +21,8 @@ import (
 	"github.com/theopenlane/core/pkg/middleware/echocontext"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/testutils"
-	"github.com/theopenlane/core/pkg/tokens"
 	"github.com/theopenlane/httpsling"
+	"github.com/theopenlane/iam/tokens"
 )
 
 func (suite *HandlerTestSuite) TestRefreshHandler() {

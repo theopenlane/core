@@ -15,11 +15,11 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/core/pkg/providers/github"
-	"github.com/theopenlane/core/pkg/providers/google"
-	oauth "github.com/theopenlane/core/pkg/providers/oauth2"
-	"github.com/theopenlane/core/pkg/providers/webauthn"
-	"github.com/theopenlane/core/pkg/sessions"
+	"github.com/theopenlane/iam/providers/github"
+	"github.com/theopenlane/iam/providers/google"
+	oauth "github.com/theopenlane/iam/providers/oauth2"
+	"github.com/theopenlane/iam/providers/webauthn"
+	"github.com/theopenlane/iam/sessions"
 )
 
 // OauthProviderConfig represents the configuration for OAuth providers such as Github and Google

@@ -8,7 +8,7 @@ import (
 	"github.com/theopenlane/utils/ulids"
 
 	authtest "github.com/theopenlane/core/pkg/middleware/authtest"
-	"github.com/theopenlane/core/pkg/tokens"
+	"github.com/theopenlane/iam/tokens"
 )
 
 // This test generates an example token with fake RSA keys for use in examples,

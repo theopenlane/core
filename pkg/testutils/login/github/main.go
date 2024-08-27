@@ -10,8 +10,8 @@ import (
 	"golang.org/x/oauth2"
 	githubOAuth2 "golang.org/x/oauth2/github"
 
-	"github.com/theopenlane/core/pkg/providers/github"
-	"github.com/theopenlane/core/pkg/sessions"
+	"github.com/theopenlane/iam/providers/github"
+	"github.com/theopenlane/iam/sessions"
 )
 
 const (

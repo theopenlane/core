@@ -9,6 +9,7 @@ import (
 	dbx "github.com/theopenlane/dbx/pkg/dbxclient"
 	dbxenums "github.com/theopenlane/dbx/pkg/enums"
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/utils/gravatar"
@@ -18,7 +19,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
-	"github.com/theopenlane/core/pkg/auth"
 	"github.com/theopenlane/core/pkg/enums"
 )
 

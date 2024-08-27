@@ -20,14 +20,14 @@ import (
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/genhooks"
 	"github.com/theopenlane/entx/history"
+	"github.com/theopenlane/iam/totp"
 	"github.com/theopenlane/utils/emails"
 	"github.com/theopenlane/utils/marionette"
-	"github.com/theopenlane/utils/totp"
 
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	"github.com/theopenlane/core/pkg/analytics"
-	"github.com/theopenlane/core/pkg/sessions"
-	"github.com/theopenlane/core/pkg/tokens"
+	"github.com/theopenlane/iam/sessions"
+	"github.com/theopenlane/iam/tokens"
 )
 
 const (

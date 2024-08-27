@@ -6,10 +6,10 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/handler"
-	"github.com/theopenlane/core/pkg/auth"
 	"github.com/theopenlane/core/pkg/middleware/echocontext"
-	"github.com/theopenlane/core/pkg/sessions"
 	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/sessions"
 )
 
 const (

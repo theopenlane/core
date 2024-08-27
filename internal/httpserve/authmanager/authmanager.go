@@ -10,9 +10,9 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/core/pkg/sessions"
-	"github.com/theopenlane/core/pkg/tokens"
 	"github.com/theopenlane/httpsling"
+	"github.com/theopenlane/iam/sessions"
+	"github.com/theopenlane/iam/tokens"
 )
 
 type Config struct {

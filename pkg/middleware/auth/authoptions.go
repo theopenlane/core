@@ -9,8 +9,8 @@ import (
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	api "github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/core/pkg/sessions"
-	"github.com/theopenlane/core/pkg/tokens"
+	"github.com/theopenlane/iam/sessions"
+	"github.com/theopenlane/iam/tokens"
 )
 
 // AuthOption allows users to optionally supply configuration to the Authorization middleware.

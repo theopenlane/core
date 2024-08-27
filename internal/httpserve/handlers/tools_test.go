@@ -25,12 +25,12 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/pkg/analytics"
-	"github.com/theopenlane/core/pkg/auth"
 	"github.com/theopenlane/core/pkg/middleware/echocontext"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 	"github.com/theopenlane/core/pkg/openlaneclient"
-	"github.com/theopenlane/core/pkg/sessions"
 	"github.com/theopenlane/core/pkg/testutils"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/sessions"
 )
 
 var (

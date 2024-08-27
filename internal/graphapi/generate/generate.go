@@ -8,9 +8,8 @@ import (
 
 	"github.com/99designs/gqlgen/api"
 	"github.com/99designs/gqlgen/codegen/config"
-	"github.com/theopenlane/core/pkg/gqlplugin/bulkgen"
-
-	"github.com/theopenlane/core/pkg/gqlplugin/resolvergen"
+	"github.com/theopenlane/gqlgen-plugins/bulkgen"
+	"github.com/theopenlane/gqlgen-plugins/resolvergen"
 )
 
 func main() {

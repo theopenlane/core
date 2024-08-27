@@ -13,8 +13,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/core/pkg/providers/github"
-	"github.com/theopenlane/core/pkg/providers/google"
+	"github.com/theopenlane/iam/providers/github"
+	"github.com/theopenlane/iam/providers/google"
 )
 
 // OauthRegister returns the TokenResponse for a verified authenticated external oauth user

@@ -6,7 +6,7 @@ import (
 
 	"github.com/oklog/ulid/v2"
 
-	"github.com/theopenlane/core/pkg/tokens"
+	"github.com/theopenlane/iam/tokens"
 )
 
 // User holds data specific to the user for the REST handlers for

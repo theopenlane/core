@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/theopenlane/core/pkg/providers/google"
-	"github.com/theopenlane/core/pkg/sessions"
+	"github.com/theopenlane/iam/providers/google"
+	"github.com/theopenlane/iam/sessions"
 
 	"golang.org/x/oauth2"
 	googleOAuth2 "golang.org/x/oauth2/google"

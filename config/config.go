@@ -14,8 +14,8 @@ import (
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/fgax"
 
+	"github.com/theopenlane/iam/totp"
 	"github.com/theopenlane/utils/emails"
-	"github.com/theopenlane/utils/totp"
 
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
@@ -29,8 +29,8 @@ import (
 	"github.com/theopenlane/core/pkg/middleware/redirect"
 	"github.com/theopenlane/core/pkg/middleware/secure"
 	"github.com/theopenlane/core/pkg/otelx"
-	"github.com/theopenlane/core/pkg/sessions"
-	"github.com/theopenlane/core/pkg/tokens"
+	"github.com/theopenlane/iam/sessions"
+	"github.com/theopenlane/iam/tokens"
 )
 
 var (
