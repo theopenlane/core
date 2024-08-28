@@ -1,4 +1,4 @@
-FROM golang:1.22.6 as builder
+FROM golang:1.23.0 as builder
 
 WORKDIR /go/src/app
 COPY . .
@@ -14,8 +14,8 @@ WORKDIR /home/nonroot
 # Copy the binary that goreleaser built
 COPY --from=builder /go/bin/core /bin/core
 
-# Copy the geodetic binary
-COPY --from=ghcr.io/theopenlane/geodetic:620-516e3250  /bin/geodetic /bin/geodetic
+# Copy the dbx binary
+COPY --from=ghcr.io/theopenlane/dbx:5-35840501  /bin/dbx /bin/dbx
 
 # Copy redis binary
 COPY --from=redis:7.4.0 /usr/local/bin/redis-server /bin/redis-server
@@ -43,7 +43,7 @@ EXPOSE 8080
 EXPOSE 8081
 EXPOSE 2112
 
-#Expose geodetic ports
+#Expose dbx ports
 EXPOSE 1337
 
 # Expose redis ports
