@@ -207,7 +207,7 @@ func (suite *GraphTestSuite) TestMutationCreateAPIToken() {
 			assert.NotEqual(t, redacted, resp.CreateAPIToken.APIToken.Token)
 
 			// ensure the token is prefixed
-			assert.Contains(t, resp.CreateAPIToken.APIToken.Token, "dtma_")
+			assert.Contains(t, resp.CreateAPIToken.APIToken.Token, "tola_")
 		})
 	}
 }
