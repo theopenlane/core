@@ -6,6 +6,32 @@ import (
 	"context"
 
 	"entgo.io/ent/privacy"
+	"github.com/theopenlane/core/internal/ent/generated/contact"
+	"github.com/theopenlane/core/internal/ent/generated/documentdata"
+	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
+	"github.com/theopenlane/core/internal/ent/generated/entitlement"
+	"github.com/theopenlane/core/internal/ent/generated/entitlementplan"
+	"github.com/theopenlane/core/internal/ent/generated/entitlementplanfeature"
+	"github.com/theopenlane/core/internal/ent/generated/entity"
+	"github.com/theopenlane/core/internal/ent/generated/entitytype"
+	"github.com/theopenlane/core/internal/ent/generated/group"
+	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
+	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
+	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/internal/ent/generated/invite"
+	"github.com/theopenlane/core/internal/ent/generated/note"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
+	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
+	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
+	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
+	"github.com/theopenlane/core/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/internal/ent/generated/template"
+	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
+	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/internal/ent/generated/usersetting"
+	"github.com/theopenlane/core/internal/ent/generated/webauthn"
+	"github.com/theopenlane/core/internal/ent/generated/webhook"
 )
 
 func APITokenEdgeCleanup(ctx context.Context, id string) error {
@@ -166,6 +192,20 @@ func GroupEdgeCleanup(ctx context.Context, id string) error {
 	// If a user has access to delete the object, they have access to delete all edges
 	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup group edge"))
 
+	if exists, err := FromContext(ctx).GroupSetting.Query().Where((groupsetting.HasGroupWith(group.ID(id)))).Exist(ctx); err == nil && exists {
+		if groupsettingCount, err := FromContext(ctx).GroupSetting.Delete().Where(groupsetting.HasGroupWith(group.ID(id))).Exec(ctx); err != nil {
+			FromContext(ctx).Logger.Debugw("deleting groupsetting", "count", groupsettingCount, "err", err)
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).GroupMembership.Query().Where((groupmembership.HasGroupWith(group.ID(id)))).Exist(ctx); err == nil && exists {
+		if groupmembershipCount, err := FromContext(ctx).GroupMembership.Delete().Where(groupmembership.HasGroupWith(group.ID(id))).Exec(ctx); err != nil {
+			FromContext(ctx).Logger.Debugw("deleting groupmembership", "count", groupmembershipCount, "err", err)
+			return err
+		}
+	}
+
 	return nil
 }
 
@@ -292,6 +332,125 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 	// If a user has access to delete the object, they have access to delete all edges
 	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup organization edge"))
 
+	if exists, err := FromContext(ctx).Organization.Query().Where(organization.HasParentWith(organization.ID(id))).Exist(ctx); err == nil && exists {
+		if organizationCount, err := FromContext(ctx).Organization.Delete().Where(organization.HasParentWith(organization.ID(id))).Exec(ctx); err != nil {
+			FromContext(ctx).Logger.Debugw("deleting child organization", "count", organizationCount, "err", err)
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).Group.Query().Where((group.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if groupCount, err := FromContext(ctx).Group.Delete().Where(group.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			FromContext(ctx).Logger.Debugw("deleting group", "count", groupCount, "err", err)
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).Template.Query().Where((template.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if templateCount, err := FromContext(ctx).Template.Delete().Where(template.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			FromContext(ctx).Logger.Debugw("deleting template", "count", templateCount, "err", err)
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).Integration.Query().Where((integration.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if integrationCount, err := FromContext(ctx).Integration.Delete().Where(integration.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			FromContext(ctx).Logger.Debugw("deleting integration", "count", integrationCount, "err", err)
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).OrganizationSetting.Query().Where((organizationsetting.HasOrganizationWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if organizationsettingCount, err := FromContext(ctx).OrganizationSetting.Delete().Where(organizationsetting.HasOrganizationWith(organization.ID(id))).Exec(ctx); err != nil {
+			FromContext(ctx).Logger.Debugw("deleting organizationsetting", "count", organizationsettingCount, "err", err)
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).DocumentData.Query().Where((documentdata.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if documentdataCount, err := FromContext(ctx).DocumentData.Delete().Where(documentdata.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			FromContext(ctx).Logger.Debugw("deleting documentdata", "count", documentdataCount, "err", err)
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).Entitlement.Query().Where((entitlement.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if entitlementCount, err := FromContext(ctx).Entitlement.Delete().Where(entitlement.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			FromContext(ctx).Logger.Debugw("deleting entitlement", "count", entitlementCount, "err", err)
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).Invite.Query().Where((invite.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if inviteCount, err := FromContext(ctx).Invite.Delete().Where(invite.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			FromContext(ctx).Logger.Debugw("deleting invite", "count", inviteCount, "err", err)
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).Subscriber.Query().Where((subscriber.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if subscriberCount, err := FromContext(ctx).Subscriber.Delete().Where(subscriber.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			FromContext(ctx).Logger.Debugw("deleting subscriber", "count", subscriberCount, "err", err)
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).Webhook.Query().Where((webhook.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if webhookCount, err := FromContext(ctx).Webhook.Delete().Where(webhook.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			FromContext(ctx).Logger.Debugw("deleting webhook", "count", webhookCount, "err", err)
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).EntitlementPlan.Query().Where((entitlementplan.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if entitlementplanCount, err := FromContext(ctx).EntitlementPlan.Delete().Where(entitlementplan.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			FromContext(ctx).Logger.Debugw("deleting entitlementplan", "count", entitlementplanCount, "err", err)
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).EntitlementPlanFeature.Query().Where((entitlementplanfeature.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if entitlementplanfeatureCount, err := FromContext(ctx).EntitlementPlanFeature.Delete().Where(entitlementplanfeature.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			FromContext(ctx).Logger.Debugw("deleting entitlementplanfeature", "count", entitlementplanfeatureCount, "err", err)
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).Entity.Query().Where((entity.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if entityCount, err := FromContext(ctx).Entity.Delete().Where(entity.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			FromContext(ctx).Logger.Debugw("deleting entity", "count", entityCount, "err", err)
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).EntityType.Query().Where((entitytype.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if entitytypeCount, err := FromContext(ctx).EntityType.Delete().Where(entitytype.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			FromContext(ctx).Logger.Debugw("deleting entitytype", "count", entitytypeCount, "err", err)
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).Contact.Query().Where((contact.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if contactCount, err := FromContext(ctx).Contact.Delete().Where(contact.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			FromContext(ctx).Logger.Debugw("deleting contact", "count", contactCount, "err", err)
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).Note.Query().Where((note.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if noteCount, err := FromContext(ctx).Note.Delete().Where(note.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			FromContext(ctx).Logger.Debugw("deleting note", "count", noteCount, "err", err)
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).OrgMembership.Query().Where((orgmembership.HasOrganizationWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if orgmembershipCount, err := FromContext(ctx).OrgMembership.Delete().Where(orgmembership.HasOrganizationWith(organization.ID(id))).Exec(ctx); err != nil {
+			FromContext(ctx).Logger.Debugw("deleting orgmembership", "count", orgmembershipCount, "err", err)
+			return err
+		}
+	}
+
 	return nil
 }
 
@@ -348,6 +507,13 @@ func TemplateEdgeCleanup(ctx context.Context, id string) error {
 	// If a user has access to delete the object, they have access to delete all edges
 	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup template edge"))
 
+	if exists, err := FromContext(ctx).DocumentData.Query().Where((documentdata.HasTemplateWith(template.ID(id)))).Exist(ctx); err == nil && exists {
+		if documentdataCount, err := FromContext(ctx).DocumentData.Delete().Where(documentdata.HasTemplateWith(template.ID(id))).Exec(ctx); err != nil {
+			FromContext(ctx).Logger.Debugw("deleting documentdata", "count", documentdataCount, "err", err)
+			return err
+		}
+	}
+
 	return nil
 }
 
@@ -361,6 +527,62 @@ func TemplateHistoryEdgeCleanup(ctx context.Context, id string) error {
 func UserEdgeCleanup(ctx context.Context, id string) error {
 	// If a user has access to delete the object, they have access to delete all edges
 	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup user edge"))
+
+	if exists, err := FromContext(ctx).PersonalAccessToken.Query().Where((personalaccesstoken.HasOwnerWith(user.ID(id)))).Exist(ctx); err == nil && exists {
+		if personalaccesstokenCount, err := FromContext(ctx).PersonalAccessToken.Delete().Where(personalaccesstoken.HasOwnerWith(user.ID(id))).Exec(ctx); err != nil {
+			FromContext(ctx).Logger.Debugw("deleting personalaccesstoken", "count", personalaccesstokenCount, "err", err)
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).TFASetting.Query().Where((tfasetting.HasOwnerWith(user.ID(id)))).Exist(ctx); err == nil && exists {
+		if tfasettingCount, err := FromContext(ctx).TFASetting.Delete().Where(tfasetting.HasOwnerWith(user.ID(id))).Exec(ctx); err != nil {
+			FromContext(ctx).Logger.Debugw("deleting tfasetting", "count", tfasettingCount, "err", err)
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).UserSetting.Query().Where((usersetting.HasUserWith(user.ID(id)))).Exist(ctx); err == nil && exists {
+		if usersettingCount, err := FromContext(ctx).UserSetting.Delete().Where(usersetting.HasUserWith(user.ID(id))).Exec(ctx); err != nil {
+			FromContext(ctx).Logger.Debugw("deleting usersetting", "count", usersettingCount, "err", err)
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).EmailVerificationToken.Query().Where((emailverificationtoken.HasOwnerWith(user.ID(id)))).Exist(ctx); err == nil && exists {
+		if emailverificationtokenCount, err := FromContext(ctx).EmailVerificationToken.Delete().Where(emailverificationtoken.HasOwnerWith(user.ID(id))).Exec(ctx); err != nil {
+			FromContext(ctx).Logger.Debugw("deleting emailverificationtoken", "count", emailverificationtokenCount, "err", err)
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).PasswordResetToken.Query().Where((passwordresettoken.HasOwnerWith(user.ID(id)))).Exist(ctx); err == nil && exists {
+		if passwordresettokenCount, err := FromContext(ctx).PasswordResetToken.Delete().Where(passwordresettoken.HasOwnerWith(user.ID(id))).Exec(ctx); err != nil {
+			FromContext(ctx).Logger.Debugw("deleting passwordresettoken", "count", passwordresettokenCount, "err", err)
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).Webauthn.Query().Where((webauthn.HasOwnerWith(user.ID(id)))).Exist(ctx); err == nil && exists {
+		if webauthnCount, err := FromContext(ctx).Webauthn.Delete().Where(webauthn.HasOwnerWith(user.ID(id))).Exec(ctx); err != nil {
+			FromContext(ctx).Logger.Debugw("deleting webauthn", "count", webauthnCount, "err", err)
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).OrgMembership.Query().Where((orgmembership.HasUserWith(user.ID(id)))).Exist(ctx); err == nil && exists {
+		if orgmembershipCount, err := FromContext(ctx).OrgMembership.Delete().Where(orgmembership.HasUserWith(user.ID(id))).Exec(ctx); err != nil {
+			FromContext(ctx).Logger.Debugw("deleting orgmembership", "count", orgmembershipCount, "err", err)
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).GroupMembership.Query().Where((groupmembership.HasUserWith(user.ID(id)))).Exist(ctx); err == nil && exists {
+		if groupmembershipCount, err := FromContext(ctx).GroupMembership.Delete().Where(groupmembership.HasUserWith(user.ID(id))).Exec(ctx); err != nil {
+			FromContext(ctx).Logger.Debugw("deleting groupmembership", "count", groupmembershipCount, "err", err)
+			return err
+		}
+	}
 
 	return nil
 }

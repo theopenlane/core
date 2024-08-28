@@ -17,7 +17,7 @@
                {{/* For each edge */}}
                {{- range $edge := $node.Edges }}
                     {{/* if the edge has our custom annotation applied */}}
-                    {{- if $annotation := $edge.Annotations.ENT_CASCADE }}
+                    {{- if $annotation := $edge.Annotations.OPENLANE_CASCADE }}
                         {{/* use the client to delete records where the edge schema has a field (provided by the annotation) containing the ID provided by the func */}}
                         {{/* special case for child fields */}}
                         {{- if eq $annotation.Field "Child" }}
@@ -37,7 +37,7 @@
                         {{ end }}
                     {{ end }}
                {{- end }}
-               {{- if $annotation := $node.Annotations.ENT_CASCADE_THROUGH }}
+               {{- if $annotation := $node.Annotations.OPENLANE_CASCADE_THROUGH }}
                {{- range $schema := $annotation.Schemas }}
                     {{- $field := $schema.Through }}
                     {{/* use the client to delete records where the edge has a field and a through schema (provided by the annotation) containing the ID provided by the func */}}
