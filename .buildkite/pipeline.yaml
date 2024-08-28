@@ -36,6 +36,7 @@ steps:
           - docker#v5.11.0:
               image: "golangci/golangci-lint:latest-alpine"
               command: ["golangci-lint", "run", "-v", "--timeout", "10m", "--config", ".golangci.yaml", "--concurrency", "0"]
+              always_pull: true
               environment:
                 - "GOTOOLCHAIN=auto"
       - label: ":golang: go test - libsql"
