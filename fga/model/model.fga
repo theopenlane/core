@@ -5,6 +5,9 @@ type service
 type role
   relations
     define assignee: [user]
+type search
+  relations
+    define admin: [user]
 type organization
   relations
     # main roles
