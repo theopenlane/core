@@ -1,34 +1,34 @@
-name: TheOpenLane
+name: OpenLane
 model_file: ../model/model.fga
 tuples:
   # setup parent child org relationship
-  - user: organization:meow
+  - user: organization:openlane
     relation: parent
-    object: organization:woof
+    object: organization:foo
   # setup org primary owner
   - user: user:ulid-of-owner
     relation: owner
-    object: organization:meow
+    object: organization:openlane
   # setup org admin
   - user: user:ulid-of-admin
     relation: admin
-    object: organization:meow
+    object: organization:openlane
   # setup org member
   - user: user:ulid-of-member
     relation: member
-    object: organization:meow
+    object: organization:openlane
   # setup audit log viewer
   - user: user:ulid-of-audit-log-viewer
     relation: audit_log_viewer
-    object: organization:meow
+    object: organization:openlane
   # setup service user
   - user: service:ulid-of-service-editor
     relation: can_edit
-    object: organization:meow
+    object: organization:openlane
   # setup service user
   - user: service:ulid-of-service-viewer
     relation: can_view
-    object: organization:meow
+    object: organization:openlane
 tests:
   - name: organization
     description: test organization relationships
@@ -36,7 +36,7 @@ tests:
     # add test local tuples here
     check:
       - user: user:ulid-of-owner
-        object: organization:meow # parent org
+        object: organization:openlane # parent org
         assertions:
           member: true
           admin: false
@@ -48,7 +48,7 @@ tests:
           can_invite_members: true
           can_invite_admins: true
       - user: user:ulid-of-member
-        object: organization:meow # parent org
+        object: organization:openlane # parent org
         assertions:
           member: true
           admin: false
@@ -60,7 +60,7 @@ tests:
           can_invite_members: true
           can_invite_admins: false
       - user: service:ulid-of-service-editor
-        object: organization:meow # parent org
+        object: organization:openlane # parent org
         assertions:
           member: false
           admin: false
@@ -72,7 +72,7 @@ tests:
           can_invite_members: true
           can_invite_admins: true
       - user: service:ulid-of-service-viewer
-        object: organization:meow # parent org
+        object: organization:openlane # parent org
         assertions:
           member: false
           admin: false
@@ -84,7 +84,7 @@ tests:
           can_invite_members: false
           can_invite_admins: false
       - user: user:ulid-of-admin
-        object: organization:meow # parent org
+        object: organization:openlane # parent org
         assertions:
           member: true
           admin: true
@@ -96,7 +96,7 @@ tests:
           can_invite_members: true
           can_invite_admins: true
       - user: user:ulid-of-audit-log-viewer
-        object: organization:meow # parent org
+        object: organization:openlane # parent org
         assertions:
           member: false
           admin: false
@@ -108,7 +108,7 @@ tests:
           can_invite_members: false
           can_invite_admins: false
       - user: user:ulid-of-owner
-        object: organization:dog #child org
+        object: organization:foo #child org
         assertions:
           member: true
           admin: false
@@ -120,7 +120,7 @@ tests:
           can_invite_members: true
           can_invite_admins: true
       - user: user:ulid-of-member
-        object: organization:dog # child org
+        object: organization:foo # child org
         assertions:
           member: true
           admin: false
@@ -132,7 +132,7 @@ tests:
           can_invite_members: true
           can_invite_admins: false
       - user: user:ulid-of-admin
-        object: organization:dog # child org
+        object: organization:foo # child org
         assertions:
           member: true
           admin: true
@@ -148,51 +148,51 @@ tests:
         type: organization
         assertions:
           owner:
-            - organization:dog
-            - organization:meow
+            - organization:foo
+            - organization:openlane
           admin:
           member:
-            - organization:dog
-            - organization:meow
+            - organization:foo
+            - organization:openlane
       - user: user:ulid-of-member
         type: organization
         assertions:
           owner:
           admin:
           member:
-            - organization:dog
-            - organization:meow
+            - organization:foo
+            - organization:openlane
       - user: service:ulid-of-service-editor
         type: organization
         assertions:
           can_edit:
-            - organization:dog
-            - organization:meow
+            - organization:foo
+            - organization:openlane
           can_view:
-            - organization:dog
-            - organization:meow
+            - organization:foo
+            - organization:openlane
       - user: service:ulid-of-service-viewer
         type: organization
         assertions:
           can_edit:
           can_view:
-            - organization:dog
-            - organization:meow
+            - organization:foo
+            - organization:openlane
       - user: user:ulid-of-admin
         type: organization
         assertions:
           owner:
           admin:
-            - organization:dog
-            - organization:meow
+            - organization:foo
+            - organization:openlane
           member:
-            - organization:dog
-            - organization:meow
+            - organization:foo
+            - organization:openlane
   - name: groups
     description: test group relationships to their parent (organization)
     tuples:
       # setup group with owner
-      - user: organization:meow
+      - user: organization:openlane
         relation: parent
         object: group:cat-lovers
       # add group admin
@@ -212,7 +212,7 @@ tests:
         relation: member
         object: group:cat-lovers
     check:
-      - user: organization:meow
+      - user: organization:openlane
         object: group:cat-lovers
         assertions:
           parent: true
@@ -274,7 +274,7 @@ tests:
     description: subscription tiers are associated to organizations, and members are part of that organization
     tuples:
       # setup organization with pro tier
-      - user: organization:meow
+      - user: organization:openlane
         relation: subscriber
         object: subscription_tier:pro
       # setup organization with free tier
@@ -282,12 +282,12 @@ tests:
         relation: subscriber
         object: subscription_tier:free
     check:
-      - user: organization:meow
+      - user: organization:openlane
         object: subscription_tier:pro
         assertions:
           subscriber: true
           subscriber_member: false
-      - user: organization:meow
+      - user: organization:openlane
         object: subscription_tier:free
         assertions:
           subscriber: false
@@ -331,7 +331,7 @@ tests:
           subscriber_member:
             - subscription_tier:pro
           subscriber:
-      - user: organization:meow
+      - user: organization:openlane
         type: subscription_tier
         assertions:
           subscriber_member:
@@ -352,7 +352,7 @@ tests:
     description: features tiers are associated to subscription tiers, and users can access features based on their subscription tier of their organization
     tuples:
       # setup organization with pro tier
-      - user: organization:meow
+      - user: organization:openlane
         relation: subscriber
         object: subscription_tier:pro
       # setup organization with free tier
