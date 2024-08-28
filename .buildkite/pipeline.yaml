@@ -34,7 +34,7 @@ steps:
         key: "lint"
         plugins:
           - docker#v5.11.0:
-              image: "registry.hub.docker.com/golangci/golangci-lint:v1.59.1"
+              image: "golangci/golangci-lint:latest-alpine"
               command: ["golangci-lint", "run", "-v", "--timeout", "10m", "--config", ".golangci.yaml", "--concurrency", "0"]
               environment:
                 - "GOTOOLCHAIN=auto"
