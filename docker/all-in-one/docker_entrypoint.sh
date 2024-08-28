@@ -14,8 +14,8 @@ done
 
 /bin/redis-server --save 20 1 --loglevel warning --daemonize yes
 
-# run the geodetic service in the background
-/bin/geodetic serve --debug --pretty &!
+# run the dbx service in the background
+/bin/dbx serve --debug --pretty &!
 
 # run the core service in the foreground
 /bin/core serve --debug --pretty

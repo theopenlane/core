@@ -1,6 +1,7 @@
 env:
   APP_NAME: ${BUILDKITE_PIPELINE_SLUG}
   IMAGE_REPO: ghcr.io/theopenlane/${APP_NAME}
+  GCR_REPO: us-west1-docker.pkg.dev/neural-vista-433523-c1/openlane/openlane
   IMAGE_TAG: ${BUILDKITE_BUILD_NUMBER}-${BUILDKITE_COMMIT:0:8}
   SONAR_HOST: "https://sonarcloud.io"
 
@@ -234,7 +235,7 @@ steps:
           - docker-login#v3.0.0:
               username: _json_key_base64
               password-env: SECRET_GCR_PUBLISH_TOKEN
-              server: us-central1-docker.pkg.dev
+              server: us-west1-docker.pkg.dev
           - theopenlane/docker-metadata#v1.0.0:
               tag_prefix: "aio-"
               debug: true
@@ -257,7 +258,6 @@ steps:
         if: build.tag != null
         commands: |
           #!/bin/bash
-          ls
         plugins:
           - docker-login#v3.0.0:
               username: openlane-bender
@@ -287,7 +287,7 @@ steps:
           - docker-login#v3.0.0:
               username: _json_key_base64
               password-env: SECRET_GCR_PUBLISH_TOKEN
-              server: us-central1-docker.pkg.dev
+              server: us-west1-docker.pkg.dev
           - theopenlane/docker-metadata#v1.0.0:
               tag_prefix: "aio-"
               debug: true
