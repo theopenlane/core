@@ -156,7 +156,7 @@ steps:
       - label: ":postgres: atlas lint"
         key: "atlas_lint"
         plugins:
-          - theopenlane/atlas#v0.0.3:
+          - theopenlane/atlas#v1.0.0:
               project: core
               dev-url: "docker://postgres/16/dev?search_path=public"
               dir: "file://db/migrations"
@@ -165,7 +165,7 @@ steps:
         if: build.branch == "main"
         key: "atlas_migrate"
         plugins:
-          - theopenlane/atlas#v0.0.3:
+          - theopenlane/atlas#v1.0.0:
               project: core
               dev-url: "docker://postgres/16/dev?search_path=public"
               dir: "file://db/migrations"
@@ -187,7 +187,7 @@ steps:
                 - "${IMAGE_REPO}"
               extra_tags:
                 - "${IMAGE_TAG}"
-          - theopenlane/container-build#v1.1.0:
+          - theopenlane/container-build#v1.0.0:
               dockerfile: docker/Dockerfile
               push: false
               build-args:
@@ -214,7 +214,7 @@ steps:
                 - "${IMAGE_REPO}"
               extra_tags:
                 - "${IMAGE_TAG}"
-          - theopenlane/container-build#v1.1.0:
+          - theopenlane/container-build#v1.0.0:
               dockerfile: docker/Dockerfile
               push: true
               build-args:
@@ -241,7 +241,7 @@ steps:
                 - "${GCR_REPO}"
               extra_tags:
                 - "${IMAGE_TAG}"
-          - theopenlane/container-build#v1.1.0:
+          - theopenlane/container-build#v1.0.0:
               dockerfile: docker/all-in-one/Dockerfile.all-in-one
               push: true
               build-args:
@@ -267,7 +267,7 @@ steps:
                 - "${IMAGE_REPO}"
               extra_tags:
                 - "${BUILDKITE_TAG}"
-          - theopenlane/container-build#v1.1.0:
+          - theopenlane/container-build#v1.0.0:
               dockerfile: docker/Dockerfile
               push: true
               build-args:
@@ -294,7 +294,7 @@ steps:
                 - "${GCR_REPO}"
               extra_tags:
                 - "${BUILDKITE_TAG}"
-          - theopenlane/container-build#v1.1.0:
+          - theopenlane/container-build#v1.0.0:
               dockerfile: docker/all-in-one/Dockerfile.all-in-one
               push: true
               build-args:
