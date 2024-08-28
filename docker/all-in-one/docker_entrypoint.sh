@@ -14,8 +14,10 @@ done
 
 /bin/redis-server --save 20 1 --loglevel warning --daemonize yes
 
-# run the dbx service in the background
-/bin/dbx serve --debug --pretty &!
+# run the dbx service in the background if enabled
+if [ $CORE_DBX_ENABLED = "true" ]; then
+	/bin/dbx serve --debug --pretty &!
+fi
 
 # run the core service in the foreground
 /bin/core serve --debug --pretty
