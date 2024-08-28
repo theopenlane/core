@@ -35,7 +35,3 @@ email:
   testing: false
   consoleUrl:
     consoleBase: "https://console.theopenlane.io"
-
-# analytics settings
-posthog:
-  enabled: true
