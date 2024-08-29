@@ -16,7 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/config"
 	"github.com/theopenlane/core/internal/httpserve/server"
 	"github.com/theopenlane/core/internal/httpserve/serveropts"
-	"github.com/theopenlane/core/pkg/cache"
+	"github.com/theopenlane/utils/cache"
 )
 
 var serveCmd = &cobra.Command{

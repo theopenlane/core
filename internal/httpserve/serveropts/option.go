@@ -32,7 +32,6 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/config"
 	"github.com/theopenlane/core/internal/httpserve/server"
 	"github.com/theopenlane/core/pkg/analytics"
-	"github.com/theopenlane/core/pkg/cache"
 	"github.com/theopenlane/core/pkg/events/kafka/publisher"
 	authmw "github.com/theopenlane/core/pkg/middleware/auth"
 	"github.com/theopenlane/core/pkg/middleware/cachecontrol"
@@ -42,6 +41,7 @@ import (
 	"github.com/theopenlane/core/pkg/middleware/ratelimit"
 	"github.com/theopenlane/core/pkg/middleware/redirect"
 	"github.com/theopenlane/core/pkg/middleware/secure"
+	"github.com/theopenlane/utils/cache"
 )
 
 type ServerOption interface {

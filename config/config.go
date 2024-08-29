@@ -24,7 +24,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/pkg/analytics/posthog"
-	"github.com/theopenlane/core/pkg/cache"
 	"github.com/theopenlane/core/pkg/events/kafka/kafkaconfig"
 	"github.com/theopenlane/core/pkg/middleware/cachecontrol"
 	"github.com/theopenlane/core/pkg/middleware/cors"
@@ -32,6 +31,7 @@ import (
 	"github.com/theopenlane/core/pkg/middleware/ratelimit"
 	"github.com/theopenlane/core/pkg/middleware/redirect"
 	"github.com/theopenlane/core/pkg/middleware/secure"
+	"github.com/theopenlane/utils/cache"
 )
 
 var (
