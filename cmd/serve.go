@@ -10,13 +10,14 @@ import (
 	dbx "github.com/theopenlane/dbx/pkg/dbxclient"
 	"github.com/theopenlane/iam/fgax"
 
+	"github.com/theopenlane/utils/cache"
+
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/entdb"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/internal/httpserve/config"
 	"github.com/theopenlane/core/internal/httpserve/server"
 	"github.com/theopenlane/core/internal/httpserve/serveropts"
-	"github.com/theopenlane/utils/cache"
 )
 
 var serveCmd = &cobra.Command{

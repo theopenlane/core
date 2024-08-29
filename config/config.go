@@ -21,6 +21,8 @@ import (
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/iam/tokens"
 
+	"github.com/theopenlane/utils/cache"
+
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/pkg/analytics/posthog"
@@ -31,7 +33,6 @@ import (
 	"github.com/theopenlane/core/pkg/middleware/ratelimit"
 	"github.com/theopenlane/core/pkg/middleware/redirect"
 	"github.com/theopenlane/core/pkg/middleware/secure"
-	"github.com/theopenlane/utils/cache"
 )
 
 var (
