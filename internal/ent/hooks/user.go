@@ -18,7 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/passwd"
+	"github.com/theopenlane/utils/passwd"
 )
 
 const (

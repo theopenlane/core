@@ -114,16 +114,16 @@ func NewOpenAPISpec() (*openapi3.T, error) {
 		Paths: openapi3.NewPaths(),
 		Servers: openapi3.Servers{
 			&openapi3.Server{
-				Description: "OpenLane API Server",
+				Description: "Openlane API Server",
 				URL:         "https://api.theopenlane.io/v1",
 			},
 			&openapi3.Server{
-				Description: "OpenLane API Server (local)",
+				Description: "Openlane API Server (local)",
 				URL:         "http://localhost:17608/v1",
 			},
 		},
 		ExternalDocs: &openapi3.ExternalDocs{
-			Description: "Documentation for OpenLane's API services",
+			Description: "Documentation for Openlane's API services",
 			URL:         "https://docs.theopenlane.io",
 		},
 

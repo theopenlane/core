@@ -60,8 +60,8 @@ require (
 	github.com/theopenlane/entx v0.1.4
 	github.com/theopenlane/gqlgen-plugins v0.1.0
 	github.com/theopenlane/httpsling v0.1.0
-	github.com/theopenlane/iam v0.1.5
-	github.com/theopenlane/utils v0.1.3
+	github.com/theopenlane/iam v0.1.6
+	github.com/theopenlane/utils v0.1.4
 	github.com/tursodatabase/libsql-client-go v0.0.0-20240812094001-348a4e45b535
 	github.com/vektah/gqlparser/v2 v2.5.16
 	github.com/wundergraph/graphql-go-tools v1.67.4
