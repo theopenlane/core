@@ -5,7 +5,7 @@ COPY . .
 
 RUN go mod download
 
-RUN CGO_ENABLED=1 GOOS=linux go build -o /go/bin/core -a -ldflags '-linkmode external -extldflags "-static"' .
+RUN CGO_ENABLED=1 GOOS=linux go build -o /go/bin/core -a -tags osusergo -ldflags '-linkmode external -extldflags "-static"' .
 
 FROM cgr.dev/chainguard/bash:latest
 
