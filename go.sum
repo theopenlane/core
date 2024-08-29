@@ -545,8 +545,8 @@ github.com/theopenlane/gqlgen-plugins v0.1.0 h1:DL3knGQ+pcoXceSFvmgWzzlgIyPRgl71
 github.com/theopenlane/gqlgen-plugins v0.1.0/go.mod h1:sP0nCjrE3KoVT4qfYqMrSK1XZa3Bx2oTIRSdEF7F5l0=
 github.com/theopenlane/httpsling v0.1.0 h1:IHWUSo213stJTmHOHjNIg5b3npgpchzMdPMY7jAkimI=
 github.com/theopenlane/httpsling v0.1.0/go.mod h1:wOyNfO4moIbmP4stQc9Kasgp+Q4sODo3LOLwvjUe/PA=
-github.com/theopenlane/iam v0.1.4 h1:02y9wWxfnP0K0iJxiADJNMAi/dB3v3zP3jG1G7KToGI=
-github.com/theopenlane/iam v0.1.4/go.mod h1:KZd/k1nEHSzS9wQeQHLqRabJuH3XkF5g8aGqzRhjSmQ=
+github.com/theopenlane/iam v0.1.5 h1:CreDFrl8hLTpdQJcs/gFbkk8EuOFClGCClIpCUxPrOg=
+github.com/theopenlane/iam v0.1.5/go.mod h1:KZd/k1nEHSzS9wQeQHLqRabJuH3XkF5g8aGqzRhjSmQ=
 github.com/theopenlane/utils v0.1.2 h1:kFbzvGgz/7b2CNZ/ycAzMBTmCqBJUld/UJxsfXCOgbw=
 github.com/theopenlane/utils v0.1.2/go.mod h1:37sJeeuIsmMbMFE2nKglmEQUJenTccxh5WxkJtyuZUw=
 github.com/tursodatabase/libsql-client-go v0.0.0-20240812094001-348a4e45b535 h1:iLjJLq2A5J6L9zrhyNn+fpmxFvtEpYB4XLMr0rX3epI=
