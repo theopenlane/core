@@ -37,7 +37,6 @@ var includedPackages = []string{
 	"./internal/ent",
 	"./internal/entdb",
 	"./internal/httpserve/handlers",
-	"./pkg/otelx",
 	"./pkg/analytics",
 	"./pkg/middleware",
 	"./pkg/events/kafka/kafkaconfig",

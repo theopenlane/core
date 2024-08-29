@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/spf13/cobra"
+	"github.com/theopenlane/beacon/otelx"
 	"go.uber.org/zap"
 
 	dbx "github.com/theopenlane/dbx/pkg/dbxclient"
@@ -16,7 +17,6 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/server"
 	"github.com/theopenlane/core/internal/httpserve/serveropts"
 	"github.com/theopenlane/core/pkg/cache"
-	"github.com/theopenlane/core/pkg/otelx"
 )
 
 var serveCmd = &cobra.Command{
@@ -75,7 +75,7 @@ func serve(ctx context.Context) error {
 		serveropts.WithTokenManager(),
 	)
 
-	err = otelx.NewTracer(so.Config.Settings.Tracer, appName, logger)
+	err = otelx.NewTracer(so.Config.Settings.Tracer, appName)
 	if err != nil {
 		logger.Fatalw("failed to initialize tracer", "error", err)
 	}
