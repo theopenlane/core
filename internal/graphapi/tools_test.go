@@ -53,9 +53,9 @@ type GraphTestSuite struct {
 // client contains all the clients the test need to interact with
 type client struct {
 	db           *ent.Client
-	api          *openlaneclient.OpenLaneClient
-	apiWithPAT   *openlaneclient.OpenLaneClient
-	apiWithToken *openlaneclient.OpenLaneClient
+	api          *openlaneclient.OpenlaneClient
+	apiWithPAT   *openlaneclient.OpenlaneClient
+	apiWithToken *openlaneclient.OpenlaneClient
 	fga          *mock_fga.MockSdkClient
 }
 

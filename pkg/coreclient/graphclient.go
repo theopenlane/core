@@ -14,7 +14,7 @@ import (
 	"github.com/theopenlane/entx/history"
 )
 
-type OpenLaneGraphClient interface {
+type OpenlaneGraphClient interface {
 	CreateAPIToken(ctx context.Context, input CreateAPITokenInput, interceptors ...clientv2.RequestInterceptor) (*CreateAPIToken, error)
 	UpdateAPIToken(ctx context.Context, updateAPITokenID string, input UpdateAPITokenInput, interceptors ...clientv2.RequestInterceptor) (*UpdateAPIToken, error)
 	GetAllAPITokens(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllAPITokens, error)
@@ -256,7 +256,7 @@ type Client struct {
 	Client *clientv2.Client
 }
 
-func NewClient(cli *http.Client, baseURL string, options *clientv2.Options, interceptors ...clientv2.RequestInterceptor) OpenLaneGraphClient {
+func NewClient(cli *http.Client, baseURL string, options *clientv2.Options, interceptors ...clientv2.RequestInterceptor) OpenlaneGraphClient {
 	return &Client{Client: clientv2.NewClient(cli, baseURL, options, interceptors...)}
 }
 

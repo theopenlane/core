@@ -29,7 +29,7 @@ func (suite *GraphTestSuite) TestQueryTFASetting() {
 	testCases := []struct {
 		name     string
 		userID   string
-		client   *openlaneclient.OpenLaneClient
+		client   *openlaneclient.OpenlaneClient
 		ctx      context.Context
 		errorMsg string
 	}{
@@ -91,7 +91,7 @@ func (suite *GraphTestSuite) TestMutationCreateTFASetting() {
 		name   string
 		userID string
 		input  openlaneclient.CreateTFASettingInput
-		client *openlaneclient.OpenLaneClient
+		client *openlaneclient.OpenlaneClient
 		ctx    context.Context
 		errMsg string
 	}{
@@ -180,7 +180,7 @@ func (suite *GraphTestSuite) TestMutationUpdateTFASetting() {
 	testCases := []struct {
 		name   string
 		input  openlaneclient.UpdateTFASettingInput
-		client *openlaneclient.OpenLaneClient
+		client *openlaneclient.OpenlaneClient
 		ctx    context.Context
 		errMsg string
 	}{

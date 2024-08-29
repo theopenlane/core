@@ -95,6 +95,8 @@ func (s *Server) StartEchoServer(ctx context.Context) error {
 		s.logger.Infow("registered route", "route", r.Path(), "method", r.Method())
 	}
 
+	s.logger.Info(startBlock)
+
 	// if TLS is enabled, start new echo server with TLS
 	if s.config.Settings.Server.TLS.Enabled {
 		s.logger.Infow("starting in https mode")
@@ -102,27 +104,16 @@ func (s *Server) StartEchoServer(ctx context.Context) error {
 		return sc.StartTLS(srv.Echo, s.config.Settings.Server.TLS.CertFile, s.config.Settings.Server.TLS.CertKey)
 	}
 
-	s.logger.Infow(startBlock)
-
 	// otherwise, start without TLS
 	return sc.Start(srv.Echo)
 }
 
 var startBlock = `
-┌────────────────────────────────────────────────────────────────────────────────────┐
-│                                                                                    │
-│                                                                                    │
-│                                                                                    │
-|        *******                             **                                      │
-|       **/////**  ******                   /**                                      │ 
-|      **     //**/**///**  *****  *******  /**        ******   *******   *****      │ 
-|     /**      /**/**  /** **///**//**///** /**       //////** //**///** **///**     │
-|     /**      /**/****** /******* /**  /** /**        *******  /**  /**/*******     │
-|     //**     ** /**///  /**////  /**  /** /**       **////**  /**  /**/**////      │
-|      //*******  /**     //****** ***  /** /********//******** ***  /**//******     │
-|       ///////   //       ////// ///   //  ////////  //////// ///   //  //////      │ 
-│                                                                                    │
-│                                                                                    │
-│                                                                                    │
-│                                                                                    │
-└────────────────────────────────────────────────────────────────────────────────────┘`
+________________________________________________________________
+                                                                
+                                     /                          
+-----------__------__----__----__---/----__----__----__---------
+         /   )   /   ) /___) /   ) /   /   ) /   ) /___)        
+________(___/___/___/_(___ _/___/_/___(___(_/___/_(___ _________     
+
+`

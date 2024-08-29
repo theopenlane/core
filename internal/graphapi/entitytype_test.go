@@ -26,7 +26,7 @@ func (suite *GraphTestSuite) TestQueryEntityType() {
 	testCases := []struct {
 		name     string
 		queryID  string
-		client   *openlaneclient.OpenLaneClient
+		client   *openlaneclient.OpenlaneClient
 		ctx      context.Context
 		allowed  bool
 		expected *ent.EntityType
@@ -108,7 +108,7 @@ func (suite *GraphTestSuite) TestQueryEntityTypes() {
 
 	testCases := []struct {
 		name            string
-		client          *openlaneclient.OpenLaneClient
+		client          *openlaneclient.OpenlaneClient
 		ctx             context.Context
 		expectedResults int
 	}{
@@ -161,7 +161,7 @@ func (suite *GraphTestSuite) TestMutationCreateEntityType() {
 	testCases := []struct {
 		name        string
 		request     openlaneclient.CreateEntityTypeInput
-		client      *openlaneclient.OpenLaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		allowed     bool
 		expectedErr string
@@ -250,7 +250,7 @@ func (suite *GraphTestSuite) TestMutationUpdateEntityType() {
 	testCases := []struct {
 		name        string
 		request     openlaneclient.UpdateEntityTypeInput
-		client      *openlaneclient.OpenLaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		allowed     bool
 		expectedErr string
@@ -331,7 +331,7 @@ func (suite *GraphTestSuite) TestMutationDeleteEntityType() {
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      *openlaneclient.OpenLaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		allowed     bool
 		checkAccess bool

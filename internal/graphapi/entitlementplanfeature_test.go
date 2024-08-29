@@ -23,7 +23,7 @@ func (suite *GraphTestSuite) TestQueryEntitlementPlanFeature() {
 	testCases := []struct {
 		name     string
 		queryID  string
-		client   *openlaneclient.OpenLaneClient
+		client   *openlaneclient.OpenlaneClient
 		ctx      context.Context
 		errorMsg string
 	}{
@@ -101,7 +101,7 @@ func (suite *GraphTestSuite) TestQueryEntitlementPlanFeatures() {
 
 	testCases := []struct {
 		name            string
-		client          *openlaneclient.OpenLaneClient
+		client          *openlaneclient.OpenlaneClient
 		ctx             context.Context
 		expectedResults int
 	}{
@@ -160,7 +160,7 @@ func (suite *GraphTestSuite) TestMutationCreateEntitlementPlanFeature() {
 	testCases := []struct {
 		name        string
 		request     openlaneclient.CreateEntitlementPlanFeatureInput
-		client      *openlaneclient.OpenLaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		allowed     bool
 		expectedErr string
@@ -293,7 +293,7 @@ func (suite *GraphTestSuite) TestMutationUpdateEntitlementPlanFeature() {
 	testCases := []struct {
 		name        string
 		request     openlaneclient.UpdateEntitlementPlanFeatureInput
-		client      *openlaneclient.OpenLaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		allowed     bool
 		expectedErr string
@@ -385,7 +385,7 @@ func (suite *GraphTestSuite) TestMutationDeleteEntitlementPlanFeature() {
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      *openlaneclient.OpenLaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		allowed     bool
 		checkAccess bool

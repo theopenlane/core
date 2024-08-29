@@ -30,7 +30,7 @@ func (suite *GraphTestSuite) TestQueryContact() {
 		name     string
 		queryID  string
 		allowed  bool
-		client   *openlaneclient.OpenLaneClient
+		client   *openlaneclient.OpenlaneClient
 		ctx      context.Context
 		expected *ent.Contact
 		errorMsg string
@@ -127,7 +127,7 @@ func (suite *GraphTestSuite) TestQueryContacts() {
 
 	testCases := []struct {
 		name            string
-		client          *openlaneclient.OpenLaneClient
+		client          *openlaneclient.OpenlaneClient
 		ctx             context.Context
 		expectedResults int
 	}{
@@ -180,7 +180,7 @@ func (suite *GraphTestSuite) TestMutationCreateContact() {
 	testCases := []struct {
 		name        string
 		request     openlaneclient.CreateContactInput
-		client      *openlaneclient.OpenLaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		allowed     bool
 		expectedErr string
@@ -323,7 +323,7 @@ func (suite *GraphTestSuite) TestMutationUpdateContact() {
 	testCases := []struct {
 		name        string
 		request     openlaneclient.UpdateContactInput
-		client      *openlaneclient.OpenLaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		allowed     bool
 		expectedErr string
@@ -474,7 +474,7 @@ func (suite *GraphTestSuite) TestMutationDeleteContact() {
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      *openlaneclient.OpenLaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		allowed     bool
 		checkAccess bool

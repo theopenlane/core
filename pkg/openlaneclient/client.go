@@ -21,10 +21,10 @@ const (
 	cookieExpiryMinutes = 10 * time.Minute
 )
 
-// OpenLaneClient wraps The OpenLane API client methods to form a single client interface
-type OpenLaneClient struct {
-	OpenLaneRestClient
-	OpenLaneGraphClient
+// OpenlaneClient wraps the Openlane API client methods to form a single client interface
+type OpenlaneClient struct {
+	OpenlaneRestClient
+	OpenlaneGraphClient
 }
 
 // A Reauthenticator generates new access and refresh pair given a valid refresh token
@@ -33,14 +33,14 @@ type Reauthenticator interface {
 }
 
 // NewWithDefaults creates a new API v1 client with default configuration
-func NewWithDefaults(opts ...ClientOption) (*OpenLaneClient, error) {
+func NewWithDefaults(opts ...ClientOption) (*OpenlaneClient, error) {
 	config := NewDefaultConfig()
 
 	return New(config, opts...)
 }
 
 // New creates a new API v1 client that implements the Client interface
-func New(config Config, opts ...ClientOption) (*OpenLaneClient, error) {
+func New(config Config, opts ...ClientOption) (*OpenlaneClient, error) {
 	// configure rest client
 	c, err := NewRestClient(config, opts...)
 	if err != nil {
@@ -58,7 +58,7 @@ func New(config Config, opts ...ClientOption) (*OpenLaneClient, error) {
 		api.Config.Interceptors...,
 	)
 
-	return &OpenLaneClient{
+	return &OpenlaneClient{
 		c,
 		graphClient,
 	}, nil
@@ -94,15 +94,15 @@ type APIv1 struct {
 }
 
 // Config is the configuration for the APIv1 client
-func (c *OpenLaneClient) Config() Config {
-	api := c.OpenLaneRestClient.(*APIv1)
+func (c *OpenlaneClient) Config() Config {
+	api := c.OpenlaneRestClient.(*APIv1)
 
 	return api.Config
 }
 
 // HTTPSlingClient is the http client for the APIv1 client
-func (c *OpenLaneClient) HTTPSlingClient() *httpsling.Client {
-	api := c.OpenLaneRestClient.(*APIv1)
+func (c *OpenlaneClient) HTTPSlingClient() *httpsling.Client {
+	api := c.OpenlaneRestClient.(*APIv1)
 
 	return api.HTTPSlingClient
 }
@@ -110,7 +110,7 @@ func (c *OpenLaneClient) HTTPSlingClient() *httpsling.Client {
 // AccessToken returns the access token cached on the client or an error if it is not
 // available. This method is primarily used for testing but can be used to fetch the
 // access token for debugging or inspection if necessary.
-func (c *OpenLaneClient) AccessToken() (_ string, err error) {
+func (c *OpenlaneClient) AccessToken() (_ string, err error) {
 	var cookies []*http.Cookie
 
 	if cookies, err = c.Cookies(); err != nil {
@@ -129,7 +129,7 @@ func (c *OpenLaneClient) AccessToken() (_ string, err error) {
 // RefreshToken returns the refresh token cached on the client or an error if it is not
 // available. This method is primarily used for testing but can be used to fetch the
 // refresh token for debugging or inspection if necessary.
-func (c *OpenLaneClient) RefreshToken() (_ string, err error) {
+func (c *OpenlaneClient) RefreshToken() (_ string, err error) {
 	var cookies []*http.Cookie
 
 	if cookies, err = c.Cookies(); err != nil {
@@ -147,7 +147,7 @@ func (c *OpenLaneClient) RefreshToken() (_ string, err error) {
 
 // SetAuthTokens is a helper function to set the access and refresh tokens on the
 // client cookie jar.
-func (c *OpenLaneClient) SetAuthTokens(access, refresh string) error {
+func (c *OpenlaneClient) SetAuthTokens(access, refresh string) error {
 	if c.HTTPSlingClient().HTTPClient.Jar == nil {
 		return ErrNoCookieJarSet
 	}
@@ -182,7 +182,7 @@ func (c *OpenLaneClient) SetAuthTokens(access, refresh string) error {
 }
 
 // ClearAuthTokens clears the access and refresh tokens on the client Jar.
-func (c *OpenLaneClient) ClearAuthTokens() {
+func (c *OpenlaneClient) ClearAuthTokens() {
 	if cookies, err := c.Cookies(); err == nil {
 		// Expire the access and refresh cookies.
 		for _, cookie := range cookies {
@@ -197,7 +197,7 @@ func (c *OpenLaneClient) ClearAuthTokens() {
 }
 
 // Returns the cookies set from the previous request(s) on the client Jar.
-func (c *OpenLaneClient) Cookies() ([]*http.Cookie, error) {
+func (c *OpenlaneClient) Cookies() ([]*http.Cookie, error) {
 	if c.HTTPSlingClient().HTTPClient.Jar == nil {
 		return nil, ErrNoCookieJarSet
 	}
@@ -208,7 +208,7 @@ func (c *OpenLaneClient) Cookies() ([]*http.Cookie, error) {
 }
 
 // GetSessionFromCookieJar parses the cookie jar for the session cookie
-func (c *OpenLaneClient) GetSessionFromCookieJar() (sessionID string, err error) {
+func (c *OpenlaneClient) GetSessionFromCookieJar() (sessionID string, err error) {
 	cookies, err := c.Cookies()
 	if err != nil {
 		return "", err
@@ -232,7 +232,7 @@ func (c *OpenLaneClient) GetSessionFromCookieJar() (sessionID string, err error)
 
 // GetAuthTokensFromCookieJar gets the access and refresh tokens from the cookie jar
 // and returns them as an oauth2.Token if they are set
-func (c *OpenLaneClient) GetAuthTokensFromCookieJar() *oauth2.Token {
+func (c *OpenlaneClient) GetAuthTokensFromCookieJar() *oauth2.Token {
 	token := oauth2.Token{}
 
 	if cookies, err := c.Cookies(); err == nil {

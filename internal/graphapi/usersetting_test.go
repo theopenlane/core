@@ -34,7 +34,7 @@ func (suite *GraphTestSuite) TestQueryUserSetting() {
 	testCases := []struct {
 		name     string
 		queryID  string
-		client   *openlaneclient.OpenLaneClient
+		client   *openlaneclient.OpenlaneClient
 		ctx      context.Context
 		expected *openlaneclient.GetUserSettings_UserSettings_Edges_Node
 		errorMsg string
@@ -152,7 +152,7 @@ func (suite *GraphTestSuite) TestMutationUpdateUserSetting() {
 	testCases := []struct {
 		name        string
 		updateInput openlaneclient.UpdateUserSettingInput
-		client      *openlaneclient.OpenLaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedRes openlaneclient.UpdateUserSetting_UpdateUserSetting_UserSetting
 		allowed     bool

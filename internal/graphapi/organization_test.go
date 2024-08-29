@@ -35,7 +35,7 @@ func (suite *GraphTestSuite) TestQueryOrganization() {
 	testCases := []struct {
 		name               string
 		queryID            string
-		client             *openlaneclient.OpenLaneClient
+		client             *openlaneclient.OpenlaneClient
 		ctx                context.Context
 		expected           *ent.Organization
 		orgMembersExpected int
@@ -181,7 +181,7 @@ func (suite *GraphTestSuite) TestMutationCreateOrganization() {
 		orgDescription           string
 		parentOrgID              string
 		settings                 *openlaneclient.CreateOrganizationSettingInput
-		client                   *openlaneclient.OpenLaneClient
+		client                   *openlaneclient.OpenlaneClient
 		ctx                      context.Context
 		expectedDefaultOrgUpdate bool
 		errorMsg                 string
@@ -407,7 +407,7 @@ func (suite *GraphTestSuite) TestMutationUpdateOrganization() {
 	testCases := []struct {
 		name        string
 		updateInput openlaneclient.UpdateOrganizationInput
-		client      *openlaneclient.OpenLaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedRes openlaneclient.UpdateOrganization_UpdateOrganization_Organization
 		errorMsg    string

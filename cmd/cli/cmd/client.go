@@ -23,10 +23,10 @@ const (
 	sessionKey      = "open_lane_session"
 )
 
-// SetupClientWithAuth will setup the OpenLane client with the the bearer token passed in the Authorization header
+// SetupClientWithAuth will setup the openlane client with the the bearer token passed in the Authorization header
 // and the session cookie passed in the Cookie header. If the token is expired, it will be refreshed.
 // The token and session will be stored in the keyring for future requests
-func SetupClientWithAuth(ctx context.Context) (*openlaneclient.OpenLaneClient, error) {
+func SetupClientWithAuth(ctx context.Context) (*openlaneclient.OpenlaneClient, error) {
 	// setup interceptors
 	token, session, err := GetTokenFromKeyring(ctx)
 	if err != nil {
@@ -68,7 +68,7 @@ func SetupClientWithAuth(ctx context.Context) (*openlaneclient.OpenLaneClient, e
 
 // SetupClient will setup the client without the Authorization header
 // this is used for endpoints that do not require authentication, e.g. `v1/login`
-func SetupClient(ctx context.Context) (*openlaneclient.OpenLaneClient, error) {
+func SetupClient(ctx context.Context) (*openlaneclient.OpenlaneClient, error) {
 	config, opts, err := configureDefaultOpts()
 	if err != nil {
 		return nil, err
@@ -106,7 +106,7 @@ func configureClientEndpoints() (openlaneclient.ClientOption, error) {
 
 // StoreSessionCookies gets the session cookie from the cookie jar
 // and stores it in the keychain for future requests
-func StoreSessionCookies(client *openlaneclient.OpenLaneClient) {
+func StoreSessionCookies(client *openlaneclient.OpenlaneClient) {
 	session, err := client.GetSessionFromCookieJar()
 	if err != nil || session == "" {
 		fmt.Println("unable to get session from cookie jar")
@@ -126,7 +126,7 @@ func StoreSessionCookies(client *openlaneclient.OpenLaneClient) {
 
 // StoreAuthCookies gets the auth cookies from the cookie jar if they exist
 // and stores them in the keychain for future requests
-func StoreAuthCookies(client *openlaneclient.OpenLaneClient) {
+func StoreAuthCookies(client *openlaneclient.OpenlaneClient) {
 	token := client.GetAuthTokensFromCookieJar()
 
 	if token == nil {

@@ -27,7 +27,7 @@ func (suite *GraphTestSuite) TestQueryInvite() {
 	testCases := []struct {
 		name        string
 		queryID     string
-		client      *openlaneclient.OpenLaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		shouldCheck bool
 		wantErr     bool
@@ -106,7 +106,7 @@ func (suite *GraphTestSuite) TestMutationCreateInvite() {
 		recipient        string
 		orgID            string
 		role             enums.Role
-		client           *openlaneclient.OpenLaneClient
+		client           *openlaneclient.OpenlaneClient
 		ctx              context.Context
 		accessAllowed    bool
 		skipMockCheck    bool
@@ -298,7 +298,7 @@ func (suite *GraphTestSuite) TestMutationDeleteInvite() {
 	testCases := []struct {
 		name          string
 		queryID       string
-		client        *openlaneclient.OpenLaneClient
+		client        *openlaneclient.OpenlaneClient
 		ctx           context.Context
 		skipMockCheck bool
 		allowed       bool

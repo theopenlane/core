@@ -7,8 +7,8 @@ import (
 	"github.com/theopenlane/core/pkg/models"
 )
 
-// OpenLaneRestClient is the interface that wraps the OpenLane API REST client methods
-type OpenLaneRestClient interface {
+// OpenlaneRestClient is the interface that wraps the openlane API REST client methods
+type OpenlaneRestClient interface {
 	// Register a new user with the API
 	Register(context.Context, *models.RegisterRequest) (*models.RegisterReply, error)
 	// Login to the API
@@ -29,8 +29,8 @@ type OpenLaneRestClient interface {
 	AcceptInvite(context.Context, *models.InviteRequest) (*models.InviteReply, error)
 }
 
-// New creates a new API v1 client that implements the OpenLane Client interface
-func NewRestClient(config Config, opts ...ClientOption) (_ OpenLaneRestClient, err error) {
+// New creates a new API v1 client that implements the Openlane Client interface
+func NewRestClient(config Config, opts ...ClientOption) (_ OpenlaneRestClient, err error) {
 	c := &APIv1{
 		Config: config,
 	}
@@ -53,8 +53,8 @@ func NewRestClient(config Config, opts ...ClientOption) (_ OpenLaneRestClient, e
 	return c, nil
 }
 
-// Ensure the APIv1 implements the OpenLaneClient interface
-var _ OpenLaneRestClient = &APIv1{}
+// Ensure the APIv1 implements the OpenlaneClient interface
+var _ OpenlaneRestClient = &APIv1{}
 
 // Register a new user with the API
 func (s *APIv1) Register(ctx context.Context, in *models.RegisterRequest) (out *models.RegisterReply, err error) {
