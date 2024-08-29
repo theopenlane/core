@@ -11,61 +11,47 @@
     "cache.Config": {
       "properties": {
         "enabled": {
-          "type": "boolean",
-          "description": "Enabled to enable redis client in the server"
+          "type": "boolean"
         },
         "address": {
-          "type": "string",
-          "description": "Address is the host:port to connect to redis"
+          "type": "string"
         },
         "name": {
-          "type": "string",
-          "description": "Name of the connecting client"
+          "type": "string"
         },
         "username": {
-          "type": "string",
-          "description": "Username to connect to redis"
+          "type": "string"
         },
         "password": {
-          "type": "string",
-          "description": "Password, must match the password specified in the server configuration"
+          "type": "string"
         },
         "db": {
-          "type": "integer",
-          "description": "DB to be selected after connecting to the server, 0 uses the default"
+          "type": "integer"
         },
         "dialTimeout": {
-          "type": "integer",
-          "description": "Dial timeout for establishing new connections, defaults to 5s"
+          "type": "integer"
         },
         "readTimeout": {
-          "type": "integer",
-          "description": "Timeout for socket reads. If reached, commands will fail\nwith a timeout instead of blocking. Supported values:\n  - `0` - default timeout (3 seconds).\n  - `-1` - no timeout (block indefinitely).\n  - `-2` - disables SetReadDeadline calls completely."
+          "type": "integer"
         },
         "writeTimeout": {
-          "type": "integer",
-          "description": "Timeout for socket writes. If reached, commands will fail\nwith a timeout instead of blocking.  Supported values:\n  - `0` - default timeout (3 seconds).\n  - `-1` - no timeout (block indefinitely).\n  - `-2` - disables SetWriteDeadline calls completely."
+          "type": "integer"
         },
         "maxRetries": {
-          "type": "integer",
-          "description": "MaxRetries before giving up.\nDefault is 3 retries; -1 (not 0) disables retries."
+          "type": "integer"
         },
         "minIdleConns": {
-          "type": "integer",
-          "description": "MinIdleConns is useful when establishing new connection is slow.\nDefault is 0. the idle connections are not closed by default."
+          "type": "integer"
         },
         "maxIdleConns": {
-          "type": "integer",
-          "description": "Maximum number of idle connections.\nDefault is 0. the idle connections are not closed by default."
+          "type": "integer"
         },
         "maxActiveConns": {
-          "type": "integer",
-          "description": "Maximum number of connections allocated by the pool at a given time.\nWhen zero, there is no limit on the number of connections in the pool."
+          "type": "integer"
         }
       },
       "additionalProperties": false,
-      "type": "object",
-      "description": "Config for the redis client used to store key-value pairs"
+      "type": "object"
     },
     "cachecontrol.Config": {
       "properties": {

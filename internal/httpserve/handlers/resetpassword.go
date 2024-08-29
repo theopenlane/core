@@ -19,10 +19,11 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
 
+	"github.com/theopenlane/utils/passwd"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/utils/passwd"
 )
 
 // ResetPassword allows the user (after requesting a password reset) to

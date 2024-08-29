@@ -14,7 +14,7 @@ Config contains the configuration for the core server
 |[**authz**](#authz)|`object`||yes|
 |[**db**](#db)|`object`||yes|
 |[**dbx**](#dbx)|`object`|||
-|[**redis**](#redis)|`object`|Config for the redis client used to store key-value pairs<br/>||
+|[**redis**](#redis)|`object`|||
 |[**tracer**](#tracer)|`object`|||
 |[**email**](#email)|`object`|||
 |[**sessions**](#sessions)|`object`|||
@@ -429,26 +429,23 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 <a name="redis"></a>
 ## redis: object
 
-Config for the redis client used to store key-value pairs
-
-
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**enabled**|`boolean`|Enabled to enable redis client in the server<br/>||
-|**address**|`string`|Address is the host:port to connect to redis<br/>||
-|**name**|`string`|Name of the connecting client<br/>||
-|**username**|`string`|Username to connect to redis<br/>||
-|**password**|`string`|Password, must match the password specified in the server configuration<br/>||
-|**db**|`integer`|DB to be selected after connecting to the server, 0 uses the default<br/>||
-|**dialTimeout**|`integer`|Dial timeout for establishing new connections, defaults to 5s<br/>||
-|**readTimeout**|`integer`|Timeout for socket reads. If reached, commands will fail<br/>with a timeout instead of blocking. Supported values:<br/>  - `0` - default timeout (3 seconds).<br/>  - `-1` - no timeout (block indefinitely).<br/>  - `-2` - disables SetReadDeadline calls completely.<br/>||
-|**writeTimeout**|`integer`|Timeout for socket writes. If reached, commands will fail<br/>with a timeout instead of blocking.  Supported values:<br/>  - `0` - default timeout (3 seconds).<br/>  - `-1` - no timeout (block indefinitely).<br/>  - `-2` - disables SetWriteDeadline calls completely.<br/>||
-|**maxRetries**|`integer`|MaxRetries before giving up.<br/>Default is 3 retries; -1 (not 0) disables retries.<br/>||
-|**minIdleConns**|`integer`|MinIdleConns is useful when establishing new connection is slow.<br/>Default is 0. the idle connections are not closed by default.<br/>||
-|**maxIdleConns**|`integer`|Maximum number of idle connections.<br/>Default is 0. the idle connections are not closed by default.<br/>||
-|**maxActiveConns**|`integer`|Maximum number of connections allocated by the pool at a given time.<br/>When zero, there is no limit on the number of connections in the pool.<br/>||
+|**enabled**|`boolean`|||
+|**address**|`string`|||
+|**name**|`string`|||
+|**username**|`string`|||
+|**password**|`string`|||
+|**db**|`integer`|||
+|**dialTimeout**|`integer`|||
+|**readTimeout**|`integer`|||
+|**writeTimeout**|`integer`|||
+|**maxRetries**|`integer`|||
+|**minIdleConns**|`integer`|||
+|**maxIdleConns**|`integer`|||
+|**maxActiveConns**|`integer`|||
 
 **Additional Properties:** not allowed  
 <a name="tracer"></a>

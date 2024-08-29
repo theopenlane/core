@@ -11,9 +11,10 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 
+	"github.com/theopenlane/utils/passwd"
+
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/utils/passwd"
 )
 
 // LoginHandler validates the user credentials and returns a valid cookie
