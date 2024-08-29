@@ -31,8 +31,8 @@ func (l localRoundTripper) RoundTrip(req *http.Request) (*http.Response, error) 
 	return w.Result(), nil
 }
 
-// TestClient creates a new OpenLaneClient for testing
-func TestClient(t *testing.T, c *generated.Client, opts ...openlaneclient.ClientOption) (*openlaneclient.OpenLaneClient, error) {
+// TestClient creates a new OpenlaneClient for testing
+func TestClient(t *testing.T, c *generated.Client, opts ...openlaneclient.ClientOption) (*openlaneclient.OpenlaneClient, error) {
 	e := testEchoServer(t, c, false)
 
 	// setup interceptors
@@ -47,8 +47,8 @@ func TestClient(t *testing.T, c *generated.Client, opts ...openlaneclient.Client
 	return openlaneclient.New(config, opts...)
 }
 
-// TestClientWithAuth creates a new OpenLaneClient for testing that includes the auth middleware
-func TestClientWithAuth(t *testing.T, c *generated.Client, opts ...openlaneclient.ClientOption) (*openlaneclient.OpenLaneClient, error) {
+// TestClientWithAuth creates a new OpenlaneClient for testing that includes the auth middleware
+func TestClientWithAuth(t *testing.T, c *generated.Client, opts ...openlaneclient.ClientOption) (*openlaneclient.OpenlaneClient, error) {
 	e := testEchoServer(t, c, true)
 
 	// setup interceptors

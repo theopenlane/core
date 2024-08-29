@@ -35,7 +35,7 @@ func (suite *GraphTestSuite) TestQueryGroupMembers() {
 	testCases := []struct {
 		name        string
 		queryID     string
-		client      *openlaneclient.OpenLaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		allowed     bool
 		expected    *ent.GroupMembership
@@ -153,7 +153,7 @@ func (suite *GraphTestSuite) TestMutationCreateGroupMembers() {
 		groupID string
 		userID  string
 		role    enums.Role
-		client  *openlaneclient.OpenLaneClient
+		client  *openlaneclient.OpenlaneClient
 		ctx     context.Context
 		allowed bool
 		check   bool
@@ -332,7 +332,7 @@ func (suite *GraphTestSuite) TestMutationUpdateGroupMembers() {
 	testCases := []struct {
 		name    string
 		role    enums.Role
-		client  *openlaneclient.OpenLaneClient
+		client  *openlaneclient.OpenlaneClient
 		ctx     context.Context
 		allowed bool
 		check   bool
@@ -439,7 +439,7 @@ func (suite *GraphTestSuite) TestMutationDeleteGroupMembers() {
 	testCases := []struct {
 		name        string
 		idToDelete  string
-		client      *openlaneclient.OpenLaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		allowed     bool
 		checkAccess bool

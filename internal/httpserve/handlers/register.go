@@ -87,7 +87,7 @@ func (h *Handler) RegisterHandler(ctx echo.Context) error {
 		Reply:   rout.Reply{Success: true},
 		ID:      meowuser.ID,
 		Email:   meowuser.Email,
-		Message: "Welcome to OpenLane!",
+		Message: "Welcome to Openlane!",
 		Token:   meowtoken.Token,
 	}
 

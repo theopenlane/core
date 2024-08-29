@@ -36,7 +36,7 @@ func (suite *GraphTestSuite) TestQueryOrgMembers() {
 	testCases := []struct {
 		name        string
 		queryID     string
-		client      *openlaneclient.OpenLaneClient
+		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		allowed     bool
 		expectedLen int

@@ -171,7 +171,7 @@ var ExampleRegisterSuccessResponse = RegisterReply{
 	Reply:   rout.Reply{Success: true},
 	ID:      "1234",
 	Email:   "",
-	Message: "Welcome to OpenLane!",
+	Message: "Welcome to Openlane!",
 	Token:   "",
 }
 

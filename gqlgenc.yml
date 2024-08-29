@@ -18,6 +18,6 @@ schema: ["schema.graphql"]
 query: ["query/*.graphql"]
 generate:
   clientV2: true
-  clientInterfaceName: "OpenLaneGraphClient"
+  clientInterfaceName: "OpenlaneGraphClient"
   query: false
   mutation: false

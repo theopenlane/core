@@ -99,10 +99,10 @@ func NewOpenAPISpec() (*openapi3.T, error) {
 	return &openapi3.T{
 		OpenAPI: "3.1.0",
 		Info: &openapi3.Info{
-			Title:   "OpenLane OpenAPI 3.1.0 Specifications",
+			Title:   "Openlane OpenAPI 3.1.0 Specifications",
 			Version: "v1.0.0",
 			Contact: &openapi3.Contact{
-				Name:  "OpenLane",
+				Name:  "Openlane",
 				Email: "support@theopenlane.io",
 				URL:   "https://theopenlane.io",
 			},

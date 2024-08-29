@@ -1,6 +1,6 @@
 # GenCMD
 
-This package is used to generate the base CRUD operations for a cli command for the `OpenLaneClient`
+This package is used to generate the base CRUD operations for a cli command for the `OpenlaneClient`
 
 ## Usage
 

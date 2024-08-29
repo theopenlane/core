@@ -1,4 +1,4 @@
-name: OpenLane
+name: Openlane
 model_file: ../model/model.fga
 tuples:
   # setup parent child org relationship

@@ -49,7 +49,7 @@ type HandlerTestSuite struct {
 	suite.Suite
 	e   *echo.Echo
 	db  *ent.Client
-	api *openlaneclient.OpenLaneClient
+	api *openlaneclient.OpenlaneClient
 	h   *handlers.Handler
 	fga *mock_fga.MockSdkClient
 	tf  *testutils.TestFixture
