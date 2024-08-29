@@ -59,11 +59,10 @@ require (
 	github.com/theopenlane/entx v0.1.4
 	github.com/theopenlane/gqlgen-plugins v0.1.0
 	github.com/theopenlane/httpsling v0.1.0
-	github.com/theopenlane/iam v0.1.4
+	github.com/theopenlane/iam v0.1.5
 	github.com/theopenlane/utils v0.1.2
 	github.com/tursodatabase/libsql-client-go v0.0.0-20240812094001-348a4e45b535
 	github.com/vektah/gqlparser/v2 v2.5.16
-	github.com/vmihailenco/msgpack/v5 v5.4.1
 	github.com/wundergraph/graphql-go-tools v1.67.4
 	go.opentelemetry.io/otel v1.29.0
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.29.0
@@ -227,6 +226,7 @@ require (
 	github.com/urfave/cli/v2 v2.27.4 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
+	github.com/vmihailenco/msgpack/v5 v5.4.1 // indirect
 	github.com/vmihailenco/tagparser/v2 v2.0.0 // indirect
 	github.com/wk8/go-ordered-map/v2 v2.1.8 // indirect
 	github.com/x448/float16 v0.8.4 // indirect
