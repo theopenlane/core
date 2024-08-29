@@ -15,7 +15,7 @@ Config contains the configuration for the core server
 |[**db**](#db)|`object`||yes|
 |[**dbx**](#dbx)|`object`|||
 |[**redis**](#redis)|`object`|Config for the redis client used to store key-value pairs<br/>||
-|[**tracer**](#tracer)|`object`|Config defines the configuration settings for opentelemetry tracing<br/>||
+|[**tracer**](#tracer)|`object`|||
 |[**email**](#email)|`object`|||
 |[**sessions**](#sessions)|`object`|||
 |[**posthog**](#posthog)|`object`|Config is the configuration for PostHog<br/>||
@@ -454,50 +454,41 @@ Config for the redis client used to store key-value pairs
 <a name="tracer"></a>
 ## tracer: object
 
-Config defines the configuration settings for opentelemetry tracing
-
-
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**enabled**|`boolean`|Enabled to enable tracing<br/>||
-|**provider**|`string`|Provider to use for tracing<br/>||
-|**environment**|`string`|Environment to set for the service<br/>||
-|[**stdout**](#tracerstdout)|`object`|StdOut settings for the stdout provider<br/>||
-|[**otlp**](#tracerotlp)|`object`|OTLP settings for the otlp provider<br/>||
+|**enabled**|`boolean`|||
+|**provider**|`string`|||
+|**environment**|`string`|||
+|[**stdout**](#tracerstdout)|`object`|||
+|[**otlp**](#tracerotlp)|`object`|||
 
 **Additional Properties:** not allowed  
 <a name="tracerstdout"></a>
 ### tracer\.stdout: object
 
-StdOut settings for the stdout provider
-
-
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**pretty**|`boolean`|Pretty enables pretty printing of the output<br/>||
-|**disableTimestamp**|`boolean`|DisableTimestamp disables the timestamp in the output<br/>||
+|**pretty**|`boolean`|||
+|**disableTimestamp**|`boolean`|||
 
 **Additional Properties:** not allowed  
 <a name="tracerotlp"></a>
 ### tracer\.otlp: object
 
-OTLP settings for the otlp provider
-
-
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**endpoint**|`string`|Endpoint to send the traces to<br/>||
-|**insecure**|`boolean`|Insecure to disable TLS<br/>||
-|**certificate**|`string`|Certificate to use for TLS<br/>||
+|**endpoint**|`string`|||
+|**insecure**|`boolean`|||
+|**certificate**|`string`|||
 |[**headers**](#tracerotlpheaders)|`string[]`|||
-|**compression**|`string`|Compression to use for the request<br/>||
-|**timeout**|`integer`|Timeout for the request<br/>||
+|**compression**|`string`|||
+|**timeout**|`integer`|||
 
 **Additional Properties:** not allowed  
 <a name="tracerotlpheaders"></a>

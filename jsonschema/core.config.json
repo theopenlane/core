@@ -616,75 +616,59 @@
     "otelx.Config": {
       "properties": {
         "enabled": {
-          "type": "boolean",
-          "description": "Enabled to enable tracing"
+          "type": "boolean"
         },
         "provider": {
-          "type": "string",
-          "description": "Provider to use for tracing"
+          "type": "string"
         },
         "environment": {
-          "type": "string",
-          "description": "Environment to set for the service"
+          "type": "string"
         },
         "stdout": {
-          "$ref": "#/$defs/otelx.StdOut",
-          "description": "StdOut settings for the stdout provider"
+          "$ref": "#/$defs/otelx.StdOut"
         },
         "otlp": {
-          "$ref": "#/$defs/otelx.OTLP",
-          "description": "OTLP settings for the otlp provider"
+          "$ref": "#/$defs/otelx.OTLP"
         }
       },
       "additionalProperties": false,
-      "type": "object",
-      "description": "Config defines the configuration settings for opentelemetry tracing"
+      "type": "object"
     },
     "otelx.OTLP": {
       "properties": {
         "endpoint": {
-          "type": "string",
-          "description": "Endpoint to send the traces to"
+          "type": "string"
         },
         "insecure": {
-          "type": "boolean",
-          "description": "Insecure to disable TLS"
+          "type": "boolean"
         },
         "certificate": {
-          "type": "string",
-          "description": "Certificate to use for TLS"
+          "type": "string"
         },
         "headers": {
-          "$ref": "#/$defs/[]string",
-          "description": "Headers to send with the request"
+          "$ref": "#/$defs/[]string"
         },
         "compression": {
-          "type": "string",
-          "description": "Compression to use for the request"
+          "type": "string"
         },
         "timeout": {
-          "type": "integer",
-          "description": "Timeout for the request"
+          "type": "integer"
         }
       },
       "additionalProperties": false,
-      "type": "object",
-      "description": "OTLP settings for the otlp provider"
+      "type": "object"
     },
     "otelx.StdOut": {
       "properties": {
         "pretty": {
-          "type": "boolean",
-          "description": "Pretty enables pretty printing of the output"
+          "type": "boolean"
         },
         "disableTimestamp": {
-          "type": "boolean",
-          "description": "DisableTimestamp disables the timestamp in the output"
+          "type": "boolean"
         }
       },
       "additionalProperties": false,
-      "type": "object",
-      "description": "StdOut settings for the stdout provider"
+      "type": "object"
     },
     "posthog.Config": {
       "properties": {
