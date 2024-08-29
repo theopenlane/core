@@ -547,8 +547,8 @@ github.com/theopenlane/httpsling v0.1.0 h1:IHWUSo213stJTmHOHjNIg5b3npgpchzMdPMY7
 github.com/theopenlane/httpsling v0.1.0/go.mod h1:wOyNfO4moIbmP4stQc9Kasgp+Q4sODo3LOLwvjUe/PA=
 github.com/theopenlane/iam v0.1.5 h1:CreDFrl8hLTpdQJcs/gFbkk8EuOFClGCClIpCUxPrOg=
 github.com/theopenlane/iam v0.1.5/go.mod h1:KZd/k1nEHSzS9wQeQHLqRabJuH3XkF5g8aGqzRhjSmQ=
-github.com/theopenlane/utils v0.1.2 h1:kFbzvGgz/7b2CNZ/ycAzMBTmCqBJUld/UJxsfXCOgbw=
-github.com/theopenlane/utils v0.1.2/go.mod h1:37sJeeuIsmMbMFE2nKglmEQUJenTccxh5WxkJtyuZUw=
+github.com/theopenlane/utils v0.1.3 h1:ankd7gtxOMC1xvRike13+Q2oI7paBSKu9Z8fUujdd50=
+github.com/theopenlane/utils v0.1.3/go.mod h1:gX64mPxANzaIc1GCgtAueWGDZVsKXiMyQF9oxTrDdVg=
 github.com/tursodatabase/libsql-client-go v0.0.0-20240812094001-348a4e45b535 h1:iLjJLq2A5J6L9zrhyNn+fpmxFvtEpYB4XLMr0rX3epI=
 github.com/tursodatabase/libsql-client-go v0.0.0-20240812094001-348a4e45b535/go.mod h1:l8xTsYB90uaVdMHXMCxKKLSgw5wLYBwBKKefNIUnm9s=
 github.com/twitchyliquid64/golang-asm v0.15.1 h1:SU5vSMR7hnwNxj24w34ZyCi/FmDZTkS4MhqMhdFk5YI=

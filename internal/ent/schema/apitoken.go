@@ -13,12 +13,13 @@ import (
 	emixin "github.com/theopenlane/entx/mixin"
 	"github.com/theopenlane/iam/entfga"
 
+	"github.com/theopenlane/utils/keygen"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
-	"github.com/theopenlane/core/pkg/keygen"
 )
 
 // APIToken holds the schema definition for the APIToken entity.
