@@ -2,7 +2,7 @@ module github.com/theopenlane/core
 
 go 1.23.0
 
-replace golang.org/x/tools v0.24.0 => golang.org/x/tools v0.23.0
+godebug default=go1.22
 
 require (
 	ariga.io/entcache v0.1.0
