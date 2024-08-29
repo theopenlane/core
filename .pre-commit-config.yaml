@@ -10,7 +10,6 @@ repos:
       - id: trailing-whitespace
         exclude: jsonschema/api-docs.md
       - id: detect-private-key
-        exclude: 'pkg/tokens/testdata/.*'
   - repo: https://github.com/google/yamlfmt
     rev: v0.13.0
     hooks:

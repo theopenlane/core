@@ -22,7 +22,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/core/pkg/passwd"
+	"github.com/theopenlane/utils/passwd"
 )
 
 // ResetPassword allows the user (after requesting a password reset) to

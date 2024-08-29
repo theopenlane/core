@@ -1,5 +1,5 @@
 [files]
-extend-exclude = ["db","internal/ent/generated/**","go.mod","go.sum","pkg/testutils/","pkg/passwd/","pkg/tokens/testdata/","pkg/tokens/expires_test.go","internal/graphapi/tools_test.go","internal/httpserve/handlers/tools_test.go","pkg/keygen/auth_test.go","pkg/utils/oas/","pkg/keygen/crypto_test.go","pkg/auth/auth_test.go"]
+extend-exclude = ["db","internal/ent/generated/**","go.mod","go.sum","pkg/testutils/","internal/graphapi/tools_test.go","internal/httpserve/handlers/tools_test.go"]
 ignore-hidden = true
 ignore-files = true
 ignore-dot = true
@@ -17,4 +17,4 @@ identifier-leading-digits = false
 locale = "en"
 extend-ignore-identifiers-re = []
 extend-ignore-words-re = ["(?i)requestor","(?i)indentity","(?i)encrypter","(?i)seeked","(?i)generater"]
-extend-ignore-re = ["#\\s*spellchecker:off\\s*\\n.*\\n\\s*#\\s*spellchecker:on"]
+extend-ignore-re = ["(?Rm)^.*//\\s*spellchecker:disable-line$"]

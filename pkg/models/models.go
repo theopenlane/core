@@ -8,7 +8,7 @@ import (
 	"github.com/theopenlane/utils/rout"
 	"github.com/theopenlane/utils/ulids"
 
-	"github.com/theopenlane/core/pkg/passwd"
+	"github.com/theopenlane/utils/passwd"
 )
 
 // =========
