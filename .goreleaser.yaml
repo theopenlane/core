@@ -1,8 +1,9 @@
-project_name: core
+project_name: openlane
 builds:
   - env:
       - GO111MODULE=on
       - CGO_ENABLED=0
+    binary: openlane
     flags:
       - -trimpath
       - -tags=netgo
@@ -38,7 +39,7 @@ archives:
         format: zip
 brews:
   - homepage: 'https://github.com/theopenlane/core'
-    description: 'core is the client CLI for interacting with the OL Core Server'
+    description: 'openlane is the client CLI for interacting with the openlane server'
     directory: Formula
     license: 'Apache-2.0'
     commit_author:
@@ -49,7 +50,7 @@ brews:
       name: homebrew-tap
       token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
     test: |
-      system "#{bin}/core --help"
+      system "#{bin}/openlane --help"
 source:
   enabled: true
 changelog:
@@ -63,7 +64,7 @@ release:
   prerelease: auto
   github:
     owner: theopenlane
-    name: core
+    name: openlane
 # This section defines how and which artifacts we want to sign for the release.
 signs:
   - cmd: cosign

@@ -85,9 +85,9 @@ tasks:
 
   go:build-cli:
     aliases: [buildcli]
-    desc: Runs go build for the core cli
+    desc: Runs go build for the openlane cli
     cmds:
-      - go build -mod=mod -o core-cli ./cmd/cli
+      - go build -mod=mod -o openlane-cli ./cmd/cli
 
   go:all:
     aliases: [go]
@@ -148,7 +148,7 @@ tasks:
     desc: open a new shell to launch server as a dep
     cmds:
       - rm -f core.db
-      - rm -f core-cli
+      - rm -f openlane-cli
       - osascript -e 'tell app "Terminal" to do script "cd {{.PWD}} && task run-dev"'
     vars:
       PWD:
