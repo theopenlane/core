@@ -426,8 +426,8 @@ github.com/opencontainers/runc v1.1.13 h1:98S2srgG9vw0zWcDpFMn5TRrh8kLxa/5OFUstu
 github.com/opencontainers/runc v1.1.13/go.mod h1:R016aXacfp/gwQBYw2FDGa9m+n6atbLWrYY8hNMT/sA=
 github.com/openfga/api/proto v0.0.0-20240807201305-c96ec773cae9 h1:Y0fIAHrYECcf5lpa/o1AbH21bS7rsco/FoH4A4NGlZE=
 github.com/openfga/api/proto v0.0.0-20240807201305-c96ec773cae9/go.mod h1:gil5LBD8tSdFQbUkCQdnXsoeU9kDJdJgbGdHkgJfcd0=
-github.com/openfga/go-sdk v0.5.0 h1:1IuAu6Xf4eBxgc2AyMfosK7QzApxuZ5yi7jmFaftnl0=
-github.com/openfga/go-sdk v0.5.0/go.mod h1:AoMnFlPw65sU/7O4xOPpCb2vXA8ZD9K9xp2hZjcvt4g=
+github.com/openfga/go-sdk v0.6.0 h1:AzfIByBk2niW5gbN5fm9A8WnDz/vW8wT1Zv4cZwWbww=
+github.com/openfga/go-sdk v0.6.0/go.mod h1:L4ss/4HEMmehyV2WIuBEPMdeh686MqIEJcnoUk3Lhd8=
 github.com/openfga/language/pkg/go v0.2.0-beta.0 h1:dTvgDkQImfNnH1iDvxnUIbz4INvKr4kS46dI12oAEzM=
 github.com/openfga/language/pkg/go v0.2.0-beta.0/go.mod h1:mCwEY2IQvyNgfEwbfH0C0ERUwtL8z6UjSAF8zgn5Xbg=
 github.com/openfga/openfga v1.5.9 h1:1x+9YdBOzbYPbkEUZjPPYt255GXDUbouC0ConpMRtL8=
@@ -534,8 +534,8 @@ github.com/subosito/gotenv v1.6.0 h1:9NlTDc1FTs4qu0DDq7AEtTPNw6SVm7uBMsUCUjABIf8
 github.com/subosito/gotenv v1.6.0/go.mod h1:Dk4QP5c2W3ibzajGcXpNraDfq2IrhjMIvMSWPKKo0FU=
 github.com/theopenlane/beacon v0.1.0 h1:cyGx18rbaJTZT8pRcqMMvg+kN6uh86X4OoDahQp6VnE=
 github.com/theopenlane/beacon v0.1.0/go.mod h1:gOJAanQzfmDF3FIyv7Lwx16bKI7YPkJx1iRT4SdcBW4=
-github.com/theopenlane/dbx v0.1.1 h1:RSSZLfhCCYKWf6+4taAfoZefvrvmLuIadjJDAxH154s=
-github.com/theopenlane/dbx v0.1.1/go.mod h1:pSfzjKF3GI0FSG4NDXYJqFYVSJXV9JrLlk2sHUtvfZ8=
+github.com/theopenlane/dbx v0.1.2 h1:h2+okfFg3oh4ou8z99QTqCxBTDeaQ2Ek2AEsh3tw/KQ=
+github.com/theopenlane/dbx v0.1.2/go.mod h1:SRBOZyQaGQLM4OFxOEtJW5JbR0aTXFUjY8GYm2WOr64=
 github.com/theopenlane/echo-prometheus v0.1.0 h1:1zMejBVHe5w4zLHS+k5FV9S/46QBiwO6ggTSKi6r/7E=
 github.com/theopenlane/echo-prometheus v0.1.0/go.mod h1:Eiiv1ZLXKMsteQ3T+H1tFfSSZuXSvQfZp95qr5hmGkA=
 github.com/theopenlane/echox v0.1.0 h1:y4Z2shaODCLwXHsHBrY/EkH/2sIuo49xdIfxx7h+Zvg=
