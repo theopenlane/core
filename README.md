@@ -56,12 +56,6 @@ We also leverage many secondary technologies in use, including (but not limited 
 1. [golangci-lint](https://github.com/golangci/golangci-lint) - an annoyingly opinionated linter
 1. [buildkite](https://buildkite.com/theopenlane) - our CI system of choice (with github actions providing some intermediary support)
 
-Lastly we're already ourselves using (and plan to support our customers usage in our cloud service) these third party integrations:
-
-1. [turso/libsql](https://github.com/tursodatabase/libsql) - Turso is an edge-hosted, distributed database that's based on libSQL , an open-source and open-contribution fork of SQLite
-1. [posthog](https://posthog.com/) - Product analytics
-1. [sendgrid](https://sendgrid.com/en-us) - Transactional email send provider
-
 All of these components are bundled into our respective Docker images; for additional information / instructions, see the [contributing guide](.github/CONTRIBUTING.md) in this repository. We're constantly adding and changing things, but have tried to list all the great open source tools and projects we rely on; if you see your project (or one you use) in here and wish to list it, feel free to open a PR!
 
 ## Dependencies

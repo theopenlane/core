@@ -109,7 +109,7 @@ steps:
               download: "coverage.out"
               step: "go_test_libsql"
           - docker#v5.11.0:
-              image: "sonarsource/sonar-scanner-cli:5"
+              image: "sonarsource/sonar-scanner-cli:11.0"
               environment:
                 - "SONAR_TOKEN"
                 - "SONAR_HOST_URL=$SONAR_HOST"
@@ -125,7 +125,7 @@ steps:
               download: coverage.out
               step: "go_test_libsql"
           - docker#v5.11.0:
-              image: "sonarsource/sonar-scanner-cli:5"
+              image: "sonarsource/sonar-scanner-cli:11.0"
               environment:
                 - "SONAR_TOKEN"
                 - "SONAR_HOST_URL=$SONAR_HOST"

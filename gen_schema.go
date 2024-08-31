@@ -20,7 +20,9 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	defer f.Close()
+
 	fmtr := formatter.NewFormatter(f)
 
 	fmtr.FormatSchema(schema)

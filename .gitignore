@@ -20,7 +20,7 @@ go.work
 # local dev created files
 *.db
 core
-core-cli
+openlane-cli
 server.crt
 server.key
 private_key.pem

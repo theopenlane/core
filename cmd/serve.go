@@ -98,7 +98,7 @@ func serve(ctx context.Context) error {
 		serveropts.WithSessionManager(redisClient),
 	)
 
-	// Setup Geodetic client
+	// Setup DBx client
 	if so.Config.Settings.DBx.Enabled {
 		gc := so.Config.Settings.DBx.NewDefaultClient()
 

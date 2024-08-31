@@ -1,5 +1,4 @@
 variable "cloud_token" {
-  type    = string
   default = getenv("ATLAS_CLOUD_TOKEN")
 }
 

@@ -42,7 +42,6 @@ issues:
     - .buildkite/*
     - .github/*
     - docker/*
-    - pkg/utils/totp/testing/*
     - internal/ent/generated/*
     - jsonschema/templates/*
   exclude-files:
