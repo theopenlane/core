@@ -30,7 +30,6 @@ func (a Authorization) WithAuthorization() clientv2.RequestInterceptor {
 // WithLoggingInterceptor adds a http debug logging interceptor
 func WithLoggingInterceptor() clientv2.RequestInterceptor {
 	return func(ctx context.Context, req *http.Request, gqlInfo *clientv2.GQLRequestInfo, res interface{}, next clientv2.RequestInterceptorFunc) error {
-		fmt.Println("Request header sent:", req.Header)
 		fmt.Println("Request body sent:", req.Body)
 
 		return next(ctx, req, gqlInfo, res)
