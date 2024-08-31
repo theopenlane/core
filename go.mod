@@ -38,7 +38,7 @@ require (
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/nyaruka/phonenumbers v1.4.0
 	github.com/oklog/ulid/v2 v2.1.0
-	github.com/openfga/go-sdk v0.5.0
+	github.com/openfga/go-sdk v0.6.0
 	github.com/ory/dockertest v3.3.5+incompatible
 	github.com/panta/machineid v1.0.2
 	github.com/pkg/errors v0.9.1
@@ -53,7 +53,7 @@ require (
 	github.com/stoewer/go-strcase v1.3.0
 	github.com/stretchr/testify v1.9.0
 	github.com/theopenlane/beacon v0.1.0
-	github.com/theopenlane/dbx v0.1.1
+	github.com/theopenlane/dbx v0.1.2
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.1.0
 	github.com/theopenlane/echozap v0.1.0
