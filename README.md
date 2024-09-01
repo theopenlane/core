@@ -7,9 +7,9 @@
 
 </div>
 
-# Openlane - Core
+# openlane
 
-This repository houses the core server and orchestration elements which are at the heart of the [Openlane](https://theopenlane.io) cloud service. We have no plans to ever gate / silo elements of the code that may fall under our "enterprise licensing" (or any other commercial license we offer) and intend to keep the code Apache 2.0 licensed and free for use, forever. Given that, if you find value in anything we're doing here, our cloud services, or use this software yourself (for any purpose) - don't be afraid to become a contributor! If you have any questions please reach out to `contribute@theopenlane.io`.
+This repository houses the core server and orchestration elements which are at the heart of the [openlane](https://theopenlane.io) cloud service.
 
 ## Features
 
