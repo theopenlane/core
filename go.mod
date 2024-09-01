@@ -12,7 +12,7 @@ require (
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
 	github.com/Yamashou/gqlgenc v0.24.0
 	github.com/alicebob/miniredis/v2 v2.33.0
-	github.com/alitto/pond v1.9.1
+	github.com/alitto/pond v1.9.2
 	github.com/brianvoe/gofakeit/v7 v7.0.4
 	github.com/cenkalti/backoff/v4 v4.3.0
 	github.com/dustinkirkland/golang-petname v0.0.0-20240428194347-eebcea082ee0
