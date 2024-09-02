@@ -15,6 +15,7 @@ import (
 )
 
 type OpenlaneGraphClient interface {
+	AdminSearch(ctx context.Context, query string, interceptors ...clientv2.RequestInterceptor) (*AdminSearch, error)
 	CreateAPIToken(ctx context.Context, input CreateAPITokenInput, interceptors ...clientv2.RequestInterceptor) (*CreateAPIToken, error)
 	UpdateAPIToken(ctx context.Context, updateAPITokenID string, input UpdateAPITokenInput, interceptors ...clientv2.RequestInterceptor) (*UpdateAPIToken, error)
 	GetAllAPITokens(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllAPITokens, error)
@@ -206,7 +207,7 @@ type OpenlaneGraphClient interface {
 	GetAllPersonalAccessTokens(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllPersonalAccessTokens, error)
 	GetPersonalAccessTokenByID(ctx context.Context, personalAccessTokenID string, interceptors ...clientv2.RequestInterceptor) (*GetPersonalAccessTokenByID, error)
 	UpdatePersonalAccessToken(ctx context.Context, updatePersonalAccessTokenID string, input UpdatePersonalAccessTokenInput, interceptors ...clientv2.RequestInterceptor) (*UpdatePersonalAccessToken, error)
-	Search(ctx context.Context, query string, interceptors ...clientv2.RequestInterceptor) (*Search, error)
+	GlobalSearch(ctx context.Context, query string, interceptors ...clientv2.RequestInterceptor) (*GlobalSearch, error)
 	CreateBulkCSVSubscriber(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVSubscriber, error)
 	CreateBulkSubscriber(ctx context.Context, input []*CreateSubscriberInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkSubscriber, error)
 	CreateSubscriber(ctx context.Context, input CreateSubscriberInput, interceptors ...clientv2.RequestInterceptor) (*CreateSubscriber, error)
@@ -258,6 +259,397 @@ type Client struct {
 
 func NewClient(cli *http.Client, baseURL string, options *clientv2.Options, interceptors ...clientv2.RequestInterceptor) OpenlaneGraphClient {
 	return &Client{Client: clientv2.NewClient(cli, baseURL, options, interceptors...)}
+}
+
+type AdminSearch_Search_Nodes_ContactSearchResult_Contacts struct {
+	ID          string   "json:\"id\" graphql:\"id\""
+	DeletedBy   *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
+	OwnerID     *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	FullName    string   "json:\"fullName\" graphql:\"fullName\""
+	Title       *string  "json:\"title,omitempty\" graphql:\"title\""
+	Company     *string  "json:\"company,omitempty\" graphql:\"company\""
+	Email       *string  "json:\"email,omitempty\" graphql:\"email\""
+	PhoneNumber *string  "json:\"phoneNumber,omitempty\" graphql:\"phoneNumber\""
+	Address     *string  "json:\"address,omitempty\" graphql:\"address\""
+}
+
+func (t *AdminSearch_Search_Nodes_ContactSearchResult_Contacts) GetID() string {
+	if t == nil {
+		t = &AdminSearch_Search_Nodes_ContactSearchResult_Contacts{}
+	}
+	return t.ID
+}
+func (t *AdminSearch_Search_Nodes_ContactSearchResult_Contacts) GetDeletedBy() *string {
+	if t == nil {
+		t = &AdminSearch_Search_Nodes_ContactSearchResult_Contacts{}
+	}
+	return t.DeletedBy
+}
+func (t *AdminSearch_Search_Nodes_ContactSearchResult_Contacts) GetTags() []string {
+	if t == nil {
+		t = &AdminSearch_Search_Nodes_ContactSearchResult_Contacts{}
+	}
+	return t.Tags
+}
+func (t *AdminSearch_Search_Nodes_ContactSearchResult_Contacts) GetOwnerID() *string {
+	if t == nil {
+		t = &AdminSearch_Search_Nodes_ContactSearchResult_Contacts{}
+	}
+	return t.OwnerID
+}
+func (t *AdminSearch_Search_Nodes_ContactSearchResult_Contacts) GetFullName() string {
+	if t == nil {
+		t = &AdminSearch_Search_Nodes_ContactSearchResult_Contacts{}
+	}
+	return t.FullName
+}
+func (t *AdminSearch_Search_Nodes_ContactSearchResult_Contacts) GetTitle() *string {
+	if t == nil {
+		t = &AdminSearch_Search_Nodes_ContactSearchResult_Contacts{}
+	}
+	return t.Title
+}
+func (t *AdminSearch_Search_Nodes_ContactSearchResult_Contacts) GetCompany() *string {
+	if t == nil {
+		t = &AdminSearch_Search_Nodes_ContactSearchResult_Contacts{}
+	}
+	return t.Company
+}
+func (t *AdminSearch_Search_Nodes_ContactSearchResult_Contacts) GetEmail() *string {
+	if t == nil {
+		t = &AdminSearch_Search_Nodes_ContactSearchResult_Contacts{}
+	}
+	return t.Email
+}
+func (t *AdminSearch_Search_Nodes_ContactSearchResult_Contacts) GetPhoneNumber() *string {
+	if t == nil {
+		t = &AdminSearch_Search_Nodes_ContactSearchResult_Contacts{}
+	}
+	return t.PhoneNumber
+}
+func (t *AdminSearch_Search_Nodes_ContactSearchResult_Contacts) GetAddress() *string {
+	if t == nil {
+		t = &AdminSearch_Search_Nodes_ContactSearchResult_Contacts{}
+	}
+	return t.Address
+}
+
+type AdminSearch_Search_Nodes_ContactSearchResult struct {
+	Contacts []*AdminSearch_Search_Nodes_ContactSearchResult_Contacts "json:\"contacts,omitempty\" graphql:\"contacts\""
+}
+
+func (t *AdminSearch_Search_Nodes_ContactSearchResult) GetContacts() []*AdminSearch_Search_Nodes_ContactSearchResult_Contacts {
+	if t == nil {
+		t = &AdminSearch_Search_Nodes_ContactSearchResult{}
+	}
+	return t.Contacts
+}
+
+type AdminSearch_Search_Nodes_EntitySearchResult_Entities struct {
+	ID           string   "json:\"id\" graphql:\"id\""
+	DeletedBy    *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	Tags         []string "json:\"tags,omitempty\" graphql:\"tags\""
+	OwnerID      *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Name         *string  "json:\"name,omitempty\" graphql:\"name\""
+	DisplayName  *string  "json:\"displayName,omitempty\" graphql:\"displayName\""
+	Description  *string  "json:\"description,omitempty\" graphql:\"description\""
+	Domains      []string "json:\"domains,omitempty\" graphql:\"domains\""
+	EntityTypeID *string  "json:\"entityTypeID,omitempty\" graphql:\"entityTypeID\""
+	Status       *string  "json:\"status,omitempty\" graphql:\"status\""
+}
+
+func (t *AdminSearch_Search_Nodes_EntitySearchResult_Entities) GetID() string {
+	if t == nil {
+		t = &AdminSearch_Search_Nodes_EntitySearchResult_Entities{}
+	}
+	return t.ID
+}
+func (t *AdminSearch_Search_Nodes_EntitySearchResult_Entities) GetDeletedBy() *string {
+	if t == nil {
+		t = &AdminSearch_Search_Nodes_EntitySearchResult_Entities{}
+	}
+	return t.DeletedBy
+}
+func (t *AdminSearch_Search_Nodes_EntitySearchResult_Entities) GetTags() []string {
+	if t == nil {
+		t = &AdminSearch_Search_Nodes_EntitySearchResult_Entities{}
+	}
+	return t.Tags
+}
+func (t *AdminSearch_Search_Nodes_EntitySearchResult_Entities) GetOwnerID() *string {
+	if t == nil {
+		t = &AdminSearch_Search_Nodes_EntitySearchResult_Entities{}
+	}
+	return t.OwnerID
+}
+func (t *AdminSearch_Search_Nodes_EntitySearchResult_Entities) GetName() *string {
+	if t == nil {
+		t = &AdminSearch_Search_Nodes_EntitySearchResult_Entities{}
+	}
+	return t.Name
+}
+func (t *AdminSearch_Search_Nodes_EntitySearchResult_Entities) GetDisplayName() *string {
+	if t == nil {
+		t = &AdminSearch_Search_Nodes_EntitySearchResult_Entities{}
+	}
+	return t.DisplayName
+}
+func (t *AdminSearch_Search_Nodes_EntitySearchResult_Entities) GetDescription() *string {
+	if t == nil {
+		t = &AdminSearch_Search_Nodes_EntitySearchResult_Entities{}
+	}
+	return t.Description
+}
+func (t *AdminSearch_Search_Nodes_EntitySearchResult_Entities) GetDomains() []string {
+	if t == nil {
+		t = &AdminSearch_Search_Nodes_EntitySearchResult_Entities{}
+	}
+	return t.Domains
+}
+func (t *AdminSearch_Search_Nodes_EntitySearchResult_Entities) GetEntityTypeID() *string {
+	if t == nil {
+		t = &AdminSearch_Search_Nodes_EntitySearchResult_Entities{}
+	}
+	return t.EntityTypeID
+}
+func (t *AdminSearch_Search_Nodes_EntitySearchResult_Entities) GetStatus() *string {
+	if t == nil {
+		t = &AdminSearch_Search_Nodes_EntitySearchResult_Entities{}
+	}
+	return t.Status
+}
+
+type AdminSearch_Search_Nodes_EntitySearchResult struct {
+	Entities []*AdminSearch_Search_Nodes_EntitySearchResult_Entities "json:\"entities,omitempty\" graphql:\"entities\""
+}
+
+func (t *AdminSearch_Search_Nodes_EntitySearchResult) GetEntities() []*AdminSearch_Search_Nodes_EntitySearchResult_Entities {
+	if t == nil {
+		t = &AdminSearch_Search_Nodes_EntitySearchResult{}
+	}
+	return t.Entities
+}
+
+type AdminSearch_Search_Nodes_GroupSearchResult_Groups struct {
+	DeletedBy   *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	ID          string   "json:\"id\" graphql:\"id\""
+	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
+	OwnerID     *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Name        string   "json:\"name\" graphql:\"name\""
+	DisplayName string   "json:\"displayName\" graphql:\"displayName\""
+}
+
+func (t *AdminSearch_Search_Nodes_GroupSearchResult_Groups) GetDeletedBy() *string {
+	if t == nil {
+		t = &AdminSearch_Search_Nodes_GroupSearchResult_Groups{}
+	}
+	return t.DeletedBy
+}
+func (t *AdminSearch_Search_Nodes_GroupSearchResult_Groups) GetID() string {
+	if t == nil {
+		t = &AdminSearch_Search_Nodes_GroupSearchResult_Groups{}
+	}
+	return t.ID
+}
+func (t *AdminSearch_Search_Nodes_GroupSearchResult_Groups) GetTags() []string {
+	if t == nil {
+		t = &AdminSearch_Search_Nodes_GroupSearchResult_Groups{}
+	}
+	return t.Tags
+}
+func (t *AdminSearch_Search_Nodes_GroupSearchResult_Groups) GetOwnerID() *string {
+	if t == nil {
+		t = &AdminSearch_Search_Nodes_GroupSearchResult_Groups{}
+	}
+	return t.OwnerID
+}
+func (t *AdminSearch_Search_Nodes_GroupSearchResult_Groups) GetName() string {
+	if t == nil {
+		t = &AdminSearch_Search_Nodes_GroupSearchResult_Groups{}
+	}
+	return t.Name
+}
+func (t *AdminSearch_Search_Nodes_GroupSearchResult_Groups) GetDisplayName() string {
+	if t == nil {
+		t = &AdminSearch_Search_Nodes_GroupSearchResult_Groups{}
+	}
+	return t.DisplayName
+}
+
+type AdminSearch_Search_Nodes_GroupSearchResult struct {
+	Groups []*AdminSearch_Search_Nodes_GroupSearchResult_Groups "json:\"groups,omitempty\" graphql:\"groups\""
+}
+
+func (t *AdminSearch_Search_Nodes_GroupSearchResult) GetGroups() []*AdminSearch_Search_Nodes_GroupSearchResult_Groups {
+	if t == nil {
+		t = &AdminSearch_Search_Nodes_GroupSearchResult{}
+	}
+	return t.Groups
+}
+
+type AdminSearch_Search_Nodes_OrganizationSearchResult_Organizations struct {
+	ID              string   "json:\"id\" graphql:\"id\""
+	Tags            []string "json:\"tags,omitempty\" graphql:\"tags\""
+	DeletedBy       *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	Name            string   "json:\"name\" graphql:\"name\""
+	DisplayName     string   "json:\"displayName\" graphql:\"displayName\""
+	AvatarRemoteURL *string  "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
+}
+
+func (t *AdminSearch_Search_Nodes_OrganizationSearchResult_Organizations) GetID() string {
+	if t == nil {
+		t = &AdminSearch_Search_Nodes_OrganizationSearchResult_Organizations{}
+	}
+	return t.ID
+}
+func (t *AdminSearch_Search_Nodes_OrganizationSearchResult_Organizations) GetTags() []string {
+	if t == nil {
+		t = &AdminSearch_Search_Nodes_OrganizationSearchResult_Organizations{}
+	}
+	return t.Tags
+}
+func (t *AdminSearch_Search_Nodes_OrganizationSearchResult_Organizations) GetDeletedBy() *string {
+	if t == nil {
+		t = &AdminSearch_Search_Nodes_OrganizationSearchResult_Organizations{}
+	}
+	return t.DeletedBy
+}
+func (t *AdminSearch_Search_Nodes_OrganizationSearchResult_Organizations) GetName() string {
+	if t == nil {
+		t = &AdminSearch_Search_Nodes_OrganizationSearchResult_Organizations{}
+	}
+	return t.Name
+}
+func (t *AdminSearch_Search_Nodes_OrganizationSearchResult_Organizations) GetDisplayName() string {
+	if t == nil {
+		t = &AdminSearch_Search_Nodes_OrganizationSearchResult_Organizations{}
+	}
+	return t.DisplayName
+}
+func (t *AdminSearch_Search_Nodes_OrganizationSearchResult_Organizations) GetAvatarRemoteURL() *string {
+	if t == nil {
+		t = &AdminSearch_Search_Nodes_OrganizationSearchResult_Organizations{}
+	}
+	return t.AvatarRemoteURL
+}
+
+type AdminSearch_Search_Nodes_OrganizationSearchResult struct {
+	Organizations []*AdminSearch_Search_Nodes_OrganizationSearchResult_Organizations "json:\"organizations,omitempty\" graphql:\"organizations\""
+}
+
+func (t *AdminSearch_Search_Nodes_OrganizationSearchResult) GetOrganizations() []*AdminSearch_Search_Nodes_OrganizationSearchResult_Organizations {
+	if t == nil {
+		t = &AdminSearch_Search_Nodes_OrganizationSearchResult{}
+	}
+	return t.Organizations
+}
+
+type AdminSearch_Search_Nodes_SubscriberSearchResult_Subscribers struct {
+	ID          string   "json:\"id\" graphql:\"id\""
+	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
+	DeletedBy   *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	OwnerID     *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Email       string   "json:\"email\" graphql:\"email\""
+	PhoneNumber *string  "json:\"phoneNumber,omitempty\" graphql:\"phoneNumber\""
+}
+
+func (t *AdminSearch_Search_Nodes_SubscriberSearchResult_Subscribers) GetID() string {
+	if t == nil {
+		t = &AdminSearch_Search_Nodes_SubscriberSearchResult_Subscribers{}
+	}
+	return t.ID
+}
+func (t *AdminSearch_Search_Nodes_SubscriberSearchResult_Subscribers) GetTags() []string {
+	if t == nil {
+		t = &AdminSearch_Search_Nodes_SubscriberSearchResult_Subscribers{}
+	}
+	return t.Tags
+}
+func (t *AdminSearch_Search_Nodes_SubscriberSearchResult_Subscribers) GetDeletedBy() *string {
+	if t == nil {
+		t = &AdminSearch_Search_Nodes_SubscriberSearchResult_Subscribers{}
+	}
+	return t.DeletedBy
+}
+func (t *AdminSearch_Search_Nodes_SubscriberSearchResult_Subscribers) GetOwnerID() *string {
+	if t == nil {
+		t = &AdminSearch_Search_Nodes_SubscriberSearchResult_Subscribers{}
+	}
+	return t.OwnerID
+}
+func (t *AdminSearch_Search_Nodes_SubscriberSearchResult_Subscribers) GetEmail() string {
+	if t == nil {
+		t = &AdminSearch_Search_Nodes_SubscriberSearchResult_Subscribers{}
+	}
+	return t.Email
+}
+func (t *AdminSearch_Search_Nodes_SubscriberSearchResult_Subscribers) GetPhoneNumber() *string {
+	if t == nil {
+		t = &AdminSearch_Search_Nodes_SubscriberSearchResult_Subscribers{}
+	}
+	return t.PhoneNumber
+}
+
+type AdminSearch_Search_Nodes_SubscriberSearchResult struct {
+	Subscribers []*AdminSearch_Search_Nodes_SubscriberSearchResult_Subscribers "json:\"subscribers,omitempty\" graphql:\"subscribers\""
+}
+
+func (t *AdminSearch_Search_Nodes_SubscriberSearchResult) GetSubscribers() []*AdminSearch_Search_Nodes_SubscriberSearchResult_Subscribers {
+	if t == nil {
+		t = &AdminSearch_Search_Nodes_SubscriberSearchResult{}
+	}
+	return t.Subscribers
+}
+
+type AdminSearch_Search_Nodes struct {
+	ContactSearchResult      AdminSearch_Search_Nodes_ContactSearchResult      "graphql:\"... on ContactSearchResult\""
+	EntitySearchResult       AdminSearch_Search_Nodes_EntitySearchResult       "graphql:\"... on EntitySearchResult\""
+	GroupSearchResult        AdminSearch_Search_Nodes_GroupSearchResult        "graphql:\"... on GroupSearchResult\""
+	OrganizationSearchResult AdminSearch_Search_Nodes_OrganizationSearchResult "graphql:\"... on OrganizationSearchResult\""
+	SubscriberSearchResult   AdminSearch_Search_Nodes_SubscriberSearchResult   "graphql:\"... on SubscriberSearchResult\""
+}
+
+func (t *AdminSearch_Search_Nodes) GetContactSearchResult() *AdminSearch_Search_Nodes_ContactSearchResult {
+	if t == nil {
+		t = &AdminSearch_Search_Nodes{}
+	}
+	return &t.ContactSearchResult
+}
+func (t *AdminSearch_Search_Nodes) GetEntitySearchResult() *AdminSearch_Search_Nodes_EntitySearchResult {
+	if t == nil {
+		t = &AdminSearch_Search_Nodes{}
+	}
+	return &t.EntitySearchResult
+}
+func (t *AdminSearch_Search_Nodes) GetGroupSearchResult() *AdminSearch_Search_Nodes_GroupSearchResult {
+	if t == nil {
+		t = &AdminSearch_Search_Nodes{}
+	}
+	return &t.GroupSearchResult
+}
+func (t *AdminSearch_Search_Nodes) GetOrganizationSearchResult() *AdminSearch_Search_Nodes_OrganizationSearchResult {
+	if t == nil {
+		t = &AdminSearch_Search_Nodes{}
+	}
+	return &t.OrganizationSearchResult
+}
+func (t *AdminSearch_Search_Nodes) GetSubscriberSearchResult() *AdminSearch_Search_Nodes_SubscriberSearchResult {
+	if t == nil {
+		t = &AdminSearch_Search_Nodes{}
+	}
+	return &t.SubscriberSearchResult
+}
+
+type AdminSearch_Search struct {
+	Nodes []*AdminSearch_Search_Nodes "json:\"nodes\" graphql:\"nodes\""
+}
+
+func (t *AdminSearch_Search) GetNodes() []*AdminSearch_Search_Nodes {
+	if t == nil {
+		t = &AdminSearch_Search{}
+	}
+	return t.Nodes
 }
 
 type CreateAPIToken_CreateAPIToken_APIToken_Owner struct {
@@ -22426,217 +22818,225 @@ func (t *UpdatePersonalAccessToken_UpdatePersonalAccessToken) GetPersonalAccessT
 	return &t.PersonalAccessToken
 }
 
-type Search_Search_Nodes_OrganizationSearchResult_Organizations struct {
-	Description *string "json:\"description,omitempty\" graphql:\"description\""
-	DisplayName string  "json:\"displayName\" graphql:\"displayName\""
-	ID          string  "json:\"id\" graphql:\"id\""
-	Name        string  "json:\"name\" graphql:\"name\""
+type GlobalSearch_Search_Nodes_ContactSearchResult_Contacts struct {
+	FullName string "json:\"fullName\" graphql:\"fullName\""
+	ID       string "json:\"id\" graphql:\"id\""
 }
 
-func (t *Search_Search_Nodes_OrganizationSearchResult_Organizations) GetDescription() *string {
+func (t *GlobalSearch_Search_Nodes_ContactSearchResult_Contacts) GetFullName() string {
 	if t == nil {
-		t = &Search_Search_Nodes_OrganizationSearchResult_Organizations{}
+		t = &GlobalSearch_Search_Nodes_ContactSearchResult_Contacts{}
 	}
-	return t.Description
+	return t.FullName
 }
-func (t *Search_Search_Nodes_OrganizationSearchResult_Organizations) GetDisplayName() string {
+func (t *GlobalSearch_Search_Nodes_ContactSearchResult_Contacts) GetID() string {
 	if t == nil {
-		t = &Search_Search_Nodes_OrganizationSearchResult_Organizations{}
-	}
-	return t.DisplayName
-}
-func (t *Search_Search_Nodes_OrganizationSearchResult_Organizations) GetID() string {
-	if t == nil {
-		t = &Search_Search_Nodes_OrganizationSearchResult_Organizations{}
+		t = &GlobalSearch_Search_Nodes_ContactSearchResult_Contacts{}
 	}
 	return t.ID
 }
-func (t *Search_Search_Nodes_OrganizationSearchResult_Organizations) GetName() string {
+
+type GlobalSearch_Search_Nodes_ContactSearchResult struct {
+	Contacts []*GlobalSearch_Search_Nodes_ContactSearchResult_Contacts "json:\"contacts,omitempty\" graphql:\"contacts\""
+}
+
+func (t *GlobalSearch_Search_Nodes_ContactSearchResult) GetContacts() []*GlobalSearch_Search_Nodes_ContactSearchResult_Contacts {
 	if t == nil {
-		t = &Search_Search_Nodes_OrganizationSearchResult_Organizations{}
+		t = &GlobalSearch_Search_Nodes_ContactSearchResult{}
+	}
+	return t.Contacts
+}
+
+type GlobalSearch_Search_Nodes_EntitySearchResult_Entities struct {
+	Description *string "json:\"description,omitempty\" graphql:\"description\""
+	DisplayName *string "json:\"displayName,omitempty\" graphql:\"displayName\""
+	ID          string  "json:\"id\" graphql:\"id\""
+	Name        *string "json:\"name,omitempty\" graphql:\"name\""
+}
+
+func (t *GlobalSearch_Search_Nodes_EntitySearchResult_Entities) GetDescription() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_EntitySearchResult_Entities{}
+	}
+	return t.Description
+}
+func (t *GlobalSearch_Search_Nodes_EntitySearchResult_Entities) GetDisplayName() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_EntitySearchResult_Entities{}
+	}
+	return t.DisplayName
+}
+func (t *GlobalSearch_Search_Nodes_EntitySearchResult_Entities) GetID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_EntitySearchResult_Entities{}
+	}
+	return t.ID
+}
+func (t *GlobalSearch_Search_Nodes_EntitySearchResult_Entities) GetName() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_EntitySearchResult_Entities{}
 	}
 	return t.Name
 }
 
-type Search_Search_Nodes_OrganizationSearchResult struct {
-	Organizations []*Search_Search_Nodes_OrganizationSearchResult_Organizations "json:\"organizations,omitempty\" graphql:\"organizations\""
+type GlobalSearch_Search_Nodes_EntitySearchResult struct {
+	Entities []*GlobalSearch_Search_Nodes_EntitySearchResult_Entities "json:\"entities,omitempty\" graphql:\"entities\""
 }
 
-func (t *Search_Search_Nodes_OrganizationSearchResult) GetOrganizations() []*Search_Search_Nodes_OrganizationSearchResult_Organizations {
+func (t *GlobalSearch_Search_Nodes_EntitySearchResult) GetEntities() []*GlobalSearch_Search_Nodes_EntitySearchResult_Entities {
 	if t == nil {
-		t = &Search_Search_Nodes_OrganizationSearchResult{}
+		t = &GlobalSearch_Search_Nodes_EntitySearchResult{}
 	}
-	return t.Organizations
+	return t.Entities
 }
 
-type Search_Search_Nodes_GroupSearchResult_Groups struct {
-	Description *string "json:\"description,omitempty\" graphql:\"description\""
-	DisplayName string  "json:\"displayName\" graphql:\"displayName\""
-	ID          string  "json:\"id\" graphql:\"id\""
-	Name        string  "json:\"name\" graphql:\"name\""
+type GlobalSearch_Search_Nodes_GroupSearchResult_Groups struct {
+	DisplayName string "json:\"displayName\" graphql:\"displayName\""
+	ID          string "json:\"id\" graphql:\"id\""
+	Name        string "json:\"name\" graphql:\"name\""
 }
 
-func (t *Search_Search_Nodes_GroupSearchResult_Groups) GetDescription() *string {
+func (t *GlobalSearch_Search_Nodes_GroupSearchResult_Groups) GetDisplayName() string {
 	if t == nil {
-		t = &Search_Search_Nodes_GroupSearchResult_Groups{}
-	}
-	return t.Description
-}
-func (t *Search_Search_Nodes_GroupSearchResult_Groups) GetDisplayName() string {
-	if t == nil {
-		t = &Search_Search_Nodes_GroupSearchResult_Groups{}
+		t = &GlobalSearch_Search_Nodes_GroupSearchResult_Groups{}
 	}
 	return t.DisplayName
 }
-func (t *Search_Search_Nodes_GroupSearchResult_Groups) GetID() string {
+func (t *GlobalSearch_Search_Nodes_GroupSearchResult_Groups) GetID() string {
 	if t == nil {
-		t = &Search_Search_Nodes_GroupSearchResult_Groups{}
+		t = &GlobalSearch_Search_Nodes_GroupSearchResult_Groups{}
 	}
 	return t.ID
 }
-func (t *Search_Search_Nodes_GroupSearchResult_Groups) GetName() string {
+func (t *GlobalSearch_Search_Nodes_GroupSearchResult_Groups) GetName() string {
 	if t == nil {
-		t = &Search_Search_Nodes_GroupSearchResult_Groups{}
+		t = &GlobalSearch_Search_Nodes_GroupSearchResult_Groups{}
 	}
 	return t.Name
 }
 
-type Search_Search_Nodes_GroupSearchResult struct {
-	Groups []*Search_Search_Nodes_GroupSearchResult_Groups "json:\"groups,omitempty\" graphql:\"groups\""
+type GlobalSearch_Search_Nodes_GroupSearchResult struct {
+	Groups []*GlobalSearch_Search_Nodes_GroupSearchResult_Groups "json:\"groups,omitempty\" graphql:\"groups\""
 }
 
-func (t *Search_Search_Nodes_GroupSearchResult) GetGroups() []*Search_Search_Nodes_GroupSearchResult_Groups {
+func (t *GlobalSearch_Search_Nodes_GroupSearchResult) GetGroups() []*GlobalSearch_Search_Nodes_GroupSearchResult_Groups {
 	if t == nil {
-		t = &Search_Search_Nodes_GroupSearchResult{}
+		t = &GlobalSearch_Search_Nodes_GroupSearchResult{}
 	}
 	return t.Groups
 }
 
-type Search_Search_Nodes_UserSearchResult_Users struct {
-	DisplayName string  "json:\"displayName\" graphql:\"displayName\""
-	Email       string  "json:\"email\" graphql:\"email\""
-	FirstName   *string "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID          string  "json:\"id\" graphql:\"id\""
-	LastName    *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+type GlobalSearch_Search_Nodes_OrganizationSearchResult_Organizations struct {
+	DisplayName string "json:\"displayName\" graphql:\"displayName\""
+	ID          string "json:\"id\" graphql:\"id\""
+	Name        string "json:\"name\" graphql:\"name\""
 }
 
-func (t *Search_Search_Nodes_UserSearchResult_Users) GetDisplayName() string {
+func (t *GlobalSearch_Search_Nodes_OrganizationSearchResult_Organizations) GetDisplayName() string {
 	if t == nil {
-		t = &Search_Search_Nodes_UserSearchResult_Users{}
+		t = &GlobalSearch_Search_Nodes_OrganizationSearchResult_Organizations{}
 	}
 	return t.DisplayName
 }
-func (t *Search_Search_Nodes_UserSearchResult_Users) GetEmail() string {
+func (t *GlobalSearch_Search_Nodes_OrganizationSearchResult_Organizations) GetID() string {
 	if t == nil {
-		t = &Search_Search_Nodes_UserSearchResult_Users{}
-	}
-	return t.Email
-}
-func (t *Search_Search_Nodes_UserSearchResult_Users) GetFirstName() *string {
-	if t == nil {
-		t = &Search_Search_Nodes_UserSearchResult_Users{}
-	}
-	return t.FirstName
-}
-func (t *Search_Search_Nodes_UserSearchResult_Users) GetID() string {
-	if t == nil {
-		t = &Search_Search_Nodes_UserSearchResult_Users{}
+		t = &GlobalSearch_Search_Nodes_OrganizationSearchResult_Organizations{}
 	}
 	return t.ID
 }
-func (t *Search_Search_Nodes_UserSearchResult_Users) GetLastName() *string {
+func (t *GlobalSearch_Search_Nodes_OrganizationSearchResult_Organizations) GetName() string {
 	if t == nil {
-		t = &Search_Search_Nodes_UserSearchResult_Users{}
+		t = &GlobalSearch_Search_Nodes_OrganizationSearchResult_Organizations{}
 	}
-	return t.LastName
+	return t.Name
 }
 
-type Search_Search_Nodes_UserSearchResult struct {
-	Users []*Search_Search_Nodes_UserSearchResult_Users "json:\"users,omitempty\" graphql:\"users\""
+type GlobalSearch_Search_Nodes_OrganizationSearchResult struct {
+	Organizations []*GlobalSearch_Search_Nodes_OrganizationSearchResult_Organizations "json:\"organizations,omitempty\" graphql:\"organizations\""
 }
 
-func (t *Search_Search_Nodes_UserSearchResult) GetUsers() []*Search_Search_Nodes_UserSearchResult_Users {
+func (t *GlobalSearch_Search_Nodes_OrganizationSearchResult) GetOrganizations() []*GlobalSearch_Search_Nodes_OrganizationSearchResult_Organizations {
 	if t == nil {
-		t = &Search_Search_Nodes_UserSearchResult{}
+		t = &GlobalSearch_Search_Nodes_OrganizationSearchResult{}
 	}
-	return t.Users
+	return t.Organizations
 }
 
-type Search_Search_Nodes_SubscriberSearchResult_Subscribers struct {
-	Active bool   "json:\"active\" graphql:\"active\""
-	Email  string "json:\"email\" graphql:\"email\""
-	ID     string "json:\"id\" graphql:\"id\""
+type GlobalSearch_Search_Nodes_SubscriberSearchResult_Subscribers struct {
+	Email string "json:\"email\" graphql:\"email\""
+	ID    string "json:\"id\" graphql:\"id\""
 }
 
-func (t *Search_Search_Nodes_SubscriberSearchResult_Subscribers) GetActive() bool {
+func (t *GlobalSearch_Search_Nodes_SubscriberSearchResult_Subscribers) GetEmail() string {
 	if t == nil {
-		t = &Search_Search_Nodes_SubscriberSearchResult_Subscribers{}
-	}
-	return t.Active
-}
-func (t *Search_Search_Nodes_SubscriberSearchResult_Subscribers) GetEmail() string {
-	if t == nil {
-		t = &Search_Search_Nodes_SubscriberSearchResult_Subscribers{}
+		t = &GlobalSearch_Search_Nodes_SubscriberSearchResult_Subscribers{}
 	}
 	return t.Email
 }
-func (t *Search_Search_Nodes_SubscriberSearchResult_Subscribers) GetID() string {
+func (t *GlobalSearch_Search_Nodes_SubscriberSearchResult_Subscribers) GetID() string {
 	if t == nil {
-		t = &Search_Search_Nodes_SubscriberSearchResult_Subscribers{}
+		t = &GlobalSearch_Search_Nodes_SubscriberSearchResult_Subscribers{}
 	}
 	return t.ID
 }
 
-type Search_Search_Nodes_SubscriberSearchResult struct {
-	Subscribers []*Search_Search_Nodes_SubscriberSearchResult_Subscribers "json:\"subscribers,omitempty\" graphql:\"subscribers\""
+type GlobalSearch_Search_Nodes_SubscriberSearchResult struct {
+	Subscribers []*GlobalSearch_Search_Nodes_SubscriberSearchResult_Subscribers "json:\"subscribers,omitempty\" graphql:\"subscribers\""
 }
 
-func (t *Search_Search_Nodes_SubscriberSearchResult) GetSubscribers() []*Search_Search_Nodes_SubscriberSearchResult_Subscribers {
+func (t *GlobalSearch_Search_Nodes_SubscriberSearchResult) GetSubscribers() []*GlobalSearch_Search_Nodes_SubscriberSearchResult_Subscribers {
 	if t == nil {
-		t = &Search_Search_Nodes_SubscriberSearchResult{}
+		t = &GlobalSearch_Search_Nodes_SubscriberSearchResult{}
 	}
 	return t.Subscribers
 }
 
-type Search_Search_Nodes struct {
-	OrganizationSearchResult Search_Search_Nodes_OrganizationSearchResult "graphql:\"... on OrganizationSearchResult\""
-	GroupSearchResult        Search_Search_Nodes_GroupSearchResult        "graphql:\"... on GroupSearchResult\""
-	UserSearchResult         Search_Search_Nodes_UserSearchResult         "graphql:\"... on UserSearchResult\""
-	SubscriberSearchResult   Search_Search_Nodes_SubscriberSearchResult   "graphql:\"... on SubscriberSearchResult\""
+type GlobalSearch_Search_Nodes struct {
+	ContactSearchResult      GlobalSearch_Search_Nodes_ContactSearchResult      "graphql:\"... on ContactSearchResult\""
+	EntitySearchResult       GlobalSearch_Search_Nodes_EntitySearchResult       "graphql:\"... on EntitySearchResult\""
+	GroupSearchResult        GlobalSearch_Search_Nodes_GroupSearchResult        "graphql:\"... on GroupSearchResult\""
+	OrganizationSearchResult GlobalSearch_Search_Nodes_OrganizationSearchResult "graphql:\"... on OrganizationSearchResult\""
+	SubscriberSearchResult   GlobalSearch_Search_Nodes_SubscriberSearchResult   "graphql:\"... on SubscriberSearchResult\""
 }
 
-func (t *Search_Search_Nodes) GetOrganizationSearchResult() *Search_Search_Nodes_OrganizationSearchResult {
+func (t *GlobalSearch_Search_Nodes) GetContactSearchResult() *GlobalSearch_Search_Nodes_ContactSearchResult {
 	if t == nil {
-		t = &Search_Search_Nodes{}
+		t = &GlobalSearch_Search_Nodes{}
 	}
-	return &t.OrganizationSearchResult
+	return &t.ContactSearchResult
 }
-func (t *Search_Search_Nodes) GetGroupSearchResult() *Search_Search_Nodes_GroupSearchResult {
+func (t *GlobalSearch_Search_Nodes) GetEntitySearchResult() *GlobalSearch_Search_Nodes_EntitySearchResult {
 	if t == nil {
-		t = &Search_Search_Nodes{}
+		t = &GlobalSearch_Search_Nodes{}
+	}
+	return &t.EntitySearchResult
+}
+func (t *GlobalSearch_Search_Nodes) GetGroupSearchResult() *GlobalSearch_Search_Nodes_GroupSearchResult {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes{}
 	}
 	return &t.GroupSearchResult
 }
-func (t *Search_Search_Nodes) GetUserSearchResult() *Search_Search_Nodes_UserSearchResult {
+func (t *GlobalSearch_Search_Nodes) GetOrganizationSearchResult() *GlobalSearch_Search_Nodes_OrganizationSearchResult {
 	if t == nil {
-		t = &Search_Search_Nodes{}
+		t = &GlobalSearch_Search_Nodes{}
 	}
-	return &t.UserSearchResult
+	return &t.OrganizationSearchResult
 }
-func (t *Search_Search_Nodes) GetSubscriberSearchResult() *Search_Search_Nodes_SubscriberSearchResult {
+func (t *GlobalSearch_Search_Nodes) GetSubscriberSearchResult() *GlobalSearch_Search_Nodes_SubscriberSearchResult {
 	if t == nil {
-		t = &Search_Search_Nodes{}
+		t = &GlobalSearch_Search_Nodes{}
 	}
 	return &t.SubscriberSearchResult
 }
 
-type Search_Search struct {
-	Nodes []*Search_Search_Nodes "json:\"nodes\" graphql:\"nodes\""
+type GlobalSearch_Search struct {
+	Nodes []*GlobalSearch_Search_Nodes "json:\"nodes\" graphql:\"nodes\""
 }
 
-func (t *Search_Search) GetNodes() []*Search_Search_Nodes {
+func (t *GlobalSearch_Search) GetNodes() []*GlobalSearch_Search_Nodes {
 	if t == nil {
-		t = &Search_Search{}
+		t = &GlobalSearch_Search{}
 	}
 	return t.Nodes
 }
@@ -27405,6 +27805,17 @@ func (t *GetWebhookHistories_WebhookHistories) GetEdges() []*GetWebhookHistories
 	return t.Edges
 }
 
+type AdminSearch struct {
+	Search *AdminSearch_Search "json:\"search,omitempty\" graphql:\"search\""
+}
+
+func (t *AdminSearch) GetSearch() *AdminSearch_Search {
+	if t == nil {
+		t = &AdminSearch{}
+	}
+	return t.Search
+}
+
 type CreateAPIToken struct {
 	CreateAPIToken CreateAPIToken_CreateAPIToken "json:\"createAPIToken\" graphql:\"createAPIToken\""
 }
@@ -29506,13 +29917,13 @@ func (t *UpdatePersonalAccessToken) GetUpdatePersonalAccessToken() *UpdatePerson
 	return &t.UpdatePersonalAccessToken
 }
 
-type Search struct {
-	Search *Search_Search "json:\"search,omitempty\" graphql:\"search\""
+type GlobalSearch struct {
+	Search *GlobalSearch_Search "json:\"search,omitempty\" graphql:\"search\""
 }
 
-func (t *Search) GetSearch() *Search_Search {
+func (t *GlobalSearch) GetSearch() *GlobalSearch_Search {
 	if t == nil {
-		t = &Search{}
+		t = &GlobalSearch{}
 	}
 	return t.Search
 }
@@ -29988,6 +30399,89 @@ func (t *GetWebhookHistories) GetWebhookHistories() *GetWebhookHistories_Webhook
 		t = &GetWebhookHistories{}
 	}
 	return &t.WebhookHistories
+}
+
+const AdminSearchDocument = `query AdminSearch ($query: String!) {
+	search(query: $query) {
+		nodes {
+			... on ContactSearchResult {
+				contacts {
+					id
+					deletedBy
+					tags
+					ownerID
+					fullName
+					title
+					company
+					email
+					phoneNumber
+					address
+				}
+			}
+			... on EntitySearchResult {
+				entities {
+					id
+					deletedBy
+					tags
+					ownerID
+					name
+					displayName
+					description
+					domains
+					entityTypeID
+					status
+				}
+			}
+			... on GroupSearchResult {
+				groups {
+					deletedBy
+					id
+					tags
+					ownerID
+					name
+					displayName
+				}
+			}
+			... on OrganizationSearchResult {
+				organizations {
+					id
+					tags
+					deletedBy
+					name
+					displayName
+					avatarRemoteURL
+				}
+			}
+			... on SubscriberSearchResult {
+				subscribers {
+					id
+					tags
+					deletedBy
+					ownerID
+					email
+					phoneNumber
+				}
+			}
+		}
+	}
+}
+`
+
+func (c *Client) AdminSearch(ctx context.Context, query string, interceptors ...clientv2.RequestInterceptor) (*AdminSearch, error) {
+	vars := map[string]any{
+		"query": query,
+	}
+
+	var res AdminSearch
+	if err := c.Client.Post(ctx, "AdminSearch", AdminSearchDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
 }
 
 const CreateAPITokenDocument = `mutation CreateAPIToken ($input: CreateAPITokenInput!) {
@@ -37616,11 +38110,17 @@ func (c *Client) UpdatePersonalAccessToken(ctx context.Context, updatePersonalAc
 	return &res, nil
 }
 
-const SearchDocument = `query Search ($query: String!) {
+const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 	search(query: $query) {
 		nodes {
-			... on OrganizationSearchResult {
-				organizations {
+			... on ContactSearchResult {
+				contacts {
+					fullName
+					id
+				}
+			}
+			... on EntitySearchResult {
+				entities {
 					description
 					displayName
 					id
@@ -37629,24 +38129,20 @@ const SearchDocument = `query Search ($query: String!) {
 			}
 			... on GroupSearchResult {
 				groups {
-					description
 					displayName
 					id
 					name
 				}
 			}
-			... on UserSearchResult {
-				users {
+			... on OrganizationSearchResult {
+				organizations {
 					displayName
-					email
-					firstName
 					id
-					lastName
+					name
 				}
 			}
 			... on SubscriberSearchResult {
 				subscribers {
-					active
 					email
 					id
 				}
@@ -37656,13 +38152,13 @@ const SearchDocument = `query Search ($query: String!) {
 }
 `
 
-func (c *Client) Search(ctx context.Context, query string, interceptors ...clientv2.RequestInterceptor) (*Search, error) {
+func (c *Client) GlobalSearch(ctx context.Context, query string, interceptors ...clientv2.RequestInterceptor) (*GlobalSearch, error) {
 	vars := map[string]any{
 		"query": query,
 	}
 
-	var res Search
-	if err := c.Client.Post(ctx, "Search", SearchDocument, &res, vars, interceptors...); err != nil {
+	var res GlobalSearch
+	if err := c.Client.Post(ctx, "GlobalSearch", GlobalSearchDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -39339,6 +39835,7 @@ func (c *Client) GetWebhookHistories(ctx context.Context, where *WebhookHistoryW
 }
 
 var DocumentOperationNames = map[string]string{
+	AdminSearchDocument:                           "AdminSearch",
 	CreateAPITokenDocument:                        "CreateAPIToken",
 	UpdateAPITokenDocument:                        "UpdateAPIToken",
 	GetAllAPITokensDocument:                       "GetAllAPITokens",
@@ -39530,7 +40027,7 @@ var DocumentOperationNames = map[string]string{
 	GetAllPersonalAccessTokensDocument:            "GetAllPersonalAccessTokens",
 	GetPersonalAccessTokenByIDDocument:            "GetPersonalAccessTokenByID",
 	UpdatePersonalAccessTokenDocument:             "UpdatePersonalAccessToken",
-	SearchDocument:                                "Search",
+	GlobalSearchDocument:                          "GlobalSearch",
 	CreateBulkCSVSubscriberDocument:               "CreateBulkCSVSubscriber",
 	CreateBulkSubscriberDocument:                  "CreateBulkSubscriber",
 	CreateSubscriberDocument:                      "CreateSubscriber",

@@ -1,0 +1,40 @@
+query GlobalSearch($query: String!) {
+  search(query: $query) {
+    nodes {
+      ... on ContactSearchResult {
+        contacts {
+          fullName
+          id
+        }
+      }
+      ... on EntitySearchResult {
+        entities {
+          description
+          displayName
+          id
+          name
+        }
+      }
+      ... on GroupSearchResult {
+        groups {
+          displayName
+          id
+          name
+        }
+      }
+      ... on OrganizationSearchResult {
+        organizations {
+          displayName
+          id
+          name
+        }
+      }
+      ... on SubscriberSearchResult {
+        subscribers {
+          email
+          id
+        }
+      }
+    }
+  }
+}

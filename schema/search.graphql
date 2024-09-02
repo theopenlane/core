@@ -1,0 +1,91 @@
+extend type Query{
+    """
+    Search across Contact objects
+    """
+    contactSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): ContactSearchResult
+    """
+    Search across Entity objects
+    """
+    entitySearch(
+        """
+        Search query
+        """
+        query: String!
+    ): EntitySearchResult
+    """
+    Search across Group objects
+    """
+    groupSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): GroupSearchResult
+    """
+    Search across Organization objects
+    """
+    organizationSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): OrganizationSearchResult
+    """
+    Search across Subscriber objects
+    """
+    subscriberSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): SubscriberSearchResult
+}
+union SearchResult =
+  | ContactSearchResult
+  | EntitySearchResult
+  | GroupSearchResult
+  | OrganizationSearchResult
+  | SubscriberSearchResult
+
+type SearchResultConnection {
+  page: PageInfo!
+
+  nodes: [SearchResult!]!
+}
+
+extend type Query{
+    """
+    Search across all objects
+    """
+    search(
+        """
+        Search query
+        """
+        query: String!
+    ): SearchResultConnection
+}
+
+type  ContactSearchResult {
+   contacts: [ Contact!]
+}
+
+type  EntitySearchResult {
+   entities: [ Entity!]
+}
+
+type  GroupSearchResult {
+   groups: [ Group!]
+}
+
+type  OrganizationSearchResult {
+   organizations: [ Organization!]
+}
+
+type  SubscriberSearchResult {
+   subscribers: [ Subscriber!]
+}

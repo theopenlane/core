@@ -2,14 +2,11 @@ package search
 
 import (
 	"context"
-	"fmt"
+	"encoding/json"
 
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
-
-	"github.com/theopenlane/utils/cli/tables"
-
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -49,63 +46,20 @@ func search(ctx context.Context) error { // setup http client
 	query, err := validate()
 	cobra.CheckErr(err)
 
-	results, err := client.Search(ctx, query)
+	results, err := client.GlobalSearch(ctx, query)
 	cobra.CheckErr(err)
 
-	consoleOutput(results)
-
-	return nil
+	return consoleOutput(results)
 }
 
-func consoleOutput(results *openlaneclient.Search) {
-	// print results
-	for _, r := range results.Search.Nodes {
-		if len(r.OrganizationSearchResult.Organizations) > 0 {
-			fmt.Println("Organization Results")
+func consoleOutput(results *openlaneclient.GlobalSearch) error {
+	return jsonOutput(results)
+}
 
-			writer := tables.NewTableWriter(cmd.RootCmd.OutOrStdout(), "ID", "Name", "DisplayName", "Description")
+// jsonOutput prints the output in a JSON format
+func jsonOutput(out any) error {
+	s, err := json.Marshal(out)
+	cobra.CheckErr(err)
 
-			for _, o := range r.OrganizationSearchResult.Organizations {
-				writer.AddRow(o.ID, o.Name, o.DisplayName, *o.Description)
-			}
-
-			writer.Render()
-		}
-
-		if len(r.GroupSearchResult.Groups) > 0 {
-			fmt.Println("Group Results")
-
-			writer := tables.NewTableWriter(cmd.RootCmd.OutOrStdout(), "ID", "Name", "DisplayName", "Description")
-
-			for _, g := range r.GroupSearchResult.Groups {
-				writer.AddRow(g.ID, g.Name, g.DisplayName, *g.Description)
-			}
-
-			writer.Render()
-		}
-
-		if len(r.UserSearchResult.Users) > 0 {
-			fmt.Println("User Results")
-
-			writer := tables.NewTableWriter(cmd.RootCmd.OutOrStdout(), "ID", "FirstName", "LastName", "DisplayName", "Email")
-
-			for _, u := range r.UserSearchResult.Users {
-				writer.AddRow(u.ID, *u.FirstName, *u.LastName, u.DisplayName, u.Email)
-			}
-
-			writer.Render()
-		}
-
-		if len(r.SubscriberSearchResult.Subscribers) > 0 {
-			fmt.Println("Subscriber Results")
-
-			writer := tables.NewTableWriter(cmd.RootCmd.OutOrStdout(), "ID", "Email")
-
-			for _, s := range r.SubscriberSearchResult.Subscribers {
-				writer.AddRow(s.ID, s.Email)
-			}
-
-			writer.Render()
-		}
-	}
+	return cmd.JSONPrint(s)
 }

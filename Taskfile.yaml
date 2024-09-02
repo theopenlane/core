@@ -138,10 +138,10 @@ tasks:
         fi
 
   clean:local:
-    desc: cleans up core.db and core-cli local
+    desc: cleans up core.db and openlane-cli local
     cmds:
       - "rm -f core.db"
-      - "rm -f core-cli"
+      - "rm -f openlane-cli"
       - task: buildcli
 
   shell:

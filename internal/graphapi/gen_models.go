@@ -9,6 +9,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 )
 
+type SearchResult interface {
+	IsSearchResult()
+}
+
 // Return response for createBulkAPIToken mutation
 type APITokenBulkCreatePayload struct {
 	// Created apiTokens
@@ -88,6 +92,12 @@ type ContactDeletePayload struct {
 	// Deleted contact ID
 	DeletedID string `json:"deletedID"`
 }
+
+type ContactSearchResult struct {
+	Contacts []*generated.Contact `json:"contacts,omitempty"`
+}
+
+func (ContactSearchResult) IsSearchResult() {}
 
 // Return response for updateContact mutation
 type ContactUpdatePayload struct {
@@ -208,6 +218,12 @@ type EntityDeletePayload struct {
 	// Deleted entity ID
 	DeletedID string `json:"deletedID"`
 }
+
+type EntitySearchResult struct {
+	Entities []*generated.Entity `json:"entities,omitempty"`
+}
+
+func (EntitySearchResult) IsSearchResult() {}
 
 // Return response for createBulkEntityType mutation
 type EntityTypeBulkCreatePayload struct {
@@ -352,6 +368,12 @@ type GroupMembershipUpdatePayload struct {
 	// Updated groupMembership
 	GroupMembership *generated.GroupMembership `json:"groupMembership"`
 }
+
+type GroupSearchResult struct {
+	Groups []*generated.Group `json:"groups,omitempty"`
+}
+
+func (GroupSearchResult) IsSearchResult() {}
 
 // Return response for createBulkGroupSetting mutation
 type GroupSettingBulkCreatePayload struct {
@@ -545,6 +567,12 @@ type OrganizationDeletePayload struct {
 	DeletedID string `json:"deletedID"`
 }
 
+type OrganizationSearchResult struct {
+	Organizations []*generated.Organization `json:"organizations,omitempty"`
+}
+
+func (OrganizationSearchResult) IsSearchResult() {}
+
 // Return response for createBulkOrganizationSetting mutation
 type OrganizationSettingBulkCreatePayload struct {
 	// Created organizationSettings
@@ -599,6 +627,11 @@ type PersonalAccessTokenUpdatePayload struct {
 	PersonalAccessToken *generated.PersonalAccessToken `json:"personalAccessToken"`
 }
 
+type SearchResultConnection struct {
+	Page  *entgql.PageInfo[string] `json:"page"`
+	Nodes []SearchResult           `json:"nodes"`
+}
+
 // Return response for createBulkSubscriber mutation
 type SubscriberBulkCreatePayload struct {
 	// Created subscribers
@@ -616,6 +649,12 @@ type SubscriberDeletePayload struct {
 	// Deleted subscriber email
 	Email string `json:"email"`
 }
+
+type SubscriberSearchResult struct {
+	Subscribers []*generated.Subscriber `json:"subscribers,omitempty"`
+}
+
+func (SubscriberSearchResult) IsSearchResult() {}
 
 // Return response for updateSubscriber mutation
 type SubscriberUpdatePayload struct {

@@ -24,6 +24,7 @@ func init() {
 	createCmd.Flags().StringP("name", "n", "", "name of the group")
 	createCmd.Flags().StringP("display-name", "s", "", "display name of the group")
 	createCmd.Flags().StringP("description", "d", "", "description of the group")
+	createCmd.Flags().StringSlice("tags", []string{}, "tags associated with the plan")
 }
 
 // createValidation validates the required fields for the command
@@ -41,6 +42,11 @@ func createValidation() (input openlaneclient.CreateGroupInput, err error) {
 	description := cmd.Config.String("description")
 	if description != "" {
 		input.Description = &description
+	}
+
+	tags := cmd.Config.Strings("tags")
+	if len(tags) > 0 {
+		input.Tags = tags
 	}
 
 	return input, nil

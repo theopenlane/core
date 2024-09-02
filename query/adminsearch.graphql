@@ -1,0 +1,64 @@
+query AdminSearch($query: String!) {
+  search(query: $query) {
+    nodes {
+      ... on ContactSearchResult {
+        contacts {
+          id
+          deletedBy
+          tags
+          ownerID
+          fullName
+          title
+          company
+          email
+          phoneNumber
+          address
+        }
+      }
+      ... on EntitySearchResult {
+        entities {
+          id
+          deletedBy
+          tags
+          ownerID
+          name
+          displayName
+          description
+          domains
+          entityTypeID
+          status
+        }
+      }
+      ... on GroupSearchResult {
+        groups {
+          deletedBy
+          id
+          tags
+          ownerID
+          name
+          displayName
+        }
+      }
+      ... on OrganizationSearchResult {
+        organizations {
+          id
+          tags
+          deletedBy
+          name
+          displayName
+          avatarRemoteURL
+        }
+      }
+      ... on SubscriberSearchResult {
+        subscribers {
+          id
+          tags
+          deletedBy
+          ownerID
+          email
+          phoneNumber
+        }
+      }
+    }
+  }
+}

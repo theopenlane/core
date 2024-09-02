@@ -66,7 +66,7 @@ func main() {
 		Hooks: []gen.Hook{
 			genhooks.GenSchema(graphSchemaDir),
 			genhooks.GenQuery(graphQueryDir),
-			// genhooks.GenSearchSchema(graphSchemaDir, graphQueryDir),
+			genhooks.GenSearchSchema(graphSchemaDir, graphQueryDir),
 		},
 		Package: "github.com/theopenlane/core/internal/ent/generated",
 		Features: []gen.Feature{

@@ -13,8 +13,8 @@ import (
 	"github.com/theopenlane/entx/history"
 )
 
-type GlobalSearchResult interface {
-	IsGlobalSearchResult()
+type SearchResult interface {
+	IsSearchResult()
 }
 
 type APIToken struct {
@@ -641,6 +641,12 @@ type ContactHistoryWhereInput struct {
 	StatusIn    []enums.UserStatus `json:"statusIn,omitempty"`
 	StatusNotIn []enums.UserStatus `json:"statusNotIn,omitempty"`
 }
+
+type ContactSearchResult struct {
+	Contacts []*Contact `json:"contacts,omitempty"`
+}
+
+func (ContactSearchResult) IsSearchResult() {}
 
 // Return response for updateContact mutation
 type ContactUpdatePayload struct {
@@ -3653,6 +3659,12 @@ type EntityOrder struct {
 	Field EntityOrderField `json:"field"`
 }
 
+type EntitySearchResult struct {
+	Entities []*Entity `json:"entities,omitempty"`
+}
+
+func (EntitySearchResult) IsSearchResult() {}
+
 type EntityType struct {
 	ID        string     `json:"id"`
 	CreatedAt *time.Time `json:"createdAt,omitempty"`
@@ -5737,11 +5749,6 @@ type FileWhereInput struct {
 	HasGroupWith []*GroupWhereInput `json:"hasGroupWith,omitempty"`
 }
 
-type GlobalSearchResultConnection struct {
-	Page  *PageInfo            `json:"page"`
-	Nodes []GlobalSearchResult `json:"nodes"`
-}
-
 type Group struct {
 	ID        string     `json:"id"`
 	CreatedAt *time.Time `json:"createdAt,omitempty"`
@@ -6418,7 +6425,7 @@ type GroupSearchResult struct {
 	Groups []*Group `json:"groups,omitempty"`
 }
 
-func (GroupSearchResult) IsGlobalSearchResult() {}
+func (GroupSearchResult) IsSearchResult() {}
 
 type GroupSetting struct {
 	ID        string     `json:"id"`
@@ -10095,7 +10102,7 @@ type OrganizationSearchResult struct {
 	Organizations []*Organization `json:"organizations,omitempty"`
 }
 
-func (OrganizationSearchResult) IsGlobalSearchResult() {}
+func (OrganizationSearchResult) IsSearchResult() {}
 
 type OrganizationSetting struct {
 	ID        string     `json:"id"`
@@ -11128,6 +11135,11 @@ type PersonalAccessTokenWhereInput struct {
 type Query struct {
 }
 
+type SearchResultConnection struct {
+	Page  *PageInfo      `json:"page"`
+	Nodes []SearchResult `json:"nodes"`
+}
+
 type Subscriber struct {
 	ID        string     `json:"id"`
 	CreatedAt *time.Time `json:"createdAt,omitempty"`
@@ -11196,7 +11208,7 @@ type SubscriberSearchResult struct {
 	Subscribers []*Subscriber `json:"subscribers,omitempty"`
 }
 
-func (SubscriberSearchResult) IsGlobalSearchResult() {}
+func (SubscriberSearchResult) IsSearchResult() {}
 
 // Return response for updateSubscriber mutation
 type SubscriberUpdatePayload struct {
@@ -13314,12 +13326,6 @@ type UserOrder struct {
 	// The field by which to order Users.
 	Field UserOrderField `json:"field"`
 }
-
-type UserSearchResult struct {
-	Users []*User `json:"users,omitempty"`
-}
-
-func (UserSearchResult) IsGlobalSearchResult() {}
 
 type UserSetting struct {
 	ID        string     `json:"id"`

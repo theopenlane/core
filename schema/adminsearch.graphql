@@ -1,0 +1,47 @@
+extend type Query{
+    """
+    Search across Contact objects
+    """
+    adminContactSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): ContactSearchResult
+    """
+    Search across Entity objects
+    """
+    adminEntitySearch(
+        """
+        Search query
+        """
+        query: String!
+    ): EntitySearchResult
+    """
+    Search across Group objects
+    """
+    adminGroupSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): GroupSearchResult
+    """
+    Search across Organization objects
+    """
+    adminOrganizationSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): OrganizationSearchResult
+    """
+    Search across Subscriber objects
+    """
+    adminSubscriberSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): SubscriberSearchResult
+}

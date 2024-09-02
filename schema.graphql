@@ -807,6 +807,9 @@ input ContactHistoryWhereInput {
 	statusIn: [ContactHistoryUserStatus!]
 	statusNotIn: [ContactHistoryUserStatus!]
 }
+type ContactSearchResult {
+	contacts: [Contact!]
+}
 """
 Return response for updateContact mutation
 """
@@ -4773,6 +4776,9 @@ enum EntityOrderField {
 	name
 	display_name
 }
+type EntitySearchResult {
+	entities: [Entity!]
+}
 type EntityType implements Node {
 	id: ID!
 	createdAt: Time
@@ -8258,6 +8264,9 @@ Properties by which Group connections can be ordered.
 enum GroupOrderField {
 	name
 	display_name
+}
+type GroupSearchResult {
+	groups: [Group!]
 }
 type GroupSetting implements Node {
 	id: ID!
@@ -14443,6 +14452,9 @@ enum OrganizationOrderField {
 	name
 	display_name
 }
+type OrganizationSearchResult {
+	organizations: [Organization!]
+}
 type OrganizationSetting implements Node {
 	id: ID!
 	createdAt: Time
@@ -17288,6 +17300,51 @@ type Query {
 		where: WebhookHistoryWhereInput
 	): WebhookHistoryConnection!
 	"""
+	Search across Contact objects
+	"""
+	adminContactSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): ContactSearchResult
+	"""
+	Search across Entity objects
+	"""
+	adminEntitySearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): EntitySearchResult
+	"""
+	Search across Group objects
+	"""
+	adminGroupSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): GroupSearchResult
+	"""
+	Search across Organization objects
+	"""
+	adminOrganizationSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): OrganizationSearchResult
+	"""
+	Search across Subscriber objects
+	"""
+	adminSubscriberSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): SubscriberSearchResult
+	"""
 	Look up apiToken by ID
 	"""
 	apiToken(
@@ -17521,6 +17578,60 @@ type Query {
 		id: ID!
 	): PersonalAccessToken!
 	"""
+	Search across Contact objects
+	"""
+	contactSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): ContactSearchResult
+	"""
+	Search across Entity objects
+	"""
+	entitySearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): EntitySearchResult
+	"""
+	Search across Group objects
+	"""
+	groupSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): GroupSearchResult
+	"""
+	Search across Organization objects
+	"""
+	organizationSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): OrganizationSearchResult
+	"""
+	Search across Subscriber objects
+	"""
+	subscriberSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): SubscriberSearchResult
+	"""
+	Search across all objects
+	"""
+	search(
+		"""
+		Search query
+		"""
+		query: String!
+	): SearchResultConnection
+	"""
 	Look up subscriber by Email
 	"""
 	subscriber(
@@ -17574,6 +17685,11 @@ type Query {
 		"""
 		id: ID!
 	): Webhook!
+}
+union SearchResult = ContactSearchResult | EntitySearchResult | GroupSearchResult | OrganizationSearchResult | SubscriberSearchResult
+type SearchResultConnection {
+	page: PageInfo!
+	nodes: [SearchResult!]!
 }
 type Subscriber implements Node {
 	id: ID!
@@ -17670,6 +17786,9 @@ type SubscriberEdge {
 	A cursor for use in pagination.
 	"""
 	cursor: Cursor!
+}
+type SubscriberSearchResult {
+	subscribers: [Subscriber!]
 }
 """
 Return response for updateSubscriber mutation
