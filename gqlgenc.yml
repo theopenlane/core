@@ -1,9 +1,9 @@
 model:
-  package: coreclient
-  filename: ./pkg/coreclient/models.go
+  package: openlaneclient
+  filename: ./pkg/openlaneclient/models.go
 client:
-  package: coreclient
-  filename: ./pkg/coreclient/graphclient.go
+  package: openlaneclient
+  filename: ./pkg/openlaneclient/graphclient.go
 models:
   Int:
     model: github.com/99designs/gqlgen/graphql.Int64
