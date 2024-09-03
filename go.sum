@@ -452,8 +452,8 @@ github.com/posthog/posthog-go v1.2.21 h1:p2ea0l+Qwtk+VC2LCAI87Dz36vwj9i+QHw5s6Cp
 github.com/posthog/posthog-go v1.2.21/go.mod h1:uYC2l1Yktc8E+9FAHJ9QZG4vQf/NHJPD800Hsm7DzoM=
 github.com/pquerna/otp v1.4.0 h1:wZvl1TIVxKRThZIBiwOOHOGP/1+nZyWBil9Y2XNEDzg=
 github.com/pquerna/otp v1.4.0/go.mod h1:dkJfzwRKNiegxyNb54X/3fLwhCynbMspSyWKnvi1AEg=
-github.com/pressly/goose/v3 v3.21.1 h1:5SSAKKWej8LVVzNLuT6KIvP1eFDuPvxa+B6H0w78buQ=
-github.com/pressly/goose/v3 v3.21.1/go.mod h1:sqthmzV8PitchEkjecFJII//l43dLOCzfWh8pHEe+vE=
+github.com/pressly/goose/v3 v3.22.0 h1:wd/7kNiPTuNAztWun7iaB98DrhulbWPrzMAaw2DEZNw=
+github.com/pressly/goose/v3 v3.22.0/go.mod h1:yJM3qwSj2pp7aAaCvso096sguezamNb2OBgxCnh/EYg=
 github.com/prometheus/client_golang v1.20.2 h1:5ctymQzZlyOON1666svgwn3s6IKWgfbjsejTMiXIyjg=
 github.com/prometheus/client_golang v1.20.2/go.mod h1:PIEt8X02hGcP8JWbeHyeZ53Y/jReSnHgO035n//V5WE=
 github.com/prometheus/client_model v0.0.0-20190812154241-14fe0d1b01d4/go.mod h1:xMI15A0UPsDsEKsMN9yxemIoYk6Tm2C1GtYGdfGttqA=

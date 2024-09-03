@@ -43,7 +43,7 @@ require (
 	github.com/panta/machineid v1.0.2
 	github.com/pkg/errors v0.9.1
 	github.com/posthog/posthog-go v1.2.21
-	github.com/pressly/goose/v3 v3.21.1
+	github.com/pressly/goose/v3 v3.22.0
 	github.com/prometheus/client_golang v1.20.2
 	github.com/rShetty/asyncwait v0.0.0-20180203043142-1e02703eb90e
 	github.com/ravilushqa/otelgqlgen v0.16.0
