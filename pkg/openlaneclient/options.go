@@ -12,14 +12,6 @@ import (
 // ClientOption allows us to configure the APIv1 client when it is created
 type ClientOption func(c *APIv1) error
 
-// WithClient sets the client for the APIv1 client
-func WithClient(client *httpsling.Client) ClientOption {
-	return func(c *APIv1) error {
-		c.HTTPSlingClient = client
-		return nil
-	}
-}
-
 // WithCredentials sets the credentials for the APIv1 client
 func WithCredentials(creds Credentials) ClientOption {
 	return func(c *APIv1) error {
@@ -34,17 +26,7 @@ func WithCredentials(creds Credentials) ClientOption {
 		c.Config.Interceptors = append(c.Config.Interceptors, auth.WithAuthorization())
 
 		// Set the bearer token for the HTTPSling client, used for REST requests
-		c.Config.HTTPSling.Headers.Set(httpsling.HeaderAuthorization, "Bearer "+auth.BearerToken)
-
-		return nil
-	}
-}
-
-// WithHTTPSlingConfig sets the config for the APIv1 client
-func WithHTTPSlingConfig(config *httpsling.Config) ClientOption {
-	return func(c *APIv1) error {
-		c.Config.HTTPSling = config
-		return nil
+		return c.Requester.Apply(httpsling.BearerAuth(auth.BearerToken))
 	}
 }
 
@@ -79,16 +61,15 @@ func WithBaseURL(baseURL *url.URL) ClientOption {
 		c.Config.BaseURL = baseURL
 
 		// Set the base URL for the HTTPSling client
-		c.Config.HTTPSling.BaseURL = baseURL.String()
-
-		return nil
+		return c.Requester.Apply(httpsling.URL(baseURL.String()))
 	}
 }
 
 // WithTransport sets the transport for the APIv1 client
 func WithTransport(transport http.RoundTripper) ClientOption {
 	return func(c *APIv1) error {
-		c.Config.HTTPSling.Transport = transport
+		c.Requester.HTTPClient().Transport = transport
+
 		return nil
 	}
 }

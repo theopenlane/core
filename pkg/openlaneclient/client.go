@@ -52,7 +52,7 @@ func New(config Config, opts ...ClientOption) (*OpenlaneClient, error) {
 	// create the graph client
 	// use api.Config instead of config because some fields are updated in NewRestClient
 	graphClient := NewClient(
-		api.HTTPSlingClient.HTTPClient,
+		api.Requester.HTTPClient(),
 		graphRequestPath(api.Config),
 		&api.Config.Clientv2Options,
 		api.Config.Interceptors...,
@@ -64,33 +64,12 @@ func New(config Config, opts ...ClientOption) (*OpenlaneClient, error) {
 	}, nil
 }
 
-// newHTTPClient creates a new HTTP sling client with the given configuration
-func newHTTPClient(config Config) (*httpsling.Client, error) {
-	// copy the values from the base config to the httpsling config
-	if config.HTTPSling == nil {
-		config.HTTPSling = &httpsling.Config{}
-	}
-
-	if config.HTTPSling.BaseURL == "" {
-		config.HTTPSling.BaseURL = config.BaseURL.String()
-	}
-
-	client := httpsling.Create(config.HTTPSling)
-
-	// set the default cookie jar
-	if err := client.SetDefaultCookieJar(); err != nil {
-		return nil, err
-	}
-
-	return client, nil
-}
-
 // APIv1 implements the Client interface and provides methods to interact with the API
 type APIv1 struct {
 	// Config is the configuration for the APIv1 client
 	Config Config
-	// HTTPSlingClient is the HTTP client for the APIv1 client
-	HTTPSlingClient *httpsling.Client
+	// Requester is the HTTP client for the APIv1 client
+	Requester *httpsling.Requester
 }
 
 // Config is the configuration for the APIv1 client
@@ -100,11 +79,11 @@ func (c *OpenlaneClient) Config() Config {
 	return api.Config
 }
 
-// HTTPSlingClient is the http client for the APIv1 client
-func (c *OpenlaneClient) HTTPSlingClient() *httpsling.Client {
+// HTTPSlingRequester is the http client for the APIv1 client
+func (c *OpenlaneClient) HTTPSlingRequester() *httpsling.Requester {
 	api := c.OpenlaneRestClient.(*APIv1)
 
-	return api.HTTPSlingClient
+	return api.Requester
 }
 
 // AccessToken returns the access token cached on the client or an error if it is not
@@ -148,7 +127,7 @@ func (c *OpenlaneClient) RefreshToken() (_ string, err error) {
 // SetAuthTokens is a helper function to set the access and refresh tokens on the
 // client cookie jar.
 func (c *OpenlaneClient) SetAuthTokens(access, refresh string) error {
-	if c.HTTPSlingClient().HTTPClient.Jar == nil {
+	if c.HTTPSlingRequester().CookieJar() == nil {
 		return ErrNoCookieJarSet
 	}
 
@@ -176,7 +155,7 @@ func (c *OpenlaneClient) SetAuthTokens(access, refresh string) error {
 		})
 	}
 
-	c.Config().HTTPSling.CookieJar.SetCookies(u, cookies)
+	c.HTTPSlingRequester().CookieJar().SetCookies(u, cookies)
 
 	return nil
 }
@@ -198,11 +177,11 @@ func (c *OpenlaneClient) ClearAuthTokens() {
 
 // Returns the cookies set from the previous request(s) on the client Jar.
 func (c *OpenlaneClient) Cookies() ([]*http.Cookie, error) {
-	if c.HTTPSlingClient().HTTPClient.Jar == nil {
+	if c.HTTPSlingRequester().CookieJar() == nil {
 		return nil, ErrNoCookieJarSet
 	}
 
-	cookies := c.HTTPSlingClient().HTTPClient.Jar.Cookies(c.Config().BaseURL)
+	cookies := c.HTTPSlingRequester().CookieJar().Cookies(c.Config().BaseURL)
 
 	return cookies, nil
 }

@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/utils/rout"
 
-	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/iam/sessions"
 )
 
@@ -63,11 +63,7 @@ func (a Authorization) SetAuthorizationHeader(req *http.Request) {
 		// ignore error as we are setting the header
 		token, _ := a.AccessToken()
 
-		auth := httpsling.BearerAuth{
-			Token: token,
-		}
-
-		auth.Apply(req)
+		req.Header.Set(httpsling.HeaderAuthorization, httpsling.BearerAuthHeader+token)
 	}
 }
 
