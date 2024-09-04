@@ -520,8 +520,8 @@ github.com/theopenlane/echox v0.1.0 h1:y4Z2shaODCLwXHsHBrY/EkH/2sIuo49xdIfxx7h+Z
 github.com/theopenlane/echox v0.1.0/go.mod h1:RaynhPvY9qbLOVlcO7Js1NqZ66+CP9hVBa0c7ehNYA4=
 github.com/theopenlane/echozap v0.1.0 h1:qoD1tEGQoTMPrzleOymk6auLHJcQmzPLprCEvoXNKDE=
 github.com/theopenlane/echozap v0.1.0/go.mod h1:E3Fkzb6QvEsx9KxxpUv9dpxUvKjxAEUZSEtkYeCXLok=
-github.com/theopenlane/entx v0.1.4 h1:dxP/+LUdMXBhbMoFq3ITkJv6vINxii1306BSrxHckn4=
-github.com/theopenlane/entx v0.1.4/go.mod h1:MxnlrB6Eid2BDwB5kKz7p9QP/Bm0/kpbr8z76CQvjw4=
+github.com/theopenlane/entx v0.1.5 h1:qEJxAmsrGP1rD+PeDx5N3ThRmKWlTpRcYhA9rMfwo/k=
+github.com/theopenlane/entx v0.1.5/go.mod h1:KRCgcNoZmHdljODipqHX92/MG90da6W7sNKiptuC/p4=
 github.com/theopenlane/gqlgen-plugins v0.1.0 h1:DL3knGQ+pcoXceSFvmgWzzlgIyPRgl71tYPTySP+vHk=
 github.com/theopenlane/gqlgen-plugins v0.1.0/go.mod h1:sP0nCjrE3KoVT4qfYqMrSK1XZa3Bx2oTIRSdEF7F5l0=
 github.com/theopenlane/httpsling v0.2.0 h1:5k/PoFA5jjak9dnijATFvTVTvgUSMFdEZeyctyv1cWU=
