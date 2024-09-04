@@ -1,12 +1,9 @@
 package openlaneclient
 
 import (
-	"net/http"
 	"net/url"
 
 	"github.com/Yamashou/gqlgenc/clientv2"
-
-	"github.com/theopenlane/httpsling"
 )
 
 // Config is the configuration for the API client
@@ -15,8 +12,6 @@ type Config struct {
 	BaseURL *url.URL `json:"baseUrl" yaml:"base_url" default:"http://localhost:17608"`
 	// GraphQLPath is the path to the GraphQL endpoint
 	GraphQLPath string `json:"graphqlPath" default:"/query"`
-	// HTTPSling is the configuration for the HTTPSling client
-	HTTPSling *httpsling.Config
 	// Interceptors are the request interceptors for the graph client
 	Interceptors []clientv2.RequestInterceptor
 	// Credentials are the credentials for the client
@@ -42,14 +37,7 @@ var defaultClientConfig = Config{
 		Scheme: "http",
 		Host:   "localhost:17608",
 	},
-	GraphQLPath: "/query",
-	HTTPSling: &httpsling.Config{
-		Headers: &http.Header{
-			"Accept":          []string{httpsling.ContentTypeJSONUTF8},
-			"Accept-Language": []string{"en-US,en"},
-			"Content-Type":    []string{httpsling.ContentTypeJSONUTF8},
-		},
-	},
+	GraphQLPath:     "/query",
 	Interceptors:    []clientv2.RequestInterceptor{},
 	Clientv2Options: clientv2.Options{ParseDataAlongWithErrors: false},
 }

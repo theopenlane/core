@@ -8,12 +8,15 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 	echo "github.com/theopenlane/echox"
 
-	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/iam/tokens"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/models"
+)
+
+const (
+	bearerAuthType = "Bearer"
 )
 
 type Config struct {
@@ -85,7 +88,7 @@ func (a *Config) GenerateUserAuthSessionWithOrg(ctx echo.Context, user *generate
 		return nil, err
 	}
 
-	auth.TokenType = string(httpsling.BearerAuthType)
+	auth.TokenType = bearerAuthType
 
 	return auth, nil
 }
@@ -102,7 +105,7 @@ func (a *Config) GenerateOauthAuthSession(ctx context.Context, w http.ResponseWr
 		return nil, err
 	}
 
-	auth.TokenType = string(httpsling.BearerAuthType)
+	auth.TokenType = bearerAuthType
 
 	return auth, nil
 }

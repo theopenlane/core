@@ -2,7 +2,9 @@ package openlaneclient
 
 import (
 	"context"
-	"net/http"
+
+	"github.com/theopenlane/httpsling"
+	"github.com/theopenlane/httpsling/httpclient"
 
 	"github.com/theopenlane/core/pkg/models"
 )
@@ -35,17 +37,21 @@ func NewRestClient(config Config, opts ...ClientOption) (_ OpenlaneRestClient, e
 		Config: config,
 	}
 
-	// Apply our options
-	for _, opt := range opts {
-		if err := opt(c); err != nil {
+	// create the HTTP sling requester if it is not set with the default client
+	if c.Requester == nil {
+		c.Requester, err = httpsling.New(
+			httpsling.Client(
+				httpclient.CookieJar(nil), // Use a cookie jar to store session cookies
+			),
+		)
+		if err != nil {
 			return nil, err
 		}
 	}
 
-	// create the HTTP sling client if it is not set
-	if c.HTTPSlingClient == nil {
-		c.HTTPSlingClient, err = newHTTPClient(c.Config)
-		if err != nil {
+	// Apply our options
+	for _, opt := range opts {
+		if err := opt(c); err != nil {
 			return nil, err
 		}
 	}
@@ -58,20 +64,17 @@ var _ OpenlaneRestClient = &APIv1{}
 
 // Register a new user with the API
 func (s *APIv1) Register(ctx context.Context, in *models.RegisterRequest) (out *models.RegisterReply, err error) {
-	req := s.HTTPSlingClient.NewRequestBuilder(http.MethodPost, "/v1/register")
-	req.Body(in)
-
-	resp, err := req.Send(ctx)
+	resp, err := s.Requester.ReceiveWithContext(ctx, &out,
+		httpsling.Post(v1Path("register")),
+		httpsling.Body(in))
 	if err != nil {
 		return nil, err
 	}
 
-	if err := resp.ScanJSON(&out); err != nil {
-		return nil, err
-	}
+	defer resp.Body.Close()
 
-	if !resp.IsSuccess() {
-		return nil, newRequestError(resp.StatusCode(), out.Error)
+	if !httpsling.IsSuccess(resp) {
+		return nil, newRequestError(resp.StatusCode, out.Error)
 	}
 
 	return out, nil
@@ -79,20 +82,17 @@ func (s *APIv1) Register(ctx context.Context, in *models.RegisterRequest) (out *
 
 // Login to the API
 func (s *APIv1) Login(ctx context.Context, in *models.LoginRequest) (out *models.LoginReply, err error) {
-	req := s.HTTPSlingClient.NewRequestBuilder(http.MethodPost, "/v1/login")
-	req.Body(in)
-
-	resp, err := req.Send(ctx)
+	resp, err := s.Requester.ReceiveWithContext(ctx, &out,
+		httpsling.Post(v1Path("login")),
+		httpsling.Body(in))
 	if err != nil {
 		return nil, err
 	}
 
-	if err := resp.ScanJSON(&out); err != nil {
-		return nil, err
-	}
+	defer resp.Body.Close()
 
-	if !resp.IsSuccess() {
-		return nil, newAuthenticationError(resp.StatusCode(), out.Error)
+	if !httpsling.IsSuccess(resp) {
+		return nil, newAuthenticationError(resp.StatusCode, out.Error)
 	}
 
 	return out, nil
@@ -100,20 +100,17 @@ func (s *APIv1) Login(ctx context.Context, in *models.LoginRequest) (out *models
 
 // Refresh a user's access token
 func (s *APIv1) Refresh(ctx context.Context, in *models.RefreshRequest) (out *models.RefreshReply, err error) {
-	req := s.HTTPSlingClient.NewRequestBuilder(http.MethodPost, "/v1/refresh")
-	req.Body(in)
-
-	resp, err := req.Send(ctx)
+	resp, err := s.Requester.ReceiveWithContext(ctx, &out,
+		httpsling.Post(v1Path("refresh")),
+		httpsling.Body(in))
 	if err != nil {
 		return nil, err
 	}
 
-	if err := resp.ScanJSON(&out); err != nil {
-		return nil, err
-	}
+	defer resp.Body.Close()
 
-	if !resp.IsSuccess() {
-		return nil, newAuthenticationError(resp.StatusCode(), out.Error)
+	if !httpsling.IsSuccess(resp) {
+		return nil, newAuthenticationError(resp.StatusCode, out.Error)
 	}
 
 	return out, nil
@@ -121,20 +118,17 @@ func (s *APIv1) Refresh(ctx context.Context, in *models.RefreshRequest) (out *mo
 
 // Switch the current organization context
 func (s *APIv1) Switch(ctx context.Context, in *models.SwitchOrganizationRequest) (out *models.SwitchOrganizationReply, err error) {
-	req := s.HTTPSlingClient.NewRequestBuilder(http.MethodPost, "/v1/switch")
-	req.Body(in)
-
-	resp, err := req.Send(ctx)
+	resp, err := s.Requester.ReceiveWithContext(ctx, &out,
+		httpsling.Post(v1Path("switch")),
+		httpsling.Body(in))
 	if err != nil {
 		return nil, err
 	}
 
-	if err := resp.ScanJSON(&out); err != nil {
-		return nil, err
-	}
+	defer resp.Body.Close()
 
-	if !resp.IsSuccess() {
-		return nil, newAuthenticationError(resp.StatusCode(), out.Error)
+	if !httpsling.IsSuccess(resp) {
+		return nil, newAuthenticationError(resp.StatusCode, out.Error)
 	}
 
 	return out, nil
@@ -142,20 +136,17 @@ func (s *APIv1) Switch(ctx context.Context, in *models.SwitchOrganizationRequest
 
 // VerifyEmail verifies the email address of a user
 func (s *APIv1) VerifyEmail(ctx context.Context, in *models.VerifyRequest) (out *models.VerifyReply, err error) {
-	req := s.HTTPSlingClient.NewRequestBuilder(http.MethodGet, "/v1/verify")
-	req.Query("token", in.Token)
-
-	resp, err := req.Send(ctx)
+	resp, err := s.Requester.ReceiveWithContext(ctx, &out,
+		httpsling.Post(v1Path("verify")),
+		httpsling.Body(in))
 	if err != nil {
 		return nil, err
 	}
 
-	if err := resp.ScanJSON(&out); err != nil {
-		return nil, err
-	}
+	defer resp.Body.Close()
 
-	if !resp.IsSuccess() {
-		return nil, newRequestError(resp.StatusCode(), out.Error)
+	if !httpsling.IsSuccess(resp) {
+		return nil, newRequestError(resp.StatusCode, out.Error)
 	}
 
 	return out, nil
@@ -163,20 +154,17 @@ func (s *APIv1) VerifyEmail(ctx context.Context, in *models.VerifyRequest) (out 
 
 // ResendEmail resends the verification email to the user
 func (s *APIv1) ResendEmail(ctx context.Context, in *models.ResendRequest) (out *models.ResendReply, err error) {
-	req := s.HTTPSlingClient.NewRequestBuilder(http.MethodPost, "/v1/resend")
-	req.Body(in)
-
-	resp, err := req.Send(ctx)
+	resp, err := s.Requester.ReceiveWithContext(ctx, &out,
+		httpsling.Post(v1Path("resend")),
+		httpsling.Body(in))
 	if err != nil {
 		return nil, err
 	}
 
-	if err := resp.ScanJSON(&out); err != nil {
-		return nil, err
-	}
+	defer resp.Body.Close()
 
-	if !resp.IsSuccess() {
-		return nil, newRequestError(resp.StatusCode(), out.Error)
+	if !httpsling.IsSuccess(resp) {
+		return nil, newRequestError(resp.StatusCode, out.Error)
 	}
 
 	return out, nil
@@ -184,20 +172,17 @@ func (s *APIv1) ResendEmail(ctx context.Context, in *models.ResendRequest) (out 
 
 // ForgotPassword sends a password reset email to the user
 func (s *APIv1) ForgotPassword(ctx context.Context, in *models.ForgotPasswordRequest) (out *models.ForgotPasswordReply, err error) {
-	req := s.HTTPSlingClient.NewRequestBuilder(http.MethodPost, "/v1/forgot-password")
-	req.Body(in)
-
-	resp, err := req.Send(ctx)
+	resp, err := s.Requester.ReceiveWithContext(ctx, &out,
+		httpsling.Post(v1Path("forgot-password")),
+		httpsling.Body(in))
 	if err != nil {
 		return nil, err
 	}
 
-	if err := resp.ScanJSON(&out); err != nil {
-		return nil, err
-	}
+	defer resp.Body.Close()
 
-	if !resp.IsSuccess() {
-		return nil, newRequestError(resp.StatusCode(), out.Error)
+	if !httpsling.IsSuccess(resp) {
+		return nil, newRequestError(resp.StatusCode, out.Error)
 	}
 
 	return out, nil
@@ -205,20 +190,17 @@ func (s *APIv1) ForgotPassword(ctx context.Context, in *models.ForgotPasswordReq
 
 // ResetPassword resets the user's password
 func (s *APIv1) ResetPassword(ctx context.Context, in *models.ResetPasswordRequest) (out *models.ResetPasswordReply, err error) {
-	req := s.HTTPSlingClient.NewRequestBuilder(http.MethodPost, "/v1/password-reset")
-	req.Body(in)
-
-	resp, err := req.Send(ctx)
+	resp, err := s.Requester.ReceiveWithContext(ctx, &out,
+		httpsling.Post(v1Path("password-reset")),
+		httpsling.Body(in))
 	if err != nil {
 		return nil, err
 	}
 
-	if err := resp.ScanJSON(&out); err != nil {
-		return nil, err
-	}
+	defer resp.Body.Close()
 
-	if !resp.IsSuccess() {
-		return nil, newRequestError(resp.StatusCode(), out.Error)
+	if !httpsling.IsSuccess(resp) {
+		return nil, newRequestError(resp.StatusCode, out.Error)
 	}
 
 	return out, nil
@@ -226,20 +208,17 @@ func (s *APIv1) ResetPassword(ctx context.Context, in *models.ResetPasswordReque
 
 // AcceptInvite accepts an invite to join an organization
 func (s *APIv1) AcceptInvite(ctx context.Context, in *models.InviteRequest) (out *models.InviteReply, err error) {
-	req := s.HTTPSlingClient.NewRequestBuilder(http.MethodGet, "/v1/invite")
-	req.Query("token", in.Token)
-
-	resp, err := req.Send(ctx)
+	resp, err := s.Requester.ReceiveWithContext(ctx, &out,
+		httpsling.Post(v1Path("invite")),
+		httpsling.Body(in))
 	if err != nil {
 		return nil, err
 	}
 
-	if err := resp.ScanJSON(&out); err != nil {
-		return nil, err
-	}
+	defer resp.Body.Close()
 
-	if !resp.IsSuccess() {
-		return nil, newRequestError(resp.StatusCode(), out.Error)
+	if !httpsling.IsSuccess(resp) {
+		return nil, newRequestError(resp.StatusCode, out.Error)
 	}
 
 	return out, nil
@@ -247,21 +226,22 @@ func (s *APIv1) AcceptInvite(ctx context.Context, in *models.InviteRequest) (out
 
 // VerifySubscriberEmail verifies the email address of a subscriber
 func (s *APIv1) VerifySubscriberEmail(ctx context.Context, in *models.VerifySubscribeRequest) (out *models.VerifySubscribeReply, err error) {
-	req := s.HTTPSlingClient.NewRequestBuilder(http.MethodGet, "/v1/subscribe/verify")
-	req.Query("token", in.Token)
-
-	resp, err := req.Send(ctx)
+	resp, err := s.Requester.ReceiveWithContext(ctx, &out,
+		httpsling.Post(v1Path("subscribe/verify")),
+		httpsling.Body(in))
 	if err != nil {
 		return nil, err
 	}
 
-	if err := resp.ScanJSON(&out); err != nil {
-		return nil, err
-	}
+	defer resp.Body.Close()
 
-	if !resp.IsSuccess() {
-		return nil, newRequestError(resp.StatusCode(), out.Error)
+	if !httpsling.IsSuccess(resp) {
+		return nil, newRequestError(resp.StatusCode, out.Error)
 	}
 
 	return out, nil
+}
+
+func v1Path(path string) string {
+	return "/v1/" + path
 }
