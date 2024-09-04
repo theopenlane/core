@@ -2,10 +2,7 @@ module github.com/theopenlane/core
 
 go 1.23.0
 
-replace (
-	github.com/theopenlane/entx => ../entx
-	github.com/theopenlane/gqlgen-plugins => ../gqlgen-plugins
-)
+replace github.com/theopenlane/gqlgen-plugins => ../gqlgen-plugins
 
 require (
 	ariga.io/entcache v0.1.0
@@ -262,6 +259,7 @@ require (
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
+	gotest.tools v2.2.0+incompatible // indirect
 	modernc.org/gc/v3 v3.0.0-20240801135723-a856999a2e4a // indirect
 	modernc.org/mathutil v1.6.0 // indirect
 	modernc.org/memory v1.8.0 // indirect
