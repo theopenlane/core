@@ -2,8 +2,6 @@ module github.com/theopenlane/core
 
 go 1.23.0
 
-replace github.com/theopenlane/httpsling => ../httpsling
-
 require (
 	ariga.io/entcache v0.1.0
 	entgo.io/contrib v0.6.0
@@ -61,7 +59,7 @@ require (
 	github.com/theopenlane/echozap v0.1.0
 	github.com/theopenlane/entx v0.1.4
 	github.com/theopenlane/gqlgen-plugins v0.1.0
-	github.com/theopenlane/httpsling v0.1.0
+	github.com/theopenlane/httpsling v0.2.0
 	github.com/theopenlane/iam v0.1.6
 	github.com/theopenlane/utils v0.1.5
 	github.com/tursodatabase/libsql-client-go v0.0.0-20240902231107-85af5b9d094d
