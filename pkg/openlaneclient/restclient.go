@@ -137,8 +137,8 @@ func (s *APIv1) Switch(ctx context.Context, in *models.SwitchOrganizationRequest
 // VerifyEmail verifies the email address of a user
 func (s *APIv1) VerifyEmail(ctx context.Context, in *models.VerifyRequest) (out *models.VerifyReply, err error) {
 	resp, err := s.Requester.ReceiveWithContext(ctx, &out,
-		httpsling.Post(v1Path("verify")),
-		httpsling.Body(in))
+		httpsling.Get(v1Path("verify")),
+		httpsling.QueryParam("token", in.Token))
 	if err != nil {
 		return nil, err
 	}
@@ -209,8 +209,8 @@ func (s *APIv1) ResetPassword(ctx context.Context, in *models.ResetPasswordReque
 // AcceptInvite accepts an invite to join an organization
 func (s *APIv1) AcceptInvite(ctx context.Context, in *models.InviteRequest) (out *models.InviteReply, err error) {
 	resp, err := s.Requester.ReceiveWithContext(ctx, &out,
-		httpsling.Post(v1Path("invite")),
-		httpsling.Body(in))
+		httpsling.Get(v1Path("invite")),
+		httpsling.QueryParam("token", in.Token))
 	if err != nil {
 		return nil, err
 	}
@@ -227,8 +227,8 @@ func (s *APIv1) AcceptInvite(ctx context.Context, in *models.InviteRequest) (out
 // VerifySubscriberEmail verifies the email address of a subscriber
 func (s *APIv1) VerifySubscriberEmail(ctx context.Context, in *models.VerifySubscribeRequest) (out *models.VerifySubscribeReply, err error) {
 	resp, err := s.Requester.ReceiveWithContext(ctx, &out,
-		httpsling.Post(v1Path("subscribe/verify")),
-		httpsling.Body(in))
+		httpsling.Get(v1Path("subscribe/verify")),
+		httpsling.QueryParam("token", in.Token))
 	if err != nil {
 		return nil, err
 	}
