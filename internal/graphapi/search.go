@@ -30,8 +30,8 @@ type searchResult[T any] struct {
 func searchContacts(ctx context.Context, query string) ([]*generated.Contact, error) {
 	return withTransactionalMutation(ctx).Contact.Query().Where(
 		contact.Or(
-			contact.FullNameContainsFold(query), // search by FullName for type string
-			contact.IDContainsFold(query),       // search by ID for type string
+			contact.FullNameContainsFold(query), // search by FullName
+			contact.IDContainsFold(query),       // search by ID
 		),
 	).All(ctx)
 }
@@ -40,20 +40,20 @@ func searchContacts(ctx context.Context, query string) ([]*generated.Contact, er
 func adminSearchContacts(ctx context.Context, query string) ([]*generated.Contact, error) {
 	return withTransactionalMutation(ctx).Contact.Query().Where(
 		contact.Or(
-			contact.IDContainsFold(query),        // search by ID for type string
-			contact.DeletedByContainsFold(query), // search by DeletedBy for type string
+			contact.IDContainsFold(query),        // search by ID
+			contact.DeletedByContainsFold(query), // search by DeletedBy
 			func(s *sql.Selector) {
 				s.Where(
-					sqljson.ValueContains(contact.FieldTags, query), // search by Tags for type json.RawMessage
+					sqljson.ValueContains(contact.FieldTags, query), // search by Tags
 				)
 			},
-			contact.OwnerIDContainsFold(query),     // search by OwnerID for type string
-			contact.FullNameContainsFold(query),    // search by FullName for type string
-			contact.TitleContainsFold(query),       // search by Title for type string
-			contact.CompanyContainsFold(query),     // search by Company for type string
-			contact.EmailContainsFold(query),       // search by Email for type string
-			contact.PhoneNumberContainsFold(query), // search by PhoneNumber for type string
-			contact.AddressContainsFold(query),     // search by Address for type string
+			contact.OwnerIDContainsFold(query),     // search by OwnerID
+			contact.FullNameContainsFold(query),    // search by FullName
+			contact.TitleContainsFold(query),       // search by Title
+			contact.CompanyContainsFold(query),     // search by Company
+			contact.EmailContainsFold(query),       // search by Email
+			contact.PhoneNumberContainsFold(query), // search by PhoneNumber
+			contact.AddressContainsFold(query),     // search by Address
 		),
 	).All(ctx)
 }
@@ -62,10 +62,10 @@ func adminSearchContacts(ctx context.Context, query string) ([]*generated.Contac
 func searchEntities(ctx context.Context, query string) ([]*generated.Entity, error) {
 	return withTransactionalMutation(ctx).Entity.Query().Where(
 		entity.Or(
-			entity.DescriptionContainsFold(query), // search by Description for type string
-			entity.DisplayNameContainsFold(query), // search by DisplayName for type string
-			entity.IDContainsFold(query),          // search by ID for type string
-			entity.NameContainsFold(query),        // search by Name for type string
+			entity.DescriptionContainsFold(query), // search by Description
+			entity.DisplayNameContainsFold(query), // search by DisplayName
+			entity.IDContainsFold(query),          // search by ID
+			entity.NameContainsFold(query),        // search by Name
 		),
 	).All(ctx)
 }
@@ -74,24 +74,24 @@ func searchEntities(ctx context.Context, query string) ([]*generated.Entity, err
 func adminSearchEntities(ctx context.Context, query string) ([]*generated.Entity, error) {
 	return withTransactionalMutation(ctx).Entity.Query().Where(
 		entity.Or(
-			entity.IDContainsFold(query),        // search by ID for type string
-			entity.DeletedByContainsFold(query), // search by DeletedBy for type string
+			entity.IDContainsFold(query),        // search by ID
+			entity.DeletedByContainsFold(query), // search by DeletedBy
 			func(s *sql.Selector) {
 				s.Where(
-					sqljson.ValueContains(entity.FieldTags, query), // search by Tags for type json.RawMessage
+					sqljson.ValueContains(entity.FieldTags, query), // search by Tags
 				)
 			},
-			entity.OwnerIDContainsFold(query),     // search by OwnerID for type string
-			entity.NameContainsFold(query),        // search by Name for type string
-			entity.DisplayNameContainsFold(query), // search by DisplayName for type string
-			entity.DescriptionContainsFold(query), // search by Description for type string
+			entity.OwnerIDContainsFold(query),     // search by OwnerID
+			entity.NameContainsFold(query),        // search by Name
+			entity.DisplayNameContainsFold(query), // search by DisplayName
+			entity.DescriptionContainsFold(query), // search by Description
 			func(s *sql.Selector) {
 				s.Where(
-					sqljson.ValueContains(entity.FieldDomains, query), // search by Domains for type json.RawMessage
+					sqljson.ValueContains(entity.FieldDomains, query), // search by Domains
 				)
 			},
-			entity.EntityTypeIDContainsFold(query), // search by EntityTypeID for type string
-			entity.StatusContainsFold(query),       // search by Status for type string
+			entity.EntityTypeIDContainsFold(query), // search by EntityTypeID
+			entity.StatusContainsFold(query),       // search by Status
 		),
 	).All(ctx)
 }
@@ -100,9 +100,9 @@ func adminSearchEntities(ctx context.Context, query string) ([]*generated.Entity
 func searchGroups(ctx context.Context, query string) ([]*generated.Group, error) {
 	return withTransactionalMutation(ctx).Group.Query().Where(
 		group.Or(
-			group.DisplayNameContainsFold(query), // search by DisplayName for type string
-			group.IDContainsFold(query),          // search by ID for type string
-			group.NameContainsFold(query),        // search by Name for type string
+			group.DisplayNameContainsFold(query), // search by DisplayName
+			group.IDContainsFold(query),          // search by ID
+			group.NameContainsFold(query),        // search by Name
 		),
 	).All(ctx)
 }
@@ -111,16 +111,16 @@ func searchGroups(ctx context.Context, query string) ([]*generated.Group, error)
 func adminSearchGroups(ctx context.Context, query string) ([]*generated.Group, error) {
 	return withTransactionalMutation(ctx).Group.Query().Where(
 		group.Or(
-			group.DeletedByContainsFold(query), // search by DeletedBy for type string
-			group.IDContainsFold(query),        // search by ID for type string
+			group.DeletedByContainsFold(query), // search by DeletedBy
+			group.IDContainsFold(query),        // search by ID
 			func(s *sql.Selector) {
 				s.Where(
-					sqljson.ValueContains(group.FieldTags, query), // search by Tags for type json.RawMessage
+					sqljson.ValueContains(group.FieldTags, query), // search by Tags
 				)
 			},
-			group.OwnerIDContainsFold(query),     // search by OwnerID for type string
-			group.NameContainsFold(query),        // search by Name for type string
-			group.DisplayNameContainsFold(query), // search by DisplayName for type string
+			group.OwnerIDContainsFold(query),     // search by OwnerID
+			group.NameContainsFold(query),        // search by Name
+			group.DisplayNameContainsFold(query), // search by DisplayName
 		),
 	).All(ctx)
 }
@@ -129,9 +129,9 @@ func adminSearchGroups(ctx context.Context, query string) ([]*generated.Group, e
 func searchOrganizations(ctx context.Context, query string) ([]*generated.Organization, error) {
 	return withTransactionalMutation(ctx).Organization.Query().Where(
 		organization.Or(
-			organization.DisplayNameContainsFold(query), // search by DisplayName for type string
-			organization.IDContainsFold(query),          // search by ID for type string
-			organization.NameContainsFold(query),        // search by Name for type string
+			organization.DisplayNameContainsFold(query), // search by DisplayName
+			organization.IDContainsFold(query),          // search by ID
+			organization.NameContainsFold(query),        // search by Name
 		),
 	).All(ctx)
 }
@@ -140,16 +140,16 @@ func searchOrganizations(ctx context.Context, query string) ([]*generated.Organi
 func adminSearchOrganizations(ctx context.Context, query string) ([]*generated.Organization, error) {
 	return withTransactionalMutation(ctx).Organization.Query().Where(
 		organization.Or(
-			organization.IDContainsFold(query), // search by ID for type string
+			organization.IDContainsFold(query), // search by ID
 			func(s *sql.Selector) {
 				s.Where(
-					sqljson.ValueContains(organization.FieldTags, query), // search by Tags for type json.RawMessage
+					sqljson.ValueContains(organization.FieldTags, query), // search by Tags
 				)
 			},
-			organization.DeletedByContainsFold(query),       // search by DeletedBy for type string
-			organization.NameContainsFold(query),            // search by Name for type string
-			organization.DisplayNameContainsFold(query),     // search by DisplayName for type string
-			organization.AvatarRemoteURLContainsFold(query), // search by AvatarRemoteURL for type string
+			organization.DeletedByContainsFold(query),       // search by DeletedBy
+			organization.NameContainsFold(query),            // search by Name
+			organization.DisplayNameContainsFold(query),     // search by DisplayName
+			organization.AvatarRemoteURLContainsFold(query), // search by AvatarRemoteURL
 		),
 	).All(ctx)
 }
@@ -158,8 +158,8 @@ func adminSearchOrganizations(ctx context.Context, query string) ([]*generated.O
 func searchSubscribers(ctx context.Context, query string) ([]*generated.Subscriber, error) {
 	return withTransactionalMutation(ctx).Subscriber.Query().Where(
 		subscriber.Or(
-			subscriber.EmailContainsFold(query), // search by Email for type string
-			subscriber.IDContainsFold(query),    // search by ID for type string
+			subscriber.EmailContainsFold(query), // search by Email
+			subscriber.IDContainsFold(query),    // search by ID
 		),
 	).All(ctx)
 }
@@ -168,16 +168,16 @@ func searchSubscribers(ctx context.Context, query string) ([]*generated.Subscrib
 func adminSearchSubscribers(ctx context.Context, query string) ([]*generated.Subscriber, error) {
 	return withTransactionalMutation(ctx).Subscriber.Query().Where(
 		subscriber.Or(
-			subscriber.IDContainsFold(query), // search by ID for type string
+			subscriber.IDContainsFold(query), // search by ID
 			func(s *sql.Selector) {
 				s.Where(
-					sqljson.ValueContains(subscriber.FieldTags, query), // search by Tags for type json.RawMessage
+					sqljson.ValueContains(subscriber.FieldTags, query), // search by Tags
 				)
 			},
-			subscriber.DeletedByContainsFold(query),   // search by DeletedBy for type string
-			subscriber.OwnerIDContainsFold(query),     // search by OwnerID for type string
-			subscriber.EmailContainsFold(query),       // search by Email for type string
-			subscriber.PhoneNumberContainsFold(query), // search by PhoneNumber for type string
+			subscriber.DeletedByContainsFold(query),   // search by DeletedBy
+			subscriber.OwnerIDContainsFold(query),     // search by OwnerID
+			subscriber.EmailContainsFold(query),       // search by Email
+			subscriber.PhoneNumberContainsFold(query), // search by PhoneNumber
 		),
 	).All(ctx)
 }
