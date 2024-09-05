@@ -43,7 +43,7 @@ brews:
     directory: Formula
     license: 'Apache-2.0'
     commit_author:
-      name: bender-core
+      name: theopenlane-bender
       email: bender@theopenlane.io
     repository:
       owner: theopenlane
