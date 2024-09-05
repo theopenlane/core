@@ -59,12 +59,10 @@ changelog:
 sboms:
   - artifacts: archive
 release:
-  # If set to auto, will mark the release as not ready for production
-  # in case there is an indicator for this in the tag e.g. v1.0.0-rc1
   prerelease: auto
   github:
     owner: theopenlane
-    name: openlane
+    name: core
 # This section defines how and which artifacts we want to sign for the release.
 signs:
   - cmd: cosign
