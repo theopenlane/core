@@ -19,7 +19,7 @@ import (
 )
 
 const (
-	appName         = "core"
+	appName         = "openlane"
 	defaultRootHost = "http://localhost:17608"
 	TableOutput     = "table"
 	JSONOutput      = "json"

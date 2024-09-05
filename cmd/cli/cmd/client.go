@@ -17,7 +17,7 @@ import (
 )
 
 const (
-	serviceName     = "core"
+	serviceName     = "openlane"
 	accessTokenKey  = "open_lane_token"
 	refreshTokenKey = "open_lane_refresh_token" // nolint:gosec
 	sessionKey      = "open_lane_session"

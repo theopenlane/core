@@ -9,7 +9,7 @@ import (
 	"go.uber.org/zap"
 )
 
-const appName = "core"
+const appName = "openlane"
 
 var (
 	logger *zap.SugaredLogger
@@ -19,7 +19,7 @@ var (
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   appName,
-	Short: "A cli for interacting with the core server",
+	Short: "A cli for interacting with the openlane core server",
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 		err := initCmdFlags(cmd)
 		cobra.CheckErr(err)
