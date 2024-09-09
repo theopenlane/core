@@ -2,6 +2,7 @@ package usersettinghistory
 
 import (
 	"encoding/json"
+	"strings"
 
 	"github.com/spf13/cobra"
 
@@ -24,7 +25,7 @@ func init() {
 // consoleOutput prints the output in the console
 func consoleOutput(e any) error {
 	// check if the output format is JSON and print the userSettingHistories in JSON format
-	if cmd.OutputFormat == cmd.JSONOutput {
+	if strings.EqualFold(cmd.OutputFormat, cmd.JSONOutput) {
 		return jsonOutput(e)
 	}
 

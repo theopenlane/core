@@ -24,7 +24,7 @@ func init() {
 	createCmd.Flags().StringP("name", "n", "", "name of the group")
 	createCmd.Flags().StringP("display-name", "s", "", "display name of the group")
 	createCmd.Flags().StringP("description", "d", "", "description of the group")
-	createCmd.Flags().StringSlice("tags", []string{}, "tags associated with the plan")
+	createCmd.Flags().StringSlice("tags", []string{}, "tags associated with the group")
 }
 
 // createValidation validates the required fields for the command
