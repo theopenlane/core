@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-// MapLimitStore represents internal limiter data database where data is stored in golang maps
+// MapLimitStore represents a data structure for in-memory storage of ratelimiter information
 type MapLimitStore struct {
 	// data is a map of key to limitValue
 	data map[string]limitValue

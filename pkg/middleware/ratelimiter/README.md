@@ -1,6 +1,6 @@
 # ratelimiter
 
-Rate limiter for any resource typoe (not just http requests), inspired by Cloudflare's approach: [How we built rate limiting capable of scaling to millions of domains.](https://blog.cloudflare.com/counting-things-a-lot-of-different-things/)
+Rate limiter for any resource type (not just http requests), inspired by Cloudflare's approach: [How we built rate limiting capable of scaling to millions of domains.](https://blog.cloudflare.com/counting-things-a-lot-of-different-things/)
 
 ## Usage
 
@@ -19,7 +19,7 @@ func main() {
 	limitedKey := "key"
 	windowSize := 1 * time.Minute
 	// create map data store for rate limiter and set each element's expiration time to 2*windowSize and old data flush interval to 10*time.Second
-	dataStore := ratelimiter.NewMapLimitStore(2*windowSize, 10*time.Second) 
+	dataStore := ratelimiter.NewMapLimitStore(2*windowSize, 10*time.Second)
 
 	var maxLimit int64 = 5
 	// allow 5 requests per windowSize (1 minute)
@@ -79,7 +79,7 @@ func main() {
 	// create map data store for rate limiter and set each element's expiration time to 2*windowSize and old data flush interval to 10*time.Second
 	dataStore := ratelimiter.NewMapLimitStore(2*windowSize, 10*time.Second)
 	// allow 5 requests per windowSize (1 minute)
-	rateLimiter := ratelimiter.New(dataStore, 5, windowSize)               
+	rateLimiter := ratelimiter.New(dataStore, 5, windowSize)
 
 	rateLimiterHandler := rateLimitMiddleware(rateLimiter)
 	helloHandler := http.HandlerFunc(hello)
