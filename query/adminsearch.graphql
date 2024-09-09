@@ -1,5 +1,5 @@
 query AdminSearch($query: String!) {
-  search(query: $query) {
+  adminSearch(query: $query) {
     nodes {
       ... on ContactSearchResult {
         contacts {

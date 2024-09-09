@@ -10,6 +10,10 @@ import (
 
 // Search is the resolver for the search field.
 func (r *queryResolver) AdminSearch(ctx context.Context, query string) (*SearchResultConnection, error) {
+	if len(query) < 3 {
+		return nil, ErrSearchQueryTooShort
+	}
+
 	var (
 		errors              []error
 		contactResults      []*generated.Contact

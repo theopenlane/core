@@ -17632,6 +17632,15 @@ type Query {
 		query: String!
 	): SearchResultConnection
 	"""
+	Admin search across all objects
+	"""
+	adminSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): SearchResultConnection
+	"""
 	Look up subscriber by Email
 	"""
 	subscriber(

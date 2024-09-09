@@ -261,7 +261,7 @@ func NewClient(cli *http.Client, baseURL string, options *clientv2.Options, inte
 	return &Client{Client: clientv2.NewClient(cli, baseURL, options, interceptors...)}
 }
 
-type AdminSearch_Search_Nodes_ContactSearchResult_Contacts struct {
+type AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts struct {
 	ID          string   "json:\"id\" graphql:\"id\""
 	DeletedBy   *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
@@ -274,79 +274,79 @@ type AdminSearch_Search_Nodes_ContactSearchResult_Contacts struct {
 	Address     *string  "json:\"address,omitempty\" graphql:\"address\""
 }
 
-func (t *AdminSearch_Search_Nodes_ContactSearchResult_Contacts) GetID() string {
+func (t *AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts) GetID() string {
 	if t == nil {
-		t = &AdminSearch_Search_Nodes_ContactSearchResult_Contacts{}
+		t = &AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts{}
 	}
 	return t.ID
 }
-func (t *AdminSearch_Search_Nodes_ContactSearchResult_Contacts) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts) GetDeletedBy() *string {
 	if t == nil {
-		t = &AdminSearch_Search_Nodes_ContactSearchResult_Contacts{}
+		t = &AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts{}
 	}
 	return t.DeletedBy
 }
-func (t *AdminSearch_Search_Nodes_ContactSearchResult_Contacts) GetTags() []string {
+func (t *AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts) GetTags() []string {
 	if t == nil {
-		t = &AdminSearch_Search_Nodes_ContactSearchResult_Contacts{}
+		t = &AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts{}
 	}
 	return t.Tags
 }
-func (t *AdminSearch_Search_Nodes_ContactSearchResult_Contacts) GetOwnerID() *string {
+func (t *AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts) GetOwnerID() *string {
 	if t == nil {
-		t = &AdminSearch_Search_Nodes_ContactSearchResult_Contacts{}
+		t = &AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts{}
 	}
 	return t.OwnerID
 }
-func (t *AdminSearch_Search_Nodes_ContactSearchResult_Contacts) GetFullName() string {
+func (t *AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts) GetFullName() string {
 	if t == nil {
-		t = &AdminSearch_Search_Nodes_ContactSearchResult_Contacts{}
+		t = &AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts{}
 	}
 	return t.FullName
 }
-func (t *AdminSearch_Search_Nodes_ContactSearchResult_Contacts) GetTitle() *string {
+func (t *AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts) GetTitle() *string {
 	if t == nil {
-		t = &AdminSearch_Search_Nodes_ContactSearchResult_Contacts{}
+		t = &AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts{}
 	}
 	return t.Title
 }
-func (t *AdminSearch_Search_Nodes_ContactSearchResult_Contacts) GetCompany() *string {
+func (t *AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts) GetCompany() *string {
 	if t == nil {
-		t = &AdminSearch_Search_Nodes_ContactSearchResult_Contacts{}
+		t = &AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts{}
 	}
 	return t.Company
 }
-func (t *AdminSearch_Search_Nodes_ContactSearchResult_Contacts) GetEmail() *string {
+func (t *AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts) GetEmail() *string {
 	if t == nil {
-		t = &AdminSearch_Search_Nodes_ContactSearchResult_Contacts{}
+		t = &AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts{}
 	}
 	return t.Email
 }
-func (t *AdminSearch_Search_Nodes_ContactSearchResult_Contacts) GetPhoneNumber() *string {
+func (t *AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts) GetPhoneNumber() *string {
 	if t == nil {
-		t = &AdminSearch_Search_Nodes_ContactSearchResult_Contacts{}
+		t = &AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts{}
 	}
 	return t.PhoneNumber
 }
-func (t *AdminSearch_Search_Nodes_ContactSearchResult_Contacts) GetAddress() *string {
+func (t *AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts) GetAddress() *string {
 	if t == nil {
-		t = &AdminSearch_Search_Nodes_ContactSearchResult_Contacts{}
+		t = &AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts{}
 	}
 	return t.Address
 }
 
-type AdminSearch_Search_Nodes_ContactSearchResult struct {
-	Contacts []*AdminSearch_Search_Nodes_ContactSearchResult_Contacts "json:\"contacts,omitempty\" graphql:\"contacts\""
+type AdminSearch_AdminSearch_Nodes_ContactSearchResult struct {
+	Contacts []*AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts "json:\"contacts,omitempty\" graphql:\"contacts\""
 }
 
-func (t *AdminSearch_Search_Nodes_ContactSearchResult) GetContacts() []*AdminSearch_Search_Nodes_ContactSearchResult_Contacts {
+func (t *AdminSearch_AdminSearch_Nodes_ContactSearchResult) GetContacts() []*AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts {
 	if t == nil {
-		t = &AdminSearch_Search_Nodes_ContactSearchResult{}
+		t = &AdminSearch_AdminSearch_Nodes_ContactSearchResult{}
 	}
 	return t.Contacts
 }
 
-type AdminSearch_Search_Nodes_EntitySearchResult_Entities struct {
+type AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities struct {
 	ID           string   "json:\"id\" graphql:\"id\""
 	DeletedBy    *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	Tags         []string "json:\"tags,omitempty\" graphql:\"tags\""
@@ -359,79 +359,79 @@ type AdminSearch_Search_Nodes_EntitySearchResult_Entities struct {
 	Status       *string  "json:\"status,omitempty\" graphql:\"status\""
 }
 
-func (t *AdminSearch_Search_Nodes_EntitySearchResult_Entities) GetID() string {
+func (t *AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities) GetID() string {
 	if t == nil {
-		t = &AdminSearch_Search_Nodes_EntitySearchResult_Entities{}
+		t = &AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities{}
 	}
 	return t.ID
 }
-func (t *AdminSearch_Search_Nodes_EntitySearchResult_Entities) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities) GetDeletedBy() *string {
 	if t == nil {
-		t = &AdminSearch_Search_Nodes_EntitySearchResult_Entities{}
+		t = &AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities{}
 	}
 	return t.DeletedBy
 }
-func (t *AdminSearch_Search_Nodes_EntitySearchResult_Entities) GetTags() []string {
+func (t *AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities) GetTags() []string {
 	if t == nil {
-		t = &AdminSearch_Search_Nodes_EntitySearchResult_Entities{}
+		t = &AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities{}
 	}
 	return t.Tags
 }
-func (t *AdminSearch_Search_Nodes_EntitySearchResult_Entities) GetOwnerID() *string {
+func (t *AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities) GetOwnerID() *string {
 	if t == nil {
-		t = &AdminSearch_Search_Nodes_EntitySearchResult_Entities{}
+		t = &AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities{}
 	}
 	return t.OwnerID
 }
-func (t *AdminSearch_Search_Nodes_EntitySearchResult_Entities) GetName() *string {
+func (t *AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities) GetName() *string {
 	if t == nil {
-		t = &AdminSearch_Search_Nodes_EntitySearchResult_Entities{}
+		t = &AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities{}
 	}
 	return t.Name
 }
-func (t *AdminSearch_Search_Nodes_EntitySearchResult_Entities) GetDisplayName() *string {
+func (t *AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities) GetDisplayName() *string {
 	if t == nil {
-		t = &AdminSearch_Search_Nodes_EntitySearchResult_Entities{}
+		t = &AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities{}
 	}
 	return t.DisplayName
 }
-func (t *AdminSearch_Search_Nodes_EntitySearchResult_Entities) GetDescription() *string {
+func (t *AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities) GetDescription() *string {
 	if t == nil {
-		t = &AdminSearch_Search_Nodes_EntitySearchResult_Entities{}
+		t = &AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities{}
 	}
 	return t.Description
 }
-func (t *AdminSearch_Search_Nodes_EntitySearchResult_Entities) GetDomains() []string {
+func (t *AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities) GetDomains() []string {
 	if t == nil {
-		t = &AdminSearch_Search_Nodes_EntitySearchResult_Entities{}
+		t = &AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities{}
 	}
 	return t.Domains
 }
-func (t *AdminSearch_Search_Nodes_EntitySearchResult_Entities) GetEntityTypeID() *string {
+func (t *AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities) GetEntityTypeID() *string {
 	if t == nil {
-		t = &AdminSearch_Search_Nodes_EntitySearchResult_Entities{}
+		t = &AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities{}
 	}
 	return t.EntityTypeID
 }
-func (t *AdminSearch_Search_Nodes_EntitySearchResult_Entities) GetStatus() *string {
+func (t *AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities) GetStatus() *string {
 	if t == nil {
-		t = &AdminSearch_Search_Nodes_EntitySearchResult_Entities{}
+		t = &AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities{}
 	}
 	return t.Status
 }
 
-type AdminSearch_Search_Nodes_EntitySearchResult struct {
-	Entities []*AdminSearch_Search_Nodes_EntitySearchResult_Entities "json:\"entities,omitempty\" graphql:\"entities\""
+type AdminSearch_AdminSearch_Nodes_EntitySearchResult struct {
+	Entities []*AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities "json:\"entities,omitempty\" graphql:\"entities\""
 }
 
-func (t *AdminSearch_Search_Nodes_EntitySearchResult) GetEntities() []*AdminSearch_Search_Nodes_EntitySearchResult_Entities {
+func (t *AdminSearch_AdminSearch_Nodes_EntitySearchResult) GetEntities() []*AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities {
 	if t == nil {
-		t = &AdminSearch_Search_Nodes_EntitySearchResult{}
+		t = &AdminSearch_AdminSearch_Nodes_EntitySearchResult{}
 	}
 	return t.Entities
 }
 
-type AdminSearch_Search_Nodes_GroupSearchResult_Groups struct {
+type AdminSearch_AdminSearch_Nodes_GroupSearchResult_Groups struct {
 	DeletedBy   *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	ID          string   "json:\"id\" graphql:\"id\""
 	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
@@ -440,55 +440,55 @@ type AdminSearch_Search_Nodes_GroupSearchResult_Groups struct {
 	DisplayName string   "json:\"displayName\" graphql:\"displayName\""
 }
 
-func (t *AdminSearch_Search_Nodes_GroupSearchResult_Groups) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Nodes_GroupSearchResult_Groups) GetDeletedBy() *string {
 	if t == nil {
-		t = &AdminSearch_Search_Nodes_GroupSearchResult_Groups{}
+		t = &AdminSearch_AdminSearch_Nodes_GroupSearchResult_Groups{}
 	}
 	return t.DeletedBy
 }
-func (t *AdminSearch_Search_Nodes_GroupSearchResult_Groups) GetID() string {
+func (t *AdminSearch_AdminSearch_Nodes_GroupSearchResult_Groups) GetID() string {
 	if t == nil {
-		t = &AdminSearch_Search_Nodes_GroupSearchResult_Groups{}
+		t = &AdminSearch_AdminSearch_Nodes_GroupSearchResult_Groups{}
 	}
 	return t.ID
 }
-func (t *AdminSearch_Search_Nodes_GroupSearchResult_Groups) GetTags() []string {
+func (t *AdminSearch_AdminSearch_Nodes_GroupSearchResult_Groups) GetTags() []string {
 	if t == nil {
-		t = &AdminSearch_Search_Nodes_GroupSearchResult_Groups{}
+		t = &AdminSearch_AdminSearch_Nodes_GroupSearchResult_Groups{}
 	}
 	return t.Tags
 }
-func (t *AdminSearch_Search_Nodes_GroupSearchResult_Groups) GetOwnerID() *string {
+func (t *AdminSearch_AdminSearch_Nodes_GroupSearchResult_Groups) GetOwnerID() *string {
 	if t == nil {
-		t = &AdminSearch_Search_Nodes_GroupSearchResult_Groups{}
+		t = &AdminSearch_AdminSearch_Nodes_GroupSearchResult_Groups{}
 	}
 	return t.OwnerID
 }
-func (t *AdminSearch_Search_Nodes_GroupSearchResult_Groups) GetName() string {
+func (t *AdminSearch_AdminSearch_Nodes_GroupSearchResult_Groups) GetName() string {
 	if t == nil {
-		t = &AdminSearch_Search_Nodes_GroupSearchResult_Groups{}
+		t = &AdminSearch_AdminSearch_Nodes_GroupSearchResult_Groups{}
 	}
 	return t.Name
 }
-func (t *AdminSearch_Search_Nodes_GroupSearchResult_Groups) GetDisplayName() string {
+func (t *AdminSearch_AdminSearch_Nodes_GroupSearchResult_Groups) GetDisplayName() string {
 	if t == nil {
-		t = &AdminSearch_Search_Nodes_GroupSearchResult_Groups{}
+		t = &AdminSearch_AdminSearch_Nodes_GroupSearchResult_Groups{}
 	}
 	return t.DisplayName
 }
 
-type AdminSearch_Search_Nodes_GroupSearchResult struct {
-	Groups []*AdminSearch_Search_Nodes_GroupSearchResult_Groups "json:\"groups,omitempty\" graphql:\"groups\""
+type AdminSearch_AdminSearch_Nodes_GroupSearchResult struct {
+	Groups []*AdminSearch_AdminSearch_Nodes_GroupSearchResult_Groups "json:\"groups,omitempty\" graphql:\"groups\""
 }
 
-func (t *AdminSearch_Search_Nodes_GroupSearchResult) GetGroups() []*AdminSearch_Search_Nodes_GroupSearchResult_Groups {
+func (t *AdminSearch_AdminSearch_Nodes_GroupSearchResult) GetGroups() []*AdminSearch_AdminSearch_Nodes_GroupSearchResult_Groups {
 	if t == nil {
-		t = &AdminSearch_Search_Nodes_GroupSearchResult{}
+		t = &AdminSearch_AdminSearch_Nodes_GroupSearchResult{}
 	}
 	return t.Groups
 }
 
-type AdminSearch_Search_Nodes_OrganizationSearchResult_Organizations struct {
+type AdminSearch_AdminSearch_Nodes_OrganizationSearchResult_Organizations struct {
 	ID              string   "json:\"id\" graphql:\"id\""
 	Tags            []string "json:\"tags,omitempty\" graphql:\"tags\""
 	DeletedBy       *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
@@ -497,55 +497,55 @@ type AdminSearch_Search_Nodes_OrganizationSearchResult_Organizations struct {
 	AvatarRemoteURL *string  "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
 }
 
-func (t *AdminSearch_Search_Nodes_OrganizationSearchResult_Organizations) GetID() string {
+func (t *AdminSearch_AdminSearch_Nodes_OrganizationSearchResult_Organizations) GetID() string {
 	if t == nil {
-		t = &AdminSearch_Search_Nodes_OrganizationSearchResult_Organizations{}
+		t = &AdminSearch_AdminSearch_Nodes_OrganizationSearchResult_Organizations{}
 	}
 	return t.ID
 }
-func (t *AdminSearch_Search_Nodes_OrganizationSearchResult_Organizations) GetTags() []string {
+func (t *AdminSearch_AdminSearch_Nodes_OrganizationSearchResult_Organizations) GetTags() []string {
 	if t == nil {
-		t = &AdminSearch_Search_Nodes_OrganizationSearchResult_Organizations{}
+		t = &AdminSearch_AdminSearch_Nodes_OrganizationSearchResult_Organizations{}
 	}
 	return t.Tags
 }
-func (t *AdminSearch_Search_Nodes_OrganizationSearchResult_Organizations) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Nodes_OrganizationSearchResult_Organizations) GetDeletedBy() *string {
 	if t == nil {
-		t = &AdminSearch_Search_Nodes_OrganizationSearchResult_Organizations{}
+		t = &AdminSearch_AdminSearch_Nodes_OrganizationSearchResult_Organizations{}
 	}
 	return t.DeletedBy
 }
-func (t *AdminSearch_Search_Nodes_OrganizationSearchResult_Organizations) GetName() string {
+func (t *AdminSearch_AdminSearch_Nodes_OrganizationSearchResult_Organizations) GetName() string {
 	if t == nil {
-		t = &AdminSearch_Search_Nodes_OrganizationSearchResult_Organizations{}
+		t = &AdminSearch_AdminSearch_Nodes_OrganizationSearchResult_Organizations{}
 	}
 	return t.Name
 }
-func (t *AdminSearch_Search_Nodes_OrganizationSearchResult_Organizations) GetDisplayName() string {
+func (t *AdminSearch_AdminSearch_Nodes_OrganizationSearchResult_Organizations) GetDisplayName() string {
 	if t == nil {
-		t = &AdminSearch_Search_Nodes_OrganizationSearchResult_Organizations{}
+		t = &AdminSearch_AdminSearch_Nodes_OrganizationSearchResult_Organizations{}
 	}
 	return t.DisplayName
 }
-func (t *AdminSearch_Search_Nodes_OrganizationSearchResult_Organizations) GetAvatarRemoteURL() *string {
+func (t *AdminSearch_AdminSearch_Nodes_OrganizationSearchResult_Organizations) GetAvatarRemoteURL() *string {
 	if t == nil {
-		t = &AdminSearch_Search_Nodes_OrganizationSearchResult_Organizations{}
+		t = &AdminSearch_AdminSearch_Nodes_OrganizationSearchResult_Organizations{}
 	}
 	return t.AvatarRemoteURL
 }
 
-type AdminSearch_Search_Nodes_OrganizationSearchResult struct {
-	Organizations []*AdminSearch_Search_Nodes_OrganizationSearchResult_Organizations "json:\"organizations,omitempty\" graphql:\"organizations\""
+type AdminSearch_AdminSearch_Nodes_OrganizationSearchResult struct {
+	Organizations []*AdminSearch_AdminSearch_Nodes_OrganizationSearchResult_Organizations "json:\"organizations,omitempty\" graphql:\"organizations\""
 }
 
-func (t *AdminSearch_Search_Nodes_OrganizationSearchResult) GetOrganizations() []*AdminSearch_Search_Nodes_OrganizationSearchResult_Organizations {
+func (t *AdminSearch_AdminSearch_Nodes_OrganizationSearchResult) GetOrganizations() []*AdminSearch_AdminSearch_Nodes_OrganizationSearchResult_Organizations {
 	if t == nil {
-		t = &AdminSearch_Search_Nodes_OrganizationSearchResult{}
+		t = &AdminSearch_AdminSearch_Nodes_OrganizationSearchResult{}
 	}
 	return t.Organizations
 }
 
-type AdminSearch_Search_Nodes_SubscriberSearchResult_Subscribers struct {
+type AdminSearch_AdminSearch_Nodes_SubscriberSearchResult_Subscribers struct {
 	ID          string   "json:\"id\" graphql:\"id\""
 	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
 	DeletedBy   *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
@@ -554,100 +554,100 @@ type AdminSearch_Search_Nodes_SubscriberSearchResult_Subscribers struct {
 	PhoneNumber *string  "json:\"phoneNumber,omitempty\" graphql:\"phoneNumber\""
 }
 
-func (t *AdminSearch_Search_Nodes_SubscriberSearchResult_Subscribers) GetID() string {
+func (t *AdminSearch_AdminSearch_Nodes_SubscriberSearchResult_Subscribers) GetID() string {
 	if t == nil {
-		t = &AdminSearch_Search_Nodes_SubscriberSearchResult_Subscribers{}
+		t = &AdminSearch_AdminSearch_Nodes_SubscriberSearchResult_Subscribers{}
 	}
 	return t.ID
 }
-func (t *AdminSearch_Search_Nodes_SubscriberSearchResult_Subscribers) GetTags() []string {
+func (t *AdminSearch_AdminSearch_Nodes_SubscriberSearchResult_Subscribers) GetTags() []string {
 	if t == nil {
-		t = &AdminSearch_Search_Nodes_SubscriberSearchResult_Subscribers{}
+		t = &AdminSearch_AdminSearch_Nodes_SubscriberSearchResult_Subscribers{}
 	}
 	return t.Tags
 }
-func (t *AdminSearch_Search_Nodes_SubscriberSearchResult_Subscribers) GetDeletedBy() *string {
+func (t *AdminSearch_AdminSearch_Nodes_SubscriberSearchResult_Subscribers) GetDeletedBy() *string {
 	if t == nil {
-		t = &AdminSearch_Search_Nodes_SubscriberSearchResult_Subscribers{}
+		t = &AdminSearch_AdminSearch_Nodes_SubscriberSearchResult_Subscribers{}
 	}
 	return t.DeletedBy
 }
-func (t *AdminSearch_Search_Nodes_SubscriberSearchResult_Subscribers) GetOwnerID() *string {
+func (t *AdminSearch_AdminSearch_Nodes_SubscriberSearchResult_Subscribers) GetOwnerID() *string {
 	if t == nil {
-		t = &AdminSearch_Search_Nodes_SubscriberSearchResult_Subscribers{}
+		t = &AdminSearch_AdminSearch_Nodes_SubscriberSearchResult_Subscribers{}
 	}
 	return t.OwnerID
 }
-func (t *AdminSearch_Search_Nodes_SubscriberSearchResult_Subscribers) GetEmail() string {
+func (t *AdminSearch_AdminSearch_Nodes_SubscriberSearchResult_Subscribers) GetEmail() string {
 	if t == nil {
-		t = &AdminSearch_Search_Nodes_SubscriberSearchResult_Subscribers{}
+		t = &AdminSearch_AdminSearch_Nodes_SubscriberSearchResult_Subscribers{}
 	}
 	return t.Email
 }
-func (t *AdminSearch_Search_Nodes_SubscriberSearchResult_Subscribers) GetPhoneNumber() *string {
+func (t *AdminSearch_AdminSearch_Nodes_SubscriberSearchResult_Subscribers) GetPhoneNumber() *string {
 	if t == nil {
-		t = &AdminSearch_Search_Nodes_SubscriberSearchResult_Subscribers{}
+		t = &AdminSearch_AdminSearch_Nodes_SubscriberSearchResult_Subscribers{}
 	}
 	return t.PhoneNumber
 }
 
-type AdminSearch_Search_Nodes_SubscriberSearchResult struct {
-	Subscribers []*AdminSearch_Search_Nodes_SubscriberSearchResult_Subscribers "json:\"subscribers,omitempty\" graphql:\"subscribers\""
+type AdminSearch_AdminSearch_Nodes_SubscriberSearchResult struct {
+	Subscribers []*AdminSearch_AdminSearch_Nodes_SubscriberSearchResult_Subscribers "json:\"subscribers,omitempty\" graphql:\"subscribers\""
 }
 
-func (t *AdminSearch_Search_Nodes_SubscriberSearchResult) GetSubscribers() []*AdminSearch_Search_Nodes_SubscriberSearchResult_Subscribers {
+func (t *AdminSearch_AdminSearch_Nodes_SubscriberSearchResult) GetSubscribers() []*AdminSearch_AdminSearch_Nodes_SubscriberSearchResult_Subscribers {
 	if t == nil {
-		t = &AdminSearch_Search_Nodes_SubscriberSearchResult{}
+		t = &AdminSearch_AdminSearch_Nodes_SubscriberSearchResult{}
 	}
 	return t.Subscribers
 }
 
-type AdminSearch_Search_Nodes struct {
-	ContactSearchResult      AdminSearch_Search_Nodes_ContactSearchResult      "graphql:\"... on ContactSearchResult\""
-	EntitySearchResult       AdminSearch_Search_Nodes_EntitySearchResult       "graphql:\"... on EntitySearchResult\""
-	GroupSearchResult        AdminSearch_Search_Nodes_GroupSearchResult        "graphql:\"... on GroupSearchResult\""
-	OrganizationSearchResult AdminSearch_Search_Nodes_OrganizationSearchResult "graphql:\"... on OrganizationSearchResult\""
-	SubscriberSearchResult   AdminSearch_Search_Nodes_SubscriberSearchResult   "graphql:\"... on SubscriberSearchResult\""
+type AdminSearch_AdminSearch_Nodes struct {
+	ContactSearchResult      AdminSearch_AdminSearch_Nodes_ContactSearchResult      "graphql:\"... on ContactSearchResult\""
+	EntitySearchResult       AdminSearch_AdminSearch_Nodes_EntitySearchResult       "graphql:\"... on EntitySearchResult\""
+	GroupSearchResult        AdminSearch_AdminSearch_Nodes_GroupSearchResult        "graphql:\"... on GroupSearchResult\""
+	OrganizationSearchResult AdminSearch_AdminSearch_Nodes_OrganizationSearchResult "graphql:\"... on OrganizationSearchResult\""
+	SubscriberSearchResult   AdminSearch_AdminSearch_Nodes_SubscriberSearchResult   "graphql:\"... on SubscriberSearchResult\""
 }
 
-func (t *AdminSearch_Search_Nodes) GetContactSearchResult() *AdminSearch_Search_Nodes_ContactSearchResult {
+func (t *AdminSearch_AdminSearch_Nodes) GetContactSearchResult() *AdminSearch_AdminSearch_Nodes_ContactSearchResult {
 	if t == nil {
-		t = &AdminSearch_Search_Nodes{}
+		t = &AdminSearch_AdminSearch_Nodes{}
 	}
 	return &t.ContactSearchResult
 }
-func (t *AdminSearch_Search_Nodes) GetEntitySearchResult() *AdminSearch_Search_Nodes_EntitySearchResult {
+func (t *AdminSearch_AdminSearch_Nodes) GetEntitySearchResult() *AdminSearch_AdminSearch_Nodes_EntitySearchResult {
 	if t == nil {
-		t = &AdminSearch_Search_Nodes{}
+		t = &AdminSearch_AdminSearch_Nodes{}
 	}
 	return &t.EntitySearchResult
 }
-func (t *AdminSearch_Search_Nodes) GetGroupSearchResult() *AdminSearch_Search_Nodes_GroupSearchResult {
+func (t *AdminSearch_AdminSearch_Nodes) GetGroupSearchResult() *AdminSearch_AdminSearch_Nodes_GroupSearchResult {
 	if t == nil {
-		t = &AdminSearch_Search_Nodes{}
+		t = &AdminSearch_AdminSearch_Nodes{}
 	}
 	return &t.GroupSearchResult
 }
-func (t *AdminSearch_Search_Nodes) GetOrganizationSearchResult() *AdminSearch_Search_Nodes_OrganizationSearchResult {
+func (t *AdminSearch_AdminSearch_Nodes) GetOrganizationSearchResult() *AdminSearch_AdminSearch_Nodes_OrganizationSearchResult {
 	if t == nil {
-		t = &AdminSearch_Search_Nodes{}
+		t = &AdminSearch_AdminSearch_Nodes{}
 	}
 	return &t.OrganizationSearchResult
 }
-func (t *AdminSearch_Search_Nodes) GetSubscriberSearchResult() *AdminSearch_Search_Nodes_SubscriberSearchResult {
+func (t *AdminSearch_AdminSearch_Nodes) GetSubscriberSearchResult() *AdminSearch_AdminSearch_Nodes_SubscriberSearchResult {
 	if t == nil {
-		t = &AdminSearch_Search_Nodes{}
+		t = &AdminSearch_AdminSearch_Nodes{}
 	}
 	return &t.SubscriberSearchResult
 }
 
-type AdminSearch_Search struct {
-	Nodes []*AdminSearch_Search_Nodes "json:\"nodes\" graphql:\"nodes\""
+type AdminSearch_AdminSearch struct {
+	Nodes []*AdminSearch_AdminSearch_Nodes "json:\"nodes\" graphql:\"nodes\""
 }
 
-func (t *AdminSearch_Search) GetNodes() []*AdminSearch_Search_Nodes {
+func (t *AdminSearch_AdminSearch) GetNodes() []*AdminSearch_AdminSearch_Nodes {
 	if t == nil {
-		t = &AdminSearch_Search{}
+		t = &AdminSearch_AdminSearch{}
 	}
 	return t.Nodes
 }
@@ -27806,14 +27806,14 @@ func (t *GetWebhookHistories_WebhookHistories) GetEdges() []*GetWebhookHistories
 }
 
 type AdminSearch struct {
-	Search *AdminSearch_Search "json:\"search,omitempty\" graphql:\"search\""
+	AdminSearch *AdminSearch_AdminSearch "json:\"adminSearch,omitempty\" graphql:\"adminSearch\""
 }
 
-func (t *AdminSearch) GetSearch() *AdminSearch_Search {
+func (t *AdminSearch) GetAdminSearch() *AdminSearch_AdminSearch {
 	if t == nil {
 		t = &AdminSearch{}
 	}
-	return t.Search
+	return t.AdminSearch
 }
 
 type CreateAPIToken struct {
@@ -30402,7 +30402,7 @@ func (t *GetWebhookHistories) GetWebhookHistories() *GetWebhookHistories_Webhook
 }
 
 const AdminSearchDocument = `query AdminSearch ($query: String!) {
-	search(query: $query) {
+	adminSearch(query: $query) {
 		nodes {
 			... on ContactSearchResult {
 				contacts {

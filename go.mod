@@ -2,6 +2,11 @@ module github.com/theopenlane/core
 
 go 1.23.0
 
+replace (
+	github.com/theopenlane/entx => ../entx
+	github.com/theopenlane/gqlgen-plugins => ../gqlgen-plugins
+)
+
 require (
 	ariga.io/entcache v0.1.0
 	entgo.io/contrib v0.6.0
