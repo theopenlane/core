@@ -23,8 +23,8 @@ type limitValue struct {
 }
 
 // NewMapLimitStore creates new in-memory data store for internal limiter data
-func NewMapLimitStore(expirationTime time.Duration, flushInterval time.Duration) (m *MapLimitStore) {
-	m = &MapLimitStore{
+func NewMapLimitStore(expirationTime time.Duration, flushInterval time.Duration) LimitStore {
+	m := &MapLimitStore{
 		data:           make(map[string]limitValue),
 		expirationTime: expirationTime,
 	}
