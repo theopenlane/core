@@ -96,8 +96,8 @@ func consoleOutput(results *openlaneclient.GlobalSearch) error {
 	if strings.EqualFold(cmd.OutputFormat, cmd.JSONOutput) {
 		// create a full result map
 		full := map[string]interface{}{
-			"search": map[string]interface{}{
-				"data": map[string]interface{}{
+			"data": map[string]interface{}{
+				"search": map[string]interface{}{
 					"nodes": realResult,
 				},
 			},
