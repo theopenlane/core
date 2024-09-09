@@ -46,7 +46,7 @@ require (
 	github.com/pressly/goose/v3 v3.22.0
 	github.com/prometheus/client_golang v1.20.3
 	github.com/rShetty/asyncwait v0.0.0-20180203043142-1e02703eb90e
-	github.com/ravilushqa/otelgqlgen v0.16.0
+	github.com/ravilushqa/otelgqlgen v0.17.0
 	github.com/redis/go-redis/v9 v9.6.1
 	github.com/samber/lo v1.47.0
 	github.com/spf13/cobra v1.8.1
