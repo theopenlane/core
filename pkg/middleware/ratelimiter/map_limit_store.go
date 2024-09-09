@@ -70,7 +70,7 @@ func (m *MapLimitStore) Get(key string, previousWindow, currentWindow time.Time)
 	prevValue = m.data[mapKey(key, previousWindow)].val
 	currValue = m.data[mapKey(key, currentWindow)].val
 
-	return prevValue, currValue, nil
+	return 
 }
 
 // Size returns current length of data map
