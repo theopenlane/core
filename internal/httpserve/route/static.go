@@ -124,3 +124,27 @@ func registerFaviconHandler(router *Router) (err error) {
 
 	return nil
 }
+
+//go:embed applemerchant
+var applemerchant embed.FS
+
+// registerAppleMerchant serves up the text output of the applemerchant file
+func registerAppleMerchant(router *Router) (err error) {
+	path := "/.well-known/apple-developer-merchantid-domain-association"
+	method := http.MethodGet
+	name := "Applemerchant"
+
+	route := echo.Route{
+		Name:        name,
+		Method:      method,
+		Path:        path,
+		Middlewares: mw,
+		Handler:     echo.StaticFileHandler("apple-developer-merchantid-domain-association", applemerchant),
+	}
+
+	if err := router.AddEchoOnlyRoute(path, method, route); err != nil {
+		return err
+	}
+
+	return nil
+}
