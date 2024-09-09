@@ -443,8 +443,8 @@ github.com/prometheus/procfs v0.15.1 h1:YagwOFzUgYfKKHX6Dr+sHT7km/hxC76UB0leargg
 github.com/prometheus/procfs v0.15.1/go.mod h1:fB45yRUv8NstnjriLhBQLuOUt+WW4BsoGhij/e3PBqk=
 github.com/rShetty/asyncwait v0.0.0-20180203043142-1e02703eb90e h1:JGv2d5lATeXBDtgpLKS7emfoBGh8H+LNDqm94kRozIc=
 github.com/rShetty/asyncwait v0.0.0-20180203043142-1e02703eb90e/go.mod h1:YNFw1n0p4qcSXP3vvmzYGzFIeCukWn2NGmwWrYBPQS8=
-github.com/ravilushqa/otelgqlgen v0.16.0 h1:tEryUp/Kai5lccgA0Hl0lb/LUdJmqIJT31HwwxaYiUM=
-github.com/ravilushqa/otelgqlgen v0.16.0/go.mod h1:72/ZmqsGciNzAEYavQRKqhiRaZ4piW/Fjk4xLnG3SAg=
+github.com/ravilushqa/otelgqlgen v0.17.0 h1:bLwQfKqtj9P24QpjM2sc1ipBm5Fqv2u7DKN5LIpj3g8=
+github.com/ravilushqa/otelgqlgen v0.17.0/go.mod h1:orOIikuYsay1y3CmLgd5gsHcT9EsnXwNKmkAplzzYXQ=
 github.com/rcrowley/go-metrics v0.0.0-20201227073835-cf1acfcdf475 h1:N/ElC8H3+5XpJzTSTfLsJV/mx9Q9g7kxmchpfZyxgzM=
 github.com/rcrowley/go-metrics v0.0.0-20201227073835-cf1acfcdf475/go.mod h1:bCqnVzQkZxMG4s8nGwiZ5l3QUCyqpo9Y+/ZMZ9VjZe4=
 github.com/redis/go-redis/v9 v9.6.1 h1:HHDteefn6ZkTtY5fGUE8tj8uy85AHk6zP7CpzIAM0y4=
