@@ -1,16 +1,25 @@
 -----BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA512
+Hash: SHA256
 
 Contact: mailto:security@theopenlane.io
 Expires: 2026-01-09T12:34:00.000Z
-Encryption: https://keys.openpgp.org/vks/v1/by-fingerprint/CDD6CB47F5C8C90340CEB56F5024ED84F6BF803F
+Encryption: https://keys.openpgp.org/vks/v1/by-fingerprint/9C30C088846DA8BFEB25FBC3CFEAD31A033EDC54
 Preferred-Languages: en
 Canonical: https://api.theopenlane.io/.well-known/security.txt
 Policy: https://github.com/theopenlane/core/security/policy
 -----BEGIN PGP SIGNATURE-----
 
-iHUEARYKAB0WIQTN1stH9cjJA0DOtW9QJO2E9r+APwUCZZ6RLgAKCRBQJO2E9r+A
-PyjIAQC13xI75wq7o4MhparBplTo6ZCF+bJTyCrO5c5izag9IQD+KbAXRKq3pjXu
-kwa/7CNQAyf7R//ZzA2npg2Ly5Jv4Qs=
-=Uh5X
+iQIzBAEBCAAdFiEEnDDAiIRtqL/rJfvDz+rTGgM+3FQFAmbfT+EACgkQz+rTGgM+
+3FT4BhAAwepLA76HMi/lLKb35zOcqyHrCd98Qh7JtPwZk4wz/Tp6dZpgV32bNtqS
+9+ZV2koQo10irM8gi1k9wir4O9rUkwLXb9JBpCPIHqdALPyI3TU7ZHgNODT2kgB2
+wLxNFrhnA8jvE5HZ0uIZR0588RJi2j+JbD0lwJihp56OBl4jMPMRKxuVKoVcsmEZ
+iHAM73gUQGwZZ8X/tn0iW9oza6wZIpNaLKTBV4cf2Tjl7QGH5M+B3Q3CCtd+jouI
+xXq181wMZelW5ziSSiWJdjz9D/p+LfeW2Jt8oAPDgAui+QA/zlhuIT0GVzLZVsxI
+P3DTSMxAFgX2+Vh7iGskKwiviPavsZ6O7kFKIyJKLq/sUbwMkZ9VVWOjjo96HKQy
+oeotAkLN/HZ5qjNT9wdW5xPOQF3XSPKdVy9hJxCfbo15ApLdbfgvYKCeHU7yY/V+
+/so+0VVHdJRZ1NWabaPW4NcyvVJKlWeOjic7AUJOUUDwcM+7kfunTzYwXI484QK4
+Y+5JQf8R8EAUlQEJiytVXi/l2RtZjLb4LDlA9UoIdNiZbQmEIm8WPywFFEAlWJro
+ywljsTr+IUJubjK/cuFzYO0WDFXWGuFIy2/yfpxOVMH867HfLO33WWAmii738rMC
+EBRfexe4vhvvFTYbLAIz+/2LNtNGk2vDXmApkJuRYLA5uOC2+5k=
+=djvA
 -----END PGP SIGNATURE-----
