@@ -128,8 +128,8 @@ func registerFaviconHandler(router *Router) (err error) {
 //go:embed applemerchant
 var applemerchant embed.FS
 
-// registerAppleMerchant serves up the text output of the applemerchant file
-func registerAppleMerchant(router *Router) (err error) {
+// registerAppleMerchantHandler serves up the text output of the applemerchant file
+func registerAppleMerchantHandler(router *Router) (err error) {
 	path := "/.well-known/apple-developer-merchantid-domain-association"
 	method := http.MethodGet
 	name := "Applemerchant"
@@ -140,6 +140,30 @@ func registerAppleMerchant(router *Router) (err error) {
 		Path:        path,
 		Middlewares: mw,
 		Handler:     echo.StaticFileHandler("apple-developer-merchantid-domain-association", applemerchant),
+	}
+
+	if err := router.AddEchoOnlyRoute(path, method, route); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+//go:embed mta-sts.txt
+var mtasts embed.FS
+
+// registerMTASTSHandler serves up the text output of the mta-sts.txt
+func registerMTASTSHandler(router *Router) (err error) {
+	path := "/.well-known/mta-sts.txt"
+	method := http.MethodGet
+	name := "MTASTS"
+
+	route := echo.Route{
+		Name:        name,
+		Method:      method,
+		Path:        path,
+		Middlewares: mw,
+		Handler:     echo.StaticFileHandler("mta-sts.txt", mtasts),
 	}
 
 	if err := router.AddEchoOnlyRoute(path, method, route); err != nil {
