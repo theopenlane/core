@@ -2,11 +2,6 @@ module github.com/theopenlane/core
 
 go 1.23.1
 
-replace (
-	github.com/theopenlane/entx => ../entx
-	github.com/theopenlane/gqlgen-plugins => ../gqlgen-plugins
-)
-
 require (
 	ariga.io/entcache v0.1.0
 	entgo.io/contrib v0.6.0
@@ -63,8 +58,8 @@ require (
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.1.0
 	github.com/theopenlane/echozap v0.1.0
-	github.com/theopenlane/entx v0.1.7-0.20240910190256-653c63a9a93a
-	github.com/theopenlane/gqlgen-plugins v0.1.2
+	github.com/theopenlane/entx v0.1.7
+	github.com/theopenlane/gqlgen-plugins v0.1.3
 	github.com/theopenlane/httpsling v0.2.0
 	github.com/theopenlane/iam v0.1.6
 	github.com/theopenlane/utils v0.1.5
