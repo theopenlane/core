@@ -1,5 +1,14 @@
 extend type Query{
     """
+    Search across APIToken objects
+    """
+    adminAPITokenSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): APITokenSearchResult
+    """
     Search across Contact objects
     """
     adminContactSearch(
@@ -8,6 +17,42 @@ extend type Query{
         """
         query: String!
     ): ContactSearchResult
+    """
+    Search across DocumentData objects
+    """
+    adminDocumentDataSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): DocumentDataSearchResult
+    """
+    Search across Entitlement objects
+    """
+    adminEntitlementSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): EntitlementSearchResult
+    """
+    Search across EntitlementPlan objects
+    """
+    adminEntitlementPlanSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): EntitlementPlanSearchResult
+    """
+    Search across EntitlementPlanFeature objects
+    """
+    adminEntitlementPlanFeatureSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): EntitlementPlanFeatureSearchResult
     """
     Search across Entity objects
     """
@@ -18,6 +63,42 @@ extend type Query{
         query: String!
     ): EntitySearchResult
     """
+    Search across EntityType objects
+    """
+    adminEntityTypeSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): EntityTypeSearchResult
+    """
+    Search across Event objects
+    """
+    adminEventSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): EventSearchResult
+    """
+    Search across Feature objects
+    """
+    adminFeatureSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): FeatureSearchResult
+    """
+    Search across File objects
+    """
+    adminFileSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): FileSearchResult
+    """
     Search across Group objects
     """
     adminGroupSearch(
@@ -26,6 +107,42 @@ extend type Query{
         """
         query: String!
     ): GroupSearchResult
+    """
+    Search across GroupSetting objects
+    """
+    adminGroupSettingSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): GroupSettingSearchResult
+    """
+    Search across Integration objects
+    """
+    adminIntegrationSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): IntegrationSearchResult
+    """
+    Search across OauthProvider objects
+    """
+    adminOauthProviderSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): OauthProviderSearchResult
+    """
+    Search across OhAuthTooToken objects
+    """
+    adminOhAuthTooTokenSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): OhAuthTooTokenSearchResult
     """
     Search across Organization objects
     """
@@ -36,6 +153,24 @@ extend type Query{
         query: String!
     ): OrganizationSearchResult
     """
+    Search across OrganizationSetting objects
+    """
+    adminOrganizationSettingSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): OrganizationSettingSearchResult
+    """
+    Search across PersonalAccessToken objects
+    """
+    adminPersonalAccessTokenSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): PersonalAccessTokenSearchResult
+    """
     Search across Subscriber objects
     """
     adminSubscriberSearch(
@@ -44,4 +179,49 @@ extend type Query{
         """
         query: String!
     ): SubscriberSearchResult
+    """
+    Search across TFASetting objects
+    """
+    adminTFASettingSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): TFASettingSearchResult
+    """
+    Search across Template objects
+    """
+    adminTemplateSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): TemplateSearchResult
+    """
+    Search across User objects
+    """
+    adminUserSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): UserSearchResult
+    """
+    Search across UserSetting objects
+    """
+    adminUserSettingSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): UserSettingSearchResult
+    """
+    Search across Webhook objects
+    """
+    adminWebhookSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): WebhookSearchResult
 }

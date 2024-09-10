@@ -261,6 +261,63 @@ func NewClient(cli *http.Client, baseURL string, options *clientv2.Options, inte
 	return &Client{Client: clientv2.NewClient(cli, baseURL, options, interceptors...)}
 }
 
+type AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens struct {
+	DeletedBy *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	ID        string   "json:\"id\" graphql:\"id\""
+	Tags      []string "json:\"tags,omitempty\" graphql:\"tags\""
+	OwnerID   *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Name      string   "json:\"name\" graphql:\"name\""
+	Scopes    []string "json:\"scopes,omitempty\" graphql:\"scopes\""
+}
+
+func (t *AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens) GetDeletedBy() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens{}
+	}
+	return t.DeletedBy
+}
+func (t *AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens) GetID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens{}
+	}
+	return t.ID
+}
+func (t *AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens) GetTags() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens{}
+	}
+	return t.Tags
+}
+func (t *AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens) GetOwnerID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens{}
+	}
+	return t.OwnerID
+}
+func (t *AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens) GetName() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens{}
+	}
+	return t.Name
+}
+func (t *AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens) GetScopes() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens{}
+	}
+	return t.Scopes
+}
+
+type AdminSearch_AdminSearch_Nodes_APITokenSearchResult struct {
+	APITokens []*AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens "json:\"apiTokens,omitempty\" graphql:\"apiTokens\""
+}
+
+func (t *AdminSearch_AdminSearch_Nodes_APITokenSearchResult) GetAPITokens() []*AdminSearch_AdminSearch_Nodes_APITokenSearchResult_APITokens {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_APITokenSearchResult{}
+	}
+	return t.APITokens
+}
+
 type AdminSearch_AdminSearch_Nodes_ContactSearchResult_Contacts struct {
 	ID          string   "json:\"id\" graphql:\"id\""
 	DeletedBy   *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
@@ -344,6 +401,276 @@ func (t *AdminSearch_AdminSearch_Nodes_ContactSearchResult) GetContacts() []*Adm
 		t = &AdminSearch_AdminSearch_Nodes_ContactSearchResult{}
 	}
 	return t.Contacts
+}
+
+type AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult_DocumentData struct {
+	ID         string          "json:\"id\" graphql:\"id\""
+	Tags       []string        "json:\"tags,omitempty\" graphql:\"tags\""
+	DeletedBy  *string         "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	OwnerID    *string         "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	TemplateID string          "json:\"templateID\" graphql:\"templateID\""
+	Data       json.RawMessage "json:\"data\" graphql:\"data\""
+}
+
+func (t *AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult_DocumentData) GetID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult_DocumentData{}
+	}
+	return t.ID
+}
+func (t *AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult_DocumentData) GetTags() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult_DocumentData{}
+	}
+	return t.Tags
+}
+func (t *AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult_DocumentData) GetDeletedBy() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult_DocumentData{}
+	}
+	return t.DeletedBy
+}
+func (t *AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult_DocumentData) GetOwnerID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult_DocumentData{}
+	}
+	return t.OwnerID
+}
+func (t *AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult_DocumentData) GetTemplateID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult_DocumentData{}
+	}
+	return t.TemplateID
+}
+func (t *AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult_DocumentData) GetData() *json.RawMessage {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult_DocumentData{}
+	}
+	return &t.Data
+}
+
+type AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult struct {
+	DocumentData []*AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult_DocumentData "json:\"documentData,omitempty\" graphql:\"documentData\""
+}
+
+func (t *AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult) GetDocumentData() []*AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult_DocumentData {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult{}
+	}
+	return t.DocumentData
+}
+
+type AdminSearch_AdminSearch_Nodes_EntitlementSearchResult_Entitlements struct {
+	ID                     string   "json:\"id\" graphql:\"id\""
+	Tags                   []string "json:\"tags,omitempty\" graphql:\"tags\""
+	DeletedBy              *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	OwnerID                *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	PlanID                 string   "json:\"planID\" graphql:\"planID\""
+	OrganizationID         string   "json:\"organizationID\" graphql:\"organizationID\""
+	ExternalCustomerID     *string  "json:\"externalCustomerID,omitempty\" graphql:\"externalCustomerID\""
+	ExternalSubscriptionID *string  "json:\"externalSubscriptionID,omitempty\" graphql:\"externalSubscriptionID\""
+}
+
+func (t *AdminSearch_AdminSearch_Nodes_EntitlementSearchResult_Entitlements) GetID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_EntitlementSearchResult_Entitlements{}
+	}
+	return t.ID
+}
+func (t *AdminSearch_AdminSearch_Nodes_EntitlementSearchResult_Entitlements) GetTags() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_EntitlementSearchResult_Entitlements{}
+	}
+	return t.Tags
+}
+func (t *AdminSearch_AdminSearch_Nodes_EntitlementSearchResult_Entitlements) GetDeletedBy() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_EntitlementSearchResult_Entitlements{}
+	}
+	return t.DeletedBy
+}
+func (t *AdminSearch_AdminSearch_Nodes_EntitlementSearchResult_Entitlements) GetOwnerID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_EntitlementSearchResult_Entitlements{}
+	}
+	return t.OwnerID
+}
+func (t *AdminSearch_AdminSearch_Nodes_EntitlementSearchResult_Entitlements) GetPlanID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_EntitlementSearchResult_Entitlements{}
+	}
+	return t.PlanID
+}
+func (t *AdminSearch_AdminSearch_Nodes_EntitlementSearchResult_Entitlements) GetOrganizationID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_EntitlementSearchResult_Entitlements{}
+	}
+	return t.OrganizationID
+}
+func (t *AdminSearch_AdminSearch_Nodes_EntitlementSearchResult_Entitlements) GetExternalCustomerID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_EntitlementSearchResult_Entitlements{}
+	}
+	return t.ExternalCustomerID
+}
+func (t *AdminSearch_AdminSearch_Nodes_EntitlementSearchResult_Entitlements) GetExternalSubscriptionID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_EntitlementSearchResult_Entitlements{}
+	}
+	return t.ExternalSubscriptionID
+}
+
+type AdminSearch_AdminSearch_Nodes_EntitlementSearchResult struct {
+	Entitlements []*AdminSearch_AdminSearch_Nodes_EntitlementSearchResult_Entitlements "json:\"entitlements,omitempty\" graphql:\"entitlements\""
+}
+
+func (t *AdminSearch_AdminSearch_Nodes_EntitlementSearchResult) GetEntitlements() []*AdminSearch_AdminSearch_Nodes_EntitlementSearchResult_Entitlements {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_EntitlementSearchResult{}
+	}
+	return t.Entitlements
+}
+
+type AdminSearch_AdminSearch_Nodes_EntitlementPlanSearchResult_EntitlementPlans struct {
+	ID          string                 "json:\"id\" graphql:\"id\""
+	DeletedBy   *string                "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	Tags        []string               "json:\"tags,omitempty\" graphql:\"tags\""
+	OwnerID     *string                "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	DisplayName *string                "json:\"displayName,omitempty\" graphql:\"displayName\""
+	Name        string                 "json:\"name\" graphql:\"name\""
+	Description *string                "json:\"description,omitempty\" graphql:\"description\""
+	Version     string                 "json:\"version\" graphql:\"version\""
+	Metadata    map[string]interface{} "json:\"metadata,omitempty\" graphql:\"metadata\""
+}
+
+func (t *AdminSearch_AdminSearch_Nodes_EntitlementPlanSearchResult_EntitlementPlans) GetID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_EntitlementPlanSearchResult_EntitlementPlans{}
+	}
+	return t.ID
+}
+func (t *AdminSearch_AdminSearch_Nodes_EntitlementPlanSearchResult_EntitlementPlans) GetDeletedBy() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_EntitlementPlanSearchResult_EntitlementPlans{}
+	}
+	return t.DeletedBy
+}
+func (t *AdminSearch_AdminSearch_Nodes_EntitlementPlanSearchResult_EntitlementPlans) GetTags() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_EntitlementPlanSearchResult_EntitlementPlans{}
+	}
+	return t.Tags
+}
+func (t *AdminSearch_AdminSearch_Nodes_EntitlementPlanSearchResult_EntitlementPlans) GetOwnerID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_EntitlementPlanSearchResult_EntitlementPlans{}
+	}
+	return t.OwnerID
+}
+func (t *AdminSearch_AdminSearch_Nodes_EntitlementPlanSearchResult_EntitlementPlans) GetDisplayName() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_EntitlementPlanSearchResult_EntitlementPlans{}
+	}
+	return t.DisplayName
+}
+func (t *AdminSearch_AdminSearch_Nodes_EntitlementPlanSearchResult_EntitlementPlans) GetName() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_EntitlementPlanSearchResult_EntitlementPlans{}
+	}
+	return t.Name
+}
+func (t *AdminSearch_AdminSearch_Nodes_EntitlementPlanSearchResult_EntitlementPlans) GetDescription() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_EntitlementPlanSearchResult_EntitlementPlans{}
+	}
+	return t.Description
+}
+func (t *AdminSearch_AdminSearch_Nodes_EntitlementPlanSearchResult_EntitlementPlans) GetVersion() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_EntitlementPlanSearchResult_EntitlementPlans{}
+	}
+	return t.Version
+}
+func (t *AdminSearch_AdminSearch_Nodes_EntitlementPlanSearchResult_EntitlementPlans) GetMetadata() map[string]interface{} {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_EntitlementPlanSearchResult_EntitlementPlans{}
+	}
+	return t.Metadata
+}
+
+type AdminSearch_AdminSearch_Nodes_EntitlementPlanSearchResult struct {
+	EntitlementPlans []*AdminSearch_AdminSearch_Nodes_EntitlementPlanSearchResult_EntitlementPlans "json:\"entitlementPlans,omitempty\" graphql:\"entitlementPlans\""
+}
+
+func (t *AdminSearch_AdminSearch_Nodes_EntitlementPlanSearchResult) GetEntitlementPlans() []*AdminSearch_AdminSearch_Nodes_EntitlementPlanSearchResult_EntitlementPlans {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_EntitlementPlanSearchResult{}
+	}
+	return t.EntitlementPlans
+}
+
+type AdminSearch_AdminSearch_Nodes_EntitlementPlanFeatureSearchResult_EntitlementPlanFeatures struct {
+	ID        string                 "json:\"id\" graphql:\"id\""
+	DeletedBy *string                "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	Tags      []string               "json:\"tags,omitempty\" graphql:\"tags\""
+	OwnerID   *string                "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Metadata  map[string]interface{} "json:\"metadata,omitempty\" graphql:\"metadata\""
+	PlanID    string                 "json:\"planID\" graphql:\"planID\""
+	FeatureID string                 "json:\"featureID\" graphql:\"featureID\""
+}
+
+func (t *AdminSearch_AdminSearch_Nodes_EntitlementPlanFeatureSearchResult_EntitlementPlanFeatures) GetID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_EntitlementPlanFeatureSearchResult_EntitlementPlanFeatures{}
+	}
+	return t.ID
+}
+func (t *AdminSearch_AdminSearch_Nodes_EntitlementPlanFeatureSearchResult_EntitlementPlanFeatures) GetDeletedBy() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_EntitlementPlanFeatureSearchResult_EntitlementPlanFeatures{}
+	}
+	return t.DeletedBy
+}
+func (t *AdminSearch_AdminSearch_Nodes_EntitlementPlanFeatureSearchResult_EntitlementPlanFeatures) GetTags() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_EntitlementPlanFeatureSearchResult_EntitlementPlanFeatures{}
+	}
+	return t.Tags
+}
+func (t *AdminSearch_AdminSearch_Nodes_EntitlementPlanFeatureSearchResult_EntitlementPlanFeatures) GetOwnerID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_EntitlementPlanFeatureSearchResult_EntitlementPlanFeatures{}
+	}
+	return t.OwnerID
+}
+func (t *AdminSearch_AdminSearch_Nodes_EntitlementPlanFeatureSearchResult_EntitlementPlanFeatures) GetMetadata() map[string]interface{} {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_EntitlementPlanFeatureSearchResult_EntitlementPlanFeatures{}
+	}
+	return t.Metadata
+}
+func (t *AdminSearch_AdminSearch_Nodes_EntitlementPlanFeatureSearchResult_EntitlementPlanFeatures) GetPlanID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_EntitlementPlanFeatureSearchResult_EntitlementPlanFeatures{}
+	}
+	return t.PlanID
+}
+func (t *AdminSearch_AdminSearch_Nodes_EntitlementPlanFeatureSearchResult_EntitlementPlanFeatures) GetFeatureID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_EntitlementPlanFeatureSearchResult_EntitlementPlanFeatures{}
+	}
+	return t.FeatureID
+}
+
+type AdminSearch_AdminSearch_Nodes_EntitlementPlanFeatureSearchResult struct {
+	EntitlementPlanFeatures []*AdminSearch_AdminSearch_Nodes_EntitlementPlanFeatureSearchResult_EntitlementPlanFeatures "json:\"entitlementPlanFeatures,omitempty\" graphql:\"entitlementPlanFeatures\""
+}
+
+func (t *AdminSearch_AdminSearch_Nodes_EntitlementPlanFeatureSearchResult) GetEntitlementPlanFeatures() []*AdminSearch_AdminSearch_Nodes_EntitlementPlanFeatureSearchResult_EntitlementPlanFeatures {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_EntitlementPlanFeatureSearchResult{}
+	}
+	return t.EntitlementPlanFeatures
 }
 
 type AdminSearch_AdminSearch_Nodes_EntitySearchResult_Entities struct {
@@ -431,6 +758,262 @@ func (t *AdminSearch_AdminSearch_Nodes_EntitySearchResult) GetEntities() []*Admi
 	return t.Entities
 }
 
+type AdminSearch_AdminSearch_Nodes_EntityTypeSearchResult_EntityTypes struct {
+	ID        string   "json:\"id\" graphql:\"id\""
+	DeletedBy *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	Tags      []string "json:\"tags,omitempty\" graphql:\"tags\""
+	OwnerID   *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Name      string   "json:\"name\" graphql:\"name\""
+}
+
+func (t *AdminSearch_AdminSearch_Nodes_EntityTypeSearchResult_EntityTypes) GetID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_EntityTypeSearchResult_EntityTypes{}
+	}
+	return t.ID
+}
+func (t *AdminSearch_AdminSearch_Nodes_EntityTypeSearchResult_EntityTypes) GetDeletedBy() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_EntityTypeSearchResult_EntityTypes{}
+	}
+	return t.DeletedBy
+}
+func (t *AdminSearch_AdminSearch_Nodes_EntityTypeSearchResult_EntityTypes) GetTags() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_EntityTypeSearchResult_EntityTypes{}
+	}
+	return t.Tags
+}
+func (t *AdminSearch_AdminSearch_Nodes_EntityTypeSearchResult_EntityTypes) GetOwnerID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_EntityTypeSearchResult_EntityTypes{}
+	}
+	return t.OwnerID
+}
+func (t *AdminSearch_AdminSearch_Nodes_EntityTypeSearchResult_EntityTypes) GetName() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_EntityTypeSearchResult_EntityTypes{}
+	}
+	return t.Name
+}
+
+type AdminSearch_AdminSearch_Nodes_EntityTypeSearchResult struct {
+	EntityTypes []*AdminSearch_AdminSearch_Nodes_EntityTypeSearchResult_EntityTypes "json:\"entityTypes,omitempty\" graphql:\"entityTypes\""
+}
+
+func (t *AdminSearch_AdminSearch_Nodes_EntityTypeSearchResult) GetEntityTypes() []*AdminSearch_AdminSearch_Nodes_EntityTypeSearchResult_EntityTypes {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_EntityTypeSearchResult{}
+	}
+	return t.EntityTypes
+}
+
+type AdminSearch_AdminSearch_Nodes_EventSearchResult_Events struct {
+	ID            string                 "json:\"id\" graphql:\"id\""
+	Tags          []string               "json:\"tags,omitempty\" graphql:\"tags\""
+	EventID       *string                "json:\"eventID,omitempty\" graphql:\"eventID\""
+	CorrelationID *string                "json:\"correlationID,omitempty\" graphql:\"correlationID\""
+	EventType     string                 "json:\"eventType\" graphql:\"eventType\""
+	Metadata      map[string]interface{} "json:\"metadata,omitempty\" graphql:\"metadata\""
+}
+
+func (t *AdminSearch_AdminSearch_Nodes_EventSearchResult_Events) GetID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_EventSearchResult_Events{}
+	}
+	return t.ID
+}
+func (t *AdminSearch_AdminSearch_Nodes_EventSearchResult_Events) GetTags() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_EventSearchResult_Events{}
+	}
+	return t.Tags
+}
+func (t *AdminSearch_AdminSearch_Nodes_EventSearchResult_Events) GetEventID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_EventSearchResult_Events{}
+	}
+	return t.EventID
+}
+func (t *AdminSearch_AdminSearch_Nodes_EventSearchResult_Events) GetCorrelationID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_EventSearchResult_Events{}
+	}
+	return t.CorrelationID
+}
+func (t *AdminSearch_AdminSearch_Nodes_EventSearchResult_Events) GetEventType() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_EventSearchResult_Events{}
+	}
+	return t.EventType
+}
+func (t *AdminSearch_AdminSearch_Nodes_EventSearchResult_Events) GetMetadata() map[string]interface{} {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_EventSearchResult_Events{}
+	}
+	return t.Metadata
+}
+
+type AdminSearch_AdminSearch_Nodes_EventSearchResult struct {
+	Events []*AdminSearch_AdminSearch_Nodes_EventSearchResult_Events "json:\"events,omitempty\" graphql:\"events\""
+}
+
+func (t *AdminSearch_AdminSearch_Nodes_EventSearchResult) GetEvents() []*AdminSearch_AdminSearch_Nodes_EventSearchResult_Events {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_EventSearchResult{}
+	}
+	return t.Events
+}
+
+type AdminSearch_AdminSearch_Nodes_FeatureSearchResult_Features struct {
+	DeletedBy   *string                "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	ID          string                 "json:\"id\" graphql:\"id\""
+	Tags        []string               "json:\"tags,omitempty\" graphql:\"tags\""
+	OwnerID     *string                "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Name        string                 "json:\"name\" graphql:\"name\""
+	DisplayName *string                "json:\"displayName,omitempty\" graphql:\"displayName\""
+	Description *string                "json:\"description,omitempty\" graphql:\"description\""
+	Metadata    map[string]interface{} "json:\"metadata,omitempty\" graphql:\"metadata\""
+}
+
+func (t *AdminSearch_AdminSearch_Nodes_FeatureSearchResult_Features) GetDeletedBy() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_FeatureSearchResult_Features{}
+	}
+	return t.DeletedBy
+}
+func (t *AdminSearch_AdminSearch_Nodes_FeatureSearchResult_Features) GetID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_FeatureSearchResult_Features{}
+	}
+	return t.ID
+}
+func (t *AdminSearch_AdminSearch_Nodes_FeatureSearchResult_Features) GetTags() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_FeatureSearchResult_Features{}
+	}
+	return t.Tags
+}
+func (t *AdminSearch_AdminSearch_Nodes_FeatureSearchResult_Features) GetOwnerID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_FeatureSearchResult_Features{}
+	}
+	return t.OwnerID
+}
+func (t *AdminSearch_AdminSearch_Nodes_FeatureSearchResult_Features) GetName() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_FeatureSearchResult_Features{}
+	}
+	return t.Name
+}
+func (t *AdminSearch_AdminSearch_Nodes_FeatureSearchResult_Features) GetDisplayName() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_FeatureSearchResult_Features{}
+	}
+	return t.DisplayName
+}
+func (t *AdminSearch_AdminSearch_Nodes_FeatureSearchResult_Features) GetDescription() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_FeatureSearchResult_Features{}
+	}
+	return t.Description
+}
+func (t *AdminSearch_AdminSearch_Nodes_FeatureSearchResult_Features) GetMetadata() map[string]interface{} {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_FeatureSearchResult_Features{}
+	}
+	return t.Metadata
+}
+
+type AdminSearch_AdminSearch_Nodes_FeatureSearchResult struct {
+	Features []*AdminSearch_AdminSearch_Nodes_FeatureSearchResult_Features "json:\"features,omitempty\" graphql:\"features\""
+}
+
+func (t *AdminSearch_AdminSearch_Nodes_FeatureSearchResult) GetFeatures() []*AdminSearch_AdminSearch_Nodes_FeatureSearchResult_Features {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_FeatureSearchResult{}
+	}
+	return t.Features
+}
+
+type AdminSearch_AdminSearch_Nodes_FileSearchResult_Files struct {
+	DeletedBy     *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	ID            string   "json:\"id\" graphql:\"id\""
+	Tags          []string "json:\"tags,omitempty\" graphql:\"tags\""
+	FileName      string   "json:\"fileName\" graphql:\"fileName\""
+	FileExtension string   "json:\"fileExtension\" graphql:\"fileExtension\""
+	ContentType   string   "json:\"contentType\" graphql:\"contentType\""
+	StoreKey      string   "json:\"storeKey\" graphql:\"storeKey\""
+	Category      *string  "json:\"category,omitempty\" graphql:\"category\""
+	Annotation    *string  "json:\"annotation,omitempty\" graphql:\"annotation\""
+}
+
+func (t *AdminSearch_AdminSearch_Nodes_FileSearchResult_Files) GetDeletedBy() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_FileSearchResult_Files{}
+	}
+	return t.DeletedBy
+}
+func (t *AdminSearch_AdminSearch_Nodes_FileSearchResult_Files) GetID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_FileSearchResult_Files{}
+	}
+	return t.ID
+}
+func (t *AdminSearch_AdminSearch_Nodes_FileSearchResult_Files) GetTags() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_FileSearchResult_Files{}
+	}
+	return t.Tags
+}
+func (t *AdminSearch_AdminSearch_Nodes_FileSearchResult_Files) GetFileName() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_FileSearchResult_Files{}
+	}
+	return t.FileName
+}
+func (t *AdminSearch_AdminSearch_Nodes_FileSearchResult_Files) GetFileExtension() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_FileSearchResult_Files{}
+	}
+	return t.FileExtension
+}
+func (t *AdminSearch_AdminSearch_Nodes_FileSearchResult_Files) GetContentType() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_FileSearchResult_Files{}
+	}
+	return t.ContentType
+}
+func (t *AdminSearch_AdminSearch_Nodes_FileSearchResult_Files) GetStoreKey() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_FileSearchResult_Files{}
+	}
+	return t.StoreKey
+}
+func (t *AdminSearch_AdminSearch_Nodes_FileSearchResult_Files) GetCategory() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_FileSearchResult_Files{}
+	}
+	return t.Category
+}
+func (t *AdminSearch_AdminSearch_Nodes_FileSearchResult_Files) GetAnnotation() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_FileSearchResult_Files{}
+	}
+	return t.Annotation
+}
+
+type AdminSearch_AdminSearch_Nodes_FileSearchResult struct {
+	Files []*AdminSearch_AdminSearch_Nodes_FileSearchResult_Files "json:\"files,omitempty\" graphql:\"files\""
+}
+
+func (t *AdminSearch_AdminSearch_Nodes_FileSearchResult) GetFiles() []*AdminSearch_AdminSearch_Nodes_FileSearchResult_Files {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_FileSearchResult{}
+	}
+	return t.Files
+}
+
 type AdminSearch_AdminSearch_Nodes_GroupSearchResult_Groups struct {
 	DeletedBy   *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	ID          string   "json:\"id\" graphql:\"id\""
@@ -486,6 +1069,304 @@ func (t *AdminSearch_AdminSearch_Nodes_GroupSearchResult) GetGroups() []*AdminSe
 		t = &AdminSearch_AdminSearch_Nodes_GroupSearchResult{}
 	}
 	return t.Groups
+}
+
+type AdminSearch_AdminSearch_Nodes_GroupSettingSearchResult_GroupSettings struct {
+	ID        string   "json:\"id\" graphql:\"id\""
+	Tags      []string "json:\"tags,omitempty\" graphql:\"tags\""
+	DeletedBy *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	GroupID   *string  "json:\"groupID,omitempty\" graphql:\"groupID\""
+}
+
+func (t *AdminSearch_AdminSearch_Nodes_GroupSettingSearchResult_GroupSettings) GetID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_GroupSettingSearchResult_GroupSettings{}
+	}
+	return t.ID
+}
+func (t *AdminSearch_AdminSearch_Nodes_GroupSettingSearchResult_GroupSettings) GetTags() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_GroupSettingSearchResult_GroupSettings{}
+	}
+	return t.Tags
+}
+func (t *AdminSearch_AdminSearch_Nodes_GroupSettingSearchResult_GroupSettings) GetDeletedBy() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_GroupSettingSearchResult_GroupSettings{}
+	}
+	return t.DeletedBy
+}
+func (t *AdminSearch_AdminSearch_Nodes_GroupSettingSearchResult_GroupSettings) GetGroupID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_GroupSettingSearchResult_GroupSettings{}
+	}
+	return t.GroupID
+}
+
+type AdminSearch_AdminSearch_Nodes_GroupSettingSearchResult struct {
+	GroupSettings []*AdminSearch_AdminSearch_Nodes_GroupSettingSearchResult_GroupSettings "json:\"groupSettings,omitempty\" graphql:\"groupSettings\""
+}
+
+func (t *AdminSearch_AdminSearch_Nodes_GroupSettingSearchResult) GetGroupSettings() []*AdminSearch_AdminSearch_Nodes_GroupSettingSearchResult_GroupSettings {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_GroupSettingSearchResult{}
+	}
+	return t.GroupSettings
+}
+
+type AdminSearch_AdminSearch_Nodes_IntegrationSearchResult_Integrations struct {
+	ID        string   "json:\"id\" graphql:\"id\""
+	Tags      []string "json:\"tags,omitempty\" graphql:\"tags\""
+	DeletedBy *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	OwnerID   *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Name      string   "json:\"name\" graphql:\"name\""
+	Kind      *string  "json:\"kind,omitempty\" graphql:\"kind\""
+}
+
+func (t *AdminSearch_AdminSearch_Nodes_IntegrationSearchResult_Integrations) GetID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_IntegrationSearchResult_Integrations{}
+	}
+	return t.ID
+}
+func (t *AdminSearch_AdminSearch_Nodes_IntegrationSearchResult_Integrations) GetTags() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_IntegrationSearchResult_Integrations{}
+	}
+	return t.Tags
+}
+func (t *AdminSearch_AdminSearch_Nodes_IntegrationSearchResult_Integrations) GetDeletedBy() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_IntegrationSearchResult_Integrations{}
+	}
+	return t.DeletedBy
+}
+func (t *AdminSearch_AdminSearch_Nodes_IntegrationSearchResult_Integrations) GetOwnerID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_IntegrationSearchResult_Integrations{}
+	}
+	return t.OwnerID
+}
+func (t *AdminSearch_AdminSearch_Nodes_IntegrationSearchResult_Integrations) GetName() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_IntegrationSearchResult_Integrations{}
+	}
+	return t.Name
+}
+func (t *AdminSearch_AdminSearch_Nodes_IntegrationSearchResult_Integrations) GetKind() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_IntegrationSearchResult_Integrations{}
+	}
+	return t.Kind
+}
+
+type AdminSearch_AdminSearch_Nodes_IntegrationSearchResult struct {
+	Integrations []*AdminSearch_AdminSearch_Nodes_IntegrationSearchResult_Integrations "json:\"integrations,omitempty\" graphql:\"integrations\""
+}
+
+func (t *AdminSearch_AdminSearch_Nodes_IntegrationSearchResult) GetIntegrations() []*AdminSearch_AdminSearch_Nodes_IntegrationSearchResult_Integrations {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_IntegrationSearchResult{}
+	}
+	return t.Integrations
+}
+
+type AdminSearch_AdminSearch_Nodes_OauthProviderSearchResult_OauthProviders struct {
+	ID           string   "json:\"id\" graphql:\"id\""
+	Tags         []string "json:\"tags,omitempty\" graphql:\"tags\""
+	DeletedBy    *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	OwnerID      *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Name         string   "json:\"name\" graphql:\"name\""
+	ClientID     string   "json:\"clientID\" graphql:\"clientID\""
+	ClientSecret string   "json:\"clientSecret\" graphql:\"clientSecret\""
+	RedirectURL  string   "json:\"redirectURL\" graphql:\"redirectURL\""
+	Scopes       string   "json:\"scopes\" graphql:\"scopes\""
+	AuthURL      string   "json:\"authURL\" graphql:\"authURL\""
+	TokenURL     string   "json:\"tokenURL\" graphql:\"tokenURL\""
+	InfoURL      string   "json:\"infoURL\" graphql:\"infoURL\""
+}
+
+func (t *AdminSearch_AdminSearch_Nodes_OauthProviderSearchResult_OauthProviders) GetID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_OauthProviderSearchResult_OauthProviders{}
+	}
+	return t.ID
+}
+func (t *AdminSearch_AdminSearch_Nodes_OauthProviderSearchResult_OauthProviders) GetTags() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_OauthProviderSearchResult_OauthProviders{}
+	}
+	return t.Tags
+}
+func (t *AdminSearch_AdminSearch_Nodes_OauthProviderSearchResult_OauthProviders) GetDeletedBy() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_OauthProviderSearchResult_OauthProviders{}
+	}
+	return t.DeletedBy
+}
+func (t *AdminSearch_AdminSearch_Nodes_OauthProviderSearchResult_OauthProviders) GetOwnerID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_OauthProviderSearchResult_OauthProviders{}
+	}
+	return t.OwnerID
+}
+func (t *AdminSearch_AdminSearch_Nodes_OauthProviderSearchResult_OauthProviders) GetName() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_OauthProviderSearchResult_OauthProviders{}
+	}
+	return t.Name
+}
+func (t *AdminSearch_AdminSearch_Nodes_OauthProviderSearchResult_OauthProviders) GetClientID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_OauthProviderSearchResult_OauthProviders{}
+	}
+	return t.ClientID
+}
+func (t *AdminSearch_AdminSearch_Nodes_OauthProviderSearchResult_OauthProviders) GetClientSecret() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_OauthProviderSearchResult_OauthProviders{}
+	}
+	return t.ClientSecret
+}
+func (t *AdminSearch_AdminSearch_Nodes_OauthProviderSearchResult_OauthProviders) GetRedirectURL() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_OauthProviderSearchResult_OauthProviders{}
+	}
+	return t.RedirectURL
+}
+func (t *AdminSearch_AdminSearch_Nodes_OauthProviderSearchResult_OauthProviders) GetScopes() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_OauthProviderSearchResult_OauthProviders{}
+	}
+	return t.Scopes
+}
+func (t *AdminSearch_AdminSearch_Nodes_OauthProviderSearchResult_OauthProviders) GetAuthURL() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_OauthProviderSearchResult_OauthProviders{}
+	}
+	return t.AuthURL
+}
+func (t *AdminSearch_AdminSearch_Nodes_OauthProviderSearchResult_OauthProviders) GetTokenURL() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_OauthProviderSearchResult_OauthProviders{}
+	}
+	return t.TokenURL
+}
+func (t *AdminSearch_AdminSearch_Nodes_OauthProviderSearchResult_OauthProviders) GetInfoURL() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_OauthProviderSearchResult_OauthProviders{}
+	}
+	return t.InfoURL
+}
+
+type AdminSearch_AdminSearch_Nodes_OauthProviderSearchResult struct {
+	OauthProviders []*AdminSearch_AdminSearch_Nodes_OauthProviderSearchResult_OauthProviders "json:\"oauthProviders,omitempty\" graphql:\"oauthProviders\""
+}
+
+func (t *AdminSearch_AdminSearch_Nodes_OauthProviderSearchResult) GetOauthProviders() []*AdminSearch_AdminSearch_Nodes_OauthProviderSearchResult_OauthProviders {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_OauthProviderSearchResult{}
+	}
+	return t.OauthProviders
+}
+
+type AdminSearch_AdminSearch_Nodes_OhAuthTooTokenSearchResult_OhAuthTooTokens struct {
+	ID                      string   "json:\"id\" graphql:\"id\""
+	Tags                    []string "json:\"tags,omitempty\" graphql:\"tags\""
+	ClientID                string   "json:\"clientID\" graphql:\"clientID\""
+	Scopes                  []string "json:\"scopes,omitempty\" graphql:\"scopes\""
+	Nonce                   string   "json:\"nonce\" graphql:\"nonce\""
+	ClaimsUserID            string   "json:\"claimsUserID\" graphql:\"claimsUserID\""
+	ClaimsUsername          string   "json:\"claimsUsername\" graphql:\"claimsUsername\""
+	ClaimsEmail             string   "json:\"claimsEmail\" graphql:\"claimsEmail\""
+	ClaimsGroups            []string "json:\"claimsGroups,omitempty\" graphql:\"claimsGroups\""
+	ClaimsPreferredUsername string   "json:\"claimsPreferredUsername\" graphql:\"claimsPreferredUsername\""
+	ConnectorID             string   "json:\"connectorID\" graphql:\"connectorID\""
+	ConnectorData           []string "json:\"connectorData,omitempty\" graphql:\"connectorData\""
+}
+
+func (t *AdminSearch_AdminSearch_Nodes_OhAuthTooTokenSearchResult_OhAuthTooTokens) GetID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_OhAuthTooTokenSearchResult_OhAuthTooTokens{}
+	}
+	return t.ID
+}
+func (t *AdminSearch_AdminSearch_Nodes_OhAuthTooTokenSearchResult_OhAuthTooTokens) GetTags() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_OhAuthTooTokenSearchResult_OhAuthTooTokens{}
+	}
+	return t.Tags
+}
+func (t *AdminSearch_AdminSearch_Nodes_OhAuthTooTokenSearchResult_OhAuthTooTokens) GetClientID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_OhAuthTooTokenSearchResult_OhAuthTooTokens{}
+	}
+	return t.ClientID
+}
+func (t *AdminSearch_AdminSearch_Nodes_OhAuthTooTokenSearchResult_OhAuthTooTokens) GetScopes() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_OhAuthTooTokenSearchResult_OhAuthTooTokens{}
+	}
+	return t.Scopes
+}
+func (t *AdminSearch_AdminSearch_Nodes_OhAuthTooTokenSearchResult_OhAuthTooTokens) GetNonce() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_OhAuthTooTokenSearchResult_OhAuthTooTokens{}
+	}
+	return t.Nonce
+}
+func (t *AdminSearch_AdminSearch_Nodes_OhAuthTooTokenSearchResult_OhAuthTooTokens) GetClaimsUserID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_OhAuthTooTokenSearchResult_OhAuthTooTokens{}
+	}
+	return t.ClaimsUserID
+}
+func (t *AdminSearch_AdminSearch_Nodes_OhAuthTooTokenSearchResult_OhAuthTooTokens) GetClaimsUsername() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_OhAuthTooTokenSearchResult_OhAuthTooTokens{}
+	}
+	return t.ClaimsUsername
+}
+func (t *AdminSearch_AdminSearch_Nodes_OhAuthTooTokenSearchResult_OhAuthTooTokens) GetClaimsEmail() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_OhAuthTooTokenSearchResult_OhAuthTooTokens{}
+	}
+	return t.ClaimsEmail
+}
+func (t *AdminSearch_AdminSearch_Nodes_OhAuthTooTokenSearchResult_OhAuthTooTokens) GetClaimsGroups() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_OhAuthTooTokenSearchResult_OhAuthTooTokens{}
+	}
+	return t.ClaimsGroups
+}
+func (t *AdminSearch_AdminSearch_Nodes_OhAuthTooTokenSearchResult_OhAuthTooTokens) GetClaimsPreferredUsername() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_OhAuthTooTokenSearchResult_OhAuthTooTokens{}
+	}
+	return t.ClaimsPreferredUsername
+}
+func (t *AdminSearch_AdminSearch_Nodes_OhAuthTooTokenSearchResult_OhAuthTooTokens) GetConnectorID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_OhAuthTooTokenSearchResult_OhAuthTooTokens{}
+	}
+	return t.ConnectorID
+}
+func (t *AdminSearch_AdminSearch_Nodes_OhAuthTooTokenSearchResult_OhAuthTooTokens) GetConnectorData() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_OhAuthTooTokenSearchResult_OhAuthTooTokens{}
+	}
+	return t.ConnectorData
+}
+
+type AdminSearch_AdminSearch_Nodes_OhAuthTooTokenSearchResult struct {
+	OhAuthTooTokens []*AdminSearch_AdminSearch_Nodes_OhAuthTooTokenSearchResult_OhAuthTooTokens "json:\"ohAuthTooTokens,omitempty\" graphql:\"ohAuthTooTokens\""
+}
+
+func (t *AdminSearch_AdminSearch_Nodes_OhAuthTooTokenSearchResult) GetOhAuthTooTokens() []*AdminSearch_AdminSearch_Nodes_OhAuthTooTokenSearchResult_OhAuthTooTokens {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_OhAuthTooTokenSearchResult{}
+	}
+	return t.OhAuthTooTokens
 }
 
 type AdminSearch_AdminSearch_Nodes_OrganizationSearchResult_Organizations struct {
@@ -545,6 +1426,141 @@ func (t *AdminSearch_AdminSearch_Nodes_OrganizationSearchResult) GetOrganization
 	return t.Organizations
 }
 
+type AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings struct {
+	ID             string   "json:\"id\" graphql:\"id\""
+	Tags           []string "json:\"tags,omitempty\" graphql:\"tags\""
+	DeletedBy      *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	Domains        []string "json:\"domains,omitempty\" graphql:\"domains\""
+	BillingContact *string  "json:\"billingContact,omitempty\" graphql:\"billingContact\""
+	BillingEmail   *string  "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
+	BillingPhone   *string  "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
+	BillingAddress *string  "json:\"billingAddress,omitempty\" graphql:\"billingAddress\""
+	TaxIdentifier  *string  "json:\"taxIdentifier,omitempty\" graphql:\"taxIdentifier\""
+	OrganizationID *string  "json:\"organizationID,omitempty\" graphql:\"organizationID\""
+}
+
+func (t *AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings) GetID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings{}
+	}
+	return t.ID
+}
+func (t *AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings) GetTags() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings{}
+	}
+	return t.Tags
+}
+func (t *AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings) GetDeletedBy() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings{}
+	}
+	return t.DeletedBy
+}
+func (t *AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings) GetDomains() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings{}
+	}
+	return t.Domains
+}
+func (t *AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings) GetBillingContact() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings{}
+	}
+	return t.BillingContact
+}
+func (t *AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings) GetBillingEmail() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings{}
+	}
+	return t.BillingEmail
+}
+func (t *AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings) GetBillingPhone() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings{}
+	}
+	return t.BillingPhone
+}
+func (t *AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings) GetBillingAddress() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings{}
+	}
+	return t.BillingAddress
+}
+func (t *AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings) GetTaxIdentifier() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings{}
+	}
+	return t.TaxIdentifier
+}
+func (t *AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings) GetOrganizationID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings{}
+	}
+	return t.OrganizationID
+}
+
+type AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult struct {
+	OrganizationSettings []*AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings "json:\"organizationSettings,omitempty\" graphql:\"organizationSettings\""
+}
+
+func (t *AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult) GetOrganizationSettings() []*AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult_OrganizationSettings {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult{}
+	}
+	return t.OrganizationSettings
+}
+
+type AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens struct {
+	DeletedBy *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	ID        string   "json:\"id\" graphql:\"id\""
+	Tags      []string "json:\"tags,omitempty\" graphql:\"tags\""
+	Name      string   "json:\"name\" graphql:\"name\""
+	Scopes    []string "json:\"scopes,omitempty\" graphql:\"scopes\""
+}
+
+func (t *AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens) GetDeletedBy() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens{}
+	}
+	return t.DeletedBy
+}
+func (t *AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens) GetID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens{}
+	}
+	return t.ID
+}
+func (t *AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens) GetTags() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens{}
+	}
+	return t.Tags
+}
+func (t *AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens) GetName() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens{}
+	}
+	return t.Name
+}
+func (t *AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens) GetScopes() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens{}
+	}
+	return t.Scopes
+}
+
+type AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult struct {
+	PersonalAccessTokens []*AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens "json:\"personalAccessTokens,omitempty\" graphql:\"personalAccessTokens\""
+}
+
+func (t *AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult) GetPersonalAccessTokens() []*AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult{}
+	}
+	return t.PersonalAccessTokens
+}
+
 type AdminSearch_AdminSearch_Nodes_SubscriberSearchResult_Subscribers struct {
 	ID          string   "json:\"id\" graphql:\"id\""
 	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
@@ -602,19 +1618,389 @@ func (t *AdminSearch_AdminSearch_Nodes_SubscriberSearchResult) GetSubscribers() 
 	return t.Subscribers
 }
 
-type AdminSearch_AdminSearch_Nodes struct {
-	ContactSearchResult      AdminSearch_AdminSearch_Nodes_ContactSearchResult      "graphql:\"... on ContactSearchResult\""
-	EntitySearchResult       AdminSearch_AdminSearch_Nodes_EntitySearchResult       "graphql:\"... on EntitySearchResult\""
-	GroupSearchResult        AdminSearch_AdminSearch_Nodes_GroupSearchResult        "graphql:\"... on GroupSearchResult\""
-	OrganizationSearchResult AdminSearch_AdminSearch_Nodes_OrganizationSearchResult "graphql:\"... on OrganizationSearchResult\""
-	SubscriberSearchResult   AdminSearch_AdminSearch_Nodes_SubscriberSearchResult   "graphql:\"... on SubscriberSearchResult\""
+type AdminSearch_AdminSearch_Nodes_TFASettingSearchResult_TFASettings struct {
+	ID            string   "json:\"id\" graphql:\"id\""
+	DeletedBy     *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	Tags          []string "json:\"tags,omitempty\" graphql:\"tags\""
+	TfaSecret     *string  "json:\"tfaSecret,omitempty\" graphql:\"tfaSecret\""
+	RecoveryCodes []string "json:\"recoveryCodes,omitempty\" graphql:\"recoveryCodes\""
 }
 
+func (t *AdminSearch_AdminSearch_Nodes_TFASettingSearchResult_TFASettings) GetID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_TFASettingSearchResult_TFASettings{}
+	}
+	return t.ID
+}
+func (t *AdminSearch_AdminSearch_Nodes_TFASettingSearchResult_TFASettings) GetDeletedBy() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_TFASettingSearchResult_TFASettings{}
+	}
+	return t.DeletedBy
+}
+func (t *AdminSearch_AdminSearch_Nodes_TFASettingSearchResult_TFASettings) GetTags() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_TFASettingSearchResult_TFASettings{}
+	}
+	return t.Tags
+}
+func (t *AdminSearch_AdminSearch_Nodes_TFASettingSearchResult_TFASettings) GetTfaSecret() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_TFASettingSearchResult_TFASettings{}
+	}
+	return t.TfaSecret
+}
+func (t *AdminSearch_AdminSearch_Nodes_TFASettingSearchResult_TFASettings) GetRecoveryCodes() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_TFASettingSearchResult_TFASettings{}
+	}
+	return t.RecoveryCodes
+}
+
+type AdminSearch_AdminSearch_Nodes_TFASettingSearchResult struct {
+	TFASettings []*AdminSearch_AdminSearch_Nodes_TFASettingSearchResult_TFASettings "json:\"tFASettings,omitempty\" graphql:\"tFASettings\""
+}
+
+func (t *AdminSearch_AdminSearch_Nodes_TFASettingSearchResult) GetTFASettings() []*AdminSearch_AdminSearch_Nodes_TFASettingSearchResult_TFASettings {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_TFASettingSearchResult{}
+	}
+	return t.TFASettings
+}
+
+type AdminSearch_AdminSearch_Nodes_TemplateSearchResult_Templates struct {
+	DeletedBy   *string         "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	ID          string          "json:\"id\" graphql:\"id\""
+	Tags        []string        "json:\"tags,omitempty\" graphql:\"tags\""
+	OwnerID     *string         "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Name        string          "json:\"name\" graphql:\"name\""
+	Description *string         "json:\"description,omitempty\" graphql:\"description\""
+	Jsonconfig  json.RawMessage "json:\"jsonconfig\" graphql:\"jsonconfig\""
+	Uischema    json.RawMessage "json:\"uischema,omitempty\" graphql:\"uischema\""
+}
+
+func (t *AdminSearch_AdminSearch_Nodes_TemplateSearchResult_Templates) GetDeletedBy() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_TemplateSearchResult_Templates{}
+	}
+	return t.DeletedBy
+}
+func (t *AdminSearch_AdminSearch_Nodes_TemplateSearchResult_Templates) GetID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_TemplateSearchResult_Templates{}
+	}
+	return t.ID
+}
+func (t *AdminSearch_AdminSearch_Nodes_TemplateSearchResult_Templates) GetTags() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_TemplateSearchResult_Templates{}
+	}
+	return t.Tags
+}
+func (t *AdminSearch_AdminSearch_Nodes_TemplateSearchResult_Templates) GetOwnerID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_TemplateSearchResult_Templates{}
+	}
+	return t.OwnerID
+}
+func (t *AdminSearch_AdminSearch_Nodes_TemplateSearchResult_Templates) GetName() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_TemplateSearchResult_Templates{}
+	}
+	return t.Name
+}
+func (t *AdminSearch_AdminSearch_Nodes_TemplateSearchResult_Templates) GetDescription() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_TemplateSearchResult_Templates{}
+	}
+	return t.Description
+}
+func (t *AdminSearch_AdminSearch_Nodes_TemplateSearchResult_Templates) GetJsonconfig() *json.RawMessage {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_TemplateSearchResult_Templates{}
+	}
+	return &t.Jsonconfig
+}
+func (t *AdminSearch_AdminSearch_Nodes_TemplateSearchResult_Templates) GetUischema() *json.RawMessage {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_TemplateSearchResult_Templates{}
+	}
+	return &t.Uischema
+}
+
+type AdminSearch_AdminSearch_Nodes_TemplateSearchResult struct {
+	Templates []*AdminSearch_AdminSearch_Nodes_TemplateSearchResult_Templates "json:\"templates,omitempty\" graphql:\"templates\""
+}
+
+func (t *AdminSearch_AdminSearch_Nodes_TemplateSearchResult) GetTemplates() []*AdminSearch_AdminSearch_Nodes_TemplateSearchResult_Templates {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_TemplateSearchResult{}
+	}
+	return t.Templates
+}
+
+type AdminSearch_AdminSearch_Nodes_UserSearchResult_Users struct {
+	DeletedBy       *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	ID              string   "json:\"id\" graphql:\"id\""
+	Tags            []string "json:\"tags,omitempty\" graphql:\"tags\""
+	Email           string   "json:\"email\" graphql:\"email\""
+	FirstName       *string  "json:\"firstName,omitempty\" graphql:\"firstName\""
+	LastName        *string  "json:\"lastName,omitempty\" graphql:\"lastName\""
+	DisplayName     string   "json:\"displayName\" graphql:\"displayName\""
+	AvatarRemoteURL *string  "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
+	AvatarLocalFile *string  "json:\"avatarLocalFile,omitempty\" graphql:\"avatarLocalFile\""
+	Sub             *string  "json:\"sub,omitempty\" graphql:\"sub\""
+}
+
+func (t *AdminSearch_AdminSearch_Nodes_UserSearchResult_Users) GetDeletedBy() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_UserSearchResult_Users{}
+	}
+	return t.DeletedBy
+}
+func (t *AdminSearch_AdminSearch_Nodes_UserSearchResult_Users) GetID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_UserSearchResult_Users{}
+	}
+	return t.ID
+}
+func (t *AdminSearch_AdminSearch_Nodes_UserSearchResult_Users) GetTags() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_UserSearchResult_Users{}
+	}
+	return t.Tags
+}
+func (t *AdminSearch_AdminSearch_Nodes_UserSearchResult_Users) GetEmail() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_UserSearchResult_Users{}
+	}
+	return t.Email
+}
+func (t *AdminSearch_AdminSearch_Nodes_UserSearchResult_Users) GetFirstName() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_UserSearchResult_Users{}
+	}
+	return t.FirstName
+}
+func (t *AdminSearch_AdminSearch_Nodes_UserSearchResult_Users) GetLastName() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_UserSearchResult_Users{}
+	}
+	return t.LastName
+}
+func (t *AdminSearch_AdminSearch_Nodes_UserSearchResult_Users) GetDisplayName() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_UserSearchResult_Users{}
+	}
+	return t.DisplayName
+}
+func (t *AdminSearch_AdminSearch_Nodes_UserSearchResult_Users) GetAvatarRemoteURL() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_UserSearchResult_Users{}
+	}
+	return t.AvatarRemoteURL
+}
+func (t *AdminSearch_AdminSearch_Nodes_UserSearchResult_Users) GetAvatarLocalFile() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_UserSearchResult_Users{}
+	}
+	return t.AvatarLocalFile
+}
+func (t *AdminSearch_AdminSearch_Nodes_UserSearchResult_Users) GetSub() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_UserSearchResult_Users{}
+	}
+	return t.Sub
+}
+
+type AdminSearch_AdminSearch_Nodes_UserSearchResult struct {
+	Users []*AdminSearch_AdminSearch_Nodes_UserSearchResult_Users "json:\"users,omitempty\" graphql:\"users\""
+}
+
+func (t *AdminSearch_AdminSearch_Nodes_UserSearchResult) GetUsers() []*AdminSearch_AdminSearch_Nodes_UserSearchResult_Users {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_UserSearchResult{}
+	}
+	return t.Users
+}
+
+type AdminSearch_AdminSearch_Nodes_UserSettingSearchResult_UserSettings struct {
+	ID        string   "json:\"id\" graphql:\"id\""
+	Tags      []string "json:\"tags,omitempty\" graphql:\"tags\""
+	DeletedBy *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	UserID    *string  "json:\"userID,omitempty\" graphql:\"userID\""
+}
+
+func (t *AdminSearch_AdminSearch_Nodes_UserSettingSearchResult_UserSettings) GetID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_UserSettingSearchResult_UserSettings{}
+	}
+	return t.ID
+}
+func (t *AdminSearch_AdminSearch_Nodes_UserSettingSearchResult_UserSettings) GetTags() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_UserSettingSearchResult_UserSettings{}
+	}
+	return t.Tags
+}
+func (t *AdminSearch_AdminSearch_Nodes_UserSettingSearchResult_UserSettings) GetDeletedBy() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_UserSettingSearchResult_UserSettings{}
+	}
+	return t.DeletedBy
+}
+func (t *AdminSearch_AdminSearch_Nodes_UserSettingSearchResult_UserSettings) GetUserID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_UserSettingSearchResult_UserSettings{}
+	}
+	return t.UserID
+}
+
+type AdminSearch_AdminSearch_Nodes_UserSettingSearchResult struct {
+	UserSettings []*AdminSearch_AdminSearch_Nodes_UserSettingSearchResult_UserSettings "json:\"userSettings,omitempty\" graphql:\"userSettings\""
+}
+
+func (t *AdminSearch_AdminSearch_Nodes_UserSettingSearchResult) GetUserSettings() []*AdminSearch_AdminSearch_Nodes_UserSettingSearchResult_UserSettings {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_UserSettingSearchResult{}
+	}
+	return t.UserSettings
+}
+
+type AdminSearch_AdminSearch_Nodes_WebhookSearchResult_Webhooks struct {
+	ID             string   "json:\"id\" graphql:\"id\""
+	Tags           []string "json:\"tags,omitempty\" graphql:\"tags\""
+	DeletedBy      *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	OwnerID        *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Name           string   "json:\"name\" graphql:\"name\""
+	DestinationURL string   "json:\"destinationURL\" graphql:\"destinationURL\""
+	LastError      *string  "json:\"lastError,omitempty\" graphql:\"lastError\""
+	LastResponse   *string  "json:\"lastResponse,omitempty\" graphql:\"lastResponse\""
+}
+
+func (t *AdminSearch_AdminSearch_Nodes_WebhookSearchResult_Webhooks) GetID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_WebhookSearchResult_Webhooks{}
+	}
+	return t.ID
+}
+func (t *AdminSearch_AdminSearch_Nodes_WebhookSearchResult_Webhooks) GetTags() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_WebhookSearchResult_Webhooks{}
+	}
+	return t.Tags
+}
+func (t *AdminSearch_AdminSearch_Nodes_WebhookSearchResult_Webhooks) GetDeletedBy() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_WebhookSearchResult_Webhooks{}
+	}
+	return t.DeletedBy
+}
+func (t *AdminSearch_AdminSearch_Nodes_WebhookSearchResult_Webhooks) GetOwnerID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_WebhookSearchResult_Webhooks{}
+	}
+	return t.OwnerID
+}
+func (t *AdminSearch_AdminSearch_Nodes_WebhookSearchResult_Webhooks) GetName() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_WebhookSearchResult_Webhooks{}
+	}
+	return t.Name
+}
+func (t *AdminSearch_AdminSearch_Nodes_WebhookSearchResult_Webhooks) GetDestinationURL() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_WebhookSearchResult_Webhooks{}
+	}
+	return t.DestinationURL
+}
+func (t *AdminSearch_AdminSearch_Nodes_WebhookSearchResult_Webhooks) GetLastError() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_WebhookSearchResult_Webhooks{}
+	}
+	return t.LastError
+}
+func (t *AdminSearch_AdminSearch_Nodes_WebhookSearchResult_Webhooks) GetLastResponse() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_WebhookSearchResult_Webhooks{}
+	}
+	return t.LastResponse
+}
+
+type AdminSearch_AdminSearch_Nodes_WebhookSearchResult struct {
+	Webhooks []*AdminSearch_AdminSearch_Nodes_WebhookSearchResult_Webhooks "json:\"webhooks,omitempty\" graphql:\"webhooks\""
+}
+
+func (t *AdminSearch_AdminSearch_Nodes_WebhookSearchResult) GetWebhooks() []*AdminSearch_AdminSearch_Nodes_WebhookSearchResult_Webhooks {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_WebhookSearchResult{}
+	}
+	return t.Webhooks
+}
+
+type AdminSearch_AdminSearch_Nodes struct {
+	APITokenSearchResult               AdminSearch_AdminSearch_Nodes_APITokenSearchResult               "graphql:\"... on APITokenSearchResult\""
+	ContactSearchResult                AdminSearch_AdminSearch_Nodes_ContactSearchResult                "graphql:\"... on ContactSearchResult\""
+	DocumentDataSearchResult           AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult           "graphql:\"... on DocumentDataSearchResult\""
+	EntitlementSearchResult            AdminSearch_AdminSearch_Nodes_EntitlementSearchResult            "graphql:\"... on EntitlementSearchResult\""
+	EntitlementPlanSearchResult        AdminSearch_AdminSearch_Nodes_EntitlementPlanSearchResult        "graphql:\"... on EntitlementPlanSearchResult\""
+	EntitlementPlanFeatureSearchResult AdminSearch_AdminSearch_Nodes_EntitlementPlanFeatureSearchResult "graphql:\"... on EntitlementPlanFeatureSearchResult\""
+	EntitySearchResult                 AdminSearch_AdminSearch_Nodes_EntitySearchResult                 "graphql:\"... on EntitySearchResult\""
+	EntityTypeSearchResult             AdminSearch_AdminSearch_Nodes_EntityTypeSearchResult             "graphql:\"... on EntityTypeSearchResult\""
+	EventSearchResult                  AdminSearch_AdminSearch_Nodes_EventSearchResult                  "graphql:\"... on EventSearchResult\""
+	FeatureSearchResult                AdminSearch_AdminSearch_Nodes_FeatureSearchResult                "graphql:\"... on FeatureSearchResult\""
+	FileSearchResult                   AdminSearch_AdminSearch_Nodes_FileSearchResult                   "graphql:\"... on FileSearchResult\""
+	GroupSearchResult                  AdminSearch_AdminSearch_Nodes_GroupSearchResult                  "graphql:\"... on GroupSearchResult\""
+	GroupSettingSearchResult           AdminSearch_AdminSearch_Nodes_GroupSettingSearchResult           "graphql:\"... on GroupSettingSearchResult\""
+	IntegrationSearchResult            AdminSearch_AdminSearch_Nodes_IntegrationSearchResult            "graphql:\"... on IntegrationSearchResult\""
+	OauthProviderSearchResult          AdminSearch_AdminSearch_Nodes_OauthProviderSearchResult          "graphql:\"... on OauthProviderSearchResult\""
+	OhAuthTooTokenSearchResult         AdminSearch_AdminSearch_Nodes_OhAuthTooTokenSearchResult         "graphql:\"... on OhAuthTooTokenSearchResult\""
+	OrganizationSearchResult           AdminSearch_AdminSearch_Nodes_OrganizationSearchResult           "graphql:\"... on OrganizationSearchResult\""
+	OrganizationSettingSearchResult    AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult    "graphql:\"... on OrganizationSettingSearchResult\""
+	PersonalAccessTokenSearchResult    AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult    "graphql:\"... on PersonalAccessTokenSearchResult\""
+	SubscriberSearchResult             AdminSearch_AdminSearch_Nodes_SubscriberSearchResult             "graphql:\"... on SubscriberSearchResult\""
+	TFASettingSearchResult             AdminSearch_AdminSearch_Nodes_TFASettingSearchResult             "graphql:\"... on TFASettingSearchResult\""
+	TemplateSearchResult               AdminSearch_AdminSearch_Nodes_TemplateSearchResult               "graphql:\"... on TemplateSearchResult\""
+	UserSearchResult                   AdminSearch_AdminSearch_Nodes_UserSearchResult                   "graphql:\"... on UserSearchResult\""
+	UserSettingSearchResult            AdminSearch_AdminSearch_Nodes_UserSettingSearchResult            "graphql:\"... on UserSettingSearchResult\""
+	WebhookSearchResult                AdminSearch_AdminSearch_Nodes_WebhookSearchResult                "graphql:\"... on WebhookSearchResult\""
+}
+
+func (t *AdminSearch_AdminSearch_Nodes) GetAPITokenSearchResult() *AdminSearch_AdminSearch_Nodes_APITokenSearchResult {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes{}
+	}
+	return &t.APITokenSearchResult
+}
 func (t *AdminSearch_AdminSearch_Nodes) GetContactSearchResult() *AdminSearch_AdminSearch_Nodes_ContactSearchResult {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes{}
 	}
 	return &t.ContactSearchResult
+}
+func (t *AdminSearch_AdminSearch_Nodes) GetDocumentDataSearchResult() *AdminSearch_AdminSearch_Nodes_DocumentDataSearchResult {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes{}
+	}
+	return &t.DocumentDataSearchResult
+}
+func (t *AdminSearch_AdminSearch_Nodes) GetEntitlementSearchResult() *AdminSearch_AdminSearch_Nodes_EntitlementSearchResult {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes{}
+	}
+	return &t.EntitlementSearchResult
+}
+func (t *AdminSearch_AdminSearch_Nodes) GetEntitlementPlanSearchResult() *AdminSearch_AdminSearch_Nodes_EntitlementPlanSearchResult {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes{}
+	}
+	return &t.EntitlementPlanSearchResult
+}
+func (t *AdminSearch_AdminSearch_Nodes) GetEntitlementPlanFeatureSearchResult() *AdminSearch_AdminSearch_Nodes_EntitlementPlanFeatureSearchResult {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes{}
+	}
+	return &t.EntitlementPlanFeatureSearchResult
 }
 func (t *AdminSearch_AdminSearch_Nodes) GetEntitySearchResult() *AdminSearch_AdminSearch_Nodes_EntitySearchResult {
 	if t == nil {
@@ -622,11 +2008,59 @@ func (t *AdminSearch_AdminSearch_Nodes) GetEntitySearchResult() *AdminSearch_Adm
 	}
 	return &t.EntitySearchResult
 }
+func (t *AdminSearch_AdminSearch_Nodes) GetEntityTypeSearchResult() *AdminSearch_AdminSearch_Nodes_EntityTypeSearchResult {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes{}
+	}
+	return &t.EntityTypeSearchResult
+}
+func (t *AdminSearch_AdminSearch_Nodes) GetEventSearchResult() *AdminSearch_AdminSearch_Nodes_EventSearchResult {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes{}
+	}
+	return &t.EventSearchResult
+}
+func (t *AdminSearch_AdminSearch_Nodes) GetFeatureSearchResult() *AdminSearch_AdminSearch_Nodes_FeatureSearchResult {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes{}
+	}
+	return &t.FeatureSearchResult
+}
+func (t *AdminSearch_AdminSearch_Nodes) GetFileSearchResult() *AdminSearch_AdminSearch_Nodes_FileSearchResult {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes{}
+	}
+	return &t.FileSearchResult
+}
 func (t *AdminSearch_AdminSearch_Nodes) GetGroupSearchResult() *AdminSearch_AdminSearch_Nodes_GroupSearchResult {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes{}
 	}
 	return &t.GroupSearchResult
+}
+func (t *AdminSearch_AdminSearch_Nodes) GetGroupSettingSearchResult() *AdminSearch_AdminSearch_Nodes_GroupSettingSearchResult {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes{}
+	}
+	return &t.GroupSettingSearchResult
+}
+func (t *AdminSearch_AdminSearch_Nodes) GetIntegrationSearchResult() *AdminSearch_AdminSearch_Nodes_IntegrationSearchResult {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes{}
+	}
+	return &t.IntegrationSearchResult
+}
+func (t *AdminSearch_AdminSearch_Nodes) GetOauthProviderSearchResult() *AdminSearch_AdminSearch_Nodes_OauthProviderSearchResult {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes{}
+	}
+	return &t.OauthProviderSearchResult
+}
+func (t *AdminSearch_AdminSearch_Nodes) GetOhAuthTooTokenSearchResult() *AdminSearch_AdminSearch_Nodes_OhAuthTooTokenSearchResult {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes{}
+	}
+	return &t.OhAuthTooTokenSearchResult
 }
 func (t *AdminSearch_AdminSearch_Nodes) GetOrganizationSearchResult() *AdminSearch_AdminSearch_Nodes_OrganizationSearchResult {
 	if t == nil {
@@ -634,11 +2068,53 @@ func (t *AdminSearch_AdminSearch_Nodes) GetOrganizationSearchResult() *AdminSear
 	}
 	return &t.OrganizationSearchResult
 }
+func (t *AdminSearch_AdminSearch_Nodes) GetOrganizationSettingSearchResult() *AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes{}
+	}
+	return &t.OrganizationSettingSearchResult
+}
+func (t *AdminSearch_AdminSearch_Nodes) GetPersonalAccessTokenSearchResult() *AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes{}
+	}
+	return &t.PersonalAccessTokenSearchResult
+}
 func (t *AdminSearch_AdminSearch_Nodes) GetSubscriberSearchResult() *AdminSearch_AdminSearch_Nodes_SubscriberSearchResult {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes{}
 	}
 	return &t.SubscriberSearchResult
+}
+func (t *AdminSearch_AdminSearch_Nodes) GetTFASettingSearchResult() *AdminSearch_AdminSearch_Nodes_TFASettingSearchResult {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes{}
+	}
+	return &t.TFASettingSearchResult
+}
+func (t *AdminSearch_AdminSearch_Nodes) GetTemplateSearchResult() *AdminSearch_AdminSearch_Nodes_TemplateSearchResult {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes{}
+	}
+	return &t.TemplateSearchResult
+}
+func (t *AdminSearch_AdminSearch_Nodes) GetUserSearchResult() *AdminSearch_AdminSearch_Nodes_UserSearchResult {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes{}
+	}
+	return &t.UserSearchResult
+}
+func (t *AdminSearch_AdminSearch_Nodes) GetUserSettingSearchResult() *AdminSearch_AdminSearch_Nodes_UserSettingSearchResult {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes{}
+	}
+	return &t.UserSettingSearchResult
+}
+func (t *AdminSearch_AdminSearch_Nodes) GetWebhookSearchResult() *AdminSearch_AdminSearch_Nodes_WebhookSearchResult {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes{}
+	}
+	return &t.WebhookSearchResult
 }
 
 type AdminSearch_AdminSearch struct {
@@ -22818,9 +24294,39 @@ func (t *UpdatePersonalAccessToken_UpdatePersonalAccessToken) GetPersonalAccessT
 	return &t.PersonalAccessToken
 }
 
+type GlobalSearch_Search_Nodes_APITokenSearchResult_APITokens struct {
+	ID   string   "json:\"id\" graphql:\"id\""
+	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *GlobalSearch_Search_Nodes_APITokenSearchResult_APITokens) GetID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_APITokenSearchResult_APITokens{}
+	}
+	return t.ID
+}
+func (t *GlobalSearch_Search_Nodes_APITokenSearchResult_APITokens) GetTags() []string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_APITokenSearchResult_APITokens{}
+	}
+	return t.Tags
+}
+
+type GlobalSearch_Search_Nodes_APITokenSearchResult struct {
+	APITokens []*GlobalSearch_Search_Nodes_APITokenSearchResult_APITokens "json:\"apiTokens,omitempty\" graphql:\"apiTokens\""
+}
+
+func (t *GlobalSearch_Search_Nodes_APITokenSearchResult) GetAPITokens() []*GlobalSearch_Search_Nodes_APITokenSearchResult_APITokens {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_APITokenSearchResult{}
+	}
+	return t.APITokens
+}
+
 type GlobalSearch_Search_Nodes_ContactSearchResult_Contacts struct {
-	FullName string "json:\"fullName\" graphql:\"fullName\""
-	ID       string "json:\"id\" graphql:\"id\""
+	FullName string   "json:\"fullName\" graphql:\"fullName\""
+	ID       string   "json:\"id\" graphql:\"id\""
+	Tags     []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
 func (t *GlobalSearch_Search_Nodes_ContactSearchResult_Contacts) GetFullName() string {
@@ -22835,6 +24341,12 @@ func (t *GlobalSearch_Search_Nodes_ContactSearchResult_Contacts) GetID() string 
 	}
 	return t.ID
 }
+func (t *GlobalSearch_Search_Nodes_ContactSearchResult_Contacts) GetTags() []string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_ContactSearchResult_Contacts{}
+	}
+	return t.Tags
+}
 
 type GlobalSearch_Search_Nodes_ContactSearchResult struct {
 	Contacts []*GlobalSearch_Search_Nodes_ContactSearchResult_Contacts "json:\"contacts,omitempty\" graphql:\"contacts\""
@@ -22847,11 +24359,128 @@ func (t *GlobalSearch_Search_Nodes_ContactSearchResult) GetContacts() []*GlobalS
 	return t.Contacts
 }
 
+type GlobalSearch_Search_Nodes_DocumentDataSearchResult_DocumentData struct {
+	ID   string   "json:\"id\" graphql:\"id\""
+	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *GlobalSearch_Search_Nodes_DocumentDataSearchResult_DocumentData) GetID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_DocumentDataSearchResult_DocumentData{}
+	}
+	return t.ID
+}
+func (t *GlobalSearch_Search_Nodes_DocumentDataSearchResult_DocumentData) GetTags() []string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_DocumentDataSearchResult_DocumentData{}
+	}
+	return t.Tags
+}
+
+type GlobalSearch_Search_Nodes_DocumentDataSearchResult struct {
+	DocumentData []*GlobalSearch_Search_Nodes_DocumentDataSearchResult_DocumentData "json:\"documentData,omitempty\" graphql:\"documentData\""
+}
+
+func (t *GlobalSearch_Search_Nodes_DocumentDataSearchResult) GetDocumentData() []*GlobalSearch_Search_Nodes_DocumentDataSearchResult_DocumentData {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_DocumentDataSearchResult{}
+	}
+	return t.DocumentData
+}
+
+type GlobalSearch_Search_Nodes_EntitlementSearchResult_Entitlements struct {
+	ID   string   "json:\"id\" graphql:\"id\""
+	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *GlobalSearch_Search_Nodes_EntitlementSearchResult_Entitlements) GetID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_EntitlementSearchResult_Entitlements{}
+	}
+	return t.ID
+}
+func (t *GlobalSearch_Search_Nodes_EntitlementSearchResult_Entitlements) GetTags() []string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_EntitlementSearchResult_Entitlements{}
+	}
+	return t.Tags
+}
+
+type GlobalSearch_Search_Nodes_EntitlementSearchResult struct {
+	Entitlements []*GlobalSearch_Search_Nodes_EntitlementSearchResult_Entitlements "json:\"entitlements,omitempty\" graphql:\"entitlements\""
+}
+
+func (t *GlobalSearch_Search_Nodes_EntitlementSearchResult) GetEntitlements() []*GlobalSearch_Search_Nodes_EntitlementSearchResult_Entitlements {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_EntitlementSearchResult{}
+	}
+	return t.Entitlements
+}
+
+type GlobalSearch_Search_Nodes_EntitlementPlanSearchResult_EntitlementPlans struct {
+	ID   string   "json:\"id\" graphql:\"id\""
+	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *GlobalSearch_Search_Nodes_EntitlementPlanSearchResult_EntitlementPlans) GetID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_EntitlementPlanSearchResult_EntitlementPlans{}
+	}
+	return t.ID
+}
+func (t *GlobalSearch_Search_Nodes_EntitlementPlanSearchResult_EntitlementPlans) GetTags() []string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_EntitlementPlanSearchResult_EntitlementPlans{}
+	}
+	return t.Tags
+}
+
+type GlobalSearch_Search_Nodes_EntitlementPlanSearchResult struct {
+	EntitlementPlans []*GlobalSearch_Search_Nodes_EntitlementPlanSearchResult_EntitlementPlans "json:\"entitlementPlans,omitempty\" graphql:\"entitlementPlans\""
+}
+
+func (t *GlobalSearch_Search_Nodes_EntitlementPlanSearchResult) GetEntitlementPlans() []*GlobalSearch_Search_Nodes_EntitlementPlanSearchResult_EntitlementPlans {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_EntitlementPlanSearchResult{}
+	}
+	return t.EntitlementPlans
+}
+
+type GlobalSearch_Search_Nodes_EntitlementPlanFeatureSearchResult_EntitlementPlanFeatures struct {
+	ID   string   "json:\"id\" graphql:\"id\""
+	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *GlobalSearch_Search_Nodes_EntitlementPlanFeatureSearchResult_EntitlementPlanFeatures) GetID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_EntitlementPlanFeatureSearchResult_EntitlementPlanFeatures{}
+	}
+	return t.ID
+}
+func (t *GlobalSearch_Search_Nodes_EntitlementPlanFeatureSearchResult_EntitlementPlanFeatures) GetTags() []string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_EntitlementPlanFeatureSearchResult_EntitlementPlanFeatures{}
+	}
+	return t.Tags
+}
+
+type GlobalSearch_Search_Nodes_EntitlementPlanFeatureSearchResult struct {
+	EntitlementPlanFeatures []*GlobalSearch_Search_Nodes_EntitlementPlanFeatureSearchResult_EntitlementPlanFeatures "json:\"entitlementPlanFeatures,omitempty\" graphql:\"entitlementPlanFeatures\""
+}
+
+func (t *GlobalSearch_Search_Nodes_EntitlementPlanFeatureSearchResult) GetEntitlementPlanFeatures() []*GlobalSearch_Search_Nodes_EntitlementPlanFeatureSearchResult_EntitlementPlanFeatures {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_EntitlementPlanFeatureSearchResult{}
+	}
+	return t.EntitlementPlanFeatures
+}
+
 type GlobalSearch_Search_Nodes_EntitySearchResult_Entities struct {
-	Description *string "json:\"description,omitempty\" graphql:\"description\""
-	DisplayName *string "json:\"displayName,omitempty\" graphql:\"displayName\""
-	ID          string  "json:\"id\" graphql:\"id\""
-	Name        *string "json:\"name,omitempty\" graphql:\"name\""
+	Description *string  "json:\"description,omitempty\" graphql:\"description\""
+	DisplayName *string  "json:\"displayName,omitempty\" graphql:\"displayName\""
+	ID          string   "json:\"id\" graphql:\"id\""
+	Name        *string  "json:\"name,omitempty\" graphql:\"name\""
+	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
 func (t *GlobalSearch_Search_Nodes_EntitySearchResult_Entities) GetDescription() *string {
@@ -22878,6 +24507,12 @@ func (t *GlobalSearch_Search_Nodes_EntitySearchResult_Entities) GetName() *strin
 	}
 	return t.Name
 }
+func (t *GlobalSearch_Search_Nodes_EntitySearchResult_Entities) GetTags() []string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_EntitySearchResult_Entities{}
+	}
+	return t.Tags
+}
 
 type GlobalSearch_Search_Nodes_EntitySearchResult struct {
 	Entities []*GlobalSearch_Search_Nodes_EntitySearchResult_Entities "json:\"entities,omitempty\" graphql:\"entities\""
@@ -22890,10 +24525,127 @@ func (t *GlobalSearch_Search_Nodes_EntitySearchResult) GetEntities() []*GlobalSe
 	return t.Entities
 }
 
+type GlobalSearch_Search_Nodes_EntityTypeSearchResult_EntityTypes struct {
+	ID   string   "json:\"id\" graphql:\"id\""
+	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *GlobalSearch_Search_Nodes_EntityTypeSearchResult_EntityTypes) GetID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_EntityTypeSearchResult_EntityTypes{}
+	}
+	return t.ID
+}
+func (t *GlobalSearch_Search_Nodes_EntityTypeSearchResult_EntityTypes) GetTags() []string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_EntityTypeSearchResult_EntityTypes{}
+	}
+	return t.Tags
+}
+
+type GlobalSearch_Search_Nodes_EntityTypeSearchResult struct {
+	EntityTypes []*GlobalSearch_Search_Nodes_EntityTypeSearchResult_EntityTypes "json:\"entityTypes,omitempty\" graphql:\"entityTypes\""
+}
+
+func (t *GlobalSearch_Search_Nodes_EntityTypeSearchResult) GetEntityTypes() []*GlobalSearch_Search_Nodes_EntityTypeSearchResult_EntityTypes {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_EntityTypeSearchResult{}
+	}
+	return t.EntityTypes
+}
+
+type GlobalSearch_Search_Nodes_EventSearchResult_Events struct {
+	ID   string   "json:\"id\" graphql:\"id\""
+	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *GlobalSearch_Search_Nodes_EventSearchResult_Events) GetID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_EventSearchResult_Events{}
+	}
+	return t.ID
+}
+func (t *GlobalSearch_Search_Nodes_EventSearchResult_Events) GetTags() []string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_EventSearchResult_Events{}
+	}
+	return t.Tags
+}
+
+type GlobalSearch_Search_Nodes_EventSearchResult struct {
+	Events []*GlobalSearch_Search_Nodes_EventSearchResult_Events "json:\"events,omitempty\" graphql:\"events\""
+}
+
+func (t *GlobalSearch_Search_Nodes_EventSearchResult) GetEvents() []*GlobalSearch_Search_Nodes_EventSearchResult_Events {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_EventSearchResult{}
+	}
+	return t.Events
+}
+
+type GlobalSearch_Search_Nodes_FeatureSearchResult_Features struct {
+	ID   string   "json:\"id\" graphql:\"id\""
+	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *GlobalSearch_Search_Nodes_FeatureSearchResult_Features) GetID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_FeatureSearchResult_Features{}
+	}
+	return t.ID
+}
+func (t *GlobalSearch_Search_Nodes_FeatureSearchResult_Features) GetTags() []string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_FeatureSearchResult_Features{}
+	}
+	return t.Tags
+}
+
+type GlobalSearch_Search_Nodes_FeatureSearchResult struct {
+	Features []*GlobalSearch_Search_Nodes_FeatureSearchResult_Features "json:\"features,omitempty\" graphql:\"features\""
+}
+
+func (t *GlobalSearch_Search_Nodes_FeatureSearchResult) GetFeatures() []*GlobalSearch_Search_Nodes_FeatureSearchResult_Features {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_FeatureSearchResult{}
+	}
+	return t.Features
+}
+
+type GlobalSearch_Search_Nodes_FileSearchResult_Files struct {
+	ID   string   "json:\"id\" graphql:\"id\""
+	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *GlobalSearch_Search_Nodes_FileSearchResult_Files) GetID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_FileSearchResult_Files{}
+	}
+	return t.ID
+}
+func (t *GlobalSearch_Search_Nodes_FileSearchResult_Files) GetTags() []string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_FileSearchResult_Files{}
+	}
+	return t.Tags
+}
+
+type GlobalSearch_Search_Nodes_FileSearchResult struct {
+	Files []*GlobalSearch_Search_Nodes_FileSearchResult_Files "json:\"files,omitempty\" graphql:\"files\""
+}
+
+func (t *GlobalSearch_Search_Nodes_FileSearchResult) GetFiles() []*GlobalSearch_Search_Nodes_FileSearchResult_Files {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_FileSearchResult{}
+	}
+	return t.Files
+}
+
 type GlobalSearch_Search_Nodes_GroupSearchResult_Groups struct {
-	DisplayName string "json:\"displayName\" graphql:\"displayName\""
-	ID          string "json:\"id\" graphql:\"id\""
-	Name        string "json:\"name\" graphql:\"name\""
+	DisplayName string   "json:\"displayName\" graphql:\"displayName\""
+	ID          string   "json:\"id\" graphql:\"id\""
+	Name        string   "json:\"name\" graphql:\"name\""
+	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
 func (t *GlobalSearch_Search_Nodes_GroupSearchResult_Groups) GetDisplayName() string {
@@ -22914,6 +24666,12 @@ func (t *GlobalSearch_Search_Nodes_GroupSearchResult_Groups) GetName() string {
 	}
 	return t.Name
 }
+func (t *GlobalSearch_Search_Nodes_GroupSearchResult_Groups) GetTags() []string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_GroupSearchResult_Groups{}
+	}
+	return t.Tags
+}
 
 type GlobalSearch_Search_Nodes_GroupSearchResult struct {
 	Groups []*GlobalSearch_Search_Nodes_GroupSearchResult_Groups "json:\"groups,omitempty\" graphql:\"groups\""
@@ -22926,10 +24684,127 @@ func (t *GlobalSearch_Search_Nodes_GroupSearchResult) GetGroups() []*GlobalSearc
 	return t.Groups
 }
 
+type GlobalSearch_Search_Nodes_GroupSettingSearchResult_GroupSettings struct {
+	ID   string   "json:\"id\" graphql:\"id\""
+	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *GlobalSearch_Search_Nodes_GroupSettingSearchResult_GroupSettings) GetID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_GroupSettingSearchResult_GroupSettings{}
+	}
+	return t.ID
+}
+func (t *GlobalSearch_Search_Nodes_GroupSettingSearchResult_GroupSettings) GetTags() []string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_GroupSettingSearchResult_GroupSettings{}
+	}
+	return t.Tags
+}
+
+type GlobalSearch_Search_Nodes_GroupSettingSearchResult struct {
+	GroupSettings []*GlobalSearch_Search_Nodes_GroupSettingSearchResult_GroupSettings "json:\"groupSettings,omitempty\" graphql:\"groupSettings\""
+}
+
+func (t *GlobalSearch_Search_Nodes_GroupSettingSearchResult) GetGroupSettings() []*GlobalSearch_Search_Nodes_GroupSettingSearchResult_GroupSettings {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_GroupSettingSearchResult{}
+	}
+	return t.GroupSettings
+}
+
+type GlobalSearch_Search_Nodes_IntegrationSearchResult_Integrations struct {
+	ID   string   "json:\"id\" graphql:\"id\""
+	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *GlobalSearch_Search_Nodes_IntegrationSearchResult_Integrations) GetID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_IntegrationSearchResult_Integrations{}
+	}
+	return t.ID
+}
+func (t *GlobalSearch_Search_Nodes_IntegrationSearchResult_Integrations) GetTags() []string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_IntegrationSearchResult_Integrations{}
+	}
+	return t.Tags
+}
+
+type GlobalSearch_Search_Nodes_IntegrationSearchResult struct {
+	Integrations []*GlobalSearch_Search_Nodes_IntegrationSearchResult_Integrations "json:\"integrations,omitempty\" graphql:\"integrations\""
+}
+
+func (t *GlobalSearch_Search_Nodes_IntegrationSearchResult) GetIntegrations() []*GlobalSearch_Search_Nodes_IntegrationSearchResult_Integrations {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_IntegrationSearchResult{}
+	}
+	return t.Integrations
+}
+
+type GlobalSearch_Search_Nodes_OauthProviderSearchResult_OauthProviders struct {
+	ID   string   "json:\"id\" graphql:\"id\""
+	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *GlobalSearch_Search_Nodes_OauthProviderSearchResult_OauthProviders) GetID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_OauthProviderSearchResult_OauthProviders{}
+	}
+	return t.ID
+}
+func (t *GlobalSearch_Search_Nodes_OauthProviderSearchResult_OauthProviders) GetTags() []string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_OauthProviderSearchResult_OauthProviders{}
+	}
+	return t.Tags
+}
+
+type GlobalSearch_Search_Nodes_OauthProviderSearchResult struct {
+	OauthProviders []*GlobalSearch_Search_Nodes_OauthProviderSearchResult_OauthProviders "json:\"oauthProviders,omitempty\" graphql:\"oauthProviders\""
+}
+
+func (t *GlobalSearch_Search_Nodes_OauthProviderSearchResult) GetOauthProviders() []*GlobalSearch_Search_Nodes_OauthProviderSearchResult_OauthProviders {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_OauthProviderSearchResult{}
+	}
+	return t.OauthProviders
+}
+
+type GlobalSearch_Search_Nodes_OhAuthTooTokenSearchResult_OhAuthTooTokens struct {
+	ID   string   "json:\"id\" graphql:\"id\""
+	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *GlobalSearch_Search_Nodes_OhAuthTooTokenSearchResult_OhAuthTooTokens) GetID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_OhAuthTooTokenSearchResult_OhAuthTooTokens{}
+	}
+	return t.ID
+}
+func (t *GlobalSearch_Search_Nodes_OhAuthTooTokenSearchResult_OhAuthTooTokens) GetTags() []string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_OhAuthTooTokenSearchResult_OhAuthTooTokens{}
+	}
+	return t.Tags
+}
+
+type GlobalSearch_Search_Nodes_OhAuthTooTokenSearchResult struct {
+	OhAuthTooTokens []*GlobalSearch_Search_Nodes_OhAuthTooTokenSearchResult_OhAuthTooTokens "json:\"ohAuthTooTokens,omitempty\" graphql:\"ohAuthTooTokens\""
+}
+
+func (t *GlobalSearch_Search_Nodes_OhAuthTooTokenSearchResult) GetOhAuthTooTokens() []*GlobalSearch_Search_Nodes_OhAuthTooTokenSearchResult_OhAuthTooTokens {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_OhAuthTooTokenSearchResult{}
+	}
+	return t.OhAuthTooTokens
+}
+
 type GlobalSearch_Search_Nodes_OrganizationSearchResult_Organizations struct {
-	DisplayName string "json:\"displayName\" graphql:\"displayName\""
-	ID          string "json:\"id\" graphql:\"id\""
-	Name        string "json:\"name\" graphql:\"name\""
+	DisplayName string   "json:\"displayName\" graphql:\"displayName\""
+	ID          string   "json:\"id\" graphql:\"id\""
+	Name        string   "json:\"name\" graphql:\"name\""
+	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
 func (t *GlobalSearch_Search_Nodes_OrganizationSearchResult_Organizations) GetDisplayName() string {
@@ -22950,6 +24825,12 @@ func (t *GlobalSearch_Search_Nodes_OrganizationSearchResult_Organizations) GetNa
 	}
 	return t.Name
 }
+func (t *GlobalSearch_Search_Nodes_OrganizationSearchResult_Organizations) GetTags() []string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_OrganizationSearchResult_Organizations{}
+	}
+	return t.Tags
+}
 
 type GlobalSearch_Search_Nodes_OrganizationSearchResult struct {
 	Organizations []*GlobalSearch_Search_Nodes_OrganizationSearchResult_Organizations "json:\"organizations,omitempty\" graphql:\"organizations\""
@@ -22962,9 +24843,68 @@ func (t *GlobalSearch_Search_Nodes_OrganizationSearchResult) GetOrganizations() 
 	return t.Organizations
 }
 
+type GlobalSearch_Search_Nodes_OrganizationSettingSearchResult_OrganizationSettings struct {
+	ID   string   "json:\"id\" graphql:\"id\""
+	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *GlobalSearch_Search_Nodes_OrganizationSettingSearchResult_OrganizationSettings) GetID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_OrganizationSettingSearchResult_OrganizationSettings{}
+	}
+	return t.ID
+}
+func (t *GlobalSearch_Search_Nodes_OrganizationSettingSearchResult_OrganizationSettings) GetTags() []string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_OrganizationSettingSearchResult_OrganizationSettings{}
+	}
+	return t.Tags
+}
+
+type GlobalSearch_Search_Nodes_OrganizationSettingSearchResult struct {
+	OrganizationSettings []*GlobalSearch_Search_Nodes_OrganizationSettingSearchResult_OrganizationSettings "json:\"organizationSettings,omitempty\" graphql:\"organizationSettings\""
+}
+
+func (t *GlobalSearch_Search_Nodes_OrganizationSettingSearchResult) GetOrganizationSettings() []*GlobalSearch_Search_Nodes_OrganizationSettingSearchResult_OrganizationSettings {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_OrganizationSettingSearchResult{}
+	}
+	return t.OrganizationSettings
+}
+
+type GlobalSearch_Search_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens struct {
+	ID   string   "json:\"id\" graphql:\"id\""
+	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *GlobalSearch_Search_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens) GetID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens{}
+	}
+	return t.ID
+}
+func (t *GlobalSearch_Search_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens) GetTags() []string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens{}
+	}
+	return t.Tags
+}
+
+type GlobalSearch_Search_Nodes_PersonalAccessTokenSearchResult struct {
+	PersonalAccessTokens []*GlobalSearch_Search_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens "json:\"personalAccessTokens,omitempty\" graphql:\"personalAccessTokens\""
+}
+
+func (t *GlobalSearch_Search_Nodes_PersonalAccessTokenSearchResult) GetPersonalAccessTokens() []*GlobalSearch_Search_Nodes_PersonalAccessTokenSearchResult_PersonalAccessTokens {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_PersonalAccessTokenSearchResult{}
+	}
+	return t.PersonalAccessTokens
+}
+
 type GlobalSearch_Search_Nodes_SubscriberSearchResult_Subscribers struct {
-	Email string "json:\"email\" graphql:\"email\""
-	ID    string "json:\"id\" graphql:\"id\""
+	Email string   "json:\"email\" graphql:\"email\""
+	ID    string   "json:\"id\" graphql:\"id\""
+	Tags  []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
 func (t *GlobalSearch_Search_Nodes_SubscriberSearchResult_Subscribers) GetEmail() string {
@@ -22979,6 +24919,12 @@ func (t *GlobalSearch_Search_Nodes_SubscriberSearchResult_Subscribers) GetID() s
 	}
 	return t.ID
 }
+func (t *GlobalSearch_Search_Nodes_SubscriberSearchResult_Subscribers) GetTags() []string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_SubscriberSearchResult_Subscribers{}
+	}
+	return t.Tags
+}
 
 type GlobalSearch_Search_Nodes_SubscriberSearchResult struct {
 	Subscribers []*GlobalSearch_Search_Nodes_SubscriberSearchResult_Subscribers "json:\"subscribers,omitempty\" graphql:\"subscribers\""
@@ -22991,19 +24937,228 @@ func (t *GlobalSearch_Search_Nodes_SubscriberSearchResult) GetSubscribers() []*G
 	return t.Subscribers
 }
 
-type GlobalSearch_Search_Nodes struct {
-	ContactSearchResult      GlobalSearch_Search_Nodes_ContactSearchResult      "graphql:\"... on ContactSearchResult\""
-	EntitySearchResult       GlobalSearch_Search_Nodes_EntitySearchResult       "graphql:\"... on EntitySearchResult\""
-	GroupSearchResult        GlobalSearch_Search_Nodes_GroupSearchResult        "graphql:\"... on GroupSearchResult\""
-	OrganizationSearchResult GlobalSearch_Search_Nodes_OrganizationSearchResult "graphql:\"... on OrganizationSearchResult\""
-	SubscriberSearchResult   GlobalSearch_Search_Nodes_SubscriberSearchResult   "graphql:\"... on SubscriberSearchResult\""
+type GlobalSearch_Search_Nodes_TFASettingSearchResult_TFASettings struct {
+	ID   string   "json:\"id\" graphql:\"id\""
+	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
 }
 
+func (t *GlobalSearch_Search_Nodes_TFASettingSearchResult_TFASettings) GetID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_TFASettingSearchResult_TFASettings{}
+	}
+	return t.ID
+}
+func (t *GlobalSearch_Search_Nodes_TFASettingSearchResult_TFASettings) GetTags() []string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_TFASettingSearchResult_TFASettings{}
+	}
+	return t.Tags
+}
+
+type GlobalSearch_Search_Nodes_TFASettingSearchResult struct {
+	TFASettings []*GlobalSearch_Search_Nodes_TFASettingSearchResult_TFASettings "json:\"tFASettings,omitempty\" graphql:\"tFASettings\""
+}
+
+func (t *GlobalSearch_Search_Nodes_TFASettingSearchResult) GetTFASettings() []*GlobalSearch_Search_Nodes_TFASettingSearchResult_TFASettings {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_TFASettingSearchResult{}
+	}
+	return t.TFASettings
+}
+
+type GlobalSearch_Search_Nodes_TemplateSearchResult_Templates struct {
+	ID         string          "json:\"id\" graphql:\"id\""
+	Jsonconfig json.RawMessage "json:\"jsonconfig\" graphql:\"jsonconfig\""
+	Name       string          "json:\"name\" graphql:\"name\""
+	Tags       []string        "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *GlobalSearch_Search_Nodes_TemplateSearchResult_Templates) GetID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_TemplateSearchResult_Templates{}
+	}
+	return t.ID
+}
+func (t *GlobalSearch_Search_Nodes_TemplateSearchResult_Templates) GetJsonconfig() *json.RawMessage {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_TemplateSearchResult_Templates{}
+	}
+	return &t.Jsonconfig
+}
+func (t *GlobalSearch_Search_Nodes_TemplateSearchResult_Templates) GetName() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_TemplateSearchResult_Templates{}
+	}
+	return t.Name
+}
+func (t *GlobalSearch_Search_Nodes_TemplateSearchResult_Templates) GetTags() []string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_TemplateSearchResult_Templates{}
+	}
+	return t.Tags
+}
+
+type GlobalSearch_Search_Nodes_TemplateSearchResult struct {
+	Templates []*GlobalSearch_Search_Nodes_TemplateSearchResult_Templates "json:\"templates,omitempty\" graphql:\"templates\""
+}
+
+func (t *GlobalSearch_Search_Nodes_TemplateSearchResult) GetTemplates() []*GlobalSearch_Search_Nodes_TemplateSearchResult_Templates {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_TemplateSearchResult{}
+	}
+	return t.Templates
+}
+
+type GlobalSearch_Search_Nodes_UserSearchResult_Users struct {
+	ID   string   "json:\"id\" graphql:\"id\""
+	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *GlobalSearch_Search_Nodes_UserSearchResult_Users) GetID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_UserSearchResult_Users{}
+	}
+	return t.ID
+}
+func (t *GlobalSearch_Search_Nodes_UserSearchResult_Users) GetTags() []string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_UserSearchResult_Users{}
+	}
+	return t.Tags
+}
+
+type GlobalSearch_Search_Nodes_UserSearchResult struct {
+	Users []*GlobalSearch_Search_Nodes_UserSearchResult_Users "json:\"users,omitempty\" graphql:\"users\""
+}
+
+func (t *GlobalSearch_Search_Nodes_UserSearchResult) GetUsers() []*GlobalSearch_Search_Nodes_UserSearchResult_Users {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_UserSearchResult{}
+	}
+	return t.Users
+}
+
+type GlobalSearch_Search_Nodes_UserSettingSearchResult_UserSettings struct {
+	ID   string   "json:\"id\" graphql:\"id\""
+	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *GlobalSearch_Search_Nodes_UserSettingSearchResult_UserSettings) GetID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_UserSettingSearchResult_UserSettings{}
+	}
+	return t.ID
+}
+func (t *GlobalSearch_Search_Nodes_UserSettingSearchResult_UserSettings) GetTags() []string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_UserSettingSearchResult_UserSettings{}
+	}
+	return t.Tags
+}
+
+type GlobalSearch_Search_Nodes_UserSettingSearchResult struct {
+	UserSettings []*GlobalSearch_Search_Nodes_UserSettingSearchResult_UserSettings "json:\"userSettings,omitempty\" graphql:\"userSettings\""
+}
+
+func (t *GlobalSearch_Search_Nodes_UserSettingSearchResult) GetUserSettings() []*GlobalSearch_Search_Nodes_UserSettingSearchResult_UserSettings {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_UserSettingSearchResult{}
+	}
+	return t.UserSettings
+}
+
+type GlobalSearch_Search_Nodes_WebhookSearchResult_Webhooks struct {
+	ID   string   "json:\"id\" graphql:\"id\""
+	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *GlobalSearch_Search_Nodes_WebhookSearchResult_Webhooks) GetID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_WebhookSearchResult_Webhooks{}
+	}
+	return t.ID
+}
+func (t *GlobalSearch_Search_Nodes_WebhookSearchResult_Webhooks) GetTags() []string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_WebhookSearchResult_Webhooks{}
+	}
+	return t.Tags
+}
+
+type GlobalSearch_Search_Nodes_WebhookSearchResult struct {
+	Webhooks []*GlobalSearch_Search_Nodes_WebhookSearchResult_Webhooks "json:\"webhooks,omitempty\" graphql:\"webhooks\""
+}
+
+func (t *GlobalSearch_Search_Nodes_WebhookSearchResult) GetWebhooks() []*GlobalSearch_Search_Nodes_WebhookSearchResult_Webhooks {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_WebhookSearchResult{}
+	}
+	return t.Webhooks
+}
+
+type GlobalSearch_Search_Nodes struct {
+	APITokenSearchResult               GlobalSearch_Search_Nodes_APITokenSearchResult               "graphql:\"... on APITokenSearchResult\""
+	ContactSearchResult                GlobalSearch_Search_Nodes_ContactSearchResult                "graphql:\"... on ContactSearchResult\""
+	DocumentDataSearchResult           GlobalSearch_Search_Nodes_DocumentDataSearchResult           "graphql:\"... on DocumentDataSearchResult\""
+	EntitlementSearchResult            GlobalSearch_Search_Nodes_EntitlementSearchResult            "graphql:\"... on EntitlementSearchResult\""
+	EntitlementPlanSearchResult        GlobalSearch_Search_Nodes_EntitlementPlanSearchResult        "graphql:\"... on EntitlementPlanSearchResult\""
+	EntitlementPlanFeatureSearchResult GlobalSearch_Search_Nodes_EntitlementPlanFeatureSearchResult "graphql:\"... on EntitlementPlanFeatureSearchResult\""
+	EntitySearchResult                 GlobalSearch_Search_Nodes_EntitySearchResult                 "graphql:\"... on EntitySearchResult\""
+	EntityTypeSearchResult             GlobalSearch_Search_Nodes_EntityTypeSearchResult             "graphql:\"... on EntityTypeSearchResult\""
+	EventSearchResult                  GlobalSearch_Search_Nodes_EventSearchResult                  "graphql:\"... on EventSearchResult\""
+	FeatureSearchResult                GlobalSearch_Search_Nodes_FeatureSearchResult                "graphql:\"... on FeatureSearchResult\""
+	FileSearchResult                   GlobalSearch_Search_Nodes_FileSearchResult                   "graphql:\"... on FileSearchResult\""
+	GroupSearchResult                  GlobalSearch_Search_Nodes_GroupSearchResult                  "graphql:\"... on GroupSearchResult\""
+	GroupSettingSearchResult           GlobalSearch_Search_Nodes_GroupSettingSearchResult           "graphql:\"... on GroupSettingSearchResult\""
+	IntegrationSearchResult            GlobalSearch_Search_Nodes_IntegrationSearchResult            "graphql:\"... on IntegrationSearchResult\""
+	OauthProviderSearchResult          GlobalSearch_Search_Nodes_OauthProviderSearchResult          "graphql:\"... on OauthProviderSearchResult\""
+	OhAuthTooTokenSearchResult         GlobalSearch_Search_Nodes_OhAuthTooTokenSearchResult         "graphql:\"... on OhAuthTooTokenSearchResult\""
+	OrganizationSearchResult           GlobalSearch_Search_Nodes_OrganizationSearchResult           "graphql:\"... on OrganizationSearchResult\""
+	OrganizationSettingSearchResult    GlobalSearch_Search_Nodes_OrganizationSettingSearchResult    "graphql:\"... on OrganizationSettingSearchResult\""
+	PersonalAccessTokenSearchResult    GlobalSearch_Search_Nodes_PersonalAccessTokenSearchResult    "graphql:\"... on PersonalAccessTokenSearchResult\""
+	SubscriberSearchResult             GlobalSearch_Search_Nodes_SubscriberSearchResult             "graphql:\"... on SubscriberSearchResult\""
+	TFASettingSearchResult             GlobalSearch_Search_Nodes_TFASettingSearchResult             "graphql:\"... on TFASettingSearchResult\""
+	TemplateSearchResult               GlobalSearch_Search_Nodes_TemplateSearchResult               "graphql:\"... on TemplateSearchResult\""
+	UserSearchResult                   GlobalSearch_Search_Nodes_UserSearchResult                   "graphql:\"... on UserSearchResult\""
+	UserSettingSearchResult            GlobalSearch_Search_Nodes_UserSettingSearchResult            "graphql:\"... on UserSettingSearchResult\""
+	WebhookSearchResult                GlobalSearch_Search_Nodes_WebhookSearchResult                "graphql:\"... on WebhookSearchResult\""
+}
+
+func (t *GlobalSearch_Search_Nodes) GetAPITokenSearchResult() *GlobalSearch_Search_Nodes_APITokenSearchResult {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes{}
+	}
+	return &t.APITokenSearchResult
+}
 func (t *GlobalSearch_Search_Nodes) GetContactSearchResult() *GlobalSearch_Search_Nodes_ContactSearchResult {
 	if t == nil {
 		t = &GlobalSearch_Search_Nodes{}
 	}
 	return &t.ContactSearchResult
+}
+func (t *GlobalSearch_Search_Nodes) GetDocumentDataSearchResult() *GlobalSearch_Search_Nodes_DocumentDataSearchResult {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes{}
+	}
+	return &t.DocumentDataSearchResult
+}
+func (t *GlobalSearch_Search_Nodes) GetEntitlementSearchResult() *GlobalSearch_Search_Nodes_EntitlementSearchResult {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes{}
+	}
+	return &t.EntitlementSearchResult
+}
+func (t *GlobalSearch_Search_Nodes) GetEntitlementPlanSearchResult() *GlobalSearch_Search_Nodes_EntitlementPlanSearchResult {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes{}
+	}
+	return &t.EntitlementPlanSearchResult
+}
+func (t *GlobalSearch_Search_Nodes) GetEntitlementPlanFeatureSearchResult() *GlobalSearch_Search_Nodes_EntitlementPlanFeatureSearchResult {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes{}
+	}
+	return &t.EntitlementPlanFeatureSearchResult
 }
 func (t *GlobalSearch_Search_Nodes) GetEntitySearchResult() *GlobalSearch_Search_Nodes_EntitySearchResult {
 	if t == nil {
@@ -23011,11 +25166,59 @@ func (t *GlobalSearch_Search_Nodes) GetEntitySearchResult() *GlobalSearch_Search
 	}
 	return &t.EntitySearchResult
 }
+func (t *GlobalSearch_Search_Nodes) GetEntityTypeSearchResult() *GlobalSearch_Search_Nodes_EntityTypeSearchResult {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes{}
+	}
+	return &t.EntityTypeSearchResult
+}
+func (t *GlobalSearch_Search_Nodes) GetEventSearchResult() *GlobalSearch_Search_Nodes_EventSearchResult {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes{}
+	}
+	return &t.EventSearchResult
+}
+func (t *GlobalSearch_Search_Nodes) GetFeatureSearchResult() *GlobalSearch_Search_Nodes_FeatureSearchResult {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes{}
+	}
+	return &t.FeatureSearchResult
+}
+func (t *GlobalSearch_Search_Nodes) GetFileSearchResult() *GlobalSearch_Search_Nodes_FileSearchResult {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes{}
+	}
+	return &t.FileSearchResult
+}
 func (t *GlobalSearch_Search_Nodes) GetGroupSearchResult() *GlobalSearch_Search_Nodes_GroupSearchResult {
 	if t == nil {
 		t = &GlobalSearch_Search_Nodes{}
 	}
 	return &t.GroupSearchResult
+}
+func (t *GlobalSearch_Search_Nodes) GetGroupSettingSearchResult() *GlobalSearch_Search_Nodes_GroupSettingSearchResult {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes{}
+	}
+	return &t.GroupSettingSearchResult
+}
+func (t *GlobalSearch_Search_Nodes) GetIntegrationSearchResult() *GlobalSearch_Search_Nodes_IntegrationSearchResult {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes{}
+	}
+	return &t.IntegrationSearchResult
+}
+func (t *GlobalSearch_Search_Nodes) GetOauthProviderSearchResult() *GlobalSearch_Search_Nodes_OauthProviderSearchResult {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes{}
+	}
+	return &t.OauthProviderSearchResult
+}
+func (t *GlobalSearch_Search_Nodes) GetOhAuthTooTokenSearchResult() *GlobalSearch_Search_Nodes_OhAuthTooTokenSearchResult {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes{}
+	}
+	return &t.OhAuthTooTokenSearchResult
 }
 func (t *GlobalSearch_Search_Nodes) GetOrganizationSearchResult() *GlobalSearch_Search_Nodes_OrganizationSearchResult {
 	if t == nil {
@@ -23023,11 +25226,53 @@ func (t *GlobalSearch_Search_Nodes) GetOrganizationSearchResult() *GlobalSearch_
 	}
 	return &t.OrganizationSearchResult
 }
+func (t *GlobalSearch_Search_Nodes) GetOrganizationSettingSearchResult() *GlobalSearch_Search_Nodes_OrganizationSettingSearchResult {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes{}
+	}
+	return &t.OrganizationSettingSearchResult
+}
+func (t *GlobalSearch_Search_Nodes) GetPersonalAccessTokenSearchResult() *GlobalSearch_Search_Nodes_PersonalAccessTokenSearchResult {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes{}
+	}
+	return &t.PersonalAccessTokenSearchResult
+}
 func (t *GlobalSearch_Search_Nodes) GetSubscriberSearchResult() *GlobalSearch_Search_Nodes_SubscriberSearchResult {
 	if t == nil {
 		t = &GlobalSearch_Search_Nodes{}
 	}
 	return &t.SubscriberSearchResult
+}
+func (t *GlobalSearch_Search_Nodes) GetTFASettingSearchResult() *GlobalSearch_Search_Nodes_TFASettingSearchResult {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes{}
+	}
+	return &t.TFASettingSearchResult
+}
+func (t *GlobalSearch_Search_Nodes) GetTemplateSearchResult() *GlobalSearch_Search_Nodes_TemplateSearchResult {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes{}
+	}
+	return &t.TemplateSearchResult
+}
+func (t *GlobalSearch_Search_Nodes) GetUserSearchResult() *GlobalSearch_Search_Nodes_UserSearchResult {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes{}
+	}
+	return &t.UserSearchResult
+}
+func (t *GlobalSearch_Search_Nodes) GetUserSettingSearchResult() *GlobalSearch_Search_Nodes_UserSettingSearchResult {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes{}
+	}
+	return &t.UserSettingSearchResult
+}
+func (t *GlobalSearch_Search_Nodes) GetWebhookSearchResult() *GlobalSearch_Search_Nodes_WebhookSearchResult {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes{}
+	}
+	return &t.WebhookSearchResult
 }
 
 type GlobalSearch_Search struct {
@@ -30404,6 +32649,16 @@ func (t *GetWebhookHistories) GetWebhookHistories() *GetWebhookHistories_Webhook
 const AdminSearchDocument = `query AdminSearch ($query: String!) {
 	adminSearch(query: $query) {
 		nodes {
+			... on APITokenSearchResult {
+				apiTokens {
+					deletedBy
+					id
+					tags
+					ownerID
+					name
+					scopes
+				}
+			}
 			... on ContactSearchResult {
 				contacts {
 					id
@@ -30416,6 +32671,52 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					email
 					phoneNumber
 					address
+				}
+			}
+			... on DocumentDataSearchResult {
+				documentData {
+					id
+					tags
+					deletedBy
+					ownerID
+					templateID
+					data
+				}
+			}
+			... on EntitlementSearchResult {
+				entitlements {
+					id
+					tags
+					deletedBy
+					ownerID
+					planID
+					organizationID
+					externalCustomerID
+					externalSubscriptionID
+				}
+			}
+			... on EntitlementPlanSearchResult {
+				entitlementPlans {
+					id
+					deletedBy
+					tags
+					ownerID
+					displayName
+					name
+					description
+					version
+					metadata
+				}
+			}
+			... on EntitlementPlanFeatureSearchResult {
+				entitlementPlanFeatures {
+					id
+					deletedBy
+					tags
+					ownerID
+					metadata
+					planID
+					featureID
 				}
 			}
 			... on EntitySearchResult {
@@ -30432,6 +32733,50 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					status
 				}
 			}
+			... on EntityTypeSearchResult {
+				entityTypes {
+					id
+					deletedBy
+					tags
+					ownerID
+					name
+				}
+			}
+			... on EventSearchResult {
+				events {
+					id
+					tags
+					eventID
+					correlationID
+					eventType
+					metadata
+				}
+			}
+			... on FeatureSearchResult {
+				features {
+					deletedBy
+					id
+					tags
+					ownerID
+					name
+					displayName
+					description
+					metadata
+				}
+			}
+			... on FileSearchResult {
+				files {
+					deletedBy
+					id
+					tags
+					fileName
+					fileExtension
+					contentType
+					storeKey
+					category
+					annotation
+				}
+			}
 			... on GroupSearchResult {
 				groups {
 					deletedBy
@@ -30440,6 +32785,56 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					ownerID
 					name
 					displayName
+				}
+			}
+			... on GroupSettingSearchResult {
+				groupSettings {
+					id
+					tags
+					deletedBy
+					groupID
+				}
+			}
+			... on IntegrationSearchResult {
+				integrations {
+					id
+					tags
+					deletedBy
+					ownerID
+					name
+					kind
+				}
+			}
+			... on OauthProviderSearchResult {
+				oauthProviders {
+					id
+					tags
+					deletedBy
+					ownerID
+					name
+					clientID
+					clientSecret
+					redirectURL
+					scopes
+					authURL
+					tokenURL
+					infoURL
+				}
+			}
+			... on OhAuthTooTokenSearchResult {
+				ohAuthTooTokens {
+					id
+					tags
+					clientID
+					scopes
+					nonce
+					claimsUserID
+					claimsUsername
+					claimsEmail
+					claimsGroups
+					claimsPreferredUsername
+					connectorID
+					connectorData
 				}
 			}
 			... on OrganizationSearchResult {
@@ -30452,6 +32847,29 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					avatarRemoteURL
 				}
 			}
+			... on OrganizationSettingSearchResult {
+				organizationSettings {
+					id
+					tags
+					deletedBy
+					domains
+					billingContact
+					billingEmail
+					billingPhone
+					billingAddress
+					taxIdentifier
+					organizationID
+				}
+			}
+			... on PersonalAccessTokenSearchResult {
+				personalAccessTokens {
+					deletedBy
+					id
+					tags
+					name
+					scopes
+				}
+			}
 			... on SubscriberSearchResult {
 				subscribers {
 					id
@@ -30460,6 +32878,61 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					ownerID
 					email
 					phoneNumber
+				}
+			}
+			... on TFASettingSearchResult {
+				tFASettings {
+					id
+					deletedBy
+					tags
+					tfaSecret
+					recoveryCodes
+				}
+			}
+			... on TemplateSearchResult {
+				templates {
+					deletedBy
+					id
+					tags
+					ownerID
+					name
+					description
+					jsonconfig
+					uischema
+				}
+			}
+			... on UserSearchResult {
+				users {
+					deletedBy
+					id
+					tags
+					email
+					firstName
+					lastName
+					displayName
+					avatarRemoteURL
+					avatarLocalFile
+					sub
+				}
+			}
+			... on UserSettingSearchResult {
+				userSettings {
+					id
+					tags
+					deletedBy
+					userID
+				}
+			}
+			... on WebhookSearchResult {
+				webhooks {
+					id
+					tags
+					deletedBy
+					ownerID
+					name
+					destinationURL
+					lastError
+					lastResponse
 				}
 			}
 		}
@@ -38113,10 +40586,41 @@ func (c *Client) UpdatePersonalAccessToken(ctx context.Context, updatePersonalAc
 const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 	search(query: $query) {
 		nodes {
+			... on APITokenSearchResult {
+				apiTokens {
+					id
+					tags
+				}
+			}
 			... on ContactSearchResult {
 				contacts {
 					fullName
 					id
+					tags
+				}
+			}
+			... on DocumentDataSearchResult {
+				documentData {
+					id
+					tags
+				}
+			}
+			... on EntitlementSearchResult {
+				entitlements {
+					id
+					tags
+				}
+			}
+			... on EntitlementPlanSearchResult {
+				entitlementPlans {
+					id
+					tags
+				}
+			}
+			... on EntitlementPlanFeatureSearchResult {
+				entitlementPlanFeatures {
+					id
+					tags
 				}
 			}
 			... on EntitySearchResult {
@@ -38125,6 +40629,31 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 					displayName
 					id
 					name
+					tags
+				}
+			}
+			... on EntityTypeSearchResult {
+				entityTypes {
+					id
+					tags
+				}
+			}
+			... on EventSearchResult {
+				events {
+					id
+					tags
+				}
+			}
+			... on FeatureSearchResult {
+				features {
+					id
+					tags
+				}
+			}
+			... on FileSearchResult {
+				files {
+					id
+					tags
 				}
 			}
 			... on GroupSearchResult {
@@ -38132,6 +40661,31 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 					displayName
 					id
 					name
+					tags
+				}
+			}
+			... on GroupSettingSearchResult {
+				groupSettings {
+					id
+					tags
+				}
+			}
+			... on IntegrationSearchResult {
+				integrations {
+					id
+					tags
+				}
+			}
+			... on OauthProviderSearchResult {
+				oauthProviders {
+					id
+					tags
+				}
+			}
+			... on OhAuthTooTokenSearchResult {
+				ohAuthTooTokens {
+					id
+					tags
 				}
 			}
 			... on OrganizationSearchResult {
@@ -38139,12 +40693,58 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 					displayName
 					id
 					name
+					tags
+				}
+			}
+			... on OrganizationSettingSearchResult {
+				organizationSettings {
+					id
+					tags
+				}
+			}
+			... on PersonalAccessTokenSearchResult {
+				personalAccessTokens {
+					id
+					tags
 				}
 			}
 			... on SubscriberSearchResult {
 				subscribers {
 					email
 					id
+					tags
+				}
+			}
+			... on TFASettingSearchResult {
+				tFASettings {
+					id
+					tags
+				}
+			}
+			... on TemplateSearchResult {
+				templates {
+					id
+					jsonconfig
+					name
+					tags
+				}
+			}
+			... on UserSearchResult {
+				users {
+					id
+					tags
+				}
+			}
+			... on UserSettingSearchResult {
+				userSettings {
+					id
+					tags
+				}
+			}
+			... on WebhookSearchResult {
+				webhooks {
+					id
+					tags
 				}
 			}
 		}

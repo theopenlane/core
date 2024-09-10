@@ -79,6 +79,12 @@ type APITokenEdge struct {
 	Cursor string `json:"cursor"`
 }
 
+type APITokenSearchResult struct {
+	APITokens []*APIToken `json:"apiTokens,omitempty"`
+}
+
+func (APITokenSearchResult) IsSearchResult() {}
+
 // Return response for updateAPIToken mutation
 type APITokenUpdatePayload struct {
 	// Updated apiToken
@@ -1716,6 +1722,12 @@ type DocumentDataHistoryWhereInput struct {
 	TemplateIDContainsFold *string  `json:"templateIDContainsFold,omitempty"`
 }
 
+type DocumentDataSearchResult struct {
+	DocumentData []*DocumentData `json:"documentData,omitempty"`
+}
+
+func (DocumentDataSearchResult) IsSearchResult() {}
+
 // Return response for updateDocumentData mutation
 type DocumentDataUpdatePayload struct {
 	// Updated documentData
@@ -2547,6 +2559,12 @@ type EntitlementPlanFeatureHistoryWhereInput struct {
 	FeatureIDContainsFold *string  `json:"featureIDContainsFold,omitempty"`
 }
 
+type EntitlementPlanFeatureSearchResult struct {
+	EntitlementPlanFeatures []*EntitlementPlanFeature `json:"entitlementPlanFeatures,omitempty"`
+}
+
+func (EntitlementPlanFeatureSearchResult) IsSearchResult() {}
+
 // Return response for updateEntitlementPlanFeature mutation
 type EntitlementPlanFeatureUpdatePayload struct {
 	// Updated entitlementPlanFeature
@@ -2906,6 +2924,12 @@ type EntitlementPlanHistoryWhereInput struct {
 	VersionContainsFold *string  `json:"versionContainsFold,omitempty"`
 }
 
+type EntitlementPlanSearchResult struct {
+	EntitlementPlans []*EntitlementPlan `json:"entitlementPlans,omitempty"`
+}
+
+func (EntitlementPlanSearchResult) IsSearchResult() {}
+
 // Return response for updateEntitlementPlan mutation
 type EntitlementPlanUpdatePayload struct {
 	// Updated entitlementPlan
@@ -3102,6 +3126,12 @@ type EntitlementPlanWhereInput struct {
 	HasFeatures     *bool                               `json:"hasFeatures,omitempty"`
 	HasFeaturesWith []*EntitlementPlanFeatureWhereInput `json:"hasFeaturesWith,omitempty"`
 }
+
+type EntitlementSearchResult struct {
+	Entitlements []*Entitlement `json:"entitlements,omitempty"`
+}
+
+func (EntitlementSearchResult) IsSearchResult() {}
 
 // Return response for updateEntitlement mutation
 type EntitlementUpdatePayload struct {
@@ -3936,6 +3966,12 @@ type EntityTypeOrder struct {
 	Field EntityTypeOrderField `json:"field"`
 }
 
+type EntityTypeSearchResult struct {
+	EntityTypes []*EntityType `json:"entityTypes,omitempty"`
+}
+
+func (EntityTypeSearchResult) IsSearchResult() {}
+
 // Return response for updateEntityType mutation
 type EntityTypeUpdatePayload struct {
 	// Updated entityType
@@ -4536,6 +4572,12 @@ type EventHistoryWhereInput struct {
 	EventTypeContainsFold *string  `json:"eventTypeContainsFold,omitempty"`
 }
 
+type EventSearchResult struct {
+	Events []*Event `json:"events,omitempty"`
+}
+
+func (EventSearchResult) IsSearchResult() {}
+
 // Return response for updateEvent mutation
 type EventUpdatePayload struct {
 	// Updated event
@@ -5016,6 +5058,12 @@ type FeatureHistoryWhereInput struct {
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
 }
+
+type FeatureSearchResult struct {
+	Features []*Feature `json:"features,omitempty"`
+}
+
+func (FeatureSearchResult) IsSearchResult() {}
 
 // Return response for updateFeature mutation
 type FeatureUpdatePayload struct {
@@ -5531,6 +5579,12 @@ type FileHistoryWhereInput struct {
 	AnnotationEqualFold    *string  `json:"annotationEqualFold,omitempty"`
 	AnnotationContainsFold *string  `json:"annotationContainsFold,omitempty"`
 }
+
+type FileSearchResult struct {
+	Files []*File `json:"files,omitempty"`
+}
+
+func (FileSearchResult) IsSearchResult() {}
 
 // Return response for updateFile mutation
 type FileUpdatePayload struct {
@@ -6699,6 +6753,12 @@ type GroupSettingHistoryWhereInput struct {
 	GroupIDContainsFold *string  `json:"groupIDContainsFold,omitempty"`
 }
 
+type GroupSettingSearchResult struct {
+	GroupSettings []*GroupSetting `json:"groupSettings,omitempty"`
+}
+
+func (GroupSettingSearchResult) IsSearchResult() {}
+
 // Return response for updateGroupSetting mutation
 type GroupSettingUpdatePayload struct {
 	// Updated groupSetting
@@ -7766,6 +7826,12 @@ type IntegrationOrder struct {
 	// The field by which to order Integrations.
 	Field IntegrationOrderField `json:"field"`
 }
+
+type IntegrationSearchResult struct {
+	Integrations []*Integration `json:"integrations,omitempty"`
+}
+
+func (IntegrationSearchResult) IsSearchResult() {}
 
 // Return response for updateIntegration mutation
 type IntegrationUpdatePayload struct {
@@ -8954,6 +9020,12 @@ type OauthProviderHistoryWhereInput struct {
 	InfoURLContainsFold *string  `json:"infoURLContainsFold,omitempty"`
 }
 
+type OauthProviderSearchResult struct {
+	OauthProviders []*OauthProvider `json:"oauthProviders,omitempty"`
+}
+
+func (OauthProviderSearchResult) IsSearchResult() {}
+
 // Return response for updateOauthProvider mutation
 type OauthProviderUpdatePayload struct {
 	// Updated oauthProvider
@@ -9257,6 +9329,12 @@ type OhAuthTooTokenEdge struct {
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
 }
+
+type OhAuthTooTokenSearchResult struct {
+	OhAuthTooTokens []*OhAuthTooToken `json:"ohAuthTooTokens,omitempty"`
+}
+
+func (OhAuthTooTokenSearchResult) IsSearchResult() {}
 
 // Return response for updateOhAuthTooToken mutation
 type OhAuthTooTokenUpdatePayload struct {
@@ -10455,6 +10533,12 @@ type OrganizationSettingHistoryWhereInput struct {
 	OrganizationIDContainsFold *string  `json:"organizationIDContainsFold,omitempty"`
 }
 
+type OrganizationSettingSearchResult struct {
+	OrganizationSettings []*OrganizationSetting `json:"organizationSettings,omitempty"`
+}
+
+func (OrganizationSettingSearchResult) IsSearchResult() {}
+
 // Return response for updateOrganizationSetting mutation
 type OrganizationSettingUpdatePayload struct {
 	// Updated organizationSetting
@@ -10981,6 +11065,12 @@ type PersonalAccessTokenEdge struct {
 	Cursor string `json:"cursor"`
 }
 
+type PersonalAccessTokenSearchResult struct {
+	PersonalAccessTokens []*PersonalAccessToken `json:"personalAccessTokens,omitempty"`
+}
+
+func (PersonalAccessTokenSearchResult) IsSearchResult() {}
+
 // Return response for updatePersonalAccessToken mutation
 type PersonalAccessTokenUpdatePayload struct {
 	// Updated personalAccessToken
@@ -11424,6 +11514,12 @@ type TFASettingEdge struct {
 	Cursor string `json:"cursor"`
 }
 
+type TFASettingSearchResult struct {
+	TFASettings []*TFASetting `json:"tFASettings,omitempty"`
+}
+
+func (TFASettingSearchResult) IsSearchResult() {}
+
 // Return response for updateTFASetting mutation
 type TFASettingUpdatePayload struct {
 	// Updated tfaSetting
@@ -11864,6 +11960,12 @@ type TemplateOrder struct {
 	// The field by which to order Templates.
 	Field TemplateOrderField `json:"field"`
 }
+
+type TemplateSearchResult struct {
+	Templates []*Template `json:"templates,omitempty"`
+}
+
+func (TemplateSearchResult) IsSearchResult() {}
 
 // Return response for updateTemplate mutation
 type TemplateUpdatePayload struct {
@@ -13327,6 +13429,12 @@ type UserOrder struct {
 	Field UserOrderField `json:"field"`
 }
 
+type UserSearchResult struct {
+	Users []*User `json:"users,omitempty"`
+}
+
+func (UserSearchResult) IsSearchResult() {}
+
 type UserSetting struct {
 	ID        string     `json:"id"`
 	CreatedAt *time.Time `json:"createdAt,omitempty"`
@@ -13627,6 +13735,12 @@ type UserSettingHistoryWhereInput struct {
 	IsTfaEnabledIsNil  *bool `json:"isTfaEnabledIsNil,omitempty"`
 	IsTfaEnabledNotNil *bool `json:"isTfaEnabledNotNil,omitempty"`
 }
+
+type UserSettingSearchResult struct {
+	UserSettings []*UserSetting `json:"userSettings,omitempty"`
+}
+
+func (UserSettingSearchResult) IsSearchResult() {}
 
 // Return response for updateUserSetting mutation
 type UserSettingUpdatePayload struct {
@@ -14429,6 +14543,12 @@ type WebhookOrder struct {
 	// The field by which to order Webhooks.
 	Field WebhookOrderField `json:"field"`
 }
+
+type WebhookSearchResult struct {
+	Webhooks []*Webhook `json:"webhooks,omitempty"`
+}
+
+func (WebhookSearchResult) IsSearchResult() {}
 
 // Return response for updateWebhook mutation
 type WebhookUpdatePayload struct {

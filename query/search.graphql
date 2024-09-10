@@ -1,10 +1,41 @@
 query GlobalSearch($query: String!) {
   search(query: $query) {
     nodes {
+      ... on APITokenSearchResult {
+        apiTokens {
+          id
+          tags
+        }
+      }
       ... on ContactSearchResult {
         contacts {
           fullName
           id
+          tags
+        }
+      }
+      ... on DocumentDataSearchResult {
+        documentData {
+          id
+          tags
+        }
+      }
+      ... on EntitlementSearchResult {
+        entitlements {
+          id
+          tags
+        }
+      }
+      ... on EntitlementPlanSearchResult {
+        entitlementPlans {
+          id
+          tags
+        }
+      }
+      ... on EntitlementPlanFeatureSearchResult {
+        entitlementPlanFeatures {
+          id
+          tags
         }
       }
       ... on EntitySearchResult {
@@ -13,6 +44,31 @@ query GlobalSearch($query: String!) {
           displayName
           id
           name
+          tags
+        }
+      }
+      ... on EntityTypeSearchResult {
+        entityTypes {
+          id
+          tags
+        }
+      }
+      ... on EventSearchResult {
+        events {
+          id
+          tags
+        }
+      }
+      ... on FeatureSearchResult {
+        features {
+          id
+          tags
+        }
+      }
+      ... on FileSearchResult {
+        files {
+          id
+          tags
         }
       }
       ... on GroupSearchResult {
@@ -20,6 +76,31 @@ query GlobalSearch($query: String!) {
           displayName
           id
           name
+          tags
+        }
+      }
+      ... on GroupSettingSearchResult {
+        groupSettings {
+          id
+          tags
+        }
+      }
+      ... on IntegrationSearchResult {
+        integrations {
+          id
+          tags
+        }
+      }
+      ... on OauthProviderSearchResult {
+        oauthProviders {
+          id
+          tags
+        }
+      }
+      ... on OhAuthTooTokenSearchResult {
+        ohAuthTooTokens {
+          id
+          tags
         }
       }
       ... on OrganizationSearchResult {
@@ -27,12 +108,58 @@ query GlobalSearch($query: String!) {
           displayName
           id
           name
+          tags
+        }
+      }
+      ... on OrganizationSettingSearchResult {
+        organizationSettings {
+          id
+          tags
+        }
+      }
+      ... on PersonalAccessTokenSearchResult {
+        personalAccessTokens {
+          id
+          tags
         }
       }
       ... on SubscriberSearchResult {
         subscribers {
           email
           id
+          tags
+        }
+      }
+      ... on TFASettingSearchResult {
+        tFASettings {
+          id
+          tags
+        }
+      }
+      ... on TemplateSearchResult {
+        templates {
+          id
+          jsonconfig
+          name
+          tags
+        }
+      }
+      ... on UserSearchResult {
+        users {
+          id
+          tags
+        }
+      }
+      ... on UserSettingSearchResult {
+        userSettings {
+          id
+          tags
+        }
+      }
+      ... on WebhookSearchResult {
+        webhooks {
+          id
+          tags
         }
       }
     }

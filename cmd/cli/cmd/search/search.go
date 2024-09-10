@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"reflect"
 	"strings"
 
 	"github.com/go-viper/mapstructure/v2"
@@ -169,7 +170,23 @@ func parseRows(writer tables.TableOutputWriter, row []map[string]interface{}, he
 		var values []interface{}
 
 		for _, h := range headers {
-			values = append(values, fmt.Sprintf("%v", v[h]))
+			switch t := reflect.TypeOf(v[h]); t.Kind() {
+			case reflect.String:
+				values = append(values, fmt.Sprintf("%v", v[h]))
+			case reflect.Slice:
+				s, _ := v[h].([]interface{})
+
+				var stringVals []string
+
+				for _, val := range s {
+					stringVals = append(stringVals, fmt.Sprintf("%v", val))
+				}
+
+				values = append(values, strings.Join(stringVals, ", "))
+			default:
+				out, _ := json.MarshalIndent(v[h], "", " ")
+				values = append(values, string(out))
+			}
 		}
 
 		writer.AddRow(values...)

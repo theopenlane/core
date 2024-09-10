@@ -47,6 +47,7 @@ func (Template) Fields() []ent.Field {
 			NotEmpty().
 			Annotations(
 				entgql.OrderField("name"),
+				entx.FieldSearchable(),
 			),
 		field.Enum("template_type").
 			Comment("the type of the template, either a provided template or an implementation (document)").
@@ -59,6 +60,7 @@ func (Template) Fields() []ent.Field {
 			Comment("the jsonschema object of the template").
 			Annotations(
 				entgql.Type("JSON"),
+				entx.FieldJSONPathSearchable("$id"),
 			),
 		field.JSON("uischema", customtypes.JSONObject{}).
 			Comment("the uischema for the template to render in the UI").
