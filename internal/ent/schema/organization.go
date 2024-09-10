@@ -42,6 +42,7 @@ func (Organization) Fields() []ent.Field {
 			MaxLen(orgNameMaxLen).
 			NotEmpty().
 			Annotations(
+				entx.FieldSearchable(),
 				entgql.OrderField("name"),
 				entgql.Skip(entgql.SkipWhereInput),
 			),
@@ -50,6 +51,7 @@ func (Organization) Fields() []ent.Field {
 			MaxLen(nameMaxLen).
 			Default("").
 			Annotations(
+				entx.FieldSearchable(),
 				entgql.OrderField("display_name"),
 			),
 		field.String("description").

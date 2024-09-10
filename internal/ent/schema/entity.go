@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
+	"github.com/theopenlane/entx"
 	emixin "github.com/theopenlane/entx/mixin"
 	"github.com/theopenlane/iam/entfga"
 
@@ -35,6 +36,7 @@ func (Entity) Fields() []ent.Field {
 			Optional().
 			NotEmpty().
 			Annotations(
+				entx.FieldSearchable(),
 				entgql.OrderField("name"),
 			),
 		field.String("display_name").
@@ -43,12 +45,14 @@ func (Entity) Fields() []ent.Field {
 			Optional().
 			NotEmpty().
 			Annotations(
+				entx.FieldSearchable(),
 				entgql.OrderField("display_name"),
 			),
 		field.String("description").
 			Comment("An optional description of the entity").
 			Optional().
 			Annotations(
+				entx.FieldSearchable(),
 				entgql.Skip(entgql.SkipWhereInput),
 			),
 		field.Strings("domains").

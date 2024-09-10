@@ -48,6 +48,7 @@ func (Group) Fields() []ent.Field {
 			Comment("the name of the group - must be unique within the organization").
 			NotEmpty().
 			Annotations(
+				entx.FieldSearchable(),
 				entgql.OrderField("name"),
 			),
 		field.String("description").
@@ -73,6 +74,7 @@ func (Group) Fields() []ent.Field {
 			MaxLen(nameMaxLen).
 			Default("").
 			Annotations(
+				entx.FieldSearchable(),
 				entgql.OrderField("display_name"),
 			),
 	}

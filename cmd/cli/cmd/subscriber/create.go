@@ -24,6 +24,7 @@ func init() {
 	command.AddCommand(createCmd)
 
 	createCmd.Flags().StringSliceP("emails", "e", []string{}, "email address of the subscriber()")
+	createCmd.Flags().StringSlice("tags", []string{}, "tags associated with the subscriber")
 }
 
 // createValidation validates the required fields for the command
@@ -34,9 +35,16 @@ func createValidation() (input []*openlaneclient.CreateSubscriberInput, err erro
 	}
 
 	for _, e := range email {
-		input = append(input, &openlaneclient.CreateSubscriberInput{
+		i := &openlaneclient.CreateSubscriberInput{
 			Email: e,
-		})
+		}
+
+		tags := cmd.Config.Strings("tags")
+		if len(tags) > 0 {
+			i.Tags = tags
+		}
+
+		input = append(input, i)
 	}
 
 	return input, nil

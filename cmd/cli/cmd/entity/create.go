@@ -30,6 +30,7 @@ func init() {
 	createCmd.Flags().String("status", "", "status of the entity")
 	createCmd.Flags().StringSlice("domains", []string{}, "domains associated with the entity")
 	createCmd.Flags().String("note", "", "note about the entity")
+	createCmd.Flags().StringSlice("tags", []string{}, "tags associated with the entity")
 }
 
 // createValidation validates the required fields for the command
@@ -81,6 +82,11 @@ func createValidation(ctx context.Context) (input openlaneclient.CreateEntityInp
 		input.Note = &openlaneclient.CreateNoteInput{
 			Text: note,
 		}
+	}
+
+	tags := cmd.Config.Strings("tags")
+	if len(tags) > 0 {
+		input.Tags = tags
 	}
 
 	return input, nil

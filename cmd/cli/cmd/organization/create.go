@@ -25,6 +25,7 @@ func init() {
 	createCmd.Flags().StringP("display-name", "s", "", "display name of the organization")
 	createCmd.Flags().StringP("description", "d", "", "description of the organization")
 	createCmd.Flags().StringP("parent-org-id", "p", "", "parent organization id, leave empty to create a root org")
+	createCmd.Flags().StringSlice("tags", []string{}, "tags associated with the organization")
 
 	// TODO: https://github.com/theopenlane/core/issues/734
 	// remove flag once the feature is implemented
@@ -56,6 +57,11 @@ func createValidation() (input openlaneclient.CreateOrganizationInput, err error
 	dedicatedDB := cmd.Config.Bool("dedicated-db")
 	if dedicatedDB {
 		input.DedicatedDb = &dedicatedDB
+	}
+
+	tags := cmd.Config.Strings("tags")
+	if len(tags) > 0 {
+		input.Tags = tags
 	}
 
 	return input, nil

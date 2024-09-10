@@ -9,8 +9,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 )
 
-type GlobalSearchResult interface {
-	IsGlobalSearchResult()
+type SearchResult interface {
+	IsSearchResult()
 }
 
 // Return response for createBulkAPIToken mutation
@@ -30,6 +30,12 @@ type APITokenDeletePayload struct {
 	// Deleted apiToken ID
 	DeletedID string `json:"deletedID"`
 }
+
+type APITokenSearchResult struct {
+	APITokens []*generated.APIToken `json:"apiTokens,omitempty"`
+}
+
+func (APITokenSearchResult) IsSearchResult() {}
 
 // Return response for updateAPIToken mutation
 type APITokenUpdatePayload struct {
@@ -93,6 +99,12 @@ type ContactDeletePayload struct {
 	DeletedID string `json:"deletedID"`
 }
 
+type ContactSearchResult struct {
+	Contacts []*generated.Contact `json:"contacts,omitempty"`
+}
+
+func (ContactSearchResult) IsSearchResult() {}
+
 // Return response for updateContact mutation
 type ContactUpdatePayload struct {
 	// Updated contact
@@ -116,6 +128,12 @@ type DocumentDataDeletePayload struct {
 	// Deleted documentData ID
 	DeletedID string `json:"deletedID"`
 }
+
+type DocumentDataSearchResult struct {
+	DocumentData []*generated.DocumentData `json:"documentData,omitempty"`
+}
+
+func (DocumentDataSearchResult) IsSearchResult() {}
 
 // Return response for updateDocumentData mutation
 type DocumentDataUpdatePayload struct {
@@ -177,17 +195,35 @@ type EntitlementPlanFeatureDeletePayload struct {
 	DeletedID string `json:"deletedID"`
 }
 
+type EntitlementPlanFeatureSearchResult struct {
+	EntitlementPlanFeatures []*generated.EntitlementPlanFeature `json:"entitlementPlanFeatures,omitempty"`
+}
+
+func (EntitlementPlanFeatureSearchResult) IsSearchResult() {}
+
 // Return response for updateEntitlementPlanFeature mutation
 type EntitlementPlanFeatureUpdatePayload struct {
 	// Updated entitlementPlanFeature
 	EntitlementPlanFeature *generated.EntitlementPlanFeature `json:"entitlementPlanFeature"`
 }
 
+type EntitlementPlanSearchResult struct {
+	EntitlementPlans []*generated.EntitlementPlan `json:"entitlementPlans,omitempty"`
+}
+
+func (EntitlementPlanSearchResult) IsSearchResult() {}
+
 // Return response for updateEntitlementPlan mutation
 type EntitlementPlanUpdatePayload struct {
 	// Updated entitlementPlan
 	EntitlementPlan *generated.EntitlementPlan `json:"entitlementPlan"`
 }
+
+type EntitlementSearchResult struct {
+	Entitlements []*generated.Entitlement `json:"entitlements,omitempty"`
+}
+
+func (EntitlementSearchResult) IsSearchResult() {}
 
 // Return response for updateEntitlement mutation
 type EntitlementUpdatePayload struct {
@@ -213,6 +249,12 @@ type EntityDeletePayload struct {
 	DeletedID string `json:"deletedID"`
 }
 
+type EntitySearchResult struct {
+	Entities []*generated.Entity `json:"entities,omitempty"`
+}
+
+func (EntitySearchResult) IsSearchResult() {}
+
 // Return response for createBulkEntityType mutation
 type EntityTypeBulkCreatePayload struct {
 	// Created entityTypes
@@ -230,6 +272,12 @@ type EntityTypeDeletePayload struct {
 	// Deleted entityType ID
 	DeletedID string `json:"deletedID"`
 }
+
+type EntityTypeSearchResult struct {
+	EntityTypes []*generated.EntityType `json:"entityTypes,omitempty"`
+}
+
+func (EntityTypeSearchResult) IsSearchResult() {}
 
 // Return response for updateEntityType mutation
 type EntityTypeUpdatePayload struct {
@@ -261,6 +309,12 @@ type EventDeletePayload struct {
 	DeletedID string `json:"deletedID"`
 }
 
+type EventSearchResult struct {
+	Events []*generated.Event `json:"events,omitempty"`
+}
+
+func (EventSearchResult) IsSearchResult() {}
+
 // Return response for updateEvent mutation
 type EventUpdatePayload struct {
 	// Updated event
@@ -284,6 +338,12 @@ type FeatureDeletePayload struct {
 	// Deleted feature ID
 	DeletedID string `json:"deletedID"`
 }
+
+type FeatureSearchResult struct {
+	Features []*generated.Feature `json:"features,omitempty"`
+}
+
+func (FeatureSearchResult) IsSearchResult() {}
 
 // Return response for updateFeature mutation
 type FeatureUpdatePayload struct {
@@ -309,15 +369,16 @@ type FileDeletePayload struct {
 	DeletedID string `json:"deletedID"`
 }
 
+type FileSearchResult struct {
+	Files []*generated.File `json:"files,omitempty"`
+}
+
+func (FileSearchResult) IsSearchResult() {}
+
 // Return response for updateFile mutation
 type FileUpdatePayload struct {
 	// Updated file
 	File *generated.File `json:"file"`
-}
-
-type GlobalSearchResultConnection struct {
-	Page  *entgql.PageInfo[string] `json:"page"`
-	Nodes []GlobalSearchResult     `json:"nodes"`
 }
 
 // Return response for createBulkGroup mutation
@@ -366,7 +427,7 @@ type GroupSearchResult struct {
 	Groups []*generated.Group `json:"groups,omitempty"`
 }
 
-func (GroupSearchResult) IsGlobalSearchResult() {}
+func (GroupSearchResult) IsSearchResult() {}
 
 // Return response for createBulkGroupSetting mutation
 type GroupSettingBulkCreatePayload struct {
@@ -385,6 +446,12 @@ type GroupSettingDeletePayload struct {
 	// Deleted groupSetting ID
 	DeletedID string `json:"deletedID"`
 }
+
+type GroupSettingSearchResult struct {
+	GroupSettings []*generated.GroupSetting `json:"groupSettings,omitempty"`
+}
+
+func (GroupSettingSearchResult) IsSearchResult() {}
 
 // Return response for updateGroupSetting mutation
 type GroupSettingUpdatePayload struct {
@@ -440,6 +507,12 @@ type IntegrationDeletePayload struct {
 	DeletedID string `json:"deletedID"`
 }
 
+type IntegrationSearchResult struct {
+	Integrations []*generated.Integration `json:"integrations,omitempty"`
+}
+
+func (IntegrationSearchResult) IsSearchResult() {}
+
 // Return response for updateIntegration mutation
 type IntegrationUpdatePayload struct {
 	// Updated integration
@@ -488,6 +561,12 @@ type OauthProviderDeletePayload struct {
 	DeletedID string `json:"deletedID"`
 }
 
+type OauthProviderSearchResult struct {
+	OauthProviders []*generated.OauthProvider `json:"oauthProviders,omitempty"`
+}
+
+func (OauthProviderSearchResult) IsSearchResult() {}
+
 // Return response for updateOauthProvider mutation
 type OauthProviderUpdatePayload struct {
 	// Updated oauthProvider
@@ -511,6 +590,12 @@ type OhAuthTooTokenDeletePayload struct {
 	// Deleted ohAuthTooToken ID
 	DeletedID string `json:"deletedID"`
 }
+
+type OhAuthTooTokenSearchResult struct {
+	OhAuthTooTokens []*generated.OhAuthTooToken `json:"ohAuthTooTokens,omitempty"`
+}
+
+func (OhAuthTooTokenSearchResult) IsSearchResult() {}
 
 // Return response for updateOhAuthTooToken mutation
 type OhAuthTooTokenUpdatePayload struct {
@@ -564,7 +649,7 @@ type OrganizationSearchResult struct {
 	Organizations []*generated.Organization `json:"organizations,omitempty"`
 }
 
-func (OrganizationSearchResult) IsGlobalSearchResult() {}
+func (OrganizationSearchResult) IsSearchResult() {}
 
 // Return response for createBulkOrganizationSetting mutation
 type OrganizationSettingBulkCreatePayload struct {
@@ -583,6 +668,12 @@ type OrganizationSettingDeletePayload struct {
 	// Deleted organizationSetting ID
 	DeletedID string `json:"deletedID"`
 }
+
+type OrganizationSettingSearchResult struct {
+	OrganizationSettings []*generated.OrganizationSetting `json:"organizationSettings,omitempty"`
+}
+
+func (OrganizationSettingSearchResult) IsSearchResult() {}
 
 // Return response for updateOrganizationSetting mutation
 type OrganizationSettingUpdatePayload struct {
@@ -614,10 +705,21 @@ type PersonalAccessTokenDeletePayload struct {
 	DeletedID string `json:"deletedID"`
 }
 
+type PersonalAccessTokenSearchResult struct {
+	PersonalAccessTokens []*generated.PersonalAccessToken `json:"personalAccessTokens,omitempty"`
+}
+
+func (PersonalAccessTokenSearchResult) IsSearchResult() {}
+
 // Return response for updatePersonalAccessToken mutation
 type PersonalAccessTokenUpdatePayload struct {
 	// Updated personalAccessToken
 	PersonalAccessToken *generated.PersonalAccessToken `json:"personalAccessToken"`
+}
+
+type SearchResultConnection struct {
+	Page  *entgql.PageInfo[string] `json:"page"`
+	Nodes []SearchResult           `json:"nodes"`
 }
 
 // Return response for createBulkSubscriber mutation
@@ -642,7 +744,7 @@ type SubscriberSearchResult struct {
 	Subscribers []*generated.Subscriber `json:"subscribers,omitempty"`
 }
 
-func (SubscriberSearchResult) IsGlobalSearchResult() {}
+func (SubscriberSearchResult) IsSearchResult() {}
 
 // Return response for updateSubscriber mutation
 type SubscriberUpdatePayload struct {
@@ -655,6 +757,12 @@ type TFASettingCreatePayload struct {
 	// Created tfaSetting
 	TfaSetting *generated.TFASetting `json:"tfaSetting"`
 }
+
+type TFASettingSearchResult struct {
+	TFASettings []*generated.TFASetting `json:"tFASettings,omitempty"`
+}
+
+func (TFASettingSearchResult) IsSearchResult() {}
 
 // Return response for updateTFASetting mutation
 type TFASettingUpdatePayload struct {
@@ -679,6 +787,12 @@ type TemplateDeletePayload struct {
 	// Deleted template ID
 	DeletedID string `json:"deletedID"`
 }
+
+type TemplateSearchResult struct {
+	Templates []*generated.Template `json:"templates,omitempty"`
+}
+
+func (TemplateSearchResult) IsSearchResult() {}
 
 // Return response for updateTemplate mutation
 type TemplateUpdatePayload struct {
@@ -708,7 +822,7 @@ type UserSearchResult struct {
 	Users []*generated.User `json:"users,omitempty"`
 }
 
-func (UserSearchResult) IsGlobalSearchResult() {}
+func (UserSearchResult) IsSearchResult() {}
 
 // Return response for createBulkUserSetting mutation
 type UserSettingBulkCreatePayload struct {
@@ -721,6 +835,12 @@ type UserSettingCreatePayload struct {
 	// Created userSetting
 	UserSetting *generated.UserSetting `json:"userSetting"`
 }
+
+type UserSettingSearchResult struct {
+	UserSettings []*generated.UserSetting `json:"userSettings,omitempty"`
+}
+
+func (UserSettingSearchResult) IsSearchResult() {}
 
 // Return response for updateUserSetting mutation
 type UserSettingUpdatePayload struct {
@@ -751,6 +871,12 @@ type WebhookDeletePayload struct {
 	// Deleted webhook ID
 	DeletedID string `json:"deletedID"`
 }
+
+type WebhookSearchResult struct {
+	Webhooks []*generated.Webhook `json:"webhooks,omitempty"`
+}
+
+func (WebhookSearchResult) IsSearchResult() {}
 
 // Return response for updateWebhook mutation
 type WebhookUpdatePayload struct {

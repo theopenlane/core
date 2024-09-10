@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
 	emixin "github.com/theopenlane/entx/mixin"
 	"github.com/theopenlane/iam/entfga"
@@ -35,6 +36,9 @@ func (Subscriber) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("email").
 			Comment("email address of the subscriber").
+			Annotations(
+				entx.FieldSearchable(),
+			).
 			Validate(func(email string) error {
 				_, err := mail.ParseAddress(email)
 				return err

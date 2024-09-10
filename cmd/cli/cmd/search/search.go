@@ -2,14 +2,17 @@ package search
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
+	"reflect"
+	"strings"
 
+	"github.com/go-viper/mapstructure/v2"
 	"github.com/spf13/cobra"
-
-	"github.com/theopenlane/core/cmd/cli/cmd"
 
 	"github.com/theopenlane/utils/cli/tables"
 
+	"github.com/theopenlane/core/cmd/cli/cmd"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -49,63 +52,151 @@ func search(ctx context.Context) error { // setup http client
 	query, err := validate()
 	cobra.CheckErr(err)
 
-	results, err := client.Search(ctx, query)
+	results, err := client.GlobalSearch(ctx, query)
 	cobra.CheckErr(err)
 
-	consoleOutput(results)
+	return consoleOutput(results)
+}
+
+func consoleOutput(results *openlaneclient.GlobalSearch) error {
+	// fragments are duplicating results with gqlgenc,
+	// so we need to parse the results and create a new map
+	// so it aligns with what is expected in the json output
+	var realResult []map[string]interface{}
+
+	for _, node := range results.GetSearch().GetNodes() {
+		var fullResult map[string]interface{}
+		err := mapstructure.Decode(node, &fullResult)
+		cobra.CheckErr(err)
+
+		for _, objectTypeResult := range fullResult {
+			var parsedObjectTypeResult map[string]interface{}
+			err := mapstructure.Decode(objectTypeResult, &parsedObjectTypeResult)
+			cobra.CheckErr(err)
+
+			for k, v := range parsedObjectTypeResult {
+				tmp, err := json.Marshal(v)
+				cobra.CheckErr(err)
+
+				var out []interface{}
+				err = json.Unmarshal(tmp, &out)
+				cobra.CheckErr(err)
+
+				if len(out) == 0 {
+					continue
+				}
+
+				realResult = append(realResult, map[string]interface{}{
+					k: out,
+				})
+			}
+		}
+	}
+
+	// check if the output format is JSON and print the output in JSON format
+	if strings.EqualFold(cmd.OutputFormat, cmd.JSONOutput) {
+		// create a full result map
+		full := map[string]interface{}{
+			"data": map[string]interface{}{
+				"search": map[string]interface{}{
+					"nodes": realResult,
+				},
+			},
+		}
+
+		return jsonOutput(full)
+	}
+
+	tableOutput(realResult)
 
 	return nil
 }
 
-func consoleOutput(results *openlaneclient.Search) {
-	// print results
-	for _, r := range results.Search.Nodes {
-		if len(r.OrganizationSearchResult.Organizations) > 0 {
-			fmt.Println("Organization Results")
+// tableOutput prints the output in a table format
+func tableOutput(results []map[string]interface{}) {
+	for _, r := range results {
+		writer := tables.NewTableWriter(cmd.RootCmd.OutOrStdout())
 
-			writer := tables.NewTableWriter(cmd.RootCmd.OutOrStdout(), "ID", "Name", "DisplayName", "Description")
+		for k, v := range r {
+			// print the object type header
+			fmt.Println(k)
 
-			for _, o := range r.OrganizationSearchResult.Organizations {
-				writer.AddRow(o.ID, o.Name, o.DisplayName, *o.Description)
-			}
+			tmp, err := json.Marshal(v)
+			cobra.CheckErr(err)
 
-			writer.Render()
-		}
+			var res []map[string]interface{}
+			err = json.Unmarshal(tmp, &res)
+			cobra.CheckErr(err)
 
-		if len(r.GroupSearchResult.Groups) > 0 {
-			fmt.Println("Group Results")
+			// add headers
+			headers := parseHeaders(writer, res)
 
-			writer := tables.NewTableWriter(cmd.RootCmd.OutOrStdout(), "ID", "Name", "DisplayName", "Description")
+			// add rows
+			parseRows(writer, res, headers)
 
-			for _, g := range r.GroupSearchResult.Groups {
-				writer.AddRow(g.ID, g.Name, g.DisplayName, *g.Description)
-			}
-
-			writer.Render()
-		}
-
-		if len(r.UserSearchResult.Users) > 0 {
-			fmt.Println("User Results")
-
-			writer := tables.NewTableWriter(cmd.RootCmd.OutOrStdout(), "ID", "FirstName", "LastName", "DisplayName", "Email")
-
-			for _, u := range r.UserSearchResult.Users {
-				writer.AddRow(u.ID, *u.FirstName, *u.LastName, u.DisplayName, u.Email)
-			}
-
-			writer.Render()
-		}
-
-		if len(r.SubscriberSearchResult.Subscribers) > 0 {
-			fmt.Println("Subscriber Results")
-
-			writer := tables.NewTableWriter(cmd.RootCmd.OutOrStdout(), "ID", "Email")
-
-			for _, s := range r.SubscriberSearchResult.Subscribers {
-				writer.AddRow(s.ID, s.Email)
-			}
-
+			// render the table
 			writer.Render()
 		}
 	}
+}
+
+// parseHeaders parses the headers from the result and sets them in the table
+// the id column is always added as the first column
+func parseHeaders(writer tables.TableOutputWriter, res []map[string]interface{}) (headers []string) {
+	if len(res) == 0 {
+		return
+	}
+
+	// always add the ID as the first column
+	headers = append(headers, "id")
+
+	for header := range res[0] {
+		if strings.EqualFold(header, "id") {
+			continue
+		}
+
+		headers = append(headers, header)
+	}
+
+	// add headers
+	writer.SetHeaders(headers...)
+
+	return
+}
+
+// parseRows parses the rows from the result and sets them in the table based on the headers
+func parseRows(writer tables.TableOutputWriter, row []map[string]interface{}, headers []string) {
+	for _, v := range row {
+		var values []interface{}
+
+		for _, h := range headers {
+			switch t := reflect.TypeOf(v[h]); t.Kind() {
+			case reflect.String:
+				values = append(values, fmt.Sprintf("%v", v[h]))
+			case reflect.Slice:
+				s, _ := v[h].([]interface{})
+
+				var stringVals []string
+
+				for _, val := range s {
+					stringVals = append(stringVals, fmt.Sprintf("%v", val))
+				}
+
+				values = append(values, strings.Join(stringVals, ", "))
+			default:
+				out, _ := json.MarshalIndent(v[h], "", " ")
+				values = append(values, string(out))
+			}
+		}
+
+		writer.AddRow(values...)
+	}
+}
+
+// jsonOutput prints the output in a JSON format
+func jsonOutput(out any) error {
+	s, err := json.Marshal(out)
+	cobra.CheckErr(err)
+
+	return cmd.JSONPrint(s)
 }

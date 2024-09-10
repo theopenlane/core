@@ -1,0 +1,292 @@
+query AdminSearch($query: String!) {
+  adminSearch(query: $query) {
+    nodes {
+      ... on APITokenSearchResult {
+        apiTokens {
+          deletedBy
+          id
+          tags
+          ownerID
+          name
+          scopes
+        }
+      }
+      ... on ContactSearchResult {
+        contacts {
+          id
+          deletedBy
+          tags
+          ownerID
+          fullName
+          title
+          company
+          email
+          phoneNumber
+          address
+        }
+      }
+      ... on DocumentDataSearchResult {
+        documentData {
+          id
+          tags
+          deletedBy
+          ownerID
+          templateID
+          data
+        }
+      }
+      ... on EntitlementSearchResult {
+        entitlements {
+          id
+          tags
+          deletedBy
+          ownerID
+          planID
+          organizationID
+          externalCustomerID
+          externalSubscriptionID
+        }
+      }
+      ... on EntitlementPlanSearchResult {
+        entitlementPlans {
+          id
+          deletedBy
+          tags
+          ownerID
+          displayName
+          name
+          description
+          version
+          metadata
+        }
+      }
+      ... on EntitlementPlanFeatureSearchResult {
+        entitlementPlanFeatures {
+          id
+          deletedBy
+          tags
+          ownerID
+          metadata
+          planID
+          featureID
+        }
+      }
+      ... on EntitySearchResult {
+        entities {
+          id
+          deletedBy
+          tags
+          ownerID
+          name
+          displayName
+          description
+          domains
+          entityTypeID
+          status
+        }
+      }
+      ... on EntityTypeSearchResult {
+        entityTypes {
+          id
+          deletedBy
+          tags
+          ownerID
+          name
+        }
+      }
+      ... on EventSearchResult {
+        events {
+          id
+          tags
+          eventID
+          correlationID
+          eventType
+          metadata
+        }
+      }
+      ... on FeatureSearchResult {
+        features {
+          deletedBy
+          id
+          tags
+          ownerID
+          name
+          displayName
+          description
+          metadata
+        }
+      }
+      ... on FileSearchResult {
+        files {
+          deletedBy
+          id
+          tags
+          fileName
+          fileExtension
+          contentType
+          storeKey
+          category
+          annotation
+        }
+      }
+      ... on GroupSearchResult {
+        groups {
+          deletedBy
+          id
+          tags
+          ownerID
+          name
+          displayName
+        }
+      }
+      ... on GroupSettingSearchResult {
+        groupSettings {
+          id
+          tags
+          deletedBy
+          groupID
+        }
+      }
+      ... on IntegrationSearchResult {
+        integrations {
+          id
+          tags
+          deletedBy
+          ownerID
+          name
+          kind
+        }
+      }
+      ... on OauthProviderSearchResult {
+        oauthProviders {
+          id
+          tags
+          deletedBy
+          ownerID
+          name
+          clientID
+          clientSecret
+          redirectURL
+          scopes
+          authURL
+          tokenURL
+          infoURL
+        }
+      }
+      ... on OhAuthTooTokenSearchResult {
+        ohAuthTooTokens {
+          id
+          tags
+          clientID
+          scopes
+          nonce
+          claimsUserID
+          claimsUsername
+          claimsEmail
+          claimsGroups
+          claimsPreferredUsername
+          connectorID
+          connectorData
+        }
+      }
+      ... on OrganizationSearchResult {
+        organizations {
+          id
+          tags
+          deletedBy
+          name
+          displayName
+          avatarRemoteURL
+        }
+      }
+      ... on OrganizationSettingSearchResult {
+        organizationSettings {
+          id
+          tags
+          deletedBy
+          domains
+          billingContact
+          billingEmail
+          billingPhone
+          billingAddress
+          taxIdentifier
+          organizationID
+        }
+      }
+      ... on PersonalAccessTokenSearchResult {
+        personalAccessTokens {
+          deletedBy
+          id
+          tags
+          name
+          scopes
+        }
+      }
+      ... on SubscriberSearchResult {
+        subscribers {
+          id
+          tags
+          deletedBy
+          ownerID
+          email
+          phoneNumber
+        }
+      }
+      ... on TFASettingSearchResult {
+        tFASettings {
+          id
+          deletedBy
+          tags
+          tfaSecret
+          recoveryCodes
+        }
+      }
+      ... on TemplateSearchResult {
+        templates {
+          deletedBy
+          id
+          tags
+          ownerID
+          name
+          description
+          jsonconfig
+          uischema
+        }
+      }
+      ... on UserSearchResult {
+        users {
+          deletedBy
+          id
+          tags
+          email
+          firstName
+          lastName
+          displayName
+          avatarRemoteURL
+          avatarLocalFile
+          sub
+        }
+      }
+      ... on UserSettingSearchResult {
+        userSettings {
+          id
+          tags
+          deletedBy
+          userID
+        }
+      }
+      ... on WebhookSearchResult {
+        webhooks {
+          id
+          tags
+          deletedBy
+          ownerID
+          name
+          destinationURL
+          lastError
+          lastResponse
+        }
+      }
+    }
+  }
+}

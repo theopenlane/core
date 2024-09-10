@@ -1,42 +1,380 @@
-union GlobalSearchResult =
-  | OrganizationSearchResult
+extend type Query{
+    """
+    Search across APIToken objects
+    """
+    apiTokenSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): APITokenSearchResult
+    """
+    Search across Contact objects
+    """
+    contactSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): ContactSearchResult
+    """
+    Search across DocumentData objects
+    """
+    documentDataSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): DocumentDataSearchResult
+    """
+    Search across Entitlement objects
+    """
+    entitlementSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): EntitlementSearchResult
+    """
+    Search across EntitlementPlan objects
+    """
+    entitlementPlanSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): EntitlementPlanSearchResult
+    """
+    Search across EntitlementPlanFeature objects
+    """
+    entitlementPlanFeatureSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): EntitlementPlanFeatureSearchResult
+    """
+    Search across Entity objects
+    """
+    entitySearch(
+        """
+        Search query
+        """
+        query: String!
+    ): EntitySearchResult
+    """
+    Search across EntityType objects
+    """
+    entityTypeSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): EntityTypeSearchResult
+    """
+    Search across Event objects
+    """
+    eventSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): EventSearchResult
+    """
+    Search across Feature objects
+    """
+    featureSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): FeatureSearchResult
+    """
+    Search across File objects
+    """
+    fileSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): FileSearchResult
+    """
+    Search across Group objects
+    """
+    groupSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): GroupSearchResult
+    """
+    Search across GroupSetting objects
+    """
+    groupSettingSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): GroupSettingSearchResult
+    """
+    Search across Integration objects
+    """
+    integrationSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): IntegrationSearchResult
+    """
+    Search across OauthProvider objects
+    """
+    oauthProviderSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): OauthProviderSearchResult
+    """
+    Search across OhAuthTooToken objects
+    """
+    ohAuthTooTokenSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): OhAuthTooTokenSearchResult
+    """
+    Search across Organization objects
+    """
+    organizationSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): OrganizationSearchResult
+    """
+    Search across OrganizationSetting objects
+    """
+    organizationSettingSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): OrganizationSettingSearchResult
+    """
+    Search across PersonalAccessToken objects
+    """
+    personalAccessTokenSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): PersonalAccessTokenSearchResult
+    """
+    Search across Subscriber objects
+    """
+    subscriberSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): SubscriberSearchResult
+    """
+    Search across TFASetting objects
+    """
+    tFASettingSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): TFASettingSearchResult
+    """
+    Search across Template objects
+    """
+    templateSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): TemplateSearchResult
+    """
+    Search across User objects
+    """
+    userSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): UserSearchResult
+    """
+    Search across UserSetting objects
+    """
+    userSettingSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): UserSettingSearchResult
+    """
+    Search across Webhook objects
+    """
+    webhookSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): WebhookSearchResult
+}
+union SearchResult =
+  | APITokenSearchResult
+  | ContactSearchResult
+  | DocumentDataSearchResult
+  | EntitlementSearchResult
+  | EntitlementPlanSearchResult
+  | EntitlementPlanFeatureSearchResult
+  | EntitySearchResult
+  | EntityTypeSearchResult
+  | EventSearchResult
+  | FeatureSearchResult
+  | FileSearchResult
   | GroupSearchResult
-  | UserSearchResult
+  | GroupSettingSearchResult
+  | IntegrationSearchResult
+  | OauthProviderSearchResult
+  | OhAuthTooTokenSearchResult
+  | OrganizationSearchResult
+  | OrganizationSettingSearchResult
+  | PersonalAccessTokenSearchResult
   | SubscriberSearchResult
+  | TFASettingSearchResult
+  | TemplateSearchResult
+  | UserSearchResult
+  | UserSettingSearchResult
+  | WebhookSearchResult
 
-
-
-type OrganizationSearchResult {
-  organizations: [Organization!]
-}
-
-type GroupSearchResult {
-  groups: [Group!]
-}
-
-type UserSearchResult {
-  users: [User!]
-}
-
-type SubscriberSearchResult {
-  subscribers: [Subscriber!]
-}
-
-type GlobalSearchResultConnection {
+type SearchResultConnection {
   page: PageInfo!
 
-  nodes: [GlobalSearchResult!]!
+  nodes: [SearchResult!]!
 }
-
 
 extend type Query{
     """
-    Search across organizations, groups, and users
+    Search across all objects
     """
     search(
         """
         Search query
         """
         query: String!
-    ): GlobalSearchResultConnection
+    ): SearchResultConnection
+    """
+    Admin search across all objects
+    """
+    adminSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): SearchResultConnection
+}
+
+type  APITokenSearchResult {
+   apiTokens: [ APIToken!]
+}
+
+type  ContactSearchResult {
+   contacts: [ Contact!]
+}
+
+type  DocumentDataSearchResult {
+   documentData: [ DocumentData!]
+}
+
+type  EntitlementSearchResult {
+   entitlements: [ Entitlement!]
+}
+
+type  EntitlementPlanSearchResult {
+   entitlementPlans: [ EntitlementPlan!]
+}
+
+type  EntitlementPlanFeatureSearchResult {
+   entitlementPlanFeatures: [ EntitlementPlanFeature!]
+}
+
+type  EntitySearchResult {
+   entities: [ Entity!]
+}
+
+type  EntityTypeSearchResult {
+   entityTypes: [ EntityType!]
+}
+
+type  EventSearchResult {
+   events: [ Event!]
+}
+
+type  FeatureSearchResult {
+   features: [ Feature!]
+}
+
+type  FileSearchResult {
+   files: [ File!]
+}
+
+type  GroupSearchResult {
+   groups: [ Group!]
+}
+
+type  GroupSettingSearchResult {
+   groupSettings: [ GroupSetting!]
+}
+
+type  IntegrationSearchResult {
+   integrations: [ Integration!]
+}
+
+type  OauthProviderSearchResult {
+   oauthProviders: [ OauthProvider!]
+}
+
+type  OhAuthTooTokenSearchResult {
+   ohAuthTooTokens: [ OhAuthTooToken!]
+}
+
+type  OrganizationSearchResult {
+   organizations: [ Organization!]
+}
+
+type  OrganizationSettingSearchResult {
+   organizationSettings: [ OrganizationSetting!]
+}
+
+type  PersonalAccessTokenSearchResult {
+   personalAccessTokens: [ PersonalAccessToken!]
+}
+
+type  SubscriberSearchResult {
+   subscribers: [ Subscriber!]
+}
+
+type  TFASettingSearchResult {
+   tFASettings: [ TFASetting!]
+}
+
+type  TemplateSearchResult {
+   templates: [ Template!]
+}
+
+type  UserSearchResult {
+   users: [ User!]
+}
+
+type  UserSettingSearchResult {
+   userSettings: [ UserSetting!]
+}
+
+type  WebhookSearchResult {
+   webhooks: [ Webhook!]
 }

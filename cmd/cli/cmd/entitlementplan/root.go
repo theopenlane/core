@@ -2,6 +2,7 @@ package entitlementplan
 
 import (
 	"encoding/json"
+	"strings"
 
 	"github.com/spf13/cobra"
 
@@ -24,7 +25,7 @@ func init() {
 // consoleOutput prints the plans in the console
 func consoleOutput(e any) error {
 	// check if the output format is JSON and print the plans in JSON format
-	if cmd.OutputFormat == cmd.JSONOutput {
+	if strings.EqualFold(cmd.OutputFormat, cmd.JSONOutput) {
 		return jsonOutput(e)
 	}
 

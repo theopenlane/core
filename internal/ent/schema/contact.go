@@ -10,6 +10,7 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 
+	"github.com/theopenlane/entx"
 	emixin "github.com/theopenlane/entx/mixin"
 	"github.com/theopenlane/iam/entfga"
 	"github.com/theopenlane/utils/rout"
@@ -32,6 +33,9 @@ func (Contact) Fields() []ent.Field {
 		field.String("full_name").
 			Comment("the full name of the contact").
 			MaxLen(nameMaxLen).
+			Annotations(
+				entx.FieldSearchable(),
+			).
 			NotEmpty(),
 		field.String("title").
 			Comment("the title of the contact").

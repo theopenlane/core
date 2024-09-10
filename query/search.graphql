@@ -1,36 +1,165 @@
-query Search($query: String!) {
+query GlobalSearch($query: String!) {
   search(query: $query) {
     nodes {
-      ... on OrganizationSearchResult {
-        organizations {
+      ... on APITokenSearchResult {
+        apiTokens {
+          id
+          tags
+        }
+      }
+      ... on ContactSearchResult {
+        contacts {
+          fullName
+          id
+          tags
+        }
+      }
+      ... on DocumentDataSearchResult {
+        documentData {
+          id
+          tags
+        }
+      }
+      ... on EntitlementSearchResult {
+        entitlements {
+          id
+          tags
+        }
+      }
+      ... on EntitlementPlanSearchResult {
+        entitlementPlans {
+          id
+          tags
+        }
+      }
+      ... on EntitlementPlanFeatureSearchResult {
+        entitlementPlanFeatures {
+          id
+          tags
+        }
+      }
+      ... on EntitySearchResult {
+        entities {
           description
           displayName
           id
           name
+          tags
+        }
+      }
+      ... on EntityTypeSearchResult {
+        entityTypes {
+          id
+          tags
+        }
+      }
+      ... on EventSearchResult {
+        events {
+          id
+          tags
+        }
+      }
+      ... on FeatureSearchResult {
+        features {
+          id
+          tags
+        }
+      }
+      ... on FileSearchResult {
+        files {
+          id
+          tags
         }
       }
       ... on GroupSearchResult {
         groups {
-          description
           displayName
           id
           name
+          tags
         }
       }
-      ... on UserSearchResult {
-        users {
-          displayName
-          email
-          firstName
+      ... on GroupSettingSearchResult {
+        groupSettings {
           id
-          lastName
+          tags
+        }
+      }
+      ... on IntegrationSearchResult {
+        integrations {
+          id
+          tags
+        }
+      }
+      ... on OauthProviderSearchResult {
+        oauthProviders {
+          id
+          tags
+        }
+      }
+      ... on OhAuthTooTokenSearchResult {
+        ohAuthTooTokens {
+          id
+          tags
+        }
+      }
+      ... on OrganizationSearchResult {
+        organizations {
+          displayName
+          id
+          name
+          tags
+        }
+      }
+      ... on OrganizationSettingSearchResult {
+        organizationSettings {
+          id
+          tags
+        }
+      }
+      ... on PersonalAccessTokenSearchResult {
+        personalAccessTokens {
+          id
+          tags
         }
       }
       ... on SubscriberSearchResult {
         subscribers {
-          active
           email
           id
+          tags
+        }
+      }
+      ... on TFASettingSearchResult {
+        tFASettings {
+          id
+          tags
+        }
+      }
+      ... on TemplateSearchResult {
+        templates {
+          id
+          jsonconfig
+          name
+          tags
+        }
+      }
+      ... on UserSearchResult {
+        users {
+          id
+          tags
+        }
+      }
+      ... on UserSettingSearchResult {
+        userSettings {
+          id
+          tags
+        }
+      }
+      ... on WebhookSearchResult {
+        webhooks {
+          id
+          tags
         }
       }
     }

@@ -90,6 +90,9 @@ type APITokenEdge {
 	"""
 	cursor: Cursor!
 }
+type APITokenSearchResult {
+	apiTokens: [APIToken!]
+}
 """
 Return response for updateAPIToken mutation
 """
@@ -806,6 +809,9 @@ input ContactHistoryWhereInput {
 	statusNEQ: ContactHistoryUserStatus
 	statusIn: [ContactHistoryUserStatus!]
 	statusNotIn: [ContactHistoryUserStatus!]
+}
+type ContactSearchResult {
+	contacts: [Contact!]
 }
 """
 Return response for updateContact mutation
@@ -2306,6 +2312,9 @@ input DocumentDataHistoryWhereInput {
 	templateIDEqualFold: String
 	templateIDContainsFold: String
 }
+type DocumentDataSearchResult {
+	documentData: [DocumentData!]
+}
 """
 Return response for updateDocumentData mutation
 """
@@ -3379,6 +3388,9 @@ input EntitlementPlanFeatureHistoryWhereInput {
 	featureIDEqualFold: String
 	featureIDContainsFold: String
 }
+type EntitlementPlanFeatureSearchResult {
+	entitlementPlanFeatures: [EntitlementPlanFeature!]
+}
 """
 Return response for updateEntitlementPlanFeature mutation
 """
@@ -3818,6 +3830,9 @@ input EntitlementPlanHistoryWhereInput {
 	versionEqualFold: String
 	versionContainsFold: String
 }
+type EntitlementPlanSearchResult {
+	entitlementPlans: [EntitlementPlan!]
+}
 """
 Return response for updateEntitlementPlan mutation
 """
@@ -4052,6 +4067,9 @@ input EntitlementPlanWhereInput {
 	"""
 	hasFeatures: Boolean
 	hasFeaturesWith: [EntitlementPlanFeatureWhereInput!]
+}
+type EntitlementSearchResult {
+	entitlements: [Entitlement!]
 }
 """
 Return response for updateEntitlement mutation
@@ -4773,6 +4791,9 @@ enum EntityOrderField {
 	name
 	display_name
 }
+type EntitySearchResult {
+	entities: [Entity!]
+}
 type EntityType implements Node {
 	id: ID!
 	createdAt: Time
@@ -5137,6 +5158,9 @@ Properties by which EntityType connections can be ordered.
 """
 enum EntityTypeOrderField {
 	name
+}
+type EntityTypeSearchResult {
+	entityTypes: [EntityType!]
 }
 """
 Return response for updateEntityType mutation
@@ -5866,6 +5890,9 @@ input EventHistoryWhereInput {
 	eventTypeEqualFold: String
 	eventTypeContainsFold: String
 }
+type EventSearchResult {
+	events: [Event!]
+}
 """
 Return response for updateEvent mutation
 """
@@ -6493,6 +6520,9 @@ input FeatureHistoryWhereInput {
 	descriptionEqualFold: String
 	descriptionContainsFold: String
 }
+type FeatureSearchResult {
+	features: [Feature!]
+}
 """
 Return response for updateFeature mutation
 """
@@ -7118,6 +7148,9 @@ input FileHistoryWhereInput {
 	annotationEqualFold: String
 	annotationContainsFold: String
 }
+type FileSearchResult {
+	files: [File!]
+}
 """
 Return response for updateFile mutation
 """
@@ -7374,11 +7407,6 @@ input FileWhereInput {
 	"""
 	hasGroup: Boolean
 	hasGroupWith: [GroupWhereInput!]
-}
-union GlobalSearchResult = OrganizationSearchResult | GroupSearchResult | UserSearchResult | SubscriberSearchResult
-type GlobalSearchResultConnection {
-	page: PageInfo!
-	nodes: [GlobalSearchResult!]!
 }
 type Group implements Node {
 	id: ID!
@@ -8653,6 +8681,9 @@ enum GroupSettingJoinPolicy @goModel(model: "github.com/theopenlane/core/pkg/enu
 	INVITE_ONLY
 	APPLICATION_ONLY
 	INVITE_OR_APPLICATION
+}
+type GroupSettingSearchResult {
+	groupSettings: [GroupSetting!]
 }
 """
 Return response for updateGroupSetting mutation
@@ -10036,6 +10067,9 @@ Properties by which Integration connections can be ordered.
 enum IntegrationOrderField {
 	name
 	kind
+}
+type IntegrationSearchResult {
+	integrations: [Integration!]
 }
 """
 Return response for updateIntegration mutation
@@ -12960,6 +12994,9 @@ input OauthProviderHistoryWhereInput {
 	infoURLEqualFold: String
 	infoURLContainsFold: String
 }
+type OauthProviderSearchResult {
+	oauthProviders: [OauthProvider!]
+}
 """
 Return response for updateOauthProvider mutation
 """
@@ -13323,6 +13360,9 @@ type OhAuthTooTokenEdge {
 	A cursor for use in pagination.
 	"""
 	cursor: Cursor!
+}
+type OhAuthTooTokenSearchResult {
+	ohAuthTooTokens: [OhAuthTooToken!]
 }
 """
 Return response for updateOhAuthTooToken mutation
@@ -14927,6 +14967,9 @@ enum OrganizationSettingRegion @goModel(model: "github.com/theopenlane/core/pkg/
 	EMEA
 	APAC
 }
+type OrganizationSettingSearchResult {
+	organizationSettings: [OrganizationSetting!]
+}
 """
 Return response for updateOrganizationSetting mutation
 """
@@ -15603,6 +15646,9 @@ type PersonalAccessTokenEdge {
 	A cursor for use in pagination.
 	"""
 	cursor: Cursor!
+}
+type PersonalAccessTokenSearchResult {
+	personalAccessTokens: [PersonalAccessToken!]
 }
 """
 Return response for updatePersonalAccessToken mutation
@@ -17299,6 +17345,231 @@ type Query {
 		where: WebhookHistoryWhereInput
 	): WebhookHistoryConnection!
 	"""
+	Search across APIToken objects
+	"""
+	adminAPITokenSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): APITokenSearchResult
+	"""
+	Search across Contact objects
+	"""
+	adminContactSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): ContactSearchResult
+	"""
+	Search across DocumentData objects
+	"""
+	adminDocumentDataSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): DocumentDataSearchResult
+	"""
+	Search across Entitlement objects
+	"""
+	adminEntitlementSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): EntitlementSearchResult
+	"""
+	Search across EntitlementPlan objects
+	"""
+	adminEntitlementPlanSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): EntitlementPlanSearchResult
+	"""
+	Search across EntitlementPlanFeature objects
+	"""
+	adminEntitlementPlanFeatureSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): EntitlementPlanFeatureSearchResult
+	"""
+	Search across Entity objects
+	"""
+	adminEntitySearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): EntitySearchResult
+	"""
+	Search across EntityType objects
+	"""
+	adminEntityTypeSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): EntityTypeSearchResult
+	"""
+	Search across Event objects
+	"""
+	adminEventSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): EventSearchResult
+	"""
+	Search across Feature objects
+	"""
+	adminFeatureSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): FeatureSearchResult
+	"""
+	Search across File objects
+	"""
+	adminFileSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): FileSearchResult
+	"""
+	Search across Group objects
+	"""
+	adminGroupSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): GroupSearchResult
+	"""
+	Search across GroupSetting objects
+	"""
+	adminGroupSettingSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): GroupSettingSearchResult
+	"""
+	Search across Integration objects
+	"""
+	adminIntegrationSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): IntegrationSearchResult
+	"""
+	Search across OauthProvider objects
+	"""
+	adminOauthProviderSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): OauthProviderSearchResult
+	"""
+	Search across OhAuthTooToken objects
+	"""
+	adminOhAuthTooTokenSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): OhAuthTooTokenSearchResult
+	"""
+	Search across Organization objects
+	"""
+	adminOrganizationSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): OrganizationSearchResult
+	"""
+	Search across OrganizationSetting objects
+	"""
+	adminOrganizationSettingSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): OrganizationSettingSearchResult
+	"""
+	Search across PersonalAccessToken objects
+	"""
+	adminPersonalAccessTokenSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): PersonalAccessTokenSearchResult
+	"""
+	Search across Subscriber objects
+	"""
+	adminSubscriberSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): SubscriberSearchResult
+	"""
+	Search across TFASetting objects
+	"""
+	adminTFASettingSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): TFASettingSearchResult
+	"""
+	Search across Template objects
+	"""
+	adminTemplateSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): TemplateSearchResult
+	"""
+	Search across User objects
+	"""
+	adminUserSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): UserSearchResult
+	"""
+	Search across UserSetting objects
+	"""
+	adminUserSettingSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): UserSettingSearchResult
+	"""
+	Search across Webhook objects
+	"""
+	adminWebhookSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): WebhookSearchResult
+	"""
 	Look up apiToken by ID
 	"""
 	apiToken(
@@ -17532,14 +17803,248 @@ type Query {
 		id: ID!
 	): PersonalAccessToken!
 	"""
-	Search across organizations, groups, and users
+	Search across APIToken objects
+	"""
+	apiTokenSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): APITokenSearchResult
+	"""
+	Search across Contact objects
+	"""
+	contactSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): ContactSearchResult
+	"""
+	Search across DocumentData objects
+	"""
+	documentDataSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): DocumentDataSearchResult
+	"""
+	Search across Entitlement objects
+	"""
+	entitlementSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): EntitlementSearchResult
+	"""
+	Search across EntitlementPlan objects
+	"""
+	entitlementPlanSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): EntitlementPlanSearchResult
+	"""
+	Search across EntitlementPlanFeature objects
+	"""
+	entitlementPlanFeatureSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): EntitlementPlanFeatureSearchResult
+	"""
+	Search across Entity objects
+	"""
+	entitySearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): EntitySearchResult
+	"""
+	Search across EntityType objects
+	"""
+	entityTypeSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): EntityTypeSearchResult
+	"""
+	Search across Event objects
+	"""
+	eventSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): EventSearchResult
+	"""
+	Search across Feature objects
+	"""
+	featureSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): FeatureSearchResult
+	"""
+	Search across File objects
+	"""
+	fileSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): FileSearchResult
+	"""
+	Search across Group objects
+	"""
+	groupSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): GroupSearchResult
+	"""
+	Search across GroupSetting objects
+	"""
+	groupSettingSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): GroupSettingSearchResult
+	"""
+	Search across Integration objects
+	"""
+	integrationSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): IntegrationSearchResult
+	"""
+	Search across OauthProvider objects
+	"""
+	oauthProviderSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): OauthProviderSearchResult
+	"""
+	Search across OhAuthTooToken objects
+	"""
+	ohAuthTooTokenSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): OhAuthTooTokenSearchResult
+	"""
+	Search across Organization objects
+	"""
+	organizationSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): OrganizationSearchResult
+	"""
+	Search across OrganizationSetting objects
+	"""
+	organizationSettingSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): OrganizationSettingSearchResult
+	"""
+	Search across PersonalAccessToken objects
+	"""
+	personalAccessTokenSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): PersonalAccessTokenSearchResult
+	"""
+	Search across Subscriber objects
+	"""
+	subscriberSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): SubscriberSearchResult
+	"""
+	Search across TFASetting objects
+	"""
+	tFASettingSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): TFASettingSearchResult
+	"""
+	Search across Template objects
+	"""
+	templateSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): TemplateSearchResult
+	"""
+	Search across User objects
+	"""
+	userSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): UserSearchResult
+	"""
+	Search across UserSetting objects
+	"""
+	userSettingSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): UserSettingSearchResult
+	"""
+	Search across Webhook objects
+	"""
+	webhookSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): WebhookSearchResult
+	"""
+	Search across all objects
 	"""
 	search(
 		"""
 		Search query
 		"""
 		query: String!
-	): GlobalSearchResultConnection
+	): SearchResultConnection
+	"""
+	Admin search across all objects
+	"""
+	adminSearch(
+		"""
+		Search query
+		"""
+		query: String!
+	): SearchResultConnection
 	"""
 	Look up subscriber by Email
 	"""
@@ -17594,6 +18099,11 @@ type Query {
 		"""
 		id: ID!
 	): Webhook!
+}
+union SearchResult = APITokenSearchResult | ContactSearchResult | DocumentDataSearchResult | EntitlementSearchResult | EntitlementPlanSearchResult | EntitlementPlanFeatureSearchResult | EntitySearchResult | EntityTypeSearchResult | EventSearchResult | FeatureSearchResult | FileSearchResult | GroupSearchResult | GroupSettingSearchResult | IntegrationSearchResult | OauthProviderSearchResult | OhAuthTooTokenSearchResult | OrganizationSearchResult | OrganizationSettingSearchResult | PersonalAccessTokenSearchResult | SubscriberSearchResult | TFASettingSearchResult | TemplateSearchResult | UserSearchResult | UserSettingSearchResult | WebhookSearchResult
+type SearchResultConnection {
+	page: PageInfo!
+	nodes: [SearchResult!]!
 }
 type Subscriber implements Node {
 	id: ID!
@@ -17963,6 +18473,9 @@ type TFASettingEdge {
 	A cursor for use in pagination.
 	"""
 	cursor: Cursor!
+}
+type TFASettingSearchResult {
+	tFASettings: [TFASetting!]
 }
 """
 Return response for updateTFASetting mutation
@@ -18558,6 +19071,9 @@ Properties by which Template connections can be ordered.
 """
 enum TemplateOrderField {
 	name
+}
+type TemplateSearchResult {
+	templates: [Template!]
 }
 """
 Return response for updateTemplate mutation
@@ -20935,6 +21451,9 @@ input UserSettingHistoryWhereInput {
 	isTfaEnabledIsNil: Boolean
 	isTfaEnabledNotNil: Boolean
 }
+type UserSettingSearchResult {
+	userSettings: [UserSetting!]
+}
 """
 Return response for updateUserSetting mutation
 """
@@ -21972,6 +22491,9 @@ Properties by which Webhook connections can be ordered.
 enum WebhookOrderField {
 	name
 	url
+}
+type WebhookSearchResult {
+	webhooks: [Webhook!]
 }
 """
 Return response for updateWebhook mutation

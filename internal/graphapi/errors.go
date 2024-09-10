@@ -26,6 +26,9 @@ var (
 
 	// ErrSearchFailed is returned when the search operation fails
 	ErrSearchFailed = errors.New("search failed, please try again")
+
+	// ErrSearchQueryTooShort is returned when the search query is too short
+	ErrSearchQueryTooShort = errors.New("search query is too short, please enter a longer search query")
 )
 
 // PermissionDeniedError is returned when user is not authorized to perform the requested query or mutation

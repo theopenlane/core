@@ -2,6 +2,7 @@ package templates
 
 import (
 	"encoding/json"
+	"strings"
 
 	"github.com/spf13/cobra"
 
@@ -24,7 +25,7 @@ func init() {
 // consoleOutput prints the out in the console
 func consoleOutput(e any) error {
 	// check if the output format is JSON and print the out in JSON format
-	if cmd.OutputFormat == cmd.JSONOutput {
+	if strings.EqualFold(cmd.OutputFormat, cmd.JSONOutput) {
 		return jsonOutput(e)
 	}
 
@@ -75,11 +76,54 @@ func jsonOutput(out any) error {
 
 // tableOutput prints the output in a table format
 func tableOutput(out []openlaneclient.Template) {
-	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "Name", "Description", "JSON")
 	for _, i := range out {
-		// this doesn't visually show you the json in the table but leaving it in for now
-		writer.AddRow(i.ID, i.Name, *i.Description, i.Jsonconfig)
+		writer := tables.NewTableWriter(command.OutOrStdout())
+
+		writer.SetHeaders("ID", "Name", "Description")
+		writer.AddRow(i.ID, i.Name, *i.Description)
+		writer.Render()
+
+		tmp, err := json.Marshal(i.Jsonconfig)
+		cobra.CheckErr(err)
+
+		var res map[string]interface{}
+		err = json.Unmarshal(tmp, &res)
+		cobra.CheckErr(err)
+
+		// add headers
+		writer = tables.NewTableWriter(command.OutOrStdout())
+		headers := parseHeaders(writer, res)
+
+		// add rows
+		parseRow(writer, res, headers)
+		writer.Render()
+	}
+}
+
+// parseHeaders parses the headers from the result and sets them in the table
+func parseHeaders(writer tables.TableOutputWriter, res map[string]interface{}) (headers []string) {
+	if len(res) == 0 {
+		return
 	}
 
-	writer.Render()
+	for header := range res {
+		headers = append(headers, header)
+	}
+
+	// add headers
+	writer.SetHeaders(headers...)
+
+	return
+}
+
+// parseRow parses the rows from the result and sets them in the table based on the headers
+func parseRow(writer tables.TableOutputWriter, row map[string]interface{}, headers []string) {
+	var values []interface{}
+
+	for _, h := range headers {
+		out, _ := json.MarshalIndent(row[h], "", " ")
+		values = append(values, string(out))
+	}
+
+	writer.AddRow(values...)
 }

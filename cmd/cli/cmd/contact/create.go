@@ -27,6 +27,7 @@ func init() {
 	createCmd.Flags().StringP("phone", "p", "", "phone number of the contact")
 	createCmd.Flags().StringP("title", "t", "", "title of the contact")
 	createCmd.Flags().StringP("company", "c", "", "company of the contact")
+	createCmd.Flags().StringSlice("tags", []string{}, "tags associated with the contact")
 }
 
 // createValidation validates the required fields for the command
@@ -55,6 +56,11 @@ func createValidation() (input openlaneclient.CreateContactInput, err error) {
 	company := cmd.Config.String("company")
 	if company != "" {
 		input.Company = &company
+	}
+
+	tags := cmd.Config.Strings("tags")
+	if len(tags) > 0 {
+		input.Tags = tags
 	}
 
 	return input, nil
