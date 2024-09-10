@@ -14,7 +14,8 @@ steps:
         cancel_on_build_failing: true
         plugins:
           - docker#v5.11.0:
-              image: "ghcr.io/theopenlane/build-image:v0.1.2"
+              image: "ghcr.io/theopenlane/build-image:latest"
+              always_pull: true
               command: ["task", "ci"]
               environment:
                 - "GOTOOLCHAIN=auto"
@@ -23,7 +24,8 @@ steps:
         cancel_on_build_failing: true
         plugins:
           - docker#v5.11.0:
-              image: "ghcr.io/theopenlane/build-image:v0.1.2"
+              image: "ghcr.io/theopenlane/build-image:latest"
+              always_pull: true
               command: ["task", "config:ci"]
               environment:
                 - "GOTOOLCHAIN=auto"
@@ -35,7 +37,7 @@ steps:
         key: "lint"
         plugins:
           - docker#v5.11.0:
-              image: "golangci/golangci-lint:latest-alpine"
+              image: "ghcr.io/theopenlane/build-image:latest"
               command: ["golangci-lint", "run", "-v", "--timeout", "10m", "--config", ".golangci.yaml", "--concurrency", "0"]
               always_pull: true
               environment:
@@ -51,7 +53,8 @@ steps:
           TEST_DB_URL: "libsql://file::memory:?cache=shared"
         plugins:
           - docker#v5.11.0:
-              image: golang:1.23.0
+              image: ghcr.io/theopenlane/build-image:latest
+              always_pull: true
               command: ["go", "test", "-coverprofile=coverage.out", "./..."]
               environment:
                 - "TEST_DB_URL"
@@ -70,7 +73,8 @@ steps:
           - "sqlite://file:ent?mode=memory&cache=shared"
         plugins:
           - docker#v5.11.0:
-              image: golang:1.23.0
+              image: ghcr.io/theopenlane/build-image:latest
+              always_pull: true
               command: ["go", "test", "-coverprofile=coverage.out", "./..."]
               environment:
                 - "TEST_DB_URL"
@@ -93,7 +97,7 @@ steps:
         key: "gosec"
         plugins:
           - docker#v5.11.0:
-              image: "registry.hub.docker.com/securego/gosec:2.20.0"
+              image: "securego/gosec:2.20.0"
               command: ["-no-fail", "-exclude-generated", "-fmt sonarqube", "-out", "results.txt", "./..."]
               environment:
                 - "GOTOOLCHAIN=auto"
@@ -137,7 +141,8 @@ steps:
         artifact_paths: "bin/${APP_NAME}"
         plugins:
           - docker#v5.11.0:
-              image: "golang:1.23.0"
+              image: "ghcr.io/theopenlane/build-image:latest"
+              always_pull: true
               environment:
                 - CGO_ENABLED=0
                 - GOOS=linux
@@ -147,7 +152,8 @@ steps:
         artifact_paths: "bin/${APP_NAME}-cli"
         plugins:
           - docker#v5.11.0:
-              image: "golang:1.23.0"
+              image: "ghcr.io/theopenlane/build-image:latest"
+              always_pull: true
               environment:
                 - GOOS=darwin
                 - GOARCH=arm64

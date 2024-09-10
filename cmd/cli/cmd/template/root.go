@@ -100,6 +100,7 @@ func tableOutput(out []openlaneclient.Template) {
 	}
 }
 
+// parseHeaders parses the headers from the result and sets them in the table
 func parseHeaders(writer tables.TableOutputWriter, res map[string]interface{}) (headers []string) {
 	if len(res) == 0 {
 		return
