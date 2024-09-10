@@ -38,7 +38,7 @@ steps:
         plugins:
           - docker#v5.11.0:
               image: "ghcr.io/theopenlane/build-image:latest"
-              command: ["golangci-lint", "run", "-v", "--timeout", "10m", "--config", ".golangci.yaml", "--concurrency", "0"]
+              command: ["task", "go:lint"]
               always_pull: true
               environment:
                 - "GOTOOLCHAIN=auto"
@@ -55,7 +55,7 @@ steps:
           - docker#v5.11.0:
               image: ghcr.io/theopenlane/build-image:latest
               always_pull: true
-              command: ["go", "test", "-coverprofile=coverage.out", "./..."]
+              command: ["task", "go:test:cover"]
               environment:
                 - "TEST_DB_URL"
         artifact_paths: ["coverage.out"]
@@ -75,7 +75,7 @@ steps:
           - docker#v5.11.0:
               image: ghcr.io/theopenlane/build-image:latest
               always_pull: true
-              command: ["go", "test", "-coverprofile=coverage.out", "./..."]
+              command: ["task", "go:test:cover"]
               environment:
                 - "TEST_DB_URL"
                 - "TEST_DB_CONTAINER_EXPIRY=8" # container expiry in minutes
@@ -146,10 +146,10 @@ steps:
               environment:
                 - CGO_ENABLED=0
                 - GOOS=linux
-              command: ["go", "build", "-buildvcs=false", "-mod=mod", "-a", "-o", "bin/$APP_NAME"]
+              command: ["task", "go:build:ci"]
       - label: ":terminal: build cli"
         key: "gobuild-cli"
-        artifact_paths: "bin/${APP_NAME}-cli"
+        artifact_paths: "bin/openlane-cli"
         plugins:
           - docker#v5.11.0:
               image: "ghcr.io/theopenlane/build-image:latest"
@@ -157,7 +157,7 @@ steps:
               environment:
                 - GOOS=darwin
                 - GOARCH=arm64
-              command: ["go", "build", "-buildvcs=false", "-mod=mod", "-a", "-o", "bin/${APP_NAME}-cli", "./cmd/cli"]
+              command: ["task", "go:build-cli:ci"]
   - group: ":database: atlas migrate"
     key: "database"
     steps:

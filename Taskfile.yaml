@@ -26,7 +26,6 @@ env:
   TEST_FGA_URL: "localhost:8080"
   ENV: config
   GODEBUG: gotypesalias=0 # remove once the backport fixes the types.Alias bug
-  GOFLAGS: -buildvcs=false
 
 tasks:
   default:
@@ -66,6 +65,12 @@ tasks:
     aliases: [cover]
     cmds:
       - go test -v ./... -coverprofile=coverage.out
+
+  go:test:coverout:
+    desc: runs and outputs results of created go tests with coverage
+    aliases: [cover]
+    cmds:
+      - task: go:test:cover
       - go tool cover -html=coverage.out
 
   go:fmt:
@@ -84,11 +89,21 @@ tasks:
     cmds:
       - go build -mod=mod -o core
 
+  go:build:ci:
+    desc: Runs go build for the core server
+    cmds:
+      - go build -mod=mod -o -a bin/core
+
   go:build-cli:
     aliases: [buildcli]
     desc: Runs go build for the openlane cli
     cmds:
       - go build -mod=mod -o openlane-cli ./cmd/cli
+
+  go:build-cli:ci:
+    desc: Runs go build for the openlane cli in CI
+    cmds:
+      - go build -mod=mod -a -o bin/openlane-cli ./cmd/cli
 
   go:all:
     aliases: [go]
