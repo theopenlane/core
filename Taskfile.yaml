@@ -93,7 +93,7 @@ tasks:
   go:build:ci:
     desc: Runs go build for the core server
     cmds:
-      - go build -mod=mod -o -a bin/core
+      - go build -mod=mod -a -o bin/core
 
   go:build-cli:
     aliases: [buildcli]
