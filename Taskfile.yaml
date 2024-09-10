@@ -26,6 +26,7 @@ env:
   TEST_FGA_URL: "localhost:8080"
   ENV: config
   GODEBUG: gotypesalias=0 # remove once the backport fixes the types.Alias bug
+  GOFLAGS: -buildvcs=false
 
 tasks:
   default:
