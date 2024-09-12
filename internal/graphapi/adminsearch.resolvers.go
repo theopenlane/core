@@ -5,6 +5,7 @@ package graphapi
 import (
 	"context"
 
+	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 )
 
@@ -223,7 +224,7 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string) (*SearchR
 
 	// Check all errors and return a single error if any of the searches failed
 	if len(errors) > 0 {
-		r.logger.Errorw("search failed", "errors", errors)
+		log.Error().Errs("errors", errors).Msg("search failed")
 
 		return nil, ErrSearchFailed
 	}

@@ -20,7 +20,7 @@ import (
 	atlas "ariga.io/atlas/sql/migrate"
 	"ariga.io/atlas/sql/sqltool"
 	"github.com/theopenlane/core/internal/ent/generated/migrate"
-	"github.com/theopenlane/core/pkg/testutils"
+	"github.com/theopenlane/utils/testutils"
 )
 
 func main() {

@@ -18,11 +18,12 @@ import (
 	"github.com/theopenlane/utils/emails"
 	"github.com/theopenlane/utils/emails/mock"
 
+	"github.com/theopenlane/utils/echocontext"
+
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	_ "github.com/theopenlane/core/internal/ent/generated/runtime"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
-	"github.com/theopenlane/core/pkg/middleware/echocontext"
 	"github.com/theopenlane/core/pkg/models"
 )
 

@@ -13,7 +13,6 @@ import (
 	"entgo.io/ent/entc/gen"
 	"github.com/theopenlane/iam/entfga"
 	"github.com/theopenlane/iam/fgax"
-	"go.uber.org/zap"
 	"gocloud.dev/secrets"
 
 	dbx "github.com/theopenlane/dbx/pkg/dbxclient"
@@ -97,10 +96,6 @@ func main() {
 		entc.Dependency(
 			entc.DependencyName("SessionConfig"),
 			entc.DependencyType(&sessions.SessionConfig{}),
-		),
-		entc.Dependency(
-			entc.DependencyName("Logger"),
-			entc.DependencyType(zap.SugaredLogger{}),
 		),
 		entc.Dependency(
 			entc.DependencyName("Emails"),

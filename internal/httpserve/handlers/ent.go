@@ -5,6 +5,7 @@ import (
 	"time"
 
 	gowebauthn "github.com/go-webauthn/webauthn/webauthn"
+	"github.com/rs/zerolog/log"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
@@ -26,7 +27,7 @@ func (h *Handler) updateUserLastSeen(ctx context.Context, id string) error {
 		UpdateOneID(id).
 		SetLastSeen(time.Now()).
 		Save(ctx); err != nil {
-		h.Logger.Errorw("error updating user last seen", "error", err)
+		log.Error().Err(err).Msg("error updating user last seen")
 
 		return err
 	}
@@ -40,7 +41,7 @@ func (h *Handler) createUser(ctx context.Context, input ent.CreateUserInput) (*e
 		SetInput(input).
 		Save(ctx)
 	if err != nil {
-		h.Logger.Errorw("error creating new user", "error", err)
+		log.Error().Err(err).Msg("error creating new user")
 
 		return nil, err
 	}
@@ -56,7 +57,7 @@ func (h *Handler) updateSubscriberVerifiedEmail(ctx context.Context, id string, 
 		SetVerifiedEmail(true).
 		Save(ctx)
 	if err != nil {
-		h.Logger.Errorw("error updating subscriber verified", "error", err)
+		log.Error().Err(err).Msg("error updating subscriber verified")
 		return err
 	}
 
@@ -67,7 +68,7 @@ func (h *Handler) updateSubscriberVerifiedEmail(ctx context.Context, id string, 
 func (h *Handler) updateSubscriberVerificationToken(ctx context.Context, user *User) error {
 	ttl, err := time.Parse(time.RFC3339Nano, user.EmailVerificationExpires.String)
 	if err != nil {
-		h.Logger.Errorw("unable to parse ttl", "error", err)
+		log.Error().Err(err).Msg("unable to parse ttl")
 		return err
 	}
 
@@ -77,7 +78,7 @@ func (h *Handler) updateSubscriberVerificationToken(ctx context.Context, user *U
 		SetTTL(ttl).
 		Save(ctx)
 	if err != nil {
-		h.Logger.Errorw("error updating subscriber tokens", "error", err)
+		log.Error().Err(err).Msg("error updating subscriber tokens")
 
 		return err
 	}
@@ -89,7 +90,7 @@ func (h *Handler) updateSubscriberVerificationToken(ctx context.Context, user *U
 func (h *Handler) createEmailVerificationToken(ctx context.Context, user *User) (*ent.EmailVerificationToken, error) {
 	ttl, err := time.Parse(time.RFC3339Nano, user.EmailVerificationExpires.String)
 	if err != nil {
-		h.Logger.Errorw("unable to parse ttl", "error", err)
+		log.Error().Err(err).Msg("unable to parse ttl")
 		return nil, err
 	}
 
@@ -101,7 +102,7 @@ func (h *Handler) createEmailVerificationToken(ctx context.Context, user *User) 
 		SetSecret(user.EmailVerificationSecret).
 		Save(ctx)
 	if err != nil {
-		h.Logger.Errorw("error creating email verification token", "error", err)
+		log.Error().Err(err).Msg("error creating email verification token")
 
 		return nil, err
 	}
@@ -112,7 +113,7 @@ func (h *Handler) createEmailVerificationToken(ctx context.Context, user *User) 
 func (h *Handler) createPasswordResetToken(ctx context.Context, user *User) (*ent.PasswordResetToken, error) {
 	ttl, err := time.Parse(time.RFC3339Nano, user.PasswordResetExpires.String)
 	if err != nil {
-		h.Logger.Errorw("unable to parse ttl", "error", err)
+		log.Error().Err(err).Msg("unable to parse ttl")
 		return nil, err
 	}
 
@@ -124,7 +125,7 @@ func (h *Handler) createPasswordResetToken(ctx context.Context, user *User) (*en
 		SetSecret(user.PasswordResetSecret).
 		Save(ctx)
 	if err != nil {
-		h.Logger.Errorw("error creating password reset token", "error", err)
+		log.Error().Err(err).Msg("error creating password reset token")
 
 		return nil, err
 	}
@@ -141,7 +142,7 @@ func (h *Handler) getUserByEVToken(ctx context.Context, token string) (*ent.User
 		).
 		QueryOwner().WithSetting().WithEmailVerificationTokens().Only(ctx)
 	if err != nil {
-		h.Logger.Errorw("error obtaining user from email verification token", "error", err)
+		log.Error().Err(err).Msg("error obtaining user from email verification token")
 
 		return nil, err
 	}
@@ -158,7 +159,7 @@ func (h *Handler) getUserByResetToken(ctx context.Context, token string) (*ent.U
 		).
 		QueryOwner().WithSetting().WithPasswordResetTokens().Only(ctx)
 	if err != nil {
-		h.Logger.Errorw("error obtaining user from reset token", "error", err)
+		log.Error().Err(err).Msg("error obtaining user from reset token")
 
 		return nil, err
 	}
@@ -173,7 +174,7 @@ func (h *Handler) getUserByEmail(ctx context.Context, email string, authProvider
 		Where(user.AuthProviderEQ(authProvider)).
 		Only(ctx)
 	if err != nil {
-		h.Logger.Errorw("error obtaining user from email", "error", err)
+		log.Error().Err(err).Msg("error obtaining user from email")
 
 		return nil, err
 	}
@@ -188,7 +189,7 @@ func (h *Handler) getUserByID(ctx context.Context, id string, authProvider enums
 		Where(user.AuthProviderEQ(authProvider)).
 		Only(ctx)
 	if err != nil {
-		h.Logger.Errorw("error obtaining user from id", "error", err)
+		log.Error().Err(err).Msg("error obtaining user from id")
 
 		return nil, err
 	}
@@ -210,13 +211,13 @@ func (h *Handler) addCredentialToUser(ctx context.Context, user *ent.User, crede
 		webauthn.OwnerID(user.ID),
 	).Count(ctx)
 	if err != nil {
-		h.Logger.Errorw("error checking existing webauthn credentials", "error", err)
+		log.Error().Err(err).Msg("error checking existing webauthn credentials")
 
 		return err
 	}
 
 	if count >= h.OauthProvider.Webauthn.MaxDevices {
-		h.Logger.Errorw("max devices reached", "error", err)
+		log.Error().Err(err).Msg("max devices reached")
 
 		return ErrMaxDeviceLimit
 	}
@@ -235,7 +236,7 @@ func (h *Handler) addCredentialToUser(ctx context.Context, user *ent.User, crede
 		SetSignCount(int32(credential.Authenticator.SignCount)). // nolint:gosec
 		Save(ctx)
 	if err != nil {
-		h.Logger.Errorw("error creating email verification token", "error", err)
+		log.Error().Err(err).Msg("error creating email verification token")
 
 		return err
 	}
@@ -249,7 +250,7 @@ func (h *Handler) getUserDetailsByID(ctx context.Context, userID string) (*ent.U
 		user.ID(userID),
 	).Only(ctx)
 	if err != nil {
-		h.Logger.Errorf("error retrieving user", "error", err)
+		log.Error().Err(err).Msg("error retrieving user")
 
 		return nil, err
 	}
@@ -265,7 +266,7 @@ func (h *Handler) getUserByInviteToken(ctx context.Context, token string) (*ent.
 		).WithOwner().Only(ctx)
 
 	if err != nil {
-		h.Logger.Errorw("error obtaining user from token", "error", err)
+		log.Error().Err(err).Msg("error obtaining user from token")
 
 		return nil, err
 	}
@@ -280,7 +281,7 @@ func (h *Handler) countVerificationTokensUserByEmail(ctx context.Context, email 
 			emailverificationtoken.Email(email),
 		)).Count(ctx)
 	if err != nil {
-		h.Logger.Errorw("error counting verification reset tokens", "error", err)
+		log.Error().Err(err).Msg("error counting verification reset tokens")
 
 		return 0, err
 	}
@@ -296,14 +297,14 @@ func (h *Handler) expireAllVerificationTokensUserByEmail(ctx context.Context, em
 			emailverificationtoken.TTLGT(time.Now()),
 		)).All(ctx)
 	if err != nil {
-		h.Logger.Errorw("error obtaining verification reset tokens", "error", err)
+		log.Error().Err(err).Msg("error obtaining verification reset tokens")
 
 		return err
 	}
 
 	for _, pr := range prs {
 		if err := pr.Update().SetTTL(time.Now()).Exec(ctx); err != nil {
-			h.Logger.Errorw("error expiring verification token", "error", err)
+			log.Error().Err(err).Msg("error expiring verification token")
 
 			return err
 		}
@@ -320,14 +321,14 @@ func (h *Handler) expireAllResetTokensUserByEmail(ctx context.Context, email str
 			passwordresettoken.TTLGT(time.Now()),
 		)).All(ctx)
 	if err != nil {
-		h.Logger.Errorw("error obtaining password reset tokens", "error", err)
+		log.Error().Err(err).Msg("error obtaining password reset tokens")
 
 		return err
 	}
 
 	for _, pr := range prs {
 		if err := pr.Update().SetTTL(time.Now()).Exec(ctx); err != nil {
-			h.Logger.Errorw("error expiring password reset token", "error", err)
+			log.Error().Err(err).Msg("error expiring password reset token")
 
 			return err
 		}
@@ -342,7 +343,7 @@ func (h *Handler) setEmailConfirmed(ctx context.Context, user *ent.User) error {
 		Where(
 			usersetting.ID(user.Edges.Setting.ID),
 		).Save(ctx); err != nil {
-		h.Logger.Errorw("error setting email confirmed", "error", err)
+		log.Error().Err(err).Msg("error setting email confirmed")
 
 		return err
 	}
@@ -353,7 +354,7 @@ func (h *Handler) setEmailConfirmed(ctx context.Context, user *ent.User) error {
 // updateUserPassword changes a updates a user's password in the database
 func (h *Handler) updateUserPassword(ctx context.Context, id string, password string) error {
 	if _, err := transaction.FromContext(ctx).User.UpdateOneID(id).SetPassword(password).Save(ctx); err != nil {
-		h.Logger.Errorw("error updating user password", "error", err)
+		log.Error().Err(err).Msg("error updating user password")
 
 		return err
 	}
@@ -368,7 +369,7 @@ func (h *Handler) addDefaultOrgToUserQuery(ctx context.Context, user *ent.User) 
 
 	org, err := user.Edges.Setting.DefaultOrg(orgCtx)
 	if err != nil {
-		h.Logger.Errorw("error obtaining default org", "error", err)
+		log.Error().Err(err).Msg("error obtaining default org")
 
 		return err
 	}
@@ -393,7 +394,7 @@ func (h *Handler) CheckAndCreateUser(ctx context.Context, name, email string, pr
 			// create user in the database
 			entUser, err = h.createUser(ctx, input)
 			if err != nil {
-				h.Logger.Errorw("error creating new user", "error", err)
+				log.Error().Err(err).Msg("error creating new user")
 
 				return nil, err
 			}
@@ -407,14 +408,14 @@ func (h *Handler) CheckAndCreateUser(ctx context.Context, name, email string, pr
 
 	// update last seen of user
 	if err := h.updateUserLastSeen(ctx, entUser.ID); err != nil {
-		h.Logger.Errorw("unable to update last seen", "error", err)
+		log.Error().Err(err).Msg("error updating user last seen")
 
 		return nil, err
 	}
 
 	// update user avatar
 	if err := h.updateUserAvatar(ctx, entUser, image); err != nil {
-		h.Logger.Errorw("error updating user avatar", "error", err)
+		log.Error().Err(err).Msg("error updating user avatar")
 
 		return nil, err
 	}
@@ -452,7 +453,7 @@ func (h *Handler) updateUserAvatar(ctx context.Context, user *ent.User, image st
 		User.UpdateOneID(user.ID).
 		SetAvatarRemoteURL(image).
 		Save(ctx); err != nil {
-		h.Logger.Errorw("error updating user avatar", "error", err)
+		log.Error().Err(err).Msg("error updating user avatar")
 		return err
 	}
 
@@ -465,7 +466,7 @@ func (h *Handler) setWebauthnAllowed(ctx context.Context, user *ent.User) error 
 		Where(
 			usersetting.UserID(user.ID),
 		).Save(ctx); err != nil {
-		h.Logger.Errorw("error setting webauthn allowed", "error", err)
+		log.Error().Err(err).Msg("error setting webauthn allowed")
 
 		return err
 	}
@@ -481,7 +482,7 @@ func (h *Handler) getSubscriberByToken(ctx context.Context, token string) (*ent.
 		).
 		Only(ctx)
 	if err != nil {
-		h.Logger.Errorw("error obtaining subscriber from verification token", "error", err)
+		log.Error().Err(err).Msg("error obtaining subscriber from token")
 
 		return nil, err
 	}
@@ -493,7 +494,7 @@ func (h *Handler) getSubscriberByToken(ctx context.Context, token string) (*ent.
 func (h *Handler) getOrgByID(ctx context.Context, id string) (*ent.Organization, error) {
 	org, err := transaction.FromContext(ctx).Organization.Get(ctx, id)
 	if err != nil {
-		h.Logger.Errorw("error obtaining organization from id", "error", err)
+		log.Error().Err(err).Msg("error obtaining organization from id")
 
 		return nil, err
 	}

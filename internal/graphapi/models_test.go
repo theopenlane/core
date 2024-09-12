@@ -306,7 +306,10 @@ func (o *OrganizationBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Or
 		m.SetParentID(o.ParentOrgID)
 	}
 
-	org := m.SaveX(ctx)
+	org, err := m.Save(ctx)
+	if err != nil {
+		t.Fatalf("failed to create organization: %s", err)
+	}
 
 	// clear mocks before going to tests
 	mock_fga.ClearMocks(o.client.fga)

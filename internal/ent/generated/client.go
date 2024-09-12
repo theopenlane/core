@@ -82,7 +82,6 @@ import (
 	"github.com/theopenlane/iam/totp"
 	"github.com/theopenlane/utils/emails"
 	"github.com/theopenlane/utils/marionette"
-	"go.uber.org/zap"
 	"gocloud.dev/secrets"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -316,7 +315,6 @@ type (
 		Authz         fgax.Client
 		TokenManager  *tokens.TokenManager
 		SessionConfig *sessions.SessionConfig
-		Logger        zap.SugaredLogger
 		Emails        *emails.EmailManager
 		Marionette    *marionette.TaskManager
 		Analytics     *analytics.EventManager
@@ -399,13 +397,6 @@ func TokenManager(v *tokens.TokenManager) Option {
 func SessionConfig(v *sessions.SessionConfig) Option {
 	return func(c *config) {
 		c.SessionConfig = v
-	}
-}
-
-// Logger configures the Logger.
-func Logger(v zap.SugaredLogger) Option {
-	return func(c *config) {
-		c.Logger = v
 	}
 }
 

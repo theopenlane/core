@@ -4,9 +4,10 @@ import (
 	"context"
 
 	"entgo.io/ent"
-	"github.com/theopenlane/iam/fgax"
+	"github.com/rs/zerolog/log"
 
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -26,7 +27,7 @@ func CanCreateGroupsInOrg() privacy.GroupMutationRuleFunc {
 			}
 		}
 
-		m.Logger.Debugw("checking mutation access")
+		log.Debug().Msg("checking mutation access")
 
 		relation := fgax.CanEdit
 		if m.Op().Is(ent.OpDelete | ent.OpDeleteOne) {
@@ -38,7 +39,9 @@ func CanCreateGroupsInOrg() privacy.GroupMutationRuleFunc {
 			return err
 		}
 
-		m.Logger.Infow("checking relationship tuples", "relation", relation, "organization_id", oID)
+		log.Info().Str("relation", relation).
+			Str("organization_id", oID).
+			Msg("checking relationship tuples")
 
 		ac := fgax.AccessCheck{
 			SubjectID:   userID,
@@ -53,7 +56,9 @@ func CanCreateGroupsInOrg() privacy.GroupMutationRuleFunc {
 		}
 
 		if access {
-			m.Logger.Debugw("access allowed", "relation", relation, "organization_id", oID)
+			log.Debug().Str("relation", relation).
+				Str("organization_id", oID).
+				Msg("access allowed")
 
 			return privacy.Allow
 		}

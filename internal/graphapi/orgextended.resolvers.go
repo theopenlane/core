@@ -8,6 +8,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 )
 
@@ -30,7 +31,7 @@ func (r *updateOrganizationInputResolver) AddOrgMembers(ctx context.Context, obj
 	opCtx := graphql.GetOperationContext(ctx)
 	orgID, ok := opCtx.Variables["updateOrganizationId"]
 	if !ok {
-		r.logger.Errorw("unable to get org from context")
+		log.Error().Msg("unable to get org from context")
 
 		return ErrInternalServerError
 	}
@@ -56,7 +57,7 @@ func (r *updateOrganizationInputResolver) UpdateOrgSettings(ctx context.Context,
 	opCtx := graphql.GetOperationContext(ctx)
 	orgID, ok := opCtx.Variables["updateOrganizationId"]
 	if !ok {
-		r.logger.Errorw("unable to get org from context")
+		log.Error().Msg("unable to get org from context")
 
 		return ErrInternalServerError
 	}

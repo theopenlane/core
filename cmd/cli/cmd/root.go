@@ -14,8 +14,9 @@ import (
 	"github.com/knadh/koanf/providers/posflag"
 	"github.com/knadh/koanf/v2"
 	"github.com/mitchellh/go-homedir"
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
-	"go.uber.org/zap"
 )
 
 const (
@@ -29,7 +30,6 @@ var (
 	cfgFile      string
 	OutputFormat string
 	InputFile    string
-	Logger       *zap.SugaredLogger
 	Config       *koanf.Koanf
 )
 
@@ -97,22 +97,19 @@ func initConfig() {
 
 // setupLogging configures the logger based on the command flags
 func setupLogging() {
-	cfg := zap.NewProductionConfig()
+	log.Logger = zerolog.New(os.Stderr).With().Timestamp().Logger()
+
 	if Config.Bool("pretty") {
-		cfg = zap.NewDevelopmentConfig()
+		log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
 	}
+
+	zerolog.SetGlobalLevel(zerolog.InfoLevel)
 
 	if Config.Bool("debug") {
-		cfg.Level = zap.NewAtomicLevelAt(zap.DebugLevel)
-	} else {
-		cfg.Level = zap.NewAtomicLevelAt(zap.InfoLevel)
+		zerolog.SetGlobalLevel(zerolog.DebugLevel)
 	}
 
-	l, err := cfg.Build()
-	cobra.CheckErr(err)
-
-	Logger = l.Sugar().With("app", appName)
-	defer Logger.Sync() //nolint:errcheck
+	log.Logger = log.With().Str("app", appName).Logger()
 }
 
 // initConfiguration loads the configuration from the command flags of the given cobra command

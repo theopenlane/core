@@ -6,13 +6,13 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/echox/middleware"
-	"go.uber.org/zap"
 )
 
 // BodyDump prints out the request body for debugging purpose but attempts to obfuscate sensitive fields within the requests
-func BodyDump(l *zap.SugaredLogger) echo.MiddlewareFunc {
+func BodyDump() echo.MiddlewareFunc {
 	return middleware.BodyDump(func(c echo.Context, reqBody, resBody []byte) {
 		secretFields := []string{"new_password", "old_password", "password", "access_token", "refresh_token"}
 
@@ -66,7 +66,7 @@ func BodyDump(l *zap.SugaredLogger) echo.MiddlewareFunc {
 				)
 			}
 
-			l.Infof("Request Body: %v\n", string(reqBody))
+			log.Info().Msgf("Request Body: %v\n", string(reqBody))
 		}
 
 		if (c.Request().Method == "PATCH" || c.Request().Method == "POST") && len(resBody) > 0 {
@@ -109,7 +109,7 @@ func BodyDump(l *zap.SugaredLogger) echo.MiddlewareFunc {
 				)
 			}
 
-			l.Infof("Response Body: %v\n", string(resBody))
+			log.Info().Msgf("Response Body: %v\n", string(resBody))
 		}
 	})
 }

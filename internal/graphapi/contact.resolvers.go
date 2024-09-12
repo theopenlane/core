@@ -8,6 +8,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/utils/rout"
 )
@@ -16,14 +17,14 @@ import (
 func (r *mutationResolver) CreateContact(ctx context.Context, input generated.CreateContactInput) (*ContactCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
-		r.logger.Errorw("failed to set organization in auth context", "error", err)
+		log.Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
 	res, err := withTransactionalMutation(ctx).Contact.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "contact"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "contact"})
 	}
 
 	return &ContactCreatePayload{
@@ -40,7 +41,7 @@ func (r *mutationResolver) CreateBulkContact(ctx context.Context, input []*gener
 func (r *mutationResolver) CreateBulkCSVContact(ctx context.Context, input graphql.Upload) (*ContactBulkCreatePayload, error) {
 	data, err := unmarshalBulkData[generated.CreateContactInput](input)
 	if err != nil {
-		r.logger.Errorw("failed to unmarshal bulk data", "error", err)
+		log.Error().Err(err).Msg("failed to unmarshal bulk data")
 
 		return nil, err
 	}
@@ -52,11 +53,11 @@ func (r *mutationResolver) CreateBulkCSVContact(ctx context.Context, input graph
 func (r *mutationResolver) UpdateContact(ctx context.Context, id string, input generated.UpdateContactInput) (*ContactUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Contact.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "contact"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "contact"})
 	}
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
-		r.logger.Errorw("failed to set organization in auth context", "error", err)
+		log.Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, ErrPermissionDenied
 	}
@@ -66,7 +67,7 @@ func (r *mutationResolver) UpdateContact(ctx context.Context, id string, input g
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "contact"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "contact"})
 	}
 
 	return &ContactUpdatePayload{
@@ -77,7 +78,7 @@ func (r *mutationResolver) UpdateContact(ctx context.Context, id string, input g
 // DeleteContact is the resolver for the deleteContact field.
 func (r *mutationResolver) DeleteContact(ctx context.Context, id string) (*ContactDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Contact.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "contact"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionDelete, object: "contact"})
 	}
 
 	if err := generated.ContactEdgeCleanup(ctx, id); err != nil {
@@ -93,7 +94,7 @@ func (r *mutationResolver) DeleteContact(ctx context.Context, id string) (*Conta
 func (r *queryResolver) Contact(ctx context.Context, id string) (*generated.Contact, error) {
 	res, err := withTransactionalMutation(ctx).Contact.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "contact"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionGet, object: "contact"})
 	}
 
 	return res, nil

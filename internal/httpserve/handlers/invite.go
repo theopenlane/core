@@ -9,6 +9,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/oklog/ulid/v2"
+	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/utils/rout"
@@ -56,7 +57,7 @@ func (h *Handler) OrganizationInviteAccept(ctx echo.Context) error {
 	// get the authenticated user from the context
 	userID, err := auth.GetUserIDFromContext(reqCtx)
 	if err != nil {
-		h.Logger.Errorw("unable to get user id from context", "error", err)
+		log.Err(err).Msg("unable to get user id from context")
 
 		return h.BadRequest(ctx, err)
 	}
@@ -80,7 +81,7 @@ func (h *Handler) OrganizationInviteAccept(ctx echo.Context) error {
 			return h.BadRequest(ctx, err)
 		}
 
-		h.Logger.Errorf("error retrieving invite token", "error", err)
+		log.Error().Err(err).Msg("error retrieving invite token")
 
 		return h.InternalServerError(ctx, nil)
 	}
@@ -91,7 +92,7 @@ func (h *Handler) OrganizationInviteAccept(ctx echo.Context) error {
 	// get user details for logged in user
 	user, err := h.getUserDetailsByID(reqCtx, userID)
 	if err != nil {
-		h.Logger.Errorw("unable to get user for request", "error", err)
+		log.Error().Err(err).Msg("unable to get user for request")
 
 		return h.Unauthorized(ctx, err)
 	}
@@ -123,7 +124,7 @@ func (h *Handler) OrganizationInviteAccept(ctx echo.Context) error {
 
 	// set tokens for request
 	if err := invite.setOrgInviteTokens(invitedUser, inv.Token); err != nil {
-		h.Logger.Errorw("unable to set invite token for request", "error", err)
+		log.Error().Err(err).Msg("unable to set invite token for request")
 
 		return h.BadRequest(ctx, err)
 	}
@@ -136,7 +137,7 @@ func (h *Handler) OrganizationInviteAccept(ctx echo.Context) error {
 
 	// check and ensure the token has not expired
 	if t.ExpiresAt, err = invite.GetInviteExpires(); err != nil {
-		h.Logger.Errorw("unable to parse expiration", "error", err)
+		log.Error().Err(err).Msg("unable to parse expiration")
 
 		return h.InternalServerError(ctx, err)
 	}
@@ -155,7 +156,7 @@ func (h *Handler) OrganizationInviteAccept(ctx echo.Context) error {
 	}
 
 	if err := updateInviteStatusAccepted(ctxWithToken, invitedUser); err != nil {
-		h.Logger.Errorw("unable to update invite status", "error", err)
+		log.Error().Err(err).Msg("unable to update invite status")
 
 		return h.BadRequest(ctx, err)
 	}
@@ -163,7 +164,7 @@ func (h *Handler) OrganizationInviteAccept(ctx echo.Context) error {
 	// create new claims for the user
 	auth, err := h.AuthManager.GenerateUserAuthSessionWithOrg(ctx, user, invitedUser.OwnerID)
 	if err != nil {
-		h.Logger.Errorw("unable create new auth session", "error", err)
+		log.Error().Err(err).Msg("unable to create new auth session")
 
 		return h.InternalServerError(ctx, err)
 	}

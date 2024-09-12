@@ -1,20 +1,18 @@
 package cmd
 
 import (
-	"log"
+	"os"
 
 	"github.com/knadh/koanf/providers/posflag"
 	"github.com/knadh/koanf/v2"
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
-	"go.uber.org/zap"
 )
 
 const appName = "openlane"
 
-var (
-	logger *zap.SugaredLogger
-	k      *koanf.Koanf
-)
+var k *koanf.Koanf
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -46,7 +44,7 @@ func init() {
 // refer to the README.md for more information
 func initConfig() {
 	if err := initCmdFlags(rootCmd); err != nil {
-		log.Fatalf("error loading config: %v", err)
+		log.Fatal().Err(err).Msg("error loading config")
 	}
 
 	setupLogging()
@@ -58,22 +56,17 @@ func initCmdFlags(cmd *cobra.Command) error {
 }
 
 func setupLogging() {
-	cfg := zap.NewProductionConfig()
-	if k.Bool("pretty") {
-		cfg = zap.NewDevelopmentConfig()
-	}
+	log.Logger = zerolog.New(os.Stderr).With().Timestamp().Logger()
+
+	zerolog.SetGlobalLevel(zerolog.InfoLevel)
 
 	if k.Bool("debug") {
-		cfg.Level = zap.NewAtomicLevelAt(zap.DebugLevel)
-	} else {
-		cfg.Level = zap.NewAtomicLevelAt(zap.InfoLevel)
+		zerolog.SetGlobalLevel(zerolog.DebugLevel)
 	}
 
-	l, err := cfg.Build()
-	if err != nil {
-		panic(err)
+	if k.Bool("pretty") {
+		log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
 	}
 
-	logger = l.Sugar().With("app", appName)
-	defer logger.Sync() //nolint:errcheck
+	log.With().Str("app", appName).Logger()
 }

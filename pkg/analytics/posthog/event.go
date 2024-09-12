@@ -32,7 +32,6 @@ func (c *Config) Init() *PostHog {
 	client, _ := posthog.NewWithConfig(c.APIKey, posthog.Config{
 		Endpoint:  c.Host,
 		BatchSize: 1,
-		Logger:    new(noopLogger),
 	})
 
 	if client != nil {

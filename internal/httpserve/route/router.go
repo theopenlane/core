@@ -99,7 +99,6 @@ func RegisterRoutes(router *Router) error {
 	// add transaction middleware
 	transactionConfig := transaction.Client{
 		EntDBClient: router.Handler.DBClient,
-		Logger:      router.Handler.Logger,
 	}
 
 	mw = append(mw, transactionConfig.Middleware)

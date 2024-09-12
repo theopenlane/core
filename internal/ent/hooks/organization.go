@@ -5,13 +5,13 @@ import (
 	"fmt"
 
 	"entgo.io/ent"
+	"github.com/rs/zerolog/log"
 
 	dbx "github.com/theopenlane/dbx/pkg/dbxclient"
 	dbxenums "github.com/theopenlane/dbx/pkg/enums"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
-
 	"github.com/theopenlane/utils/gravatar"
 	"github.com/theopenlane/utils/marionette"
 
@@ -67,7 +67,7 @@ func HookOrganization() ent.Hook {
 				if orgCreated.DedicatedDb && mutation.DBx != nil {
 					settings, err := orgCreated.Setting(ctx)
 					if err != nil {
-						mutation.Logger.Errorw("unable to get organization settings")
+						log.Error().Err(err).Msg("unable to get organization settings")
 
 						return nil, err
 					}
@@ -76,7 +76,7 @@ func HookOrganization() ent.Hook {
 						return createDatabase(ctx, orgCreated.ID, settings.GeoLocation.String(), mutation)
 					}), marionette.WithErrorf("could not send create the database for %s", orgCreated.Name),
 					); err != nil {
-						mutation.Logger.Errorw("unable to queue database creation")
+						log.Error().Err(err).Msg("unable to queue database creation")
 
 						return v, err
 					}
@@ -169,7 +169,7 @@ func createOrgSettings(ctx context.Context, mutation *generated.OrganizationMuta
 		// sets up default org settings using schema defaults
 		orgSettingID, err := defaultOrganizationSettings(ctx, mutation)
 		if err != nil {
-			mutation.Logger.Errorw("error creating default organization settings", "error", err)
+			log.Error().Err(err).Msg("error creating default organization settings")
 
 			return err
 		}
@@ -196,7 +196,7 @@ func createEntityTypes(ctx context.Context, orgID string, mutation *generated.Or
 	}
 
 	if err := mutation.Client().EntityType.CreateBulk(builders...).Exec(ctx); err != nil {
-		mutation.Logger.Errorw("error creating entity types", "error", err)
+		log.Error().Err(err).Msg("error creating entity types")
 
 		return err
 	}
@@ -243,7 +243,7 @@ func validateDeletion(ctx context.Context, mutation *generated.OrganizationMutat
 	}
 
 	if deletedOrg.PersonalOrg {
-		mutation.Logger.Debugw("attempt to delete personal org detected")
+		log.Debug().Msg("attempt to delete personal org detected")
 
 		return fmt.Errorf("%w: %s", ErrInvalidInput, "cannot delete personal organizations")
 	}
@@ -321,10 +321,14 @@ func createDatabase(ctx context.Context, orgID, geo string, mutation *generated.
 		Provider:       &dbxenums.Turso,
 	}
 
-	mutation.Logger.Infow("creating database", "org", input.OrganizationID, "geo", input.Geo, "provider", input.Provider)
+	log.Debug().
+		Str("org", input.OrganizationID).
+		Str("geo", *input.Geo).
+		Str("provider", input.Provider.String()).
+		Msg("creating database")
 
 	if _, err := mutation.DBx.CreateDatabase(ctx, input); err != nil {
-		mutation.Logger.Errorw("error creating database", "error", err)
+		log.Error().Err(err).Msg("error creating database")
 
 		return err
 	}
@@ -380,7 +384,7 @@ func createParentOrgTuple(ctx context.Context, m *generated.OrganizationMutation
 	if _, err := m.Authz.WriteTupleKeys(ctx, []fgax.TupleKey{
 		tuple,
 	}, nil); err != nil {
-		m.Logger.Errorw("failed to create relationship tuple", "error", err)
+		log.Error().Err(err).Msg("failed to create relationship tuple")
 
 		return err
 	}
@@ -410,7 +414,7 @@ func createOrgMemberOwner(ctx context.Context, oID string, m *generated.Organiza
 	// get userID from context
 	userID, err := auth.GetUserIDFromContext(ctx)
 	if err != nil {
-		m.Logger.Errorw("unable to get user id from echo context, unable to add user to organization")
+		log.Error().Err(err).Msg("unable to get user id from context, unable to add user to organization")
 
 		return err
 	}
@@ -424,7 +428,7 @@ func createOrgMemberOwner(ctx context.Context, oID string, m *generated.Organiza
 	}
 
 	if _, err := m.Client().OrgMembership.Create().SetInput(input).Save(ctx); err != nil {
-		m.Logger.Errorw("error creating org membership for owner", "error", err)
+		log.Error().Err(err).Msg("error creating org membership for owner")
 
 		return err
 	}
@@ -438,7 +442,7 @@ func createServiceTuple(ctx context.Context, oID string, m *generated.Organizati
 	// get userID from context
 	subjectID, err := auth.GetUserIDFromContext(ctx)
 	if err != nil {
-		m.Logger.Errorw("unable to get user id from echo context, unable to add user to organization")
+		log.Error().Err(err).Msg("unable to get user id from context, unable to add user to organization")
 
 		return err
 	}
@@ -459,12 +463,12 @@ func createServiceTuple(ctx context.Context, oID string, m *generated.Organizati
 	tuple := fgax.GetTupleKey(req)
 
 	if _, err := m.Authz.WriteTupleKeys(ctx, []fgax.TupleKey{tuple}, nil); err != nil {
-		m.Logger.Errorw("failed to create relationship tuple", "error", err)
+		log.Error().Err(err).Msg("failed to create relationship tuple")
 
 		return err
 	}
 
-	m.Logger.Debugw("created relationship tuples", "relation", role, "object", tuple.Object)
+	log.Debug().Str("relation", role).Str("object", tuple.Object.String()).Msg("created relationship tuples")
 
 	return nil
 }

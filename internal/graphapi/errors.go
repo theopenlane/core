@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/utils/rout"
-	"go.uber.org/zap"
 )
 
 var (
@@ -97,21 +97,28 @@ func newForeignKeyError(action, objecttype string) *ForeignKeyError {
 
 // parseRequestError logs and parses the error and returns the appropriate error type for the client
 // TODO: cleanup return error messages
-func parseRequestError(err error, a action, logger *zap.SugaredLogger) error {
+func parseRequestError(err error, a action) error {
 	// log the error for debugging
-	logger.Errorw("error processing request", "action", a.action, "object", a.object, "error", err)
+	log.Error().
+		Err(err).
+		Str("action", a.action).
+		Str("object", a.object).
+		Msg("error processing request")
 
 	switch {
 	case generated.IsValidationError(err):
 		validationError := err.(*generated.ValidationError)
 
-		logger.Debugw("validation error", "field", validationError.Name, "error", validationError.Error())
+		log.Debug().
+			Err(validationError).
+			Str("field", validationError.Name).
+			Msg("validation error")
 
 		return validationError
 	case generated.IsConstraintError(err):
 		constraintError := err.(*generated.ConstraintError)
 
-		logger.Debugw("constraint error", "error", constraintError.Error())
+		log.Debug().Err(constraintError).Msg("constraint error")
 
 		// Check for unique (or UNIQUE in sqlite) constraint error
 		if strings.Contains(strings.ToLower(constraintError.Error()), "unique") {
@@ -125,15 +132,15 @@ func parseRequestError(err error, a action, logger *zap.SugaredLogger) error {
 
 		return constraintError
 	case generated.IsNotFound(err):
-		logger.Debugw("not found", "error", err.Error())
+		log.Debug().Err(err).Msg("not found")
 
 		return err
 	case errors.Is(err, privacy.Deny):
-		logger.Debugw("permission denied", "error", err.Error())
+		log.Debug().Err(err).Msg("permission denied")
 
 		return newPermissionDeniedError(a.action, a.object)
 	default:
-		logger.Errorw("unexpected error", "error", err.Error())
+		log.Error().Err(err).Msg("unexpected error")
 
 		return err
 	}

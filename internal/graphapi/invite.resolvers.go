@@ -8,6 +8,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/utils/rout"
 )
@@ -16,14 +17,13 @@ import (
 func (r *mutationResolver) CreateInvite(ctx context.Context, input generated.CreateInviteInput) (*InviteCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
-		r.logger.Errorw("failed to set organization in auth context", "error", err)
-
+		log.Error().Err(err).Msg("failed to set organization in auth context")
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
 	res, err := withTransactionalMutation(ctx).Invite.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "invite"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "invite"})
 	}
 
 	return &InviteCreatePayload{
@@ -40,7 +40,7 @@ func (r *mutationResolver) CreateBulkInvite(ctx context.Context, input []*genera
 func (r *mutationResolver) CreateBulkCSVInvite(ctx context.Context, input graphql.Upload) (*InviteBulkCreatePayload, error) {
 	data, err := unmarshalBulkData[generated.CreateInviteInput](input)
 	if err != nil {
-		r.logger.Errorw("failed to unmarshal bulk data", "error", err)
+		log.Error().Err(err).Msg("failed to unmarshal bulk data")
 
 		return nil, err
 	}
@@ -52,12 +52,11 @@ func (r *mutationResolver) CreateBulkCSVInvite(ctx context.Context, input graphq
 func (r *mutationResolver) UpdateInvite(ctx context.Context, id string, input generated.UpdateInviteInput) (*InviteUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Invite.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "invite"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "invite"})
 	}
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
-		r.logger.Errorw("failed to set organization in auth context", "error", err)
-
+		log.Error().Err(err).Msg("failed to set organization in auth context")
 		return nil, ErrPermissionDenied
 	}
 
@@ -66,7 +65,7 @@ func (r *mutationResolver) UpdateInvite(ctx context.Context, id string, input ge
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "invite"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "invite"})
 	}
 
 	return &InviteUpdatePayload{
@@ -77,7 +76,7 @@ func (r *mutationResolver) UpdateInvite(ctx context.Context, id string, input ge
 // DeleteInvite is the resolver for the deleteInvite field.
 func (r *mutationResolver) DeleteInvite(ctx context.Context, id string) (*InviteDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Invite.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "invite"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionDelete, object: "invite"})
 	}
 
 	if err := generated.InviteEdgeCleanup(ctx, id); err != nil {
@@ -93,7 +92,7 @@ func (r *mutationResolver) DeleteInvite(ctx context.Context, id string) (*Invite
 func (r *queryResolver) Invite(ctx context.Context, id string) (*generated.Invite, error) {
 	res, err := withTransactionalMutation(ctx).Invite.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "invite"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionGet, object: "invite"})
 	}
 
 	return res, nil

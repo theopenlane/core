@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	ph "github.com/posthog/posthog-go"
+	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/utils/slack"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
@@ -29,7 +30,7 @@ func CreateEvent(ctx context.Context, c *ent.Client, m ent.Mutation, v ent.Value
 	action := getOp(m)
 
 	// debug log the event
-	c.Logger.Debugw("tracking event", "object", obj, "action", action)
+	log.Debug().Str("object", obj).Str("action", action).Msg("tracking event")
 
 	event := fmt.Sprintf("%s.%sd", obj, action)
 	e.EnsureTopic(event)
@@ -106,7 +107,9 @@ func CreateEvent(ctx context.Context, c *ent.Client, m ent.Mutation, v ent.Value
 	c.Analytics.Event(event, props)
 
 	// debug log the event
-	c.Logger.Debugw("event tracked", "event", event, "props", props)
+	log.Debug().Str("event", event).
+		Interface("props", props).
+		Msg("event tracked")
 }
 
 // trackedEvent returns true if the mutation should be a tracked event

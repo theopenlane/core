@@ -8,6 +8,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 )
 
@@ -15,7 +16,7 @@ import (
 func (r *mutationResolver) CreateGroupMembership(ctx context.Context, input generated.CreateGroupMembershipInput) (*GroupMembershipCreatePayload, error) {
 	res, err := withTransactionalMutation(ctx).GroupMembership.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "groupmembership"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "groupmembership"})
 	}
 
 	return &GroupMembershipCreatePayload{
@@ -32,7 +33,7 @@ func (r *mutationResolver) CreateBulkGroupMembership(ctx context.Context, input 
 func (r *mutationResolver) CreateBulkCSVGroupMembership(ctx context.Context, input graphql.Upload) (*GroupMembershipBulkCreatePayload, error) {
 	data, err := unmarshalBulkData[generated.CreateGroupMembershipInput](input)
 	if err != nil {
-		r.logger.Errorw("failed to unmarshal bulk data", "error", err)
+		log.Error().Err(err).Msg("failed to unmarshal bulk data")
 
 		return nil, err
 	}
@@ -44,7 +45,7 @@ func (r *mutationResolver) CreateBulkCSVGroupMembership(ctx context.Context, inp
 func (r *mutationResolver) UpdateGroupMembership(ctx context.Context, id string, input generated.UpdateGroupMembershipInput) (*GroupMembershipUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).GroupMembership.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "groupmembership"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "groupmembership"})
 	}
 
 	// setup update request
@@ -52,7 +53,7 @@ func (r *mutationResolver) UpdateGroupMembership(ctx context.Context, id string,
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "groupmembership"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "groupmembership"})
 	}
 
 	return &GroupMembershipUpdatePayload{
@@ -63,7 +64,7 @@ func (r *mutationResolver) UpdateGroupMembership(ctx context.Context, id string,
 // DeleteGroupMembership is the resolver for the deleteGroupMembership field.
 func (r *mutationResolver) DeleteGroupMembership(ctx context.Context, id string) (*GroupMembershipDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).GroupMembership.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "groupmembership"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionDelete, object: "groupmembership"})
 	}
 
 	if err := generated.GroupMembershipEdgeCleanup(ctx, id); err != nil {
@@ -79,7 +80,7 @@ func (r *mutationResolver) DeleteGroupMembership(ctx context.Context, id string)
 func (r *queryResolver) GroupMembership(ctx context.Context, id string) (*generated.GroupMembership, error) {
 	res, err := withTransactionalMutation(ctx).GroupMembership.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "groupmembership"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionGet, object: "groupmembership"})
 	}
 
 	return res, nil

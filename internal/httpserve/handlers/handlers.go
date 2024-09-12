@@ -5,7 +5,6 @@ import (
 	"github.com/lestrrat-go/jwx/v2/jwk"
 	"github.com/redis/go-redis/v9"
 	echo "github.com/theopenlane/echox"
-	"go.uber.org/zap"
 
 	"github.com/theopenlane/iam/totp"
 	"github.com/theopenlane/utils/emails"
@@ -32,8 +31,6 @@ type Handler struct {
 	AuthManager *authmanager.Config
 	// TokenManager contains the token manager in order to validate auth requests
 	TokenManager *tokens.TokenManager
-	// Logger provides the zap logger to do logging things from the handlers
-	Logger *zap.SugaredLogger
 	// ReadyChecks is a set of checkFuncs to determine if the application is "ready" upon startup
 	ReadyChecks Checks
 	// JWTKeys contains the set of valid JWT authentication key

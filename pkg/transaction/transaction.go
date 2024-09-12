@@ -5,8 +5,8 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
-	"go.uber.org/zap"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 )
@@ -24,7 +24,6 @@ var (
 
 type Client struct {
 	EntDBClient *ent.Client
-	Logger      *zap.SugaredLogger
 }
 
 type entClientCtxKey struct{}
@@ -45,7 +44,7 @@ func (d *Client) Middleware(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		client, err := d.EntDBClient.Tx(c.Request().Context())
 		if err != nil {
-			d.Logger.Errorw(transactionStartErr, "error", err)
+			log.Error().Err(err).Msg(transactionStartErr)
 
 			return c.JSON(http.StatusInternalServerError, ErrProcessingRequest)
 		}
@@ -56,10 +55,10 @@ func (d *Client) Middleware(next echo.HandlerFunc) echo.HandlerFunc {
 		c.SetRequest(c.Request().WithContext(ctx))
 
 		if err := next(c); err != nil {
-			d.Logger.Debug("rolling back transaction in middleware")
+			log.Debug().Msg("rolling back transaction in middleware")
 
 			if err := client.Rollback(); err != nil {
-				d.Logger.Errorw(rollbackErr, "error", err)
+				log.Error().Err(err).Msg(rollbackErr)
 
 				return c.JSON(http.StatusInternalServerError, ErrProcessingRequest)
 			}
@@ -67,10 +66,10 @@ func (d *Client) Middleware(next echo.HandlerFunc) echo.HandlerFunc {
 			return err
 		}
 
-		d.Logger.Debug("committing transaction in middleware")
+		log.Debug().Msg("committing transaction in middleware")
 
 		if err := client.Commit(); err != nil {
-			d.Logger.Errorw(transactionCommitErr, "error", err)
+			log.Error().Err(err).Msg(transactionCommitErr)
 
 			return c.JSON(http.StatusInternalServerError, ErrProcessingRequest)
 		}

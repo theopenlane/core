@@ -6,6 +6,7 @@ import (
 
 	"entgo.io/ent/privacy"
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/rs/zerolog/log"
 
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
@@ -101,7 +102,7 @@ func (m *APITokenMutation) CheckAccessForEdit(ctx context.Context) error {
 			reqCtx := privacy.DecisionContext(ctx, privacy.Allow)
 			ob, err := m.Client().APIToken.Get(reqCtx, id)
 			if err != nil {
-				m.Logger.Debugw("error getting object", "error", err)
+				log.Debug().Err(err).Msg("error getting object")
 
 				return err
 			}
@@ -117,7 +118,7 @@ func (m *APITokenMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	m.Logger.Debugw("checking mutation access")
+	log.Debug().Msg("checking mutation access")
 
 	var err error
 	ac.SubjectID, err = auth.GetUserIDFromContext(ctx)
@@ -125,7 +126,7 @@ func (m *APITokenMutation) CheckAccessForEdit(ctx context.Context) error {
 		return err
 	}
 
-	m.Logger.Infow("checking relationship tuples", "relation", ac.Relation, "object_id", ac.ObjectID)
+	log.Info().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("checking relationship tuples")
 
 	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err != nil {
@@ -133,7 +134,7 @@ func (m *APITokenMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	if access {
-		m.Logger.Debugw("access allowed", "relation", ac.Relation, "object_id", ac.ObjectID)
+		log.Debug().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("access allowed")
 
 		return privacy.Allow
 	}
@@ -157,7 +158,7 @@ func (m *APITokenMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	m.Logger.Debugw("checking mutation access")
+	log.Debug().Msg("checking mutation access")
 
 	var err error
 	ac.SubjectID, err = auth.GetUserIDFromContext(ctx)
@@ -165,7 +166,7 @@ func (m *APITokenMutation) CheckAccessForDelete(ctx context.Context) error {
 		return err
 	}
 
-	m.Logger.Infow("checking relationship tuples", "relation", ac.Relation, "object_id", ac.ObjectID)
+	log.Info().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("checking relationship tuples")
 
 	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err != nil {
@@ -173,7 +174,7 @@ func (m *APITokenMutation) CheckAccessForDelete(ctx context.Context) error {
 	}
 
 	if access {
-		m.Logger.Debugw("access allowed", "relation", ac.Relation, "object_id", ac.ObjectID)
+		log.Debug().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("access allowed")
 
 		return privacy.Allow
 	}
@@ -265,7 +266,7 @@ func (m *ContactMutation) CheckAccessForEdit(ctx context.Context) error {
 			reqCtx := privacy.DecisionContext(ctx, privacy.Allow)
 			ob, err := m.Client().Contact.Get(reqCtx, id)
 			if err != nil {
-				m.Logger.Debugw("error getting object", "error", err)
+				log.Debug().Err(err).Msg("error getting object")
 
 				return err
 			}
@@ -281,7 +282,7 @@ func (m *ContactMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	m.Logger.Debugw("checking mutation access")
+	log.Debug().Msg("checking mutation access")
 
 	var err error
 	ac.SubjectID, err = auth.GetUserIDFromContext(ctx)
@@ -289,7 +290,7 @@ func (m *ContactMutation) CheckAccessForEdit(ctx context.Context) error {
 		return err
 	}
 
-	m.Logger.Infow("checking relationship tuples", "relation", ac.Relation, "object_id", ac.ObjectID)
+	log.Info().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("checking relationship tuples")
 
 	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err != nil {
@@ -297,7 +298,7 @@ func (m *ContactMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	if access {
-		m.Logger.Debugw("access allowed", "relation", ac.Relation, "object_id", ac.ObjectID)
+		log.Debug().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("access allowed")
 
 		return privacy.Allow
 	}
@@ -321,7 +322,7 @@ func (m *ContactMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	m.Logger.Debugw("checking mutation access")
+	log.Debug().Msg("checking mutation access")
 
 	var err error
 	ac.SubjectID, err = auth.GetUserIDFromContext(ctx)
@@ -329,7 +330,7 @@ func (m *ContactMutation) CheckAccessForDelete(ctx context.Context) error {
 		return err
 	}
 
-	m.Logger.Infow("checking relationship tuples", "relation", ac.Relation, "object_id", ac.ObjectID)
+	log.Info().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("checking relationship tuples")
 
 	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err != nil {
@@ -337,7 +338,7 @@ func (m *ContactMutation) CheckAccessForDelete(ctx context.Context) error {
 	}
 
 	if access {
-		m.Logger.Debugw("access allowed", "relation", ac.Relation, "object_id", ac.ObjectID)
+		log.Debug().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("access allowed")
 
 		return privacy.Allow
 	}
@@ -494,7 +495,7 @@ func (m *DocumentDataMutation) CheckAccessForEdit(ctx context.Context) error {
 			reqCtx := privacy.DecisionContext(ctx, privacy.Allow)
 			ob, err := m.Client().DocumentData.Get(reqCtx, id)
 			if err != nil {
-				m.Logger.Debugw("error getting object", "error", err)
+				log.Debug().Err(err).Msg("error getting object")
 
 				return err
 			}
@@ -510,7 +511,7 @@ func (m *DocumentDataMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	m.Logger.Debugw("checking mutation access")
+	log.Debug().Msg("checking mutation access")
 
 	var err error
 	ac.SubjectID, err = auth.GetUserIDFromContext(ctx)
@@ -518,7 +519,7 @@ func (m *DocumentDataMutation) CheckAccessForEdit(ctx context.Context) error {
 		return err
 	}
 
-	m.Logger.Infow("checking relationship tuples", "relation", ac.Relation, "object_id", ac.ObjectID)
+	log.Info().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("checking relationship tuples")
 
 	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err != nil {
@@ -526,7 +527,7 @@ func (m *DocumentDataMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	if access {
-		m.Logger.Debugw("access allowed", "relation", ac.Relation, "object_id", ac.ObjectID)
+		log.Debug().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("access allowed")
 
 		return privacy.Allow
 	}
@@ -550,7 +551,7 @@ func (m *DocumentDataMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	m.Logger.Debugw("checking mutation access")
+	log.Debug().Msg("checking mutation access")
 
 	var err error
 	ac.SubjectID, err = auth.GetUserIDFromContext(ctx)
@@ -558,7 +559,7 @@ func (m *DocumentDataMutation) CheckAccessForDelete(ctx context.Context) error {
 		return err
 	}
 
-	m.Logger.Infow("checking relationship tuples", "relation", ac.Relation, "object_id", ac.ObjectID)
+	log.Info().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("checking relationship tuples")
 
 	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err != nil {
@@ -566,7 +567,7 @@ func (m *DocumentDataMutation) CheckAccessForDelete(ctx context.Context) error {
 	}
 
 	if access {
-		m.Logger.Debugw("access allowed", "relation", ac.Relation, "object_id", ac.ObjectID)
+		log.Debug().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("access allowed")
 
 		return privacy.Allow
 	}
@@ -723,7 +724,7 @@ func (m *EntitlementMutation) CheckAccessForEdit(ctx context.Context) error {
 			reqCtx := privacy.DecisionContext(ctx, privacy.Allow)
 			ob, err := m.Client().Entitlement.Get(reqCtx, id)
 			if err != nil {
-				m.Logger.Debugw("error getting object", "error", err)
+				log.Debug().Err(err).Msg("error getting object")
 
 				return err
 			}
@@ -739,7 +740,7 @@ func (m *EntitlementMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	m.Logger.Debugw("checking mutation access")
+	log.Debug().Msg("checking mutation access")
 
 	var err error
 	ac.SubjectID, err = auth.GetUserIDFromContext(ctx)
@@ -747,7 +748,7 @@ func (m *EntitlementMutation) CheckAccessForEdit(ctx context.Context) error {
 		return err
 	}
 
-	m.Logger.Infow("checking relationship tuples", "relation", ac.Relation, "object_id", ac.ObjectID)
+	log.Info().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("checking relationship tuples")
 
 	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err != nil {
@@ -755,7 +756,7 @@ func (m *EntitlementMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	if access {
-		m.Logger.Debugw("access allowed", "relation", ac.Relation, "object_id", ac.ObjectID)
+		log.Debug().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("access allowed")
 
 		return privacy.Allow
 	}
@@ -779,7 +780,7 @@ func (m *EntitlementMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	m.Logger.Debugw("checking mutation access")
+	log.Debug().Msg("checking mutation access")
 
 	var err error
 	ac.SubjectID, err = auth.GetUserIDFromContext(ctx)
@@ -787,7 +788,7 @@ func (m *EntitlementMutation) CheckAccessForDelete(ctx context.Context) error {
 		return err
 	}
 
-	m.Logger.Infow("checking relationship tuples", "relation", ac.Relation, "object_id", ac.ObjectID)
+	log.Info().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("checking relationship tuples")
 
 	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err != nil {
@@ -795,7 +796,7 @@ func (m *EntitlementMutation) CheckAccessForDelete(ctx context.Context) error {
 	}
 
 	if access {
-		m.Logger.Debugw("access allowed", "relation", ac.Relation, "object_id", ac.ObjectID)
+		log.Debug().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("access allowed")
 
 		return privacy.Allow
 	}
@@ -952,7 +953,7 @@ func (m *EntitlementPlanMutation) CheckAccessForEdit(ctx context.Context) error 
 			reqCtx := privacy.DecisionContext(ctx, privacy.Allow)
 			ob, err := m.Client().EntitlementPlan.Get(reqCtx, id)
 			if err != nil {
-				m.Logger.Debugw("error getting object", "error", err)
+				log.Debug().Err(err).Msg("error getting object")
 
 				return err
 			}
@@ -968,7 +969,7 @@ func (m *EntitlementPlanMutation) CheckAccessForEdit(ctx context.Context) error 
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	m.Logger.Debugw("checking mutation access")
+	log.Debug().Msg("checking mutation access")
 
 	var err error
 	ac.SubjectID, err = auth.GetUserIDFromContext(ctx)
@@ -976,7 +977,7 @@ func (m *EntitlementPlanMutation) CheckAccessForEdit(ctx context.Context) error 
 		return err
 	}
 
-	m.Logger.Infow("checking relationship tuples", "relation", ac.Relation, "object_id", ac.ObjectID)
+	log.Info().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("checking relationship tuples")
 
 	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err != nil {
@@ -984,7 +985,7 @@ func (m *EntitlementPlanMutation) CheckAccessForEdit(ctx context.Context) error 
 	}
 
 	if access {
-		m.Logger.Debugw("access allowed", "relation", ac.Relation, "object_id", ac.ObjectID)
+		log.Debug().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("access allowed")
 
 		return privacy.Allow
 	}
@@ -1008,7 +1009,7 @@ func (m *EntitlementPlanMutation) CheckAccessForDelete(ctx context.Context) erro
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	m.Logger.Debugw("checking mutation access")
+	log.Debug().Msg("checking mutation access")
 
 	var err error
 	ac.SubjectID, err = auth.GetUserIDFromContext(ctx)
@@ -1016,7 +1017,7 @@ func (m *EntitlementPlanMutation) CheckAccessForDelete(ctx context.Context) erro
 		return err
 	}
 
-	m.Logger.Infow("checking relationship tuples", "relation", ac.Relation, "object_id", ac.ObjectID)
+	log.Info().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("checking relationship tuples")
 
 	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err != nil {
@@ -1024,7 +1025,7 @@ func (m *EntitlementPlanMutation) CheckAccessForDelete(ctx context.Context) erro
 	}
 
 	if access {
-		m.Logger.Debugw("access allowed", "relation", ac.Relation, "object_id", ac.ObjectID)
+		log.Debug().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("access allowed")
 
 		return privacy.Allow
 	}
@@ -1116,7 +1117,7 @@ func (m *EntitlementPlanFeatureMutation) CheckAccessForEdit(ctx context.Context)
 			reqCtx := privacy.DecisionContext(ctx, privacy.Allow)
 			ob, err := m.Client().EntitlementPlanFeature.Get(reqCtx, id)
 			if err != nil {
-				m.Logger.Debugw("error getting object", "error", err)
+				log.Debug().Err(err).Msg("error getting object")
 
 				return err
 			}
@@ -1132,7 +1133,7 @@ func (m *EntitlementPlanFeatureMutation) CheckAccessForEdit(ctx context.Context)
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	m.Logger.Debugw("checking mutation access")
+	log.Debug().Msg("checking mutation access")
 
 	var err error
 	ac.SubjectID, err = auth.GetUserIDFromContext(ctx)
@@ -1140,7 +1141,7 @@ func (m *EntitlementPlanFeatureMutation) CheckAccessForEdit(ctx context.Context)
 		return err
 	}
 
-	m.Logger.Infow("checking relationship tuples", "relation", ac.Relation, "object_id", ac.ObjectID)
+	log.Info().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("checking relationship tuples")
 
 	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err != nil {
@@ -1148,7 +1149,7 @@ func (m *EntitlementPlanFeatureMutation) CheckAccessForEdit(ctx context.Context)
 	}
 
 	if access {
-		m.Logger.Debugw("access allowed", "relation", ac.Relation, "object_id", ac.ObjectID)
+		log.Debug().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("access allowed")
 
 		return privacy.Allow
 	}
@@ -1172,7 +1173,7 @@ func (m *EntitlementPlanFeatureMutation) CheckAccessForDelete(ctx context.Contex
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	m.Logger.Debugw("checking mutation access")
+	log.Debug().Msg("checking mutation access")
 
 	var err error
 	ac.SubjectID, err = auth.GetUserIDFromContext(ctx)
@@ -1180,7 +1181,7 @@ func (m *EntitlementPlanFeatureMutation) CheckAccessForDelete(ctx context.Contex
 		return err
 	}
 
-	m.Logger.Infow("checking relationship tuples", "relation", ac.Relation, "object_id", ac.ObjectID)
+	log.Info().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("checking relationship tuples")
 
 	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err != nil {
@@ -1188,7 +1189,7 @@ func (m *EntitlementPlanFeatureMutation) CheckAccessForDelete(ctx context.Contex
 	}
 
 	if access {
-		m.Logger.Debugw("access allowed", "relation", ac.Relation, "object_id", ac.ObjectID)
+		log.Debug().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("access allowed")
 
 		return privacy.Allow
 	}
@@ -1410,7 +1411,7 @@ func (m *EntityMutation) CheckAccessForEdit(ctx context.Context) error {
 			reqCtx := privacy.DecisionContext(ctx, privacy.Allow)
 			ob, err := m.Client().Entity.Get(reqCtx, id)
 			if err != nil {
-				m.Logger.Debugw("error getting object", "error", err)
+				log.Debug().Err(err).Msg("error getting object")
 
 				return err
 			}
@@ -1426,7 +1427,7 @@ func (m *EntityMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	m.Logger.Debugw("checking mutation access")
+	log.Debug().Msg("checking mutation access")
 
 	var err error
 	ac.SubjectID, err = auth.GetUserIDFromContext(ctx)
@@ -1434,7 +1435,7 @@ func (m *EntityMutation) CheckAccessForEdit(ctx context.Context) error {
 		return err
 	}
 
-	m.Logger.Infow("checking relationship tuples", "relation", ac.Relation, "object_id", ac.ObjectID)
+	log.Info().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("checking relationship tuples")
 
 	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err != nil {
@@ -1442,7 +1443,7 @@ func (m *EntityMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	if access {
-		m.Logger.Debugw("access allowed", "relation", ac.Relation, "object_id", ac.ObjectID)
+		log.Debug().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("access allowed")
 
 		return privacy.Allow
 	}
@@ -1466,7 +1467,7 @@ func (m *EntityMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	m.Logger.Debugw("checking mutation access")
+	log.Debug().Msg("checking mutation access")
 
 	var err error
 	ac.SubjectID, err = auth.GetUserIDFromContext(ctx)
@@ -1474,7 +1475,7 @@ func (m *EntityMutation) CheckAccessForDelete(ctx context.Context) error {
 		return err
 	}
 
-	m.Logger.Infow("checking relationship tuples", "relation", ac.Relation, "object_id", ac.ObjectID)
+	log.Info().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("checking relationship tuples")
 
 	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err != nil {
@@ -1482,7 +1483,7 @@ func (m *EntityMutation) CheckAccessForDelete(ctx context.Context) error {
 	}
 
 	if access {
-		m.Logger.Debugw("access allowed", "relation", ac.Relation, "object_id", ac.ObjectID)
+		log.Debug().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("access allowed")
 
 		return privacy.Allow
 	}
@@ -1639,7 +1640,7 @@ func (m *EntityTypeMutation) CheckAccessForEdit(ctx context.Context) error {
 			reqCtx := privacy.DecisionContext(ctx, privacy.Allow)
 			ob, err := m.Client().EntityType.Get(reqCtx, id)
 			if err != nil {
-				m.Logger.Debugw("error getting object", "error", err)
+				log.Debug().Err(err).Msg("error getting object")
 
 				return err
 			}
@@ -1655,7 +1656,7 @@ func (m *EntityTypeMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	m.Logger.Debugw("checking mutation access")
+	log.Debug().Msg("checking mutation access")
 
 	var err error
 	ac.SubjectID, err = auth.GetUserIDFromContext(ctx)
@@ -1663,7 +1664,7 @@ func (m *EntityTypeMutation) CheckAccessForEdit(ctx context.Context) error {
 		return err
 	}
 
-	m.Logger.Infow("checking relationship tuples", "relation", ac.Relation, "object_id", ac.ObjectID)
+	log.Info().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("checking relationship tuples")
 
 	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err != nil {
@@ -1671,7 +1672,7 @@ func (m *EntityTypeMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	if access {
-		m.Logger.Debugw("access allowed", "relation", ac.Relation, "object_id", ac.ObjectID)
+		log.Debug().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("access allowed")
 
 		return privacy.Allow
 	}
@@ -1695,7 +1696,7 @@ func (m *EntityTypeMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	m.Logger.Debugw("checking mutation access")
+	log.Debug().Msg("checking mutation access")
 
 	var err error
 	ac.SubjectID, err = auth.GetUserIDFromContext(ctx)
@@ -1703,7 +1704,7 @@ func (m *EntityTypeMutation) CheckAccessForDelete(ctx context.Context) error {
 		return err
 	}
 
-	m.Logger.Infow("checking relationship tuples", "relation", ac.Relation, "object_id", ac.ObjectID)
+	log.Info().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("checking relationship tuples")
 
 	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err != nil {
@@ -1711,7 +1712,7 @@ func (m *EntityTypeMutation) CheckAccessForDelete(ctx context.Context) error {
 	}
 
 	if access {
-		m.Logger.Debugw("access allowed", "relation", ac.Relation, "object_id", ac.ObjectID)
+		log.Debug().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("access allowed")
 
 		return privacy.Allow
 	}
@@ -1868,7 +1869,7 @@ func (m *FeatureMutation) CheckAccessForEdit(ctx context.Context) error {
 			reqCtx := privacy.DecisionContext(ctx, privacy.Allow)
 			ob, err := m.Client().Feature.Get(reqCtx, id)
 			if err != nil {
-				m.Logger.Debugw("error getting object", "error", err)
+				log.Debug().Err(err).Msg("error getting object")
 
 				return err
 			}
@@ -1884,7 +1885,7 @@ func (m *FeatureMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	m.Logger.Debugw("checking mutation access")
+	log.Debug().Msg("checking mutation access")
 
 	var err error
 	ac.SubjectID, err = auth.GetUserIDFromContext(ctx)
@@ -1892,7 +1893,7 @@ func (m *FeatureMutation) CheckAccessForEdit(ctx context.Context) error {
 		return err
 	}
 
-	m.Logger.Infow("checking relationship tuples", "relation", ac.Relation, "object_id", ac.ObjectID)
+	log.Info().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("checking relationship tuples")
 
 	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err != nil {
@@ -1900,7 +1901,7 @@ func (m *FeatureMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	if access {
-		m.Logger.Debugw("access allowed", "relation", ac.Relation, "object_id", ac.ObjectID)
+		log.Debug().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("access allowed")
 
 		return privacy.Allow
 	}
@@ -1924,7 +1925,7 @@ func (m *FeatureMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	m.Logger.Debugw("checking mutation access")
+	log.Debug().Msg("checking mutation access")
 
 	var err error
 	ac.SubjectID, err = auth.GetUserIDFromContext(ctx)
@@ -1932,7 +1933,7 @@ func (m *FeatureMutation) CheckAccessForDelete(ctx context.Context) error {
 		return err
 	}
 
-	m.Logger.Infow("checking relationship tuples", "relation", ac.Relation, "object_id", ac.ObjectID)
+	log.Info().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("checking relationship tuples")
 
 	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err != nil {
@@ -1940,7 +1941,7 @@ func (m *FeatureMutation) CheckAccessForDelete(ctx context.Context) error {
 	}
 
 	if access {
-		m.Logger.Debugw("access allowed", "relation", ac.Relation, "object_id", ac.ObjectID)
+		log.Debug().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("access allowed")
 
 		return privacy.Allow
 	}
@@ -2112,7 +2113,7 @@ func (m *GroupMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	m.Logger.Debugw("checking mutation access")
+	log.Debug().Msg("checking mutation access")
 
 	var err error
 	ac.SubjectID, err = auth.GetUserIDFromContext(ctx)
@@ -2120,7 +2121,7 @@ func (m *GroupMutation) CheckAccessForEdit(ctx context.Context) error {
 		return err
 	}
 
-	m.Logger.Infow("checking relationship tuples", "relation", ac.Relation, "object_id", ac.ObjectID)
+	log.Info().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("checking relationship tuples")
 
 	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err != nil {
@@ -2128,7 +2129,7 @@ func (m *GroupMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	if access {
-		m.Logger.Debugw("access allowed", "relation", ac.Relation, "object_id", ac.ObjectID)
+		log.Debug().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("access allowed")
 
 		return privacy.Allow
 	}
@@ -2152,7 +2153,7 @@ func (m *GroupMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	m.Logger.Debugw("checking mutation access")
+	log.Debug().Msg("checking mutation access")
 
 	var err error
 	ac.SubjectID, err = auth.GetUserIDFromContext(ctx)
@@ -2160,7 +2161,7 @@ func (m *GroupMutation) CheckAccessForDelete(ctx context.Context) error {
 		return err
 	}
 
-	m.Logger.Infow("checking relationship tuples", "relation", ac.Relation, "object_id", ac.ObjectID)
+	log.Info().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("checking relationship tuples")
 
 	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err != nil {
@@ -2168,7 +2169,7 @@ func (m *GroupMutation) CheckAccessForDelete(ctx context.Context) error {
 	}
 
 	if access {
-		m.Logger.Debugw("access allowed", "relation", ac.Relation, "object_id", ac.ObjectID)
+		log.Debug().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("access allowed")
 
 		return privacy.Allow
 	}
@@ -2350,7 +2351,7 @@ func (m *GroupMembershipMutation) CheckAccessForEdit(ctx context.Context) error 
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	m.Logger.Debugw("checking mutation access")
+	log.Debug().Msg("checking mutation access")
 
 	var err error
 	ac.SubjectID, err = auth.GetUserIDFromContext(ctx)
@@ -2358,7 +2359,7 @@ func (m *GroupMembershipMutation) CheckAccessForEdit(ctx context.Context) error 
 		return err
 	}
 
-	m.Logger.Infow("checking relationship tuples", "relation", ac.Relation, "object_id", ac.ObjectID)
+	log.Info().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("checking relationship tuples")
 
 	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err != nil {
@@ -2366,7 +2367,7 @@ func (m *GroupMembershipMutation) CheckAccessForEdit(ctx context.Context) error 
 	}
 
 	if access {
-		m.Logger.Debugw("access allowed", "relation", ac.Relation, "object_id", ac.ObjectID)
+		log.Debug().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("access allowed")
 
 		return privacy.Allow
 	}
@@ -2390,7 +2391,7 @@ func (m *GroupMembershipMutation) CheckAccessForDelete(ctx context.Context) erro
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	m.Logger.Debugw("checking mutation access")
+	log.Debug().Msg("checking mutation access")
 
 	var err error
 	ac.SubjectID, err = auth.GetUserIDFromContext(ctx)
@@ -2398,7 +2399,7 @@ func (m *GroupMembershipMutation) CheckAccessForDelete(ctx context.Context) erro
 		return err
 	}
 
-	m.Logger.Infow("checking relationship tuples", "relation", ac.Relation, "object_id", ac.ObjectID)
+	log.Info().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("checking relationship tuples")
 
 	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err != nil {
@@ -2406,7 +2407,7 @@ func (m *GroupMembershipMutation) CheckAccessForDelete(ctx context.Context) erro
 	}
 
 	if access {
-		m.Logger.Debugw("access allowed", "relation", ac.Relation, "object_id", ac.ObjectID)
+		log.Debug().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("access allowed")
 
 		return privacy.Allow
 	}
@@ -2588,7 +2589,7 @@ func (m *GroupSettingMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	m.Logger.Debugw("checking mutation access")
+	log.Debug().Msg("checking mutation access")
 
 	var err error
 	ac.SubjectID, err = auth.GetUserIDFromContext(ctx)
@@ -2596,7 +2597,7 @@ func (m *GroupSettingMutation) CheckAccessForEdit(ctx context.Context) error {
 		return err
 	}
 
-	m.Logger.Infow("checking relationship tuples", "relation", ac.Relation, "object_id", ac.ObjectID)
+	log.Info().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("checking relationship tuples")
 
 	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err != nil {
@@ -2604,7 +2605,7 @@ func (m *GroupSettingMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	if access {
-		m.Logger.Debugw("access allowed", "relation", ac.Relation, "object_id", ac.ObjectID)
+		log.Debug().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("access allowed")
 
 		return privacy.Allow
 	}
@@ -2628,7 +2629,7 @@ func (m *GroupSettingMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	m.Logger.Debugw("checking mutation access")
+	log.Debug().Msg("checking mutation access")
 
 	var err error
 	ac.SubjectID, err = auth.GetUserIDFromContext(ctx)
@@ -2636,7 +2637,7 @@ func (m *GroupSettingMutation) CheckAccessForDelete(ctx context.Context) error {
 		return err
 	}
 
-	m.Logger.Infow("checking relationship tuples", "relation", ac.Relation, "object_id", ac.ObjectID)
+	log.Info().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("checking relationship tuples")
 
 	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err != nil {
@@ -2644,7 +2645,7 @@ func (m *GroupSettingMutation) CheckAccessForDelete(ctx context.Context) error {
 	}
 
 	if access {
-		m.Logger.Debugw("access allowed", "relation", ac.Relation, "object_id", ac.ObjectID)
+		log.Debug().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("access allowed")
 
 		return privacy.Allow
 	}
@@ -2801,7 +2802,7 @@ func (m *IntegrationMutation) CheckAccessForEdit(ctx context.Context) error {
 			reqCtx := privacy.DecisionContext(ctx, privacy.Allow)
 			ob, err := m.Client().Integration.Get(reqCtx, id)
 			if err != nil {
-				m.Logger.Debugw("error getting object", "error", err)
+				log.Debug().Err(err).Msg("error getting object")
 
 				return err
 			}
@@ -2817,7 +2818,7 @@ func (m *IntegrationMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	m.Logger.Debugw("checking mutation access")
+	log.Debug().Msg("checking mutation access")
 
 	var err error
 	ac.SubjectID, err = auth.GetUserIDFromContext(ctx)
@@ -2825,7 +2826,7 @@ func (m *IntegrationMutation) CheckAccessForEdit(ctx context.Context) error {
 		return err
 	}
 
-	m.Logger.Infow("checking relationship tuples", "relation", ac.Relation, "object_id", ac.ObjectID)
+	log.Info().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("checking relationship tuples")
 
 	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err != nil {
@@ -2833,7 +2834,7 @@ func (m *IntegrationMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	if access {
-		m.Logger.Debugw("access allowed", "relation", ac.Relation, "object_id", ac.ObjectID)
+		log.Debug().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("access allowed")
 
 		return privacy.Allow
 	}
@@ -2857,7 +2858,7 @@ func (m *IntegrationMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	m.Logger.Debugw("checking mutation access")
+	log.Debug().Msg("checking mutation access")
 
 	var err error
 	ac.SubjectID, err = auth.GetUserIDFromContext(ctx)
@@ -2865,7 +2866,7 @@ func (m *IntegrationMutation) CheckAccessForDelete(ctx context.Context) error {
 		return err
 	}
 
-	m.Logger.Infow("checking relationship tuples", "relation", ac.Relation, "object_id", ac.ObjectID)
+	log.Info().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("checking relationship tuples")
 
 	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err != nil {
@@ -2873,7 +2874,7 @@ func (m *IntegrationMutation) CheckAccessForDelete(ctx context.Context) error {
 	}
 
 	if access {
-		m.Logger.Debugw("access allowed", "relation", ac.Relation, "object_id", ac.ObjectID)
+		log.Debug().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("access allowed")
 
 		return privacy.Allow
 	}
@@ -3030,7 +3031,7 @@ func (m *InviteMutation) CheckAccessForEdit(ctx context.Context) error {
 			reqCtx := privacy.DecisionContext(ctx, privacy.Allow)
 			ob, err := m.Client().Invite.Get(reqCtx, id)
 			if err != nil {
-				m.Logger.Debugw("error getting object", "error", err)
+				log.Debug().Err(err).Msg("error getting object")
 
 				return err
 			}
@@ -3046,7 +3047,7 @@ func (m *InviteMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	m.Logger.Debugw("checking mutation access")
+	log.Debug().Msg("checking mutation access")
 
 	var err error
 	ac.SubjectID, err = auth.GetUserIDFromContext(ctx)
@@ -3054,7 +3055,7 @@ func (m *InviteMutation) CheckAccessForEdit(ctx context.Context) error {
 		return err
 	}
 
-	m.Logger.Infow("checking relationship tuples", "relation", ac.Relation, "object_id", ac.ObjectID)
+	log.Info().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("checking relationship tuples")
 
 	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err != nil {
@@ -3062,7 +3063,7 @@ func (m *InviteMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	if access {
-		m.Logger.Debugw("access allowed", "relation", ac.Relation, "object_id", ac.ObjectID)
+		log.Debug().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("access allowed")
 
 		return privacy.Allow
 	}
@@ -3086,7 +3087,7 @@ func (m *InviteMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	m.Logger.Debugw("checking mutation access")
+	log.Debug().Msg("checking mutation access")
 
 	var err error
 	ac.SubjectID, err = auth.GetUserIDFromContext(ctx)
@@ -3094,7 +3095,7 @@ func (m *InviteMutation) CheckAccessForDelete(ctx context.Context) error {
 		return err
 	}
 
-	m.Logger.Infow("checking relationship tuples", "relation", ac.Relation, "object_id", ac.ObjectID)
+	log.Info().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("checking relationship tuples")
 
 	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err != nil {
@@ -3102,7 +3103,7 @@ func (m *InviteMutation) CheckAccessForDelete(ctx context.Context) error {
 	}
 
 	if access {
-		m.Logger.Debugw("access allowed", "relation", ac.Relation, "object_id", ac.ObjectID)
+		log.Debug().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("access allowed")
 
 		return privacy.Allow
 	}
@@ -3194,7 +3195,7 @@ func (m *NoteMutation) CheckAccessForEdit(ctx context.Context) error {
 			reqCtx := privacy.DecisionContext(ctx, privacy.Allow)
 			ob, err := m.Client().Note.Get(reqCtx, id)
 			if err != nil {
-				m.Logger.Debugw("error getting object", "error", err)
+				log.Debug().Err(err).Msg("error getting object")
 
 				return err
 			}
@@ -3210,7 +3211,7 @@ func (m *NoteMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	m.Logger.Debugw("checking mutation access")
+	log.Debug().Msg("checking mutation access")
 
 	var err error
 	ac.SubjectID, err = auth.GetUserIDFromContext(ctx)
@@ -3218,7 +3219,7 @@ func (m *NoteMutation) CheckAccessForEdit(ctx context.Context) error {
 		return err
 	}
 
-	m.Logger.Infow("checking relationship tuples", "relation", ac.Relation, "object_id", ac.ObjectID)
+	log.Info().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("checking relationship tuples")
 
 	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err != nil {
@@ -3226,7 +3227,7 @@ func (m *NoteMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	if access {
-		m.Logger.Debugw("access allowed", "relation", ac.Relation, "object_id", ac.ObjectID)
+		log.Debug().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("access allowed")
 
 		return privacy.Allow
 	}
@@ -3250,7 +3251,7 @@ func (m *NoteMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	m.Logger.Debugw("checking mutation access")
+	log.Debug().Msg("checking mutation access")
 
 	var err error
 	ac.SubjectID, err = auth.GetUserIDFromContext(ctx)
@@ -3258,7 +3259,7 @@ func (m *NoteMutation) CheckAccessForDelete(ctx context.Context) error {
 		return err
 	}
 
-	m.Logger.Infow("checking relationship tuples", "relation", ac.Relation, "object_id", ac.ObjectID)
+	log.Info().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("checking relationship tuples")
 
 	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err != nil {
@@ -3266,7 +3267,7 @@ func (m *NoteMutation) CheckAccessForDelete(ctx context.Context) error {
 	}
 
 	if access {
-		m.Logger.Debugw("access allowed", "relation", ac.Relation, "object_id", ac.ObjectID)
+		log.Debug().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("access allowed")
 
 		return privacy.Allow
 	}
@@ -3423,7 +3424,7 @@ func (m *OauthProviderMutation) CheckAccessForEdit(ctx context.Context) error {
 			reqCtx := privacy.DecisionContext(ctx, privacy.Allow)
 			ob, err := m.Client().OauthProvider.Get(reqCtx, id)
 			if err != nil {
-				m.Logger.Debugw("error getting object", "error", err)
+				log.Debug().Err(err).Msg("error getting object")
 
 				return err
 			}
@@ -3439,7 +3440,7 @@ func (m *OauthProviderMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	m.Logger.Debugw("checking mutation access")
+	log.Debug().Msg("checking mutation access")
 
 	var err error
 	ac.SubjectID, err = auth.GetUserIDFromContext(ctx)
@@ -3447,7 +3448,7 @@ func (m *OauthProviderMutation) CheckAccessForEdit(ctx context.Context) error {
 		return err
 	}
 
-	m.Logger.Infow("checking relationship tuples", "relation", ac.Relation, "object_id", ac.ObjectID)
+	log.Info().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("checking relationship tuples")
 
 	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err != nil {
@@ -3455,7 +3456,7 @@ func (m *OauthProviderMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	if access {
-		m.Logger.Debugw("access allowed", "relation", ac.Relation, "object_id", ac.ObjectID)
+		log.Debug().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("access allowed")
 
 		return privacy.Allow
 	}
@@ -3479,7 +3480,7 @@ func (m *OauthProviderMutation) CheckAccessForDelete(ctx context.Context) error 
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	m.Logger.Debugw("checking mutation access")
+	log.Debug().Msg("checking mutation access")
 
 	var err error
 	ac.SubjectID, err = auth.GetUserIDFromContext(ctx)
@@ -3487,7 +3488,7 @@ func (m *OauthProviderMutation) CheckAccessForDelete(ctx context.Context) error 
 		return err
 	}
 
-	m.Logger.Infow("checking relationship tuples", "relation", ac.Relation, "object_id", ac.ObjectID)
+	log.Info().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("checking relationship tuples")
 
 	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err != nil {
@@ -3495,7 +3496,7 @@ func (m *OauthProviderMutation) CheckAccessForDelete(ctx context.Context) error 
 	}
 
 	if access {
-		m.Logger.Debugw("access allowed", "relation", ac.Relation, "object_id", ac.ObjectID)
+		log.Debug().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("access allowed")
 
 		return privacy.Allow
 	}
@@ -3677,7 +3678,7 @@ func (m *OrgMembershipMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	m.Logger.Debugw("checking mutation access")
+	log.Debug().Msg("checking mutation access")
 
 	var err error
 	ac.SubjectID, err = auth.GetUserIDFromContext(ctx)
@@ -3685,7 +3686,7 @@ func (m *OrgMembershipMutation) CheckAccessForEdit(ctx context.Context) error {
 		return err
 	}
 
-	m.Logger.Infow("checking relationship tuples", "relation", ac.Relation, "object_id", ac.ObjectID)
+	log.Info().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("checking relationship tuples")
 
 	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err != nil {
@@ -3693,7 +3694,7 @@ func (m *OrgMembershipMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	if access {
-		m.Logger.Debugw("access allowed", "relation", ac.Relation, "object_id", ac.ObjectID)
+		log.Debug().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("access allowed")
 
 		return privacy.Allow
 	}
@@ -3717,7 +3718,7 @@ func (m *OrgMembershipMutation) CheckAccessForDelete(ctx context.Context) error 
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	m.Logger.Debugw("checking mutation access")
+	log.Debug().Msg("checking mutation access")
 
 	var err error
 	ac.SubjectID, err = auth.GetUserIDFromContext(ctx)
@@ -3725,7 +3726,7 @@ func (m *OrgMembershipMutation) CheckAccessForDelete(ctx context.Context) error 
 		return err
 	}
 
-	m.Logger.Infow("checking relationship tuples", "relation", ac.Relation, "object_id", ac.ObjectID)
+	log.Info().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("checking relationship tuples")
 
 	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err != nil {
@@ -3733,7 +3734,7 @@ func (m *OrgMembershipMutation) CheckAccessForDelete(ctx context.Context) error 
 	}
 
 	if access {
-		m.Logger.Debugw("access allowed", "relation", ac.Relation, "object_id", ac.ObjectID)
+		log.Debug().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("access allowed")
 
 		return privacy.Allow
 	}
@@ -3905,7 +3906,7 @@ func (m *OrganizationMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	m.Logger.Debugw("checking mutation access")
+	log.Debug().Msg("checking mutation access")
 
 	var err error
 	ac.SubjectID, err = auth.GetUserIDFromContext(ctx)
@@ -3913,7 +3914,7 @@ func (m *OrganizationMutation) CheckAccessForEdit(ctx context.Context) error {
 		return err
 	}
 
-	m.Logger.Infow("checking relationship tuples", "relation", ac.Relation, "object_id", ac.ObjectID)
+	log.Info().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("checking relationship tuples")
 
 	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err != nil {
@@ -3921,7 +3922,7 @@ func (m *OrganizationMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	if access {
-		m.Logger.Debugw("access allowed", "relation", ac.Relation, "object_id", ac.ObjectID)
+		log.Debug().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("access allowed")
 
 		return privacy.Allow
 	}
@@ -3945,7 +3946,7 @@ func (m *OrganizationMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	m.Logger.Debugw("checking mutation access")
+	log.Debug().Msg("checking mutation access")
 
 	var err error
 	ac.SubjectID, err = auth.GetUserIDFromContext(ctx)
@@ -3953,7 +3954,7 @@ func (m *OrganizationMutation) CheckAccessForDelete(ctx context.Context) error {
 		return err
 	}
 
-	m.Logger.Infow("checking relationship tuples", "relation", ac.Relation, "object_id", ac.ObjectID)
+	log.Info().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("checking relationship tuples")
 
 	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err != nil {
@@ -3961,7 +3962,7 @@ func (m *OrganizationMutation) CheckAccessForDelete(ctx context.Context) error {
 	}
 
 	if access {
-		m.Logger.Debugw("access allowed", "relation", ac.Relation, "object_id", ac.ObjectID)
+		log.Debug().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("access allowed")
 
 		return privacy.Allow
 	}
@@ -4143,7 +4144,7 @@ func (m *OrganizationSettingMutation) CheckAccessForEdit(ctx context.Context) er
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	m.Logger.Debugw("checking mutation access")
+	log.Debug().Msg("checking mutation access")
 
 	var err error
 	ac.SubjectID, err = auth.GetUserIDFromContext(ctx)
@@ -4151,7 +4152,7 @@ func (m *OrganizationSettingMutation) CheckAccessForEdit(ctx context.Context) er
 		return err
 	}
 
-	m.Logger.Infow("checking relationship tuples", "relation", ac.Relation, "object_id", ac.ObjectID)
+	log.Info().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("checking relationship tuples")
 
 	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err != nil {
@@ -4159,7 +4160,7 @@ func (m *OrganizationSettingMutation) CheckAccessForEdit(ctx context.Context) er
 	}
 
 	if access {
-		m.Logger.Debugw("access allowed", "relation", ac.Relation, "object_id", ac.ObjectID)
+		log.Debug().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("access allowed")
 
 		return privacy.Allow
 	}
@@ -4183,7 +4184,7 @@ func (m *OrganizationSettingMutation) CheckAccessForDelete(ctx context.Context) 
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	m.Logger.Debugw("checking mutation access")
+	log.Debug().Msg("checking mutation access")
 
 	var err error
 	ac.SubjectID, err = auth.GetUserIDFromContext(ctx)
@@ -4191,7 +4192,7 @@ func (m *OrganizationSettingMutation) CheckAccessForDelete(ctx context.Context) 
 		return err
 	}
 
-	m.Logger.Infow("checking relationship tuples", "relation", ac.Relation, "object_id", ac.ObjectID)
+	log.Info().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("checking relationship tuples")
 
 	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err != nil {
@@ -4199,7 +4200,7 @@ func (m *OrganizationSettingMutation) CheckAccessForDelete(ctx context.Context) 
 	}
 
 	if access {
-		m.Logger.Debugw("access allowed", "relation", ac.Relation, "object_id", ac.ObjectID)
+		log.Debug().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("access allowed")
 
 		return privacy.Allow
 	}
@@ -4356,7 +4357,7 @@ func (m *SubscriberMutation) CheckAccessForEdit(ctx context.Context) error {
 			reqCtx := privacy.DecisionContext(ctx, privacy.Allow)
 			ob, err := m.Client().Subscriber.Get(reqCtx, id)
 			if err != nil {
-				m.Logger.Debugw("error getting object", "error", err)
+				log.Debug().Err(err).Msg("error getting object")
 
 				return err
 			}
@@ -4372,7 +4373,7 @@ func (m *SubscriberMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	m.Logger.Debugw("checking mutation access")
+	log.Debug().Msg("checking mutation access")
 
 	var err error
 	ac.SubjectID, err = auth.GetUserIDFromContext(ctx)
@@ -4380,7 +4381,7 @@ func (m *SubscriberMutation) CheckAccessForEdit(ctx context.Context) error {
 		return err
 	}
 
-	m.Logger.Infow("checking relationship tuples", "relation", ac.Relation, "object_id", ac.ObjectID)
+	log.Info().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("checking relationship tuples")
 
 	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err != nil {
@@ -4388,7 +4389,7 @@ func (m *SubscriberMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	if access {
-		m.Logger.Debugw("access allowed", "relation", ac.Relation, "object_id", ac.ObjectID)
+		log.Debug().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("access allowed")
 
 		return privacy.Allow
 	}
@@ -4412,7 +4413,7 @@ func (m *SubscriberMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	m.Logger.Debugw("checking mutation access")
+	log.Debug().Msg("checking mutation access")
 
 	var err error
 	ac.SubjectID, err = auth.GetUserIDFromContext(ctx)
@@ -4420,7 +4421,7 @@ func (m *SubscriberMutation) CheckAccessForDelete(ctx context.Context) error {
 		return err
 	}
 
-	m.Logger.Infow("checking relationship tuples", "relation", ac.Relation, "object_id", ac.ObjectID)
+	log.Info().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("checking relationship tuples")
 
 	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err != nil {
@@ -4428,7 +4429,7 @@ func (m *SubscriberMutation) CheckAccessForDelete(ctx context.Context) error {
 	}
 
 	if access {
-		m.Logger.Debugw("access allowed", "relation", ac.Relation, "object_id", ac.ObjectID)
+		log.Debug().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("access allowed")
 
 		return privacy.Allow
 	}
@@ -4520,7 +4521,7 @@ func (m *TemplateMutation) CheckAccessForEdit(ctx context.Context) error {
 			reqCtx := privacy.DecisionContext(ctx, privacy.Allow)
 			ob, err := m.Client().Template.Get(reqCtx, id)
 			if err != nil {
-				m.Logger.Debugw("error getting object", "error", err)
+				log.Debug().Err(err).Msg("error getting object")
 
 				return err
 			}
@@ -4536,7 +4537,7 @@ func (m *TemplateMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	m.Logger.Debugw("checking mutation access")
+	log.Debug().Msg("checking mutation access")
 
 	var err error
 	ac.SubjectID, err = auth.GetUserIDFromContext(ctx)
@@ -4544,7 +4545,7 @@ func (m *TemplateMutation) CheckAccessForEdit(ctx context.Context) error {
 		return err
 	}
 
-	m.Logger.Infow("checking relationship tuples", "relation", ac.Relation, "object_id", ac.ObjectID)
+	log.Info().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("checking relationship tuples")
 
 	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err != nil {
@@ -4552,7 +4553,7 @@ func (m *TemplateMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	if access {
-		m.Logger.Debugw("access allowed", "relation", ac.Relation, "object_id", ac.ObjectID)
+		log.Debug().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("access allowed")
 
 		return privacy.Allow
 	}
@@ -4576,7 +4577,7 @@ func (m *TemplateMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	m.Logger.Debugw("checking mutation access")
+	log.Debug().Msg("checking mutation access")
 
 	var err error
 	ac.SubjectID, err = auth.GetUserIDFromContext(ctx)
@@ -4584,7 +4585,7 @@ func (m *TemplateMutation) CheckAccessForDelete(ctx context.Context) error {
 		return err
 	}
 
-	m.Logger.Infow("checking relationship tuples", "relation", ac.Relation, "object_id", ac.ObjectID)
+	log.Info().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("checking relationship tuples")
 
 	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err != nil {
@@ -4592,7 +4593,7 @@ func (m *TemplateMutation) CheckAccessForDelete(ctx context.Context) error {
 	}
 
 	if access {
-		m.Logger.Debugw("access allowed", "relation", ac.Relation, "object_id", ac.ObjectID)
+		log.Debug().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("access allowed")
 
 		return privacy.Allow
 	}
@@ -4774,7 +4775,7 @@ func (m *WebhookMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	m.Logger.Debugw("checking mutation access")
+	log.Debug().Msg("checking mutation access")
 
 	var err error
 	ac.SubjectID, err = auth.GetUserIDFromContext(ctx)
@@ -4782,7 +4783,7 @@ func (m *WebhookMutation) CheckAccessForEdit(ctx context.Context) error {
 		return err
 	}
 
-	m.Logger.Infow("checking relationship tuples", "relation", ac.Relation, "object_id", ac.ObjectID)
+	log.Info().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("checking relationship tuples")
 
 	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err != nil {
@@ -4790,7 +4791,7 @@ func (m *WebhookMutation) CheckAccessForEdit(ctx context.Context) error {
 	}
 
 	if access {
-		m.Logger.Debugw("access allowed", "relation", ac.Relation, "object_id", ac.ObjectID)
+		log.Debug().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("access allowed")
 
 		return privacy.Allow
 	}
@@ -4814,7 +4815,7 @@ func (m *WebhookMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allowf("nil request, bypassing auth check")
 	}
 
-	m.Logger.Debugw("checking mutation access")
+	log.Debug().Msg("checking mutation access")
 
 	var err error
 	ac.SubjectID, err = auth.GetUserIDFromContext(ctx)
@@ -4822,7 +4823,7 @@ func (m *WebhookMutation) CheckAccessForDelete(ctx context.Context) error {
 		return err
 	}
 
-	m.Logger.Infow("checking relationship tuples", "relation", ac.Relation, "object_id", ac.ObjectID)
+	log.Info().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("checking relationship tuples")
 
 	access, err := m.Authz.CheckAccess(ctx, ac)
 	if err != nil {
@@ -4830,7 +4831,7 @@ func (m *WebhookMutation) CheckAccessForDelete(ctx context.Context) error {
 	}
 
 	if access {
-		m.Logger.Debugw("access allowed", "relation", ac.Relation, "object_id", ac.ObjectID)
+		log.Debug().Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Msg("access allowed")
 
 		return privacy.Allow
 	}

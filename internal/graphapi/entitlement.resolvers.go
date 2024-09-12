@@ -8,6 +8,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/utils/rout"
 )
@@ -16,14 +17,14 @@ import (
 func (r *mutationResolver) CreateEntitlement(ctx context.Context, input generated.CreateEntitlementInput) (*EntitlementCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
-		r.logger.Errorw("failed to set organization in auth context", "error", err)
+		log.Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
 	res, err := withTransactionalMutation(ctx).Entitlement.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "entitlement"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "entitlement"})
 	}
 
 	return &EntitlementCreatePayload{
@@ -40,7 +41,7 @@ func (r *mutationResolver) CreateBulkEntitlement(ctx context.Context, input []*g
 func (r *mutationResolver) CreateBulkCSVEntitlement(ctx context.Context, input graphql.Upload) (*EntitlementBulkCreatePayload, error) {
 	data, err := unmarshalBulkData[generated.CreateEntitlementInput](input)
 	if err != nil {
-		r.logger.Errorw("failed to unmarshal bulk data", "error", err)
+		log.Error().Err(err).Msg("failed to unmarshal bulk data")
 
 		return nil, err
 	}
@@ -52,11 +53,11 @@ func (r *mutationResolver) CreateBulkCSVEntitlement(ctx context.Context, input g
 func (r *mutationResolver) UpdateEntitlement(ctx context.Context, id string, input generated.UpdateEntitlementInput) (*EntitlementUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Entitlement.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "entitlement"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "entitlement"})
 	}
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
-		r.logger.Errorw("failed to set organization in auth context", "error", err)
+		log.Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, ErrPermissionDenied
 	}
@@ -66,7 +67,7 @@ func (r *mutationResolver) UpdateEntitlement(ctx context.Context, id string, inp
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "entitlement"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "entitlement"})
 	}
 
 	return &EntitlementUpdatePayload{
@@ -77,7 +78,7 @@ func (r *mutationResolver) UpdateEntitlement(ctx context.Context, id string, inp
 // DeleteEntitlement is the resolver for the deleteEntitlement field.
 func (r *mutationResolver) DeleteEntitlement(ctx context.Context, id string) (*EntitlementDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Entitlement.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "entitlement"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionDelete, object: "entitlement"})
 	}
 
 	if err := generated.EntitlementEdgeCleanup(ctx, id); err != nil {
@@ -93,7 +94,7 @@ func (r *mutationResolver) DeleteEntitlement(ctx context.Context, id string) (*E
 func (r *queryResolver) Entitlement(ctx context.Context, id string) (*generated.Entitlement, error) {
 	res, err := withTransactionalMutation(ctx).Entitlement.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "entitlement"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionGet, object: "entitlement"})
 	}
 
 	return res, nil

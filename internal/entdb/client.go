@@ -14,12 +14,13 @@ import (
 	"github.com/pressly/goose/v3"
 	"github.com/theopenlane/entx"
 
-	"go.uber.org/zap"
+	"github.com/rs/zerolog/log"
+
+	"github.com/theopenlane/utils/testutils"
 
 	migratedb "github.com/theopenlane/core/db"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/interceptors"
-	"github.com/theopenlane/core/pkg/testutils"
 )
 
 const (
@@ -34,20 +35,15 @@ type client struct {
 	pc *ent.Client
 	// sc is the secondary ent client
 	sc *ent.Client
-	// logger holds the zap logger
-	logger *zap.SugaredLogger
 }
 
 // NewMultiDriverDBClient returns a ent client with a primary and secondary, if configured, write database
-func NewMultiDriverDBClient(ctx context.Context, c entx.Config, l *zap.SugaredLogger, opts []ent.Option) (*ent.Client, *entx.EntClientConfig, error) {
+func NewMultiDriverDBClient(ctx context.Context, c entx.Config, opts []ent.Option) (*ent.Client, *entx.EntClientConfig, error) {
 	client := &client{
 		config: &c,
-		logger: l,
 	}
 
-	dbOpts := []entx.DBOption{
-		entx.WithLogger(l),
-	}
+	dbOpts := []entx.DBOption{}
 
 	if c.MultiWrite {
 		dbOpts = append(dbOpts, entx.WithSecondaryDB())
@@ -69,7 +65,7 @@ func NewMultiDriverDBClient(ctx context.Context, c entx.Config, l *zap.SugaredLo
 
 	if c.RunMigrations {
 		if err := client.runMigrations(ctx); err != nil {
-			client.logger.Errorf("failed running migrations", zap.Error(err))
+			log.Error().Err(err).Msg("failed running migrations")
 
 			return nil, nil, err
 		}
@@ -89,7 +85,7 @@ func NewMultiDriverDBClient(ctx context.Context, c entx.Config, l *zap.SugaredLo
 
 		if c.RunMigrations {
 			if err := client.runMigrations(ctx); err != nil {
-				client.logger.Errorf("failed running migrations", zap.Error(err))
+				log.Error().Err(err).Msg("failed running migrations")
 
 				return nil, nil, err
 			}
@@ -105,7 +101,7 @@ func NewMultiDriverDBClient(ctx context.Context, c entx.Config, l *zap.SugaredLo
 
 	if c.Debug {
 		cOpts = append(cOpts,
-			ent.Log(client.logger.Named("ent").Debugln),
+			// ent.Log(log.Debug().Str("name", "ent")),
 			ent.Debug(),
 			ent.Driver(drvPrimary),
 		)
@@ -121,7 +117,7 @@ func NewMultiDriverDBClient(ctx context.Context, c entx.Config, l *zap.SugaredLo
 		ec.WithHistory()
 	}
 
-	ec.Intercept(interceptors.QueryLogger(client.logger))
+	ec.Intercept(interceptors.QueryLogger())
 
 	return ec, entConfig, nil
 }
@@ -192,7 +188,7 @@ func (c *client) runAtlasMigrations(ctx context.Context) error {
 	// Run the automatic migration tool to create all schema resources.
 	// entcache.Driver will skip the caching layer when running the schema migration
 	if err := c.pc.Schema.Create(entcache.Skip(ctx)); err != nil {
-		c.logger.Errorf("failed creating schema resources", zap.Error(err))
+		log.Error().Err(err).Msg("failed creating schema resources")
 
 		return err
 	}
@@ -206,7 +202,7 @@ func (c *client) createEntDBClient(db *entsql.Driver) *ent.Client {
 
 	if c.config.Debug {
 		cOpts = append(cOpts,
-			ent.Log(c.logger.Named("ent").Debugln),
+			// ent.Log(log.Named("ent").Debugln),
 			ent.Debug(),
 		)
 	}
@@ -239,9 +235,6 @@ func NewTestFixture() *testutils.TestFixture {
 
 // NewTestClient creates a entdb client that can be used for TEST purposes ONLY
 func NewTestClient(ctx context.Context, ctr *testutils.TestFixture, entOpts []ent.Option) (*ent.Client, error) {
-	// setup logger
-	logger := zap.NewNop().Sugar()
-
 	dbconf := entx.Config{
 		Debug:           true,
 		DriverName:      ctr.Dialect,
@@ -250,8 +243,7 @@ func NewTestClient(ctx context.Context, ctr *testutils.TestFixture, entOpts []en
 		CacheTTL:        0 * time.Second, // do not cache results in tests
 	}
 
-	entOpts = append(entOpts, ent.Logger(*logger))
-
+	// Create the ent client
 	var db *ent.Client
 
 	// Retry the connection to the database to ensure it is up and running
@@ -262,7 +254,7 @@ func NewTestClient(ctx context.Context, ctr *testutils.TestFixture, entOpts []en
 		err = ctr.Pool.Retry(func() error {
 			fmt.Println("connecting to database...")
 
-			db, _, err = NewMultiDriverDBClient(ctx, dbconf, logger, entOpts)
+			db, _, err = NewMultiDriverDBClient(ctx, dbconf, entOpts)
 			if err != nil {
 				fmt.Printf("retrying connection to database: %v", err)
 			}
@@ -270,7 +262,7 @@ func NewTestClient(ctx context.Context, ctr *testutils.TestFixture, entOpts []en
 			return err
 		})
 	} else {
-		db, _, err = NewMultiDriverDBClient(ctx, dbconf, logger, entOpts)
+		db, _, err = NewMultiDriverDBClient(ctx, dbconf, entOpts)
 	}
 
 	if err != nil {

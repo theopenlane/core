@@ -11,11 +11,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi"
 	"github.com/theopenlane/core/pkg/middleware/auth"
-	"github.com/theopenlane/core/pkg/middleware/echocontext"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	echo "github.com/theopenlane/echox"
-	"go.uber.org/zap"
-	"go.uber.org/zap/zaptest"
+	"github.com/theopenlane/utils/echocontext"
 )
 
 // localRoundTripper is an http.RoundTripper that executes HTTP transactions
@@ -104,11 +102,9 @@ func createAuthConfig(c *generated.Client) *auth.AuthOptions {
 
 // testGraphServer creates a new graphql server for testing the graph api
 func testGraphServer(t *testing.T, c *generated.Client) *handler.Server {
-	logger := zaptest.NewLogger(t, zaptest.Level(zap.ErrorLevel)).Sugar()
-
 	srv := handler.NewDefaultServer(
 		graphapi.NewExecutableSchema(
-			graphapi.Config{Resolvers: graphapi.NewResolver(c).WithLogger(logger)},
+			graphapi.Config{Resolvers: graphapi.NewResolver(c)},
 		))
 
 	// lower the cache size for testing

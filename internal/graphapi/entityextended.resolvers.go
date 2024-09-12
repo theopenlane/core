@@ -8,6 +8,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/rout"
@@ -43,13 +44,12 @@ func (r *updateEntityInputResolver) Note(ctx context.Context, obj *generated.Upd
 		// get the entity in order to set the organization in the auth context
 		res, err := withTransactionalMutation(ctx).Entity.Get(ctx, id.(string))
 		if err != nil {
-			return parseRequestError(err, action{action: ActionUpdate, object: "entity"}, r.logger)
+			return parseRequestError(err, action{action: ActionUpdate, object: "entity"})
 		}
 
 		// set the organization in the auth context if its not done for us
 		if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
-			r.logger.Errorw("failed to set organization in auth context", "error", err)
-
+			log.Error().Err(err).Msg("failed to set organization in auth context")
 			return ErrPermissionDenied
 		}
 	}

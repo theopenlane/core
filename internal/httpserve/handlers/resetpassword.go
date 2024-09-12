@@ -11,6 +11,7 @@ import (
 	"github.com/cenkalti/backoff/v4"
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/oklog/ulid/v2"
+	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/utils/marionette"
@@ -46,7 +47,7 @@ func (h *Handler) ResetPassword(ctx echo.Context) error {
 	// lookup user from db based on provided token
 	entUser, err := h.getUserByResetToken(ctxWithToken, in.Token)
 	if err != nil {
-		h.Logger.Errorf("error retrieving user token", "error", err)
+		log.Error().Err(err).Msg("error retrieving user token")
 
 		if generated.IsNotFound(err) {
 			return h.BadRequest(ctx, ErrPassWordResetTokenInvalid)
@@ -63,7 +64,7 @@ func (h *Handler) ResetPassword(ctx echo.Context) error {
 
 	// set tokens for request
 	if err := user.setResetTokens(entUser, in.Token); err != nil {
-		h.Logger.Errorw("unable to set reset tokens for request", "error", err)
+		log.Error().Err(err).Msg("unable to set reset tokens for request")
 
 		return h.BadRequest(ctx, err)
 	}
@@ -81,7 +82,7 @@ func (h *Handler) ResetPassword(ctx echo.Context) error {
 	}
 
 	if token.ExpiresAt, err = user.GetPasswordResetExpires(); err != nil {
-		h.Logger.Errorw("unable to parse expiration", "error", err)
+		log.Error().Err(err).Msg("unable to parse expiration")
 
 		return h.InternalServerError(ctx, ErrUnableToVerifyEmail)
 	}
@@ -109,13 +110,13 @@ func (h *Handler) ResetPassword(ctx echo.Context) error {
 	})
 
 	if err := h.updateUserPassword(userCtx, entUser.ID, in.Password); err != nil {
-		h.Logger.Errorw("error updating user password", "error", err)
+		log.Error().Err(err).Msg("error updating user password")
 
 		return h.BadRequest(ctx, err)
 	}
 
 	if err := h.expireAllResetTokensUserByEmail(userCtx, user.Email); err != nil {
-		h.Logger.Errorw("error expiring existing tokens", "error", err)
+		log.Error().Err(err).Msg("error expiring existing tokens")
 
 		return h.BadRequest(ctx, err)
 	}
@@ -126,7 +127,7 @@ func (h *Handler) ResetPassword(ctx echo.Context) error {
 		marionette.WithBackoff(backoff.NewExponentialBackOff()),
 		marionette.WithErrorf("could not send password reset confirmation email to user %s", user.Email),
 	); err != nil {
-		h.Logger.Errorw("error sending confirmation email", "error", err)
+		log.Error().Err(err).Msg("error sending confirmation email")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}

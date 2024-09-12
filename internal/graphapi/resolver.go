@@ -16,10 +16,10 @@ import (
 	"github.com/alitto/pond"
 	"github.com/gorilla/websocket"
 	"github.com/ravilushqa/otelgqlgen"
+	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 	"github.com/vektah/gqlparser/v2/ast"
 	"github.com/wundergraph/graphql-go-tools/pkg/playground"
-	"go.uber.org/zap"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/events/soiree"
@@ -47,7 +47,6 @@ var (
 type Resolver struct {
 	client            *ent.Client
 	pool              *soiree.PondPool
-	logger            *zap.SugaredLogger
 	extensionsEnabled bool
 }
 
@@ -56,12 +55,6 @@ func NewResolver(client *ent.Client) *Resolver {
 	return &Resolver{
 		client: client,
 	}
-}
-
-func (r Resolver) WithLogger(l *zap.SugaredLogger) *Resolver {
-	r.logger = l
-
-	return &r
 }
 
 func (r Resolver) WithExtensions(enabled bool) *Resolver {
@@ -215,7 +208,7 @@ func (h *Handler) Routes(e *echo.Group) {
 	if h.playground != nil {
 		handlers, err := h.playground.Handlers()
 		if err != nil {
-			h.r.logger.Fatal("error configuring playground handlers", "error", err)
+			log.Fatal().Err(err).Msg("error configuring playground handlers")
 			return
 		}
 

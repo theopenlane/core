@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	ph "github.com/posthog/posthog-go"
+	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 	"golang.org/x/oauth2"
 
@@ -50,7 +51,7 @@ func (h *Handler) OauthRegister(ctx echo.Context) error {
 	// create claims for verified user
 	auth, err := h.AuthManager.GenerateOauthAuthSession(ctx.Request().Context(), ctx.Response().Writer, user, in)
 	if err != nil {
-		h.Logger.Errorw("unable create new auth session", "error", err)
+		log.Error().Err(err).Msg("unable to create new auth session")
 
 		return h.InternalServerError(ctx, err)
 	}

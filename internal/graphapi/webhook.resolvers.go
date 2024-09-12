@@ -8,6 +8,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/utils/rout"
 )
@@ -16,14 +17,13 @@ import (
 func (r *mutationResolver) CreateWebhook(ctx context.Context, input generated.CreateWebhookInput) (*WebhookCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
-		r.logger.Errorw("failed to set organization in auth context", "error", err)
-
+		log.Error().Err(err).Msg("failed to set organization in auth context")
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
 	res, err := withTransactionalMutation(ctx).Webhook.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "webhook"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "webhook"})
 	}
 
 	return &WebhookCreatePayload{
@@ -40,7 +40,7 @@ func (r *mutationResolver) CreateBulkWebhook(ctx context.Context, input []*gener
 func (r *mutationResolver) CreateBulkCSVWebhook(ctx context.Context, input graphql.Upload) (*WebhookBulkCreatePayload, error) {
 	data, err := unmarshalBulkData[generated.CreateWebhookInput](input)
 	if err != nil {
-		r.logger.Errorw("failed to unmarshal bulk data", "error", err)
+		log.Error().Err(err).Msg("failed to unmarshal bulk data")
 
 		return nil, err
 	}
@@ -52,12 +52,11 @@ func (r *mutationResolver) CreateBulkCSVWebhook(ctx context.Context, input graph
 func (r *mutationResolver) UpdateWebhook(ctx context.Context, id string, input generated.UpdateWebhookInput) (*WebhookUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Webhook.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "webhook"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "webhook"})
 	}
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
-		r.logger.Errorw("failed to set organization in auth context", "error", err)
-
+		log.Error().Err(err).Msg("failed to set organization in auth context")
 		return nil, ErrPermissionDenied
 	}
 
@@ -66,7 +65,7 @@ func (r *mutationResolver) UpdateWebhook(ctx context.Context, id string, input g
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "webhook"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "webhook"})
 	}
 
 	return &WebhookUpdatePayload{
@@ -77,7 +76,7 @@ func (r *mutationResolver) UpdateWebhook(ctx context.Context, id string, input g
 // DeleteWebhook is the resolver for the deleteWebhook field.
 func (r *mutationResolver) DeleteWebhook(ctx context.Context, id string) (*WebhookDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Webhook.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "webhook"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionDelete, object: "webhook"})
 	}
 
 	if err := generated.WebhookEdgeCleanup(ctx, id); err != nil {
@@ -93,7 +92,7 @@ func (r *mutationResolver) DeleteWebhook(ctx context.Context, id string) (*Webho
 func (r *queryResolver) Webhook(ctx context.Context, id string) (*generated.Webhook, error) {
 	res, err := withTransactionalMutation(ctx).Webhook.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "webhook"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionGet, object: "webhook"})
 	}
 
 	return res, nil

@@ -9,6 +9,7 @@ import (
 	"errors"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/utils/rout"
@@ -18,14 +19,14 @@ import (
 func (r *mutationResolver) CreateAPIToken(ctx context.Context, input generated.CreateAPITokenInput) (*APITokenCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
-		r.logger.Errorw("failed to set organization in auth context", "error", err)
+		log.Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
 	apiToken, err := withTransactionalMutation(ctx).APIToken.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		r.logger.Errorw("failed to create api token", "error", err)
+		log.Error().Err(err).Msg("failed to create api token")
 
 		return nil, err
 	}
@@ -42,7 +43,7 @@ func (r *mutationResolver) CreateBulkAPIToken(ctx context.Context, input []*gene
 func (r *mutationResolver) CreateBulkCSVAPIToken(ctx context.Context, input graphql.Upload) (*APITokenBulkCreatePayload, error) {
 	data, err := unmarshalBulkData[generated.CreateAPITokenInput](input)
 	if err != nil {
-		r.logger.Errorw("failed to unmarshal bulk data", "error", err)
+		log.Error().Err(err).Msg("failed to unmarshal bulk data")
 
 		return nil, err
 	}
@@ -62,12 +63,12 @@ func (r *mutationResolver) UpdateAPIToken(ctx context.Context, id string, input 
 			return nil, ErrPermissionDenied
 		}
 
-		r.logger.Errorw("failed to get api token", "error", err)
+		log.Error().Err(err).Msg("failed to get api token")
 		return nil, ErrInternalServerError
 	}
 
 	if err := setOrganizationInAuthContext(ctx, &apiToken.OwnerID); err != nil {
-		r.logger.Errorw("failed to set organization in auth context", "error", err)
+		log.Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, ErrPermissionDenied
 	}
@@ -82,7 +83,7 @@ func (r *mutationResolver) UpdateAPIToken(ctx context.Context, id string, input 
 			return nil, err
 		}
 
-		r.logger.Errorw("failed to update api token", "error", err)
+		log.Error().Err(err).Msg("failed to update api token")
 
 		return nil, ErrInternalServerError
 	}
@@ -101,7 +102,7 @@ func (r *mutationResolver) DeleteAPIToken(ctx context.Context, id string) (*APIT
 			return nil, ErrPermissionDenied
 		}
 
-		r.logger.Errorw("failed to delete api token", "error", err)
+		log.Error().Err(err).Msg("failed to delete api token")
 		return nil, err
 	}
 
@@ -120,7 +121,7 @@ func (r *queryResolver) APIToken(ctx context.Context, id string) (*generated.API
 			return nil, err
 		}
 
-		r.logger.Errorw("failed to get api token", "error", err)
+		log.Error().Err(err).Msg("failed to get api token")
 
 		return nil, ErrInternalServerError
 	}

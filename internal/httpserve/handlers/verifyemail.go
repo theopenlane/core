@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/getkin/kin-openapi/openapi3"
 	ph "github.com/posthog/posthog-go"
+	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/utils/rout"
@@ -40,7 +41,7 @@ func (h *Handler) VerifyEmail(ctx echo.Context) error {
 			return h.BadRequest(ctx, err)
 		}
 
-		h.Logger.Errorf("error retrieving user token", "error", err)
+		log.Error().Err(err).Msg("error retrieving user token")
 
 		return h.InternalServerError(ctx, ErrUnableToVerifyEmail)
 	}
@@ -59,7 +60,7 @@ func (h *Handler) VerifyEmail(ctx echo.Context) error {
 	if !entUser.Edges.Setting.EmailConfirmed {
 		// set tokens for request
 		if err := user.setUserTokens(entUser, in.Token); err != nil {
-			h.Logger.Errorw("unable to set user tokens for request", "error", err)
+			log.Error().Err(err).Msg("unable to set user tokens for request")
 
 			return h.BadRequest(ctx, err)
 		}
@@ -70,7 +71,7 @@ func (h *Handler) VerifyEmail(ctx echo.Context) error {
 		}
 
 		if t.ExpiresAt, err = user.GetVerificationExpires(); err != nil {
-			h.Logger.Errorw("unable to parse expiration", "error", err)
+			log.Error().Err(err).Msg("unable to parse expiration")
 
 			return h.InternalServerError(ctx, ErrUnableToVerifyEmail)
 		}
@@ -82,7 +83,7 @@ func (h *Handler) VerifyEmail(ctx echo.Context) error {
 
 				meowtoken, err := h.storeAndSendEmailVerificationToken(userCtx, user)
 				if err != nil {
-					h.Logger.Errorw("unable to resend verification token", "error", err)
+					log.Error().Err(err).Msg("unable to resend verification token")
 
 					return h.InternalServerError(ctx, ErrUnableToVerifyEmail)
 				}
@@ -113,7 +114,7 @@ func (h *Handler) VerifyEmail(ctx echo.Context) error {
 	// create new claims for the user
 	auth, err := h.AuthManager.GenerateUserAuthSession(ctx, entUser)
 	if err != nil {
-		h.Logger.Errorw("unable create new auth session", "error", err)
+		log.Error().Err(err).Msg("unable to create new auth session")
 
 		return h.InternalServerError(ctx, err)
 	}

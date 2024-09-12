@@ -4,9 +4,10 @@ import (
 	"context"
 	"strings"
 
-	"github.com/theopenlane/iam/fgax"
+	"github.com/rs/zerolog/log"
 
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -32,12 +33,16 @@ func CanInviteUsers() privacy.InviteMutationRuleFunc {
 
 		relation, err := getRelationToCheck(ctx, m)
 		if err != nil {
-			m.Logger.Errorw("unable to determine relation to check", "error", err)
+			log.Error().Err(err).Msg("unable to determine relation to check")
 
 			return err
 		}
 
-		m.Logger.Debugw("checking relationship tuples", "relation", relation, "organization_id", oID, "user_id", userID)
+		log.Debug().
+			Str("relation", relation).
+			Str("organization_id", oID).
+			Str("user_id", userID).
+			Msg("checking relationship tuples")
 
 		ac := fgax.AccessCheck{
 			SubjectID:   userID,
@@ -52,7 +57,7 @@ func CanInviteUsers() privacy.InviteMutationRuleFunc {
 		}
 
 		if access {
-			m.Logger.Debugw("access allowed", "relation", relation, "organization_id", oID)
+			log.Debug().Str("relation", relation).Str("organization_id", oID).Msg("access allowed")
 
 			return privacy.Allow
 		}
