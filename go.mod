@@ -59,7 +59,7 @@ require (
 	github.com/theopenlane/echox v0.1.0
 	github.com/theopenlane/echozap v0.1.0
 	github.com/theopenlane/entx v0.1.7
-	github.com/theopenlane/gqlgen-plugins v0.1.3
+	github.com/theopenlane/gqlgen-plugins v0.2.3
 	github.com/theopenlane/httpsling v0.2.0
 	github.com/theopenlane/iam v0.1.6
 	github.com/theopenlane/utils v0.1.5
