@@ -12,9 +12,8 @@ import (
 	"entgo.io/ent/dialect"
 	entsql "entgo.io/ent/dialect/sql"
 	"github.com/pressly/goose/v3"
-	"github.com/theopenlane/entx"
-
 	"github.com/rs/zerolog/log"
+	"github.com/theopenlane/entx"
 
 	"github.com/theopenlane/utils/testutils"
 
@@ -101,7 +100,7 @@ func NewMultiDriverDBClient(ctx context.Context, c entx.Config, opts []ent.Optio
 
 	if c.Debug {
 		cOpts = append(cOpts,
-			// ent.Log(log.Debug().Str("name", "ent")),
+			ent.Log(log.Print),
 			ent.Debug(),
 			ent.Driver(drvPrimary),
 		)
@@ -202,7 +201,7 @@ func (c *client) createEntDBClient(db *entsql.Driver) *ent.Client {
 
 	if c.config.Debug {
 		cOpts = append(cOpts,
-			// ent.Log(log.Named("ent").Debugln),
+			ent.Log(log.Print),
 			ent.Debug(),
 		)
 	}
