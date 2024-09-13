@@ -10,8 +10,8 @@ import (
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/utils/echocontext"
 	"github.com/theopenlane/utils/rout"
 	sliceutil "github.com/theopenlane/utils/slice"
 )

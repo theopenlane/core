@@ -13,7 +13,7 @@ import (
 	"github.com/theopenlane/core/pkg/middleware/auth"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	echo "github.com/theopenlane/echox"
-	"github.com/theopenlane/utils/echocontext"
+	"github.com/theopenlane/echox/middleware/echocontext"
 )
 
 // localRoundTripper is an http.RoundTripper that executes HTTP transactions

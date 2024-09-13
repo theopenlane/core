@@ -19,7 +19,7 @@ import (
 	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/iam/tokens"
 
-	"github.com/theopenlane/utils/echocontext"
+	"github.com/theopenlane/echox/middleware/echocontext"
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	_ "github.com/theopenlane/core/internal/ent/generated/runtime"

@@ -2,6 +2,8 @@ module github.com/theopenlane/core
 
 go 1.23.1
 
+replace github.com/theopenlane/gqlgen-plugins => ../gqlgen-plugins
+
 require (
 	ariga.io/entcache v0.1.0
 	entgo.io/contrib v0.6.0
@@ -55,12 +57,12 @@ require (
 	github.com/theopenlane/beacon v0.1.0
 	github.com/theopenlane/dbx v0.1.2
 	github.com/theopenlane/echo-prometheus v0.1.0
-	github.com/theopenlane/echox v0.1.0
-	github.com/theopenlane/entx v0.1.8-0.20240912154908-7b00e1d17274
-	github.com/theopenlane/gqlgen-plugins v0.1.4-0.20240912163123-cf7ebe35ad16
+	github.com/theopenlane/echox v0.2.0
+	github.com/theopenlane/entx v0.2.0
+	github.com/theopenlane/gqlgen-plugins v0.2.0
 	github.com/theopenlane/httpsling v0.2.0
-	github.com/theopenlane/iam v0.1.7-0.20240912160306-eea17566b57c
-	github.com/theopenlane/utils v0.1.6-0.20240912154620-6cff45e295f6
+	github.com/theopenlane/iam v0.2.0
+	github.com/theopenlane/utils v0.2.0
 	github.com/vektah/gqlparser/v2 v2.5.16
 	github.com/wundergraph/graphql-go-tools v1.67.4
 	gocloud.dev v0.39.0
@@ -184,9 +186,9 @@ require (
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/opencontainers/image-spec v1.1.0 // indirect
 	github.com/opencontainers/runc v1.1.14 // indirect
-	github.com/openfga/api/proto v0.0.0-20240905181937-3583905f61a6 // indirect
+	github.com/openfga/api/proto v0.0.0-20240906203051-102620ef2a66 // indirect
 	github.com/openfga/language/pkg/go v0.2.0-beta.2 // indirect
-	github.com/openfga/openfga v1.6.0 // indirect
+	github.com/openfga/openfga v1.6.1 // indirect
 	github.com/ory/dockertest v3.3.5+incompatible // indirect
 	github.com/pelletier/go-toml/v2 v2.2.3 // indirect
 	github.com/perimeterx/marshmallow v1.1.5 // indirect
@@ -260,7 +262,7 @@ require (
 	modernc.org/libc v1.60.0 // indirect
 	modernc.org/mathutil v1.6.0 // indirect
 	modernc.org/memory v1.8.0 // indirect
-	modernc.org/sqlite v1.33.0 // indirect
+	modernc.org/sqlite v1.33.1 // indirect
 	modernc.org/strutil v1.2.0 // indirect
 	modernc.org/token v1.1.0 // indirect
 )

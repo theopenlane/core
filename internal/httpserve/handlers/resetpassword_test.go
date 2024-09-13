@@ -18,7 +18,7 @@ import (
 	"github.com/theopenlane/utils/emails"
 	"github.com/theopenlane/utils/emails/mock"
 
-	"github.com/theopenlane/utils/echocontext"
+	"github.com/theopenlane/echox/middleware/echocontext"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"

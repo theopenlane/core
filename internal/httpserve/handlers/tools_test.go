@@ -12,11 +12,11 @@ import (
 	"github.com/stretchr/testify/suite"
 
 	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	mock_fga "github.com/theopenlane/iam/fgax/mockery"
 	"github.com/theopenlane/iam/sessions"
-	"github.com/theopenlane/utils/echocontext"
 	"github.com/theopenlane/utils/emails"
 	"github.com/theopenlane/utils/marionette"
 	"github.com/theopenlane/utils/testutils"
