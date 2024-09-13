@@ -97,11 +97,11 @@ func initConfig() {
 
 // setupLogging configures the logger based on the command flags
 func setupLogging() {
-	log.Logger = zerolog.New(os.Stderr).With().Timestamp().Logger()
-
-	if Config.Bool("pretty") {
-		log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
-	}
+	log.Logger = zerolog.New(os.Stderr).
+		With().Timestamp().
+		Logger().
+		With().Str("app", appName).
+		Logger()
 
 	zerolog.SetGlobalLevel(zerolog.InfoLevel)
 
@@ -109,7 +109,9 @@ func setupLogging() {
 		zerolog.SetGlobalLevel(zerolog.DebugLevel)
 	}
 
-	log.Logger = log.With().Str("app", appName).Logger()
+	if Config.Bool("pretty") {
+		log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
+	}
 }
 
 // initConfiguration loads the configuration from the command flags of the given cobra command

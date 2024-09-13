@@ -1,7 +1,11 @@
 package cmd
 
 import (
+	"fmt"
 	"os"
+	"path/filepath"
+	"runtime/debug"
+	"time"
 
 	"github.com/knadh/koanf/providers/posflag"
 	"github.com/knadh/koanf/v2"
@@ -56,17 +60,36 @@ func initCmdFlags(cmd *cobra.Command) error {
 }
 
 func setupLogging() {
-	log.Logger = zerolog.New(os.Stderr).With().Timestamp().Logger()
+	// setup logging with time and app name
+	log.Logger = zerolog.New(os.Stderr).
+		With().Timestamp().
+		Logger().
+		With().Str("app", appName).
+		Logger()
 
+	// set the log level
 	zerolog.SetGlobalLevel(zerolog.InfoLevel)
 
+	// set the log level to debug if the debug flag is set and add additional information
 	if k.Bool("debug") {
 		zerolog.SetGlobalLevel(zerolog.DebugLevel)
+
+		buildInfo, _ := debug.ReadBuildInfo()
+
+		log.Logger = log.Logger.With().
+			Caller().
+			Int("pid", os.Getpid()).
+			Str("go_version", buildInfo.GoVersion).Logger()
 	}
 
+	// pretty logging for development
 	if k.Bool("pretty") {
-		log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
+		log.Logger = log.Output(zerolog.ConsoleWriter{
+			Out:        os.Stderr,
+			TimeFormat: time.RFC3339,
+			FormatCaller: func(i interface{}) string {
+				return filepath.Base(fmt.Sprintf("%s", i))
+			},
+		})
 	}
-
-	log.With().Str("app", appName).Logger()
 }

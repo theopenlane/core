@@ -252,11 +252,11 @@ func NewTestClient(ctx context.Context, ctr *testutils.TestFixture, entOpts []en
 	// If a test container is used, retry the connection to the database to ensure it is up and running
 	if ctr.Pool != nil {
 		err = ctr.Pool.Retry(func() error {
-			fmt.Println("connecting to database...")
+			log.Info().Msg("connecting to database...")
 
 			db, _, err = NewMultiDriverDBClient(ctx, dbconf, entOpts)
 			if err != nil {
-				fmt.Printf("retrying connection to database: %v", err)
+				log.Info().Err(err).Msg("retrying connection to database...")
 			}
 
 			return err

@@ -59,6 +59,7 @@ type client struct {
 
 func (suite *GraphTestSuite) SetupSuite() {
 	zerolog.SetGlobalLevel(zerolog.Disabled)
+
 	suite.tf = entdb.NewTestFixture()
 }
 

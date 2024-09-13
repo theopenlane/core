@@ -524,8 +524,16 @@ github.com/theopenlane/echo-prometheus v0.1.0 h1:1zMejBVHe5w4zLHS+k5FV9S/46QBiwO
 github.com/theopenlane/echo-prometheus v0.1.0/go.mod h1:Eiiv1ZLXKMsteQ3T+H1tFfSSZuXSvQfZp95qr5hmGkA=
 github.com/theopenlane/echox v0.1.0 h1:y4Z2shaODCLwXHsHBrY/EkH/2sIuo49xdIfxx7h+Zvg=
 github.com/theopenlane/echox v0.1.0/go.mod h1:RaynhPvY9qbLOVlcO7Js1NqZ66+CP9hVBa0c7ehNYA4=
+github.com/theopenlane/entx v0.1.8-0.20240912154908-7b00e1d17274 h1:wQodDTssioy5G9QBaJihou/50FJk3rsZuMev6t+iOYI=
+github.com/theopenlane/entx v0.1.8-0.20240912154908-7b00e1d17274/go.mod h1:fw1lv2/U755qpIj8NH865c3iKDn2g0m1LR0zueSk6v0=
+github.com/theopenlane/gqlgen-plugins v0.1.4-0.20240912163123-cf7ebe35ad16 h1:zp4a4vMHkPf0yQ31D63qlW49OUe8K8VtaOUtzgDhQlI=
+github.com/theopenlane/gqlgen-plugins v0.1.4-0.20240912163123-cf7ebe35ad16/go.mod h1:PrZIGyqAr/Hqrka3UFOS6kquBl2TvL5vhZOL3d48/bU=
 github.com/theopenlane/httpsling v0.2.0 h1:5k/PoFA5jjak9dnijATFvTVTvgUSMFdEZeyctyv1cWU=
 github.com/theopenlane/httpsling v0.2.0/go.mod h1:Ta/8bjv4JhKT0Xk1hD2Iott9BKLCqXvscmjolSB/bBY=
+github.com/theopenlane/iam v0.1.7-0.20240912160306-eea17566b57c h1:BK9IczEZSDs0JnCSh+aLjjBXE8jI+6z6bBrZ4QHiKUw=
+github.com/theopenlane/iam v0.1.7-0.20240912160306-eea17566b57c/go.mod h1:eDLIShKiSxxpnkfwnpa8k5EMRjqzA/rc9gdenH74iJY=
+github.com/theopenlane/utils v0.1.6-0.20240912154620-6cff45e295f6 h1:AIuzLIgAEPP1jq+EgxNDqr8cZbw21MDgMfzC8OltEYM=
+github.com/theopenlane/utils v0.1.6-0.20240912154620-6cff45e295f6/go.mod h1:G8HaMBNhVQ1FpZ8g9luRNwNfkQV8wMJJ4stqy29pXnY=
 github.com/tursodatabase/libsql-client-go v0.0.0-20240902231107-85af5b9d094d h1:dOMI4+zEbDI37KGb0TI44GUAwxHF9cMsIoDTJ7UmgfU=
 github.com/tursodatabase/libsql-client-go v0.0.0-20240902231107-85af5b9d094d/go.mod h1:l8xTsYB90uaVdMHXMCxKKLSgw5wLYBwBKKefNIUnm9s=
 github.com/ugorji/go/codec v1.2.12 h1:9LC83zGrHhuUA9l16C9AHXAqEV/2wBQ4nkvumAE65EE=

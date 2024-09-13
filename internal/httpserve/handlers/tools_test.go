@@ -7,22 +7,19 @@ import (
 	"testing"
 	"time"
 
+	"github.com/rs/zerolog"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 
 	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	mock_fga "github.com/theopenlane/iam/fgax/mockery"
-
+	"github.com/theopenlane/iam/sessions"
+	"github.com/theopenlane/utils/echocontext"
 	"github.com/theopenlane/utils/emails"
 	"github.com/theopenlane/utils/marionette"
-
-	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/iam/sessions"
-
 	"github.com/theopenlane/utils/testutils"
-
-	"github.com/theopenlane/utils/echocontext"
 
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	ent "github.com/theopenlane/core/internal/ent/generated"
@@ -62,6 +59,8 @@ func TestHandlerTestSuite(t *testing.T) {
 }
 
 func (suite *HandlerTestSuite) SetupSuite() {
+	zerolog.SetGlobalLevel(zerolog.Disabled)
+
 	suite.tf = entdb.NewTestFixture()
 }
 

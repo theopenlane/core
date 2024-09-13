@@ -2,13 +2,6 @@ module github.com/theopenlane/core
 
 go 1.23.1
 
-replace (
-	github.com/theopenlane/entx => ../entx
-	github.com/theopenlane/gqlgen-plugins => ../gqlgen-plugins
-	github.com/theopenlane/iam => ../iam
-	github.com/theopenlane/utils => ../utils
-)
-
 require (
 	ariga.io/entcache v0.1.0
 	entgo.io/contrib v0.6.0
@@ -63,11 +56,11 @@ require (
 	github.com/theopenlane/dbx v0.1.2
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.1.0
-	github.com/theopenlane/entx v0.1.8-0.20240911225118-327095418f4e
-	github.com/theopenlane/gqlgen-plugins v0.1.4-0.20240912034723-15c56e18248e
+	github.com/theopenlane/entx v0.1.8-0.20240912154908-7b00e1d17274
+	github.com/theopenlane/gqlgen-plugins v0.1.4-0.20240912163123-cf7ebe35ad16
 	github.com/theopenlane/httpsling v0.2.0
-	github.com/theopenlane/iam v0.1.7-0.20240911224405-ef3f7999442e
-	github.com/theopenlane/utils v0.1.6-0.20240911214559-3e4455ffe31f
+	github.com/theopenlane/iam v0.1.7-0.20240912160306-eea17566b57c
+	github.com/theopenlane/utils v0.1.6-0.20240912154620-6cff45e295f6
 	github.com/vektah/gqlparser/v2 v2.5.16
 	github.com/wundergraph/graphql-go-tools v1.67.4
 	gocloud.dev v0.39.0

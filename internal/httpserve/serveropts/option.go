@@ -233,10 +233,10 @@ func WithMiddleware() ServerOption {
 			middleware.RequestID(), // add request id
 			middleware.Recover(),   // recover server from any panic/fatal error gracefully
 			middleware.LoggerWithConfig(middleware.LoggerConfig{
-				Format: "remote_ip=${remote_ip}, method=${method}, uri=${uri}, status=${status}, session=${header:Set-Cookie}, host=${host}, referer=${referer}, user_agent=${user_agent}, route=${route}, path=${path}, auth=${header:Authorization}\n",
+				Output: log.Logger.Hook(LevelNameHook{}),
+				Format: "remote_ip=${remote_ip}, method=${method}, uri=${uri}, status=${status}, session=${header:Set-Cookie}, host=${host}, referer=${referer}, user_agent=${user_agent}, route=${route}, path=${path}",
 			}),
-			echoprometheus.MetricsMiddleware(), // add prometheus metrics
-			// echozap.ZapLogger(log.Desugar()),                                     // add logger middleware
+			echoprometheus.MetricsMiddleware(),                                                 // add prometheus metrics
 			echocontext.EchoContextToContextMiddleware(),                                       // adds echo context to parent
 			mime.NewWithConfig(mime.Config{DefaultContentType: httpsling.ContentTypeJSONUTF8}), // add mime middleware
 		)

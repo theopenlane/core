@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 )
@@ -17,6 +16,6 @@ func main() {
 
 	l.Printf("[INFO] start server at %s", origin)
 	if err := http.ListenAndServe(":5500", nil); err != nil {
-		fmt.Println(err)
+		l.Println(err)
 	}
 }
