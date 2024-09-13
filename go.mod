@@ -10,7 +10,7 @@ require (
 	github.com/99designs/keyring v1.2.2
 	github.com/IBM/sarama v1.43.3
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
-	github.com/Yamashou/gqlgenc v0.24.0
+	github.com/Yamashou/gqlgenc v0.25.0
 	github.com/alicebob/miniredis/v2 v2.33.0
 	github.com/alitto/pond v1.9.2
 	github.com/brianvoe/gofakeit/v7 v7.0.4
