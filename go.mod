@@ -56,7 +56,7 @@ require (
 	github.com/theopenlane/beacon v0.1.0
 	github.com/theopenlane/dbx v0.1.2
 	github.com/theopenlane/echo-prometheus v0.1.0
-	github.com/theopenlane/echox v0.1.0
+	github.com/theopenlane/echox v0.2.0
 	github.com/theopenlane/echozap v0.1.0
 	github.com/theopenlane/entx v0.1.7
 	github.com/theopenlane/gqlgen-plugins v0.1.3
