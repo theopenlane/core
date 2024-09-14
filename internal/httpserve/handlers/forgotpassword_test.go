@@ -19,9 +19,10 @@ import (
 
 	"github.com/theopenlane/httpsling"
 
+	"github.com/theopenlane/echox/middleware/echocontext"
+
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	_ "github.com/theopenlane/core/internal/ent/generated/runtime"
-	"github.com/theopenlane/core/pkg/middleware/echocontext"
 	"github.com/theopenlane/core/pkg/models"
 )
 

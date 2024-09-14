@@ -7,6 +7,7 @@ import (
 	"github.com/cenkalti/backoff/v4"
 	"github.com/getkin/kin-openapi/openapi3"
 	ph "github.com/posthog/posthog-go"
+	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/utils/marionette"
@@ -50,7 +51,7 @@ func (h *Handler) RegisterHandler(ctx echo.Context) error {
 
 	meowuser, err := h.createUser(ctxWithToken, input)
 	if err != nil {
-		h.Logger.Errorw("error creating new user", "error", err)
+		log.Error().Err(err).Msg("error creating new user")
 
 		if IsUniqueConstraintError(err) {
 			return h.Conflict(ctx, "user already exists", UserExistsErrCode)
@@ -78,7 +79,7 @@ func (h *Handler) RegisterHandler(ctx echo.Context) error {
 
 	meowtoken, err := h.storeAndSendEmailVerificationToken(userCtx, user)
 	if err != nil {
-		h.Logger.Errorw("error storing token", "error", err)
+		log.Error().Err(err).Msg("error storing email verification token")
 
 		return h.InternalServerError(ctx, err)
 	}
@@ -97,7 +98,7 @@ func (h *Handler) RegisterHandler(ctx echo.Context) error {
 func (h *Handler) storeAndSendEmailVerificationToken(ctx context.Context, user *User) (*generated.EmailVerificationToken, error) {
 	// expire all existing tokens
 	if err := h.expireAllVerificationTokensUserByEmail(ctx, user.Email); err != nil {
-		h.Logger.Errorw("error expiring existing tokens", "error", err)
+		log.Error().Err(err).Msg("error expiring existing tokens")
 
 		return nil, err
 	}
@@ -105,7 +106,7 @@ func (h *Handler) storeAndSendEmailVerificationToken(ctx context.Context, user *
 	// check if the user has attempted to verify their email too many times
 	attempts, err := h.countVerificationTokensUserByEmail(ctx, user.Email)
 	if err != nil {
-		h.Logger.Errorw("error getting existing tokens", "error", err)
+		log.Error().Err(err).Msg("error getting existing tokens")
 
 		return nil, err
 	}
@@ -116,7 +117,7 @@ func (h *Handler) storeAndSendEmailVerificationToken(ctx context.Context, user *
 
 	// create a new token and store it in the database
 	if err := user.CreateVerificationToken(); err != nil {
-		h.Logger.Errorw("unable to create verification token", "error", err)
+		log.Error().Err(err).Msg("error creating verification token")
 
 		return nil, err
 	}

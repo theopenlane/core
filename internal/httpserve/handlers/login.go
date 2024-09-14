@@ -5,6 +5,7 @@ import (
 
 	"github.com/getkin/kin-openapi/openapi3"
 	ph "github.com/posthog/posthog-go"
+	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/utils/rout"
@@ -61,13 +62,13 @@ func (h *Handler) LoginHandler(ctx echo.Context) error {
 	// create new claims for the user
 	auth, err := h.AuthManager.GenerateUserAuthSession(ctx, user)
 	if err != nil {
-		h.Logger.Errorw("unable create new auth session", "error", err)
+		log.Error().Err(err).Msg("unable to create new auth session")
 
 		return h.InternalServerError(ctx, err)
 	}
 
 	if err := h.updateUserLastSeen(userCtx, user.ID); err != nil {
-		h.Logger.Errorw("unable to update last seen", "error", err)
+		log.Error().Err(err).Msg("unable to update last seen")
 
 		return h.InternalServerError(ctx, err)
 	}

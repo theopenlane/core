@@ -1,20 +1,22 @@
 package cmd
 
 import (
-	"log"
+	"fmt"
+	"os"
+	"path/filepath"
+	"runtime/debug"
+	"time"
 
 	"github.com/knadh/koanf/providers/posflag"
 	"github.com/knadh/koanf/v2"
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
-	"go.uber.org/zap"
 )
 
 const appName = "openlane"
 
-var (
-	logger *zap.SugaredLogger
-	k      *koanf.Koanf
-)
+var k *koanf.Koanf
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -46,7 +48,7 @@ func init() {
 // refer to the README.md for more information
 func initConfig() {
 	if err := initCmdFlags(rootCmd); err != nil {
-		log.Fatalf("error loading config: %v", err)
+		log.Fatal().Err(err).Msg("error loading config")
 	}
 
 	setupLogging()
@@ -58,22 +60,36 @@ func initCmdFlags(cmd *cobra.Command) error {
 }
 
 func setupLogging() {
-	cfg := zap.NewProductionConfig()
-	if k.Bool("pretty") {
-		cfg = zap.NewDevelopmentConfig()
-	}
+	// setup logging with time and app name
+	log.Logger = zerolog.New(os.Stderr).
+		With().Timestamp().
+		Logger().
+		With().Str("app", appName).
+		Logger()
 
+	// set the log level
+	zerolog.SetGlobalLevel(zerolog.InfoLevel)
+
+	// set the log level to debug if the debug flag is set and add additional information
 	if k.Bool("debug") {
-		cfg.Level = zap.NewAtomicLevelAt(zap.DebugLevel)
-	} else {
-		cfg.Level = zap.NewAtomicLevelAt(zap.InfoLevel)
+		zerolog.SetGlobalLevel(zerolog.DebugLevel)
+
+		buildInfo, _ := debug.ReadBuildInfo()
+
+		log.Logger = log.Logger.With().
+			Caller().
+			Int("pid", os.Getpid()).
+			Str("go_version", buildInfo.GoVersion).Logger()
 	}
 
-	l, err := cfg.Build()
-	if err != nil {
-		panic(err)
+	// pretty logging for development
+	if k.Bool("pretty") {
+		log.Logger = log.Output(zerolog.ConsoleWriter{
+			Out:        os.Stderr,
+			TimeFormat: time.RFC3339,
+			FormatCaller: func(i interface{}) string {
+				return filepath.Base(fmt.Sprintf("%s", i))
+			},
+		})
 	}
-
-	logger = l.Sugar().With("app", appName)
-	defer logger.Sync() //nolint:errcheck
 }

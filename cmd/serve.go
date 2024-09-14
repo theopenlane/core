@@ -3,9 +3,9 @@ package cmd
 import (
 	"context"
 
+	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 	"github.com/theopenlane/beacon/otelx"
-	"go.uber.org/zap"
 
 	dbx "github.com/theopenlane/dbx/pkg/dbxclient"
 	"github.com/theopenlane/iam/fgax"
@@ -43,12 +43,11 @@ func serve(ctx context.Context) error {
 	)
 
 	// create ent dependency injection
-	entOpts := []ent.Option{ent.Logger(*logger)}
+	entOpts := []ent.Option{}
 
 	serverOpts := []serveropts.ServerOption{}
 	serverOpts = append(serverOpts,
 		serveropts.WithConfigProvider(&config.ConfigProviderWithRefresh{}),
-		serveropts.WithLogger(logger),
 		serveropts.WithHTTPS(),
 		serveropts.WithEmailManager(),
 		serveropts.WithTaskManager(),
@@ -78,13 +77,13 @@ func serve(ctx context.Context) error {
 
 	err = otelx.NewTracer(so.Config.Settings.Tracer, appName)
 	if err != nil {
-		logger.Fatalw("failed to initialize tracer", "error", err)
+		log.Fatal().Err(err).Msg("failed to initialize tracer")
 	}
 
 	// setup Authz connection
 	// this must come before the database setup because the FGA Client
 	// is used as an ent dependency
-	fgaClient, err = fgax.CreateFGAClientWithStore(ctx, so.Config.Settings.Authz, so.Config.Logger)
+	fgaClient, err = fgax.CreateFGAClientWithStore(ctx, so.Config.Settings.Authz)
 	if err != nil {
 		return err
 	}
@@ -124,7 +123,7 @@ func serve(ctx context.Context) error {
 	)
 
 	// Setup DB connection
-	entdbClient, dbConfig, err := entdb.NewMultiDriverDBClient(ctx, so.Config.Settings.DB, logger, entOpts)
+	entdbClient, dbConfig, err := entdb.NewMultiDriverDBClient(ctx, so.Config.Settings.DB, entOpts)
 	if err != nil {
 		return err
 	}
@@ -152,13 +151,13 @@ func serve(ctx context.Context) error {
 		serveropts.WithSessionMiddleware(),
 	)
 
-	srv := server.NewServer(so.Config, so.Config.Logger)
+	srv := server.NewServer(so.Config)
 
 	// Setup Graph API Handlers
 	so.AddServerOptions(serveropts.WithGraphRoute(srv, entdbClient))
 
 	if err := srv.StartEchoServer(ctx); err != nil {
-		logger.Error("failed to run server", zap.Error(err))
+		log.Error().Err(err).Msg("failed to run server")
 	}
 
 	return nil

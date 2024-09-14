@@ -8,6 +8,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/utils/rout"
 )
@@ -16,14 +17,13 @@ import (
 func (r *mutationResolver) CreateOauthProvider(ctx context.Context, input generated.CreateOauthProviderInput) (*OauthProviderCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
-		r.logger.Errorw("failed to set organization in auth context", "error", err)
-
+		log.Error().Err(err).Msg("failed to set organization in auth context")
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
 	res, err := withTransactionalMutation(ctx).OauthProvider.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "oauthprovider"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "oauthprovider"})
 	}
 
 	return &OauthProviderCreatePayload{
@@ -40,7 +40,7 @@ func (r *mutationResolver) CreateBulkOauthProvider(ctx context.Context, input []
 func (r *mutationResolver) CreateBulkCSVOauthProvider(ctx context.Context, input graphql.Upload) (*OauthProviderBulkCreatePayload, error) {
 	data, err := unmarshalBulkData[generated.CreateOauthProviderInput](input)
 	if err != nil {
-		r.logger.Errorw("failed to unmarshal bulk data", "error", err)
+		log.Error().Err(err).Msg("failed to unmarshal bulk data")
 
 		return nil, err
 	}
@@ -52,12 +52,11 @@ func (r *mutationResolver) CreateBulkCSVOauthProvider(ctx context.Context, input
 func (r *mutationResolver) UpdateOauthProvider(ctx context.Context, id string, input generated.UpdateOauthProviderInput) (*OauthProviderUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).OauthProvider.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "oauthprovider"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "oauthprovider"})
 	}
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
-		r.logger.Errorw("failed to set organization in auth context", "error", err)
-
+		log.Error().Err(err).Msg("failed to set organization in auth context")
 		return nil, ErrPermissionDenied
 	}
 
@@ -66,7 +65,7 @@ func (r *mutationResolver) UpdateOauthProvider(ctx context.Context, id string, i
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "oauthprovider"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "oauthprovider"})
 	}
 
 	return &OauthProviderUpdatePayload{
@@ -77,7 +76,7 @@ func (r *mutationResolver) UpdateOauthProvider(ctx context.Context, id string, i
 // DeleteOauthProvider is the resolver for the deleteOauthProvider field.
 func (r *mutationResolver) DeleteOauthProvider(ctx context.Context, id string) (*OauthProviderDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).OauthProvider.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "oauthprovider"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionDelete, object: "oauthprovider"})
 	}
 
 	if err := generated.OauthProviderEdgeCleanup(ctx, id); err != nil {
@@ -93,7 +92,7 @@ func (r *mutationResolver) DeleteOauthProvider(ctx context.Context, id string) (
 func (r *queryResolver) OauthProvider(ctx context.Context, id string) (*generated.OauthProvider, error) {
 	res, err := withTransactionalMutation(ctx).OauthProvider.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "oauthprovider"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionGet, object: "oauthprovider"})
 	}
 
 	return res, nil

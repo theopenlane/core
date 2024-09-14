@@ -7,6 +7,7 @@ import (
 
 	"entgo.io/ent"
 	petname "github.com/dustinkirkland/golang-petname"
+	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/entx"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
@@ -181,7 +182,7 @@ func createPersonalOrg(ctx context.Context, dbClient *generated.Client, user *ge
 			return createPersonalOrg(ctx, dbClient, user)
 		}
 
-		user.Logger.Errorw("unable to create personal org", "error", err.Error())
+		log.Error().Err(err).Msg("unable to create personal org")
 
 		return nil, err
 	}
@@ -196,7 +197,7 @@ func createPersonalOrg(ctx context.Context, dbClient *generated.Client, user *ge
 	if _, err := dbClient.OrgMembership.Create().
 		SetInput(input).
 		Save(ctx); err != nil {
-		user.Logger.Errorw("unable to add user as owner to organization", "error", err.Error())
+		log.Error().Err(err).Msg("unable to add user as owner to organization")
 
 		return nil, err
 	}
@@ -208,14 +209,14 @@ func createPersonalOrg(ctx context.Context, dbClient *generated.Client, user *ge
 func setDefaultOrg(ctx context.Context, dbClient *generated.Client, user *generated.User, org *generated.Organization) (*generated.UserSetting, error) {
 	setting, err := user.Setting(ctx)
 	if err != nil {
-		user.Logger.Errorw("unable to get user settings", "error", err)
+		log.Error().Err(err).Msg("unable to get user settings")
 
 		return nil, err
 	}
 
 	setting, err = dbClient.UserSetting.UpdateOneID(setting.ID).SetDefaultOrg(org).Save(ctx)
 	if err != nil {
-		user.Logger.Errorw("unable to set default org", "error", err)
+		log.Error().Err(err).Msg("unable to set default org")
 
 		return nil, err
 	}

@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/utils/rout"
@@ -45,7 +46,7 @@ func (h *Handler) ResendEmail(ctx echo.Context) error {
 			return h.Success(ctx, out)
 		}
 
-		h.Logger.Errorf("error retrieving user email", "error", err)
+		log.Error().Err(err).Msg("error retrieving user email")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
@@ -71,7 +72,7 @@ func (h *Handler) ResendEmail(ctx echo.Context) error {
 	}
 
 	if _, err = h.storeAndSendEmailVerificationToken(userCtx, user); err != nil {
-		h.Logger.Errorw("error storing token", "error", err)
+		log.Error().Err(err).Msg("error storing email verification token")
 
 		if errors.Is(err, ErrMaxAttempts) {
 			return h.TooManyRequests(ctx, err)

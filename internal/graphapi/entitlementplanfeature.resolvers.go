@@ -8,6 +8,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/utils/rout"
 )
@@ -16,14 +17,13 @@ import (
 func (r *mutationResolver) CreateEntitlementPlanFeature(ctx context.Context, input generated.CreateEntitlementPlanFeatureInput) (*EntitlementPlanFeatureCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
-		r.logger.Errorw("failed to set organization in auth context", "error", err)
-
+		log.Error().Err(err).Msg("failed to set organization in auth context")
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
 	res, err := withTransactionalMutation(ctx).EntitlementPlanFeature.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "entitlementplanfeature"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "entitlementplanfeature"})
 	}
 
 	return &EntitlementPlanFeatureCreatePayload{
@@ -40,7 +40,7 @@ func (r *mutationResolver) CreateBulkEntitlementPlanFeature(ctx context.Context,
 func (r *mutationResolver) CreateBulkCSVEntitlementPlanFeature(ctx context.Context, input graphql.Upload) (*EntitlementPlanFeatureBulkCreatePayload, error) {
 	data, err := unmarshalBulkData[generated.CreateEntitlementPlanFeatureInput](input)
 	if err != nil {
-		r.logger.Errorw("failed to unmarshal bulk data", "error", err)
+		log.Error().Err(err).Msg("failed to unmarshal bulk data")
 
 		return nil, err
 	}
@@ -52,12 +52,11 @@ func (r *mutationResolver) CreateBulkCSVEntitlementPlanFeature(ctx context.Conte
 func (r *mutationResolver) UpdateEntitlementPlanFeature(ctx context.Context, id string, input generated.UpdateEntitlementPlanFeatureInput) (*EntitlementPlanFeatureUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).EntitlementPlanFeature.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "entitlementplanfeature"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "entitlementplanfeature"})
 	}
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
-		r.logger.Errorw("failed to set organization in auth context", "error", err)
-
+		log.Error().Err(err).Msg("failed to set organization in auth context")
 		return nil, ErrPermissionDenied
 	}
 
@@ -66,7 +65,7 @@ func (r *mutationResolver) UpdateEntitlementPlanFeature(ctx context.Context, id 
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "entitlementplanfeature"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "entitlementplanfeature"})
 	}
 
 	return &EntitlementPlanFeatureUpdatePayload{
@@ -77,7 +76,7 @@ func (r *mutationResolver) UpdateEntitlementPlanFeature(ctx context.Context, id 
 // DeleteEntitlementPlanFeature is the resolver for the deleteEntitlementPlanFeature field.
 func (r *mutationResolver) DeleteEntitlementPlanFeature(ctx context.Context, id string) (*EntitlementPlanFeatureDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).EntitlementPlanFeature.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "entitlementplanfeature"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionDelete, object: "entitlementplanfeature"})
 	}
 
 	if err := generated.EntitlementPlanFeatureEdgeCleanup(ctx, id); err != nil {
@@ -93,7 +92,7 @@ func (r *mutationResolver) DeleteEntitlementPlanFeature(ctx context.Context, id 
 func (r *queryResolver) EntitlementPlanFeature(ctx context.Context, id string) (*generated.EntitlementPlanFeature, error) {
 	res, err := withTransactionalMutation(ctx).EntitlementPlanFeature.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "entitlementplanfeature"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionGet, object: "entitlementplanfeature"})
 	}
 
 	return res, nil

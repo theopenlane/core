@@ -9,25 +9,24 @@ import (
 	"os"
 
 	"github.com/redis/go-redis/v9"
+	"github.com/rs/zerolog/log"
 	echoprometheus "github.com/theopenlane/echo-prometheus"
 	echo "github.com/theopenlane/echox"
-	"github.com/theopenlane/echox/middleware"
-	"github.com/theopenlane/echozap"
-	"github.com/theopenlane/entx"
-	"github.com/theopenlane/iam/fgax"
-	"go.uber.org/zap"
 
+	"github.com/theopenlane/echox/middleware"
+	"github.com/theopenlane/entx"
+	"github.com/theopenlane/httpsling"
+	"github.com/theopenlane/iam/fgax"
+	"github.com/theopenlane/iam/providers/webauthn"
+	"github.com/theopenlane/iam/sessions"
+	"github.com/theopenlane/iam/tokens"
 	"github.com/theopenlane/iam/totp"
+	"github.com/theopenlane/utils/cache"
 	"github.com/theopenlane/utils/emails"
 	"github.com/theopenlane/utils/marionette"
 	"github.com/theopenlane/utils/ulids"
 
-	"github.com/theopenlane/httpsling"
-	"github.com/theopenlane/iam/providers/webauthn"
-	"github.com/theopenlane/iam/sessions"
-	"github.com/theopenlane/iam/tokens"
-
-	"github.com/theopenlane/utils/cache"
+	"github.com/theopenlane/echox/middleware/echocontext"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi"
@@ -38,7 +37,6 @@ import (
 	authmw "github.com/theopenlane/core/pkg/middleware/auth"
 	"github.com/theopenlane/core/pkg/middleware/cachecontrol"
 	"github.com/theopenlane/core/pkg/middleware/cors"
-	"github.com/theopenlane/core/pkg/middleware/echocontext"
 	"github.com/theopenlane/core/pkg/middleware/mime"
 	"github.com/theopenlane/core/pkg/middleware/ratelimit"
 	"github.com/theopenlane/core/pkg/middleware/redirect"
@@ -67,16 +65,6 @@ func newApplyFunc(apply func(option *ServerOptions)) *applyFunc {
 func WithConfigProvider(cfgProvider config.ConfigProvider) ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
 		s.ConfigProvider = cfgProvider
-	})
-}
-
-// WithLogger supplies the logger for the server
-func WithLogger(l *zap.SugaredLogger) ServerOption {
-	return newApplyFunc(func(s *ServerOptions) {
-		// Add logger to main config
-		s.Config.Logger = l
-		// Add logger to the handlers config
-		s.Config.Handler.Logger = l
 	})
 }
 
@@ -109,7 +97,7 @@ func WithGeneratedKeys() ServerOption {
 			// Generate a new RSA private key with 2048 bits
 			privateKey, err := rsa.GenerateKey(rand.Reader, 2048) //nolint:mnd
 			if err != nil {
-				s.Config.Logger.Panicf("Error generating RSA private key:", err)
+				log.Panic().Err(err).Msg("Error generating RSA private key")
 			}
 
 			// Encode the private key to the PEM format
@@ -120,11 +108,11 @@ func WithGeneratedKeys() ServerOption {
 
 			privateKeyFile, err := os.Create(privFileName)
 			if err != nil {
-				s.Config.Logger.Panicf("Error creating private key file:", err)
+				log.Panic().Err(err).Msg("Error creating private key file")
 			}
 
 			if err := pem.Encode(privateKeyFile, privateKeyPEM); err != nil {
-				s.Config.Logger.Panicw("unable to encode pem on startup", "error", err.Error())
+				log.Panic().Err(err).Msg("unable to encode pem on startup")
 			}
 
 			privateKeyFile.Close()
@@ -217,7 +205,6 @@ func WithGraphRoute(srv *server.Server, c *generated.Client) ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
 		// Setup Graph API Handlers
 		r := graphapi.NewResolver(c).
-			WithLogger(s.Config.Logger.Named("resolvers")).
 			WithExtensions(s.Config.Settings.Server.EnableGraphExtensions)
 
 		// add pool to the resolver to manage the number of goroutines
@@ -246,10 +233,10 @@ func WithMiddleware() ServerOption {
 			middleware.RequestID(), // add request id
 			middleware.Recover(),   // recover server from any panic/fatal error gracefully
 			middleware.LoggerWithConfig(middleware.LoggerConfig{
-				Format: "remote_ip=${remote_ip}, method=${method}, uri=${uri}, status=${status}, session=${header:Set-Cookie}, host=${host}, referer=${referer}, user_agent=${user_agent}, route=${route}, path=${path}, auth=${header:Authorization}\n",
+				Output: log.Logger.Hook(LevelNameHook{}),
+				Format: "remote_ip=${remote_ip}, method=${method}, uri=${uri}, status=${status}, session=${header:Set-Cookie}, host=${host}, referer=${referer}, user_agent=${user_agent}, route=${route}, path=${path}",
 			}),
 			echoprometheus.MetricsMiddleware(),                                                 // add prometheus metrics
-			echozap.ZapLogger(s.Config.Logger.Desugar()),                                       // add zap logger, middleware requires the "regular" zap logger
 			echocontext.EchoContextToContextMiddleware(),                                       // adds echo context to parent
 			mime.NewWithConfig(mime.Config{DefaultContentType: httpsling.ContentTypeJSONUTF8}), // add mime middleware
 		)
@@ -298,9 +285,7 @@ func WithEmailManager() ServerOption {
 func WithTaskManager() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
 		// Start task manager
-		tmConfig := marionette.Config{
-			// Logger: s.Config.Logger,
-		}
+		tmConfig := marionette.Config{}
 
 		tm := marionette.New(tmConfig)
 
@@ -339,7 +324,6 @@ func WithSessionManager(rc *redis.Client) ServerOption {
 		sessionConfig := sessions.NewSessionConfig(
 			sm,
 			sessions.WithPersistence(rc),
-			sessions.WithLogger(s.Config.Logger),
 			sessions.WithSkipperFunc(authmw.SessionSkipperFunc),
 		)
 

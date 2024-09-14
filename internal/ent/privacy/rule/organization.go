@@ -4,9 +4,10 @@ import (
 	"context"
 
 	"entgo.io/ent"
-	"github.com/theopenlane/iam/fgax"
+	"github.com/rs/zerolog/log"
 
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -15,7 +16,7 @@ import (
 // HasOrgMutationAccess is a rule that returns allow decision if user has edit or delete access
 func HasOrgMutationAccess() privacy.OrganizationMutationRuleFunc {
 	return privacy.OrganizationMutationRuleFunc(func(ctx context.Context, m *generated.OrganizationMutation) error {
-		m.Logger.Debugw("checking mutation access")
+		log.Debug().Msg("checking mutation access")
 
 		relation := fgax.CanEdit
 		if m.Op().Is(ent.OpDelete | ent.OpDeleteOne) {
@@ -47,7 +48,9 @@ func HasOrgMutationAccess() privacy.OrganizationMutationRuleFunc {
 				}
 
 				if !access {
-					m.Logger.Debugw("access denied to parent org", "relation", relation, "organization_id", parentOrgID)
+					log.Debug().Str("relation", relation).
+						Str("organization_id", parentOrgID).
+						Msg("access denied to parent org")
 
 					return privacy.Deny
 				}
@@ -61,12 +64,14 @@ func HasOrgMutationAccess() privacy.OrganizationMutationRuleFunc {
 
 		// if it's not set return an error
 		if oID == "" {
-			m.Logger.Debugw("missing expected organization id")
+			log.Debug().Msg("missing expected organization id")
 
 			return privacy.Denyf("missing organization ID information in context")
 		}
 
-		m.Logger.Infow("checking relationship tuples", "relation", relation, "organization_id", oID)
+		log.Info().Str("relation", relation).
+			Str("organization_id", oID).
+			Msg("checking relationship tuples")
 
 		// check access to the organization
 		ac.ObjectID = oID
@@ -77,7 +82,9 @@ func HasOrgMutationAccess() privacy.OrganizationMutationRuleFunc {
 		}
 
 		if access {
-			m.Logger.Debugw("access allowed", "relation", relation, "organization_id", oID)
+			log.Debug().Str("relation", relation).
+				Str("organization_id", oID).
+				Msg("access allowed")
 
 			return privacy.Allow
 		}

@@ -8,6 +8,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 )
 
@@ -15,7 +16,7 @@ import (
 func (r *mutationResolver) CreateFile(ctx context.Context, input generated.CreateFileInput) (*FileCreatePayload, error) {
 	res, err := withTransactionalMutation(ctx).File.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "file"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "file"})
 	}
 
 	return &FileCreatePayload{
@@ -32,7 +33,7 @@ func (r *mutationResolver) CreateBulkFile(ctx context.Context, input []*generate
 func (r *mutationResolver) CreateBulkCSVFile(ctx context.Context, input graphql.Upload) (*FileBulkCreatePayload, error) {
 	data, err := unmarshalBulkData[generated.CreateFileInput](input)
 	if err != nil {
-		r.logger.Errorw("failed to unmarshal bulk data", "error", err)
+		log.Error().Err(err).Msg("failed to unmarshal bulk data")
 
 		return nil, err
 	}
@@ -44,7 +45,7 @@ func (r *mutationResolver) CreateBulkCSVFile(ctx context.Context, input graphql.
 func (r *mutationResolver) UpdateFile(ctx context.Context, id string, input generated.UpdateFileInput) (*FileUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).File.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "file"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "file"})
 	}
 
 	// setup update request
@@ -52,7 +53,7 @@ func (r *mutationResolver) UpdateFile(ctx context.Context, id string, input gene
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "file"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "file"})
 	}
 
 	return &FileUpdatePayload{
@@ -63,7 +64,7 @@ func (r *mutationResolver) UpdateFile(ctx context.Context, id string, input gene
 // DeleteFile is the resolver for the deleteFile field.
 func (r *mutationResolver) DeleteFile(ctx context.Context, id string) (*FileDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).File.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "file"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionDelete, object: "file"})
 	}
 
 	if err := generated.FileEdgeCleanup(ctx, id); err != nil {
@@ -79,7 +80,7 @@ func (r *mutationResolver) DeleteFile(ctx context.Context, id string) (*FileDele
 func (r *queryResolver) File(ctx context.Context, id string) (*generated.File, error) {
 	res, err := withTransactionalMutation(ctx).File.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "file"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionGet, object: "file"})
 	}
 
 	return res, nil

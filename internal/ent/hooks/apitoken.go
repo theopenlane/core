@@ -4,12 +4,11 @@ import (
 	"context"
 
 	"entgo.io/ent"
-
+	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/iam/fgax"
 
-	sliceutil "github.com/theopenlane/utils/slice"
-
 	"github.com/theopenlane/iam/auth"
+	sliceutil "github.com/theopenlane/utils/slice"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
@@ -46,7 +45,7 @@ func HookCreateAPIToken() ent.Hook {
 			// create the relationship tuples if we have any
 			if len(tuples) > 0 {
 				if _, err := mutation.Authz.WriteTupleKeys(ctx, tuples, nil); err != nil {
-					mutation.Logger.Errorw("failed to create relationship tuple", "error", err)
+					log.Error().Err(err).Msg("failed to create relationship tuple")
 
 					return nil, err
 				}
@@ -88,7 +87,7 @@ func HookUpdateAPIToken() ent.Hook {
 			// create the relationship tuples if we have any
 			if len(tuples) > 0 {
 				if _, err := mutation.Authz.WriteTupleKeys(ctx, tuples, nil); err != nil {
-					mutation.Logger.Errorw("failed to create relationship tuple", "error", err)
+					log.Error().Err(err).Msg("failed to create relationship tuple")
 
 					return nil, err
 				}

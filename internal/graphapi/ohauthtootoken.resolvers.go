@@ -8,6 +8,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 )
 
@@ -15,7 +16,7 @@ import (
 func (r *mutationResolver) CreateOhAuthTooToken(ctx context.Context, input generated.CreateOhAuthTooTokenInput) (*OhAuthTooTokenCreatePayload, error) {
 	res, err := withTransactionalMutation(ctx).OhAuthTooToken.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "ohauthtootoken"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "ohauthtootoken"})
 	}
 
 	return &OhAuthTooTokenCreatePayload{
@@ -32,7 +33,7 @@ func (r *mutationResolver) CreateBulkOhAuthTooToken(ctx context.Context, input [
 func (r *mutationResolver) CreateBulkCSVOhAuthTooToken(ctx context.Context, input graphql.Upload) (*OhAuthTooTokenBulkCreatePayload, error) {
 	data, err := unmarshalBulkData[generated.CreateOhAuthTooTokenInput](input)
 	if err != nil {
-		r.logger.Errorw("failed to unmarshal bulk data", "error", err)
+		log.Error().Err(err).Msg("failed to unmarshal bulk data")
 
 		return nil, err
 	}
@@ -44,7 +45,7 @@ func (r *mutationResolver) CreateBulkCSVOhAuthTooToken(ctx context.Context, inpu
 func (r *mutationResolver) UpdateOhAuthTooToken(ctx context.Context, id string, input generated.UpdateOhAuthTooTokenInput) (*OhAuthTooTokenUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).OhAuthTooToken.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "ohauthtootoken"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "ohauthtootoken"})
 	}
 
 	// setup update request
@@ -52,7 +53,7 @@ func (r *mutationResolver) UpdateOhAuthTooToken(ctx context.Context, id string, 
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "ohauthtootoken"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "ohauthtootoken"})
 	}
 
 	return &OhAuthTooTokenUpdatePayload{
@@ -63,7 +64,7 @@ func (r *mutationResolver) UpdateOhAuthTooToken(ctx context.Context, id string, 
 // DeleteOhAuthTooToken is the resolver for the deleteOhAuthTooToken field.
 func (r *mutationResolver) DeleteOhAuthTooToken(ctx context.Context, id string) (*OhAuthTooTokenDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).OhAuthTooToken.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "ohauthtootoken"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionDelete, object: "ohauthtootoken"})
 	}
 
 	if err := generated.OhAuthTooTokenEdgeCleanup(ctx, id); err != nil {
@@ -79,7 +80,7 @@ func (r *mutationResolver) DeleteOhAuthTooToken(ctx context.Context, id string) 
 func (r *queryResolver) OhAuthTooToken(ctx context.Context, id string) (*generated.OhAuthTooToken, error) {
 	res, err := withTransactionalMutation(ctx).OhAuthTooToken.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "ohauthtootoken"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionGet, object: "ohauthtootoken"})
 	}
 
 	return res, nil

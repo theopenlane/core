@@ -6,6 +6,7 @@ import (
 
 	"github.com/cenkalti/backoff/v4"
 	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/utils/marionette"
@@ -44,7 +45,7 @@ func (h *Handler) ForgotPassword(ctx echo.Context) error {
 			return h.Success(ctx, out)
 		}
 
-		h.Logger.Errorf("error retrieving user email", "error", err)
+		log.Error().Err(err).Msg("error retrieving user email")
 
 		return h.InternalServerError(ctx, err)
 	}
@@ -71,13 +72,13 @@ func (h *Handler) ForgotPassword(ctx echo.Context) error {
 // storeAndSendPasswordResetToken creates a password reset token for the user and sends an email with the token
 func (h *Handler) storeAndSendPasswordResetToken(ctx context.Context, user *User) (*ent.PasswordResetToken, error) {
 	if err := h.expireAllResetTokensUserByEmail(ctx, user.Email); err != nil {
-		h.Logger.Errorw("error expiring existing tokens", "error", err)
+		log.Error().Err(err).Msg("error expiring existing tokens")
 
 		return nil, err
 	}
 
 	if err := user.CreatePasswordResetToken(); err != nil {
-		h.Logger.Errorw("unable to create password reset token", "error", err)
+		log.Error().Err(err).Msg("error creating password reset token")
 		return nil, err
 	}
 

@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/utils/rout"
@@ -29,7 +30,7 @@ func (h *Handler) RefreshHandler(ctx echo.Context) error {
 	// verify the refresh token
 	claims, err := h.TokenManager.Verify(in.RefreshToken)
 	if err != nil {
-		h.Logger.Errorw("error verifying token", "error", err)
+		log.Error().Err(err).Msg("error verifying token")
 
 		return h.BadRequest(ctx, err)
 	}
@@ -54,7 +55,7 @@ func (h *Handler) RefreshHandler(ctx echo.Context) error {
 
 	accessToken, refreshToken, err := h.TokenManager.CreateTokenPair(claims)
 	if err != nil {
-		h.Logger.Errorw("error creating token pair", "error", err)
+		log.Error().Err(err).Msg("error creating token pair")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
@@ -64,7 +65,7 @@ func (h *Handler) RefreshHandler(ctx echo.Context) error {
 
 	// set sessions in response
 	if err := h.SessionConfig.CreateAndStoreSession(ctx, user.ID); err != nil {
-		h.Logger.Errorw("unable to save session", "error", err)
+		log.Error().Err(err).Msg("error storing session")
 
 		return err
 	}

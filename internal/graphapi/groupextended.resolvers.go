@@ -8,6 +8,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 )
 
@@ -30,7 +31,7 @@ func (r *updateGroupInputResolver) AddGroupMembers(ctx context.Context, obj *gen
 	opCtx := graphql.GetOperationContext(ctx)
 	groupID, ok := opCtx.Variables["updateGroupId"]
 	if !ok {
-		r.logger.Errorw("unable to get group from context")
+		log.Error().Msg("unable to get group from context")
 
 		return ErrInternalServerError
 	}
@@ -56,7 +57,7 @@ func (r *updateGroupInputResolver) UpdateGroupSettings(ctx context.Context, obj 
 	opCtx := graphql.GetOperationContext(ctx)
 	groupID, ok := opCtx.Variables["updateGroupId"]
 	if !ok {
-		r.logger.Errorw("unable to get group from context")
+		log.Error().Msg("unable to get group from context")
 
 		return ErrInternalServerError
 	}

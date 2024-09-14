@@ -7,20 +7,19 @@ import (
 	"testing"
 	"time"
 
+	"github.com/rs/zerolog"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 
 	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/echox/middleware/echocontext"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	mock_fga "github.com/theopenlane/iam/fgax/mockery"
-	"go.uber.org/zap"
-	"go.uber.org/zap/zaptest"
-
+	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/utils/emails"
 	"github.com/theopenlane/utils/marionette"
-
-	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/iam/sessions"
+	"github.com/theopenlane/utils/testutils"
 
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	ent "github.com/theopenlane/core/internal/ent/generated"
@@ -28,10 +27,9 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/pkg/analytics"
-	"github.com/theopenlane/core/pkg/middleware/echocontext"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 	"github.com/theopenlane/core/pkg/openlaneclient"
-	"github.com/theopenlane/core/pkg/testutils"
+	coreutils "github.com/theopenlane/core/pkg/testutils"
 )
 
 var (
@@ -61,6 +59,8 @@ func TestHandlerTestSuite(t *testing.T) {
 }
 
 func (suite *HandlerTestSuite) SetupSuite() {
+	zerolog.SetGlobalLevel(zerolog.Disabled)
+
 	suite.tf = entdb.NewTestFixture()
 }
 
@@ -73,9 +73,6 @@ func (suite *HandlerTestSuite) SetupTest() {
 
 	// create mock FGA client
 	fc := fgax.NewMockFGAClient(t, suite.fga)
-
-	// setup logger
-	logger := zap.NewNop().Sugar()
 
 	emConfig := emails.Config{
 		Testing:   true,
@@ -95,24 +92,22 @@ func (suite *HandlerTestSuite) SetupTest() {
 
 	taskMan.Start()
 
-	tm, err := testutils.CreateTokenManager(15 * time.Minute) //nolint:mnd
+	tm, err := coreutils.CreateTokenManager(15 * time.Minute) //nolint:mnd
 	if err != nil {
 		t.Fatal("error creating token manager")
 	}
 
-	sm := testutils.CreateSessionManager()
-	rc := testutils.NewRedisClient()
+	sm := coreutils.CreateSessionManager()
+	rc := coreutils.NewRedisClient()
 
 	sessionConfig := sessions.NewSessionConfig(
 		sm,
 		sessions.WithPersistence(rc),
-		sessions.WithLogger(logger),
 	)
 
 	sessionConfig.CookieConfig = &sessions.DebugOnlyCookieConfig
 
 	opts := []ent.Option{
-		ent.Logger(*logger),
 		ent.Authz(*fc),
 		ent.Marionette(taskMan),
 		ent.Emails(em),
@@ -135,7 +130,7 @@ func (suite *HandlerTestSuite) SetupTest() {
 	suite.db = db
 
 	// add the client
-	suite.api, err = testutils.TestClient(t, suite.db)
+	suite.api, err = coreutils.TestClient(t, suite.db)
 	require.NoError(t, err)
 
 	// setup handler
@@ -163,9 +158,9 @@ func (suite *HandlerTestSuite) TearDownSuite() {
 func setupEcho(entClient *ent.Client) *echo.Echo {
 	// create echo context with middleware
 	e := echo.New()
+
 	transactionConfig := transaction.Client{
 		EntDBClient: entClient,
-		Logger:      zap.NewNop().Sugar(),
 	}
 
 	e.Use(transactionConfig.Middleware)
@@ -175,8 +170,6 @@ func setupEcho(entClient *ent.Client) *echo.Echo {
 
 // handlerSetup to be used for required references in the handler tests
 func handlerSetup(t *testing.T, ent *ent.Client) *handlers.Handler {
-	logger := zaptest.NewLogger(t, zaptest.Level(zap.ErrorLevel)).Sugar()
-
 	as := authmanager.New()
 	as.SetTokenManager(ent.TokenManager)
 	as.SetSessionConfig(ent.SessionConfig)
@@ -186,7 +179,6 @@ func handlerSetup(t *testing.T, ent *ent.Client) *handlers.Handler {
 		TokenManager:  ent.TokenManager,
 		DBClient:      ent,
 		RedisClient:   ent.SessionConfig.RedisClient,
-		Logger:        logger,
 		SessionConfig: ent.SessionConfig,
 		AuthManager:   as,
 		EmailManager:  ent.Emails,

@@ -5,12 +5,11 @@ import (
 	"slices"
 
 	"entgo.io/ent"
-
 	"github.com/99designs/gqlgen/graphql"
-
-	"github.com/theopenlane/iam/fgax"
+	"github.com/rs/zerolog/log"
 
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
@@ -41,11 +40,11 @@ func TraverseUser() ent.Interceptor {
 		// filter for just those users
 		case "org":
 			if q.EntConfig.Flags.UseListUserService {
-				q.Logger.Debug("using FGA to filter users")
+				log.Debug().Msg("using FGA to filter users")
 				return filterUsingFGA(ctx, q)
 			}
 
-			q.Logger.Debug("using the db to filter users")
+			log.Debug().Msg("using the db to filter users")
 
 			return filterUsingDB(ctx, q)
 		case "user":

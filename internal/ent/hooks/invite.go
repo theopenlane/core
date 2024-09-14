@@ -4,16 +4,15 @@ import (
 	"context"
 
 	"entgo.io/ent"
-
 	ph "github.com/posthog/posthog-go"
+	"github.com/rs/zerolog/log"
 
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/tokens"
 	"github.com/theopenlane/utils/emails"
 	"github.com/theopenlane/utils/marionette"
 	"github.com/theopenlane/utils/sendgrid"
 	"github.com/theopenlane/utils/ulids"
-
-	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/iam/tokens"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
@@ -28,14 +27,14 @@ func HookInvite() ent.Hook {
 		return hook.InviteFunc(func(ctx context.Context, m *generated.InviteMutation) (generated.Value, error) {
 			m, err := setRequestor(ctx, m)
 			if err != nil {
-				m.Logger.Errorw("unable to determine requestor")
+				log.Error().Err(err).Msg("unable to determine requestor")
 
 				return nil, err
 			}
 
 			// check that the invite isn't to a personal organization
 			if err := personalOrgNoInvite(ctx, m); err != nil {
-				m.Logger.Infow("unable to add user to specified organization", "error", err)
+				log.Info().Err(err).Msg("unable to add user to specified organization")
 
 				return nil, err
 			}
@@ -43,7 +42,7 @@ func HookInvite() ent.Hook {
 			// generate token based on recipient + target org ID
 			m, err = setRecipientAndToken(m)
 			if err != nil {
-				m.Logger.Errorw("error creating verification token", "error", err)
+				log.Error().Err(err).Msg("unable to create verification token")
 
 				return nil, err
 			}
@@ -56,12 +55,12 @@ func HookInvite() ent.Hook {
 
 			// if the invite exists, update the token and resend
 			if existingInvite != nil && err == nil {
-				m.Logger.Infow("invitation for user already exists")
+				log.Info().Msg("invitation for user already exists")
 
 				// update invite instead
 				retValue, err = updateInvite(ctx, m)
 				if err != nil {
-					m.Logger.Errorw("unable to update invitation", "error", err)
+					log.Error().Err(err).Msg("unable to update invitation")
 
 					return retValue, err
 				}
@@ -75,7 +74,7 @@ func HookInvite() ent.Hook {
 
 			// non-blocking queued email
 			if err := createInviteToSend(ctx, m); err != nil {
-				m.Logger.Errorw("error sending email to user", "error", err)
+				log.Error().Err(err).Msg("error sending email to user")
 			}
 
 			orgID, _ := m.OwnerID()
@@ -126,7 +125,7 @@ func HookInviteAccepted() ent.Hook {
 
 				invite, err := m.Client().Invite.Get(ctx, id)
 				if err != nil {
-					m.Logger.Errorw("unable to get existing invite", "error", err)
+					log.Error().Err(err).Msg("unable to get existing invite")
 
 					return nil, err
 				}
@@ -139,7 +138,7 @@ func HookInviteAccepted() ent.Hook {
 			// user must be authenticated to accept an invite, get their id from the context
 			userID, err := auth.GetUserIDFromContext(ctx)
 			if err != nil {
-				m.Logger.Errorw("unable to get user to add to organization", "error", err)
+				log.Error().Err(err).Msg("unable to get user to add to organization")
 
 				return nil, err
 			}
@@ -152,7 +151,7 @@ func HookInviteAccepted() ent.Hook {
 
 			// add user to the inviting org
 			if _, err := m.Client().OrgMembership.Create().SetInput(input).Save(ctx); err != nil {
-				m.Logger.Errorw("unable to add user to organization", "error", err)
+				log.Error().Err(err).Msg("unable to add user to organization")
 
 				return nil, err
 			}
@@ -166,7 +165,7 @@ func HookInviteAccepted() ent.Hook {
 			// fetch org details to pass the name in the email
 			org, err := m.Client().Organization.Query().Clone().Where(organization.ID(ownerID)).Only(ctx)
 			if err != nil {
-				m.Logger.Errorw("unable to get organization", "error", err)
+				log.Error().Err(err).Msg("unable to get organization")
 
 				return retValue, err
 			}
@@ -190,7 +189,7 @@ func HookInviteAccepted() ent.Hook {
 				return sendOrgAccepted(ctx, m, invite)
 			}), marionette.WithErrorf("could not send invitation email to user %s", recipient),
 			); err != nil {
-				m.Logger.Errorw("unable to queue email for sending")
+				log.Error().Err(err).Msg("unable to queue email for sending")
 
 				return retValue, err
 			}
@@ -260,7 +259,7 @@ func setRecipientAndToken(m *generated.InviteMutation) (*generated.InviteMutatio
 func setRequestor(ctx context.Context, m *generated.InviteMutation) (*generated.InviteMutation, error) {
 	userID, err := auth.GetUserIDFromContext(ctx)
 	if err != nil {
-		m.Logger.Errorw("unable to get requestor", "error", err)
+		log.Error().Err(err).Msg("unable to get requestor")
 
 		return m, err
 	}
@@ -301,7 +300,7 @@ func createInviteToSend(ctx context.Context, m *generated.InviteMutation) error 
 		return sendOrgInvitationEmail(ctx, m, invite)
 	}), marionette.WithErrorf("could not send invitation email to user %s", email),
 	); err != nil {
-		m.Logger.Errorw("unable to queue email for sending")
+		log.Error().Err(err).Msg("unable to queue email for sending")
 
 		return err
 	}
@@ -400,7 +399,7 @@ func deleteInvite(ctx context.Context, m *generated.InviteMutation) error {
 	id, _ := m.ID()
 
 	if err := m.Client().Invite.DeleteOneID(id).Exec(ctx); err != nil {
-		m.Logger.Errorw("unable to delete invite", "error", err)
+		log.Error().Err(err).Msg("unable to delete invite")
 
 		return err
 	}

@@ -6,14 +6,14 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"go.uber.org/zap"
 
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/iam/auth"
 
+	"github.com/theopenlane/echox/middleware/echocontext"
+
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/pkg/middleware/echocontext"
 )
 
 func TestSetRequestor(t *testing.T) {
@@ -47,7 +47,6 @@ func TestSetRequestor(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			invMut := &generated.InviteMutation{}
-			invMut.Logger = *zap.NewNop().Sugar()
 
 			got, err := setRequestor(tt.ctx, invMut)
 

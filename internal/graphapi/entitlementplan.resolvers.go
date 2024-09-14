@@ -8,6 +8,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/utils/rout"
 )
@@ -16,14 +17,14 @@ import (
 func (r *mutationResolver) CreateEntitlementPlan(ctx context.Context, input generated.CreateEntitlementPlanInput) (*EntitlementPlanCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
-		r.logger.Errorw("failed to set organization in auth context", "error", err)
+		log.Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
 	res, err := withTransactionalMutation(ctx).EntitlementPlan.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "entitlementplan"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "entitlementplan"})
 	}
 
 	return &EntitlementPlanCreatePayload{
@@ -40,7 +41,7 @@ func (r *mutationResolver) CreateBulkEntitlementPlan(ctx context.Context, input 
 func (r *mutationResolver) CreateBulkCSVEntitlementPlan(ctx context.Context, input graphql.Upload) (*EntitlementPlanBulkCreatePayload, error) {
 	data, err := unmarshalBulkData[generated.CreateEntitlementPlanInput](input)
 	if err != nil {
-		r.logger.Errorw("failed to unmarshal bulk data", "error", err)
+		log.Error().Err(err).Msg("failed to unmarshal bulk data")
 
 		return nil, err
 	}
@@ -52,12 +53,11 @@ func (r *mutationResolver) CreateBulkCSVEntitlementPlan(ctx context.Context, inp
 func (r *mutationResolver) UpdateEntitlementPlan(ctx context.Context, id string, input generated.UpdateEntitlementPlanInput) (*EntitlementPlanUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).EntitlementPlan.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "entitlementplan"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "entitlementplan"})
 	}
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
-		r.logger.Errorw("failed to set organization in auth context", "error", err)
-
+		log.Error().Err(err).Msg("failed to set organization in auth context")
 		return nil, ErrPermissionDenied
 	}
 
@@ -66,7 +66,7 @@ func (r *mutationResolver) UpdateEntitlementPlan(ctx context.Context, id string,
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "entitlementplan"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "entitlementplan"})
 	}
 
 	return &EntitlementPlanUpdatePayload{
@@ -77,7 +77,7 @@ func (r *mutationResolver) UpdateEntitlementPlan(ctx context.Context, id string,
 // DeleteEntitlementPlan is the resolver for the deleteEntitlementPlan field.
 func (r *mutationResolver) DeleteEntitlementPlan(ctx context.Context, id string) (*EntitlementPlanDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).EntitlementPlan.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "entitlementplan"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionDelete, object: "entitlementplan"})
 	}
 
 	if err := generated.EntitlementPlanEdgeCleanup(ctx, id); err != nil {
@@ -93,7 +93,7 @@ func (r *mutationResolver) DeleteEntitlementPlan(ctx context.Context, id string)
 func (r *queryResolver) EntitlementPlan(ctx context.Context, id string) (*generated.EntitlementPlan, error) {
 	res, err := withTransactionalMutation(ctx).EntitlementPlan.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "entitlementplan"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionGet, object: "entitlementplan"})
 	}
 
 	return res, nil

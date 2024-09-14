@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/iam/auth"
@@ -13,7 +14,7 @@ func (h *Handler) UserInfo(ctx echo.Context) error {
 
 	userID, err := auth.GetUserIDFromContext(reqCtx)
 	if err != nil {
-		h.Logger.Errorw("unable to get user id from context", "error", err)
+		log.Err(err).Msg("unable to get user id from context")
 
 		return h.BadRequest(ctx, err)
 	}
@@ -21,7 +22,7 @@ func (h *Handler) UserInfo(ctx echo.Context) error {
 	// get user from database by subject
 	user, err := h.getUserDetailsByID(reqCtx, userID)
 	if err != nil {
-		h.Logger.Errorw("unable to get user by subject", "error", err)
+		log.Error().Err(err).Msg("unable to get user by subject")
 
 		return h.BadRequest(ctx, err)
 	}

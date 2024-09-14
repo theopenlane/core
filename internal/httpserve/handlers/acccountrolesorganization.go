@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/fgax"
 
@@ -25,7 +26,7 @@ func (h *Handler) AccountRolesOrganizationHandler(ctx echo.Context) error {
 
 	au, err := auth.GetAuthenticatedUserContext(ctx.Request().Context())
 	if err != nil {
-		h.Logger.Error("error getting authenticated user", "error", err)
+		log.Error().Err(err).Msg("error getting authenticated user")
 
 		return h.InternalServerError(ctx, err)
 	}
@@ -56,7 +57,7 @@ func (h *Handler) AccountRolesOrganizationHandler(ctx echo.Context) error {
 
 	roles, err := h.DBClient.Authz.ListRelations(ctx.Request().Context(), req)
 	if err != nil {
-		h.Logger.Errorw("error checking access", "error", err)
+		log.Error().Err(err).Msg("error checking access")
 
 		return h.InternalServerError(ctx, err)
 	}

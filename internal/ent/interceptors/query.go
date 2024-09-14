@@ -5,13 +5,13 @@ import (
 	"time"
 
 	"entgo.io/ent"
-	"go.uber.org/zap"
+	"github.com/rs/zerolog/log"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
 )
 
-func QueryLogger(l *zap.SugaredLogger) ent.InterceptFunc {
+func QueryLogger() ent.InterceptFunc {
 	return func(next ent.Querier) ent.Querier {
 		return ent.QuerierFunc(func(ctx context.Context, query generated.Query) (ent.Value, error) {
 			q, err := intercept.NewQuery(query)
@@ -21,7 +21,10 @@ func QueryLogger(l *zap.SugaredLogger) ent.InterceptFunc {
 
 			start := time.Now()
 			defer func() {
-				l.Infow("query duration", "duration", time.Since(start), "schema", q.Type())
+				log.Info().
+					Str("duration", time.Since(start).String()).
+					Str("schema", q.Type()).
+					Msg("query duration")
 			}()
 
 			return next.Query(ctx, query)

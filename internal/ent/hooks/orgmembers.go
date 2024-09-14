@@ -7,6 +7,7 @@ import (
 	"entgo.io/ent"
 	"github.com/99designs/gqlgen/graphql"
 	ph "github.com/posthog/posthog-go"
+	"github.com/rs/zerolog/log"
 
 	"github.com/theopenlane/iam/auth"
 
@@ -41,7 +42,7 @@ func HookOrgMembers() ent.Hook {
 			// get the organization
 			org, err := mutation.Client().Organization.Get(ctx, orgID)
 			if err != nil {
-				mutation.Logger.Errorw("error getting organization", "error", err)
+				log.Error().Err(err).Msg("failed to get organization")
 
 				return nil, err
 			}
@@ -70,14 +71,14 @@ func HookOrgMembers() ent.Hook {
 
 				user, err := mutation.Client().User.Get(allowCtx, userID)
 				if err != nil {
-					mutation.Logger.Errorw("error getting user", "error", err)
+					log.Error().Err(err).Msg("failed to get user")
 
 					return nil, err
 				}
 
 				orgName, err := auth.GetOrganizationNameFromContext(ctx)
 				if err != nil {
-					mutation.Logger.Errorw("error getting org name from context", "error", err)
+					log.Error().Err(err).Msg("failed to get organization name from context")
 
 					return nil, err
 				}

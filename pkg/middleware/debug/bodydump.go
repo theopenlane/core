@@ -2,114 +2,63 @@ package debug
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
-	"time"
 
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/echox/middleware"
-	"go.uber.org/zap"
 )
 
 // BodyDump prints out the request body for debugging purpose but attempts to obfuscate sensitive fields within the requests
-func BodyDump(l *zap.SugaredLogger) echo.MiddlewareFunc {
+func BodyDump() echo.MiddlewareFunc {
 	return middleware.BodyDump(func(c echo.Context, reqBody, resBody []byte) {
-		secretFields := []string{"new_password", "old_password", "password", "access_token", "refresh_token"}
+		// Create a child logger for concurrency safety
+		logger := log.Logger.With().Logger()
+
+		// Add context fields for the request
+		logger.UpdateContext(func(l zerolog.Context) zerolog.Context {
+			return l.Str("user-agent", c.Request().Header.Get("User-Agent")).
+				Str("request-id", c.Response().Header().Get(echo.HeaderXRequestID)).
+				Str("request-uri", c.Request().RequestURI).
+				Str("request-method", c.Request().Method).
+				Str("request-protocol", c.Request().Proto).
+				Str("client-ip", c.RealIP())
+		})
 
 		if len(reqBody) > 0 {
 			var bodymap map[string]interface{}
 			if err := json.Unmarshal(reqBody, &bodymap); err == nil {
-				for i := 0; i < len(secretFields); i++ {
-					if _, ok := bodymap[secretFields[i]]; ok {
-						bodymap[secretFields[i]] = "********"
-					}
-				}
+				bodymap = redactSecretFields(bodymap)
 
 				reqBody, _ = json.Marshal(bodymap)
-
-				var reqMethod string
-
-				var methodColor, resetColor string
-
-				req := c.Request()
-				reqMethod = req.Method
-				// for request method
-				switch reqMethod {
-				case "GET":
-					methodColor = blue
-				case "POST":
-					methodColor = cyan
-				case "PUT":
-					methodColor = yellow
-				case "DELETE":
-					methodColor = red
-				case "PATCH":
-					methodColor = green
-				case "HEAD":
-					methodColor = magenta
-				case "OPTIONS":
-					methodColor = white
-				default:
-					methodColor = reset
-				}
-				// reset to return to the normal terminal color variables (kinda default)
-				resetColor = reset
-
-				name := "REQUEST"
-				fmt.Printf("\n[%s] %v | %8s | %10s |%s %-7s %s %s\n",
-					name, // request
-					time.Now().Format("2006/01/02 - 15:04:05"), // TIMESTAMP for route access
-					req.Proto,                          // protocol
-					c.RealIP(),                         // client IP
-					methodColor, reqMethod, resetColor, // request method
-					req.URL, // request URI (path)
-				)
 			}
 
-			l.Infof("Request Body: %v\n", string(reqBody))
+			logger.Info().Bytes("request body", reqBody).Msg("request body")
 		}
 
-		if (c.Request().Method == "PATCH" || c.Request().Method == "POST") && len(resBody) > 0 {
+		if (c.Request().Method == http.MethodPost || c.Request().Method == http.MethodPatch) && len(resBody) > 0 {
 			var bodymap map[string]interface{}
 			if err := json.Unmarshal(resBody, &bodymap); err == nil {
-				for i := 0; i < len(secretFields); i++ {
-					if _, ok := bodymap[secretFields[i]]; ok {
-						bodymap[secretFields[i]] = "********"
-					}
-				}
+				bodymap = redactSecretFields(bodymap)
 
 				resBody, _ = json.Marshal(bodymap)
-
-				var resStatus int
-
-				var statusColor, resetColor string
-
-				res := c.Response()
-				resStatus = res.Status
-
-				switch {
-				case resStatus >= http.StatusOK && resStatus < http.StatusMultipleChoices:
-					statusColor = green
-				case resStatus >= http.StatusMultipleChoices && resStatus < http.StatusBadRequest:
-					statusColor = white
-				case resStatus >= http.StatusBadRequest && resStatus < http.StatusInternalServerError:
-					statusColor = yellow
-				default:
-					statusColor = red
-				}
-				// reset to return to the normal terminal color variables (kinda default)
-				resetColor = reset
-
-				name := "RESPONSE"
-				fmt.Printf("\n[%s] %v |%s %3d %s| %s\n",
-					name, // response
-					time.Now().Format("2006/01/02 - 15:04:05"), // TIMESTAMP for route access
-					statusColor, resStatus, resetColor, // response status
-					res.Header(),
-				)
 			}
 
-			l.Infof("Response Body: %v\n", string(resBody))
+			logger.Info().Bytes("response body", resBody).Msg("response body")
 		}
 	})
+}
+
+// redactSecretFields redacts sensitive fields from the request body
+func redactSecretFields(bodymap map[string]interface{}) map[string]interface{} {
+	secretFields := []string{"new_password", "old_password", "password", "access_token", "refresh_token"}
+
+	for i := 0; i < len(secretFields); i++ {
+		if _, ok := bodymap[secretFields[i]]; ok {
+			bodymap[secretFields[i]] = "********"
+		}
+	}
+
+	return bodymap
 }

@@ -6,6 +6,7 @@ import (
 	"context"
 
 	"entgo.io/ent/privacy"
+	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
@@ -194,14 +195,14 @@ func GroupEdgeCleanup(ctx context.Context, id string) error {
 
 	if exists, err := FromContext(ctx).GroupSetting.Query().Where((groupsetting.HasGroupWith(group.ID(id)))).Exist(ctx); err == nil && exists {
 		if groupsettingCount, err := FromContext(ctx).GroupSetting.Delete().Where(groupsetting.HasGroupWith(group.ID(id))).Exec(ctx); err != nil {
-			FromContext(ctx).Logger.Debugw("deleting groupsetting", "count", groupsettingCount, "err", err)
+			log.Debug().Err(err).Int("count", groupsettingCount).Msg("deleting groupsetting")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).GroupMembership.Query().Where((groupmembership.HasGroupWith(group.ID(id)))).Exist(ctx); err == nil && exists {
 		if groupmembershipCount, err := FromContext(ctx).GroupMembership.Delete().Where(groupmembership.HasGroupWith(group.ID(id))).Exec(ctx); err != nil {
-			FromContext(ctx).Logger.Debugw("deleting groupmembership", "count", groupmembershipCount, "err", err)
+			log.Debug().Err(err).Int("count", groupmembershipCount).Msg("deleting groupmembership")
 			return err
 		}
 	}
@@ -334,119 +335,119 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 
 	if exists, err := FromContext(ctx).Organization.Query().Where(organization.HasParentWith(organization.ID(id))).Exist(ctx); err == nil && exists {
 		if organizationCount, err := FromContext(ctx).Organization.Delete().Where(organization.HasParentWith(organization.ID(id))).Exec(ctx); err != nil {
-			FromContext(ctx).Logger.Debugw("deleting child organization", "count", organizationCount, "err", err)
+			log.Debug().Err(err).Int("count", organizationCount).Msg("deleting child organization")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).Group.Query().Where((group.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if groupCount, err := FromContext(ctx).Group.Delete().Where(group.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			FromContext(ctx).Logger.Debugw("deleting group", "count", groupCount, "err", err)
+			log.Debug().Err(err).Int("count", groupCount).Msg("deleting group")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).Template.Query().Where((template.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if templateCount, err := FromContext(ctx).Template.Delete().Where(template.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			FromContext(ctx).Logger.Debugw("deleting template", "count", templateCount, "err", err)
+			log.Debug().Err(err).Int("count", templateCount).Msg("deleting template")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).Integration.Query().Where((integration.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if integrationCount, err := FromContext(ctx).Integration.Delete().Where(integration.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			FromContext(ctx).Logger.Debugw("deleting integration", "count", integrationCount, "err", err)
+			log.Debug().Err(err).Int("count", integrationCount).Msg("deleting integration")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).OrganizationSetting.Query().Where((organizationsetting.HasOrganizationWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if organizationsettingCount, err := FromContext(ctx).OrganizationSetting.Delete().Where(organizationsetting.HasOrganizationWith(organization.ID(id))).Exec(ctx); err != nil {
-			FromContext(ctx).Logger.Debugw("deleting organizationsetting", "count", organizationsettingCount, "err", err)
+			log.Debug().Err(err).Int("count", organizationsettingCount).Msg("deleting organizationsetting")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).DocumentData.Query().Where((documentdata.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if documentdataCount, err := FromContext(ctx).DocumentData.Delete().Where(documentdata.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			FromContext(ctx).Logger.Debugw("deleting documentdata", "count", documentdataCount, "err", err)
+			log.Debug().Err(err).Int("count", documentdataCount).Msg("deleting documentdata")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).Entitlement.Query().Where((entitlement.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if entitlementCount, err := FromContext(ctx).Entitlement.Delete().Where(entitlement.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			FromContext(ctx).Logger.Debugw("deleting entitlement", "count", entitlementCount, "err", err)
+			log.Debug().Err(err).Int("count", entitlementCount).Msg("deleting entitlement")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).Invite.Query().Where((invite.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if inviteCount, err := FromContext(ctx).Invite.Delete().Where(invite.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			FromContext(ctx).Logger.Debugw("deleting invite", "count", inviteCount, "err", err)
+			log.Debug().Err(err).Int("count", inviteCount).Msg("deleting invite")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).Subscriber.Query().Where((subscriber.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if subscriberCount, err := FromContext(ctx).Subscriber.Delete().Where(subscriber.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			FromContext(ctx).Logger.Debugw("deleting subscriber", "count", subscriberCount, "err", err)
+			log.Debug().Err(err).Int("count", subscriberCount).Msg("deleting subscriber")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).Webhook.Query().Where((webhook.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if webhookCount, err := FromContext(ctx).Webhook.Delete().Where(webhook.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			FromContext(ctx).Logger.Debugw("deleting webhook", "count", webhookCount, "err", err)
+			log.Debug().Err(err).Int("count", webhookCount).Msg("deleting webhook")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).EntitlementPlan.Query().Where((entitlementplan.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if entitlementplanCount, err := FromContext(ctx).EntitlementPlan.Delete().Where(entitlementplan.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			FromContext(ctx).Logger.Debugw("deleting entitlementplan", "count", entitlementplanCount, "err", err)
+			log.Debug().Err(err).Int("count", entitlementplanCount).Msg("deleting entitlementplan")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).EntitlementPlanFeature.Query().Where((entitlementplanfeature.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if entitlementplanfeatureCount, err := FromContext(ctx).EntitlementPlanFeature.Delete().Where(entitlementplanfeature.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			FromContext(ctx).Logger.Debugw("deleting entitlementplanfeature", "count", entitlementplanfeatureCount, "err", err)
+			log.Debug().Err(err).Int("count", entitlementplanfeatureCount).Msg("deleting entitlementplanfeature")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).Entity.Query().Where((entity.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if entityCount, err := FromContext(ctx).Entity.Delete().Where(entity.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			FromContext(ctx).Logger.Debugw("deleting entity", "count", entityCount, "err", err)
+			log.Debug().Err(err).Int("count", entityCount).Msg("deleting entity")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).EntityType.Query().Where((entitytype.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if entitytypeCount, err := FromContext(ctx).EntityType.Delete().Where(entitytype.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			FromContext(ctx).Logger.Debugw("deleting entitytype", "count", entitytypeCount, "err", err)
+			log.Debug().Err(err).Int("count", entitytypeCount).Msg("deleting entitytype")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).Contact.Query().Where((contact.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if contactCount, err := FromContext(ctx).Contact.Delete().Where(contact.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			FromContext(ctx).Logger.Debugw("deleting contact", "count", contactCount, "err", err)
+			log.Debug().Err(err).Int("count", contactCount).Msg("deleting contact")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).Note.Query().Where((note.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if noteCount, err := FromContext(ctx).Note.Delete().Where(note.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			FromContext(ctx).Logger.Debugw("deleting note", "count", noteCount, "err", err)
+			log.Debug().Err(err).Int("count", noteCount).Msg("deleting note")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).OrgMembership.Query().Where((orgmembership.HasOrganizationWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if orgmembershipCount, err := FromContext(ctx).OrgMembership.Delete().Where(orgmembership.HasOrganizationWith(organization.ID(id))).Exec(ctx); err != nil {
-			FromContext(ctx).Logger.Debugw("deleting orgmembership", "count", orgmembershipCount, "err", err)
+			log.Debug().Err(err).Int("count", orgmembershipCount).Msg("deleting orgmembership")
 			return err
 		}
 	}
@@ -509,7 +510,7 @@ func TemplateEdgeCleanup(ctx context.Context, id string) error {
 
 	if exists, err := FromContext(ctx).DocumentData.Query().Where((documentdata.HasTemplateWith(template.ID(id)))).Exist(ctx); err == nil && exists {
 		if documentdataCount, err := FromContext(ctx).DocumentData.Delete().Where(documentdata.HasTemplateWith(template.ID(id))).Exec(ctx); err != nil {
-			FromContext(ctx).Logger.Debugw("deleting documentdata", "count", documentdataCount, "err", err)
+			log.Debug().Err(err).Int("count", documentdataCount).Msg("deleting documentdata")
 			return err
 		}
 	}
@@ -530,56 +531,56 @@ func UserEdgeCleanup(ctx context.Context, id string) error {
 
 	if exists, err := FromContext(ctx).PersonalAccessToken.Query().Where((personalaccesstoken.HasOwnerWith(user.ID(id)))).Exist(ctx); err == nil && exists {
 		if personalaccesstokenCount, err := FromContext(ctx).PersonalAccessToken.Delete().Where(personalaccesstoken.HasOwnerWith(user.ID(id))).Exec(ctx); err != nil {
-			FromContext(ctx).Logger.Debugw("deleting personalaccesstoken", "count", personalaccesstokenCount, "err", err)
+			log.Debug().Err(err).Int("count", personalaccesstokenCount).Msg("deleting personalaccesstoken")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).TFASetting.Query().Where((tfasetting.HasOwnerWith(user.ID(id)))).Exist(ctx); err == nil && exists {
 		if tfasettingCount, err := FromContext(ctx).TFASetting.Delete().Where(tfasetting.HasOwnerWith(user.ID(id))).Exec(ctx); err != nil {
-			FromContext(ctx).Logger.Debugw("deleting tfasetting", "count", tfasettingCount, "err", err)
+			log.Debug().Err(err).Int("count", tfasettingCount).Msg("deleting tfasetting")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).UserSetting.Query().Where((usersetting.HasUserWith(user.ID(id)))).Exist(ctx); err == nil && exists {
 		if usersettingCount, err := FromContext(ctx).UserSetting.Delete().Where(usersetting.HasUserWith(user.ID(id))).Exec(ctx); err != nil {
-			FromContext(ctx).Logger.Debugw("deleting usersetting", "count", usersettingCount, "err", err)
+			log.Debug().Err(err).Int("count", usersettingCount).Msg("deleting usersetting")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).EmailVerificationToken.Query().Where((emailverificationtoken.HasOwnerWith(user.ID(id)))).Exist(ctx); err == nil && exists {
 		if emailverificationtokenCount, err := FromContext(ctx).EmailVerificationToken.Delete().Where(emailverificationtoken.HasOwnerWith(user.ID(id))).Exec(ctx); err != nil {
-			FromContext(ctx).Logger.Debugw("deleting emailverificationtoken", "count", emailverificationtokenCount, "err", err)
+			log.Debug().Err(err).Int("count", emailverificationtokenCount).Msg("deleting emailverificationtoken")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).PasswordResetToken.Query().Where((passwordresettoken.HasOwnerWith(user.ID(id)))).Exist(ctx); err == nil && exists {
 		if passwordresettokenCount, err := FromContext(ctx).PasswordResetToken.Delete().Where(passwordresettoken.HasOwnerWith(user.ID(id))).Exec(ctx); err != nil {
-			FromContext(ctx).Logger.Debugw("deleting passwordresettoken", "count", passwordresettokenCount, "err", err)
+			log.Debug().Err(err).Int("count", passwordresettokenCount).Msg("deleting passwordresettoken")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).Webauthn.Query().Where((webauthn.HasOwnerWith(user.ID(id)))).Exist(ctx); err == nil && exists {
 		if webauthnCount, err := FromContext(ctx).Webauthn.Delete().Where(webauthn.HasOwnerWith(user.ID(id))).Exec(ctx); err != nil {
-			FromContext(ctx).Logger.Debugw("deleting webauthn", "count", webauthnCount, "err", err)
+			log.Debug().Err(err).Int("count", webauthnCount).Msg("deleting webauthn")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).OrgMembership.Query().Where((orgmembership.HasUserWith(user.ID(id)))).Exist(ctx); err == nil && exists {
 		if orgmembershipCount, err := FromContext(ctx).OrgMembership.Delete().Where(orgmembership.HasUserWith(user.ID(id))).Exec(ctx); err != nil {
-			FromContext(ctx).Logger.Debugw("deleting orgmembership", "count", orgmembershipCount, "err", err)
+			log.Debug().Err(err).Int("count", orgmembershipCount).Msg("deleting orgmembership")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).GroupMembership.Query().Where((groupmembership.HasUserWith(user.ID(id)))).Exist(ctx); err == nil && exists {
 		if groupmembershipCount, err := FromContext(ctx).GroupMembership.Delete().Where(groupmembership.HasUserWith(user.ID(id))).Exec(ctx); err != nil {
-			FromContext(ctx).Logger.Debugw("deleting groupmembership", "count", groupmembershipCount, "err", err)
+			log.Debug().Err(err).Int("count", groupmembershipCount).Msg("deleting groupmembership")
 			return err
 		}
 	}

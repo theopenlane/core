@@ -13,9 +13,10 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 
+	"github.com/theopenlane/echox/middleware/echocontext"
+
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/pkg/middleware/echocontext"
 )
 
 func (suite *HandlerTestSuite) TestUserInfoHandler() {

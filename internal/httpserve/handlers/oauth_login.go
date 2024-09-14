@@ -9,6 +9,7 @@ import (
 	githubOAuth2 "golang.org/x/oauth2/github"
 	googleOAuth2 "golang.org/x/oauth2/google"
 
+	"github.com/rs/zerolog/log"
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/iam/providers/github"
@@ -130,7 +131,7 @@ func (h *Handler) issueGoogleSession() http.Handler {
 
 		auth, err := h.AuthManager.GenerateOauthAuthSession(ctxWithToken, w, user, oauthReq)
 		if err != nil {
-			h.Logger.Errorw("unable create new auth session", "error", err)
+			log.Error().Err(err).Msg("unable to create new auth session")
 
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 
@@ -207,7 +208,7 @@ func (h *Handler) issueGitHubSession() http.Handler {
 
 		auth, err := h.AuthManager.GenerateOauthAuthSession(ctxWithToken, w, user, oauthReq)
 		if err != nil {
-			h.Logger.Errorw("unable create new auth session", "error", err)
+			log.Error().Err(err).Msg("unable to create new auth session")
 
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 

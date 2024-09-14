@@ -8,6 +8,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/utils/rout"
 )
@@ -16,14 +17,13 @@ import (
 func (r *mutationResolver) CreateIntegration(ctx context.Context, input generated.CreateIntegrationInput) (*IntegrationCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
-		r.logger.Errorw("failed to set organization in auth context", "error", err)
-
+		log.Error().Err(err).Msg("failed to set organization in auth context")
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
 	res, err := withTransactionalMutation(ctx).Integration.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "integration"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "integration"})
 	}
 
 	return &IntegrationCreatePayload{
@@ -40,7 +40,7 @@ func (r *mutationResolver) CreateBulkIntegration(ctx context.Context, input []*g
 func (r *mutationResolver) CreateBulkCSVIntegration(ctx context.Context, input graphql.Upload) (*IntegrationBulkCreatePayload, error) {
 	data, err := unmarshalBulkData[generated.CreateIntegrationInput](input)
 	if err != nil {
-		r.logger.Errorw("failed to unmarshal bulk data", "error", err)
+		log.Error().Err(err).Msg("failed to unmarshal bulk data")
 
 		return nil, err
 	}
@@ -52,12 +52,11 @@ func (r *mutationResolver) CreateBulkCSVIntegration(ctx context.Context, input g
 func (r *mutationResolver) UpdateIntegration(ctx context.Context, id string, input generated.UpdateIntegrationInput) (*IntegrationUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Integration.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "integration"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "integration"})
 	}
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
-		r.logger.Errorw("failed to set organization in auth context", "error", err)
-
+		log.Error().Err(err).Msg("failed to set organization in auth context")
 		return nil, ErrPermissionDenied
 	}
 
@@ -66,7 +65,7 @@ func (r *mutationResolver) UpdateIntegration(ctx context.Context, id string, inp
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "integration"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "integration"})
 	}
 
 	return &IntegrationUpdatePayload{
@@ -77,7 +76,7 @@ func (r *mutationResolver) UpdateIntegration(ctx context.Context, id string, inp
 // DeleteIntegration is the resolver for the deleteIntegration field.
 func (r *mutationResolver) DeleteIntegration(ctx context.Context, id string) (*IntegrationDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Integration.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "integration"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionDelete, object: "integration"})
 	}
 
 	if err := generated.IntegrationEdgeCleanup(ctx, id); err != nil {
@@ -93,7 +92,7 @@ func (r *mutationResolver) DeleteIntegration(ctx context.Context, id string) (*I
 func (r *queryResolver) Integration(ctx context.Context, id string) (*generated.Integration, error) {
 	res, err := withTransactionalMutation(ctx).Integration.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "integration"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionGet, object: "integration"})
 	}
 
 	return res, nil

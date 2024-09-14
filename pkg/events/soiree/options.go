@@ -1,8 +1,7 @@
 package soiree
 
 import (
-	"fmt"
-
+	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/utils/ulids"
 )
 
@@ -20,7 +19,7 @@ var DefaultIDGenerator = func() string {
 
 // DefaultPanicHandler handles panics by printing the panic value
 var DefaultPanicHandler = func(p interface{}) {
-	fmt.Printf("Panic occurred: %v\n", p)
+	log.Error().Msgf("Panic occurred: %v", p)
 }
 
 // WithErrorHandler sets a custom error handler for an Soiree

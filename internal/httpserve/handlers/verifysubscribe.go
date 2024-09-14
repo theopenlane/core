@@ -11,6 +11,7 @@ import (
 	"github.com/cenkalti/backoff/v4"
 	"github.com/getkin/kin-openapi/openapi3"
 	ph "github.com/posthog/posthog-go"
+	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/utils/marionette"
@@ -44,7 +45,7 @@ func (h *Handler) VerifySubscriptionHandler(ctx echo.Context) error {
 			return h.BadRequest(ctx, err)
 		}
 
-		h.Logger.Errorf("error retrieving subscriber", "error", err)
+		log.Error().Err(err).Msg("error retrieving subscriber")
 
 		return h.InternalServerError(ctx, ErrUnableToVerifyEmail)
 	}
@@ -68,7 +69,7 @@ func (h *Handler) VerifySubscriptionHandler(ctx echo.Context) error {
 				return h.Created(ctx, out)
 			}
 
-			h.Logger.Errorf("error verifying subscriber token", "error", err)
+			log.Error().Err(err).Msg("error verifying subscriber token")
 
 			return h.InternalServerError(ctx, ErrUnableToVerifyEmail)
 		}
@@ -78,7 +79,7 @@ func (h *Handler) VerifySubscriptionHandler(ctx echo.Context) error {
 		}
 
 		if err := h.updateSubscriberVerifiedEmail(ctxWithToken, entSubscriber.ID, input); err != nil {
-			h.Logger.Errorf("error updating subscriber", "error", err)
+			log.Error().Err(err).Msg("error updating subscriber")
 
 			return h.InternalServerError(ctx, ErrUnableToVerifyEmail)
 		}
@@ -117,7 +118,7 @@ func (h *Handler) verifySubscriberToken(ctx context.Context, entSubscriber *gene
 	t.ExpiresAt, err = user.GetVerificationExpires()
 
 	if err != nil {
-		h.Logger.Errorw("unable to parse expiration", "error", err)
+		log.Error().Err(err).Msg("unable to parse expiration")
 
 		return ErrUnableToVerifyEmail
 	}
@@ -127,14 +128,14 @@ func (h *Handler) verifySubscriberToken(ctx context.Context, entSubscriber *gene
 		// if token is expired, create new token and send email
 		if errors.Is(err, tokens.ErrTokenExpired) {
 			if err := user.CreateVerificationToken(); err != nil {
-				h.Logger.Errorw("error creating verification token", "error", err)
+				log.Error().Err(err).Msg("error creating verification token")
 
 				return err
 			}
 
 			// update token settings in the database
 			if err := h.updateSubscriberVerificationToken(ctx, user); err != nil {
-				h.Logger.Errorw("error updating subscriber verification token", "error", err)
+				log.Error().Err(err).Msg("error updating subscriber verification token")
 
 				return err
 			}
@@ -144,7 +145,7 @@ func (h *Handler) verifySubscriberToken(ctx context.Context, entSubscriber *gene
 
 			// resend email with new token to the subscriber
 			if err := h.sendSubscriberEmail(ctxWithToken, user, entSubscriber.OwnerID); err != nil {
-				h.Logger.Errorw("error sending subscriber email", "error", err)
+				log.Error().Err(err).Msg("error sending subscriber email")
 
 				return err
 			}

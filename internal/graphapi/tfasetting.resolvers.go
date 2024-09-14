@@ -20,7 +20,7 @@ func (r *mutationResolver) CreateTFASetting(ctx context.Context, input generated
 
 	settings, err := withTransactionalMutation(ctx).TFASetting.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "tfasetting"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "tfasetting"})
 	}
 
 	return &TFASettingCreatePayload{TfaSetting: settings}, nil
@@ -40,12 +40,12 @@ func (r *mutationResolver) UpdateTFASetting(ctx context.Context, input generated
 
 	settings, err := withTransactionalMutation(ctx).TFASetting.Query().Where(tfasetting.OwnerID(userID)).Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "tfasetting"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "tfasetting"})
 	}
 
 	settings, err = settings.Update().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "tfasetting"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "tfasetting"})
 	}
 
 	return &TFASettingUpdatePayload{TfaSetting: settings}, nil
@@ -66,7 +66,7 @@ func (r *queryResolver) TfaSetting(ctx context.Context, id *string) (*generated.
 	if id != nil && *id != "" {
 		settings, err := withTransactionalMutation(ctx).TFASetting.Get(ctx, *id)
 		if err != nil {
-			return nil, parseRequestError(err, action{action: ActionGet, object: "tfasetting"}, r.logger)
+			return nil, parseRequestError(err, action{action: ActionGet, object: "tfasetting"})
 		}
 
 		return settings, nil
@@ -74,7 +74,7 @@ func (r *queryResolver) TfaSetting(ctx context.Context, id *string) (*generated.
 
 	settings, err := withTransactionalMutation(ctx).TFASetting.Query().Where(tfasetting.OwnerID(userID)).Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "tfasetting"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionGet, object: "tfasetting"})
 	}
 
 	return settings, nil

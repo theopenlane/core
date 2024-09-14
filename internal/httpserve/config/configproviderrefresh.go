@@ -3,6 +3,8 @@ package config
 import (
 	"sync"
 	"time"
+
+	"github.com/rs/zerolog/log"
 )
 
 // ConfigProviderWithRefresh shows a config provider with automatic refresh; it contains fields and methods to manage the configuration,
@@ -65,11 +67,11 @@ func (s *ConfigProviderWithRefresh) refreshConfig() {
 
 		newConfig, err := s.configProvider.GetConfig()
 		if err != nil {
-			s.config.Logger.Error("failed to load new server configuration")
+			log.Error().Msg("failed to load new server configuration")
 			continue
 		}
 
-		s.config.Logger.Info("loaded new server configuration")
+		log.Info().Msg("loaded new server configuration")
 
 		s.Lock()
 		s.config = newConfig

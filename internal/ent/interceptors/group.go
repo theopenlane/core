@@ -4,9 +4,10 @@ import (
 	"context"
 
 	"entgo.io/ent"
-	"github.com/theopenlane/iam/fgax"
+	"github.com/rs/zerolog/log"
 
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
@@ -29,7 +30,7 @@ func InterceptorGroup() ent.Interceptor {
 
 // filterGroupsByAccess checks fga, using ListObjects, and ensure user has view access to a group before it is returned
 func filterGroupsByAccess(ctx context.Context, q *generated.GroupQuery, v ent.Value) ([]*generated.Group, error) {
-	q.Logger.Debugw("intercepting list group query")
+	log.Debug().Msg("intercepting list group query")
 
 	// return early if no groups
 	if v == nil {
@@ -46,7 +47,7 @@ func filterGroupsByAccess(ctx context.Context, q *generated.GroupQuery, v ent.Va
 	case ExistOperation, IDsOperation:
 		groupIDs, ok := v.([]string)
 		if !ok {
-			q.Logger.Errorw("unexpected type for group query")
+			log.Error().Msg("unexpected type for group query")
 
 			return nil, ErrInternalServerError
 		}
@@ -59,7 +60,7 @@ func filterGroupsByAccess(ctx context.Context, q *generated.GroupQuery, v ent.Va
 
 		groups, ok = v.([]*generated.Group)
 		if !ok {
-			q.Logger.Errorw("unexpected type for group query")
+			log.Error().Msg("unexpected type for group query")
 
 			return nil, ErrInternalServerError
 		}
@@ -68,7 +69,7 @@ func filterGroupsByAccess(ctx context.Context, q *generated.GroupQuery, v ent.Va
 	// get userID for tuple checks
 	userID, err := auth.GetUserIDFromContext(ctx)
 	if err != nil {
-		q.Logger.Errorw("unable to get user id from echo context")
+		log.Error().Msg("unable to get user id from context")
 		return nil, err
 	}
 
@@ -92,7 +93,10 @@ func filterGroupsByAccess(ctx context.Context, q *generated.GroupQuery, v ent.Va
 		entityType := "group"
 
 		if !fgax.ListContains(entityType, userGroups, g.ID) {
-			q.Logger.Infow("access denied to group", "relation", fgax.CanView, "group_id", g.ID, "type", entityType)
+			log.Info().Str("group_id", g.ID).
+				Str("relation", fgax.CanView).
+				Str("type", entityType).
+				Msg("access denied to group")
 
 			continue
 		}

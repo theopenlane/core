@@ -1,34 +1,32 @@
 package graphapi_test
 
 import (
-	"bufio"
-	"bytes"
 	"context"
-	"log"
 	"path/filepath"
 	"testing"
 	"time"
 
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 
 	"github.com/theopenlane/iam/fgax"
 	mock_fga "github.com/theopenlane/iam/fgax/mockery"
-	"go.uber.org/zap"
-	"go.uber.org/zap/zapcore"
 
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/entdb"
 	"github.com/theopenlane/core/pkg/analytics"
-	"github.com/theopenlane/core/pkg/middleware/echocontext"
 	"github.com/theopenlane/core/pkg/openlaneclient"
-	"github.com/theopenlane/core/pkg/testutils"
+	coreutils "github.com/theopenlane/core/pkg/testutils"
+	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/iam/totp"
 	"github.com/theopenlane/utils/emails"
 	"github.com/theopenlane/utils/marionette"
+	"github.com/theopenlane/utils/testutils"
 	"github.com/theopenlane/utils/ulids"
 )
 
@@ -60,6 +58,8 @@ type client struct {
 }
 
 func (suite *GraphTestSuite) SetupSuite() {
+	zerolog.SetGlobalLevel(zerolog.Disabled)
+
 	suite.tf = entdb.NewTestFixture()
 }
 
@@ -75,9 +75,6 @@ func (suite *GraphTestSuite) SetupTest() {
 
 	// create mock FGA client
 	fc := fgax.NewMockFGAClient(t, c.fga)
-
-	// setup logger
-	logger := zap.NewNop().Sugar()
 
 	// setup email manager
 	emConfig := emails.Config{
@@ -108,18 +105,17 @@ func (suite *GraphTestSuite) SetupTest() {
 		}),
 	}
 
-	tm, err := testutils.CreateTokenManager(15 * time.Minute) //nolint:mnd
+	tm, err := coreutils.CreateTokenManager(15 * time.Minute) //nolint:mnd
 	if err != nil {
 		t.Fatal("error creating token manager")
 	}
 
-	sm := testutils.CreateSessionManager()
-	rc := testutils.NewRedisClient()
+	sm := coreutils.CreateSessionManager()
+	rc := coreutils.NewRedisClient()
 
 	sessionConfig := sessions.NewSessionConfig(
 		sm,
 		sessions.WithPersistence(rc),
-		sessions.WithLogger(logger),
 	)
 
 	sessionConfig.CookieConfig = &sessions.DebugOnlyCookieConfig
@@ -127,7 +123,6 @@ func (suite *GraphTestSuite) SetupTest() {
 	otpMan := totp.NewOTP(otpOpts...)
 
 	opts := []ent.Option{
-		ent.Logger(*logger),
 		ent.Authz(*fc),
 		ent.Emails(em),
 		ent.Marionette(taskMan),
@@ -152,7 +147,7 @@ func (suite *GraphTestSuite) SetupTest() {
 
 	// assign values
 	c.db = db
-	c.api, err = testutils.TestClient(t, c.db)
+	c.api, err = coreutils.TestClient(t, c.db)
 	require.NoError(t, err)
 
 	// create test user
@@ -179,7 +174,7 @@ func (suite *GraphTestSuite) SetupTest() {
 		BearerToken: pat.Token,
 	}
 
-	c.apiWithPAT, err = testutils.TestClientWithAuth(t, c.db, openlaneclient.WithCredentials(authHeaderPAT))
+	c.apiWithPAT, err = coreutils.TestClientWithAuth(t, c.db, openlaneclient.WithCredentials(authHeaderPAT))
 	require.NoError(t, err)
 
 	// setup client with an API token
@@ -188,7 +183,7 @@ func (suite *GraphTestSuite) SetupTest() {
 	authHeaderAPIToken := openlaneclient.Authorization{
 		BearerToken: apiToken.Token,
 	}
-	c.apiWithToken, err = testutils.TestClientWithAuth(t, c.db, openlaneclient.WithCredentials(authHeaderAPIToken))
+	c.apiWithToken, err = coreutils.TestClientWithAuth(t, c.db, openlaneclient.WithCredentials(authHeaderAPIToken))
 	require.NoError(t, err)
 
 	suite.client = c
@@ -200,7 +195,7 @@ func (suite *GraphTestSuite) TearDownTest() {
 
 	if suite.client.db != nil {
 		if err := suite.client.db.Close(); err != nil {
-			log.Fatalf("failed to close database: %s", err)
+			log.Fatal().Err(err).Msg("failed to close database")
 		}
 	}
 }
@@ -228,25 +223,4 @@ func userContextWithID(userID string) (context.Context, error) {
 	ec.SetRequest(ec.Request().WithContext(reqCtx))
 
 	return reqCtx, nil
-}
-
-func (suite *GraphTestSuite) captureOutput(funcToRun func()) string {
-	var buffer bytes.Buffer
-
-	oldLogger := suite.client.db.Logger
-	encoder := zapcore.NewConsoleEncoder(zap.NewDevelopmentEncoderConfig())
-	writer := bufio.NewWriter(&buffer)
-
-	logger := zap.New(
-		zapcore.NewCore(encoder, zapcore.AddSync(writer), zapcore.DebugLevel)).
-		Sugar()
-
-	suite.client.db.Logger = *logger
-
-	funcToRun()
-	writer.Flush()
-
-	suite.client.db.Logger = oldLogger
-
-	return buffer.String()
 }

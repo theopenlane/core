@@ -8,6 +8,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/utils/rout"
 )
@@ -16,14 +17,14 @@ import (
 func (r *mutationResolver) CreateDocumentData(ctx context.Context, input generated.CreateDocumentDataInput) (*DocumentDataCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
-		r.logger.Errorw("failed to set organization in auth context", "error", err)
+		log.Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
 	res, err := withTransactionalMutation(ctx).DocumentData.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "documentdata"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "documentdata"})
 	}
 
 	return &DocumentDataCreatePayload{
@@ -40,7 +41,7 @@ func (r *mutationResolver) CreateBulkDocumentData(ctx context.Context, input []*
 func (r *mutationResolver) CreateBulkCSVDocumentData(ctx context.Context, input graphql.Upload) (*DocumentDataBulkCreatePayload, error) {
 	data, err := unmarshalBulkData[generated.CreateDocumentDataInput](input)
 	if err != nil {
-		r.logger.Errorw("failed to unmarshal bulk data", "error", err)
+		log.Error().Err(err).Msg("failed to unmarshal bulk data")
 
 		return nil, err
 	}
@@ -52,11 +53,11 @@ func (r *mutationResolver) CreateBulkCSVDocumentData(ctx context.Context, input 
 func (r *mutationResolver) UpdateDocumentData(ctx context.Context, id string, input generated.UpdateDocumentDataInput) (*DocumentDataUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).DocumentData.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "documentdata"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "documentdata"})
 	}
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
-		r.logger.Errorw("failed to set organization in auth context", "error", err)
+		log.Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, ErrPermissionDenied
 	}
@@ -66,7 +67,7 @@ func (r *mutationResolver) UpdateDocumentData(ctx context.Context, id string, in
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "documentdata"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "documentdata"})
 	}
 
 	return &DocumentDataUpdatePayload{
@@ -77,7 +78,7 @@ func (r *mutationResolver) UpdateDocumentData(ctx context.Context, id string, in
 // DeleteDocumentData is the resolver for the deleteDocumentData field.
 func (r *mutationResolver) DeleteDocumentData(ctx context.Context, id string) (*DocumentDataDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).DocumentData.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "documentdata"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionDelete, object: "documentdata"})
 	}
 
 	if err := generated.DocumentDataEdgeCleanup(ctx, id); err != nil {
@@ -93,7 +94,7 @@ func (r *mutationResolver) DeleteDocumentData(ctx context.Context, id string) (*
 func (r *queryResolver) DocumentData(ctx context.Context, id string) (*generated.DocumentData, error) {
 	res, err := withTransactionalMutation(ctx).DocumentData.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "documentdata"}, r.logger)
+		return nil, parseRequestError(err, action{action: ActionGet, object: "documentdata"})
 	}
 
 	return res, nil

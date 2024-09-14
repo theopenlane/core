@@ -5,6 +5,7 @@ import (
 
 	"github.com/getkin/kin-openapi/openapi3"
 	ph "github.com/posthog/posthog-go"
+	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/fgax"
 
@@ -31,7 +32,7 @@ func (h *Handler) SwitchHandler(ctx echo.Context) error {
 
 	userID, err := auth.GetUserIDFromContext(reqCtx)
 	if err != nil {
-		h.Logger.Errorw("unable to get user id from context", "error", err)
+		log.Err(err).Msg("unable to get user id from context")
 
 		return h.BadRequest(ctx, err)
 	}
@@ -39,14 +40,14 @@ func (h *Handler) SwitchHandler(ctx echo.Context) error {
 	// get user from database by subject
 	user, err := h.getUserDetailsByID(reqCtx, userID)
 	if err != nil {
-		h.Logger.Errorw("unable to get user by subject", "error", err)
+		log.Error().Err(err).Msg("unable to get user by subject")
 
 		return h.BadRequest(ctx, err)
 	}
 
 	orgID, err := auth.GetOrganizationIDFromContext(reqCtx)
 	if err != nil {
-		h.Logger.Errorw("unable to get organization id from context", "error", err)
+		log.Error().Err(err).Msg("unable to get organization id from context")
 
 		return h.BadRequest(ctx, err)
 	}
@@ -64,7 +65,7 @@ func (h *Handler) SwitchHandler(ctx echo.Context) error {
 	}
 
 	if allow, err := h.DBClient.Authz.CheckOrgReadAccess(reqCtx, req); err != nil || !allow {
-		h.Logger.Errorw("user not authorized to access organization", "error", err)
+		log.Error().Err(err).Msg("user not authorized to access organization")
 
 		return h.Unauthorized(ctx, err)
 	}
@@ -74,7 +75,7 @@ func (h *Handler) SwitchHandler(ctx echo.Context) error {
 
 	org, err := h.getOrgByID(orgGetCtx, in.TargetOrganizationID)
 	if err != nil {
-		h.Logger.Errorw("unable to get target organization by id", "error", err)
+		log.Error().Err(err).Msg("unable to get target organization by id")
 
 		return h.BadRequest(ctx, err)
 	}
@@ -82,7 +83,7 @@ func (h *Handler) SwitchHandler(ctx echo.Context) error {
 	// create new claims for the user
 	auth, err := h.AuthManager.GenerateUserAuthSessionWithOrg(ctx, user, org.ID)
 	if err != nil {
-		h.Logger.Errorw("unable create new auth session", "error", err)
+		log.Error().Err(err).Msg("unable to create new auth session")
 
 		return h.InternalServerError(ctx, err)
 	}
