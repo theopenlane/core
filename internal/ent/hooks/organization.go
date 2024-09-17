@@ -7,19 +7,17 @@ import (
 	"entgo.io/ent"
 	"github.com/rs/zerolog/log"
 
-	dbx "github.com/theopenlane/dbx/pkg/dbxclient"
-	dbxenums "github.com/theopenlane/dbx/pkg/enums"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/gravatar"
-	"github.com/theopenlane/utils/marionette"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/jobs"
 )
 
 // HookOrganization runs on org mutations to set default values that are not provided
@@ -64,7 +62,7 @@ func HookOrganization() ent.Hook {
 				}
 
 				// create the database, if the org has a dedicated db and dbx is available
-				if orgCreated.DedicatedDb && mutation.DBx != nil {
+				if orgCreated.DedicatedDb {
 					settings, err := orgCreated.Setting(ctx)
 					if err != nil {
 						log.Error().Err(err).Msg("unable to get organization settings")
@@ -72,13 +70,11 @@ func HookOrganization() ent.Hook {
 						return nil, err
 					}
 
-					if err := mutation.Marionette.Queue(marionette.TaskFunc(func(ctx context.Context) error {
-						return createDatabase(ctx, orgCreated.ID, settings.GeoLocation.String(), mutation)
-					}), marionette.WithErrorf("could not send create the database for %s", orgCreated.Name),
-					); err != nil {
-						log.Error().Err(err).Msg("unable to queue database creation")
-
-						return v, err
+					if _, err := mutation.JobQueue.Insert(ctx, jobs.DBxArgs{
+						OrganizationID: orgCreated.ID,
+						GeoLocation:    settings.GeoLocation.String(),
+					}, nil); err != nil {
+						return nil, err
 					}
 				}
 
@@ -306,35 +302,6 @@ func checkAndUpdateDefaultOrg(ctx context.Context, userID string, oldOrgID strin
 	}
 
 	return userSetting.Edges.DefaultOrg.ID, nil
-}
-
-// createDatabase creates a new database for the organization
-func createDatabase(ctx context.Context, orgID, geo string, mutation *generated.OrganizationMutation) error {
-	// set default geo if not provided
-	if geo == "" {
-		geo = enums.Amer.String()
-	}
-
-	input := dbx.CreateDatabaseInput{
-		OrganizationID: orgID,
-		Geo:            &geo,
-		Provider:       &dbxenums.Turso,
-	}
-
-	log.Debug().
-		Str("org", input.OrganizationID).
-		Str("geo", *input.Geo).
-		Str("provider", input.Provider.String()).
-		Msg("creating database")
-
-	if _, err := mutation.DBx.CreateDatabase(ctx, input); err != nil {
-		log.Error().Err(err).Msg("error creating database")
-
-		return err
-	}
-
-	// create the database
-	return nil
 }
 
 // defaultOrganizationSettings creates the default organizations settings for a new org

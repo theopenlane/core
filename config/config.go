@@ -11,12 +11,11 @@ import (
 	"github.com/knadh/koanf/v2"
 	"github.com/mcuadros/go-defaults"
 	"github.com/theopenlane/beacon/otelx"
-	dbx "github.com/theopenlane/dbx/pkg/dbxclient"
+	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/iam/totp"
-	"github.com/theopenlane/utils/emails"
 
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/iam/tokens"
@@ -25,8 +24,6 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
-	"github.com/theopenlane/core/pkg/analytics/posthog"
-	"github.com/theopenlane/core/pkg/events/kafka/kafkaconfig"
 	"github.com/theopenlane/core/pkg/middleware/cachecontrol"
 	"github.com/theopenlane/core/pkg/middleware/cors"
 	"github.com/theopenlane/core/pkg/middleware/mime"
@@ -53,24 +50,20 @@ type Config struct {
 	Authz fgax.Config `json:"authz" koanf:"authz"`
 	// DB contains the database configuration for the ent client
 	DB entx.Config `json:"db" koanf:"db"`
-	// DBx contains the dbx client configuration
-	DBx dbx.Config `json:"dbx" koanf:"dbx"`
+	// JobQueue contains the configuration for the job queue (river) client
+	JobQueue JobQueue `json:"jobQueue" koanf:"jobQueue"`
 	// Redis contains the redis configuration for the key-value store
 	Redis cache.Config `json:"redis" koanf:"redis"`
 	// Tracer contains the tracing config for opentelemetry
 	Tracer otelx.Config `json:"tracer" koanf:"tracer"`
 	// Email contains email sending configuration for the server
-	Email emails.Config `json:"email" koanf:"email"`
+	Email emailtemplates.Config `json:"email" koanf:"email"`
 	// Sessions config for user sessions and cookies
 	Sessions sessions.Config `json:"sessions" koanf:"sessions"`
-	// PostHog contains the configuration for the PostHog analytics
-	PostHog posthog.Config `json:"posthog" koanf:"posthog"`
 	// TOTP contains the configuration for the TOTP provider
 	TOTP totp.Config `json:"totp" koanf:"totp"`
 	// Ratelimit contains the configuration for the rate limiter
 	Ratelimit ratelimit.Config `json:"ratelimit" koanf:"ratelimit"`
-	// EventPublisher contains the configuration for the event publisher
-	Events kafkaconfig.Config `json:"publisherConfig" koanf:"publisherConfig"`
 }
 
 // Server settings for the echo server
@@ -141,6 +134,10 @@ type PondPool struct {
 	MaxWorkers int `json:"maxWorkers" koanf:"maxWorkers" default:"100"`
 	// MaxCapacity is the maximum number of tasks that can be queued
 	MaxCapacity int `json:"maxCapacity" koanf:"maxCapacity" default:"1000"`
+}
+
+type JobQueue struct {
+	DatabaseConnection string `json:"databaseConnection" koanf:"databaseConnection" jsonschema:"required" default:""`
 }
 
 // Load is responsible for loading the configuration from a YAML file and environment variables.

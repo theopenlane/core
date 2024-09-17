@@ -6,18 +6,20 @@ import (
 	"testing"
 	"time"
 
+	"github.com/jackc/pgx/v5"
+	"github.com/riverqueue/river"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 
+	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/iam/fgax"
 	mock_fga "github.com/theopenlane/iam/fgax/mockery"
 
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/entdb"
-	"github.com/theopenlane/core/pkg/analytics"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	coreutils "github.com/theopenlane/core/pkg/testutils"
 	"github.com/theopenlane/echox/middleware/echocontext"
@@ -124,9 +126,8 @@ func (suite *GraphTestSuite) SetupTest() {
 
 	opts := []ent.Option{
 		ent.Authz(*fc),
-		ent.Emails(em),
-		ent.Marionette(taskMan),
-		ent.Analytics(&analytics.EventManager{Enabled: false}),
+		ent.EmailConfig(&emailtemplates.Config{}), // add noop email config
+		ent.JobQueue(river.Client[pgx.Tx]{}),      // todo add a noop job queue
 		ent.TOTP(&totp.Manager{
 			TOTPManager: otpMan,
 		}),

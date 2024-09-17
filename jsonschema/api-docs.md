@@ -13,7 +13,7 @@ Config contains the configuration for the core server
 |[**auth**](#auth)|`object`|Auth settings including oauth2 providers and token configuration<br/>|yes|
 |[**authz**](#authz)|`object`||yes|
 |[**db**](#db)|`object`||yes|
-|[**dbx**](#dbx)|`object`|||
+|[**jobQueue**](#jobqueue)|`object`||yes|
 |[**redis**](#redis)|`object`|||
 |[**tracer**](#tracer)|`object`|||
 |[**email**](#email)|`object`|||
@@ -413,17 +413,14 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |**enableHistory**|`boolean`|enable history data to be logged to the database<br/>|no|
 
 **Additional Properties:** not allowed  
-<a name="dbx"></a>
-## dbx: object
+<a name="jobqueue"></a>
+## jobQueue: object
 
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**enabled**|`boolean`|Enable the dbx client<br/>||
-|**baseUrl**|`string`|Base URL for the dbx service<br/>||
-|**endpoint**|`string`|Endpoint for the graphql api<br/>||
-|**debug**|`boolean`|Enable debug mode<br/>||
+|**databaseConnection**|`string`||yes|
 
 **Additional Properties:** not allowed  
 <a name="redis"></a>
@@ -501,38 +498,29 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**sendGridApiKey**|`string`|||
+|**companyName**|`string`|||
+|**companyAddress**|`string`|||
+|**corporation**|`string`|||
 |**fromEmail**|`string`|||
-|**testing**|`boolean`|||
-|**archive**|`string`|||
-|**listId**|`string`|||
-|**adminEmail**|`string`|||
-|[**consoleUrl**](#emailconsoleurl)|`object`|||
-|[**marketingUrl**](#emailmarketingurl)|`object`|||
+|**supportEmail**|`string`|||
+|**logoURL**|`string`|||
+|[**urls**](#emailurls)|`object`|||
 
 **Additional Properties:** not allowed  
-<a name="emailconsoleurl"></a>
-### email\.consoleUrl: object
+<a name="emailurls"></a>
+### email\.urls: object
 
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**consoleBase**|`string`|||
+|**root**|`string`|||
+|**product**|`string`|||
+|**docs**|`string`|||
 |**verify**|`string`|||
 |**invite**|`string`|||
 |**reset**|`string`|||
-
-**Additional Properties:** not allowed  
-<a name="emailmarketingurl"></a>
-### email\.marketingUrl: object
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**marketingBase**|`string`|||
-|**subscriberVerify**|`string`|||
+|**verifySubscriber**|`string`|||
 
 **Additional Properties:** not allowed  
 <a name="sessions"></a>

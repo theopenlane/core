@@ -1,142 +1,133 @@
 package handlers
 
 import (
+	"context"
+
+	"github.com/rs/zerolog/log"
+	"github.com/theopenlane/core/pkg/jobs"
+	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/utils/emails"
-	"github.com/theopenlane/utils/sendgrid"
 )
 
 // SendVerificationEmail sends an email to a user to verify their email address
-func (h *Handler) SendVerificationEmail(user *User) error {
-	contact := &sendgrid.Contact{
+func (h *Handler) SendVerificationEmail(ctx context.Context, user *User) error {
+	email, err := h.Email.NewVerifyEmail(emailtemplates.Recipient{
 		Email:     user.Email,
 		FirstName: user.FirstName,
 		LastName:  user.LastName,
-	}
-
-	data := emails.VerifyEmailData{
-		EmailData: emails.EmailData{
-			Sender: h.EmailManager.MustFromContact(),
-			Recipient: sendgrid.Contact{
-				Email:     user.Email,
-				FirstName: user.FirstName,
-				LastName:  user.LastName,
-			},
-		},
-		FullName: contact.FullName(),
-	}
-
-	var err error
-	if data.VerifyURL, err = h.EmailManager.VerifyURL(user.GetVerificationToken()); err != nil {
-		return err
-	}
-
-	msg, err := emails.VerifyEmail(data)
+	}, user.GetVerificationToken())
 	if err != nil {
+		log.Error().Err(err).Msg("error creating email verification")
+
 		return err
 	}
 
-	// Send the email
-	return h.EmailManager.Send(msg)
+	_, err = h.JobQueue.Insert(ctx, jobs.EmailArgs{
+		Message: *email,
+	}, nil)
+	if err != nil {
+		log.Error().Err(err).Msg("error queueing email verification")
+
+		return err
+	}
+
+	return nil
 }
 
 // SendSubscriberEmail sends an email to confirm a user's subscription
-func (h *Handler) SendSubscriberEmail(user *User, orgName string) error {
-	data := emails.SubscriberEmailData{
-		OrgName: orgName,
-		EmailData: emails.EmailData{
-			Sender: h.EmailManager.MustFromContact(),
-			Recipient: sendgrid.Contact{
-				Email: user.Email,
-			},
-		},
-	}
-
-	var err error
-	if data.VerifySubscriberURL, err = h.EmailManager.SubscriberVerifyURL(user.GetVerificationToken()); err != nil {
-		return err
-	}
-
-	msg, err := emails.SubscribeEmail(data)
+func (h *Handler) SendSubscriberEmail(ctx context.Context, user *User, orgName string) error {
+	email, err := h.Email.NewSubscriberEmail(emailtemplates.Recipient{
+		Email:     user.Email,
+		FirstName: user.FirstName,
+		LastName:  user.LastName,
+	}, orgName, user.GetVerificationToken())
 	if err != nil {
+		log.Error().Err(err).Msg("error creating email verification")
+
 		return err
 	}
 
-	// Send the email
-	return h.EmailManager.Send(msg)
+	_, err = h.JobQueue.Insert(ctx, jobs.EmailArgs{
+		Message: *email,
+	}, nil)
+	if err != nil {
+		log.Error().Err(err).Msg("error queueing email verification")
+
+		return err
+	}
+
+	return nil
 }
 
 // SendPasswordResetRequestEmail Send an email to a user to request them to reset their password
-func (h *Handler) SendPasswordResetRequestEmail(user *User) error {
-	data := emails.ResetRequestData{
-		EmailData: emails.EmailData{
-			Sender: h.EmailManager.MustFromContact(),
-			Recipient: sendgrid.Contact{
-				Email:     user.Email,
-				FirstName: user.FirstName,
-				LastName:  user.LastName,
-			},
-		},
-	}
-	data.Recipient.ParseName(user.Name)
-
-	var err error
-	if data.ResetURL, err = h.EmailManager.ResetURL(user.GetPasswordResetToken()); err != nil {
-		return err
-	}
-
-	msg, err := emails.PasswordResetRequestEmail(data)
+func (h *Handler) SendPasswordResetRequestEmail(ctx context.Context, user *User) error {
+	email, err := h.Email.NewPasswordResetRequestEmail(emailtemplates.Recipient{
+		Email:     user.Email,
+		FirstName: user.FirstName,
+		LastName:  user.LastName,
+	}, user.GetVerificationToken())
 	if err != nil {
+		log.Error().Err(err).Msg("error creating password reset email")
+
 		return err
 	}
 
-	// Send the email
-	return h.EmailManager.Send(msg)
+	_, err = h.JobQueue.Insert(ctx, jobs.EmailArgs{
+		Message: *email,
+	}, nil)
+	if err != nil {
+		log.Error().Err(err).Msg("error queueing  password reset email")
+
+		return err
+	}
+
+	return nil
 }
 
 // SendPasswordResetSuccessEmail Send an email to a user to inform them that their password has been reset
-func (h *Handler) SendPasswordResetSuccessEmail(user *User) error {
-	data := emails.ResetSuccessData{
-		EmailData: emails.EmailData{
-			Sender: h.EmailManager.MustFromContact(),
-			Recipient: sendgrid.Contact{
-				Email: user.Email,
-			},
-		},
-	}
-
-	data.Recipient.ParseName(user.Name)
-
-	msg, err := emails.PasswordResetSuccessEmail(data)
+func (h *Handler) SendPasswordResetSuccessEmail(ctx context.Context, user *User) error {
+	email, err := h.Email.NewPasswordResetSuccessEmail(emailtemplates.Recipient{
+		Email:     user.Email,
+		FirstName: user.FirstName,
+		LastName:  user.LastName,
+	})
 	if err != nil {
+		log.Error().Err(err).Msg("error creating password reset success email")
+
 		return err
 	}
 
-	// Send the email
-	return h.EmailManager.Send(msg)
+	_, err = h.JobQueue.Insert(ctx, jobs.EmailArgs{
+		Message: *email,
+	}, nil)
+	if err != nil {
+		log.Error().Err(err).Msg("error queueing  password reset success email")
+
+		return err
+	}
+
+	return nil
 }
 
 // SendOrgInvitationEmail sends an email inviting a user to join an existing organization
-func (h *Handler) SendOrgInvitationEmail(i *emails.Invite) error {
-	data := emails.InviteData{
-		InviterName: i.Requestor,
-		OrgName:     i.OrgName,
-		EmailData: emails.EmailData{
-			Sender: h.EmailManager.MustFromContact(),
-			Recipient: sendgrid.Contact{
-				Email: i.Recipient,
-			},
-		},
-	}
-
-	var err error
-	if data.InviteURL, err = h.EmailManager.InviteURL(i.Token); err != nil {
-		return err
-	}
-
-	msg, err := emails.InviteEmail(data)
+func (h *Handler) SendOrgInvitationEmail(ctx context.Context, i *emails.Invite) error {
+	email, err := h.Email.NewInviteEmail(emailtemplates.Recipient{
+		Email: i.Recipient,
+	}, i.Requestor, i.OrgName, i.Role, i.Token)
 	if err != nil {
+		log.Error().Err(err).Msg("error creating password reset success email")
+
 		return err
 	}
 
-	return h.EmailManager.Send(msg)
+	_, err = h.JobQueue.Insert(ctx, jobs.EmailArgs{
+		Message: *email,
+	}, nil)
+	if err != nil {
+		log.Error().Err(err).Msg("error queueing  password reset success email")
+
+		return err
+	}
+
+	return nil
 }

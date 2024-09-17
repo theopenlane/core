@@ -1,6 +1,7 @@
 package serveropts
 
 import (
+	"context"
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/x509"
@@ -8,7 +9,11 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/redis/go-redis/v9"
+	"github.com/riverqueue/river"
+	"github.com/riverqueue/river/riverdriver/riverpgxv5"
+
 	"github.com/rs/zerolog/log"
 	echoprometheus "github.com/theopenlane/echo-prometheus"
 	echo "github.com/theopenlane/echox"
@@ -22,8 +27,6 @@ import (
 	"github.com/theopenlane/iam/tokens"
 	"github.com/theopenlane/iam/totp"
 	"github.com/theopenlane/utils/cache"
-	"github.com/theopenlane/utils/emails"
-	"github.com/theopenlane/utils/marionette"
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/echox/middleware/echocontext"
@@ -32,8 +35,6 @@ import (
 	"github.com/theopenlane/core/internal/graphapi"
 	"github.com/theopenlane/core/internal/httpserve/config"
 	"github.com/theopenlane/core/internal/httpserve/server"
-	"github.com/theopenlane/core/pkg/analytics"
-	"github.com/theopenlane/core/pkg/events/kafka/publisher"
 	authmw "github.com/theopenlane/core/pkg/middleware/auth"
 	"github.com/theopenlane/core/pkg/middleware/cachecontrol"
 	"github.com/theopenlane/core/pkg/middleware/cors"
@@ -243,55 +244,13 @@ func WithMiddleware() ServerOption {
 	})
 }
 
-// WithEventPublisher sets up the default Kafka event publisher
-func WithEventPublisher() ServerOption {
-	return newApplyFunc(func(s *ServerOptions) {
-		ep := publisher.KafkaPublisher{
-			Config: s.Config.Settings.Events,
-		}
-
-		publisher := publisher.NewKafkaPublisher(ep.Config.Addresses)
-
-		s.Config.Handler.EventManager = publisher
-	})
-}
-
-// WithEmailManager sets up the default SendGrid email manager to be used to send emails to users
+// WithEmailConfig sets up the email config to be used to send emails to users
 // on registration, password reset, etc
-func WithEmailManager() ServerOption {
+func WithEmailConfig() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
-		em, err := emails.New(s.Config.Settings.Email)
-		if err != nil {
-			panic(err)
-		}
+		log.Debug().Interface("email", s.Config.Settings.Email).Msg("email config")
 
-		if err := s.Config.Settings.Email.ConsoleURLConfig.Validate(); err != nil {
-			panic(err)
-		}
-
-		em.ConsoleURLConfig = s.Config.Settings.Email.ConsoleURLConfig
-
-		if err := s.Config.Settings.Email.MarketingURLConfig.Validate(); err != nil {
-			panic(err)
-		}
-
-		em.MarketingURLConfig = s.Config.Settings.Email.MarketingURLConfig
-
-		s.Config.Handler.EmailManager = em
-	})
-}
-
-// WithTaskManager sets up the default Marionette task manager to be used for delegating background tasks
-func WithTaskManager() ServerOption {
-	return newApplyFunc(func(s *ServerOptions) {
-		// Start task manager
-		tmConfig := marionette.Config{}
-
-		tm := marionette.New(tmConfig)
-
-		tm.Start()
-
-		s.Config.Handler.TaskMan = tm
+		s.Config.Handler.Email = s.Config.Settings.Email
 	})
 }
 
@@ -345,26 +304,6 @@ func WithSessionMiddleware() ServerOption {
 		s.Config.GraphMiddleware = append(s.Config.GraphMiddleware,
 			sessions.LoadAndSaveWithConfig(*s.Config.SessionConfig),
 		)
-	})
-}
-
-// WithAnalytics sets up the PostHog analytics manager
-func WithAnalytics() ServerOption {
-	return newApplyFunc(func(s *ServerOptions) {
-		ph := s.Config.Settings.PostHog.Init()
-		if ph == nil {
-			s.Config.Handler.AnalyticsClient = &analytics.EventManager{
-				Enabled: false,
-				Handler: nil,
-			}
-
-			return
-		}
-
-		s.Config.Handler.AnalyticsClient = &analytics.EventManager{
-			Enabled: true,
-			Handler: ph,
-		}
 	})
 }
 
@@ -446,5 +385,24 @@ func WithCORS() ServerOption {
 		if s.Config.Settings.Server.CORS.Enabled {
 			s.Config.DefaultMiddleware = append(s.Config.DefaultMiddleware, cors.New(s.Config.Settings.Server.CORS.AllowOrigins))
 		}
+	})
+}
+
+// WithJobQueue sets up the river job queue for the server
+func WithJobQueue() ServerOption {
+	return newApplyFunc(func(s *ServerOptions) {
+		dbPool, err := pgxpool.New(context.Background(), s.Config.Settings.JobQueue.DatabaseConnection)
+		if err != nil {
+			log.Error().Err(err).Msg("error creating job queue database connection")
+		}
+
+		riverClient, err := river.NewClient(riverpgxv5.New(dbPool), &river.Config{})
+		if err != nil {
+			log.Panic().Err(err).Msg("error creating river client")
+		}
+
+		s.Config.Handler.JobQueue = riverClient
+
+		log.Info().Msg("job queue initialized")
 	})
 }

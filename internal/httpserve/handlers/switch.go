@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"github.com/getkin/kin-openapi/openapi3"
-	ph "github.com/posthog/posthog-go"
 	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/fgax"
@@ -87,16 +86,6 @@ func (h *Handler) SwitchHandler(ctx echo.Context) error {
 
 		return h.InternalServerError(ctx, err)
 	}
-
-	// track the organization switch event
-	props := ph.NewProperties().
-		Set("user_id", user.ID).
-		Set("email", user.Email).
-		Set("target_organization_id", org.ID).
-		Set("auth_provider", user.AuthProvider).
-		Set("previous_organization_id", orgID)
-
-	h.AnalyticsClient.Event("organization_switched", props)
 
 	// set the out attributes we send back to the client only on success
 	out := &models.SwitchOrganizationReply{

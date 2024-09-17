@@ -7,12 +7,15 @@ import (
 	"testing"
 	"time"
 
+	"github.com/jackc/pgx/v5"
+	"github.com/riverqueue/river"
 	"github.com/rs/zerolog"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/echox/middleware/echocontext"
+	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	mock_fga "github.com/theopenlane/iam/fgax/mockery"
@@ -26,7 +29,6 @@ import (
 	"github.com/theopenlane/core/internal/entdb"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
-	"github.com/theopenlane/core/pkg/analytics"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	coreutils "github.com/theopenlane/core/pkg/testutils"
@@ -109,11 +111,10 @@ func (suite *HandlerTestSuite) SetupTest() {
 
 	opts := []ent.Option{
 		ent.Authz(*fc),
-		ent.Marionette(taskMan),
-		ent.Emails(em),
+		ent.JobQueue(river.Client[pgx.Tx]{}), // todo: add a noop job queue
+		ent.EmailConfig(&emailtemplates.Config{}),
 		ent.TokenManager(tm),
 		ent.SessionConfig(&sessionConfig),
-		ent.Analytics(&analytics.EventManager{Enabled: false}),
 		ent.EntConfig(&entconfig.Config{
 			Flags: entconfig.Flags{
 				UseListUserService:   false,
@@ -181,11 +182,8 @@ func handlerSetup(t *testing.T, ent *ent.Client) *handlers.Handler {
 		RedisClient:   ent.SessionConfig.RedisClient,
 		SessionConfig: ent.SessionConfig,
 		AuthManager:   as,
-		EmailManager:  ent.Emails,
-		TaskMan:       ent.Marionette,
-		AnalyticsClient: &analytics.EventManager{
-			Enabled: false,
-		},
+		EmailConfig:   emailtemplates.Config{},
+		JobQueue:      river.Client[pgx.Tx]{}, // todo: add a noop job queue
 	}
 
 	return h

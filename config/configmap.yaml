@@ -105,10 +105,7 @@ data:
   CORE_DB_RUNMIGRATIONS: {{ .Values.core.db.runMigrations | default true }}
   CORE_DB_MIGRATIONPROVIDER: {{ .Values.core.db.migrationProvider | default "atlas" }}
   CORE_DB_ENABLEHISTORY: {{ .Values.core.db.enableHistory | default false }}
-  CORE_DBX_ENABLED: {{ .Values.core.dbx.enabled | default true }}
-  CORE_DBX_BASEURL: {{ .Values.core.dbx.baseUrl | default "http://localhost:1337" }}
-  CORE_DBX_ENDPOINT: {{ .Values.core.dbx.endpoint | default "query" }}
-  CORE_DBX_DEBUG: {{ .Values.core.dbx.debug | default false }}
+  CORE_JOBQUEUE_DATABASECONNECTION: {{ .Values.core.jobQueue.databaseConnection }}
   CORE_REDIS_ENABLED: {{ .Values.core.redis.enabled | default true }}
   CORE_REDIS_ADDRESS: {{ .Values.core.redis.address | default "localhost:6379" }}
   CORE_REDIS_NAME: {{ .Values.core.redis.name | default "openlane" }}
@@ -133,18 +130,19 @@ data:
   CORE_TRACER_OTLP_HEADERS: {{ .Values.core.tracer.otlp.headers }}
   CORE_TRACER_OTLP_COMPRESSION: {{ .Values.core.tracer.otlp.compression }}
   CORE_TRACER_OTLP_TIMEOUT: {{ .Values.core.tracer.otlp.timeout | default "10s" }}
-  CORE_EMAIL_SENDGRIDAPIKEY: {{ .Values.core.email.sendGridApiKey }}
-  CORE_EMAIL_FROMEMAIL: {{ .Values.core.email.fromEmail | default "no-reply@theopenlane.io" }}
-  CORE_EMAIL_TESTING: {{ .Values.core.email.testing | default true }}
-  CORE_EMAIL_ARCHIVE: {{ .Values.core.email.archive }}
-  CORE_EMAIL_LISTID: {{ .Values.core.email.listId }}
-  CORE_EMAIL_ADMINEMAIL: {{ .Values.core.email.adminEmail | default "admins@theopenlane.io" }}
-  CORE_EMAIL_CONSOLEURL_CONSOLEBASE: {{ .Values.core.email.consoleUrl.consoleBase | default "https://console.theopenlane.io" }}
-  CORE_EMAIL_CONSOLEURL_VERIFY: {{ .Values.core.email.consoleUrl.verify | default "/verify" }}
-  CORE_EMAIL_CONSOLEURL_INVITE: {{ .Values.core.email.consoleUrl.invite | default "/invite" }}
-  CORE_EMAIL_CONSOLEURL_RESET: {{ .Values.core.email.consoleUrl.reset | default "/password-reset" }}
-  CORE_EMAIL_MARKETINGURL_MARKETINGBASE: {{ .Values.core.email.marketingUrl.marketingBase | default "https://www.theopenlane.io" }}
-  CORE_EMAIL_MARKETINGURL_SUBSCRIBERVERIFY: {{ .Values.core.email.marketingUrl.subscriberVerify | default "/verify" }}
+  CORE_EMAIL_COMPANYNAME: {{ .Values.core.email.companyName }}
+  CORE_EMAIL_COMPANYADDRESS: {{ .Values.core.email.companyAddress }}
+  CORE_EMAIL_CORPORATION: {{ .Values.core.email.corporation }}
+  CORE_EMAIL_FROMEMAIL: {{ .Values.core.email.fromEmail }}
+  CORE_EMAIL_SUPPORTEMAIL: {{ .Values.core.email.supportEmail }}
+  CORE_EMAIL_LOGOURL: {{ .Values.core.email.logoURL }}
+  CORE_EMAIL_URLS_ROOT: {{ .Values.core.email.urls.root }}
+  CORE_EMAIL_URLS_PRODUCT: {{ .Values.core.email.urls.product }}
+  CORE_EMAIL_URLS_DOCS: {{ .Values.core.email.urls.docs }}
+  CORE_EMAIL_URLS_VERIFY: {{ .Values.core.email.urls.verify }}
+  CORE_EMAIL_URLS_INVITE: {{ .Values.core.email.urls.invite }}
+  CORE_EMAIL_URLS_RESET: {{ .Values.core.email.urls.reset }}
+  CORE_EMAIL_URLS_VERIFYSUBSCRIBER: {{ .Values.core.email.urls.verifySubscriber }}
   CORE_SESSIONS_SIGNINGKEY: {{ .Values.core.sessions.signingKey | default "my-signing-secret" }}
   CORE_SESSIONS_ENCRYPTIONKEY: {{ .Values.core.sessions.encryptionKey | default "encryptionsecret" }}
   CORE_SESSIONS_DOMAIN: {{ .Values.core.sessions.domain }}

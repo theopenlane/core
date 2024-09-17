@@ -4,20 +4,18 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/cenkalti/backoff/v4"
 	"github.com/getkin/kin-openapi/openapi3"
-	ph "github.com/posthog/posthog-go"
 	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
-	"github.com/theopenlane/utils/marionette"
-	"github.com/theopenlane/utils/rout"
-
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
+	"github.com/theopenlane/core/pkg/jobs"
 	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/emailtemplates"
 )
 
 const (
@@ -127,21 +125,24 @@ func (h *Handler) storeAndSendEmailVerificationToken(ctx context.Context, user *
 		return nil, err
 	}
 
-	props := ph.NewProperties().
-		Set("user_id", user.ID).
-		Set("email", user.Email).
-		Set("first_name", user.FirstName).
-		Set("last_name", user.LastName)
+	email, err := h.Email.NewVerifyEmail(emailtemplates.Recipient{
+		Email:     user.Email,
+		FirstName: user.FirstName,
+		LastName:  user.LastName,
+	}, meowtoken.Token)
+	if err != nil {
+		log.Error().Err(err).Msg("error rendering email")
 
-	h.AnalyticsClient.Event("email_verification_sent", props)
+		return nil, err
+	}
 
-	// send emails via TaskMan as to not create blocking operations in the server
-	if err := h.TaskMan.Queue(marionette.TaskFunc(func(ctx context.Context) error {
-		return h.SendVerificationEmail(user)
-	}), marionette.WithRetries(3), //nolint:mnd
-		marionette.WithBackoff(backoff.NewExponentialBackOff()),
-		marionette.WithErrorf("could not send verification email to user %s", user.ID),
-	); err != nil {
+	// send the email
+	_, err = h.JobQueue.Insert(ctx, jobs.EmailArgs{
+		Message: *email,
+	}, nil)
+	if err != nil {
+		log.Error().Err(err).Msg("error queueing email verification")
+
 		return nil, err
 	}
 

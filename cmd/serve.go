@@ -7,7 +7,6 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/theopenlane/beacon/otelx"
 
-	dbx "github.com/theopenlane/dbx/pkg/dbxclient"
 	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/utils/cache"
@@ -49,15 +48,13 @@ func serve(ctx context.Context) error {
 	serverOpts = append(serverOpts,
 		serveropts.WithConfigProvider(&config.ConfigProviderWithRefresh{}),
 		serveropts.WithHTTPS(),
-		serveropts.WithEmailManager(),
-		serveropts.WithTaskManager(),
+		serveropts.WithEmailConfig(),
 		serveropts.WithMiddleware(),
 		serveropts.WithRateLimiter(),
 		serveropts.WithSecureMW(),
 		serveropts.WithCacheHeaders(),
 		serveropts.WithCORS(),
-		serveropts.WithAnalytics(),
-		serveropts.WithEventPublisher(),
+		serveropts.WithJobQueue(),
 	)
 
 	so := serveropts.NewServerOptions(serverOpts, k.String("config"))
@@ -97,13 +94,6 @@ func serve(ctx context.Context) error {
 		serveropts.WithSessionManager(redisClient),
 	)
 
-	// Setup DBx client
-	if so.Config.Settings.DBx.Enabled {
-		gc := so.Config.Settings.DBx.NewDefaultClient()
-
-		entOpts = append(entOpts, ent.DBx(gc.(*dbx.Client)))
-	}
-
 	// add otp manager, after redis is setup
 	so.AddServerOptions(
 		serveropts.WithOTP(),
@@ -113,16 +103,16 @@ func serve(ctx context.Context) error {
 	entOpts = append(
 		entOpts,
 		ent.Authz(*fgaClient),
-		ent.Emails(so.Config.Handler.EmailManager),
-		ent.Marionette(so.Config.Handler.TaskMan),
-		ent.Analytics(so.Config.Handler.AnalyticsClient),
 		ent.TOTP(so.Config.Handler.OTPManager),
 		ent.TokenManager(so.Config.Handler.TokenManager),
 		ent.SessionConfig(so.Config.Handler.SessionConfig),
 		ent.EntConfig(&so.Config.Settings.EntConfig),
+		ent.EmailConfig(&so.Config.Settings.Email),
+		ent.JobQueue(*so.Config.Handler.JobQueue),
 	)
 
 	// Setup DB connection
+	log.Info().Interface("db", so.Config.Settings.DB).Msg("connecting to database")
 	entdbClient, dbConfig, err := entdb.NewMultiDriverDBClient(ctx, so.Config.Settings.DB, entOpts)
 	if err != nil {
 		return err

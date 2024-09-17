@@ -62,31 +62,28 @@ db:
     primaryDbSource: file:openlane.db
     runMigrations: true
     secondaryDbSource: file:backup.db
-dbx:
-    baseUrl: http://localhost:1337
-    debug: false
-    enabled: true
-    endpoint: query
 email:
-    adminEmail: admins@theopenlane.io
-    archive: ""
-    consoleUrl:
-        consoleBase: https://console.theopenlane.io
-        invite: /invite
-        reset: /password-reset
-        verify: /verify
-    fromEmail: no-reply@theopenlane.io
-    listId: ""
-    marketingUrl:
-        marketingBase: https://www.theopenlane.io
-        subscriberVerify: /verify
-    sendGridApiKey: ""
-    testing: true
+    companyAddress: ""
+    companyName: ""
+    corporation: ""
+    fromEmail: ""
+    logoURL: ""
+    supportEmail: ""
+    urls:
+        docs: ""
+        invite: ""
+        product: ""
+        reset: ""
+        root: ""
+        verify: ""
+        verifySubscriber: ""
 entConfig:
     entityTypes: null
     flags:
         useListObjectServices: false
         useListUserService: true
+jobQueue:
+    databaseConnection: ""
 posthog:
     apiKey: ""
     enabled: false

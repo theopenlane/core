@@ -9,12 +9,14 @@ import (
 	"log"
 	"reflect"
 
+	"github.com/jackc/pgx/v5"
 	"github.com/theopenlane/core/internal/ent/generated/migrate"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/riverqueue/river"
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
@@ -73,15 +75,12 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
 	"github.com/theopenlane/core/internal/ent/generated/webhook"
 	"github.com/theopenlane/core/internal/ent/generated/webhookhistory"
-	"github.com/theopenlane/core/pkg/analytics"
-	"github.com/theopenlane/dbx/pkg/dbxclient"
+	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/iam/entfga"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/iam/tokens"
 	"github.com/theopenlane/iam/totp"
-	"github.com/theopenlane/utils/emails"
-	"github.com/theopenlane/utils/marionette"
 	"gocloud.dev/secrets"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -315,11 +314,9 @@ type (
 		Authz         fgax.Client
 		TokenManager  *tokens.TokenManager
 		SessionConfig *sessions.SessionConfig
-		Emails        *emails.EmailManager
-		Marionette    *marionette.TaskManager
-		Analytics     *analytics.EventManager
+		EmailConfig   *emailtemplates.Config
+		JobQueue      river.Client[pgx.Tx]
 		TOTP          *totp.Manager
-		DBx           *dbxclient.Client
 		// schemaConfig contains alternative names for all tables.
 		schemaConfig SchemaConfig
 	}
@@ -400,24 +397,17 @@ func SessionConfig(v *sessions.SessionConfig) Option {
 	}
 }
 
-// Emails configures the Emails.
-func Emails(v *emails.EmailManager) Option {
+// EmailConfig configures the EmailConfig.
+func EmailConfig(v *emailtemplates.Config) Option {
 	return func(c *config) {
-		c.Emails = v
+		c.EmailConfig = v
 	}
 }
 
-// Marionette configures the Marionette.
-func Marionette(v *marionette.TaskManager) Option {
+// JobQueue configures the JobQueue.
+func JobQueue(v river.Client[pgx.Tx]) Option {
 	return func(c *config) {
-		c.Marionette = v
-	}
-}
-
-// Analytics configures the Analytics.
-func Analytics(v *analytics.EventManager) Option {
-	return func(c *config) {
-		c.Analytics = v
+		c.JobQueue = v
 	}
 }
 
@@ -425,13 +415,6 @@ func Analytics(v *analytics.EventManager) Option {
 func TOTP(v *totp.Manager) Option {
 	return func(c *config) {
 		c.TOTP = v
-	}
-}
-
-// DBx configures the DBx.
-func DBx(v *dbxclient.Client) Option {
-	return func(c *config) {
-		c.DBx = v
 	}
 }
 

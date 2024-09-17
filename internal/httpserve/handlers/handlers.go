@@ -2,21 +2,20 @@ package handlers
 
 import (
 	"github.com/go-webauthn/webauthn/webauthn"
+	"github.com/jackc/pgx/v5"
 	"github.com/lestrrat-go/jwx/v2/jwk"
 	"github.com/redis/go-redis/v9"
+	"github.com/riverqueue/river"
 	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/emailtemplates"
 
 	"github.com/theopenlane/iam/totp"
-	"github.com/theopenlane/utils/emails"
-	"github.com/theopenlane/utils/marionette"
 
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/iam/tokens"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
-	"github.com/theopenlane/core/pkg/analytics"
-	"github.com/theopenlane/core/pkg/events/kafka/publisher"
 )
 
 // Handler contains configuration options for handlers
@@ -37,12 +36,6 @@ type Handler struct {
 	JWTKeys jwk.Set
 	// SessionConfig to handle sessions
 	SessionConfig *sessions.SessionConfig
-	// EmailManager to handle sending emails
-	EmailManager *emails.EmailManager
-	// TaskMan manages tasks in a separate goroutine to allow for non blocking operations
-	TaskMan *marionette.TaskManager
-	// AnalyticsClient is the client used to send analytics events
-	AnalyticsClient *analytics.EventManager
 	// OauthProvider contains the configuration settings for all supported Oauth2 providers
 	OauthProvider OauthProviderConfig
 	// AuthMiddleware contains the middleware to be used for authenticated endpoints
@@ -51,6 +44,8 @@ type Handler struct {
 	WebAuthn *webauthn.WebAuthn
 	// OTPManager contains the configuration settings for the OTP provider
 	OTPManager *totp.Manager
-	// EventManager contains the configuration settings for the event publisher
-	EventManager *publisher.KafkaPublisher
+	// JobQueue contains the configuration settings for the workflow client
+	JobQueue *river.Client[pgx.Tx]
+	// Email contains email sending configuration for the server
+	Email emailtemplates.Config
 }

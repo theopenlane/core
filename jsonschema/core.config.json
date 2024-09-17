@@ -97,6 +97,18 @@
       ],
       "description": "Auth settings including oauth2 providers and token configuration"
     },
+    "config.JobQueue": {
+      "properties": {
+        "databaseConnection": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "databaseConnection"
+      ]
+    },
     "config.PondPool": {
       "properties": {
         "maxWorkers": {
@@ -232,61 +244,42 @@
       "type": "object",
       "description": "Config holds the cors configuration settings"
     },
-    "dbxclient.Config": {
+    "emailtemplates.Config": {
       "properties": {
-        "enabled": {
-          "type": "boolean",
-          "description": "Enable the dbx client"
+        "companyName": {
+          "type": "string"
         },
-        "baseUrl": {
-          "type": "string",
-          "description": "Base URL for the dbx service"
+        "companyAddress": {
+          "type": "string"
         },
-        "endpoint": {
-          "type": "string",
-          "description": "Endpoint for the graphql api"
-        },
-        "debug": {
-          "type": "boolean",
-          "description": "Enable debug mode"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object"
-    },
-    "emails.Config": {
-      "properties": {
-        "sendGridApiKey": {
+        "corporation": {
           "type": "string"
         },
         "fromEmail": {
           "type": "string"
         },
-        "testing": {
-          "type": "boolean"
-        },
-        "archive": {
+        "supportEmail": {
           "type": "string"
         },
-        "listId": {
+        "logoURL": {
           "type": "string"
         },
-        "adminEmail": {
-          "type": "string"
-        },
-        "consoleUrl": {
-          "$ref": "#/$defs/emails.ConsoleURLConfig"
-        },
-        "marketingUrl": {
-          "$ref": "#/$defs/emails.MarketingURLConfig"
+        "urls": {
+          "$ref": "#/$defs/emailtemplates.URLConfig"
         }
       },
       "additionalProperties": false,
       "type": "object"
     },
-    "emails.ConsoleURLConfig": {
+    "emailtemplates.URLConfig": {
       "properties": {
-        "consoleBase": {
+        "root": {
+          "type": "string"
+        },
+        "product": {
+          "type": "string"
+        },
+        "docs": {
           "type": "string"
         },
         "verify": {
@@ -297,17 +290,8 @@
         },
         "reset": {
           "type": "string"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object"
-    },
-    "emails.MarketingURLConfig": {
-      "properties": {
-        "marketingBase": {
-          "type": "string"
         },
-        "subscriberVerify": {
+        "verifySubscriber": {
           "type": "string"
         }
       },
@@ -901,9 +885,9 @@
       "$ref": "#/$defs/entx.Config",
       "description": "DB contains the database configuration for the ent client"
     },
-    "dbx": {
-      "$ref": "#/$defs/dbxclient.Config",
-      "description": "DBx contains the dbx client configuration"
+    "jobQueue": {
+      "$ref": "#/$defs/config.JobQueue",
+      "description": "JobQueue contains the configuration for the job queue (river) client"
     },
     "redis": {
       "$ref": "#/$defs/cache.Config",
@@ -914,7 +898,7 @@
       "description": "Tracer contains the tracing config for opentelemetry"
     },
     "email": {
-      "$ref": "#/$defs/emails.Config",
+      "$ref": "#/$defs/emailtemplates.Config",
       "description": "Email contains email sending configuration for the server"
     },
     "sessions": {

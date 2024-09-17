@@ -6,7 +6,6 @@ import (
 
 	"entgo.io/ent"
 	"github.com/99designs/gqlgen/graphql"
-	ph "github.com/posthog/posthog-go"
 	"github.com/rs/zerolog/log"
 
 	"github.com/theopenlane/iam/auth"
@@ -60,35 +59,6 @@ func HookOrgMembers() ent.Hook {
 			// check to see if the default org needs to be updated for the user
 			if err := updateOrgMemberDefaultOrgOnCreate(ctx, mutation, orgID); err != nil {
 				return retValue, err
-			}
-
-			if userID, ok := mutation.UserID(); ok {
-				role, _ := mutation.Role()
-
-				// allow the user to be pulled directly with a GET User, which is not allowed by default
-				// the traverser will not allow this, so we need to create a new context
-				allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
-				user, err := mutation.Client().User.Get(allowCtx, userID)
-				if err != nil {
-					log.Error().Err(err).Msg("failed to get user")
-
-					return nil, err
-				}
-
-				orgName, err := auth.GetOrganizationNameFromContext(ctx)
-				if err != nil {
-					log.Error().Err(err).Msg("failed to get organization name from context")
-
-					return nil, err
-				}
-
-				props := ph.NewProperties().
-					Set("organization_name", orgName).
-					Set("user_name", user.FirstName+user.LastName).
-					Set("join_role", role.String())
-
-				mutation.Analytics.Event("org_membership", props)
 			}
 
 			return retValue, err

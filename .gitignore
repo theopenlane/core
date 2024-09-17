@@ -25,10 +25,10 @@ server.crt
 server.key
 private_key.pem
 public_key.pem
-# Sendgrid test email folders
-internal/httpserve/handlers/fixtures/emails/*
+
+# emails tests 
+emails/*
 fixtures/emails/*
-pkg/httpsling/testdata/*
 
 # Packages
 *.7z

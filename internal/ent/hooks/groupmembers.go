@@ -5,8 +5,6 @@ import (
 
 	"entgo.io/ent"
 
-	ph "github.com/posthog/posthog-go"
-
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
@@ -44,15 +42,6 @@ func HookGroupMembers() ent.Hook {
 			if !exists {
 				return nil, ErrUserNotInOrg
 			}
-
-			role, _ := mutation.Role()
-
-			props := ph.NewProperties().
-				Set("group_id", groupID).
-				Set("user_id", userID).
-				Set("role", role)
-
-			mutation.Analytics.Event("group_membership", props)
 
 			return next.Mutate(ctx, mutation)
 		})
