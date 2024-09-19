@@ -12,7 +12,7 @@ import (
 	"github.com/mcuadros/go-defaults"
 
 	"github.com/theopenlane/core/config"
-	"github.com/theopenlane/core/jsonschema/envparse"
+	"github.com/theopenlane/utils/envparse"
 )
 
 // const values used for the schema generator
