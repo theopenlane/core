@@ -1,6 +1,5 @@
-
-mutation CreateBulkCSVContact($input: Upload!) {
-  createBulkCSVContact(input: $input) {
+mutation CreateBulkContact($input: [CreateContactInput!]) {
+  createBulkContact(input: $input) {
     contacts {
       address
       company
@@ -20,8 +19,8 @@ mutation CreateBulkCSVContact($input: Upload!) {
   }
 }
 
-mutation CreateBulkContact($input: [CreateContactInput!]) {
-  createBulkContact(input: $input) {
+mutation CreateBulkCSVContact($input: Upload!) {
+  createBulkCSVContact(input: $input) {
     contacts {
       address
       company
@@ -90,6 +89,7 @@ query GetAllContacts {
     }
   }
 }
+
 query GetContactByID($contactId: ID!) {
   contact(id: $contactId) {
     address
@@ -131,6 +131,7 @@ query GetContacts($where: ContactWhereInput) {
     }
   }
 }
+
 mutation UpdateContact($updateContactId: ID!, $input: UpdateContactInput!) {
   updateContact(id: $updateContactId, input: $input) {
     contact {

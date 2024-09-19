@@ -4,6 +4,7 @@
 [![Build status](https://badge.buildkite.com/a3a38b934ca2bb7fc771e19bc5a986a1452fa2962e4e1c63bf.svg?branch=main)](https://buildkite.com/theopenlane/core)
 [![Go Reference](https://pkg.go.dev/badge/github.com/theopenlane/core.svg)](https://pkg.go.dev/github.com/theopenlane/core)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache2.0-brightgreen.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=theopenlane_core&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=theopenlane_core)
 
 </div>
 
@@ -22,6 +23,7 @@ At it's core, this repo is a collection of services built on top of an entity fr
 - Code generated audit / history tables for defined schemas
 
 On top of this powerful core we also have an incredible amount of pluggable, extensible services:
+
 - Authentication: we today support password, OAuth2 / Social login providers (Github, Google), Passkeys as well as standard OIDC Discovery flows
 - Multi-factor: built-in 2FA mechanisms, TOTP
 - Authorization: extensible and flexible permissions constructs via openFGA based on Google Zanzibar
@@ -34,31 +36,11 @@ On top of this powerful core we also have an incredible amount of pluggable, ext
 
 ## Development
 
-Developing against this repo involves a few mandatory tools; please read up on these and familiarize yourself if you're interested in making additions or changes!
+### Dependencies
 
-1. [ent](https://entgo.io/) - insane entity mapping tool, definitely not an ORM but kind of an ORM (handles our relational data storage, mappings, codegen processes)
-1. [atlas](https://atlasgo.io/) - Schema generation and migrations (can be disabled in lieu of migrations on disk)
-1. [goose](https://github.com/pressly/goose) - Secondary database migration utility we also use for seeding data
-1. [gqlgen](https://gqlgen.com/) - Code generation + GraphQL server building from from `ent` schema definitions
-1. [gqlgenc](https://github.com/Yamashou/gqlgenc) - Client building utilities with GraphQL
-1. [openfga](https://openfga.dev/) - Flexible authorization/permission engine inspired by Google Zanzibar
-1. [echo](https://echo.labstack.com/) - High performance, extensible, minimalist Go web framework
-1. [koanf](https://github.com/knadh/koanf) - Configuration management library which parses command line arguments, Go structs + creates our main configuration files
-
-We also leverage many secondary technologies in use, including (but not limited to!):
-
-1. [taskfile](https://taskfile.dev/usage/) - So much better than Make zomg
-1. [redis](https://redis.io/) - in-memory datastore used for sessions, caching
-1. databases:
-    * [postgres](https://www.postgresql.org/)
-    * [libsql](https://turso.tech/libsql)
-    * [sqlite](https://www.sqlite.org/)
-1. [golangci-lint](https://github.com/golangci/golangci-lint) - an annoyingly opinionated linter
-1. [buildkite](https://buildkite.com/theopenlane) - our CI system of choice (with github actions providing some intermediary support)
-
-All of these components are bundled into our respective Docker images; for additional information / instructions, see the [contributing guide](.github/CONTRIBUTING.md) in this repository. We're constantly adding and changing things, but have tried to list all the great open source tools and projects we rely on; if you see your project (or one you use) in here and wish to list it, feel free to open a PR!
-
-## Dependencies
+- Go 1.23+
+- Docker (used for running Postgres and the river-ui)
+- [task](https://taskfile.dev/)
 
 The vast majority of behaviors of the system can be turned on or off by updating the configuration parameters found in `config`; in some instances, we've made features or integrations with third party systems which are "always on", but we're happy to receive PR's wrapping those dependencies if you are interested in running the software without them!
 
@@ -70,28 +52,71 @@ Setup [Taskfile](https://taskfile.dev/installation/) by following the instructio
 
 See the [README](/config/README.md) in the `config` directory.
 
+### Starting the Server
+
+1. Copy the config, this is in .gitignore so you do not have to worry about accidentally committing secrets
+
+   ```bash
+   cp ./config/config-dev.example.yaml ./config/.config.yaml
+   ```
+
+1. Update the configuration with whatever respective settings you desire; the defaults inside should allow you to run the server without a problem
+
+1. Use the task commands to start the server
+
+   Run the core server in development mode with dependencies in docker
+
+   ```bash
+   task run-dev
+   ```
+
+   Run fully in docker
+
+   ```bash
+   task docker:all:up
+   ```
+
+1. In a separate terminal, with the server running, you can create a verified test user by running:
+
+   ```bash
+   task cli:user:all
+   ```
+
+1. Once this command has finished ^, you can login and perform actions as user `mitb@theopenlane.io` with password `mattisthebest1234!`
+
+### Creating Queries in GraphQL
+
+The best method of forming / testing queries against the server is to run `task docker:rover` which will launch an interactive query UI.
+
+If you are running the queries against your local repo, you will have CORS issues using the local running apollo. Instead, its recommended to use the [apollo sandbox](https://studio.apollographql.com/sandbox/explorer) and ensure the following origin is allowed in your `config/.config.yaml`
+
+```
+server:
+  cors:
+    allowOrigins:
+      - https://studio.apollographql.com
+```
+
+### OpenFGA Playground
+
+You can load up a local openFGA environment with the compose setup in this repository; `task fga:up` - this will launch an interactive playground where you can model permissions model(s) or changes to the models
+
+### Creating a new Schema
+
+To ease the effort required to add additional schemas into the system a template + task function has been created. This isn't doing anything terribly complex, but it's attempting to ensure you have the _minimum_ set of required things needed to create a schema - most notably: you need to ensure the IDMixin is present (otherwise you will get ID type conflicts) and a standard set of schema annotations.
+
+NOTE: you still have to make intelligent decisions around things like the presence / integration of hooks, interceptors, policies, etc. This is saving you about 10 seconds of copy-paste, so don't over estimate the automation, here.
+
+To generate a new schema, you can run `task newschema -- [yourschemaname]` where you replace the name within `[]`. Please be sure to note that this isn't a command line flag so there's a space between `--` and the name.
+
+### Migrations
+
+We use [atlas](https://atlasgo.io/) and [goose](https://github.com/pressly/goose) to create and manage our DB migrations - you can trigger one via `task atlas:create` and that will generate the necessary migrations. There should be a new migration file created in `db/migrations`, `db/migrations-goose-postgre` and `db/migrations-goose-sqlite`. On every PR, the Atlas integration also creates comments with any issues related to the schema changes / migrations.
+
 ## Deploying
 
 The only "supported" method of deploying today is locally, but we have a WIP Helm chart which can be found [here](https://github.com/theopenlane/helm-charts)
 
 ## Contributing
 
-Please read the [contributing](.github/CONTRIBUTING.md) guide as well as the [Developer Certificate of Origin](https://developercertificate.org/). You will be required to sign all commits to the [theopenlane](https://github.com/theopenlane) organization, so if you're unfamiliar with how to set that up, see [github's documentation](https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification).
-
-## Licensing
-
-This repository contains `core` which is open source software under [Apache 2.0](LICENSE). Openlane is a product produced from this open source software exclusively by The Open Lane, Inc. This product is produced under our published commercial terms (which are subject to change), and any logos or trademarks in this repository or the broader [theopenlane](https://github.com/theopenlane) organization are not covered under the Apache License.
-
-Others are allowed to make their own distribution of this software or include this software in other commercial offerings, but cannot use any of the Openlane logos, trademarks, cloud services, etc.
-
-## Security
-
-We take the security of our software products and services seriously, including all of the open source code repositories managed through our Github Organizations, such as [theopenlane](https://github.com/theopenlane). If you believe you have found a security vulnerability in any of our repositories, please report it to us through coordinated disclosure.
-
-**Please do NOT report security vulnerabilities through public github issues, discussions, or pull requests!**
-
-Instead, please send an email to `security@theopenlane.io` with as much information as possible to best help us understand and resolve the issues. See the security policy attached to this repository for more details.
-
-## Questions?
-
-You can email us at `info@theopenlane.io`, open a github issue in this repository, or reach out to [matoszz](https://github.com/matoszz) directly.
+See the [contributing](.github/CONTRIBUTING.md) guide for more information
