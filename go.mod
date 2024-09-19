@@ -60,7 +60,7 @@ require (
 	github.com/theopenlane/gqlgen-plugins v0.2.0
 	github.com/theopenlane/httpsling v0.2.0
 	github.com/theopenlane/iam v0.2.0
-	github.com/theopenlane/utils v0.2.0
+	github.com/theopenlane/utils v0.2.1
 	github.com/vektah/gqlparser/v2 v2.5.16
 	github.com/wundergraph/graphql-go-tools v1.67.4
 	gocloud.dev v0.39.0
