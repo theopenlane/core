@@ -38,10 +38,6 @@ On top of this powerful core we also have an incredible amount of pluggable, ext
 
 ### Dependencies
 
-- Go 1.23+
-- Docker (used for running Postgres and the river-ui)
-- [task](https://taskfile.dev/)
-
 The vast majority of behaviors of the system can be turned on or off by updating the configuration parameters found in `config`; in some instances, we've made features or integrations with third party systems which are "always on", but we're happy to receive PR's wrapping those dependencies if you are interested in running the software without them!
 
 ### Installing Dependencies
