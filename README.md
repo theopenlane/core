@@ -82,7 +82,7 @@ See the [README](/config/README.md) in the `config` directory.
    task cli:user:all
    ```
 
-1. Once this command has finished ^, you can login and perform actions as user `mitb@theopenlane.io` with password `mattisthebest1234!`
+1. Once this command has finished ^, you can login and perform actions as user `mitb@theopenlane.io` with password `mattisthebest1234`
 
 ### Creating Queries in GraphQL
 
