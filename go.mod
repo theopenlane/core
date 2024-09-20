@@ -6,7 +6,7 @@ require (
 	ariga.io/entcache v0.1.0
 	entgo.io/contrib v0.6.0
 	entgo.io/ent v0.14.1
-	github.com/99designs/gqlgen v0.17.49
+	github.com/99designs/gqlgen v0.17.54
 	github.com/99designs/keyring v1.2.2
 	github.com/IBM/sarama v1.43.3
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
