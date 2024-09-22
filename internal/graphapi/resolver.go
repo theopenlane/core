@@ -94,11 +94,11 @@ func (r *Resolver) Handler(withPlayground bool) *Handler {
 	srv.AddTransport(transport.POST{})
 	srv.AddTransport(transport.MultipartForm{})
 
-	srv.SetQueryCache(lru.New(1000)) //nolint:mnd
+	srv.SetQueryCache(lru.New[*ast.QueryDocument](1000)) //nolint:mnd
 
 	srv.Use(extension.Introspection{})
 	srv.Use(extension.AutomaticPersistedQuery{
-		Cache: lru.New(100), //nolint:mnd
+		Cache: lru.New[string](100), //nolint:mnd
 	})
 
 	// add transactional db client

@@ -11,8 +11,9 @@ import (
 	"github.com/invopop/yaml"
 	"github.com/mcuadros/go-defaults"
 
+	"github.com/theopenlane/utils/envparse"
+
 	"github.com/theopenlane/core/config"
-	"github.com/theopenlane/core/jsonschema/envparse"
 )
 
 // const values used for the schema generator
