@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/echox/middleware/echocontext"
+	"github.com/vektah/gqlparser/v2/ast"
 )
 
 // localRoundTripper is an http.RoundTripper that executes HTTP transactions
@@ -108,10 +109,10 @@ func testGraphServer(t *testing.T, c *generated.Client) *handler.Server {
 		))
 
 	// lower the cache size for testing
-	srv.SetQueryCache(lru.New(1000))
+	srv.SetQueryCache(lru.New[*ast.QueryDocument](1000))
 
 	srv.Use(extension.AutomaticPersistedQuery{
-		Cache: lru.New(100), //nolint:mnd
+		Cache: lru.New[string](100), //nolint:mnd
 	})
 
 	// add all extension to the server
