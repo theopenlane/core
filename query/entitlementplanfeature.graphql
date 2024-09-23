@@ -1,3 +1,60 @@
+mutation CreateBulkCSVEntitlementPlanFeature($input: Upload!) {
+  createBulkCSVEntitlementPlanFeature(input: $input) {
+    entitlementPlanFeatures {
+      id
+      metadata
+      plan {
+        id
+        name
+      }
+      feature {
+        id
+        name
+      }
+    }
+  }
+}
+
+mutation CreateBulkEntitlementPlanFeature($input: [CreateEntitlementPlanFeatureInput!]) {
+  createBulkEntitlementPlanFeature(input: $input) {
+    entitlementPlanFeatures {
+      id
+      metadata
+      plan {
+        id
+        name
+      }
+      feature {
+        id
+        name
+      }
+    }
+  }
+}
+
+mutation CreateEntitlementPlanFeature($input: CreateEntitlementPlanFeatureInput!) {
+  createEntitlementPlanFeature(input: $input) {
+    entitlementPlanFeature {
+      id
+      metadata
+      plan {
+        id
+        name
+      }
+      feature {
+        id
+        name
+      }
+    }
+  }
+}
+
+mutation DeleteEntitlementPlanFeature($deleteEntitlementPlanFeatureId: ID!) {
+  deleteEntitlementPlanFeature(id: $deleteEntitlementPlanFeatureId) {
+    deletedID
+  }
+}
+
 query GetAllEntitlementPlanFeatures {
   entitlementPlanFeatures {
     edges {
@@ -51,8 +108,8 @@ query GetEntitlementPlanFeatures($where: EntitlementPlanFeatureWhereInput) {
   }
 }
 
-mutation CreateEntitlementPlanFeature($input: CreateEntitlementPlanFeatureInput!) {
-  createEntitlementPlanFeature(input: $input) {
+mutation UpdateEntitlementPlanFeature($updateEntitlementPlanFeatureId: ID!, $input: UpdateEntitlementPlanFeatureInput!) {
+  updateEntitlementPlanFeature(id: $updateEntitlementPlanFeatureId, input: $input) {
     entitlementPlanFeature {
       id
       metadata
@@ -65,62 +122,5 @@ mutation CreateEntitlementPlanFeature($input: CreateEntitlementPlanFeatureInput!
         name
       }
     }
-  }
-}
-
-mutation CreateBulkCSVEntitlementPlanFeature($input: Upload!) {
-  createBulkCSVEntitlementPlanFeature(input: $input) {
-    entitlementPlanFeatures {
-      id
-      metadata
-      plan {
-        id
-        name
-      }
-      feature {
-        id
-        name
-      }
-    }
-  }
-}
-
-mutation CreateBulkEntitlementPlanFeature($input: [CreateEntitlementPlanFeatureInput!]) {
-  createBulkEntitlementPlanFeature(input: $input) {
-    entitlementPlanFeatures {
-      id
-      metadata
-      plan {
-        id
-        name
-      }
-      feature {
-        id
-        name
-      }
-    }
-  }
-}
-
-mutation UpdateEntitlementPlanFeature($updateEntitlementPlanFeatureId: ID!, $input: UpdateEntitlementPlanFeatureInput!) {
-  updateEntitlementPlanFeature(id: $updateEntitlementPlanFeatureId, input: $input) {
-     entitlementPlanFeature {
-      id
-      metadata
-      plan {
-        id
-        name
-      }
-      feature {
-        id
-        name
-      }
-    }
-  }
-}
-
-mutation DeleteEntitlementPlanFeature($deleteEntitlementPlanFeatureId: ID!) {
-  deleteEntitlementPlanFeature(id: $deleteEntitlementPlanFeatureId) {
-    deletedID
   }
 }

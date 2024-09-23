@@ -21,8 +21,8 @@ type OpenlaneGraphClient interface {
 	GetAllAPITokens(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllAPITokens, error)
 	GetAPITokenByID(ctx context.Context, apiTokenID string, interceptors ...clientv2.RequestInterceptor) (*GetAPITokenByID, error)
 	DeleteAPIToken(ctx context.Context, deleteAPITokenID string, interceptors ...clientv2.RequestInterceptor) (*DeleteAPIToken, error)
-	CreateBulkCSVContact(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVContact, error)
 	CreateBulkContact(ctx context.Context, input []*CreateContactInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkContact, error)
+	CreateBulkCSVContact(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVContact, error)
 	CreateContact(ctx context.Context, input CreateContactInput, interceptors ...clientv2.RequestInterceptor) (*CreateContact, error)
 	DeleteContact(ctx context.Context, deleteContactID string, interceptors ...clientv2.RequestInterceptor) (*DeleteContact, error)
 	GetAllContacts(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllContacts, error)
@@ -55,14 +55,14 @@ type OpenlaneGraphClient interface {
 	GetEntitlementPlanByID(ctx context.Context, entitlementPlanID string, interceptors ...clientv2.RequestInterceptor) (*GetEntitlementPlanByID, error)
 	GetEntitlementPlans(ctx context.Context, where *EntitlementPlanWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetEntitlementPlans, error)
 	UpdateEntitlementPlan(ctx context.Context, updateEntitlementPlanID string, input UpdateEntitlementPlanInput, interceptors ...clientv2.RequestInterceptor) (*UpdateEntitlementPlan, error)
+	CreateBulkCSVEntitlementPlanFeature(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVEntitlementPlanFeature, error)
+	CreateBulkEntitlementPlanFeature(ctx context.Context, input []*CreateEntitlementPlanFeatureInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkEntitlementPlanFeature, error)
+	CreateEntitlementPlanFeature(ctx context.Context, input CreateEntitlementPlanFeatureInput, interceptors ...clientv2.RequestInterceptor) (*CreateEntitlementPlanFeature, error)
+	DeleteEntitlementPlanFeature(ctx context.Context, deleteEntitlementPlanFeatureID string, interceptors ...clientv2.RequestInterceptor) (*DeleteEntitlementPlanFeature, error)
 	GetAllEntitlementPlanFeatures(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllEntitlementPlanFeatures, error)
 	GetEntitlementPlanFeatureByID(ctx context.Context, entitlementPlanFeatureID string, interceptors ...clientv2.RequestInterceptor) (*GetEntitlementPlanFeatureByID, error)
 	GetEntitlementPlanFeatures(ctx context.Context, where *EntitlementPlanFeatureWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetEntitlementPlanFeatures, error)
-	CreateEntitlementPlanFeature(ctx context.Context, input CreateEntitlementPlanFeatureInput, interceptors ...clientv2.RequestInterceptor) (*CreateEntitlementPlanFeature, error)
-	CreateBulkCSVEntitlementPlanFeature(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVEntitlementPlanFeature, error)
-	CreateBulkEntitlementPlanFeature(ctx context.Context, input []*CreateEntitlementPlanFeatureInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkEntitlementPlanFeature, error)
 	UpdateEntitlementPlanFeature(ctx context.Context, updateEntitlementPlanFeatureID string, input UpdateEntitlementPlanFeatureInput, interceptors ...clientv2.RequestInterceptor) (*UpdateEntitlementPlanFeature, error)
-	DeleteEntitlementPlanFeature(ctx context.Context, deleteEntitlementPlanFeatureID string, interceptors ...clientv2.RequestInterceptor) (*DeleteEntitlementPlanFeature, error)
 	GetAllEntitlementPlanFeatureHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllEntitlementPlanFeatureHistories, error)
 	GetEntitlementPlanFeatureHistories(ctx context.Context, where *EntitlementPlanFeatureHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetEntitlementPlanFeatureHistories, error)
 	GetAllEntitlementPlanHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllEntitlementPlanHistories, error)
@@ -87,14 +87,14 @@ type OpenlaneGraphClient interface {
 	UpdateEntityType(ctx context.Context, updateEntityTypeID string, input UpdateEntityTypeInput, interceptors ...clientv2.RequestInterceptor) (*UpdateEntityType, error)
 	GetAllEntityTypeHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllEntityTypeHistories, error)
 	GetEntityTypeHistories(ctx context.Context, where *EntityTypeHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetEntityTypeHistories, error)
-	GetEvents(ctx context.Context, where *EventWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetEvents, error)
-	GetEventByID(ctx context.Context, eventID string, interceptors ...clientv2.RequestInterceptor) (*GetEventByID, error)
-	GetAllEvents(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllEvents, error)
-	CreateEvent(ctx context.Context, input CreateEventInput, interceptors ...clientv2.RequestInterceptor) (*CreateEvent, error)
-	CreateBulkEvent(ctx context.Context, input []*CreateEventInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkEvent, error)
 	CreateBulkCSVEvent(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVEvent, error)
-	UpdateEvent(ctx context.Context, updateEventID string, input UpdateEventInput, interceptors ...clientv2.RequestInterceptor) (*UpdateEvent, error)
+	CreateBulkEvent(ctx context.Context, input []*CreateEventInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkEvent, error)
+	CreateEvent(ctx context.Context, input CreateEventInput, interceptors ...clientv2.RequestInterceptor) (*CreateEvent, error)
 	DeleteEvent(ctx context.Context, deleteEventID string, interceptors ...clientv2.RequestInterceptor) (*DeleteEvent, error)
+	GetAllEvents(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllEvents, error)
+	GetEventByID(ctx context.Context, eventID string, interceptors ...clientv2.RequestInterceptor) (*GetEventByID, error)
+	GetEvents(ctx context.Context, where *EventWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetEvents, error)
+	UpdateEvent(ctx context.Context, updateEventID string, input UpdateEventInput, interceptors ...clientv2.RequestInterceptor) (*UpdateEvent, error)
 	GetAllEventHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllEventHistories, error)
 	GetEventHistories(ctx context.Context, where *EventHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetEventHistories, error)
 	CreateBulkCSVFeature(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVFeature, error)
@@ -2579,119 +2579,6 @@ func (t *DeleteAPIToken_DeleteAPIToken) GetDeletedID() string {
 	return t.DeletedID
 }
 
-type CreateBulkCSVContact_CreateBulkCSVContact_Contacts struct {
-	Address     *string          "json:\"address,omitempty\" graphql:\"address\""
-	Company     *string          "json:\"company,omitempty\" graphql:\"company\""
-	CreatedAt   *time.Time       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Email       *string          "json:\"email,omitempty\" graphql:\"email\""
-	FullName    string           "json:\"fullName\" graphql:\"fullName\""
-	ID          string           "json:\"id\" graphql:\"id\""
-	OwnerID     *string          "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	PhoneNumber *string          "json:\"phoneNumber,omitempty\" graphql:\"phoneNumber\""
-	Status      enums.UserStatus "json:\"status\" graphql:\"status\""
-	Tags        []string         "json:\"tags,omitempty\" graphql:\"tags\""
-	Title       *string          "json:\"title,omitempty\" graphql:\"title\""
-	UpdatedAt   *time.Time       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-}
-
-func (t *CreateBulkCSVContact_CreateBulkCSVContact_Contacts) GetAddress() *string {
-	if t == nil {
-		t = &CreateBulkCSVContact_CreateBulkCSVContact_Contacts{}
-	}
-	return t.Address
-}
-func (t *CreateBulkCSVContact_CreateBulkCSVContact_Contacts) GetCompany() *string {
-	if t == nil {
-		t = &CreateBulkCSVContact_CreateBulkCSVContact_Contacts{}
-	}
-	return t.Company
-}
-func (t *CreateBulkCSVContact_CreateBulkCSVContact_Contacts) GetCreatedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkCSVContact_CreateBulkCSVContact_Contacts{}
-	}
-	return t.CreatedAt
-}
-func (t *CreateBulkCSVContact_CreateBulkCSVContact_Contacts) GetCreatedBy() *string {
-	if t == nil {
-		t = &CreateBulkCSVContact_CreateBulkCSVContact_Contacts{}
-	}
-	return t.CreatedBy
-}
-func (t *CreateBulkCSVContact_CreateBulkCSVContact_Contacts) GetEmail() *string {
-	if t == nil {
-		t = &CreateBulkCSVContact_CreateBulkCSVContact_Contacts{}
-	}
-	return t.Email
-}
-func (t *CreateBulkCSVContact_CreateBulkCSVContact_Contacts) GetFullName() string {
-	if t == nil {
-		t = &CreateBulkCSVContact_CreateBulkCSVContact_Contacts{}
-	}
-	return t.FullName
-}
-func (t *CreateBulkCSVContact_CreateBulkCSVContact_Contacts) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVContact_CreateBulkCSVContact_Contacts{}
-	}
-	return t.ID
-}
-func (t *CreateBulkCSVContact_CreateBulkCSVContact_Contacts) GetOwnerID() *string {
-	if t == nil {
-		t = &CreateBulkCSVContact_CreateBulkCSVContact_Contacts{}
-	}
-	return t.OwnerID
-}
-func (t *CreateBulkCSVContact_CreateBulkCSVContact_Contacts) GetPhoneNumber() *string {
-	if t == nil {
-		t = &CreateBulkCSVContact_CreateBulkCSVContact_Contacts{}
-	}
-	return t.PhoneNumber
-}
-func (t *CreateBulkCSVContact_CreateBulkCSVContact_Contacts) GetStatus() *enums.UserStatus {
-	if t == nil {
-		t = &CreateBulkCSVContact_CreateBulkCSVContact_Contacts{}
-	}
-	return &t.Status
-}
-func (t *CreateBulkCSVContact_CreateBulkCSVContact_Contacts) GetTags() []string {
-	if t == nil {
-		t = &CreateBulkCSVContact_CreateBulkCSVContact_Contacts{}
-	}
-	return t.Tags
-}
-func (t *CreateBulkCSVContact_CreateBulkCSVContact_Contacts) GetTitle() *string {
-	if t == nil {
-		t = &CreateBulkCSVContact_CreateBulkCSVContact_Contacts{}
-	}
-	return t.Title
-}
-func (t *CreateBulkCSVContact_CreateBulkCSVContact_Contacts) GetUpdatedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkCSVContact_CreateBulkCSVContact_Contacts{}
-	}
-	return t.UpdatedAt
-}
-func (t *CreateBulkCSVContact_CreateBulkCSVContact_Contacts) GetUpdatedBy() *string {
-	if t == nil {
-		t = &CreateBulkCSVContact_CreateBulkCSVContact_Contacts{}
-	}
-	return t.UpdatedBy
-}
-
-type CreateBulkCSVContact_CreateBulkCSVContact struct {
-	Contacts []*CreateBulkCSVContact_CreateBulkCSVContact_Contacts "json:\"contacts,omitempty\" graphql:\"contacts\""
-}
-
-func (t *CreateBulkCSVContact_CreateBulkCSVContact) GetContacts() []*CreateBulkCSVContact_CreateBulkCSVContact_Contacts {
-	if t == nil {
-		t = &CreateBulkCSVContact_CreateBulkCSVContact{}
-	}
-	return t.Contacts
-}
-
 type CreateBulkContact_CreateBulkContact_Contacts struct {
 	Address     *string          "json:\"address,omitempty\" graphql:\"address\""
 	Company     *string          "json:\"company,omitempty\" graphql:\"company\""
@@ -2801,6 +2688,119 @@ type CreateBulkContact_CreateBulkContact struct {
 func (t *CreateBulkContact_CreateBulkContact) GetContacts() []*CreateBulkContact_CreateBulkContact_Contacts {
 	if t == nil {
 		t = &CreateBulkContact_CreateBulkContact{}
+	}
+	return t.Contacts
+}
+
+type CreateBulkCSVContact_CreateBulkCSVContact_Contacts struct {
+	Address     *string          "json:\"address,omitempty\" graphql:\"address\""
+	Company     *string          "json:\"company,omitempty\" graphql:\"company\""
+	CreatedAt   *time.Time       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Email       *string          "json:\"email,omitempty\" graphql:\"email\""
+	FullName    string           "json:\"fullName\" graphql:\"fullName\""
+	ID          string           "json:\"id\" graphql:\"id\""
+	OwnerID     *string          "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	PhoneNumber *string          "json:\"phoneNumber,omitempty\" graphql:\"phoneNumber\""
+	Status      enums.UserStatus "json:\"status\" graphql:\"status\""
+	Tags        []string         "json:\"tags,omitempty\" graphql:\"tags\""
+	Title       *string          "json:\"title,omitempty\" graphql:\"title\""
+	UpdatedAt   *time.Time       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkCSVContact_CreateBulkCSVContact_Contacts) GetAddress() *string {
+	if t == nil {
+		t = &CreateBulkCSVContact_CreateBulkCSVContact_Contacts{}
+	}
+	return t.Address
+}
+func (t *CreateBulkCSVContact_CreateBulkCSVContact_Contacts) GetCompany() *string {
+	if t == nil {
+		t = &CreateBulkCSVContact_CreateBulkCSVContact_Contacts{}
+	}
+	return t.Company
+}
+func (t *CreateBulkCSVContact_CreateBulkCSVContact_Contacts) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVContact_CreateBulkCSVContact_Contacts{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkCSVContact_CreateBulkCSVContact_Contacts) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVContact_CreateBulkCSVContact_Contacts{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkCSVContact_CreateBulkCSVContact_Contacts) GetEmail() *string {
+	if t == nil {
+		t = &CreateBulkCSVContact_CreateBulkCSVContact_Contacts{}
+	}
+	return t.Email
+}
+func (t *CreateBulkCSVContact_CreateBulkCSVContact_Contacts) GetFullName() string {
+	if t == nil {
+		t = &CreateBulkCSVContact_CreateBulkCSVContact_Contacts{}
+	}
+	return t.FullName
+}
+func (t *CreateBulkCSVContact_CreateBulkCSVContact_Contacts) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVContact_CreateBulkCSVContact_Contacts{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVContact_CreateBulkCSVContact_Contacts) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkCSVContact_CreateBulkCSVContact_Contacts{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkCSVContact_CreateBulkCSVContact_Contacts) GetPhoneNumber() *string {
+	if t == nil {
+		t = &CreateBulkCSVContact_CreateBulkCSVContact_Contacts{}
+	}
+	return t.PhoneNumber
+}
+func (t *CreateBulkCSVContact_CreateBulkCSVContact_Contacts) GetStatus() *enums.UserStatus {
+	if t == nil {
+		t = &CreateBulkCSVContact_CreateBulkCSVContact_Contacts{}
+	}
+	return &t.Status
+}
+func (t *CreateBulkCSVContact_CreateBulkCSVContact_Contacts) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkCSVContact_CreateBulkCSVContact_Contacts{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkCSVContact_CreateBulkCSVContact_Contacts) GetTitle() *string {
+	if t == nil {
+		t = &CreateBulkCSVContact_CreateBulkCSVContact_Contacts{}
+	}
+	return t.Title
+}
+func (t *CreateBulkCSVContact_CreateBulkCSVContact_Contacts) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVContact_CreateBulkCSVContact_Contacts{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkCSVContact_CreateBulkCSVContact_Contacts) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVContact_CreateBulkCSVContact_Contacts{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkCSVContact_CreateBulkCSVContact struct {
+	Contacts []*CreateBulkCSVContact_CreateBulkCSVContact_Contacts "json:\"contacts,omitempty\" graphql:\"contacts\""
+}
+
+func (t *CreateBulkCSVContact_CreateBulkCSVContact) GetContacts() []*CreateBulkCSVContact_CreateBulkCSVContact_Contacts {
+	if t == nil {
+		t = &CreateBulkCSVContact_CreateBulkCSVContact{}
 	}
 	return t.Contacts
 }
@@ -5900,6 +5900,254 @@ func (t *UpdateEntitlementPlan_UpdateEntitlementPlan) GetEntitlementPlan() *Upda
 	return &t.EntitlementPlan
 }
 
+type CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature_EntitlementPlanFeatures_Plan struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature_EntitlementPlanFeatures_Plan) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature_EntitlementPlanFeatures_Plan{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature_EntitlementPlanFeatures_Plan) GetName() string {
+	if t == nil {
+		t = &CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature_EntitlementPlanFeatures_Plan{}
+	}
+	return t.Name
+}
+
+type CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature_EntitlementPlanFeatures_Feature struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature_EntitlementPlanFeatures_Feature) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature_EntitlementPlanFeatures_Feature{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature_EntitlementPlanFeatures_Feature) GetName() string {
+	if t == nil {
+		t = &CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature_EntitlementPlanFeatures_Feature{}
+	}
+	return t.Name
+}
+
+type CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature_EntitlementPlanFeatures struct {
+	ID       string                                                                                                  "json:\"id\" graphql:\"id\""
+	Metadata map[string]interface{}                                                                                  "json:\"metadata,omitempty\" graphql:\"metadata\""
+	Plan     CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature_EntitlementPlanFeatures_Plan    "json:\"plan\" graphql:\"plan\""
+	Feature  CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature_EntitlementPlanFeatures_Feature "json:\"feature\" graphql:\"feature\""
+}
+
+func (t *CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature_EntitlementPlanFeatures) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature_EntitlementPlanFeatures{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature_EntitlementPlanFeatures) GetMetadata() map[string]interface{} {
+	if t == nil {
+		t = &CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature_EntitlementPlanFeatures{}
+	}
+	return t.Metadata
+}
+func (t *CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature_EntitlementPlanFeatures) GetPlan() *CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature_EntitlementPlanFeatures_Plan {
+	if t == nil {
+		t = &CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature_EntitlementPlanFeatures{}
+	}
+	return &t.Plan
+}
+func (t *CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature_EntitlementPlanFeatures) GetFeature() *CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature_EntitlementPlanFeatures_Feature {
+	if t == nil {
+		t = &CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature_EntitlementPlanFeatures{}
+	}
+	return &t.Feature
+}
+
+type CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature struct {
+	EntitlementPlanFeatures []*CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature_EntitlementPlanFeatures "json:\"entitlementPlanFeatures,omitempty\" graphql:\"entitlementPlanFeatures\""
+}
+
+func (t *CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature) GetEntitlementPlanFeatures() []*CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature_EntitlementPlanFeatures {
+	if t == nil {
+		t = &CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature{}
+	}
+	return t.EntitlementPlanFeatures
+}
+
+type CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature_EntitlementPlanFeatures_Plan struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature_EntitlementPlanFeatures_Plan) GetID() string {
+	if t == nil {
+		t = &CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature_EntitlementPlanFeatures_Plan{}
+	}
+	return t.ID
+}
+func (t *CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature_EntitlementPlanFeatures_Plan) GetName() string {
+	if t == nil {
+		t = &CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature_EntitlementPlanFeatures_Plan{}
+	}
+	return t.Name
+}
+
+type CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature_EntitlementPlanFeatures_Feature struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature_EntitlementPlanFeatures_Feature) GetID() string {
+	if t == nil {
+		t = &CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature_EntitlementPlanFeatures_Feature{}
+	}
+	return t.ID
+}
+func (t *CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature_EntitlementPlanFeatures_Feature) GetName() string {
+	if t == nil {
+		t = &CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature_EntitlementPlanFeatures_Feature{}
+	}
+	return t.Name
+}
+
+type CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature_EntitlementPlanFeatures struct {
+	ID       string                                                                                            "json:\"id\" graphql:\"id\""
+	Metadata map[string]interface{}                                                                            "json:\"metadata,omitempty\" graphql:\"metadata\""
+	Plan     CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature_EntitlementPlanFeatures_Plan    "json:\"plan\" graphql:\"plan\""
+	Feature  CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature_EntitlementPlanFeatures_Feature "json:\"feature\" graphql:\"feature\""
+}
+
+func (t *CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature_EntitlementPlanFeatures) GetID() string {
+	if t == nil {
+		t = &CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature_EntitlementPlanFeatures{}
+	}
+	return t.ID
+}
+func (t *CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature_EntitlementPlanFeatures) GetMetadata() map[string]interface{} {
+	if t == nil {
+		t = &CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature_EntitlementPlanFeatures{}
+	}
+	return t.Metadata
+}
+func (t *CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature_EntitlementPlanFeatures) GetPlan() *CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature_EntitlementPlanFeatures_Plan {
+	if t == nil {
+		t = &CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature_EntitlementPlanFeatures{}
+	}
+	return &t.Plan
+}
+func (t *CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature_EntitlementPlanFeatures) GetFeature() *CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature_EntitlementPlanFeatures_Feature {
+	if t == nil {
+		t = &CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature_EntitlementPlanFeatures{}
+	}
+	return &t.Feature
+}
+
+type CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature struct {
+	EntitlementPlanFeatures []*CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature_EntitlementPlanFeatures "json:\"entitlementPlanFeatures,omitempty\" graphql:\"entitlementPlanFeatures\""
+}
+
+func (t *CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature) GetEntitlementPlanFeatures() []*CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature_EntitlementPlanFeatures {
+	if t == nil {
+		t = &CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature{}
+	}
+	return t.EntitlementPlanFeatures
+}
+
+type CreateEntitlementPlanFeature_CreateEntitlementPlanFeature_EntitlementPlanFeature_Plan struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateEntitlementPlanFeature_CreateEntitlementPlanFeature_EntitlementPlanFeature_Plan) GetID() string {
+	if t == nil {
+		t = &CreateEntitlementPlanFeature_CreateEntitlementPlanFeature_EntitlementPlanFeature_Plan{}
+	}
+	return t.ID
+}
+func (t *CreateEntitlementPlanFeature_CreateEntitlementPlanFeature_EntitlementPlanFeature_Plan) GetName() string {
+	if t == nil {
+		t = &CreateEntitlementPlanFeature_CreateEntitlementPlanFeature_EntitlementPlanFeature_Plan{}
+	}
+	return t.Name
+}
+
+type CreateEntitlementPlanFeature_CreateEntitlementPlanFeature_EntitlementPlanFeature_Feature struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateEntitlementPlanFeature_CreateEntitlementPlanFeature_EntitlementPlanFeature_Feature) GetID() string {
+	if t == nil {
+		t = &CreateEntitlementPlanFeature_CreateEntitlementPlanFeature_EntitlementPlanFeature_Feature{}
+	}
+	return t.ID
+}
+func (t *CreateEntitlementPlanFeature_CreateEntitlementPlanFeature_EntitlementPlanFeature_Feature) GetName() string {
+	if t == nil {
+		t = &CreateEntitlementPlanFeature_CreateEntitlementPlanFeature_EntitlementPlanFeature_Feature{}
+	}
+	return t.Name
+}
+
+type CreateEntitlementPlanFeature_CreateEntitlementPlanFeature_EntitlementPlanFeature struct {
+	ID       string                                                                                   "json:\"id\" graphql:\"id\""
+	Metadata map[string]interface{}                                                                   "json:\"metadata,omitempty\" graphql:\"metadata\""
+	Plan     CreateEntitlementPlanFeature_CreateEntitlementPlanFeature_EntitlementPlanFeature_Plan    "json:\"plan\" graphql:\"plan\""
+	Feature  CreateEntitlementPlanFeature_CreateEntitlementPlanFeature_EntitlementPlanFeature_Feature "json:\"feature\" graphql:\"feature\""
+}
+
+func (t *CreateEntitlementPlanFeature_CreateEntitlementPlanFeature_EntitlementPlanFeature) GetID() string {
+	if t == nil {
+		t = &CreateEntitlementPlanFeature_CreateEntitlementPlanFeature_EntitlementPlanFeature{}
+	}
+	return t.ID
+}
+func (t *CreateEntitlementPlanFeature_CreateEntitlementPlanFeature_EntitlementPlanFeature) GetMetadata() map[string]interface{} {
+	if t == nil {
+		t = &CreateEntitlementPlanFeature_CreateEntitlementPlanFeature_EntitlementPlanFeature{}
+	}
+	return t.Metadata
+}
+func (t *CreateEntitlementPlanFeature_CreateEntitlementPlanFeature_EntitlementPlanFeature) GetPlan() *CreateEntitlementPlanFeature_CreateEntitlementPlanFeature_EntitlementPlanFeature_Plan {
+	if t == nil {
+		t = &CreateEntitlementPlanFeature_CreateEntitlementPlanFeature_EntitlementPlanFeature{}
+	}
+	return &t.Plan
+}
+func (t *CreateEntitlementPlanFeature_CreateEntitlementPlanFeature_EntitlementPlanFeature) GetFeature() *CreateEntitlementPlanFeature_CreateEntitlementPlanFeature_EntitlementPlanFeature_Feature {
+	if t == nil {
+		t = &CreateEntitlementPlanFeature_CreateEntitlementPlanFeature_EntitlementPlanFeature{}
+	}
+	return &t.Feature
+}
+
+type CreateEntitlementPlanFeature_CreateEntitlementPlanFeature struct {
+	EntitlementPlanFeature CreateEntitlementPlanFeature_CreateEntitlementPlanFeature_EntitlementPlanFeature "json:\"entitlementPlanFeature\" graphql:\"entitlementPlanFeature\""
+}
+
+func (t *CreateEntitlementPlanFeature_CreateEntitlementPlanFeature) GetEntitlementPlanFeature() *CreateEntitlementPlanFeature_CreateEntitlementPlanFeature_EntitlementPlanFeature {
+	if t == nil {
+		t = &CreateEntitlementPlanFeature_CreateEntitlementPlanFeature{}
+	}
+	return &t.EntitlementPlanFeature
+}
+
+type DeleteEntitlementPlanFeature_DeleteEntitlementPlanFeature struct {
+	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
+}
+
+func (t *DeleteEntitlementPlanFeature_DeleteEntitlementPlanFeature) GetDeletedID() string {
+	if t == nil {
+		t = &DeleteEntitlementPlanFeature_DeleteEntitlementPlanFeature{}
+	}
+	return t.DeletedID
+}
+
 type GetAllEntitlementPlanFeatures_EntitlementPlanFeatures_Edges_Node_Feature struct {
 	ID   string "json:\"id\" graphql:\"id\""
 	Name string "json:\"name\" graphql:\"name\""
@@ -6148,243 +6396,6 @@ func (t *GetEntitlementPlanFeatures_EntitlementPlanFeatures) GetEdges() []*GetEn
 	return t.Edges
 }
 
-type CreateEntitlementPlanFeature_CreateEntitlementPlanFeature_EntitlementPlanFeature_Plan struct {
-	ID   string "json:\"id\" graphql:\"id\""
-	Name string "json:\"name\" graphql:\"name\""
-}
-
-func (t *CreateEntitlementPlanFeature_CreateEntitlementPlanFeature_EntitlementPlanFeature_Plan) GetID() string {
-	if t == nil {
-		t = &CreateEntitlementPlanFeature_CreateEntitlementPlanFeature_EntitlementPlanFeature_Plan{}
-	}
-	return t.ID
-}
-func (t *CreateEntitlementPlanFeature_CreateEntitlementPlanFeature_EntitlementPlanFeature_Plan) GetName() string {
-	if t == nil {
-		t = &CreateEntitlementPlanFeature_CreateEntitlementPlanFeature_EntitlementPlanFeature_Plan{}
-	}
-	return t.Name
-}
-
-type CreateEntitlementPlanFeature_CreateEntitlementPlanFeature_EntitlementPlanFeature_Feature struct {
-	ID   string "json:\"id\" graphql:\"id\""
-	Name string "json:\"name\" graphql:\"name\""
-}
-
-func (t *CreateEntitlementPlanFeature_CreateEntitlementPlanFeature_EntitlementPlanFeature_Feature) GetID() string {
-	if t == nil {
-		t = &CreateEntitlementPlanFeature_CreateEntitlementPlanFeature_EntitlementPlanFeature_Feature{}
-	}
-	return t.ID
-}
-func (t *CreateEntitlementPlanFeature_CreateEntitlementPlanFeature_EntitlementPlanFeature_Feature) GetName() string {
-	if t == nil {
-		t = &CreateEntitlementPlanFeature_CreateEntitlementPlanFeature_EntitlementPlanFeature_Feature{}
-	}
-	return t.Name
-}
-
-type CreateEntitlementPlanFeature_CreateEntitlementPlanFeature_EntitlementPlanFeature struct {
-	ID       string                                                                                   "json:\"id\" graphql:\"id\""
-	Metadata map[string]interface{}                                                                   "json:\"metadata,omitempty\" graphql:\"metadata\""
-	Plan     CreateEntitlementPlanFeature_CreateEntitlementPlanFeature_EntitlementPlanFeature_Plan    "json:\"plan\" graphql:\"plan\""
-	Feature  CreateEntitlementPlanFeature_CreateEntitlementPlanFeature_EntitlementPlanFeature_Feature "json:\"feature\" graphql:\"feature\""
-}
-
-func (t *CreateEntitlementPlanFeature_CreateEntitlementPlanFeature_EntitlementPlanFeature) GetID() string {
-	if t == nil {
-		t = &CreateEntitlementPlanFeature_CreateEntitlementPlanFeature_EntitlementPlanFeature{}
-	}
-	return t.ID
-}
-func (t *CreateEntitlementPlanFeature_CreateEntitlementPlanFeature_EntitlementPlanFeature) GetMetadata() map[string]interface{} {
-	if t == nil {
-		t = &CreateEntitlementPlanFeature_CreateEntitlementPlanFeature_EntitlementPlanFeature{}
-	}
-	return t.Metadata
-}
-func (t *CreateEntitlementPlanFeature_CreateEntitlementPlanFeature_EntitlementPlanFeature) GetPlan() *CreateEntitlementPlanFeature_CreateEntitlementPlanFeature_EntitlementPlanFeature_Plan {
-	if t == nil {
-		t = &CreateEntitlementPlanFeature_CreateEntitlementPlanFeature_EntitlementPlanFeature{}
-	}
-	return &t.Plan
-}
-func (t *CreateEntitlementPlanFeature_CreateEntitlementPlanFeature_EntitlementPlanFeature) GetFeature() *CreateEntitlementPlanFeature_CreateEntitlementPlanFeature_EntitlementPlanFeature_Feature {
-	if t == nil {
-		t = &CreateEntitlementPlanFeature_CreateEntitlementPlanFeature_EntitlementPlanFeature{}
-	}
-	return &t.Feature
-}
-
-type CreateEntitlementPlanFeature_CreateEntitlementPlanFeature struct {
-	EntitlementPlanFeature CreateEntitlementPlanFeature_CreateEntitlementPlanFeature_EntitlementPlanFeature "json:\"entitlementPlanFeature\" graphql:\"entitlementPlanFeature\""
-}
-
-func (t *CreateEntitlementPlanFeature_CreateEntitlementPlanFeature) GetEntitlementPlanFeature() *CreateEntitlementPlanFeature_CreateEntitlementPlanFeature_EntitlementPlanFeature {
-	if t == nil {
-		t = &CreateEntitlementPlanFeature_CreateEntitlementPlanFeature{}
-	}
-	return &t.EntitlementPlanFeature
-}
-
-type CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature_EntitlementPlanFeatures_Plan struct {
-	ID   string "json:\"id\" graphql:\"id\""
-	Name string "json:\"name\" graphql:\"name\""
-}
-
-func (t *CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature_EntitlementPlanFeatures_Plan) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature_EntitlementPlanFeatures_Plan{}
-	}
-	return t.ID
-}
-func (t *CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature_EntitlementPlanFeatures_Plan) GetName() string {
-	if t == nil {
-		t = &CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature_EntitlementPlanFeatures_Plan{}
-	}
-	return t.Name
-}
-
-type CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature_EntitlementPlanFeatures_Feature struct {
-	ID   string "json:\"id\" graphql:\"id\""
-	Name string "json:\"name\" graphql:\"name\""
-}
-
-func (t *CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature_EntitlementPlanFeatures_Feature) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature_EntitlementPlanFeatures_Feature{}
-	}
-	return t.ID
-}
-func (t *CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature_EntitlementPlanFeatures_Feature) GetName() string {
-	if t == nil {
-		t = &CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature_EntitlementPlanFeatures_Feature{}
-	}
-	return t.Name
-}
-
-type CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature_EntitlementPlanFeatures struct {
-	ID       string                                                                                                  "json:\"id\" graphql:\"id\""
-	Metadata map[string]interface{}                                                                                  "json:\"metadata,omitempty\" graphql:\"metadata\""
-	Plan     CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature_EntitlementPlanFeatures_Plan    "json:\"plan\" graphql:\"plan\""
-	Feature  CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature_EntitlementPlanFeatures_Feature "json:\"feature\" graphql:\"feature\""
-}
-
-func (t *CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature_EntitlementPlanFeatures) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature_EntitlementPlanFeatures{}
-	}
-	return t.ID
-}
-func (t *CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature_EntitlementPlanFeatures) GetMetadata() map[string]interface{} {
-	if t == nil {
-		t = &CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature_EntitlementPlanFeatures{}
-	}
-	return t.Metadata
-}
-func (t *CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature_EntitlementPlanFeatures) GetPlan() *CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature_EntitlementPlanFeatures_Plan {
-	if t == nil {
-		t = &CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature_EntitlementPlanFeatures{}
-	}
-	return &t.Plan
-}
-func (t *CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature_EntitlementPlanFeatures) GetFeature() *CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature_EntitlementPlanFeatures_Feature {
-	if t == nil {
-		t = &CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature_EntitlementPlanFeatures{}
-	}
-	return &t.Feature
-}
-
-type CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature struct {
-	EntitlementPlanFeatures []*CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature_EntitlementPlanFeatures "json:\"entitlementPlanFeatures,omitempty\" graphql:\"entitlementPlanFeatures\""
-}
-
-func (t *CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature) GetEntitlementPlanFeatures() []*CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature_EntitlementPlanFeatures {
-	if t == nil {
-		t = &CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature{}
-	}
-	return t.EntitlementPlanFeatures
-}
-
-type CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature_EntitlementPlanFeatures_Plan struct {
-	ID   string "json:\"id\" graphql:\"id\""
-	Name string "json:\"name\" graphql:\"name\""
-}
-
-func (t *CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature_EntitlementPlanFeatures_Plan) GetID() string {
-	if t == nil {
-		t = &CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature_EntitlementPlanFeatures_Plan{}
-	}
-	return t.ID
-}
-func (t *CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature_EntitlementPlanFeatures_Plan) GetName() string {
-	if t == nil {
-		t = &CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature_EntitlementPlanFeatures_Plan{}
-	}
-	return t.Name
-}
-
-type CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature_EntitlementPlanFeatures_Feature struct {
-	ID   string "json:\"id\" graphql:\"id\""
-	Name string "json:\"name\" graphql:\"name\""
-}
-
-func (t *CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature_EntitlementPlanFeatures_Feature) GetID() string {
-	if t == nil {
-		t = &CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature_EntitlementPlanFeatures_Feature{}
-	}
-	return t.ID
-}
-func (t *CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature_EntitlementPlanFeatures_Feature) GetName() string {
-	if t == nil {
-		t = &CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature_EntitlementPlanFeatures_Feature{}
-	}
-	return t.Name
-}
-
-type CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature_EntitlementPlanFeatures struct {
-	ID       string                                                                                            "json:\"id\" graphql:\"id\""
-	Metadata map[string]interface{}                                                                            "json:\"metadata,omitempty\" graphql:\"metadata\""
-	Plan     CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature_EntitlementPlanFeatures_Plan    "json:\"plan\" graphql:\"plan\""
-	Feature  CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature_EntitlementPlanFeatures_Feature "json:\"feature\" graphql:\"feature\""
-}
-
-func (t *CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature_EntitlementPlanFeatures) GetID() string {
-	if t == nil {
-		t = &CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature_EntitlementPlanFeatures{}
-	}
-	return t.ID
-}
-func (t *CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature_EntitlementPlanFeatures) GetMetadata() map[string]interface{} {
-	if t == nil {
-		t = &CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature_EntitlementPlanFeatures{}
-	}
-	return t.Metadata
-}
-func (t *CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature_EntitlementPlanFeatures) GetPlan() *CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature_EntitlementPlanFeatures_Plan {
-	if t == nil {
-		t = &CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature_EntitlementPlanFeatures{}
-	}
-	return &t.Plan
-}
-func (t *CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature_EntitlementPlanFeatures) GetFeature() *CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature_EntitlementPlanFeatures_Feature {
-	if t == nil {
-		t = &CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature_EntitlementPlanFeatures{}
-	}
-	return &t.Feature
-}
-
-type CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature struct {
-	EntitlementPlanFeatures []*CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature_EntitlementPlanFeatures "json:\"entitlementPlanFeatures,omitempty\" graphql:\"entitlementPlanFeatures\""
-}
-
-func (t *CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature) GetEntitlementPlanFeatures() []*CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature_EntitlementPlanFeatures {
-	if t == nil {
-		t = &CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature{}
-	}
-	return t.EntitlementPlanFeatures
-}
-
 type UpdateEntitlementPlanFeature_UpdateEntitlementPlanFeature_EntitlementPlanFeature_Plan struct {
 	ID   string "json:\"id\" graphql:\"id\""
 	Name string "json:\"name\" graphql:\"name\""
@@ -6462,17 +6473,6 @@ func (t *UpdateEntitlementPlanFeature_UpdateEntitlementPlanFeature) GetEntitleme
 		t = &UpdateEntitlementPlanFeature_UpdateEntitlementPlanFeature{}
 	}
 	return &t.EntitlementPlanFeature
-}
-
-type DeleteEntitlementPlanFeature_DeleteEntitlementPlanFeature struct {
-	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
-}
-
-func (t *DeleteEntitlementPlanFeature_DeleteEntitlementPlanFeature) GetDeletedID() string {
-	if t == nil {
-		t = &DeleteEntitlementPlanFeature_DeleteEntitlementPlanFeature{}
-	}
-	return t.DeletedID
 }
 
 type GetAllEntitlementPlanFeatureHistories_EntitlementPlanFeatureHistories_Edges_Node struct {
@@ -9097,366 +9097,867 @@ func (t *GetEntityTypeHistories_EntityTypeHistories) GetEdges() []*GetEntityType
 	return t.Edges
 }
 
-type GetEvents_Events_Edges_Node struct {
-	EventID       *string                "json:\"eventID,omitempty\" graphql:\"eventID\""
-	ID            string                 "json:\"id\" graphql:\"id\""
-	CorrelationID *string                "json:\"correlationID,omitempty\" graphql:\"correlationID\""
-	EventType     string                 "json:\"eventType\" graphql:\"eventType\""
-	Metadata      map[string]interface{} "json:\"metadata,omitempty\" graphql:\"metadata\""
+type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_User struct {
+	ID string "json:\"id\" graphql:\"id\""
 }
 
-func (t *GetEvents_Events_Edges_Node) GetEventID() *string {
+func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_User) GetID() string {
 	if t == nil {
-		t = &GetEvents_Events_Edges_Node{}
+		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_User{}
+	}
+	return t.ID
+}
+
+type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Group struct {
+	ID string "json:\"id\" graphql:\"id\""
+}
+
+func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Group) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Group{}
+	}
+	return t.ID
+}
+
+type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Integration struct {
+	ID string "json:\"id\" graphql:\"id\""
+}
+
+func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Integration) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Integration{}
+	}
+	return t.ID
+}
+
+type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Organization struct {
+	ID string "json:\"id\" graphql:\"id\""
+}
+
+func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Organization) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Organization{}
+	}
+	return t.ID
+}
+
+type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Invite struct {
+	ID string "json:\"id\" graphql:\"id\""
+}
+
+func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Invite) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Invite{}
+	}
+	return t.ID
+}
+
+type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Feature struct {
+	ID string "json:\"id\" graphql:\"id\""
+}
+
+func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Feature) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Feature{}
+	}
+	return t.ID
+}
+
+type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_PersonalAccessToken struct {
+	ID string "json:\"id\" graphql:\"id\""
+}
+
+func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_PersonalAccessToken) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_PersonalAccessToken{}
+	}
+	return t.ID
+}
+
+type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Oauth2token struct {
+	ID string "json:\"id\" graphql:\"id\""
+}
+
+func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Oauth2token) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Oauth2token{}
+	}
+	return t.ID
+}
+
+type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Hush struct {
+	ID string "json:\"id\" graphql:\"id\""
+}
+
+func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Hush) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Hush{}
+	}
+	return t.ID
+}
+
+type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Orgmembership struct {
+	ID string "json:\"id\" graphql:\"id\""
+}
+
+func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Orgmembership) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Orgmembership{}
+	}
+	return t.ID
+}
+
+type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Groupmembership struct {
+	ID string "json:\"id\" graphql:\"id\""
+}
+
+func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Groupmembership) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Groupmembership{}
+	}
+	return t.ID
+}
+
+type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Entitlement struct {
+	ID string "json:\"id\" graphql:\"id\""
+}
+
+func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Entitlement) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Entitlement{}
+	}
+	return t.ID
+}
+
+type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Webhook struct {
+	ID string "json:\"id\" graphql:\"id\""
+}
+
+func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Webhook) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Webhook{}
+	}
+	return t.ID
+}
+
+type CreateBulkCSVEvent_CreateBulkCSVEvent_Events struct {
+	ID                  string                                                              "json:\"id\" graphql:\"id\""
+	EventID             *string                                                             "json:\"eventID,omitempty\" graphql:\"eventID\""
+	CorrelationID       *string                                                             "json:\"correlationID,omitempty\" graphql:\"correlationID\""
+	EventType           string                                                              "json:\"eventType\" graphql:\"eventType\""
+	Metadata            map[string]interface{}                                              "json:\"metadata,omitempty\" graphql:\"metadata\""
+	User                []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_User                "json:\"user,omitempty\" graphql:\"user\""
+	Group               []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Group               "json:\"group,omitempty\" graphql:\"group\""
+	Integration         []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Integration         "json:\"integration,omitempty\" graphql:\"integration\""
+	Organization        []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Organization        "json:\"organization,omitempty\" graphql:\"organization\""
+	Invite              []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Invite              "json:\"invite,omitempty\" graphql:\"invite\""
+	Feature             []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Feature             "json:\"feature,omitempty\" graphql:\"feature\""
+	PersonalAccessToken []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_PersonalAccessToken "json:\"personalAccessToken,omitempty\" graphql:\"personalAccessToken\""
+	Oauth2token         []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Oauth2token         "json:\"oauth2token,omitempty\" graphql:\"oauth2token\""
+	Hush                []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Hush                "json:\"hush,omitempty\" graphql:\"hush\""
+	Orgmembership       []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Orgmembership       "json:\"orgmembership,omitempty\" graphql:\"orgmembership\""
+	Groupmembership     []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Groupmembership     "json:\"groupmembership,omitempty\" graphql:\"groupmembership\""
+	Entitlement         []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Entitlement         "json:\"entitlement,omitempty\" graphql:\"entitlement\""
+	Webhook             []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Webhook             "json:\"webhook,omitempty\" graphql:\"webhook\""
+}
+
+func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetEventID() *string {
+	if t == nil {
+		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
 	}
 	return t.EventID
 }
-func (t *GetEvents_Events_Edges_Node) GetID() string {
+func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetCorrelationID() *string {
 	if t == nil {
-		t = &GetEvents_Events_Edges_Node{}
-	}
-	return t.ID
-}
-func (t *GetEvents_Events_Edges_Node) GetCorrelationID() *string {
-	if t == nil {
-		t = &GetEvents_Events_Edges_Node{}
+		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
 	}
 	return t.CorrelationID
 }
-func (t *GetEvents_Events_Edges_Node) GetEventType() string {
+func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetEventType() string {
 	if t == nil {
-		t = &GetEvents_Events_Edges_Node{}
+		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
 	}
 	return t.EventType
 }
-func (t *GetEvents_Events_Edges_Node) GetMetadata() map[string]interface{} {
+func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetMetadata() map[string]interface{} {
 	if t == nil {
-		t = &GetEvents_Events_Edges_Node{}
+		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
 	}
 	return t.Metadata
 }
-
-type GetEvents_Events_Edges struct {
-	Node *GetEvents_Events_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetEvents_Events_Edges) GetNode() *GetEvents_Events_Edges_Node {
+func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetUser() []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_User {
 	if t == nil {
-		t = &GetEvents_Events_Edges{}
-	}
-	return t.Node
-}
-
-type GetEvents_Events struct {
-	Edges []*GetEvents_Events_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-}
-
-func (t *GetEvents_Events) GetEdges() []*GetEvents_Events_Edges {
-	if t == nil {
-		t = &GetEvents_Events{}
-	}
-	return t.Edges
-}
-
-type GetEventByID_Event_User struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetEventByID_Event_User) GetID() string {
-	if t == nil {
-		t = &GetEventByID_Event_User{}
-	}
-	return t.ID
-}
-
-type GetEventByID_Event_Group struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetEventByID_Event_Group) GetID() string {
-	if t == nil {
-		t = &GetEventByID_Event_Group{}
-	}
-	return t.ID
-}
-
-type GetEventByID_Event_Integration struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetEventByID_Event_Integration) GetID() string {
-	if t == nil {
-		t = &GetEventByID_Event_Integration{}
-	}
-	return t.ID
-}
-
-type GetEventByID_Event_Organization struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetEventByID_Event_Organization) GetID() string {
-	if t == nil {
-		t = &GetEventByID_Event_Organization{}
-	}
-	return t.ID
-}
-
-type GetEventByID_Event_Invite struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetEventByID_Event_Invite) GetID() string {
-	if t == nil {
-		t = &GetEventByID_Event_Invite{}
-	}
-	return t.ID
-}
-
-type GetEventByID_Event_Feature struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetEventByID_Event_Feature) GetID() string {
-	if t == nil {
-		t = &GetEventByID_Event_Feature{}
-	}
-	return t.ID
-}
-
-type GetEventByID_Event_PersonalAccessToken struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetEventByID_Event_PersonalAccessToken) GetID() string {
-	if t == nil {
-		t = &GetEventByID_Event_PersonalAccessToken{}
-	}
-	return t.ID
-}
-
-type GetEventByID_Event_Oauth2token struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetEventByID_Event_Oauth2token) GetID() string {
-	if t == nil {
-		t = &GetEventByID_Event_Oauth2token{}
-	}
-	return t.ID
-}
-
-type GetEventByID_Event_Hush struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetEventByID_Event_Hush) GetID() string {
-	if t == nil {
-		t = &GetEventByID_Event_Hush{}
-	}
-	return t.ID
-}
-
-type GetEventByID_Event_Orgmembership struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetEventByID_Event_Orgmembership) GetID() string {
-	if t == nil {
-		t = &GetEventByID_Event_Orgmembership{}
-	}
-	return t.ID
-}
-
-type GetEventByID_Event_Groupmembership struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetEventByID_Event_Groupmembership) GetID() string {
-	if t == nil {
-		t = &GetEventByID_Event_Groupmembership{}
-	}
-	return t.ID
-}
-
-type GetEventByID_Event_Entitlement struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetEventByID_Event_Entitlement) GetID() string {
-	if t == nil {
-		t = &GetEventByID_Event_Entitlement{}
-	}
-	return t.ID
-}
-
-type GetEventByID_Event_Webhook struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetEventByID_Event_Webhook) GetID() string {
-	if t == nil {
-		t = &GetEventByID_Event_Webhook{}
-	}
-	return t.ID
-}
-
-type GetEventByID_Event struct {
-	ID                  string                                    "json:\"id\" graphql:\"id\""
-	CreatedAt           *time.Time                                "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	UpdatedAt           *time.Time                                "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	CreatedBy           *string                                   "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	UpdatedBy           *string                                   "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	EventID             *string                                   "json:\"eventID,omitempty\" graphql:\"eventID\""
-	CorrelationID       *string                                   "json:\"correlationID,omitempty\" graphql:\"correlationID\""
-	EventType           string                                    "json:\"eventType\" graphql:\"eventType\""
-	Metadata            map[string]interface{}                    "json:\"metadata,omitempty\" graphql:\"metadata\""
-	User                []*GetEventByID_Event_User                "json:\"user,omitempty\" graphql:\"user\""
-	Group               []*GetEventByID_Event_Group               "json:\"group,omitempty\" graphql:\"group\""
-	Integration         []*GetEventByID_Event_Integration         "json:\"integration,omitempty\" graphql:\"integration\""
-	Organization        []*GetEventByID_Event_Organization        "json:\"organization,omitempty\" graphql:\"organization\""
-	Invite              []*GetEventByID_Event_Invite              "json:\"invite,omitempty\" graphql:\"invite\""
-	Feature             []*GetEventByID_Event_Feature             "json:\"feature,omitempty\" graphql:\"feature\""
-	PersonalAccessToken []*GetEventByID_Event_PersonalAccessToken "json:\"personalAccessToken,omitempty\" graphql:\"personalAccessToken\""
-	Oauth2token         []*GetEventByID_Event_Oauth2token         "json:\"oauth2token,omitempty\" graphql:\"oauth2token\""
-	Hush                []*GetEventByID_Event_Hush                "json:\"hush,omitempty\" graphql:\"hush\""
-	Orgmembership       []*GetEventByID_Event_Orgmembership       "json:\"orgmembership,omitempty\" graphql:\"orgmembership\""
-	Groupmembership     []*GetEventByID_Event_Groupmembership     "json:\"groupmembership,omitempty\" graphql:\"groupmembership\""
-	Entitlement         []*GetEventByID_Event_Entitlement         "json:\"entitlement,omitempty\" graphql:\"entitlement\""
-	Webhook             []*GetEventByID_Event_Webhook             "json:\"webhook,omitempty\" graphql:\"webhook\""
-}
-
-func (t *GetEventByID_Event) GetID() string {
-	if t == nil {
-		t = &GetEventByID_Event{}
-	}
-	return t.ID
-}
-func (t *GetEventByID_Event) GetCreatedAt() *time.Time {
-	if t == nil {
-		t = &GetEventByID_Event{}
-	}
-	return t.CreatedAt
-}
-func (t *GetEventByID_Event) GetUpdatedAt() *time.Time {
-	if t == nil {
-		t = &GetEventByID_Event{}
-	}
-	return t.UpdatedAt
-}
-func (t *GetEventByID_Event) GetCreatedBy() *string {
-	if t == nil {
-		t = &GetEventByID_Event{}
-	}
-	return t.CreatedBy
-}
-func (t *GetEventByID_Event) GetUpdatedBy() *string {
-	if t == nil {
-		t = &GetEventByID_Event{}
-	}
-	return t.UpdatedBy
-}
-func (t *GetEventByID_Event) GetEventID() *string {
-	if t == nil {
-		t = &GetEventByID_Event{}
-	}
-	return t.EventID
-}
-func (t *GetEventByID_Event) GetCorrelationID() *string {
-	if t == nil {
-		t = &GetEventByID_Event{}
-	}
-	return t.CorrelationID
-}
-func (t *GetEventByID_Event) GetEventType() string {
-	if t == nil {
-		t = &GetEventByID_Event{}
-	}
-	return t.EventType
-}
-func (t *GetEventByID_Event) GetMetadata() map[string]interface{} {
-	if t == nil {
-		t = &GetEventByID_Event{}
-	}
-	return t.Metadata
-}
-func (t *GetEventByID_Event) GetUser() []*GetEventByID_Event_User {
-	if t == nil {
-		t = &GetEventByID_Event{}
+		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
 	}
 	return t.User
 }
-func (t *GetEventByID_Event) GetGroup() []*GetEventByID_Event_Group {
+func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetGroup() []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Group {
 	if t == nil {
-		t = &GetEventByID_Event{}
+		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
 	}
 	return t.Group
 }
-func (t *GetEventByID_Event) GetIntegration() []*GetEventByID_Event_Integration {
+func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetIntegration() []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Integration {
 	if t == nil {
-		t = &GetEventByID_Event{}
+		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
 	}
 	return t.Integration
 }
-func (t *GetEventByID_Event) GetOrganization() []*GetEventByID_Event_Organization {
+func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetOrganization() []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Organization {
 	if t == nil {
-		t = &GetEventByID_Event{}
+		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
 	}
 	return t.Organization
 }
-func (t *GetEventByID_Event) GetInvite() []*GetEventByID_Event_Invite {
+func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetInvite() []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Invite {
 	if t == nil {
-		t = &GetEventByID_Event{}
+		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
 	}
 	return t.Invite
 }
-func (t *GetEventByID_Event) GetFeature() []*GetEventByID_Event_Feature {
+func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetFeature() []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Feature {
 	if t == nil {
-		t = &GetEventByID_Event{}
+		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
 	}
 	return t.Feature
 }
-func (t *GetEventByID_Event) GetPersonalAccessToken() []*GetEventByID_Event_PersonalAccessToken {
+func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetPersonalAccessToken() []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_PersonalAccessToken {
 	if t == nil {
-		t = &GetEventByID_Event{}
+		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
 	}
 	return t.PersonalAccessToken
 }
-func (t *GetEventByID_Event) GetOauth2token() []*GetEventByID_Event_Oauth2token {
+func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetOauth2token() []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Oauth2token {
 	if t == nil {
-		t = &GetEventByID_Event{}
+		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
 	}
 	return t.Oauth2token
 }
-func (t *GetEventByID_Event) GetHush() []*GetEventByID_Event_Hush {
+func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetHush() []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Hush {
 	if t == nil {
-		t = &GetEventByID_Event{}
+		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
 	}
 	return t.Hush
 }
-func (t *GetEventByID_Event) GetOrgmembership() []*GetEventByID_Event_Orgmembership {
+func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetOrgmembership() []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Orgmembership {
 	if t == nil {
-		t = &GetEventByID_Event{}
+		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
 	}
 	return t.Orgmembership
 }
-func (t *GetEventByID_Event) GetGroupmembership() []*GetEventByID_Event_Groupmembership {
+func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetGroupmembership() []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Groupmembership {
 	if t == nil {
-		t = &GetEventByID_Event{}
+		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
 	}
 	return t.Groupmembership
 }
-func (t *GetEventByID_Event) GetEntitlement() []*GetEventByID_Event_Entitlement {
+func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetEntitlement() []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Entitlement {
 	if t == nil {
-		t = &GetEventByID_Event{}
+		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
 	}
 	return t.Entitlement
 }
-func (t *GetEventByID_Event) GetWebhook() []*GetEventByID_Event_Webhook {
+func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetWebhook() []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Webhook {
 	if t == nil {
-		t = &GetEventByID_Event{}
+		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
 	}
 	return t.Webhook
+}
+
+type CreateBulkCSVEvent_CreateBulkCSVEvent struct {
+	Events []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events "json:\"events,omitempty\" graphql:\"events\""
+}
+
+func (t *CreateBulkCSVEvent_CreateBulkCSVEvent) GetEvents() []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events {
+	if t == nil {
+		t = &CreateBulkCSVEvent_CreateBulkCSVEvent{}
+	}
+	return t.Events
+}
+
+type CreateBulkEvent_CreateBulkEvent_Events_User struct {
+	ID string "json:\"id\" graphql:\"id\""
+}
+
+func (t *CreateBulkEvent_CreateBulkEvent_Events_User) GetID() string {
+	if t == nil {
+		t = &CreateBulkEvent_CreateBulkEvent_Events_User{}
+	}
+	return t.ID
+}
+
+type CreateBulkEvent_CreateBulkEvent_Events_Group struct {
+	ID string "json:\"id\" graphql:\"id\""
+}
+
+func (t *CreateBulkEvent_CreateBulkEvent_Events_Group) GetID() string {
+	if t == nil {
+		t = &CreateBulkEvent_CreateBulkEvent_Events_Group{}
+	}
+	return t.ID
+}
+
+type CreateBulkEvent_CreateBulkEvent_Events_Integration struct {
+	ID string "json:\"id\" graphql:\"id\""
+}
+
+func (t *CreateBulkEvent_CreateBulkEvent_Events_Integration) GetID() string {
+	if t == nil {
+		t = &CreateBulkEvent_CreateBulkEvent_Events_Integration{}
+	}
+	return t.ID
+}
+
+type CreateBulkEvent_CreateBulkEvent_Events_Organization struct {
+	ID string "json:\"id\" graphql:\"id\""
+}
+
+func (t *CreateBulkEvent_CreateBulkEvent_Events_Organization) GetID() string {
+	if t == nil {
+		t = &CreateBulkEvent_CreateBulkEvent_Events_Organization{}
+	}
+	return t.ID
+}
+
+type CreateBulkEvent_CreateBulkEvent_Events_Invite struct {
+	ID string "json:\"id\" graphql:\"id\""
+}
+
+func (t *CreateBulkEvent_CreateBulkEvent_Events_Invite) GetID() string {
+	if t == nil {
+		t = &CreateBulkEvent_CreateBulkEvent_Events_Invite{}
+	}
+	return t.ID
+}
+
+type CreateBulkEvent_CreateBulkEvent_Events_Feature struct {
+	ID string "json:\"id\" graphql:\"id\""
+}
+
+func (t *CreateBulkEvent_CreateBulkEvent_Events_Feature) GetID() string {
+	if t == nil {
+		t = &CreateBulkEvent_CreateBulkEvent_Events_Feature{}
+	}
+	return t.ID
+}
+
+type CreateBulkEvent_CreateBulkEvent_Events_PersonalAccessToken struct {
+	ID string "json:\"id\" graphql:\"id\""
+}
+
+func (t *CreateBulkEvent_CreateBulkEvent_Events_PersonalAccessToken) GetID() string {
+	if t == nil {
+		t = &CreateBulkEvent_CreateBulkEvent_Events_PersonalAccessToken{}
+	}
+	return t.ID
+}
+
+type CreateBulkEvent_CreateBulkEvent_Events_Oauth2token struct {
+	ID string "json:\"id\" graphql:\"id\""
+}
+
+func (t *CreateBulkEvent_CreateBulkEvent_Events_Oauth2token) GetID() string {
+	if t == nil {
+		t = &CreateBulkEvent_CreateBulkEvent_Events_Oauth2token{}
+	}
+	return t.ID
+}
+
+type CreateBulkEvent_CreateBulkEvent_Events_Hush struct {
+	ID string "json:\"id\" graphql:\"id\""
+}
+
+func (t *CreateBulkEvent_CreateBulkEvent_Events_Hush) GetID() string {
+	if t == nil {
+		t = &CreateBulkEvent_CreateBulkEvent_Events_Hush{}
+	}
+	return t.ID
+}
+
+type CreateBulkEvent_CreateBulkEvent_Events_Orgmembership struct {
+	ID string "json:\"id\" graphql:\"id\""
+}
+
+func (t *CreateBulkEvent_CreateBulkEvent_Events_Orgmembership) GetID() string {
+	if t == nil {
+		t = &CreateBulkEvent_CreateBulkEvent_Events_Orgmembership{}
+	}
+	return t.ID
+}
+
+type CreateBulkEvent_CreateBulkEvent_Events_Groupmembership struct {
+	ID string "json:\"id\" graphql:\"id\""
+}
+
+func (t *CreateBulkEvent_CreateBulkEvent_Events_Groupmembership) GetID() string {
+	if t == nil {
+		t = &CreateBulkEvent_CreateBulkEvent_Events_Groupmembership{}
+	}
+	return t.ID
+}
+
+type CreateBulkEvent_CreateBulkEvent_Events_Entitlement struct {
+	ID string "json:\"id\" graphql:\"id\""
+}
+
+func (t *CreateBulkEvent_CreateBulkEvent_Events_Entitlement) GetID() string {
+	if t == nil {
+		t = &CreateBulkEvent_CreateBulkEvent_Events_Entitlement{}
+	}
+	return t.ID
+}
+
+type CreateBulkEvent_CreateBulkEvent_Events_Webhook struct {
+	ID string "json:\"id\" graphql:\"id\""
+}
+
+func (t *CreateBulkEvent_CreateBulkEvent_Events_Webhook) GetID() string {
+	if t == nil {
+		t = &CreateBulkEvent_CreateBulkEvent_Events_Webhook{}
+	}
+	return t.ID
+}
+
+type CreateBulkEvent_CreateBulkEvent_Events struct {
+	ID                  string                                                        "json:\"id\" graphql:\"id\""
+	EventID             *string                                                       "json:\"eventID,omitempty\" graphql:\"eventID\""
+	CorrelationID       *string                                                       "json:\"correlationID,omitempty\" graphql:\"correlationID\""
+	EventType           string                                                        "json:\"eventType\" graphql:\"eventType\""
+	Metadata            map[string]interface{}                                        "json:\"metadata,omitempty\" graphql:\"metadata\""
+	User                []*CreateBulkEvent_CreateBulkEvent_Events_User                "json:\"user,omitempty\" graphql:\"user\""
+	Group               []*CreateBulkEvent_CreateBulkEvent_Events_Group               "json:\"group,omitempty\" graphql:\"group\""
+	Integration         []*CreateBulkEvent_CreateBulkEvent_Events_Integration         "json:\"integration,omitempty\" graphql:\"integration\""
+	Organization        []*CreateBulkEvent_CreateBulkEvent_Events_Organization        "json:\"organization,omitempty\" graphql:\"organization\""
+	Invite              []*CreateBulkEvent_CreateBulkEvent_Events_Invite              "json:\"invite,omitempty\" graphql:\"invite\""
+	Feature             []*CreateBulkEvent_CreateBulkEvent_Events_Feature             "json:\"feature,omitempty\" graphql:\"feature\""
+	PersonalAccessToken []*CreateBulkEvent_CreateBulkEvent_Events_PersonalAccessToken "json:\"personalAccessToken,omitempty\" graphql:\"personalAccessToken\""
+	Oauth2token         []*CreateBulkEvent_CreateBulkEvent_Events_Oauth2token         "json:\"oauth2token,omitempty\" graphql:\"oauth2token\""
+	Hush                []*CreateBulkEvent_CreateBulkEvent_Events_Hush                "json:\"hush,omitempty\" graphql:\"hush\""
+	Orgmembership       []*CreateBulkEvent_CreateBulkEvent_Events_Orgmembership       "json:\"orgmembership,omitempty\" graphql:\"orgmembership\""
+	Groupmembership     []*CreateBulkEvent_CreateBulkEvent_Events_Groupmembership     "json:\"groupmembership,omitempty\" graphql:\"groupmembership\""
+	Entitlement         []*CreateBulkEvent_CreateBulkEvent_Events_Entitlement         "json:\"entitlement,omitempty\" graphql:\"entitlement\""
+	Webhook             []*CreateBulkEvent_CreateBulkEvent_Events_Webhook             "json:\"webhook,omitempty\" graphql:\"webhook\""
+}
+
+func (t *CreateBulkEvent_CreateBulkEvent_Events) GetID() string {
+	if t == nil {
+		t = &CreateBulkEvent_CreateBulkEvent_Events{}
+	}
+	return t.ID
+}
+func (t *CreateBulkEvent_CreateBulkEvent_Events) GetEventID() *string {
+	if t == nil {
+		t = &CreateBulkEvent_CreateBulkEvent_Events{}
+	}
+	return t.EventID
+}
+func (t *CreateBulkEvent_CreateBulkEvent_Events) GetCorrelationID() *string {
+	if t == nil {
+		t = &CreateBulkEvent_CreateBulkEvent_Events{}
+	}
+	return t.CorrelationID
+}
+func (t *CreateBulkEvent_CreateBulkEvent_Events) GetEventType() string {
+	if t == nil {
+		t = &CreateBulkEvent_CreateBulkEvent_Events{}
+	}
+	return t.EventType
+}
+func (t *CreateBulkEvent_CreateBulkEvent_Events) GetMetadata() map[string]interface{} {
+	if t == nil {
+		t = &CreateBulkEvent_CreateBulkEvent_Events{}
+	}
+	return t.Metadata
+}
+func (t *CreateBulkEvent_CreateBulkEvent_Events) GetUser() []*CreateBulkEvent_CreateBulkEvent_Events_User {
+	if t == nil {
+		t = &CreateBulkEvent_CreateBulkEvent_Events{}
+	}
+	return t.User
+}
+func (t *CreateBulkEvent_CreateBulkEvent_Events) GetGroup() []*CreateBulkEvent_CreateBulkEvent_Events_Group {
+	if t == nil {
+		t = &CreateBulkEvent_CreateBulkEvent_Events{}
+	}
+	return t.Group
+}
+func (t *CreateBulkEvent_CreateBulkEvent_Events) GetIntegration() []*CreateBulkEvent_CreateBulkEvent_Events_Integration {
+	if t == nil {
+		t = &CreateBulkEvent_CreateBulkEvent_Events{}
+	}
+	return t.Integration
+}
+func (t *CreateBulkEvent_CreateBulkEvent_Events) GetOrganization() []*CreateBulkEvent_CreateBulkEvent_Events_Organization {
+	if t == nil {
+		t = &CreateBulkEvent_CreateBulkEvent_Events{}
+	}
+	return t.Organization
+}
+func (t *CreateBulkEvent_CreateBulkEvent_Events) GetInvite() []*CreateBulkEvent_CreateBulkEvent_Events_Invite {
+	if t == nil {
+		t = &CreateBulkEvent_CreateBulkEvent_Events{}
+	}
+	return t.Invite
+}
+func (t *CreateBulkEvent_CreateBulkEvent_Events) GetFeature() []*CreateBulkEvent_CreateBulkEvent_Events_Feature {
+	if t == nil {
+		t = &CreateBulkEvent_CreateBulkEvent_Events{}
+	}
+	return t.Feature
+}
+func (t *CreateBulkEvent_CreateBulkEvent_Events) GetPersonalAccessToken() []*CreateBulkEvent_CreateBulkEvent_Events_PersonalAccessToken {
+	if t == nil {
+		t = &CreateBulkEvent_CreateBulkEvent_Events{}
+	}
+	return t.PersonalAccessToken
+}
+func (t *CreateBulkEvent_CreateBulkEvent_Events) GetOauth2token() []*CreateBulkEvent_CreateBulkEvent_Events_Oauth2token {
+	if t == nil {
+		t = &CreateBulkEvent_CreateBulkEvent_Events{}
+	}
+	return t.Oauth2token
+}
+func (t *CreateBulkEvent_CreateBulkEvent_Events) GetHush() []*CreateBulkEvent_CreateBulkEvent_Events_Hush {
+	if t == nil {
+		t = &CreateBulkEvent_CreateBulkEvent_Events{}
+	}
+	return t.Hush
+}
+func (t *CreateBulkEvent_CreateBulkEvent_Events) GetOrgmembership() []*CreateBulkEvent_CreateBulkEvent_Events_Orgmembership {
+	if t == nil {
+		t = &CreateBulkEvent_CreateBulkEvent_Events{}
+	}
+	return t.Orgmembership
+}
+func (t *CreateBulkEvent_CreateBulkEvent_Events) GetGroupmembership() []*CreateBulkEvent_CreateBulkEvent_Events_Groupmembership {
+	if t == nil {
+		t = &CreateBulkEvent_CreateBulkEvent_Events{}
+	}
+	return t.Groupmembership
+}
+func (t *CreateBulkEvent_CreateBulkEvent_Events) GetEntitlement() []*CreateBulkEvent_CreateBulkEvent_Events_Entitlement {
+	if t == nil {
+		t = &CreateBulkEvent_CreateBulkEvent_Events{}
+	}
+	return t.Entitlement
+}
+func (t *CreateBulkEvent_CreateBulkEvent_Events) GetWebhook() []*CreateBulkEvent_CreateBulkEvent_Events_Webhook {
+	if t == nil {
+		t = &CreateBulkEvent_CreateBulkEvent_Events{}
+	}
+	return t.Webhook
+}
+
+type CreateBulkEvent_CreateBulkEvent struct {
+	Events []*CreateBulkEvent_CreateBulkEvent_Events "json:\"events,omitempty\" graphql:\"events\""
+}
+
+func (t *CreateBulkEvent_CreateBulkEvent) GetEvents() []*CreateBulkEvent_CreateBulkEvent_Events {
+	if t == nil {
+		t = &CreateBulkEvent_CreateBulkEvent{}
+	}
+	return t.Events
+}
+
+type CreateEvent_CreateEvent_Event_User struct {
+	ID string "json:\"id\" graphql:\"id\""
+}
+
+func (t *CreateEvent_CreateEvent_Event_User) GetID() string {
+	if t == nil {
+		t = &CreateEvent_CreateEvent_Event_User{}
+	}
+	return t.ID
+}
+
+type CreateEvent_CreateEvent_Event_Group struct {
+	ID string "json:\"id\" graphql:\"id\""
+}
+
+func (t *CreateEvent_CreateEvent_Event_Group) GetID() string {
+	if t == nil {
+		t = &CreateEvent_CreateEvent_Event_Group{}
+	}
+	return t.ID
+}
+
+type CreateEvent_CreateEvent_Event_Integration struct {
+	ID string "json:\"id\" graphql:\"id\""
+}
+
+func (t *CreateEvent_CreateEvent_Event_Integration) GetID() string {
+	if t == nil {
+		t = &CreateEvent_CreateEvent_Event_Integration{}
+	}
+	return t.ID
+}
+
+type CreateEvent_CreateEvent_Event_Organization struct {
+	ID string "json:\"id\" graphql:\"id\""
+}
+
+func (t *CreateEvent_CreateEvent_Event_Organization) GetID() string {
+	if t == nil {
+		t = &CreateEvent_CreateEvent_Event_Organization{}
+	}
+	return t.ID
+}
+
+type CreateEvent_CreateEvent_Event_Invite struct {
+	ID string "json:\"id\" graphql:\"id\""
+}
+
+func (t *CreateEvent_CreateEvent_Event_Invite) GetID() string {
+	if t == nil {
+		t = &CreateEvent_CreateEvent_Event_Invite{}
+	}
+	return t.ID
+}
+
+type CreateEvent_CreateEvent_Event_Feature struct {
+	ID string "json:\"id\" graphql:\"id\""
+}
+
+func (t *CreateEvent_CreateEvent_Event_Feature) GetID() string {
+	if t == nil {
+		t = &CreateEvent_CreateEvent_Event_Feature{}
+	}
+	return t.ID
+}
+
+type CreateEvent_CreateEvent_Event_PersonalAccessToken struct {
+	ID string "json:\"id\" graphql:\"id\""
+}
+
+func (t *CreateEvent_CreateEvent_Event_PersonalAccessToken) GetID() string {
+	if t == nil {
+		t = &CreateEvent_CreateEvent_Event_PersonalAccessToken{}
+	}
+	return t.ID
+}
+
+type CreateEvent_CreateEvent_Event_Oauth2token struct {
+	ID string "json:\"id\" graphql:\"id\""
+}
+
+func (t *CreateEvent_CreateEvent_Event_Oauth2token) GetID() string {
+	if t == nil {
+		t = &CreateEvent_CreateEvent_Event_Oauth2token{}
+	}
+	return t.ID
+}
+
+type CreateEvent_CreateEvent_Event_Hush struct {
+	ID string "json:\"id\" graphql:\"id\""
+}
+
+func (t *CreateEvent_CreateEvent_Event_Hush) GetID() string {
+	if t == nil {
+		t = &CreateEvent_CreateEvent_Event_Hush{}
+	}
+	return t.ID
+}
+
+type CreateEvent_CreateEvent_Event_Orgmembership struct {
+	ID string "json:\"id\" graphql:\"id\""
+}
+
+func (t *CreateEvent_CreateEvent_Event_Orgmembership) GetID() string {
+	if t == nil {
+		t = &CreateEvent_CreateEvent_Event_Orgmembership{}
+	}
+	return t.ID
+}
+
+type CreateEvent_CreateEvent_Event_Groupmembership struct {
+	ID string "json:\"id\" graphql:\"id\""
+}
+
+func (t *CreateEvent_CreateEvent_Event_Groupmembership) GetID() string {
+	if t == nil {
+		t = &CreateEvent_CreateEvent_Event_Groupmembership{}
+	}
+	return t.ID
+}
+
+type CreateEvent_CreateEvent_Event_Entitlement struct {
+	ID string "json:\"id\" graphql:\"id\""
+}
+
+func (t *CreateEvent_CreateEvent_Event_Entitlement) GetID() string {
+	if t == nil {
+		t = &CreateEvent_CreateEvent_Event_Entitlement{}
+	}
+	return t.ID
+}
+
+type CreateEvent_CreateEvent_Event_Webhook struct {
+	ID string "json:\"id\" graphql:\"id\""
+}
+
+func (t *CreateEvent_CreateEvent_Event_Webhook) GetID() string {
+	if t == nil {
+		t = &CreateEvent_CreateEvent_Event_Webhook{}
+	}
+	return t.ID
+}
+
+type CreateEvent_CreateEvent_Event struct {
+	ID                  string                                               "json:\"id\" graphql:\"id\""
+	EventID             *string                                              "json:\"eventID,omitempty\" graphql:\"eventID\""
+	CorrelationID       *string                                              "json:\"correlationID,omitempty\" graphql:\"correlationID\""
+	EventType           string                                               "json:\"eventType\" graphql:\"eventType\""
+	Metadata            map[string]interface{}                               "json:\"metadata,omitempty\" graphql:\"metadata\""
+	User                []*CreateEvent_CreateEvent_Event_User                "json:\"user,omitempty\" graphql:\"user\""
+	Group               []*CreateEvent_CreateEvent_Event_Group               "json:\"group,omitempty\" graphql:\"group\""
+	Integration         []*CreateEvent_CreateEvent_Event_Integration         "json:\"integration,omitempty\" graphql:\"integration\""
+	Organization        []*CreateEvent_CreateEvent_Event_Organization        "json:\"organization,omitempty\" graphql:\"organization\""
+	Invite              []*CreateEvent_CreateEvent_Event_Invite              "json:\"invite,omitempty\" graphql:\"invite\""
+	Feature             []*CreateEvent_CreateEvent_Event_Feature             "json:\"feature,omitempty\" graphql:\"feature\""
+	PersonalAccessToken []*CreateEvent_CreateEvent_Event_PersonalAccessToken "json:\"personalAccessToken,omitempty\" graphql:\"personalAccessToken\""
+	Oauth2token         []*CreateEvent_CreateEvent_Event_Oauth2token         "json:\"oauth2token,omitempty\" graphql:\"oauth2token\""
+	Hush                []*CreateEvent_CreateEvent_Event_Hush                "json:\"hush,omitempty\" graphql:\"hush\""
+	Orgmembership       []*CreateEvent_CreateEvent_Event_Orgmembership       "json:\"orgmembership,omitempty\" graphql:\"orgmembership\""
+	Groupmembership     []*CreateEvent_CreateEvent_Event_Groupmembership     "json:\"groupmembership,omitempty\" graphql:\"groupmembership\""
+	Entitlement         []*CreateEvent_CreateEvent_Event_Entitlement         "json:\"entitlement,omitempty\" graphql:\"entitlement\""
+	Webhook             []*CreateEvent_CreateEvent_Event_Webhook             "json:\"webhook,omitempty\" graphql:\"webhook\""
+}
+
+func (t *CreateEvent_CreateEvent_Event) GetID() string {
+	if t == nil {
+		t = &CreateEvent_CreateEvent_Event{}
+	}
+	return t.ID
+}
+func (t *CreateEvent_CreateEvent_Event) GetEventID() *string {
+	if t == nil {
+		t = &CreateEvent_CreateEvent_Event{}
+	}
+	return t.EventID
+}
+func (t *CreateEvent_CreateEvent_Event) GetCorrelationID() *string {
+	if t == nil {
+		t = &CreateEvent_CreateEvent_Event{}
+	}
+	return t.CorrelationID
+}
+func (t *CreateEvent_CreateEvent_Event) GetEventType() string {
+	if t == nil {
+		t = &CreateEvent_CreateEvent_Event{}
+	}
+	return t.EventType
+}
+func (t *CreateEvent_CreateEvent_Event) GetMetadata() map[string]interface{} {
+	if t == nil {
+		t = &CreateEvent_CreateEvent_Event{}
+	}
+	return t.Metadata
+}
+func (t *CreateEvent_CreateEvent_Event) GetUser() []*CreateEvent_CreateEvent_Event_User {
+	if t == nil {
+		t = &CreateEvent_CreateEvent_Event{}
+	}
+	return t.User
+}
+func (t *CreateEvent_CreateEvent_Event) GetGroup() []*CreateEvent_CreateEvent_Event_Group {
+	if t == nil {
+		t = &CreateEvent_CreateEvent_Event{}
+	}
+	return t.Group
+}
+func (t *CreateEvent_CreateEvent_Event) GetIntegration() []*CreateEvent_CreateEvent_Event_Integration {
+	if t == nil {
+		t = &CreateEvent_CreateEvent_Event{}
+	}
+	return t.Integration
+}
+func (t *CreateEvent_CreateEvent_Event) GetOrganization() []*CreateEvent_CreateEvent_Event_Organization {
+	if t == nil {
+		t = &CreateEvent_CreateEvent_Event{}
+	}
+	return t.Organization
+}
+func (t *CreateEvent_CreateEvent_Event) GetInvite() []*CreateEvent_CreateEvent_Event_Invite {
+	if t == nil {
+		t = &CreateEvent_CreateEvent_Event{}
+	}
+	return t.Invite
+}
+func (t *CreateEvent_CreateEvent_Event) GetFeature() []*CreateEvent_CreateEvent_Event_Feature {
+	if t == nil {
+		t = &CreateEvent_CreateEvent_Event{}
+	}
+	return t.Feature
+}
+func (t *CreateEvent_CreateEvent_Event) GetPersonalAccessToken() []*CreateEvent_CreateEvent_Event_PersonalAccessToken {
+	if t == nil {
+		t = &CreateEvent_CreateEvent_Event{}
+	}
+	return t.PersonalAccessToken
+}
+func (t *CreateEvent_CreateEvent_Event) GetOauth2token() []*CreateEvent_CreateEvent_Event_Oauth2token {
+	if t == nil {
+		t = &CreateEvent_CreateEvent_Event{}
+	}
+	return t.Oauth2token
+}
+func (t *CreateEvent_CreateEvent_Event) GetHush() []*CreateEvent_CreateEvent_Event_Hush {
+	if t == nil {
+		t = &CreateEvent_CreateEvent_Event{}
+	}
+	return t.Hush
+}
+func (t *CreateEvent_CreateEvent_Event) GetOrgmembership() []*CreateEvent_CreateEvent_Event_Orgmembership {
+	if t == nil {
+		t = &CreateEvent_CreateEvent_Event{}
+	}
+	return t.Orgmembership
+}
+func (t *CreateEvent_CreateEvent_Event) GetGroupmembership() []*CreateEvent_CreateEvent_Event_Groupmembership {
+	if t == nil {
+		t = &CreateEvent_CreateEvent_Event{}
+	}
+	return t.Groupmembership
+}
+func (t *CreateEvent_CreateEvent_Event) GetEntitlement() []*CreateEvent_CreateEvent_Event_Entitlement {
+	if t == nil {
+		t = &CreateEvent_CreateEvent_Event{}
+	}
+	return t.Entitlement
+}
+func (t *CreateEvent_CreateEvent_Event) GetWebhook() []*CreateEvent_CreateEvent_Event_Webhook {
+	if t == nil {
+		t = &CreateEvent_CreateEvent_Event{}
+	}
+	return t.Webhook
+}
+
+type CreateEvent_CreateEvent struct {
+	Event CreateEvent_CreateEvent_Event "json:\"event\" graphql:\"event\""
+}
+
+func (t *CreateEvent_CreateEvent) GetEvent() *CreateEvent_CreateEvent_Event {
+	if t == nil {
+		t = &CreateEvent_CreateEvent{}
+	}
+	return &t.Event
+}
+
+type DeleteEvent_DeleteEvent struct {
+	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
+}
+
+func (t *DeleteEvent_DeleteEvent) GetDeletedID() string {
+	if t == nil {
+		t = &DeleteEvent_DeleteEvent{}
+	}
+	return t.DeletedID
 }
 
 type GetAllEvents_Events_Edges_Node_User struct {
@@ -9782,856 +10283,366 @@ func (t *GetAllEvents_Events) GetEdges() []*GetAllEvents_Events_Edges {
 	return t.Edges
 }
 
-type CreateEvent_CreateEvent_Event_User struct {
+type GetEventByID_Event_User struct {
 	ID string "json:\"id\" graphql:\"id\""
 }
 
-func (t *CreateEvent_CreateEvent_Event_User) GetID() string {
+func (t *GetEventByID_Event_User) GetID() string {
 	if t == nil {
-		t = &CreateEvent_CreateEvent_Event_User{}
+		t = &GetEventByID_Event_User{}
 	}
 	return t.ID
 }
 
-type CreateEvent_CreateEvent_Event_Group struct {
+type GetEventByID_Event_Group struct {
 	ID string "json:\"id\" graphql:\"id\""
 }
 
-func (t *CreateEvent_CreateEvent_Event_Group) GetID() string {
+func (t *GetEventByID_Event_Group) GetID() string {
 	if t == nil {
-		t = &CreateEvent_CreateEvent_Event_Group{}
+		t = &GetEventByID_Event_Group{}
 	}
 	return t.ID
 }
 
-type CreateEvent_CreateEvent_Event_Integration struct {
+type GetEventByID_Event_Integration struct {
 	ID string "json:\"id\" graphql:\"id\""
 }
 
-func (t *CreateEvent_CreateEvent_Event_Integration) GetID() string {
+func (t *GetEventByID_Event_Integration) GetID() string {
 	if t == nil {
-		t = &CreateEvent_CreateEvent_Event_Integration{}
+		t = &GetEventByID_Event_Integration{}
 	}
 	return t.ID
 }
 
-type CreateEvent_CreateEvent_Event_Organization struct {
+type GetEventByID_Event_Organization struct {
 	ID string "json:\"id\" graphql:\"id\""
 }
 
-func (t *CreateEvent_CreateEvent_Event_Organization) GetID() string {
+func (t *GetEventByID_Event_Organization) GetID() string {
 	if t == nil {
-		t = &CreateEvent_CreateEvent_Event_Organization{}
+		t = &GetEventByID_Event_Organization{}
 	}
 	return t.ID
 }
 
-type CreateEvent_CreateEvent_Event_Invite struct {
+type GetEventByID_Event_Invite struct {
 	ID string "json:\"id\" graphql:\"id\""
 }
 
-func (t *CreateEvent_CreateEvent_Event_Invite) GetID() string {
+func (t *GetEventByID_Event_Invite) GetID() string {
 	if t == nil {
-		t = &CreateEvent_CreateEvent_Event_Invite{}
+		t = &GetEventByID_Event_Invite{}
 	}
 	return t.ID
 }
 
-type CreateEvent_CreateEvent_Event_Feature struct {
+type GetEventByID_Event_Feature struct {
 	ID string "json:\"id\" graphql:\"id\""
 }
 
-func (t *CreateEvent_CreateEvent_Event_Feature) GetID() string {
+func (t *GetEventByID_Event_Feature) GetID() string {
 	if t == nil {
-		t = &CreateEvent_CreateEvent_Event_Feature{}
+		t = &GetEventByID_Event_Feature{}
 	}
 	return t.ID
 }
 
-type CreateEvent_CreateEvent_Event_PersonalAccessToken struct {
+type GetEventByID_Event_PersonalAccessToken struct {
 	ID string "json:\"id\" graphql:\"id\""
 }
 
-func (t *CreateEvent_CreateEvent_Event_PersonalAccessToken) GetID() string {
+func (t *GetEventByID_Event_PersonalAccessToken) GetID() string {
 	if t == nil {
-		t = &CreateEvent_CreateEvent_Event_PersonalAccessToken{}
+		t = &GetEventByID_Event_PersonalAccessToken{}
 	}
 	return t.ID
 }
 
-type CreateEvent_CreateEvent_Event_Oauth2token struct {
+type GetEventByID_Event_Oauth2token struct {
 	ID string "json:\"id\" graphql:\"id\""
 }
 
-func (t *CreateEvent_CreateEvent_Event_Oauth2token) GetID() string {
+func (t *GetEventByID_Event_Oauth2token) GetID() string {
 	if t == nil {
-		t = &CreateEvent_CreateEvent_Event_Oauth2token{}
+		t = &GetEventByID_Event_Oauth2token{}
 	}
 	return t.ID
 }
 
-type CreateEvent_CreateEvent_Event_Hush struct {
+type GetEventByID_Event_Hush struct {
 	ID string "json:\"id\" graphql:\"id\""
 }
 
-func (t *CreateEvent_CreateEvent_Event_Hush) GetID() string {
+func (t *GetEventByID_Event_Hush) GetID() string {
 	if t == nil {
-		t = &CreateEvent_CreateEvent_Event_Hush{}
+		t = &GetEventByID_Event_Hush{}
 	}
 	return t.ID
 }
 
-type CreateEvent_CreateEvent_Event_Orgmembership struct {
+type GetEventByID_Event_Orgmembership struct {
 	ID string "json:\"id\" graphql:\"id\""
 }
 
-func (t *CreateEvent_CreateEvent_Event_Orgmembership) GetID() string {
+func (t *GetEventByID_Event_Orgmembership) GetID() string {
 	if t == nil {
-		t = &CreateEvent_CreateEvent_Event_Orgmembership{}
+		t = &GetEventByID_Event_Orgmembership{}
 	}
 	return t.ID
 }
 
-type CreateEvent_CreateEvent_Event_Groupmembership struct {
+type GetEventByID_Event_Groupmembership struct {
 	ID string "json:\"id\" graphql:\"id\""
 }
 
-func (t *CreateEvent_CreateEvent_Event_Groupmembership) GetID() string {
+func (t *GetEventByID_Event_Groupmembership) GetID() string {
 	if t == nil {
-		t = &CreateEvent_CreateEvent_Event_Groupmembership{}
+		t = &GetEventByID_Event_Groupmembership{}
 	}
 	return t.ID
 }
 
-type CreateEvent_CreateEvent_Event_Entitlement struct {
+type GetEventByID_Event_Entitlement struct {
 	ID string "json:\"id\" graphql:\"id\""
 }
 
-func (t *CreateEvent_CreateEvent_Event_Entitlement) GetID() string {
+func (t *GetEventByID_Event_Entitlement) GetID() string {
 	if t == nil {
-		t = &CreateEvent_CreateEvent_Event_Entitlement{}
+		t = &GetEventByID_Event_Entitlement{}
 	}
 	return t.ID
 }
 
-type CreateEvent_CreateEvent_Event_Webhook struct {
+type GetEventByID_Event_Webhook struct {
 	ID string "json:\"id\" graphql:\"id\""
 }
 
-func (t *CreateEvent_CreateEvent_Event_Webhook) GetID() string {
+func (t *GetEventByID_Event_Webhook) GetID() string {
 	if t == nil {
-		t = &CreateEvent_CreateEvent_Event_Webhook{}
+		t = &GetEventByID_Event_Webhook{}
 	}
 	return t.ID
 }
 
-type CreateEvent_CreateEvent_Event struct {
-	ID                  string                                               "json:\"id\" graphql:\"id\""
-	EventID             *string                                              "json:\"eventID,omitempty\" graphql:\"eventID\""
-	CorrelationID       *string                                              "json:\"correlationID,omitempty\" graphql:\"correlationID\""
-	EventType           string                                               "json:\"eventType\" graphql:\"eventType\""
-	Metadata            map[string]interface{}                               "json:\"metadata,omitempty\" graphql:\"metadata\""
-	User                []*CreateEvent_CreateEvent_Event_User                "json:\"user,omitempty\" graphql:\"user\""
-	Group               []*CreateEvent_CreateEvent_Event_Group               "json:\"group,omitempty\" graphql:\"group\""
-	Integration         []*CreateEvent_CreateEvent_Event_Integration         "json:\"integration,omitempty\" graphql:\"integration\""
-	Organization        []*CreateEvent_CreateEvent_Event_Organization        "json:\"organization,omitempty\" graphql:\"organization\""
-	Invite              []*CreateEvent_CreateEvent_Event_Invite              "json:\"invite,omitempty\" graphql:\"invite\""
-	Feature             []*CreateEvent_CreateEvent_Event_Feature             "json:\"feature,omitempty\" graphql:\"feature\""
-	PersonalAccessToken []*CreateEvent_CreateEvent_Event_PersonalAccessToken "json:\"personalAccessToken,omitempty\" graphql:\"personalAccessToken\""
-	Oauth2token         []*CreateEvent_CreateEvent_Event_Oauth2token         "json:\"oauth2token,omitempty\" graphql:\"oauth2token\""
-	Hush                []*CreateEvent_CreateEvent_Event_Hush                "json:\"hush,omitempty\" graphql:\"hush\""
-	Orgmembership       []*CreateEvent_CreateEvent_Event_Orgmembership       "json:\"orgmembership,omitempty\" graphql:\"orgmembership\""
-	Groupmembership     []*CreateEvent_CreateEvent_Event_Groupmembership     "json:\"groupmembership,omitempty\" graphql:\"groupmembership\""
-	Entitlement         []*CreateEvent_CreateEvent_Event_Entitlement         "json:\"entitlement,omitempty\" graphql:\"entitlement\""
-	Webhook             []*CreateEvent_CreateEvent_Event_Webhook             "json:\"webhook,omitempty\" graphql:\"webhook\""
+type GetEventByID_Event struct {
+	ID                  string                                    "json:\"id\" graphql:\"id\""
+	CreatedAt           *time.Time                                "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	UpdatedAt           *time.Time                                "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	CreatedBy           *string                                   "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	UpdatedBy           *string                                   "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	EventID             *string                                   "json:\"eventID,omitempty\" graphql:\"eventID\""
+	CorrelationID       *string                                   "json:\"correlationID,omitempty\" graphql:\"correlationID\""
+	EventType           string                                    "json:\"eventType\" graphql:\"eventType\""
+	Metadata            map[string]interface{}                    "json:\"metadata,omitempty\" graphql:\"metadata\""
+	User                []*GetEventByID_Event_User                "json:\"user,omitempty\" graphql:\"user\""
+	Group               []*GetEventByID_Event_Group               "json:\"group,omitempty\" graphql:\"group\""
+	Integration         []*GetEventByID_Event_Integration         "json:\"integration,omitempty\" graphql:\"integration\""
+	Organization        []*GetEventByID_Event_Organization        "json:\"organization,omitempty\" graphql:\"organization\""
+	Invite              []*GetEventByID_Event_Invite              "json:\"invite,omitempty\" graphql:\"invite\""
+	Feature             []*GetEventByID_Event_Feature             "json:\"feature,omitempty\" graphql:\"feature\""
+	PersonalAccessToken []*GetEventByID_Event_PersonalAccessToken "json:\"personalAccessToken,omitempty\" graphql:\"personalAccessToken\""
+	Oauth2token         []*GetEventByID_Event_Oauth2token         "json:\"oauth2token,omitempty\" graphql:\"oauth2token\""
+	Hush                []*GetEventByID_Event_Hush                "json:\"hush,omitempty\" graphql:\"hush\""
+	Orgmembership       []*GetEventByID_Event_Orgmembership       "json:\"orgmembership,omitempty\" graphql:\"orgmembership\""
+	Groupmembership     []*GetEventByID_Event_Groupmembership     "json:\"groupmembership,omitempty\" graphql:\"groupmembership\""
+	Entitlement         []*GetEventByID_Event_Entitlement         "json:\"entitlement,omitempty\" graphql:\"entitlement\""
+	Webhook             []*GetEventByID_Event_Webhook             "json:\"webhook,omitempty\" graphql:\"webhook\""
 }
 
-func (t *CreateEvent_CreateEvent_Event) GetID() string {
+func (t *GetEventByID_Event) GetID() string {
 	if t == nil {
-		t = &CreateEvent_CreateEvent_Event{}
+		t = &GetEventByID_Event{}
 	}
 	return t.ID
 }
-func (t *CreateEvent_CreateEvent_Event) GetEventID() *string {
+func (t *GetEventByID_Event) GetCreatedAt() *time.Time {
 	if t == nil {
-		t = &CreateEvent_CreateEvent_Event{}
+		t = &GetEventByID_Event{}
+	}
+	return t.CreatedAt
+}
+func (t *GetEventByID_Event) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetEventByID_Event{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetEventByID_Event) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetEventByID_Event{}
+	}
+	return t.CreatedBy
+}
+func (t *GetEventByID_Event) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetEventByID_Event{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetEventByID_Event) GetEventID() *string {
+	if t == nil {
+		t = &GetEventByID_Event{}
 	}
 	return t.EventID
 }
-func (t *CreateEvent_CreateEvent_Event) GetCorrelationID() *string {
+func (t *GetEventByID_Event) GetCorrelationID() *string {
 	if t == nil {
-		t = &CreateEvent_CreateEvent_Event{}
+		t = &GetEventByID_Event{}
 	}
 	return t.CorrelationID
 }
-func (t *CreateEvent_CreateEvent_Event) GetEventType() string {
+func (t *GetEventByID_Event) GetEventType() string {
 	if t == nil {
-		t = &CreateEvent_CreateEvent_Event{}
+		t = &GetEventByID_Event{}
 	}
 	return t.EventType
 }
-func (t *CreateEvent_CreateEvent_Event) GetMetadata() map[string]interface{} {
+func (t *GetEventByID_Event) GetMetadata() map[string]interface{} {
 	if t == nil {
-		t = &CreateEvent_CreateEvent_Event{}
+		t = &GetEventByID_Event{}
 	}
 	return t.Metadata
 }
-func (t *CreateEvent_CreateEvent_Event) GetUser() []*CreateEvent_CreateEvent_Event_User {
+func (t *GetEventByID_Event) GetUser() []*GetEventByID_Event_User {
 	if t == nil {
-		t = &CreateEvent_CreateEvent_Event{}
+		t = &GetEventByID_Event{}
 	}
 	return t.User
 }
-func (t *CreateEvent_CreateEvent_Event) GetGroup() []*CreateEvent_CreateEvent_Event_Group {
+func (t *GetEventByID_Event) GetGroup() []*GetEventByID_Event_Group {
 	if t == nil {
-		t = &CreateEvent_CreateEvent_Event{}
+		t = &GetEventByID_Event{}
 	}
 	return t.Group
 }
-func (t *CreateEvent_CreateEvent_Event) GetIntegration() []*CreateEvent_CreateEvent_Event_Integration {
+func (t *GetEventByID_Event) GetIntegration() []*GetEventByID_Event_Integration {
 	if t == nil {
-		t = &CreateEvent_CreateEvent_Event{}
+		t = &GetEventByID_Event{}
 	}
 	return t.Integration
 }
-func (t *CreateEvent_CreateEvent_Event) GetOrganization() []*CreateEvent_CreateEvent_Event_Organization {
+func (t *GetEventByID_Event) GetOrganization() []*GetEventByID_Event_Organization {
 	if t == nil {
-		t = &CreateEvent_CreateEvent_Event{}
+		t = &GetEventByID_Event{}
 	}
 	return t.Organization
 }
-func (t *CreateEvent_CreateEvent_Event) GetInvite() []*CreateEvent_CreateEvent_Event_Invite {
+func (t *GetEventByID_Event) GetInvite() []*GetEventByID_Event_Invite {
 	if t == nil {
-		t = &CreateEvent_CreateEvent_Event{}
+		t = &GetEventByID_Event{}
 	}
 	return t.Invite
 }
-func (t *CreateEvent_CreateEvent_Event) GetFeature() []*CreateEvent_CreateEvent_Event_Feature {
+func (t *GetEventByID_Event) GetFeature() []*GetEventByID_Event_Feature {
 	if t == nil {
-		t = &CreateEvent_CreateEvent_Event{}
+		t = &GetEventByID_Event{}
 	}
 	return t.Feature
 }
-func (t *CreateEvent_CreateEvent_Event) GetPersonalAccessToken() []*CreateEvent_CreateEvent_Event_PersonalAccessToken {
+func (t *GetEventByID_Event) GetPersonalAccessToken() []*GetEventByID_Event_PersonalAccessToken {
 	if t == nil {
-		t = &CreateEvent_CreateEvent_Event{}
+		t = &GetEventByID_Event{}
 	}
 	return t.PersonalAccessToken
 }
-func (t *CreateEvent_CreateEvent_Event) GetOauth2token() []*CreateEvent_CreateEvent_Event_Oauth2token {
+func (t *GetEventByID_Event) GetOauth2token() []*GetEventByID_Event_Oauth2token {
 	if t == nil {
-		t = &CreateEvent_CreateEvent_Event{}
+		t = &GetEventByID_Event{}
 	}
 	return t.Oauth2token
 }
-func (t *CreateEvent_CreateEvent_Event) GetHush() []*CreateEvent_CreateEvent_Event_Hush {
+func (t *GetEventByID_Event) GetHush() []*GetEventByID_Event_Hush {
 	if t == nil {
-		t = &CreateEvent_CreateEvent_Event{}
+		t = &GetEventByID_Event{}
 	}
 	return t.Hush
 }
-func (t *CreateEvent_CreateEvent_Event) GetOrgmembership() []*CreateEvent_CreateEvent_Event_Orgmembership {
+func (t *GetEventByID_Event) GetOrgmembership() []*GetEventByID_Event_Orgmembership {
 	if t == nil {
-		t = &CreateEvent_CreateEvent_Event{}
+		t = &GetEventByID_Event{}
 	}
 	return t.Orgmembership
 }
-func (t *CreateEvent_CreateEvent_Event) GetGroupmembership() []*CreateEvent_CreateEvent_Event_Groupmembership {
+func (t *GetEventByID_Event) GetGroupmembership() []*GetEventByID_Event_Groupmembership {
 	if t == nil {
-		t = &CreateEvent_CreateEvent_Event{}
+		t = &GetEventByID_Event{}
 	}
 	return t.Groupmembership
 }
-func (t *CreateEvent_CreateEvent_Event) GetEntitlement() []*CreateEvent_CreateEvent_Event_Entitlement {
+func (t *GetEventByID_Event) GetEntitlement() []*GetEventByID_Event_Entitlement {
 	if t == nil {
-		t = &CreateEvent_CreateEvent_Event{}
+		t = &GetEventByID_Event{}
 	}
 	return t.Entitlement
 }
-func (t *CreateEvent_CreateEvent_Event) GetWebhook() []*CreateEvent_CreateEvent_Event_Webhook {
+func (t *GetEventByID_Event) GetWebhook() []*GetEventByID_Event_Webhook {
 	if t == nil {
-		t = &CreateEvent_CreateEvent_Event{}
+		t = &GetEventByID_Event{}
 	}
 	return t.Webhook
 }
 
-type CreateEvent_CreateEvent struct {
-	Event CreateEvent_CreateEvent_Event "json:\"event\" graphql:\"event\""
+type GetEvents_Events_Edges_Node struct {
+	EventID       *string                "json:\"eventID,omitempty\" graphql:\"eventID\""
+	ID            string                 "json:\"id\" graphql:\"id\""
+	CorrelationID *string                "json:\"correlationID,omitempty\" graphql:\"correlationID\""
+	EventType     string                 "json:\"eventType\" graphql:\"eventType\""
+	Metadata      map[string]interface{} "json:\"metadata,omitempty\" graphql:\"metadata\""
 }
 
-func (t *CreateEvent_CreateEvent) GetEvent() *CreateEvent_CreateEvent_Event {
+func (t *GetEvents_Events_Edges_Node) GetEventID() *string {
 	if t == nil {
-		t = &CreateEvent_CreateEvent{}
-	}
-	return &t.Event
-}
-
-type CreateBulkEvent_CreateBulkEvent_Events_User struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkEvent_CreateBulkEvent_Events_User) GetID() string {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events_User{}
-	}
-	return t.ID
-}
-
-type CreateBulkEvent_CreateBulkEvent_Events_Group struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkEvent_CreateBulkEvent_Events_Group) GetID() string {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events_Group{}
-	}
-	return t.ID
-}
-
-type CreateBulkEvent_CreateBulkEvent_Events_Integration struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkEvent_CreateBulkEvent_Events_Integration) GetID() string {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events_Integration{}
-	}
-	return t.ID
-}
-
-type CreateBulkEvent_CreateBulkEvent_Events_Organization struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkEvent_CreateBulkEvent_Events_Organization) GetID() string {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events_Organization{}
-	}
-	return t.ID
-}
-
-type CreateBulkEvent_CreateBulkEvent_Events_Invite struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkEvent_CreateBulkEvent_Events_Invite) GetID() string {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events_Invite{}
-	}
-	return t.ID
-}
-
-type CreateBulkEvent_CreateBulkEvent_Events_Feature struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkEvent_CreateBulkEvent_Events_Feature) GetID() string {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events_Feature{}
-	}
-	return t.ID
-}
-
-type CreateBulkEvent_CreateBulkEvent_Events_PersonalAccessToken struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkEvent_CreateBulkEvent_Events_PersonalAccessToken) GetID() string {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events_PersonalAccessToken{}
-	}
-	return t.ID
-}
-
-type CreateBulkEvent_CreateBulkEvent_Events_Oauth2token struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkEvent_CreateBulkEvent_Events_Oauth2token) GetID() string {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events_Oauth2token{}
-	}
-	return t.ID
-}
-
-type CreateBulkEvent_CreateBulkEvent_Events_Hush struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkEvent_CreateBulkEvent_Events_Hush) GetID() string {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events_Hush{}
-	}
-	return t.ID
-}
-
-type CreateBulkEvent_CreateBulkEvent_Events_Orgmembership struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkEvent_CreateBulkEvent_Events_Orgmembership) GetID() string {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events_Orgmembership{}
-	}
-	return t.ID
-}
-
-type CreateBulkEvent_CreateBulkEvent_Events_Groupmembership struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkEvent_CreateBulkEvent_Events_Groupmembership) GetID() string {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events_Groupmembership{}
-	}
-	return t.ID
-}
-
-type CreateBulkEvent_CreateBulkEvent_Events_Entitlement struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkEvent_CreateBulkEvent_Events_Entitlement) GetID() string {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events_Entitlement{}
-	}
-	return t.ID
-}
-
-type CreateBulkEvent_CreateBulkEvent_Events_Webhook struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkEvent_CreateBulkEvent_Events_Webhook) GetID() string {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events_Webhook{}
-	}
-	return t.ID
-}
-
-type CreateBulkEvent_CreateBulkEvent_Events struct {
-	ID                  string                                                        "json:\"id\" graphql:\"id\""
-	EventID             *string                                                       "json:\"eventID,omitempty\" graphql:\"eventID\""
-	CorrelationID       *string                                                       "json:\"correlationID,omitempty\" graphql:\"correlationID\""
-	EventType           string                                                        "json:\"eventType\" graphql:\"eventType\""
-	Metadata            map[string]interface{}                                        "json:\"metadata,omitempty\" graphql:\"metadata\""
-	User                []*CreateBulkEvent_CreateBulkEvent_Events_User                "json:\"user,omitempty\" graphql:\"user\""
-	Group               []*CreateBulkEvent_CreateBulkEvent_Events_Group               "json:\"group,omitempty\" graphql:\"group\""
-	Integration         []*CreateBulkEvent_CreateBulkEvent_Events_Integration         "json:\"integration,omitempty\" graphql:\"integration\""
-	Organization        []*CreateBulkEvent_CreateBulkEvent_Events_Organization        "json:\"organization,omitempty\" graphql:\"organization\""
-	Invite              []*CreateBulkEvent_CreateBulkEvent_Events_Invite              "json:\"invite,omitempty\" graphql:\"invite\""
-	Feature             []*CreateBulkEvent_CreateBulkEvent_Events_Feature             "json:\"feature,omitempty\" graphql:\"feature\""
-	PersonalAccessToken []*CreateBulkEvent_CreateBulkEvent_Events_PersonalAccessToken "json:\"personalAccessToken,omitempty\" graphql:\"personalAccessToken\""
-	Oauth2token         []*CreateBulkEvent_CreateBulkEvent_Events_Oauth2token         "json:\"oauth2token,omitempty\" graphql:\"oauth2token\""
-	Hush                []*CreateBulkEvent_CreateBulkEvent_Events_Hush                "json:\"hush,omitempty\" graphql:\"hush\""
-	Orgmembership       []*CreateBulkEvent_CreateBulkEvent_Events_Orgmembership       "json:\"orgmembership,omitempty\" graphql:\"orgmembership\""
-	Groupmembership     []*CreateBulkEvent_CreateBulkEvent_Events_Groupmembership     "json:\"groupmembership,omitempty\" graphql:\"groupmembership\""
-	Entitlement         []*CreateBulkEvent_CreateBulkEvent_Events_Entitlement         "json:\"entitlement,omitempty\" graphql:\"entitlement\""
-	Webhook             []*CreateBulkEvent_CreateBulkEvent_Events_Webhook             "json:\"webhook,omitempty\" graphql:\"webhook\""
-}
-
-func (t *CreateBulkEvent_CreateBulkEvent_Events) GetID() string {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events{}
-	}
-	return t.ID
-}
-func (t *CreateBulkEvent_CreateBulkEvent_Events) GetEventID() *string {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events{}
+		t = &GetEvents_Events_Edges_Node{}
 	}
 	return t.EventID
 }
-func (t *CreateBulkEvent_CreateBulkEvent_Events) GetCorrelationID() *string {
+func (t *GetEvents_Events_Edges_Node) GetID() string {
 	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events{}
+		t = &GetEvents_Events_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetEvents_Events_Edges_Node) GetCorrelationID() *string {
+	if t == nil {
+		t = &GetEvents_Events_Edges_Node{}
 	}
 	return t.CorrelationID
 }
-func (t *CreateBulkEvent_CreateBulkEvent_Events) GetEventType() string {
+func (t *GetEvents_Events_Edges_Node) GetEventType() string {
 	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events{}
+		t = &GetEvents_Events_Edges_Node{}
 	}
 	return t.EventType
 }
-func (t *CreateBulkEvent_CreateBulkEvent_Events) GetMetadata() map[string]interface{} {
+func (t *GetEvents_Events_Edges_Node) GetMetadata() map[string]interface{} {
 	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events{}
+		t = &GetEvents_Events_Edges_Node{}
 	}
 	return t.Metadata
 }
-func (t *CreateBulkEvent_CreateBulkEvent_Events) GetUser() []*CreateBulkEvent_CreateBulkEvent_Events_User {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events{}
-	}
-	return t.User
-}
-func (t *CreateBulkEvent_CreateBulkEvent_Events) GetGroup() []*CreateBulkEvent_CreateBulkEvent_Events_Group {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events{}
-	}
-	return t.Group
-}
-func (t *CreateBulkEvent_CreateBulkEvent_Events) GetIntegration() []*CreateBulkEvent_CreateBulkEvent_Events_Integration {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events{}
-	}
-	return t.Integration
-}
-func (t *CreateBulkEvent_CreateBulkEvent_Events) GetOrganization() []*CreateBulkEvent_CreateBulkEvent_Events_Organization {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events{}
-	}
-	return t.Organization
-}
-func (t *CreateBulkEvent_CreateBulkEvent_Events) GetInvite() []*CreateBulkEvent_CreateBulkEvent_Events_Invite {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events{}
-	}
-	return t.Invite
-}
-func (t *CreateBulkEvent_CreateBulkEvent_Events) GetFeature() []*CreateBulkEvent_CreateBulkEvent_Events_Feature {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events{}
-	}
-	return t.Feature
-}
-func (t *CreateBulkEvent_CreateBulkEvent_Events) GetPersonalAccessToken() []*CreateBulkEvent_CreateBulkEvent_Events_PersonalAccessToken {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events{}
-	}
-	return t.PersonalAccessToken
-}
-func (t *CreateBulkEvent_CreateBulkEvent_Events) GetOauth2token() []*CreateBulkEvent_CreateBulkEvent_Events_Oauth2token {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events{}
-	}
-	return t.Oauth2token
-}
-func (t *CreateBulkEvent_CreateBulkEvent_Events) GetHush() []*CreateBulkEvent_CreateBulkEvent_Events_Hush {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events{}
-	}
-	return t.Hush
-}
-func (t *CreateBulkEvent_CreateBulkEvent_Events) GetOrgmembership() []*CreateBulkEvent_CreateBulkEvent_Events_Orgmembership {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events{}
-	}
-	return t.Orgmembership
-}
-func (t *CreateBulkEvent_CreateBulkEvent_Events) GetGroupmembership() []*CreateBulkEvent_CreateBulkEvent_Events_Groupmembership {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events{}
-	}
-	return t.Groupmembership
-}
-func (t *CreateBulkEvent_CreateBulkEvent_Events) GetEntitlement() []*CreateBulkEvent_CreateBulkEvent_Events_Entitlement {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events{}
-	}
-	return t.Entitlement
-}
-func (t *CreateBulkEvent_CreateBulkEvent_Events) GetWebhook() []*CreateBulkEvent_CreateBulkEvent_Events_Webhook {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent_Events{}
-	}
-	return t.Webhook
+
+type GetEvents_Events_Edges struct {
+	Node *GetEvents_Events_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
 }
 
-type CreateBulkEvent_CreateBulkEvent struct {
-	Events []*CreateBulkEvent_CreateBulkEvent_Events "json:\"events,omitempty\" graphql:\"events\""
+func (t *GetEvents_Events_Edges) GetNode() *GetEvents_Events_Edges_Node {
+	if t == nil {
+		t = &GetEvents_Events_Edges{}
+	}
+	return t.Node
 }
 
-func (t *CreateBulkEvent_CreateBulkEvent) GetEvents() []*CreateBulkEvent_CreateBulkEvent_Events {
-	if t == nil {
-		t = &CreateBulkEvent_CreateBulkEvent{}
-	}
-	return t.Events
+type GetEvents_Events struct {
+	Edges []*GetEvents_Events_Edges "json:\"edges,omitempty\" graphql:\"edges\""
 }
 
-type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_User struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_User) GetID() string {
+func (t *GetEvents_Events) GetEdges() []*GetEvents_Events_Edges {
 	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_User{}
+		t = &GetEvents_Events{}
 	}
-	return t.ID
-}
-
-type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Group struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Group) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Group{}
-	}
-	return t.ID
-}
-
-type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Integration struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Integration) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Integration{}
-	}
-	return t.ID
-}
-
-type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Organization struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Organization) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Organization{}
-	}
-	return t.ID
-}
-
-type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Invite struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Invite) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Invite{}
-	}
-	return t.ID
-}
-
-type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Feature struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Feature) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Feature{}
-	}
-	return t.ID
-}
-
-type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_PersonalAccessToken struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_PersonalAccessToken) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_PersonalAccessToken{}
-	}
-	return t.ID
-}
-
-type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Oauth2token struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Oauth2token) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Oauth2token{}
-	}
-	return t.ID
-}
-
-type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Hush struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Hush) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Hush{}
-	}
-	return t.ID
-}
-
-type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Orgmembership struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Orgmembership) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Orgmembership{}
-	}
-	return t.ID
-}
-
-type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Groupmembership struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Groupmembership) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Groupmembership{}
-	}
-	return t.ID
-}
-
-type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Entitlement struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Entitlement) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Entitlement{}
-	}
-	return t.ID
-}
-
-type CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Webhook struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Webhook) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Webhook{}
-	}
-	return t.ID
-}
-
-type CreateBulkCSVEvent_CreateBulkCSVEvent_Events struct {
-	ID                  string                                                              "json:\"id\" graphql:\"id\""
-	EventID             *string                                                             "json:\"eventID,omitempty\" graphql:\"eventID\""
-	CorrelationID       *string                                                             "json:\"correlationID,omitempty\" graphql:\"correlationID\""
-	EventType           string                                                              "json:\"eventType\" graphql:\"eventType\""
-	Metadata            map[string]interface{}                                              "json:\"metadata,omitempty\" graphql:\"metadata\""
-	User                []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_User                "json:\"user,omitempty\" graphql:\"user\""
-	Group               []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Group               "json:\"group,omitempty\" graphql:\"group\""
-	Integration         []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Integration         "json:\"integration,omitempty\" graphql:\"integration\""
-	Organization        []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Organization        "json:\"organization,omitempty\" graphql:\"organization\""
-	Invite              []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Invite              "json:\"invite,omitempty\" graphql:\"invite\""
-	Feature             []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Feature             "json:\"feature,omitempty\" graphql:\"feature\""
-	PersonalAccessToken []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_PersonalAccessToken "json:\"personalAccessToken,omitempty\" graphql:\"personalAccessToken\""
-	Oauth2token         []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Oauth2token         "json:\"oauth2token,omitempty\" graphql:\"oauth2token\""
-	Hush                []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Hush                "json:\"hush,omitempty\" graphql:\"hush\""
-	Orgmembership       []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Orgmembership       "json:\"orgmembership,omitempty\" graphql:\"orgmembership\""
-	Groupmembership     []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Groupmembership     "json:\"groupmembership,omitempty\" graphql:\"groupmembership\""
-	Entitlement         []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Entitlement         "json:\"entitlement,omitempty\" graphql:\"entitlement\""
-	Webhook             []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Webhook             "json:\"webhook,omitempty\" graphql:\"webhook\""
-}
-
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
-	}
-	return t.ID
-}
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetEventID() *string {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
-	}
-	return t.EventID
-}
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetCorrelationID() *string {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
-	}
-	return t.CorrelationID
-}
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetEventType() string {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
-	}
-	return t.EventType
-}
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetMetadata() map[string]interface{} {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
-	}
-	return t.Metadata
-}
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetUser() []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_User {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
-	}
-	return t.User
-}
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetGroup() []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Group {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
-	}
-	return t.Group
-}
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetIntegration() []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Integration {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
-	}
-	return t.Integration
-}
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetOrganization() []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Organization {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
-	}
-	return t.Organization
-}
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetInvite() []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Invite {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
-	}
-	return t.Invite
-}
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetFeature() []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Feature {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
-	}
-	return t.Feature
-}
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetPersonalAccessToken() []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_PersonalAccessToken {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
-	}
-	return t.PersonalAccessToken
-}
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetOauth2token() []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Oauth2token {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
-	}
-	return t.Oauth2token
-}
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetHush() []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Hush {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
-	}
-	return t.Hush
-}
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetOrgmembership() []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Orgmembership {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
-	}
-	return t.Orgmembership
-}
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetGroupmembership() []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Groupmembership {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
-	}
-	return t.Groupmembership
-}
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetEntitlement() []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Entitlement {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
-	}
-	return t.Entitlement
-}
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent_Events) GetWebhook() []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events_Webhook {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent_Events{}
-	}
-	return t.Webhook
-}
-
-type CreateBulkCSVEvent_CreateBulkCSVEvent struct {
-	Events []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events "json:\"events,omitempty\" graphql:\"events\""
-}
-
-func (t *CreateBulkCSVEvent_CreateBulkCSVEvent) GetEvents() []*CreateBulkCSVEvent_CreateBulkCSVEvent_Events {
-	if t == nil {
-		t = &CreateBulkCSVEvent_CreateBulkCSVEvent{}
-	}
-	return t.Events
+	return t.Edges
 }
 
 type UpdateEvent_UpdateEvent_Event_User struct {
@@ -10944,17 +10955,6 @@ func (t *UpdateEvent_UpdateEvent) GetEvent() *UpdateEvent_UpdateEvent_Event {
 		t = &UpdateEvent_UpdateEvent{}
 	}
 	return &t.Event
-}
-
-type DeleteEvent_DeleteEvent struct {
-	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
-}
-
-func (t *DeleteEvent_DeleteEvent) GetDeletedID() string {
-	if t == nil {
-		t = &DeleteEvent_DeleteEvent{}
-	}
-	return t.DeletedID
 }
 
 type GetAllEventHistories_EventHistories_Edges_Node struct {
@@ -30116,17 +30116,6 @@ func (t *DeleteAPIToken) GetDeleteAPIToken() *DeleteAPIToken_DeleteAPIToken {
 	return &t.DeleteAPIToken
 }
 
-type CreateBulkCSVContact struct {
-	CreateBulkCSVContact CreateBulkCSVContact_CreateBulkCSVContact "json:\"createBulkCSVContact\" graphql:\"createBulkCSVContact\""
-}
-
-func (t *CreateBulkCSVContact) GetCreateBulkCSVContact() *CreateBulkCSVContact_CreateBulkCSVContact {
-	if t == nil {
-		t = &CreateBulkCSVContact{}
-	}
-	return &t.CreateBulkCSVContact
-}
-
 type CreateBulkContact struct {
 	CreateBulkContact CreateBulkContact_CreateBulkContact "json:\"createBulkContact\" graphql:\"createBulkContact\""
 }
@@ -30136,6 +30125,17 @@ func (t *CreateBulkContact) GetCreateBulkContact() *CreateBulkContact_CreateBulk
 		t = &CreateBulkContact{}
 	}
 	return &t.CreateBulkContact
+}
+
+type CreateBulkCSVContact struct {
+	CreateBulkCSVContact CreateBulkCSVContact_CreateBulkCSVContact "json:\"createBulkCSVContact\" graphql:\"createBulkCSVContact\""
+}
+
+func (t *CreateBulkCSVContact) GetCreateBulkCSVContact() *CreateBulkCSVContact_CreateBulkCSVContact {
+	if t == nil {
+		t = &CreateBulkCSVContact{}
+	}
+	return &t.CreateBulkCSVContact
 }
 
 type CreateContact struct {
@@ -30490,6 +30490,50 @@ func (t *UpdateEntitlementPlan) GetUpdateEntitlementPlan() *UpdateEntitlementPla
 	return &t.UpdateEntitlementPlan
 }
 
+type CreateBulkCSVEntitlementPlanFeature struct {
+	CreateBulkCSVEntitlementPlanFeature CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature "json:\"createBulkCSVEntitlementPlanFeature\" graphql:\"createBulkCSVEntitlementPlanFeature\""
+}
+
+func (t *CreateBulkCSVEntitlementPlanFeature) GetCreateBulkCSVEntitlementPlanFeature() *CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature {
+	if t == nil {
+		t = &CreateBulkCSVEntitlementPlanFeature{}
+	}
+	return &t.CreateBulkCSVEntitlementPlanFeature
+}
+
+type CreateBulkEntitlementPlanFeature struct {
+	CreateBulkEntitlementPlanFeature CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature "json:\"createBulkEntitlementPlanFeature\" graphql:\"createBulkEntitlementPlanFeature\""
+}
+
+func (t *CreateBulkEntitlementPlanFeature) GetCreateBulkEntitlementPlanFeature() *CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature {
+	if t == nil {
+		t = &CreateBulkEntitlementPlanFeature{}
+	}
+	return &t.CreateBulkEntitlementPlanFeature
+}
+
+type CreateEntitlementPlanFeature struct {
+	CreateEntitlementPlanFeature CreateEntitlementPlanFeature_CreateEntitlementPlanFeature "json:\"createEntitlementPlanFeature\" graphql:\"createEntitlementPlanFeature\""
+}
+
+func (t *CreateEntitlementPlanFeature) GetCreateEntitlementPlanFeature() *CreateEntitlementPlanFeature_CreateEntitlementPlanFeature {
+	if t == nil {
+		t = &CreateEntitlementPlanFeature{}
+	}
+	return &t.CreateEntitlementPlanFeature
+}
+
+type DeleteEntitlementPlanFeature struct {
+	DeleteEntitlementPlanFeature DeleteEntitlementPlanFeature_DeleteEntitlementPlanFeature "json:\"deleteEntitlementPlanFeature\" graphql:\"deleteEntitlementPlanFeature\""
+}
+
+func (t *DeleteEntitlementPlanFeature) GetDeleteEntitlementPlanFeature() *DeleteEntitlementPlanFeature_DeleteEntitlementPlanFeature {
+	if t == nil {
+		t = &DeleteEntitlementPlanFeature{}
+	}
+	return &t.DeleteEntitlementPlanFeature
+}
+
 type GetAllEntitlementPlanFeatures struct {
 	EntitlementPlanFeatures GetAllEntitlementPlanFeatures_EntitlementPlanFeatures "json:\"entitlementPlanFeatures\" graphql:\"entitlementPlanFeatures\""
 }
@@ -30523,39 +30567,6 @@ func (t *GetEntitlementPlanFeatures) GetEntitlementPlanFeatures() *GetEntitlemen
 	return &t.EntitlementPlanFeatures
 }
 
-type CreateEntitlementPlanFeature struct {
-	CreateEntitlementPlanFeature CreateEntitlementPlanFeature_CreateEntitlementPlanFeature "json:\"createEntitlementPlanFeature\" graphql:\"createEntitlementPlanFeature\""
-}
-
-func (t *CreateEntitlementPlanFeature) GetCreateEntitlementPlanFeature() *CreateEntitlementPlanFeature_CreateEntitlementPlanFeature {
-	if t == nil {
-		t = &CreateEntitlementPlanFeature{}
-	}
-	return &t.CreateEntitlementPlanFeature
-}
-
-type CreateBulkCSVEntitlementPlanFeature struct {
-	CreateBulkCSVEntitlementPlanFeature CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature "json:\"createBulkCSVEntitlementPlanFeature\" graphql:\"createBulkCSVEntitlementPlanFeature\""
-}
-
-func (t *CreateBulkCSVEntitlementPlanFeature) GetCreateBulkCSVEntitlementPlanFeature() *CreateBulkCSVEntitlementPlanFeature_CreateBulkCSVEntitlementPlanFeature {
-	if t == nil {
-		t = &CreateBulkCSVEntitlementPlanFeature{}
-	}
-	return &t.CreateBulkCSVEntitlementPlanFeature
-}
-
-type CreateBulkEntitlementPlanFeature struct {
-	CreateBulkEntitlementPlanFeature CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature "json:\"createBulkEntitlementPlanFeature\" graphql:\"createBulkEntitlementPlanFeature\""
-}
-
-func (t *CreateBulkEntitlementPlanFeature) GetCreateBulkEntitlementPlanFeature() *CreateBulkEntitlementPlanFeature_CreateBulkEntitlementPlanFeature {
-	if t == nil {
-		t = &CreateBulkEntitlementPlanFeature{}
-	}
-	return &t.CreateBulkEntitlementPlanFeature
-}
-
 type UpdateEntitlementPlanFeature struct {
 	UpdateEntitlementPlanFeature UpdateEntitlementPlanFeature_UpdateEntitlementPlanFeature "json:\"updateEntitlementPlanFeature\" graphql:\"updateEntitlementPlanFeature\""
 }
@@ -30565,17 +30576,6 @@ func (t *UpdateEntitlementPlanFeature) GetUpdateEntitlementPlanFeature() *Update
 		t = &UpdateEntitlementPlanFeature{}
 	}
 	return &t.UpdateEntitlementPlanFeature
-}
-
-type DeleteEntitlementPlanFeature struct {
-	DeleteEntitlementPlanFeature DeleteEntitlementPlanFeature_DeleteEntitlementPlanFeature "json:\"deleteEntitlementPlanFeature\" graphql:\"deleteEntitlementPlanFeature\""
-}
-
-func (t *DeleteEntitlementPlanFeature) GetDeleteEntitlementPlanFeature() *DeleteEntitlementPlanFeature_DeleteEntitlementPlanFeature {
-	if t == nil {
-		t = &DeleteEntitlementPlanFeature{}
-	}
-	return &t.DeleteEntitlementPlanFeature
 }
 
 type GetAllEntitlementPlanFeatureHistories struct {
@@ -30842,13 +30842,57 @@ func (t *GetEntityTypeHistories) GetEntityTypeHistories() *GetEntityTypeHistorie
 	return &t.EntityTypeHistories
 }
 
-type GetEvents struct {
-	Events GetEvents_Events "json:\"events\" graphql:\"events\""
+type CreateBulkCSVEvent struct {
+	CreateBulkCSVEvent CreateBulkCSVEvent_CreateBulkCSVEvent "json:\"createBulkCSVEvent\" graphql:\"createBulkCSVEvent\""
 }
 
-func (t *GetEvents) GetEvents() *GetEvents_Events {
+func (t *CreateBulkCSVEvent) GetCreateBulkCSVEvent() *CreateBulkCSVEvent_CreateBulkCSVEvent {
 	if t == nil {
-		t = &GetEvents{}
+		t = &CreateBulkCSVEvent{}
+	}
+	return &t.CreateBulkCSVEvent
+}
+
+type CreateBulkEvent struct {
+	CreateBulkEvent CreateBulkEvent_CreateBulkEvent "json:\"createBulkEvent\" graphql:\"createBulkEvent\""
+}
+
+func (t *CreateBulkEvent) GetCreateBulkEvent() *CreateBulkEvent_CreateBulkEvent {
+	if t == nil {
+		t = &CreateBulkEvent{}
+	}
+	return &t.CreateBulkEvent
+}
+
+type CreateEvent struct {
+	CreateEvent CreateEvent_CreateEvent "json:\"createEvent\" graphql:\"createEvent\""
+}
+
+func (t *CreateEvent) GetCreateEvent() *CreateEvent_CreateEvent {
+	if t == nil {
+		t = &CreateEvent{}
+	}
+	return &t.CreateEvent
+}
+
+type DeleteEvent struct {
+	DeleteEvent DeleteEvent_DeleteEvent "json:\"deleteEvent\" graphql:\"deleteEvent\""
+}
+
+func (t *DeleteEvent) GetDeleteEvent() *DeleteEvent_DeleteEvent {
+	if t == nil {
+		t = &DeleteEvent{}
+	}
+	return &t.DeleteEvent
+}
+
+type GetAllEvents struct {
+	Events GetAllEvents_Events "json:\"events\" graphql:\"events\""
+}
+
+func (t *GetAllEvents) GetEvents() *GetAllEvents_Events {
+	if t == nil {
+		t = &GetAllEvents{}
 	}
 	return &t.Events
 }
@@ -30864,48 +30908,15 @@ func (t *GetEventByID) GetEvent() *GetEventByID_Event {
 	return &t.Event
 }
 
-type GetAllEvents struct {
-	Events GetAllEvents_Events "json:\"events\" graphql:\"events\""
+type GetEvents struct {
+	Events GetEvents_Events "json:\"events\" graphql:\"events\""
 }
 
-func (t *GetAllEvents) GetEvents() *GetAllEvents_Events {
+func (t *GetEvents) GetEvents() *GetEvents_Events {
 	if t == nil {
-		t = &GetAllEvents{}
+		t = &GetEvents{}
 	}
 	return &t.Events
-}
-
-type CreateEvent struct {
-	CreateEvent CreateEvent_CreateEvent "json:\"createEvent\" graphql:\"createEvent\""
-}
-
-func (t *CreateEvent) GetCreateEvent() *CreateEvent_CreateEvent {
-	if t == nil {
-		t = &CreateEvent{}
-	}
-	return &t.CreateEvent
-}
-
-type CreateBulkEvent struct {
-	CreateBulkEvent CreateBulkEvent_CreateBulkEvent "json:\"createBulkEvent\" graphql:\"createBulkEvent\""
-}
-
-func (t *CreateBulkEvent) GetCreateBulkEvent() *CreateBulkEvent_CreateBulkEvent {
-	if t == nil {
-		t = &CreateBulkEvent{}
-	}
-	return &t.CreateBulkEvent
-}
-
-type CreateBulkCSVEvent struct {
-	CreateBulkCSVEvent CreateBulkCSVEvent_CreateBulkCSVEvent "json:\"createBulkCSVEvent\" graphql:\"createBulkCSVEvent\""
-}
-
-func (t *CreateBulkCSVEvent) GetCreateBulkCSVEvent() *CreateBulkCSVEvent_CreateBulkCSVEvent {
-	if t == nil {
-		t = &CreateBulkCSVEvent{}
-	}
-	return &t.CreateBulkCSVEvent
 }
 
 type UpdateEvent struct {
@@ -30917,17 +30928,6 @@ func (t *UpdateEvent) GetUpdateEvent() *UpdateEvent_UpdateEvent {
 		t = &UpdateEvent{}
 	}
 	return &t.UpdateEvent
-}
-
-type DeleteEvent struct {
-	DeleteEvent DeleteEvent_DeleteEvent "json:\"deleteEvent\" graphql:\"deleteEvent\""
-}
-
-func (t *DeleteEvent) GetDeleteEvent() *DeleteEvent_DeleteEvent {
-	if t == nil {
-		t = &DeleteEvent{}
-	}
-	return &t.DeleteEvent
 }
 
 type GetAllEventHistories struct {
@@ -33136,45 +33136,6 @@ func (c *Client) DeleteAPIToken(ctx context.Context, deleteAPITokenID string, in
 	return &res, nil
 }
 
-const CreateBulkCSVContactDocument = `mutation CreateBulkCSVContact ($input: Upload!) {
-	createBulkCSVContact(input: $input) {
-		contacts {
-			address
-			company
-			createdAt
-			createdBy
-			email
-			fullName
-			id
-			ownerID
-			phoneNumber
-			status
-			tags
-			title
-			updatedAt
-			updatedBy
-		}
-	}
-}
-`
-
-func (c *Client) CreateBulkCSVContact(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVContact, error) {
-	vars := map[string]any{
-		"input": input,
-	}
-
-	var res CreateBulkCSVContact
-	if err := c.Client.Post(ctx, "CreateBulkCSVContact", CreateBulkCSVContactDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
 const CreateBulkContactDocument = `mutation CreateBulkContact ($input: [CreateContactInput!]) {
 	createBulkContact(input: $input) {
 		contacts {
@@ -33204,6 +33165,45 @@ func (c *Client) CreateBulkContact(ctx context.Context, input []*CreateContactIn
 
 	var res CreateBulkContact
 	if err := c.Client.Post(ctx, "CreateBulkContact", CreateBulkContactDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkCSVContactDocument = `mutation CreateBulkCSVContact ($input: Upload!) {
+	createBulkCSVContact(input: $input) {
+		contacts {
+			address
+			company
+			createdAt
+			createdBy
+			email
+			fullName
+			id
+			ownerID
+			phoneNumber
+			status
+			tags
+			title
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkCSVContact(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVContact, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkCSVContact
+	if err := c.Client.Post(ctx, "CreateBulkCSVContact", CreateBulkCSVContactDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -34392,6 +34392,135 @@ func (c *Client) UpdateEntitlementPlan(ctx context.Context, updateEntitlementPla
 	return &res, nil
 }
 
+const CreateBulkCSVEntitlementPlanFeatureDocument = `mutation CreateBulkCSVEntitlementPlanFeature ($input: Upload!) {
+	createBulkCSVEntitlementPlanFeature(input: $input) {
+		entitlementPlanFeatures {
+			id
+			metadata
+			plan {
+				id
+				name
+			}
+			feature {
+				id
+				name
+			}
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkCSVEntitlementPlanFeature(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVEntitlementPlanFeature, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkCSVEntitlementPlanFeature
+	if err := c.Client.Post(ctx, "CreateBulkCSVEntitlementPlanFeature", CreateBulkCSVEntitlementPlanFeatureDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkEntitlementPlanFeatureDocument = `mutation CreateBulkEntitlementPlanFeature ($input: [CreateEntitlementPlanFeatureInput!]) {
+	createBulkEntitlementPlanFeature(input: $input) {
+		entitlementPlanFeatures {
+			id
+			metadata
+			plan {
+				id
+				name
+			}
+			feature {
+				id
+				name
+			}
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkEntitlementPlanFeature(ctx context.Context, input []*CreateEntitlementPlanFeatureInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkEntitlementPlanFeature, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkEntitlementPlanFeature
+	if err := c.Client.Post(ctx, "CreateBulkEntitlementPlanFeature", CreateBulkEntitlementPlanFeatureDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateEntitlementPlanFeatureDocument = `mutation CreateEntitlementPlanFeature ($input: CreateEntitlementPlanFeatureInput!) {
+	createEntitlementPlanFeature(input: $input) {
+		entitlementPlanFeature {
+			id
+			metadata
+			plan {
+				id
+				name
+			}
+			feature {
+				id
+				name
+			}
+		}
+	}
+}
+`
+
+func (c *Client) CreateEntitlementPlanFeature(ctx context.Context, input CreateEntitlementPlanFeatureInput, interceptors ...clientv2.RequestInterceptor) (*CreateEntitlementPlanFeature, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateEntitlementPlanFeature
+	if err := c.Client.Post(ctx, "CreateEntitlementPlanFeature", CreateEntitlementPlanFeatureDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteEntitlementPlanFeatureDocument = `mutation DeleteEntitlementPlanFeature ($deleteEntitlementPlanFeatureId: ID!) {
+	deleteEntitlementPlanFeature(id: $deleteEntitlementPlanFeatureId) {
+		deletedID
+	}
+}
+`
+
+func (c *Client) DeleteEntitlementPlanFeature(ctx context.Context, deleteEntitlementPlanFeatureID string, interceptors ...clientv2.RequestInterceptor) (*DeleteEntitlementPlanFeature, error) {
+	vars := map[string]any{
+		"deleteEntitlementPlanFeatureId": deleteEntitlementPlanFeatureID,
+	}
+
+	var res DeleteEntitlementPlanFeature
+	if err := c.Client.Post(ctx, "DeleteEntitlementPlanFeature", DeleteEntitlementPlanFeatureDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const GetAllEntitlementPlanFeaturesDocument = `query GetAllEntitlementPlanFeatures {
 	entitlementPlanFeatures {
 		edges {
@@ -34497,111 +34626,6 @@ func (c *Client) GetEntitlementPlanFeatures(ctx context.Context, where *Entitlem
 	return &res, nil
 }
 
-const CreateEntitlementPlanFeatureDocument = `mutation CreateEntitlementPlanFeature ($input: CreateEntitlementPlanFeatureInput!) {
-	createEntitlementPlanFeature(input: $input) {
-		entitlementPlanFeature {
-			id
-			metadata
-			plan {
-				id
-				name
-			}
-			feature {
-				id
-				name
-			}
-		}
-	}
-}
-`
-
-func (c *Client) CreateEntitlementPlanFeature(ctx context.Context, input CreateEntitlementPlanFeatureInput, interceptors ...clientv2.RequestInterceptor) (*CreateEntitlementPlanFeature, error) {
-	vars := map[string]any{
-		"input": input,
-	}
-
-	var res CreateEntitlementPlanFeature
-	if err := c.Client.Post(ctx, "CreateEntitlementPlanFeature", CreateEntitlementPlanFeatureDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
-const CreateBulkCSVEntitlementPlanFeatureDocument = `mutation CreateBulkCSVEntitlementPlanFeature ($input: Upload!) {
-	createBulkCSVEntitlementPlanFeature(input: $input) {
-		entitlementPlanFeatures {
-			id
-			metadata
-			plan {
-				id
-				name
-			}
-			feature {
-				id
-				name
-			}
-		}
-	}
-}
-`
-
-func (c *Client) CreateBulkCSVEntitlementPlanFeature(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVEntitlementPlanFeature, error) {
-	vars := map[string]any{
-		"input": input,
-	}
-
-	var res CreateBulkCSVEntitlementPlanFeature
-	if err := c.Client.Post(ctx, "CreateBulkCSVEntitlementPlanFeature", CreateBulkCSVEntitlementPlanFeatureDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
-const CreateBulkEntitlementPlanFeatureDocument = `mutation CreateBulkEntitlementPlanFeature ($input: [CreateEntitlementPlanFeatureInput!]) {
-	createBulkEntitlementPlanFeature(input: $input) {
-		entitlementPlanFeatures {
-			id
-			metadata
-			plan {
-				id
-				name
-			}
-			feature {
-				id
-				name
-			}
-		}
-	}
-}
-`
-
-func (c *Client) CreateBulkEntitlementPlanFeature(ctx context.Context, input []*CreateEntitlementPlanFeatureInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkEntitlementPlanFeature, error) {
-	vars := map[string]any{
-		"input": input,
-	}
-
-	var res CreateBulkEntitlementPlanFeature
-	if err := c.Client.Post(ctx, "CreateBulkEntitlementPlanFeature", CreateBulkEntitlementPlanFeatureDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
 const UpdateEntitlementPlanFeatureDocument = `mutation UpdateEntitlementPlanFeature ($updateEntitlementPlanFeatureId: ID!, $input: UpdateEntitlementPlanFeatureInput!) {
 	updateEntitlementPlanFeature(id: $updateEntitlementPlanFeatureId, input: $input) {
 		entitlementPlanFeature {
@@ -34628,30 +34652,6 @@ func (c *Client) UpdateEntitlementPlanFeature(ctx context.Context, updateEntitle
 
 	var res UpdateEntitlementPlanFeature
 	if err := c.Client.Post(ctx, "UpdateEntitlementPlanFeature", UpdateEntitlementPlanFeatureDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
-const DeleteEntitlementPlanFeatureDocument = `mutation DeleteEntitlementPlanFeature ($deleteEntitlementPlanFeatureId: ID!) {
-	deleteEntitlementPlanFeature(id: $deleteEntitlementPlanFeatureId) {
-		deletedID
-	}
-}
-`
-
-func (c *Client) DeleteEntitlementPlanFeature(ctx context.Context, deleteEntitlementPlanFeatureID string, interceptors ...clientv2.RequestInterceptor) (*DeleteEntitlementPlanFeature, error) {
-	vars := map[string]any{
-		"deleteEntitlementPlanFeatureId": deleteEntitlementPlanFeatureID,
-	}
-
-	var res DeleteEntitlementPlanFeature
-	if err := c.Client.Post(ctx, "DeleteEntitlementPlanFeature", DeleteEntitlementPlanFeatureDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -35585,28 +35585,65 @@ func (c *Client) GetEntityTypeHistories(ctx context.Context, where *EntityTypeHi
 	return &res, nil
 }
 
-const GetEventsDocument = `query GetEvents ($where: EventWhereInput) {
-	events(where: $where) {
-		edges {
-			node {
-				eventID
+const CreateBulkCSVEventDocument = `mutation CreateBulkCSVEvent ($input: Upload!) {
+	createBulkCSVEvent(input: $input) {
+		events {
+			id
+			eventID
+			correlationID
+			eventType
+			metadata
+			user {
 				id
-				correlationID
-				eventType
-				metadata
+			}
+			group {
+				id
+			}
+			integration {
+				id
+			}
+			organization {
+				id
+			}
+			invite {
+				id
+			}
+			feature {
+				id
+			}
+			personalAccessToken {
+				id
+			}
+			oauth2token {
+				id
+			}
+			hush {
+				id
+			}
+			orgmembership {
+				id
+			}
+			groupmembership {
+				id
+			}
+			entitlement {
+				id
+			}
+			webhook {
+				id
 			}
 		}
 	}
 }
 `
 
-func (c *Client) GetEvents(ctx context.Context, where *EventWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetEvents, error) {
+func (c *Client) CreateBulkCSVEvent(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVEvent, error) {
 	vars := map[string]any{
-		"where": where,
+		"input": input,
 	}
 
-	var res GetEvents
-	if err := c.Client.Post(ctx, "GetEvents", GetEventsDocument, &res, vars, interceptors...); err != nil {
+	var res CreateBulkCSVEvent
+	if err := c.Client.Post(ctx, "CreateBulkCSVEvent", CreateBulkCSVEventDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -35617,67 +35654,158 @@ func (c *Client) GetEvents(ctx context.Context, where *EventWhereInput, intercep
 	return &res, nil
 }
 
-const GetEventByIDDocument = `query GetEventByID ($eventId: ID!) {
-	event(id: $eventId) {
-		id
-		createdAt
-		updatedAt
-		createdBy
-		updatedBy
-		eventID
-		correlationID
-		eventType
-		metadata
-		user {
+const CreateBulkEventDocument = `mutation CreateBulkEvent ($input: [CreateEventInput!]) {
+	createBulkEvent(input: $input) {
+		events {
 			id
-		}
-		group {
-			id
-		}
-		integration {
-			id
-		}
-		organization {
-			id
-		}
-		invite {
-			id
-		}
-		feature {
-			id
-		}
-		personalAccessToken {
-			id
-		}
-		oauth2token {
-			id
-		}
-		hush {
-			id
-		}
-		orgmembership {
-			id
-		}
-		groupmembership {
-			id
-		}
-		entitlement {
-			id
-		}
-		webhook {
-			id
+			eventID
+			correlationID
+			eventType
+			metadata
+			user {
+				id
+			}
+			group {
+				id
+			}
+			integration {
+				id
+			}
+			organization {
+				id
+			}
+			invite {
+				id
+			}
+			feature {
+				id
+			}
+			personalAccessToken {
+				id
+			}
+			oauth2token {
+				id
+			}
+			hush {
+				id
+			}
+			orgmembership {
+				id
+			}
+			groupmembership {
+				id
+			}
+			entitlement {
+				id
+			}
+			webhook {
+				id
+			}
 		}
 	}
 }
 `
 
-func (c *Client) GetEventByID(ctx context.Context, eventID string, interceptors ...clientv2.RequestInterceptor) (*GetEventByID, error) {
+func (c *Client) CreateBulkEvent(ctx context.Context, input []*CreateEventInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkEvent, error) {
 	vars := map[string]any{
-		"eventId": eventID,
+		"input": input,
 	}
 
-	var res GetEventByID
-	if err := c.Client.Post(ctx, "GetEventByID", GetEventByIDDocument, &res, vars, interceptors...); err != nil {
+	var res CreateBulkEvent
+	if err := c.Client.Post(ctx, "CreateBulkEvent", CreateBulkEventDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateEventDocument = `mutation CreateEvent ($input: CreateEventInput!) {
+	createEvent(input: $input) {
+		event {
+			id
+			eventID
+			correlationID
+			eventType
+			metadata
+			user {
+				id
+			}
+			group {
+				id
+			}
+			integration {
+				id
+			}
+			organization {
+				id
+			}
+			invite {
+				id
+			}
+			feature {
+				id
+			}
+			personalAccessToken {
+				id
+			}
+			oauth2token {
+				id
+			}
+			hush {
+				id
+			}
+			orgmembership {
+				id
+			}
+			groupmembership {
+				id
+			}
+			entitlement {
+				id
+			}
+			webhook {
+				id
+			}
+		}
+	}
+}
+`
+
+func (c *Client) CreateEvent(ctx context.Context, input CreateEventInput, interceptors ...clientv2.RequestInterceptor) (*CreateEvent, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateEvent
+	if err := c.Client.Post(ctx, "CreateEvent", CreateEventDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteEventDocument = `mutation DeleteEvent ($deleteEventId: ID!) {
+	deleteEvent(id: $deleteEventId) {
+		deletedID
+	}
+}
+`
+
+func (c *Client) DeleteEvent(ctx context.Context, deleteEventID string, interceptors ...clientv2.RequestInterceptor) (*DeleteEvent, error) {
+	vars := map[string]any{
+		"deleteEventId": deleteEventID,
+	}
+
+	var res DeleteEvent
+	if err := c.Client.Post(ctx, "DeleteEvent", DeleteEventDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -35761,65 +35889,67 @@ func (c *Client) GetAllEvents(ctx context.Context, interceptors ...clientv2.Requ
 	return &res, nil
 }
 
-const CreateEventDocument = `mutation CreateEvent ($input: CreateEventInput!) {
-	createEvent(input: $input) {
-		event {
+const GetEventByIDDocument = `query GetEventByID ($eventId: ID!) {
+	event(id: $eventId) {
+		id
+		createdAt
+		updatedAt
+		createdBy
+		updatedBy
+		eventID
+		correlationID
+		eventType
+		metadata
+		user {
 			id
-			eventID
-			correlationID
-			eventType
-			metadata
-			user {
-				id
-			}
-			group {
-				id
-			}
-			integration {
-				id
-			}
-			organization {
-				id
-			}
-			invite {
-				id
-			}
-			feature {
-				id
-			}
-			personalAccessToken {
-				id
-			}
-			oauth2token {
-				id
-			}
-			hush {
-				id
-			}
-			orgmembership {
-				id
-			}
-			groupmembership {
-				id
-			}
-			entitlement {
-				id
-			}
-			webhook {
-				id
-			}
+		}
+		group {
+			id
+		}
+		integration {
+			id
+		}
+		organization {
+			id
+		}
+		invite {
+			id
+		}
+		feature {
+			id
+		}
+		personalAccessToken {
+			id
+		}
+		oauth2token {
+			id
+		}
+		hush {
+			id
+		}
+		orgmembership {
+			id
+		}
+		groupmembership {
+			id
+		}
+		entitlement {
+			id
+		}
+		webhook {
+			id
 		}
 	}
 }
 `
 
-func (c *Client) CreateEvent(ctx context.Context, input CreateEventInput, interceptors ...clientv2.RequestInterceptor) (*CreateEvent, error) {
+func (c *Client) GetEventByID(ctx context.Context, eventID string, interceptors ...clientv2.RequestInterceptor) (*GetEventByID, error) {
 	vars := map[string]any{
-		"input": input,
+		"eventId": eventID,
 	}
 
-	var res CreateEvent
-	if err := c.Client.Post(ctx, "CreateEvent", CreateEventDocument, &res, vars, interceptors...); err != nil {
+	var res GetEventByID
+	if err := c.Client.Post(ctx, "GetEventByID", GetEventByIDDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -35830,134 +35960,28 @@ func (c *Client) CreateEvent(ctx context.Context, input CreateEventInput, interc
 	return &res, nil
 }
 
-const CreateBulkEventDocument = `mutation CreateBulkEvent ($input: [CreateEventInput!]) {
-	createBulkEvent(input: $input) {
-		events {
-			id
-			eventID
-			correlationID
-			eventType
-			metadata
-			user {
+const GetEventsDocument = `query GetEvents ($where: EventWhereInput) {
+	events(where: $where) {
+		edges {
+			node {
+				eventID
 				id
-			}
-			group {
-				id
-			}
-			integration {
-				id
-			}
-			organization {
-				id
-			}
-			invite {
-				id
-			}
-			feature {
-				id
-			}
-			personalAccessToken {
-				id
-			}
-			oauth2token {
-				id
-			}
-			hush {
-				id
-			}
-			orgmembership {
-				id
-			}
-			groupmembership {
-				id
-			}
-			entitlement {
-				id
-			}
-			webhook {
-				id
+				correlationID
+				eventType
+				metadata
 			}
 		}
 	}
 }
 `
 
-func (c *Client) CreateBulkEvent(ctx context.Context, input []*CreateEventInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkEvent, error) {
+func (c *Client) GetEvents(ctx context.Context, where *EventWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetEvents, error) {
 	vars := map[string]any{
-		"input": input,
+		"where": where,
 	}
 
-	var res CreateBulkEvent
-	if err := c.Client.Post(ctx, "CreateBulkEvent", CreateBulkEventDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
-const CreateBulkCSVEventDocument = `mutation CreateBulkCSVEvent ($input: Upload!) {
-	createBulkCSVEvent(input: $input) {
-		events {
-			id
-			eventID
-			correlationID
-			eventType
-			metadata
-			user {
-				id
-			}
-			group {
-				id
-			}
-			integration {
-				id
-			}
-			organization {
-				id
-			}
-			invite {
-				id
-			}
-			feature {
-				id
-			}
-			personalAccessToken {
-				id
-			}
-			oauth2token {
-				id
-			}
-			hush {
-				id
-			}
-			orgmembership {
-				id
-			}
-			groupmembership {
-				id
-			}
-			entitlement {
-				id
-			}
-			webhook {
-				id
-			}
-		}
-	}
-}
-`
-
-func (c *Client) CreateBulkCSVEvent(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVEvent, error) {
-	vars := map[string]any{
-		"input": input,
-	}
-
-	var res CreateBulkCSVEvent
-	if err := c.Client.Post(ctx, "CreateBulkCSVEvent", CreateBulkCSVEventDocument, &res, vars, interceptors...); err != nil {
+	var res GetEvents
+	if err := c.Client.Post(ctx, "GetEvents", GetEventsDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -36032,30 +36056,6 @@ func (c *Client) UpdateEvent(ctx context.Context, updateEventID string, input Up
 
 	var res UpdateEvent
 	if err := c.Client.Post(ctx, "UpdateEvent", UpdateEventDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
-const DeleteEventDocument = `mutation DeleteEvent ($deleteEventId: ID!) {
-	deleteEvent(id: $deleteEventId) {
-		deletedID
-	}
-}
-`
-
-func (c *Client) DeleteEvent(ctx context.Context, deleteEventID string, interceptors ...clientv2.RequestInterceptor) (*DeleteEvent, error) {
-	vars := map[string]any{
-		"deleteEventId": deleteEventID,
-	}
-
-	var res DeleteEvent
-	if err := c.Client.Post(ctx, "DeleteEvent", DeleteEventDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -42441,8 +42441,8 @@ var DocumentOperationNames = map[string]string{
 	GetAllAPITokensDocument:                       "GetAllAPITokens",
 	GetAPITokenByIDDocument:                       "GetAPITokenByID",
 	DeleteAPITokenDocument:                        "DeleteAPIToken",
-	CreateBulkCSVContactDocument:                  "CreateBulkCSVContact",
 	CreateBulkContactDocument:                     "CreateBulkContact",
+	CreateBulkCSVContactDocument:                  "CreateBulkCSVContact",
 	CreateContactDocument:                         "CreateContact",
 	DeleteContactDocument:                         "DeleteContact",
 	GetAllContactsDocument:                        "GetAllContacts",
@@ -42475,14 +42475,14 @@ var DocumentOperationNames = map[string]string{
 	GetEntitlementPlanByIDDocument:                "GetEntitlementPlanByID",
 	GetEntitlementPlansDocument:                   "GetEntitlementPlans",
 	UpdateEntitlementPlanDocument:                 "UpdateEntitlementPlan",
+	CreateBulkCSVEntitlementPlanFeatureDocument:   "CreateBulkCSVEntitlementPlanFeature",
+	CreateBulkEntitlementPlanFeatureDocument:      "CreateBulkEntitlementPlanFeature",
+	CreateEntitlementPlanFeatureDocument:          "CreateEntitlementPlanFeature",
+	DeleteEntitlementPlanFeatureDocument:          "DeleteEntitlementPlanFeature",
 	GetAllEntitlementPlanFeaturesDocument:         "GetAllEntitlementPlanFeatures",
 	GetEntitlementPlanFeatureByIDDocument:         "GetEntitlementPlanFeatureByID",
 	GetEntitlementPlanFeaturesDocument:            "GetEntitlementPlanFeatures",
-	CreateEntitlementPlanFeatureDocument:          "CreateEntitlementPlanFeature",
-	CreateBulkCSVEntitlementPlanFeatureDocument:   "CreateBulkCSVEntitlementPlanFeature",
-	CreateBulkEntitlementPlanFeatureDocument:      "CreateBulkEntitlementPlanFeature",
 	UpdateEntitlementPlanFeatureDocument:          "UpdateEntitlementPlanFeature",
-	DeleteEntitlementPlanFeatureDocument:          "DeleteEntitlementPlanFeature",
 	GetAllEntitlementPlanFeatureHistoriesDocument: "GetAllEntitlementPlanFeatureHistories",
 	GetEntitlementPlanFeatureHistoriesDocument:    "GetEntitlementPlanFeatureHistories",
 	GetAllEntitlementPlanHistoriesDocument:        "GetAllEntitlementPlanHistories",
@@ -42507,14 +42507,14 @@ var DocumentOperationNames = map[string]string{
 	UpdateEntityTypeDocument:                      "UpdateEntityType",
 	GetAllEntityTypeHistoriesDocument:             "GetAllEntityTypeHistories",
 	GetEntityTypeHistoriesDocument:                "GetEntityTypeHistories",
-	GetEventsDocument:                             "GetEvents",
-	GetEventByIDDocument:                          "GetEventByID",
-	GetAllEventsDocument:                          "GetAllEvents",
-	CreateEventDocument:                           "CreateEvent",
-	CreateBulkEventDocument:                       "CreateBulkEvent",
 	CreateBulkCSVEventDocument:                    "CreateBulkCSVEvent",
-	UpdateEventDocument:                           "UpdateEvent",
+	CreateBulkEventDocument:                       "CreateBulkEvent",
+	CreateEventDocument:                           "CreateEvent",
 	DeleteEventDocument:                           "DeleteEvent",
+	GetAllEventsDocument:                          "GetAllEvents",
+	GetEventByIDDocument:                          "GetEventByID",
+	GetEventsDocument:                             "GetEvents",
+	UpdateEventDocument:                           "UpdateEvent",
 	GetAllEventHistoriesDocument:                  "GetAllEventHistories",
 	GetEventHistoriesDocument:                     "GetEventHistories",
 	CreateBulkCSVFeatureDocument:                  "CreateBulkCSVFeature",
