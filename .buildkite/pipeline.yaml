@@ -195,7 +195,7 @@ steps:
                 - "${IMAGE_REPO}"
               extra_tags:
                 - "${IMAGE_TAG}"
-          - theopenlane/container-build#v1.0.0:
+          - theopenlane/container-build#v1.1.0:
               dockerfile: docker/Dockerfile
               push: false
               build-args:
@@ -222,7 +222,7 @@ steps:
                 - "${IMAGE_REPO}"
               extra_tags:
                 - "${IMAGE_TAG}"
-          - theopenlane/container-build#v1.0.0:
+          - theopenlane/container-build#v1.1.0:
               dockerfile: docker/Dockerfile
               push: true
               build-args:
@@ -249,7 +249,7 @@ steps:
                 - "${GCR_REPO}"
               extra_tags:
                 - "${IMAGE_TAG}"
-          - theopenlane/container-build#v1.0.0:
+          - theopenlane/container-build#v1.1.0:
               dockerfile: docker/all-in-one/Dockerfile.all-in-one
               push: true
               build-args:
@@ -274,7 +274,7 @@ steps:
                 - "${IMAGE_REPO}"
               extra_tags:
                 - "${BUILDKITE_TAG}"
-          - theopenlane/container-build#v1.0.0:
+          - theopenlane/container-build#v1.1.0:
               dockerfile: docker/Dockerfile
               push: true
               build-args:
@@ -301,7 +301,7 @@ steps:
                 - "${GCR_REPO}"
               extra_tags:
                 - "${BUILDKITE_TAG}"
-          - theopenlane/container-build#v1.0.0:
+          - theopenlane/container-build#v1.1.0:
               dockerfile: docker/all-in-one/Dockerfile.all-in-one
               push: true
               build-args:
