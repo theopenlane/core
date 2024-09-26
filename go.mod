@@ -61,7 +61,7 @@ require (
 	github.com/theopenlane/httpsling v0.2.1
 	github.com/theopenlane/iam v0.2.0
 	github.com/theopenlane/utils v0.2.1
-	github.com/vektah/gqlparser/v2 v2.5.16
+	github.com/vektah/gqlparser/v2 v2.5.17
 	github.com/wundergraph/graphql-go-tools v1.67.4
 	gocloud.dev v0.39.0
 	golang.org/x/crypto v0.27.0
