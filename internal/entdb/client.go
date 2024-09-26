@@ -9,7 +9,6 @@ import (
 	"time"
 
 	"ariga.io/entcache"
-	"entgo.io/ent/dialect"
 	entsql "entgo.io/ent/dialect/sql"
 	"github.com/pressly/goose/v3"
 	"github.com/rs/zerolog/log"
@@ -145,15 +144,6 @@ func (c *client) runGooseMigrations() error {
 	defer drv.Close()
 
 	migrations := migratedb.GooseMigrationsPG
-	if driver == dialect.SQLite {
-		migrations = migratedb.GooseMigrationsSQLite
-
-		if _, err := drv.Exec("PRAGMA foreign_keys = off;", nil); err != nil {
-			drv.Close()
-
-			return fmt.Errorf("failed to disable foreign keys: %w", err)
-		}
-	}
 
 	goose.SetBaseFS(migrations)
 
@@ -162,20 +152,9 @@ func (c *client) runGooseMigrations() error {
 	}
 
 	migrationsDir := "migrations-goose-postgres"
-	if driver == dialect.SQLite {
-		migrationsDir = "migrations-goose-sqlite"
-	}
 
 	if err := goose.Up(drv, migrationsDir); err != nil {
 		return err
-	}
-
-	if driver == dialect.SQLite {
-		if _, err := drv.Exec("PRAGMA foreign_keys = on;", nil); err != nil {
-			drv.Close()
-
-			return fmt.Errorf("failed to enable foreign keys: %w", err)
-		}
 	}
 
 	return nil

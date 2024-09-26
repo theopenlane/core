@@ -25,13 +25,7 @@ tasks:
     desc: re-sets the checksum created by the atlas package so that a complete migration can be re-created if deleted
     cmds:
       - atlas migrate hash --dir="file://migrations"
-      - atlas migrate hash --dir="file://migrations-goose-sqlite"
       - atlas migrate hash --dir="file://migrations-goose-postgres"
-
-  console:
-    desc: launches an interactive terminal to the local core db with some tasty options
-    cmds:
-      - sqlite3 -column -header -box ../core.db
 
   newschema:
     desc: generate a new ent schema from template

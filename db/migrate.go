@@ -10,11 +10,6 @@ import (
 //go:embed migrations/*.sql
 var Migrations embed.FS
 
-// GooseMigrationsSQLite contain an embedded filesystem with all the goose migration files for sqlite
-//
-//go:embed migrations-goose-sqlite/*.sql
-var GooseMigrationsSQLite embed.FS
-
 // GooseMigrationsPG contain an embedded filesystem with all the goose migration files for postgres
 //
 //go:embed migrations-goose-postgres/*.sql

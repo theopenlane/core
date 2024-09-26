@@ -19,7 +19,6 @@ includes:
     taskfile: ./jsonschema/Taskfile.yaml
 
 env:
-  ATLAS_SQLITE_DB_URI: "sqlite://file?mode=memory&_fk=1"
   ATLAS_POSTGRES_DB_URI: "postgres:16-alpine"
   TEST_DB_URL: "docker://postgres:16-alpine"
   TEST_DB_CONTAINER_EXPIRY: "2" # in minutes
@@ -50,14 +49,6 @@ tasks:
     aliases: ['go:test:psql', 'test:psql']
     env:
       TEST_DB_URL: "docker://postgres:16-alpine"
-    cmds:
-      - go test -v ./...
-
-  go:test:libsql:
-    desc: runs and outputs results of created go tests
-    aliases: ['test:libsql']
-    env:
-      TEST_DB_URL: "libsql://file::memory:?cache=shared"
     cmds:
       - go test -v ./...
 
