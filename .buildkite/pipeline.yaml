@@ -42,35 +42,20 @@ steps:
               always_pull: true
               environment:
                 - "GOTOOLCHAIN=auto"
-      - label: ":golang: go test - libsql"
-        key: "go_test_libsql"
-        retry:
-          automatic:
-            - exit_status: "*"
-              limit: 2
-        cancel_on_build_failing: true
-        env:
-          TEST_DB_URL: "libsql://file::memory:?cache=shared"
-        plugins:
-          - docker#v5.11.0:
-              image: ghcr.io/theopenlane/build-image:latest
-              always_pull: true
-              command: ["task", "go:test:cover"]
-              environment:
-                - "TEST_DB_URL"
         artifact_paths: ["coverage.out"]
-      - label: ":golang: go test - {{matrix}}"
+      - label: ":golang: go test - {{matrix.version}}"
         key: "go_test"
         retry:
           automatic:
             - exit_status: "*"
               limit: 2
         env:
-          TEST_DB_URL: "{{matrix}}"
+          TEST_DB_URL: "docker://postgres:{{matrix.version}}"
         matrix:
-          - "docker://postgres:16-alpine"
-          - "docker://postgres:15-alpine"
-          - "sqlite://file:ent?mode=memory&cache=shared"
+          setup:
+            version:
+              - 16-alpine
+              - 15-alpine
         plugins:
           - docker#v5.11.0:
               image: ghcr.io/theopenlane/build-image:latest
@@ -90,7 +75,6 @@ steps:
               image: openfga/cli:v0.5.1
               command: ["model", "test", "--tests", "fga/tests/tests.yaml"]
   - group: ":closed_lock_with_key: Security Checks"
-    depends_on: "go_test_libsql"
     key: "security"
     steps:
       - label: ":closed_lock_with_key: gosec"
@@ -105,13 +89,13 @@ steps:
       - label: ":github: upload PR reports"
         key: "scan-upload-pr"
         if: build.pull_request.id != null
-        depends_on: ["gosec", "go_test_libsql"]
+        depends_on: ["gosec", "go_test"]
         plugins:
           - artifacts#v1.9.4:
               download: "results.txt"
           - artifacts#v1.9.4:
               download: "coverage.out"
-              step: "go_test_libsql"
+              step: "go_test"
           - docker#v5.11.0:
               image: "sonarsource/sonar-scanner-cli:11.0"
               environment:
@@ -121,13 +105,13 @@ steps:
       - label: ":github: upload reports"
         key: "scan-upload"
         if: build.branch == "main"
-        depends_on: ["gosec", "go_test_libsql"]
+        depends_on: ["gosec", "go_test"]
         plugins:
           - artifacts#v1.9.4:
               download: results.txt
           - artifacts#v1.9.4:
               download: coverage.out
-              step: "go_test_libsql"
+              step: "go_test"
           - docker#v5.11.0:
               image: "sonarsource/sonar-scanner-cli:11.0"
               environment:

@@ -120,7 +120,7 @@ func parseRequestError(err error, a action) error {
 
 		log.Debug().Err(constraintError).Msg("constraint error")
 
-		// Check for unique (or UNIQUE in sqlite) constraint error
+		// Check for unique constraint error
 		if strings.Contains(strings.ToLower(constraintError.Error()), "unique") {
 			return newAlreadyExistsError(a.object)
 		}
