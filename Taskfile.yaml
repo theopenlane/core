@@ -19,8 +19,8 @@ includes:
     taskfile: ./jsonschema/Taskfile.yaml
 
 env:
-  ATLAS_POSTGRES_DB_URI: "postgres:16-alpine"
-  TEST_DB_URL: "docker://postgres:16-alpine"
+  ATLAS_POSTGRES_DB_URI: "postgres:17-alpine"
+  TEST_DB_URL: "docker://postgres:17-alpine"
   TEST_DB_CONTAINER_EXPIRY: "2" # in minutes
   TEST_FGA_URL: "localhost:8080"
   ENV: config
@@ -48,7 +48,7 @@ tasks:
     desc: runs and outputs results of created go tests
     aliases: ['go:test:psql', 'test:psql']
     env:
-      TEST_DB_URL: "docker://postgres:16-alpine"
+      TEST_DB_URL: "docker://postgres:17-alpine"
     cmds:
       - go test -v ./...
 

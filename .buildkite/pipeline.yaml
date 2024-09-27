@@ -54,8 +54,8 @@ steps:
         matrix:
           setup:
             version:
+              - 17-alpine
               - 16-alpine
-              - 15-alpine
         plugins:
           - docker#v5.11.0:
               image: ghcr.io/theopenlane/build-image:latest
@@ -150,7 +150,7 @@ steps:
         plugins:
           - theopenlane/atlas#v1.0.0:
               project: core
-              dev-url: "docker://postgres/16/dev?search_path=public"
+              dev-url: "docker://postgres/17/dev?search_path=public"
               dir: "file://db/migrations"
               step: lint
       - label: ":rocket: atlas push"
@@ -159,7 +159,7 @@ steps:
         plugins:
           - theopenlane/atlas#v1.0.0:
               project: core
-              dev-url: "docker://postgres/16/dev?search_path=public"
+              dev-url: "docker://postgres/17/dev?search_path=public"
               dir: "file://db/migrations"
               step: migrate
   - group: ":docker: Image Build"
