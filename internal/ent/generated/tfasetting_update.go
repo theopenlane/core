@@ -22,8 +22,9 @@ import (
 // TFASettingUpdate is the builder for updating TFASetting entities.
 type TFASettingUpdate struct {
 	config
-	hooks    []Hook
-	mutation *TFASettingMutation
+	hooks     []Hook
+	mutation  *TFASettingMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the TFASettingUpdate builder.
@@ -312,6 +313,12 @@ func (tsu *TFASettingUpdate) defaults() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (tsu *TFASettingUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TFASettingUpdate {
+	tsu.modifiers = append(tsu.modifiers, modifiers...)
+	return tsu
+}
+
 func (tsu *TFASettingUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(tfasetting.Table, tfasetting.Columns, sqlgraph.NewFieldSpec(tfasetting.FieldID, field.TypeString))
 	if ps := tsu.mutation.predicates; len(ps) > 0 {
@@ -433,6 +440,7 @@ func (tsu *TFASettingUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	_spec.Node.Schema = tsu.schemaConfig.TFASetting
 	ctx = internal.NewSchemaConfigContext(ctx, tsu.schemaConfig)
+	_spec.AddModifiers(tsu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, tsu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{tfasetting.Label}
@@ -448,9 +456,10 @@ func (tsu *TFASettingUpdate) sqlSave(ctx context.Context) (n int, err error) {
 // TFASettingUpdateOne is the builder for updating a single TFASetting entity.
 type TFASettingUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *TFASettingMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *TFASettingMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -746,6 +755,12 @@ func (tsuo *TFASettingUpdateOne) defaults() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (tsuo *TFASettingUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TFASettingUpdateOne {
+	tsuo.modifiers = append(tsuo.modifiers, modifiers...)
+	return tsuo
+}
+
 func (tsuo *TFASettingUpdateOne) sqlSave(ctx context.Context) (_node *TFASetting, err error) {
 	_spec := sqlgraph.NewUpdateSpec(tfasetting.Table, tfasetting.Columns, sqlgraph.NewFieldSpec(tfasetting.FieldID, field.TypeString))
 	id, ok := tsuo.mutation.ID()
@@ -884,6 +899,7 @@ func (tsuo *TFASettingUpdateOne) sqlSave(ctx context.Context) (_node *TFASetting
 	}
 	_spec.Node.Schema = tsuo.schemaConfig.TFASetting
 	ctx = internal.NewSchemaConfigContext(ctx, tsuo.schemaConfig)
+	_spec.AddModifiers(tsuo.modifiers...)
 	_node = &TFASetting{config: tsuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

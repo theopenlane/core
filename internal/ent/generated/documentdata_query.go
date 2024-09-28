@@ -32,8 +32,8 @@ type DocumentDataQuery struct {
 	withOwner       *OrganizationQuery
 	withTemplate    *TemplateQuery
 	withEntity      *EntityQuery
-	modifiers       []func(*sql.Selector)
 	loadTotal       []func(context.Context, []*DocumentData) error
+	modifiers       []func(*sql.Selector)
 	withNamedEntity map[string]*EntityQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -342,8 +342,9 @@ func (ddq *DocumentDataQuery) Clone() *DocumentDataQuery {
 		withTemplate: ddq.withTemplate.Clone(),
 		withEntity:   ddq.withEntity.Clone(),
 		// clone intermediate query.
-		sql:  ddq.sql.Clone(),
-		path: ddq.path,
+		sql:       ddq.sql.Clone(),
+		path:      ddq.path,
+		modifiers: append([]func(*sql.Selector){}, ddq.modifiers...),
 	}
 }
 
@@ -726,6 +727,9 @@ func (ddq *DocumentDataQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	t1.Schema(ddq.schemaConfig.DocumentData)
 	ctx = internal.NewSchemaConfigContext(ctx, ddq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range ddq.modifiers {
+		m(selector)
+	}
 	for _, p := range ddq.predicates {
 		p(selector)
 	}
@@ -741,6 +745,12 @@ func (ddq *DocumentDataQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (ddq *DocumentDataQuery) Modify(modifiers ...func(s *sql.Selector)) *DocumentDataSelect {
+	ddq.modifiers = append(ddq.modifiers, modifiers...)
+	return ddq.Select()
 }
 
 // WithNamedEntity tells the query-builder to eager-load the nodes that are connected to the "entity"
@@ -845,4 +855,10 @@ func (dds *DocumentDataSelect) sqlScan(ctx context.Context, root *DocumentDataQu
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (dds *DocumentDataSelect) Modify(modifiers ...func(s *sql.Selector)) *DocumentDataSelect {
+	dds.modifiers = append(dds.modifiers, modifiers...)
+	return dds
 }

@@ -5,11 +5,10 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/theopenlane/utils/emails"
-	"github.com/theopenlane/utils/marionette"
-	"github.com/theopenlane/utils/sendgrid"
-
+	"github.com/rs/zerolog/log"
+	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/iam/tokens"
+	"github.com/theopenlane/riverboat/pkg/jobs"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
@@ -45,9 +44,10 @@ func HookSubscriber() ent.Hook {
 // queueSubscriberEmail queues the email to be sent to the subscriber
 func queueSubscriberEmail(ctx context.Context, m *generated.SubscriberMutation) error {
 	// Get the details from the mutation, these will never be empty because they are set in the hook
+	// or are required fields
 	orgID, _ := m.OwnerID()
 	tok, _ := m.Token()
-	email, _ := m.Email()
+	e, _ := m.Email()
 
 	// Get the organization name
 	org, err := m.Client().Organization.Get(ctx, orgID)
@@ -55,44 +55,26 @@ func queueSubscriberEmail(ctx context.Context, m *generated.SubscriberMutation) 
 		return err
 	}
 
-	// send emails via Marionette as to not create blocking operations in the server
-	if err := m.Marionette.Queue(marionette.TaskFunc(func(ctx context.Context) error {
-		return sendSubscriberEmail(m, org.Name, tok)
-	}), marionette.WithRetries(3), //nolint:mnd
-		marionette.WithErrorf("could not send subscriber verification email to user %s", email),
-	); err != nil {
+	email, err := m.Emailer.NewSubscriberEmail(emailtemplates.Recipient{
+		Email: e,
+	}, org.Name, tok)
+	if err != nil {
+		log.Error().Err(err).Msg("error rendering email")
+
+		return err
+	}
+
+	// send the email via the job queue
+	_, err = m.Job.Insert(ctx, jobs.EmailArgs{
+		Message: *email,
+	}, nil)
+	if err != nil {
+		log.Error().Err(err).Msg("error queueing email verification")
+
 		return err
 	}
 
 	return nil
-}
-
-// sendSubscriberEmail sends an email to confirm a user's subscription
-func sendSubscriberEmail(m *generated.SubscriberMutation, orgName, token string) error {
-	e, _ := m.Email()
-
-	data := emails.SubscriberEmailData{
-		OrgName: orgName,
-		EmailData: emails.EmailData{
-			Sender: m.Emails.MustFromContact(),
-			Recipient: sendgrid.Contact{
-				Email: e,
-			},
-		},
-	}
-
-	var err error
-	if data.VerifySubscriberURL, err = m.Emails.SubscriberVerifyURL(token); err != nil {
-		return err
-	}
-
-	msg, err := emails.SubscribeEmail(data)
-	if err != nil {
-		return err
-	}
-
-	// Send the email
-	return m.Emails.Send(msg)
 }
 
 // createVerificationToken creates a new email verification token for the user

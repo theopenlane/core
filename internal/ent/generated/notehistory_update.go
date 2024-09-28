@@ -21,8 +21,9 @@ import (
 // NoteHistoryUpdate is the builder for updating NoteHistory entities.
 type NoteHistoryUpdate struct {
 	config
-	hooks    []Hook
-	mutation *NoteHistoryMutation
+	hooks     []Hook
+	mutation  *NoteHistoryMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the NoteHistoryUpdate builder.
@@ -202,6 +203,12 @@ func (nhu *NoteHistoryUpdate) defaults() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (nhu *NoteHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *NoteHistoryUpdate {
+	nhu.modifiers = append(nhu.modifiers, modifiers...)
+	return nhu
+}
+
 func (nhu *NoteHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(notehistory.Table, notehistory.Columns, sqlgraph.NewFieldSpec(notehistory.FieldID, field.TypeString))
 	if ps := nhu.mutation.predicates; len(ps) > 0 {
@@ -266,6 +273,7 @@ func (nhu *NoteHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	_spec.Node.Schema = nhu.schemaConfig.NoteHistory
 	ctx = internal.NewSchemaConfigContext(ctx, nhu.schemaConfig)
+	_spec.AddModifiers(nhu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, nhu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{notehistory.Label}
@@ -281,9 +289,10 @@ func (nhu *NoteHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 // NoteHistoryUpdateOne is the builder for updating a single NoteHistory entity.
 type NoteHistoryUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *NoteHistoryMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *NoteHistoryMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -470,6 +479,12 @@ func (nhuo *NoteHistoryUpdateOne) defaults() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (nhuo *NoteHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *NoteHistoryUpdateOne {
+	nhuo.modifiers = append(nhuo.modifiers, modifiers...)
+	return nhuo
+}
+
 func (nhuo *NoteHistoryUpdateOne) sqlSave(ctx context.Context) (_node *NoteHistory, err error) {
 	_spec := sqlgraph.NewUpdateSpec(notehistory.Table, notehistory.Columns, sqlgraph.NewFieldSpec(notehistory.FieldID, field.TypeString))
 	id, ok := nhuo.mutation.ID()
@@ -551,6 +566,7 @@ func (nhuo *NoteHistoryUpdateOne) sqlSave(ctx context.Context) (_node *NoteHisto
 	}
 	_spec.Node.Schema = nhuo.schemaConfig.NoteHistory
 	ctx = internal.NewSchemaConfigContext(ctx, nhuo.schemaConfig)
+	_spec.AddModifiers(nhuo.modifiers...)
 	_node = &NoteHistory{config: nhuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

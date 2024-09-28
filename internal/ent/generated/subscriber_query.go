@@ -30,8 +30,8 @@ type SubscriberQuery struct {
 	predicates      []predicate.Subscriber
 	withOwner       *OrganizationQuery
 	withEvents      *EventQuery
-	modifiers       []func(*sql.Selector)
 	loadTotal       []func(context.Context, []*Subscriber) error
+	modifiers       []func(*sql.Selector)
 	withNamedEvents map[string]*EventQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -314,8 +314,9 @@ func (sq *SubscriberQuery) Clone() *SubscriberQuery {
 		withOwner:  sq.withOwner.Clone(),
 		withEvents: sq.withEvents.Clone(),
 		// clone intermediate query.
-		sql:  sq.sql.Clone(),
-		path: sq.path,
+		sql:       sq.sql.Clone(),
+		path:      sq.path,
+		modifiers: append([]func(*sql.Selector){}, sq.modifiers...),
 	}
 }
 
@@ -648,6 +649,9 @@ func (sq *SubscriberQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	t1.Schema(sq.schemaConfig.Subscriber)
 	ctx = internal.NewSchemaConfigContext(ctx, sq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range sq.modifiers {
+		m(selector)
+	}
 	for _, p := range sq.predicates {
 		p(selector)
 	}
@@ -663,6 +667,12 @@ func (sq *SubscriberQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (sq *SubscriberQuery) Modify(modifiers ...func(s *sql.Selector)) *SubscriberSelect {
+	sq.modifiers = append(sq.modifiers, modifiers...)
+	return sq.Select()
 }
 
 // WithNamedEvents tells the query-builder to eager-load the nodes that are connected to the "events"
@@ -767,4 +777,10 @@ func (ss *SubscriberSelect) sqlScan(ctx context.Context, root *SubscriberQuery, 
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (ss *SubscriberSelect) Modify(modifiers ...func(s *sql.Selector)) *SubscriberSelect {
+	ss.modifiers = append(ss.modifiers, modifiers...)
+	return ss
 }

@@ -9,6 +9,6 @@ import (
 
 // isDeleteOp checks if the mutation is a deletion operation.
 // which includes soft delete, delete, and delete one.
-func isDeleteOp(ctx context.Context, mutation ent.Mutation) bool {
-	return entx.CheckIsSoftDelete(ctx) || mutation.Op().Is(ent.OpDelete) || mutation.Op().Is(ent.OpDeleteOne)
+func isDeleteOp(ctx context.Context, m ent.Mutation) bool {
+	return entx.CheckIsSoftDelete(ctx) || m.Op().Is(ent.OpDelete) || m.Op().Is(ent.OpDeleteOne)
 }

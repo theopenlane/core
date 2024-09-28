@@ -22,8 +22,9 @@ import (
 // OrganizationSettingHistoryUpdate is the builder for updating OrganizationSettingHistory entities.
 type OrganizationSettingHistoryUpdate struct {
 	config
-	hooks    []Hook
-	mutation *OrganizationSettingHistoryMutation
+	hooks     []Hook
+	mutation  *OrganizationSettingHistoryMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the OrganizationSettingHistoryUpdate builder.
@@ -337,6 +338,12 @@ func (oshu *OrganizationSettingHistoryUpdate) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (oshu *OrganizationSettingHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrganizationSettingHistoryUpdate {
+	oshu.modifiers = append(oshu.modifiers, modifiers...)
+	return oshu
+}
+
 func (oshu *OrganizationSettingHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if err := oshu.check(); err != nil {
 		return n, err
@@ -448,6 +455,7 @@ func (oshu *OrganizationSettingHistoryUpdate) sqlSave(ctx context.Context) (n in
 	}
 	_spec.Node.Schema = oshu.schemaConfig.OrganizationSettingHistory
 	ctx = internal.NewSchemaConfigContext(ctx, oshu.schemaConfig)
+	_spec.AddModifiers(oshu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, oshu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{organizationsettinghistory.Label}
@@ -463,9 +471,10 @@ func (oshu *OrganizationSettingHistoryUpdate) sqlSave(ctx context.Context) (n in
 // OrganizationSettingHistoryUpdateOne is the builder for updating a single OrganizationSettingHistory entity.
 type OrganizationSettingHistoryUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *OrganizationSettingHistoryMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *OrganizationSettingHistoryMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -786,6 +795,12 @@ func (oshuo *OrganizationSettingHistoryUpdateOne) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (oshuo *OrganizationSettingHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrganizationSettingHistoryUpdateOne {
+	oshuo.modifiers = append(oshuo.modifiers, modifiers...)
+	return oshuo
+}
+
 func (oshuo *OrganizationSettingHistoryUpdateOne) sqlSave(ctx context.Context) (_node *OrganizationSettingHistory, err error) {
 	if err := oshuo.check(); err != nil {
 		return _node, err
@@ -914,6 +929,7 @@ func (oshuo *OrganizationSettingHistoryUpdateOne) sqlSave(ctx context.Context) (
 	}
 	_spec.Node.Schema = oshuo.schemaConfig.OrganizationSettingHistory
 	ctx = internal.NewSchemaConfigContext(ctx, oshuo.schemaConfig)
+	_spec.AddModifiers(oshuo.modifiers...)
 	_node = &OrganizationSettingHistory{config: oshuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

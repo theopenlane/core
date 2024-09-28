@@ -25,8 +25,8 @@ type OauthProviderHistoryQuery struct {
 	order      []oauthproviderhistory.OrderOption
 	inters     []Interceptor
 	predicates []predicate.OauthProviderHistory
-	modifiers  []func(*sql.Selector)
 	loadTotal  []func(context.Context, []*OauthProviderHistory) error
+	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -256,8 +256,9 @@ func (ophq *OauthProviderHistoryQuery) Clone() *OauthProviderHistoryQuery {
 		inters:     append([]Interceptor{}, ophq.inters...),
 		predicates: append([]predicate.OauthProviderHistory{}, ophq.predicates...),
 		// clone intermediate query.
-		sql:  ophq.sql.Clone(),
-		path: ophq.path,
+		sql:       ophq.sql.Clone(),
+		path:      ophq.path,
+		modifiers: append([]func(*sql.Selector){}, ophq.modifiers...),
 	}
 }
 
@@ -448,6 +449,9 @@ func (ophq *OauthProviderHistoryQuery) sqlQuery(ctx context.Context) *sql.Select
 	t1.Schema(ophq.schemaConfig.OauthProviderHistory)
 	ctx = internal.NewSchemaConfigContext(ctx, ophq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range ophq.modifiers {
+		m(selector)
+	}
 	for _, p := range ophq.predicates {
 		p(selector)
 	}
@@ -463,6 +467,12 @@ func (ophq *OauthProviderHistoryQuery) sqlQuery(ctx context.Context) *sql.Select
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (ophq *OauthProviderHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *OauthProviderHistorySelect {
+	ophq.modifiers = append(ophq.modifiers, modifiers...)
+	return ophq.Select()
 }
 
 // OauthProviderHistoryGroupBy is the group-by builder for OauthProviderHistory entities.
@@ -553,4 +563,10 @@ func (ophs *OauthProviderHistorySelect) sqlScan(ctx context.Context, root *Oauth
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (ophs *OauthProviderHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *OauthProviderHistorySelect {
+	ophs.modifiers = append(ophs.modifiers, modifiers...)
+	return ophs
 }

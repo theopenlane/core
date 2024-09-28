@@ -18,7 +18,7 @@ tasks:
     desc: brings up the compose environment for the core server
     deps: [build]
     cmds:
-      - "docker compose -f ./docker/docker-compose-redis.yml -f ./docker/docker-compose-fga.yml -f ./docker/docker-compose-kafka.yml -f ./docker/docker-compose.yml -p core up -d"
+      - "docker compose -f ./docker/docker-compose-redis.yml -f ./docker/docker-compose-fga.yml -f ./docker/docker-compose-riverboat.yml -f ./docker/docker-compose.yml -p core up -d"
 
   core:down:
     dir: ..
@@ -50,6 +50,23 @@ tasks:
     desc: brings up the compose environment for redis
     cmds:
       - "docker compose -p redis down"
+
+  riverboat:
+      dir: ..
+      desc: brings up the compose environment for riverboat
+      env:
+        RIVERBOAT_TAG: "{{.RIVERBOAT_TAG}}"
+      vars:
+        RIVERBOAT_TAG:
+          sh: "uname=$(uname -m); if [ $uname = 'x86_64' ]; then echo 'amd64-latest'; else echo 'arm64-latest'; fi"
+      cmds:
+        - "docker compose -f ./docker/docker-compose-riverboat.yml -p riverboat up -d"
+
+  riverboat:down:
+    dir: ..
+    desc: brings the riverboat compose environment down
+    cmds:
+      - docker compose -p riverboat down
 
   postgres:
     dir: ..

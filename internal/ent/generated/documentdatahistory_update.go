@@ -22,8 +22,9 @@ import (
 // DocumentDataHistoryUpdate is the builder for updating DocumentDataHistory entities.
 type DocumentDataHistoryUpdate struct {
 	config
-	hooks    []Hook
-	mutation *DocumentDataHistoryMutation
+	hooks     []Hook
+	mutation  *DocumentDataHistoryMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the DocumentDataHistoryUpdate builder.
@@ -209,6 +210,12 @@ func (ddhu *DocumentDataHistoryUpdate) defaults() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (ddhu *DocumentDataHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *DocumentDataHistoryUpdate {
+	ddhu.modifiers = append(ddhu.modifiers, modifiers...)
+	return ddhu
+}
+
 func (ddhu *DocumentDataHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(documentdatahistory.Table, documentdatahistory.Columns, sqlgraph.NewFieldSpec(documentdatahistory.FieldID, field.TypeString))
 	if ps := ddhu.mutation.predicates; len(ps) > 0 {
@@ -276,6 +283,7 @@ func (ddhu *DocumentDataHistoryUpdate) sqlSave(ctx context.Context) (n int, err 
 	}
 	_spec.Node.Schema = ddhu.schemaConfig.DocumentDataHistory
 	ctx = internal.NewSchemaConfigContext(ctx, ddhu.schemaConfig)
+	_spec.AddModifiers(ddhu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, ddhu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{documentdatahistory.Label}
@@ -291,9 +299,10 @@ func (ddhu *DocumentDataHistoryUpdate) sqlSave(ctx context.Context) (n int, err 
 // DocumentDataHistoryUpdateOne is the builder for updating a single DocumentDataHistory entity.
 type DocumentDataHistoryUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *DocumentDataHistoryMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *DocumentDataHistoryMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -486,6 +495,12 @@ func (ddhuo *DocumentDataHistoryUpdateOne) defaults() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (ddhuo *DocumentDataHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *DocumentDataHistoryUpdateOne {
+	ddhuo.modifiers = append(ddhuo.modifiers, modifiers...)
+	return ddhuo
+}
+
 func (ddhuo *DocumentDataHistoryUpdateOne) sqlSave(ctx context.Context) (_node *DocumentDataHistory, err error) {
 	_spec := sqlgraph.NewUpdateSpec(documentdatahistory.Table, documentdatahistory.Columns, sqlgraph.NewFieldSpec(documentdatahistory.FieldID, field.TypeString))
 	id, ok := ddhuo.mutation.ID()
@@ -570,6 +585,7 @@ func (ddhuo *DocumentDataHistoryUpdateOne) sqlSave(ctx context.Context) (_node *
 	}
 	_spec.Node.Schema = ddhuo.schemaConfig.DocumentDataHistory
 	ctx = internal.NewSchemaConfigContext(ctx, ddhuo.schemaConfig)
+	_spec.AddModifiers(ddhuo.modifiers...)
 	_node = &DocumentDataHistory{config: ddhuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

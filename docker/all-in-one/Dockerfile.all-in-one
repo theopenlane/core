@@ -17,6 +17,9 @@ COPY --from=builder /go/bin/core /bin/core
 # Copy the dbx binary
 COPY --from=ghcr.io/theopenlane/dbx:5-35840501  /bin/dbx /bin/dbx
 
+# Copy the riverboat binary
+COPY --from=ghcr.io/theopenlane/riverboat:amd64-latest  /bin/riverboat /bin/riverboat
+
 # Copy redis binary
 COPY --from=redis:7.4.0 /usr/local/bin/redis-server /bin/redis-server
 

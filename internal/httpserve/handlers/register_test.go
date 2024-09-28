@@ -1,20 +1,21 @@
 package handlers_test
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
-	"time"
 
-	"github.com/rShetty/asyncwait"
+	"github.com/riverqueue/river/riverdriver/riverpgxv5"
+	"github.com/riverqueue/river/rivertest"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	mock_fga "github.com/theopenlane/iam/fgax/mockery"
+	"github.com/theopenlane/newman"
+	"github.com/theopenlane/riverboat/pkg/jobs"
 
-	"github.com/theopenlane/utils/emails"
-	"github.com/theopenlane/utils/emails/mock"
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/httpsling"
@@ -96,10 +97,6 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 		t.Run(tc.name, func(t *testing.T) {
 			defer mock_fga.ClearMocks(suite.fga)
 
-			sent := time.Now()
-
-			mock.ResetEmailMock()
-
 			// setup mock authz writes
 			if tc.expectedErrMessage == "" {
 				mock_fga.WriteAny(t, suite.fga)
@@ -175,30 +172,15 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 				assert.Contains(t, out.Error, tc.expectedErrMessage)
 			}
 
-			// Test that one verify email was sent to each user
-			messages := []*mock.EmailMetadata{
-				{
-					To:        tc.email,
-					From:      "mitb@theopenlane.io",
-					Subject:   emails.VerifyEmailRE,
-					Timestamp: sent,
-				},
-			}
-
 			// wait for messages
-			predicate := func() bool {
-				return suite.h.TaskMan.GetQueueLength() == 0
-			}
-			successful := asyncwait.NewAsyncWait(maxWaitInMillis, pollIntervalInMillis).Check(predicate)
-
-			if successful != true {
-				t.Errorf("max wait of email send")
-			}
-
 			if tc.emailExpected {
-				mock.CheckEmails(t, messages)
-			} else {
-				mock.CheckEmails(t, nil)
+				job := rivertest.RequireInserted[*riverpgxv5.Driver](context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()), &jobs.EmailArgs{
+					Message: *newman.NewEmailMessageWithOptions(
+						newman.WithSubject("Please verify your email address to login to Openlane"),
+					),
+				}, nil)
+				require.NotNil(t, job)
+				require.Equal(t, []string{tc.email}, job.Args.Message.To)
 			}
 		})
 	}

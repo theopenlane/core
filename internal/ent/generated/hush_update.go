@@ -23,8 +23,9 @@ import (
 // HushUpdate is the builder for updating Hush entities.
 type HushUpdate struct {
 	config
-	hooks    []Hook
-	mutation *HushMutation
+	hooks     []Hook
+	mutation  *HushMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the HushUpdate builder.
@@ -324,6 +325,12 @@ func (hu *HushUpdate) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (hu *HushUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *HushUpdate {
+	hu.modifiers = append(hu.modifiers, modifiers...)
+	return hu
+}
+
 func (hu *HushUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if err := hu.check(); err != nil {
 		return n, err
@@ -533,6 +540,7 @@ func (hu *HushUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	_spec.Node.Schema = hu.schemaConfig.Hush
 	ctx = internal.NewSchemaConfigContext(ctx, hu.schemaConfig)
+	_spec.AddModifiers(hu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, hu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{hush.Label}
@@ -548,9 +556,10 @@ func (hu *HushUpdate) sqlSave(ctx context.Context) (n int, err error) {
 // HushUpdateOne is the builder for updating a single Hush entity.
 type HushUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *HushMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *HushMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -857,6 +866,12 @@ func (huo *HushUpdateOne) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (huo *HushUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *HushUpdateOne {
+	huo.modifiers = append(huo.modifiers, modifiers...)
+	return huo
+}
+
 func (huo *HushUpdateOne) sqlSave(ctx context.Context) (_node *Hush, err error) {
 	if err := huo.check(); err != nil {
 		return _node, err
@@ -1083,6 +1098,7 @@ func (huo *HushUpdateOne) sqlSave(ctx context.Context) (_node *Hush, err error) 
 	}
 	_spec.Node.Schema = huo.schemaConfig.Hush
 	ctx = internal.NewSchemaConfigContext(ctx, huo.schemaConfig)
+	_spec.AddModifiers(huo.modifiers...)
 	_node = &Hush{config: huo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

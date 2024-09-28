@@ -7,15 +7,13 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
-	"time"
 
-	"github.com/rShetty/asyncwait"
+	"github.com/riverqueue/river/riverdriver/riverpgxv5"
+	"github.com/riverqueue/river/rivertest"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	mock_fga "github.com/theopenlane/iam/fgax/mockery"
-
-	"github.com/theopenlane/utils/emails"
-	"github.com/theopenlane/utils/emails/mock"
+	"github.com/theopenlane/riverboat/pkg/jobs"
 
 	"github.com/theopenlane/iam/auth"
 
@@ -76,18 +74,16 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 	require.NoError(t, err)
 
 	testCases := []struct {
-		name          string
-		email         string
-		tokenSet      bool
-		emailExpected bool
-		wantErr       bool
-		errMsg        string
+		name     string
+		email    string
+		tokenSet bool
+		wantErr  bool
+		errMsg   string
 	}{
 		{
-			name:          "happy path",
-			email:         groot,
-			emailExpected: true,
-			tokenSet:      true,
+			name:     "happy path",
+			email:    groot,
+			tokenSet: true,
 		},
 		{
 			name:     "missing token",
@@ -107,25 +103,12 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			defer mock_fga.ClearMocks(suite.fga)
-
-			sent := time.Now()
-
-			mock.ResetEmailMock()
+			defer suite.ClearTestData()
 
 			ctx := privacy.DecisionContext(userCtx, privacy.Allow)
 
 			invite := suite.db.Invite.Create().
 				SetRecipient(tc.email).SaveX(ctx)
-
-			// wait for messages so we don't have conflicts with the accept message
-			predicate := func() bool {
-				return suite.h.TaskMan.GetQueueLength() == 0
-			}
-
-			asyncwait.NewAsyncWait(maxWaitInMillis, pollIntervalInMillis).Check(predicate)
-
-			mock.ResetEmailMock()
 
 			target := "/invite"
 			if tc.tokenSet {
@@ -170,31 +153,20 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 
 			assert.Equal(t, org.CreateOrganization.Organization.ID, user.User.Setting.DefaultOrg.ID)
 
-			// Test that one email was sent for accepted invite
-			messages := []*mock.EmailMetadata{
-				{
-					To:        tc.email,
-					From:      "mitb@theopenlane.io",
-					Subject:   emails.InviteBeenAccepted,
-					Timestamp: sent,
-				},
-			}
-
-			// wait for messages
-			predicate = func() bool {
-				return suite.h.TaskMan.GetQueueLength() == 0
-			}
-			successful := asyncwait.NewAsyncWait(maxWaitInMillis, pollIntervalInMillis).Check(predicate)
-
-			if successful != true {
-				t.Errorf("max wait of email send")
-			}
-
-			if tc.emailExpected {
-				mock.CheckEmails(t, messages)
-			} else {
-				mock.CheckEmails(t, nil)
-			}
+			// ensure the email jobs are created
+			// there will be two because the first is the invite email and the second is the accepted invite email
+			job := rivertest.RequireManyInserted[*riverpgxv5.Driver](context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()),
+				[]rivertest.ExpectedJob{
+					{
+						Args: jobs.EmailArgs{},
+					},
+					{
+						Args: jobs.EmailArgs{},
+					},
+				})
+			require.NotNil(t, job)
+			assert.Contains(t, string(job[0].EncodedArgs), "Join your team")                       // first email is the invite email
+			assert.Contains(t, string(job[1].EncodedArgs), "You've been added to an organization") // second email is the accepted invite email
 		})
 	}
 }

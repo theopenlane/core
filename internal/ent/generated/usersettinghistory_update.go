@@ -22,8 +22,9 @@ import (
 // UserSettingHistoryUpdate is the builder for updating UserSettingHistory entities.
 type UserSettingHistoryUpdate struct {
 	config
-	hooks    []Hook
-	mutation *UserSettingHistoryMutation
+	hooks     []Hook
+	mutation  *UserSettingHistoryMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the UserSettingHistoryUpdate builder.
@@ -335,6 +336,12 @@ func (ushu *UserSettingHistoryUpdate) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (ushu *UserSettingHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *UserSettingHistoryUpdate {
+	ushu.modifiers = append(ushu.modifiers, modifiers...)
+	return ushu
+}
+
 func (ushu *UserSettingHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if err := ushu.check(); err != nil {
 		return n, err
@@ -438,6 +445,7 @@ func (ushu *UserSettingHistoryUpdate) sqlSave(ctx context.Context) (n int, err e
 	}
 	_spec.Node.Schema = ushu.schemaConfig.UserSettingHistory
 	ctx = internal.NewSchemaConfigContext(ctx, ushu.schemaConfig)
+	_spec.AddModifiers(ushu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, ushu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{usersettinghistory.Label}
@@ -453,9 +461,10 @@ func (ushu *UserSettingHistoryUpdate) sqlSave(ctx context.Context) (n int, err e
 // UserSettingHistoryUpdateOne is the builder for updating a single UserSettingHistory entity.
 type UserSettingHistoryUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *UserSettingHistoryMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *UserSettingHistoryMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -774,6 +783,12 @@ func (ushuo *UserSettingHistoryUpdateOne) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (ushuo *UserSettingHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *UserSettingHistoryUpdateOne {
+	ushuo.modifiers = append(ushuo.modifiers, modifiers...)
+	return ushuo
+}
+
 func (ushuo *UserSettingHistoryUpdateOne) sqlSave(ctx context.Context) (_node *UserSettingHistory, err error) {
 	if err := ushuo.check(); err != nil {
 		return _node, err
@@ -894,6 +909,7 @@ func (ushuo *UserSettingHistoryUpdateOne) sqlSave(ctx context.Context) (_node *U
 	}
 	_spec.Node.Schema = ushuo.schemaConfig.UserSettingHistory
 	ctx = internal.NewSchemaConfigContext(ctx, ushuo.schemaConfig)
+	_spec.AddModifiers(ushuo.modifiers...)
 	_node = &UserSettingHistory{config: ushuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

@@ -30,8 +30,8 @@ const (
 // HookUser runs on user mutations validate and hash the password and set default values that are not provided
 func HookUser() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
-		return hook.UserFunc(func(ctx context.Context, mutation *generated.UserMutation) (generated.Value, error) {
-			if password, ok := mutation.Password(); ok {
+		return hook.UserFunc(func(ctx context.Context, m *generated.UserMutation) (generated.Value, error) {
+			if password, ok := m.Password(); ok {
 				// validate password before its encrypted
 				if passwd.Strength(password) < passwd.Moderate {
 					return nil, auth.ErrPasswordTooWeak
@@ -42,37 +42,37 @@ func HookUser() ent.Hook {
 					return nil, err
 				}
 
-				mutation.SetPassword(hash)
+				m.SetPassword(hash)
 			}
 
-			if email, ok := mutation.Email(); ok {
+			if email, ok := m.Email(); ok {
 				// use the email without the domain as the display name, if not provided on creation
-				if mutation.Op().Is(ent.OpCreate) {
-					displayName, _ := mutation.DisplayName()
+				if m.Op().Is(ent.OpCreate) {
+					displayName, _ := m.DisplayName()
 					if displayName == "" {
 						displayName := strings.Split(email, "@")[0]
 
-						mutation.SetDisplayName(displayName)
+						m.SetDisplayName(displayName)
 					}
 				}
 			}
 
 			// user settings are required, if this is empty generate a default setting schema
-			if mutation.Op().Is(ent.OpCreate) {
-				settingID, _ := mutation.SettingID()
+			if m.Op().Is(ent.OpCreate) {
+				settingID, _ := m.SettingID()
 				if settingID == "" {
 					// sets up default user settings using schema defaults
-					userSettingID, err := defaultUserSettings(ctx, mutation)
+					userSettingID, err := defaultUserSettings(ctx, m)
 					if err != nil {
 						return nil, err
 					}
 
 					// add the user setting ID to the input
-					mutation.SetSettingID(userSettingID)
+					m.SetSettingID(userSettingID)
 				}
 			}
 
-			v, err := next.Mutate(ctx, mutation)
+			v, err := next.Mutate(ctx, m)
 			if err != nil {
 				return nil, err
 			}
@@ -82,11 +82,11 @@ func HookUser() ent.Hook {
 				return nil, err
 			}
 
-			if mutation.Op().Is(ent.OpCreate) {
+			if m.Op().Is(ent.OpCreate) {
 				userCreated.Sub = userCreated.ID
 
 				// set the subject to the user id
-				if _, err := mutation.Client().User.
+				if _, err := m.Client().User.
 					UpdateOneID(userCreated.ID).
 					SetSub(userCreated.Sub).
 					Save(ctx); err != nil {
@@ -94,7 +94,7 @@ func HookUser() ent.Hook {
 				}
 
 				// when a user is created, we create a personal user org
-				setting, err := createPersonalOrg(ctx, mutation.Client(), userCreated)
+				setting, err := createPersonalOrg(ctx, m.Client(), userCreated)
 				if err != nil {
 					return nil, err
 				}
@@ -110,29 +110,29 @@ func HookUser() ent.Hook {
 // HookDeleteUser runs on user deletions to clean up personal organizations
 func HookDeleteUser() ent.Hook {
 	return func(next ent.Mutator) ent.Mutator {
-		return hook.UserFunc(func(ctx context.Context, mutation *generated.UserMutation) (generated.Value, error) {
-			if mutation.Op().Is(ent.OpDelete|ent.OpDeleteOne) || entx.CheckIsSoftDelete(ctx) {
-				userID, _ := mutation.ID()
+		return hook.UserFunc(func(ctx context.Context, m *generated.UserMutation) (generated.Value, error) {
+			if m.Op().Is(ent.OpDelete|ent.OpDeleteOne) || entx.CheckIsSoftDelete(ctx) {
+				userID, _ := m.ID()
 				// get the personal org id
-				user, err := mutation.Client().User.Get(ctx, userID)
+				user, err := m.Client().User.Get(ctx, userID)
 				if err != nil {
 					return nil, err
 				}
 
-				personalOrgIDs, err := mutation.Client().User.QueryOrganizations(user).Where(organization.PersonalOrg(true)).IDs(ctx)
+				personalOrgIDs, err := m.Client().User.QueryOrganizations(user).Where(organization.PersonalOrg(true)).IDs(ctx)
 				if err != nil {
 					return nil, err
 				}
 
 				// run the mutation first
-				v, err := next.Mutate(ctx, mutation)
+				v, err := next.Mutate(ctx, m)
 				if err != nil {
 					return nil, err
 				}
 
 				// cleanup personal org(s)
 				allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-				if _, err := mutation.Client().
+				if _, err := m.Client().
 					Organization.
 					Delete().
 					Where(organization.IDIn(personalOrgIDs...)).
@@ -143,7 +143,7 @@ func HookDeleteUser() ent.Hook {
 				return v, err
 			}
 
-			return next.Mutate(ctx, mutation)
+			return next.Mutate(ctx, m)
 		})
 	}
 }

@@ -30,8 +30,8 @@ type UserSettingQuery struct {
 	withUser       *UserQuery
 	withDefaultOrg *OrganizationQuery
 	withFKs        bool
-	modifiers      []func(*sql.Selector)
 	loadTotal      []func(context.Context, []*UserSetting) error
+	modifiers      []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -313,8 +313,9 @@ func (usq *UserSettingQuery) Clone() *UserSettingQuery {
 		withUser:       usq.withUser.Clone(),
 		withDefaultOrg: usq.withDefaultOrg.Clone(),
 		// clone intermediate query.
-		sql:  usq.sql.Clone(),
-		path: usq.path,
+		sql:       usq.sql.Clone(),
+		path:      usq.path,
+		modifiers: append([]func(*sql.Selector){}, usq.modifiers...),
 	}
 }
 
@@ -616,6 +617,9 @@ func (usq *UserSettingQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	t1.Schema(usq.schemaConfig.UserSetting)
 	ctx = internal.NewSchemaConfigContext(ctx, usq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range usq.modifiers {
+		m(selector)
+	}
 	for _, p := range usq.predicates {
 		p(selector)
 	}
@@ -631,6 +635,12 @@ func (usq *UserSettingQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (usq *UserSettingQuery) Modify(modifiers ...func(s *sql.Selector)) *UserSettingSelect {
+	usq.modifiers = append(usq.modifiers, modifiers...)
+	return usq.Select()
 }
 
 // UserSettingGroupBy is the group-by builder for UserSetting entities.
@@ -721,4 +731,10 @@ func (uss *UserSettingSelect) sqlScan(ctx context.Context, root *UserSettingQuer
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (uss *UserSettingSelect) Modify(modifiers ...func(s *sql.Selector)) *UserSettingSelect {
+	uss.modifiers = append(uss.modifiers, modifiers...)
+	return uss
 }

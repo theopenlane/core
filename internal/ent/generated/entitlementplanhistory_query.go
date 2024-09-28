@@ -25,8 +25,8 @@ type EntitlementPlanHistoryQuery struct {
 	order      []entitlementplanhistory.OrderOption
 	inters     []Interceptor
 	predicates []predicate.EntitlementPlanHistory
-	modifiers  []func(*sql.Selector)
 	loadTotal  []func(context.Context, []*EntitlementPlanHistory) error
+	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -256,8 +256,9 @@ func (ephq *EntitlementPlanHistoryQuery) Clone() *EntitlementPlanHistoryQuery {
 		inters:     append([]Interceptor{}, ephq.inters...),
 		predicates: append([]predicate.EntitlementPlanHistory{}, ephq.predicates...),
 		// clone intermediate query.
-		sql:  ephq.sql.Clone(),
-		path: ephq.path,
+		sql:       ephq.sql.Clone(),
+		path:      ephq.path,
+		modifiers: append([]func(*sql.Selector){}, ephq.modifiers...),
 	}
 }
 
@@ -448,6 +449,9 @@ func (ephq *EntitlementPlanHistoryQuery) sqlQuery(ctx context.Context) *sql.Sele
 	t1.Schema(ephq.schemaConfig.EntitlementPlanHistory)
 	ctx = internal.NewSchemaConfigContext(ctx, ephq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range ephq.modifiers {
+		m(selector)
+	}
 	for _, p := range ephq.predicates {
 		p(selector)
 	}
@@ -463,6 +467,12 @@ func (ephq *EntitlementPlanHistoryQuery) sqlQuery(ctx context.Context) *sql.Sele
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (ephq *EntitlementPlanHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *EntitlementPlanHistorySelect {
+	ephq.modifiers = append(ephq.modifiers, modifiers...)
+	return ephq.Select()
 }
 
 // EntitlementPlanHistoryGroupBy is the group-by builder for EntitlementPlanHistory entities.
@@ -553,4 +563,10 @@ func (ephs *EntitlementPlanHistorySelect) sqlScan(ctx context.Context, root *Ent
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (ephs *EntitlementPlanHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *EntitlementPlanHistorySelect {
+	ephs.modifiers = append(ephs.modifiers, modifiers...)
+	return ephs
 }

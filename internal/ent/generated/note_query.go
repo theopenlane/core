@@ -30,8 +30,8 @@ type NoteQuery struct {
 	withOwner  *OrganizationQuery
 	withEntity *EntityQuery
 	withFKs    bool
-	modifiers  []func(*sql.Selector)
 	loadTotal  []func(context.Context, []*Note) error
+	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -313,8 +313,9 @@ func (nq *NoteQuery) Clone() *NoteQuery {
 		withOwner:  nq.withOwner.Clone(),
 		withEntity: nq.withEntity.Clone(),
 		// clone intermediate query.
-		sql:  nq.sql.Clone(),
-		path: nq.path,
+		sql:       nq.sql.Clone(),
+		path:      nq.path,
+		modifiers: append([]func(*sql.Selector){}, nq.modifiers...),
 	}
 }
 
@@ -616,6 +617,9 @@ func (nq *NoteQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	t1.Schema(nq.schemaConfig.Note)
 	ctx = internal.NewSchemaConfigContext(ctx, nq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range nq.modifiers {
+		m(selector)
+	}
 	for _, p := range nq.predicates {
 		p(selector)
 	}
@@ -631,6 +635,12 @@ func (nq *NoteQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (nq *NoteQuery) Modify(modifiers ...func(s *sql.Selector)) *NoteSelect {
+	nq.modifiers = append(nq.modifiers, modifiers...)
+	return nq.Select()
 }
 
 // NoteGroupBy is the group-by builder for Note entities.
@@ -721,4 +731,10 @@ func (ns *NoteSelect) sqlScan(ctx context.Context, root *NoteQuery, v any) error
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (ns *NoteSelect) Modify(modifiers ...func(s *sql.Selector)) *NoteSelect {
+	ns.modifiers = append(ns.modifiers, modifiers...)
+	return ns
 }

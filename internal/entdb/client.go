@@ -13,12 +13,15 @@ import (
 	"github.com/pressly/goose/v3"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/riverboat/pkg/riverqueue"
 
 	"github.com/theopenlane/utils/testutils"
 
 	migratedb "github.com/theopenlane/core/db"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/interceptors"
+
+	_ "github.com/jackc/pgx/v5/stdlib" // add pgx driver
 )
 
 const (
@@ -35,8 +38,8 @@ type client struct {
 	sc *ent.Client
 }
 
-// NewMultiDriverDBClient returns a ent client with a primary and secondary, if configured, write database
-func NewMultiDriverDBClient(ctx context.Context, c entx.Config, opts []ent.Option) (*ent.Client, *entx.EntClientConfig, error) {
+// New returns a ent client with a primary and secondary, if configured, write database
+func New(ctx context.Context, c entx.Config, jobOpts []riverqueue.Option, opts ...ent.Option) (*ent.Client, error) {
 	client := &client{
 		config: &c,
 	}
@@ -49,7 +52,7 @@ func NewMultiDriverDBClient(ctx context.Context, c entx.Config, opts []ent.Optio
 
 	entConfig, err := entx.NewDBConfig(c, dbOpts...)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
 	// Decorates the sql.Driver with entcache.Driver on the primaryDB
@@ -65,7 +68,7 @@ func NewMultiDriverDBClient(ctx context.Context, c entx.Config, opts []ent.Optio
 		if err := client.runMigrations(ctx); err != nil {
 			log.Error().Err(err).Msg("failed running migrations")
 
-			return nil, nil, err
+			return nil, err
 		}
 	}
 
@@ -85,7 +88,7 @@ func NewMultiDriverDBClient(ctx context.Context, c entx.Config, opts []ent.Optio
 			if err := client.runMigrations(ctx); err != nil {
 				log.Error().Err(err).Msg("failed running migrations")
 
-				return nil, nil, err
+				return nil, err
 			}
 		}
 
@@ -97,6 +100,9 @@ func NewMultiDriverDBClient(ctx context.Context, c entx.Config, opts []ent.Optio
 
 	cOpts = append(cOpts, opts...)
 
+	// add job client to the config
+	cOpts = append(cOpts, ent.Job(ctx, jobOpts...))
+
 	if c.Debug {
 		cOpts = append(cOpts,
 			ent.Log(log.Print),
@@ -105,19 +111,24 @@ func NewMultiDriverDBClient(ctx context.Context, c entx.Config, opts []ent.Optio
 		)
 	}
 
-	ec := ent.NewClient(cOpts...)
+	db := ent.NewClient(cOpts...)
+
+	db.Config = entConfig
 
 	// add authz hooks
-	ec.WithAuthz()
+	db.WithAuthz()
+
+	// add job client to the client
+	db.WithJobClient()
 
 	if c.EnableHistory {
 		// add history hooks
-		ec.WithHistory()
+		db.WithHistory()
 	}
 
-	ec.Intercept(interceptors.QueryLogger())
+	db.Intercept(interceptors.QueryLogger())
 
-	return ec, entConfig, nil
+	return db, nil
 }
 
 // runMigrations runs the migrations based on the configured migration provider on startup
@@ -212,7 +223,7 @@ func NewTestFixture() *testutils.TestFixture {
 }
 
 // NewTestClient creates a entdb client that can be used for TEST purposes ONLY
-func NewTestClient(ctx context.Context, ctr *testutils.TestFixture, entOpts []ent.Option) (*ent.Client, error) {
+func NewTestClient(ctx context.Context, ctr *testutils.TestFixture, jobOpts []riverqueue.Option, entOpts []ent.Option) (*ent.Client, error) {
 	dbconf := entx.Config{
 		Debug:           true,
 		DriverName:      ctr.Dialect,
@@ -221,18 +232,21 @@ func NewTestClient(ctx context.Context, ctr *testutils.TestFixture, entOpts []en
 		CacheTTL:        0 * time.Second, // do not cache results in tests
 	}
 
-	// Create the ent client
+	// Create the db client
 	var db *ent.Client
 
 	// Retry the connection to the database to ensure it is up and running
 	var err error
+
+	// run migrations for tests
+	jobOpts = append(jobOpts, riverqueue.WithRunMigrations(true))
 
 	// If a test container is used, retry the connection to the database to ensure it is up and running
 	if ctr.Pool != nil {
 		err = ctr.Pool.Retry(func() error {
 			log.Info().Msg("connecting to database...")
 
-			db, _, err = NewMultiDriverDBClient(ctx, dbconf, entOpts)
+			db, err = New(ctx, dbconf, jobOpts, entOpts...)
 			if err != nil {
 				log.Info().Err(err).Msg("retrying connection to database...")
 			}
@@ -240,7 +254,7 @@ func NewTestClient(ctx context.Context, ctr *testutils.TestFixture, entOpts []en
 			return err
 		})
 	} else {
-		db, _, err = NewMultiDriverDBClient(ctx, dbconf, entOpts)
+		db, err = New(ctx, dbconf, jobOpts, entOpts...)
 	}
 
 	if err != nil {

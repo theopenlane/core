@@ -10,13 +10,13 @@ import (
 	"time"
 
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/rShetty/asyncwait"
+	"github.com/riverqueue/river/riverdriver/riverpgxv5"
+	"github.com/riverqueue/river/rivertest"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	mock_fga "github.com/theopenlane/iam/fgax/mockery"
+	"github.com/theopenlane/riverboat/pkg/jobs"
 
-	"github.com/theopenlane/utils/emails"
-	"github.com/theopenlane/utils/emails/mock"
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/iam/auth"
@@ -98,10 +98,6 @@ func (suite *HandlerTestSuite) TestVerifySubscribeHandler() {
 		t.Run(tc.name, func(t *testing.T) {
 			defer mock_fga.ClearMocks(suite.fga)
 
-			sent := time.Now()
-
-			mock.ResetEmailMock()
-
 			sub := suite.createTestSubscriber(t, org.CreateOrganization.Organization.ID, tc.email, tc.ttl)
 
 			target := "/subscribe/verify"
@@ -133,28 +129,21 @@ func (suite *HandlerTestSuite) TestVerifySubscribeHandler() {
 				assert.NotEmpty(t, out.Message)
 			}
 
-			// Test that one verify email was sent to each user
-			messages := []*mock.EmailMetadata{
-				{
-					To:        tc.email,
-					From:      "mitb@theopenlane.io",
-					Subject:   fmt.Sprintf(emails.Subscribed, "mitb"),
-					Timestamp: sent,
-				},
-			}
-
-			// wait for messages
-			predicate := func() bool {
-				return suite.h.TaskMan.GetQueueLength() == 0
-			}
-			successful := asyncwait.NewAsyncWait(maxWaitInMillis, pollIntervalInMillis).Check(predicate)
-
-			if successful != true {
-				t.Errorf("max wait of email send")
-			}
-
+			// ensure email job was created
+			// the first job is the subscriber verification email and the following is the subscribed email
 			if tc.emailExpected {
-				mock.CheckEmails(t, messages)
+				job := rivertest.RequireManyInserted[*riverpgxv5.Driver](context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()),
+					[]rivertest.ExpectedJob{
+						{
+							Args: jobs.EmailArgs{},
+						},
+						{
+							Args: jobs.EmailArgs{},
+						},
+					})
+				require.NotNil(t, job)
+				assert.Contains(t, string(job[0].EncodedArgs), "Thank you for subscribing") // first email is the invite email
+				assert.Contains(t, string(job[1].EncodedArgs), "You've been subscribed to") // second email is the accepted invite email
 			}
 		})
 	}

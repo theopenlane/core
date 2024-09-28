@@ -8,13 +8,14 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/handler/extension"
 	"github.com/99designs/gqlgen/graphql/handler/lru"
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi"
 	"github.com/theopenlane/core/pkg/middleware/auth"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/vektah/gqlparser/v2/ast"
+
+	ent "github.com/theopenlane/core/internal/ent/generated"
 )
 
 // localRoundTripper is an http.RoundTripper that executes HTTP transactions
@@ -31,7 +32,7 @@ func (l localRoundTripper) RoundTrip(req *http.Request) (*http.Response, error) 
 }
 
 // TestClient creates a new OpenlaneClient for testing
-func TestClient(t *testing.T, c *generated.Client, opts ...openlaneclient.ClientOption) (*openlaneclient.OpenlaneClient, error) {
+func TestClient(t *testing.T, c *ent.Client, opts ...openlaneclient.ClientOption) (*openlaneclient.OpenlaneClient, error) {
 	e := testEchoServer(t, c, false)
 
 	// setup interceptors
@@ -47,7 +48,7 @@ func TestClient(t *testing.T, c *generated.Client, opts ...openlaneclient.Client
 }
 
 // TestClientWithAuth creates a new OpenlaneClient for testing that includes the auth middleware
-func TestClientWithAuth(t *testing.T, c *generated.Client, opts ...openlaneclient.ClientOption) (*openlaneclient.OpenlaneClient, error) {
+func TestClientWithAuth(t *testing.T, c *ent.Client, opts ...openlaneclient.ClientOption) (*openlaneclient.OpenlaneClient, error) {
 	e := testEchoServer(t, c, true)
 
 	// setup interceptors
@@ -64,7 +65,7 @@ func TestClientWithAuth(t *testing.T, c *generated.Client, opts ...openlaneclien
 
 // testEchoServer creates a new echo server for testing the graph api
 // and optionally includes the middleware for authentication testing
-func testEchoServer(t *testing.T, c *generated.Client, includeMiddleware bool) *echo.Echo {
+func testEchoServer(t *testing.T, c *ent.Client, includeMiddleware bool) *echo.Echo {
 	srv := testGraphServer(t, c)
 
 	e := echo.New()
@@ -88,7 +89,7 @@ func testEchoServer(t *testing.T, c *generated.Client, includeMiddleware bool) *
 
 // createAuthConfig creates a new auth config for testing with the provided client
 // and local validator
-func createAuthConfig(c *generated.Client) *auth.AuthOptions {
+func createAuthConfig(c *ent.Client) *auth.AuthOptions {
 	// setup auth middleware
 	opts := []auth.AuthOption{
 		auth.WithDBClient(c),
@@ -102,7 +103,7 @@ func createAuthConfig(c *generated.Client) *auth.AuthOptions {
 }
 
 // testGraphServer creates a new graphql server for testing the graph api
-func testGraphServer(t *testing.T, c *generated.Client) *handler.Server {
+func testGraphServer(t *testing.T, c *ent.Client) *handler.Server {
 	srv := handler.NewDefaultServer(
 		graphapi.NewExecutableSchema(
 			graphapi.Config{Resolvers: graphapi.NewResolver(c)},

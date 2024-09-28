@@ -23,8 +23,9 @@ import (
 // OhAuthTooTokenUpdate is the builder for updating OhAuthTooToken entities.
 type OhAuthTooTokenUpdate struct {
 	config
-	hooks    []Hook
-	mutation *OhAuthTooTokenMutation
+	hooks     []Hook
+	mutation  *OhAuthTooTokenMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the OhAuthTooTokenUpdate builder.
@@ -370,6 +371,12 @@ func (oattu *OhAuthTooTokenUpdate) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (oattu *OhAuthTooTokenUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OhAuthTooTokenUpdate {
+	oattu.modifiers = append(oattu.modifiers, modifiers...)
+	return oattu
+}
+
 func (oattu *OhAuthTooTokenUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if err := oattu.check(); err != nil {
 		return n, err
@@ -551,6 +558,7 @@ func (oattu *OhAuthTooTokenUpdate) sqlSave(ctx context.Context) (n int, err erro
 	}
 	_spec.Node.Schema = oattu.schemaConfig.OhAuthTooToken
 	ctx = internal.NewSchemaConfigContext(ctx, oattu.schemaConfig)
+	_spec.AddModifiers(oattu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, oattu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{ohauthtootoken.Label}
@@ -566,9 +574,10 @@ func (oattu *OhAuthTooTokenUpdate) sqlSave(ctx context.Context) (n int, err erro
 // OhAuthTooTokenUpdateOne is the builder for updating a single OhAuthTooToken entity.
 type OhAuthTooTokenUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *OhAuthTooTokenMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *OhAuthTooTokenMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetTags sets the "tags" field.
@@ -921,6 +930,12 @@ func (oattuo *OhAuthTooTokenUpdateOne) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (oattuo *OhAuthTooTokenUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OhAuthTooTokenUpdateOne {
+	oattuo.modifiers = append(oattuo.modifiers, modifiers...)
+	return oattuo
+}
+
 func (oattuo *OhAuthTooTokenUpdateOne) sqlSave(ctx context.Context) (_node *OhAuthTooToken, err error) {
 	if err := oattuo.check(); err != nil {
 		return _node, err
@@ -1119,6 +1134,7 @@ func (oattuo *OhAuthTooTokenUpdateOne) sqlSave(ctx context.Context) (_node *OhAu
 	}
 	_spec.Node.Schema = oattuo.schemaConfig.OhAuthTooToken
 	ctx = internal.NewSchemaConfigContext(ctx, oattuo.schemaConfig)
+	_spec.AddModifiers(oattuo.modifiers...)
 	_node = &OhAuthTooToken{config: oattuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

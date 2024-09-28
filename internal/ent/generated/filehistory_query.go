@@ -24,8 +24,8 @@ type FileHistoryQuery struct {
 	order      []filehistory.OrderOption
 	inters     []Interceptor
 	predicates []predicate.FileHistory
-	modifiers  []func(*sql.Selector)
 	loadTotal  []func(context.Context, []*FileHistory) error
+	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -255,8 +255,9 @@ func (fhq *FileHistoryQuery) Clone() *FileHistoryQuery {
 		inters:     append([]Interceptor{}, fhq.inters...),
 		predicates: append([]predicate.FileHistory{}, fhq.predicates...),
 		// clone intermediate query.
-		sql:  fhq.sql.Clone(),
-		path: fhq.path,
+		sql:       fhq.sql.Clone(),
+		path:      fhq.path,
+		modifiers: append([]func(*sql.Selector){}, fhq.modifiers...),
 	}
 }
 
@@ -441,6 +442,9 @@ func (fhq *FileHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	t1.Schema(fhq.schemaConfig.FileHistory)
 	ctx = internal.NewSchemaConfigContext(ctx, fhq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range fhq.modifiers {
+		m(selector)
+	}
 	for _, p := range fhq.predicates {
 		p(selector)
 	}
@@ -456,6 +460,12 @@ func (fhq *FileHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (fhq *FileHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *FileHistorySelect {
+	fhq.modifiers = append(fhq.modifiers, modifiers...)
+	return fhq.Select()
 }
 
 // FileHistoryGroupBy is the group-by builder for FileHistory entities.
@@ -546,4 +556,10 @@ func (fhs *FileHistorySelect) sqlScan(ctx context.Context, root *FileHistoryQuer
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (fhs *FileHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *FileHistorySelect {
+	fhs.modifiers = append(fhs.modifiers, modifiers...)
+	return fhs
 }

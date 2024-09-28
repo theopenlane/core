@@ -24,8 +24,9 @@ import (
 // UserSettingUpdate is the builder for updating UserSetting entities.
 type UserSettingUpdate struct {
 	config
-	hooks    []Hook
-	mutation *UserSettingMutation
+	hooks     []Hook
+	mutation  *UserSettingMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the UserSettingUpdate builder.
@@ -379,6 +380,12 @@ func (usu *UserSettingUpdate) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (usu *UserSettingUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *UserSettingUpdate {
+	usu.modifiers = append(usu.modifiers, modifiers...)
+	return usu
+}
+
 func (usu *UserSettingUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if err := usu.check(); err != nil {
 		return n, err
@@ -535,6 +542,7 @@ func (usu *UserSettingUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	_spec.Node.Schema = usu.schemaConfig.UserSetting
 	ctx = internal.NewSchemaConfigContext(ctx, usu.schemaConfig)
+	_spec.AddModifiers(usu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, usu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{usersetting.Label}
@@ -550,9 +558,10 @@ func (usu *UserSettingUpdate) sqlSave(ctx context.Context) (n int, err error) {
 // UserSettingUpdateOne is the builder for updating a single UserSetting entity.
 type UserSettingUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *UserSettingMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *UserSettingMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -913,6 +922,12 @@ func (usuo *UserSettingUpdateOne) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (usuo *UserSettingUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *UserSettingUpdateOne {
+	usuo.modifiers = append(usuo.modifiers, modifiers...)
+	return usuo
+}
+
 func (usuo *UserSettingUpdateOne) sqlSave(ctx context.Context) (_node *UserSetting, err error) {
 	if err := usuo.check(); err != nil {
 		return _node, err
@@ -1086,6 +1101,7 @@ func (usuo *UserSettingUpdateOne) sqlSave(ctx context.Context) (_node *UserSetti
 	}
 	_spec.Node.Schema = usuo.schemaConfig.UserSetting
 	ctx = internal.NewSchemaConfigContext(ctx, usuo.schemaConfig)
+	_spec.AddModifiers(usuo.modifiers...)
 	_node = &UserSetting{config: usuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

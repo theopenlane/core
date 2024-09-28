@@ -23,8 +23,9 @@ import (
 // TemplateHistoryUpdate is the builder for updating TemplateHistory entities.
 type TemplateHistoryUpdate struct {
 	config
-	hooks    []Hook
-	mutation *TemplateHistoryMutation
+	hooks     []Hook
+	mutation  *TemplateHistoryMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the TemplateHistoryUpdate builder.
@@ -266,6 +267,12 @@ func (thu *TemplateHistoryUpdate) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (thu *TemplateHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TemplateHistoryUpdate {
+	thu.modifiers = append(thu.modifiers, modifiers...)
+	return thu
+}
+
 func (thu *TemplateHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if err := thu.check(); err != nil {
 		return n, err
@@ -351,6 +358,7 @@ func (thu *TemplateHistoryUpdate) sqlSave(ctx context.Context) (n int, err error
 	}
 	_spec.Node.Schema = thu.schemaConfig.TemplateHistory
 	ctx = internal.NewSchemaConfigContext(ctx, thu.schemaConfig)
+	_spec.AddModifiers(thu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, thu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{templatehistory.Label}
@@ -366,9 +374,10 @@ func (thu *TemplateHistoryUpdate) sqlSave(ctx context.Context) (n int, err error
 // TemplateHistoryUpdateOne is the builder for updating a single TemplateHistory entity.
 type TemplateHistoryUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *TemplateHistoryMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *TemplateHistoryMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -617,6 +626,12 @@ func (thuo *TemplateHistoryUpdateOne) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (thuo *TemplateHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TemplateHistoryUpdateOne {
+	thuo.modifiers = append(thuo.modifiers, modifiers...)
+	return thuo
+}
+
 func (thuo *TemplateHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TemplateHistory, err error) {
 	if err := thuo.check(); err != nil {
 		return _node, err
@@ -719,6 +734,7 @@ func (thuo *TemplateHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Templ
 	}
 	_spec.Node.Schema = thuo.schemaConfig.TemplateHistory
 	ctx = internal.NewSchemaConfigContext(ctx, thuo.schemaConfig)
+	_spec.AddModifiers(thuo.modifiers...)
 	_node = &TemplateHistory{config: thuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

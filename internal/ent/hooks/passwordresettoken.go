@@ -13,13 +13,13 @@ import (
 // HookPasswordResetToken runs on reset token mutations and sets expires
 func HookPasswordResetToken() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
-		return hook.PasswordResetTokenFunc(func(ctx context.Context, mutation *generated.PasswordResetTokenMutation) (generated.Value, error) {
-			expires, _ := mutation.TTL()
+		return hook.PasswordResetTokenFunc(func(ctx context.Context, m *generated.PasswordResetTokenMutation) (generated.Value, error) {
+			expires, _ := m.TTL()
 			if expires.IsZero() {
-				mutation.SetTTL(time.Now().UTC().Add(time.Minute * 15).Truncate(time.Microsecond)) //nolint:mnd
+				m.SetTTL(time.Now().UTC().Add(time.Minute * 15).Truncate(time.Microsecond)) //nolint:mnd
 			}
 
-			return next.Mutate(ctx, mutation)
+			return next.Mutate(ctx, m)
 		})
 	}, ent.OpCreate)
 }

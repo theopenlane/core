@@ -45,15 +45,15 @@ var (
 
 // Resolver provides a graph response resolver
 type Resolver struct {
-	client            *ent.Client
+	db                *ent.Client
 	pool              *soiree.PondPool
 	extensionsEnabled bool
 }
 
 // NewResolver returns a resolver configured with the given ent client
-func NewResolver(client *ent.Client) *Resolver {
+func NewResolver(db *ent.Client) *Resolver {
 	return &Resolver{
-		client: client,
+		db: db,
 	}
 }
 
@@ -102,13 +102,10 @@ func (r *Resolver) Handler(withPlayground bool) *Handler {
 	})
 
 	// add transactional db client
-	WithTransactions(srv, r.client)
+	WithTransactions(srv, r.db)
 
 	// add context level caching
 	WithContextLevelCache(srv)
-
-	// add analytics
-	WithEvents(r.client)
 
 	// add extensions if enabled
 	if r.extensionsEnabled {
@@ -133,29 +130,11 @@ func (r *Resolver) Handler(withPlayground bool) *Handler {
 	return h
 }
 
-func WithEvents(c *ent.Client) {
-	// Add a global hook that runs on all types and all operations.
-	c.Use(func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			retVal, err := next.Mutate(ctx, m)
-			if err != nil {
-				return retVal, err
-			}
-
-			if TrackedEvent(m) {
-				CreateEvent(ctx, c, m, retVal)
-			}
-
-			return retVal, nil
-		})
-	})
-}
-
 // WithTransactions adds the transactioner to the ent db client
-func WithTransactions(h *handler.Server, c *ent.Client) {
+func WithTransactions(h *handler.Server, d *ent.Client) {
 	// setup transactional db client
-	h.AroundOperations(injectClient(c))
-	h.Use(entgql.Transactioner{TxOpener: c})
+	h.AroundOperations(injectClient(d))
+	h.Use(entgql.Transactioner{TxOpener: d})
 }
 
 // WithContextLevelCache adds a context level cache to the handler
@@ -177,6 +156,7 @@ func WithSkipCache(h *handler.Server) {
 	})
 }
 
+// WithPool adds a worker pool to the resolver for parallel processing
 func (r *Resolver) WithPool(maxWorkers int, maxCapacity int, options ...pond.Option) {
 	// create the pool
 	r.pool = soiree.NewNamedPondPool(maxWorkers, maxCapacity, "graph", options...)

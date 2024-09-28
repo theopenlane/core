@@ -21,8 +21,9 @@ import (
 // WebhookHistoryUpdate is the builder for updating WebhookHistory entities.
 type WebhookHistoryUpdate struct {
 	config
-	hooks    []Hook
-	mutation *WebhookHistoryMutation
+	hooks     []Hook
+	mutation  *WebhookHistoryMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the WebhookHistoryUpdate builder.
@@ -369,6 +370,12 @@ func (whu *WebhookHistoryUpdate) defaults() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (whu *WebhookHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *WebhookHistoryUpdate {
+	whu.modifiers = append(whu.modifiers, modifiers...)
+	return whu
+}
+
 func (whu *WebhookHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(webhookhistory.Table, webhookhistory.Columns, sqlgraph.NewFieldSpec(webhookhistory.FieldID, field.TypeString))
 	if ps := whu.mutation.predicates; len(ps) > 0 {
@@ -484,6 +491,7 @@ func (whu *WebhookHistoryUpdate) sqlSave(ctx context.Context) (n int, err error)
 	}
 	_spec.Node.Schema = whu.schemaConfig.WebhookHistory
 	ctx = internal.NewSchemaConfigContext(ctx, whu.schemaConfig)
+	_spec.AddModifiers(whu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, whu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{webhookhistory.Label}
@@ -499,9 +507,10 @@ func (whu *WebhookHistoryUpdate) sqlSave(ctx context.Context) (n int, err error)
 // WebhookHistoryUpdateOne is the builder for updating a single WebhookHistory entity.
 type WebhookHistoryUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *WebhookHistoryMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *WebhookHistoryMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -855,6 +864,12 @@ func (whuo *WebhookHistoryUpdateOne) defaults() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (whuo *WebhookHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *WebhookHistoryUpdateOne {
+	whuo.modifiers = append(whuo.modifiers, modifiers...)
+	return whuo
+}
+
 func (whuo *WebhookHistoryUpdateOne) sqlSave(ctx context.Context) (_node *WebhookHistory, err error) {
 	_spec := sqlgraph.NewUpdateSpec(webhookhistory.Table, webhookhistory.Columns, sqlgraph.NewFieldSpec(webhookhistory.FieldID, field.TypeString))
 	id, ok := whuo.mutation.ID()
@@ -987,6 +1002,7 @@ func (whuo *WebhookHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Webhoo
 	}
 	_spec.Node.Schema = whuo.schemaConfig.WebhookHistory
 	ctx = internal.NewSchemaConfigContext(ctx, whuo.schemaConfig)
+	_spec.AddModifiers(whuo.modifiers...)
 	_node = &WebhookHistory{config: whuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

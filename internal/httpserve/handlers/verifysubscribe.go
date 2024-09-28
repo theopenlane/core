@@ -3,18 +3,14 @@ package handlers
 import (
 	"context"
 	"errors"
-	"fmt"
 	"net/http"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
-	"github.com/cenkalti/backoff/v4"
 	"github.com/getkin/kin-openapi/openapi3"
-	ph "github.com/posthog/posthog-go"
 	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
-	"github.com/theopenlane/utils/marionette"
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/iam/auth"
@@ -85,11 +81,6 @@ func (h *Handler) VerifySubscriptionHandler(ctx echo.Context) error {
 		}
 	}
 
-	props := ph.NewProperties().
-		Set("email", entSubscriber.Email)
-
-	h.AnalyticsClient.Event("subscriber_verified", props)
-
 	out := &models.VerifySubscribeReply{
 		Reply:   rout.Reply{Success: true},
 		Message: "Subscription confirmed, looking forward to sending you updates!",
@@ -153,38 +144,6 @@ func (h *Handler) verifySubscriberToken(ctx context.Context, entSubscriber *gene
 
 		return ErrExpiredToken
 	}
-
-	return nil
-}
-
-func (h *Handler) sendSubscriberEmail(ctx context.Context, user *User, orgID string) error {
-	if orgID == "" {
-		return fmt.Errorf("%w, subscriber organization not found", ErrMissingField)
-	}
-
-	org, err := h.getOrgByID(ctx, orgID)
-	if err != nil {
-		return err
-	}
-
-	// send emails via TaskMan as to not create blocking operations in the server
-	if err := h.TaskMan.Queue(marionette.TaskFunc(func(ctx context.Context) error {
-		return h.SendSubscriberEmail(user, org.Name)
-	}), marionette.WithRetries(3), //nolint:mnd
-		marionette.WithBackoff(backoff.NewExponentialBackOff()),
-		marionette.WithErrorf("could not send subscriber verification email to user %s", user.Email),
-	); err != nil {
-		return err
-	}
-
-	props := ph.NewProperties().
-		Set("user_id", user.ID).
-		Set("email", user.Email).
-		Set("first_name", user.FirstName).
-		Set("last_name", user.LastName).
-		Set("organization_name", org.Name)
-
-	h.AnalyticsClient.Event("email_verification_sent", props)
 
 	return nil
 }

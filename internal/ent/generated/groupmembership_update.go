@@ -22,8 +22,9 @@ import (
 // GroupMembershipUpdate is the builder for updating GroupMembership entities.
 type GroupMembershipUpdate struct {
 	config
-	hooks    []Hook
-	mutation *GroupMembershipMutation
+	hooks     []Hook
+	mutation  *GroupMembershipMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the GroupMembershipUpdate builder.
@@ -217,6 +218,12 @@ func (gmu *GroupMembershipUpdate) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (gmu *GroupMembershipUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *GroupMembershipUpdate {
+	gmu.modifiers = append(gmu.modifiers, modifiers...)
+	return gmu
+}
+
 func (gmu *GroupMembershipUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if err := gmu.check(); err != nil {
 		return n, err
@@ -312,6 +319,7 @@ func (gmu *GroupMembershipUpdate) sqlSave(ctx context.Context) (n int, err error
 	}
 	_spec.Node.Schema = gmu.schemaConfig.GroupMembership
 	ctx = internal.NewSchemaConfigContext(ctx, gmu.schemaConfig)
+	_spec.AddModifiers(gmu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, gmu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{groupmembership.Label}
@@ -327,9 +335,10 @@ func (gmu *GroupMembershipUpdate) sqlSave(ctx context.Context) (n int, err error
 // GroupMembershipUpdateOne is the builder for updating a single GroupMembership entity.
 type GroupMembershipUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *GroupMembershipMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *GroupMembershipMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -530,6 +539,12 @@ func (gmuo *GroupMembershipUpdateOne) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (gmuo *GroupMembershipUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *GroupMembershipUpdateOne {
+	gmuo.modifiers = append(gmuo.modifiers, modifiers...)
+	return gmuo
+}
+
 func (gmuo *GroupMembershipUpdateOne) sqlSave(ctx context.Context) (_node *GroupMembership, err error) {
 	if err := gmuo.check(); err != nil {
 		return _node, err
@@ -642,6 +657,7 @@ func (gmuo *GroupMembershipUpdateOne) sqlSave(ctx context.Context) (_node *Group
 	}
 	_spec.Node.Schema = gmuo.schemaConfig.GroupMembership
 	ctx = internal.NewSchemaConfigContext(ctx, gmuo.schemaConfig)
+	_spec.AddModifiers(gmuo.modifiers...)
 	_node = &GroupMembership{config: gmuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

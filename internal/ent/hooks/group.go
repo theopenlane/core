@@ -20,36 +20,36 @@ import (
 // HookGroup runs on group mutations to set default values that are not provided
 func HookGroup() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
-		return hook.GroupFunc(func(ctx context.Context, mutation *generated.GroupMutation) (generated.Value, error) {
-			if name, ok := mutation.Name(); ok {
-				displayName, _ := mutation.DisplayName()
+		return hook.GroupFunc(func(ctx context.Context, m *generated.GroupMutation) (generated.Value, error) {
+			if name, ok := m.Name(); ok {
+				displayName, _ := m.DisplayName()
 
 				if displayName == "" {
-					mutation.SetDisplayName(name)
+					m.SetDisplayName(name)
 				}
 			}
 
-			if mutation.Op().Is(ent.OpCreate) {
+			if m.Op().Is(ent.OpCreate) {
 				// if this is empty generate a default group setting schema
-				settingID, _ := mutation.SettingID()
+				settingID, _ := m.SettingID()
 				if settingID == "" {
 					// sets up default group settings using schema defaults
-					groupSettingID, err := defaultGroupSettings(ctx, mutation)
+					groupSettingID, err := defaultGroupSettings(ctx, m)
 					if err != nil {
 						return nil, err
 					}
 
 					// add the group setting ID to the input
-					mutation.SetSettingID(groupSettingID)
+					m.SetSettingID(groupSettingID)
 				}
 			}
 
-			if name, ok := mutation.Name(); ok {
+			if name, ok := m.Name(); ok {
 				url := gravatar.New(name, nil)
-				mutation.SetGravatarLogoURL(url)
+				m.SetGravatarLogoURL(url)
 			}
 
-			return next.Mutate(ctx, mutation)
+			return next.Mutate(ctx, m)
 		})
 	}, ent.OpCreate|ent.OpUpdateOne)
 }
@@ -173,10 +173,10 @@ func groupDeleteHook(ctx context.Context, m *generated.GroupMutation) error {
 }
 
 // defaultGroupSettings creates the default group settings for a new group
-func defaultGroupSettings(ctx context.Context, group *generated.GroupMutation) (string, error) {
+func defaultGroupSettings(ctx context.Context, m *generated.GroupMutation) (string, error) {
 	input := generated.CreateGroupSettingInput{}
 
-	groupSetting, err := group.Client().GroupSetting.Create().SetInput(input).Save(ctx)
+	groupSetting, err := m.Client().GroupSetting.Create().SetInput(input).Save(ctx)
 	if err != nil {
 		return "", err
 	}

@@ -25,8 +25,8 @@ type OrganizationSettingHistoryQuery struct {
 	order      []organizationsettinghistory.OrderOption
 	inters     []Interceptor
 	predicates []predicate.OrganizationSettingHistory
-	modifiers  []func(*sql.Selector)
 	loadTotal  []func(context.Context, []*OrganizationSettingHistory) error
+	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -256,8 +256,9 @@ func (oshq *OrganizationSettingHistoryQuery) Clone() *OrganizationSettingHistory
 		inters:     append([]Interceptor{}, oshq.inters...),
 		predicates: append([]predicate.OrganizationSettingHistory{}, oshq.predicates...),
 		// clone intermediate query.
-		sql:  oshq.sql.Clone(),
-		path: oshq.path,
+		sql:       oshq.sql.Clone(),
+		path:      oshq.path,
+		modifiers: append([]func(*sql.Selector){}, oshq.modifiers...),
 	}
 }
 
@@ -448,6 +449,9 @@ func (oshq *OrganizationSettingHistoryQuery) sqlQuery(ctx context.Context) *sql.
 	t1.Schema(oshq.schemaConfig.OrganizationSettingHistory)
 	ctx = internal.NewSchemaConfigContext(ctx, oshq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range oshq.modifiers {
+		m(selector)
+	}
 	for _, p := range oshq.predicates {
 		p(selector)
 	}
@@ -463,6 +467,12 @@ func (oshq *OrganizationSettingHistoryQuery) sqlQuery(ctx context.Context) *sql.
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (oshq *OrganizationSettingHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *OrganizationSettingHistorySelect {
+	oshq.modifiers = append(oshq.modifiers, modifiers...)
+	return oshq.Select()
 }
 
 // OrganizationSettingHistoryGroupBy is the group-by builder for OrganizationSettingHistory entities.
@@ -553,4 +563,10 @@ func (oshs *OrganizationSettingHistorySelect) sqlScan(ctx context.Context, root 
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (oshs *OrganizationSettingHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *OrganizationSettingHistorySelect {
+	oshs.modifiers = append(oshs.modifiers, modifiers...)
+	return oshs
 }

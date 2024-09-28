@@ -22,8 +22,9 @@ import (
 // OauthProviderHistoryUpdate is the builder for updating OauthProviderHistory entities.
 type OauthProviderHistoryUpdate struct {
 	config
-	hooks    []Hook
-	mutation *OauthProviderHistoryMutation
+	hooks     []Hook
+	mutation  *OauthProviderHistoryMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the OauthProviderHistoryUpdate builder.
@@ -322,6 +323,12 @@ func (ophu *OauthProviderHistoryUpdate) defaults() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (ophu *OauthProviderHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OauthProviderHistoryUpdate {
+	ophu.modifiers = append(ophu.modifiers, modifiers...)
+	return ophu
+}
+
 func (ophu *OauthProviderHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(oauthproviderhistory.Table, oauthproviderhistory.Columns, sqlgraph.NewFieldSpec(oauthproviderhistory.FieldID, field.TypeString))
 	if ps := ophu.mutation.predicates; len(ps) > 0 {
@@ -413,6 +420,7 @@ func (ophu *OauthProviderHistoryUpdate) sqlSave(ctx context.Context) (n int, err
 	}
 	_spec.Node.Schema = ophu.schemaConfig.OauthProviderHistory
 	ctx = internal.NewSchemaConfigContext(ctx, ophu.schemaConfig)
+	_spec.AddModifiers(ophu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, ophu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{oauthproviderhistory.Label}
@@ -428,9 +436,10 @@ func (ophu *OauthProviderHistoryUpdate) sqlSave(ctx context.Context) (n int, err
 // OauthProviderHistoryUpdateOne is the builder for updating a single OauthProviderHistory entity.
 type OauthProviderHistoryUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *OauthProviderHistoryMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *OauthProviderHistoryMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -736,6 +745,12 @@ func (ophuo *OauthProviderHistoryUpdateOne) defaults() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (ophuo *OauthProviderHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OauthProviderHistoryUpdateOne {
+	ophuo.modifiers = append(ophuo.modifiers, modifiers...)
+	return ophuo
+}
+
 func (ophuo *OauthProviderHistoryUpdateOne) sqlSave(ctx context.Context) (_node *OauthProviderHistory, err error) {
 	_spec := sqlgraph.NewUpdateSpec(oauthproviderhistory.Table, oauthproviderhistory.Columns, sqlgraph.NewFieldSpec(oauthproviderhistory.FieldID, field.TypeString))
 	id, ok := ophuo.mutation.ID()
@@ -844,6 +859,7 @@ func (ophuo *OauthProviderHistoryUpdateOne) sqlSave(ctx context.Context) (_node 
 	}
 	_spec.Node.Schema = ophuo.schemaConfig.OauthProviderHistory
 	ctx = internal.NewSchemaConfigContext(ctx, ophuo.schemaConfig)
+	_spec.AddModifiers(ophuo.modifiers...)
 	_node = &OauthProviderHistory{config: ophuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

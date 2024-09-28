@@ -26,8 +26,9 @@ import (
 // IntegrationUpdate is the builder for updating Integration entities.
 type IntegrationUpdate struct {
 	config
-	hooks    []Hook
-	mutation *IntegrationMutation
+	hooks     []Hook
+	mutation  *IntegrationMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the IntegrationUpdate builder.
@@ -417,6 +418,12 @@ func (iu *IntegrationUpdate) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (iu *IntegrationUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *IntegrationUpdate {
+	iu.modifiers = append(iu.modifiers, modifiers...)
+	return iu
+}
+
 func (iu *IntegrationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if err := iu.check(); err != nil {
 		return n, err
@@ -710,6 +717,7 @@ func (iu *IntegrationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	_spec.Node.Schema = iu.schemaConfig.Integration
 	ctx = internal.NewSchemaConfigContext(ctx, iu.schemaConfig)
+	_spec.AddModifiers(iu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, iu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{integration.Label}
@@ -725,9 +733,10 @@ func (iu *IntegrationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 // IntegrationUpdateOne is the builder for updating a single Integration entity.
 type IntegrationUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *IntegrationMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *IntegrationMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -1124,6 +1133,12 @@ func (iuo *IntegrationUpdateOne) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (iuo *IntegrationUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *IntegrationUpdateOne {
+	iuo.modifiers = append(iuo.modifiers, modifiers...)
+	return iuo
+}
+
 func (iuo *IntegrationUpdateOne) sqlSave(ctx context.Context) (_node *Integration, err error) {
 	if err := iuo.check(); err != nil {
 		return _node, err
@@ -1434,6 +1449,7 @@ func (iuo *IntegrationUpdateOne) sqlSave(ctx context.Context) (_node *Integratio
 	}
 	_spec.Node.Schema = iuo.schemaConfig.Integration
 	ctx = internal.NewSchemaConfigContext(ctx, iuo.schemaConfig)
+	_spec.AddModifiers(iuo.modifiers...)
 	_node = &Integration{config: iuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

@@ -25,8 +25,9 @@ import (
 // DocumentDataUpdate is the builder for updating DocumentData entities.
 type DocumentDataUpdate struct {
 	config
-	hooks    []Hook
-	mutation *DocumentDataMutation
+	hooks     []Hook
+	mutation  *DocumentDataMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the DocumentDataUpdate builder.
@@ -283,6 +284,12 @@ func (ddu *DocumentDataUpdate) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (ddu *DocumentDataUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *DocumentDataUpdate {
+	ddu.modifiers = append(ddu.modifiers, modifiers...)
+	return ddu
+}
+
 func (ddu *DocumentDataUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if err := ddu.check(); err != nil {
 		return n, err
@@ -451,6 +458,7 @@ func (ddu *DocumentDataUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	_spec.Node.Schema = ddu.schemaConfig.DocumentData
 	ctx = internal.NewSchemaConfigContext(ctx, ddu.schemaConfig)
+	_spec.AddModifiers(ddu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, ddu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{documentdata.Label}
@@ -466,9 +474,10 @@ func (ddu *DocumentDataUpdate) sqlSave(ctx context.Context) (n int, err error) {
 // DocumentDataUpdateOne is the builder for updating a single DocumentData entity.
 type DocumentDataUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *DocumentDataMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *DocumentDataMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -732,6 +741,12 @@ func (dduo *DocumentDataUpdateOne) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (dduo *DocumentDataUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *DocumentDataUpdateOne {
+	dduo.modifiers = append(dduo.modifiers, modifiers...)
+	return dduo
+}
+
 func (dduo *DocumentDataUpdateOne) sqlSave(ctx context.Context) (_node *DocumentData, err error) {
 	if err := dduo.check(); err != nil {
 		return _node, err
@@ -917,6 +932,7 @@ func (dduo *DocumentDataUpdateOne) sqlSave(ctx context.Context) (_node *Document
 	}
 	_spec.Node.Schema = dduo.schemaConfig.DocumentData
 	ctx = internal.NewSchemaConfigContext(ctx, dduo.schemaConfig)
+	_spec.AddModifiers(dduo.modifiers...)
 	_node = &DocumentData{config: dduo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

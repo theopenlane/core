@@ -23,8 +23,9 @@ import (
 // InviteUpdate is the builder for updating Invite entities.
 type InviteUpdate struct {
 	config
-	hooks    []Hook
-	mutation *InviteMutation
+	hooks     []Hook
+	mutation  *InviteMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the InviteUpdate builder.
@@ -338,6 +339,12 @@ func (iu *InviteUpdate) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (iu *InviteUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *InviteUpdate {
+	iu.modifiers = append(iu.modifiers, modifiers...)
+	return iu
+}
+
 func (iu *InviteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if err := iu.check(); err != nil {
 		return n, err
@@ -488,6 +495,7 @@ func (iu *InviteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	_spec.Node.Schema = iu.schemaConfig.Invite
 	ctx = internal.NewSchemaConfigContext(ctx, iu.schemaConfig)
+	_spec.AddModifiers(iu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, iu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{invite.Label}
@@ -503,9 +511,10 @@ func (iu *InviteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 // InviteUpdateOne is the builder for updating a single Invite entity.
 type InviteUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *InviteMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *InviteMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -826,6 +835,12 @@ func (iuo *InviteUpdateOne) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (iuo *InviteUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *InviteUpdateOne {
+	iuo.modifiers = append(iuo.modifiers, modifiers...)
+	return iuo
+}
+
 func (iuo *InviteUpdateOne) sqlSave(ctx context.Context) (_node *Invite, err error) {
 	if err := iuo.check(); err != nil {
 		return _node, err
@@ -993,6 +1008,7 @@ func (iuo *InviteUpdateOne) sqlSave(ctx context.Context) (_node *Invite, err err
 	}
 	_spec.Node.Schema = iuo.schemaConfig.Invite
 	ctx = internal.NewSchemaConfigContext(ctx, iuo.schemaConfig)
+	_spec.AddModifiers(iuo.modifiers...)
 	_node = &Invite{config: iuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

@@ -11,19 +11,19 @@ import (
 
 func HookEntitlementPlan() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
-		return hook.EntitlementPlanFunc(func(ctx context.Context, mutation *generated.EntitlementPlanMutation) (generated.Value, error) {
+		return hook.EntitlementPlanFunc(func(ctx context.Context, m *generated.EntitlementPlanMutation) (generated.Value, error) {
 			// set the display name if it is not set
-			if mutation.Op() == ent.OpCreate {
-				displayName, _ := mutation.DisplayName()
+			if m.Op() == ent.OpCreate {
+				displayName, _ := m.DisplayName()
 				if displayName == "" {
-					name, ok := mutation.Name()
+					name, ok := m.Name()
 					if ok {
-						mutation.SetDisplayName(name)
+						m.SetDisplayName(name)
 					}
 				}
 			}
 
-			retVal, err := next.Mutate(ctx, mutation)
+			retVal, err := next.Mutate(ctx, m)
 			if err != nil {
 				return nil, err
 			}

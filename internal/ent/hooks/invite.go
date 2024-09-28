@@ -4,15 +4,14 @@ import (
 	"context"
 
 	"entgo.io/ent"
-	ph "github.com/posthog/posthog-go"
 	"github.com/rs/zerolog/log"
 
+	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
-	"github.com/theopenlane/utils/emails"
-	"github.com/theopenlane/utils/marionette"
-	"github.com/theopenlane/utils/sendgrid"
 	"github.com/theopenlane/utils/ulids"
+
+	"github.com/theopenlane/riverboat/pkg/jobs"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
@@ -47,11 +46,11 @@ func HookInvite() ent.Hook {
 				return nil, err
 			}
 
-			// check if the invite already exists
-			existingInvite, err := getInvite(ctx, m)
-
 			// attempt to do the mutation for a new user invite
 			var retValue ent.Value
+
+			// check if the invite already exists
+			existingInvite, err := getInvite(ctx, m)
 
 			// if the invite exists, update the token and resend
 			if existingInvite != nil && err == nil {
@@ -72,32 +71,10 @@ func HookInvite() ent.Hook {
 				}
 			}
 
-			// non-blocking queued email
+			// queue the email to be sent
 			if err := createInviteToSend(ctx, m); err != nil {
 				log.Error().Err(err).Msg("error sending email to user")
 			}
-
-			orgID, _ := m.OwnerID()
-			org, _ := m.Client().Organization.Get(ctx, orgID)
-			reqID, _ := m.RequestorID()
-			requestor, _ := m.Client().User.Get(ctx, reqID)
-			email, _ := m.Recipient()
-			role, _ := m.Role()
-
-			props := ph.NewProperties().
-				Set("organization_id", orgID).
-				Set("organization_name", org.Name).
-				Set("requestor_id", reqID).
-				Set("recipient_email", email).
-				Set("recipient_role", role)
-
-			// if we have the requestor, add their name and email to the properties
-			if requestor != nil {
-				props.Set("requestor_name", requestor.FirstName).
-					Set("requestor_email", requestor.Email)
-			}
-
-			m.Analytics.Event("organization_invite_created", props)
 
 			return retValue, err
 		})
@@ -170,27 +147,12 @@ func HookInviteAccepted() ent.Hook {
 				return retValue, err
 			}
 
-			invite := &emails.Invite{
-				OrgName:   org.Name,
-				Recipient: recipient,
-				Role:      string(role),
+			invite := emailtemplates.InviteTemplateData{
+				OrganizationName: org.Name,
+				Role:             string(role),
 			}
 
-			props := ph.NewProperties().
-				Set("organization_id", org.ID).
-				Set("organization_name", org.Name).
-				Set("acceptor_email", recipient).
-				Set("acceptor_id", userID)
-
-			m.Analytics.Event("organization_invite_accepted", props)
-
-			// send an email to recipient notifying them they've been added to an organization
-			if err := m.Marionette.Queue(marionette.TaskFunc(func(ctx context.Context) error {
-				return sendOrgAccepted(ctx, m, invite)
-			}), marionette.WithErrorf("could not send invitation email to user %s", recipient),
-			); err != nil {
-				log.Error().Err(err).Msg("unable to queue email for sending")
-
+			if err := createOrgInviteAcceptedToSend(ctx, m, recipient, invite); err != nil {
 				return retValue, err
 			}
 
@@ -275,7 +237,7 @@ func createInviteToSend(ctx context.Context, m *generated.InviteMutation) error 
 	orgID, _ := m.OwnerID()
 	reqID, _ := m.RequestorID()
 	token, _ := m.Token()
-	email, _ := m.Recipient()
+	emailAddress, _ := m.Recipient()
 	role, _ := m.Role()
 
 	org, err := m.Client().Organization.Get(ctx, orgID)
@@ -288,19 +250,27 @@ func createInviteToSend(ctx context.Context, m *generated.InviteMutation) error 
 		return err
 	}
 
-	invite := &emails.Invite{
-		OrgName:   org.Name,
-		Token:     token,
-		Requestor: requestor.FirstName,
-		Recipient: email,
-		Role:      string(role),
+	invite := emailtemplates.InviteTemplateData{
+		InviterName:      requestor.FirstName,
+		OrganizationName: org.Name,
+		Role:             string(role),
 	}
 
-	if err := m.Marionette.Queue(marionette.TaskFunc(func(ctx context.Context) error {
-		return sendOrgInvitationEmail(ctx, m, invite)
-	}), marionette.WithErrorf("could not send invitation email to user %s", email),
-	); err != nil {
-		log.Error().Err(err).Msg("unable to queue email for sending")
+	email, err := m.Emailer.NewInviteEmail(emailtemplates.Recipient{
+		Email: emailAddress,
+	}, invite, token)
+	if err != nil {
+		log.Error().Err(err).Msg("error rendering email")
+
+		return err
+	}
+
+	// send the email
+	_, err = m.Job.Insert(ctx, jobs.EmailArgs{
+		Message: *email,
+	}, nil)
+	if err != nil {
+		log.Error().Err(err).Msg("error queueing email verification")
 
 		return err
 	}
@@ -308,50 +278,28 @@ func createInviteToSend(ctx context.Context, m *generated.InviteMutation) error 
 	return nil
 }
 
-// sendOrgInvitationEmail composes the email metadata and sends via email manager
-func sendOrgInvitationEmail(ctx context.Context, m *generated.InviteMutation, i *emails.Invite) (err error) {
-	data := emails.InviteData{
-		InviterName: i.Requestor,
-		OrgName:     i.OrgName,
-		EmailData: emails.EmailData{
-			Sender: m.Emails.MustFromContact(),
-			Recipient: sendgrid.Contact{
-				Email: i.Recipient,
-			},
-		},
-	}
-
-	if data.InviteURL, err = m.Emails.InviteURL(i.Token); err != nil {
-		return err
-	}
-
-	msg, err := emails.InviteEmail(data)
+// createOrgInviteAcceptedToSend composes the email metadata and queues the email to be sent
+func createOrgInviteAcceptedToSend(ctx context.Context, m *generated.InviteMutation, recipient string, i emailtemplates.InviteTemplateData) error {
+	email, err := m.Emailer.NewInviteAcceptedEmail(emailtemplates.Recipient{
+		Email: recipient,
+	}, i)
 	if err != nil {
+		log.Error().Err(err).Msg("error rendering email")
+
 		return err
 	}
 
-	return m.Emails.Send(msg)
-}
-
-// sendOrgAccepted composes the email metadata to notify the user they've been joined to the org
-func sendOrgAccepted(ctx context.Context, m *generated.InviteMutation, i *emails.Invite) (err error) {
-	data := emails.InviteData{
-		InviterName: i.Requestor,
-		OrgName:     i.OrgName,
-		EmailData: emails.EmailData{
-			Sender: m.Emails.MustFromContact(),
-			Recipient: sendgrid.Contact{
-				Email: i.Recipient,
-			},
-		},
-	}
-
-	msg, err := emails.InviteAccepted(data)
+	// send the email
+	_, err = m.Job.Insert(ctx, jobs.EmailArgs{
+		Message: *email,
+	}, nil)
 	if err != nil {
+		log.Error().Err(err).Msg("error queueing email verification")
+
 		return err
 	}
 
-	return m.Emails.Send(msg)
+	return nil
 }
 
 var maxAttempts = 5

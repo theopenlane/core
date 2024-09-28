@@ -9,6 +9,7 @@ import (
 	"os"
 
 	"github.com/redis/go-redis/v9"
+
 	"github.com/rs/zerolog/log"
 	echoprometheus "github.com/theopenlane/echo-prometheus"
 	echo "github.com/theopenlane/echox"
@@ -21,19 +22,16 @@ import (
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/iam/tokens"
 	"github.com/theopenlane/iam/totp"
+	"github.com/theopenlane/riverboat/pkg/riverqueue"
 	"github.com/theopenlane/utils/cache"
-	"github.com/theopenlane/utils/emails"
-	"github.com/theopenlane/utils/marionette"
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/echox/middleware/echocontext"
 
-	"github.com/theopenlane/core/internal/ent/generated"
+	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi"
 	"github.com/theopenlane/core/internal/httpserve/config"
 	"github.com/theopenlane/core/internal/httpserve/server"
-	"github.com/theopenlane/core/pkg/analytics"
-	"github.com/theopenlane/core/pkg/events/kafka/publisher"
 	authmw "github.com/theopenlane/core/pkg/middleware/auth"
 	"github.com/theopenlane/core/pkg/middleware/cachecontrol"
 	"github.com/theopenlane/core/pkg/middleware/cors"
@@ -178,10 +176,14 @@ func WithAuth() ServerOption {
 }
 
 // WithReadyChecks adds readiness checks to the server
-func WithReadyChecks(c *entx.EntClientConfig, f *fgax.Client, r *redis.Client) ServerOption {
+func WithReadyChecks(c *entx.EntClientConfig, f *fgax.Client, r *redis.Client, j riverqueue.JobClient) ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
 		// Always add a check to the primary db connection
 		s.Config.Handler.AddReadinessCheck("db_primary", entx.Healthcheck(c.GetPrimaryDB()))
+
+		// Check the connection to the job queue
+		jc := j.(*riverqueue.Client)
+		s.Config.Handler.AddReadinessCheck(("job_queue"), riverqueue.Healthcheck(jc))
 
 		// Check the secondary db, if enabled
 		if s.Config.Settings.DB.MultiWrite {
@@ -201,7 +203,7 @@ func WithReadyChecks(c *entx.EntClientConfig, f *fgax.Client, r *redis.Client) S
 }
 
 // WithGraphRoute adds the graph handler to the server
-func WithGraphRoute(srv *server.Server, c *generated.Client) ServerOption {
+func WithGraphRoute(srv *server.Server, c *ent.Client) ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
 		// Setup Graph API Handlers
 		r := graphapi.NewResolver(c).
@@ -243,55 +245,13 @@ func WithMiddleware() ServerOption {
 	})
 }
 
-// WithEventPublisher sets up the default Kafka event publisher
-func WithEventPublisher() ServerOption {
-	return newApplyFunc(func(s *ServerOptions) {
-		ep := publisher.KafkaPublisher{
-			Config: s.Config.Settings.Events,
-		}
-
-		publisher := publisher.NewKafkaPublisher(ep.Config.Addresses)
-
-		s.Config.Handler.EventManager = publisher
-	})
-}
-
-// WithEmailManager sets up the default SendGrid email manager to be used to send emails to users
+// WithEmailConfig sets up the email config to be used to send emails to users
 // on registration, password reset, etc
-func WithEmailManager() ServerOption {
+func WithEmailConfig() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
-		em, err := emails.New(s.Config.Settings.Email)
-		if err != nil {
-			panic(err)
-		}
+		log.Debug().Interface("email", s.Config.Settings.Email).Msg("email config")
 
-		if err := s.Config.Settings.Email.ConsoleURLConfig.Validate(); err != nil {
-			panic(err)
-		}
-
-		em.ConsoleURLConfig = s.Config.Settings.Email.ConsoleURLConfig
-
-		if err := s.Config.Settings.Email.MarketingURLConfig.Validate(); err != nil {
-			panic(err)
-		}
-
-		em.MarketingURLConfig = s.Config.Settings.Email.MarketingURLConfig
-
-		s.Config.Handler.EmailManager = em
-	})
-}
-
-// WithTaskManager sets up the default Marionette task manager to be used for delegating background tasks
-func WithTaskManager() ServerOption {
-	return newApplyFunc(func(s *ServerOptions) {
-		// Start task manager
-		tmConfig := marionette.Config{}
-
-		tm := marionette.New(tmConfig)
-
-		tm.Start()
-
-		s.Config.Handler.TaskMan = tm
+		s.Config.Handler.Emailer = s.Config.Settings.Email
 	})
 }
 
@@ -345,26 +305,6 @@ func WithSessionMiddleware() ServerOption {
 		s.Config.GraphMiddleware = append(s.Config.GraphMiddleware,
 			sessions.LoadAndSaveWithConfig(*s.Config.SessionConfig),
 		)
-	})
-}
-
-// WithAnalytics sets up the PostHog analytics manager
-func WithAnalytics() ServerOption {
-	return newApplyFunc(func(s *ServerOptions) {
-		ph := s.Config.Settings.PostHog.Init()
-		if ph == nil {
-			s.Config.Handler.AnalyticsClient = &analytics.EventManager{
-				Enabled: false,
-				Handler: nil,
-			}
-
-			return
-		}
-
-		s.Config.Handler.AnalyticsClient = &analytics.EventManager{
-			Enabled: true,
-			Handler: ph,
-		}
 	})
 }
 

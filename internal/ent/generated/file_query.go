@@ -34,8 +34,8 @@ type FileQuery struct {
 	withEntity            *EntityQuery
 	withGroup             *GroupQuery
 	withFKs               bool
-	modifiers             []func(*sql.Selector)
 	loadTotal             []func(context.Context, []*File) error
+	modifiers             []func(*sql.Selector)
 	withNamedOrganization map[string]*OrganizationQuery
 	withNamedEntity       map[string]*EntityQuery
 	withNamedGroup        map[string]*GroupQuery
@@ -372,8 +372,9 @@ func (fq *FileQuery) Clone() *FileQuery {
 		withEntity:       fq.withEntity.Clone(),
 		withGroup:        fq.withGroup.Clone(),
 		// clone intermediate query.
-		sql:  fq.sql.Clone(),
-		path: fq.path,
+		sql:       fq.sql.Clone(),
+		path:      fq.path,
+		modifiers: append([]func(*sql.Selector){}, fq.modifiers...),
 	}
 }
 
@@ -883,6 +884,9 @@ func (fq *FileQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	t1.Schema(fq.schemaConfig.File)
 	ctx = internal.NewSchemaConfigContext(ctx, fq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range fq.modifiers {
+		m(selector)
+	}
 	for _, p := range fq.predicates {
 		p(selector)
 	}
@@ -898,6 +902,12 @@ func (fq *FileQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (fq *FileQuery) Modify(modifiers ...func(s *sql.Selector)) *FileSelect {
+	fq.modifiers = append(fq.modifiers, modifiers...)
+	return fq.Select()
 }
 
 // WithNamedOrganization tells the query-builder to eager-load the nodes that are connected to the "organization"
@@ -1030,4 +1040,10 @@ func (fs *FileSelect) sqlScan(ctx context.Context, root *FileQuery, v any) error
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (fs *FileSelect) Modify(modifiers ...func(s *sql.Selector)) *FileSelect {
+	fs.modifiers = append(fs.modifiers, modifiers...)
+	return fs
 }

@@ -25,8 +25,8 @@ type EntityTypeHistoryQuery struct {
 	order      []entitytypehistory.OrderOption
 	inters     []Interceptor
 	predicates []predicate.EntityTypeHistory
-	modifiers  []func(*sql.Selector)
 	loadTotal  []func(context.Context, []*EntityTypeHistory) error
+	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -256,8 +256,9 @@ func (ethq *EntityTypeHistoryQuery) Clone() *EntityTypeHistoryQuery {
 		inters:     append([]Interceptor{}, ethq.inters...),
 		predicates: append([]predicate.EntityTypeHistory{}, ethq.predicates...),
 		// clone intermediate query.
-		sql:  ethq.sql.Clone(),
-		path: ethq.path,
+		sql:       ethq.sql.Clone(),
+		path:      ethq.path,
+		modifiers: append([]func(*sql.Selector){}, ethq.modifiers...),
 	}
 }
 
@@ -448,6 +449,9 @@ func (ethq *EntityTypeHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector 
 	t1.Schema(ethq.schemaConfig.EntityTypeHistory)
 	ctx = internal.NewSchemaConfigContext(ctx, ethq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range ethq.modifiers {
+		m(selector)
+	}
 	for _, p := range ethq.predicates {
 		p(selector)
 	}
@@ -463,6 +467,12 @@ func (ethq *EntityTypeHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector 
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (ethq *EntityTypeHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *EntityTypeHistorySelect {
+	ethq.modifiers = append(ethq.modifiers, modifiers...)
+	return ethq.Select()
 }
 
 // EntityTypeHistoryGroupBy is the group-by builder for EntityTypeHistory entities.
@@ -553,4 +563,10 @@ func (eths *EntityTypeHistorySelect) sqlScan(ctx context.Context, root *EntityTy
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (eths *EntityTypeHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *EntityTypeHistorySelect {
+	eths.modifiers = append(eths.modifiers, modifiers...)
+	return eths
 }

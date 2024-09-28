@@ -37,9 +37,7 @@ var includedPackages = []string{
 	"./internal/ent",
 	"./internal/entdb",
 	"./internal/httpserve/handlers",
-	"./pkg/analytics",
 	"./pkg/middleware",
-	"./pkg/events/kafka/kafkaconfig",
 }
 
 // schemaConfig represents the configuration for the schema generator

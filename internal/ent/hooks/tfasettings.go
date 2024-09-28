@@ -18,31 +18,31 @@ import (
 
 func HookEnableTFA() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
-		return hook.TFASettingFunc(func(ctx context.Context, mutation *generated.TFASettingMutation) (generated.Value, error) {
+		return hook.TFASettingFunc(func(ctx context.Context, m *generated.TFASettingMutation) (generated.Value, error) {
 			// once verified, create recovery codes
-			verified, ok := mutation.Verified()
+			verified, ok := m.Verified()
 
 			// if recovery codes are cleared, generate new ones
 			gtx := graphql.GetOperationContext(ctx)
 			regenBackupCodes, _ := gtx.Variables["input"].(map[string]interface{})["regenBackupCodes"].(bool)
 
 			if (ok && verified) || regenBackupCodes {
-				u, err := constructTOTPUser(ctx, mutation)
+				u, err := constructTOTPUser(ctx, m)
 				if err != nil {
 					return nil, err
 				}
 
-				u.TFASecret, err = mutation.TOTP.TOTPManager.TOTPSecret(u)
+				u.TFASecret, err = m.TOTP.TOTPManager.TOTPSecret(u)
 				if err != nil {
 					return nil, err
 				}
 
-				codes := mutation.TOTP.TOTPManager.GenerateRecoveryCodes()
-				mutation.SetRecoveryCodes(codes)
+				codes := m.TOTP.TOTPManager.GenerateRecoveryCodes()
+				m.SetRecoveryCodes(codes)
 
 				if verified {
 					// update user settings
-					_, err := mutation.Client().UserSetting.Update().
+					_, err := m.Client().UserSetting.Update().
 						Where(usersetting.UserID(u.ID)).
 						SetIsTfaEnabled(true). // set tfa enabled to true
 						Save(ctx)
@@ -52,14 +52,14 @@ func HookEnableTFA() ent.Hook {
 				}
 			}
 
-			return next.Mutate(ctx, mutation)
+			return next.Mutate(ctx, m)
 		})
 	}, ent.OpUpdate|ent.OpUpdateOne)
 }
 
 // constructTOTPUser constructs a TOTP user object from the mutation
-func constructTOTPUser(ctx context.Context, mutation *generated.TFASettingMutation) (*totp.User, error) {
-	userID, ok := mutation.OwnerID()
+func constructTOTPUser(ctx context.Context, m *generated.TFASettingMutation) (*totp.User, error) {
+	userID, ok := m.OwnerID()
 	if !ok {
 		var err error
 
@@ -74,7 +74,7 @@ func constructTOTPUser(ctx context.Context, mutation *generated.TFASettingMutati
 	}
 
 	// get the user object
-	user, err := mutation.Client().User.Get(ctx, userID)
+	user, err := m.Client().User.Get(ctx, userID)
 	if err != nil {
 		return nil, err
 	}
@@ -86,9 +86,9 @@ func constructTOTPUser(ctx context.Context, mutation *generated.TFASettingMutati
 	}
 
 	// set the TFA settings
-	u.IsEmailOTPAllowed, _ = mutation.EmailOtpAllowed()
-	u.IsPhoneOTPAllowed, _ = mutation.PhoneOtpAllowed()
-	u.IsTOTPAllowed, _ = mutation.TotpAllowed()
+	u.IsEmailOTPAllowed, _ = m.EmailOtpAllowed()
+	u.IsPhoneOTPAllowed, _ = m.PhoneOtpAllowed()
+	u.IsTOTPAllowed, _ = m.TotpAllowed()
 
 	// setup account name fields
 	u.Email = sql.NullString{

@@ -23,8 +23,9 @@ import (
 // OauthProviderUpdate is the builder for updating OauthProvider entities.
 type OauthProviderUpdate struct {
 	config
-	hooks    []Hook
-	mutation *OauthProviderMutation
+	hooks     []Hook
+	mutation  *OauthProviderMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the OauthProviderUpdate builder.
@@ -344,6 +345,12 @@ func (opu *OauthProviderUpdate) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (opu *OauthProviderUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OauthProviderUpdate {
+	opu.modifiers = append(opu.modifiers, modifiers...)
+	return opu
+}
+
 func (opu *OauthProviderUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if err := opu.check(); err != nil {
 		return n, err
@@ -460,6 +467,7 @@ func (opu *OauthProviderUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	}
 	_spec.Node.Schema = opu.schemaConfig.OauthProvider
 	ctx = internal.NewSchemaConfigContext(ctx, opu.schemaConfig)
+	_spec.AddModifiers(opu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, opu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{oauthprovider.Label}
@@ -475,9 +483,10 @@ func (opu *OauthProviderUpdate) sqlSave(ctx context.Context) (n int, err error) 
 // OauthProviderUpdateOne is the builder for updating a single OauthProvider entity.
 type OauthProviderUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *OauthProviderMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *OauthProviderMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -804,6 +813,12 @@ func (opuo *OauthProviderUpdateOne) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (opuo *OauthProviderUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OauthProviderUpdateOne {
+	opuo.modifiers = append(opuo.modifiers, modifiers...)
+	return opuo
+}
+
 func (opuo *OauthProviderUpdateOne) sqlSave(ctx context.Context) (_node *OauthProvider, err error) {
 	if err := opuo.check(); err != nil {
 		return _node, err
@@ -937,6 +952,7 @@ func (opuo *OauthProviderUpdateOne) sqlSave(ctx context.Context) (_node *OauthPr
 	}
 	_spec.Node.Schema = opuo.schemaConfig.OauthProvider
 	ctx = internal.NewSchemaConfigContext(ctx, opuo.schemaConfig)
+	_spec.AddModifiers(opuo.modifiers...)
 	_node = &OauthProvider{config: opuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

@@ -2,7 +2,6 @@ package graphapi_test
 
 import (
 	"context"
-	"path/filepath"
 	"testing"
 	"time"
 
@@ -11,21 +10,20 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 
+	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/iam/fgax"
 	mock_fga "github.com/theopenlane/iam/fgax/mockery"
+	"github.com/theopenlane/riverboat/pkg/riverqueue"
 
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/entdb"
-	"github.com/theopenlane/core/pkg/analytics"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	coreutils "github.com/theopenlane/core/pkg/testutils"
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/iam/totp"
-	"github.com/theopenlane/utils/emails"
-	"github.com/theopenlane/utils/marionette"
 	"github.com/theopenlane/utils/testutils"
 	"github.com/theopenlane/utils/ulids"
 )
@@ -76,25 +74,6 @@ func (suite *GraphTestSuite) SetupTest() {
 	// create mock FGA client
 	fc := fgax.NewMockFGAClient(t, c.fga)
 
-	// setup email manager
-	emConfig := emails.Config{
-		Testing:   true,
-		Archive:   filepath.Join("fixtures", "emails"),
-		FromEmail: "mitb@theopenlane.io",
-	}
-
-	em, err := emails.New(emConfig)
-	if err != nil {
-		t.Fatal("error creating email manager")
-	}
-
-	// setup task manager
-	tmConfig := marionette.Config{}
-
-	taskMan := marionette.New(tmConfig)
-
-	taskMan.Start()
-
 	// setup otp manager
 	otpOpts := []totp.ConfigOption{
 		totp.WithCodeLength(6),
@@ -124,9 +103,7 @@ func (suite *GraphTestSuite) SetupTest() {
 
 	opts := []ent.Option{
 		ent.Authz(*fc),
-		ent.Emails(em),
-		ent.Marionette(taskMan),
-		ent.Analytics(&analytics.EventManager{Enabled: false}),
+		ent.Emailer(&emailtemplates.Config{}), // add noop email config
 		ent.TOTP(&totp.Manager{
 			TOTPManager: otpMan,
 		}),
@@ -142,7 +119,9 @@ func (suite *GraphTestSuite) SetupTest() {
 	}
 
 	// create database connection
-	db, err := entdb.NewTestClient(ctx, suite.tf, opts)
+	jobOpts := []riverqueue.Option{riverqueue.WithConnectionURI(suite.tf.URI)}
+
+	db, err := entdb.NewTestClient(ctx, suite.tf, jobOpts, opts)
 	require.NoError(t, err, "failed opening connection to database")
 
 	// assign values
@@ -193,11 +172,10 @@ func (suite *GraphTestSuite) TearDownTest() {
 	// clear all fga mocks
 	mock_fga.ClearMocks(suite.client.fga)
 
-	if suite.client.db != nil {
-		if err := suite.client.db.Close(); err != nil {
-			log.Fatal().Err(err).Msg("failed to close database")
-		}
+	if err := suite.client.db.Close(); err != nil {
+		log.Fatal().Err(err).Msg("failed to close database")
 	}
+
 }
 
 func (suite *GraphTestSuite) TearDownSuite() {

@@ -26,8 +26,9 @@ import (
 // EntitlementPlanUpdate is the builder for updating EntitlementPlan entities.
 type EntitlementPlanUpdate struct {
 	config
-	hooks    []Hook
-	mutation *EntitlementPlanMutation
+	hooks     []Hook
+	mutation  *EntitlementPlanMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the EntitlementPlanUpdate builder.
@@ -410,6 +411,12 @@ func (epu *EntitlementPlanUpdate) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (epu *EntitlementPlanUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EntitlementPlanUpdate {
+	epu.modifiers = append(epu.modifiers, modifiers...)
+	return epu
+}
+
 func (epu *EntitlementPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if err := epu.check(); err != nil {
 		return n, err
@@ -727,6 +734,7 @@ func (epu *EntitlementPlanUpdate) sqlSave(ctx context.Context) (n int, err error
 	}
 	_spec.Node.Schema = epu.schemaConfig.EntitlementPlan
 	ctx = internal.NewSchemaConfigContext(ctx, epu.schemaConfig)
+	_spec.AddModifiers(epu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, epu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{entitlementplan.Label}
@@ -742,9 +750,10 @@ func (epu *EntitlementPlanUpdate) sqlSave(ctx context.Context) (n int, err error
 // EntitlementPlanUpdateOne is the builder for updating a single EntitlementPlan entity.
 type EntitlementPlanUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *EntitlementPlanMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *EntitlementPlanMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -1134,6 +1143,12 @@ func (epuo *EntitlementPlanUpdateOne) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (epuo *EntitlementPlanUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EntitlementPlanUpdateOne {
+	epuo.modifiers = append(epuo.modifiers, modifiers...)
+	return epuo
+}
+
 func (epuo *EntitlementPlanUpdateOne) sqlSave(ctx context.Context) (_node *EntitlementPlan, err error) {
 	if err := epuo.check(); err != nil {
 		return _node, err
@@ -1468,6 +1483,7 @@ func (epuo *EntitlementPlanUpdateOne) sqlSave(ctx context.Context) (_node *Entit
 	}
 	_spec.Node.Schema = epuo.schemaConfig.EntitlementPlan
 	ctx = internal.NewSchemaConfigContext(ctx, epuo.schemaConfig)
+	_spec.AddModifiers(epuo.modifiers...)
 	_node = &EntitlementPlan{config: epuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

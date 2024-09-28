@@ -242,7 +242,7 @@ func (r *queryResolver) IntegrationHistories(ctx context.Context, after *entgql.
 
 // Invites is the resolver for the invites field.
 func (r *queryResolver) Invites(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.InviteWhereInput) (*generated.InviteConnection, error) {
-	return r.client.Invite.Query().Paginate(ctx, after, first, before, last, generated.WithInviteFilter(where.Filter))
+	return r.db.Invite.Query().Paginate(ctx, after, first, before, last, generated.WithInviteFilter(where.Filter))
 }
 
 // Notes is the resolver for the notes field.

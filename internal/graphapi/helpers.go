@@ -30,9 +30,9 @@ func withTransactionalMutation(ctx context.Context) *ent.Client {
 }
 
 // injectClient adds the db client to the context to be used with transactional mutations
-func injectClient(client *ent.Client) graphql.OperationMiddleware {
+func injectClient(db *ent.Client) graphql.OperationMiddleware {
 	return func(ctx context.Context, next graphql.OperationHandler) graphql.ResponseHandler {
-		ctx = ent.NewContext(ctx, client)
+		ctx = ent.NewContext(ctx, db)
 		return next(ctx)
 	}
 }

@@ -25,8 +25,8 @@ type GroupHistoryQuery struct {
 	order      []grouphistory.OrderOption
 	inters     []Interceptor
 	predicates []predicate.GroupHistory
-	modifiers  []func(*sql.Selector)
 	loadTotal  []func(context.Context, []*GroupHistory) error
+	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -256,8 +256,9 @@ func (ghq *GroupHistoryQuery) Clone() *GroupHistoryQuery {
 		inters:     append([]Interceptor{}, ghq.inters...),
 		predicates: append([]predicate.GroupHistory{}, ghq.predicates...),
 		// clone intermediate query.
-		sql:  ghq.sql.Clone(),
-		path: ghq.path,
+		sql:       ghq.sql.Clone(),
+		path:      ghq.path,
+		modifiers: append([]func(*sql.Selector){}, ghq.modifiers...),
 	}
 }
 
@@ -448,6 +449,9 @@ func (ghq *GroupHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	t1.Schema(ghq.schemaConfig.GroupHistory)
 	ctx = internal.NewSchemaConfigContext(ctx, ghq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range ghq.modifiers {
+		m(selector)
+	}
 	for _, p := range ghq.predicates {
 		p(selector)
 	}
@@ -463,6 +467,12 @@ func (ghq *GroupHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (ghq *GroupHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *GroupHistorySelect {
+	ghq.modifiers = append(ghq.modifiers, modifiers...)
+	return ghq.Select()
 }
 
 // GroupHistoryGroupBy is the group-by builder for GroupHistory entities.
@@ -553,4 +563,10 @@ func (ghs *GroupHistorySelect) sqlScan(ctx context.Context, root *GroupHistoryQu
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (ghs *GroupHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *GroupHistorySelect {
+	ghs.modifiers = append(ghs.modifiers, modifiers...)
+	return ghs
 }

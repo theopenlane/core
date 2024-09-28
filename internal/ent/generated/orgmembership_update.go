@@ -22,8 +22,9 @@ import (
 // OrgMembershipUpdate is the builder for updating OrgMembership entities.
 type OrgMembershipUpdate struct {
 	config
-	hooks    []Hook
-	mutation *OrgMembershipMutation
+	hooks     []Hook
+	mutation  *OrgMembershipMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the OrgMembershipUpdate builder.
@@ -217,6 +218,12 @@ func (omu *OrgMembershipUpdate) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (omu *OrgMembershipUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrgMembershipUpdate {
+	omu.modifiers = append(omu.modifiers, modifiers...)
+	return omu
+}
+
 func (omu *OrgMembershipUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if err := omu.check(); err != nil {
 		return n, err
@@ -312,6 +319,7 @@ func (omu *OrgMembershipUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	}
 	_spec.Node.Schema = omu.schemaConfig.OrgMembership
 	ctx = internal.NewSchemaConfigContext(ctx, omu.schemaConfig)
+	_spec.AddModifiers(omu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, omu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{orgmembership.Label}
@@ -327,9 +335,10 @@ func (omu *OrgMembershipUpdate) sqlSave(ctx context.Context) (n int, err error) 
 // OrgMembershipUpdateOne is the builder for updating a single OrgMembership entity.
 type OrgMembershipUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *OrgMembershipMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *OrgMembershipMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -530,6 +539,12 @@ func (omuo *OrgMembershipUpdateOne) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (omuo *OrgMembershipUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrgMembershipUpdateOne {
+	omuo.modifiers = append(omuo.modifiers, modifiers...)
+	return omuo
+}
+
 func (omuo *OrgMembershipUpdateOne) sqlSave(ctx context.Context) (_node *OrgMembership, err error) {
 	if err := omuo.check(); err != nil {
 		return _node, err
@@ -642,6 +657,7 @@ func (omuo *OrgMembershipUpdateOne) sqlSave(ctx context.Context) (_node *OrgMemb
 	}
 	_spec.Node.Schema = omuo.schemaConfig.OrgMembership
 	ctx = internal.NewSchemaConfigContext(ctx, omuo.schemaConfig)
+	_spec.AddModifiers(omuo.modifiers...)
 	_node = &OrgMembership{config: omuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
