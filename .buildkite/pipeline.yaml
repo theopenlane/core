@@ -54,8 +54,8 @@ steps:
         matrix:
           setup:
             version:
+              - 17-alpine
               - 16-alpine
-              - 15-alpine
         plugins:
           - docker#v5.11.0:
               image: ghcr.io/theopenlane/build-image:latest
