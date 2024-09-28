@@ -74,8 +74,9 @@ func main() {
 			gen.FeatureNamedEdges,
 			gen.FeatureSchemaConfig,
 			gen.FeatureIntercept,
-			gen.FeatureExecQuery,
 			gen.FeatureModifier,
+			// this is disabled because it is not compatible with the entcache driver
+			// gen.FeatureExecQuery,
 		},
 	},
 		entc.Dependency(

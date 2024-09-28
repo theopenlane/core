@@ -9,6 +9,7 @@ import (
 	"log"
 	"reflect"
 
+	"ariga.io/entcache"
 	"github.com/theopenlane/core/internal/ent/generated/migrate"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/riverboat/pkg/riverqueue"
@@ -680,7 +681,25 @@ func (c *Client) Driver() dialect.Driver {
 
 // DB returns the underlying *sql.DB.
 func (c *Client) DB() *stdsql.DB {
-	return c.driver.(*sql.Driver).DB()
+	switch c.driver.(type) {
+	case *sql.Driver: // default
+		return c.driver.(*sql.Driver).DB()
+	case *entcache.Driver: // when using entcache we need to unwrap the driver
+		return c.driver.(*entcache.Driver).Driver.(*sql.Driver).DB()
+	case *dialect.DebugDriver: // when the ent debug driver is used
+		driver := c.driver.(*dialect.DebugDriver)
+
+		switch driver.Driver.(type) {
+		case *sql.Driver: // default
+			return driver.Driver.(*sql.Driver).DB()
+		case *entcache.Driver: // when using entcache we need to unwrap the driver
+			return driver.Driver.(*entcache.Driver).Driver.(*sql.Driver).DB()
+		default:
+			panic(fmt.Sprintf("ent: unknown driver type: %T", driver))
+		}
+	default:
+		panic(fmt.Sprintf("ent: unknown driver type: %T", c.driver))
+	}
 }
 
 // WithJobClient adds the job client to the database client based on the configuration.
@@ -11138,28 +11157,4 @@ func AlternateSchema(schemaConfig SchemaConfig) Option {
 	return func(c *config) {
 		c.schemaConfig = schemaConfig
 	}
-}
-
-// ExecContext allows calling the underlying ExecContext method of the driver if it is supported by it.
-// See, database/sql#DB.ExecContext for more information.
-func (c *config) ExecContext(ctx context.Context, query string, args ...any) (stdsql.Result, error) {
-	ex, ok := c.driver.(interface {
-		ExecContext(context.Context, string, ...any) (stdsql.Result, error)
-	})
-	if !ok {
-		return nil, fmt.Errorf("Driver.ExecContext is not supported")
-	}
-	return ex.ExecContext(ctx, query, args...)
-}
-
-// QueryContext allows calling the underlying QueryContext method of the driver if it is supported by it.
-// See, database/sql#DB.QueryContext for more information.
-func (c *config) QueryContext(ctx context.Context, query string, args ...any) (*stdsql.Rows, error) {
-	q, ok := c.driver.(interface {
-		QueryContext(context.Context, string, ...any) (*stdsql.Rows, error)
-	})
-	if !ok {
-		return nil, fmt.Errorf("Driver.QueryContext is not supported")
-	}
-	return q.QueryContext(ctx, query, args...)
 }

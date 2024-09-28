@@ -1,5 +1,10 @@
 {{/* A template for adding additional client fields/options. */}}
 
+{{- define "import/additional/stdsql" -}}
+    stdsql "database/sql"
+{{- end -}}
+
+
 {{ define "client/additional/driver/dialect" }}
     // Dialect returns the driver dialect.
     func(c *Client) Dialect() string {
@@ -13,7 +18,25 @@
 
     // DB returns the underlying *sql.DB.
     func (c *Client) DB() *stdsql.DB {
-        return c.driver.(*sql.Driver).DB()
+        switch c.driver.(type) {
+        case *sql.Driver: // default
+            return c.driver.( *sql.Driver).DB()
+        case *entcache.Driver: // when using entcache we need to unwrap the driver
+            return c.driver.(*entcache.Driver).Driver.(*sql.Driver).DB()
+        case *dialect.DebugDriver: // when the ent debug driver is used
+            driver := c.driver.(*dialect.DebugDriver)
+
+            switch driver.Driver.(type) {
+            case *sql.Driver: // default 
+                return driver.Driver.(*sql.Driver).DB()
+            case *entcache.Driver: // when using entcache we need to unwrap the driver
+                return driver.Driver.(*entcache.Driver).Driver.(*sql.Driver).DB() 
+            default:
+                panic(fmt.Sprintf("ent: unknown driver type: %T", driver))
+            }
+        default:
+            panic(fmt.Sprintf("ent: unknown driver type: %T", c.driver))
+        }
     }
 {{ end }}
 

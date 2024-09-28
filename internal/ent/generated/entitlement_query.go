@@ -16,10 +16,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entitlement"
 	"github.com/theopenlane/core/internal/ent/generated/entitlementplan"
 	"github.com/theopenlane/core/internal/ent/generated/event"
+	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // EntitlementQuery is the builder for querying Entitlement entities.
