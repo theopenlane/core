@@ -17,10 +17,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entitlementplanfeature"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/feature"
+	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // EntitlementPlanFeatureQuery is the builder for querying EntitlementPlanFeature entities.
@@ -34,8 +33,8 @@ type EntitlementPlanFeatureQuery struct {
 	withPlan        *EntitlementPlanQuery
 	withFeature     *FeatureQuery
 	withEvents      *EventQuery
-	modifiers       []func(*sql.Selector)
 	loadTotal       []func(context.Context, []*EntitlementPlanFeature) error
+	modifiers       []func(*sql.Selector)
 	withNamedEvents map[string]*EventQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -370,8 +369,9 @@ func (epfq *EntitlementPlanFeatureQuery) Clone() *EntitlementPlanFeatureQuery {
 		withFeature: epfq.withFeature.Clone(),
 		withEvents:  epfq.withEvents.Clone(),
 		// clone intermediate query.
-		sql:  epfq.sql.Clone(),
-		path: epfq.path,
+		sql:       epfq.sql.Clone(),
+		path:      epfq.path,
+		modifiers: append([]func(*sql.Selector){}, epfq.modifiers...),
 	}
 }
 
@@ -804,6 +804,9 @@ func (epfq *EntitlementPlanFeatureQuery) sqlQuery(ctx context.Context) *sql.Sele
 	t1.Schema(epfq.schemaConfig.EntitlementPlanFeature)
 	ctx = internal.NewSchemaConfigContext(ctx, epfq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range epfq.modifiers {
+		m(selector)
+	}
 	for _, p := range epfq.predicates {
 		p(selector)
 	}
@@ -819,6 +822,12 @@ func (epfq *EntitlementPlanFeatureQuery) sqlQuery(ctx context.Context) *sql.Sele
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (epfq *EntitlementPlanFeatureQuery) Modify(modifiers ...func(s *sql.Selector)) *EntitlementPlanFeatureSelect {
+	epfq.modifiers = append(epfq.modifiers, modifiers...)
+	return epfq.Select()
 }
 
 // WithNamedEvents tells the query-builder to eager-load the nodes that are connected to the "events"
@@ -923,4 +932,10 @@ func (epfs *EntitlementPlanFeatureSelect) sqlScan(ctx context.Context, root *Ent
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (epfs *EntitlementPlanFeatureSelect) Modify(modifiers ...func(s *sql.Selector)) *EntitlementPlanFeatureSelect {
+	epfs.modifiers = append(epfs.modifiers, modifiers...)
+	return epfs
 }

@@ -12,17 +12,17 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
+	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/user"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // EmailVerificationTokenUpdate is the builder for updating EmailVerificationToken entities.
 type EmailVerificationTokenUpdate struct {
 	config
-	hooks    []Hook
-	mutation *EmailVerificationTokenMutation
+	hooks     []Hook
+	mutation  *EmailVerificationTokenMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the EmailVerificationTokenUpdate builder.
@@ -246,6 +246,12 @@ func (evtu *EmailVerificationTokenUpdate) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (evtu *EmailVerificationTokenUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EmailVerificationTokenUpdate {
+	evtu.modifiers = append(evtu.modifiers, modifiers...)
+	return evtu
+}
+
 func (evtu *EmailVerificationTokenUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if err := evtu.check(); err != nil {
 		return n, err
@@ -333,6 +339,7 @@ func (evtu *EmailVerificationTokenUpdate) sqlSave(ctx context.Context) (n int, e
 	}
 	_spec.Node.Schema = evtu.schemaConfig.EmailVerificationToken
 	ctx = internal.NewSchemaConfigContext(ctx, evtu.schemaConfig)
+	_spec.AddModifiers(evtu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, evtu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{emailverificationtoken.Label}
@@ -348,9 +355,10 @@ func (evtu *EmailVerificationTokenUpdate) sqlSave(ctx context.Context) (n int, e
 // EmailVerificationTokenUpdateOne is the builder for updating a single EmailVerificationToken entity.
 type EmailVerificationTokenUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *EmailVerificationTokenMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *EmailVerificationTokenMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -581,6 +589,12 @@ func (evtuo *EmailVerificationTokenUpdateOne) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (evtuo *EmailVerificationTokenUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EmailVerificationTokenUpdateOne {
+	evtuo.modifiers = append(evtuo.modifiers, modifiers...)
+	return evtuo
+}
+
 func (evtuo *EmailVerificationTokenUpdateOne) sqlSave(ctx context.Context) (_node *EmailVerificationToken, err error) {
 	if err := evtuo.check(); err != nil {
 		return _node, err
@@ -685,6 +699,7 @@ func (evtuo *EmailVerificationTokenUpdateOne) sqlSave(ctx context.Context) (_nod
 	}
 	_spec.Node.Schema = evtuo.schemaConfig.EmailVerificationToken
 	ctx = internal.NewSchemaConfigContext(ctx, evtuo.schemaConfig)
+	_spec.AddModifiers(evtuo.modifiers...)
 	_node = &EmailVerificationToken{config: evtuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

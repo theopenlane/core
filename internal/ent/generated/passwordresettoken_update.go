@@ -11,18 +11,18 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/user"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // PasswordResetTokenUpdate is the builder for updating PasswordResetToken entities.
 type PasswordResetTokenUpdate struct {
 	config
-	hooks    []Hook
-	mutation *PasswordResetTokenMutation
+	hooks     []Hook
+	mutation  *PasswordResetTokenMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the PasswordResetTokenUpdate builder.
@@ -246,6 +246,12 @@ func (prtu *PasswordResetTokenUpdate) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (prtu *PasswordResetTokenUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *PasswordResetTokenUpdate {
+	prtu.modifiers = append(prtu.modifiers, modifiers...)
+	return prtu
+}
+
 func (prtu *PasswordResetTokenUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if err := prtu.check(); err != nil {
 		return n, err
@@ -333,6 +339,7 @@ func (prtu *PasswordResetTokenUpdate) sqlSave(ctx context.Context) (n int, err e
 	}
 	_spec.Node.Schema = prtu.schemaConfig.PasswordResetToken
 	ctx = internal.NewSchemaConfigContext(ctx, prtu.schemaConfig)
+	_spec.AddModifiers(prtu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, prtu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{passwordresettoken.Label}
@@ -348,9 +355,10 @@ func (prtu *PasswordResetTokenUpdate) sqlSave(ctx context.Context) (n int, err e
 // PasswordResetTokenUpdateOne is the builder for updating a single PasswordResetToken entity.
 type PasswordResetTokenUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *PasswordResetTokenMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *PasswordResetTokenMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -581,6 +589,12 @@ func (prtuo *PasswordResetTokenUpdateOne) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (prtuo *PasswordResetTokenUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *PasswordResetTokenUpdateOne {
+	prtuo.modifiers = append(prtuo.modifiers, modifiers...)
+	return prtuo
+}
+
 func (prtuo *PasswordResetTokenUpdateOne) sqlSave(ctx context.Context) (_node *PasswordResetToken, err error) {
 	if err := prtuo.check(); err != nil {
 		return _node, err
@@ -685,6 +699,7 @@ func (prtuo *PasswordResetTokenUpdateOne) sqlSave(ctx context.Context) (_node *P
 	}
 	_spec.Node.Schema = prtuo.schemaConfig.PasswordResetToken
 	ctx = internal.NewSchemaConfigContext(ctx, prtuo.schemaConfig)
+	_spec.AddModifiers(prtuo.modifiers...)
 	_node = &PasswordResetToken{config: prtuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

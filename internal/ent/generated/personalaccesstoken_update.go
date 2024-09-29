@@ -13,19 +13,19 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/event"
+	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/user"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // PersonalAccessTokenUpdate is the builder for updating PersonalAccessToken entities.
 type PersonalAccessTokenUpdate struct {
 	config
-	hooks    []Hook
-	mutation *PersonalAccessTokenMutation
+	hooks     []Hook
+	mutation  *PersonalAccessTokenMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the PersonalAccessTokenUpdate builder.
@@ -373,6 +373,12 @@ func (patu *PersonalAccessTokenUpdate) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (patu *PersonalAccessTokenUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *PersonalAccessTokenUpdate {
+	patu.modifiers = append(patu.modifiers, modifiers...)
+	return patu
+}
+
 func (patu *PersonalAccessTokenUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if err := patu.check(); err != nil {
 		return n, err
@@ -587,6 +593,7 @@ func (patu *PersonalAccessTokenUpdate) sqlSave(ctx context.Context) (n int, err 
 	}
 	_spec.Node.Schema = patu.schemaConfig.PersonalAccessToken
 	ctx = internal.NewSchemaConfigContext(ctx, patu.schemaConfig)
+	_spec.AddModifiers(patu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, patu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{personalaccesstoken.Label}
@@ -602,9 +609,10 @@ func (patu *PersonalAccessTokenUpdate) sqlSave(ctx context.Context) (n int, err 
 // PersonalAccessTokenUpdateOne is the builder for updating a single PersonalAccessToken entity.
 type PersonalAccessTokenUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *PersonalAccessTokenMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *PersonalAccessTokenMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -959,6 +967,12 @@ func (patuo *PersonalAccessTokenUpdateOne) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (patuo *PersonalAccessTokenUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *PersonalAccessTokenUpdateOne {
+	patuo.modifiers = append(patuo.modifiers, modifiers...)
+	return patuo
+}
+
 func (patuo *PersonalAccessTokenUpdateOne) sqlSave(ctx context.Context) (_node *PersonalAccessToken, err error) {
 	if err := patuo.check(); err != nil {
 		return _node, err
@@ -1190,6 +1204,7 @@ func (patuo *PersonalAccessTokenUpdateOne) sqlSave(ctx context.Context) (_node *
 	}
 	_spec.Node.Schema = patuo.schemaConfig.PersonalAccessToken
 	ctx = internal.NewSchemaConfigContext(ctx, patuo.schemaConfig)
+	_spec.AddModifiers(patuo.modifiers...)
 	_node = &PersonalAccessToken{config: patuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

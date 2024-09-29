@@ -14,11 +14,10 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/webhook"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // WebhookQuery is the builder for querying Webhook entities.
@@ -31,8 +30,8 @@ type WebhookQuery struct {
 	withOwner             *OrganizationQuery
 	withEvents            *EventQuery
 	withIntegrations      *IntegrationQuery
-	modifiers             []func(*sql.Selector)
 	loadTotal             []func(context.Context, []*Webhook) error
+	modifiers             []func(*sql.Selector)
 	withNamedEvents       map[string]*EventQuery
 	withNamedIntegrations map[string]*IntegrationQuery
 	// intermediate query (i.e. traversal path).
@@ -342,8 +341,9 @@ func (wq *WebhookQuery) Clone() *WebhookQuery {
 		withEvents:       wq.withEvents.Clone(),
 		withIntegrations: wq.withIntegrations.Clone(),
 		// clone intermediate query.
-		sql:  wq.sql.Clone(),
-		path: wq.path,
+		sql:       wq.sql.Clone(),
+		path:      wq.path,
+		modifiers: append([]func(*sql.Selector){}, wq.modifiers...),
 	}
 }
 
@@ -758,6 +758,9 @@ func (wq *WebhookQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	t1.Schema(wq.schemaConfig.Webhook)
 	ctx = internal.NewSchemaConfigContext(ctx, wq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range wq.modifiers {
+		m(selector)
+	}
 	for _, p := range wq.predicates {
 		p(selector)
 	}
@@ -773,6 +776,12 @@ func (wq *WebhookQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (wq *WebhookQuery) Modify(modifiers ...func(s *sql.Selector)) *WebhookSelect {
+	wq.modifiers = append(wq.modifiers, modifiers...)
+	return wq.Select()
 }
 
 // WithNamedEvents tells the query-builder to eager-load the nodes that are connected to the "events"
@@ -891,4 +900,10 @@ func (ws *WebhookSelect) sqlScan(ctx context.Context, root *WebhookQuery, v any)
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (ws *WebhookSelect) Modify(modifiers ...func(s *sql.Selector)) *WebhookSelect {
+	ws.modifiers = append(ws.modifiers, modifiers...)
+	return ws
 }

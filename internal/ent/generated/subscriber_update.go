@@ -13,18 +13,18 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/event"
+	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // SubscriberUpdate is the builder for updating Subscriber entities.
 type SubscriberUpdate struct {
 	config
-	hooks    []Hook
-	mutation *SubscriberMutation
+	hooks     []Hook
+	mutation  *SubscriberMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the SubscriberUpdate builder.
@@ -377,6 +377,12 @@ func (su *SubscriberUpdate) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (su *SubscriberUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *SubscriberUpdate {
+	su.modifiers = append(su.modifiers, modifiers...)
+	return su
+}
+
 func (su *SubscriberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if err := su.check(); err != nil {
 		return n, err
@@ -538,6 +544,7 @@ func (su *SubscriberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	_spec.Node.Schema = su.schemaConfig.Subscriber
 	ctx = internal.NewSchemaConfigContext(ctx, su.schemaConfig)
+	_spec.AddModifiers(su.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, su.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{subscriber.Label}
@@ -553,9 +560,10 @@ func (su *SubscriberUpdate) sqlSave(ctx context.Context) (n int, err error) {
 // SubscriberUpdateOne is the builder for updating a single Subscriber entity.
 type SubscriberUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *SubscriberMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *SubscriberMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -915,6 +923,12 @@ func (suo *SubscriberUpdateOne) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (suo *SubscriberUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *SubscriberUpdateOne {
+	suo.modifiers = append(suo.modifiers, modifiers...)
+	return suo
+}
+
 func (suo *SubscriberUpdateOne) sqlSave(ctx context.Context) (_node *Subscriber, err error) {
 	if err := suo.check(); err != nil {
 		return _node, err
@@ -1093,6 +1107,7 @@ func (suo *SubscriberUpdateOne) sqlSave(ctx context.Context) (_node *Subscriber,
 	}
 	_spec.Node.Schema = suo.schemaConfig.Subscriber
 	ctx = internal.NewSchemaConfigContext(ctx, suo.schemaConfig)
+	_spec.AddModifiers(suo.modifiers...)
 	_node = &Subscriber{config: suo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

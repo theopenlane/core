@@ -1,142 +1,121 @@
 package handlers
 
 import (
-	"github.com/theopenlane/utils/emails"
-	"github.com/theopenlane/utils/sendgrid"
+	"context"
+	"fmt"
+
+	"github.com/rs/zerolog/log"
+	"github.com/theopenlane/emailtemplates"
+	"github.com/theopenlane/riverboat/pkg/jobs"
 )
 
-// SendVerificationEmail sends an email to a user to verify their email address
-func (h *Handler) SendVerificationEmail(user *User) error {
-	contact := &sendgrid.Contact{
+// sendVerificationEmail sends an email to a user to verify their email address
+func (h *Handler) sendVerificationEmail(ctx context.Context, user *User, token string) error {
+	email, err := h.Emailer.NewVerifyEmail(emailtemplates.Recipient{
 		Email:     user.Email,
 		FirstName: user.FirstName,
 		LastName:  user.LastName,
-	}
-
-	data := emails.VerifyEmailData{
-		EmailData: emails.EmailData{
-			Sender: h.EmailManager.MustFromContact(),
-			Recipient: sendgrid.Contact{
-				Email:     user.Email,
-				FirstName: user.FirstName,
-				LastName:  user.LastName,
-			},
-		},
-		FullName: contact.FullName(),
-	}
-
-	var err error
-	if data.VerifyURL, err = h.EmailManager.VerifyURL(user.GetVerificationToken()); err != nil {
-		return err
-	}
-
-	msg, err := emails.VerifyEmail(data)
+	}, token)
 	if err != nil {
+		log.Error().Err(err).Msg("error creating email verification")
+
 		return err
 	}
 
-	// Send the email
-	return h.EmailManager.Send(msg)
+	_, err = h.DBClient.Job.Insert(ctx, jobs.EmailArgs{
+		Message: *email,
+	}, nil)
+	if err != nil {
+		log.Error().Err(err).Msg("error queueing email verification")
+
+		return err
+	}
+
+	log.Info().Msg("queued email")
+
+	return nil
 }
 
 // SendSubscriberEmail sends an email to confirm a user's subscription
-func (h *Handler) SendSubscriberEmail(user *User, orgName string) error {
-	data := emails.SubscriberEmailData{
-		OrgName: orgName,
-		EmailData: emails.EmailData{
-			Sender: h.EmailManager.MustFromContact(),
-			Recipient: sendgrid.Contact{
-				Email: user.Email,
-			},
-		},
+func (h *Handler) sendSubscriberEmail(ctx context.Context, user *User, orgID string) error {
+	if orgID == "" {
+		return fmt.Errorf("%w, subscriber organization not found", ErrMissingField)
 	}
 
-	var err error
-	if data.VerifySubscriberURL, err = h.EmailManager.SubscriberVerifyURL(user.GetVerificationToken()); err != nil {
-		return err
-	}
-
-	msg, err := emails.SubscribeEmail(data)
+	org, err := h.getOrgByID(ctx, orgID)
 	if err != nil {
 		return err
 	}
 
-	// Send the email
-	return h.EmailManager.Send(msg)
+	email, err := h.Emailer.NewSubscriberEmail(emailtemplates.Recipient{
+		Email:     user.Email,
+		FirstName: user.FirstName,
+		LastName:  user.LastName,
+	}, org.Name, user.GetVerificationToken())
+	if err != nil {
+		log.Error().Err(err).Msg("error creating email verification")
+
+		return err
+	}
+
+	_, err = h.DBClient.Job.Insert(ctx, jobs.EmailArgs{
+		Message: *email,
+	}, nil)
+	if err != nil {
+		log.Error().Err(err).Msg("error queueing email verification")
+
+		return err
+	}
+
+	return nil
 }
 
-// SendPasswordResetRequestEmail Send an email to a user to request them to reset their password
-func (h *Handler) SendPasswordResetRequestEmail(user *User) error {
-	data := emails.ResetRequestData{
-		EmailData: emails.EmailData{
-			Sender: h.EmailManager.MustFromContact(),
-			Recipient: sendgrid.Contact{
-				Email:     user.Email,
-				FirstName: user.FirstName,
-				LastName:  user.LastName,
-			},
-		},
-	}
-	data.Recipient.ParseName(user.Name)
-
-	var err error
-	if data.ResetURL, err = h.EmailManager.ResetURL(user.GetPasswordResetToken()); err != nil {
-		return err
-	}
-
-	msg, err := emails.PasswordResetRequestEmail(data)
+// sendPasswordResetRequestEmail to a user to request them to reset their password
+func (h *Handler) sendPasswordResetRequestEmail(ctx context.Context, user *User) error {
+	email, err := h.Emailer.NewPasswordResetRequestEmail(emailtemplates.Recipient{
+		Email:     user.Email,
+		FirstName: user.FirstName,
+		LastName:  user.LastName,
+	}, user.GetPasswordResetToken())
 	if err != nil {
+		log.Error().Err(err).Msg("error creating password reset email")
+
 		return err
 	}
 
-	// Send the email
-	return h.EmailManager.Send(msg)
+	_, err = h.DBClient.Job.Insert(ctx, jobs.EmailArgs{
+		Message: *email,
+	}, nil)
+	if err != nil {
+		log.Error().Err(err).Msg("error queueing  password reset email")
+
+		return err
+	}
+
+	return nil
 }
 
 // SendPasswordResetSuccessEmail Send an email to a user to inform them that their password has been reset
-func (h *Handler) SendPasswordResetSuccessEmail(user *User) error {
-	data := emails.ResetSuccessData{
-		EmailData: emails.EmailData{
-			Sender: h.EmailManager.MustFromContact(),
-			Recipient: sendgrid.Contact{
-				Email: user.Email,
-			},
-		},
-	}
-
-	data.Recipient.ParseName(user.Name)
-
-	msg, err := emails.PasswordResetSuccessEmail(data)
+func (h *Handler) sendPasswordResetSuccessEmail(ctx context.Context, user *User) error {
+	email, err := h.Emailer.NewPasswordResetSuccessEmail(emailtemplates.Recipient{
+		Email:     user.Email,
+		FirstName: user.FirstName,
+		LastName:  user.LastName,
+	})
 	if err != nil {
+		log.Error().Err(err).Msg("error creating password reset success email")
+
 		return err
 	}
 
-	// Send the email
-	return h.EmailManager.Send(msg)
-}
-
-// SendOrgInvitationEmail sends an email inviting a user to join an existing organization
-func (h *Handler) SendOrgInvitationEmail(i *emails.Invite) error {
-	data := emails.InviteData{
-		InviterName: i.Requestor,
-		OrgName:     i.OrgName,
-		EmailData: emails.EmailData{
-			Sender: h.EmailManager.MustFromContact(),
-			Recipient: sendgrid.Contact{
-				Email: i.Recipient,
-			},
-		},
-	}
-
-	var err error
-	if data.InviteURL, err = h.EmailManager.InviteURL(i.Token); err != nil {
-		return err
-	}
-
-	msg, err := emails.InviteEmail(data)
+	_, err = h.DBClient.Job.Insert(ctx, jobs.EmailArgs{
+		Message: *email,
+	}, nil)
 	if err != nil {
+		log.Error().Err(err).Msg("error queueing  password reset success email")
+
 		return err
 	}
 
-	return h.EmailManager.Send(msg)
+	return nil
 }

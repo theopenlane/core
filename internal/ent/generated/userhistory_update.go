@@ -12,18 +12,18 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
 	"github.com/theopenlane/core/pkg/enums"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // UserHistoryUpdate is the builder for updating UserHistory entities.
 type UserHistoryUpdate struct {
 	config
-	hooks    []Hook
-	mutation *UserHistoryMutation
+	hooks     []Hook
+	mutation  *UserHistoryMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the UserHistoryUpdate builder.
@@ -392,6 +392,12 @@ func (uhu *UserHistoryUpdate) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (uhu *UserHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *UserHistoryUpdate {
+	uhu.modifiers = append(uhu.modifiers, modifiers...)
+	return uhu
+}
+
 func (uhu *UserHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if err := uhu.check(); err != nil {
 		return n, err
@@ -513,6 +519,7 @@ func (uhu *UserHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	_spec.Node.Schema = uhu.schemaConfig.UserHistory
 	ctx = internal.NewSchemaConfigContext(ctx, uhu.schemaConfig)
+	_spec.AddModifiers(uhu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, uhu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{userhistory.Label}
@@ -528,9 +535,10 @@ func (uhu *UserHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 // UserHistoryUpdateOne is the builder for updating a single UserHistory entity.
 type UserHistoryUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *UserHistoryMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *UserHistoryMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -906,6 +914,12 @@ func (uhuo *UserHistoryUpdateOne) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (uhuo *UserHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *UserHistoryUpdateOne {
+	uhuo.modifiers = append(uhuo.modifiers, modifiers...)
+	return uhuo
+}
+
 func (uhuo *UserHistoryUpdateOne) sqlSave(ctx context.Context) (_node *UserHistory, err error) {
 	if err := uhuo.check(); err != nil {
 		return _node, err
@@ -1044,6 +1058,7 @@ func (uhuo *UserHistoryUpdateOne) sqlSave(ctx context.Context) (_node *UserHisto
 	}
 	_spec.Node.Schema = uhuo.schemaConfig.UserHistory
 	ctx = internal.NewSchemaConfigContext(ctx, uhuo.schemaConfig)
+	_spec.AddModifiers(uhuo.modifiers...)
 	_node = &UserHistory{config: uhuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

@@ -9,7 +9,10 @@ import (
 	"log"
 	"reflect"
 
+	"ariga.io/entcache"
 	"github.com/theopenlane/core/internal/ent/generated/migrate"
+	"github.com/theopenlane/entx"
+	"github.com/theopenlane/riverboat/pkg/riverqueue"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
@@ -73,16 +76,15 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
 	"github.com/theopenlane/core/internal/ent/generated/webhook"
 	"github.com/theopenlane/core/internal/ent/generated/webhookhistory"
-	"github.com/theopenlane/core/pkg/analytics"
-	"github.com/theopenlane/dbx/pkg/dbxclient"
+	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/iam/entfga"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/iam/tokens"
 	"github.com/theopenlane/iam/totp"
-	"github.com/theopenlane/utils/emails"
-	"github.com/theopenlane/utils/marionette"
 	"gocloud.dev/secrets"
+
+	stdsql "database/sql"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -207,6 +209,12 @@ type Client struct {
 	// WebhookHistory is the client for interacting with the WebhookHistory builders.
 	WebhookHistory *WebhookHistoryClient
 
+	// Config is the db client configuration
+	Config *entx.EntClientConfig
+
+	// Job is the job client to insert jobs into the queue.
+	Job riverqueue.JobClient
+
 	// authzActivated determines if the authz hooks have already been activated
 	authzActivated bool
 }
@@ -315,11 +323,11 @@ type (
 		Authz         fgax.Client
 		TokenManager  *tokens.TokenManager
 		SessionConfig *sessions.SessionConfig
-		Emails        *emails.EmailManager
-		Marionette    *marionette.TaskManager
-		Analytics     *analytics.EventManager
+		Emailer       *emailtemplates.Config
 		TOTP          *totp.Manager
-		DBx           *dbxclient.Client
+		// Job is the job client to insert jobs into the queue.
+		Job riverqueue.JobClient
+
 		// schemaConfig contains alternative names for all tables.
 		schemaConfig SchemaConfig
 	}
@@ -400,24 +408,10 @@ func SessionConfig(v *sessions.SessionConfig) Option {
 	}
 }
 
-// Emails configures the Emails.
-func Emails(v *emails.EmailManager) Option {
+// Emailer configures the Emailer.
+func Emailer(v *emailtemplates.Config) Option {
 	return func(c *config) {
-		c.Emails = v
-	}
-}
-
-// Marionette configures the Marionette.
-func Marionette(v *marionette.TaskManager) Option {
-	return func(c *config) {
-		c.Marionette = v
-	}
-}
-
-// Analytics configures the Analytics.
-func Analytics(v *analytics.EventManager) Option {
-	return func(c *config) {
-		c.Analytics = v
+		c.Emailer = v
 	}
 }
 
@@ -425,13 +419,6 @@ func Analytics(v *analytics.EventManager) Option {
 func TOTP(v *totp.Manager) Option {
 	return func(c *config) {
 		c.TOTP = v
-	}
-}
-
-// DBx configures the DBx.
-func DBx(v *dbxclient.Client) Option {
-	return func(c *config) {
-		c.DBx = v
 	}
 }
 
@@ -671,6 +658,58 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 	} {
 		n.Intercept(interceptors...)
 	}
+}
+
+// CloseAll closes the all database client connections
+func (c *Client) CloseAll() error {
+	if err := c.Job.Close(); err != nil {
+		return err
+	}
+
+	return c.Close()
+}
+
+// Dialect returns the driver dialect.
+func (c *Client) Dialect() string {
+	return c.driver.Dialect()
+}
+
+// Driver returns the underlying driver.
+func (c *Client) Driver() dialect.Driver {
+	return c.driver
+}
+
+// DB returns the underlying *sql.DB.
+func (c *Client) DB() *stdsql.DB {
+	switch c.driver.(type) {
+	case *sql.Driver: // default
+		return c.driver.(*sql.Driver).DB()
+	case *entcache.Driver: // when using entcache we need to unwrap the driver
+		return c.driver.(*entcache.Driver).Driver.(*sql.Driver).DB()
+	case *dialect.DebugDriver: // when the ent debug driver is used
+		driver := c.driver.(*dialect.DebugDriver)
+
+		switch driver.Driver.(type) {
+		case *sql.Driver: // default
+			return driver.Driver.(*sql.Driver).DB()
+		case *entcache.Driver: // when using entcache we need to unwrap the driver
+			return driver.Driver.(*entcache.Driver).Driver.(*sql.Driver).DB()
+		default:
+			panic(fmt.Sprintf("ent: unknown driver type: %T", driver))
+		}
+	default:
+		panic(fmt.Sprintf("ent: unknown driver type: %T", c.driver))
+	}
+}
+
+// WithJobClient adds the job client to the database client based on the configuration.
+func (c *Client) WithJobClient() {
+	c.Job = NewJobClient(c.config)
+}
+
+// NewJobClient returns a new job client based on the configuration.
+func NewJobClient(c config) riverqueue.JobClient {
+	return c.Job
 }
 
 // Mutate implements the ent.Mutator interface.
@@ -11095,6 +11134,18 @@ type (
 		WebhookHistory []ent.Interceptor
 	}
 )
+
+// Job option added by the client template to add the job client.
+func Job(ctx context.Context, opts ...riverqueue.Option) Option {
+	return func(c *config) {
+		var err error
+
+		c.Job, err = riverqueue.New(ctx, opts...)
+		if err != nil {
+			panic(err)
+		}
+	}
+}
 
 // SchemaConfig represents alternative schema names for all tables
 // that can be passed at runtime.

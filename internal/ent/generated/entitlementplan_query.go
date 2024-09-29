@@ -18,10 +18,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entitlementplanfeature"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/feature"
+	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // EntitlementPlanQuery is the builder for querying EntitlementPlan entities.
@@ -36,8 +35,8 @@ type EntitlementPlanQuery struct {
 	withBaseFeatures      *FeatureQuery
 	withEvents            *EventQuery
 	withFeatures          *EntitlementPlanFeatureQuery
-	modifiers             []func(*sql.Selector)
 	loadTotal             []func(context.Context, []*EntitlementPlan) error
+	modifiers             []func(*sql.Selector)
 	withNamedEntitlements map[string]*EntitlementQuery
 	withNamedBaseFeatures map[string]*FeatureQuery
 	withNamedEvents       map[string]*EventQuery
@@ -401,8 +400,9 @@ func (epq *EntitlementPlanQuery) Clone() *EntitlementPlanQuery {
 		withEvents:       epq.withEvents.Clone(),
 		withFeatures:     epq.withFeatures.Clone(),
 		// clone intermediate query.
-		sql:  epq.sql.Clone(),
-		path: epq.path,
+		sql:       epq.sql.Clone(),
+		path:      epq.path,
+		modifiers: append([]func(*sql.Selector){}, epq.modifiers...),
 	}
 }
 
@@ -935,6 +935,9 @@ func (epq *EntitlementPlanQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	t1.Schema(epq.schemaConfig.EntitlementPlan)
 	ctx = internal.NewSchemaConfigContext(ctx, epq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range epq.modifiers {
+		m(selector)
+	}
 	for _, p := range epq.predicates {
 		p(selector)
 	}
@@ -950,6 +953,12 @@ func (epq *EntitlementPlanQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (epq *EntitlementPlanQuery) Modify(modifiers ...func(s *sql.Selector)) *EntitlementPlanSelect {
+	epq.modifiers = append(epq.modifiers, modifiers...)
+	return epq.Select()
 }
 
 // WithNamedEntitlements tells the query-builder to eager-load the nodes that are connected to the "entitlements"
@@ -1096,4 +1105,10 @@ func (eps *EntitlementPlanSelect) sqlScan(ctx context.Context, root *Entitlement
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (eps *EntitlementPlanSelect) Modify(modifiers ...func(s *sql.Selector)) *EntitlementPlanSelect {
+	eps.modifiers = append(eps.modifiers, modifiers...)
+	return eps
 }

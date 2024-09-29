@@ -13,9 +13,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/featurehistory"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
 	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/internal/ent/generated/predicate"
 )
 
 // FeatureHistoryQuery is the builder for querying FeatureHistory entities.
@@ -25,8 +24,8 @@ type FeatureHistoryQuery struct {
 	order      []featurehistory.OrderOption
 	inters     []Interceptor
 	predicates []predicate.FeatureHistory
-	modifiers  []func(*sql.Selector)
 	loadTotal  []func(context.Context, []*FeatureHistory) error
+	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -256,8 +255,9 @@ func (fhq *FeatureHistoryQuery) Clone() *FeatureHistoryQuery {
 		inters:     append([]Interceptor{}, fhq.inters...),
 		predicates: append([]predicate.FeatureHistory{}, fhq.predicates...),
 		// clone intermediate query.
-		sql:  fhq.sql.Clone(),
-		path: fhq.path,
+		sql:       fhq.sql.Clone(),
+		path:      fhq.path,
+		modifiers: append([]func(*sql.Selector){}, fhq.modifiers...),
 	}
 }
 
@@ -448,6 +448,9 @@ func (fhq *FeatureHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	t1.Schema(fhq.schemaConfig.FeatureHistory)
 	ctx = internal.NewSchemaConfigContext(ctx, fhq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range fhq.modifiers {
+		m(selector)
+	}
 	for _, p := range fhq.predicates {
 		p(selector)
 	}
@@ -463,6 +466,12 @@ func (fhq *FeatureHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (fhq *FeatureHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *FeatureHistorySelect {
+	fhq.modifiers = append(fhq.modifiers, modifiers...)
+	return fhq.Select()
 }
 
 // FeatureHistoryGroupBy is the group-by builder for FeatureHistory entities.
@@ -553,4 +562,10 @@ func (fhs *FeatureHistorySelect) sqlScan(ctx context.Context, root *FeatureHisto
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (fhs *FeatureHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *FeatureHistorySelect {
+	fhs.modifiers = append(fhs.modifiers, modifiers...)
+	return fhs
 }

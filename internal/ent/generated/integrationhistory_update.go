@@ -13,16 +13,16 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/integrationhistory"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
 	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/internal/ent/generated/predicate"
 )
 
 // IntegrationHistoryUpdate is the builder for updating IntegrationHistory entities.
 type IntegrationHistoryUpdate struct {
 	config
-	hooks    []Hook
-	mutation *IntegrationHistoryMutation
+	hooks     []Hook
+	mutation  *IntegrationHistoryMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the IntegrationHistoryUpdate builder.
@@ -242,6 +242,12 @@ func (ihu *IntegrationHistoryUpdate) defaults() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (ihu *IntegrationHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *IntegrationHistoryUpdate {
+	ihu.modifiers = append(ihu.modifiers, modifiers...)
+	return ihu
+}
+
 func (ihu *IntegrationHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(integrationhistory.Table, integrationhistory.Columns, sqlgraph.NewFieldSpec(integrationhistory.FieldID, field.TypeString))
 	if ps := ihu.mutation.predicates; len(ps) > 0 {
@@ -318,6 +324,7 @@ func (ihu *IntegrationHistoryUpdate) sqlSave(ctx context.Context) (n int, err er
 	}
 	_spec.Node.Schema = ihu.schemaConfig.IntegrationHistory
 	ctx = internal.NewSchemaConfigContext(ctx, ihu.schemaConfig)
+	_spec.AddModifiers(ihu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, ihu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{integrationhistory.Label}
@@ -333,9 +340,10 @@ func (ihu *IntegrationHistoryUpdate) sqlSave(ctx context.Context) (n int, err er
 // IntegrationHistoryUpdateOne is the builder for updating a single IntegrationHistory entity.
 type IntegrationHistoryUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *IntegrationHistoryMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *IntegrationHistoryMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -562,6 +570,12 @@ func (ihuo *IntegrationHistoryUpdateOne) defaults() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (ihuo *IntegrationHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *IntegrationHistoryUpdateOne {
+	ihuo.modifiers = append(ihuo.modifiers, modifiers...)
+	return ihuo
+}
+
 func (ihuo *IntegrationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *IntegrationHistory, err error) {
 	_spec := sqlgraph.NewUpdateSpec(integrationhistory.Table, integrationhistory.Columns, sqlgraph.NewFieldSpec(integrationhistory.FieldID, field.TypeString))
 	id, ok := ihuo.mutation.ID()
@@ -655,6 +669,7 @@ func (ihuo *IntegrationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *In
 	}
 	_spec.Node.Schema = ihuo.schemaConfig.IntegrationHistory
 	ctx = internal.NewSchemaConfigContext(ctx, ihuo.schemaConfig)
+	_spec.AddModifiers(ihuo.modifiers...)
 	_node = &IntegrationHistory{config: ihuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

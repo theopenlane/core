@@ -13,9 +13,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/contacthistory"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
 	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/internal/ent/generated/predicate"
 )
 
 // ContactHistoryQuery is the builder for querying ContactHistory entities.
@@ -25,8 +24,8 @@ type ContactHistoryQuery struct {
 	order      []contacthistory.OrderOption
 	inters     []Interceptor
 	predicates []predicate.ContactHistory
-	modifiers  []func(*sql.Selector)
 	loadTotal  []func(context.Context, []*ContactHistory) error
+	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -256,8 +255,9 @@ func (chq *ContactHistoryQuery) Clone() *ContactHistoryQuery {
 		inters:     append([]Interceptor{}, chq.inters...),
 		predicates: append([]predicate.ContactHistory{}, chq.predicates...),
 		// clone intermediate query.
-		sql:  chq.sql.Clone(),
-		path: chq.path,
+		sql:       chq.sql.Clone(),
+		path:      chq.path,
+		modifiers: append([]func(*sql.Selector){}, chq.modifiers...),
 	}
 }
 
@@ -448,6 +448,9 @@ func (chq *ContactHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	t1.Schema(chq.schemaConfig.ContactHistory)
 	ctx = internal.NewSchemaConfigContext(ctx, chq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range chq.modifiers {
+		m(selector)
+	}
 	for _, p := range chq.predicates {
 		p(selector)
 	}
@@ -463,6 +466,12 @@ func (chq *ContactHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (chq *ContactHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *ContactHistorySelect {
+	chq.modifiers = append(chq.modifiers, modifiers...)
+	return chq.Select()
 }
 
 // ContactHistoryGroupBy is the group-by builder for ContactHistory entities.
@@ -553,4 +562,10 @@ func (chs *ContactHistorySelect) sqlScan(ctx context.Context, root *ContactHisto
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (chs *ContactHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *ContactHistorySelect {
+	chs.modifiers = append(chs.modifiers, modifiers...)
+	return chs
 }

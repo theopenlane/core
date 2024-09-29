@@ -13,9 +13,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/integrationhistory"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
 	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/internal/ent/generated/predicate"
 )
 
 // IntegrationHistoryQuery is the builder for querying IntegrationHistory entities.
@@ -25,8 +24,8 @@ type IntegrationHistoryQuery struct {
 	order      []integrationhistory.OrderOption
 	inters     []Interceptor
 	predicates []predicate.IntegrationHistory
-	modifiers  []func(*sql.Selector)
 	loadTotal  []func(context.Context, []*IntegrationHistory) error
+	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -256,8 +255,9 @@ func (ihq *IntegrationHistoryQuery) Clone() *IntegrationHistoryQuery {
 		inters:     append([]Interceptor{}, ihq.inters...),
 		predicates: append([]predicate.IntegrationHistory{}, ihq.predicates...),
 		// clone intermediate query.
-		sql:  ihq.sql.Clone(),
-		path: ihq.path,
+		sql:       ihq.sql.Clone(),
+		path:      ihq.path,
+		modifiers: append([]func(*sql.Selector){}, ihq.modifiers...),
 	}
 }
 
@@ -448,6 +448,9 @@ func (ihq *IntegrationHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector 
 	t1.Schema(ihq.schemaConfig.IntegrationHistory)
 	ctx = internal.NewSchemaConfigContext(ctx, ihq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range ihq.modifiers {
+		m(selector)
+	}
 	for _, p := range ihq.predicates {
 		p(selector)
 	}
@@ -463,6 +466,12 @@ func (ihq *IntegrationHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector 
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (ihq *IntegrationHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *IntegrationHistorySelect {
+	ihq.modifiers = append(ihq.modifiers, modifiers...)
+	return ihq.Select()
 }
 
 // IntegrationHistoryGroupBy is the group-by builder for IntegrationHistory entities.
@@ -553,4 +562,10 @@ func (ihs *IntegrationHistorySelect) sqlScan(ctx context.Context, root *Integrat
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (ihs *IntegrationHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *IntegrationHistorySelect {
+	ihs.modifiers = append(ihs.modifiers, modifiers...)
+	return ihs
 }

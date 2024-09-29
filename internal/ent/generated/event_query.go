@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/ohauthtootoken"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -30,8 +31,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/webhook"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // EventQuery is the builder for querying Event entities.
@@ -57,8 +56,8 @@ type EventQuery struct {
 	withEntitlement                 *EntitlementQuery
 	withWebhook                     *WebhookQuery
 	withSubscriber                  *SubscriberQuery
-	modifiers                       []func(*sql.Selector)
 	loadTotal                       []func(context.Context, []*Event) error
+	modifiers                       []func(*sql.Selector)
 	withNamedUser                   map[string]*UserQuery
 	withNamedGroup                  map[string]*GroupQuery
 	withNamedIntegration            map[string]*IntegrationQuery
@@ -720,8 +719,9 @@ func (eq *EventQuery) Clone() *EventQuery {
 		withWebhook:                eq.withWebhook.Clone(),
 		withSubscriber:             eq.withSubscriber.Clone(),
 		// clone intermediate query.
-		sql:  eq.sql.Clone(),
-		path: eq.path,
+		sql:       eq.sql.Clone(),
+		path:      eq.path,
+		modifiers: append([]func(*sql.Selector){}, eq.modifiers...),
 	}
 }
 
@@ -2322,6 +2322,9 @@ func (eq *EventQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	t1.Schema(eq.schemaConfig.Event)
 	ctx = internal.NewSchemaConfigContext(ctx, eq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range eq.modifiers {
+		m(selector)
+	}
 	for _, p := range eq.predicates {
 		p(selector)
 	}
@@ -2337,6 +2340,12 @@ func (eq *EventQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (eq *EventQuery) Modify(modifiers ...func(s *sql.Selector)) *EventSelect {
+	eq.modifiers = append(eq.modifiers, modifiers...)
+	return eq.Select()
 }
 
 // WithNamedUser tells the query-builder to eager-load the nodes that are connected to the "user"
@@ -2651,4 +2660,10 @@ func (es *EventSelect) sqlScan(ctx context.Context, root *EventQuery, v any) err
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (es *EventSelect) Modify(modifiers ...func(s *sql.Selector)) *EventSelect {
+	es.modifiers = append(es.modifiers, modifiers...)
+	return es
 }

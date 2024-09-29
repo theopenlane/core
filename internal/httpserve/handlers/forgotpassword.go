@@ -4,12 +4,10 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/cenkalti/backoff/v4"
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
-	"github.com/theopenlane/utils/marionette"
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/iam/auth"
@@ -87,13 +85,8 @@ func (h *Handler) storeAndSendPasswordResetToken(ctx context.Context, user *User
 		return nil, err
 	}
 
-	// send emails via TaskMan as to not create blocking operations in the server
-	if err := h.TaskMan.Queue(marionette.TaskFunc(func(ctx context.Context) error {
-		return h.SendPasswordResetRequestEmail(user)
-	}), marionette.WithRetries(3), //nolint:mnd
-		marionette.WithBackoff(backoff.NewExponentialBackOff()),
-		marionette.WithErrorf("could not send password reset email to user %s", user.ID),
-	); err != nil {
+	// add email send to the job queue
+	if err := h.sendPasswordResetRequestEmail(ctx, user); err != nil {
 		return nil, err
 	}
 

@@ -18,16 +18,16 @@ const (
 // HookCreatePersonalAccessToken runs on access token mutations and sets the owner id
 func HookCreatePersonalAccessToken() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
-		return hook.PersonalAccessTokenFunc(func(ctx context.Context, mutation *generated.PersonalAccessTokenMutation) (generated.Value, error) {
+		return hook.PersonalAccessTokenFunc(func(ctx context.Context, m *generated.PersonalAccessTokenMutation) (generated.Value, error) {
 			userID, err := auth.GetUserIDFromContext(ctx)
 			if err != nil {
 				return nil, err
 			}
 
 			// set user on the token
-			mutation.SetOwnerID(userID)
+			m.SetOwnerID(userID)
 
-			return next.Mutate(ctx, mutation)
+			return next.Mutate(ctx, m)
 		})
 	}, ent.OpCreate)
 }
@@ -35,14 +35,14 @@ func HookCreatePersonalAccessToken() ent.Hook {
 // HookUpdatePersonalAccessToken runs on access token update and redacts the token
 func HookUpdatePersonalAccessToken() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
-		return hook.PersonalAccessTokenFunc(func(ctx context.Context, mutation *generated.PersonalAccessTokenMutation) (generated.Value, error) {
+		return hook.PersonalAccessTokenFunc(func(ctx context.Context, m *generated.PersonalAccessTokenMutation) (generated.Value, error) {
 			// do not allow user to be changed
-			_, ok := mutation.OwnerID()
+			_, ok := m.OwnerID()
 			if ok {
-				mutation.ClearOwner()
+				m.ClearOwner()
 			}
 
-			retVal, err := next.Mutate(ctx, mutation)
+			retVal, err := next.Mutate(ctx, m)
 			if err != nil {
 				return nil, err
 			}

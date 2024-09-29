@@ -12,17 +12,17 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/internal/ent/generated/organizationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // OrganizationHistoryUpdate is the builder for updating OrganizationHistory entities.
 type OrganizationHistoryUpdate struct {
 	config
-	hooks    []Hook
-	mutation *OrganizationHistoryMutation
+	hooks     []Hook
+	mutation  *OrganizationHistoryMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the OrganizationHistoryUpdate builder.
@@ -250,6 +250,12 @@ func (ohu *OrganizationHistoryUpdate) defaults() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (ohu *OrganizationHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrganizationHistoryUpdate {
+	ohu.modifiers = append(ohu.modifiers, modifiers...)
+	return ohu
+}
+
 func (ohu *OrganizationHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(organizationhistory.Table, organizationhistory.Columns, sqlgraph.NewFieldSpec(organizationhistory.FieldID, field.TypeString))
 	if ps := ohu.mutation.predicates; len(ps) > 0 {
@@ -332,6 +338,7 @@ func (ohu *OrganizationHistoryUpdate) sqlSave(ctx context.Context) (n int, err e
 	}
 	_spec.Node.Schema = ohu.schemaConfig.OrganizationHistory
 	ctx = internal.NewSchemaConfigContext(ctx, ohu.schemaConfig)
+	_spec.AddModifiers(ohu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, ohu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{organizationhistory.Label}
@@ -347,9 +354,10 @@ func (ohu *OrganizationHistoryUpdate) sqlSave(ctx context.Context) (n int, err e
 // OrganizationHistoryUpdateOne is the builder for updating a single OrganizationHistory entity.
 type OrganizationHistoryUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *OrganizationHistoryMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *OrganizationHistoryMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -584,6 +592,12 @@ func (ohuo *OrganizationHistoryUpdateOne) defaults() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (ohuo *OrganizationHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrganizationHistoryUpdateOne {
+	ohuo.modifiers = append(ohuo.modifiers, modifiers...)
+	return ohuo
+}
+
 func (ohuo *OrganizationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *OrganizationHistory, err error) {
 	_spec := sqlgraph.NewUpdateSpec(organizationhistory.Table, organizationhistory.Columns, sqlgraph.NewFieldSpec(organizationhistory.FieldID, field.TypeString))
 	id, ok := ohuo.mutation.ID()
@@ -683,6 +697,7 @@ func (ohuo *OrganizationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *O
 	}
 	_spec.Node.Schema = ohuo.schemaConfig.OrganizationHistory
 	ctx = internal.NewSchemaConfigContext(ctx, ohuo.schemaConfig)
+	_spec.AddModifiers(ohuo.modifiers...)
 	_node = &OrganizationHistory{config: ohuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

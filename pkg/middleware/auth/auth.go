@@ -13,7 +13,7 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
 
-	"github.com/theopenlane/core/internal/ent/generated"
+	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -73,11 +73,6 @@ func Authenticate(conf *AuthOptions) echo.MiddlewareFunc {
 			claims, err := validator.Verify(accessToken)
 
 			if err != nil {
-				// if its not a JWT, check to see if its a PAT or API Token
-				if conf.DBClient == nil {
-					return rout.HTTPErrorResponse(rout.ErrInvalidCredentials)
-				}
-
 				au, id, err = checkToken(c.Request().Context(), conf, accessToken)
 				if err != nil {
 					return rout.HTTPErrorResponse(rout.ErrInvalidCredentials)
@@ -104,7 +99,7 @@ func Authenticate(conf *AuthOptions) echo.MiddlewareFunc {
 }
 
 // updateLastUsed updates the last used time for the token depending on the authentication type
-func updateLastUsed(ctx context.Context, dbClient *generated.Client, au *auth.AuthenticatedUser, tokenID string) error {
+func updateLastUsed(ctx context.Context, dbClient *ent.Client, au *auth.AuthenticatedUser, tokenID string) error {
 	switch au.AuthenticationType {
 	case auth.PATAuthentication:
 		// allow the request, we know the user has access to the token, no need to check
@@ -163,7 +158,7 @@ func Reauthenticate(conf *AuthOptions, validator tokens.Validator) func(c echo.C
 }
 
 // createAuthenticatedUserFromClaims creates an authenticated user from the claims provided
-func createAuthenticatedUserFromClaims(ctx context.Context, dbClient *generated.Client, claims *tokens.Claims, authType auth.AuthenticationType) (*auth.AuthenticatedUser, error) {
+func createAuthenticatedUserFromClaims(ctx context.Context, dbClient *ent.Client, claims *tokens.Claims, authType auth.AuthenticationType) (*auth.AuthenticatedUser, error) {
 	// get the user ID from the claims
 	user, err := dbClient.User.Get(ctx, claims.UserID)
 	if err != nil {
@@ -196,13 +191,13 @@ func checkToken(ctx context.Context, conf *AuthOptions, token string) (*auth.Aut
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
 	// check if the token is a personal access token
-	au, id, err := isValidPersonalAccessToken(ctx, conf.DBClient, token)
+	au, id, err := isValidPersonalAccessToken(ctx, *conf.DBClient, token)
 	if err == nil {
 		return au, id, nil
 	}
 
 	// check if the token is an API token
-	au, id, err = isValidAPIToken(ctx, conf.DBClient, token)
+	au, id, err = isValidAPIToken(ctx, *conf.DBClient, token)
 	if err == nil {
 		return au, id, nil
 	}
@@ -211,7 +206,7 @@ func checkToken(ctx context.Context, conf *AuthOptions, token string) (*auth.Aut
 }
 
 // isValidPersonalAccessToken checks if the provided token is a valid personal access token and returns the authenticated user
-func isValidPersonalAccessToken(ctx context.Context, dbClient *generated.Client, token string) (*auth.AuthenticatedUser, string, error) {
+func isValidPersonalAccessToken(ctx context.Context, dbClient ent.Client, token string) (*auth.AuthenticatedUser, string, error) {
 	pat, err := dbClient.PersonalAccessToken.Query().Where(personalaccesstoken.Token(token)).
 		WithOwner().
 		WithOrganizations().
@@ -247,7 +242,7 @@ func isValidPersonalAccessToken(ctx context.Context, dbClient *generated.Client,
 	}, pat.ID, nil
 }
 
-func isValidAPIToken(ctx context.Context, dbClient *generated.Client, token string) (*auth.AuthenticatedUser, string, error) {
+func isValidAPIToken(ctx context.Context, dbClient ent.Client, token string) (*auth.AuthenticatedUser, string, error) {
 	t, err := dbClient.APIToken.Query().Where(apitoken.Token(token)).
 		Only(ctx)
 	if err != nil {
@@ -269,7 +264,7 @@ func isValidAPIToken(ctx context.Context, dbClient *generated.Client, token stri
 }
 
 // getSubjectName returns the subject name for the user
-func getSubjectName(user *generated.User) string {
+func getSubjectName(user *ent.User) string {
 	subjectName := user.FirstName + " " + user.LastName
 	if subjectName == "" {
 		subjectName = user.DisplayName

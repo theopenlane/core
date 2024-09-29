@@ -11,10 +11,9 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/usersettinghistory"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // UserSettingHistoryQuery is the builder for querying UserSettingHistory entities.
@@ -24,8 +23,8 @@ type UserSettingHistoryQuery struct {
 	order      []usersettinghistory.OrderOption
 	inters     []Interceptor
 	predicates []predicate.UserSettingHistory
-	modifiers  []func(*sql.Selector)
 	loadTotal  []func(context.Context, []*UserSettingHistory) error
+	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -255,8 +254,9 @@ func (ushq *UserSettingHistoryQuery) Clone() *UserSettingHistoryQuery {
 		inters:     append([]Interceptor{}, ushq.inters...),
 		predicates: append([]predicate.UserSettingHistory{}, ushq.predicates...),
 		// clone intermediate query.
-		sql:  ushq.sql.Clone(),
-		path: ushq.path,
+		sql:       ushq.sql.Clone(),
+		path:      ushq.path,
+		modifiers: append([]func(*sql.Selector){}, ushq.modifiers...),
 	}
 }
 
@@ -441,6 +441,9 @@ func (ushq *UserSettingHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector
 	t1.Schema(ushq.schemaConfig.UserSettingHistory)
 	ctx = internal.NewSchemaConfigContext(ctx, ushq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range ushq.modifiers {
+		m(selector)
+	}
 	for _, p := range ushq.predicates {
 		p(selector)
 	}
@@ -456,6 +459,12 @@ func (ushq *UserSettingHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (ushq *UserSettingHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *UserSettingHistorySelect {
+	ushq.modifiers = append(ushq.modifiers, modifiers...)
+	return ushq.Select()
 }
 
 // UserSettingHistoryGroupBy is the group-by builder for UserSettingHistory entities.
@@ -546,4 +555,10 @@ func (ushs *UserSettingHistorySelect) sqlScan(ctx context.Context, root *UserSet
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (ushs *UserSettingHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *UserSettingHistorySelect {
+	ushs.modifiers = append(ushs.modifiers, modifiers...)
+	return ushs
 }

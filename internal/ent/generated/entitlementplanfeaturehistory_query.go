@@ -13,9 +13,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/entitlementplanfeaturehistory"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
 	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/internal/ent/generated/predicate"
 )
 
 // EntitlementPlanFeatureHistoryQuery is the builder for querying EntitlementPlanFeatureHistory entities.
@@ -25,8 +24,8 @@ type EntitlementPlanFeatureHistoryQuery struct {
 	order      []entitlementplanfeaturehistory.OrderOption
 	inters     []Interceptor
 	predicates []predicate.EntitlementPlanFeatureHistory
-	modifiers  []func(*sql.Selector)
 	loadTotal  []func(context.Context, []*EntitlementPlanFeatureHistory) error
+	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -256,8 +255,9 @@ func (epfhq *EntitlementPlanFeatureHistoryQuery) Clone() *EntitlementPlanFeature
 		inters:     append([]Interceptor{}, epfhq.inters...),
 		predicates: append([]predicate.EntitlementPlanFeatureHistory{}, epfhq.predicates...),
 		// clone intermediate query.
-		sql:  epfhq.sql.Clone(),
-		path: epfhq.path,
+		sql:       epfhq.sql.Clone(),
+		path:      epfhq.path,
+		modifiers: append([]func(*sql.Selector){}, epfhq.modifiers...),
 	}
 }
 
@@ -448,6 +448,9 @@ func (epfhq *EntitlementPlanFeatureHistoryQuery) sqlQuery(ctx context.Context) *
 	t1.Schema(epfhq.schemaConfig.EntitlementPlanFeatureHistory)
 	ctx = internal.NewSchemaConfigContext(ctx, epfhq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range epfhq.modifiers {
+		m(selector)
+	}
 	for _, p := range epfhq.predicates {
 		p(selector)
 	}
@@ -463,6 +466,12 @@ func (epfhq *EntitlementPlanFeatureHistoryQuery) sqlQuery(ctx context.Context) *
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (epfhq *EntitlementPlanFeatureHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *EntitlementPlanFeatureHistorySelect {
+	epfhq.modifiers = append(epfhq.modifiers, modifiers...)
+	return epfhq.Select()
 }
 
 // EntitlementPlanFeatureHistoryGroupBy is the group-by builder for EntitlementPlanFeatureHistory entities.
@@ -553,4 +562,10 @@ func (epfhs *EntitlementPlanFeatureHistorySelect) sqlScan(ctx context.Context, r
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (epfhs *EntitlementPlanFeatureHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *EntitlementPlanFeatureHistorySelect {
+	epfhs.modifiers = append(epfhs.modifiers, modifiers...)
+	return epfhs
 }

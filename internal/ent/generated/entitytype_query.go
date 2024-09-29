@@ -15,10 +15,9 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
+	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // EntityTypeQuery is the builder for querying EntityType entities.
@@ -30,8 +29,8 @@ type EntityTypeQuery struct {
 	predicates        []predicate.EntityType
 	withOwner         *OrganizationQuery
 	withEntities      *EntityQuery
-	modifiers         []func(*sql.Selector)
 	loadTotal         []func(context.Context, []*EntityType) error
+	modifiers         []func(*sql.Selector)
 	withNamedEntities map[string]*EntityQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -314,8 +313,9 @@ func (etq *EntityTypeQuery) Clone() *EntityTypeQuery {
 		withOwner:    etq.withOwner.Clone(),
 		withEntities: etq.withEntities.Clone(),
 		// clone intermediate query.
-		sql:  etq.sql.Clone(),
-		path: etq.path,
+		sql:       etq.sql.Clone(),
+		path:      etq.path,
+		modifiers: append([]func(*sql.Selector){}, etq.modifiers...),
 	}
 }
 
@@ -617,6 +617,9 @@ func (etq *EntityTypeQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	t1.Schema(etq.schemaConfig.EntityType)
 	ctx = internal.NewSchemaConfigContext(ctx, etq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range etq.modifiers {
+		m(selector)
+	}
 	for _, p := range etq.predicates {
 		p(selector)
 	}
@@ -632,6 +635,12 @@ func (etq *EntityTypeQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (etq *EntityTypeQuery) Modify(modifiers ...func(s *sql.Selector)) *EntityTypeSelect {
+	etq.modifiers = append(etq.modifiers, modifiers...)
+	return etq.Select()
 }
 
 // WithNamedEntities tells the query-builder to eager-load the nodes that are connected to the "entities"
@@ -736,4 +745,10 @@ func (ets *EntityTypeSelect) sqlScan(ctx context.Context, root *EntityTypeQuery,
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (ets *EntityTypeSelect) Modify(modifiers ...func(s *sql.Selector)) *EntityTypeSelect {
+	ets.modifiers = append(ets.modifiers, modifiers...)
+	return ets
 }

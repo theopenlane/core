@@ -12,10 +12,9 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/webhookhistory"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // WebhookHistoryQuery is the builder for querying WebhookHistory entities.
@@ -25,8 +24,8 @@ type WebhookHistoryQuery struct {
 	order      []webhookhistory.OrderOption
 	inters     []Interceptor
 	predicates []predicate.WebhookHistory
-	modifiers  []func(*sql.Selector)
 	loadTotal  []func(context.Context, []*WebhookHistory) error
+	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -256,8 +255,9 @@ func (whq *WebhookHistoryQuery) Clone() *WebhookHistoryQuery {
 		inters:     append([]Interceptor{}, whq.inters...),
 		predicates: append([]predicate.WebhookHistory{}, whq.predicates...),
 		// clone intermediate query.
-		sql:  whq.sql.Clone(),
-		path: whq.path,
+		sql:       whq.sql.Clone(),
+		path:      whq.path,
+		modifiers: append([]func(*sql.Selector){}, whq.modifiers...),
 	}
 }
 
@@ -448,6 +448,9 @@ func (whq *WebhookHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	t1.Schema(whq.schemaConfig.WebhookHistory)
 	ctx = internal.NewSchemaConfigContext(ctx, whq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range whq.modifiers {
+		m(selector)
+	}
 	for _, p := range whq.predicates {
 		p(selector)
 	}
@@ -463,6 +466,12 @@ func (whq *WebhookHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (whq *WebhookHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *WebhookHistorySelect {
+	whq.modifiers = append(whq.modifiers, modifiers...)
+	return whq.Select()
 }
 
 // WebhookHistoryGroupBy is the group-by builder for WebhookHistory entities.
@@ -553,4 +562,10 @@ func (whs *WebhookHistorySelect) sqlScan(ctx context.Context, root *WebhookHisto
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (whs *WebhookHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *WebhookHistorySelect {
+	whs.modifiers = append(whs.modifiers, modifiers...)
+	return whs
 }

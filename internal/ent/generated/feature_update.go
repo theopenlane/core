@@ -16,17 +16,17 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entitlementplanfeature"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/feature"
+	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // FeatureUpdate is the builder for updating Feature entities.
 type FeatureUpdate struct {
 	config
-	hooks    []Hook
-	mutation *FeatureMutation
+	hooks     []Hook
+	mutation  *FeatureMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the FeatureUpdate builder.
@@ -387,6 +387,12 @@ func (fu *FeatureUpdate) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (fu *FeatureUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *FeatureUpdate {
+	fu.modifiers = append(fu.modifiers, modifiers...)
+	return fu
+}
+
 func (fu *FeatureUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if err := fu.check(); err != nil {
 		return n, err
@@ -659,6 +665,7 @@ func (fu *FeatureUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	_spec.Node.Schema = fu.schemaConfig.Feature
 	ctx = internal.NewSchemaConfigContext(ctx, fu.schemaConfig)
+	_spec.AddModifiers(fu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, fu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{feature.Label}
@@ -674,9 +681,10 @@ func (fu *FeatureUpdate) sqlSave(ctx context.Context) (n int, err error) {
 // FeatureUpdateOne is the builder for updating a single Feature entity.
 type FeatureUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *FeatureMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *FeatureMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -1044,6 +1052,12 @@ func (fuo *FeatureUpdateOne) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (fuo *FeatureUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *FeatureUpdateOne {
+	fuo.modifiers = append(fuo.modifiers, modifiers...)
+	return fuo
+}
+
 func (fuo *FeatureUpdateOne) sqlSave(ctx context.Context) (_node *Feature, err error) {
 	if err := fuo.check(); err != nil {
 		return _node, err
@@ -1333,6 +1347,7 @@ func (fuo *FeatureUpdateOne) sqlSave(ctx context.Context) (_node *Feature, err e
 	}
 	_spec.Node.Schema = fuo.schemaConfig.Feature
 	ctx = internal.NewSchemaConfigContext(ctx, fuo.schemaConfig)
+	_spec.AddModifiers(fuo.modifiers...)
 	_node = &Feature{config: fuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

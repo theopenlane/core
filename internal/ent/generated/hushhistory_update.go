@@ -12,16 +12,16 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/hushhistory"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
 	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/internal/ent/generated/predicate"
 )
 
 // HushHistoryUpdate is the builder for updating HushHistory entities.
 type HushHistoryUpdate struct {
 	config
-	hooks    []Hook
-	mutation *HushHistoryMutation
+	hooks     []Hook
+	mutation  *HushHistoryMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the HushHistoryUpdate builder.
@@ -197,6 +197,12 @@ func (hhu *HushHistoryUpdate) defaults() {
 	}
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (hhu *HushHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *HushHistoryUpdate {
+	hhu.modifiers = append(hhu.modifiers, modifiers...)
+	return hhu
+}
+
 func (hhu *HushHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(hushhistory.Table, hushhistory.Columns, sqlgraph.NewFieldSpec(hushhistory.FieldID, field.TypeString))
 	if ps := hhu.mutation.predicates; len(ps) > 0 {
@@ -262,6 +268,7 @@ func (hhu *HushHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	_spec.Node.Schema = hhu.schemaConfig.HushHistory
 	ctx = internal.NewSchemaConfigContext(ctx, hhu.schemaConfig)
+	_spec.AddModifiers(hhu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, hhu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{hushhistory.Label}
@@ -277,9 +284,10 @@ func (hhu *HushHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 // HushHistoryUpdateOne is the builder for updating a single HushHistory entity.
 type HushHistoryUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *HushHistoryMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *HushHistoryMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -462,6 +470,12 @@ func (hhuo *HushHistoryUpdateOne) defaults() {
 	}
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (hhuo *HushHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *HushHistoryUpdateOne {
+	hhuo.modifiers = append(hhuo.modifiers, modifiers...)
+	return hhuo
+}
+
 func (hhuo *HushHistoryUpdateOne) sqlSave(ctx context.Context) (_node *HushHistory, err error) {
 	_spec := sqlgraph.NewUpdateSpec(hushhistory.Table, hushhistory.Columns, sqlgraph.NewFieldSpec(hushhistory.FieldID, field.TypeString))
 	id, ok := hhuo.mutation.ID()
@@ -544,6 +558,7 @@ func (hhuo *HushHistoryUpdateOne) sqlSave(ctx context.Context) (_node *HushHisto
 	}
 	_spec.Node.Schema = hhuo.schemaConfig.HushHistory
 	ctx = internal.NewSchemaConfigContext(ctx, hhuo.schemaConfig)
+	_spec.AddModifiers(hhuo.modifiers...)
 	_node = &HushHistory{config: hhuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

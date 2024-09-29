@@ -13,9 +13,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembershiphistory"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
 	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/internal/ent/generated/predicate"
 )
 
 // GroupMembershipHistoryQuery is the builder for querying GroupMembershipHistory entities.
@@ -25,8 +24,8 @@ type GroupMembershipHistoryQuery struct {
 	order      []groupmembershiphistory.OrderOption
 	inters     []Interceptor
 	predicates []predicate.GroupMembershipHistory
-	modifiers  []func(*sql.Selector)
 	loadTotal  []func(context.Context, []*GroupMembershipHistory) error
+	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -256,8 +255,9 @@ func (gmhq *GroupMembershipHistoryQuery) Clone() *GroupMembershipHistoryQuery {
 		inters:     append([]Interceptor{}, gmhq.inters...),
 		predicates: append([]predicate.GroupMembershipHistory{}, gmhq.predicates...),
 		// clone intermediate query.
-		sql:  gmhq.sql.Clone(),
-		path: gmhq.path,
+		sql:       gmhq.sql.Clone(),
+		path:      gmhq.path,
+		modifiers: append([]func(*sql.Selector){}, gmhq.modifiers...),
 	}
 }
 
@@ -448,6 +448,9 @@ func (gmhq *GroupMembershipHistoryQuery) sqlQuery(ctx context.Context) *sql.Sele
 	t1.Schema(gmhq.schemaConfig.GroupMembershipHistory)
 	ctx = internal.NewSchemaConfigContext(ctx, gmhq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range gmhq.modifiers {
+		m(selector)
+	}
 	for _, p := range gmhq.predicates {
 		p(selector)
 	}
@@ -463,6 +466,12 @@ func (gmhq *GroupMembershipHistoryQuery) sqlQuery(ctx context.Context) *sql.Sele
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (gmhq *GroupMembershipHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *GroupMembershipHistorySelect {
+	gmhq.modifiers = append(gmhq.modifiers, modifiers...)
+	return gmhq.Select()
 }
 
 // GroupMembershipHistoryGroupBy is the group-by builder for GroupMembershipHistory entities.
@@ -553,4 +562,10 @@ func (gmhs *GroupMembershipHistorySelect) sqlScan(ctx context.Context, root *Gro
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (gmhs *GroupMembershipHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *GroupMembershipHistorySelect {
+	gmhs.modifiers = append(gmhs.modifiers, modifiers...)
+	return gmhs
 }

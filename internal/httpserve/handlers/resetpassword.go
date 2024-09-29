@@ -1,20 +1,17 @@
 package handlers
 
 import (
-	"context"
 	"database/sql"
 	"errors"
 	"fmt"
 	"net/http"
 	"time"
 
-	"github.com/cenkalti/backoff/v4"
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/oklog/ulid/v2"
 	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
-	"github.com/theopenlane/utils/marionette"
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/iam/auth"
@@ -121,15 +118,8 @@ func (h *Handler) ResetPassword(ctx echo.Context) error {
 		return h.BadRequest(ctx, err)
 	}
 
-	if err := h.TaskMan.Queue(marionette.TaskFunc(func(ctx context.Context) error {
-		return h.SendPasswordResetSuccessEmail(user)
-	}), marionette.WithRetries(3), //nolint:mnd
-		marionette.WithBackoff(backoff.NewExponentialBackOff()),
-		marionette.WithErrorf("could not send password reset confirmation email to user %s", user.Email),
-	); err != nil {
-		log.Error().Err(err).Msg("error sending confirmation email")
-
-		return h.InternalServerError(ctx, ErrProcessingRequest)
+	if err := h.sendPasswordResetSuccessEmail(userCtx, user); err != nil {
+		return h.InternalServerError(ctx, err)
 	}
 
 	out := &models.ResetPasswordReply{

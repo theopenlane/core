@@ -14,12 +14,11 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/event"
+	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/user"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // OrgMembershipQuery is the builder for querying OrgMembership entities.
@@ -32,8 +31,8 @@ type OrgMembershipQuery struct {
 	withOrganization *OrganizationQuery
 	withUser         *UserQuery
 	withEvents       *EventQuery
-	modifiers        []func(*sql.Selector)
 	loadTotal        []func(context.Context, []*OrgMembership) error
+	modifiers        []func(*sql.Selector)
 	withNamedEvents  map[string]*EventQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -342,8 +341,9 @@ func (omq *OrgMembershipQuery) Clone() *OrgMembershipQuery {
 		withUser:         omq.withUser.Clone(),
 		withEvents:       omq.withEvents.Clone(),
 		// clone intermediate query.
-		sql:  omq.sql.Clone(),
-		path: omq.path,
+		sql:       omq.sql.Clone(),
+		path:      omq.path,
+		modifiers: append([]func(*sql.Selector){}, omq.modifiers...),
 	}
 }
 
@@ -726,6 +726,9 @@ func (omq *OrgMembershipQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	t1.Schema(omq.schemaConfig.OrgMembership)
 	ctx = internal.NewSchemaConfigContext(ctx, omq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range omq.modifiers {
+		m(selector)
+	}
 	for _, p := range omq.predicates {
 		p(selector)
 	}
@@ -741,6 +744,12 @@ func (omq *OrgMembershipQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (omq *OrgMembershipQuery) Modify(modifiers ...func(s *sql.Selector)) *OrgMembershipSelect {
+	omq.modifiers = append(omq.modifiers, modifiers...)
+	return omq.Select()
 }
 
 // WithNamedEvents tells the query-builder to eager-load the nodes that are connected to the "events"
@@ -845,4 +854,10 @@ func (oms *OrgMembershipSelect) sqlScan(ctx context.Context, root *OrgMembership
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (oms *OrgMembershipSelect) Modify(modifiers ...func(s *sql.Selector)) *OrgMembershipSelect {
+	oms.modifiers = append(oms.modifiers, modifiers...)
+	return oms
 }

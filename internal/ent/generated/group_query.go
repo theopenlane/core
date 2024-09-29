@@ -19,11 +19,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/user"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // GroupQuery is the builder for querying Group entities.
@@ -40,8 +39,8 @@ type GroupQuery struct {
 	withIntegrations      *IntegrationQuery
 	withFiles             *FileQuery
 	withMembers           *GroupMembershipQuery
-	modifiers             []func(*sql.Selector)
 	loadTotal             []func(context.Context, []*Group) error
+	modifiers             []func(*sql.Selector)
 	withNamedUsers        map[string]*UserQuery
 	withNamedEvents       map[string]*EventQuery
 	withNamedIntegrations map[string]*IntegrationQuery
@@ -458,8 +457,9 @@ func (gq *GroupQuery) Clone() *GroupQuery {
 		withFiles:        gq.withFiles.Clone(),
 		withMembers:      gq.withMembers.Clone(),
 		// clone intermediate query.
-		sql:  gq.sql.Clone(),
-		path: gq.path,
+		sql:       gq.sql.Clone(),
+		path:      gq.path,
+		modifiers: append([]func(*sql.Selector){}, gq.modifiers...),
 	}
 }
 
@@ -1126,6 +1126,9 @@ func (gq *GroupQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	t1.Schema(gq.schemaConfig.Group)
 	ctx = internal.NewSchemaConfigContext(ctx, gq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range gq.modifiers {
+		m(selector)
+	}
 	for _, p := range gq.predicates {
 		p(selector)
 	}
@@ -1141,6 +1144,12 @@ func (gq *GroupQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (gq *GroupQuery) Modify(modifiers ...func(s *sql.Selector)) *GroupSelect {
+	gq.modifiers = append(gq.modifiers, modifiers...)
+	return gq.Select()
 }
 
 // WithNamedUsers tells the query-builder to eager-load the nodes that are connected to the "users"
@@ -1301,4 +1310,10 @@ func (gs *GroupSelect) sqlScan(ctx context.Context, root *GroupQuery, v any) err
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (gs *GroupSelect) Modify(modifiers ...func(s *sql.Selector)) *GroupSelect {
+	gs.modifiers = append(gs.modifiers, modifiers...)
+	return gs
 }

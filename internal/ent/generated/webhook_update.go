@@ -14,18 +14,18 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/webhook"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // WebhookUpdate is the builder for updating Webhook entities.
 type WebhookUpdate struct {
 	config
-	hooks    []Hook
-	mutation *WebhookMutation
+	hooks     []Hook
+	mutation  *WebhookMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the WebhookUpdate builder.
@@ -470,6 +470,12 @@ func (wu *WebhookUpdate) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (wu *WebhookUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *WebhookUpdate {
+	wu.modifiers = append(wu.modifiers, modifiers...)
+	return wu
+}
+
 func (wu *WebhookUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if err := wu.check(); err != nil {
 		return n, err
@@ -706,6 +712,7 @@ func (wu *WebhookUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	_spec.Node.Schema = wu.schemaConfig.Webhook
 	ctx = internal.NewSchemaConfigContext(ctx, wu.schemaConfig)
+	_spec.AddModifiers(wu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, wu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{webhook.Label}
@@ -721,9 +728,10 @@ func (wu *WebhookUpdate) sqlSave(ctx context.Context) (n int, err error) {
 // WebhookUpdateOne is the builder for updating a single Webhook entity.
 type WebhookUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *WebhookMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *WebhookMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -1175,6 +1183,12 @@ func (wuo *WebhookUpdateOne) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (wuo *WebhookUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *WebhookUpdateOne {
+	wuo.modifiers = append(wuo.modifiers, modifiers...)
+	return wuo
+}
+
 func (wuo *WebhookUpdateOne) sqlSave(ctx context.Context) (_node *Webhook, err error) {
 	if err := wuo.check(); err != nil {
 		return _node, err
@@ -1428,6 +1442,7 @@ func (wuo *WebhookUpdateOne) sqlSave(ctx context.Context) (_node *Webhook, err e
 	}
 	_spec.Node.Schema = wuo.schemaConfig.Webhook
 	ctx = internal.NewSchemaConfigContext(ctx, wuo.schemaConfig)
+	_spec.AddModifiers(wuo.modifiers...)
 	_node = &Webhook{config: wuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

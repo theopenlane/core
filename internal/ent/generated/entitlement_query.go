@@ -16,10 +16,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entitlement"
 	"github.com/theopenlane/core/internal/ent/generated/entitlementplan"
 	"github.com/theopenlane/core/internal/ent/generated/event"
+	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // EntitlementQuery is the builder for querying Entitlement entities.
@@ -33,8 +32,8 @@ type EntitlementQuery struct {
 	withPlan         *EntitlementPlanQuery
 	withOrganization *OrganizationQuery
 	withEvents       *EventQuery
-	modifiers        []func(*sql.Selector)
 	loadTotal        []func(context.Context, []*Entitlement) error
+	modifiers        []func(*sql.Selector)
 	withNamedEvents  map[string]*EventQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -369,8 +368,9 @@ func (eq *EntitlementQuery) Clone() *EntitlementQuery {
 		withOrganization: eq.withOrganization.Clone(),
 		withEvents:       eq.withEvents.Clone(),
 		// clone intermediate query.
-		sql:  eq.sql.Clone(),
-		path: eq.path,
+		sql:       eq.sql.Clone(),
+		path:      eq.path,
+		modifiers: append([]func(*sql.Selector){}, eq.modifiers...),
 	}
 }
 
@@ -803,6 +803,9 @@ func (eq *EntitlementQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	t1.Schema(eq.schemaConfig.Entitlement)
 	ctx = internal.NewSchemaConfigContext(ctx, eq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range eq.modifiers {
+		m(selector)
+	}
 	for _, p := range eq.predicates {
 		p(selector)
 	}
@@ -818,6 +821,12 @@ func (eq *EntitlementQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (eq *EntitlementQuery) Modify(modifiers ...func(s *sql.Selector)) *EntitlementSelect {
+	eq.modifiers = append(eq.modifiers, modifiers...)
+	return eq.Select()
 }
 
 // WithNamedEvents tells the query-builder to eager-load the nodes that are connected to the "events"
@@ -922,4 +931,10 @@ func (es *EntitlementSelect) sqlScan(ctx context.Context, root *EntitlementQuery
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (es *EntitlementSelect) Modify(modifiers ...func(s *sql.Selector)) *EntitlementSelect {
+	es.modifiers = append(es.modifiers, modifiers...)
+	return es
 }

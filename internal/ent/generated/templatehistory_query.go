@@ -12,10 +12,9 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // TemplateHistoryQuery is the builder for querying TemplateHistory entities.
@@ -25,8 +24,8 @@ type TemplateHistoryQuery struct {
 	order      []templatehistory.OrderOption
 	inters     []Interceptor
 	predicates []predicate.TemplateHistory
-	modifiers  []func(*sql.Selector)
 	loadTotal  []func(context.Context, []*TemplateHistory) error
+	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -256,8 +255,9 @@ func (thq *TemplateHistoryQuery) Clone() *TemplateHistoryQuery {
 		inters:     append([]Interceptor{}, thq.inters...),
 		predicates: append([]predicate.TemplateHistory{}, thq.predicates...),
 		// clone intermediate query.
-		sql:  thq.sql.Clone(),
-		path: thq.path,
+		sql:       thq.sql.Clone(),
+		path:      thq.path,
+		modifiers: append([]func(*sql.Selector){}, thq.modifiers...),
 	}
 }
 
@@ -448,6 +448,9 @@ func (thq *TemplateHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	t1.Schema(thq.schemaConfig.TemplateHistory)
 	ctx = internal.NewSchemaConfigContext(ctx, thq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range thq.modifiers {
+		m(selector)
+	}
 	for _, p := range thq.predicates {
 		p(selector)
 	}
@@ -463,6 +466,12 @@ func (thq *TemplateHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (thq *TemplateHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *TemplateHistorySelect {
+	thq.modifiers = append(thq.modifiers, modifiers...)
+	return thq.Select()
 }
 
 // TemplateHistoryGroupBy is the group-by builder for TemplateHistory entities.
@@ -553,4 +562,10 @@ func (ths *TemplateHistorySelect) sqlScan(ctx context.Context, root *TemplateHis
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (ths *TemplateHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *TemplateHistorySelect {
+	ths.modifiers = append(ths.modifiers, modifiers...)
+	return ths
 }

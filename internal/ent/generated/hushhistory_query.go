@@ -12,9 +12,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/hushhistory"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
 	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/internal/ent/generated/predicate"
 )
 
 // HushHistoryQuery is the builder for querying HushHistory entities.
@@ -24,8 +23,8 @@ type HushHistoryQuery struct {
 	order      []hushhistory.OrderOption
 	inters     []Interceptor
 	predicates []predicate.HushHistory
-	modifiers  []func(*sql.Selector)
 	loadTotal  []func(context.Context, []*HushHistory) error
+	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -255,8 +254,9 @@ func (hhq *HushHistoryQuery) Clone() *HushHistoryQuery {
 		inters:     append([]Interceptor{}, hhq.inters...),
 		predicates: append([]predicate.HushHistory{}, hhq.predicates...),
 		// clone intermediate query.
-		sql:  hhq.sql.Clone(),
-		path: hhq.path,
+		sql:       hhq.sql.Clone(),
+		path:      hhq.path,
+		modifiers: append([]func(*sql.Selector){}, hhq.modifiers...),
 	}
 }
 
@@ -441,6 +441,9 @@ func (hhq *HushHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	t1.Schema(hhq.schemaConfig.HushHistory)
 	ctx = internal.NewSchemaConfigContext(ctx, hhq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range hhq.modifiers {
+		m(selector)
+	}
 	for _, p := range hhq.predicates {
 		p(selector)
 	}
@@ -456,6 +459,12 @@ func (hhq *HushHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (hhq *HushHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *HushHistorySelect {
+	hhq.modifiers = append(hhq.modifiers, modifiers...)
+	return hhq.Select()
 }
 
 // HushHistoryGroupBy is the group-by builder for HushHistory entities.
@@ -546,4 +555,10 @@ func (hhs *HushHistorySelect) sqlScan(ctx context.Context, root *HushHistoryQuer
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (hhs *HushHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *HushHistorySelect {
+	hhs.modifiers = append(hhs.modifiers, modifiers...)
+	return hhs
 }

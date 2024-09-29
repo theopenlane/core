@@ -13,9 +13,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/documentdatahistory"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
 	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/internal/ent/generated/predicate"
 )
 
 // DocumentDataHistoryQuery is the builder for querying DocumentDataHistory entities.
@@ -25,8 +24,8 @@ type DocumentDataHistoryQuery struct {
 	order      []documentdatahistory.OrderOption
 	inters     []Interceptor
 	predicates []predicate.DocumentDataHistory
-	modifiers  []func(*sql.Selector)
 	loadTotal  []func(context.Context, []*DocumentDataHistory) error
+	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -256,8 +255,9 @@ func (ddhq *DocumentDataHistoryQuery) Clone() *DocumentDataHistoryQuery {
 		inters:     append([]Interceptor{}, ddhq.inters...),
 		predicates: append([]predicate.DocumentDataHistory{}, ddhq.predicates...),
 		// clone intermediate query.
-		sql:  ddhq.sql.Clone(),
-		path: ddhq.path,
+		sql:       ddhq.sql.Clone(),
+		path:      ddhq.path,
+		modifiers: append([]func(*sql.Selector){}, ddhq.modifiers...),
 	}
 }
 
@@ -448,6 +448,9 @@ func (ddhq *DocumentDataHistoryQuery) sqlQuery(ctx context.Context) *sql.Selecto
 	t1.Schema(ddhq.schemaConfig.DocumentDataHistory)
 	ctx = internal.NewSchemaConfigContext(ctx, ddhq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range ddhq.modifiers {
+		m(selector)
+	}
 	for _, p := range ddhq.predicates {
 		p(selector)
 	}
@@ -463,6 +466,12 @@ func (ddhq *DocumentDataHistoryQuery) sqlQuery(ctx context.Context) *sql.Selecto
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (ddhq *DocumentDataHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *DocumentDataHistorySelect {
+	ddhq.modifiers = append(ddhq.modifiers, modifiers...)
+	return ddhq.Select()
 }
 
 // DocumentDataHistoryGroupBy is the group-by builder for DocumentDataHistory entities.
@@ -553,4 +562,10 @@ func (ddhs *DocumentDataHistorySelect) sqlScan(ctx context.Context, root *Docume
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (ddhs *DocumentDataHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *DocumentDataHistorySelect {
+	ddhs.modifiers = append(ddhs.modifiers, modifiers...)
+	return ddhs
 }

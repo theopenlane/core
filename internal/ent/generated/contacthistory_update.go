@@ -13,17 +13,17 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/contacthistory"
+	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/pkg/enums"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // ContactHistoryUpdate is the builder for updating ContactHistory entities.
 type ContactHistoryUpdate struct {
 	config
-	hooks    []Hook
-	mutation *ContactHistoryMutation
+	hooks     []Hook
+	mutation  *ContactHistoryMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the ContactHistoryUpdate builder.
@@ -327,6 +327,12 @@ func (chu *ContactHistoryUpdate) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (chu *ContactHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ContactHistoryUpdate {
+	chu.modifiers = append(chu.modifiers, modifiers...)
+	return chu
+}
+
 func (chu *ContactHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if err := chu.check(); err != nil {
 		return n, err
@@ -427,6 +433,7 @@ func (chu *ContactHistoryUpdate) sqlSave(ctx context.Context) (n int, err error)
 	}
 	_spec.Node.Schema = chu.schemaConfig.ContactHistory
 	ctx = internal.NewSchemaConfigContext(ctx, chu.schemaConfig)
+	_spec.AddModifiers(chu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, chu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{contacthistory.Label}
@@ -442,9 +449,10 @@ func (chu *ContactHistoryUpdate) sqlSave(ctx context.Context) (n int, err error)
 // ContactHistoryUpdateOne is the builder for updating a single ContactHistory entity.
 type ContactHistoryUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *ContactHistoryMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *ContactHistoryMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -755,6 +763,12 @@ func (chuo *ContactHistoryUpdateOne) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (chuo *ContactHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ContactHistoryUpdateOne {
+	chuo.modifiers = append(chuo.modifiers, modifiers...)
+	return chuo
+}
+
 func (chuo *ContactHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ContactHistory, err error) {
 	if err := chuo.check(); err != nil {
 		return _node, err
@@ -872,6 +886,7 @@ func (chuo *ContactHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Contac
 	}
 	_spec.Node.Schema = chuo.schemaConfig.ContactHistory
 	ctx = internal.NewSchemaConfigContext(ctx, chuo.schemaConfig)
+	_spec.AddModifiers(chuo.modifiers...)
 	_node = &ContactHistory{config: chuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

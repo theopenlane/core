@@ -13,16 +13,16 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/grouphistory"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
 	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/internal/ent/generated/predicate"
 )
 
 // GroupHistoryUpdate is the builder for updating GroupHistory entities.
 type GroupHistoryUpdate struct {
 	config
-	hooks    []Hook
-	mutation *GroupHistoryMutation
+	hooks     []Hook
+	mutation  *GroupHistoryMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the GroupHistoryUpdate builder.
@@ -276,6 +276,12 @@ func (ghu *GroupHistoryUpdate) defaults() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (ghu *GroupHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *GroupHistoryUpdate {
+	ghu.modifiers = append(ghu.modifiers, modifiers...)
+	return ghu
+}
+
 func (ghu *GroupHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(grouphistory.Table, grouphistory.Columns, sqlgraph.NewFieldSpec(grouphistory.FieldID, field.TypeString))
 	if ps := ghu.mutation.predicates; len(ps) > 0 {
@@ -361,6 +367,7 @@ func (ghu *GroupHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	_spec.Node.Schema = ghu.schemaConfig.GroupHistory
 	ctx = internal.NewSchemaConfigContext(ctx, ghu.schemaConfig)
+	_spec.AddModifiers(ghu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, ghu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{grouphistory.Label}
@@ -376,9 +383,10 @@ func (ghu *GroupHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 // GroupHistoryUpdateOne is the builder for updating a single GroupHistory entity.
 type GroupHistoryUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *GroupHistoryMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *GroupHistoryMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -639,6 +647,12 @@ func (ghuo *GroupHistoryUpdateOne) defaults() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (ghuo *GroupHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *GroupHistoryUpdateOne {
+	ghuo.modifiers = append(ghuo.modifiers, modifiers...)
+	return ghuo
+}
+
 func (ghuo *GroupHistoryUpdateOne) sqlSave(ctx context.Context) (_node *GroupHistory, err error) {
 	_spec := sqlgraph.NewUpdateSpec(grouphistory.Table, grouphistory.Columns, sqlgraph.NewFieldSpec(grouphistory.FieldID, field.TypeString))
 	id, ok := ghuo.mutation.ID()
@@ -741,6 +755,7 @@ func (ghuo *GroupHistoryUpdateOne) sqlSave(ctx context.Context) (_node *GroupHis
 	}
 	_spec.Node.Schema = ghuo.schemaConfig.GroupHistory
 	ctx = internal.NewSchemaConfigContext(ctx, ghuo.schemaConfig)
+	_spec.AddModifiers(ghuo.modifiers...)
 	_node = &GroupHistory{config: ghuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

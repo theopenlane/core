@@ -14,11 +14,10 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
+	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/template"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // TemplateQuery is the builder for querying Template entities.
@@ -30,8 +29,8 @@ type TemplateQuery struct {
 	predicates         []predicate.Template
 	withOwner          *OrganizationQuery
 	withDocuments      *DocumentDataQuery
-	modifiers          []func(*sql.Selector)
 	loadTotal          []func(context.Context, []*Template) error
+	modifiers          []func(*sql.Selector)
 	withNamedDocuments map[string]*DocumentDataQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -314,8 +313,9 @@ func (tq *TemplateQuery) Clone() *TemplateQuery {
 		withOwner:     tq.withOwner.Clone(),
 		withDocuments: tq.withDocuments.Clone(),
 		// clone intermediate query.
-		sql:  tq.sql.Clone(),
-		path: tq.path,
+		sql:       tq.sql.Clone(),
+		path:      tq.path,
+		modifiers: append([]func(*sql.Selector){}, tq.modifiers...),
 	}
 }
 
@@ -616,6 +616,9 @@ func (tq *TemplateQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	t1.Schema(tq.schemaConfig.Template)
 	ctx = internal.NewSchemaConfigContext(ctx, tq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range tq.modifiers {
+		m(selector)
+	}
 	for _, p := range tq.predicates {
 		p(selector)
 	}
@@ -631,6 +634,12 @@ func (tq *TemplateQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (tq *TemplateQuery) Modify(modifiers ...func(s *sql.Selector)) *TemplateSelect {
+	tq.modifiers = append(tq.modifiers, modifiers...)
+	return tq.Select()
 }
 
 // WithNamedDocuments tells the query-builder to eager-load the nodes that are connected to the "documents"
@@ -735,4 +744,10 @@ func (ts *TemplateSelect) sqlScan(ctx context.Context, root *TemplateQuery, v an
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (ts *TemplateSelect) Modify(modifiers ...func(s *sql.Selector)) *TemplateSelect {
+	ts.modifiers = append(ts.modifiers, modifiers...)
+	return ts
 }

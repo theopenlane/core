@@ -15,10 +15,9 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
+	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // ContactQuery is the builder for querying Contact entities.
@@ -30,8 +29,8 @@ type ContactQuery struct {
 	predicates        []predicate.Contact
 	withOwner         *OrganizationQuery
 	withEntities      *EntityQuery
-	modifiers         []func(*sql.Selector)
 	loadTotal         []func(context.Context, []*Contact) error
+	modifiers         []func(*sql.Selector)
 	withNamedEntities map[string]*EntityQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -314,8 +313,9 @@ func (cq *ContactQuery) Clone() *ContactQuery {
 		withOwner:    cq.withOwner.Clone(),
 		withEntities: cq.withEntities.Clone(),
 		// clone intermediate query.
-		sql:  cq.sql.Clone(),
-		path: cq.path,
+		sql:       cq.sql.Clone(),
+		path:      cq.path,
+		modifiers: append([]func(*sql.Selector){}, cq.modifiers...),
 	}
 }
 
@@ -648,6 +648,9 @@ func (cq *ContactQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	t1.Schema(cq.schemaConfig.Contact)
 	ctx = internal.NewSchemaConfigContext(ctx, cq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range cq.modifiers {
+		m(selector)
+	}
 	for _, p := range cq.predicates {
 		p(selector)
 	}
@@ -663,6 +666,12 @@ func (cq *ContactQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (cq *ContactQuery) Modify(modifiers ...func(s *sql.Selector)) *ContactSelect {
+	cq.modifiers = append(cq.modifiers, modifiers...)
+	return cq.Select()
 }
 
 // WithNamedEntities tells the query-builder to eager-load the nodes that are connected to the "entities"
@@ -767,4 +776,10 @@ func (cs *ContactSelect) sqlScan(ctx context.Context, root *ContactQuery, v any)
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (cs *ContactSelect) Modify(modifiers ...func(s *sql.Selector)) *ContactSelect {
+	cs.modifiers = append(cs.modifiers, modifiers...)
+	return cs
 }

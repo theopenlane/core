@@ -13,10 +13,9 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
+	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/user"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // EmailVerificationTokenQuery is the builder for querying EmailVerificationToken entities.
@@ -27,8 +26,8 @@ type EmailVerificationTokenQuery struct {
 	inters     []Interceptor
 	predicates []predicate.EmailVerificationToken
 	withOwner  *UserQuery
-	modifiers  []func(*sql.Selector)
 	loadTotal  []func(context.Context, []*EmailVerificationToken) error
+	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -284,8 +283,9 @@ func (evtq *EmailVerificationTokenQuery) Clone() *EmailVerificationTokenQuery {
 		predicates: append([]predicate.EmailVerificationToken{}, evtq.predicates...),
 		withOwner:  evtq.withOwner.Clone(),
 		// clone intermediate query.
-		sql:  evtq.sql.Clone(),
-		path: evtq.path,
+		sql:       evtq.sql.Clone(),
+		path:      evtq.path,
+		modifiers: append([]func(*sql.Selector){}, evtq.modifiers...),
 	}
 }
 
@@ -530,6 +530,9 @@ func (evtq *EmailVerificationTokenQuery) sqlQuery(ctx context.Context) *sql.Sele
 	t1.Schema(evtq.schemaConfig.EmailVerificationToken)
 	ctx = internal.NewSchemaConfigContext(ctx, evtq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range evtq.modifiers {
+		m(selector)
+	}
 	for _, p := range evtq.predicates {
 		p(selector)
 	}
@@ -545,6 +548,12 @@ func (evtq *EmailVerificationTokenQuery) sqlQuery(ctx context.Context) *sql.Sele
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (evtq *EmailVerificationTokenQuery) Modify(modifiers ...func(s *sql.Selector)) *EmailVerificationTokenSelect {
+	evtq.modifiers = append(evtq.modifiers, modifiers...)
+	return evtq.Select()
 }
 
 // EmailVerificationTokenGroupBy is the group-by builder for EmailVerificationToken entities.
@@ -635,4 +644,10 @@ func (evts *EmailVerificationTokenSelect) sqlScan(ctx context.Context, root *Ema
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (evts *EmailVerificationTokenSelect) Modify(modifiers ...func(s *sql.Selector)) *EmailVerificationTokenSelect {
+	evts.modifiers = append(evts.modifiers, modifiers...)
+	return evts
 }

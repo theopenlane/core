@@ -19,5 +19,8 @@ if [ $CORE_DBX_ENABLED = "true" ]; then
 	/bin/dbx serve --debug --pretty &!
 fi
 
+# run the riverboat service in the background
+/bin/riverboat serve --debug --pretty &!
+
 # run the core service in the foreground
 /bin/core serve --debug --pretty

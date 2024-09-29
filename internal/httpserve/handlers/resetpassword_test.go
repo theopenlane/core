@@ -10,13 +10,13 @@ import (
 	"time"
 
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/rShetty/asyncwait"
+	"github.com/riverqueue/river/riverdriver/riverpgxv5"
+	"github.com/riverqueue/river/rivertest"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	mock_fga "github.com/theopenlane/iam/fgax/mockery"
-
-	"github.com/theopenlane/utils/emails"
-	"github.com/theopenlane/utils/emails/mock"
+	"github.com/theopenlane/newman"
+	"github.com/theopenlane/riverboat/pkg/jobs"
 
 	"github.com/theopenlane/echox/middleware/echocontext"
 
@@ -40,28 +40,24 @@ func (suite *HandlerTestSuite) TestResetPasswordHandler() {
 	expiredTTL := time.Now().AddDate(0, 0, -1).Format(time.RFC3339Nano)
 
 	testCases := []struct {
-		name                 string
-		email                string
-		newPassword          string
-		tokenSet             bool
-		tokenProvided        string
-		ttl                  string
-		emailExpected        bool
-		expectedEmailSubject string
-		expectedResp         string
-		expectedStatus       int
-		from                 string
+		name           string
+		email          string
+		newPassword    string
+		tokenSet       bool
+		tokenProvided  string
+		ttl            string
+		expectedResp   string
+		expectedStatus int
+		from           string
 	}{
 		{
-			name:                 "happy path",
-			email:                "kelsier@theopenlane.io",
-			tokenSet:             true,
-			newPassword:          newPassword,
-			from:                 "mitb@theopenlane.io",
-			emailExpected:        true,
-			expectedEmailSubject: emails.PasswordResetSuccessRE,
-			expectedResp:         emptyResponse,
-			expectedStatus:       http.StatusOK,
+			name:           "happy path",
+			email:          "kelsier@theopenlane.io",
+			tokenSet:       true,
+			newPassword:    newPassword,
+			from:           "mitb@theopenlane.io",
+			expectedResp:   emptyResponse,
+			expectedStatus: http.StatusOK,
 		},
 		{
 			name:           "bad token (user not found)",
@@ -69,7 +65,6 @@ func (suite *HandlerTestSuite) TestResetPasswordHandler() {
 			tokenSet:       true,
 			tokenProvided:  "thisisnotavalidtoken",
 			newPassword:    newPassword,
-			emailExpected:  false,
 			from:           "notactuallyanemail",
 			expectedResp:   "password reset token invalid",
 			expectedStatus: http.StatusBadRequest,
@@ -79,7 +74,6 @@ func (suite *HandlerTestSuite) TestResetPasswordHandler() {
 			email:          "sazed@theopenlane.io",
 			tokenSet:       true,
 			newPassword:    "weak1",
-			emailExpected:  false,
 			from:           "nottodaysatan",
 			expectedResp:   "password is too weak",
 			expectedStatus: http.StatusBadRequest,
@@ -89,7 +83,6 @@ func (suite *HandlerTestSuite) TestResetPasswordHandler() {
 			email:          "sventure@theopenlane.io",
 			tokenSet:       true,
 			newPassword:    validPassword,
-			emailExpected:  false,
 			from:           "mmhmm",
 			expectedResp:   "password was already used",
 			expectedStatus: http.StatusBadRequest,
@@ -99,7 +92,6 @@ func (suite *HandlerTestSuite) TestResetPasswordHandler() {
 			email:          "dockson@theopenlane.io",
 			tokenSet:       false,
 			newPassword:    newPassword,
-			emailExpected:  false,
 			from:           "yadayadayada",
 			expectedResp:   "token is required",
 			expectedStatus: http.StatusBadRequest,
@@ -109,7 +101,6 @@ func (suite *HandlerTestSuite) TestResetPasswordHandler() {
 			email:          "tensoon@theopenlane.io",
 			newPassword:    "6z9Fqc-E-9v32NsJzLNP",
 			tokenSet:       true,
-			emailExpected:  false,
 			from:           "zonkertons",
 			ttl:            expiredTTL,
 			expectedResp:   "reset token is expired, please request a new token using forgot-password",
@@ -119,10 +110,6 @@ func (suite *HandlerTestSuite) TestResetPasswordHandler() {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			sent := time.Now()
-
-			mock.ResetEmailMock()
-
 			// create user in the database
 			rt, _, err := suite.createUserWithResetToken(t, ec, tc.email, tc.ttl)
 			require.NoError(t, err)
@@ -168,32 +155,14 @@ func (suite *HandlerTestSuite) TestResetPasswordHandler() {
 
 			if tc.expectedStatus != http.StatusOK {
 				assert.Contains(t, out.Error, tc.expectedResp)
-			}
-
-			// Test that one verify email was sent to each user
-			messages := []*mock.EmailMetadata{
-				{
-					To:        tc.email,
-					From:      tc.from,
-					Subject:   tc.expectedEmailSubject,
-					Timestamp: sent,
-				},
-			}
-
-			// wait for messages
-			predicate := func() bool {
-				return suite.h.TaskMan.GetQueueLength() == 0
-			}
-			successful := asyncwait.NewAsyncWait(maxWaitInMillis, pollIntervalInMillis).Check(predicate)
-
-			if successful != true {
-				t.Errorf("max wait of email send")
-			}
-
-			if tc.emailExpected {
-				mock.CheckEmails(t, messages)
 			} else {
-				mock.CheckEmails(t, nil)
+				job := rivertest.RequireInserted[*riverpgxv5.Driver](context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()), &jobs.EmailArgs{
+					Message: *newman.NewEmailMessageWithOptions(
+						newman.WithSubject("Openlane Password Reset - Action Required"),
+					),
+				}, nil)
+				require.NotNil(t, job)
+				require.Equal(t, []string{tc.email}, job.Args.Message.To)
 			}
 		})
 	}

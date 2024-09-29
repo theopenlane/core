@@ -13,9 +13,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/entitlementhistory"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
 	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/internal/ent/generated/predicate"
 )
 
 // EntitlementHistoryQuery is the builder for querying EntitlementHistory entities.
@@ -25,8 +24,8 @@ type EntitlementHistoryQuery struct {
 	order      []entitlementhistory.OrderOption
 	inters     []Interceptor
 	predicates []predicate.EntitlementHistory
-	modifiers  []func(*sql.Selector)
 	loadTotal  []func(context.Context, []*EntitlementHistory) error
+	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -256,8 +255,9 @@ func (ehq *EntitlementHistoryQuery) Clone() *EntitlementHistoryQuery {
 		inters:     append([]Interceptor{}, ehq.inters...),
 		predicates: append([]predicate.EntitlementHistory{}, ehq.predicates...),
 		// clone intermediate query.
-		sql:  ehq.sql.Clone(),
-		path: ehq.path,
+		sql:       ehq.sql.Clone(),
+		path:      ehq.path,
+		modifiers: append([]func(*sql.Selector){}, ehq.modifiers...),
 	}
 }
 
@@ -448,6 +448,9 @@ func (ehq *EntitlementHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector 
 	t1.Schema(ehq.schemaConfig.EntitlementHistory)
 	ctx = internal.NewSchemaConfigContext(ctx, ehq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range ehq.modifiers {
+		m(selector)
+	}
 	for _, p := range ehq.predicates {
 		p(selector)
 	}
@@ -463,6 +466,12 @@ func (ehq *EntitlementHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector 
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (ehq *EntitlementHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *EntitlementHistorySelect {
+	ehq.modifiers = append(ehq.modifiers, modifiers...)
+	return ehq.Select()
 }
 
 // EntitlementHistoryGroupBy is the group-by builder for EntitlementHistory entities.
@@ -553,4 +562,10 @@ func (ehs *EntitlementHistorySelect) sqlScan(ctx context.Context, root *Entitlem
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (ehs *EntitlementHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *EntitlementHistorySelect {
+	ehs.modifiers = append(ehs.modifiers, modifiers...)
+	return ehs
 }

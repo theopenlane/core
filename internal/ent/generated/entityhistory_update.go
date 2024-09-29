@@ -13,16 +13,16 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/entityhistory"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
 	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/internal/ent/generated/predicate"
 )
 
 // EntityHistoryUpdate is the builder for updating EntityHistory entities.
 type EntityHistoryUpdate struct {
 	config
-	hooks    []Hook
-	mutation *EntityHistoryMutation
+	hooks     []Hook
+	mutation  *EntityHistoryMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the EntityHistoryUpdate builder.
@@ -306,6 +306,12 @@ func (ehu *EntityHistoryUpdate) defaults() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (ehu *EntityHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EntityHistoryUpdate {
+	ehu.modifiers = append(ehu.modifiers, modifiers...)
+	return ehu
+}
+
 func (ehu *EntityHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(entityhistory.Table, entityhistory.Columns, sqlgraph.NewFieldSpec(entityhistory.FieldID, field.TypeString))
 	if ps := ehu.mutation.predicates; len(ps) > 0 {
@@ -408,6 +414,7 @@ func (ehu *EntityHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	}
 	_spec.Node.Schema = ehu.schemaConfig.EntityHistory
 	ctx = internal.NewSchemaConfigContext(ctx, ehu.schemaConfig)
+	_spec.AddModifiers(ehu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, ehu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{entityhistory.Label}
@@ -423,9 +430,10 @@ func (ehu *EntityHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) 
 // EntityHistoryUpdateOne is the builder for updating a single EntityHistory entity.
 type EntityHistoryUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *EntityHistoryMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *EntityHistoryMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -716,6 +724,12 @@ func (ehuo *EntityHistoryUpdateOne) defaults() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (ehuo *EntityHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EntityHistoryUpdateOne {
+	ehuo.modifiers = append(ehuo.modifiers, modifiers...)
+	return ehuo
+}
+
 func (ehuo *EntityHistoryUpdateOne) sqlSave(ctx context.Context) (_node *EntityHistory, err error) {
 	_spec := sqlgraph.NewUpdateSpec(entityhistory.Table, entityhistory.Columns, sqlgraph.NewFieldSpec(entityhistory.FieldID, field.TypeString))
 	id, ok := ehuo.mutation.ID()
@@ -835,6 +849,7 @@ func (ehuo *EntityHistoryUpdateOne) sqlSave(ctx context.Context) (_node *EntityH
 	}
 	_spec.Node.Schema = ehuo.schemaConfig.EntityHistory
 	ctx = internal.NewSchemaConfigContext(ctx, ehuo.schemaConfig)
+	_spec.AddModifiers(ehuo.modifiers...)
 	_node = &EntityHistory{config: ehuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

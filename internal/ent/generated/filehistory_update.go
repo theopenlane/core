@@ -13,16 +13,16 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/filehistory"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
 	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/internal/ent/generated/predicate"
 )
 
 // FileHistoryUpdate is the builder for updating FileHistory entities.
 type FileHistoryUpdate struct {
 	config
-	hooks    []Hook
-	mutation *FileHistoryMutation
+	hooks     []Hook
+	mutation  *FileHistoryMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the FileHistoryUpdate builder.
@@ -285,6 +285,12 @@ func (fhu *FileHistoryUpdate) defaults() {
 	}
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (fhu *FileHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *FileHistoryUpdate {
+	fhu.modifiers = append(fhu.modifiers, modifiers...)
+	return fhu
+}
+
 func (fhu *FileHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(filehistory.Table, filehistory.Columns, sqlgraph.NewFieldSpec(filehistory.FieldID, field.TypeString))
 	if ps := fhu.mutation.predicates; len(ps) > 0 {
@@ -373,6 +379,7 @@ func (fhu *FileHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	_spec.Node.Schema = fhu.schemaConfig.FileHistory
 	ctx = internal.NewSchemaConfigContext(ctx, fhu.schemaConfig)
+	_spec.AddModifiers(fhu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, fhu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{filehistory.Label}
@@ -388,9 +395,10 @@ func (fhu *FileHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 // FileHistoryUpdateOne is the builder for updating a single FileHistory entity.
 type FileHistoryUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *FileHistoryMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *FileHistoryMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -660,6 +668,12 @@ func (fhuo *FileHistoryUpdateOne) defaults() {
 	}
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (fhuo *FileHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *FileHistoryUpdateOne {
+	fhuo.modifiers = append(fhuo.modifiers, modifiers...)
+	return fhuo
+}
+
 func (fhuo *FileHistoryUpdateOne) sqlSave(ctx context.Context) (_node *FileHistory, err error) {
 	_spec := sqlgraph.NewUpdateSpec(filehistory.Table, filehistory.Columns, sqlgraph.NewFieldSpec(filehistory.FieldID, field.TypeString))
 	id, ok := fhuo.mutation.ID()
@@ -765,6 +779,7 @@ func (fhuo *FileHistoryUpdateOne) sqlSave(ctx context.Context) (_node *FileHisto
 	}
 	_spec.Node.Schema = fhuo.schemaConfig.FileHistory
 	ctx = internal.NewSchemaConfigContext(ctx, fhuo.schemaConfig)
+	_spec.AddModifiers(fhuo.modifiers...)
 	_node = &FileHistory{config: fhuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

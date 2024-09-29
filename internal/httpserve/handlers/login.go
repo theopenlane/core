@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"github.com/getkin/kin-openapi/openapi3"
-	ph "github.com/posthog/posthog-go"
 	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
@@ -72,14 +71,6 @@ func (h *Handler) LoginHandler(ctx echo.Context) error {
 
 		return h.InternalServerError(ctx, err)
 	}
-
-	props := ph.NewProperties().
-		Set("user_id", user.ID).
-		Set("email", user.Email).
-		Set("organization_id", user.Edges.Setting.Edges.DefaultOrg.ID). // user is logged into their default org
-		Set("auth_provider", user.AuthProvider)
-
-	h.AnalyticsClient.Event("user_authenticated", props)
 
 	out := models.LoginReply{
 		Reply:    rout.Reply{Success: true},

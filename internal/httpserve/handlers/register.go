@@ -4,16 +4,12 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/cenkalti/backoff/v4"
 	"github.com/getkin/kin-openapi/openapi3"
-	ph "github.com/posthog/posthog-go"
 	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
-	"github.com/theopenlane/utils/marionette"
-	"github.com/theopenlane/utils/rout"
-
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
@@ -127,25 +123,7 @@ func (h *Handler) storeAndSendEmailVerificationToken(ctx context.Context, user *
 		return nil, err
 	}
 
-	props := ph.NewProperties().
-		Set("user_id", user.ID).
-		Set("email", user.Email).
-		Set("first_name", user.FirstName).
-		Set("last_name", user.LastName)
-
-	h.AnalyticsClient.Event("email_verification_sent", props)
-
-	// send emails via TaskMan as to not create blocking operations in the server
-	if err := h.TaskMan.Queue(marionette.TaskFunc(func(ctx context.Context) error {
-		return h.SendVerificationEmail(user)
-	}), marionette.WithRetries(3), //nolint:mnd
-		marionette.WithBackoff(backoff.NewExponentialBackOff()),
-		marionette.WithErrorf("could not send verification email to user %s", user.ID),
-	); err != nil {
-		return nil, err
-	}
-
-	return meowtoken, nil
+	return meowtoken, h.sendVerificationEmail(ctx, user, meowtoken.Token)
 }
 
 // BindRegisterHandler is used to bind the register endpoint to the OpenAPI schema

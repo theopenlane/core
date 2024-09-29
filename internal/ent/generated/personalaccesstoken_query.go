@@ -14,12 +14,11 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/event"
+	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/user"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // PersonalAccessTokenQuery is the builder for querying PersonalAccessToken entities.
@@ -32,8 +31,8 @@ type PersonalAccessTokenQuery struct {
 	withOwner              *UserQuery
 	withOrganizations      *OrganizationQuery
 	withEvents             *EventQuery
-	modifiers              []func(*sql.Selector)
 	loadTotal              []func(context.Context, []*PersonalAccessToken) error
+	modifiers              []func(*sql.Selector)
 	withNamedOrganizations map[string]*OrganizationQuery
 	withNamedEvents        map[string]*EventQuery
 	// intermediate query (i.e. traversal path).
@@ -343,8 +342,9 @@ func (patq *PersonalAccessTokenQuery) Clone() *PersonalAccessTokenQuery {
 		withOrganizations: patq.withOrganizations.Clone(),
 		withEvents:        patq.withEvents.Clone(),
 		// clone intermediate query.
-		sql:  patq.sql.Clone(),
-		path: patq.path,
+		sql:       patq.sql.Clone(),
+		path:      patq.path,
+		modifiers: append([]func(*sql.Selector){}, patq.modifiers...),
 	}
 }
 
@@ -767,6 +767,9 @@ func (patq *PersonalAccessTokenQuery) sqlQuery(ctx context.Context) *sql.Selecto
 	t1.Schema(patq.schemaConfig.PersonalAccessToken)
 	ctx = internal.NewSchemaConfigContext(ctx, patq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range patq.modifiers {
+		m(selector)
+	}
 	for _, p := range patq.predicates {
 		p(selector)
 	}
@@ -782,6 +785,12 @@ func (patq *PersonalAccessTokenQuery) sqlQuery(ctx context.Context) *sql.Selecto
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (patq *PersonalAccessTokenQuery) Modify(modifiers ...func(s *sql.Selector)) *PersonalAccessTokenSelect {
+	patq.modifiers = append(patq.modifiers, modifiers...)
+	return patq.Select()
 }
 
 // WithNamedOrganizations tells the query-builder to eager-load the nodes that are connected to the "organizations"
@@ -900,4 +909,10 @@ func (pats *PersonalAccessTokenSelect) sqlScan(ctx context.Context, root *Person
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (pats *PersonalAccessTokenSelect) Modify(modifiers ...func(s *sql.Selector)) *PersonalAccessTokenSelect {
+	pats.modifiers = append(pats.modifiers, modifiers...)
+	return pats
 }

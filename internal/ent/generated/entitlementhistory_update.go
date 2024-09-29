@@ -13,16 +13,16 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/entitlementhistory"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
 	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/internal/ent/generated/predicate"
 )
 
 // EntitlementHistoryUpdate is the builder for updating EntitlementHistory entities.
 type EntitlementHistoryUpdate struct {
 	config
-	hooks    []Hook
-	mutation *EntitlementHistoryMutation
+	hooks     []Hook
+	mutation  *EntitlementHistoryMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the EntitlementHistoryUpdate builder.
@@ -276,6 +276,12 @@ func (ehu *EntitlementHistoryUpdate) defaults() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (ehu *EntitlementHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EntitlementHistoryUpdate {
+	ehu.modifiers = append(ehu.modifiers, modifiers...)
+	return ehu
+}
+
 func (ehu *EntitlementHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(entitlementhistory.Table, entitlementhistory.Columns, sqlgraph.NewFieldSpec(entitlementhistory.FieldID, field.TypeString))
 	if ps := ehu.mutation.predicates; len(ps) > 0 {
@@ -361,6 +367,7 @@ func (ehu *EntitlementHistoryUpdate) sqlSave(ctx context.Context) (n int, err er
 	}
 	_spec.Node.Schema = ehu.schemaConfig.EntitlementHistory
 	ctx = internal.NewSchemaConfigContext(ctx, ehu.schemaConfig)
+	_spec.AddModifiers(ehu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, ehu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{entitlementhistory.Label}
@@ -376,9 +383,10 @@ func (ehu *EntitlementHistoryUpdate) sqlSave(ctx context.Context) (n int, err er
 // EntitlementHistoryUpdateOne is the builder for updating a single EntitlementHistory entity.
 type EntitlementHistoryUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *EntitlementHistoryMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *EntitlementHistoryMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -639,6 +647,12 @@ func (ehuo *EntitlementHistoryUpdateOne) defaults() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (ehuo *EntitlementHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EntitlementHistoryUpdateOne {
+	ehuo.modifiers = append(ehuo.modifiers, modifiers...)
+	return ehuo
+}
+
 func (ehuo *EntitlementHistoryUpdateOne) sqlSave(ctx context.Context) (_node *EntitlementHistory, err error) {
 	_spec := sqlgraph.NewUpdateSpec(entitlementhistory.Table, entitlementhistory.Columns, sqlgraph.NewFieldSpec(entitlementhistory.FieldID, field.TypeString))
 	id, ok := ehuo.mutation.ID()
@@ -741,6 +755,7 @@ func (ehuo *EntitlementHistoryUpdateOne) sqlSave(ctx context.Context) (_node *En
 	}
 	_spec.Node.Schema = ehuo.schemaConfig.EntitlementHistory
 	ctx = internal.NewSchemaConfigContext(ctx, ehuo.schemaConfig)
+	_spec.AddModifiers(ehuo.modifiers...)
 	_node = &EntitlementHistory{config: ehuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

@@ -13,9 +13,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/groupsettinghistory"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
 	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/internal/ent/generated/predicate"
 )
 
 // GroupSettingHistoryQuery is the builder for querying GroupSettingHistory entities.
@@ -25,8 +24,8 @@ type GroupSettingHistoryQuery struct {
 	order      []groupsettinghistory.OrderOption
 	inters     []Interceptor
 	predicates []predicate.GroupSettingHistory
-	modifiers  []func(*sql.Selector)
 	loadTotal  []func(context.Context, []*GroupSettingHistory) error
+	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -256,8 +255,9 @@ func (gshq *GroupSettingHistoryQuery) Clone() *GroupSettingHistoryQuery {
 		inters:     append([]Interceptor{}, gshq.inters...),
 		predicates: append([]predicate.GroupSettingHistory{}, gshq.predicates...),
 		// clone intermediate query.
-		sql:  gshq.sql.Clone(),
-		path: gshq.path,
+		sql:       gshq.sql.Clone(),
+		path:      gshq.path,
+		modifiers: append([]func(*sql.Selector){}, gshq.modifiers...),
 	}
 }
 
@@ -448,6 +448,9 @@ func (gshq *GroupSettingHistoryQuery) sqlQuery(ctx context.Context) *sql.Selecto
 	t1.Schema(gshq.schemaConfig.GroupSettingHistory)
 	ctx = internal.NewSchemaConfigContext(ctx, gshq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range gshq.modifiers {
+		m(selector)
+	}
 	for _, p := range gshq.predicates {
 		p(selector)
 	}
@@ -463,6 +466,12 @@ func (gshq *GroupSettingHistoryQuery) sqlQuery(ctx context.Context) *sql.Selecto
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (gshq *GroupSettingHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *GroupSettingHistorySelect {
+	gshq.modifiers = append(gshq.modifiers, modifiers...)
+	return gshq.Select()
 }
 
 // GroupSettingHistoryGroupBy is the group-by builder for GroupSettingHistory entities.
@@ -553,4 +562,10 @@ func (gshs *GroupSettingHistorySelect) sqlScan(ctx context.Context, root *GroupS
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (gshs *GroupSettingHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *GroupSettingHistorySelect {
+	gshs.modifiers = append(gshs.modifiers, modifiers...)
+	return gshs
 }

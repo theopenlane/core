@@ -27,6 +27,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/oauthprovider"
@@ -39,8 +40,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/webhook"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // OrganizationQuery is the builder for querying Organization entities.
@@ -77,8 +76,8 @@ type OrganizationQuery struct {
 	withContacts                     *ContactQuery
 	withNotes                        *NoteQuery
 	withMembers                      *OrgMembershipQuery
-	modifiers                        []func(*sql.Selector)
 	loadTotal                        []func(context.Context, []*Organization) error
+	modifiers                        []func(*sql.Selector)
 	withNamedChildren                map[string]*OrganizationQuery
 	withNamedGroups                  map[string]*GroupQuery
 	withNamedTemplates               map[string]*TemplateQuery
@@ -1035,8 +1034,9 @@ func (oq *OrganizationQuery) Clone() *OrganizationQuery {
 		withNotes:                   oq.withNotes.Clone(),
 		withMembers:                 oq.withMembers.Clone(),
 		// clone intermediate query.
-		sql:  oq.sql.Clone(),
-		path: oq.path,
+		sql:       oq.sql.Clone(),
+		path:      oq.path,
+		modifiers: append([]func(*sql.Selector){}, oq.modifiers...),
 	}
 }
 
@@ -2897,6 +2897,9 @@ func (oq *OrganizationQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	t1.Schema(oq.schemaConfig.Organization)
 	ctx = internal.NewSchemaConfigContext(ctx, oq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range oq.modifiers {
+		m(selector)
+	}
 	for _, p := range oq.predicates {
 		p(selector)
 	}
@@ -2912,6 +2915,12 @@ func (oq *OrganizationQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (oq *OrganizationQuery) Modify(modifiers ...func(s *sql.Selector)) *OrganizationSelect {
+	oq.modifiers = append(oq.modifiers, modifiers...)
+	return oq.Select()
 }
 
 // WithNamedChildren tells the query-builder to eager-load the nodes that are connected to the "children"
@@ -3352,4 +3361,10 @@ func (os *OrganizationSelect) sqlScan(ctx context.Context, root *OrganizationQue
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (os *OrganizationSelect) Modify(modifiers ...func(s *sql.Selector)) *OrganizationSelect {
+	os.modifiers = append(os.modifiers, modifiers...)
+	return os
 }

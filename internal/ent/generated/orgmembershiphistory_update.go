@@ -11,18 +11,18 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembershiphistory"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/pkg/enums"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // OrgMembershipHistoryUpdate is the builder for updating OrgMembershipHistory entities.
 type OrgMembershipHistoryUpdate struct {
 	config
-	hooks    []Hook
-	mutation *OrgMembershipHistoryMutation
+	hooks     []Hook
+	mutation  *OrgMembershipHistoryMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the OrgMembershipHistoryUpdate builder.
@@ -174,6 +174,12 @@ func (omhu *OrgMembershipHistoryUpdate) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (omhu *OrgMembershipHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrgMembershipHistoryUpdate {
+	omhu.modifiers = append(omhu.modifiers, modifiers...)
+	return omhu
+}
+
 func (omhu *OrgMembershipHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if err := omhu.check(); err != nil {
 		return n, err
@@ -224,6 +230,7 @@ func (omhu *OrgMembershipHistoryUpdate) sqlSave(ctx context.Context) (n int, err
 	}
 	_spec.Node.Schema = omhu.schemaConfig.OrgMembershipHistory
 	ctx = internal.NewSchemaConfigContext(ctx, omhu.schemaConfig)
+	_spec.AddModifiers(omhu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, omhu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{orgmembershiphistory.Label}
@@ -239,9 +246,10 @@ func (omhu *OrgMembershipHistoryUpdate) sqlSave(ctx context.Context) (n int, err
 // OrgMembershipHistoryUpdateOne is the builder for updating a single OrgMembershipHistory entity.
 type OrgMembershipHistoryUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *OrgMembershipHistoryMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *OrgMembershipHistoryMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -400,6 +408,12 @@ func (omhuo *OrgMembershipHistoryUpdateOne) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (omhuo *OrgMembershipHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrgMembershipHistoryUpdateOne {
+	omhuo.modifiers = append(omhuo.modifiers, modifiers...)
+	return omhuo
+}
+
 func (omhuo *OrgMembershipHistoryUpdateOne) sqlSave(ctx context.Context) (_node *OrgMembershipHistory, err error) {
 	if err := omhuo.check(); err != nil {
 		return _node, err
@@ -467,6 +481,7 @@ func (omhuo *OrgMembershipHistoryUpdateOne) sqlSave(ctx context.Context) (_node 
 	}
 	_spec.Node.Schema = omhuo.schemaConfig.OrgMembershipHistory
 	ctx = internal.NewSchemaConfigContext(ctx, omhuo.schemaConfig)
+	_spec.AddModifiers(omhuo.modifiers...)
 	_node = &OrgMembershipHistory{config: omhuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

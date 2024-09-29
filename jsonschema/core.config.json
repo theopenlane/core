@@ -2,6 +2,12 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/theopenlane/core/config/config.-config",
   "$defs": {
+    "[]*river.PeriodicJob": {
+      "items": {
+        "$ref": "#/$defs/river.PeriodicJob"
+      },
+      "type": "array"
+    },
     "[]string": {
       "items": {
         "type": "string"
@@ -232,61 +238,42 @@
       "type": "object",
       "description": "Config holds the cors configuration settings"
     },
-    "dbxclient.Config": {
+    "emailtemplates.Config": {
       "properties": {
-        "enabled": {
-          "type": "boolean",
-          "description": "Enable the dbx client"
+        "companyName": {
+          "type": "string"
         },
-        "baseUrl": {
-          "type": "string",
-          "description": "Base URL for the dbx service"
+        "companyAddress": {
+          "type": "string"
         },
-        "endpoint": {
-          "type": "string",
-          "description": "Endpoint for the graphql api"
-        },
-        "debug": {
-          "type": "boolean",
-          "description": "Enable debug mode"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object"
-    },
-    "emails.Config": {
-      "properties": {
-        "sendGridApiKey": {
+        "corporation": {
           "type": "string"
         },
         "fromEmail": {
           "type": "string"
         },
-        "testing": {
-          "type": "boolean"
-        },
-        "archive": {
+        "supportEmail": {
           "type": "string"
         },
-        "listId": {
+        "logoURL": {
           "type": "string"
         },
-        "adminEmail": {
-          "type": "string"
-        },
-        "consoleUrl": {
-          "$ref": "#/$defs/emails.ConsoleURLConfig"
-        },
-        "marketingUrl": {
-          "$ref": "#/$defs/emails.MarketingURLConfig"
+        "urls": {
+          "$ref": "#/$defs/emailtemplates.URLConfig"
         }
       },
       "additionalProperties": false,
       "type": "object"
     },
-    "emails.ConsoleURLConfig": {
+    "emailtemplates.URLConfig": {
       "properties": {
-        "consoleBase": {
+        "root": {
+          "type": "string"
+        },
+        "product": {
+          "type": "string"
+        },
+        "docs": {
           "type": "string"
         },
         "verify": {
@@ -297,17 +284,8 @@
         },
         "reset": {
           "type": "string"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object"
-    },
-    "emails.MarketingURLConfig": {
-      "properties": {
-        "marketingBase": {
-          "type": "string"
         },
-        "subscriberVerify": {
+        "verifySubscriber": {
           "type": "string"
         }
       },
@@ -541,36 +519,15 @@
       "type": "object",
       "description": "OauthProviderConfig represents the configuration for OAuth providers such as Github and Google"
     },
-    "kafkaconfig.Config": {
-      "properties": {
-        "enabled": {
-          "type": "boolean",
-          "description": "Enabled is a flag to determine if the Kafka event source is enabled"
-        },
-        "appName": {
-          "type": "string",
-          "description": "AppName is the name of the application that is publishing events"
-        },
-        "address": {
-          "type": "string",
-          "description": "Address is the address of the Kafka broker"
-        },
-        "addresses": {
-          "$ref": "#/$defs/[]string",
-          "description": "Addresses is a list of addresses of the Kafka brokers"
-        },
-        "debug": {
-          "type": "boolean",
-          "description": "Debug is a flag to determine if the Kafka client should run in debug mode"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "description": "Config is the configuration for the Kafka event source"
-    },
     "map[string][]string": {
       "additionalProperties": {
         "$ref": "#/$defs/[]string"
+      },
+      "type": "object"
+    },
+    "map[string]river.QueueConfig": {
+      "additionalProperties": {
+        "$ref": "#/$defs/river.QueueConfig"
       },
       "type": "object"
     },
@@ -656,25 +613,6 @@
       "additionalProperties": false,
       "type": "object"
     },
-    "posthog.Config": {
-      "properties": {
-        "enabled": {
-          "type": "boolean",
-          "description": "Enabled is a flag to enable or disable PostHog"
-        },
-        "apiKey": {
-          "type": "string",
-          "description": "APIKey is the PostHog API Key"
-        },
-        "host": {
-          "type": "string",
-          "description": "Host is the PostHog API Host"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "description": "Config is the configuration for PostHog"
-    },
     "ratelimit.Config": {
       "properties": {
         "enabled": {
@@ -712,6 +650,100 @@
       "additionalProperties": false,
       "type": "object",
       "description": "Config contains the types used in executing redirects via the redirect middleware"
+    },
+    "river.Config": {
+      "properties": {
+        "AdvisoryLockPrefix": {
+          "type": "integer"
+        },
+        "CancelledJobRetentionPeriod": {
+          "type": "integer"
+        },
+        "CompletedJobRetentionPeriod": {
+          "type": "integer"
+        },
+        "DiscardedJobRetentionPeriod": {
+          "type": "integer"
+        },
+        "ErrorHandler": true,
+        "FetchCooldown": {
+          "type": "integer"
+        },
+        "FetchPollInterval": {
+          "type": "integer"
+        },
+        "ID": {
+          "type": "string"
+        },
+        "JobCleanerTimeout": {
+          "type": "integer"
+        },
+        "JobTimeout": {
+          "type": "integer"
+        },
+        "Logger": {
+          "$ref": "#/$defs/slog.Logger"
+        },
+        "MaxAttempts": {
+          "type": "integer"
+        },
+        "PeriodicJobs": {
+          "$ref": "#/$defs/[]*river.PeriodicJob"
+        },
+        "PollOnly": {
+          "type": "boolean"
+        },
+        "Queues": {
+          "$ref": "#/$defs/map[string]river.QueueConfig"
+        },
+        "ReindexerSchedule": true,
+        "RescueStuckJobsAfter": {
+          "type": "integer"
+        },
+        "RetryPolicy": true,
+        "TestOnly": {
+          "type": "boolean"
+        },
+        "Workers": {
+          "$ref": "#/$defs/river.Workers"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "river.PeriodicJob": {
+      "properties": {},
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "river.QueueConfig": {
+      "properties": {
+        "MaxWorkers": {
+          "type": "integer"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "river.Workers": {
+      "properties": {},
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "riverqueue.Config": {
+      "properties": {
+        "connectionURI": {
+          "type": "string"
+        },
+        "runMigrations": {
+          "type": "boolean"
+        },
+        "riverConf": {
+          "$ref": "#/$defs/river.Config"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
     },
     "secure.Config": {
       "properties": {
@@ -768,6 +800,11 @@
           "type": "string"
         }
       },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "slog.Logger": {
+      "properties": {},
       "additionalProperties": false,
       "type": "object"
     },
@@ -901,9 +938,9 @@
       "$ref": "#/$defs/entx.Config",
       "description": "DB contains the database configuration for the ent client"
     },
-    "dbx": {
-      "$ref": "#/$defs/dbxclient.Config",
-      "description": "DBx contains the dbx client configuration"
+    "jobQueue": {
+      "$ref": "#/$defs/riverqueue.Config",
+      "description": "JobQueue contains the configuration for the job queue (river) client"
     },
     "redis": {
       "$ref": "#/$defs/cache.Config",
@@ -914,16 +951,12 @@
       "description": "Tracer contains the tracing config for opentelemetry"
     },
     "email": {
-      "$ref": "#/$defs/emails.Config",
+      "$ref": "#/$defs/emailtemplates.Config",
       "description": "Email contains email sending configuration for the server"
     },
     "sessions": {
       "$ref": "#/$defs/sessions.Config",
       "description": "Sessions config for user sessions and cookies"
-    },
-    "posthog": {
-      "$ref": "#/$defs/posthog.Config",
-      "description": "PostHog contains the configuration for the PostHog analytics"
     },
     "totp": {
       "$ref": "#/$defs/totp.Config",
@@ -932,10 +965,6 @@
     "ratelimit": {
       "$ref": "#/$defs/ratelimit.Config",
       "description": "Ratelimit contains the configuration for the rate limiter"
-    },
-    "publisherConfig": {
-      "$ref": "#/$defs/kafkaconfig.Config",
-      "description": "EventPublisher contains the configuration for the event publisher"
     }
   },
   "additionalProperties": false,

@@ -18,18 +18,18 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/user"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // GroupUpdate is the builder for updating Group entities.
 type GroupUpdate struct {
 	config
-	hooks    []Hook
-	mutation *GroupMutation
+	hooks     []Hook
+	mutation  *GroupMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the GroupUpdate builder.
@@ -514,6 +514,12 @@ func (gu *GroupUpdate) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (gu *GroupUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *GroupUpdate {
+	gu.modifiers = append(gu.modifiers, modifiers...)
+	return gu
+}
+
 func (gu *GroupUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if err := gu.check(); err != nil {
 		return n, err
@@ -916,6 +922,7 @@ func (gu *GroupUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	_spec.Node.Schema = gu.schemaConfig.Group
 	ctx = internal.NewSchemaConfigContext(ctx, gu.schemaConfig)
+	_spec.AddModifiers(gu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, gu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{group.Label}
@@ -931,9 +938,10 @@ func (gu *GroupUpdate) sqlSave(ctx context.Context) (n int, err error) {
 // GroupUpdateOne is the builder for updating a single Group entity.
 type GroupUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *GroupMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *GroupMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -1425,6 +1433,12 @@ func (guo *GroupUpdateOne) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (guo *GroupUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *GroupUpdateOne {
+	guo.modifiers = append(guo.modifiers, modifiers...)
+	return guo
+}
+
 func (guo *GroupUpdateOne) sqlSave(ctx context.Context) (_node *Group, err error) {
 	if err := guo.check(); err != nil {
 		return _node, err
@@ -1844,6 +1858,7 @@ func (guo *GroupUpdateOne) sqlSave(ctx context.Context) (_node *Group, err error
 	}
 	_spec.Node.Schema = guo.schemaConfig.Group
 	ctx = internal.NewSchemaConfigContext(ctx, guo.schemaConfig)
+	_spec.AddModifiers(guo.modifiers...)
 	_node = &Group{config: guo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

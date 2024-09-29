@@ -12,11 +12,10 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // OrganizationSettingQuery is the builder for querying OrganizationSetting entities.
@@ -27,8 +26,8 @@ type OrganizationSettingQuery struct {
 	inters           []Interceptor
 	predicates       []predicate.OrganizationSetting
 	withOrganization *OrganizationQuery
-	modifiers        []func(*sql.Selector)
 	loadTotal        []func(context.Context, []*OrganizationSetting) error
+	modifiers        []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -284,8 +283,9 @@ func (osq *OrganizationSettingQuery) Clone() *OrganizationSettingQuery {
 		predicates:       append([]predicate.OrganizationSetting{}, osq.predicates...),
 		withOrganization: osq.withOrganization.Clone(),
 		// clone intermediate query.
-		sql:  osq.sql.Clone(),
-		path: osq.path,
+		sql:       osq.sql.Clone(),
+		path:      osq.path,
+		modifiers: append([]func(*sql.Selector){}, osq.modifiers...),
 	}
 }
 
@@ -530,6 +530,9 @@ func (osq *OrganizationSettingQuery) sqlQuery(ctx context.Context) *sql.Selector
 	t1.Schema(osq.schemaConfig.OrganizationSetting)
 	ctx = internal.NewSchemaConfigContext(ctx, osq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range osq.modifiers {
+		m(selector)
+	}
 	for _, p := range osq.predicates {
 		p(selector)
 	}
@@ -545,6 +548,12 @@ func (osq *OrganizationSettingQuery) sqlQuery(ctx context.Context) *sql.Selector
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (osq *OrganizationSettingQuery) Modify(modifiers ...func(s *sql.Selector)) *OrganizationSettingSelect {
+	osq.modifiers = append(osq.modifiers, modifiers...)
+	return osq.Select()
 }
 
 // OrganizationSettingGroupBy is the group-by builder for OrganizationSetting entities.
@@ -635,4 +644,10 @@ func (oss *OrganizationSettingSelect) sqlScan(ctx context.Context, root *Organiz
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (oss *OrganizationSettingSelect) Modify(modifiers ...func(s *sql.Selector)) *OrganizationSettingSelect {
+	oss.modifiers = append(oss.modifiers, modifiers...)
+	return oss
 }

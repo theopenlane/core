@@ -12,19 +12,19 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/pkg/enums"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // OrganizationSettingUpdate is the builder for updating OrganizationSetting entities.
 type OrganizationSettingUpdate struct {
 	config
-	hooks    []Hook
-	mutation *OrganizationSettingMutation
+	hooks     []Hook
+	mutation  *OrganizationSettingMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the OrganizationSettingUpdate builder.
@@ -364,6 +364,12 @@ func (osu *OrganizationSettingUpdate) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (osu *OrganizationSettingUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrganizationSettingUpdate {
+	osu.modifiers = append(osu.modifiers, modifiers...)
+	return osu
+}
+
 func (osu *OrganizationSettingUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if err := osu.check(); err != nil {
 		return n, err
@@ -497,6 +503,7 @@ func (osu *OrganizationSettingUpdate) sqlSave(ctx context.Context) (n int, err e
 	}
 	_spec.Node.Schema = osu.schemaConfig.OrganizationSetting
 	ctx = internal.NewSchemaConfigContext(ctx, osu.schemaConfig)
+	_spec.AddModifiers(osu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, osu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{organizationsetting.Label}
@@ -512,9 +519,10 @@ func (osu *OrganizationSettingUpdate) sqlSave(ctx context.Context) (n int, err e
 // OrganizationSettingUpdateOne is the builder for updating a single OrganizationSetting entity.
 type OrganizationSettingUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *OrganizationSettingMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *OrganizationSettingMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -861,6 +869,12 @@ func (osuo *OrganizationSettingUpdateOne) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (osuo *OrganizationSettingUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrganizationSettingUpdateOne {
+	osuo.modifiers = append(osuo.modifiers, modifiers...)
+	return osuo
+}
+
 func (osuo *OrganizationSettingUpdateOne) sqlSave(ctx context.Context) (_node *OrganizationSetting, err error) {
 	if err := osuo.check(); err != nil {
 		return _node, err
@@ -1011,6 +1025,7 @@ func (osuo *OrganizationSettingUpdateOne) sqlSave(ctx context.Context) (_node *O
 	}
 	_spec.Node.Schema = osuo.schemaConfig.OrganizationSetting
 	ctx = internal.NewSchemaConfigContext(ctx, osuo.schemaConfig)
+	_spec.AddModifiers(osuo.modifiers...)
 	_node = &OrganizationSetting{config: osuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

@@ -14,10 +14,9 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/internal/ent/generated/ohauthtootoken"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // OhAuthTooTokenQuery is the builder for querying OhAuthTooToken entities.
@@ -29,8 +28,8 @@ type OhAuthTooTokenQuery struct {
 	predicates           []predicate.OhAuthTooToken
 	withIntegration      *IntegrationQuery
 	withEvents           *EventQuery
-	modifiers            []func(*sql.Selector)
 	loadTotal            []func(context.Context, []*OhAuthTooToken) error
+	modifiers            []func(*sql.Selector)
 	withNamedIntegration map[string]*IntegrationQuery
 	withNamedEvents      map[string]*EventQuery
 	// intermediate query (i.e. traversal path).
@@ -314,8 +313,9 @@ func (oattq *OhAuthTooTokenQuery) Clone() *OhAuthTooTokenQuery {
 		withIntegration: oattq.withIntegration.Clone(),
 		withEvents:      oattq.withEvents.Clone(),
 		// clone intermediate query.
-		sql:  oattq.sql.Clone(),
-		path: oattq.path,
+		sql:       oattq.sql.Clone(),
+		path:      oattq.path,
+		modifiers: append([]func(*sql.Selector){}, oattq.modifiers...),
 	}
 }
 
@@ -680,6 +680,9 @@ func (oattq *OhAuthTooTokenQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	t1.Schema(oattq.schemaConfig.OhAuthTooToken)
 	ctx = internal.NewSchemaConfigContext(ctx, oattq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range oattq.modifiers {
+		m(selector)
+	}
 	for _, p := range oattq.predicates {
 		p(selector)
 	}
@@ -695,6 +698,12 @@ func (oattq *OhAuthTooTokenQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (oattq *OhAuthTooTokenQuery) Modify(modifiers ...func(s *sql.Selector)) *OhAuthTooTokenSelect {
+	oattq.modifiers = append(oattq.modifiers, modifiers...)
+	return oattq.Select()
 }
 
 // WithNamedIntegration tells the query-builder to eager-load the nodes that are connected to the "integration"
@@ -813,4 +822,10 @@ func (oatts *OhAuthTooTokenSelect) sqlScan(ctx context.Context, root *OhAuthTooT
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (oatts *OhAuthTooTokenSelect) Modify(modifiers ...func(s *sql.Selector)) *OhAuthTooTokenSelect {
+	oatts.modifiers = append(oatts.modifiers, modifiers...)
+	return oatts
 }

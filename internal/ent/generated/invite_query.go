@@ -14,11 +14,10 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/event"
+	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // InviteQuery is the builder for querying Invite entities.
@@ -30,8 +29,8 @@ type InviteQuery struct {
 	predicates      []predicate.Invite
 	withOwner       *OrganizationQuery
 	withEvents      *EventQuery
-	modifiers       []func(*sql.Selector)
 	loadTotal       []func(context.Context, []*Invite) error
+	modifiers       []func(*sql.Selector)
 	withNamedEvents map[string]*EventQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -314,8 +313,9 @@ func (iq *InviteQuery) Clone() *InviteQuery {
 		withOwner:  iq.withOwner.Clone(),
 		withEvents: iq.withEvents.Clone(),
 		// clone intermediate query.
-		sql:  iq.sql.Clone(),
-		path: iq.path,
+		sql:       iq.sql.Clone(),
+		path:      iq.path,
+		modifiers: append([]func(*sql.Selector){}, iq.modifiers...),
 	}
 }
 
@@ -648,6 +648,9 @@ func (iq *InviteQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	t1.Schema(iq.schemaConfig.Invite)
 	ctx = internal.NewSchemaConfigContext(ctx, iq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range iq.modifiers {
+		m(selector)
+	}
 	for _, p := range iq.predicates {
 		p(selector)
 	}
@@ -663,6 +666,12 @@ func (iq *InviteQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (iq *InviteQuery) Modify(modifiers ...func(s *sql.Selector)) *InviteSelect {
+	iq.modifiers = append(iq.modifiers, modifiers...)
+	return iq.Select()
 }
 
 // WithNamedEvents tells the query-builder to eager-load the nodes that are connected to the "events"
@@ -767,4 +776,10 @@ func (is *InviteSelect) sqlScan(ctx context.Context, root *InviteQuery, v any) e
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (is *InviteSelect) Modify(modifiers ...func(s *sql.Selector)) *InviteSelect {
+	is.modifiers = append(is.modifiers, modifiers...)
+	return is
 }

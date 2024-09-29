@@ -14,17 +14,17 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
+	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // EntityTypeUpdate is the builder for updating EntityType entities.
 type EntityTypeUpdate struct {
 	config
-	hooks    []Hook
-	mutation *EntityTypeMutation
+	hooks     []Hook
+	mutation  *EntityTypeMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the EntityTypeUpdate builder.
@@ -266,6 +266,12 @@ func (etu *EntityTypeUpdate) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (etu *EntityTypeUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EntityTypeUpdate {
+	etu.modifiers = append(etu.modifiers, modifiers...)
+	return etu
+}
+
 func (etu *EntityTypeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if err := etu.check(); err != nil {
 		return n, err
@@ -403,6 +409,7 @@ func (etu *EntityTypeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	_spec.Node.Schema = etu.schemaConfig.EntityType
 	ctx = internal.NewSchemaConfigContext(ctx, etu.schemaConfig)
+	_spec.AddModifiers(etu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, etu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{entitytype.Label}
@@ -418,9 +425,10 @@ func (etu *EntityTypeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 // EntityTypeUpdateOne is the builder for updating a single EntityType entity.
 type EntityTypeUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *EntityTypeMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *EntityTypeMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -669,6 +677,12 @@ func (etuo *EntityTypeUpdateOne) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (etuo *EntityTypeUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EntityTypeUpdateOne {
+	etuo.modifiers = append(etuo.modifiers, modifiers...)
+	return etuo
+}
+
 func (etuo *EntityTypeUpdateOne) sqlSave(ctx context.Context) (_node *EntityType, err error) {
 	if err := etuo.check(); err != nil {
 		return _node, err
@@ -823,6 +837,7 @@ func (etuo *EntityTypeUpdateOne) sqlSave(ctx context.Context) (_node *EntityType
 	}
 	_spec.Node.Schema = etuo.schemaConfig.EntityType
 	ctx = internal.NewSchemaConfigContext(ctx, etuo.schemaConfig)
+	_spec.AddModifiers(etuo.modifiers...)
 	_node = &EntityType{config: etuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

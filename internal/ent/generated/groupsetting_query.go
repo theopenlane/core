@@ -14,9 +14,8 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
 	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/internal/ent/generated/predicate"
 )
 
 // GroupSettingQuery is the builder for querying GroupSetting entities.
@@ -27,8 +26,8 @@ type GroupSettingQuery struct {
 	inters     []Interceptor
 	predicates []predicate.GroupSetting
 	withGroup  *GroupQuery
-	modifiers  []func(*sql.Selector)
 	loadTotal  []func(context.Context, []*GroupSetting) error
+	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -284,8 +283,9 @@ func (gsq *GroupSettingQuery) Clone() *GroupSettingQuery {
 		predicates: append([]predicate.GroupSetting{}, gsq.predicates...),
 		withGroup:  gsq.withGroup.Clone(),
 		// clone intermediate query.
-		sql:  gsq.sql.Clone(),
-		path: gsq.path,
+		sql:       gsq.sql.Clone(),
+		path:      gsq.path,
+		modifiers: append([]func(*sql.Selector){}, gsq.modifiers...),
 	}
 }
 
@@ -530,6 +530,9 @@ func (gsq *GroupSettingQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	t1.Schema(gsq.schemaConfig.GroupSetting)
 	ctx = internal.NewSchemaConfigContext(ctx, gsq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range gsq.modifiers {
+		m(selector)
+	}
 	for _, p := range gsq.predicates {
 		p(selector)
 	}
@@ -545,6 +548,12 @@ func (gsq *GroupSettingQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (gsq *GroupSettingQuery) Modify(modifiers ...func(s *sql.Selector)) *GroupSettingSelect {
+	gsq.modifiers = append(gsq.modifiers, modifiers...)
+	return gsq.Select()
 }
 
 // GroupSettingGroupBy is the group-by builder for GroupSetting entities.
@@ -635,4 +644,10 @@ func (gss *GroupSettingSelect) sqlScan(ctx context.Context, root *GroupSettingQu
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (gss *GroupSettingSelect) Modify(modifiers ...func(s *sql.Selector)) *GroupSettingSelect {
+	gss.modifiers = append(gss.modifiers, modifiers...)
+	return gss
 }

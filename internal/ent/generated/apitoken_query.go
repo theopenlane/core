@@ -13,10 +13,9 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
+	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // APITokenQuery is the builder for querying APIToken entities.
@@ -27,8 +26,8 @@ type APITokenQuery struct {
 	inters     []Interceptor
 	predicates []predicate.APIToken
 	withOwner  *OrganizationQuery
-	modifiers  []func(*sql.Selector)
 	loadTotal  []func(context.Context, []*APIToken) error
+	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -284,8 +283,9 @@ func (atq *APITokenQuery) Clone() *APITokenQuery {
 		predicates: append([]predicate.APIToken{}, atq.predicates...),
 		withOwner:  atq.withOwner.Clone(),
 		// clone intermediate query.
-		sql:  atq.sql.Clone(),
-		path: atq.path,
+		sql:       atq.sql.Clone(),
+		path:      atq.path,
+		modifiers: append([]func(*sql.Selector){}, atq.modifiers...),
 	}
 }
 
@@ -530,6 +530,9 @@ func (atq *APITokenQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	t1.Schema(atq.schemaConfig.APIToken)
 	ctx = internal.NewSchemaConfigContext(ctx, atq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range atq.modifiers {
+		m(selector)
+	}
 	for _, p := range atq.predicates {
 		p(selector)
 	}
@@ -545,6 +548,12 @@ func (atq *APITokenQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (atq *APITokenQuery) Modify(modifiers ...func(s *sql.Selector)) *APITokenSelect {
+	atq.modifiers = append(atq.modifiers, modifiers...)
+	return atq.Select()
 }
 
 // APITokenGroupBy is the group-by builder for APIToken entities.
@@ -635,4 +644,10 @@ func (ats *APITokenSelect) sqlScan(ctx context.Context, root *APITokenQuery, v a
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (ats *APITokenSelect) Modify(modifiers ...func(s *sql.Selector)) *APITokenSelect {
+	ats.modifiers = append(ats.modifiers, modifiers...)
+	return ats
 }

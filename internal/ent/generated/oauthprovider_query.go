@@ -12,11 +12,10 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/internal/ent/generated/oauthprovider"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // OauthProviderQuery is the builder for querying OauthProvider entities.
@@ -27,8 +26,8 @@ type OauthProviderQuery struct {
 	inters     []Interceptor
 	predicates []predicate.OauthProvider
 	withOwner  *OrganizationQuery
-	modifiers  []func(*sql.Selector)
 	loadTotal  []func(context.Context, []*OauthProvider) error
+	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -284,8 +283,9 @@ func (opq *OauthProviderQuery) Clone() *OauthProviderQuery {
 		predicates: append([]predicate.OauthProvider{}, opq.predicates...),
 		withOwner:  opq.withOwner.Clone(),
 		// clone intermediate query.
-		sql:  opq.sql.Clone(),
-		path: opq.path,
+		sql:       opq.sql.Clone(),
+		path:      opq.path,
+		modifiers: append([]func(*sql.Selector){}, opq.modifiers...),
 	}
 }
 
@@ -530,6 +530,9 @@ func (opq *OauthProviderQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	t1.Schema(opq.schemaConfig.OauthProvider)
 	ctx = internal.NewSchemaConfigContext(ctx, opq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range opq.modifiers {
+		m(selector)
+	}
 	for _, p := range opq.predicates {
 		p(selector)
 	}
@@ -545,6 +548,12 @@ func (opq *OauthProviderQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (opq *OauthProviderQuery) Modify(modifiers ...func(s *sql.Selector)) *OauthProviderSelect {
+	opq.modifiers = append(opq.modifiers, modifiers...)
+	return opq.Select()
 }
 
 // OauthProviderGroupBy is the group-by builder for OauthProvider entities.
@@ -635,4 +644,10 @@ func (ops *OauthProviderSelect) sqlScan(ctx context.Context, root *OauthProvider
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (ops *OauthProviderSelect) Modify(modifiers ...func(s *sql.Selector)) *OauthProviderSelect {
+	ops.modifiers = append(ops.modifiers, modifiers...)
+	return ops
 }

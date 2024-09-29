@@ -13,16 +13,16 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/featurehistory"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
 	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/internal/ent/generated/predicate"
 )
 
 // FeatureHistoryUpdate is the builder for updating FeatureHistory entities.
 type FeatureHistoryUpdate struct {
 	config
-	hooks    []Hook
-	mutation *FeatureHistoryMutation
+	hooks     []Hook
+	mutation  *FeatureHistoryMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the FeatureHistoryUpdate builder.
@@ -254,6 +254,12 @@ func (fhu *FeatureHistoryUpdate) defaults() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (fhu *FeatureHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *FeatureHistoryUpdate {
+	fhu.modifiers = append(fhu.modifiers, modifiers...)
+	return fhu
+}
+
 func (fhu *FeatureHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(featurehistory.Table, featurehistory.Columns, sqlgraph.NewFieldSpec(featurehistory.FieldID, field.TypeString))
 	if ps := fhu.mutation.predicates; len(ps) > 0 {
@@ -336,6 +342,7 @@ func (fhu *FeatureHistoryUpdate) sqlSave(ctx context.Context) (n int, err error)
 	}
 	_spec.Node.Schema = fhu.schemaConfig.FeatureHistory
 	ctx = internal.NewSchemaConfigContext(ctx, fhu.schemaConfig)
+	_spec.AddModifiers(fhu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, fhu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{featurehistory.Label}
@@ -351,9 +358,10 @@ func (fhu *FeatureHistoryUpdate) sqlSave(ctx context.Context) (n int, err error)
 // FeatureHistoryUpdateOne is the builder for updating a single FeatureHistory entity.
 type FeatureHistoryUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *FeatureHistoryMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *FeatureHistoryMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -592,6 +600,12 @@ func (fhuo *FeatureHistoryUpdateOne) defaults() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (fhuo *FeatureHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *FeatureHistoryUpdateOne {
+	fhuo.modifiers = append(fhuo.modifiers, modifiers...)
+	return fhuo
+}
+
 func (fhuo *FeatureHistoryUpdateOne) sqlSave(ctx context.Context) (_node *FeatureHistory, err error) {
 	_spec := sqlgraph.NewUpdateSpec(featurehistory.Table, featurehistory.Columns, sqlgraph.NewFieldSpec(featurehistory.FieldID, field.TypeString))
 	id, ok := fhuo.mutation.ID()
@@ -691,6 +705,7 @@ func (fhuo *FeatureHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Featur
 	}
 	_spec.Node.Schema = fhuo.schemaConfig.FeatureHistory
 	ctx = internal.NewSchemaConfigContext(ctx, fhuo.schemaConfig)
+	_spec.AddModifiers(fhuo.modifiers...)
 	_node = &FeatureHistory{config: fhuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

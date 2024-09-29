@@ -12,11 +12,10 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/user"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // PasswordResetTokenQuery is the builder for querying PasswordResetToken entities.
@@ -27,8 +26,8 @@ type PasswordResetTokenQuery struct {
 	inters     []Interceptor
 	predicates []predicate.PasswordResetToken
 	withOwner  *UserQuery
-	modifiers  []func(*sql.Selector)
 	loadTotal  []func(context.Context, []*PasswordResetToken) error
+	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -284,8 +283,9 @@ func (prtq *PasswordResetTokenQuery) Clone() *PasswordResetTokenQuery {
 		predicates: append([]predicate.PasswordResetToken{}, prtq.predicates...),
 		withOwner:  prtq.withOwner.Clone(),
 		// clone intermediate query.
-		sql:  prtq.sql.Clone(),
-		path: prtq.path,
+		sql:       prtq.sql.Clone(),
+		path:      prtq.path,
+		modifiers: append([]func(*sql.Selector){}, prtq.modifiers...),
 	}
 }
 
@@ -530,6 +530,9 @@ func (prtq *PasswordResetTokenQuery) sqlQuery(ctx context.Context) *sql.Selector
 	t1.Schema(prtq.schemaConfig.PasswordResetToken)
 	ctx = internal.NewSchemaConfigContext(ctx, prtq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range prtq.modifiers {
+		m(selector)
+	}
 	for _, p := range prtq.predicates {
 		p(selector)
 	}
@@ -545,6 +548,12 @@ func (prtq *PasswordResetTokenQuery) sqlQuery(ctx context.Context) *sql.Selector
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (prtq *PasswordResetTokenQuery) Modify(modifiers ...func(s *sql.Selector)) *PasswordResetTokenSelect {
+	prtq.modifiers = append(prtq.modifiers, modifiers...)
+	return prtq.Select()
 }
 
 // PasswordResetTokenGroupBy is the group-by builder for PasswordResetToken entities.
@@ -635,4 +644,10 @@ func (prts *PasswordResetTokenSelect) sqlScan(ctx context.Context, root *Passwor
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (prts *PasswordResetTokenSelect) Modify(modifiers ...func(s *sql.Selector)) *PasswordResetTokenSelect {
+	prts.modifiers = append(prts.modifiers, modifiers...)
+	return prts
 }

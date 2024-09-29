@@ -134,7 +134,6 @@ func RegisterRoutes(router *Router) error {
 		registerUserInfoHandler,
 		registerOAuthRegisterHandler,
 		registerSwitchRoute,
-		registerEventPublisher,
 		registerLivenessHandler,
 		registerMetricsHandler,
 		registerSecurityTxtHandler,

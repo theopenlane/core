@@ -7,7 +7,6 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/getkin/kin-openapi/openapi3"
-	ph "github.com/posthog/posthog-go"
 	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
@@ -118,14 +117,6 @@ func (h *Handler) VerifyEmail(ctx echo.Context) error {
 
 		return h.InternalServerError(ctx, err)
 	}
-
-	props := ph.NewProperties().
-		Set("user_id", user.ID).
-		Set("email", user.Email).
-		Set("first_name", user.FirstName).
-		Set("last_name", user.LastName)
-
-	h.AnalyticsClient.Event("email_verified", props)
 
 	out := &models.VerifyReply{
 		ID:       entUser.ID,

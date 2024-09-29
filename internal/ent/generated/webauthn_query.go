@@ -11,11 +11,10 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // WebauthnQuery is the builder for querying Webauthn entities.
@@ -26,8 +25,8 @@ type WebauthnQuery struct {
 	inters     []Interceptor
 	predicates []predicate.Webauthn
 	withOwner  *UserQuery
-	modifiers  []func(*sql.Selector)
 	loadTotal  []func(context.Context, []*Webauthn) error
+	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -283,8 +282,9 @@ func (wq *WebauthnQuery) Clone() *WebauthnQuery {
 		predicates: append([]predicate.Webauthn{}, wq.predicates...),
 		withOwner:  wq.withOwner.Clone(),
 		// clone intermediate query.
-		sql:  wq.sql.Clone(),
-		path: wq.path,
+		sql:       wq.sql.Clone(),
+		path:      wq.path,
+		modifiers: append([]func(*sql.Selector){}, wq.modifiers...),
 	}
 }
 
@@ -523,6 +523,9 @@ func (wq *WebauthnQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	t1.Schema(wq.schemaConfig.Webauthn)
 	ctx = internal.NewSchemaConfigContext(ctx, wq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range wq.modifiers {
+		m(selector)
+	}
 	for _, p := range wq.predicates {
 		p(selector)
 	}
@@ -538,6 +541,12 @@ func (wq *WebauthnQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (wq *WebauthnQuery) Modify(modifiers ...func(s *sql.Selector)) *WebauthnSelect {
+	wq.modifiers = append(wq.modifiers, modifiers...)
+	return wq.Select()
 }
 
 // WebauthnGroupBy is the group-by builder for Webauthn entities.
@@ -628,4 +637,10 @@ func (ws *WebauthnSelect) sqlScan(ctx context.Context, root *WebauthnQuery, v an
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (ws *WebauthnSelect) Modify(modifiers ...func(s *sql.Selector)) *WebauthnSelect {
+	ws.modifiers = append(ws.modifiers, modifiers...)
+	return ws
 }

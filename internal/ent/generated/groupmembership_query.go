@@ -16,10 +16,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
+	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/user"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // GroupMembershipQuery is the builder for querying GroupMembership entities.
@@ -32,8 +31,8 @@ type GroupMembershipQuery struct {
 	withGroup       *GroupQuery
 	withUser        *UserQuery
 	withEvents      *EventQuery
-	modifiers       []func(*sql.Selector)
 	loadTotal       []func(context.Context, []*GroupMembership) error
+	modifiers       []func(*sql.Selector)
 	withNamedEvents map[string]*EventQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -342,8 +341,9 @@ func (gmq *GroupMembershipQuery) Clone() *GroupMembershipQuery {
 		withUser:   gmq.withUser.Clone(),
 		withEvents: gmq.withEvents.Clone(),
 		// clone intermediate query.
-		sql:  gmq.sql.Clone(),
-		path: gmq.path,
+		sql:       gmq.sql.Clone(),
+		path:      gmq.path,
+		modifiers: append([]func(*sql.Selector){}, gmq.modifiers...),
 	}
 }
 
@@ -726,6 +726,9 @@ func (gmq *GroupMembershipQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	t1.Schema(gmq.schemaConfig.GroupMembership)
 	ctx = internal.NewSchemaConfigContext(ctx, gmq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range gmq.modifiers {
+		m(selector)
+	}
 	for _, p := range gmq.predicates {
 		p(selector)
 	}
@@ -741,6 +744,12 @@ func (gmq *GroupMembershipQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (gmq *GroupMembershipQuery) Modify(modifiers ...func(s *sql.Selector)) *GroupMembershipSelect {
+	gmq.modifiers = append(gmq.modifiers, modifiers...)
+	return gmq.Select()
 }
 
 // WithNamedEvents tells the query-builder to eager-load the nodes that are connected to the "events"
@@ -845,4 +854,10 @@ func (gms *GroupMembershipSelect) sqlScan(ctx context.Context, root *GroupMember
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (gms *GroupMembershipSelect) Modify(modifiers ...func(s *sql.Selector)) *GroupMembershipSelect {
+	gms.modifiers = append(gms.modifiers, modifiers...)
+	return gms
 }
