@@ -37,7 +37,8 @@ extensible services:
   encrypted cookies and sessions
 - Robust Middleware: cache control, CORS, Rate Limiting, transaction rollbacks,
   and more
-- Queuing and Scheduling: Task management and scheduling with Marionette
+- Queuing and Scheduling: Task management and scheduling with
+  [riverqueue](https://github.com/riverqueue/river)
 - External Storage Providers: store data in AWS S3, Google GCS, or locally
 - External Database Providers: Leverage NeonDB, or other PostgreSQL compatible
   vendors and libraries
