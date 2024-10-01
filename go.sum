@@ -512,8 +512,8 @@ github.com/theopenlane/echo-prometheus v0.1.0 h1:1zMejBVHe5w4zLHS+k5FV9S/46QBiwO
 github.com/theopenlane/echo-prometheus v0.1.0/go.mod h1:Eiiv1ZLXKMsteQ3T+H1tFfSSZuXSvQfZp95qr5hmGkA=
 github.com/theopenlane/echox v0.2.0 h1:s9DJJrsLOSPsXVfgmQxgXmSVtxzztBnSmcVX4ax7tIM=
 github.com/theopenlane/echox v0.2.0/go.mod h1:nfxwQpwvqYYI/pFHJKDs3/HLvjYKEGCih4XDgLSma64=
-github.com/theopenlane/emailtemplates v0.1.1 h1:TMjGDokp4BKpghWMxfNlElqI3jaggwBf7XceENxyCJY=
-github.com/theopenlane/emailtemplates v0.1.1/go.mod h1:ZVTSMr+jKZZDH1IDTYBzR5nF/FPGt+IAPOJmet/WPi8=
+github.com/theopenlane/emailtemplates v0.1.2 h1:0l/PlokMjH8mARToQXWFvhBwvs9mtcaZqBlDicPYNHg=
+github.com/theopenlane/emailtemplates v0.1.2/go.mod h1:ZVTSMr+jKZZDH1IDTYBzR5nF/FPGt+IAPOJmet/WPi8=
 github.com/theopenlane/entx v0.2.2 h1:tUYxJQbG/W7kyCOF836GfLLB3agbdElxXV2qwlKA6L4=
 github.com/theopenlane/entx v0.2.2/go.mod h1:6TA516nQJ3p/Cn7QlbVouKpui2XPipj8OXb9/5iGDB8=
 github.com/theopenlane/gqlgen-plugins v0.2.0 h1:0Kb2oJ3zcNlOCqveRjqeUVlwc8SMiLI7e4ii52hTkl8=
