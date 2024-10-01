@@ -187,7 +187,7 @@ steps:
           - equinixmetal-buildkite/trivy#v1.18.5:
               severity: CRITICAL,HIGH
               ignore-unfixed: true
-              security-checks: config,secret,vuln
+              scanners: misconfig,secret,vuln
               skip-files: "cosign.key,Dockerfile.dev"
               trivy-version: "0.55.2"
       - label: ":docker: docker build and publish"
@@ -215,7 +215,7 @@ steps:
           - equinixmetal-buildkite/trivy#v1.18.5:
               severity: CRITICAL,HIGH
               ignore-unfixed: true
-              security-checks: config,secret,vuln
+              scanners: misconfig,secret,vuln
               skip-files: "cosign.key,Dockerfile.dev"
               trivy-version: "0.55.2"
       - label: ":docker: docker build and publish all in one"
@@ -269,7 +269,7 @@ steps:
           - equinixmetal-buildkite/trivy#v1.18.5:
               severity: CRITICAL,HIGH
               ignore-unfixed: true
-              security-checks: config,secret,vuln
+              scanners: misconfig,secret,vuln
               skip-files: "cosign.key,Dockerfile.dev"
               trivy-version: "0.55.2"
       - label: ":docker: docker build and publish all in one"
@@ -297,6 +297,6 @@ steps:
           - equinixmetal-buildkite/trivy#v1.18.5:
               severity: CRITICAL,HIGH
               ignore-unfixed: true
-              security-checks: config,secret,vuln
+              scanners: misconfig,secret,vuln
               skip-files: "cosign.key,Dockerfile.dev"
               trivy-version: "0.55.2"
