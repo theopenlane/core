@@ -189,6 +189,7 @@ steps:
               ignore-unfixed: true
               security-checks: config,secret,vuln
               skip-files: "cosign.key,Dockerfile.dev"
+              trivy-version: "0.55.2"
       - label: ":docker: docker build and publish"
         key: "docker-build"
         cancel_on_build_failing: true
@@ -216,6 +217,7 @@ steps:
               ignore-unfixed: true
               security-checks: config,secret,vuln
               skip-files: "cosign.key,Dockerfile.dev"
+              trivy-version: "0.55.2"
       - label: ":docker: docker build and publish all in one"
         key: "docker-build-aio"
         if: build.branch == "main"
@@ -243,6 +245,7 @@ steps:
               ignore-unfixed: true
               security-checks: config,secret,vuln
               skip-files: "cosign.key,Dockerfile.dev"
+              trivy-version: "0.55.2"
       - label: ":docker: docker build and publish"
         key: "docker-build-and-tag"
         if: build.tag != null
@@ -268,6 +271,7 @@ steps:
               ignore-unfixed: true
               security-checks: config,secret,vuln
               skip-files: "cosign.key,Dockerfile.dev"
+              trivy-version: "0.55.2"
       - label: ":docker: docker build and publish all in one"
         key: "docker-build-aio-and-tag"
         if: build.tag != null
@@ -295,3 +299,4 @@ steps:
               ignore-unfixed: true
               security-checks: config,secret,vuln
               skip-files: "cosign.key,Dockerfile.dev"
+              trivy-version: "0.55.2"
