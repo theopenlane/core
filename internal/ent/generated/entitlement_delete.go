@@ -8,9 +8,10 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/predicate"
+
 	"github.com/theopenlane/core/internal/ent/generated/entitlement"
 	"github.com/theopenlane/core/internal/ent/generated/internal"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
 )
 
 // EntitlementDelete is the builder for deleting a Entitlement entity.

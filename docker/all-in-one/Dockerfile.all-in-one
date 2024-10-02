@@ -15,7 +15,7 @@ WORKDIR /home/nonroot
 COPY --from=builder /go/bin/core /bin/core
 
 # Copy the dbx binary
-COPY --from=ghcr.io/theopenlane/dbx:5-35840501  /bin/dbx /bin/dbx
+COPY --from=ghcr.io/theopenlane/dbx:145-c77867be /bin/dbx /bin/dbx
 
 # Copy the riverboat binary
 COPY --from=ghcr.io/theopenlane/riverboat:amd64-86-3eaa899d /bin/riverboat /bin/riverboat
