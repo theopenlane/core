@@ -13,8 +13,9 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/featurehistory"
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+
+	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // FeatureHistoryUpdate is the builder for updating FeatureHistory entities.

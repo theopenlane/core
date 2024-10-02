@@ -12,9 +12,10 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+
+	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // OrganizationSettingHistoryQuery is the builder for querying OrganizationSettingHistory entities.

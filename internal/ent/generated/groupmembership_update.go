@@ -13,9 +13,10 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/pkg/enums"
+
+	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // GroupMembershipUpdate is the builder for updating GroupMembership entities.

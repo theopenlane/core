@@ -13,8 +13,9 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/entityhistory"
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+
+	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // EntityHistoryUpdate is the builder for updating EntityHistory entities.
