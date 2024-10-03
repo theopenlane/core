@@ -38,20 +38,36 @@ const (
 	FieldMappingID = "mapping_id"
 	// FieldTags holds the string denoting the tags field in the database.
 	FieldTags = "tags"
-	// FieldFileName holds the string denoting the file_name field in the database.
-	FieldFileName = "file_name"
-	// FieldFileExtension holds the string denoting the file_extension field in the database.
-	FieldFileExtension = "file_extension"
-	// FieldFileSize holds the string denoting the file_size field in the database.
-	FieldFileSize = "file_size"
-	// FieldContentType holds the string denoting the content_type field in the database.
-	FieldContentType = "content_type"
+	// FieldProvidedFileName holds the string denoting the provided_file_name field in the database.
+	FieldProvidedFileName = "provided_file_name"
+	// FieldProvidedFileExtension holds the string denoting the provided_file_extension field in the database.
+	FieldProvidedFileExtension = "provided_file_extension"
+	// FieldProvidedFileSize holds the string denoting the provided_file_size field in the database.
+	FieldProvidedFileSize = "provided_file_size"
+	// FieldPersistedFileSize holds the string denoting the persisted_file_size field in the database.
+	FieldPersistedFileSize = "persisted_file_size"
+	// FieldDetectedMimeType holds the string denoting the detected_mime_type field in the database.
+	FieldDetectedMimeType = "detected_mime_type"
+	// FieldMd5Hash holds the string denoting the md5_hash field in the database.
+	FieldMd5Hash = "md5_hash"
+	// FieldDetectedContentType holds the string denoting the detected_content_type field in the database.
+	FieldDetectedContentType = "detected_content_type"
 	// FieldStoreKey holds the string denoting the store_key field in the database.
 	FieldStoreKey = "store_key"
-	// FieldCategory holds the string denoting the category field in the database.
-	FieldCategory = "category"
-	// FieldAnnotation holds the string denoting the annotation field in the database.
-	FieldAnnotation = "annotation"
+	// FieldCorrelationID holds the string denoting the correlation_id field in the database.
+	FieldCorrelationID = "correlation_id"
+	// FieldCategoryType holds the string denoting the category_type field in the database.
+	FieldCategoryType = "category_type"
+	// FieldURI holds the string denoting the uri field in the database.
+	FieldURI = "uri"
+	// FieldStorageScheme holds the string denoting the storage_scheme field in the database.
+	FieldStorageScheme = "storage_scheme"
+	// FieldStorageVolume holds the string denoting the storage_volume field in the database.
+	FieldStorageVolume = "storage_volume"
+	// FieldStoragePath holds the string denoting the storage_path field in the database.
+	FieldStoragePath = "storage_path"
+	// FieldFileContents holds the string denoting the file_contents field in the database.
+	FieldFileContents = "file_contents"
 	// Table holds the table name of the filehistory in the database.
 	Table = "file_history"
 )
@@ -70,13 +86,21 @@ var Columns = []string{
 	FieldDeletedBy,
 	FieldMappingID,
 	FieldTags,
-	FieldFileName,
-	FieldFileExtension,
-	FieldFileSize,
-	FieldContentType,
+	FieldProvidedFileName,
+	FieldProvidedFileExtension,
+	FieldProvidedFileSize,
+	FieldPersistedFileSize,
+	FieldDetectedMimeType,
+	FieldMd5Hash,
+	FieldDetectedContentType,
 	FieldStoreKey,
-	FieldCategory,
-	FieldAnnotation,
+	FieldCorrelationID,
+	FieldCategoryType,
+	FieldURI,
+	FieldStorageScheme,
+	FieldStorageVolume,
+	FieldStoragePath,
+	FieldFileContents,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -174,24 +198,39 @@ func ByMappingID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldMappingID, opts...).ToFunc()
 }
 
-// ByFileName orders the results by the file_name field.
-func ByFileName(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldFileName, opts...).ToFunc()
+// ByProvidedFileName orders the results by the provided_file_name field.
+func ByProvidedFileName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldProvidedFileName, opts...).ToFunc()
 }
 
-// ByFileExtension orders the results by the file_extension field.
-func ByFileExtension(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldFileExtension, opts...).ToFunc()
+// ByProvidedFileExtension orders the results by the provided_file_extension field.
+func ByProvidedFileExtension(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldProvidedFileExtension, opts...).ToFunc()
 }
 
-// ByFileSize orders the results by the file_size field.
-func ByFileSize(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldFileSize, opts...).ToFunc()
+// ByProvidedFileSize orders the results by the provided_file_size field.
+func ByProvidedFileSize(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldProvidedFileSize, opts...).ToFunc()
 }
 
-// ByContentType orders the results by the content_type field.
-func ByContentType(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldContentType, opts...).ToFunc()
+// ByPersistedFileSize orders the results by the persisted_file_size field.
+func ByPersistedFileSize(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPersistedFileSize, opts...).ToFunc()
+}
+
+// ByDetectedMimeType orders the results by the detected_mime_type field.
+func ByDetectedMimeType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDetectedMimeType, opts...).ToFunc()
+}
+
+// ByMd5Hash orders the results by the md5_hash field.
+func ByMd5Hash(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldMd5Hash, opts...).ToFunc()
+}
+
+// ByDetectedContentType orders the results by the detected_content_type field.
+func ByDetectedContentType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDetectedContentType, opts...).ToFunc()
 }
 
 // ByStoreKey orders the results by the store_key field.
@@ -199,14 +238,34 @@ func ByStoreKey(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStoreKey, opts...).ToFunc()
 }
 
-// ByCategory orders the results by the category field.
-func ByCategory(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldCategory, opts...).ToFunc()
+// ByCorrelationID orders the results by the correlation_id field.
+func ByCorrelationID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCorrelationID, opts...).ToFunc()
 }
 
-// ByAnnotation orders the results by the annotation field.
-func ByAnnotation(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldAnnotation, opts...).ToFunc()
+// ByCategoryType orders the results by the category_type field.
+func ByCategoryType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCategoryType, opts...).ToFunc()
+}
+
+// ByURI orders the results by the uri field.
+func ByURI(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldURI, opts...).ToFunc()
+}
+
+// ByStorageScheme orders the results by the storage_scheme field.
+func ByStorageScheme(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStorageScheme, opts...).ToFunc()
+}
+
+// ByStorageVolume orders the results by the storage_volume field.
+func ByStorageVolume(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStorageVolume, opts...).ToFunc()
+}
+
+// ByStoragePath orders the results by the storage_path field.
+func ByStoragePath(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStoragePath, opts...).ToFunc()
 }
 
 var (

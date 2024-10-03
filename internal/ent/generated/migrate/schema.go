@@ -773,28 +773,27 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString, Unique: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "file_name", Type: field.TypeString},
-		{Name: "file_extension", Type: field.TypeString},
-		{Name: "file_size", Type: field.TypeInt, Nullable: true},
-		{Name: "content_type", Type: field.TypeString},
-		{Name: "store_key", Type: field.TypeString},
-		{Name: "category", Type: field.TypeString, Nullable: true},
-		{Name: "annotation", Type: field.TypeString, Nullable: true},
-		{Name: "user_files", Type: field.TypeString, Nullable: true},
+		{Name: "provided_file_name", Type: field.TypeString},
+		{Name: "provided_file_extension", Type: field.TypeString},
+		{Name: "provided_file_size", Type: field.TypeInt64, Nullable: true},
+		{Name: "persisted_file_size", Type: field.TypeInt64, Nullable: true},
+		{Name: "detected_mime_type", Type: field.TypeString, Nullable: true},
+		{Name: "md5_hash", Type: field.TypeString, Nullable: true},
+		{Name: "detected_content_type", Type: field.TypeString},
+		{Name: "store_key", Type: field.TypeString, Nullable: true},
+		{Name: "correlation_id", Type: field.TypeString, Nullable: true},
+		{Name: "category_type", Type: field.TypeString, Nullable: true},
+		{Name: "uri", Type: field.TypeString, Nullable: true},
+		{Name: "storage_scheme", Type: field.TypeString, Nullable: true},
+		{Name: "storage_volume", Type: field.TypeString, Nullable: true},
+		{Name: "storage_path", Type: field.TypeString, Nullable: true},
+		{Name: "file_contents", Type: field.TypeBytes, Nullable: true},
 	}
 	// FilesTable holds the schema information for the "files" table.
 	FilesTable = &schema.Table{
 		Name:       "files",
 		Columns:    FilesColumns,
 		PrimaryKey: []*schema.Column{FilesColumns[0]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "files_users_files",
-				Columns:    []*schema.Column{FilesColumns[16]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-		},
 	}
 	// FileHistoryColumns holds the columns for the "file_history" table.
 	FileHistoryColumns = []*schema.Column{
@@ -810,13 +809,21 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "file_name", Type: field.TypeString},
-		{Name: "file_extension", Type: field.TypeString},
-		{Name: "file_size", Type: field.TypeInt, Nullable: true},
-		{Name: "content_type", Type: field.TypeString},
-		{Name: "store_key", Type: field.TypeString},
-		{Name: "category", Type: field.TypeString, Nullable: true},
-		{Name: "annotation", Type: field.TypeString, Nullable: true},
+		{Name: "provided_file_name", Type: field.TypeString},
+		{Name: "provided_file_extension", Type: field.TypeString},
+		{Name: "provided_file_size", Type: field.TypeInt64, Nullable: true},
+		{Name: "persisted_file_size", Type: field.TypeInt64, Nullable: true},
+		{Name: "detected_mime_type", Type: field.TypeString, Nullable: true},
+		{Name: "md5_hash", Type: field.TypeString, Nullable: true},
+		{Name: "detected_content_type", Type: field.TypeString},
+		{Name: "store_key", Type: field.TypeString, Nullable: true},
+		{Name: "correlation_id", Type: field.TypeString, Nullable: true},
+		{Name: "category_type", Type: field.TypeString, Nullable: true},
+		{Name: "uri", Type: field.TypeString, Nullable: true},
+		{Name: "storage_scheme", Type: field.TypeString, Nullable: true},
+		{Name: "storage_volume", Type: field.TypeString, Nullable: true},
+		{Name: "storage_path", Type: field.TypeString, Nullable: true},
+		{Name: "file_contents", Type: field.TypeBytes, Nullable: true},
 	}
 	// FileHistoryTable holds the schema information for the "file_history" table.
 	FileHistoryTable = &schema.Table{
@@ -2126,6 +2133,56 @@ var (
 			},
 		},
 	}
+	// ContactFilesColumns holds the columns for the "contact_files" table.
+	ContactFilesColumns = []*schema.Column{
+		{Name: "contact_id", Type: field.TypeString},
+		{Name: "file_id", Type: field.TypeString},
+	}
+	// ContactFilesTable holds the schema information for the "contact_files" table.
+	ContactFilesTable = &schema.Table{
+		Name:       "contact_files",
+		Columns:    ContactFilesColumns,
+		PrimaryKey: []*schema.Column{ContactFilesColumns[0], ContactFilesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "contact_files_contact_id",
+				Columns:    []*schema.Column{ContactFilesColumns[0]},
+				RefColumns: []*schema.Column{ContactsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "contact_files_file_id",
+				Columns:    []*schema.Column{ContactFilesColumns[1]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// DocumentDataFilesColumns holds the columns for the "document_data_files" table.
+	DocumentDataFilesColumns = []*schema.Column{
+		{Name: "document_data_id", Type: field.TypeString},
+		{Name: "file_id", Type: field.TypeString},
+	}
+	// DocumentDataFilesTable holds the schema information for the "document_data_files" table.
+	DocumentDataFilesTable = &schema.Table{
+		Name:       "document_data_files",
+		Columns:    DocumentDataFilesColumns,
+		PrimaryKey: []*schema.Column{DocumentDataFilesColumns[0], DocumentDataFilesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "document_data_files_document_data_id",
+				Columns:    []*schema.Column{DocumentDataFilesColumns[0]},
+				RefColumns: []*schema.Column{DocumentDataColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "document_data_files_file_id",
+				Columns:    []*schema.Column{DocumentDataFilesColumns[1]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// EntitlementEventsColumns holds the columns for the "entitlement_events" table.
 	EntitlementEventsColumns = []*schema.Column{
 		{Name: "entitlement_id", Type: field.TypeString},
@@ -2296,6 +2353,31 @@ var (
 			{
 				Symbol:     "feature_events_event_id",
 				Columns:    []*schema.Column{FeatureEventsColumns[1]},
+				RefColumns: []*schema.Column{EventsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// FileEventsColumns holds the columns for the "file_events" table.
+	FileEventsColumns = []*schema.Column{
+		{Name: "file_id", Type: field.TypeString},
+		{Name: "event_id", Type: field.TypeString},
+	}
+	// FileEventsTable holds the schema information for the "file_events" table.
+	FileEventsTable = &schema.Table{
+		Name:       "file_events",
+		Columns:    FileEventsColumns,
+		PrimaryKey: []*schema.Column{FileEventsColumns[0], FileEventsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "file_events_file_id",
+				Columns:    []*schema.Column{FileEventsColumns[0]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "file_events_event_id",
+				Columns:    []*schema.Column{FileEventsColumns[1]},
 				RefColumns: []*schema.Column{EventsColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
@@ -2676,6 +2758,31 @@ var (
 			},
 		},
 	}
+	// OrganizationSettingFilesColumns holds the columns for the "organization_setting_files" table.
+	OrganizationSettingFilesColumns = []*schema.Column{
+		{Name: "organization_setting_id", Type: field.TypeString},
+		{Name: "file_id", Type: field.TypeString},
+	}
+	// OrganizationSettingFilesTable holds the schema information for the "organization_setting_files" table.
+	OrganizationSettingFilesTable = &schema.Table{
+		Name:       "organization_setting_files",
+		Columns:    OrganizationSettingFilesColumns,
+		PrimaryKey: []*schema.Column{OrganizationSettingFilesColumns[0], OrganizationSettingFilesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "organization_setting_files_organization_setting_id",
+				Columns:    []*schema.Column{OrganizationSettingFilesColumns[0]},
+				RefColumns: []*schema.Column{OrganizationSettingsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "organization_setting_files_file_id",
+				Columns:    []*schema.Column{OrganizationSettingFilesColumns[1]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// PersonalAccessTokenEventsColumns holds the columns for the "personal_access_token_events" table.
 	PersonalAccessTokenEventsColumns = []*schema.Column{
 		{Name: "personal_access_token_id", Type: field.TypeString},
@@ -2726,6 +2833,56 @@ var (
 			},
 		},
 	}
+	// TemplateFilesColumns holds the columns for the "template_files" table.
+	TemplateFilesColumns = []*schema.Column{
+		{Name: "template_id", Type: field.TypeString},
+		{Name: "file_id", Type: field.TypeString},
+	}
+	// TemplateFilesTable holds the schema information for the "template_files" table.
+	TemplateFilesTable = &schema.Table{
+		Name:       "template_files",
+		Columns:    TemplateFilesColumns,
+		PrimaryKey: []*schema.Column{TemplateFilesColumns[0], TemplateFilesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "template_files_template_id",
+				Columns:    []*schema.Column{TemplateFilesColumns[0]},
+				RefColumns: []*schema.Column{TemplatesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "template_files_file_id",
+				Columns:    []*schema.Column{TemplateFilesColumns[1]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// UserFilesColumns holds the columns for the "user_files" table.
+	UserFilesColumns = []*schema.Column{
+		{Name: "user_id", Type: field.TypeString},
+		{Name: "file_id", Type: field.TypeString},
+	}
+	// UserFilesTable holds the schema information for the "user_files" table.
+	UserFilesTable = &schema.Table{
+		Name:       "user_files",
+		Columns:    UserFilesColumns,
+		PrimaryKey: []*schema.Column{UserFilesColumns[0], UserFilesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "user_files_user_id",
+				Columns:    []*schema.Column{UserFilesColumns[0]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "user_files_file_id",
+				Columns:    []*schema.Column{UserFilesColumns[1]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// UserEventsColumns holds the columns for the "user_events" table.
 	UserEventsColumns = []*schema.Column{
 		{Name: "user_id", Type: field.TypeString},
@@ -2747,6 +2904,31 @@ var (
 				Symbol:     "user_events_event_id",
 				Columns:    []*schema.Column{UserEventsColumns[1]},
 				RefColumns: []*schema.Column{EventsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// UserSettingFilesColumns holds the columns for the "user_setting_files" table.
+	UserSettingFilesColumns = []*schema.Column{
+		{Name: "user_setting_id", Type: field.TypeString},
+		{Name: "file_id", Type: field.TypeString},
+	}
+	// UserSettingFilesTable holds the schema information for the "user_setting_files" table.
+	UserSettingFilesTable = &schema.Table{
+		Name:       "user_setting_files",
+		Columns:    UserSettingFilesColumns,
+		PrimaryKey: []*schema.Column{UserSettingFilesColumns[0], UserSettingFilesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "user_setting_files_user_setting_id",
+				Columns:    []*schema.Column{UserSettingFilesColumns[0]},
+				RefColumns: []*schema.Column{UserSettingsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "user_setting_files_file_id",
+				Columns:    []*schema.Column{UserSettingFilesColumns[1]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 		},
@@ -2835,6 +3017,8 @@ var (
 		WebauthnsTable,
 		WebhooksTable,
 		WebhookHistoryTable,
+		ContactFilesTable,
+		DocumentDataFilesTable,
 		EntitlementEventsTable,
 		EntitlementPlanEventsTable,
 		EntitlementPlanFeatureEventsTable,
@@ -2842,6 +3026,7 @@ var (
 		EntityDocumentsTable,
 		EntityFilesTable,
 		FeatureEventsTable,
+		FileEventsTable,
 		GroupEventsTable,
 		GroupFilesTable,
 		GroupMembershipEventsTable,
@@ -2857,9 +3042,13 @@ var (
 		OrganizationEventsTable,
 		OrganizationSecretsTable,
 		OrganizationFilesTable,
+		OrganizationSettingFilesTable,
 		PersonalAccessTokenEventsTable,
 		SubscriberEventsTable,
+		TemplateFilesTable,
+		UserFilesTable,
 		UserEventsTable,
+		UserSettingFilesTable,
 		WebhookEventsTable,
 	}
 )
@@ -2909,7 +3098,6 @@ func init() {
 	FeatureHistoryTable.Annotation = &entsql.Annotation{
 		Table: "feature_history",
 	}
-	FilesTable.ForeignKeys[0].RefTable = UsersTable
 	FileHistoryTable.Annotation = &entsql.Annotation{
 		Table: "file_history",
 	}
@@ -2978,6 +3166,10 @@ func init() {
 	WebhookHistoryTable.Annotation = &entsql.Annotation{
 		Table: "webhook_history",
 	}
+	ContactFilesTable.ForeignKeys[0].RefTable = ContactsTable
+	ContactFilesTable.ForeignKeys[1].RefTable = FilesTable
+	DocumentDataFilesTable.ForeignKeys[0].RefTable = DocumentDataTable
+	DocumentDataFilesTable.ForeignKeys[1].RefTable = FilesTable
 	EntitlementEventsTable.ForeignKeys[0].RefTable = EntitlementsTable
 	EntitlementEventsTable.ForeignKeys[1].RefTable = EventsTable
 	EntitlementPlanEventsTable.ForeignKeys[0].RefTable = EntitlementPlansTable
@@ -2992,6 +3184,8 @@ func init() {
 	EntityFilesTable.ForeignKeys[1].RefTable = FilesTable
 	FeatureEventsTable.ForeignKeys[0].RefTable = FeaturesTable
 	FeatureEventsTable.ForeignKeys[1].RefTable = EventsTable
+	FileEventsTable.ForeignKeys[0].RefTable = FilesTable
+	FileEventsTable.ForeignKeys[1].RefTable = EventsTable
 	GroupEventsTable.ForeignKeys[0].RefTable = GroupsTable
 	GroupEventsTable.ForeignKeys[1].RefTable = EventsTable
 	GroupFilesTable.ForeignKeys[0].RefTable = GroupsTable
@@ -3022,12 +3216,20 @@ func init() {
 	OrganizationSecretsTable.ForeignKeys[1].RefTable = HushesTable
 	OrganizationFilesTable.ForeignKeys[0].RefTable = OrganizationsTable
 	OrganizationFilesTable.ForeignKeys[1].RefTable = FilesTable
+	OrganizationSettingFilesTable.ForeignKeys[0].RefTable = OrganizationSettingsTable
+	OrganizationSettingFilesTable.ForeignKeys[1].RefTable = FilesTable
 	PersonalAccessTokenEventsTable.ForeignKeys[0].RefTable = PersonalAccessTokensTable
 	PersonalAccessTokenEventsTable.ForeignKeys[1].RefTable = EventsTable
 	SubscriberEventsTable.ForeignKeys[0].RefTable = SubscribersTable
 	SubscriberEventsTable.ForeignKeys[1].RefTable = EventsTable
+	TemplateFilesTable.ForeignKeys[0].RefTable = TemplatesTable
+	TemplateFilesTable.ForeignKeys[1].RefTable = FilesTable
+	UserFilesTable.ForeignKeys[0].RefTable = UsersTable
+	UserFilesTable.ForeignKeys[1].RefTable = FilesTable
 	UserEventsTable.ForeignKeys[0].RefTable = UsersTable
 	UserEventsTable.ForeignKeys[1].RefTable = EventsTable
+	UserSettingFilesTable.ForeignKeys[0].RefTable = UserSettingsTable
+	UserSettingFilesTable.ForeignKeys[1].RefTable = FilesTable
 	WebhookEventsTable.ForeignKeys[0].RefTable = WebhooksTable
 	WebhookEventsTable.ForeignKeys[1].RefTable = EventsTable
 }

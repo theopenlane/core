@@ -1257,10 +1257,14 @@ func init() {
 	fileDescTags := fileMixinFields3[0].Descriptor()
 	// file.DefaultTags holds the default value on creation for the tags field.
 	file.DefaultTags = fileDescTags.Default.([]string)
-	// fileDescFileSize is the schema descriptor for file_size field.
-	fileDescFileSize := fileFields[2].Descriptor()
-	// file.FileSizeValidator is a validator for the "file_size" field. It is called by the builders before save.
-	file.FileSizeValidator = fileDescFileSize.Validators[0].(func(int) error)
+	// fileDescProvidedFileSize is the schema descriptor for provided_file_size field.
+	fileDescProvidedFileSize := fileFields[2].Descriptor()
+	// file.ProvidedFileSizeValidator is a validator for the "provided_file_size" field. It is called by the builders before save.
+	file.ProvidedFileSizeValidator = fileDescProvidedFileSize.Validators[0].(func(int64) error)
+	// fileDescPersistedFileSize is the schema descriptor for persisted_file_size field.
+	fileDescPersistedFileSize := fileFields[3].Descriptor()
+	// file.PersistedFileSizeValidator is a validator for the "persisted_file_size" field. It is called by the builders before save.
+	file.PersistedFileSizeValidator = fileDescPersistedFileSize.Validators[0].(func(int64) error)
 	// fileDescID is the schema descriptor for id field.
 	fileDescID := fileMixinFields2[0].Descriptor()
 	// file.DefaultID holds the default value on creation for the id field.

@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/pkg/enums"
@@ -293,6 +294,21 @@ func (cu *ContactUpdate) AddEntities(e ...*Entity) *ContactUpdate {
 	return cu.AddEntityIDs(ids...)
 }
 
+// AddFileIDs adds the "files" edge to the File entity by IDs.
+func (cu *ContactUpdate) AddFileIDs(ids ...string) *ContactUpdate {
+	cu.mutation.AddFileIDs(ids...)
+	return cu
+}
+
+// AddFiles adds the "files" edges to the File entity.
+func (cu *ContactUpdate) AddFiles(f ...*File) *ContactUpdate {
+	ids := make([]string, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return cu.AddFileIDs(ids...)
+}
+
 // Mutation returns the ContactMutation object of the builder.
 func (cu *ContactUpdate) Mutation() *ContactMutation {
 	return cu.mutation
@@ -323,6 +339,27 @@ func (cu *ContactUpdate) RemoveEntities(e ...*Entity) *ContactUpdate {
 		ids[i] = e[i].ID
 	}
 	return cu.RemoveEntityIDs(ids...)
+}
+
+// ClearFiles clears all "files" edges to the File entity.
+func (cu *ContactUpdate) ClearFiles() *ContactUpdate {
+	cu.mutation.ClearFiles()
+	return cu
+}
+
+// RemoveFileIDs removes the "files" edge to File entities by IDs.
+func (cu *ContactUpdate) RemoveFileIDs(ids ...string) *ContactUpdate {
+	cu.mutation.RemoveFileIDs(ids...)
+	return cu
+}
+
+// RemoveFiles removes "files" edges to File entities.
+func (cu *ContactUpdate) RemoveFiles(f ...*File) *ContactUpdate {
+	ids := make([]string, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return cu.RemoveFileIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -566,6 +603,54 @@ func (cu *ContactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			},
 		}
 		edge.Schema = cu.schemaConfig.EntityContacts
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if cu.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   contact.FilesTable,
+			Columns: contact.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cu.schemaConfig.ContactFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cu.mutation.RemovedFilesIDs(); len(nodes) > 0 && !cu.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   contact.FilesTable,
+			Columns: contact.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cu.schemaConfig.ContactFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cu.mutation.FilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   contact.FilesTable,
+			Columns: contact.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cu.schemaConfig.ContactFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -853,6 +938,21 @@ func (cuo *ContactUpdateOne) AddEntities(e ...*Entity) *ContactUpdateOne {
 	return cuo.AddEntityIDs(ids...)
 }
 
+// AddFileIDs adds the "files" edge to the File entity by IDs.
+func (cuo *ContactUpdateOne) AddFileIDs(ids ...string) *ContactUpdateOne {
+	cuo.mutation.AddFileIDs(ids...)
+	return cuo
+}
+
+// AddFiles adds the "files" edges to the File entity.
+func (cuo *ContactUpdateOne) AddFiles(f ...*File) *ContactUpdateOne {
+	ids := make([]string, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return cuo.AddFileIDs(ids...)
+}
+
 // Mutation returns the ContactMutation object of the builder.
 func (cuo *ContactUpdateOne) Mutation() *ContactMutation {
 	return cuo.mutation
@@ -883,6 +983,27 @@ func (cuo *ContactUpdateOne) RemoveEntities(e ...*Entity) *ContactUpdateOne {
 		ids[i] = e[i].ID
 	}
 	return cuo.RemoveEntityIDs(ids...)
+}
+
+// ClearFiles clears all "files" edges to the File entity.
+func (cuo *ContactUpdateOne) ClearFiles() *ContactUpdateOne {
+	cuo.mutation.ClearFiles()
+	return cuo
+}
+
+// RemoveFileIDs removes the "files" edge to File entities by IDs.
+func (cuo *ContactUpdateOne) RemoveFileIDs(ids ...string) *ContactUpdateOne {
+	cuo.mutation.RemoveFileIDs(ids...)
+	return cuo
+}
+
+// RemoveFiles removes "files" edges to File entities.
+func (cuo *ContactUpdateOne) RemoveFiles(f ...*File) *ContactUpdateOne {
+	ids := make([]string, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return cuo.RemoveFileIDs(ids...)
 }
 
 // Where appends a list predicates to the ContactUpdate builder.
@@ -1156,6 +1277,54 @@ func (cuo *ContactUpdateOne) sqlSave(ctx context.Context) (_node *Contact, err e
 			},
 		}
 		edge.Schema = cuo.schemaConfig.EntityContacts
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if cuo.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   contact.FilesTable,
+			Columns: contact.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cuo.schemaConfig.ContactFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cuo.mutation.RemovedFilesIDs(); len(nodes) > 0 && !cuo.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   contact.FilesTable,
+			Columns: contact.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cuo.schemaConfig.ContactFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cuo.mutation.FilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   contact.FilesTable,
+			Columns: contact.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cuo.schemaConfig.ContactFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

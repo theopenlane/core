@@ -57,13 +57,16 @@ type DocumentDataEdges struct {
 	Template *Template `json:"template,omitempty"`
 	// Entity holds the value of the entity edge.
 	Entity []*Entity `json:"entity,omitempty"`
+	// Files holds the value of the files edge.
+	Files []*File `json:"files,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [4]bool
 	// totalCount holds the count of the edges above.
-	totalCount [3]map[string]int
+	totalCount [4]map[string]int
 
 	namedEntity map[string][]*Entity
+	namedFiles  map[string][]*File
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -95,6 +98,15 @@ func (e DocumentDataEdges) EntityOrErr() ([]*Entity, error) {
 		return e.Entity, nil
 	}
 	return nil, &NotLoadedError{edge: "entity"}
+}
+
+// FilesOrErr returns the Files value or an error if the edge
+// was not loaded in eager-loading.
+func (e DocumentDataEdges) FilesOrErr() ([]*File, error) {
+	if e.loadedTypes[3] {
+		return e.Files, nil
+	}
+	return nil, &NotLoadedError{edge: "files"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -227,6 +239,11 @@ func (dd *DocumentData) QueryEntity() *EntityQuery {
 	return NewDocumentDataClient(dd.config).QueryEntity(dd)
 }
 
+// QueryFiles queries the "files" edge of the DocumentData entity.
+func (dd *DocumentData) QueryFiles() *FileQuery {
+	return NewDocumentDataClient(dd.config).QueryFiles(dd)
+}
+
 // Update returns a builder for updating this DocumentData.
 // Note that you need to call DocumentData.Unwrap() before calling this method if this DocumentData
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -307,6 +324,30 @@ func (dd *DocumentData) appendNamedEntity(name string, edges ...*Entity) {
 		dd.Edges.namedEntity[name] = []*Entity{}
 	} else {
 		dd.Edges.namedEntity[name] = append(dd.Edges.namedEntity[name], edges...)
+	}
+}
+
+// NamedFiles returns the Files named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (dd *DocumentData) NamedFiles(name string) ([]*File, error) {
+	if dd.Edges.namedFiles == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := dd.Edges.namedFiles[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (dd *DocumentData) appendNamedFiles(name string, edges ...*File) {
+	if dd.Edges.namedFiles == nil {
+		dd.Edges.namedFiles = make(map[string][]*File)
+	}
+	if len(edges) == 0 {
+		dd.Edges.namedFiles[name] = []*File{}
+	} else {
+		dd.Edges.namedFiles[name] = append(dd.Edges.namedFiles[name], edges...)
 	}
 }
 

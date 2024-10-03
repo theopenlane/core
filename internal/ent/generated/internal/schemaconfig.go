@@ -9,8 +9,10 @@ import "context"
 type SchemaConfig struct {
 	APIToken                         string // APIToken table.
 	Contact                          string // Contact table.
+	ContactFiles                     string // Contact-files->File table.
 	ContactHistory                   string // ContactHistory table.
 	DocumentData                     string // DocumentData table.
+	DocumentDataFiles                string // DocumentData-files->File table.
 	DocumentDataHistory              string // DocumentDataHistory table.
 	EmailVerificationToken           string // EmailVerificationToken table.
 	Entitlement                      string // Entitlement table.
@@ -35,6 +37,7 @@ type SchemaConfig struct {
 	FeatureEvents                    string // Feature-events->Event table.
 	FeatureHistory                   string // FeatureHistory table.
 	File                             string // File table.
+	FileEvents                       string // File-events->Event table.
 	FileHistory                      string // FileHistory table.
 	Group                            string // Group table.
 	GroupEvents                      string // Group-events->Event table.
@@ -72,6 +75,7 @@ type SchemaConfig struct {
 	OrganizationFiles                string // Organization-files->File table.
 	OrganizationHistory              string // OrganizationHistory table.
 	OrganizationSetting              string // OrganizationSetting table.
+	OrganizationSettingFiles         string // OrganizationSetting-files->File table.
 	OrganizationSettingHistory       string // OrganizationSettingHistory table.
 	PasswordResetToken               string // PasswordResetToken table.
 	PersonalAccessToken              string // PersonalAccessToken table.
@@ -80,11 +84,14 @@ type SchemaConfig struct {
 	SubscriberEvents                 string // Subscriber-events->Event table.
 	TFASetting                       string // TFASetting table.
 	Template                         string // Template table.
+	TemplateFiles                    string // Template-files->File table.
 	TemplateHistory                  string // TemplateHistory table.
 	User                             string // User table.
+	UserFiles                        string // User-files->File table.
 	UserEvents                       string // User-events->Event table.
 	UserHistory                      string // UserHistory table.
 	UserSetting                      string // UserSetting table.
+	UserSettingFiles                 string // UserSetting-files->File table.
 	UserSettingHistory               string // UserSettingHistory table.
 	Webauthn                         string // Webauthn table.
 	Webhook                          string // Webhook table.

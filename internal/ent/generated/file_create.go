@@ -10,11 +10,17 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/contact"
+	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
+	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
+	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 )
 
 // FileCreate is the builder for creating a File entity.
@@ -128,35 +134,77 @@ func (fc *FileCreate) SetTags(s []string) *FileCreate {
 	return fc
 }
 
-// SetFileName sets the "file_name" field.
-func (fc *FileCreate) SetFileName(s string) *FileCreate {
-	fc.mutation.SetFileName(s)
+// SetProvidedFileName sets the "provided_file_name" field.
+func (fc *FileCreate) SetProvidedFileName(s string) *FileCreate {
+	fc.mutation.SetProvidedFileName(s)
 	return fc
 }
 
-// SetFileExtension sets the "file_extension" field.
-func (fc *FileCreate) SetFileExtension(s string) *FileCreate {
-	fc.mutation.SetFileExtension(s)
+// SetProvidedFileExtension sets the "provided_file_extension" field.
+func (fc *FileCreate) SetProvidedFileExtension(s string) *FileCreate {
+	fc.mutation.SetProvidedFileExtension(s)
 	return fc
 }
 
-// SetFileSize sets the "file_size" field.
-func (fc *FileCreate) SetFileSize(i int) *FileCreate {
-	fc.mutation.SetFileSize(i)
+// SetProvidedFileSize sets the "provided_file_size" field.
+func (fc *FileCreate) SetProvidedFileSize(i int64) *FileCreate {
+	fc.mutation.SetProvidedFileSize(i)
 	return fc
 }
 
-// SetNillableFileSize sets the "file_size" field if the given value is not nil.
-func (fc *FileCreate) SetNillableFileSize(i *int) *FileCreate {
+// SetNillableProvidedFileSize sets the "provided_file_size" field if the given value is not nil.
+func (fc *FileCreate) SetNillableProvidedFileSize(i *int64) *FileCreate {
 	if i != nil {
-		fc.SetFileSize(*i)
+		fc.SetProvidedFileSize(*i)
 	}
 	return fc
 }
 
-// SetContentType sets the "content_type" field.
-func (fc *FileCreate) SetContentType(s string) *FileCreate {
-	fc.mutation.SetContentType(s)
+// SetPersistedFileSize sets the "persisted_file_size" field.
+func (fc *FileCreate) SetPersistedFileSize(i int64) *FileCreate {
+	fc.mutation.SetPersistedFileSize(i)
+	return fc
+}
+
+// SetNillablePersistedFileSize sets the "persisted_file_size" field if the given value is not nil.
+func (fc *FileCreate) SetNillablePersistedFileSize(i *int64) *FileCreate {
+	if i != nil {
+		fc.SetPersistedFileSize(*i)
+	}
+	return fc
+}
+
+// SetDetectedMimeType sets the "detected_mime_type" field.
+func (fc *FileCreate) SetDetectedMimeType(s string) *FileCreate {
+	fc.mutation.SetDetectedMimeType(s)
+	return fc
+}
+
+// SetNillableDetectedMimeType sets the "detected_mime_type" field if the given value is not nil.
+func (fc *FileCreate) SetNillableDetectedMimeType(s *string) *FileCreate {
+	if s != nil {
+		fc.SetDetectedMimeType(*s)
+	}
+	return fc
+}
+
+// SetMd5Hash sets the "md5_hash" field.
+func (fc *FileCreate) SetMd5Hash(s string) *FileCreate {
+	fc.mutation.SetMd5Hash(s)
+	return fc
+}
+
+// SetNillableMd5Hash sets the "md5_hash" field if the given value is not nil.
+func (fc *FileCreate) SetNillableMd5Hash(s *string) *FileCreate {
+	if s != nil {
+		fc.SetMd5Hash(*s)
+	}
+	return fc
+}
+
+// SetDetectedContentType sets the "detected_content_type" field.
+func (fc *FileCreate) SetDetectedContentType(s string) *FileCreate {
+	fc.mutation.SetDetectedContentType(s)
 	return fc
 }
 
@@ -166,31 +214,101 @@ func (fc *FileCreate) SetStoreKey(s string) *FileCreate {
 	return fc
 }
 
-// SetCategory sets the "category" field.
-func (fc *FileCreate) SetCategory(s string) *FileCreate {
-	fc.mutation.SetCategory(s)
-	return fc
-}
-
-// SetNillableCategory sets the "category" field if the given value is not nil.
-func (fc *FileCreate) SetNillableCategory(s *string) *FileCreate {
+// SetNillableStoreKey sets the "store_key" field if the given value is not nil.
+func (fc *FileCreate) SetNillableStoreKey(s *string) *FileCreate {
 	if s != nil {
-		fc.SetCategory(*s)
+		fc.SetStoreKey(*s)
 	}
 	return fc
 }
 
-// SetAnnotation sets the "annotation" field.
-func (fc *FileCreate) SetAnnotation(s string) *FileCreate {
-	fc.mutation.SetAnnotation(s)
+// SetCorrelationID sets the "correlation_id" field.
+func (fc *FileCreate) SetCorrelationID(s string) *FileCreate {
+	fc.mutation.SetCorrelationID(s)
 	return fc
 }
 
-// SetNillableAnnotation sets the "annotation" field if the given value is not nil.
-func (fc *FileCreate) SetNillableAnnotation(s *string) *FileCreate {
+// SetNillableCorrelationID sets the "correlation_id" field if the given value is not nil.
+func (fc *FileCreate) SetNillableCorrelationID(s *string) *FileCreate {
 	if s != nil {
-		fc.SetAnnotation(*s)
+		fc.SetCorrelationID(*s)
 	}
+	return fc
+}
+
+// SetCategoryType sets the "category_type" field.
+func (fc *FileCreate) SetCategoryType(s string) *FileCreate {
+	fc.mutation.SetCategoryType(s)
+	return fc
+}
+
+// SetNillableCategoryType sets the "category_type" field if the given value is not nil.
+func (fc *FileCreate) SetNillableCategoryType(s *string) *FileCreate {
+	if s != nil {
+		fc.SetCategoryType(*s)
+	}
+	return fc
+}
+
+// SetURI sets the "uri" field.
+func (fc *FileCreate) SetURI(s string) *FileCreate {
+	fc.mutation.SetURI(s)
+	return fc
+}
+
+// SetNillableURI sets the "uri" field if the given value is not nil.
+func (fc *FileCreate) SetNillableURI(s *string) *FileCreate {
+	if s != nil {
+		fc.SetURI(*s)
+	}
+	return fc
+}
+
+// SetStorageScheme sets the "storage_scheme" field.
+func (fc *FileCreate) SetStorageScheme(s string) *FileCreate {
+	fc.mutation.SetStorageScheme(s)
+	return fc
+}
+
+// SetNillableStorageScheme sets the "storage_scheme" field if the given value is not nil.
+func (fc *FileCreate) SetNillableStorageScheme(s *string) *FileCreate {
+	if s != nil {
+		fc.SetStorageScheme(*s)
+	}
+	return fc
+}
+
+// SetStorageVolume sets the "storage_volume" field.
+func (fc *FileCreate) SetStorageVolume(s string) *FileCreate {
+	fc.mutation.SetStorageVolume(s)
+	return fc
+}
+
+// SetNillableStorageVolume sets the "storage_volume" field if the given value is not nil.
+func (fc *FileCreate) SetNillableStorageVolume(s *string) *FileCreate {
+	if s != nil {
+		fc.SetStorageVolume(*s)
+	}
+	return fc
+}
+
+// SetStoragePath sets the "storage_path" field.
+func (fc *FileCreate) SetStoragePath(s string) *FileCreate {
+	fc.mutation.SetStoragePath(s)
+	return fc
+}
+
+// SetNillableStoragePath sets the "storage_path" field if the given value is not nil.
+func (fc *FileCreate) SetNillableStoragePath(s *string) *FileCreate {
+	if s != nil {
+		fc.SetStoragePath(*s)
+	}
+	return fc
+}
+
+// SetFileContents sets the "file_contents" field.
+func (fc *FileCreate) SetFileContents(b []byte) *FileCreate {
+	fc.mutation.SetFileContents(b)
 	return fc
 }
 
@@ -208,23 +326,19 @@ func (fc *FileCreate) SetNillableID(s *string) *FileCreate {
 	return fc
 }
 
-// SetUserID sets the "user" edge to the User entity by ID.
-func (fc *FileCreate) SetUserID(id string) *FileCreate {
-	fc.mutation.SetUserID(id)
+// AddUserIDs adds the "user" edge to the User entity by IDs.
+func (fc *FileCreate) AddUserIDs(ids ...string) *FileCreate {
+	fc.mutation.AddUserIDs(ids...)
 	return fc
 }
 
-// SetNillableUserID sets the "user" edge to the User entity by ID if the given value is not nil.
-func (fc *FileCreate) SetNillableUserID(id *string) *FileCreate {
-	if id != nil {
-		fc = fc.SetUserID(*id)
+// AddUser adds the "user" edges to the User entity.
+func (fc *FileCreate) AddUser(u ...*User) *FileCreate {
+	ids := make([]string, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
 	}
-	return fc
-}
-
-// SetUser sets the "user" edge to the User entity.
-func (fc *FileCreate) SetUser(u *User) *FileCreate {
-	return fc.SetUserID(u.ID)
+	return fc.AddUserIDs(ids...)
 }
 
 // AddOrganizationIDs adds the "organization" edge to the Organization entity by IDs.
@@ -242,6 +356,36 @@ func (fc *FileCreate) AddOrganization(o ...*Organization) *FileCreate {
 	return fc.AddOrganizationIDs(ids...)
 }
 
+// AddGroupIDs adds the "group" edge to the Group entity by IDs.
+func (fc *FileCreate) AddGroupIDs(ids ...string) *FileCreate {
+	fc.mutation.AddGroupIDs(ids...)
+	return fc
+}
+
+// AddGroup adds the "group" edges to the Group entity.
+func (fc *FileCreate) AddGroup(g ...*Group) *FileCreate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return fc.AddGroupIDs(ids...)
+}
+
+// AddContactIDs adds the "contact" edge to the Contact entity by IDs.
+func (fc *FileCreate) AddContactIDs(ids ...string) *FileCreate {
+	fc.mutation.AddContactIDs(ids...)
+	return fc
+}
+
+// AddContact adds the "contact" edges to the Contact entity.
+func (fc *FileCreate) AddContact(c ...*Contact) *FileCreate {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return fc.AddContactIDs(ids...)
+}
+
 // AddEntityIDs adds the "entity" edge to the Entity entity by IDs.
 func (fc *FileCreate) AddEntityIDs(ids ...string) *FileCreate {
 	fc.mutation.AddEntityIDs(ids...)
@@ -257,19 +401,79 @@ func (fc *FileCreate) AddEntity(e ...*Entity) *FileCreate {
 	return fc.AddEntityIDs(ids...)
 }
 
-// AddGroupIDs adds the "group" edge to the Group entity by IDs.
-func (fc *FileCreate) AddGroupIDs(ids ...string) *FileCreate {
-	fc.mutation.AddGroupIDs(ids...)
+// AddUsersettingIDs adds the "usersetting" edge to the UserSetting entity by IDs.
+func (fc *FileCreate) AddUsersettingIDs(ids ...string) *FileCreate {
+	fc.mutation.AddUsersettingIDs(ids...)
 	return fc
 }
 
-// AddGroup adds the "group" edges to the Group entity.
-func (fc *FileCreate) AddGroup(g ...*Group) *FileCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+// AddUsersetting adds the "usersetting" edges to the UserSetting entity.
+func (fc *FileCreate) AddUsersetting(u ...*UserSetting) *FileCreate {
+	ids := make([]string, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
 	}
-	return fc.AddGroupIDs(ids...)
+	return fc.AddUsersettingIDs(ids...)
+}
+
+// AddOrganizationsettingIDs adds the "organizationsetting" edge to the OrganizationSetting entity by IDs.
+func (fc *FileCreate) AddOrganizationsettingIDs(ids ...string) *FileCreate {
+	fc.mutation.AddOrganizationsettingIDs(ids...)
+	return fc
+}
+
+// AddOrganizationsetting adds the "organizationsetting" edges to the OrganizationSetting entity.
+func (fc *FileCreate) AddOrganizationsetting(o ...*OrganizationSetting) *FileCreate {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return fc.AddOrganizationsettingIDs(ids...)
+}
+
+// AddTemplateIDs adds the "template" edge to the Template entity by IDs.
+func (fc *FileCreate) AddTemplateIDs(ids ...string) *FileCreate {
+	fc.mutation.AddTemplateIDs(ids...)
+	return fc
+}
+
+// AddTemplate adds the "template" edges to the Template entity.
+func (fc *FileCreate) AddTemplate(t ...*Template) *FileCreate {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return fc.AddTemplateIDs(ids...)
+}
+
+// AddDocumentdatumIDs adds the "documentdata" edge to the DocumentData entity by IDs.
+func (fc *FileCreate) AddDocumentdatumIDs(ids ...string) *FileCreate {
+	fc.mutation.AddDocumentdatumIDs(ids...)
+	return fc
+}
+
+// AddDocumentdata adds the "documentdata" edges to the DocumentData entity.
+func (fc *FileCreate) AddDocumentdata(d ...*DocumentData) *FileCreate {
+	ids := make([]string, len(d))
+	for i := range d {
+		ids[i] = d[i].ID
+	}
+	return fc.AddDocumentdatumIDs(ids...)
+}
+
+// AddEventIDs adds the "events" edge to the Event entity by IDs.
+func (fc *FileCreate) AddEventIDs(ids ...string) *FileCreate {
+	fc.mutation.AddEventIDs(ids...)
+	return fc
+}
+
+// AddEvents adds the "events" edges to the Event entity.
+func (fc *FileCreate) AddEvents(e ...*Event) *FileCreate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return fc.AddEventIDs(ids...)
 }
 
 // Mutation returns the FileMutation object of the builder.
@@ -349,22 +553,24 @@ func (fc *FileCreate) check() error {
 	if _, ok := fc.mutation.MappingID(); !ok {
 		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "File.mapping_id"`)}
 	}
-	if _, ok := fc.mutation.FileName(); !ok {
-		return &ValidationError{Name: "file_name", err: errors.New(`generated: missing required field "File.file_name"`)}
+	if _, ok := fc.mutation.ProvidedFileName(); !ok {
+		return &ValidationError{Name: "provided_file_name", err: errors.New(`generated: missing required field "File.provided_file_name"`)}
 	}
-	if _, ok := fc.mutation.FileExtension(); !ok {
-		return &ValidationError{Name: "file_extension", err: errors.New(`generated: missing required field "File.file_extension"`)}
+	if _, ok := fc.mutation.ProvidedFileExtension(); !ok {
+		return &ValidationError{Name: "provided_file_extension", err: errors.New(`generated: missing required field "File.provided_file_extension"`)}
 	}
-	if v, ok := fc.mutation.FileSize(); ok {
-		if err := file.FileSizeValidator(v); err != nil {
-			return &ValidationError{Name: "file_size", err: fmt.Errorf(`generated: validator failed for field "File.file_size": %w`, err)}
+	if v, ok := fc.mutation.ProvidedFileSize(); ok {
+		if err := file.ProvidedFileSizeValidator(v); err != nil {
+			return &ValidationError{Name: "provided_file_size", err: fmt.Errorf(`generated: validator failed for field "File.provided_file_size": %w`, err)}
 		}
 	}
-	if _, ok := fc.mutation.ContentType(); !ok {
-		return &ValidationError{Name: "content_type", err: errors.New(`generated: missing required field "File.content_type"`)}
+	if v, ok := fc.mutation.PersistedFileSize(); ok {
+		if err := file.PersistedFileSizeValidator(v); err != nil {
+			return &ValidationError{Name: "persisted_file_size", err: fmt.Errorf(`generated: validator failed for field "File.persisted_file_size": %w`, err)}
+		}
 	}
-	if _, ok := fc.mutation.StoreKey(); !ok {
-		return &ValidationError{Name: "store_key", err: errors.New(`generated: missing required field "File.store_key"`)}
+	if _, ok := fc.mutation.DetectedContentType(); !ok {
+		return &ValidationError{Name: "detected_content_type", err: errors.New(`generated: missing required field "File.detected_content_type"`)}
 	}
 	return nil
 }
@@ -434,50 +640,81 @@ func (fc *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 		_spec.SetField(file.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := fc.mutation.FileName(); ok {
-		_spec.SetField(file.FieldFileName, field.TypeString, value)
-		_node.FileName = value
+	if value, ok := fc.mutation.ProvidedFileName(); ok {
+		_spec.SetField(file.FieldProvidedFileName, field.TypeString, value)
+		_node.ProvidedFileName = value
 	}
-	if value, ok := fc.mutation.FileExtension(); ok {
-		_spec.SetField(file.FieldFileExtension, field.TypeString, value)
-		_node.FileExtension = value
+	if value, ok := fc.mutation.ProvidedFileExtension(); ok {
+		_spec.SetField(file.FieldProvidedFileExtension, field.TypeString, value)
+		_node.ProvidedFileExtension = value
 	}
-	if value, ok := fc.mutation.FileSize(); ok {
-		_spec.SetField(file.FieldFileSize, field.TypeInt, value)
-		_node.FileSize = value
+	if value, ok := fc.mutation.ProvidedFileSize(); ok {
+		_spec.SetField(file.FieldProvidedFileSize, field.TypeInt64, value)
+		_node.ProvidedFileSize = value
 	}
-	if value, ok := fc.mutation.ContentType(); ok {
-		_spec.SetField(file.FieldContentType, field.TypeString, value)
-		_node.ContentType = value
+	if value, ok := fc.mutation.PersistedFileSize(); ok {
+		_spec.SetField(file.FieldPersistedFileSize, field.TypeInt64, value)
+		_node.PersistedFileSize = value
+	}
+	if value, ok := fc.mutation.DetectedMimeType(); ok {
+		_spec.SetField(file.FieldDetectedMimeType, field.TypeString, value)
+		_node.DetectedMimeType = value
+	}
+	if value, ok := fc.mutation.Md5Hash(); ok {
+		_spec.SetField(file.FieldMd5Hash, field.TypeString, value)
+		_node.Md5Hash = value
+	}
+	if value, ok := fc.mutation.DetectedContentType(); ok {
+		_spec.SetField(file.FieldDetectedContentType, field.TypeString, value)
+		_node.DetectedContentType = value
 	}
 	if value, ok := fc.mutation.StoreKey(); ok {
 		_spec.SetField(file.FieldStoreKey, field.TypeString, value)
 		_node.StoreKey = value
 	}
-	if value, ok := fc.mutation.Category(); ok {
-		_spec.SetField(file.FieldCategory, field.TypeString, value)
-		_node.Category = value
+	if value, ok := fc.mutation.CorrelationID(); ok {
+		_spec.SetField(file.FieldCorrelationID, field.TypeString, value)
+		_node.CorrelationID = value
 	}
-	if value, ok := fc.mutation.Annotation(); ok {
-		_spec.SetField(file.FieldAnnotation, field.TypeString, value)
-		_node.Annotation = value
+	if value, ok := fc.mutation.CategoryType(); ok {
+		_spec.SetField(file.FieldCategoryType, field.TypeString, value)
+		_node.CategoryType = value
+	}
+	if value, ok := fc.mutation.URI(); ok {
+		_spec.SetField(file.FieldURI, field.TypeString, value)
+		_node.URI = value
+	}
+	if value, ok := fc.mutation.StorageScheme(); ok {
+		_spec.SetField(file.FieldStorageScheme, field.TypeString, value)
+		_node.StorageScheme = value
+	}
+	if value, ok := fc.mutation.StorageVolume(); ok {
+		_spec.SetField(file.FieldStorageVolume, field.TypeString, value)
+		_node.StorageVolume = value
+	}
+	if value, ok := fc.mutation.StoragePath(); ok {
+		_spec.SetField(file.FieldStoragePath, field.TypeString, value)
+		_node.StoragePath = value
+	}
+	if value, ok := fc.mutation.FileContents(); ok {
+		_spec.SetField(file.FieldFileContents, field.TypeBytes, value)
+		_node.FileContents = value
 	}
 	if nodes := fc.mutation.UserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
+			Rel:     sqlgraph.M2M,
 			Inverse: true,
 			Table:   file.UserTable,
-			Columns: []string{file.UserColumn},
+			Columns: file.UserPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = fc.schemaConfig.File
+		edge.Schema = fc.schemaConfig.UserFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.user_files = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := fc.mutation.OrganizationIDs(); len(nodes) > 0 {
@@ -492,6 +729,40 @@ func (fc *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = fc.schemaConfig.OrganizationFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := fc.mutation.GroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.GroupTable,
+			Columns: file.GroupPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fc.schemaConfig.GroupFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := fc.mutation.ContactIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.ContactTable,
+			Columns: file.ContactPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contact.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fc.schemaConfig.ContactFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -514,18 +785,86 @@ func (fc *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := fc.mutation.GroupIDs(); len(nodes) > 0 {
+	if nodes := fc.mutation.UsersettingIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   file.GroupTable,
-			Columns: file.GroupPrimaryKey,
+			Table:   file.UsersettingTable,
+			Columns: file.UsersettingPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(usersetting.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = fc.schemaConfig.GroupFiles
+		edge.Schema = fc.schemaConfig.UserSettingFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := fc.mutation.OrganizationsettingIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.OrganizationsettingTable,
+			Columns: file.OrganizationsettingPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organizationsetting.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fc.schemaConfig.OrganizationSettingFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := fc.mutation.TemplateIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.TemplateTable,
+			Columns: file.TemplatePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fc.schemaConfig.TemplateFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := fc.mutation.DocumentdataIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.DocumentdataTable,
+			Columns: file.DocumentdataPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fc.schemaConfig.DocumentDataFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := fc.mutation.EventsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   file.EventsTable,
+			Columns: file.EventsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fc.schemaConfig.FileEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

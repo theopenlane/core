@@ -409,12 +409,18 @@ func adminSearchFiles(ctx context.Context, query string) ([]*generated.File, err
 				likeQuery := "%" + query + "%"
 				s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
 			},
-			file.FileNameContainsFold(query),      // search by FileName
-			file.FileExtensionContainsFold(query), // search by FileExtension
-			file.ContentTypeContainsFold(query),   // search by ContentType
-			file.StoreKeyContainsFold(query),      // search by StoreKey
-			file.CategoryContainsFold(query),      // search by Category
-			file.AnnotationContainsFold(query),    // search by Annotation
+			file.ProvidedFileNameContainsFold(query),      // search by ProvidedFileName
+			file.ProvidedFileExtensionContainsFold(query), // search by ProvidedFileExtension
+			file.DetectedMimeTypeContainsFold(query),      // search by DetectedMimeType
+			file.Md5HashContainsFold(query),               // search by Md5Hash
+			file.DetectedContentTypeContainsFold(query),   // search by DetectedContentType
+			file.StoreKeyContainsFold(query),              // search by StoreKey
+			file.CorrelationIDContainsFold(query),         // search by CorrelationID
+			file.CategoryTypeContainsFold(query),          // search by CategoryType
+			file.URIContainsFold(query),                   // search by URI
+			file.StorageSchemeContainsFold(query),         // search by StorageScheme
+			file.StorageVolumeContainsFold(query),         // search by StorageVolume
+			file.StoragePathContainsFold(query),           // search by StoragePath
 		),
 	).All(ctx)
 }

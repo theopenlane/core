@@ -15,6 +15,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 
@@ -30,9 +31,11 @@ type ContactQuery struct {
 	predicates        []predicate.Contact
 	withOwner         *OrganizationQuery
 	withEntities      *EntityQuery
+	withFiles         *FileQuery
 	loadTotal         []func(context.Context, []*Contact) error
 	modifiers         []func(*sql.Selector)
 	withNamedEntities map[string]*EntityQuery
+	withNamedFiles    map[string]*FileQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -113,6 +116,31 @@ func (cq *ContactQuery) QueryEntities() *EntityQuery {
 		schemaConfig := cq.schemaConfig
 		step.To.Schema = schemaConfig.Entity
 		step.Edge.Schema = schemaConfig.EntityContacts
+		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryFiles chains the current query on the "files" edge.
+func (cq *ContactQuery) QueryFiles() *FileQuery {
+	query := (&FileClient{config: cq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := cq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := cq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(contact.Table, contact.FieldID, selector),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, contact.FilesTable, contact.FilesPrimaryKey...),
+		)
+		schemaConfig := cq.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.ContactFiles
 		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -313,6 +341,7 @@ func (cq *ContactQuery) Clone() *ContactQuery {
 		predicates:   append([]predicate.Contact{}, cq.predicates...),
 		withOwner:    cq.withOwner.Clone(),
 		withEntities: cq.withEntities.Clone(),
+		withFiles:    cq.withFiles.Clone(),
 		// clone intermediate query.
 		sql:       cq.sql.Clone(),
 		path:      cq.path,
@@ -339,6 +368,17 @@ func (cq *ContactQuery) WithEntities(opts ...func(*EntityQuery)) *ContactQuery {
 		opt(query)
 	}
 	cq.withEntities = query
+	return cq
+}
+
+// WithFiles tells the query-builder to eager-load the nodes that are connected to
+// the "files" edge. The optional arguments are used to configure the query builder of the edge.
+func (cq *ContactQuery) WithFiles(opts ...func(*FileQuery)) *ContactQuery {
+	query := (&FileClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	cq.withFiles = query
 	return cq
 }
 
@@ -426,9 +466,10 @@ func (cq *ContactQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 	var (
 		nodes       = []*Contact{}
 		_spec       = cq.querySpec()
-		loadedTypes = [2]bool{
+		loadedTypes = [3]bool{
 			cq.withOwner != nil,
 			cq.withEntities != nil,
+			cq.withFiles != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -467,10 +508,24 @@ func (cq *ContactQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 			return nil, err
 		}
 	}
+	if query := cq.withFiles; query != nil {
+		if err := cq.loadFiles(ctx, query, nodes,
+			func(n *Contact) { n.Edges.Files = []*File{} },
+			func(n *Contact, e *File) { n.Edges.Files = append(n.Edges.Files, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range cq.withNamedEntities {
 		if err := cq.loadEntities(ctx, query, nodes,
 			func(n *Contact) { n.appendNamedEntities(name) },
 			func(n *Contact, e *Entity) { n.appendNamedEntities(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range cq.withNamedFiles {
+		if err := cq.loadFiles(ctx, query, nodes,
+			func(n *Contact) { n.appendNamedFiles(name) },
+			func(n *Contact, e *File) { n.appendNamedFiles(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -566,6 +621,68 @@ func (cq *ContactQuery) loadEntities(ctx context.Context, query *EntityQuery, no
 		nodes, ok := nids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected "entities" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (cq *ContactQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []*Contact, init func(*Contact), assign func(*Contact, *File)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Contact)
+	nids := make(map[string]map[*Contact]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(contact.FilesTable)
+		joinT.Schema(cq.schemaConfig.ContactFiles)
+		s.Join(joinT).On(s.C(file.FieldID), joinT.C(contact.FilesPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(contact.FilesPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(contact.FilesPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Contact]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*File](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "files" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -686,6 +803,20 @@ func (cq *ContactQuery) WithNamedEntities(name string, opts ...func(*EntityQuery
 		cq.withNamedEntities = make(map[string]*EntityQuery)
 	}
 	cq.withNamedEntities[name] = query
+	return cq
+}
+
+// WithNamedFiles tells the query-builder to eager-load the nodes that are connected to the "files"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (cq *ContactQuery) WithNamedFiles(name string, opts ...func(*FileQuery)) *ContactQuery {
+	query := (&FileClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if cq.withNamedFiles == nil {
+		cq.withNamedFiles = make(map[string]*FileQuery)
+	}
+	cq.withNamedFiles[name] = query
 	return cq
 }
 

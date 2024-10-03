@@ -133,6 +133,7 @@ type CreateContactInput struct {
 	Status      *enums.UserStatus
 	OwnerID     *string
 	EntityIDs   []string
+	FileIDs     []string
 }
 
 // Mutate applies the CreateContactInput on the ContactMutation builder.
@@ -165,6 +166,9 @@ func (i *CreateContactInput) Mutate(m *ContactMutation) {
 	if v := i.EntityIDs; len(v) > 0 {
 		m.AddEntityIDs(v...)
 	}
+	if v := i.FileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateContactInput on the ContactCreate builder.
@@ -195,6 +199,9 @@ type UpdateContactInput struct {
 	ClearEntities    bool
 	AddEntityIDs     []string
 	RemoveEntityIDs  []string
+	ClearFiles       bool
+	AddFileIDs       []string
+	RemoveFileIDs    []string
 }
 
 // Mutate applies the UpdateContactInput on the ContactMutation builder.
@@ -259,6 +266,15 @@ func (i *UpdateContactInput) Mutate(m *ContactMutation) {
 	if v := i.RemoveEntityIDs; len(v) > 0 {
 		m.RemoveEntityIDs(v...)
 	}
+	if i.ClearFiles {
+		m.ClearFiles()
+	}
+	if v := i.AddFileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
+	if v := i.RemoveFileIDs; len(v) > 0 {
+		m.RemoveFileIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the UpdateContactInput on the ContactUpdate builder.
@@ -280,6 +296,7 @@ type CreateDocumentDataInput struct {
 	OwnerID    *string
 	TemplateID string
 	EntityIDs  []string
+	FileIDs    []string
 }
 
 // Mutate applies the CreateDocumentDataInput on the DocumentDataMutation builder.
@@ -296,6 +313,9 @@ func (i *CreateDocumentDataInput) Mutate(m *DocumentDataMutation) {
 	m.SetTemplateID(i.TemplateID)
 	if v := i.EntityIDs; len(v) > 0 {
 		m.AddEntityIDs(v...)
+	}
+	if v := i.FileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
 	}
 }
 
@@ -317,6 +337,9 @@ type UpdateDocumentDataInput struct {
 	ClearEntity     bool
 	AddEntityIDs    []string
 	RemoveEntityIDs []string
+	ClearFiles      bool
+	AddFileIDs      []string
+	RemoveFileIDs   []string
 }
 
 // Mutate applies the UpdateDocumentDataInput on the DocumentDataMutation builder.
@@ -350,6 +373,15 @@ func (i *UpdateDocumentDataInput) Mutate(m *DocumentDataMutation) {
 	}
 	if v := i.RemoveEntityIDs; len(v) > 0 {
 		m.RemoveEntityIDs(v...)
+	}
+	if i.ClearFiles {
+		m.ClearFiles()
+	}
+	if v := i.AddFileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
+	if v := i.RemoveFileIDs; len(v) > 0 {
+		m.RemoveFileIDs(v...)
 	}
 }
 
@@ -1041,6 +1073,7 @@ type CreateEventInput struct {
 	EntitlementIDs         []string
 	WebhookIDs             []string
 	SubscriberIDs          []string
+	FileIDs                []string
 }
 
 // Mutate applies the CreateEventInput on the EventMutation builder.
@@ -1096,6 +1129,9 @@ func (i *CreateEventInput) Mutate(m *EventMutation) {
 	}
 	if v := i.SubscriberIDs; len(v) > 0 {
 		m.AddSubscriberIDs(v...)
+	}
+	if v := i.FileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
 	}
 }
 
@@ -1156,6 +1192,9 @@ type UpdateEventInput struct {
 	ClearSubscriber              bool
 	AddSubscriberIDs             []string
 	RemoveSubscriberIDs          []string
+	ClearFile                    bool
+	AddFileIDs                   []string
+	RemoveFileIDs                []string
 }
 
 // Mutate applies the UpdateEventInput on the EventMutation builder.
@@ -1306,6 +1345,15 @@ func (i *UpdateEventInput) Mutate(m *EventMutation) {
 	}
 	if v := i.RemoveSubscriberIDs; len(v) > 0 {
 		m.RemoveSubscriberIDs(v...)
+	}
+	if i.ClearFile {
+		m.ClearFile()
+	}
+	if v := i.AddFileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
+	if v := i.RemoveFileIDs; len(v) > 0 {
+		m.RemoveFileIDs(v...)
 	}
 }
 
@@ -1463,18 +1511,31 @@ func (c *FeatureUpdateOne) SetInput(i UpdateFeatureInput) *FeatureUpdateOne {
 
 // CreateFileInput represents a mutation input for creating files.
 type CreateFileInput struct {
-	Tags            []string
-	FileName        string
-	FileExtension   string
-	FileSize        *int
-	ContentType     string
-	StoreKey        string
-	Category        *string
-	Annotation      *string
-	UserID          *string
-	OrganizationIDs []string
-	EntityIDs       []string
-	GroupIDs        []string
+	Tags                   []string
+	ProvidedFileName       string
+	ProvidedFileExtension  string
+	ProvidedFileSize       *int64
+	PersistedFileSize      *int64
+	DetectedMimeType       *string
+	Md5Hash                *string
+	DetectedContentType    string
+	StoreKey               *string
+	CorrelationID          *string
+	CategoryType           *string
+	URI                    *string
+	StorageScheme          *string
+	StorageVolume          *string
+	StoragePath            *string
+	UserIDs                []string
+	OrganizationIDs        []string
+	GroupIDs               []string
+	ContactIDs             []string
+	EntityIDs              []string
+	UsersettingIDs         []string
+	OrganizationsettingIDs []string
+	TemplateIDs            []string
+	DocumentdatumIDs       []string
+	EventIDs               []string
 }
 
 // Mutate applies the CreateFileInput on the FileMutation builder.
@@ -1482,30 +1543,71 @@ func (i *CreateFileInput) Mutate(m *FileMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
 	}
-	m.SetFileName(i.FileName)
-	m.SetFileExtension(i.FileExtension)
-	if v := i.FileSize; v != nil {
-		m.SetFileSize(*v)
+	m.SetProvidedFileName(i.ProvidedFileName)
+	m.SetProvidedFileExtension(i.ProvidedFileExtension)
+	if v := i.ProvidedFileSize; v != nil {
+		m.SetProvidedFileSize(*v)
 	}
-	m.SetContentType(i.ContentType)
-	m.SetStoreKey(i.StoreKey)
-	if v := i.Category; v != nil {
-		m.SetCategory(*v)
+	if v := i.PersistedFileSize; v != nil {
+		m.SetPersistedFileSize(*v)
 	}
-	if v := i.Annotation; v != nil {
-		m.SetAnnotation(*v)
+	if v := i.DetectedMimeType; v != nil {
+		m.SetDetectedMimeType(*v)
 	}
-	if v := i.UserID; v != nil {
-		m.SetUserID(*v)
+	if v := i.Md5Hash; v != nil {
+		m.SetMd5Hash(*v)
+	}
+	m.SetDetectedContentType(i.DetectedContentType)
+	if v := i.StoreKey; v != nil {
+		m.SetStoreKey(*v)
+	}
+	if v := i.CorrelationID; v != nil {
+		m.SetCorrelationID(*v)
+	}
+	if v := i.CategoryType; v != nil {
+		m.SetCategoryType(*v)
+	}
+	if v := i.URI; v != nil {
+		m.SetURI(*v)
+	}
+	if v := i.StorageScheme; v != nil {
+		m.SetStorageScheme(*v)
+	}
+	if v := i.StorageVolume; v != nil {
+		m.SetStorageVolume(*v)
+	}
+	if v := i.StoragePath; v != nil {
+		m.SetStoragePath(*v)
+	}
+	if v := i.UserIDs; len(v) > 0 {
+		m.AddUserIDs(v...)
 	}
 	if v := i.OrganizationIDs; len(v) > 0 {
 		m.AddOrganizationIDs(v...)
 	}
+	if v := i.GroupIDs; len(v) > 0 {
+		m.AddGroupIDs(v...)
+	}
+	if v := i.ContactIDs; len(v) > 0 {
+		m.AddContactIDs(v...)
+	}
 	if v := i.EntityIDs; len(v) > 0 {
 		m.AddEntityIDs(v...)
 	}
-	if v := i.GroupIDs; len(v) > 0 {
-		m.AddGroupIDs(v...)
+	if v := i.UsersettingIDs; len(v) > 0 {
+		m.AddUsersettingIDs(v...)
+	}
+	if v := i.OrganizationsettingIDs; len(v) > 0 {
+		m.AddOrganizationsettingIDs(v...)
+	}
+	if v := i.TemplateIDs; len(v) > 0 {
+		m.AddTemplateIDs(v...)
+	}
+	if v := i.DocumentdatumIDs; len(v) > 0 {
+		m.AddDocumentdatumIDs(v...)
+	}
+	if v := i.EventIDs; len(v) > 0 {
+		m.AddEventIDs(v...)
 	}
 }
 
@@ -1517,30 +1619,64 @@ func (c *FileCreate) SetInput(i CreateFileInput) *FileCreate {
 
 // UpdateFileInput represents a mutation input for updating files.
 type UpdateFileInput struct {
-	ClearTags             bool
-	Tags                  []string
-	AppendTags            []string
-	FileName              *string
-	FileExtension         *string
-	ClearFileSize         bool
-	FileSize              *int
-	ContentType           *string
-	StoreKey              *string
-	ClearCategory         bool
-	Category              *string
-	ClearAnnotation       bool
-	Annotation            *string
-	ClearUser             bool
-	UserID                *string
-	ClearOrganization     bool
-	AddOrganizationIDs    []string
-	RemoveOrganizationIDs []string
-	ClearEntity           bool
-	AddEntityIDs          []string
-	RemoveEntityIDs       []string
-	ClearGroup            bool
-	AddGroupIDs           []string
-	RemoveGroupIDs        []string
+	ClearTags                    bool
+	Tags                         []string
+	AppendTags                   []string
+	ProvidedFileName             *string
+	ProvidedFileExtension        *string
+	ClearProvidedFileSize        bool
+	ProvidedFileSize             *int64
+	ClearPersistedFileSize       bool
+	PersistedFileSize            *int64
+	ClearDetectedMimeType        bool
+	DetectedMimeType             *string
+	ClearMd5Hash                 bool
+	Md5Hash                      *string
+	DetectedContentType          *string
+	ClearStoreKey                bool
+	StoreKey                     *string
+	ClearCorrelationID           bool
+	CorrelationID                *string
+	ClearCategoryType            bool
+	CategoryType                 *string
+	ClearURI                     bool
+	URI                          *string
+	ClearStorageScheme           bool
+	StorageScheme                *string
+	ClearStorageVolume           bool
+	StorageVolume                *string
+	ClearStoragePath             bool
+	StoragePath                  *string
+	ClearUser                    bool
+	AddUserIDs                   []string
+	RemoveUserIDs                []string
+	ClearOrganization            bool
+	AddOrganizationIDs           []string
+	RemoveOrganizationIDs        []string
+	ClearGroup                   bool
+	AddGroupIDs                  []string
+	RemoveGroupIDs               []string
+	ClearContact                 bool
+	AddContactIDs                []string
+	RemoveContactIDs             []string
+	ClearEntity                  bool
+	AddEntityIDs                 []string
+	RemoveEntityIDs              []string
+	ClearUsersetting             bool
+	AddUsersettingIDs            []string
+	RemoveUsersettingIDs         []string
+	ClearOrganizationsetting     bool
+	AddOrganizationsettingIDs    []string
+	RemoveOrganizationsettingIDs []string
+	ClearTemplate                bool
+	AddTemplateIDs               []string
+	RemoveTemplateIDs            []string
+	ClearDocumentdata            bool
+	AddDocumentdatumIDs          []string
+	RemoveDocumentdatumIDs       []string
+	ClearEvents                  bool
+	AddEventIDs                  []string
+	RemoveEventIDs               []string
 }
 
 // Mutate applies the UpdateFileInput on the FileMutation builder.
@@ -1554,41 +1690,89 @@ func (i *UpdateFileInput) Mutate(m *FileMutation) {
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
 	}
-	if v := i.FileName; v != nil {
-		m.SetFileName(*v)
+	if v := i.ProvidedFileName; v != nil {
+		m.SetProvidedFileName(*v)
 	}
-	if v := i.FileExtension; v != nil {
-		m.SetFileExtension(*v)
+	if v := i.ProvidedFileExtension; v != nil {
+		m.SetProvidedFileExtension(*v)
 	}
-	if i.ClearFileSize {
-		m.ClearFileSize()
+	if i.ClearProvidedFileSize {
+		m.ClearProvidedFileSize()
 	}
-	if v := i.FileSize; v != nil {
-		m.SetFileSize(*v)
+	if v := i.ProvidedFileSize; v != nil {
+		m.SetProvidedFileSize(*v)
 	}
-	if v := i.ContentType; v != nil {
-		m.SetContentType(*v)
+	if i.ClearPersistedFileSize {
+		m.ClearPersistedFileSize()
+	}
+	if v := i.PersistedFileSize; v != nil {
+		m.SetPersistedFileSize(*v)
+	}
+	if i.ClearDetectedMimeType {
+		m.ClearDetectedMimeType()
+	}
+	if v := i.DetectedMimeType; v != nil {
+		m.SetDetectedMimeType(*v)
+	}
+	if i.ClearMd5Hash {
+		m.ClearMd5Hash()
+	}
+	if v := i.Md5Hash; v != nil {
+		m.SetMd5Hash(*v)
+	}
+	if v := i.DetectedContentType; v != nil {
+		m.SetDetectedContentType(*v)
+	}
+	if i.ClearStoreKey {
+		m.ClearStoreKey()
 	}
 	if v := i.StoreKey; v != nil {
 		m.SetStoreKey(*v)
 	}
-	if i.ClearCategory {
-		m.ClearCategory()
+	if i.ClearCorrelationID {
+		m.ClearCorrelationID()
 	}
-	if v := i.Category; v != nil {
-		m.SetCategory(*v)
+	if v := i.CorrelationID; v != nil {
+		m.SetCorrelationID(*v)
 	}
-	if i.ClearAnnotation {
-		m.ClearAnnotation()
+	if i.ClearCategoryType {
+		m.ClearCategoryType()
 	}
-	if v := i.Annotation; v != nil {
-		m.SetAnnotation(*v)
+	if v := i.CategoryType; v != nil {
+		m.SetCategoryType(*v)
+	}
+	if i.ClearURI {
+		m.ClearURI()
+	}
+	if v := i.URI; v != nil {
+		m.SetURI(*v)
+	}
+	if i.ClearStorageScheme {
+		m.ClearStorageScheme()
+	}
+	if v := i.StorageScheme; v != nil {
+		m.SetStorageScheme(*v)
+	}
+	if i.ClearStorageVolume {
+		m.ClearStorageVolume()
+	}
+	if v := i.StorageVolume; v != nil {
+		m.SetStorageVolume(*v)
+	}
+	if i.ClearStoragePath {
+		m.ClearStoragePath()
+	}
+	if v := i.StoragePath; v != nil {
+		m.SetStoragePath(*v)
 	}
 	if i.ClearUser {
 		m.ClearUser()
 	}
-	if v := i.UserID; v != nil {
-		m.SetUserID(*v)
+	if v := i.AddUserIDs; len(v) > 0 {
+		m.AddUserIDs(v...)
+	}
+	if v := i.RemoveUserIDs; len(v) > 0 {
+		m.RemoveUserIDs(v...)
 	}
 	if i.ClearOrganization {
 		m.ClearOrganization()
@@ -1599,6 +1783,24 @@ func (i *UpdateFileInput) Mutate(m *FileMutation) {
 	if v := i.RemoveOrganizationIDs; len(v) > 0 {
 		m.RemoveOrganizationIDs(v...)
 	}
+	if i.ClearGroup {
+		m.ClearGroup()
+	}
+	if v := i.AddGroupIDs; len(v) > 0 {
+		m.AddGroupIDs(v...)
+	}
+	if v := i.RemoveGroupIDs; len(v) > 0 {
+		m.RemoveGroupIDs(v...)
+	}
+	if i.ClearContact {
+		m.ClearContact()
+	}
+	if v := i.AddContactIDs; len(v) > 0 {
+		m.AddContactIDs(v...)
+	}
+	if v := i.RemoveContactIDs; len(v) > 0 {
+		m.RemoveContactIDs(v...)
+	}
 	if i.ClearEntity {
 		m.ClearEntity()
 	}
@@ -1608,14 +1810,50 @@ func (i *UpdateFileInput) Mutate(m *FileMutation) {
 	if v := i.RemoveEntityIDs; len(v) > 0 {
 		m.RemoveEntityIDs(v...)
 	}
-	if i.ClearGroup {
-		m.ClearGroup()
+	if i.ClearUsersetting {
+		m.ClearUsersetting()
 	}
-	if v := i.AddGroupIDs; len(v) > 0 {
-		m.AddGroupIDs(v...)
+	if v := i.AddUsersettingIDs; len(v) > 0 {
+		m.AddUsersettingIDs(v...)
 	}
-	if v := i.RemoveGroupIDs; len(v) > 0 {
-		m.RemoveGroupIDs(v...)
+	if v := i.RemoveUsersettingIDs; len(v) > 0 {
+		m.RemoveUsersettingIDs(v...)
+	}
+	if i.ClearOrganizationsetting {
+		m.ClearOrganizationsetting()
+	}
+	if v := i.AddOrganizationsettingIDs; len(v) > 0 {
+		m.AddOrganizationsettingIDs(v...)
+	}
+	if v := i.RemoveOrganizationsettingIDs; len(v) > 0 {
+		m.RemoveOrganizationsettingIDs(v...)
+	}
+	if i.ClearTemplate {
+		m.ClearTemplate()
+	}
+	if v := i.AddTemplateIDs; len(v) > 0 {
+		m.AddTemplateIDs(v...)
+	}
+	if v := i.RemoveTemplateIDs; len(v) > 0 {
+		m.RemoveTemplateIDs(v...)
+	}
+	if i.ClearDocumentdata {
+		m.ClearDocumentdata()
+	}
+	if v := i.AddDocumentdatumIDs; len(v) > 0 {
+		m.AddDocumentdatumIDs(v...)
+	}
+	if v := i.RemoveDocumentdatumIDs; len(v) > 0 {
+		m.RemoveDocumentdatumIDs(v...)
+	}
+	if i.ClearEvents {
+		m.ClearEvents()
+	}
+	if v := i.AddEventIDs; len(v) > 0 {
+		m.AddEventIDs(v...)
+	}
+	if v := i.RemoveEventIDs; len(v) > 0 {
+		m.RemoveEventIDs(v...)
 	}
 }
 
@@ -3276,6 +3514,7 @@ type CreateOrganizationSettingInput struct {
 	TaxIdentifier  *string
 	GeoLocation    *enums.Region
 	OrganizationID *string
+	FileIDs        []string
 }
 
 // Mutate applies the CreateOrganizationSettingInput on the OrganizationSettingMutation builder.
@@ -3307,6 +3546,9 @@ func (i *CreateOrganizationSettingInput) Mutate(m *OrganizationSettingMutation) 
 	if v := i.OrganizationID; v != nil {
 		m.SetOrganizationID(*v)
 	}
+	if v := i.FileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateOrganizationSettingInput on the OrganizationSettingCreate builder.
@@ -3337,6 +3579,9 @@ type UpdateOrganizationSettingInput struct {
 	GeoLocation         *enums.Region
 	ClearOrganization   bool
 	OrganizationID      *string
+	ClearFiles          bool
+	AddFileIDs          []string
+	RemoveFileIDs       []string
 }
 
 // Mutate applies the UpdateOrganizationSettingInput on the OrganizationSettingMutation builder.
@@ -3400,6 +3645,15 @@ func (i *UpdateOrganizationSettingInput) Mutate(m *OrganizationSettingMutation) 
 	}
 	if v := i.OrganizationID; v != nil {
 		m.SetOrganizationID(*v)
+	}
+	if i.ClearFiles {
+		m.ClearFiles()
+	}
+	if v := i.AddFileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
+	if v := i.RemoveFileIDs; len(v) > 0 {
+		m.RemoveFileIDs(v...)
 	}
 }
 
@@ -3725,6 +3979,7 @@ type CreateTemplateInput struct {
 	Uischema     customtypes.JSONObject
 	OwnerID      *string
 	DocumentIDs  []string
+	FileIDs      []string
 }
 
 // Mutate applies the CreateTemplateInput on the TemplateMutation builder.
@@ -3751,6 +4006,9 @@ func (i *CreateTemplateInput) Mutate(m *TemplateMutation) {
 	if v := i.DocumentIDs; len(v) > 0 {
 		m.AddDocumentIDs(v...)
 	}
+	if v := i.FileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateTemplateInput on the TemplateCreate builder.
@@ -3776,6 +4034,9 @@ type UpdateTemplateInput struct {
 	ClearDocuments    bool
 	AddDocumentIDs    []string
 	RemoveDocumentIDs []string
+	ClearFiles        bool
+	AddFileIDs        []string
+	RemoveFileIDs     []string
 }
 
 // Mutate applies the UpdateTemplateInput on the TemplateMutation builder.
@@ -3824,6 +4085,15 @@ func (i *UpdateTemplateInput) Mutate(m *TemplateMutation) {
 	}
 	if v := i.RemoveDocumentIDs; len(v) > 0 {
 		m.RemoveDocumentIDs(v...)
+	}
+	if i.ClearFiles {
+		m.ClearFiles()
+	}
+	if v := i.AddFileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
+	if v := i.RemoveFileIDs; len(v) > 0 {
+		m.RemoveFileIDs(v...)
 	}
 }
 
@@ -4179,6 +4449,7 @@ type CreateUserSettingInput struct {
 	IsTfaEnabled      *bool
 	UserID            *string
 	DefaultOrgID      *string
+	FileIDs           []string
 }
 
 // Mutate applies the CreateUserSettingInput on the UserSettingMutation builder.
@@ -4213,6 +4484,9 @@ func (i *CreateUserSettingInput) Mutate(m *UserSettingMutation) {
 	if v := i.DefaultOrgID; v != nil {
 		m.SetDefaultOrgID(*v)
 	}
+	if v := i.FileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateUserSettingInput on the UserSettingCreate builder.
@@ -4241,6 +4515,9 @@ type UpdateUserSettingInput struct {
 	UserID                 *string
 	ClearDefaultOrg        bool
 	DefaultOrgID           *string
+	ClearFiles             bool
+	AddFileIDs             []string
+	RemoveFileIDs          []string
 }
 
 // Mutate applies the UpdateUserSettingInput on the UserSettingMutation builder.
@@ -4298,6 +4575,15 @@ func (i *UpdateUserSettingInput) Mutate(m *UserSettingMutation) {
 	}
 	if v := i.DefaultOrgID; v != nil {
 		m.SetDefaultOrgID(*v)
+	}
+	if i.ClearFiles {
+		m.ClearFiles()
+	}
+	if v := i.AddFileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
+	if v := i.RemoveFileIDs; len(v) > 0 {
+		m.RemoveFileIDs(v...)
 	}
 }
 

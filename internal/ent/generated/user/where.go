@@ -1590,11 +1590,11 @@ func HasFiles() predicate.User {
 	return predicate.User(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, FilesTable, FilesColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, FilesTable, FilesPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.UserFiles
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1605,7 +1605,7 @@ func HasFilesWith(preds ...predicate.File) predicate.User {
 		step := newFilesStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.UserFiles
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

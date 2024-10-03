@@ -78,11 +78,13 @@ type EventEdges struct {
 	Webhook []*Webhook `json:"webhook,omitempty"`
 	// Subscriber holds the value of the subscriber edge.
 	Subscriber []*Subscriber `json:"subscriber,omitempty"`
+	// File holds the value of the file edge.
+	File []*File `json:"file,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [16]bool
+	loadedTypes [17]bool
 	// totalCount holds the count of the edges above.
-	totalCount [16]map[string]int
+	totalCount [17]map[string]int
 
 	namedUser                   map[string][]*User
 	namedGroup                  map[string][]*Group
@@ -100,6 +102,7 @@ type EventEdges struct {
 	namedEntitlement            map[string][]*Entitlement
 	namedWebhook                map[string][]*Webhook
 	namedSubscriber             map[string][]*Subscriber
+	namedFile                   map[string][]*File
 }
 
 // UserOrErr returns the User value or an error if the edge
@@ -244,6 +247,15 @@ func (e EventEdges) SubscriberOrErr() ([]*Subscriber, error) {
 		return e.Subscriber, nil
 	}
 	return nil, &NotLoadedError{edge: "subscriber"}
+}
+
+// FileOrErr returns the File value or an error if the edge
+// was not loaded in eager-loading.
+func (e EventEdges) FileOrErr() ([]*File, error) {
+	if e.loadedTypes[16] {
+		return e.File, nil
+	}
+	return nil, &NotLoadedError{edge: "file"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -433,6 +445,11 @@ func (e *Event) QueryWebhook() *WebhookQuery {
 // QuerySubscriber queries the "subscriber" edge of the Event entity.
 func (e *Event) QuerySubscriber() *SubscriberQuery {
 	return NewEventClient(e.config).QuerySubscriber(e)
+}
+
+// QueryFile queries the "file" edge of the Event entity.
+func (e *Event) QueryFile() *FileQuery {
+	return NewEventClient(e.config).QueryFile(e)
 }
 
 // Update returns a builder for updating this Event.
@@ -872,6 +889,30 @@ func (e *Event) appendNamedSubscriber(name string, edges ...*Subscriber) {
 		e.Edges.namedSubscriber[name] = []*Subscriber{}
 	} else {
 		e.Edges.namedSubscriber[name] = append(e.Edges.namedSubscriber[name], edges...)
+	}
+}
+
+// NamedFile returns the File named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (e *Event) NamedFile(name string) ([]*File, error) {
+	if e.Edges.namedFile == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := e.Edges.namedFile[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (e *Event) appendNamedFile(name string, edges ...*File) {
+	if e.Edges.namedFile == nil {
+		e.Edges.namedFile = make(map[string][]*File)
+	}
+	if len(edges) == 0 {
+		e.Edges.namedFile[name] = []*File{}
+	} else {
+		e.Edges.namedFile[name] = append(e.Edges.namedFile[name], edges...)
 	}
 }
 

@@ -112,6 +112,7 @@ type OpenlaneGraphClient interface {
 	CreateFile(ctx context.Context, input CreateFileInput, interceptors ...clientv2.RequestInterceptor) (*CreateFile, error)
 	DeleteFile(ctx context.Context, deleteFileID string, interceptors ...clientv2.RequestInterceptor) (*DeleteFile, error)
 	GetAllFiles(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllFiles, error)
+	GetFileByID(ctx context.Context, fileID string, interceptors ...clientv2.RequestInterceptor) (*GetFileByID, error)
 	GetFiles(ctx context.Context, where *FileWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetFiles, error)
 	UpdateFile(ctx context.Context, updateFileID string, input UpdateFileInput, interceptors ...clientv2.RequestInterceptor) (*UpdateFile, error)
 	GetAllFileHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllFileHistories, error)
@@ -937,15 +938,21 @@ func (t *AdminSearch_AdminSearch_Nodes_FeatureSearchResult) GetFeatures() []*Adm
 }
 
 type AdminSearch_AdminSearch_Nodes_FileSearchResult_Files struct {
-	DeletedBy     *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
-	ID            string   "json:\"id\" graphql:\"id\""
-	Tags          []string "json:\"tags,omitempty\" graphql:\"tags\""
-	FileName      string   "json:\"fileName\" graphql:\"fileName\""
-	FileExtension string   "json:\"fileExtension\" graphql:\"fileExtension\""
-	ContentType   string   "json:\"contentType\" graphql:\"contentType\""
-	StoreKey      string   "json:\"storeKey\" graphql:\"storeKey\""
-	Category      *string  "json:\"category,omitempty\" graphql:\"category\""
-	Annotation    *string  "json:\"annotation,omitempty\" graphql:\"annotation\""
+	DeletedBy             *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	ID                    string   "json:\"id\" graphql:\"id\""
+	Tags                  []string "json:\"tags,omitempty\" graphql:\"tags\""
+	ProvidedFileName      string   "json:\"providedFileName\" graphql:\"providedFileName\""
+	ProvidedFileExtension string   "json:\"providedFileExtension\" graphql:\"providedFileExtension\""
+	DetectedMimeType      *string  "json:\"detectedMimeType,omitempty\" graphql:\"detectedMimeType\""
+	Md5Hash               *string  "json:\"md5Hash,omitempty\" graphql:\"md5Hash\""
+	DetectedContentType   string   "json:\"detectedContentType\" graphql:\"detectedContentType\""
+	StoreKey              *string  "json:\"storeKey,omitempty\" graphql:\"storeKey\""
+	CorrelationID         *string  "json:\"correlationID,omitempty\" graphql:\"correlationID\""
+	CategoryType          *string  "json:\"categoryType,omitempty\" graphql:\"categoryType\""
+	URI                   *string  "json:\"uri,omitempty\" graphql:\"uri\""
+	StorageScheme         *string  "json:\"storageScheme,omitempty\" graphql:\"storageScheme\""
+	StorageVolume         *string  "json:\"storageVolume,omitempty\" graphql:\"storageVolume\""
+	StoragePath           *string  "json:\"storagePath,omitempty\" graphql:\"storagePath\""
 }
 
 func (t *AdminSearch_AdminSearch_Nodes_FileSearchResult_Files) GetDeletedBy() *string {
@@ -966,41 +973,77 @@ func (t *AdminSearch_AdminSearch_Nodes_FileSearchResult_Files) GetTags() []strin
 	}
 	return t.Tags
 }
-func (t *AdminSearch_AdminSearch_Nodes_FileSearchResult_Files) GetFileName() string {
+func (t *AdminSearch_AdminSearch_Nodes_FileSearchResult_Files) GetProvidedFileName() string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_FileSearchResult_Files{}
 	}
-	return t.FileName
+	return t.ProvidedFileName
 }
-func (t *AdminSearch_AdminSearch_Nodes_FileSearchResult_Files) GetFileExtension() string {
+func (t *AdminSearch_AdminSearch_Nodes_FileSearchResult_Files) GetProvidedFileExtension() string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_FileSearchResult_Files{}
 	}
-	return t.FileExtension
+	return t.ProvidedFileExtension
 }
-func (t *AdminSearch_AdminSearch_Nodes_FileSearchResult_Files) GetContentType() string {
+func (t *AdminSearch_AdminSearch_Nodes_FileSearchResult_Files) GetDetectedMimeType() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_FileSearchResult_Files{}
 	}
-	return t.ContentType
+	return t.DetectedMimeType
 }
-func (t *AdminSearch_AdminSearch_Nodes_FileSearchResult_Files) GetStoreKey() string {
+func (t *AdminSearch_AdminSearch_Nodes_FileSearchResult_Files) GetMd5Hash() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_FileSearchResult_Files{}
+	}
+	return t.Md5Hash
+}
+func (t *AdminSearch_AdminSearch_Nodes_FileSearchResult_Files) GetDetectedContentType() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_FileSearchResult_Files{}
+	}
+	return t.DetectedContentType
+}
+func (t *AdminSearch_AdminSearch_Nodes_FileSearchResult_Files) GetStoreKey() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_FileSearchResult_Files{}
 	}
 	return t.StoreKey
 }
-func (t *AdminSearch_AdminSearch_Nodes_FileSearchResult_Files) GetCategory() *string {
+func (t *AdminSearch_AdminSearch_Nodes_FileSearchResult_Files) GetCorrelationID() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_FileSearchResult_Files{}
 	}
-	return t.Category
+	return t.CorrelationID
 }
-func (t *AdminSearch_AdminSearch_Nodes_FileSearchResult_Files) GetAnnotation() *string {
+func (t *AdminSearch_AdminSearch_Nodes_FileSearchResult_Files) GetCategoryType() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_FileSearchResult_Files{}
 	}
-	return t.Annotation
+	return t.CategoryType
+}
+func (t *AdminSearch_AdminSearch_Nodes_FileSearchResult_Files) GetURI() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_FileSearchResult_Files{}
+	}
+	return t.URI
+}
+func (t *AdminSearch_AdminSearch_Nodes_FileSearchResult_Files) GetStorageScheme() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_FileSearchResult_Files{}
+	}
+	return t.StorageScheme
+}
+func (t *AdminSearch_AdminSearch_Nodes_FileSearchResult_Files) GetStorageVolume() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_FileSearchResult_Files{}
+	}
+	return t.StorageVolume
+}
+func (t *AdminSearch_AdminSearch_Nodes_FileSearchResult_Files) GetStoragePath() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_FileSearchResult_Files{}
+	}
+	return t.StoragePath
 }
 
 type AdminSearch_AdminSearch_Nodes_FileSearchResult struct {
@@ -11874,88 +11917,64 @@ func (t *GetFeatureHistories_FeatureHistories) GetEdges() []*GetFeatureHistories
 	return t.Edges
 }
 
-type CreateBulkCSVFile_CreateBulkCSVFile_Files_User struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkCSVFile_CreateBulkCSVFile_Files_User) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVFile_CreateBulkCSVFile_Files_User{}
-	}
-	return t.ID
-}
-
-type CreateBulkCSVFile_CreateBulkCSVFile_Files_Organization struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkCSVFile_CreateBulkCSVFile_Files_Organization) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVFile_CreateBulkCSVFile_Files_Organization{}
-	}
-	return t.ID
-}
-
-type CreateBulkCSVFile_CreateBulkCSVFile_Files_Group struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkCSVFile_CreateBulkCSVFile_Files_Group) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVFile_CreateBulkCSVFile_Files_Group{}
-	}
-	return t.ID
-}
-
 type CreateBulkCSVFile_CreateBulkCSVFile_Files struct {
-	Annotation    *string                                                   "json:\"annotation,omitempty\" graphql:\"annotation\""
-	Category      *string                                                   "json:\"category,omitempty\" graphql:\"category\""
-	ContentType   string                                                    "json:\"contentType\" graphql:\"contentType\""
-	FileExtension string                                                    "json:\"fileExtension\" graphql:\"fileExtension\""
-	FileName      string                                                    "json:\"fileName\" graphql:\"fileName\""
-	FileSize      *int64                                                    "json:\"fileSize,omitempty\" graphql:\"fileSize\""
-	ID            string                                                    "json:\"id\" graphql:\"id\""
-	StoreKey      string                                                    "json:\"storeKey\" graphql:\"storeKey\""
-	User          *CreateBulkCSVFile_CreateBulkCSVFile_Files_User           "json:\"user,omitempty\" graphql:\"user\""
-	Organization  []*CreateBulkCSVFile_CreateBulkCSVFile_Files_Organization "json:\"organization,omitempty\" graphql:\"organization\""
-	Group         []*CreateBulkCSVFile_CreateBulkCSVFile_Files_Group        "json:\"group,omitempty\" graphql:\"group\""
+	CategoryType          *string    "json:\"categoryType,omitempty\" graphql:\"categoryType\""
+	CorrelationID         *string    "json:\"correlationID,omitempty\" graphql:\"correlationID\""
+	CreatedAt             *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DetectedContentType   string     "json:\"detectedContentType\" graphql:\"detectedContentType\""
+	DetectedMimeType      *string    "json:\"detectedMimeType,omitempty\" graphql:\"detectedMimeType\""
+	ID                    string     "json:\"id\" graphql:\"id\""
+	Md5Hash               *string    "json:\"md5Hash,omitempty\" graphql:\"md5Hash\""
+	PersistedFileSize     *int64     "json:\"persistedFileSize,omitempty\" graphql:\"persistedFileSize\""
+	ProvidedFileExtension string     "json:\"providedFileExtension\" graphql:\"providedFileExtension\""
+	ProvidedFileName      string     "json:\"providedFileName\" graphql:\"providedFileName\""
+	ProvidedFileSize      *int64     "json:\"providedFileSize,omitempty\" graphql:\"providedFileSize\""
+	StoragePath           *string    "json:\"storagePath,omitempty\" graphql:\"storagePath\""
+	StorageScheme         *string    "json:\"storageScheme,omitempty\" graphql:\"storageScheme\""
+	StorageVolume         *string    "json:\"storageVolume,omitempty\" graphql:\"storageVolume\""
+	StoreKey              *string    "json:\"storeKey,omitempty\" graphql:\"storeKey\""
+	Tags                  []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt             *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	URI                   *string    "json:\"uri,omitempty\" graphql:\"uri\""
 }
 
-func (t *CreateBulkCSVFile_CreateBulkCSVFile_Files) GetAnnotation() *string {
+func (t *CreateBulkCSVFile_CreateBulkCSVFile_Files) GetCategoryType() *string {
 	if t == nil {
 		t = &CreateBulkCSVFile_CreateBulkCSVFile_Files{}
 	}
-	return t.Annotation
+	return t.CategoryType
 }
-func (t *CreateBulkCSVFile_CreateBulkCSVFile_Files) GetCategory() *string {
+func (t *CreateBulkCSVFile_CreateBulkCSVFile_Files) GetCorrelationID() *string {
 	if t == nil {
 		t = &CreateBulkCSVFile_CreateBulkCSVFile_Files{}
 	}
-	return t.Category
+	return t.CorrelationID
 }
-func (t *CreateBulkCSVFile_CreateBulkCSVFile_Files) GetContentType() string {
+func (t *CreateBulkCSVFile_CreateBulkCSVFile_Files) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &CreateBulkCSVFile_CreateBulkCSVFile_Files{}
 	}
-	return t.ContentType
+	return t.CreatedAt
 }
-func (t *CreateBulkCSVFile_CreateBulkCSVFile_Files) GetFileExtension() string {
+func (t *CreateBulkCSVFile_CreateBulkCSVFile_Files) GetCreatedBy() *string {
 	if t == nil {
 		t = &CreateBulkCSVFile_CreateBulkCSVFile_Files{}
 	}
-	return t.FileExtension
+	return t.CreatedBy
 }
-func (t *CreateBulkCSVFile_CreateBulkCSVFile_Files) GetFileName() string {
+func (t *CreateBulkCSVFile_CreateBulkCSVFile_Files) GetDetectedContentType() string {
 	if t == nil {
 		t = &CreateBulkCSVFile_CreateBulkCSVFile_Files{}
 	}
-	return t.FileName
+	return t.DetectedContentType
 }
-func (t *CreateBulkCSVFile_CreateBulkCSVFile_Files) GetFileSize() *int64 {
+func (t *CreateBulkCSVFile_CreateBulkCSVFile_Files) GetDetectedMimeType() *string {
 	if t == nil {
 		t = &CreateBulkCSVFile_CreateBulkCSVFile_Files{}
 	}
-	return t.FileSize
+	return t.DetectedMimeType
 }
 func (t *CreateBulkCSVFile_CreateBulkCSVFile_Files) GetID() string {
 	if t == nil {
@@ -11963,29 +11982,83 @@ func (t *CreateBulkCSVFile_CreateBulkCSVFile_Files) GetID() string {
 	}
 	return t.ID
 }
-func (t *CreateBulkCSVFile_CreateBulkCSVFile_Files) GetStoreKey() string {
+func (t *CreateBulkCSVFile_CreateBulkCSVFile_Files) GetMd5Hash() *string {
+	if t == nil {
+		t = &CreateBulkCSVFile_CreateBulkCSVFile_Files{}
+	}
+	return t.Md5Hash
+}
+func (t *CreateBulkCSVFile_CreateBulkCSVFile_Files) GetPersistedFileSize() *int64 {
+	if t == nil {
+		t = &CreateBulkCSVFile_CreateBulkCSVFile_Files{}
+	}
+	return t.PersistedFileSize
+}
+func (t *CreateBulkCSVFile_CreateBulkCSVFile_Files) GetProvidedFileExtension() string {
+	if t == nil {
+		t = &CreateBulkCSVFile_CreateBulkCSVFile_Files{}
+	}
+	return t.ProvidedFileExtension
+}
+func (t *CreateBulkCSVFile_CreateBulkCSVFile_Files) GetProvidedFileName() string {
+	if t == nil {
+		t = &CreateBulkCSVFile_CreateBulkCSVFile_Files{}
+	}
+	return t.ProvidedFileName
+}
+func (t *CreateBulkCSVFile_CreateBulkCSVFile_Files) GetProvidedFileSize() *int64 {
+	if t == nil {
+		t = &CreateBulkCSVFile_CreateBulkCSVFile_Files{}
+	}
+	return t.ProvidedFileSize
+}
+func (t *CreateBulkCSVFile_CreateBulkCSVFile_Files) GetStoragePath() *string {
+	if t == nil {
+		t = &CreateBulkCSVFile_CreateBulkCSVFile_Files{}
+	}
+	return t.StoragePath
+}
+func (t *CreateBulkCSVFile_CreateBulkCSVFile_Files) GetStorageScheme() *string {
+	if t == nil {
+		t = &CreateBulkCSVFile_CreateBulkCSVFile_Files{}
+	}
+	return t.StorageScheme
+}
+func (t *CreateBulkCSVFile_CreateBulkCSVFile_Files) GetStorageVolume() *string {
+	if t == nil {
+		t = &CreateBulkCSVFile_CreateBulkCSVFile_Files{}
+	}
+	return t.StorageVolume
+}
+func (t *CreateBulkCSVFile_CreateBulkCSVFile_Files) GetStoreKey() *string {
 	if t == nil {
 		t = &CreateBulkCSVFile_CreateBulkCSVFile_Files{}
 	}
 	return t.StoreKey
 }
-func (t *CreateBulkCSVFile_CreateBulkCSVFile_Files) GetUser() *CreateBulkCSVFile_CreateBulkCSVFile_Files_User {
+func (t *CreateBulkCSVFile_CreateBulkCSVFile_Files) GetTags() []string {
 	if t == nil {
 		t = &CreateBulkCSVFile_CreateBulkCSVFile_Files{}
 	}
-	return t.User
+	return t.Tags
 }
-func (t *CreateBulkCSVFile_CreateBulkCSVFile_Files) GetOrganization() []*CreateBulkCSVFile_CreateBulkCSVFile_Files_Organization {
+func (t *CreateBulkCSVFile_CreateBulkCSVFile_Files) GetUpdatedAt() *time.Time {
 	if t == nil {
 		t = &CreateBulkCSVFile_CreateBulkCSVFile_Files{}
 	}
-	return t.Organization
+	return t.UpdatedAt
 }
-func (t *CreateBulkCSVFile_CreateBulkCSVFile_Files) GetGroup() []*CreateBulkCSVFile_CreateBulkCSVFile_Files_Group {
+func (t *CreateBulkCSVFile_CreateBulkCSVFile_Files) GetUpdatedBy() *string {
 	if t == nil {
 		t = &CreateBulkCSVFile_CreateBulkCSVFile_Files{}
 	}
-	return t.Group
+	return t.UpdatedBy
+}
+func (t *CreateBulkCSVFile_CreateBulkCSVFile_Files) GetURI() *string {
+	if t == nil {
+		t = &CreateBulkCSVFile_CreateBulkCSVFile_Files{}
+	}
+	return t.URI
 }
 
 type CreateBulkCSVFile_CreateBulkCSVFile struct {
@@ -11999,88 +12072,64 @@ func (t *CreateBulkCSVFile_CreateBulkCSVFile) GetFiles() []*CreateBulkCSVFile_Cr
 	return t.Files
 }
 
-type CreateBulkFile_CreateBulkFile_Files_User struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkFile_CreateBulkFile_Files_User) GetID() string {
-	if t == nil {
-		t = &CreateBulkFile_CreateBulkFile_Files_User{}
-	}
-	return t.ID
-}
-
-type CreateBulkFile_CreateBulkFile_Files_Organization struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkFile_CreateBulkFile_Files_Organization) GetID() string {
-	if t == nil {
-		t = &CreateBulkFile_CreateBulkFile_Files_Organization{}
-	}
-	return t.ID
-}
-
-type CreateBulkFile_CreateBulkFile_Files_Group struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateBulkFile_CreateBulkFile_Files_Group) GetID() string {
-	if t == nil {
-		t = &CreateBulkFile_CreateBulkFile_Files_Group{}
-	}
-	return t.ID
-}
-
 type CreateBulkFile_CreateBulkFile_Files struct {
-	Annotation    *string                                             "json:\"annotation,omitempty\" graphql:\"annotation\""
-	Category      *string                                             "json:\"category,omitempty\" graphql:\"category\""
-	ContentType   string                                              "json:\"contentType\" graphql:\"contentType\""
-	FileExtension string                                              "json:\"fileExtension\" graphql:\"fileExtension\""
-	FileName      string                                              "json:\"fileName\" graphql:\"fileName\""
-	FileSize      *int64                                              "json:\"fileSize,omitempty\" graphql:\"fileSize\""
-	ID            string                                              "json:\"id\" graphql:\"id\""
-	StoreKey      string                                              "json:\"storeKey\" graphql:\"storeKey\""
-	User          *CreateBulkFile_CreateBulkFile_Files_User           "json:\"user,omitempty\" graphql:\"user\""
-	Organization  []*CreateBulkFile_CreateBulkFile_Files_Organization "json:\"organization,omitempty\" graphql:\"organization\""
-	Group         []*CreateBulkFile_CreateBulkFile_Files_Group        "json:\"group,omitempty\" graphql:\"group\""
+	CategoryType          *string    "json:\"categoryType,omitempty\" graphql:\"categoryType\""
+	CorrelationID         *string    "json:\"correlationID,omitempty\" graphql:\"correlationID\""
+	CreatedAt             *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DetectedContentType   string     "json:\"detectedContentType\" graphql:\"detectedContentType\""
+	DetectedMimeType      *string    "json:\"detectedMimeType,omitempty\" graphql:\"detectedMimeType\""
+	ID                    string     "json:\"id\" graphql:\"id\""
+	Md5Hash               *string    "json:\"md5Hash,omitempty\" graphql:\"md5Hash\""
+	PersistedFileSize     *int64     "json:\"persistedFileSize,omitempty\" graphql:\"persistedFileSize\""
+	ProvidedFileExtension string     "json:\"providedFileExtension\" graphql:\"providedFileExtension\""
+	ProvidedFileName      string     "json:\"providedFileName\" graphql:\"providedFileName\""
+	ProvidedFileSize      *int64     "json:\"providedFileSize,omitempty\" graphql:\"providedFileSize\""
+	StoragePath           *string    "json:\"storagePath,omitempty\" graphql:\"storagePath\""
+	StorageScheme         *string    "json:\"storageScheme,omitempty\" graphql:\"storageScheme\""
+	StorageVolume         *string    "json:\"storageVolume,omitempty\" graphql:\"storageVolume\""
+	StoreKey              *string    "json:\"storeKey,omitempty\" graphql:\"storeKey\""
+	Tags                  []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt             *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	URI                   *string    "json:\"uri,omitempty\" graphql:\"uri\""
 }
 
-func (t *CreateBulkFile_CreateBulkFile_Files) GetAnnotation() *string {
+func (t *CreateBulkFile_CreateBulkFile_Files) GetCategoryType() *string {
 	if t == nil {
 		t = &CreateBulkFile_CreateBulkFile_Files{}
 	}
-	return t.Annotation
+	return t.CategoryType
 }
-func (t *CreateBulkFile_CreateBulkFile_Files) GetCategory() *string {
+func (t *CreateBulkFile_CreateBulkFile_Files) GetCorrelationID() *string {
 	if t == nil {
 		t = &CreateBulkFile_CreateBulkFile_Files{}
 	}
-	return t.Category
+	return t.CorrelationID
 }
-func (t *CreateBulkFile_CreateBulkFile_Files) GetContentType() string {
+func (t *CreateBulkFile_CreateBulkFile_Files) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &CreateBulkFile_CreateBulkFile_Files{}
 	}
-	return t.ContentType
+	return t.CreatedAt
 }
-func (t *CreateBulkFile_CreateBulkFile_Files) GetFileExtension() string {
+func (t *CreateBulkFile_CreateBulkFile_Files) GetCreatedBy() *string {
 	if t == nil {
 		t = &CreateBulkFile_CreateBulkFile_Files{}
 	}
-	return t.FileExtension
+	return t.CreatedBy
 }
-func (t *CreateBulkFile_CreateBulkFile_Files) GetFileName() string {
+func (t *CreateBulkFile_CreateBulkFile_Files) GetDetectedContentType() string {
 	if t == nil {
 		t = &CreateBulkFile_CreateBulkFile_Files{}
 	}
-	return t.FileName
+	return t.DetectedContentType
 }
-func (t *CreateBulkFile_CreateBulkFile_Files) GetFileSize() *int64 {
+func (t *CreateBulkFile_CreateBulkFile_Files) GetDetectedMimeType() *string {
 	if t == nil {
 		t = &CreateBulkFile_CreateBulkFile_Files{}
 	}
-	return t.FileSize
+	return t.DetectedMimeType
 }
 func (t *CreateBulkFile_CreateBulkFile_Files) GetID() string {
 	if t == nil {
@@ -12088,29 +12137,83 @@ func (t *CreateBulkFile_CreateBulkFile_Files) GetID() string {
 	}
 	return t.ID
 }
-func (t *CreateBulkFile_CreateBulkFile_Files) GetStoreKey() string {
+func (t *CreateBulkFile_CreateBulkFile_Files) GetMd5Hash() *string {
+	if t == nil {
+		t = &CreateBulkFile_CreateBulkFile_Files{}
+	}
+	return t.Md5Hash
+}
+func (t *CreateBulkFile_CreateBulkFile_Files) GetPersistedFileSize() *int64 {
+	if t == nil {
+		t = &CreateBulkFile_CreateBulkFile_Files{}
+	}
+	return t.PersistedFileSize
+}
+func (t *CreateBulkFile_CreateBulkFile_Files) GetProvidedFileExtension() string {
+	if t == nil {
+		t = &CreateBulkFile_CreateBulkFile_Files{}
+	}
+	return t.ProvidedFileExtension
+}
+func (t *CreateBulkFile_CreateBulkFile_Files) GetProvidedFileName() string {
+	if t == nil {
+		t = &CreateBulkFile_CreateBulkFile_Files{}
+	}
+	return t.ProvidedFileName
+}
+func (t *CreateBulkFile_CreateBulkFile_Files) GetProvidedFileSize() *int64 {
+	if t == nil {
+		t = &CreateBulkFile_CreateBulkFile_Files{}
+	}
+	return t.ProvidedFileSize
+}
+func (t *CreateBulkFile_CreateBulkFile_Files) GetStoragePath() *string {
+	if t == nil {
+		t = &CreateBulkFile_CreateBulkFile_Files{}
+	}
+	return t.StoragePath
+}
+func (t *CreateBulkFile_CreateBulkFile_Files) GetStorageScheme() *string {
+	if t == nil {
+		t = &CreateBulkFile_CreateBulkFile_Files{}
+	}
+	return t.StorageScheme
+}
+func (t *CreateBulkFile_CreateBulkFile_Files) GetStorageVolume() *string {
+	if t == nil {
+		t = &CreateBulkFile_CreateBulkFile_Files{}
+	}
+	return t.StorageVolume
+}
+func (t *CreateBulkFile_CreateBulkFile_Files) GetStoreKey() *string {
 	if t == nil {
 		t = &CreateBulkFile_CreateBulkFile_Files{}
 	}
 	return t.StoreKey
 }
-func (t *CreateBulkFile_CreateBulkFile_Files) GetUser() *CreateBulkFile_CreateBulkFile_Files_User {
+func (t *CreateBulkFile_CreateBulkFile_Files) GetTags() []string {
 	if t == nil {
 		t = &CreateBulkFile_CreateBulkFile_Files{}
 	}
-	return t.User
+	return t.Tags
 }
-func (t *CreateBulkFile_CreateBulkFile_Files) GetOrganization() []*CreateBulkFile_CreateBulkFile_Files_Organization {
+func (t *CreateBulkFile_CreateBulkFile_Files) GetUpdatedAt() *time.Time {
 	if t == nil {
 		t = &CreateBulkFile_CreateBulkFile_Files{}
 	}
-	return t.Organization
+	return t.UpdatedAt
 }
-func (t *CreateBulkFile_CreateBulkFile_Files) GetGroup() []*CreateBulkFile_CreateBulkFile_Files_Group {
+func (t *CreateBulkFile_CreateBulkFile_Files) GetUpdatedBy() *string {
 	if t == nil {
 		t = &CreateBulkFile_CreateBulkFile_Files{}
 	}
-	return t.Group
+	return t.UpdatedBy
+}
+func (t *CreateBulkFile_CreateBulkFile_Files) GetURI() *string {
+	if t == nil {
+		t = &CreateBulkFile_CreateBulkFile_Files{}
+	}
+	return t.URI
 }
 
 type CreateBulkFile_CreateBulkFile struct {
@@ -12124,88 +12227,64 @@ func (t *CreateBulkFile_CreateBulkFile) GetFiles() []*CreateBulkFile_CreateBulkF
 	return t.Files
 }
 
-type CreateFile_CreateFile_File_User struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateFile_CreateFile_File_User) GetID() string {
-	if t == nil {
-		t = &CreateFile_CreateFile_File_User{}
-	}
-	return t.ID
-}
-
-type CreateFile_CreateFile_File_Organization struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateFile_CreateFile_File_Organization) GetID() string {
-	if t == nil {
-		t = &CreateFile_CreateFile_File_Organization{}
-	}
-	return t.ID
-}
-
-type CreateFile_CreateFile_File_Group struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *CreateFile_CreateFile_File_Group) GetID() string {
-	if t == nil {
-		t = &CreateFile_CreateFile_File_Group{}
-	}
-	return t.ID
-}
-
 type CreateFile_CreateFile_File struct {
-	Annotation    *string                                    "json:\"annotation,omitempty\" graphql:\"annotation\""
-	Category      *string                                    "json:\"category,omitempty\" graphql:\"category\""
-	ContentType   string                                     "json:\"contentType\" graphql:\"contentType\""
-	FileExtension string                                     "json:\"fileExtension\" graphql:\"fileExtension\""
-	FileName      string                                     "json:\"fileName\" graphql:\"fileName\""
-	FileSize      *int64                                     "json:\"fileSize,omitempty\" graphql:\"fileSize\""
-	ID            string                                     "json:\"id\" graphql:\"id\""
-	StoreKey      string                                     "json:\"storeKey\" graphql:\"storeKey\""
-	User          *CreateFile_CreateFile_File_User           "json:\"user,omitempty\" graphql:\"user\""
-	Organization  []*CreateFile_CreateFile_File_Organization "json:\"organization,omitempty\" graphql:\"organization\""
-	Group         []*CreateFile_CreateFile_File_Group        "json:\"group,omitempty\" graphql:\"group\""
+	CategoryType          *string    "json:\"categoryType,omitempty\" graphql:\"categoryType\""
+	CorrelationID         *string    "json:\"correlationID,omitempty\" graphql:\"correlationID\""
+	CreatedAt             *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DetectedContentType   string     "json:\"detectedContentType\" graphql:\"detectedContentType\""
+	DetectedMimeType      *string    "json:\"detectedMimeType,omitempty\" graphql:\"detectedMimeType\""
+	ID                    string     "json:\"id\" graphql:\"id\""
+	Md5Hash               *string    "json:\"md5Hash,omitempty\" graphql:\"md5Hash\""
+	PersistedFileSize     *int64     "json:\"persistedFileSize,omitempty\" graphql:\"persistedFileSize\""
+	ProvidedFileExtension string     "json:\"providedFileExtension\" graphql:\"providedFileExtension\""
+	ProvidedFileName      string     "json:\"providedFileName\" graphql:\"providedFileName\""
+	ProvidedFileSize      *int64     "json:\"providedFileSize,omitempty\" graphql:\"providedFileSize\""
+	StoragePath           *string    "json:\"storagePath,omitempty\" graphql:\"storagePath\""
+	StorageScheme         *string    "json:\"storageScheme,omitempty\" graphql:\"storageScheme\""
+	StorageVolume         *string    "json:\"storageVolume,omitempty\" graphql:\"storageVolume\""
+	StoreKey              *string    "json:\"storeKey,omitempty\" graphql:\"storeKey\""
+	Tags                  []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt             *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	URI                   *string    "json:\"uri,omitempty\" graphql:\"uri\""
 }
 
-func (t *CreateFile_CreateFile_File) GetAnnotation() *string {
+func (t *CreateFile_CreateFile_File) GetCategoryType() *string {
 	if t == nil {
 		t = &CreateFile_CreateFile_File{}
 	}
-	return t.Annotation
+	return t.CategoryType
 }
-func (t *CreateFile_CreateFile_File) GetCategory() *string {
+func (t *CreateFile_CreateFile_File) GetCorrelationID() *string {
 	if t == nil {
 		t = &CreateFile_CreateFile_File{}
 	}
-	return t.Category
+	return t.CorrelationID
 }
-func (t *CreateFile_CreateFile_File) GetContentType() string {
+func (t *CreateFile_CreateFile_File) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &CreateFile_CreateFile_File{}
 	}
-	return t.ContentType
+	return t.CreatedAt
 }
-func (t *CreateFile_CreateFile_File) GetFileExtension() string {
+func (t *CreateFile_CreateFile_File) GetCreatedBy() *string {
 	if t == nil {
 		t = &CreateFile_CreateFile_File{}
 	}
-	return t.FileExtension
+	return t.CreatedBy
 }
-func (t *CreateFile_CreateFile_File) GetFileName() string {
+func (t *CreateFile_CreateFile_File) GetDetectedContentType() string {
 	if t == nil {
 		t = &CreateFile_CreateFile_File{}
 	}
-	return t.FileName
+	return t.DetectedContentType
 }
-func (t *CreateFile_CreateFile_File) GetFileSize() *int64 {
+func (t *CreateFile_CreateFile_File) GetDetectedMimeType() *string {
 	if t == nil {
 		t = &CreateFile_CreateFile_File{}
 	}
-	return t.FileSize
+	return t.DetectedMimeType
 }
 func (t *CreateFile_CreateFile_File) GetID() string {
 	if t == nil {
@@ -12213,29 +12292,83 @@ func (t *CreateFile_CreateFile_File) GetID() string {
 	}
 	return t.ID
 }
-func (t *CreateFile_CreateFile_File) GetStoreKey() string {
+func (t *CreateFile_CreateFile_File) GetMd5Hash() *string {
+	if t == nil {
+		t = &CreateFile_CreateFile_File{}
+	}
+	return t.Md5Hash
+}
+func (t *CreateFile_CreateFile_File) GetPersistedFileSize() *int64 {
+	if t == nil {
+		t = &CreateFile_CreateFile_File{}
+	}
+	return t.PersistedFileSize
+}
+func (t *CreateFile_CreateFile_File) GetProvidedFileExtension() string {
+	if t == nil {
+		t = &CreateFile_CreateFile_File{}
+	}
+	return t.ProvidedFileExtension
+}
+func (t *CreateFile_CreateFile_File) GetProvidedFileName() string {
+	if t == nil {
+		t = &CreateFile_CreateFile_File{}
+	}
+	return t.ProvidedFileName
+}
+func (t *CreateFile_CreateFile_File) GetProvidedFileSize() *int64 {
+	if t == nil {
+		t = &CreateFile_CreateFile_File{}
+	}
+	return t.ProvidedFileSize
+}
+func (t *CreateFile_CreateFile_File) GetStoragePath() *string {
+	if t == nil {
+		t = &CreateFile_CreateFile_File{}
+	}
+	return t.StoragePath
+}
+func (t *CreateFile_CreateFile_File) GetStorageScheme() *string {
+	if t == nil {
+		t = &CreateFile_CreateFile_File{}
+	}
+	return t.StorageScheme
+}
+func (t *CreateFile_CreateFile_File) GetStorageVolume() *string {
+	if t == nil {
+		t = &CreateFile_CreateFile_File{}
+	}
+	return t.StorageVolume
+}
+func (t *CreateFile_CreateFile_File) GetStoreKey() *string {
 	if t == nil {
 		t = &CreateFile_CreateFile_File{}
 	}
 	return t.StoreKey
 }
-func (t *CreateFile_CreateFile_File) GetUser() *CreateFile_CreateFile_File_User {
+func (t *CreateFile_CreateFile_File) GetTags() []string {
 	if t == nil {
 		t = &CreateFile_CreateFile_File{}
 	}
-	return t.User
+	return t.Tags
 }
-func (t *CreateFile_CreateFile_File) GetOrganization() []*CreateFile_CreateFile_File_Organization {
+func (t *CreateFile_CreateFile_File) GetUpdatedAt() *time.Time {
 	if t == nil {
 		t = &CreateFile_CreateFile_File{}
 	}
-	return t.Organization
+	return t.UpdatedAt
 }
-func (t *CreateFile_CreateFile_File) GetGroup() []*CreateFile_CreateFile_File_Group {
+func (t *CreateFile_CreateFile_File) GetUpdatedBy() *string {
 	if t == nil {
 		t = &CreateFile_CreateFile_File{}
 	}
-	return t.Group
+	return t.UpdatedBy
+}
+func (t *CreateFile_CreateFile_File) GetURI() *string {
+	if t == nil {
+		t = &CreateFile_CreateFile_File{}
+	}
+	return t.URI
 }
 
 type CreateFile_CreateFile struct {
@@ -12260,74 +12393,40 @@ func (t *DeleteFile_DeleteFile) GetDeletedID() string {
 	return t.DeletedID
 }
 
-type GetAllFiles_Files_Edges_Node_User struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetAllFiles_Files_Edges_Node_User) GetID() string {
-	if t == nil {
-		t = &GetAllFiles_Files_Edges_Node_User{}
-	}
-	return t.ID
-}
-
-type GetAllFiles_Files_Edges_Node_Organization struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetAllFiles_Files_Edges_Node_Organization) GetID() string {
-	if t == nil {
-		t = &GetAllFiles_Files_Edges_Node_Organization{}
-	}
-	return t.ID
-}
-
-type GetAllFiles_Files_Edges_Node_Group struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetAllFiles_Files_Edges_Node_Group) GetID() string {
-	if t == nil {
-		t = &GetAllFiles_Files_Edges_Node_Group{}
-	}
-	return t.ID
-}
-
 type GetAllFiles_Files_Edges_Node struct {
-	Annotation    *string                                      "json:\"annotation,omitempty\" graphql:\"annotation\""
-	Category      *string                                      "json:\"category,omitempty\" graphql:\"category\""
-	ContentType   string                                       "json:\"contentType\" graphql:\"contentType\""
-	CreatedAt     *time.Time                                   "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string                                      "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	FileExtension string                                       "json:\"fileExtension\" graphql:\"fileExtension\""
-	FileName      string                                       "json:\"fileName\" graphql:\"fileName\""
-	FileSize      *int64                                       "json:\"fileSize,omitempty\" graphql:\"fileSize\""
-	ID            string                                       "json:\"id\" graphql:\"id\""
-	StoreKey      string                                       "json:\"storeKey\" graphql:\"storeKey\""
-	UpdatedAt     *time.Time                                   "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string                                      "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	User          *GetAllFiles_Files_Edges_Node_User           "json:\"user,omitempty\" graphql:\"user\""
-	Organization  []*GetAllFiles_Files_Edges_Node_Organization "json:\"organization,omitempty\" graphql:\"organization\""
-	Group         []*GetAllFiles_Files_Edges_Node_Group        "json:\"group,omitempty\" graphql:\"group\""
+	CategoryType          *string    "json:\"categoryType,omitempty\" graphql:\"categoryType\""
+	CorrelationID         *string    "json:\"correlationID,omitempty\" graphql:\"correlationID\""
+	CreatedAt             *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DetectedContentType   string     "json:\"detectedContentType\" graphql:\"detectedContentType\""
+	DetectedMimeType      *string    "json:\"detectedMimeType,omitempty\" graphql:\"detectedMimeType\""
+	ID                    string     "json:\"id\" graphql:\"id\""
+	Md5Hash               *string    "json:\"md5Hash,omitempty\" graphql:\"md5Hash\""
+	PersistedFileSize     *int64     "json:\"persistedFileSize,omitempty\" graphql:\"persistedFileSize\""
+	ProvidedFileExtension string     "json:\"providedFileExtension\" graphql:\"providedFileExtension\""
+	ProvidedFileName      string     "json:\"providedFileName\" graphql:\"providedFileName\""
+	ProvidedFileSize      *int64     "json:\"providedFileSize,omitempty\" graphql:\"providedFileSize\""
+	StoragePath           *string    "json:\"storagePath,omitempty\" graphql:\"storagePath\""
+	StorageScheme         *string    "json:\"storageScheme,omitempty\" graphql:\"storageScheme\""
+	StorageVolume         *string    "json:\"storageVolume,omitempty\" graphql:\"storageVolume\""
+	StoreKey              *string    "json:\"storeKey,omitempty\" graphql:\"storeKey\""
+	Tags                  []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt             *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	URI                   *string    "json:\"uri,omitempty\" graphql:\"uri\""
 }
 
-func (t *GetAllFiles_Files_Edges_Node) GetAnnotation() *string {
+func (t *GetAllFiles_Files_Edges_Node) GetCategoryType() *string {
 	if t == nil {
 		t = &GetAllFiles_Files_Edges_Node{}
 	}
-	return t.Annotation
+	return t.CategoryType
 }
-func (t *GetAllFiles_Files_Edges_Node) GetCategory() *string {
+func (t *GetAllFiles_Files_Edges_Node) GetCorrelationID() *string {
 	if t == nil {
 		t = &GetAllFiles_Files_Edges_Node{}
 	}
-	return t.Category
-}
-func (t *GetAllFiles_Files_Edges_Node) GetContentType() string {
-	if t == nil {
-		t = &GetAllFiles_Files_Edges_Node{}
-	}
-	return t.ContentType
+	return t.CorrelationID
 }
 func (t *GetAllFiles_Files_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
@@ -12341,23 +12440,17 @@ func (t *GetAllFiles_Files_Edges_Node) GetCreatedBy() *string {
 	}
 	return t.CreatedBy
 }
-func (t *GetAllFiles_Files_Edges_Node) GetFileExtension() string {
+func (t *GetAllFiles_Files_Edges_Node) GetDetectedContentType() string {
 	if t == nil {
 		t = &GetAllFiles_Files_Edges_Node{}
 	}
-	return t.FileExtension
+	return t.DetectedContentType
 }
-func (t *GetAllFiles_Files_Edges_Node) GetFileName() string {
+func (t *GetAllFiles_Files_Edges_Node) GetDetectedMimeType() *string {
 	if t == nil {
 		t = &GetAllFiles_Files_Edges_Node{}
 	}
-	return t.FileName
-}
-func (t *GetAllFiles_Files_Edges_Node) GetFileSize() *int64 {
-	if t == nil {
-		t = &GetAllFiles_Files_Edges_Node{}
-	}
-	return t.FileSize
+	return t.DetectedMimeType
 }
 func (t *GetAllFiles_Files_Edges_Node) GetID() string {
 	if t == nil {
@@ -12365,11 +12458,65 @@ func (t *GetAllFiles_Files_Edges_Node) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetAllFiles_Files_Edges_Node) GetStoreKey() string {
+func (t *GetAllFiles_Files_Edges_Node) GetMd5Hash() *string {
+	if t == nil {
+		t = &GetAllFiles_Files_Edges_Node{}
+	}
+	return t.Md5Hash
+}
+func (t *GetAllFiles_Files_Edges_Node) GetPersistedFileSize() *int64 {
+	if t == nil {
+		t = &GetAllFiles_Files_Edges_Node{}
+	}
+	return t.PersistedFileSize
+}
+func (t *GetAllFiles_Files_Edges_Node) GetProvidedFileExtension() string {
+	if t == nil {
+		t = &GetAllFiles_Files_Edges_Node{}
+	}
+	return t.ProvidedFileExtension
+}
+func (t *GetAllFiles_Files_Edges_Node) GetProvidedFileName() string {
+	if t == nil {
+		t = &GetAllFiles_Files_Edges_Node{}
+	}
+	return t.ProvidedFileName
+}
+func (t *GetAllFiles_Files_Edges_Node) GetProvidedFileSize() *int64 {
+	if t == nil {
+		t = &GetAllFiles_Files_Edges_Node{}
+	}
+	return t.ProvidedFileSize
+}
+func (t *GetAllFiles_Files_Edges_Node) GetStoragePath() *string {
+	if t == nil {
+		t = &GetAllFiles_Files_Edges_Node{}
+	}
+	return t.StoragePath
+}
+func (t *GetAllFiles_Files_Edges_Node) GetStorageScheme() *string {
+	if t == nil {
+		t = &GetAllFiles_Files_Edges_Node{}
+	}
+	return t.StorageScheme
+}
+func (t *GetAllFiles_Files_Edges_Node) GetStorageVolume() *string {
+	if t == nil {
+		t = &GetAllFiles_Files_Edges_Node{}
+	}
+	return t.StorageVolume
+}
+func (t *GetAllFiles_Files_Edges_Node) GetStoreKey() *string {
 	if t == nil {
 		t = &GetAllFiles_Files_Edges_Node{}
 	}
 	return t.StoreKey
+}
+func (t *GetAllFiles_Files_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllFiles_Files_Edges_Node{}
+	}
+	return t.Tags
 }
 func (t *GetAllFiles_Files_Edges_Node) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -12383,23 +12530,11 @@ func (t *GetAllFiles_Files_Edges_Node) GetUpdatedBy() *string {
 	}
 	return t.UpdatedBy
 }
-func (t *GetAllFiles_Files_Edges_Node) GetUser() *GetAllFiles_Files_Edges_Node_User {
+func (t *GetAllFiles_Files_Edges_Node) GetURI() *string {
 	if t == nil {
 		t = &GetAllFiles_Files_Edges_Node{}
 	}
-	return t.User
-}
-func (t *GetAllFiles_Files_Edges_Node) GetOrganization() []*GetAllFiles_Files_Edges_Node_Organization {
-	if t == nil {
-		t = &GetAllFiles_Files_Edges_Node{}
-	}
-	return t.Organization
-}
-func (t *GetAllFiles_Files_Edges_Node) GetGroup() []*GetAllFiles_Files_Edges_Node_Group {
-	if t == nil {
-		t = &GetAllFiles_Files_Edges_Node{}
-	}
-	return t.Group
+	return t.URI
 }
 
 type GetAllFiles_Files_Edges struct {
@@ -12424,74 +12559,184 @@ func (t *GetAllFiles_Files) GetEdges() []*GetAllFiles_Files_Edges {
 	return t.Edges
 }
 
-type GetFiles_Files_Edges_Node_User struct {
-	ID string "json:\"id\" graphql:\"id\""
+type GetFileByID_File struct {
+	CategoryType          *string    "json:\"categoryType,omitempty\" graphql:\"categoryType\""
+	CorrelationID         *string    "json:\"correlationID,omitempty\" graphql:\"correlationID\""
+	CreatedAt             *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DetectedContentType   string     "json:\"detectedContentType\" graphql:\"detectedContentType\""
+	DetectedMimeType      *string    "json:\"detectedMimeType,omitempty\" graphql:\"detectedMimeType\""
+	ID                    string     "json:\"id\" graphql:\"id\""
+	Md5Hash               *string    "json:\"md5Hash,omitempty\" graphql:\"md5Hash\""
+	PersistedFileSize     *int64     "json:\"persistedFileSize,omitempty\" graphql:\"persistedFileSize\""
+	ProvidedFileExtension string     "json:\"providedFileExtension\" graphql:\"providedFileExtension\""
+	ProvidedFileName      string     "json:\"providedFileName\" graphql:\"providedFileName\""
+	ProvidedFileSize      *int64     "json:\"providedFileSize,omitempty\" graphql:\"providedFileSize\""
+	StoragePath           *string    "json:\"storagePath,omitempty\" graphql:\"storagePath\""
+	StorageScheme         *string    "json:\"storageScheme,omitempty\" graphql:\"storageScheme\""
+	StorageVolume         *string    "json:\"storageVolume,omitempty\" graphql:\"storageVolume\""
+	StoreKey              *string    "json:\"storeKey,omitempty\" graphql:\"storeKey\""
+	Tags                  []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt             *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	URI                   *string    "json:\"uri,omitempty\" graphql:\"uri\""
 }
 
-func (t *GetFiles_Files_Edges_Node_User) GetID() string {
+func (t *GetFileByID_File) GetCategoryType() *string {
 	if t == nil {
-		t = &GetFiles_Files_Edges_Node_User{}
+		t = &GetFileByID_File{}
+	}
+	return t.CategoryType
+}
+func (t *GetFileByID_File) GetCorrelationID() *string {
+	if t == nil {
+		t = &GetFileByID_File{}
+	}
+	return t.CorrelationID
+}
+func (t *GetFileByID_File) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetFileByID_File{}
+	}
+	return t.CreatedAt
+}
+func (t *GetFileByID_File) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetFileByID_File{}
+	}
+	return t.CreatedBy
+}
+func (t *GetFileByID_File) GetDetectedContentType() string {
+	if t == nil {
+		t = &GetFileByID_File{}
+	}
+	return t.DetectedContentType
+}
+func (t *GetFileByID_File) GetDetectedMimeType() *string {
+	if t == nil {
+		t = &GetFileByID_File{}
+	}
+	return t.DetectedMimeType
+}
+func (t *GetFileByID_File) GetID() string {
+	if t == nil {
+		t = &GetFileByID_File{}
 	}
 	return t.ID
 }
-
-type GetFiles_Files_Edges_Node_Organization struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetFiles_Files_Edges_Node_Organization) GetID() string {
+func (t *GetFileByID_File) GetMd5Hash() *string {
 	if t == nil {
-		t = &GetFiles_Files_Edges_Node_Organization{}
+		t = &GetFileByID_File{}
 	}
-	return t.ID
+	return t.Md5Hash
 }
-
-type GetFiles_Files_Edges_Node_Group struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *GetFiles_Files_Edges_Node_Group) GetID() string {
+func (t *GetFileByID_File) GetPersistedFileSize() *int64 {
 	if t == nil {
-		t = &GetFiles_Files_Edges_Node_Group{}
+		t = &GetFileByID_File{}
 	}
-	return t.ID
+	return t.PersistedFileSize
+}
+func (t *GetFileByID_File) GetProvidedFileExtension() string {
+	if t == nil {
+		t = &GetFileByID_File{}
+	}
+	return t.ProvidedFileExtension
+}
+func (t *GetFileByID_File) GetProvidedFileName() string {
+	if t == nil {
+		t = &GetFileByID_File{}
+	}
+	return t.ProvidedFileName
+}
+func (t *GetFileByID_File) GetProvidedFileSize() *int64 {
+	if t == nil {
+		t = &GetFileByID_File{}
+	}
+	return t.ProvidedFileSize
+}
+func (t *GetFileByID_File) GetStoragePath() *string {
+	if t == nil {
+		t = &GetFileByID_File{}
+	}
+	return t.StoragePath
+}
+func (t *GetFileByID_File) GetStorageScheme() *string {
+	if t == nil {
+		t = &GetFileByID_File{}
+	}
+	return t.StorageScheme
+}
+func (t *GetFileByID_File) GetStorageVolume() *string {
+	if t == nil {
+		t = &GetFileByID_File{}
+	}
+	return t.StorageVolume
+}
+func (t *GetFileByID_File) GetStoreKey() *string {
+	if t == nil {
+		t = &GetFileByID_File{}
+	}
+	return t.StoreKey
+}
+func (t *GetFileByID_File) GetTags() []string {
+	if t == nil {
+		t = &GetFileByID_File{}
+	}
+	return t.Tags
+}
+func (t *GetFileByID_File) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetFileByID_File{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetFileByID_File) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetFileByID_File{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetFileByID_File) GetURI() *string {
+	if t == nil {
+		t = &GetFileByID_File{}
+	}
+	return t.URI
 }
 
 type GetFiles_Files_Edges_Node struct {
-	Annotation    *string                                   "json:\"annotation,omitempty\" graphql:\"annotation\""
-	Category      *string                                   "json:\"category,omitempty\" graphql:\"category\""
-	ContentType   string                                    "json:\"contentType\" graphql:\"contentType\""
-	CreatedAt     *time.Time                                "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string                                   "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	FileExtension string                                    "json:\"fileExtension\" graphql:\"fileExtension\""
-	FileName      string                                    "json:\"fileName\" graphql:\"fileName\""
-	FileSize      *int64                                    "json:\"fileSize,omitempty\" graphql:\"fileSize\""
-	ID            string                                    "json:\"id\" graphql:\"id\""
-	StoreKey      string                                    "json:\"storeKey\" graphql:\"storeKey\""
-	UpdatedAt     *time.Time                                "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string                                   "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	User          *GetFiles_Files_Edges_Node_User           "json:\"user,omitempty\" graphql:\"user\""
-	Organization  []*GetFiles_Files_Edges_Node_Organization "json:\"organization,omitempty\" graphql:\"organization\""
-	Group         []*GetFiles_Files_Edges_Node_Group        "json:\"group,omitempty\" graphql:\"group\""
+	CategoryType          *string    "json:\"categoryType,omitempty\" graphql:\"categoryType\""
+	CorrelationID         *string    "json:\"correlationID,omitempty\" graphql:\"correlationID\""
+	CreatedAt             *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DetectedContentType   string     "json:\"detectedContentType\" graphql:\"detectedContentType\""
+	DetectedMimeType      *string    "json:\"detectedMimeType,omitempty\" graphql:\"detectedMimeType\""
+	ID                    string     "json:\"id\" graphql:\"id\""
+	Md5Hash               *string    "json:\"md5Hash,omitempty\" graphql:\"md5Hash\""
+	PersistedFileSize     *int64     "json:\"persistedFileSize,omitempty\" graphql:\"persistedFileSize\""
+	ProvidedFileExtension string     "json:\"providedFileExtension\" graphql:\"providedFileExtension\""
+	ProvidedFileName      string     "json:\"providedFileName\" graphql:\"providedFileName\""
+	ProvidedFileSize      *int64     "json:\"providedFileSize,omitempty\" graphql:\"providedFileSize\""
+	StoragePath           *string    "json:\"storagePath,omitempty\" graphql:\"storagePath\""
+	StorageScheme         *string    "json:\"storageScheme,omitempty\" graphql:\"storageScheme\""
+	StorageVolume         *string    "json:\"storageVolume,omitempty\" graphql:\"storageVolume\""
+	StoreKey              *string    "json:\"storeKey,omitempty\" graphql:\"storeKey\""
+	Tags                  []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt             *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	URI                   *string    "json:\"uri,omitempty\" graphql:\"uri\""
 }
 
-func (t *GetFiles_Files_Edges_Node) GetAnnotation() *string {
+func (t *GetFiles_Files_Edges_Node) GetCategoryType() *string {
 	if t == nil {
 		t = &GetFiles_Files_Edges_Node{}
 	}
-	return t.Annotation
+	return t.CategoryType
 }
-func (t *GetFiles_Files_Edges_Node) GetCategory() *string {
+func (t *GetFiles_Files_Edges_Node) GetCorrelationID() *string {
 	if t == nil {
 		t = &GetFiles_Files_Edges_Node{}
 	}
-	return t.Category
-}
-func (t *GetFiles_Files_Edges_Node) GetContentType() string {
-	if t == nil {
-		t = &GetFiles_Files_Edges_Node{}
-	}
-	return t.ContentType
+	return t.CorrelationID
 }
 func (t *GetFiles_Files_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
@@ -12505,23 +12750,17 @@ func (t *GetFiles_Files_Edges_Node) GetCreatedBy() *string {
 	}
 	return t.CreatedBy
 }
-func (t *GetFiles_Files_Edges_Node) GetFileExtension() string {
+func (t *GetFiles_Files_Edges_Node) GetDetectedContentType() string {
 	if t == nil {
 		t = &GetFiles_Files_Edges_Node{}
 	}
-	return t.FileExtension
+	return t.DetectedContentType
 }
-func (t *GetFiles_Files_Edges_Node) GetFileName() string {
+func (t *GetFiles_Files_Edges_Node) GetDetectedMimeType() *string {
 	if t == nil {
 		t = &GetFiles_Files_Edges_Node{}
 	}
-	return t.FileName
-}
-func (t *GetFiles_Files_Edges_Node) GetFileSize() *int64 {
-	if t == nil {
-		t = &GetFiles_Files_Edges_Node{}
-	}
-	return t.FileSize
+	return t.DetectedMimeType
 }
 func (t *GetFiles_Files_Edges_Node) GetID() string {
 	if t == nil {
@@ -12529,11 +12768,65 @@ func (t *GetFiles_Files_Edges_Node) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetFiles_Files_Edges_Node) GetStoreKey() string {
+func (t *GetFiles_Files_Edges_Node) GetMd5Hash() *string {
+	if t == nil {
+		t = &GetFiles_Files_Edges_Node{}
+	}
+	return t.Md5Hash
+}
+func (t *GetFiles_Files_Edges_Node) GetPersistedFileSize() *int64 {
+	if t == nil {
+		t = &GetFiles_Files_Edges_Node{}
+	}
+	return t.PersistedFileSize
+}
+func (t *GetFiles_Files_Edges_Node) GetProvidedFileExtension() string {
+	if t == nil {
+		t = &GetFiles_Files_Edges_Node{}
+	}
+	return t.ProvidedFileExtension
+}
+func (t *GetFiles_Files_Edges_Node) GetProvidedFileName() string {
+	if t == nil {
+		t = &GetFiles_Files_Edges_Node{}
+	}
+	return t.ProvidedFileName
+}
+func (t *GetFiles_Files_Edges_Node) GetProvidedFileSize() *int64 {
+	if t == nil {
+		t = &GetFiles_Files_Edges_Node{}
+	}
+	return t.ProvidedFileSize
+}
+func (t *GetFiles_Files_Edges_Node) GetStoragePath() *string {
+	if t == nil {
+		t = &GetFiles_Files_Edges_Node{}
+	}
+	return t.StoragePath
+}
+func (t *GetFiles_Files_Edges_Node) GetStorageScheme() *string {
+	if t == nil {
+		t = &GetFiles_Files_Edges_Node{}
+	}
+	return t.StorageScheme
+}
+func (t *GetFiles_Files_Edges_Node) GetStorageVolume() *string {
+	if t == nil {
+		t = &GetFiles_Files_Edges_Node{}
+	}
+	return t.StorageVolume
+}
+func (t *GetFiles_Files_Edges_Node) GetStoreKey() *string {
 	if t == nil {
 		t = &GetFiles_Files_Edges_Node{}
 	}
 	return t.StoreKey
+}
+func (t *GetFiles_Files_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetFiles_Files_Edges_Node{}
+	}
+	return t.Tags
 }
 func (t *GetFiles_Files_Edges_Node) GetUpdatedAt() *time.Time {
 	if t == nil {
@@ -12547,23 +12840,11 @@ func (t *GetFiles_Files_Edges_Node) GetUpdatedBy() *string {
 	}
 	return t.UpdatedBy
 }
-func (t *GetFiles_Files_Edges_Node) GetUser() *GetFiles_Files_Edges_Node_User {
+func (t *GetFiles_Files_Edges_Node) GetURI() *string {
 	if t == nil {
 		t = &GetFiles_Files_Edges_Node{}
 	}
-	return t.User
-}
-func (t *GetFiles_Files_Edges_Node) GetOrganization() []*GetFiles_Files_Edges_Node_Organization {
-	if t == nil {
-		t = &GetFiles_Files_Edges_Node{}
-	}
-	return t.Organization
-}
-func (t *GetFiles_Files_Edges_Node) GetGroup() []*GetFiles_Files_Edges_Node_Group {
-	if t == nil {
-		t = &GetFiles_Files_Edges_Node{}
-	}
-	return t.Group
+	return t.URI
 }
 
 type GetFiles_Files_Edges struct {
@@ -12588,118 +12869,148 @@ func (t *GetFiles_Files) GetEdges() []*GetFiles_Files_Edges {
 	return t.Edges
 }
 
-type UpdateFile_UpdateFile_File_User struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *UpdateFile_UpdateFile_File_User) GetID() string {
-	if t == nil {
-		t = &UpdateFile_UpdateFile_File_User{}
-	}
-	return t.ID
-}
-
-type UpdateFile_UpdateFile_File_Organization struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *UpdateFile_UpdateFile_File_Organization) GetID() string {
-	if t == nil {
-		t = &UpdateFile_UpdateFile_File_Organization{}
-	}
-	return t.ID
-}
-
-type UpdateFile_UpdateFile_File_Group struct {
-	ID string "json:\"id\" graphql:\"id\""
-}
-
-func (t *UpdateFile_UpdateFile_File_Group) GetID() string {
-	if t == nil {
-		t = &UpdateFile_UpdateFile_File_Group{}
-	}
-	return t.ID
-}
-
 type UpdateFile_UpdateFile_File struct {
-	ID            string                                     "json:\"id\" graphql:\"id\""
-	FileName      string                                     "json:\"fileName\" graphql:\"fileName\""
-	FileExtension string                                     "json:\"fileExtension\" graphql:\"fileExtension\""
-	FileSize      *int64                                     "json:\"fileSize,omitempty\" graphql:\"fileSize\""
-	ContentType   string                                     "json:\"contentType\" graphql:\"contentType\""
-	StoreKey      string                                     "json:\"storeKey\" graphql:\"storeKey\""
-	Category      *string                                    "json:\"category,omitempty\" graphql:\"category\""
-	Annotation    *string                                    "json:\"annotation,omitempty\" graphql:\"annotation\""
-	User          *UpdateFile_UpdateFile_File_User           "json:\"user,omitempty\" graphql:\"user\""
-	Organization  []*UpdateFile_UpdateFile_File_Organization "json:\"organization,omitempty\" graphql:\"organization\""
-	Group         []*UpdateFile_UpdateFile_File_Group        "json:\"group,omitempty\" graphql:\"group\""
+	CategoryType          *string    "json:\"categoryType,omitempty\" graphql:\"categoryType\""
+	CorrelationID         *string    "json:\"correlationID,omitempty\" graphql:\"correlationID\""
+	CreatedAt             *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DetectedContentType   string     "json:\"detectedContentType\" graphql:\"detectedContentType\""
+	DetectedMimeType      *string    "json:\"detectedMimeType,omitempty\" graphql:\"detectedMimeType\""
+	ID                    string     "json:\"id\" graphql:\"id\""
+	Md5Hash               *string    "json:\"md5Hash,omitempty\" graphql:\"md5Hash\""
+	PersistedFileSize     *int64     "json:\"persistedFileSize,omitempty\" graphql:\"persistedFileSize\""
+	ProvidedFileExtension string     "json:\"providedFileExtension\" graphql:\"providedFileExtension\""
+	ProvidedFileName      string     "json:\"providedFileName\" graphql:\"providedFileName\""
+	ProvidedFileSize      *int64     "json:\"providedFileSize,omitempty\" graphql:\"providedFileSize\""
+	StoragePath           *string    "json:\"storagePath,omitempty\" graphql:\"storagePath\""
+	StorageScheme         *string    "json:\"storageScheme,omitempty\" graphql:\"storageScheme\""
+	StorageVolume         *string    "json:\"storageVolume,omitempty\" graphql:\"storageVolume\""
+	StoreKey              *string    "json:\"storeKey,omitempty\" graphql:\"storeKey\""
+	Tags                  []string   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt             *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	URI                   *string    "json:\"uri,omitempty\" graphql:\"uri\""
 }
 
+func (t *UpdateFile_UpdateFile_File) GetCategoryType() *string {
+	if t == nil {
+		t = &UpdateFile_UpdateFile_File{}
+	}
+	return t.CategoryType
+}
+func (t *UpdateFile_UpdateFile_File) GetCorrelationID() *string {
+	if t == nil {
+		t = &UpdateFile_UpdateFile_File{}
+	}
+	return t.CorrelationID
+}
+func (t *UpdateFile_UpdateFile_File) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateFile_UpdateFile_File{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateFile_UpdateFile_File) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateFile_UpdateFile_File{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateFile_UpdateFile_File) GetDetectedContentType() string {
+	if t == nil {
+		t = &UpdateFile_UpdateFile_File{}
+	}
+	return t.DetectedContentType
+}
+func (t *UpdateFile_UpdateFile_File) GetDetectedMimeType() *string {
+	if t == nil {
+		t = &UpdateFile_UpdateFile_File{}
+	}
+	return t.DetectedMimeType
+}
 func (t *UpdateFile_UpdateFile_File) GetID() string {
 	if t == nil {
 		t = &UpdateFile_UpdateFile_File{}
 	}
 	return t.ID
 }
-func (t *UpdateFile_UpdateFile_File) GetFileName() string {
+func (t *UpdateFile_UpdateFile_File) GetMd5Hash() *string {
 	if t == nil {
 		t = &UpdateFile_UpdateFile_File{}
 	}
-	return t.FileName
+	return t.Md5Hash
 }
-func (t *UpdateFile_UpdateFile_File) GetFileExtension() string {
+func (t *UpdateFile_UpdateFile_File) GetPersistedFileSize() *int64 {
 	if t == nil {
 		t = &UpdateFile_UpdateFile_File{}
 	}
-	return t.FileExtension
+	return t.PersistedFileSize
 }
-func (t *UpdateFile_UpdateFile_File) GetFileSize() *int64 {
+func (t *UpdateFile_UpdateFile_File) GetProvidedFileExtension() string {
 	if t == nil {
 		t = &UpdateFile_UpdateFile_File{}
 	}
-	return t.FileSize
+	return t.ProvidedFileExtension
 }
-func (t *UpdateFile_UpdateFile_File) GetContentType() string {
+func (t *UpdateFile_UpdateFile_File) GetProvidedFileName() string {
 	if t == nil {
 		t = &UpdateFile_UpdateFile_File{}
 	}
-	return t.ContentType
+	return t.ProvidedFileName
 }
-func (t *UpdateFile_UpdateFile_File) GetStoreKey() string {
+func (t *UpdateFile_UpdateFile_File) GetProvidedFileSize() *int64 {
+	if t == nil {
+		t = &UpdateFile_UpdateFile_File{}
+	}
+	return t.ProvidedFileSize
+}
+func (t *UpdateFile_UpdateFile_File) GetStoragePath() *string {
+	if t == nil {
+		t = &UpdateFile_UpdateFile_File{}
+	}
+	return t.StoragePath
+}
+func (t *UpdateFile_UpdateFile_File) GetStorageScheme() *string {
+	if t == nil {
+		t = &UpdateFile_UpdateFile_File{}
+	}
+	return t.StorageScheme
+}
+func (t *UpdateFile_UpdateFile_File) GetStorageVolume() *string {
+	if t == nil {
+		t = &UpdateFile_UpdateFile_File{}
+	}
+	return t.StorageVolume
+}
+func (t *UpdateFile_UpdateFile_File) GetStoreKey() *string {
 	if t == nil {
 		t = &UpdateFile_UpdateFile_File{}
 	}
 	return t.StoreKey
 }
-func (t *UpdateFile_UpdateFile_File) GetCategory() *string {
+func (t *UpdateFile_UpdateFile_File) GetTags() []string {
 	if t == nil {
 		t = &UpdateFile_UpdateFile_File{}
 	}
-	return t.Category
+	return t.Tags
 }
-func (t *UpdateFile_UpdateFile_File) GetAnnotation() *string {
+func (t *UpdateFile_UpdateFile_File) GetUpdatedAt() *time.Time {
 	if t == nil {
 		t = &UpdateFile_UpdateFile_File{}
 	}
-	return t.Annotation
+	return t.UpdatedAt
 }
-func (t *UpdateFile_UpdateFile_File) GetUser() *UpdateFile_UpdateFile_File_User {
+func (t *UpdateFile_UpdateFile_File) GetUpdatedBy() *string {
 	if t == nil {
 		t = &UpdateFile_UpdateFile_File{}
 	}
-	return t.User
+	return t.UpdatedBy
 }
-func (t *UpdateFile_UpdateFile_File) GetOrganization() []*UpdateFile_UpdateFile_File_Organization {
+func (t *UpdateFile_UpdateFile_File) GetURI() *string {
 	if t == nil {
 		t = &UpdateFile_UpdateFile_File{}
 	}
-	return t.Organization
-}
-func (t *UpdateFile_UpdateFile_File) GetGroup() []*UpdateFile_UpdateFile_File_Group {
-	if t == nil {
-		t = &UpdateFile_UpdateFile_File{}
-	}
-	return t.Group
+	return t.URI
 }
 
 type UpdateFile_UpdateFile struct {
@@ -12714,41 +13025,42 @@ func (t *UpdateFile_UpdateFile) GetFile() *UpdateFile_UpdateFile_File {
 }
 
 type GetAllFileHistories_FileHistories_Edges_Node struct {
-	Annotation    *string        "json:\"annotation,omitempty\" graphql:\"annotation\""
-	Category      *string        "json:\"category,omitempty\" graphql:\"category\""
-	ContentType   string         "json:\"contentType\" graphql:\"contentType\""
-	CreatedAt     *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	FileExtension string         "json:\"fileExtension\" graphql:\"fileExtension\""
-	FileName      string         "json:\"fileName\" graphql:\"fileName\""
-	FileSize      *int64         "json:\"fileSize,omitempty\" graphql:\"fileSize\""
-	HistoryTime   time.Time      "json:\"historyTime\" graphql:\"historyTime\""
-	ID            string         "json:\"id\" graphql:\"id\""
-	Operation     history.OpType "json:\"operation\" graphql:\"operation\""
-	Ref           *string        "json:\"ref,omitempty\" graphql:\"ref\""
-	StoreKey      string         "json:\"storeKey\" graphql:\"storeKey\""
-	Tags          []string       "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt     *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CategoryType          *string        "json:\"categoryType,omitempty\" graphql:\"categoryType\""
+	CorrelationID         *string        "json:\"correlationID,omitempty\" graphql:\"correlationID\""
+	CreatedAt             *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DetectedContentType   string         "json:\"detectedContentType\" graphql:\"detectedContentType\""
+	DetectedMimeType      *string        "json:\"detectedMimeType,omitempty\" graphql:\"detectedMimeType\""
+	HistoryTime           time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID                    string         "json:\"id\" graphql:\"id\""
+	Md5Hash               *string        "json:\"md5Hash,omitempty\" graphql:\"md5Hash\""
+	Operation             history.OpType "json:\"operation\" graphql:\"operation\""
+	PersistedFileSize     *int64         "json:\"persistedFileSize,omitempty\" graphql:\"persistedFileSize\""
+	ProvidedFileExtension string         "json:\"providedFileExtension\" graphql:\"providedFileExtension\""
+	ProvidedFileName      string         "json:\"providedFileName\" graphql:\"providedFileName\""
+	ProvidedFileSize      *int64         "json:\"providedFileSize,omitempty\" graphql:\"providedFileSize\""
+	Ref                   *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	StoragePath           *string        "json:\"storagePath,omitempty\" graphql:\"storagePath\""
+	StorageScheme         *string        "json:\"storageScheme,omitempty\" graphql:\"storageScheme\""
+	StorageVolume         *string        "json:\"storageVolume,omitempty\" graphql:\"storageVolume\""
+	StoreKey              *string        "json:\"storeKey,omitempty\" graphql:\"storeKey\""
+	Tags                  []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt             *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	URI                   *string        "json:\"uri,omitempty\" graphql:\"uri\""
 }
 
-func (t *GetAllFileHistories_FileHistories_Edges_Node) GetAnnotation() *string {
+func (t *GetAllFileHistories_FileHistories_Edges_Node) GetCategoryType() *string {
 	if t == nil {
 		t = &GetAllFileHistories_FileHistories_Edges_Node{}
 	}
-	return t.Annotation
+	return t.CategoryType
 }
-func (t *GetAllFileHistories_FileHistories_Edges_Node) GetCategory() *string {
+func (t *GetAllFileHistories_FileHistories_Edges_Node) GetCorrelationID() *string {
 	if t == nil {
 		t = &GetAllFileHistories_FileHistories_Edges_Node{}
 	}
-	return t.Category
-}
-func (t *GetAllFileHistories_FileHistories_Edges_Node) GetContentType() string {
-	if t == nil {
-		t = &GetAllFileHistories_FileHistories_Edges_Node{}
-	}
-	return t.ContentType
+	return t.CorrelationID
 }
 func (t *GetAllFileHistories_FileHistories_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
@@ -12762,23 +13074,17 @@ func (t *GetAllFileHistories_FileHistories_Edges_Node) GetCreatedBy() *string {
 	}
 	return t.CreatedBy
 }
-func (t *GetAllFileHistories_FileHistories_Edges_Node) GetFileExtension() string {
+func (t *GetAllFileHistories_FileHistories_Edges_Node) GetDetectedContentType() string {
 	if t == nil {
 		t = &GetAllFileHistories_FileHistories_Edges_Node{}
 	}
-	return t.FileExtension
+	return t.DetectedContentType
 }
-func (t *GetAllFileHistories_FileHistories_Edges_Node) GetFileName() string {
+func (t *GetAllFileHistories_FileHistories_Edges_Node) GetDetectedMimeType() *string {
 	if t == nil {
 		t = &GetAllFileHistories_FileHistories_Edges_Node{}
 	}
-	return t.FileName
-}
-func (t *GetAllFileHistories_FileHistories_Edges_Node) GetFileSize() *int64 {
-	if t == nil {
-		t = &GetAllFileHistories_FileHistories_Edges_Node{}
-	}
-	return t.FileSize
+	return t.DetectedMimeType
 }
 func (t *GetAllFileHistories_FileHistories_Edges_Node) GetHistoryTime() *time.Time {
 	if t == nil {
@@ -12792,11 +13098,41 @@ func (t *GetAllFileHistories_FileHistories_Edges_Node) GetID() string {
 	}
 	return t.ID
 }
+func (t *GetAllFileHistories_FileHistories_Edges_Node) GetMd5Hash() *string {
+	if t == nil {
+		t = &GetAllFileHistories_FileHistories_Edges_Node{}
+	}
+	return t.Md5Hash
+}
 func (t *GetAllFileHistories_FileHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
 		t = &GetAllFileHistories_FileHistories_Edges_Node{}
 	}
 	return &t.Operation
+}
+func (t *GetAllFileHistories_FileHistories_Edges_Node) GetPersistedFileSize() *int64 {
+	if t == nil {
+		t = &GetAllFileHistories_FileHistories_Edges_Node{}
+	}
+	return t.PersistedFileSize
+}
+func (t *GetAllFileHistories_FileHistories_Edges_Node) GetProvidedFileExtension() string {
+	if t == nil {
+		t = &GetAllFileHistories_FileHistories_Edges_Node{}
+	}
+	return t.ProvidedFileExtension
+}
+func (t *GetAllFileHistories_FileHistories_Edges_Node) GetProvidedFileName() string {
+	if t == nil {
+		t = &GetAllFileHistories_FileHistories_Edges_Node{}
+	}
+	return t.ProvidedFileName
+}
+func (t *GetAllFileHistories_FileHistories_Edges_Node) GetProvidedFileSize() *int64 {
+	if t == nil {
+		t = &GetAllFileHistories_FileHistories_Edges_Node{}
+	}
+	return t.ProvidedFileSize
 }
 func (t *GetAllFileHistories_FileHistories_Edges_Node) GetRef() *string {
 	if t == nil {
@@ -12804,7 +13140,25 @@ func (t *GetAllFileHistories_FileHistories_Edges_Node) GetRef() *string {
 	}
 	return t.Ref
 }
-func (t *GetAllFileHistories_FileHistories_Edges_Node) GetStoreKey() string {
+func (t *GetAllFileHistories_FileHistories_Edges_Node) GetStoragePath() *string {
+	if t == nil {
+		t = &GetAllFileHistories_FileHistories_Edges_Node{}
+	}
+	return t.StoragePath
+}
+func (t *GetAllFileHistories_FileHistories_Edges_Node) GetStorageScheme() *string {
+	if t == nil {
+		t = &GetAllFileHistories_FileHistories_Edges_Node{}
+	}
+	return t.StorageScheme
+}
+func (t *GetAllFileHistories_FileHistories_Edges_Node) GetStorageVolume() *string {
+	if t == nil {
+		t = &GetAllFileHistories_FileHistories_Edges_Node{}
+	}
+	return t.StorageVolume
+}
+func (t *GetAllFileHistories_FileHistories_Edges_Node) GetStoreKey() *string {
 	if t == nil {
 		t = &GetAllFileHistories_FileHistories_Edges_Node{}
 	}
@@ -12827,6 +13181,12 @@ func (t *GetAllFileHistories_FileHistories_Edges_Node) GetUpdatedBy() *string {
 		t = &GetAllFileHistories_FileHistories_Edges_Node{}
 	}
 	return t.UpdatedBy
+}
+func (t *GetAllFileHistories_FileHistories_Edges_Node) GetURI() *string {
+	if t == nil {
+		t = &GetAllFileHistories_FileHistories_Edges_Node{}
+	}
+	return t.URI
 }
 
 type GetAllFileHistories_FileHistories_Edges struct {
@@ -12852,41 +13212,42 @@ func (t *GetAllFileHistories_FileHistories) GetEdges() []*GetAllFileHistories_Fi
 }
 
 type GetFileHistories_FileHistories_Edges_Node struct {
-	Annotation    *string        "json:\"annotation,omitempty\" graphql:\"annotation\""
-	Category      *string        "json:\"category,omitempty\" graphql:\"category\""
-	ContentType   string         "json:\"contentType\" graphql:\"contentType\""
-	CreatedAt     *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	FileExtension string         "json:\"fileExtension\" graphql:\"fileExtension\""
-	FileName      string         "json:\"fileName\" graphql:\"fileName\""
-	FileSize      *int64         "json:\"fileSize,omitempty\" graphql:\"fileSize\""
-	HistoryTime   time.Time      "json:\"historyTime\" graphql:\"historyTime\""
-	ID            string         "json:\"id\" graphql:\"id\""
-	Operation     history.OpType "json:\"operation\" graphql:\"operation\""
-	Ref           *string        "json:\"ref,omitempty\" graphql:\"ref\""
-	StoreKey      string         "json:\"storeKey\" graphql:\"storeKey\""
-	Tags          []string       "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt     *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CategoryType          *string        "json:\"categoryType,omitempty\" graphql:\"categoryType\""
+	CorrelationID         *string        "json:\"correlationID,omitempty\" graphql:\"correlationID\""
+	CreatedAt             *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DetectedContentType   string         "json:\"detectedContentType\" graphql:\"detectedContentType\""
+	DetectedMimeType      *string        "json:\"detectedMimeType,omitempty\" graphql:\"detectedMimeType\""
+	HistoryTime           time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID                    string         "json:\"id\" graphql:\"id\""
+	Md5Hash               *string        "json:\"md5Hash,omitempty\" graphql:\"md5Hash\""
+	Operation             history.OpType "json:\"operation\" graphql:\"operation\""
+	PersistedFileSize     *int64         "json:\"persistedFileSize,omitempty\" graphql:\"persistedFileSize\""
+	ProvidedFileExtension string         "json:\"providedFileExtension\" graphql:\"providedFileExtension\""
+	ProvidedFileName      string         "json:\"providedFileName\" graphql:\"providedFileName\""
+	ProvidedFileSize      *int64         "json:\"providedFileSize,omitempty\" graphql:\"providedFileSize\""
+	Ref                   *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	StoragePath           *string        "json:\"storagePath,omitempty\" graphql:\"storagePath\""
+	StorageScheme         *string        "json:\"storageScheme,omitempty\" graphql:\"storageScheme\""
+	StorageVolume         *string        "json:\"storageVolume,omitempty\" graphql:\"storageVolume\""
+	StoreKey              *string        "json:\"storeKey,omitempty\" graphql:\"storeKey\""
+	Tags                  []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt             *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	URI                   *string        "json:\"uri,omitempty\" graphql:\"uri\""
 }
 
-func (t *GetFileHistories_FileHistories_Edges_Node) GetAnnotation() *string {
+func (t *GetFileHistories_FileHistories_Edges_Node) GetCategoryType() *string {
 	if t == nil {
 		t = &GetFileHistories_FileHistories_Edges_Node{}
 	}
-	return t.Annotation
+	return t.CategoryType
 }
-func (t *GetFileHistories_FileHistories_Edges_Node) GetCategory() *string {
+func (t *GetFileHistories_FileHistories_Edges_Node) GetCorrelationID() *string {
 	if t == nil {
 		t = &GetFileHistories_FileHistories_Edges_Node{}
 	}
-	return t.Category
-}
-func (t *GetFileHistories_FileHistories_Edges_Node) GetContentType() string {
-	if t == nil {
-		t = &GetFileHistories_FileHistories_Edges_Node{}
-	}
-	return t.ContentType
+	return t.CorrelationID
 }
 func (t *GetFileHistories_FileHistories_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
@@ -12900,23 +13261,17 @@ func (t *GetFileHistories_FileHistories_Edges_Node) GetCreatedBy() *string {
 	}
 	return t.CreatedBy
 }
-func (t *GetFileHistories_FileHistories_Edges_Node) GetFileExtension() string {
+func (t *GetFileHistories_FileHistories_Edges_Node) GetDetectedContentType() string {
 	if t == nil {
 		t = &GetFileHistories_FileHistories_Edges_Node{}
 	}
-	return t.FileExtension
+	return t.DetectedContentType
 }
-func (t *GetFileHistories_FileHistories_Edges_Node) GetFileName() string {
+func (t *GetFileHistories_FileHistories_Edges_Node) GetDetectedMimeType() *string {
 	if t == nil {
 		t = &GetFileHistories_FileHistories_Edges_Node{}
 	}
-	return t.FileName
-}
-func (t *GetFileHistories_FileHistories_Edges_Node) GetFileSize() *int64 {
-	if t == nil {
-		t = &GetFileHistories_FileHistories_Edges_Node{}
-	}
-	return t.FileSize
+	return t.DetectedMimeType
 }
 func (t *GetFileHistories_FileHistories_Edges_Node) GetHistoryTime() *time.Time {
 	if t == nil {
@@ -12930,11 +13285,41 @@ func (t *GetFileHistories_FileHistories_Edges_Node) GetID() string {
 	}
 	return t.ID
 }
+func (t *GetFileHistories_FileHistories_Edges_Node) GetMd5Hash() *string {
+	if t == nil {
+		t = &GetFileHistories_FileHistories_Edges_Node{}
+	}
+	return t.Md5Hash
+}
 func (t *GetFileHistories_FileHistories_Edges_Node) GetOperation() *history.OpType {
 	if t == nil {
 		t = &GetFileHistories_FileHistories_Edges_Node{}
 	}
 	return &t.Operation
+}
+func (t *GetFileHistories_FileHistories_Edges_Node) GetPersistedFileSize() *int64 {
+	if t == nil {
+		t = &GetFileHistories_FileHistories_Edges_Node{}
+	}
+	return t.PersistedFileSize
+}
+func (t *GetFileHistories_FileHistories_Edges_Node) GetProvidedFileExtension() string {
+	if t == nil {
+		t = &GetFileHistories_FileHistories_Edges_Node{}
+	}
+	return t.ProvidedFileExtension
+}
+func (t *GetFileHistories_FileHistories_Edges_Node) GetProvidedFileName() string {
+	if t == nil {
+		t = &GetFileHistories_FileHistories_Edges_Node{}
+	}
+	return t.ProvidedFileName
+}
+func (t *GetFileHistories_FileHistories_Edges_Node) GetProvidedFileSize() *int64 {
+	if t == nil {
+		t = &GetFileHistories_FileHistories_Edges_Node{}
+	}
+	return t.ProvidedFileSize
 }
 func (t *GetFileHistories_FileHistories_Edges_Node) GetRef() *string {
 	if t == nil {
@@ -12942,7 +13327,25 @@ func (t *GetFileHistories_FileHistories_Edges_Node) GetRef() *string {
 	}
 	return t.Ref
 }
-func (t *GetFileHistories_FileHistories_Edges_Node) GetStoreKey() string {
+func (t *GetFileHistories_FileHistories_Edges_Node) GetStoragePath() *string {
+	if t == nil {
+		t = &GetFileHistories_FileHistories_Edges_Node{}
+	}
+	return t.StoragePath
+}
+func (t *GetFileHistories_FileHistories_Edges_Node) GetStorageScheme() *string {
+	if t == nil {
+		t = &GetFileHistories_FileHistories_Edges_Node{}
+	}
+	return t.StorageScheme
+}
+func (t *GetFileHistories_FileHistories_Edges_Node) GetStorageVolume() *string {
+	if t == nil {
+		t = &GetFileHistories_FileHistories_Edges_Node{}
+	}
+	return t.StorageVolume
+}
+func (t *GetFileHistories_FileHistories_Edges_Node) GetStoreKey() *string {
 	if t == nil {
 		t = &GetFileHistories_FileHistories_Edges_Node{}
 	}
@@ -12965,6 +13368,12 @@ func (t *GetFileHistories_FileHistories_Edges_Node) GetUpdatedBy() *string {
 		t = &GetFileHistories_FileHistories_Edges_Node{}
 	}
 	return t.UpdatedBy
+}
+func (t *GetFileHistories_FileHistories_Edges_Node) GetURI() *string {
+	if t == nil {
+		t = &GetFileHistories_FileHistories_Edges_Node{}
+	}
+	return t.URI
 }
 
 type GetFileHistories_FileHistories_Edges struct {
@@ -31117,6 +31526,17 @@ func (t *GetAllFiles) GetFiles() *GetAllFiles_Files {
 	return &t.Files
 }
 
+type GetFileByID struct {
+	File GetFileByID_File "json:\"file\" graphql:\"file\""
+}
+
+func (t *GetFileByID) GetFile() *GetFileByID_File {
+	if t == nil {
+		t = &GetFileByID{}
+	}
+	return &t.File
+}
+
 type GetFiles struct {
 	Files GetFiles_Files "json:\"files\" graphql:\"files\""
 }
@@ -32769,12 +33189,18 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					deletedBy
 					id
 					tags
-					fileName
-					fileExtension
-					contentType
+					providedFileName
+					providedFileExtension
+					detectedMimeType
+					md5Hash
+					detectedContentType
 					storeKey
-					category
-					annotation
+					correlationID
+					categoryType
+					uri
+					storageScheme
+					storageVolume
+					storagePath
 				}
 			}
 			... on GroupSearchResult {
@@ -36471,23 +36897,26 @@ func (c *Client) GetFeatureHistories(ctx context.Context, where *FeatureHistoryW
 const CreateBulkCSVFileDocument = `mutation CreateBulkCSVFile ($input: Upload!) {
 	createBulkCSVFile(input: $input) {
 		files {
-			annotation
-			category
-			contentType
-			fileExtension
-			fileName
-			fileSize
+			categoryType
+			correlationID
+			createdAt
+			createdBy
+			detectedContentType
+			detectedMimeType
 			id
+			md5Hash
+			persistedFileSize
+			providedFileExtension
+			providedFileName
+			providedFileSize
+			storagePath
+			storageScheme
+			storageVolume
 			storeKey
-			user {
-				id
-			}
-			organization {
-				id
-			}
-			group {
-				id
-			}
+			tags
+			updatedAt
+			updatedBy
+			uri
 		}
 	}
 }
@@ -36513,23 +36942,26 @@ func (c *Client) CreateBulkCSVFile(ctx context.Context, input graphql.Upload, in
 const CreateBulkFileDocument = `mutation CreateBulkFile ($input: [CreateFileInput!]) {
 	createBulkFile(input: $input) {
 		files {
-			annotation
-			category
-			contentType
-			fileExtension
-			fileName
-			fileSize
+			categoryType
+			correlationID
+			createdAt
+			createdBy
+			detectedContentType
+			detectedMimeType
 			id
+			md5Hash
+			persistedFileSize
+			providedFileExtension
+			providedFileName
+			providedFileSize
+			storagePath
+			storageScheme
+			storageVolume
 			storeKey
-			user {
-				id
-			}
-			organization {
-				id
-			}
-			group {
-				id
-			}
+			tags
+			updatedAt
+			updatedBy
+			uri
 		}
 	}
 }
@@ -36555,23 +36987,26 @@ func (c *Client) CreateBulkFile(ctx context.Context, input []*CreateFileInput, i
 const CreateFileDocument = `mutation CreateFile ($input: CreateFileInput!) {
 	createFile(input: $input) {
 		file {
-			annotation
-			category
-			contentType
-			fileExtension
-			fileName
-			fileSize
+			categoryType
+			correlationID
+			createdAt
+			createdBy
+			detectedContentType
+			detectedMimeType
 			id
+			md5Hash
+			persistedFileSize
+			providedFileExtension
+			providedFileName
+			providedFileSize
+			storagePath
+			storageScheme
+			storageVolume
 			storeKey
-			user {
-				id
-			}
-			organization {
-				id
-			}
-			group {
-				id
-			}
+			tags
+			updatedAt
+			updatedBy
+			uri
 		}
 	}
 }
@@ -36622,27 +37057,26 @@ const GetAllFilesDocument = `query GetAllFiles {
 	files {
 		edges {
 			node {
-				annotation
-				category
-				contentType
+				categoryType
+				correlationID
 				createdAt
 				createdBy
-				fileExtension
-				fileName
-				fileSize
+				detectedContentType
+				detectedMimeType
 				id
+				md5Hash
+				persistedFileSize
+				providedFileExtension
+				providedFileName
+				providedFileSize
+				storagePath
+				storageScheme
+				storageVolume
 				storeKey
+				tags
 				updatedAt
 				updatedBy
-				user {
-					id
-				}
-				organization {
-					id
-				}
-				group {
-					id
-				}
+				uri
 			}
 		}
 	}
@@ -36664,31 +37098,73 @@ func (c *Client) GetAllFiles(ctx context.Context, interceptors ...clientv2.Reque
 	return &res, nil
 }
 
+const GetFileByIDDocument = `query GetFileByID ($fileId: ID!) {
+	file(id: $fileId) {
+		categoryType
+		correlationID
+		createdAt
+		createdBy
+		detectedContentType
+		detectedMimeType
+		id
+		md5Hash
+		persistedFileSize
+		providedFileExtension
+		providedFileName
+		providedFileSize
+		storagePath
+		storageScheme
+		storageVolume
+		storeKey
+		tags
+		updatedAt
+		updatedBy
+		uri
+	}
+}
+`
+
+func (c *Client) GetFileByID(ctx context.Context, fileID string, interceptors ...clientv2.RequestInterceptor) (*GetFileByID, error) {
+	vars := map[string]any{
+		"fileId": fileID,
+	}
+
+	var res GetFileByID
+	if err := c.Client.Post(ctx, "GetFileByID", GetFileByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const GetFilesDocument = `query GetFiles ($where: FileWhereInput) {
 	files(where: $where) {
 		edges {
 			node {
-				annotation
-				category
-				contentType
+				categoryType
+				correlationID
 				createdAt
 				createdBy
-				fileExtension
-				fileName
-				fileSize
+				detectedContentType
+				detectedMimeType
 				id
+				md5Hash
+				persistedFileSize
+				providedFileExtension
+				providedFileName
+				providedFileSize
+				storagePath
+				storageScheme
+				storageVolume
 				storeKey
+				tags
 				updatedAt
 				updatedBy
-				user {
-					id
-				}
-				organization {
-					id
-				}
-				group {
-					id
-				}
+				uri
 			}
 		}
 	}
@@ -36715,23 +37191,26 @@ func (c *Client) GetFiles(ctx context.Context, where *FileWhereInput, intercepto
 const UpdateFileDocument = `mutation UpdateFile ($updateFileId: ID!, $input: UpdateFileInput!) {
 	updateFile(id: $updateFileId, input: $input) {
 		file {
+			categoryType
+			correlationID
+			createdAt
+			createdBy
+			detectedContentType
+			detectedMimeType
 			id
-			fileName
-			fileExtension
-			fileSize
-			contentType
+			md5Hash
+			persistedFileSize
+			providedFileExtension
+			providedFileName
+			providedFileSize
+			storagePath
+			storageScheme
+			storageVolume
 			storeKey
-			category
-			annotation
-			user {
-				id
-			}
-			organization {
-				id
-			}
-			group {
-				id
-			}
+			tags
+			updatedAt
+			updatedBy
+			uri
 		}
 	}
 }
@@ -36759,22 +37238,29 @@ const GetAllFileHistoriesDocument = `query GetAllFileHistories {
 	fileHistories {
 		edges {
 			node {
-				annotation
-				category
-				contentType
+				categoryType
+				correlationID
 				createdAt
 				createdBy
-				fileExtension
-				fileName
-				fileSize
+				detectedContentType
+				detectedMimeType
 				historyTime
 				id
+				md5Hash
 				operation
+				persistedFileSize
+				providedFileExtension
+				providedFileName
+				providedFileSize
 				ref
+				storagePath
+				storageScheme
+				storageVolume
 				storeKey
 				tags
 				updatedAt
 				updatedBy
+				uri
 			}
 		}
 	}
@@ -36800,22 +37286,29 @@ const GetFileHistoriesDocument = `query GetFileHistories ($where: FileHistoryWhe
 	fileHistories(where: $where) {
 		edges {
 			node {
-				annotation
-				category
-				contentType
+				categoryType
+				correlationID
 				createdAt
 				createdBy
-				fileExtension
-				fileName
-				fileSize
+				detectedContentType
+				detectedMimeType
 				historyTime
 				id
+				md5Hash
 				operation
+				persistedFileSize
+				providedFileExtension
+				providedFileName
+				providedFileSize
 				ref
+				storagePath
+				storageScheme
+				storageVolume
 				storeKey
 				tags
 				updatedAt
 				updatedBy
+				uri
 			}
 		}
 	}
@@ -42532,6 +43025,7 @@ var DocumentOperationNames = map[string]string{
 	CreateFileDocument:                            "CreateFile",
 	DeleteFileDocument:                            "DeleteFile",
 	GetAllFilesDocument:                           "GetAllFiles",
+	GetFileByIDDocument:                           "GetFileByID",
 	GetFilesDocument:                              "GetFiles",
 	UpdateFileDocument:                            "UpdateFile",
 	GetAllFileHistoriesDocument:                   "GetAllFileHistories",

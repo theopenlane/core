@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/customtypes"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/template"
@@ -191,6 +192,21 @@ func (ddu *DocumentDataUpdate) AddEntity(e ...*Entity) *DocumentDataUpdate {
 	return ddu.AddEntityIDs(ids...)
 }
 
+// AddFileIDs adds the "files" edge to the File entity by IDs.
+func (ddu *DocumentDataUpdate) AddFileIDs(ids ...string) *DocumentDataUpdate {
+	ddu.mutation.AddFileIDs(ids...)
+	return ddu
+}
+
+// AddFiles adds the "files" edges to the File entity.
+func (ddu *DocumentDataUpdate) AddFiles(f ...*File) *DocumentDataUpdate {
+	ids := make([]string, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return ddu.AddFileIDs(ids...)
+}
+
 // Mutation returns the DocumentDataMutation object of the builder.
 func (ddu *DocumentDataUpdate) Mutation() *DocumentDataMutation {
 	return ddu.mutation
@@ -227,6 +243,27 @@ func (ddu *DocumentDataUpdate) RemoveEntity(e ...*Entity) *DocumentDataUpdate {
 		ids[i] = e[i].ID
 	}
 	return ddu.RemoveEntityIDs(ids...)
+}
+
+// ClearFiles clears all "files" edges to the File entity.
+func (ddu *DocumentDataUpdate) ClearFiles() *DocumentDataUpdate {
+	ddu.mutation.ClearFiles()
+	return ddu
+}
+
+// RemoveFileIDs removes the "files" edge to File entities by IDs.
+func (ddu *DocumentDataUpdate) RemoveFileIDs(ids ...string) *DocumentDataUpdate {
+	ddu.mutation.RemoveFileIDs(ids...)
+	return ddu
+}
+
+// RemoveFiles removes "files" edges to File entities.
+func (ddu *DocumentDataUpdate) RemoveFiles(f ...*File) *DocumentDataUpdate {
+	ids := make([]string, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return ddu.RemoveFileIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -456,6 +493,54 @@ func (ddu *DocumentDataUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if ddu.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   documentdata.FilesTable,
+			Columns: documentdata.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ddu.schemaConfig.DocumentDataFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ddu.mutation.RemovedFilesIDs(); len(nodes) > 0 && !ddu.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   documentdata.FilesTable,
+			Columns: documentdata.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ddu.schemaConfig.DocumentDataFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ddu.mutation.FilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   documentdata.FilesTable,
+			Columns: documentdata.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ddu.schemaConfig.DocumentDataFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = ddu.schemaConfig.DocumentData
 	ctx = internal.NewSchemaConfigContext(ctx, ddu.schemaConfig)
 	_spec.AddModifiers(ddu.modifiers...)
@@ -635,6 +720,21 @@ func (dduo *DocumentDataUpdateOne) AddEntity(e ...*Entity) *DocumentDataUpdateOn
 	return dduo.AddEntityIDs(ids...)
 }
 
+// AddFileIDs adds the "files" edge to the File entity by IDs.
+func (dduo *DocumentDataUpdateOne) AddFileIDs(ids ...string) *DocumentDataUpdateOne {
+	dduo.mutation.AddFileIDs(ids...)
+	return dduo
+}
+
+// AddFiles adds the "files" edges to the File entity.
+func (dduo *DocumentDataUpdateOne) AddFiles(f ...*File) *DocumentDataUpdateOne {
+	ids := make([]string, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return dduo.AddFileIDs(ids...)
+}
+
 // Mutation returns the DocumentDataMutation object of the builder.
 func (dduo *DocumentDataUpdateOne) Mutation() *DocumentDataMutation {
 	return dduo.mutation
@@ -671,6 +771,27 @@ func (dduo *DocumentDataUpdateOne) RemoveEntity(e ...*Entity) *DocumentDataUpdat
 		ids[i] = e[i].ID
 	}
 	return dduo.RemoveEntityIDs(ids...)
+}
+
+// ClearFiles clears all "files" edges to the File entity.
+func (dduo *DocumentDataUpdateOne) ClearFiles() *DocumentDataUpdateOne {
+	dduo.mutation.ClearFiles()
+	return dduo
+}
+
+// RemoveFileIDs removes the "files" edge to File entities by IDs.
+func (dduo *DocumentDataUpdateOne) RemoveFileIDs(ids ...string) *DocumentDataUpdateOne {
+	dduo.mutation.RemoveFileIDs(ids...)
+	return dduo
+}
+
+// RemoveFiles removes "files" edges to File entities.
+func (dduo *DocumentDataUpdateOne) RemoveFiles(f ...*File) *DocumentDataUpdateOne {
+	ids := make([]string, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return dduo.RemoveFileIDs(ids...)
 }
 
 // Where appends a list predicates to the DocumentDataUpdate builder.
@@ -925,6 +1046,54 @@ func (dduo *DocumentDataUpdateOne) sqlSave(ctx context.Context) (_node *Document
 			},
 		}
 		edge.Schema = dduo.schemaConfig.EntityDocuments
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if dduo.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   documentdata.FilesTable,
+			Columns: documentdata.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = dduo.schemaConfig.DocumentDataFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := dduo.mutation.RemovedFilesIDs(); len(nodes) > 0 && !dduo.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   documentdata.FilesTable,
+			Columns: documentdata.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = dduo.schemaConfig.DocumentDataFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := dduo.mutation.FilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   documentdata.FilesTable,
+			Columns: documentdata.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = dduo.schemaConfig.DocumentDataFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

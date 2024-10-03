@@ -1133,6 +1133,25 @@ func (c *ContactClient) QueryEntities(co *Contact) *EntityQuery {
 	return query
 }
 
+// QueryFiles queries the files edge of a Contact.
+func (c *ContactClient) QueryFiles(co *Contact) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := co.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(contact.Table, contact.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, contact.FilesTable, contact.FilesPrimaryKey...),
+		)
+		schemaConfig := co.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.ContactFiles
+		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *ContactClient) Hooks() []Hook {
 	hooks := c.hooks.Contact
@@ -1454,6 +1473,25 @@ func (c *DocumentDataClient) QueryEntity(dd *DocumentData) *EntityQuery {
 		schemaConfig := dd.schemaConfig
 		step.To.Schema = schemaConfig.Entity
 		step.Edge.Schema = schemaConfig.EntityDocuments
+		fromV = sqlgraph.Neighbors(dd.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryFiles queries the files edge of a DocumentData.
+func (c *DocumentDataClient) QueryFiles(dd *DocumentData) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := dd.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(documentdata.Table, documentdata.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, documentdata.FilesTable, documentdata.FilesPrimaryKey...),
+		)
+		schemaConfig := dd.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.DocumentDataFiles
 		fromV = sqlgraph.Neighbors(dd.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -3937,6 +3975,25 @@ func (c *EventClient) QuerySubscriber(e *Event) *SubscriberQuery {
 	return query
 }
 
+// QueryFile queries the file edge of a Event.
+func (c *EventClient) QueryFile(e *Event) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := e.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(event.Table, event.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, event.FileTable, event.FilePrimaryKey...),
+		)
+		schemaConfig := e.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.FileEvents
+		fromV = sqlgraph.Neighbors(e.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *EventClient) Hooks() []Hook {
 	hooks := c.hooks.Event
@@ -4558,11 +4615,11 @@ func (c *FileClient) QueryUser(f *File) *UserQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(file.Table, file.FieldID, id),
 			sqlgraph.To(user.Table, user.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, file.UserTable, file.UserColumn),
+			sqlgraph.Edge(sqlgraph.M2M, true, file.UserTable, file.UserPrimaryKey...),
 		)
 		schemaConfig := f.schemaConfig
 		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.UserFiles
 		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -4588,6 +4645,44 @@ func (c *FileClient) QueryOrganization(f *File) *OrganizationQuery {
 	return query
 }
 
+// QueryGroup queries the group edge of a File.
+func (c *FileClient) QueryGroup(f *File) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := f.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, file.GroupTable, file.GroupPrimaryKey...),
+		)
+		schemaConfig := f.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.GroupFiles
+		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryContact queries the contact edge of a File.
+func (c *FileClient) QueryContact(f *File) *ContactQuery {
+	query := (&ContactClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := f.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, id),
+			sqlgraph.To(contact.Table, contact.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, file.ContactTable, file.ContactPrimaryKey...),
+		)
+		schemaConfig := f.schemaConfig
+		step.To.Schema = schemaConfig.Contact
+		step.Edge.Schema = schemaConfig.ContactFiles
+		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryEntity queries the entity edge of a File.
 func (c *FileClient) QueryEntity(f *File) *EntityQuery {
 	query := (&EntityClient{config: c.config}).Query()
@@ -4607,19 +4702,95 @@ func (c *FileClient) QueryEntity(f *File) *EntityQuery {
 	return query
 }
 
-// QueryGroup queries the group edge of a File.
-func (c *FileClient) QueryGroup(f *File) *GroupQuery {
-	query := (&GroupClient{config: c.config}).Query()
+// QueryUsersetting queries the usersetting edge of a File.
+func (c *FileClient) QueryUsersetting(f *File) *UserSettingQuery {
+	query := (&UserSettingClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := f.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(file.Table, file.FieldID, id),
-			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, file.GroupTable, file.GroupPrimaryKey...),
+			sqlgraph.To(usersetting.Table, usersetting.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, file.UsersettingTable, file.UsersettingPrimaryKey...),
 		)
 		schemaConfig := f.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.GroupFiles
+		step.To.Schema = schemaConfig.UserSetting
+		step.Edge.Schema = schemaConfig.UserSettingFiles
+		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryOrganizationsetting queries the organizationsetting edge of a File.
+func (c *FileClient) QueryOrganizationsetting(f *File) *OrganizationSettingQuery {
+	query := (&OrganizationSettingClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := f.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, id),
+			sqlgraph.To(organizationsetting.Table, organizationsetting.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, file.OrganizationsettingTable, file.OrganizationsettingPrimaryKey...),
+		)
+		schemaConfig := f.schemaConfig
+		step.To.Schema = schemaConfig.OrganizationSetting
+		step.Edge.Schema = schemaConfig.OrganizationSettingFiles
+		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTemplate queries the template edge of a File.
+func (c *FileClient) QueryTemplate(f *File) *TemplateQuery {
+	query := (&TemplateClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := f.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, id),
+			sqlgraph.To(template.Table, template.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, file.TemplateTable, file.TemplatePrimaryKey...),
+		)
+		schemaConfig := f.schemaConfig
+		step.To.Schema = schemaConfig.Template
+		step.Edge.Schema = schemaConfig.TemplateFiles
+		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDocumentdata queries the documentdata edge of a File.
+func (c *FileClient) QueryDocumentdata(f *File) *DocumentDataQuery {
+	query := (&DocumentDataClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := f.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, id),
+			sqlgraph.To(documentdata.Table, documentdata.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, file.DocumentdataTable, file.DocumentdataPrimaryKey...),
+		)
+		schemaConfig := f.schemaConfig
+		step.To.Schema = schemaConfig.DocumentData
+		step.Edge.Schema = schemaConfig.DocumentDataFiles
+		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEvents queries the events edge of a File.
+func (c *FileClient) QueryEvents(f *File) *EventQuery {
+	query := (&EventClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := f.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, id),
+			sqlgraph.To(event.Table, event.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, file.EventsTable, file.EventsPrimaryKey...),
+		)
+		schemaConfig := f.schemaConfig
+		step.To.Schema = schemaConfig.Event
+		step.Edge.Schema = schemaConfig.FileEvents
 		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -8673,6 +8844,25 @@ func (c *OrganizationSettingClient) QueryOrganization(os *OrganizationSetting) *
 	return query
 }
 
+// QueryFiles queries the files edge of a OrganizationSetting.
+func (c *OrganizationSettingClient) QueryFiles(os *OrganizationSetting) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := os.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organizationsetting.Table, organizationsetting.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, organizationsetting.FilesTable, organizationsetting.FilesPrimaryKey...),
+		)
+		schemaConfig := os.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.OrganizationSettingFiles
+		fromV = sqlgraph.Neighbors(os.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *OrganizationSettingClient) Hooks() []Hook {
 	hooks := c.hooks.OrganizationSetting
@@ -9654,6 +9844,25 @@ func (c *TemplateClient) QueryDocuments(t *Template) *DocumentDataQuery {
 	return query
 }
 
+// QueryFiles queries the files edge of a Template.
+func (c *TemplateClient) QueryFiles(t *Template) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := t.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(template.Table, template.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, template.FilesTable, template.FilesPrimaryKey...),
+		)
+		schemaConfig := t.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.TemplateFiles
+		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *TemplateClient) Hooks() []Hook {
 	hooks := c.hooks.Template
@@ -10084,11 +10293,11 @@ func (c *UserClient) QueryFiles(u *User) *FileQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(user.Table, user.FieldID, id),
 			sqlgraph.To(file.Table, file.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, user.FilesTable, user.FilesColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, user.FilesTable, user.FilesPrimaryKey...),
 		)
 		schemaConfig := u.schemaConfig
 		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.UserFiles
 		fromV = sqlgraph.Neighbors(u.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -10453,6 +10662,25 @@ func (c *UserSettingClient) QueryDefaultOrg(us *UserSetting) *OrganizationQuery 
 		schemaConfig := us.schemaConfig
 		step.To.Schema = schemaConfig.Organization
 		step.Edge.Schema = schemaConfig.UserSetting
+		fromV = sqlgraph.Neighbors(us.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryFiles queries the files edge of a UserSetting.
+func (c *UserSettingClient) QueryFiles(us *UserSetting) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := us.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(usersetting.Table, usersetting.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, usersetting.FilesTable, usersetting.FilesPrimaryKey...),
+		)
+		schemaConfig := us.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.UserSettingFiles
 		fromV = sqlgraph.Neighbors(us.driver.Dialect(), step)
 		return fromV, nil
 	}

@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entitlementplanfeature"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/feature"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
@@ -57,6 +58,7 @@ type EventQuery struct {
 	withEntitlement                 *EntitlementQuery
 	withWebhook                     *WebhookQuery
 	withSubscriber                  *SubscriberQuery
+	withFile                        *FileQuery
 	loadTotal                       []func(context.Context, []*Event) error
 	modifiers                       []func(*sql.Selector)
 	withNamedUser                   map[string]*UserQuery
@@ -75,6 +77,7 @@ type EventQuery struct {
 	withNamedEntitlement            map[string]*EntitlementQuery
 	withNamedWebhook                map[string]*WebhookQuery
 	withNamedSubscriber             map[string]*SubscriberQuery
+	withNamedFile                   map[string]*FileQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -511,6 +514,31 @@ func (eq *EventQuery) QuerySubscriber() *SubscriberQuery {
 	return query
 }
 
+// QueryFile chains the current query on the "file" edge.
+func (eq *EventQuery) QueryFile() *FileQuery {
+	query := (&FileClient{config: eq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := eq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := eq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(event.Table, event.FieldID, selector),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, event.FileTable, event.FilePrimaryKey...),
+		)
+		schemaConfig := eq.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.FileEvents
+		fromU = sqlgraph.SetNeighbors(eq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first Event entity from the query.
 // Returns a *NotFoundError when no Event was found.
 func (eq *EventQuery) First(ctx context.Context) (*Event, error) {
@@ -719,6 +747,7 @@ func (eq *EventQuery) Clone() *EventQuery {
 		withEntitlement:            eq.withEntitlement.Clone(),
 		withWebhook:                eq.withWebhook.Clone(),
 		withSubscriber:             eq.withSubscriber.Clone(),
+		withFile:                   eq.withFile.Clone(),
 		// clone intermediate query.
 		sql:       eq.sql.Clone(),
 		path:      eq.path,
@@ -902,6 +931,17 @@ func (eq *EventQuery) WithSubscriber(opts ...func(*SubscriberQuery)) *EventQuery
 	return eq
 }
 
+// WithFile tells the query-builder to eager-load the nodes that are connected to
+// the "file" edge. The optional arguments are used to configure the query builder of the edge.
+func (eq *EventQuery) WithFile(opts ...func(*FileQuery)) *EventQuery {
+	query := (&FileClient{config: eq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	eq.withFile = query
+	return eq
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -980,7 +1020,7 @@ func (eq *EventQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Event,
 	var (
 		nodes       = []*Event{}
 		_spec       = eq.querySpec()
-		loadedTypes = [16]bool{
+		loadedTypes = [17]bool{
 			eq.withUser != nil,
 			eq.withGroup != nil,
 			eq.withIntegration != nil,
@@ -997,6 +1037,7 @@ func (eq *EventQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Event,
 			eq.withEntitlement != nil,
 			eq.withWebhook != nil,
 			eq.withSubscriber != nil,
+			eq.withFile != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -1138,6 +1179,13 @@ func (eq *EventQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Event,
 			return nil, err
 		}
 	}
+	if query := eq.withFile; query != nil {
+		if err := eq.loadFile(ctx, query, nodes,
+			func(n *Event) { n.Edges.File = []*File{} },
+			func(n *Event, e *File) { n.Edges.File = append(n.Edges.File, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range eq.withNamedUser {
 		if err := eq.loadUser(ctx, query, nodes,
 			func(n *Event) { n.appendNamedUser(name) },
@@ -1247,6 +1295,13 @@ func (eq *EventQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Event,
 		if err := eq.loadSubscriber(ctx, query, nodes,
 			func(n *Event) { n.appendNamedSubscriber(name) },
 			func(n *Event, e *Subscriber) { n.appendNamedSubscriber(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range eq.withNamedFile {
+		if err := eq.loadFile(ctx, query, nodes,
+			func(n *Event) { n.appendNamedFile(name) },
+			func(n *Event, e *File) { n.appendNamedFile(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2250,6 +2305,68 @@ func (eq *EventQuery) loadSubscriber(ctx context.Context, query *SubscriberQuery
 	}
 	return nil
 }
+func (eq *EventQuery) loadFile(ctx context.Context, query *FileQuery, nodes []*Event, init func(*Event), assign func(*Event, *File)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Event)
+	nids := make(map[string]map[*Event]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(event.FileTable)
+		joinT.Schema(eq.schemaConfig.FileEvents)
+		s.Join(joinT).On(s.C(file.FieldID), joinT.C(event.FilePrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(event.FilePrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(event.FilePrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Event]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*File](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "file" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 
 func (eq *EventQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := eq.querySpec()
@@ -2570,6 +2687,20 @@ func (eq *EventQuery) WithNamedSubscriber(name string, opts ...func(*SubscriberQ
 		eq.withNamedSubscriber = make(map[string]*SubscriberQuery)
 	}
 	eq.withNamedSubscriber[name] = query
+	return eq
+}
+
+// WithNamedFile tells the query-builder to eager-load the nodes that are connected to the "file"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (eq *EventQuery) WithNamedFile(name string, opts ...func(*FileQuery)) *EventQuery {
+	query := (&FileClient{config: eq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if eq.withNamedFile == nil {
+		eq.withNamedFile = make(map[string]*FileQuery)
+	}
+	eq.withNamedFile[name] = query
 	return eq
 }
 

@@ -1396,30 +1396,30 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if uu.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   user.FilesTable,
-			Columns: []string{user.FilesColumn},
+			Columns: user.FilesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = uu.schemaConfig.File
+		edge.Schema = uu.schemaConfig.UserFiles
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := uu.mutation.RemovedFilesIDs(); len(nodes) > 0 && !uu.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   user.FilesTable,
-			Columns: []string{user.FilesColumn},
+			Columns: user.FilesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = uu.schemaConfig.File
+		edge.Schema = uu.schemaConfig.UserFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1427,16 +1427,16 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if nodes := uu.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   user.FilesTable,
-			Columns: []string{user.FilesColumn},
+			Columns: user.FilesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = uu.schemaConfig.File
+		edge.Schema = uu.schemaConfig.UserFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2991,30 +2991,30 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 	}
 	if uuo.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   user.FilesTable,
-			Columns: []string{user.FilesColumn},
+			Columns: user.FilesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = uuo.schemaConfig.File
+		edge.Schema = uuo.schemaConfig.UserFiles
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := uuo.mutation.RemovedFilesIDs(); len(nodes) > 0 && !uuo.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   user.FilesTable,
-			Columns: []string{user.FilesColumn},
+			Columns: user.FilesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = uuo.schemaConfig.File
+		edge.Schema = uuo.schemaConfig.UserFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3022,16 +3022,16 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 	}
 	if nodes := uuo.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   user.FilesTable,
-			Columns: []string{user.FilesColumn},
+			Columns: user.FilesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = uuo.schemaConfig.File
+		edge.Schema = uuo.schemaConfig.UserFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

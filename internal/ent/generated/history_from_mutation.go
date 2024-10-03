@@ -2149,32 +2149,64 @@ func (m *FileMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetTags(tags)
 	}
 
-	if fileName, exists := m.FileName(); exists {
-		create = create.SetFileName(fileName)
+	if providedFileName, exists := m.ProvidedFileName(); exists {
+		create = create.SetProvidedFileName(providedFileName)
 	}
 
-	if fileExtension, exists := m.FileExtension(); exists {
-		create = create.SetFileExtension(fileExtension)
+	if providedFileExtension, exists := m.ProvidedFileExtension(); exists {
+		create = create.SetProvidedFileExtension(providedFileExtension)
 	}
 
-	if fileSize, exists := m.FileSize(); exists {
-		create = create.SetFileSize(fileSize)
+	if providedFileSize, exists := m.ProvidedFileSize(); exists {
+		create = create.SetProvidedFileSize(providedFileSize)
 	}
 
-	if contentType, exists := m.ContentType(); exists {
-		create = create.SetContentType(contentType)
+	if persistedFileSize, exists := m.PersistedFileSize(); exists {
+		create = create.SetPersistedFileSize(persistedFileSize)
+	}
+
+	if detectedMimeType, exists := m.DetectedMimeType(); exists {
+		create = create.SetDetectedMimeType(detectedMimeType)
+	}
+
+	if md5Hash, exists := m.Md5Hash(); exists {
+		create = create.SetMd5Hash(md5Hash)
+	}
+
+	if detectedContentType, exists := m.DetectedContentType(); exists {
+		create = create.SetDetectedContentType(detectedContentType)
 	}
 
 	if storeKey, exists := m.StoreKey(); exists {
 		create = create.SetStoreKey(storeKey)
 	}
 
-	if category, exists := m.Category(); exists {
-		create = create.SetCategory(category)
+	if correlationID, exists := m.CorrelationID(); exists {
+		create = create.SetCorrelationID(correlationID)
 	}
 
-	if annotation, exists := m.Annotation(); exists {
-		create = create.SetAnnotation(annotation)
+	if categoryType, exists := m.CategoryType(); exists {
+		create = create.SetCategoryType(categoryType)
+	}
+
+	if uri, exists := m.URI(); exists {
+		create = create.SetURI(uri)
+	}
+
+	if storageScheme, exists := m.StorageScheme(); exists {
+		create = create.SetStorageScheme(storageScheme)
+	}
+
+	if storageVolume, exists := m.StorageVolume(); exists {
+		create = create.SetStorageVolume(storageVolume)
+	}
+
+	if storagePath, exists := m.StoragePath(); exists {
+		create = create.SetStoragePath(storagePath)
+	}
+
+	if fileContents, exists := m.FileContents(); exists {
+		create = create.SetFileContents(fileContents)
 	}
 
 	_, err := create.Save(ctx)
@@ -2255,28 +2287,46 @@ func (m *FileMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetTags(file.Tags)
 		}
 
-		if fileName, exists := m.FileName(); exists {
-			create = create.SetFileName(fileName)
+		if providedFileName, exists := m.ProvidedFileName(); exists {
+			create = create.SetProvidedFileName(providedFileName)
 		} else {
-			create = create.SetFileName(file.FileName)
+			create = create.SetProvidedFileName(file.ProvidedFileName)
 		}
 
-		if fileExtension, exists := m.FileExtension(); exists {
-			create = create.SetFileExtension(fileExtension)
+		if providedFileExtension, exists := m.ProvidedFileExtension(); exists {
+			create = create.SetProvidedFileExtension(providedFileExtension)
 		} else {
-			create = create.SetFileExtension(file.FileExtension)
+			create = create.SetProvidedFileExtension(file.ProvidedFileExtension)
 		}
 
-		if fileSize, exists := m.FileSize(); exists {
-			create = create.SetFileSize(fileSize)
+		if providedFileSize, exists := m.ProvidedFileSize(); exists {
+			create = create.SetProvidedFileSize(providedFileSize)
 		} else {
-			create = create.SetFileSize(file.FileSize)
+			create = create.SetProvidedFileSize(file.ProvidedFileSize)
 		}
 
-		if contentType, exists := m.ContentType(); exists {
-			create = create.SetContentType(contentType)
+		if persistedFileSize, exists := m.PersistedFileSize(); exists {
+			create = create.SetPersistedFileSize(persistedFileSize)
 		} else {
-			create = create.SetContentType(file.ContentType)
+			create = create.SetPersistedFileSize(file.PersistedFileSize)
+		}
+
+		if detectedMimeType, exists := m.DetectedMimeType(); exists {
+			create = create.SetDetectedMimeType(detectedMimeType)
+		} else {
+			create = create.SetDetectedMimeType(file.DetectedMimeType)
+		}
+
+		if md5Hash, exists := m.Md5Hash(); exists {
+			create = create.SetMd5Hash(md5Hash)
+		} else {
+			create = create.SetMd5Hash(file.Md5Hash)
+		}
+
+		if detectedContentType, exists := m.DetectedContentType(); exists {
+			create = create.SetDetectedContentType(detectedContentType)
+		} else {
+			create = create.SetDetectedContentType(file.DetectedContentType)
 		}
 
 		if storeKey, exists := m.StoreKey(); exists {
@@ -2285,16 +2335,46 @@ func (m *FileMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetStoreKey(file.StoreKey)
 		}
 
-		if category, exists := m.Category(); exists {
-			create = create.SetCategory(category)
+		if correlationID, exists := m.CorrelationID(); exists {
+			create = create.SetCorrelationID(correlationID)
 		} else {
-			create = create.SetCategory(file.Category)
+			create = create.SetCorrelationID(file.CorrelationID)
 		}
 
-		if annotation, exists := m.Annotation(); exists {
-			create = create.SetAnnotation(annotation)
+		if categoryType, exists := m.CategoryType(); exists {
+			create = create.SetCategoryType(categoryType)
 		} else {
-			create = create.SetAnnotation(file.Annotation)
+			create = create.SetCategoryType(file.CategoryType)
+		}
+
+		if uri, exists := m.URI(); exists {
+			create = create.SetURI(uri)
+		} else {
+			create = create.SetURI(file.URI)
+		}
+
+		if storageScheme, exists := m.StorageScheme(); exists {
+			create = create.SetStorageScheme(storageScheme)
+		} else {
+			create = create.SetStorageScheme(file.StorageScheme)
+		}
+
+		if storageVolume, exists := m.StorageVolume(); exists {
+			create = create.SetStorageVolume(storageVolume)
+		} else {
+			create = create.SetStorageVolume(file.StorageVolume)
+		}
+
+		if storagePath, exists := m.StoragePath(); exists {
+			create = create.SetStoragePath(storagePath)
+		} else {
+			create = create.SetStoragePath(file.StoragePath)
+		}
+
+		if fileContents, exists := m.FileContents(); exists {
+			create = create.SetFileContents(fileContents)
+		} else {
+			create = create.SetFileContents(file.FileContents)
 		}
 
 		if _, err := create.Save(ctx); err != nil {
@@ -2337,13 +2417,21 @@ func (m *FileMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDeletedBy(file.DeletedBy).
 			SetMappingID(file.MappingID).
 			SetTags(file.Tags).
-			SetFileName(file.FileName).
-			SetFileExtension(file.FileExtension).
-			SetFileSize(file.FileSize).
-			SetContentType(file.ContentType).
+			SetProvidedFileName(file.ProvidedFileName).
+			SetProvidedFileExtension(file.ProvidedFileExtension).
+			SetProvidedFileSize(file.ProvidedFileSize).
+			SetPersistedFileSize(file.PersistedFileSize).
+			SetDetectedMimeType(file.DetectedMimeType).
+			SetMd5Hash(file.Md5Hash).
+			SetDetectedContentType(file.DetectedContentType).
 			SetStoreKey(file.StoreKey).
-			SetCategory(file.Category).
-			SetAnnotation(file.Annotation).
+			SetCorrelationID(file.CorrelationID).
+			SetCategoryType(file.CategoryType).
+			SetURI(file.URI).
+			SetStorageScheme(file.StorageScheme).
+			SetStorageVolume(file.StorageVolume).
+			SetStoragePath(file.StoragePath).
+			SetFileContents(file.FileContents).
 			Save(ctx)
 		if err != nil {
 			return err

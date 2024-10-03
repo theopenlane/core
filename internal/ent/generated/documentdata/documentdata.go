@@ -43,6 +43,8 @@ const (
 	EdgeTemplate = "template"
 	// EdgeEntity holds the string denoting the entity edge name in mutations.
 	EdgeEntity = "entity"
+	// EdgeFiles holds the string denoting the files edge name in mutations.
+	EdgeFiles = "files"
 	// Table holds the table name of the documentdata in the database.
 	Table = "document_data"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -64,6 +66,11 @@ const (
 	// EntityInverseTable is the table name for the Entity entity.
 	// It exists in this package in order to avoid circular dependency with the "entity" package.
 	EntityInverseTable = "entities"
+	// FilesTable is the table that holds the files relation/edge. The primary key declared below.
+	FilesTable = "document_data_files"
+	// FilesInverseTable is the table name for the File entity.
+	// It exists in this package in order to avoid circular dependency with the "file" package.
+	FilesInverseTable = "files"
 )
 
 // Columns holds all SQL columns for documentdata fields.
@@ -86,6 +93,9 @@ var (
 	// EntityPrimaryKey and EntityColumn2 are the table columns denoting the
 	// primary key for the entity relation (M2M).
 	EntityPrimaryKey = []string{"entity_id", "document_data_id"}
+	// FilesPrimaryKey and FilesColumn2 are the table columns denoting the
+	// primary key for the files relation (M2M).
+	FilesPrimaryKey = []string{"document_data_id", "file_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -203,6 +213,20 @@ func ByEntity(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newEntityStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByFilesCount orders the results by files count.
+func ByFilesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newFilesStep(), opts...)
+	}
+}
+
+// ByFiles orders the results by files terms.
+func ByFiles(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newFilesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -222,5 +246,12 @@ func newEntityStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(EntityInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, EntityTable, EntityPrimaryKey...),
+	)
+}
+func newFilesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(FilesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, FilesTable, FilesPrimaryKey...),
 	)
 }
