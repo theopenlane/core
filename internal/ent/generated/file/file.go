@@ -31,52 +31,108 @@ const (
 	FieldMappingID = "mapping_id"
 	// FieldTags holds the string denoting the tags field in the database.
 	FieldTags = "tags"
-	// FieldFileName holds the string denoting the file_name field in the database.
-	FieldFileName = "file_name"
-	// FieldFileExtension holds the string denoting the file_extension field in the database.
-	FieldFileExtension = "file_extension"
-	// FieldFileSize holds the string denoting the file_size field in the database.
-	FieldFileSize = "file_size"
-	// FieldContentType holds the string denoting the content_type field in the database.
-	FieldContentType = "content_type"
+	// FieldProvidedFileName holds the string denoting the provided_file_name field in the database.
+	FieldProvidedFileName = "provided_file_name"
+	// FieldProvidedFileExtension holds the string denoting the provided_file_extension field in the database.
+	FieldProvidedFileExtension = "provided_file_extension"
+	// FieldProvidedFileSize holds the string denoting the provided_file_size field in the database.
+	FieldProvidedFileSize = "provided_file_size"
+	// FieldPersistedFileSize holds the string denoting the persisted_file_size field in the database.
+	FieldPersistedFileSize = "persisted_file_size"
+	// FieldDetectedMimeType holds the string denoting the detected_mime_type field in the database.
+	FieldDetectedMimeType = "detected_mime_type"
+	// FieldMd5Hash holds the string denoting the md5_hash field in the database.
+	FieldMd5Hash = "md5_hash"
+	// FieldDetectedContentType holds the string denoting the detected_content_type field in the database.
+	FieldDetectedContentType = "detected_content_type"
 	// FieldStoreKey holds the string denoting the store_key field in the database.
 	FieldStoreKey = "store_key"
-	// FieldCategory holds the string denoting the category field in the database.
-	FieldCategory = "category"
-	// FieldAnnotation holds the string denoting the annotation field in the database.
-	FieldAnnotation = "annotation"
+	// FieldCorrelationID holds the string denoting the correlation_id field in the database.
+	FieldCorrelationID = "correlation_id"
+	// FieldCategoryType holds the string denoting the category_type field in the database.
+	FieldCategoryType = "category_type"
+	// FieldURI holds the string denoting the uri field in the database.
+	FieldURI = "uri"
+	// FieldStorageScheme holds the string denoting the storage_scheme field in the database.
+	FieldStorageScheme = "storage_scheme"
+	// FieldStorageVolume holds the string denoting the storage_volume field in the database.
+	FieldStorageVolume = "storage_volume"
+	// FieldStoragePath holds the string denoting the storage_path field in the database.
+	FieldStoragePath = "storage_path"
+	// FieldFileContents holds the string denoting the file_contents field in the database.
+	FieldFileContents = "file_contents"
 	// EdgeUser holds the string denoting the user edge name in mutations.
 	EdgeUser = "user"
 	// EdgeOrganization holds the string denoting the organization edge name in mutations.
 	EdgeOrganization = "organization"
-	// EdgeEntity holds the string denoting the entity edge name in mutations.
-	EdgeEntity = "entity"
 	// EdgeGroup holds the string denoting the group edge name in mutations.
 	EdgeGroup = "group"
+	// EdgeContact holds the string denoting the contact edge name in mutations.
+	EdgeContact = "contact"
+	// EdgeEntity holds the string denoting the entity edge name in mutations.
+	EdgeEntity = "entity"
+	// EdgeUsersetting holds the string denoting the usersetting edge name in mutations.
+	EdgeUsersetting = "usersetting"
+	// EdgeOrganizationsetting holds the string denoting the organizationsetting edge name in mutations.
+	EdgeOrganizationsetting = "organizationsetting"
+	// EdgeTemplate holds the string denoting the template edge name in mutations.
+	EdgeTemplate = "template"
+	// EdgeDocumentdata holds the string denoting the documentdata edge name in mutations.
+	EdgeDocumentdata = "documentdata"
+	// EdgeEvents holds the string denoting the events edge name in mutations.
+	EdgeEvents = "events"
 	// Table holds the table name of the file in the database.
 	Table = "files"
-	// UserTable is the table that holds the user relation/edge.
-	UserTable = "files"
+	// UserTable is the table that holds the user relation/edge. The primary key declared below.
+	UserTable = "user_files"
 	// UserInverseTable is the table name for the User entity.
 	// It exists in this package in order to avoid circular dependency with the "user" package.
 	UserInverseTable = "users"
-	// UserColumn is the table column denoting the user relation/edge.
-	UserColumn = "user_files"
 	// OrganizationTable is the table that holds the organization relation/edge. The primary key declared below.
 	OrganizationTable = "organization_files"
 	// OrganizationInverseTable is the table name for the Organization entity.
 	// It exists in this package in order to avoid circular dependency with the "organization" package.
 	OrganizationInverseTable = "organizations"
-	// EntityTable is the table that holds the entity relation/edge. The primary key declared below.
-	EntityTable = "entity_files"
-	// EntityInverseTable is the table name for the Entity entity.
-	// It exists in this package in order to avoid circular dependency with the "entity" package.
-	EntityInverseTable = "entities"
 	// GroupTable is the table that holds the group relation/edge. The primary key declared below.
 	GroupTable = "group_files"
 	// GroupInverseTable is the table name for the Group entity.
 	// It exists in this package in order to avoid circular dependency with the "group" package.
 	GroupInverseTable = "groups"
+	// ContactTable is the table that holds the contact relation/edge. The primary key declared below.
+	ContactTable = "contact_files"
+	// ContactInverseTable is the table name for the Contact entity.
+	// It exists in this package in order to avoid circular dependency with the "contact" package.
+	ContactInverseTable = "contacts"
+	// EntityTable is the table that holds the entity relation/edge. The primary key declared below.
+	EntityTable = "entity_files"
+	// EntityInverseTable is the table name for the Entity entity.
+	// It exists in this package in order to avoid circular dependency with the "entity" package.
+	EntityInverseTable = "entities"
+	// UsersettingTable is the table that holds the usersetting relation/edge. The primary key declared below.
+	UsersettingTable = "user_setting_files"
+	// UsersettingInverseTable is the table name for the UserSetting entity.
+	// It exists in this package in order to avoid circular dependency with the "usersetting" package.
+	UsersettingInverseTable = "user_settings"
+	// OrganizationsettingTable is the table that holds the organizationsetting relation/edge. The primary key declared below.
+	OrganizationsettingTable = "organization_setting_files"
+	// OrganizationsettingInverseTable is the table name for the OrganizationSetting entity.
+	// It exists in this package in order to avoid circular dependency with the "organizationsetting" package.
+	OrganizationsettingInverseTable = "organization_settings"
+	// TemplateTable is the table that holds the template relation/edge. The primary key declared below.
+	TemplateTable = "template_files"
+	// TemplateInverseTable is the table name for the Template entity.
+	// It exists in this package in order to avoid circular dependency with the "template" package.
+	TemplateInverseTable = "templates"
+	// DocumentdataTable is the table that holds the documentdata relation/edge. The primary key declared below.
+	DocumentdataTable = "document_data_files"
+	// DocumentdataInverseTable is the table name for the DocumentData entity.
+	// It exists in this package in order to avoid circular dependency with the "documentdata" package.
+	DocumentdataInverseTable = "document_data"
+	// EventsTable is the table that holds the events relation/edge. The primary key declared below.
+	EventsTable = "file_events"
+	// EventsInverseTable is the table name for the Event entity.
+	// It exists in this package in order to avoid circular dependency with the "event" package.
+	EventsInverseTable = "events"
 )
 
 // Columns holds all SQL columns for file fields.
@@ -90,42 +146,60 @@ var Columns = []string{
 	FieldDeletedBy,
 	FieldMappingID,
 	FieldTags,
-	FieldFileName,
-	FieldFileExtension,
-	FieldFileSize,
-	FieldContentType,
+	FieldProvidedFileName,
+	FieldProvidedFileExtension,
+	FieldProvidedFileSize,
+	FieldPersistedFileSize,
+	FieldDetectedMimeType,
+	FieldMd5Hash,
+	FieldDetectedContentType,
 	FieldStoreKey,
-	FieldCategory,
-	FieldAnnotation,
-}
-
-// ForeignKeys holds the SQL foreign-keys that are owned by the "files"
-// table and are not defined as standalone fields in the schema.
-var ForeignKeys = []string{
-	"user_files",
+	FieldCorrelationID,
+	FieldCategoryType,
+	FieldURI,
+	FieldStorageScheme,
+	FieldStorageVolume,
+	FieldStoragePath,
+	FieldFileContents,
 }
 
 var (
+	// UserPrimaryKey and UserColumn2 are the table columns denoting the
+	// primary key for the user relation (M2M).
+	UserPrimaryKey = []string{"user_id", "file_id"}
 	// OrganizationPrimaryKey and OrganizationColumn2 are the table columns denoting the
 	// primary key for the organization relation (M2M).
 	OrganizationPrimaryKey = []string{"organization_id", "file_id"}
-	// EntityPrimaryKey and EntityColumn2 are the table columns denoting the
-	// primary key for the entity relation (M2M).
-	EntityPrimaryKey = []string{"entity_id", "file_id"}
 	// GroupPrimaryKey and GroupColumn2 are the table columns denoting the
 	// primary key for the group relation (M2M).
 	GroupPrimaryKey = []string{"group_id", "file_id"}
+	// ContactPrimaryKey and ContactColumn2 are the table columns denoting the
+	// primary key for the contact relation (M2M).
+	ContactPrimaryKey = []string{"contact_id", "file_id"}
+	// EntityPrimaryKey and EntityColumn2 are the table columns denoting the
+	// primary key for the entity relation (M2M).
+	EntityPrimaryKey = []string{"entity_id", "file_id"}
+	// UsersettingPrimaryKey and UsersettingColumn2 are the table columns denoting the
+	// primary key for the usersetting relation (M2M).
+	UsersettingPrimaryKey = []string{"user_setting_id", "file_id"}
+	// OrganizationsettingPrimaryKey and OrganizationsettingColumn2 are the table columns denoting the
+	// primary key for the organizationsetting relation (M2M).
+	OrganizationsettingPrimaryKey = []string{"organization_setting_id", "file_id"}
+	// TemplatePrimaryKey and TemplateColumn2 are the table columns denoting the
+	// primary key for the template relation (M2M).
+	TemplatePrimaryKey = []string{"template_id", "file_id"}
+	// DocumentdataPrimaryKey and DocumentdataColumn2 are the table columns denoting the
+	// primary key for the documentdata relation (M2M).
+	DocumentdataPrimaryKey = []string{"document_data_id", "file_id"}
+	// EventsPrimaryKey and EventsColumn2 are the table columns denoting the
+	// primary key for the events relation (M2M).
+	EventsPrimaryKey = []string{"file_id", "event_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
-			return true
-		}
-	}
-	for i := range ForeignKeys {
-		if column == ForeignKeys[i] {
 			return true
 		}
 	}
@@ -150,8 +224,10 @@ var (
 	DefaultMappingID func() string
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
-	// FileSizeValidator is a validator for the "file_size" field. It is called by the builders before save.
-	FileSizeValidator func(int) error
+	// ProvidedFileSizeValidator is a validator for the "provided_file_size" field. It is called by the builders before save.
+	ProvidedFileSizeValidator func(int64) error
+	// PersistedFileSizeValidator is a validator for the "persisted_file_size" field. It is called by the builders before save.
+	PersistedFileSizeValidator func(int64) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -199,24 +275,39 @@ func ByMappingID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldMappingID, opts...).ToFunc()
 }
 
-// ByFileName orders the results by the file_name field.
-func ByFileName(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldFileName, opts...).ToFunc()
+// ByProvidedFileName orders the results by the provided_file_name field.
+func ByProvidedFileName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldProvidedFileName, opts...).ToFunc()
 }
 
-// ByFileExtension orders the results by the file_extension field.
-func ByFileExtension(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldFileExtension, opts...).ToFunc()
+// ByProvidedFileExtension orders the results by the provided_file_extension field.
+func ByProvidedFileExtension(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldProvidedFileExtension, opts...).ToFunc()
 }
 
-// ByFileSize orders the results by the file_size field.
-func ByFileSize(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldFileSize, opts...).ToFunc()
+// ByProvidedFileSize orders the results by the provided_file_size field.
+func ByProvidedFileSize(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldProvidedFileSize, opts...).ToFunc()
 }
 
-// ByContentType orders the results by the content_type field.
-func ByContentType(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldContentType, opts...).ToFunc()
+// ByPersistedFileSize orders the results by the persisted_file_size field.
+func ByPersistedFileSize(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPersistedFileSize, opts...).ToFunc()
+}
+
+// ByDetectedMimeType orders the results by the detected_mime_type field.
+func ByDetectedMimeType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDetectedMimeType, opts...).ToFunc()
+}
+
+// ByMd5Hash orders the results by the md5_hash field.
+func ByMd5Hash(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldMd5Hash, opts...).ToFunc()
+}
+
+// ByDetectedContentType orders the results by the detected_content_type field.
+func ByDetectedContentType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDetectedContentType, opts...).ToFunc()
 }
 
 // ByStoreKey orders the results by the store_key field.
@@ -224,20 +315,47 @@ func ByStoreKey(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStoreKey, opts...).ToFunc()
 }
 
-// ByCategory orders the results by the category field.
-func ByCategory(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldCategory, opts...).ToFunc()
+// ByCorrelationID orders the results by the correlation_id field.
+func ByCorrelationID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCorrelationID, opts...).ToFunc()
 }
 
-// ByAnnotation orders the results by the annotation field.
-func ByAnnotation(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldAnnotation, opts...).ToFunc()
+// ByCategoryType orders the results by the category_type field.
+func ByCategoryType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCategoryType, opts...).ToFunc()
 }
 
-// ByUserField orders the results by user field.
-func ByUserField(field string, opts ...sql.OrderTermOption) OrderOption {
+// ByURI orders the results by the uri field.
+func ByURI(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldURI, opts...).ToFunc()
+}
+
+// ByStorageScheme orders the results by the storage_scheme field.
+func ByStorageScheme(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStorageScheme, opts...).ToFunc()
+}
+
+// ByStorageVolume orders the results by the storage_volume field.
+func ByStorageVolume(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStorageVolume, opts...).ToFunc()
+}
+
+// ByStoragePath orders the results by the storage_path field.
+func ByStoragePath(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStoragePath, opts...).ToFunc()
+}
+
+// ByUserCount orders the results by user count.
+func ByUserCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newUserStep(), sql.OrderByField(field, opts...))
+		sqlgraph.OrderByNeighborsCount(s, newUserStep(), opts...)
+	}
+}
+
+// ByUser orders the results by user terms.
+func ByUser(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newUserStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -255,6 +373,34 @@ func ByOrganization(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByGroupCount orders the results by group count.
+func ByGroupCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newGroupStep(), opts...)
+	}
+}
+
+// ByGroup orders the results by group terms.
+func ByGroup(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newGroupStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByContactCount orders the results by contact count.
+func ByContactCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newContactStep(), opts...)
+	}
+}
+
+// ByContact orders the results by contact terms.
+func ByContact(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newContactStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByEntityCount orders the results by entity count.
 func ByEntityCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -269,24 +415,80 @@ func ByEntity(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByGroupCount orders the results by group count.
-func ByGroupCount(opts ...sql.OrderTermOption) OrderOption {
+// ByUsersettingCount orders the results by usersetting count.
+func ByUsersettingCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newGroupStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newUsersettingStep(), opts...)
 	}
 }
 
-// ByGroup orders the results by group terms.
-func ByGroup(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByUsersetting orders the results by usersetting terms.
+func ByUsersetting(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newGroupStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newUsersettingStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByOrganizationsettingCount orders the results by organizationsetting count.
+func ByOrganizationsettingCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newOrganizationsettingStep(), opts...)
+	}
+}
+
+// ByOrganizationsetting orders the results by organizationsetting terms.
+func ByOrganizationsetting(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newOrganizationsettingStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByTemplateCount orders the results by template count.
+func ByTemplateCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newTemplateStep(), opts...)
+	}
+}
+
+// ByTemplate orders the results by template terms.
+func ByTemplate(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTemplateStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByDocumentdataCount orders the results by documentdata count.
+func ByDocumentdataCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newDocumentdataStep(), opts...)
+	}
+}
+
+// ByDocumentdata orders the results by documentdata terms.
+func ByDocumentdata(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDocumentdataStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByEventsCount orders the results by events count.
+func ByEventsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newEventsStep(), opts...)
+	}
+}
+
+// ByEvents orders the results by events terms.
+func ByEvents(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEventsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 func newUserStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(UserInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, true, UserTable, UserColumn),
+		sqlgraph.Edge(sqlgraph.M2M, true, UserTable, UserPrimaryKey...),
 	)
 }
 func newOrganizationStep() *sqlgraph.Step {
@@ -296,6 +498,20 @@ func newOrganizationStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, true, OrganizationTable, OrganizationPrimaryKey...),
 	)
 }
+func newGroupStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(GroupInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, GroupTable, GroupPrimaryKey...),
+	)
+}
+func newContactStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ContactInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ContactTable, ContactPrimaryKey...),
+	)
+}
 func newEntityStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -303,10 +519,38 @@ func newEntityStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, true, EntityTable, EntityPrimaryKey...),
 	)
 }
-func newGroupStep() *sqlgraph.Step {
+func newUsersettingStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(GroupInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, GroupTable, GroupPrimaryKey...),
+		sqlgraph.To(UsersettingInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, UsersettingTable, UsersettingPrimaryKey...),
+	)
+}
+func newOrganizationsettingStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(OrganizationsettingInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, OrganizationsettingTable, OrganizationsettingPrimaryKey...),
+	)
+}
+func newTemplateStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TemplateInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, TemplateTable, TemplatePrimaryKey...),
+	)
+}
+func newDocumentdataStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DocumentdataInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, DocumentdataTable, DocumentdataPrimaryKey...),
+	)
+}
+func newEventsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EventsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, EventsTable, EventsPrimaryKey...),
 	)
 }

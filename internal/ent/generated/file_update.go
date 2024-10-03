@@ -12,12 +12,18 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/contact"
+	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
+	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -126,71 +132,138 @@ func (fu *FileUpdate) ClearTags() *FileUpdate {
 	return fu
 }
 
-// SetFileName sets the "file_name" field.
-func (fu *FileUpdate) SetFileName(s string) *FileUpdate {
-	fu.mutation.SetFileName(s)
+// SetProvidedFileName sets the "provided_file_name" field.
+func (fu *FileUpdate) SetProvidedFileName(s string) *FileUpdate {
+	fu.mutation.SetProvidedFileName(s)
 	return fu
 }
 
-// SetNillableFileName sets the "file_name" field if the given value is not nil.
-func (fu *FileUpdate) SetNillableFileName(s *string) *FileUpdate {
+// SetNillableProvidedFileName sets the "provided_file_name" field if the given value is not nil.
+func (fu *FileUpdate) SetNillableProvidedFileName(s *string) *FileUpdate {
 	if s != nil {
-		fu.SetFileName(*s)
+		fu.SetProvidedFileName(*s)
 	}
 	return fu
 }
 
-// SetFileExtension sets the "file_extension" field.
-func (fu *FileUpdate) SetFileExtension(s string) *FileUpdate {
-	fu.mutation.SetFileExtension(s)
+// SetProvidedFileExtension sets the "provided_file_extension" field.
+func (fu *FileUpdate) SetProvidedFileExtension(s string) *FileUpdate {
+	fu.mutation.SetProvidedFileExtension(s)
 	return fu
 }
 
-// SetNillableFileExtension sets the "file_extension" field if the given value is not nil.
-func (fu *FileUpdate) SetNillableFileExtension(s *string) *FileUpdate {
+// SetNillableProvidedFileExtension sets the "provided_file_extension" field if the given value is not nil.
+func (fu *FileUpdate) SetNillableProvidedFileExtension(s *string) *FileUpdate {
 	if s != nil {
-		fu.SetFileExtension(*s)
+		fu.SetProvidedFileExtension(*s)
 	}
 	return fu
 }
 
-// SetFileSize sets the "file_size" field.
-func (fu *FileUpdate) SetFileSize(i int) *FileUpdate {
-	fu.mutation.ResetFileSize()
-	fu.mutation.SetFileSize(i)
+// SetProvidedFileSize sets the "provided_file_size" field.
+func (fu *FileUpdate) SetProvidedFileSize(i int64) *FileUpdate {
+	fu.mutation.ResetProvidedFileSize()
+	fu.mutation.SetProvidedFileSize(i)
 	return fu
 }
 
-// SetNillableFileSize sets the "file_size" field if the given value is not nil.
-func (fu *FileUpdate) SetNillableFileSize(i *int) *FileUpdate {
+// SetNillableProvidedFileSize sets the "provided_file_size" field if the given value is not nil.
+func (fu *FileUpdate) SetNillableProvidedFileSize(i *int64) *FileUpdate {
 	if i != nil {
-		fu.SetFileSize(*i)
+		fu.SetProvidedFileSize(*i)
 	}
 	return fu
 }
 
-// AddFileSize adds i to the "file_size" field.
-func (fu *FileUpdate) AddFileSize(i int) *FileUpdate {
-	fu.mutation.AddFileSize(i)
+// AddProvidedFileSize adds i to the "provided_file_size" field.
+func (fu *FileUpdate) AddProvidedFileSize(i int64) *FileUpdate {
+	fu.mutation.AddProvidedFileSize(i)
 	return fu
 }
 
-// ClearFileSize clears the value of the "file_size" field.
-func (fu *FileUpdate) ClearFileSize() *FileUpdate {
-	fu.mutation.ClearFileSize()
+// ClearProvidedFileSize clears the value of the "provided_file_size" field.
+func (fu *FileUpdate) ClearProvidedFileSize() *FileUpdate {
+	fu.mutation.ClearProvidedFileSize()
 	return fu
 }
 
-// SetContentType sets the "content_type" field.
-func (fu *FileUpdate) SetContentType(s string) *FileUpdate {
-	fu.mutation.SetContentType(s)
+// SetPersistedFileSize sets the "persisted_file_size" field.
+func (fu *FileUpdate) SetPersistedFileSize(i int64) *FileUpdate {
+	fu.mutation.ResetPersistedFileSize()
+	fu.mutation.SetPersistedFileSize(i)
 	return fu
 }
 
-// SetNillableContentType sets the "content_type" field if the given value is not nil.
-func (fu *FileUpdate) SetNillableContentType(s *string) *FileUpdate {
+// SetNillablePersistedFileSize sets the "persisted_file_size" field if the given value is not nil.
+func (fu *FileUpdate) SetNillablePersistedFileSize(i *int64) *FileUpdate {
+	if i != nil {
+		fu.SetPersistedFileSize(*i)
+	}
+	return fu
+}
+
+// AddPersistedFileSize adds i to the "persisted_file_size" field.
+func (fu *FileUpdate) AddPersistedFileSize(i int64) *FileUpdate {
+	fu.mutation.AddPersistedFileSize(i)
+	return fu
+}
+
+// ClearPersistedFileSize clears the value of the "persisted_file_size" field.
+func (fu *FileUpdate) ClearPersistedFileSize() *FileUpdate {
+	fu.mutation.ClearPersistedFileSize()
+	return fu
+}
+
+// SetDetectedMimeType sets the "detected_mime_type" field.
+func (fu *FileUpdate) SetDetectedMimeType(s string) *FileUpdate {
+	fu.mutation.SetDetectedMimeType(s)
+	return fu
+}
+
+// SetNillableDetectedMimeType sets the "detected_mime_type" field if the given value is not nil.
+func (fu *FileUpdate) SetNillableDetectedMimeType(s *string) *FileUpdate {
 	if s != nil {
-		fu.SetContentType(*s)
+		fu.SetDetectedMimeType(*s)
+	}
+	return fu
+}
+
+// ClearDetectedMimeType clears the value of the "detected_mime_type" field.
+func (fu *FileUpdate) ClearDetectedMimeType() *FileUpdate {
+	fu.mutation.ClearDetectedMimeType()
+	return fu
+}
+
+// SetMd5Hash sets the "md5_hash" field.
+func (fu *FileUpdate) SetMd5Hash(s string) *FileUpdate {
+	fu.mutation.SetMd5Hash(s)
+	return fu
+}
+
+// SetNillableMd5Hash sets the "md5_hash" field if the given value is not nil.
+func (fu *FileUpdate) SetNillableMd5Hash(s *string) *FileUpdate {
+	if s != nil {
+		fu.SetMd5Hash(*s)
+	}
+	return fu
+}
+
+// ClearMd5Hash clears the value of the "md5_hash" field.
+func (fu *FileUpdate) ClearMd5Hash() *FileUpdate {
+	fu.mutation.ClearMd5Hash()
+	return fu
+}
+
+// SetDetectedContentType sets the "detected_content_type" field.
+func (fu *FileUpdate) SetDetectedContentType(s string) *FileUpdate {
+	fu.mutation.SetDetectedContentType(s)
+	return fu
+}
+
+// SetNillableDetectedContentType sets the "detected_content_type" field if the given value is not nil.
+func (fu *FileUpdate) SetNillableDetectedContentType(s *string) *FileUpdate {
+	if s != nil {
+		fu.SetDetectedContentType(*s)
 	}
 	return fu
 }
@@ -209,63 +282,157 @@ func (fu *FileUpdate) SetNillableStoreKey(s *string) *FileUpdate {
 	return fu
 }
 
-// SetCategory sets the "category" field.
-func (fu *FileUpdate) SetCategory(s string) *FileUpdate {
-	fu.mutation.SetCategory(s)
+// ClearStoreKey clears the value of the "store_key" field.
+func (fu *FileUpdate) ClearStoreKey() *FileUpdate {
+	fu.mutation.ClearStoreKey()
 	return fu
 }
 
-// SetNillableCategory sets the "category" field if the given value is not nil.
-func (fu *FileUpdate) SetNillableCategory(s *string) *FileUpdate {
+// SetCorrelationID sets the "correlation_id" field.
+func (fu *FileUpdate) SetCorrelationID(s string) *FileUpdate {
+	fu.mutation.SetCorrelationID(s)
+	return fu
+}
+
+// SetNillableCorrelationID sets the "correlation_id" field if the given value is not nil.
+func (fu *FileUpdate) SetNillableCorrelationID(s *string) *FileUpdate {
 	if s != nil {
-		fu.SetCategory(*s)
+		fu.SetCorrelationID(*s)
 	}
 	return fu
 }
 
-// ClearCategory clears the value of the "category" field.
-func (fu *FileUpdate) ClearCategory() *FileUpdate {
-	fu.mutation.ClearCategory()
+// ClearCorrelationID clears the value of the "correlation_id" field.
+func (fu *FileUpdate) ClearCorrelationID() *FileUpdate {
+	fu.mutation.ClearCorrelationID()
 	return fu
 }
 
-// SetAnnotation sets the "annotation" field.
-func (fu *FileUpdate) SetAnnotation(s string) *FileUpdate {
-	fu.mutation.SetAnnotation(s)
+// SetCategoryType sets the "category_type" field.
+func (fu *FileUpdate) SetCategoryType(s string) *FileUpdate {
+	fu.mutation.SetCategoryType(s)
 	return fu
 }
 
-// SetNillableAnnotation sets the "annotation" field if the given value is not nil.
-func (fu *FileUpdate) SetNillableAnnotation(s *string) *FileUpdate {
+// SetNillableCategoryType sets the "category_type" field if the given value is not nil.
+func (fu *FileUpdate) SetNillableCategoryType(s *string) *FileUpdate {
 	if s != nil {
-		fu.SetAnnotation(*s)
+		fu.SetCategoryType(*s)
 	}
 	return fu
 }
 
-// ClearAnnotation clears the value of the "annotation" field.
-func (fu *FileUpdate) ClearAnnotation() *FileUpdate {
-	fu.mutation.ClearAnnotation()
+// ClearCategoryType clears the value of the "category_type" field.
+func (fu *FileUpdate) ClearCategoryType() *FileUpdate {
+	fu.mutation.ClearCategoryType()
 	return fu
 }
 
-// SetUserID sets the "user" edge to the User entity by ID.
-func (fu *FileUpdate) SetUserID(id string) *FileUpdate {
-	fu.mutation.SetUserID(id)
+// SetURI sets the "uri" field.
+func (fu *FileUpdate) SetURI(s string) *FileUpdate {
+	fu.mutation.SetURI(s)
 	return fu
 }
 
-// SetNillableUserID sets the "user" edge to the User entity by ID if the given value is not nil.
-func (fu *FileUpdate) SetNillableUserID(id *string) *FileUpdate {
-	if id != nil {
-		fu = fu.SetUserID(*id)
+// SetNillableURI sets the "uri" field if the given value is not nil.
+func (fu *FileUpdate) SetNillableURI(s *string) *FileUpdate {
+	if s != nil {
+		fu.SetURI(*s)
 	}
 	return fu
 }
 
-// SetUser sets the "user" edge to the User entity.
-func (fu *FileUpdate) SetUser(u *User) *FileUpdate {
-	return fu.SetUserID(u.ID)
+// ClearURI clears the value of the "uri" field.
+func (fu *FileUpdate) ClearURI() *FileUpdate {
+	fu.mutation.ClearURI()
+	return fu
+}
+
+// SetStorageScheme sets the "storage_scheme" field.
+func (fu *FileUpdate) SetStorageScheme(s string) *FileUpdate {
+	fu.mutation.SetStorageScheme(s)
+	return fu
+}
+
+// SetNillableStorageScheme sets the "storage_scheme" field if the given value is not nil.
+func (fu *FileUpdate) SetNillableStorageScheme(s *string) *FileUpdate {
+	if s != nil {
+		fu.SetStorageScheme(*s)
+	}
+	return fu
+}
+
+// ClearStorageScheme clears the value of the "storage_scheme" field.
+func (fu *FileUpdate) ClearStorageScheme() *FileUpdate {
+	fu.mutation.ClearStorageScheme()
+	return fu
+}
+
+// SetStorageVolume sets the "storage_volume" field.
+func (fu *FileUpdate) SetStorageVolume(s string) *FileUpdate {
+	fu.mutation.SetStorageVolume(s)
+	return fu
+}
+
+// SetNillableStorageVolume sets the "storage_volume" field if the given value is not nil.
+func (fu *FileUpdate) SetNillableStorageVolume(s *string) *FileUpdate {
+	if s != nil {
+		fu.SetStorageVolume(*s)
+	}
+	return fu
+}
+
+// ClearStorageVolume clears the value of the "storage_volume" field.
+func (fu *FileUpdate) ClearStorageVolume() *FileUpdate {
+	fu.mutation.ClearStorageVolume()
+	return fu
+}
+
+// SetStoragePath sets the "storage_path" field.
+func (fu *FileUpdate) SetStoragePath(s string) *FileUpdate {
+	fu.mutation.SetStoragePath(s)
+	return fu
+}
+
+// SetNillableStoragePath sets the "storage_path" field if the given value is not nil.
+func (fu *FileUpdate) SetNillableStoragePath(s *string) *FileUpdate {
+	if s != nil {
+		fu.SetStoragePath(*s)
+	}
+	return fu
+}
+
+// ClearStoragePath clears the value of the "storage_path" field.
+func (fu *FileUpdate) ClearStoragePath() *FileUpdate {
+	fu.mutation.ClearStoragePath()
+	return fu
+}
+
+// SetFileContents sets the "file_contents" field.
+func (fu *FileUpdate) SetFileContents(b []byte) *FileUpdate {
+	fu.mutation.SetFileContents(b)
+	return fu
+}
+
+// ClearFileContents clears the value of the "file_contents" field.
+func (fu *FileUpdate) ClearFileContents() *FileUpdate {
+	fu.mutation.ClearFileContents()
+	return fu
+}
+
+// AddUserIDs adds the "user" edge to the User entity by IDs.
+func (fu *FileUpdate) AddUserIDs(ids ...string) *FileUpdate {
+	fu.mutation.AddUserIDs(ids...)
+	return fu
+}
+
+// AddUser adds the "user" edges to the User entity.
+func (fu *FileUpdate) AddUser(u ...*User) *FileUpdate {
+	ids := make([]string, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return fu.AddUserIDs(ids...)
 }
 
 // AddOrganizationIDs adds the "organization" edge to the Organization entity by IDs.
@@ -283,21 +450,6 @@ func (fu *FileUpdate) AddOrganization(o ...*Organization) *FileUpdate {
 	return fu.AddOrganizationIDs(ids...)
 }
 
-// AddEntityIDs adds the "entity" edge to the Entity entity by IDs.
-func (fu *FileUpdate) AddEntityIDs(ids ...string) *FileUpdate {
-	fu.mutation.AddEntityIDs(ids...)
-	return fu
-}
-
-// AddEntity adds the "entity" edges to the Entity entity.
-func (fu *FileUpdate) AddEntity(e ...*Entity) *FileUpdate {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
-	}
-	return fu.AddEntityIDs(ids...)
-}
-
 // AddGroupIDs adds the "group" edge to the Group entity by IDs.
 func (fu *FileUpdate) AddGroupIDs(ids ...string) *FileUpdate {
 	fu.mutation.AddGroupIDs(ids...)
@@ -313,15 +465,135 @@ func (fu *FileUpdate) AddGroup(g ...*Group) *FileUpdate {
 	return fu.AddGroupIDs(ids...)
 }
 
+// AddContactIDs adds the "contact" edge to the Contact entity by IDs.
+func (fu *FileUpdate) AddContactIDs(ids ...string) *FileUpdate {
+	fu.mutation.AddContactIDs(ids...)
+	return fu
+}
+
+// AddContact adds the "contact" edges to the Contact entity.
+func (fu *FileUpdate) AddContact(c ...*Contact) *FileUpdate {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return fu.AddContactIDs(ids...)
+}
+
+// AddEntityIDs adds the "entity" edge to the Entity entity by IDs.
+func (fu *FileUpdate) AddEntityIDs(ids ...string) *FileUpdate {
+	fu.mutation.AddEntityIDs(ids...)
+	return fu
+}
+
+// AddEntity adds the "entity" edges to the Entity entity.
+func (fu *FileUpdate) AddEntity(e ...*Entity) *FileUpdate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return fu.AddEntityIDs(ids...)
+}
+
+// AddUsersettingIDs adds the "usersetting" edge to the UserSetting entity by IDs.
+func (fu *FileUpdate) AddUsersettingIDs(ids ...string) *FileUpdate {
+	fu.mutation.AddUsersettingIDs(ids...)
+	return fu
+}
+
+// AddUsersetting adds the "usersetting" edges to the UserSetting entity.
+func (fu *FileUpdate) AddUsersetting(u ...*UserSetting) *FileUpdate {
+	ids := make([]string, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return fu.AddUsersettingIDs(ids...)
+}
+
+// AddOrganizationsettingIDs adds the "organizationsetting" edge to the OrganizationSetting entity by IDs.
+func (fu *FileUpdate) AddOrganizationsettingIDs(ids ...string) *FileUpdate {
+	fu.mutation.AddOrganizationsettingIDs(ids...)
+	return fu
+}
+
+// AddOrganizationsetting adds the "organizationsetting" edges to the OrganizationSetting entity.
+func (fu *FileUpdate) AddOrganizationsetting(o ...*OrganizationSetting) *FileUpdate {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return fu.AddOrganizationsettingIDs(ids...)
+}
+
+// AddTemplateIDs adds the "template" edge to the Template entity by IDs.
+func (fu *FileUpdate) AddTemplateIDs(ids ...string) *FileUpdate {
+	fu.mutation.AddTemplateIDs(ids...)
+	return fu
+}
+
+// AddTemplate adds the "template" edges to the Template entity.
+func (fu *FileUpdate) AddTemplate(t ...*Template) *FileUpdate {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return fu.AddTemplateIDs(ids...)
+}
+
+// AddDocumentdatumIDs adds the "documentdata" edge to the DocumentData entity by IDs.
+func (fu *FileUpdate) AddDocumentdatumIDs(ids ...string) *FileUpdate {
+	fu.mutation.AddDocumentdatumIDs(ids...)
+	return fu
+}
+
+// AddDocumentdata adds the "documentdata" edges to the DocumentData entity.
+func (fu *FileUpdate) AddDocumentdata(d ...*DocumentData) *FileUpdate {
+	ids := make([]string, len(d))
+	for i := range d {
+		ids[i] = d[i].ID
+	}
+	return fu.AddDocumentdatumIDs(ids...)
+}
+
+// AddEventIDs adds the "events" edge to the Event entity by IDs.
+func (fu *FileUpdate) AddEventIDs(ids ...string) *FileUpdate {
+	fu.mutation.AddEventIDs(ids...)
+	return fu
+}
+
+// AddEvents adds the "events" edges to the Event entity.
+func (fu *FileUpdate) AddEvents(e ...*Event) *FileUpdate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return fu.AddEventIDs(ids...)
+}
+
 // Mutation returns the FileMutation object of the builder.
 func (fu *FileUpdate) Mutation() *FileMutation {
 	return fu.mutation
 }
 
-// ClearUser clears the "user" edge to the User entity.
+// ClearUser clears all "user" edges to the User entity.
 func (fu *FileUpdate) ClearUser() *FileUpdate {
 	fu.mutation.ClearUser()
 	return fu
+}
+
+// RemoveUserIDs removes the "user" edge to User entities by IDs.
+func (fu *FileUpdate) RemoveUserIDs(ids ...string) *FileUpdate {
+	fu.mutation.RemoveUserIDs(ids...)
+	return fu
+}
+
+// RemoveUser removes "user" edges to User entities.
+func (fu *FileUpdate) RemoveUser(u ...*User) *FileUpdate {
+	ids := make([]string, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return fu.RemoveUserIDs(ids...)
 }
 
 // ClearOrganization clears all "organization" edges to the Organization entity.
@@ -345,6 +617,48 @@ func (fu *FileUpdate) RemoveOrganization(o ...*Organization) *FileUpdate {
 	return fu.RemoveOrganizationIDs(ids...)
 }
 
+// ClearGroup clears all "group" edges to the Group entity.
+func (fu *FileUpdate) ClearGroup() *FileUpdate {
+	fu.mutation.ClearGroup()
+	return fu
+}
+
+// RemoveGroupIDs removes the "group" edge to Group entities by IDs.
+func (fu *FileUpdate) RemoveGroupIDs(ids ...string) *FileUpdate {
+	fu.mutation.RemoveGroupIDs(ids...)
+	return fu
+}
+
+// RemoveGroup removes "group" edges to Group entities.
+func (fu *FileUpdate) RemoveGroup(g ...*Group) *FileUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return fu.RemoveGroupIDs(ids...)
+}
+
+// ClearContact clears all "contact" edges to the Contact entity.
+func (fu *FileUpdate) ClearContact() *FileUpdate {
+	fu.mutation.ClearContact()
+	return fu
+}
+
+// RemoveContactIDs removes the "contact" edge to Contact entities by IDs.
+func (fu *FileUpdate) RemoveContactIDs(ids ...string) *FileUpdate {
+	fu.mutation.RemoveContactIDs(ids...)
+	return fu
+}
+
+// RemoveContact removes "contact" edges to Contact entities.
+func (fu *FileUpdate) RemoveContact(c ...*Contact) *FileUpdate {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return fu.RemoveContactIDs(ids...)
+}
+
 // ClearEntity clears all "entity" edges to the Entity entity.
 func (fu *FileUpdate) ClearEntity() *FileUpdate {
 	fu.mutation.ClearEntity()
@@ -366,25 +680,109 @@ func (fu *FileUpdate) RemoveEntity(e ...*Entity) *FileUpdate {
 	return fu.RemoveEntityIDs(ids...)
 }
 
-// ClearGroup clears all "group" edges to the Group entity.
-func (fu *FileUpdate) ClearGroup() *FileUpdate {
-	fu.mutation.ClearGroup()
+// ClearUsersetting clears all "usersetting" edges to the UserSetting entity.
+func (fu *FileUpdate) ClearUsersetting() *FileUpdate {
+	fu.mutation.ClearUsersetting()
 	return fu
 }
 
-// RemoveGroupIDs removes the "group" edge to Group entities by IDs.
-func (fu *FileUpdate) RemoveGroupIDs(ids ...string) *FileUpdate {
-	fu.mutation.RemoveGroupIDs(ids...)
+// RemoveUsersettingIDs removes the "usersetting" edge to UserSetting entities by IDs.
+func (fu *FileUpdate) RemoveUsersettingIDs(ids ...string) *FileUpdate {
+	fu.mutation.RemoveUsersettingIDs(ids...)
 	return fu
 }
 
-// RemoveGroup removes "group" edges to Group entities.
-func (fu *FileUpdate) RemoveGroup(g ...*Group) *FileUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+// RemoveUsersetting removes "usersetting" edges to UserSetting entities.
+func (fu *FileUpdate) RemoveUsersetting(u ...*UserSetting) *FileUpdate {
+	ids := make([]string, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
 	}
-	return fu.RemoveGroupIDs(ids...)
+	return fu.RemoveUsersettingIDs(ids...)
+}
+
+// ClearOrganizationsetting clears all "organizationsetting" edges to the OrganizationSetting entity.
+func (fu *FileUpdate) ClearOrganizationsetting() *FileUpdate {
+	fu.mutation.ClearOrganizationsetting()
+	return fu
+}
+
+// RemoveOrganizationsettingIDs removes the "organizationsetting" edge to OrganizationSetting entities by IDs.
+func (fu *FileUpdate) RemoveOrganizationsettingIDs(ids ...string) *FileUpdate {
+	fu.mutation.RemoveOrganizationsettingIDs(ids...)
+	return fu
+}
+
+// RemoveOrganizationsetting removes "organizationsetting" edges to OrganizationSetting entities.
+func (fu *FileUpdate) RemoveOrganizationsetting(o ...*OrganizationSetting) *FileUpdate {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return fu.RemoveOrganizationsettingIDs(ids...)
+}
+
+// ClearTemplate clears all "template" edges to the Template entity.
+func (fu *FileUpdate) ClearTemplate() *FileUpdate {
+	fu.mutation.ClearTemplate()
+	return fu
+}
+
+// RemoveTemplateIDs removes the "template" edge to Template entities by IDs.
+func (fu *FileUpdate) RemoveTemplateIDs(ids ...string) *FileUpdate {
+	fu.mutation.RemoveTemplateIDs(ids...)
+	return fu
+}
+
+// RemoveTemplate removes "template" edges to Template entities.
+func (fu *FileUpdate) RemoveTemplate(t ...*Template) *FileUpdate {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return fu.RemoveTemplateIDs(ids...)
+}
+
+// ClearDocumentdata clears all "documentdata" edges to the DocumentData entity.
+func (fu *FileUpdate) ClearDocumentdata() *FileUpdate {
+	fu.mutation.ClearDocumentdata()
+	return fu
+}
+
+// RemoveDocumentdatumIDs removes the "documentdata" edge to DocumentData entities by IDs.
+func (fu *FileUpdate) RemoveDocumentdatumIDs(ids ...string) *FileUpdate {
+	fu.mutation.RemoveDocumentdatumIDs(ids...)
+	return fu
+}
+
+// RemoveDocumentdata removes "documentdata" edges to DocumentData entities.
+func (fu *FileUpdate) RemoveDocumentdata(d ...*DocumentData) *FileUpdate {
+	ids := make([]string, len(d))
+	for i := range d {
+		ids[i] = d[i].ID
+	}
+	return fu.RemoveDocumentdatumIDs(ids...)
+}
+
+// ClearEvents clears all "events" edges to the Event entity.
+func (fu *FileUpdate) ClearEvents() *FileUpdate {
+	fu.mutation.ClearEvents()
+	return fu
+}
+
+// RemoveEventIDs removes the "events" edge to Event entities by IDs.
+func (fu *FileUpdate) RemoveEventIDs(ids ...string) *FileUpdate {
+	fu.mutation.RemoveEventIDs(ids...)
+	return fu
+}
+
+// RemoveEvents removes "events" edges to Event entities.
+func (fu *FileUpdate) RemoveEvents(e ...*Event) *FileUpdate {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return fu.RemoveEventIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -431,9 +829,14 @@ func (fu *FileUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (fu *FileUpdate) check() error {
-	if v, ok := fu.mutation.FileSize(); ok {
-		if err := file.FileSizeValidator(v); err != nil {
-			return &ValidationError{Name: "file_size", err: fmt.Errorf(`generated: validator failed for field "File.file_size": %w`, err)}
+	if v, ok := fu.mutation.ProvidedFileSize(); ok {
+		if err := file.ProvidedFileSizeValidator(v); err != nil {
+			return &ValidationError{Name: "provided_file_size", err: fmt.Errorf(`generated: validator failed for field "File.provided_file_size": %w`, err)}
+		}
+	}
+	if v, ok := fu.mutation.PersistedFileSize(); ok {
+		if err := file.PersistedFileSizeValidator(v); err != nil {
+			return &ValidationError{Name: "persisted_file_size", err: fmt.Errorf(`generated: validator failed for field "File.persisted_file_size": %w`, err)}
 		}
 	}
 	return nil
@@ -498,65 +901,136 @@ func (fu *FileUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if fu.mutation.TagsCleared() {
 		_spec.ClearField(file.FieldTags, field.TypeJSON)
 	}
-	if value, ok := fu.mutation.FileName(); ok {
-		_spec.SetField(file.FieldFileName, field.TypeString, value)
+	if value, ok := fu.mutation.ProvidedFileName(); ok {
+		_spec.SetField(file.FieldProvidedFileName, field.TypeString, value)
 	}
-	if value, ok := fu.mutation.FileExtension(); ok {
-		_spec.SetField(file.FieldFileExtension, field.TypeString, value)
+	if value, ok := fu.mutation.ProvidedFileExtension(); ok {
+		_spec.SetField(file.FieldProvidedFileExtension, field.TypeString, value)
 	}
-	if value, ok := fu.mutation.FileSize(); ok {
-		_spec.SetField(file.FieldFileSize, field.TypeInt, value)
+	if value, ok := fu.mutation.ProvidedFileSize(); ok {
+		_spec.SetField(file.FieldProvidedFileSize, field.TypeInt64, value)
 	}
-	if value, ok := fu.mutation.AddedFileSize(); ok {
-		_spec.AddField(file.FieldFileSize, field.TypeInt, value)
+	if value, ok := fu.mutation.AddedProvidedFileSize(); ok {
+		_spec.AddField(file.FieldProvidedFileSize, field.TypeInt64, value)
 	}
-	if fu.mutation.FileSizeCleared() {
-		_spec.ClearField(file.FieldFileSize, field.TypeInt)
+	if fu.mutation.ProvidedFileSizeCleared() {
+		_spec.ClearField(file.FieldProvidedFileSize, field.TypeInt64)
 	}
-	if value, ok := fu.mutation.ContentType(); ok {
-		_spec.SetField(file.FieldContentType, field.TypeString, value)
+	if value, ok := fu.mutation.PersistedFileSize(); ok {
+		_spec.SetField(file.FieldPersistedFileSize, field.TypeInt64, value)
+	}
+	if value, ok := fu.mutation.AddedPersistedFileSize(); ok {
+		_spec.AddField(file.FieldPersistedFileSize, field.TypeInt64, value)
+	}
+	if fu.mutation.PersistedFileSizeCleared() {
+		_spec.ClearField(file.FieldPersistedFileSize, field.TypeInt64)
+	}
+	if value, ok := fu.mutation.DetectedMimeType(); ok {
+		_spec.SetField(file.FieldDetectedMimeType, field.TypeString, value)
+	}
+	if fu.mutation.DetectedMimeTypeCleared() {
+		_spec.ClearField(file.FieldDetectedMimeType, field.TypeString)
+	}
+	if value, ok := fu.mutation.Md5Hash(); ok {
+		_spec.SetField(file.FieldMd5Hash, field.TypeString, value)
+	}
+	if fu.mutation.Md5HashCleared() {
+		_spec.ClearField(file.FieldMd5Hash, field.TypeString)
+	}
+	if value, ok := fu.mutation.DetectedContentType(); ok {
+		_spec.SetField(file.FieldDetectedContentType, field.TypeString, value)
 	}
 	if value, ok := fu.mutation.StoreKey(); ok {
 		_spec.SetField(file.FieldStoreKey, field.TypeString, value)
 	}
-	if value, ok := fu.mutation.Category(); ok {
-		_spec.SetField(file.FieldCategory, field.TypeString, value)
+	if fu.mutation.StoreKeyCleared() {
+		_spec.ClearField(file.FieldStoreKey, field.TypeString)
 	}
-	if fu.mutation.CategoryCleared() {
-		_spec.ClearField(file.FieldCategory, field.TypeString)
+	if value, ok := fu.mutation.CorrelationID(); ok {
+		_spec.SetField(file.FieldCorrelationID, field.TypeString, value)
 	}
-	if value, ok := fu.mutation.Annotation(); ok {
-		_spec.SetField(file.FieldAnnotation, field.TypeString, value)
+	if fu.mutation.CorrelationIDCleared() {
+		_spec.ClearField(file.FieldCorrelationID, field.TypeString)
 	}
-	if fu.mutation.AnnotationCleared() {
-		_spec.ClearField(file.FieldAnnotation, field.TypeString)
+	if value, ok := fu.mutation.CategoryType(); ok {
+		_spec.SetField(file.FieldCategoryType, field.TypeString, value)
+	}
+	if fu.mutation.CategoryTypeCleared() {
+		_spec.ClearField(file.FieldCategoryType, field.TypeString)
+	}
+	if value, ok := fu.mutation.URI(); ok {
+		_spec.SetField(file.FieldURI, field.TypeString, value)
+	}
+	if fu.mutation.URICleared() {
+		_spec.ClearField(file.FieldURI, field.TypeString)
+	}
+	if value, ok := fu.mutation.StorageScheme(); ok {
+		_spec.SetField(file.FieldStorageScheme, field.TypeString, value)
+	}
+	if fu.mutation.StorageSchemeCleared() {
+		_spec.ClearField(file.FieldStorageScheme, field.TypeString)
+	}
+	if value, ok := fu.mutation.StorageVolume(); ok {
+		_spec.SetField(file.FieldStorageVolume, field.TypeString, value)
+	}
+	if fu.mutation.StorageVolumeCleared() {
+		_spec.ClearField(file.FieldStorageVolume, field.TypeString)
+	}
+	if value, ok := fu.mutation.StoragePath(); ok {
+		_spec.SetField(file.FieldStoragePath, field.TypeString, value)
+	}
+	if fu.mutation.StoragePathCleared() {
+		_spec.ClearField(file.FieldStoragePath, field.TypeString)
+	}
+	if value, ok := fu.mutation.FileContents(); ok {
+		_spec.SetField(file.FieldFileContents, field.TypeBytes, value)
+	}
+	if fu.mutation.FileContentsCleared() {
+		_spec.ClearField(file.FieldFileContents, field.TypeBytes)
 	}
 	if fu.mutation.UserCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
+			Rel:     sqlgraph.M2M,
 			Inverse: true,
 			Table:   file.UserTable,
-			Columns: []string{file.UserColumn},
+			Columns: file.UserPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = fu.schemaConfig.File
+		edge.Schema = fu.schemaConfig.UserFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fu.mutation.RemovedUserIDs(); len(nodes) > 0 && !fu.mutation.UserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.UserTable,
+			Columns: file.UserPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fu.schemaConfig.UserFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := fu.mutation.UserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
+			Rel:     sqlgraph.M2M,
 			Inverse: true,
 			Table:   file.UserTable,
-			Columns: []string{file.UserColumn},
+			Columns: file.UserPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = fu.schemaConfig.File
+		edge.Schema = fu.schemaConfig.UserFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -610,6 +1084,102 @@ func (fu *FileUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if fu.mutation.GroupCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.GroupTable,
+			Columns: file.GroupPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fu.schemaConfig.GroupFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fu.mutation.RemovedGroupIDs(); len(nodes) > 0 && !fu.mutation.GroupCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.GroupTable,
+			Columns: file.GroupPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fu.schemaConfig.GroupFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fu.mutation.GroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.GroupTable,
+			Columns: file.GroupPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fu.schemaConfig.GroupFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if fu.mutation.ContactCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.ContactTable,
+			Columns: file.ContactPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contact.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fu.schemaConfig.ContactFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fu.mutation.RemovedContactIDs(); len(nodes) > 0 && !fu.mutation.ContactCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.ContactTable,
+			Columns: file.ContactPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contact.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fu.schemaConfig.ContactFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fu.mutation.ContactIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.ContactTable,
+			Columns: file.ContactPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contact.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fu.schemaConfig.ContactFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if fu.mutation.EntityCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -658,49 +1228,241 @@ func (fu *FileUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if fu.mutation.GroupCleared() {
+	if fu.mutation.UsersettingCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   file.GroupTable,
-			Columns: file.GroupPrimaryKey,
+			Table:   file.UsersettingTable,
+			Columns: file.UsersettingPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(usersetting.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = fu.schemaConfig.GroupFiles
+		edge.Schema = fu.schemaConfig.UserSettingFiles
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := fu.mutation.RemovedGroupIDs(); len(nodes) > 0 && !fu.mutation.GroupCleared() {
+	if nodes := fu.mutation.RemovedUsersettingIDs(); len(nodes) > 0 && !fu.mutation.UsersettingCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   file.GroupTable,
-			Columns: file.GroupPrimaryKey,
+			Table:   file.UsersettingTable,
+			Columns: file.UsersettingPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(usersetting.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = fu.schemaConfig.GroupFiles
+		edge.Schema = fu.schemaConfig.UserSettingFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := fu.mutation.GroupIDs(); len(nodes) > 0 {
+	if nodes := fu.mutation.UsersettingIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   file.GroupTable,
-			Columns: file.GroupPrimaryKey,
+			Table:   file.UsersettingTable,
+			Columns: file.UsersettingPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(usersetting.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = fu.schemaConfig.GroupFiles
+		edge.Schema = fu.schemaConfig.UserSettingFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if fu.mutation.OrganizationsettingCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.OrganizationsettingTable,
+			Columns: file.OrganizationsettingPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organizationsetting.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fu.schemaConfig.OrganizationSettingFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fu.mutation.RemovedOrganizationsettingIDs(); len(nodes) > 0 && !fu.mutation.OrganizationsettingCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.OrganizationsettingTable,
+			Columns: file.OrganizationsettingPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organizationsetting.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fu.schemaConfig.OrganizationSettingFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fu.mutation.OrganizationsettingIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.OrganizationsettingTable,
+			Columns: file.OrganizationsettingPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organizationsetting.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fu.schemaConfig.OrganizationSettingFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if fu.mutation.TemplateCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.TemplateTable,
+			Columns: file.TemplatePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fu.schemaConfig.TemplateFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fu.mutation.RemovedTemplateIDs(); len(nodes) > 0 && !fu.mutation.TemplateCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.TemplateTable,
+			Columns: file.TemplatePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fu.schemaConfig.TemplateFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fu.mutation.TemplateIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.TemplateTable,
+			Columns: file.TemplatePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fu.schemaConfig.TemplateFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if fu.mutation.DocumentdataCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.DocumentdataTable,
+			Columns: file.DocumentdataPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fu.schemaConfig.DocumentDataFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fu.mutation.RemovedDocumentdataIDs(); len(nodes) > 0 && !fu.mutation.DocumentdataCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.DocumentdataTable,
+			Columns: file.DocumentdataPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fu.schemaConfig.DocumentDataFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fu.mutation.DocumentdataIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.DocumentdataTable,
+			Columns: file.DocumentdataPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fu.schemaConfig.DocumentDataFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if fu.mutation.EventsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   file.EventsTable,
+			Columns: file.EventsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fu.schemaConfig.FileEvents
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fu.mutation.RemovedEventsIDs(); len(nodes) > 0 && !fu.mutation.EventsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   file.EventsTable,
+			Columns: file.EventsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fu.schemaConfig.FileEvents
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fu.mutation.EventsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   file.EventsTable,
+			Columns: file.EventsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fu.schemaConfig.FileEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -820,71 +1582,138 @@ func (fuo *FileUpdateOne) ClearTags() *FileUpdateOne {
 	return fuo
 }
 
-// SetFileName sets the "file_name" field.
-func (fuo *FileUpdateOne) SetFileName(s string) *FileUpdateOne {
-	fuo.mutation.SetFileName(s)
+// SetProvidedFileName sets the "provided_file_name" field.
+func (fuo *FileUpdateOne) SetProvidedFileName(s string) *FileUpdateOne {
+	fuo.mutation.SetProvidedFileName(s)
 	return fuo
 }
 
-// SetNillableFileName sets the "file_name" field if the given value is not nil.
-func (fuo *FileUpdateOne) SetNillableFileName(s *string) *FileUpdateOne {
+// SetNillableProvidedFileName sets the "provided_file_name" field if the given value is not nil.
+func (fuo *FileUpdateOne) SetNillableProvidedFileName(s *string) *FileUpdateOne {
 	if s != nil {
-		fuo.SetFileName(*s)
+		fuo.SetProvidedFileName(*s)
 	}
 	return fuo
 }
 
-// SetFileExtension sets the "file_extension" field.
-func (fuo *FileUpdateOne) SetFileExtension(s string) *FileUpdateOne {
-	fuo.mutation.SetFileExtension(s)
+// SetProvidedFileExtension sets the "provided_file_extension" field.
+func (fuo *FileUpdateOne) SetProvidedFileExtension(s string) *FileUpdateOne {
+	fuo.mutation.SetProvidedFileExtension(s)
 	return fuo
 }
 
-// SetNillableFileExtension sets the "file_extension" field if the given value is not nil.
-func (fuo *FileUpdateOne) SetNillableFileExtension(s *string) *FileUpdateOne {
+// SetNillableProvidedFileExtension sets the "provided_file_extension" field if the given value is not nil.
+func (fuo *FileUpdateOne) SetNillableProvidedFileExtension(s *string) *FileUpdateOne {
 	if s != nil {
-		fuo.SetFileExtension(*s)
+		fuo.SetProvidedFileExtension(*s)
 	}
 	return fuo
 }
 
-// SetFileSize sets the "file_size" field.
-func (fuo *FileUpdateOne) SetFileSize(i int) *FileUpdateOne {
-	fuo.mutation.ResetFileSize()
-	fuo.mutation.SetFileSize(i)
+// SetProvidedFileSize sets the "provided_file_size" field.
+func (fuo *FileUpdateOne) SetProvidedFileSize(i int64) *FileUpdateOne {
+	fuo.mutation.ResetProvidedFileSize()
+	fuo.mutation.SetProvidedFileSize(i)
 	return fuo
 }
 
-// SetNillableFileSize sets the "file_size" field if the given value is not nil.
-func (fuo *FileUpdateOne) SetNillableFileSize(i *int) *FileUpdateOne {
+// SetNillableProvidedFileSize sets the "provided_file_size" field if the given value is not nil.
+func (fuo *FileUpdateOne) SetNillableProvidedFileSize(i *int64) *FileUpdateOne {
 	if i != nil {
-		fuo.SetFileSize(*i)
+		fuo.SetProvidedFileSize(*i)
 	}
 	return fuo
 }
 
-// AddFileSize adds i to the "file_size" field.
-func (fuo *FileUpdateOne) AddFileSize(i int) *FileUpdateOne {
-	fuo.mutation.AddFileSize(i)
+// AddProvidedFileSize adds i to the "provided_file_size" field.
+func (fuo *FileUpdateOne) AddProvidedFileSize(i int64) *FileUpdateOne {
+	fuo.mutation.AddProvidedFileSize(i)
 	return fuo
 }
 
-// ClearFileSize clears the value of the "file_size" field.
-func (fuo *FileUpdateOne) ClearFileSize() *FileUpdateOne {
-	fuo.mutation.ClearFileSize()
+// ClearProvidedFileSize clears the value of the "provided_file_size" field.
+func (fuo *FileUpdateOne) ClearProvidedFileSize() *FileUpdateOne {
+	fuo.mutation.ClearProvidedFileSize()
 	return fuo
 }
 
-// SetContentType sets the "content_type" field.
-func (fuo *FileUpdateOne) SetContentType(s string) *FileUpdateOne {
-	fuo.mutation.SetContentType(s)
+// SetPersistedFileSize sets the "persisted_file_size" field.
+func (fuo *FileUpdateOne) SetPersistedFileSize(i int64) *FileUpdateOne {
+	fuo.mutation.ResetPersistedFileSize()
+	fuo.mutation.SetPersistedFileSize(i)
 	return fuo
 }
 
-// SetNillableContentType sets the "content_type" field if the given value is not nil.
-func (fuo *FileUpdateOne) SetNillableContentType(s *string) *FileUpdateOne {
+// SetNillablePersistedFileSize sets the "persisted_file_size" field if the given value is not nil.
+func (fuo *FileUpdateOne) SetNillablePersistedFileSize(i *int64) *FileUpdateOne {
+	if i != nil {
+		fuo.SetPersistedFileSize(*i)
+	}
+	return fuo
+}
+
+// AddPersistedFileSize adds i to the "persisted_file_size" field.
+func (fuo *FileUpdateOne) AddPersistedFileSize(i int64) *FileUpdateOne {
+	fuo.mutation.AddPersistedFileSize(i)
+	return fuo
+}
+
+// ClearPersistedFileSize clears the value of the "persisted_file_size" field.
+func (fuo *FileUpdateOne) ClearPersistedFileSize() *FileUpdateOne {
+	fuo.mutation.ClearPersistedFileSize()
+	return fuo
+}
+
+// SetDetectedMimeType sets the "detected_mime_type" field.
+func (fuo *FileUpdateOne) SetDetectedMimeType(s string) *FileUpdateOne {
+	fuo.mutation.SetDetectedMimeType(s)
+	return fuo
+}
+
+// SetNillableDetectedMimeType sets the "detected_mime_type" field if the given value is not nil.
+func (fuo *FileUpdateOne) SetNillableDetectedMimeType(s *string) *FileUpdateOne {
 	if s != nil {
-		fuo.SetContentType(*s)
+		fuo.SetDetectedMimeType(*s)
+	}
+	return fuo
+}
+
+// ClearDetectedMimeType clears the value of the "detected_mime_type" field.
+func (fuo *FileUpdateOne) ClearDetectedMimeType() *FileUpdateOne {
+	fuo.mutation.ClearDetectedMimeType()
+	return fuo
+}
+
+// SetMd5Hash sets the "md5_hash" field.
+func (fuo *FileUpdateOne) SetMd5Hash(s string) *FileUpdateOne {
+	fuo.mutation.SetMd5Hash(s)
+	return fuo
+}
+
+// SetNillableMd5Hash sets the "md5_hash" field if the given value is not nil.
+func (fuo *FileUpdateOne) SetNillableMd5Hash(s *string) *FileUpdateOne {
+	if s != nil {
+		fuo.SetMd5Hash(*s)
+	}
+	return fuo
+}
+
+// ClearMd5Hash clears the value of the "md5_hash" field.
+func (fuo *FileUpdateOne) ClearMd5Hash() *FileUpdateOne {
+	fuo.mutation.ClearMd5Hash()
+	return fuo
+}
+
+// SetDetectedContentType sets the "detected_content_type" field.
+func (fuo *FileUpdateOne) SetDetectedContentType(s string) *FileUpdateOne {
+	fuo.mutation.SetDetectedContentType(s)
+	return fuo
+}
+
+// SetNillableDetectedContentType sets the "detected_content_type" field if the given value is not nil.
+func (fuo *FileUpdateOne) SetNillableDetectedContentType(s *string) *FileUpdateOne {
+	if s != nil {
+		fuo.SetDetectedContentType(*s)
 	}
 	return fuo
 }
@@ -903,63 +1732,157 @@ func (fuo *FileUpdateOne) SetNillableStoreKey(s *string) *FileUpdateOne {
 	return fuo
 }
 
-// SetCategory sets the "category" field.
-func (fuo *FileUpdateOne) SetCategory(s string) *FileUpdateOne {
-	fuo.mutation.SetCategory(s)
+// ClearStoreKey clears the value of the "store_key" field.
+func (fuo *FileUpdateOne) ClearStoreKey() *FileUpdateOne {
+	fuo.mutation.ClearStoreKey()
 	return fuo
 }
 
-// SetNillableCategory sets the "category" field if the given value is not nil.
-func (fuo *FileUpdateOne) SetNillableCategory(s *string) *FileUpdateOne {
+// SetCorrelationID sets the "correlation_id" field.
+func (fuo *FileUpdateOne) SetCorrelationID(s string) *FileUpdateOne {
+	fuo.mutation.SetCorrelationID(s)
+	return fuo
+}
+
+// SetNillableCorrelationID sets the "correlation_id" field if the given value is not nil.
+func (fuo *FileUpdateOne) SetNillableCorrelationID(s *string) *FileUpdateOne {
 	if s != nil {
-		fuo.SetCategory(*s)
+		fuo.SetCorrelationID(*s)
 	}
 	return fuo
 }
 
-// ClearCategory clears the value of the "category" field.
-func (fuo *FileUpdateOne) ClearCategory() *FileUpdateOne {
-	fuo.mutation.ClearCategory()
+// ClearCorrelationID clears the value of the "correlation_id" field.
+func (fuo *FileUpdateOne) ClearCorrelationID() *FileUpdateOne {
+	fuo.mutation.ClearCorrelationID()
 	return fuo
 }
 
-// SetAnnotation sets the "annotation" field.
-func (fuo *FileUpdateOne) SetAnnotation(s string) *FileUpdateOne {
-	fuo.mutation.SetAnnotation(s)
+// SetCategoryType sets the "category_type" field.
+func (fuo *FileUpdateOne) SetCategoryType(s string) *FileUpdateOne {
+	fuo.mutation.SetCategoryType(s)
 	return fuo
 }
 
-// SetNillableAnnotation sets the "annotation" field if the given value is not nil.
-func (fuo *FileUpdateOne) SetNillableAnnotation(s *string) *FileUpdateOne {
+// SetNillableCategoryType sets the "category_type" field if the given value is not nil.
+func (fuo *FileUpdateOne) SetNillableCategoryType(s *string) *FileUpdateOne {
 	if s != nil {
-		fuo.SetAnnotation(*s)
+		fuo.SetCategoryType(*s)
 	}
 	return fuo
 }
 
-// ClearAnnotation clears the value of the "annotation" field.
-func (fuo *FileUpdateOne) ClearAnnotation() *FileUpdateOne {
-	fuo.mutation.ClearAnnotation()
+// ClearCategoryType clears the value of the "category_type" field.
+func (fuo *FileUpdateOne) ClearCategoryType() *FileUpdateOne {
+	fuo.mutation.ClearCategoryType()
 	return fuo
 }
 
-// SetUserID sets the "user" edge to the User entity by ID.
-func (fuo *FileUpdateOne) SetUserID(id string) *FileUpdateOne {
-	fuo.mutation.SetUserID(id)
+// SetURI sets the "uri" field.
+func (fuo *FileUpdateOne) SetURI(s string) *FileUpdateOne {
+	fuo.mutation.SetURI(s)
 	return fuo
 }
 
-// SetNillableUserID sets the "user" edge to the User entity by ID if the given value is not nil.
-func (fuo *FileUpdateOne) SetNillableUserID(id *string) *FileUpdateOne {
-	if id != nil {
-		fuo = fuo.SetUserID(*id)
+// SetNillableURI sets the "uri" field if the given value is not nil.
+func (fuo *FileUpdateOne) SetNillableURI(s *string) *FileUpdateOne {
+	if s != nil {
+		fuo.SetURI(*s)
 	}
 	return fuo
 }
 
-// SetUser sets the "user" edge to the User entity.
-func (fuo *FileUpdateOne) SetUser(u *User) *FileUpdateOne {
-	return fuo.SetUserID(u.ID)
+// ClearURI clears the value of the "uri" field.
+func (fuo *FileUpdateOne) ClearURI() *FileUpdateOne {
+	fuo.mutation.ClearURI()
+	return fuo
+}
+
+// SetStorageScheme sets the "storage_scheme" field.
+func (fuo *FileUpdateOne) SetStorageScheme(s string) *FileUpdateOne {
+	fuo.mutation.SetStorageScheme(s)
+	return fuo
+}
+
+// SetNillableStorageScheme sets the "storage_scheme" field if the given value is not nil.
+func (fuo *FileUpdateOne) SetNillableStorageScheme(s *string) *FileUpdateOne {
+	if s != nil {
+		fuo.SetStorageScheme(*s)
+	}
+	return fuo
+}
+
+// ClearStorageScheme clears the value of the "storage_scheme" field.
+func (fuo *FileUpdateOne) ClearStorageScheme() *FileUpdateOne {
+	fuo.mutation.ClearStorageScheme()
+	return fuo
+}
+
+// SetStorageVolume sets the "storage_volume" field.
+func (fuo *FileUpdateOne) SetStorageVolume(s string) *FileUpdateOne {
+	fuo.mutation.SetStorageVolume(s)
+	return fuo
+}
+
+// SetNillableStorageVolume sets the "storage_volume" field if the given value is not nil.
+func (fuo *FileUpdateOne) SetNillableStorageVolume(s *string) *FileUpdateOne {
+	if s != nil {
+		fuo.SetStorageVolume(*s)
+	}
+	return fuo
+}
+
+// ClearStorageVolume clears the value of the "storage_volume" field.
+func (fuo *FileUpdateOne) ClearStorageVolume() *FileUpdateOne {
+	fuo.mutation.ClearStorageVolume()
+	return fuo
+}
+
+// SetStoragePath sets the "storage_path" field.
+func (fuo *FileUpdateOne) SetStoragePath(s string) *FileUpdateOne {
+	fuo.mutation.SetStoragePath(s)
+	return fuo
+}
+
+// SetNillableStoragePath sets the "storage_path" field if the given value is not nil.
+func (fuo *FileUpdateOne) SetNillableStoragePath(s *string) *FileUpdateOne {
+	if s != nil {
+		fuo.SetStoragePath(*s)
+	}
+	return fuo
+}
+
+// ClearStoragePath clears the value of the "storage_path" field.
+func (fuo *FileUpdateOne) ClearStoragePath() *FileUpdateOne {
+	fuo.mutation.ClearStoragePath()
+	return fuo
+}
+
+// SetFileContents sets the "file_contents" field.
+func (fuo *FileUpdateOne) SetFileContents(b []byte) *FileUpdateOne {
+	fuo.mutation.SetFileContents(b)
+	return fuo
+}
+
+// ClearFileContents clears the value of the "file_contents" field.
+func (fuo *FileUpdateOne) ClearFileContents() *FileUpdateOne {
+	fuo.mutation.ClearFileContents()
+	return fuo
+}
+
+// AddUserIDs adds the "user" edge to the User entity by IDs.
+func (fuo *FileUpdateOne) AddUserIDs(ids ...string) *FileUpdateOne {
+	fuo.mutation.AddUserIDs(ids...)
+	return fuo
+}
+
+// AddUser adds the "user" edges to the User entity.
+func (fuo *FileUpdateOne) AddUser(u ...*User) *FileUpdateOne {
+	ids := make([]string, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return fuo.AddUserIDs(ids...)
 }
 
 // AddOrganizationIDs adds the "organization" edge to the Organization entity by IDs.
@@ -977,21 +1900,6 @@ func (fuo *FileUpdateOne) AddOrganization(o ...*Organization) *FileUpdateOne {
 	return fuo.AddOrganizationIDs(ids...)
 }
 
-// AddEntityIDs adds the "entity" edge to the Entity entity by IDs.
-func (fuo *FileUpdateOne) AddEntityIDs(ids ...string) *FileUpdateOne {
-	fuo.mutation.AddEntityIDs(ids...)
-	return fuo
-}
-
-// AddEntity adds the "entity" edges to the Entity entity.
-func (fuo *FileUpdateOne) AddEntity(e ...*Entity) *FileUpdateOne {
-	ids := make([]string, len(e))
-	for i := range e {
-		ids[i] = e[i].ID
-	}
-	return fuo.AddEntityIDs(ids...)
-}
-
 // AddGroupIDs adds the "group" edge to the Group entity by IDs.
 func (fuo *FileUpdateOne) AddGroupIDs(ids ...string) *FileUpdateOne {
 	fuo.mutation.AddGroupIDs(ids...)
@@ -1007,15 +1915,135 @@ func (fuo *FileUpdateOne) AddGroup(g ...*Group) *FileUpdateOne {
 	return fuo.AddGroupIDs(ids...)
 }
 
+// AddContactIDs adds the "contact" edge to the Contact entity by IDs.
+func (fuo *FileUpdateOne) AddContactIDs(ids ...string) *FileUpdateOne {
+	fuo.mutation.AddContactIDs(ids...)
+	return fuo
+}
+
+// AddContact adds the "contact" edges to the Contact entity.
+func (fuo *FileUpdateOne) AddContact(c ...*Contact) *FileUpdateOne {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return fuo.AddContactIDs(ids...)
+}
+
+// AddEntityIDs adds the "entity" edge to the Entity entity by IDs.
+func (fuo *FileUpdateOne) AddEntityIDs(ids ...string) *FileUpdateOne {
+	fuo.mutation.AddEntityIDs(ids...)
+	return fuo
+}
+
+// AddEntity adds the "entity" edges to the Entity entity.
+func (fuo *FileUpdateOne) AddEntity(e ...*Entity) *FileUpdateOne {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return fuo.AddEntityIDs(ids...)
+}
+
+// AddUsersettingIDs adds the "usersetting" edge to the UserSetting entity by IDs.
+func (fuo *FileUpdateOne) AddUsersettingIDs(ids ...string) *FileUpdateOne {
+	fuo.mutation.AddUsersettingIDs(ids...)
+	return fuo
+}
+
+// AddUsersetting adds the "usersetting" edges to the UserSetting entity.
+func (fuo *FileUpdateOne) AddUsersetting(u ...*UserSetting) *FileUpdateOne {
+	ids := make([]string, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return fuo.AddUsersettingIDs(ids...)
+}
+
+// AddOrganizationsettingIDs adds the "organizationsetting" edge to the OrganizationSetting entity by IDs.
+func (fuo *FileUpdateOne) AddOrganizationsettingIDs(ids ...string) *FileUpdateOne {
+	fuo.mutation.AddOrganizationsettingIDs(ids...)
+	return fuo
+}
+
+// AddOrganizationsetting adds the "organizationsetting" edges to the OrganizationSetting entity.
+func (fuo *FileUpdateOne) AddOrganizationsetting(o ...*OrganizationSetting) *FileUpdateOne {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return fuo.AddOrganizationsettingIDs(ids...)
+}
+
+// AddTemplateIDs adds the "template" edge to the Template entity by IDs.
+func (fuo *FileUpdateOne) AddTemplateIDs(ids ...string) *FileUpdateOne {
+	fuo.mutation.AddTemplateIDs(ids...)
+	return fuo
+}
+
+// AddTemplate adds the "template" edges to the Template entity.
+func (fuo *FileUpdateOne) AddTemplate(t ...*Template) *FileUpdateOne {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return fuo.AddTemplateIDs(ids...)
+}
+
+// AddDocumentdatumIDs adds the "documentdata" edge to the DocumentData entity by IDs.
+func (fuo *FileUpdateOne) AddDocumentdatumIDs(ids ...string) *FileUpdateOne {
+	fuo.mutation.AddDocumentdatumIDs(ids...)
+	return fuo
+}
+
+// AddDocumentdata adds the "documentdata" edges to the DocumentData entity.
+func (fuo *FileUpdateOne) AddDocumentdata(d ...*DocumentData) *FileUpdateOne {
+	ids := make([]string, len(d))
+	for i := range d {
+		ids[i] = d[i].ID
+	}
+	return fuo.AddDocumentdatumIDs(ids...)
+}
+
+// AddEventIDs adds the "events" edge to the Event entity by IDs.
+func (fuo *FileUpdateOne) AddEventIDs(ids ...string) *FileUpdateOne {
+	fuo.mutation.AddEventIDs(ids...)
+	return fuo
+}
+
+// AddEvents adds the "events" edges to the Event entity.
+func (fuo *FileUpdateOne) AddEvents(e ...*Event) *FileUpdateOne {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return fuo.AddEventIDs(ids...)
+}
+
 // Mutation returns the FileMutation object of the builder.
 func (fuo *FileUpdateOne) Mutation() *FileMutation {
 	return fuo.mutation
 }
 
-// ClearUser clears the "user" edge to the User entity.
+// ClearUser clears all "user" edges to the User entity.
 func (fuo *FileUpdateOne) ClearUser() *FileUpdateOne {
 	fuo.mutation.ClearUser()
 	return fuo
+}
+
+// RemoveUserIDs removes the "user" edge to User entities by IDs.
+func (fuo *FileUpdateOne) RemoveUserIDs(ids ...string) *FileUpdateOne {
+	fuo.mutation.RemoveUserIDs(ids...)
+	return fuo
+}
+
+// RemoveUser removes "user" edges to User entities.
+func (fuo *FileUpdateOne) RemoveUser(u ...*User) *FileUpdateOne {
+	ids := make([]string, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return fuo.RemoveUserIDs(ids...)
 }
 
 // ClearOrganization clears all "organization" edges to the Organization entity.
@@ -1039,6 +2067,48 @@ func (fuo *FileUpdateOne) RemoveOrganization(o ...*Organization) *FileUpdateOne 
 	return fuo.RemoveOrganizationIDs(ids...)
 }
 
+// ClearGroup clears all "group" edges to the Group entity.
+func (fuo *FileUpdateOne) ClearGroup() *FileUpdateOne {
+	fuo.mutation.ClearGroup()
+	return fuo
+}
+
+// RemoveGroupIDs removes the "group" edge to Group entities by IDs.
+func (fuo *FileUpdateOne) RemoveGroupIDs(ids ...string) *FileUpdateOne {
+	fuo.mutation.RemoveGroupIDs(ids...)
+	return fuo
+}
+
+// RemoveGroup removes "group" edges to Group entities.
+func (fuo *FileUpdateOne) RemoveGroup(g ...*Group) *FileUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return fuo.RemoveGroupIDs(ids...)
+}
+
+// ClearContact clears all "contact" edges to the Contact entity.
+func (fuo *FileUpdateOne) ClearContact() *FileUpdateOne {
+	fuo.mutation.ClearContact()
+	return fuo
+}
+
+// RemoveContactIDs removes the "contact" edge to Contact entities by IDs.
+func (fuo *FileUpdateOne) RemoveContactIDs(ids ...string) *FileUpdateOne {
+	fuo.mutation.RemoveContactIDs(ids...)
+	return fuo
+}
+
+// RemoveContact removes "contact" edges to Contact entities.
+func (fuo *FileUpdateOne) RemoveContact(c ...*Contact) *FileUpdateOne {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return fuo.RemoveContactIDs(ids...)
+}
+
 // ClearEntity clears all "entity" edges to the Entity entity.
 func (fuo *FileUpdateOne) ClearEntity() *FileUpdateOne {
 	fuo.mutation.ClearEntity()
@@ -1060,25 +2130,109 @@ func (fuo *FileUpdateOne) RemoveEntity(e ...*Entity) *FileUpdateOne {
 	return fuo.RemoveEntityIDs(ids...)
 }
 
-// ClearGroup clears all "group" edges to the Group entity.
-func (fuo *FileUpdateOne) ClearGroup() *FileUpdateOne {
-	fuo.mutation.ClearGroup()
+// ClearUsersetting clears all "usersetting" edges to the UserSetting entity.
+func (fuo *FileUpdateOne) ClearUsersetting() *FileUpdateOne {
+	fuo.mutation.ClearUsersetting()
 	return fuo
 }
 
-// RemoveGroupIDs removes the "group" edge to Group entities by IDs.
-func (fuo *FileUpdateOne) RemoveGroupIDs(ids ...string) *FileUpdateOne {
-	fuo.mutation.RemoveGroupIDs(ids...)
+// RemoveUsersettingIDs removes the "usersetting" edge to UserSetting entities by IDs.
+func (fuo *FileUpdateOne) RemoveUsersettingIDs(ids ...string) *FileUpdateOne {
+	fuo.mutation.RemoveUsersettingIDs(ids...)
 	return fuo
 }
 
-// RemoveGroup removes "group" edges to Group entities.
-func (fuo *FileUpdateOne) RemoveGroup(g ...*Group) *FileUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
+// RemoveUsersetting removes "usersetting" edges to UserSetting entities.
+func (fuo *FileUpdateOne) RemoveUsersetting(u ...*UserSetting) *FileUpdateOne {
+	ids := make([]string, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
 	}
-	return fuo.RemoveGroupIDs(ids...)
+	return fuo.RemoveUsersettingIDs(ids...)
+}
+
+// ClearOrganizationsetting clears all "organizationsetting" edges to the OrganizationSetting entity.
+func (fuo *FileUpdateOne) ClearOrganizationsetting() *FileUpdateOne {
+	fuo.mutation.ClearOrganizationsetting()
+	return fuo
+}
+
+// RemoveOrganizationsettingIDs removes the "organizationsetting" edge to OrganizationSetting entities by IDs.
+func (fuo *FileUpdateOne) RemoveOrganizationsettingIDs(ids ...string) *FileUpdateOne {
+	fuo.mutation.RemoveOrganizationsettingIDs(ids...)
+	return fuo
+}
+
+// RemoveOrganizationsetting removes "organizationsetting" edges to OrganizationSetting entities.
+func (fuo *FileUpdateOne) RemoveOrganizationsetting(o ...*OrganizationSetting) *FileUpdateOne {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return fuo.RemoveOrganizationsettingIDs(ids...)
+}
+
+// ClearTemplate clears all "template" edges to the Template entity.
+func (fuo *FileUpdateOne) ClearTemplate() *FileUpdateOne {
+	fuo.mutation.ClearTemplate()
+	return fuo
+}
+
+// RemoveTemplateIDs removes the "template" edge to Template entities by IDs.
+func (fuo *FileUpdateOne) RemoveTemplateIDs(ids ...string) *FileUpdateOne {
+	fuo.mutation.RemoveTemplateIDs(ids...)
+	return fuo
+}
+
+// RemoveTemplate removes "template" edges to Template entities.
+func (fuo *FileUpdateOne) RemoveTemplate(t ...*Template) *FileUpdateOne {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return fuo.RemoveTemplateIDs(ids...)
+}
+
+// ClearDocumentdata clears all "documentdata" edges to the DocumentData entity.
+func (fuo *FileUpdateOne) ClearDocumentdata() *FileUpdateOne {
+	fuo.mutation.ClearDocumentdata()
+	return fuo
+}
+
+// RemoveDocumentdatumIDs removes the "documentdata" edge to DocumentData entities by IDs.
+func (fuo *FileUpdateOne) RemoveDocumentdatumIDs(ids ...string) *FileUpdateOne {
+	fuo.mutation.RemoveDocumentdatumIDs(ids...)
+	return fuo
+}
+
+// RemoveDocumentdata removes "documentdata" edges to DocumentData entities.
+func (fuo *FileUpdateOne) RemoveDocumentdata(d ...*DocumentData) *FileUpdateOne {
+	ids := make([]string, len(d))
+	for i := range d {
+		ids[i] = d[i].ID
+	}
+	return fuo.RemoveDocumentdatumIDs(ids...)
+}
+
+// ClearEvents clears all "events" edges to the Event entity.
+func (fuo *FileUpdateOne) ClearEvents() *FileUpdateOne {
+	fuo.mutation.ClearEvents()
+	return fuo
+}
+
+// RemoveEventIDs removes the "events" edge to Event entities by IDs.
+func (fuo *FileUpdateOne) RemoveEventIDs(ids ...string) *FileUpdateOne {
+	fuo.mutation.RemoveEventIDs(ids...)
+	return fuo
+}
+
+// RemoveEvents removes "events" edges to Event entities.
+func (fuo *FileUpdateOne) RemoveEvents(e ...*Event) *FileUpdateOne {
+	ids := make([]string, len(e))
+	for i := range e {
+		ids[i] = e[i].ID
+	}
+	return fuo.RemoveEventIDs(ids...)
 }
 
 // Where appends a list predicates to the FileUpdate builder.
@@ -1138,9 +2292,14 @@ func (fuo *FileUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (fuo *FileUpdateOne) check() error {
-	if v, ok := fuo.mutation.FileSize(); ok {
-		if err := file.FileSizeValidator(v); err != nil {
-			return &ValidationError{Name: "file_size", err: fmt.Errorf(`generated: validator failed for field "File.file_size": %w`, err)}
+	if v, ok := fuo.mutation.ProvidedFileSize(); ok {
+		if err := file.ProvidedFileSizeValidator(v); err != nil {
+			return &ValidationError{Name: "provided_file_size", err: fmt.Errorf(`generated: validator failed for field "File.provided_file_size": %w`, err)}
+		}
+	}
+	if v, ok := fuo.mutation.PersistedFileSize(); ok {
+		if err := file.PersistedFileSizeValidator(v); err != nil {
+			return &ValidationError{Name: "persisted_file_size", err: fmt.Errorf(`generated: validator failed for field "File.persisted_file_size": %w`, err)}
 		}
 	}
 	return nil
@@ -1222,65 +2381,136 @@ func (fuo *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) 
 	if fuo.mutation.TagsCleared() {
 		_spec.ClearField(file.FieldTags, field.TypeJSON)
 	}
-	if value, ok := fuo.mutation.FileName(); ok {
-		_spec.SetField(file.FieldFileName, field.TypeString, value)
+	if value, ok := fuo.mutation.ProvidedFileName(); ok {
+		_spec.SetField(file.FieldProvidedFileName, field.TypeString, value)
 	}
-	if value, ok := fuo.mutation.FileExtension(); ok {
-		_spec.SetField(file.FieldFileExtension, field.TypeString, value)
+	if value, ok := fuo.mutation.ProvidedFileExtension(); ok {
+		_spec.SetField(file.FieldProvidedFileExtension, field.TypeString, value)
 	}
-	if value, ok := fuo.mutation.FileSize(); ok {
-		_spec.SetField(file.FieldFileSize, field.TypeInt, value)
+	if value, ok := fuo.mutation.ProvidedFileSize(); ok {
+		_spec.SetField(file.FieldProvidedFileSize, field.TypeInt64, value)
 	}
-	if value, ok := fuo.mutation.AddedFileSize(); ok {
-		_spec.AddField(file.FieldFileSize, field.TypeInt, value)
+	if value, ok := fuo.mutation.AddedProvidedFileSize(); ok {
+		_spec.AddField(file.FieldProvidedFileSize, field.TypeInt64, value)
 	}
-	if fuo.mutation.FileSizeCleared() {
-		_spec.ClearField(file.FieldFileSize, field.TypeInt)
+	if fuo.mutation.ProvidedFileSizeCleared() {
+		_spec.ClearField(file.FieldProvidedFileSize, field.TypeInt64)
 	}
-	if value, ok := fuo.mutation.ContentType(); ok {
-		_spec.SetField(file.FieldContentType, field.TypeString, value)
+	if value, ok := fuo.mutation.PersistedFileSize(); ok {
+		_spec.SetField(file.FieldPersistedFileSize, field.TypeInt64, value)
+	}
+	if value, ok := fuo.mutation.AddedPersistedFileSize(); ok {
+		_spec.AddField(file.FieldPersistedFileSize, field.TypeInt64, value)
+	}
+	if fuo.mutation.PersistedFileSizeCleared() {
+		_spec.ClearField(file.FieldPersistedFileSize, field.TypeInt64)
+	}
+	if value, ok := fuo.mutation.DetectedMimeType(); ok {
+		_spec.SetField(file.FieldDetectedMimeType, field.TypeString, value)
+	}
+	if fuo.mutation.DetectedMimeTypeCleared() {
+		_spec.ClearField(file.FieldDetectedMimeType, field.TypeString)
+	}
+	if value, ok := fuo.mutation.Md5Hash(); ok {
+		_spec.SetField(file.FieldMd5Hash, field.TypeString, value)
+	}
+	if fuo.mutation.Md5HashCleared() {
+		_spec.ClearField(file.FieldMd5Hash, field.TypeString)
+	}
+	if value, ok := fuo.mutation.DetectedContentType(); ok {
+		_spec.SetField(file.FieldDetectedContentType, field.TypeString, value)
 	}
 	if value, ok := fuo.mutation.StoreKey(); ok {
 		_spec.SetField(file.FieldStoreKey, field.TypeString, value)
 	}
-	if value, ok := fuo.mutation.Category(); ok {
-		_spec.SetField(file.FieldCategory, field.TypeString, value)
+	if fuo.mutation.StoreKeyCleared() {
+		_spec.ClearField(file.FieldStoreKey, field.TypeString)
 	}
-	if fuo.mutation.CategoryCleared() {
-		_spec.ClearField(file.FieldCategory, field.TypeString)
+	if value, ok := fuo.mutation.CorrelationID(); ok {
+		_spec.SetField(file.FieldCorrelationID, field.TypeString, value)
 	}
-	if value, ok := fuo.mutation.Annotation(); ok {
-		_spec.SetField(file.FieldAnnotation, field.TypeString, value)
+	if fuo.mutation.CorrelationIDCleared() {
+		_spec.ClearField(file.FieldCorrelationID, field.TypeString)
 	}
-	if fuo.mutation.AnnotationCleared() {
-		_spec.ClearField(file.FieldAnnotation, field.TypeString)
+	if value, ok := fuo.mutation.CategoryType(); ok {
+		_spec.SetField(file.FieldCategoryType, field.TypeString, value)
+	}
+	if fuo.mutation.CategoryTypeCleared() {
+		_spec.ClearField(file.FieldCategoryType, field.TypeString)
+	}
+	if value, ok := fuo.mutation.URI(); ok {
+		_spec.SetField(file.FieldURI, field.TypeString, value)
+	}
+	if fuo.mutation.URICleared() {
+		_spec.ClearField(file.FieldURI, field.TypeString)
+	}
+	if value, ok := fuo.mutation.StorageScheme(); ok {
+		_spec.SetField(file.FieldStorageScheme, field.TypeString, value)
+	}
+	if fuo.mutation.StorageSchemeCleared() {
+		_spec.ClearField(file.FieldStorageScheme, field.TypeString)
+	}
+	if value, ok := fuo.mutation.StorageVolume(); ok {
+		_spec.SetField(file.FieldStorageVolume, field.TypeString, value)
+	}
+	if fuo.mutation.StorageVolumeCleared() {
+		_spec.ClearField(file.FieldStorageVolume, field.TypeString)
+	}
+	if value, ok := fuo.mutation.StoragePath(); ok {
+		_spec.SetField(file.FieldStoragePath, field.TypeString, value)
+	}
+	if fuo.mutation.StoragePathCleared() {
+		_spec.ClearField(file.FieldStoragePath, field.TypeString)
+	}
+	if value, ok := fuo.mutation.FileContents(); ok {
+		_spec.SetField(file.FieldFileContents, field.TypeBytes, value)
+	}
+	if fuo.mutation.FileContentsCleared() {
+		_spec.ClearField(file.FieldFileContents, field.TypeBytes)
 	}
 	if fuo.mutation.UserCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
+			Rel:     sqlgraph.M2M,
 			Inverse: true,
 			Table:   file.UserTable,
-			Columns: []string{file.UserColumn},
+			Columns: file.UserPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = fuo.schemaConfig.File
+		edge.Schema = fuo.schemaConfig.UserFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fuo.mutation.RemovedUserIDs(); len(nodes) > 0 && !fuo.mutation.UserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.UserTable,
+			Columns: file.UserPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fuo.schemaConfig.UserFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := fuo.mutation.UserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
+			Rel:     sqlgraph.M2M,
 			Inverse: true,
 			Table:   file.UserTable,
-			Columns: []string{file.UserColumn},
+			Columns: file.UserPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = fuo.schemaConfig.File
+		edge.Schema = fuo.schemaConfig.UserFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1334,6 +2564,102 @@ func (fuo *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if fuo.mutation.GroupCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.GroupTable,
+			Columns: file.GroupPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fuo.schemaConfig.GroupFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fuo.mutation.RemovedGroupIDs(); len(nodes) > 0 && !fuo.mutation.GroupCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.GroupTable,
+			Columns: file.GroupPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fuo.schemaConfig.GroupFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fuo.mutation.GroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.GroupTable,
+			Columns: file.GroupPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fuo.schemaConfig.GroupFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if fuo.mutation.ContactCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.ContactTable,
+			Columns: file.ContactPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contact.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fuo.schemaConfig.ContactFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fuo.mutation.RemovedContactIDs(); len(nodes) > 0 && !fuo.mutation.ContactCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.ContactTable,
+			Columns: file.ContactPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contact.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fuo.schemaConfig.ContactFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fuo.mutation.ContactIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.ContactTable,
+			Columns: file.ContactPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contact.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fuo.schemaConfig.ContactFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if fuo.mutation.EntityCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -1382,49 +2708,241 @@ func (fuo *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if fuo.mutation.GroupCleared() {
+	if fuo.mutation.UsersettingCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   file.GroupTable,
-			Columns: file.GroupPrimaryKey,
+			Table:   file.UsersettingTable,
+			Columns: file.UsersettingPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(usersetting.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = fuo.schemaConfig.GroupFiles
+		edge.Schema = fuo.schemaConfig.UserSettingFiles
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := fuo.mutation.RemovedGroupIDs(); len(nodes) > 0 && !fuo.mutation.GroupCleared() {
+	if nodes := fuo.mutation.RemovedUsersettingIDs(); len(nodes) > 0 && !fuo.mutation.UsersettingCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   file.GroupTable,
-			Columns: file.GroupPrimaryKey,
+			Table:   file.UsersettingTable,
+			Columns: file.UsersettingPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(usersetting.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = fuo.schemaConfig.GroupFiles
+		edge.Schema = fuo.schemaConfig.UserSettingFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := fuo.mutation.GroupIDs(); len(nodes) > 0 {
+	if nodes := fuo.mutation.UsersettingIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   file.GroupTable,
-			Columns: file.GroupPrimaryKey,
+			Table:   file.UsersettingTable,
+			Columns: file.UsersettingPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(usersetting.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = fuo.schemaConfig.GroupFiles
+		edge.Schema = fuo.schemaConfig.UserSettingFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if fuo.mutation.OrganizationsettingCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.OrganizationsettingTable,
+			Columns: file.OrganizationsettingPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organizationsetting.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fuo.schemaConfig.OrganizationSettingFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fuo.mutation.RemovedOrganizationsettingIDs(); len(nodes) > 0 && !fuo.mutation.OrganizationsettingCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.OrganizationsettingTable,
+			Columns: file.OrganizationsettingPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organizationsetting.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fuo.schemaConfig.OrganizationSettingFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fuo.mutation.OrganizationsettingIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.OrganizationsettingTable,
+			Columns: file.OrganizationsettingPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organizationsetting.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fuo.schemaConfig.OrganizationSettingFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if fuo.mutation.TemplateCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.TemplateTable,
+			Columns: file.TemplatePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fuo.schemaConfig.TemplateFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fuo.mutation.RemovedTemplateIDs(); len(nodes) > 0 && !fuo.mutation.TemplateCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.TemplateTable,
+			Columns: file.TemplatePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fuo.schemaConfig.TemplateFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fuo.mutation.TemplateIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.TemplateTable,
+			Columns: file.TemplatePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fuo.schemaConfig.TemplateFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if fuo.mutation.DocumentdataCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.DocumentdataTable,
+			Columns: file.DocumentdataPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fuo.schemaConfig.DocumentDataFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fuo.mutation.RemovedDocumentdataIDs(); len(nodes) > 0 && !fuo.mutation.DocumentdataCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.DocumentdataTable,
+			Columns: file.DocumentdataPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fuo.schemaConfig.DocumentDataFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fuo.mutation.DocumentdataIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.DocumentdataTable,
+			Columns: file.DocumentdataPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fuo.schemaConfig.DocumentDataFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if fuo.mutation.EventsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   file.EventsTable,
+			Columns: file.EventsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fuo.schemaConfig.FileEvents
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fuo.mutation.RemovedEventsIDs(); len(nodes) > 0 && !fuo.mutation.EventsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   file.EventsTable,
+			Columns: file.EventsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fuo.schemaConfig.FileEvents
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fuo.mutation.EventsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   file.EventsTable,
+			Columns: file.EventsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fuo.schemaConfig.FileEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

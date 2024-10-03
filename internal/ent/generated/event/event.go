@@ -67,6 +67,8 @@ const (
 	EdgeWebhook = "webhook"
 	// EdgeSubscriber holds the string denoting the subscriber edge name in mutations.
 	EdgeSubscriber = "subscriber"
+	// EdgeFile holds the string denoting the file edge name in mutations.
+	EdgeFile = "file"
 	// Table holds the table name of the event in the database.
 	Table = "events"
 	// UserTable is the table that holds the user relation/edge. The primary key declared below.
@@ -149,6 +151,11 @@ const (
 	// SubscriberInverseTable is the table name for the Subscriber entity.
 	// It exists in this package in order to avoid circular dependency with the "subscriber" package.
 	SubscriberInverseTable = "subscribers"
+	// FileTable is the table that holds the file relation/edge. The primary key declared below.
+	FileTable = "file_events"
+	// FileInverseTable is the table name for the File entity.
+	// It exists in this package in order to avoid circular dependency with the "file" package.
+	FileInverseTable = "files"
 )
 
 // Columns holds all SQL columns for event fields.
@@ -215,6 +222,9 @@ var (
 	// SubscriberPrimaryKey and SubscriberColumn2 are the table columns denoting the
 	// primary key for the subscriber relation (M2M).
 	SubscriberPrimaryKey = []string{"subscriber_id", "event_id"}
+	// FilePrimaryKey and FileColumn2 are the table columns denoting the
+	// primary key for the file relation (M2M).
+	FilePrimaryKey = []string{"file_id", "event_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -519,6 +529,20 @@ func BySubscriber(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newSubscriberStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByFileCount orders the results by file count.
+func ByFileCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newFileStep(), opts...)
+	}
+}
+
+// ByFile orders the results by file terms.
+func ByFile(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newFileStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newUserStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -629,5 +653,12 @@ func newSubscriberStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(SubscriberInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, SubscriberTable, SubscriberPrimaryKey...),
+	)
+}
+func newFileStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(FileInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, FileTable, FilePrimaryKey...),
 	)
 }

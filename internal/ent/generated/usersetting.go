@@ -68,11 +68,15 @@ type UserSettingEdges struct {
 	User *User `json:"user,omitempty"`
 	// organization to load on user login
 	DefaultOrg *Organization `json:"default_org,omitempty"`
+	// Files holds the value of the files edge.
+	Files []*File `json:"files,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [3]bool
 	// totalCount holds the count of the edges above.
-	totalCount [2]map[string]int
+	totalCount [3]map[string]int
+
+	namedFiles map[string][]*File
 }
 
 // UserOrErr returns the User value or an error if the edge
@@ -95,6 +99,15 @@ func (e UserSettingEdges) DefaultOrgOrErr() (*Organization, error) {
 		return nil, &NotFoundError{label: organization.Label}
 	}
 	return nil, &NotLoadedError{edge: "default_org"}
+}
+
+// FilesOrErr returns the Files value or an error if the edge
+// was not loaded in eager-loading.
+func (e UserSettingEdges) FilesOrErr() ([]*File, error) {
+	if e.loadedTypes[2] {
+		return e.Files, nil
+	}
+	return nil, &NotLoadedError{edge: "files"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -270,6 +283,11 @@ func (us *UserSetting) QueryDefaultOrg() *OrganizationQuery {
 	return NewUserSettingClient(us.config).QueryDefaultOrg(us)
 }
 
+// QueryFiles queries the "files" edge of the UserSetting entity.
+func (us *UserSetting) QueryFiles() *FileQuery {
+	return NewUserSettingClient(us.config).QueryFiles(us)
+}
+
 // Update returns a builder for updating this UserSetting.
 // Note that you need to call UserSetting.Unwrap() before calling this method if this UserSetting
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -351,6 +369,30 @@ func (us *UserSetting) String() string {
 	}
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedFiles returns the Files named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (us *UserSetting) NamedFiles(name string) ([]*File, error) {
+	if us.Edges.namedFiles == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := us.Edges.namedFiles[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (us *UserSetting) appendNamedFiles(name string, edges ...*File) {
+	if us.Edges.namedFiles == nil {
+		us.Edges.namedFiles = make(map[string][]*File)
+	}
+	if len(edges) == 0 {
+		us.Edges.namedFiles[name] = []*File{}
+	} else {
+		us.Edges.namedFiles[name] = append(us.Edges.namedFiles[name], edges...)
+	}
 }
 
 // UserSettings is a parsable slice of UserSetting.

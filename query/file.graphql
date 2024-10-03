@@ -1,0 +1,195 @@
+
+mutation CreateBulkCSVFile($input: Upload!) {
+  createBulkCSVFile(input: $input) {
+    files {
+      categoryType
+      correlationID
+      createdAt
+      createdBy
+      detectedContentType
+      detectedMimeType
+      id
+      md5Hash
+      persistedFileSize
+      providedFileExtension
+      providedFileName
+      providedFileSize
+      storagePath
+      storageScheme
+      storageVolume
+      storeKey
+      tags
+      updatedAt
+      updatedBy
+      uri
+    }
+  }
+}
+
+mutation CreateBulkFile($input: [CreateFileInput!]) {
+  createBulkFile(input: $input) {
+    files {
+      categoryType
+      correlationID
+      createdAt
+      createdBy
+      detectedContentType
+      detectedMimeType
+      id
+      md5Hash
+      persistedFileSize
+      providedFileExtension
+      providedFileName
+      providedFileSize
+      storagePath
+      storageScheme
+      storageVolume
+      storeKey
+      tags
+      updatedAt
+      updatedBy
+      uri
+    }
+  }
+}
+
+mutation CreateFile($input: CreateFileInput!) {
+  createFile(input: $input) {
+    file {
+      categoryType
+      correlationID
+      createdAt
+      createdBy
+      detectedContentType
+      detectedMimeType
+      id
+      md5Hash
+      persistedFileSize
+      providedFileExtension
+      providedFileName
+      providedFileSize
+      storagePath
+      storageScheme
+      storageVolume
+      storeKey
+      tags
+      updatedAt
+      updatedBy
+      uri
+    }
+  }
+}
+
+mutation DeleteFile($deleteFileId: ID!) {
+  deleteFile(id: $deleteFileId) {
+    deletedID
+  }
+}
+
+query GetAllFiles {
+  files {
+    edges {
+      node {
+        categoryType
+        correlationID
+        createdAt
+        createdBy
+        detectedContentType
+        detectedMimeType
+        id
+        md5Hash
+        persistedFileSize
+        providedFileExtension
+        providedFileName
+        providedFileSize
+        storagePath
+        storageScheme
+        storageVolume
+        storeKey
+        tags
+        updatedAt
+        updatedBy
+        uri
+      }
+    }
+  }
+}
+query GetFileByID($fileId: ID!) {
+  file(id: $fileId) {
+    categoryType
+    correlationID
+    createdAt
+    createdBy
+    detectedContentType
+    detectedMimeType
+    id
+    md5Hash
+    persistedFileSize
+    providedFileExtension
+    providedFileName
+    providedFileSize
+    storagePath
+    storageScheme
+    storageVolume
+    storeKey
+    tags
+    updatedAt
+    updatedBy
+    uri
+  }
+}
+
+query GetFiles($where: FileWhereInput) {
+  files(where: $where) {
+    edges {
+      node {
+        categoryType
+        correlationID
+        createdAt
+        createdBy
+        detectedContentType
+        detectedMimeType
+        id
+        md5Hash
+        persistedFileSize
+        providedFileExtension
+        providedFileName
+        providedFileSize
+        storagePath
+        storageScheme
+        storageVolume
+        storeKey
+        tags
+        updatedAt
+        updatedBy
+        uri
+      }
+    }
+  }
+}
+mutation UpdateFile($updateFileId: ID!, $input: UpdateFileInput!) {
+  updateFile(id: $updateFileId, input: $input) {
+    file {
+      categoryType
+      correlationID
+      createdAt
+      createdBy
+      detectedContentType
+      detectedMimeType
+      id
+      md5Hash
+      persistedFileSize
+      providedFileExtension
+      providedFileName
+      providedFileSize
+      storagePath
+      storageScheme
+      storageVolume
+      storeKey
+      tags
+      updatedAt
+      updatedBy
+      uri
+    }
+  }
+}

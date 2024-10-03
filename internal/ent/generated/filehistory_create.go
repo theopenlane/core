@@ -159,35 +159,77 @@ func (fhc *FileHistoryCreate) SetTags(s []string) *FileHistoryCreate {
 	return fhc
 }
 
-// SetFileName sets the "file_name" field.
-func (fhc *FileHistoryCreate) SetFileName(s string) *FileHistoryCreate {
-	fhc.mutation.SetFileName(s)
+// SetProvidedFileName sets the "provided_file_name" field.
+func (fhc *FileHistoryCreate) SetProvidedFileName(s string) *FileHistoryCreate {
+	fhc.mutation.SetProvidedFileName(s)
 	return fhc
 }
 
-// SetFileExtension sets the "file_extension" field.
-func (fhc *FileHistoryCreate) SetFileExtension(s string) *FileHistoryCreate {
-	fhc.mutation.SetFileExtension(s)
+// SetProvidedFileExtension sets the "provided_file_extension" field.
+func (fhc *FileHistoryCreate) SetProvidedFileExtension(s string) *FileHistoryCreate {
+	fhc.mutation.SetProvidedFileExtension(s)
 	return fhc
 }
 
-// SetFileSize sets the "file_size" field.
-func (fhc *FileHistoryCreate) SetFileSize(i int) *FileHistoryCreate {
-	fhc.mutation.SetFileSize(i)
+// SetProvidedFileSize sets the "provided_file_size" field.
+func (fhc *FileHistoryCreate) SetProvidedFileSize(i int64) *FileHistoryCreate {
+	fhc.mutation.SetProvidedFileSize(i)
 	return fhc
 }
 
-// SetNillableFileSize sets the "file_size" field if the given value is not nil.
-func (fhc *FileHistoryCreate) SetNillableFileSize(i *int) *FileHistoryCreate {
+// SetNillableProvidedFileSize sets the "provided_file_size" field if the given value is not nil.
+func (fhc *FileHistoryCreate) SetNillableProvidedFileSize(i *int64) *FileHistoryCreate {
 	if i != nil {
-		fhc.SetFileSize(*i)
+		fhc.SetProvidedFileSize(*i)
 	}
 	return fhc
 }
 
-// SetContentType sets the "content_type" field.
-func (fhc *FileHistoryCreate) SetContentType(s string) *FileHistoryCreate {
-	fhc.mutation.SetContentType(s)
+// SetPersistedFileSize sets the "persisted_file_size" field.
+func (fhc *FileHistoryCreate) SetPersistedFileSize(i int64) *FileHistoryCreate {
+	fhc.mutation.SetPersistedFileSize(i)
+	return fhc
+}
+
+// SetNillablePersistedFileSize sets the "persisted_file_size" field if the given value is not nil.
+func (fhc *FileHistoryCreate) SetNillablePersistedFileSize(i *int64) *FileHistoryCreate {
+	if i != nil {
+		fhc.SetPersistedFileSize(*i)
+	}
+	return fhc
+}
+
+// SetDetectedMimeType sets the "detected_mime_type" field.
+func (fhc *FileHistoryCreate) SetDetectedMimeType(s string) *FileHistoryCreate {
+	fhc.mutation.SetDetectedMimeType(s)
+	return fhc
+}
+
+// SetNillableDetectedMimeType sets the "detected_mime_type" field if the given value is not nil.
+func (fhc *FileHistoryCreate) SetNillableDetectedMimeType(s *string) *FileHistoryCreate {
+	if s != nil {
+		fhc.SetDetectedMimeType(*s)
+	}
+	return fhc
+}
+
+// SetMd5Hash sets the "md5_hash" field.
+func (fhc *FileHistoryCreate) SetMd5Hash(s string) *FileHistoryCreate {
+	fhc.mutation.SetMd5Hash(s)
+	return fhc
+}
+
+// SetNillableMd5Hash sets the "md5_hash" field if the given value is not nil.
+func (fhc *FileHistoryCreate) SetNillableMd5Hash(s *string) *FileHistoryCreate {
+	if s != nil {
+		fhc.SetMd5Hash(*s)
+	}
+	return fhc
+}
+
+// SetDetectedContentType sets the "detected_content_type" field.
+func (fhc *FileHistoryCreate) SetDetectedContentType(s string) *FileHistoryCreate {
+	fhc.mutation.SetDetectedContentType(s)
 	return fhc
 }
 
@@ -197,31 +239,101 @@ func (fhc *FileHistoryCreate) SetStoreKey(s string) *FileHistoryCreate {
 	return fhc
 }
 
-// SetCategory sets the "category" field.
-func (fhc *FileHistoryCreate) SetCategory(s string) *FileHistoryCreate {
-	fhc.mutation.SetCategory(s)
-	return fhc
-}
-
-// SetNillableCategory sets the "category" field if the given value is not nil.
-func (fhc *FileHistoryCreate) SetNillableCategory(s *string) *FileHistoryCreate {
+// SetNillableStoreKey sets the "store_key" field if the given value is not nil.
+func (fhc *FileHistoryCreate) SetNillableStoreKey(s *string) *FileHistoryCreate {
 	if s != nil {
-		fhc.SetCategory(*s)
+		fhc.SetStoreKey(*s)
 	}
 	return fhc
 }
 
-// SetAnnotation sets the "annotation" field.
-func (fhc *FileHistoryCreate) SetAnnotation(s string) *FileHistoryCreate {
-	fhc.mutation.SetAnnotation(s)
+// SetCorrelationID sets the "correlation_id" field.
+func (fhc *FileHistoryCreate) SetCorrelationID(s string) *FileHistoryCreate {
+	fhc.mutation.SetCorrelationID(s)
 	return fhc
 }
 
-// SetNillableAnnotation sets the "annotation" field if the given value is not nil.
-func (fhc *FileHistoryCreate) SetNillableAnnotation(s *string) *FileHistoryCreate {
+// SetNillableCorrelationID sets the "correlation_id" field if the given value is not nil.
+func (fhc *FileHistoryCreate) SetNillableCorrelationID(s *string) *FileHistoryCreate {
 	if s != nil {
-		fhc.SetAnnotation(*s)
+		fhc.SetCorrelationID(*s)
 	}
+	return fhc
+}
+
+// SetCategoryType sets the "category_type" field.
+func (fhc *FileHistoryCreate) SetCategoryType(s string) *FileHistoryCreate {
+	fhc.mutation.SetCategoryType(s)
+	return fhc
+}
+
+// SetNillableCategoryType sets the "category_type" field if the given value is not nil.
+func (fhc *FileHistoryCreate) SetNillableCategoryType(s *string) *FileHistoryCreate {
+	if s != nil {
+		fhc.SetCategoryType(*s)
+	}
+	return fhc
+}
+
+// SetURI sets the "uri" field.
+func (fhc *FileHistoryCreate) SetURI(s string) *FileHistoryCreate {
+	fhc.mutation.SetURI(s)
+	return fhc
+}
+
+// SetNillableURI sets the "uri" field if the given value is not nil.
+func (fhc *FileHistoryCreate) SetNillableURI(s *string) *FileHistoryCreate {
+	if s != nil {
+		fhc.SetURI(*s)
+	}
+	return fhc
+}
+
+// SetStorageScheme sets the "storage_scheme" field.
+func (fhc *FileHistoryCreate) SetStorageScheme(s string) *FileHistoryCreate {
+	fhc.mutation.SetStorageScheme(s)
+	return fhc
+}
+
+// SetNillableStorageScheme sets the "storage_scheme" field if the given value is not nil.
+func (fhc *FileHistoryCreate) SetNillableStorageScheme(s *string) *FileHistoryCreate {
+	if s != nil {
+		fhc.SetStorageScheme(*s)
+	}
+	return fhc
+}
+
+// SetStorageVolume sets the "storage_volume" field.
+func (fhc *FileHistoryCreate) SetStorageVolume(s string) *FileHistoryCreate {
+	fhc.mutation.SetStorageVolume(s)
+	return fhc
+}
+
+// SetNillableStorageVolume sets the "storage_volume" field if the given value is not nil.
+func (fhc *FileHistoryCreate) SetNillableStorageVolume(s *string) *FileHistoryCreate {
+	if s != nil {
+		fhc.SetStorageVolume(*s)
+	}
+	return fhc
+}
+
+// SetStoragePath sets the "storage_path" field.
+func (fhc *FileHistoryCreate) SetStoragePath(s string) *FileHistoryCreate {
+	fhc.mutation.SetStoragePath(s)
+	return fhc
+}
+
+// SetNillableStoragePath sets the "storage_path" field if the given value is not nil.
+func (fhc *FileHistoryCreate) SetNillableStoragePath(s *string) *FileHistoryCreate {
+	if s != nil {
+		fhc.SetStoragePath(*s)
+	}
+	return fhc
+}
+
+// SetFileContents sets the "file_contents" field.
+func (fhc *FileHistoryCreate) SetFileContents(b []byte) *FileHistoryCreate {
+	fhc.mutation.SetFileContents(b)
 	return fhc
 }
 
@@ -316,17 +428,14 @@ func (fhc *FileHistoryCreate) check() error {
 	if _, ok := fhc.mutation.MappingID(); !ok {
 		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "FileHistory.mapping_id"`)}
 	}
-	if _, ok := fhc.mutation.FileName(); !ok {
-		return &ValidationError{Name: "file_name", err: errors.New(`generated: missing required field "FileHistory.file_name"`)}
+	if _, ok := fhc.mutation.ProvidedFileName(); !ok {
+		return &ValidationError{Name: "provided_file_name", err: errors.New(`generated: missing required field "FileHistory.provided_file_name"`)}
 	}
-	if _, ok := fhc.mutation.FileExtension(); !ok {
-		return &ValidationError{Name: "file_extension", err: errors.New(`generated: missing required field "FileHistory.file_extension"`)}
+	if _, ok := fhc.mutation.ProvidedFileExtension(); !ok {
+		return &ValidationError{Name: "provided_file_extension", err: errors.New(`generated: missing required field "FileHistory.provided_file_extension"`)}
 	}
-	if _, ok := fhc.mutation.ContentType(); !ok {
-		return &ValidationError{Name: "content_type", err: errors.New(`generated: missing required field "FileHistory.content_type"`)}
-	}
-	if _, ok := fhc.mutation.StoreKey(); !ok {
-		return &ValidationError{Name: "store_key", err: errors.New(`generated: missing required field "FileHistory.store_key"`)}
+	if _, ok := fhc.mutation.DetectedContentType(); !ok {
+		return &ValidationError{Name: "detected_content_type", err: errors.New(`generated: missing required field "FileHistory.detected_content_type"`)}
 	}
 	return nil
 }
@@ -408,33 +517,65 @@ func (fhc *FileHistoryCreate) createSpec() (*FileHistory, *sqlgraph.CreateSpec) 
 		_spec.SetField(filehistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := fhc.mutation.FileName(); ok {
-		_spec.SetField(filehistory.FieldFileName, field.TypeString, value)
-		_node.FileName = value
+	if value, ok := fhc.mutation.ProvidedFileName(); ok {
+		_spec.SetField(filehistory.FieldProvidedFileName, field.TypeString, value)
+		_node.ProvidedFileName = value
 	}
-	if value, ok := fhc.mutation.FileExtension(); ok {
-		_spec.SetField(filehistory.FieldFileExtension, field.TypeString, value)
-		_node.FileExtension = value
+	if value, ok := fhc.mutation.ProvidedFileExtension(); ok {
+		_spec.SetField(filehistory.FieldProvidedFileExtension, field.TypeString, value)
+		_node.ProvidedFileExtension = value
 	}
-	if value, ok := fhc.mutation.FileSize(); ok {
-		_spec.SetField(filehistory.FieldFileSize, field.TypeInt, value)
-		_node.FileSize = value
+	if value, ok := fhc.mutation.ProvidedFileSize(); ok {
+		_spec.SetField(filehistory.FieldProvidedFileSize, field.TypeInt64, value)
+		_node.ProvidedFileSize = value
 	}
-	if value, ok := fhc.mutation.ContentType(); ok {
-		_spec.SetField(filehistory.FieldContentType, field.TypeString, value)
-		_node.ContentType = value
+	if value, ok := fhc.mutation.PersistedFileSize(); ok {
+		_spec.SetField(filehistory.FieldPersistedFileSize, field.TypeInt64, value)
+		_node.PersistedFileSize = value
+	}
+	if value, ok := fhc.mutation.DetectedMimeType(); ok {
+		_spec.SetField(filehistory.FieldDetectedMimeType, field.TypeString, value)
+		_node.DetectedMimeType = value
+	}
+	if value, ok := fhc.mutation.Md5Hash(); ok {
+		_spec.SetField(filehistory.FieldMd5Hash, field.TypeString, value)
+		_node.Md5Hash = value
+	}
+	if value, ok := fhc.mutation.DetectedContentType(); ok {
+		_spec.SetField(filehistory.FieldDetectedContentType, field.TypeString, value)
+		_node.DetectedContentType = value
 	}
 	if value, ok := fhc.mutation.StoreKey(); ok {
 		_spec.SetField(filehistory.FieldStoreKey, field.TypeString, value)
 		_node.StoreKey = value
 	}
-	if value, ok := fhc.mutation.Category(); ok {
-		_spec.SetField(filehistory.FieldCategory, field.TypeString, value)
-		_node.Category = value
+	if value, ok := fhc.mutation.CorrelationID(); ok {
+		_spec.SetField(filehistory.FieldCorrelationID, field.TypeString, value)
+		_node.CorrelationID = value
 	}
-	if value, ok := fhc.mutation.Annotation(); ok {
-		_spec.SetField(filehistory.FieldAnnotation, field.TypeString, value)
-		_node.Annotation = value
+	if value, ok := fhc.mutation.CategoryType(); ok {
+		_spec.SetField(filehistory.FieldCategoryType, field.TypeString, value)
+		_node.CategoryType = value
+	}
+	if value, ok := fhc.mutation.URI(); ok {
+		_spec.SetField(filehistory.FieldURI, field.TypeString, value)
+		_node.URI = value
+	}
+	if value, ok := fhc.mutation.StorageScheme(); ok {
+		_spec.SetField(filehistory.FieldStorageScheme, field.TypeString, value)
+		_node.StorageScheme = value
+	}
+	if value, ok := fhc.mutation.StorageVolume(); ok {
+		_spec.SetField(filehistory.FieldStorageVolume, field.TypeString, value)
+		_node.StorageVolume = value
+	}
+	if value, ok := fhc.mutation.StoragePath(); ok {
+		_spec.SetField(filehistory.FieldStoragePath, field.TypeString, value)
+		_node.StoragePath = value
+	}
+	if value, ok := fhc.mutation.FileContents(); ok {
+		_spec.SetField(filehistory.FieldFileContents, field.TypeBytes, value)
+		_node.FileContents = value
 	}
 	return _node, _spec
 }

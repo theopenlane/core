@@ -262,6 +262,19 @@ func (c *ContactQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			c.WithNamedEntities(alias, func(wq *EntityQuery) {
 				*wq = *query
 			})
+
+		case "files":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&FileClient{config: c.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, fileImplementors)...); err != nil {
+				return err
+			}
+			c.WithNamedFiles(alias, func(wq *FileQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[contact.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, contact.FieldCreatedAt)
@@ -592,6 +605,19 @@ func (dd *DocumentDataQuery) collectField(ctx context.Context, oneNode bool, opC
 				return err
 			}
 			dd.WithNamedEntity(alias, func(wq *EntityQuery) {
+				*wq = *query
+			})
+
+		case "files":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&FileClient{config: dd.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, fileImplementors)...); err != nil {
+				return err
+			}
+			dd.WithNamedFiles(alias, func(wq *FileQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -2737,6 +2763,19 @@ func (e *EventQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			e.WithNamedSubscriber(alias, func(wq *SubscriberQuery) {
 				*wq = *query
 			})
+
+		case "file":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&FileClient{config: e.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, fileImplementors)...); err != nil {
+				return err
+			}
+			e.WithNamedFile(alias, func(wq *FileQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[event.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, event.FieldCreatedAt)
@@ -3296,10 +3335,12 @@ func (f *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				path  = append(path, alias)
 				query = (&UserClient{config: f.config}).Query()
 			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			f.withUser = query
+			f.WithNamedUser(alias, func(wq *UserQuery) {
+				*wq = *query
+			})
 
 		case "organization":
 			var (
@@ -3311,6 +3352,32 @@ func (f *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				return err
 			}
 			f.WithNamedOrganization(alias, func(wq *OrganizationQuery) {
+				*wq = *query
+			})
+
+		case "group":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&GroupClient{config: f.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
+				return err
+			}
+			f.WithNamedGroup(alias, func(wq *GroupQuery) {
+				*wq = *query
+			})
+
+		case "contact":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ContactClient{config: f.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, contactImplementors)...); err != nil {
+				return err
+			}
+			f.WithNamedContact(alias, func(wq *ContactQuery) {
 				*wq = *query
 			})
 
@@ -3327,16 +3394,68 @@ func (f *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				*wq = *query
 			})
 
-		case "group":
+		case "usersetting":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&GroupClient{config: f.config}).Query()
+				query = (&UserSettingClient{config: f.config}).Query()
 			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, usersettingImplementors)...); err != nil {
 				return err
 			}
-			f.WithNamedGroup(alias, func(wq *GroupQuery) {
+			f.WithNamedUsersetting(alias, func(wq *UserSettingQuery) {
+				*wq = *query
+			})
+
+		case "organizationsetting":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationSettingClient{config: f.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, organizationsettingImplementors)...); err != nil {
+				return err
+			}
+			f.WithNamedOrganizationsetting(alias, func(wq *OrganizationSettingQuery) {
+				*wq = *query
+			})
+
+		case "template":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&TemplateClient{config: f.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, templateImplementors)...); err != nil {
+				return err
+			}
+			f.WithNamedTemplate(alias, func(wq *TemplateQuery) {
+				*wq = *query
+			})
+
+		case "documentdata":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&DocumentDataClient{config: f.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, documentdataImplementors)...); err != nil {
+				return err
+			}
+			f.WithNamedDocumentdata(alias, func(wq *DocumentDataQuery) {
+				*wq = *query
+			})
+
+		case "events":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&EventClient{config: f.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, eventImplementors)...); err != nil {
+				return err
+			}
+			f.WithNamedEvents(alias, func(wq *EventQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -3374,40 +3493,75 @@ func (f *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				selectedFields = append(selectedFields, file.FieldTags)
 				fieldSeen[file.FieldTags] = struct{}{}
 			}
-		case "fileName":
-			if _, ok := fieldSeen[file.FieldFileName]; !ok {
-				selectedFields = append(selectedFields, file.FieldFileName)
-				fieldSeen[file.FieldFileName] = struct{}{}
+		case "providedFileName":
+			if _, ok := fieldSeen[file.FieldProvidedFileName]; !ok {
+				selectedFields = append(selectedFields, file.FieldProvidedFileName)
+				fieldSeen[file.FieldProvidedFileName] = struct{}{}
 			}
-		case "fileExtension":
-			if _, ok := fieldSeen[file.FieldFileExtension]; !ok {
-				selectedFields = append(selectedFields, file.FieldFileExtension)
-				fieldSeen[file.FieldFileExtension] = struct{}{}
+		case "providedFileExtension":
+			if _, ok := fieldSeen[file.FieldProvidedFileExtension]; !ok {
+				selectedFields = append(selectedFields, file.FieldProvidedFileExtension)
+				fieldSeen[file.FieldProvidedFileExtension] = struct{}{}
 			}
-		case "fileSize":
-			if _, ok := fieldSeen[file.FieldFileSize]; !ok {
-				selectedFields = append(selectedFields, file.FieldFileSize)
-				fieldSeen[file.FieldFileSize] = struct{}{}
+		case "providedFileSize":
+			if _, ok := fieldSeen[file.FieldProvidedFileSize]; !ok {
+				selectedFields = append(selectedFields, file.FieldProvidedFileSize)
+				fieldSeen[file.FieldProvidedFileSize] = struct{}{}
 			}
-		case "contentType":
-			if _, ok := fieldSeen[file.FieldContentType]; !ok {
-				selectedFields = append(selectedFields, file.FieldContentType)
-				fieldSeen[file.FieldContentType] = struct{}{}
+		case "persistedFileSize":
+			if _, ok := fieldSeen[file.FieldPersistedFileSize]; !ok {
+				selectedFields = append(selectedFields, file.FieldPersistedFileSize)
+				fieldSeen[file.FieldPersistedFileSize] = struct{}{}
+			}
+		case "detectedMimeType":
+			if _, ok := fieldSeen[file.FieldDetectedMimeType]; !ok {
+				selectedFields = append(selectedFields, file.FieldDetectedMimeType)
+				fieldSeen[file.FieldDetectedMimeType] = struct{}{}
+			}
+		case "md5Hash":
+			if _, ok := fieldSeen[file.FieldMd5Hash]; !ok {
+				selectedFields = append(selectedFields, file.FieldMd5Hash)
+				fieldSeen[file.FieldMd5Hash] = struct{}{}
+			}
+		case "detectedContentType":
+			if _, ok := fieldSeen[file.FieldDetectedContentType]; !ok {
+				selectedFields = append(selectedFields, file.FieldDetectedContentType)
+				fieldSeen[file.FieldDetectedContentType] = struct{}{}
 			}
 		case "storeKey":
 			if _, ok := fieldSeen[file.FieldStoreKey]; !ok {
 				selectedFields = append(selectedFields, file.FieldStoreKey)
 				fieldSeen[file.FieldStoreKey] = struct{}{}
 			}
-		case "category":
-			if _, ok := fieldSeen[file.FieldCategory]; !ok {
-				selectedFields = append(selectedFields, file.FieldCategory)
-				fieldSeen[file.FieldCategory] = struct{}{}
+		case "correlationID":
+			if _, ok := fieldSeen[file.FieldCorrelationID]; !ok {
+				selectedFields = append(selectedFields, file.FieldCorrelationID)
+				fieldSeen[file.FieldCorrelationID] = struct{}{}
 			}
-		case "annotation":
-			if _, ok := fieldSeen[file.FieldAnnotation]; !ok {
-				selectedFields = append(selectedFields, file.FieldAnnotation)
-				fieldSeen[file.FieldAnnotation] = struct{}{}
+		case "categoryType":
+			if _, ok := fieldSeen[file.FieldCategoryType]; !ok {
+				selectedFields = append(selectedFields, file.FieldCategoryType)
+				fieldSeen[file.FieldCategoryType] = struct{}{}
+			}
+		case "uri":
+			if _, ok := fieldSeen[file.FieldURI]; !ok {
+				selectedFields = append(selectedFields, file.FieldURI)
+				fieldSeen[file.FieldURI] = struct{}{}
+			}
+		case "storageScheme":
+			if _, ok := fieldSeen[file.FieldStorageScheme]; !ok {
+				selectedFields = append(selectedFields, file.FieldStorageScheme)
+				fieldSeen[file.FieldStorageScheme] = struct{}{}
+			}
+		case "storageVolume":
+			if _, ok := fieldSeen[file.FieldStorageVolume]; !ok {
+				selectedFields = append(selectedFields, file.FieldStorageVolume)
+				fieldSeen[file.FieldStorageVolume] = struct{}{}
+			}
+		case "storagePath":
+			if _, ok := fieldSeen[file.FieldStoragePath]; !ok {
+				selectedFields = append(selectedFields, file.FieldStoragePath)
+				fieldSeen[file.FieldStoragePath] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -3521,40 +3675,75 @@ func (fh *FileHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 				selectedFields = append(selectedFields, filehistory.FieldTags)
 				fieldSeen[filehistory.FieldTags] = struct{}{}
 			}
-		case "fileName":
-			if _, ok := fieldSeen[filehistory.FieldFileName]; !ok {
-				selectedFields = append(selectedFields, filehistory.FieldFileName)
-				fieldSeen[filehistory.FieldFileName] = struct{}{}
+		case "providedFileName":
+			if _, ok := fieldSeen[filehistory.FieldProvidedFileName]; !ok {
+				selectedFields = append(selectedFields, filehistory.FieldProvidedFileName)
+				fieldSeen[filehistory.FieldProvidedFileName] = struct{}{}
 			}
-		case "fileExtension":
-			if _, ok := fieldSeen[filehistory.FieldFileExtension]; !ok {
-				selectedFields = append(selectedFields, filehistory.FieldFileExtension)
-				fieldSeen[filehistory.FieldFileExtension] = struct{}{}
+		case "providedFileExtension":
+			if _, ok := fieldSeen[filehistory.FieldProvidedFileExtension]; !ok {
+				selectedFields = append(selectedFields, filehistory.FieldProvidedFileExtension)
+				fieldSeen[filehistory.FieldProvidedFileExtension] = struct{}{}
 			}
-		case "fileSize":
-			if _, ok := fieldSeen[filehistory.FieldFileSize]; !ok {
-				selectedFields = append(selectedFields, filehistory.FieldFileSize)
-				fieldSeen[filehistory.FieldFileSize] = struct{}{}
+		case "providedFileSize":
+			if _, ok := fieldSeen[filehistory.FieldProvidedFileSize]; !ok {
+				selectedFields = append(selectedFields, filehistory.FieldProvidedFileSize)
+				fieldSeen[filehistory.FieldProvidedFileSize] = struct{}{}
 			}
-		case "contentType":
-			if _, ok := fieldSeen[filehistory.FieldContentType]; !ok {
-				selectedFields = append(selectedFields, filehistory.FieldContentType)
-				fieldSeen[filehistory.FieldContentType] = struct{}{}
+		case "persistedFileSize":
+			if _, ok := fieldSeen[filehistory.FieldPersistedFileSize]; !ok {
+				selectedFields = append(selectedFields, filehistory.FieldPersistedFileSize)
+				fieldSeen[filehistory.FieldPersistedFileSize] = struct{}{}
+			}
+		case "detectedMimeType":
+			if _, ok := fieldSeen[filehistory.FieldDetectedMimeType]; !ok {
+				selectedFields = append(selectedFields, filehistory.FieldDetectedMimeType)
+				fieldSeen[filehistory.FieldDetectedMimeType] = struct{}{}
+			}
+		case "md5Hash":
+			if _, ok := fieldSeen[filehistory.FieldMd5Hash]; !ok {
+				selectedFields = append(selectedFields, filehistory.FieldMd5Hash)
+				fieldSeen[filehistory.FieldMd5Hash] = struct{}{}
+			}
+		case "detectedContentType":
+			if _, ok := fieldSeen[filehistory.FieldDetectedContentType]; !ok {
+				selectedFields = append(selectedFields, filehistory.FieldDetectedContentType)
+				fieldSeen[filehistory.FieldDetectedContentType] = struct{}{}
 			}
 		case "storeKey":
 			if _, ok := fieldSeen[filehistory.FieldStoreKey]; !ok {
 				selectedFields = append(selectedFields, filehistory.FieldStoreKey)
 				fieldSeen[filehistory.FieldStoreKey] = struct{}{}
 			}
-		case "category":
-			if _, ok := fieldSeen[filehistory.FieldCategory]; !ok {
-				selectedFields = append(selectedFields, filehistory.FieldCategory)
-				fieldSeen[filehistory.FieldCategory] = struct{}{}
+		case "correlationID":
+			if _, ok := fieldSeen[filehistory.FieldCorrelationID]; !ok {
+				selectedFields = append(selectedFields, filehistory.FieldCorrelationID)
+				fieldSeen[filehistory.FieldCorrelationID] = struct{}{}
 			}
-		case "annotation":
-			if _, ok := fieldSeen[filehistory.FieldAnnotation]; !ok {
-				selectedFields = append(selectedFields, filehistory.FieldAnnotation)
-				fieldSeen[filehistory.FieldAnnotation] = struct{}{}
+		case "categoryType":
+			if _, ok := fieldSeen[filehistory.FieldCategoryType]; !ok {
+				selectedFields = append(selectedFields, filehistory.FieldCategoryType)
+				fieldSeen[filehistory.FieldCategoryType] = struct{}{}
+			}
+		case "uri":
+			if _, ok := fieldSeen[filehistory.FieldURI]; !ok {
+				selectedFields = append(selectedFields, filehistory.FieldURI)
+				fieldSeen[filehistory.FieldURI] = struct{}{}
+			}
+		case "storageScheme":
+			if _, ok := fieldSeen[filehistory.FieldStorageScheme]; !ok {
+				selectedFields = append(selectedFields, filehistory.FieldStorageScheme)
+				fieldSeen[filehistory.FieldStorageScheme] = struct{}{}
+			}
+		case "storageVolume":
+			if _, ok := fieldSeen[filehistory.FieldStorageVolume]; !ok {
+				selectedFields = append(selectedFields, filehistory.FieldStorageVolume)
+				fieldSeen[filehistory.FieldStorageVolume] = struct{}{}
+			}
+		case "storagePath":
+			if _, ok := fieldSeen[filehistory.FieldStoragePath]; !ok {
+				selectedFields = append(selectedFields, filehistory.FieldStoragePath)
+				fieldSeen[filehistory.FieldStoragePath] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -7164,6 +7353,19 @@ func (os *OrganizationSettingQuery) collectField(ctx context.Context, oneNode bo
 				selectedFields = append(selectedFields, organizationsetting.FieldOrganizationID)
 				fieldSeen[organizationsetting.FieldOrganizationID] = struct{}{}
 			}
+
+		case "files":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&FileClient{config: os.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, fileImplementors)...); err != nil {
+				return err
+			}
+			os.WithNamedFiles(alias, func(wq *FileQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[organizationsetting.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, organizationsetting.FieldCreatedAt)
@@ -7934,6 +8136,19 @@ func (t *TemplateQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				return err
 			}
 			t.WithNamedDocuments(alias, func(wq *DocumentDataQuery) {
+				*wq = *query
+			})
+
+		case "files":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&FileClient{config: t.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, fileImplementors)...); err != nil {
+				return err
+			}
+			t.WithNamedFiles(alias, func(wq *FileQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -8753,6 +8968,19 @@ func (us *UserSettingQuery) collectField(ctx context.Context, oneNode bool, opCt
 				return err
 			}
 			us.withDefaultOrg = query
+
+		case "files":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&FileClient{config: us.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, fileImplementors)...); err != nil {
+				return err
+			}
+			us.WithNamedFiles(alias, func(wq *FileQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[usersetting.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, usersetting.FieldCreatedAt)

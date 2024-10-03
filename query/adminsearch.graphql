@@ -121,12 +121,18 @@ query AdminSearch($query: String!) {
           deletedBy
           id
           tags
-          fileName
-          fileExtension
-          contentType
+          providedFileName
+          providedFileExtension
+          detectedMimeType
+          md5Hash
+          detectedContentType
           storeKey
-          category
-          annotation
+          correlationID
+          categoryType
+          uri
+          storageScheme
+          storageVolume
+          storagePath
         }
       }
       ... on GroupSearchResult {

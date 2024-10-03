@@ -64,13 +64,16 @@ type ContactEdges struct {
 	Owner *Organization `json:"owner,omitempty"`
 	// Entities holds the value of the entities edge.
 	Entities []*Entity `json:"entities,omitempty"`
+	// Files holds the value of the files edge.
+	Files []*File `json:"files,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [3]bool
 	// totalCount holds the count of the edges above.
-	totalCount [2]map[string]int
+	totalCount [3]map[string]int
 
 	namedEntities map[string][]*Entity
+	namedFiles    map[string][]*File
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -91,6 +94,15 @@ func (e ContactEdges) EntitiesOrErr() ([]*Entity, error) {
 		return e.Entities, nil
 	}
 	return nil, &NotLoadedError{edge: "entities"}
+}
+
+// FilesOrErr returns the Files value or an error if the edge
+// was not loaded in eager-loading.
+func (e ContactEdges) FilesOrErr() ([]*File, error) {
+	if e.loadedTypes[2] {
+		return e.Files, nil
+	}
+	return nil, &NotLoadedError{edge: "files"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -246,6 +258,11 @@ func (c *Contact) QueryEntities() *EntityQuery {
 	return NewContactClient(c.config).QueryEntities(c)
 }
 
+// QueryFiles queries the "files" edge of the Contact entity.
+func (c *Contact) QueryFiles() *FileQuery {
+	return NewContactClient(c.config).QueryFiles(c)
+}
+
 // Update returns a builder for updating this Contact.
 // Note that you need to call Contact.Unwrap() before calling this method if this Contact
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -341,6 +358,30 @@ func (c *Contact) appendNamedEntities(name string, edges ...*Entity) {
 		c.Edges.namedEntities[name] = []*Entity{}
 	} else {
 		c.Edges.namedEntities[name] = append(c.Edges.namedEntities[name], edges...)
+	}
+}
+
+// NamedFiles returns the Files named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (c *Contact) NamedFiles(name string) ([]*File, error) {
+	if c.Edges.namedFiles == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := c.Edges.namedFiles[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (c *Contact) appendNamedFiles(name string, edges ...*File) {
+	if c.Edges.namedFiles == nil {
+		c.Edges.namedFiles = make(map[string][]*File)
+	}
+	if len(edges) == 0 {
+		c.Edges.namedFiles[name] = []*File{}
+	} else {
+		c.Edges.namedFiles[name] = append(c.Edges.namedFiles[name], edges...)
 	}
 }
 
