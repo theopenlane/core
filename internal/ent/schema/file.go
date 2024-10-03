@@ -61,7 +61,10 @@ func (File) Fields() []ent.Field {
 			Optional(),
 		field.Bytes("file_contents").
 			Comment("the contents of the file").
-			Optional(),
+			Optional().
+			Annotations(
+				entgql.Skip(), // Don't return file content in GraphQL queries
+			),
 	}
 }
 
