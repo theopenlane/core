@@ -59,7 +59,7 @@ require (
 	github.com/theopenlane/httpsling v0.2.1
 	github.com/theopenlane/iam v0.2.1
 	github.com/theopenlane/newman v0.1.1
-	github.com/theopenlane/riverboat v0.0.6
+	github.com/theopenlane/riverboat v0.0.7
 	github.com/theopenlane/utils v0.3.0
 	github.com/vektah/gqlparser/v2 v2.5.17
 	github.com/wundergraph/graphql-go-tools v1.67.4
