@@ -83,7 +83,7 @@ entConfig:
         useListObjectServices: false
         useListUserService: true
 jobQueue:
-    connectionURI: ""
+    connectionURI: postgres://postgres:password@0.0.0.0:5432/jobs?sslmode=disable
     riverConf:
         AdvisoryLockPrefix: 0
         CancelledJobRetentionPeriod: 0
