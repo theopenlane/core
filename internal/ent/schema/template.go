@@ -78,6 +78,7 @@ func (Template) Edges() []ent.Edge {
 			Annotations(
 				entx.CascadeAnnotationField("Template"),
 			),
+		edge.To("files", File.Type),
 	}
 }
 

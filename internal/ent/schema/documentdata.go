@@ -59,6 +59,7 @@ func (DocumentData) Edges() []ent.Edge {
 			Field("template_id"),
 		edge.From("entity", Entity.Type).
 			Ref("documents"),
+		edge.To("files", File.Type),
 	}
 }
 
