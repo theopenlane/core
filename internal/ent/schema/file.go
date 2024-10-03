@@ -19,16 +19,48 @@ type File struct {
 // Fields returns file fields.
 func (File) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("file_name"),
-		field.String("file_extension"),
-		field.Int("file_size").
+		field.String("provided_file_name").
+			Comment("the name of the file provided in the payload key without the extension"),
+		field.String("provided_file_extension").
+			Comment("the extension of the file provided"),
+		field.Int64("provided_file_size").
+			Comment("the computed size of the file in the original http request").
 			NonNegative().
 			Optional(),
-		field.String("content_type"),
-		field.String("store_key"),
-		field.String("category").
+		field.Int64("persisted_file_size").
+			NonNegative().
 			Optional(),
-		field.String("annotation").
+		field.String("detected_mime_type").
+			Comment("the mime type detected by the system").
+			Optional(),
+		field.String("md5_hash").
+			Comment("the computed md5 hash of the file calculated after we received the contents of the file, but before the file was written to permanent storage").
+			Optional(),
+		field.String("detected_content_type").
+			Comment("the content type of the HTTP request - may be different than MIME type as multipart-form can transmit multiple files and different types"),
+		field.String("store_key").
+			Comment("the key parsed out of a multipart-form request; if we allow multiple files to be uploaded we may want our API specifications to require the use of different keys allowing us to perfdorm easier conditional evaluation on the key and what to do with the file based on key").
+			Optional(),
+		field.String("correlation_id").
+			Comment("the ULID provided in the http request indicating the ULID to correleate the file to").
+			Optional(),
+		field.String("category_type").
+			Comment("the category type of the file, if any (e.g. contract, invoice, etc.)").
+			Optional(),
+		field.String("uri").
+			Comment("the full URI of the file").
+			Optional(),
+		field.String("storage_scheme").
+			Comment("the storage scheme of the file, e.g. file://, s3://, etc.").
+			Optional(),
+		field.String("storage_volume").
+			Comment("the storage volume of the file which typically will be the organization ID the file belongs to - this is not a literal volume but the overlay file system mapping").
+			Optional(),
+		field.String("storage_path").
+			Comment("the storage path is the second-level directory of the file path, typically the correlating logical object ID the file is associated with; files can be stand alone objects and not always correlated to a logical one, so this path of the tree may be empty").
+			Optional(),
+		field.Bytes("file_contents").
+			Comment("the contents of the file").
 			Optional(),
 	}
 }
@@ -37,14 +69,24 @@ func (File) Fields() []ent.Field {
 func (File) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("user", User.Type).
-			Ref("files").
-			Unique(),
-		edge.From("organization", Organization.Type).
 			Ref("files"),
-		edge.From("entity", Entity.Type).
+		edge.From("organization", Organization.Type).
 			Ref("files"),
 		edge.From("group", Group.Type).
 			Ref("files"),
+		edge.From("contact", Contact.Type).
+			Ref("files"),
+		edge.From("entity", Entity.Type).
+			Ref("files"),
+		edge.From("usersetting", UserSetting.Type).
+			Ref("files"),
+		edge.From("organizationsetting", OrganizationSetting.Type).
+			Ref("files"),
+		edge.From("template", Template.Type).
+			Ref("files"),
+		edge.From("documentdata", DocumentData.Type).
+			Ref("files"),
+		edge.To("events", Event.Type),
 	}
 }
 

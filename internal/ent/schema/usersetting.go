@@ -80,6 +80,7 @@ func (UserSetting) Edges() []ent.Edge {
 		edge.To("default_org", Organization.Type).
 			Unique().
 			Comment("organization to load on user login"),
+		edge.To("files", File.Type),
 	}
 }
 

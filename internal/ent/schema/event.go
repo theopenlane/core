@@ -44,6 +44,7 @@ func (Event) Edges() []ent.Edge {
 		edge.From("entitlement", Entitlement.Type).Ref("events"),
 		edge.From("webhook", Webhook.Type).Ref("events"),
 		edge.From("subscriber", Subscriber.Type).Ref("events"),
+		edge.From("file", File.Type).Ref("events"),
 	}
 }
 
