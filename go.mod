@@ -28,7 +28,7 @@ require (
 	github.com/jackc/pgx/v5 v5.7.1
 	github.com/knadh/koanf/parsers/yaml v0.1.0
 	github.com/knadh/koanf/providers/env v1.0.0
-	github.com/knadh/koanf/providers/file v1.1.1
+	github.com/knadh/koanf/providers/file v1.1.2
 	github.com/knadh/koanf/providers/posflag v0.1.0
 	github.com/knadh/koanf/v2 v2.1.1
 	github.com/lestrrat-go/jwx/v2 v2.1.1
@@ -64,11 +64,11 @@ require (
 	github.com/vektah/gqlparser/v2 v2.5.17
 	github.com/wundergraph/graphql-go-tools v1.67.4
 	gocloud.dev v0.39.0
-	golang.org/x/crypto v0.27.0
+	golang.org/x/crypto v0.28.0
 	golang.org/x/oauth2 v0.23.0
-	golang.org/x/term v0.24.0
-	golang.org/x/text v0.18.0
-	golang.org/x/tools v0.25.0
+	golang.org/x/term v0.25.0
+	golang.org/x/text v0.19.0
+	golang.org/x/tools v0.26.0
 )
 
 require (
@@ -245,9 +245,9 @@ require (
 	go.uber.org/zap v1.27.0 // indirect
 	golang.org/x/exp v0.0.0-20240904232852-e7e105dedf7e // indirect
 	golang.org/x/mod v0.21.0 // indirect
-	golang.org/x/net v0.29.0 // indirect
+	golang.org/x/net v0.30.0 // indirect
 	golang.org/x/sync v0.8.0 // indirect
-	golang.org/x/sys v0.25.0 // indirect
+	golang.org/x/sys v0.26.0 // indirect
 	golang.org/x/time v0.6.0 // indirect
 	golang.org/x/xerrors v0.0.0-20240716161551-93cc26a95ae9 // indirect
 	google.golang.org/api v0.199.0 // indirect
