@@ -524,8 +524,8 @@ github.com/theopenlane/iam v0.2.1 h1:rUUnrEIgr1up6DnF52Ayk6TVaGhBtSNiEw5rGSQPR/w
 github.com/theopenlane/iam v0.2.1/go.mod h1:65VB58GMFay80qRTP+4USlSkTiZcisxvt7ohMHmuHnc=
 github.com/theopenlane/newman v0.1.1 h1:pxGPRcy8kXQplfv4Sp1N3XUkWmx/scZvp7oj+y2l8wI=
 github.com/theopenlane/newman v0.1.1/go.mod h1:A37pInKEYsdvUmjQzTDv7x5T4KhMxoFW105DA3XvH4Y=
-github.com/theopenlane/riverboat v0.0.6 h1:7N4AetqHkbKw1l/zYtRJnUi/XpsYNHBHWLf2PJgnhN0=
-github.com/theopenlane/riverboat v0.0.6/go.mod h1:yvXaeXRnPGe8xHj08K6SlUHGQAnR72mDxK5VFFpu6sY=
+github.com/theopenlane/riverboat v0.0.7 h1:zT/H6ipMRLVYQEGLGgwUI6B1wXEBS0ARhkfzv+Pekwg=
+github.com/theopenlane/riverboat v0.0.7/go.mod h1:ke4bnkUNiqsQs7arZlIynAbDsy8uqY6yUSRUD1bmrBg=
 github.com/theopenlane/utils v0.3.0 h1:wLduNgi065CeRu4RvRG5p1Sz8H5S+KDiwSdSQ/Jc9Kg=
 github.com/theopenlane/utils v0.3.0/go.mod h1:ydEtwhmEvkVt3KKmNqiQiSY5b3rKH7U4umZ3QbFDsxU=
 github.com/tidwall/gjson v1.14.2/go.mod h1:/wbyibRr2FHMks5tjHJ5F8dMZh3AcwJEMf5vlfC0lxk=
