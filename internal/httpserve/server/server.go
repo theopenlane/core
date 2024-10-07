@@ -64,6 +64,9 @@ func (s *Server) StartEchoServer(ctx context.Context) error {
 		GracefulContext: ctx,
 	}
 
+	//	srv.Echo.Binder = objects.NewFileBinder(srv.Echo.Binder)
+	//	srv.Echo.Validator = objects.NewValidator()
+
 	srv.Echo.Debug = s.config.Settings.Server.Debug
 
 	if srv.Echo.Debug {

@@ -564,6 +564,73 @@
       "type": "object",
       "description": "Config defines the config for Mime middleware"
     },
+    "objects.Config": {
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "provider": {
+          "type": "string"
+        },
+        "ConfigurationPath": {
+          "type": "string"
+        },
+        "SourcePath": {
+          "type": "string"
+        },
+        "ExecutionTime": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "storage": {
+          "$ref": "#/$defs/map[string]string"
+        },
+        "dataset_type": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "container": {
+          "type": "string"
+        },
+        "accesskey": {
+          "type": "string"
+        },
+        "region": {
+          "type": "string"
+        },
+        "secretkey": {
+          "type": "string"
+        },
+        "credentials_json": {
+          "type": "string"
+        },
+        "bucket": {
+          "type": "string"
+        },
+        "endpoint": {
+          "type": "string"
+        },
+        "disable_ssl": {
+          "type": "boolean"
+        },
+        "force_path_style": {
+          "type": "boolean"
+        },
+        "path_style": {
+          "type": "boolean"
+        },
+        "endpoint_style": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
     "otelx.Config": {
       "properties": {
         "enabled": {
@@ -979,6 +1046,9 @@
     "ratelimit": {
       "$ref": "#/$defs/ratelimit.Config",
       "description": "Ratelimit contains the configuration for the rate limiter"
+    },
+    "objectStorage": {
+      "$ref": "#/$defs/objects.Config"
     }
   },
   "additionalProperties": false,

@@ -20,6 +20,7 @@ Config contains the configuration for the core server
 |[**sessions**](#sessions)|`object`|||
 |[**totp**](#totp)|`object`|||
 |[**ratelimit**](#ratelimit)|`object`|Config defines the configuration settings for the default rate limiter<br/>||
+|[**objectStorage**](#objectstorage)|`object`|||
 
 **Additional Properties:** not allowed  
 <a name="server"></a>
@@ -633,4 +634,41 @@ Config defines the configuration settings for the default rate limiter
 |**expires**|`integer`|||
 
 **Additional Properties:** not allowed  
+<a name="objectstorage"></a>
+## objectStorage: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**enabled**|`boolean`|||
+|**provider**|`string`|||
+|**ConfigurationPath**|`string`|||
+|**SourcePath**|`string`|||
+|**ExecutionTime**|`string`|Format: `"date-time"`<br/>||
+|[**storage**](#objectstoragestorage)|`object`|||
+|**dataset\_type**|`string`|||
+|**kind**|`string`|||
+|**path**|`string`|||
+|**container**|`string`|||
+|**accesskey**|`string`|||
+|**region**|`string`|||
+|**secretkey**|`string`|||
+|**credentials\_json**|`string`|||
+|**bucket**|`string`|||
+|**endpoint**|`string`|||
+|**disable\_ssl**|`boolean`|||
+|**force\_path\_style**|`boolean`|||
+|**path\_style**|`boolean`|||
+|**endpoint\_style**|`boolean`|||
+
+**Additional Properties:** not allowed  
+<a name="objectstoragestorage"></a>
+### objectStorage\.storage: object
+
+**Additional Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+
 

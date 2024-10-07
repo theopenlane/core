@@ -14,6 +14,8 @@ import (
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
+	"github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/core/pkg/objects/storage"
 )
 
 // Handler contains configuration options for handlers
@@ -43,5 +45,7 @@ type Handler struct {
 	// OTPManager contains the configuration settings for the OTP provider
 	OTPManager *totp.Manager
 	// Email contains email sending configuration for the server
-	Emailer emailtemplates.Config
+	Emailer       emailtemplates.Config
+	ObjectStorage *objects.Objects
+	Storage       *storage.S3Store
 }

@@ -3,6 +3,7 @@ package debug
 import (
 	"encoding/json"
 	"net/http"
+	"strings"
 
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
@@ -27,14 +28,33 @@ func BodyDump() echo.MiddlewareFunc {
 		})
 
 		if len(reqBody) > 0 {
-			var bodymap map[string]interface{}
-			if err := json.Unmarshal(reqBody, &bodymap); err == nil {
-				bodymap = redactSecretFields(bodymap)
+			contentType := c.Request().Header.Get("Content-Type")
+			if strings.HasPrefix(contentType, "multipart/form-data") {
+				// Parse the multipart form
+				if err := c.Request().ParseMultipartForm(32 << 20); err == nil { // nolint:mnd
+					form := c.Request().MultipartForm
+					if form != nil {
+						hasFile := false
 
-				reqBody, _ = json.Marshal(bodymap)
+						for _, files := range form.File {
+							if len(files) > 0 {
+								hasFile = true
+								break
+							}
+						}
+
+						if hasFile {
+							logger.Info().Msg("request contains a file, not logging request body")
+						} else {
+							logRequestBody(logger, reqBody)
+						}
+					}
+				} else {
+					logRequestBody(logger, reqBody)
+				}
+			} else {
+				logRequestBody(logger, reqBody)
 			}
-
-			logger.Info().Bytes("request body", reqBody).Msg("request body")
 		}
 
 		if (c.Request().Method == http.MethodPost || c.Request().Method == http.MethodPatch) && len(resBody) > 0 {
@@ -48,6 +68,17 @@ func BodyDump() echo.MiddlewareFunc {
 			logger.Info().Bytes("response body", resBody).Msg("response body")
 		}
 	})
+}
+
+func logRequestBody(logger zerolog.Logger, reqBody []byte) {
+	var bodymap map[string]interface{}
+	if err := json.Unmarshal(reqBody, &bodymap); err == nil {
+		bodymap = redactSecretFields(bodymap)
+
+		reqBody, _ = json.Marshal(bodymap)
+	}
+
+	logger.Info().Bytes("request body", reqBody).Msg("request body")
 }
 
 // redactSecretFields redacts sensitive fields from the request body

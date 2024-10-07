@@ -1,6 +1,7 @@
 package serveropts
 
 import (
+	"context"
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/x509"
@@ -28,6 +29,9 @@ import (
 
 	"github.com/theopenlane/echox/middleware/echocontext"
 
+	awsConfig "github.com/aws/aws-sdk-go-v2/config"
+	awsCreds "github.com/aws/aws-sdk-go-v2/credentials"
+
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi"
 	"github.com/theopenlane/core/internal/httpserve/config"
@@ -39,6 +43,8 @@ import (
 	"github.com/theopenlane/core/pkg/middleware/ratelimit"
 	"github.com/theopenlane/core/pkg/middleware/redirect"
 	"github.com/theopenlane/core/pkg/middleware/secure"
+	"github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/core/pkg/objects/storage"
 )
 
 type ServerOption interface {
@@ -385,6 +391,44 @@ func WithCORS() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
 		if s.Config.Settings.Server.CORS.Enabled {
 			s.Config.DefaultMiddleware = append(s.Config.DefaultMiddleware, cors.New(s.Config.Settings.Server.CORS.AllowOrigins))
+		}
+	})
+}
+
+func WithObjectStorage() ServerOption {
+	return newApplyFunc(func(s *ServerOptions) {
+		if s.Config.Settings.ObjectStorage.Enabled {
+			s3Config, _ := awsConfig.LoadDefaultConfig(
+				context.Background(),
+				awsConfig.WithRegion("us-east-2"),
+				//				awsConfig.WithHTTPClient(httpClient),
+				awsConfig.WithCredentialsProvider(
+					awsCreds.NewStaticCredentialsProvider(
+						"",
+						"",
+						"")),
+			)
+
+			s3store, err := storage.NewS3FromConfig(s3Config, storage.S3Options{
+				Bucket: "openlane",
+			})
+
+			if err != nil {
+				panic(err.Error())
+			}
+
+			handler, err := objects.New(
+				objects.WithMaxFileSize(10<<20), // nolint:mnd
+				objects.WithStorage(s3store),
+				objects.WithNameFuncGenerator(objects.OrganizationNameFunc),
+			)
+
+			if err != nil {
+				panic(err.Error())
+			}
+
+			s.Config.Handler.ObjectStorage = handler
+			s.Config.Handler.Storage = s3store
 		}
 	})
 }

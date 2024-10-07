@@ -1,6 +1,7 @@
 package models
 
 import (
+	"mime/multipart"
 	"strings"
 
 	"github.com/go-webauthn/webauthn/protocol"
@@ -713,4 +714,55 @@ var ExampleAccountRolesOrganizationReply = AccountRolesOrganizationReply{
 	Reply:          rout.Reply{Success: true},
 	Roles:          []string{"can_view", "can_edit", "audit_log_viewer"},
 	OrganizationID: "01J4HMNDSZCCQBTY93BF9CBF5D",
+}
+
+// =========
+// FILES
+// =========
+
+type UploadFilesRequest struct {
+	File       multipart.File
+	FileHeader *multipart.FileHeader
+	ID         string `form:"id"`
+	Param      string `param:"param"`
+	Payload    string `json:"payload"`
+	Content    string `json:"content" form:"content"`
+}
+
+type UploadFilesReply struct {
+	rout.Reply
+	Message         string `json:"message,omitempty"`
+	FileName        string `json:"file_name,omitempty"`
+	FilePath        string `json:"file_path,omitempty"`
+	Size            int64  `json:"size,omitempty"`
+	MimeType        string `json:"mime_type,omitempty"`
+	Link            string `json:"link,omitempty"`
+	FileCount       int64
+	FileIdentifiers []string
+	PresignedURL    string `json:"presigned_url,omitempty"`
+}
+
+func (r *UploadFilesRequest) Validate() error {
+	if r.File == nil {
+		return rout.NewMissingRequiredFieldError("file")
+	}
+
+	if r.FileHeader == nil {
+		return rout.NewMissingRequiredFieldError("fileheader")
+	}
+
+	return nil
+}
+
+// ExampleLoginSuccessRequest is an example of a successful login request for OpenAPI documentation
+var ExampleUploadFilesSuccessRequest = UploadFilesRequest{
+	ID: "123456",
+}
+
+// ExampleLoginSuccessResponse is an example of a successful login response for OpenAPI documentation
+var ExampleUploadFilesSuccessResponse = UploadFilesReply{
+	Reply: rout.Reply{
+		Success: true,
+	},
+	Message: "meow",
 }
