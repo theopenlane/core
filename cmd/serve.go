@@ -55,6 +55,7 @@ func serve(ctx context.Context) error {
 		serveropts.WithSecureMW(),
 		serveropts.WithCacheHeaders(),
 		serveropts.WithCORS(),
+		serveropts.WithObjectStorage(),
 	)
 
 	so := serveropts.NewServerOptions(serverOpts, k.String("config"))

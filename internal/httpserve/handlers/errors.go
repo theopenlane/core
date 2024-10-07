@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -226,4 +227,15 @@ func (h *Handler) Success(ctx echo.Context, rep interface{}) error {
 // Created returns a 201 Created response with the response object.
 func (h *Handler) Created(ctx echo.Context, rep interface{}) error {
 	return ctx.JSON(http.StatusCreated, rep)
+}
+
+func (h *Handler) SuccessBlob(ctx echo.Context, rep interface{}) error {
+	ctx.Response().Header().Set(echo.HeaderContentType, echo.MIMEApplicationJSONCharsetUTF8)
+	ctx.Response().WriteHeader(http.StatusOK)
+
+	encoder := json.NewEncoder(ctx.Response())
+	encoder.SetEscapeHTML(false)
+	encoder.SetIndent("  ", "  ")
+
+	return encoder.Encode(rep)
 }

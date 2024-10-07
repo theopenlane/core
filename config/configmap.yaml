@@ -158,3 +158,20 @@ data:
   CORE_RATELIMIT_LIMIT: {{ .Values.core.ratelimit.limit | default 10 }}
   CORE_RATELIMIT_BURST: {{ .Values.core.ratelimit.burst | default 30 }}
   CORE_RATELIMIT_EXPIRES: {{ .Values.core.ratelimit.expires | default "10m" }}
+  CORE_OBJECTSTORAGE_ENABLED: {{ .Values.core.objectStorage.enabled | default true }}
+  CORE_OBJECTSTORAGE_PROVIDER: {{ .Values.core.objectStorage.provider }}
+  CORE_OBJECTSTORAGE_STORAGE: {{ .Values.core.objectStorage.storage }}
+  CORE_OBJECTSTORAGE_DATASET_TYPE: {{ .Values.core.objectStorage.dataset_type }}
+  CORE_OBJECTSTORAGE_KIND: {{ .Values.core.objectStorage.kind }}
+  CORE_OBJECTSTORAGE_PATH: {{ .Values.core.objectStorage.path }}
+  CORE_OBJECTSTORAGE_CONTAINER: {{ .Values.core.objectStorage.container }}
+  CORE_OBJECTSTORAGE_ACCESSKEY: {{ .Values.core.objectStorage.accesskey }}
+  CORE_OBJECTSTORAGE_REGION: {{ .Values.core.objectStorage.region }}
+  CORE_OBJECTSTORAGE_SECRETKEY: {{ .Values.core.objectStorage.secretkey }}
+  CORE_OBJECTSTORAGE_CREDENTIALS_JSON: {{ .Values.core.objectStorage.credentials_json }}
+  CORE_OBJECTSTORAGE_BUCKET: {{ .Values.core.objectStorage.bucket }}
+  CORE_OBJECTSTORAGE_ENDPOINT: {{ .Values.core.objectStorage.endpoint }}
+  CORE_OBJECTSTORAGE_DISABLE_SSL: {{ .Values.core.objectStorage.disable_ssl }}
+  CORE_OBJECTSTORAGE_FORCE_PATH_STYLE: {{ .Values.core.objectStorage.force_path_style }}
+  CORE_OBJECTSTORAGE_PATH_STYLE: {{ .Values.core.objectStorage.path_style }}
+  CORE_OBJECTSTORAGE_ENDPOINT_STYLE: {{ .Values.core.objectStorage.endpoint_style }}
