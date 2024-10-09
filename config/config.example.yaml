@@ -94,6 +94,7 @@ jobQueue:
         FetchPollInterval: 0
         ID: ""
         JobCleanerTimeout: 0
+        JobInsertMiddleware: null
         JobTimeout: 0
         Logger: null
         MaxAttempts: 0
@@ -104,6 +105,7 @@ jobQueue:
         RescueStuckJobsAfter: 0
         RetryPolicy: null
         TestOnly: false
+        WorkerMiddleware: null
         Workers: null
     runMigrations: false
 ratelimit:

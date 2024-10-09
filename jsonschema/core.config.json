@@ -8,6 +8,14 @@
       },
       "type": "array"
     },
+    "[]rivertype.JobInsertMiddleware": {
+      "items": true,
+      "type": "array"
+    },
+    "[]rivertype.WorkerMiddleware": {
+      "items": true,
+      "type": "array"
+    },
     "[]string": {
       "items": {
         "type": "string"
@@ -678,6 +686,9 @@
         "JobCleanerTimeout": {
           "type": "integer"
         },
+        "JobInsertMiddleware": {
+          "$ref": "#/$defs/[]rivertype.JobInsertMiddleware"
+        },
         "JobTimeout": {
           "type": "integer"
         },
@@ -706,6 +717,9 @@
         },
         "Workers": {
           "$ref": "#/$defs/river.Workers"
+        },
+        "WorkerMiddleware": {
+          "$ref": "#/$defs/[]rivertype.WorkerMiddleware"
         }
       },
       "additionalProperties": false,

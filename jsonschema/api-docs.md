@@ -439,6 +439,7 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |**FetchPollInterval**|`integer`|||
 |**ID**|`string`|||
 |**JobCleanerTimeout**|`integer`|||
+|[**JobInsertMiddleware**](#jobqueueriverconfjobinsertmiddleware)|`array`|||
 |**JobTimeout**|`integer`|||
 |[**Logger**](#jobqueueriverconflogger)|`object`|||
 |**MaxAttempts**|`integer`|||
@@ -450,8 +451,14 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |**RetryPolicy**||||
 |**TestOnly**|`boolean`|||
 |[**Workers**](#jobqueueriverconfworkers)|`object`|||
+|[**WorkerMiddleware**](#jobqueueriverconfworkermiddleware)|`array`|||
 
 **Additional Properties:** not allowed  
+<a name="jobqueueriverconfjobinsertmiddleware"></a>
+#### jobQueue\.riverConf\.JobInsertMiddleware: array
+
+**Items**
+
 <a name="jobqueueriverconflogger"></a>
 #### jobQueue\.riverConf\.Logger: object
 
@@ -477,6 +484,11 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 **No properties.**
 
 **Additional Properties:** not allowed  
+<a name="jobqueueriverconfworkermiddleware"></a>
+#### jobQueue\.riverConf\.WorkerMiddleware: array
+
+**Items**
+
 <a name="redis"></a>
 ## redis: object
 
