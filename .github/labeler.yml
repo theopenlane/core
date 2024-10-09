@@ -9,7 +9,7 @@ breaking-change:
   - head-branch: ["^breaking-change", "breaking-change"]
 # Add 'dependencies' label to any PR where the head branch name starts with `dependencies` or has a `dependencies` section in the name
 dependencies:
-  - head-branch: ["^dependencies", "dependencies", "^deps", "deps"]
+  - head-branch: ["^dependencies", "dependencies", "^deps", "deps", "renovate", "dependabot"]
 ci:
   - changed-files:
       - any-glob-to-any-file: .github/**
