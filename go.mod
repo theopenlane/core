@@ -43,8 +43,8 @@ require (
 	github.com/prometheus/client_golang v1.20.4
 	github.com/ravilushqa/otelgqlgen v0.17.0
 	github.com/redis/go-redis/v9 v9.6.1
-	github.com/riverqueue/river v0.12.1
-	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.12.1
+	github.com/riverqueue/river v0.13.0
+	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.13.0
 	github.com/rs/zerolog v1.33.0
 	github.com/samber/lo v1.47.0
 	github.com/spf13/cobra v1.8.1
@@ -193,9 +193,9 @@ require (
 	github.com/prometheus/procfs v0.15.1 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
 	github.com/resend/resend-go/v2 v2.11.0 // indirect
-	github.com/riverqueue/river/riverdriver v0.12.1 // indirect
-	github.com/riverqueue/river/rivershared v0.12.1 // indirect
-	github.com/riverqueue/river/rivertype v0.12.1 // indirect
+	github.com/riverqueue/river/riverdriver v0.13.0 // indirect
+	github.com/riverqueue/river/rivershared v0.13.0 // indirect
+	github.com/riverqueue/river/rivertype v0.13.0 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/sagikazarmark/locafero v0.6.0 // indirect
@@ -212,7 +212,7 @@ require (
 	github.com/stretchr/objx v0.5.2 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect
 	github.com/theopenlane/dbx v0.1.2 // indirect
-	github.com/tidwall/gjson v1.17.3 // indirect
+	github.com/tidwall/gjson v1.18.0 // indirect
 	github.com/tidwall/match v1.1.1 // indirect
 	github.com/tidwall/pretty v1.2.1 // indirect
 	github.com/tidwall/sjson v1.2.5 // indirect
