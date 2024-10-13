@@ -269,6 +269,7 @@ query AdminSearch($query: String!) {
           displayName
           avatarRemoteURL
           avatarLocalFile
+          avatarLocalFileID
           sub
         }
       }

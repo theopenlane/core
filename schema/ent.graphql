@@ -1820,6 +1820,7 @@ input CreateUserInput {
   organizationIDs: [ID!]
   webauthnIDs: [ID!]
   fileIDs: [ID!]
+  fileID: ID
   eventIDs: [ID!]
 }
 """
@@ -17628,6 +17629,8 @@ input UpdateUserInput {
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFiles: Boolean
+  fileID: ID
+  clearFile: Boolean
   addEventIDs: [ID!]
   removeEventIDs: [ID!]
   clearEvents: Boolean
@@ -17763,6 +17766,10 @@ type User implements Node {
   """
   avatarLocalFile: String
   """
+  The user's local avatar file id
+  """
+  avatarLocalFileID: ID
+  """
   The time the user's (local) avatar was last updated
   """
   avatarUpdatedAt: Time
@@ -17788,6 +17795,7 @@ type User implements Node {
   groups: [Group!]
   organizations: [Organization!]
   files: [File!]
+  file: File
   events: [Event!]
   groupMemberships: [GroupMembership!]
   orgMemberships: [OrgMembership!]
@@ -17861,6 +17869,10 @@ type UserHistory implements Node {
   The user's local avatar file
   """
   avatarLocalFile: String
+  """
+  The user's local avatar file id
+  """
+  avatarLocalFileID: String
   """
   The time the user's (local) avatar was last updated
   """
@@ -18212,6 +18224,24 @@ input UserHistoryWhereInput {
   avatarLocalFileNotNil: Boolean
   avatarLocalFileEqualFold: String
   avatarLocalFileContainsFold: String
+  """
+  avatar_local_file_id field predicates
+  """
+  avatarLocalFileID: String
+  avatarLocalFileIDNEQ: String
+  avatarLocalFileIDIn: [String!]
+  avatarLocalFileIDNotIn: [String!]
+  avatarLocalFileIDGT: String
+  avatarLocalFileIDGTE: String
+  avatarLocalFileIDLT: String
+  avatarLocalFileIDLTE: String
+  avatarLocalFileIDContains: String
+  avatarLocalFileIDHasPrefix: String
+  avatarLocalFileIDHasSuffix: String
+  avatarLocalFileIDIsNil: Boolean
+  avatarLocalFileIDNotNil: Boolean
+  avatarLocalFileIDEqualFold: String
+  avatarLocalFileIDContainsFold: String
   """
   avatar_updated_at field predicates
   """
@@ -19133,6 +19163,24 @@ input UserWhereInput {
   avatarLocalFileEqualFold: String
   avatarLocalFileContainsFold: String
   """
+  avatar_local_file_id field predicates
+  """
+  avatarLocalFileID: ID
+  avatarLocalFileIDNEQ: ID
+  avatarLocalFileIDIn: [ID!]
+  avatarLocalFileIDNotIn: [ID!]
+  avatarLocalFileIDGT: ID
+  avatarLocalFileIDGTE: ID
+  avatarLocalFileIDLT: ID
+  avatarLocalFileIDLTE: ID
+  avatarLocalFileIDContains: ID
+  avatarLocalFileIDHasPrefix: ID
+  avatarLocalFileIDHasSuffix: ID
+  avatarLocalFileIDIsNil: Boolean
+  avatarLocalFileIDNotNil: Boolean
+  avatarLocalFileIDEqualFold: ID
+  avatarLocalFileIDContainsFold: ID
+  """
   avatar_updated_at field predicates
   """
   avatarUpdatedAt: Time
@@ -19222,6 +19270,11 @@ input UserWhereInput {
   """
   hasFiles: Boolean
   hasFilesWith: [FileWhereInput!]
+  """
+  file edge predicates
+  """
+  hasFile: Boolean
+  hasFileWith: [FileWhereInput!]
   """
   events edge predicates
   """

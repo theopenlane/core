@@ -2947,11 +2947,11 @@ func init() {
 	// user.AvatarLocalFileValidator is a validator for the "avatar_local_file" field. It is called by the builders before save.
 	user.AvatarLocalFileValidator = userDescAvatarLocalFile.Validators[0].(func(string) error)
 	// userDescAvatarUpdatedAt is the schema descriptor for avatar_updated_at field.
-	userDescAvatarUpdatedAt := userFields[6].Descriptor()
+	userDescAvatarUpdatedAt := userFields[7].Descriptor()
 	// user.UpdateDefaultAvatarUpdatedAt holds the default value on update for the avatar_updated_at field.
 	user.UpdateDefaultAvatarUpdatedAt = userDescAvatarUpdatedAt.UpdateDefault.(func() time.Time)
 	// userDescLastSeen is the schema descriptor for last_seen field.
-	userDescLastSeen := userFields[7].Descriptor()
+	userDescLastSeen := userFields[8].Descriptor()
 	// user.UpdateDefaultLastSeen holds the default value on update for the last_seen field.
 	user.UpdateDefaultLastSeen = userDescLastSeen.UpdateDefault.(func() time.Time)
 	// userDescID is the schema descriptor for id field.
@@ -2985,11 +2985,11 @@ func init() {
 	// userhistory.DefaultTags holds the default value on creation for the tags field.
 	userhistory.DefaultTags = userhistoryDescTags.Default.([]string)
 	// userhistoryDescAvatarUpdatedAt is the schema descriptor for avatar_updated_at field.
-	userhistoryDescAvatarUpdatedAt := userhistoryFields[18].Descriptor()
+	userhistoryDescAvatarUpdatedAt := userhistoryFields[19].Descriptor()
 	// userhistory.UpdateDefaultAvatarUpdatedAt holds the default value on update for the avatar_updated_at field.
 	userhistory.UpdateDefaultAvatarUpdatedAt = userhistoryDescAvatarUpdatedAt.UpdateDefault.(func() time.Time)
 	// userhistoryDescLastSeen is the schema descriptor for last_seen field.
-	userhistoryDescLastSeen := userhistoryFields[19].Descriptor()
+	userhistoryDescLastSeen := userhistoryFields[20].Descriptor()
 	// userhistory.UpdateDefaultLastSeen holds the default value on update for the last_seen field.
 	userhistory.UpdateDefaultLastSeen = userhistoryDescLastSeen.UpdateDefault.(func() time.Time)
 	// userhistoryDescID is the schema descriptor for id field.

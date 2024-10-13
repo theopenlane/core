@@ -52,6 +52,8 @@ const (
 	FieldAvatarRemoteURL = "avatar_remote_url"
 	// FieldAvatarLocalFile holds the string denoting the avatar_local_file field in the database.
 	FieldAvatarLocalFile = "avatar_local_file"
+	// FieldAvatarLocalFileID holds the string denoting the avatar_local_file_id field in the database.
+	FieldAvatarLocalFileID = "avatar_local_file_id"
 	// FieldAvatarUpdatedAt holds the string denoting the avatar_updated_at field in the database.
 	FieldAvatarUpdatedAt = "avatar_updated_at"
 	// FieldLastSeen holds the string denoting the last_seen field in the database.
@@ -88,6 +90,7 @@ var Columns = []string{
 	FieldDisplayName,
 	FieldAvatarRemoteURL,
 	FieldAvatarLocalFile,
+	FieldAvatarLocalFileID,
 	FieldAvatarUpdatedAt,
 	FieldLastSeen,
 	FieldPassword,
@@ -253,6 +256,11 @@ func ByAvatarRemoteURL(opts ...sql.OrderTermOption) OrderOption {
 // ByAvatarLocalFile orders the results by the avatar_local_file field.
 func ByAvatarLocalFile(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAvatarLocalFile, opts...).ToFunc()
+}
+
+// ByAvatarLocalFileID orders the results by the avatar_local_file_id field.
+func ByAvatarLocalFileID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAvatarLocalFileID, opts...).ToFunc()
 }
 
 // ByAvatarUpdatedAt orders the results by the avatar_updated_at field.

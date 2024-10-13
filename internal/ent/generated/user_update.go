@@ -243,6 +243,26 @@ func (uu *UserUpdate) ClearAvatarLocalFile() *UserUpdate {
 	return uu
 }
 
+// SetAvatarLocalFileID sets the "avatar_local_file_id" field.
+func (uu *UserUpdate) SetAvatarLocalFileID(s string) *UserUpdate {
+	uu.mutation.SetAvatarLocalFileID(s)
+	return uu
+}
+
+// SetNillableAvatarLocalFileID sets the "avatar_local_file_id" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableAvatarLocalFileID(s *string) *UserUpdate {
+	if s != nil {
+		uu.SetAvatarLocalFileID(*s)
+	}
+	return uu
+}
+
+// ClearAvatarLocalFileID clears the value of the "avatar_local_file_id" field.
+func (uu *UserUpdate) ClearAvatarLocalFileID() *UserUpdate {
+	uu.mutation.ClearAvatarLocalFileID()
+	return uu
+}
+
 // SetAvatarUpdatedAt sets the "avatar_updated_at" field.
 func (uu *UserUpdate) SetAvatarUpdatedAt(t time.Time) *UserUpdate {
 	uu.mutation.SetAvatarUpdatedAt(t)
@@ -472,6 +492,25 @@ func (uu *UserUpdate) AddFiles(f ...*File) *UserUpdate {
 	return uu.AddFileIDs(ids...)
 }
 
+// SetFileID sets the "file" edge to the File entity by ID.
+func (uu *UserUpdate) SetFileID(id string) *UserUpdate {
+	uu.mutation.SetFileID(id)
+	return uu
+}
+
+// SetNillableFileID sets the "file" edge to the File entity by ID if the given value is not nil.
+func (uu *UserUpdate) SetNillableFileID(id *string) *UserUpdate {
+	if id != nil {
+		uu = uu.SetFileID(*id)
+	}
+	return uu
+}
+
+// SetFile sets the "file" edge to the File entity.
+func (uu *UserUpdate) SetFile(f *File) *UserUpdate {
+	return uu.SetFileID(f.ID)
+}
+
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
 func (uu *UserUpdate) AddEventIDs(ids ...string) *UserUpdate {
 	uu.mutation.AddEventIDs(ids...)
@@ -694,6 +733,12 @@ func (uu *UserUpdate) RemoveFiles(f ...*File) *UserUpdate {
 		ids[i] = f[i].ID
 	}
 	return uu.RemoveFileIDs(ids...)
+}
+
+// ClearFile clears the "file" edge to the File entity.
+func (uu *UserUpdate) ClearFile() *UserUpdate {
+	uu.mutation.ClearFile()
+	return uu
 }
 
 // ClearEvents clears all "events" edges to the Event entity.
@@ -1442,6 +1487,37 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if uu.mutation.FileCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   user.FileTable,
+			Columns: []string{user.FileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = uu.schemaConfig.User
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uu.mutation.FileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   user.FileTable,
+			Columns: []string{user.FileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = uu.schemaConfig.User
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if uu.mutation.EventsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -1808,6 +1884,26 @@ func (uuo *UserUpdateOne) ClearAvatarLocalFile() *UserUpdateOne {
 	return uuo
 }
 
+// SetAvatarLocalFileID sets the "avatar_local_file_id" field.
+func (uuo *UserUpdateOne) SetAvatarLocalFileID(s string) *UserUpdateOne {
+	uuo.mutation.SetAvatarLocalFileID(s)
+	return uuo
+}
+
+// SetNillableAvatarLocalFileID sets the "avatar_local_file_id" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableAvatarLocalFileID(s *string) *UserUpdateOne {
+	if s != nil {
+		uuo.SetAvatarLocalFileID(*s)
+	}
+	return uuo
+}
+
+// ClearAvatarLocalFileID clears the value of the "avatar_local_file_id" field.
+func (uuo *UserUpdateOne) ClearAvatarLocalFileID() *UserUpdateOne {
+	uuo.mutation.ClearAvatarLocalFileID()
+	return uuo
+}
+
 // SetAvatarUpdatedAt sets the "avatar_updated_at" field.
 func (uuo *UserUpdateOne) SetAvatarUpdatedAt(t time.Time) *UserUpdateOne {
 	uuo.mutation.SetAvatarUpdatedAt(t)
@@ -2037,6 +2133,25 @@ func (uuo *UserUpdateOne) AddFiles(f ...*File) *UserUpdateOne {
 	return uuo.AddFileIDs(ids...)
 }
 
+// SetFileID sets the "file" edge to the File entity by ID.
+func (uuo *UserUpdateOne) SetFileID(id string) *UserUpdateOne {
+	uuo.mutation.SetFileID(id)
+	return uuo
+}
+
+// SetNillableFileID sets the "file" edge to the File entity by ID if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableFileID(id *string) *UserUpdateOne {
+	if id != nil {
+		uuo = uuo.SetFileID(*id)
+	}
+	return uuo
+}
+
+// SetFile sets the "file" edge to the File entity.
+func (uuo *UserUpdateOne) SetFile(f *File) *UserUpdateOne {
+	return uuo.SetFileID(f.ID)
+}
+
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
 func (uuo *UserUpdateOne) AddEventIDs(ids ...string) *UserUpdateOne {
 	uuo.mutation.AddEventIDs(ids...)
@@ -2259,6 +2374,12 @@ func (uuo *UserUpdateOne) RemoveFiles(f ...*File) *UserUpdateOne {
 		ids[i] = f[i].ID
 	}
 	return uuo.RemoveFileIDs(ids...)
+}
+
+// ClearFile clears the "file" edge to the File entity.
+func (uuo *UserUpdateOne) ClearFile() *UserUpdateOne {
+	uuo.mutation.ClearFile()
+	return uuo
 }
 
 // ClearEvents clears all "events" edges to the Event entity.
@@ -3032,6 +3153,37 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 			},
 		}
 		edge.Schema = uuo.schemaConfig.UserFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if uuo.mutation.FileCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   user.FileTable,
+			Columns: []string{user.FileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = uuo.schemaConfig.User
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uuo.mutation.FileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   user.FileTable,
+			Columns: []string{user.FileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = uuo.schemaConfig.User
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

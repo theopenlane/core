@@ -1469,7 +1469,7 @@ var (
 		{Name: "display_name", Type: field.TypeString, Size: 64, Default: ""},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "personal_org", Type: field.TypeBool, Nullable: true, Default: false},
-		{Name: "avatar_remote_url", Type: field.TypeString, Nullable: true, Size: 255},
+		{Name: "avatar_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
 		{Name: "dedicated_db", Type: field.TypeBool, Default: false},
 		{Name: "parent_organization_id", Type: field.TypeString, Nullable: true},
 	}
@@ -1516,7 +1516,7 @@ var (
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "parent_organization_id", Type: field.TypeString, Nullable: true},
 		{Name: "personal_org", Type: field.TypeBool, Nullable: true, Default: false},
-		{Name: "avatar_remote_url", Type: field.TypeString, Nullable: true, Size: 255},
+		{Name: "avatar_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
 		{Name: "dedicated_db", Type: field.TypeBool, Default: false},
 	}
 	// OrganizationHistoryTable holds the schema information for the "organization_history" table.
@@ -1861,20 +1861,29 @@ var (
 		{Name: "first_name", Type: field.TypeString, Nullable: true, Size: 64},
 		{Name: "last_name", Type: field.TypeString, Nullable: true, Size: 64},
 		{Name: "display_name", Type: field.TypeString, Size: 64},
-		{Name: "avatar_remote_url", Type: field.TypeString, Nullable: true, Size: 255},
-		{Name: "avatar_local_file", Type: field.TypeString, Nullable: true, Size: 255},
+		{Name: "avatar_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
+		{Name: "avatar_local_file", Type: field.TypeString, Nullable: true, Size: 2048},
 		{Name: "avatar_updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "last_seen", Type: field.TypeTime, Nullable: true},
 		{Name: "password", Type: field.TypeString, Nullable: true},
 		{Name: "sub", Type: field.TypeString, Unique: true, Nullable: true},
 		{Name: "auth_provider", Type: field.TypeEnum, Enums: []string{"CREDENTIALS", "GOOGLE", "GITHUB", "WEBAUTHN"}, Default: "CREDENTIALS"},
 		{Name: "role", Type: field.TypeEnum, Nullable: true, Enums: []string{"ADMIN", "MEMBER", "USER"}, Default: "USER"},
+		{Name: "avatar_local_file_id", Type: field.TypeString, Nullable: true},
 	}
 	// UsersTable holds the schema information for the "users" table.
 	UsersTable = &schema.Table{
 		Name:       "users",
 		Columns:    UsersColumns,
 		PrimaryKey: []*schema.Column{UsersColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "users_files_file",
+				Columns:    []*schema.Column{UsersColumns[21]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
 		Indexes: []*schema.Index{
 			{
 				Name:    "user_id",
@@ -1909,8 +1918,9 @@ var (
 		{Name: "first_name", Type: field.TypeString, Nullable: true, Size: 64},
 		{Name: "last_name", Type: field.TypeString, Nullable: true, Size: 64},
 		{Name: "display_name", Type: field.TypeString, Size: 64},
-		{Name: "avatar_remote_url", Type: field.TypeString, Nullable: true, Size: 255},
-		{Name: "avatar_local_file", Type: field.TypeString, Nullable: true, Size: 255},
+		{Name: "avatar_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
+		{Name: "avatar_local_file", Type: field.TypeString, Nullable: true, Size: 2048},
+		{Name: "avatar_local_file_id", Type: field.TypeString, Nullable: true},
 		{Name: "avatar_updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "last_seen", Type: field.TypeTime, Nullable: true},
 		{Name: "password", Type: field.TypeString, Nullable: true},
@@ -3151,6 +3161,7 @@ func init() {
 	TemplateHistoryTable.Annotation = &entsql.Annotation{
 		Table: "template_history",
 	}
+	UsersTable.ForeignKeys[0].RefTable = FilesTable
 	UserHistoryTable.Annotation = &entsql.Annotation{
 		Table: "user_history",
 	}

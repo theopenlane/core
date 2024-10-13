@@ -4121,6 +4121,7 @@ type CreateUserInput struct {
 	OrganizationIDs           []string
 	WebauthnIDs               []string
 	FileIDs                   []string
+	FileID                    *string
 	EventIDs                  []string
 }
 
@@ -4186,6 +4187,9 @@ func (i *CreateUserInput) Mutate(m *UserMutation) {
 	if v := i.FileIDs; len(v) > 0 {
 		m.AddFileIDs(v...)
 	}
+	if v := i.FileID; v != nil {
+		m.SetFileID(*v)
+	}
 	if v := i.EventIDs; len(v) > 0 {
 		m.AddEventIDs(v...)
 	}
@@ -4248,6 +4252,8 @@ type UpdateUserInput struct {
 	ClearFiles                      bool
 	AddFileIDs                      []string
 	RemoveFileIDs                   []string
+	ClearFile                       bool
+	FileID                          *string
 	ClearEvents                     bool
 	AddEventIDs                     []string
 	RemoveEventIDs                  []string
@@ -4401,6 +4407,12 @@ func (i *UpdateUserInput) Mutate(m *UserMutation) {
 	}
 	if v := i.RemoveFileIDs; len(v) > 0 {
 		m.RemoveFileIDs(v...)
+	}
+	if i.ClearFile {
+		m.ClearFile()
+	}
+	if v := i.FileID; v != nil {
+		m.SetFileID(*v)
 	}
 	if i.ClearEvents {
 		m.ClearEvents()

@@ -8531,6 +8531,21 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				*wq = *query
 			})
 
+		case "file":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&FileClient{config: u.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, fileImplementors)...); err != nil {
+				return err
+			}
+			u.withFile = query
+			if _, ok := fieldSeen[user.FieldAvatarLocalFileID]; !ok {
+				selectedFields = append(selectedFields, user.FieldAvatarLocalFileID)
+				fieldSeen[user.FieldAvatarLocalFileID] = struct{}{}
+			}
+
 		case "events":
 			var (
 				alias = field.Alias
@@ -8633,6 +8648,11 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			if _, ok := fieldSeen[user.FieldAvatarLocalFile]; !ok {
 				selectedFields = append(selectedFields, user.FieldAvatarLocalFile)
 				fieldSeen[user.FieldAvatarLocalFile] = struct{}{}
+			}
+		case "avatarLocalFileID":
+			if _, ok := fieldSeen[user.FieldAvatarLocalFileID]; !ok {
+				selectedFields = append(selectedFields, user.FieldAvatarLocalFileID)
+				fieldSeen[user.FieldAvatarLocalFileID] = struct{}{}
 			}
 		case "avatarUpdatedAt":
 			if _, ok := fieldSeen[user.FieldAvatarUpdatedAt]; !ok {
@@ -8822,6 +8842,11 @@ func (uh *UserHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if _, ok := fieldSeen[userhistory.FieldAvatarLocalFile]; !ok {
 				selectedFields = append(selectedFields, userhistory.FieldAvatarLocalFile)
 				fieldSeen[userhistory.FieldAvatarLocalFile] = struct{}{}
+			}
+		case "avatarLocalFileID":
+			if _, ok := fieldSeen[userhistory.FieldAvatarLocalFileID]; !ok {
+				selectedFields = append(selectedFields, userhistory.FieldAvatarLocalFileID)
+				fieldSeen[userhistory.FieldAvatarLocalFileID] = struct{}{}
 			}
 		case "avatarUpdatedAt":
 			if _, ok := fieldSeen[userhistory.FieldAvatarUpdatedAt]; !ok {

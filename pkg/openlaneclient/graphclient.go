@@ -1776,16 +1776,17 @@ func (t *AdminSearch_AdminSearch_Nodes_TemplateSearchResult) GetTemplates() []*A
 }
 
 type AdminSearch_AdminSearch_Nodes_UserSearchResult_Users struct {
-	DeletedBy       *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
-	ID              string   "json:\"id\" graphql:\"id\""
-	Tags            []string "json:\"tags,omitempty\" graphql:\"tags\""
-	Email           string   "json:\"email\" graphql:\"email\""
-	FirstName       *string  "json:\"firstName,omitempty\" graphql:\"firstName\""
-	LastName        *string  "json:\"lastName,omitempty\" graphql:\"lastName\""
-	DisplayName     string   "json:\"displayName\" graphql:\"displayName\""
-	AvatarRemoteURL *string  "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
-	AvatarLocalFile *string  "json:\"avatarLocalFile,omitempty\" graphql:\"avatarLocalFile\""
-	Sub             *string  "json:\"sub,omitempty\" graphql:\"sub\""
+	DeletedBy         *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	ID                string   "json:\"id\" graphql:\"id\""
+	Tags              []string "json:\"tags,omitempty\" graphql:\"tags\""
+	Email             string   "json:\"email\" graphql:\"email\""
+	FirstName         *string  "json:\"firstName,omitempty\" graphql:\"firstName\""
+	LastName          *string  "json:\"lastName,omitempty\" graphql:\"lastName\""
+	DisplayName       string   "json:\"displayName\" graphql:\"displayName\""
+	AvatarRemoteURL   *string  "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
+	AvatarLocalFile   *string  "json:\"avatarLocalFile,omitempty\" graphql:\"avatarLocalFile\""
+	AvatarLocalFileID *string  "json:\"avatarLocalFileID,omitempty\" graphql:\"avatarLocalFileID\""
+	Sub               *string  "json:\"sub,omitempty\" graphql:\"sub\""
 }
 
 func (t *AdminSearch_AdminSearch_Nodes_UserSearchResult_Users) GetDeletedBy() *string {
@@ -1841,6 +1842,12 @@ func (t *AdminSearch_AdminSearch_Nodes_UserSearchResult_Users) GetAvatarLocalFil
 		t = &AdminSearch_AdminSearch_Nodes_UserSearchResult_Users{}
 	}
 	return t.AvatarLocalFile
+}
+func (t *AdminSearch_AdminSearch_Nodes_UserSearchResult_Users) GetAvatarLocalFileID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_UserSearchResult_Users{}
+	}
+	return t.AvatarLocalFileID
 }
 func (t *AdminSearch_AdminSearch_Nodes_UserSearchResult_Users) GetSub() *string {
 	if t == nil {
@@ -33267,6 +33274,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					displayName
 					avatarRemoteURL
 					avatarLocalFile
+					avatarLocalFileID
 					sub
 				}
 			}

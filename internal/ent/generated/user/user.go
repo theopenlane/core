@@ -46,6 +46,8 @@ const (
 	FieldAvatarRemoteURL = "avatar_remote_url"
 	// FieldAvatarLocalFile holds the string denoting the avatar_local_file field in the database.
 	FieldAvatarLocalFile = "avatar_local_file"
+	// FieldAvatarLocalFileID holds the string denoting the avatar_local_file_id field in the database.
+	FieldAvatarLocalFileID = "avatar_local_file_id"
 	// FieldAvatarUpdatedAt holds the string denoting the avatar_updated_at field in the database.
 	FieldAvatarUpdatedAt = "avatar_updated_at"
 	// FieldLastSeen holds the string denoting the last_seen field in the database.
@@ -76,6 +78,8 @@ const (
 	EdgeWebauthn = "webauthn"
 	// EdgeFiles holds the string denoting the files edge name in mutations.
 	EdgeFiles = "files"
+	// EdgeFile holds the string denoting the file edge name in mutations.
+	EdgeFile = "file"
 	// EdgeEvents holds the string denoting the events edge name in mutations.
 	EdgeEvents = "events"
 	// EdgeGroupMemberships holds the string denoting the group_memberships edge name in mutations.
@@ -141,6 +145,13 @@ const (
 	// FilesInverseTable is the table name for the File entity.
 	// It exists in this package in order to avoid circular dependency with the "file" package.
 	FilesInverseTable = "files"
+	// FileTable is the table that holds the file relation/edge.
+	FileTable = "users"
+	// FileInverseTable is the table name for the File entity.
+	// It exists in this package in order to avoid circular dependency with the "file" package.
+	FileInverseTable = "files"
+	// FileColumn is the table column denoting the file relation/edge.
+	FileColumn = "avatar_local_file_id"
 	// EventsTable is the table that holds the events relation/edge. The primary key declared below.
 	EventsTable = "user_events"
 	// EventsInverseTable is the table name for the Event entity.
@@ -179,6 +190,7 @@ var Columns = []string{
 	FieldDisplayName,
 	FieldAvatarRemoteURL,
 	FieldAvatarLocalFile,
+	FieldAvatarLocalFileID,
 	FieldAvatarUpdatedAt,
 	FieldLastSeen,
 	FieldPassword,
@@ -348,6 +360,11 @@ func ByAvatarLocalFile(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAvatarLocalFile, opts...).ToFunc()
 }
 
+// ByAvatarLocalFileID orders the results by the avatar_local_file_id field.
+func ByAvatarLocalFileID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAvatarLocalFileID, opts...).ToFunc()
+}
+
 // ByAvatarUpdatedAt orders the results by the avatar_updated_at field.
 func ByAvatarUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAvatarUpdatedAt, opts...).ToFunc()
@@ -497,6 +514,13 @@ func ByFiles(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByFileField orders the results by file field.
+func ByFileField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newFileStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // ByEventsCount orders the results by events count.
 func ByEventsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -599,6 +623,13 @@ func newFilesStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(FilesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, FilesTable, FilesPrimaryKey...),
+	)
+}
+func newFileStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(FileInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, FileTable, FileColumn),
 	)
 }
 func newEventsStep() *sqlgraph.Step {

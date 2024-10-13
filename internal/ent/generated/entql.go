@@ -1479,26 +1479,27 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "User",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			user.FieldCreatedAt:       {Type: field.TypeTime, Column: user.FieldCreatedAt},
-			user.FieldUpdatedAt:       {Type: field.TypeTime, Column: user.FieldUpdatedAt},
-			user.FieldCreatedBy:       {Type: field.TypeString, Column: user.FieldCreatedBy},
-			user.FieldUpdatedBy:       {Type: field.TypeString, Column: user.FieldUpdatedBy},
-			user.FieldDeletedAt:       {Type: field.TypeTime, Column: user.FieldDeletedAt},
-			user.FieldDeletedBy:       {Type: field.TypeString, Column: user.FieldDeletedBy},
-			user.FieldMappingID:       {Type: field.TypeString, Column: user.FieldMappingID},
-			user.FieldTags:            {Type: field.TypeJSON, Column: user.FieldTags},
-			user.FieldEmail:           {Type: field.TypeString, Column: user.FieldEmail},
-			user.FieldFirstName:       {Type: field.TypeString, Column: user.FieldFirstName},
-			user.FieldLastName:        {Type: field.TypeString, Column: user.FieldLastName},
-			user.FieldDisplayName:     {Type: field.TypeString, Column: user.FieldDisplayName},
-			user.FieldAvatarRemoteURL: {Type: field.TypeString, Column: user.FieldAvatarRemoteURL},
-			user.FieldAvatarLocalFile: {Type: field.TypeString, Column: user.FieldAvatarLocalFile},
-			user.FieldAvatarUpdatedAt: {Type: field.TypeTime, Column: user.FieldAvatarUpdatedAt},
-			user.FieldLastSeen:        {Type: field.TypeTime, Column: user.FieldLastSeen},
-			user.FieldPassword:        {Type: field.TypeString, Column: user.FieldPassword},
-			user.FieldSub:             {Type: field.TypeString, Column: user.FieldSub},
-			user.FieldAuthProvider:    {Type: field.TypeEnum, Column: user.FieldAuthProvider},
-			user.FieldRole:            {Type: field.TypeEnum, Column: user.FieldRole},
+			user.FieldCreatedAt:         {Type: field.TypeTime, Column: user.FieldCreatedAt},
+			user.FieldUpdatedAt:         {Type: field.TypeTime, Column: user.FieldUpdatedAt},
+			user.FieldCreatedBy:         {Type: field.TypeString, Column: user.FieldCreatedBy},
+			user.FieldUpdatedBy:         {Type: field.TypeString, Column: user.FieldUpdatedBy},
+			user.FieldDeletedAt:         {Type: field.TypeTime, Column: user.FieldDeletedAt},
+			user.FieldDeletedBy:         {Type: field.TypeString, Column: user.FieldDeletedBy},
+			user.FieldMappingID:         {Type: field.TypeString, Column: user.FieldMappingID},
+			user.FieldTags:              {Type: field.TypeJSON, Column: user.FieldTags},
+			user.FieldEmail:             {Type: field.TypeString, Column: user.FieldEmail},
+			user.FieldFirstName:         {Type: field.TypeString, Column: user.FieldFirstName},
+			user.FieldLastName:          {Type: field.TypeString, Column: user.FieldLastName},
+			user.FieldDisplayName:       {Type: field.TypeString, Column: user.FieldDisplayName},
+			user.FieldAvatarRemoteURL:   {Type: field.TypeString, Column: user.FieldAvatarRemoteURL},
+			user.FieldAvatarLocalFile:   {Type: field.TypeString, Column: user.FieldAvatarLocalFile},
+			user.FieldAvatarLocalFileID: {Type: field.TypeString, Column: user.FieldAvatarLocalFileID},
+			user.FieldAvatarUpdatedAt:   {Type: field.TypeTime, Column: user.FieldAvatarUpdatedAt},
+			user.FieldLastSeen:          {Type: field.TypeTime, Column: user.FieldLastSeen},
+			user.FieldPassword:          {Type: field.TypeString, Column: user.FieldPassword},
+			user.FieldSub:               {Type: field.TypeString, Column: user.FieldSub},
+			user.FieldAuthProvider:      {Type: field.TypeEnum, Column: user.FieldAuthProvider},
+			user.FieldRole:              {Type: field.TypeEnum, Column: user.FieldRole},
 		},
 	}
 	graph.Nodes[51] = &sqlgraph.Node{
@@ -1512,29 +1513,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "UserHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			userhistory.FieldHistoryTime:     {Type: field.TypeTime, Column: userhistory.FieldHistoryTime},
-			userhistory.FieldRef:             {Type: field.TypeString, Column: userhistory.FieldRef},
-			userhistory.FieldOperation:       {Type: field.TypeEnum, Column: userhistory.FieldOperation},
-			userhistory.FieldCreatedAt:       {Type: field.TypeTime, Column: userhistory.FieldCreatedAt},
-			userhistory.FieldUpdatedAt:       {Type: field.TypeTime, Column: userhistory.FieldUpdatedAt},
-			userhistory.FieldCreatedBy:       {Type: field.TypeString, Column: userhistory.FieldCreatedBy},
-			userhistory.FieldUpdatedBy:       {Type: field.TypeString, Column: userhistory.FieldUpdatedBy},
-			userhistory.FieldDeletedAt:       {Type: field.TypeTime, Column: userhistory.FieldDeletedAt},
-			userhistory.FieldDeletedBy:       {Type: field.TypeString, Column: userhistory.FieldDeletedBy},
-			userhistory.FieldMappingID:       {Type: field.TypeString, Column: userhistory.FieldMappingID},
-			userhistory.FieldTags:            {Type: field.TypeJSON, Column: userhistory.FieldTags},
-			userhistory.FieldEmail:           {Type: field.TypeString, Column: userhistory.FieldEmail},
-			userhistory.FieldFirstName:       {Type: field.TypeString, Column: userhistory.FieldFirstName},
-			userhistory.FieldLastName:        {Type: field.TypeString, Column: userhistory.FieldLastName},
-			userhistory.FieldDisplayName:     {Type: field.TypeString, Column: userhistory.FieldDisplayName},
-			userhistory.FieldAvatarRemoteURL: {Type: field.TypeString, Column: userhistory.FieldAvatarRemoteURL},
-			userhistory.FieldAvatarLocalFile: {Type: field.TypeString, Column: userhistory.FieldAvatarLocalFile},
-			userhistory.FieldAvatarUpdatedAt: {Type: field.TypeTime, Column: userhistory.FieldAvatarUpdatedAt},
-			userhistory.FieldLastSeen:        {Type: field.TypeTime, Column: userhistory.FieldLastSeen},
-			userhistory.FieldPassword:        {Type: field.TypeString, Column: userhistory.FieldPassword},
-			userhistory.FieldSub:             {Type: field.TypeString, Column: userhistory.FieldSub},
-			userhistory.FieldAuthProvider:    {Type: field.TypeEnum, Column: userhistory.FieldAuthProvider},
-			userhistory.FieldRole:            {Type: field.TypeEnum, Column: userhistory.FieldRole},
+			userhistory.FieldHistoryTime:       {Type: field.TypeTime, Column: userhistory.FieldHistoryTime},
+			userhistory.FieldRef:               {Type: field.TypeString, Column: userhistory.FieldRef},
+			userhistory.FieldOperation:         {Type: field.TypeEnum, Column: userhistory.FieldOperation},
+			userhistory.FieldCreatedAt:         {Type: field.TypeTime, Column: userhistory.FieldCreatedAt},
+			userhistory.FieldUpdatedAt:         {Type: field.TypeTime, Column: userhistory.FieldUpdatedAt},
+			userhistory.FieldCreatedBy:         {Type: field.TypeString, Column: userhistory.FieldCreatedBy},
+			userhistory.FieldUpdatedBy:         {Type: field.TypeString, Column: userhistory.FieldUpdatedBy},
+			userhistory.FieldDeletedAt:         {Type: field.TypeTime, Column: userhistory.FieldDeletedAt},
+			userhistory.FieldDeletedBy:         {Type: field.TypeString, Column: userhistory.FieldDeletedBy},
+			userhistory.FieldMappingID:         {Type: field.TypeString, Column: userhistory.FieldMappingID},
+			userhistory.FieldTags:              {Type: field.TypeJSON, Column: userhistory.FieldTags},
+			userhistory.FieldEmail:             {Type: field.TypeString, Column: userhistory.FieldEmail},
+			userhistory.FieldFirstName:         {Type: field.TypeString, Column: userhistory.FieldFirstName},
+			userhistory.FieldLastName:          {Type: field.TypeString, Column: userhistory.FieldLastName},
+			userhistory.FieldDisplayName:       {Type: field.TypeString, Column: userhistory.FieldDisplayName},
+			userhistory.FieldAvatarRemoteURL:   {Type: field.TypeString, Column: userhistory.FieldAvatarRemoteURL},
+			userhistory.FieldAvatarLocalFile:   {Type: field.TypeString, Column: userhistory.FieldAvatarLocalFile},
+			userhistory.FieldAvatarLocalFileID: {Type: field.TypeString, Column: userhistory.FieldAvatarLocalFileID},
+			userhistory.FieldAvatarUpdatedAt:   {Type: field.TypeTime, Column: userhistory.FieldAvatarUpdatedAt},
+			userhistory.FieldLastSeen:          {Type: field.TypeTime, Column: userhistory.FieldLastSeen},
+			userhistory.FieldPassword:          {Type: field.TypeString, Column: userhistory.FieldPassword},
+			userhistory.FieldSub:               {Type: field.TypeString, Column: userhistory.FieldSub},
+			userhistory.FieldAuthProvider:      {Type: field.TypeEnum, Column: userhistory.FieldAuthProvider},
+			userhistory.FieldRole:              {Type: field.TypeEnum, Column: userhistory.FieldRole},
 		},
 	}
 	graph.Nodes[52] = &sqlgraph.Node{
@@ -3348,6 +3350,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Inverse: false,
 			Table:   user.FilesTable,
 			Columns: user.FilesPrimaryKey,
+			Bidi:    false,
+		},
+		"User",
+		"File",
+	)
+	graph.MustAddE(
+		"file",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   user.FileTable,
+			Columns: []string{user.FileColumn},
 			Bidi:    false,
 		},
 		"User",
@@ -11133,6 +11147,11 @@ func (f *UserFilter) WhereAvatarLocalFile(p entql.StringP) {
 	f.Where(p.Field(user.FieldAvatarLocalFile))
 }
 
+// WhereAvatarLocalFileID applies the entql string predicate on the avatar_local_file_id field.
+func (f *UserFilter) WhereAvatarLocalFileID(p entql.StringP) {
+	f.Where(p.Field(user.FieldAvatarLocalFileID))
+}
+
 // WhereAvatarUpdatedAt applies the entql time.Time predicate on the avatar_updated_at field.
 func (f *UserFilter) WhereAvatarUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(user.FieldAvatarUpdatedAt))
@@ -11283,6 +11302,20 @@ func (f *UserFilter) WhereHasFiles() {
 // WhereHasFilesWith applies a predicate to check if query has an edge files with a given conditions (other predicates).
 func (f *UserFilter) WhereHasFilesWith(preds ...predicate.File) {
 	f.Where(entql.HasEdgeWith("files", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasFile applies a predicate to check if query has an edge file.
+func (f *UserFilter) WhereHasFile() {
+	f.Where(entql.HasEdge("file"))
+}
+
+// WhereHasFileWith applies a predicate to check if query has an edge file with a given conditions (other predicates).
+func (f *UserFilter) WhereHasFileWith(preds ...predicate.File) {
+	f.Where(entql.HasEdgeWith("file", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -11454,6 +11487,11 @@ func (f *UserHistoryFilter) WhereAvatarRemoteURL(p entql.StringP) {
 // WhereAvatarLocalFile applies the entql string predicate on the avatar_local_file field.
 func (f *UserHistoryFilter) WhereAvatarLocalFile(p entql.StringP) {
 	f.Where(p.Field(userhistory.FieldAvatarLocalFile))
+}
+
+// WhereAvatarLocalFileID applies the entql string predicate on the avatar_local_file_id field.
+func (f *UserHistoryFilter) WhereAvatarLocalFileID(p entql.StringP) {
+	f.Where(p.Field(userhistory.FieldAvatarLocalFileID))
 }
 
 // WhereAvatarUpdatedAt applies the entql time.Time predicate on the avatar_updated_at field.

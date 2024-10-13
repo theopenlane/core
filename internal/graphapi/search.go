@@ -827,13 +827,14 @@ func adminSearchUsers(ctx context.Context, query string) ([]*generated.User, err
 				likeQuery := "%" + query + "%"
 				s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
 			},
-			user.EmailContainsFold(query),           // search by Email
-			user.FirstNameContainsFold(query),       // search by FirstName
-			user.LastNameContainsFold(query),        // search by LastName
-			user.DisplayNameContainsFold(query),     // search by DisplayName
-			user.AvatarRemoteURLContainsFold(query), // search by AvatarRemoteURL
-			user.AvatarLocalFileContainsFold(query), // search by AvatarLocalFile
-			user.SubContainsFold(query),             // search by Sub
+			user.EmailContainsFold(query),             // search by Email
+			user.FirstNameContainsFold(query),         // search by FirstName
+			user.LastNameContainsFold(query),          // search by LastName
+			user.DisplayNameContainsFold(query),       // search by DisplayName
+			user.AvatarRemoteURLContainsFold(query),   // search by AvatarRemoteURL
+			user.AvatarLocalFileContainsFold(query),   // search by AvatarLocalFile
+			user.AvatarLocalFileIDContainsFold(query), // search by AvatarLocalFileID
+			user.SubContainsFold(query),               // search by Sub
 		),
 	).All(ctx)
 }

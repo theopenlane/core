@@ -228,6 +228,20 @@ func (uhc *UserHistoryCreate) SetNillableAvatarLocalFile(s *string) *UserHistory
 	return uhc
 }
 
+// SetAvatarLocalFileID sets the "avatar_local_file_id" field.
+func (uhc *UserHistoryCreate) SetAvatarLocalFileID(s string) *UserHistoryCreate {
+	uhc.mutation.SetAvatarLocalFileID(s)
+	return uhc
+}
+
+// SetNillableAvatarLocalFileID sets the "avatar_local_file_id" field if the given value is not nil.
+func (uhc *UserHistoryCreate) SetNillableAvatarLocalFileID(s *string) *UserHistoryCreate {
+	if s != nil {
+		uhc.SetAvatarLocalFileID(*s)
+	}
+	return uhc
+}
+
 // SetAvatarUpdatedAt sets the "avatar_updated_at" field.
 func (uhc *UserHistoryCreate) SetAvatarUpdatedAt(t time.Time) *UserHistoryCreate {
 	uhc.mutation.SetAvatarUpdatedAt(t)
@@ -533,6 +547,10 @@ func (uhc *UserHistoryCreate) createSpec() (*UserHistory, *sqlgraph.CreateSpec) 
 	if value, ok := uhc.mutation.AvatarLocalFile(); ok {
 		_spec.SetField(userhistory.FieldAvatarLocalFile, field.TypeString, value)
 		_node.AvatarLocalFile = &value
+	}
+	if value, ok := uhc.mutation.AvatarLocalFileID(); ok {
+		_spec.SetField(userhistory.FieldAvatarLocalFileID, field.TypeString, value)
+		_node.AvatarLocalFileID = &value
 	}
 	if value, ok := uhc.mutation.AvatarUpdatedAt(); ok {
 		_spec.SetField(userhistory.FieldAvatarUpdatedAt, field.TypeTime, value)

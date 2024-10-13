@@ -10304,6 +10304,25 @@ func (c *UserClient) QueryFiles(u *User) *FileQuery {
 	return query
 }
 
+// QueryFile queries the file edge of a User.
+func (c *UserClient) QueryFile(u *User) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := u.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, user.FileTable, user.FileColumn),
+		)
+		schemaConfig := u.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.User
+		fromV = sqlgraph.Neighbors(u.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryEvents queries the events edge of a User.
 func (c *UserClient) QueryEvents(u *User) *EventQuery {
 	query := (&EventClient{config: c.config}).Query()

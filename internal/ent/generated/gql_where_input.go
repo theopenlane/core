@@ -38243,6 +38243,23 @@ type UserWhereInput struct {
 	AvatarLocalFileEqualFold    *string  `json:"avatarLocalFileEqualFold,omitempty"`
 	AvatarLocalFileContainsFold *string  `json:"avatarLocalFileContainsFold,omitempty"`
 
+	// "avatar_local_file_id" field predicates.
+	AvatarLocalFileID             *string  `json:"avatarLocalFileID,omitempty"`
+	AvatarLocalFileIDNEQ          *string  `json:"avatarLocalFileIDNEQ,omitempty"`
+	AvatarLocalFileIDIn           []string `json:"avatarLocalFileIDIn,omitempty"`
+	AvatarLocalFileIDNotIn        []string `json:"avatarLocalFileIDNotIn,omitempty"`
+	AvatarLocalFileIDGT           *string  `json:"avatarLocalFileIDGT,omitempty"`
+	AvatarLocalFileIDGTE          *string  `json:"avatarLocalFileIDGTE,omitempty"`
+	AvatarLocalFileIDLT           *string  `json:"avatarLocalFileIDLT,omitempty"`
+	AvatarLocalFileIDLTE          *string  `json:"avatarLocalFileIDLTE,omitempty"`
+	AvatarLocalFileIDContains     *string  `json:"avatarLocalFileIDContains,omitempty"`
+	AvatarLocalFileIDHasPrefix    *string  `json:"avatarLocalFileIDHasPrefix,omitempty"`
+	AvatarLocalFileIDHasSuffix    *string  `json:"avatarLocalFileIDHasSuffix,omitempty"`
+	AvatarLocalFileIDIsNil        bool     `json:"avatarLocalFileIDIsNil,omitempty"`
+	AvatarLocalFileIDNotNil       bool     `json:"avatarLocalFileIDNotNil,omitempty"`
+	AvatarLocalFileIDEqualFold    *string  `json:"avatarLocalFileIDEqualFold,omitempty"`
+	AvatarLocalFileIDContainsFold *string  `json:"avatarLocalFileIDContainsFold,omitempty"`
+
 	// "avatar_updated_at" field predicates.
 	AvatarUpdatedAt       *time.Time  `json:"avatarUpdatedAt,omitempty"`
 	AvatarUpdatedAtNEQ    *time.Time  `json:"avatarUpdatedAtNEQ,omitempty"`
@@ -38338,6 +38355,10 @@ type UserWhereInput struct {
 	// "files" edge predicates.
 	HasFiles     *bool             `json:"hasFiles,omitempty"`
 	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
+
+	// "file" edge predicates.
+	HasFile     *bool             `json:"hasFile,omitempty"`
+	HasFileWith []*FileWhereInput `json:"hasFileWith,omitempty"`
 
 	// "events" edge predicates.
 	HasEvents     *bool              `json:"hasEvents,omitempty"`
@@ -38936,6 +38957,51 @@ func (i *UserWhereInput) P() (predicate.User, error) {
 	if i.AvatarLocalFileContainsFold != nil {
 		predicates = append(predicates, user.AvatarLocalFileContainsFold(*i.AvatarLocalFileContainsFold))
 	}
+	if i.AvatarLocalFileID != nil {
+		predicates = append(predicates, user.AvatarLocalFileIDEQ(*i.AvatarLocalFileID))
+	}
+	if i.AvatarLocalFileIDNEQ != nil {
+		predicates = append(predicates, user.AvatarLocalFileIDNEQ(*i.AvatarLocalFileIDNEQ))
+	}
+	if len(i.AvatarLocalFileIDIn) > 0 {
+		predicates = append(predicates, user.AvatarLocalFileIDIn(i.AvatarLocalFileIDIn...))
+	}
+	if len(i.AvatarLocalFileIDNotIn) > 0 {
+		predicates = append(predicates, user.AvatarLocalFileIDNotIn(i.AvatarLocalFileIDNotIn...))
+	}
+	if i.AvatarLocalFileIDGT != nil {
+		predicates = append(predicates, user.AvatarLocalFileIDGT(*i.AvatarLocalFileIDGT))
+	}
+	if i.AvatarLocalFileIDGTE != nil {
+		predicates = append(predicates, user.AvatarLocalFileIDGTE(*i.AvatarLocalFileIDGTE))
+	}
+	if i.AvatarLocalFileIDLT != nil {
+		predicates = append(predicates, user.AvatarLocalFileIDLT(*i.AvatarLocalFileIDLT))
+	}
+	if i.AvatarLocalFileIDLTE != nil {
+		predicates = append(predicates, user.AvatarLocalFileIDLTE(*i.AvatarLocalFileIDLTE))
+	}
+	if i.AvatarLocalFileIDContains != nil {
+		predicates = append(predicates, user.AvatarLocalFileIDContains(*i.AvatarLocalFileIDContains))
+	}
+	if i.AvatarLocalFileIDHasPrefix != nil {
+		predicates = append(predicates, user.AvatarLocalFileIDHasPrefix(*i.AvatarLocalFileIDHasPrefix))
+	}
+	if i.AvatarLocalFileIDHasSuffix != nil {
+		predicates = append(predicates, user.AvatarLocalFileIDHasSuffix(*i.AvatarLocalFileIDHasSuffix))
+	}
+	if i.AvatarLocalFileIDIsNil {
+		predicates = append(predicates, user.AvatarLocalFileIDIsNil())
+	}
+	if i.AvatarLocalFileIDNotNil {
+		predicates = append(predicates, user.AvatarLocalFileIDNotNil())
+	}
+	if i.AvatarLocalFileIDEqualFold != nil {
+		predicates = append(predicates, user.AvatarLocalFileIDEqualFold(*i.AvatarLocalFileIDEqualFold))
+	}
+	if i.AvatarLocalFileIDContainsFold != nil {
+		predicates = append(predicates, user.AvatarLocalFileIDContainsFold(*i.AvatarLocalFileIDContainsFold))
+	}
 	if i.AvatarUpdatedAt != nil {
 		predicates = append(predicates, user.AvatarUpdatedAtEQ(*i.AvatarUpdatedAt))
 	}
@@ -39224,6 +39290,24 @@ func (i *UserWhereInput) P() (predicate.User, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, user.HasFilesWith(with...))
+	}
+	if i.HasFile != nil {
+		p := user.HasFile()
+		if !*i.HasFile {
+			p = user.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasFileWith) > 0 {
+		with := make([]predicate.File, 0, len(i.HasFileWith))
+		for _, w := range i.HasFileWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasFileWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, user.HasFileWith(with...))
 	}
 	if i.HasEvents != nil {
 		p := user.HasEvents()
@@ -39525,6 +39609,23 @@ type UserHistoryWhereInput struct {
 	AvatarLocalFileNotNil       bool     `json:"avatarLocalFileNotNil,omitempty"`
 	AvatarLocalFileEqualFold    *string  `json:"avatarLocalFileEqualFold,omitempty"`
 	AvatarLocalFileContainsFold *string  `json:"avatarLocalFileContainsFold,omitempty"`
+
+	// "avatar_local_file_id" field predicates.
+	AvatarLocalFileID             *string  `json:"avatarLocalFileID,omitempty"`
+	AvatarLocalFileIDNEQ          *string  `json:"avatarLocalFileIDNEQ,omitempty"`
+	AvatarLocalFileIDIn           []string `json:"avatarLocalFileIDIn,omitempty"`
+	AvatarLocalFileIDNotIn        []string `json:"avatarLocalFileIDNotIn,omitempty"`
+	AvatarLocalFileIDGT           *string  `json:"avatarLocalFileIDGT,omitempty"`
+	AvatarLocalFileIDGTE          *string  `json:"avatarLocalFileIDGTE,omitempty"`
+	AvatarLocalFileIDLT           *string  `json:"avatarLocalFileIDLT,omitempty"`
+	AvatarLocalFileIDLTE          *string  `json:"avatarLocalFileIDLTE,omitempty"`
+	AvatarLocalFileIDContains     *string  `json:"avatarLocalFileIDContains,omitempty"`
+	AvatarLocalFileIDHasPrefix    *string  `json:"avatarLocalFileIDHasPrefix,omitempty"`
+	AvatarLocalFileIDHasSuffix    *string  `json:"avatarLocalFileIDHasSuffix,omitempty"`
+	AvatarLocalFileIDIsNil        bool     `json:"avatarLocalFileIDIsNil,omitempty"`
+	AvatarLocalFileIDNotNil       bool     `json:"avatarLocalFileIDNotNil,omitempty"`
+	AvatarLocalFileIDEqualFold    *string  `json:"avatarLocalFileIDEqualFold,omitempty"`
+	AvatarLocalFileIDContainsFold *string  `json:"avatarLocalFileIDContainsFold,omitempty"`
 
 	// "avatar_updated_at" field predicates.
 	AvatarUpdatedAt       *time.Time  `json:"avatarUpdatedAt,omitempty"`
@@ -40263,6 +40364,51 @@ func (i *UserHistoryWhereInput) P() (predicate.UserHistory, error) {
 	}
 	if i.AvatarLocalFileContainsFold != nil {
 		predicates = append(predicates, userhistory.AvatarLocalFileContainsFold(*i.AvatarLocalFileContainsFold))
+	}
+	if i.AvatarLocalFileID != nil {
+		predicates = append(predicates, userhistory.AvatarLocalFileIDEQ(*i.AvatarLocalFileID))
+	}
+	if i.AvatarLocalFileIDNEQ != nil {
+		predicates = append(predicates, userhistory.AvatarLocalFileIDNEQ(*i.AvatarLocalFileIDNEQ))
+	}
+	if len(i.AvatarLocalFileIDIn) > 0 {
+		predicates = append(predicates, userhistory.AvatarLocalFileIDIn(i.AvatarLocalFileIDIn...))
+	}
+	if len(i.AvatarLocalFileIDNotIn) > 0 {
+		predicates = append(predicates, userhistory.AvatarLocalFileIDNotIn(i.AvatarLocalFileIDNotIn...))
+	}
+	if i.AvatarLocalFileIDGT != nil {
+		predicates = append(predicates, userhistory.AvatarLocalFileIDGT(*i.AvatarLocalFileIDGT))
+	}
+	if i.AvatarLocalFileIDGTE != nil {
+		predicates = append(predicates, userhistory.AvatarLocalFileIDGTE(*i.AvatarLocalFileIDGTE))
+	}
+	if i.AvatarLocalFileIDLT != nil {
+		predicates = append(predicates, userhistory.AvatarLocalFileIDLT(*i.AvatarLocalFileIDLT))
+	}
+	if i.AvatarLocalFileIDLTE != nil {
+		predicates = append(predicates, userhistory.AvatarLocalFileIDLTE(*i.AvatarLocalFileIDLTE))
+	}
+	if i.AvatarLocalFileIDContains != nil {
+		predicates = append(predicates, userhistory.AvatarLocalFileIDContains(*i.AvatarLocalFileIDContains))
+	}
+	if i.AvatarLocalFileIDHasPrefix != nil {
+		predicates = append(predicates, userhistory.AvatarLocalFileIDHasPrefix(*i.AvatarLocalFileIDHasPrefix))
+	}
+	if i.AvatarLocalFileIDHasSuffix != nil {
+		predicates = append(predicates, userhistory.AvatarLocalFileIDHasSuffix(*i.AvatarLocalFileIDHasSuffix))
+	}
+	if i.AvatarLocalFileIDIsNil {
+		predicates = append(predicates, userhistory.AvatarLocalFileIDIsNil())
+	}
+	if i.AvatarLocalFileIDNotNil {
+		predicates = append(predicates, userhistory.AvatarLocalFileIDNotNil())
+	}
+	if i.AvatarLocalFileIDEqualFold != nil {
+		predicates = append(predicates, userhistory.AvatarLocalFileIDEqualFold(*i.AvatarLocalFileIDEqualFold))
+	}
+	if i.AvatarLocalFileIDContainsFold != nil {
+		predicates = append(predicates, userhistory.AvatarLocalFileIDContainsFold(*i.AvatarLocalFileIDContainsFold))
 	}
 	if i.AvatarUpdatedAt != nil {
 		predicates = append(predicates, userhistory.AvatarUpdatedAtEQ(*i.AvatarUpdatedAt))

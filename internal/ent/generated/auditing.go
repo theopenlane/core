@@ -1524,6 +1524,9 @@ func (uh *UserHistory) changes(new *UserHistory) []Change {
 	if !reflect.DeepEqual(uh.AvatarLocalFile, new.AvatarLocalFile) {
 		changes = append(changes, NewChange(userhistory.FieldAvatarLocalFile, uh.AvatarLocalFile, new.AvatarLocalFile))
 	}
+	if !reflect.DeepEqual(uh.AvatarLocalFileID, new.AvatarLocalFileID) {
+		changes = append(changes, NewChange(userhistory.FieldAvatarLocalFileID, uh.AvatarLocalFileID, new.AvatarLocalFileID))
+	}
 	if !reflect.DeepEqual(uh.AvatarUpdatedAt, new.AvatarUpdatedAt) {
 		changes = append(changes, NewChange(userhistory.FieldAvatarUpdatedAt, uh.AvatarUpdatedAt, new.AvatarUpdatedAt))
 	}

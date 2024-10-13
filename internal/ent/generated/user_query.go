@@ -47,6 +47,7 @@ type UserQuery struct {
 	withOrganizations                *OrganizationQuery
 	withWebauthn                     *WebauthnQuery
 	withFiles                        *FileQuery
+	withFile                         *FileQuery
 	withEvents                       *EventQuery
 	withGroupMemberships             *GroupMembershipQuery
 	withOrgMemberships               *OrgMembershipQuery
@@ -318,6 +319,31 @@ func (uq *UserQuery) QueryFiles() *FileQuery {
 		schemaConfig := uq.schemaConfig
 		step.To.Schema = schemaConfig.File
 		step.Edge.Schema = schemaConfig.UserFiles
+		fromU = sqlgraph.SetNeighbors(uq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryFile chains the current query on the "file" edge.
+func (uq *UserQuery) QueryFile() *FileQuery {
+	query := (&FileClient{config: uq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := uq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := uq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, selector),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, user.FileTable, user.FileColumn),
+		)
+		schemaConfig := uq.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.User
 		fromU = sqlgraph.SetNeighbors(uq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -600,6 +626,7 @@ func (uq *UserQuery) Clone() *UserQuery {
 		withOrganizations:           uq.withOrganizations.Clone(),
 		withWebauthn:                uq.withWebauthn.Clone(),
 		withFiles:                   uq.withFiles.Clone(),
+		withFile:                    uq.withFile.Clone(),
 		withEvents:                  uq.withEvents.Clone(),
 		withGroupMemberships:        uq.withGroupMemberships.Clone(),
 		withOrgMemberships:          uq.withOrgMemberships.Clone(),
@@ -706,6 +733,17 @@ func (uq *UserQuery) WithFiles(opts ...func(*FileQuery)) *UserQuery {
 		opt(query)
 	}
 	uq.withFiles = query
+	return uq
+}
+
+// WithFile tells the query-builder to eager-load the nodes that are connected to
+// the "file" edge. The optional arguments are used to configure the query builder of the edge.
+func (uq *UserQuery) WithFile(opts ...func(*FileQuery)) *UserQuery {
+	query := (&FileClient{config: uq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	uq.withFile = query
 	return uq
 }
 
@@ -826,7 +864,7 @@ func (uq *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 	var (
 		nodes       = []*User{}
 		_spec       = uq.querySpec()
-		loadedTypes = [12]bool{
+		loadedTypes = [13]bool{
 			uq.withPersonalAccessTokens != nil,
 			uq.withTfaSettings != nil,
 			uq.withSetting != nil,
@@ -836,6 +874,7 @@ func (uq *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 			uq.withOrganizations != nil,
 			uq.withWebauthn != nil,
 			uq.withFiles != nil,
+			uq.withFile != nil,
 			uq.withEvents != nil,
 			uq.withGroupMemberships != nil,
 			uq.withOrgMemberships != nil,
@@ -929,6 +968,12 @@ func (uq *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 		if err := uq.loadFiles(ctx, query, nodes,
 			func(n *User) { n.Edges.Files = []*File{} },
 			func(n *User, e *File) { n.Edges.Files = append(n.Edges.Files, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := uq.withFile; query != nil {
+		if err := uq.loadFile(ctx, query, nodes, nil,
+			func(n *User, e *File) { n.Edges.File = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1402,6 +1447,38 @@ func (uq *UserQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []*U
 	}
 	return nil
 }
+func (uq *UserQuery) loadFile(ctx context.Context, query *FileQuery, nodes []*User, init func(*User), assign func(*User, *File)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*User)
+	for i := range nodes {
+		if nodes[i].AvatarLocalFileID == nil {
+			continue
+		}
+		fk := *nodes[i].AvatarLocalFileID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(file.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "avatar_local_file_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (uq *UserQuery) loadEvents(ctx context.Context, query *EventQuery, nodes []*User, init func(*User), assign func(*User, *Event)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*User)
@@ -1554,6 +1631,9 @@ func (uq *UserQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != user.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if uq.withFile != nil {
+			_spec.Node.AddColumnOnce(user.FieldAvatarLocalFileID)
 		}
 	}
 	if ps := uq.predicates; len(ps) > 0 {

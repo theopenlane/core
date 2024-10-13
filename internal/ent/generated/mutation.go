@@ -75341,6 +75341,8 @@ type UserMutation struct {
 	files                            map[string]struct{}
 	removedfiles                     map[string]struct{}
 	clearedfiles                     bool
+	file                             *string
+	clearedfile                      bool
 	events                           map[string]struct{}
 	removedevents                    map[string]struct{}
 	clearedevents                    bool
@@ -76122,6 +76124,55 @@ func (m *UserMutation) ResetAvatarLocalFile() {
 	delete(m.clearedFields, user.FieldAvatarLocalFile)
 }
 
+// SetAvatarLocalFileID sets the "avatar_local_file_id" field.
+func (m *UserMutation) SetAvatarLocalFileID(s string) {
+	m.file = &s
+}
+
+// AvatarLocalFileID returns the value of the "avatar_local_file_id" field in the mutation.
+func (m *UserMutation) AvatarLocalFileID() (r string, exists bool) {
+	v := m.file
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAvatarLocalFileID returns the old "avatar_local_file_id" field's value of the User entity.
+// If the User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserMutation) OldAvatarLocalFileID(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAvatarLocalFileID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAvatarLocalFileID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAvatarLocalFileID: %w", err)
+	}
+	return oldValue.AvatarLocalFileID, nil
+}
+
+// ClearAvatarLocalFileID clears the value of the "avatar_local_file_id" field.
+func (m *UserMutation) ClearAvatarLocalFileID() {
+	m.file = nil
+	m.clearedFields[user.FieldAvatarLocalFileID] = struct{}{}
+}
+
+// AvatarLocalFileIDCleared returns if the "avatar_local_file_id" field was cleared in this mutation.
+func (m *UserMutation) AvatarLocalFileIDCleared() bool {
+	_, ok := m.clearedFields[user.FieldAvatarLocalFileID]
+	return ok
+}
+
+// ResetAvatarLocalFileID resets all changes to the "avatar_local_file_id" field.
+func (m *UserMutation) ResetAvatarLocalFileID() {
+	m.file = nil
+	delete(m.clearedFields, user.FieldAvatarLocalFileID)
+}
+
 // SetAvatarUpdatedAt sets the "avatar_updated_at" field.
 func (m *UserMutation) SetAvatarUpdatedAt(t time.Time) {
 	m.avatar_updated_at = &t
@@ -76874,6 +76925,46 @@ func (m *UserMutation) ResetFiles() {
 	m.removedfiles = nil
 }
 
+// SetFileID sets the "file" edge to the File entity by id.
+func (m *UserMutation) SetFileID(id string) {
+	m.file = &id
+}
+
+// ClearFile clears the "file" edge to the File entity.
+func (m *UserMutation) ClearFile() {
+	m.clearedfile = true
+	m.clearedFields[user.FieldAvatarLocalFileID] = struct{}{}
+}
+
+// FileCleared reports if the "file" edge to the File entity was cleared.
+func (m *UserMutation) FileCleared() bool {
+	return m.AvatarLocalFileIDCleared() || m.clearedfile
+}
+
+// FileID returns the "file" edge ID in the mutation.
+func (m *UserMutation) FileID() (id string, exists bool) {
+	if m.file != nil {
+		return *m.file, true
+	}
+	return
+}
+
+// FileIDs returns the "file" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// FileID instead. It exists only for internal usage by the builders.
+func (m *UserMutation) FileIDs() (ids []string) {
+	if id := m.file; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetFile resets all changes to the "file" edge.
+func (m *UserMutation) ResetFile() {
+	m.file = nil
+	m.clearedfile = false
+}
+
 // AddEventIDs adds the "events" edge to the Event entity by ids.
 func (m *UserMutation) AddEventIDs(ids ...string) {
 	if m.events == nil {
@@ -77070,7 +77161,7 @@ func (m *UserMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *UserMutation) Fields() []string {
-	fields := make([]string, 0, 20)
+	fields := make([]string, 0, 21)
 	if m.created_at != nil {
 		fields = append(fields, user.FieldCreatedAt)
 	}
@@ -77112,6 +77203,9 @@ func (m *UserMutation) Fields() []string {
 	}
 	if m.avatar_local_file != nil {
 		fields = append(fields, user.FieldAvatarLocalFile)
+	}
+	if m.file != nil {
+		fields = append(fields, user.FieldAvatarLocalFileID)
 	}
 	if m.avatar_updated_at != nil {
 		fields = append(fields, user.FieldAvatarUpdatedAt)
@@ -77167,6 +77261,8 @@ func (m *UserMutation) Field(name string) (ent.Value, bool) {
 		return m.AvatarRemoteURL()
 	case user.FieldAvatarLocalFile:
 		return m.AvatarLocalFile()
+	case user.FieldAvatarLocalFileID:
+		return m.AvatarLocalFileID()
 	case user.FieldAvatarUpdatedAt:
 		return m.AvatarUpdatedAt()
 	case user.FieldLastSeen:
@@ -77216,6 +77312,8 @@ func (m *UserMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldAvatarRemoteURL(ctx)
 	case user.FieldAvatarLocalFile:
 		return m.OldAvatarLocalFile(ctx)
+	case user.FieldAvatarLocalFileID:
+		return m.OldAvatarLocalFileID(ctx)
 	case user.FieldAvatarUpdatedAt:
 		return m.OldAvatarUpdatedAt(ctx)
 	case user.FieldLastSeen:
@@ -77335,6 +77433,13 @@ func (m *UserMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetAvatarLocalFile(v)
 		return nil
+	case user.FieldAvatarLocalFileID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAvatarLocalFileID(v)
+		return nil
 	case user.FieldAvatarUpdatedAt:
 		v, ok := value.(time.Time)
 		if !ok {
@@ -77440,6 +77545,9 @@ func (m *UserMutation) ClearedFields() []string {
 	if m.FieldCleared(user.FieldAvatarLocalFile) {
 		fields = append(fields, user.FieldAvatarLocalFile)
 	}
+	if m.FieldCleared(user.FieldAvatarLocalFileID) {
+		fields = append(fields, user.FieldAvatarLocalFileID)
+	}
 	if m.FieldCleared(user.FieldAvatarUpdatedAt) {
 		fields = append(fields, user.FieldAvatarUpdatedAt)
 	}
@@ -77501,6 +77609,9 @@ func (m *UserMutation) ClearField(name string) error {
 		return nil
 	case user.FieldAvatarLocalFile:
 		m.ClearAvatarLocalFile()
+		return nil
+	case user.FieldAvatarLocalFileID:
+		m.ClearAvatarLocalFileID()
 		return nil
 	case user.FieldAvatarUpdatedAt:
 		m.ClearAvatarUpdatedAt()
@@ -77567,6 +77678,9 @@ func (m *UserMutation) ResetField(name string) error {
 	case user.FieldAvatarLocalFile:
 		m.ResetAvatarLocalFile()
 		return nil
+	case user.FieldAvatarLocalFileID:
+		m.ResetAvatarLocalFileID()
+		return nil
 	case user.FieldAvatarUpdatedAt:
 		m.ResetAvatarUpdatedAt()
 		return nil
@@ -77591,7 +77705,7 @@ func (m *UserMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *UserMutation) AddedEdges() []string {
-	edges := make([]string, 0, 12)
+	edges := make([]string, 0, 13)
 	if m.personal_access_tokens != nil {
 		edges = append(edges, user.EdgePersonalAccessTokens)
 	}
@@ -77618,6 +77732,9 @@ func (m *UserMutation) AddedEdges() []string {
 	}
 	if m.files != nil {
 		edges = append(edges, user.EdgeFiles)
+	}
+	if m.file != nil {
+		edges = append(edges, user.EdgeFile)
 	}
 	if m.events != nil {
 		edges = append(edges, user.EdgeEvents)
@@ -77687,6 +77804,10 @@ func (m *UserMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case user.EdgeFile:
+		if id := m.file; id != nil {
+			return []ent.Value{*id}
+		}
 	case user.EdgeEvents:
 		ids := make([]ent.Value, 0, len(m.events))
 		for id := range m.events {
@@ -77711,7 +77832,7 @@ func (m *UserMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *UserMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 12)
+	edges := make([]string, 0, 13)
 	if m.removedpersonal_access_tokens != nil {
 		edges = append(edges, user.EdgePersonalAccessTokens)
 	}
@@ -77824,7 +77945,7 @@ func (m *UserMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *UserMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 12)
+	edges := make([]string, 0, 13)
 	if m.clearedpersonal_access_tokens {
 		edges = append(edges, user.EdgePersonalAccessTokens)
 	}
@@ -77851,6 +77972,9 @@ func (m *UserMutation) ClearedEdges() []string {
 	}
 	if m.clearedfiles {
 		edges = append(edges, user.EdgeFiles)
+	}
+	if m.clearedfile {
+		edges = append(edges, user.EdgeFile)
 	}
 	if m.clearedevents {
 		edges = append(edges, user.EdgeEvents)
@@ -77886,6 +78010,8 @@ func (m *UserMutation) EdgeCleared(name string) bool {
 		return m.clearedwebauthn
 	case user.EdgeFiles:
 		return m.clearedfiles
+	case user.EdgeFile:
+		return m.clearedfile
 	case user.EdgeEvents:
 		return m.clearedevents
 	case user.EdgeGroupMemberships:
@@ -77902,6 +78028,9 @@ func (m *UserMutation) ClearEdge(name string) error {
 	switch name {
 	case user.EdgeSetting:
 		m.ClearSetting()
+		return nil
+	case user.EdgeFile:
+		m.ClearFile()
 		return nil
 	}
 	return fmt.Errorf("unknown User unique edge %s", name)
@@ -77938,6 +78067,9 @@ func (m *UserMutation) ResetEdge(name string) error {
 	case user.EdgeFiles:
 		m.ResetFiles()
 		return nil
+	case user.EdgeFile:
+		m.ResetFile()
+		return nil
 	case user.EdgeEvents:
 		m.ResetEvents()
 		return nil
@@ -77954,37 +78086,38 @@ func (m *UserMutation) ResetEdge(name string) error {
 // UserHistoryMutation represents an operation that mutates the UserHistory nodes in the graph.
 type UserHistoryMutation struct {
 	config
-	op                Op
-	typ               string
-	id                *string
-	history_time      *time.Time
-	ref               *string
-	operation         *history.OpType
-	created_at        *time.Time
-	updated_at        *time.Time
-	created_by        *string
-	updated_by        *string
-	deleted_at        *time.Time
-	deleted_by        *string
-	mapping_id        *string
-	tags              *[]string
-	appendtags        []string
-	email             *string
-	first_name        *string
-	last_name         *string
-	display_name      *string
-	avatar_remote_url *string
-	avatar_local_file *string
-	avatar_updated_at *time.Time
-	last_seen         *time.Time
-	password          *string
-	sub               *string
-	auth_provider     *enums.AuthProvider
-	role              *enums.Role
-	clearedFields     map[string]struct{}
-	done              bool
-	oldValue          func(context.Context) (*UserHistory, error)
-	predicates        []predicate.UserHistory
+	op                   Op
+	typ                  string
+	id                   *string
+	history_time         *time.Time
+	ref                  *string
+	operation            *history.OpType
+	created_at           *time.Time
+	updated_at           *time.Time
+	created_by           *string
+	updated_by           *string
+	deleted_at           *time.Time
+	deleted_by           *string
+	mapping_id           *string
+	tags                 *[]string
+	appendtags           []string
+	email                *string
+	first_name           *string
+	last_name            *string
+	display_name         *string
+	avatar_remote_url    *string
+	avatar_local_file    *string
+	avatar_local_file_id *string
+	avatar_updated_at    *time.Time
+	last_seen            *time.Time
+	password             *string
+	sub                  *string
+	auth_provider        *enums.AuthProvider
+	role                 *enums.Role
+	clearedFields        map[string]struct{}
+	done                 bool
+	oldValue             func(context.Context) (*UserHistory, error)
+	predicates           []predicate.UserHistory
 }
 
 var _ ent.Mutation = (*UserHistoryMutation)(nil)
@@ -78875,6 +79008,55 @@ func (m *UserHistoryMutation) ResetAvatarLocalFile() {
 	delete(m.clearedFields, userhistory.FieldAvatarLocalFile)
 }
 
+// SetAvatarLocalFileID sets the "avatar_local_file_id" field.
+func (m *UserHistoryMutation) SetAvatarLocalFileID(s string) {
+	m.avatar_local_file_id = &s
+}
+
+// AvatarLocalFileID returns the value of the "avatar_local_file_id" field in the mutation.
+func (m *UserHistoryMutation) AvatarLocalFileID() (r string, exists bool) {
+	v := m.avatar_local_file_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAvatarLocalFileID returns the old "avatar_local_file_id" field's value of the UserHistory entity.
+// If the UserHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserHistoryMutation) OldAvatarLocalFileID(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAvatarLocalFileID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAvatarLocalFileID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAvatarLocalFileID: %w", err)
+	}
+	return oldValue.AvatarLocalFileID, nil
+}
+
+// ClearAvatarLocalFileID clears the value of the "avatar_local_file_id" field.
+func (m *UserHistoryMutation) ClearAvatarLocalFileID() {
+	m.avatar_local_file_id = nil
+	m.clearedFields[userhistory.FieldAvatarLocalFileID] = struct{}{}
+}
+
+// AvatarLocalFileIDCleared returns if the "avatar_local_file_id" field was cleared in this mutation.
+func (m *UserHistoryMutation) AvatarLocalFileIDCleared() bool {
+	_, ok := m.clearedFields[userhistory.FieldAvatarLocalFileID]
+	return ok
+}
+
+// ResetAvatarLocalFileID resets all changes to the "avatar_local_file_id" field.
+func (m *UserHistoryMutation) ResetAvatarLocalFileID() {
+	m.avatar_local_file_id = nil
+	delete(m.clearedFields, userhistory.FieldAvatarLocalFileID)
+}
+
 // SetAvatarUpdatedAt sets the "avatar_updated_at" field.
 func (m *UserHistoryMutation) SetAvatarUpdatedAt(t time.Time) {
 	m.avatar_updated_at = &t
@@ -79190,7 +79372,7 @@ func (m *UserHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *UserHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 23)
+	fields := make([]string, 0, 24)
 	if m.history_time != nil {
 		fields = append(fields, userhistory.FieldHistoryTime)
 	}
@@ -79241,6 +79423,9 @@ func (m *UserHistoryMutation) Fields() []string {
 	}
 	if m.avatar_local_file != nil {
 		fields = append(fields, userhistory.FieldAvatarLocalFile)
+	}
+	if m.avatar_local_file_id != nil {
+		fields = append(fields, userhistory.FieldAvatarLocalFileID)
 	}
 	if m.avatar_updated_at != nil {
 		fields = append(fields, userhistory.FieldAvatarUpdatedAt)
@@ -79302,6 +79487,8 @@ func (m *UserHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.AvatarRemoteURL()
 	case userhistory.FieldAvatarLocalFile:
 		return m.AvatarLocalFile()
+	case userhistory.FieldAvatarLocalFileID:
+		return m.AvatarLocalFileID()
 	case userhistory.FieldAvatarUpdatedAt:
 		return m.AvatarUpdatedAt()
 	case userhistory.FieldLastSeen:
@@ -79357,6 +79544,8 @@ func (m *UserHistoryMutation) OldField(ctx context.Context, name string) (ent.Va
 		return m.OldAvatarRemoteURL(ctx)
 	case userhistory.FieldAvatarLocalFile:
 		return m.OldAvatarLocalFile(ctx)
+	case userhistory.FieldAvatarLocalFileID:
+		return m.OldAvatarLocalFileID(ctx)
 	case userhistory.FieldAvatarUpdatedAt:
 		return m.OldAvatarUpdatedAt(ctx)
 	case userhistory.FieldLastSeen:
@@ -79497,6 +79686,13 @@ func (m *UserHistoryMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetAvatarLocalFile(v)
 		return nil
+	case userhistory.FieldAvatarLocalFileID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAvatarLocalFileID(v)
+		return nil
 	case userhistory.FieldAvatarUpdatedAt:
 		v, ok := value.(time.Time)
 		if !ok {
@@ -79605,6 +79801,9 @@ func (m *UserHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(userhistory.FieldAvatarLocalFile) {
 		fields = append(fields, userhistory.FieldAvatarLocalFile)
 	}
+	if m.FieldCleared(userhistory.FieldAvatarLocalFileID) {
+		fields = append(fields, userhistory.FieldAvatarLocalFileID)
+	}
 	if m.FieldCleared(userhistory.FieldAvatarUpdatedAt) {
 		fields = append(fields, userhistory.FieldAvatarUpdatedAt)
 	}
@@ -79669,6 +79868,9 @@ func (m *UserHistoryMutation) ClearField(name string) error {
 		return nil
 	case userhistory.FieldAvatarLocalFile:
 		m.ClearAvatarLocalFile()
+		return nil
+	case userhistory.FieldAvatarLocalFileID:
+		m.ClearAvatarLocalFileID()
 		return nil
 	case userhistory.FieldAvatarUpdatedAt:
 		m.ClearAvatarUpdatedAt()
@@ -79743,6 +79945,9 @@ func (m *UserHistoryMutation) ResetField(name string) error {
 		return nil
 	case userhistory.FieldAvatarLocalFile:
 		m.ResetAvatarLocalFile()
+		return nil
+	case userhistory.FieldAvatarLocalFileID:
+		m.ResetAvatarLocalFileID()
 		return nil
 	case userhistory.FieldAvatarUpdatedAt:
 		m.ResetAvatarUpdatedAt()

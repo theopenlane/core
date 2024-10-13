@@ -5031,6 +5031,10 @@ func (m *UserMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetNillableAvatarLocalFile(&avatarLocalFile)
 	}
 
+	if avatarLocalFileID, exists := m.AvatarLocalFileID(); exists {
+		create = create.SetNillableAvatarLocalFileID(&avatarLocalFileID)
+	}
+
 	if avatarUpdatedAt, exists := m.AvatarUpdatedAt(); exists {
 		create = create.SetNillableAvatarUpdatedAt(&avatarUpdatedAt)
 	}
@@ -5169,6 +5173,12 @@ func (m *UserMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetNillableAvatarLocalFile(user.AvatarLocalFile)
 		}
 
+		if avatarLocalFileID, exists := m.AvatarLocalFileID(); exists {
+			create = create.SetNillableAvatarLocalFileID(&avatarLocalFileID)
+		} else {
+			create = create.SetNillableAvatarLocalFileID(user.AvatarLocalFileID)
+		}
+
 		if avatarUpdatedAt, exists := m.AvatarUpdatedAt(); exists {
 			create = create.SetNillableAvatarUpdatedAt(&avatarUpdatedAt)
 		} else {
@@ -5251,6 +5261,7 @@ func (m *UserMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDisplayName(user.DisplayName).
 			SetNillableAvatarRemoteURL(user.AvatarRemoteURL).
 			SetNillableAvatarLocalFile(user.AvatarLocalFile).
+			SetNillableAvatarLocalFileID(user.AvatarLocalFileID).
 			SetNillableAvatarUpdatedAt(user.AvatarUpdatedAt).
 			SetNillableLastSeen(user.LastSeen).
 			SetNillablePassword(user.Password).

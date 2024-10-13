@@ -1473,6 +1473,14 @@ func (u *User) Files(ctx context.Context) (result []*File, err error) {
 	return result, err
 }
 
+func (u *User) File(ctx context.Context) (*File, error) {
+	result, err := u.Edges.FileOrErr()
+	if IsNotLoaded(err) {
+		result, err = u.QueryFile().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (u *User) Events(ctx context.Context) (result []*Event, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = u.NamedEvents(graphql.GetFieldContext(ctx).Field.Alias)
