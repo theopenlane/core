@@ -65,8 +65,9 @@ type Config struct {
 	// TOTP contains the configuration for the TOTP provider
 	TOTP totp.Config `json:"totp" koanf:"totp"`
 	// Ratelimit contains the configuration for the rate limiter
-	Ratelimit     ratelimit.Config `json:"ratelimit" koanf:"ratelimit"`
-	ObjectStorage objects.Config   `json:"objectStorage" koanf:"objectStorage"`
+	Ratelimit ratelimit.Config `json:"ratelimit" koanf:"ratelimit"`
+	// ObjectStorage contains the configuration for the object storage backend
+	ObjectStorage objects.Config `json:"objectStorage" koanf:"objectStorage"`
 }
 
 // Server settings for the echo server

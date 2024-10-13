@@ -2181,10 +2181,6 @@ func (m *FileMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetStoreKey(storeKey)
 	}
 
-	if correlationID, exists := m.CorrelationID(); exists {
-		create = create.SetCorrelationID(correlationID)
-	}
-
 	if categoryType, exists := m.CategoryType(); exists {
 		create = create.SetCategoryType(categoryType)
 	}
@@ -2335,12 +2331,6 @@ func (m *FileMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetStoreKey(file.StoreKey)
 		}
 
-		if correlationID, exists := m.CorrelationID(); exists {
-			create = create.SetCorrelationID(correlationID)
-		} else {
-			create = create.SetCorrelationID(file.CorrelationID)
-		}
-
 		if categoryType, exists := m.CategoryType(); exists {
 			create = create.SetCategoryType(categoryType)
 		} else {
@@ -2425,7 +2415,6 @@ func (m *FileMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetMd5Hash(file.Md5Hash).
 			SetDetectedContentType(file.DetectedContentType).
 			SetStoreKey(file.StoreKey).
-			SetCorrelationID(file.CorrelationID).
 			SetCategoryType(file.CategoryType).
 			SetURI(file.URI).
 			SetStorageScheme(file.StorageScheme).

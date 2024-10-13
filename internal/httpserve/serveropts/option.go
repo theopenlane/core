@@ -36,6 +36,7 @@ import (
 	"github.com/theopenlane/core/internal/graphapi"
 	"github.com/theopenlane/core/internal/httpserve/config"
 	"github.com/theopenlane/core/internal/httpserve/server"
+	objmw "github.com/theopenlane/core/internal/middleware/objects"
 	authmw "github.com/theopenlane/core/pkg/middleware/auth"
 	"github.com/theopenlane/core/pkg/middleware/cachecontrol"
 	"github.com/theopenlane/core/pkg/middleware/cors"
@@ -144,12 +145,12 @@ func WithTokenManager() ServerOption {
 		// Setup token manager
 		tm, err := tokens.New(s.Config.Settings.Auth.Token)
 		if err != nil {
-			panic(err)
+			log.Panic().Err(err).Msg("Error creating token manager")
 		}
 
 		keys, err := tm.Keys()
 		if err != nil {
-			panic(err)
+			log.Panic().Err(err).Msg("Error getting keys from token manager")
 		}
 
 		// pass to the REST handlers
@@ -212,7 +213,11 @@ func WithReadyChecks(c *entx.EntClientConfig, f *fgax.Client, r *redis.Client, j
 func WithGraphRoute(srv *server.Server, c *ent.Client) ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
 		// Setup Graph API Handlers
-		r := graphapi.NewResolver(c).
+		r := graphapi.NewResolver(c,
+			&objmw.Upload{
+				ObjectStorage: s.Config.Handler.ObjectStorage,
+				Storage:       s.Config.Handler.Storage,
+			}).
 			WithExtensions(s.Config.Settings.Server.EnableGraphExtensions)
 
 		// add pool to the resolver to manage the number of goroutines
@@ -400,35 +405,49 @@ func WithObjectStorage() ServerOption {
 		if s.Config.Settings.ObjectStorage.Enabled {
 			s3Config, _ := awsConfig.LoadDefaultConfig(
 				context.Background(),
-				awsConfig.WithRegion("us-east-2"),
-				//				awsConfig.WithHTTPClient(httpClient),
+				awsConfig.WithRegion(s.Config.Settings.ObjectStorage.Region),
 				awsConfig.WithCredentialsProvider(
 					awsCreds.NewStaticCredentialsProvider(
-						"",
-						"",
+						s.Config.Settings.ObjectStorage.AccessKey,
+						s.Config.Settings.ObjectStorage.SecretKey,
 						"")),
 			)
 
 			s3store, err := storage.NewS3FromConfig(s3Config, storage.S3Options{
-				Bucket: "openlane",
+				Bucket: s.Config.Settings.ObjectStorage.Bucket,
 			})
-
 			if err != nil {
-				panic(err.Error())
+				log.Panic().Err(err).Msg("Error creating S3 store")
 			}
 
 			handler, err := objects.New(
 				objects.WithMaxFileSize(10<<20), // nolint:mnd
+				objects.WithMaxMemory(32<<20),   // nolint:mnd
 				objects.WithStorage(s3store),
 				objects.WithNameFuncGenerator(objects.OrganizationNameFunc),
 			)
 
 			if err != nil {
-				panic(err.Error())
+				log.Panic().Err(err).Msg("Error creating object storage")
 			}
 
 			s.Config.Handler.ObjectStorage = handler
 			s.Config.Handler.Storage = s3store
+
+			u := objmw.Upload{
+				ObjectStorage: handler,
+				Storage:       s3store,
+			}
+
+			cf := objmw.Config{
+				Keys:   []string{"uploadFile"},
+				Upload: &u,
+			}
+
+			// add upload middleware to authMW, non-authenticated endpoints will not have this middleware
+			uploadMw := echo.WrapMiddleware(objmw.FileUploadMiddleware(cf))
+
+			s.Config.Handler.AuthMiddleware = append(s.Config.Handler.AuthMiddleware, uploadMw)
 		}
 	})
 }

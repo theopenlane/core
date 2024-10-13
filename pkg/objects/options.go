@@ -13,15 +13,22 @@ type Option func(*Objects)
 
 // WithStorage allows you to provide a storage backend to the Objects
 func WithStorage(store Storage) Option {
-	return func(gh *Objects) {
-		gh.Storage = store
+	return func(o *Objects) {
+		o.Storage = store
 	}
 }
 
 // WithMaxFileSize allows you limit the size of file uploads to accept
 func WithMaxFileSize(i int64) Option {
-	return func(gh *Objects) {
-		gh.MaxSize = i
+	return func(o *Objects) {
+		o.MaxSize = i
+	}
+}
+
+// WithMaxMemory allows you limit the amount of memory to use when parsing a multipart form
+func WithMaxMemory(i int64) Option {
+	return func(o *Objects) {
+		o.MaxMemory = i
 	}
 }
 

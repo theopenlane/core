@@ -708,9 +708,6 @@ func (fh *FileHistory) changes(new *FileHistory) []Change {
 	if !reflect.DeepEqual(fh.StoreKey, new.StoreKey) {
 		changes = append(changes, NewChange(filehistory.FieldStoreKey, fh.StoreKey, new.StoreKey))
 	}
-	if !reflect.DeepEqual(fh.CorrelationID, new.CorrelationID) {
-		changes = append(changes, NewChange(filehistory.FieldCorrelationID, fh.CorrelationID, new.CorrelationID))
-	}
 	if !reflect.DeepEqual(fh.CategoryType, new.CategoryType) {
 		changes = append(changes, NewChange(filehistory.FieldCategoryType, fh.CategoryType, new.CategoryType))
 	}

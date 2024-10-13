@@ -48,11 +48,9 @@ type File struct {
 	Md5Hash string `json:"md5_hash,omitempty"`
 	// the content type of the HTTP request - may be different than MIME type as multipart-form can transmit multiple files and different types
 	DetectedContentType string `json:"detected_content_type,omitempty"`
-	// the key parsed out of a multipart-form request; if we allow multiple files to be uploaded we may want our API specifications to require the use of different keys allowing us to perfdorm easier conditional evaluation on the key and what to do with the file based on key
+	// the key parsed out of a multipart-form request; if we allow multiple files to be uploaded we may want our API specifications to require the use of different keys allowing us to perform easier conditional evaluation on the key and what to do with the file based on key
 	StoreKey string `json:"store_key,omitempty"`
-	// the ULID provided in the http request indicating the ULID to correleate the file to
-	CorrelationID string `json:"correlation_id,omitempty"`
-	// the category type of the file, if any (e.g. contract, invoice, etc.)
+	// the category type of the file, if any (e.g. evidence, invoice, etc.)
 	CategoryType string `json:"category_type,omitempty"`
 	// the full URI of the file
 	URI string `json:"uri,omitempty"`
@@ -209,7 +207,7 @@ func (*File) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case file.FieldProvidedFileSize, file.FieldPersistedFileSize:
 			values[i] = new(sql.NullInt64)
-		case file.FieldID, file.FieldCreatedBy, file.FieldUpdatedBy, file.FieldDeletedBy, file.FieldMappingID, file.FieldProvidedFileName, file.FieldProvidedFileExtension, file.FieldDetectedMimeType, file.FieldMd5Hash, file.FieldDetectedContentType, file.FieldStoreKey, file.FieldCorrelationID, file.FieldCategoryType, file.FieldURI, file.FieldStorageScheme, file.FieldStorageVolume, file.FieldStoragePath:
+		case file.FieldID, file.FieldCreatedBy, file.FieldUpdatedBy, file.FieldDeletedBy, file.FieldMappingID, file.FieldProvidedFileName, file.FieldProvidedFileExtension, file.FieldDetectedMimeType, file.FieldMd5Hash, file.FieldDetectedContentType, file.FieldStoreKey, file.FieldCategoryType, file.FieldURI, file.FieldStorageScheme, file.FieldStorageVolume, file.FieldStoragePath:
 			values[i] = new(sql.NullString)
 		case file.FieldCreatedAt, file.FieldUpdatedAt, file.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -331,12 +329,6 @@ func (f *File) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field store_key", values[i])
 			} else if value.Valid {
 				f.StoreKey = value.String
-			}
-		case file.FieldCorrelationID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field correlation_id", values[i])
-			} else if value.Valid {
-				f.CorrelationID = value.String
 			}
 		case file.FieldCategoryType:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -507,9 +499,6 @@ func (f *File) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("store_key=")
 	builder.WriteString(f.StoreKey)
-	builder.WriteString(", ")
-	builder.WriteString("correlation_id=")
-	builder.WriteString(f.CorrelationID)
 	builder.WriteString(", ")
 	builder.WriteString("category_type=")
 	builder.WriteString(f.CategoryType)

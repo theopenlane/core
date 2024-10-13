@@ -22,6 +22,8 @@ var (
 	ErrUnsupportedMimeType = errors.New("unsupported mime type uploaded")
 	// ErrMustProvideStorageBackend is returned when a storage backend is not provided
 	ErrMustProvideStorageBackend = errors.New("you must provide a storage backend")
+	// ErrUnexpectedType is returned when an invalid type is provided
+	ErrUnexpectedType = errors.New("unexpected type provided")
 )
 
 type errorMsg string

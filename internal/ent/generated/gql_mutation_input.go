@@ -1520,7 +1520,6 @@ type CreateFileInput struct {
 	Md5Hash                *string
 	DetectedContentType    string
 	StoreKey               *string
-	CorrelationID          *string
 	CategoryType           *string
 	URI                    *string
 	StorageScheme          *string
@@ -1560,9 +1559,6 @@ func (i *CreateFileInput) Mutate(m *FileMutation) {
 	m.SetDetectedContentType(i.DetectedContentType)
 	if v := i.StoreKey; v != nil {
 		m.SetStoreKey(*v)
-	}
-	if v := i.CorrelationID; v != nil {
-		m.SetCorrelationID(*v)
 	}
 	if v := i.CategoryType; v != nil {
 		m.SetCategoryType(*v)
@@ -1635,8 +1631,6 @@ type UpdateFileInput struct {
 	DetectedContentType          *string
 	ClearStoreKey                bool
 	StoreKey                     *string
-	ClearCorrelationID           bool
-	CorrelationID                *string
 	ClearCategoryType            bool
 	CategoryType                 *string
 	ClearURI                     bool
@@ -1728,12 +1722,6 @@ func (i *UpdateFileInput) Mutate(m *FileMutation) {
 	}
 	if v := i.StoreKey; v != nil {
 		m.SetStoreKey(*v)
-	}
-	if i.ClearCorrelationID {
-		m.ClearCorrelationID()
-	}
-	if v := i.CorrelationID; v != nil {
-		m.SetCorrelationID(*v)
 	}
 	if i.ClearCategoryType {
 		m.ClearCategoryType()

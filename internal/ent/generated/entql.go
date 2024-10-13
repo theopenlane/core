@@ -648,7 +648,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			file.FieldMd5Hash:               {Type: field.TypeString, Column: file.FieldMd5Hash},
 			file.FieldDetectedContentType:   {Type: field.TypeString, Column: file.FieldDetectedContentType},
 			file.FieldStoreKey:              {Type: field.TypeString, Column: file.FieldStoreKey},
-			file.FieldCorrelationID:         {Type: field.TypeString, Column: file.FieldCorrelationID},
 			file.FieldCategoryType:          {Type: field.TypeString, Column: file.FieldCategoryType},
 			file.FieldURI:                   {Type: field.TypeString, Column: file.FieldURI},
 			file.FieldStorageScheme:         {Type: field.TypeString, Column: file.FieldStorageScheme},
@@ -687,7 +686,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			filehistory.FieldMd5Hash:               {Type: field.TypeString, Column: filehistory.FieldMd5Hash},
 			filehistory.FieldDetectedContentType:   {Type: field.TypeString, Column: filehistory.FieldDetectedContentType},
 			filehistory.FieldStoreKey:              {Type: field.TypeString, Column: filehistory.FieldStoreKey},
-			filehistory.FieldCorrelationID:         {Type: field.TypeString, Column: filehistory.FieldCorrelationID},
 			filehistory.FieldCategoryType:          {Type: field.TypeString, Column: filehistory.FieldCategoryType},
 			filehistory.FieldURI:                   {Type: field.TypeString, Column: filehistory.FieldURI},
 			filehistory.FieldStorageScheme:         {Type: field.TypeString, Column: filehistory.FieldStorageScheme},
@@ -6568,11 +6566,6 @@ func (f *FileFilter) WhereStoreKey(p entql.StringP) {
 	f.Where(p.Field(file.FieldStoreKey))
 }
 
-// WhereCorrelationID applies the entql string predicate on the correlation_id field.
-func (f *FileFilter) WhereCorrelationID(p entql.StringP) {
-	f.Where(p.Field(file.FieldCorrelationID))
-}
-
 // WhereCategoryType applies the entql string predicate on the category_type field.
 func (f *FileFilter) WhereCategoryType(p entql.StringP) {
 	f.Where(p.Field(file.FieldCategoryType))
@@ -6876,11 +6869,6 @@ func (f *FileHistoryFilter) WhereDetectedContentType(p entql.StringP) {
 // WhereStoreKey applies the entql string predicate on the store_key field.
 func (f *FileHistoryFilter) WhereStoreKey(p entql.StringP) {
 	f.Where(p.Field(filehistory.FieldStoreKey))
-}
-
-// WhereCorrelationID applies the entql string predicate on the correlation_id field.
-func (f *FileHistoryFilter) WhereCorrelationID(p entql.StringP) {
-	f.Where(p.Field(filehistory.FieldCorrelationID))
 }
 
 // WhereCategoryType applies the entql string predicate on the category_type field.

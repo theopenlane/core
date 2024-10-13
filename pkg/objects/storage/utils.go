@@ -2,9 +2,10 @@ package storage
 
 import "strings"
 
-// StringPointer allows you to take the address of a string literal
-func StringPointer(s string) *string {
+// toPointer allows you to take the address of any literal
+func toPointer[T any](s T) *T {
 	return &s
 }
 
-func IsStringEmpty(s string) bool { return len(strings.TrimSpace(s)) == 0 }
+// isStringEmpty checks if a string is empty
+func isStringEmpty(s string) bool { return len(strings.TrimSpace(s)) == 0 }

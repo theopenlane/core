@@ -127,7 +127,6 @@ query AdminSearch($query: String!) {
           md5Hash
           detectedContentType
           storeKey
-          correlationID
           categoryType
           uri
           storageScheme

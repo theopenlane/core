@@ -5,7 +5,6 @@ query GetAllFileHistories {
     edges {
       node {
         categoryType
-        correlationID
         createdAt
         createdBy
         detectedContentType
@@ -37,7 +36,6 @@ query GetFileHistories($where: FileHistoryWhereInput) {
     edges {
       node {
         categoryType
-        correlationID
         createdAt
         createdBy
         detectedContentType

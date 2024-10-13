@@ -572,60 +572,20 @@
         "provider": {
           "type": "string"
         },
-        "ConfigurationPath": {
-          "type": "string"
-        },
-        "SourcePath": {
-          "type": "string"
-        },
-        "ExecutionTime": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "storage": {
-          "$ref": "#/$defs/map[string]string"
-        },
-        "dataset_type": {
-          "type": "string"
-        },
-        "kind": {
-          "type": "string"
-        },
-        "path": {
-          "type": "string"
-        },
-        "container": {
-          "type": "string"
-        },
-        "accesskey": {
+        "accessKey": {
           "type": "string"
         },
         "region": {
           "type": "string"
         },
-        "secretkey": {
+        "secretKey": {
           "type": "string"
         },
-        "credentials_json": {
+        "credentialsJSON": {
           "type": "string"
         },
         "bucket": {
           "type": "string"
-        },
-        "endpoint": {
-          "type": "string"
-        },
-        "disable_ssl": {
-          "type": "boolean"
-        },
-        "force_path_style": {
-          "type": "boolean"
-        },
-        "path_style": {
-          "type": "boolean"
-        },
-        "endpoint_style": {
-          "type": "boolean"
         }
       },
       "additionalProperties": false,
@@ -1048,7 +1008,8 @@
       "description": "Ratelimit contains the configuration for the rate limiter"
     },
     "objectStorage": {
-      "$ref": "#/$defs/objects.Config"
+      "$ref": "#/$defs/objects.Config",
+      "description": "ObjectStorage contains the configuration for the object storage backend"
     }
   },
   "additionalProperties": false,

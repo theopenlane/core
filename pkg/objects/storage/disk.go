@@ -2,7 +2,7 @@ package storage
 
 import (
 	"context"
-	"errors"
+	"fmt"
 	"io"
 	"os"
 	"path/filepath"
@@ -13,15 +13,17 @@ import (
 
 type Disk struct {
 	destinationFolder string
+	Scheme            string
 }
 
 func NewDiskStorage(folder string) (*Disk, error) {
 	if len(strings.TrimSpace(folder)) == 0 {
-		return nil, errors.New("please provide a valid folder path")
+		return nil, fmt.Errorf("%w: please provide a valid folder path", ErrInvalidFolderPath)
 	}
 
 	return &Disk{
 		destinationFolder: folder,
+		Scheme:            "file://",
 	}, nil
 }
 

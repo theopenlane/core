@@ -150,11 +150,6 @@ func StoreKey(v string) predicate.FileHistory {
 	return predicate.FileHistory(sql.FieldEQ(FieldStoreKey, v))
 }
 
-// CorrelationID applies equality check predicate on the "correlation_id" field. It's identical to CorrelationIDEQ.
-func CorrelationID(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldEQ(FieldCorrelationID, v))
-}
-
 // CategoryType applies equality check predicate on the "category_type" field. It's identical to CategoryTypeEQ.
 func CategoryType(v string) predicate.FileHistory {
 	return predicate.FileHistory(sql.FieldEQ(FieldCategoryType, v))
@@ -1288,81 +1283,6 @@ func StoreKeyEqualFold(v string) predicate.FileHistory {
 // StoreKeyContainsFold applies the ContainsFold predicate on the "store_key" field.
 func StoreKeyContainsFold(v string) predicate.FileHistory {
 	return predicate.FileHistory(sql.FieldContainsFold(FieldStoreKey, v))
-}
-
-// CorrelationIDEQ applies the EQ predicate on the "correlation_id" field.
-func CorrelationIDEQ(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldEQ(FieldCorrelationID, v))
-}
-
-// CorrelationIDNEQ applies the NEQ predicate on the "correlation_id" field.
-func CorrelationIDNEQ(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldNEQ(FieldCorrelationID, v))
-}
-
-// CorrelationIDIn applies the In predicate on the "correlation_id" field.
-func CorrelationIDIn(vs ...string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldIn(FieldCorrelationID, vs...))
-}
-
-// CorrelationIDNotIn applies the NotIn predicate on the "correlation_id" field.
-func CorrelationIDNotIn(vs ...string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldNotIn(FieldCorrelationID, vs...))
-}
-
-// CorrelationIDGT applies the GT predicate on the "correlation_id" field.
-func CorrelationIDGT(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldGT(FieldCorrelationID, v))
-}
-
-// CorrelationIDGTE applies the GTE predicate on the "correlation_id" field.
-func CorrelationIDGTE(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldGTE(FieldCorrelationID, v))
-}
-
-// CorrelationIDLT applies the LT predicate on the "correlation_id" field.
-func CorrelationIDLT(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldLT(FieldCorrelationID, v))
-}
-
-// CorrelationIDLTE applies the LTE predicate on the "correlation_id" field.
-func CorrelationIDLTE(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldLTE(FieldCorrelationID, v))
-}
-
-// CorrelationIDContains applies the Contains predicate on the "correlation_id" field.
-func CorrelationIDContains(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldContains(FieldCorrelationID, v))
-}
-
-// CorrelationIDHasPrefix applies the HasPrefix predicate on the "correlation_id" field.
-func CorrelationIDHasPrefix(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldHasPrefix(FieldCorrelationID, v))
-}
-
-// CorrelationIDHasSuffix applies the HasSuffix predicate on the "correlation_id" field.
-func CorrelationIDHasSuffix(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldHasSuffix(FieldCorrelationID, v))
-}
-
-// CorrelationIDIsNil applies the IsNil predicate on the "correlation_id" field.
-func CorrelationIDIsNil() predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldIsNull(FieldCorrelationID))
-}
-
-// CorrelationIDNotNil applies the NotNil predicate on the "correlation_id" field.
-func CorrelationIDNotNil() predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldNotNull(FieldCorrelationID))
-}
-
-// CorrelationIDEqualFold applies the EqualFold predicate on the "correlation_id" field.
-func CorrelationIDEqualFold(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldEqualFold(FieldCorrelationID, v))
-}
-
-// CorrelationIDContainsFold applies the ContainsFold predicate on the "correlation_id" field.
-func CorrelationIDContainsFold(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldContainsFold(FieldCorrelationID, v))
 }
 
 // CategoryTypeEQ applies the EQ predicate on the "category_type" field.

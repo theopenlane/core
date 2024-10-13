@@ -643,32 +643,11 @@ Config defines the configuration settings for the default rate limiter
 |----|----|-----------|--------|
 |**enabled**|`boolean`|||
 |**provider**|`string`|||
-|**ConfigurationPath**|`string`|||
-|**SourcePath**|`string`|||
-|**ExecutionTime**|`string`|Format: `"date-time"`<br/>||
-|[**storage**](#objectstoragestorage)|`object`|||
-|**dataset\_type**|`string`|||
-|**kind**|`string`|||
-|**path**|`string`|||
-|**container**|`string`|||
-|**accesskey**|`string`|||
+|**accessKey**|`string`|||
 |**region**|`string`|||
-|**secretkey**|`string`|||
-|**credentials\_json**|`string`|||
+|**secretKey**|`string`|||
+|**credentialsJSON**|`string`|||
 |**bucket**|`string`|||
-|**endpoint**|`string`|||
-|**disable\_ssl**|`boolean`|||
-|**force\_path\_style**|`boolean`|||
-|**path\_style**|`boolean`|||
-|**endpoint\_style**|`boolean`|||
 
 **Additional Properties:** not allowed  
-<a name="objectstoragestorage"></a>
-### objectStorage\.storage: object
-
-**Additional Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-
 

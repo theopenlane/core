@@ -3533,11 +3533,6 @@ func (f *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				selectedFields = append(selectedFields, file.FieldStoreKey)
 				fieldSeen[file.FieldStoreKey] = struct{}{}
 			}
-		case "correlationID":
-			if _, ok := fieldSeen[file.FieldCorrelationID]; !ok {
-				selectedFields = append(selectedFields, file.FieldCorrelationID)
-				fieldSeen[file.FieldCorrelationID] = struct{}{}
-			}
 		case "categoryType":
 			if _, ok := fieldSeen[file.FieldCategoryType]; !ok {
 				selectedFields = append(selectedFields, file.FieldCategoryType)
@@ -3714,11 +3709,6 @@ func (fh *FileHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if _, ok := fieldSeen[filehistory.FieldStoreKey]; !ok {
 				selectedFields = append(selectedFields, filehistory.FieldStoreKey)
 				fieldSeen[filehistory.FieldStoreKey] = struct{}{}
-			}
-		case "correlationID":
-			if _, ok := fieldSeen[filehistory.FieldCorrelationID]; !ok {
-				selectedFields = append(selectedFields, filehistory.FieldCorrelationID)
-				fieldSeen[filehistory.FieldCorrelationID] = struct{}{}
 			}
 		case "categoryType":
 			if _, ok := fieldSeen[filehistory.FieldCategoryType]; !ok {

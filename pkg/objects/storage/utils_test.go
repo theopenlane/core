@@ -18,6 +18,6 @@ func TestIsStringEmpty(t *testing.T) {
 	}
 
 	for _, v := range tt {
-		require.Equal(t, v.empty, IsStringEmpty(v.s))
+		require.Equal(t, v.empty, isStringEmpty(v.s))
 	}
 }

@@ -1409,15 +1409,11 @@ input CreateFileInput {
 	"""
 	detectedContentType: String!
 	"""
-	the key parsed out of a multipart-form request; if we allow multiple files to be uploaded we may want our API specifications to require the use of different keys allowing us to perfdorm easier conditional evaluation on the key and what to do with the file based on key
+	the key parsed out of a multipart-form request; if we allow multiple files to be uploaded we may want our API specifications to require the use of different keys allowing us to perform easier conditional evaluation on the key and what to do with the file based on key
 	"""
 	storeKey: String
 	"""
-	the ULID provided in the http request indicating the ULID to correleate the file to
-	"""
-	correlationID: String
-	"""
-	the category type of the file, if any (e.g. contract, invoice, etc.)
+	the category type of the file, if any (e.g. evidence, invoice, etc.)
 	"""
 	categoryType: String
 	"""
@@ -6856,15 +6852,11 @@ type File implements Node {
 	"""
 	detectedContentType: String!
 	"""
-	the key parsed out of a multipart-form request; if we allow multiple files to be uploaded we may want our API specifications to require the use of different keys allowing us to perfdorm easier conditional evaluation on the key and what to do with the file based on key
+	the key parsed out of a multipart-form request; if we allow multiple files to be uploaded we may want our API specifications to require the use of different keys allowing us to perform easier conditional evaluation on the key and what to do with the file based on key
 	"""
 	storeKey: String
 	"""
-	the ULID provided in the http request indicating the ULID to correleate the file to
-	"""
-	correlationID: String
-	"""
-	the category type of the file, if any (e.g. contract, invoice, etc.)
+	the category type of the file, if any (e.g. evidence, invoice, etc.)
 	"""
 	categoryType: String
 	"""
@@ -6992,15 +6984,11 @@ type FileHistory implements Node {
 	"""
 	detectedContentType: String!
 	"""
-	the key parsed out of a multipart-form request; if we allow multiple files to be uploaded we may want our API specifications to require the use of different keys allowing us to perfdorm easier conditional evaluation on the key and what to do with the file based on key
+	the key parsed out of a multipart-form request; if we allow multiple files to be uploaded we may want our API specifications to require the use of different keys allowing us to perform easier conditional evaluation on the key and what to do with the file based on key
 	"""
 	storeKey: String
 	"""
-	the ULID provided in the http request indicating the ULID to correleate the file to
-	"""
-	correlationID: String
-	"""
-	the category type of the file, if any (e.g. contract, invoice, etc.)
+	the category type of the file, if any (e.g. evidence, invoice, etc.)
 	"""
 	categoryType: String
 	"""
@@ -7336,24 +7324,6 @@ input FileHistoryWhereInput {
 	storeKeyNotNil: Boolean
 	storeKeyEqualFold: String
 	storeKeyContainsFold: String
-	"""
-	correlation_id field predicates
-	"""
-	correlationID: String
-	correlationIDNEQ: String
-	correlationIDIn: [String!]
-	correlationIDNotIn: [String!]
-	correlationIDGT: String
-	correlationIDGTE: String
-	correlationIDLT: String
-	correlationIDLTE: String
-	correlationIDContains: String
-	correlationIDHasPrefix: String
-	correlationIDHasSuffix: String
-	correlationIDIsNil: Boolean
-	correlationIDNotNil: Boolean
-	correlationIDEqualFold: String
-	correlationIDContainsFold: String
 	"""
 	category_type field predicates
 	"""
@@ -7699,24 +7669,6 @@ input FileWhereInput {
 	storeKeyNotNil: Boolean
 	storeKeyEqualFold: String
 	storeKeyContainsFold: String
-	"""
-	correlation_id field predicates
-	"""
-	correlationID: String
-	correlationIDNEQ: String
-	correlationIDIn: [String!]
-	correlationIDNotIn: [String!]
-	correlationIDGT: String
-	correlationIDGTE: String
-	correlationIDLT: String
-	correlationIDLTE: String
-	correlationIDContains: String
-	correlationIDHasPrefix: String
-	correlationIDHasSuffix: String
-	correlationIDIsNil: Boolean
-	correlationIDNotNil: Boolean
-	correlationIDEqualFold: String
-	correlationIDContainsFold: String
 	"""
 	category_type field predicates
 	"""
@@ -12346,7 +12298,7 @@ type Mutation {
 		values of the user
 		"""
 		input: CreateUserInput!
-	): UserCreatePayload!
+	avatarURL: Upload): UserCreatePayload!
 	"""
 	Update an existing user
 	"""
@@ -12360,7 +12312,7 @@ type Mutation {
 		New values for the user
 		"""
 		input: UpdateUserInput!
-	): UserUpdatePayload!
+	avatarFile: Upload): UserUpdatePayload!
 	"""
 	Delete an existing user
 	"""
@@ -20157,17 +20109,12 @@ input UpdateFileInput {
 	"""
 	detectedContentType: String
 	"""
-	the key parsed out of a multipart-form request; if we allow multiple files to be uploaded we may want our API specifications to require the use of different keys allowing us to perfdorm easier conditional evaluation on the key and what to do with the file based on key
+	the key parsed out of a multipart-form request; if we allow multiple files to be uploaded we may want our API specifications to require the use of different keys allowing us to perform easier conditional evaluation on the key and what to do with the file based on key
 	"""
 	storeKey: String
 	clearStoreKey: Boolean
 	"""
-	the ULID provided in the http request indicating the ULID to correleate the file to
-	"""
-	correlationID: String
-	clearCorrelationID: Boolean
-	"""
-	the category type of the file, if any (e.g. contract, invoice, etc.)
+	the category type of the file, if any (e.g. evidence, invoice, etc.)
 	"""
 	categoryType: String
 	clearCategoryType: Boolean

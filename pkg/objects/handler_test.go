@@ -47,7 +47,7 @@ func TestObjects(t *testing.T) {
 		expectedStatusCode int
 		validMimeTypes     []string
 		// ignoreFormField instructs the test to not add the
-		// multipar form data part to the request
+		// multipart form data part to the request
 		ignoreFormField bool
 
 		useIgnoreSkipOpt bool
@@ -75,8 +75,8 @@ func TestObjects(t *testing.T) {
 					Upload(gomock.Any(), gomock.Any(), gomock.Any()).
 					Return(&objects.UploadedFileMetadata{
 						Size: size,
-					}, errors.New("could not upload file")).
-					Times(0) // make sure this is never called
+					}, errors.New("could not upload file")). // nolint:err113
+					Times(0)                                 // make sure this is never called
 			},
 			expectedStatusCode: http.StatusInternalServerError,
 			pathToFile:         "objects.md",
@@ -92,8 +92,8 @@ func TestObjects(t *testing.T) {
 					Upload(gomock.Any(), gomock.Any(), gomock.Any()).
 					Return(&objects.UploadedFileMetadata{
 						Size: size,
-					}, errors.New("could not upload file")).
-					Times(0) // make sure this is never called
+					}, errors.New("could not upload file")). // nolint:err113
+					Times(0)                                 // make sure this is never called
 			},
 			expectedStatusCode: http.StatusAccepted,
 			pathToFile:         "objects.md",
@@ -109,8 +109,8 @@ func TestObjects(t *testing.T) {
 					Upload(gomock.Any(), gomock.Any(), gomock.Any()).
 					Return(&objects.UploadedFileMetadata{
 						Size: size,
-					}, errors.New("could not upload file")).
-					Times(0) // make sure this is never called
+					}, errors.New("could not upload file")). // nolint:err113
+					Times(0)                                 // make sure this is never called
 			},
 			expectedStatusCode: http.StatusInternalServerError,
 			pathToFile:         "objects.md",
@@ -124,7 +124,7 @@ func TestObjects(t *testing.T) {
 					Upload(gomock.Any(), gomock.Any(), gomock.Any()).
 					Return(&objects.UploadedFileMetadata{
 						Size: size,
-					}, errors.New("could not upload file")).
+					}, errors.New("could not upload file")). // nolint:err113
 					Times(1)
 			},
 			expectedStatusCode: http.StatusInternalServerError,
@@ -139,8 +139,8 @@ func TestObjects(t *testing.T) {
 					Upload(gomock.Any(), gomock.Any(), gomock.Any()).
 					Return(&objects.UploadedFileMetadata{
 						Size: size,
-					}, errors.New("could not upload file")).
-					Times(0) // never call this
+					}, errors.New("could not upload file")). // nolint:err113
+					Times(0)                                 // never call this
 			},
 			expectedStatusCode: http.StatusInternalServerError,
 			pathToFile:         "image.jpg",
@@ -202,7 +202,7 @@ func TestObjects(t *testing.T) {
 					return
 				}
 
-				file, err := objects.FilesFromContextWithKey(r, "form-field")
+				file, err := objects.FilesFromContextWithKey(r.Context(), "form-field")
 
 				require.NoError(t, err)
 
@@ -212,7 +212,13 @@ func TestObjects(t *testing.T) {
 				fmt.Fprintf(w, "successfully uploaded the file")
 			})).ServeHTTP(recorder, r)
 
-			require.Equal(t, v.expectedStatusCode, recorder.Result().StatusCode)
+			result := recorder.Result()
+
+			respBody := result.Body
+			defer respBody.Close()
+
+			require.Equal(t, v.expectedStatusCode, result.StatusCode)
+
 			verifyMatch(t, recorder)
 		})
 	}

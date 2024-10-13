@@ -39,13 +39,10 @@ func (File) Fields() []ent.Field {
 		field.String("detected_content_type").
 			Comment("the content type of the HTTP request - may be different than MIME type as multipart-form can transmit multiple files and different types"),
 		field.String("store_key").
-			Comment("the key parsed out of a multipart-form request; if we allow multiple files to be uploaded we may want our API specifications to require the use of different keys allowing us to perfdorm easier conditional evaluation on the key and what to do with the file based on key").
-			Optional(),
-		field.String("correlation_id").
-			Comment("the ULID provided in the http request indicating the ULID to correleate the file to").
+			Comment("the key parsed out of a multipart-form request; if we allow multiple files to be uploaded we may want our API specifications to require the use of different keys allowing us to perform easier conditional evaluation on the key and what to do with the file based on key").
 			Optional(),
 		field.String("category_type").
-			Comment("the category type of the file, if any (e.g. contract, invoice, etc.)").
+			Comment("the category type of the file, if any (e.g. evidence, invoice, etc.)").
 			Optional(),
 		field.String("uri").
 			Comment("the full URI of the file").

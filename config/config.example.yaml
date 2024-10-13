@@ -109,26 +109,13 @@ jobQueue:
         Workers: null
     runMigrations: false
 objectStorage:
-    ConfigurationPath: ""
-    ExecutionTime: "0001-01-01T00:00:00Z"
-    SourcePath: ""
-    accesskey: ""
+    accessKey: ""
     bucket: ""
-    container: ""
-    credentials_json: ""
-    dataset_type: ""
-    disable_ssl: false
+    credentialsJSON: ""
     enabled: true
-    endpoint: ""
-    endpoint_style: false
-    force_path_style: false
-    kind: ""
-    path: ""
-    path_style: false
     provider: ""
     region: ""
-    secretkey: ""
-    storage: null
+    secretKey: ""
 ratelimit:
     burst: 30
     enabled: false

@@ -1,7 +1,6 @@
 package models
 
 import (
-	"mime/multipart"
 	"strings"
 
 	"github.com/go-webauthn/webauthn/protocol"
@@ -720,43 +719,19 @@ var ExampleAccountRolesOrganizationReply = AccountRolesOrganizationReply{
 // FILES
 // =========
 
-type UploadFilesRequest struct {
-	File       multipart.File
-	FileHeader *multipart.FileHeader
-	ID         string `form:"id"`
-	Param      string `param:"param"`
-	Payload    string `json:"payload"`
-	Content    string `json:"content" form:"content"`
-}
-
 type UploadFilesReply struct {
 	rout.Reply
-	Message         string `json:"message,omitempty"`
-	FileName        string `json:"file_name,omitempty"`
-	FilePath        string `json:"file_path,omitempty"`
-	Size            int64  `json:"size,omitempty"`
-	MimeType        string `json:"mime_type,omitempty"`
-	Link            string `json:"link,omitempty"`
-	FileCount       int64
-	FileIdentifiers []string
-	PresignedURL    string `json:"presigned_url,omitempty"`
+	Message   string `json:"message,omitempty"`
+	FileCount int64  `json:"file_count,omitempty"`
+	Files     []File `json:"files,omitempty"`
 }
 
-func (r *UploadFilesRequest) Validate() error {
-	if r.File == nil {
-		return rout.NewMissingRequiredFieldError("file")
-	}
-
-	if r.FileHeader == nil {
-		return rout.NewMissingRequiredFieldError("fileheader")
-	}
-
-	return nil
-}
-
-// ExampleLoginSuccessRequest is an example of a successful login request for OpenAPI documentation
-var ExampleUploadFilesSuccessRequest = UploadFilesRequest{
-	ID: "123456",
+type File struct {
+	ID           string `json:"id,omitempty"`
+	Name         string `json:"name,omitempty"`
+	Size         int64  `json:"size,omitempty"`
+	MimeType     string `json:"mime_type,omitempty"`
+	PresignedURL string `json:"presigned_url,omitempty"`
 }
 
 // ExampleLoginSuccessResponse is an example of a successful login response for OpenAPI documentation

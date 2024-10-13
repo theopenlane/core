@@ -47,8 +47,6 @@ const (
 	FieldDetectedContentType = "detected_content_type"
 	// FieldStoreKey holds the string denoting the store_key field in the database.
 	FieldStoreKey = "store_key"
-	// FieldCorrelationID holds the string denoting the correlation_id field in the database.
-	FieldCorrelationID = "correlation_id"
 	// FieldCategoryType holds the string denoting the category_type field in the database.
 	FieldCategoryType = "category_type"
 	// FieldURI holds the string denoting the uri field in the database.
@@ -154,7 +152,6 @@ var Columns = []string{
 	FieldMd5Hash,
 	FieldDetectedContentType,
 	FieldStoreKey,
-	FieldCorrelationID,
 	FieldCategoryType,
 	FieldURI,
 	FieldStorageScheme,
@@ -313,11 +310,6 @@ func ByDetectedContentType(opts ...sql.OrderTermOption) OrderOption {
 // ByStoreKey orders the results by the store_key field.
 func ByStoreKey(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStoreKey, opts...).ToFunc()
-}
-
-// ByCorrelationID orders the results by the correlation_id field.
-func ByCorrelationID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldCorrelationID, opts...).ToFunc()
 }
 
 // ByCategoryType orders the results by the category_type field.

@@ -288,26 +288,6 @@ func (fu *FileUpdate) ClearStoreKey() *FileUpdate {
 	return fu
 }
 
-// SetCorrelationID sets the "correlation_id" field.
-func (fu *FileUpdate) SetCorrelationID(s string) *FileUpdate {
-	fu.mutation.SetCorrelationID(s)
-	return fu
-}
-
-// SetNillableCorrelationID sets the "correlation_id" field if the given value is not nil.
-func (fu *FileUpdate) SetNillableCorrelationID(s *string) *FileUpdate {
-	if s != nil {
-		fu.SetCorrelationID(*s)
-	}
-	return fu
-}
-
-// ClearCorrelationID clears the value of the "correlation_id" field.
-func (fu *FileUpdate) ClearCorrelationID() *FileUpdate {
-	fu.mutation.ClearCorrelationID()
-	return fu
-}
-
 // SetCategoryType sets the "category_type" field.
 func (fu *FileUpdate) SetCategoryType(s string) *FileUpdate {
 	fu.mutation.SetCategoryType(s)
@@ -945,12 +925,6 @@ func (fu *FileUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if fu.mutation.StoreKeyCleared() {
 		_spec.ClearField(file.FieldStoreKey, field.TypeString)
-	}
-	if value, ok := fu.mutation.CorrelationID(); ok {
-		_spec.SetField(file.FieldCorrelationID, field.TypeString, value)
-	}
-	if fu.mutation.CorrelationIDCleared() {
-		_spec.ClearField(file.FieldCorrelationID, field.TypeString)
 	}
 	if value, ok := fu.mutation.CategoryType(); ok {
 		_spec.SetField(file.FieldCategoryType, field.TypeString, value)
@@ -1738,26 +1712,6 @@ func (fuo *FileUpdateOne) ClearStoreKey() *FileUpdateOne {
 	return fuo
 }
 
-// SetCorrelationID sets the "correlation_id" field.
-func (fuo *FileUpdateOne) SetCorrelationID(s string) *FileUpdateOne {
-	fuo.mutation.SetCorrelationID(s)
-	return fuo
-}
-
-// SetNillableCorrelationID sets the "correlation_id" field if the given value is not nil.
-func (fuo *FileUpdateOne) SetNillableCorrelationID(s *string) *FileUpdateOne {
-	if s != nil {
-		fuo.SetCorrelationID(*s)
-	}
-	return fuo
-}
-
-// ClearCorrelationID clears the value of the "correlation_id" field.
-func (fuo *FileUpdateOne) ClearCorrelationID() *FileUpdateOne {
-	fuo.mutation.ClearCorrelationID()
-	return fuo
-}
-
 // SetCategoryType sets the "category_type" field.
 func (fuo *FileUpdateOne) SetCategoryType(s string) *FileUpdateOne {
 	fuo.mutation.SetCategoryType(s)
@@ -2425,12 +2379,6 @@ func (fuo *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) 
 	}
 	if fuo.mutation.StoreKeyCleared() {
 		_spec.ClearField(file.FieldStoreKey, field.TypeString)
-	}
-	if value, ok := fuo.mutation.CorrelationID(); ok {
-		_spec.SetField(file.FieldCorrelationID, field.TypeString, value)
-	}
-	if fuo.mutation.CorrelationIDCleared() {
-		_spec.ClearField(file.FieldCorrelationID, field.TypeString)
 	}
 	if value, ok := fuo.mutation.CategoryType(); ok {
 		_spec.SetField(file.FieldCategoryType, field.TypeString, value)

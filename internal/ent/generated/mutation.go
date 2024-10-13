@@ -29615,7 +29615,6 @@ type FileMutation struct {
 	md5_hash                   *string
 	detected_content_type      *string
 	store_key                  *string
-	correlation_id             *string
 	category_type              *string
 	uri                        *string
 	storage_scheme             *string
@@ -30552,55 +30551,6 @@ func (m *FileMutation) ResetStoreKey() {
 	delete(m.clearedFields, file.FieldStoreKey)
 }
 
-// SetCorrelationID sets the "correlation_id" field.
-func (m *FileMutation) SetCorrelationID(s string) {
-	m.correlation_id = &s
-}
-
-// CorrelationID returns the value of the "correlation_id" field in the mutation.
-func (m *FileMutation) CorrelationID() (r string, exists bool) {
-	v := m.correlation_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldCorrelationID returns the old "correlation_id" field's value of the File entity.
-// If the File object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *FileMutation) OldCorrelationID(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldCorrelationID is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldCorrelationID requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldCorrelationID: %w", err)
-	}
-	return oldValue.CorrelationID, nil
-}
-
-// ClearCorrelationID clears the value of the "correlation_id" field.
-func (m *FileMutation) ClearCorrelationID() {
-	m.correlation_id = nil
-	m.clearedFields[file.FieldCorrelationID] = struct{}{}
-}
-
-// CorrelationIDCleared returns if the "correlation_id" field was cleared in this mutation.
-func (m *FileMutation) CorrelationIDCleared() bool {
-	_, ok := m.clearedFields[file.FieldCorrelationID]
-	return ok
-}
-
-// ResetCorrelationID resets all changes to the "correlation_id" field.
-func (m *FileMutation) ResetCorrelationID() {
-	m.correlation_id = nil
-	delete(m.clearedFields, file.FieldCorrelationID)
-}
-
 // SetCategoryType sets the "category_type" field.
 func (m *FileMutation) SetCategoryType(s string) {
 	m.category_type = &s
@@ -31469,7 +31419,7 @@ func (m *FileMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *FileMutation) Fields() []string {
-	fields := make([]string, 0, 23)
+	fields := make([]string, 0, 22)
 	if m.created_at != nil {
 		fields = append(fields, file.FieldCreatedAt)
 	}
@@ -31517,9 +31467,6 @@ func (m *FileMutation) Fields() []string {
 	}
 	if m.store_key != nil {
 		fields = append(fields, file.FieldStoreKey)
-	}
-	if m.correlation_id != nil {
-		fields = append(fields, file.FieldCorrelationID)
 	}
 	if m.category_type != nil {
 		fields = append(fields, file.FieldCategoryType)
@@ -31579,8 +31526,6 @@ func (m *FileMutation) Field(name string) (ent.Value, bool) {
 		return m.DetectedContentType()
 	case file.FieldStoreKey:
 		return m.StoreKey()
-	case file.FieldCorrelationID:
-		return m.CorrelationID()
 	case file.FieldCategoryType:
 		return m.CategoryType()
 	case file.FieldURI:
@@ -31634,8 +31579,6 @@ func (m *FileMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldDetectedContentType(ctx)
 	case file.FieldStoreKey:
 		return m.OldStoreKey(ctx)
-	case file.FieldCorrelationID:
-		return m.OldCorrelationID(ctx)
 	case file.FieldCategoryType:
 		return m.OldCategoryType(ctx)
 	case file.FieldURI:
@@ -31768,13 +31711,6 @@ func (m *FileMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetStoreKey(v)
-		return nil
-	case file.FieldCorrelationID:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetCorrelationID(v)
 		return nil
 	case file.FieldCategoryType:
 		v, ok := value.(string)
@@ -31911,9 +31847,6 @@ func (m *FileMutation) ClearedFields() []string {
 	if m.FieldCleared(file.FieldStoreKey) {
 		fields = append(fields, file.FieldStoreKey)
 	}
-	if m.FieldCleared(file.FieldCorrelationID) {
-		fields = append(fields, file.FieldCorrelationID)
-	}
 	if m.FieldCleared(file.FieldCategoryType) {
 		fields = append(fields, file.FieldCategoryType)
 	}
@@ -31981,9 +31914,6 @@ func (m *FileMutation) ClearField(name string) error {
 		return nil
 	case file.FieldStoreKey:
 		m.ClearStoreKey()
-		return nil
-	case file.FieldCorrelationID:
-		m.ClearCorrelationID()
 		return nil
 	case file.FieldCategoryType:
 		m.ClearCategoryType()
@@ -32058,9 +31988,6 @@ func (m *FileMutation) ResetField(name string) error {
 		return nil
 	case file.FieldStoreKey:
 		m.ResetStoreKey()
-		return nil
-	case file.FieldCorrelationID:
-		m.ResetCorrelationID()
 		return nil
 	case file.FieldCategoryType:
 		m.ResetCategoryType()
@@ -32430,7 +32357,6 @@ type FileHistoryMutation struct {
 	md5_hash                *string
 	detected_content_type   *string
 	store_key               *string
-	correlation_id          *string
 	category_type           *string
 	uri                     *string
 	storage_scheme          *string
@@ -33458,55 +33384,6 @@ func (m *FileHistoryMutation) ResetStoreKey() {
 	delete(m.clearedFields, filehistory.FieldStoreKey)
 }
 
-// SetCorrelationID sets the "correlation_id" field.
-func (m *FileHistoryMutation) SetCorrelationID(s string) {
-	m.correlation_id = &s
-}
-
-// CorrelationID returns the value of the "correlation_id" field in the mutation.
-func (m *FileHistoryMutation) CorrelationID() (r string, exists bool) {
-	v := m.correlation_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldCorrelationID returns the old "correlation_id" field's value of the FileHistory entity.
-// If the FileHistory object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *FileHistoryMutation) OldCorrelationID(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldCorrelationID is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldCorrelationID requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldCorrelationID: %w", err)
-	}
-	return oldValue.CorrelationID, nil
-}
-
-// ClearCorrelationID clears the value of the "correlation_id" field.
-func (m *FileHistoryMutation) ClearCorrelationID() {
-	m.correlation_id = nil
-	m.clearedFields[filehistory.FieldCorrelationID] = struct{}{}
-}
-
-// CorrelationIDCleared returns if the "correlation_id" field was cleared in this mutation.
-func (m *FileHistoryMutation) CorrelationIDCleared() bool {
-	_, ok := m.clearedFields[filehistory.FieldCorrelationID]
-	return ok
-}
-
-// ResetCorrelationID resets all changes to the "correlation_id" field.
-func (m *FileHistoryMutation) ResetCorrelationID() {
-	m.correlation_id = nil
-	delete(m.clearedFields, filehistory.FieldCorrelationID)
-}
-
 // SetCategoryType sets the "category_type" field.
 func (m *FileHistoryMutation) SetCategoryType(s string) {
 	m.category_type = &s
@@ -33835,7 +33712,7 @@ func (m *FileHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *FileHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 26)
+	fields := make([]string, 0, 25)
 	if m.history_time != nil {
 		fields = append(fields, filehistory.FieldHistoryTime)
 	}
@@ -33892,9 +33769,6 @@ func (m *FileHistoryMutation) Fields() []string {
 	}
 	if m.store_key != nil {
 		fields = append(fields, filehistory.FieldStoreKey)
-	}
-	if m.correlation_id != nil {
-		fields = append(fields, filehistory.FieldCorrelationID)
 	}
 	if m.category_type != nil {
 		fields = append(fields, filehistory.FieldCategoryType)
@@ -33960,8 +33834,6 @@ func (m *FileHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.DetectedContentType()
 	case filehistory.FieldStoreKey:
 		return m.StoreKey()
-	case filehistory.FieldCorrelationID:
-		return m.CorrelationID()
 	case filehistory.FieldCategoryType:
 		return m.CategoryType()
 	case filehistory.FieldURI:
@@ -34021,8 +33893,6 @@ func (m *FileHistoryMutation) OldField(ctx context.Context, name string) (ent.Va
 		return m.OldDetectedContentType(ctx)
 	case filehistory.FieldStoreKey:
 		return m.OldStoreKey(ctx)
-	case filehistory.FieldCorrelationID:
-		return m.OldCorrelationID(ctx)
 	case filehistory.FieldCategoryType:
 		return m.OldCategoryType(ctx)
 	case filehistory.FieldURI:
@@ -34177,13 +34047,6 @@ func (m *FileHistoryMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetStoreKey(v)
 		return nil
-	case filehistory.FieldCorrelationID:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetCorrelationID(v)
-		return nil
 	case filehistory.FieldCategoryType:
 		v, ok := value.(string)
 		if !ok {
@@ -34322,9 +34185,6 @@ func (m *FileHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(filehistory.FieldStoreKey) {
 		fields = append(fields, filehistory.FieldStoreKey)
 	}
-	if m.FieldCleared(filehistory.FieldCorrelationID) {
-		fields = append(fields, filehistory.FieldCorrelationID)
-	}
 	if m.FieldCleared(filehistory.FieldCategoryType) {
 		fields = append(fields, filehistory.FieldCategoryType)
 	}
@@ -34395,9 +34255,6 @@ func (m *FileHistoryMutation) ClearField(name string) error {
 		return nil
 	case filehistory.FieldStoreKey:
 		m.ClearStoreKey()
-		return nil
-	case filehistory.FieldCorrelationID:
-		m.ClearCorrelationID()
 		return nil
 	case filehistory.FieldCategoryType:
 		m.ClearCategoryType()
@@ -34481,9 +34338,6 @@ func (m *FileHistoryMutation) ResetField(name string) error {
 		return nil
 	case filehistory.FieldStoreKey:
 		m.ResetStoreKey()
-		return nil
-	case filehistory.FieldCorrelationID:
-		m.ResetCorrelationID()
 		return nil
 	case filehistory.FieldCategoryType:
 		m.ResetCategoryType()

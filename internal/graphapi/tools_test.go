@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/entdb"
+	"github.com/theopenlane/core/internal/middleware/objects"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	coreutils "github.com/theopenlane/core/pkg/testutils"
 	"github.com/theopenlane/echox/middleware/echocontext"
@@ -126,7 +127,7 @@ func (suite *GraphTestSuite) SetupTest() {
 
 	// assign values
 	c.db = db
-	c.api, err = coreutils.TestClient(t, c.db)
+	c.api, err = coreutils.TestClient(t, c.db, &objects.Upload{})
 	require.NoError(t, err)
 
 	// create test user
@@ -153,7 +154,7 @@ func (suite *GraphTestSuite) SetupTest() {
 		BearerToken: pat.Token,
 	}
 
-	c.apiWithPAT, err = coreutils.TestClientWithAuth(t, c.db, openlaneclient.WithCredentials(authHeaderPAT))
+	c.apiWithPAT, err = coreutils.TestClientWithAuth(t, c.db, &objects.Upload{}, openlaneclient.WithCredentials(authHeaderPAT))
 	require.NoError(t, err)
 
 	// setup client with an API token
@@ -162,7 +163,7 @@ func (suite *GraphTestSuite) SetupTest() {
 	authHeaderAPIToken := openlaneclient.Authorization{
 		BearerToken: apiToken.Token,
 	}
-	c.apiWithToken, err = coreutils.TestClientWithAuth(t, c.db, openlaneclient.WithCredentials(authHeaderAPIToken))
+	c.apiWithToken, err = coreutils.TestClientWithAuth(t, c.db, &objects.Upload{}, openlaneclient.WithCredentials(authHeaderAPIToken))
 	require.NoError(t, err)
 
 	suite.client = c

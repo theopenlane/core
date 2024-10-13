@@ -247,20 +247,6 @@ func (fhc *FileHistoryCreate) SetNillableStoreKey(s *string) *FileHistoryCreate 
 	return fhc
 }
 
-// SetCorrelationID sets the "correlation_id" field.
-func (fhc *FileHistoryCreate) SetCorrelationID(s string) *FileHistoryCreate {
-	fhc.mutation.SetCorrelationID(s)
-	return fhc
-}
-
-// SetNillableCorrelationID sets the "correlation_id" field if the given value is not nil.
-func (fhc *FileHistoryCreate) SetNillableCorrelationID(s *string) *FileHistoryCreate {
-	if s != nil {
-		fhc.SetCorrelationID(*s)
-	}
-	return fhc
-}
-
 // SetCategoryType sets the "category_type" field.
 func (fhc *FileHistoryCreate) SetCategoryType(s string) *FileHistoryCreate {
 	fhc.mutation.SetCategoryType(s)
@@ -548,10 +534,6 @@ func (fhc *FileHistoryCreate) createSpec() (*FileHistory, *sqlgraph.CreateSpec) 
 	if value, ok := fhc.mutation.StoreKey(); ok {
 		_spec.SetField(filehistory.FieldStoreKey, field.TypeString, value)
 		_node.StoreKey = value
-	}
-	if value, ok := fhc.mutation.CorrelationID(); ok {
-		_spec.SetField(filehistory.FieldCorrelationID, field.TypeString, value)
-		_node.CorrelationID = value
 	}
 	if value, ok := fhc.mutation.CategoryType(); ok {
 		_spec.SetField(filehistory.FieldCategoryType, field.TypeString, value)

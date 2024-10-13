@@ -20,37 +20,44 @@ func (fn BindFunc) Bind(ctx echo.Context, i interface{}) error {
 	return fn(ctx, i)
 }
 
+// NewFileBinder returns a new FileBinder that binds the request body to the struct pointer and bind the form files to the struct fields.
 func NewFileBinder(b echo.Binder) echo.Binder {
 	return BindFunc(func(ctx echo.Context, i interface{}) error {
-		err := b.Bind(ctx, i)
-		if err == nil {
-			ctype := ctx.Request().Header.Get(echo.HeaderContentType)
-			// if bind form
-			if strings.HasPrefix(ctype, echo.MIMEApplicationForm) || strings.HasPrefix(ctype, echo.MIMEMultipartForm) {
-				// get form files
-				var form *multipart.Form
-
-				form, err = ctx.MultipartForm()
-				if err == nil {
-					err = BindFile(i, ctx, form.File)
-				}
-			}
+		if err := b.Bind(ctx, i); err != nil {
+			return err
 		}
 
-		return err
+		ctype := ctx.Request().Header.Get(echo.HeaderContentType)
+
+		// if bind form
+		if strings.HasPrefix(ctype, echo.MIMEApplicationForm) || strings.HasPrefix(ctype, echo.MIMEMultipartForm) {
+			// get form files
+			var form *multipart.Form
+
+			form, err := ctx.MultipartForm()
+			if err != nil {
+				return err
+			}
+
+			return BindFile(i, ctx, form.File)
+		}
+
+		return nil
 	})
 }
 
+// BindFile binds the form files to the struct fields.
 func BindFile(i interface{}, ctx echo.Context, files map[string][]*multipart.FileHeader) error {
 	iValue := reflect.Indirect(reflect.ValueOf(i))
 	// check bind type is struct pointer
 	if iValue.Kind() != reflect.Struct {
-		return fmt.Errorf("BindFile input not is struct pointer, indirect type is %s", iValue.Type().String())
+		return fmt.Errorf("%w: BindFile input not is struct pointer, indirect type is %s", ErrUnexpectedType, iValue.Type().String())
 	}
 
 	iType := iValue.Type()
-	for i := 0; i < iType.NumField(); i++ {
+	for i := range iType.NumField() {
 		fType := iType.Field(i)
+
 		// check canset field
 		fValue := iValue.Field(i)
 		if !fValue.CanSet() {
@@ -74,6 +81,7 @@ func BindFile(i interface{}, ctx echo.Context, files map[string][]*multipart.Fil
 	return nil
 }
 
+// getFiles returns the files by the field name or form name
 func getFiles(files map[string][]*multipart.FileHeader, names ...string) []*multipart.FileHeader {
 	for _, name := range names {
 		file, ok := files[name]

@@ -415,7 +415,6 @@ func adminSearchFiles(ctx context.Context, query string) ([]*generated.File, err
 			file.Md5HashContainsFold(query),               // search by Md5Hash
 			file.DetectedContentTypeContainsFold(query),   // search by DetectedContentType
 			file.StoreKeyContainsFold(query),              // search by StoreKey
-			file.CorrelationIDContainsFold(query),         // search by CorrelationID
 			file.CategoryTypeContainsFold(query),          // search by CategoryType
 			file.URIContainsFold(query),                   // search by URI
 			file.StorageSchemeContainsFold(query),         // search by StorageScheme

@@ -278,26 +278,6 @@ func (fhu *FileHistoryUpdate) ClearStoreKey() *FileHistoryUpdate {
 	return fhu
 }
 
-// SetCorrelationID sets the "correlation_id" field.
-func (fhu *FileHistoryUpdate) SetCorrelationID(s string) *FileHistoryUpdate {
-	fhu.mutation.SetCorrelationID(s)
-	return fhu
-}
-
-// SetNillableCorrelationID sets the "correlation_id" field if the given value is not nil.
-func (fhu *FileHistoryUpdate) SetNillableCorrelationID(s *string) *FileHistoryUpdate {
-	if s != nil {
-		fhu.SetCorrelationID(*s)
-	}
-	return fhu
-}
-
-// ClearCorrelationID clears the value of the "correlation_id" field.
-func (fhu *FileHistoryUpdate) ClearCorrelationID() *FileHistoryUpdate {
-	fhu.mutation.ClearCorrelationID()
-	return fhu
-}
-
 // SetCategoryType sets the "category_type" field.
 func (fhu *FileHistoryUpdate) SetCategoryType(s string) *FileHistoryUpdate {
 	fhu.mutation.SetCategoryType(s)
@@ -554,12 +534,6 @@ func (fhu *FileHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if fhu.mutation.StoreKeyCleared() {
 		_spec.ClearField(filehistory.FieldStoreKey, field.TypeString)
-	}
-	if value, ok := fhu.mutation.CorrelationID(); ok {
-		_spec.SetField(filehistory.FieldCorrelationID, field.TypeString, value)
-	}
-	if fhu.mutation.CorrelationIDCleared() {
-		_spec.ClearField(filehistory.FieldCorrelationID, field.TypeString)
 	}
 	if value, ok := fhu.mutation.CategoryType(); ok {
 		_spec.SetField(filehistory.FieldCategoryType, field.TypeString, value)
@@ -867,26 +841,6 @@ func (fhuo *FileHistoryUpdateOne) ClearStoreKey() *FileHistoryUpdateOne {
 	return fhuo
 }
 
-// SetCorrelationID sets the "correlation_id" field.
-func (fhuo *FileHistoryUpdateOne) SetCorrelationID(s string) *FileHistoryUpdateOne {
-	fhuo.mutation.SetCorrelationID(s)
-	return fhuo
-}
-
-// SetNillableCorrelationID sets the "correlation_id" field if the given value is not nil.
-func (fhuo *FileHistoryUpdateOne) SetNillableCorrelationID(s *string) *FileHistoryUpdateOne {
-	if s != nil {
-		fhuo.SetCorrelationID(*s)
-	}
-	return fhuo
-}
-
-// ClearCorrelationID clears the value of the "correlation_id" field.
-func (fhuo *FileHistoryUpdateOne) ClearCorrelationID() *FileHistoryUpdateOne {
-	fhuo.mutation.ClearCorrelationID()
-	return fhuo
-}
-
 // SetCategoryType sets the "category_type" field.
 func (fhuo *FileHistoryUpdateOne) SetCategoryType(s string) *FileHistoryUpdateOne {
 	fhuo.mutation.SetCategoryType(s)
@@ -1173,12 +1127,6 @@ func (fhuo *FileHistoryUpdateOne) sqlSave(ctx context.Context) (_node *FileHisto
 	}
 	if fhuo.mutation.StoreKeyCleared() {
 		_spec.ClearField(filehistory.FieldStoreKey, field.TypeString)
-	}
-	if value, ok := fhuo.mutation.CorrelationID(); ok {
-		_spec.SetField(filehistory.FieldCorrelationID, field.TypeString, value)
-	}
-	if fhuo.mutation.CorrelationIDCleared() {
-		_spec.ClearField(filehistory.FieldCorrelationID, field.TypeString)
 	}
 	if value, ok := fhuo.mutation.CategoryType(); ok {
 		_spec.SetField(filehistory.FieldCategoryType, field.TypeString, value)

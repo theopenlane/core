@@ -1,60 +1,41 @@
 package debug
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
-	"strings"
 
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/echox/middleware"
+
+	"github.com/theopenlane/core/pkg/objects"
 )
 
 // BodyDump prints out the request body for debugging purpose but attempts to obfuscate sensitive fields within the requests
 func BodyDump() echo.MiddlewareFunc {
 	return middleware.BodyDump(func(c echo.Context, reqBody, resBody []byte) {
+		r := c.Request()
+		w := c.Response()
+		ctx := r.Context()
+
 		// Create a child logger for concurrency safety
 		logger := log.Logger.With().Logger()
 
 		// Add context fields for the request
 		logger.UpdateContext(func(l zerolog.Context) zerolog.Context {
-			return l.Str("user-agent", c.Request().Header.Get("User-Agent")).
-				Str("request-id", c.Response().Header().Get(echo.HeaderXRequestID)).
-				Str("request-uri", c.Request().RequestURI).
-				Str("request-method", c.Request().Method).
-				Str("request-protocol", c.Request().Proto).
+			return l.Str("user-agent", r.Header.Get("User-Agent")).
+				Str("request-id", w.Header().Get(echo.HeaderXRequestID)).
+				Str("request-uri", r.RequestURI).
+				Str("request-method", r.Method).
+				Str("request-protocol", r.Proto).
 				Str("client-ip", c.RealIP())
 		})
 
-		if len(reqBody) > 0 {
-			contentType := c.Request().Header.Get("Content-Type")
-			if strings.HasPrefix(contentType, "multipart/form-data") {
-				// Parse the multipart form
-				if err := c.Request().ParseMultipartForm(32 << 20); err == nil { // nolint:mnd
-					form := c.Request().MultipartForm
-					if form != nil {
-						hasFile := false
-
-						for _, files := range form.File {
-							if len(files) > 0 {
-								hasFile = true
-								break
-							}
-						}
-
-						if hasFile {
-							logger.Info().Msg("request contains a file, not logging request body")
-						} else {
-							logRequestBody(logger, reqBody)
-						}
-					}
-				} else {
-					logRequestBody(logger, reqBody)
-				}
-			} else {
-				logRequestBody(logger, reqBody)
-			}
+		// Log the request body if it is not empty and the content type is not multipart/form-data
+		if shouldLogBody(ctx, logger, reqBody) {
+			logRequestBody(logger, reqBody)
 		}
 
 		if (c.Request().Method == http.MethodPost || c.Request().Method == http.MethodPatch) && len(resBody) > 0 {
@@ -70,6 +51,25 @@ func BodyDump() echo.MiddlewareFunc {
 	})
 }
 
+// shouldLogBody determines if the request body should be logged based on the content type and the presence of files in the request
+func shouldLogBody(ctx context.Context, logger zerolog.Logger, reqBody []byte) bool {
+	// If the request body is empty, there is nothing to log
+	if len(reqBody) == 0 {
+		return false
+	}
+
+	files, _ := objects.FilesFromContext(ctx)
+	if len(files) > 0 {
+		logger.Info().Msg("request contains a file, not logging request body")
+
+		return false
+	}
+
+	// default to logging the request body
+	return true
+}
+
+// logRequestBody logs the request body to the logger
 func logRequestBody(logger zerolog.Logger, reqBody []byte) {
 	var bodymap map[string]interface{}
 	if err := json.Unmarshal(reqBody, &bodymap); err == nil {

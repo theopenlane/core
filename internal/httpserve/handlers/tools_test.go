@@ -24,6 +24,7 @@ import (
 	"github.com/theopenlane/core/internal/entdb"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
+	"github.com/theopenlane/core/internal/middleware/objects"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	coreutils "github.com/theopenlane/core/pkg/testutils"
@@ -107,7 +108,7 @@ func (suite *HandlerTestSuite) SetupTest() {
 	suite.db = db
 
 	// add the client
-	suite.api, err = coreutils.TestClient(t, suite.db)
+	suite.api, err = coreutils.TestClient(t, suite.db, &objects.Upload{})
 	require.NoError(t, err)
 
 	// setup handler

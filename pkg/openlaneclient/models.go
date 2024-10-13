@@ -1089,11 +1089,9 @@ type CreateFileInput struct {
 	Md5Hash *string `json:"md5Hash,omitempty"`
 	// the content type of the HTTP request - may be different than MIME type as multipart-form can transmit multiple files and different types
 	DetectedContentType string `json:"detectedContentType"`
-	// the key parsed out of a multipart-form request; if we allow multiple files to be uploaded we may want our API specifications to require the use of different keys allowing us to perfdorm easier conditional evaluation on the key and what to do with the file based on key
+	// the key parsed out of a multipart-form request; if we allow multiple files to be uploaded we may want our API specifications to require the use of different keys allowing us to perform easier conditional evaluation on the key and what to do with the file based on key
 	StoreKey *string `json:"storeKey,omitempty"`
-	// the ULID provided in the http request indicating the ULID to correleate the file to
-	CorrelationID *string `json:"correlationID,omitempty"`
-	// the category type of the file, if any (e.g. contract, invoice, etc.)
+	// the category type of the file, if any (e.g. evidence, invoice, etc.)
 	CategoryType *string `json:"categoryType,omitempty"`
 	// the full URI of the file
 	URI *string `json:"uri,omitempty"`
@@ -5315,11 +5313,9 @@ type File struct {
 	Md5Hash *string `json:"md5Hash,omitempty"`
 	// the content type of the HTTP request - may be different than MIME type as multipart-form can transmit multiple files and different types
 	DetectedContentType string `json:"detectedContentType"`
-	// the key parsed out of a multipart-form request; if we allow multiple files to be uploaded we may want our API specifications to require the use of different keys allowing us to perfdorm easier conditional evaluation on the key and what to do with the file based on key
+	// the key parsed out of a multipart-form request; if we allow multiple files to be uploaded we may want our API specifications to require the use of different keys allowing us to perform easier conditional evaluation on the key and what to do with the file based on key
 	StoreKey *string `json:"storeKey,omitempty"`
-	// the ULID provided in the http request indicating the ULID to correleate the file to
-	CorrelationID *string `json:"correlationID,omitempty"`
-	// the category type of the file, if any (e.g. contract, invoice, etc.)
+	// the category type of the file, if any (e.g. evidence, invoice, etc.)
 	CategoryType *string `json:"categoryType,omitempty"`
 	// the full URI of the file
 	URI *string `json:"uri,omitempty"`
@@ -5405,11 +5401,9 @@ type FileHistory struct {
 	Md5Hash *string `json:"md5Hash,omitempty"`
 	// the content type of the HTTP request - may be different than MIME type as multipart-form can transmit multiple files and different types
 	DetectedContentType string `json:"detectedContentType"`
-	// the key parsed out of a multipart-form request; if we allow multiple files to be uploaded we may want our API specifications to require the use of different keys allowing us to perfdorm easier conditional evaluation on the key and what to do with the file based on key
+	// the key parsed out of a multipart-form request; if we allow multiple files to be uploaded we may want our API specifications to require the use of different keys allowing us to perform easier conditional evaluation on the key and what to do with the file based on key
 	StoreKey *string `json:"storeKey,omitempty"`
-	// the ULID provided in the http request indicating the ULID to correleate the file to
-	CorrelationID *string `json:"correlationID,omitempty"`
-	// the category type of the file, if any (e.g. contract, invoice, etc.)
+	// the category type of the file, if any (e.g. evidence, invoice, etc.)
 	CategoryType *string `json:"categoryType,omitempty"`
 	// the full URI of the file
 	URI *string `json:"uri,omitempty"`
@@ -5681,22 +5675,6 @@ type FileHistoryWhereInput struct {
 	StoreKeyNotNil       *bool    `json:"storeKeyNotNil,omitempty"`
 	StoreKeyEqualFold    *string  `json:"storeKeyEqualFold,omitempty"`
 	StoreKeyContainsFold *string  `json:"storeKeyContainsFold,omitempty"`
-	// correlation_id field predicates
-	CorrelationID             *string  `json:"correlationID,omitempty"`
-	CorrelationIDNeq          *string  `json:"correlationIDNEQ,omitempty"`
-	CorrelationIDIn           []string `json:"correlationIDIn,omitempty"`
-	CorrelationIDNotIn        []string `json:"correlationIDNotIn,omitempty"`
-	CorrelationIDGt           *string  `json:"correlationIDGT,omitempty"`
-	CorrelationIDGte          *string  `json:"correlationIDGTE,omitempty"`
-	CorrelationIDLt           *string  `json:"correlationIDLT,omitempty"`
-	CorrelationIDLte          *string  `json:"correlationIDLTE,omitempty"`
-	CorrelationIDContains     *string  `json:"correlationIDContains,omitempty"`
-	CorrelationIDHasPrefix    *string  `json:"correlationIDHasPrefix,omitempty"`
-	CorrelationIDHasSuffix    *string  `json:"correlationIDHasSuffix,omitempty"`
-	CorrelationIDIsNil        *bool    `json:"correlationIDIsNil,omitempty"`
-	CorrelationIDNotNil       *bool    `json:"correlationIDNotNil,omitempty"`
-	CorrelationIDEqualFold    *string  `json:"correlationIDEqualFold,omitempty"`
-	CorrelationIDContainsFold *string  `json:"correlationIDContainsFold,omitempty"`
 	// category_type field predicates
 	CategoryType             *string  `json:"categoryType,omitempty"`
 	CategoryTypeNeq          *string  `json:"categoryTypeNEQ,omitempty"`
@@ -6001,22 +5979,6 @@ type FileWhereInput struct {
 	StoreKeyNotNil       *bool    `json:"storeKeyNotNil,omitempty"`
 	StoreKeyEqualFold    *string  `json:"storeKeyEqualFold,omitempty"`
 	StoreKeyContainsFold *string  `json:"storeKeyContainsFold,omitempty"`
-	// correlation_id field predicates
-	CorrelationID             *string  `json:"correlationID,omitempty"`
-	CorrelationIDNeq          *string  `json:"correlationIDNEQ,omitempty"`
-	CorrelationIDIn           []string `json:"correlationIDIn,omitempty"`
-	CorrelationIDNotIn        []string `json:"correlationIDNotIn,omitempty"`
-	CorrelationIDGt           *string  `json:"correlationIDGT,omitempty"`
-	CorrelationIDGte          *string  `json:"correlationIDGTE,omitempty"`
-	CorrelationIDLt           *string  `json:"correlationIDLT,omitempty"`
-	CorrelationIDLte          *string  `json:"correlationIDLTE,omitempty"`
-	CorrelationIDContains     *string  `json:"correlationIDContains,omitempty"`
-	CorrelationIDHasPrefix    *string  `json:"correlationIDHasPrefix,omitempty"`
-	CorrelationIDHasSuffix    *string  `json:"correlationIDHasSuffix,omitempty"`
-	CorrelationIDIsNil        *bool    `json:"correlationIDIsNil,omitempty"`
-	CorrelationIDNotNil       *bool    `json:"correlationIDNotNil,omitempty"`
-	CorrelationIDEqualFold    *string  `json:"correlationIDEqualFold,omitempty"`
-	CorrelationIDContainsFold *string  `json:"correlationIDContainsFold,omitempty"`
 	// category_type field predicates
 	CategoryType             *string  `json:"categoryType,omitempty"`
 	CategoryTypeNeq          *string  `json:"categoryTypeNEQ,omitempty"`
@@ -12780,13 +12742,10 @@ type UpdateFileInput struct {
 	ClearMd5Hash *bool   `json:"clearMd5Hash,omitempty"`
 	// the content type of the HTTP request - may be different than MIME type as multipart-form can transmit multiple files and different types
 	DetectedContentType *string `json:"detectedContentType,omitempty"`
-	// the key parsed out of a multipart-form request; if we allow multiple files to be uploaded we may want our API specifications to require the use of different keys allowing us to perfdorm easier conditional evaluation on the key and what to do with the file based on key
+	// the key parsed out of a multipart-form request; if we allow multiple files to be uploaded we may want our API specifications to require the use of different keys allowing us to perform easier conditional evaluation on the key and what to do with the file based on key
 	StoreKey      *string `json:"storeKey,omitempty"`
 	ClearStoreKey *bool   `json:"clearStoreKey,omitempty"`
-	// the ULID provided in the http request indicating the ULID to correleate the file to
-	CorrelationID      *string `json:"correlationID,omitempty"`
-	ClearCorrelationID *bool   `json:"clearCorrelationID,omitempty"`
-	// the category type of the file, if any (e.g. contract, invoice, etc.)
+	// the category type of the file, if any (e.g. evidence, invoice, etc.)
 	CategoryType      *string `json:"categoryType,omitempty"`
 	ClearCategoryType *bool   `json:"clearCategoryType,omitempty"`
 	// the full URI of the file
