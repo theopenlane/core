@@ -1,0 +1,6 @@
+with-expecter: true
+dir: mocks
+all: true
+disable-version-string: true
+packages:
+  github.com/theopenlane/core/pkg/objects:

@@ -44,7 +44,7 @@ func TestObjects(t *testing.T) {
 		name               string
 		maxFileSize        int64
 		pathToFile         string
-		fn                 func(store *mocks.Storage, size int64)
+		fn                 func(store *mocks.MockStorage, size int64)
 		expectedStatusCode int
 		validMimeTypes     []string
 		// ignoreFormField instructs the test to not add the
@@ -56,7 +56,7 @@ func TestObjects(t *testing.T) {
 		{
 			name:        "uploading succeeds",
 			maxFileSize: 1024,
-			fn: func(store *mocks.Storage, size int64) {
+			fn: func(store *mocks.MockStorage, size int64) {
 				store.EXPECT().
 					Upload(context.Background(), mock.Anything, mock.Anything).
 					Return(&objects.UploadedFileMetadata{
@@ -71,7 +71,7 @@ func TestObjects(t *testing.T) {
 		{
 			name:        "upload fails because form field does not exist",
 			maxFileSize: 1024,
-			fn: func(store *mocks.Storage, size int64) {
+			fn: func(store *mocks.MockStorage, size int64) {
 				// leave empty because we should not be calling Upload
 			},
 			expectedStatusCode: http.StatusInternalServerError,
@@ -83,7 +83,7 @@ func TestObjects(t *testing.T) {
 			// this test case will use the WithIgnore option
 			name:        "upload middleware succeeds even if the form field does not exist",
 			maxFileSize: 1024,
-			fn: func(store *mocks.Storage, size int64) {
+			fn: func(store *mocks.MockStorage, size int64) {
 				// leave empty because we should not be calling Upload
 			},
 			expectedStatusCode: http.StatusAccepted,
@@ -95,7 +95,7 @@ func TestObjects(t *testing.T) {
 		{
 			name:        "upload fails because of mimetype validation constraints",
 			maxFileSize: 1024,
-			fn: func(store *mocks.Storage, size int64) {
+			fn: func(store *mocks.MockStorage, size int64) {
 				// leave empty because we should not be calling Upload
 			},
 			expectedStatusCode: http.StatusInternalServerError,
@@ -105,7 +105,7 @@ func TestObjects(t *testing.T) {
 		{
 			name:        "upload fails because of storage layer",
 			maxFileSize: 1024,
-			fn: func(store *mocks.Storage, size int64) {
+			fn: func(store *mocks.MockStorage, size int64) {
 				store.EXPECT().
 					Upload(context.Background(), mock.Anything, mock.Anything).
 					Return(&objects.UploadedFileMetadata{
@@ -120,7 +120,7 @@ func TestObjects(t *testing.T) {
 		{
 			name:        "upload fails because file is too large",
 			maxFileSize: 1024,
-			fn: func(store *mocks.Storage, size int64) {
+			fn: func(store *mocks.MockStorage, size int64) {
 				// leave empty because we should not be calling Upload
 			},
 			expectedStatusCode: http.StatusInternalServerError,
@@ -131,7 +131,7 @@ func TestObjects(t *testing.T) {
 
 	for _, v := range tt {
 		t.Run(v.name, func(t *testing.T) {
-			storage := mocks.NewStorage(t)
+			storage := mocks.NewMockStorage(t)
 
 			opts := []objects.Option{
 				objects.WithMaxFileSize(v.maxFileSize),

@@ -67,7 +67,6 @@ require (
 	github.com/theopenlane/utils v0.3.0
 	github.com/vektah/gqlparser/v2 v2.5.17
 	github.com/wundergraph/graphql-go-tools v1.67.4
-	go.uber.org/mock v0.4.0
 	gocloud.dev v0.40.0
 	golang.org/x/crypto v0.28.0
 	golang.org/x/oauth2 v0.23.0
