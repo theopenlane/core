@@ -195,6 +195,53 @@ func (_c *MockStorage_GetPresignedURL_Call) RunAndReturn(run func(context.Contex
 	return _c
 }
 
+// GetScheme provides a mock function with given fields:
+func (_m *MockStorage) GetScheme() *string {
+	ret := _m.Called()
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetScheme")
+	}
+
+	var r0 *string
+	if rf, ok := ret.Get(0).(func() *string); ok {
+		r0 = rf()
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*string)
+		}
+	}
+
+	return r0
+}
+
+// MockStorage_GetScheme_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetScheme'
+type MockStorage_GetScheme_Call struct {
+	*mock.Call
+}
+
+// GetScheme is a helper method to define mock.On call
+func (_e *MockStorage_Expecter) GetScheme() *MockStorage_GetScheme_Call {
+	return &MockStorage_GetScheme_Call{Call: _e.mock.On("GetScheme")}
+}
+
+func (_c *MockStorage_GetScheme_Call) Run(run func()) *MockStorage_GetScheme_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run()
+	})
+	return _c
+}
+
+func (_c *MockStorage_GetScheme_Call) Return(_a0 *string) *MockStorage_GetScheme_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
+func (_c *MockStorage_GetScheme_Call) RunAndReturn(run func() *string) *MockStorage_GetScheme_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // ManagerUpload provides a mock function with given fields: _a0, _a1
 func (_m *MockStorage) ManagerUpload(_a0 context.Context, _a1 [][]byte) error {
 	ret := _m.Called(_a0, _a1)

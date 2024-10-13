@@ -16,15 +16,14 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 	"github.com/theopenlane/core/pkg/objects"
-	"github.com/theopenlane/core/pkg/objects/storage"
 )
 
 // Upload is the object that handles the file upload process
 type Upload struct {
 	// ObjectStorage is the object storage configuration
 	ObjectStorage *objects.Objects
-	// Storage is the storage type to use, in this case, S3
-	Storage *storage.S3Store
+	// Storage is the storage type to use, this can be S3 or Disk
+	Storage objects.Storage
 }
 
 // FileUpload is the object that holds the file information
@@ -338,10 +337,10 @@ func (u *Upload) createFile(ctx context.Context, f FileUpload) (*ent.File, error
 		DetectedContentType:   contentType,
 		Md5Hash:               &md5Hash,
 		StoreKey:              &f.Key,
-		StorageScheme:         &u.Storage.Scheme,
+		StorageScheme:         u.Storage.GetScheme(),
 	}
 
-	// get file contents
+	// get file contents to store in the database
 	contents, err := objects.StreamToByte(f.File)
 	if err != nil {
 		log.Error().Err(err).Str("file", f.Filename).Msg("failed to read file contents")

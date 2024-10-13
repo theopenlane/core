@@ -21,6 +21,9 @@ var (
 	presignedURLTimeout = 15 * time.Minute
 )
 
+// ensure S3Store satisfies the Storage interface
+var _ objects.Storage = &S3Store{}
+
 // S3Options is used to configure the S3Store
 type S3Options struct {
 	// Bucket to store objects in
@@ -184,4 +187,9 @@ func (s *S3Store) GetPresignedURLWithCustomDuration(ctx context.Context, key str
 	log.Debug().Str("presigned_url", presignURL.URL).Msg("presigned URL created")
 
 	return presignURL.URL, nil
+}
+
+// GetScheme returns the scheme of the storage backend
+func (s *S3Store) GetScheme() *string {
+	return &s.Scheme
 }

@@ -16,6 +16,8 @@ type Storage interface {
 	Download(context.Context, string, *DownloadFileOptions) (*DownloadFileMetadata, io.ReadCloser, error)
 	// GetPresignedURL is used to get a presigned URL for a file in the storage backend
 	GetPresignedURL(context.Context, string) (string, error)
+	// GetScheme returns the scheme of the storage backend
+	GetScheme() *string
 	io.Closer
 }
 

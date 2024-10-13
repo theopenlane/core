@@ -9,13 +9,21 @@ import (
 	"os"
 
 	"github.com/gabriel-vasile/mimetype"
+	"github.com/rs/zerolog/log"
 )
 
 // StreamToByte function reads the content of the provided io.Reader and returns it as a byte slice
-func StreamToByte(stream io.Reader) ([]byte, error) {
+func StreamToByte(stream io.ReadSeeker) ([]byte, error) {
 	buf := new(bytes.Buffer)
 
 	if _, err := buf.ReadFrom(stream); err != nil {
+		return nil, err
+	}
+
+	// reset the file to the beginning
+	if _, err := stream.Seek(0, io.SeekStart); err != nil {
+		log.Error().Err(err).Msg("failed to reset file")
+
 		return nil, err
 	}
 
