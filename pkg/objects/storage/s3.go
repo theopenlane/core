@@ -163,6 +163,11 @@ func (s *S3Store) Download(ctx context.Context, key string, opts *objects.Downlo
 
 // PresignedURL returns a URL that provides access to a file for 15 minutes
 func (s *S3Store) GetPresignedURL(ctx context.Context, key string) (string, error) {
+	return s.GetPresignedURLWithCustomDuration(ctx, key, presignedURLTimeout)
+}
+
+// PresignedURL returns a URL that provides access to a file with a custom duration
+func (s *S3Store) GetPresignedURLWithCustomDuration(ctx context.Context, key string, expires time.Duration) (string, error) {
 	client := s3.NewPresignClient(s.Client)
 
 	presignURL, err := client.PresignGetObject(context.Background(), &s3.GetObjectInput{
@@ -170,7 +175,7 @@ func (s *S3Store) GetPresignedURL(ctx context.Context, key string) (string, erro
 		Key:                        aws.String(key),
 		ResponseContentDisposition: toPointer("attachment"),
 	}, func(opts *s3.PresignOptions) {
-		opts.Expires = presignedURLTimeout
+		opts.Expires = expires
 	})
 	if err != nil {
 		return "", err

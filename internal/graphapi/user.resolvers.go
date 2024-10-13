@@ -15,7 +15,7 @@ import (
 )
 
 // CreateUser is the resolver for the createUser field.
-func (r *mutationResolver) CreateUser(ctx context.Context, input generated.CreateUserInput, avatarURL *graphql.Upload) (*UserCreatePayload, error) {
+func (r *mutationResolver) CreateUser(ctx context.Context, input generated.CreateUserInput, avatarFile *graphql.Upload) (*UserCreatePayload, error) {
 	// TODO: look at allowing this resolver to invite the user instead of creating them directly
 	// for now, return permission denied
 	return nil, ErrPermissionDenied

@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/objects"
 )
 
 const (
@@ -54,6 +55,17 @@ func HookUser() ent.Hook {
 
 						m.SetDisplayName(displayName)
 					}
+				}
+			}
+
+			// check for uploaded files (e.g. avatar image)
+			fileIDs := objects.GetFileIDsFromContext(ctx)
+
+			if len(fileIDs) > 0 {
+				m.AddFileIDs(fileIDs...)
+
+				if err := checkAvatarFile(ctx, m); err != nil {
+					return nil, err
 				}
 			}
 
@@ -237,4 +249,20 @@ func defaultUserSettings(ctx context.Context, user *generated.UserMutation) (str
 	}
 
 	return userSetting.ID, nil
+}
+
+func checkAvatarFile(ctx context.Context, m *generated.UserMutation) error {
+	file, _ := objects.FilesFromContextWithKey(ctx, "avatarFile")
+
+	if file == nil {
+		return nil
+	}
+
+	if len(file) > 1 {
+		return ErrTooManyAvatarFiles
+	}
+
+	m.SetAvatarLocalFile(file[0].ID)
+
+	return nil
 }

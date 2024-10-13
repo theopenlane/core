@@ -48,3 +48,23 @@ func FilesFromContextWithKey(ctx context.Context, key string) ([]File, error) {
 
 	return files[key], nil
 }
+
+// GetFileIDsFromContext returns the file IDs from the context that are associated with the request
+func GetFileIDsFromContext(ctx context.Context) []string {
+	// ignore the error, if the files are not found in the context, we just skip the file processing
+	files, _ := FilesFromContext(ctx) //nolint:errcheck
+
+	if len(files) == 0 {
+		return []string{}
+	}
+
+	fileIDs := make([]string, 0, len(files))
+
+	for _, fileKeys := range files {
+		for _, file := range fileKeys {
+			fileIDs = append(fileIDs, file.ID)
+		}
+	}
+
+	return fileIDs
+}

@@ -48,7 +48,7 @@ func injectFileUploader(u *objects.Upload) graphql.OperationMiddleware {
 		// get the uploads from the variables
 		// gqlgen will parse the variables and convert the graphql.Upload to a struct with the file data
 		uploads := []objects.FileUpload{}
-		for _, v := range op.Variables {
+		for k, v := range op.Variables {
 			up, ok := v.(graphql.Upload)
 			if ok {
 				fileUpload := objects.FileUpload{
@@ -56,6 +56,7 @@ func injectFileUploader(u *objects.Upload) graphql.OperationMiddleware {
 					Filename:    up.Filename,
 					Size:        up.Size,
 					ContentType: up.ContentType,
+					Key:         k,
 				}
 
 				uploads = append(uploads, fileUpload)

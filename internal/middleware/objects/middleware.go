@@ -37,6 +37,8 @@ type FileUpload struct {
 	Size int64
 	// ContentType is the content type of the file from the header
 	ContentType string
+	// Key is the field name from the graph input or multipart form
+	Key string
 }
 
 // Config defines the config for Mime middleware
@@ -141,7 +143,7 @@ func (u *Upload) multiformParseForm(w http.ResponseWriter, r *http.Request, keys
 				return nil
 			}
 
-			files, err := parse(fileHeaders)
+			files, err := parse(fileHeaders, key)
 			if err != nil {
 				log.Error().Err(err).Str("key", key).Msg("failed to parse files from headers")
 			}
@@ -165,7 +167,7 @@ func (u *Upload) multiformParseForm(w http.ResponseWriter, r *http.Request, keys
 }
 
 // parse handles the parses the multipart form and returns the files to be uploaded
-func parse(fileHeaders []*multipart.FileHeader) ([]FileUpload, error) {
+func parse(fileHeaders []*multipart.FileHeader, key string) ([]FileUpload, error) {
 	files := []FileUpload{}
 
 	for _, header := range fileHeaders {
@@ -182,6 +184,7 @@ func parse(fileHeaders []*multipart.FileHeader) ([]FileUpload, error) {
 			Filename:    header.Filename,
 			Size:        header.Size,
 			ContentType: header.Header.Get("Content-Type"),
+			Key:         key,
 		}
 
 		files = append(files, fileUpload)
@@ -206,8 +209,8 @@ func (u *Upload) upload(ctx context.Context, files []FileUpload) ([]objects.File
 		// generate the uploaded file name
 		uploadedFileName := u.ObjectStorage.NameFuncGenerator(entFile.ID + "_" + f.Filename)
 		fileData := objects.File{
-			ID: entFile.ID,
-			// FieldName:        key,
+			ID:               entFile.ID,
+			FieldName:        f.Key,
 			OriginalName:     f.Filename,
 			UploadedFileName: uploadedFileName,
 			MimeType:         entFile.DetectedMimeType,
@@ -334,8 +337,8 @@ func (u *Upload) createFile(ctx context.Context, f FileUpload) (*ent.File, error
 		DetectedMimeType:      &f.ContentType,
 		DetectedContentType:   contentType,
 		Md5Hash:               &md5Hash,
-		// StoreKey:              &f.,
-		// StorageScheme: u.Storage.Scheme,
+		StoreKey:              &f.Key,
+		StorageScheme:         &u.Storage.Scheme,
 	}
 
 	// get file contents

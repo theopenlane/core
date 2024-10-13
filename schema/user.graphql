@@ -19,7 +19,7 @@ extend type Mutation{
         values of the user
         """
         input: CreateUserInput!
-        avatarURL: Upload
+        avatarFile: Upload
     ): UserCreatePayload!
     """
     Update an existing user
