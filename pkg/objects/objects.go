@@ -19,7 +19,7 @@ type Storage interface {
 	io.Closer
 }
 
-//go:generate mockgen -destination=mocks/objects.go -source=objects.go -package mocks
+//go:generate mockery --output=mocks --all --with-expecter
 
 // Objects is the definition for handling objects and file uploads
 type Objects struct {
