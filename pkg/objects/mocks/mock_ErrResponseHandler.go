@@ -21,17 +21,17 @@ func (_m *MockErrResponseHandler) EXPECT() *MockErrResponseHandler_Expecter {
 	return &MockErrResponseHandler_Expecter{mock: &_m.Mock}
 }
 
-// Execute provides a mock function with given fields: _a0
-func (_m *MockErrResponseHandler) Execute(_a0 error) http.HandlerFunc {
-	ret := _m.Called(_a0)
+// Execute provides a mock function with given fields: err, statusCode
+func (_m *MockErrResponseHandler) Execute(err error, statusCode int) http.HandlerFunc {
+	ret := _m.Called(err, statusCode)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Execute")
 	}
 
 	var r0 http.HandlerFunc
-	if rf, ok := ret.Get(0).(func(error) http.HandlerFunc); ok {
-		r0 = rf(_a0)
+	if rf, ok := ret.Get(0).(func(error, int) http.HandlerFunc); ok {
+		r0 = rf(err, statusCode)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(http.HandlerFunc)
@@ -47,14 +47,15 @@ type MockErrResponseHandler_Execute_Call struct {
 }
 
 // Execute is a helper method to define mock.On call
-//   - _a0 error
-func (_e *MockErrResponseHandler_Expecter) Execute(_a0 interface{}) *MockErrResponseHandler_Execute_Call {
-	return &MockErrResponseHandler_Execute_Call{Call: _e.mock.On("Execute", _a0)}
+//   - err error
+//   - statusCode int
+func (_e *MockErrResponseHandler_Expecter) Execute(err interface{}, statusCode interface{}) *MockErrResponseHandler_Execute_Call {
+	return &MockErrResponseHandler_Execute_Call{Call: _e.mock.On("Execute", err, statusCode)}
 }
 
-func (_c *MockErrResponseHandler_Execute_Call) Run(run func(_a0 error)) *MockErrResponseHandler_Execute_Call {
+func (_c *MockErrResponseHandler_Execute_Call) Run(run func(err error, statusCode int)) *MockErrResponseHandler_Execute_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(error))
+		run(args[0].(error), args[1].(int))
 	})
 	return _c
 }
@@ -64,7 +65,7 @@ func (_c *MockErrResponseHandler_Execute_Call) Return(_a0 http.HandlerFunc) *Moc
 	return _c
 }
 
-func (_c *MockErrResponseHandler_Execute_Call) RunAndReturn(run func(error) http.HandlerFunc) *MockErrResponseHandler_Execute_Call {
+func (_c *MockErrResponseHandler_Execute_Call) RunAndReturn(run func(error, int) http.HandlerFunc) *MockErrResponseHandler_Execute_Call {
 	_c.Call.Return(run)
 	return _c
 }

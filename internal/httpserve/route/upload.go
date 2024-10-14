@@ -27,7 +27,9 @@ func registerFileUploadRoute(router *Router) (err error) {
 		},
 	}
 
-	if err := router.AddEchoOnlyRoute(path, method, route); err != nil {
+	uploadOperation := router.Handler.BindUploadBander()
+
+	if err := router.Addv1Route(path, method, uploadOperation, route); err != nil {
 		return err
 	}
 

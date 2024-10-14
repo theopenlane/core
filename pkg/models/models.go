@@ -719,6 +719,10 @@ var ExampleAccountRolesOrganizationReply = AccountRolesOrganizationReply{
 // FILES
 // =========
 
+type UploadFilesRequest struct {
+	UploadFile []byte `form:"uploadFile"`
+}
+
 type UploadFilesReply struct {
 	rout.Reply
 	Message   string `json:"message,omitempty"`
@@ -732,6 +736,10 @@ type File struct {
 	Size         int64  `json:"size,omitempty"`
 	MimeType     string `json:"mime_type,omitempty"`
 	PresignedURL string `json:"presigned_url,omitempty"`
+}
+
+var ExampleUploadFileRequest = UploadFilesRequest{
+	UploadFile: []byte("file context"),
 }
 
 // ExampleLoginSuccessResponse is an example of a successful login response for OpenAPI documentation
