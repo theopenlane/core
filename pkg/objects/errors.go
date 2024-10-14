@@ -7,7 +7,7 @@ import (
 
 // ErrResponseHandler is a custom error that should be used to handle errors when
 // an upload fails
-type ErrResponseHandler func(error) http.HandlerFunc
+type ErrResponseHandler func(err error, statusCode int) http.HandlerFunc
 
 var (
 	// ErrFilesNotFound is returned when files could not be found in key from http request

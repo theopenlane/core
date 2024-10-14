@@ -15,8 +15,11 @@ import (
 	"testing"
 
 	"github.com/sebdah/goldie/v2"
-	"github.com/stretchr/testify/mock"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"github.com/test-go/testify/mock"
+
+	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/pkg/objects"
 	mocks "github.com/theopenlane/core/pkg/objects/mocks"
@@ -39,7 +42,7 @@ func verifyMatch(t *testing.T, v interface{}) {
 	g.Assert(t, t.Name(), b.Bytes())
 }
 
-func TestObjects(t *testing.T) {
+func TestFileUploadMiddleware(t *testing.T) {
 	tt := []struct {
 		name               string
 		maxFileSize        int64
@@ -52,6 +55,7 @@ func TestObjects(t *testing.T) {
 		ignoreFormField bool
 
 		useIgnoreSkipOpt bool
+		uploadExpected   bool
 	}{
 		{
 			name:        "uploading succeeds",
@@ -67,6 +71,7 @@ func TestObjects(t *testing.T) {
 			expectedStatusCode: http.StatusAccepted,
 			pathToFile:         "objects.md",
 			validMimeTypes:     []string{"text/markdown", "text/plain", "text/plain; charset=utf-8"},
+			uploadExpected:     true,
 		},
 		{
 			name:        "upload fails because form field does not exist",
@@ -74,10 +79,11 @@ func TestObjects(t *testing.T) {
 			fn: func(store *mocks.MockStorage, size int64) {
 				// leave empty because we should not be calling Upload
 			},
-			expectedStatusCode: http.StatusInternalServerError,
+			expectedStatusCode: http.StatusOK,
 			pathToFile:         "objects.md",
 			validMimeTypes:     []string{"image/png", "application/pdf"},
 			ignoreFormField:    true,
+			uploadExpected:     false,
 		},
 		{
 			// this test case will use the WithIgnore option
@@ -91,6 +97,7 @@ func TestObjects(t *testing.T) {
 			validMimeTypes:     []string{"image/png", "application/pdf"},
 			ignoreFormField:    true,
 			useIgnoreSkipOpt:   true,
+			uploadExpected:     false,
 		},
 		{
 			name:        "upload fails because of mimetype validation constraints",
@@ -98,9 +105,10 @@ func TestObjects(t *testing.T) {
 			fn: func(store *mocks.MockStorage, size int64) {
 				// leave empty because we should not be calling Upload
 			},
-			expectedStatusCode: http.StatusInternalServerError,
+			expectedStatusCode: http.StatusBadRequest,
 			pathToFile:         "objects.md",
 			validMimeTypes:     []string{"image/png", "application/pdf"},
+			uploadExpected:     false,
 		},
 		{
 			name:        "upload fails because of storage layer",
@@ -110,12 +118,13 @@ func TestObjects(t *testing.T) {
 					Upload(context.Background(), mock.Anything, mock.Anything).
 					Return(&objects.UploadedFileMetadata{
 						Size: size,
-					}, errors.New("could not upload file")). // nolint:err113
+					}, errors.New("could not upload file to storage backend")). // nolint:err113
 					Times(1)
 			},
-			expectedStatusCode: http.StatusInternalServerError,
+			expectedStatusCode: http.StatusBadRequest,
 			pathToFile:         "objects.md",
 			validMimeTypes:     []string{"text/markdown", "text/plain", "text/plain; charset=utf-8"},
+			uploadExpected:     false,
 		},
 		{
 			name:        "upload fails because file is too large",
@@ -123,9 +132,10 @@ func TestObjects(t *testing.T) {
 			fn: func(store *mocks.MockStorage, size int64) {
 				// leave empty because we should not be calling Upload
 			},
-			expectedStatusCode: http.StatusInternalServerError,
+			expectedStatusCode: http.StatusBadRequest,
 			pathToFile:         "image.jpg",
 			validMimeTypes:     []string{"image/jpeg"},
+			uploadExpected:     false,
 		},
 	}
 
@@ -173,7 +183,15 @@ func TestObjects(t *testing.T) {
 			r := httptest.NewRequest(http.MethodPatch, "/", buffer)
 			r.Header.Set("Content-Type", multipartWriter.FormDataContentType())
 
-			handler.UploadHandler("form-field")(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			upload := &objects.Upload{
+				ObjectStorage: handler,
+				Uploader:      mockUploader(),
+			}
+
+			objects.FileUploadMiddleware(objects.UploadConfig{
+				Keys:   []string{"form-field"},
+				Upload: upload,
+			})(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				if v.useIgnoreSkipOpt {
 					w.WriteHeader(http.StatusAccepted)
 					fmt.Fprintf(w, "skipping check since we did not upload any file")
@@ -181,13 +199,19 @@ func TestObjects(t *testing.T) {
 				}
 
 				file, err := objects.FilesFromContextWithKey(r.Context(), "form-field")
+				if v.uploadExpected {
+					require.NoError(t, err)
 
-				require.NoError(t, err)
+					require.NoError(t, err)
+					require.Len(t, file, 1)
 
-				require.Equal(t, v.pathToFile, file[0].OriginalName)
+					assert.Equal(t, v.pathToFile, file[0].OriginalName)
 
-				w.WriteHeader(http.StatusAccepted)
-				fmt.Fprintf(w, "successfully uploaded the file")
+					w.WriteHeader(http.StatusAccepted)
+					fmt.Fprintf(w, "successfully uploaded the file")
+				} else {
+					require.Error(t, err)
+				}
 			})).ServeHTTP(recorder, r)
 
 			result := recorder.Result()
@@ -199,5 +223,50 @@ func TestObjects(t *testing.T) {
 
 			verifyMatch(t, recorder)
 		})
+	}
+}
+
+func mockUploader() func(ctx context.Context, u *objects.Upload, files []objects.FileUpload) ([]objects.File, error) {
+	return func(ctx context.Context, u *objects.Upload, files []objects.FileUpload) ([]objects.File, error) {
+		uploadedFiles := make([]objects.File, 0, len(files))
+
+		for _, f := range files {
+			fileID := ulids.New().String()
+			uploadedFileName := u.ObjectStorage.NameFuncGenerator(fileID + "_" + f.Filename)
+
+			mimeType, err := objects.DetectContentType(f.File)
+			if err != nil {
+				return nil, err
+			}
+
+			fileData := objects.File{
+				ID:               fileID,
+				FieldName:        f.Key,
+				OriginalName:     f.Filename,
+				UploadedFileName: uploadedFileName,
+				MimeType:         mimeType,
+			}
+
+			// validate the file
+			if err := u.ObjectStorage.ValidationFunc(fileData); err != nil {
+				return nil, err
+			}
+
+			metadata, err := u.ObjectStorage.Storage.Upload(ctx, files[0].File, &objects.UploadFileOptions{
+				FileName: uploadedFileName,
+			})
+			if err != nil {
+				return nil, err
+			}
+
+			// add metadata to file information
+			fileData.Size = metadata.Size
+			fileData.FolderDestination = metadata.FolderDestination
+			fileData.StorageKey = metadata.Key
+
+			uploadedFiles = append(uploadedFiles, fileData)
+		}
+
+		return uploadedFiles, nil
 	}
 }

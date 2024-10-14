@@ -214,9 +214,9 @@ func WithGraphRoute(srv *server.Server, c *ent.Client) ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
 		// Setup Graph API Handlers
 		r := graphapi.NewResolver(c,
-			&objmw.Upload{
+			&objects.Upload{
 				ObjectStorage: s.Config.Handler.ObjectStorage,
-				Storage:       s.Config.Handler.Storage,
+				Uploader:      objmw.Upload,
 			}).
 			WithExtensions(s.Config.Settings.Server.EnableGraphExtensions)
 
@@ -431,21 +431,22 @@ func WithObjectStorage() ServerOption {
 				log.Panic().Err(err).Msg("Error creating object storage")
 			}
 
+			// TODO: do I need to add this to the server options?
 			s.Config.Handler.ObjectStorage = handler
-			s.Config.Handler.Storage = s3store
+			s.Config.Handler.ObjectStorage.Storage = s3store
 
-			u := objmw.Upload{
+			u := objects.Upload{
 				ObjectStorage: handler,
-				Storage:       s3store,
+				Uploader:      objmw.Upload,
 			}
 
-			cf := objmw.Config{
+			cf := objects.UploadConfig{
 				Keys:   []string{"uploadFile"},
 				Upload: &u,
 			}
 
 			// add upload middleware to authMW, non-authenticated endpoints will not have this middleware
-			uploadMw := echo.WrapMiddleware(objmw.FileUploadMiddleware(cf))
+			uploadMw := echo.WrapMiddleware(objects.FileUploadMiddleware(cf))
 
 			s.Config.Handler.AuthMiddleware = append(s.Config.Handler.AuthMiddleware, uploadMw)
 		}

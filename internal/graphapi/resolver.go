@@ -22,8 +22,8 @@ import (
 	"github.com/wundergraph/graphql-go-tools/pkg/playground"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/middleware/objects"
 	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/pkg/objects"
 )
 
 // This file will not be regenerated automatically.

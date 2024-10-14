@@ -38,11 +38,11 @@ var (
 	defaultFileUploadMaxSize int64 = 10 << 20
 	defaultMaxMemorySize     int64 = 32 << 20
 
-	defaultErrorResponseHandler ErrResponseHandler = func(err error) http.HandlerFunc {
+	defaultErrorResponseHandler ErrResponseHandler = func(err error, statusCode int) http.HandlerFunc {
 		return func(w http.ResponseWriter, _ *http.Request) {
 			w.Header().Set("Content-Type", "application/json")
-			w.WriteHeader(http.StatusInternalServerError)
-			fmt.Fprintf(w, `{"message" : "could not upload file", "error" : %s}`, err.Error())
+			w.WriteHeader(statusCode)
+			fmt.Fprintf(w, `{"message" : "could not upload file", "error" : "%s"}`, err.Error())
 		}
 	}
 )

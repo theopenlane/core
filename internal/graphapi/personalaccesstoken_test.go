@@ -11,7 +11,7 @@ import (
 	"github.com/stretchr/testify/require"
 	mock_fga "github.com/theopenlane/iam/fgax/mockery"
 
-	"github.com/theopenlane/core/internal/middleware/objects"
+	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 
 	"github.com/theopenlane/core/pkg/testutils"
