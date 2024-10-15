@@ -88,7 +88,6 @@ func jsonOutput(out any) error {
 // tableOutput prints the output in a table format
 func tableOutput(out []openlaneclient.File) {
 	// create a table writer
-	// TODO: add additional columns to the table writer
 	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "URI", "ProvidedFileName", "CategoryType", "DetectedMimeType", "FileExtension", "StoragePath")
 	for _, i := range out {
 		writer.AddRow(i.ID, *i.URI, i.ProvidedFileName, *i.Md5Hash, *i.DetectedMimeType, i.ProvidedFileExtension, *i.StoragePath)

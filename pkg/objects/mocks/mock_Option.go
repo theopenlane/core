@@ -4,7 +4,6 @@ package mocks
 
 import (
 	mock "github.com/stretchr/testify/mock"
-
 	objects "github.com/theopenlane/core/pkg/objects"
 )
 

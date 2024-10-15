@@ -252,16 +252,20 @@ func defaultUserSettings(ctx context.Context, user *generated.UserMutation) (str
 
 // checkAvatarFile checks if an avatar file is provided and sets the local file ID
 func checkAvatarFile(ctx context.Context, m *generated.UserMutation) error {
+	// get the file from the context, if it exists
 	file, _ := objects.FilesFromContextWithKey(ctx, "avatarFile")
 
+	// return early if no file is provided
 	if file == nil {
 		return nil
 	}
 
+	// we should only have one file
 	if len(file) > 1 {
 		return ErrTooManyAvatarFiles
 	}
 
+	// this should always be true, but check just in case
 	if file[0].FieldName == "avatarFile" {
 		m.SetAvatarLocalFileID(file[0].ID)
 	}

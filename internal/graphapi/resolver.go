@@ -149,6 +149,8 @@ func WithTransactions(h *handler.Server, d *ent.Client) {
 	h.Use(entgql.Transactioner{TxOpener: d})
 }
 
+// WithFileUploader adds the file uploader to the graphql handler
+// this will handle the file upload process for the multipart form
 func WithFileUploader(h *handler.Server, u *objects.Objects) {
 	h.AroundOperations(injectFileUploader(u))
 }

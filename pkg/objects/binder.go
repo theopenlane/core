@@ -14,8 +14,10 @@ var (
 	typeMultipartSliceFileHeader = reflect.TypeOf(([]*multipart.FileHeader)(nil))
 )
 
+// BindFunc is a function that binds the request body to the struct pointer
 type BindFunc func(echo.Context, interface{}) error
 
+// Bind binds the request body to the struct pointer
 func (fn BindFunc) Bind(ctx echo.Context, i interface{}) error {
 	return fn(ctx, i)
 }
@@ -46,7 +48,7 @@ func NewFileBinder(b echo.Binder) echo.Binder {
 	})
 }
 
-// BindFile binds the form files to the struct fields.
+// BindFile binds the form files to the struct fields
 func BindFile(i interface{}, ctx echo.Context, files map[string][]*multipart.FileHeader) error {
 	iValue := reflect.Indirect(reflect.ValueOf(i))
 	// check bind type is struct pointer

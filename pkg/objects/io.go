@@ -65,6 +65,10 @@ func StreamToByte(stream io.ReadSeeker) ([]byte, error) {
 
 // ReaderToSeeker function takes an io.Reader as input and returns an io.ReadSeeker which can be used to upload files to the object storage
 func ReaderToSeeker(r io.Reader) (io.ReadSeeker, error) {
+	if r == nil {
+		return nil, nil
+	}
+
 	tmpfile, err := os.CreateTemp("", "upload-")
 	if err != nil {
 		return nil, err

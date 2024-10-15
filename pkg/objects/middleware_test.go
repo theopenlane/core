@@ -202,6 +202,84 @@ func TestFileUploadMiddleware(t *testing.T) {
 	}
 }
 
+func TestCreateURI(t *testing.T) {
+	tests := []struct {
+		scheme      string
+		destination string
+		key         string
+		expectedURI string
+	}{
+		{
+			scheme:      "https://",
+			destination: "example.com",
+			key:         "file123",
+			expectedURI: "https://example.com/file123",
+		},
+		{
+			scheme:      "s3://",
+			destination: "bucket",
+			key:         "upload/file456",
+			expectedURI: "s3://bucket/upload/file456",
+		},
+		{
+			scheme:      "ftp://",
+			destination: "ftp.example.com",
+			key:         "dir/file789",
+			expectedURI: "ftp://ftp.example.com/dir/file789",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(fmt.Sprintf("%s%s/%s", tt.scheme, tt.destination, tt.key), func(t *testing.T) {
+			uri := objects.CreateURI(tt.scheme, tt.destination, tt.key)
+			assert.Equal(t, tt.expectedURI, uri)
+		})
+	}
+}
+
+func TestFormatFileSize(t *testing.T) {
+	tests := []struct {
+		size         int64
+		expectedSize string
+	}{
+		{
+			size:         1024,
+			expectedSize: "1.00 KB",
+		},
+		{
+			size:         1048576,
+			expectedSize: "1.00 MB",
+		},
+		{
+			size:         1073741824,
+			expectedSize: "1.00 GB",
+		},
+		{
+			size:         512,
+			expectedSize: "512 bytes",
+		},
+		{
+			size:         1536,
+			expectedSize: "1.50 KB",
+		},
+		{
+			size:         1572864,
+			expectedSize: "1.50 MB",
+		},
+		{
+			size:         1610612736,
+			expectedSize: "1.50 GB",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(fmt.Sprintf("%d bytes", tt.size), func(t *testing.T) {
+			result := objects.FormatFileSize(tt.size)
+			assert.Equal(t, tt.expectedSize, result)
+		})
+	}
+}
+
 func verifyMatch(t *testing.T, v interface{}) {
 	g := goldie.New(t, goldie.WithFixtureDir("./testdata/golden"))
 

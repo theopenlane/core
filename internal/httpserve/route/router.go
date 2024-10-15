@@ -60,6 +60,7 @@ func WithOptions(opts ...RouterOption) RouterOption {
 	}
 }
 
+// WithHideBanner is a RouterOption that allows the banner to be hidden on the echo server
 func WithHideBanner() RouterOption {
 	return func(r *Router) {
 		r.StartConfig = &echo.StartConfig{
