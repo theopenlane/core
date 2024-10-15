@@ -54,6 +54,8 @@ type UserHistory struct {
 	AvatarRemoteURL *string `json:"avatar_remote_url,omitempty"`
 	// The user's local avatar file
 	AvatarLocalFile *string `json:"avatar_local_file,omitempty"`
+	// The user's local avatar file id
+	AvatarLocalFileID *string `json:"avatar_local_file_id,omitempty"`
 	// The time the user's (local) avatar was last updated
 	AvatarUpdatedAt *time.Time `json:"avatar_updated_at,omitempty"`
 	// the time the user was last seen
@@ -78,7 +80,7 @@ func (*UserHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case userhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case userhistory.FieldID, userhistory.FieldRef, userhistory.FieldCreatedBy, userhistory.FieldUpdatedBy, userhistory.FieldDeletedBy, userhistory.FieldMappingID, userhistory.FieldEmail, userhistory.FieldFirstName, userhistory.FieldLastName, userhistory.FieldDisplayName, userhistory.FieldAvatarRemoteURL, userhistory.FieldAvatarLocalFile, userhistory.FieldPassword, userhistory.FieldSub, userhistory.FieldAuthProvider, userhistory.FieldRole:
+		case userhistory.FieldID, userhistory.FieldRef, userhistory.FieldCreatedBy, userhistory.FieldUpdatedBy, userhistory.FieldDeletedBy, userhistory.FieldMappingID, userhistory.FieldEmail, userhistory.FieldFirstName, userhistory.FieldLastName, userhistory.FieldDisplayName, userhistory.FieldAvatarRemoteURL, userhistory.FieldAvatarLocalFile, userhistory.FieldAvatarLocalFileID, userhistory.FieldPassword, userhistory.FieldSub, userhistory.FieldAuthProvider, userhistory.FieldRole:
 			values[i] = new(sql.NullString)
 		case userhistory.FieldHistoryTime, userhistory.FieldCreatedAt, userhistory.FieldUpdatedAt, userhistory.FieldDeletedAt, userhistory.FieldAvatarUpdatedAt, userhistory.FieldLastSeen:
 			values[i] = new(sql.NullTime)
@@ -209,6 +211,13 @@ func (uh *UserHistory) assignValues(columns []string, values []any) error {
 				uh.AvatarLocalFile = new(string)
 				*uh.AvatarLocalFile = value.String
 			}
+		case userhistory.FieldAvatarLocalFileID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field avatar_local_file_id", values[i])
+			} else if value.Valid {
+				uh.AvatarLocalFileID = new(string)
+				*uh.AvatarLocalFileID = value.String
+			}
 		case userhistory.FieldAvatarUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field avatar_updated_at", values[i])
@@ -336,6 +345,11 @@ func (uh *UserHistory) String() string {
 	builder.WriteString(", ")
 	if v := uh.AvatarLocalFile; v != nil {
 		builder.WriteString("avatar_local_file=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := uh.AvatarLocalFileID; v != nil {
+		builder.WriteString("avatar_local_file_id=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")

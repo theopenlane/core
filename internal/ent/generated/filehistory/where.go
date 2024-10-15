@@ -110,24 +110,39 @@ func MappingID(v string) predicate.FileHistory {
 	return predicate.FileHistory(sql.FieldEQ(FieldMappingID, v))
 }
 
-// FileName applies equality check predicate on the "file_name" field. It's identical to FileNameEQ.
-func FileName(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldEQ(FieldFileName, v))
+// ProvidedFileName applies equality check predicate on the "provided_file_name" field. It's identical to ProvidedFileNameEQ.
+func ProvidedFileName(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEQ(FieldProvidedFileName, v))
 }
 
-// FileExtension applies equality check predicate on the "file_extension" field. It's identical to FileExtensionEQ.
-func FileExtension(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldEQ(FieldFileExtension, v))
+// ProvidedFileExtension applies equality check predicate on the "provided_file_extension" field. It's identical to ProvidedFileExtensionEQ.
+func ProvidedFileExtension(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEQ(FieldProvidedFileExtension, v))
 }
 
-// FileSize applies equality check predicate on the "file_size" field. It's identical to FileSizeEQ.
-func FileSize(v int) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldEQ(FieldFileSize, v))
+// ProvidedFileSize applies equality check predicate on the "provided_file_size" field. It's identical to ProvidedFileSizeEQ.
+func ProvidedFileSize(v int64) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEQ(FieldProvidedFileSize, v))
 }
 
-// ContentType applies equality check predicate on the "content_type" field. It's identical to ContentTypeEQ.
-func ContentType(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldEQ(FieldContentType, v))
+// PersistedFileSize applies equality check predicate on the "persisted_file_size" field. It's identical to PersistedFileSizeEQ.
+func PersistedFileSize(v int64) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEQ(FieldPersistedFileSize, v))
+}
+
+// DetectedMimeType applies equality check predicate on the "detected_mime_type" field. It's identical to DetectedMimeTypeEQ.
+func DetectedMimeType(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEQ(FieldDetectedMimeType, v))
+}
+
+// Md5Hash applies equality check predicate on the "md5_hash" field. It's identical to Md5HashEQ.
+func Md5Hash(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEQ(FieldMd5Hash, v))
+}
+
+// DetectedContentType applies equality check predicate on the "detected_content_type" field. It's identical to DetectedContentTypeEQ.
+func DetectedContentType(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEQ(FieldDetectedContentType, v))
 }
 
 // StoreKey applies equality check predicate on the "store_key" field. It's identical to StoreKeyEQ.
@@ -135,14 +150,34 @@ func StoreKey(v string) predicate.FileHistory {
 	return predicate.FileHistory(sql.FieldEQ(FieldStoreKey, v))
 }
 
-// Category applies equality check predicate on the "category" field. It's identical to CategoryEQ.
-func Category(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldEQ(FieldCategory, v))
+// CategoryType applies equality check predicate on the "category_type" field. It's identical to CategoryTypeEQ.
+func CategoryType(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEQ(FieldCategoryType, v))
 }
 
-// Annotation applies equality check predicate on the "annotation" field. It's identical to AnnotationEQ.
-func Annotation(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldEQ(FieldAnnotation, v))
+// URI applies equality check predicate on the "uri" field. It's identical to URIEQ.
+func URI(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEQ(FieldURI, v))
+}
+
+// StorageScheme applies equality check predicate on the "storage_scheme" field. It's identical to StorageSchemeEQ.
+func StorageScheme(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEQ(FieldStorageScheme, v))
+}
+
+// StorageVolume applies equality check predicate on the "storage_volume" field. It's identical to StorageVolumeEQ.
+func StorageVolume(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEQ(FieldStorageVolume, v))
+}
+
+// StoragePath applies equality check predicate on the "storage_path" field. It's identical to StoragePathEQ.
+func StoragePath(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEQ(FieldStoragePath, v))
+}
+
+// FileContents applies equality check predicate on the "file_contents" field. It's identical to FileContentsEQ.
+func FileContents(v []byte) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEQ(FieldFileContents, v))
 }
 
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
@@ -730,249 +765,449 @@ func TagsNotNil() predicate.FileHistory {
 	return predicate.FileHistory(sql.FieldNotNull(FieldTags))
 }
 
-// FileNameEQ applies the EQ predicate on the "file_name" field.
-func FileNameEQ(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldEQ(FieldFileName, v))
+// ProvidedFileNameEQ applies the EQ predicate on the "provided_file_name" field.
+func ProvidedFileNameEQ(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEQ(FieldProvidedFileName, v))
 }
 
-// FileNameNEQ applies the NEQ predicate on the "file_name" field.
-func FileNameNEQ(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldNEQ(FieldFileName, v))
+// ProvidedFileNameNEQ applies the NEQ predicate on the "provided_file_name" field.
+func ProvidedFileNameNEQ(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNEQ(FieldProvidedFileName, v))
 }
 
-// FileNameIn applies the In predicate on the "file_name" field.
-func FileNameIn(vs ...string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldIn(FieldFileName, vs...))
+// ProvidedFileNameIn applies the In predicate on the "provided_file_name" field.
+func ProvidedFileNameIn(vs ...string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldIn(FieldProvidedFileName, vs...))
 }
 
-// FileNameNotIn applies the NotIn predicate on the "file_name" field.
-func FileNameNotIn(vs ...string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldNotIn(FieldFileName, vs...))
+// ProvidedFileNameNotIn applies the NotIn predicate on the "provided_file_name" field.
+func ProvidedFileNameNotIn(vs ...string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNotIn(FieldProvidedFileName, vs...))
 }
 
-// FileNameGT applies the GT predicate on the "file_name" field.
-func FileNameGT(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldGT(FieldFileName, v))
+// ProvidedFileNameGT applies the GT predicate on the "provided_file_name" field.
+func ProvidedFileNameGT(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldGT(FieldProvidedFileName, v))
 }
 
-// FileNameGTE applies the GTE predicate on the "file_name" field.
-func FileNameGTE(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldGTE(FieldFileName, v))
+// ProvidedFileNameGTE applies the GTE predicate on the "provided_file_name" field.
+func ProvidedFileNameGTE(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldGTE(FieldProvidedFileName, v))
 }
 
-// FileNameLT applies the LT predicate on the "file_name" field.
-func FileNameLT(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldLT(FieldFileName, v))
+// ProvidedFileNameLT applies the LT predicate on the "provided_file_name" field.
+func ProvidedFileNameLT(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldLT(FieldProvidedFileName, v))
 }
 
-// FileNameLTE applies the LTE predicate on the "file_name" field.
-func FileNameLTE(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldLTE(FieldFileName, v))
+// ProvidedFileNameLTE applies the LTE predicate on the "provided_file_name" field.
+func ProvidedFileNameLTE(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldLTE(FieldProvidedFileName, v))
 }
 
-// FileNameContains applies the Contains predicate on the "file_name" field.
-func FileNameContains(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldContains(FieldFileName, v))
+// ProvidedFileNameContains applies the Contains predicate on the "provided_file_name" field.
+func ProvidedFileNameContains(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldContains(FieldProvidedFileName, v))
 }
 
-// FileNameHasPrefix applies the HasPrefix predicate on the "file_name" field.
-func FileNameHasPrefix(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldHasPrefix(FieldFileName, v))
+// ProvidedFileNameHasPrefix applies the HasPrefix predicate on the "provided_file_name" field.
+func ProvidedFileNameHasPrefix(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldHasPrefix(FieldProvidedFileName, v))
 }
 
-// FileNameHasSuffix applies the HasSuffix predicate on the "file_name" field.
-func FileNameHasSuffix(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldHasSuffix(FieldFileName, v))
+// ProvidedFileNameHasSuffix applies the HasSuffix predicate on the "provided_file_name" field.
+func ProvidedFileNameHasSuffix(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldHasSuffix(FieldProvidedFileName, v))
 }
 
-// FileNameEqualFold applies the EqualFold predicate on the "file_name" field.
-func FileNameEqualFold(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldEqualFold(FieldFileName, v))
+// ProvidedFileNameEqualFold applies the EqualFold predicate on the "provided_file_name" field.
+func ProvidedFileNameEqualFold(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEqualFold(FieldProvidedFileName, v))
 }
 
-// FileNameContainsFold applies the ContainsFold predicate on the "file_name" field.
-func FileNameContainsFold(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldContainsFold(FieldFileName, v))
+// ProvidedFileNameContainsFold applies the ContainsFold predicate on the "provided_file_name" field.
+func ProvidedFileNameContainsFold(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldContainsFold(FieldProvidedFileName, v))
 }
 
-// FileExtensionEQ applies the EQ predicate on the "file_extension" field.
-func FileExtensionEQ(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldEQ(FieldFileExtension, v))
+// ProvidedFileExtensionEQ applies the EQ predicate on the "provided_file_extension" field.
+func ProvidedFileExtensionEQ(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEQ(FieldProvidedFileExtension, v))
 }
 
-// FileExtensionNEQ applies the NEQ predicate on the "file_extension" field.
-func FileExtensionNEQ(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldNEQ(FieldFileExtension, v))
+// ProvidedFileExtensionNEQ applies the NEQ predicate on the "provided_file_extension" field.
+func ProvidedFileExtensionNEQ(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNEQ(FieldProvidedFileExtension, v))
 }
 
-// FileExtensionIn applies the In predicate on the "file_extension" field.
-func FileExtensionIn(vs ...string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldIn(FieldFileExtension, vs...))
+// ProvidedFileExtensionIn applies the In predicate on the "provided_file_extension" field.
+func ProvidedFileExtensionIn(vs ...string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldIn(FieldProvidedFileExtension, vs...))
 }
 
-// FileExtensionNotIn applies the NotIn predicate on the "file_extension" field.
-func FileExtensionNotIn(vs ...string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldNotIn(FieldFileExtension, vs...))
+// ProvidedFileExtensionNotIn applies the NotIn predicate on the "provided_file_extension" field.
+func ProvidedFileExtensionNotIn(vs ...string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNotIn(FieldProvidedFileExtension, vs...))
 }
 
-// FileExtensionGT applies the GT predicate on the "file_extension" field.
-func FileExtensionGT(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldGT(FieldFileExtension, v))
+// ProvidedFileExtensionGT applies the GT predicate on the "provided_file_extension" field.
+func ProvidedFileExtensionGT(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldGT(FieldProvidedFileExtension, v))
 }
 
-// FileExtensionGTE applies the GTE predicate on the "file_extension" field.
-func FileExtensionGTE(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldGTE(FieldFileExtension, v))
+// ProvidedFileExtensionGTE applies the GTE predicate on the "provided_file_extension" field.
+func ProvidedFileExtensionGTE(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldGTE(FieldProvidedFileExtension, v))
 }
 
-// FileExtensionLT applies the LT predicate on the "file_extension" field.
-func FileExtensionLT(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldLT(FieldFileExtension, v))
+// ProvidedFileExtensionLT applies the LT predicate on the "provided_file_extension" field.
+func ProvidedFileExtensionLT(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldLT(FieldProvidedFileExtension, v))
 }
 
-// FileExtensionLTE applies the LTE predicate on the "file_extension" field.
-func FileExtensionLTE(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldLTE(FieldFileExtension, v))
+// ProvidedFileExtensionLTE applies the LTE predicate on the "provided_file_extension" field.
+func ProvidedFileExtensionLTE(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldLTE(FieldProvidedFileExtension, v))
 }
 
-// FileExtensionContains applies the Contains predicate on the "file_extension" field.
-func FileExtensionContains(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldContains(FieldFileExtension, v))
+// ProvidedFileExtensionContains applies the Contains predicate on the "provided_file_extension" field.
+func ProvidedFileExtensionContains(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldContains(FieldProvidedFileExtension, v))
 }
 
-// FileExtensionHasPrefix applies the HasPrefix predicate on the "file_extension" field.
-func FileExtensionHasPrefix(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldHasPrefix(FieldFileExtension, v))
+// ProvidedFileExtensionHasPrefix applies the HasPrefix predicate on the "provided_file_extension" field.
+func ProvidedFileExtensionHasPrefix(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldHasPrefix(FieldProvidedFileExtension, v))
 }
 
-// FileExtensionHasSuffix applies the HasSuffix predicate on the "file_extension" field.
-func FileExtensionHasSuffix(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldHasSuffix(FieldFileExtension, v))
+// ProvidedFileExtensionHasSuffix applies the HasSuffix predicate on the "provided_file_extension" field.
+func ProvidedFileExtensionHasSuffix(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldHasSuffix(FieldProvidedFileExtension, v))
 }
 
-// FileExtensionEqualFold applies the EqualFold predicate on the "file_extension" field.
-func FileExtensionEqualFold(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldEqualFold(FieldFileExtension, v))
+// ProvidedFileExtensionEqualFold applies the EqualFold predicate on the "provided_file_extension" field.
+func ProvidedFileExtensionEqualFold(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEqualFold(FieldProvidedFileExtension, v))
 }
 
-// FileExtensionContainsFold applies the ContainsFold predicate on the "file_extension" field.
-func FileExtensionContainsFold(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldContainsFold(FieldFileExtension, v))
+// ProvidedFileExtensionContainsFold applies the ContainsFold predicate on the "provided_file_extension" field.
+func ProvidedFileExtensionContainsFold(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldContainsFold(FieldProvidedFileExtension, v))
 }
 
-// FileSizeEQ applies the EQ predicate on the "file_size" field.
-func FileSizeEQ(v int) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldEQ(FieldFileSize, v))
+// ProvidedFileSizeEQ applies the EQ predicate on the "provided_file_size" field.
+func ProvidedFileSizeEQ(v int64) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEQ(FieldProvidedFileSize, v))
 }
 
-// FileSizeNEQ applies the NEQ predicate on the "file_size" field.
-func FileSizeNEQ(v int) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldNEQ(FieldFileSize, v))
+// ProvidedFileSizeNEQ applies the NEQ predicate on the "provided_file_size" field.
+func ProvidedFileSizeNEQ(v int64) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNEQ(FieldProvidedFileSize, v))
 }
 
-// FileSizeIn applies the In predicate on the "file_size" field.
-func FileSizeIn(vs ...int) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldIn(FieldFileSize, vs...))
+// ProvidedFileSizeIn applies the In predicate on the "provided_file_size" field.
+func ProvidedFileSizeIn(vs ...int64) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldIn(FieldProvidedFileSize, vs...))
 }
 
-// FileSizeNotIn applies the NotIn predicate on the "file_size" field.
-func FileSizeNotIn(vs ...int) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldNotIn(FieldFileSize, vs...))
+// ProvidedFileSizeNotIn applies the NotIn predicate on the "provided_file_size" field.
+func ProvidedFileSizeNotIn(vs ...int64) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNotIn(FieldProvidedFileSize, vs...))
 }
 
-// FileSizeGT applies the GT predicate on the "file_size" field.
-func FileSizeGT(v int) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldGT(FieldFileSize, v))
+// ProvidedFileSizeGT applies the GT predicate on the "provided_file_size" field.
+func ProvidedFileSizeGT(v int64) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldGT(FieldProvidedFileSize, v))
 }
 
-// FileSizeGTE applies the GTE predicate on the "file_size" field.
-func FileSizeGTE(v int) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldGTE(FieldFileSize, v))
+// ProvidedFileSizeGTE applies the GTE predicate on the "provided_file_size" field.
+func ProvidedFileSizeGTE(v int64) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldGTE(FieldProvidedFileSize, v))
 }
 
-// FileSizeLT applies the LT predicate on the "file_size" field.
-func FileSizeLT(v int) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldLT(FieldFileSize, v))
+// ProvidedFileSizeLT applies the LT predicate on the "provided_file_size" field.
+func ProvidedFileSizeLT(v int64) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldLT(FieldProvidedFileSize, v))
 }
 
-// FileSizeLTE applies the LTE predicate on the "file_size" field.
-func FileSizeLTE(v int) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldLTE(FieldFileSize, v))
+// ProvidedFileSizeLTE applies the LTE predicate on the "provided_file_size" field.
+func ProvidedFileSizeLTE(v int64) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldLTE(FieldProvidedFileSize, v))
 }
 
-// FileSizeIsNil applies the IsNil predicate on the "file_size" field.
-func FileSizeIsNil() predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldIsNull(FieldFileSize))
+// ProvidedFileSizeIsNil applies the IsNil predicate on the "provided_file_size" field.
+func ProvidedFileSizeIsNil() predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldIsNull(FieldProvidedFileSize))
 }
 
-// FileSizeNotNil applies the NotNil predicate on the "file_size" field.
-func FileSizeNotNil() predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldNotNull(FieldFileSize))
+// ProvidedFileSizeNotNil applies the NotNil predicate on the "provided_file_size" field.
+func ProvidedFileSizeNotNil() predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNotNull(FieldProvidedFileSize))
 }
 
-// ContentTypeEQ applies the EQ predicate on the "content_type" field.
-func ContentTypeEQ(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldEQ(FieldContentType, v))
+// PersistedFileSizeEQ applies the EQ predicate on the "persisted_file_size" field.
+func PersistedFileSizeEQ(v int64) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEQ(FieldPersistedFileSize, v))
 }
 
-// ContentTypeNEQ applies the NEQ predicate on the "content_type" field.
-func ContentTypeNEQ(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldNEQ(FieldContentType, v))
+// PersistedFileSizeNEQ applies the NEQ predicate on the "persisted_file_size" field.
+func PersistedFileSizeNEQ(v int64) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNEQ(FieldPersistedFileSize, v))
 }
 
-// ContentTypeIn applies the In predicate on the "content_type" field.
-func ContentTypeIn(vs ...string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldIn(FieldContentType, vs...))
+// PersistedFileSizeIn applies the In predicate on the "persisted_file_size" field.
+func PersistedFileSizeIn(vs ...int64) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldIn(FieldPersistedFileSize, vs...))
 }
 
-// ContentTypeNotIn applies the NotIn predicate on the "content_type" field.
-func ContentTypeNotIn(vs ...string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldNotIn(FieldContentType, vs...))
+// PersistedFileSizeNotIn applies the NotIn predicate on the "persisted_file_size" field.
+func PersistedFileSizeNotIn(vs ...int64) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNotIn(FieldPersistedFileSize, vs...))
 }
 
-// ContentTypeGT applies the GT predicate on the "content_type" field.
-func ContentTypeGT(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldGT(FieldContentType, v))
+// PersistedFileSizeGT applies the GT predicate on the "persisted_file_size" field.
+func PersistedFileSizeGT(v int64) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldGT(FieldPersistedFileSize, v))
 }
 
-// ContentTypeGTE applies the GTE predicate on the "content_type" field.
-func ContentTypeGTE(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldGTE(FieldContentType, v))
+// PersistedFileSizeGTE applies the GTE predicate on the "persisted_file_size" field.
+func PersistedFileSizeGTE(v int64) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldGTE(FieldPersistedFileSize, v))
 }
 
-// ContentTypeLT applies the LT predicate on the "content_type" field.
-func ContentTypeLT(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldLT(FieldContentType, v))
+// PersistedFileSizeLT applies the LT predicate on the "persisted_file_size" field.
+func PersistedFileSizeLT(v int64) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldLT(FieldPersistedFileSize, v))
 }
 
-// ContentTypeLTE applies the LTE predicate on the "content_type" field.
-func ContentTypeLTE(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldLTE(FieldContentType, v))
+// PersistedFileSizeLTE applies the LTE predicate on the "persisted_file_size" field.
+func PersistedFileSizeLTE(v int64) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldLTE(FieldPersistedFileSize, v))
 }
 
-// ContentTypeContains applies the Contains predicate on the "content_type" field.
-func ContentTypeContains(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldContains(FieldContentType, v))
+// PersistedFileSizeIsNil applies the IsNil predicate on the "persisted_file_size" field.
+func PersistedFileSizeIsNil() predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldIsNull(FieldPersistedFileSize))
 }
 
-// ContentTypeHasPrefix applies the HasPrefix predicate on the "content_type" field.
-func ContentTypeHasPrefix(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldHasPrefix(FieldContentType, v))
+// PersistedFileSizeNotNil applies the NotNil predicate on the "persisted_file_size" field.
+func PersistedFileSizeNotNil() predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNotNull(FieldPersistedFileSize))
 }
 
-// ContentTypeHasSuffix applies the HasSuffix predicate on the "content_type" field.
-func ContentTypeHasSuffix(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldHasSuffix(FieldContentType, v))
+// DetectedMimeTypeEQ applies the EQ predicate on the "detected_mime_type" field.
+func DetectedMimeTypeEQ(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEQ(FieldDetectedMimeType, v))
 }
 
-// ContentTypeEqualFold applies the EqualFold predicate on the "content_type" field.
-func ContentTypeEqualFold(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldEqualFold(FieldContentType, v))
+// DetectedMimeTypeNEQ applies the NEQ predicate on the "detected_mime_type" field.
+func DetectedMimeTypeNEQ(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNEQ(FieldDetectedMimeType, v))
 }
 
-// ContentTypeContainsFold applies the ContainsFold predicate on the "content_type" field.
-func ContentTypeContainsFold(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldContainsFold(FieldContentType, v))
+// DetectedMimeTypeIn applies the In predicate on the "detected_mime_type" field.
+func DetectedMimeTypeIn(vs ...string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldIn(FieldDetectedMimeType, vs...))
+}
+
+// DetectedMimeTypeNotIn applies the NotIn predicate on the "detected_mime_type" field.
+func DetectedMimeTypeNotIn(vs ...string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNotIn(FieldDetectedMimeType, vs...))
+}
+
+// DetectedMimeTypeGT applies the GT predicate on the "detected_mime_type" field.
+func DetectedMimeTypeGT(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldGT(FieldDetectedMimeType, v))
+}
+
+// DetectedMimeTypeGTE applies the GTE predicate on the "detected_mime_type" field.
+func DetectedMimeTypeGTE(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldGTE(FieldDetectedMimeType, v))
+}
+
+// DetectedMimeTypeLT applies the LT predicate on the "detected_mime_type" field.
+func DetectedMimeTypeLT(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldLT(FieldDetectedMimeType, v))
+}
+
+// DetectedMimeTypeLTE applies the LTE predicate on the "detected_mime_type" field.
+func DetectedMimeTypeLTE(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldLTE(FieldDetectedMimeType, v))
+}
+
+// DetectedMimeTypeContains applies the Contains predicate on the "detected_mime_type" field.
+func DetectedMimeTypeContains(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldContains(FieldDetectedMimeType, v))
+}
+
+// DetectedMimeTypeHasPrefix applies the HasPrefix predicate on the "detected_mime_type" field.
+func DetectedMimeTypeHasPrefix(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldHasPrefix(FieldDetectedMimeType, v))
+}
+
+// DetectedMimeTypeHasSuffix applies the HasSuffix predicate on the "detected_mime_type" field.
+func DetectedMimeTypeHasSuffix(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldHasSuffix(FieldDetectedMimeType, v))
+}
+
+// DetectedMimeTypeIsNil applies the IsNil predicate on the "detected_mime_type" field.
+func DetectedMimeTypeIsNil() predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldIsNull(FieldDetectedMimeType))
+}
+
+// DetectedMimeTypeNotNil applies the NotNil predicate on the "detected_mime_type" field.
+func DetectedMimeTypeNotNil() predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNotNull(FieldDetectedMimeType))
+}
+
+// DetectedMimeTypeEqualFold applies the EqualFold predicate on the "detected_mime_type" field.
+func DetectedMimeTypeEqualFold(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEqualFold(FieldDetectedMimeType, v))
+}
+
+// DetectedMimeTypeContainsFold applies the ContainsFold predicate on the "detected_mime_type" field.
+func DetectedMimeTypeContainsFold(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldContainsFold(FieldDetectedMimeType, v))
+}
+
+// Md5HashEQ applies the EQ predicate on the "md5_hash" field.
+func Md5HashEQ(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEQ(FieldMd5Hash, v))
+}
+
+// Md5HashNEQ applies the NEQ predicate on the "md5_hash" field.
+func Md5HashNEQ(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNEQ(FieldMd5Hash, v))
+}
+
+// Md5HashIn applies the In predicate on the "md5_hash" field.
+func Md5HashIn(vs ...string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldIn(FieldMd5Hash, vs...))
+}
+
+// Md5HashNotIn applies the NotIn predicate on the "md5_hash" field.
+func Md5HashNotIn(vs ...string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNotIn(FieldMd5Hash, vs...))
+}
+
+// Md5HashGT applies the GT predicate on the "md5_hash" field.
+func Md5HashGT(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldGT(FieldMd5Hash, v))
+}
+
+// Md5HashGTE applies the GTE predicate on the "md5_hash" field.
+func Md5HashGTE(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldGTE(FieldMd5Hash, v))
+}
+
+// Md5HashLT applies the LT predicate on the "md5_hash" field.
+func Md5HashLT(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldLT(FieldMd5Hash, v))
+}
+
+// Md5HashLTE applies the LTE predicate on the "md5_hash" field.
+func Md5HashLTE(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldLTE(FieldMd5Hash, v))
+}
+
+// Md5HashContains applies the Contains predicate on the "md5_hash" field.
+func Md5HashContains(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldContains(FieldMd5Hash, v))
+}
+
+// Md5HashHasPrefix applies the HasPrefix predicate on the "md5_hash" field.
+func Md5HashHasPrefix(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldHasPrefix(FieldMd5Hash, v))
+}
+
+// Md5HashHasSuffix applies the HasSuffix predicate on the "md5_hash" field.
+func Md5HashHasSuffix(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldHasSuffix(FieldMd5Hash, v))
+}
+
+// Md5HashIsNil applies the IsNil predicate on the "md5_hash" field.
+func Md5HashIsNil() predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldIsNull(FieldMd5Hash))
+}
+
+// Md5HashNotNil applies the NotNil predicate on the "md5_hash" field.
+func Md5HashNotNil() predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNotNull(FieldMd5Hash))
+}
+
+// Md5HashEqualFold applies the EqualFold predicate on the "md5_hash" field.
+func Md5HashEqualFold(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEqualFold(FieldMd5Hash, v))
+}
+
+// Md5HashContainsFold applies the ContainsFold predicate on the "md5_hash" field.
+func Md5HashContainsFold(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldContainsFold(FieldMd5Hash, v))
+}
+
+// DetectedContentTypeEQ applies the EQ predicate on the "detected_content_type" field.
+func DetectedContentTypeEQ(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEQ(FieldDetectedContentType, v))
+}
+
+// DetectedContentTypeNEQ applies the NEQ predicate on the "detected_content_type" field.
+func DetectedContentTypeNEQ(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNEQ(FieldDetectedContentType, v))
+}
+
+// DetectedContentTypeIn applies the In predicate on the "detected_content_type" field.
+func DetectedContentTypeIn(vs ...string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldIn(FieldDetectedContentType, vs...))
+}
+
+// DetectedContentTypeNotIn applies the NotIn predicate on the "detected_content_type" field.
+func DetectedContentTypeNotIn(vs ...string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNotIn(FieldDetectedContentType, vs...))
+}
+
+// DetectedContentTypeGT applies the GT predicate on the "detected_content_type" field.
+func DetectedContentTypeGT(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldGT(FieldDetectedContentType, v))
+}
+
+// DetectedContentTypeGTE applies the GTE predicate on the "detected_content_type" field.
+func DetectedContentTypeGTE(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldGTE(FieldDetectedContentType, v))
+}
+
+// DetectedContentTypeLT applies the LT predicate on the "detected_content_type" field.
+func DetectedContentTypeLT(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldLT(FieldDetectedContentType, v))
+}
+
+// DetectedContentTypeLTE applies the LTE predicate on the "detected_content_type" field.
+func DetectedContentTypeLTE(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldLTE(FieldDetectedContentType, v))
+}
+
+// DetectedContentTypeContains applies the Contains predicate on the "detected_content_type" field.
+func DetectedContentTypeContains(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldContains(FieldDetectedContentType, v))
+}
+
+// DetectedContentTypeHasPrefix applies the HasPrefix predicate on the "detected_content_type" field.
+func DetectedContentTypeHasPrefix(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldHasPrefix(FieldDetectedContentType, v))
+}
+
+// DetectedContentTypeHasSuffix applies the HasSuffix predicate on the "detected_content_type" field.
+func DetectedContentTypeHasSuffix(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldHasSuffix(FieldDetectedContentType, v))
+}
+
+// DetectedContentTypeEqualFold applies the EqualFold predicate on the "detected_content_type" field.
+func DetectedContentTypeEqualFold(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEqualFold(FieldDetectedContentType, v))
+}
+
+// DetectedContentTypeContainsFold applies the ContainsFold predicate on the "detected_content_type" field.
+func DetectedContentTypeContainsFold(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldContainsFold(FieldDetectedContentType, v))
 }
 
 // StoreKeyEQ applies the EQ predicate on the "store_key" field.
@@ -1030,6 +1265,16 @@ func StoreKeyHasSuffix(v string) predicate.FileHistory {
 	return predicate.FileHistory(sql.FieldHasSuffix(FieldStoreKey, v))
 }
 
+// StoreKeyIsNil applies the IsNil predicate on the "store_key" field.
+func StoreKeyIsNil() predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldIsNull(FieldStoreKey))
+}
+
+// StoreKeyNotNil applies the NotNil predicate on the "store_key" field.
+func StoreKeyNotNil() predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNotNull(FieldStoreKey))
+}
+
 // StoreKeyEqualFold applies the EqualFold predicate on the "store_key" field.
 func StoreKeyEqualFold(v string) predicate.FileHistory {
 	return predicate.FileHistory(sql.FieldEqualFold(FieldStoreKey, v))
@@ -1040,154 +1285,429 @@ func StoreKeyContainsFold(v string) predicate.FileHistory {
 	return predicate.FileHistory(sql.FieldContainsFold(FieldStoreKey, v))
 }
 
-// CategoryEQ applies the EQ predicate on the "category" field.
-func CategoryEQ(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldEQ(FieldCategory, v))
+// CategoryTypeEQ applies the EQ predicate on the "category_type" field.
+func CategoryTypeEQ(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEQ(FieldCategoryType, v))
 }
 
-// CategoryNEQ applies the NEQ predicate on the "category" field.
-func CategoryNEQ(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldNEQ(FieldCategory, v))
+// CategoryTypeNEQ applies the NEQ predicate on the "category_type" field.
+func CategoryTypeNEQ(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNEQ(FieldCategoryType, v))
 }
 
-// CategoryIn applies the In predicate on the "category" field.
-func CategoryIn(vs ...string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldIn(FieldCategory, vs...))
+// CategoryTypeIn applies the In predicate on the "category_type" field.
+func CategoryTypeIn(vs ...string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldIn(FieldCategoryType, vs...))
 }
 
-// CategoryNotIn applies the NotIn predicate on the "category" field.
-func CategoryNotIn(vs ...string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldNotIn(FieldCategory, vs...))
+// CategoryTypeNotIn applies the NotIn predicate on the "category_type" field.
+func CategoryTypeNotIn(vs ...string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNotIn(FieldCategoryType, vs...))
 }
 
-// CategoryGT applies the GT predicate on the "category" field.
-func CategoryGT(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldGT(FieldCategory, v))
+// CategoryTypeGT applies the GT predicate on the "category_type" field.
+func CategoryTypeGT(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldGT(FieldCategoryType, v))
 }
 
-// CategoryGTE applies the GTE predicate on the "category" field.
-func CategoryGTE(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldGTE(FieldCategory, v))
+// CategoryTypeGTE applies the GTE predicate on the "category_type" field.
+func CategoryTypeGTE(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldGTE(FieldCategoryType, v))
 }
 
-// CategoryLT applies the LT predicate on the "category" field.
-func CategoryLT(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldLT(FieldCategory, v))
+// CategoryTypeLT applies the LT predicate on the "category_type" field.
+func CategoryTypeLT(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldLT(FieldCategoryType, v))
 }
 
-// CategoryLTE applies the LTE predicate on the "category" field.
-func CategoryLTE(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldLTE(FieldCategory, v))
+// CategoryTypeLTE applies the LTE predicate on the "category_type" field.
+func CategoryTypeLTE(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldLTE(FieldCategoryType, v))
 }
 
-// CategoryContains applies the Contains predicate on the "category" field.
-func CategoryContains(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldContains(FieldCategory, v))
+// CategoryTypeContains applies the Contains predicate on the "category_type" field.
+func CategoryTypeContains(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldContains(FieldCategoryType, v))
 }
 
-// CategoryHasPrefix applies the HasPrefix predicate on the "category" field.
-func CategoryHasPrefix(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldHasPrefix(FieldCategory, v))
+// CategoryTypeHasPrefix applies the HasPrefix predicate on the "category_type" field.
+func CategoryTypeHasPrefix(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldHasPrefix(FieldCategoryType, v))
 }
 
-// CategoryHasSuffix applies the HasSuffix predicate on the "category" field.
-func CategoryHasSuffix(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldHasSuffix(FieldCategory, v))
+// CategoryTypeHasSuffix applies the HasSuffix predicate on the "category_type" field.
+func CategoryTypeHasSuffix(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldHasSuffix(FieldCategoryType, v))
 }
 
-// CategoryIsNil applies the IsNil predicate on the "category" field.
-func CategoryIsNil() predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldIsNull(FieldCategory))
+// CategoryTypeIsNil applies the IsNil predicate on the "category_type" field.
+func CategoryTypeIsNil() predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldIsNull(FieldCategoryType))
 }
 
-// CategoryNotNil applies the NotNil predicate on the "category" field.
-func CategoryNotNil() predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldNotNull(FieldCategory))
+// CategoryTypeNotNil applies the NotNil predicate on the "category_type" field.
+func CategoryTypeNotNil() predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNotNull(FieldCategoryType))
 }
 
-// CategoryEqualFold applies the EqualFold predicate on the "category" field.
-func CategoryEqualFold(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldEqualFold(FieldCategory, v))
+// CategoryTypeEqualFold applies the EqualFold predicate on the "category_type" field.
+func CategoryTypeEqualFold(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEqualFold(FieldCategoryType, v))
 }
 
-// CategoryContainsFold applies the ContainsFold predicate on the "category" field.
-func CategoryContainsFold(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldContainsFold(FieldCategory, v))
+// CategoryTypeContainsFold applies the ContainsFold predicate on the "category_type" field.
+func CategoryTypeContainsFold(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldContainsFold(FieldCategoryType, v))
 }
 
-// AnnotationEQ applies the EQ predicate on the "annotation" field.
-func AnnotationEQ(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldEQ(FieldAnnotation, v))
+// URIEQ applies the EQ predicate on the "uri" field.
+func URIEQ(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEQ(FieldURI, v))
 }
 
-// AnnotationNEQ applies the NEQ predicate on the "annotation" field.
-func AnnotationNEQ(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldNEQ(FieldAnnotation, v))
+// URINEQ applies the NEQ predicate on the "uri" field.
+func URINEQ(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNEQ(FieldURI, v))
 }
 
-// AnnotationIn applies the In predicate on the "annotation" field.
-func AnnotationIn(vs ...string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldIn(FieldAnnotation, vs...))
+// URIIn applies the In predicate on the "uri" field.
+func URIIn(vs ...string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldIn(FieldURI, vs...))
 }
 
-// AnnotationNotIn applies the NotIn predicate on the "annotation" field.
-func AnnotationNotIn(vs ...string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldNotIn(FieldAnnotation, vs...))
+// URINotIn applies the NotIn predicate on the "uri" field.
+func URINotIn(vs ...string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNotIn(FieldURI, vs...))
 }
 
-// AnnotationGT applies the GT predicate on the "annotation" field.
-func AnnotationGT(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldGT(FieldAnnotation, v))
+// URIGT applies the GT predicate on the "uri" field.
+func URIGT(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldGT(FieldURI, v))
 }
 
-// AnnotationGTE applies the GTE predicate on the "annotation" field.
-func AnnotationGTE(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldGTE(FieldAnnotation, v))
+// URIGTE applies the GTE predicate on the "uri" field.
+func URIGTE(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldGTE(FieldURI, v))
 }
 
-// AnnotationLT applies the LT predicate on the "annotation" field.
-func AnnotationLT(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldLT(FieldAnnotation, v))
+// URILT applies the LT predicate on the "uri" field.
+func URILT(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldLT(FieldURI, v))
 }
 
-// AnnotationLTE applies the LTE predicate on the "annotation" field.
-func AnnotationLTE(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldLTE(FieldAnnotation, v))
+// URILTE applies the LTE predicate on the "uri" field.
+func URILTE(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldLTE(FieldURI, v))
 }
 
-// AnnotationContains applies the Contains predicate on the "annotation" field.
-func AnnotationContains(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldContains(FieldAnnotation, v))
+// URIContains applies the Contains predicate on the "uri" field.
+func URIContains(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldContains(FieldURI, v))
 }
 
-// AnnotationHasPrefix applies the HasPrefix predicate on the "annotation" field.
-func AnnotationHasPrefix(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldHasPrefix(FieldAnnotation, v))
+// URIHasPrefix applies the HasPrefix predicate on the "uri" field.
+func URIHasPrefix(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldHasPrefix(FieldURI, v))
 }
 
-// AnnotationHasSuffix applies the HasSuffix predicate on the "annotation" field.
-func AnnotationHasSuffix(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldHasSuffix(FieldAnnotation, v))
+// URIHasSuffix applies the HasSuffix predicate on the "uri" field.
+func URIHasSuffix(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldHasSuffix(FieldURI, v))
 }
 
-// AnnotationIsNil applies the IsNil predicate on the "annotation" field.
-func AnnotationIsNil() predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldIsNull(FieldAnnotation))
+// URIIsNil applies the IsNil predicate on the "uri" field.
+func URIIsNil() predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldIsNull(FieldURI))
 }
 
-// AnnotationNotNil applies the NotNil predicate on the "annotation" field.
-func AnnotationNotNil() predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldNotNull(FieldAnnotation))
+// URINotNil applies the NotNil predicate on the "uri" field.
+func URINotNil() predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNotNull(FieldURI))
 }
 
-// AnnotationEqualFold applies the EqualFold predicate on the "annotation" field.
-func AnnotationEqualFold(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldEqualFold(FieldAnnotation, v))
+// URIEqualFold applies the EqualFold predicate on the "uri" field.
+func URIEqualFold(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEqualFold(FieldURI, v))
 }
 
-// AnnotationContainsFold applies the ContainsFold predicate on the "annotation" field.
-func AnnotationContainsFold(v string) predicate.FileHistory {
-	return predicate.FileHistory(sql.FieldContainsFold(FieldAnnotation, v))
+// URIContainsFold applies the ContainsFold predicate on the "uri" field.
+func URIContainsFold(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldContainsFold(FieldURI, v))
+}
+
+// StorageSchemeEQ applies the EQ predicate on the "storage_scheme" field.
+func StorageSchemeEQ(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEQ(FieldStorageScheme, v))
+}
+
+// StorageSchemeNEQ applies the NEQ predicate on the "storage_scheme" field.
+func StorageSchemeNEQ(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNEQ(FieldStorageScheme, v))
+}
+
+// StorageSchemeIn applies the In predicate on the "storage_scheme" field.
+func StorageSchemeIn(vs ...string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldIn(FieldStorageScheme, vs...))
+}
+
+// StorageSchemeNotIn applies the NotIn predicate on the "storage_scheme" field.
+func StorageSchemeNotIn(vs ...string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNotIn(FieldStorageScheme, vs...))
+}
+
+// StorageSchemeGT applies the GT predicate on the "storage_scheme" field.
+func StorageSchemeGT(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldGT(FieldStorageScheme, v))
+}
+
+// StorageSchemeGTE applies the GTE predicate on the "storage_scheme" field.
+func StorageSchemeGTE(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldGTE(FieldStorageScheme, v))
+}
+
+// StorageSchemeLT applies the LT predicate on the "storage_scheme" field.
+func StorageSchemeLT(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldLT(FieldStorageScheme, v))
+}
+
+// StorageSchemeLTE applies the LTE predicate on the "storage_scheme" field.
+func StorageSchemeLTE(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldLTE(FieldStorageScheme, v))
+}
+
+// StorageSchemeContains applies the Contains predicate on the "storage_scheme" field.
+func StorageSchemeContains(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldContains(FieldStorageScheme, v))
+}
+
+// StorageSchemeHasPrefix applies the HasPrefix predicate on the "storage_scheme" field.
+func StorageSchemeHasPrefix(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldHasPrefix(FieldStorageScheme, v))
+}
+
+// StorageSchemeHasSuffix applies the HasSuffix predicate on the "storage_scheme" field.
+func StorageSchemeHasSuffix(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldHasSuffix(FieldStorageScheme, v))
+}
+
+// StorageSchemeIsNil applies the IsNil predicate on the "storage_scheme" field.
+func StorageSchemeIsNil() predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldIsNull(FieldStorageScheme))
+}
+
+// StorageSchemeNotNil applies the NotNil predicate on the "storage_scheme" field.
+func StorageSchemeNotNil() predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNotNull(FieldStorageScheme))
+}
+
+// StorageSchemeEqualFold applies the EqualFold predicate on the "storage_scheme" field.
+func StorageSchemeEqualFold(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEqualFold(FieldStorageScheme, v))
+}
+
+// StorageSchemeContainsFold applies the ContainsFold predicate on the "storage_scheme" field.
+func StorageSchemeContainsFold(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldContainsFold(FieldStorageScheme, v))
+}
+
+// StorageVolumeEQ applies the EQ predicate on the "storage_volume" field.
+func StorageVolumeEQ(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEQ(FieldStorageVolume, v))
+}
+
+// StorageVolumeNEQ applies the NEQ predicate on the "storage_volume" field.
+func StorageVolumeNEQ(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNEQ(FieldStorageVolume, v))
+}
+
+// StorageVolumeIn applies the In predicate on the "storage_volume" field.
+func StorageVolumeIn(vs ...string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldIn(FieldStorageVolume, vs...))
+}
+
+// StorageVolumeNotIn applies the NotIn predicate on the "storage_volume" field.
+func StorageVolumeNotIn(vs ...string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNotIn(FieldStorageVolume, vs...))
+}
+
+// StorageVolumeGT applies the GT predicate on the "storage_volume" field.
+func StorageVolumeGT(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldGT(FieldStorageVolume, v))
+}
+
+// StorageVolumeGTE applies the GTE predicate on the "storage_volume" field.
+func StorageVolumeGTE(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldGTE(FieldStorageVolume, v))
+}
+
+// StorageVolumeLT applies the LT predicate on the "storage_volume" field.
+func StorageVolumeLT(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldLT(FieldStorageVolume, v))
+}
+
+// StorageVolumeLTE applies the LTE predicate on the "storage_volume" field.
+func StorageVolumeLTE(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldLTE(FieldStorageVolume, v))
+}
+
+// StorageVolumeContains applies the Contains predicate on the "storage_volume" field.
+func StorageVolumeContains(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldContains(FieldStorageVolume, v))
+}
+
+// StorageVolumeHasPrefix applies the HasPrefix predicate on the "storage_volume" field.
+func StorageVolumeHasPrefix(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldHasPrefix(FieldStorageVolume, v))
+}
+
+// StorageVolumeHasSuffix applies the HasSuffix predicate on the "storage_volume" field.
+func StorageVolumeHasSuffix(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldHasSuffix(FieldStorageVolume, v))
+}
+
+// StorageVolumeIsNil applies the IsNil predicate on the "storage_volume" field.
+func StorageVolumeIsNil() predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldIsNull(FieldStorageVolume))
+}
+
+// StorageVolumeNotNil applies the NotNil predicate on the "storage_volume" field.
+func StorageVolumeNotNil() predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNotNull(FieldStorageVolume))
+}
+
+// StorageVolumeEqualFold applies the EqualFold predicate on the "storage_volume" field.
+func StorageVolumeEqualFold(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEqualFold(FieldStorageVolume, v))
+}
+
+// StorageVolumeContainsFold applies the ContainsFold predicate on the "storage_volume" field.
+func StorageVolumeContainsFold(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldContainsFold(FieldStorageVolume, v))
+}
+
+// StoragePathEQ applies the EQ predicate on the "storage_path" field.
+func StoragePathEQ(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEQ(FieldStoragePath, v))
+}
+
+// StoragePathNEQ applies the NEQ predicate on the "storage_path" field.
+func StoragePathNEQ(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNEQ(FieldStoragePath, v))
+}
+
+// StoragePathIn applies the In predicate on the "storage_path" field.
+func StoragePathIn(vs ...string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldIn(FieldStoragePath, vs...))
+}
+
+// StoragePathNotIn applies the NotIn predicate on the "storage_path" field.
+func StoragePathNotIn(vs ...string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNotIn(FieldStoragePath, vs...))
+}
+
+// StoragePathGT applies the GT predicate on the "storage_path" field.
+func StoragePathGT(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldGT(FieldStoragePath, v))
+}
+
+// StoragePathGTE applies the GTE predicate on the "storage_path" field.
+func StoragePathGTE(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldGTE(FieldStoragePath, v))
+}
+
+// StoragePathLT applies the LT predicate on the "storage_path" field.
+func StoragePathLT(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldLT(FieldStoragePath, v))
+}
+
+// StoragePathLTE applies the LTE predicate on the "storage_path" field.
+func StoragePathLTE(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldLTE(FieldStoragePath, v))
+}
+
+// StoragePathContains applies the Contains predicate on the "storage_path" field.
+func StoragePathContains(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldContains(FieldStoragePath, v))
+}
+
+// StoragePathHasPrefix applies the HasPrefix predicate on the "storage_path" field.
+func StoragePathHasPrefix(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldHasPrefix(FieldStoragePath, v))
+}
+
+// StoragePathHasSuffix applies the HasSuffix predicate on the "storage_path" field.
+func StoragePathHasSuffix(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldHasSuffix(FieldStoragePath, v))
+}
+
+// StoragePathIsNil applies the IsNil predicate on the "storage_path" field.
+func StoragePathIsNil() predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldIsNull(FieldStoragePath))
+}
+
+// StoragePathNotNil applies the NotNil predicate on the "storage_path" field.
+func StoragePathNotNil() predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNotNull(FieldStoragePath))
+}
+
+// StoragePathEqualFold applies the EqualFold predicate on the "storage_path" field.
+func StoragePathEqualFold(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEqualFold(FieldStoragePath, v))
+}
+
+// StoragePathContainsFold applies the ContainsFold predicate on the "storage_path" field.
+func StoragePathContainsFold(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldContainsFold(FieldStoragePath, v))
+}
+
+// FileContentsEQ applies the EQ predicate on the "file_contents" field.
+func FileContentsEQ(v []byte) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEQ(FieldFileContents, v))
+}
+
+// FileContentsNEQ applies the NEQ predicate on the "file_contents" field.
+func FileContentsNEQ(v []byte) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNEQ(FieldFileContents, v))
+}
+
+// FileContentsIn applies the In predicate on the "file_contents" field.
+func FileContentsIn(vs ...[]byte) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldIn(FieldFileContents, vs...))
+}
+
+// FileContentsNotIn applies the NotIn predicate on the "file_contents" field.
+func FileContentsNotIn(vs ...[]byte) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNotIn(FieldFileContents, vs...))
+}
+
+// FileContentsGT applies the GT predicate on the "file_contents" field.
+func FileContentsGT(v []byte) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldGT(FieldFileContents, v))
+}
+
+// FileContentsGTE applies the GTE predicate on the "file_contents" field.
+func FileContentsGTE(v []byte) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldGTE(FieldFileContents, v))
+}
+
+// FileContentsLT applies the LT predicate on the "file_contents" field.
+func FileContentsLT(v []byte) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldLT(FieldFileContents, v))
+}
+
+// FileContentsLTE applies the LTE predicate on the "file_contents" field.
+func FileContentsLTE(v []byte) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldLTE(FieldFileContents, v))
+}
+
+// FileContentsIsNil applies the IsNil predicate on the "file_contents" field.
+func FileContentsIsNil() predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldIsNull(FieldFileContents))
+}
+
+// FileContentsNotNil applies the NotNil predicate on the "file_contents" field.
+func FileContentsNotNil() predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNotNull(FieldFileContents))
 }
 
 // And groups predicates with the AND operator between them.

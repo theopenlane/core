@@ -8,7 +8,7 @@ tasks:
         sh: ls -d ../../query/* | cut -f1 |grep history | sed -e "s/query\///" |sed -e "s/.graphql//" | sed -e "s/history/History/" | sed -e "s/..\/..\///"
     cmds:
       - for: {var: SCHEMAS, as: SCHEMA}
-        cmd: go run gencmd/generate/main.go generate --name={{ .SCHEMA }} --read-only
+        cmd: go run ../../pkg/gencmd/generate/main.go generate --name={{ .SCHEMA }} --read-only
 
   generate:all:history:force:
     desc: regenerates the cli cmd for all history commands from the query/ directory, this will overwrite any changes made to the generated files
@@ -17,19 +17,19 @@ tasks:
         sh: ls -d ../../query/* | cut -f1 |grep history | sed -e "s/query\///" |sed -e "s/.graphql//" | sed -e "s/history/History/" | sed -e "s/..\/..\///"
     cmds:
       - for: {var: SCHEMAS, as: SCHEMA}
-        cmd: go run gencmd/generate/main.go generate --name={{ .SCHEMA }} --read-only --force
+        cmd: go run ../../pkg/gencmd/generate/main.go generate --name={{ .SCHEMA }} --read-only --force
 
   generate:
     desc: generates a new cli cmd
     interactive: true
     cmds:
-      - go run gencmd/generate/main.go generate
+      - go run ../../pkg/gencmd/generate/main.go generate
 
   generate:ro:
     desc: generates a new cli cmd with only the read cmds
     interactive: true
     cmds:
-      - go run gencmd/generate/main.go generate --read-only
+      - go run ../../pkg/gencmd/generate/main.go generate --read-only
 
   org:create:
     desc: creates an organization against a running local instance of the server - see the CLI help commands for other variables

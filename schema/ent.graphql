@@ -289,6 +289,7 @@ type Contact implements Node {
   status: ContactUserStatus!
   owner: Organization
   entities: [Entity!]
+  files: [File!]
 }
 """
 A connection to a list of items.
@@ -963,6 +964,11 @@ input ContactWhereInput {
   """
   hasEntities: Boolean
   hasEntitiesWith: [EntityWhereInput!]
+  """
+  files edge predicates
+  """
+  hasFiles: Boolean
+  hasFilesWith: [FileWhereInput!]
 }
 """
 CreateAPITokenInput is used for create APIToken object.
@@ -1028,6 +1034,7 @@ input CreateContactInput {
   status: ContactUserStatus
   ownerID: ID
   entityIDs: [ID!]
+  fileIDs: [ID!]
 }
 """
 CreateDocumentDataInput is used for create DocumentData object.
@@ -1045,6 +1052,7 @@ input CreateDocumentDataInput {
   ownerID: ID
   templateID: ID!
   entityIDs: [ID!]
+  fileIDs: [ID!]
 }
 """
 CreateEntitlementInput is used for create Entitlement object.
@@ -1206,6 +1214,7 @@ input CreateEventInput {
   entitlementIDs: [ID!]
   webhookIDs: [ID!]
   subscriberIDs: [ID!]
+  fileIDs: [ID!]
 }
 """
 CreateFeatureInput is used for create Feature object.
@@ -1249,17 +1258,65 @@ input CreateFileInput {
   tags associated with the object
   """
   tags: [String!]
-  fileName: String!
-  fileExtension: String!
-  fileSize: Int
-  contentType: String!
-  storeKey: String!
-  category: String
-  annotation: String
-  userID: ID
+  """
+  the name of the file provided in the payload key without the extension
+  """
+  providedFileName: String!
+  """
+  the extension of the file provided
+  """
+  providedFileExtension: String!
+  """
+  the computed size of the file in the original http request
+  """
+  providedFileSize: Int
+  persistedFileSize: Int
+  """
+  the mime type detected by the system
+  """
+  detectedMimeType: String
+  """
+  the computed md5 hash of the file calculated after we received the contents of the file, but before the file was written to permanent storage
+  """
+  md5Hash: String
+  """
+  the content type of the HTTP request - may be different than MIME type as multipart-form can transmit multiple files and different types
+  """
+  detectedContentType: String!
+  """
+  the key parsed out of a multipart-form request; if we allow multiple files to be uploaded we may want our API specifications to require the use of different keys allowing us to perform easier conditional evaluation on the key and what to do with the file based on key
+  """
+  storeKey: String
+  """
+  the category type of the file, if any (e.g. evidence, invoice, etc.)
+  """
+  categoryType: String
+  """
+  the full URI of the file
+  """
+  uri: String
+  """
+  the storage scheme of the file, e.g. file://, s3://, etc.
+  """
+  storageScheme: String
+  """
+  the storage volume of the file which typically will be the organization ID the file belongs to - this is not a literal volume but the overlay file system mapping
+  """
+  storageVolume: String
+  """
+  the storage path is the second-level directory of the file path, typically the correlating logical object ID the file is associated with; files can be stand alone objects and not always correlated to a logical one, so this path of the tree may be empty
+  """
+  storagePath: String
+  userIDs: [ID!]
   organizationIDs: [ID!]
-  entityIDs: [ID!]
   groupIDs: [ID!]
+  contactIDs: [ID!]
+  entityIDs: [ID!]
+  usersettingIDs: [ID!]
+  organizationsettingIDs: [ID!]
+  templateIDs: [ID!]
+  documentdatumIDs: [ID!]
+  eventIDs: [ID!]
 }
 """
 CreateGroupInput is used for create Group object.
@@ -1609,6 +1666,7 @@ input CreateOrganizationSettingInput {
   """
   geoLocation: OrganizationSettingRegion
   organizationID: ID
+  fileIDs: [ID!]
 }
 """
 CreatePersonalAccessTokenInput is used for create PersonalAccessToken object.
@@ -1703,6 +1761,7 @@ input CreateTemplateInput {
   uischema: JSON
   ownerID: ID
   documentIDs: [ID!]
+  fileIDs: [ID!]
 }
 """
 CreateUserInput is used for create User object.
@@ -1761,6 +1820,7 @@ input CreateUserInput {
   organizationIDs: [ID!]
   webauthnIDs: [ID!]
   fileIDs: [ID!]
+  fileID: ID
   eventIDs: [ID!]
 }
 """
@@ -1802,6 +1862,7 @@ input CreateUserSettingInput {
   isTfaEnabled: Boolean
   userID: ID
   defaultOrgID: ID
+  fileIDs: [ID!]
 }
 """
 CreateWebhookInput is used for create Webhook object.
@@ -1876,6 +1937,7 @@ type DocumentData implements Node {
   owner: Organization
   template: Template!
   entity: [Entity!]
+  files: [File!]
 }
 """
 A connection to a list of items.
@@ -2321,6 +2383,11 @@ input DocumentDataWhereInput {
   """
   hasEntity: Boolean
   hasEntityWith: [EntityWhereInput!]
+  """
+  files edge predicates
+  """
+  hasFiles: Boolean
+  hasFilesWith: [FileWhereInput!]
 }
 type Entitlement implements Node {
   id: ID!
@@ -5243,6 +5310,7 @@ type Event implements Node {
   entitlement: [Entitlement!]
   webhook: [Webhook!]
   subscriber: [Subscriber!]
+  file: [File!]
 }
 """
 A connection to a list of items.
@@ -5717,6 +5785,11 @@ input EventWhereInput {
   """
   hasSubscriber: Boolean
   hasSubscriberWith: [SubscriberWhereInput!]
+  """
+  file edge predicates
+  """
+  hasFile: Boolean
+  hasFileWith: [FileWhereInput!]
 }
 type Feature implements Node {
   id: ID!
@@ -6315,17 +6388,65 @@ type File implements Node {
   tags associated with the object
   """
   tags: [String!]
-  fileName: String!
-  fileExtension: String!
-  fileSize: Int
-  contentType: String!
-  storeKey: String!
-  category: String
-  annotation: String
-  user: User
+  """
+  the name of the file provided in the payload key without the extension
+  """
+  providedFileName: String!
+  """
+  the extension of the file provided
+  """
+  providedFileExtension: String!
+  """
+  the computed size of the file in the original http request
+  """
+  providedFileSize: Int
+  persistedFileSize: Int
+  """
+  the mime type detected by the system
+  """
+  detectedMimeType: String
+  """
+  the computed md5 hash of the file calculated after we received the contents of the file, but before the file was written to permanent storage
+  """
+  md5Hash: String
+  """
+  the content type of the HTTP request - may be different than MIME type as multipart-form can transmit multiple files and different types
+  """
+  detectedContentType: String!
+  """
+  the key parsed out of a multipart-form request; if we allow multiple files to be uploaded we may want our API specifications to require the use of different keys allowing us to perform easier conditional evaluation on the key and what to do with the file based on key
+  """
+  storeKey: String
+  """
+  the category type of the file, if any (e.g. evidence, invoice, etc.)
+  """
+  categoryType: String
+  """
+  the full URI of the file
+  """
+  uri: String
+  """
+  the storage scheme of the file, e.g. file://, s3://, etc.
+  """
+  storageScheme: String
+  """
+  the storage volume of the file which typically will be the organization ID the file belongs to - this is not a literal volume but the overlay file system mapping
+  """
+  storageVolume: String
+  """
+  the storage path is the second-level directory of the file path, typically the correlating logical object ID the file is associated with; files can be stand alone objects and not always correlated to a logical one, so this path of the tree may be empty
+  """
+  storagePath: String
+  user: [User!]
   organization: [Organization!]
-  entity: [Entity!]
   group: [Group!]
+  contact: [Contact!]
+  entity: [Entity!]
+  usersetting: [UserSetting!]
+  organizationsetting: [OrganizationSetting!]
+  template: [Template!]
+  documentdata: [DocumentData!]
+  events: [Event!]
 }
 """
 A connection to a list of items.
@@ -6372,13 +6493,55 @@ type FileHistory implements Node {
   tags associated with the object
   """
   tags: [String!]
-  fileName: String!
-  fileExtension: String!
-  fileSize: Int
-  contentType: String!
-  storeKey: String!
-  category: String
-  annotation: String
+  """
+  the name of the file provided in the payload key without the extension
+  """
+  providedFileName: String!
+  """
+  the extension of the file provided
+  """
+  providedFileExtension: String!
+  """
+  the computed size of the file in the original http request
+  """
+  providedFileSize: Int
+  persistedFileSize: Int
+  """
+  the mime type detected by the system
+  """
+  detectedMimeType: String
+  """
+  the computed md5 hash of the file calculated after we received the contents of the file, but before the file was written to permanent storage
+  """
+  md5Hash: String
+  """
+  the content type of the HTTP request - may be different than MIME type as multipart-form can transmit multiple files and different types
+  """
+  detectedContentType: String!
+  """
+  the key parsed out of a multipart-form request; if we allow multiple files to be uploaded we may want our API specifications to require the use of different keys allowing us to perform easier conditional evaluation on the key and what to do with the file based on key
+  """
+  storeKey: String
+  """
+  the category type of the file, if any (e.g. evidence, invoice, etc.)
+  """
+  categoryType: String
+  """
+  the full URI of the file
+  """
+  uri: String
+  """
+  the storage scheme of the file, e.g. file://, s3://, etc.
+  """
+  storageScheme: String
+  """
+  the storage volume of the file which typically will be the organization ID the file belongs to - this is not a literal volume but the overlay file system mapping
+  """
+  storageVolume: String
+  """
+  the storage path is the second-level directory of the file path, typically the correlating logical object ID the file is associated with; files can be stand alone objects and not always correlated to a logical one, so this path of the tree may be empty
+  """
+  storagePath: String
 }
 """
 A connection to a list of items.
@@ -6569,66 +6732,115 @@ input FileHistoryWhereInput {
   deletedByEqualFold: String
   deletedByContainsFold: String
   """
-  file_name field predicates
+  provided_file_name field predicates
   """
-  fileName: String
-  fileNameNEQ: String
-  fileNameIn: [String!]
-  fileNameNotIn: [String!]
-  fileNameGT: String
-  fileNameGTE: String
-  fileNameLT: String
-  fileNameLTE: String
-  fileNameContains: String
-  fileNameHasPrefix: String
-  fileNameHasSuffix: String
-  fileNameEqualFold: String
-  fileNameContainsFold: String
+  providedFileName: String
+  providedFileNameNEQ: String
+  providedFileNameIn: [String!]
+  providedFileNameNotIn: [String!]
+  providedFileNameGT: String
+  providedFileNameGTE: String
+  providedFileNameLT: String
+  providedFileNameLTE: String
+  providedFileNameContains: String
+  providedFileNameHasPrefix: String
+  providedFileNameHasSuffix: String
+  providedFileNameEqualFold: String
+  providedFileNameContainsFold: String
   """
-  file_extension field predicates
+  provided_file_extension field predicates
   """
-  fileExtension: String
-  fileExtensionNEQ: String
-  fileExtensionIn: [String!]
-  fileExtensionNotIn: [String!]
-  fileExtensionGT: String
-  fileExtensionGTE: String
-  fileExtensionLT: String
-  fileExtensionLTE: String
-  fileExtensionContains: String
-  fileExtensionHasPrefix: String
-  fileExtensionHasSuffix: String
-  fileExtensionEqualFold: String
-  fileExtensionContainsFold: String
+  providedFileExtension: String
+  providedFileExtensionNEQ: String
+  providedFileExtensionIn: [String!]
+  providedFileExtensionNotIn: [String!]
+  providedFileExtensionGT: String
+  providedFileExtensionGTE: String
+  providedFileExtensionLT: String
+  providedFileExtensionLTE: String
+  providedFileExtensionContains: String
+  providedFileExtensionHasPrefix: String
+  providedFileExtensionHasSuffix: String
+  providedFileExtensionEqualFold: String
+  providedFileExtensionContainsFold: String
   """
-  file_size field predicates
+  provided_file_size field predicates
   """
-  fileSize: Int
-  fileSizeNEQ: Int
-  fileSizeIn: [Int!]
-  fileSizeNotIn: [Int!]
-  fileSizeGT: Int
-  fileSizeGTE: Int
-  fileSizeLT: Int
-  fileSizeLTE: Int
-  fileSizeIsNil: Boolean
-  fileSizeNotNil: Boolean
+  providedFileSize: Int
+  providedFileSizeNEQ: Int
+  providedFileSizeIn: [Int!]
+  providedFileSizeNotIn: [Int!]
+  providedFileSizeGT: Int
+  providedFileSizeGTE: Int
+  providedFileSizeLT: Int
+  providedFileSizeLTE: Int
+  providedFileSizeIsNil: Boolean
+  providedFileSizeNotNil: Boolean
   """
-  content_type field predicates
+  persisted_file_size field predicates
   """
-  contentType: String
-  contentTypeNEQ: String
-  contentTypeIn: [String!]
-  contentTypeNotIn: [String!]
-  contentTypeGT: String
-  contentTypeGTE: String
-  contentTypeLT: String
-  contentTypeLTE: String
-  contentTypeContains: String
-  contentTypeHasPrefix: String
-  contentTypeHasSuffix: String
-  contentTypeEqualFold: String
-  contentTypeContainsFold: String
+  persistedFileSize: Int
+  persistedFileSizeNEQ: Int
+  persistedFileSizeIn: [Int!]
+  persistedFileSizeNotIn: [Int!]
+  persistedFileSizeGT: Int
+  persistedFileSizeGTE: Int
+  persistedFileSizeLT: Int
+  persistedFileSizeLTE: Int
+  persistedFileSizeIsNil: Boolean
+  persistedFileSizeNotNil: Boolean
+  """
+  detected_mime_type field predicates
+  """
+  detectedMimeType: String
+  detectedMimeTypeNEQ: String
+  detectedMimeTypeIn: [String!]
+  detectedMimeTypeNotIn: [String!]
+  detectedMimeTypeGT: String
+  detectedMimeTypeGTE: String
+  detectedMimeTypeLT: String
+  detectedMimeTypeLTE: String
+  detectedMimeTypeContains: String
+  detectedMimeTypeHasPrefix: String
+  detectedMimeTypeHasSuffix: String
+  detectedMimeTypeIsNil: Boolean
+  detectedMimeTypeNotNil: Boolean
+  detectedMimeTypeEqualFold: String
+  detectedMimeTypeContainsFold: String
+  """
+  md5_hash field predicates
+  """
+  md5Hash: String
+  md5HashNEQ: String
+  md5HashIn: [String!]
+  md5HashNotIn: [String!]
+  md5HashGT: String
+  md5HashGTE: String
+  md5HashLT: String
+  md5HashLTE: String
+  md5HashContains: String
+  md5HashHasPrefix: String
+  md5HashHasSuffix: String
+  md5HashIsNil: Boolean
+  md5HashNotNil: Boolean
+  md5HashEqualFold: String
+  md5HashContainsFold: String
+  """
+  detected_content_type field predicates
+  """
+  detectedContentType: String
+  detectedContentTypeNEQ: String
+  detectedContentTypeIn: [String!]
+  detectedContentTypeNotIn: [String!]
+  detectedContentTypeGT: String
+  detectedContentTypeGTE: String
+  detectedContentTypeLT: String
+  detectedContentTypeLTE: String
+  detectedContentTypeContains: String
+  detectedContentTypeHasPrefix: String
+  detectedContentTypeHasSuffix: String
+  detectedContentTypeEqualFold: String
+  detectedContentTypeContainsFold: String
   """
   store_key field predicates
   """
@@ -6643,44 +6855,100 @@ input FileHistoryWhereInput {
   storeKeyContains: String
   storeKeyHasPrefix: String
   storeKeyHasSuffix: String
+  storeKeyIsNil: Boolean
+  storeKeyNotNil: Boolean
   storeKeyEqualFold: String
   storeKeyContainsFold: String
   """
-  category field predicates
+  category_type field predicates
   """
-  category: String
-  categoryNEQ: String
-  categoryIn: [String!]
-  categoryNotIn: [String!]
-  categoryGT: String
-  categoryGTE: String
-  categoryLT: String
-  categoryLTE: String
-  categoryContains: String
-  categoryHasPrefix: String
-  categoryHasSuffix: String
-  categoryIsNil: Boolean
-  categoryNotNil: Boolean
-  categoryEqualFold: String
-  categoryContainsFold: String
+  categoryType: String
+  categoryTypeNEQ: String
+  categoryTypeIn: [String!]
+  categoryTypeNotIn: [String!]
+  categoryTypeGT: String
+  categoryTypeGTE: String
+  categoryTypeLT: String
+  categoryTypeLTE: String
+  categoryTypeContains: String
+  categoryTypeHasPrefix: String
+  categoryTypeHasSuffix: String
+  categoryTypeIsNil: Boolean
+  categoryTypeNotNil: Boolean
+  categoryTypeEqualFold: String
+  categoryTypeContainsFold: String
   """
-  annotation field predicates
+  uri field predicates
   """
-  annotation: String
-  annotationNEQ: String
-  annotationIn: [String!]
-  annotationNotIn: [String!]
-  annotationGT: String
-  annotationGTE: String
-  annotationLT: String
-  annotationLTE: String
-  annotationContains: String
-  annotationHasPrefix: String
-  annotationHasSuffix: String
-  annotationIsNil: Boolean
-  annotationNotNil: Boolean
-  annotationEqualFold: String
-  annotationContainsFold: String
+  uri: String
+  uriNEQ: String
+  uriIn: [String!]
+  uriNotIn: [String!]
+  uriGT: String
+  uriGTE: String
+  uriLT: String
+  uriLTE: String
+  uriContains: String
+  uriHasPrefix: String
+  uriHasSuffix: String
+  uriIsNil: Boolean
+  uriNotNil: Boolean
+  uriEqualFold: String
+  uriContainsFold: String
+  """
+  storage_scheme field predicates
+  """
+  storageScheme: String
+  storageSchemeNEQ: String
+  storageSchemeIn: [String!]
+  storageSchemeNotIn: [String!]
+  storageSchemeGT: String
+  storageSchemeGTE: String
+  storageSchemeLT: String
+  storageSchemeLTE: String
+  storageSchemeContains: String
+  storageSchemeHasPrefix: String
+  storageSchemeHasSuffix: String
+  storageSchemeIsNil: Boolean
+  storageSchemeNotNil: Boolean
+  storageSchemeEqualFold: String
+  storageSchemeContainsFold: String
+  """
+  storage_volume field predicates
+  """
+  storageVolume: String
+  storageVolumeNEQ: String
+  storageVolumeIn: [String!]
+  storageVolumeNotIn: [String!]
+  storageVolumeGT: String
+  storageVolumeGTE: String
+  storageVolumeLT: String
+  storageVolumeLTE: String
+  storageVolumeContains: String
+  storageVolumeHasPrefix: String
+  storageVolumeHasSuffix: String
+  storageVolumeIsNil: Boolean
+  storageVolumeNotNil: Boolean
+  storageVolumeEqualFold: String
+  storageVolumeContainsFold: String
+  """
+  storage_path field predicates
+  """
+  storagePath: String
+  storagePathNEQ: String
+  storagePathIn: [String!]
+  storagePathNotIn: [String!]
+  storagePathGT: String
+  storagePathGTE: String
+  storagePathLT: String
+  storagePathLTE: String
+  storagePathContains: String
+  storagePathHasPrefix: String
+  storagePathHasSuffix: String
+  storagePathIsNil: Boolean
+  storagePathNotNil: Boolean
+  storagePathEqualFold: String
+  storagePathContainsFold: String
 }
 """
 FileWhereInput is used for filtering File objects.
@@ -6797,66 +7065,115 @@ input FileWhereInput {
   deletedByEqualFold: String
   deletedByContainsFold: String
   """
-  file_name field predicates
+  provided_file_name field predicates
   """
-  fileName: String
-  fileNameNEQ: String
-  fileNameIn: [String!]
-  fileNameNotIn: [String!]
-  fileNameGT: String
-  fileNameGTE: String
-  fileNameLT: String
-  fileNameLTE: String
-  fileNameContains: String
-  fileNameHasPrefix: String
-  fileNameHasSuffix: String
-  fileNameEqualFold: String
-  fileNameContainsFold: String
+  providedFileName: String
+  providedFileNameNEQ: String
+  providedFileNameIn: [String!]
+  providedFileNameNotIn: [String!]
+  providedFileNameGT: String
+  providedFileNameGTE: String
+  providedFileNameLT: String
+  providedFileNameLTE: String
+  providedFileNameContains: String
+  providedFileNameHasPrefix: String
+  providedFileNameHasSuffix: String
+  providedFileNameEqualFold: String
+  providedFileNameContainsFold: String
   """
-  file_extension field predicates
+  provided_file_extension field predicates
   """
-  fileExtension: String
-  fileExtensionNEQ: String
-  fileExtensionIn: [String!]
-  fileExtensionNotIn: [String!]
-  fileExtensionGT: String
-  fileExtensionGTE: String
-  fileExtensionLT: String
-  fileExtensionLTE: String
-  fileExtensionContains: String
-  fileExtensionHasPrefix: String
-  fileExtensionHasSuffix: String
-  fileExtensionEqualFold: String
-  fileExtensionContainsFold: String
+  providedFileExtension: String
+  providedFileExtensionNEQ: String
+  providedFileExtensionIn: [String!]
+  providedFileExtensionNotIn: [String!]
+  providedFileExtensionGT: String
+  providedFileExtensionGTE: String
+  providedFileExtensionLT: String
+  providedFileExtensionLTE: String
+  providedFileExtensionContains: String
+  providedFileExtensionHasPrefix: String
+  providedFileExtensionHasSuffix: String
+  providedFileExtensionEqualFold: String
+  providedFileExtensionContainsFold: String
   """
-  file_size field predicates
+  provided_file_size field predicates
   """
-  fileSize: Int
-  fileSizeNEQ: Int
-  fileSizeIn: [Int!]
-  fileSizeNotIn: [Int!]
-  fileSizeGT: Int
-  fileSizeGTE: Int
-  fileSizeLT: Int
-  fileSizeLTE: Int
-  fileSizeIsNil: Boolean
-  fileSizeNotNil: Boolean
+  providedFileSize: Int
+  providedFileSizeNEQ: Int
+  providedFileSizeIn: [Int!]
+  providedFileSizeNotIn: [Int!]
+  providedFileSizeGT: Int
+  providedFileSizeGTE: Int
+  providedFileSizeLT: Int
+  providedFileSizeLTE: Int
+  providedFileSizeIsNil: Boolean
+  providedFileSizeNotNil: Boolean
   """
-  content_type field predicates
+  persisted_file_size field predicates
   """
-  contentType: String
-  contentTypeNEQ: String
-  contentTypeIn: [String!]
-  contentTypeNotIn: [String!]
-  contentTypeGT: String
-  contentTypeGTE: String
-  contentTypeLT: String
-  contentTypeLTE: String
-  contentTypeContains: String
-  contentTypeHasPrefix: String
-  contentTypeHasSuffix: String
-  contentTypeEqualFold: String
-  contentTypeContainsFold: String
+  persistedFileSize: Int
+  persistedFileSizeNEQ: Int
+  persistedFileSizeIn: [Int!]
+  persistedFileSizeNotIn: [Int!]
+  persistedFileSizeGT: Int
+  persistedFileSizeGTE: Int
+  persistedFileSizeLT: Int
+  persistedFileSizeLTE: Int
+  persistedFileSizeIsNil: Boolean
+  persistedFileSizeNotNil: Boolean
+  """
+  detected_mime_type field predicates
+  """
+  detectedMimeType: String
+  detectedMimeTypeNEQ: String
+  detectedMimeTypeIn: [String!]
+  detectedMimeTypeNotIn: [String!]
+  detectedMimeTypeGT: String
+  detectedMimeTypeGTE: String
+  detectedMimeTypeLT: String
+  detectedMimeTypeLTE: String
+  detectedMimeTypeContains: String
+  detectedMimeTypeHasPrefix: String
+  detectedMimeTypeHasSuffix: String
+  detectedMimeTypeIsNil: Boolean
+  detectedMimeTypeNotNil: Boolean
+  detectedMimeTypeEqualFold: String
+  detectedMimeTypeContainsFold: String
+  """
+  md5_hash field predicates
+  """
+  md5Hash: String
+  md5HashNEQ: String
+  md5HashIn: [String!]
+  md5HashNotIn: [String!]
+  md5HashGT: String
+  md5HashGTE: String
+  md5HashLT: String
+  md5HashLTE: String
+  md5HashContains: String
+  md5HashHasPrefix: String
+  md5HashHasSuffix: String
+  md5HashIsNil: Boolean
+  md5HashNotNil: Boolean
+  md5HashEqualFold: String
+  md5HashContainsFold: String
+  """
+  detected_content_type field predicates
+  """
+  detectedContentType: String
+  detectedContentTypeNEQ: String
+  detectedContentTypeIn: [String!]
+  detectedContentTypeNotIn: [String!]
+  detectedContentTypeGT: String
+  detectedContentTypeGTE: String
+  detectedContentTypeLT: String
+  detectedContentTypeLTE: String
+  detectedContentTypeContains: String
+  detectedContentTypeHasPrefix: String
+  detectedContentTypeHasSuffix: String
+  detectedContentTypeEqualFold: String
+  detectedContentTypeContainsFold: String
   """
   store_key field predicates
   """
@@ -6871,44 +7188,100 @@ input FileWhereInput {
   storeKeyContains: String
   storeKeyHasPrefix: String
   storeKeyHasSuffix: String
+  storeKeyIsNil: Boolean
+  storeKeyNotNil: Boolean
   storeKeyEqualFold: String
   storeKeyContainsFold: String
   """
-  category field predicates
+  category_type field predicates
   """
-  category: String
-  categoryNEQ: String
-  categoryIn: [String!]
-  categoryNotIn: [String!]
-  categoryGT: String
-  categoryGTE: String
-  categoryLT: String
-  categoryLTE: String
-  categoryContains: String
-  categoryHasPrefix: String
-  categoryHasSuffix: String
-  categoryIsNil: Boolean
-  categoryNotNil: Boolean
-  categoryEqualFold: String
-  categoryContainsFold: String
+  categoryType: String
+  categoryTypeNEQ: String
+  categoryTypeIn: [String!]
+  categoryTypeNotIn: [String!]
+  categoryTypeGT: String
+  categoryTypeGTE: String
+  categoryTypeLT: String
+  categoryTypeLTE: String
+  categoryTypeContains: String
+  categoryTypeHasPrefix: String
+  categoryTypeHasSuffix: String
+  categoryTypeIsNil: Boolean
+  categoryTypeNotNil: Boolean
+  categoryTypeEqualFold: String
+  categoryTypeContainsFold: String
   """
-  annotation field predicates
+  uri field predicates
   """
-  annotation: String
-  annotationNEQ: String
-  annotationIn: [String!]
-  annotationNotIn: [String!]
-  annotationGT: String
-  annotationGTE: String
-  annotationLT: String
-  annotationLTE: String
-  annotationContains: String
-  annotationHasPrefix: String
-  annotationHasSuffix: String
-  annotationIsNil: Boolean
-  annotationNotNil: Boolean
-  annotationEqualFold: String
-  annotationContainsFold: String
+  uri: String
+  uriNEQ: String
+  uriIn: [String!]
+  uriNotIn: [String!]
+  uriGT: String
+  uriGTE: String
+  uriLT: String
+  uriLTE: String
+  uriContains: String
+  uriHasPrefix: String
+  uriHasSuffix: String
+  uriIsNil: Boolean
+  uriNotNil: Boolean
+  uriEqualFold: String
+  uriContainsFold: String
+  """
+  storage_scheme field predicates
+  """
+  storageScheme: String
+  storageSchemeNEQ: String
+  storageSchemeIn: [String!]
+  storageSchemeNotIn: [String!]
+  storageSchemeGT: String
+  storageSchemeGTE: String
+  storageSchemeLT: String
+  storageSchemeLTE: String
+  storageSchemeContains: String
+  storageSchemeHasPrefix: String
+  storageSchemeHasSuffix: String
+  storageSchemeIsNil: Boolean
+  storageSchemeNotNil: Boolean
+  storageSchemeEqualFold: String
+  storageSchemeContainsFold: String
+  """
+  storage_volume field predicates
+  """
+  storageVolume: String
+  storageVolumeNEQ: String
+  storageVolumeIn: [String!]
+  storageVolumeNotIn: [String!]
+  storageVolumeGT: String
+  storageVolumeGTE: String
+  storageVolumeLT: String
+  storageVolumeLTE: String
+  storageVolumeContains: String
+  storageVolumeHasPrefix: String
+  storageVolumeHasSuffix: String
+  storageVolumeIsNil: Boolean
+  storageVolumeNotNil: Boolean
+  storageVolumeEqualFold: String
+  storageVolumeContainsFold: String
+  """
+  storage_path field predicates
+  """
+  storagePath: String
+  storagePathNEQ: String
+  storagePathIn: [String!]
+  storagePathNotIn: [String!]
+  storagePathGT: String
+  storagePathGTE: String
+  storagePathLT: String
+  storagePathLTE: String
+  storagePathContains: String
+  storagePathHasPrefix: String
+  storagePathHasSuffix: String
+  storagePathIsNil: Boolean
+  storagePathNotNil: Boolean
+  storagePathEqualFold: String
+  storagePathContainsFold: String
   """
   user edge predicates
   """
@@ -6920,15 +7293,45 @@ input FileWhereInput {
   hasOrganization: Boolean
   hasOrganizationWith: [OrganizationWhereInput!]
   """
+  group edge predicates
+  """
+  hasGroup: Boolean
+  hasGroupWith: [GroupWhereInput!]
+  """
+  contact edge predicates
+  """
+  hasContact: Boolean
+  hasContactWith: [ContactWhereInput!]
+  """
   entity edge predicates
   """
   hasEntity: Boolean
   hasEntityWith: [EntityWhereInput!]
   """
-  group edge predicates
+  usersetting edge predicates
   """
-  hasGroup: Boolean
-  hasGroupWith: [GroupWhereInput!]
+  hasUsersetting: Boolean
+  hasUsersettingWith: [UserSettingWhereInput!]
+  """
+  organizationsetting edge predicates
+  """
+  hasOrganizationsetting: Boolean
+  hasOrganizationsettingWith: [OrganizationSettingWhereInput!]
+  """
+  template edge predicates
+  """
+  hasTemplate: Boolean
+  hasTemplateWith: [TemplateWhereInput!]
+  """
+  documentdata edge predicates
+  """
+  hasDocumentdata: Boolean
+  hasDocumentdataWith: [DocumentDataWhereInput!]
+  """
+  events edge predicates
+  """
+  hasEvents: Boolean
+  hasEventsWith: [EventWhereInput!]
 }
 type Group implements Node {
   id: ID!
@@ -12290,6 +12693,7 @@ type OrganizationSetting implements Node {
   """
   organizationID: ID
   organization: Organization
+  files: [File!]
 }
 """
 A connection to a list of items.
@@ -12927,6 +13331,11 @@ input OrganizationSettingWhereInput {
   """
   hasOrganization: Boolean
   hasOrganizationWith: [OrganizationWhereInput!]
+  """
+  files edge predicates
+  """
+  hasFiles: Boolean
+  hasFilesWith: [FileWhereInput!]
 }
 """
 OrganizationWhereInput is used for filtering Organization objects.
@@ -15518,6 +15927,7 @@ type Template implements Node {
   uischema: JSON
   owner: Organization
   documents: [DocumentData!]
+  files: [File!]
 }
 """
 A connection to a list of items.
@@ -16072,6 +16482,11 @@ input TemplateWhereInput {
   """
   hasDocuments: Boolean
   hasDocumentsWith: [DocumentDataWhereInput!]
+  """
+  files edge predicates
+  """
+  hasFiles: Boolean
+  hasFilesWith: [FileWhereInput!]
 }
 """
 The builtin Time type
@@ -16158,6 +16573,9 @@ input UpdateContactInput {
   addEntityIDs: [ID!]
   removeEntityIDs: [ID!]
   clearEntities: Boolean
+  addFileIDs: [ID!]
+  removeFileIDs: [ID!]
+  clearFiles: Boolean
 }
 """
 UpdateDocumentDataInput is used for update DocumentData object.
@@ -16180,6 +16598,9 @@ input UpdateDocumentDataInput {
   addEntityIDs: [ID!]
   removeEntityIDs: [ID!]
   clearEntity: Boolean
+  addFileIDs: [ID!]
+  removeFileIDs: [ID!]
+  clearFiles: Boolean
 }
 """
 UpdateEntitlementInput is used for update Entitlement object.
@@ -16409,6 +16830,9 @@ input UpdateEventInput {
   addSubscriberIDs: [ID!]
   removeSubscriberIDs: [ID!]
   clearSubscriber: Boolean
+  addFileIDs: [ID!]
+  removeFileIDs: [ID!]
+  clearFile: Boolean
 }
 """
 UpdateFeatureInput is used for update Feature object.
@@ -16460,27 +16884,95 @@ input UpdateFileInput {
   tags: [String!]
   appendTags: [String!]
   clearTags: Boolean
-  fileName: String
-  fileExtension: String
-  fileSize: Int
-  clearFileSize: Boolean
-  contentType: String
+  """
+  the name of the file provided in the payload key without the extension
+  """
+  providedFileName: String
+  """
+  the extension of the file provided
+  """
+  providedFileExtension: String
+  """
+  the computed size of the file in the original http request
+  """
+  providedFileSize: Int
+  clearProvidedFileSize: Boolean
+  persistedFileSize: Int
+  clearPersistedFileSize: Boolean
+  """
+  the mime type detected by the system
+  """
+  detectedMimeType: String
+  clearDetectedMimeType: Boolean
+  """
+  the computed md5 hash of the file calculated after we received the contents of the file, but before the file was written to permanent storage
+  """
+  md5Hash: String
+  clearMd5Hash: Boolean
+  """
+  the content type of the HTTP request - may be different than MIME type as multipart-form can transmit multiple files and different types
+  """
+  detectedContentType: String
+  """
+  the key parsed out of a multipart-form request; if we allow multiple files to be uploaded we may want our API specifications to require the use of different keys allowing us to perform easier conditional evaluation on the key and what to do with the file based on key
+  """
   storeKey: String
-  category: String
-  clearCategory: Boolean
-  annotation: String
-  clearAnnotation: Boolean
-  userID: ID
+  clearStoreKey: Boolean
+  """
+  the category type of the file, if any (e.g. evidence, invoice, etc.)
+  """
+  categoryType: String
+  clearCategoryType: Boolean
+  """
+  the full URI of the file
+  """
+  uri: String
+  clearURI: Boolean
+  """
+  the storage scheme of the file, e.g. file://, s3://, etc.
+  """
+  storageScheme: String
+  clearStorageScheme: Boolean
+  """
+  the storage volume of the file which typically will be the organization ID the file belongs to - this is not a literal volume but the overlay file system mapping
+  """
+  storageVolume: String
+  clearStorageVolume: Boolean
+  """
+  the storage path is the second-level directory of the file path, typically the correlating logical object ID the file is associated with; files can be stand alone objects and not always correlated to a logical one, so this path of the tree may be empty
+  """
+  storagePath: String
+  clearStoragePath: Boolean
+  addUserIDs: [ID!]
+  removeUserIDs: [ID!]
   clearUser: Boolean
   addOrganizationIDs: [ID!]
   removeOrganizationIDs: [ID!]
   clearOrganization: Boolean
-  addEntityIDs: [ID!]
-  removeEntityIDs: [ID!]
-  clearEntity: Boolean
   addGroupIDs: [ID!]
   removeGroupIDs: [ID!]
   clearGroup: Boolean
+  addContactIDs: [ID!]
+  removeContactIDs: [ID!]
+  clearContact: Boolean
+  addEntityIDs: [ID!]
+  removeEntityIDs: [ID!]
+  clearEntity: Boolean
+  addUsersettingIDs: [ID!]
+  removeUsersettingIDs: [ID!]
+  clearUsersetting: Boolean
+  addOrganizationsettingIDs: [ID!]
+  removeOrganizationsettingIDs: [ID!]
+  clearOrganizationsetting: Boolean
+  addTemplateIDs: [ID!]
+  removeTemplateIDs: [ID!]
+  clearTemplate: Boolean
+  addDocumentdatumIDs: [ID!]
+  removeDocumentdatumIDs: [ID!]
+  clearDocumentdata: Boolean
+  addEventIDs: [ID!]
+  removeEventIDs: [ID!]
+  clearEvents: Boolean
 }
 """
 UpdateGroupInput is used for update Group object.
@@ -16928,6 +17420,9 @@ input UpdateOrganizationSettingInput {
   clearGeoLocation: Boolean
   organizationID: ID
   clearOrganization: Boolean
+  addFileIDs: [ID!]
+  removeFileIDs: [ID!]
+  clearFiles: Boolean
 }
 """
 UpdatePersonalAccessTokenInput is used for update PersonalAccessToken object.
@@ -17046,6 +17541,9 @@ input UpdateTemplateInput {
   addDocumentIDs: [ID!]
   removeDocumentIDs: [ID!]
   clearDocuments: Boolean
+  addFileIDs: [ID!]
+  removeFileIDs: [ID!]
+  clearFiles: Boolean
 }
 """
 UpdateUserInput is used for update User object.
@@ -17131,6 +17629,8 @@ input UpdateUserInput {
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFiles: Boolean
+  fileID: ID
+  clearFile: Boolean
   addEventIDs: [ID!]
   removeEventIDs: [ID!]
   clearEvents: Boolean
@@ -17182,6 +17682,9 @@ input UpdateUserSettingInput {
   clearUser: Boolean
   defaultOrgID: ID
   clearDefaultOrg: Boolean
+  addFileIDs: [ID!]
+  removeFileIDs: [ID!]
+  clearFiles: Boolean
 }
 """
 UpdateWebhookInput is used for update Webhook object.
@@ -17263,6 +17766,10 @@ type User implements Node {
   """
   avatarLocalFile: String
   """
+  The user's local avatar file id
+  """
+  avatarLocalFileID: ID
+  """
   The time the user's (local) avatar was last updated
   """
   avatarUpdatedAt: Time
@@ -17288,6 +17795,7 @@ type User implements Node {
   groups: [Group!]
   organizations: [Organization!]
   files: [File!]
+  file: File
   events: [Event!]
   groupMemberships: [GroupMembership!]
   orgMemberships: [OrgMembership!]
@@ -17361,6 +17869,10 @@ type UserHistory implements Node {
   The user's local avatar file
   """
   avatarLocalFile: String
+  """
+  The user's local avatar file id
+  """
+  avatarLocalFileID: String
   """
   The time the user's (local) avatar was last updated
   """
@@ -17713,6 +18225,24 @@ input UserHistoryWhereInput {
   avatarLocalFileEqualFold: String
   avatarLocalFileContainsFold: String
   """
+  avatar_local_file_id field predicates
+  """
+  avatarLocalFileID: String
+  avatarLocalFileIDNEQ: String
+  avatarLocalFileIDIn: [String!]
+  avatarLocalFileIDNotIn: [String!]
+  avatarLocalFileIDGT: String
+  avatarLocalFileIDGTE: String
+  avatarLocalFileIDLT: String
+  avatarLocalFileIDLTE: String
+  avatarLocalFileIDContains: String
+  avatarLocalFileIDHasPrefix: String
+  avatarLocalFileIDHasSuffix: String
+  avatarLocalFileIDIsNil: Boolean
+  avatarLocalFileIDNotNil: Boolean
+  avatarLocalFileIDEqualFold: String
+  avatarLocalFileIDContainsFold: String
+  """
   avatar_updated_at field predicates
   """
   avatarUpdatedAt: Time
@@ -17848,6 +18378,7 @@ type UserSetting implements Node {
   organization to load on user login
   """
   defaultOrg: Organization
+  files: [File!]
 }
 """
 A connection to a list of items.
@@ -18407,6 +18938,11 @@ input UserSettingWhereInput {
   """
   hasDefaultOrg: Boolean
   hasDefaultOrgWith: [OrganizationWhereInput!]
+  """
+  files edge predicates
+  """
+  hasFiles: Boolean
+  hasFilesWith: [FileWhereInput!]
 }
 """
 UserWhereInput is used for filtering User objects.
@@ -18627,6 +19163,24 @@ input UserWhereInput {
   avatarLocalFileEqualFold: String
   avatarLocalFileContainsFold: String
   """
+  avatar_local_file_id field predicates
+  """
+  avatarLocalFileID: ID
+  avatarLocalFileIDNEQ: ID
+  avatarLocalFileIDIn: [ID!]
+  avatarLocalFileIDNotIn: [ID!]
+  avatarLocalFileIDGT: ID
+  avatarLocalFileIDGTE: ID
+  avatarLocalFileIDLT: ID
+  avatarLocalFileIDLTE: ID
+  avatarLocalFileIDContains: ID
+  avatarLocalFileIDHasPrefix: ID
+  avatarLocalFileIDHasSuffix: ID
+  avatarLocalFileIDIsNil: Boolean
+  avatarLocalFileIDNotNil: Boolean
+  avatarLocalFileIDEqualFold: ID
+  avatarLocalFileIDContainsFold: ID
+  """
   avatar_updated_at field predicates
   """
   avatarUpdatedAt: Time
@@ -18716,6 +19270,11 @@ input UserWhereInput {
   """
   hasFiles: Boolean
   hasFilesWith: [FileWhereInput!]
+  """
+  file edge predicates
+  """
+  hasFile: Boolean
+  hasFileWith: [FileWhereInput!]
   """
   events edge predicates
   """

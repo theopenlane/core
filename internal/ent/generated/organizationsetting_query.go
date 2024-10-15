@@ -4,6 +4,7 @@ package generated
 
 import (
 	"context"
+	"database/sql/driver"
 	"errors"
 	"fmt"
 	"math"
@@ -12,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -27,8 +29,10 @@ type OrganizationSettingQuery struct {
 	inters           []Interceptor
 	predicates       []predicate.OrganizationSetting
 	withOrganization *OrganizationQuery
+	withFiles        *FileQuery
 	loadTotal        []func(context.Context, []*OrganizationSetting) error
 	modifiers        []func(*sql.Selector)
+	withNamedFiles   map[string]*FileQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -84,6 +88,31 @@ func (osq *OrganizationSettingQuery) QueryOrganization() *OrganizationQuery {
 		schemaConfig := osq.schemaConfig
 		step.To.Schema = schemaConfig.Organization
 		step.Edge.Schema = schemaConfig.OrganizationSetting
+		fromU = sqlgraph.SetNeighbors(osq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryFiles chains the current query on the "files" edge.
+func (osq *OrganizationSettingQuery) QueryFiles() *FileQuery {
+	query := (&FileClient{config: osq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := osq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := osq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organizationsetting.Table, organizationsetting.FieldID, selector),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, organizationsetting.FilesTable, organizationsetting.FilesPrimaryKey...),
+		)
+		schemaConfig := osq.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.OrganizationSettingFiles
 		fromU = sqlgraph.SetNeighbors(osq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -283,6 +312,7 @@ func (osq *OrganizationSettingQuery) Clone() *OrganizationSettingQuery {
 		inters:           append([]Interceptor{}, osq.inters...),
 		predicates:       append([]predicate.OrganizationSetting{}, osq.predicates...),
 		withOrganization: osq.withOrganization.Clone(),
+		withFiles:        osq.withFiles.Clone(),
 		// clone intermediate query.
 		sql:       osq.sql.Clone(),
 		path:      osq.path,
@@ -298,6 +328,17 @@ func (osq *OrganizationSettingQuery) WithOrganization(opts ...func(*Organization
 		opt(query)
 	}
 	osq.withOrganization = query
+	return osq
+}
+
+// WithFiles tells the query-builder to eager-load the nodes that are connected to
+// the "files" edge. The optional arguments are used to configure the query builder of the edge.
+func (osq *OrganizationSettingQuery) WithFiles(opts ...func(*FileQuery)) *OrganizationSettingQuery {
+	query := (&FileClient{config: osq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	osq.withFiles = query
 	return osq
 }
 
@@ -385,8 +426,9 @@ func (osq *OrganizationSettingQuery) sqlAll(ctx context.Context, hooks ...queryH
 	var (
 		nodes       = []*OrganizationSetting{}
 		_spec       = osq.querySpec()
-		loadedTypes = [1]bool{
+		loadedTypes = [2]bool{
 			osq.withOrganization != nil,
+			osq.withFiles != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -415,6 +457,20 @@ func (osq *OrganizationSettingQuery) sqlAll(ctx context.Context, hooks ...queryH
 	if query := osq.withOrganization; query != nil {
 		if err := osq.loadOrganization(ctx, query, nodes, nil,
 			func(n *OrganizationSetting, e *Organization) { n.Edges.Organization = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := osq.withFiles; query != nil {
+		if err := osq.loadFiles(ctx, query, nodes,
+			func(n *OrganizationSetting) { n.Edges.Files = []*File{} },
+			func(n *OrganizationSetting, e *File) { n.Edges.Files = append(n.Edges.Files, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range osq.withNamedFiles {
+		if err := osq.loadFiles(ctx, query, nodes,
+			func(n *OrganizationSetting) { n.appendNamedFiles(name) },
+			func(n *OrganizationSetting, e *File) { n.appendNamedFiles(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -451,6 +507,68 @@ func (osq *OrganizationSettingQuery) loadOrganization(ctx context.Context, query
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (osq *OrganizationSettingQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []*OrganizationSetting, init func(*OrganizationSetting), assign func(*OrganizationSetting, *File)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*OrganizationSetting)
+	nids := make(map[string]map[*OrganizationSetting]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(organizationsetting.FilesTable)
+		joinT.Schema(osq.schemaConfig.OrganizationSettingFiles)
+		s.Join(joinT).On(s.C(file.FieldID), joinT.C(organizationsetting.FilesPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(organizationsetting.FilesPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(organizationsetting.FilesPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*OrganizationSetting]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*File](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "files" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
 		}
 	}
 	return nil
@@ -555,6 +673,20 @@ func (osq *OrganizationSettingQuery) sqlQuery(ctx context.Context) *sql.Selector
 func (osq *OrganizationSettingQuery) Modify(modifiers ...func(s *sql.Selector)) *OrganizationSettingSelect {
 	osq.modifiers = append(osq.modifiers, modifiers...)
 	return osq.Select()
+}
+
+// WithNamedFiles tells the query-builder to eager-load the nodes that are connected to the "files"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (osq *OrganizationSettingQuery) WithNamedFiles(name string, opts ...func(*FileQuery)) *OrganizationSettingQuery {
+	query := (&FileClient{config: osq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if osq.withNamedFiles == nil {
+		osq.withNamedFiles = make(map[string]*FileQuery)
+	}
+	osq.withNamedFiles[name] = query
+	return osq
 }
 
 // OrganizationSettingGroupBy is the group-by builder for OrganizationSetting entities.

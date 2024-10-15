@@ -20,6 +20,7 @@ Config contains the configuration for the core server
 |[**sessions**](#sessions)|`object`|||
 |[**totp**](#totp)|`object`|||
 |[**ratelimit**](#ratelimit)|`object`|Config defines the configuration settings for the default rate limiter<br/>||
+|[**objectStorage**](#objectstorage)|`object`|||
 
 **Additional Properties:** not allowed  
 <a name="server"></a>
@@ -633,4 +634,27 @@ Config defines the configuration settings for the default rate limiter
 |**expires**|`integer`|||
 
 **Additional Properties:** not allowed  
+<a name="objectstorage"></a>
+## objectStorage: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**enabled**|`boolean`|||
+|**provider**|`string`|||
+|**accessKey**|`string`|||
+|**region**|`string`|||
+|**secretKey**|`string`|||
+|**credentialsJSON**|`string`|||
+|**defaultBucket**|`string`|||
+|[**keys**](#objectstoragekeys)|`string[]`|||
+
+**Additional Properties:** not allowed  
+<a name="objectstoragekeys"></a>
+### objectStorage\.keys: array
+
+**Items**
+
+**Item Type:** `string`  
 

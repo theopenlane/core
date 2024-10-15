@@ -41,20 +41,34 @@ type FileHistory struct {
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// FileName holds the value of the "file_name" field.
-	FileName string `json:"file_name,omitempty"`
-	// FileExtension holds the value of the "file_extension" field.
-	FileExtension string `json:"file_extension,omitempty"`
-	// FileSize holds the value of the "file_size" field.
-	FileSize int `json:"file_size,omitempty"`
-	// ContentType holds the value of the "content_type" field.
-	ContentType string `json:"content_type,omitempty"`
-	// StoreKey holds the value of the "store_key" field.
+	// the name of the file provided in the payload key without the extension
+	ProvidedFileName string `json:"provided_file_name,omitempty"`
+	// the extension of the file provided
+	ProvidedFileExtension string `json:"provided_file_extension,omitempty"`
+	// the computed size of the file in the original http request
+	ProvidedFileSize int64 `json:"provided_file_size,omitempty"`
+	// PersistedFileSize holds the value of the "persisted_file_size" field.
+	PersistedFileSize int64 `json:"persisted_file_size,omitempty"`
+	// the mime type detected by the system
+	DetectedMimeType string `json:"detected_mime_type,omitempty"`
+	// the computed md5 hash of the file calculated after we received the contents of the file, but before the file was written to permanent storage
+	Md5Hash string `json:"md5_hash,omitempty"`
+	// the content type of the HTTP request - may be different than MIME type as multipart-form can transmit multiple files and different types
+	DetectedContentType string `json:"detected_content_type,omitempty"`
+	// the key parsed out of a multipart-form request; if we allow multiple files to be uploaded we may want our API specifications to require the use of different keys allowing us to perform easier conditional evaluation on the key and what to do with the file based on key
 	StoreKey string `json:"store_key,omitempty"`
-	// Category holds the value of the "category" field.
-	Category string `json:"category,omitempty"`
-	// Annotation holds the value of the "annotation" field.
-	Annotation   string `json:"annotation,omitempty"`
+	// the category type of the file, if any (e.g. evidence, invoice, etc.)
+	CategoryType string `json:"category_type,omitempty"`
+	// the full URI of the file
+	URI string `json:"uri,omitempty"`
+	// the storage scheme of the file, e.g. file://, s3://, etc.
+	StorageScheme string `json:"storage_scheme,omitempty"`
+	// the storage volume of the file which typically will be the organization ID the file belongs to - this is not a literal volume but the overlay file system mapping
+	StorageVolume string `json:"storage_volume,omitempty"`
+	// the storage path is the second-level directory of the file path, typically the correlating logical object ID the file is associated with; files can be stand alone objects and not always correlated to a logical one, so this path of the tree may be empty
+	StoragePath string `json:"storage_path,omitempty"`
+	// the contents of the file
+	FileContents []byte `json:"file_contents,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -63,13 +77,13 @@ func (*FileHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case filehistory.FieldTags:
+		case filehistory.FieldTags, filehistory.FieldFileContents:
 			values[i] = new([]byte)
 		case filehistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case filehistory.FieldFileSize:
+		case filehistory.FieldProvidedFileSize, filehistory.FieldPersistedFileSize:
 			values[i] = new(sql.NullInt64)
-		case filehistory.FieldID, filehistory.FieldRef, filehistory.FieldCreatedBy, filehistory.FieldUpdatedBy, filehistory.FieldDeletedBy, filehistory.FieldMappingID, filehistory.FieldFileName, filehistory.FieldFileExtension, filehistory.FieldContentType, filehistory.FieldStoreKey, filehistory.FieldCategory, filehistory.FieldAnnotation:
+		case filehistory.FieldID, filehistory.FieldRef, filehistory.FieldCreatedBy, filehistory.FieldUpdatedBy, filehistory.FieldDeletedBy, filehistory.FieldMappingID, filehistory.FieldProvidedFileName, filehistory.FieldProvidedFileExtension, filehistory.FieldDetectedMimeType, filehistory.FieldMd5Hash, filehistory.FieldDetectedContentType, filehistory.FieldStoreKey, filehistory.FieldCategoryType, filehistory.FieldURI, filehistory.FieldStorageScheme, filehistory.FieldStorageVolume, filehistory.FieldStoragePath:
 			values[i] = new(sql.NullString)
 		case filehistory.FieldHistoryTime, filehistory.FieldCreatedAt, filehistory.FieldUpdatedAt, filehistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -162,29 +176,47 @@ func (fh *FileHistory) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
-		case filehistory.FieldFileName:
+		case filehistory.FieldProvidedFileName:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field file_name", values[i])
+				return fmt.Errorf("unexpected type %T for field provided_file_name", values[i])
 			} else if value.Valid {
-				fh.FileName = value.String
+				fh.ProvidedFileName = value.String
 			}
-		case filehistory.FieldFileExtension:
+		case filehistory.FieldProvidedFileExtension:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field file_extension", values[i])
+				return fmt.Errorf("unexpected type %T for field provided_file_extension", values[i])
 			} else if value.Valid {
-				fh.FileExtension = value.String
+				fh.ProvidedFileExtension = value.String
 			}
-		case filehistory.FieldFileSize:
+		case filehistory.FieldProvidedFileSize:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field file_size", values[i])
+				return fmt.Errorf("unexpected type %T for field provided_file_size", values[i])
 			} else if value.Valid {
-				fh.FileSize = int(value.Int64)
+				fh.ProvidedFileSize = value.Int64
 			}
-		case filehistory.FieldContentType:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field content_type", values[i])
+		case filehistory.FieldPersistedFileSize:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field persisted_file_size", values[i])
 			} else if value.Valid {
-				fh.ContentType = value.String
+				fh.PersistedFileSize = value.Int64
+			}
+		case filehistory.FieldDetectedMimeType:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field detected_mime_type", values[i])
+			} else if value.Valid {
+				fh.DetectedMimeType = value.String
+			}
+		case filehistory.FieldMd5Hash:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field md5_hash", values[i])
+			} else if value.Valid {
+				fh.Md5Hash = value.String
+			}
+		case filehistory.FieldDetectedContentType:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field detected_content_type", values[i])
+			} else if value.Valid {
+				fh.DetectedContentType = value.String
 			}
 		case filehistory.FieldStoreKey:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -192,17 +224,41 @@ func (fh *FileHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				fh.StoreKey = value.String
 			}
-		case filehistory.FieldCategory:
+		case filehistory.FieldCategoryType:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field category", values[i])
+				return fmt.Errorf("unexpected type %T for field category_type", values[i])
 			} else if value.Valid {
-				fh.Category = value.String
+				fh.CategoryType = value.String
 			}
-		case filehistory.FieldAnnotation:
+		case filehistory.FieldURI:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field annotation", values[i])
+				return fmt.Errorf("unexpected type %T for field uri", values[i])
 			} else if value.Valid {
-				fh.Annotation = value.String
+				fh.URI = value.String
+			}
+		case filehistory.FieldStorageScheme:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field storage_scheme", values[i])
+			} else if value.Valid {
+				fh.StorageScheme = value.String
+			}
+		case filehistory.FieldStorageVolume:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field storage_volume", values[i])
+			} else if value.Valid {
+				fh.StorageVolume = value.String
+			}
+		case filehistory.FieldStoragePath:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field storage_path", values[i])
+			} else if value.Valid {
+				fh.StoragePath = value.String
+			}
+		case filehistory.FieldFileContents:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field file_contents", values[i])
+			} else if value != nil {
+				fh.FileContents = *value
 			}
 		default:
 			fh.selectValues.Set(columns[i], values[i])
@@ -273,26 +329,47 @@ func (fh *FileHistory) String() string {
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", fh.Tags))
 	builder.WriteString(", ")
-	builder.WriteString("file_name=")
-	builder.WriteString(fh.FileName)
+	builder.WriteString("provided_file_name=")
+	builder.WriteString(fh.ProvidedFileName)
 	builder.WriteString(", ")
-	builder.WriteString("file_extension=")
-	builder.WriteString(fh.FileExtension)
+	builder.WriteString("provided_file_extension=")
+	builder.WriteString(fh.ProvidedFileExtension)
 	builder.WriteString(", ")
-	builder.WriteString("file_size=")
-	builder.WriteString(fmt.Sprintf("%v", fh.FileSize))
+	builder.WriteString("provided_file_size=")
+	builder.WriteString(fmt.Sprintf("%v", fh.ProvidedFileSize))
 	builder.WriteString(", ")
-	builder.WriteString("content_type=")
-	builder.WriteString(fh.ContentType)
+	builder.WriteString("persisted_file_size=")
+	builder.WriteString(fmt.Sprintf("%v", fh.PersistedFileSize))
+	builder.WriteString(", ")
+	builder.WriteString("detected_mime_type=")
+	builder.WriteString(fh.DetectedMimeType)
+	builder.WriteString(", ")
+	builder.WriteString("md5_hash=")
+	builder.WriteString(fh.Md5Hash)
+	builder.WriteString(", ")
+	builder.WriteString("detected_content_type=")
+	builder.WriteString(fh.DetectedContentType)
 	builder.WriteString(", ")
 	builder.WriteString("store_key=")
 	builder.WriteString(fh.StoreKey)
 	builder.WriteString(", ")
-	builder.WriteString("category=")
-	builder.WriteString(fh.Category)
+	builder.WriteString("category_type=")
+	builder.WriteString(fh.CategoryType)
 	builder.WriteString(", ")
-	builder.WriteString("annotation=")
-	builder.WriteString(fh.Annotation)
+	builder.WriteString("uri=")
+	builder.WriteString(fh.URI)
+	builder.WriteString(", ")
+	builder.WriteString("storage_scheme=")
+	builder.WriteString(fh.StorageScheme)
+	builder.WriteString(", ")
+	builder.WriteString("storage_volume=")
+	builder.WriteString(fh.StorageVolume)
+	builder.WriteString(", ")
+	builder.WriteString("storage_path=")
+	builder.WriteString(fh.StoragePath)
+	builder.WriteString(", ")
+	builder.WriteString("file_contents=")
+	builder.WriteString(fmt.Sprintf("%v", fh.FileContents))
 	builder.WriteByte(')')
 	return builder.String()
 }

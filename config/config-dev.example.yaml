@@ -96,3 +96,9 @@ entConfig:
   flags:
     useListObjectServices: false
     useListUserService: true
+
+objectStorage:
+    accessKey: "REDACTED"
+    secretKey: "REDACTED"
+    region: "us-east-2"
+    defaultBucket: "openlane"

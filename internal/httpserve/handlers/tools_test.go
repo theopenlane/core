@@ -24,7 +24,9 @@ import (
 	"github.com/theopenlane/core/internal/entdb"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
+	objmw "github.com/theopenlane/core/internal/middleware/objects"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
+	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	coreutils "github.com/theopenlane/core/pkg/testutils"
 )
@@ -38,12 +40,13 @@ var (
 // HandlerTestSuite handles the setup and teardown between tests
 type HandlerTestSuite struct {
 	suite.Suite
-	e   *echo.Echo
-	db  *ent.Client
-	api *openlaneclient.OpenlaneClient
-	h   *handlers.Handler
-	fga *mock_fga.MockSdkClient
-	tf  *testutils.TestFixture
+	e           *echo.Echo
+	db          *ent.Client
+	api         *openlaneclient.OpenlaneClient
+	h           *handlers.Handler
+	fga         *mock_fga.MockSdkClient
+	tf          *testutils.TestFixture
+	objectStore *objects.Objects
 }
 
 // TestHandlerTestSuite runs all the tests in the HandlerTestSuite
@@ -99,6 +102,9 @@ func (suite *HandlerTestSuite) SetupTest() {
 	db, err := entdb.NewTestClient(ctx, suite.tf, jobOpts, opts)
 	require.NoError(t, err, "failed opening connection to database")
 
+	suite.objectStore, err = coreutils.MockObjectManager(t, objmw.Upload)
+	require.NoError(t, err)
+
 	// truncate river tables
 	err = db.Job.TruncateRiverTables(ctx)
 	require.NoError(t, err)
@@ -107,7 +113,7 @@ func (suite *HandlerTestSuite) SetupTest() {
 	suite.db = db
 
 	// add the client
-	suite.api, err = coreutils.TestClient(t, suite.db)
+	suite.api, err = coreutils.TestClient(t, suite.db, suite.objectStore)
 	require.NoError(t, err)
 
 	// setup handler

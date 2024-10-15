@@ -1,6 +1,7 @@
 package serveropts
 
 import (
+	"context"
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/x509"
@@ -28,10 +29,14 @@ import (
 
 	"github.com/theopenlane/echox/middleware/echocontext"
 
+	awsConfig "github.com/aws/aws-sdk-go-v2/config"
+	awsCreds "github.com/aws/aws-sdk-go-v2/credentials"
+
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi"
 	"github.com/theopenlane/core/internal/httpserve/config"
 	"github.com/theopenlane/core/internal/httpserve/server"
+	objmw "github.com/theopenlane/core/internal/middleware/objects"
 	authmw "github.com/theopenlane/core/pkg/middleware/auth"
 	"github.com/theopenlane/core/pkg/middleware/cachecontrol"
 	"github.com/theopenlane/core/pkg/middleware/cors"
@@ -39,6 +44,8 @@ import (
 	"github.com/theopenlane/core/pkg/middleware/ratelimit"
 	"github.com/theopenlane/core/pkg/middleware/redirect"
 	"github.com/theopenlane/core/pkg/middleware/secure"
+	"github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/core/pkg/objects/storage"
 )
 
 type ServerOption interface {
@@ -138,12 +145,12 @@ func WithTokenManager() ServerOption {
 		// Setup token manager
 		tm, err := tokens.New(s.Config.Settings.Auth.Token)
 		if err != nil {
-			panic(err)
+			log.Panic().Err(err).Msg("Error creating token manager")
 		}
 
 		keys, err := tm.Keys()
 		if err != nil {
-			panic(err)
+			log.Panic().Err(err).Msg("Error getting keys from token manager")
 		}
 
 		// pass to the REST handlers
@@ -206,7 +213,7 @@ func WithReadyChecks(c *entx.EntClientConfig, f *fgax.Client, r *redis.Client, j
 func WithGraphRoute(srv *server.Server, c *ent.Client) ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
 		// Setup Graph API Handlers
-		r := graphapi.NewResolver(c).
+		r := graphapi.NewResolver(c, s.Config.ObjectManager).
 			WithExtensions(s.Config.Settings.Server.EnableGraphExtensions)
 
 		// add pool to the resolver to manage the number of goroutines
@@ -385,6 +392,47 @@ func WithCORS() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
 		if s.Config.Settings.Server.CORS.Enabled {
 			s.Config.DefaultMiddleware = append(s.Config.DefaultMiddleware, cors.New(s.Config.Settings.Server.CORS.AllowOrigins))
+		}
+	})
+}
+
+func WithObjectStorage() ServerOption {
+	return newApplyFunc(func(s *ServerOptions) {
+		if s.Config.Settings.ObjectStorage.Enabled {
+			s3Config, _ := awsConfig.LoadDefaultConfig(
+				context.Background(),
+				awsConfig.WithRegion(s.Config.Settings.ObjectStorage.Region),
+				awsConfig.WithCredentialsProvider(
+					awsCreds.NewStaticCredentialsProvider(
+						s.Config.Settings.ObjectStorage.AccessKey,
+						s.Config.Settings.ObjectStorage.SecretKey,
+						"")),
+			)
+
+			s3store, err := storage.NewS3FromConfig(s3Config, storage.S3Options{
+				Bucket: s.Config.Settings.ObjectStorage.DefaultBucket,
+			})
+			if err != nil {
+				log.Panic().Err(err).Msg("error creating S3 store")
+			}
+
+			s.Config.ObjectManager, err = objects.New(
+				objects.WithMaxFileSize(10<<20), // nolint:mnd
+				objects.WithMaxMemory(32<<20),   // nolint:mnd
+				objects.WithStorage(s3store),
+				objects.WithNameFuncGenerator(objects.OrganizationNameFunc),
+				objects.WithKeys(s.Config.Settings.ObjectStorage.Keys),
+				objects.WithUploaderFunc(objmw.Upload),
+				objects.WithValidationFunc(objmw.MimeTypeValidator),
+			)
+			if err != nil {
+				log.Panic().Err(err).Msg("Error creating object storage")
+			}
+
+			// add upload middleware to authMW, non-authenticated endpoints will not have this middleware
+			uploadMw := echo.WrapMiddleware(objects.FileUploadMiddleware(s.Config.ObjectManager))
+
+			s.Config.Handler.AuthMiddleware = append(s.Config.Handler.AuthMiddleware, uploadMw)
 		}
 	})
 }

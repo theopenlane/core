@@ -12,12 +12,18 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/contact"
+	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
+	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -25,20 +31,32 @@ import (
 // FileQuery is the builder for querying File entities.
 type FileQuery struct {
 	config
-	ctx                   *QueryContext
-	order                 []file.OrderOption
-	inters                []Interceptor
-	predicates            []predicate.File
-	withUser              *UserQuery
-	withOrganization      *OrganizationQuery
-	withEntity            *EntityQuery
-	withGroup             *GroupQuery
-	withFKs               bool
-	loadTotal             []func(context.Context, []*File) error
-	modifiers             []func(*sql.Selector)
-	withNamedOrganization map[string]*OrganizationQuery
-	withNamedEntity       map[string]*EntityQuery
-	withNamedGroup        map[string]*GroupQuery
+	ctx                          *QueryContext
+	order                        []file.OrderOption
+	inters                       []Interceptor
+	predicates                   []predicate.File
+	withUser                     *UserQuery
+	withOrganization             *OrganizationQuery
+	withGroup                    *GroupQuery
+	withContact                  *ContactQuery
+	withEntity                   *EntityQuery
+	withUsersetting              *UserSettingQuery
+	withOrganizationsetting      *OrganizationSettingQuery
+	withTemplate                 *TemplateQuery
+	withDocumentdata             *DocumentDataQuery
+	withEvents                   *EventQuery
+	loadTotal                    []func(context.Context, []*File) error
+	modifiers                    []func(*sql.Selector)
+	withNamedUser                map[string]*UserQuery
+	withNamedOrganization        map[string]*OrganizationQuery
+	withNamedGroup               map[string]*GroupQuery
+	withNamedContact             map[string]*ContactQuery
+	withNamedEntity              map[string]*EntityQuery
+	withNamedUsersetting         map[string]*UserSettingQuery
+	withNamedOrganizationsetting map[string]*OrganizationSettingQuery
+	withNamedTemplate            map[string]*TemplateQuery
+	withNamedDocumentdata        map[string]*DocumentDataQuery
+	withNamedEvents              map[string]*EventQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -89,11 +107,11 @@ func (fq *FileQuery) QueryUser() *UserQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(file.Table, file.FieldID, selector),
 			sqlgraph.To(user.Table, user.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, file.UserTable, file.UserColumn),
+			sqlgraph.Edge(sqlgraph.M2M, true, file.UserTable, file.UserPrimaryKey...),
 		)
 		schemaConfig := fq.schemaConfig
 		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.UserFiles
 		fromU = sqlgraph.SetNeighbors(fq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -125,6 +143,56 @@ func (fq *FileQuery) QueryOrganization() *OrganizationQuery {
 	return query
 }
 
+// QueryGroup chains the current query on the "group" edge.
+func (fq *FileQuery) QueryGroup() *GroupQuery {
+	query := (&GroupClient{config: fq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := fq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := fq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, file.GroupTable, file.GroupPrimaryKey...),
+		)
+		schemaConfig := fq.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.GroupFiles
+		fromU = sqlgraph.SetNeighbors(fq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryContact chains the current query on the "contact" edge.
+func (fq *FileQuery) QueryContact() *ContactQuery {
+	query := (&ContactClient{config: fq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := fq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := fq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, selector),
+			sqlgraph.To(contact.Table, contact.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, file.ContactTable, file.ContactPrimaryKey...),
+		)
+		schemaConfig := fq.schemaConfig
+		step.To.Schema = schemaConfig.Contact
+		step.Edge.Schema = schemaConfig.ContactFiles
+		fromU = sqlgraph.SetNeighbors(fq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryEntity chains the current query on the "entity" edge.
 func (fq *FileQuery) QueryEntity() *EntityQuery {
 	query := (&EntityClient{config: fq.config}).Query()
@@ -150,9 +218,9 @@ func (fq *FileQuery) QueryEntity() *EntityQuery {
 	return query
 }
 
-// QueryGroup chains the current query on the "group" edge.
-func (fq *FileQuery) QueryGroup() *GroupQuery {
-	query := (&GroupClient{config: fq.config}).Query()
+// QueryUsersetting chains the current query on the "usersetting" edge.
+func (fq *FileQuery) QueryUsersetting() *UserSettingQuery {
+	query := (&UserSettingClient{config: fq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := fq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -163,12 +231,112 @@ func (fq *FileQuery) QueryGroup() *GroupQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(file.Table, file.FieldID, selector),
-			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, file.GroupTable, file.GroupPrimaryKey...),
+			sqlgraph.To(usersetting.Table, usersetting.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, file.UsersettingTable, file.UsersettingPrimaryKey...),
 		)
 		schemaConfig := fq.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.GroupFiles
+		step.To.Schema = schemaConfig.UserSetting
+		step.Edge.Schema = schemaConfig.UserSettingFiles
+		fromU = sqlgraph.SetNeighbors(fq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryOrganizationsetting chains the current query on the "organizationsetting" edge.
+func (fq *FileQuery) QueryOrganizationsetting() *OrganizationSettingQuery {
+	query := (&OrganizationSettingClient{config: fq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := fq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := fq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, selector),
+			sqlgraph.To(organizationsetting.Table, organizationsetting.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, file.OrganizationsettingTable, file.OrganizationsettingPrimaryKey...),
+		)
+		schemaConfig := fq.schemaConfig
+		step.To.Schema = schemaConfig.OrganizationSetting
+		step.Edge.Schema = schemaConfig.OrganizationSettingFiles
+		fromU = sqlgraph.SetNeighbors(fq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryTemplate chains the current query on the "template" edge.
+func (fq *FileQuery) QueryTemplate() *TemplateQuery {
+	query := (&TemplateClient{config: fq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := fq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := fq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, selector),
+			sqlgraph.To(template.Table, template.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, file.TemplateTable, file.TemplatePrimaryKey...),
+		)
+		schemaConfig := fq.schemaConfig
+		step.To.Schema = schemaConfig.Template
+		step.Edge.Schema = schemaConfig.TemplateFiles
+		fromU = sqlgraph.SetNeighbors(fq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryDocumentdata chains the current query on the "documentdata" edge.
+func (fq *FileQuery) QueryDocumentdata() *DocumentDataQuery {
+	query := (&DocumentDataClient{config: fq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := fq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := fq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, selector),
+			sqlgraph.To(documentdata.Table, documentdata.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, file.DocumentdataTable, file.DocumentdataPrimaryKey...),
+		)
+		schemaConfig := fq.schemaConfig
+		step.To.Schema = schemaConfig.DocumentData
+		step.Edge.Schema = schemaConfig.DocumentDataFiles
+		fromU = sqlgraph.SetNeighbors(fq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEvents chains the current query on the "events" edge.
+func (fq *FileQuery) QueryEvents() *EventQuery {
+	query := (&EventClient{config: fq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := fq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := fq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, selector),
+			sqlgraph.To(event.Table, event.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, file.EventsTable, file.EventsPrimaryKey...),
+		)
+		schemaConfig := fq.schemaConfig
+		step.To.Schema = schemaConfig.Event
+		step.Edge.Schema = schemaConfig.FileEvents
 		fromU = sqlgraph.SetNeighbors(fq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -362,15 +530,21 @@ func (fq *FileQuery) Clone() *FileQuery {
 		return nil
 	}
 	return &FileQuery{
-		config:           fq.config,
-		ctx:              fq.ctx.Clone(),
-		order:            append([]file.OrderOption{}, fq.order...),
-		inters:           append([]Interceptor{}, fq.inters...),
-		predicates:       append([]predicate.File{}, fq.predicates...),
-		withUser:         fq.withUser.Clone(),
-		withOrganization: fq.withOrganization.Clone(),
-		withEntity:       fq.withEntity.Clone(),
-		withGroup:        fq.withGroup.Clone(),
+		config:                  fq.config,
+		ctx:                     fq.ctx.Clone(),
+		order:                   append([]file.OrderOption{}, fq.order...),
+		inters:                  append([]Interceptor{}, fq.inters...),
+		predicates:              append([]predicate.File{}, fq.predicates...),
+		withUser:                fq.withUser.Clone(),
+		withOrganization:        fq.withOrganization.Clone(),
+		withGroup:               fq.withGroup.Clone(),
+		withContact:             fq.withContact.Clone(),
+		withEntity:              fq.withEntity.Clone(),
+		withUsersetting:         fq.withUsersetting.Clone(),
+		withOrganizationsetting: fq.withOrganizationsetting.Clone(),
+		withTemplate:            fq.withTemplate.Clone(),
+		withDocumentdata:        fq.withDocumentdata.Clone(),
+		withEvents:              fq.withEvents.Clone(),
 		// clone intermediate query.
 		sql:       fq.sql.Clone(),
 		path:      fq.path,
@@ -400,6 +574,28 @@ func (fq *FileQuery) WithOrganization(opts ...func(*OrganizationQuery)) *FileQue
 	return fq
 }
 
+// WithGroup tells the query-builder to eager-load the nodes that are connected to
+// the "group" edge. The optional arguments are used to configure the query builder of the edge.
+func (fq *FileQuery) WithGroup(opts ...func(*GroupQuery)) *FileQuery {
+	query := (&GroupClient{config: fq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	fq.withGroup = query
+	return fq
+}
+
+// WithContact tells the query-builder to eager-load the nodes that are connected to
+// the "contact" edge. The optional arguments are used to configure the query builder of the edge.
+func (fq *FileQuery) WithContact(opts ...func(*ContactQuery)) *FileQuery {
+	query := (&ContactClient{config: fq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	fq.withContact = query
+	return fq
+}
+
 // WithEntity tells the query-builder to eager-load the nodes that are connected to
 // the "entity" edge. The optional arguments are used to configure the query builder of the edge.
 func (fq *FileQuery) WithEntity(opts ...func(*EntityQuery)) *FileQuery {
@@ -411,14 +607,58 @@ func (fq *FileQuery) WithEntity(opts ...func(*EntityQuery)) *FileQuery {
 	return fq
 }
 
-// WithGroup tells the query-builder to eager-load the nodes that are connected to
-// the "group" edge. The optional arguments are used to configure the query builder of the edge.
-func (fq *FileQuery) WithGroup(opts ...func(*GroupQuery)) *FileQuery {
-	query := (&GroupClient{config: fq.config}).Query()
+// WithUsersetting tells the query-builder to eager-load the nodes that are connected to
+// the "usersetting" edge. The optional arguments are used to configure the query builder of the edge.
+func (fq *FileQuery) WithUsersetting(opts ...func(*UserSettingQuery)) *FileQuery {
+	query := (&UserSettingClient{config: fq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	fq.withGroup = query
+	fq.withUsersetting = query
+	return fq
+}
+
+// WithOrganizationsetting tells the query-builder to eager-load the nodes that are connected to
+// the "organizationsetting" edge. The optional arguments are used to configure the query builder of the edge.
+func (fq *FileQuery) WithOrganizationsetting(opts ...func(*OrganizationSettingQuery)) *FileQuery {
+	query := (&OrganizationSettingClient{config: fq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	fq.withOrganizationsetting = query
+	return fq
+}
+
+// WithTemplate tells the query-builder to eager-load the nodes that are connected to
+// the "template" edge. The optional arguments are used to configure the query builder of the edge.
+func (fq *FileQuery) WithTemplate(opts ...func(*TemplateQuery)) *FileQuery {
+	query := (&TemplateClient{config: fq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	fq.withTemplate = query
+	return fq
+}
+
+// WithDocumentdata tells the query-builder to eager-load the nodes that are connected to
+// the "documentdata" edge. The optional arguments are used to configure the query builder of the edge.
+func (fq *FileQuery) WithDocumentdata(opts ...func(*DocumentDataQuery)) *FileQuery {
+	query := (&DocumentDataClient{config: fq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	fq.withDocumentdata = query
+	return fq
+}
+
+// WithEvents tells the query-builder to eager-load the nodes that are connected to
+// the "events" edge. The optional arguments are used to configure the query builder of the edge.
+func (fq *FileQuery) WithEvents(opts ...func(*EventQuery)) *FileQuery {
+	query := (&EventClient{config: fq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	fq.withEvents = query
 	return fq
 }
 
@@ -499,21 +739,20 @@ func (fq *FileQuery) prepareQuery(ctx context.Context) error {
 func (fq *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, error) {
 	var (
 		nodes       = []*File{}
-		withFKs     = fq.withFKs
 		_spec       = fq.querySpec()
-		loadedTypes = [4]bool{
+		loadedTypes = [10]bool{
 			fq.withUser != nil,
 			fq.withOrganization != nil,
-			fq.withEntity != nil,
 			fq.withGroup != nil,
+			fq.withContact != nil,
+			fq.withEntity != nil,
+			fq.withUsersetting != nil,
+			fq.withOrganizationsetting != nil,
+			fq.withTemplate != nil,
+			fq.withDocumentdata != nil,
+			fq.withEvents != nil,
 		}
 	)
-	if fq.withUser != nil {
-		withFKs = true
-	}
-	if withFKs {
-		_spec.Node.Columns = append(_spec.Node.Columns, file.ForeignKeys...)
-	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*File).scanValues(nil, columns)
 	}
@@ -538,8 +777,9 @@ func (fq *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 		return nodes, nil
 	}
 	if query := fq.withUser; query != nil {
-		if err := fq.loadUser(ctx, query, nodes, nil,
-			func(n *File, e *User) { n.Edges.User = e }); err != nil {
+		if err := fq.loadUser(ctx, query, nodes,
+			func(n *File) { n.Edges.User = []*User{} },
+			func(n *File, e *User) { n.Edges.User = append(n.Edges.User, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -550,6 +790,20 @@ func (fq *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 			return nil, err
 		}
 	}
+	if query := fq.withGroup; query != nil {
+		if err := fq.loadGroup(ctx, query, nodes,
+			func(n *File) { n.Edges.Group = []*Group{} },
+			func(n *File, e *Group) { n.Edges.Group = append(n.Edges.Group, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := fq.withContact; query != nil {
+		if err := fq.loadContact(ctx, query, nodes,
+			func(n *File) { n.Edges.Contact = []*Contact{} },
+			func(n *File, e *Contact) { n.Edges.Contact = append(n.Edges.Contact, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := fq.withEntity; query != nil {
 		if err := fq.loadEntity(ctx, query, nodes,
 			func(n *File) { n.Edges.Entity = []*Entity{} },
@@ -557,10 +811,47 @@ func (fq *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 			return nil, err
 		}
 	}
-	if query := fq.withGroup; query != nil {
-		if err := fq.loadGroup(ctx, query, nodes,
-			func(n *File) { n.Edges.Group = []*Group{} },
-			func(n *File, e *Group) { n.Edges.Group = append(n.Edges.Group, e) }); err != nil {
+	if query := fq.withUsersetting; query != nil {
+		if err := fq.loadUsersetting(ctx, query, nodes,
+			func(n *File) { n.Edges.Usersetting = []*UserSetting{} },
+			func(n *File, e *UserSetting) { n.Edges.Usersetting = append(n.Edges.Usersetting, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := fq.withOrganizationsetting; query != nil {
+		if err := fq.loadOrganizationsetting(ctx, query, nodes,
+			func(n *File) { n.Edges.Organizationsetting = []*OrganizationSetting{} },
+			func(n *File, e *OrganizationSetting) {
+				n.Edges.Organizationsetting = append(n.Edges.Organizationsetting, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := fq.withTemplate; query != nil {
+		if err := fq.loadTemplate(ctx, query, nodes,
+			func(n *File) { n.Edges.Template = []*Template{} },
+			func(n *File, e *Template) { n.Edges.Template = append(n.Edges.Template, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := fq.withDocumentdata; query != nil {
+		if err := fq.loadDocumentdata(ctx, query, nodes,
+			func(n *File) { n.Edges.Documentdata = []*DocumentData{} },
+			func(n *File, e *DocumentData) { n.Edges.Documentdata = append(n.Edges.Documentdata, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := fq.withEvents; query != nil {
+		if err := fq.loadEvents(ctx, query, nodes,
+			func(n *File) { n.Edges.Events = []*Event{} },
+			func(n *File, e *Event) { n.Edges.Events = append(n.Edges.Events, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range fq.withNamedUser {
+		if err := fq.loadUser(ctx, query, nodes,
+			func(n *File) { n.appendNamedUser(name) },
+			func(n *File, e *User) { n.appendNamedUser(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -571,6 +862,20 @@ func (fq *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 			return nil, err
 		}
 	}
+	for name, query := range fq.withNamedGroup {
+		if err := fq.loadGroup(ctx, query, nodes,
+			func(n *File) { n.appendNamedGroup(name) },
+			func(n *File, e *Group) { n.appendNamedGroup(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range fq.withNamedContact {
+		if err := fq.loadContact(ctx, query, nodes,
+			func(n *File) { n.appendNamedContact(name) },
+			func(n *File, e *Contact) { n.appendNamedContact(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range fq.withNamedEntity {
 		if err := fq.loadEntity(ctx, query, nodes,
 			func(n *File) { n.appendNamedEntity(name) },
@@ -578,10 +883,38 @@ func (fq *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 			return nil, err
 		}
 	}
-	for name, query := range fq.withNamedGroup {
-		if err := fq.loadGroup(ctx, query, nodes,
-			func(n *File) { n.appendNamedGroup(name) },
-			func(n *File, e *Group) { n.appendNamedGroup(name, e) }); err != nil {
+	for name, query := range fq.withNamedUsersetting {
+		if err := fq.loadUsersetting(ctx, query, nodes,
+			func(n *File) { n.appendNamedUsersetting(name) },
+			func(n *File, e *UserSetting) { n.appendNamedUsersetting(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range fq.withNamedOrganizationsetting {
+		if err := fq.loadOrganizationsetting(ctx, query, nodes,
+			func(n *File) { n.appendNamedOrganizationsetting(name) },
+			func(n *File, e *OrganizationSetting) { n.appendNamedOrganizationsetting(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range fq.withNamedTemplate {
+		if err := fq.loadTemplate(ctx, query, nodes,
+			func(n *File) { n.appendNamedTemplate(name) },
+			func(n *File, e *Template) { n.appendNamedTemplate(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range fq.withNamedDocumentdata {
+		if err := fq.loadDocumentdata(ctx, query, nodes,
+			func(n *File) { n.appendNamedDocumentdata(name) },
+			func(n *File, e *DocumentData) { n.appendNamedDocumentdata(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range fq.withNamedEvents {
+		if err := fq.loadEvents(ctx, query, nodes,
+			func(n *File) { n.appendNamedEvents(name) },
+			func(n *File, e *Event) { n.appendNamedEvents(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -594,33 +927,63 @@ func (fq *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 }
 
 func (fq *FileQuery) loadUser(ctx context.Context, query *UserQuery, nodes []*File, init func(*File), assign func(*File, *User)) error {
-	ids := make([]string, 0, len(nodes))
-	nodeids := make(map[string][]*File)
-	for i := range nodes {
-		if nodes[i].user_files == nil {
-			continue
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*File)
+	nids := make(map[string]map[*File]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
 		}
-		fk := *nodes[i].user_files
-		if _, ok := nodeids[fk]; !ok {
-			ids = append(ids, fk)
-		}
-		nodeids[fk] = append(nodeids[fk], nodes[i])
 	}
-	if len(ids) == 0 {
-		return nil
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(file.UserTable)
+		joinT.Schema(fq.schemaConfig.UserFiles)
+		s.Join(joinT).On(s.C(user.FieldID), joinT.C(file.UserPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(file.UserPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(file.UserPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
 	}
-	query.Where(user.IDIn(ids...))
-	neighbors, err := query.All(ctx)
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*File]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*User](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		nodes, ok := nodeids[n.ID]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "user_files" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected "user" node returned %v`, n.ID)
 		}
-		for i := range nodes {
-			assign(nodes[i], n)
+		for kn := range nodes {
+			assign(kn, n)
 		}
 	}
 	return nil
@@ -680,6 +1043,130 @@ func (fq *FileQuery) loadOrganization(ctx context.Context, query *OrganizationQu
 		nodes, ok := nids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected "organization" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (fq *FileQuery) loadGroup(ctx context.Context, query *GroupQuery, nodes []*File, init func(*File), assign func(*File, *Group)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*File)
+	nids := make(map[string]map[*File]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(file.GroupTable)
+		joinT.Schema(fq.schemaConfig.GroupFiles)
+		s.Join(joinT).On(s.C(group.FieldID), joinT.C(file.GroupPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(file.GroupPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(file.GroupPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*File]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Group](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "group" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (fq *FileQuery) loadContact(ctx context.Context, query *ContactQuery, nodes []*File, init func(*File), assign func(*File, *Contact)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*File)
+	nids := make(map[string]map[*File]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(file.ContactTable)
+		joinT.Schema(fq.schemaConfig.ContactFiles)
+		s.Join(joinT).On(s.C(contact.FieldID), joinT.C(file.ContactPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(file.ContactPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(file.ContactPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*File]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Contact](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "contact" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -749,7 +1236,7 @@ func (fq *FileQuery) loadEntity(ctx context.Context, query *EntityQuery, nodes [
 	}
 	return nil
 }
-func (fq *FileQuery) loadGroup(ctx context.Context, query *GroupQuery, nodes []*File, init func(*File), assign func(*File, *Group)) error {
+func (fq *FileQuery) loadUsersetting(ctx context.Context, query *UserSettingQuery, nodes []*File, init func(*File), assign func(*File, *UserSetting)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*File)
 	nids := make(map[string]map[*File]struct{})
@@ -761,12 +1248,12 @@ func (fq *FileQuery) loadGroup(ctx context.Context, query *GroupQuery, nodes []*
 		}
 	}
 	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(file.GroupTable)
-		joinT.Schema(fq.schemaConfig.GroupFiles)
-		s.Join(joinT).On(s.C(group.FieldID), joinT.C(file.GroupPrimaryKey[0]))
-		s.Where(sql.InValues(joinT.C(file.GroupPrimaryKey[1]), edgeIDs...))
+		joinT := sql.Table(file.UsersettingTable)
+		joinT.Schema(fq.schemaConfig.UserSettingFiles)
+		s.Join(joinT).On(s.C(usersetting.FieldID), joinT.C(file.UsersettingPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(file.UsersettingPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
-		s.Select(joinT.C(file.GroupPrimaryKey[1]))
+		s.Select(joinT.C(file.UsersettingPrimaryKey[1]))
 		s.AppendSelect(columns...)
 		s.SetDistinct(false)
 	})
@@ -796,14 +1283,262 @@ func (fq *FileQuery) loadGroup(ctx context.Context, query *GroupQuery, nodes []*
 			}
 		})
 	})
-	neighbors, err := withInterceptors[[]*Group](ctx, query, qr, query.inters)
+	neighbors, err := withInterceptors[[]*UserSetting](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
 		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected "group" node returned %v`, n.ID)
+			return fmt.Errorf(`unexpected "usersetting" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (fq *FileQuery) loadOrganizationsetting(ctx context.Context, query *OrganizationSettingQuery, nodes []*File, init func(*File), assign func(*File, *OrganizationSetting)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*File)
+	nids := make(map[string]map[*File]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(file.OrganizationsettingTable)
+		joinT.Schema(fq.schemaConfig.OrganizationSettingFiles)
+		s.Join(joinT).On(s.C(organizationsetting.FieldID), joinT.C(file.OrganizationsettingPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(file.OrganizationsettingPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(file.OrganizationsettingPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*File]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*OrganizationSetting](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "organizationsetting" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (fq *FileQuery) loadTemplate(ctx context.Context, query *TemplateQuery, nodes []*File, init func(*File), assign func(*File, *Template)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*File)
+	nids := make(map[string]map[*File]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(file.TemplateTable)
+		joinT.Schema(fq.schemaConfig.TemplateFiles)
+		s.Join(joinT).On(s.C(template.FieldID), joinT.C(file.TemplatePrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(file.TemplatePrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(file.TemplatePrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*File]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Template](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "template" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (fq *FileQuery) loadDocumentdata(ctx context.Context, query *DocumentDataQuery, nodes []*File, init func(*File), assign func(*File, *DocumentData)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*File)
+	nids := make(map[string]map[*File]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(file.DocumentdataTable)
+		joinT.Schema(fq.schemaConfig.DocumentDataFiles)
+		s.Join(joinT).On(s.C(documentdata.FieldID), joinT.C(file.DocumentdataPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(file.DocumentdataPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(file.DocumentdataPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*File]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*DocumentData](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "documentdata" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (fq *FileQuery) loadEvents(ctx context.Context, query *EventQuery, nodes []*File, init func(*File), assign func(*File, *Event)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*File)
+	nids := make(map[string]map[*File]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(file.EventsTable)
+		joinT.Schema(fq.schemaConfig.FileEvents)
+		s.Join(joinT).On(s.C(event.FieldID), joinT.C(file.EventsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(file.EventsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(file.EventsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*File]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Event](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "events" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -910,6 +1645,20 @@ func (fq *FileQuery) Modify(modifiers ...func(s *sql.Selector)) *FileSelect {
 	return fq.Select()
 }
 
+// WithNamedUser tells the query-builder to eager-load the nodes that are connected to the "user"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (fq *FileQuery) WithNamedUser(name string, opts ...func(*UserQuery)) *FileQuery {
+	query := (&UserClient{config: fq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if fq.withNamedUser == nil {
+		fq.withNamedUser = make(map[string]*UserQuery)
+	}
+	fq.withNamedUser[name] = query
+	return fq
+}
+
 // WithNamedOrganization tells the query-builder to eager-load the nodes that are connected to the "organization"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
 func (fq *FileQuery) WithNamedOrganization(name string, opts ...func(*OrganizationQuery)) *FileQuery {
@@ -921,6 +1670,34 @@ func (fq *FileQuery) WithNamedOrganization(name string, opts ...func(*Organizati
 		fq.withNamedOrganization = make(map[string]*OrganizationQuery)
 	}
 	fq.withNamedOrganization[name] = query
+	return fq
+}
+
+// WithNamedGroup tells the query-builder to eager-load the nodes that are connected to the "group"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (fq *FileQuery) WithNamedGroup(name string, opts ...func(*GroupQuery)) *FileQuery {
+	query := (&GroupClient{config: fq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if fq.withNamedGroup == nil {
+		fq.withNamedGroup = make(map[string]*GroupQuery)
+	}
+	fq.withNamedGroup[name] = query
+	return fq
+}
+
+// WithNamedContact tells the query-builder to eager-load the nodes that are connected to the "contact"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (fq *FileQuery) WithNamedContact(name string, opts ...func(*ContactQuery)) *FileQuery {
+	query := (&ContactClient{config: fq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if fq.withNamedContact == nil {
+		fq.withNamedContact = make(map[string]*ContactQuery)
+	}
+	fq.withNamedContact[name] = query
 	return fq
 }
 
@@ -938,17 +1715,73 @@ func (fq *FileQuery) WithNamedEntity(name string, opts ...func(*EntityQuery)) *F
 	return fq
 }
 
-// WithNamedGroup tells the query-builder to eager-load the nodes that are connected to the "group"
+// WithNamedUsersetting tells the query-builder to eager-load the nodes that are connected to the "usersetting"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (fq *FileQuery) WithNamedGroup(name string, opts ...func(*GroupQuery)) *FileQuery {
-	query := (&GroupClient{config: fq.config}).Query()
+func (fq *FileQuery) WithNamedUsersetting(name string, opts ...func(*UserSettingQuery)) *FileQuery {
+	query := (&UserSettingClient{config: fq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if fq.withNamedGroup == nil {
-		fq.withNamedGroup = make(map[string]*GroupQuery)
+	if fq.withNamedUsersetting == nil {
+		fq.withNamedUsersetting = make(map[string]*UserSettingQuery)
 	}
-	fq.withNamedGroup[name] = query
+	fq.withNamedUsersetting[name] = query
+	return fq
+}
+
+// WithNamedOrganizationsetting tells the query-builder to eager-load the nodes that are connected to the "organizationsetting"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (fq *FileQuery) WithNamedOrganizationsetting(name string, opts ...func(*OrganizationSettingQuery)) *FileQuery {
+	query := (&OrganizationSettingClient{config: fq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if fq.withNamedOrganizationsetting == nil {
+		fq.withNamedOrganizationsetting = make(map[string]*OrganizationSettingQuery)
+	}
+	fq.withNamedOrganizationsetting[name] = query
+	return fq
+}
+
+// WithNamedTemplate tells the query-builder to eager-load the nodes that are connected to the "template"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (fq *FileQuery) WithNamedTemplate(name string, opts ...func(*TemplateQuery)) *FileQuery {
+	query := (&TemplateClient{config: fq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if fq.withNamedTemplate == nil {
+		fq.withNamedTemplate = make(map[string]*TemplateQuery)
+	}
+	fq.withNamedTemplate[name] = query
+	return fq
+}
+
+// WithNamedDocumentdata tells the query-builder to eager-load the nodes that are connected to the "documentdata"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (fq *FileQuery) WithNamedDocumentdata(name string, opts ...func(*DocumentDataQuery)) *FileQuery {
+	query := (&DocumentDataClient{config: fq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if fq.withNamedDocumentdata == nil {
+		fq.withNamedDocumentdata = make(map[string]*DocumentDataQuery)
+	}
+	fq.withNamedDocumentdata[name] = query
+	return fq
+}
+
+// WithNamedEvents tells the query-builder to eager-load the nodes that are connected to the "events"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (fq *FileQuery) WithNamedEvents(name string, opts ...func(*EventQuery)) *FileQuery {
+	query := (&EventClient{config: fq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if fq.withNamedEvents == nil {
+		fq.withNamedEvents = make(map[string]*EventQuery)
+	}
+	fq.withNamedEvents[name] = query
 	return fq
 }
 

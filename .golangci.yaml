@@ -44,6 +44,7 @@ issues:
     - docker/*
     - internal/ent/generated/*
     - jsonschema/templates/*
+    - pkg/objects/mocks/*
   exclude-files:
     - internal/graphapi/gen_server.go
     - internal/graphapi/

@@ -27,7 +27,7 @@ import (
 )
 
 const (
-	urlMaxLen  = 255
+	urlMaxLen  = 2048
 	nameMaxLen = 64
 )
 
@@ -95,6 +95,14 @@ func (User) Fields() []ent.Field {
 			Comment("The user's local avatar file").
 			MaxLen(urlMaxLen).
 			Optional().
+			Nillable(),
+		field.String("avatar_local_file_id").
+			Comment("The user's local avatar file id").
+			Optional().
+			Annotations(
+				// this field is not exposed to the graphql schema, it is set by the file upload handler
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+			).
 			Nillable(),
 		field.Time("avatar_updated_at").
 			Comment("The time the user's (local) avatar was last updated").
@@ -165,6 +173,8 @@ func (User) Edges() []ent.Edge {
 		edge.To("webauthn", Webauthn.Type).
 			Annotations(entx.CascadeAnnotationField("Owner")),
 		edge.To("files", File.Type),
+		edge.To("file", File.Type).
+			Field("avatar_local_file_id").Unique(),
 		edge.To("events", Event.Type),
 	}
 }

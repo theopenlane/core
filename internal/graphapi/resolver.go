@@ -23,6 +23,7 @@ import (
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/pkg/objects"
 )
 
 // This file will not be regenerated automatically.
@@ -48,12 +49,14 @@ type Resolver struct {
 	db                *ent.Client
 	pool              *soiree.PondPool
 	extensionsEnabled bool
+	uploader          *objects.Objects
 }
 
 // NewResolver returns a resolver configured with the given ent client
-func NewResolver(db *ent.Client) *Resolver {
+func NewResolver(db *ent.Client, u *objects.Objects) *Resolver {
 	return &Resolver{
-		db: db,
+		db:       db,
+		uploader: u,
 	}
 }
 
@@ -92,7 +95,10 @@ func (r *Resolver) Handler(withPlayground bool) *Handler {
 	srv.AddTransport(transport.Options{})
 	srv.AddTransport(transport.GET{})
 	srv.AddTransport(transport.POST{})
-	srv.AddTransport(transport.MultipartForm{})
+	srv.AddTransport(transport.MultipartForm{
+		MaxUploadSize: r.uploader.MaxSize,
+		MaxMemory:     r.uploader.MaxMemory,
+	})
 
 	srv.SetQueryCache(lru.New[*ast.QueryDocument](1000)) //nolint:mnd
 
@@ -110,6 +116,11 @@ func (r *Resolver) Handler(withPlayground bool) *Handler {
 	// add extensions if enabled
 	if r.extensionsEnabled {
 		AddAllExtensions(srv)
+	}
+
+	// add file uploader if it is configured
+	if r.uploader != nil {
+		WithFileUploader(srv, r.uploader)
 	}
 
 	srv.Use(otelgqlgen.Middleware())
@@ -134,7 +145,14 @@ func (r *Resolver) Handler(withPlayground bool) *Handler {
 func WithTransactions(h *handler.Server, d *ent.Client) {
 	// setup transactional db client
 	h.AroundOperations(injectClient(d))
+
 	h.Use(entgql.Transactioner{TxOpener: d})
+}
+
+// WithFileUploader adds the file uploader to the graphql handler
+// this will handle the file upload process for the multipart form
+func WithFileUploader(h *handler.Server, u *objects.Objects) {
+	h.AroundOperations(injectFileUploader(u))
 }
 
 // WithContextLevelCache adds a context level cache to the handler
