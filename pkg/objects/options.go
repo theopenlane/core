@@ -5,7 +5,7 @@ import (
 	"io"
 
 	"github.com/spf13/cast"
-	"gopkg.in/cheggaaa/pb.v1"
+	"gopkg.in/cheggaaa/pb.v2"
 )
 
 // Option is a function that configures the Objects
