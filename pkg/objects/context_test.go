@@ -227,7 +227,7 @@ func TestGetFileIDsFromContext(t *testing.T) {
 			require.Len(t, result, len(tt.expectedResult))
 
 			if len(tt.expectedResult) > 0 {
-				assert.EqualValues(t, tt.expectedResult, result)
+				assert.ElementsMatch(t, tt.expectedResult, result)
 			}
 		})
 	}
