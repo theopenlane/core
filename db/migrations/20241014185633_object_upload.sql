@@ -1,7 +1,7 @@
 -- Modify "file_history" table
 ALTER TABLE "file_history" DROP COLUMN "file_name", DROP COLUMN "file_extension", DROP COLUMN "file_size", DROP COLUMN "content_type", ALTER COLUMN "store_key" DROP NOT NULL, DROP COLUMN "category", DROP COLUMN "annotation", ADD COLUMN "provided_file_name" character varying NOT NULL, ADD COLUMN "provided_file_extension" character varying NOT NULL, ADD COLUMN "provided_file_size" bigint NULL, ADD COLUMN "persisted_file_size" bigint NULL, ADD COLUMN "detected_mime_type" character varying NULL, ADD COLUMN "md5_hash" character varying NULL, ADD COLUMN "detected_content_type" character varying NOT NULL, ADD COLUMN "category_type" character varying NULL, ADD COLUMN "uri" character varying NULL, ADD COLUMN "storage_scheme" character varying NULL, ADD COLUMN "storage_volume" character varying NULL, ADD COLUMN "storage_path" character varying NULL, ADD COLUMN "file_contents" bytea NULL;
 -- Modify "user_history" table
-ALTER TABLE "user_history" ADD COLUMN "file_id" jsonb NULL;
+ALTER TABLE "user_history" ADD COLUMN "avatar_local_file_id" character varying NULL;
 -- Modify "files" table
 ALTER TABLE "files" DROP COLUMN "file_name", DROP COLUMN "file_extension", DROP COLUMN "file_size", DROP COLUMN "content_type", ALTER COLUMN "store_key" DROP NOT NULL, DROP COLUMN "category", DROP COLUMN "annotation", DROP COLUMN "user_files", ADD COLUMN "provided_file_name" character varying NOT NULL, ADD COLUMN "provided_file_extension" character varying NOT NULL, ADD COLUMN "provided_file_size" bigint NULL, ADD COLUMN "persisted_file_size" bigint NULL, ADD COLUMN "detected_mime_type" character varying NULL, ADD COLUMN "md5_hash" character varying NULL, ADD COLUMN "detected_content_type" character varying NOT NULL, ADD COLUMN "category_type" character varying NULL, ADD COLUMN "uri" character varying NULL, ADD COLUMN "storage_scheme" character varying NULL, ADD COLUMN "storage_volume" character varying NULL, ADD COLUMN "storage_path" character varying NULL, ADD COLUMN "file_contents" bytea NULL;
 -- Create "contact_files" table
@@ -15,7 +15,7 @@ CREATE TABLE "organization_setting_files" ("organization_setting_id" character v
 -- Create "template_files" table
 CREATE TABLE "template_files" ("template_id" character varying NOT NULL, "file_id" character varying NOT NULL, PRIMARY KEY ("template_id", "file_id"), CONSTRAINT "template_files_file_id" FOREIGN KEY ("file_id") REFERENCES "files" ("id") ON UPDATE NO ACTION ON DELETE CASCADE, CONSTRAINT "template_files_template_id" FOREIGN KEY ("template_id") REFERENCES "templates" ("id") ON UPDATE NO ACTION ON DELETE CASCADE);
 -- Modify "users" table
-ALTER TABLE "users" ADD COLUMN "file_id" jsonb NULL;
+ALTER TABLE "users" ADD COLUMN "avatar_local_file_id" character varying NULL, ADD CONSTRAINT "users_files_file" FOREIGN KEY ("avatar_local_file_id") REFERENCES "files" ("id") ON UPDATE NO ACTION ON DELETE SET NULL;
 -- Create "user_files" table
 CREATE TABLE "user_files" ("user_id" character varying NOT NULL, "file_id" character varying NOT NULL, PRIMARY KEY ("user_id", "file_id"), CONSTRAINT "user_files_file_id" FOREIGN KEY ("file_id") REFERENCES "files" ("id") ON UPDATE NO ACTION ON DELETE CASCADE, CONSTRAINT "user_files_user_id" FOREIGN KEY ("user_id") REFERENCES "users" ("id") ON UPDATE NO ACTION ON DELETE CASCADE);
 -- Create "user_setting_files" table

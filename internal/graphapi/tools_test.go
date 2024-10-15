@@ -5,10 +5,11 @@ import (
 	"testing"
 	"time"
 
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
+	"github.com/test-go/testify/mock"
 
 	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/iam/fgax"
@@ -18,7 +19,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/entdb"
+	objmw "github.com/theopenlane/core/internal/middleware/objects"
 	"github.com/theopenlane/core/pkg/objects"
+	mock_objects "github.com/theopenlane/core/pkg/objects/mocks"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	coreutils "github.com/theopenlane/core/pkg/testutils"
 	"github.com/theopenlane/echox/middleware/echocontext"
@@ -54,6 +57,7 @@ type client struct {
 	apiWithPAT   *openlaneclient.OpenlaneClient
 	apiWithToken *openlaneclient.OpenlaneClient
 	fga          *mock_fga.MockSdkClient
+	objectStore  *objects.Objects
 }
 
 func (suite *GraphTestSuite) SetupSuite() {
@@ -86,9 +90,7 @@ func (suite *GraphTestSuite) SetupTest() {
 	}
 
 	tm, err := coreutils.CreateTokenManager(15 * time.Minute) //nolint:mnd
-	if err != nil {
-		t.Fatal("error creating token manager")
-	}
+	require.NoError(t, err)
 
 	sm := coreutils.CreateSessionManager()
 	rc := coreutils.NewRedisClient()
@@ -125,9 +127,15 @@ func (suite *GraphTestSuite) SetupTest() {
 	db, err := entdb.NewTestClient(ctx, suite.tf, jobOpts, opts)
 	require.NoError(t, err, "failed opening connection to database")
 
+	c.objectStore, err = coreutils.MockObjectManager(t, objmw.Upload)
+	require.NoError(t, err)
+
+	// set the validation function
+	c.objectStore.ValidationFunc = objmw.MimeTypeValidator
+
 	// assign values
 	c.db = db
-	c.api, err = coreutils.TestClient(t, c.db, &objects.Upload{})
+	c.api, err = coreutils.TestClient(t, c.db, c.objectStore)
 	require.NoError(t, err)
 
 	// create test user
@@ -154,7 +162,7 @@ func (suite *GraphTestSuite) SetupTest() {
 		BearerToken: pat.Token,
 	}
 
-	c.apiWithPAT, err = coreutils.TestClientWithAuth(t, c.db, &objects.Upload{}, openlaneclient.WithCredentials(authHeaderPAT))
+	c.apiWithPAT, err = coreutils.TestClientWithAuth(t, c.db, c.objectStore, openlaneclient.WithCredentials(authHeaderPAT))
 	require.NoError(t, err)
 
 	// setup client with an API token
@@ -163,7 +171,7 @@ func (suite *GraphTestSuite) SetupTest() {
 	authHeaderAPIToken := openlaneclient.Authorization{
 		BearerToken: apiToken.Token,
 	}
-	c.apiWithToken, err = coreutils.TestClientWithAuth(t, c.db, &objects.Upload{}, openlaneclient.WithCredentials(authHeaderAPIToken))
+	c.apiWithToken, err = coreutils.TestClientWithAuth(t, c.db, c.objectStore, openlaneclient.WithCredentials(authHeaderAPIToken))
 	require.NoError(t, err)
 
 	suite.client = c
@@ -173,10 +181,8 @@ func (suite *GraphTestSuite) TearDownTest() {
 	// clear all fga mocks
 	mock_fga.ClearMocks(suite.client.fga)
 
-	if err := suite.client.db.Close(); err != nil {
-		log.Fatal().Err(err).Msg("failed to close database")
-	}
-
+	err := suite.client.db.Close()
+	require.NoError(suite.T(), err)
 }
 
 func (suite *GraphTestSuite) TearDownSuite() {
@@ -202,4 +208,32 @@ func userContextWithID(userID string) (context.Context, error) {
 	ec.SetRequest(ec.Request().WithContext(reqCtx))
 
 	return reqCtx, nil
+}
+
+func expectUpload(t *testing.T, mockStore objects.Storage, expectedUploads []graphql.Upload) {
+	require.NotNil(t, mockStore)
+
+	ms, ok := mockStore.(*mock_objects.MockStorage)
+	require.True(t, ok)
+
+	mockScheme := "file://"
+
+	for _, upload := range expectedUploads {
+		ms.EXPECT().GetScheme().Return(&mockScheme).Times(1)
+		ms.EXPECT().Upload(mock.Anything, mock.Anything, mock.Anything).Return(&objects.UploadedFileMetadata{
+			Size: upload.Size,
+		}, nil).Times(1)
+		ms.EXPECT().GetPresignedURL(mock.Anything, mock.Anything).Return("https://presigned.url/my-file", nil).Times(1)
+	}
+}
+
+func expectUploadCheckOnly(t *testing.T, mockStore objects.Storage) {
+	require.NotNil(t, mockStore)
+
+	ms, ok := mockStore.(*mock_objects.MockStorage)
+	require.True(t, ok)
+
+	mockScheme := "file://"
+
+	ms.EXPECT().GetScheme().Return(&mockScheme).Times(1)
 }

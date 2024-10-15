@@ -13,12 +13,12 @@ type ValidationFunc func(f File) error
 func MimeTypeValidator(validMimeTypes ...string) ValidationFunc {
 	return func(f File) error {
 		for _, mimeType := range validMimeTypes {
-			if strings.EqualFold(strings.ToLower(mimeType), f.MimeType) {
+			if strings.EqualFold(strings.ToLower(mimeType), f.ContentType) {
 				return nil
 			}
 		}
 
-		return fmt.Errorf("%w: %s", ErrUnsupportedMimeType, f.MimeType)
+		return fmt.Errorf("%w: %s", ErrUnsupportedMimeType, f.ContentType)
 	}
 }
 

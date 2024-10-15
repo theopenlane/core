@@ -41,7 +41,7 @@ func injectClient(db *ent.Client) graphql.OperationMiddleware {
 // injectFileUploader adds the file uploader as middleware to the graphql operation
 // this is used to handle file uploads to a storage backend, add the file to the file schema
 // and add the uploaded files to the echo context
-func injectFileUploader(u *objects.Upload) graphql.OperationMiddleware {
+func injectFileUploader(u *objects.Objects) graphql.OperationMiddleware {
 	return func(ctx context.Context, next graphql.OperationHandler) graphql.ResponseHandler {
 		op := graphql.GetOperationContext(ctx)
 

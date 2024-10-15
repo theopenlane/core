@@ -49,11 +49,11 @@ type Resolver struct {
 	db                *ent.Client
 	pool              *soiree.PondPool
 	extensionsEnabled bool
-	uploader          *objects.Upload
+	uploader          *objects.Objects
 }
 
 // NewResolver returns a resolver configured with the given ent client
-func NewResolver(db *ent.Client, u *objects.Upload) *Resolver {
+func NewResolver(db *ent.Client, u *objects.Objects) *Resolver {
 	return &Resolver{
 		db:       db,
 		uploader: u,
@@ -96,8 +96,8 @@ func (r *Resolver) Handler(withPlayground bool) *Handler {
 	srv.AddTransport(transport.GET{})
 	srv.AddTransport(transport.POST{})
 	srv.AddTransport(transport.MultipartForm{
-		MaxUploadSize: r.uploader.ObjectStorage.MaxSize,
-		MaxMemory:     r.uploader.ObjectStorage.MaxMemory,
+		MaxUploadSize: r.uploader.MaxSize,
+		MaxMemory:     r.uploader.MaxMemory,
 	})
 
 	srv.SetQueryCache(lru.New[*ast.QueryDocument](1000)) //nolint:mnd
@@ -149,7 +149,7 @@ func WithTransactions(h *handler.Server, d *ent.Client) {
 	h.Use(entgql.Transactioner{TxOpener: d})
 }
 
-func WithFileUploader(h *handler.Server, u *objects.Upload) {
+func WithFileUploader(h *handler.Server, u *objects.Objects) {
 	h.AroundOperations(injectFileUploader(u))
 }
 

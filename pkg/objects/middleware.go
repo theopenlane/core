@@ -13,14 +13,6 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-// Upload is the object that handles the file upload process
-type Upload struct {
-	// ObjectStorage is the object storage configuration
-	ObjectStorage *Objects
-	// Uploader is the func that handlers the file upload process and returns the files uploaded
-	Uploader func(ctx context.Context, u *Upload, files []FileUpload) ([]File, error)
-}
-
 // FileUpload is the object that holds the file information
 type FileUpload struct {
 	// File is the file to be uploaded
@@ -35,18 +27,8 @@ type FileUpload struct {
 	Key string
 }
 
-// Config defines the config for Mime middleware
-type UploadConfig struct {
-	// Keys is a list of keys to look for in the multipart form
-	Keys []string `yaml:"keys"`
-	// Skipper defines a function to skip middleware.
-	Skipper func(r *http.Request) bool `json:"-" koanf:"-"`
-	// Upload is the upload object that handles the file upload process
-	Upload *Upload
-}
-
 // FileUpload uploads the files to the storage and returns the the context with the uploaded files
-func (u *Upload) FileUpload(ctx context.Context, files []FileUpload) (context.Context, error) {
+func (u *Objects) FileUpload(ctx context.Context, files []FileUpload) (context.Context, error) {
 	// set up a wait group to wait for all the uploads to finish
 	var wg errgroup.Group
 
@@ -83,18 +65,18 @@ func (u *Upload) FileUpload(ctx context.Context, files []FileUpload) (context.Co
 // FileUploadMiddleware is a middleware that handles the file upload process
 // this can be added to the middleware chain to handle file uploads prior to the main handler
 // Since gqlgen handles file uploads differently, this middleware is not used in the graphql handler
-func FileUploadMiddleware(config UploadConfig) func(http.Handler) http.Handler {
+func FileUploadMiddleware(config *Objects) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			if config.Skipper != nil && config.Skipper(r) {
+			if config.Skipper(r) {
 				next.ServeHTTP(w, r)
 
 				return
 			}
 
-			ctx, err := config.Upload.multiformParseForm(w, r, config.Keys...)
+			ctx, err := config.multiformParseForm(w, r, config.Keys...)
 			if err != nil {
-				config.Upload.ObjectStorage.ErrorResponseHandler(err, http.StatusBadRequest).ServeHTTP(w, r)
+				config.ErrorResponseHandler(err, http.StatusBadRequest).ServeHTTP(w, r)
 
 				return
 			}
@@ -107,17 +89,17 @@ func FileUploadMiddleware(config UploadConfig) func(http.Handler) http.Handler {
 }
 
 // multiformParseForm parses the multipart form and uploads the files to the storage and returns the context with the uploaded files
-func (u *Upload) multiformParseForm(w http.ResponseWriter, r *http.Request, keys ...string) (context.Context, error) {
+func (u *Objects) multiformParseForm(w http.ResponseWriter, r *http.Request, keys ...string) (context.Context, error) {
 	ctx := r.Context()
 
-	r.Body = http.MaxBytesReader(w, r.Body, u.ObjectStorage.MaxSize)
+	r.Body = http.MaxBytesReader(w, r.Body, u.MaxSize)
 
 	// skip if the content type is not multipart
 	if !strings.Contains(r.Header.Get("Content-Type"), "multipart/form-data") {
 		return ctx, nil
 	}
 
-	if err := r.ParseMultipartForm(u.ObjectStorage.MaxSize); err != nil {
+	if err := r.ParseMultipartForm(u.MaxSize); err != nil {
 		return nil, err
 	}
 
@@ -159,10 +141,10 @@ func (u *Upload) multiformParseForm(w http.ResponseWriter, r *http.Request, keys
 }
 
 // getFileHeaders returns the file headers for a given key in the multipart form
-func (u *Upload) getFileHeaders(r *http.Request, key string) ([]*multipart.FileHeader, error) {
+func (u *Objects) getFileHeaders(r *http.Request, key string) ([]*multipart.FileHeader, error) {
 	fileHeaders, ok := r.MultipartForm.File[key]
 	if !ok {
-		if u.ObjectStorage.IgnoreNonExistentKeys {
+		if u.IgnoreNonExistentKeys {
 			return nil, nil
 		}
 
@@ -219,7 +201,7 @@ func FormatFileSize(size int64) string {
 	}
 }
 
-// createUCreateURIRI creates a URI for the file
+// CreateURI creates a URI for the file based on the scheme, destination and key
 func CreateURI(scheme, destination, key string) string {
 	return fmt.Sprintf("%s%s/%s", scheme, destination, key)
 }

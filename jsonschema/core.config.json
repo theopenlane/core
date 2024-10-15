@@ -584,8 +584,11 @@
         "credentialsJSON": {
           "type": "string"
         },
-        "bucket": {
+        "defaultBucket": {
           "type": "string"
+        },
+        "keys": {
+          "$ref": "#/$defs/[]string"
         }
       },
       "additionalProperties": false,

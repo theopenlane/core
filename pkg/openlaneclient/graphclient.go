@@ -10,8 +10,9 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/Yamashou/gqlgenc/clientv2"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/history"
+
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 type OpenlaneGraphClient interface {
@@ -229,12 +230,12 @@ type OpenlaneGraphClient interface {
 	GetAllTFASettings(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTFASettings, error)
 	GetTFASetting(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetTFASetting, error)
 	UpdateTFASetting(ctx context.Context, input UpdateTFASettingInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTFASetting, error)
-	CreateUser(ctx context.Context, input CreateUserInput, interceptors ...clientv2.RequestInterceptor) (*CreateUser, error)
+	CreateUser(ctx context.Context, input CreateUserInput, avatarFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateUser, error)
 	DeleteUser(ctx context.Context, deleteUserID string, interceptors ...clientv2.RequestInterceptor) (*DeleteUser, error)
 	GetAllUsers(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllUsers, error)
 	GetUserByID(ctx context.Context, userID string, interceptors ...clientv2.RequestInterceptor) (*GetUserByID, error)
 	GetUserByIDWithOrgs(ctx context.Context, userID string, interceptors ...clientv2.RequestInterceptor) (*GetUserByIDWithOrgs, error)
-	UpdateUser(ctx context.Context, updateUserID string, input UpdateUserInput, interceptors ...clientv2.RequestInterceptor) (*UpdateUser, error)
+	UpdateUser(ctx context.Context, updateUserID string, input UpdateUserInput, avatarFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateUser, error)
 	GetAllUserHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllUserHistories, error)
 	GetUserHistories(ctx context.Context, where *UserHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetUserHistories, error)
 	GetAllUserSettings(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllUserSettings, error)
@@ -27141,19 +27142,20 @@ func (t *CreateUser_CreateUser_User_Setting) GetUpdatedBy() *string {
 }
 
 type CreateUser_CreateUser_User struct {
-	AuthProvider     enums.AuthProvider                             "json:\"authProvider\" graphql:\"authProvider\""
-	AvatarLocalFile  *string                                        "json:\"avatarLocalFile,omitempty\" graphql:\"avatarLocalFile\""
-	AvatarRemoteURL  *string                                        "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
-	DisplayName      string                                         "json:\"displayName\" graphql:\"displayName\""
-	Email            string                                         "json:\"email\" graphql:\"email\""
-	FirstName        *string                                        "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID               string                                         "json:\"id\" graphql:\"id\""
-	LastName         *string                                        "json:\"lastName,omitempty\" graphql:\"lastName\""
-	Sub              *string                                        "json:\"sub,omitempty\" graphql:\"sub\""
-	Tags             []string                                       "json:\"tags,omitempty\" graphql:\"tags\""
-	OrgMemberships   []*CreateUser_CreateUser_User_OrgMemberships   "json:\"orgMemberships,omitempty\" graphql:\"orgMemberships\""
-	GroupMemberships []*CreateUser_CreateUser_User_GroupMemberships "json:\"groupMemberships,omitempty\" graphql:\"groupMemberships\""
-	Setting          CreateUser_CreateUser_User_Setting             "json:\"setting\" graphql:\"setting\""
+	AuthProvider      enums.AuthProvider                             "json:\"authProvider\" graphql:\"authProvider\""
+	AvatarLocalFile   *string                                        "json:\"avatarLocalFile,omitempty\" graphql:\"avatarLocalFile\""
+	AvatarRemoteURL   *string                                        "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
+	AvatarLocalFileID *string                                        "json:\"avatarLocalFileID,omitempty\" graphql:\"avatarLocalFileID\""
+	DisplayName       string                                         "json:\"displayName\" graphql:\"displayName\""
+	Email             string                                         "json:\"email\" graphql:\"email\""
+	FirstName         *string                                        "json:\"firstName,omitempty\" graphql:\"firstName\""
+	ID                string                                         "json:\"id\" graphql:\"id\""
+	LastName          *string                                        "json:\"lastName,omitempty\" graphql:\"lastName\""
+	Sub               *string                                        "json:\"sub,omitempty\" graphql:\"sub\""
+	Tags              []string                                       "json:\"tags,omitempty\" graphql:\"tags\""
+	OrgMemberships    []*CreateUser_CreateUser_User_OrgMemberships   "json:\"orgMemberships,omitempty\" graphql:\"orgMemberships\""
+	GroupMemberships  []*CreateUser_CreateUser_User_GroupMemberships "json:\"groupMemberships,omitempty\" graphql:\"groupMemberships\""
+	Setting           CreateUser_CreateUser_User_Setting             "json:\"setting\" graphql:\"setting\""
 }
 
 func (t *CreateUser_CreateUser_User) GetAuthProvider() *enums.AuthProvider {
@@ -27173,6 +27175,12 @@ func (t *CreateUser_CreateUser_User) GetAvatarRemoteURL() *string {
 		t = &CreateUser_CreateUser_User{}
 	}
 	return t.AvatarRemoteURL
+}
+func (t *CreateUser_CreateUser_User) GetAvatarLocalFileID() *string {
+	if t == nil {
+		t = &CreateUser_CreateUser_User{}
+	}
+	return t.AvatarLocalFileID
 }
 func (t *CreateUser_CreateUser_User) GetDisplayName() string {
 	if t == nil {
@@ -27364,22 +27372,23 @@ func (t *GetAllUsers_Users_Edges_Node_Setting) GetUpdatedBy() *string {
 }
 
 type GetAllUsers_Users_Edges_Node struct {
-	AuthProvider    enums.AuthProvider                   "json:\"authProvider\" graphql:\"authProvider\""
-	AvatarLocalFile *string                              "json:\"avatarLocalFile,omitempty\" graphql:\"avatarLocalFile\""
-	AvatarRemoteURL *string                              "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
-	DisplayName     string                               "json:\"displayName\" graphql:\"displayName\""
-	Email           string                               "json:\"email\" graphql:\"email\""
-	FirstName       *string                              "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID              string                               "json:\"id\" graphql:\"id\""
-	LastName        *string                              "json:\"lastName,omitempty\" graphql:\"lastName\""
-	LastSeen        *time.Time                           "json:\"lastSeen,omitempty\" graphql:\"lastSeen\""
-	Sub             *string                              "json:\"sub,omitempty\" graphql:\"sub\""
-	Tags            []string                             "json:\"tags,omitempty\" graphql:\"tags\""
-	Setting         GetAllUsers_Users_Edges_Node_Setting "json:\"setting\" graphql:\"setting\""
-	CreatedAt       *time.Time                           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string                              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	UpdatedAt       *time.Time                           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string                              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	AuthProvider      enums.AuthProvider                   "json:\"authProvider\" graphql:\"authProvider\""
+	AvatarLocalFile   *string                              "json:\"avatarLocalFile,omitempty\" graphql:\"avatarLocalFile\""
+	AvatarRemoteURL   *string                              "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
+	AvatarLocalFileID *string                              "json:\"avatarLocalFileID,omitempty\" graphql:\"avatarLocalFileID\""
+	DisplayName       string                               "json:\"displayName\" graphql:\"displayName\""
+	Email             string                               "json:\"email\" graphql:\"email\""
+	FirstName         *string                              "json:\"firstName,omitempty\" graphql:\"firstName\""
+	ID                string                               "json:\"id\" graphql:\"id\""
+	LastName          *string                              "json:\"lastName,omitempty\" graphql:\"lastName\""
+	LastSeen          *time.Time                           "json:\"lastSeen,omitempty\" graphql:\"lastSeen\""
+	Sub               *string                              "json:\"sub,omitempty\" graphql:\"sub\""
+	Tags              []string                             "json:\"tags,omitempty\" graphql:\"tags\""
+	Setting           GetAllUsers_Users_Edges_Node_Setting "json:\"setting\" graphql:\"setting\""
+	CreatedAt         *time.Time                           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy         *string                              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	UpdatedAt         *time.Time                           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy         *string                              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllUsers_Users_Edges_Node) GetAuthProvider() *enums.AuthProvider {
@@ -27399,6 +27408,12 @@ func (t *GetAllUsers_Users_Edges_Node) GetAvatarRemoteURL() *string {
 		t = &GetAllUsers_Users_Edges_Node{}
 	}
 	return t.AvatarRemoteURL
+}
+func (t *GetAllUsers_Users_Edges_Node) GetAvatarLocalFileID() *string {
+	if t == nil {
+		t = &GetAllUsers_Users_Edges_Node{}
+	}
+	return t.AvatarLocalFileID
 }
 func (t *GetAllUsers_Users_Edges_Node) GetDisplayName() string {
 	if t == nil {
@@ -27658,23 +27673,24 @@ func (t *GetUserByID_User_Organizations) GetMembers() []*GetUserByID_User_Organi
 }
 
 type GetUserByID_User struct {
-	AuthProvider    enums.AuthProvider                "json:\"authProvider\" graphql:\"authProvider\""
-	AvatarLocalFile *string                           "json:\"avatarLocalFile,omitempty\" graphql:\"avatarLocalFile\""
-	AvatarRemoteURL *string                           "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
-	DisplayName     string                            "json:\"displayName\" graphql:\"displayName\""
-	Email           string                            "json:\"email\" graphql:\"email\""
-	FirstName       *string                           "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID              string                            "json:\"id\" graphql:\"id\""
-	LastName        *string                           "json:\"lastName,omitempty\" graphql:\"lastName\""
-	LastSeen        *time.Time                        "json:\"lastSeen,omitempty\" graphql:\"lastSeen\""
-	Sub             *string                           "json:\"sub,omitempty\" graphql:\"sub\""
-	Tags            []string                          "json:\"tags,omitempty\" graphql:\"tags\""
-	Setting         GetUserByID_User_Setting          "json:\"setting\" graphql:\"setting\""
-	Organizations   []*GetUserByID_User_Organizations "json:\"organizations,omitempty\" graphql:\"organizations\""
-	UpdatedAt       *time.Time                        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string                           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	CreatedAt       *time.Time                        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string                           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	AuthProvider      enums.AuthProvider                "json:\"authProvider\" graphql:\"authProvider\""
+	AvatarLocalFile   *string                           "json:\"avatarLocalFile,omitempty\" graphql:\"avatarLocalFile\""
+	AvatarRemoteURL   *string                           "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
+	AvatarLocalFileID *string                           "json:\"avatarLocalFileID,omitempty\" graphql:\"avatarLocalFileID\""
+	DisplayName       string                            "json:\"displayName\" graphql:\"displayName\""
+	Email             string                            "json:\"email\" graphql:\"email\""
+	FirstName         *string                           "json:\"firstName,omitempty\" graphql:\"firstName\""
+	ID                string                            "json:\"id\" graphql:\"id\""
+	LastName          *string                           "json:\"lastName,omitempty\" graphql:\"lastName\""
+	LastSeen          *time.Time                        "json:\"lastSeen,omitempty\" graphql:\"lastSeen\""
+	Sub               *string                           "json:\"sub,omitempty\" graphql:\"sub\""
+	Tags              []string                          "json:\"tags,omitempty\" graphql:\"tags\""
+	Setting           GetUserByID_User_Setting          "json:\"setting\" graphql:\"setting\""
+	Organizations     []*GetUserByID_User_Organizations "json:\"organizations,omitempty\" graphql:\"organizations\""
+	UpdatedAt         *time.Time                        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy         *string                           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt         *time.Time                        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy         *string                           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 }
 
 func (t *GetUserByID_User) GetAuthProvider() *enums.AuthProvider {
@@ -27694,6 +27710,12 @@ func (t *GetUserByID_User) GetAvatarRemoteURL() *string {
 		t = &GetUserByID_User{}
 	}
 	return t.AvatarRemoteURL
+}
+func (t *GetUserByID_User) GetAvatarLocalFileID() *string {
+	if t == nil {
+		t = &GetUserByID_User{}
+	}
+	return t.AvatarLocalFileID
 }
 func (t *GetUserByID_User) GetDisplayName() string {
 	if t == nil {
@@ -27930,23 +27952,24 @@ func (t *GetUserByIDWithOrgs_User_OrgMemberships) GetUser() *GetUserByIDWithOrgs
 }
 
 type GetUserByIDWithOrgs_User struct {
-	AuthProvider    enums.AuthProvider                         "json:\"authProvider\" graphql:\"authProvider\""
-	AvatarLocalFile *string                                    "json:\"avatarLocalFile,omitempty\" graphql:\"avatarLocalFile\""
-	AvatarRemoteURL *string                                    "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
-	DisplayName     string                                     "json:\"displayName\" graphql:\"displayName\""
-	Email           string                                     "json:\"email\" graphql:\"email\""
-	FirstName       *string                                    "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID              string                                     "json:\"id\" graphql:\"id\""
-	LastName        *string                                    "json:\"lastName,omitempty\" graphql:\"lastName\""
-	LastSeen        *time.Time                                 "json:\"lastSeen,omitempty\" graphql:\"lastSeen\""
-	Sub             *string                                    "json:\"sub,omitempty\" graphql:\"sub\""
-	Tags            []string                                   "json:\"tags,omitempty\" graphql:\"tags\""
-	Setting         GetUserByIDWithOrgs_User_Setting           "json:\"setting\" graphql:\"setting\""
-	OrgMemberships  []*GetUserByIDWithOrgs_User_OrgMemberships "json:\"orgMemberships,omitempty\" graphql:\"orgMemberships\""
-	CreatedAt       *time.Time                                 "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string                                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	UpdatedAt       *time.Time                                 "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string                                    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	AuthProvider      enums.AuthProvider                         "json:\"authProvider\" graphql:\"authProvider\""
+	AvatarLocalFile   *string                                    "json:\"avatarLocalFile,omitempty\" graphql:\"avatarLocalFile\""
+	AvatarRemoteURL   *string                                    "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
+	AvatarLocalFileID *string                                    "json:\"avatarLocalFileID,omitempty\" graphql:\"avatarLocalFileID\""
+	DisplayName       string                                     "json:\"displayName\" graphql:\"displayName\""
+	Email             string                                     "json:\"email\" graphql:\"email\""
+	FirstName         *string                                    "json:\"firstName,omitempty\" graphql:\"firstName\""
+	ID                string                                     "json:\"id\" graphql:\"id\""
+	LastName          *string                                    "json:\"lastName,omitempty\" graphql:\"lastName\""
+	LastSeen          *time.Time                                 "json:\"lastSeen,omitempty\" graphql:\"lastSeen\""
+	Sub               *string                                    "json:\"sub,omitempty\" graphql:\"sub\""
+	Tags              []string                                   "json:\"tags,omitempty\" graphql:\"tags\""
+	Setting           GetUserByIDWithOrgs_User_Setting           "json:\"setting\" graphql:\"setting\""
+	OrgMemberships    []*GetUserByIDWithOrgs_User_OrgMemberships "json:\"orgMemberships,omitempty\" graphql:\"orgMemberships\""
+	CreatedAt         *time.Time                                 "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy         *string                                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	UpdatedAt         *time.Time                                 "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy         *string                                    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetUserByIDWithOrgs_User) GetAuthProvider() *enums.AuthProvider {
@@ -27966,6 +27989,12 @@ func (t *GetUserByIDWithOrgs_User) GetAvatarRemoteURL() *string {
 		t = &GetUserByIDWithOrgs_User{}
 	}
 	return t.AvatarRemoteURL
+}
+func (t *GetUserByIDWithOrgs_User) GetAvatarLocalFileID() *string {
+	if t == nil {
+		t = &GetUserByIDWithOrgs_User{}
+	}
+	return t.AvatarLocalFileID
 }
 func (t *GetUserByIDWithOrgs_User) GetDisplayName() string {
 	if t == nil {
@@ -28181,19 +28210,20 @@ func (t *UpdateUser_UpdateUser_User_Setting) GetUpdatedBy() *string {
 }
 
 type UpdateUser_UpdateUser_User struct {
-	AuthProvider     enums.AuthProvider                             "json:\"authProvider\" graphql:\"authProvider\""
-	AvatarLocalFile  *string                                        "json:\"avatarLocalFile,omitempty\" graphql:\"avatarLocalFile\""
-	AvatarRemoteURL  *string                                        "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
-	DisplayName      string                                         "json:\"displayName\" graphql:\"displayName\""
-	Email            string                                         "json:\"email\" graphql:\"email\""
-	FirstName        *string                                        "json:\"firstName,omitempty\" graphql:\"firstName\""
-	ID               string                                         "json:\"id\" graphql:\"id\""
-	LastName         *string                                        "json:\"lastName,omitempty\" graphql:\"lastName\""
-	Sub              *string                                        "json:\"sub,omitempty\" graphql:\"sub\""
-	Tags             []string                                       "json:\"tags,omitempty\" graphql:\"tags\""
-	GroupMemberships []*UpdateUser_UpdateUser_User_GroupMemberships "json:\"groupMemberships,omitempty\" graphql:\"groupMemberships\""
-	OrgMemberships   []*UpdateUser_UpdateUser_User_OrgMemberships   "json:\"orgMemberships,omitempty\" graphql:\"orgMemberships\""
-	Setting          UpdateUser_UpdateUser_User_Setting             "json:\"setting\" graphql:\"setting\""
+	AuthProvider      enums.AuthProvider                             "json:\"authProvider\" graphql:\"authProvider\""
+	AvatarLocalFile   *string                                        "json:\"avatarLocalFile,omitempty\" graphql:\"avatarLocalFile\""
+	AvatarRemoteURL   *string                                        "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
+	AvatarLocalFileID *string                                        "json:\"avatarLocalFileID,omitempty\" graphql:\"avatarLocalFileID\""
+	DisplayName       string                                         "json:\"displayName\" graphql:\"displayName\""
+	Email             string                                         "json:\"email\" graphql:\"email\""
+	FirstName         *string                                        "json:\"firstName,omitempty\" graphql:\"firstName\""
+	ID                string                                         "json:\"id\" graphql:\"id\""
+	LastName          *string                                        "json:\"lastName,omitempty\" graphql:\"lastName\""
+	Sub               *string                                        "json:\"sub,omitempty\" graphql:\"sub\""
+	Tags              []string                                       "json:\"tags,omitempty\" graphql:\"tags\""
+	GroupMemberships  []*UpdateUser_UpdateUser_User_GroupMemberships "json:\"groupMemberships,omitempty\" graphql:\"groupMemberships\""
+	OrgMemberships    []*UpdateUser_UpdateUser_User_OrgMemberships   "json:\"orgMemberships,omitempty\" graphql:\"orgMemberships\""
+	Setting           UpdateUser_UpdateUser_User_Setting             "json:\"setting\" graphql:\"setting\""
 }
 
 func (t *UpdateUser_UpdateUser_User) GetAuthProvider() *enums.AuthProvider {
@@ -28213,6 +28243,12 @@ func (t *UpdateUser_UpdateUser_User) GetAvatarRemoteURL() *string {
 		t = &UpdateUser_UpdateUser_User{}
 	}
 	return t.AvatarRemoteURL
+}
+func (t *UpdateUser_UpdateUser_User) GetAvatarLocalFileID() *string {
+	if t == nil {
+		t = &UpdateUser_UpdateUser_User{}
+	}
+	return t.AvatarLocalFileID
 }
 func (t *UpdateUser_UpdateUser_User) GetDisplayName() string {
 	if t == nil {
@@ -41840,12 +41876,13 @@ func (c *Client) UpdateTFASetting(ctx context.Context, input UpdateTFASettingInp
 	return &res, nil
 }
 
-const CreateUserDocument = `mutation CreateUser ($input: CreateUserInput!) {
-	createUser(input: $input) {
+const CreateUserDocument = `mutation CreateUser ($input: CreateUserInput!, $avatarFile: Upload) {
+	createUser(input: $input, avatarFile: $avatarFile) {
 		user {
 			authProvider
 			avatarLocalFile
 			avatarRemoteURL
+			avatarLocalFileID
 			displayName
 			email
 			firstName
@@ -41883,9 +41920,10 @@ const CreateUserDocument = `mutation CreateUser ($input: CreateUserInput!) {
 }
 `
 
-func (c *Client) CreateUser(ctx context.Context, input CreateUserInput, interceptors ...clientv2.RequestInterceptor) (*CreateUser, error) {
+func (c *Client) CreateUser(ctx context.Context, input CreateUserInput, avatarFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateUser, error) {
 	vars := map[string]any{
-		"input": input,
+		"input":      input,
+		"avatarFile": avatarFile,
 	}
 
 	var res CreateUser
@@ -41931,6 +41969,7 @@ const GetAllUsersDocument = `query GetAllUsers {
 				authProvider
 				avatarLocalFile
 				avatarRemoteURL
+				avatarLocalFileID
 				displayName
 				email
 				firstName
@@ -41986,6 +42025,7 @@ const GetUserByIDDocument = `query GetUserByID ($userId: ID!) {
 		authProvider
 		avatarLocalFile
 		avatarRemoteURL
+		avatarLocalFileID
 		displayName
 		email
 		firstName
@@ -42050,6 +42090,7 @@ const GetUserByIDWithOrgsDocument = `query GetUserByIDWithOrgs ($userId: ID!) {
 		authProvider
 		avatarLocalFile
 		avatarRemoteURL
+		avatarLocalFileID
 		displayName
 		email
 		firstName
@@ -42108,12 +42149,13 @@ func (c *Client) GetUserByIDWithOrgs(ctx context.Context, userID string, interce
 	return &res, nil
 }
 
-const UpdateUserDocument = `mutation UpdateUser ($updateUserId: ID!, $input: UpdateUserInput!) {
-	updateUser(id: $updateUserId, input: $input) {
+const UpdateUserDocument = `mutation UpdateUser ($updateUserId: ID!, $input: UpdateUserInput!, $avatarFile: Upload) {
+	updateUser(id: $updateUserId, input: $input, avatarFile: $avatarFile) {
 		user {
 			authProvider
 			avatarLocalFile
 			avatarRemoteURL
+			avatarLocalFileID
 			displayName
 			email
 			firstName
@@ -42149,10 +42191,11 @@ const UpdateUserDocument = `mutation UpdateUser ($updateUserId: ID!, $input: Upd
 }
 `
 
-func (c *Client) UpdateUser(ctx context.Context, updateUserID string, input UpdateUserInput, interceptors ...clientv2.RequestInterceptor) (*UpdateUser, error) {
+func (c *Client) UpdateUser(ctx context.Context, updateUserID string, input UpdateUserInput, avatarFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateUser, error) {
 	vars := map[string]any{
 		"updateUserId": updateUserID,
 		"input":        input,
+		"avatarFile":   avatarFile,
 	}
 
 	var res UpdateUser

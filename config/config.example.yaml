@@ -110,9 +110,11 @@ jobQueue:
     runMigrations: false
 objectStorage:
     accessKey: ""
-    bucket: ""
     credentialsJSON: ""
+    defaultBucket: ""
     enabled: true
+    keys:
+        - uploadFile
     provider: ""
     region: ""
     secretKey: ""

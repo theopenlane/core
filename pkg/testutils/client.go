@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/core/internal/graphapi"
 	"github.com/theopenlane/core/pkg/middleware/auth"
 	"github.com/theopenlane/core/pkg/objects"
+	mock_objects "github.com/theopenlane/core/pkg/objects/mocks"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/echox/middleware/echocontext"
@@ -33,7 +34,7 @@ func (l localRoundTripper) RoundTrip(req *http.Request) (*http.Response, error) 
 }
 
 // TestClient creates a new OpenlaneClient for testing
-func TestClient(t *testing.T, c *ent.Client, u *objects.Upload, opts ...openlaneclient.ClientOption) (*openlaneclient.OpenlaneClient, error) {
+func TestClient(t *testing.T, c *ent.Client, u *objects.Objects, opts ...openlaneclient.ClientOption) (*openlaneclient.OpenlaneClient, error) {
 	e := testEchoServer(t, c, u, false)
 
 	// setup interceptors
@@ -49,7 +50,7 @@ func TestClient(t *testing.T, c *ent.Client, u *objects.Upload, opts ...openlane
 }
 
 // TestClientWithAuth creates a new OpenlaneClient for testing that includes the auth middleware
-func TestClientWithAuth(t *testing.T, c *ent.Client, u *objects.Upload, opts ...openlaneclient.ClientOption) (*openlaneclient.OpenlaneClient, error) {
+func TestClientWithAuth(t *testing.T, c *ent.Client, u *objects.Objects, opts ...openlaneclient.ClientOption) (*openlaneclient.OpenlaneClient, error) {
 	e := testEchoServer(t, c, u, true)
 
 	// setup interceptors
@@ -66,7 +67,7 @@ func TestClientWithAuth(t *testing.T, c *ent.Client, u *objects.Upload, opts ...
 
 // testEchoServer creates a new echo server for testing the graph api
 // and optionally includes the middleware for authentication testing
-func testEchoServer(t *testing.T, c *ent.Client, u *objects.Upload, includeMiddleware bool) *echo.Echo {
+func testEchoServer(t *testing.T, c *ent.Client, u *objects.Objects, includeMiddleware bool) *echo.Echo {
 	srv := testGraphServer(t, c, u)
 
 	e := echo.New()
@@ -104,7 +105,7 @@ func createAuthConfig(c *ent.Client) *auth.AuthOptions {
 }
 
 // testGraphServer creates a new graphql server for testing the graph api
-func testGraphServer(t *testing.T, c *ent.Client, u *objects.Upload) *handler.Server {
+func testGraphServer(t *testing.T, c *ent.Client, u *objects.Objects) *handler.Server {
 	srv := handler.NewDefaultServer(
 		graphapi.NewExecutableSchema(
 			graphapi.Config{Resolvers: graphapi.NewResolver(c, u)},
@@ -122,8 +123,21 @@ func testGraphServer(t *testing.T, c *ent.Client, u *objects.Upload) *handler.Se
 
 	graphapi.WithTransactions(srv, c)
 
+	// add the file uploader middleware to the server
+	if u != nil {
+		graphapi.WithFileUploader(srv, u)
+	}
+
 	// if you do not want sleeps (the writer prefers naps anyways), skip cache
 	graphapi.WithSkipCache(srv)
 
 	return srv
+}
+
+// MockObjectManager creates a new objects manager for testing with a mock storage backend
+func MockObjectManager(t *testing.T, uploader objects.UploaderFunc) (*objects.Objects, error) {
+	return objects.New(
+		objects.WithStorage(mock_objects.NewMockStorage(t)),
+		objects.WithUploaderFunc(uploader),
+	)
 }

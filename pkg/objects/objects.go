@@ -3,6 +3,7 @@ package objects
 import (
 	"context"
 	"io"
+	"net/http"
 	"time"
 )
 
@@ -33,10 +34,18 @@ type Objects struct {
 	MaxMemory int64 `json:"maxMemory" koanf:"maxMemory"`
 	// IgnoreNonExistentKeys is a flag that indicates the handler should skip multipart form key values which do not match the configured
 	IgnoreNonExistentKeys bool `json:"ignoreNonExistentKeys" koanf:"ignoreNonExistentKeys"`
+	// Keys is a list of keys to look for in the multipart form on the REST request
+	// if the keys are not found, the request upload will be skipped
+	// this is not used by the graphql handler
+	Keys []string `json:"keys" koanf:"keys" default:"[uploadFile]"`
 	// ValidationFunc is a custom validation function
 	ValidationFunc ValidationFunc `json:"-" koanf:"-"`
 	// NameFuncGenerator is a function that allows you to rename your uploaded files
 	NameFuncGenerator NameGeneratorFunc `json:"-" koanf:"-"`
+	// Uploader is the func that handlers the file upload process and returns the files uploaded
+	Uploader UploaderFunc `json:"-" koanf:"-"`
+	// Skipper defines a function to skip middleware.
+	Skipper SkipperFunc `json:"-" koanf:"-"`
 	// ErrorResponseHandler is a custom error response handler
 	ErrorResponseHandler ErrResponseHandler `json:"-" koanf:"-"`
 }
@@ -65,8 +74,16 @@ func New(opts ...Option) (*Objects, error) {
 		handler.NameFuncGenerator = defaultNameGeneratorFunc
 	}
 
+	if handler.Uploader == nil {
+		handler.Uploader = defaultUploader
+	}
+
 	if handler.ErrorResponseHandler == nil {
 		handler.ErrorResponseHandler = defaultErrorResponseHandler
+	}
+
+	if handler.Skipper == nil {
+		handler.Skipper = defaultSkipper
 	}
 
 	if handler.Storage == nil {
@@ -117,6 +134,9 @@ type File struct {
 	// MimeType of the uploaded file
 	MimeType string `json:"mime_type,omitempty"`
 
+	// ContentType is the detected content type of the file
+	ContentType string `json:"content_type,omitempty"`
+
 	// Size in bytes of the uploaded file
 	Size              int64 `json:"size,omitempty"`
 	Metadata          map[string]string
@@ -124,6 +144,12 @@ type File struct {
 	PresignedURL      string `json:"url"`
 	ProvidedExtension string `json:"provided_extension"`
 }
+
+// SKipperFunc is a function that defines whether to skip the middleware
+type SkipperFunc func(r *http.Request) bool
+
+// UploaderFunc is a function that handles the file upload process and returns the files uploaded
+type UploaderFunc func(ctx context.Context, u *Objects, files []FileUpload) ([]File, error)
 
 // NameGeneratorFunc allows you alter the name of the file before it is ultimately uploaded and stored
 type NameGeneratorFunc func(s string) string

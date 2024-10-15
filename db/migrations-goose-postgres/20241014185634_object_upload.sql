@@ -2,7 +2,7 @@
 -- modify "file_history" table
 ALTER TABLE "file_history" DROP COLUMN "file_name", DROP COLUMN "file_extension", DROP COLUMN "file_size", DROP COLUMN "content_type", ALTER COLUMN "store_key" DROP NOT NULL, DROP COLUMN "category", DROP COLUMN "annotation", ADD COLUMN "provided_file_name" character varying NOT NULL, ADD COLUMN "provided_file_extension" character varying NOT NULL, ADD COLUMN "provided_file_size" bigint NULL, ADD COLUMN "persisted_file_size" bigint NULL, ADD COLUMN "detected_mime_type" character varying NULL, ADD COLUMN "md5_hash" character varying NULL, ADD COLUMN "detected_content_type" character varying NOT NULL, ADD COLUMN "category_type" character varying NULL, ADD COLUMN "uri" character varying NULL, ADD COLUMN "storage_scheme" character varying NULL, ADD COLUMN "storage_volume" character varying NULL, ADD COLUMN "storage_path" character varying NULL, ADD COLUMN "file_contents" bytea NULL;
 -- modify "user_history" table
-ALTER TABLE "user_history" ADD COLUMN "file_id" jsonb NULL;
+ALTER TABLE "user_history" ADD COLUMN "avatar_local_file_id" character varying NULL;
 -- modify "files" table
 ALTER TABLE "files" DROP COLUMN "file_name", DROP COLUMN "file_extension", DROP COLUMN "file_size", DROP COLUMN "content_type", ALTER COLUMN "store_key" DROP NOT NULL, DROP COLUMN "category", DROP COLUMN "annotation", DROP COLUMN "user_files", ADD COLUMN "provided_file_name" character varying NOT NULL, ADD COLUMN "provided_file_extension" character varying NOT NULL, ADD COLUMN "provided_file_size" bigint NULL, ADD COLUMN "persisted_file_size" bigint NULL, ADD COLUMN "detected_mime_type" character varying NULL, ADD COLUMN "md5_hash" character varying NULL, ADD COLUMN "detected_content_type" character varying NOT NULL, ADD COLUMN "category_type" character varying NULL, ADD COLUMN "uri" character varying NULL, ADD COLUMN "storage_scheme" character varying NULL, ADD COLUMN "storage_volume" character varying NULL, ADD COLUMN "storage_path" character varying NULL, ADD COLUMN "file_contents" bytea NULL;
 -- create "contact_files" table
@@ -16,7 +16,7 @@ CREATE TABLE "organization_setting_files" ("organization_setting_id" character v
 -- create "template_files" table
 CREATE TABLE "template_files" ("template_id" character varying NOT NULL, "file_id" character varying NOT NULL, PRIMARY KEY ("template_id", "file_id"), CONSTRAINT "template_files_file_id" FOREIGN KEY ("file_id") REFERENCES "files" ("id") ON UPDATE NO ACTION ON DELETE CASCADE, CONSTRAINT "template_files_template_id" FOREIGN KEY ("template_id") REFERENCES "templates" ("id") ON UPDATE NO ACTION ON DELETE CASCADE);
 -- modify "users" table
-ALTER TABLE "users" ADD COLUMN "file_id" jsonb NULL;
+ALTER TABLE "users" ADD COLUMN "avatar_local_file_id" character varying NULL, ADD CONSTRAINT "users_files_file" FOREIGN KEY ("avatar_local_file_id") REFERENCES "files" ("id") ON UPDATE NO ACTION ON DELETE SET NULL;
 -- create "user_files" table
 CREATE TABLE "user_files" ("user_id" character varying NOT NULL, "file_id" character varying NOT NULL, PRIMARY KEY ("user_id", "file_id"), CONSTRAINT "user_files_file_id" FOREIGN KEY ("file_id") REFERENCES "files" ("id") ON UPDATE NO ACTION ON DELETE CASCADE, CONSTRAINT "user_files_user_id" FOREIGN KEY ("user_id") REFERENCES "users" ("id") ON UPDATE NO ACTION ON DELETE CASCADE);
 -- create "user_setting_files" table
@@ -28,7 +28,7 @@ DROP TABLE "user_setting_files";
 -- reverse: create "user_files" table
 DROP TABLE "user_files";
 -- reverse: modify "users" table
-ALTER TABLE "users" DROP COLUMN "file_id";
+ALTER TABLE "users" DROP CONSTRAINT "users_files_file", DROP COLUMN "avatar_local_file_id";
 -- reverse: create "template_files" table
 DROP TABLE "template_files";
 -- reverse: create "organization_setting_files" table
@@ -42,6 +42,6 @@ DROP TABLE "contact_files";
 -- reverse: modify "files" table
 ALTER TABLE "files" DROP COLUMN "file_contents", DROP COLUMN "storage_path", DROP COLUMN "storage_volume", DROP COLUMN "storage_scheme", DROP COLUMN "uri", DROP COLUMN "category_type", DROP COLUMN "detected_content_type", DROP COLUMN "md5_hash", DROP COLUMN "detected_mime_type", DROP COLUMN "persisted_file_size", DROP COLUMN "provided_file_size", DROP COLUMN "provided_file_extension", DROP COLUMN "provided_file_name", ADD COLUMN "user_files" character varying NULL, ADD COLUMN "annotation" character varying NULL, ADD COLUMN "category" character varying NULL, ALTER COLUMN "store_key" SET NOT NULL, ADD COLUMN "content_type" character varying NOT NULL, ADD COLUMN "file_size" bigint NULL, ADD COLUMN "file_extension" character varying NOT NULL, ADD COLUMN "file_name" character varying NOT NULL;
 -- reverse: modify "user_history" table
-ALTER TABLE "user_history" DROP COLUMN "file_id";
+ALTER TABLE "user_history" DROP COLUMN "avatar_local_file_id";
 -- reverse: modify "file_history" table
 ALTER TABLE "file_history" DROP COLUMN "file_contents", DROP COLUMN "storage_path", DROP COLUMN "storage_volume", DROP COLUMN "storage_scheme", DROP COLUMN "uri", DROP COLUMN "category_type", DROP COLUMN "detected_content_type", DROP COLUMN "md5_hash", DROP COLUMN "detected_mime_type", DROP COLUMN "persisted_file_size", DROP COLUMN "provided_file_size", DROP COLUMN "provided_file_extension", DROP COLUMN "provided_file_name", ADD COLUMN "annotation" character varying NULL, ADD COLUMN "category" character varying NULL, ALTER COLUMN "store_key" SET NOT NULL, ADD COLUMN "content_type" character varying NOT NULL, ADD COLUMN "file_size" bigint NULL, ADD COLUMN "file_extension" character varying NOT NULL, ADD COLUMN "file_name" character varying NOT NULL;

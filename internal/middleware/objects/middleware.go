@@ -13,7 +13,7 @@ import (
 
 // Upload handles the file Upload process per key in the multipart form and returns the uploaded files
 // in addition to uploading the files to the storage, it also creates the file in the database
-func Upload(ctx context.Context, u *objects.Upload, files []objects.FileUpload) ([]objects.File, error) {
+func Upload(ctx context.Context, u *objects.Objects, files []objects.FileUpload) ([]objects.File, error) {
 	uploadedFiles := make([]objects.File, 0, len(files))
 
 	for _, f := range files {
@@ -26,24 +26,25 @@ func Upload(ctx context.Context, u *objects.Upload, files []objects.FileUpload) 
 		}
 
 		// generate the uploaded file name
-		uploadedFileName := u.ObjectStorage.NameFuncGenerator(entFile.ID + "_" + f.Filename)
+		uploadedFileName := u.NameFuncGenerator(entFile.ID + "_" + f.Filename)
 		fileData := objects.File{
 			ID:               entFile.ID,
 			FieldName:        f.Key,
 			OriginalName:     f.Filename,
 			UploadedFileName: uploadedFileName,
 			MimeType:         entFile.DetectedMimeType,
+			ContentType:      entFile.DetectedContentType,
 		}
 
 		// validate the file
-		if err := u.ObjectStorage.ValidationFunc(fileData); err != nil {
+		if err := u.ValidationFunc(fileData); err != nil {
 			log.Error().Err(err).Str("file", f.Filename).Msg("failed to validate file")
 
 			return nil, err
 		}
 
 		// Upload the file to the storage and get the metadata
-		metadata, err := u.ObjectStorage.Storage.Upload(ctx, f.File, &objects.UploadFileOptions{
+		metadata, err := u.Storage.Upload(ctx, f.File, &objects.UploadFileOptions{
 			FileName:    uploadedFileName,
 			ContentType: entFile.DetectedContentType,
 			Metadata: map[string]string{
@@ -62,7 +63,7 @@ func Upload(ctx context.Context, u *objects.Upload, files []objects.FileUpload) 
 		fileData.StorageKey = metadata.Key
 
 		// generate a presigned URL that is valid for 15 minutes
-		fileData.PresignedURL, err = u.ObjectStorage.Storage.GetPresignedURL(ctx, uploadedFileName)
+		fileData.PresignedURL, err = u.Storage.GetPresignedURL(ctx, uploadedFileName)
 		if err != nil {
 			log.Error().Err(err).Str("file", f.Filename).Msg("failed to get presigned URL")
 
@@ -95,7 +96,7 @@ func Upload(ctx context.Context, u *objects.Upload, files []objects.FileUpload) 
 }
 
 // createFile creates a file in the database and returns the file object
-func createFile(ctx context.Context, u *objects.Upload, f objects.FileUpload) (*ent.File, error) {
+func createFile(ctx context.Context, u *objects.Objects, f objects.FileUpload) (*ent.File, error) {
 	contentType, err := objects.DetectContentType(f.File)
 	if err != nil {
 		log.Error().Err(err).Str("file", f.Filename).Msg("failed to fetch content type")
@@ -118,7 +119,7 @@ func createFile(ctx context.Context, u *objects.Upload, f objects.FileUpload) (*
 		DetectedContentType:   contentType,
 		Md5Hash:               &md5Hash,
 		StoreKey:              &f.Key,
-		StorageScheme:         u.ObjectStorage.Storage.GetScheme(),
+		StorageScheme:         u.Storage.GetScheme(),
 	}
 
 	// get file contents to store in the database

@@ -8,7 +8,6 @@ import (
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/iam/auth"
 	mock_fga "github.com/theopenlane/iam/fgax/mockery"
@@ -399,7 +398,7 @@ func (suite *GraphTestSuite) TestLastUsedAPIToken() {
 		BearerToken: token.Token,
 	}
 
-	graphClient, err := testutils.TestClientWithAuth(t, suite.client.db, &objects.Upload{}, openlaneclient.WithCredentials(authHeader))
+	graphClient, err := testutils.TestClientWithAuth(t, suite.client.db, suite.client.objectStore, openlaneclient.WithCredentials(authHeader))
 	require.NoError(t, err)
 
 	// get the token to make sure the last used is updated using the token

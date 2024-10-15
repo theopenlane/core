@@ -9,8 +9,9 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/history"
+
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 type SearchResult interface {

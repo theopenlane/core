@@ -60,13 +60,12 @@ func HookUser() ent.Hook {
 
 			// check for uploaded files (e.g. avatar image)
 			fileIDs := objects.GetFileIDsFromContext(ctx)
-
 			if len(fileIDs) > 0 {
-				m.AddFileIDs(fileIDs...)
-
 				if err := checkAvatarFile(ctx, m); err != nil {
 					return nil, err
 				}
+
+				m.AddFileIDs(fileIDs...)
 			}
 
 			// user settings are required, if this is empty generate a default setting schema
@@ -263,7 +262,9 @@ func checkAvatarFile(ctx context.Context, m *generated.UserMutation) error {
 		return ErrTooManyAvatarFiles
 	}
 
-	m.SetAvatarLocalFileID(file[0].ID)
+	if file[0].FieldName == "avatarFile" {
+		m.SetAvatarLocalFileID(file[0].ID)
+	}
 
 	return nil
 }

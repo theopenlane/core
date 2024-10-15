@@ -2,6 +2,9 @@ module github.com/theopenlane/core
 
 go 1.23.1
 
+// point to fork of gqlgenc until the upstream is updated
+replace github.com/Yamashou/gqlgenc v0.25.2 => github.com/golanglemonade/gqlgenc v0.0.0-20241015025551-5203da073e90
+
 require (
 	ariga.io/entcache v0.1.0
 	entgo.io/contrib v0.6.0

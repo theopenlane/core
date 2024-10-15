@@ -11,9 +11,10 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
-	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
+
+	"github.com/theopenlane/core/internal/ent/interceptors"
 )
 
 // UserSettingHistory holds the schema definition for the UserSettingHistory entity.

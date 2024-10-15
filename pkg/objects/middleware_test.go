@@ -19,28 +19,9 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/test-go/testify/mock"
 
-	"github.com/theopenlane/utils/ulids"
-
 	"github.com/theopenlane/core/pkg/objects"
 	mocks "github.com/theopenlane/core/pkg/objects/mocks"
 )
-
-func verifyMatch(t *testing.T, v interface{}) {
-	g := goldie.New(t, goldie.WithFixtureDir("./testdata/golden"))
-
-	b := new(bytes.Buffer)
-
-	var err error
-
-	if d, ok := v.(*httptest.ResponseRecorder); ok {
-		_, err = io.Copy(b, d.Body)
-	} else {
-		err = json.NewEncoder(b).Encode(v)
-	}
-
-	require.NoError(t, err)
-	g.Assert(t, t.Name(), b.Bytes())
-}
 
 func TestFileUploadMiddleware(t *testing.T) {
 	tt := []struct {
@@ -153,7 +134,7 @@ func TestFileUploadMiddleware(t *testing.T) {
 				opts = append(opts, objects.WithIgnoreNonExistentKey(true))
 			}
 
-			handler, err := objects.New(opts...)
+			objectHandler, err := objects.New(opts...)
 			require.NoError(t, err)
 
 			buffer := bytes.NewBuffer(nil)
@@ -183,15 +164,10 @@ func TestFileUploadMiddleware(t *testing.T) {
 			r := httptest.NewRequest(http.MethodPatch, "/", buffer)
 			r.Header.Set("Content-Type", multipartWriter.FormDataContentType())
 
-			upload := &objects.Upload{
-				ObjectStorage: handler,
-				Uploader:      mockUploader(),
-			}
+			// set the form field key
+			objectHandler.Keys = []string{"form-field"}
 
-			objects.FileUploadMiddleware(objects.UploadConfig{
-				Keys:   []string{"form-field"},
-				Upload: upload,
-			})(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			objects.FileUploadMiddleware(objectHandler)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				if v.useIgnoreSkipOpt {
 					w.WriteHeader(http.StatusAccepted)
 					fmt.Fprintf(w, "skipping check since we did not upload any file")
@@ -226,47 +202,19 @@ func TestFileUploadMiddleware(t *testing.T) {
 	}
 }
 
-func mockUploader() func(ctx context.Context, u *objects.Upload, files []objects.FileUpload) ([]objects.File, error) {
-	return func(ctx context.Context, u *objects.Upload, files []objects.FileUpload) ([]objects.File, error) {
-		uploadedFiles := make([]objects.File, 0, len(files))
+func verifyMatch(t *testing.T, v interface{}) {
+	g := goldie.New(t, goldie.WithFixtureDir("./testdata/golden"))
 
-		for _, f := range files {
-			fileID := ulids.New().String()
-			uploadedFileName := u.ObjectStorage.NameFuncGenerator(fileID + "_" + f.Filename)
+	b := new(bytes.Buffer)
 
-			mimeType, err := objects.DetectContentType(f.File)
-			if err != nil {
-				return nil, err
-			}
+	var err error
 
-			fileData := objects.File{
-				ID:               fileID,
-				FieldName:        f.Key,
-				OriginalName:     f.Filename,
-				UploadedFileName: uploadedFileName,
-				MimeType:         mimeType,
-			}
-
-			// validate the file
-			if err := u.ObjectStorage.ValidationFunc(fileData); err != nil {
-				return nil, err
-			}
-
-			metadata, err := u.ObjectStorage.Storage.Upload(ctx, files[0].File, &objects.UploadFileOptions{
-				FileName: uploadedFileName,
-			})
-			if err != nil {
-				return nil, err
-			}
-
-			// add metadata to file information
-			fileData.Size = metadata.Size
-			fileData.FolderDestination = metadata.FolderDestination
-			fileData.StorageKey = metadata.Key
-
-			uploadedFiles = append(uploadedFiles, fileData)
-		}
-
-		return uploadedFiles, nil
+	if d, ok := v.(*httptest.ResponseRecorder); ok {
+		_, err = io.Copy(b, d.Body)
+	} else {
+		err = json.NewEncoder(b).Encode(v)
 	}
+
+	require.NoError(t, err)
+	g.Assert(t, t.Name(), b.Bytes())
 }

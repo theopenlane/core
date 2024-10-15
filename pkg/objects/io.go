@@ -6,11 +6,44 @@ import (
 	"encoding/base64"
 	"fmt"
 	"io"
+	"net/http"
 	"os"
 
 	"github.com/gabriel-vasile/mimetype"
 	"github.com/rs/zerolog/log"
 )
+
+// NewUploadFile function reads the content of the provided file path and returns a FileUpload object
+func NewUploadFile(filePath string) (file FileUpload, err error) {
+	f, err := os.Open(filePath)
+	if err != nil {
+		return file, err
+	}
+
+	defer func() {
+		closeErr := f.Close()
+		if err == nil {
+			err = closeErr
+		}
+	}()
+
+	stat, err := f.Stat()
+	if err != nil {
+		return file, err
+	}
+
+	b, err := io.ReadAll(f)
+	if err != nil {
+		return file, err
+	}
+
+	file.File = bytes.NewReader(b)
+	file.Filename = stat.Name()
+	file.Size = stat.Size()
+	file.ContentType = http.DetectContentType(b)
+
+	return file, nil
+}
 
 // StreamToByte function reads the content of the provided io.Reader and returns it as a byte slice
 func StreamToByte(stream io.ReadSeeker) ([]byte, error) {

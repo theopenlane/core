@@ -213,11 +213,7 @@ func WithReadyChecks(c *entx.EntClientConfig, f *fgax.Client, r *redis.Client, j
 func WithGraphRoute(srv *server.Server, c *ent.Client) ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
 		// Setup Graph API Handlers
-		r := graphapi.NewResolver(c,
-			&objects.Upload{
-				ObjectStorage: s.Config.Handler.ObjectStorage,
-				Uploader:      objmw.Upload,
-			}).
+		r := graphapi.NewResolver(c, s.Config.ObjectManager).
 			WithExtensions(s.Config.Settings.Server.EnableGraphExtensions)
 
 		// add pool to the resolver to manage the number of goroutines
@@ -414,39 +410,27 @@ func WithObjectStorage() ServerOption {
 			)
 
 			s3store, err := storage.NewS3FromConfig(s3Config, storage.S3Options{
-				Bucket: s.Config.Settings.ObjectStorage.Bucket,
+				Bucket: s.Config.Settings.ObjectStorage.DefaultBucket,
 			})
 			if err != nil {
-				log.Panic().Err(err).Msg("Error creating S3 store")
+				log.Panic().Err(err).Msg("error creating S3 store")
 			}
 
-			handler, err := objects.New(
+			s.Config.ObjectManager, err = objects.New(
 				objects.WithMaxFileSize(10<<20), // nolint:mnd
 				objects.WithMaxMemory(32<<20),   // nolint:mnd
 				objects.WithStorage(s3store),
 				objects.WithNameFuncGenerator(objects.OrganizationNameFunc),
+				objects.WithKeys(s.Config.Settings.ObjectStorage.Keys),
+				objects.WithUploaderFunc(objmw.Upload),
+				objects.WithValidationFunc(objmw.MimeTypeValidator),
 			)
-
 			if err != nil {
 				log.Panic().Err(err).Msg("Error creating object storage")
 			}
 
-			// TODO: do I need to add this to the server options?
-			s.Config.Handler.ObjectStorage = handler
-			s.Config.Handler.ObjectStorage.Storage = s3store
-
-			u := objects.Upload{
-				ObjectStorage: handler,
-				Uploader:      objmw.Upload,
-			}
-
-			cf := objects.UploadConfig{
-				Keys:   []string{"uploadFile"},
-				Upload: &u,
-			}
-
 			// add upload middleware to authMW, non-authenticated endpoints will not have this middleware
-			uploadMw := echo.WrapMiddleware(objects.FileUploadMiddleware(cf))
+			uploadMw := echo.WrapMiddleware(objects.FileUploadMiddleware(s.Config.ObjectManager))
 
 			s.Config.Handler.AuthMiddleware = append(s.Config.Handler.AuthMiddleware, uploadMw)
 		}

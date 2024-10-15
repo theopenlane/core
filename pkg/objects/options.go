@@ -32,31 +32,52 @@ func WithMaxMemory(i int64) Option {
 	}
 }
 
+// WithIgnoreNonExistentKey allows you to configure the handler to skip multipart form key values which do not match the configured
+func WithIgnoreNonExistentKey(ignore bool) Option {
+	return func(o *Objects) {
+		o.IgnoreNonExistentKeys = ignore
+	}
+}
+
 // WithValidationFunc allows you to provide a custom validation function
 func WithValidationFunc(validationFunc ValidationFunc) Option {
-	return func(g *Objects) {
-		g.ValidationFunc = validationFunc
+	return func(o *Objects) {
+		o.ValidationFunc = validationFunc
+	}
+}
+
+// WithKeys allows you to configure the keys to look for in the multipart form on the REST request
+func WithKeys(keys []string) Option {
+	return func(o *Objects) {
+		o.Keys = keys
 	}
 }
 
 // WithNameFuncGenerator allows you configure how you'd like to rename your uploaded files
 func WithNameFuncGenerator(nameFunc NameGeneratorFunc) Option {
-	return func(g *Objects) {
-		g.NameFuncGenerator = nameFunc
+	return func(o *Objects) {
+		o.NameFuncGenerator = nameFunc
 	}
 }
 
-// WithIgnoreNonExistentKey allows you to configure the handler to skip multipart form key values which do not match the configured
-func WithIgnoreNonExistentKey(ignore bool) Option {
-	return func(g *Objects) {
-		g.IgnoreNonExistentKeys = ignore
+// WithUploaderFunc allows you to provide a custom uploader function
+func WithUploaderFunc(uploader UploaderFunc) Option {
+	return func(o *Objects) {
+		o.Uploader = uploader
+	}
+}
+
+// WithSkipper allows you to provide a custom skipper function
+func WithSkipper(skipper SkipperFunc) Option {
+	return func(o *Objects) {
+		o.Skipper = skipper
 	}
 }
 
 // WithErrorResponseHandler allows you to provide a custom error response handler
 func WithErrorResponseHandler(errHandler ErrResponseHandler) Option {
-	return func(g *Objects) {
-		g.ErrorResponseHandler = errHandler
+	return func(o *Objects) {
+		o.ErrorResponseHandler = errHandler
 	}
 }
 

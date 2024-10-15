@@ -647,7 +647,14 @@ Config defines the configuration settings for the default rate limiter
 |**region**|`string`|||
 |**secretKey**|`string`|||
 |**credentialsJSON**|`string`|||
-|**bucket**|`string`|||
+|**defaultBucket**|`string`|||
+|[**keys**](#objectstoragekeys)|`string[]`|||
 
 **Additional Properties:** not allowed  
+<a name="objectstoragekeys"></a>
+### objectStorage\.keys: array
+
+**Items**
+
+**Item Type:** `string`  
 
