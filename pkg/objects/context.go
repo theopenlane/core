@@ -5,6 +5,9 @@ import (
 )
 
 // FileContextKey is the context key for the files
+// This is the key that is used to store the files in the context, which is then used to retrieve the files
+// in subsequent parts of the request
+// this is different than the `key` in the multipart form, which is the form field name that the file was uploaded with
 var FileContextKey = &ContextKey{"files"}
 
 // ContextKey is the key name for the additional context

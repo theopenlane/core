@@ -1,7 +1,10 @@
 package models
 
 import (
+	"mime/multipart"
+	"net/textproto"
 	"strings"
+	"time"
 
 	"github.com/go-webauthn/webauthn/protocol"
 
@@ -719,10 +722,12 @@ var ExampleAccountRolesOrganizationReply = AccountRolesOrganizationReply{
 // FILES
 // =========
 
+// UploadFilesRequest holds the fields that should be included on a request to the `/upload` endpoint
 type UploadFilesRequest struct {
-	UploadFile []byte `form:"uploadFile"`
+	UploadFile multipart.FileHeader `form:"uploadFile"`
 }
 
+// UploadFilesReply holds the fields that are sent on a response to the `/upload` endpoint
 type UploadFilesReply struct {
 	rout.Reply
 	Message   string `json:"message,omitempty"`
@@ -730,22 +735,48 @@ type UploadFilesReply struct {
 	Files     []File `json:"files,omitempty"`
 }
 
+// File holds the fields that are sent on a response to the `/upload` endpoint
 type File struct {
-	ID           string `json:"id,omitempty"`
-	Name         string `json:"name,omitempty"`
-	Size         int64  `json:"size,omitempty"`
-	MimeType     string `json:"mime_type,omitempty"`
-	PresignedURL string `json:"presigned_url,omitempty"`
+	ID           string    `json:"id,omitempty"`
+	Name         string    `json:"name,omitempty"`
+	Size         int64     `json:"size,omitempty"`
+	MimeType     string    `json:"mime_type,omitempty"`
+	ContentType  string    `json:"content_type,omitempty"`
+	PresignedURL string    `json:"presigned_url,omitempty"`
+	MD5          []byte    `json:"md5,omitempty"`
+	CreatedAt    time.Time `json:"created_at,omitempty"`
+	UpdatedAt    time.Time `json:"updated_at,omitempty"`
 }
 
+// ExampleUploadFileRequest is an example of a successful upload request for OpenAPI documentation
 var ExampleUploadFileRequest = UploadFilesRequest{
-	UploadFile: []byte("file context"),
+	UploadFile: multipart.FileHeader{
+		Filename: "file.txt",
+		Size:     1024, // nolint:mnd
+		Header: textproto.MIMEHeader{
+			"Content-Type": []string{"text/plain"},
+		},
+	},
 }
 
-// ExampleLoginSuccessResponse is an example of a successful login response for OpenAPI documentation
+// ExampleUploadFilesSuccessResponse is an example of a successful upload response for OpenAPI documentation
 var ExampleUploadFilesSuccessResponse = UploadFilesReply{
 	Reply: rout.Reply{
 		Success: true,
 	},
-	Message: "meow",
+	Message:   "file(s) uploaded successfully",
+	FileCount: 1,
+	Files: []File{
+		{
+			ID:           "1234",
+			Name:         "file.txt",
+			Size:         1024, // nolint:mnd
+			MimeType:     "text/plain",
+			ContentType:  "text/plain",
+			PresignedURL: "https://example.com/file.txt",
+			MD5:          []byte("1234"),
+			CreatedAt:    time.Now(),
+			UpdatedAt:    time.Now(),
+		},
+	},
 }

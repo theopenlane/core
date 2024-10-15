@@ -13,7 +13,7 @@ import (
 )
 
 // FileUploadHandler is responsible for uploading files
-func (h *Handler) FileUploadHandler(ctx echo.Context, keys ...string) error {
+func (h *Handler) FileUploadHandler(ctx echo.Context) error {
 	r := ctx.Request()
 
 	// create the output struct
@@ -37,6 +37,11 @@ func (h *Handler) FileUploadHandler(ctx echo.Context, keys ...string) error {
 				Name:         f.UploadedFileName,
 				PresignedURL: f.PresignedURL,
 				MimeType:     f.MimeType,
+				ContentType:  f.ContentType,
+				MD5:          f.MD5,
+				Size:         f.Size,
+				CreatedAt:    f.CreatedAt,
+				UpdatedAt:    f.UpdatedAt,
 			}
 
 			out.Files = append(out.Files, outFile)

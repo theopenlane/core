@@ -6,11 +6,6 @@ import (
 	echo "github.com/theopenlane/echox"
 )
 
-var (
-	// uploadKeys are the keys that can be used to upload files in a multipart form
-	uploadKeys = []string{"uploadFile"}
-)
-
 // registerFileUploadRoute registers the file upload route
 func registerFileUploadRoute(router *Router) (err error) {
 	path := "/upload"
@@ -23,7 +18,7 @@ func registerFileUploadRoute(router *Router) (err error) {
 		Path:        path,
 		Middlewares: authMW,
 		Handler: func(c echo.Context) error {
-			return router.Handler.FileUploadHandler(c, uploadKeys...)
+			return router.Handler.FileUploadHandler(c)
 		},
 	}
 

@@ -7,6 +7,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/gocarina/gocsv"
+	"github.com/rs/zerolog/log"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/events/soiree"
@@ -51,12 +52,21 @@ func injectFileUploader(u *objects.Objects) graphql.OperationMiddleware {
 		for k, v := range op.Variables {
 			up, ok := v.(graphql.Upload)
 			if ok {
+				key := getArgumentName(op, k)
+				// this should never happen because the graphql will validate the input
+				// but log a warning and continue if it does
+				if key == "" {
+					log.Warn().Str("key", k).Msg("unable to determine argument name for file upload")
+
+					continue
+				}
+
 				fileUpload := objects.FileUpload{
 					File:        up.File,
 					Filename:    up.Filename,
 					Size:        up.Size,
 					ContentType: up.ContentType,
-					Key:         k,
+					Key:         key,
 				}
 
 				uploads = append(uploads, fileUpload)
@@ -168,4 +178,25 @@ func checkAllowedAuthType(ctx context.Context) error {
 	}
 
 	return nil
+}
+
+// getArgumentName returns the name of the argument in the graphql query
+// this is useful because the field inputs a user can provide are not required to be
+// the same as the field name in the resolver
+func getArgumentName(op *graphql.OperationContext, key string) string {
+	if op == nil || op.Operation == nil {
+		return ""
+	}
+
+	fields := graphql.CollectFields(op, op.Operation.SelectionSet, nil)
+
+	for _, f := range fields {
+		for _, a := range f.Arguments {
+			if a.Value.Raw == key {
+				return a.Name
+			}
+		}
+	}
+
+	return ""
 }
