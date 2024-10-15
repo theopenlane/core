@@ -2,7 +2,7 @@ package objects
 
 import (
 	"bytes"
-	"crypto/md5" //nolint:gosec // MD5 is used for checksums, not for hashing passwords
+	"crypto/md5" //nolint:gosec  #nosec G501 // MD5 is used for checksums, not for hashing passwords
 	"encoding/base64"
 	"fmt"
 	"io"
@@ -13,9 +13,13 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+var (
+	seekError = "could not seek to beginning of file"
+)
+
 // NewUploadFile function reads the content of the provided file path and returns a FileUpload object
 func NewUploadFile(filePath string) (file FileUpload, err error) {
-	f, err := os.Open(filePath)
+	f, err := os.Open(filePath) // #nosec G304
 	if err != nil {
 		return file, err
 	}
@@ -96,13 +100,13 @@ func ReaderToSeeker(r io.Reader) (io.ReadSeeker, error) {
 // the passed io object will be seeked to its beginning and will seek back to the
 // beginning after reading its content.
 func ComputeChecksum(data io.ReadSeeker) (string, error) {
-	hash := md5.New() //nolint:gosec // MD5 is used for checksums, not for hashing passwords
+	hash := md5.New() //nolint:gosec  #nosec G501 // MD5 is used for checksums, not for hashing passwords
 	if _, err := io.Copy(hash, data); err != nil {
 		return "", fmt.Errorf("could not read file: %w", err)
 	}
 
 	if _, err := data.Seek(0, io.SeekStart); err != nil { // seek back to beginning of file
-		return "", fmt.Errorf("could not seek to beginning of file: %w", err)
+		return "", fmt.Errorf("%s: %w", seekError, err)
 	}
 
 	return base64.StdEncoding.EncodeToString(hash.Sum(nil)), nil
@@ -113,7 +117,7 @@ func ComputeChecksum(data io.ReadSeeker) (string, error) {
 // beginning and will seek back to the beginning after reading its content.
 func DetectContentType(data io.ReadSeeker) (string, error) {
 	if _, err := data.Seek(0, io.SeekStart); err != nil { // seek back to beginning of file
-		return "", fmt.Errorf("could not seek to beginning of file: %w", err)
+		return "", fmt.Errorf("%s: %w", seekError, err)
 	}
 
 	// the default return value will default to application/octet-stream if unable to detect the MIME type
@@ -123,7 +127,7 @@ func DetectContentType(data io.ReadSeeker) (string, error) {
 	}
 
 	if _, err := data.Seek(0, io.SeekStart); err != nil { // seek back to beginning of file
-		return "", fmt.Errorf("could not seek to beginning of file: %w", err)
+		return "", fmt.Errorf("%s: %w", seekError, err)
 	}
 
 	return contentType.String(), nil

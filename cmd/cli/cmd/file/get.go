@@ -19,6 +19,8 @@ var getCmd = &cobra.Command{
 
 func init() {
 	command.AddCommand(getCmd)
+
+	getCmd.Flags().StringP("id", "i", "", "the ID of the file")
 }
 
 // get an existing file in the platform
