@@ -9,7 +9,7 @@ require (
 	github.com/99designs/gqlgen v0.17.54
 	github.com/99designs/keyring v1.2.2
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
-	github.com/Yamashou/gqlgenc v0.25.2
+	github.com/Yamashou/gqlgenc v0.25.3
 	github.com/alicebob/miniredis/v2 v2.33.0
 	github.com/alitto/pond v1.9.2
 	github.com/brianvoe/gofakeit/v7 v7.0.4
