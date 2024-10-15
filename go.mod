@@ -54,7 +54,6 @@ require (
 	github.com/spf13/cobra v1.8.1
 	github.com/stoewer/go-strcase v1.3.0
 	github.com/stretchr/testify v1.9.0
-	github.com/test-go/testify v1.1.4
 	github.com/theopenlane/beacon v0.1.0
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.2.0

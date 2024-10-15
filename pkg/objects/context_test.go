@@ -4,8 +4,8 @@ import (
 	"context"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/test-go/testify/assert"
 )
 
 func TestWriteFilesToContext(t *testing.T) {

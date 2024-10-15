@@ -7,9 +7,9 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog"
+	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
-	"github.com/test-go/testify/mock"
 
 	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/iam/fgax"

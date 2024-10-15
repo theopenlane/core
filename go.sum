@@ -558,8 +558,6 @@ github.com/stretchr/testify v1.9.0 h1:HtqpIVDClZ4nwg75+f6Lvsy/wHu+3BoSGCbBAcpTsT
 github.com/stretchr/testify v1.9.0/go.mod h1:r2ic/lqez/lEtzL7wO/rwa5dbSLXVDPFyf8C91i36aY=
 github.com/subosito/gotenv v1.6.0 h1:9NlTDc1FTs4qu0DDq7AEtTPNw6SVm7uBMsUCUjABIf8=
 github.com/subosito/gotenv v1.6.0/go.mod h1:Dk4QP5c2W3ibzajGcXpNraDfq2IrhjMIvMSWPKKo0FU=
-github.com/test-go/testify v1.1.4 h1:Tf9lntrKUMHiXQ07qBScBTSA0dhYQlu83hswqelv1iE=
-github.com/test-go/testify v1.1.4/go.mod h1:rH7cfJo/47vWGdi4GPj16x3/t1xGOj2YxzmNQzk2ghU=
 github.com/theopenlane/beacon v0.1.0 h1:cyGx18rbaJTZT8pRcqMMvg+kN6uh86X4OoDahQp6VnE=
 github.com/theopenlane/beacon v0.1.0/go.mod h1:gOJAanQzfmDF3FIyv7Lwx16bKI7YPkJx1iRT4SdcBW4=
 github.com/theopenlane/dbx v0.1.2 h1:h2+okfFg3oh4ou8z99QTqCxBTDeaQ2Ek2AEsh3tw/KQ=
