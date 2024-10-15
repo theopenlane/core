@@ -2,7 +2,8 @@ package objects
 
 import (
 	"bytes"
-	"crypto/md5" //nolint:gosec  #nosec G501 // MD5 is used for checksums, not for hashing passwords
+	// #nosec: G501
+	"crypto/md5" //nolint:gosec  // MD5 is used for checksums, not for hashing passwords
 	"encoding/base64"
 	"fmt"
 	"io"
@@ -100,7 +101,8 @@ func ReaderToSeeker(r io.Reader) (io.ReadSeeker, error) {
 // the passed io object will be seeked to its beginning and will seek back to the
 // beginning after reading its content.
 func ComputeChecksum(data io.ReadSeeker) (string, error) {
-	hash := md5.New() //nolint:gosec  #nosec G501 // MD5 is used for checksums, not for hashing passwords
+	// #nosec: G501
+	hash := md5.New() //nolint:gosec  // MD5 is used for checksums, not for hashing passwords
 	if _, err := io.Copy(hash, data); err != nil {
 		return "", fmt.Errorf("could not read file: %w", err)
 	}
