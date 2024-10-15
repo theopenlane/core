@@ -15,7 +15,7 @@ import (
 )
 
 var (
-	errSeek = "could not seek to beginning of file; %w"
+	seekError = "could not seek to beginning of file"
 )
 
 // NewUploadFile function reads the content of the provided file path and returns a FileUpload object
@@ -108,7 +108,7 @@ func ComputeChecksum(data io.ReadSeeker) (string, error) {
 	}
 
 	if _, err := data.Seek(0, io.SeekStart); err != nil { // seek back to beginning of file
-		return "", fmt.Errorf(errSeek, err)
+		return "", fmt.Errorf("%s: %w", seekError, err)
 	}
 
 	return base64.StdEncoding.EncodeToString(hash.Sum(nil)), nil
@@ -119,7 +119,7 @@ func ComputeChecksum(data io.ReadSeeker) (string, error) {
 // beginning and will seek back to the beginning after reading its content.
 func DetectContentType(data io.ReadSeeker) (string, error) {
 	if _, err := data.Seek(0, io.SeekStart); err != nil { // seek back to beginning of file
-		return "", fmt.Errorf(errSeek, err)
+		return "", fmt.Errorf("%s: %w", seekError, err)
 	}
 
 	// the default return value will default to application/octet-stream if unable to detect the MIME type
@@ -129,7 +129,7 @@ func DetectContentType(data io.ReadSeeker) (string, error) {
 	}
 
 	if _, err := data.Seek(0, io.SeekStart); err != nil { // seek back to beginning of file
-		return "", fmt.Errorf(errSeek, err)
+		return "", fmt.Errorf("%s: %w", seekError, err)
 	}
 
 	return contentType.String(), nil
