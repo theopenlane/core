@@ -684,26 +684,47 @@ func (fh *FileHistory) changes(new *FileHistory) []Change {
 	if !reflect.DeepEqual(fh.Tags, new.Tags) {
 		changes = append(changes, NewChange(filehistory.FieldTags, fh.Tags, new.Tags))
 	}
-	if !reflect.DeepEqual(fh.FileName, new.FileName) {
-		changes = append(changes, NewChange(filehistory.FieldFileName, fh.FileName, new.FileName))
+	if !reflect.DeepEqual(fh.ProvidedFileName, new.ProvidedFileName) {
+		changes = append(changes, NewChange(filehistory.FieldProvidedFileName, fh.ProvidedFileName, new.ProvidedFileName))
 	}
-	if !reflect.DeepEqual(fh.FileExtension, new.FileExtension) {
-		changes = append(changes, NewChange(filehistory.FieldFileExtension, fh.FileExtension, new.FileExtension))
+	if !reflect.DeepEqual(fh.ProvidedFileExtension, new.ProvidedFileExtension) {
+		changes = append(changes, NewChange(filehistory.FieldProvidedFileExtension, fh.ProvidedFileExtension, new.ProvidedFileExtension))
 	}
-	if !reflect.DeepEqual(fh.FileSize, new.FileSize) {
-		changes = append(changes, NewChange(filehistory.FieldFileSize, fh.FileSize, new.FileSize))
+	if !reflect.DeepEqual(fh.ProvidedFileSize, new.ProvidedFileSize) {
+		changes = append(changes, NewChange(filehistory.FieldProvidedFileSize, fh.ProvidedFileSize, new.ProvidedFileSize))
 	}
-	if !reflect.DeepEqual(fh.ContentType, new.ContentType) {
-		changes = append(changes, NewChange(filehistory.FieldContentType, fh.ContentType, new.ContentType))
+	if !reflect.DeepEqual(fh.PersistedFileSize, new.PersistedFileSize) {
+		changes = append(changes, NewChange(filehistory.FieldPersistedFileSize, fh.PersistedFileSize, new.PersistedFileSize))
+	}
+	if !reflect.DeepEqual(fh.DetectedMimeType, new.DetectedMimeType) {
+		changes = append(changes, NewChange(filehistory.FieldDetectedMimeType, fh.DetectedMimeType, new.DetectedMimeType))
+	}
+	if !reflect.DeepEqual(fh.Md5Hash, new.Md5Hash) {
+		changes = append(changes, NewChange(filehistory.FieldMd5Hash, fh.Md5Hash, new.Md5Hash))
+	}
+	if !reflect.DeepEqual(fh.DetectedContentType, new.DetectedContentType) {
+		changes = append(changes, NewChange(filehistory.FieldDetectedContentType, fh.DetectedContentType, new.DetectedContentType))
 	}
 	if !reflect.DeepEqual(fh.StoreKey, new.StoreKey) {
 		changes = append(changes, NewChange(filehistory.FieldStoreKey, fh.StoreKey, new.StoreKey))
 	}
-	if !reflect.DeepEqual(fh.Category, new.Category) {
-		changes = append(changes, NewChange(filehistory.FieldCategory, fh.Category, new.Category))
+	if !reflect.DeepEqual(fh.CategoryType, new.CategoryType) {
+		changes = append(changes, NewChange(filehistory.FieldCategoryType, fh.CategoryType, new.CategoryType))
 	}
-	if !reflect.DeepEqual(fh.Annotation, new.Annotation) {
-		changes = append(changes, NewChange(filehistory.FieldAnnotation, fh.Annotation, new.Annotation))
+	if !reflect.DeepEqual(fh.URI, new.URI) {
+		changes = append(changes, NewChange(filehistory.FieldURI, fh.URI, new.URI))
+	}
+	if !reflect.DeepEqual(fh.StorageScheme, new.StorageScheme) {
+		changes = append(changes, NewChange(filehistory.FieldStorageScheme, fh.StorageScheme, new.StorageScheme))
+	}
+	if !reflect.DeepEqual(fh.StorageVolume, new.StorageVolume) {
+		changes = append(changes, NewChange(filehistory.FieldStorageVolume, fh.StorageVolume, new.StorageVolume))
+	}
+	if !reflect.DeepEqual(fh.StoragePath, new.StoragePath) {
+		changes = append(changes, NewChange(filehistory.FieldStoragePath, fh.StoragePath, new.StoragePath))
+	}
+	if !reflect.DeepEqual(fh.FileContents, new.FileContents) {
+		changes = append(changes, NewChange(filehistory.FieldFileContents, fh.FileContents, new.FileContents))
 	}
 	return changes
 }
@@ -1502,6 +1523,9 @@ func (uh *UserHistory) changes(new *UserHistory) []Change {
 	}
 	if !reflect.DeepEqual(uh.AvatarLocalFile, new.AvatarLocalFile) {
 		changes = append(changes, NewChange(userhistory.FieldAvatarLocalFile, uh.AvatarLocalFile, new.AvatarLocalFile))
+	}
+	if !reflect.DeepEqual(uh.AvatarLocalFileID, new.AvatarLocalFileID) {
+		changes = append(changes, NewChange(userhistory.FieldAvatarLocalFileID, uh.AvatarLocalFileID, new.AvatarLocalFileID))
 	}
 	if !reflect.DeepEqual(uh.AvatarUpdatedAt, new.AvatarUpdatedAt) {
 		changes = append(changes, NewChange(userhistory.FieldAvatarUpdatedAt, uh.AvatarUpdatedAt, new.AvatarUpdatedAt))

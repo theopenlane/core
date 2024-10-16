@@ -7,9 +7,11 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/gocarina/gocsv"
+	"github.com/rs/zerolog/log"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/rout"
@@ -33,6 +35,63 @@ func withTransactionalMutation(ctx context.Context) *ent.Client {
 func injectClient(db *ent.Client) graphql.OperationMiddleware {
 	return func(ctx context.Context, next graphql.OperationHandler) graphql.ResponseHandler {
 		ctx = ent.NewContext(ctx, db)
+		return next(ctx)
+	}
+}
+
+// injectFileUploader adds the file uploader as middleware to the graphql operation
+// this is used to handle file uploads to a storage backend, add the file to the file schema
+// and add the uploaded files to the echo context
+func injectFileUploader(u *objects.Objects) graphql.OperationMiddleware {
+	return func(ctx context.Context, next graphql.OperationHandler) graphql.ResponseHandler {
+		op := graphql.GetOperationContext(ctx)
+
+		// get the uploads from the variables
+		// gqlgen will parse the variables and convert the graphql.Upload to a struct with the file data
+		uploads := []objects.FileUpload{}
+		for k, v := range op.Variables {
+			up, ok := v.(graphql.Upload)
+			if ok {
+				key := getArgumentName(op, k)
+				// this should never happen because the graphql will validate the input
+				// but log a warning and continue if it does
+				if key == "" {
+					log.Warn().Str("key", k).Msg("unable to determine argument name for file upload")
+
+					continue
+				}
+
+				fileUpload := objects.FileUpload{
+					File:        up.File,
+					Filename:    up.Filename,
+					Size:        up.Size,
+					ContentType: up.ContentType,
+					Key:         key,
+				}
+
+				uploads = append(uploads, fileUpload)
+			}
+		}
+
+		// return the next handler if there are no uploads
+		if len(uploads) == 0 {
+			return next(ctx)
+		}
+
+		// handle the file uploads
+		ctx, err := u.FileUpload(ctx, uploads)
+		if err != nil {
+			return errorResponse(err)
+		}
+
+		// add the uploaded files to the echo context if there are any
+		// this is useful for using other middleware that depends on the echo context
+		// and the uploaded files (e.g. body dump middleware)
+		ec, err := echocontext.EchoContextFromContext(ctx)
+		if err == nil {
+			ec.SetRequest(ec.Request().WithContext(ctx))
+		}
+
 		return next(ctx)
 	}
 }
@@ -119,4 +178,25 @@ func checkAllowedAuthType(ctx context.Context) error {
 	}
 
 	return nil
+}
+
+// getArgumentName returns the name of the argument in the graphql query
+// this is useful because the field inputs a user can provide are not required to be
+// the same as the field name in the resolver
+func getArgumentName(op *graphql.OperationContext, key string) string {
+	if op == nil || op.Operation == nil {
+		return ""
+	}
+
+	fields := graphql.CollectFields(op, op.Operation.SelectionSet, nil)
+
+	for _, f := range fields {
+		for _, a := range f.Arguments {
+			if a.Value.Raw == key {
+				return a.Name
+			}
+		}
+	}
+
+	return ""
 }

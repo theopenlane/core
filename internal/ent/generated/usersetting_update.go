@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -311,6 +312,21 @@ func (usu *UserSettingUpdate) SetDefaultOrg(o *Organization) *UserSettingUpdate 
 	return usu.SetDefaultOrgID(o.ID)
 }
 
+// AddFileIDs adds the "files" edge to the File entity by IDs.
+func (usu *UserSettingUpdate) AddFileIDs(ids ...string) *UserSettingUpdate {
+	usu.mutation.AddFileIDs(ids...)
+	return usu
+}
+
+// AddFiles adds the "files" edges to the File entity.
+func (usu *UserSettingUpdate) AddFiles(f ...*File) *UserSettingUpdate {
+	ids := make([]string, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return usu.AddFileIDs(ids...)
+}
+
 // Mutation returns the UserSettingMutation object of the builder.
 func (usu *UserSettingUpdate) Mutation() *UserSettingMutation {
 	return usu.mutation
@@ -326,6 +342,27 @@ func (usu *UserSettingUpdate) ClearUser() *UserSettingUpdate {
 func (usu *UserSettingUpdate) ClearDefaultOrg() *UserSettingUpdate {
 	usu.mutation.ClearDefaultOrg()
 	return usu
+}
+
+// ClearFiles clears all "files" edges to the File entity.
+func (usu *UserSettingUpdate) ClearFiles() *UserSettingUpdate {
+	usu.mutation.ClearFiles()
+	return usu
+}
+
+// RemoveFileIDs removes the "files" edge to File entities by IDs.
+func (usu *UserSettingUpdate) RemoveFileIDs(ids ...string) *UserSettingUpdate {
+	usu.mutation.RemoveFileIDs(ids...)
+	return usu
+}
+
+// RemoveFiles removes "files" edges to File entities.
+func (usu *UserSettingUpdate) RemoveFiles(f ...*File) *UserSettingUpdate {
+	ids := make([]string, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return usu.RemoveFileIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -535,6 +572,54 @@ func (usu *UserSettingUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			},
 		}
 		edge.Schema = usu.schemaConfig.UserSetting
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if usu.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   usersetting.FilesTable,
+			Columns: usersetting.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = usu.schemaConfig.UserSettingFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := usu.mutation.RemovedFilesIDs(); len(nodes) > 0 && !usu.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   usersetting.FilesTable,
+			Columns: usersetting.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = usu.schemaConfig.UserSettingFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := usu.mutation.FilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   usersetting.FilesTable,
+			Columns: usersetting.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = usu.schemaConfig.UserSettingFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -840,6 +925,21 @@ func (usuo *UserSettingUpdateOne) SetDefaultOrg(o *Organization) *UserSettingUpd
 	return usuo.SetDefaultOrgID(o.ID)
 }
 
+// AddFileIDs adds the "files" edge to the File entity by IDs.
+func (usuo *UserSettingUpdateOne) AddFileIDs(ids ...string) *UserSettingUpdateOne {
+	usuo.mutation.AddFileIDs(ids...)
+	return usuo
+}
+
+// AddFiles adds the "files" edges to the File entity.
+func (usuo *UserSettingUpdateOne) AddFiles(f ...*File) *UserSettingUpdateOne {
+	ids := make([]string, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return usuo.AddFileIDs(ids...)
+}
+
 // Mutation returns the UserSettingMutation object of the builder.
 func (usuo *UserSettingUpdateOne) Mutation() *UserSettingMutation {
 	return usuo.mutation
@@ -855,6 +955,27 @@ func (usuo *UserSettingUpdateOne) ClearUser() *UserSettingUpdateOne {
 func (usuo *UserSettingUpdateOne) ClearDefaultOrg() *UserSettingUpdateOne {
 	usuo.mutation.ClearDefaultOrg()
 	return usuo
+}
+
+// ClearFiles clears all "files" edges to the File entity.
+func (usuo *UserSettingUpdateOne) ClearFiles() *UserSettingUpdateOne {
+	usuo.mutation.ClearFiles()
+	return usuo
+}
+
+// RemoveFileIDs removes the "files" edge to File entities by IDs.
+func (usuo *UserSettingUpdateOne) RemoveFileIDs(ids ...string) *UserSettingUpdateOne {
+	usuo.mutation.RemoveFileIDs(ids...)
+	return usuo
+}
+
+// RemoveFiles removes "files" edges to File entities.
+func (usuo *UserSettingUpdateOne) RemoveFiles(f ...*File) *UserSettingUpdateOne {
+	ids := make([]string, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return usuo.RemoveFileIDs(ids...)
 }
 
 // Where appends a list predicates to the UserSettingUpdate builder.
@@ -1094,6 +1215,54 @@ func (usuo *UserSettingUpdateOne) sqlSave(ctx context.Context) (_node *UserSetti
 			},
 		}
 		edge.Schema = usuo.schemaConfig.UserSetting
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if usuo.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   usersetting.FilesTable,
+			Columns: usersetting.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = usuo.schemaConfig.UserSettingFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := usuo.mutation.RemovedFilesIDs(); len(nodes) > 0 && !usuo.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   usersetting.FilesTable,
+			Columns: usersetting.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = usuo.schemaConfig.UserSettingFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := usuo.mutation.FilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   usersetting.FilesTable,
+			Columns: usersetting.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = usuo.schemaConfig.UserSettingFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

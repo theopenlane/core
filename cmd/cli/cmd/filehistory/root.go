@@ -12,7 +12,7 @@ import (
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
-// cmd represents the base fileHistory command when called without any subcommands
+// command represents the base fileHistory command when called without any subcommands
 var command = &cobra.Command{
 	Use:   "file-history",
 	Short: "the subcommands for working with fileHistories",

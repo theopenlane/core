@@ -121,12 +121,17 @@ query AdminSearch($query: String!) {
           deletedBy
           id
           tags
-          fileName
-          fileExtension
-          contentType
+          providedFileName
+          providedFileExtension
+          detectedMimeType
+          md5Hash
+          detectedContentType
           storeKey
-          category
-          annotation
+          categoryType
+          uri
+          storageScheme
+          storageVolume
+          storagePath
         }
       }
       ... on GroupSearchResult {
@@ -264,6 +269,7 @@ query AdminSearch($query: String!) {
           displayName
           avatarRemoteURL
           avatarLocalFile
+          avatarLocalFileID
           sub
         }
       }

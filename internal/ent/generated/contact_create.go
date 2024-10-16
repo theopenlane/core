@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/pkg/enums"
 )
@@ -265,6 +266,21 @@ func (cc *ContactCreate) AddEntities(e ...*Entity) *ContactCreate {
 	return cc.AddEntityIDs(ids...)
 }
 
+// AddFileIDs adds the "files" edge to the File entity by IDs.
+func (cc *ContactCreate) AddFileIDs(ids ...string) *ContactCreate {
+	cc.mutation.AddFileIDs(ids...)
+	return cc
+}
+
+// AddFiles adds the "files" edges to the File entity.
+func (cc *ContactCreate) AddFiles(f ...*File) *ContactCreate {
+	ids := make([]string, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return cc.AddFileIDs(ids...)
+}
+
 // Mutation returns the ContactMutation object of the builder.
 func (cc *ContactCreate) Mutation() *ContactMutation {
 	return cc.mutation
@@ -503,6 +519,23 @@ func (cc *ContactCreate) createSpec() (*Contact, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = cc.schemaConfig.EntityContacts
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := cc.mutation.FilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   contact.FilesTable,
+			Columns: contact.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cc.schemaConfig.ContactFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

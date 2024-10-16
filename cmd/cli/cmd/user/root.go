@@ -78,7 +78,6 @@ func jsonOutput(out any) error {
 func tableOutput(out []openlaneclient.User) {
 	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "Email", "FirstName", "LastName", "DisplayName", "AuthProvider")
 	for _, i := range out {
-		// this doesn't visually show you the json in the table but leaving it in for now
 		writer.AddRow(i.ID, i.Email, *i.FirstName, *i.LastName, i.DisplayName, i.AuthProvider)
 	}
 

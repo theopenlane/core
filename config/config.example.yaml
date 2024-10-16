@@ -108,6 +108,16 @@ jobQueue:
         WorkerMiddleware: null
         Workers: null
     runMigrations: false
+objectStorage:
+    accessKey: ""
+    credentialsJSON: ""
+    defaultBucket: ""
+    enabled: true
+    keys:
+        - uploadFile
+    provider: ""
+    region: ""
+    secretKey: ""
 ratelimit:
     burst: 30
     enabled: false

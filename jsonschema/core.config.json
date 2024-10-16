@@ -564,6 +564,36 @@
       "type": "object",
       "description": "Config defines the config for Mime middleware"
     },
+    "objects.Config": {
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "provider": {
+          "type": "string"
+        },
+        "accessKey": {
+          "type": "string"
+        },
+        "region": {
+          "type": "string"
+        },
+        "secretKey": {
+          "type": "string"
+        },
+        "credentialsJSON": {
+          "type": "string"
+        },
+        "defaultBucket": {
+          "type": "string"
+        },
+        "keys": {
+          "$ref": "#/$defs/[]string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
     "otelx.Config": {
       "properties": {
         "enabled": {
@@ -979,6 +1009,10 @@
     "ratelimit": {
       "$ref": "#/$defs/ratelimit.Config",
       "description": "Ratelimit contains the configuration for the rate limiter"
+    },
+    "objectStorage": {
+      "$ref": "#/$defs/objects.Config",
+      "description": "ObjectStorage contains the configuration for the object storage backend"
     }
   },
   "additionalProperties": false,

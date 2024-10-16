@@ -632,21 +632,28 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "File",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			file.FieldCreatedAt:     {Type: field.TypeTime, Column: file.FieldCreatedAt},
-			file.FieldUpdatedAt:     {Type: field.TypeTime, Column: file.FieldUpdatedAt},
-			file.FieldCreatedBy:     {Type: field.TypeString, Column: file.FieldCreatedBy},
-			file.FieldUpdatedBy:     {Type: field.TypeString, Column: file.FieldUpdatedBy},
-			file.FieldDeletedAt:     {Type: field.TypeTime, Column: file.FieldDeletedAt},
-			file.FieldDeletedBy:     {Type: field.TypeString, Column: file.FieldDeletedBy},
-			file.FieldMappingID:     {Type: field.TypeString, Column: file.FieldMappingID},
-			file.FieldTags:          {Type: field.TypeJSON, Column: file.FieldTags},
-			file.FieldFileName:      {Type: field.TypeString, Column: file.FieldFileName},
-			file.FieldFileExtension: {Type: field.TypeString, Column: file.FieldFileExtension},
-			file.FieldFileSize:      {Type: field.TypeInt, Column: file.FieldFileSize},
-			file.FieldContentType:   {Type: field.TypeString, Column: file.FieldContentType},
-			file.FieldStoreKey:      {Type: field.TypeString, Column: file.FieldStoreKey},
-			file.FieldCategory:      {Type: field.TypeString, Column: file.FieldCategory},
-			file.FieldAnnotation:    {Type: field.TypeString, Column: file.FieldAnnotation},
+			file.FieldCreatedAt:             {Type: field.TypeTime, Column: file.FieldCreatedAt},
+			file.FieldUpdatedAt:             {Type: field.TypeTime, Column: file.FieldUpdatedAt},
+			file.FieldCreatedBy:             {Type: field.TypeString, Column: file.FieldCreatedBy},
+			file.FieldUpdatedBy:             {Type: field.TypeString, Column: file.FieldUpdatedBy},
+			file.FieldDeletedAt:             {Type: field.TypeTime, Column: file.FieldDeletedAt},
+			file.FieldDeletedBy:             {Type: field.TypeString, Column: file.FieldDeletedBy},
+			file.FieldMappingID:             {Type: field.TypeString, Column: file.FieldMappingID},
+			file.FieldTags:                  {Type: field.TypeJSON, Column: file.FieldTags},
+			file.FieldProvidedFileName:      {Type: field.TypeString, Column: file.FieldProvidedFileName},
+			file.FieldProvidedFileExtension: {Type: field.TypeString, Column: file.FieldProvidedFileExtension},
+			file.FieldProvidedFileSize:      {Type: field.TypeInt64, Column: file.FieldProvidedFileSize},
+			file.FieldPersistedFileSize:     {Type: field.TypeInt64, Column: file.FieldPersistedFileSize},
+			file.FieldDetectedMimeType:      {Type: field.TypeString, Column: file.FieldDetectedMimeType},
+			file.FieldMd5Hash:               {Type: field.TypeString, Column: file.FieldMd5Hash},
+			file.FieldDetectedContentType:   {Type: field.TypeString, Column: file.FieldDetectedContentType},
+			file.FieldStoreKey:              {Type: field.TypeString, Column: file.FieldStoreKey},
+			file.FieldCategoryType:          {Type: field.TypeString, Column: file.FieldCategoryType},
+			file.FieldURI:                   {Type: field.TypeString, Column: file.FieldURI},
+			file.FieldStorageScheme:         {Type: field.TypeString, Column: file.FieldStorageScheme},
+			file.FieldStorageVolume:         {Type: field.TypeString, Column: file.FieldStorageVolume},
+			file.FieldStoragePath:           {Type: field.TypeString, Column: file.FieldStoragePath},
+			file.FieldFileContents:          {Type: field.TypeBytes, Column: file.FieldFileContents},
 		},
 	}
 	graph.Nodes[21] = &sqlgraph.Node{
@@ -660,24 +667,31 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "FileHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			filehistory.FieldHistoryTime:   {Type: field.TypeTime, Column: filehistory.FieldHistoryTime},
-			filehistory.FieldRef:           {Type: field.TypeString, Column: filehistory.FieldRef},
-			filehistory.FieldOperation:     {Type: field.TypeEnum, Column: filehistory.FieldOperation},
-			filehistory.FieldCreatedAt:     {Type: field.TypeTime, Column: filehistory.FieldCreatedAt},
-			filehistory.FieldUpdatedAt:     {Type: field.TypeTime, Column: filehistory.FieldUpdatedAt},
-			filehistory.FieldCreatedBy:     {Type: field.TypeString, Column: filehistory.FieldCreatedBy},
-			filehistory.FieldUpdatedBy:     {Type: field.TypeString, Column: filehistory.FieldUpdatedBy},
-			filehistory.FieldDeletedAt:     {Type: field.TypeTime, Column: filehistory.FieldDeletedAt},
-			filehistory.FieldDeletedBy:     {Type: field.TypeString, Column: filehistory.FieldDeletedBy},
-			filehistory.FieldMappingID:     {Type: field.TypeString, Column: filehistory.FieldMappingID},
-			filehistory.FieldTags:          {Type: field.TypeJSON, Column: filehistory.FieldTags},
-			filehistory.FieldFileName:      {Type: field.TypeString, Column: filehistory.FieldFileName},
-			filehistory.FieldFileExtension: {Type: field.TypeString, Column: filehistory.FieldFileExtension},
-			filehistory.FieldFileSize:      {Type: field.TypeInt, Column: filehistory.FieldFileSize},
-			filehistory.FieldContentType:   {Type: field.TypeString, Column: filehistory.FieldContentType},
-			filehistory.FieldStoreKey:      {Type: field.TypeString, Column: filehistory.FieldStoreKey},
-			filehistory.FieldCategory:      {Type: field.TypeString, Column: filehistory.FieldCategory},
-			filehistory.FieldAnnotation:    {Type: field.TypeString, Column: filehistory.FieldAnnotation},
+			filehistory.FieldHistoryTime:           {Type: field.TypeTime, Column: filehistory.FieldHistoryTime},
+			filehistory.FieldRef:                   {Type: field.TypeString, Column: filehistory.FieldRef},
+			filehistory.FieldOperation:             {Type: field.TypeEnum, Column: filehistory.FieldOperation},
+			filehistory.FieldCreatedAt:             {Type: field.TypeTime, Column: filehistory.FieldCreatedAt},
+			filehistory.FieldUpdatedAt:             {Type: field.TypeTime, Column: filehistory.FieldUpdatedAt},
+			filehistory.FieldCreatedBy:             {Type: field.TypeString, Column: filehistory.FieldCreatedBy},
+			filehistory.FieldUpdatedBy:             {Type: field.TypeString, Column: filehistory.FieldUpdatedBy},
+			filehistory.FieldDeletedAt:             {Type: field.TypeTime, Column: filehistory.FieldDeletedAt},
+			filehistory.FieldDeletedBy:             {Type: field.TypeString, Column: filehistory.FieldDeletedBy},
+			filehistory.FieldMappingID:             {Type: field.TypeString, Column: filehistory.FieldMappingID},
+			filehistory.FieldTags:                  {Type: field.TypeJSON, Column: filehistory.FieldTags},
+			filehistory.FieldProvidedFileName:      {Type: field.TypeString, Column: filehistory.FieldProvidedFileName},
+			filehistory.FieldProvidedFileExtension: {Type: field.TypeString, Column: filehistory.FieldProvidedFileExtension},
+			filehistory.FieldProvidedFileSize:      {Type: field.TypeInt64, Column: filehistory.FieldProvidedFileSize},
+			filehistory.FieldPersistedFileSize:     {Type: field.TypeInt64, Column: filehistory.FieldPersistedFileSize},
+			filehistory.FieldDetectedMimeType:      {Type: field.TypeString, Column: filehistory.FieldDetectedMimeType},
+			filehistory.FieldMd5Hash:               {Type: field.TypeString, Column: filehistory.FieldMd5Hash},
+			filehistory.FieldDetectedContentType:   {Type: field.TypeString, Column: filehistory.FieldDetectedContentType},
+			filehistory.FieldStoreKey:              {Type: field.TypeString, Column: filehistory.FieldStoreKey},
+			filehistory.FieldCategoryType:          {Type: field.TypeString, Column: filehistory.FieldCategoryType},
+			filehistory.FieldURI:                   {Type: field.TypeString, Column: filehistory.FieldURI},
+			filehistory.FieldStorageScheme:         {Type: field.TypeString, Column: filehistory.FieldStorageScheme},
+			filehistory.FieldStorageVolume:         {Type: field.TypeString, Column: filehistory.FieldStorageVolume},
+			filehistory.FieldStoragePath:           {Type: field.TypeString, Column: filehistory.FieldStoragePath},
+			filehistory.FieldFileContents:          {Type: field.TypeBytes, Column: filehistory.FieldFileContents},
 		},
 	}
 	graph.Nodes[22] = &sqlgraph.Node{
@@ -1465,26 +1479,27 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "User",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			user.FieldCreatedAt:       {Type: field.TypeTime, Column: user.FieldCreatedAt},
-			user.FieldUpdatedAt:       {Type: field.TypeTime, Column: user.FieldUpdatedAt},
-			user.FieldCreatedBy:       {Type: field.TypeString, Column: user.FieldCreatedBy},
-			user.FieldUpdatedBy:       {Type: field.TypeString, Column: user.FieldUpdatedBy},
-			user.FieldDeletedAt:       {Type: field.TypeTime, Column: user.FieldDeletedAt},
-			user.FieldDeletedBy:       {Type: field.TypeString, Column: user.FieldDeletedBy},
-			user.FieldMappingID:       {Type: field.TypeString, Column: user.FieldMappingID},
-			user.FieldTags:            {Type: field.TypeJSON, Column: user.FieldTags},
-			user.FieldEmail:           {Type: field.TypeString, Column: user.FieldEmail},
-			user.FieldFirstName:       {Type: field.TypeString, Column: user.FieldFirstName},
-			user.FieldLastName:        {Type: field.TypeString, Column: user.FieldLastName},
-			user.FieldDisplayName:     {Type: field.TypeString, Column: user.FieldDisplayName},
-			user.FieldAvatarRemoteURL: {Type: field.TypeString, Column: user.FieldAvatarRemoteURL},
-			user.FieldAvatarLocalFile: {Type: field.TypeString, Column: user.FieldAvatarLocalFile},
-			user.FieldAvatarUpdatedAt: {Type: field.TypeTime, Column: user.FieldAvatarUpdatedAt},
-			user.FieldLastSeen:        {Type: field.TypeTime, Column: user.FieldLastSeen},
-			user.FieldPassword:        {Type: field.TypeString, Column: user.FieldPassword},
-			user.FieldSub:             {Type: field.TypeString, Column: user.FieldSub},
-			user.FieldAuthProvider:    {Type: field.TypeEnum, Column: user.FieldAuthProvider},
-			user.FieldRole:            {Type: field.TypeEnum, Column: user.FieldRole},
+			user.FieldCreatedAt:         {Type: field.TypeTime, Column: user.FieldCreatedAt},
+			user.FieldUpdatedAt:         {Type: field.TypeTime, Column: user.FieldUpdatedAt},
+			user.FieldCreatedBy:         {Type: field.TypeString, Column: user.FieldCreatedBy},
+			user.FieldUpdatedBy:         {Type: field.TypeString, Column: user.FieldUpdatedBy},
+			user.FieldDeletedAt:         {Type: field.TypeTime, Column: user.FieldDeletedAt},
+			user.FieldDeletedBy:         {Type: field.TypeString, Column: user.FieldDeletedBy},
+			user.FieldMappingID:         {Type: field.TypeString, Column: user.FieldMappingID},
+			user.FieldTags:              {Type: field.TypeJSON, Column: user.FieldTags},
+			user.FieldEmail:             {Type: field.TypeString, Column: user.FieldEmail},
+			user.FieldFirstName:         {Type: field.TypeString, Column: user.FieldFirstName},
+			user.FieldLastName:          {Type: field.TypeString, Column: user.FieldLastName},
+			user.FieldDisplayName:       {Type: field.TypeString, Column: user.FieldDisplayName},
+			user.FieldAvatarRemoteURL:   {Type: field.TypeString, Column: user.FieldAvatarRemoteURL},
+			user.FieldAvatarLocalFile:   {Type: field.TypeString, Column: user.FieldAvatarLocalFile},
+			user.FieldAvatarLocalFileID: {Type: field.TypeString, Column: user.FieldAvatarLocalFileID},
+			user.FieldAvatarUpdatedAt:   {Type: field.TypeTime, Column: user.FieldAvatarUpdatedAt},
+			user.FieldLastSeen:          {Type: field.TypeTime, Column: user.FieldLastSeen},
+			user.FieldPassword:          {Type: field.TypeString, Column: user.FieldPassword},
+			user.FieldSub:               {Type: field.TypeString, Column: user.FieldSub},
+			user.FieldAuthProvider:      {Type: field.TypeEnum, Column: user.FieldAuthProvider},
+			user.FieldRole:              {Type: field.TypeEnum, Column: user.FieldRole},
 		},
 	}
 	graph.Nodes[51] = &sqlgraph.Node{
@@ -1498,29 +1513,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "UserHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			userhistory.FieldHistoryTime:     {Type: field.TypeTime, Column: userhistory.FieldHistoryTime},
-			userhistory.FieldRef:             {Type: field.TypeString, Column: userhistory.FieldRef},
-			userhistory.FieldOperation:       {Type: field.TypeEnum, Column: userhistory.FieldOperation},
-			userhistory.FieldCreatedAt:       {Type: field.TypeTime, Column: userhistory.FieldCreatedAt},
-			userhistory.FieldUpdatedAt:       {Type: field.TypeTime, Column: userhistory.FieldUpdatedAt},
-			userhistory.FieldCreatedBy:       {Type: field.TypeString, Column: userhistory.FieldCreatedBy},
-			userhistory.FieldUpdatedBy:       {Type: field.TypeString, Column: userhistory.FieldUpdatedBy},
-			userhistory.FieldDeletedAt:       {Type: field.TypeTime, Column: userhistory.FieldDeletedAt},
-			userhistory.FieldDeletedBy:       {Type: field.TypeString, Column: userhistory.FieldDeletedBy},
-			userhistory.FieldMappingID:       {Type: field.TypeString, Column: userhistory.FieldMappingID},
-			userhistory.FieldTags:            {Type: field.TypeJSON, Column: userhistory.FieldTags},
-			userhistory.FieldEmail:           {Type: field.TypeString, Column: userhistory.FieldEmail},
-			userhistory.FieldFirstName:       {Type: field.TypeString, Column: userhistory.FieldFirstName},
-			userhistory.FieldLastName:        {Type: field.TypeString, Column: userhistory.FieldLastName},
-			userhistory.FieldDisplayName:     {Type: field.TypeString, Column: userhistory.FieldDisplayName},
-			userhistory.FieldAvatarRemoteURL: {Type: field.TypeString, Column: userhistory.FieldAvatarRemoteURL},
-			userhistory.FieldAvatarLocalFile: {Type: field.TypeString, Column: userhistory.FieldAvatarLocalFile},
-			userhistory.FieldAvatarUpdatedAt: {Type: field.TypeTime, Column: userhistory.FieldAvatarUpdatedAt},
-			userhistory.FieldLastSeen:        {Type: field.TypeTime, Column: userhistory.FieldLastSeen},
-			userhistory.FieldPassword:        {Type: field.TypeString, Column: userhistory.FieldPassword},
-			userhistory.FieldSub:             {Type: field.TypeString, Column: userhistory.FieldSub},
-			userhistory.FieldAuthProvider:    {Type: field.TypeEnum, Column: userhistory.FieldAuthProvider},
-			userhistory.FieldRole:            {Type: field.TypeEnum, Column: userhistory.FieldRole},
+			userhistory.FieldHistoryTime:       {Type: field.TypeTime, Column: userhistory.FieldHistoryTime},
+			userhistory.FieldRef:               {Type: field.TypeString, Column: userhistory.FieldRef},
+			userhistory.FieldOperation:         {Type: field.TypeEnum, Column: userhistory.FieldOperation},
+			userhistory.FieldCreatedAt:         {Type: field.TypeTime, Column: userhistory.FieldCreatedAt},
+			userhistory.FieldUpdatedAt:         {Type: field.TypeTime, Column: userhistory.FieldUpdatedAt},
+			userhistory.FieldCreatedBy:         {Type: field.TypeString, Column: userhistory.FieldCreatedBy},
+			userhistory.FieldUpdatedBy:         {Type: field.TypeString, Column: userhistory.FieldUpdatedBy},
+			userhistory.FieldDeletedAt:         {Type: field.TypeTime, Column: userhistory.FieldDeletedAt},
+			userhistory.FieldDeletedBy:         {Type: field.TypeString, Column: userhistory.FieldDeletedBy},
+			userhistory.FieldMappingID:         {Type: field.TypeString, Column: userhistory.FieldMappingID},
+			userhistory.FieldTags:              {Type: field.TypeJSON, Column: userhistory.FieldTags},
+			userhistory.FieldEmail:             {Type: field.TypeString, Column: userhistory.FieldEmail},
+			userhistory.FieldFirstName:         {Type: field.TypeString, Column: userhistory.FieldFirstName},
+			userhistory.FieldLastName:          {Type: field.TypeString, Column: userhistory.FieldLastName},
+			userhistory.FieldDisplayName:       {Type: field.TypeString, Column: userhistory.FieldDisplayName},
+			userhistory.FieldAvatarRemoteURL:   {Type: field.TypeString, Column: userhistory.FieldAvatarRemoteURL},
+			userhistory.FieldAvatarLocalFile:   {Type: field.TypeString, Column: userhistory.FieldAvatarLocalFile},
+			userhistory.FieldAvatarLocalFileID: {Type: field.TypeString, Column: userhistory.FieldAvatarLocalFileID},
+			userhistory.FieldAvatarUpdatedAt:   {Type: field.TypeTime, Column: userhistory.FieldAvatarUpdatedAt},
+			userhistory.FieldLastSeen:          {Type: field.TypeTime, Column: userhistory.FieldLastSeen},
+			userhistory.FieldPassword:          {Type: field.TypeString, Column: userhistory.FieldPassword},
+			userhistory.FieldSub:               {Type: field.TypeString, Column: userhistory.FieldSub},
+			userhistory.FieldAuthProvider:      {Type: field.TypeEnum, Column: userhistory.FieldAuthProvider},
+			userhistory.FieldRole:              {Type: field.TypeEnum, Column: userhistory.FieldRole},
 		},
 	}
 	graph.Nodes[52] = &sqlgraph.Node{
@@ -1720,6 +1736,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Entity",
 	)
 	graph.MustAddE(
+		"files",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   contact.FilesTable,
+			Columns: contact.FilesPrimaryKey,
+			Bidi:    false,
+		},
+		"Contact",
+		"File",
+	)
+	graph.MustAddE(
 		"owner",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -1754,6 +1782,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"DocumentData",
 		"Entity",
+	)
+	graph.MustAddE(
+		"files",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   documentdata.FilesTable,
+			Columns: documentdata.FilesPrimaryKey,
+			Bidi:    false,
+		},
+		"DocumentData",
+		"File",
 	)
 	graph.MustAddE(
 		"owner",
@@ -2212,6 +2252,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Subscriber",
 	)
 	graph.MustAddE(
+		"file",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   event.FileTable,
+			Columns: event.FilePrimaryKey,
+			Bidi:    false,
+		},
+		"Event",
+		"File",
+	)
+	graph.MustAddE(
 		"owner",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -2262,10 +2314,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"user",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
+			Rel:     sqlgraph.M2M,
 			Inverse: true,
 			Table:   file.UserTable,
-			Columns: []string{file.UserColumn},
+			Columns: file.UserPrimaryKey,
 			Bidi:    false,
 		},
 		"File",
@@ -2284,6 +2336,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Organization",
 	)
 	graph.MustAddE(
+		"group",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.GroupTable,
+			Columns: file.GroupPrimaryKey,
+			Bidi:    false,
+		},
+		"File",
+		"Group",
+	)
+	graph.MustAddE(
+		"contact",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.ContactTable,
+			Columns: file.ContactPrimaryKey,
+			Bidi:    false,
+		},
+		"File",
+		"Contact",
+	)
+	graph.MustAddE(
 		"entity",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -2296,16 +2372,64 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Entity",
 	)
 	graph.MustAddE(
-		"group",
+		"usersetting",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   file.GroupTable,
-			Columns: file.GroupPrimaryKey,
+			Table:   file.UsersettingTable,
+			Columns: file.UsersettingPrimaryKey,
 			Bidi:    false,
 		},
 		"File",
-		"Group",
+		"UserSetting",
+	)
+	graph.MustAddE(
+		"organizationsetting",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.OrganizationsettingTable,
+			Columns: file.OrganizationsettingPrimaryKey,
+			Bidi:    false,
+		},
+		"File",
+		"OrganizationSetting",
+	)
+	graph.MustAddE(
+		"template",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.TemplateTable,
+			Columns: file.TemplatePrimaryKey,
+			Bidi:    false,
+		},
+		"File",
+		"Template",
+	)
+	graph.MustAddE(
+		"documentdata",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.DocumentdataTable,
+			Columns: file.DocumentdataPrimaryKey,
+			Bidi:    false,
+		},
+		"File",
+		"DocumentData",
+	)
+	graph.MustAddE(
+		"events",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   file.EventsTable,
+			Columns: file.EventsPrimaryKey,
+			Bidi:    false,
+		},
+		"File",
+		"Event",
 	)
 	graph.MustAddE(
 		"owner",
@@ -2992,6 +3116,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Organization",
 	)
 	graph.MustAddE(
+		"files",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   organizationsetting.FilesTable,
+			Columns: organizationsetting.FilesPrimaryKey,
+			Bidi:    false,
+		},
+		"OrganizationSetting",
+		"File",
+	)
+	graph.MustAddE(
 		"owner",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -3100,6 +3236,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"DocumentData",
 	)
 	graph.MustAddE(
+		"files",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   template.FilesTable,
+			Columns: template.FilesPrimaryKey,
+			Bidi:    false,
+		},
+		"Template",
+		"File",
+	)
+	graph.MustAddE(
 		"personal_access_tokens",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -3198,10 +3346,22 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"files",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   user.FilesTable,
-			Columns: []string{user.FilesColumn},
+			Columns: user.FilesPrimaryKey,
+			Bidi:    false,
+		},
+		"User",
+		"File",
+	)
+	graph.MustAddE(
+		"file",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   user.FileTable,
+			Columns: []string{user.FileColumn},
 			Bidi:    false,
 		},
 		"User",
@@ -3266,6 +3426,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"UserSetting",
 		"Organization",
+	)
+	graph.MustAddE(
+		"files",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   usersetting.FilesTable,
+			Columns: usersetting.FilesPrimaryKey,
+			Bidi:    false,
+		},
+		"UserSetting",
+		"File",
 	)
 	graph.MustAddE(
 		"owner",
@@ -3601,6 +3773,20 @@ func (f *ContactFilter) WhereHasEntitiesWith(preds ...predicate.Entity) {
 	})))
 }
 
+// WhereHasFiles applies a predicate to check if query has an edge files.
+func (f *ContactFilter) WhereHasFiles() {
+	f.Where(entql.HasEdge("files"))
+}
+
+// WhereHasFilesWith applies a predicate to check if query has an edge files with a given conditions (other predicates).
+func (f *ContactFilter) WhereHasFilesWith(preds ...predicate.File) {
+	f.Where(entql.HasEdgeWith("files", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // addPredicate implements the predicateAdder interface.
 func (chq *ContactHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
 	chq.predicates = append(chq.predicates, pred)
@@ -3867,6 +4053,20 @@ func (f *DocumentDataFilter) WhereHasEntity() {
 // WhereHasEntityWith applies a predicate to check if query has an edge entity with a given conditions (other predicates).
 func (f *DocumentDataFilter) WhereHasEntityWith(preds ...predicate.Entity) {
 	f.Where(entql.HasEdgeWith("entity", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasFiles applies a predicate to check if query has an edge files.
+func (f *DocumentDataFilter) WhereHasFiles() {
+	f.Where(entql.HasEdge("files"))
+}
+
+// WhereHasFilesWith applies a predicate to check if query has an edge files with a given conditions (other predicates).
+func (f *DocumentDataFilter) WhereHasFilesWith(preds ...predicate.File) {
+	f.Where(entql.HasEdgeWith("files", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -5850,6 +6050,20 @@ func (f *EventFilter) WhereHasSubscriberWith(preds ...predicate.Subscriber) {
 	})))
 }
 
+// WhereHasFile applies a predicate to check if query has an edge file.
+func (f *EventFilter) WhereHasFile() {
+	f.Where(entql.HasEdge("file"))
+}
+
+// WhereHasFileWith applies a predicate to check if query has an edge file with a given conditions (other predicates).
+func (f *EventFilter) WhereHasFileWith(preds ...predicate.File) {
+	f.Where(entql.HasEdgeWith("file", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // addPredicate implements the predicateAdder interface.
 func (ehq *EventHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
 	ehq.predicates = append(ehq.predicates, pred)
@@ -6326,24 +6540,39 @@ func (f *FileFilter) WhereTags(p entql.BytesP) {
 	f.Where(p.Field(file.FieldTags))
 }
 
-// WhereFileName applies the entql string predicate on the file_name field.
-func (f *FileFilter) WhereFileName(p entql.StringP) {
-	f.Where(p.Field(file.FieldFileName))
+// WhereProvidedFileName applies the entql string predicate on the provided_file_name field.
+func (f *FileFilter) WhereProvidedFileName(p entql.StringP) {
+	f.Where(p.Field(file.FieldProvidedFileName))
 }
 
-// WhereFileExtension applies the entql string predicate on the file_extension field.
-func (f *FileFilter) WhereFileExtension(p entql.StringP) {
-	f.Where(p.Field(file.FieldFileExtension))
+// WhereProvidedFileExtension applies the entql string predicate on the provided_file_extension field.
+func (f *FileFilter) WhereProvidedFileExtension(p entql.StringP) {
+	f.Where(p.Field(file.FieldProvidedFileExtension))
 }
 
-// WhereFileSize applies the entql int predicate on the file_size field.
-func (f *FileFilter) WhereFileSize(p entql.IntP) {
-	f.Where(p.Field(file.FieldFileSize))
+// WhereProvidedFileSize applies the entql int64 predicate on the provided_file_size field.
+func (f *FileFilter) WhereProvidedFileSize(p entql.Int64P) {
+	f.Where(p.Field(file.FieldProvidedFileSize))
 }
 
-// WhereContentType applies the entql string predicate on the content_type field.
-func (f *FileFilter) WhereContentType(p entql.StringP) {
-	f.Where(p.Field(file.FieldContentType))
+// WherePersistedFileSize applies the entql int64 predicate on the persisted_file_size field.
+func (f *FileFilter) WherePersistedFileSize(p entql.Int64P) {
+	f.Where(p.Field(file.FieldPersistedFileSize))
+}
+
+// WhereDetectedMimeType applies the entql string predicate on the detected_mime_type field.
+func (f *FileFilter) WhereDetectedMimeType(p entql.StringP) {
+	f.Where(p.Field(file.FieldDetectedMimeType))
+}
+
+// WhereMd5Hash applies the entql string predicate on the md5_hash field.
+func (f *FileFilter) WhereMd5Hash(p entql.StringP) {
+	f.Where(p.Field(file.FieldMd5Hash))
+}
+
+// WhereDetectedContentType applies the entql string predicate on the detected_content_type field.
+func (f *FileFilter) WhereDetectedContentType(p entql.StringP) {
+	f.Where(p.Field(file.FieldDetectedContentType))
 }
 
 // WhereStoreKey applies the entql string predicate on the store_key field.
@@ -6351,14 +6580,34 @@ func (f *FileFilter) WhereStoreKey(p entql.StringP) {
 	f.Where(p.Field(file.FieldStoreKey))
 }
 
-// WhereCategory applies the entql string predicate on the category field.
-func (f *FileFilter) WhereCategory(p entql.StringP) {
-	f.Where(p.Field(file.FieldCategory))
+// WhereCategoryType applies the entql string predicate on the category_type field.
+func (f *FileFilter) WhereCategoryType(p entql.StringP) {
+	f.Where(p.Field(file.FieldCategoryType))
 }
 
-// WhereAnnotation applies the entql string predicate on the annotation field.
-func (f *FileFilter) WhereAnnotation(p entql.StringP) {
-	f.Where(p.Field(file.FieldAnnotation))
+// WhereURI applies the entql string predicate on the uri field.
+func (f *FileFilter) WhereURI(p entql.StringP) {
+	f.Where(p.Field(file.FieldURI))
+}
+
+// WhereStorageScheme applies the entql string predicate on the storage_scheme field.
+func (f *FileFilter) WhereStorageScheme(p entql.StringP) {
+	f.Where(p.Field(file.FieldStorageScheme))
+}
+
+// WhereStorageVolume applies the entql string predicate on the storage_volume field.
+func (f *FileFilter) WhereStorageVolume(p entql.StringP) {
+	f.Where(p.Field(file.FieldStorageVolume))
+}
+
+// WhereStoragePath applies the entql string predicate on the storage_path field.
+func (f *FileFilter) WhereStoragePath(p entql.StringP) {
+	f.Where(p.Field(file.FieldStoragePath))
+}
+
+// WhereFileContents applies the entql []byte predicate on the file_contents field.
+func (f *FileFilter) WhereFileContents(p entql.BytesP) {
+	f.Where(p.Field(file.FieldFileContents))
 }
 
 // WhereHasUser applies a predicate to check if query has an edge user.
@@ -6389,6 +6638,34 @@ func (f *FileFilter) WhereHasOrganizationWith(preds ...predicate.Organization) {
 	})))
 }
 
+// WhereHasGroup applies a predicate to check if query has an edge group.
+func (f *FileFilter) WhereHasGroup() {
+	f.Where(entql.HasEdge("group"))
+}
+
+// WhereHasGroupWith applies a predicate to check if query has an edge group with a given conditions (other predicates).
+func (f *FileFilter) WhereHasGroupWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("group", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasContact applies a predicate to check if query has an edge contact.
+func (f *FileFilter) WhereHasContact() {
+	f.Where(entql.HasEdge("contact"))
+}
+
+// WhereHasContactWith applies a predicate to check if query has an edge contact with a given conditions (other predicates).
+func (f *FileFilter) WhereHasContactWith(preds ...predicate.Contact) {
+	f.Where(entql.HasEdgeWith("contact", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasEntity applies a predicate to check if query has an edge entity.
 func (f *FileFilter) WhereHasEntity() {
 	f.Where(entql.HasEdge("entity"))
@@ -6403,14 +6680,70 @@ func (f *FileFilter) WhereHasEntityWith(preds ...predicate.Entity) {
 	})))
 }
 
-// WhereHasGroup applies a predicate to check if query has an edge group.
-func (f *FileFilter) WhereHasGroup() {
-	f.Where(entql.HasEdge("group"))
+// WhereHasUsersetting applies a predicate to check if query has an edge usersetting.
+func (f *FileFilter) WhereHasUsersetting() {
+	f.Where(entql.HasEdge("usersetting"))
 }
 
-// WhereHasGroupWith applies a predicate to check if query has an edge group with a given conditions (other predicates).
-func (f *FileFilter) WhereHasGroupWith(preds ...predicate.Group) {
-	f.Where(entql.HasEdgeWith("group", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasUsersettingWith applies a predicate to check if query has an edge usersetting with a given conditions (other predicates).
+func (f *FileFilter) WhereHasUsersettingWith(preds ...predicate.UserSetting) {
+	f.Where(entql.HasEdgeWith("usersetting", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasOrganizationsetting applies a predicate to check if query has an edge organizationsetting.
+func (f *FileFilter) WhereHasOrganizationsetting() {
+	f.Where(entql.HasEdge("organizationsetting"))
+}
+
+// WhereHasOrganizationsettingWith applies a predicate to check if query has an edge organizationsetting with a given conditions (other predicates).
+func (f *FileFilter) WhereHasOrganizationsettingWith(preds ...predicate.OrganizationSetting) {
+	f.Where(entql.HasEdgeWith("organizationsetting", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasTemplate applies a predicate to check if query has an edge template.
+func (f *FileFilter) WhereHasTemplate() {
+	f.Where(entql.HasEdge("template"))
+}
+
+// WhereHasTemplateWith applies a predicate to check if query has an edge template with a given conditions (other predicates).
+func (f *FileFilter) WhereHasTemplateWith(preds ...predicate.Template) {
+	f.Where(entql.HasEdgeWith("template", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasDocumentdata applies a predicate to check if query has an edge documentdata.
+func (f *FileFilter) WhereHasDocumentdata() {
+	f.Where(entql.HasEdge("documentdata"))
+}
+
+// WhereHasDocumentdataWith applies a predicate to check if query has an edge documentdata with a given conditions (other predicates).
+func (f *FileFilter) WhereHasDocumentdataWith(preds ...predicate.DocumentData) {
+	f.Where(entql.HasEdgeWith("documentdata", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasEvents applies a predicate to check if query has an edge events.
+func (f *FileFilter) WhereHasEvents() {
+	f.Where(entql.HasEdge("events"))
+}
+
+// WhereHasEventsWith applies a predicate to check if query has an edge events with a given conditions (other predicates).
+func (f *FileFilter) WhereHasEventsWith(preds ...predicate.Event) {
+	f.Where(entql.HasEdgeWith("events", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -6512,24 +6845,39 @@ func (f *FileHistoryFilter) WhereTags(p entql.BytesP) {
 	f.Where(p.Field(filehistory.FieldTags))
 }
 
-// WhereFileName applies the entql string predicate on the file_name field.
-func (f *FileHistoryFilter) WhereFileName(p entql.StringP) {
-	f.Where(p.Field(filehistory.FieldFileName))
+// WhereProvidedFileName applies the entql string predicate on the provided_file_name field.
+func (f *FileHistoryFilter) WhereProvidedFileName(p entql.StringP) {
+	f.Where(p.Field(filehistory.FieldProvidedFileName))
 }
 
-// WhereFileExtension applies the entql string predicate on the file_extension field.
-func (f *FileHistoryFilter) WhereFileExtension(p entql.StringP) {
-	f.Where(p.Field(filehistory.FieldFileExtension))
+// WhereProvidedFileExtension applies the entql string predicate on the provided_file_extension field.
+func (f *FileHistoryFilter) WhereProvidedFileExtension(p entql.StringP) {
+	f.Where(p.Field(filehistory.FieldProvidedFileExtension))
 }
 
-// WhereFileSize applies the entql int predicate on the file_size field.
-func (f *FileHistoryFilter) WhereFileSize(p entql.IntP) {
-	f.Where(p.Field(filehistory.FieldFileSize))
+// WhereProvidedFileSize applies the entql int64 predicate on the provided_file_size field.
+func (f *FileHistoryFilter) WhereProvidedFileSize(p entql.Int64P) {
+	f.Where(p.Field(filehistory.FieldProvidedFileSize))
 }
 
-// WhereContentType applies the entql string predicate on the content_type field.
-func (f *FileHistoryFilter) WhereContentType(p entql.StringP) {
-	f.Where(p.Field(filehistory.FieldContentType))
+// WherePersistedFileSize applies the entql int64 predicate on the persisted_file_size field.
+func (f *FileHistoryFilter) WherePersistedFileSize(p entql.Int64P) {
+	f.Where(p.Field(filehistory.FieldPersistedFileSize))
+}
+
+// WhereDetectedMimeType applies the entql string predicate on the detected_mime_type field.
+func (f *FileHistoryFilter) WhereDetectedMimeType(p entql.StringP) {
+	f.Where(p.Field(filehistory.FieldDetectedMimeType))
+}
+
+// WhereMd5Hash applies the entql string predicate on the md5_hash field.
+func (f *FileHistoryFilter) WhereMd5Hash(p entql.StringP) {
+	f.Where(p.Field(filehistory.FieldMd5Hash))
+}
+
+// WhereDetectedContentType applies the entql string predicate on the detected_content_type field.
+func (f *FileHistoryFilter) WhereDetectedContentType(p entql.StringP) {
+	f.Where(p.Field(filehistory.FieldDetectedContentType))
 }
 
 // WhereStoreKey applies the entql string predicate on the store_key field.
@@ -6537,14 +6885,34 @@ func (f *FileHistoryFilter) WhereStoreKey(p entql.StringP) {
 	f.Where(p.Field(filehistory.FieldStoreKey))
 }
 
-// WhereCategory applies the entql string predicate on the category field.
-func (f *FileHistoryFilter) WhereCategory(p entql.StringP) {
-	f.Where(p.Field(filehistory.FieldCategory))
+// WhereCategoryType applies the entql string predicate on the category_type field.
+func (f *FileHistoryFilter) WhereCategoryType(p entql.StringP) {
+	f.Where(p.Field(filehistory.FieldCategoryType))
 }
 
-// WhereAnnotation applies the entql string predicate on the annotation field.
-func (f *FileHistoryFilter) WhereAnnotation(p entql.StringP) {
-	f.Where(p.Field(filehistory.FieldAnnotation))
+// WhereURI applies the entql string predicate on the uri field.
+func (f *FileHistoryFilter) WhereURI(p entql.StringP) {
+	f.Where(p.Field(filehistory.FieldURI))
+}
+
+// WhereStorageScheme applies the entql string predicate on the storage_scheme field.
+func (f *FileHistoryFilter) WhereStorageScheme(p entql.StringP) {
+	f.Where(p.Field(filehistory.FieldStorageScheme))
+}
+
+// WhereStorageVolume applies the entql string predicate on the storage_volume field.
+func (f *FileHistoryFilter) WhereStorageVolume(p entql.StringP) {
+	f.Where(p.Field(filehistory.FieldStorageVolume))
+}
+
+// WhereStoragePath applies the entql string predicate on the storage_path field.
+func (f *FileHistoryFilter) WhereStoragePath(p entql.StringP) {
+	f.Where(p.Field(filehistory.FieldStoragePath))
+}
+
+// WhereFileContents applies the entql []byte predicate on the file_contents field.
+func (f *FileHistoryFilter) WhereFileContents(p entql.BytesP) {
+	f.Where(p.Field(filehistory.FieldFileContents))
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -9690,6 +10058,20 @@ func (f *OrganizationSettingFilter) WhereHasOrganizationWith(preds ...predicate.
 	})))
 }
 
+// WhereHasFiles applies a predicate to check if query has an edge files.
+func (f *OrganizationSettingFilter) WhereHasFiles() {
+	f.Where(entql.HasEdge("files"))
+}
+
+// WhereHasFilesWith applies a predicate to check if query has an edge files with a given conditions (other predicates).
+func (f *OrganizationSettingFilter) WhereHasFilesWith(preds ...predicate.File) {
+	f.Where(entql.HasEdgeWith("files", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // addPredicate implements the predicateAdder interface.
 func (oshq *OrganizationSettingHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
 	oshq.predicates = append(oshq.predicates, pred)
@@ -10516,6 +10898,20 @@ func (f *TemplateFilter) WhereHasDocumentsWith(preds ...predicate.DocumentData) 
 	})))
 }
 
+// WhereHasFiles applies a predicate to check if query has an edge files.
+func (f *TemplateFilter) WhereHasFiles() {
+	f.Where(entql.HasEdge("files"))
+}
+
+// WhereHasFilesWith applies a predicate to check if query has an edge files with a given conditions (other predicates).
+func (f *TemplateFilter) WhereHasFilesWith(preds ...predicate.File) {
+	f.Where(entql.HasEdgeWith("files", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // addPredicate implements the predicateAdder interface.
 func (thq *TemplateHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
 	thq.predicates = append(thq.predicates, pred)
@@ -10751,6 +11147,11 @@ func (f *UserFilter) WhereAvatarLocalFile(p entql.StringP) {
 	f.Where(p.Field(user.FieldAvatarLocalFile))
 }
 
+// WhereAvatarLocalFileID applies the entql string predicate on the avatar_local_file_id field.
+func (f *UserFilter) WhereAvatarLocalFileID(p entql.StringP) {
+	f.Where(p.Field(user.FieldAvatarLocalFileID))
+}
+
 // WhereAvatarUpdatedAt applies the entql time.Time predicate on the avatar_updated_at field.
 func (f *UserFilter) WhereAvatarUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(user.FieldAvatarUpdatedAt))
@@ -10901,6 +11302,20 @@ func (f *UserFilter) WhereHasFiles() {
 // WhereHasFilesWith applies a predicate to check if query has an edge files with a given conditions (other predicates).
 func (f *UserFilter) WhereHasFilesWith(preds ...predicate.File) {
 	f.Where(entql.HasEdgeWith("files", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasFile applies a predicate to check if query has an edge file.
+func (f *UserFilter) WhereHasFile() {
+	f.Where(entql.HasEdge("file"))
+}
+
+// WhereHasFileWith applies a predicate to check if query has an edge file with a given conditions (other predicates).
+func (f *UserFilter) WhereHasFileWith(preds ...predicate.File) {
+	f.Where(entql.HasEdgeWith("file", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -11072,6 +11487,11 @@ func (f *UserHistoryFilter) WhereAvatarRemoteURL(p entql.StringP) {
 // WhereAvatarLocalFile applies the entql string predicate on the avatar_local_file field.
 func (f *UserHistoryFilter) WhereAvatarLocalFile(p entql.StringP) {
 	f.Where(p.Field(userhistory.FieldAvatarLocalFile))
+}
+
+// WhereAvatarLocalFileID applies the entql string predicate on the avatar_local_file_id field.
+func (f *UserHistoryFilter) WhereAvatarLocalFileID(p entql.StringP) {
+	f.Where(p.Field(userhistory.FieldAvatarLocalFileID))
 }
 
 // WhereAvatarUpdatedAt applies the entql time.Time predicate on the avatar_updated_at field.
@@ -11251,6 +11671,20 @@ func (f *UserSettingFilter) WhereHasDefaultOrg() {
 // WhereHasDefaultOrgWith applies a predicate to check if query has an edge default_org with a given conditions (other predicates).
 func (f *UserSettingFilter) WhereHasDefaultOrgWith(preds ...predicate.Organization) {
 	f.Where(entql.HasEdgeWith("default_org", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasFiles applies a predicate to check if query has an edge files.
+func (f *UserSettingFilter) WhereHasFiles() {
+	f.Where(entql.HasEdge("files"))
+}
+
+// WhereHasFilesWith applies a predicate to check if query has an edge files with a given conditions (other predicates).
+func (f *UserSettingFilter) WhereHasFilesWith(preds ...predicate.File) {
+	f.Where(entql.HasEdgeWith("files", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

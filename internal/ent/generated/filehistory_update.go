@@ -122,71 +122,138 @@ func (fhu *FileHistoryUpdate) ClearTags() *FileHistoryUpdate {
 	return fhu
 }
 
-// SetFileName sets the "file_name" field.
-func (fhu *FileHistoryUpdate) SetFileName(s string) *FileHistoryUpdate {
-	fhu.mutation.SetFileName(s)
+// SetProvidedFileName sets the "provided_file_name" field.
+func (fhu *FileHistoryUpdate) SetProvidedFileName(s string) *FileHistoryUpdate {
+	fhu.mutation.SetProvidedFileName(s)
 	return fhu
 }
 
-// SetNillableFileName sets the "file_name" field if the given value is not nil.
-func (fhu *FileHistoryUpdate) SetNillableFileName(s *string) *FileHistoryUpdate {
+// SetNillableProvidedFileName sets the "provided_file_name" field if the given value is not nil.
+func (fhu *FileHistoryUpdate) SetNillableProvidedFileName(s *string) *FileHistoryUpdate {
 	if s != nil {
-		fhu.SetFileName(*s)
+		fhu.SetProvidedFileName(*s)
 	}
 	return fhu
 }
 
-// SetFileExtension sets the "file_extension" field.
-func (fhu *FileHistoryUpdate) SetFileExtension(s string) *FileHistoryUpdate {
-	fhu.mutation.SetFileExtension(s)
+// SetProvidedFileExtension sets the "provided_file_extension" field.
+func (fhu *FileHistoryUpdate) SetProvidedFileExtension(s string) *FileHistoryUpdate {
+	fhu.mutation.SetProvidedFileExtension(s)
 	return fhu
 }
 
-// SetNillableFileExtension sets the "file_extension" field if the given value is not nil.
-func (fhu *FileHistoryUpdate) SetNillableFileExtension(s *string) *FileHistoryUpdate {
+// SetNillableProvidedFileExtension sets the "provided_file_extension" field if the given value is not nil.
+func (fhu *FileHistoryUpdate) SetNillableProvidedFileExtension(s *string) *FileHistoryUpdate {
 	if s != nil {
-		fhu.SetFileExtension(*s)
+		fhu.SetProvidedFileExtension(*s)
 	}
 	return fhu
 }
 
-// SetFileSize sets the "file_size" field.
-func (fhu *FileHistoryUpdate) SetFileSize(i int) *FileHistoryUpdate {
-	fhu.mutation.ResetFileSize()
-	fhu.mutation.SetFileSize(i)
+// SetProvidedFileSize sets the "provided_file_size" field.
+func (fhu *FileHistoryUpdate) SetProvidedFileSize(i int64) *FileHistoryUpdate {
+	fhu.mutation.ResetProvidedFileSize()
+	fhu.mutation.SetProvidedFileSize(i)
 	return fhu
 }
 
-// SetNillableFileSize sets the "file_size" field if the given value is not nil.
-func (fhu *FileHistoryUpdate) SetNillableFileSize(i *int) *FileHistoryUpdate {
+// SetNillableProvidedFileSize sets the "provided_file_size" field if the given value is not nil.
+func (fhu *FileHistoryUpdate) SetNillableProvidedFileSize(i *int64) *FileHistoryUpdate {
 	if i != nil {
-		fhu.SetFileSize(*i)
+		fhu.SetProvidedFileSize(*i)
 	}
 	return fhu
 }
 
-// AddFileSize adds i to the "file_size" field.
-func (fhu *FileHistoryUpdate) AddFileSize(i int) *FileHistoryUpdate {
-	fhu.mutation.AddFileSize(i)
+// AddProvidedFileSize adds i to the "provided_file_size" field.
+func (fhu *FileHistoryUpdate) AddProvidedFileSize(i int64) *FileHistoryUpdate {
+	fhu.mutation.AddProvidedFileSize(i)
 	return fhu
 }
 
-// ClearFileSize clears the value of the "file_size" field.
-func (fhu *FileHistoryUpdate) ClearFileSize() *FileHistoryUpdate {
-	fhu.mutation.ClearFileSize()
+// ClearProvidedFileSize clears the value of the "provided_file_size" field.
+func (fhu *FileHistoryUpdate) ClearProvidedFileSize() *FileHistoryUpdate {
+	fhu.mutation.ClearProvidedFileSize()
 	return fhu
 }
 
-// SetContentType sets the "content_type" field.
-func (fhu *FileHistoryUpdate) SetContentType(s string) *FileHistoryUpdate {
-	fhu.mutation.SetContentType(s)
+// SetPersistedFileSize sets the "persisted_file_size" field.
+func (fhu *FileHistoryUpdate) SetPersistedFileSize(i int64) *FileHistoryUpdate {
+	fhu.mutation.ResetPersistedFileSize()
+	fhu.mutation.SetPersistedFileSize(i)
 	return fhu
 }
 
-// SetNillableContentType sets the "content_type" field if the given value is not nil.
-func (fhu *FileHistoryUpdate) SetNillableContentType(s *string) *FileHistoryUpdate {
+// SetNillablePersistedFileSize sets the "persisted_file_size" field if the given value is not nil.
+func (fhu *FileHistoryUpdate) SetNillablePersistedFileSize(i *int64) *FileHistoryUpdate {
+	if i != nil {
+		fhu.SetPersistedFileSize(*i)
+	}
+	return fhu
+}
+
+// AddPersistedFileSize adds i to the "persisted_file_size" field.
+func (fhu *FileHistoryUpdate) AddPersistedFileSize(i int64) *FileHistoryUpdate {
+	fhu.mutation.AddPersistedFileSize(i)
+	return fhu
+}
+
+// ClearPersistedFileSize clears the value of the "persisted_file_size" field.
+func (fhu *FileHistoryUpdate) ClearPersistedFileSize() *FileHistoryUpdate {
+	fhu.mutation.ClearPersistedFileSize()
+	return fhu
+}
+
+// SetDetectedMimeType sets the "detected_mime_type" field.
+func (fhu *FileHistoryUpdate) SetDetectedMimeType(s string) *FileHistoryUpdate {
+	fhu.mutation.SetDetectedMimeType(s)
+	return fhu
+}
+
+// SetNillableDetectedMimeType sets the "detected_mime_type" field if the given value is not nil.
+func (fhu *FileHistoryUpdate) SetNillableDetectedMimeType(s *string) *FileHistoryUpdate {
 	if s != nil {
-		fhu.SetContentType(*s)
+		fhu.SetDetectedMimeType(*s)
+	}
+	return fhu
+}
+
+// ClearDetectedMimeType clears the value of the "detected_mime_type" field.
+func (fhu *FileHistoryUpdate) ClearDetectedMimeType() *FileHistoryUpdate {
+	fhu.mutation.ClearDetectedMimeType()
+	return fhu
+}
+
+// SetMd5Hash sets the "md5_hash" field.
+func (fhu *FileHistoryUpdate) SetMd5Hash(s string) *FileHistoryUpdate {
+	fhu.mutation.SetMd5Hash(s)
+	return fhu
+}
+
+// SetNillableMd5Hash sets the "md5_hash" field if the given value is not nil.
+func (fhu *FileHistoryUpdate) SetNillableMd5Hash(s *string) *FileHistoryUpdate {
+	if s != nil {
+		fhu.SetMd5Hash(*s)
+	}
+	return fhu
+}
+
+// ClearMd5Hash clears the value of the "md5_hash" field.
+func (fhu *FileHistoryUpdate) ClearMd5Hash() *FileHistoryUpdate {
+	fhu.mutation.ClearMd5Hash()
+	return fhu
+}
+
+// SetDetectedContentType sets the "detected_content_type" field.
+func (fhu *FileHistoryUpdate) SetDetectedContentType(s string) *FileHistoryUpdate {
+	fhu.mutation.SetDetectedContentType(s)
+	return fhu
+}
+
+// SetNillableDetectedContentType sets the "detected_content_type" field if the given value is not nil.
+func (fhu *FileHistoryUpdate) SetNillableDetectedContentType(s *string) *FileHistoryUpdate {
+	if s != nil {
+		fhu.SetDetectedContentType(*s)
 	}
 	return fhu
 }
@@ -205,43 +272,121 @@ func (fhu *FileHistoryUpdate) SetNillableStoreKey(s *string) *FileHistoryUpdate 
 	return fhu
 }
 
-// SetCategory sets the "category" field.
-func (fhu *FileHistoryUpdate) SetCategory(s string) *FileHistoryUpdate {
-	fhu.mutation.SetCategory(s)
+// ClearStoreKey clears the value of the "store_key" field.
+func (fhu *FileHistoryUpdate) ClearStoreKey() *FileHistoryUpdate {
+	fhu.mutation.ClearStoreKey()
 	return fhu
 }
 
-// SetNillableCategory sets the "category" field if the given value is not nil.
-func (fhu *FileHistoryUpdate) SetNillableCategory(s *string) *FileHistoryUpdate {
+// SetCategoryType sets the "category_type" field.
+func (fhu *FileHistoryUpdate) SetCategoryType(s string) *FileHistoryUpdate {
+	fhu.mutation.SetCategoryType(s)
+	return fhu
+}
+
+// SetNillableCategoryType sets the "category_type" field if the given value is not nil.
+func (fhu *FileHistoryUpdate) SetNillableCategoryType(s *string) *FileHistoryUpdate {
 	if s != nil {
-		fhu.SetCategory(*s)
+		fhu.SetCategoryType(*s)
 	}
 	return fhu
 }
 
-// ClearCategory clears the value of the "category" field.
-func (fhu *FileHistoryUpdate) ClearCategory() *FileHistoryUpdate {
-	fhu.mutation.ClearCategory()
+// ClearCategoryType clears the value of the "category_type" field.
+func (fhu *FileHistoryUpdate) ClearCategoryType() *FileHistoryUpdate {
+	fhu.mutation.ClearCategoryType()
 	return fhu
 }
 
-// SetAnnotation sets the "annotation" field.
-func (fhu *FileHistoryUpdate) SetAnnotation(s string) *FileHistoryUpdate {
-	fhu.mutation.SetAnnotation(s)
+// SetURI sets the "uri" field.
+func (fhu *FileHistoryUpdate) SetURI(s string) *FileHistoryUpdate {
+	fhu.mutation.SetURI(s)
 	return fhu
 }
 
-// SetNillableAnnotation sets the "annotation" field if the given value is not nil.
-func (fhu *FileHistoryUpdate) SetNillableAnnotation(s *string) *FileHistoryUpdate {
+// SetNillableURI sets the "uri" field if the given value is not nil.
+func (fhu *FileHistoryUpdate) SetNillableURI(s *string) *FileHistoryUpdate {
 	if s != nil {
-		fhu.SetAnnotation(*s)
+		fhu.SetURI(*s)
 	}
 	return fhu
 }
 
-// ClearAnnotation clears the value of the "annotation" field.
-func (fhu *FileHistoryUpdate) ClearAnnotation() *FileHistoryUpdate {
-	fhu.mutation.ClearAnnotation()
+// ClearURI clears the value of the "uri" field.
+func (fhu *FileHistoryUpdate) ClearURI() *FileHistoryUpdate {
+	fhu.mutation.ClearURI()
+	return fhu
+}
+
+// SetStorageScheme sets the "storage_scheme" field.
+func (fhu *FileHistoryUpdate) SetStorageScheme(s string) *FileHistoryUpdate {
+	fhu.mutation.SetStorageScheme(s)
+	return fhu
+}
+
+// SetNillableStorageScheme sets the "storage_scheme" field if the given value is not nil.
+func (fhu *FileHistoryUpdate) SetNillableStorageScheme(s *string) *FileHistoryUpdate {
+	if s != nil {
+		fhu.SetStorageScheme(*s)
+	}
+	return fhu
+}
+
+// ClearStorageScheme clears the value of the "storage_scheme" field.
+func (fhu *FileHistoryUpdate) ClearStorageScheme() *FileHistoryUpdate {
+	fhu.mutation.ClearStorageScheme()
+	return fhu
+}
+
+// SetStorageVolume sets the "storage_volume" field.
+func (fhu *FileHistoryUpdate) SetStorageVolume(s string) *FileHistoryUpdate {
+	fhu.mutation.SetStorageVolume(s)
+	return fhu
+}
+
+// SetNillableStorageVolume sets the "storage_volume" field if the given value is not nil.
+func (fhu *FileHistoryUpdate) SetNillableStorageVolume(s *string) *FileHistoryUpdate {
+	if s != nil {
+		fhu.SetStorageVolume(*s)
+	}
+	return fhu
+}
+
+// ClearStorageVolume clears the value of the "storage_volume" field.
+func (fhu *FileHistoryUpdate) ClearStorageVolume() *FileHistoryUpdate {
+	fhu.mutation.ClearStorageVolume()
+	return fhu
+}
+
+// SetStoragePath sets the "storage_path" field.
+func (fhu *FileHistoryUpdate) SetStoragePath(s string) *FileHistoryUpdate {
+	fhu.mutation.SetStoragePath(s)
+	return fhu
+}
+
+// SetNillableStoragePath sets the "storage_path" field if the given value is not nil.
+func (fhu *FileHistoryUpdate) SetNillableStoragePath(s *string) *FileHistoryUpdate {
+	if s != nil {
+		fhu.SetStoragePath(*s)
+	}
+	return fhu
+}
+
+// ClearStoragePath clears the value of the "storage_path" field.
+func (fhu *FileHistoryUpdate) ClearStoragePath() *FileHistoryUpdate {
+	fhu.mutation.ClearStoragePath()
+	return fhu
+}
+
+// SetFileContents sets the "file_contents" field.
+func (fhu *FileHistoryUpdate) SetFileContents(b []byte) *FileHistoryUpdate {
+	fhu.mutation.SetFileContents(b)
+	return fhu
+}
+
+// ClearFileContents clears the value of the "file_contents" field.
+func (fhu *FileHistoryUpdate) ClearFileContents() *FileHistoryUpdate {
+	fhu.mutation.ClearFileContents()
 	return fhu
 }
 
@@ -345,38 +490,86 @@ func (fhu *FileHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if fhu.mutation.TagsCleared() {
 		_spec.ClearField(filehistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := fhu.mutation.FileName(); ok {
-		_spec.SetField(filehistory.FieldFileName, field.TypeString, value)
+	if value, ok := fhu.mutation.ProvidedFileName(); ok {
+		_spec.SetField(filehistory.FieldProvidedFileName, field.TypeString, value)
 	}
-	if value, ok := fhu.mutation.FileExtension(); ok {
-		_spec.SetField(filehistory.FieldFileExtension, field.TypeString, value)
+	if value, ok := fhu.mutation.ProvidedFileExtension(); ok {
+		_spec.SetField(filehistory.FieldProvidedFileExtension, field.TypeString, value)
 	}
-	if value, ok := fhu.mutation.FileSize(); ok {
-		_spec.SetField(filehistory.FieldFileSize, field.TypeInt, value)
+	if value, ok := fhu.mutation.ProvidedFileSize(); ok {
+		_spec.SetField(filehistory.FieldProvidedFileSize, field.TypeInt64, value)
 	}
-	if value, ok := fhu.mutation.AddedFileSize(); ok {
-		_spec.AddField(filehistory.FieldFileSize, field.TypeInt, value)
+	if value, ok := fhu.mutation.AddedProvidedFileSize(); ok {
+		_spec.AddField(filehistory.FieldProvidedFileSize, field.TypeInt64, value)
 	}
-	if fhu.mutation.FileSizeCleared() {
-		_spec.ClearField(filehistory.FieldFileSize, field.TypeInt)
+	if fhu.mutation.ProvidedFileSizeCleared() {
+		_spec.ClearField(filehistory.FieldProvidedFileSize, field.TypeInt64)
 	}
-	if value, ok := fhu.mutation.ContentType(); ok {
-		_spec.SetField(filehistory.FieldContentType, field.TypeString, value)
+	if value, ok := fhu.mutation.PersistedFileSize(); ok {
+		_spec.SetField(filehistory.FieldPersistedFileSize, field.TypeInt64, value)
+	}
+	if value, ok := fhu.mutation.AddedPersistedFileSize(); ok {
+		_spec.AddField(filehistory.FieldPersistedFileSize, field.TypeInt64, value)
+	}
+	if fhu.mutation.PersistedFileSizeCleared() {
+		_spec.ClearField(filehistory.FieldPersistedFileSize, field.TypeInt64)
+	}
+	if value, ok := fhu.mutation.DetectedMimeType(); ok {
+		_spec.SetField(filehistory.FieldDetectedMimeType, field.TypeString, value)
+	}
+	if fhu.mutation.DetectedMimeTypeCleared() {
+		_spec.ClearField(filehistory.FieldDetectedMimeType, field.TypeString)
+	}
+	if value, ok := fhu.mutation.Md5Hash(); ok {
+		_spec.SetField(filehistory.FieldMd5Hash, field.TypeString, value)
+	}
+	if fhu.mutation.Md5HashCleared() {
+		_spec.ClearField(filehistory.FieldMd5Hash, field.TypeString)
+	}
+	if value, ok := fhu.mutation.DetectedContentType(); ok {
+		_spec.SetField(filehistory.FieldDetectedContentType, field.TypeString, value)
 	}
 	if value, ok := fhu.mutation.StoreKey(); ok {
 		_spec.SetField(filehistory.FieldStoreKey, field.TypeString, value)
 	}
-	if value, ok := fhu.mutation.Category(); ok {
-		_spec.SetField(filehistory.FieldCategory, field.TypeString, value)
+	if fhu.mutation.StoreKeyCleared() {
+		_spec.ClearField(filehistory.FieldStoreKey, field.TypeString)
 	}
-	if fhu.mutation.CategoryCleared() {
-		_spec.ClearField(filehistory.FieldCategory, field.TypeString)
+	if value, ok := fhu.mutation.CategoryType(); ok {
+		_spec.SetField(filehistory.FieldCategoryType, field.TypeString, value)
 	}
-	if value, ok := fhu.mutation.Annotation(); ok {
-		_spec.SetField(filehistory.FieldAnnotation, field.TypeString, value)
+	if fhu.mutation.CategoryTypeCleared() {
+		_spec.ClearField(filehistory.FieldCategoryType, field.TypeString)
 	}
-	if fhu.mutation.AnnotationCleared() {
-		_spec.ClearField(filehistory.FieldAnnotation, field.TypeString)
+	if value, ok := fhu.mutation.URI(); ok {
+		_spec.SetField(filehistory.FieldURI, field.TypeString, value)
+	}
+	if fhu.mutation.URICleared() {
+		_spec.ClearField(filehistory.FieldURI, field.TypeString)
+	}
+	if value, ok := fhu.mutation.StorageScheme(); ok {
+		_spec.SetField(filehistory.FieldStorageScheme, field.TypeString, value)
+	}
+	if fhu.mutation.StorageSchemeCleared() {
+		_spec.ClearField(filehistory.FieldStorageScheme, field.TypeString)
+	}
+	if value, ok := fhu.mutation.StorageVolume(); ok {
+		_spec.SetField(filehistory.FieldStorageVolume, field.TypeString, value)
+	}
+	if fhu.mutation.StorageVolumeCleared() {
+		_spec.ClearField(filehistory.FieldStorageVolume, field.TypeString)
+	}
+	if value, ok := fhu.mutation.StoragePath(); ok {
+		_spec.SetField(filehistory.FieldStoragePath, field.TypeString, value)
+	}
+	if fhu.mutation.StoragePathCleared() {
+		_spec.ClearField(filehistory.FieldStoragePath, field.TypeString)
+	}
+	if value, ok := fhu.mutation.FileContents(); ok {
+		_spec.SetField(filehistory.FieldFileContents, field.TypeBytes, value)
+	}
+	if fhu.mutation.FileContentsCleared() {
+		_spec.ClearField(filehistory.FieldFileContents, field.TypeBytes)
 	}
 	_spec.Node.Schema = fhu.schemaConfig.FileHistory
 	ctx = internal.NewSchemaConfigContext(ctx, fhu.schemaConfig)
@@ -492,71 +685,138 @@ func (fhuo *FileHistoryUpdateOne) ClearTags() *FileHistoryUpdateOne {
 	return fhuo
 }
 
-// SetFileName sets the "file_name" field.
-func (fhuo *FileHistoryUpdateOne) SetFileName(s string) *FileHistoryUpdateOne {
-	fhuo.mutation.SetFileName(s)
+// SetProvidedFileName sets the "provided_file_name" field.
+func (fhuo *FileHistoryUpdateOne) SetProvidedFileName(s string) *FileHistoryUpdateOne {
+	fhuo.mutation.SetProvidedFileName(s)
 	return fhuo
 }
 
-// SetNillableFileName sets the "file_name" field if the given value is not nil.
-func (fhuo *FileHistoryUpdateOne) SetNillableFileName(s *string) *FileHistoryUpdateOne {
+// SetNillableProvidedFileName sets the "provided_file_name" field if the given value is not nil.
+func (fhuo *FileHistoryUpdateOne) SetNillableProvidedFileName(s *string) *FileHistoryUpdateOne {
 	if s != nil {
-		fhuo.SetFileName(*s)
+		fhuo.SetProvidedFileName(*s)
 	}
 	return fhuo
 }
 
-// SetFileExtension sets the "file_extension" field.
-func (fhuo *FileHistoryUpdateOne) SetFileExtension(s string) *FileHistoryUpdateOne {
-	fhuo.mutation.SetFileExtension(s)
+// SetProvidedFileExtension sets the "provided_file_extension" field.
+func (fhuo *FileHistoryUpdateOne) SetProvidedFileExtension(s string) *FileHistoryUpdateOne {
+	fhuo.mutation.SetProvidedFileExtension(s)
 	return fhuo
 }
 
-// SetNillableFileExtension sets the "file_extension" field if the given value is not nil.
-func (fhuo *FileHistoryUpdateOne) SetNillableFileExtension(s *string) *FileHistoryUpdateOne {
+// SetNillableProvidedFileExtension sets the "provided_file_extension" field if the given value is not nil.
+func (fhuo *FileHistoryUpdateOne) SetNillableProvidedFileExtension(s *string) *FileHistoryUpdateOne {
 	if s != nil {
-		fhuo.SetFileExtension(*s)
+		fhuo.SetProvidedFileExtension(*s)
 	}
 	return fhuo
 }
 
-// SetFileSize sets the "file_size" field.
-func (fhuo *FileHistoryUpdateOne) SetFileSize(i int) *FileHistoryUpdateOne {
-	fhuo.mutation.ResetFileSize()
-	fhuo.mutation.SetFileSize(i)
+// SetProvidedFileSize sets the "provided_file_size" field.
+func (fhuo *FileHistoryUpdateOne) SetProvidedFileSize(i int64) *FileHistoryUpdateOne {
+	fhuo.mutation.ResetProvidedFileSize()
+	fhuo.mutation.SetProvidedFileSize(i)
 	return fhuo
 }
 
-// SetNillableFileSize sets the "file_size" field if the given value is not nil.
-func (fhuo *FileHistoryUpdateOne) SetNillableFileSize(i *int) *FileHistoryUpdateOne {
+// SetNillableProvidedFileSize sets the "provided_file_size" field if the given value is not nil.
+func (fhuo *FileHistoryUpdateOne) SetNillableProvidedFileSize(i *int64) *FileHistoryUpdateOne {
 	if i != nil {
-		fhuo.SetFileSize(*i)
+		fhuo.SetProvidedFileSize(*i)
 	}
 	return fhuo
 }
 
-// AddFileSize adds i to the "file_size" field.
-func (fhuo *FileHistoryUpdateOne) AddFileSize(i int) *FileHistoryUpdateOne {
-	fhuo.mutation.AddFileSize(i)
+// AddProvidedFileSize adds i to the "provided_file_size" field.
+func (fhuo *FileHistoryUpdateOne) AddProvidedFileSize(i int64) *FileHistoryUpdateOne {
+	fhuo.mutation.AddProvidedFileSize(i)
 	return fhuo
 }
 
-// ClearFileSize clears the value of the "file_size" field.
-func (fhuo *FileHistoryUpdateOne) ClearFileSize() *FileHistoryUpdateOne {
-	fhuo.mutation.ClearFileSize()
+// ClearProvidedFileSize clears the value of the "provided_file_size" field.
+func (fhuo *FileHistoryUpdateOne) ClearProvidedFileSize() *FileHistoryUpdateOne {
+	fhuo.mutation.ClearProvidedFileSize()
 	return fhuo
 }
 
-// SetContentType sets the "content_type" field.
-func (fhuo *FileHistoryUpdateOne) SetContentType(s string) *FileHistoryUpdateOne {
-	fhuo.mutation.SetContentType(s)
+// SetPersistedFileSize sets the "persisted_file_size" field.
+func (fhuo *FileHistoryUpdateOne) SetPersistedFileSize(i int64) *FileHistoryUpdateOne {
+	fhuo.mutation.ResetPersistedFileSize()
+	fhuo.mutation.SetPersistedFileSize(i)
 	return fhuo
 }
 
-// SetNillableContentType sets the "content_type" field if the given value is not nil.
-func (fhuo *FileHistoryUpdateOne) SetNillableContentType(s *string) *FileHistoryUpdateOne {
+// SetNillablePersistedFileSize sets the "persisted_file_size" field if the given value is not nil.
+func (fhuo *FileHistoryUpdateOne) SetNillablePersistedFileSize(i *int64) *FileHistoryUpdateOne {
+	if i != nil {
+		fhuo.SetPersistedFileSize(*i)
+	}
+	return fhuo
+}
+
+// AddPersistedFileSize adds i to the "persisted_file_size" field.
+func (fhuo *FileHistoryUpdateOne) AddPersistedFileSize(i int64) *FileHistoryUpdateOne {
+	fhuo.mutation.AddPersistedFileSize(i)
+	return fhuo
+}
+
+// ClearPersistedFileSize clears the value of the "persisted_file_size" field.
+func (fhuo *FileHistoryUpdateOne) ClearPersistedFileSize() *FileHistoryUpdateOne {
+	fhuo.mutation.ClearPersistedFileSize()
+	return fhuo
+}
+
+// SetDetectedMimeType sets the "detected_mime_type" field.
+func (fhuo *FileHistoryUpdateOne) SetDetectedMimeType(s string) *FileHistoryUpdateOne {
+	fhuo.mutation.SetDetectedMimeType(s)
+	return fhuo
+}
+
+// SetNillableDetectedMimeType sets the "detected_mime_type" field if the given value is not nil.
+func (fhuo *FileHistoryUpdateOne) SetNillableDetectedMimeType(s *string) *FileHistoryUpdateOne {
 	if s != nil {
-		fhuo.SetContentType(*s)
+		fhuo.SetDetectedMimeType(*s)
+	}
+	return fhuo
+}
+
+// ClearDetectedMimeType clears the value of the "detected_mime_type" field.
+func (fhuo *FileHistoryUpdateOne) ClearDetectedMimeType() *FileHistoryUpdateOne {
+	fhuo.mutation.ClearDetectedMimeType()
+	return fhuo
+}
+
+// SetMd5Hash sets the "md5_hash" field.
+func (fhuo *FileHistoryUpdateOne) SetMd5Hash(s string) *FileHistoryUpdateOne {
+	fhuo.mutation.SetMd5Hash(s)
+	return fhuo
+}
+
+// SetNillableMd5Hash sets the "md5_hash" field if the given value is not nil.
+func (fhuo *FileHistoryUpdateOne) SetNillableMd5Hash(s *string) *FileHistoryUpdateOne {
+	if s != nil {
+		fhuo.SetMd5Hash(*s)
+	}
+	return fhuo
+}
+
+// ClearMd5Hash clears the value of the "md5_hash" field.
+func (fhuo *FileHistoryUpdateOne) ClearMd5Hash() *FileHistoryUpdateOne {
+	fhuo.mutation.ClearMd5Hash()
+	return fhuo
+}
+
+// SetDetectedContentType sets the "detected_content_type" field.
+func (fhuo *FileHistoryUpdateOne) SetDetectedContentType(s string) *FileHistoryUpdateOne {
+	fhuo.mutation.SetDetectedContentType(s)
+	return fhuo
+}
+
+// SetNillableDetectedContentType sets the "detected_content_type" field if the given value is not nil.
+func (fhuo *FileHistoryUpdateOne) SetNillableDetectedContentType(s *string) *FileHistoryUpdateOne {
+	if s != nil {
+		fhuo.SetDetectedContentType(*s)
 	}
 	return fhuo
 }
@@ -575,43 +835,121 @@ func (fhuo *FileHistoryUpdateOne) SetNillableStoreKey(s *string) *FileHistoryUpd
 	return fhuo
 }
 
-// SetCategory sets the "category" field.
-func (fhuo *FileHistoryUpdateOne) SetCategory(s string) *FileHistoryUpdateOne {
-	fhuo.mutation.SetCategory(s)
+// ClearStoreKey clears the value of the "store_key" field.
+func (fhuo *FileHistoryUpdateOne) ClearStoreKey() *FileHistoryUpdateOne {
+	fhuo.mutation.ClearStoreKey()
 	return fhuo
 }
 
-// SetNillableCategory sets the "category" field if the given value is not nil.
-func (fhuo *FileHistoryUpdateOne) SetNillableCategory(s *string) *FileHistoryUpdateOne {
+// SetCategoryType sets the "category_type" field.
+func (fhuo *FileHistoryUpdateOne) SetCategoryType(s string) *FileHistoryUpdateOne {
+	fhuo.mutation.SetCategoryType(s)
+	return fhuo
+}
+
+// SetNillableCategoryType sets the "category_type" field if the given value is not nil.
+func (fhuo *FileHistoryUpdateOne) SetNillableCategoryType(s *string) *FileHistoryUpdateOne {
 	if s != nil {
-		fhuo.SetCategory(*s)
+		fhuo.SetCategoryType(*s)
 	}
 	return fhuo
 }
 
-// ClearCategory clears the value of the "category" field.
-func (fhuo *FileHistoryUpdateOne) ClearCategory() *FileHistoryUpdateOne {
-	fhuo.mutation.ClearCategory()
+// ClearCategoryType clears the value of the "category_type" field.
+func (fhuo *FileHistoryUpdateOne) ClearCategoryType() *FileHistoryUpdateOne {
+	fhuo.mutation.ClearCategoryType()
 	return fhuo
 }
 
-// SetAnnotation sets the "annotation" field.
-func (fhuo *FileHistoryUpdateOne) SetAnnotation(s string) *FileHistoryUpdateOne {
-	fhuo.mutation.SetAnnotation(s)
+// SetURI sets the "uri" field.
+func (fhuo *FileHistoryUpdateOne) SetURI(s string) *FileHistoryUpdateOne {
+	fhuo.mutation.SetURI(s)
 	return fhuo
 }
 
-// SetNillableAnnotation sets the "annotation" field if the given value is not nil.
-func (fhuo *FileHistoryUpdateOne) SetNillableAnnotation(s *string) *FileHistoryUpdateOne {
+// SetNillableURI sets the "uri" field if the given value is not nil.
+func (fhuo *FileHistoryUpdateOne) SetNillableURI(s *string) *FileHistoryUpdateOne {
 	if s != nil {
-		fhuo.SetAnnotation(*s)
+		fhuo.SetURI(*s)
 	}
 	return fhuo
 }
 
-// ClearAnnotation clears the value of the "annotation" field.
-func (fhuo *FileHistoryUpdateOne) ClearAnnotation() *FileHistoryUpdateOne {
-	fhuo.mutation.ClearAnnotation()
+// ClearURI clears the value of the "uri" field.
+func (fhuo *FileHistoryUpdateOne) ClearURI() *FileHistoryUpdateOne {
+	fhuo.mutation.ClearURI()
+	return fhuo
+}
+
+// SetStorageScheme sets the "storage_scheme" field.
+func (fhuo *FileHistoryUpdateOne) SetStorageScheme(s string) *FileHistoryUpdateOne {
+	fhuo.mutation.SetStorageScheme(s)
+	return fhuo
+}
+
+// SetNillableStorageScheme sets the "storage_scheme" field if the given value is not nil.
+func (fhuo *FileHistoryUpdateOne) SetNillableStorageScheme(s *string) *FileHistoryUpdateOne {
+	if s != nil {
+		fhuo.SetStorageScheme(*s)
+	}
+	return fhuo
+}
+
+// ClearStorageScheme clears the value of the "storage_scheme" field.
+func (fhuo *FileHistoryUpdateOne) ClearStorageScheme() *FileHistoryUpdateOne {
+	fhuo.mutation.ClearStorageScheme()
+	return fhuo
+}
+
+// SetStorageVolume sets the "storage_volume" field.
+func (fhuo *FileHistoryUpdateOne) SetStorageVolume(s string) *FileHistoryUpdateOne {
+	fhuo.mutation.SetStorageVolume(s)
+	return fhuo
+}
+
+// SetNillableStorageVolume sets the "storage_volume" field if the given value is not nil.
+func (fhuo *FileHistoryUpdateOne) SetNillableStorageVolume(s *string) *FileHistoryUpdateOne {
+	if s != nil {
+		fhuo.SetStorageVolume(*s)
+	}
+	return fhuo
+}
+
+// ClearStorageVolume clears the value of the "storage_volume" field.
+func (fhuo *FileHistoryUpdateOne) ClearStorageVolume() *FileHistoryUpdateOne {
+	fhuo.mutation.ClearStorageVolume()
+	return fhuo
+}
+
+// SetStoragePath sets the "storage_path" field.
+func (fhuo *FileHistoryUpdateOne) SetStoragePath(s string) *FileHistoryUpdateOne {
+	fhuo.mutation.SetStoragePath(s)
+	return fhuo
+}
+
+// SetNillableStoragePath sets the "storage_path" field if the given value is not nil.
+func (fhuo *FileHistoryUpdateOne) SetNillableStoragePath(s *string) *FileHistoryUpdateOne {
+	if s != nil {
+		fhuo.SetStoragePath(*s)
+	}
+	return fhuo
+}
+
+// ClearStoragePath clears the value of the "storage_path" field.
+func (fhuo *FileHistoryUpdateOne) ClearStoragePath() *FileHistoryUpdateOne {
+	fhuo.mutation.ClearStoragePath()
+	return fhuo
+}
+
+// SetFileContents sets the "file_contents" field.
+func (fhuo *FileHistoryUpdateOne) SetFileContents(b []byte) *FileHistoryUpdateOne {
+	fhuo.mutation.SetFileContents(b)
+	return fhuo
+}
+
+// ClearFileContents clears the value of the "file_contents" field.
+func (fhuo *FileHistoryUpdateOne) ClearFileContents() *FileHistoryUpdateOne {
+	fhuo.mutation.ClearFileContents()
 	return fhuo
 }
 
@@ -745,38 +1083,86 @@ func (fhuo *FileHistoryUpdateOne) sqlSave(ctx context.Context) (_node *FileHisto
 	if fhuo.mutation.TagsCleared() {
 		_spec.ClearField(filehistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := fhuo.mutation.FileName(); ok {
-		_spec.SetField(filehistory.FieldFileName, field.TypeString, value)
+	if value, ok := fhuo.mutation.ProvidedFileName(); ok {
+		_spec.SetField(filehistory.FieldProvidedFileName, field.TypeString, value)
 	}
-	if value, ok := fhuo.mutation.FileExtension(); ok {
-		_spec.SetField(filehistory.FieldFileExtension, field.TypeString, value)
+	if value, ok := fhuo.mutation.ProvidedFileExtension(); ok {
+		_spec.SetField(filehistory.FieldProvidedFileExtension, field.TypeString, value)
 	}
-	if value, ok := fhuo.mutation.FileSize(); ok {
-		_spec.SetField(filehistory.FieldFileSize, field.TypeInt, value)
+	if value, ok := fhuo.mutation.ProvidedFileSize(); ok {
+		_spec.SetField(filehistory.FieldProvidedFileSize, field.TypeInt64, value)
 	}
-	if value, ok := fhuo.mutation.AddedFileSize(); ok {
-		_spec.AddField(filehistory.FieldFileSize, field.TypeInt, value)
+	if value, ok := fhuo.mutation.AddedProvidedFileSize(); ok {
+		_spec.AddField(filehistory.FieldProvidedFileSize, field.TypeInt64, value)
 	}
-	if fhuo.mutation.FileSizeCleared() {
-		_spec.ClearField(filehistory.FieldFileSize, field.TypeInt)
+	if fhuo.mutation.ProvidedFileSizeCleared() {
+		_spec.ClearField(filehistory.FieldProvidedFileSize, field.TypeInt64)
 	}
-	if value, ok := fhuo.mutation.ContentType(); ok {
-		_spec.SetField(filehistory.FieldContentType, field.TypeString, value)
+	if value, ok := fhuo.mutation.PersistedFileSize(); ok {
+		_spec.SetField(filehistory.FieldPersistedFileSize, field.TypeInt64, value)
+	}
+	if value, ok := fhuo.mutation.AddedPersistedFileSize(); ok {
+		_spec.AddField(filehistory.FieldPersistedFileSize, field.TypeInt64, value)
+	}
+	if fhuo.mutation.PersistedFileSizeCleared() {
+		_spec.ClearField(filehistory.FieldPersistedFileSize, field.TypeInt64)
+	}
+	if value, ok := fhuo.mutation.DetectedMimeType(); ok {
+		_spec.SetField(filehistory.FieldDetectedMimeType, field.TypeString, value)
+	}
+	if fhuo.mutation.DetectedMimeTypeCleared() {
+		_spec.ClearField(filehistory.FieldDetectedMimeType, field.TypeString)
+	}
+	if value, ok := fhuo.mutation.Md5Hash(); ok {
+		_spec.SetField(filehistory.FieldMd5Hash, field.TypeString, value)
+	}
+	if fhuo.mutation.Md5HashCleared() {
+		_spec.ClearField(filehistory.FieldMd5Hash, field.TypeString)
+	}
+	if value, ok := fhuo.mutation.DetectedContentType(); ok {
+		_spec.SetField(filehistory.FieldDetectedContentType, field.TypeString, value)
 	}
 	if value, ok := fhuo.mutation.StoreKey(); ok {
 		_spec.SetField(filehistory.FieldStoreKey, field.TypeString, value)
 	}
-	if value, ok := fhuo.mutation.Category(); ok {
-		_spec.SetField(filehistory.FieldCategory, field.TypeString, value)
+	if fhuo.mutation.StoreKeyCleared() {
+		_spec.ClearField(filehistory.FieldStoreKey, field.TypeString)
 	}
-	if fhuo.mutation.CategoryCleared() {
-		_spec.ClearField(filehistory.FieldCategory, field.TypeString)
+	if value, ok := fhuo.mutation.CategoryType(); ok {
+		_spec.SetField(filehistory.FieldCategoryType, field.TypeString, value)
 	}
-	if value, ok := fhuo.mutation.Annotation(); ok {
-		_spec.SetField(filehistory.FieldAnnotation, field.TypeString, value)
+	if fhuo.mutation.CategoryTypeCleared() {
+		_spec.ClearField(filehistory.FieldCategoryType, field.TypeString)
 	}
-	if fhuo.mutation.AnnotationCleared() {
-		_spec.ClearField(filehistory.FieldAnnotation, field.TypeString)
+	if value, ok := fhuo.mutation.URI(); ok {
+		_spec.SetField(filehistory.FieldURI, field.TypeString, value)
+	}
+	if fhuo.mutation.URICleared() {
+		_spec.ClearField(filehistory.FieldURI, field.TypeString)
+	}
+	if value, ok := fhuo.mutation.StorageScheme(); ok {
+		_spec.SetField(filehistory.FieldStorageScheme, field.TypeString, value)
+	}
+	if fhuo.mutation.StorageSchemeCleared() {
+		_spec.ClearField(filehistory.FieldStorageScheme, field.TypeString)
+	}
+	if value, ok := fhuo.mutation.StorageVolume(); ok {
+		_spec.SetField(filehistory.FieldStorageVolume, field.TypeString, value)
+	}
+	if fhuo.mutation.StorageVolumeCleared() {
+		_spec.ClearField(filehistory.FieldStorageVolume, field.TypeString)
+	}
+	if value, ok := fhuo.mutation.StoragePath(); ok {
+		_spec.SetField(filehistory.FieldStoragePath, field.TypeString, value)
+	}
+	if fhuo.mutation.StoragePathCleared() {
+		_spec.ClearField(filehistory.FieldStoragePath, field.TypeString)
+	}
+	if value, ok := fhuo.mutation.FileContents(); ok {
+		_spec.SetField(filehistory.FieldFileContents, field.TypeBytes, value)
+	}
+	if fhuo.mutation.FileContentsCleared() {
+		_spec.ClearField(filehistory.FieldFileContents, field.TypeBytes)
 	}
 	_spec.Node.Schema = fhuo.schemaConfig.FileHistory
 	ctx = internal.NewSchemaConfigContext(ctx, fhuo.schemaConfig)

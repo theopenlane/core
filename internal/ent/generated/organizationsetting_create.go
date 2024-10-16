@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/pkg/enums"
@@ -249,6 +250,21 @@ func (osc *OrganizationSettingCreate) SetOrganization(o *Organization) *Organiza
 	return osc.SetOrganizationID(o.ID)
 }
 
+// AddFileIDs adds the "files" edge to the File entity by IDs.
+func (osc *OrganizationSettingCreate) AddFileIDs(ids ...string) *OrganizationSettingCreate {
+	osc.mutation.AddFileIDs(ids...)
+	return osc
+}
+
+// AddFiles adds the "files" edges to the File entity.
+func (osc *OrganizationSettingCreate) AddFiles(f ...*File) *OrganizationSettingCreate {
+	ids := make([]string, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return osc.AddFileIDs(ids...)
+}
+
 // Mutation returns the OrganizationSettingMutation object of the builder.
 func (osc *OrganizationSettingCreate) Mutation() *OrganizationSettingMutation {
 	return osc.mutation
@@ -462,6 +478,23 @@ func (osc *OrganizationSettingCreate) createSpec() (*OrganizationSetting, *sqlgr
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.OrganizationID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := osc.mutation.FilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   organizationsetting.FilesTable,
+			Columns: organizationsetting.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osc.schemaConfig.OrganizationSettingFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

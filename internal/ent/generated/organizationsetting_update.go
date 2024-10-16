@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -287,6 +288,21 @@ func (osu *OrganizationSettingUpdate) SetOrganization(o *Organization) *Organiza
 	return osu.SetOrganizationID(o.ID)
 }
 
+// AddFileIDs adds the "files" edge to the File entity by IDs.
+func (osu *OrganizationSettingUpdate) AddFileIDs(ids ...string) *OrganizationSettingUpdate {
+	osu.mutation.AddFileIDs(ids...)
+	return osu
+}
+
+// AddFiles adds the "files" edges to the File entity.
+func (osu *OrganizationSettingUpdate) AddFiles(f ...*File) *OrganizationSettingUpdate {
+	ids := make([]string, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return osu.AddFileIDs(ids...)
+}
+
 // Mutation returns the OrganizationSettingMutation object of the builder.
 func (osu *OrganizationSettingUpdate) Mutation() *OrganizationSettingMutation {
 	return osu.mutation
@@ -296,6 +312,27 @@ func (osu *OrganizationSettingUpdate) Mutation() *OrganizationSettingMutation {
 func (osu *OrganizationSettingUpdate) ClearOrganization() *OrganizationSettingUpdate {
 	osu.mutation.ClearOrganization()
 	return osu
+}
+
+// ClearFiles clears all "files" edges to the File entity.
+func (osu *OrganizationSettingUpdate) ClearFiles() *OrganizationSettingUpdate {
+	osu.mutation.ClearFiles()
+	return osu
+}
+
+// RemoveFileIDs removes the "files" edge to File entities by IDs.
+func (osu *OrganizationSettingUpdate) RemoveFileIDs(ids ...string) *OrganizationSettingUpdate {
+	osu.mutation.RemoveFileIDs(ids...)
+	return osu
+}
+
+// RemoveFiles removes "files" edges to File entities.
+func (osu *OrganizationSettingUpdate) RemoveFiles(f ...*File) *OrganizationSettingUpdate {
+	ids := make([]string, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return osu.RemoveFileIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -497,6 +534,54 @@ func (osu *OrganizationSettingUpdate) sqlSave(ctx context.Context) (n int, err e
 			},
 		}
 		edge.Schema = osu.schemaConfig.OrganizationSetting
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if osu.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   organizationsetting.FilesTable,
+			Columns: organizationsetting.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osu.schemaConfig.OrganizationSettingFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := osu.mutation.RemovedFilesIDs(); len(nodes) > 0 && !osu.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   organizationsetting.FilesTable,
+			Columns: organizationsetting.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osu.schemaConfig.OrganizationSettingFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := osu.mutation.FilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   organizationsetting.FilesTable,
+			Columns: organizationsetting.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osu.schemaConfig.OrganizationSettingFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -779,6 +864,21 @@ func (osuo *OrganizationSettingUpdateOne) SetOrganization(o *Organization) *Orga
 	return osuo.SetOrganizationID(o.ID)
 }
 
+// AddFileIDs adds the "files" edge to the File entity by IDs.
+func (osuo *OrganizationSettingUpdateOne) AddFileIDs(ids ...string) *OrganizationSettingUpdateOne {
+	osuo.mutation.AddFileIDs(ids...)
+	return osuo
+}
+
+// AddFiles adds the "files" edges to the File entity.
+func (osuo *OrganizationSettingUpdateOne) AddFiles(f ...*File) *OrganizationSettingUpdateOne {
+	ids := make([]string, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return osuo.AddFileIDs(ids...)
+}
+
 // Mutation returns the OrganizationSettingMutation object of the builder.
 func (osuo *OrganizationSettingUpdateOne) Mutation() *OrganizationSettingMutation {
 	return osuo.mutation
@@ -788,6 +888,27 @@ func (osuo *OrganizationSettingUpdateOne) Mutation() *OrganizationSettingMutatio
 func (osuo *OrganizationSettingUpdateOne) ClearOrganization() *OrganizationSettingUpdateOne {
 	osuo.mutation.ClearOrganization()
 	return osuo
+}
+
+// ClearFiles clears all "files" edges to the File entity.
+func (osuo *OrganizationSettingUpdateOne) ClearFiles() *OrganizationSettingUpdateOne {
+	osuo.mutation.ClearFiles()
+	return osuo
+}
+
+// RemoveFileIDs removes the "files" edge to File entities by IDs.
+func (osuo *OrganizationSettingUpdateOne) RemoveFileIDs(ids ...string) *OrganizationSettingUpdateOne {
+	osuo.mutation.RemoveFileIDs(ids...)
+	return osuo
+}
+
+// RemoveFiles removes "files" edges to File entities.
+func (osuo *OrganizationSettingUpdateOne) RemoveFiles(f ...*File) *OrganizationSettingUpdateOne {
+	ids := make([]string, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return osuo.RemoveFileIDs(ids...)
 }
 
 // Where appends a list predicates to the OrganizationSettingUpdate builder.
@@ -1019,6 +1140,54 @@ func (osuo *OrganizationSettingUpdateOne) sqlSave(ctx context.Context) (_node *O
 			},
 		}
 		edge.Schema = osuo.schemaConfig.OrganizationSetting
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if osuo.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   organizationsetting.FilesTable,
+			Columns: organizationsetting.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osuo.schemaConfig.OrganizationSettingFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := osuo.mutation.RemovedFilesIDs(); len(nodes) > 0 && !osuo.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   organizationsetting.FilesTable,
+			Columns: organizationsetting.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osuo.schemaConfig.OrganizationSettingFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := osuo.mutation.FilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   organizationsetting.FilesTable,
+			Columns: organizationsetting.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = osuo.schemaConfig.OrganizationSettingFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

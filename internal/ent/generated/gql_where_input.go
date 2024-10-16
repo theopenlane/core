@@ -969,6 +969,10 @@ type ContactWhereInput struct {
 	// "entities" edge predicates.
 	HasEntities     *bool               `json:"hasEntities,omitempty"`
 	HasEntitiesWith []*EntityWhereInput `json:"hasEntitiesWith,omitempty"`
+
+	// "files" edge predicates.
+	HasFiles     *bool             `json:"hasFiles,omitempty"`
+	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -1654,6 +1658,24 @@ func (i *ContactWhereInput) P() (predicate.Contact, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, contact.HasEntitiesWith(with...))
+	}
+	if i.HasFiles != nil {
+		p := contact.HasFiles()
+		if !*i.HasFiles {
+			p = contact.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasFilesWith) > 0 {
+		with := make([]predicate.File, 0, len(i.HasFilesWith))
+		for _, w := range i.HasFilesWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasFilesWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, contact.HasFilesWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -2816,6 +2838,10 @@ type DocumentDataWhereInput struct {
 	// "entity" edge predicates.
 	HasEntity     *bool               `json:"hasEntity,omitempty"`
 	HasEntityWith []*EntityWhereInput `json:"hasEntityWith,omitempty"`
+
+	// "files" edge predicates.
+	HasFiles     *bool             `json:"hasFiles,omitempty"`
+	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -3282,6 +3308,24 @@ func (i *DocumentDataWhereInput) P() (predicate.DocumentData, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, documentdata.HasEntityWith(with...))
+	}
+	if i.HasFiles != nil {
+		p := documentdata.HasFiles()
+		if !*i.HasFiles {
+			p = documentdata.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasFilesWith) > 0 {
+		with := make([]predicate.File, 0, len(i.HasFilesWith))
+		for _, w := range i.HasFilesWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasFilesWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, documentdata.HasFilesWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -12120,6 +12164,10 @@ type EventWhereInput struct {
 	// "subscriber" edge predicates.
 	HasSubscriber     *bool                   `json:"hasSubscriber,omitempty"`
 	HasSubscriberWith []*SubscriberWhereInput `json:"hasSubscriberWith,omitempty"`
+
+	// "file" edge predicates.
+	HasFile     *bool             `json:"hasFile,omitempty"`
+	HasFileWith []*FileWhereInput `json:"hasFileWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -12790,6 +12838,24 @@ func (i *EventWhereInput) P() (predicate.Event, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, event.HasSubscriberWith(with...))
+	}
+	if i.HasFile != nil {
+		p := event.HasFile()
+		if !*i.HasFile {
+			p = event.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasFileWith) > 0 {
+		with := make([]predicate.File, 0, len(i.HasFileWith))
+		for _, w := range i.HasFileWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasFileWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, event.HasFileWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -15129,62 +15195,108 @@ type FileWhereInput struct {
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 
-	// "file_name" field predicates.
-	FileName             *string  `json:"fileName,omitempty"`
-	FileNameNEQ          *string  `json:"fileNameNEQ,omitempty"`
-	FileNameIn           []string `json:"fileNameIn,omitempty"`
-	FileNameNotIn        []string `json:"fileNameNotIn,omitempty"`
-	FileNameGT           *string  `json:"fileNameGT,omitempty"`
-	FileNameGTE          *string  `json:"fileNameGTE,omitempty"`
-	FileNameLT           *string  `json:"fileNameLT,omitempty"`
-	FileNameLTE          *string  `json:"fileNameLTE,omitempty"`
-	FileNameContains     *string  `json:"fileNameContains,omitempty"`
-	FileNameHasPrefix    *string  `json:"fileNameHasPrefix,omitempty"`
-	FileNameHasSuffix    *string  `json:"fileNameHasSuffix,omitempty"`
-	FileNameEqualFold    *string  `json:"fileNameEqualFold,omitempty"`
-	FileNameContainsFold *string  `json:"fileNameContainsFold,omitempty"`
+	// "provided_file_name" field predicates.
+	ProvidedFileName             *string  `json:"providedFileName,omitempty"`
+	ProvidedFileNameNEQ          *string  `json:"providedFileNameNEQ,omitempty"`
+	ProvidedFileNameIn           []string `json:"providedFileNameIn,omitempty"`
+	ProvidedFileNameNotIn        []string `json:"providedFileNameNotIn,omitempty"`
+	ProvidedFileNameGT           *string  `json:"providedFileNameGT,omitempty"`
+	ProvidedFileNameGTE          *string  `json:"providedFileNameGTE,omitempty"`
+	ProvidedFileNameLT           *string  `json:"providedFileNameLT,omitempty"`
+	ProvidedFileNameLTE          *string  `json:"providedFileNameLTE,omitempty"`
+	ProvidedFileNameContains     *string  `json:"providedFileNameContains,omitempty"`
+	ProvidedFileNameHasPrefix    *string  `json:"providedFileNameHasPrefix,omitempty"`
+	ProvidedFileNameHasSuffix    *string  `json:"providedFileNameHasSuffix,omitempty"`
+	ProvidedFileNameEqualFold    *string  `json:"providedFileNameEqualFold,omitempty"`
+	ProvidedFileNameContainsFold *string  `json:"providedFileNameContainsFold,omitempty"`
 
-	// "file_extension" field predicates.
-	FileExtension             *string  `json:"fileExtension,omitempty"`
-	FileExtensionNEQ          *string  `json:"fileExtensionNEQ,omitempty"`
-	FileExtensionIn           []string `json:"fileExtensionIn,omitempty"`
-	FileExtensionNotIn        []string `json:"fileExtensionNotIn,omitempty"`
-	FileExtensionGT           *string  `json:"fileExtensionGT,omitempty"`
-	FileExtensionGTE          *string  `json:"fileExtensionGTE,omitempty"`
-	FileExtensionLT           *string  `json:"fileExtensionLT,omitempty"`
-	FileExtensionLTE          *string  `json:"fileExtensionLTE,omitempty"`
-	FileExtensionContains     *string  `json:"fileExtensionContains,omitempty"`
-	FileExtensionHasPrefix    *string  `json:"fileExtensionHasPrefix,omitempty"`
-	FileExtensionHasSuffix    *string  `json:"fileExtensionHasSuffix,omitempty"`
-	FileExtensionEqualFold    *string  `json:"fileExtensionEqualFold,omitempty"`
-	FileExtensionContainsFold *string  `json:"fileExtensionContainsFold,omitempty"`
+	// "provided_file_extension" field predicates.
+	ProvidedFileExtension             *string  `json:"providedFileExtension,omitempty"`
+	ProvidedFileExtensionNEQ          *string  `json:"providedFileExtensionNEQ,omitempty"`
+	ProvidedFileExtensionIn           []string `json:"providedFileExtensionIn,omitempty"`
+	ProvidedFileExtensionNotIn        []string `json:"providedFileExtensionNotIn,omitempty"`
+	ProvidedFileExtensionGT           *string  `json:"providedFileExtensionGT,omitempty"`
+	ProvidedFileExtensionGTE          *string  `json:"providedFileExtensionGTE,omitempty"`
+	ProvidedFileExtensionLT           *string  `json:"providedFileExtensionLT,omitempty"`
+	ProvidedFileExtensionLTE          *string  `json:"providedFileExtensionLTE,omitempty"`
+	ProvidedFileExtensionContains     *string  `json:"providedFileExtensionContains,omitempty"`
+	ProvidedFileExtensionHasPrefix    *string  `json:"providedFileExtensionHasPrefix,omitempty"`
+	ProvidedFileExtensionHasSuffix    *string  `json:"providedFileExtensionHasSuffix,omitempty"`
+	ProvidedFileExtensionEqualFold    *string  `json:"providedFileExtensionEqualFold,omitempty"`
+	ProvidedFileExtensionContainsFold *string  `json:"providedFileExtensionContainsFold,omitempty"`
 
-	// "file_size" field predicates.
-	FileSize       *int  `json:"fileSize,omitempty"`
-	FileSizeNEQ    *int  `json:"fileSizeNEQ,omitempty"`
-	FileSizeIn     []int `json:"fileSizeIn,omitempty"`
-	FileSizeNotIn  []int `json:"fileSizeNotIn,omitempty"`
-	FileSizeGT     *int  `json:"fileSizeGT,omitempty"`
-	FileSizeGTE    *int  `json:"fileSizeGTE,omitempty"`
-	FileSizeLT     *int  `json:"fileSizeLT,omitempty"`
-	FileSizeLTE    *int  `json:"fileSizeLTE,omitempty"`
-	FileSizeIsNil  bool  `json:"fileSizeIsNil,omitempty"`
-	FileSizeNotNil bool  `json:"fileSizeNotNil,omitempty"`
+	// "provided_file_size" field predicates.
+	ProvidedFileSize       *int64  `json:"providedFileSize,omitempty"`
+	ProvidedFileSizeNEQ    *int64  `json:"providedFileSizeNEQ,omitempty"`
+	ProvidedFileSizeIn     []int64 `json:"providedFileSizeIn,omitempty"`
+	ProvidedFileSizeNotIn  []int64 `json:"providedFileSizeNotIn,omitempty"`
+	ProvidedFileSizeGT     *int64  `json:"providedFileSizeGT,omitempty"`
+	ProvidedFileSizeGTE    *int64  `json:"providedFileSizeGTE,omitempty"`
+	ProvidedFileSizeLT     *int64  `json:"providedFileSizeLT,omitempty"`
+	ProvidedFileSizeLTE    *int64  `json:"providedFileSizeLTE,omitempty"`
+	ProvidedFileSizeIsNil  bool    `json:"providedFileSizeIsNil,omitempty"`
+	ProvidedFileSizeNotNil bool    `json:"providedFileSizeNotNil,omitempty"`
 
-	// "content_type" field predicates.
-	ContentType             *string  `json:"contentType,omitempty"`
-	ContentTypeNEQ          *string  `json:"contentTypeNEQ,omitempty"`
-	ContentTypeIn           []string `json:"contentTypeIn,omitempty"`
-	ContentTypeNotIn        []string `json:"contentTypeNotIn,omitempty"`
-	ContentTypeGT           *string  `json:"contentTypeGT,omitempty"`
-	ContentTypeGTE          *string  `json:"contentTypeGTE,omitempty"`
-	ContentTypeLT           *string  `json:"contentTypeLT,omitempty"`
-	ContentTypeLTE          *string  `json:"contentTypeLTE,omitempty"`
-	ContentTypeContains     *string  `json:"contentTypeContains,omitempty"`
-	ContentTypeHasPrefix    *string  `json:"contentTypeHasPrefix,omitempty"`
-	ContentTypeHasSuffix    *string  `json:"contentTypeHasSuffix,omitempty"`
-	ContentTypeEqualFold    *string  `json:"contentTypeEqualFold,omitempty"`
-	ContentTypeContainsFold *string  `json:"contentTypeContainsFold,omitempty"`
+	// "persisted_file_size" field predicates.
+	PersistedFileSize       *int64  `json:"persistedFileSize,omitempty"`
+	PersistedFileSizeNEQ    *int64  `json:"persistedFileSizeNEQ,omitempty"`
+	PersistedFileSizeIn     []int64 `json:"persistedFileSizeIn,omitempty"`
+	PersistedFileSizeNotIn  []int64 `json:"persistedFileSizeNotIn,omitempty"`
+	PersistedFileSizeGT     *int64  `json:"persistedFileSizeGT,omitempty"`
+	PersistedFileSizeGTE    *int64  `json:"persistedFileSizeGTE,omitempty"`
+	PersistedFileSizeLT     *int64  `json:"persistedFileSizeLT,omitempty"`
+	PersistedFileSizeLTE    *int64  `json:"persistedFileSizeLTE,omitempty"`
+	PersistedFileSizeIsNil  bool    `json:"persistedFileSizeIsNil,omitempty"`
+	PersistedFileSizeNotNil bool    `json:"persistedFileSizeNotNil,omitempty"`
+
+	// "detected_mime_type" field predicates.
+	DetectedMimeType             *string  `json:"detectedMimeType,omitempty"`
+	DetectedMimeTypeNEQ          *string  `json:"detectedMimeTypeNEQ,omitempty"`
+	DetectedMimeTypeIn           []string `json:"detectedMimeTypeIn,omitempty"`
+	DetectedMimeTypeNotIn        []string `json:"detectedMimeTypeNotIn,omitempty"`
+	DetectedMimeTypeGT           *string  `json:"detectedMimeTypeGT,omitempty"`
+	DetectedMimeTypeGTE          *string  `json:"detectedMimeTypeGTE,omitempty"`
+	DetectedMimeTypeLT           *string  `json:"detectedMimeTypeLT,omitempty"`
+	DetectedMimeTypeLTE          *string  `json:"detectedMimeTypeLTE,omitempty"`
+	DetectedMimeTypeContains     *string  `json:"detectedMimeTypeContains,omitempty"`
+	DetectedMimeTypeHasPrefix    *string  `json:"detectedMimeTypeHasPrefix,omitempty"`
+	DetectedMimeTypeHasSuffix    *string  `json:"detectedMimeTypeHasSuffix,omitempty"`
+	DetectedMimeTypeIsNil        bool     `json:"detectedMimeTypeIsNil,omitempty"`
+	DetectedMimeTypeNotNil       bool     `json:"detectedMimeTypeNotNil,omitempty"`
+	DetectedMimeTypeEqualFold    *string  `json:"detectedMimeTypeEqualFold,omitempty"`
+	DetectedMimeTypeContainsFold *string  `json:"detectedMimeTypeContainsFold,omitempty"`
+
+	// "md5_hash" field predicates.
+	Md5Hash             *string  `json:"md5Hash,omitempty"`
+	Md5HashNEQ          *string  `json:"md5HashNEQ,omitempty"`
+	Md5HashIn           []string `json:"md5HashIn,omitempty"`
+	Md5HashNotIn        []string `json:"md5HashNotIn,omitempty"`
+	Md5HashGT           *string  `json:"md5HashGT,omitempty"`
+	Md5HashGTE          *string  `json:"md5HashGTE,omitempty"`
+	Md5HashLT           *string  `json:"md5HashLT,omitempty"`
+	Md5HashLTE          *string  `json:"md5HashLTE,omitempty"`
+	Md5HashContains     *string  `json:"md5HashContains,omitempty"`
+	Md5HashHasPrefix    *string  `json:"md5HashHasPrefix,omitempty"`
+	Md5HashHasSuffix    *string  `json:"md5HashHasSuffix,omitempty"`
+	Md5HashIsNil        bool     `json:"md5HashIsNil,omitempty"`
+	Md5HashNotNil       bool     `json:"md5HashNotNil,omitempty"`
+	Md5HashEqualFold    *string  `json:"md5HashEqualFold,omitempty"`
+	Md5HashContainsFold *string  `json:"md5HashContainsFold,omitempty"`
+
+	// "detected_content_type" field predicates.
+	DetectedContentType             *string  `json:"detectedContentType,omitempty"`
+	DetectedContentTypeNEQ          *string  `json:"detectedContentTypeNEQ,omitempty"`
+	DetectedContentTypeIn           []string `json:"detectedContentTypeIn,omitempty"`
+	DetectedContentTypeNotIn        []string `json:"detectedContentTypeNotIn,omitempty"`
+	DetectedContentTypeGT           *string  `json:"detectedContentTypeGT,omitempty"`
+	DetectedContentTypeGTE          *string  `json:"detectedContentTypeGTE,omitempty"`
+	DetectedContentTypeLT           *string  `json:"detectedContentTypeLT,omitempty"`
+	DetectedContentTypeLTE          *string  `json:"detectedContentTypeLTE,omitempty"`
+	DetectedContentTypeContains     *string  `json:"detectedContentTypeContains,omitempty"`
+	DetectedContentTypeHasPrefix    *string  `json:"detectedContentTypeHasPrefix,omitempty"`
+	DetectedContentTypeHasSuffix    *string  `json:"detectedContentTypeHasSuffix,omitempty"`
+	DetectedContentTypeEqualFold    *string  `json:"detectedContentTypeEqualFold,omitempty"`
+	DetectedContentTypeContainsFold *string  `json:"detectedContentTypeContainsFold,omitempty"`
 
 	// "store_key" field predicates.
 	StoreKey             *string  `json:"storeKey,omitempty"`
@@ -15198,42 +15310,95 @@ type FileWhereInput struct {
 	StoreKeyContains     *string  `json:"storeKeyContains,omitempty"`
 	StoreKeyHasPrefix    *string  `json:"storeKeyHasPrefix,omitempty"`
 	StoreKeyHasSuffix    *string  `json:"storeKeyHasSuffix,omitempty"`
+	StoreKeyIsNil        bool     `json:"storeKeyIsNil,omitempty"`
+	StoreKeyNotNil       bool     `json:"storeKeyNotNil,omitempty"`
 	StoreKeyEqualFold    *string  `json:"storeKeyEqualFold,omitempty"`
 	StoreKeyContainsFold *string  `json:"storeKeyContainsFold,omitempty"`
 
-	// "category" field predicates.
-	Category             *string  `json:"category,omitempty"`
-	CategoryNEQ          *string  `json:"categoryNEQ,omitempty"`
-	CategoryIn           []string `json:"categoryIn,omitempty"`
-	CategoryNotIn        []string `json:"categoryNotIn,omitempty"`
-	CategoryGT           *string  `json:"categoryGT,omitempty"`
-	CategoryGTE          *string  `json:"categoryGTE,omitempty"`
-	CategoryLT           *string  `json:"categoryLT,omitempty"`
-	CategoryLTE          *string  `json:"categoryLTE,omitempty"`
-	CategoryContains     *string  `json:"categoryContains,omitempty"`
-	CategoryHasPrefix    *string  `json:"categoryHasPrefix,omitempty"`
-	CategoryHasSuffix    *string  `json:"categoryHasSuffix,omitempty"`
-	CategoryIsNil        bool     `json:"categoryIsNil,omitempty"`
-	CategoryNotNil       bool     `json:"categoryNotNil,omitempty"`
-	CategoryEqualFold    *string  `json:"categoryEqualFold,omitempty"`
-	CategoryContainsFold *string  `json:"categoryContainsFold,omitempty"`
+	// "category_type" field predicates.
+	CategoryType             *string  `json:"categoryType,omitempty"`
+	CategoryTypeNEQ          *string  `json:"categoryTypeNEQ,omitempty"`
+	CategoryTypeIn           []string `json:"categoryTypeIn,omitempty"`
+	CategoryTypeNotIn        []string `json:"categoryTypeNotIn,omitempty"`
+	CategoryTypeGT           *string  `json:"categoryTypeGT,omitempty"`
+	CategoryTypeGTE          *string  `json:"categoryTypeGTE,omitempty"`
+	CategoryTypeLT           *string  `json:"categoryTypeLT,omitempty"`
+	CategoryTypeLTE          *string  `json:"categoryTypeLTE,omitempty"`
+	CategoryTypeContains     *string  `json:"categoryTypeContains,omitempty"`
+	CategoryTypeHasPrefix    *string  `json:"categoryTypeHasPrefix,omitempty"`
+	CategoryTypeHasSuffix    *string  `json:"categoryTypeHasSuffix,omitempty"`
+	CategoryTypeIsNil        bool     `json:"categoryTypeIsNil,omitempty"`
+	CategoryTypeNotNil       bool     `json:"categoryTypeNotNil,omitempty"`
+	CategoryTypeEqualFold    *string  `json:"categoryTypeEqualFold,omitempty"`
+	CategoryTypeContainsFold *string  `json:"categoryTypeContainsFold,omitempty"`
 
-	// "annotation" field predicates.
-	Annotation             *string  `json:"annotation,omitempty"`
-	AnnotationNEQ          *string  `json:"annotationNEQ,omitempty"`
-	AnnotationIn           []string `json:"annotationIn,omitempty"`
-	AnnotationNotIn        []string `json:"annotationNotIn,omitempty"`
-	AnnotationGT           *string  `json:"annotationGT,omitempty"`
-	AnnotationGTE          *string  `json:"annotationGTE,omitempty"`
-	AnnotationLT           *string  `json:"annotationLT,omitempty"`
-	AnnotationLTE          *string  `json:"annotationLTE,omitempty"`
-	AnnotationContains     *string  `json:"annotationContains,omitempty"`
-	AnnotationHasPrefix    *string  `json:"annotationHasPrefix,omitempty"`
-	AnnotationHasSuffix    *string  `json:"annotationHasSuffix,omitempty"`
-	AnnotationIsNil        bool     `json:"annotationIsNil,omitempty"`
-	AnnotationNotNil       bool     `json:"annotationNotNil,omitempty"`
-	AnnotationEqualFold    *string  `json:"annotationEqualFold,omitempty"`
-	AnnotationContainsFold *string  `json:"annotationContainsFold,omitempty"`
+	// "uri" field predicates.
+	URI             *string  `json:"uri,omitempty"`
+	URINEQ          *string  `json:"uriNEQ,omitempty"`
+	URIIn           []string `json:"uriIn,omitempty"`
+	URINotIn        []string `json:"uriNotIn,omitempty"`
+	URIGT           *string  `json:"uriGT,omitempty"`
+	URIGTE          *string  `json:"uriGTE,omitempty"`
+	URILT           *string  `json:"uriLT,omitempty"`
+	URILTE          *string  `json:"uriLTE,omitempty"`
+	URIContains     *string  `json:"uriContains,omitempty"`
+	URIHasPrefix    *string  `json:"uriHasPrefix,omitempty"`
+	URIHasSuffix    *string  `json:"uriHasSuffix,omitempty"`
+	URIIsNil        bool     `json:"uriIsNil,omitempty"`
+	URINotNil       bool     `json:"uriNotNil,omitempty"`
+	URIEqualFold    *string  `json:"uriEqualFold,omitempty"`
+	URIContainsFold *string  `json:"uriContainsFold,omitempty"`
+
+	// "storage_scheme" field predicates.
+	StorageScheme             *string  `json:"storageScheme,omitempty"`
+	StorageSchemeNEQ          *string  `json:"storageSchemeNEQ,omitempty"`
+	StorageSchemeIn           []string `json:"storageSchemeIn,omitempty"`
+	StorageSchemeNotIn        []string `json:"storageSchemeNotIn,omitempty"`
+	StorageSchemeGT           *string  `json:"storageSchemeGT,omitempty"`
+	StorageSchemeGTE          *string  `json:"storageSchemeGTE,omitempty"`
+	StorageSchemeLT           *string  `json:"storageSchemeLT,omitempty"`
+	StorageSchemeLTE          *string  `json:"storageSchemeLTE,omitempty"`
+	StorageSchemeContains     *string  `json:"storageSchemeContains,omitempty"`
+	StorageSchemeHasPrefix    *string  `json:"storageSchemeHasPrefix,omitempty"`
+	StorageSchemeHasSuffix    *string  `json:"storageSchemeHasSuffix,omitempty"`
+	StorageSchemeIsNil        bool     `json:"storageSchemeIsNil,omitempty"`
+	StorageSchemeNotNil       bool     `json:"storageSchemeNotNil,omitempty"`
+	StorageSchemeEqualFold    *string  `json:"storageSchemeEqualFold,omitempty"`
+	StorageSchemeContainsFold *string  `json:"storageSchemeContainsFold,omitempty"`
+
+	// "storage_volume" field predicates.
+	StorageVolume             *string  `json:"storageVolume,omitempty"`
+	StorageVolumeNEQ          *string  `json:"storageVolumeNEQ,omitempty"`
+	StorageVolumeIn           []string `json:"storageVolumeIn,omitempty"`
+	StorageVolumeNotIn        []string `json:"storageVolumeNotIn,omitempty"`
+	StorageVolumeGT           *string  `json:"storageVolumeGT,omitempty"`
+	StorageVolumeGTE          *string  `json:"storageVolumeGTE,omitempty"`
+	StorageVolumeLT           *string  `json:"storageVolumeLT,omitempty"`
+	StorageVolumeLTE          *string  `json:"storageVolumeLTE,omitempty"`
+	StorageVolumeContains     *string  `json:"storageVolumeContains,omitempty"`
+	StorageVolumeHasPrefix    *string  `json:"storageVolumeHasPrefix,omitempty"`
+	StorageVolumeHasSuffix    *string  `json:"storageVolumeHasSuffix,omitempty"`
+	StorageVolumeIsNil        bool     `json:"storageVolumeIsNil,omitempty"`
+	StorageVolumeNotNil       bool     `json:"storageVolumeNotNil,omitempty"`
+	StorageVolumeEqualFold    *string  `json:"storageVolumeEqualFold,omitempty"`
+	StorageVolumeContainsFold *string  `json:"storageVolumeContainsFold,omitempty"`
+
+	// "storage_path" field predicates.
+	StoragePath             *string  `json:"storagePath,omitempty"`
+	StoragePathNEQ          *string  `json:"storagePathNEQ,omitempty"`
+	StoragePathIn           []string `json:"storagePathIn,omitempty"`
+	StoragePathNotIn        []string `json:"storagePathNotIn,omitempty"`
+	StoragePathGT           *string  `json:"storagePathGT,omitempty"`
+	StoragePathGTE          *string  `json:"storagePathGTE,omitempty"`
+	StoragePathLT           *string  `json:"storagePathLT,omitempty"`
+	StoragePathLTE          *string  `json:"storagePathLTE,omitempty"`
+	StoragePathContains     *string  `json:"storagePathContains,omitempty"`
+	StoragePathHasPrefix    *string  `json:"storagePathHasPrefix,omitempty"`
+	StoragePathHasSuffix    *string  `json:"storagePathHasSuffix,omitempty"`
+	StoragePathIsNil        bool     `json:"storagePathIsNil,omitempty"`
+	StoragePathNotNil       bool     `json:"storagePathNotNil,omitempty"`
+	StoragePathEqualFold    *string  `json:"storagePathEqualFold,omitempty"`
+	StoragePathContainsFold *string  `json:"storagePathContainsFold,omitempty"`
 
 	// "user" edge predicates.
 	HasUser     *bool             `json:"hasUser,omitempty"`
@@ -15243,13 +15408,37 @@ type FileWhereInput struct {
 	HasOrganization     *bool                     `json:"hasOrganization,omitempty"`
 	HasOrganizationWith []*OrganizationWhereInput `json:"hasOrganizationWith,omitempty"`
 
+	// "group" edge predicates.
+	HasGroup     *bool              `json:"hasGroup,omitempty"`
+	HasGroupWith []*GroupWhereInput `json:"hasGroupWith,omitempty"`
+
+	// "contact" edge predicates.
+	HasContact     *bool                `json:"hasContact,omitempty"`
+	HasContactWith []*ContactWhereInput `json:"hasContactWith,omitempty"`
+
 	// "entity" edge predicates.
 	HasEntity     *bool               `json:"hasEntity,omitempty"`
 	HasEntityWith []*EntityWhereInput `json:"hasEntityWith,omitempty"`
 
-	// "group" edge predicates.
-	HasGroup     *bool              `json:"hasGroup,omitempty"`
-	HasGroupWith []*GroupWhereInput `json:"hasGroupWith,omitempty"`
+	// "usersetting" edge predicates.
+	HasUsersetting     *bool                    `json:"hasUsersetting,omitempty"`
+	HasUsersettingWith []*UserSettingWhereInput `json:"hasUsersettingWith,omitempty"`
+
+	// "organizationsetting" edge predicates.
+	HasOrganizationsetting     *bool                            `json:"hasOrganizationsetting,omitempty"`
+	HasOrganizationsettingWith []*OrganizationSettingWhereInput `json:"hasOrganizationsettingWith,omitempty"`
+
+	// "template" edge predicates.
+	HasTemplate     *bool                 `json:"hasTemplate,omitempty"`
+	HasTemplateWith []*TemplateWhereInput `json:"hasTemplateWith,omitempty"`
+
+	// "documentdata" edge predicates.
+	HasDocumentdata     *bool                     `json:"hasDocumentdata,omitempty"`
+	HasDocumentdataWith []*DocumentDataWhereInput `json:"hasDocumentdataWith,omitempty"`
+
+	// "events" edge predicates.
+	HasEvents     *bool              `json:"hasEvents,omitempty"`
+	HasEventsWith []*EventWhereInput `json:"hasEventsWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -15578,152 +15767,272 @@ func (i *FileWhereInput) P() (predicate.File, error) {
 	if i.DeletedByContainsFold != nil {
 		predicates = append(predicates, file.DeletedByContainsFold(*i.DeletedByContainsFold))
 	}
-	if i.FileName != nil {
-		predicates = append(predicates, file.FileNameEQ(*i.FileName))
+	if i.ProvidedFileName != nil {
+		predicates = append(predicates, file.ProvidedFileNameEQ(*i.ProvidedFileName))
 	}
-	if i.FileNameNEQ != nil {
-		predicates = append(predicates, file.FileNameNEQ(*i.FileNameNEQ))
+	if i.ProvidedFileNameNEQ != nil {
+		predicates = append(predicates, file.ProvidedFileNameNEQ(*i.ProvidedFileNameNEQ))
 	}
-	if len(i.FileNameIn) > 0 {
-		predicates = append(predicates, file.FileNameIn(i.FileNameIn...))
+	if len(i.ProvidedFileNameIn) > 0 {
+		predicates = append(predicates, file.ProvidedFileNameIn(i.ProvidedFileNameIn...))
 	}
-	if len(i.FileNameNotIn) > 0 {
-		predicates = append(predicates, file.FileNameNotIn(i.FileNameNotIn...))
+	if len(i.ProvidedFileNameNotIn) > 0 {
+		predicates = append(predicates, file.ProvidedFileNameNotIn(i.ProvidedFileNameNotIn...))
 	}
-	if i.FileNameGT != nil {
-		predicates = append(predicates, file.FileNameGT(*i.FileNameGT))
+	if i.ProvidedFileNameGT != nil {
+		predicates = append(predicates, file.ProvidedFileNameGT(*i.ProvidedFileNameGT))
 	}
-	if i.FileNameGTE != nil {
-		predicates = append(predicates, file.FileNameGTE(*i.FileNameGTE))
+	if i.ProvidedFileNameGTE != nil {
+		predicates = append(predicates, file.ProvidedFileNameGTE(*i.ProvidedFileNameGTE))
 	}
-	if i.FileNameLT != nil {
-		predicates = append(predicates, file.FileNameLT(*i.FileNameLT))
+	if i.ProvidedFileNameLT != nil {
+		predicates = append(predicates, file.ProvidedFileNameLT(*i.ProvidedFileNameLT))
 	}
-	if i.FileNameLTE != nil {
-		predicates = append(predicates, file.FileNameLTE(*i.FileNameLTE))
+	if i.ProvidedFileNameLTE != nil {
+		predicates = append(predicates, file.ProvidedFileNameLTE(*i.ProvidedFileNameLTE))
 	}
-	if i.FileNameContains != nil {
-		predicates = append(predicates, file.FileNameContains(*i.FileNameContains))
+	if i.ProvidedFileNameContains != nil {
+		predicates = append(predicates, file.ProvidedFileNameContains(*i.ProvidedFileNameContains))
 	}
-	if i.FileNameHasPrefix != nil {
-		predicates = append(predicates, file.FileNameHasPrefix(*i.FileNameHasPrefix))
+	if i.ProvidedFileNameHasPrefix != nil {
+		predicates = append(predicates, file.ProvidedFileNameHasPrefix(*i.ProvidedFileNameHasPrefix))
 	}
-	if i.FileNameHasSuffix != nil {
-		predicates = append(predicates, file.FileNameHasSuffix(*i.FileNameHasSuffix))
+	if i.ProvidedFileNameHasSuffix != nil {
+		predicates = append(predicates, file.ProvidedFileNameHasSuffix(*i.ProvidedFileNameHasSuffix))
 	}
-	if i.FileNameEqualFold != nil {
-		predicates = append(predicates, file.FileNameEqualFold(*i.FileNameEqualFold))
+	if i.ProvidedFileNameEqualFold != nil {
+		predicates = append(predicates, file.ProvidedFileNameEqualFold(*i.ProvidedFileNameEqualFold))
 	}
-	if i.FileNameContainsFold != nil {
-		predicates = append(predicates, file.FileNameContainsFold(*i.FileNameContainsFold))
+	if i.ProvidedFileNameContainsFold != nil {
+		predicates = append(predicates, file.ProvidedFileNameContainsFold(*i.ProvidedFileNameContainsFold))
 	}
-	if i.FileExtension != nil {
-		predicates = append(predicates, file.FileExtensionEQ(*i.FileExtension))
+	if i.ProvidedFileExtension != nil {
+		predicates = append(predicates, file.ProvidedFileExtensionEQ(*i.ProvidedFileExtension))
 	}
-	if i.FileExtensionNEQ != nil {
-		predicates = append(predicates, file.FileExtensionNEQ(*i.FileExtensionNEQ))
+	if i.ProvidedFileExtensionNEQ != nil {
+		predicates = append(predicates, file.ProvidedFileExtensionNEQ(*i.ProvidedFileExtensionNEQ))
 	}
-	if len(i.FileExtensionIn) > 0 {
-		predicates = append(predicates, file.FileExtensionIn(i.FileExtensionIn...))
+	if len(i.ProvidedFileExtensionIn) > 0 {
+		predicates = append(predicates, file.ProvidedFileExtensionIn(i.ProvidedFileExtensionIn...))
 	}
-	if len(i.FileExtensionNotIn) > 0 {
-		predicates = append(predicates, file.FileExtensionNotIn(i.FileExtensionNotIn...))
+	if len(i.ProvidedFileExtensionNotIn) > 0 {
+		predicates = append(predicates, file.ProvidedFileExtensionNotIn(i.ProvidedFileExtensionNotIn...))
 	}
-	if i.FileExtensionGT != nil {
-		predicates = append(predicates, file.FileExtensionGT(*i.FileExtensionGT))
+	if i.ProvidedFileExtensionGT != nil {
+		predicates = append(predicates, file.ProvidedFileExtensionGT(*i.ProvidedFileExtensionGT))
 	}
-	if i.FileExtensionGTE != nil {
-		predicates = append(predicates, file.FileExtensionGTE(*i.FileExtensionGTE))
+	if i.ProvidedFileExtensionGTE != nil {
+		predicates = append(predicates, file.ProvidedFileExtensionGTE(*i.ProvidedFileExtensionGTE))
 	}
-	if i.FileExtensionLT != nil {
-		predicates = append(predicates, file.FileExtensionLT(*i.FileExtensionLT))
+	if i.ProvidedFileExtensionLT != nil {
+		predicates = append(predicates, file.ProvidedFileExtensionLT(*i.ProvidedFileExtensionLT))
 	}
-	if i.FileExtensionLTE != nil {
-		predicates = append(predicates, file.FileExtensionLTE(*i.FileExtensionLTE))
+	if i.ProvidedFileExtensionLTE != nil {
+		predicates = append(predicates, file.ProvidedFileExtensionLTE(*i.ProvidedFileExtensionLTE))
 	}
-	if i.FileExtensionContains != nil {
-		predicates = append(predicates, file.FileExtensionContains(*i.FileExtensionContains))
+	if i.ProvidedFileExtensionContains != nil {
+		predicates = append(predicates, file.ProvidedFileExtensionContains(*i.ProvidedFileExtensionContains))
 	}
-	if i.FileExtensionHasPrefix != nil {
-		predicates = append(predicates, file.FileExtensionHasPrefix(*i.FileExtensionHasPrefix))
+	if i.ProvidedFileExtensionHasPrefix != nil {
+		predicates = append(predicates, file.ProvidedFileExtensionHasPrefix(*i.ProvidedFileExtensionHasPrefix))
 	}
-	if i.FileExtensionHasSuffix != nil {
-		predicates = append(predicates, file.FileExtensionHasSuffix(*i.FileExtensionHasSuffix))
+	if i.ProvidedFileExtensionHasSuffix != nil {
+		predicates = append(predicates, file.ProvidedFileExtensionHasSuffix(*i.ProvidedFileExtensionHasSuffix))
 	}
-	if i.FileExtensionEqualFold != nil {
-		predicates = append(predicates, file.FileExtensionEqualFold(*i.FileExtensionEqualFold))
+	if i.ProvidedFileExtensionEqualFold != nil {
+		predicates = append(predicates, file.ProvidedFileExtensionEqualFold(*i.ProvidedFileExtensionEqualFold))
 	}
-	if i.FileExtensionContainsFold != nil {
-		predicates = append(predicates, file.FileExtensionContainsFold(*i.FileExtensionContainsFold))
+	if i.ProvidedFileExtensionContainsFold != nil {
+		predicates = append(predicates, file.ProvidedFileExtensionContainsFold(*i.ProvidedFileExtensionContainsFold))
 	}
-	if i.FileSize != nil {
-		predicates = append(predicates, file.FileSizeEQ(*i.FileSize))
+	if i.ProvidedFileSize != nil {
+		predicates = append(predicates, file.ProvidedFileSizeEQ(*i.ProvidedFileSize))
 	}
-	if i.FileSizeNEQ != nil {
-		predicates = append(predicates, file.FileSizeNEQ(*i.FileSizeNEQ))
+	if i.ProvidedFileSizeNEQ != nil {
+		predicates = append(predicates, file.ProvidedFileSizeNEQ(*i.ProvidedFileSizeNEQ))
 	}
-	if len(i.FileSizeIn) > 0 {
-		predicates = append(predicates, file.FileSizeIn(i.FileSizeIn...))
+	if len(i.ProvidedFileSizeIn) > 0 {
+		predicates = append(predicates, file.ProvidedFileSizeIn(i.ProvidedFileSizeIn...))
 	}
-	if len(i.FileSizeNotIn) > 0 {
-		predicates = append(predicates, file.FileSizeNotIn(i.FileSizeNotIn...))
+	if len(i.ProvidedFileSizeNotIn) > 0 {
+		predicates = append(predicates, file.ProvidedFileSizeNotIn(i.ProvidedFileSizeNotIn...))
 	}
-	if i.FileSizeGT != nil {
-		predicates = append(predicates, file.FileSizeGT(*i.FileSizeGT))
+	if i.ProvidedFileSizeGT != nil {
+		predicates = append(predicates, file.ProvidedFileSizeGT(*i.ProvidedFileSizeGT))
 	}
-	if i.FileSizeGTE != nil {
-		predicates = append(predicates, file.FileSizeGTE(*i.FileSizeGTE))
+	if i.ProvidedFileSizeGTE != nil {
+		predicates = append(predicates, file.ProvidedFileSizeGTE(*i.ProvidedFileSizeGTE))
 	}
-	if i.FileSizeLT != nil {
-		predicates = append(predicates, file.FileSizeLT(*i.FileSizeLT))
+	if i.ProvidedFileSizeLT != nil {
+		predicates = append(predicates, file.ProvidedFileSizeLT(*i.ProvidedFileSizeLT))
 	}
-	if i.FileSizeLTE != nil {
-		predicates = append(predicates, file.FileSizeLTE(*i.FileSizeLTE))
+	if i.ProvidedFileSizeLTE != nil {
+		predicates = append(predicates, file.ProvidedFileSizeLTE(*i.ProvidedFileSizeLTE))
 	}
-	if i.FileSizeIsNil {
-		predicates = append(predicates, file.FileSizeIsNil())
+	if i.ProvidedFileSizeIsNil {
+		predicates = append(predicates, file.ProvidedFileSizeIsNil())
 	}
-	if i.FileSizeNotNil {
-		predicates = append(predicates, file.FileSizeNotNil())
+	if i.ProvidedFileSizeNotNil {
+		predicates = append(predicates, file.ProvidedFileSizeNotNil())
 	}
-	if i.ContentType != nil {
-		predicates = append(predicates, file.ContentTypeEQ(*i.ContentType))
+	if i.PersistedFileSize != nil {
+		predicates = append(predicates, file.PersistedFileSizeEQ(*i.PersistedFileSize))
 	}
-	if i.ContentTypeNEQ != nil {
-		predicates = append(predicates, file.ContentTypeNEQ(*i.ContentTypeNEQ))
+	if i.PersistedFileSizeNEQ != nil {
+		predicates = append(predicates, file.PersistedFileSizeNEQ(*i.PersistedFileSizeNEQ))
 	}
-	if len(i.ContentTypeIn) > 0 {
-		predicates = append(predicates, file.ContentTypeIn(i.ContentTypeIn...))
+	if len(i.PersistedFileSizeIn) > 0 {
+		predicates = append(predicates, file.PersistedFileSizeIn(i.PersistedFileSizeIn...))
 	}
-	if len(i.ContentTypeNotIn) > 0 {
-		predicates = append(predicates, file.ContentTypeNotIn(i.ContentTypeNotIn...))
+	if len(i.PersistedFileSizeNotIn) > 0 {
+		predicates = append(predicates, file.PersistedFileSizeNotIn(i.PersistedFileSizeNotIn...))
 	}
-	if i.ContentTypeGT != nil {
-		predicates = append(predicates, file.ContentTypeGT(*i.ContentTypeGT))
+	if i.PersistedFileSizeGT != nil {
+		predicates = append(predicates, file.PersistedFileSizeGT(*i.PersistedFileSizeGT))
 	}
-	if i.ContentTypeGTE != nil {
-		predicates = append(predicates, file.ContentTypeGTE(*i.ContentTypeGTE))
+	if i.PersistedFileSizeGTE != nil {
+		predicates = append(predicates, file.PersistedFileSizeGTE(*i.PersistedFileSizeGTE))
 	}
-	if i.ContentTypeLT != nil {
-		predicates = append(predicates, file.ContentTypeLT(*i.ContentTypeLT))
+	if i.PersistedFileSizeLT != nil {
+		predicates = append(predicates, file.PersistedFileSizeLT(*i.PersistedFileSizeLT))
 	}
-	if i.ContentTypeLTE != nil {
-		predicates = append(predicates, file.ContentTypeLTE(*i.ContentTypeLTE))
+	if i.PersistedFileSizeLTE != nil {
+		predicates = append(predicates, file.PersistedFileSizeLTE(*i.PersistedFileSizeLTE))
 	}
-	if i.ContentTypeContains != nil {
-		predicates = append(predicates, file.ContentTypeContains(*i.ContentTypeContains))
+	if i.PersistedFileSizeIsNil {
+		predicates = append(predicates, file.PersistedFileSizeIsNil())
 	}
-	if i.ContentTypeHasPrefix != nil {
-		predicates = append(predicates, file.ContentTypeHasPrefix(*i.ContentTypeHasPrefix))
+	if i.PersistedFileSizeNotNil {
+		predicates = append(predicates, file.PersistedFileSizeNotNil())
 	}
-	if i.ContentTypeHasSuffix != nil {
-		predicates = append(predicates, file.ContentTypeHasSuffix(*i.ContentTypeHasSuffix))
+	if i.DetectedMimeType != nil {
+		predicates = append(predicates, file.DetectedMimeTypeEQ(*i.DetectedMimeType))
 	}
-	if i.ContentTypeEqualFold != nil {
-		predicates = append(predicates, file.ContentTypeEqualFold(*i.ContentTypeEqualFold))
+	if i.DetectedMimeTypeNEQ != nil {
+		predicates = append(predicates, file.DetectedMimeTypeNEQ(*i.DetectedMimeTypeNEQ))
 	}
-	if i.ContentTypeContainsFold != nil {
-		predicates = append(predicates, file.ContentTypeContainsFold(*i.ContentTypeContainsFold))
+	if len(i.DetectedMimeTypeIn) > 0 {
+		predicates = append(predicates, file.DetectedMimeTypeIn(i.DetectedMimeTypeIn...))
+	}
+	if len(i.DetectedMimeTypeNotIn) > 0 {
+		predicates = append(predicates, file.DetectedMimeTypeNotIn(i.DetectedMimeTypeNotIn...))
+	}
+	if i.DetectedMimeTypeGT != nil {
+		predicates = append(predicates, file.DetectedMimeTypeGT(*i.DetectedMimeTypeGT))
+	}
+	if i.DetectedMimeTypeGTE != nil {
+		predicates = append(predicates, file.DetectedMimeTypeGTE(*i.DetectedMimeTypeGTE))
+	}
+	if i.DetectedMimeTypeLT != nil {
+		predicates = append(predicates, file.DetectedMimeTypeLT(*i.DetectedMimeTypeLT))
+	}
+	if i.DetectedMimeTypeLTE != nil {
+		predicates = append(predicates, file.DetectedMimeTypeLTE(*i.DetectedMimeTypeLTE))
+	}
+	if i.DetectedMimeTypeContains != nil {
+		predicates = append(predicates, file.DetectedMimeTypeContains(*i.DetectedMimeTypeContains))
+	}
+	if i.DetectedMimeTypeHasPrefix != nil {
+		predicates = append(predicates, file.DetectedMimeTypeHasPrefix(*i.DetectedMimeTypeHasPrefix))
+	}
+	if i.DetectedMimeTypeHasSuffix != nil {
+		predicates = append(predicates, file.DetectedMimeTypeHasSuffix(*i.DetectedMimeTypeHasSuffix))
+	}
+	if i.DetectedMimeTypeIsNil {
+		predicates = append(predicates, file.DetectedMimeTypeIsNil())
+	}
+	if i.DetectedMimeTypeNotNil {
+		predicates = append(predicates, file.DetectedMimeTypeNotNil())
+	}
+	if i.DetectedMimeTypeEqualFold != nil {
+		predicates = append(predicates, file.DetectedMimeTypeEqualFold(*i.DetectedMimeTypeEqualFold))
+	}
+	if i.DetectedMimeTypeContainsFold != nil {
+		predicates = append(predicates, file.DetectedMimeTypeContainsFold(*i.DetectedMimeTypeContainsFold))
+	}
+	if i.Md5Hash != nil {
+		predicates = append(predicates, file.Md5HashEQ(*i.Md5Hash))
+	}
+	if i.Md5HashNEQ != nil {
+		predicates = append(predicates, file.Md5HashNEQ(*i.Md5HashNEQ))
+	}
+	if len(i.Md5HashIn) > 0 {
+		predicates = append(predicates, file.Md5HashIn(i.Md5HashIn...))
+	}
+	if len(i.Md5HashNotIn) > 0 {
+		predicates = append(predicates, file.Md5HashNotIn(i.Md5HashNotIn...))
+	}
+	if i.Md5HashGT != nil {
+		predicates = append(predicates, file.Md5HashGT(*i.Md5HashGT))
+	}
+	if i.Md5HashGTE != nil {
+		predicates = append(predicates, file.Md5HashGTE(*i.Md5HashGTE))
+	}
+	if i.Md5HashLT != nil {
+		predicates = append(predicates, file.Md5HashLT(*i.Md5HashLT))
+	}
+	if i.Md5HashLTE != nil {
+		predicates = append(predicates, file.Md5HashLTE(*i.Md5HashLTE))
+	}
+	if i.Md5HashContains != nil {
+		predicates = append(predicates, file.Md5HashContains(*i.Md5HashContains))
+	}
+	if i.Md5HashHasPrefix != nil {
+		predicates = append(predicates, file.Md5HashHasPrefix(*i.Md5HashHasPrefix))
+	}
+	if i.Md5HashHasSuffix != nil {
+		predicates = append(predicates, file.Md5HashHasSuffix(*i.Md5HashHasSuffix))
+	}
+	if i.Md5HashIsNil {
+		predicates = append(predicates, file.Md5HashIsNil())
+	}
+	if i.Md5HashNotNil {
+		predicates = append(predicates, file.Md5HashNotNil())
+	}
+	if i.Md5HashEqualFold != nil {
+		predicates = append(predicates, file.Md5HashEqualFold(*i.Md5HashEqualFold))
+	}
+	if i.Md5HashContainsFold != nil {
+		predicates = append(predicates, file.Md5HashContainsFold(*i.Md5HashContainsFold))
+	}
+	if i.DetectedContentType != nil {
+		predicates = append(predicates, file.DetectedContentTypeEQ(*i.DetectedContentType))
+	}
+	if i.DetectedContentTypeNEQ != nil {
+		predicates = append(predicates, file.DetectedContentTypeNEQ(*i.DetectedContentTypeNEQ))
+	}
+	if len(i.DetectedContentTypeIn) > 0 {
+		predicates = append(predicates, file.DetectedContentTypeIn(i.DetectedContentTypeIn...))
+	}
+	if len(i.DetectedContentTypeNotIn) > 0 {
+		predicates = append(predicates, file.DetectedContentTypeNotIn(i.DetectedContentTypeNotIn...))
+	}
+	if i.DetectedContentTypeGT != nil {
+		predicates = append(predicates, file.DetectedContentTypeGT(*i.DetectedContentTypeGT))
+	}
+	if i.DetectedContentTypeGTE != nil {
+		predicates = append(predicates, file.DetectedContentTypeGTE(*i.DetectedContentTypeGTE))
+	}
+	if i.DetectedContentTypeLT != nil {
+		predicates = append(predicates, file.DetectedContentTypeLT(*i.DetectedContentTypeLT))
+	}
+	if i.DetectedContentTypeLTE != nil {
+		predicates = append(predicates, file.DetectedContentTypeLTE(*i.DetectedContentTypeLTE))
+	}
+	if i.DetectedContentTypeContains != nil {
+		predicates = append(predicates, file.DetectedContentTypeContains(*i.DetectedContentTypeContains))
+	}
+	if i.DetectedContentTypeHasPrefix != nil {
+		predicates = append(predicates, file.DetectedContentTypeHasPrefix(*i.DetectedContentTypeHasPrefix))
+	}
+	if i.DetectedContentTypeHasSuffix != nil {
+		predicates = append(predicates, file.DetectedContentTypeHasSuffix(*i.DetectedContentTypeHasSuffix))
+	}
+	if i.DetectedContentTypeEqualFold != nil {
+		predicates = append(predicates, file.DetectedContentTypeEqualFold(*i.DetectedContentTypeEqualFold))
+	}
+	if i.DetectedContentTypeContainsFold != nil {
+		predicates = append(predicates, file.DetectedContentTypeContainsFold(*i.DetectedContentTypeContainsFold))
 	}
 	if i.StoreKey != nil {
 		predicates = append(predicates, file.StoreKeyEQ(*i.StoreKey))
@@ -15758,101 +16067,242 @@ func (i *FileWhereInput) P() (predicate.File, error) {
 	if i.StoreKeyHasSuffix != nil {
 		predicates = append(predicates, file.StoreKeyHasSuffix(*i.StoreKeyHasSuffix))
 	}
+	if i.StoreKeyIsNil {
+		predicates = append(predicates, file.StoreKeyIsNil())
+	}
+	if i.StoreKeyNotNil {
+		predicates = append(predicates, file.StoreKeyNotNil())
+	}
 	if i.StoreKeyEqualFold != nil {
 		predicates = append(predicates, file.StoreKeyEqualFold(*i.StoreKeyEqualFold))
 	}
 	if i.StoreKeyContainsFold != nil {
 		predicates = append(predicates, file.StoreKeyContainsFold(*i.StoreKeyContainsFold))
 	}
-	if i.Category != nil {
-		predicates = append(predicates, file.CategoryEQ(*i.Category))
+	if i.CategoryType != nil {
+		predicates = append(predicates, file.CategoryTypeEQ(*i.CategoryType))
 	}
-	if i.CategoryNEQ != nil {
-		predicates = append(predicates, file.CategoryNEQ(*i.CategoryNEQ))
+	if i.CategoryTypeNEQ != nil {
+		predicates = append(predicates, file.CategoryTypeNEQ(*i.CategoryTypeNEQ))
 	}
-	if len(i.CategoryIn) > 0 {
-		predicates = append(predicates, file.CategoryIn(i.CategoryIn...))
+	if len(i.CategoryTypeIn) > 0 {
+		predicates = append(predicates, file.CategoryTypeIn(i.CategoryTypeIn...))
 	}
-	if len(i.CategoryNotIn) > 0 {
-		predicates = append(predicates, file.CategoryNotIn(i.CategoryNotIn...))
+	if len(i.CategoryTypeNotIn) > 0 {
+		predicates = append(predicates, file.CategoryTypeNotIn(i.CategoryTypeNotIn...))
 	}
-	if i.CategoryGT != nil {
-		predicates = append(predicates, file.CategoryGT(*i.CategoryGT))
+	if i.CategoryTypeGT != nil {
+		predicates = append(predicates, file.CategoryTypeGT(*i.CategoryTypeGT))
 	}
-	if i.CategoryGTE != nil {
-		predicates = append(predicates, file.CategoryGTE(*i.CategoryGTE))
+	if i.CategoryTypeGTE != nil {
+		predicates = append(predicates, file.CategoryTypeGTE(*i.CategoryTypeGTE))
 	}
-	if i.CategoryLT != nil {
-		predicates = append(predicates, file.CategoryLT(*i.CategoryLT))
+	if i.CategoryTypeLT != nil {
+		predicates = append(predicates, file.CategoryTypeLT(*i.CategoryTypeLT))
 	}
-	if i.CategoryLTE != nil {
-		predicates = append(predicates, file.CategoryLTE(*i.CategoryLTE))
+	if i.CategoryTypeLTE != nil {
+		predicates = append(predicates, file.CategoryTypeLTE(*i.CategoryTypeLTE))
 	}
-	if i.CategoryContains != nil {
-		predicates = append(predicates, file.CategoryContains(*i.CategoryContains))
+	if i.CategoryTypeContains != nil {
+		predicates = append(predicates, file.CategoryTypeContains(*i.CategoryTypeContains))
 	}
-	if i.CategoryHasPrefix != nil {
-		predicates = append(predicates, file.CategoryHasPrefix(*i.CategoryHasPrefix))
+	if i.CategoryTypeHasPrefix != nil {
+		predicates = append(predicates, file.CategoryTypeHasPrefix(*i.CategoryTypeHasPrefix))
 	}
-	if i.CategoryHasSuffix != nil {
-		predicates = append(predicates, file.CategoryHasSuffix(*i.CategoryHasSuffix))
+	if i.CategoryTypeHasSuffix != nil {
+		predicates = append(predicates, file.CategoryTypeHasSuffix(*i.CategoryTypeHasSuffix))
 	}
-	if i.CategoryIsNil {
-		predicates = append(predicates, file.CategoryIsNil())
+	if i.CategoryTypeIsNil {
+		predicates = append(predicates, file.CategoryTypeIsNil())
 	}
-	if i.CategoryNotNil {
-		predicates = append(predicates, file.CategoryNotNil())
+	if i.CategoryTypeNotNil {
+		predicates = append(predicates, file.CategoryTypeNotNil())
 	}
-	if i.CategoryEqualFold != nil {
-		predicates = append(predicates, file.CategoryEqualFold(*i.CategoryEqualFold))
+	if i.CategoryTypeEqualFold != nil {
+		predicates = append(predicates, file.CategoryTypeEqualFold(*i.CategoryTypeEqualFold))
 	}
-	if i.CategoryContainsFold != nil {
-		predicates = append(predicates, file.CategoryContainsFold(*i.CategoryContainsFold))
+	if i.CategoryTypeContainsFold != nil {
+		predicates = append(predicates, file.CategoryTypeContainsFold(*i.CategoryTypeContainsFold))
 	}
-	if i.Annotation != nil {
-		predicates = append(predicates, file.AnnotationEQ(*i.Annotation))
+	if i.URI != nil {
+		predicates = append(predicates, file.URIEQ(*i.URI))
 	}
-	if i.AnnotationNEQ != nil {
-		predicates = append(predicates, file.AnnotationNEQ(*i.AnnotationNEQ))
+	if i.URINEQ != nil {
+		predicates = append(predicates, file.URINEQ(*i.URINEQ))
 	}
-	if len(i.AnnotationIn) > 0 {
-		predicates = append(predicates, file.AnnotationIn(i.AnnotationIn...))
+	if len(i.URIIn) > 0 {
+		predicates = append(predicates, file.URIIn(i.URIIn...))
 	}
-	if len(i.AnnotationNotIn) > 0 {
-		predicates = append(predicates, file.AnnotationNotIn(i.AnnotationNotIn...))
+	if len(i.URINotIn) > 0 {
+		predicates = append(predicates, file.URINotIn(i.URINotIn...))
 	}
-	if i.AnnotationGT != nil {
-		predicates = append(predicates, file.AnnotationGT(*i.AnnotationGT))
+	if i.URIGT != nil {
+		predicates = append(predicates, file.URIGT(*i.URIGT))
 	}
-	if i.AnnotationGTE != nil {
-		predicates = append(predicates, file.AnnotationGTE(*i.AnnotationGTE))
+	if i.URIGTE != nil {
+		predicates = append(predicates, file.URIGTE(*i.URIGTE))
 	}
-	if i.AnnotationLT != nil {
-		predicates = append(predicates, file.AnnotationLT(*i.AnnotationLT))
+	if i.URILT != nil {
+		predicates = append(predicates, file.URILT(*i.URILT))
 	}
-	if i.AnnotationLTE != nil {
-		predicates = append(predicates, file.AnnotationLTE(*i.AnnotationLTE))
+	if i.URILTE != nil {
+		predicates = append(predicates, file.URILTE(*i.URILTE))
 	}
-	if i.AnnotationContains != nil {
-		predicates = append(predicates, file.AnnotationContains(*i.AnnotationContains))
+	if i.URIContains != nil {
+		predicates = append(predicates, file.URIContains(*i.URIContains))
 	}
-	if i.AnnotationHasPrefix != nil {
-		predicates = append(predicates, file.AnnotationHasPrefix(*i.AnnotationHasPrefix))
+	if i.URIHasPrefix != nil {
+		predicates = append(predicates, file.URIHasPrefix(*i.URIHasPrefix))
 	}
-	if i.AnnotationHasSuffix != nil {
-		predicates = append(predicates, file.AnnotationHasSuffix(*i.AnnotationHasSuffix))
+	if i.URIHasSuffix != nil {
+		predicates = append(predicates, file.URIHasSuffix(*i.URIHasSuffix))
 	}
-	if i.AnnotationIsNil {
-		predicates = append(predicates, file.AnnotationIsNil())
+	if i.URIIsNil {
+		predicates = append(predicates, file.URIIsNil())
 	}
-	if i.AnnotationNotNil {
-		predicates = append(predicates, file.AnnotationNotNil())
+	if i.URINotNil {
+		predicates = append(predicates, file.URINotNil())
 	}
-	if i.AnnotationEqualFold != nil {
-		predicates = append(predicates, file.AnnotationEqualFold(*i.AnnotationEqualFold))
+	if i.URIEqualFold != nil {
+		predicates = append(predicates, file.URIEqualFold(*i.URIEqualFold))
 	}
-	if i.AnnotationContainsFold != nil {
-		predicates = append(predicates, file.AnnotationContainsFold(*i.AnnotationContainsFold))
+	if i.URIContainsFold != nil {
+		predicates = append(predicates, file.URIContainsFold(*i.URIContainsFold))
+	}
+	if i.StorageScheme != nil {
+		predicates = append(predicates, file.StorageSchemeEQ(*i.StorageScheme))
+	}
+	if i.StorageSchemeNEQ != nil {
+		predicates = append(predicates, file.StorageSchemeNEQ(*i.StorageSchemeNEQ))
+	}
+	if len(i.StorageSchemeIn) > 0 {
+		predicates = append(predicates, file.StorageSchemeIn(i.StorageSchemeIn...))
+	}
+	if len(i.StorageSchemeNotIn) > 0 {
+		predicates = append(predicates, file.StorageSchemeNotIn(i.StorageSchemeNotIn...))
+	}
+	if i.StorageSchemeGT != nil {
+		predicates = append(predicates, file.StorageSchemeGT(*i.StorageSchemeGT))
+	}
+	if i.StorageSchemeGTE != nil {
+		predicates = append(predicates, file.StorageSchemeGTE(*i.StorageSchemeGTE))
+	}
+	if i.StorageSchemeLT != nil {
+		predicates = append(predicates, file.StorageSchemeLT(*i.StorageSchemeLT))
+	}
+	if i.StorageSchemeLTE != nil {
+		predicates = append(predicates, file.StorageSchemeLTE(*i.StorageSchemeLTE))
+	}
+	if i.StorageSchemeContains != nil {
+		predicates = append(predicates, file.StorageSchemeContains(*i.StorageSchemeContains))
+	}
+	if i.StorageSchemeHasPrefix != nil {
+		predicates = append(predicates, file.StorageSchemeHasPrefix(*i.StorageSchemeHasPrefix))
+	}
+	if i.StorageSchemeHasSuffix != nil {
+		predicates = append(predicates, file.StorageSchemeHasSuffix(*i.StorageSchemeHasSuffix))
+	}
+	if i.StorageSchemeIsNil {
+		predicates = append(predicates, file.StorageSchemeIsNil())
+	}
+	if i.StorageSchemeNotNil {
+		predicates = append(predicates, file.StorageSchemeNotNil())
+	}
+	if i.StorageSchemeEqualFold != nil {
+		predicates = append(predicates, file.StorageSchemeEqualFold(*i.StorageSchemeEqualFold))
+	}
+	if i.StorageSchemeContainsFold != nil {
+		predicates = append(predicates, file.StorageSchemeContainsFold(*i.StorageSchemeContainsFold))
+	}
+	if i.StorageVolume != nil {
+		predicates = append(predicates, file.StorageVolumeEQ(*i.StorageVolume))
+	}
+	if i.StorageVolumeNEQ != nil {
+		predicates = append(predicates, file.StorageVolumeNEQ(*i.StorageVolumeNEQ))
+	}
+	if len(i.StorageVolumeIn) > 0 {
+		predicates = append(predicates, file.StorageVolumeIn(i.StorageVolumeIn...))
+	}
+	if len(i.StorageVolumeNotIn) > 0 {
+		predicates = append(predicates, file.StorageVolumeNotIn(i.StorageVolumeNotIn...))
+	}
+	if i.StorageVolumeGT != nil {
+		predicates = append(predicates, file.StorageVolumeGT(*i.StorageVolumeGT))
+	}
+	if i.StorageVolumeGTE != nil {
+		predicates = append(predicates, file.StorageVolumeGTE(*i.StorageVolumeGTE))
+	}
+	if i.StorageVolumeLT != nil {
+		predicates = append(predicates, file.StorageVolumeLT(*i.StorageVolumeLT))
+	}
+	if i.StorageVolumeLTE != nil {
+		predicates = append(predicates, file.StorageVolumeLTE(*i.StorageVolumeLTE))
+	}
+	if i.StorageVolumeContains != nil {
+		predicates = append(predicates, file.StorageVolumeContains(*i.StorageVolumeContains))
+	}
+	if i.StorageVolumeHasPrefix != nil {
+		predicates = append(predicates, file.StorageVolumeHasPrefix(*i.StorageVolumeHasPrefix))
+	}
+	if i.StorageVolumeHasSuffix != nil {
+		predicates = append(predicates, file.StorageVolumeHasSuffix(*i.StorageVolumeHasSuffix))
+	}
+	if i.StorageVolumeIsNil {
+		predicates = append(predicates, file.StorageVolumeIsNil())
+	}
+	if i.StorageVolumeNotNil {
+		predicates = append(predicates, file.StorageVolumeNotNil())
+	}
+	if i.StorageVolumeEqualFold != nil {
+		predicates = append(predicates, file.StorageVolumeEqualFold(*i.StorageVolumeEqualFold))
+	}
+	if i.StorageVolumeContainsFold != nil {
+		predicates = append(predicates, file.StorageVolumeContainsFold(*i.StorageVolumeContainsFold))
+	}
+	if i.StoragePath != nil {
+		predicates = append(predicates, file.StoragePathEQ(*i.StoragePath))
+	}
+	if i.StoragePathNEQ != nil {
+		predicates = append(predicates, file.StoragePathNEQ(*i.StoragePathNEQ))
+	}
+	if len(i.StoragePathIn) > 0 {
+		predicates = append(predicates, file.StoragePathIn(i.StoragePathIn...))
+	}
+	if len(i.StoragePathNotIn) > 0 {
+		predicates = append(predicates, file.StoragePathNotIn(i.StoragePathNotIn...))
+	}
+	if i.StoragePathGT != nil {
+		predicates = append(predicates, file.StoragePathGT(*i.StoragePathGT))
+	}
+	if i.StoragePathGTE != nil {
+		predicates = append(predicates, file.StoragePathGTE(*i.StoragePathGTE))
+	}
+	if i.StoragePathLT != nil {
+		predicates = append(predicates, file.StoragePathLT(*i.StoragePathLT))
+	}
+	if i.StoragePathLTE != nil {
+		predicates = append(predicates, file.StoragePathLTE(*i.StoragePathLTE))
+	}
+	if i.StoragePathContains != nil {
+		predicates = append(predicates, file.StoragePathContains(*i.StoragePathContains))
+	}
+	if i.StoragePathHasPrefix != nil {
+		predicates = append(predicates, file.StoragePathHasPrefix(*i.StoragePathHasPrefix))
+	}
+	if i.StoragePathHasSuffix != nil {
+		predicates = append(predicates, file.StoragePathHasSuffix(*i.StoragePathHasSuffix))
+	}
+	if i.StoragePathIsNil {
+		predicates = append(predicates, file.StoragePathIsNil())
+	}
+	if i.StoragePathNotNil {
+		predicates = append(predicates, file.StoragePathNotNil())
+	}
+	if i.StoragePathEqualFold != nil {
+		predicates = append(predicates, file.StoragePathEqualFold(*i.StoragePathEqualFold))
+	}
+	if i.StoragePathContainsFold != nil {
+		predicates = append(predicates, file.StoragePathContainsFold(*i.StoragePathContainsFold))
 	}
 
 	if i.HasUser != nil {
@@ -15891,6 +16341,42 @@ func (i *FileWhereInput) P() (predicate.File, error) {
 		}
 		predicates = append(predicates, file.HasOrganizationWith(with...))
 	}
+	if i.HasGroup != nil {
+		p := file.HasGroup()
+		if !*i.HasGroup {
+			p = file.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasGroupWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasGroupWith))
+		for _, w := range i.HasGroupWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasGroupWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, file.HasGroupWith(with...))
+	}
+	if i.HasContact != nil {
+		p := file.HasContact()
+		if !*i.HasContact {
+			p = file.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasContactWith) > 0 {
+		with := make([]predicate.Contact, 0, len(i.HasContactWith))
+		for _, w := range i.HasContactWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasContactWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, file.HasContactWith(with...))
+	}
 	if i.HasEntity != nil {
 		p := file.HasEntity()
 		if !*i.HasEntity {
@@ -15909,23 +16395,95 @@ func (i *FileWhereInput) P() (predicate.File, error) {
 		}
 		predicates = append(predicates, file.HasEntityWith(with...))
 	}
-	if i.HasGroup != nil {
-		p := file.HasGroup()
-		if !*i.HasGroup {
+	if i.HasUsersetting != nil {
+		p := file.HasUsersetting()
+		if !*i.HasUsersetting {
 			p = file.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasGroupWith) > 0 {
-		with := make([]predicate.Group, 0, len(i.HasGroupWith))
-		for _, w := range i.HasGroupWith {
+	if len(i.HasUsersettingWith) > 0 {
+		with := make([]predicate.UserSetting, 0, len(i.HasUsersettingWith))
+		for _, w := range i.HasUsersettingWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasGroupWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasUsersettingWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, file.HasGroupWith(with...))
+		predicates = append(predicates, file.HasUsersettingWith(with...))
+	}
+	if i.HasOrganizationsetting != nil {
+		p := file.HasOrganizationsetting()
+		if !*i.HasOrganizationsetting {
+			p = file.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasOrganizationsettingWith) > 0 {
+		with := make([]predicate.OrganizationSetting, 0, len(i.HasOrganizationsettingWith))
+		for _, w := range i.HasOrganizationsettingWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasOrganizationsettingWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, file.HasOrganizationsettingWith(with...))
+	}
+	if i.HasTemplate != nil {
+		p := file.HasTemplate()
+		if !*i.HasTemplate {
+			p = file.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasTemplateWith) > 0 {
+		with := make([]predicate.Template, 0, len(i.HasTemplateWith))
+		for _, w := range i.HasTemplateWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasTemplateWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, file.HasTemplateWith(with...))
+	}
+	if i.HasDocumentdata != nil {
+		p := file.HasDocumentdata()
+		if !*i.HasDocumentdata {
+			p = file.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasDocumentdataWith) > 0 {
+		with := make([]predicate.DocumentData, 0, len(i.HasDocumentdataWith))
+		for _, w := range i.HasDocumentdataWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasDocumentdataWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, file.HasDocumentdataWith(with...))
+	}
+	if i.HasEvents != nil {
+		p := file.HasEvents()
+		if !*i.HasEvents {
+			p = file.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasEventsWith) > 0 {
+		with := make([]predicate.Event, 0, len(i.HasEventsWith))
+		for _, w := range i.HasEventsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasEventsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, file.HasEventsWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -16076,62 +16634,108 @@ type FileHistoryWhereInput struct {
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 
-	// "file_name" field predicates.
-	FileName             *string  `json:"fileName,omitempty"`
-	FileNameNEQ          *string  `json:"fileNameNEQ,omitempty"`
-	FileNameIn           []string `json:"fileNameIn,omitempty"`
-	FileNameNotIn        []string `json:"fileNameNotIn,omitempty"`
-	FileNameGT           *string  `json:"fileNameGT,omitempty"`
-	FileNameGTE          *string  `json:"fileNameGTE,omitempty"`
-	FileNameLT           *string  `json:"fileNameLT,omitempty"`
-	FileNameLTE          *string  `json:"fileNameLTE,omitempty"`
-	FileNameContains     *string  `json:"fileNameContains,omitempty"`
-	FileNameHasPrefix    *string  `json:"fileNameHasPrefix,omitempty"`
-	FileNameHasSuffix    *string  `json:"fileNameHasSuffix,omitempty"`
-	FileNameEqualFold    *string  `json:"fileNameEqualFold,omitempty"`
-	FileNameContainsFold *string  `json:"fileNameContainsFold,omitempty"`
+	// "provided_file_name" field predicates.
+	ProvidedFileName             *string  `json:"providedFileName,omitempty"`
+	ProvidedFileNameNEQ          *string  `json:"providedFileNameNEQ,omitempty"`
+	ProvidedFileNameIn           []string `json:"providedFileNameIn,omitempty"`
+	ProvidedFileNameNotIn        []string `json:"providedFileNameNotIn,omitempty"`
+	ProvidedFileNameGT           *string  `json:"providedFileNameGT,omitempty"`
+	ProvidedFileNameGTE          *string  `json:"providedFileNameGTE,omitempty"`
+	ProvidedFileNameLT           *string  `json:"providedFileNameLT,omitempty"`
+	ProvidedFileNameLTE          *string  `json:"providedFileNameLTE,omitempty"`
+	ProvidedFileNameContains     *string  `json:"providedFileNameContains,omitempty"`
+	ProvidedFileNameHasPrefix    *string  `json:"providedFileNameHasPrefix,omitempty"`
+	ProvidedFileNameHasSuffix    *string  `json:"providedFileNameHasSuffix,omitempty"`
+	ProvidedFileNameEqualFold    *string  `json:"providedFileNameEqualFold,omitempty"`
+	ProvidedFileNameContainsFold *string  `json:"providedFileNameContainsFold,omitempty"`
 
-	// "file_extension" field predicates.
-	FileExtension             *string  `json:"fileExtension,omitempty"`
-	FileExtensionNEQ          *string  `json:"fileExtensionNEQ,omitempty"`
-	FileExtensionIn           []string `json:"fileExtensionIn,omitempty"`
-	FileExtensionNotIn        []string `json:"fileExtensionNotIn,omitempty"`
-	FileExtensionGT           *string  `json:"fileExtensionGT,omitempty"`
-	FileExtensionGTE          *string  `json:"fileExtensionGTE,omitempty"`
-	FileExtensionLT           *string  `json:"fileExtensionLT,omitempty"`
-	FileExtensionLTE          *string  `json:"fileExtensionLTE,omitempty"`
-	FileExtensionContains     *string  `json:"fileExtensionContains,omitempty"`
-	FileExtensionHasPrefix    *string  `json:"fileExtensionHasPrefix,omitempty"`
-	FileExtensionHasSuffix    *string  `json:"fileExtensionHasSuffix,omitempty"`
-	FileExtensionEqualFold    *string  `json:"fileExtensionEqualFold,omitempty"`
-	FileExtensionContainsFold *string  `json:"fileExtensionContainsFold,omitempty"`
+	// "provided_file_extension" field predicates.
+	ProvidedFileExtension             *string  `json:"providedFileExtension,omitempty"`
+	ProvidedFileExtensionNEQ          *string  `json:"providedFileExtensionNEQ,omitempty"`
+	ProvidedFileExtensionIn           []string `json:"providedFileExtensionIn,omitempty"`
+	ProvidedFileExtensionNotIn        []string `json:"providedFileExtensionNotIn,omitempty"`
+	ProvidedFileExtensionGT           *string  `json:"providedFileExtensionGT,omitempty"`
+	ProvidedFileExtensionGTE          *string  `json:"providedFileExtensionGTE,omitempty"`
+	ProvidedFileExtensionLT           *string  `json:"providedFileExtensionLT,omitempty"`
+	ProvidedFileExtensionLTE          *string  `json:"providedFileExtensionLTE,omitempty"`
+	ProvidedFileExtensionContains     *string  `json:"providedFileExtensionContains,omitempty"`
+	ProvidedFileExtensionHasPrefix    *string  `json:"providedFileExtensionHasPrefix,omitempty"`
+	ProvidedFileExtensionHasSuffix    *string  `json:"providedFileExtensionHasSuffix,omitempty"`
+	ProvidedFileExtensionEqualFold    *string  `json:"providedFileExtensionEqualFold,omitempty"`
+	ProvidedFileExtensionContainsFold *string  `json:"providedFileExtensionContainsFold,omitempty"`
 
-	// "file_size" field predicates.
-	FileSize       *int  `json:"fileSize,omitempty"`
-	FileSizeNEQ    *int  `json:"fileSizeNEQ,omitempty"`
-	FileSizeIn     []int `json:"fileSizeIn,omitempty"`
-	FileSizeNotIn  []int `json:"fileSizeNotIn,omitempty"`
-	FileSizeGT     *int  `json:"fileSizeGT,omitempty"`
-	FileSizeGTE    *int  `json:"fileSizeGTE,omitempty"`
-	FileSizeLT     *int  `json:"fileSizeLT,omitempty"`
-	FileSizeLTE    *int  `json:"fileSizeLTE,omitempty"`
-	FileSizeIsNil  bool  `json:"fileSizeIsNil,omitempty"`
-	FileSizeNotNil bool  `json:"fileSizeNotNil,omitempty"`
+	// "provided_file_size" field predicates.
+	ProvidedFileSize       *int64  `json:"providedFileSize,omitempty"`
+	ProvidedFileSizeNEQ    *int64  `json:"providedFileSizeNEQ,omitempty"`
+	ProvidedFileSizeIn     []int64 `json:"providedFileSizeIn,omitempty"`
+	ProvidedFileSizeNotIn  []int64 `json:"providedFileSizeNotIn,omitempty"`
+	ProvidedFileSizeGT     *int64  `json:"providedFileSizeGT,omitempty"`
+	ProvidedFileSizeGTE    *int64  `json:"providedFileSizeGTE,omitempty"`
+	ProvidedFileSizeLT     *int64  `json:"providedFileSizeLT,omitempty"`
+	ProvidedFileSizeLTE    *int64  `json:"providedFileSizeLTE,omitempty"`
+	ProvidedFileSizeIsNil  bool    `json:"providedFileSizeIsNil,omitempty"`
+	ProvidedFileSizeNotNil bool    `json:"providedFileSizeNotNil,omitempty"`
 
-	// "content_type" field predicates.
-	ContentType             *string  `json:"contentType,omitempty"`
-	ContentTypeNEQ          *string  `json:"contentTypeNEQ,omitempty"`
-	ContentTypeIn           []string `json:"contentTypeIn,omitempty"`
-	ContentTypeNotIn        []string `json:"contentTypeNotIn,omitempty"`
-	ContentTypeGT           *string  `json:"contentTypeGT,omitempty"`
-	ContentTypeGTE          *string  `json:"contentTypeGTE,omitempty"`
-	ContentTypeLT           *string  `json:"contentTypeLT,omitempty"`
-	ContentTypeLTE          *string  `json:"contentTypeLTE,omitempty"`
-	ContentTypeContains     *string  `json:"contentTypeContains,omitempty"`
-	ContentTypeHasPrefix    *string  `json:"contentTypeHasPrefix,omitempty"`
-	ContentTypeHasSuffix    *string  `json:"contentTypeHasSuffix,omitempty"`
-	ContentTypeEqualFold    *string  `json:"contentTypeEqualFold,omitempty"`
-	ContentTypeContainsFold *string  `json:"contentTypeContainsFold,omitempty"`
+	// "persisted_file_size" field predicates.
+	PersistedFileSize       *int64  `json:"persistedFileSize,omitempty"`
+	PersistedFileSizeNEQ    *int64  `json:"persistedFileSizeNEQ,omitempty"`
+	PersistedFileSizeIn     []int64 `json:"persistedFileSizeIn,omitempty"`
+	PersistedFileSizeNotIn  []int64 `json:"persistedFileSizeNotIn,omitempty"`
+	PersistedFileSizeGT     *int64  `json:"persistedFileSizeGT,omitempty"`
+	PersistedFileSizeGTE    *int64  `json:"persistedFileSizeGTE,omitempty"`
+	PersistedFileSizeLT     *int64  `json:"persistedFileSizeLT,omitempty"`
+	PersistedFileSizeLTE    *int64  `json:"persistedFileSizeLTE,omitempty"`
+	PersistedFileSizeIsNil  bool    `json:"persistedFileSizeIsNil,omitempty"`
+	PersistedFileSizeNotNil bool    `json:"persistedFileSizeNotNil,omitempty"`
+
+	// "detected_mime_type" field predicates.
+	DetectedMimeType             *string  `json:"detectedMimeType,omitempty"`
+	DetectedMimeTypeNEQ          *string  `json:"detectedMimeTypeNEQ,omitempty"`
+	DetectedMimeTypeIn           []string `json:"detectedMimeTypeIn,omitempty"`
+	DetectedMimeTypeNotIn        []string `json:"detectedMimeTypeNotIn,omitempty"`
+	DetectedMimeTypeGT           *string  `json:"detectedMimeTypeGT,omitempty"`
+	DetectedMimeTypeGTE          *string  `json:"detectedMimeTypeGTE,omitempty"`
+	DetectedMimeTypeLT           *string  `json:"detectedMimeTypeLT,omitempty"`
+	DetectedMimeTypeLTE          *string  `json:"detectedMimeTypeLTE,omitempty"`
+	DetectedMimeTypeContains     *string  `json:"detectedMimeTypeContains,omitempty"`
+	DetectedMimeTypeHasPrefix    *string  `json:"detectedMimeTypeHasPrefix,omitempty"`
+	DetectedMimeTypeHasSuffix    *string  `json:"detectedMimeTypeHasSuffix,omitempty"`
+	DetectedMimeTypeIsNil        bool     `json:"detectedMimeTypeIsNil,omitempty"`
+	DetectedMimeTypeNotNil       bool     `json:"detectedMimeTypeNotNil,omitempty"`
+	DetectedMimeTypeEqualFold    *string  `json:"detectedMimeTypeEqualFold,omitempty"`
+	DetectedMimeTypeContainsFold *string  `json:"detectedMimeTypeContainsFold,omitempty"`
+
+	// "md5_hash" field predicates.
+	Md5Hash             *string  `json:"md5Hash,omitempty"`
+	Md5HashNEQ          *string  `json:"md5HashNEQ,omitempty"`
+	Md5HashIn           []string `json:"md5HashIn,omitempty"`
+	Md5HashNotIn        []string `json:"md5HashNotIn,omitempty"`
+	Md5HashGT           *string  `json:"md5HashGT,omitempty"`
+	Md5HashGTE          *string  `json:"md5HashGTE,omitempty"`
+	Md5HashLT           *string  `json:"md5HashLT,omitempty"`
+	Md5HashLTE          *string  `json:"md5HashLTE,omitempty"`
+	Md5HashContains     *string  `json:"md5HashContains,omitempty"`
+	Md5HashHasPrefix    *string  `json:"md5HashHasPrefix,omitempty"`
+	Md5HashHasSuffix    *string  `json:"md5HashHasSuffix,omitempty"`
+	Md5HashIsNil        bool     `json:"md5HashIsNil,omitempty"`
+	Md5HashNotNil       bool     `json:"md5HashNotNil,omitempty"`
+	Md5HashEqualFold    *string  `json:"md5HashEqualFold,omitempty"`
+	Md5HashContainsFold *string  `json:"md5HashContainsFold,omitempty"`
+
+	// "detected_content_type" field predicates.
+	DetectedContentType             *string  `json:"detectedContentType,omitempty"`
+	DetectedContentTypeNEQ          *string  `json:"detectedContentTypeNEQ,omitempty"`
+	DetectedContentTypeIn           []string `json:"detectedContentTypeIn,omitempty"`
+	DetectedContentTypeNotIn        []string `json:"detectedContentTypeNotIn,omitempty"`
+	DetectedContentTypeGT           *string  `json:"detectedContentTypeGT,omitempty"`
+	DetectedContentTypeGTE          *string  `json:"detectedContentTypeGTE,omitempty"`
+	DetectedContentTypeLT           *string  `json:"detectedContentTypeLT,omitempty"`
+	DetectedContentTypeLTE          *string  `json:"detectedContentTypeLTE,omitempty"`
+	DetectedContentTypeContains     *string  `json:"detectedContentTypeContains,omitempty"`
+	DetectedContentTypeHasPrefix    *string  `json:"detectedContentTypeHasPrefix,omitempty"`
+	DetectedContentTypeHasSuffix    *string  `json:"detectedContentTypeHasSuffix,omitempty"`
+	DetectedContentTypeEqualFold    *string  `json:"detectedContentTypeEqualFold,omitempty"`
+	DetectedContentTypeContainsFold *string  `json:"detectedContentTypeContainsFold,omitempty"`
 
 	// "store_key" field predicates.
 	StoreKey             *string  `json:"storeKey,omitempty"`
@@ -16145,42 +16749,95 @@ type FileHistoryWhereInput struct {
 	StoreKeyContains     *string  `json:"storeKeyContains,omitempty"`
 	StoreKeyHasPrefix    *string  `json:"storeKeyHasPrefix,omitempty"`
 	StoreKeyHasSuffix    *string  `json:"storeKeyHasSuffix,omitempty"`
+	StoreKeyIsNil        bool     `json:"storeKeyIsNil,omitempty"`
+	StoreKeyNotNil       bool     `json:"storeKeyNotNil,omitempty"`
 	StoreKeyEqualFold    *string  `json:"storeKeyEqualFold,omitempty"`
 	StoreKeyContainsFold *string  `json:"storeKeyContainsFold,omitempty"`
 
-	// "category" field predicates.
-	Category             *string  `json:"category,omitempty"`
-	CategoryNEQ          *string  `json:"categoryNEQ,omitempty"`
-	CategoryIn           []string `json:"categoryIn,omitempty"`
-	CategoryNotIn        []string `json:"categoryNotIn,omitempty"`
-	CategoryGT           *string  `json:"categoryGT,omitempty"`
-	CategoryGTE          *string  `json:"categoryGTE,omitempty"`
-	CategoryLT           *string  `json:"categoryLT,omitempty"`
-	CategoryLTE          *string  `json:"categoryLTE,omitempty"`
-	CategoryContains     *string  `json:"categoryContains,omitempty"`
-	CategoryHasPrefix    *string  `json:"categoryHasPrefix,omitempty"`
-	CategoryHasSuffix    *string  `json:"categoryHasSuffix,omitempty"`
-	CategoryIsNil        bool     `json:"categoryIsNil,omitempty"`
-	CategoryNotNil       bool     `json:"categoryNotNil,omitempty"`
-	CategoryEqualFold    *string  `json:"categoryEqualFold,omitempty"`
-	CategoryContainsFold *string  `json:"categoryContainsFold,omitempty"`
+	// "category_type" field predicates.
+	CategoryType             *string  `json:"categoryType,omitempty"`
+	CategoryTypeNEQ          *string  `json:"categoryTypeNEQ,omitempty"`
+	CategoryTypeIn           []string `json:"categoryTypeIn,omitempty"`
+	CategoryTypeNotIn        []string `json:"categoryTypeNotIn,omitempty"`
+	CategoryTypeGT           *string  `json:"categoryTypeGT,omitempty"`
+	CategoryTypeGTE          *string  `json:"categoryTypeGTE,omitempty"`
+	CategoryTypeLT           *string  `json:"categoryTypeLT,omitempty"`
+	CategoryTypeLTE          *string  `json:"categoryTypeLTE,omitempty"`
+	CategoryTypeContains     *string  `json:"categoryTypeContains,omitempty"`
+	CategoryTypeHasPrefix    *string  `json:"categoryTypeHasPrefix,omitempty"`
+	CategoryTypeHasSuffix    *string  `json:"categoryTypeHasSuffix,omitempty"`
+	CategoryTypeIsNil        bool     `json:"categoryTypeIsNil,omitempty"`
+	CategoryTypeNotNil       bool     `json:"categoryTypeNotNil,omitempty"`
+	CategoryTypeEqualFold    *string  `json:"categoryTypeEqualFold,omitempty"`
+	CategoryTypeContainsFold *string  `json:"categoryTypeContainsFold,omitempty"`
 
-	// "annotation" field predicates.
-	Annotation             *string  `json:"annotation,omitempty"`
-	AnnotationNEQ          *string  `json:"annotationNEQ,omitempty"`
-	AnnotationIn           []string `json:"annotationIn,omitempty"`
-	AnnotationNotIn        []string `json:"annotationNotIn,omitempty"`
-	AnnotationGT           *string  `json:"annotationGT,omitempty"`
-	AnnotationGTE          *string  `json:"annotationGTE,omitempty"`
-	AnnotationLT           *string  `json:"annotationLT,omitempty"`
-	AnnotationLTE          *string  `json:"annotationLTE,omitempty"`
-	AnnotationContains     *string  `json:"annotationContains,omitempty"`
-	AnnotationHasPrefix    *string  `json:"annotationHasPrefix,omitempty"`
-	AnnotationHasSuffix    *string  `json:"annotationHasSuffix,omitempty"`
-	AnnotationIsNil        bool     `json:"annotationIsNil,omitempty"`
-	AnnotationNotNil       bool     `json:"annotationNotNil,omitempty"`
-	AnnotationEqualFold    *string  `json:"annotationEqualFold,omitempty"`
-	AnnotationContainsFold *string  `json:"annotationContainsFold,omitempty"`
+	// "uri" field predicates.
+	URI             *string  `json:"uri,omitempty"`
+	URINEQ          *string  `json:"uriNEQ,omitempty"`
+	URIIn           []string `json:"uriIn,omitempty"`
+	URINotIn        []string `json:"uriNotIn,omitempty"`
+	URIGT           *string  `json:"uriGT,omitempty"`
+	URIGTE          *string  `json:"uriGTE,omitempty"`
+	URILT           *string  `json:"uriLT,omitempty"`
+	URILTE          *string  `json:"uriLTE,omitempty"`
+	URIContains     *string  `json:"uriContains,omitempty"`
+	URIHasPrefix    *string  `json:"uriHasPrefix,omitempty"`
+	URIHasSuffix    *string  `json:"uriHasSuffix,omitempty"`
+	URIIsNil        bool     `json:"uriIsNil,omitempty"`
+	URINotNil       bool     `json:"uriNotNil,omitempty"`
+	URIEqualFold    *string  `json:"uriEqualFold,omitempty"`
+	URIContainsFold *string  `json:"uriContainsFold,omitempty"`
+
+	// "storage_scheme" field predicates.
+	StorageScheme             *string  `json:"storageScheme,omitempty"`
+	StorageSchemeNEQ          *string  `json:"storageSchemeNEQ,omitempty"`
+	StorageSchemeIn           []string `json:"storageSchemeIn,omitempty"`
+	StorageSchemeNotIn        []string `json:"storageSchemeNotIn,omitempty"`
+	StorageSchemeGT           *string  `json:"storageSchemeGT,omitempty"`
+	StorageSchemeGTE          *string  `json:"storageSchemeGTE,omitempty"`
+	StorageSchemeLT           *string  `json:"storageSchemeLT,omitempty"`
+	StorageSchemeLTE          *string  `json:"storageSchemeLTE,omitempty"`
+	StorageSchemeContains     *string  `json:"storageSchemeContains,omitempty"`
+	StorageSchemeHasPrefix    *string  `json:"storageSchemeHasPrefix,omitempty"`
+	StorageSchemeHasSuffix    *string  `json:"storageSchemeHasSuffix,omitempty"`
+	StorageSchemeIsNil        bool     `json:"storageSchemeIsNil,omitempty"`
+	StorageSchemeNotNil       bool     `json:"storageSchemeNotNil,omitempty"`
+	StorageSchemeEqualFold    *string  `json:"storageSchemeEqualFold,omitempty"`
+	StorageSchemeContainsFold *string  `json:"storageSchemeContainsFold,omitempty"`
+
+	// "storage_volume" field predicates.
+	StorageVolume             *string  `json:"storageVolume,omitempty"`
+	StorageVolumeNEQ          *string  `json:"storageVolumeNEQ,omitempty"`
+	StorageVolumeIn           []string `json:"storageVolumeIn,omitempty"`
+	StorageVolumeNotIn        []string `json:"storageVolumeNotIn,omitempty"`
+	StorageVolumeGT           *string  `json:"storageVolumeGT,omitempty"`
+	StorageVolumeGTE          *string  `json:"storageVolumeGTE,omitempty"`
+	StorageVolumeLT           *string  `json:"storageVolumeLT,omitempty"`
+	StorageVolumeLTE          *string  `json:"storageVolumeLTE,omitempty"`
+	StorageVolumeContains     *string  `json:"storageVolumeContains,omitempty"`
+	StorageVolumeHasPrefix    *string  `json:"storageVolumeHasPrefix,omitempty"`
+	StorageVolumeHasSuffix    *string  `json:"storageVolumeHasSuffix,omitempty"`
+	StorageVolumeIsNil        bool     `json:"storageVolumeIsNil,omitempty"`
+	StorageVolumeNotNil       bool     `json:"storageVolumeNotNil,omitempty"`
+	StorageVolumeEqualFold    *string  `json:"storageVolumeEqualFold,omitempty"`
+	StorageVolumeContainsFold *string  `json:"storageVolumeContainsFold,omitempty"`
+
+	// "storage_path" field predicates.
+	StoragePath             *string  `json:"storagePath,omitempty"`
+	StoragePathNEQ          *string  `json:"storagePathNEQ,omitempty"`
+	StoragePathIn           []string `json:"storagePathIn,omitempty"`
+	StoragePathNotIn        []string `json:"storagePathNotIn,omitempty"`
+	StoragePathGT           *string  `json:"storagePathGT,omitempty"`
+	StoragePathGTE          *string  `json:"storagePathGTE,omitempty"`
+	StoragePathLT           *string  `json:"storagePathLT,omitempty"`
+	StoragePathLTE          *string  `json:"storagePathLTE,omitempty"`
+	StoragePathContains     *string  `json:"storagePathContains,omitempty"`
+	StoragePathHasPrefix    *string  `json:"storagePathHasPrefix,omitempty"`
+	StoragePathHasSuffix    *string  `json:"storagePathHasSuffix,omitempty"`
+	StoragePathIsNil        bool     `json:"storagePathIsNil,omitempty"`
+	StoragePathNotNil       bool     `json:"storagePathNotNil,omitempty"`
+	StoragePathEqualFold    *string  `json:"storagePathEqualFold,omitempty"`
+	StoragePathContainsFold *string  `json:"storagePathContainsFold,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -16590,152 +17247,272 @@ func (i *FileHistoryWhereInput) P() (predicate.FileHistory, error) {
 	if i.DeletedByContainsFold != nil {
 		predicates = append(predicates, filehistory.DeletedByContainsFold(*i.DeletedByContainsFold))
 	}
-	if i.FileName != nil {
-		predicates = append(predicates, filehistory.FileNameEQ(*i.FileName))
+	if i.ProvidedFileName != nil {
+		predicates = append(predicates, filehistory.ProvidedFileNameEQ(*i.ProvidedFileName))
 	}
-	if i.FileNameNEQ != nil {
-		predicates = append(predicates, filehistory.FileNameNEQ(*i.FileNameNEQ))
+	if i.ProvidedFileNameNEQ != nil {
+		predicates = append(predicates, filehistory.ProvidedFileNameNEQ(*i.ProvidedFileNameNEQ))
 	}
-	if len(i.FileNameIn) > 0 {
-		predicates = append(predicates, filehistory.FileNameIn(i.FileNameIn...))
+	if len(i.ProvidedFileNameIn) > 0 {
+		predicates = append(predicates, filehistory.ProvidedFileNameIn(i.ProvidedFileNameIn...))
 	}
-	if len(i.FileNameNotIn) > 0 {
-		predicates = append(predicates, filehistory.FileNameNotIn(i.FileNameNotIn...))
+	if len(i.ProvidedFileNameNotIn) > 0 {
+		predicates = append(predicates, filehistory.ProvidedFileNameNotIn(i.ProvidedFileNameNotIn...))
 	}
-	if i.FileNameGT != nil {
-		predicates = append(predicates, filehistory.FileNameGT(*i.FileNameGT))
+	if i.ProvidedFileNameGT != nil {
+		predicates = append(predicates, filehistory.ProvidedFileNameGT(*i.ProvidedFileNameGT))
 	}
-	if i.FileNameGTE != nil {
-		predicates = append(predicates, filehistory.FileNameGTE(*i.FileNameGTE))
+	if i.ProvidedFileNameGTE != nil {
+		predicates = append(predicates, filehistory.ProvidedFileNameGTE(*i.ProvidedFileNameGTE))
 	}
-	if i.FileNameLT != nil {
-		predicates = append(predicates, filehistory.FileNameLT(*i.FileNameLT))
+	if i.ProvidedFileNameLT != nil {
+		predicates = append(predicates, filehistory.ProvidedFileNameLT(*i.ProvidedFileNameLT))
 	}
-	if i.FileNameLTE != nil {
-		predicates = append(predicates, filehistory.FileNameLTE(*i.FileNameLTE))
+	if i.ProvidedFileNameLTE != nil {
+		predicates = append(predicates, filehistory.ProvidedFileNameLTE(*i.ProvidedFileNameLTE))
 	}
-	if i.FileNameContains != nil {
-		predicates = append(predicates, filehistory.FileNameContains(*i.FileNameContains))
+	if i.ProvidedFileNameContains != nil {
+		predicates = append(predicates, filehistory.ProvidedFileNameContains(*i.ProvidedFileNameContains))
 	}
-	if i.FileNameHasPrefix != nil {
-		predicates = append(predicates, filehistory.FileNameHasPrefix(*i.FileNameHasPrefix))
+	if i.ProvidedFileNameHasPrefix != nil {
+		predicates = append(predicates, filehistory.ProvidedFileNameHasPrefix(*i.ProvidedFileNameHasPrefix))
 	}
-	if i.FileNameHasSuffix != nil {
-		predicates = append(predicates, filehistory.FileNameHasSuffix(*i.FileNameHasSuffix))
+	if i.ProvidedFileNameHasSuffix != nil {
+		predicates = append(predicates, filehistory.ProvidedFileNameHasSuffix(*i.ProvidedFileNameHasSuffix))
 	}
-	if i.FileNameEqualFold != nil {
-		predicates = append(predicates, filehistory.FileNameEqualFold(*i.FileNameEqualFold))
+	if i.ProvidedFileNameEqualFold != nil {
+		predicates = append(predicates, filehistory.ProvidedFileNameEqualFold(*i.ProvidedFileNameEqualFold))
 	}
-	if i.FileNameContainsFold != nil {
-		predicates = append(predicates, filehistory.FileNameContainsFold(*i.FileNameContainsFold))
+	if i.ProvidedFileNameContainsFold != nil {
+		predicates = append(predicates, filehistory.ProvidedFileNameContainsFold(*i.ProvidedFileNameContainsFold))
 	}
-	if i.FileExtension != nil {
-		predicates = append(predicates, filehistory.FileExtensionEQ(*i.FileExtension))
+	if i.ProvidedFileExtension != nil {
+		predicates = append(predicates, filehistory.ProvidedFileExtensionEQ(*i.ProvidedFileExtension))
 	}
-	if i.FileExtensionNEQ != nil {
-		predicates = append(predicates, filehistory.FileExtensionNEQ(*i.FileExtensionNEQ))
+	if i.ProvidedFileExtensionNEQ != nil {
+		predicates = append(predicates, filehistory.ProvidedFileExtensionNEQ(*i.ProvidedFileExtensionNEQ))
 	}
-	if len(i.FileExtensionIn) > 0 {
-		predicates = append(predicates, filehistory.FileExtensionIn(i.FileExtensionIn...))
+	if len(i.ProvidedFileExtensionIn) > 0 {
+		predicates = append(predicates, filehistory.ProvidedFileExtensionIn(i.ProvidedFileExtensionIn...))
 	}
-	if len(i.FileExtensionNotIn) > 0 {
-		predicates = append(predicates, filehistory.FileExtensionNotIn(i.FileExtensionNotIn...))
+	if len(i.ProvidedFileExtensionNotIn) > 0 {
+		predicates = append(predicates, filehistory.ProvidedFileExtensionNotIn(i.ProvidedFileExtensionNotIn...))
 	}
-	if i.FileExtensionGT != nil {
-		predicates = append(predicates, filehistory.FileExtensionGT(*i.FileExtensionGT))
+	if i.ProvidedFileExtensionGT != nil {
+		predicates = append(predicates, filehistory.ProvidedFileExtensionGT(*i.ProvidedFileExtensionGT))
 	}
-	if i.FileExtensionGTE != nil {
-		predicates = append(predicates, filehistory.FileExtensionGTE(*i.FileExtensionGTE))
+	if i.ProvidedFileExtensionGTE != nil {
+		predicates = append(predicates, filehistory.ProvidedFileExtensionGTE(*i.ProvidedFileExtensionGTE))
 	}
-	if i.FileExtensionLT != nil {
-		predicates = append(predicates, filehistory.FileExtensionLT(*i.FileExtensionLT))
+	if i.ProvidedFileExtensionLT != nil {
+		predicates = append(predicates, filehistory.ProvidedFileExtensionLT(*i.ProvidedFileExtensionLT))
 	}
-	if i.FileExtensionLTE != nil {
-		predicates = append(predicates, filehistory.FileExtensionLTE(*i.FileExtensionLTE))
+	if i.ProvidedFileExtensionLTE != nil {
+		predicates = append(predicates, filehistory.ProvidedFileExtensionLTE(*i.ProvidedFileExtensionLTE))
 	}
-	if i.FileExtensionContains != nil {
-		predicates = append(predicates, filehistory.FileExtensionContains(*i.FileExtensionContains))
+	if i.ProvidedFileExtensionContains != nil {
+		predicates = append(predicates, filehistory.ProvidedFileExtensionContains(*i.ProvidedFileExtensionContains))
 	}
-	if i.FileExtensionHasPrefix != nil {
-		predicates = append(predicates, filehistory.FileExtensionHasPrefix(*i.FileExtensionHasPrefix))
+	if i.ProvidedFileExtensionHasPrefix != nil {
+		predicates = append(predicates, filehistory.ProvidedFileExtensionHasPrefix(*i.ProvidedFileExtensionHasPrefix))
 	}
-	if i.FileExtensionHasSuffix != nil {
-		predicates = append(predicates, filehistory.FileExtensionHasSuffix(*i.FileExtensionHasSuffix))
+	if i.ProvidedFileExtensionHasSuffix != nil {
+		predicates = append(predicates, filehistory.ProvidedFileExtensionHasSuffix(*i.ProvidedFileExtensionHasSuffix))
 	}
-	if i.FileExtensionEqualFold != nil {
-		predicates = append(predicates, filehistory.FileExtensionEqualFold(*i.FileExtensionEqualFold))
+	if i.ProvidedFileExtensionEqualFold != nil {
+		predicates = append(predicates, filehistory.ProvidedFileExtensionEqualFold(*i.ProvidedFileExtensionEqualFold))
 	}
-	if i.FileExtensionContainsFold != nil {
-		predicates = append(predicates, filehistory.FileExtensionContainsFold(*i.FileExtensionContainsFold))
+	if i.ProvidedFileExtensionContainsFold != nil {
+		predicates = append(predicates, filehistory.ProvidedFileExtensionContainsFold(*i.ProvidedFileExtensionContainsFold))
 	}
-	if i.FileSize != nil {
-		predicates = append(predicates, filehistory.FileSizeEQ(*i.FileSize))
+	if i.ProvidedFileSize != nil {
+		predicates = append(predicates, filehistory.ProvidedFileSizeEQ(*i.ProvidedFileSize))
 	}
-	if i.FileSizeNEQ != nil {
-		predicates = append(predicates, filehistory.FileSizeNEQ(*i.FileSizeNEQ))
+	if i.ProvidedFileSizeNEQ != nil {
+		predicates = append(predicates, filehistory.ProvidedFileSizeNEQ(*i.ProvidedFileSizeNEQ))
 	}
-	if len(i.FileSizeIn) > 0 {
-		predicates = append(predicates, filehistory.FileSizeIn(i.FileSizeIn...))
+	if len(i.ProvidedFileSizeIn) > 0 {
+		predicates = append(predicates, filehistory.ProvidedFileSizeIn(i.ProvidedFileSizeIn...))
 	}
-	if len(i.FileSizeNotIn) > 0 {
-		predicates = append(predicates, filehistory.FileSizeNotIn(i.FileSizeNotIn...))
+	if len(i.ProvidedFileSizeNotIn) > 0 {
+		predicates = append(predicates, filehistory.ProvidedFileSizeNotIn(i.ProvidedFileSizeNotIn...))
 	}
-	if i.FileSizeGT != nil {
-		predicates = append(predicates, filehistory.FileSizeGT(*i.FileSizeGT))
+	if i.ProvidedFileSizeGT != nil {
+		predicates = append(predicates, filehistory.ProvidedFileSizeGT(*i.ProvidedFileSizeGT))
 	}
-	if i.FileSizeGTE != nil {
-		predicates = append(predicates, filehistory.FileSizeGTE(*i.FileSizeGTE))
+	if i.ProvidedFileSizeGTE != nil {
+		predicates = append(predicates, filehistory.ProvidedFileSizeGTE(*i.ProvidedFileSizeGTE))
 	}
-	if i.FileSizeLT != nil {
-		predicates = append(predicates, filehistory.FileSizeLT(*i.FileSizeLT))
+	if i.ProvidedFileSizeLT != nil {
+		predicates = append(predicates, filehistory.ProvidedFileSizeLT(*i.ProvidedFileSizeLT))
 	}
-	if i.FileSizeLTE != nil {
-		predicates = append(predicates, filehistory.FileSizeLTE(*i.FileSizeLTE))
+	if i.ProvidedFileSizeLTE != nil {
+		predicates = append(predicates, filehistory.ProvidedFileSizeLTE(*i.ProvidedFileSizeLTE))
 	}
-	if i.FileSizeIsNil {
-		predicates = append(predicates, filehistory.FileSizeIsNil())
+	if i.ProvidedFileSizeIsNil {
+		predicates = append(predicates, filehistory.ProvidedFileSizeIsNil())
 	}
-	if i.FileSizeNotNil {
-		predicates = append(predicates, filehistory.FileSizeNotNil())
+	if i.ProvidedFileSizeNotNil {
+		predicates = append(predicates, filehistory.ProvidedFileSizeNotNil())
 	}
-	if i.ContentType != nil {
-		predicates = append(predicates, filehistory.ContentTypeEQ(*i.ContentType))
+	if i.PersistedFileSize != nil {
+		predicates = append(predicates, filehistory.PersistedFileSizeEQ(*i.PersistedFileSize))
 	}
-	if i.ContentTypeNEQ != nil {
-		predicates = append(predicates, filehistory.ContentTypeNEQ(*i.ContentTypeNEQ))
+	if i.PersistedFileSizeNEQ != nil {
+		predicates = append(predicates, filehistory.PersistedFileSizeNEQ(*i.PersistedFileSizeNEQ))
 	}
-	if len(i.ContentTypeIn) > 0 {
-		predicates = append(predicates, filehistory.ContentTypeIn(i.ContentTypeIn...))
+	if len(i.PersistedFileSizeIn) > 0 {
+		predicates = append(predicates, filehistory.PersistedFileSizeIn(i.PersistedFileSizeIn...))
 	}
-	if len(i.ContentTypeNotIn) > 0 {
-		predicates = append(predicates, filehistory.ContentTypeNotIn(i.ContentTypeNotIn...))
+	if len(i.PersistedFileSizeNotIn) > 0 {
+		predicates = append(predicates, filehistory.PersistedFileSizeNotIn(i.PersistedFileSizeNotIn...))
 	}
-	if i.ContentTypeGT != nil {
-		predicates = append(predicates, filehistory.ContentTypeGT(*i.ContentTypeGT))
+	if i.PersistedFileSizeGT != nil {
+		predicates = append(predicates, filehistory.PersistedFileSizeGT(*i.PersistedFileSizeGT))
 	}
-	if i.ContentTypeGTE != nil {
-		predicates = append(predicates, filehistory.ContentTypeGTE(*i.ContentTypeGTE))
+	if i.PersistedFileSizeGTE != nil {
+		predicates = append(predicates, filehistory.PersistedFileSizeGTE(*i.PersistedFileSizeGTE))
 	}
-	if i.ContentTypeLT != nil {
-		predicates = append(predicates, filehistory.ContentTypeLT(*i.ContentTypeLT))
+	if i.PersistedFileSizeLT != nil {
+		predicates = append(predicates, filehistory.PersistedFileSizeLT(*i.PersistedFileSizeLT))
 	}
-	if i.ContentTypeLTE != nil {
-		predicates = append(predicates, filehistory.ContentTypeLTE(*i.ContentTypeLTE))
+	if i.PersistedFileSizeLTE != nil {
+		predicates = append(predicates, filehistory.PersistedFileSizeLTE(*i.PersistedFileSizeLTE))
 	}
-	if i.ContentTypeContains != nil {
-		predicates = append(predicates, filehistory.ContentTypeContains(*i.ContentTypeContains))
+	if i.PersistedFileSizeIsNil {
+		predicates = append(predicates, filehistory.PersistedFileSizeIsNil())
 	}
-	if i.ContentTypeHasPrefix != nil {
-		predicates = append(predicates, filehistory.ContentTypeHasPrefix(*i.ContentTypeHasPrefix))
+	if i.PersistedFileSizeNotNil {
+		predicates = append(predicates, filehistory.PersistedFileSizeNotNil())
 	}
-	if i.ContentTypeHasSuffix != nil {
-		predicates = append(predicates, filehistory.ContentTypeHasSuffix(*i.ContentTypeHasSuffix))
+	if i.DetectedMimeType != nil {
+		predicates = append(predicates, filehistory.DetectedMimeTypeEQ(*i.DetectedMimeType))
 	}
-	if i.ContentTypeEqualFold != nil {
-		predicates = append(predicates, filehistory.ContentTypeEqualFold(*i.ContentTypeEqualFold))
+	if i.DetectedMimeTypeNEQ != nil {
+		predicates = append(predicates, filehistory.DetectedMimeTypeNEQ(*i.DetectedMimeTypeNEQ))
 	}
-	if i.ContentTypeContainsFold != nil {
-		predicates = append(predicates, filehistory.ContentTypeContainsFold(*i.ContentTypeContainsFold))
+	if len(i.DetectedMimeTypeIn) > 0 {
+		predicates = append(predicates, filehistory.DetectedMimeTypeIn(i.DetectedMimeTypeIn...))
+	}
+	if len(i.DetectedMimeTypeNotIn) > 0 {
+		predicates = append(predicates, filehistory.DetectedMimeTypeNotIn(i.DetectedMimeTypeNotIn...))
+	}
+	if i.DetectedMimeTypeGT != nil {
+		predicates = append(predicates, filehistory.DetectedMimeTypeGT(*i.DetectedMimeTypeGT))
+	}
+	if i.DetectedMimeTypeGTE != nil {
+		predicates = append(predicates, filehistory.DetectedMimeTypeGTE(*i.DetectedMimeTypeGTE))
+	}
+	if i.DetectedMimeTypeLT != nil {
+		predicates = append(predicates, filehistory.DetectedMimeTypeLT(*i.DetectedMimeTypeLT))
+	}
+	if i.DetectedMimeTypeLTE != nil {
+		predicates = append(predicates, filehistory.DetectedMimeTypeLTE(*i.DetectedMimeTypeLTE))
+	}
+	if i.DetectedMimeTypeContains != nil {
+		predicates = append(predicates, filehistory.DetectedMimeTypeContains(*i.DetectedMimeTypeContains))
+	}
+	if i.DetectedMimeTypeHasPrefix != nil {
+		predicates = append(predicates, filehistory.DetectedMimeTypeHasPrefix(*i.DetectedMimeTypeHasPrefix))
+	}
+	if i.DetectedMimeTypeHasSuffix != nil {
+		predicates = append(predicates, filehistory.DetectedMimeTypeHasSuffix(*i.DetectedMimeTypeHasSuffix))
+	}
+	if i.DetectedMimeTypeIsNil {
+		predicates = append(predicates, filehistory.DetectedMimeTypeIsNil())
+	}
+	if i.DetectedMimeTypeNotNil {
+		predicates = append(predicates, filehistory.DetectedMimeTypeNotNil())
+	}
+	if i.DetectedMimeTypeEqualFold != nil {
+		predicates = append(predicates, filehistory.DetectedMimeTypeEqualFold(*i.DetectedMimeTypeEqualFold))
+	}
+	if i.DetectedMimeTypeContainsFold != nil {
+		predicates = append(predicates, filehistory.DetectedMimeTypeContainsFold(*i.DetectedMimeTypeContainsFold))
+	}
+	if i.Md5Hash != nil {
+		predicates = append(predicates, filehistory.Md5HashEQ(*i.Md5Hash))
+	}
+	if i.Md5HashNEQ != nil {
+		predicates = append(predicates, filehistory.Md5HashNEQ(*i.Md5HashNEQ))
+	}
+	if len(i.Md5HashIn) > 0 {
+		predicates = append(predicates, filehistory.Md5HashIn(i.Md5HashIn...))
+	}
+	if len(i.Md5HashNotIn) > 0 {
+		predicates = append(predicates, filehistory.Md5HashNotIn(i.Md5HashNotIn...))
+	}
+	if i.Md5HashGT != nil {
+		predicates = append(predicates, filehistory.Md5HashGT(*i.Md5HashGT))
+	}
+	if i.Md5HashGTE != nil {
+		predicates = append(predicates, filehistory.Md5HashGTE(*i.Md5HashGTE))
+	}
+	if i.Md5HashLT != nil {
+		predicates = append(predicates, filehistory.Md5HashLT(*i.Md5HashLT))
+	}
+	if i.Md5HashLTE != nil {
+		predicates = append(predicates, filehistory.Md5HashLTE(*i.Md5HashLTE))
+	}
+	if i.Md5HashContains != nil {
+		predicates = append(predicates, filehistory.Md5HashContains(*i.Md5HashContains))
+	}
+	if i.Md5HashHasPrefix != nil {
+		predicates = append(predicates, filehistory.Md5HashHasPrefix(*i.Md5HashHasPrefix))
+	}
+	if i.Md5HashHasSuffix != nil {
+		predicates = append(predicates, filehistory.Md5HashHasSuffix(*i.Md5HashHasSuffix))
+	}
+	if i.Md5HashIsNil {
+		predicates = append(predicates, filehistory.Md5HashIsNil())
+	}
+	if i.Md5HashNotNil {
+		predicates = append(predicates, filehistory.Md5HashNotNil())
+	}
+	if i.Md5HashEqualFold != nil {
+		predicates = append(predicates, filehistory.Md5HashEqualFold(*i.Md5HashEqualFold))
+	}
+	if i.Md5HashContainsFold != nil {
+		predicates = append(predicates, filehistory.Md5HashContainsFold(*i.Md5HashContainsFold))
+	}
+	if i.DetectedContentType != nil {
+		predicates = append(predicates, filehistory.DetectedContentTypeEQ(*i.DetectedContentType))
+	}
+	if i.DetectedContentTypeNEQ != nil {
+		predicates = append(predicates, filehistory.DetectedContentTypeNEQ(*i.DetectedContentTypeNEQ))
+	}
+	if len(i.DetectedContentTypeIn) > 0 {
+		predicates = append(predicates, filehistory.DetectedContentTypeIn(i.DetectedContentTypeIn...))
+	}
+	if len(i.DetectedContentTypeNotIn) > 0 {
+		predicates = append(predicates, filehistory.DetectedContentTypeNotIn(i.DetectedContentTypeNotIn...))
+	}
+	if i.DetectedContentTypeGT != nil {
+		predicates = append(predicates, filehistory.DetectedContentTypeGT(*i.DetectedContentTypeGT))
+	}
+	if i.DetectedContentTypeGTE != nil {
+		predicates = append(predicates, filehistory.DetectedContentTypeGTE(*i.DetectedContentTypeGTE))
+	}
+	if i.DetectedContentTypeLT != nil {
+		predicates = append(predicates, filehistory.DetectedContentTypeLT(*i.DetectedContentTypeLT))
+	}
+	if i.DetectedContentTypeLTE != nil {
+		predicates = append(predicates, filehistory.DetectedContentTypeLTE(*i.DetectedContentTypeLTE))
+	}
+	if i.DetectedContentTypeContains != nil {
+		predicates = append(predicates, filehistory.DetectedContentTypeContains(*i.DetectedContentTypeContains))
+	}
+	if i.DetectedContentTypeHasPrefix != nil {
+		predicates = append(predicates, filehistory.DetectedContentTypeHasPrefix(*i.DetectedContentTypeHasPrefix))
+	}
+	if i.DetectedContentTypeHasSuffix != nil {
+		predicates = append(predicates, filehistory.DetectedContentTypeHasSuffix(*i.DetectedContentTypeHasSuffix))
+	}
+	if i.DetectedContentTypeEqualFold != nil {
+		predicates = append(predicates, filehistory.DetectedContentTypeEqualFold(*i.DetectedContentTypeEqualFold))
+	}
+	if i.DetectedContentTypeContainsFold != nil {
+		predicates = append(predicates, filehistory.DetectedContentTypeContainsFold(*i.DetectedContentTypeContainsFold))
 	}
 	if i.StoreKey != nil {
 		predicates = append(predicates, filehistory.StoreKeyEQ(*i.StoreKey))
@@ -16770,101 +17547,242 @@ func (i *FileHistoryWhereInput) P() (predicate.FileHistory, error) {
 	if i.StoreKeyHasSuffix != nil {
 		predicates = append(predicates, filehistory.StoreKeyHasSuffix(*i.StoreKeyHasSuffix))
 	}
+	if i.StoreKeyIsNil {
+		predicates = append(predicates, filehistory.StoreKeyIsNil())
+	}
+	if i.StoreKeyNotNil {
+		predicates = append(predicates, filehistory.StoreKeyNotNil())
+	}
 	if i.StoreKeyEqualFold != nil {
 		predicates = append(predicates, filehistory.StoreKeyEqualFold(*i.StoreKeyEqualFold))
 	}
 	if i.StoreKeyContainsFold != nil {
 		predicates = append(predicates, filehistory.StoreKeyContainsFold(*i.StoreKeyContainsFold))
 	}
-	if i.Category != nil {
-		predicates = append(predicates, filehistory.CategoryEQ(*i.Category))
+	if i.CategoryType != nil {
+		predicates = append(predicates, filehistory.CategoryTypeEQ(*i.CategoryType))
 	}
-	if i.CategoryNEQ != nil {
-		predicates = append(predicates, filehistory.CategoryNEQ(*i.CategoryNEQ))
+	if i.CategoryTypeNEQ != nil {
+		predicates = append(predicates, filehistory.CategoryTypeNEQ(*i.CategoryTypeNEQ))
 	}
-	if len(i.CategoryIn) > 0 {
-		predicates = append(predicates, filehistory.CategoryIn(i.CategoryIn...))
+	if len(i.CategoryTypeIn) > 0 {
+		predicates = append(predicates, filehistory.CategoryTypeIn(i.CategoryTypeIn...))
 	}
-	if len(i.CategoryNotIn) > 0 {
-		predicates = append(predicates, filehistory.CategoryNotIn(i.CategoryNotIn...))
+	if len(i.CategoryTypeNotIn) > 0 {
+		predicates = append(predicates, filehistory.CategoryTypeNotIn(i.CategoryTypeNotIn...))
 	}
-	if i.CategoryGT != nil {
-		predicates = append(predicates, filehistory.CategoryGT(*i.CategoryGT))
+	if i.CategoryTypeGT != nil {
+		predicates = append(predicates, filehistory.CategoryTypeGT(*i.CategoryTypeGT))
 	}
-	if i.CategoryGTE != nil {
-		predicates = append(predicates, filehistory.CategoryGTE(*i.CategoryGTE))
+	if i.CategoryTypeGTE != nil {
+		predicates = append(predicates, filehistory.CategoryTypeGTE(*i.CategoryTypeGTE))
 	}
-	if i.CategoryLT != nil {
-		predicates = append(predicates, filehistory.CategoryLT(*i.CategoryLT))
+	if i.CategoryTypeLT != nil {
+		predicates = append(predicates, filehistory.CategoryTypeLT(*i.CategoryTypeLT))
 	}
-	if i.CategoryLTE != nil {
-		predicates = append(predicates, filehistory.CategoryLTE(*i.CategoryLTE))
+	if i.CategoryTypeLTE != nil {
+		predicates = append(predicates, filehistory.CategoryTypeLTE(*i.CategoryTypeLTE))
 	}
-	if i.CategoryContains != nil {
-		predicates = append(predicates, filehistory.CategoryContains(*i.CategoryContains))
+	if i.CategoryTypeContains != nil {
+		predicates = append(predicates, filehistory.CategoryTypeContains(*i.CategoryTypeContains))
 	}
-	if i.CategoryHasPrefix != nil {
-		predicates = append(predicates, filehistory.CategoryHasPrefix(*i.CategoryHasPrefix))
+	if i.CategoryTypeHasPrefix != nil {
+		predicates = append(predicates, filehistory.CategoryTypeHasPrefix(*i.CategoryTypeHasPrefix))
 	}
-	if i.CategoryHasSuffix != nil {
-		predicates = append(predicates, filehistory.CategoryHasSuffix(*i.CategoryHasSuffix))
+	if i.CategoryTypeHasSuffix != nil {
+		predicates = append(predicates, filehistory.CategoryTypeHasSuffix(*i.CategoryTypeHasSuffix))
 	}
-	if i.CategoryIsNil {
-		predicates = append(predicates, filehistory.CategoryIsNil())
+	if i.CategoryTypeIsNil {
+		predicates = append(predicates, filehistory.CategoryTypeIsNil())
 	}
-	if i.CategoryNotNil {
-		predicates = append(predicates, filehistory.CategoryNotNil())
+	if i.CategoryTypeNotNil {
+		predicates = append(predicates, filehistory.CategoryTypeNotNil())
 	}
-	if i.CategoryEqualFold != nil {
-		predicates = append(predicates, filehistory.CategoryEqualFold(*i.CategoryEqualFold))
+	if i.CategoryTypeEqualFold != nil {
+		predicates = append(predicates, filehistory.CategoryTypeEqualFold(*i.CategoryTypeEqualFold))
 	}
-	if i.CategoryContainsFold != nil {
-		predicates = append(predicates, filehistory.CategoryContainsFold(*i.CategoryContainsFold))
+	if i.CategoryTypeContainsFold != nil {
+		predicates = append(predicates, filehistory.CategoryTypeContainsFold(*i.CategoryTypeContainsFold))
 	}
-	if i.Annotation != nil {
-		predicates = append(predicates, filehistory.AnnotationEQ(*i.Annotation))
+	if i.URI != nil {
+		predicates = append(predicates, filehistory.URIEQ(*i.URI))
 	}
-	if i.AnnotationNEQ != nil {
-		predicates = append(predicates, filehistory.AnnotationNEQ(*i.AnnotationNEQ))
+	if i.URINEQ != nil {
+		predicates = append(predicates, filehistory.URINEQ(*i.URINEQ))
 	}
-	if len(i.AnnotationIn) > 0 {
-		predicates = append(predicates, filehistory.AnnotationIn(i.AnnotationIn...))
+	if len(i.URIIn) > 0 {
+		predicates = append(predicates, filehistory.URIIn(i.URIIn...))
 	}
-	if len(i.AnnotationNotIn) > 0 {
-		predicates = append(predicates, filehistory.AnnotationNotIn(i.AnnotationNotIn...))
+	if len(i.URINotIn) > 0 {
+		predicates = append(predicates, filehistory.URINotIn(i.URINotIn...))
 	}
-	if i.AnnotationGT != nil {
-		predicates = append(predicates, filehistory.AnnotationGT(*i.AnnotationGT))
+	if i.URIGT != nil {
+		predicates = append(predicates, filehistory.URIGT(*i.URIGT))
 	}
-	if i.AnnotationGTE != nil {
-		predicates = append(predicates, filehistory.AnnotationGTE(*i.AnnotationGTE))
+	if i.URIGTE != nil {
+		predicates = append(predicates, filehistory.URIGTE(*i.URIGTE))
 	}
-	if i.AnnotationLT != nil {
-		predicates = append(predicates, filehistory.AnnotationLT(*i.AnnotationLT))
+	if i.URILT != nil {
+		predicates = append(predicates, filehistory.URILT(*i.URILT))
 	}
-	if i.AnnotationLTE != nil {
-		predicates = append(predicates, filehistory.AnnotationLTE(*i.AnnotationLTE))
+	if i.URILTE != nil {
+		predicates = append(predicates, filehistory.URILTE(*i.URILTE))
 	}
-	if i.AnnotationContains != nil {
-		predicates = append(predicates, filehistory.AnnotationContains(*i.AnnotationContains))
+	if i.URIContains != nil {
+		predicates = append(predicates, filehistory.URIContains(*i.URIContains))
 	}
-	if i.AnnotationHasPrefix != nil {
-		predicates = append(predicates, filehistory.AnnotationHasPrefix(*i.AnnotationHasPrefix))
+	if i.URIHasPrefix != nil {
+		predicates = append(predicates, filehistory.URIHasPrefix(*i.URIHasPrefix))
 	}
-	if i.AnnotationHasSuffix != nil {
-		predicates = append(predicates, filehistory.AnnotationHasSuffix(*i.AnnotationHasSuffix))
+	if i.URIHasSuffix != nil {
+		predicates = append(predicates, filehistory.URIHasSuffix(*i.URIHasSuffix))
 	}
-	if i.AnnotationIsNil {
-		predicates = append(predicates, filehistory.AnnotationIsNil())
+	if i.URIIsNil {
+		predicates = append(predicates, filehistory.URIIsNil())
 	}
-	if i.AnnotationNotNil {
-		predicates = append(predicates, filehistory.AnnotationNotNil())
+	if i.URINotNil {
+		predicates = append(predicates, filehistory.URINotNil())
 	}
-	if i.AnnotationEqualFold != nil {
-		predicates = append(predicates, filehistory.AnnotationEqualFold(*i.AnnotationEqualFold))
+	if i.URIEqualFold != nil {
+		predicates = append(predicates, filehistory.URIEqualFold(*i.URIEqualFold))
 	}
-	if i.AnnotationContainsFold != nil {
-		predicates = append(predicates, filehistory.AnnotationContainsFold(*i.AnnotationContainsFold))
+	if i.URIContainsFold != nil {
+		predicates = append(predicates, filehistory.URIContainsFold(*i.URIContainsFold))
+	}
+	if i.StorageScheme != nil {
+		predicates = append(predicates, filehistory.StorageSchemeEQ(*i.StorageScheme))
+	}
+	if i.StorageSchemeNEQ != nil {
+		predicates = append(predicates, filehistory.StorageSchemeNEQ(*i.StorageSchemeNEQ))
+	}
+	if len(i.StorageSchemeIn) > 0 {
+		predicates = append(predicates, filehistory.StorageSchemeIn(i.StorageSchemeIn...))
+	}
+	if len(i.StorageSchemeNotIn) > 0 {
+		predicates = append(predicates, filehistory.StorageSchemeNotIn(i.StorageSchemeNotIn...))
+	}
+	if i.StorageSchemeGT != nil {
+		predicates = append(predicates, filehistory.StorageSchemeGT(*i.StorageSchemeGT))
+	}
+	if i.StorageSchemeGTE != nil {
+		predicates = append(predicates, filehistory.StorageSchemeGTE(*i.StorageSchemeGTE))
+	}
+	if i.StorageSchemeLT != nil {
+		predicates = append(predicates, filehistory.StorageSchemeLT(*i.StorageSchemeLT))
+	}
+	if i.StorageSchemeLTE != nil {
+		predicates = append(predicates, filehistory.StorageSchemeLTE(*i.StorageSchemeLTE))
+	}
+	if i.StorageSchemeContains != nil {
+		predicates = append(predicates, filehistory.StorageSchemeContains(*i.StorageSchemeContains))
+	}
+	if i.StorageSchemeHasPrefix != nil {
+		predicates = append(predicates, filehistory.StorageSchemeHasPrefix(*i.StorageSchemeHasPrefix))
+	}
+	if i.StorageSchemeHasSuffix != nil {
+		predicates = append(predicates, filehistory.StorageSchemeHasSuffix(*i.StorageSchemeHasSuffix))
+	}
+	if i.StorageSchemeIsNil {
+		predicates = append(predicates, filehistory.StorageSchemeIsNil())
+	}
+	if i.StorageSchemeNotNil {
+		predicates = append(predicates, filehistory.StorageSchemeNotNil())
+	}
+	if i.StorageSchemeEqualFold != nil {
+		predicates = append(predicates, filehistory.StorageSchemeEqualFold(*i.StorageSchemeEqualFold))
+	}
+	if i.StorageSchemeContainsFold != nil {
+		predicates = append(predicates, filehistory.StorageSchemeContainsFold(*i.StorageSchemeContainsFold))
+	}
+	if i.StorageVolume != nil {
+		predicates = append(predicates, filehistory.StorageVolumeEQ(*i.StorageVolume))
+	}
+	if i.StorageVolumeNEQ != nil {
+		predicates = append(predicates, filehistory.StorageVolumeNEQ(*i.StorageVolumeNEQ))
+	}
+	if len(i.StorageVolumeIn) > 0 {
+		predicates = append(predicates, filehistory.StorageVolumeIn(i.StorageVolumeIn...))
+	}
+	if len(i.StorageVolumeNotIn) > 0 {
+		predicates = append(predicates, filehistory.StorageVolumeNotIn(i.StorageVolumeNotIn...))
+	}
+	if i.StorageVolumeGT != nil {
+		predicates = append(predicates, filehistory.StorageVolumeGT(*i.StorageVolumeGT))
+	}
+	if i.StorageVolumeGTE != nil {
+		predicates = append(predicates, filehistory.StorageVolumeGTE(*i.StorageVolumeGTE))
+	}
+	if i.StorageVolumeLT != nil {
+		predicates = append(predicates, filehistory.StorageVolumeLT(*i.StorageVolumeLT))
+	}
+	if i.StorageVolumeLTE != nil {
+		predicates = append(predicates, filehistory.StorageVolumeLTE(*i.StorageVolumeLTE))
+	}
+	if i.StorageVolumeContains != nil {
+		predicates = append(predicates, filehistory.StorageVolumeContains(*i.StorageVolumeContains))
+	}
+	if i.StorageVolumeHasPrefix != nil {
+		predicates = append(predicates, filehistory.StorageVolumeHasPrefix(*i.StorageVolumeHasPrefix))
+	}
+	if i.StorageVolumeHasSuffix != nil {
+		predicates = append(predicates, filehistory.StorageVolumeHasSuffix(*i.StorageVolumeHasSuffix))
+	}
+	if i.StorageVolumeIsNil {
+		predicates = append(predicates, filehistory.StorageVolumeIsNil())
+	}
+	if i.StorageVolumeNotNil {
+		predicates = append(predicates, filehistory.StorageVolumeNotNil())
+	}
+	if i.StorageVolumeEqualFold != nil {
+		predicates = append(predicates, filehistory.StorageVolumeEqualFold(*i.StorageVolumeEqualFold))
+	}
+	if i.StorageVolumeContainsFold != nil {
+		predicates = append(predicates, filehistory.StorageVolumeContainsFold(*i.StorageVolumeContainsFold))
+	}
+	if i.StoragePath != nil {
+		predicates = append(predicates, filehistory.StoragePathEQ(*i.StoragePath))
+	}
+	if i.StoragePathNEQ != nil {
+		predicates = append(predicates, filehistory.StoragePathNEQ(*i.StoragePathNEQ))
+	}
+	if len(i.StoragePathIn) > 0 {
+		predicates = append(predicates, filehistory.StoragePathIn(i.StoragePathIn...))
+	}
+	if len(i.StoragePathNotIn) > 0 {
+		predicates = append(predicates, filehistory.StoragePathNotIn(i.StoragePathNotIn...))
+	}
+	if i.StoragePathGT != nil {
+		predicates = append(predicates, filehistory.StoragePathGT(*i.StoragePathGT))
+	}
+	if i.StoragePathGTE != nil {
+		predicates = append(predicates, filehistory.StoragePathGTE(*i.StoragePathGTE))
+	}
+	if i.StoragePathLT != nil {
+		predicates = append(predicates, filehistory.StoragePathLT(*i.StoragePathLT))
+	}
+	if i.StoragePathLTE != nil {
+		predicates = append(predicates, filehistory.StoragePathLTE(*i.StoragePathLTE))
+	}
+	if i.StoragePathContains != nil {
+		predicates = append(predicates, filehistory.StoragePathContains(*i.StoragePathContains))
+	}
+	if i.StoragePathHasPrefix != nil {
+		predicates = append(predicates, filehistory.StoragePathHasPrefix(*i.StoragePathHasPrefix))
+	}
+	if i.StoragePathHasSuffix != nil {
+		predicates = append(predicates, filehistory.StoragePathHasSuffix(*i.StoragePathHasSuffix))
+	}
+	if i.StoragePathIsNil {
+		predicates = append(predicates, filehistory.StoragePathIsNil())
+	}
+	if i.StoragePathNotNil {
+		predicates = append(predicates, filehistory.StoragePathNotNil())
+	}
+	if i.StoragePathEqualFold != nil {
+		predicates = append(predicates, filehistory.StoragePathEqualFold(*i.StoragePathEqualFold))
+	}
+	if i.StoragePathContainsFold != nil {
+		predicates = append(predicates, filehistory.StoragePathContainsFold(*i.StoragePathContainsFold))
 	}
 
 	switch len(predicates) {
@@ -32138,6 +33056,10 @@ type OrganizationSettingWhereInput struct {
 	// "organization" edge predicates.
 	HasOrganization     *bool                     `json:"hasOrganization,omitempty"`
 	HasOrganizationWith []*OrganizationWhereInput `json:"hasOrganizationWith,omitempty"`
+
+	// "files" edge predicates.
+	HasFiles     *bool             `json:"hasFiles,omitempty"`
+	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -32772,6 +33694,24 @@ func (i *OrganizationSettingWhereInput) P() (predicate.OrganizationSetting, erro
 			with = append(with, p)
 		}
 		predicates = append(predicates, organizationsetting.HasOrganizationWith(with...))
+	}
+	if i.HasFiles != nil {
+		p := organizationsetting.HasFiles()
+		if !*i.HasFiles {
+			p = organizationsetting.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasFilesWith) > 0 {
+		with := make([]predicate.File, 0, len(i.HasFilesWith))
+		for _, w := range i.HasFilesWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasFilesWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, organizationsetting.HasFilesWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -35807,6 +36747,10 @@ type TemplateWhereInput struct {
 	// "documents" edge predicates.
 	HasDocuments     *bool                     `json:"hasDocuments,omitempty"`
 	HasDocumentsWith []*DocumentDataWhereInput `json:"hasDocumentsWith,omitempty"`
+
+	// "files" edge predicates.
+	HasFiles     *bool             `json:"hasFiles,omitempty"`
+	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -36312,6 +37256,24 @@ func (i *TemplateWhereInput) P() (predicate.Template, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, template.HasDocumentsWith(with...))
+	}
+	if i.HasFiles != nil {
+		p := template.HasFiles()
+		if !*i.HasFiles {
+			p = template.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasFilesWith) > 0 {
+		with := make([]predicate.File, 0, len(i.HasFilesWith))
+		for _, w := range i.HasFilesWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasFilesWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, template.HasFilesWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -37281,6 +38243,23 @@ type UserWhereInput struct {
 	AvatarLocalFileEqualFold    *string  `json:"avatarLocalFileEqualFold,omitempty"`
 	AvatarLocalFileContainsFold *string  `json:"avatarLocalFileContainsFold,omitempty"`
 
+	// "avatar_local_file_id" field predicates.
+	AvatarLocalFileID             *string  `json:"avatarLocalFileID,omitempty"`
+	AvatarLocalFileIDNEQ          *string  `json:"avatarLocalFileIDNEQ,omitempty"`
+	AvatarLocalFileIDIn           []string `json:"avatarLocalFileIDIn,omitempty"`
+	AvatarLocalFileIDNotIn        []string `json:"avatarLocalFileIDNotIn,omitempty"`
+	AvatarLocalFileIDGT           *string  `json:"avatarLocalFileIDGT,omitempty"`
+	AvatarLocalFileIDGTE          *string  `json:"avatarLocalFileIDGTE,omitempty"`
+	AvatarLocalFileIDLT           *string  `json:"avatarLocalFileIDLT,omitempty"`
+	AvatarLocalFileIDLTE          *string  `json:"avatarLocalFileIDLTE,omitempty"`
+	AvatarLocalFileIDContains     *string  `json:"avatarLocalFileIDContains,omitempty"`
+	AvatarLocalFileIDHasPrefix    *string  `json:"avatarLocalFileIDHasPrefix,omitempty"`
+	AvatarLocalFileIDHasSuffix    *string  `json:"avatarLocalFileIDHasSuffix,omitempty"`
+	AvatarLocalFileIDIsNil        bool     `json:"avatarLocalFileIDIsNil,omitempty"`
+	AvatarLocalFileIDNotNil       bool     `json:"avatarLocalFileIDNotNil,omitempty"`
+	AvatarLocalFileIDEqualFold    *string  `json:"avatarLocalFileIDEqualFold,omitempty"`
+	AvatarLocalFileIDContainsFold *string  `json:"avatarLocalFileIDContainsFold,omitempty"`
+
 	// "avatar_updated_at" field predicates.
 	AvatarUpdatedAt       *time.Time  `json:"avatarUpdatedAt,omitempty"`
 	AvatarUpdatedAtNEQ    *time.Time  `json:"avatarUpdatedAtNEQ,omitempty"`
@@ -37376,6 +38355,10 @@ type UserWhereInput struct {
 	// "files" edge predicates.
 	HasFiles     *bool             `json:"hasFiles,omitempty"`
 	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
+
+	// "file" edge predicates.
+	HasFile     *bool             `json:"hasFile,omitempty"`
+	HasFileWith []*FileWhereInput `json:"hasFileWith,omitempty"`
 
 	// "events" edge predicates.
 	HasEvents     *bool              `json:"hasEvents,omitempty"`
@@ -37974,6 +38957,51 @@ func (i *UserWhereInput) P() (predicate.User, error) {
 	if i.AvatarLocalFileContainsFold != nil {
 		predicates = append(predicates, user.AvatarLocalFileContainsFold(*i.AvatarLocalFileContainsFold))
 	}
+	if i.AvatarLocalFileID != nil {
+		predicates = append(predicates, user.AvatarLocalFileIDEQ(*i.AvatarLocalFileID))
+	}
+	if i.AvatarLocalFileIDNEQ != nil {
+		predicates = append(predicates, user.AvatarLocalFileIDNEQ(*i.AvatarLocalFileIDNEQ))
+	}
+	if len(i.AvatarLocalFileIDIn) > 0 {
+		predicates = append(predicates, user.AvatarLocalFileIDIn(i.AvatarLocalFileIDIn...))
+	}
+	if len(i.AvatarLocalFileIDNotIn) > 0 {
+		predicates = append(predicates, user.AvatarLocalFileIDNotIn(i.AvatarLocalFileIDNotIn...))
+	}
+	if i.AvatarLocalFileIDGT != nil {
+		predicates = append(predicates, user.AvatarLocalFileIDGT(*i.AvatarLocalFileIDGT))
+	}
+	if i.AvatarLocalFileIDGTE != nil {
+		predicates = append(predicates, user.AvatarLocalFileIDGTE(*i.AvatarLocalFileIDGTE))
+	}
+	if i.AvatarLocalFileIDLT != nil {
+		predicates = append(predicates, user.AvatarLocalFileIDLT(*i.AvatarLocalFileIDLT))
+	}
+	if i.AvatarLocalFileIDLTE != nil {
+		predicates = append(predicates, user.AvatarLocalFileIDLTE(*i.AvatarLocalFileIDLTE))
+	}
+	if i.AvatarLocalFileIDContains != nil {
+		predicates = append(predicates, user.AvatarLocalFileIDContains(*i.AvatarLocalFileIDContains))
+	}
+	if i.AvatarLocalFileIDHasPrefix != nil {
+		predicates = append(predicates, user.AvatarLocalFileIDHasPrefix(*i.AvatarLocalFileIDHasPrefix))
+	}
+	if i.AvatarLocalFileIDHasSuffix != nil {
+		predicates = append(predicates, user.AvatarLocalFileIDHasSuffix(*i.AvatarLocalFileIDHasSuffix))
+	}
+	if i.AvatarLocalFileIDIsNil {
+		predicates = append(predicates, user.AvatarLocalFileIDIsNil())
+	}
+	if i.AvatarLocalFileIDNotNil {
+		predicates = append(predicates, user.AvatarLocalFileIDNotNil())
+	}
+	if i.AvatarLocalFileIDEqualFold != nil {
+		predicates = append(predicates, user.AvatarLocalFileIDEqualFold(*i.AvatarLocalFileIDEqualFold))
+	}
+	if i.AvatarLocalFileIDContainsFold != nil {
+		predicates = append(predicates, user.AvatarLocalFileIDContainsFold(*i.AvatarLocalFileIDContainsFold))
+	}
 	if i.AvatarUpdatedAt != nil {
 		predicates = append(predicates, user.AvatarUpdatedAtEQ(*i.AvatarUpdatedAt))
 	}
@@ -38262,6 +39290,24 @@ func (i *UserWhereInput) P() (predicate.User, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, user.HasFilesWith(with...))
+	}
+	if i.HasFile != nil {
+		p := user.HasFile()
+		if !*i.HasFile {
+			p = user.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasFileWith) > 0 {
+		with := make([]predicate.File, 0, len(i.HasFileWith))
+		for _, w := range i.HasFileWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasFileWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, user.HasFileWith(with...))
 	}
 	if i.HasEvents != nil {
 		p := user.HasEvents()
@@ -38563,6 +39609,23 @@ type UserHistoryWhereInput struct {
 	AvatarLocalFileNotNil       bool     `json:"avatarLocalFileNotNil,omitempty"`
 	AvatarLocalFileEqualFold    *string  `json:"avatarLocalFileEqualFold,omitempty"`
 	AvatarLocalFileContainsFold *string  `json:"avatarLocalFileContainsFold,omitempty"`
+
+	// "avatar_local_file_id" field predicates.
+	AvatarLocalFileID             *string  `json:"avatarLocalFileID,omitempty"`
+	AvatarLocalFileIDNEQ          *string  `json:"avatarLocalFileIDNEQ,omitempty"`
+	AvatarLocalFileIDIn           []string `json:"avatarLocalFileIDIn,omitempty"`
+	AvatarLocalFileIDNotIn        []string `json:"avatarLocalFileIDNotIn,omitempty"`
+	AvatarLocalFileIDGT           *string  `json:"avatarLocalFileIDGT,omitempty"`
+	AvatarLocalFileIDGTE          *string  `json:"avatarLocalFileIDGTE,omitempty"`
+	AvatarLocalFileIDLT           *string  `json:"avatarLocalFileIDLT,omitempty"`
+	AvatarLocalFileIDLTE          *string  `json:"avatarLocalFileIDLTE,omitempty"`
+	AvatarLocalFileIDContains     *string  `json:"avatarLocalFileIDContains,omitempty"`
+	AvatarLocalFileIDHasPrefix    *string  `json:"avatarLocalFileIDHasPrefix,omitempty"`
+	AvatarLocalFileIDHasSuffix    *string  `json:"avatarLocalFileIDHasSuffix,omitempty"`
+	AvatarLocalFileIDIsNil        bool     `json:"avatarLocalFileIDIsNil,omitempty"`
+	AvatarLocalFileIDNotNil       bool     `json:"avatarLocalFileIDNotNil,omitempty"`
+	AvatarLocalFileIDEqualFold    *string  `json:"avatarLocalFileIDEqualFold,omitempty"`
+	AvatarLocalFileIDContainsFold *string  `json:"avatarLocalFileIDContainsFold,omitempty"`
 
 	// "avatar_updated_at" field predicates.
 	AvatarUpdatedAt       *time.Time  `json:"avatarUpdatedAt,omitempty"`
@@ -39302,6 +40365,51 @@ func (i *UserHistoryWhereInput) P() (predicate.UserHistory, error) {
 	if i.AvatarLocalFileContainsFold != nil {
 		predicates = append(predicates, userhistory.AvatarLocalFileContainsFold(*i.AvatarLocalFileContainsFold))
 	}
+	if i.AvatarLocalFileID != nil {
+		predicates = append(predicates, userhistory.AvatarLocalFileIDEQ(*i.AvatarLocalFileID))
+	}
+	if i.AvatarLocalFileIDNEQ != nil {
+		predicates = append(predicates, userhistory.AvatarLocalFileIDNEQ(*i.AvatarLocalFileIDNEQ))
+	}
+	if len(i.AvatarLocalFileIDIn) > 0 {
+		predicates = append(predicates, userhistory.AvatarLocalFileIDIn(i.AvatarLocalFileIDIn...))
+	}
+	if len(i.AvatarLocalFileIDNotIn) > 0 {
+		predicates = append(predicates, userhistory.AvatarLocalFileIDNotIn(i.AvatarLocalFileIDNotIn...))
+	}
+	if i.AvatarLocalFileIDGT != nil {
+		predicates = append(predicates, userhistory.AvatarLocalFileIDGT(*i.AvatarLocalFileIDGT))
+	}
+	if i.AvatarLocalFileIDGTE != nil {
+		predicates = append(predicates, userhistory.AvatarLocalFileIDGTE(*i.AvatarLocalFileIDGTE))
+	}
+	if i.AvatarLocalFileIDLT != nil {
+		predicates = append(predicates, userhistory.AvatarLocalFileIDLT(*i.AvatarLocalFileIDLT))
+	}
+	if i.AvatarLocalFileIDLTE != nil {
+		predicates = append(predicates, userhistory.AvatarLocalFileIDLTE(*i.AvatarLocalFileIDLTE))
+	}
+	if i.AvatarLocalFileIDContains != nil {
+		predicates = append(predicates, userhistory.AvatarLocalFileIDContains(*i.AvatarLocalFileIDContains))
+	}
+	if i.AvatarLocalFileIDHasPrefix != nil {
+		predicates = append(predicates, userhistory.AvatarLocalFileIDHasPrefix(*i.AvatarLocalFileIDHasPrefix))
+	}
+	if i.AvatarLocalFileIDHasSuffix != nil {
+		predicates = append(predicates, userhistory.AvatarLocalFileIDHasSuffix(*i.AvatarLocalFileIDHasSuffix))
+	}
+	if i.AvatarLocalFileIDIsNil {
+		predicates = append(predicates, userhistory.AvatarLocalFileIDIsNil())
+	}
+	if i.AvatarLocalFileIDNotNil {
+		predicates = append(predicates, userhistory.AvatarLocalFileIDNotNil())
+	}
+	if i.AvatarLocalFileIDEqualFold != nil {
+		predicates = append(predicates, userhistory.AvatarLocalFileIDEqualFold(*i.AvatarLocalFileIDEqualFold))
+	}
+	if i.AvatarLocalFileIDContainsFold != nil {
+		predicates = append(predicates, userhistory.AvatarLocalFileIDContainsFold(*i.AvatarLocalFileIDContainsFold))
+	}
 	if i.AvatarUpdatedAt != nil {
 		predicates = append(predicates, userhistory.AvatarUpdatedAtEQ(*i.AvatarUpdatedAt))
 	}
@@ -39673,6 +40781,10 @@ type UserSettingWhereInput struct {
 	// "default_org" edge predicates.
 	HasDefaultOrg     *bool                     `json:"hasDefaultOrg,omitempty"`
 	HasDefaultOrgWith []*OrganizationWhereInput `json:"hasDefaultOrgWith,omitempty"`
+
+	// "files" edge predicates.
+	HasFiles     *bool             `json:"hasFiles,omitempty"`
+	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -40190,6 +41302,24 @@ func (i *UserSettingWhereInput) P() (predicate.UserSetting, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, usersetting.HasDefaultOrgWith(with...))
+	}
+	if i.HasFiles != nil {
+		p := usersetting.HasFiles()
+		if !*i.HasFiles {
+			p = usersetting.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasFilesWith) > 0 {
+		with := make([]predicate.File, 0, len(i.HasFilesWith))
+		for _, w := range i.HasFilesWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasFilesWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, usersetting.HasFilesWith(with...))
 	}
 	switch len(predicates) {
 	case 0:

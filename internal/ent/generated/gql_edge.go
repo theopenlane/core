@@ -36,6 +36,18 @@ func (c *Contact) Entities(ctx context.Context) (result []*Entity, err error) {
 	return result, err
 }
 
+func (c *Contact) Files(ctx context.Context) (result []*File, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = c.NamedFiles(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = c.Edges.FilesOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = c.QueryFiles().All(ctx)
+	}
+	return result, err
+}
+
 func (dd *DocumentData) Owner(ctx context.Context) (*Organization, error) {
 	result, err := dd.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {
@@ -60,6 +72,18 @@ func (dd *DocumentData) Entity(ctx context.Context) (result []*Entity, err error
 	}
 	if IsNotLoaded(err) {
 		result, err = dd.QueryEntity().All(ctx)
+	}
+	return result, err
+}
+
+func (dd *DocumentData) Files(ctx context.Context) (result []*File, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = dd.NamedFiles(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = dd.Edges.FilesOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = dd.QueryFiles().All(ctx)
 	}
 	return result, err
 }
@@ -468,6 +492,18 @@ func (e *Event) Subscriber(ctx context.Context) (result []*Subscriber, err error
 	return result, err
 }
 
+func (e *Event) File(ctx context.Context) (result []*File, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = e.NamedFile(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = e.Edges.FileOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = e.QueryFile().All(ctx)
+	}
+	return result, err
+}
+
 func (f *Feature) Owner(ctx context.Context) (*Organization, error) {
 	result, err := f.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {
@@ -512,12 +548,16 @@ func (f *Feature) Features(ctx context.Context) (result []*EntitlementPlanFeatur
 	return result, err
 }
 
-func (f *File) User(ctx context.Context) (*User, error) {
-	result, err := f.Edges.UserOrErr()
-	if IsNotLoaded(err) {
-		result, err = f.QueryUser().Only(ctx)
+func (f *File) User(ctx context.Context) (result []*User, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = f.NamedUser(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = f.Edges.UserOrErr()
 	}
-	return result, MaskNotFound(err)
+	if IsNotLoaded(err) {
+		result, err = f.QueryUser().All(ctx)
+	}
+	return result, err
 }
 
 func (f *File) Organization(ctx context.Context) (result []*Organization, err error) {
@@ -528,6 +568,30 @@ func (f *File) Organization(ctx context.Context) (result []*Organization, err er
 	}
 	if IsNotLoaded(err) {
 		result, err = f.QueryOrganization().All(ctx)
+	}
+	return result, err
+}
+
+func (f *File) Group(ctx context.Context) (result []*Group, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = f.NamedGroup(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = f.Edges.GroupOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = f.QueryGroup().All(ctx)
+	}
+	return result, err
+}
+
+func (f *File) Contact(ctx context.Context) (result []*Contact, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = f.NamedContact(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = f.Edges.ContactOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = f.QueryContact().All(ctx)
 	}
 	return result, err
 }
@@ -544,14 +608,62 @@ func (f *File) Entity(ctx context.Context) (result []*Entity, err error) {
 	return result, err
 }
 
-func (f *File) Group(ctx context.Context) (result []*Group, err error) {
+func (f *File) Usersetting(ctx context.Context) (result []*UserSetting, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = f.NamedGroup(graphql.GetFieldContext(ctx).Field.Alias)
+		result, err = f.NamedUsersetting(graphql.GetFieldContext(ctx).Field.Alias)
 	} else {
-		result, err = f.Edges.GroupOrErr()
+		result, err = f.Edges.UsersettingOrErr()
 	}
 	if IsNotLoaded(err) {
-		result, err = f.QueryGroup().All(ctx)
+		result, err = f.QueryUsersetting().All(ctx)
+	}
+	return result, err
+}
+
+func (f *File) Organizationsetting(ctx context.Context) (result []*OrganizationSetting, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = f.NamedOrganizationsetting(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = f.Edges.OrganizationsettingOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = f.QueryOrganizationsetting().All(ctx)
+	}
+	return result, err
+}
+
+func (f *File) Template(ctx context.Context) (result []*Template, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = f.NamedTemplate(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = f.Edges.TemplateOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = f.QueryTemplate().All(ctx)
+	}
+	return result, err
+}
+
+func (f *File) Documentdata(ctx context.Context) (result []*DocumentData, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = f.NamedDocumentdata(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = f.Edges.DocumentdataOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = f.QueryDocumentdata().All(ctx)
+	}
+	return result, err
+}
+
+func (f *File) Events(ctx context.Context) (result []*Event, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = f.NamedEvents(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = f.Edges.EventsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = f.QueryEvents().All(ctx)
 	}
 	return result, err
 }
@@ -1189,6 +1301,18 @@ func (os *OrganizationSetting) Organization(ctx context.Context) (*Organization,
 	return result, MaskNotFound(err)
 }
 
+func (os *OrganizationSetting) Files(ctx context.Context) (result []*File, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = os.NamedFiles(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = os.Edges.FilesOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = os.QueryFiles().All(ctx)
+	}
+	return result, err
+}
+
 func (pat *PersonalAccessToken) Owner(ctx context.Context) (*User, error) {
 	result, err := pat.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {
@@ -1269,6 +1393,18 @@ func (t *Template) Documents(ctx context.Context) (result []*DocumentData, err e
 	return result, err
 }
 
+func (t *Template) Files(ctx context.Context) (result []*File, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = t.NamedFiles(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = t.Edges.FilesOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = t.QueryFiles().All(ctx)
+	}
+	return result, err
+}
+
 func (u *User) PersonalAccessTokens(ctx context.Context) (result []*PersonalAccessToken, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = u.NamedPersonalAccessTokens(graphql.GetFieldContext(ctx).Field.Alias)
@@ -1337,6 +1473,14 @@ func (u *User) Files(ctx context.Context) (result []*File, err error) {
 	return result, err
 }
 
+func (u *User) File(ctx context.Context) (*File, error) {
+	result, err := u.Edges.FileOrErr()
+	if IsNotLoaded(err) {
+		result, err = u.QueryFile().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (u *User) Events(ctx context.Context) (result []*Event, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = u.NamedEvents(graphql.GetFieldContext(ctx).Field.Alias)
@@ -1387,6 +1531,18 @@ func (us *UserSetting) DefaultOrg(ctx context.Context) (*Organization, error) {
 		result, err = us.QueryDefaultOrg().Only(ctx)
 	}
 	return result, MaskNotFound(err)
+}
+
+func (us *UserSetting) Files(ctx context.Context) (result []*File, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = us.NamedFiles(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = us.Edges.FilesOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = us.QueryFiles().All(ctx)
+	}
+	return result, err
 }
 
 func (w *Webhook) Owner(ctx context.Context) (*Organization, error) {

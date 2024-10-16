@@ -3,6 +3,7 @@ package graphapi_test
 import (
 	"testing"
 
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
@@ -13,6 +14,7 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/graphapi"
+	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	auth "github.com/theopenlane/iam/auth"
 )
@@ -151,9 +153,10 @@ func (suite *GraphTestSuite) TestMutationCreateUser() {
 	strongPassword := "my&supers3cr3tpassw0rd!"
 
 	testCases := []struct {
-		name      string
-		userInput openlaneclient.CreateUserInput
-		errorMsg  string
+		name       string
+		userInput  openlaneclient.CreateUserInput
+		avatarFile *graphql.Upload
+		errorMsg   string
 	}{
 		{
 			name: "no auth create user",
@@ -177,7 +180,7 @@ func (suite *GraphTestSuite) TestMutationCreateUser() {
 				mock_fga.WriteAny(t, suite.client.fga)
 			}
 
-			resp, err := suite.client.api.CreateUser(reqCtx, tc.userInput)
+			resp, err := suite.client.api.CreateUser(reqCtx, tc.userInput, tc.avatarFile)
 
 			if tc.errorMsg != "" {
 				require.Error(t, err)
@@ -210,7 +213,7 @@ func (suite *GraphTestSuite) TestMutationCreateUser() {
 			// default org will always be the personal org when the user is first created
 			personalOrgID := resp.CreateUser.User.Setting.DefaultOrg.ID
 
-			org, err := suite.client.api.GetOrganizationByID(reqCtx, personalOrgID, nil)
+			org, err := suite.client.api.GetOrganizationByID(reqCtx, personalOrgID)
 			require.NoError(t, err)
 			assert.Equal(t, personalOrgID, org.Organization.ID)
 			assert.True(t, *org.Organization.PersonalOrg)
@@ -239,9 +242,16 @@ func (suite *GraphTestSuite) TestMutationUpdateUser() {
 
 	weakPassword := "notsecure"
 
+	avatarFile, err := objects.NewUploadFile("testdata/uploads/logo.png")
+	require.NoError(t, err)
+
+	invalidAvatarFile, err := objects.NewUploadFile("testdata/uploads/hello.txt")
+	require.NoError(t, err)
+
 	testCases := []struct {
 		name        string
 		updateInput openlaneclient.UpdateUserInput
+		avatarFile  *graphql.Upload
 		expectedRes openlaneclient.UpdateUser_UpdateUser_User
 		errorMsg    string
 	}{
@@ -257,6 +267,32 @@ func (suite *GraphTestSuite) TestMutationUpdateUser() {
 				DisplayName: user.DisplayName,
 				Email:       user.Email,
 			},
+		},
+		{
+			name: "update avatar",
+			avatarFile: &graphql.Upload{
+				File:        avatarFile.File,
+				Filename:    avatarFile.Filename,
+				Size:        avatarFile.Size,
+				ContentType: avatarFile.ContentType,
+			},
+			expectedRes: openlaneclient.UpdateUser_UpdateUser_User{
+				ID:          user.ID,
+				FirstName:   &firstNameUpdate,
+				LastName:    &user.LastName,
+				DisplayName: user.DisplayName,
+				Email:       user.Email,
+			},
+		},
+		{
+			name: "update avatar with invalid file",
+			avatarFile: &graphql.Upload{
+				File:        invalidAvatarFile.File,
+				Filename:    invalidAvatarFile.Filename,
+				Size:        invalidAvatarFile.Size,
+				ContentType: invalidAvatarFile.ContentType,
+			},
+			errorMsg: "unsupported mime type uploaded: text/plain",
 		},
 		{
 			name: "update last name, happy path",
@@ -319,11 +355,19 @@ func (suite *GraphTestSuite) TestMutationUpdateUser() {
 
 			if tc.errorMsg == "" {
 				mock_fga.CheckAny(t, suite.client.fga, true)
+
+			}
+
+			if tc.avatarFile != nil {
+				if tc.errorMsg == "" {
+					expectUpload(t, suite.client.objectStore.Storage, []graphql.Upload{*tc.avatarFile})
+				} else {
+					expectUploadCheckOnly(t, suite.client.objectStore.Storage)
+				}
 			}
 
 			// update user
-			resp, err := suite.client.api.UpdateUser(reqCtx, user.ID, tc.updateInput)
-
+			resp, err := suite.client.api.UpdateUser(reqCtx, user.ID, tc.updateInput, tc.avatarFile)
 			if tc.errorMsg != "" {
 				require.Error(t, err)
 				assert.ErrorContains(t, err, tc.errorMsg)
@@ -342,6 +386,10 @@ func (suite *GraphTestSuite) TestMutationUpdateUser() {
 			assert.Equal(t, tc.expectedRes.LastName, updatedUser.LastName)
 			assert.Equal(t, tc.expectedRes.DisplayName, updatedUser.DisplayName)
 			assert.Equal(t, tc.expectedRes.Email, updatedUser.Email)
+
+			if tc.avatarFile != nil {
+				assert.NotNil(t, updatedUser.AvatarLocalFileID)
+			}
 		})
 	}
 }

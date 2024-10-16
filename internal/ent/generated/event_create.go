@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entitlementplanfeature"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/feature"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
@@ -404,6 +405,21 @@ func (ec *EventCreate) AddSubscriber(s ...*Subscriber) *EventCreate {
 		ids[i] = s[i].ID
 	}
 	return ec.AddSubscriberIDs(ids...)
+}
+
+// AddFileIDs adds the "file" edge to the File entity by IDs.
+func (ec *EventCreate) AddFileIDs(ids ...string) *EventCreate {
+	ec.mutation.AddFileIDs(ids...)
+	return ec
+}
+
+// AddFile adds the "file" edges to the File entity.
+func (ec *EventCreate) AddFile(f ...*File) *EventCreate {
+	ids := make([]string, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return ec.AddFileIDs(ids...)
 }
 
 // Mutation returns the EventMutation object of the builder.
@@ -829,6 +845,23 @@ func (ec *EventCreate) createSpec() (*Event, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = ec.schemaConfig.SubscriberEvents
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ec.mutation.FileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   event.FileTable,
+			Columns: event.FilePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ec.schemaConfig.FileEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

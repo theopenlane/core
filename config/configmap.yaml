@@ -158,3 +158,11 @@ data:
   CORE_RATELIMIT_LIMIT: {{ .Values.core.ratelimit.limit | default 10 }}
   CORE_RATELIMIT_BURST: {{ .Values.core.ratelimit.burst | default 30 }}
   CORE_RATELIMIT_EXPIRES: {{ .Values.core.ratelimit.expires | default "10m" }}
+  CORE_OBJECTSTORAGE_ENABLED: {{ .Values.core.objectStorage.enabled | default true }}
+  CORE_OBJECTSTORAGE_PROVIDER: {{ .Values.core.objectStorage.provider }}
+  CORE_OBJECTSTORAGE_ACCESSKEY: {{ .Values.core.objectStorage.accessKey }}
+  CORE_OBJECTSTORAGE_REGION: {{ .Values.core.objectStorage.region }}
+  CORE_OBJECTSTORAGE_SECRETKEY: {{ .Values.core.objectStorage.secretKey }}
+  CORE_OBJECTSTORAGE_CREDENTIALSJSON: {{ .Values.core.objectStorage.credentialsJSON }}
+  CORE_OBJECTSTORAGE_DEFAULTBUCKET: {{ .Values.core.objectStorage.defaultBucket }}
+  CORE_OBJECTSTORAGE_KEYS: {{ .Values.core.objectStorage.keys | default "uploadFile" }}

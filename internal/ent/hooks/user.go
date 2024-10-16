@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/objects"
 )
 
 const (
@@ -55,6 +56,16 @@ func HookUser() ent.Hook {
 						m.SetDisplayName(displayName)
 					}
 				}
+			}
+
+			// check for uploaded files (e.g. avatar image)
+			fileIDs := objects.GetFileIDsFromContext(ctx)
+			if len(fileIDs) > 0 {
+				if err := checkAvatarFile(ctx, m); err != nil {
+					return nil, err
+				}
+
+				m.AddFileIDs(fileIDs...)
 			}
 
 			// user settings are required, if this is empty generate a default setting schema
@@ -237,4 +248,27 @@ func defaultUserSettings(ctx context.Context, user *generated.UserMutation) (str
 	}
 
 	return userSetting.ID, nil
+}
+
+// checkAvatarFile checks if an avatar file is provided and sets the local file ID
+func checkAvatarFile(ctx context.Context, m *generated.UserMutation) error {
+	// get the file from the context, if it exists
+	file, _ := objects.FilesFromContextWithKey(ctx, "avatarFile")
+
+	// return early if no file is provided
+	if file == nil {
+		return nil
+	}
+
+	// we should only have one file
+	if len(file) > 1 {
+		return ErrTooManyAvatarFiles
+	}
+
+	// this should always be true, but check just in case
+	if file[0].FieldName == "avatarFile" {
+		m.SetAvatarLocalFileID(file[0].ID)
+	}
+
+	return nil
 }

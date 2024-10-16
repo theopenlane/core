@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/customtypes"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/pkg/enums"
@@ -220,6 +221,21 @@ func (tc *TemplateCreate) AddDocuments(d ...*DocumentData) *TemplateCreate {
 		ids[i] = d[i].ID
 	}
 	return tc.AddDocumentIDs(ids...)
+}
+
+// AddFileIDs adds the "files" edge to the File entity by IDs.
+func (tc *TemplateCreate) AddFileIDs(ids ...string) *TemplateCreate {
+	tc.mutation.AddFileIDs(ids...)
+	return tc
+}
+
+// AddFiles adds the "files" edges to the File entity.
+func (tc *TemplateCreate) AddFiles(f ...*File) *TemplateCreate {
+	ids := make([]string, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return tc.AddFileIDs(ids...)
 }
 
 // Mutation returns the TemplateMutation object of the builder.
@@ -445,6 +461,23 @@ func (tc *TemplateCreate) createSpec() (*Template, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = tc.schemaConfig.DocumentData
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := tc.mutation.FilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   template.FilesTable,
+			Columns: template.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tc.schemaConfig.TemplateFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

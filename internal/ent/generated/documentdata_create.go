@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/customtypes"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 )
@@ -191,6 +192,21 @@ func (ddc *DocumentDataCreate) AddEntity(e ...*Entity) *DocumentDataCreate {
 		ids[i] = e[i].ID
 	}
 	return ddc.AddEntityIDs(ids...)
+}
+
+// AddFileIDs adds the "files" edge to the File entity by IDs.
+func (ddc *DocumentDataCreate) AddFileIDs(ids ...string) *DocumentDataCreate {
+	ddc.mutation.AddFileIDs(ids...)
+	return ddc
+}
+
+// AddFiles adds the "files" edges to the File entity.
+func (ddc *DocumentDataCreate) AddFiles(f ...*File) *DocumentDataCreate {
+	ids := make([]string, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return ddc.AddFileIDs(ids...)
 }
 
 // Mutation returns the DocumentDataMutation object of the builder.
@@ -404,6 +420,23 @@ func (ddc *DocumentDataCreate) createSpec() (*DocumentData, *sqlgraph.CreateSpec
 			},
 		}
 		edge.Schema = ddc.schemaConfig.EntityDocuments
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ddc.mutation.FilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   documentdata.FilesTable,
+			Columns: documentdata.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ddc.schemaConfig.DocumentDataFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

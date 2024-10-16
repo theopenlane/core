@@ -62,11 +62,15 @@ type OrganizationSetting struct {
 type OrganizationSettingEdges struct {
 	// Organization holds the value of the organization edge.
 	Organization *Organization `json:"organization,omitempty"`
+	// Files holds the value of the files edge.
+	Files []*File `json:"files,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
+	loadedTypes [2]bool
 	// totalCount holds the count of the edges above.
-	totalCount [1]map[string]int
+	totalCount [2]map[string]int
+
+	namedFiles map[string][]*File
 }
 
 // OrganizationOrErr returns the Organization value or an error if the edge
@@ -78,6 +82,15 @@ func (e OrganizationSettingEdges) OrganizationOrErr() (*Organization, error) {
 		return nil, &NotFoundError{label: organization.Label}
 	}
 	return nil, &NotLoadedError{edge: "organization"}
+}
+
+// FilesOrErr returns the Files value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationSettingEdges) FilesOrErr() ([]*File, error) {
+	if e.loadedTypes[1] {
+		return e.Files, nil
+	}
+	return nil, &NotLoadedError{edge: "files"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -230,6 +243,11 @@ func (os *OrganizationSetting) QueryOrganization() *OrganizationQuery {
 	return NewOrganizationSettingClient(os.config).QueryOrganization(os)
 }
 
+// QueryFiles queries the "files" edge of the OrganizationSetting entity.
+func (os *OrganizationSetting) QueryFiles() *FileQuery {
+	return NewOrganizationSettingClient(os.config).QueryFiles(os)
+}
+
 // Update returns a builder for updating this OrganizationSetting.
 // Note that you need to call OrganizationSetting.Unwrap() before calling this method if this OrganizationSetting
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -302,6 +320,30 @@ func (os *OrganizationSetting) String() string {
 	builder.WriteString(os.OrganizationID)
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedFiles returns the Files named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (os *OrganizationSetting) NamedFiles(name string) ([]*File, error) {
+	if os.Edges.namedFiles == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := os.Edges.namedFiles[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (os *OrganizationSetting) appendNamedFiles(name string, edges ...*File) {
+	if os.Edges.namedFiles == nil {
+		os.Edges.namedFiles = make(map[string][]*File)
+	}
+	if len(edges) == 0 {
+		os.Edges.namedFiles[name] = []*File{}
+	} else {
+		os.Edges.namedFiles[name] = append(os.Edges.namedFiles[name], edges...)
+	}
 }
 
 // OrganizationSettings is a parsable slice of OrganizationSetting.

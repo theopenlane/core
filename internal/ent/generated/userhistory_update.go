@@ -231,6 +231,26 @@ func (uhu *UserHistoryUpdate) ClearAvatarLocalFile() *UserHistoryUpdate {
 	return uhu
 }
 
+// SetAvatarLocalFileID sets the "avatar_local_file_id" field.
+func (uhu *UserHistoryUpdate) SetAvatarLocalFileID(s string) *UserHistoryUpdate {
+	uhu.mutation.SetAvatarLocalFileID(s)
+	return uhu
+}
+
+// SetNillableAvatarLocalFileID sets the "avatar_local_file_id" field if the given value is not nil.
+func (uhu *UserHistoryUpdate) SetNillableAvatarLocalFileID(s *string) *UserHistoryUpdate {
+	if s != nil {
+		uhu.SetAvatarLocalFileID(*s)
+	}
+	return uhu
+}
+
+// ClearAvatarLocalFileID clears the value of the "avatar_local_file_id" field.
+func (uhu *UserHistoryUpdate) ClearAvatarLocalFileID() *UserHistoryUpdate {
+	uhu.mutation.ClearAvatarLocalFileID()
+	return uhu
+}
+
 // SetAvatarUpdatedAt sets the "avatar_updated_at" field.
 func (uhu *UserHistoryUpdate) SetAvatarUpdatedAt(t time.Time) *UserHistoryUpdate {
 	uhu.mutation.SetAvatarUpdatedAt(t)
@@ -485,6 +505,12 @@ func (uhu *UserHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if uhu.mutation.AvatarLocalFileCleared() {
 		_spec.ClearField(userhistory.FieldAvatarLocalFile, field.TypeString)
 	}
+	if value, ok := uhu.mutation.AvatarLocalFileID(); ok {
+		_spec.SetField(userhistory.FieldAvatarLocalFileID, field.TypeString, value)
+	}
+	if uhu.mutation.AvatarLocalFileIDCleared() {
+		_spec.ClearField(userhistory.FieldAvatarLocalFileID, field.TypeString)
+	}
 	if value, ok := uhu.mutation.AvatarUpdatedAt(); ok {
 		_spec.SetField(userhistory.FieldAvatarUpdatedAt, field.TypeTime, value)
 	}
@@ -737,6 +763,26 @@ func (uhuo *UserHistoryUpdateOne) SetNillableAvatarLocalFile(s *string) *UserHis
 // ClearAvatarLocalFile clears the value of the "avatar_local_file" field.
 func (uhuo *UserHistoryUpdateOne) ClearAvatarLocalFile() *UserHistoryUpdateOne {
 	uhuo.mutation.ClearAvatarLocalFile()
+	return uhuo
+}
+
+// SetAvatarLocalFileID sets the "avatar_local_file_id" field.
+func (uhuo *UserHistoryUpdateOne) SetAvatarLocalFileID(s string) *UserHistoryUpdateOne {
+	uhuo.mutation.SetAvatarLocalFileID(s)
+	return uhuo
+}
+
+// SetNillableAvatarLocalFileID sets the "avatar_local_file_id" field if the given value is not nil.
+func (uhuo *UserHistoryUpdateOne) SetNillableAvatarLocalFileID(s *string) *UserHistoryUpdateOne {
+	if s != nil {
+		uhuo.SetAvatarLocalFileID(*s)
+	}
+	return uhuo
+}
+
+// ClearAvatarLocalFileID clears the value of the "avatar_local_file_id" field.
+func (uhuo *UserHistoryUpdateOne) ClearAvatarLocalFileID() *UserHistoryUpdateOne {
+	uhuo.mutation.ClearAvatarLocalFileID()
 	return uhuo
 }
 
@@ -1023,6 +1069,12 @@ func (uhuo *UserHistoryUpdateOne) sqlSave(ctx context.Context) (_node *UserHisto
 	}
 	if uhuo.mutation.AvatarLocalFileCleared() {
 		_spec.ClearField(userhistory.FieldAvatarLocalFile, field.TypeString)
+	}
+	if value, ok := uhuo.mutation.AvatarLocalFileID(); ok {
+		_spec.SetField(userhistory.FieldAvatarLocalFileID, field.TypeString, value)
+	}
+	if uhuo.mutation.AvatarLocalFileIDCleared() {
+		_spec.ClearField(userhistory.FieldAvatarLocalFileID, field.TypeString)
 	}
 	if value, ok := uhuo.mutation.AvatarUpdatedAt(); ok {
 		_spec.SetField(userhistory.FieldAvatarUpdatedAt, field.TypeTime, value)
