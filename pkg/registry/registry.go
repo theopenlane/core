@@ -5,6 +5,7 @@ import (
 	"sync"
 )
 
+// Registry is an interface that defines methods for managing JSON schema definitions
 type Registry interface {
 	// GetSchema returns a jsonschema definition by name
 	GetSchema(name string) (string, error)

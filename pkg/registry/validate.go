@@ -46,7 +46,7 @@ func getFieldJSONName(field *reflect.StructField) string {
 	return fieldName
 }
 
-func IsOmitemptyField(field *reflect.StructField) bool {
+func isOmitemptyField(field *reflect.StructField) bool {
 	tags := strings.Split(field.Tag.Get("json"), ",")
 
 	for _, tag := range tags {
@@ -68,7 +68,7 @@ func (vr *ValidateRecorder) recordFormat(val *reflect.Value, field *reflect.Stru
 		return
 	}
 
-	if IsOmitemptyField(field) && val.IsZero() {
+	if isOmitemptyField(field) && val.IsZero() {
 		return
 	}
 
@@ -100,7 +100,8 @@ func (vr *ValidateRecorder) recordFormat(val *reflect.Value, field *reflect.Stru
 	}
 }
 
-var ErrValidatePanic = errors.New("call Validate panic")
+// ErrValidatePanic is the error when the validate function panics
+var ErrValidatePanic = errors.New("call validate panic")
 
 func (vr *ValidateRecorder) recordGeneral(val *reflect.Value, field *reflect.StructField) {
 	t := val.Type()
@@ -110,8 +111,7 @@ func (vr *ValidateRecorder) recordGeneral(val *reflect.Value, field *reflect.Str
 		// NOTE: MethodByName returns the existence of the method
 		// only if the method is defined on Spec instead of *Spec.
 		// So we need to return here in case of calling Validate twice.
-		_, exists := elemType.MethodByName("Validate")
-		if exists {
+		if _, exists := elemType.MethodByName("Validate"); exists {
 			return
 		}
 	}
@@ -122,14 +122,13 @@ func (vr *ValidateRecorder) recordGeneral(val *reflect.Value, field *reflect.Str
 	}
 
 	v, ok := val.Interface().(Validator)
-
 	if !ok {
 		return
 	}
 
 	defer func() {
 		if r := recover(); r != nil {
-			err := fmt.Errorf("%w: call Validate for %T panic: %v", ErrValidatePanic, v, r)
+			err := fmt.Errorf("%w: for %T: %v", ErrValidatePanic, v, r)
 			log.Error().Msgf("%v\n%s", err, debug.Stack())
 			vr.recordSystem(err)
 		}
@@ -149,20 +148,26 @@ func (vr *ValidateRecorder) recordSystem(err error) {
 	}
 }
 
+// Error returns the string representation of the recorder
 func (vr *ValidateRecorder) Error() string {
 	return vr.String()
 }
 
+// String marshals the recorder to json and returns the string
 func (vr *ValidateRecorder) String() string {
+	if vr == nil {
+		return ""
+	}
+
 	buff, err := json.Marshal(vr)
 	if err != nil {
-		log.Printf("BUG: marshal %#v to json failed: %v", vr, err)
+		log.Error().Err(err).Interface("recorder", vr).Msg("marshal to json failed")
 	}
 
 	return string(buff)
 }
 
-// Valid represents if the result is valid.
+// Valid represents if the result is valid
 func (vr *ValidateRecorder) Valid() bool {
 	return len(vr.JSONSchemaErrs) == 0 && len(vr.FormatErrs) == 0 &&
 		len(vr.GeneralErrs) == 0 && len(vr.SystemErr) == 0

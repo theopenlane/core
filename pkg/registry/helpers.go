@@ -38,6 +38,10 @@ var (
 
 // GetSchema returns the json schema of t.
 func GetSchema(t reflect.Type) (*genjs.Schema, error) {
+	if t == nil {
+		return nil, fmt.Errorf("%w: nil type", ErrNilValue)
+	}
+
 	sm, err := getSchemaMeta(t)
 	if err != nil {
 		return nil, err
@@ -47,6 +51,11 @@ func GetSchema(t reflect.Type) (*genjs.Schema, error) {
 }
 
 func getSchemaMeta(t reflect.Type) (*schemaMeta, error) {
+	// return early if the we get a nil type
+	if t == nil {
+		return nil, fmt.Errorf("%w: nil type", ErrNilValue)
+	}
+
 	schemaMetasMutex.Lock()
 	defer schemaMetasMutex.Unlock()
 
@@ -75,7 +84,7 @@ func getSchemaMeta(t reflect.Type) (*schemaMeta, error) {
 		return nil, fmt.Errorf("%w: marshal %#v to json failed", err, sm.loadSchema)
 	}
 
-	sm.loadSchema, err = loadjs.NewCompiler().Compile(string(sm.jsonFormat))
+	sm.loadSchema, err = loadMemorySchema(sm.jsonFormat)
 	if err != nil {
 		return nil, fmt.Errorf("%w: new schema from %s failed", err, sm.jsonFormat)
 	}
@@ -209,7 +218,7 @@ type SchemaTransformer interface {
 	Transform(s *genjs.Schema) *genjs.Schema
 }
 
-// ransformSchema function takes a JSON schema represented by a `genjs.Schema` as input, along
+// TransformSchema function takes a JSON schema represented by a `genjs.Schema` as input, along
 // with one or more `SchemaTransformer` implementations. It then iterates over each transformer
 // provided and applies the `Transform` method of each transformer to the input schema sequentially.
 func TransformSchema(s *genjs.Schema, transformers ...SchemaTransformer) *genjs.Schema {

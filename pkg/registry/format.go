@@ -58,17 +58,27 @@ func standardFormat(v interface{}) error {
 var ErrInvalidName = fmt.Errorf("invalid name format")
 
 func urlName(v interface{}) error {
-	if urlCharsRegexp.MatchString(v.(string)) {
+	url, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("%w: %v", ErrInvalidName, v)
+	}
+
+	if urlCharsRegexp.MatchString(url) {
 		return nil
 	}
 
-	return fmt.Errorf("%w: %s", ErrInvalidName, v)
+	return fmt.Errorf("%w: %s", ErrInvalidName, url)
 }
 
 var ErrInvalidHTTPMethod = fmt.Errorf("invalid http method")
 
 func httpMethod(v interface{}) error {
-	switch v.(string) {
+	method, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("%w", ErrInvalidHTTPMethod)
+	}
+
+	switch method {
 	case http.MethodGet,
 		http.MethodHead,
 		http.MethodPost,
@@ -85,7 +95,12 @@ func httpMethod(v interface{}) error {
 }
 
 func httpMethodArray(v interface{}) error {
-	for _, method := range v.([]string) {
+	methods, ok := v.([]string)
+	if !ok {
+		return fmt.Errorf("%w", ErrInvalidHTTPMethod)
+	}
+
+	for _, method := range methods {
 		err := httpMethod(method)
 		if err != nil {
 			return err
@@ -98,7 +113,11 @@ func httpMethodArray(v interface{}) error {
 var ErrInvalidHTTPCode = fmt.Errorf("invalid http code")
 
 func httpCode(v interface{}) error {
-	code := v.(int)
+	code, ok := v.(int)
+	if !ok {
+		return fmt.Errorf("%w", ErrInvalidHTTPCode)
+	}
+
 	// Reference: https://tools.ietf.org/html/rfc7231#section-6
 	if code < 100 || code >= 600 {
 		return fmt.Errorf("%w", ErrInvalidHTTPCode)
@@ -108,9 +127,13 @@ func httpCode(v interface{}) error {
 }
 
 func httpCodeArray(v interface{}) error {
-	for _, method := range v.([]int) {
-		err := httpCode(method)
-		if err != nil {
+	codeArray, ok := v.([]int)
+	if !ok {
+		return fmt.Errorf("%w", ErrInvalidHTTPCode)
+	}
+
+	for _, method := range codeArray {
+		if err := httpCode(method); err != nil {
 			return err
 		}
 	}
@@ -118,54 +141,67 @@ func httpCodeArray(v interface{}) error {
 	return nil
 }
 
+// ErrInvalidRFC3339Time is returned when the time is not in RFC3339 format
 var ErrInvalidRFC3339Time = fmt.Errorf("invalid RFC3339 time")
 
 func timerfc3339(v interface{}) error {
-	s := v.(string)
+	s, ok := v.(string)
+	if !ok {
+		return ErrInvalidRFC3339Time
+	}
 
-	_, err := time.Parse(time.RFC3339, s)
-	if err != nil {
+	if _, err := time.Parse(time.RFC3339, s); err != nil {
 		return fmt.Errorf("%w: %v", ErrInvalidRFC3339Time, err)
 	}
 
 	return nil
 }
 
+// ErrInvalidDuration is returned when the duration is not in valid format
 var ErrInvalidDuration = fmt.Errorf("invalid duration")
 
 func duration(v interface{}) error {
-	s := v.(string)
+	s, ok := v.(string)
+	if !ok {
+		return ErrInvalidDuration
+	}
 
-	_, err := time.ParseDuration(s)
-	if err != nil {
+	if _, err := time.ParseDuration(s); err != nil {
 		return fmt.Errorf("%w: %v", ErrInvalidDuration, err)
 	}
 
 	return nil
 }
 
+// ErrInvalidIPCIDR is returned when the ip or cidr is not in valid format
 var ErrInvalidIPCIDR = fmt.Errorf("invalid ip or cidr")
 
 func ipcidr(v interface{}) error {
-	s := v.(string)
+	s, ok := v.(string)
+	if !ok {
+		return ErrInvalidIPCIDR
+	}
 
 	ip := net.ParseIP(s)
 	if ip != nil {
 		return nil
 	}
 
-	_, _, err := net.ParseCIDR(s)
-	if err != nil {
-		return fmt.Errorf("%w", ErrInvalidIPCIDR)
+	if _, _, err := net.ParseCIDR(s); err != nil {
+		return fmt.Errorf("%w: %w", ErrInvalidIPCIDR, err)
 	}
 
 	return nil
 }
 
 func ipcidrArray(v interface{}) error {
-	for _, ic := range v.([]string) {
-		err := ipcidr(ic)
-		if err != nil {
+	cidrs, ok := v.([]string)
+	if !ok {
+		return ErrInvalidIPCIDR
+	}
+
+	for _, ic := range cidrs {
+		if err := ipcidr(ic); err != nil {
 			return err
 		}
 	}
@@ -176,10 +212,12 @@ func ipcidrArray(v interface{}) error {
 var ErrInvalidHostport = fmt.Errorf("invalid hostport")
 
 func hostport(v interface{}) error {
-	s := v.(string)
+	s, ok := v.(string)
+	if !ok {
+		return ErrInvalidHostport
+	}
 
-	_, _, err := net.SplitHostPort(s)
-	if err != nil {
+	if _, _, err := net.SplitHostPort(s); err != nil {
 		return fmt.Errorf("%w: %v", ErrInvalidHostport, err)
 	}
 
@@ -189,10 +227,12 @@ func hostport(v interface{}) error {
 var ErrInvalidRegexp = fmt.Errorf("invalid regular expression")
 
 func _regexp(v interface{}) error {
-	s := v.(string)
+	s, ok := v.(string)
+	if !ok {
+		return ErrInvalidRegexp
+	}
 
-	_, err := regexp.Compile(s)
-	if err != nil {
+	if _, err := regexp.Compile(s); err != nil {
 		return fmt.Errorf("%w: %v", ErrInvalidRegexp, err)
 	}
 
@@ -202,10 +242,12 @@ func _regexp(v interface{}) error {
 var ErrInvalidBase64 = fmt.Errorf("invalid base64")
 
 func _base64(v interface{}) error {
-	s := v.(string)
+	s, ok := v.(string)
+	if !ok {
+		return ErrInvalidBase64
+	}
 
-	_, err := base64.StdEncoding.DecodeString(s)
-	if err != nil {
+	if _, err := base64.StdEncoding.DecodeString(s); err != nil {
 		return fmt.Errorf("%w: %v", ErrInvalidBase64, err)
 	}
 
@@ -215,11 +257,22 @@ func _base64(v interface{}) error {
 var ErrInvalidURL = fmt.Errorf("invalid url")
 
 func _url(v interface{}) error {
-	s := v.(string)
+	s, ok := v.(string)
+	if !ok {
+		return ErrInvalidURL
+	}
 
-	_, err := url.Parse(s)
+	url, err := url.Parse(s)
 	if err != nil {
 		return fmt.Errorf("%w: %v", ErrInvalidURL, err)
+	}
+
+	if url.Host == "" {
+		return fmt.Errorf("%w: host is empty", ErrInvalidURL)
+	}
+
+	if url.Scheme == "" {
+		return fmt.Errorf("%w: scheme is empty", ErrInvalidURL)
 	}
 
 	return nil
