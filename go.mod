@@ -13,10 +13,10 @@ require (
 	github.com/Yamashou/gqlgenc v0.25.3
 	github.com/alicebob/miniredis/v2 v2.33.0
 	github.com/alitto/pond v1.9.2
-	github.com/barkimedes/go-deepcopy v0.0.0-20220514131651-17c30cfc62df
 	github.com/aws/aws-sdk-go-v2/config v1.27.43
 	github.com/aws/aws-sdk-go-v2/credentials v1.17.41
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.65.3
+	github.com/barkimedes/go-deepcopy v0.0.0-20220514131651-17c30cfc62df
 	github.com/brianvoe/gofakeit/v7 v7.0.4
 	github.com/danielgtaylor/huma/v2 v2.23.0
 	github.com/dustinkirkland/golang-petname v0.0.0-20240428194347-eebcea082ee0
