@@ -4,6 +4,7 @@ go 1.23.2
 
 require (
 	ariga.io/entcache v0.1.0
+	dario.cat/mergo v1.0.1
 	entgo.io/contrib v0.6.0
 	entgo.io/ent v0.14.1
 	github.com/99designs/gqlgen v0.17.54
@@ -15,7 +16,9 @@ require (
 	github.com/aws/aws-sdk-go-v2/config v1.27.43
 	github.com/aws/aws-sdk-go-v2/credentials v1.17.41
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.65.3
+	github.com/barkimedes/go-deepcopy v0.0.0-20220514131651-17c30cfc62df
 	github.com/brianvoe/gofakeit/v7 v7.0.4
+	github.com/danielgtaylor/huma/v2 v2.23.0
 	github.com/dustinkirkland/golang-petname v0.0.0-20240428194347-eebcea082ee0
 	github.com/gertd/go-pluralize v0.2.1
 	github.com/getkin/kin-openapi v0.128.0
@@ -50,6 +53,7 @@ require (
 	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.13.0
 	github.com/rs/zerolog v1.33.0
 	github.com/samber/lo v1.47.0
+	github.com/santhosh-tekuri/jsonschema/v6 v6.0.1
 	github.com/sebdah/goldie/v2 v2.5.5
 	github.com/spf13/cobra v1.8.1
 	github.com/stoewer/go-strcase v1.3.0
@@ -66,6 +70,7 @@ require (
 	github.com/theopenlane/riverboat v0.0.7
 	github.com/theopenlane/utils v0.3.0
 	github.com/vektah/gqlparser/v2 v2.5.17
+	github.com/wk8/go-ordered-map/v2 v2.1.8
 	github.com/wundergraph/graphql-go-tools v1.67.4
 	gocloud.dev v0.40.0
 	golang.org/x/crypto v0.28.0
@@ -251,13 +256,11 @@ require (
 	github.com/tidwall/pretty v1.2.1 // indirect
 	github.com/tidwall/sjson v1.2.5 // indirect
 	github.com/tursodatabase/libsql-client-go v0.0.0-20240902231107-85af5b9d094d // indirect
-	github.com/ugorji/go/codec v1.2.12 // indirect
 	github.com/urfave/cli/v2 v2.27.4 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
 	github.com/vmihailenco/msgpack/v5 v5.4.1 // indirect
 	github.com/vmihailenco/tagparser/v2 v2.0.0 // indirect
-	github.com/wk8/go-ordered-map/v2 v2.1.8 // indirect
 	github.com/x448/float16 v0.8.4 // indirect
 	github.com/xrash/smetrics v0.0.0-20240521201337-686a1a2994c1 // indirect
 	github.com/yuin/gopher-lua v1.1.1 // indirect
