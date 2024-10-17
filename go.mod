@@ -48,7 +48,7 @@ require (
 	github.com/pressly/goose/v3 v3.22.1
 	github.com/prometheus/client_golang v1.20.5
 	github.com/ravilushqa/otelgqlgen v0.17.0
-	github.com/redis/go-redis/v9 v9.6.2
+	github.com/redis/go-redis/v9 v9.7.0
 	github.com/riverqueue/river v0.13.0
 	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.13.0
 	github.com/rs/zerolog v1.33.0
