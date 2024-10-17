@@ -27,7 +27,6 @@ func (Narrative) Fields() []ent.Field {
 		field.Text("satisfies").
 			Comment("which controls are satisfied by the narrative"),
 	}
-
 }
 
 // Edges of the Narrative
