@@ -35,15 +35,12 @@ func (Control) Fields() []ent.Field {
 			Comment("control number"),
 		field.Text("control_family").
 			Comment("control family"),
-		field.String("control_class").	
+		field.String("control_class").
 			Comment("control class"),
 		field.String("source").
 			Comment("source of the control"),
 		field.Text("mapped_frameworks").
 			Comment("mapped frameworks"),
-		
-
-		
 	}
 }
 
@@ -55,8 +52,6 @@ func (Control) Edges() []ent.Edge {
 		edge.To("controlobjective", ControlObjective.Type),
 		edge.From("standard", Standard.Type).
 			Ref("controls"),
-
-
 	}
 }
 
