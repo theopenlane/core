@@ -26,7 +26,7 @@ import (
 
 const (
 	// defaultDBTestImage is the default docker image to use for testing
-	defaultDBTestImage = "docker://postgres:16-alpine"
+	defaultDBTestImage = "docker://postgres:17-alpine"
 )
 
 type client struct {
