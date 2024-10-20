@@ -22,8 +22,9 @@ import (
 // UserHistoryUpdate is the builder for updating UserHistory entities.
 type UserHistoryUpdate struct {
 	config
-	hooks    []Hook
-	mutation *UserHistoryMutation
+	hooks     []Hook
+	mutation  *UserHistoryMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the UserHistoryUpdate builder.
@@ -230,6 +231,26 @@ func (uhu *UserHistoryUpdate) ClearAvatarLocalFile() *UserHistoryUpdate {
 	return uhu
 }
 
+// SetAvatarLocalFileID sets the "avatar_local_file_id" field.
+func (uhu *UserHistoryUpdate) SetAvatarLocalFileID(s string) *UserHistoryUpdate {
+	uhu.mutation.SetAvatarLocalFileID(s)
+	return uhu
+}
+
+// SetNillableAvatarLocalFileID sets the "avatar_local_file_id" field if the given value is not nil.
+func (uhu *UserHistoryUpdate) SetNillableAvatarLocalFileID(s *string) *UserHistoryUpdate {
+	if s != nil {
+		uhu.SetAvatarLocalFileID(*s)
+	}
+	return uhu
+}
+
+// ClearAvatarLocalFileID clears the value of the "avatar_local_file_id" field.
+func (uhu *UserHistoryUpdate) ClearAvatarLocalFileID() *UserHistoryUpdate {
+	uhu.mutation.ClearAvatarLocalFileID()
+	return uhu
+}
+
 // SetAvatarUpdatedAt sets the "avatar_updated_at" field.
 func (uhu *UserHistoryUpdate) SetAvatarUpdatedAt(t time.Time) *UserHistoryUpdate {
 	uhu.mutation.SetAvatarUpdatedAt(t)
@@ -392,6 +413,12 @@ func (uhu *UserHistoryUpdate) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (uhu *UserHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *UserHistoryUpdate {
+	uhu.modifiers = append(uhu.modifiers, modifiers...)
+	return uhu
+}
+
 func (uhu *UserHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if err := uhu.check(); err != nil {
 		return n, err
@@ -478,6 +505,12 @@ func (uhu *UserHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if uhu.mutation.AvatarLocalFileCleared() {
 		_spec.ClearField(userhistory.FieldAvatarLocalFile, field.TypeString)
 	}
+	if value, ok := uhu.mutation.AvatarLocalFileID(); ok {
+		_spec.SetField(userhistory.FieldAvatarLocalFileID, field.TypeString, value)
+	}
+	if uhu.mutation.AvatarLocalFileIDCleared() {
+		_spec.ClearField(userhistory.FieldAvatarLocalFileID, field.TypeString)
+	}
 	if value, ok := uhu.mutation.AvatarUpdatedAt(); ok {
 		_spec.SetField(userhistory.FieldAvatarUpdatedAt, field.TypeTime, value)
 	}
@@ -513,6 +546,7 @@ func (uhu *UserHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	_spec.Node.Schema = uhu.schemaConfig.UserHistory
 	ctx = internal.NewSchemaConfigContext(ctx, uhu.schemaConfig)
+	_spec.AddModifiers(uhu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, uhu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{userhistory.Label}
@@ -528,9 +562,10 @@ func (uhu *UserHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 // UserHistoryUpdateOne is the builder for updating a single UserHistory entity.
 type UserHistoryUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *UserHistoryMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *UserHistoryMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -731,6 +766,26 @@ func (uhuo *UserHistoryUpdateOne) ClearAvatarLocalFile() *UserHistoryUpdateOne {
 	return uhuo
 }
 
+// SetAvatarLocalFileID sets the "avatar_local_file_id" field.
+func (uhuo *UserHistoryUpdateOne) SetAvatarLocalFileID(s string) *UserHistoryUpdateOne {
+	uhuo.mutation.SetAvatarLocalFileID(s)
+	return uhuo
+}
+
+// SetNillableAvatarLocalFileID sets the "avatar_local_file_id" field if the given value is not nil.
+func (uhuo *UserHistoryUpdateOne) SetNillableAvatarLocalFileID(s *string) *UserHistoryUpdateOne {
+	if s != nil {
+		uhuo.SetAvatarLocalFileID(*s)
+	}
+	return uhuo
+}
+
+// ClearAvatarLocalFileID clears the value of the "avatar_local_file_id" field.
+func (uhuo *UserHistoryUpdateOne) ClearAvatarLocalFileID() *UserHistoryUpdateOne {
+	uhuo.mutation.ClearAvatarLocalFileID()
+	return uhuo
+}
+
 // SetAvatarUpdatedAt sets the "avatar_updated_at" field.
 func (uhuo *UserHistoryUpdateOne) SetAvatarUpdatedAt(t time.Time) *UserHistoryUpdateOne {
 	uhuo.mutation.SetAvatarUpdatedAt(t)
@@ -906,6 +961,12 @@ func (uhuo *UserHistoryUpdateOne) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (uhuo *UserHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *UserHistoryUpdateOne {
+	uhuo.modifiers = append(uhuo.modifiers, modifiers...)
+	return uhuo
+}
+
 func (uhuo *UserHistoryUpdateOne) sqlSave(ctx context.Context) (_node *UserHistory, err error) {
 	if err := uhuo.check(); err != nil {
 		return _node, err
@@ -1009,6 +1070,12 @@ func (uhuo *UserHistoryUpdateOne) sqlSave(ctx context.Context) (_node *UserHisto
 	if uhuo.mutation.AvatarLocalFileCleared() {
 		_spec.ClearField(userhistory.FieldAvatarLocalFile, field.TypeString)
 	}
+	if value, ok := uhuo.mutation.AvatarLocalFileID(); ok {
+		_spec.SetField(userhistory.FieldAvatarLocalFileID, field.TypeString, value)
+	}
+	if uhuo.mutation.AvatarLocalFileIDCleared() {
+		_spec.ClearField(userhistory.FieldAvatarLocalFileID, field.TypeString)
+	}
 	if value, ok := uhuo.mutation.AvatarUpdatedAt(); ok {
 		_spec.SetField(userhistory.FieldAvatarUpdatedAt, field.TypeTime, value)
 	}
@@ -1044,6 +1111,7 @@ func (uhuo *UserHistoryUpdateOne) sqlSave(ctx context.Context) (_node *UserHisto
 	}
 	_spec.Node.Schema = uhuo.schemaConfig.UserHistory
 	ctx = internal.NewSchemaConfigContext(ctx, uhuo.schemaConfig)
+	_spec.AddModifiers(uhuo.modifiers...)
 	_node = &UserHistory{config: uhuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

@@ -205,6 +205,20 @@ func (uc *UserCreate) SetNillableAvatarLocalFile(s *string) *UserCreate {
 	return uc
 }
 
+// SetAvatarLocalFileID sets the "avatar_local_file_id" field.
+func (uc *UserCreate) SetAvatarLocalFileID(s string) *UserCreate {
+	uc.mutation.SetAvatarLocalFileID(s)
+	return uc
+}
+
+// SetNillableAvatarLocalFileID sets the "avatar_local_file_id" field if the given value is not nil.
+func (uc *UserCreate) SetNillableAvatarLocalFileID(s *string) *UserCreate {
+	if s != nil {
+		uc.SetAvatarLocalFileID(*s)
+	}
+	return uc
+}
+
 // SetAvatarUpdatedAt sets the "avatar_updated_at" field.
 func (uc *UserCreate) SetAvatarUpdatedAt(t time.Time) *UserCreate {
 	uc.mutation.SetAvatarUpdatedAt(t)
@@ -432,6 +446,25 @@ func (uc *UserCreate) AddFiles(f ...*File) *UserCreate {
 		ids[i] = f[i].ID
 	}
 	return uc.AddFileIDs(ids...)
+}
+
+// SetFileID sets the "file" edge to the File entity by ID.
+func (uc *UserCreate) SetFileID(id string) *UserCreate {
+	uc.mutation.SetFileID(id)
+	return uc
+}
+
+// SetNillableFileID sets the "file" edge to the File entity by ID if the given value is not nil.
+func (uc *UserCreate) SetNillableFileID(id *string) *UserCreate {
+	if id != nil {
+		uc = uc.SetFileID(*id)
+	}
+	return uc
+}
+
+// SetFile sets the "file" edge to the File entity.
+func (uc *UserCreate) SetFile(f *File) *UserCreate {
+	return uc.SetFileID(f.ID)
 }
 
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
@@ -884,19 +917,37 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 	}
 	if nodes := uc.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   user.FilesTable,
-			Columns: []string{user.FilesColumn},
+			Columns: user.FilesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = uc.schemaConfig.File
+		edge.Schema = uc.schemaConfig.UserFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := uc.mutation.FileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   user.FileTable,
+			Columns: []string{user.FileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = uc.schemaConfig.User
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.AvatarLocalFileID = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := uc.mutation.EventsIDs(); len(nodes) > 0 {

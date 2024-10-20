@@ -9,14 +9,24 @@ server:
   # tls settings
   tls:
     enabled: false
+
+# dbx settings
+dbx:
+  enabled: false
+
 # db settings
 db:
   debug: true
-  driverName: postgres
+  driverName: pgx
   primaryDbSource: "postgres://postgres:password@0.0.0.0:5432/core?sslmode=disable"
   multiWrite: false
   migrationProvider: "goose"
+  runMigrations: true
   enableHistory: true
+
+jobQueue:
+    connectionURI: "postgres://postgres:password@0.0.0.0:5432/jobs?sslmode=disable"
+
 # auth settings
 auth:
   enabled: true
@@ -48,6 +58,7 @@ auth:
       relyingPartyId: "localhost"
       requestOrigins:
         - "http://localhost:3001"
+
 # authz settings
 authz:
   enabled: true
@@ -61,22 +72,22 @@ authz:
 sessions:
   encryptionKey: encryptionsecret
   signingKey: my-signing-secret
+
 # email settings
 email:
-  testing: true
-  archive: "fixtures/email"
-  sendGridApiKey: "SG.FakeAPIKey"
-  consoleUrl:
-    consoleBase: "http://localhost:17608/"
-# analytics settings
-posthog:
-  enabled: false
-  apiKey: "phc_FakeKey"
-publisherConfig:
-    appName: openlane
-    addresses:
-        - localhost:10000
-    enabled: true
+    companyAddress: 5150 Broadway St &middot; San Antonio, TX 78209
+    companyName: Openlane
+    corporation: theopenlane, Inc.
+    fromEmail: no-reply@mail.theopenlane.io
+    supportEmail: support@theopenlane.io
+    urls:
+      verifySubscriber: https://www.theopenlane.io/subscribe
+      verify: https://console.theopenlane.io/verify
+      reset: https://console.theopenlane.io/password-reset
+      invite: https://console.theopenlane.io/invite 
+      root: https://www.theopenlane.io
+      docs: https://docs.theopenlane.io
+      product: https://console.theopenlane.io
 
 entConfig:
   entityTypes:
@@ -85,3 +96,9 @@ entConfig:
   flags:
     useListObjectServices: false
     useListUserService: true
+
+objectStorage:
+    accessKey: "REDACTED"
+    secretKey: "REDACTED"
+    region: "us-east-2"
+    defaultBucket: "openlane"

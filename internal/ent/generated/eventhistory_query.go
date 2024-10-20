@@ -24,8 +24,8 @@ type EventHistoryQuery struct {
 	order      []eventhistory.OrderOption
 	inters     []Interceptor
 	predicates []predicate.EventHistory
-	modifiers  []func(*sql.Selector)
 	loadTotal  []func(context.Context, []*EventHistory) error
+	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -255,8 +255,9 @@ func (ehq *EventHistoryQuery) Clone() *EventHistoryQuery {
 		inters:     append([]Interceptor{}, ehq.inters...),
 		predicates: append([]predicate.EventHistory{}, ehq.predicates...),
 		// clone intermediate query.
-		sql:  ehq.sql.Clone(),
-		path: ehq.path,
+		sql:       ehq.sql.Clone(),
+		path:      ehq.path,
+		modifiers: append([]func(*sql.Selector){}, ehq.modifiers...),
 	}
 }
 
@@ -441,6 +442,9 @@ func (ehq *EventHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	t1.Schema(ehq.schemaConfig.EventHistory)
 	ctx = internal.NewSchemaConfigContext(ctx, ehq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range ehq.modifiers {
+		m(selector)
+	}
 	for _, p := range ehq.predicates {
 		p(selector)
 	}
@@ -456,6 +460,12 @@ func (ehq *EventHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (ehq *EventHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *EventHistorySelect {
+	ehq.modifiers = append(ehq.modifiers, modifiers...)
+	return ehq.Select()
 }
 
 // EventHistoryGroupBy is the group-by builder for EventHistory entities.
@@ -546,4 +556,10 @@ func (ehs *EventHistorySelect) sqlScan(ctx context.Context, root *EventHistoryQu
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (ehs *EventHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *EventHistorySelect {
+	ehs.modifiers = append(ehs.modifiers, modifiers...)
+	return ehs
 }

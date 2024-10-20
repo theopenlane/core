@@ -11,14 +11,14 @@ import (
 
 func HookEntitlement() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
-		return hook.EntitlementFunc(func(ctx context.Context, mutation *generated.EntitlementMutation) (generated.Value, error) {
+		return hook.EntitlementFunc(func(ctx context.Context, m *generated.EntitlementMutation) (generated.Value, error) {
 			// set the expires flag if the expires_at field is set
-			expiresAt, ok := mutation.ExpiresAt()
+			expiresAt, ok := m.ExpiresAt()
 			if ok && !expiresAt.IsZero() {
-				mutation.SetExpires(true)
+				m.SetExpires(true)
 			}
 
-			retVal, err := next.Mutate(ctx, mutation)
+			retVal, err := next.Mutate(ctx, m)
 			if err != nil {
 				return nil, err
 			}

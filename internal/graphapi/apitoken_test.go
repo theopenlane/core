@@ -398,7 +398,7 @@ func (suite *GraphTestSuite) TestLastUsedAPIToken() {
 		BearerToken: token.Token,
 	}
 
-	graphClient, err := testutils.TestClientWithAuth(t, suite.client.db, openlaneclient.WithCredentials(authHeader))
+	graphClient, err := testutils.TestClientWithAuth(t, suite.client.db, suite.client.objectStore, openlaneclient.WithCredentials(authHeader))
 	require.NoError(t, err)
 
 	// get the token to make sure the last used is updated using the token

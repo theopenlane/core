@@ -1,9 +1,10 @@
-mutation CreateUser($input: CreateUserInput!) {
-  createUser(input: $input) {
+mutation CreateUser($input: CreateUserInput!, $avatarFile: Upload) {
+  createUser(input: $input, avatarFile: $avatarFile) {
     user {
       authProvider
       avatarLocalFile
       avatarRemoteURL
+      avatarLocalFileID
       displayName
       email
       firstName
@@ -53,6 +54,7 @@ query GetAllUsers {
         authProvider
         avatarLocalFile
         avatarRemoteURL
+        avatarLocalFileID
         displayName
         email
         firstName
@@ -92,6 +94,7 @@ query GetUserByID($userId: ID!) {
     authProvider
     avatarLocalFile
     avatarRemoteURL
+    avatarLocalFileID
     displayName
     email
     firstName
@@ -138,6 +141,7 @@ query GetUserByIDWithOrgs($userId: ID!) {
     authProvider
     avatarLocalFile
     avatarRemoteURL
+    avatarLocalFileID
     displayName
     email
     firstName
@@ -178,12 +182,13 @@ query GetUserByIDWithOrgs($userId: ID!) {
   }
 }
 
-mutation UpdateUser($updateUserId: ID!, $input: UpdateUserInput!) {
-  updateUser(id: $updateUserId, input: $input) {
+mutation UpdateUser($updateUserId: ID!, $input: UpdateUserInput!, $avatarFile: Upload) {
+  updateUser(id: $updateUserId, input: $input, avatarFile: $avatarFile) {
     user {
       authProvider
       avatarLocalFile
       avatarRemoteURL
+      avatarLocalFileID
       displayName
       email
       firstName

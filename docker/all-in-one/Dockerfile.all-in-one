@@ -1,4 +1,4 @@
-FROM golang:1.23.1 as builder
+FROM golang:1.23.2 as builder
 
 WORKDIR /go/src/app
 COPY . .
@@ -15,13 +15,16 @@ WORKDIR /home/nonroot
 COPY --from=builder /go/bin/core /bin/core
 
 # Copy the dbx binary
-COPY --from=ghcr.io/theopenlane/dbx:5-35840501  /bin/dbx /bin/dbx
+COPY --from=ghcr.io/theopenlane/dbx:145-c77867be /bin/dbx /bin/dbx
+
+# Copy the riverboat binary
+COPY --from=ghcr.io/theopenlane/riverboat:amd64-86-3eaa899d /bin/riverboat /bin/riverboat
 
 # Copy redis binary
-COPY --from=redis:7.4.0 /usr/local/bin/redis-server /bin/redis-server
+COPY --from=redis:7.4.1 /usr/local/bin/redis-server /bin/redis-server
 
 # Copy FGA binary
-COPY --from=openfga/openfga:v1.6.1 /openfga /bin/openfga
+COPY --from=openfga/openfga:v1.6.2 /openfga /bin/openfga
 
 # Copy default model into image
 COPY fga/model/model.fga fga/model/model.fga

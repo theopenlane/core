@@ -1,23 +1,26 @@
+
 mutation CreateBulkCSVFile($input: Upload!) {
   createBulkCSVFile(input: $input) {
     files {
-      annotation
-      category
-      contentType
-      fileExtension
-      fileName
-      fileSize
+      categoryType
+      createdAt
+      createdBy
+      detectedContentType
+      detectedMimeType
       id
+      md5Hash
+      persistedFileSize
+      providedFileExtension
+      providedFileName
+      providedFileSize
+      storagePath
+      storageScheme
+      storageVolume
       storeKey
-      user {
-        id
-      }
-      organization {
-        id
-      }
-      group {
-        id
-      }
+      tags
+      updatedAt
+      updatedBy
+      uri
     }
   }
 }
@@ -25,23 +28,25 @@ mutation CreateBulkCSVFile($input: Upload!) {
 mutation CreateBulkFile($input: [CreateFileInput!]) {
   createBulkFile(input: $input) {
     files {
-      annotation
-      category
-      contentType
-      fileExtension
-      fileName
-      fileSize
+      categoryType
+      createdAt
+      createdBy
+      detectedContentType
+      detectedMimeType
       id
+      md5Hash
+      persistedFileSize
+      providedFileExtension
+      providedFileName
+      providedFileSize
+      storagePath
+      storageScheme
+      storageVolume
       storeKey
-      user {
-        id
-      }
-      organization {
-        id
-      }
-      group {
-        id
-      }
+      tags
+      updatedAt
+      updatedBy
+      uri
     }
   }
 }
@@ -49,23 +54,25 @@ mutation CreateBulkFile($input: [CreateFileInput!]) {
 mutation CreateFile($input: CreateFileInput!) {
   createFile(input: $input) {
     file {
-      annotation
-      category
-      contentType
-      fileExtension
-      fileName
-      fileSize
+      categoryType
+      createdAt
+      createdBy
+      detectedContentType
+      detectedMimeType
       id
+      md5Hash
+      persistedFileSize
+      providedFileExtension
+      providedFileName
+      providedFileSize
+      storagePath
+      storageScheme
+      storageVolume
       storeKey
-      user {
-        id
-      }
-      organization {
-        id
-      }
-      group {
-        id
-      }
+      tags
+      updatedAt
+      updatedBy
+      uri
     }
   }
 }
@@ -80,29 +87,50 @@ query GetAllFiles {
   files {
     edges {
       node {
-        annotation
-        category
-        contentType
+        categoryType
         createdAt
         createdBy
-        fileExtension
-        fileName
-        fileSize
+        detectedContentType
+        detectedMimeType
         id
+        md5Hash
+        persistedFileSize
+        providedFileExtension
+        providedFileName
+        providedFileSize
+        storagePath
+        storageScheme
+        storageVolume
         storeKey
+        tags
         updatedAt
         updatedBy
-        user {
-          id
-        }
-        organization {
-          id
-        }
-        group {
-          id
-        }
+        uri
       }
     }
+  }
+}
+query GetFileByID($fileId: ID!) {
+  file(id: $fileId) {
+    categoryType
+    createdAt
+    createdBy
+    detectedContentType
+    detectedMimeType
+    id
+    md5Hash
+    persistedFileSize
+    providedFileExtension
+    providedFileName
+    providedFileSize
+    storagePath
+    storageScheme
+    storageVolume
+    storeKey
+    tags
+    updatedAt
+    updatedBy
+    uri
   }
 }
 
@@ -110,52 +138,51 @@ query GetFiles($where: FileWhereInput) {
   files(where: $where) {
     edges {
       node {
-        annotation
-        category
-        contentType
+        categoryType
         createdAt
         createdBy
-        fileExtension
-        fileName
-        fileSize
+        detectedContentType
+        detectedMimeType
         id
+        md5Hash
+        persistedFileSize
+        providedFileExtension
+        providedFileName
+        providedFileSize
+        storagePath
+        storageScheme
+        storageVolume
         storeKey
+        tags
         updatedAt
         updatedBy
-        user {
-          id
-        }
-        organization {
-          id
-        }
-        group {
-          id
-        }
+        uri
       }
     }
   }
 }
-
 mutation UpdateFile($updateFileId: ID!, $input: UpdateFileInput!) {
   updateFile(id: $updateFileId, input: $input) {
     file {
+      categoryType
+      createdAt
+      createdBy
+      detectedContentType
+      detectedMimeType
       id
-      fileName
-      fileExtension
-      fileSize
-      contentType
+      md5Hash
+      persistedFileSize
+      providedFileExtension
+      providedFileName
+      providedFileSize
+      storagePath
+      storageScheme
+      storageVolume
       storeKey
-      category
-      annotation
-      user {
-        id
-      }
-      organization {
-        id
-      }
-      group {
-        id
-      }
+      tags
+      updatedAt
+      updatedBy
+      uri
     }
   }
 }

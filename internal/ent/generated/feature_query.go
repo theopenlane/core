@@ -34,8 +34,8 @@ type FeatureQuery struct {
 	withPlans         *EntitlementPlanQuery
 	withEvents        *EventQuery
 	withFeatures      *EntitlementPlanFeatureQuery
-	modifiers         []func(*sql.Selector)
 	loadTotal         []func(context.Context, []*Feature) error
+	modifiers         []func(*sql.Selector)
 	withNamedPlans    map[string]*EntitlementPlanQuery
 	withNamedEvents   map[string]*EventQuery
 	withNamedFeatures map[string]*EntitlementPlanFeatureQuery
@@ -372,8 +372,9 @@ func (fq *FeatureQuery) Clone() *FeatureQuery {
 		withEvents:   fq.withEvents.Clone(),
 		withFeatures: fq.withFeatures.Clone(),
 		// clone intermediate query.
-		sql:  fq.sql.Clone(),
-		path: fq.path,
+		sql:       fq.sql.Clone(),
+		path:      fq.path,
+		modifiers: append([]func(*sql.Selector){}, fq.modifiers...),
 	}
 }
 
@@ -850,6 +851,9 @@ func (fq *FeatureQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	t1.Schema(fq.schemaConfig.Feature)
 	ctx = internal.NewSchemaConfigContext(ctx, fq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range fq.modifiers {
+		m(selector)
+	}
 	for _, p := range fq.predicates {
 		p(selector)
 	}
@@ -865,6 +869,12 @@ func (fq *FeatureQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (fq *FeatureQuery) Modify(modifiers ...func(s *sql.Selector)) *FeatureSelect {
+	fq.modifiers = append(fq.modifiers, modifiers...)
+	return fq.Select()
 }
 
 // WithNamedPlans tells the query-builder to eager-load the nodes that are connected to the "plans"
@@ -997,4 +1007,10 @@ func (fs *FeatureSelect) sqlScan(ctx context.Context, root *FeatureQuery, v any)
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (fs *FeatureSelect) Modify(modifiers ...func(s *sql.Selector)) *FeatureSelect {
+	fs.modifiers = append(fs.modifiers, modifiers...)
+	return fs
 }

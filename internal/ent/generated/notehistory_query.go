@@ -25,8 +25,8 @@ type NoteHistoryQuery struct {
 	order      []notehistory.OrderOption
 	inters     []Interceptor
 	predicates []predicate.NoteHistory
-	modifiers  []func(*sql.Selector)
 	loadTotal  []func(context.Context, []*NoteHistory) error
+	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -256,8 +256,9 @@ func (nhq *NoteHistoryQuery) Clone() *NoteHistoryQuery {
 		inters:     append([]Interceptor{}, nhq.inters...),
 		predicates: append([]predicate.NoteHistory{}, nhq.predicates...),
 		// clone intermediate query.
-		sql:  nhq.sql.Clone(),
-		path: nhq.path,
+		sql:       nhq.sql.Clone(),
+		path:      nhq.path,
+		modifiers: append([]func(*sql.Selector){}, nhq.modifiers...),
 	}
 }
 
@@ -448,6 +449,9 @@ func (nhq *NoteHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	t1.Schema(nhq.schemaConfig.NoteHistory)
 	ctx = internal.NewSchemaConfigContext(ctx, nhq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range nhq.modifiers {
+		m(selector)
+	}
 	for _, p := range nhq.predicates {
 		p(selector)
 	}
@@ -463,6 +467,12 @@ func (nhq *NoteHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (nhq *NoteHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *NoteHistorySelect {
+	nhq.modifiers = append(nhq.modifiers, modifiers...)
+	return nhq.Select()
 }
 
 // NoteHistoryGroupBy is the group-by builder for NoteHistory entities.
@@ -553,4 +563,10 @@ func (nhs *NoteHistorySelect) sqlScan(ctx context.Context, root *NoteHistoryQuer
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (nhs *NoteHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *NoteHistorySelect {
+	nhs.modifiers = append(nhs.modifiers, modifiers...)
+	return nhs
 }

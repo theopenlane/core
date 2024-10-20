@@ -22,8 +22,9 @@ import (
 // GroupSettingHistoryUpdate is the builder for updating GroupSettingHistory entities.
 type GroupSettingHistoryUpdate struct {
 	config
-	hooks    []Hook
-	mutation *GroupSettingHistoryMutation
+	hooks     []Hook
+	mutation  *GroupSettingHistoryMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the GroupSettingHistoryUpdate builder.
@@ -272,6 +273,12 @@ func (gshu *GroupSettingHistoryUpdate) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (gshu *GroupSettingHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *GroupSettingHistoryUpdate {
+	gshu.modifiers = append(gshu.modifiers, modifiers...)
+	return gshu
+}
+
 func (gshu *GroupSettingHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if err := gshu.check(); err != nil {
 		return n, err
@@ -354,6 +361,7 @@ func (gshu *GroupSettingHistoryUpdate) sqlSave(ctx context.Context) (n int, err 
 	}
 	_spec.Node.Schema = gshu.schemaConfig.GroupSettingHistory
 	ctx = internal.NewSchemaConfigContext(ctx, gshu.schemaConfig)
+	_spec.AddModifiers(gshu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, gshu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{groupsettinghistory.Label}
@@ -369,9 +377,10 @@ func (gshu *GroupSettingHistoryUpdate) sqlSave(ctx context.Context) (n int, err 
 // GroupSettingHistoryUpdateOne is the builder for updating a single GroupSettingHistory entity.
 type GroupSettingHistoryUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *GroupSettingHistoryMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *GroupSettingHistoryMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -627,6 +636,12 @@ func (gshuo *GroupSettingHistoryUpdateOne) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (gshuo *GroupSettingHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *GroupSettingHistoryUpdateOne {
+	gshuo.modifiers = append(gshuo.modifiers, modifiers...)
+	return gshuo
+}
+
 func (gshuo *GroupSettingHistoryUpdateOne) sqlSave(ctx context.Context) (_node *GroupSettingHistory, err error) {
 	if err := gshuo.check(); err != nil {
 		return _node, err
@@ -726,6 +741,7 @@ func (gshuo *GroupSettingHistoryUpdateOne) sqlSave(ctx context.Context) (_node *
 	}
 	_spec.Node.Schema = gshuo.schemaConfig.GroupSettingHistory
 	ctx = internal.NewSchemaConfigContext(ctx, gshuo.schemaConfig)
+	_spec.AddModifiers(gshuo.modifiers...)
 	_node = &GroupSettingHistory{config: gshuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

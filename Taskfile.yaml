@@ -113,7 +113,7 @@ tasks:
     cmds:
       - task: compose:redis
       - task: compose:fga
-      - task: compose:kafka
+      - task: compose:riverboat
       - task: run-api
 
   run-api:

@@ -13,15 +13,14 @@ Config contains the configuration for the core server
 |[**auth**](#auth)|`object`|Auth settings including oauth2 providers and token configuration<br/>|yes|
 |[**authz**](#authz)|`object`||yes|
 |[**db**](#db)|`object`||yes|
-|[**dbx**](#dbx)|`object`|||
+|[**jobQueue**](#jobqueue)|`object`|||
 |[**redis**](#redis)|`object`|||
 |[**tracer**](#tracer)|`object`|||
 |[**email**](#email)|`object`|||
 |[**sessions**](#sessions)|`object`|||
-|[**posthog**](#posthog)|`object`|Config is the configuration for PostHog<br/>||
 |[**totp**](#totp)|`object`|||
 |[**ratelimit**](#ratelimit)|`object`|Config defines the configuration settings for the default rate limiter<br/>||
-|[**publisherConfig**](#publisherconfig)|`object`|Config is the configuration for the Kafka event source<br/>||
+|[**objectStorage**](#objectstorage)|`object`|||
 
 **Additional Properties:** not allowed  
 <a name="server"></a>
@@ -413,19 +412,84 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |**enableHistory**|`boolean`|enable history data to be logged to the database<br/>|no|
 
 **Additional Properties:** not allowed  
-<a name="dbx"></a>
-## dbx: object
+<a name="jobqueue"></a>
+## jobQueue: object
 
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**enabled**|`boolean`|Enable the dbx client<br/>||
-|**baseUrl**|`string`|Base URL for the dbx service<br/>||
-|**endpoint**|`string`|Endpoint for the graphql api<br/>||
-|**debug**|`boolean`|Enable debug mode<br/>||
+|**connectionURI**|`string`|||
+|**runMigrations**|`boolean`|||
+|[**riverConf**](#jobqueueriverconf)|`object`|||
 
 **Additional Properties:** not allowed  
+<a name="jobqueueriverconf"></a>
+### jobQueue\.riverConf: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**AdvisoryLockPrefix**|`integer`|||
+|**CancelledJobRetentionPeriod**|`integer`|||
+|**CompletedJobRetentionPeriod**|`integer`|||
+|**DiscardedJobRetentionPeriod**|`integer`|||
+|**ErrorHandler**||||
+|**FetchCooldown**|`integer`|||
+|**FetchPollInterval**|`integer`|||
+|**ID**|`string`|||
+|**JobCleanerTimeout**|`integer`|||
+|[**JobInsertMiddleware**](#jobqueueriverconfjobinsertmiddleware)|`array`|||
+|**JobTimeout**|`integer`|||
+|[**Logger**](#jobqueueriverconflogger)|`object`|||
+|**MaxAttempts**|`integer`|||
+|[**PeriodicJobs**](#jobqueueriverconfperiodicjobs)|`array`|||
+|**PollOnly**|`boolean`|||
+|[**Queues**](#jobqueueriverconfqueues)|`object`|||
+|**ReindexerSchedule**||||
+|**RescueStuckJobsAfter**|`integer`|||
+|**RetryPolicy**||||
+|**TestOnly**|`boolean`|||
+|[**Workers**](#jobqueueriverconfworkers)|`object`|||
+|[**WorkerMiddleware**](#jobqueueriverconfworkermiddleware)|`array`|||
+
+**Additional Properties:** not allowed  
+<a name="jobqueueriverconfjobinsertmiddleware"></a>
+#### jobQueue\.riverConf\.JobInsertMiddleware: array
+
+**Items**
+
+<a name="jobqueueriverconflogger"></a>
+#### jobQueue\.riverConf\.Logger: object
+
+**No properties.**
+
+**Additional Properties:** not allowed  
+<a name="jobqueueriverconfperiodicjobs"></a>
+#### jobQueue\.riverConf\.PeriodicJobs: array
+
+**Items**
+
+<a name="jobqueueriverconfqueues"></a>
+#### jobQueue\.riverConf\.Queues: object
+
+**Additional Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+
+<a name="jobqueueriverconfworkers"></a>
+#### jobQueue\.riverConf\.Workers: object
+
+**No properties.**
+
+**Additional Properties:** not allowed  
+<a name="jobqueueriverconfworkermiddleware"></a>
+#### jobQueue\.riverConf\.WorkerMiddleware: array
+
+**Items**
+
 <a name="redis"></a>
 ## redis: object
 
@@ -501,38 +565,29 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**sendGridApiKey**|`string`|||
+|**companyName**|`string`|||
+|**companyAddress**|`string`|||
+|**corporation**|`string`|||
 |**fromEmail**|`string`|||
-|**testing**|`boolean`|||
-|**archive**|`string`|||
-|**listId**|`string`|||
-|**adminEmail**|`string`|||
-|[**consoleUrl**](#emailconsoleurl)|`object`|||
-|[**marketingUrl**](#emailmarketingurl)|`object`|||
+|**supportEmail**|`string`|||
+|**logoURL**|`string`|||
+|[**urls**](#emailurls)|`object`|||
 
 **Additional Properties:** not allowed  
-<a name="emailconsoleurl"></a>
-### email\.consoleUrl: object
+<a name="emailurls"></a>
+### email\.urls: object
 
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**consoleBase**|`string`|||
+|**root**|`string`|||
+|**product**|`string`|||
+|**docs**|`string`|||
 |**verify**|`string`|||
 |**invite**|`string`|||
 |**reset**|`string`|||
-
-**Additional Properties:** not allowed  
-<a name="emailmarketingurl"></a>
-### email\.marketingUrl: object
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**marketingBase**|`string`|||
-|**subscriberVerify**|`string`|||
+|**verifySubscriber**|`string`|||
 
 **Additional Properties:** not allowed  
 <a name="sessions"></a>
@@ -545,21 +600,6 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |**signingKey**|`string`|||
 |**encryptionKey**|`string`|||
 |**domain**|`string`|||
-
-**Additional Properties:** not allowed  
-<a name="posthog"></a>
-## posthog: object
-
-Config is the configuration for PostHog
-
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**enabled**|`boolean`|Enabled is a flag to enable or disable PostHog<br/>||
-|**apiKey**|`string`|APIKey is the PostHog API Key<br/>||
-|**host**|`string`|Host is the PostHog API Host<br/>||
 
 **Additional Properties:** not allowed  
 <a name="totp"></a>
@@ -594,25 +634,25 @@ Config defines the configuration settings for the default rate limiter
 |**expires**|`integer`|||
 
 **Additional Properties:** not allowed  
-<a name="publisherconfig"></a>
-## publisherConfig: object
-
-Config is the configuration for the Kafka event source
-
+<a name="objectstorage"></a>
+## objectStorage: object
 
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**enabled**|`boolean`|Enabled is a flag to determine if the Kafka event source is enabled<br/>||
-|**appName**|`string`|AppName is the name of the application that is publishing events<br/>||
-|**address**|`string`|Address is the address of the Kafka broker<br/>||
-|[**addresses**](#publisherconfigaddresses)|`string[]`|||
-|**debug**|`boolean`|Debug is a flag to determine if the Kafka client should run in debug mode<br/>||
+|**enabled**|`boolean`|||
+|**provider**|`string`|||
+|**accessKey**|`string`|||
+|**region**|`string`|||
+|**secretKey**|`string`|||
+|**credentialsJSON**|`string`|||
+|**defaultBucket**|`string`|||
+|[**keys**](#objectstoragekeys)|`string[]`|||
 
 **Additional Properties:** not allowed  
-<a name="publisherconfigaddresses"></a>
-### publisherConfig\.addresses: array
+<a name="objectstoragekeys"></a>
+### objectStorage\.keys: array
 
 **Items**
 

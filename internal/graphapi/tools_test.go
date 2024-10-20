@@ -2,30 +2,32 @@ package graphapi_test
 
 import (
 	"context"
-	"path/filepath"
 	"testing"
 	"time"
 
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
+	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 
+	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/iam/fgax"
 	mock_fga "github.com/theopenlane/iam/fgax/mockery"
+	"github.com/theopenlane/riverboat/pkg/riverqueue"
 
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/entdb"
-	"github.com/theopenlane/core/pkg/analytics"
+	objmw "github.com/theopenlane/core/internal/middleware/objects"
+	"github.com/theopenlane/core/pkg/objects"
+	mock_objects "github.com/theopenlane/core/pkg/objects/mocks"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	coreutils "github.com/theopenlane/core/pkg/testutils"
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/iam/totp"
-	"github.com/theopenlane/utils/emails"
-	"github.com/theopenlane/utils/marionette"
 	"github.com/theopenlane/utils/testutils"
 	"github.com/theopenlane/utils/ulids"
 )
@@ -55,6 +57,7 @@ type client struct {
 	apiWithPAT   *openlaneclient.OpenlaneClient
 	apiWithToken *openlaneclient.OpenlaneClient
 	fga          *mock_fga.MockSdkClient
+	objectStore  *objects.Objects
 }
 
 func (suite *GraphTestSuite) SetupSuite() {
@@ -76,25 +79,6 @@ func (suite *GraphTestSuite) SetupTest() {
 	// create mock FGA client
 	fc := fgax.NewMockFGAClient(t, c.fga)
 
-	// setup email manager
-	emConfig := emails.Config{
-		Testing:   true,
-		Archive:   filepath.Join("fixtures", "emails"),
-		FromEmail: "mitb@theopenlane.io",
-	}
-
-	em, err := emails.New(emConfig)
-	if err != nil {
-		t.Fatal("error creating email manager")
-	}
-
-	// setup task manager
-	tmConfig := marionette.Config{}
-
-	taskMan := marionette.New(tmConfig)
-
-	taskMan.Start()
-
 	// setup otp manager
 	otpOpts := []totp.ConfigOption{
 		totp.WithCodeLength(6),
@@ -106,9 +90,7 @@ func (suite *GraphTestSuite) SetupTest() {
 	}
 
 	tm, err := coreutils.CreateTokenManager(15 * time.Minute) //nolint:mnd
-	if err != nil {
-		t.Fatal("error creating token manager")
-	}
+	require.NoError(t, err)
 
 	sm := coreutils.CreateSessionManager()
 	rc := coreutils.NewRedisClient()
@@ -124,9 +106,7 @@ func (suite *GraphTestSuite) SetupTest() {
 
 	opts := []ent.Option{
 		ent.Authz(*fc),
-		ent.Emails(em),
-		ent.Marionette(taskMan),
-		ent.Analytics(&analytics.EventManager{Enabled: false}),
+		ent.Emailer(&emailtemplates.Config{}), // add noop email config
 		ent.TOTP(&totp.Manager{
 			TOTPManager: otpMan,
 		}),
@@ -142,12 +122,20 @@ func (suite *GraphTestSuite) SetupTest() {
 	}
 
 	// create database connection
-	db, err := entdb.NewTestClient(ctx, suite.tf, opts)
+	jobOpts := []riverqueue.Option{riverqueue.WithConnectionURI(suite.tf.URI)}
+
+	db, err := entdb.NewTestClient(ctx, suite.tf, jobOpts, opts)
 	require.NoError(t, err, "failed opening connection to database")
+
+	c.objectStore, err = coreutils.MockObjectManager(t, objmw.Upload)
+	require.NoError(t, err)
+
+	// set the validation function
+	c.objectStore.ValidationFunc = objmw.MimeTypeValidator
 
 	// assign values
 	c.db = db
-	c.api, err = coreutils.TestClient(t, c.db)
+	c.api, err = coreutils.TestClient(t, c.db, c.objectStore)
 	require.NoError(t, err)
 
 	// create test user
@@ -174,7 +162,7 @@ func (suite *GraphTestSuite) SetupTest() {
 		BearerToken: pat.Token,
 	}
 
-	c.apiWithPAT, err = coreutils.TestClientWithAuth(t, c.db, openlaneclient.WithCredentials(authHeaderPAT))
+	c.apiWithPAT, err = coreutils.TestClientWithAuth(t, c.db, c.objectStore, openlaneclient.WithCredentials(authHeaderPAT))
 	require.NoError(t, err)
 
 	// setup client with an API token
@@ -183,7 +171,7 @@ func (suite *GraphTestSuite) SetupTest() {
 	authHeaderAPIToken := openlaneclient.Authorization{
 		BearerToken: apiToken.Token,
 	}
-	c.apiWithToken, err = coreutils.TestClientWithAuth(t, c.db, openlaneclient.WithCredentials(authHeaderAPIToken))
+	c.apiWithToken, err = coreutils.TestClientWithAuth(t, c.db, c.objectStore, openlaneclient.WithCredentials(authHeaderAPIToken))
 	require.NoError(t, err)
 
 	suite.client = c
@@ -193,11 +181,8 @@ func (suite *GraphTestSuite) TearDownTest() {
 	// clear all fga mocks
 	mock_fga.ClearMocks(suite.client.fga)
 
-	if suite.client.db != nil {
-		if err := suite.client.db.Close(); err != nil {
-			log.Fatal().Err(err).Msg("failed to close database")
-		}
-	}
+	err := suite.client.db.Close()
+	require.NoError(suite.T(), err)
 }
 
 func (suite *GraphTestSuite) TearDownSuite() {
@@ -223,4 +208,35 @@ func userContextWithID(userID string) (context.Context, error) {
 	ec.SetRequest(ec.Request().WithContext(reqCtx))
 
 	return reqCtx, nil
+}
+
+// expectUpload sets up the mock object store to expect an upload and related operations
+func expectUpload(t *testing.T, mockStore objects.Storage, expectedUploads []graphql.Upload) {
+	require.NotNil(t, mockStore)
+
+	ms, ok := mockStore.(*mock_objects.MockStorage)
+	require.True(t, ok)
+
+	mockScheme := "file://"
+
+	for _, upload := range expectedUploads {
+		ms.EXPECT().GetScheme().Return(&mockScheme).Times(1)
+		ms.EXPECT().Upload(mock.Anything, mock.Anything, mock.Anything).Return(&objects.UploadedFileMetadata{
+			Size: upload.Size,
+		}, nil).Times(1)
+		ms.EXPECT().GetPresignedURL(mock.Anything, mock.Anything).Return("https://presigned.url/my-file", nil).Times(1)
+	}
+}
+
+// expectUploadCheckOnly sets up the mock object store to expect an upload check only operation
+// but fails before the upload is attempted
+func expectUploadCheckOnly(t *testing.T, mockStore objects.Storage) {
+	require.NotNil(t, mockStore)
+
+	ms, ok := mockStore.(*mock_objects.MockStorage)
+	require.True(t, ok)
+
+	mockScheme := "file://"
+
+	ms.EXPECT().GetScheme().Return(&mockScheme).Times(1)
 }

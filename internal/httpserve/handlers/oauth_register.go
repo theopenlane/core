@@ -4,7 +4,6 @@ import (
 	"context"
 	"strings"
 
-	ph "github.com/posthog/posthog-go"
 	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 	"golang.org/x/oauth2"
@@ -55,14 +54,6 @@ func (h *Handler) OauthRegister(ctx echo.Context) error {
 
 		return h.InternalServerError(ctx, err)
 	}
-
-	props := ph.NewProperties().
-		Set("user_id", user.ID).
-		Set("email", user.Email).
-		Set("organization_id", user.Edges.Setting.Edges.DefaultOrg.ID). // user is logged into their default org
-		Set("auth_provider", in.AuthProvider)
-
-	h.AnalyticsClient.Event("user_authenticated", props)
 
 	out := models.LoginReply{
 		Reply:    rout.Reply{Success: true},

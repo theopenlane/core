@@ -27,8 +27,9 @@ import (
 // EntityUpdate is the builder for updating Entity entities.
 type EntityUpdate struct {
 	config
-	hooks    []Hook
-	mutation *EntityMutation
+	hooks     []Hook
+	mutation  *EntityMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the EntityUpdate builder.
@@ -503,6 +504,12 @@ func (eu *EntityUpdate) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (eu *EntityUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EntityUpdate {
+	eu.modifiers = append(eu.modifiers, modifiers...)
+	return eu
+}
+
 func (eu *EntityUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if err := eu.check(); err != nil {
 		return n, err
@@ -847,6 +854,7 @@ func (eu *EntityUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	_spec.Node.Schema = eu.schemaConfig.Entity
 	ctx = internal.NewSchemaConfigContext(ctx, eu.schemaConfig)
+	_spec.AddModifiers(eu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, eu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{entity.Label}
@@ -862,9 +870,10 @@ func (eu *EntityUpdate) sqlSave(ctx context.Context) (n int, err error) {
 // EntityUpdateOne is the builder for updating a single Entity entity.
 type EntityUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *EntityMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *EntityMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -1346,6 +1355,12 @@ func (euo *EntityUpdateOne) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (euo *EntityUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EntityUpdateOne {
+	euo.modifiers = append(euo.modifiers, modifiers...)
+	return euo
+}
+
 func (euo *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err error) {
 	if err := euo.check(); err != nil {
 		return _node, err
@@ -1707,6 +1722,7 @@ func (euo *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err err
 	}
 	_spec.Node.Schema = euo.schemaConfig.Entity
 	ctx = internal.NewSchemaConfigContext(ctx, euo.schemaConfig)
+	_spec.AddModifiers(euo.modifiers...)
 	_node = &Entity{config: euo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

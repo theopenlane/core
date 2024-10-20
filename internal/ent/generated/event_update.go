@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entitlementplanfeature"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/feature"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
@@ -37,8 +38,9 @@ import (
 // EventUpdate is the builder for updating Event entities.
 type EventUpdate struct {
 	config
-	hooks    []Hook
-	mutation *EventMutation
+	hooks     []Hook
+	mutation  *EventMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the EventUpdate builder.
@@ -403,6 +405,21 @@ func (eu *EventUpdate) AddSubscriber(s ...*Subscriber) *EventUpdate {
 	return eu.AddSubscriberIDs(ids...)
 }
 
+// AddFileIDs adds the "file" edge to the File entity by IDs.
+func (eu *EventUpdate) AddFileIDs(ids ...string) *EventUpdate {
+	eu.mutation.AddFileIDs(ids...)
+	return eu
+}
+
+// AddFile adds the "file" edges to the File entity.
+func (eu *EventUpdate) AddFile(f ...*File) *EventUpdate {
+	ids := make([]string, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return eu.AddFileIDs(ids...)
+}
+
 // Mutation returns the EventMutation object of the builder.
 func (eu *EventUpdate) Mutation() *EventMutation {
 	return eu.mutation
@@ -744,6 +761,27 @@ func (eu *EventUpdate) RemoveSubscriber(s ...*Subscriber) *EventUpdate {
 	return eu.RemoveSubscriberIDs(ids...)
 }
 
+// ClearFile clears all "file" edges to the File entity.
+func (eu *EventUpdate) ClearFile() *EventUpdate {
+	eu.mutation.ClearFile()
+	return eu
+}
+
+// RemoveFileIDs removes the "file" edge to File entities by IDs.
+func (eu *EventUpdate) RemoveFileIDs(ids ...string) *EventUpdate {
+	eu.mutation.RemoveFileIDs(ids...)
+	return eu
+}
+
+// RemoveFile removes "file" edges to File entities.
+func (eu *EventUpdate) RemoveFile(f ...*File) *EventUpdate {
+	ids := make([]string, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return eu.RemoveFileIDs(ids...)
+}
+
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (eu *EventUpdate) Save(ctx context.Context) (int, error) {
 	if err := eu.defaults(); err != nil {
@@ -784,6 +822,12 @@ func (eu *EventUpdate) defaults() error {
 		eu.mutation.SetUpdatedAt(v)
 	}
 	return nil
+}
+
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (eu *EventUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EventUpdate {
+	eu.modifiers = append(eu.modifiers, modifiers...)
+	return eu
 }
 
 func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
@@ -1613,8 +1657,57 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if eu.mutation.FileCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   event.FileTable,
+			Columns: event.FilePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = eu.schemaConfig.FileEvents
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := eu.mutation.RemovedFileIDs(); len(nodes) > 0 && !eu.mutation.FileCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   event.FileTable,
+			Columns: event.FilePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = eu.schemaConfig.FileEvents
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := eu.mutation.FileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   event.FileTable,
+			Columns: event.FilePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = eu.schemaConfig.FileEvents
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = eu.schemaConfig.Event
 	ctx = internal.NewSchemaConfigContext(ctx, eu.schemaConfig)
+	_spec.AddModifiers(eu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, eu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{event.Label}
@@ -1630,9 +1723,10 @@ func (eu *EventUpdate) sqlSave(ctx context.Context) (n int, err error) {
 // EventUpdateOne is the builder for updating a single Event entity.
 type EventUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *EventMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *EventMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -1991,6 +2085,21 @@ func (euo *EventUpdateOne) AddSubscriber(s ...*Subscriber) *EventUpdateOne {
 	return euo.AddSubscriberIDs(ids...)
 }
 
+// AddFileIDs adds the "file" edge to the File entity by IDs.
+func (euo *EventUpdateOne) AddFileIDs(ids ...string) *EventUpdateOne {
+	euo.mutation.AddFileIDs(ids...)
+	return euo
+}
+
+// AddFile adds the "file" edges to the File entity.
+func (euo *EventUpdateOne) AddFile(f ...*File) *EventUpdateOne {
+	ids := make([]string, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return euo.AddFileIDs(ids...)
+}
+
 // Mutation returns the EventMutation object of the builder.
 func (euo *EventUpdateOne) Mutation() *EventMutation {
 	return euo.mutation
@@ -2332,6 +2441,27 @@ func (euo *EventUpdateOne) RemoveSubscriber(s ...*Subscriber) *EventUpdateOne {
 	return euo.RemoveSubscriberIDs(ids...)
 }
 
+// ClearFile clears all "file" edges to the File entity.
+func (euo *EventUpdateOne) ClearFile() *EventUpdateOne {
+	euo.mutation.ClearFile()
+	return euo
+}
+
+// RemoveFileIDs removes the "file" edge to File entities by IDs.
+func (euo *EventUpdateOne) RemoveFileIDs(ids ...string) *EventUpdateOne {
+	euo.mutation.RemoveFileIDs(ids...)
+	return euo
+}
+
+// RemoveFile removes "file" edges to File entities.
+func (euo *EventUpdateOne) RemoveFile(f ...*File) *EventUpdateOne {
+	ids := make([]string, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return euo.RemoveFileIDs(ids...)
+}
+
 // Where appends a list predicates to the EventUpdate builder.
 func (euo *EventUpdateOne) Where(ps ...predicate.Event) *EventUpdateOne {
 	euo.mutation.Where(ps...)
@@ -2385,6 +2515,12 @@ func (euo *EventUpdateOne) defaults() error {
 		euo.mutation.SetUpdatedAt(v)
 	}
 	return nil
+}
+
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (euo *EventUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EventUpdateOne {
+	euo.modifiers = append(euo.modifiers, modifiers...)
+	return euo
 }
 
 func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error) {
@@ -3231,8 +3367,57 @@ func (euo *EventUpdateOne) sqlSave(ctx context.Context) (_node *Event, err error
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if euo.mutation.FileCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   event.FileTable,
+			Columns: event.FilePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = euo.schemaConfig.FileEvents
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := euo.mutation.RemovedFileIDs(); len(nodes) > 0 && !euo.mutation.FileCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   event.FileTable,
+			Columns: event.FilePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = euo.schemaConfig.FileEvents
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := euo.mutation.FileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   event.FileTable,
+			Columns: event.FilePrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = euo.schemaConfig.FileEvents
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = euo.schemaConfig.Event
 	ctx = internal.NewSchemaConfigContext(ctx, euo.schemaConfig)
+	_spec.AddModifiers(euo.modifiers...)
 	_node = &Event{config: euo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

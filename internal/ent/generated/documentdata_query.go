@@ -15,6 +15,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/template"
@@ -32,9 +33,11 @@ type DocumentDataQuery struct {
 	withOwner       *OrganizationQuery
 	withTemplate    *TemplateQuery
 	withEntity      *EntityQuery
-	modifiers       []func(*sql.Selector)
+	withFiles       *FileQuery
 	loadTotal       []func(context.Context, []*DocumentData) error
+	modifiers       []func(*sql.Selector)
 	withNamedEntity map[string]*EntityQuery
+	withNamedFiles  map[string]*FileQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -140,6 +143,31 @@ func (ddq *DocumentDataQuery) QueryEntity() *EntityQuery {
 		schemaConfig := ddq.schemaConfig
 		step.To.Schema = schemaConfig.Entity
 		step.Edge.Schema = schemaConfig.EntityDocuments
+		fromU = sqlgraph.SetNeighbors(ddq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryFiles chains the current query on the "files" edge.
+func (ddq *DocumentDataQuery) QueryFiles() *FileQuery {
+	query := (&FileClient{config: ddq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := ddq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := ddq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(documentdata.Table, documentdata.FieldID, selector),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, documentdata.FilesTable, documentdata.FilesPrimaryKey...),
+		)
+		schemaConfig := ddq.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.DocumentDataFiles
 		fromU = sqlgraph.SetNeighbors(ddq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -341,9 +369,11 @@ func (ddq *DocumentDataQuery) Clone() *DocumentDataQuery {
 		withOwner:    ddq.withOwner.Clone(),
 		withTemplate: ddq.withTemplate.Clone(),
 		withEntity:   ddq.withEntity.Clone(),
+		withFiles:    ddq.withFiles.Clone(),
 		// clone intermediate query.
-		sql:  ddq.sql.Clone(),
-		path: ddq.path,
+		sql:       ddq.sql.Clone(),
+		path:      ddq.path,
+		modifiers: append([]func(*sql.Selector){}, ddq.modifiers...),
 	}
 }
 
@@ -377,6 +407,17 @@ func (ddq *DocumentDataQuery) WithEntity(opts ...func(*EntityQuery)) *DocumentDa
 		opt(query)
 	}
 	ddq.withEntity = query
+	return ddq
+}
+
+// WithFiles tells the query-builder to eager-load the nodes that are connected to
+// the "files" edge. The optional arguments are used to configure the query builder of the edge.
+func (ddq *DocumentDataQuery) WithFiles(opts ...func(*FileQuery)) *DocumentDataQuery {
+	query := (&FileClient{config: ddq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	ddq.withFiles = query
 	return ddq
 }
 
@@ -464,10 +505,11 @@ func (ddq *DocumentDataQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 	var (
 		nodes       = []*DocumentData{}
 		_spec       = ddq.querySpec()
-		loadedTypes = [3]bool{
+		loadedTypes = [4]bool{
 			ddq.withOwner != nil,
 			ddq.withTemplate != nil,
 			ddq.withEntity != nil,
+			ddq.withFiles != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -512,10 +554,24 @@ func (ddq *DocumentDataQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 			return nil, err
 		}
 	}
+	if query := ddq.withFiles; query != nil {
+		if err := ddq.loadFiles(ctx, query, nodes,
+			func(n *DocumentData) { n.Edges.Files = []*File{} },
+			func(n *DocumentData, e *File) { n.Edges.Files = append(n.Edges.Files, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range ddq.withNamedEntity {
 		if err := ddq.loadEntity(ctx, query, nodes,
 			func(n *DocumentData) { n.appendNamedEntity(name) },
 			func(n *DocumentData, e *Entity) { n.appendNamedEntity(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range ddq.withNamedFiles {
+		if err := ddq.loadFiles(ctx, query, nodes,
+			func(n *DocumentData) { n.appendNamedFiles(name) },
+			func(n *DocumentData, e *File) { n.appendNamedFiles(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -647,6 +703,68 @@ func (ddq *DocumentDataQuery) loadEntity(ctx context.Context, query *EntityQuery
 	}
 	return nil
 }
+func (ddq *DocumentDataQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []*DocumentData, init func(*DocumentData), assign func(*DocumentData, *File)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*DocumentData)
+	nids := make(map[string]map[*DocumentData]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(documentdata.FilesTable)
+		joinT.Schema(ddq.schemaConfig.DocumentDataFiles)
+		s.Join(joinT).On(s.C(file.FieldID), joinT.C(documentdata.FilesPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(documentdata.FilesPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(documentdata.FilesPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*DocumentData]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*File](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "files" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 
 func (ddq *DocumentDataQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := ddq.querySpec()
@@ -726,6 +844,9 @@ func (ddq *DocumentDataQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	t1.Schema(ddq.schemaConfig.DocumentData)
 	ctx = internal.NewSchemaConfigContext(ctx, ddq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range ddq.modifiers {
+		m(selector)
+	}
 	for _, p := range ddq.predicates {
 		p(selector)
 	}
@@ -743,6 +864,12 @@ func (ddq *DocumentDataQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	return selector
 }
 
+// Modify adds a query modifier for attaching custom logic to queries.
+func (ddq *DocumentDataQuery) Modify(modifiers ...func(s *sql.Selector)) *DocumentDataSelect {
+	ddq.modifiers = append(ddq.modifiers, modifiers...)
+	return ddq.Select()
+}
+
 // WithNamedEntity tells the query-builder to eager-load the nodes that are connected to the "entity"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
 func (ddq *DocumentDataQuery) WithNamedEntity(name string, opts ...func(*EntityQuery)) *DocumentDataQuery {
@@ -754,6 +881,20 @@ func (ddq *DocumentDataQuery) WithNamedEntity(name string, opts ...func(*EntityQ
 		ddq.withNamedEntity = make(map[string]*EntityQuery)
 	}
 	ddq.withNamedEntity[name] = query
+	return ddq
+}
+
+// WithNamedFiles tells the query-builder to eager-load the nodes that are connected to the "files"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (ddq *DocumentDataQuery) WithNamedFiles(name string, opts ...func(*FileQuery)) *DocumentDataQuery {
+	query := (&FileClient{config: ddq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if ddq.withNamedFiles == nil {
+		ddq.withNamedFiles = make(map[string]*FileQuery)
+	}
+	ddq.withNamedFiles[name] = query
 	return ddq
 }
 
@@ -845,4 +986,10 @@ func (dds *DocumentDataSelect) sqlScan(ctx context.Context, root *DocumentDataQu
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (dds *DocumentDataSelect) Modify(modifiers ...func(s *sql.Selector)) *DocumentDataSelect {
+	dds.modifiers = append(dds.modifiers, modifiers...)
+	return dds
 }

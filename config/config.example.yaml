@@ -55,49 +55,69 @@ db:
     cacheTTL: 1000000000
     databaseName: openlane
     debug: false
-    driverName: libsql
+    driverName: pgx
     enableHistory: false
     migrationProvider: atlas
     multiWrite: false
     primaryDbSource: file:openlane.db
     runMigrations: true
     secondaryDbSource: file:backup.db
-dbx:
-    baseUrl: http://localhost:1337
-    debug: false
-    enabled: true
-    endpoint: query
 email:
-    adminEmail: admins@theopenlane.io
-    archive: ""
-    consoleUrl:
-        consoleBase: https://console.theopenlane.io
-        invite: /invite
-        reset: /password-reset
-        verify: /verify
-    fromEmail: no-reply@theopenlane.io
-    listId: ""
-    marketingUrl:
-        marketingBase: https://www.theopenlane.io
-        subscriberVerify: /verify
-    sendGridApiKey: ""
-    testing: true
+    companyAddress: ""
+    companyName: ""
+    corporation: ""
+    fromEmail: ""
+    logoURL: ""
+    supportEmail: ""
+    urls:
+        docs: ""
+        invite: ""
+        product: ""
+        reset: ""
+        root: ""
+        verify: ""
+        verifySubscriber: ""
 entConfig:
     entityTypes: null
     flags:
         useListObjectServices: false
         useListUserService: true
-posthog:
-    apiKey: ""
-    enabled: false
-    host: https://app.posthog.com
-publisherConfig:
-    address: localhost:10000
-    addresses:
-        - localhost:10000
-    appName: openlane
-    debug: false
-    enabled: false
+jobQueue:
+    connectionURI: postgres://postgres:password@0.0.0.0:5432/jobs?sslmode=disable
+    riverConf:
+        AdvisoryLockPrefix: 0
+        CancelledJobRetentionPeriod: 0
+        CompletedJobRetentionPeriod: 0
+        DiscardedJobRetentionPeriod: 0
+        ErrorHandler: null
+        FetchCooldown: 0
+        FetchPollInterval: 0
+        ID: ""
+        JobCleanerTimeout: 0
+        JobInsertMiddleware: null
+        JobTimeout: 0
+        Logger: null
+        MaxAttempts: 0
+        PeriodicJobs: null
+        PollOnly: false
+        Queues: null
+        ReindexerSchedule: null
+        RescueStuckJobsAfter: 0
+        RetryPolicy: null
+        TestOnly: false
+        WorkerMiddleware: null
+        Workers: null
+    runMigrations: false
+objectStorage:
+    accessKey: ""
+    credentialsJSON: ""
+    defaultBucket: ""
+    enabled: true
+    keys:
+        - uploadFile
+    provider: ""
+    region: ""
+    secretKey: ""
 ratelimit:
     burst: 30
     enabled: false

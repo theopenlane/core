@@ -26,8 +26,8 @@ type TFASettingQuery struct {
 	inters     []Interceptor
 	predicates []predicate.TFASetting
 	withOwner  *UserQuery
-	modifiers  []func(*sql.Selector)
 	loadTotal  []func(context.Context, []*TFASetting) error
+	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -283,8 +283,9 @@ func (tsq *TFASettingQuery) Clone() *TFASettingQuery {
 		predicates: append([]predicate.TFASetting{}, tsq.predicates...),
 		withOwner:  tsq.withOwner.Clone(),
 		// clone intermediate query.
-		sql:  tsq.sql.Clone(),
-		path: tsq.path,
+		sql:       tsq.sql.Clone(),
+		path:      tsq.path,
+		modifiers: append([]func(*sql.Selector){}, tsq.modifiers...),
 	}
 }
 
@@ -523,6 +524,9 @@ func (tsq *TFASettingQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	t1.Schema(tsq.schemaConfig.TFASetting)
 	ctx = internal.NewSchemaConfigContext(ctx, tsq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range tsq.modifiers {
+		m(selector)
+	}
 	for _, p := range tsq.predicates {
 		p(selector)
 	}
@@ -538,6 +542,12 @@ func (tsq *TFASettingQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (tsq *TFASettingQuery) Modify(modifiers ...func(s *sql.Selector)) *TFASettingSelect {
+	tsq.modifiers = append(tsq.modifiers, modifiers...)
+	return tsq.Select()
 }
 
 // TFASettingGroupBy is the group-by builder for TFASetting entities.
@@ -628,4 +638,10 @@ func (tss *TFASettingSelect) sqlScan(ctx context.Context, root *TFASettingQuery,
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (tss *TFASettingSelect) Modify(modifiers ...func(s *sql.Selector)) *TFASettingSelect {
+	tss.modifiers = append(tss.modifiers, modifiers...)
+	return tss
 }

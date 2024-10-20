@@ -25,8 +25,8 @@ type OrganizationHistoryQuery struct {
 	order      []organizationhistory.OrderOption
 	inters     []Interceptor
 	predicates []predicate.OrganizationHistory
-	modifiers  []func(*sql.Selector)
 	loadTotal  []func(context.Context, []*OrganizationHistory) error
+	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -256,8 +256,9 @@ func (ohq *OrganizationHistoryQuery) Clone() *OrganizationHistoryQuery {
 		inters:     append([]Interceptor{}, ohq.inters...),
 		predicates: append([]predicate.OrganizationHistory{}, ohq.predicates...),
 		// clone intermediate query.
-		sql:  ohq.sql.Clone(),
-		path: ohq.path,
+		sql:       ohq.sql.Clone(),
+		path:      ohq.path,
+		modifiers: append([]func(*sql.Selector){}, ohq.modifiers...),
 	}
 }
 
@@ -448,6 +449,9 @@ func (ohq *OrganizationHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector
 	t1.Schema(ohq.schemaConfig.OrganizationHistory)
 	ctx = internal.NewSchemaConfigContext(ctx, ohq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range ohq.modifiers {
+		m(selector)
+	}
 	for _, p := range ohq.predicates {
 		p(selector)
 	}
@@ -463,6 +467,12 @@ func (ohq *OrganizationHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (ohq *OrganizationHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *OrganizationHistorySelect {
+	ohq.modifiers = append(ohq.modifiers, modifiers...)
+	return ohq.Select()
 }
 
 // OrganizationHistoryGroupBy is the group-by builder for OrganizationHistory entities.
@@ -553,4 +563,10 @@ func (ohs *OrganizationHistorySelect) sqlScan(ctx context.Context, root *Organiz
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (ohs *OrganizationHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *OrganizationHistorySelect {
+	ohs.modifiers = append(ohs.modifiers, modifiers...)
+	return ohs
 }

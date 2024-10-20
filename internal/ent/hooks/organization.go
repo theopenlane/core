@@ -7,13 +7,12 @@ import (
 	"entgo.io/ent"
 	"github.com/rs/zerolog/log"
 
-	dbx "github.com/theopenlane/dbx/pkg/dbxclient"
-	dbxenums "github.com/theopenlane/dbx/pkg/enums"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/gravatar"
-	"github.com/theopenlane/utils/marionette"
+
+	"github.com/theopenlane/riverboat/pkg/jobs"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
@@ -25,33 +24,33 @@ import (
 // HookOrganization runs on org mutations to set default values that are not provided
 func HookOrganization() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
-		return hook.OrganizationFunc(func(ctx context.Context, mutation *generated.OrganizationMutation) (generated.Value, error) {
+		return hook.OrganizationFunc(func(ctx context.Context, m *generated.OrganizationMutation) (generated.Value, error) {
 			// if this is a soft delete, skip this hook
 			if entx.CheckIsSoftDelete(ctx) {
-				return next.Mutate(ctx, mutation)
+				return next.Mutate(ctx, m)
 			}
 
-			if mutation.Op().Is(ent.OpCreate) {
+			if m.Op().Is(ent.OpCreate) {
 				// generate a default org setting schema if not provided
-				if err := createOrgSettings(ctx, mutation); err != nil {
+				if err := createOrgSettings(ctx, m); err != nil {
 					return nil, err
 				}
 
 				// check if this is a child org, error if parent org is a personal org
-				if err := personalOrgNoChildren(ctx, mutation); err != nil {
+				if err := personalOrgNoChildren(ctx, m); err != nil {
 					return nil, err
 				}
 			}
 
 			// set default display name and avatar if not provided
-			setDefaultsOnMutations(mutation)
+			setDefaultsOnMutations(m)
 
-			v, err := next.Mutate(ctx, mutation)
+			v, err := next.Mutate(ctx, m)
 			if err != nil {
 				return v, err
 			}
 
-			if mutation.Op().Is(ent.OpCreate) {
+			if m.Op().Is(ent.OpCreate) {
 				orgCreated, ok := v.(*generated.Organization)
 				if !ok {
 					return nil, err
@@ -59,12 +58,12 @@ func HookOrganization() ent.Hook {
 
 				// create the admin organization member if not using an API token (which is not associated with a user)
 				// otherwise add the API token for admin access to the newly created organization
-				if err := createOrgMemberOwner(ctx, orgCreated.ID, mutation); err != nil {
+				if err := createOrgMemberOwner(ctx, orgCreated.ID, m); err != nil {
 					return v, err
 				}
 
 				// create the database, if the org has a dedicated db and dbx is available
-				if orgCreated.DedicatedDb && mutation.DBx != nil {
+				if orgCreated.DedicatedDb {
 					settings, err := orgCreated.Setting(ctx)
 					if err != nil {
 						log.Error().Err(err).Msg("unable to get organization settings")
@@ -72,13 +71,11 @@ func HookOrganization() ent.Hook {
 						return nil, err
 					}
 
-					if err := mutation.Marionette.Queue(marionette.TaskFunc(func(ctx context.Context) error {
-						return createDatabase(ctx, orgCreated.ID, settings.GeoLocation.String(), mutation)
-					}), marionette.WithErrorf("could not send create the database for %s", orgCreated.Name),
-					); err != nil {
-						log.Error().Err(err).Msg("unable to queue database creation")
-
-						return v, err
+					if _, err := m.Job.Insert(ctx, jobs.DatabaseArgs{
+						OrganizationID: orgCreated.ID,
+						Location:       settings.GeoLocation.String(),
+					}, nil); err != nil {
+						return nil, err
 					}
 				}
 
@@ -86,13 +83,13 @@ func HookOrganization() ent.Hook {
 				// if the org is not a personal org, as personal orgs are created during registration
 				// and sessions are already set
 				if !orgCreated.PersonalOrg {
-					as := newAuthSession(mutation.SessionConfig, mutation.TokenManager)
+					as := newAuthSession(m.SessionConfig, m.TokenManager)
 
 					if err := updateUserAuthSession(ctx, as, orgCreated.ID); err != nil {
 						return v, err
 					}
 
-					if err := postCreation(ctx, orgCreated, mutation); err != nil {
+					if err := postCreation(ctx, orgCreated, m); err != nil {
 						return v, err
 					}
 				}
@@ -106,29 +103,29 @@ func HookOrganization() ent.Hook {
 // HookOrganizationDelete runs on org delete mutations to ensure the org can be deleted
 func HookOrganizationDelete() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
-		return hook.OrganizationFunc(func(ctx context.Context, mutation *generated.OrganizationMutation) (generated.Value, error) {
+		return hook.OrganizationFunc(func(ctx context.Context, m *generated.OrganizationMutation) (generated.Value, error) {
 			// by pass checks on invite or pre-allowed request
 			// this includes things like the edge-cleanup on user deletion
 			if _, allow := privacy.DecisionFromContext(ctx); allow {
-				return next.Mutate(ctx, mutation)
+				return next.Mutate(ctx, m)
 			}
 
 			// ensure it's a soft delete or a hard delete, otherwise skip this hook
-			if !isDeleteOp(ctx, mutation) {
-				return next.Mutate(ctx, mutation)
+			if !isDeleteOp(ctx, m) {
+				return next.Mutate(ctx, m)
 			}
 
 			// validate the organization can be deleted
-			if err := validateDeletion(ctx, mutation); err != nil {
+			if err := validateDeletion(ctx, m); err != nil {
 				return nil, err
 			}
 
-			v, err := next.Mutate(ctx, mutation)
+			v, err := next.Mutate(ctx, m)
 			if err != nil {
 				return v, err
 			}
 
-			newOrgID, err := updateUserDefaultOrgOnDelete(ctx, mutation)
+			newOrgID, err := updateUserDefaultOrgOnDelete(ctx, m)
 			// if we got an error, return it
 			// if we didn't get a new org id, keep going and don't
 			// update the session cookie
@@ -137,7 +134,7 @@ func HookOrganizationDelete() ent.Hook {
 			}
 
 			// if the deleted org was the current org, update the session cookie
-			as := newAuthSession(mutation.SessionConfig, mutation.TokenManager)
+			as := newAuthSession(m.SessionConfig, m.TokenManager)
 
 			if err := updateUserAuthSession(ctx, as, newOrgID); err != nil {
 				return v, err
@@ -149,25 +146,25 @@ func HookOrganizationDelete() ent.Hook {
 }
 
 // setDefaultsOnMutations sets default values on mutations that are not provided
-func setDefaultsOnMutations(mutation *generated.OrganizationMutation) {
-	if name, ok := mutation.Name(); ok {
-		if displayName, ok := mutation.DisplayName(); ok {
+func setDefaultsOnMutations(m *generated.OrganizationMutation) {
+	if name, ok := m.Name(); ok {
+		if displayName, ok := m.DisplayName(); ok {
 			if displayName == "" {
-				mutation.SetDisplayName(name)
+				m.SetDisplayName(name)
 			}
 		}
 
 		url := gravatar.New(name, nil)
-		mutation.SetAvatarRemoteURL(url)
+		m.SetAvatarRemoteURL(url)
 	}
 }
 
 // createOrgSettings creates the default organization settings for a new org
-func createOrgSettings(ctx context.Context, mutation *generated.OrganizationMutation) error {
+func createOrgSettings(ctx context.Context, m *generated.OrganizationMutation) error {
 	// if this is empty generate a default org setting schema
-	if _, exists := mutation.SettingID(); !exists {
+	if _, exists := m.SettingID(); !exists {
 		// sets up default org settings using schema defaults
-		orgSettingID, err := defaultOrganizationSettings(ctx, mutation)
+		orgSettingID, err := defaultOrganizationSettings(ctx, m)
 		if err != nil {
 			log.Error().Err(err).Msg("error creating default organization settings")
 
@@ -175,27 +172,27 @@ func createOrgSettings(ctx context.Context, mutation *generated.OrganizationMuta
 		}
 
 		// add the org setting ID to the input
-		mutation.SetSettingID(orgSettingID)
+		m.SetSettingID(orgSettingID)
 	}
 
 	return nil
 }
 
 // createEntityTypes creates the default entity types for a new org
-func createEntityTypes(ctx context.Context, orgID string, mutation *generated.OrganizationMutation) error {
-	if len(mutation.EntConfig.EntityTypes) == 0 {
+func createEntityTypes(ctx context.Context, orgID string, m *generated.OrganizationMutation) error {
+	if len(m.EntConfig.EntityTypes) == 0 {
 		return nil
 	}
 
-	builders := make([]*generated.EntityTypeCreate, 0, len(mutation.EntConfig.EntityTypes))
-	for _, entityType := range mutation.EntConfig.EntityTypes {
-		builders = append(builders, mutation.Client().EntityType.Create().
+	builders := make([]*generated.EntityTypeCreate, 0, len(m.EntConfig.EntityTypes))
+	for _, entityType := range m.EntConfig.EntityTypes {
+		builders = append(builders, m.Client().EntityType.Create().
 			SetName(entityType).
 			SetOwnerID(orgID),
 		)
 	}
 
-	if err := mutation.Client().EntityType.CreateBulk(builders...).Exec(ctx); err != nil {
+	if err := m.Client().EntityType.CreateBulk(builders...).Exec(ctx); err != nil {
 		log.Error().Err(err).Msg("error creating entity types")
 
 		return err
@@ -205,7 +202,7 @@ func createEntityTypes(ctx context.Context, orgID string, mutation *generated.Or
 }
 
 // postCreation runs after an organization is created to perform additional setup
-func postCreation(ctx context.Context, orgCreated *generated.Organization, mutation *generated.OrganizationMutation) error {
+func postCreation(ctx context.Context, orgCreated *generated.Organization, m *generated.OrganizationMutation) error {
 	// capture the original org id, ignore error as this will not be set in all cases
 	originalOrg, _ := auth.GetOrganizationIDFromContext(ctx) // nolint: errcheck
 
@@ -215,7 +212,7 @@ func postCreation(ctx context.Context, orgCreated *generated.Organization, mutat
 	}
 
 	// create default entity types, if configured
-	if err := createEntityTypes(ctx, orgCreated.ID, mutation); err != nil {
+	if err := createEntityTypes(ctx, orgCreated.ID, m); err != nil {
 		return err
 	}
 
@@ -230,14 +227,14 @@ func postCreation(ctx context.Context, orgCreated *generated.Organization, mutat
 }
 
 // validateDeletion ensures the organization can be deleted
-func validateDeletion(ctx context.Context, mutation *generated.OrganizationMutation) error {
-	deletedID, ok := mutation.ID()
+func validateDeletion(ctx context.Context, m *generated.OrganizationMutation) error {
+	deletedID, ok := m.ID()
 	if !ok {
 		return nil
 	}
 
 	// do not allow deletion of personal orgs, these are deleted when the user is deleted
-	deletedOrg, err := mutation.Client().Organization.Get(ctx, deletedID)
+	deletedOrg, err := m.Client().Organization.Get(ctx, deletedID)
 	if err != nil {
 		return err
 	}
@@ -252,19 +249,19 @@ func validateDeletion(ctx context.Context, mutation *generated.OrganizationMutat
 }
 
 // updateUserDefaultOrgOnDelete updates the user's default org if the org being deleted is the user's default org
-func updateUserDefaultOrgOnDelete(ctx context.Context, mutation *generated.OrganizationMutation) (string, error) {
+func updateUserDefaultOrgOnDelete(ctx context.Context, m *generated.OrganizationMutation) (string, error) {
 	currentUserID, err := auth.GetUserIDFromContext(ctx)
 	if err != nil {
 		return "", err
 	}
 
 	// check if this organization is the user's default org
-	deletedOrgID, ok := mutation.ID()
+	deletedOrgID, ok := m.ID()
 	if !ok {
 		return "", nil
 	}
 
-	return checkAndUpdateDefaultOrg(ctx, currentUserID, deletedOrgID, mutation.Client())
+	return checkAndUpdateDefaultOrg(ctx, currentUserID, deletedOrgID, m.Client())
 }
 
 // checkAndUpdateDefaultOrg checks if the old organization is the user's default org and updates it if needed
@@ -308,40 +305,11 @@ func checkAndUpdateDefaultOrg(ctx context.Context, userID string, oldOrgID strin
 	return userSetting.Edges.DefaultOrg.ID, nil
 }
 
-// createDatabase creates a new database for the organization
-func createDatabase(ctx context.Context, orgID, geo string, mutation *generated.OrganizationMutation) error {
-	// set default geo if not provided
-	if geo == "" {
-		geo = enums.Amer.String()
-	}
-
-	input := dbx.CreateDatabaseInput{
-		OrganizationID: orgID,
-		Geo:            &geo,
-		Provider:       &dbxenums.Turso,
-	}
-
-	log.Debug().
-		Str("org", input.OrganizationID).
-		Str("geo", *input.Geo).
-		Str("provider", input.Provider.String()).
-		Msg("creating database")
-
-	if _, err := mutation.DBx.CreateDatabase(ctx, input); err != nil {
-		log.Error().Err(err).Msg("error creating database")
-
-		return err
-	}
-
-	// create the database
-	return nil
-}
-
 // defaultOrganizationSettings creates the default organizations settings for a new org
-func defaultOrganizationSettings(ctx context.Context, mutation *generated.OrganizationMutation) (string, error) {
+func defaultOrganizationSettings(ctx context.Context, m *generated.OrganizationMutation) (string, error) {
 	input := generated.CreateOrganizationSettingInput{}
 
-	organizationSetting, err := mutation.Client().OrganizationSetting.Create().SetInput(input).Save(ctx)
+	organizationSetting, err := m.Client().OrganizationSetting.Create().SetInput(input).Save(ctx)
 	if err != nil {
 		return "", err
 	}
@@ -351,12 +319,12 @@ func defaultOrganizationSettings(ctx context.Context, mutation *generated.Organi
 
 // personalOrgNoChildren checks if the mutation is for a child org, and if so returns an error
 // if the parent org is a personal org
-func personalOrgNoChildren(ctx context.Context, mutation *generated.OrganizationMutation) error {
+func personalOrgNoChildren(ctx context.Context, m *generated.OrganizationMutation) error {
 	// check if this is a child org, error if parent org is a personal org
-	parentOrgID, ok := mutation.ParentID()
+	parentOrgID, ok := m.ParentID()
 	if ok {
 		// check if parent org is a personal org
-		parentOrg, err := mutation.Client().Organization.Get(ctx, parentOrgID)
+		parentOrg, err := m.Client().Organization.Get(ctx, parentOrgID)
 		if err != nil {
 			return err
 		}

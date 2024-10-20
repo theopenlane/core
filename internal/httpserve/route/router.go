@@ -22,9 +22,65 @@ var (
 
 // Router is a struct that holds the echo router, the OpenAPI schema, and the handler - it's a way to group these components together
 type Router struct {
-	Echo    *echo.Echo
-	OAS     *openapi3.T
-	Handler *handlers.Handler
+	Echo        *echo.Echo
+	OAS         *openapi3.T
+	Handler     *handlers.Handler
+	StartConfig *echo.StartConfig
+}
+
+type RouterOption func(*Router)
+
+// WithHandler is a RouterOption that allows the handler to be set on the router
+func WithHandler(h *handlers.Handler) RouterOption {
+	return func(r *Router) {
+		r.Handler = h
+	}
+}
+
+// WithEcho is a RouterOption that allows the echo router to be set on the router
+func WithEcho(e *echo.Echo) RouterOption {
+	return func(r *Router) {
+		r.Echo = e
+	}
+}
+
+// WithOpenAPI is a RouterOption that allows the OpenAPI schema to be set on the router
+func WithOpenAPI(oas *openapi3.T) RouterOption {
+	return func(r *Router) {
+		r.OAS = oas
+	}
+}
+
+// WithOptions is a RouterOption that allows multiple options to be set on the router
+func WithOptions(opts ...RouterOption) RouterOption {
+	return func(r *Router) {
+		for _, opt := range opts {
+			opt(r)
+		}
+	}
+}
+
+// WithHideBanner is a RouterOption that allows the banner to be hidden on the echo server
+func WithHideBanner() RouterOption {
+	return func(r *Router) {
+		r.StartConfig = &echo.StartConfig{
+			HideBanner: true,
+		}
+	}
+}
+
+// NewRouter creates a new router with the echo router and OpenAPI schema
+func NewRouter(opts ...RouterOption) *Router {
+	r := &Router{
+		Echo: echo.New(),
+		OAS:  &openapi3.T{},
+	}
+
+	for _, opt := range opts {
+		opt(r)
+	}
+
+	return r
 }
 
 // AddRoute is used to add a route to the echo router and OpenAPI schema at the same time ensuring consistency between the spec and the server
@@ -134,7 +190,6 @@ func RegisterRoutes(router *Router) error {
 		registerUserInfoHandler,
 		registerOAuthRegisterHandler,
 		registerSwitchRoute,
-		registerEventPublisher,
 		registerLivenessHandler,
 		registerMetricsHandler,
 		registerSecurityTxtHandler,
@@ -147,6 +202,7 @@ func RegisterRoutes(router *Router) error {
 		registerAccountRolesOrganizationHandler,
 		registerAppleMerchantHandler,
 		registerMTASTSHandler,
+		registerFileUploadRoute,
 	}
 
 	for _, route := range routeHandlers {

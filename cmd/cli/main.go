@@ -14,6 +14,7 @@ import (
 	_ "github.com/theopenlane/core/cmd/cli/cmd/entitytype"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/events"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/features"
+	_ "github.com/theopenlane/core/cmd/cli/cmd/file"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/group"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/groupmembers"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/groupsetting"

@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/customtypes"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/template"
@@ -25,8 +26,9 @@ import (
 // TemplateUpdate is the builder for updating Template entities.
 type TemplateUpdate struct {
 	config
-	hooks    []Hook
-	mutation *TemplateMutation
+	hooks     []Hook
+	mutation  *TemplateMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the TemplateUpdate builder.
@@ -231,6 +233,21 @@ func (tu *TemplateUpdate) AddDocuments(d ...*DocumentData) *TemplateUpdate {
 	return tu.AddDocumentIDs(ids...)
 }
 
+// AddFileIDs adds the "files" edge to the File entity by IDs.
+func (tu *TemplateUpdate) AddFileIDs(ids ...string) *TemplateUpdate {
+	tu.mutation.AddFileIDs(ids...)
+	return tu
+}
+
+// AddFiles adds the "files" edges to the File entity.
+func (tu *TemplateUpdate) AddFiles(f ...*File) *TemplateUpdate {
+	ids := make([]string, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return tu.AddFileIDs(ids...)
+}
+
 // Mutation returns the TemplateMutation object of the builder.
 func (tu *TemplateUpdate) Mutation() *TemplateMutation {
 	return tu.mutation
@@ -261,6 +278,27 @@ func (tu *TemplateUpdate) RemoveDocuments(d ...*DocumentData) *TemplateUpdate {
 		ids[i] = d[i].ID
 	}
 	return tu.RemoveDocumentIDs(ids...)
+}
+
+// ClearFiles clears all "files" edges to the File entity.
+func (tu *TemplateUpdate) ClearFiles() *TemplateUpdate {
+	tu.mutation.ClearFiles()
+	return tu
+}
+
+// RemoveFileIDs removes the "files" edge to File entities by IDs.
+func (tu *TemplateUpdate) RemoveFileIDs(ids ...string) *TemplateUpdate {
+	tu.mutation.RemoveFileIDs(ids...)
+	return tu
+}
+
+// RemoveFiles removes "files" edges to File entities.
+func (tu *TemplateUpdate) RemoveFiles(f ...*File) *TemplateUpdate {
+	ids := make([]string, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return tu.RemoveFileIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -323,6 +361,12 @@ func (tu *TemplateUpdate) check() error {
 		}
 	}
 	return nil
+}
+
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (tu *TemplateUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TemplateUpdate {
+	tu.modifiers = append(tu.modifiers, modifiers...)
+	return tu
 }
 
 func (tu *TemplateUpdate) sqlSave(ctx context.Context) (n int, err error) {
@@ -478,8 +522,57 @@ func (tu *TemplateUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if tu.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   template.FilesTable,
+			Columns: template.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tu.schemaConfig.TemplateFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tu.mutation.RemovedFilesIDs(); len(nodes) > 0 && !tu.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   template.FilesTable,
+			Columns: template.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tu.schemaConfig.TemplateFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tu.mutation.FilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   template.FilesTable,
+			Columns: template.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tu.schemaConfig.TemplateFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = tu.schemaConfig.Template
 	ctx = internal.NewSchemaConfigContext(ctx, tu.schemaConfig)
+	_spec.AddModifiers(tu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, tu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{template.Label}
@@ -495,9 +588,10 @@ func (tu *TemplateUpdate) sqlSave(ctx context.Context) (n int, err error) {
 // TemplateUpdateOne is the builder for updating a single Template entity.
 type TemplateUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *TemplateMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *TemplateMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -696,6 +790,21 @@ func (tuo *TemplateUpdateOne) AddDocuments(d ...*DocumentData) *TemplateUpdateOn
 	return tuo.AddDocumentIDs(ids...)
 }
 
+// AddFileIDs adds the "files" edge to the File entity by IDs.
+func (tuo *TemplateUpdateOne) AddFileIDs(ids ...string) *TemplateUpdateOne {
+	tuo.mutation.AddFileIDs(ids...)
+	return tuo
+}
+
+// AddFiles adds the "files" edges to the File entity.
+func (tuo *TemplateUpdateOne) AddFiles(f ...*File) *TemplateUpdateOne {
+	ids := make([]string, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return tuo.AddFileIDs(ids...)
+}
+
 // Mutation returns the TemplateMutation object of the builder.
 func (tuo *TemplateUpdateOne) Mutation() *TemplateMutation {
 	return tuo.mutation
@@ -726,6 +835,27 @@ func (tuo *TemplateUpdateOne) RemoveDocuments(d ...*DocumentData) *TemplateUpdat
 		ids[i] = d[i].ID
 	}
 	return tuo.RemoveDocumentIDs(ids...)
+}
+
+// ClearFiles clears all "files" edges to the File entity.
+func (tuo *TemplateUpdateOne) ClearFiles() *TemplateUpdateOne {
+	tuo.mutation.ClearFiles()
+	return tuo
+}
+
+// RemoveFileIDs removes the "files" edge to File entities by IDs.
+func (tuo *TemplateUpdateOne) RemoveFileIDs(ids ...string) *TemplateUpdateOne {
+	tuo.mutation.RemoveFileIDs(ids...)
+	return tuo
+}
+
+// RemoveFiles removes "files" edges to File entities.
+func (tuo *TemplateUpdateOne) RemoveFiles(f ...*File) *TemplateUpdateOne {
+	ids := make([]string, len(f))
+	for i := range f {
+		ids[i] = f[i].ID
+	}
+	return tuo.RemoveFileIDs(ids...)
 }
 
 // Where appends a list predicates to the TemplateUpdate builder.
@@ -801,6 +931,12 @@ func (tuo *TemplateUpdateOne) check() error {
 		}
 	}
 	return nil
+}
+
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (tuo *TemplateUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TemplateUpdateOne {
+	tuo.modifiers = append(tuo.modifiers, modifiers...)
+	return tuo
 }
 
 func (tuo *TemplateUpdateOne) sqlSave(ctx context.Context) (_node *Template, err error) {
@@ -973,8 +1109,57 @@ func (tuo *TemplateUpdateOne) sqlSave(ctx context.Context) (_node *Template, err
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if tuo.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   template.FilesTable,
+			Columns: template.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tuo.schemaConfig.TemplateFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tuo.mutation.RemovedFilesIDs(); len(nodes) > 0 && !tuo.mutation.FilesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   template.FilesTable,
+			Columns: template.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tuo.schemaConfig.TemplateFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tuo.mutation.FilesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   template.FilesTable,
+			Columns: template.FilesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tuo.schemaConfig.TemplateFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = tuo.schemaConfig.Template
 	ctx = internal.NewSchemaConfigContext(ctx, tuo.schemaConfig)
+	_spec.AddModifiers(tuo.modifiers...)
 	_node = &Template{config: tuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

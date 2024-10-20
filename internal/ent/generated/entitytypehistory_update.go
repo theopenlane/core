@@ -21,8 +21,9 @@ import (
 // EntityTypeHistoryUpdate is the builder for updating EntityTypeHistory entities.
 type EntityTypeHistoryUpdate struct {
 	config
-	hooks    []Hook
-	mutation *EntityTypeHistoryMutation
+	hooks     []Hook
+	mutation  *EntityTypeHistoryMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the EntityTypeHistoryUpdate builder.
@@ -202,6 +203,12 @@ func (ethu *EntityTypeHistoryUpdate) defaults() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (ethu *EntityTypeHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EntityTypeHistoryUpdate {
+	ethu.modifiers = append(ethu.modifiers, modifiers...)
+	return ethu
+}
+
 func (ethu *EntityTypeHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(entitytypehistory.Table, entitytypehistory.Columns, sqlgraph.NewFieldSpec(entitytypehistory.FieldID, field.TypeString))
 	if ps := ethu.mutation.predicates; len(ps) > 0 {
@@ -266,6 +273,7 @@ func (ethu *EntityTypeHistoryUpdate) sqlSave(ctx context.Context) (n int, err er
 	}
 	_spec.Node.Schema = ethu.schemaConfig.EntityTypeHistory
 	ctx = internal.NewSchemaConfigContext(ctx, ethu.schemaConfig)
+	_spec.AddModifiers(ethu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, ethu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{entitytypehistory.Label}
@@ -281,9 +289,10 @@ func (ethu *EntityTypeHistoryUpdate) sqlSave(ctx context.Context) (n int, err er
 // EntityTypeHistoryUpdateOne is the builder for updating a single EntityTypeHistory entity.
 type EntityTypeHistoryUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *EntityTypeHistoryMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *EntityTypeHistoryMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -470,6 +479,12 @@ func (ethuo *EntityTypeHistoryUpdateOne) defaults() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (ethuo *EntityTypeHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EntityTypeHistoryUpdateOne {
+	ethuo.modifiers = append(ethuo.modifiers, modifiers...)
+	return ethuo
+}
+
 func (ethuo *EntityTypeHistoryUpdateOne) sqlSave(ctx context.Context) (_node *EntityTypeHistory, err error) {
 	_spec := sqlgraph.NewUpdateSpec(entitytypehistory.Table, entitytypehistory.Columns, sqlgraph.NewFieldSpec(entitytypehistory.FieldID, field.TypeString))
 	id, ok := ethuo.mutation.ID()
@@ -551,6 +566,7 @@ func (ethuo *EntityTypeHistoryUpdateOne) sqlSave(ctx context.Context) (_node *En
 	}
 	_spec.Node.Schema = ethuo.schemaConfig.EntityTypeHistory
 	ctx = internal.NewSchemaConfigContext(ctx, ethuo.schemaConfig)
+	_spec.AddModifiers(ethuo.modifiers...)
 	_node = &EntityTypeHistory{config: ethuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

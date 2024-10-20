@@ -26,7 +26,7 @@
 ```yaml
 db:
   debug: true
-  driver_name: postgres
+  driver_name: pgx # or `postgres` to use lib/pg instead
   primary_db_source: "postgres://postgres:password@postgres:5432?sslmode=disable"
   run_migrations: true
 ```

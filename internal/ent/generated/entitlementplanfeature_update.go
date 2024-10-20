@@ -23,8 +23,9 @@ import (
 // EntitlementPlanFeatureUpdate is the builder for updating EntitlementPlanFeature entities.
 type EntitlementPlanFeatureUpdate struct {
 	config
-	hooks    []Hook
-	mutation *EntitlementPlanFeatureMutation
+	hooks     []Hook
+	mutation  *EntitlementPlanFeatureMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the EntitlementPlanFeatureUpdate builder.
@@ -265,6 +266,12 @@ func (epfu *EntitlementPlanFeatureUpdate) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (epfu *EntitlementPlanFeatureUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EntitlementPlanFeatureUpdate {
+	epfu.modifiers = append(epfu.modifiers, modifiers...)
+	return epfu
+}
+
 func (epfu *EntitlementPlanFeatureUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if err := epfu.check(); err != nil {
 		return n, err
@@ -405,6 +412,7 @@ func (epfu *EntitlementPlanFeatureUpdate) sqlSave(ctx context.Context) (n int, e
 	}
 	_spec.Node.Schema = epfu.schemaConfig.EntitlementPlanFeature
 	ctx = internal.NewSchemaConfigContext(ctx, epfu.schemaConfig)
+	_spec.AddModifiers(epfu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, epfu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{entitlementplanfeature.Label}
@@ -420,9 +428,10 @@ func (epfu *EntitlementPlanFeatureUpdate) sqlSave(ctx context.Context) (n int, e
 // EntitlementPlanFeatureUpdateOne is the builder for updating a single EntitlementPlanFeature entity.
 type EntitlementPlanFeatureUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *EntitlementPlanFeatureMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *EntitlementPlanFeatureMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -670,6 +679,12 @@ func (epfuo *EntitlementPlanFeatureUpdateOne) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (epfuo *EntitlementPlanFeatureUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EntitlementPlanFeatureUpdateOne {
+	epfuo.modifiers = append(epfuo.modifiers, modifiers...)
+	return epfuo
+}
+
 func (epfuo *EntitlementPlanFeatureUpdateOne) sqlSave(ctx context.Context) (_node *EntitlementPlanFeature, err error) {
 	if err := epfuo.check(); err != nil {
 		return _node, err
@@ -827,6 +842,7 @@ func (epfuo *EntitlementPlanFeatureUpdateOne) sqlSave(ctx context.Context) (_nod
 	}
 	_spec.Node.Schema = epfuo.schemaConfig.EntitlementPlanFeature
 	ctx = internal.NewSchemaConfigContext(ctx, epfuo.schemaConfig)
+	_spec.AddModifiers(epfuo.modifiers...)
 	_node = &EntitlementPlanFeature{config: epfuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

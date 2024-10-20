@@ -21,8 +21,9 @@ import (
 // GroupMembershipHistoryUpdate is the builder for updating GroupMembershipHistory entities.
 type GroupMembershipHistoryUpdate struct {
 	config
-	hooks    []Hook
-	mutation *GroupMembershipHistoryMutation
+	hooks     []Hook
+	mutation  *GroupMembershipHistoryMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the GroupMembershipHistoryUpdate builder.
@@ -174,6 +175,12 @@ func (gmhu *GroupMembershipHistoryUpdate) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (gmhu *GroupMembershipHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *GroupMembershipHistoryUpdate {
+	gmhu.modifiers = append(gmhu.modifiers, modifiers...)
+	return gmhu
+}
+
 func (gmhu *GroupMembershipHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if err := gmhu.check(); err != nil {
 		return n, err
@@ -224,6 +231,7 @@ func (gmhu *GroupMembershipHistoryUpdate) sqlSave(ctx context.Context) (n int, e
 	}
 	_spec.Node.Schema = gmhu.schemaConfig.GroupMembershipHistory
 	ctx = internal.NewSchemaConfigContext(ctx, gmhu.schemaConfig)
+	_spec.AddModifiers(gmhu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, gmhu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{groupmembershiphistory.Label}
@@ -239,9 +247,10 @@ func (gmhu *GroupMembershipHistoryUpdate) sqlSave(ctx context.Context) (n int, e
 // GroupMembershipHistoryUpdateOne is the builder for updating a single GroupMembershipHistory entity.
 type GroupMembershipHistoryUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *GroupMembershipHistoryMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *GroupMembershipHistoryMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -400,6 +409,12 @@ func (gmhuo *GroupMembershipHistoryUpdateOne) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (gmhuo *GroupMembershipHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *GroupMembershipHistoryUpdateOne {
+	gmhuo.modifiers = append(gmhuo.modifiers, modifiers...)
+	return gmhuo
+}
+
 func (gmhuo *GroupMembershipHistoryUpdateOne) sqlSave(ctx context.Context) (_node *GroupMembershipHistory, err error) {
 	if err := gmhuo.check(); err != nil {
 		return _node, err
@@ -467,6 +482,7 @@ func (gmhuo *GroupMembershipHistoryUpdateOne) sqlSave(ctx context.Context) (_nod
 	}
 	_spec.Node.Schema = gmhuo.schemaConfig.GroupMembershipHistory
 	ctx = internal.NewSchemaConfigContext(ctx, gmhuo.schemaConfig)
+	_spec.AddModifiers(gmhuo.modifiers...)
 	_node = &GroupMembershipHistory{config: gmhuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

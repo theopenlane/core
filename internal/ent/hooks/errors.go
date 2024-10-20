@@ -47,6 +47,9 @@ var (
 
 	// ErrMissingRequiredName is returned when a name is required but not provided
 	ErrMissingRequiredName = errors.New("name or display name is required but not provided")
+
+	// ErrTooManyAvatarFiles is returned when a user attempts to upload more than one avatar file
+	ErrTooManyAvatarFiles = errors.New("too many avatar files uploaded, only one is allowed")
 )
 
 // IsUniqueConstraintError reports if the error resulted from a DB uniqueness constraint violation.

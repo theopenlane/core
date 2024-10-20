@@ -3,9 +3,11 @@ package user
 import (
 	"context"
 
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
+	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -26,25 +28,26 @@ func init() {
 	createCmd.Flags().StringP("first-name", "f", "", "first name of the user")
 	createCmd.Flags().StringP("last-name", "l", "", "last name of the user")
 	createCmd.Flags().StringP("display-name", "d", "", "first name of the user")
+	createCmd.Flags().StringP("avatar-file", "a", "", "local of avatar file to upload")
 }
 
 // createValidation validates the required fields for the command
-func createValidation() (input openlaneclient.CreateUserInput, err error) {
+func createValidation() (input openlaneclient.CreateUserInput, avatarFile *graphql.Upload, err error) {
 	input.Email = cmd.Config.String("email")
 	if input.Email == "" {
-		return input, cmd.NewRequiredFieldMissingError("email")
+		return input, nil, cmd.NewRequiredFieldMissingError("email")
 	}
 
 	firstName := cmd.Config.String("first-name")
 	if firstName == "" {
-		return input, cmd.NewRequiredFieldMissingError("first name")
+		return input, nil, cmd.NewRequiredFieldMissingError("first name")
 	}
 
 	input.FirstName = &firstName
 
 	lastName := cmd.Config.String("last-name")
 	if lastName == "" {
-		return input, cmd.NewRequiredFieldMissingError("last name")
+		return input, nil, cmd.NewRequiredFieldMissingError("last name")
 	}
 
 	input.LastName = &lastName
@@ -59,7 +62,22 @@ func createValidation() (input openlaneclient.CreateUserInput, err error) {
 		input.Password = &password
 	}
 
-	return input, nil
+	avatarFileLoc := cmd.Config.String("avatar-file")
+	if avatarFileLoc != "" {
+		file, err := objects.NewUploadFile(avatarFileLoc)
+		if err != nil {
+			return input, nil, err
+		}
+
+		avatarFile = &graphql.Upload{
+			File:        file.File,
+			Filename:    file.Filename,
+			Size:        file.Size,
+			ContentType: file.ContentType,
+		}
+	}
+
+	return input, avatarFile, nil
 }
 
 // create a new user
@@ -69,10 +87,10 @@ func create(ctx context.Context) error {
 	cobra.CheckErr(err)
 	defer cmd.StoreSessionCookies(client)
 
-	input, err := createValidation()
+	input, avatarFile, err := createValidation()
 	cobra.CheckErr(err)
 
-	o, err := client.CreateUser(ctx, input)
+	o, err := client.CreateUser(ctx, input, avatarFile)
 	cobra.CheckErr(err)
 
 	return consoleOutput(o)

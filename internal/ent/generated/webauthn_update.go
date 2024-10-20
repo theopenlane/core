@@ -22,8 +22,9 @@ import (
 // WebauthnUpdate is the builder for updating Webauthn entities.
 type WebauthnUpdate struct {
 	config
-	hooks    []Hook
-	mutation *WebauthnMutation
+	hooks     []Hook
+	mutation  *WebauthnMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the WebauthnUpdate builder.
@@ -281,6 +282,12 @@ func (wu *WebauthnUpdate) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (wu *WebauthnUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *WebauthnUpdate {
+	wu.modifiers = append(wu.modifiers, modifiers...)
+	return wu
+}
+
 func (wu *WebauthnUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if err := wu.check(); err != nil {
 		return n, err
@@ -396,6 +403,7 @@ func (wu *WebauthnUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	_spec.Node.Schema = wu.schemaConfig.Webauthn
 	ctx = internal.NewSchemaConfigContext(ctx, wu.schemaConfig)
+	_spec.AddModifiers(wu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, wu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{webauthn.Label}
@@ -411,9 +419,10 @@ func (wu *WebauthnUpdate) sqlSave(ctx context.Context) (n int, err error) {
 // WebauthnUpdateOne is the builder for updating a single Webauthn entity.
 type WebauthnUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *WebauthnMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *WebauthnMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -678,6 +687,12 @@ func (wuo *WebauthnUpdateOne) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (wuo *WebauthnUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *WebauthnUpdateOne {
+	wuo.modifiers = append(wuo.modifiers, modifiers...)
+	return wuo
+}
+
 func (wuo *WebauthnUpdateOne) sqlSave(ctx context.Context) (_node *Webauthn, err error) {
 	if err := wuo.check(); err != nil {
 		return _node, err
@@ -810,6 +825,7 @@ func (wuo *WebauthnUpdateOne) sqlSave(ctx context.Context) (_node *Webauthn, err
 	}
 	_spec.Node.Schema = wuo.schemaConfig.Webauthn
 	ctx = internal.NewSchemaConfigContext(ctx, wuo.schemaConfig)
+	_spec.AddModifiers(wuo.modifiers...)
 	_node = &Webauthn{config: wuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

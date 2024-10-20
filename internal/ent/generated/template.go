@@ -61,13 +61,16 @@ type TemplateEdges struct {
 	Owner *Organization `json:"owner,omitempty"`
 	// Documents holds the value of the documents edge.
 	Documents []*DocumentData `json:"documents,omitempty"`
+	// Files holds the value of the files edge.
+	Files []*File `json:"files,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [3]bool
 	// totalCount holds the count of the edges above.
-	totalCount [2]map[string]int
+	totalCount [3]map[string]int
 
 	namedDocuments map[string][]*DocumentData
+	namedFiles     map[string][]*File
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -88,6 +91,15 @@ func (e TemplateEdges) DocumentsOrErr() ([]*DocumentData, error) {
 		return e.Documents, nil
 	}
 	return nil, &NotLoadedError{edge: "documents"}
+}
+
+// FilesOrErr returns the Files value or an error if the edge
+// was not loaded in eager-loading.
+func (e TemplateEdges) FilesOrErr() ([]*File, error) {
+	if e.loadedTypes[2] {
+		return e.Files, nil
+	}
+	return nil, &NotLoadedError{edge: "files"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -235,6 +247,11 @@ func (t *Template) QueryDocuments() *DocumentDataQuery {
 	return NewTemplateClient(t.config).QueryDocuments(t)
 }
 
+// QueryFiles queries the "files" edge of the Template entity.
+func (t *Template) QueryFiles() *FileQuery {
+	return NewTemplateClient(t.config).QueryFiles(t)
+}
+
 // Update returns a builder for updating this Template.
 // Note that you need to call Template.Unwrap() before calling this method if this Template
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -324,6 +341,30 @@ func (t *Template) appendNamedDocuments(name string, edges ...*DocumentData) {
 		t.Edges.namedDocuments[name] = []*DocumentData{}
 	} else {
 		t.Edges.namedDocuments[name] = append(t.Edges.namedDocuments[name], edges...)
+	}
+}
+
+// NamedFiles returns the Files named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (t *Template) NamedFiles(name string) ([]*File, error) {
+	if t.Edges.namedFiles == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := t.Edges.namedFiles[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (t *Template) appendNamedFiles(name string, edges ...*File) {
+	if t.Edges.namedFiles == nil {
+		t.Edges.namedFiles = make(map[string][]*File)
+	}
+	if len(edges) == 0 {
+		t.Edges.namedFiles[name] = []*File{}
+	} else {
+		t.Edges.namedFiles[name] = append(t.Edges.namedFiles[name], edges...)
 	}
 }
 

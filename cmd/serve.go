@@ -6,8 +6,8 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 	"github.com/theopenlane/beacon/otelx"
+	"github.com/theopenlane/riverboat/pkg/riverqueue"
 
-	dbx "github.com/theopenlane/dbx/pkg/dbxclient"
 	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/utils/cache"
@@ -49,15 +49,13 @@ func serve(ctx context.Context) error {
 	serverOpts = append(serverOpts,
 		serveropts.WithConfigProvider(&config.ConfigProviderWithRefresh{}),
 		serveropts.WithHTTPS(),
-		serveropts.WithEmailManager(),
-		serveropts.WithTaskManager(),
+		serveropts.WithEmailConfig(),
 		serveropts.WithMiddleware(),
 		serveropts.WithRateLimiter(),
 		serveropts.WithSecureMW(),
 		serveropts.WithCacheHeaders(),
 		serveropts.WithCORS(),
-		serveropts.WithAnalytics(),
-		serveropts.WithEventPublisher(),
+		serveropts.WithObjectStorage(),
 	)
 
 	so := serveropts.NewServerOptions(serverOpts, k.String("config"))
@@ -97,13 +95,6 @@ func serve(ctx context.Context) error {
 		serveropts.WithSessionManager(redisClient),
 	)
 
-	// Setup DBx client
-	if so.Config.Settings.DBx.Enabled {
-		gc := so.Config.Settings.DBx.NewDefaultClient()
-
-		entOpts = append(entOpts, ent.DBx(gc.(*dbx.Client)))
-	}
-
 	// add otp manager, after redis is setup
 	so.AddServerOptions(
 		serveropts.WithOTP(),
@@ -113,32 +104,36 @@ func serve(ctx context.Context) error {
 	entOpts = append(
 		entOpts,
 		ent.Authz(*fgaClient),
-		ent.Emails(so.Config.Handler.EmailManager),
-		ent.Marionette(so.Config.Handler.TaskMan),
-		ent.Analytics(so.Config.Handler.AnalyticsClient),
 		ent.TOTP(so.Config.Handler.OTPManager),
 		ent.TokenManager(so.Config.Handler.TokenManager),
 		ent.SessionConfig(so.Config.Handler.SessionConfig),
 		ent.EntConfig(&so.Config.Settings.EntConfig),
+		ent.Emailer(&so.Config.Settings.Email),
 	)
 
 	// Setup DB connection
-	entdbClient, dbConfig, err := entdb.NewMultiDriverDBClient(ctx, so.Config.Settings.DB, entOpts)
+	log.Info().Interface("db", so.Config.Settings.DB).Msg("connecting to database")
+
+	jobOpts := []riverqueue.Option{
+		riverqueue.WithConnectionURI(so.Config.Settings.JobQueue.ConnectionURI),
+	}
+
+	dbClient, err := entdb.New(ctx, so.Config.Settings.DB, jobOpts, entOpts...)
 	if err != nil {
 		return err
 	}
 
-	defer entdbClient.Close()
+	defer dbClient.CloseAll() // nolint: errcheck
 
 	// Add Driver to the Handlers Config
-	so.Config.Handler.DBClient = entdbClient
+	so.Config.Handler.DBClient = dbClient
 
 	// Add redis client to Handlers Config
 	so.Config.Handler.RedisClient = redisClient
 
 	// add ready checks
 	so.AddServerOptions(
-		serveropts.WithReadyChecks(dbConfig, fgaClient, redisClient),
+		serveropts.WithReadyChecks(dbClient.Config, fgaClient, redisClient, dbClient.Job),
 	)
 
 	// add auth options
@@ -154,7 +149,7 @@ func serve(ctx context.Context) error {
 	srv := server.NewServer(so.Config)
 
 	// Setup Graph API Handlers
-	so.AddServerOptions(serveropts.WithGraphRoute(srv, entdbClient))
+	so.AddServerOptions(serveropts.WithGraphRoute(srv, dbClient))
 
 	if err := srv.StartEchoServer(ctx); err != nil {
 		log.Error().Err(err).Msg("failed to run server")

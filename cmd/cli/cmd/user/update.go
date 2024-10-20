@@ -3,9 +3,11 @@ package user
 import (
 	"context"
 
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
+	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -26,13 +28,14 @@ func init() {
 	updateCmd.Flags().StringP("last-name", "l", "", "last name of the user")
 	updateCmd.Flags().StringP("display-name", "d", "", "display name of the user")
 	updateCmd.Flags().StringP("email", "e", "", "email of the user")
+	updateCmd.Flags().StringP("avatar-file", "a", "", "local of avatar file to upload")
 }
 
 // updateValidation validates the input flags provided by the user
-func updateValidation() (id string, input openlaneclient.UpdateUserInput, err error) {
+func updateValidation() (id string, input openlaneclient.UpdateUserInput, avatarFile *graphql.Upload, err error) {
 	id = cmd.Config.String("id")
 	if id == "" {
-		return id, input, cmd.NewRequiredFieldMissingError("user id")
+		return id, input, nil, cmd.NewRequiredFieldMissingError("user id")
 	}
 
 	firstName := cmd.Config.String("first-name")
@@ -55,8 +58,23 @@ func updateValidation() (id string, input openlaneclient.UpdateUserInput, err er
 		input.Email = &email
 	}
 
+	avatarFileLoc := cmd.Config.String("avatar-file")
+	if avatarFileLoc != "" {
+		file, err := objects.NewUploadFile(avatarFileLoc)
+		if err != nil {
+			return id, input, nil, err
+		}
+
+		avatarFile = &graphql.Upload{
+			File:        file.File,
+			Filename:    file.Filename,
+			Size:        file.Size,
+			ContentType: file.ContentType,
+		}
+	}
+
 	// TODO: allow updates to user settings
-	return id, input, nil
+	return id, input, avatarFile, nil
 }
 
 // update an existing user
@@ -66,10 +84,10 @@ func update(ctx context.Context) error {
 	cobra.CheckErr(err)
 	defer cmd.StoreSessionCookies(client)
 
-	id, input, err := updateValidation()
+	id, input, avatarFile, err := updateValidation()
 	cobra.CheckErr(err)
 
-	o, err := client.UpdateUser(ctx, id, input)
+	o, err := client.UpdateUser(ctx, id, input, avatarFile)
 	cobra.CheckErr(err)
 
 	return consoleOutput(o)

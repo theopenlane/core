@@ -21,8 +21,9 @@ import (
 // EventHistoryUpdate is the builder for updating EventHistory entities.
 type EventHistoryUpdate struct {
 	config
-	hooks    []Hook
-	mutation *EventHistoryMutation
+	hooks     []Hook
+	mutation  *EventHistoryMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the EventHistoryUpdate builder.
@@ -188,6 +189,12 @@ func (ehu *EventHistoryUpdate) defaults() {
 	}
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (ehu *EventHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EventHistoryUpdate {
+	ehu.modifiers = append(ehu.modifiers, modifiers...)
+	return ehu
+}
+
 func (ehu *EventHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(eventhistory.Table, eventhistory.Columns, sqlgraph.NewFieldSpec(eventhistory.FieldID, field.TypeString))
 	if ps := ehu.mutation.predicates; len(ps) > 0 {
@@ -252,6 +259,7 @@ func (ehu *EventHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	_spec.Node.Schema = ehu.schemaConfig.EventHistory
 	ctx = internal.NewSchemaConfigContext(ctx, ehu.schemaConfig)
+	_spec.AddModifiers(ehu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, ehu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{eventhistory.Label}
@@ -267,9 +275,10 @@ func (ehu *EventHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 // EventHistoryUpdateOne is the builder for updating a single EventHistory entity.
 type EventHistoryUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *EventHistoryMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *EventHistoryMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -442,6 +451,12 @@ func (ehuo *EventHistoryUpdateOne) defaults() {
 	}
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (ehuo *EventHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EventHistoryUpdateOne {
+	ehuo.modifiers = append(ehuo.modifiers, modifiers...)
+	return ehuo
+}
+
 func (ehuo *EventHistoryUpdateOne) sqlSave(ctx context.Context) (_node *EventHistory, err error) {
 	_spec := sqlgraph.NewUpdateSpec(eventhistory.Table, eventhistory.Columns, sqlgraph.NewFieldSpec(eventhistory.FieldID, field.TypeString))
 	id, ok := ehuo.mutation.ID()
@@ -523,6 +538,7 @@ func (ehuo *EventHistoryUpdateOne) sqlSave(ctx context.Context) (_node *EventHis
 	}
 	_spec.Node.Schema = ehuo.schemaConfig.EventHistory
 	ctx = internal.NewSchemaConfigContext(ctx, ehuo.schemaConfig)
+	_spec.AddModifiers(ehuo.modifiers...)
 	_node = &EventHistory{config: ehuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

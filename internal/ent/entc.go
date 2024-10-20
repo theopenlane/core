@@ -11,22 +11,21 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent/entc"
 	"entgo.io/ent/entc/gen"
+	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/iam/entfga"
 	"github.com/theopenlane/iam/fgax"
 	"gocloud.dev/secrets"
 
-	dbx "github.com/theopenlane/dbx/pkg/dbxclient"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/genhooks"
 	"github.com/theopenlane/entx/history"
 	"github.com/theopenlane/iam/totp"
-	"github.com/theopenlane/utils/emails"
-	"github.com/theopenlane/utils/marionette"
 
 	"github.com/theopenlane/core/internal/ent/entconfig"
-	"github.com/theopenlane/core/pkg/analytics"
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/iam/tokens"
+
+	_ "github.com/jackc/pgx/v5"
 )
 
 const (
@@ -75,6 +74,9 @@ func main() {
 			gen.FeatureNamedEdges,
 			gen.FeatureSchemaConfig,
 			gen.FeatureIntercept,
+			gen.FeatureModifier,
+			// this is disabled because it is not compatible with the entcache driver
+			// gen.FeatureExecQuery,
 		},
 	},
 		entc.Dependency(
@@ -98,24 +100,12 @@ func main() {
 			entc.DependencyType(&sessions.SessionConfig{}),
 		),
 		entc.Dependency(
-			entc.DependencyName("Emails"),
-			entc.DependencyType(&emails.EmailManager{}),
-		),
-		entc.Dependency(
-			entc.DependencyName("Marionette"),
-			entc.DependencyType(&marionette.TaskManager{}),
-		),
-		entc.Dependency(
-			entc.DependencyName("Analytics"),
-			entc.DependencyType(&analytics.EventManager{}),
+			entc.DependencyName("Emailer"),
+			entc.DependencyType(&emailtemplates.Config{}),
 		),
 		entc.Dependency(
 			entc.DependencyName("TOTP"),
 			entc.DependencyType(&totp.Manager{}),
-		),
-		entc.Dependency(
-			entc.DependencyName("DBx"),
-			entc.DependencyType(&dbx.Client{}),
 		),
 		entc.TemplateDir("./internal/ent/templates"),
 		entc.Extensions(

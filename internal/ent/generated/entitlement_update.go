@@ -23,8 +23,9 @@ import (
 // EntitlementUpdate is the builder for updating Entitlement entities.
 type EntitlementUpdate struct {
 	config
-	hooks    []Hook
-	mutation *EntitlementMutation
+	hooks     []Hook
+	mutation  *EntitlementMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the EntitlementUpdate builder.
@@ -341,6 +342,12 @@ func (eu *EntitlementUpdate) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (eu *EntitlementUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EntitlementUpdate {
+	eu.modifiers = append(eu.modifiers, modifiers...)
+	return eu
+}
+
 func (eu *EntitlementUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if err := eu.check(); err != nil {
 		return n, err
@@ -499,6 +506,7 @@ func (eu *EntitlementUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	_spec.Node.Schema = eu.schemaConfig.Entitlement
 	ctx = internal.NewSchemaConfigContext(ctx, eu.schemaConfig)
+	_spec.AddModifiers(eu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, eu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{entitlement.Label}
@@ -514,9 +522,10 @@ func (eu *EntitlementUpdate) sqlSave(ctx context.Context) (n int, err error) {
 // EntitlementUpdateOne is the builder for updating a single Entitlement entity.
 type EntitlementUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *EntitlementMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *EntitlementMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -840,6 +849,12 @@ func (euo *EntitlementUpdateOne) check() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (euo *EntitlementUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EntitlementUpdateOne {
+	euo.modifiers = append(euo.modifiers, modifiers...)
+	return euo
+}
+
 func (euo *EntitlementUpdateOne) sqlSave(ctx context.Context) (_node *Entitlement, err error) {
 	if err := euo.check(); err != nil {
 		return _node, err
@@ -1015,6 +1030,7 @@ func (euo *EntitlementUpdateOne) sqlSave(ctx context.Context) (_node *Entitlemen
 	}
 	_spec.Node.Schema = euo.schemaConfig.Entitlement
 	ctx = internal.NewSchemaConfigContext(ctx, euo.schemaConfig)
+	_spec.AddModifiers(euo.modifiers...)
 	_node = &Entitlement{config: euo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

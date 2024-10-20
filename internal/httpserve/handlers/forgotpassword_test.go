@@ -1,21 +1,20 @@
 package handlers_test
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
-	"time"
 
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/rShetty/asyncwait"
+	"github.com/riverqueue/river/riverdriver/riverpgxv5"
+	"github.com/riverqueue/river/rivertest"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	mock_fga "github.com/theopenlane/iam/fgax/mockery"
-
-	"github.com/theopenlane/utils/emails"
-	"github.com/theopenlane/utils/emails/mock"
+	"github.com/theopenlane/riverboat/pkg/jobs"
 
 	"github.com/theopenlane/httpsling"
 
@@ -87,9 +86,7 @@ func (suite *HandlerTestSuite) TestForgotPasswordHandler() {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			sent := time.Now()
-
-			mock.ResetEmailMock()
+			defer suite.ClearTestData()
 
 			resendJSON := models.ForgotPasswordRequest{
 				Email: tc.email,
@@ -126,30 +123,14 @@ func (suite *HandlerTestSuite) TestForgotPasswordHandler() {
 				assert.False(t, out.Success)
 			}
 
-			// Test that one verify email was sent to each user
-			messages := []*mock.EmailMetadata{
-				{
-					To:        tc.email,
-					From:      tc.from,
-					Subject:   emails.PasswordResetRequestRE,
-					Timestamp: sent,
-				},
-			}
-
-			// wait for messages
-			predicate := func() bool {
-				return suite.h.TaskMan.GetQueueLength() == 0
-			}
-			successful := asyncwait.NewAsyncWait(maxWaitInMillis, pollIntervalInMillis).Check(predicate)
-
-			if successful != true {
-				t.Errorf("max wait of email send")
-			}
-
+			// ensure email was added to the job queue
 			if tc.emailExpected {
-				mock.CheckEmails(t, messages)
+				job := rivertest.RequireInserted[*riverpgxv5.Driver](context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()), &jobs.EmailArgs{}, nil)
+				require.NotNil(t, job)
+				assert.Equal(t, []string{tc.email}, job.Args.Message.To)
+				assert.Contains(t, job.Args.Message.Subject, "Password Reset - Action Required")
 			} else {
-				mock.CheckEmails(t, nil)
+				rivertest.RequireNotInserted(ctx, t, riverpgxv5.New(suite.db.Job.GetPool()), &jobs.EmailArgs{}, nil)
 			}
 		})
 	}

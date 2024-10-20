@@ -89,6 +89,7 @@ func (Contact) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("entities", Entity.Type).
 			Ref("contacts"),
+		edge.To("files", File.Type),
 	}
 }
 

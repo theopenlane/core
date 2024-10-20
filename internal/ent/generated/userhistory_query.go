@@ -24,8 +24,8 @@ type UserHistoryQuery struct {
 	order      []userhistory.OrderOption
 	inters     []Interceptor
 	predicates []predicate.UserHistory
-	modifiers  []func(*sql.Selector)
 	loadTotal  []func(context.Context, []*UserHistory) error
+	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -255,8 +255,9 @@ func (uhq *UserHistoryQuery) Clone() *UserHistoryQuery {
 		inters:     append([]Interceptor{}, uhq.inters...),
 		predicates: append([]predicate.UserHistory{}, uhq.predicates...),
 		// clone intermediate query.
-		sql:  uhq.sql.Clone(),
-		path: uhq.path,
+		sql:       uhq.sql.Clone(),
+		path:      uhq.path,
+		modifiers: append([]func(*sql.Selector){}, uhq.modifiers...),
 	}
 }
 
@@ -441,6 +442,9 @@ func (uhq *UserHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	t1.Schema(uhq.schemaConfig.UserHistory)
 	ctx = internal.NewSchemaConfigContext(ctx, uhq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range uhq.modifiers {
+		m(selector)
+	}
 	for _, p := range uhq.predicates {
 		p(selector)
 	}
@@ -456,6 +460,12 @@ func (uhq *UserHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (uhq *UserHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *UserHistorySelect {
+	uhq.modifiers = append(uhq.modifiers, modifiers...)
+	return uhq.Select()
 }
 
 // UserHistoryGroupBy is the group-by builder for UserHistory entities.
@@ -546,4 +556,10 @@ func (uhs *UserHistorySelect) sqlScan(ctx context.Context, root *UserHistoryQuer
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (uhs *UserHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *UserHistorySelect {
+	uhs.modifiers = append(uhs.modifiers, modifiers...)
+	return uhs
 }

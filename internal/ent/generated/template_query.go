@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/template"
@@ -30,9 +31,11 @@ type TemplateQuery struct {
 	predicates         []predicate.Template
 	withOwner          *OrganizationQuery
 	withDocuments      *DocumentDataQuery
-	modifiers          []func(*sql.Selector)
+	withFiles          *FileQuery
 	loadTotal          []func(context.Context, []*Template) error
+	modifiers          []func(*sql.Selector)
 	withNamedDocuments map[string]*DocumentDataQuery
+	withNamedFiles     map[string]*FileQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -113,6 +116,31 @@ func (tq *TemplateQuery) QueryDocuments() *DocumentDataQuery {
 		schemaConfig := tq.schemaConfig
 		step.To.Schema = schemaConfig.DocumentData
 		step.Edge.Schema = schemaConfig.DocumentData
+		fromU = sqlgraph.SetNeighbors(tq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryFiles chains the current query on the "files" edge.
+func (tq *TemplateQuery) QueryFiles() *FileQuery {
+	query := (&FileClient{config: tq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := tq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := tq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(template.Table, template.FieldID, selector),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, template.FilesTable, template.FilesPrimaryKey...),
+		)
+		schemaConfig := tq.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.TemplateFiles
 		fromU = sqlgraph.SetNeighbors(tq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -313,9 +341,11 @@ func (tq *TemplateQuery) Clone() *TemplateQuery {
 		predicates:    append([]predicate.Template{}, tq.predicates...),
 		withOwner:     tq.withOwner.Clone(),
 		withDocuments: tq.withDocuments.Clone(),
+		withFiles:     tq.withFiles.Clone(),
 		// clone intermediate query.
-		sql:  tq.sql.Clone(),
-		path: tq.path,
+		sql:       tq.sql.Clone(),
+		path:      tq.path,
+		modifiers: append([]func(*sql.Selector){}, tq.modifiers...),
 	}
 }
 
@@ -338,6 +368,17 @@ func (tq *TemplateQuery) WithDocuments(opts ...func(*DocumentDataQuery)) *Templa
 		opt(query)
 	}
 	tq.withDocuments = query
+	return tq
+}
+
+// WithFiles tells the query-builder to eager-load the nodes that are connected to
+// the "files" edge. The optional arguments are used to configure the query builder of the edge.
+func (tq *TemplateQuery) WithFiles(opts ...func(*FileQuery)) *TemplateQuery {
+	query := (&FileClient{config: tq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	tq.withFiles = query
 	return tq
 }
 
@@ -425,9 +466,10 @@ func (tq *TemplateQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Tem
 	var (
 		nodes       = []*Template{}
 		_spec       = tq.querySpec()
-		loadedTypes = [2]bool{
+		loadedTypes = [3]bool{
 			tq.withOwner != nil,
 			tq.withDocuments != nil,
+			tq.withFiles != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -466,10 +508,24 @@ func (tq *TemplateQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Tem
 			return nil, err
 		}
 	}
+	if query := tq.withFiles; query != nil {
+		if err := tq.loadFiles(ctx, query, nodes,
+			func(n *Template) { n.Edges.Files = []*File{} },
+			func(n *Template, e *File) { n.Edges.Files = append(n.Edges.Files, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range tq.withNamedDocuments {
 		if err := tq.loadDocuments(ctx, query, nodes,
 			func(n *Template) { n.appendNamedDocuments(name) },
 			func(n *Template, e *DocumentData) { n.appendNamedDocuments(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range tq.withNamedFiles {
+		if err := tq.loadFiles(ctx, query, nodes,
+			func(n *Template) { n.appendNamedFiles(name) },
+			func(n *Template, e *File) { n.appendNamedFiles(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -537,6 +593,68 @@ func (tq *TemplateQuery) loadDocuments(ctx context.Context, query *DocumentDataQ
 			return fmt.Errorf(`unexpected referenced foreign-key "template_id" returned %v for node %v`, fk, n.ID)
 		}
 		assign(node, n)
+	}
+	return nil
+}
+func (tq *TemplateQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []*Template, init func(*Template), assign func(*Template, *File)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Template)
+	nids := make(map[string]map[*Template]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(template.FilesTable)
+		joinT.Schema(tq.schemaConfig.TemplateFiles)
+		s.Join(joinT).On(s.C(file.FieldID), joinT.C(template.FilesPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(template.FilesPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(template.FilesPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Template]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*File](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "files" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
 	}
 	return nil
 }
@@ -616,6 +734,9 @@ func (tq *TemplateQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	t1.Schema(tq.schemaConfig.Template)
 	ctx = internal.NewSchemaConfigContext(ctx, tq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range tq.modifiers {
+		m(selector)
+	}
 	for _, p := range tq.predicates {
 		p(selector)
 	}
@@ -633,6 +754,12 @@ func (tq *TemplateQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	return selector
 }
 
+// Modify adds a query modifier for attaching custom logic to queries.
+func (tq *TemplateQuery) Modify(modifiers ...func(s *sql.Selector)) *TemplateSelect {
+	tq.modifiers = append(tq.modifiers, modifiers...)
+	return tq.Select()
+}
+
 // WithNamedDocuments tells the query-builder to eager-load the nodes that are connected to the "documents"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
 func (tq *TemplateQuery) WithNamedDocuments(name string, opts ...func(*DocumentDataQuery)) *TemplateQuery {
@@ -644,6 +771,20 @@ func (tq *TemplateQuery) WithNamedDocuments(name string, opts ...func(*DocumentD
 		tq.withNamedDocuments = make(map[string]*DocumentDataQuery)
 	}
 	tq.withNamedDocuments[name] = query
+	return tq
+}
+
+// WithNamedFiles tells the query-builder to eager-load the nodes that are connected to the "files"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (tq *TemplateQuery) WithNamedFiles(name string, opts ...func(*FileQuery)) *TemplateQuery {
+	query := (&FileClient{config: tq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if tq.withNamedFiles == nil {
+		tq.withNamedFiles = make(map[string]*FileQuery)
+	}
+	tq.withNamedFiles[name] = query
 	return tq
 }
 
@@ -735,4 +876,10 @@ func (ts *TemplateSelect) sqlScan(ctx context.Context, root *TemplateQuery, v an
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (ts *TemplateSelect) Modify(modifiers ...func(s *sql.Selector)) *TemplateSelect {
+	ts.modifiers = append(ts.modifiers, modifiers...)
+	return ts
 }

@@ -25,8 +25,8 @@ type OrgMembershipHistoryQuery struct {
 	order      []orgmembershiphistory.OrderOption
 	inters     []Interceptor
 	predicates []predicate.OrgMembershipHistory
-	modifiers  []func(*sql.Selector)
 	loadTotal  []func(context.Context, []*OrgMembershipHistory) error
+	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -256,8 +256,9 @@ func (omhq *OrgMembershipHistoryQuery) Clone() *OrgMembershipHistoryQuery {
 		inters:     append([]Interceptor{}, omhq.inters...),
 		predicates: append([]predicate.OrgMembershipHistory{}, omhq.predicates...),
 		// clone intermediate query.
-		sql:  omhq.sql.Clone(),
-		path: omhq.path,
+		sql:       omhq.sql.Clone(),
+		path:      omhq.path,
+		modifiers: append([]func(*sql.Selector){}, omhq.modifiers...),
 	}
 }
 
@@ -448,6 +449,9 @@ func (omhq *OrgMembershipHistoryQuery) sqlQuery(ctx context.Context) *sql.Select
 	t1.Schema(omhq.schemaConfig.OrgMembershipHistory)
 	ctx = internal.NewSchemaConfigContext(ctx, omhq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range omhq.modifiers {
+		m(selector)
+	}
 	for _, p := range omhq.predicates {
 		p(selector)
 	}
@@ -463,6 +467,12 @@ func (omhq *OrgMembershipHistoryQuery) sqlQuery(ctx context.Context) *sql.Select
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (omhq *OrgMembershipHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *OrgMembershipHistorySelect {
+	omhq.modifiers = append(omhq.modifiers, modifiers...)
+	return omhq.Select()
 }
 
 // OrgMembershipHistoryGroupBy is the group-by builder for OrgMembershipHistory entities.
@@ -553,4 +563,10 @@ func (omhs *OrgMembershipHistorySelect) sqlScan(ctx context.Context, root *OrgMe
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (omhs *OrgMembershipHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *OrgMembershipHistorySelect {
+	omhs.modifiers = append(omhs.modifiers, modifiers...)
+	return omhs
 }

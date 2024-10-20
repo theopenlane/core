@@ -21,8 +21,9 @@ import (
 // EntitlementPlanHistoryUpdate is the builder for updating EntitlementPlanHistory entities.
 type EntitlementPlanHistoryUpdate struct {
 	config
-	hooks    []Hook
-	mutation *EntitlementPlanHistoryMutation
+	hooks     []Hook
+	mutation  *EntitlementPlanHistoryMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // Where appends a list predicates to the EntitlementPlanHistoryUpdate builder.
@@ -240,6 +241,12 @@ func (ephu *EntitlementPlanHistoryUpdate) defaults() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (ephu *EntitlementPlanHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EntitlementPlanHistoryUpdate {
+	ephu.modifiers = append(ephu.modifiers, modifiers...)
+	return ephu
+}
+
 func (ephu *EntitlementPlanHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(entitlementplanhistory.Table, entitlementplanhistory.Columns, sqlgraph.NewFieldSpec(entitlementplanhistory.FieldID, field.TypeString))
 	if ps := ephu.mutation.predicates; len(ps) > 0 {
@@ -319,6 +326,7 @@ func (ephu *EntitlementPlanHistoryUpdate) sqlSave(ctx context.Context) (n int, e
 	}
 	_spec.Node.Schema = ephu.schemaConfig.EntitlementPlanHistory
 	ctx = internal.NewSchemaConfigContext(ctx, ephu.schemaConfig)
+	_spec.AddModifiers(ephu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, ephu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{entitlementplanhistory.Label}
@@ -334,9 +342,10 @@ func (ephu *EntitlementPlanHistoryUpdate) sqlSave(ctx context.Context) (n int, e
 // EntitlementPlanHistoryUpdateOne is the builder for updating a single EntitlementPlanHistory entity.
 type EntitlementPlanHistoryUpdateOne struct {
 	config
-	fields   []string
-	hooks    []Hook
-	mutation *EntitlementPlanHistoryMutation
+	fields    []string
+	hooks     []Hook
+	mutation  *EntitlementPlanHistoryMutation
+	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
@@ -561,6 +570,12 @@ func (ephuo *EntitlementPlanHistoryUpdateOne) defaults() error {
 	return nil
 }
 
+// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
+func (ephuo *EntitlementPlanHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EntitlementPlanHistoryUpdateOne {
+	ephuo.modifiers = append(ephuo.modifiers, modifiers...)
+	return ephuo
+}
+
 func (ephuo *EntitlementPlanHistoryUpdateOne) sqlSave(ctx context.Context) (_node *EntitlementPlanHistory, err error) {
 	_spec := sqlgraph.NewUpdateSpec(entitlementplanhistory.Table, entitlementplanhistory.Columns, sqlgraph.NewFieldSpec(entitlementplanhistory.FieldID, field.TypeString))
 	id, ok := ephuo.mutation.ID()
@@ -657,6 +672,7 @@ func (ephuo *EntitlementPlanHistoryUpdateOne) sqlSave(ctx context.Context) (_nod
 	}
 	_spec.Node.Schema = ephuo.schemaConfig.EntitlementPlanHistory
 	ctx = internal.NewSchemaConfigContext(ctx, ephuo.schemaConfig)
+	_spec.AddModifiers(ephuo.modifiers...)
 	_node = &EntitlementPlanHistory{config: ephuo.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

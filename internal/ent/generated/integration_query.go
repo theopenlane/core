@@ -37,8 +37,8 @@ type IntegrationQuery struct {
 	withEvents            *EventQuery
 	withWebhooks          *WebhookQuery
 	withFKs               bool
-	modifiers             []func(*sql.Selector)
 	loadTotal             []func(context.Context, []*Integration) error
+	modifiers             []func(*sql.Selector)
 	withNamedSecrets      map[string]*HushQuery
 	withNamedOauth2tokens map[string]*OhAuthTooTokenQuery
 	withNamedEvents       map[string]*EventQuery
@@ -402,8 +402,9 @@ func (iq *IntegrationQuery) Clone() *IntegrationQuery {
 		withEvents:       iq.withEvents.Clone(),
 		withWebhooks:     iq.withWebhooks.Clone(),
 		// clone intermediate query.
-		sql:  iq.sql.Clone(),
-		path: iq.path,
+		sql:       iq.sql.Clone(),
+		path:      iq.path,
+		modifiers: append([]func(*sql.Selector){}, iq.modifiers...),
 	}
 }
 
@@ -1004,6 +1005,9 @@ func (iq *IntegrationQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	t1.Schema(iq.schemaConfig.Integration)
 	ctx = internal.NewSchemaConfigContext(ctx, iq.schemaConfig)
 	selector.WithContext(ctx)
+	for _, m := range iq.modifiers {
+		m(selector)
+	}
 	for _, p := range iq.predicates {
 		p(selector)
 	}
@@ -1019,6 +1023,12 @@ func (iq *IntegrationQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (iq *IntegrationQuery) Modify(modifiers ...func(s *sql.Selector)) *IntegrationSelect {
+	iq.modifiers = append(iq.modifiers, modifiers...)
+	return iq.Select()
 }
 
 // WithNamedSecrets tells the query-builder to eager-load the nodes that are connected to the "secrets"
@@ -1165,4 +1175,10 @@ func (is *IntegrationSelect) sqlScan(ctx context.Context, root *IntegrationQuery
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
+}
+
+// Modify adds a query modifier for attaching custom logic to queries.
+func (is *IntegrationSelect) Modify(modifiers ...func(s *sql.Selector)) *IntegrationSelect {
+	is.modifiers = append(is.modifiers, modifiers...)
+	return is
 }

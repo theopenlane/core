@@ -23,6 +23,7 @@ import (
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/pkg/objects"
 )
 
 // This file will not be regenerated automatically.
@@ -45,15 +46,17 @@ var (
 
 // Resolver provides a graph response resolver
 type Resolver struct {
-	client            *ent.Client
+	db                *ent.Client
 	pool              *soiree.PondPool
 	extensionsEnabled bool
+	uploader          *objects.Objects
 }
 
 // NewResolver returns a resolver configured with the given ent client
-func NewResolver(client *ent.Client) *Resolver {
+func NewResolver(db *ent.Client, u *objects.Objects) *Resolver {
 	return &Resolver{
-		client: client,
+		db:       db,
+		uploader: u,
 	}
 }
 
@@ -92,7 +95,10 @@ func (r *Resolver) Handler(withPlayground bool) *Handler {
 	srv.AddTransport(transport.Options{})
 	srv.AddTransport(transport.GET{})
 	srv.AddTransport(transport.POST{})
-	srv.AddTransport(transport.MultipartForm{})
+	srv.AddTransport(transport.MultipartForm{
+		MaxUploadSize: r.uploader.MaxSize,
+		MaxMemory:     r.uploader.MaxMemory,
+	})
 
 	srv.SetQueryCache(lru.New[*ast.QueryDocument](1000)) //nolint:mnd
 
@@ -102,17 +108,19 @@ func (r *Resolver) Handler(withPlayground bool) *Handler {
 	})
 
 	// add transactional db client
-	WithTransactions(srv, r.client)
+	WithTransactions(srv, r.db)
 
 	// add context level caching
 	WithContextLevelCache(srv)
 
-	// add analytics
-	WithEvents(r.client)
-
 	// add extensions if enabled
 	if r.extensionsEnabled {
 		AddAllExtensions(srv)
+	}
+
+	// add file uploader if it is configured
+	if r.uploader != nil {
+		WithFileUploader(srv, r.uploader)
 	}
 
 	srv.Use(otelgqlgen.Middleware())
@@ -133,29 +141,18 @@ func (r *Resolver) Handler(withPlayground bool) *Handler {
 	return h
 }
 
-func WithEvents(c *ent.Client) {
-	// Add a global hook that runs on all types and all operations.
-	c.Use(func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			retVal, err := next.Mutate(ctx, m)
-			if err != nil {
-				return retVal, err
-			}
+// WithTransactions adds the transactioner to the ent db client
+func WithTransactions(h *handler.Server, d *ent.Client) {
+	// setup transactional db client
+	h.AroundOperations(injectClient(d))
 
-			if TrackedEvent(m) {
-				CreateEvent(ctx, c, m, retVal)
-			}
-
-			return retVal, nil
-		})
-	})
+	h.Use(entgql.Transactioner{TxOpener: d})
 }
 
-// WithTransactions adds the transactioner to the ent db client
-func WithTransactions(h *handler.Server, c *ent.Client) {
-	// setup transactional db client
-	h.AroundOperations(injectClient(c))
-	h.Use(entgql.Transactioner{TxOpener: c})
+// WithFileUploader adds the file uploader to the graphql handler
+// this will handle the file upload process for the multipart form
+func WithFileUploader(h *handler.Server, u *objects.Objects) {
+	h.AroundOperations(injectFileUploader(u))
 }
 
 // WithContextLevelCache adds a context level cache to the handler
@@ -177,6 +174,7 @@ func WithSkipCache(h *handler.Server) {
 	})
 }
 
+// WithPool adds a worker pool to the resolver for parallel processing
 func (r *Resolver) WithPool(maxWorkers int, maxCapacity int, options ...pond.Option) {
 	// create the pool
 	r.pool = soiree.NewNamedPondPool(maxWorkers, maxCapacity, "graph", options...)
