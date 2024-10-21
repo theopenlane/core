@@ -22,39 +22,59 @@ func (Subcontrol) Fields() []ent.Field {
 		field.String("name").
 			Comment("the name of the subcontrol"),
 		field.Text("description").
+			Optional().
 			Comment("description of the subcontrol"),
 		field.String("status").
+			Optional().
 			Comment("status of the subcontrol"),
 		field.String("type").
+			Optional().
 			Comment("type of the subcontrol"),
 		field.String("version").
+			Optional().
 			Comment("version of the control"),
 		field.String("owner").
+			Optional().
 			Comment("owner of the subcontrol"),
 		field.String("subcontrol_number").
+			Optional().
 			Comment("control number"),
 		field.Text("subcontrol_family").
+			Optional().
 			Comment("control family"),
 		field.String("subcontrol_class").
+			Optional().
 			Comment("control class"),
 		field.String("source").
+			Optional().
 			Comment("source of the control"),
 		field.Text("mapped_frameworks").
+			Optional().
 			Comment("mapped frameworks"),
 		field.String("assigned_to").
+			Optional().
 			Comment("assigned to"),
 		field.String("implementation_status").
+			Optional().
 			Comment("implementation status"),
 		field.String("implementation_notes").
+			Optional().
 			Comment("implementation notes"),
 		field.String("implementation_date").
+			Optional().
 			Comment("implementation date"),
 		field.String("implementation_evidence").
+			Optional().
 			Comment("implementation evidence"),
 		field.String("implementation_verification").
+			Optional().
 			Comment("implementation verification"),
 		field.String("implementation_verification_date").
+			Optional().
 			Comment("implementation verification date"),
+		field.JSON("jsonschema", map[string]interface{}{}).
+			Optional().
+			Comment("json schema"),
 	}
 }
 

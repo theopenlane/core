@@ -24,15 +24,23 @@ func (Policy) Fields() []ent.Field {
 		field.Text("description").
 			Comment("description of the policy"),
 		field.String("status").
+			Optional().
 			Comment("status of the policy"),
 		field.String("type").
+			Optional().
 			Comment("type of the policy"),
 		field.String("version").
+			Optional().
 			Comment("version of the policy"),
 		field.Text("purpose and scope").
+			Optional().
 			Comment("purpose and scope"),
 		field.Text("background").
+			Optional().
 			Comment("background"),
+		field.JSON("jsonschema", map[string]interface{}{}).
+			Optional().
+			Comment("json schema"),
 	}
 }
 
@@ -40,6 +48,8 @@ func (Policy) Fields() []ent.Field {
 func (Policy) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("controlobjective", ControlObjective.Type),
+		edge.To("control", Control.Type),
+		edge.To("procedure", Procedure.Type),
 	}
 }
 

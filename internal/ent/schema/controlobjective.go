@@ -22,25 +22,38 @@ func (ControlObjective) Fields() []ent.Field {
 		field.String("name").
 			Comment("the name of the control"),
 		field.Text("description").
+			Optional().
 			Comment("description of the control"),
 		field.String("status").
+			Optional().
 			Comment("status of the control"),
 		field.String("type").
+			Optional().
 			Comment("type of the control"),
 		field.String("version").
+			Optional().
 			Comment("version of the control"),
 		field.String("owner").
+			Optional().
 			Comment("owner of the control"),
 		field.String("control_number").
+			Optional().
 			Comment("control number"),
 		field.Text("control_family").
+			Optional().
 			Comment("control family"),
 		field.String("control_class").
+			Optional().
 			Comment("control class"),
 		field.String("source").
+			Optional().
 			Comment("source of the control"),
 		field.Text("mapped_frameworks").
+			Optional().
 			Comment("mapped frameworks"),
+		field.JSON("jsonschema", map[string]interface{}{}).
+			Optional().
+			Comment("json schema"),
 	}
 }
 
@@ -49,6 +62,12 @@ func (ControlObjective) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("policy", Policy.Type).
 			Ref("policies"),
+		edge.To("control", Control.Type),
+		edge.To("procedure", Procedure.Type),
+		edge.To("risk", Risk.Type),
+		edge.To("subcontrol", Subcontrol.Type),
+		edge.From("standard", Standard.Type).
+			Ref("standards"),
 	}
 }
 
