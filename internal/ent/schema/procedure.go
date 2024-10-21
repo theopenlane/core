@@ -22,19 +22,29 @@ func (Procedure) Fields() []ent.Field {
 		field.String("name").
 			Comment("the name of the procedure"),
 		field.Text("description").
+			Optional().
 			Comment("description of the procedure"),
 		field.String("status").
+			Optional().
 			Comment("status of the procedure"),
 		field.String("type").
+			Optional().
 			Comment("type of the procedure"),
 		field.String("version").
+			Optional().
 			Comment("version of the procedure"),
 		field.Text("purpose and scope").
+			Optional().
 			Comment("purpose and scope"),
 		field.Text("background").
+			Optional().
 			Comment("background"),
 		field.Text("satisfies").
+			Optional().
 			Comment("which controls are satisfied by the procedure"),
+		field.JSON("jsonschema", map[string]interface{}{}).
+			Optional().
+			Comment("json schema"),
 	}
 }
 
@@ -43,6 +53,8 @@ func (Procedure) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("control", User.Type).
 			Ref("controls"),
+		edge.From("policy", Policy.Type).
+			Ref("policies"),
 	}
 }
 

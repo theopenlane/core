@@ -22,21 +22,32 @@ func (Standard) Fields() []ent.Field {
 		field.String("name").
 			Comment("the name of the standard body, e.g. TSC, NIST, SOC, HITRUST, FedRamp, etc."),
 		field.Text("description").
+			Optional().
 			Comment("description of the standard"),
 		field.String("family").
+			Optional().
 			Comment("family of the standard, e.g. 800-53, 800-171, 27001, etc."),
 		field.String("status").
+			Optional().
 			Comment("status of the standard - active, deprecated, etc."),
 		field.String("type").
+			Optional().
 			Comment("type of the standard - security, privacy, etc."),
 		field.String("version").
+			Optional().
 			Comment("version of the standard"),
 		field.Text("purpose and scope").
+			Optional().
 			Comment("purpose and scope"),
 		field.Text("background").
+			Optional().
 			Comment("background"),
 		field.Text("satisfies").
+			Optional().
 			Comment("which controls are satisfied by the standard"),
+		field.JSON("jsonschema", map[string]interface{}{}).
+			Optional().
+			Comment("json schema"),
 	}
 }
 
@@ -44,6 +55,8 @@ func (Standard) Fields() []ent.Field {
 func (Standard) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("controlobjective", ControlObjective.Type),
+		edge.To("control", Control.Type),
+		edge.To("procedure", Procedure.Type),
 	}
 }
 

@@ -25,14 +25,21 @@ func (Narrative) Fields() []ent.Field {
 			Optional().
 			Comment("the description of the narrative"),
 		field.Text("satisfies").
+			Optional().
 			Comment("which controls are satisfied by the narrative"),
+		field.JSON("jsonschema", map[string]interface{}{}).
+			Optional().
+			Comment("json schema"),
 	}
 }
 
 // Edges of the Narrative
 func (Narrative) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("policy", User.Type),
+		edge.From("policy", Policy.Type),
+		edge.From("control", Control.Type),
+		edge.From("procedure", Procedure.Type),
+		edge.From("controlobjective", ControlObjective.Type),
 	}
 }
 
