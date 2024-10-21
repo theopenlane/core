@@ -27,7 +27,7 @@ func (Risk) Fields() []ent.Field {
 		field.String("status").
 			Optional().
 			Comment("status of the risk - mitigated or not, inflight, etc."),
-		field.String("type").
+		field.String("risk_type").
 			Optional().
 			Comment("type of the risk, e.g. strategic, operational, financial, external, etc."),
 		field.Text("business costs").

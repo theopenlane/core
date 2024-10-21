@@ -26,7 +26,7 @@ func (InternalPolicy) Fields() []ent.Field {
 		field.String("status").
 			Optional().
 			Comment("status of the policy"),
-		field.String("type").
+		field.String("policy_type").
 			Optional().
 			Comment("type of the policy"),
 		field.String("version").

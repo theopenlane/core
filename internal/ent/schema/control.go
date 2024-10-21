@@ -27,7 +27,7 @@ func (Control) Fields() []ent.Field {
 		field.String("status").
 			Optional().
 			Comment("status of the control"),
-		field.String("type").
+		field.String("control_type").
 			Optional().
 			Comment("type of the control"),
 		field.String("version").
@@ -69,6 +69,7 @@ func (Control) Edges() []ent.Edge {
 		edge.From("standard", Standard.Type).
 			Ref("controls"),
 		edge.To("narratives", Narrative.Type),
+		edge.To("risks", Risk.Type),
 	}
 }
 

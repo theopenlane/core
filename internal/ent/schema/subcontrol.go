@@ -27,7 +27,7 @@ func (Subcontrol) Fields() []ent.Field {
 		field.String("status").
 			Optional().
 			Comment("status of the subcontrol"),
-		field.String("type").
+		field.String("subcontrol_type").
 			Optional().
 			Comment("type of the subcontrol"),
 		field.String("version").

@@ -27,7 +27,7 @@ func (Procedure) Fields() []ent.Field {
 		field.String("status").
 			Optional().
 			Comment("status of the procedure"),
-		field.String("type").
+		field.String("procedure_type").
 			Optional().
 			Comment("type of the procedure"),
 		field.String("version").
@@ -55,6 +55,8 @@ func (Procedure) Edges() []ent.Edge {
 			Ref("procedures"),
 		edge.From("internalpolicy", InternalPolicy.Type).
 			Ref("procedures"),
+		edge.To("narratives", Narrative.Type),
+		edge.To("risks", Risk.Type),
 	}
 }
 

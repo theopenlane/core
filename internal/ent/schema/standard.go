@@ -30,7 +30,7 @@ func (Standard) Fields() []ent.Field {
 		field.String("status").
 			Optional().
 			Comment("status of the standard - active, deprecated, etc."),
-		field.String("type").
+		field.String("standard_type").
 			Optional().
 			Comment("type of the standard - security, privacy, etc."),
 		field.String("version").
