@@ -128,8 +128,3 @@ func (r *queryResolver) APIToken(ctx context.Context, id string) (*generated.API
 
 	return apiToken, nil
 }
-
-// Mutation returns MutationResolver implementation.
-func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
-
-type mutationResolver struct{ *Resolver }

@@ -9,9 +9,15 @@ import (
 	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/hashicorp/go-multierror"
+	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/actionplanhistory"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/contacthistory"
+	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/controlhistory"
+	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/documentdatahistory"
 	"github.com/theopenlane/core/internal/ent/generated/entitlement"
@@ -40,7 +46,11 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hushhistory"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/integrationhistory"
+	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/internal/ent/generated/internalpolicyhistory"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
+	"github.com/theopenlane/core/internal/ent/generated/narrative"
+	"github.com/theopenlane/core/internal/ent/generated/narrativehistory"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/notehistory"
 	"github.com/theopenlane/core/internal/ent/generated/oauthprovider"
@@ -53,6 +63,14 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembershiphistory"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
+	"github.com/theopenlane/core/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/internal/ent/generated/procedurehistory"
+	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
+	"github.com/theopenlane/core/internal/ent/generated/standard"
+	"github.com/theopenlane/core/internal/ent/generated/standardhistory"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
@@ -75,6 +93,16 @@ var apitokenImplementors = []string{"APIToken", "Node"}
 // IsNode implements the Node interface check for GQLGen.
 func (*APIToken) IsNode() {}
 
+var actionplanImplementors = []string{"ActionPlan", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*ActionPlan) IsNode() {}
+
+var actionplanhistoryImplementors = []string{"ActionPlanHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*ActionPlanHistory) IsNode() {}
+
 var contactImplementors = []string{"Contact", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
@@ -84,6 +112,26 @@ var contacthistoryImplementors = []string{"ContactHistory", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*ContactHistory) IsNode() {}
+
+var controlImplementors = []string{"Control", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*Control) IsNode() {}
+
+var controlhistoryImplementors = []string{"ControlHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*ControlHistory) IsNode() {}
+
+var controlobjectiveImplementors = []string{"ControlObjective", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*ControlObjective) IsNode() {}
+
+var controlobjectivehistoryImplementors = []string{"ControlObjectiveHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*ControlObjectiveHistory) IsNode() {}
 
 var documentdataImplementors = []string{"DocumentData", "Node"}
 
@@ -225,10 +273,30 @@ var integrationhistoryImplementors = []string{"IntegrationHistory", "Node"}
 // IsNode implements the Node interface check for GQLGen.
 func (*IntegrationHistory) IsNode() {}
 
+var internalpolicyImplementors = []string{"InternalPolicy", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*InternalPolicy) IsNode() {}
+
+var internalpolicyhistoryImplementors = []string{"InternalPolicyHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*InternalPolicyHistory) IsNode() {}
+
 var inviteImplementors = []string{"Invite", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*Invite) IsNode() {}
+
+var narrativeImplementors = []string{"Narrative", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*Narrative) IsNode() {}
+
+var narrativehistoryImplementors = []string{"NarrativeHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*NarrativeHistory) IsNode() {}
 
 var noteImplementors = []string{"Note", "Node"}
 
@@ -289,6 +357,46 @@ var personalaccesstokenImplementors = []string{"PersonalAccessToken", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*PersonalAccessToken) IsNode() {}
+
+var procedureImplementors = []string{"Procedure", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*Procedure) IsNode() {}
+
+var procedurehistoryImplementors = []string{"ProcedureHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*ProcedureHistory) IsNode() {}
+
+var riskImplementors = []string{"Risk", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*Risk) IsNode() {}
+
+var riskhistoryImplementors = []string{"RiskHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*RiskHistory) IsNode() {}
+
+var standardImplementors = []string{"Standard", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*Standard) IsNode() {}
+
+var standardhistoryImplementors = []string{"StandardHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*StandardHistory) IsNode() {}
+
+var subcontrolImplementors = []string{"Subcontrol", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*Subcontrol) IsNode() {}
+
+var subcontrolhistoryImplementors = []string{"SubcontrolHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*SubcontrolHistory) IsNode() {}
 
 var subscriberImplementors = []string{"Subscriber", "Node"}
 
@@ -407,6 +515,24 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			}
 		}
 		return query.Only(ctx)
+	case actionplan.Table:
+		query := c.ActionPlan.Query().
+			Where(actionplan.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, actionplanImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case actionplanhistory.Table:
+		query := c.ActionPlanHistory.Query().
+			Where(actionplanhistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, actionplanhistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
 	case contact.Table:
 		query := c.Contact.Query().
 			Where(contact.ID(id))
@@ -421,6 +547,42 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(contacthistory.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, contacthistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case control.Table:
+		query := c.Control.Query().
+			Where(control.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, controlImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case controlhistory.Table:
+		query := c.ControlHistory.Query().
+			Where(controlhistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, controlhistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case controlobjective.Table:
+		query := c.ControlObjective.Query().
+			Where(controlobjective.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, controlobjectiveImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case controlobjectivehistory.Table:
+		query := c.ControlObjectiveHistory.Query().
+			Where(controlobjectivehistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, controlobjectivehistoryImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -677,11 +839,47 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			}
 		}
 		return query.Only(ctx)
+	case internalpolicy.Table:
+		query := c.InternalPolicy.Query().
+			Where(internalpolicy.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, internalpolicyImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case internalpolicyhistory.Table:
+		query := c.InternalPolicyHistory.Query().
+			Where(internalpolicyhistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, internalpolicyhistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
 	case invite.Table:
 		query := c.Invite.Query().
 			Where(invite.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, inviteImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case narrative.Table:
+		query := c.Narrative.Query().
+			Where(narrative.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, narrativeImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case narrativehistory.Table:
+		query := c.NarrativeHistory.Query().
+			Where(narrativehistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, narrativehistoryImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -790,6 +988,78 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(personalaccesstoken.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, personalaccesstokenImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case procedure.Table:
+		query := c.Procedure.Query().
+			Where(procedure.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, procedureImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case procedurehistory.Table:
+		query := c.ProcedureHistory.Query().
+			Where(procedurehistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, procedurehistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case risk.Table:
+		query := c.Risk.Query().
+			Where(risk.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, riskImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case riskhistory.Table:
+		query := c.RiskHistory.Query().
+			Where(riskhistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, riskhistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case standard.Table:
+		query := c.Standard.Query().
+			Where(standard.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, standardImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case standardhistory.Table:
+		query := c.StandardHistory.Query().
+			Where(standardhistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, standardhistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case subcontrol.Table:
+		query := c.Subcontrol.Query().
+			Where(subcontrol.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, subcontrolImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case subcontrolhistory.Table:
+		query := c.SubcontrolHistory.Query().
+			Where(subcontrolhistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, subcontrolhistoryImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -973,6 +1243,38 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 				*noder = node
 			}
 		}
+	case actionplan.Table:
+		query := c.ActionPlan.Query().
+			Where(actionplan.IDIn(ids...))
+		query, err := query.CollectFields(ctx, actionplanImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case actionplanhistory.Table:
+		query := c.ActionPlanHistory.Query().
+			Where(actionplanhistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, actionplanhistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
 	case contact.Table:
 		query := c.Contact.Query().
 			Where(contact.IDIn(ids...))
@@ -993,6 +1295,70 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.ContactHistory.Query().
 			Where(contacthistory.IDIn(ids...))
 		query, err := query.CollectFields(ctx, contacthistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case control.Table:
+		query := c.Control.Query().
+			Where(control.IDIn(ids...))
+		query, err := query.CollectFields(ctx, controlImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case controlhistory.Table:
+		query := c.ControlHistory.Query().
+			Where(controlhistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, controlhistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case controlobjective.Table:
+		query := c.ControlObjective.Query().
+			Where(controlobjective.IDIn(ids...))
+		query, err := query.CollectFields(ctx, controlobjectiveImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case controlobjectivehistory.Table:
+		query := c.ControlObjectiveHistory.Query().
+			Where(controlobjectivehistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, controlobjectivehistoryImplementors...)
 		if err != nil {
 			return nil, err
 		}
@@ -1453,10 +1819,74 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 				*noder = node
 			}
 		}
+	case internalpolicy.Table:
+		query := c.InternalPolicy.Query().
+			Where(internalpolicy.IDIn(ids...))
+		query, err := query.CollectFields(ctx, internalpolicyImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case internalpolicyhistory.Table:
+		query := c.InternalPolicyHistory.Query().
+			Where(internalpolicyhistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, internalpolicyhistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
 	case invite.Table:
 		query := c.Invite.Query().
 			Where(invite.IDIn(ids...))
 		query, err := query.CollectFields(ctx, inviteImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case narrative.Table:
+		query := c.Narrative.Query().
+			Where(narrative.IDIn(ids...))
+		query, err := query.CollectFields(ctx, narrativeImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case narrativehistory.Table:
+		query := c.NarrativeHistory.Query().
+			Where(narrativehistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, narrativehistoryImplementors...)
 		if err != nil {
 			return nil, err
 		}
@@ -1649,6 +2079,134 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.PersonalAccessToken.Query().
 			Where(personalaccesstoken.IDIn(ids...))
 		query, err := query.CollectFields(ctx, personalaccesstokenImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case procedure.Table:
+		query := c.Procedure.Query().
+			Where(procedure.IDIn(ids...))
+		query, err := query.CollectFields(ctx, procedureImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case procedurehistory.Table:
+		query := c.ProcedureHistory.Query().
+			Where(procedurehistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, procedurehistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case risk.Table:
+		query := c.Risk.Query().
+			Where(risk.IDIn(ids...))
+		query, err := query.CollectFields(ctx, riskImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case riskhistory.Table:
+		query := c.RiskHistory.Query().
+			Where(riskhistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, riskhistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case standard.Table:
+		query := c.Standard.Query().
+			Where(standard.IDIn(ids...))
+		query, err := query.CollectFields(ctx, standardImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case standardhistory.Table:
+		query := c.StandardHistory.Query().
+			Where(standardhistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, standardhistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case subcontrol.Table:
+		query := c.Subcontrol.Query().
+			Where(subcontrol.IDIn(ids...))
+		query, err := query.CollectFields(ctx, subcontrolImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case subcontrolhistory.Table:
+		query := c.SubcontrolHistory.Query().
+			Where(subcontrolhistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, subcontrolhistoryImplementors...)
 		if err != nil {
 			return nil, err
 		}

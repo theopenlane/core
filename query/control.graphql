@@ -1,0 +1,188 @@
+
+mutation CreateBulkCSVControl($input: Upload!) {
+  createBulkCSVControl(input: $input) {
+    controls {
+      controlClass
+      controlFamily
+      controlNumber
+      controlType
+      createdAt
+      createdBy
+      description
+      id
+      jsonschema
+      mappedFrameworks
+      name
+      owner
+      satisfies
+      source
+      status
+      tags
+      updatedAt
+      updatedBy
+      version
+    }
+  }
+}
+
+mutation CreateBulkControl($input: [CreateControlInput!]) {
+  createBulkControl(input: $input) {
+    controls {
+      controlClass
+      controlFamily
+      controlNumber
+      controlType
+      createdAt
+      createdBy
+      description
+      id
+      jsonschema
+      mappedFrameworks
+      name
+      owner
+      satisfies
+      source
+      status
+      tags
+      updatedAt
+      updatedBy
+      version
+    }
+  }
+}
+
+mutation CreateControl($input: CreateControlInput!) {
+  createControl(input: $input) {
+    control {
+      controlClass
+      controlFamily
+      controlNumber
+      controlType
+      createdAt
+      createdBy
+      description
+      id
+      jsonschema
+      mappedFrameworks
+      name
+      owner
+      satisfies
+      source
+      status
+      tags
+      updatedAt
+      updatedBy
+      version
+    }
+  }
+}
+
+mutation DeleteControl($deleteControlId: ID!) {
+  deleteControl(id: $deleteControlId) {
+    deletedID
+  }
+}
+
+query GetAllControls {
+  controls {
+    edges {
+      node {
+        controlClass
+        controlFamily
+        controlNumber
+        controlType
+        createdAt
+        createdBy
+        description
+        id
+        jsonschema
+        mappedFrameworks
+        name
+        owner
+        satisfies
+        source
+        status
+        tags
+        updatedAt
+        updatedBy
+        version
+      }
+    }
+  }
+}
+query GetControlByID($controlId: ID!) {
+  control(id: $controlId) {
+    controlClass
+    controlFamily
+    controlNumber
+    controlType
+    createdAt
+    createdBy
+    description
+    id
+    jsonschema
+    mappedFrameworks
+    name
+    owner
+    satisfies
+    source
+    status
+    tags
+    updatedAt
+    updatedBy
+    version
+  }
+}
+
+query GetControls($where: ControlWhereInput) {
+  controls(where: $where) {
+    edges {
+      node {
+        controlClass
+        controlFamily
+        controlNumber
+        controlType
+        createdAt
+        createdBy
+        description
+        id
+        jsonschema
+        mappedFrameworks
+        name
+        owner
+        satisfies
+        source
+        status
+        tags
+        updatedAt
+        updatedBy
+        version
+      }
+    }
+  }
+}
+mutation UpdateControl($updateControlId: ID!, $input: UpdateControlInput!) {
+  updateControl(id: $updateControlId, input: $input) {
+    control {
+      controlClass
+      controlFamily
+      controlNumber
+      controlType
+      createdAt
+      createdBy
+      description
+      id
+      jsonschema
+      mappedFrameworks
+      name
+      owner
+      satisfies
+      source
+      status
+      tags
+      updatedAt
+      updatedBy
+      version
+    }
+  }
+}

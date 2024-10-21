@@ -18,7 +18,10 @@ func (r *queryResolver) Search(ctx context.Context, query string) (*SearchResult
 	var (
 		errors                        []error
 		apitokenResults               []*generated.APIToken
+		actionplanResults             []*generated.ActionPlan
 		contactResults                []*generated.Contact
+		controlResults                []*generated.Control
+		controlobjectiveResults       []*generated.ControlObjective
 		documentdataResults           []*generated.DocumentData
 		entitlementResults            []*generated.Entitlement
 		entitlementplanResults        []*generated.EntitlementPlan
@@ -31,11 +34,17 @@ func (r *queryResolver) Search(ctx context.Context, query string) (*SearchResult
 		groupResults                  []*generated.Group
 		groupsettingResults           []*generated.GroupSetting
 		integrationResults            []*generated.Integration
+		internalpolicyResults         []*generated.InternalPolicy
+		narrativeResults              []*generated.Narrative
 		oauthproviderResults          []*generated.OauthProvider
 		ohauthtootokenResults         []*generated.OhAuthTooToken
 		organizationResults           []*generated.Organization
 		organizationsettingResults    []*generated.OrganizationSetting
 		personalaccesstokenResults    []*generated.PersonalAccessToken
+		procedureResults              []*generated.Procedure
+		riskResults                   []*generated.Risk
+		standardResults               []*generated.Standard
+		subcontrolResults             []*generated.Subcontrol
 		subscriberResults             []*generated.Subscriber
 		tfasettingResults             []*generated.TFASetting
 		templateResults               []*generated.Template
@@ -54,7 +63,28 @@ func (r *queryResolver) Search(ctx context.Context, query string) (*SearchResult
 		},
 		func() {
 			var err error
+			actionplanResults, err = searchActionPlans(ctx, query)
+			if err != nil {
+				errors = append(errors, err)
+			}
+		},
+		func() {
+			var err error
 			contactResults, err = searchContacts(ctx, query)
+			if err != nil {
+				errors = append(errors, err)
+			}
+		},
+		func() {
+			var err error
+			controlResults, err = searchControls(ctx, query)
+			if err != nil {
+				errors = append(errors, err)
+			}
+		},
+		func() {
+			var err error
+			controlobjectiveResults, err = searchControlObjectives(ctx, query)
 			if err != nil {
 				errors = append(errors, err)
 			}
@@ -145,6 +175,20 @@ func (r *queryResolver) Search(ctx context.Context, query string) (*SearchResult
 		},
 		func() {
 			var err error
+			internalpolicyResults, err = searchInternalPolicies(ctx, query)
+			if err != nil {
+				errors = append(errors, err)
+			}
+		},
+		func() {
+			var err error
+			narrativeResults, err = searchNarratives(ctx, query)
+			if err != nil {
+				errors = append(errors, err)
+			}
+		},
+		func() {
+			var err error
 			oauthproviderResults, err = searchOauthProviders(ctx, query)
 			if err != nil {
 				errors = append(errors, err)
@@ -174,6 +218,34 @@ func (r *queryResolver) Search(ctx context.Context, query string) (*SearchResult
 		func() {
 			var err error
 			personalaccesstokenResults, err = searchPersonalAccessTokens(ctx, query)
+			if err != nil {
+				errors = append(errors, err)
+			}
+		},
+		func() {
+			var err error
+			procedureResults, err = searchProcedures(ctx, query)
+			if err != nil {
+				errors = append(errors, err)
+			}
+		},
+		func() {
+			var err error
+			riskResults, err = searchRisks(ctx, query)
+			if err != nil {
+				errors = append(errors, err)
+			}
+		},
+		func() {
+			var err error
+			standardResults, err = searchStandards(ctx, query)
+			if err != nil {
+				errors = append(errors, err)
+			}
+		},
+		func() {
+			var err error
+			subcontrolResults, err = searchSubcontrols(ctx, query)
 			if err != nil {
 				errors = append(errors, err)
 			}
@@ -235,8 +307,17 @@ func (r *queryResolver) Search(ctx context.Context, query string) (*SearchResult
 			APITokenSearchResult{
 				APITokens: apitokenResults,
 			},
+			ActionPlanSearchResult{
+				ActionPlans: actionplanResults,
+			},
 			ContactSearchResult{
 				Contacts: contactResults,
+			},
+			ControlSearchResult{
+				Controls: controlResults,
+			},
+			ControlObjectiveSearchResult{
+				ControlObjectives: controlobjectiveResults,
 			},
 			DocumentDataSearchResult{
 				DocumentData: documentdataResults,
@@ -274,6 +355,12 @@ func (r *queryResolver) Search(ctx context.Context, query string) (*SearchResult
 			IntegrationSearchResult{
 				Integrations: integrationResults,
 			},
+			InternalPolicySearchResult{
+				InternalPolicies: internalpolicyResults,
+			},
+			NarrativeSearchResult{
+				Narratives: narrativeResults,
+			},
 			OauthProviderSearchResult{
 				OauthProviders: oauthproviderResults,
 			},
@@ -288,6 +375,18 @@ func (r *queryResolver) Search(ctx context.Context, query string) (*SearchResult
 			},
 			PersonalAccessTokenSearchResult{
 				PersonalAccessTokens: personalaccesstokenResults,
+			},
+			ProcedureSearchResult{
+				Procedures: procedureResults,
+			},
+			RiskSearchResult{
+				Risks: riskResults,
+			},
+			StandardSearchResult{
+				Standards: standardResults,
+			},
+			SubcontrolSearchResult{
+				Subcontrols: subcontrolResults,
 			},
 			SubscriberSearchResult{
 				Subscribers: subscriberResults,
@@ -322,6 +421,18 @@ func (r *queryResolver) APITokenSearch(ctx context.Context, query string) (*APIT
 		APITokens: apitokenResults,
 	}, nil
 }
+func (r *queryResolver) ActionPlanSearch(ctx context.Context, query string) (*ActionPlanSearchResult, error) {
+	actionplanResults, err := searchActionPlans(ctx, query)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return &ActionPlanSearchResult{
+		ActionPlans: actionplanResults,
+	}, nil
+}
 func (r *queryResolver) ContactSearch(ctx context.Context, query string) (*ContactSearchResult, error) {
 	contactResults, err := searchContacts(ctx, query)
 
@@ -332,6 +443,30 @@ func (r *queryResolver) ContactSearch(ctx context.Context, query string) (*Conta
 	// return the results
 	return &ContactSearchResult{
 		Contacts: contactResults,
+	}, nil
+}
+func (r *queryResolver) ControlSearch(ctx context.Context, query string) (*ControlSearchResult, error) {
+	controlResults, err := searchControls(ctx, query)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return &ControlSearchResult{
+		Controls: controlResults,
+	}, nil
+}
+func (r *queryResolver) ControlObjectiveSearch(ctx context.Context, query string) (*ControlObjectiveSearchResult, error) {
+	controlobjectiveResults, err := searchControlObjectives(ctx, query)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return &ControlObjectiveSearchResult{
+		ControlObjectives: controlobjectiveResults,
 	}, nil
 }
 func (r *queryResolver) DocumentDataSearch(ctx context.Context, query string) (*DocumentDataSearchResult, error) {
@@ -478,6 +613,30 @@ func (r *queryResolver) IntegrationSearch(ctx context.Context, query string) (*I
 		Integrations: integrationResults,
 	}, nil
 }
+func (r *queryResolver) InternalPolicySearch(ctx context.Context, query string) (*InternalPolicySearchResult, error) {
+	internalpolicyResults, err := searchInternalPolicies(ctx, query)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return &InternalPolicySearchResult{
+		InternalPolicies: internalpolicyResults,
+	}, nil
+}
+func (r *queryResolver) NarrativeSearch(ctx context.Context, query string) (*NarrativeSearchResult, error) {
+	narrativeResults, err := searchNarratives(ctx, query)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return &NarrativeSearchResult{
+		Narratives: narrativeResults,
+	}, nil
+}
 func (r *queryResolver) OauthProviderSearch(ctx context.Context, query string) (*OauthProviderSearchResult, error) {
 	oauthproviderResults, err := searchOauthProviders(ctx, query)
 
@@ -536,6 +695,54 @@ func (r *queryResolver) PersonalAccessTokenSearch(ctx context.Context, query str
 	// return the results
 	return &PersonalAccessTokenSearchResult{
 		PersonalAccessTokens: personalaccesstokenResults,
+	}, nil
+}
+func (r *queryResolver) ProcedureSearch(ctx context.Context, query string) (*ProcedureSearchResult, error) {
+	procedureResults, err := searchProcedures(ctx, query)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return &ProcedureSearchResult{
+		Procedures: procedureResults,
+	}, nil
+}
+func (r *queryResolver) RiskSearch(ctx context.Context, query string) (*RiskSearchResult, error) {
+	riskResults, err := searchRisks(ctx, query)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return &RiskSearchResult{
+		Risks: riskResults,
+	}, nil
+}
+func (r *queryResolver) StandardSearch(ctx context.Context, query string) (*StandardSearchResult, error) {
+	standardResults, err := searchStandards(ctx, query)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return &StandardSearchResult{
+		Standards: standardResults,
+	}, nil
+}
+func (r *queryResolver) SubcontrolSearch(ctx context.Context, query string) (*SubcontrolSearchResult, error) {
+	subcontrolResults, err := searchSubcontrols(ctx, query)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return &SubcontrolSearchResult{
+		Subcontrols: subcontrolResults,
 	}, nil
 }
 func (r *queryResolver) SubscriberSearch(ctx context.Context, query string) (*SubscriberSearchResult, error) {

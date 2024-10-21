@@ -8,9 +8,20 @@ import "context"
 // that can be passed at runtime.
 type SchemaConfig struct {
 	APIToken                         string // APIToken table.
+	ActionPlan                       string // ActionPlan table.
+	ActionPlanHistory                string // ActionPlanHistory table.
 	Contact                          string // Contact table.
 	ContactFiles                     string // Contact-files->File table.
 	ContactHistory                   string // ContactHistory table.
+	Control                          string // Control table.
+	ControlProcedures                string // Control-procedures->Procedure table.
+	ControlSubcontrols               string // Control-subcontrols->Subcontrol table.
+	ControlNarratives                string // Control-narratives->Narrative table.
+	ControlRisks                     string // Control-risks->Risk table.
+	ControlHistory                   string // ControlHistory table.
+	ControlObjective                 string // ControlObjective table.
+	ControlObjectiveNarratives       string // ControlObjective-narratives->Narrative table.
+	ControlObjectiveHistory          string // ControlObjectiveHistory table.
 	DocumentData                     string // DocumentData table.
 	DocumentDataFiles                string // DocumentData-files->File table.
 	DocumentDataHistory              string // DocumentDataHistory table.
@@ -57,8 +68,15 @@ type SchemaConfig struct {
 	IntegrationEvents                string // Integration-events->Event table.
 	IntegrationWebhooks              string // Integration-webhooks->Webhook table.
 	IntegrationHistory               string // IntegrationHistory table.
+	InternalPolicy                   string // InternalPolicy table.
+	InternalPolicyControlobjectives  string // InternalPolicy-controlobjectives->ControlObjective table.
+	InternalPolicyProcedures         string // InternalPolicy-procedures->Procedure table.
+	InternalPolicyNarratives         string // InternalPolicy-narratives->Narrative table.
+	InternalPolicyHistory            string // InternalPolicyHistory table.
 	Invite                           string // Invite table.
 	InviteEvents                     string // Invite-events->Event table.
+	Narrative                        string // Narrative table.
+	NarrativeHistory                 string // NarrativeHistory table.
 	Note                             string // Note table.
 	NoteHistory                      string // NoteHistory table.
 	OauthProvider                    string // OauthProvider table.
@@ -80,6 +98,20 @@ type SchemaConfig struct {
 	PasswordResetToken               string // PasswordResetToken table.
 	PersonalAccessToken              string // PersonalAccessToken table.
 	PersonalAccessTokenEvents        string // PersonalAccessToken-events->Event table.
+	Procedure                        string // Procedure table.
+	ProcedureNarratives              string // Procedure-narratives->Narrative table.
+	ProcedureRisks                   string // Procedure-risks->Risk table.
+	ProcedureHistory                 string // ProcedureHistory table.
+	Risk                             string // Risk table.
+	RiskActionplans                  string // Risk-actionplans->ActionPlan table.
+	RiskHistory                      string // RiskHistory table.
+	Standard                         string // Standard table.
+	StandardControlobjectives        string // Standard-controlobjectives->ControlObjective table.
+	StandardControls                 string // Standard-controls->Control table.
+	StandardActionplans              string // Standard-actionplans->ActionPlan table.
+	StandardHistory                  string // StandardHistory table.
+	Subcontrol                       string // Subcontrol table.
+	SubcontrolHistory                string // SubcontrolHistory table.
 	Subscriber                       string // Subscriber table.
 	SubscriberEvents                 string // Subscriber-events->Event table.
 	TFASetting                       string // TFASetting table.
