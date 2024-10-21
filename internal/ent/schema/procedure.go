@@ -52,9 +52,9 @@ func (Procedure) Fields() []ent.Field {
 func (Procedure) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("control", User.Type).
-			Ref("controls"),
+			Ref("procedures"),
 		edge.From("internalpolicy", InternalPolicy.Type).
-			Ref("policies"),
+			Ref("procedures"),
 	}
 }
 

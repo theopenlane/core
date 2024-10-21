@@ -16,7 +16,7 @@ type Narrative struct {
 	ent.Schema
 }
 
-// Fields returns narrative fields.
+// Fields returns narrative fields
 func (Narrative) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("name").
@@ -37,13 +37,13 @@ func (Narrative) Fields() []ent.Field {
 func (Narrative) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("policy", InternalPolicy.Type).
-			Ref("policies"),
+			Ref("narratives"),
 		edge.From("control", Control.Type).
-			Ref("controls"),
+			Ref("narratives"),
 		edge.From("procedure", Procedure.Type).
-			Ref("procedures"),
+			Ref("narratives"),
 		edge.From("controlobjective", ControlObjective.Type).
-			Ref("controlobjectives"),
+			Ref("narratives"),
 	}
 }
 

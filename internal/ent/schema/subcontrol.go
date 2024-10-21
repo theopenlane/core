@@ -82,7 +82,7 @@ func (Subcontrol) Fields() []ent.Field {
 func (Subcontrol) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("control", Control.Type).
-			Ref("controls"),
+			Ref("subcontrols"),
 	}
 }
 

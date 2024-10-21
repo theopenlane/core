@@ -54,10 +54,10 @@ func (Standard) Fields() []ent.Field {
 // Edges of the Standard
 func (Standard) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("controlobjective", ControlObjective.Type),
-		edge.To("control", Control.Type),
-		edge.To("procedure", Procedure.Type),
-		edge.To("actionplan", ActionPlan.Type),
+		edge.To("controlobjectives", ControlObjective.Type),
+		edge.To("controls", Control.Type),
+		edge.To("procedures", Procedure.Type),
+		edge.To("actionplans", ActionPlan.Type),
 	}
 }
 

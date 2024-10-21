@@ -58,10 +58,10 @@ func (Risk) Fields() []ent.Field {
 func (Risk) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("control", Control.Type).
-			Ref("controls"),
+			Ref("risks"),
 		edge.From("procedure", Procedure.Type).
-			Ref("procedures"),
-		edge.To("actionplan", ActionPlan.Type),
+			Ref("risks"),
+		edge.To("actionplans", ActionPlan.Type),
 	}
 }
 
