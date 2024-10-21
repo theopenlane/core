@@ -9,11 +9,29 @@ import (
 // APIToken is the predicate function for apitoken builders.
 type APIToken func(*sql.Selector)
 
+// ActionPlan is the predicate function for actionplan builders.
+type ActionPlan func(*sql.Selector)
+
+// ActionPlanHistory is the predicate function for actionplanhistory builders.
+type ActionPlanHistory func(*sql.Selector)
+
 // Contact is the predicate function for contact builders.
 type Contact func(*sql.Selector)
 
 // ContactHistory is the predicate function for contacthistory builders.
 type ContactHistory func(*sql.Selector)
+
+// Control is the predicate function for control builders.
+type Control func(*sql.Selector)
+
+// ControlHistory is the predicate function for controlhistory builders.
+type ControlHistory func(*sql.Selector)
+
+// ControlObjective is the predicate function for controlobjective builders.
+type ControlObjective func(*sql.Selector)
+
+// ControlObjectiveHistory is the predicate function for controlobjectivehistory builders.
+type ControlObjectiveHistory func(*sql.Selector)
 
 // DocumentData is the predicate function for documentdata builders.
 type DocumentData func(*sql.Selector)
@@ -102,8 +120,20 @@ type Integration func(*sql.Selector)
 // IntegrationHistory is the predicate function for integrationhistory builders.
 type IntegrationHistory func(*sql.Selector)
 
+// InternalPolicy is the predicate function for internalpolicy builders.
+type InternalPolicy func(*sql.Selector)
+
+// InternalPolicyHistory is the predicate function for internalpolicyhistory builders.
+type InternalPolicyHistory func(*sql.Selector)
+
 // Invite is the predicate function for invite builders.
 type Invite func(*sql.Selector)
+
+// Narrative is the predicate function for narrative builders.
+type Narrative func(*sql.Selector)
+
+// NarrativeHistory is the predicate function for narrativehistory builders.
+type NarrativeHistory func(*sql.Selector)
 
 // Note is the predicate function for note builders.
 type Note func(*sql.Selector)
@@ -143,6 +173,30 @@ type PasswordResetToken func(*sql.Selector)
 
 // PersonalAccessToken is the predicate function for personalaccesstoken builders.
 type PersonalAccessToken func(*sql.Selector)
+
+// Procedure is the predicate function for procedure builders.
+type Procedure func(*sql.Selector)
+
+// ProcedureHistory is the predicate function for procedurehistory builders.
+type ProcedureHistory func(*sql.Selector)
+
+// Risk is the predicate function for risk builders.
+type Risk func(*sql.Selector)
+
+// RiskHistory is the predicate function for riskhistory builders.
+type RiskHistory func(*sql.Selector)
+
+// Standard is the predicate function for standard builders.
+type Standard func(*sql.Selector)
+
+// StandardHistory is the predicate function for standardhistory builders.
+type StandardHistory func(*sql.Selector)
+
+// Subcontrol is the predicate function for subcontrol builders.
+type Subcontrol func(*sql.Selector)
+
+// SubcontrolHistory is the predicate function for subcontrolhistory builders.
+type SubcontrolHistory func(*sql.Selector)
 
 // Subscriber is the predicate function for subscriber builders.
 type Subscriber func(*sql.Selector)

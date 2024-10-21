@@ -1,0 +1,181 @@
+
+mutation CreateBulkCSVControlObjective($input: Upload!) {
+  createBulkCSVControlObjective(input: $input) {
+    controlObjectives {
+      controlClass
+      controlFamily
+      controlNumber
+      controlObjectiveType
+      createdAt
+      createdBy
+      description
+      id
+      jsonschema
+      mappedFrameworks
+      name
+      owner
+      source
+      status
+      tags
+      updatedAt
+      updatedBy
+      version
+    }
+  }
+}
+
+mutation CreateBulkControlObjective($input: [CreateControlObjectiveInput!]) {
+  createBulkControlObjective(input: $input) {
+    controlObjectives {
+      controlClass
+      controlFamily
+      controlNumber
+      controlObjectiveType
+      createdAt
+      createdBy
+      description
+      id
+      jsonschema
+      mappedFrameworks
+      name
+      owner
+      source
+      status
+      tags
+      updatedAt
+      updatedBy
+      version
+    }
+  }
+}
+
+mutation CreateControlObjective($input: CreateControlObjectiveInput!) {
+  createControlObjective(input: $input) {
+    controlObjective {
+      controlClass
+      controlFamily
+      controlNumber
+      controlObjectiveType
+      createdAt
+      createdBy
+      description
+      id
+      jsonschema
+      mappedFrameworks
+      name
+      owner
+      source
+      status
+      tags
+      updatedAt
+      updatedBy
+      version
+    }
+  }
+}
+
+mutation DeleteControlObjective($deleteControlObjectiveId: ID!) {
+  deleteControlObjective(id: $deleteControlObjectiveId) {
+    deletedID
+  }
+}
+
+query GetAllControlObjectives {
+  controlObjectives {
+    edges {
+      node {
+        controlClass
+        controlFamily
+        controlNumber
+        controlObjectiveType
+        createdAt
+        createdBy
+        description
+        id
+        jsonschema
+        mappedFrameworks
+        name
+        owner
+        source
+        status
+        tags
+        updatedAt
+        updatedBy
+        version
+      }
+    }
+  }
+}
+query GetControlObjectiveByID($controlObjectiveId: ID!) {
+  controlObjective(id: $controlObjectiveId) {
+    controlClass
+    controlFamily
+    controlNumber
+    controlObjectiveType
+    createdAt
+    createdBy
+    description
+    id
+    jsonschema
+    mappedFrameworks
+    name
+    owner
+    source
+    status
+    tags
+    updatedAt
+    updatedBy
+    version
+  }
+}
+
+query GetControlObjectives($where: ControlObjectiveWhereInput) {
+  controlObjectives(where: $where) {
+    edges {
+      node {
+        controlClass
+        controlFamily
+        controlNumber
+        controlObjectiveType
+        createdAt
+        createdBy
+        description
+        id
+        jsonschema
+        mappedFrameworks
+        name
+        owner
+        source
+        status
+        tags
+        updatedAt
+        updatedBy
+        version
+      }
+    }
+  }
+}
+mutation UpdateControlObjective($updateControlObjectiveId: ID!, $input: UpdateControlObjectiveInput!) {
+  updateControlObjective(id: $updateControlObjectiveId, input: $input) {
+    controlObjective {
+      controlClass
+      controlFamily
+      controlNumber
+      controlObjectiveType
+      createdAt
+      createdBy
+      description
+      id
+      jsonschema
+      mappedFrameworks
+      name
+      owner
+      source
+      status
+      tags
+      updatedAt
+      updatedBy
+      version
+    }
+  }
+}

@@ -1,0 +1,174 @@
+
+mutation CreateBulkCSVRisk($input: Upload!) {
+  createBulkCSVRisk(input: $input) {
+    risks {
+      businessCosts
+      createdAt
+      createdBy
+      description
+      id
+      impact
+      jsonschema
+      likelihood
+      mitigation
+      name
+      riskType
+      satisfies
+      severity
+      status
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateBulkRisk($input: [CreateRiskInput!]) {
+  createBulkRisk(input: $input) {
+    risks {
+      businessCosts
+      createdAt
+      createdBy
+      description
+      id
+      impact
+      jsonschema
+      likelihood
+      mitigation
+      name
+      riskType
+      satisfies
+      severity
+      status
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateRisk($input: CreateRiskInput!) {
+  createRisk(input: $input) {
+    risk {
+      businessCosts
+      createdAt
+      createdBy
+      description
+      id
+      impact
+      jsonschema
+      likelihood
+      mitigation
+      name
+      riskType
+      satisfies
+      severity
+      status
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation DeleteRisk($deleteRiskId: ID!) {
+  deleteRisk(id: $deleteRiskId) {
+    deletedID
+  }
+}
+
+query GetAllRisks {
+  risks {
+    edges {
+      node {
+        businessCosts
+        createdAt
+        createdBy
+        description
+        id
+        impact
+        jsonschema
+        likelihood
+        mitigation
+        name
+        riskType
+        satisfies
+        severity
+        status
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+query GetRiskByID($riskId: ID!) {
+  risk(id: $riskId) {
+    businessCosts
+    createdAt
+    createdBy
+    description
+    id
+    impact
+    jsonschema
+    likelihood
+    mitigation
+    name
+    riskType
+    satisfies
+    severity
+    status
+    tags
+    updatedAt
+    updatedBy
+  }
+}
+
+query GetRisks($where: RiskWhereInput) {
+  risks(where: $where) {
+    edges {
+      node {
+        businessCosts
+        createdAt
+        createdBy
+        description
+        id
+        impact
+        jsonschema
+        likelihood
+        mitigation
+        name
+        riskType
+        satisfies
+        severity
+        status
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+mutation UpdateRisk($updateRiskId: ID!, $input: UpdateRiskInput!) {
+  updateRisk(id: $updateRiskId, input: $input) {
+    risk {
+      businessCosts
+      createdAt
+      createdBy
+      description
+      id
+      impact
+      jsonschema
+      likelihood
+      mitigation
+      name
+      riskType
+      satisfies
+      severity
+      status
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}

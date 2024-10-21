@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up control by ID
+    """
+     control(
+        """
+        ID of the control
+        """
+        id: ID!
+    ):  Control!
+}
+
+extend type Mutation{
+    """
+    Create a new control
+    """
+    createControl(
+        """
+        values of the control
+        """
+        input: CreateControlInput!
+    ): ControlCreatePayload!
+    """
+    Create multiple new controls
+    """
+    createBulkControl(
+        """
+        values of the control
+        """
+        input: [CreateControlInput!]
+    ): ControlBulkCreatePayload!
+    """
+    Create multiple new controls via file upload
+    """
+    createBulkCSVControl(
+        """
+        csv file containing values of the control
+        """
+        input: Upload!
+    ): ControlBulkCreatePayload!
+    """
+    Update an existing control
+    """
+    updateControl(
+        """
+        ID of the control
+        """
+        id: ID!
+        """
+        New values for the control
+        """
+        input: UpdateControlInput!
+    ): ControlUpdatePayload!
+    """
+    Delete an existing control
+    """
+    deleteControl(
+        """
+        ID of the control
+        """
+        id: ID!
+    ): ControlDeletePayload!
+}
+
+"""
+Return response for createControl mutation
+"""
+type ControlCreatePayload {
+    """
+    Created control
+    """
+    control: Control!
+}
+
+"""
+Return response for updateControl mutation
+"""
+type ControlUpdatePayload {
+    """
+    Updated control
+    """
+    control: Control!
+}
+
+"""
+Return response for deleteControl mutation
+"""
+type ControlDeletePayload {
+    """
+    Deleted control ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkControl mutation
+"""
+type ControlBulkCreatePayload {
+    """
+    Created controls
+    """
+    controls: [Control!]
+}

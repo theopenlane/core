@@ -1,0 +1,230 @@
+
+mutation CreateBulkCSVSubcontrol($input: Upload!) {
+  createBulkCSVSubcontrol(input: $input) {
+    subcontrols {
+      assignedTo
+      createdAt
+      createdBy
+      description
+      id
+      implementationDate
+      implementationEvidence
+      implementationNotes
+      implementationStatus
+      implementationVerification
+      implementationVerificationDate
+      jsonschema
+      mappedFrameworks
+      name
+      owner
+      source
+      status
+      subcontrolClass
+      subcontrolFamily
+      subcontrolNumber
+      subcontrolType
+      tags
+      updatedAt
+      updatedBy
+      version
+    }
+  }
+}
+
+mutation CreateBulkSubcontrol($input: [CreateSubcontrolInput!]) {
+  createBulkSubcontrol(input: $input) {
+    subcontrols {
+      assignedTo
+      createdAt
+      createdBy
+      description
+      id
+      implementationDate
+      implementationEvidence
+      implementationNotes
+      implementationStatus
+      implementationVerification
+      implementationVerificationDate
+      jsonschema
+      mappedFrameworks
+      name
+      owner
+      source
+      status
+      subcontrolClass
+      subcontrolFamily
+      subcontrolNumber
+      subcontrolType
+      tags
+      updatedAt
+      updatedBy
+      version
+    }
+  }
+}
+
+mutation CreateSubcontrol($input: CreateSubcontrolInput!) {
+  createSubcontrol(input: $input) {
+    subcontrol {
+      assignedTo
+      createdAt
+      createdBy
+      description
+      id
+      implementationDate
+      implementationEvidence
+      implementationNotes
+      implementationStatus
+      implementationVerification
+      implementationVerificationDate
+      jsonschema
+      mappedFrameworks
+      name
+      owner
+      source
+      status
+      subcontrolClass
+      subcontrolFamily
+      subcontrolNumber
+      subcontrolType
+      tags
+      updatedAt
+      updatedBy
+      version
+    }
+  }
+}
+
+mutation DeleteSubcontrol($deleteSubcontrolId: ID!) {
+  deleteSubcontrol(id: $deleteSubcontrolId) {
+    deletedID
+  }
+}
+
+query GetAllSubcontrols {
+  subcontrols {
+    edges {
+      node {
+        assignedTo
+        createdAt
+        createdBy
+        description
+        id
+        implementationDate
+        implementationEvidence
+        implementationNotes
+        implementationStatus
+        implementationVerification
+        implementationVerificationDate
+        jsonschema
+        mappedFrameworks
+        name
+        owner
+        source
+        status
+        subcontrolClass
+        subcontrolFamily
+        subcontrolNumber
+        subcontrolType
+        tags
+        updatedAt
+        updatedBy
+        version
+      }
+    }
+  }
+}
+query GetSubcontrolByID($subcontrolId: ID!) {
+  subcontrol(id: $subcontrolId) {
+    assignedTo
+    createdAt
+    createdBy
+    description
+    id
+    implementationDate
+    implementationEvidence
+    implementationNotes
+    implementationStatus
+    implementationVerification
+    implementationVerificationDate
+    jsonschema
+    mappedFrameworks
+    name
+    owner
+    source
+    status
+    subcontrolClass
+    subcontrolFamily
+    subcontrolNumber
+    subcontrolType
+    tags
+    updatedAt
+    updatedBy
+    version
+  }
+}
+
+query GetSubcontrols($where: SubcontrolWhereInput) {
+  subcontrols(where: $where) {
+    edges {
+      node {
+        assignedTo
+        createdAt
+        createdBy
+        description
+        id
+        implementationDate
+        implementationEvidence
+        implementationNotes
+        implementationStatus
+        implementationVerification
+        implementationVerificationDate
+        jsonschema
+        mappedFrameworks
+        name
+        owner
+        source
+        status
+        subcontrolClass
+        subcontrolFamily
+        subcontrolNumber
+        subcontrolType
+        tags
+        updatedAt
+        updatedBy
+        version
+      }
+    }
+  }
+}
+mutation UpdateSubcontrol($updateSubcontrolId: ID!, $input: UpdateSubcontrolInput!) {
+  updateSubcontrol(id: $updateSubcontrolId, input: $input) {
+    subcontrol {
+      assignedTo
+      createdAt
+      createdBy
+      description
+      id
+      implementationDate
+      implementationEvidence
+      implementationNotes
+      implementationStatus
+      implementationVerification
+      implementationVerificationDate
+      jsonschema
+      mappedFrameworks
+      name
+      owner
+      source
+      status
+      subcontrolClass
+      subcontrolFamily
+      subcontrolNumber
+      subcontrolType
+      tags
+      updatedAt
+      updatedBy
+      version
+    }
+  }
+}
