@@ -1,0 +1,75 @@
+
+
+query GetAllSubcontrolHistories {
+  subcontrolHistories {
+    edges {
+      node {
+        assignedTo
+        createdAt
+        createdBy
+        description
+        historyTime
+        id
+        implementationDate
+        implementationEvidence
+        implementationNotes
+        implementationStatus
+        implementationVerification
+        implementationVerificationDate
+        jsonschema
+        mappedFrameworks
+        name
+        operation
+        owner
+        ref
+        source
+        status
+        subcontrolClass
+        subcontrolFamily
+        subcontrolNumber
+        subcontrolType
+        tags
+        updatedAt
+        updatedBy
+        version
+      }
+    }
+  }
+}
+
+query GetSubcontrolHistories($where: SubcontrolHistoryWhereInput) {
+  subcontrolHistories(where: $where) {
+    edges {
+      node {
+        assignedTo
+        createdAt
+        createdBy
+        description
+        historyTime
+        id
+        implementationDate
+        implementationEvidence
+        implementationNotes
+        implementationStatus
+        implementationVerification
+        implementationVerificationDate
+        jsonschema
+        mappedFrameworks
+        name
+        operation
+        owner
+        ref
+        source
+        status
+        subcontrolClass
+        subcontrolFamily
+        subcontrolNumber
+        subcontrolType
+        tags
+        updatedAt
+        updatedBy
+        version
+      }
+    }
+  }
+}

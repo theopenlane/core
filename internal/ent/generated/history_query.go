@@ -8,7 +8,10 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/internal/ent/generated/actionplanhistory"
 	"github.com/theopenlane/core/internal/ent/generated/contacthistory"
+	"github.com/theopenlane/core/internal/ent/generated/controlhistory"
+	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdatahistory"
 	"github.com/theopenlane/core/internal/ent/generated/entitlementhistory"
 	"github.com/theopenlane/core/internal/ent/generated/entitlementplanfeaturehistory"
@@ -23,16 +26,68 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/groupsettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/hushhistory"
 	"github.com/theopenlane/core/internal/ent/generated/integrationhistory"
+	"github.com/theopenlane/core/internal/ent/generated/internalpolicyhistory"
+	"github.com/theopenlane/core/internal/ent/generated/narrativehistory"
 	"github.com/theopenlane/core/internal/ent/generated/notehistory"
 	"github.com/theopenlane/core/internal/ent/generated/oauthproviderhistory"
 	"github.com/theopenlane/core/internal/ent/generated/organizationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembershiphistory"
+	"github.com/theopenlane/core/internal/ent/generated/procedurehistory"
+	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
+	"github.com/theopenlane/core/internal/ent/generated/standardhistory"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
 	"github.com/theopenlane/core/internal/ent/generated/usersettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/webhookhistory"
 )
+
+func (ap *ActionPlan) History() *ActionPlanHistoryQuery {
+	historyClient := NewActionPlanHistoryClient(ap.config)
+	return historyClient.Query().Where(actionplanhistory.Ref(ap.ID))
+}
+
+func (aph *ActionPlanHistory) Next(ctx context.Context) (*ActionPlanHistory, error) {
+	client := NewActionPlanHistoryClient(aph.config)
+	return client.Query().
+		Where(
+			actionplanhistory.Ref(aph.Ref),
+			actionplanhistory.HistoryTimeGT(aph.HistoryTime),
+		).
+		Order(actionplanhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (aph *ActionPlanHistory) Prev(ctx context.Context) (*ActionPlanHistory, error) {
+	client := NewActionPlanHistoryClient(aph.config)
+	return client.Query().
+		Where(
+			actionplanhistory.Ref(aph.Ref),
+			actionplanhistory.HistoryTimeLT(aph.HistoryTime),
+		).
+		Order(actionplanhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (aphq *ActionPlanHistoryQuery) Earliest(ctx context.Context) (*ActionPlanHistory, error) {
+	return aphq.
+		Order(actionplanhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (aphq *ActionPlanHistoryQuery) Latest(ctx context.Context) (*ActionPlanHistory, error) {
+	return aphq.
+		Order(actionplanhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (aphq *ActionPlanHistoryQuery) AsOf(ctx context.Context, time time.Time) (*ActionPlanHistory, error) {
+	return aphq.
+		Where(actionplanhistory.HistoryTimeLTE(time)).
+		Order(actionplanhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
 
 func (c *Contact) History() *ContactHistoryQuery {
 	historyClient := NewContactHistoryClient(c.config)
@@ -77,6 +132,98 @@ func (chq *ContactHistoryQuery) AsOf(ctx context.Context, time time.Time) (*Cont
 	return chq.
 		Where(contacthistory.HistoryTimeLTE(time)).
 		Order(contacthistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (c *Control) History() *ControlHistoryQuery {
+	historyClient := NewControlHistoryClient(c.config)
+	return historyClient.Query().Where(controlhistory.Ref(c.ID))
+}
+
+func (ch *ControlHistory) Next(ctx context.Context) (*ControlHistory, error) {
+	client := NewControlHistoryClient(ch.config)
+	return client.Query().
+		Where(
+			controlhistory.Ref(ch.Ref),
+			controlhistory.HistoryTimeGT(ch.HistoryTime),
+		).
+		Order(controlhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (ch *ControlHistory) Prev(ctx context.Context) (*ControlHistory, error) {
+	client := NewControlHistoryClient(ch.config)
+	return client.Query().
+		Where(
+			controlhistory.Ref(ch.Ref),
+			controlhistory.HistoryTimeLT(ch.HistoryTime),
+		).
+		Order(controlhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (chq *ControlHistoryQuery) Earliest(ctx context.Context) (*ControlHistory, error) {
+	return chq.
+		Order(controlhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (chq *ControlHistoryQuery) Latest(ctx context.Context) (*ControlHistory, error) {
+	return chq.
+		Order(controlhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (chq *ControlHistoryQuery) AsOf(ctx context.Context, time time.Time) (*ControlHistory, error) {
+	return chq.
+		Where(controlhistory.HistoryTimeLTE(time)).
+		Order(controlhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (co *ControlObjective) History() *ControlObjectiveHistoryQuery {
+	historyClient := NewControlObjectiveHistoryClient(co.config)
+	return historyClient.Query().Where(controlobjectivehistory.Ref(co.ID))
+}
+
+func (coh *ControlObjectiveHistory) Next(ctx context.Context) (*ControlObjectiveHistory, error) {
+	client := NewControlObjectiveHistoryClient(coh.config)
+	return client.Query().
+		Where(
+			controlobjectivehistory.Ref(coh.Ref),
+			controlobjectivehistory.HistoryTimeGT(coh.HistoryTime),
+		).
+		Order(controlobjectivehistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (coh *ControlObjectiveHistory) Prev(ctx context.Context) (*ControlObjectiveHistory, error) {
+	client := NewControlObjectiveHistoryClient(coh.config)
+	return client.Query().
+		Where(
+			controlobjectivehistory.Ref(coh.Ref),
+			controlobjectivehistory.HistoryTimeLT(coh.HistoryTime),
+		).
+		Order(controlobjectivehistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (cohq *ControlObjectiveHistoryQuery) Earliest(ctx context.Context) (*ControlObjectiveHistory, error) {
+	return cohq.
+		Order(controlobjectivehistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (cohq *ControlObjectiveHistoryQuery) Latest(ctx context.Context) (*ControlObjectiveHistory, error) {
+	return cohq.
+		Order(controlobjectivehistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (cohq *ControlObjectiveHistoryQuery) AsOf(ctx context.Context, time time.Time) (*ControlObjectiveHistory, error) {
+	return cohq.
+		Where(controlobjectivehistory.HistoryTimeLTE(time)).
+		Order(controlobjectivehistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
 }
 
@@ -724,6 +871,98 @@ func (ihq *IntegrationHistoryQuery) AsOf(ctx context.Context, time time.Time) (*
 		First(ctx)
 }
 
+func (ip *InternalPolicy) History() *InternalPolicyHistoryQuery {
+	historyClient := NewInternalPolicyHistoryClient(ip.config)
+	return historyClient.Query().Where(internalpolicyhistory.Ref(ip.ID))
+}
+
+func (iph *InternalPolicyHistory) Next(ctx context.Context) (*InternalPolicyHistory, error) {
+	client := NewInternalPolicyHistoryClient(iph.config)
+	return client.Query().
+		Where(
+			internalpolicyhistory.Ref(iph.Ref),
+			internalpolicyhistory.HistoryTimeGT(iph.HistoryTime),
+		).
+		Order(internalpolicyhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (iph *InternalPolicyHistory) Prev(ctx context.Context) (*InternalPolicyHistory, error) {
+	client := NewInternalPolicyHistoryClient(iph.config)
+	return client.Query().
+		Where(
+			internalpolicyhistory.Ref(iph.Ref),
+			internalpolicyhistory.HistoryTimeLT(iph.HistoryTime),
+		).
+		Order(internalpolicyhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (iphq *InternalPolicyHistoryQuery) Earliest(ctx context.Context) (*InternalPolicyHistory, error) {
+	return iphq.
+		Order(internalpolicyhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (iphq *InternalPolicyHistoryQuery) Latest(ctx context.Context) (*InternalPolicyHistory, error) {
+	return iphq.
+		Order(internalpolicyhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (iphq *InternalPolicyHistoryQuery) AsOf(ctx context.Context, time time.Time) (*InternalPolicyHistory, error) {
+	return iphq.
+		Where(internalpolicyhistory.HistoryTimeLTE(time)).
+		Order(internalpolicyhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (n *Narrative) History() *NarrativeHistoryQuery {
+	historyClient := NewNarrativeHistoryClient(n.config)
+	return historyClient.Query().Where(narrativehistory.Ref(n.ID))
+}
+
+func (nh *NarrativeHistory) Next(ctx context.Context) (*NarrativeHistory, error) {
+	client := NewNarrativeHistoryClient(nh.config)
+	return client.Query().
+		Where(
+			narrativehistory.Ref(nh.Ref),
+			narrativehistory.HistoryTimeGT(nh.HistoryTime),
+		).
+		Order(narrativehistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (nh *NarrativeHistory) Prev(ctx context.Context) (*NarrativeHistory, error) {
+	client := NewNarrativeHistoryClient(nh.config)
+	return client.Query().
+		Where(
+			narrativehistory.Ref(nh.Ref),
+			narrativehistory.HistoryTimeLT(nh.HistoryTime),
+		).
+		Order(narrativehistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (nhq *NarrativeHistoryQuery) Earliest(ctx context.Context) (*NarrativeHistory, error) {
+	return nhq.
+		Order(narrativehistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (nhq *NarrativeHistoryQuery) Latest(ctx context.Context) (*NarrativeHistory, error) {
+	return nhq.
+		Order(narrativehistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (nhq *NarrativeHistoryQuery) AsOf(ctx context.Context, time time.Time) (*NarrativeHistory, error) {
+	return nhq.
+		Where(narrativehistory.HistoryTimeLTE(time)).
+		Order(narrativehistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
 func (n *Note) History() *NoteHistoryQuery {
 	historyClient := NewNoteHistoryClient(n.config)
 	return historyClient.Query().Where(notehistory.Ref(n.ID))
@@ -951,6 +1190,190 @@ func (oshq *OrganizationSettingHistoryQuery) AsOf(ctx context.Context, time time
 	return oshq.
 		Where(organizationsettinghistory.HistoryTimeLTE(time)).
 		Order(organizationsettinghistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (pr *Procedure) History() *ProcedureHistoryQuery {
+	historyClient := NewProcedureHistoryClient(pr.config)
+	return historyClient.Query().Where(procedurehistory.Ref(pr.ID))
+}
+
+func (ph *ProcedureHistory) Next(ctx context.Context) (*ProcedureHistory, error) {
+	client := NewProcedureHistoryClient(ph.config)
+	return client.Query().
+		Where(
+			procedurehistory.Ref(ph.Ref),
+			procedurehistory.HistoryTimeGT(ph.HistoryTime),
+		).
+		Order(procedurehistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (ph *ProcedureHistory) Prev(ctx context.Context) (*ProcedureHistory, error) {
+	client := NewProcedureHistoryClient(ph.config)
+	return client.Query().
+		Where(
+			procedurehistory.Ref(ph.Ref),
+			procedurehistory.HistoryTimeLT(ph.HistoryTime),
+		).
+		Order(procedurehistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (phq *ProcedureHistoryQuery) Earliest(ctx context.Context) (*ProcedureHistory, error) {
+	return phq.
+		Order(procedurehistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (phq *ProcedureHistoryQuery) Latest(ctx context.Context) (*ProcedureHistory, error) {
+	return phq.
+		Order(procedurehistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (phq *ProcedureHistoryQuery) AsOf(ctx context.Context, time time.Time) (*ProcedureHistory, error) {
+	return phq.
+		Where(procedurehistory.HistoryTimeLTE(time)).
+		Order(procedurehistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (r *Risk) History() *RiskHistoryQuery {
+	historyClient := NewRiskHistoryClient(r.config)
+	return historyClient.Query().Where(riskhistory.Ref(r.ID))
+}
+
+func (rh *RiskHistory) Next(ctx context.Context) (*RiskHistory, error) {
+	client := NewRiskHistoryClient(rh.config)
+	return client.Query().
+		Where(
+			riskhistory.Ref(rh.Ref),
+			riskhistory.HistoryTimeGT(rh.HistoryTime),
+		).
+		Order(riskhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (rh *RiskHistory) Prev(ctx context.Context) (*RiskHistory, error) {
+	client := NewRiskHistoryClient(rh.config)
+	return client.Query().
+		Where(
+			riskhistory.Ref(rh.Ref),
+			riskhistory.HistoryTimeLT(rh.HistoryTime),
+		).
+		Order(riskhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (rhq *RiskHistoryQuery) Earliest(ctx context.Context) (*RiskHistory, error) {
+	return rhq.
+		Order(riskhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (rhq *RiskHistoryQuery) Latest(ctx context.Context) (*RiskHistory, error) {
+	return rhq.
+		Order(riskhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (rhq *RiskHistoryQuery) AsOf(ctx context.Context, time time.Time) (*RiskHistory, error) {
+	return rhq.
+		Where(riskhistory.HistoryTimeLTE(time)).
+		Order(riskhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (s *Standard) History() *StandardHistoryQuery {
+	historyClient := NewStandardHistoryClient(s.config)
+	return historyClient.Query().Where(standardhistory.Ref(s.ID))
+}
+
+func (sh *StandardHistory) Next(ctx context.Context) (*StandardHistory, error) {
+	client := NewStandardHistoryClient(sh.config)
+	return client.Query().
+		Where(
+			standardhistory.Ref(sh.Ref),
+			standardhistory.HistoryTimeGT(sh.HistoryTime),
+		).
+		Order(standardhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (sh *StandardHistory) Prev(ctx context.Context) (*StandardHistory, error) {
+	client := NewStandardHistoryClient(sh.config)
+	return client.Query().
+		Where(
+			standardhistory.Ref(sh.Ref),
+			standardhistory.HistoryTimeLT(sh.HistoryTime),
+		).
+		Order(standardhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (shq *StandardHistoryQuery) Earliest(ctx context.Context) (*StandardHistory, error) {
+	return shq.
+		Order(standardhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (shq *StandardHistoryQuery) Latest(ctx context.Context) (*StandardHistory, error) {
+	return shq.
+		Order(standardhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (shq *StandardHistoryQuery) AsOf(ctx context.Context, time time.Time) (*StandardHistory, error) {
+	return shq.
+		Where(standardhistory.HistoryTimeLTE(time)).
+		Order(standardhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (s *Subcontrol) History() *SubcontrolHistoryQuery {
+	historyClient := NewSubcontrolHistoryClient(s.config)
+	return historyClient.Query().Where(subcontrolhistory.Ref(s.ID))
+}
+
+func (sh *SubcontrolHistory) Next(ctx context.Context) (*SubcontrolHistory, error) {
+	client := NewSubcontrolHistoryClient(sh.config)
+	return client.Query().
+		Where(
+			subcontrolhistory.Ref(sh.Ref),
+			subcontrolhistory.HistoryTimeGT(sh.HistoryTime),
+		).
+		Order(subcontrolhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (sh *SubcontrolHistory) Prev(ctx context.Context) (*SubcontrolHistory, error) {
+	client := NewSubcontrolHistoryClient(sh.config)
+	return client.Query().
+		Where(
+			subcontrolhistory.Ref(sh.Ref),
+			subcontrolhistory.HistoryTimeLT(sh.HistoryTime),
+		).
+		Order(subcontrolhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (shq *SubcontrolHistoryQuery) Earliest(ctx context.Context) (*SubcontrolHistory, error) {
+	return shq.
+		Order(subcontrolhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (shq *SubcontrolHistoryQuery) Latest(ctx context.Context) (*SubcontrolHistory, error) {
+	return shq.
+		Order(subcontrolhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (shq *SubcontrolHistoryQuery) AsOf(ctx context.Context, time time.Time) (*SubcontrolHistory, error) {
+	return shq.
+		Where(subcontrolhistory.HistoryTimeLTE(time)).
+		Order(subcontrolhistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
 }
 

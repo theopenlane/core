@@ -14,10 +14,22 @@ type Tx struct {
 	config
 	// APIToken is the client for interacting with the APIToken builders.
 	APIToken *APITokenClient
+	// ActionPlan is the client for interacting with the ActionPlan builders.
+	ActionPlan *ActionPlanClient
+	// ActionPlanHistory is the client for interacting with the ActionPlanHistory builders.
+	ActionPlanHistory *ActionPlanHistoryClient
 	// Contact is the client for interacting with the Contact builders.
 	Contact *ContactClient
 	// ContactHistory is the client for interacting with the ContactHistory builders.
 	ContactHistory *ContactHistoryClient
+	// Control is the client for interacting with the Control builders.
+	Control *ControlClient
+	// ControlHistory is the client for interacting with the ControlHistory builders.
+	ControlHistory *ControlHistoryClient
+	// ControlObjective is the client for interacting with the ControlObjective builders.
+	ControlObjective *ControlObjectiveClient
+	// ControlObjectiveHistory is the client for interacting with the ControlObjectiveHistory builders.
+	ControlObjectiveHistory *ControlObjectiveHistoryClient
 	// DocumentData is the client for interacting with the DocumentData builders.
 	DocumentData *DocumentDataClient
 	// DocumentDataHistory is the client for interacting with the DocumentDataHistory builders.
@@ -76,8 +88,16 @@ type Tx struct {
 	Integration *IntegrationClient
 	// IntegrationHistory is the client for interacting with the IntegrationHistory builders.
 	IntegrationHistory *IntegrationHistoryClient
+	// InternalPolicy is the client for interacting with the InternalPolicy builders.
+	InternalPolicy *InternalPolicyClient
+	// InternalPolicyHistory is the client for interacting with the InternalPolicyHistory builders.
+	InternalPolicyHistory *InternalPolicyHistoryClient
 	// Invite is the client for interacting with the Invite builders.
 	Invite *InviteClient
+	// Narrative is the client for interacting with the Narrative builders.
+	Narrative *NarrativeClient
+	// NarrativeHistory is the client for interacting with the NarrativeHistory builders.
+	NarrativeHistory *NarrativeHistoryClient
 	// Note is the client for interacting with the Note builders.
 	Note *NoteClient
 	// NoteHistory is the client for interacting with the NoteHistory builders.
@@ -104,6 +124,22 @@ type Tx struct {
 	PasswordResetToken *PasswordResetTokenClient
 	// PersonalAccessToken is the client for interacting with the PersonalAccessToken builders.
 	PersonalAccessToken *PersonalAccessTokenClient
+	// Procedure is the client for interacting with the Procedure builders.
+	Procedure *ProcedureClient
+	// ProcedureHistory is the client for interacting with the ProcedureHistory builders.
+	ProcedureHistory *ProcedureHistoryClient
+	// Risk is the client for interacting with the Risk builders.
+	Risk *RiskClient
+	// RiskHistory is the client for interacting with the RiskHistory builders.
+	RiskHistory *RiskHistoryClient
+	// Standard is the client for interacting with the Standard builders.
+	Standard *StandardClient
+	// StandardHistory is the client for interacting with the StandardHistory builders.
+	StandardHistory *StandardHistoryClient
+	// Subcontrol is the client for interacting with the Subcontrol builders.
+	Subcontrol *SubcontrolClient
+	// SubcontrolHistory is the client for interacting with the SubcontrolHistory builders.
+	SubcontrolHistory *SubcontrolHistoryClient
 	// Subscriber is the client for interacting with the Subscriber builders.
 	Subscriber *SubscriberClient
 	// TFASetting is the client for interacting with the TFASetting builders.
@@ -258,8 +294,14 @@ func (tx *Tx) Client() *Client {
 
 func (tx *Tx) init() {
 	tx.APIToken = NewAPITokenClient(tx.config)
+	tx.ActionPlan = NewActionPlanClient(tx.config)
+	tx.ActionPlanHistory = NewActionPlanHistoryClient(tx.config)
 	tx.Contact = NewContactClient(tx.config)
 	tx.ContactHistory = NewContactHistoryClient(tx.config)
+	tx.Control = NewControlClient(tx.config)
+	tx.ControlHistory = NewControlHistoryClient(tx.config)
+	tx.ControlObjective = NewControlObjectiveClient(tx.config)
+	tx.ControlObjectiveHistory = NewControlObjectiveHistoryClient(tx.config)
 	tx.DocumentData = NewDocumentDataClient(tx.config)
 	tx.DocumentDataHistory = NewDocumentDataHistoryClient(tx.config)
 	tx.EmailVerificationToken = NewEmailVerificationTokenClient(tx.config)
@@ -289,7 +331,11 @@ func (tx *Tx) init() {
 	tx.HushHistory = NewHushHistoryClient(tx.config)
 	tx.Integration = NewIntegrationClient(tx.config)
 	tx.IntegrationHistory = NewIntegrationHistoryClient(tx.config)
+	tx.InternalPolicy = NewInternalPolicyClient(tx.config)
+	tx.InternalPolicyHistory = NewInternalPolicyHistoryClient(tx.config)
 	tx.Invite = NewInviteClient(tx.config)
+	tx.Narrative = NewNarrativeClient(tx.config)
+	tx.NarrativeHistory = NewNarrativeHistoryClient(tx.config)
 	tx.Note = NewNoteClient(tx.config)
 	tx.NoteHistory = NewNoteHistoryClient(tx.config)
 	tx.OauthProvider = NewOauthProviderClient(tx.config)
@@ -303,6 +349,14 @@ func (tx *Tx) init() {
 	tx.OrganizationSettingHistory = NewOrganizationSettingHistoryClient(tx.config)
 	tx.PasswordResetToken = NewPasswordResetTokenClient(tx.config)
 	tx.PersonalAccessToken = NewPersonalAccessTokenClient(tx.config)
+	tx.Procedure = NewProcedureClient(tx.config)
+	tx.ProcedureHistory = NewProcedureHistoryClient(tx.config)
+	tx.Risk = NewRiskClient(tx.config)
+	tx.RiskHistory = NewRiskHistoryClient(tx.config)
+	tx.Standard = NewStandardClient(tx.config)
+	tx.StandardHistory = NewStandardHistoryClient(tx.config)
+	tx.Subcontrol = NewSubcontrolClient(tx.config)
+	tx.SubcontrolHistory = NewSubcontrolHistoryClient(tx.config)
 	tx.Subscriber = NewSubscriberClient(tx.config)
 	tx.TFASetting = NewTFASettingClient(tx.config)
 	tx.Template = NewTemplateClient(tx.config)

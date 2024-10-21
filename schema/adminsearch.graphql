@@ -9,6 +9,15 @@ extend type Query{
         query: String!
     ): APITokenSearchResult
     """
+    Search across ActionPlan objects
+    """
+    adminActionPlanSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): ActionPlanSearchResult
+    """
     Search across Contact objects
     """
     adminContactSearch(
@@ -17,6 +26,24 @@ extend type Query{
         """
         query: String!
     ): ContactSearchResult
+    """
+    Search across Control objects
+    """
+    adminControlSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): ControlSearchResult
+    """
+    Search across ControlObjective objects
+    """
+    adminControlObjectiveSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): ControlObjectiveSearchResult
     """
     Search across DocumentData objects
     """
@@ -126,6 +153,24 @@ extend type Query{
         query: String!
     ): IntegrationSearchResult
     """
+    Search across InternalPolicy objects
+    """
+    adminInternalPolicySearch(
+        """
+        Search query
+        """
+        query: String!
+    ): InternalPolicySearchResult
+    """
+    Search across Narrative objects
+    """
+    adminNarrativeSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): NarrativeSearchResult
+    """
     Search across OauthProvider objects
     """
     adminOauthProviderSearch(
@@ -170,6 +215,42 @@ extend type Query{
         """
         query: String!
     ): PersonalAccessTokenSearchResult
+    """
+    Search across Procedure objects
+    """
+    adminProcedureSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): ProcedureSearchResult
+    """
+    Search across Risk objects
+    """
+    adminRiskSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): RiskSearchResult
+    """
+    Search across Standard objects
+    """
+    adminStandardSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): StandardSearchResult
+    """
+    Search across Subcontrol objects
+    """
+    adminSubcontrolSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): SubcontrolSearchResult
     """
     Search across Subscriber objects
     """

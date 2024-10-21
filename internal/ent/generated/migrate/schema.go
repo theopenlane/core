@@ -49,6 +49,68 @@ var (
 			},
 		},
 	}
+	// ActionPlansColumns holds the columns for the "action_plans" table.
+	ActionPlansColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "mapping_id", Type: field.TypeString, Unique: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "name", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "status", Type: field.TypeString, Nullable: true},
+		{Name: "assigned", Type: field.TypeString, Nullable: true},
+		{Name: "due_date", Type: field.TypeString, Nullable: true},
+		{Name: "priority", Type: field.TypeString, Nullable: true},
+		{Name: "source", Type: field.TypeString, Nullable: true},
+		{Name: "jsonschema", Type: field.TypeJSON, Nullable: true},
+	}
+	// ActionPlansTable holds the schema information for the "action_plans" table.
+	ActionPlansTable = &schema.Table{
+		Name:       "action_plans",
+		Columns:    ActionPlansColumns,
+		PrimaryKey: []*schema.Column{ActionPlansColumns[0]},
+	}
+	// ActionPlanHistoryColumns holds the columns for the "action_plan_history" table.
+	ActionPlanHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "mapping_id", Type: field.TypeString},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "name", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "status", Type: field.TypeString, Nullable: true},
+		{Name: "assigned", Type: field.TypeString, Nullable: true},
+		{Name: "due_date", Type: field.TypeString, Nullable: true},
+		{Name: "priority", Type: field.TypeString, Nullable: true},
+		{Name: "source", Type: field.TypeString, Nullable: true},
+		{Name: "jsonschema", Type: field.TypeJSON, Nullable: true},
+	}
+	// ActionPlanHistoryTable holds the schema information for the "action_plan_history" table.
+	ActionPlanHistoryTable = &schema.Table{
+		Name:       "action_plan_history",
+		Columns:    ActionPlanHistoryColumns,
+		PrimaryKey: []*schema.Column{ActionPlanHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "actionplanhistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{ActionPlanHistoryColumns[1]},
+			},
+		},
+	}
 	// ContactsColumns holds the columns for the "contacts" table.
 	ContactsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -116,6 +178,173 @@ var (
 				Name:    "contacthistory_history_time",
 				Unique:  false,
 				Columns: []*schema.Column{ContactHistoryColumns[1]},
+			},
+		},
+	}
+	// ControlsColumns holds the columns for the "controls" table.
+	ControlsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "mapping_id", Type: field.TypeString, Unique: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "name", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "status", Type: field.TypeString, Nullable: true},
+		{Name: "control_type", Type: field.TypeString, Nullable: true},
+		{Name: "version", Type: field.TypeString, Nullable: true},
+		{Name: "owner", Type: field.TypeString, Nullable: true},
+		{Name: "control_number", Type: field.TypeString, Nullable: true},
+		{Name: "control_family", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "control_class", Type: field.TypeString, Nullable: true},
+		{Name: "source", Type: field.TypeString, Nullable: true},
+		{Name: "satisfies", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "mapped_frameworks", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "jsonschema", Type: field.TypeJSON, Nullable: true},
+		{Name: "control_objective_controls", Type: field.TypeString, Nullable: true},
+		{Name: "internal_policy_controls", Type: field.TypeString, Nullable: true},
+	}
+	// ControlsTable holds the schema information for the "controls" table.
+	ControlsTable = &schema.Table{
+		Name:       "controls",
+		Columns:    ControlsColumns,
+		PrimaryKey: []*schema.Column{ControlsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "controls_control_objectives_controls",
+				Columns:    []*schema.Column{ControlsColumns[22]},
+				RefColumns: []*schema.Column{ControlObjectivesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "controls_internal_policies_controls",
+				Columns:    []*schema.Column{ControlsColumns[23]},
+				RefColumns: []*schema.Column{InternalPoliciesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
+	// ControlHistoryColumns holds the columns for the "control_history" table.
+	ControlHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "mapping_id", Type: field.TypeString},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "name", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "status", Type: field.TypeString, Nullable: true},
+		{Name: "control_type", Type: field.TypeString, Nullable: true},
+		{Name: "version", Type: field.TypeString, Nullable: true},
+		{Name: "owner", Type: field.TypeString, Nullable: true},
+		{Name: "control_number", Type: field.TypeString, Nullable: true},
+		{Name: "control_family", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "control_class", Type: field.TypeString, Nullable: true},
+		{Name: "source", Type: field.TypeString, Nullable: true},
+		{Name: "satisfies", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "mapped_frameworks", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "jsonschema", Type: field.TypeJSON, Nullable: true},
+	}
+	// ControlHistoryTable holds the schema information for the "control_history" table.
+	ControlHistoryTable = &schema.Table{
+		Name:       "control_history",
+		Columns:    ControlHistoryColumns,
+		PrimaryKey: []*schema.Column{ControlHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "controlhistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{ControlHistoryColumns[1]},
+			},
+		},
+	}
+	// ControlObjectivesColumns holds the columns for the "control_objectives" table.
+	ControlObjectivesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "mapping_id", Type: field.TypeString, Unique: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "name", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "status", Type: field.TypeString, Nullable: true},
+		{Name: "control_objective_type", Type: field.TypeString, Nullable: true},
+		{Name: "version", Type: field.TypeString, Nullable: true},
+		{Name: "owner", Type: field.TypeString, Nullable: true},
+		{Name: "control_number", Type: field.TypeString, Nullable: true},
+		{Name: "control_family", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "control_class", Type: field.TypeString, Nullable: true},
+		{Name: "source", Type: field.TypeString, Nullable: true},
+		{Name: "mapped_frameworks", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "jsonschema", Type: field.TypeJSON, Nullable: true},
+		{Name: "control_controlobjectives", Type: field.TypeString, Nullable: true},
+	}
+	// ControlObjectivesTable holds the schema information for the "control_objectives" table.
+	ControlObjectivesTable = &schema.Table{
+		Name:       "control_objectives",
+		Columns:    ControlObjectivesColumns,
+		PrimaryKey: []*schema.Column{ControlObjectivesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "control_objectives_controls_controlobjectives",
+				Columns:    []*schema.Column{ControlObjectivesColumns[21]},
+				RefColumns: []*schema.Column{ControlsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
+	// ControlObjectiveHistoryColumns holds the columns for the "control_objective_history" table.
+	ControlObjectiveHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "mapping_id", Type: field.TypeString},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "name", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "status", Type: field.TypeString, Nullable: true},
+		{Name: "control_objective_type", Type: field.TypeString, Nullable: true},
+		{Name: "version", Type: field.TypeString, Nullable: true},
+		{Name: "owner", Type: field.TypeString, Nullable: true},
+		{Name: "control_number", Type: field.TypeString, Nullable: true},
+		{Name: "control_family", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "control_class", Type: field.TypeString, Nullable: true},
+		{Name: "source", Type: field.TypeString, Nullable: true},
+		{Name: "mapped_frameworks", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "jsonschema", Type: field.TypeJSON, Nullable: true},
+	}
+	// ControlObjectiveHistoryTable holds the schema information for the "control_objective_history" table.
+	ControlObjectiveHistoryTable = &schema.Table{
+		Name:       "control_objective_history",
+		Columns:    ControlObjectiveHistoryColumns,
+		PrimaryKey: []*schema.Column{ControlObjectiveHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "controlobjectivehistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{ControlObjectiveHistoryColumns[1]},
 			},
 		},
 	}
@@ -1173,6 +1402,68 @@ var (
 			},
 		},
 	}
+	// InternalPoliciesColumns holds the columns for the "internal_policies" table.
+	InternalPoliciesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "mapping_id", Type: field.TypeString, Unique: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "name", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Size: 2147483647},
+		{Name: "status", Type: field.TypeString, Nullable: true},
+		{Name: "policy_type", Type: field.TypeString, Nullable: true},
+		{Name: "version", Type: field.TypeString, Nullable: true},
+		{Name: "purpose_and_scope", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "background", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "jsonschema", Type: field.TypeJSON, Nullable: true},
+	}
+	// InternalPoliciesTable holds the schema information for the "internal_policies" table.
+	InternalPoliciesTable = &schema.Table{
+		Name:       "internal_policies",
+		Columns:    InternalPoliciesColumns,
+		PrimaryKey: []*schema.Column{InternalPoliciesColumns[0]},
+	}
+	// InternalPolicyHistoryColumns holds the columns for the "internal_policy_history" table.
+	InternalPolicyHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "mapping_id", Type: field.TypeString},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "name", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Size: 2147483647},
+		{Name: "status", Type: field.TypeString, Nullable: true},
+		{Name: "policy_type", Type: field.TypeString, Nullable: true},
+		{Name: "version", Type: field.TypeString, Nullable: true},
+		{Name: "purpose_and_scope", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "background", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "jsonschema", Type: field.TypeJSON, Nullable: true},
+	}
+	// InternalPolicyHistoryTable holds the schema information for the "internal_policy_history" table.
+	InternalPolicyHistoryTable = &schema.Table{
+		Name:       "internal_policy_history",
+		Columns:    InternalPolicyHistoryColumns,
+		PrimaryKey: []*schema.Column{InternalPolicyHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "internalpolicyhistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{InternalPolicyHistoryColumns[1]},
+			},
+		},
+	}
 	// InvitesColumns holds the columns for the "invites" table.
 	InvitesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -1214,6 +1505,60 @@ var (
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
+			},
+		},
+	}
+	// NarrativesColumns holds the columns for the "narratives" table.
+	NarrativesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "mapping_id", Type: field.TypeString, Unique: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "name", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "satisfies", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "jsonschema", Type: field.TypeJSON, Nullable: true},
+	}
+	// NarrativesTable holds the schema information for the "narratives" table.
+	NarrativesTable = &schema.Table{
+		Name:       "narratives",
+		Columns:    NarrativesColumns,
+		PrimaryKey: []*schema.Column{NarrativesColumns[0]},
+	}
+	// NarrativeHistoryColumns holds the columns for the "narrative_history" table.
+	NarrativeHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "mapping_id", Type: field.TypeString},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "name", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "satisfies", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "jsonschema", Type: field.TypeJSON, Nullable: true},
+	}
+	// NarrativeHistoryTable holds the schema information for the "narrative_history" table.
+	NarrativeHistoryTable = &schema.Table{
+		Name:       "narrative_history",
+		Columns:    NarrativeHistoryColumns,
+		PrimaryKey: []*schema.Column{NarrativeHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "narrativehistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{NarrativeHistoryColumns[1]},
 			},
 		},
 	}
@@ -1679,6 +2024,322 @@ var (
 				Name:    "personalaccesstoken_token",
 				Unique:  false,
 				Columns: []*schema.Column{PersonalAccessTokensColumns[10]},
+			},
+		},
+	}
+	// ProceduresColumns holds the columns for the "procedures" table.
+	ProceduresColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "mapping_id", Type: field.TypeString, Unique: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "name", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "status", Type: field.TypeString, Nullable: true},
+		{Name: "procedure_type", Type: field.TypeString, Nullable: true},
+		{Name: "version", Type: field.TypeString, Nullable: true},
+		{Name: "purpose_and_scope", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "background", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "satisfies", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "jsonschema", Type: field.TypeJSON, Nullable: true},
+		{Name: "control_objective_procedures", Type: field.TypeString, Nullable: true},
+		{Name: "standard_procedures", Type: field.TypeString, Nullable: true},
+	}
+	// ProceduresTable holds the schema information for the "procedures" table.
+	ProceduresTable = &schema.Table{
+		Name:       "procedures",
+		Columns:    ProceduresColumns,
+		PrimaryKey: []*schema.Column{ProceduresColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "procedures_control_objectives_procedures",
+				Columns:    []*schema.Column{ProceduresColumns[18]},
+				RefColumns: []*schema.Column{ControlObjectivesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "procedures_standards_procedures",
+				Columns:    []*schema.Column{ProceduresColumns[19]},
+				RefColumns: []*schema.Column{StandardsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
+	// ProcedureHistoryColumns holds the columns for the "procedure_history" table.
+	ProcedureHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "mapping_id", Type: field.TypeString},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "name", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "status", Type: field.TypeString, Nullable: true},
+		{Name: "procedure_type", Type: field.TypeString, Nullable: true},
+		{Name: "version", Type: field.TypeString, Nullable: true},
+		{Name: "purpose_and_scope", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "background", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "satisfies", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "jsonschema", Type: field.TypeJSON, Nullable: true},
+	}
+	// ProcedureHistoryTable holds the schema information for the "procedure_history" table.
+	ProcedureHistoryTable = &schema.Table{
+		Name:       "procedure_history",
+		Columns:    ProcedureHistoryColumns,
+		PrimaryKey: []*schema.Column{ProcedureHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "procedurehistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{ProcedureHistoryColumns[1]},
+			},
+		},
+	}
+	// RisksColumns holds the columns for the "risks" table.
+	RisksColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "mapping_id", Type: field.TypeString, Unique: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "name", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "status", Type: field.TypeString, Nullable: true},
+		{Name: "risk_type", Type: field.TypeString, Nullable: true},
+		{Name: "business_costs", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "impact", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "likelihood", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "mitigation", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "satisfies", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "severity", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "jsonschema", Type: field.TypeJSON, Nullable: true},
+		{Name: "control_objective_risks", Type: field.TypeString, Nullable: true},
+	}
+	// RisksTable holds the schema information for the "risks" table.
+	RisksTable = &schema.Table{
+		Name:       "risks",
+		Columns:    RisksColumns,
+		PrimaryKey: []*schema.Column{RisksColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "risks_control_objectives_risks",
+				Columns:    []*schema.Column{RisksColumns[20]},
+				RefColumns: []*schema.Column{ControlObjectivesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
+	// RiskHistoryColumns holds the columns for the "risk_history" table.
+	RiskHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "mapping_id", Type: field.TypeString},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "name", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "status", Type: field.TypeString, Nullable: true},
+		{Name: "risk_type", Type: field.TypeString, Nullable: true},
+		{Name: "business_costs", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "impact", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "likelihood", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "mitigation", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "satisfies", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "severity", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "jsonschema", Type: field.TypeJSON, Nullable: true},
+	}
+	// RiskHistoryTable holds the schema information for the "risk_history" table.
+	RiskHistoryTable = &schema.Table{
+		Name:       "risk_history",
+		Columns:    RiskHistoryColumns,
+		PrimaryKey: []*schema.Column{RiskHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "riskhistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{RiskHistoryColumns[1]},
+			},
+		},
+	}
+	// StandardsColumns holds the columns for the "standards" table.
+	StandardsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "mapping_id", Type: field.TypeString, Unique: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "name", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "family", Type: field.TypeString, Nullable: true},
+		{Name: "status", Type: field.TypeString, Nullable: true},
+		{Name: "standard_type", Type: field.TypeString, Nullable: true},
+		{Name: "version", Type: field.TypeString, Nullable: true},
+		{Name: "purpose_and_scope", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "background", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "satisfies", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "jsonschema", Type: field.TypeJSON, Nullable: true},
+	}
+	// StandardsTable holds the schema information for the "standards" table.
+	StandardsTable = &schema.Table{
+		Name:       "standards",
+		Columns:    StandardsColumns,
+		PrimaryKey: []*schema.Column{StandardsColumns[0]},
+	}
+	// StandardHistoryColumns holds the columns for the "standard_history" table.
+	StandardHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "mapping_id", Type: field.TypeString},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "name", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "family", Type: field.TypeString, Nullable: true},
+		{Name: "status", Type: field.TypeString, Nullable: true},
+		{Name: "standard_type", Type: field.TypeString, Nullable: true},
+		{Name: "version", Type: field.TypeString, Nullable: true},
+		{Name: "purpose_and_scope", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "background", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "satisfies", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "jsonschema", Type: field.TypeJSON, Nullable: true},
+	}
+	// StandardHistoryTable holds the schema information for the "standard_history" table.
+	StandardHistoryTable = &schema.Table{
+		Name:       "standard_history",
+		Columns:    StandardHistoryColumns,
+		PrimaryKey: []*schema.Column{StandardHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "standardhistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{StandardHistoryColumns[1]},
+			},
+		},
+	}
+	// SubcontrolsColumns holds the columns for the "subcontrols" table.
+	SubcontrolsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "mapping_id", Type: field.TypeString, Unique: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "name", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "status", Type: field.TypeString, Nullable: true},
+		{Name: "subcontrol_type", Type: field.TypeString, Nullable: true},
+		{Name: "version", Type: field.TypeString, Nullable: true},
+		{Name: "owner", Type: field.TypeString, Nullable: true},
+		{Name: "subcontrol_number", Type: field.TypeString, Nullable: true},
+		{Name: "subcontrol_family", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "subcontrol_class", Type: field.TypeString, Nullable: true},
+		{Name: "source", Type: field.TypeString, Nullable: true},
+		{Name: "mapped_frameworks", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "assigned_to", Type: field.TypeString, Nullable: true},
+		{Name: "implementation_status", Type: field.TypeString, Nullable: true},
+		{Name: "implementation_notes", Type: field.TypeString, Nullable: true},
+		{Name: "implementation_date", Type: field.TypeString, Nullable: true},
+		{Name: "implementation_evidence", Type: field.TypeString, Nullable: true},
+		{Name: "implementation_verification", Type: field.TypeString, Nullable: true},
+		{Name: "implementation_verification_date", Type: field.TypeString, Nullable: true},
+		{Name: "jsonschema", Type: field.TypeJSON, Nullable: true},
+		{Name: "control_objective_subcontrols", Type: field.TypeString, Nullable: true},
+	}
+	// SubcontrolsTable holds the schema information for the "subcontrols" table.
+	SubcontrolsTable = &schema.Table{
+		Name:       "subcontrols",
+		Columns:    SubcontrolsColumns,
+		PrimaryKey: []*schema.Column{SubcontrolsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "subcontrols_control_objectives_subcontrols",
+				Columns:    []*schema.Column{SubcontrolsColumns[28]},
+				RefColumns: []*schema.Column{ControlObjectivesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
+	// SubcontrolHistoryColumns holds the columns for the "subcontrol_history" table.
+	SubcontrolHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "mapping_id", Type: field.TypeString},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "name", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "status", Type: field.TypeString, Nullable: true},
+		{Name: "subcontrol_type", Type: field.TypeString, Nullable: true},
+		{Name: "version", Type: field.TypeString, Nullable: true},
+		{Name: "owner", Type: field.TypeString, Nullable: true},
+		{Name: "subcontrol_number", Type: field.TypeString, Nullable: true},
+		{Name: "subcontrol_family", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "subcontrol_class", Type: field.TypeString, Nullable: true},
+		{Name: "source", Type: field.TypeString, Nullable: true},
+		{Name: "mapped_frameworks", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "assigned_to", Type: field.TypeString, Nullable: true},
+		{Name: "implementation_status", Type: field.TypeString, Nullable: true},
+		{Name: "implementation_notes", Type: field.TypeString, Nullable: true},
+		{Name: "implementation_date", Type: field.TypeString, Nullable: true},
+		{Name: "implementation_evidence", Type: field.TypeString, Nullable: true},
+		{Name: "implementation_verification", Type: field.TypeString, Nullable: true},
+		{Name: "implementation_verification_date", Type: field.TypeString, Nullable: true},
+		{Name: "jsonschema", Type: field.TypeJSON, Nullable: true},
+	}
+	// SubcontrolHistoryTable holds the schema information for the "subcontrol_history" table.
+	SubcontrolHistoryTable = &schema.Table{
+		Name:       "subcontrol_history",
+		Columns:    SubcontrolHistoryColumns,
+		PrimaryKey: []*schema.Column{SubcontrolHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "subcontrolhistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{SubcontrolHistoryColumns[1]},
 			},
 		},
 	}
@@ -2166,6 +2827,131 @@ var (
 			},
 		},
 	}
+	// ControlProceduresColumns holds the columns for the "control_procedures" table.
+	ControlProceduresColumns = []*schema.Column{
+		{Name: "control_id", Type: field.TypeString},
+		{Name: "procedure_id", Type: field.TypeString},
+	}
+	// ControlProceduresTable holds the schema information for the "control_procedures" table.
+	ControlProceduresTable = &schema.Table{
+		Name:       "control_procedures",
+		Columns:    ControlProceduresColumns,
+		PrimaryKey: []*schema.Column{ControlProceduresColumns[0], ControlProceduresColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "control_procedures_control_id",
+				Columns:    []*schema.Column{ControlProceduresColumns[0]},
+				RefColumns: []*schema.Column{ControlsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "control_procedures_procedure_id",
+				Columns:    []*schema.Column{ControlProceduresColumns[1]},
+				RefColumns: []*schema.Column{ProceduresColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// ControlSubcontrolsColumns holds the columns for the "control_subcontrols" table.
+	ControlSubcontrolsColumns = []*schema.Column{
+		{Name: "control_id", Type: field.TypeString},
+		{Name: "subcontrol_id", Type: field.TypeString},
+	}
+	// ControlSubcontrolsTable holds the schema information for the "control_subcontrols" table.
+	ControlSubcontrolsTable = &schema.Table{
+		Name:       "control_subcontrols",
+		Columns:    ControlSubcontrolsColumns,
+		PrimaryKey: []*schema.Column{ControlSubcontrolsColumns[0], ControlSubcontrolsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "control_subcontrols_control_id",
+				Columns:    []*schema.Column{ControlSubcontrolsColumns[0]},
+				RefColumns: []*schema.Column{ControlsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "control_subcontrols_subcontrol_id",
+				Columns:    []*schema.Column{ControlSubcontrolsColumns[1]},
+				RefColumns: []*schema.Column{SubcontrolsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// ControlNarrativesColumns holds the columns for the "control_narratives" table.
+	ControlNarrativesColumns = []*schema.Column{
+		{Name: "control_id", Type: field.TypeString},
+		{Name: "narrative_id", Type: field.TypeString},
+	}
+	// ControlNarrativesTable holds the schema information for the "control_narratives" table.
+	ControlNarrativesTable = &schema.Table{
+		Name:       "control_narratives",
+		Columns:    ControlNarrativesColumns,
+		PrimaryKey: []*schema.Column{ControlNarrativesColumns[0], ControlNarrativesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "control_narratives_control_id",
+				Columns:    []*schema.Column{ControlNarrativesColumns[0]},
+				RefColumns: []*schema.Column{ControlsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "control_narratives_narrative_id",
+				Columns:    []*schema.Column{ControlNarrativesColumns[1]},
+				RefColumns: []*schema.Column{NarrativesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// ControlRisksColumns holds the columns for the "control_risks" table.
+	ControlRisksColumns = []*schema.Column{
+		{Name: "control_id", Type: field.TypeString},
+		{Name: "risk_id", Type: field.TypeString},
+	}
+	// ControlRisksTable holds the schema information for the "control_risks" table.
+	ControlRisksTable = &schema.Table{
+		Name:       "control_risks",
+		Columns:    ControlRisksColumns,
+		PrimaryKey: []*schema.Column{ControlRisksColumns[0], ControlRisksColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "control_risks_control_id",
+				Columns:    []*schema.Column{ControlRisksColumns[0]},
+				RefColumns: []*schema.Column{ControlsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "control_risks_risk_id",
+				Columns:    []*schema.Column{ControlRisksColumns[1]},
+				RefColumns: []*schema.Column{RisksColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// ControlObjectiveNarrativesColumns holds the columns for the "control_objective_narratives" table.
+	ControlObjectiveNarrativesColumns = []*schema.Column{
+		{Name: "control_objective_id", Type: field.TypeString},
+		{Name: "narrative_id", Type: field.TypeString},
+	}
+	// ControlObjectiveNarrativesTable holds the schema information for the "control_objective_narratives" table.
+	ControlObjectiveNarrativesTable = &schema.Table{
+		Name:       "control_objective_narratives",
+		Columns:    ControlObjectiveNarrativesColumns,
+		PrimaryKey: []*schema.Column{ControlObjectiveNarrativesColumns[0], ControlObjectiveNarrativesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "control_objective_narratives_control_objective_id",
+				Columns:    []*schema.Column{ControlObjectiveNarrativesColumns[0]},
+				RefColumns: []*schema.Column{ControlObjectivesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "control_objective_narratives_narrative_id",
+				Columns:    []*schema.Column{ControlObjectiveNarrativesColumns[1]},
+				RefColumns: []*schema.Column{NarrativesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// DocumentDataFilesColumns holds the columns for the "document_data_files" table.
 	DocumentDataFilesColumns = []*schema.Column{
 		{Name: "document_data_id", Type: field.TypeString},
@@ -2591,6 +3377,81 @@ var (
 			},
 		},
 	}
+	// InternalPolicyControlobjectivesColumns holds the columns for the "internal_policy_controlobjectives" table.
+	InternalPolicyControlobjectivesColumns = []*schema.Column{
+		{Name: "internal_policy_id", Type: field.TypeString},
+		{Name: "control_objective_id", Type: field.TypeString},
+	}
+	// InternalPolicyControlobjectivesTable holds the schema information for the "internal_policy_controlobjectives" table.
+	InternalPolicyControlobjectivesTable = &schema.Table{
+		Name:       "internal_policy_controlobjectives",
+		Columns:    InternalPolicyControlobjectivesColumns,
+		PrimaryKey: []*schema.Column{InternalPolicyControlobjectivesColumns[0], InternalPolicyControlobjectivesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "internal_policy_controlobjectives_internal_policy_id",
+				Columns:    []*schema.Column{InternalPolicyControlobjectivesColumns[0]},
+				RefColumns: []*schema.Column{InternalPoliciesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "internal_policy_controlobjectives_control_objective_id",
+				Columns:    []*schema.Column{InternalPolicyControlobjectivesColumns[1]},
+				RefColumns: []*schema.Column{ControlObjectivesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// InternalPolicyProceduresColumns holds the columns for the "internal_policy_procedures" table.
+	InternalPolicyProceduresColumns = []*schema.Column{
+		{Name: "internal_policy_id", Type: field.TypeString},
+		{Name: "procedure_id", Type: field.TypeString},
+	}
+	// InternalPolicyProceduresTable holds the schema information for the "internal_policy_procedures" table.
+	InternalPolicyProceduresTable = &schema.Table{
+		Name:       "internal_policy_procedures",
+		Columns:    InternalPolicyProceduresColumns,
+		PrimaryKey: []*schema.Column{InternalPolicyProceduresColumns[0], InternalPolicyProceduresColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "internal_policy_procedures_internal_policy_id",
+				Columns:    []*schema.Column{InternalPolicyProceduresColumns[0]},
+				RefColumns: []*schema.Column{InternalPoliciesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "internal_policy_procedures_procedure_id",
+				Columns:    []*schema.Column{InternalPolicyProceduresColumns[1]},
+				RefColumns: []*schema.Column{ProceduresColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// InternalPolicyNarrativesColumns holds the columns for the "internal_policy_narratives" table.
+	InternalPolicyNarrativesColumns = []*schema.Column{
+		{Name: "internal_policy_id", Type: field.TypeString},
+		{Name: "narrative_id", Type: field.TypeString},
+	}
+	// InternalPolicyNarrativesTable holds the schema information for the "internal_policy_narratives" table.
+	InternalPolicyNarrativesTable = &schema.Table{
+		Name:       "internal_policy_narratives",
+		Columns:    InternalPolicyNarrativesColumns,
+		PrimaryKey: []*schema.Column{InternalPolicyNarrativesColumns[0], InternalPolicyNarrativesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "internal_policy_narratives_internal_policy_id",
+				Columns:    []*schema.Column{InternalPolicyNarrativesColumns[0]},
+				RefColumns: []*schema.Column{InternalPoliciesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "internal_policy_narratives_narrative_id",
+				Columns:    []*schema.Column{InternalPolicyNarrativesColumns[1]},
+				RefColumns: []*schema.Column{NarrativesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// InviteEventsColumns holds the columns for the "invite_events" table.
 	InviteEventsColumns = []*schema.Column{
 		{Name: "invite_id", Type: field.TypeString},
@@ -2816,6 +3677,156 @@ var (
 			},
 		},
 	}
+	// ProcedureNarrativesColumns holds the columns for the "procedure_narratives" table.
+	ProcedureNarrativesColumns = []*schema.Column{
+		{Name: "procedure_id", Type: field.TypeString},
+		{Name: "narrative_id", Type: field.TypeString},
+	}
+	// ProcedureNarrativesTable holds the schema information for the "procedure_narratives" table.
+	ProcedureNarrativesTable = &schema.Table{
+		Name:       "procedure_narratives",
+		Columns:    ProcedureNarrativesColumns,
+		PrimaryKey: []*schema.Column{ProcedureNarrativesColumns[0], ProcedureNarrativesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "procedure_narratives_procedure_id",
+				Columns:    []*schema.Column{ProcedureNarrativesColumns[0]},
+				RefColumns: []*schema.Column{ProceduresColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "procedure_narratives_narrative_id",
+				Columns:    []*schema.Column{ProcedureNarrativesColumns[1]},
+				RefColumns: []*schema.Column{NarrativesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// ProcedureRisksColumns holds the columns for the "procedure_risks" table.
+	ProcedureRisksColumns = []*schema.Column{
+		{Name: "procedure_id", Type: field.TypeString},
+		{Name: "risk_id", Type: field.TypeString},
+	}
+	// ProcedureRisksTable holds the schema information for the "procedure_risks" table.
+	ProcedureRisksTable = &schema.Table{
+		Name:       "procedure_risks",
+		Columns:    ProcedureRisksColumns,
+		PrimaryKey: []*schema.Column{ProcedureRisksColumns[0], ProcedureRisksColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "procedure_risks_procedure_id",
+				Columns:    []*schema.Column{ProcedureRisksColumns[0]},
+				RefColumns: []*schema.Column{ProceduresColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "procedure_risks_risk_id",
+				Columns:    []*schema.Column{ProcedureRisksColumns[1]},
+				RefColumns: []*schema.Column{RisksColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// RiskActionplansColumns holds the columns for the "risk_actionplans" table.
+	RiskActionplansColumns = []*schema.Column{
+		{Name: "risk_id", Type: field.TypeString},
+		{Name: "action_plan_id", Type: field.TypeString},
+	}
+	// RiskActionplansTable holds the schema information for the "risk_actionplans" table.
+	RiskActionplansTable = &schema.Table{
+		Name:       "risk_actionplans",
+		Columns:    RiskActionplansColumns,
+		PrimaryKey: []*schema.Column{RiskActionplansColumns[0], RiskActionplansColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "risk_actionplans_risk_id",
+				Columns:    []*schema.Column{RiskActionplansColumns[0]},
+				RefColumns: []*schema.Column{RisksColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "risk_actionplans_action_plan_id",
+				Columns:    []*schema.Column{RiskActionplansColumns[1]},
+				RefColumns: []*schema.Column{ActionPlansColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// StandardControlobjectivesColumns holds the columns for the "standard_controlobjectives" table.
+	StandardControlobjectivesColumns = []*schema.Column{
+		{Name: "standard_id", Type: field.TypeString},
+		{Name: "control_objective_id", Type: field.TypeString},
+	}
+	// StandardControlobjectivesTable holds the schema information for the "standard_controlobjectives" table.
+	StandardControlobjectivesTable = &schema.Table{
+		Name:       "standard_controlobjectives",
+		Columns:    StandardControlobjectivesColumns,
+		PrimaryKey: []*schema.Column{StandardControlobjectivesColumns[0], StandardControlobjectivesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "standard_controlobjectives_standard_id",
+				Columns:    []*schema.Column{StandardControlobjectivesColumns[0]},
+				RefColumns: []*schema.Column{StandardsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "standard_controlobjectives_control_objective_id",
+				Columns:    []*schema.Column{StandardControlobjectivesColumns[1]},
+				RefColumns: []*schema.Column{ControlObjectivesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// StandardControlsColumns holds the columns for the "standard_controls" table.
+	StandardControlsColumns = []*schema.Column{
+		{Name: "standard_id", Type: field.TypeString},
+		{Name: "control_id", Type: field.TypeString},
+	}
+	// StandardControlsTable holds the schema information for the "standard_controls" table.
+	StandardControlsTable = &schema.Table{
+		Name:       "standard_controls",
+		Columns:    StandardControlsColumns,
+		PrimaryKey: []*schema.Column{StandardControlsColumns[0], StandardControlsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "standard_controls_standard_id",
+				Columns:    []*schema.Column{StandardControlsColumns[0]},
+				RefColumns: []*schema.Column{StandardsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "standard_controls_control_id",
+				Columns:    []*schema.Column{StandardControlsColumns[1]},
+				RefColumns: []*schema.Column{ControlsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// StandardActionplansColumns holds the columns for the "standard_actionplans" table.
+	StandardActionplansColumns = []*schema.Column{
+		{Name: "standard_id", Type: field.TypeString},
+		{Name: "action_plan_id", Type: field.TypeString},
+	}
+	// StandardActionplansTable holds the schema information for the "standard_actionplans" table.
+	StandardActionplansTable = &schema.Table{
+		Name:       "standard_actionplans",
+		Columns:    StandardActionplansColumns,
+		PrimaryKey: []*schema.Column{StandardActionplansColumns[0], StandardActionplansColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "standard_actionplans_standard_id",
+				Columns:    []*schema.Column{StandardActionplansColumns[0]},
+				RefColumns: []*schema.Column{StandardsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "standard_actionplans_action_plan_id",
+				Columns:    []*schema.Column{StandardActionplansColumns[1]},
+				RefColumns: []*schema.Column{ActionPlansColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// SubscriberEventsColumns holds the columns for the "subscriber_events" table.
 	SubscriberEventsColumns = []*schema.Column{
 		{Name: "subscriber_id", Type: field.TypeString},
@@ -2969,8 +3980,14 @@ var (
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		APITokensTable,
+		ActionPlansTable,
+		ActionPlanHistoryTable,
 		ContactsTable,
 		ContactHistoryTable,
+		ControlsTable,
+		ControlHistoryTable,
+		ControlObjectivesTable,
+		ControlObjectiveHistoryTable,
 		DocumentDataTable,
 		DocumentDataHistoryTable,
 		EmailVerificationTokensTable,
@@ -3000,7 +4017,11 @@ var (
 		HushHistoryTable,
 		IntegrationsTable,
 		IntegrationHistoryTable,
+		InternalPoliciesTable,
+		InternalPolicyHistoryTable,
 		InvitesTable,
+		NarrativesTable,
+		NarrativeHistoryTable,
 		NotesTable,
 		NoteHistoryTable,
 		OauthProvidersTable,
@@ -3014,6 +4035,14 @@ var (
 		OrganizationSettingHistoryTable,
 		PasswordResetTokensTable,
 		PersonalAccessTokensTable,
+		ProceduresTable,
+		ProcedureHistoryTable,
+		RisksTable,
+		RiskHistoryTable,
+		StandardsTable,
+		StandardHistoryTable,
+		SubcontrolsTable,
+		SubcontrolHistoryTable,
 		SubscribersTable,
 		TfaSettingsTable,
 		TemplatesTable,
@@ -3026,6 +4055,11 @@ var (
 		WebhooksTable,
 		WebhookHistoryTable,
 		ContactFilesTable,
+		ControlProceduresTable,
+		ControlSubcontrolsTable,
+		ControlNarrativesTable,
+		ControlRisksTable,
+		ControlObjectiveNarrativesTable,
 		DocumentDataFilesTable,
 		EntitlementEventsTable,
 		EntitlementPlanEventsTable,
@@ -3043,6 +4077,9 @@ var (
 		IntegrationOauth2tokensTable,
 		IntegrationEventsTable,
 		IntegrationWebhooksTable,
+		InternalPolicyControlobjectivesTable,
+		InternalPolicyProceduresTable,
+		InternalPolicyNarrativesTable,
 		InviteEventsTable,
 		OhAuthTooTokenEventsTable,
 		OrgMembershipEventsTable,
@@ -3052,6 +4089,12 @@ var (
 		OrganizationFilesTable,
 		OrganizationSettingFilesTable,
 		PersonalAccessTokenEventsTable,
+		ProcedureNarrativesTable,
+		ProcedureRisksTable,
+		RiskActionplansTable,
+		StandardControlobjectivesTable,
+		StandardControlsTable,
+		StandardActionplansTable,
 		SubscriberEventsTable,
 		TemplateFilesTable,
 		UserFilesTable,
@@ -3063,9 +4106,21 @@ var (
 
 func init() {
 	APITokensTable.ForeignKeys[0].RefTable = OrganizationsTable
+	ActionPlanHistoryTable.Annotation = &entsql.Annotation{
+		Table: "action_plan_history",
+	}
 	ContactsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	ContactHistoryTable.Annotation = &entsql.Annotation{
 		Table: "contact_history",
+	}
+	ControlsTable.ForeignKeys[0].RefTable = ControlObjectivesTable
+	ControlsTable.ForeignKeys[1].RefTable = InternalPoliciesTable
+	ControlHistoryTable.Annotation = &entsql.Annotation{
+		Table: "control_history",
+	}
+	ControlObjectivesTable.ForeignKeys[0].RefTable = ControlsTable
+	ControlObjectiveHistoryTable.Annotation = &entsql.Annotation{
+		Table: "control_objective_history",
 	}
 	DocumentDataTable.ForeignKeys[0].RefTable = OrganizationsTable
 	DocumentDataTable.ForeignKeys[1].RefTable = TemplatesTable
@@ -3130,7 +4185,13 @@ func init() {
 	IntegrationHistoryTable.Annotation = &entsql.Annotation{
 		Table: "integration_history",
 	}
+	InternalPolicyHistoryTable.Annotation = &entsql.Annotation{
+		Table: "internal_policy_history",
+	}
 	InvitesTable.ForeignKeys[0].RefTable = OrganizationsTable
+	NarrativeHistoryTable.Annotation = &entsql.Annotation{
+		Table: "narrative_history",
+	}
 	NotesTable.ForeignKeys[0].RefTable = EntitiesTable
 	NotesTable.ForeignKeys[1].RefTable = OrganizationsTable
 	NoteHistoryTable.Annotation = &entsql.Annotation{
@@ -3155,6 +4216,22 @@ func init() {
 	}
 	PasswordResetTokensTable.ForeignKeys[0].RefTable = UsersTable
 	PersonalAccessTokensTable.ForeignKeys[0].RefTable = UsersTable
+	ProceduresTable.ForeignKeys[0].RefTable = ControlObjectivesTable
+	ProceduresTable.ForeignKeys[1].RefTable = StandardsTable
+	ProcedureHistoryTable.Annotation = &entsql.Annotation{
+		Table: "procedure_history",
+	}
+	RisksTable.ForeignKeys[0].RefTable = ControlObjectivesTable
+	RiskHistoryTable.Annotation = &entsql.Annotation{
+		Table: "risk_history",
+	}
+	StandardHistoryTable.Annotation = &entsql.Annotation{
+		Table: "standard_history",
+	}
+	SubcontrolsTable.ForeignKeys[0].RefTable = ControlObjectivesTable
+	SubcontrolHistoryTable.Annotation = &entsql.Annotation{
+		Table: "subcontrol_history",
+	}
 	SubscribersTable.ForeignKeys[0].RefTable = OrganizationsTable
 	TfaSettingsTable.ForeignKeys[0].RefTable = UsersTable
 	TemplatesTable.ForeignKeys[0].RefTable = OrganizationsTable
@@ -3177,6 +4254,16 @@ func init() {
 	}
 	ContactFilesTable.ForeignKeys[0].RefTable = ContactsTable
 	ContactFilesTable.ForeignKeys[1].RefTable = FilesTable
+	ControlProceduresTable.ForeignKeys[0].RefTable = ControlsTable
+	ControlProceduresTable.ForeignKeys[1].RefTable = ProceduresTable
+	ControlSubcontrolsTable.ForeignKeys[0].RefTable = ControlsTable
+	ControlSubcontrolsTable.ForeignKeys[1].RefTable = SubcontrolsTable
+	ControlNarrativesTable.ForeignKeys[0].RefTable = ControlsTable
+	ControlNarrativesTable.ForeignKeys[1].RefTable = NarrativesTable
+	ControlRisksTable.ForeignKeys[0].RefTable = ControlsTable
+	ControlRisksTable.ForeignKeys[1].RefTable = RisksTable
+	ControlObjectiveNarrativesTable.ForeignKeys[0].RefTable = ControlObjectivesTable
+	ControlObjectiveNarrativesTable.ForeignKeys[1].RefTable = NarrativesTable
 	DocumentDataFilesTable.ForeignKeys[0].RefTable = DocumentDataTable
 	DocumentDataFilesTable.ForeignKeys[1].RefTable = FilesTable
 	EntitlementEventsTable.ForeignKeys[0].RefTable = EntitlementsTable
@@ -3211,6 +4298,12 @@ func init() {
 	IntegrationEventsTable.ForeignKeys[1].RefTable = EventsTable
 	IntegrationWebhooksTable.ForeignKeys[0].RefTable = IntegrationsTable
 	IntegrationWebhooksTable.ForeignKeys[1].RefTable = WebhooksTable
+	InternalPolicyControlobjectivesTable.ForeignKeys[0].RefTable = InternalPoliciesTable
+	InternalPolicyControlobjectivesTable.ForeignKeys[1].RefTable = ControlObjectivesTable
+	InternalPolicyProceduresTable.ForeignKeys[0].RefTable = InternalPoliciesTable
+	InternalPolicyProceduresTable.ForeignKeys[1].RefTable = ProceduresTable
+	InternalPolicyNarrativesTable.ForeignKeys[0].RefTable = InternalPoliciesTable
+	InternalPolicyNarrativesTable.ForeignKeys[1].RefTable = NarrativesTable
 	InviteEventsTable.ForeignKeys[0].RefTable = InvitesTable
 	InviteEventsTable.ForeignKeys[1].RefTable = EventsTable
 	OhAuthTooTokenEventsTable.ForeignKeys[0].RefTable = OhAuthTooTokensTable
@@ -3229,6 +4322,18 @@ func init() {
 	OrganizationSettingFilesTable.ForeignKeys[1].RefTable = FilesTable
 	PersonalAccessTokenEventsTable.ForeignKeys[0].RefTable = PersonalAccessTokensTable
 	PersonalAccessTokenEventsTable.ForeignKeys[1].RefTable = EventsTable
+	ProcedureNarrativesTable.ForeignKeys[0].RefTable = ProceduresTable
+	ProcedureNarrativesTable.ForeignKeys[1].RefTable = NarrativesTable
+	ProcedureRisksTable.ForeignKeys[0].RefTable = ProceduresTable
+	ProcedureRisksTable.ForeignKeys[1].RefTable = RisksTable
+	RiskActionplansTable.ForeignKeys[0].RefTable = RisksTable
+	RiskActionplansTable.ForeignKeys[1].RefTable = ActionPlansTable
+	StandardControlobjectivesTable.ForeignKeys[0].RefTable = StandardsTable
+	StandardControlobjectivesTable.ForeignKeys[1].RefTable = ControlObjectivesTable
+	StandardControlsTable.ForeignKeys[0].RefTable = StandardsTable
+	StandardControlsTable.ForeignKeys[1].RefTable = ControlsTable
+	StandardActionplansTable.ForeignKeys[0].RefTable = StandardsTable
+	StandardActionplansTable.ForeignKeys[1].RefTable = ActionPlansTable
 	SubscriberEventsTable.ForeignKeys[0].RefTable = SubscribersTable
 	SubscriberEventsTable.ForeignKeys[1].RefTable = EventsTable
 	TemplateFilesTable.ForeignKeys[0].RefTable = TemplatesTable

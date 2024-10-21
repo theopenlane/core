@@ -43,6 +43,36 @@ type APITokenUpdatePayload struct {
 	APIToken *generated.APIToken `json:"apiToken"`
 }
 
+// Return response for createBulkActionPlan mutation
+type ActionPlanBulkCreatePayload struct {
+	// Created actionPlans
+	ActionPlans []*generated.ActionPlan `json:"actionPlans,omitempty"`
+}
+
+// Return response for createActionPlan mutation
+type ActionPlanCreatePayload struct {
+	// Created actionPlan
+	ActionPlan *generated.ActionPlan `json:"actionPlan"`
+}
+
+// Return response for deleteActionPlan mutation
+type ActionPlanDeletePayload struct {
+	// Deleted actionPlan ID
+	DeletedID string `json:"deletedID"`
+}
+
+type ActionPlanSearchResult struct {
+	ActionPlans []*generated.ActionPlan `json:"actionPlans,omitempty"`
+}
+
+func (ActionPlanSearchResult) IsSearchResult() {}
+
+// Return response for updateActionPlan mutation
+type ActionPlanUpdatePayload struct {
+	// Updated actionPlan
+	ActionPlan *generated.ActionPlan `json:"actionPlan"`
+}
+
 type AuditLog struct {
 	Table     *string    `json:"table,omitempty"`
 	Time      *time.Time `json:"time,omitempty"`
@@ -109,6 +139,66 @@ func (ContactSearchResult) IsSearchResult() {}
 type ContactUpdatePayload struct {
 	// Updated contact
 	Contact *generated.Contact `json:"contact"`
+}
+
+// Return response for createBulkControl mutation
+type ControlBulkCreatePayload struct {
+	// Created controls
+	Controls []*generated.Control `json:"controls,omitempty"`
+}
+
+// Return response for createControl mutation
+type ControlCreatePayload struct {
+	// Created control
+	Control *generated.Control `json:"control"`
+}
+
+// Return response for deleteControl mutation
+type ControlDeletePayload struct {
+	// Deleted control ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for createBulkControlObjective mutation
+type ControlObjectiveBulkCreatePayload struct {
+	// Created controlObjectives
+	ControlObjectives []*generated.ControlObjective `json:"controlObjectives,omitempty"`
+}
+
+// Return response for createControlObjective mutation
+type ControlObjectiveCreatePayload struct {
+	// Created controlObjective
+	ControlObjective *generated.ControlObjective `json:"controlObjective"`
+}
+
+// Return response for deleteControlObjective mutation
+type ControlObjectiveDeletePayload struct {
+	// Deleted controlObjective ID
+	DeletedID string `json:"deletedID"`
+}
+
+type ControlObjectiveSearchResult struct {
+	ControlObjectives []*generated.ControlObjective `json:"controlObjectives,omitempty"`
+}
+
+func (ControlObjectiveSearchResult) IsSearchResult() {}
+
+// Return response for updateControlObjective mutation
+type ControlObjectiveUpdatePayload struct {
+	// Updated controlObjective
+	ControlObjective *generated.ControlObjective `json:"controlObjective"`
+}
+
+type ControlSearchResult struct {
+	Controls []*generated.Control `json:"controls,omitempty"`
+}
+
+func (ControlSearchResult) IsSearchResult() {}
+
+// Return response for updateControl mutation
+type ControlUpdatePayload struct {
+	// Updated control
+	Control *generated.Control `json:"control"`
 }
 
 // Return response for createBulkDocumentData mutation
@@ -501,6 +591,36 @@ type IntegrationUpdatePayload struct {
 	Integration *generated.Integration `json:"integration"`
 }
 
+// Return response for createBulkInternalPolicy mutation
+type InternalPolicyBulkCreatePayload struct {
+	// Created internalPolicys
+	InternalPolicies []*generated.InternalPolicy `json:"internalPolicies,omitempty"`
+}
+
+// Return response for createInternalPolicy mutation
+type InternalPolicyCreatePayload struct {
+	// Created internalPolicy
+	InternalPolicy *generated.InternalPolicy `json:"internalPolicy"`
+}
+
+// Return response for deleteInternalPolicy mutation
+type InternalPolicyDeletePayload struct {
+	// Deleted internalPolicy ID
+	DeletedID string `json:"deletedID"`
+}
+
+type InternalPolicySearchResult struct {
+	InternalPolicies []*generated.InternalPolicy `json:"internalPolicies,omitempty"`
+}
+
+func (InternalPolicySearchResult) IsSearchResult() {}
+
+// Return response for updateInternalPolicy mutation
+type InternalPolicyUpdatePayload struct {
+	// Updated internalPolicy
+	InternalPolicy *generated.InternalPolicy `json:"internalPolicy"`
+}
+
 // Return response for createBulkInvite mutation
 type InviteBulkCreatePayload struct {
 	// Created invites
@@ -523,6 +643,36 @@ type InviteDeletePayload struct {
 type InviteUpdatePayload struct {
 	// Updated invite
 	Invite *generated.Invite `json:"invite"`
+}
+
+// Return response for createBulkNarrative mutation
+type NarrativeBulkCreatePayload struct {
+	// Created narratives
+	Narratives []*generated.Narrative `json:"narratives,omitempty"`
+}
+
+// Return response for createNarrative mutation
+type NarrativeCreatePayload struct {
+	// Created narrative
+	Narrative *generated.Narrative `json:"narrative"`
+}
+
+// Return response for deleteNarrative mutation
+type NarrativeDeletePayload struct {
+	// Deleted narrative ID
+	DeletedID string `json:"deletedID"`
+}
+
+type NarrativeSearchResult struct {
+	Narratives []*generated.Narrative `json:"narratives,omitempty"`
+}
+
+func (NarrativeSearchResult) IsSearchResult() {}
+
+// Return response for updateNarrative mutation
+type NarrativeUpdatePayload struct {
+	// Updated narrative
+	Narrative *generated.Narrative `json:"narrative"`
 }
 
 // Return response for createBulkOauthProvider mutation
@@ -699,9 +849,129 @@ type PersonalAccessTokenUpdatePayload struct {
 	PersonalAccessToken *generated.PersonalAccessToken `json:"personalAccessToken"`
 }
 
+// Return response for createBulkProcedure mutation
+type ProcedureBulkCreatePayload struct {
+	// Created procedures
+	Procedures []*generated.Procedure `json:"procedures,omitempty"`
+}
+
+// Return response for createProcedure mutation
+type ProcedureCreatePayload struct {
+	// Created procedure
+	Procedure *generated.Procedure `json:"procedure"`
+}
+
+// Return response for deleteProcedure mutation
+type ProcedureDeletePayload struct {
+	// Deleted procedure ID
+	DeletedID string `json:"deletedID"`
+}
+
+type ProcedureSearchResult struct {
+	Procedures []*generated.Procedure `json:"procedures,omitempty"`
+}
+
+func (ProcedureSearchResult) IsSearchResult() {}
+
+// Return response for updateProcedure mutation
+type ProcedureUpdatePayload struct {
+	// Updated procedure
+	Procedure *generated.Procedure `json:"procedure"`
+}
+
+// Return response for createBulkRisk mutation
+type RiskBulkCreatePayload struct {
+	// Created risks
+	Risks []*generated.Risk `json:"risks,omitempty"`
+}
+
+// Return response for createRisk mutation
+type RiskCreatePayload struct {
+	// Created risk
+	Risk *generated.Risk `json:"risk"`
+}
+
+// Return response for deleteRisk mutation
+type RiskDeletePayload struct {
+	// Deleted risk ID
+	DeletedID string `json:"deletedID"`
+}
+
+type RiskSearchResult struct {
+	Risks []*generated.Risk `json:"risks,omitempty"`
+}
+
+func (RiskSearchResult) IsSearchResult() {}
+
+// Return response for updateRisk mutation
+type RiskUpdatePayload struct {
+	// Updated risk
+	Risk *generated.Risk `json:"risk"`
+}
+
 type SearchResultConnection struct {
 	Page  *entgql.PageInfo[string] `json:"page"`
 	Nodes []SearchResult           `json:"nodes"`
+}
+
+// Return response for createBulkStandard mutation
+type StandardBulkCreatePayload struct {
+	// Created standards
+	Standards []*generated.Standard `json:"standards,omitempty"`
+}
+
+// Return response for createStandard mutation
+type StandardCreatePayload struct {
+	// Created standard
+	Standard *generated.Standard `json:"standard"`
+}
+
+// Return response for deleteStandard mutation
+type StandardDeletePayload struct {
+	// Deleted standard ID
+	DeletedID string `json:"deletedID"`
+}
+
+type StandardSearchResult struct {
+	Standards []*generated.Standard `json:"standards,omitempty"`
+}
+
+func (StandardSearchResult) IsSearchResult() {}
+
+// Return response for updateStandard mutation
+type StandardUpdatePayload struct {
+	// Updated standard
+	Standard *generated.Standard `json:"standard"`
+}
+
+// Return response for createBulkSubcontrol mutation
+type SubcontrolBulkCreatePayload struct {
+	// Created subcontrols
+	Subcontrols []*generated.Subcontrol `json:"subcontrols,omitempty"`
+}
+
+// Return response for createSubcontrol mutation
+type SubcontrolCreatePayload struct {
+	// Created subcontrol
+	Subcontrol *generated.Subcontrol `json:"subcontrol"`
+}
+
+// Return response for deleteSubcontrol mutation
+type SubcontrolDeletePayload struct {
+	// Deleted subcontrol ID
+	DeletedID string `json:"deletedID"`
+}
+
+type SubcontrolSearchResult struct {
+	Subcontrols []*generated.Subcontrol `json:"subcontrols,omitempty"`
+}
+
+func (SubcontrolSearchResult) IsSearchResult() {}
+
+// Return response for updateSubcontrol mutation
+type SubcontrolUpdatePayload struct {
+	// Updated subcontrol
+	Subcontrol *generated.Subcontrol `json:"subcontrol"`
 }
 
 // Return response for createBulkSubscriber mutation

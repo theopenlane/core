@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up procedure by ID
+    """
+     procedure(
+        """
+        ID of the procedure
+        """
+        id: ID!
+    ):  Procedure!
+}
+
+extend type Mutation{
+    """
+    Create a new procedure
+    """
+    createProcedure(
+        """
+        values of the procedure
+        """
+        input: CreateProcedureInput!
+    ): ProcedureCreatePayload!
+    """
+    Create multiple new procedures
+    """
+    createBulkProcedure(
+        """
+        values of the procedure
+        """
+        input: [CreateProcedureInput!]
+    ): ProcedureBulkCreatePayload!
+    """
+    Create multiple new procedures via file upload
+    """
+    createBulkCSVProcedure(
+        """
+        csv file containing values of the procedure
+        """
+        input: Upload!
+    ): ProcedureBulkCreatePayload!
+    """
+    Update an existing procedure
+    """
+    updateProcedure(
+        """
+        ID of the procedure
+        """
+        id: ID!
+        """
+        New values for the procedure
+        """
+        input: UpdateProcedureInput!
+    ): ProcedureUpdatePayload!
+    """
+    Delete an existing procedure
+    """
+    deleteProcedure(
+        """
+        ID of the procedure
+        """
+        id: ID!
+    ): ProcedureDeletePayload!
+}
+
+"""
+Return response for createProcedure mutation
+"""
+type ProcedureCreatePayload {
+    """
+    Created procedure
+    """
+    procedure: Procedure!
+}
+
+"""
+Return response for updateProcedure mutation
+"""
+type ProcedureUpdatePayload {
+    """
+    Updated procedure
+    """
+    procedure: Procedure!
+}
+
+"""
+Return response for deleteProcedure mutation
+"""
+type ProcedureDeletePayload {
+    """
+    Deleted procedure ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkProcedure mutation
+"""
+type ProcedureBulkCreatePayload {
+    """
+    Created procedures
+    """
+    procedures: [Procedure!]
+}

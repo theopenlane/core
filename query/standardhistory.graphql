@@ -1,0 +1,57 @@
+
+
+query GetAllStandardHistories {
+  standardHistories {
+    edges {
+      node {
+        background
+        createdAt
+        createdBy
+        description
+        family
+        historyTime
+        id
+        jsonschema
+        name
+        operation
+        purposeAndScope
+        ref
+        satisfies
+        standardType
+        status
+        tags
+        updatedAt
+        updatedBy
+        version
+      }
+    }
+  }
+}
+
+query GetStandardHistories($where: StandardHistoryWhereInput) {
+  standardHistories(where: $where) {
+    edges {
+      node {
+        background
+        createdAt
+        createdBy
+        description
+        family
+        historyTime
+        id
+        jsonschema
+        name
+        operation
+        purposeAndScope
+        ref
+        satisfies
+        standardType
+        status
+        tags
+        updatedAt
+        updatedBy
+        version
+      }
+    }
+  }
+}

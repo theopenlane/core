@@ -1,0 +1,63 @@
+
+
+query GetAllControlHistories {
+  controlHistories {
+    edges {
+      node {
+        controlClass
+        controlFamily
+        controlNumber
+        controlType
+        createdAt
+        createdBy
+        description
+        historyTime
+        id
+        jsonschema
+        mappedFrameworks
+        name
+        operation
+        owner
+        ref
+        satisfies
+        source
+        status
+        tags
+        updatedAt
+        updatedBy
+        version
+      }
+    }
+  }
+}
+
+query GetControlHistories($where: ControlHistoryWhereInput) {
+  controlHistories(where: $where) {
+    edges {
+      node {
+        controlClass
+        controlFamily
+        controlNumber
+        controlType
+        createdAt
+        createdBy
+        description
+        historyTime
+        id
+        jsonschema
+        mappedFrameworks
+        name
+        operation
+        owner
+        ref
+        satisfies
+        source
+        status
+        tags
+        updatedAt
+        updatedBy
+        version
+      }
+    }
+  }
+}

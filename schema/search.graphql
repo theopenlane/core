@@ -9,6 +9,15 @@ extend type Query{
         query: String!
     ): APITokenSearchResult
     """
+    Search across ActionPlan objects
+    """
+    actionPlanSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): ActionPlanSearchResult
+    """
     Search across Contact objects
     """
     contactSearch(
@@ -17,6 +26,24 @@ extend type Query{
         """
         query: String!
     ): ContactSearchResult
+    """
+    Search across Control objects
+    """
+    controlSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): ControlSearchResult
+    """
+    Search across ControlObjective objects
+    """
+    controlObjectiveSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): ControlObjectiveSearchResult
     """
     Search across DocumentData objects
     """
@@ -126,6 +153,24 @@ extend type Query{
         query: String!
     ): IntegrationSearchResult
     """
+    Search across InternalPolicy objects
+    """
+    internalPolicySearch(
+        """
+        Search query
+        """
+        query: String!
+    ): InternalPolicySearchResult
+    """
+    Search across Narrative objects
+    """
+    narrativeSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): NarrativeSearchResult
+    """
     Search across OauthProvider objects
     """
     oauthProviderSearch(
@@ -170,6 +215,42 @@ extend type Query{
         """
         query: String!
     ): PersonalAccessTokenSearchResult
+    """
+    Search across Procedure objects
+    """
+    procedureSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): ProcedureSearchResult
+    """
+    Search across Risk objects
+    """
+    riskSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): RiskSearchResult
+    """
+    Search across Standard objects
+    """
+    standardSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): StandardSearchResult
+    """
+    Search across Subcontrol objects
+    """
+    subcontrolSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): SubcontrolSearchResult
     """
     Search across Subscriber objects
     """
@@ -227,7 +308,10 @@ extend type Query{
 }
 union SearchResult =
   | APITokenSearchResult
+  | ActionPlanSearchResult
   | ContactSearchResult
+  | ControlSearchResult
+  | ControlObjectiveSearchResult
   | DocumentDataSearchResult
   | EntitlementSearchResult
   | EntitlementPlanSearchResult
@@ -240,11 +324,17 @@ union SearchResult =
   | GroupSearchResult
   | GroupSettingSearchResult
   | IntegrationSearchResult
+  | InternalPolicySearchResult
+  | NarrativeSearchResult
   | OauthProviderSearchResult
   | OhAuthTooTokenSearchResult
   | OrganizationSearchResult
   | OrganizationSettingSearchResult
   | PersonalAccessTokenSearchResult
+  | ProcedureSearchResult
+  | RiskSearchResult
+  | StandardSearchResult
+  | SubcontrolSearchResult
   | SubscriberSearchResult
   | TFASettingSearchResult
   | TemplateSearchResult
@@ -283,8 +373,20 @@ type  APITokenSearchResult {
    apiTokens: [ APIToken!]
 }
 
+type  ActionPlanSearchResult {
+   actionPlans: [ ActionPlan!]
+}
+
 type  ContactSearchResult {
    contacts: [ Contact!]
+}
+
+type  ControlSearchResult {
+   controls: [ Control!]
+}
+
+type  ControlObjectiveSearchResult {
+   controlObjectives: [ ControlObjective!]
 }
 
 type  DocumentDataSearchResult {
@@ -335,6 +437,14 @@ type  IntegrationSearchResult {
    integrations: [ Integration!]
 }
 
+type  InternalPolicySearchResult {
+   internalPolicies: [ InternalPolicy!]
+}
+
+type  NarrativeSearchResult {
+   narratives: [ Narrative!]
+}
+
 type  OauthProviderSearchResult {
    oauthProviders: [ OauthProvider!]
 }
@@ -353,6 +463,22 @@ type  OrganizationSettingSearchResult {
 
 type  PersonalAccessTokenSearchResult {
    personalAccessTokens: [ PersonalAccessToken!]
+}
+
+type  ProcedureSearchResult {
+   procedures: [ Procedure!]
+}
+
+type  RiskSearchResult {
+   risks: [ Risk!]
+}
+
+type  StandardSearchResult {
+   standards: [ Standard!]
+}
+
+type  SubcontrolSearchResult {
+   subcontrols: [ Subcontrol!]
 }
 
 type  SubscriberSearchResult {

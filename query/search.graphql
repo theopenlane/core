@@ -7,9 +7,27 @@ query GlobalSearch($query: String!) {
           tags
         }
       }
+      ... on ActionPlanSearchResult {
+        actionPlans {
+          id
+          tags
+        }
+      }
       ... on ContactSearchResult {
         contacts {
           fullName
+          id
+          tags
+        }
+      }
+      ... on ControlSearchResult {
+        controls {
+          id
+          tags
+        }
+      }
+      ... on ControlObjectiveSearchResult {
+        controlObjectives {
           id
           tags
         }
@@ -91,6 +109,18 @@ query GlobalSearch($query: String!) {
           tags
         }
       }
+      ... on InternalPolicySearchResult {
+        internalPolicies {
+          id
+          tags
+        }
+      }
+      ... on NarrativeSearchResult {
+        narratives {
+          id
+          tags
+        }
+      }
       ... on OauthProviderSearchResult {
         oauthProviders {
           id
@@ -119,6 +149,30 @@ query GlobalSearch($query: String!) {
       }
       ... on PersonalAccessTokenSearchResult {
         personalAccessTokens {
+          id
+          tags
+        }
+      }
+      ... on ProcedureSearchResult {
+        procedures {
+          id
+          tags
+        }
+      }
+      ... on RiskSearchResult {
+        risks {
+          id
+          tags
+        }
+      }
+      ... on StandardSearchResult {
+        standards {
+          id
+          tags
+        }
+      }
+      ... on SubcontrolSearchResult {
+        subcontrols {
           id
           tags
         }
