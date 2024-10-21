@@ -30,7 +30,7 @@ func (Risk) Fields() []ent.Field {
 		field.String("risk_type").
 			Optional().
 			Comment("type of the risk, e.g. strategic, operational, financial, external, etc."),
-		field.Text("business costs").
+		field.Text("business_costs").
 			Optional().
 			Comment("business costs associated with the risk"),
 		field.Text("impact").
