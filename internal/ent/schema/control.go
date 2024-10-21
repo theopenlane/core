@@ -68,6 +68,7 @@ func (Control) Edges() []ent.Edge {
 		edge.To("controlobjectives", ControlObjective.Type),
 		edge.From("standard", Standard.Type).
 			Ref("controls"),
+		edge.To("narratives", Narrative.Type),
 	}
 }
 
