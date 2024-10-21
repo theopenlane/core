@@ -48,7 +48,7 @@ func (ActionPlan) Fields() []ent.Field {
 // Edges of the ActionPlan
 func (ActionPlan) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("standard", ActionPlan.Type).
+		edge.From("standard", Standard.Type).
 			Ref("actionplans"),
 		edge.From("risk", Risk.Type).
 			Ref("actionplans"),
