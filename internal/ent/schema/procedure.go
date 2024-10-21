@@ -51,7 +51,7 @@ func (Procedure) Fields() []ent.Field {
 // Edges of the Procedure
 func (Procedure) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("control", User.Type).
+		edge.From("control", Control.Type).
 			Ref("procedures"),
 		edge.From("internalpolicy", InternalPolicy.Type).
 			Ref("procedures"),
