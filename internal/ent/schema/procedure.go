@@ -53,7 +53,7 @@ func (Procedure) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("control", User.Type).
 			Ref("controls"),
-		edge.From("policy", Policy.Type).
+		edge.From("internalpolicy", InternalPolicy.Type).
 			Ref("policies"),
 	}
 }

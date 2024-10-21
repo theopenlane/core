@@ -11,13 +11,13 @@ import (
 	"github.com/theopenlane/core/internal/ent/mixin"
 )
 
-// Policy defines the policy schema.
-type Policy struct {
+// InternalPolicy defines the policy schema.
+type InternalPolicy struct {
 	ent.Schema
 }
 
 // Fields returns policy fields.
-func (Policy) Fields() []ent.Field {
+func (InternalPolicy) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("name").
 			Comment("the name of the policy"),
@@ -44,8 +44,8 @@ func (Policy) Fields() []ent.Field {
 	}
 }
 
-// Edges of the Policy
-func (Policy) Edges() []ent.Edge {
+// Edges of the InternalPolicy
+func (InternalPolicy) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("controlobjective", ControlObjective.Type),
 		edge.To("control", Control.Type),
@@ -53,8 +53,8 @@ func (Policy) Edges() []ent.Edge {
 	}
 }
 
-// Mixin of the Policy
-func (Policy) Mixin() []ent.Mixin {
+// Mixin of the InternalPolicy
+func (InternalPolicy) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		emixin.AuditMixin{},
 		mixin.SoftDeleteMixin{},
@@ -63,8 +63,8 @@ func (Policy) Mixin() []ent.Mixin {
 	}
 }
 
-// Annotations of the Policy
-func (Policy) Annotations() []schema.Annotation {
+// Annotations of the InternalPolicy
+func (InternalPolicy) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.RelayConnection(),
 		entgql.QueryField(),

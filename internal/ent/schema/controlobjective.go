@@ -60,7 +60,7 @@ func (ControlObjective) Fields() []ent.Field {
 // Edges of the ControlObjective
 func (ControlObjective) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("policy", Policy.Type).
+		edge.From("policy", InternalPolicy.Type).
 			Ref("policies"),
 		edge.To("control", Control.Type),
 		edge.To("procedure", Procedure.Type),
