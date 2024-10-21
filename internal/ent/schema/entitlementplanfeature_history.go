@@ -102,7 +102,7 @@ func (EntitlementPlanFeatureHistory) Indexes() []ent.Index {
 // Interceptors of the EntitlementPlanFeatureHistory
 func (EntitlementPlanFeatureHistory) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.HistoryAccess("audit_log_viewer", true, false),
+		interceptors.HistoryAccess("audit_log_viewer", false, false),
 	}
 }
 

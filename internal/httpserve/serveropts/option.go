@@ -395,21 +395,46 @@ func WithCORS() ServerOption {
 
 func WithObjectStorage() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
-		if s.Config.Settings.ObjectStorage.Enabled {
-			s3store, err := storage.NewS3FromConfig(*storage.NewS3Options(
-				storage.WithRegion(s.Config.Settings.ObjectStorage.Region),
-				storage.WithBucket(s.Config.Settings.ObjectStorage.DefaultBucket),
-				storage.WithAccessKeyID(s.Config.Settings.ObjectStorage.AccessKey),
-				storage.WithSecretAccessKey(s.Config.Settings.ObjectStorage.SecretKey),
-			))
-			if err != nil {
-				log.Panic().Err(err).Msg("error creating S3 store")
+		settings := s.Config.Settings.ObjectStorage
+		if settings.Enabled {
+			var (
+				store objects.Storage
+				err   error
+			)
+
+			switch settings.Provider {
+			case "s3":
+				opts := storage.NewS3Options(
+					storage.WithRegion(s.Config.Settings.ObjectStorage.Region),
+					storage.WithBucket(s.Config.Settings.ObjectStorage.DefaultBucket),
+					storage.WithAccessKeyID(s.Config.Settings.ObjectStorage.AccessKey),
+					storage.WithSecretAccessKey(s.Config.Settings.ObjectStorage.SecretKey),
+				)
+
+				store, err = storage.NewS3FromConfig(opts)
+				if err != nil {
+					log.Panic().Err(err).Msg("error creating S3 store")
+				}
+
+				bucks, err := store.ListBuckets()
+				if err != nil {
+					log.Panic().Err(err).Msg("error listing buckets")
+				}
+
+				if ok := slices.Contains(bucks, s.Config.Settings.ObjectStorage.DefaultBucket); !ok {
+					log.Panic().Msg("default bucket not found")
+				}
+			default:
+				store, err = storage.NewDiskStorage(settings.DefaultBucket)
+				if err != nil {
+					log.Panic().Err(err).Msg("error creating disk store")
+				}
 			}
 
 			s.Config.ObjectManager, err = objects.New(
 				objects.WithMaxFileSize(10<<20), // nolint:mnd
 				objects.WithMaxMemory(32<<20),   // nolint:mnd
-				objects.WithStorage(s3store),
+				objects.WithStorage(store),
 				objects.WithNameFuncGenerator(objects.OrganizationNameFunc),
 				objects.WithKeys(s.Config.Settings.ObjectStorage.Keys),
 				objects.WithUploaderFunc(objmw.Upload),
@@ -417,16 +442,6 @@ func WithObjectStorage() ServerOption {
 			)
 			if err != nil {
 				log.Panic().Err(err).Msg("Error creating object storage")
-			}
-
-			bucks, err := s3store.ListBuckets()
-			if err != nil {
-				log.Panic().Err(err).Msg("error listing buckets")
-			}
-
-			ok := slices.Contains(bucks, s.Config.Settings.ObjectStorage.DefaultBucket)
-			if !ok {
-				log.Panic().Msg("default bucket not found")
 			}
 
 			// add upload middleware to authMW, non-authenticated endpoints will not have this middleware

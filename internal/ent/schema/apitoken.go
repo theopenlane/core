@@ -85,12 +85,13 @@ func (APIToken) Mixin() []ent.Mixin {
 		mixin.SoftDeleteMixin{},
 		emixin.IDMixin{},
 		emixin.TagMixin{},
-		OrgOwnerMixin{
-			Ref: "api_tokens",
-			// skip the interceptor for Only queries when the token is being checked
-			// and we do not yet know the organization
-			SkipInterceptor: interceptors.SkipOnlyQuery,
-		},
+		NewOrgOwnedMixin(
+			ObjectOwnedMixin{
+				Ref: "api_tokens",
+				// skip the interceptor for Only queries when the token is being checked
+				// and we do not yet know the organization
+				SkipInterceptor: interceptors.SkipOnlyQuery,
+			}),
 	}
 }
 

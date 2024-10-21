@@ -79,6 +79,8 @@ func (suite *GraphTestSuite) TestQueryGroup() {
 			// second check won't happen if org does not exist
 			if tc.errorMsg == "" {
 				mock_fga.ListTimes(t, suite.client.fga, listGroups, 1)
+
+				mock_fga.ListOnce(t, suite.client.fga, []string{fmt.Sprintf("organization:%s", testOrgID)}, nil)
 			}
 
 			resp, err := suite.client.api.GetGroupByID(reqCtx, tc.queryID)
@@ -124,6 +126,8 @@ func (suite *GraphTestSuite) TestQueryGroupsByOwner() {
 		listGroups := []string{fmt.Sprintf("group:%s", group1.ID)}
 
 		mock_fga.ListAny(t, suite.client.fga, listGroups)
+
+		mock_fga.ListUsersAny(t, suite.client.fga, []string{testUser.ID}, nil)
 
 		whereInput := &openlaneclient.GroupWhereInput{
 			HasOwnerWith: []*openlaneclient.OrganizationWhereInput{
@@ -203,10 +207,13 @@ func (suite *GraphTestSuite) TestQueryGroups() {
 	t.Run("Get Groups", func(t *testing.T) {
 		defer mock_fga.ClearMocks(suite.client.fga)
 
+		mock_fga.ListOnce(t, suite.client.fga, []string{fmt.Sprintf("organization:%s", testOrgID)}, nil)
+		mock_fga.ListUsersAny(t, suite.client.fga, []string{testUser.ID}, nil)
+
 		// check org tuples
 		listGroups := []string{fmt.Sprintf("group:%s", group2.ID), fmt.Sprintf("group:%s", group3.ID)}
 
-		mock_fga.ListTimes(t, suite.client.fga, listGroups, 1)
+		mock_fga.ListOnce(t, suite.client.fga, listGroups, nil)
 
 		resp, err := suite.client.api.GetAllGroups(reqCtx2)
 
@@ -404,6 +411,8 @@ func (suite *GraphTestSuite) TestMutationCreateGroup() {
 
 				if tc.list {
 					mock_fga.ListAny(t, suite.client.fga, listObjects)
+
+					mock_fga.ListUsersAny(t, suite.client.fga, []string{testUser.ID}, nil)
 				}
 			}
 
@@ -576,6 +585,8 @@ func (suite *GraphTestSuite) TestMutationUpdateGroup() {
 
 			if tc.list {
 				mock_fga.ListAny(t, suite.client.fga, listObjects)
+
+				mock_fga.ListUsersAny(t, suite.client.fga, []string{testUser.ID, om.UserID}, nil)
 			}
 
 			if tc.updateInput.AddGroupMembers != nil && tc.errorMsg == "" {

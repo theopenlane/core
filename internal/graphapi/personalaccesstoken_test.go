@@ -56,6 +56,10 @@ func (suite *GraphTestSuite) TestQueryPersonalAccessToken() {
 		t.Run("Get "+tc.name, func(t *testing.T) {
 			defer mock_fga.ClearMocks(suite.client.fga)
 
+			if tc.errorMsg == "" {
+				mock_fga.ListAny(t, suite.client.fga, []string{"organization:" + testPersonalOrgID})
+			}
+
 			resp, err := suite.client.api.GetPersonalAccessTokenByID(reqCtx, tc.queryID)
 
 			if tc.errorMsg != "" {
@@ -104,6 +108,8 @@ func (suite *GraphTestSuite) TestQueryPersonalAccessTokens() {
 	for _, tc := range testCases {
 		t.Run("List "+tc.name, func(t *testing.T) {
 			defer mock_fga.ClearMocks(suite.client.fga)
+
+			mock_fga.ListAny(t, suite.client.fga, []string{"organization:" + testPersonalOrgID})
 
 			resp, err := suite.client.api.GetAllPersonalAccessTokens(reqCtx)
 
@@ -193,6 +199,10 @@ func (suite *GraphTestSuite) TestMutationCreatePersonalAccessToken() {
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			defer mock_fga.ClearMocks(suite.client.fga)
+
+			if tc.errorMsg == "" {
+				mock_fga.ListAny(t, suite.client.fga, []string{"organization:" + testPersonalOrgID, "organization:" + org.ID})
+			}
 
 			resp, err := suite.client.api.CreatePersonalAccessToken(reqCtx, tc.input)
 
@@ -324,6 +334,10 @@ func (suite *GraphTestSuite) TestMutationUpdatePersonalAccessToken() {
 		t.Run("Update "+tc.name, func(t *testing.T) {
 			defer mock_fga.ClearMocks(suite.client.fga)
 
+			if tc.errorMsg == "" {
+				mock_fga.ListAny(t, suite.client.fga, []string{"organization:" + testPersonalOrgID, "organization:" + org.ID})
+			}
+
 			resp, err := suite.client.api.UpdatePersonalAccessToken(reqCtx, tc.tokenID, tc.input)
 
 			if tc.errorMsg != "" {
@@ -424,12 +438,16 @@ func (suite *GraphTestSuite) TestMutationDeletePersonalAccessToken() {
 func (suite *GraphTestSuite) TestLastUsedPersonalAccessToken() {
 	t := suite.T()
 
+	defer mock_fga.ClearMocks(suite.client.fga)
+
 	// setup user context
 	reqCtx, err := userContext()
 	require.NoError(t, err)
 
 	// create new personal access token
 	token := (&PersonalAccessTokenBuilder{client: suite.client}).MustNew(reqCtx, t)
+
+	mock_fga.ListAny(t, suite.client.fga, []string{"organization:" + testOrgID})
 
 	// check that the last used is empty
 	res, err := suite.client.api.GetPersonalAccessTokenByID(reqCtx, token.ID)

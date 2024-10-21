@@ -2,6 +2,7 @@ package graphapi_test
 
 import (
 	"context"
+	"fmt"
 	"testing"
 	"time"
 
@@ -23,36 +24,41 @@ func (suite *GraphTestSuite) TestQueryEntitlement() {
 	entitlement := (&EntitlementBuilder{client: suite.client, OrganizationID: testOrgID}).MustNew(reqCtx, t)
 
 	testCases := []struct {
-		name     string
-		queryID  string
-		client   *openlaneclient.OpenlaneClient
-		ctx      context.Context
-		errorMsg string
+		name        string
+		queryID     string
+		client      *openlaneclient.OpenlaneClient
+		listObjects bool
+		ctx         context.Context
+		errorMsg    string
 	}{
 		{
-			name:    "happy path",
-			queryID: entitlement.ID,
-			client:  suite.client.api,
-			ctx:     reqCtx,
+			name:        "happy path",
+			queryID:     entitlement.ID,
+			client:      suite.client.api,
+			listObjects: true,
+			ctx:         reqCtx,
 		},
 		{
-			name:    "happy path, using api token",
-			queryID: entitlement.ID,
-			client:  suite.client.apiWithToken,
-			ctx:     context.Background(),
+			name:        "happy path, using api token",
+			queryID:     entitlement.ID,
+			client:      suite.client.apiWithToken,
+			listObjects: false, // api token already restricts to a single org
+			ctx:         context.Background(),
 		},
 		{
-			name:    "happy path, using personal access token",
-			queryID: entitlement.ID,
-			client:  suite.client.apiWithPAT,
-			ctx:     context.Background(),
+			name:        "happy path, using personal access token",
+			queryID:     entitlement.ID,
+			client:      suite.client.apiWithPAT,
+			listObjects: true,
+			ctx:         context.Background(),
 		},
 		{
-			name:     "not found",
-			queryID:  "notfound",
-			client:   suite.client.api,
-			ctx:      reqCtx,
-			errorMsg: "not found",
+			name:        "not found",
+			queryID:     "notfound",
+			client:      suite.client.api,
+			listObjects: false,
+			ctx:         reqCtx,
+			errorMsg:    "not found",
 		},
 	}
 
@@ -62,6 +68,10 @@ func (suite *GraphTestSuite) TestQueryEntitlement() {
 
 			if tc.errorMsg == "" {
 				mock_fga.CheckAny(t, suite.client.fga, true)
+			}
+
+			if tc.listObjects {
+				mock_fga.ListAny(t, suite.client.fga, []string{"organization:" + testOrgID})
 			}
 
 			resp, err := tc.client.GetEntitlementByID(tc.ctx, tc.queryID)
@@ -104,30 +114,35 @@ func (suite *GraphTestSuite) TestQueryEntitlements() {
 	testCases := []struct {
 		name            string
 		client          *openlaneclient.OpenlaneClient
+		listObjects     bool
 		ctx             context.Context
 		expectedResults int
 	}{
 		{
 			name:            "happy path",
 			client:          suite.client.api,
+			listObjects:     true,
 			ctx:             reqCtx,
 			expectedResults: 1,
 		},
 		{
 			name:            "happy path, using api token",
 			client:          suite.client.apiWithToken,
+			listObjects:     false, // api token already restricts to a single org
 			ctx:             context.Background(),
 			expectedResults: 1,
 		},
 		{
 			name:            "happy path, using pat",
 			client:          suite.client.apiWithPAT,
+			listObjects:     true,
 			ctx:             context.Background(),
 			expectedResults: 1,
 		},
 		{
 			name:            "another user, no entitlements should be returned",
 			client:          suite.client.api,
+			listObjects:     false,
 			ctx:             otherCtx,
 			expectedResults: 0,
 		},
@@ -136,6 +151,10 @@ func (suite *GraphTestSuite) TestQueryEntitlements() {
 	for _, tc := range testCases {
 		t.Run("List "+tc.name, func(t *testing.T) {
 			defer mock_fga.ClearMocks(suite.client.fga)
+
+			if tc.listObjects {
+				mock_fga.ListAny(t, suite.client.fga, []string{"organization:" + testOrgID})
+			}
 
 			resp, err := tc.client.GetAllEntitlements(tc.ctx)
 			require.NoError(t, err)
@@ -242,6 +261,12 @@ func (suite *GraphTestSuite) TestMutationCreateEntitlement() {
 
 			// check for edit permissions on the organization
 			mock_fga.CheckAny(t, suite.client.fga, tc.allowed)
+
+			if tc.expectedErr == "" {
+				mock_fga.ListAny(t, suite.client.fga, []string{fmt.Sprintf("organization:%s", testOrgID),
+					fmt.Sprintf("organization:%s", org1.ID),
+					fmt.Sprintf("organization:%s", org2.ID)})
+			}
 
 			resp, err := tc.client.CreateEntitlement(tc.ctx, tc.request)
 			if tc.expectedErr != "" {

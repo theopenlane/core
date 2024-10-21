@@ -209,22 +209,7 @@ Config holds the configuration for the ent server
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|[**flags**](#entconfigflags)|`object`|Flags contains the flags for the server to allow use to test different code paths<br/>||
 |[**entityTypes**](#entconfigentitytypes)|`string[]`|||
-
-**Additional Properties:** not allowed  
-<a name="entconfigflags"></a>
-### entConfig\.flags: object
-
-Flags contains the flags for the server to allow use to test different code paths
-
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**useListUserService**|`boolean`|use list services endpoint for object access<br/>||
-|**useListObjectServices**|`boolean`|use list object services endpoint for object access<br/>||
 
 **Additional Properties:** not allowed  
 <a name="entconfigentitytypes"></a>

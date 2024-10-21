@@ -8,6 +8,7 @@ import (
 	"github.com/rs/zerolog/log"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 	"github.com/theopenlane/core/pkg/objects"
 )
@@ -71,6 +72,9 @@ func Upload(ctx context.Context, u *objects.Objects, files []objects.FileUpload)
 			return nil, err
 		}
 
+		// allow the update, permissions are not yet set to allow the update
+		allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
 		// update the file with the size
 		if _, err := txClientFromContext(ctx).
 			UpdateOne(entFile).
@@ -78,7 +82,7 @@ func Upload(ctx context.Context, u *objects.Objects, files []objects.FileUpload)
 			SetURI(objects.CreateURI(entFile.StorageScheme, metadata.FolderDestination, metadata.Key)).
 			SetStorageVolume(metadata.FolderDestination).
 			SetStoragePath(metadata.Key).
-			Save(ctx); err != nil {
+			Save(allowCtx); err != nil {
 			log.Error().Err(err).Msg("failed to update file with size")
 			return nil, err
 		}

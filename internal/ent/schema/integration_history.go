@@ -102,7 +102,7 @@ func (IntegrationHistory) Indexes() []ent.Index {
 // Interceptors of the IntegrationHistory
 func (IntegrationHistory) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.HistoryAccess("audit_log_viewer", true, false),
+		interceptors.HistoryAccess("audit_log_viewer", false, false),
 	}
 }
 

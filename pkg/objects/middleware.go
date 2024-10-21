@@ -25,6 +25,10 @@ type FileUpload struct {
 	ContentType string
 	// Key is the field name from the graph input or multipart form
 	Key string
+	// CorrelatedObjectID is the key of the object that the file is associated with
+	CorrelatedObjectID string
+	// CorrelatedObjectType is the type of the object that the file is associated with
+	CorrelatedObjectType string
 }
 
 // FileUpload uploads the files to the storage and returns the the context with the uploaded files

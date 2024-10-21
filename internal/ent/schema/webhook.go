@@ -78,10 +78,10 @@ func (Webhook) Mixin() []ent.Mixin {
 		emixin.IDMixin{},
 		emixin.TagMixin{},
 		mixin.SoftDeleteMixin{},
-		OrgOwnerMixin{
+		NewOrgOwnedMixin(ObjectOwnedMixin{
 			Ref:        "webhooks",
 			AllowEmpty: true,
-		},
+		}),
 	}
 }
 

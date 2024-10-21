@@ -35,7 +35,7 @@ type Subscriber struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
-	// The organization id that owns the object
+	// the object id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// email address of the subscriber
 	Email string `json:"email,omitempty"`

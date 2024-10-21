@@ -41,7 +41,7 @@ type NoteHistory struct {
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// The organization id that owns the object
+	// the object id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the text of the note
 	Text         string `json:"text,omitempty"`

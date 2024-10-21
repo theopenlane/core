@@ -33,9 +33,7 @@ func (Template) Mixin() []ent.Mixin {
 		mixin.SoftDeleteMixin{},
 		emixin.IDMixin{},
 		emixin.TagMixin{},
-		OrgOwnerMixin{
-			Ref: "templates",
-		},
+		NewOrgOwnMixinWithRef("templates"),
 	}
 }
 

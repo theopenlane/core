@@ -80,9 +80,7 @@ func (Integration) Mixin() []ent.Mixin {
 		emixin.IDMixin{},
 		emixin.TagMixin{},
 		mixin.SoftDeleteMixin{},
-		OrgOwnerMixin{
-			Ref: "integrations",
-		},
+		NewOrgOwnMixinWithRef("integrations"),
 	}
 }
 
@@ -91,7 +89,7 @@ func (Integration) Policy() ent.Policy {
 	return privacy.Policy{
 		Mutation: privacy.MutationPolicy{
 			privacy.IntegrationMutationRuleFunc(func(ctx context.Context, m *generated.IntegrationMutation) error {
-				return m.CheckAccessForDelete(ctx)
+				return m.CheckAccessForEdit(ctx)
 			}),
 
 			privacy.AlwaysDenyRule(),

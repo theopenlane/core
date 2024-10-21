@@ -33,7 +33,7 @@ type Invite struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
-	// The organization id that owns the object
+	// the object id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the invitation token sent to the user via email which should only be provided to the /verify endpoint + handler
 	Token string `json:"-"`

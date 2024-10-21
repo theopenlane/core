@@ -79,9 +79,6 @@ email:
         verifySubscriber: ""
 entConfig:
     entityTypes: null
-    flags:
-        useListObjectServices: false
-        useListUserService: true
 jobQueue:
     connectionURI: postgres://postgres:password@0.0.0.0:5432/jobs?sslmode=disable
     riverConf:
@@ -111,7 +108,7 @@ jobQueue:
 objectStorage:
     accessKey: ""
     credentialsJSON: ""
-    defaultBucket: ""
+    defaultBucket: file_uploads
     enabled: true
     keys:
         - uploadFile
