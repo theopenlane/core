@@ -49,9 +49,9 @@ func (ActionPlan) Fields() []ent.Field {
 func (ActionPlan) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("standard", User.Type).
-			Ref("standards"),
+			Ref("actionplans"),
 		edge.From("risk", Risk.Type).
-			Ref("risks"),
+			Ref("actionplans"),
 	}
 }
 

@@ -47,9 +47,9 @@ func (InternalPolicy) Fields() []ent.Field {
 // Edges of the InternalPolicy
 func (InternalPolicy) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("controlobjective", ControlObjective.Type),
-		edge.To("control", Control.Type),
-		edge.To("procedure", Procedure.Type),
+		edge.To("controlobjectives", ControlObjective.Type),
+		edge.To("controls", Control.Type),
+		edge.To("procedures", Procedure.Type),
 	}
 }
 

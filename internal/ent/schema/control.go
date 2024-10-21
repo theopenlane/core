@@ -54,15 +54,18 @@ func (Control) Fields() []ent.Field {
 		field.Text("mapped_frameworks").
 			Optional().
 			Comment("mapped frameworks"),
+		field.JSON("jsonschema", map[string]interface{}{}).
+			Optional().
+			Comment("json schema"),
 	}
 }
 
 // Edges of the Control
 func (Control) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("procedure", Procedure.Type),
-		edge.To("subcontrol", Subcontrol.Type),
-		edge.To("controlobjective", ControlObjective.Type),
+		edge.To("procedures", Procedure.Type),
+		edge.To("subcontrols", Subcontrol.Type),
+		edge.To("controlobjectives", ControlObjective.Type),
 		edge.From("standard", Standard.Type).
 			Ref("controls"),
 	}

@@ -61,13 +61,13 @@ func (ControlObjective) Fields() []ent.Field {
 func (ControlObjective) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("policy", InternalPolicy.Type).
-			Ref("policies"),
-		edge.To("control", Control.Type),
-		edge.To("procedure", Procedure.Type),
-		edge.To("risk", Risk.Type),
-		edge.To("subcontrol", Subcontrol.Type),
+			Ref("controlobjectives"),
+		edge.To("controls", Control.Type),
+		edge.To("procedures", Procedure.Type),
+		edge.To("risks", Risk.Type),
+		edge.To("subcontrols", Subcontrol.Type),
 		edge.From("standard", Standard.Type).
-			Ref("standards"),
+			Ref("controlobjectives"),
 	}
 }
 
