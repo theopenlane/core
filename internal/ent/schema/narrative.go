@@ -11,7 +11,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/mixin"
 )
 
-// Narrative defines the narrative schema.
+// Narrative defines the narrative schema
 type Narrative struct {
 	ent.Schema
 }
@@ -36,10 +36,14 @@ func (Narrative) Fields() []ent.Field {
 // Edges of the Narrative
 func (Narrative) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("policy", InternalPolicy.Type),
-		edge.From("control", Control.Type),
-		edge.From("procedure", Procedure.Type),
-		edge.From("controlobjective", ControlObjective.Type),
+		edge.From("policy", InternalPolicy.Type).
+			Ref("policies"),
+		edge.From("control", Control.Type).
+			Ref("controls"),
+		edge.From("procedure", Procedure.Type).
+			Ref("procedures"),
+		edge.From("controlobjective", ControlObjective.Type).
+			Ref("controlobjectives"),
 	}
 }
 
