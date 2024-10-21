@@ -102,7 +102,7 @@ func (GroupHistory) Indexes() []ent.Index {
 // Interceptors of the GroupHistory
 func (GroupHistory) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.HistoryAccess("audit_log_viewer", true, false),
+		interceptors.HistoryAccess("audit_log_viewer", false, false),
 	}
 }
 

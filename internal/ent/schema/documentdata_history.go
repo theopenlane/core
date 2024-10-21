@@ -102,7 +102,7 @@ func (DocumentDataHistory) Indexes() []ent.Index {
 // Interceptors of the DocumentDataHistory
 func (DocumentDataHistory) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.HistoryAccess("audit_log_viewer", true, false),
+		interceptors.HistoryAccess("audit_log_viewer", false, false),
 	}
 }
 

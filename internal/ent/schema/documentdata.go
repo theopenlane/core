@@ -43,9 +43,7 @@ func (DocumentData) Mixin() []ent.Mixin {
 		emixin.IDMixin{},
 		emixin.TagMixin{},
 		mixin.SoftDeleteMixin{},
-		OrgOwnerMixin{
-			Ref: "documentdata",
-		},
+		NewOrgOwnMixinWithRef("documentdata"),
 	}
 }
 

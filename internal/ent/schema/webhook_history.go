@@ -102,7 +102,7 @@ func (WebhookHistory) Indexes() []ent.Index {
 // Interceptors of the WebhookHistory
 func (WebhookHistory) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.HistoryAccess("audit_log_viewer", true, false),
+		interceptors.HistoryAccess("audit_log_viewer", false, false),
 	}
 }
 

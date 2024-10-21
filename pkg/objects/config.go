@@ -12,8 +12,8 @@ import (
 type Config struct {
 	// Enabled indicates if the store is enabled
 	Enabled bool `json:"enabled" koanf:"enabled" default:"true"`
-	// Provider is the name of the provider
-	Provider string `json:"provider" koanf:"provider"`
+	// Provider is the name of the provider, eg. disk, s3, will default to disk if nothing is set
+	Provider string `json:"provider" koanf:"provider" `
 	// AccessKey is the access key for the storage provider
 	AccessKey string `json:"accessKey" koanf:"accessKey"`
 	// Region is the region for the storage provider
@@ -22,11 +22,12 @@ type Config struct {
 	SecretKey string `json:"secretKey" koanf:"secretKey"`
 	// CredentialsJSON is the credentials JSON for the storage provider
 	CredentialsJSON string `json:"credentialsJSON" koanf:"credentialsJSON"`
-	// DefaultBucket is the default bucket name for the storage provider
-	DefaultBucket string `json:"defaultBucket" koanf:"defaultBucket"`
+	// DefaultBucket is the default bucket name for the storage provider, if not set, it will use the default
+	// this is the local path for disk storage or the bucket name for S3
+	DefaultBucket string `json:"defaultBucket" koanf:"defaultBucket" default:"file_uploads"`
 	// Keys is a list of keys to look for in the multipart form on the REST request
 	// if the keys are not found, the request upload will be skipped
-	// this is not used by the graphql handler
+	// this is not used when uploading files with gqlgen and the graphql handler
 	Keys []string `json:"keys" koanf:"keys" default:"[uploadFile]"`
 }
 

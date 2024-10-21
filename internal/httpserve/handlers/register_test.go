@@ -150,6 +150,8 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 				// so allow the request to go through
 				ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
+				mock_fga.ListUsersAny(t, suite.fga, []string{out.ID}, nil)
+
 				// get the user and make sure things were created as expected
 				u, err := suite.db.UserSetting.Query().Where(usersetting.UserID(out.ID)).WithDefaultOrg().Only(ctx)
 				require.NoError(t, err)

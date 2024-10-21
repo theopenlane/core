@@ -235,6 +235,7 @@ func (User) Policy() ent.Policy {
 func (User) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookUser(),
+		hooks.HookUserPermissions(),
 		hooks.HookDeleteUser(),
 	}
 }

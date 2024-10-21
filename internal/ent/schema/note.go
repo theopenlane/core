@@ -39,9 +39,7 @@ func (Note) Mixin() []ent.Mixin {
 		emixin.IDMixin{},
 		mixin.SoftDeleteMixin{},
 		emixin.TagMixin{},
-		OrgOwnerMixin{
-			Ref: "notes",
-		},
+		NewOrgOwnMixinWithRef("notes"),
 	}
 }
 

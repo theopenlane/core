@@ -8,6 +8,8 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/rs/zerolog/log"
+
 	"github.com/theopenlane/core/pkg/objects"
 )
 
@@ -22,6 +24,15 @@ var _ objects.Storage = &Disk{}
 func NewDiskStorage(folder string) (*Disk, error) {
 	if len(strings.TrimSpace(folder)) == 0 {
 		return nil, fmt.Errorf("%w: please provide a valid folder path", ErrInvalidFolderPath)
+	}
+
+	// create directory if it does not exist
+	if _, err := os.Stat(folder); os.IsNotExist(err) {
+		log.Info().Str("folder", folder).Msg("directory does not exist, creating directory")
+
+		if err := os.MkdirAll(folder, os.ModePerm); err != nil {
+			return nil, fmt.Errorf("%w: failed to create directory", ErrInvalidFolderPath)
+		}
 	}
 
 	return &Disk{

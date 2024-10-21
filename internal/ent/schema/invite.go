@@ -90,12 +90,13 @@ func (Invite) Mixin() []ent.Mixin {
 		emixin.AuditMixin{},
 		emixin.IDMixin{},
 		mixin.SoftDeleteMixin{},
-		OrgOwnerMixin{
-			Ref: "invites",
-			SkipTokenType: []token.PrivacyToken{
-				&token.OrgInviteToken{},
-			},
-		},
+		NewOrgOwnedMixin(
+			ObjectOwnedMixin{
+				Ref: "invites",
+				SkipTokenType: []token.PrivacyToken{
+					&token.OrgInviteToken{},
+				},
+			}),
 	}
 }
 

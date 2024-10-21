@@ -42,9 +42,7 @@ func (EntitlementPlanFeature) Mixin() []ent.Mixin {
 		emixin.IDMixin{},
 		mixin.SoftDeleteMixin{},
 		emixin.TagMixin{},
-		OrgOwnerMixin{
-			Ref: "entitlementplanfeatures",
-		},
+		NewOrgOwnMixinWithRef("entitlementplanfeatures"),
 	}
 }
 

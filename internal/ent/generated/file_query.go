@@ -5,6 +5,7 @@ package generated
 import (
 	"context"
 	"database/sql/driver"
+	"errors"
 	"fmt"
 	"math"
 
@@ -732,6 +733,12 @@ func (fq *FileQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		fq.sql = prev
+	}
+	if file.Policy == nil {
+		return errors.New("generated: uninitialized file.Policy (forgotten import generated/runtime?)")
+	}
+	if err := file.Policy.EvalQuery(ctx, fq); err != nil {
+		return err
 	}
 	return nil
 }

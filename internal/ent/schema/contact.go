@@ -78,9 +78,7 @@ func (Contact) Mixin() []ent.Mixin {
 		emixin.IDMixin{},
 		mixin.SoftDeleteMixin{},
 		emixin.TagMixin{},
-		OrgOwnerMixin{
-			Ref: "contacts",
-		},
+		NewOrgOwnMixinWithRef("contacts"),
 	}
 }
 

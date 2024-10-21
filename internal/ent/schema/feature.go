@@ -63,9 +63,7 @@ func (Feature) Mixin() []ent.Mixin {
 		mixin.SoftDeleteMixin{},
 		emixin.IDMixin{},
 		emixin.TagMixin{},
-		OrgOwnerMixin{
-			Ref: "features",
-		},
+		NewOrgOwnMixinWithRef("features"),
 	}
 }
 

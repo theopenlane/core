@@ -64,6 +64,10 @@ func (suite *GraphTestSuite) TestQueryInvite() {
 
 			if tc.shouldCheck {
 				mock_fga.CheckAny(t, suite.client.fga, true)
+
+				if tc.client != suite.client.apiWithToken { // api token already restricts to a single org
+					mock_fga.ListAny(t, suite.client.fga, []string{"organization:" + testOrgID})
+				}
 			}
 
 			resp, err := tc.client.GetInviteByID(tc.ctx, tc.queryID)
@@ -242,6 +246,10 @@ func (suite *GraphTestSuite) TestMutationCreateInvite() {
 
 			if !tc.skipMockCheck {
 				mock_fga.CheckAny(t, suite.client.fga, tc.accessAllowed)
+			}
+
+			if tc.client != suite.client.apiWithToken && !tc.wantErr {
+				mock_fga.ListAny(t, suite.client.fga, []string{"organization:" + testOrgID})
 			}
 
 			role := tc.role

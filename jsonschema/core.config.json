@@ -302,10 +302,6 @@
     },
     "entconfig.Config": {
       "properties": {
-        "flags": {
-          "$ref": "#/$defs/entconfig.Flags",
-          "description": "flags for the server"
-        },
         "entityTypes": {
           "$ref": "#/$defs/[]string",
           "description": "EntityTypes is the list of entity types to create by default for the organization"
@@ -314,21 +310,6 @@
       "additionalProperties": false,
       "type": "object",
       "description": "Config holds the configuration for the ent server"
-    },
-    "entconfig.Flags": {
-      "properties": {
-        "useListUserService": {
-          "type": "boolean",
-          "description": "use list services endpoint for object access"
-        },
-        "useListObjectServices": {
-          "type": "boolean",
-          "description": "use list object services endpoint for object access"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "description": "Flags contains the flags for the server to allow use to test different code paths"
     },
     "entx.Config": {
       "properties": {

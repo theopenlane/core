@@ -31,6 +31,46 @@ func WriteFilesToContext(ctx context.Context, f Files) context.Context {
 	return context.WithValue(ctx, FileContextKey, existingFiles)
 }
 
+// UpdateFileInContextByKey updates the file in the context based on the key and the file ID
+func UpdateFileInContextByKey(ctx context.Context, key string, f File) context.Context {
+	existingFiles, ok := ctx.Value(FileContextKey).(Files)
+	if !ok {
+		existingFiles = Files{}
+	}
+
+	for i, v := range existingFiles[key] {
+		if v.ID == f.ID {
+			// update the file in the existing files
+			existingFiles[key][i] = f
+		}
+	}
+
+	return context.WithValue(ctx, FileContextKey, existingFiles)
+}
+
+// RemoveFileFromContext removes the file from the context based on the file ID
+func RemoveFileFromContext(ctx context.Context, f File) context.Context {
+	existingFiles, ok := ctx.Value(FileContextKey).(Files)
+	if !ok {
+		return ctx
+	}
+
+	for key, files := range existingFiles {
+		for i, v := range files {
+			if v.ID == f.ID {
+				existingFiles[key] = append(existingFiles[key][:i], existingFiles[key][i+1:]...)
+
+				// if there are no files left in the key, remove the key from the map
+				if len(existingFiles[key]) == 0 {
+					delete(existingFiles, key)
+				}
+			}
+		}
+	}
+
+	return context.WithValue(ctx, FileContextKey, existingFiles)
+}
+
 // FilesFromContext returns all files that have been uploaded during the request
 func FilesFromContext(ctx context.Context) (Files, error) {
 	files, ok := ctx.Value(FileContextKey).(Files)

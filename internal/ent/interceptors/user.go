@@ -6,15 +6,12 @@ import (
 
 	"entgo.io/ent"
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/rs/zerolog/log"
 
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 )
@@ -39,14 +36,7 @@ func TraverseUser() ent.Interceptor {
 		// if we are looking at a user in the context of an organization or group
 		// filter for just those users
 		case "org":
-			if q.EntConfig.Flags.UseListUserService {
-				log.Debug().Msg("using FGA to filter users")
-				return filterUsingFGA(ctx, q)
-			}
-
-			log.Debug().Msg("using the db to filter users")
-
-			return filterUsingDB(ctx, q)
+			return filterUsingFGA(ctx, q)
 		case "user":
 			// if we are looking at self
 			userID, err := auth.GetUserIDFromContext(ctx)
@@ -101,59 +91,30 @@ func filterType(ctx context.Context) string {
 
 // filterUsingFGA filters the user query using the FGA service to get the users with access to the org
 func filterUsingFGA(ctx context.Context, q *generated.UserQuery) error {
-	orgID, err := auth.GetOrganizationIDFromContext(ctx)
-	if err != nil {
-		return err
-	}
-
-	req := fgax.ListRequest{
-		ObjectID:   orgID,
-		ObjectType: "organization",
-	}
-
-	listUserResp, err := q.Authz.ListUserRequest(ctx, req)
+	orgIDs, err := auth.GetOrganizationIDsFromContext(ctx)
 	if err != nil {
 		return err
 	}
 
 	userIDs := []string{}
 
-	for _, user := range listUserResp.Users {
-		userIDs = append(userIDs, user.Object.Id)
+	for _, orgID := range orgIDs {
+		req := fgax.ListRequest{
+			ObjectID:   orgID,
+			ObjectType: "organization",
+		}
+
+		listUserResp, err := q.Authz.ListUserRequest(ctx, req)
+		if err != nil {
+			return err
+		}
+
+		for _, user := range listUserResp.Users {
+			userIDs = append(userIDs, user.Object.Id)
+		}
 	}
 
 	q.Where(user.IDIn(userIDs...))
-
-	return nil
-}
-
-// filterUsingDB filters the user query using the database to get the the users that are members of the org
-func filterUsingDB(ctx context.Context, q *generated.UserQuery) error {
-	orgIDs, err := auth.GetOrganizationIDsFromContext(ctx)
-	if err != nil {
-		return err
-	}
-
-	// get child orgs in addition to the orgs the user is a direct member of
-	childOrgs, err := getAllRelatedChildOrgs(ctx, orgIDs)
-	if err != nil {
-		return err
-	}
-
-	// get the parent orgs of the orgs the user is a member of to ensure all
-	// users in the org tree are returned
-	allOrgsIDs, err := getAllParentOrgIDs(ctx, orgIDs)
-	if err != nil {
-		return err
-	}
-
-	allOrgsIDs = append(allOrgsIDs, childOrgs...)
-
-	q.Where(user.HasOrgMembershipsWith(
-		orgmembership.HasOrganizationWith(
-			organization.IDIn(allOrgsIDs...),
-		),
-	))
 
 	return nil
 }

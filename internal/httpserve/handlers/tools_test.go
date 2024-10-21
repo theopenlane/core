@@ -88,12 +88,7 @@ func (suite *HandlerTestSuite) SetupTest() {
 		ent.Emailer(&emailtemplates.Config{}),
 		ent.TokenManager(tm),
 		ent.SessionConfig(&sessionConfig),
-		ent.EntConfig(&entconfig.Config{
-			Flags: entconfig.Flags{
-				UseListUserService:   false,
-				UseListObjectService: false,
-			},
-		}),
+		ent.EntConfig(&entconfig.Config{}),
 	}
 
 	// create database connection

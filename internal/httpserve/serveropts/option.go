@@ -398,28 +398,42 @@ func WithCORS() ServerOption {
 
 func WithObjectStorage() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
-		if s.Config.Settings.ObjectStorage.Enabled {
-			s3Config, _ := awsConfig.LoadDefaultConfig(
-				context.Background(),
-				awsConfig.WithRegion(s.Config.Settings.ObjectStorage.Region),
-				awsConfig.WithCredentialsProvider(
-					awsCreds.NewStaticCredentialsProvider(
-						s.Config.Settings.ObjectStorage.AccessKey,
-						s.Config.Settings.ObjectStorage.SecretKey,
-						"")),
+		settings := s.Config.Settings.ObjectStorage
+		if settings.Enabled {
+			var (
+				store objects.Storage
+				err   error
 			)
 
-			s3store, err := storage.NewS3FromConfig(s3Config, storage.S3Options{
-				Bucket: s.Config.Settings.ObjectStorage.DefaultBucket,
-			})
-			if err != nil {
-				log.Panic().Err(err).Msg("error creating S3 store")
+			switch settings.Provider {
+			case "s3":
+				s3Config, _ := awsConfig.LoadDefaultConfig(
+					context.Background(),
+					awsConfig.WithRegion(settings.Region),
+					awsConfig.WithCredentialsProvider(
+						awsCreds.NewStaticCredentialsProvider(
+							settings.AccessKey,
+							settings.SecretKey,
+							"")),
+				)
+
+				store, err = storage.NewS3FromConfig(s3Config, storage.S3Options{
+					Bucket: settings.DefaultBucket,
+				})
+				if err != nil {
+					log.Panic().Err(err).Msg("error creating S3 store")
+				}
+			default:
+				store, err = storage.NewDiskStorage(settings.DefaultBucket)
+				if err != nil {
+					log.Panic().Err(err).Msg("error creating disk store")
+				}
 			}
 
 			s.Config.ObjectManager, err = objects.New(
 				objects.WithMaxFileSize(10<<20), // nolint:mnd
 				objects.WithMaxMemory(32<<20),   // nolint:mnd
-				objects.WithStorage(s3store),
+				objects.WithStorage(store),
 				objects.WithNameFuncGenerator(objects.OrganizationNameFunc),
 				objects.WithKeys(s.Config.Settings.ObjectStorage.Keys),
 				objects.WithUploaderFunc(objmw.Upload),

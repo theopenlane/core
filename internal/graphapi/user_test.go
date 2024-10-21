@@ -63,6 +63,7 @@ func (suite *GraphTestSuite) TestQueryUser() {
 			if tc.errorMsg == "" {
 				// mock check calls
 				mock_fga.CheckAny(t, suite.client.fga, true)
+				mock_fga.ListAny(t, suite.client.fga, []string{"organization:" + user1.Edges.Setting.Edges.DefaultOrg.ID})
 			}
 
 			resp, err := suite.client.api.GetUserByID(reqCtx, tc.queryID)
@@ -97,6 +98,10 @@ func (suite *GraphTestSuite) TestQueryUsers() {
 
 	t.Run("Get Users", func(t *testing.T) {
 		defer mock_fga.ClearMocks(suite.client.fga)
+
+		// we don't actually care about the check here, but it runs because
+		// the user query returns orgs
+		mock_fga.ListAny(t, suite.client.fga, []string{})
 
 		resp, err := suite.client.api.GetAllUsers(reqCtx)
 
@@ -236,8 +241,10 @@ func (suite *GraphTestSuite) TestMutationUpdateUser() {
 
 	user := (&UserBuilder{client: suite.client}).MustNew(ctx, t)
 
+	orgID := user.Edges.Setting.Edges.DefaultOrg.ID
+
 	// setup valid user context
-	reqCtx, err := auth.NewTestContextWithOrgID(user.ID, user.Edges.Setting.Edges.DefaultOrg.ID)
+	reqCtx, err := auth.NewTestContextWithOrgID(user.ID, orgID)
 	require.NoError(t, err)
 
 	weakPassword := "notsecure"
@@ -355,7 +362,11 @@ func (suite *GraphTestSuite) TestMutationUpdateUser() {
 
 			if tc.errorMsg == "" {
 				mock_fga.CheckAny(t, suite.client.fga, true)
+				mock_fga.ListOnce(t, suite.client.fga, []string{"organization:" + orgID}, nil)
 
+				if tc.avatarFile != nil {
+					mock_fga.WriteAny(t, suite.client.fga)
+				}
 			}
 
 			if tc.avatarFile != nil {
@@ -440,6 +451,8 @@ func (suite *GraphTestSuite) TestMutationDeleteUser() {
 				mock_fga.CheckAny(t, suite.client.fga, true)
 
 				mock_fga.WriteAny(t, suite.client.fga)
+
+				mock_fga.ListAny(t, suite.client.fga, []string{"organization:" + personalOrgID})
 			}
 
 			// delete user
@@ -493,6 +506,7 @@ func (suite *GraphTestSuite) TestMutationUserCascadeDelete() {
 	mock_fga.CheckAny(t, suite.client.fga, true)
 	// mock writes to clean up personal org
 	mock_fga.WriteAny(t, suite.client.fga)
+	mock_fga.ListAny(t, suite.client.fga, []string{"organization:" + user.Edges.Setting.Edges.DefaultOrg.ID})
 
 	// delete user
 	resp, err := suite.client.api.DeleteUser(reqCtx, user.ID)

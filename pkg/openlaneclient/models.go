@@ -27,7 +27,7 @@ type APIToken struct {
 	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// The organization id that owns the object
+	// the object id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the name associated with the token
 	Name  string `json:"name"`
@@ -191,13 +191,13 @@ type APITokenWhereInput struct {
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
-	OwnerIDNeq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
-	OwnerIDGt           *string  `json:"ownerIDGT,omitempty"`
-	OwnerIDGte          *string  `json:"ownerIDGTE,omitempty"`
-	OwnerIDLt           *string  `json:"ownerIDLT,omitempty"`
-	OwnerIDLte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
 	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
@@ -294,7 +294,7 @@ type Contact struct {
 	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// The organization id that owns the object
+	// the object id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the full name of the contact
 	FullName string `json:"fullName"`
@@ -366,7 +366,7 @@ type ContactHistory struct {
 	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// The organization id that owns the object
+	// the object id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the full name of the contact
 	FullName string `json:"fullName"`
@@ -534,13 +534,13 @@ type ContactHistoryWhereInput struct {
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
-	OwnerIDNeq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
-	OwnerIDGt           *string  `json:"ownerIDGT,omitempty"`
-	OwnerIDGte          *string  `json:"ownerIDGTE,omitempty"`
-	OwnerIDLt           *string  `json:"ownerIDLT,omitempty"`
-	OwnerIDLte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
 	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
@@ -761,13 +761,13 @@ type ContactWhereInput struct {
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
-	OwnerIDNeq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
-	OwnerIDGt           *string  `json:"ownerIDGT,omitempty"`
-	OwnerIDGte          *string  `json:"ownerIDGTE,omitempty"`
-	OwnerIDLt           *string  `json:"ownerIDLT,omitempty"`
-	OwnerIDLte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
 	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
@@ -1507,7 +1507,7 @@ type DocumentData struct {
 	Tags      []string   `json:"tags,omitempty"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
 	DeletedBy *string    `json:"deletedBy,omitempty"`
-	// The organization id that owns the object
+	// the object id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the template id of the document
 	TemplateID string `json:"templateID"`
@@ -1570,7 +1570,7 @@ type DocumentDataHistory struct {
 	Tags      []string   `json:"tags,omitempty"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
 	DeletedBy *string    `json:"deletedBy,omitempty"`
-	// The organization id that owns the object
+	// the object id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the template id of the document
 	TemplateID string `json:"templateID"`
@@ -1728,13 +1728,13 @@ type DocumentDataHistoryWhereInput struct {
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
-	OwnerIDNeq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
-	OwnerIDGt           *string  `json:"ownerIDGT,omitempty"`
-	OwnerIDGte          *string  `json:"ownerIDGTE,omitempty"`
-	OwnerIDLt           *string  `json:"ownerIDLT,omitempty"`
-	OwnerIDLte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
 	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
@@ -1744,13 +1744,13 @@ type DocumentDataHistoryWhereInput struct {
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 	// template_id field predicates
 	TemplateID             *string  `json:"templateID,omitempty"`
-	TemplateIDNeq          *string  `json:"templateIDNEQ,omitempty"`
+	TemplateIdneq          *string  `json:"templateIDNEQ,omitempty"`
 	TemplateIDIn           []string `json:"templateIDIn,omitempty"`
 	TemplateIDNotIn        []string `json:"templateIDNotIn,omitempty"`
-	TemplateIDGt           *string  `json:"templateIDGT,omitempty"`
-	TemplateIDGte          *string  `json:"templateIDGTE,omitempty"`
-	TemplateIDLt           *string  `json:"templateIDLT,omitempty"`
-	TemplateIDLte          *string  `json:"templateIDLTE,omitempty"`
+	TemplateIdgt           *string  `json:"templateIDGT,omitempty"`
+	TemplateIdgte          *string  `json:"templateIDGTE,omitempty"`
+	TemplateIdlt           *string  `json:"templateIDLT,omitempty"`
+	TemplateIdlte          *string  `json:"templateIDLTE,omitempty"`
 	TemplateIDContains     *string  `json:"templateIDContains,omitempty"`
 	TemplateIDHasPrefix    *string  `json:"templateIDHasPrefix,omitempty"`
 	TemplateIDHasSuffix    *string  `json:"templateIDHasSuffix,omitempty"`
@@ -1870,13 +1870,13 @@ type DocumentDataWhereInput struct {
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
-	OwnerIDNeq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
-	OwnerIDGt           *string  `json:"ownerIDGT,omitempty"`
-	OwnerIDGte          *string  `json:"ownerIDGTE,omitempty"`
-	OwnerIDLt           *string  `json:"ownerIDLT,omitempty"`
-	OwnerIDLte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
 	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
@@ -1886,13 +1886,13 @@ type DocumentDataWhereInput struct {
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 	// template_id field predicates
 	TemplateID             *string  `json:"templateID,omitempty"`
-	TemplateIDNeq          *string  `json:"templateIDNEQ,omitempty"`
+	TemplateIdneq          *string  `json:"templateIDNEQ,omitempty"`
 	TemplateIDIn           []string `json:"templateIDIn,omitempty"`
 	TemplateIDNotIn        []string `json:"templateIDNotIn,omitempty"`
-	TemplateIDGt           *string  `json:"templateIDGT,omitempty"`
-	TemplateIDGte          *string  `json:"templateIDGTE,omitempty"`
-	TemplateIDLt           *string  `json:"templateIDLT,omitempty"`
-	TemplateIDLte          *string  `json:"templateIDLTE,omitempty"`
+	TemplateIdgt           *string  `json:"templateIDGT,omitempty"`
+	TemplateIdgte          *string  `json:"templateIDGTE,omitempty"`
+	TemplateIdlt           *string  `json:"templateIDLT,omitempty"`
+	TemplateIdlte          *string  `json:"templateIDLTE,omitempty"`
 	TemplateIDContains     *string  `json:"templateIDContains,omitempty"`
 	TemplateIDHasPrefix    *string  `json:"templateIDHasPrefix,omitempty"`
 	TemplateIDHasSuffix    *string  `json:"templateIDHasSuffix,omitempty"`
@@ -1922,7 +1922,7 @@ type Entitlement struct {
 	Tags      []string   `json:"tags,omitempty"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
 	DeletedBy *string    `json:"deletedBy,omitempty"`
-	// The organization id that owns the object
+	// the object id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the plan to which the entitlement belongs
 	PlanID string `json:"planID"`
@@ -1995,7 +1995,7 @@ type EntitlementHistory struct {
 	Tags      []string   `json:"tags,omitempty"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
 	DeletedBy *string    `json:"deletedBy,omitempty"`
-	// The organization id that owns the object
+	// the object id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the plan to which the entitlement belongs
 	PlanID string `json:"planID"`
@@ -2163,13 +2163,13 @@ type EntitlementHistoryWhereInput struct {
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
-	OwnerIDNeq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
-	OwnerIDGt           *string  `json:"ownerIDGT,omitempty"`
-	OwnerIDGte          *string  `json:"ownerIDGTE,omitempty"`
-	OwnerIDLt           *string  `json:"ownerIDLT,omitempty"`
-	OwnerIDLte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
 	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
@@ -2179,13 +2179,13 @@ type EntitlementHistoryWhereInput struct {
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 	// plan_id field predicates
 	PlanID             *string  `json:"planID,omitempty"`
-	PlanIDNeq          *string  `json:"planIDNEQ,omitempty"`
+	PlanIdneq          *string  `json:"planIDNEQ,omitempty"`
 	PlanIDIn           []string `json:"planIDIn,omitempty"`
 	PlanIDNotIn        []string `json:"planIDNotIn,omitempty"`
-	PlanIDGt           *string  `json:"planIDGT,omitempty"`
-	PlanIDGte          *string  `json:"planIDGTE,omitempty"`
-	PlanIDLt           *string  `json:"planIDLT,omitempty"`
-	PlanIDLte          *string  `json:"planIDLTE,omitempty"`
+	PlanIdgt           *string  `json:"planIDGT,omitempty"`
+	PlanIdgte          *string  `json:"planIDGTE,omitempty"`
+	PlanIdlt           *string  `json:"planIDLT,omitempty"`
+	PlanIdlte          *string  `json:"planIDLTE,omitempty"`
 	PlanIDContains     *string  `json:"planIDContains,omitempty"`
 	PlanIDHasPrefix    *string  `json:"planIDHasPrefix,omitempty"`
 	PlanIDHasSuffix    *string  `json:"planIDHasSuffix,omitempty"`
@@ -2193,13 +2193,13 @@ type EntitlementHistoryWhereInput struct {
 	PlanIDContainsFold *string  `json:"planIDContainsFold,omitempty"`
 	// organization_id field predicates
 	OrganizationID             *string  `json:"organizationID,omitempty"`
-	OrganizationIDNeq          *string  `json:"organizationIDNEQ,omitempty"`
+	OrganizationIdneq          *string  `json:"organizationIDNEQ,omitempty"`
 	OrganizationIDIn           []string `json:"organizationIDIn,omitempty"`
 	OrganizationIDNotIn        []string `json:"organizationIDNotIn,omitempty"`
-	OrganizationIDGt           *string  `json:"organizationIDGT,omitempty"`
-	OrganizationIDGte          *string  `json:"organizationIDGTE,omitempty"`
-	OrganizationIDLt           *string  `json:"organizationIDLT,omitempty"`
-	OrganizationIDLte          *string  `json:"organizationIDLTE,omitempty"`
+	OrganizationIdgt           *string  `json:"organizationIDGT,omitempty"`
+	OrganizationIdgte          *string  `json:"organizationIDGTE,omitempty"`
+	OrganizationIdlt           *string  `json:"organizationIDLT,omitempty"`
+	OrganizationIdlte          *string  `json:"organizationIDLTE,omitempty"`
 	OrganizationIDContains     *string  `json:"organizationIDContains,omitempty"`
 	OrganizationIDHasPrefix    *string  `json:"organizationIDHasPrefix,omitempty"`
 	OrganizationIDHasSuffix    *string  `json:"organizationIDHasSuffix,omitempty"`
@@ -2207,13 +2207,13 @@ type EntitlementHistoryWhereInput struct {
 	OrganizationIDContainsFold *string  `json:"organizationIDContainsFold,omitempty"`
 	// external_customer_id field predicates
 	ExternalCustomerID             *string  `json:"externalCustomerID,omitempty"`
-	ExternalCustomerIDNeq          *string  `json:"externalCustomerIDNEQ,omitempty"`
+	ExternalCustomerIdneq          *string  `json:"externalCustomerIDNEQ,omitempty"`
 	ExternalCustomerIDIn           []string `json:"externalCustomerIDIn,omitempty"`
 	ExternalCustomerIDNotIn        []string `json:"externalCustomerIDNotIn,omitempty"`
-	ExternalCustomerIDGt           *string  `json:"externalCustomerIDGT,omitempty"`
-	ExternalCustomerIDGte          *string  `json:"externalCustomerIDGTE,omitempty"`
-	ExternalCustomerIDLt           *string  `json:"externalCustomerIDLT,omitempty"`
-	ExternalCustomerIDLte          *string  `json:"externalCustomerIDLTE,omitempty"`
+	ExternalCustomerIdgt           *string  `json:"externalCustomerIDGT,omitempty"`
+	ExternalCustomerIdgte          *string  `json:"externalCustomerIDGTE,omitempty"`
+	ExternalCustomerIdlt           *string  `json:"externalCustomerIDLT,omitempty"`
+	ExternalCustomerIdlte          *string  `json:"externalCustomerIDLTE,omitempty"`
 	ExternalCustomerIDContains     *string  `json:"externalCustomerIDContains,omitempty"`
 	ExternalCustomerIDHasPrefix    *string  `json:"externalCustomerIDHasPrefix,omitempty"`
 	ExternalCustomerIDHasSuffix    *string  `json:"externalCustomerIDHasSuffix,omitempty"`
@@ -2223,13 +2223,13 @@ type EntitlementHistoryWhereInput struct {
 	ExternalCustomerIDContainsFold *string  `json:"externalCustomerIDContainsFold,omitempty"`
 	// external_subscription_id field predicates
 	ExternalSubscriptionID             *string  `json:"externalSubscriptionID,omitempty"`
-	ExternalSubscriptionIDNeq          *string  `json:"externalSubscriptionIDNEQ,omitempty"`
+	ExternalSubscriptionIdneq          *string  `json:"externalSubscriptionIDNEQ,omitempty"`
 	ExternalSubscriptionIDIn           []string `json:"externalSubscriptionIDIn,omitempty"`
 	ExternalSubscriptionIDNotIn        []string `json:"externalSubscriptionIDNotIn,omitempty"`
-	ExternalSubscriptionIDGt           *string  `json:"externalSubscriptionIDGT,omitempty"`
-	ExternalSubscriptionIDGte          *string  `json:"externalSubscriptionIDGTE,omitempty"`
-	ExternalSubscriptionIDLt           *string  `json:"externalSubscriptionIDLT,omitempty"`
-	ExternalSubscriptionIDLte          *string  `json:"externalSubscriptionIDLTE,omitempty"`
+	ExternalSubscriptionIdgt           *string  `json:"externalSubscriptionIDGT,omitempty"`
+	ExternalSubscriptionIdgte          *string  `json:"externalSubscriptionIDGTE,omitempty"`
+	ExternalSubscriptionIdlt           *string  `json:"externalSubscriptionIDLT,omitempty"`
+	ExternalSubscriptionIdlte          *string  `json:"externalSubscriptionIDLTE,omitempty"`
 	ExternalSubscriptionIDContains     *string  `json:"externalSubscriptionIDContains,omitempty"`
 	ExternalSubscriptionIDHasPrefix    *string  `json:"externalSubscriptionIDHasPrefix,omitempty"`
 	ExternalSubscriptionIDHasSuffix    *string  `json:"externalSubscriptionIDHasSuffix,omitempty"`
@@ -2266,7 +2266,7 @@ type EntitlementPlan struct {
 	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// The organization id that owns the object
+	// the object id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the displayed 'friendly' name of the plan
 	DisplayName *string `json:"displayName,omitempty"`
@@ -2333,7 +2333,7 @@ type EntitlementPlanFeature struct {
 	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// The organization id that owns the object
+	// the object id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// metadata for the entitlement plan feature such as usage limits
 	Metadata  map[string]interface{} `json:"metadata,omitempty"`
@@ -2396,7 +2396,7 @@ type EntitlementPlanFeatureHistory struct {
 	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// The organization id that owns the object
+	// the object id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// metadata for the entitlement plan feature such as usage limits
 	Metadata  map[string]interface{} `json:"metadata,omitempty"`
@@ -2554,13 +2554,13 @@ type EntitlementPlanFeatureHistoryWhereInput struct {
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
-	OwnerIDNeq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
-	OwnerIDGt           *string  `json:"ownerIDGT,omitempty"`
-	OwnerIDGte          *string  `json:"ownerIDGTE,omitempty"`
-	OwnerIDLt           *string  `json:"ownerIDLT,omitempty"`
-	OwnerIDLte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
 	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
@@ -2570,13 +2570,13 @@ type EntitlementPlanFeatureHistoryWhereInput struct {
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 	// plan_id field predicates
 	PlanID             *string  `json:"planID,omitempty"`
-	PlanIDNeq          *string  `json:"planIDNEQ,omitempty"`
+	PlanIdneq          *string  `json:"planIDNEQ,omitempty"`
 	PlanIDIn           []string `json:"planIDIn,omitempty"`
 	PlanIDNotIn        []string `json:"planIDNotIn,omitempty"`
-	PlanIDGt           *string  `json:"planIDGT,omitempty"`
-	PlanIDGte          *string  `json:"planIDGTE,omitempty"`
-	PlanIDLt           *string  `json:"planIDLT,omitempty"`
-	PlanIDLte          *string  `json:"planIDLTE,omitempty"`
+	PlanIdgt           *string  `json:"planIDGT,omitempty"`
+	PlanIdgte          *string  `json:"planIDGTE,omitempty"`
+	PlanIdlt           *string  `json:"planIDLT,omitempty"`
+	PlanIdlte          *string  `json:"planIDLTE,omitempty"`
 	PlanIDContains     *string  `json:"planIDContains,omitempty"`
 	PlanIDHasPrefix    *string  `json:"planIDHasPrefix,omitempty"`
 	PlanIDHasSuffix    *string  `json:"planIDHasSuffix,omitempty"`
@@ -2584,13 +2584,13 @@ type EntitlementPlanFeatureHistoryWhereInput struct {
 	PlanIDContainsFold *string  `json:"planIDContainsFold,omitempty"`
 	// feature_id field predicates
 	FeatureID             *string  `json:"featureID,omitempty"`
-	FeatureIDNeq          *string  `json:"featureIDNEQ,omitempty"`
+	FeatureIdneq          *string  `json:"featureIDNEQ,omitempty"`
 	FeatureIDIn           []string `json:"featureIDIn,omitempty"`
 	FeatureIDNotIn        []string `json:"featureIDNotIn,omitempty"`
-	FeatureIDGt           *string  `json:"featureIDGT,omitempty"`
-	FeatureIDGte          *string  `json:"featureIDGTE,omitempty"`
-	FeatureIDLt           *string  `json:"featureIDLT,omitempty"`
-	FeatureIDLte          *string  `json:"featureIDLTE,omitempty"`
+	FeatureIdgt           *string  `json:"featureIDGT,omitempty"`
+	FeatureIdgte          *string  `json:"featureIDGTE,omitempty"`
+	FeatureIdlt           *string  `json:"featureIDLT,omitempty"`
+	FeatureIdlte          *string  `json:"featureIDLTE,omitempty"`
 	FeatureIDContains     *string  `json:"featureIDContains,omitempty"`
 	FeatureIDHasPrefix    *string  `json:"featureIDHasPrefix,omitempty"`
 	FeatureIDHasSuffix    *string  `json:"featureIDHasSuffix,omitempty"`
@@ -2723,7 +2723,7 @@ type EntitlementPlanHistory struct {
 	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// The organization id that owns the object
+	// the object id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the displayed 'friendly' name of the plan
 	DisplayName *string `json:"displayName,omitempty"`
@@ -2887,13 +2887,13 @@ type EntitlementPlanHistoryWhereInput struct {
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
-	OwnerIDNeq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
-	OwnerIDGt           *string  `json:"ownerIDGT,omitempty"`
-	OwnerIDGte          *string  `json:"ownerIDGTE,omitempty"`
-	OwnerIDLt           *string  `json:"ownerIDLT,omitempty"`
-	OwnerIDLte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
 	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
@@ -3075,13 +3075,13 @@ type EntitlementPlanWhereInput struct {
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
-	OwnerIDNeq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
-	OwnerIDGt           *string  `json:"ownerIDGT,omitempty"`
-	OwnerIDGte          *string  `json:"ownerIDGTE,omitempty"`
-	OwnerIDLt           *string  `json:"ownerIDLT,omitempty"`
-	OwnerIDLte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
 	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
@@ -3278,13 +3278,13 @@ type EntitlementWhereInput struct {
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
-	OwnerIDNeq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
-	OwnerIDGt           *string  `json:"ownerIDGT,omitempty"`
-	OwnerIDGte          *string  `json:"ownerIDGTE,omitempty"`
-	OwnerIDLt           *string  `json:"ownerIDLT,omitempty"`
-	OwnerIDLte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
 	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
@@ -3294,13 +3294,13 @@ type EntitlementWhereInput struct {
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 	// plan_id field predicates
 	PlanID             *string  `json:"planID,omitempty"`
-	PlanIDNeq          *string  `json:"planIDNEQ,omitempty"`
+	PlanIdneq          *string  `json:"planIDNEQ,omitempty"`
 	PlanIDIn           []string `json:"planIDIn,omitempty"`
 	PlanIDNotIn        []string `json:"planIDNotIn,omitempty"`
-	PlanIDGt           *string  `json:"planIDGT,omitempty"`
-	PlanIDGte          *string  `json:"planIDGTE,omitempty"`
-	PlanIDLt           *string  `json:"planIDLT,omitempty"`
-	PlanIDLte          *string  `json:"planIDLTE,omitempty"`
+	PlanIdgt           *string  `json:"planIDGT,omitempty"`
+	PlanIdgte          *string  `json:"planIDGTE,omitempty"`
+	PlanIdlt           *string  `json:"planIDLT,omitempty"`
+	PlanIdlte          *string  `json:"planIDLTE,omitempty"`
 	PlanIDContains     *string  `json:"planIDContains,omitempty"`
 	PlanIDHasPrefix    *string  `json:"planIDHasPrefix,omitempty"`
 	PlanIDHasSuffix    *string  `json:"planIDHasSuffix,omitempty"`
@@ -3308,13 +3308,13 @@ type EntitlementWhereInput struct {
 	PlanIDContainsFold *string  `json:"planIDContainsFold,omitempty"`
 	// organization_id field predicates
 	OrganizationID             *string  `json:"organizationID,omitempty"`
-	OrganizationIDNeq          *string  `json:"organizationIDNEQ,omitempty"`
+	OrganizationIdneq          *string  `json:"organizationIDNEQ,omitempty"`
 	OrganizationIDIn           []string `json:"organizationIDIn,omitempty"`
 	OrganizationIDNotIn        []string `json:"organizationIDNotIn,omitempty"`
-	OrganizationIDGt           *string  `json:"organizationIDGT,omitempty"`
-	OrganizationIDGte          *string  `json:"organizationIDGTE,omitempty"`
-	OrganizationIDLt           *string  `json:"organizationIDLT,omitempty"`
-	OrganizationIDLte          *string  `json:"organizationIDLTE,omitempty"`
+	OrganizationIdgt           *string  `json:"organizationIDGT,omitempty"`
+	OrganizationIdgte          *string  `json:"organizationIDGTE,omitempty"`
+	OrganizationIdlt           *string  `json:"organizationIDLT,omitempty"`
+	OrganizationIdlte          *string  `json:"organizationIDLTE,omitempty"`
 	OrganizationIDContains     *string  `json:"organizationIDContains,omitempty"`
 	OrganizationIDHasPrefix    *string  `json:"organizationIDHasPrefix,omitempty"`
 	OrganizationIDHasSuffix    *string  `json:"organizationIDHasSuffix,omitempty"`
@@ -3322,13 +3322,13 @@ type EntitlementWhereInput struct {
 	OrganizationIDContainsFold *string  `json:"organizationIDContainsFold,omitempty"`
 	// external_customer_id field predicates
 	ExternalCustomerID             *string  `json:"externalCustomerID,omitempty"`
-	ExternalCustomerIDNeq          *string  `json:"externalCustomerIDNEQ,omitempty"`
+	ExternalCustomerIdneq          *string  `json:"externalCustomerIDNEQ,omitempty"`
 	ExternalCustomerIDIn           []string `json:"externalCustomerIDIn,omitempty"`
 	ExternalCustomerIDNotIn        []string `json:"externalCustomerIDNotIn,omitempty"`
-	ExternalCustomerIDGt           *string  `json:"externalCustomerIDGT,omitempty"`
-	ExternalCustomerIDGte          *string  `json:"externalCustomerIDGTE,omitempty"`
-	ExternalCustomerIDLt           *string  `json:"externalCustomerIDLT,omitempty"`
-	ExternalCustomerIDLte          *string  `json:"externalCustomerIDLTE,omitempty"`
+	ExternalCustomerIdgt           *string  `json:"externalCustomerIDGT,omitempty"`
+	ExternalCustomerIdgte          *string  `json:"externalCustomerIDGTE,omitempty"`
+	ExternalCustomerIdlt           *string  `json:"externalCustomerIDLT,omitempty"`
+	ExternalCustomerIdlte          *string  `json:"externalCustomerIDLTE,omitempty"`
 	ExternalCustomerIDContains     *string  `json:"externalCustomerIDContains,omitempty"`
 	ExternalCustomerIDHasPrefix    *string  `json:"externalCustomerIDHasPrefix,omitempty"`
 	ExternalCustomerIDHasSuffix    *string  `json:"externalCustomerIDHasSuffix,omitempty"`
@@ -3338,13 +3338,13 @@ type EntitlementWhereInput struct {
 	ExternalCustomerIDContainsFold *string  `json:"externalCustomerIDContainsFold,omitempty"`
 	// external_subscription_id field predicates
 	ExternalSubscriptionID             *string  `json:"externalSubscriptionID,omitempty"`
-	ExternalSubscriptionIDNeq          *string  `json:"externalSubscriptionIDNEQ,omitempty"`
+	ExternalSubscriptionIdneq          *string  `json:"externalSubscriptionIDNEQ,omitempty"`
 	ExternalSubscriptionIDIn           []string `json:"externalSubscriptionIDIn,omitempty"`
 	ExternalSubscriptionIDNotIn        []string `json:"externalSubscriptionIDNotIn,omitempty"`
-	ExternalSubscriptionIDGt           *string  `json:"externalSubscriptionIDGT,omitempty"`
-	ExternalSubscriptionIDGte          *string  `json:"externalSubscriptionIDGTE,omitempty"`
-	ExternalSubscriptionIDLt           *string  `json:"externalSubscriptionIDLT,omitempty"`
-	ExternalSubscriptionIDLte          *string  `json:"externalSubscriptionIDLTE,omitempty"`
+	ExternalSubscriptionIdgt           *string  `json:"externalSubscriptionIDGT,omitempty"`
+	ExternalSubscriptionIdgte          *string  `json:"externalSubscriptionIDGTE,omitempty"`
+	ExternalSubscriptionIdlt           *string  `json:"externalSubscriptionIDLT,omitempty"`
+	ExternalSubscriptionIdlte          *string  `json:"externalSubscriptionIDLTE,omitempty"`
 	ExternalSubscriptionIDContains     *string  `json:"externalSubscriptionIDContains,omitempty"`
 	ExternalSubscriptionIDHasPrefix    *string  `json:"externalSubscriptionIDHasPrefix,omitempty"`
 	ExternalSubscriptionIDHasSuffix    *string  `json:"externalSubscriptionIDHasSuffix,omitempty"`
@@ -3393,7 +3393,7 @@ type Entity struct {
 	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// The organization id that owns the object
+	// the object id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the entity
 	Name *string `json:"name,omitempty"`
@@ -3466,7 +3466,7 @@ type EntityHistory struct {
 	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// The organization id that owns the object
+	// the object id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the entity
 	Name *string `json:"name,omitempty"`
@@ -3640,13 +3640,13 @@ type EntityHistoryWhereInput struct {
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
-	OwnerIDNeq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
-	OwnerIDGt           *string  `json:"ownerIDGT,omitempty"`
-	OwnerIDGte          *string  `json:"ownerIDGTE,omitempty"`
-	OwnerIDLt           *string  `json:"ownerIDLT,omitempty"`
-	OwnerIDLte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
 	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
@@ -3688,13 +3688,13 @@ type EntityHistoryWhereInput struct {
 	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
 	// entity_type_id field predicates
 	EntityTypeID             *string  `json:"entityTypeID,omitempty"`
-	EntityTypeIDNeq          *string  `json:"entityTypeIDNEQ,omitempty"`
+	EntityTypeIdneq          *string  `json:"entityTypeIDNEQ,omitempty"`
 	EntityTypeIDIn           []string `json:"entityTypeIDIn,omitempty"`
 	EntityTypeIDNotIn        []string `json:"entityTypeIDNotIn,omitempty"`
-	EntityTypeIDGt           *string  `json:"entityTypeIDGT,omitempty"`
-	EntityTypeIDGte          *string  `json:"entityTypeIDGTE,omitempty"`
-	EntityTypeIDLt           *string  `json:"entityTypeIDLT,omitempty"`
-	EntityTypeIDLte          *string  `json:"entityTypeIDLTE,omitempty"`
+	EntityTypeIdgt           *string  `json:"entityTypeIDGT,omitempty"`
+	EntityTypeIdgte          *string  `json:"entityTypeIDGTE,omitempty"`
+	EntityTypeIdlt           *string  `json:"entityTypeIDLT,omitempty"`
+	EntityTypeIdlte          *string  `json:"entityTypeIDLTE,omitempty"`
 	EntityTypeIDContains     *string  `json:"entityTypeIDContains,omitempty"`
 	EntityTypeIDHasPrefix    *string  `json:"entityTypeIDHasPrefix,omitempty"`
 	EntityTypeIDHasSuffix    *string  `json:"entityTypeIDHasSuffix,omitempty"`
@@ -3744,7 +3744,7 @@ type EntityType struct {
 	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// The organization id that owns the object
+	// the object id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the entity
 	Name     string        `json:"name"`
@@ -3803,7 +3803,7 @@ type EntityTypeHistory struct {
 	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// The organization id that owns the object
+	// the object id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the entity
 	Name string `json:"name"`
@@ -3967,13 +3967,13 @@ type EntityTypeHistoryWhereInput struct {
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
-	OwnerIDNeq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
-	OwnerIDGt           *string  `json:"ownerIDGT,omitempty"`
-	OwnerIDGte          *string  `json:"ownerIDGTE,omitempty"`
-	OwnerIDLt           *string  `json:"ownerIDLT,omitempty"`
-	OwnerIDLte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
 	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
@@ -4117,13 +4117,13 @@ type EntityTypeWhereInput struct {
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
-	OwnerIDNeq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
-	OwnerIDGt           *string  `json:"ownerIDGT,omitempty"`
-	OwnerIDGte          *string  `json:"ownerIDGTE,omitempty"`
-	OwnerIDLt           *string  `json:"ownerIDLT,omitempty"`
-	OwnerIDLte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
 	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
@@ -4259,13 +4259,13 @@ type EntityWhereInput struct {
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
-	OwnerIDNeq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
-	OwnerIDGt           *string  `json:"ownerIDGT,omitempty"`
-	OwnerIDGte          *string  `json:"ownerIDGTE,omitempty"`
-	OwnerIDLt           *string  `json:"ownerIDLT,omitempty"`
-	OwnerIDLte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
 	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
@@ -4307,13 +4307,13 @@ type EntityWhereInput struct {
 	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
 	// entity_type_id field predicates
 	EntityTypeID             *string  `json:"entityTypeID,omitempty"`
-	EntityTypeIDNeq          *string  `json:"entityTypeIDNEQ,omitempty"`
+	EntityTypeIdneq          *string  `json:"entityTypeIDNEQ,omitempty"`
 	EntityTypeIDIn           []string `json:"entityTypeIDIn,omitempty"`
 	EntityTypeIDNotIn        []string `json:"entityTypeIDNotIn,omitempty"`
-	EntityTypeIDGt           *string  `json:"entityTypeIDGT,omitempty"`
-	EntityTypeIDGte          *string  `json:"entityTypeIDGTE,omitempty"`
-	EntityTypeIDLt           *string  `json:"entityTypeIDLT,omitempty"`
-	EntityTypeIDLte          *string  `json:"entityTypeIDLTE,omitempty"`
+	EntityTypeIdgt           *string  `json:"entityTypeIDGT,omitempty"`
+	EntityTypeIdgte          *string  `json:"entityTypeIDGTE,omitempty"`
+	EntityTypeIdlt           *string  `json:"entityTypeIDLT,omitempty"`
+	EntityTypeIdlte          *string  `json:"entityTypeIDLTE,omitempty"`
 	EntityTypeIDContains     *string  `json:"entityTypeIDContains,omitempty"`
 	EntityTypeIDHasPrefix    *string  `json:"entityTypeIDHasPrefix,omitempty"`
 	EntityTypeIDHasSuffix    *string  `json:"entityTypeIDHasSuffix,omitempty"`
@@ -4566,13 +4566,13 @@ type EventHistoryWhereInput struct {
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 	// event_id field predicates
 	EventID             *string  `json:"eventID,omitempty"`
-	EventIDNeq          *string  `json:"eventIDNEQ,omitempty"`
+	EventIdneq          *string  `json:"eventIDNEQ,omitempty"`
 	EventIDIn           []string `json:"eventIDIn,omitempty"`
 	EventIDNotIn        []string `json:"eventIDNotIn,omitempty"`
-	EventIDGt           *string  `json:"eventIDGT,omitempty"`
-	EventIDGte          *string  `json:"eventIDGTE,omitempty"`
-	EventIDLt           *string  `json:"eventIDLT,omitempty"`
-	EventIDLte          *string  `json:"eventIDLTE,omitempty"`
+	EventIdgt           *string  `json:"eventIDGT,omitempty"`
+	EventIdgte          *string  `json:"eventIDGTE,omitempty"`
+	EventIdlt           *string  `json:"eventIDLT,omitempty"`
+	EventIdlte          *string  `json:"eventIDLTE,omitempty"`
 	EventIDContains     *string  `json:"eventIDContains,omitempty"`
 	EventIDHasPrefix    *string  `json:"eventIDHasPrefix,omitempty"`
 	EventIDHasSuffix    *string  `json:"eventIDHasSuffix,omitempty"`
@@ -4582,13 +4582,13 @@ type EventHistoryWhereInput struct {
 	EventIDContainsFold *string  `json:"eventIDContainsFold,omitempty"`
 	// correlation_id field predicates
 	CorrelationID             *string  `json:"correlationID,omitempty"`
-	CorrelationIDNeq          *string  `json:"correlationIDNEQ,omitempty"`
+	CorrelationIdneq          *string  `json:"correlationIDNEQ,omitempty"`
 	CorrelationIDIn           []string `json:"correlationIDIn,omitempty"`
 	CorrelationIDNotIn        []string `json:"correlationIDNotIn,omitempty"`
-	CorrelationIDGt           *string  `json:"correlationIDGT,omitempty"`
-	CorrelationIDGte          *string  `json:"correlationIDGTE,omitempty"`
-	CorrelationIDLt           *string  `json:"correlationIDLT,omitempty"`
-	CorrelationIDLte          *string  `json:"correlationIDLTE,omitempty"`
+	CorrelationIdgt           *string  `json:"correlationIDGT,omitempty"`
+	CorrelationIdgte          *string  `json:"correlationIDGTE,omitempty"`
+	CorrelationIdlt           *string  `json:"correlationIDLT,omitempty"`
+	CorrelationIdlte          *string  `json:"correlationIDLTE,omitempty"`
 	CorrelationIDContains     *string  `json:"correlationIDContains,omitempty"`
 	CorrelationIDHasPrefix    *string  `json:"correlationIDHasPrefix,omitempty"`
 	CorrelationIDHasSuffix    *string  `json:"correlationIDHasSuffix,omitempty"`
@@ -4697,13 +4697,13 @@ type EventWhereInput struct {
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 	// event_id field predicates
 	EventID             *string  `json:"eventID,omitempty"`
-	EventIDNeq          *string  `json:"eventIDNEQ,omitempty"`
+	EventIdneq          *string  `json:"eventIDNEQ,omitempty"`
 	EventIDIn           []string `json:"eventIDIn,omitempty"`
 	EventIDNotIn        []string `json:"eventIDNotIn,omitempty"`
-	EventIDGt           *string  `json:"eventIDGT,omitempty"`
-	EventIDGte          *string  `json:"eventIDGTE,omitempty"`
-	EventIDLt           *string  `json:"eventIDLT,omitempty"`
-	EventIDLte          *string  `json:"eventIDLTE,omitempty"`
+	EventIdgt           *string  `json:"eventIDGT,omitempty"`
+	EventIdgte          *string  `json:"eventIDGTE,omitempty"`
+	EventIdlt           *string  `json:"eventIDLT,omitempty"`
+	EventIdlte          *string  `json:"eventIDLTE,omitempty"`
 	EventIDContains     *string  `json:"eventIDContains,omitempty"`
 	EventIDHasPrefix    *string  `json:"eventIDHasPrefix,omitempty"`
 	EventIDHasSuffix    *string  `json:"eventIDHasSuffix,omitempty"`
@@ -4713,13 +4713,13 @@ type EventWhereInput struct {
 	EventIDContainsFold *string  `json:"eventIDContainsFold,omitempty"`
 	// correlation_id field predicates
 	CorrelationID             *string  `json:"correlationID,omitempty"`
-	CorrelationIDNeq          *string  `json:"correlationIDNEQ,omitempty"`
+	CorrelationIdneq          *string  `json:"correlationIDNEQ,omitempty"`
 	CorrelationIDIn           []string `json:"correlationIDIn,omitempty"`
 	CorrelationIDNotIn        []string `json:"correlationIDNotIn,omitempty"`
-	CorrelationIDGt           *string  `json:"correlationIDGT,omitempty"`
-	CorrelationIDGte          *string  `json:"correlationIDGTE,omitempty"`
-	CorrelationIDLt           *string  `json:"correlationIDLT,omitempty"`
-	CorrelationIDLte          *string  `json:"correlationIDLTE,omitempty"`
+	CorrelationIdgt           *string  `json:"correlationIDGT,omitempty"`
+	CorrelationIdgte          *string  `json:"correlationIDGTE,omitempty"`
+	CorrelationIdlt           *string  `json:"correlationIDLT,omitempty"`
+	CorrelationIdlte          *string  `json:"correlationIDLTE,omitempty"`
 	CorrelationIDContains     *string  `json:"correlationIDContains,omitempty"`
 	CorrelationIDHasPrefix    *string  `json:"correlationIDHasPrefix,omitempty"`
 	CorrelationIDHasSuffix    *string  `json:"correlationIDHasSuffix,omitempty"`
@@ -4804,7 +4804,7 @@ type Feature struct {
 	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// The organization id that owns the object
+	// the object id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the unique name of the feature
 	Name string `json:"name"`
@@ -4873,7 +4873,7 @@ type FeatureHistory struct {
 	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// The organization id that owns the object
+	// the object id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the unique name of the feature
 	Name string `json:"name"`
@@ -5037,13 +5037,13 @@ type FeatureHistoryWhereInput struct {
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
-	OwnerIDNeq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
-	OwnerIDGt           *string  `json:"ownerIDGT,omitempty"`
-	OwnerIDGte          *string  `json:"ownerIDGTE,omitempty"`
-	OwnerIDLt           *string  `json:"ownerIDLT,omitempty"`
-	OwnerIDLte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
 	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
@@ -5214,13 +5214,13 @@ type FeatureWhereInput struct {
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
-	OwnerIDNeq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
-	OwnerIDGt           *string  `json:"ownerIDGT,omitempty"`
-	OwnerIDGte          *string  `json:"ownerIDGTE,omitempty"`
-	OwnerIDLt           *string  `json:"ownerIDLT,omitempty"`
-	OwnerIDLte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
 	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
@@ -6102,7 +6102,7 @@ type Group struct {
 	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// The organization id that owns the object
+	// the object id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the group - must be unique within the organization
 	Name string `json:"name"`
@@ -6174,7 +6174,7 @@ type GroupHistory struct {
 	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// The organization id that owns the object
+	// the object id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the group - must be unique within the organization
 	Name string `json:"name"`
@@ -6346,13 +6346,13 @@ type GroupHistoryWhereInput struct {
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
-	OwnerIDNeq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
-	OwnerIDGt           *string  `json:"ownerIDGT,omitempty"`
-	OwnerIDGte          *string  `json:"ownerIDGTE,omitempty"`
-	OwnerIDLt           *string  `json:"ownerIDLT,omitempty"`
-	OwnerIDLte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
 	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
@@ -6615,13 +6615,13 @@ type GroupMembershipHistoryWhereInput struct {
 	RoleNotIn []enums.Role `json:"roleNotIn,omitempty"`
 	// group_id field predicates
 	GroupID             *string  `json:"groupID,omitempty"`
-	GroupIDNeq          *string  `json:"groupIDNEQ,omitempty"`
+	GroupIdneq          *string  `json:"groupIDNEQ,omitempty"`
 	GroupIDIn           []string `json:"groupIDIn,omitempty"`
 	GroupIDNotIn        []string `json:"groupIDNotIn,omitempty"`
-	GroupIDGt           *string  `json:"groupIDGT,omitempty"`
-	GroupIDGte          *string  `json:"groupIDGTE,omitempty"`
-	GroupIDLt           *string  `json:"groupIDLT,omitempty"`
-	GroupIDLte          *string  `json:"groupIDLTE,omitempty"`
+	GroupIdgt           *string  `json:"groupIDGT,omitempty"`
+	GroupIdgte          *string  `json:"groupIDGTE,omitempty"`
+	GroupIdlt           *string  `json:"groupIDLT,omitempty"`
+	GroupIdlte          *string  `json:"groupIDLTE,omitempty"`
 	GroupIDContains     *string  `json:"groupIDContains,omitempty"`
 	GroupIDHasPrefix    *string  `json:"groupIDHasPrefix,omitempty"`
 	GroupIDHasSuffix    *string  `json:"groupIDHasSuffix,omitempty"`
@@ -6629,13 +6629,13 @@ type GroupMembershipHistoryWhereInput struct {
 	GroupIDContainsFold *string  `json:"groupIDContainsFold,omitempty"`
 	// user_id field predicates
 	UserID             *string  `json:"userID,omitempty"`
-	UserIDNeq          *string  `json:"userIDNEQ,omitempty"`
+	UserIdneq          *string  `json:"userIDNEQ,omitempty"`
 	UserIDIn           []string `json:"userIDIn,omitempty"`
 	UserIDNotIn        []string `json:"userIDNotIn,omitempty"`
-	UserIDGt           *string  `json:"userIDGT,omitempty"`
-	UserIDGte          *string  `json:"userIDGTE,omitempty"`
-	UserIDLt           *string  `json:"userIDLT,omitempty"`
-	UserIDLte          *string  `json:"userIDLTE,omitempty"`
+	UserIdgt           *string  `json:"userIDGT,omitempty"`
+	UserIdgte          *string  `json:"userIDGTE,omitempty"`
+	UserIdlt           *string  `json:"userIDLT,omitempty"`
+	UserIdlte          *string  `json:"userIDLTE,omitempty"`
 	UserIDContains     *string  `json:"userIDContains,omitempty"`
 	UserIDHasPrefix    *string  `json:"userIDHasPrefix,omitempty"`
 	UserIDHasSuffix    *string  `json:"userIDHasSuffix,omitempty"`
@@ -7026,13 +7026,13 @@ type GroupSettingHistoryWhereInput struct {
 	SyncToGithubNotNil *bool `json:"syncToGithubNotNil,omitempty"`
 	// group_id field predicates
 	GroupID             *string  `json:"groupID,omitempty"`
-	GroupIDNeq          *string  `json:"groupIDNEQ,omitempty"`
+	GroupIdneq          *string  `json:"groupIDNEQ,omitempty"`
 	GroupIDIn           []string `json:"groupIDIn,omitempty"`
 	GroupIDNotIn        []string `json:"groupIDNotIn,omitempty"`
-	GroupIDGt           *string  `json:"groupIDGT,omitempty"`
-	GroupIDGte          *string  `json:"groupIDGTE,omitempty"`
-	GroupIDLt           *string  `json:"groupIDLT,omitempty"`
-	GroupIDLte          *string  `json:"groupIDLTE,omitempty"`
+	GroupIdgt           *string  `json:"groupIDGT,omitempty"`
+	GroupIdgte          *string  `json:"groupIDGTE,omitempty"`
+	GroupIdlt           *string  `json:"groupIDLT,omitempty"`
+	GroupIdlte          *string  `json:"groupIDLTE,omitempty"`
 	GroupIDContains     *string  `json:"groupIDContains,omitempty"`
 	GroupIDHasPrefix    *string  `json:"groupIDHasPrefix,omitempty"`
 	GroupIDHasSuffix    *string  `json:"groupIDHasSuffix,omitempty"`
@@ -7174,13 +7174,13 @@ type GroupSettingWhereInput struct {
 	SyncToGithubNotNil *bool `json:"syncToGithubNotNil,omitempty"`
 	// group_id field predicates
 	GroupID             *string  `json:"groupID,omitempty"`
-	GroupIDNeq          *string  `json:"groupIDNEQ,omitempty"`
+	GroupIdneq          *string  `json:"groupIDNEQ,omitempty"`
 	GroupIDIn           []string `json:"groupIDIn,omitempty"`
 	GroupIDNotIn        []string `json:"groupIDNotIn,omitempty"`
-	GroupIDGt           *string  `json:"groupIDGT,omitempty"`
-	GroupIDGte          *string  `json:"groupIDGTE,omitempty"`
-	GroupIDLt           *string  `json:"groupIDLT,omitempty"`
-	GroupIDLte          *string  `json:"groupIDLTE,omitempty"`
+	GroupIdgt           *string  `json:"groupIDGT,omitempty"`
+	GroupIdgte          *string  `json:"groupIDGTE,omitempty"`
+	GroupIdlt           *string  `json:"groupIDLT,omitempty"`
+	GroupIdlte          *string  `json:"groupIDLTE,omitempty"`
 	GroupIDContains     *string  `json:"groupIDContains,omitempty"`
 	GroupIDHasPrefix    *string  `json:"groupIDHasPrefix,omitempty"`
 	GroupIDHasSuffix    *string  `json:"groupIDHasSuffix,omitempty"`
@@ -7299,13 +7299,13 @@ type GroupWhereInput struct {
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
-	OwnerIDNeq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
-	OwnerIDGt           *string  `json:"ownerIDGT,omitempty"`
-	OwnerIDGte          *string  `json:"ownerIDGTE,omitempty"`
-	OwnerIDLt           *string  `json:"ownerIDLT,omitempty"`
-	OwnerIDLte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
 	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
@@ -7828,7 +7828,7 @@ type Integration struct {
 	Tags      []string   `json:"tags,omitempty"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
 	DeletedBy *string    `json:"deletedBy,omitempty"`
-	// The organization id that owns the object
+	// the object id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the integration - must be unique within the organization
 	Name string `json:"name"`
@@ -7895,7 +7895,7 @@ type IntegrationHistory struct {
 	Tags      []string   `json:"tags,omitempty"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
 	DeletedBy *string    `json:"deletedBy,omitempty"`
-	// The organization id that owns the object
+	// the object id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the integration - must be unique within the organization
 	Name string `json:"name"`
@@ -8062,13 +8062,13 @@ type IntegrationHistoryWhereInput struct {
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
-	OwnerIDNeq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
-	OwnerIDGt           *string  `json:"ownerIDGT,omitempty"`
-	OwnerIDGte          *string  `json:"ownerIDGTE,omitempty"`
-	OwnerIDLt           *string  `json:"ownerIDLT,omitempty"`
-	OwnerIDLte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
 	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
@@ -8228,13 +8228,13 @@ type IntegrationWhereInput struct {
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
-	OwnerIDNeq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
-	OwnerIDGt           *string  `json:"ownerIDGT,omitempty"`
-	OwnerIDGte          *string  `json:"ownerIDGTE,omitempty"`
-	OwnerIDLt           *string  `json:"ownerIDLT,omitempty"`
-	OwnerIDLte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
 	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
@@ -8297,7 +8297,7 @@ type Invite struct {
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
 	DeletedBy *string    `json:"deletedBy,omitempty"`
-	// The organization id that owns the object
+	// the object id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the expiration date of the invitation token which defaults to 14 days in the future from creation
 	Expires *time.Time `json:"expires,omitempty"`
@@ -8458,13 +8458,13 @@ type InviteWhereInput struct {
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
-	OwnerIDNeq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
-	OwnerIDGt           *string  `json:"ownerIDGT,omitempty"`
-	OwnerIDGte          *string  `json:"ownerIDGTE,omitempty"`
-	OwnerIDLt           *string  `json:"ownerIDLT,omitempty"`
-	OwnerIDLte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
 	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
@@ -8518,13 +8518,13 @@ type InviteWhereInput struct {
 	SendAttemptsLte   *int64  `json:"sendAttemptsLTE,omitempty"`
 	// requestor_id field predicates
 	RequestorID             *string  `json:"requestorID,omitempty"`
-	RequestorIDNeq          *string  `json:"requestorIDNEQ,omitempty"`
+	RequestorIdneq          *string  `json:"requestorIDNEQ,omitempty"`
 	RequestorIDIn           []string `json:"requestorIDIn,omitempty"`
 	RequestorIDNotIn        []string `json:"requestorIDNotIn,omitempty"`
-	RequestorIDGt           *string  `json:"requestorIDGT,omitempty"`
-	RequestorIDGte          *string  `json:"requestorIDGTE,omitempty"`
-	RequestorIDLt           *string  `json:"requestorIDLT,omitempty"`
-	RequestorIDLte          *string  `json:"requestorIDLTE,omitempty"`
+	RequestorIdgt           *string  `json:"requestorIDGT,omitempty"`
+	RequestorIdgte          *string  `json:"requestorIDGTE,omitempty"`
+	RequestorIdlt           *string  `json:"requestorIDLT,omitempty"`
+	RequestorIdlte          *string  `json:"requestorIDLTE,omitempty"`
 	RequestorIDContains     *string  `json:"requestorIDContains,omitempty"`
 	RequestorIDHasPrefix    *string  `json:"requestorIDHasPrefix,omitempty"`
 	RequestorIDHasSuffix    *string  `json:"requestorIDHasSuffix,omitempty"`
@@ -8553,7 +8553,7 @@ type Note struct {
 	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// The organization id that owns the object
+	// the object id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the text of the note
 	Text   string        `json:"text"`
@@ -8594,7 +8594,7 @@ type NoteHistory struct {
 	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// The organization id that owns the object
+	// the object id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the text of the note
 	Text string `json:"text"`
@@ -8750,13 +8750,13 @@ type NoteHistoryWhereInput struct {
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
-	OwnerIDNeq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
-	OwnerIDGt           *string  `json:"ownerIDGT,omitempty"`
-	OwnerIDGte          *string  `json:"ownerIDGTE,omitempty"`
-	OwnerIDLt           *string  `json:"ownerIDLT,omitempty"`
-	OwnerIDLte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
 	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
@@ -8880,13 +8880,13 @@ type NoteWhereInput struct {
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
-	OwnerIDNeq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
-	OwnerIDGt           *string  `json:"ownerIDGT,omitempty"`
-	OwnerIDGte          *string  `json:"ownerIDGTE,omitempty"`
-	OwnerIDLt           *string  `json:"ownerIDLT,omitempty"`
-	OwnerIDLte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
 	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
@@ -8926,7 +8926,7 @@ type OauthProvider struct {
 	Tags      []string   `json:"tags,omitempty"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
 	DeletedBy *string    `json:"deletedBy,omitempty"`
-	// The organization id that owns the object
+	// the object id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the oauth provider's name
 	Name string `json:"name"`
@@ -9000,7 +9000,7 @@ type OauthProviderHistory struct {
 	Tags      []string   `json:"tags,omitempty"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
 	DeletedBy *string    `json:"deletedBy,omitempty"`
-	// The organization id that owns the object
+	// the object id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the oauth provider's name
 	Name string `json:"name"`
@@ -9172,13 +9172,13 @@ type OauthProviderHistoryWhereInput struct {
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
-	OwnerIDNeq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
-	OwnerIDGt           *string  `json:"ownerIDGT,omitempty"`
-	OwnerIDGte          *string  `json:"ownerIDGTE,omitempty"`
-	OwnerIDLt           *string  `json:"ownerIDLT,omitempty"`
-	OwnerIDLte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
 	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
@@ -9202,13 +9202,13 @@ type OauthProviderHistoryWhereInput struct {
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
 	// client_id field predicates
 	ClientID             *string  `json:"clientID,omitempty"`
-	ClientIDNeq          *string  `json:"clientIDNEQ,omitempty"`
+	ClientIdneq          *string  `json:"clientIDNEQ,omitempty"`
 	ClientIDIn           []string `json:"clientIDIn,omitempty"`
 	ClientIDNotIn        []string `json:"clientIDNotIn,omitempty"`
-	ClientIDGt           *string  `json:"clientIDGT,omitempty"`
-	ClientIDGte          *string  `json:"clientIDGTE,omitempty"`
-	ClientIDLt           *string  `json:"clientIDLT,omitempty"`
-	ClientIDLte          *string  `json:"clientIDLTE,omitempty"`
+	ClientIdgt           *string  `json:"clientIDGT,omitempty"`
+	ClientIdgte          *string  `json:"clientIDGTE,omitempty"`
+	ClientIdlt           *string  `json:"clientIDLT,omitempty"`
+	ClientIdlte          *string  `json:"clientIDLTE,omitempty"`
 	ClientIDContains     *string  `json:"clientIDContains,omitempty"`
 	ClientIDHasPrefix    *string  `json:"clientIDHasPrefix,omitempty"`
 	ClientIDHasSuffix    *string  `json:"clientIDHasSuffix,omitempty"`
@@ -9421,13 +9421,13 @@ type OauthProviderWhereInput struct {
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
-	OwnerIDNeq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
-	OwnerIDGt           *string  `json:"ownerIDGT,omitempty"`
-	OwnerIDGte          *string  `json:"ownerIDGTE,omitempty"`
-	OwnerIDLt           *string  `json:"ownerIDLT,omitempty"`
-	OwnerIDLte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
 	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
@@ -9451,13 +9451,13 @@ type OauthProviderWhereInput struct {
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
 	// client_id field predicates
 	ClientID             *string  `json:"clientID,omitempty"`
-	ClientIDNeq          *string  `json:"clientIDNEQ,omitempty"`
+	ClientIdneq          *string  `json:"clientIDNEQ,omitempty"`
 	ClientIDIn           []string `json:"clientIDIn,omitempty"`
 	ClientIDNotIn        []string `json:"clientIDNotIn,omitempty"`
-	ClientIDGt           *string  `json:"clientIDGT,omitempty"`
-	ClientIDGte          *string  `json:"clientIDGTE,omitempty"`
-	ClientIDLt           *string  `json:"clientIDLT,omitempty"`
-	ClientIDLte          *string  `json:"clientIDLTE,omitempty"`
+	ClientIdgt           *string  `json:"clientIDGT,omitempty"`
+	ClientIdgte          *string  `json:"clientIDGTE,omitempty"`
+	ClientIdlt           *string  `json:"clientIDLT,omitempty"`
+	ClientIdlte          *string  `json:"clientIDLTE,omitempty"`
 	ClientIDContains     *string  `json:"clientIDContains,omitempty"`
 	ClientIDHasPrefix    *string  `json:"clientIDHasPrefix,omitempty"`
 	ClientIDHasSuffix    *string  `json:"clientIDHasSuffix,omitempty"`
@@ -9650,13 +9650,13 @@ type OhAuthTooTokenWhereInput struct {
 	IDContainsFold *string  `json:"idContainsFold,omitempty"`
 	// client_id field predicates
 	ClientID             *string  `json:"clientID,omitempty"`
-	ClientIDNeq          *string  `json:"clientIDNEQ,omitempty"`
+	ClientIdneq          *string  `json:"clientIDNEQ,omitempty"`
 	ClientIDIn           []string `json:"clientIDIn,omitempty"`
 	ClientIDNotIn        []string `json:"clientIDNotIn,omitempty"`
-	ClientIDGt           *string  `json:"clientIDGT,omitempty"`
-	ClientIDGte          *string  `json:"clientIDGTE,omitempty"`
-	ClientIDLt           *string  `json:"clientIDLT,omitempty"`
-	ClientIDLte          *string  `json:"clientIDLTE,omitempty"`
+	ClientIdgt           *string  `json:"clientIDGT,omitempty"`
+	ClientIdgte          *string  `json:"clientIDGTE,omitempty"`
+	ClientIdlt           *string  `json:"clientIDLT,omitempty"`
+	ClientIdlte          *string  `json:"clientIDLTE,omitempty"`
 	ClientIDContains     *string  `json:"clientIDContains,omitempty"`
 	ClientIDHasPrefix    *string  `json:"clientIDHasPrefix,omitempty"`
 	ClientIDHasSuffix    *string  `json:"clientIDHasSuffix,omitempty"`
@@ -9678,13 +9678,13 @@ type OhAuthTooTokenWhereInput struct {
 	NonceContainsFold *string  `json:"nonceContainsFold,omitempty"`
 	// claims_user_id field predicates
 	ClaimsUserID             *string  `json:"claimsUserID,omitempty"`
-	ClaimsUserIDNeq          *string  `json:"claimsUserIDNEQ,omitempty"`
+	ClaimsUserIdneq          *string  `json:"claimsUserIDNEQ,omitempty"`
 	ClaimsUserIDIn           []string `json:"claimsUserIDIn,omitempty"`
 	ClaimsUserIDNotIn        []string `json:"claimsUserIDNotIn,omitempty"`
-	ClaimsUserIDGt           *string  `json:"claimsUserIDGT,omitempty"`
-	ClaimsUserIDGte          *string  `json:"claimsUserIDGTE,omitempty"`
-	ClaimsUserIDLt           *string  `json:"claimsUserIDLT,omitempty"`
-	ClaimsUserIDLte          *string  `json:"claimsUserIDLTE,omitempty"`
+	ClaimsUserIdgt           *string  `json:"claimsUserIDGT,omitempty"`
+	ClaimsUserIdgte          *string  `json:"claimsUserIDGTE,omitempty"`
+	ClaimsUserIdlt           *string  `json:"claimsUserIDLT,omitempty"`
+	ClaimsUserIdlte          *string  `json:"claimsUserIDLTE,omitempty"`
 	ClaimsUserIDContains     *string  `json:"claimsUserIDContains,omitempty"`
 	ClaimsUserIDHasPrefix    *string  `json:"claimsUserIDHasPrefix,omitempty"`
 	ClaimsUserIDHasSuffix    *string  `json:"claimsUserIDHasSuffix,omitempty"`
@@ -9737,13 +9737,13 @@ type OhAuthTooTokenWhereInput struct {
 	ClaimsPreferredUsernameContainsFold *string  `json:"claimsPreferredUsernameContainsFold,omitempty"`
 	// connector_id field predicates
 	ConnectorID             *string  `json:"connectorID,omitempty"`
-	ConnectorIDNeq          *string  `json:"connectorIDNEQ,omitempty"`
+	ConnectorIdneq          *string  `json:"connectorIDNEQ,omitempty"`
 	ConnectorIDIn           []string `json:"connectorIDIn,omitempty"`
 	ConnectorIDNotIn        []string `json:"connectorIDNotIn,omitempty"`
-	ConnectorIDGt           *string  `json:"connectorIDGT,omitempty"`
-	ConnectorIDGte          *string  `json:"connectorIDGTE,omitempty"`
-	ConnectorIDLt           *string  `json:"connectorIDLT,omitempty"`
-	ConnectorIDLte          *string  `json:"connectorIDLTE,omitempty"`
+	ConnectorIdgt           *string  `json:"connectorIDGT,omitempty"`
+	ConnectorIdgte          *string  `json:"connectorIDGTE,omitempty"`
+	ConnectorIdlt           *string  `json:"connectorIDLT,omitempty"`
+	ConnectorIdlte          *string  `json:"connectorIDLTE,omitempty"`
 	ConnectorIDContains     *string  `json:"connectorIDContains,omitempty"`
 	ConnectorIDHasPrefix    *string  `json:"connectorIDHasPrefix,omitempty"`
 	ConnectorIDHasSuffix    *string  `json:"connectorIDHasSuffix,omitempty"`
@@ -9991,13 +9991,13 @@ type OrgMembershipHistoryWhereInput struct {
 	RoleNotIn []enums.Role `json:"roleNotIn,omitempty"`
 	// organization_id field predicates
 	OrganizationID             *string  `json:"organizationID,omitempty"`
-	OrganizationIDNeq          *string  `json:"organizationIDNEQ,omitempty"`
+	OrganizationIdneq          *string  `json:"organizationIDNEQ,omitempty"`
 	OrganizationIDIn           []string `json:"organizationIDIn,omitempty"`
 	OrganizationIDNotIn        []string `json:"organizationIDNotIn,omitempty"`
-	OrganizationIDGt           *string  `json:"organizationIDGT,omitempty"`
-	OrganizationIDGte          *string  `json:"organizationIDGTE,omitempty"`
-	OrganizationIDLt           *string  `json:"organizationIDLT,omitempty"`
-	OrganizationIDLte          *string  `json:"organizationIDLTE,omitempty"`
+	OrganizationIdgt           *string  `json:"organizationIDGT,omitempty"`
+	OrganizationIdgte          *string  `json:"organizationIDGTE,omitempty"`
+	OrganizationIdlt           *string  `json:"organizationIDLT,omitempty"`
+	OrganizationIdlte          *string  `json:"organizationIDLTE,omitempty"`
 	OrganizationIDContains     *string  `json:"organizationIDContains,omitempty"`
 	OrganizationIDHasPrefix    *string  `json:"organizationIDHasPrefix,omitempty"`
 	OrganizationIDHasSuffix    *string  `json:"organizationIDHasSuffix,omitempty"`
@@ -10005,13 +10005,13 @@ type OrgMembershipHistoryWhereInput struct {
 	OrganizationIDContainsFold *string  `json:"organizationIDContainsFold,omitempty"`
 	// user_id field predicates
 	UserID             *string  `json:"userID,omitempty"`
-	UserIDNeq          *string  `json:"userIDNEQ,omitempty"`
+	UserIdneq          *string  `json:"userIDNEQ,omitempty"`
 	UserIDIn           []string `json:"userIDIn,omitempty"`
 	UserIDNotIn        []string `json:"userIDNotIn,omitempty"`
-	UserIDGt           *string  `json:"userIDGT,omitempty"`
-	UserIDGte          *string  `json:"userIDGTE,omitempty"`
-	UserIDLt           *string  `json:"userIDLT,omitempty"`
-	UserIDLte          *string  `json:"userIDLTE,omitempty"`
+	UserIdgt           *string  `json:"userIDGT,omitempty"`
+	UserIdgte          *string  `json:"userIDGTE,omitempty"`
+	UserIdlt           *string  `json:"userIDLT,omitempty"`
+	UserIdlte          *string  `json:"userIDLTE,omitempty"`
 	UserIDContains     *string  `json:"userIDContains,omitempty"`
 	UserIDHasPrefix    *string  `json:"userIDHasPrefix,omitempty"`
 	UserIDHasSuffix    *string  `json:"userIDHasSuffix,omitempty"`
@@ -10420,13 +10420,13 @@ type OrganizationHistoryWhereInput struct {
 	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
 	// parent_organization_id field predicates
 	ParentOrganizationID             *string  `json:"parentOrganizationID,omitempty"`
-	ParentOrganizationIDNeq          *string  `json:"parentOrganizationIDNEQ,omitempty"`
+	ParentOrganizationIdneq          *string  `json:"parentOrganizationIDNEQ,omitempty"`
 	ParentOrganizationIDIn           []string `json:"parentOrganizationIDIn,omitempty"`
 	ParentOrganizationIDNotIn        []string `json:"parentOrganizationIDNotIn,omitempty"`
-	ParentOrganizationIDGt           *string  `json:"parentOrganizationIDGT,omitempty"`
-	ParentOrganizationIDGte          *string  `json:"parentOrganizationIDGTE,omitempty"`
-	ParentOrganizationIDLt           *string  `json:"parentOrganizationIDLT,omitempty"`
-	ParentOrganizationIDLte          *string  `json:"parentOrganizationIDLTE,omitempty"`
+	ParentOrganizationIdgt           *string  `json:"parentOrganizationIDGT,omitempty"`
+	ParentOrganizationIdgte          *string  `json:"parentOrganizationIDGTE,omitempty"`
+	ParentOrganizationIdlt           *string  `json:"parentOrganizationIDLT,omitempty"`
+	ParentOrganizationIdlte          *string  `json:"parentOrganizationIDLTE,omitempty"`
 	ParentOrganizationIDContains     *string  `json:"parentOrganizationIDContains,omitempty"`
 	ParentOrganizationIDHasPrefix    *string  `json:"parentOrganizationIDHasPrefix,omitempty"`
 	ParentOrganizationIDHasSuffix    *string  `json:"parentOrganizationIDHasSuffix,omitempty"`
@@ -10807,13 +10807,13 @@ type OrganizationSettingHistoryWhereInput struct {
 	GeoLocationNotNil *bool          `json:"geoLocationNotNil,omitempty"`
 	// organization_id field predicates
 	OrganizationID             *string  `json:"organizationID,omitempty"`
-	OrganizationIDNeq          *string  `json:"organizationIDNEQ,omitempty"`
+	OrganizationIdneq          *string  `json:"organizationIDNEQ,omitempty"`
 	OrganizationIDIn           []string `json:"organizationIDIn,omitempty"`
 	OrganizationIDNotIn        []string `json:"organizationIDNotIn,omitempty"`
-	OrganizationIDGt           *string  `json:"organizationIDGT,omitempty"`
-	OrganizationIDGte          *string  `json:"organizationIDGTE,omitempty"`
-	OrganizationIDLt           *string  `json:"organizationIDLT,omitempty"`
-	OrganizationIDLte          *string  `json:"organizationIDLTE,omitempty"`
+	OrganizationIdgt           *string  `json:"organizationIDGT,omitempty"`
+	OrganizationIdgte          *string  `json:"organizationIDGTE,omitempty"`
+	OrganizationIdlt           *string  `json:"organizationIDLT,omitempty"`
+	OrganizationIdlte          *string  `json:"organizationIDLTE,omitempty"`
 	OrganizationIDContains     *string  `json:"organizationIDContains,omitempty"`
 	OrganizationIDHasPrefix    *string  `json:"organizationIDHasPrefix,omitempty"`
 	OrganizationIDHasSuffix    *string  `json:"organizationIDHasSuffix,omitempty"`
@@ -11022,13 +11022,13 @@ type OrganizationSettingWhereInput struct {
 	GeoLocationNotNil *bool          `json:"geoLocationNotNil,omitempty"`
 	// organization_id field predicates
 	OrganizationID             *string  `json:"organizationID,omitempty"`
-	OrganizationIDNeq          *string  `json:"organizationIDNEQ,omitempty"`
+	OrganizationIdneq          *string  `json:"organizationIDNEQ,omitempty"`
 	OrganizationIDIn           []string `json:"organizationIDIn,omitempty"`
 	OrganizationIDNotIn        []string `json:"organizationIDNotIn,omitempty"`
-	OrganizationIDGt           *string  `json:"organizationIDGT,omitempty"`
-	OrganizationIDGte          *string  `json:"organizationIDGTE,omitempty"`
-	OrganizationIDLt           *string  `json:"organizationIDLT,omitempty"`
-	OrganizationIDLte          *string  `json:"organizationIDLTE,omitempty"`
+	OrganizationIdgt           *string  `json:"organizationIDGT,omitempty"`
+	OrganizationIdgte          *string  `json:"organizationIDGTE,omitempty"`
+	OrganizationIdlt           *string  `json:"organizationIDLT,omitempty"`
+	OrganizationIdlte          *string  `json:"organizationIDLTE,omitempty"`
 	OrganizationIDContains     *string  `json:"organizationIDContains,omitempty"`
 	OrganizationIDHasPrefix    *string  `json:"organizationIDHasPrefix,omitempty"`
 	OrganizationIDHasSuffix    *string  `json:"organizationIDHasSuffix,omitempty"`
@@ -11164,13 +11164,13 @@ type OrganizationWhereInput struct {
 	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
 	// parent_organization_id field predicates
 	ParentOrganizationID             *string  `json:"parentOrganizationID,omitempty"`
-	ParentOrganizationIDNeq          *string  `json:"parentOrganizationIDNEQ,omitempty"`
+	ParentOrganizationIdneq          *string  `json:"parentOrganizationIDNEQ,omitempty"`
 	ParentOrganizationIDIn           []string `json:"parentOrganizationIDIn,omitempty"`
 	ParentOrganizationIDNotIn        []string `json:"parentOrganizationIDNotIn,omitempty"`
-	ParentOrganizationIDGt           *string  `json:"parentOrganizationIDGT,omitempty"`
-	ParentOrganizationIDGte          *string  `json:"parentOrganizationIDGTE,omitempty"`
-	ParentOrganizationIDLt           *string  `json:"parentOrganizationIDLT,omitempty"`
-	ParentOrganizationIDLte          *string  `json:"parentOrganizationIDLTE,omitempty"`
+	ParentOrganizationIdgt           *string  `json:"parentOrganizationIDGT,omitempty"`
+	ParentOrganizationIdgte          *string  `json:"parentOrganizationIDGTE,omitempty"`
+	ParentOrganizationIdlt           *string  `json:"parentOrganizationIDLT,omitempty"`
+	ParentOrganizationIdlte          *string  `json:"parentOrganizationIDLTE,omitempty"`
 	ParentOrganizationIDContains     *string  `json:"parentOrganizationIDContains,omitempty"`
 	ParentOrganizationIDHasPrefix    *string  `json:"parentOrganizationIDHasPrefix,omitempty"`
 	ParentOrganizationIDHasSuffix    *string  `json:"parentOrganizationIDHasSuffix,omitempty"`
@@ -11533,7 +11533,7 @@ type Subscriber struct {
 	Tags      []string   `json:"tags,omitempty"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
 	DeletedBy *string    `json:"deletedBy,omitempty"`
-	// The organization id that owns the object
+	// the object id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// email address of the subscriber
 	Email string `json:"email"`
@@ -11699,13 +11699,13 @@ type SubscriberWhereInput struct {
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
-	OwnerIDNeq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
-	OwnerIDGt           *string  `json:"ownerIDGT,omitempty"`
-	OwnerIDGte          *string  `json:"ownerIDGTE,omitempty"`
-	OwnerIDLt           *string  `json:"ownerIDLT,omitempty"`
-	OwnerIDLte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
 	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
@@ -11956,7 +11956,7 @@ type Template struct {
 	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// The organization id that owns the object
+	// the object id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the template
 	Name string `json:"name"`
@@ -12024,7 +12024,7 @@ type TemplateHistory struct {
 	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// The organization id that owns the object
+	// the object id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the template
 	Name string `json:"name"`
@@ -12196,13 +12196,13 @@ type TemplateHistoryWhereInput struct {
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
-	OwnerIDNeq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
-	OwnerIDGt           *string  `json:"ownerIDGT,omitempty"`
-	OwnerIDGte          *string  `json:"ownerIDGTE,omitempty"`
-	OwnerIDLt           *string  `json:"ownerIDLT,omitempty"`
-	OwnerIDLte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
 	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
@@ -12367,13 +12367,13 @@ type TemplateWhereInput struct {
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
-	OwnerIDNeq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
-	OwnerIDGt           *string  `json:"ownerIDGT,omitempty"`
-	OwnerIDGte          *string  `json:"ownerIDGTE,omitempty"`
-	OwnerIDLt           *string  `json:"ownerIDLT,omitempty"`
-	OwnerIDLte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
 	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
@@ -13737,13 +13737,13 @@ type UserHistoryWhereInput struct {
 	AvatarLocalFileContainsFold *string  `json:"avatarLocalFileContainsFold,omitempty"`
 	// avatar_local_file_id field predicates
 	AvatarLocalFileID             *string  `json:"avatarLocalFileID,omitempty"`
-	AvatarLocalFileIDNeq          *string  `json:"avatarLocalFileIDNEQ,omitempty"`
+	AvatarLocalFileIdneq          *string  `json:"avatarLocalFileIDNEQ,omitempty"`
 	AvatarLocalFileIDIn           []string `json:"avatarLocalFileIDIn,omitempty"`
 	AvatarLocalFileIDNotIn        []string `json:"avatarLocalFileIDNotIn,omitempty"`
-	AvatarLocalFileIDGt           *string  `json:"avatarLocalFileIDGT,omitempty"`
-	AvatarLocalFileIDGte          *string  `json:"avatarLocalFileIDGTE,omitempty"`
-	AvatarLocalFileIDLt           *string  `json:"avatarLocalFileIDLT,omitempty"`
-	AvatarLocalFileIDLte          *string  `json:"avatarLocalFileIDLTE,omitempty"`
+	AvatarLocalFileIdgt           *string  `json:"avatarLocalFileIDGT,omitempty"`
+	AvatarLocalFileIdgte          *string  `json:"avatarLocalFileIDGTE,omitempty"`
+	AvatarLocalFileIdlt           *string  `json:"avatarLocalFileIDLT,omitempty"`
+	AvatarLocalFileIdlte          *string  `json:"avatarLocalFileIDLTE,omitempty"`
 	AvatarLocalFileIDContains     *string  `json:"avatarLocalFileIDContains,omitempty"`
 	AvatarLocalFileIDHasPrefix    *string  `json:"avatarLocalFileIDHasPrefix,omitempty"`
 	AvatarLocalFileIDHasSuffix    *string  `json:"avatarLocalFileIDHasSuffix,omitempty"`
@@ -14060,13 +14060,13 @@ type UserSettingHistoryWhereInput struct {
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 	// user_id field predicates
 	UserID             *string  `json:"userID,omitempty"`
-	UserIDNeq          *string  `json:"userIDNEQ,omitempty"`
+	UserIdneq          *string  `json:"userIDNEQ,omitempty"`
 	UserIDIn           []string `json:"userIDIn,omitempty"`
 	UserIDNotIn        []string `json:"userIDNotIn,omitempty"`
-	UserIDGt           *string  `json:"userIDGT,omitempty"`
-	UserIDGte          *string  `json:"userIDGTE,omitempty"`
-	UserIDLt           *string  `json:"userIDLT,omitempty"`
-	UserIDLte          *string  `json:"userIDLTE,omitempty"`
+	UserIdgt           *string  `json:"userIDGT,omitempty"`
+	UserIdgte          *string  `json:"userIDGTE,omitempty"`
+	UserIdlt           *string  `json:"userIDLT,omitempty"`
+	UserIdlte          *string  `json:"userIDLTE,omitempty"`
 	UserIDContains     *string  `json:"userIDContains,omitempty"`
 	UserIDHasPrefix    *string  `json:"userIDHasPrefix,omitempty"`
 	UserIDHasSuffix    *string  `json:"userIDHasSuffix,omitempty"`
@@ -14231,13 +14231,13 @@ type UserSettingWhereInput struct {
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 	// user_id field predicates
 	UserID             *string  `json:"userID,omitempty"`
-	UserIDNeq          *string  `json:"userIDNEQ,omitempty"`
+	UserIdneq          *string  `json:"userIDNEQ,omitempty"`
 	UserIDIn           []string `json:"userIDIn,omitempty"`
 	UserIDNotIn        []string `json:"userIDNotIn,omitempty"`
-	UserIDGt           *string  `json:"userIDGT,omitempty"`
-	UserIDGte          *string  `json:"userIDGTE,omitempty"`
-	UserIDLt           *string  `json:"userIDLT,omitempty"`
-	UserIDLte          *string  `json:"userIDLTE,omitempty"`
+	UserIdgt           *string  `json:"userIDGT,omitempty"`
+	UserIdgte          *string  `json:"userIDGTE,omitempty"`
+	UserIdlt           *string  `json:"userIDLT,omitempty"`
+	UserIdlte          *string  `json:"userIDLTE,omitempty"`
 	UserIDContains     *string  `json:"userIDContains,omitempty"`
 	UserIDHasPrefix    *string  `json:"userIDHasPrefix,omitempty"`
 	UserIDHasSuffix    *string  `json:"userIDHasSuffix,omitempty"`
@@ -14497,13 +14497,13 @@ type UserWhereInput struct {
 	AvatarLocalFileContainsFold *string  `json:"avatarLocalFileContainsFold,omitempty"`
 	// avatar_local_file_id field predicates
 	AvatarLocalFileID             *string  `json:"avatarLocalFileID,omitempty"`
-	AvatarLocalFileIDNeq          *string  `json:"avatarLocalFileIDNEQ,omitempty"`
+	AvatarLocalFileIdneq          *string  `json:"avatarLocalFileIDNEQ,omitempty"`
 	AvatarLocalFileIDIn           []string `json:"avatarLocalFileIDIn,omitempty"`
 	AvatarLocalFileIDNotIn        []string `json:"avatarLocalFileIDNotIn,omitempty"`
-	AvatarLocalFileIDGt           *string  `json:"avatarLocalFileIDGT,omitempty"`
-	AvatarLocalFileIDGte          *string  `json:"avatarLocalFileIDGTE,omitempty"`
-	AvatarLocalFileIDLt           *string  `json:"avatarLocalFileIDLT,omitempty"`
-	AvatarLocalFileIDLte          *string  `json:"avatarLocalFileIDLTE,omitempty"`
+	AvatarLocalFileIdgt           *string  `json:"avatarLocalFileIDGT,omitempty"`
+	AvatarLocalFileIdgte          *string  `json:"avatarLocalFileIDGTE,omitempty"`
+	AvatarLocalFileIdlt           *string  `json:"avatarLocalFileIDLT,omitempty"`
+	AvatarLocalFileIdlte          *string  `json:"avatarLocalFileIDLTE,omitempty"`
 	AvatarLocalFileIDContains     *string  `json:"avatarLocalFileIDContains,omitempty"`
 	AvatarLocalFileIDHasPrefix    *string  `json:"avatarLocalFileIDHasPrefix,omitempty"`
 	AvatarLocalFileIDHasSuffix    *string  `json:"avatarLocalFileIDHasSuffix,omitempty"`
@@ -14603,7 +14603,7 @@ type Webhook struct {
 	Tags      []string   `json:"tags,omitempty"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
 	DeletedBy *string    `json:"deletedBy,omitempty"`
-	// The organization id that owns the object
+	// the object id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the webhook
 	Name string `json:"name"`
@@ -14675,7 +14675,7 @@ type WebhookHistory struct {
 	Tags      []string   `json:"tags,omitempty"`
 	DeletedAt *time.Time `json:"deletedAt,omitempty"`
 	DeletedBy *string    `json:"deletedBy,omitempty"`
-	// The organization id that owns the object
+	// the object id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the webhook
 	Name string `json:"name"`
@@ -14851,13 +14851,13 @@ type WebhookHistoryWhereInput struct {
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
-	OwnerIDNeq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
-	OwnerIDGt           *string  `json:"ownerIDGT,omitempty"`
-	OwnerIDGte          *string  `json:"ownerIDGTE,omitempty"`
-	OwnerIDLt           *string  `json:"ownerIDLT,omitempty"`
-	OwnerIDLte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
 	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
@@ -15061,13 +15061,13 @@ type WebhookWhereInput struct {
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 	// owner_id field predicates
 	OwnerID             *string  `json:"ownerID,omitempty"`
-	OwnerIDNeq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
-	OwnerIDGt           *string  `json:"ownerIDGT,omitempty"`
-	OwnerIDGte          *string  `json:"ownerIDGTE,omitempty"`
-	OwnerIDLt           *string  `json:"ownerIDLT,omitempty"`
-	OwnerIDLte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
 	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`

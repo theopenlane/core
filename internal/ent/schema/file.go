@@ -1,13 +1,19 @@
 package schema
 
 import (
+	"context"
+
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	emixin "github.com/theopenlane/entx/mixin"
+	"github.com/theopenlane/iam/entfga"
 
+	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
 )
 
@@ -106,5 +112,36 @@ func (File) Annotations() []schema.Annotation {
 		entgql.RelayConnection(),
 		entgql.QueryField(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
+		entfga.Annotations{
+			ObjectType:   "file",
+			IncludeHooks: false,
+		},
+	}
+}
+
+func (File) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.FilterListQuery(),
+	}
+}
+
+// Policy of the File
+func (File) Policy() ent.Policy {
+	return privacy.Policy{
+		Mutation: privacy.MutationPolicy{
+			privacy.OnMutationOperation(
+				privacy.FileMutationRuleFunc(func(ctx context.Context, m *generated.FileMutation) error {
+					return m.CheckAccessForEdit(ctx)
+				}),
+				ent.OpDelete|ent.OpDeleteOne,
+			),
+			privacy.AlwaysAllowRule(),
+		},
+		Query: privacy.QueryPolicy{
+			privacy.FileQueryRuleFunc(func(ctx context.Context, q *generated.FileQuery) error {
+				return q.CheckAccess(ctx)
+			}),
+			privacy.AlwaysDenyRule(),
+		},
 	}
 }

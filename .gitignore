@@ -30,6 +30,9 @@ public_key.pem
 emails/*
 fixtures/emails/*
 
+# object files
+file_uploads/*
+
 # Packages
 *.7z
 *.dmg

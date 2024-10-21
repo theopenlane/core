@@ -114,10 +114,6 @@ func (suite *GraphTestSuite) SetupTest() {
 		ent.SessionConfig(&sessionConfig),
 		ent.EntConfig(&entconfig.Config{
 			EntityTypes: []string{"vendor"},
-			Flags: entconfig.Flags{
-				UseListUserService:   false,
-				UseListObjectService: false,
-			},
 		}),
 	}
 

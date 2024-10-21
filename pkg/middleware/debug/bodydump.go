@@ -65,8 +65,16 @@ func shouldLogBody(ctx context.Context, logger zerolog.Logger, reqBody []byte) b
 		return false
 	}
 
-	// default to logging the request body
-	return true
+	// if we can json unmarshal the request body, it is not a file upload
+	var bodymap map[string]interface{}
+	if err := json.Unmarshal(reqBody, &bodymap); err == nil {
+		return true
+	}
+
+	// default to not logging the request body
+	logger.Info().Msg("request cannot be unmarshalled, not logging request body")
+
+	return false
 }
 
 // logRequestBody logs the request body to the logger

@@ -24,12 +24,16 @@ func (suite *GraphTestSuite) TestQueryUserSetting() {
 	user2Setting, err := user2.Setting(reqCtx)
 	require.NoError(t, err)
 
+	mock_fga.ListAny(t, suite.client.fga, []string{})
+
 	// setup valid user context
 	user1SettingResp, err := suite.client.api.GetUserSettings(reqCtx, openlaneclient.UserSettingWhereInput{})
 	require.NoError(t, err)
 	require.Len(t, user1SettingResp.UserSettings.Edges, 1)
 
 	user1Setting := user1SettingResp.UserSettings.Edges[0].Node
+
+	mock_fga.ClearMocks(suite.client.fga)
 
 	testCases := []struct {
 		name     string
@@ -73,6 +77,11 @@ func (suite *GraphTestSuite) TestQueryUserSetting() {
 		t.Run("Get "+tc.name, func(t *testing.T) {
 			defer mock_fga.ClearMocks(suite.client.fga)
 
+			// we don't care about the result so we can set to empty
+			if tc.errorMsg == "" {
+				mock_fga.ListAny(t, suite.client.fga, []string{})
+			}
+
 			resp, err := tc.client.GetUserSettingByID(tc.ctx, tc.queryID)
 
 			if tc.errorMsg != "" {
@@ -109,6 +118,9 @@ func (suite *GraphTestSuite) TestQueryUserSettings() {
 
 	t.Run("Get User Settings", func(t *testing.T) {
 		defer mock_fga.ClearMocks(suite.client.fga)
+
+		// we don't care about the result so we can set to empty
+		mock_fga.ListAny(t, suite.client.fga, []string{})
 
 		resp, err := suite.client.api.GetAllUserSettings(reqCtx)
 
@@ -220,6 +232,10 @@ func (suite *GraphTestSuite) TestMutationUpdateUserSetting() {
 			// when attempting to update default org, we do a check
 			if tc.checkOrg {
 				mock_fga.CheckAny(t, suite.client.fga, tc.allowed)
+			}
+
+			if tc.errorMsg == "" {
+				mock_fga.ListAny(t, suite.client.fga, []string{"organization:" + org.ID, "organization:" + testPersonalOrgID})
 			}
 
 			// update user

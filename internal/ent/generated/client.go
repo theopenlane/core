@@ -4934,12 +4934,14 @@ func (c *FileHistoryClient) GetX(ctx context.Context, id string) *FileHistory {
 
 // Hooks returns the client hooks.
 func (c *FileHistoryClient) Hooks() []Hook {
-	return c.hooks.FileHistory
+	hooks := c.hooks.FileHistory
+	return append(hooks[:len(hooks):len(hooks)], filehistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
 func (c *FileHistoryClient) Interceptors() []Interceptor {
-	return c.inters.FileHistory
+	inters := c.inters.FileHistory
+	return append(inters[:len(inters):len(inters)], filehistory.Interceptors[:]...)
 }
 
 func (c *FileHistoryClient) mutate(ctx context.Context, m *FileHistoryMutation) (Value, error) {
