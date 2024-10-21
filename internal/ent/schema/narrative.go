@@ -36,7 +36,7 @@ func (Narrative) Fields() []ent.Field {
 // Edges of the Narrative
 func (Narrative) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("policy", Policy.Type),
+		edge.From("policy", InternalPolicy.Type),
 		edge.From("control", Control.Type),
 		edge.From("procedure", Procedure.Type),
 		edge.From("controlobjective", ControlObjective.Type),
