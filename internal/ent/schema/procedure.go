@@ -33,7 +33,7 @@ func (Procedure) Fields() []ent.Field {
 		field.String("version").
 			Optional().
 			Comment("version of the procedure"),
-		field.Text("purpose and scope").
+		field.Text("purpose_and_scope").
 			Optional().
 			Comment("purpose and scope"),
 		field.Text("background").
