@@ -27,9 +27,9 @@ func (ControlObjective) Fields() []ent.Field {
 		field.String("status").
 			Optional().
 			Comment("status of the control"),
-		field.String("type").
+		field.String("control_objective_type").
 			Optional().
-			Comment("type of the control"),
+			Comment("type of the control objective"),
 		field.String("version").
 			Optional().
 			Comment("version of the control"),
@@ -68,6 +68,7 @@ func (ControlObjective) Edges() []ent.Edge {
 		edge.To("subcontrols", Subcontrol.Type),
 		edge.From("standard", Standard.Type).
 			Ref("controlobjectives"),
+		edge.To("narratives", Narrative.Type),
 	}
 }
 
