@@ -1,13 +1,13 @@
 package serveropts
 
 import (
-	"context"
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/x509"
 	"encoding/pem"
 	"fmt"
 	"os"
+	"slices"
 
 	"github.com/redis/go-redis/v9"
 
@@ -28,9 +28,6 @@ import (
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/echox/middleware/echocontext"
-
-	awsConfig "github.com/aws/aws-sdk-go-v2/config"
-	awsCreds "github.com/aws/aws-sdk-go-v2/credentials"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi"
@@ -399,19 +396,12 @@ func WithCORS() ServerOption {
 func WithObjectStorage() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
 		if s.Config.Settings.ObjectStorage.Enabled {
-			s3Config, _ := awsConfig.LoadDefaultConfig(
-				context.Background(),
-				awsConfig.WithRegion(s.Config.Settings.ObjectStorage.Region),
-				awsConfig.WithCredentialsProvider(
-					awsCreds.NewStaticCredentialsProvider(
-						s.Config.Settings.ObjectStorage.AccessKey,
-						s.Config.Settings.ObjectStorage.SecretKey,
-						"")),
-			)
-
-			s3store, err := storage.NewS3FromConfig(s3Config, storage.S3Options{
-				Bucket: s.Config.Settings.ObjectStorage.DefaultBucket,
-			})
+			s3store, err := storage.NewS3FromConfig(*storage.NewS3Options(
+				storage.WithRegion(s.Config.Settings.ObjectStorage.Region),
+				storage.WithBucket(s.Config.Settings.ObjectStorage.DefaultBucket),
+				storage.WithAccessKeyID(s.Config.Settings.ObjectStorage.AccessKey),
+				storage.WithSecretAccessKey(s.Config.Settings.ObjectStorage.SecretKey),
+			))
 			if err != nil {
 				log.Panic().Err(err).Msg("error creating S3 store")
 			}
@@ -429,10 +419,22 @@ func WithObjectStorage() ServerOption {
 				log.Panic().Err(err).Msg("Error creating object storage")
 			}
 
+			bucks, err := s3store.ListBuckets()
+			if err != nil {
+				log.Panic().Err(err).Msg("error listing buckets")
+			}
+
+			ok := slices.Contains(bucks, s.Config.Settings.ObjectStorage.DefaultBucket)
+			if !ok {
+				log.Panic().Msg("default bucket not found")
+			}
+
 			// add upload middleware to authMW, non-authenticated endpoints will not have this middleware
 			uploadMw := echo.WrapMiddleware(objects.FileUploadMiddleware(s.Config.ObjectManager))
 
 			s.Config.Handler.AuthMiddleware = append(s.Config.Handler.AuthMiddleware, uploadMw)
+
+			log.Info().Msg("Object storage initialized")
 		}
 	})
 }

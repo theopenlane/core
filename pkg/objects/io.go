@@ -2,9 +2,7 @@ package objects
 
 import (
 	"bytes"
-	// #nosec: G501
-	"crypto/md5" //nolint:gosec  // MD5 is used for checksums, not for hashing passwords
-	"encoding/base64"
+	"crypto/sha256"
 	"fmt"
 	"io"
 	"net/http"
@@ -14,13 +12,9 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-var (
-	seekError = "could not seek to beginning of file"
-)
-
 // NewUploadFile function reads the content of the provided file path and returns a FileUpload object
 func NewUploadFile(filePath string) (file FileUpload, err error) {
-	f, err := os.Open(filePath) // #nosec G304
+	f, err := os.Open(filePath)
 	if err != nil {
 		return file, err
 	}
@@ -101,17 +95,16 @@ func ReaderToSeeker(r io.Reader) (io.ReadSeeker, error) {
 // the passed io object will be seeked to its beginning and will seek back to the
 // beginning after reading its content.
 func ComputeChecksum(data io.ReadSeeker) (string, error) {
-	// #nosec: G501
-	hash := md5.New() //nolint:gosec  // MD5 is used for checksums, not for hashing passwords
+	hash := sha256.New()
 	if _, err := io.Copy(hash, data); err != nil {
 		return "", fmt.Errorf("could not read file: %w", err)
 	}
 
 	if _, err := data.Seek(0, io.SeekStart); err != nil { // seek back to beginning of file
-		return "", fmt.Errorf("%s: %w", seekError, err)
+		return "", fmt.Errorf("%s: %w", ErrSeekError, err)
 	}
 
-	return base64.StdEncoding.EncodeToString(hash.Sum(nil)), nil
+	return fmt.Sprintf("%x", hash.Sum(nil)), nil
 }
 
 // DetectContentType leverages http.DetectContentType to identify the content type
@@ -119,7 +112,7 @@ func ComputeChecksum(data io.ReadSeeker) (string, error) {
 // beginning and will seek back to the beginning after reading its content.
 func DetectContentType(data io.ReadSeeker) (string, error) {
 	if _, err := data.Seek(0, io.SeekStart); err != nil { // seek back to beginning of file
-		return "", fmt.Errorf("%s: %w", seekError, err)
+		return "", fmt.Errorf("%s: %w", ErrSeekError, err)
 	}
 
 	// the default return value will default to application/octet-stream if unable to detect the MIME type
@@ -129,7 +122,7 @@ func DetectContentType(data io.ReadSeeker) (string, error) {
 	}
 
 	if _, err := data.Seek(0, io.SeekStart); err != nil { // seek back to beginning of file
-		return "", fmt.Errorf("%s: %w", seekError, err)
+		return "", fmt.Errorf("%s: %w", ErrSeekError, err)
 	}
 
 	return contentType.String(), nil

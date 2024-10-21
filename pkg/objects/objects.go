@@ -5,6 +5,8 @@ import (
 	"io"
 	"net/http"
 	"time"
+
+	"gopkg.in/cheggaaa/pb.v2"
 )
 
 // Storage is the primary interface that must be implemented by any storage backend and for interacting with Objects
@@ -14,9 +16,9 @@ type Storage interface {
 	// ManagerUpload is used to upload multiple files to the storage backend
 	ManagerUpload(context.Context, [][]byte) error
 	// Download is used to download a file from the storage backend
-	Download(context.Context, string, *DownloadFileOptions) (*DownloadFileMetadata, io.ReadCloser, error)
+	Download(context.Context, *DownloadFileOptions) (*DownloadFileMetadata, error)
 	// GetPresignedURL is used to get a presigned URL for a file in the storage backend
-	GetPresignedURL(context.Context, string) (string, error)
+	GetPresignedURL(context.Context, string, time.Duration) (string, error)
 	// GetScheme returns the scheme of the storage backend
 	GetScheme() *string
 	io.Closer
@@ -48,6 +50,10 @@ type Objects struct {
 	Skipper SkipperFunc `json:"-" koanf:"-"`
 	// ErrorResponseHandler is a custom error response handler
 	ErrorResponseHandler ErrResponseHandler `json:"-" koanf:"-"`
+	// UploadFileOptions is a struct that holds options for uploading a file
+	UploadFileOptions *UploadFileOptions `json:"-" koanf:"-"`
+	// DownloadFileOptions is a struct that holds options for downloading a file
+	DownloadFileOptions *DownloadFileOptions `json:"-" koanf:"-"`
 }
 
 // New creates a new instance of Objects
@@ -118,30 +124,27 @@ type File struct {
 	OwnerID string `json:"owner_id"`
 	// FieldName denotes the field from the multipart form
 	FieldName string `json:"field_name,omitempty"`
-
 	// OriginalName of the file from the client side
 	OriginalName string `json:"original_name,omitempty"`
-	// UploadedFileName denotes the name of the file when it was ultimately
-	// uploaded to the storage layer. The distinction is important because of
-	// potential changes to the file name that may be done
+	// UploadedFileName denotes the name of the file when it was ultimately uploaded to the storage layer
 	UploadedFileName string `json:"uploaded_file_name,omitempty"`
 	// FolderDestination is the folder that holds the uploaded file
 	FolderDestination string `json:"folder_destination,omitempty"`
-
 	// StorageKey can be used to retrieve the file from the storage backend
 	StorageKey string `json:"storage_key,omitempty"`
-
 	// MimeType of the uploaded file
 	MimeType string `json:"mime_type,omitempty"`
-
 	// ContentType is the detected content type of the file
 	ContentType string `json:"content_type,omitempty"`
-
 	// Size in bytes of the uploaded file
-	Size              int64 `json:"size,omitempty"`
-	Metadata          map[string]string
-	Bucket            string
-	PresignedURL      string `json:"url"`
+	Size int64 `json:"size,omitempty"`
+	// Metdata is a map of key value pairs that can be used to store additional information about the file
+	Metadata map[string]string `json:"metadata,omitempty"`
+	// Bucket is the bucket that the file is stored in
+	Bucket string `json:"bucket,omitempty"`
+	// PresignedURL is the URL that can be used to download the file
+	PresignedURL string `json:"url"`
+	// ProvidedExtension is the extension provided by the client
 	ProvidedExtension string `json:"provided_extension"`
 }
 
@@ -153,6 +156,24 @@ type UploaderFunc func(ctx context.Context, u *Objects, files []FileUpload) ([]F
 
 // NameGeneratorFunc allows you alter the name of the file before it is ultimately uploaded and stored
 type NameGeneratorFunc func(s string) string
+
+// UploadFileOptions is a struct that holds the options for uploading a file
+type UploadFileOptions struct {
+	// FileName is the name of the file
+	FileName string `json:"file_name,omitempty"`
+	// Metadata is a map of key value pairs that can be used to store additional information about the file
+	Metadata map[string]string `json:"metadata,omitempty"`
+	// Progress is a progress bar that can be used to track the progress of the file upload
+	Progress *pb.ProgressBar
+	// ProgressOutput is the writer that the progress bar will write to
+	ProgressOutput io.Writer
+	// ProgressFinishMessage is the message that will be displayed when the progress bar finishes
+	ProgressFinishMessage string `json:"progress_finish_message,omitempty"`
+	// Bucket is the bucket that the file will be stored in
+	Bucket string `json:"bucket,omitempty"`
+	// ContentType is the detected content type of the file
+	ContentType string `json:"content_type,omitempty"`
+}
 
 // UploadedFileMetadata is a struct that holds information about a file that was successfully uploaded
 type UploadedFileMetadata struct {
@@ -166,12 +187,22 @@ type UploadedFileMetadata struct {
 	PresignedURL string `json:"presigned_url,omitempty"`
 }
 
+// DownloadFileOptions is a struct that holds the options for downloading a file
+type DownloadFileOptions struct {
+	// Bucket is the bucket that the file is stored in / where it should be fetched from
+	Bucket string
+	// FileName is the name of the file to download from the storage backend
+	FileName string
+	// Metadata is a map of key value pairs that can be used to optionally identify the file when searching
+	Metadata map[string]string
+}
+
 // DownloadFileMetadata is a struct that holds information about a file that was successfully downloaded
 type DownloadFileMetadata struct {
-	// FolderDestination is the folder that holds the file
-	FolderDestination string `json:"folder_destination,omitempty"`
-	// Key is the unique identifier for the file
-	Key string `json:"key,omitempty"`
 	// Size in bytes of the downloaded file
 	Size int64 `json:"size,omitempty"`
+	// File contains the bytes of the downloaded file
+	File []byte
+	// Writer is a writer that can be used to write the file to disk or another location
+	Writer io.WriterAt
 }
