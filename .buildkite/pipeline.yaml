@@ -184,7 +184,7 @@ steps:
               push: false
               build-args:
                 - NAME=${APP_NAME}
-          - equinixmetal-buildkite/trivy#v1.19.0:
+          - equinixmetal-buildkite/trivy#v1.19.1:
               severity: CRITICAL,HIGH
               ignore-unfixed: true
               scanners: misconfig,secret,vuln
@@ -212,7 +212,7 @@ steps:
               push: true
               build-args:
                 - NAME=${APP_NAME}
-          - equinixmetal-buildkite/trivy#v1.19.0:
+          - equinixmetal-buildkite/trivy#v1.19.1:
               severity: CRITICAL,HIGH
               ignore-unfixed: true
               scanners: misconfig,secret,vuln
@@ -240,7 +240,7 @@ steps:
               push: true
               build-args:
                 - NAME=${APP_NAME}
-          - equinixmetal-buildkite/trivy#v1.19.0:
+          - equinixmetal-buildkite/trivy#v1.19.1:
               severity: CRITICAL,HIGH
               ignore-unfixed: true
               security-checks: config,secret,vuln
@@ -266,7 +266,7 @@ steps:
               push: true
               build-args:
                 - NAME=${APP_NAME}
-          - equinixmetal-buildkite/trivy#v1.19.0:
+          - equinixmetal-buildkite/trivy#v1.19.1:
               severity: CRITICAL,HIGH
               ignore-unfixed: true
               scanners: misconfig,secret,vuln
@@ -294,7 +294,7 @@ steps:
               push: true
               build-args:
                 - NAME=${APP_NAME}
-          - equinixmetal-buildkite/trivy#v1.19.0:
+          - equinixmetal-buildkite/trivy#v1.19.1:
               severity: CRITICAL,HIGH
               ignore-unfixed: true
               scanners: misconfig,secret,vuln
