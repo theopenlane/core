@@ -41,7 +41,7 @@ type EntitlementPlanFeatureHistory struct {
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the object id that owns the object
+	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// metadata for the entitlement plan feature such as usage limits
 	Metadata map[string]interface{} `json:"metadata,omitempty"`

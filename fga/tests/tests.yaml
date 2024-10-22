@@ -483,13 +483,13 @@ tests:
           can_view: false
           can_edit: false
           can_delete: false
-      - user: user:ulid-other-3 # owner of program that has access to file
+      - user: user:ulid-other-3 # admin of program that has access to file
         object: file:file-2
         assertions:
           can_view: true
           can_edit: true
           can_delete: true
-      - user: user:ulid-contact-1 # owner of contact that has access to file
+      - user: user:ulid-contact-1 # owner of contact org that is the parent of the file
         object: file:file-3
         assertions:
           can_view: true

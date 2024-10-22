@@ -102,7 +102,7 @@ func (EntityTypeHistory) Indexes() []ent.Index {
 // Interceptors of the EntityTypeHistory
 func (EntityTypeHistory) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.HistoryAccess("audit_log_viewer", false, false),
+		interceptors.HistoryAccess("audit_log_viewer", true, false),
 	}
 }
 

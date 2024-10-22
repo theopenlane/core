@@ -3,6 +3,9 @@ package schema
 import (
 	"context"
 	"errors"
+	"fmt"
+	"reflect"
+	"strings"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
@@ -81,9 +84,10 @@ func (o ObjectOwnedMixin) Fields() []ent.Field {
 		return []ent.Field{}
 	}
 
+	objectType := o.Kind
 	objectIDField := field.
 		String(o.FieldName).
-		Comment("the object id that owns the object")
+		Comment(fmt.Sprintf("the %v id that owns the object", getObjectType(objectType)))
 
 	if !o.Required {
 		objectIDField.Optional()
@@ -227,4 +231,12 @@ var defaultObjectInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.
 
 		return interceptors.AddIDPredicate(ctx, q)
 	})
+}
+
+// getObjectType takes the `kind` and returns the object type
+// this should be type of the schema, e.g. `func(schema.Organization)` which will return `organization`
+func getObjectType(kind any) string {
+	objectType := reflect.TypeOf(kind).String()
+
+	return strings.ToLower(strings.ReplaceAll(strings.ReplaceAll(objectType, "func(schema.", ""), ")", ""))
 }

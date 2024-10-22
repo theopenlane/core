@@ -102,7 +102,7 @@ func (EntitlementHistory) Indexes() []ent.Index {
 // Interceptors of the EntitlementHistory
 func (EntitlementHistory) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.HistoryAccess("audit_log_viewer", false, false),
+		interceptors.HistoryAccess("audit_log_viewer", true, false),
 	}
 }
 

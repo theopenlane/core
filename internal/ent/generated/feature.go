@@ -35,7 +35,7 @@ type Feature struct {
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the object id that owns the object
+	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the unique name of the feature
 	Name string `json:"name,omitempty"`
