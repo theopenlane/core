@@ -92,7 +92,7 @@ func (s *S3Store) Exists(ctx context.Context, key string) (bool, error) {
 	return true, nil
 }
 
-// Exists checks if an object exists in S3
+// HeadObj checks if an object exists in S3
 func (s *S3Store) HeadObj(ctx context.Context, key string) (*s3.HeadObjectOutput, error) {
 	obj, err := s.Client.HeadObject(ctx, &s3.HeadObjectInput{
 		Bucket: aws.String(s.Opts.Bucket),
