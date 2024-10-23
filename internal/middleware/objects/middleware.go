@@ -105,20 +105,12 @@ func createFile(ctx context.Context, u *objects.Objects, f objects.FileUpload) (
 		return nil, err
 	}
 
-	md5Hash, err := objects.ComputeChecksum(f.File)
-	if err != nil {
-		log.Error().Err(err).Str("file", f.Filename).Msg("failed to compute checksum")
-
-		return nil, err
-	}
-
 	set := ent.CreateFileInput{
 		ProvidedFileName:      f.Filename,
 		ProvidedFileExtension: filepath.Ext(f.Filename),
 		ProvidedFileSize:      &f.Size,
 		DetectedMimeType:      &f.ContentType,
 		DetectedContentType:   contentType,
-		Md5Hash:               &md5Hash,
 		StoreKey:              &f.Key,
 		StorageScheme:         u.Storage.GetScheme(),
 	}
