@@ -9,8 +9,9 @@ import (
 	"github.com/stretchr/testify/require"
 	mock_fga "github.com/theopenlane/iam/fgax/mockery"
 
-	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/utils/rout"
+
+	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
 func (suite *GraphTestSuite) TestQueryTFASetting() {

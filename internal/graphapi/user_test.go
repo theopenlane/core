@@ -10,13 +10,14 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/entx"
 	mock_fga "github.com/theopenlane/iam/fgax/mockery"
+	"github.com/theopenlane/utils/rout"
+
+	auth "github.com/theopenlane/iam/auth"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/graphapi"
 	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/openlaneclient"
-	auth "github.com/theopenlane/iam/auth"
 )
 
 func (suite *GraphTestSuite) TestQueryUser() {
@@ -172,7 +173,7 @@ func (suite *GraphTestSuite) TestMutationCreateUser() {
 				Email:       gofakeit.Email(),
 				Password:    &strongPassword,
 			},
-			errorMsg: graphapi.ErrPermissionDenied.Error(),
+			errorMsg: rout.ErrPermissionDenied.Error(),
 		},
 	}
 

@@ -6,17 +6,15 @@ import (
 	"strings"
 
 	"github.com/rs/zerolog/log"
+	"github.com/theopenlane/utils/rout"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/utils/rout"
 )
 
 var (
 	// ErrInternalServerError is returned when an internal error occurs.
 	ErrInternalServerError = errors.New("internal server error")
-
-	// ErrPermissionDenied is returned when the user is not authorized to perform the requested query or mutation
-	ErrPermissionDenied = errors.New("you are not authorized to perform this action")
 
 	// ErrCascadeDelete is returned when an error occurs while performing cascade deletes on associated objects
 	ErrCascadeDelete = errors.New("error deleting associated objects")
@@ -29,6 +27,12 @@ var (
 
 	// ErrSearchQueryTooShort is returned when the search query is too short
 	ErrSearchQueryTooShort = errors.New("search query is too short, please enter a longer search query")
+
+	// ErrNoOrganizationID is returned when the organization ID is not provided
+	ErrNoOrganizationID = errors.New("unable to determine organization ID in request")
+
+	// ErrUnableToDetermineObjectType is returned when the object type up the parent upload object cannot be determined
+	ErrUnableToDetermineObjectType = errors.New("unable to determine parent object type")
 )
 
 // PermissionDeniedError is returned when user is not authorized to perform the requested query or mutation

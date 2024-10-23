@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/brianvoe/gofakeit/v7"
+	"github.com/stretchr/testify/require"
 	mock_fga "github.com/theopenlane/iam/fgax/mockery"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
@@ -149,13 +150,6 @@ type SubscriberBuilder struct {
 	OrgID string
 }
 
-type SubscriberCleanup struct {
-	client *client
-
-	// Fields
-	Email string
-}
-
 type FeatureBuilder struct {
 	client *client
 
@@ -165,26 +159,12 @@ type FeatureBuilder struct {
 	DisplayName string
 }
 
-type FeatureCleanup struct {
-	client *client
-
-	// Fields
-	ID string
-}
-
 type EntitlementBuilder struct {
 	client *client
 
 	// Fields
 	PlanID         string
 	OrganizationID string
-}
-
-type EntitlementCleanup struct {
-	client *client
-
-	// Fields
-	ID string
 }
 
 type EntitlementPlanBuilder struct {
@@ -197,13 +177,6 @@ type EntitlementPlanBuilder struct {
 	Version     string
 }
 
-type EntitlementPlanCleanup struct {
-	client *client
-
-	// Fields
-	ID string
-}
-
 type EntitlementPlanFeatureBuilder struct {
 	client *client
 
@@ -211,13 +184,6 @@ type EntitlementPlanFeatureBuilder struct {
 	PlanID    string
 	FeatureID string
 	MetaData  map[string]interface{}
-}
-
-type EntitlementPlanFeatureCleanup struct {
-	client *client
-
-	// Fields
-	ID string
 }
 
 type EntityBuilder struct {
@@ -361,7 +327,8 @@ func (u *UserBuilder) MustNew(ctx context.Context, t *testing.T) *ent.User {
 		SetSetting(userSetting).
 		SaveX(ctx)
 
-	user.Edges.Setting.DefaultOrg(ctx)
+	_, err := user.Edges.Setting.DefaultOrg(ctx)
+	require.NoError(t, err)
 
 	// clear mocks before going to tests
 	mock_fga.ClearMocks(u.client.fga)

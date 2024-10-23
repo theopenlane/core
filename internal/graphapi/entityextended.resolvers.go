@@ -50,7 +50,7 @@ func (r *updateEntityInputResolver) Note(ctx context.Context, obj *generated.Upd
 		// set the organization in the auth context if its not done for us
 		if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
 			log.Error().Err(err).Msg("failed to set organization in auth context")
-			return ErrPermissionDenied
+			return rout.ErrPermissionDenied
 		}
 	}
 

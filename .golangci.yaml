@@ -45,7 +45,13 @@ issues:
     - internal/ent/generated/*
     - jsonschema/templates/*
     - pkg/objects/mocks/*
+    - schema/*
+    - query/*
+    - fga/*
+    - docs/*
+    - internal/graphapi/generate/*
   exclude-files:
     - internal/graphapi/gen_server.go
-    - internal/graphapi/
-    - internal/coreclient/graphclient.go
+    - internal/graphapi/gen_models.go
+    - internal/openlaneclient/graphclient.go
+    - pkg/openlaneclient/graphclient.go

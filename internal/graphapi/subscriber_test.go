@@ -7,9 +7,10 @@ import (
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/iam/auth"
 	mock_fga "github.com/theopenlane/iam/fgax/mockery"
+
+	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
 func (suite *GraphTestSuite) TestQuerySubscriber() {
@@ -274,7 +275,6 @@ func (suite *GraphTestSuite) TestMutationCreateSubscriber() {
 
 			// Assert matching fields
 			assert.Equal(t, tc.email, resp.CreateSubscriber.Subscriber.Email)
-
 		})
 	}
 }
