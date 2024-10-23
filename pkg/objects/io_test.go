@@ -53,48 +53,6 @@ func TestDetectContentType(t *testing.T) {
 	}
 }
 
-func TestComputeChecksum(t *testing.T) {
-	tests := []struct {
-		name        string
-		data        io.ReadSeeker
-		expected    string
-		expectError bool
-	}{
-		{
-			name:        "Compute checksum for text data",
-			data:        bytes.NewReader([]byte("Hello, World!")),
-			expected:    "ZajifYh5KDgxtmS9i38K1A==", // Precomputed MD5 checksum for "Hello, World!"
-			expectError: false,
-		},
-		{
-			name:        "Compute checksum for binary data",
-			data:        bytes.NewReader([]byte{0x00, 0x01, 0x02, 0x03}),
-			expected:    "N7Wa/VknJfkwXkhKXX9RaA==", // Precomputed MD5 checksum for {0x00, 0x01, 0x02, 0x03}
-			expectError: false,
-		},
-		{
-			name:        "Error on empty data",
-			data:        bytes.NewReader([]byte{}),
-			expected:    "1B2M2Y8AsgTpgAmY7PhCfg==", // Precomputed MD5 checksum for empty data
-			expectError: false,
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			checksum, err := objects.ComputeChecksum(tt.data)
-			if tt.expectError {
-				assert.Error(t, err)
-
-				return
-			}
-
-			assert.NoError(t, err)
-			assert.Equal(t, tt.expected, checksum)
-		})
-	}
-}
-
 func TestReaderToSeeker(t *testing.T) {
 	tests := []struct {
 		name        string

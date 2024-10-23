@@ -3,6 +3,7 @@ package objects
 import (
 	"context"
 	"path/filepath"
+	"time"
 
 	"github.com/rs/zerolog/log"
 
@@ -63,7 +64,7 @@ func Upload(ctx context.Context, u *objects.Objects, files []objects.FileUpload)
 		fileData.StorageKey = metadata.Key
 
 		// generate a presigned URL that is valid for 15 minutes
-		fileData.PresignedURL, err = u.Storage.GetPresignedURL(ctx, uploadedFileName)
+		fileData.PresignedURL, err = u.Storage.GetPresignedURL(ctx, uploadedFileName, 60*time.Minute) // nolint:mnd
 		if err != nil {
 			log.Error().Err(err).Str("file", f.Filename).Msg("failed to get presigned URL")
 
@@ -104,20 +105,12 @@ func createFile(ctx context.Context, u *objects.Objects, f objects.FileUpload) (
 		return nil, err
 	}
 
-	md5Hash, err := objects.ComputeChecksum(f.File)
-	if err != nil {
-		log.Error().Err(err).Str("file", f.Filename).Msg("failed to compute checksum")
-
-		return nil, err
-	}
-
 	set := ent.CreateFileInput{
 		ProvidedFileName:      f.Filename,
 		ProvidedFileExtension: filepath.Ext(f.Filename),
 		ProvidedFileSize:      &f.Size,
 		DetectedMimeType:      &f.ContentType,
 		DetectedContentType:   contentType,
-		Md5Hash:               &md5Hash,
 		StoreKey:              &f.Key,
 		StorageScheme:         u.Storage.GetScheme(),
 	}
