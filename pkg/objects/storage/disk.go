@@ -67,7 +67,6 @@ func (d *Disk) ManagerUpload(ctx context.Context, files [][]byte) error {
 }
 
 // Download is used to download a file from the storage backend
-// TODO: Implement this method
 func (d *Disk) Download(ctx context.Context, opts *objects.DownloadFileOptions) (*objects.DownloadFileMetadata, error) {
 	file, err := os.ReadFile(filepath.Join(opts.Bucket, opts.FileName))
 	if err != nil {
