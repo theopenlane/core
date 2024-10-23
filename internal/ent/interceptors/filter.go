@@ -19,6 +19,8 @@ func FilterListQuery() ent.Interceptor {
 	return intercept.TraverseFunc(AddIDPredicate)
 }
 
+// AddIDPredicate adds a predicate to the query to only include the objects that the user has access to
+// This is generally used by object owned setups with the ObjectOwnedMixin
 func AddIDPredicate(ctx context.Context, q intercept.Query) error {
 	// by pass checks on invite or pre-allowed request
 	if _, allow := privacy.DecisionFromContext(ctx); allow {
@@ -38,8 +40,8 @@ func AddIDPredicate(ctx context.Context, q intercept.Query) error {
 	return nil
 }
 
-// GetAuthorized does a list objects request to pull all ids the current user
-// has access to
+// GetAuthorizedObjectIDs does a list objects request to pull all ids the current user
+// has access to within the FGA system
 func GetAuthorizedObjectIDs(ctx context.Context, objectType string) ([]string, error) {
 	userID, err := auth.GetUserIDFromContext(ctx)
 	if err != nil {

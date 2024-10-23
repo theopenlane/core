@@ -6888,15 +6888,6 @@ type File implements Node {
 	events: [Event!]
 }
 """
-Return response for createBulkFile mutation
-"""
-type FileBulkCreatePayload {
-	"""
-	Created files
-	"""
-	files: [File!]
-}
-"""
 A connection to a list of items.
 """
 type FileConnection {
@@ -6912,15 +6903,6 @@ type FileConnection {
 	Identifies the total count of items in the connection.
 	"""
 	totalCount: Int!
-}
-"""
-Return response for createFile mutation
-"""
-type FileCreatePayload {
-	"""
-	Created file
-	"""
-	file: File!
 }
 """
 Return response for deleteFile mutation
@@ -7418,15 +7400,6 @@ input FileHistoryWhereInput {
 }
 type FileSearchResult {
 	files: [File!]
-}
-"""
-Return response for updateFile mutation
-"""
-type FileUpdatePayload {
-	"""
-	Updated file
-	"""
-	file: File!
 }
 """
 FileWhereInput is used for filtering File objects.
@@ -11518,47 +11491,6 @@ type Mutation {
 		"""
 		id: ID!
 	): FeatureDeletePayload!
-	"""
-	Create a new file
-	"""
-	createFile(
-		"""
-		values of the file
-		"""
-		input: CreateFileInput!
-	): FileCreatePayload!
-	"""
-	Create multiple new files
-	"""
-	createBulkFile(
-		"""
-		values of the file
-		"""
-		input: [CreateFileInput!]
-	): FileBulkCreatePayload!
-	"""
-	Create multiple new files via file upload
-	"""
-	createBulkCSVFile(
-		"""
-		csv file containing values of the file
-		"""
-		input: Upload!
-	): FileBulkCreatePayload!
-	"""
-	Update an existing file
-	"""
-	updateFile(
-		"""
-		ID of the file
-		"""
-		id: ID!
-
-		"""
-		New values for the file
-		"""
-		input: UpdateFileInput!
-	): FileUpdatePayload!
 	"""
 	Delete an existing file
 	"""

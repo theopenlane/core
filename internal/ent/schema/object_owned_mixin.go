@@ -160,6 +160,7 @@ func (o ObjectOwnedMixin) P(w interface{ WhereP(...func(*sql.Selector)) }, objec
 	)
 }
 
+// defaultObjectHookFunc is the default hook function for the object owned mixin
 var defaultObjectHookFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 	return func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
@@ -196,6 +197,7 @@ var defaultObjectHookFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 	}
 }
 
+// emptyObjectHookFunc is a hook function that does not add any hooks but satisfies the HookFunc type
 var emptyObjectHookFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 	return func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
@@ -204,6 +206,9 @@ var emptyObjectHookFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 	}
 }
 
+// defaultObjectInterceptorFunc is the default interceptor function for the object owned mixin
+// it will filter the query to only include the objects that the user has access to based on the FGA list objects
+// setting
 var defaultObjectInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Interceptor { // nolint:unused
 	return intercept.TraverseFunc(func(ctx context.Context, q intercept.Query) error {
 		// skip the interceptor if the context has the token type

@@ -129,7 +129,8 @@ func (File) Policy() ent.Policy {
 				privacy.FileMutationRuleFunc(func(ctx context.Context, m *generated.FileMutation) error {
 					return m.CheckAccessForEdit(ctx)
 				}),
-				ent.OpDelete|ent.OpDeleteOne,
+				// check permissions on delete and update operations, creation is handled by the parent object
+				ent.OpDelete|ent.OpDeleteOne|ent.OpUpdate|ent.OpUpdateOne,
 			),
 			privacy.AlwaysAllowRule(),
 		},

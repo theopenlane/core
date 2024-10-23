@@ -12,46 +12,6 @@ extend type Query {
 
 extend type Mutation{
     """
-    Create a new file
-    """
-    createFile(
-        """
-        values of the file
-        """
-        input: CreateFileInput!
-    ): FileCreatePayload!
-    """
-    Create multiple new files
-    """
-    createBulkFile(
-        """
-        values of the file
-        """
-        input: [CreateFileInput!]
-    ): FileBulkCreatePayload!
-    """
-    Create multiple new files via file upload
-    """
-    createBulkCSVFile(
-        """
-        csv file containing values of the file
-        """
-        input: Upload!
-    ): FileBulkCreatePayload!
-    """
-    Update an existing file
-    """
-    updateFile(
-        """
-        ID of the file
-        """
-        id: ID!
-        """
-        New values for the file
-        """
-        input: UpdateFileInput!
-    ): FileUpdatePayload!
-    """
     Delete an existing file
     """
     deleteFile(
@@ -60,26 +20,6 @@ extend type Mutation{
         """
         id: ID!
     ): FileDeletePayload!
-}
-
-"""
-Return response for createFile mutation
-"""
-type FileCreatePayload {
-    """
-    Created file
-    """
-    file: File!
-}
-
-"""
-Return response for updateFile mutation
-"""
-type FileUpdatePayload {
-    """
-    Updated file
-    """
-    file: File!
 }
 
 """
@@ -92,12 +32,3 @@ type FileDeletePayload {
     deletedID: ID!
 }
 
-"""
-Return response for createBulkFile mutation
-"""
-type FileBulkCreatePayload {
-    """
-    Created files
-    """
-    files: [File!]
-}

@@ -59,7 +59,7 @@ type file
     define can_view: [user] or can_delete or can_edit or can_view from parent
     define can_edit: [user] or can_delete or can_edit from parent
     define can_delete: [user] or can_delete from parent
-    define parent: [user, program, organization, control, evidence, group, template, documentdata, contact, policy]
+    define parent: [user, program, organization, control, procedure, group, template, documentdata, contact, policy]
 type program 
   relations
     # main roles
@@ -90,12 +90,12 @@ type policy
     define can_edit: [user] or can_edit from parent
     define can_delete: [user] or can_delete from parent
     define parent: [organization]
-type evidence 
+type procedure 
   relations
     define can_view: [user] or can_view from parent
     define can_edit: [user] or can_edit from parent
     define can_delete: [user] or can_delete from parent
-    define parent: [control, program]
+    define parent: [organization]
 type template
   relations
     define can_view: [user] or can_view from parent
@@ -107,7 +107,7 @@ type documentdata
     define can_view: [user] or can_view from parent
     define can_edit: [user] or can_edit from parent
     define can_delete: [user] or can_delete from parent
-    define parent: [organization]
+    define parent: [organization, control, program]
 type contact
   relations
     define can_view: [user] or can_view from parent
