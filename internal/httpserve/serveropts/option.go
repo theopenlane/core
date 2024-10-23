@@ -253,8 +253,6 @@ func WithMiddleware() ServerOption {
 // on registration, password reset, etc
 func WithEmailConfig() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
-		log.Debug().Interface("email", s.Config.Settings.Email).Msg("email config")
-
 		s.Config.Handler.Emailer = s.Config.Settings.Email
 	})
 }
@@ -425,7 +423,11 @@ func WithObjectStorage() ServerOption {
 					log.Panic().Msg("default bucket not found")
 				}
 			default:
-				store, err = storage.NewDiskStorage(settings.DefaultBucket)
+				opts := storage.NewDiskOptions(
+					storage.WithLocalBucket(s.Config.Settings.ObjectStorage.DefaultBucket),
+				)
+
+				store, err = storage.NewDiskStorage(opts)
 				if err != nil {
 					log.Panic().Err(err).Msg("error creating disk store")
 				}

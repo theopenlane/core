@@ -95,6 +95,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.28.2 // indirect
 	github.com/aws/aws-sdk-go-v2/service/sts v1.32.2 // indirect
 	github.com/aws/smithy-go v1.22.0 // indirect
+	github.com/google/go-github/v66 v66.0.0 // indirect
 	github.com/sergi/go-diff v1.3.1 // indirect
 	gonum.org/v1/gonum v0.15.1 // indirect
 	gopkg.in/VividCortex/ewma.v1 v1.1.1 // indirect

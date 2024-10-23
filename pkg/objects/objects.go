@@ -21,6 +21,8 @@ type Storage interface {
 	GetPresignedURL(context.Context, string, time.Duration) (string, error)
 	// GetScheme returns the scheme of the storage backend
 	GetScheme() *string
+	// ListBuckets is used to list the buckets in the storage backend
+	ListBuckets() ([]string, error)
 	io.Closer
 }
 
