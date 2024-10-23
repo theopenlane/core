@@ -12,13 +12,14 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	_ "github.com/theopenlane/core/internal/ent/generated/runtime"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/rout"
 )
 
 // CreateUser is the resolver for the createUser field.
 func (r *mutationResolver) CreateUser(ctx context.Context, input generated.CreateUserInput, avatarFile *graphql.Upload) (*UserCreatePayload, error) {
 	// TODO: look at allowing this resolver to invite the user instead of creating them directly
 	// for now, return permission denied
-	return nil, ErrPermissionDenied
+	return nil, rout.ErrPermissionDenied
 }
 
 // UpdateUser is the resolver for the updateUser field.

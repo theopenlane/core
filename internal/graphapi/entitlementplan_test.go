@@ -7,9 +7,10 @@ import (
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/theopenlane/core/pkg/openlaneclient"
 	mock_fga "github.com/theopenlane/iam/fgax/mockery"
 	"github.com/theopenlane/utils/ulids"
+
+	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
 func (suite *GraphTestSuite) TestQueryEntitlementPlan() {

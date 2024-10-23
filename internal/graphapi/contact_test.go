@@ -306,7 +306,6 @@ func (suite *GraphTestSuite) TestMutationCreateContact() {
 			} else {
 				assert.Equal(t, *tc.request.Status, resp.CreateContact.Contact.Status)
 			}
-
 		})
 	}
 }
