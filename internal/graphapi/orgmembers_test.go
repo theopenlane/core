@@ -8,12 +8,13 @@ import (
 	"github.com/stretchr/testify/require"
 	mock_fga "github.com/theopenlane/iam/fgax/mockery"
 
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/ulids"
+
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
-	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/utils/ulids"
 )
 
 func (suite *GraphTestSuite) TestQueryOrgMembers() {

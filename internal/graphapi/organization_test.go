@@ -12,11 +12,12 @@ import (
 	"github.com/theopenlane/entx"
 	mock_fga "github.com/theopenlane/iam/fgax/mockery"
 
+	"github.com/theopenlane/iam/auth"
+
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
-	"github.com/theopenlane/iam/auth"
 )
 
 func (suite *GraphTestSuite) TestQueryOrganization() {
@@ -97,6 +98,7 @@ func (suite *GraphTestSuite) TestQueryOrganization() {
 
 			if tc.orgMembersExpected > 1 {
 				orgMemberFound := false
+
 				for _, m := range resp.Organization.Members {
 					if m.User.ID == orgMember.UserID {
 						orgMemberFound = true
@@ -360,6 +362,7 @@ func (suite *GraphTestSuite) TestMutationCreateOrganization() {
 				// make sure default org is updated if it's the first org created
 				userResp, err := tc.client.GetUserByID(tc.ctx, testUser.ID)
 				require.NoError(t, err)
+
 				if tc.expectedDefaultOrgUpdate {
 					assert.Equal(t, resp.CreateOrganization.Organization.ID, userResp.User.Setting.DefaultOrg.ID)
 				} else {

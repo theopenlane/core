@@ -60,7 +60,7 @@ func (r *mutationResolver) UpdateAPIToken(ctx context.Context, id string, input 
 		}
 
 		if errors.Is(err, privacy.Deny) {
-			return nil, ErrPermissionDenied
+			return nil, newPermissionDeniedError(ActionGet, "api token")
 		}
 
 		log.Error().Err(err).Msg("failed to get api token")
@@ -70,7 +70,7 @@ func (r *mutationResolver) UpdateAPIToken(ctx context.Context, id string, input 
 	if err := setOrganizationInAuthContext(ctx, &apiToken.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
 
-		return nil, ErrPermissionDenied
+		return nil, newPermissionDeniedError(ActionUpdate, "api token")
 	}
 
 	apiToken, err = apiToken.Update().SetInput(input).Save(ctx)
@@ -99,7 +99,7 @@ func (r *mutationResolver) DeleteAPIToken(ctx context.Context, id string) (*APIT
 		}
 
 		if errors.Is(err, privacy.Deny) {
-			return nil, ErrPermissionDenied
+			return nil, newPermissionDeniedError(ActionDelete, "api token")
 		}
 
 		log.Error().Err(err).Msg("failed to delete api token")

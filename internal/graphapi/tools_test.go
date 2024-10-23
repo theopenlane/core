@@ -16,6 +16,13 @@ import (
 	mock_fga "github.com/theopenlane/iam/fgax/mockery"
 	"github.com/theopenlane/riverboat/pkg/riverqueue"
 
+	"github.com/theopenlane/echox/middleware/echocontext"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/sessions"
+	"github.com/theopenlane/iam/totp"
+	"github.com/theopenlane/utils/testutils"
+	"github.com/theopenlane/utils/ulids"
+
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/entdb"
@@ -24,12 +31,6 @@ import (
 	mock_objects "github.com/theopenlane/core/pkg/objects/mocks"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	coreutils "github.com/theopenlane/core/pkg/testutils"
-	"github.com/theopenlane/echox/middleware/echocontext"
-	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/iam/sessions"
-	"github.com/theopenlane/iam/totp"
-	"github.com/theopenlane/utils/testutils"
-	"github.com/theopenlane/utils/ulids"
 )
 
 var (
