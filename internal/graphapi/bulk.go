@@ -8,6 +8,25 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 )
 
+// bulkCreateActionPlan uses the CreateBulk function to create multiple ActionPlan entities
+func (r *mutationResolver) bulkCreateActionPlan(ctx context.Context, input []*generated.CreateActionPlanInput) (*ActionPlanBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.ActionPlanCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.ActionPlan.Create().SetInput(*data)
+	}
+
+	res, err := c.ActionPlan.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "actionplan"})
+	}
+
+	// return response
+	return &ActionPlanBulkCreatePayload{
+		ActionPlans: res,
+	}, nil
+}
+
 // bulkCreateAPIToken uses the CreateBulk function to create multiple APIToken entities
 func (r *mutationResolver) bulkCreateAPIToken(ctx context.Context, input []*generated.CreateAPITokenInput) (*APITokenBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -43,6 +62,44 @@ func (r *mutationResolver) bulkCreateContact(ctx context.Context, input []*gener
 	// return response
 	return &ContactBulkCreatePayload{
 		Contacts: res,
+	}, nil
+}
+
+// bulkCreateControl uses the CreateBulk function to create multiple Control entities
+func (r *mutationResolver) bulkCreateControl(ctx context.Context, input []*generated.CreateControlInput) (*ControlBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.ControlCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.Control.Create().SetInput(*data)
+	}
+
+	res, err := c.Control.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "control"})
+	}
+
+	// return response
+	return &ControlBulkCreatePayload{
+		Controls: res,
+	}, nil
+}
+
+// bulkCreateControlObjective uses the CreateBulk function to create multiple ControlObjective entities
+func (r *mutationResolver) bulkCreateControlObjective(ctx context.Context, input []*generated.CreateControlObjectiveInput) (*ControlObjectiveBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.ControlObjectiveCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.ControlObjective.Create().SetInput(*data)
+	}
+
+	res, err := c.ControlObjective.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "controlobjective"})
+	}
+
+	// return response
+	return &ControlObjectiveBulkCreatePayload{
+		ControlObjectives: res,
 	}, nil
 }
 
@@ -293,6 +350,25 @@ func (r *mutationResolver) bulkCreateIntegration(ctx context.Context, input []*g
 	}, nil
 }
 
+// bulkCreateInternalPolicy uses the CreateBulk function to create multiple InternalPolicy entities
+func (r *mutationResolver) bulkCreateInternalPolicy(ctx context.Context, input []*generated.CreateInternalPolicyInput) (*InternalPolicyBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.InternalPolicyCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.InternalPolicy.Create().SetInput(*data)
+	}
+
+	res, err := c.InternalPolicy.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "internalpolicy"})
+	}
+
+	// return response
+	return &InternalPolicyBulkCreatePayload{
+		InternalPolicies: res,
+	}, nil
+}
+
 // bulkCreateInvite uses the CreateBulk function to create multiple Invite entities
 func (r *mutationResolver) bulkCreateInvite(ctx context.Context, input []*generated.CreateInviteInput) (*InviteBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -309,6 +385,25 @@ func (r *mutationResolver) bulkCreateInvite(ctx context.Context, input []*genera
 	// return response
 	return &InviteBulkCreatePayload{
 		Invites: res,
+	}, nil
+}
+
+// bulkCreateNarrative uses the CreateBulk function to create multiple Narrative entities
+func (r *mutationResolver) bulkCreateNarrative(ctx context.Context, input []*generated.CreateNarrativeInput) (*NarrativeBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.NarrativeCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.Narrative.Create().SetInput(*data)
+	}
+
+	res, err := c.Narrative.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "narrative"})
+	}
+
+	// return response
+	return &NarrativeBulkCreatePayload{
+		Narratives: res,
 	}, nil
 }
 
@@ -423,6 +518,82 @@ func (r *mutationResolver) bulkCreatePersonalAccessToken(ctx context.Context, in
 	// return response
 	return &PersonalAccessTokenBulkCreatePayload{
 		PersonalAccessTokens: res,
+	}, nil
+}
+
+// bulkCreateProcedure uses the CreateBulk function to create multiple Procedure entities
+func (r *mutationResolver) bulkCreateProcedure(ctx context.Context, input []*generated.CreateProcedureInput) (*ProcedureBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.ProcedureCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.Procedure.Create().SetInput(*data)
+	}
+
+	res, err := c.Procedure.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "procedure"})
+	}
+
+	// return response
+	return &ProcedureBulkCreatePayload{
+		Procedures: res,
+	}, nil
+}
+
+// bulkCreateRisk uses the CreateBulk function to create multiple Risk entities
+func (r *mutationResolver) bulkCreateRisk(ctx context.Context, input []*generated.CreateRiskInput) (*RiskBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.RiskCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.Risk.Create().SetInput(*data)
+	}
+
+	res, err := c.Risk.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "risk"})
+	}
+
+	// return response
+	return &RiskBulkCreatePayload{
+		Risks: res,
+	}, nil
+}
+
+// bulkCreateStandard uses the CreateBulk function to create multiple Standard entities
+func (r *mutationResolver) bulkCreateStandard(ctx context.Context, input []*generated.CreateStandardInput) (*StandardBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.StandardCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.Standard.Create().SetInput(*data)
+	}
+
+	res, err := c.Standard.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "standard"})
+	}
+
+	// return response
+	return &StandardBulkCreatePayload{
+		Standards: res,
+	}, nil
+}
+
+// bulkCreateSubcontrol uses the CreateBulk function to create multiple Subcontrol entities
+func (r *mutationResolver) bulkCreateSubcontrol(ctx context.Context, input []*generated.CreateSubcontrolInput) (*SubcontrolBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.SubcontrolCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.Subcontrol.Create().SetInput(*data)
+	}
+
+	res, err := c.Subcontrol.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "subcontrol"})
+	}
+
+	// return response
+	return &SubcontrolBulkCreatePayload{
+		Subcontrols: res,
 	}, nil
 }
 

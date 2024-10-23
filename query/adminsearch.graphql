@@ -11,6 +11,21 @@ query AdminSearch($query: String!) {
           scopes
         }
       }
+      ... on ActionPlanSearchResult {
+        actionPlans {
+          deletedBy
+          id
+          tags
+          name
+          description
+          status
+          assigned
+          dueDate
+          priority
+          source
+          jsonschema
+        }
+      }
       ... on ContactSearchResult {
         contacts {
           id
@@ -23,6 +38,45 @@ query AdminSearch($query: String!) {
           email
           phoneNumber
           address
+        }
+      }
+      ... on ControlSearchResult {
+        controls {
+          deletedBy
+          id
+          tags
+          name
+          description
+          status
+          controlType
+          version
+          owner
+          controlNumber
+          controlFamily
+          controlClass
+          source
+          satisfies
+          mappedFrameworks
+          jsonschema
+        }
+      }
+      ... on ControlObjectiveSearchResult {
+        controlObjectives {
+          deletedBy
+          id
+          tags
+          name
+          description
+          status
+          controlObjectiveType
+          version
+          owner
+          controlNumber
+          controlFamily
+          controlClass
+          source
+          mappedFrameworks
+          jsonschema
         }
       }
       ... on DocumentDataSearchResult {
@@ -162,6 +216,32 @@ query AdminSearch($query: String!) {
           kind
         }
       }
+      ... on InternalPolicySearchResult {
+        internalPolicies {
+          deletedBy
+          id
+          tags
+          name
+          description
+          status
+          policyType
+          version
+          purposeAndScope
+          background
+          jsonschema
+        }
+      }
+      ... on NarrativeSearchResult {
+        narratives {
+          deletedBy
+          id
+          tags
+          name
+          description
+          satisfies
+          jsonschema
+        }
+      }
       ... on OauthProviderSearchResult {
         oauthProviders {
           id
@@ -225,6 +305,83 @@ query AdminSearch($query: String!) {
           tags
           name
           scopes
+        }
+      }
+      ... on ProcedureSearchResult {
+        procedures {
+          deletedBy
+          id
+          tags
+          name
+          description
+          status
+          procedureType
+          version
+          purposeAndScope
+          background
+          satisfies
+          jsonschema
+        }
+      }
+      ... on RiskSearchResult {
+        risks {
+          deletedBy
+          id
+          tags
+          name
+          description
+          status
+          riskType
+          businessCosts
+          impact
+          likelihood
+          mitigation
+          satisfies
+          severity
+          jsonschema
+        }
+      }
+      ... on StandardSearchResult {
+        standards {
+          deletedBy
+          id
+          tags
+          name
+          description
+          family
+          status
+          standardType
+          version
+          purposeAndScope
+          background
+          satisfies
+          jsonschema
+        }
+      }
+      ... on SubcontrolSearchResult {
+        subcontrols {
+          deletedBy
+          id
+          tags
+          name
+          description
+          status
+          subcontrolType
+          version
+          owner
+          subcontrolNumber
+          subcontrolFamily
+          subcontrolClass
+          source
+          mappedFrameworks
+          assignedTo
+          implementationStatus
+          implementationNotes
+          implementationDate
+          implementationEvidence
+          implementationVerification
+          implementationVerificationDate
+          jsonschema
         }
       }
       ... on SubscriberSearchResult {

@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up risk by ID
+    """
+     risk(
+        """
+        ID of the risk
+        """
+        id: ID!
+    ):  Risk!
+}
+
+extend type Mutation{
+    """
+    Create a new risk
+    """
+    createRisk(
+        """
+        values of the risk
+        """
+        input: CreateRiskInput!
+    ): RiskCreatePayload!
+    """
+    Create multiple new risks
+    """
+    createBulkRisk(
+        """
+        values of the risk
+        """
+        input: [CreateRiskInput!]
+    ): RiskBulkCreatePayload!
+    """
+    Create multiple new risks via file upload
+    """
+    createBulkCSVRisk(
+        """
+        csv file containing values of the risk
+        """
+        input: Upload!
+    ): RiskBulkCreatePayload!
+    """
+    Update an existing risk
+    """
+    updateRisk(
+        """
+        ID of the risk
+        """
+        id: ID!
+        """
+        New values for the risk
+        """
+        input: UpdateRiskInput!
+    ): RiskUpdatePayload!
+    """
+    Delete an existing risk
+    """
+    deleteRisk(
+        """
+        ID of the risk
+        """
+        id: ID!
+    ): RiskDeletePayload!
+}
+
+"""
+Return response for createRisk mutation
+"""
+type RiskCreatePayload {
+    """
+    Created risk
+    """
+    risk: Risk!
+}
+
+"""
+Return response for updateRisk mutation
+"""
+type RiskUpdatePayload {
+    """
+    Updated risk
+    """
+    risk: Risk!
+}
+
+"""
+Return response for deleteRisk mutation
+"""
+type RiskDeletePayload {
+    """
+    Deleted risk ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkRisk mutation
+"""
+type RiskBulkCreatePayload {
+    """
+    Created risks
+    """
+    risks: [Risk!]
+}

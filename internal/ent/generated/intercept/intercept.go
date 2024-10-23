@@ -8,9 +8,15 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/actionplanhistory"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/contacthistory"
+	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/controlhistory"
+	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/documentdatahistory"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
@@ -40,7 +46,11 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hushhistory"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/integrationhistory"
+	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/internal/ent/generated/internalpolicyhistory"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
+	"github.com/theopenlane/core/internal/ent/generated/narrative"
+	"github.com/theopenlane/core/internal/ent/generated/narrativehistory"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/notehistory"
 	"github.com/theopenlane/core/internal/ent/generated/oauthprovider"
@@ -55,6 +65,14 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/internal/ent/generated/procedurehistory"
+	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
+	"github.com/theopenlane/core/internal/ent/generated/standard"
+	"github.com/theopenlane/core/internal/ent/generated/standardhistory"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
@@ -151,6 +169,60 @@ func (f TraverseAPIToken) Traverse(ctx context.Context, q generated.Query) error
 	return fmt.Errorf("unexpected query type %T. expect *generated.APITokenQuery", q)
 }
 
+// The ActionPlanFunc type is an adapter to allow the use of ordinary function as a Querier.
+type ActionPlanFunc func(context.Context, *generated.ActionPlanQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f ActionPlanFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.ActionPlanQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.ActionPlanQuery", q)
+}
+
+// The TraverseActionPlan type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseActionPlan func(context.Context, *generated.ActionPlanQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseActionPlan) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseActionPlan) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ActionPlanQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.ActionPlanQuery", q)
+}
+
+// The ActionPlanHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type ActionPlanHistoryFunc func(context.Context, *generated.ActionPlanHistoryQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f ActionPlanHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.ActionPlanHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.ActionPlanHistoryQuery", q)
+}
+
+// The TraverseActionPlanHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseActionPlanHistory func(context.Context, *generated.ActionPlanHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseActionPlanHistory) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseActionPlanHistory) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ActionPlanHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.ActionPlanHistoryQuery", q)
+}
+
 // The ContactFunc type is an adapter to allow the use of ordinary function as a Querier.
 type ContactFunc func(context.Context, *generated.ContactQuery) (generated.Value, error)
 
@@ -203,6 +275,114 @@ func (f TraverseContactHistory) Traverse(ctx context.Context, q generated.Query)
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *generated.ContactHistoryQuery", q)
+}
+
+// The ControlFunc type is an adapter to allow the use of ordinary function as a Querier.
+type ControlFunc func(context.Context, *generated.ControlQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f ControlFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.ControlQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.ControlQuery", q)
+}
+
+// The TraverseControl type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseControl func(context.Context, *generated.ControlQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseControl) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseControl) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ControlQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.ControlQuery", q)
+}
+
+// The ControlHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type ControlHistoryFunc func(context.Context, *generated.ControlHistoryQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f ControlHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.ControlHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.ControlHistoryQuery", q)
+}
+
+// The TraverseControlHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseControlHistory func(context.Context, *generated.ControlHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseControlHistory) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseControlHistory) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ControlHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.ControlHistoryQuery", q)
+}
+
+// The ControlObjectiveFunc type is an adapter to allow the use of ordinary function as a Querier.
+type ControlObjectiveFunc func(context.Context, *generated.ControlObjectiveQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f ControlObjectiveFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.ControlObjectiveQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.ControlObjectiveQuery", q)
+}
+
+// The TraverseControlObjective type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseControlObjective func(context.Context, *generated.ControlObjectiveQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseControlObjective) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseControlObjective) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ControlObjectiveQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.ControlObjectiveQuery", q)
+}
+
+// The ControlObjectiveHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type ControlObjectiveHistoryFunc func(context.Context, *generated.ControlObjectiveHistoryQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f ControlObjectiveHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.ControlObjectiveHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.ControlObjectiveHistoryQuery", q)
+}
+
+// The TraverseControlObjectiveHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseControlObjectiveHistory func(context.Context, *generated.ControlObjectiveHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseControlObjectiveHistory) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseControlObjectiveHistory) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ControlObjectiveHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.ControlObjectiveHistoryQuery", q)
 }
 
 // The DocumentDataFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -988,6 +1168,60 @@ func (f TraverseIntegrationHistory) Traverse(ctx context.Context, q generated.Qu
 	return fmt.Errorf("unexpected query type %T. expect *generated.IntegrationHistoryQuery", q)
 }
 
+// The InternalPolicyFunc type is an adapter to allow the use of ordinary function as a Querier.
+type InternalPolicyFunc func(context.Context, *generated.InternalPolicyQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f InternalPolicyFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.InternalPolicyQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.InternalPolicyQuery", q)
+}
+
+// The TraverseInternalPolicy type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseInternalPolicy func(context.Context, *generated.InternalPolicyQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseInternalPolicy) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseInternalPolicy) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.InternalPolicyQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.InternalPolicyQuery", q)
+}
+
+// The InternalPolicyHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type InternalPolicyHistoryFunc func(context.Context, *generated.InternalPolicyHistoryQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f InternalPolicyHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.InternalPolicyHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.InternalPolicyHistoryQuery", q)
+}
+
+// The TraverseInternalPolicyHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseInternalPolicyHistory func(context.Context, *generated.InternalPolicyHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseInternalPolicyHistory) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseInternalPolicyHistory) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.InternalPolicyHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.InternalPolicyHistoryQuery", q)
+}
+
 // The InviteFunc type is an adapter to allow the use of ordinary function as a Querier.
 type InviteFunc func(context.Context, *generated.InviteQuery) (generated.Value, error)
 
@@ -1013,6 +1247,60 @@ func (f TraverseInvite) Traverse(ctx context.Context, q generated.Query) error {
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *generated.InviteQuery", q)
+}
+
+// The NarrativeFunc type is an adapter to allow the use of ordinary function as a Querier.
+type NarrativeFunc func(context.Context, *generated.NarrativeQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f NarrativeFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.NarrativeQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.NarrativeQuery", q)
+}
+
+// The TraverseNarrative type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseNarrative func(context.Context, *generated.NarrativeQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseNarrative) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseNarrative) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.NarrativeQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.NarrativeQuery", q)
+}
+
+// The NarrativeHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type NarrativeHistoryFunc func(context.Context, *generated.NarrativeHistoryQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f NarrativeHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.NarrativeHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.NarrativeHistoryQuery", q)
+}
+
+// The TraverseNarrativeHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseNarrativeHistory func(context.Context, *generated.NarrativeHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseNarrativeHistory) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseNarrativeHistory) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.NarrativeHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.NarrativeHistoryQuery", q)
 }
 
 // The NoteFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -1366,6 +1654,222 @@ func (f TraversePersonalAccessToken) Traverse(ctx context.Context, q generated.Q
 	return fmt.Errorf("unexpected query type %T. expect *generated.PersonalAccessTokenQuery", q)
 }
 
+// The ProcedureFunc type is an adapter to allow the use of ordinary function as a Querier.
+type ProcedureFunc func(context.Context, *generated.ProcedureQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f ProcedureFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.ProcedureQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.ProcedureQuery", q)
+}
+
+// The TraverseProcedure type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseProcedure func(context.Context, *generated.ProcedureQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseProcedure) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseProcedure) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ProcedureQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.ProcedureQuery", q)
+}
+
+// The ProcedureHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type ProcedureHistoryFunc func(context.Context, *generated.ProcedureHistoryQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f ProcedureHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.ProcedureHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.ProcedureHistoryQuery", q)
+}
+
+// The TraverseProcedureHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseProcedureHistory func(context.Context, *generated.ProcedureHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseProcedureHistory) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseProcedureHistory) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ProcedureHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.ProcedureHistoryQuery", q)
+}
+
+// The RiskFunc type is an adapter to allow the use of ordinary function as a Querier.
+type RiskFunc func(context.Context, *generated.RiskQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f RiskFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.RiskQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.RiskQuery", q)
+}
+
+// The TraverseRisk type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseRisk func(context.Context, *generated.RiskQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseRisk) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseRisk) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.RiskQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.RiskQuery", q)
+}
+
+// The RiskHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type RiskHistoryFunc func(context.Context, *generated.RiskHistoryQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f RiskHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.RiskHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.RiskHistoryQuery", q)
+}
+
+// The TraverseRiskHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseRiskHistory func(context.Context, *generated.RiskHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseRiskHistory) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseRiskHistory) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.RiskHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.RiskHistoryQuery", q)
+}
+
+// The StandardFunc type is an adapter to allow the use of ordinary function as a Querier.
+type StandardFunc func(context.Context, *generated.StandardQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f StandardFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.StandardQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.StandardQuery", q)
+}
+
+// The TraverseStandard type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseStandard func(context.Context, *generated.StandardQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseStandard) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseStandard) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.StandardQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.StandardQuery", q)
+}
+
+// The StandardHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type StandardHistoryFunc func(context.Context, *generated.StandardHistoryQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f StandardHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.StandardHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.StandardHistoryQuery", q)
+}
+
+// The TraverseStandardHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseStandardHistory func(context.Context, *generated.StandardHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseStandardHistory) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseStandardHistory) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.StandardHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.StandardHistoryQuery", q)
+}
+
+// The SubcontrolFunc type is an adapter to allow the use of ordinary function as a Querier.
+type SubcontrolFunc func(context.Context, *generated.SubcontrolQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f SubcontrolFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.SubcontrolQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.SubcontrolQuery", q)
+}
+
+// The TraverseSubcontrol type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseSubcontrol func(context.Context, *generated.SubcontrolQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseSubcontrol) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseSubcontrol) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.SubcontrolQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.SubcontrolQuery", q)
+}
+
+// The SubcontrolHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type SubcontrolHistoryFunc func(context.Context, *generated.SubcontrolHistoryQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f SubcontrolHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.SubcontrolHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.SubcontrolHistoryQuery", q)
+}
+
+// The TraverseSubcontrolHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseSubcontrolHistory func(context.Context, *generated.SubcontrolHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseSubcontrolHistory) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseSubcontrolHistory) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.SubcontrolHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.SubcontrolHistoryQuery", q)
+}
+
 // The SubscriberFunc type is an adapter to allow the use of ordinary function as a Querier.
 type SubscriberFunc func(context.Context, *generated.SubscriberQuery) (generated.Value, error)
 
@@ -1668,10 +2172,22 @@ func NewQuery(q generated.Query) (Query, error) {
 	switch q := q.(type) {
 	case *generated.APITokenQuery:
 		return &query[*generated.APITokenQuery, predicate.APIToken, apitoken.OrderOption]{typ: generated.TypeAPIToken, tq: q}, nil
+	case *generated.ActionPlanQuery:
+		return &query[*generated.ActionPlanQuery, predicate.ActionPlan, actionplan.OrderOption]{typ: generated.TypeActionPlan, tq: q}, nil
+	case *generated.ActionPlanHistoryQuery:
+		return &query[*generated.ActionPlanHistoryQuery, predicate.ActionPlanHistory, actionplanhistory.OrderOption]{typ: generated.TypeActionPlanHistory, tq: q}, nil
 	case *generated.ContactQuery:
 		return &query[*generated.ContactQuery, predicate.Contact, contact.OrderOption]{typ: generated.TypeContact, tq: q}, nil
 	case *generated.ContactHistoryQuery:
 		return &query[*generated.ContactHistoryQuery, predicate.ContactHistory, contacthistory.OrderOption]{typ: generated.TypeContactHistory, tq: q}, nil
+	case *generated.ControlQuery:
+		return &query[*generated.ControlQuery, predicate.Control, control.OrderOption]{typ: generated.TypeControl, tq: q}, nil
+	case *generated.ControlHistoryQuery:
+		return &query[*generated.ControlHistoryQuery, predicate.ControlHistory, controlhistory.OrderOption]{typ: generated.TypeControlHistory, tq: q}, nil
+	case *generated.ControlObjectiveQuery:
+		return &query[*generated.ControlObjectiveQuery, predicate.ControlObjective, controlobjective.OrderOption]{typ: generated.TypeControlObjective, tq: q}, nil
+	case *generated.ControlObjectiveHistoryQuery:
+		return &query[*generated.ControlObjectiveHistoryQuery, predicate.ControlObjectiveHistory, controlobjectivehistory.OrderOption]{typ: generated.TypeControlObjectiveHistory, tq: q}, nil
 	case *generated.DocumentDataQuery:
 		return &query[*generated.DocumentDataQuery, predicate.DocumentData, documentdata.OrderOption]{typ: generated.TypeDocumentData, tq: q}, nil
 	case *generated.DocumentDataHistoryQuery:
@@ -1730,8 +2246,16 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.IntegrationQuery, predicate.Integration, integration.OrderOption]{typ: generated.TypeIntegration, tq: q}, nil
 	case *generated.IntegrationHistoryQuery:
 		return &query[*generated.IntegrationHistoryQuery, predicate.IntegrationHistory, integrationhistory.OrderOption]{typ: generated.TypeIntegrationHistory, tq: q}, nil
+	case *generated.InternalPolicyQuery:
+		return &query[*generated.InternalPolicyQuery, predicate.InternalPolicy, internalpolicy.OrderOption]{typ: generated.TypeInternalPolicy, tq: q}, nil
+	case *generated.InternalPolicyHistoryQuery:
+		return &query[*generated.InternalPolicyHistoryQuery, predicate.InternalPolicyHistory, internalpolicyhistory.OrderOption]{typ: generated.TypeInternalPolicyHistory, tq: q}, nil
 	case *generated.InviteQuery:
 		return &query[*generated.InviteQuery, predicate.Invite, invite.OrderOption]{typ: generated.TypeInvite, tq: q}, nil
+	case *generated.NarrativeQuery:
+		return &query[*generated.NarrativeQuery, predicate.Narrative, narrative.OrderOption]{typ: generated.TypeNarrative, tq: q}, nil
+	case *generated.NarrativeHistoryQuery:
+		return &query[*generated.NarrativeHistoryQuery, predicate.NarrativeHistory, narrativehistory.OrderOption]{typ: generated.TypeNarrativeHistory, tq: q}, nil
 	case *generated.NoteQuery:
 		return &query[*generated.NoteQuery, predicate.Note, note.OrderOption]{typ: generated.TypeNote, tq: q}, nil
 	case *generated.NoteHistoryQuery:
@@ -1758,6 +2282,22 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.PasswordResetTokenQuery, predicate.PasswordResetToken, passwordresettoken.OrderOption]{typ: generated.TypePasswordResetToken, tq: q}, nil
 	case *generated.PersonalAccessTokenQuery:
 		return &query[*generated.PersonalAccessTokenQuery, predicate.PersonalAccessToken, personalaccesstoken.OrderOption]{typ: generated.TypePersonalAccessToken, tq: q}, nil
+	case *generated.ProcedureQuery:
+		return &query[*generated.ProcedureQuery, predicate.Procedure, procedure.OrderOption]{typ: generated.TypeProcedure, tq: q}, nil
+	case *generated.ProcedureHistoryQuery:
+		return &query[*generated.ProcedureHistoryQuery, predicate.ProcedureHistory, procedurehistory.OrderOption]{typ: generated.TypeProcedureHistory, tq: q}, nil
+	case *generated.RiskQuery:
+		return &query[*generated.RiskQuery, predicate.Risk, risk.OrderOption]{typ: generated.TypeRisk, tq: q}, nil
+	case *generated.RiskHistoryQuery:
+		return &query[*generated.RiskHistoryQuery, predicate.RiskHistory, riskhistory.OrderOption]{typ: generated.TypeRiskHistory, tq: q}, nil
+	case *generated.StandardQuery:
+		return &query[*generated.StandardQuery, predicate.Standard, standard.OrderOption]{typ: generated.TypeStandard, tq: q}, nil
+	case *generated.StandardHistoryQuery:
+		return &query[*generated.StandardHistoryQuery, predicate.StandardHistory, standardhistory.OrderOption]{typ: generated.TypeStandardHistory, tq: q}, nil
+	case *generated.SubcontrolQuery:
+		return &query[*generated.SubcontrolQuery, predicate.Subcontrol, subcontrol.OrderOption]{typ: generated.TypeSubcontrol, tq: q}, nil
+	case *generated.SubcontrolHistoryQuery:
+		return &query[*generated.SubcontrolHistoryQuery, predicate.SubcontrolHistory, subcontrolhistory.OrderOption]{typ: generated.TypeSubcontrolHistory, tq: q}, nil
 	case *generated.SubscriberQuery:
 		return &query[*generated.SubscriberQuery, predicate.Subscriber, subscriber.OrderOption]{typ: generated.TypeSubscriber, tq: q}, nil
 	case *generated.TFASettingQuery:

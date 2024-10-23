@@ -42,6 +42,20 @@ func APITokenEdgeCleanup(ctx context.Context, id string) error {
 	return nil
 }
 
+func ActionPlanEdgeCleanup(ctx context.Context, id string) error {
+	// If a user has access to delete the object, they have access to delete all edges
+	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup actionplan edge"))
+
+	return nil
+}
+
+func ActionPlanHistoryEdgeCleanup(ctx context.Context, id string) error {
+	// If a user has access to delete the object, they have access to delete all edges
+	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup actionplanhistory edge"))
+
+	return nil
+}
+
 func ContactEdgeCleanup(ctx context.Context, id string) error {
 	// If a user has access to delete the object, they have access to delete all edges
 	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup contact edge"))
@@ -52,6 +66,34 @@ func ContactEdgeCleanup(ctx context.Context, id string) error {
 func ContactHistoryEdgeCleanup(ctx context.Context, id string) error {
 	// If a user has access to delete the object, they have access to delete all edges
 	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup contacthistory edge"))
+
+	return nil
+}
+
+func ControlEdgeCleanup(ctx context.Context, id string) error {
+	// If a user has access to delete the object, they have access to delete all edges
+	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup control edge"))
+
+	return nil
+}
+
+func ControlHistoryEdgeCleanup(ctx context.Context, id string) error {
+	// If a user has access to delete the object, they have access to delete all edges
+	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup controlhistory edge"))
+
+	return nil
+}
+
+func ControlObjectiveEdgeCleanup(ctx context.Context, id string) error {
+	// If a user has access to delete the object, they have access to delete all edges
+	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup controlobjective edge"))
+
+	return nil
+}
+
+func ControlObjectiveHistoryEdgeCleanup(ctx context.Context, id string) error {
+	// If a user has access to delete the object, they have access to delete all edges
+	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup controlobjectivehistory edge"))
 
 	return nil
 }
@@ -273,9 +315,37 @@ func IntegrationHistoryEdgeCleanup(ctx context.Context, id string) error {
 	return nil
 }
 
+func InternalPolicyEdgeCleanup(ctx context.Context, id string) error {
+	// If a user has access to delete the object, they have access to delete all edges
+	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup internalpolicy edge"))
+
+	return nil
+}
+
+func InternalPolicyHistoryEdgeCleanup(ctx context.Context, id string) error {
+	// If a user has access to delete the object, they have access to delete all edges
+	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup internalpolicyhistory edge"))
+
+	return nil
+}
+
 func InviteEdgeCleanup(ctx context.Context, id string) error {
 	// If a user has access to delete the object, they have access to delete all edges
 	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup invite edge"))
+
+	return nil
+}
+
+func NarrativeEdgeCleanup(ctx context.Context, id string) error {
+	// If a user has access to delete the object, they have access to delete all edges
+	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup narrative edge"))
+
+	return nil
+}
+
+func NarrativeHistoryEdgeCleanup(ctx context.Context, id string) error {
+	// If a user has access to delete the object, they have access to delete all edges
+	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup narrativehistory edge"))
 
 	return nil
 }
@@ -486,6 +556,62 @@ func PasswordResetTokenEdgeCleanup(ctx context.Context, id string) error {
 func PersonalAccessTokenEdgeCleanup(ctx context.Context, id string) error {
 	// If a user has access to delete the object, they have access to delete all edges
 	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup personalaccesstoken edge"))
+
+	return nil
+}
+
+func ProcedureEdgeCleanup(ctx context.Context, id string) error {
+	// If a user has access to delete the object, they have access to delete all edges
+	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup procedure edge"))
+
+	return nil
+}
+
+func ProcedureHistoryEdgeCleanup(ctx context.Context, id string) error {
+	// If a user has access to delete the object, they have access to delete all edges
+	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup procedurehistory edge"))
+
+	return nil
+}
+
+func RiskEdgeCleanup(ctx context.Context, id string) error {
+	// If a user has access to delete the object, they have access to delete all edges
+	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup risk edge"))
+
+	return nil
+}
+
+func RiskHistoryEdgeCleanup(ctx context.Context, id string) error {
+	// If a user has access to delete the object, they have access to delete all edges
+	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup riskhistory edge"))
+
+	return nil
+}
+
+func StandardEdgeCleanup(ctx context.Context, id string) error {
+	// If a user has access to delete the object, they have access to delete all edges
+	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup standard edge"))
+
+	return nil
+}
+
+func StandardHistoryEdgeCleanup(ctx context.Context, id string) error {
+	// If a user has access to delete the object, they have access to delete all edges
+	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup standardhistory edge"))
+
+	return nil
+}
+
+func SubcontrolEdgeCleanup(ctx context.Context, id string) error {
+	// If a user has access to delete the object, they have access to delete all edges
+	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup subcontrol edge"))
+
+	return nil
+}
+
+func SubcontrolHistoryEdgeCleanup(ctx context.Context, id string) error {
+	// If a user has access to delete the object, they have access to delete all edges
+	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup subcontrolhistory edge"))
 
 	return nil
 }

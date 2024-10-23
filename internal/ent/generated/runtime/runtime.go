@@ -6,9 +6,15 @@ import (
 	"context"
 	"time"
 
+	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/actionplanhistory"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/contacthistory"
+	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/controlhistory"
+	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/documentdatahistory"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
@@ -38,7 +44,11 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hushhistory"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/integrationhistory"
+	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/internal/ent/generated/internalpolicyhistory"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
+	"github.com/theopenlane/core/internal/ent/generated/narrative"
+	"github.com/theopenlane/core/internal/ent/generated/narrativehistory"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/notehistory"
 	"github.com/theopenlane/core/internal/ent/generated/oauthprovider"
@@ -52,6 +62,14 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgmembershiphistory"
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
+	"github.com/theopenlane/core/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/internal/ent/generated/procedurehistory"
+	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
+	"github.com/theopenlane/core/internal/ent/generated/standard"
+	"github.com/theopenlane/core/internal/ent/generated/standardhistory"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
@@ -147,6 +165,71 @@ func init() {
 	apitokenDescID := apitokenMixinFields2[0].Descriptor()
 	// apitoken.DefaultID holds the default value on creation for the id field.
 	apitoken.DefaultID = apitokenDescID.Default.(func() string)
+	actionplanMixin := schema.ActionPlan{}.Mixin()
+	actionplanMixinHooks0 := actionplanMixin[0].Hooks()
+	actionplanMixinHooks1 := actionplanMixin[1].Hooks()
+	actionplan.Hooks[0] = actionplanMixinHooks0[0]
+	actionplan.Hooks[1] = actionplanMixinHooks1[0]
+	actionplanMixinInters1 := actionplanMixin[1].Interceptors()
+	actionplan.Interceptors[0] = actionplanMixinInters1[0]
+	actionplanMixinFields0 := actionplanMixin[0].Fields()
+	_ = actionplanMixinFields0
+	actionplanMixinFields2 := actionplanMixin[2].Fields()
+	_ = actionplanMixinFields2
+	actionplanMixinFields3 := actionplanMixin[3].Fields()
+	_ = actionplanMixinFields3
+	actionplanFields := schema.ActionPlan{}.Fields()
+	_ = actionplanFields
+	// actionplanDescCreatedAt is the schema descriptor for created_at field.
+	actionplanDescCreatedAt := actionplanMixinFields0[0].Descriptor()
+	// actionplan.DefaultCreatedAt holds the default value on creation for the created_at field.
+	actionplan.DefaultCreatedAt = actionplanDescCreatedAt.Default.(func() time.Time)
+	// actionplanDescUpdatedAt is the schema descriptor for updated_at field.
+	actionplanDescUpdatedAt := actionplanMixinFields0[1].Descriptor()
+	// actionplan.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	actionplan.DefaultUpdatedAt = actionplanDescUpdatedAt.Default.(func() time.Time)
+	// actionplan.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	actionplan.UpdateDefaultUpdatedAt = actionplanDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// actionplanDescMappingID is the schema descriptor for mapping_id field.
+	actionplanDescMappingID := actionplanMixinFields2[1].Descriptor()
+	// actionplan.DefaultMappingID holds the default value on creation for the mapping_id field.
+	actionplan.DefaultMappingID = actionplanDescMappingID.Default.(func() string)
+	// actionplanDescTags is the schema descriptor for tags field.
+	actionplanDescTags := actionplanMixinFields3[0].Descriptor()
+	// actionplan.DefaultTags holds the default value on creation for the tags field.
+	actionplan.DefaultTags = actionplanDescTags.Default.([]string)
+	// actionplanDescID is the schema descriptor for id field.
+	actionplanDescID := actionplanMixinFields2[0].Descriptor()
+	// actionplan.DefaultID holds the default value on creation for the id field.
+	actionplan.DefaultID = actionplanDescID.Default.(func() string)
+	actionplanhistoryFields := schema.ActionPlanHistory{}.Fields()
+	_ = actionplanhistoryFields
+	// actionplanhistoryDescHistoryTime is the schema descriptor for history_time field.
+	actionplanhistoryDescHistoryTime := actionplanhistoryFields[0].Descriptor()
+	// actionplanhistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	actionplanhistory.DefaultHistoryTime = actionplanhistoryDescHistoryTime.Default.(func() time.Time)
+	// actionplanhistoryDescCreatedAt is the schema descriptor for created_at field.
+	actionplanhistoryDescCreatedAt := actionplanhistoryFields[3].Descriptor()
+	// actionplanhistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	actionplanhistory.DefaultCreatedAt = actionplanhistoryDescCreatedAt.Default.(func() time.Time)
+	// actionplanhistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	actionplanhistoryDescUpdatedAt := actionplanhistoryFields[4].Descriptor()
+	// actionplanhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	actionplanhistory.DefaultUpdatedAt = actionplanhistoryDescUpdatedAt.Default.(func() time.Time)
+	// actionplanhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	actionplanhistory.UpdateDefaultUpdatedAt = actionplanhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// actionplanhistoryDescMappingID is the schema descriptor for mapping_id field.
+	actionplanhistoryDescMappingID := actionplanhistoryFields[10].Descriptor()
+	// actionplanhistory.DefaultMappingID holds the default value on creation for the mapping_id field.
+	actionplanhistory.DefaultMappingID = actionplanhistoryDescMappingID.Default.(func() string)
+	// actionplanhistoryDescTags is the schema descriptor for tags field.
+	actionplanhistoryDescTags := actionplanhistoryFields[11].Descriptor()
+	// actionplanhistory.DefaultTags holds the default value on creation for the tags field.
+	actionplanhistory.DefaultTags = actionplanhistoryDescTags.Default.([]string)
+	// actionplanhistoryDescID is the schema descriptor for id field.
+	actionplanhistoryDescID := actionplanhistoryFields[9].Descriptor()
+	// actionplanhistory.DefaultID holds the default value on creation for the id field.
+	actionplanhistory.DefaultID = actionplanhistoryDescID.Default.(func() string)
 	contactMixin := schema.Contact{}.Mixin()
 	contact.Policy = privacy.NewPolicies(schema.Contact{})
 	contact.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -271,6 +354,136 @@ func init() {
 	contacthistoryDescID := contacthistoryFields[7].Descriptor()
 	// contacthistory.DefaultID holds the default value on creation for the id field.
 	contacthistory.DefaultID = contacthistoryDescID.Default.(func() string)
+	controlMixin := schema.Control{}.Mixin()
+	controlMixinHooks0 := controlMixin[0].Hooks()
+	controlMixinHooks1 := controlMixin[1].Hooks()
+	control.Hooks[0] = controlMixinHooks0[0]
+	control.Hooks[1] = controlMixinHooks1[0]
+	controlMixinInters1 := controlMixin[1].Interceptors()
+	control.Interceptors[0] = controlMixinInters1[0]
+	controlMixinFields0 := controlMixin[0].Fields()
+	_ = controlMixinFields0
+	controlMixinFields2 := controlMixin[2].Fields()
+	_ = controlMixinFields2
+	controlMixinFields3 := controlMixin[3].Fields()
+	_ = controlMixinFields3
+	controlFields := schema.Control{}.Fields()
+	_ = controlFields
+	// controlDescCreatedAt is the schema descriptor for created_at field.
+	controlDescCreatedAt := controlMixinFields0[0].Descriptor()
+	// control.DefaultCreatedAt holds the default value on creation for the created_at field.
+	control.DefaultCreatedAt = controlDescCreatedAt.Default.(func() time.Time)
+	// controlDescUpdatedAt is the schema descriptor for updated_at field.
+	controlDescUpdatedAt := controlMixinFields0[1].Descriptor()
+	// control.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	control.DefaultUpdatedAt = controlDescUpdatedAt.Default.(func() time.Time)
+	// control.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	control.UpdateDefaultUpdatedAt = controlDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// controlDescMappingID is the schema descriptor for mapping_id field.
+	controlDescMappingID := controlMixinFields2[1].Descriptor()
+	// control.DefaultMappingID holds the default value on creation for the mapping_id field.
+	control.DefaultMappingID = controlDescMappingID.Default.(func() string)
+	// controlDescTags is the schema descriptor for tags field.
+	controlDescTags := controlMixinFields3[0].Descriptor()
+	// control.DefaultTags holds the default value on creation for the tags field.
+	control.DefaultTags = controlDescTags.Default.([]string)
+	// controlDescID is the schema descriptor for id field.
+	controlDescID := controlMixinFields2[0].Descriptor()
+	// control.DefaultID holds the default value on creation for the id field.
+	control.DefaultID = controlDescID.Default.(func() string)
+	controlhistoryFields := schema.ControlHistory{}.Fields()
+	_ = controlhistoryFields
+	// controlhistoryDescHistoryTime is the schema descriptor for history_time field.
+	controlhistoryDescHistoryTime := controlhistoryFields[0].Descriptor()
+	// controlhistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	controlhistory.DefaultHistoryTime = controlhistoryDescHistoryTime.Default.(func() time.Time)
+	// controlhistoryDescCreatedAt is the schema descriptor for created_at field.
+	controlhistoryDescCreatedAt := controlhistoryFields[3].Descriptor()
+	// controlhistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	controlhistory.DefaultCreatedAt = controlhistoryDescCreatedAt.Default.(func() time.Time)
+	// controlhistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	controlhistoryDescUpdatedAt := controlhistoryFields[4].Descriptor()
+	// controlhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	controlhistory.DefaultUpdatedAt = controlhistoryDescUpdatedAt.Default.(func() time.Time)
+	// controlhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	controlhistory.UpdateDefaultUpdatedAt = controlhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// controlhistoryDescMappingID is the schema descriptor for mapping_id field.
+	controlhistoryDescMappingID := controlhistoryFields[10].Descriptor()
+	// controlhistory.DefaultMappingID holds the default value on creation for the mapping_id field.
+	controlhistory.DefaultMappingID = controlhistoryDescMappingID.Default.(func() string)
+	// controlhistoryDescTags is the schema descriptor for tags field.
+	controlhistoryDescTags := controlhistoryFields[11].Descriptor()
+	// controlhistory.DefaultTags holds the default value on creation for the tags field.
+	controlhistory.DefaultTags = controlhistoryDescTags.Default.([]string)
+	// controlhistoryDescID is the schema descriptor for id field.
+	controlhistoryDescID := controlhistoryFields[9].Descriptor()
+	// controlhistory.DefaultID holds the default value on creation for the id field.
+	controlhistory.DefaultID = controlhistoryDescID.Default.(func() string)
+	controlobjectiveMixin := schema.ControlObjective{}.Mixin()
+	controlobjectiveMixinHooks0 := controlobjectiveMixin[0].Hooks()
+	controlobjectiveMixinHooks1 := controlobjectiveMixin[1].Hooks()
+	controlobjective.Hooks[0] = controlobjectiveMixinHooks0[0]
+	controlobjective.Hooks[1] = controlobjectiveMixinHooks1[0]
+	controlobjectiveMixinInters1 := controlobjectiveMixin[1].Interceptors()
+	controlobjective.Interceptors[0] = controlobjectiveMixinInters1[0]
+	controlobjectiveMixinFields0 := controlobjectiveMixin[0].Fields()
+	_ = controlobjectiveMixinFields0
+	controlobjectiveMixinFields2 := controlobjectiveMixin[2].Fields()
+	_ = controlobjectiveMixinFields2
+	controlobjectiveMixinFields3 := controlobjectiveMixin[3].Fields()
+	_ = controlobjectiveMixinFields3
+	controlobjectiveFields := schema.ControlObjective{}.Fields()
+	_ = controlobjectiveFields
+	// controlobjectiveDescCreatedAt is the schema descriptor for created_at field.
+	controlobjectiveDescCreatedAt := controlobjectiveMixinFields0[0].Descriptor()
+	// controlobjective.DefaultCreatedAt holds the default value on creation for the created_at field.
+	controlobjective.DefaultCreatedAt = controlobjectiveDescCreatedAt.Default.(func() time.Time)
+	// controlobjectiveDescUpdatedAt is the schema descriptor for updated_at field.
+	controlobjectiveDescUpdatedAt := controlobjectiveMixinFields0[1].Descriptor()
+	// controlobjective.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	controlobjective.DefaultUpdatedAt = controlobjectiveDescUpdatedAt.Default.(func() time.Time)
+	// controlobjective.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	controlobjective.UpdateDefaultUpdatedAt = controlobjectiveDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// controlobjectiveDescMappingID is the schema descriptor for mapping_id field.
+	controlobjectiveDescMappingID := controlobjectiveMixinFields2[1].Descriptor()
+	// controlobjective.DefaultMappingID holds the default value on creation for the mapping_id field.
+	controlobjective.DefaultMappingID = controlobjectiveDescMappingID.Default.(func() string)
+	// controlobjectiveDescTags is the schema descriptor for tags field.
+	controlobjectiveDescTags := controlobjectiveMixinFields3[0].Descriptor()
+	// controlobjective.DefaultTags holds the default value on creation for the tags field.
+	controlobjective.DefaultTags = controlobjectiveDescTags.Default.([]string)
+	// controlobjectiveDescID is the schema descriptor for id field.
+	controlobjectiveDescID := controlobjectiveMixinFields2[0].Descriptor()
+	// controlobjective.DefaultID holds the default value on creation for the id field.
+	controlobjective.DefaultID = controlobjectiveDescID.Default.(func() string)
+	controlobjectivehistoryFields := schema.ControlObjectiveHistory{}.Fields()
+	_ = controlobjectivehistoryFields
+	// controlobjectivehistoryDescHistoryTime is the schema descriptor for history_time field.
+	controlobjectivehistoryDescHistoryTime := controlobjectivehistoryFields[0].Descriptor()
+	// controlobjectivehistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	controlobjectivehistory.DefaultHistoryTime = controlobjectivehistoryDescHistoryTime.Default.(func() time.Time)
+	// controlobjectivehistoryDescCreatedAt is the schema descriptor for created_at field.
+	controlobjectivehistoryDescCreatedAt := controlobjectivehistoryFields[3].Descriptor()
+	// controlobjectivehistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	controlobjectivehistory.DefaultCreatedAt = controlobjectivehistoryDescCreatedAt.Default.(func() time.Time)
+	// controlobjectivehistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	controlobjectivehistoryDescUpdatedAt := controlobjectivehistoryFields[4].Descriptor()
+	// controlobjectivehistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	controlobjectivehistory.DefaultUpdatedAt = controlobjectivehistoryDescUpdatedAt.Default.(func() time.Time)
+	// controlobjectivehistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	controlobjectivehistory.UpdateDefaultUpdatedAt = controlobjectivehistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// controlobjectivehistoryDescMappingID is the schema descriptor for mapping_id field.
+	controlobjectivehistoryDescMappingID := controlobjectivehistoryFields[10].Descriptor()
+	// controlobjectivehistory.DefaultMappingID holds the default value on creation for the mapping_id field.
+	controlobjectivehistory.DefaultMappingID = controlobjectivehistoryDescMappingID.Default.(func() string)
+	// controlobjectivehistoryDescTags is the schema descriptor for tags field.
+	controlobjectivehistoryDescTags := controlobjectivehistoryFields[11].Descriptor()
+	// controlobjectivehistory.DefaultTags holds the default value on creation for the tags field.
+	controlobjectivehistory.DefaultTags = controlobjectivehistoryDescTags.Default.([]string)
+	// controlobjectivehistoryDescID is the schema descriptor for id field.
+	controlobjectivehistoryDescID := controlobjectivehistoryFields[9].Descriptor()
+	// controlobjectivehistory.DefaultID holds the default value on creation for the id field.
+	controlobjectivehistory.DefaultID = controlobjectivehistoryDescID.Default.(func() string)
 	documentdataMixin := schema.DocumentData{}.Mixin()
 	documentdata.Policy = privacy.NewPolicies(schema.DocumentData{})
 	documentdata.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -1791,6 +2004,71 @@ func init() {
 	integrationhistoryDescID := integrationhistoryFields[7].Descriptor()
 	// integrationhistory.DefaultID holds the default value on creation for the id field.
 	integrationhistory.DefaultID = integrationhistoryDescID.Default.(func() string)
+	internalpolicyMixin := schema.InternalPolicy{}.Mixin()
+	internalpolicyMixinHooks0 := internalpolicyMixin[0].Hooks()
+	internalpolicyMixinHooks1 := internalpolicyMixin[1].Hooks()
+	internalpolicy.Hooks[0] = internalpolicyMixinHooks0[0]
+	internalpolicy.Hooks[1] = internalpolicyMixinHooks1[0]
+	internalpolicyMixinInters1 := internalpolicyMixin[1].Interceptors()
+	internalpolicy.Interceptors[0] = internalpolicyMixinInters1[0]
+	internalpolicyMixinFields0 := internalpolicyMixin[0].Fields()
+	_ = internalpolicyMixinFields0
+	internalpolicyMixinFields2 := internalpolicyMixin[2].Fields()
+	_ = internalpolicyMixinFields2
+	internalpolicyMixinFields3 := internalpolicyMixin[3].Fields()
+	_ = internalpolicyMixinFields3
+	internalpolicyFields := schema.InternalPolicy{}.Fields()
+	_ = internalpolicyFields
+	// internalpolicyDescCreatedAt is the schema descriptor for created_at field.
+	internalpolicyDescCreatedAt := internalpolicyMixinFields0[0].Descriptor()
+	// internalpolicy.DefaultCreatedAt holds the default value on creation for the created_at field.
+	internalpolicy.DefaultCreatedAt = internalpolicyDescCreatedAt.Default.(func() time.Time)
+	// internalpolicyDescUpdatedAt is the schema descriptor for updated_at field.
+	internalpolicyDescUpdatedAt := internalpolicyMixinFields0[1].Descriptor()
+	// internalpolicy.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	internalpolicy.DefaultUpdatedAt = internalpolicyDescUpdatedAt.Default.(func() time.Time)
+	// internalpolicy.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	internalpolicy.UpdateDefaultUpdatedAt = internalpolicyDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// internalpolicyDescMappingID is the schema descriptor for mapping_id field.
+	internalpolicyDescMappingID := internalpolicyMixinFields2[1].Descriptor()
+	// internalpolicy.DefaultMappingID holds the default value on creation for the mapping_id field.
+	internalpolicy.DefaultMappingID = internalpolicyDescMappingID.Default.(func() string)
+	// internalpolicyDescTags is the schema descriptor for tags field.
+	internalpolicyDescTags := internalpolicyMixinFields3[0].Descriptor()
+	// internalpolicy.DefaultTags holds the default value on creation for the tags field.
+	internalpolicy.DefaultTags = internalpolicyDescTags.Default.([]string)
+	// internalpolicyDescID is the schema descriptor for id field.
+	internalpolicyDescID := internalpolicyMixinFields2[0].Descriptor()
+	// internalpolicy.DefaultID holds the default value on creation for the id field.
+	internalpolicy.DefaultID = internalpolicyDescID.Default.(func() string)
+	internalpolicyhistoryFields := schema.InternalPolicyHistory{}.Fields()
+	_ = internalpolicyhistoryFields
+	// internalpolicyhistoryDescHistoryTime is the schema descriptor for history_time field.
+	internalpolicyhistoryDescHistoryTime := internalpolicyhistoryFields[0].Descriptor()
+	// internalpolicyhistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	internalpolicyhistory.DefaultHistoryTime = internalpolicyhistoryDescHistoryTime.Default.(func() time.Time)
+	// internalpolicyhistoryDescCreatedAt is the schema descriptor for created_at field.
+	internalpolicyhistoryDescCreatedAt := internalpolicyhistoryFields[3].Descriptor()
+	// internalpolicyhistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	internalpolicyhistory.DefaultCreatedAt = internalpolicyhistoryDescCreatedAt.Default.(func() time.Time)
+	// internalpolicyhistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	internalpolicyhistoryDescUpdatedAt := internalpolicyhistoryFields[4].Descriptor()
+	// internalpolicyhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	internalpolicyhistory.DefaultUpdatedAt = internalpolicyhistoryDescUpdatedAt.Default.(func() time.Time)
+	// internalpolicyhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	internalpolicyhistory.UpdateDefaultUpdatedAt = internalpolicyhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// internalpolicyhistoryDescMappingID is the schema descriptor for mapping_id field.
+	internalpolicyhistoryDescMappingID := internalpolicyhistoryFields[10].Descriptor()
+	// internalpolicyhistory.DefaultMappingID holds the default value on creation for the mapping_id field.
+	internalpolicyhistory.DefaultMappingID = internalpolicyhistoryDescMappingID.Default.(func() string)
+	// internalpolicyhistoryDescTags is the schema descriptor for tags field.
+	internalpolicyhistoryDescTags := internalpolicyhistoryFields[11].Descriptor()
+	// internalpolicyhistory.DefaultTags holds the default value on creation for the tags field.
+	internalpolicyhistory.DefaultTags = internalpolicyhistoryDescTags.Default.([]string)
+	// internalpolicyhistoryDescID is the schema descriptor for id field.
+	internalpolicyhistoryDescID := internalpolicyhistoryFields[9].Descriptor()
+	// internalpolicyhistory.DefaultID holds the default value on creation for the id field.
+	internalpolicyhistory.DefaultID = internalpolicyhistoryDescID.Default.(func() string)
 	inviteMixin := schema.Invite{}.Mixin()
 	invite.Policy = privacy.NewPolicies(schema.Invite{})
 	invite.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -1887,6 +2165,71 @@ func init() {
 	inviteDescID := inviteMixinFields1[0].Descriptor()
 	// invite.DefaultID holds the default value on creation for the id field.
 	invite.DefaultID = inviteDescID.Default.(func() string)
+	narrativeMixin := schema.Narrative{}.Mixin()
+	narrativeMixinHooks0 := narrativeMixin[0].Hooks()
+	narrativeMixinHooks1 := narrativeMixin[1].Hooks()
+	narrative.Hooks[0] = narrativeMixinHooks0[0]
+	narrative.Hooks[1] = narrativeMixinHooks1[0]
+	narrativeMixinInters1 := narrativeMixin[1].Interceptors()
+	narrative.Interceptors[0] = narrativeMixinInters1[0]
+	narrativeMixinFields0 := narrativeMixin[0].Fields()
+	_ = narrativeMixinFields0
+	narrativeMixinFields2 := narrativeMixin[2].Fields()
+	_ = narrativeMixinFields2
+	narrativeMixinFields3 := narrativeMixin[3].Fields()
+	_ = narrativeMixinFields3
+	narrativeFields := schema.Narrative{}.Fields()
+	_ = narrativeFields
+	// narrativeDescCreatedAt is the schema descriptor for created_at field.
+	narrativeDescCreatedAt := narrativeMixinFields0[0].Descriptor()
+	// narrative.DefaultCreatedAt holds the default value on creation for the created_at field.
+	narrative.DefaultCreatedAt = narrativeDescCreatedAt.Default.(func() time.Time)
+	// narrativeDescUpdatedAt is the schema descriptor for updated_at field.
+	narrativeDescUpdatedAt := narrativeMixinFields0[1].Descriptor()
+	// narrative.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	narrative.DefaultUpdatedAt = narrativeDescUpdatedAt.Default.(func() time.Time)
+	// narrative.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	narrative.UpdateDefaultUpdatedAt = narrativeDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// narrativeDescMappingID is the schema descriptor for mapping_id field.
+	narrativeDescMappingID := narrativeMixinFields2[1].Descriptor()
+	// narrative.DefaultMappingID holds the default value on creation for the mapping_id field.
+	narrative.DefaultMappingID = narrativeDescMappingID.Default.(func() string)
+	// narrativeDescTags is the schema descriptor for tags field.
+	narrativeDescTags := narrativeMixinFields3[0].Descriptor()
+	// narrative.DefaultTags holds the default value on creation for the tags field.
+	narrative.DefaultTags = narrativeDescTags.Default.([]string)
+	// narrativeDescID is the schema descriptor for id field.
+	narrativeDescID := narrativeMixinFields2[0].Descriptor()
+	// narrative.DefaultID holds the default value on creation for the id field.
+	narrative.DefaultID = narrativeDescID.Default.(func() string)
+	narrativehistoryFields := schema.NarrativeHistory{}.Fields()
+	_ = narrativehistoryFields
+	// narrativehistoryDescHistoryTime is the schema descriptor for history_time field.
+	narrativehistoryDescHistoryTime := narrativehistoryFields[0].Descriptor()
+	// narrativehistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	narrativehistory.DefaultHistoryTime = narrativehistoryDescHistoryTime.Default.(func() time.Time)
+	// narrativehistoryDescCreatedAt is the schema descriptor for created_at field.
+	narrativehistoryDescCreatedAt := narrativehistoryFields[3].Descriptor()
+	// narrativehistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	narrativehistory.DefaultCreatedAt = narrativehistoryDescCreatedAt.Default.(func() time.Time)
+	// narrativehistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	narrativehistoryDescUpdatedAt := narrativehistoryFields[4].Descriptor()
+	// narrativehistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	narrativehistory.DefaultUpdatedAt = narrativehistoryDescUpdatedAt.Default.(func() time.Time)
+	// narrativehistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	narrativehistory.UpdateDefaultUpdatedAt = narrativehistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// narrativehistoryDescMappingID is the schema descriptor for mapping_id field.
+	narrativehistoryDescMappingID := narrativehistoryFields[10].Descriptor()
+	// narrativehistory.DefaultMappingID holds the default value on creation for the mapping_id field.
+	narrativehistory.DefaultMappingID = narrativehistoryDescMappingID.Default.(func() string)
+	// narrativehistoryDescTags is the schema descriptor for tags field.
+	narrativehistoryDescTags := narrativehistoryFields[11].Descriptor()
+	// narrativehistory.DefaultTags holds the default value on creation for the tags field.
+	narrativehistory.DefaultTags = narrativehistoryDescTags.Default.([]string)
+	// narrativehistoryDescID is the schema descriptor for id field.
+	narrativehistoryDescID := narrativehistoryFields[9].Descriptor()
+	// narrativehistory.DefaultID holds the default value on creation for the id field.
+	narrativehistory.DefaultID = narrativehistoryDescID.Default.(func() string)
 	noteMixin := schema.Note{}.Mixin()
 	note.Policy = privacy.NewPolicies(schema.Note{})
 	note.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -2620,6 +2963,266 @@ func init() {
 	personalaccesstokenDescID := personalaccesstokenMixinFields2[0].Descriptor()
 	// personalaccesstoken.DefaultID holds the default value on creation for the id field.
 	personalaccesstoken.DefaultID = personalaccesstokenDescID.Default.(func() string)
+	procedureMixin := schema.Procedure{}.Mixin()
+	procedureMixinHooks0 := procedureMixin[0].Hooks()
+	procedureMixinHooks1 := procedureMixin[1].Hooks()
+	procedure.Hooks[0] = procedureMixinHooks0[0]
+	procedure.Hooks[1] = procedureMixinHooks1[0]
+	procedureMixinInters1 := procedureMixin[1].Interceptors()
+	procedure.Interceptors[0] = procedureMixinInters1[0]
+	procedureMixinFields0 := procedureMixin[0].Fields()
+	_ = procedureMixinFields0
+	procedureMixinFields2 := procedureMixin[2].Fields()
+	_ = procedureMixinFields2
+	procedureMixinFields3 := procedureMixin[3].Fields()
+	_ = procedureMixinFields3
+	procedureFields := schema.Procedure{}.Fields()
+	_ = procedureFields
+	// procedureDescCreatedAt is the schema descriptor for created_at field.
+	procedureDescCreatedAt := procedureMixinFields0[0].Descriptor()
+	// procedure.DefaultCreatedAt holds the default value on creation for the created_at field.
+	procedure.DefaultCreatedAt = procedureDescCreatedAt.Default.(func() time.Time)
+	// procedureDescUpdatedAt is the schema descriptor for updated_at field.
+	procedureDescUpdatedAt := procedureMixinFields0[1].Descriptor()
+	// procedure.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	procedure.DefaultUpdatedAt = procedureDescUpdatedAt.Default.(func() time.Time)
+	// procedure.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	procedure.UpdateDefaultUpdatedAt = procedureDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// procedureDescMappingID is the schema descriptor for mapping_id field.
+	procedureDescMappingID := procedureMixinFields2[1].Descriptor()
+	// procedure.DefaultMappingID holds the default value on creation for the mapping_id field.
+	procedure.DefaultMappingID = procedureDescMappingID.Default.(func() string)
+	// procedureDescTags is the schema descriptor for tags field.
+	procedureDescTags := procedureMixinFields3[0].Descriptor()
+	// procedure.DefaultTags holds the default value on creation for the tags field.
+	procedure.DefaultTags = procedureDescTags.Default.([]string)
+	// procedureDescID is the schema descriptor for id field.
+	procedureDescID := procedureMixinFields2[0].Descriptor()
+	// procedure.DefaultID holds the default value on creation for the id field.
+	procedure.DefaultID = procedureDescID.Default.(func() string)
+	procedurehistoryFields := schema.ProcedureHistory{}.Fields()
+	_ = procedurehistoryFields
+	// procedurehistoryDescHistoryTime is the schema descriptor for history_time field.
+	procedurehistoryDescHistoryTime := procedurehistoryFields[0].Descriptor()
+	// procedurehistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	procedurehistory.DefaultHistoryTime = procedurehistoryDescHistoryTime.Default.(func() time.Time)
+	// procedurehistoryDescCreatedAt is the schema descriptor for created_at field.
+	procedurehistoryDescCreatedAt := procedurehistoryFields[3].Descriptor()
+	// procedurehistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	procedurehistory.DefaultCreatedAt = procedurehistoryDescCreatedAt.Default.(func() time.Time)
+	// procedurehistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	procedurehistoryDescUpdatedAt := procedurehistoryFields[4].Descriptor()
+	// procedurehistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	procedurehistory.DefaultUpdatedAt = procedurehistoryDescUpdatedAt.Default.(func() time.Time)
+	// procedurehistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	procedurehistory.UpdateDefaultUpdatedAt = procedurehistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// procedurehistoryDescMappingID is the schema descriptor for mapping_id field.
+	procedurehistoryDescMappingID := procedurehistoryFields[10].Descriptor()
+	// procedurehistory.DefaultMappingID holds the default value on creation for the mapping_id field.
+	procedurehistory.DefaultMappingID = procedurehistoryDescMappingID.Default.(func() string)
+	// procedurehistoryDescTags is the schema descriptor for tags field.
+	procedurehistoryDescTags := procedurehistoryFields[11].Descriptor()
+	// procedurehistory.DefaultTags holds the default value on creation for the tags field.
+	procedurehistory.DefaultTags = procedurehistoryDescTags.Default.([]string)
+	// procedurehistoryDescID is the schema descriptor for id field.
+	procedurehistoryDescID := procedurehistoryFields[9].Descriptor()
+	// procedurehistory.DefaultID holds the default value on creation for the id field.
+	procedurehistory.DefaultID = procedurehistoryDescID.Default.(func() string)
+	riskMixin := schema.Risk{}.Mixin()
+	riskMixinHooks0 := riskMixin[0].Hooks()
+	riskMixinHooks1 := riskMixin[1].Hooks()
+	risk.Hooks[0] = riskMixinHooks0[0]
+	risk.Hooks[1] = riskMixinHooks1[0]
+	riskMixinInters1 := riskMixin[1].Interceptors()
+	risk.Interceptors[0] = riskMixinInters1[0]
+	riskMixinFields0 := riskMixin[0].Fields()
+	_ = riskMixinFields0
+	riskMixinFields2 := riskMixin[2].Fields()
+	_ = riskMixinFields2
+	riskMixinFields3 := riskMixin[3].Fields()
+	_ = riskMixinFields3
+	riskFields := schema.Risk{}.Fields()
+	_ = riskFields
+	// riskDescCreatedAt is the schema descriptor for created_at field.
+	riskDescCreatedAt := riskMixinFields0[0].Descriptor()
+	// risk.DefaultCreatedAt holds the default value on creation for the created_at field.
+	risk.DefaultCreatedAt = riskDescCreatedAt.Default.(func() time.Time)
+	// riskDescUpdatedAt is the schema descriptor for updated_at field.
+	riskDescUpdatedAt := riskMixinFields0[1].Descriptor()
+	// risk.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	risk.DefaultUpdatedAt = riskDescUpdatedAt.Default.(func() time.Time)
+	// risk.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	risk.UpdateDefaultUpdatedAt = riskDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// riskDescMappingID is the schema descriptor for mapping_id field.
+	riskDescMappingID := riskMixinFields2[1].Descriptor()
+	// risk.DefaultMappingID holds the default value on creation for the mapping_id field.
+	risk.DefaultMappingID = riskDescMappingID.Default.(func() string)
+	// riskDescTags is the schema descriptor for tags field.
+	riskDescTags := riskMixinFields3[0].Descriptor()
+	// risk.DefaultTags holds the default value on creation for the tags field.
+	risk.DefaultTags = riskDescTags.Default.([]string)
+	// riskDescID is the schema descriptor for id field.
+	riskDescID := riskMixinFields2[0].Descriptor()
+	// risk.DefaultID holds the default value on creation for the id field.
+	risk.DefaultID = riskDescID.Default.(func() string)
+	riskhistoryFields := schema.RiskHistory{}.Fields()
+	_ = riskhistoryFields
+	// riskhistoryDescHistoryTime is the schema descriptor for history_time field.
+	riskhistoryDescHistoryTime := riskhistoryFields[0].Descriptor()
+	// riskhistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	riskhistory.DefaultHistoryTime = riskhistoryDescHistoryTime.Default.(func() time.Time)
+	// riskhistoryDescCreatedAt is the schema descriptor for created_at field.
+	riskhistoryDescCreatedAt := riskhistoryFields[3].Descriptor()
+	// riskhistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	riskhistory.DefaultCreatedAt = riskhistoryDescCreatedAt.Default.(func() time.Time)
+	// riskhistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	riskhistoryDescUpdatedAt := riskhistoryFields[4].Descriptor()
+	// riskhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	riskhistory.DefaultUpdatedAt = riskhistoryDescUpdatedAt.Default.(func() time.Time)
+	// riskhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	riskhistory.UpdateDefaultUpdatedAt = riskhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// riskhistoryDescMappingID is the schema descriptor for mapping_id field.
+	riskhistoryDescMappingID := riskhistoryFields[10].Descriptor()
+	// riskhistory.DefaultMappingID holds the default value on creation for the mapping_id field.
+	riskhistory.DefaultMappingID = riskhistoryDescMappingID.Default.(func() string)
+	// riskhistoryDescTags is the schema descriptor for tags field.
+	riskhistoryDescTags := riskhistoryFields[11].Descriptor()
+	// riskhistory.DefaultTags holds the default value on creation for the tags field.
+	riskhistory.DefaultTags = riskhistoryDescTags.Default.([]string)
+	// riskhistoryDescID is the schema descriptor for id field.
+	riskhistoryDescID := riskhistoryFields[9].Descriptor()
+	// riskhistory.DefaultID holds the default value on creation for the id field.
+	riskhistory.DefaultID = riskhistoryDescID.Default.(func() string)
+	standardMixin := schema.Standard{}.Mixin()
+	standardMixinHooks0 := standardMixin[0].Hooks()
+	standardMixinHooks1 := standardMixin[1].Hooks()
+	standard.Hooks[0] = standardMixinHooks0[0]
+	standard.Hooks[1] = standardMixinHooks1[0]
+	standardMixinInters1 := standardMixin[1].Interceptors()
+	standard.Interceptors[0] = standardMixinInters1[0]
+	standardMixinFields0 := standardMixin[0].Fields()
+	_ = standardMixinFields0
+	standardMixinFields2 := standardMixin[2].Fields()
+	_ = standardMixinFields2
+	standardMixinFields3 := standardMixin[3].Fields()
+	_ = standardMixinFields3
+	standardFields := schema.Standard{}.Fields()
+	_ = standardFields
+	// standardDescCreatedAt is the schema descriptor for created_at field.
+	standardDescCreatedAt := standardMixinFields0[0].Descriptor()
+	// standard.DefaultCreatedAt holds the default value on creation for the created_at field.
+	standard.DefaultCreatedAt = standardDescCreatedAt.Default.(func() time.Time)
+	// standardDescUpdatedAt is the schema descriptor for updated_at field.
+	standardDescUpdatedAt := standardMixinFields0[1].Descriptor()
+	// standard.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	standard.DefaultUpdatedAt = standardDescUpdatedAt.Default.(func() time.Time)
+	// standard.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	standard.UpdateDefaultUpdatedAt = standardDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// standardDescMappingID is the schema descriptor for mapping_id field.
+	standardDescMappingID := standardMixinFields2[1].Descriptor()
+	// standard.DefaultMappingID holds the default value on creation for the mapping_id field.
+	standard.DefaultMappingID = standardDescMappingID.Default.(func() string)
+	// standardDescTags is the schema descriptor for tags field.
+	standardDescTags := standardMixinFields3[0].Descriptor()
+	// standard.DefaultTags holds the default value on creation for the tags field.
+	standard.DefaultTags = standardDescTags.Default.([]string)
+	// standardDescID is the schema descriptor for id field.
+	standardDescID := standardMixinFields2[0].Descriptor()
+	// standard.DefaultID holds the default value on creation for the id field.
+	standard.DefaultID = standardDescID.Default.(func() string)
+	standardhistoryFields := schema.StandardHistory{}.Fields()
+	_ = standardhistoryFields
+	// standardhistoryDescHistoryTime is the schema descriptor for history_time field.
+	standardhistoryDescHistoryTime := standardhistoryFields[0].Descriptor()
+	// standardhistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	standardhistory.DefaultHistoryTime = standardhistoryDescHistoryTime.Default.(func() time.Time)
+	// standardhistoryDescCreatedAt is the schema descriptor for created_at field.
+	standardhistoryDescCreatedAt := standardhistoryFields[3].Descriptor()
+	// standardhistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	standardhistory.DefaultCreatedAt = standardhistoryDescCreatedAt.Default.(func() time.Time)
+	// standardhistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	standardhistoryDescUpdatedAt := standardhistoryFields[4].Descriptor()
+	// standardhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	standardhistory.DefaultUpdatedAt = standardhistoryDescUpdatedAt.Default.(func() time.Time)
+	// standardhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	standardhistory.UpdateDefaultUpdatedAt = standardhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// standardhistoryDescMappingID is the schema descriptor for mapping_id field.
+	standardhistoryDescMappingID := standardhistoryFields[10].Descriptor()
+	// standardhistory.DefaultMappingID holds the default value on creation for the mapping_id field.
+	standardhistory.DefaultMappingID = standardhistoryDescMappingID.Default.(func() string)
+	// standardhistoryDescTags is the schema descriptor for tags field.
+	standardhistoryDescTags := standardhistoryFields[11].Descriptor()
+	// standardhistory.DefaultTags holds the default value on creation for the tags field.
+	standardhistory.DefaultTags = standardhistoryDescTags.Default.([]string)
+	// standardhistoryDescID is the schema descriptor for id field.
+	standardhistoryDescID := standardhistoryFields[9].Descriptor()
+	// standardhistory.DefaultID holds the default value on creation for the id field.
+	standardhistory.DefaultID = standardhistoryDescID.Default.(func() string)
+	subcontrolMixin := schema.Subcontrol{}.Mixin()
+	subcontrolMixinHooks0 := subcontrolMixin[0].Hooks()
+	subcontrolMixinHooks1 := subcontrolMixin[1].Hooks()
+	subcontrol.Hooks[0] = subcontrolMixinHooks0[0]
+	subcontrol.Hooks[1] = subcontrolMixinHooks1[0]
+	subcontrolMixinInters1 := subcontrolMixin[1].Interceptors()
+	subcontrol.Interceptors[0] = subcontrolMixinInters1[0]
+	subcontrolMixinFields0 := subcontrolMixin[0].Fields()
+	_ = subcontrolMixinFields0
+	subcontrolMixinFields2 := subcontrolMixin[2].Fields()
+	_ = subcontrolMixinFields2
+	subcontrolMixinFields3 := subcontrolMixin[3].Fields()
+	_ = subcontrolMixinFields3
+	subcontrolFields := schema.Subcontrol{}.Fields()
+	_ = subcontrolFields
+	// subcontrolDescCreatedAt is the schema descriptor for created_at field.
+	subcontrolDescCreatedAt := subcontrolMixinFields0[0].Descriptor()
+	// subcontrol.DefaultCreatedAt holds the default value on creation for the created_at field.
+	subcontrol.DefaultCreatedAt = subcontrolDescCreatedAt.Default.(func() time.Time)
+	// subcontrolDescUpdatedAt is the schema descriptor for updated_at field.
+	subcontrolDescUpdatedAt := subcontrolMixinFields0[1].Descriptor()
+	// subcontrol.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	subcontrol.DefaultUpdatedAt = subcontrolDescUpdatedAt.Default.(func() time.Time)
+	// subcontrol.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	subcontrol.UpdateDefaultUpdatedAt = subcontrolDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// subcontrolDescMappingID is the schema descriptor for mapping_id field.
+	subcontrolDescMappingID := subcontrolMixinFields2[1].Descriptor()
+	// subcontrol.DefaultMappingID holds the default value on creation for the mapping_id field.
+	subcontrol.DefaultMappingID = subcontrolDescMappingID.Default.(func() string)
+	// subcontrolDescTags is the schema descriptor for tags field.
+	subcontrolDescTags := subcontrolMixinFields3[0].Descriptor()
+	// subcontrol.DefaultTags holds the default value on creation for the tags field.
+	subcontrol.DefaultTags = subcontrolDescTags.Default.([]string)
+	// subcontrolDescID is the schema descriptor for id field.
+	subcontrolDescID := subcontrolMixinFields2[0].Descriptor()
+	// subcontrol.DefaultID holds the default value on creation for the id field.
+	subcontrol.DefaultID = subcontrolDescID.Default.(func() string)
+	subcontrolhistoryFields := schema.SubcontrolHistory{}.Fields()
+	_ = subcontrolhistoryFields
+	// subcontrolhistoryDescHistoryTime is the schema descriptor for history_time field.
+	subcontrolhistoryDescHistoryTime := subcontrolhistoryFields[0].Descriptor()
+	// subcontrolhistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	subcontrolhistory.DefaultHistoryTime = subcontrolhistoryDescHistoryTime.Default.(func() time.Time)
+	// subcontrolhistoryDescCreatedAt is the schema descriptor for created_at field.
+	subcontrolhistoryDescCreatedAt := subcontrolhistoryFields[3].Descriptor()
+	// subcontrolhistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	subcontrolhistory.DefaultCreatedAt = subcontrolhistoryDescCreatedAt.Default.(func() time.Time)
+	// subcontrolhistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	subcontrolhistoryDescUpdatedAt := subcontrolhistoryFields[4].Descriptor()
+	// subcontrolhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	subcontrolhistory.DefaultUpdatedAt = subcontrolhistoryDescUpdatedAt.Default.(func() time.Time)
+	// subcontrolhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	subcontrolhistory.UpdateDefaultUpdatedAt = subcontrolhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// subcontrolhistoryDescMappingID is the schema descriptor for mapping_id field.
+	subcontrolhistoryDescMappingID := subcontrolhistoryFields[10].Descriptor()
+	// subcontrolhistory.DefaultMappingID holds the default value on creation for the mapping_id field.
+	subcontrolhistory.DefaultMappingID = subcontrolhistoryDescMappingID.Default.(func() string)
+	// subcontrolhistoryDescTags is the schema descriptor for tags field.
+	subcontrolhistoryDescTags := subcontrolhistoryFields[11].Descriptor()
+	// subcontrolhistory.DefaultTags holds the default value on creation for the tags field.
+	subcontrolhistory.DefaultTags = subcontrolhistoryDescTags.Default.([]string)
+	// subcontrolhistoryDescID is the schema descriptor for id field.
+	subcontrolhistoryDescID := subcontrolhistoryFields[9].Descriptor()
+	// subcontrolhistory.DefaultID holds the default value on creation for the id field.
+	subcontrolhistory.DefaultID = subcontrolhistoryDescID.Default.(func() string)
 	subscriberMixin := schema.Subscriber{}.Mixin()
 	subscriber.Policy = privacy.NewPolicies(schema.Subscriber{})
 	subscriber.Hooks[0] = func(next ent.Mutator) ent.Mutator {
