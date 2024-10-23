@@ -223,6 +223,11 @@ func (suite *GraphTestSuite) TestMutationUpdateTFASetting() {
 		t.Run("Update "+tc.name, func(t *testing.T) {
 			defer mock_fga.ClearMocks(suite.client.fga)
 
+			if tc.errMsg == "" {
+				// we dont check the org in the response so we can use an empty list
+				mock_fga.ListAny(t, suite.client.fga, []string{})
+			}
+
 			// update tfa settings
 			resp, err := tc.client.UpdateTFASetting(tc.ctx, tc.input)
 

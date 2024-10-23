@@ -21,6 +21,8 @@ type Storage interface {
 	GetPresignedURL(context.Context, string, time.Duration) (string, error)
 	// GetScheme returns the scheme of the storage backend
 	GetScheme() *string
+	// ListBuckets is used to list the buckets in the storage backend
+	ListBuckets() ([]string, error)
 	io.Closer
 }
 
@@ -146,6 +148,15 @@ type File struct {
 	PresignedURL string `json:"url"`
 	// ProvidedExtension is the extension provided by the client
 	ProvidedExtension string `json:"provided_extension"`
+
+	// Parent is the parent object of the file, if any
+	Parent ParentObject `json:"parent,omitempty"`
+}
+
+// ParentObject is a struct that holds information about the parent object of a file
+type ParentObject struct {
+	ID   string `json:"id"`
+	Type string `json:"type"`
 }
 
 // SKipperFunc is a function that defines whether to skip the middleware

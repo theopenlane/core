@@ -30,8 +30,8 @@ func (suite *GraphTestSuite) TestQueryOrgMembers() {
 	childReqCtx, err := auth.NewTestContextWithOrgID(testUser.ID, childOrg.ID)
 	require.NoError(t, err)
 
-	(&OrgMemberBuilder{client: suite.client, OrgID: childOrg.ID}).MustNew(childReqCtx, t)
-	(&OrgMemberBuilder{client: suite.client, OrgID: childOrg.ID, UserID: org1Member.UserID}).MustNew(childReqCtx, t)
+	orgMember2 := (&OrgMemberBuilder{client: suite.client, OrgID: childOrg.ID}).MustNew(childReqCtx, t)
+	orgMember3 := (&OrgMemberBuilder{client: suite.client, OrgID: childOrg.ID, UserID: org1Member.UserID}).MustNew(childReqCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -71,7 +71,7 @@ func (suite *GraphTestSuite) TestQueryOrgMembers() {
 			client:      suite.client.api,
 			ctx:         reqCtx,
 			allowed:     false,
-			expectedLen: 2,
+			expectedLen: 0,
 			expectErr:   true,
 		},
 		{
@@ -96,6 +96,15 @@ func (suite *GraphTestSuite) TestQueryOrgMembers() {
 
 				// if thee user is providing an org id, we check if they have access to the org
 				mock_fga.CheckAny(t, suite.client.fga, tc.allowed)
+			}
+
+			if tc.expectedLen > 0 {
+				// mock_fga.ListAny(t, suite.client.fga, []string{"organization:" + testOrgID})
+				mock_fga.ListUsersAny(t, suite.client.fga, []string{org1Member.UserID,
+					orgMember2.UserID,
+					orgMember3.UserID,
+					testUser.ID,
+				}, nil)
 			}
 
 			resp, err := tc.client.GetOrgMembersByOrgID(tc.ctx, &whereInput)
@@ -200,7 +209,7 @@ func (suite *GraphTestSuite) TestMutationCreateOrgMembers() {
 			orgID:     ulids.New().String(),
 			userID:    testUser1.ID,
 			role:      enums.RoleMember,
-			checkOrg:  false,
+			checkOrg:  true,
 			checkRole: true,
 			errMsg:    "organization not found",
 		},
@@ -226,6 +235,10 @@ func (suite *GraphTestSuite) TestMutationCreateOrgMembers() {
 			// checks role in org to ensure user has ability to add other members
 			if tc.checkRole {
 				mock_fga.CheckAny(t, suite.client.fga, true)
+			}
+
+			if tc.checkOrg {
+				mock_fga.ListAny(t, suite.client.fga, []string{"organization:" + org1.ID, "organization:" + testPersonalOrgID})
 			}
 
 			role := tc.role

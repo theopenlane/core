@@ -89,7 +89,8 @@ func (suite *HandlerTestSuite) TestOauthRegister() {
 		t.Run(tt.name, func(t *testing.T) {
 			if tt.writes {
 				// add mocks for writes when a new user is created
-				mock_fga.WriteOnce(t, suite.fga)
+				// once for the personal org, and once for the _self relation
+				mock_fga.WriteAny(t, suite.fga)
 			}
 
 			registerJSON := models.OauthTokenRequest{

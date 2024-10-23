@@ -36,7 +36,7 @@ type OauthProvider struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
-	// The organization id that owns the object
+	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the oauth provider's name
 	Name string `json:"name,omitempty"`

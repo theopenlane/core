@@ -135,7 +135,8 @@ func (suite *HandlerTestSuite) TestHandlerCheckAndCreateUser() {
 
 			if tt.writes {
 				// add mocks for writes when a new user is created
-				mock_fga.WriteOnce(t, suite.fga)
+				// once for their personal org, and once for the _self relation
+				mock_fga.WriteAny(t, suite.fga)
 			}
 
 			now := time.Now()

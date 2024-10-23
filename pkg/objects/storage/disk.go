@@ -2,10 +2,13 @@ package storage
 
 import (
 	"context"
+	"fmt"
 	"io"
 	"os"
 	"path/filepath"
 	"time"
+
+	"github.com/rs/zerolog/log"
 
 	"github.com/theopenlane/core/pkg/objects"
 )
@@ -14,32 +17,39 @@ type Disk struct {
 	destinationFolder string
 	// Scheme is the scheme of the storage backend
 	Scheme string
-	// Bucket is the local folder to store files in
-	Bucket string
-	// Key is the name of the file in the local folder
-	Key string
 	// Opts is the options for the disk storage
-	Opts DiskOption
+	Opts *DiskOptions
 }
 
 // ensure Disk satisfies the Storage interface
 var _ objects.Storage = &Disk{}
 
-func NewDiskStorage(opts DiskOptions) (*Disk, error) {
+func NewDiskStorage(opts *DiskOptions) (*Disk, error) {
 	if isStringEmpty(opts.Bucket) {
 		return nil, ErrInvalidFolderPath
 	}
 
-	return &Disk{
-		Bucket: opts.Bucket,
+	disk := &Disk{
+		Opts:   opts,
 		Scheme: "file://",
-	}, nil
+	}
+
+	// create directory if it does not exist
+	if _, err := disk.ListBuckets(); os.IsNotExist(err) {
+		log.Info().Str("folder", opts.Bucket).Msg("directory does not exist, creating directory")
+
+		if err := os.MkdirAll(opts.Bucket, os.ModePerm); err != nil {
+			return nil, fmt.Errorf("%w: failed to create directory", ErrInvalidFolderPath)
+		}
+	}
+
+	return disk, nil
 }
 
 func (d *Disk) Close() error { return nil }
 
 func (d *Disk) Upload(ctx context.Context, r io.Reader, opts *objects.UploadFileOptions) (*objects.UploadedFileMetadata, error) {
-	f, err := os.Create(filepath.Join(opts.Bucket, opts.FileName))
+	f, err := os.Create(filepath.Join(d.Opts.Bucket, opts.FileName))
 	if err != nil {
 		return nil, err
 	}
@@ -83,4 +93,13 @@ func (d *Disk) Download(ctx context.Context, opts *objects.DownloadFileOptions) 
 // TODO: Implement this method
 func (d *Disk) GetPresignedURL(ctx context.Context, key string, expires time.Duration) (string, error) {
 	return "", nil
+}
+
+// ListBuckets lists the local bucket if it exists
+func (d *Disk) ListBuckets() ([]string, error) {
+	if _, err := os.Stat(d.Opts.Bucket); err != nil {
+		return nil, err
+	}
+
+	return []string{d.Opts.Bucket}, nil
 }

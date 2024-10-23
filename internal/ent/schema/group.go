@@ -35,9 +35,7 @@ func (Group) Mixin() []ent.Mixin {
 		mixin.SoftDeleteMixin{},
 		emixin.IDMixin{},
 		emixin.TagMixin{},
-		OrgOwnerMixin{
-			Ref: "groups",
-		},
+		NewOrgOwnMixinWithRef("groups"),
 	}
 }
 

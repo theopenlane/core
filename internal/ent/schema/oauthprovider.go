@@ -80,9 +80,7 @@ func (OauthProvider) Mixin() []ent.Mixin {
 		emixin.IDMixin{},
 		emixin.TagMixin{},
 		mixin.SoftDeleteMixin{},
-		OrgOwnerMixin{
-			Ref: "oauthprovider",
-		},
+		NewOrgOwnMixinWithRef("oauthprovider"),
 	}
 }
 

@@ -1,6 +1,12 @@
 model
   schema 1.1
 type user
+  relations
+    define _self: [user]
+    define can_view: _self
+    define can_edit: _self
+    define can_delete: _self
+    
 type service
 type role
   relations
@@ -48,3 +54,63 @@ type feature
   relations
     define associated_subscription_tier: [subscription_tier]
     define access: [user, service] or subscriber_member from associated_subscription_tier
+type file
+  relations
+    define can_view: [user] or can_delete or can_edit or can_view from parent
+    define can_edit: [user] or can_delete or can_edit from parent
+    define can_delete: [user] or can_delete from parent
+    define parent: [user, program, organization, control, procedure, group, template, documentdata, contact, policy]
+type program 
+  relations
+    # main roles
+    define admin: [user]
+    define member: [user] or admin
+    # main permission sets based on roles
+    define can_delete: [service] or admin
+    define can_edit: [service] or admin  
+    define can_view: [service] or member or admin or can_edit
+    # additional fine-grained permissions
+    ## allow owner and assigned users to view audit logs
+    define audit_log_viewer: [user] or admin
+    ## allow members to invite other members
+    define can_invite_members: [user] or member or can_edit
+    ## onnly allow users with edit access to the org to invite other admins
+    define can_invite_admins: [user] or can_edit
+    # additional relations
+    define user_in_context: [user]
+type control
+  relations
+    define can_view: [user] or can_view from parent
+    define can_edit: [user] or can_edit from parent
+    define can_delete: [user] or can_delete from parent
+    define parent: [program]
+type policy
+  relations
+    define can_view: [user] or can_view from parent
+    define can_edit: [user] or can_edit from parent
+    define can_delete: [user] or can_delete from parent
+    define parent: [organization]
+type procedure 
+  relations
+    define can_view: [user] or can_view from parent
+    define can_edit: [user] or can_edit from parent
+    define can_delete: [user] or can_delete from parent
+    define parent: [organization]
+type template
+  relations
+    define can_view: [user] or can_view from parent
+    define can_edit: [user] or can_edit from parent
+    define can_delete: [user] or can_delete from parent
+    define parent: [organization]
+type documentdata
+  relations
+    define can_view: [user] or can_view from parent
+    define can_edit: [user] or can_edit from parent
+    define can_delete: [user] or can_delete from parent
+    define parent: [organization, control, program]
+type contact
+  relations
+    define can_view: [user] or can_view from parent
+    define can_edit: [user] or can_edit from parent
+    define can_delete: [user] or can_delete from parent
+    define parent: [organization]

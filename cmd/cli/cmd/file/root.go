@@ -49,10 +49,6 @@ func consoleOutput(e any) error {
 		e = nodes
 	case *openlaneclient.GetFileByID:
 		e = v.File
-	case *openlaneclient.CreateFile:
-		e = v.CreateFile.File
-	case *openlaneclient.UpdateFile:
-		e = v.UpdateFile.File
 	case *openlaneclient.DeleteFile:
 		deletedTableOutput(v)
 		return nil

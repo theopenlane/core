@@ -235,6 +235,63 @@ func (_c *MockStorage_GetScheme_Call) RunAndReturn(run func() *string) *MockStor
 	return _c
 }
 
+// ListBuckets provides a mock function with given fields:
+func (_m *MockStorage) ListBuckets() ([]string, error) {
+	ret := _m.Called()
+
+	if len(ret) == 0 {
+		panic("no return value specified for ListBuckets")
+	}
+
+	var r0 []string
+	var r1 error
+	if rf, ok := ret.Get(0).(func() ([]string, error)); ok {
+		return rf()
+	}
+	if rf, ok := ret.Get(0).(func() []string); ok {
+		r0 = rf()
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]string)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func() error); ok {
+		r1 = rf()
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// MockStorage_ListBuckets_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'ListBuckets'
+type MockStorage_ListBuckets_Call struct {
+	*mock.Call
+}
+
+// ListBuckets is a helper method to define mock.On call
+func (_e *MockStorage_Expecter) ListBuckets() *MockStorage_ListBuckets_Call {
+	return &MockStorage_ListBuckets_Call{Call: _e.mock.On("ListBuckets")}
+}
+
+func (_c *MockStorage_ListBuckets_Call) Run(run func()) *MockStorage_ListBuckets_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run()
+	})
+	return _c
+}
+
+func (_c *MockStorage_ListBuckets_Call) Return(_a0 []string, _a1 error) *MockStorage_ListBuckets_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
+func (_c *MockStorage_ListBuckets_Call) RunAndReturn(run func() ([]string, error)) *MockStorage_ListBuckets_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // ManagerUpload provides a mock function with given fields: _a0, _a1
 func (_m *MockStorage) ManagerUpload(_a0 context.Context, _a1 [][]byte) error {
 	ret := _m.Called(_a0, _a1)

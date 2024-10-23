@@ -1,13 +1,18 @@
 package schema
 
 import (
+	"context"
+
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	emixin "github.com/theopenlane/entx/mixin"
+	"github.com/theopenlane/iam/entfga"
 
+	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/mixin"
 )
 
@@ -97,6 +102,9 @@ func (File) Mixin() []ent.Mixin {
 		mixin.SoftDeleteMixin{},
 		emixin.IDMixin{},
 		emixin.TagMixin{},
+		NewObjectOwnedMixin(ObjectOwnedMixin{
+			HookFunc: emptyObjectHookFunc, // use an empty hook, file processing is handled in middleware
+		}),
 	}
 }
 
@@ -106,5 +114,31 @@ func (File) Annotations() []schema.Annotation {
 		entgql.RelayConnection(),
 		entgql.QueryField(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
+		entfga.Annotations{
+			ObjectType:   "file",
+			IncludeHooks: false,
+		},
+	}
+}
+
+// Policy of the File
+func (File) Policy() ent.Policy {
+	return privacy.Policy{
+		Mutation: privacy.MutationPolicy{
+			privacy.OnMutationOperation(
+				privacy.FileMutationRuleFunc(func(ctx context.Context, m *generated.FileMutation) error {
+					return m.CheckAccessForEdit(ctx)
+				}),
+				// check permissions on delete and update operations, creation is handled by the parent object
+				ent.OpDelete|ent.OpDeleteOne|ent.OpUpdate|ent.OpUpdateOne,
+			),
+			privacy.AlwaysAllowRule(),
+		},
+		Query: privacy.QueryPolicy{
+			privacy.FileQueryRuleFunc(func(ctx context.Context, q *generated.FileQuery) error {
+				return q.CheckAccess(ctx)
+			}),
+			privacy.AlwaysDenyRule(),
+		},
 	}
 }

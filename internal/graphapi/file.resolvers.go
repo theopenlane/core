@@ -7,59 +7,8 @@ package graphapi
 import (
 	"context"
 
-	"github.com/99designs/gqlgen/graphql"
-	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 )
-
-// CreateFile is the resolver for the createFile field.
-func (r *mutationResolver) CreateFile(ctx context.Context, input generated.CreateFileInput) (*FileCreatePayload, error) {
-	res, err := withTransactionalMutation(ctx).File.Create().SetInput(input).Save(ctx)
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "file"})
-	}
-
-	return &FileCreatePayload{
-		File: res,
-	}, nil
-}
-
-// CreateBulkFile is the resolver for the createBulkFile field.
-func (r *mutationResolver) CreateBulkFile(ctx context.Context, input []*generated.CreateFileInput) (*FileBulkCreatePayload, error) {
-	return r.bulkCreateFile(ctx, input)
-}
-
-// CreateBulkCSVFile is the resolver for the createBulkCSVFile field.
-func (r *mutationResolver) CreateBulkCSVFile(ctx context.Context, input graphql.Upload) (*FileBulkCreatePayload, error) {
-	data, err := unmarshalBulkData[generated.CreateFileInput](input)
-	if err != nil {
-		log.Error().Err(err).Msg("failed to unmarshal bulk data")
-
-		return nil, err
-	}
-
-	return r.bulkCreateFile(ctx, data)
-}
-
-// UpdateFile is the resolver for the updateFile field.
-func (r *mutationResolver) UpdateFile(ctx context.Context, id string, input generated.UpdateFileInput) (*FileUpdatePayload, error) {
-	res, err := withTransactionalMutation(ctx).File.Get(ctx, id)
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "file"})
-	}
-
-	// setup update request
-	req := res.Update().SetInput(input).AppendTags(input.AppendTags)
-
-	res, err = req.Save(ctx)
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "file"})
-	}
-
-	return &FileUpdatePayload{
-		File: res,
-	}, nil
-}
 
 // DeleteFile is the resolver for the deleteFile field.
 func (r *mutationResolver) DeleteFile(ctx context.Context, id string) (*FileDeletePayload, error) {

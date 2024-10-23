@@ -8,11 +8,13 @@ import (
 	"entgo.io/ent"
 	petname "github.com/dustinkirkland/golang-petname"
 	"github.com/rs/zerolog/log"
+	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/entx"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/utils/passwd"
 
@@ -26,6 +28,11 @@ import (
 
 const (
 	personalOrgPrefix = "Personal Organization"
+)
+
+var (
+	// caser is used to capitalize the first letter of words
+	caser = cases.Title(language.AmericanEnglish)
 )
 
 // HookUser runs on user mutations validate and hash the password and set default values that are not provided
@@ -61,8 +68,14 @@ func HookUser() ent.Hook {
 			// check for uploaded files (e.g. avatar image)
 			fileIDs := objects.GetFileIDsFromContext(ctx)
 			if len(fileIDs) > 0 {
-				if err := checkAvatarFile(ctx, m); err != nil {
+				ctx, err := checkAvatarFile(ctx, m)
+				if err != nil {
 					return nil, err
+				}
+
+				ec, err := echocontext.EchoContextFromContext(ctx)
+				if err == nil {
+					ec.SetRequest(ec.Request().WithContext(ctx))
 				}
 
 				m.AddFileIDs(fileIDs...)
@@ -118,6 +131,34 @@ func HookUser() ent.Hook {
 	}, ent.OpCreate|ent.OpUpdateOne)
 }
 
+func HookUserPermissions() ent.Hook {
+	return hook.On(func(next ent.Mutator) ent.Mutator {
+		return hook.UserFunc(func(ctx context.Context, m *generated.UserMutation) (generated.Value, error) {
+			v, err := next.Mutate(ctx, m)
+			if err != nil {
+				return nil, err
+			}
+
+			// add user _self permissions after creation
+			userID, _ := m.ID()
+
+			req := fgax.TupleRequest{
+				SubjectID:   userID,
+				SubjectType: "user",
+				ObjectID:    userID,
+				ObjectType:  "user",
+				Relation:    "_self",
+			}
+
+			if _, err := m.Authz.WriteTupleKeys(ctx, []fgax.TupleKey{fgax.GetTupleKey(req)}, nil); err != nil {
+				return nil, err
+			}
+
+			return v, err
+		})
+	}, ent.OpCreate)
+}
+
 // HookDeleteUser runs on user deletions to clean up personal organizations
 func HookDeleteUser() ent.Hook {
 	return func(next ent.Mutator) ent.Mutator {
@@ -162,21 +203,31 @@ func HookDeleteUser() ent.Hook {
 // getPersonalOrgInput generates the input for a new personal organization
 // personal orgs are assigned to all new users when registering
 func getPersonalOrgInput(user *generated.User) generated.CreateOrganizationInput {
-	// caser is used to capitalize the first letter of words
-	caser := cases.Title(language.AmericanEnglish)
-
 	// generate random name for personal orgs
 	name := caser.String(petname.Generate(2, " ")) //nolint:mnd
 	displayName := name
 	personalOrg := true
-	desc := fmt.Sprintf("%s - %s %s", personalOrgPrefix, caser.String(user.FirstName), caser.String(user.LastName))
 
 	return generated.CreateOrganizationInput{
 		Name:        name,
 		DisplayName: &displayName,
-		Description: &desc,
+		Description: personalOrgDescription(user),
 		PersonalOrg: &personalOrg,
 	}
+}
+
+// personalOrgDescription generates a description for a personal org based on the
+// user's first and last name
+func personalOrgDescription(user *generated.User) *string {
+	desc := personalOrgPrefix
+
+	if user.FirstName == "" && user.LastName == "" {
+		return &desc
+	}
+
+	desc = fmt.Sprintf("%s - %s %s", desc, caser.String(user.FirstName), caser.String(user.LastName))
+
+	return &desc
 }
 
 // createPersonalOrg creates an org for a user with a unique random name
@@ -251,24 +302,31 @@ func defaultUserSettings(ctx context.Context, user *generated.UserMutation) (str
 }
 
 // checkAvatarFile checks if an avatar file is provided and sets the local file ID
-func checkAvatarFile(ctx context.Context, m *generated.UserMutation) error {
+func checkAvatarFile(ctx context.Context, m *generated.UserMutation) (context.Context, error) {
+	key := "avatarFile"
+
 	// get the file from the context, if it exists
-	file, _ := objects.FilesFromContextWithKey(ctx, "avatarFile")
+	file, _ := objects.FilesFromContextWithKey(ctx, key)
 
 	// return early if no file is provided
 	if file == nil {
-		return nil
+		return ctx, nil
 	}
 
 	// we should only have one file
 	if len(file) > 1 {
-		return ErrTooManyAvatarFiles
+		return ctx, ErrTooManyAvatarFiles
 	}
 
 	// this should always be true, but check just in case
-	if file[0].FieldName == "avatarFile" {
+	if file[0].FieldName == key {
 		m.SetAvatarLocalFileID(file[0].ID)
+
+		file[0].Parent.ID, _ = m.ID()
+		file[0].Parent.Type = "User"
+
+		ctx = objects.UpdateFileInContextByKey(ctx, key, file[0])
 	}
 
-	return nil
+	return ctx, nil
 }

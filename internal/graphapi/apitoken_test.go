@@ -46,6 +46,7 @@ func (suite *GraphTestSuite) TestQueryApiToken() {
 
 			if tc.errorMsg == "" {
 				mock_fga.CheckAny(t, suite.client.fga, true)
+				mock_fga.ListAny(t, suite.client.fga, []string{"organization:" + testOrgID})
 			}
 
 			resp, err := suite.client.api.GetAPITokenByID(reqCtx, tc.queryID)
@@ -89,6 +90,8 @@ func (suite *GraphTestSuite) TestQueryAPITokens() {
 	for _, tc := range testCases {
 		t.Run("List "+tc.name, func(t *testing.T) {
 			defer mock_fga.ClearMocks(suite.client.fga)
+
+			mock_fga.ListAny(t, suite.client.fga, []string{"organization:" + testOrgID})
 
 			resp, err := suite.client.api.GetAllAPITokens(reqCtx)
 
@@ -173,6 +176,10 @@ func (suite *GraphTestSuite) TestMutationCreateAPIToken() {
 			if tc.errorMsg == "" && len(tc.input.Scopes) > 0 {
 				// mock a call write relationship tuples
 				mock_fga.WriteOnce(t, suite.client.fga)
+			}
+
+			if tc.errorMsg == "" {
+				mock_fga.ListAny(t, suite.client.fga, []string{"organization:" + testOrgID})
 			}
 
 			resp, err := suite.client.api.CreateAPIToken(reqCtx, tc.input)
@@ -267,6 +274,7 @@ func (suite *GraphTestSuite) TestMutationUpdateAPIToken() {
 
 			if tc.errorMsg == "" {
 				mock_fga.CheckAny(t, suite.client.fga, true)
+				mock_fga.ListAny(t, suite.client.fga, []string{"organization:" + testOrgID})
 			}
 
 			if len(tc.input.Scopes) > 0 {
@@ -387,6 +395,7 @@ func (suite *GraphTestSuite) TestLastUsedAPIToken() {
 	token := (&APITokenBuilder{client: suite.client}).MustNew(reqCtx, t)
 
 	mock_fga.CheckAny(t, suite.client.fga, true)
+	mock_fga.ListAny(t, suite.client.fga, []string{"organization:" + testOrgID})
 
 	// check that the last used is empty
 	res, err := suite.client.api.GetAPITokenByID(reqCtx, token.ID)

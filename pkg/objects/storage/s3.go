@@ -25,7 +25,7 @@ var _ objects.Storage = &S3Store{}
 // S3Store is a store that uses S3 as the backend
 type S3Store struct {
 	Client             *s3.Client
-	Opts               S3Options
+	Opts               *S3Options
 	PresignClient      *s3.PresignClient
 	Downloader         *manager.Downloader
 	Uploader           *manager.Uploader
@@ -35,7 +35,7 @@ type S3Store struct {
 }
 
 // NewS3FromConfig creates a new S3Store from the provided configuration
-func NewS3FromConfig(opts S3Options) (*S3Store, error) {
+func NewS3FromConfig(opts *S3Options) (*S3Store, error) {
 	if isStringEmpty(opts.AccessKeyID) || isStringEmpty(opts.SecretAccessKey) {
 		log.Info().Msg("AWS credentials not provided, attempting to use environment variables")
 

@@ -36,6 +36,7 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 
 	mock_fga.WriteAny(t, suite.fga)
 	mock_fga.CheckAny(t, suite.fga, true)
+	mock_fga.ListAny(t, suite.fga, []string{})
 
 	// setup test data
 	requestor := suite.db.User.Create().
@@ -73,6 +74,8 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 	recipientCtx, err := auth.NewTestContextWithOrgID(recipient.ID, userSetting.Edges.DefaultOrg.ID)
 	require.NoError(t, err)
 
+	mock_fga.ClearMocks(suite.fga)
+
 	testCases := []struct {
 		name     string
 		email    string
@@ -104,6 +107,10 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			defer suite.ClearTestData()
+
+			if !tc.wantErr {
+				mock_fga.WriteAny(t, suite.fga)
+			}
 
 			ctx := privacy.DecisionContext(userCtx, privacy.Allow)
 
@@ -144,6 +151,8 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 			assert.Equal(t, http.StatusCreated, recorder.Code)
 			assert.Equal(t, org.CreateOrganization.Organization.ID, out.JoinedOrgID)
 			assert.Equal(t, tc.email, out.Email)
+
+			mock_fga.ListAny(t, suite.fga, []string{"organization:" + org.CreateOrganization.Organization.ID})
 
 			// Test the default org is updated
 			user, err := suite.api.GetUserByID(recipientCtx, recipient.ID)

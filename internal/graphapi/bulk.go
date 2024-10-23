@@ -198,25 +198,6 @@ func (r *mutationResolver) bulkCreateFeature(ctx context.Context, input []*gener
 	}, nil
 }
 
-// bulkCreateFile uses the CreateBulk function to create multiple File entities
-func (r *mutationResolver) bulkCreateFile(ctx context.Context, input []*generated.CreateFileInput) (*FileBulkCreatePayload, error) {
-	c := withTransactionalMutation(ctx)
-	builders := make([]*generated.FileCreate, len(input))
-	for i, data := range input {
-		builders[i] = c.File.Create().SetInput(*data)
-	}
-
-	res, err := c.File.CreateBulk(builders...).Save(ctx)
-	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "file"})
-	}
-
-	// return response
-	return &FileBulkCreatePayload{
-		Files: res,
-	}, nil
-}
-
 // bulkCreateGroup uses the CreateBulk function to create multiple Group entities
 func (r *mutationResolver) bulkCreateGroup(ctx context.Context, input []*generated.CreateGroupInput) (*GroupBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)

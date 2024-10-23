@@ -351,18 +351,6 @@ type FeatureUpdatePayload struct {
 	Feature *generated.Feature `json:"feature"`
 }
 
-// Return response for createBulkFile mutation
-type FileBulkCreatePayload struct {
-	// Created files
-	Files []*generated.File `json:"files,omitempty"`
-}
-
-// Return response for createFile mutation
-type FileCreatePayload struct {
-	// Created file
-	File *generated.File `json:"file"`
-}
-
 // Return response for deleteFile mutation
 type FileDeletePayload struct {
 	// Deleted file ID
@@ -374,12 +362,6 @@ type FileSearchResult struct {
 }
 
 func (FileSearchResult) IsSearchResult() {}
-
-// Return response for updateFile mutation
-type FileUpdatePayload struct {
-	// Updated file
-	File *generated.File `json:"file"`
-}
 
 // Return response for createBulkGroup mutation
 type GroupBulkCreatePayload struct {

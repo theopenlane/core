@@ -97,7 +97,9 @@ func (suite *GraphTestSuite) TestQueryGroupMembers() {
 
 			if tc.expected != nil {
 				// list groups in order to determine access to group level data
-				mock_fga.ListAny(t, suite.client.fga, []string{fmt.Sprintf("group:%s", group.ID)})
+				mock_fga.ListOnce(t, suite.client.fga, []string{fmt.Sprintf("group:%s", group.ID)}, nil)
+
+				mock_fga.ListUsersAny(t, suite.client.fga, []string{tc.expected.UserID}, nil)
 			}
 
 			resp, err := tc.client.GetGroupMembersByGroupID(tc.ctx, &whereInput)
@@ -273,6 +275,8 @@ func (suite *GraphTestSuite) TestMutationCreateGroupMembers() {
 
 			if tc.errMsg == "" {
 				mock_fga.WriteAny(t, suite.client.fga)
+
+				mock_fga.ListUsersAny(t, suite.client.fga, []string{tc.userID}, nil)
 			}
 
 			if tc.check {
@@ -388,6 +392,8 @@ func (suite *GraphTestSuite) TestMutationUpdateGroupMembers() {
 
 			if tc.errMsg == "" {
 				mock_fga.WriteAny(t, suite.client.fga)
+
+				mock_fga.ListUsersAny(t, suite.client.fga, []string{orgMember.UserID}, nil)
 			}
 
 			if tc.check {

@@ -98,7 +98,9 @@ entConfig:
     useListUserService: true
 
 objectStorage:
-    accessKey: "REDACTED"
-    secretKey: "REDACTED"
-    region: "us-east-2"
-    defaultBucket: "openlane"
+    # uncomment and update to enable s3, otherwise it will default to local storage
+    # accessKey: "REDACTED"
+    # secretKey: "REDACTED"
+    # region: "us-east-2"
+    # defaultBucket: "openlane"
+    # provider: "s3"
