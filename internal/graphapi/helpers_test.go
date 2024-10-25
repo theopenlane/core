@@ -1,14 +1,14 @@
 package graphapi
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/theopenlane/core/pkg/objects"
 	"github.com/vektah/gqlparser/v2/ast"
+
+	"github.com/theopenlane/core/pkg/objects"
 )
 
 func TestStripOperation(t *testing.T) {
@@ -101,7 +101,7 @@ func TestRetrieveObjectDetails(t *testing.T) {
 				},
 			},
 			expected:    &objects.FileUpload{},
-			expectedErr: fmt.Errorf("unable to determine object type"),
+			expectedErr: ErrUnableToDetermineObjectType,
 		},
 		{
 			name:        "No upload argument",
@@ -109,7 +109,7 @@ func TestRetrieveObjectDetails(t *testing.T) {
 			key:         "file",
 			arguments:   ast.ArgumentList{},
 			expected:    &objects.FileUpload{},
-			expectedErr: fmt.Errorf("unable to determine object type"),
+			expectedErr: ErrUnableToDetermineObjectType,
 		},
 		{
 			name:      "Non-upload argument",
@@ -126,7 +126,7 @@ func TestRetrieveObjectDetails(t *testing.T) {
 				},
 			},
 			expected:    &objects.FileUpload{},
-			expectedErr: fmt.Errorf("unable to determine object type"),
+			expectedErr: ErrUnableToDetermineObjectType,
 		},
 	}
 

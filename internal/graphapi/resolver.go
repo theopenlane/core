@@ -161,6 +161,7 @@ func WithContextLevelCache(h *handler.Server) {
 		if op := graphql.GetOperationContext(ctx).Operation; op != nil && op.Operation == ast.Query {
 			ctx = entcache.NewContext(ctx)
 		}
+
 		return next(ctx)
 	})
 }
@@ -207,6 +208,7 @@ func (h *Handler) Routes(e *echo.Group) {
 		handlers, err := h.playground.Handlers()
 		if err != nil {
 			log.Fatal().Err(err).Msg("error configuring playground handlers")
+
 			return
 		}
 
@@ -217,6 +219,7 @@ func (h *Handler) Routes(e *echo.Group) {
 
 			e.GET(handlers[i].Path, func(c echo.Context) error {
 				hCopy.ServeHTTP(c.Response(), c.Request())
+
 				return nil
 			})
 		}

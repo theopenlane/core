@@ -59,7 +59,7 @@ func (r *mutationResolver) UpdateSubscriber(ctx context.Context, email string, i
 
 	if err := setOrganizationInAuthContext(ctx, &subscriber.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
-		return nil, ErrPermissionDenied
+		return nil, rout.ErrPermissionDenied
 	}
 
 	subscriber, err = subscriber.Update().SetInput(input).Save(ctx)

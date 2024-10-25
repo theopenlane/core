@@ -59,7 +59,7 @@ func (r *mutationResolver) UpdateDocumentData(ctx context.Context, id string, in
 	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
 
-		return nil, ErrPermissionDenied
+		return nil, rout.ErrPermissionDenied
 	}
 
 	// setup update request

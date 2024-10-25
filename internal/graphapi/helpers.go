@@ -9,14 +9,15 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/gocarina/gocsv"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	objmw "github.com/theopenlane/core/internal/middleware/objects"
-	"github.com/theopenlane/core/pkg/events/soiree"
-	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/rout"
 	sliceutil "github.com/theopenlane/utils/slice"
+
+	ent "github.com/theopenlane/core/internal/ent/generated"
+	objmw "github.com/theopenlane/core/internal/middleware/objects"
+	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/pkg/objects"
 )
 
 const (
@@ -63,6 +64,7 @@ func injectFileUploader(u *objects.Objects) graphql.FieldMiddleware {
 		// get the uploads from the variables
 		// gqlgen will parse the variables and convert the graphql.Upload to a struct with the file data
 		uploads := []objects.FileUpload{}
+
 		for k, v := range op.Variables {
 			up, ok := v.(graphql.Upload)
 			if ok {
@@ -74,6 +76,7 @@ func injectFileUploader(u *objects.Objects) graphql.FieldMiddleware {
 				}
 
 				var err error
+
 				fileUpload, err = retrieveObjectDetails(rctx, k, fileUpload)
 				if err != nil {
 					return nil, err
@@ -132,6 +135,7 @@ func (r *queryResolver) withPool() *soiree.PondPool {
 func unmarshalBulkData[T any](input graphql.Upload) ([]*T, error) {
 	// read the csv file
 	var data []*T
+
 	stream, readErr := io.ReadAll(input.File)
 	if readErr != nil {
 		return nil, readErr
@@ -156,7 +160,7 @@ func setOrganizationInAuthContext(ctx context.Context, inputOrgID *string) error
 
 	if inputOrgID == nil {
 		// this would happen on a PAT authenticated request because the org id is not set
-		return fmt.Errorf("unable to determine organization id")
+		return ErrNoOrganizationID
 	}
 
 	// ensure this org is authenticated
@@ -166,7 +170,7 @@ func setOrganizationInAuthContext(ctx context.Context, inputOrgID *string) error
 	}
 
 	if !sliceutil.Contains(orgIDs, *inputOrgID) {
-		return fmt.Errorf("organization id %s not found in the authenticated organizations", orgID)
+		return fmt.Errorf("%w: organization id %s not found in the authenticated organizations", rout.ErrBadRequest, orgID)
 	}
 
 	au, err := auth.GetAuthenticatedUserContext(ctx)
@@ -218,7 +222,7 @@ func retrieveObjectDetails(rctx *graphql.FieldContext, key string, upload *objec
 		}
 	}
 
-	return upload, fmt.Errorf("unable to determine object type")
+	return upload, ErrUnableToDetermineObjectType
 }
 
 // stripOperation strips the operation from the field name, e.g. updateUser becomes user
