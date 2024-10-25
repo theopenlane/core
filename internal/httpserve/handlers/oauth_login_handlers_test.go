@@ -95,7 +95,7 @@ func (suite *HandlerTestSuite) TestHandlerCheckAndCreateUser() {
 			writes: false,
 		},
 		{
-			name: "no image, avatar URL nil ",
+			name: "no image, avatar URL not nil ",
 			args: args{
 				name:     "Wand Maxim",
 				email:    "wmaximoff1@marvel.com",
@@ -103,11 +103,10 @@ func (suite *HandlerTestSuite) TestHandlerCheckAndCreateUser() {
 				image:    "",
 			},
 			want: &ent.User{
-				FirstName:       "Wand",
-				LastName:        "Maxim",
-				Email:           "wmaximoff1@marvel.com",
-				AuthProvider:    enums.AuthProviderGitHub,
-				AvatarRemoteURL: nil,
+				FirstName:    "Wand",
+				LastName:     "Maxim",
+				Email:        "wmaximoff1@marvel.com",
+				AuthProvider: enums.AuthProviderGitHub,
 			},
 			writes: true,
 		},
@@ -120,11 +119,10 @@ func (suite *HandlerTestSuite) TestHandlerCheckAndCreateUser() {
 				image:    "",
 			},
 			want: &ent.User{
-				FirstName:       "Wand",
-				LastName:        "Maxim",
-				Email:           "wmaximoff1@marvel.com",
-				AuthProvider:    enums.AuthProviderGitHub,
-				AvatarRemoteURL: nil,
+				FirstName:    "Wand",
+				LastName:     "Maxim",
+				Email:        "wmaximoff1@marvel.com",
+				AuthProvider: enums.AuthProviderGitHub,
 			},
 			writes: false,
 		},
@@ -170,8 +168,8 @@ func (suite *HandlerTestSuite) TestHandlerCheckAndCreateUser() {
 			assert.Equal(t, tt.want.AuthProvider, got.AuthProvider)
 			assert.WithinDuration(t, now, *got.LastSeen, time.Second*5)
 
-			if tt.want.AvatarRemoteURL == nil {
-				assert.Empty(t, got.AvatarRemoteURL)
+			if tt.args.image == "" {
+				assert.NotEmpty(t, got.AvatarRemoteURL)
 			} else {
 				assert.Equal(t, *tt.want.AvatarRemoteURL, *got.AvatarRemoteURL)
 			}

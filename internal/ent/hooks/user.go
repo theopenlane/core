@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
+	"github.com/theopenlane/utils/gravatar"
 	"github.com/theopenlane/utils/passwd"
 
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -61,6 +62,12 @@ func HookUser() ent.Hook {
 						displayName := strings.Split(email, "@")[0]
 
 						m.SetDisplayName(displayName)
+					}
+
+					// set a default avatar if one is not provided
+					if _, ok := m.AvatarRemoteURL(); !ok {
+						url := gravatar.New(displayName, nil)
+						m.SetAvatarRemoteURL(url)
 					}
 				}
 			}
