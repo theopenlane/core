@@ -115,9 +115,7 @@ func (Entitlement) Mixin() []ent.Mixin {
 		emixin.IDMixin{},
 		emixin.TagMixin{},
 		mixin.SoftDeleteMixin{},
-		OrgOwnerMixin{
-			Ref: "entitlements",
-		},
+		NewOrgOwnMixinWithRef("entitlements"),
 	}
 }
 

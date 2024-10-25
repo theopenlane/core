@@ -7,7 +7,7 @@ import (
 )
 
 // registerFileUploadRoute registers the file upload route
-func registerFileUploadRoute(router *Router) (err error) {
+func registerFileUploadRoute(router *Router) (err error) { // nolint:unused
 	path := "/upload"
 	method := http.MethodPost
 	name := "FileUpload"

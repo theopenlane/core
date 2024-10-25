@@ -81,20 +81,42 @@ func WithErrorResponseHandler(errHandler ErrResponseHandler) Option {
 	}
 }
 
-// UploadFileOptions is a struct that holds the options for uploading a file
-type UploadFileOptions struct {
-	FileName              string
-	Metadata              map[string]string
-	Progress              *pb.ProgressBar
-	ProgressOutput        io.Writer
-	ProgressFinishMessage string
-	Bucket                string
-	ContentType           string
+// WithUploadFileOptions allows you to provide options for uploading a file
+func WithUploadFileOptions(opts *UploadFileOptions) Option {
+	return func(o *Objects) {
+		o.UploadFileOptions = opts
+	}
 }
 
-// DownloadFileOptions is a struct that holds the options for downloading a file
-type DownloadFileOptions struct {
-	FileName string
+// WithDownloadFileOptions allows you to provide options for downloading a file
+func WithDownloadFileOptions(opts *DownloadFileOptions) Option {
+	return func(o *Objects) {
+		o.DownloadFileOptions = opts
+	}
+}
+
+func WithMetdata(mp map[string]interface{}) Option {
+	return func(o *Objects) {
+		if o.UploadFileOptions.Metadata == nil {
+			o.UploadFileOptions.Metadata = map[string]string{}
+		}
+
+		for k, v := range mp {
+			s, err := cast.ToStringE(v)
+			if err == nil {
+				o.UploadFileOptions.Metadata[k] = s
+				continue
+			}
+
+			bts, err := json.Marshal(v)
+			if err == nil {
+				o.UploadFileOptions.Metadata[k] = string(bts)
+				continue
+			}
+
+			o.UploadFileOptions.Metadata[k] = "<<INVALID_METADATA>>"
+		}
+	}
 }
 
 // UploadOption is a function that configures the UploadFileOptions

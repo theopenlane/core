@@ -3,8 +3,8 @@ package objects
 import (
 	"bytes"
 	// #nosec: G501
-	"crypto/md5" //nolint:gosec  // MD5 is used for checksums, not for hashing passwords
-	"encoding/base64"
+	//nolint:gosec  // MD5 is used for checksums, not for hashing passwords
+
 	"fmt"
 	"io"
 	"net/http"
@@ -95,23 +95,6 @@ func ReaderToSeeker(r io.Reader) (io.ReadSeeker, error) {
 
 	// Return the file, which implements io.ReadSeeker which you can now pass to the objects uploader
 	return tmpfile, nil
-}
-
-// ComputeChecksum calculates the MD5 checksum for the provided data. It expects that
-// the passed io object will be seeked to its beginning and will seek back to the
-// beginning after reading its content.
-func ComputeChecksum(data io.ReadSeeker) (string, error) {
-	// #nosec: G501
-	hash := md5.New() //nolint:gosec  // MD5 is used for checksums, not for hashing passwords
-	if _, err := io.Copy(hash, data); err != nil {
-		return "", fmt.Errorf("could not read file: %w", err)
-	}
-
-	if _, err := data.Seek(0, io.SeekStart); err != nil { // seek back to beginning of file
-		return "", fmt.Errorf("%s: %w", seekError, err)
-	}
-
-	return base64.StdEncoding.EncodeToString(hash.Sum(nil)), nil
 }
 
 // DetectContentType leverages http.DetectContentType to identify the content type

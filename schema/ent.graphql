@@ -13,7 +13,7 @@ type APIToken implements Node {
   """
   tags: [String!]
   """
-  The organization id that owns the object
+  the organization id that owns the object
   """
   ownerID: ID
   """
@@ -256,7 +256,7 @@ type Contact implements Node {
   """
   tags: [String!]
   """
-  The organization id that owns the object
+  the organization id that owns the object
   """
   ownerID: ID
   """
@@ -337,7 +337,7 @@ type ContactHistory implements Node {
   """
   tags: [String!]
   """
-  The organization id that owns the object
+  the organization id that owns the object
   """
   ownerID: String
   """
@@ -1923,7 +1923,7 @@ type DocumentData implements Node {
   deletedAt: Time
   deletedBy: String
   """
-  The organization id that owns the object
+  the organization id that owns the object
   """
   ownerID: ID
   """
@@ -1985,7 +1985,7 @@ type DocumentDataHistory implements Node {
   deletedAt: Time
   deletedBy: String
   """
-  The organization id that owns the object
+  the organization id that owns the object
   """
   ownerID: String
   """
@@ -2402,7 +2402,7 @@ type Entitlement implements Node {
   deletedAt: Time
   deletedBy: String
   """
-  The organization id that owns the object
+  the organization id that owns the object
   """
   ownerID: ID
   """
@@ -2484,7 +2484,7 @@ type EntitlementHistory implements Node {
   deletedAt: Time
   deletedBy: String
   """
-  The organization id that owns the object
+  the organization id that owns the object
   """
   ownerID: String
   """
@@ -2827,7 +2827,7 @@ type EntitlementPlan implements Node {
   """
   tags: [String!]
   """
-  The organization id that owns the object
+  the organization id that owns the object
   """
   ownerID: ID
   """
@@ -2899,7 +2899,7 @@ type EntitlementPlanFeature implements Node {
   """
   tags: [String!]
   """
-  The organization id that owns the object
+  the organization id that owns the object
   """
   ownerID: ID
   """
@@ -2959,7 +2959,7 @@ type EntitlementPlanFeatureHistory implements Node {
   """
   tags: [String!]
   """
-  The organization id that owns the object
+  the organization id that owns the object
   """
   ownerID: String
   """
@@ -3339,7 +3339,7 @@ type EntitlementPlanHistory implements Node {
   """
   tags: [String!]
   """
-  The organization id that owns the object
+  the organization id that owns the object
   """
   ownerID: String
   """
@@ -4121,7 +4121,7 @@ type Entity implements Node {
   """
   tags: [String!]
   """
-  The organization id that owns the object
+  the organization id that owns the object
   """
   ownerID: ID
   """
@@ -4201,7 +4201,7 @@ type EntityHistory implements Node {
   """
   tags: [String!]
   """
-  The organization id that owns the object
+  the organization id that owns the object
   """
   ownerID: String
   """
@@ -4561,7 +4561,7 @@ type EntityType implements Node {
   """
   tags: [String!]
   """
-  The organization id that owns the object
+  the organization id that owns the object
   """
   ownerID: ID
   """
@@ -4617,7 +4617,7 @@ type EntityTypeHistory implements Node {
   """
   tags: [String!]
   """
-  The organization id that owns the object
+  the organization id that owns the object
   """
   ownerID: String
   """
@@ -5804,7 +5804,7 @@ type Feature implements Node {
   """
   tags: [String!]
   """
-  The organization id that owns the object
+  the organization id that owns the object
   """
   ownerID: ID
   """
@@ -5878,7 +5878,7 @@ type FeatureHistory implements Node {
   """
   tags: [String!]
   """
-  The organization id that owns the object
+  the organization id that owns the object
   """
   ownerID: String
   """
@@ -7346,7 +7346,7 @@ type Group implements Node {
   """
   tags: [String!]
   """
-  The organization id that owns the object
+  the organization id that owns the object
   """
   ownerID: ID
   """
@@ -7423,7 +7423,7 @@ type GroupHistory implements Node {
   """
   tags: [String!]
   """
-  The organization id that owns the object
+  the organization id that owns the object
   """
   ownerID: String
   """
@@ -9450,7 +9450,7 @@ type Integration implements Node {
   deletedAt: Time
   deletedBy: String
   """
-  The organization id that owns the object
+  the organization id that owns the object
   """
   ownerID: ID
   """
@@ -9520,7 +9520,7 @@ type IntegrationHistory implements Node {
   deletedAt: Time
   deletedBy: String
   """
-  The organization id that owns the object
+  the organization id that owns the object
   """
   ownerID: String
   """
@@ -10015,7 +10015,7 @@ type Invite implements Node {
   deletedAt: Time
   deletedBy: String
   """
-  The organization id that owns the object
+  the organization id that owns the object
   """
   ownerID: ID
   """
@@ -10335,7 +10335,7 @@ type Note implements Node {
   """
   tags: [String!]
   """
-  The organization id that owns the object
+  the organization id that owns the object
   """
   ownerID: ID
   """
@@ -10391,7 +10391,7 @@ type NoteHistory implements Node {
   """
   tags: [String!]
   """
-  The organization id that owns the object
+  the organization id that owns the object
   """
   ownerID: String
   """
@@ -10794,7 +10794,7 @@ type OauthProvider implements Node {
   deletedAt: Time
   deletedBy: String
   """
-  The organization id that owns the object
+  the organization id that owns the object
   """
   ownerID: ID
   """
@@ -10881,7 +10881,7 @@ type OauthProviderHistory implements Node {
   deletedAt: Time
   deletedBy: String
   """
-  The organization id that owns the object
+  the organization id that owns the object
   """
   ownerID: String
   """
@@ -15431,7 +15431,7 @@ type Subscriber implements Node {
   deletedAt: Time
   deletedBy: String
   """
-  The organization id that owns the object
+  the organization id that owns the object
   """
   ownerID: ID
   """
@@ -15902,7 +15902,7 @@ type Template implements Node {
   """
   tags: [String!]
   """
-  The organization id that owns the object
+  the organization id that owns the object
   """
   ownerID: ID
   """
@@ -15982,7 +15982,7 @@ type TemplateHistory implements Node {
   """
   tags: [String!]
   """
-  The organization id that owns the object
+  the organization id that owns the object
   """
   ownerID: String
   """
@@ -19304,7 +19304,7 @@ type Webhook implements Node {
   deletedAt: Time
   deletedBy: String
   """
-  The organization id that owns the object
+  the organization id that owns the object
   """
   ownerID: ID
   """
@@ -19385,7 +19385,7 @@ type WebhookHistory implements Node {
   deletedAt: Time
   deletedBy: String
   """
-  The organization id that owns the object
+  the organization id that owns the object
   """
   ownerID: String
   """

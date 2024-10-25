@@ -3,10 +3,12 @@ package objects
 import (
 	"context"
 	"path/filepath"
+	"time"
 
 	"github.com/rs/zerolog/log"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 	"github.com/theopenlane/core/pkg/objects"
 )
@@ -63,12 +65,15 @@ func Upload(ctx context.Context, u *objects.Objects, files []objects.FileUpload)
 		fileData.StorageKey = metadata.Key
 
 		// generate a presigned URL that is valid for 15 minutes
-		fileData.PresignedURL, err = u.Storage.GetPresignedURL(ctx, uploadedFileName)
+		fileData.PresignedURL, err = u.Storage.GetPresignedURL(ctx, uploadedFileName, 60*time.Minute) // nolint:mnd
 		if err != nil {
 			log.Error().Err(err).Str("file", f.Filename).Msg("failed to get presigned URL")
 
 			return nil, err
 		}
+
+		// allow the update, permissions are not yet set to allow the update
+		allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
 		// update the file with the size
 		if _, err := txClientFromContext(ctx).
@@ -77,7 +82,7 @@ func Upload(ctx context.Context, u *objects.Objects, files []objects.FileUpload)
 			SetURI(objects.CreateURI(entFile.StorageScheme, metadata.FolderDestination, metadata.Key)).
 			SetStorageVolume(metadata.FolderDestination).
 			SetStoragePath(metadata.Key).
-			Save(ctx); err != nil {
+			Save(allowCtx); err != nil {
 			log.Error().Err(err).Msg("failed to update file with size")
 			return nil, err
 		}
@@ -104,20 +109,12 @@ func createFile(ctx context.Context, u *objects.Objects, f objects.FileUpload) (
 		return nil, err
 	}
 
-	md5Hash, err := objects.ComputeChecksum(f.File)
-	if err != nil {
-		log.Error().Err(err).Str("file", f.Filename).Msg("failed to compute checksum")
-
-		return nil, err
-	}
-
 	set := ent.CreateFileInput{
 		ProvidedFileName:      f.Filename,
 		ProvidedFileExtension: filepath.Ext(f.Filename),
 		ProvidedFileSize:      &f.Size,
 		DetectedMimeType:      &f.ContentType,
 		DetectedContentType:   contentType,
-		Md5Hash:               &md5Hash,
 		StoreKey:              &f.Key,
 		StorageScheme:         u.Storage.GetScheme(),
 	}

@@ -6,34 +6,50 @@ import (
 	"io"
 	"os"
 	"path/filepath"
-	"strings"
+	"time"
+
+	"github.com/rs/zerolog/log"
 
 	"github.com/theopenlane/core/pkg/objects"
 )
 
 type Disk struct {
 	destinationFolder string
-	Scheme            string
+	// Scheme is the scheme of the storage backend
+	Scheme string
+	// Opts is the options for the disk storage
+	Opts *DiskOptions
 }
 
 // ensure Disk satisfies the Storage interface
 var _ objects.Storage = &Disk{}
 
-func NewDiskStorage(folder string) (*Disk, error) {
-	if len(strings.TrimSpace(folder)) == 0 {
-		return nil, fmt.Errorf("%w: please provide a valid folder path", ErrInvalidFolderPath)
+func NewDiskStorage(opts *DiskOptions) (*Disk, error) {
+	if isStringEmpty(opts.Bucket) {
+		return nil, ErrInvalidFolderPath
 	}
 
-	return &Disk{
-		destinationFolder: folder,
-		Scheme:            "file://",
-	}, nil
+	disk := &Disk{
+		Opts:   opts,
+		Scheme: "file://",
+	}
+
+	// create directory if it does not exist
+	if _, err := disk.ListBuckets(); os.IsNotExist(err) {
+		log.Info().Str("folder", opts.Bucket).Msg("directory does not exist, creating directory")
+
+		if err := os.MkdirAll(opts.Bucket, os.ModePerm); err != nil {
+			return nil, fmt.Errorf("%w: failed to create directory", ErrInvalidFolderPath)
+		}
+	}
+
+	return disk, nil
 }
 
 func (d *Disk) Close() error { return nil }
 
 func (d *Disk) Upload(ctx context.Context, r io.Reader, opts *objects.UploadFileOptions) (*objects.UploadedFileMetadata, error) {
-	f, err := os.Create(filepath.Join(d.destinationFolder, opts.FileName))
+	f, err := os.Create(filepath.Join(d.Opts.Bucket, opts.FileName))
 	if err != nil {
 		return nil, err
 	}
@@ -61,13 +77,29 @@ func (d *Disk) ManagerUpload(ctx context.Context, files [][]byte) error {
 }
 
 // Download is used to download a file from the storage backend
-// TODO: Implement this method
-func (d *Disk) Download(ctx context.Context, key string, opts *objects.DownloadFileOptions) (*objects.DownloadFileMetadata, io.ReadCloser, error) {
-	return nil, nil, nil
+func (d *Disk) Download(ctx context.Context, opts *objects.DownloadFileOptions) (*objects.DownloadFileMetadata, error) {
+	file, err := os.ReadFile(filepath.Join(opts.Bucket, opts.FileName))
+	if err != nil {
+		return nil, err
+	}
+
+	return &objects.DownloadFileMetadata{
+		File: file,
+		Size: int64(len(file)),
+	}, nil
 }
 
 // GetPresignedURL is used to get a presigned URL for a file in the storage backend
 // TODO: Implement this method
-func (d *Disk) GetPresignedURL(ctx context.Context, key string) (string, error) {
+func (d *Disk) GetPresignedURL(ctx context.Context, key string, expires time.Duration) (string, error) {
 	return "", nil
+}
+
+// ListBuckets lists the local bucket if it exists
+func (d *Disk) ListBuckets() ([]string, error) {
+	if _, err := os.Stat(d.Opts.Bucket); err != nil {
+		return nil, err
+	}
+
+	return []string{d.Opts.Bucket}, nil
 }

@@ -48,8 +48,6 @@ data:
   CORE_SERVER_GRAPHPOOL_MAXWORKERS: {{ .Values.core.server.graphPool.maxWorkers | default 100 }}
   CORE_SERVER_GRAPHPOOL_MAXCAPACITY: {{ .Values.core.server.graphPool.maxCapacity | default 1000 }}
   CORE_SERVER_ENABLEGRAPHEXTENSIONS: {{ .Values.core.server.enableGraphExtensions | default true }}
-  CORE_ENTCONFIG_FLAGS_USELISTUSERSERVICE: {{ .Values.core.entConfig.flags.useListUserService | default true }}
-  CORE_ENTCONFIG_FLAGS_USELISTOBJECTSERVICES: {{ .Values.core.entConfig.flags.useListObjectServices | default false }}
   CORE_ENTCONFIG_ENTITYTYPES: {{ .Values.core.entConfig.entityTypes }}
   CORE_AUTH_ENABLED: {{ .Values.core.auth.enabled | default true }}
   CORE_AUTH_TOKEN_KID: {{ .Values.core.auth.token.kid }}
@@ -164,5 +162,5 @@ data:
   CORE_OBJECTSTORAGE_REGION: {{ .Values.core.objectStorage.region }}
   CORE_OBJECTSTORAGE_SECRETKEY: {{ .Values.core.objectStorage.secretKey }}
   CORE_OBJECTSTORAGE_CREDENTIALSJSON: {{ .Values.core.objectStorage.credentialsJSON }}
-  CORE_OBJECTSTORAGE_DEFAULTBUCKET: {{ .Values.core.objectStorage.defaultBucket }}
+  CORE_OBJECTSTORAGE_DEFAULTBUCKET: {{ .Values.core.objectStorage.defaultBucket | default "file_uploads" }}
   CORE_OBJECTSTORAGE_KEYS: {{ .Values.core.objectStorage.keys | default "uploadFile" }}

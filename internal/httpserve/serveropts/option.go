@@ -1,13 +1,13 @@
 package serveropts
 
 import (
-	"context"
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/x509"
 	"encoding/pem"
 	"fmt"
 	"os"
+	"slices"
 
 	"github.com/redis/go-redis/v9"
 
@@ -28,9 +28,6 @@ import (
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/echox/middleware/echocontext"
-
-	awsConfig "github.com/aws/aws-sdk-go-v2/config"
-	awsCreds "github.com/aws/aws-sdk-go-v2/credentials"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi"
@@ -256,8 +253,6 @@ func WithMiddleware() ServerOption {
 // on registration, password reset, etc
 func WithEmailConfig() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
-		log.Debug().Interface("email", s.Config.Settings.Email).Msg("email config")
-
 		s.Config.Handler.Emailer = s.Config.Settings.Email
 	})
 }
@@ -398,28 +393,50 @@ func WithCORS() ServerOption {
 
 func WithObjectStorage() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
-		if s.Config.Settings.ObjectStorage.Enabled {
-			s3Config, _ := awsConfig.LoadDefaultConfig(
-				context.Background(),
-				awsConfig.WithRegion(s.Config.Settings.ObjectStorage.Region),
-				awsConfig.WithCredentialsProvider(
-					awsCreds.NewStaticCredentialsProvider(
-						s.Config.Settings.ObjectStorage.AccessKey,
-						s.Config.Settings.ObjectStorage.SecretKey,
-						"")),
+		settings := s.Config.Settings.ObjectStorage
+		if settings.Enabled {
+			var (
+				store objects.Storage
+				err   error
 			)
 
-			s3store, err := storage.NewS3FromConfig(s3Config, storage.S3Options{
-				Bucket: s.Config.Settings.ObjectStorage.DefaultBucket,
-			})
-			if err != nil {
-				log.Panic().Err(err).Msg("error creating S3 store")
+			switch settings.Provider {
+			case "s3":
+				opts := storage.NewS3Options(
+					storage.WithRegion(s.Config.Settings.ObjectStorage.Region),
+					storage.WithBucket(s.Config.Settings.ObjectStorage.DefaultBucket),
+					storage.WithAccessKeyID(s.Config.Settings.ObjectStorage.AccessKey),
+					storage.WithSecretAccessKey(s.Config.Settings.ObjectStorage.SecretKey),
+				)
+
+				store, err = storage.NewS3FromConfig(opts)
+				if err != nil {
+					log.Panic().Err(err).Msg("error creating S3 store")
+				}
+
+				bucks, err := store.ListBuckets()
+				if err != nil {
+					log.Panic().Err(err).Msg("error listing buckets")
+				}
+
+				if ok := slices.Contains(bucks, s.Config.Settings.ObjectStorage.DefaultBucket); !ok {
+					log.Panic().Msg("default bucket not found")
+				}
+			default:
+				opts := storage.NewDiskOptions(
+					storage.WithLocalBucket(s.Config.Settings.ObjectStorage.DefaultBucket),
+				)
+
+				store, err = storage.NewDiskStorage(opts)
+				if err != nil {
+					log.Panic().Err(err).Msg("error creating disk store")
+				}
 			}
 
 			s.Config.ObjectManager, err = objects.New(
 				objects.WithMaxFileSize(10<<20), // nolint:mnd
 				objects.WithMaxMemory(32<<20),   // nolint:mnd
-				objects.WithStorage(s3store),
+				objects.WithStorage(store),
 				objects.WithNameFuncGenerator(objects.OrganizationNameFunc),
 				objects.WithKeys(s.Config.Settings.ObjectStorage.Keys),
 				objects.WithUploaderFunc(objmw.Upload),
@@ -433,6 +450,8 @@ func WithObjectStorage() ServerOption {
 			uploadMw := echo.WrapMiddleware(objects.FileUploadMiddleware(s.Config.ObjectManager))
 
 			s.Config.Handler.AuthMiddleware = append(s.Config.Handler.AuthMiddleware, uploadMw)
+
+			log.Info().Msg("Object storage initialized")
 		}
 	})
 }

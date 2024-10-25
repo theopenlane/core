@@ -200,40 +200,45 @@ func (suite *GraphTestSuite) TestMutationCreateSubscriber() {
 	require.NoError(t, err)
 
 	testCases := []struct {
-		name    string
-		email   string
-		ownerID string
-		client  *openlaneclient.OpenlaneClient
-		ctx     context.Context
-		wantErr bool
+		name        string
+		email       string
+		ownerID     string
+		listObjects bool
+		client      *openlaneclient.OpenlaneClient
+		ctx         context.Context
+		wantErr     bool
 	}{
 		{
-			name:    "happy path, new subscriber",
-			email:   "c.stark@example.com",
-			client:  suite.client.api,
-			ctx:     reqCtx,
-			wantErr: false,
+			name:        "happy path, new subscriber",
+			email:       "c.stark@example.com",
+			client:      suite.client.api,
+			listObjects: true,
+			ctx:         reqCtx,
+			wantErr:     false,
 		},
 		{
-			name:    "happy path, new subscriber using api token",
-			email:   "e.stark@example.com",
-			client:  suite.client.apiWithToken,
-			ctx:     context.Background(),
-			wantErr: false,
+			name:        "happy path, new subscriber using api token",
+			email:       "e.stark@example.com",
+			client:      suite.client.apiWithToken,
+			listObjects: false,
+			ctx:         context.Background(),
+			wantErr:     false,
 		},
 		{
-			name:    "happy path, new subscriber using personal access token",
-			email:   "a.stark@example.com",
-			ownerID: testOrgID,
-			client:  suite.client.apiWithPAT,
-			ctx:     context.Background(),
-			wantErr: false,
+			name:        "happy path, new subscriber using personal access token",
+			email:       "a.stark@example.com",
+			ownerID:     testOrgID,
+			client:      suite.client.apiWithPAT,
+			listObjects: true,
+			ctx:         context.Background(),
+			wantErr:     false,
 		},
 		{
-			name:    "missing email",
-			client:  suite.client.api,
-			ctx:     reqCtx,
-			wantErr: true,
+			name:        "missing email",
+			client:      suite.client.api,
+			listObjects: false,
+			ctx:         reqCtx,
+			wantErr:     true,
 		},
 	}
 
@@ -242,6 +247,10 @@ func (suite *GraphTestSuite) TestMutationCreateSubscriber() {
 			defer mock_fga.ClearMocks(suite.client.fga)
 
 			mock_fga.CheckAny(t, suite.client.fga, true)
+
+			if tc.listObjects {
+				mock_fga.ListAny(t, suite.client.fga, []string{"organization:" + testOrgID})
+			}
 
 			input := openlaneclient.CreateSubscriberInput{
 				Email: tc.email,

@@ -1225,12 +1225,28 @@ func init() {
 	// featurehistory.DefaultID holds the default value on creation for the id field.
 	featurehistory.DefaultID = featurehistoryDescID.Default.(func() string)
 	fileMixin := schema.File{}.Mixin()
+	file.Policy = privacy.NewPolicies(schema.File{})
+	file.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := file.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
 	fileMixinHooks0 := fileMixin[0].Hooks()
 	fileMixinHooks1 := fileMixin[1].Hooks()
-	file.Hooks[0] = fileMixinHooks0[0]
-	file.Hooks[1] = fileMixinHooks1[0]
+	fileMixinHooks4 := fileMixin[4].Hooks()
+
+	file.Hooks[1] = fileMixinHooks0[0]
+
+	file.Hooks[2] = fileMixinHooks1[0]
+
+	file.Hooks[3] = fileMixinHooks4[0]
 	fileMixinInters1 := fileMixin[1].Interceptors()
+	fileMixinInters4 := fileMixin[4].Interceptors()
 	file.Interceptors[0] = fileMixinInters1[0]
+	file.Interceptors[1] = fileMixinInters4[0]
 	fileMixinFields0 := fileMixin[0].Fields()
 	_ = fileMixinFields0
 	fileMixinFields2 := fileMixin[2].Fields()
@@ -1269,6 +1285,17 @@ func init() {
 	fileDescID := fileMixinFields2[0].Descriptor()
 	// file.DefaultID holds the default value on creation for the id field.
 	file.DefaultID = fileDescID.Default.(func() string)
+	filehistory.Policy = privacy.NewPolicies(schema.FileHistory{})
+	filehistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := filehistory.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	filehistoryInters := schema.FileHistory{}.Interceptors()
+	filehistory.Interceptors[0] = filehistoryInters[0]
 	filehistoryFields := schema.FileHistory{}.Fields()
 	_ = filehistoryFields
 	// filehistoryDescHistoryTime is the schema descriptor for history_time field.
@@ -2863,6 +2890,8 @@ func init() {
 	user.Hooks[3] = userHooks[0]
 
 	user.Hooks[4] = userHooks[1]
+
+	user.Hooks[5] = userHooks[2]
 	userMixinInters1 := userMixin[1].Interceptors()
 	userInters := schema.User{}.Interceptors()
 	user.Interceptors[0] = userMixinInters1[0]

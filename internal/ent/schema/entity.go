@@ -76,9 +76,7 @@ func (Entity) Mixin() []ent.Mixin {
 		emixin.IDMixin{},
 		mixin.SoftDeleteMixin{},
 		emixin.TagMixin{},
-		OrgOwnerMixin{
-			Ref: "entities",
-		},
+		NewOrgOwnMixinWithRef("entities"),
 	}
 }
 

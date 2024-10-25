@@ -330,7 +330,7 @@ func (o *OrganizationCleanup) MustDelete(ctx context.Context, t *testing.T) {
 // MustNew user builder is used to create, without authz checks, users in the database
 func (u *UserBuilder) MustNew(ctx context.Context, t *testing.T) *ent.User {
 	// mock writes
-	mock_fga.WriteOnce(t, u.client.fga)
+	mock_fga.WriteAny(t, u.client.fga)
 
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 

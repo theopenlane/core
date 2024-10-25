@@ -344,7 +344,9 @@ func (fhc *FileHistoryCreate) Mutation() *FileHistoryMutation {
 
 // Save creates the FileHistory in the database.
 func (fhc *FileHistoryCreate) Save(ctx context.Context) (*FileHistory, error) {
-	fhc.defaults()
+	if err := fhc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, fhc.sqlSave, fhc.mutation, fhc.hooks)
 }
 
@@ -371,20 +373,32 @@ func (fhc *FileHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (fhc *FileHistoryCreate) defaults() {
+func (fhc *FileHistoryCreate) defaults() error {
 	if _, ok := fhc.mutation.HistoryTime(); !ok {
+		if filehistory.DefaultHistoryTime == nil {
+			return fmt.Errorf("generated: uninitialized filehistory.DefaultHistoryTime (forgotten import generated/runtime?)")
+		}
 		v := filehistory.DefaultHistoryTime()
 		fhc.mutation.SetHistoryTime(v)
 	}
 	if _, ok := fhc.mutation.CreatedAt(); !ok {
+		if filehistory.DefaultCreatedAt == nil {
+			return fmt.Errorf("generated: uninitialized filehistory.DefaultCreatedAt (forgotten import generated/runtime?)")
+		}
 		v := filehistory.DefaultCreatedAt()
 		fhc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := fhc.mutation.UpdatedAt(); !ok {
+		if filehistory.DefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized filehistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := filehistory.DefaultUpdatedAt()
 		fhc.mutation.SetUpdatedAt(v)
 	}
 	if _, ok := fhc.mutation.MappingID(); !ok {
+		if filehistory.DefaultMappingID == nil {
+			return fmt.Errorf("generated: uninitialized filehistory.DefaultMappingID (forgotten import generated/runtime?)")
+		}
 		v := filehistory.DefaultMappingID()
 		fhc.mutation.SetMappingID(v)
 	}
@@ -393,9 +407,13 @@ func (fhc *FileHistoryCreate) defaults() {
 		fhc.mutation.SetTags(v)
 	}
 	if _, ok := fhc.mutation.ID(); !ok {
+		if filehistory.DefaultID == nil {
+			return fmt.Errorf("generated: uninitialized filehistory.DefaultID (forgotten import generated/runtime?)")
+		}
 		v := filehistory.DefaultID()
 		fhc.mutation.SetID(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

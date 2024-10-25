@@ -87,13 +87,15 @@ func (Subscriber) Mixin() []ent.Mixin {
 		emixin.IDMixin{},
 		emixin.TagMixin{},
 		mixin.SoftDeleteMixin{},
-		OrgOwnerMixin{
-			Ref: "subscribers",
-			SkipTokenType: []token.PrivacyToken{
-				&token.VerifyToken{},
-				&token.SignUpToken{},
+		NewOrgOwnedMixin(
+			ObjectOwnedMixin{
+				Ref: "subscribers",
+				SkipTokenType: []token.PrivacyToken{
+					&token.VerifyToken{},
+					&token.SignUpToken{},
+				},
 			},
-		},
+		),
 	}
 }
 

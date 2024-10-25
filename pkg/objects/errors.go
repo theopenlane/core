@@ -24,6 +24,8 @@ var (
 	ErrMustProvideStorageBackend = errors.New("you must provide a storage backend")
 	// ErrUnexpectedType is returned when an invalid type is provided
 	ErrUnexpectedType = errors.New("unexpected type provided")
+	// ErrSeekError is returned when an error occurs while seeking
+	ErrSeekError = errors.New("error seeking")
 )
 
 type errorMsg string
