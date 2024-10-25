@@ -46,7 +46,6 @@ data:
   CORE_SERVER_MIME_MIMETYPESFILE: {{ .Values.core.server.mime.mimeTypesFile }}
   CORE_SERVER_MIME_DEFAULTCONTENTTYPE: {{ .Values.core.server.mime.defaultContentType | default "application/data" }}
   CORE_SERVER_GRAPHPOOL_MAXWORKERS: {{ .Values.core.server.graphPool.maxWorkers | default 100 }}
-  CORE_SERVER_GRAPHPOOL_MAXCAPACITY: {{ .Values.core.server.graphPool.maxCapacity | default 1000 }}
   CORE_SERVER_ENABLEGRAPHEXTENSIONS: {{ .Values.core.server.enableGraphExtensions | default true }}
   CORE_ENTCONFIG_ENTITYTYPES: {{ .Values.core.entConfig.entityTypes }}
   CORE_AUTH_ENABLED: {{ .Values.core.auth.enabled | default true }}
