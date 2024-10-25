@@ -13,7 +13,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler/extension"
 	"github.com/99designs/gqlgen/graphql/handler/lru"
 	"github.com/99designs/gqlgen/graphql/handler/transport"
-	"github.com/alitto/pond"
+	"github.com/alitto/pond/v2"
 	"github.com/gorilla/websocket"
 	"github.com/ravilushqa/otelgqlgen"
 	"github.com/rs/zerolog/log"
@@ -176,9 +176,9 @@ func WithSkipCache(h *handler.Server) {
 }
 
 // WithPool adds a worker pool to the resolver for parallel processing
-func (r *Resolver) WithPool(maxWorkers int, maxCapacity int, options ...pond.Option) {
+func (r *Resolver) WithPool(maxWorkers int, options ...pond.Option) {
 	// create the pool
-	r.pool = soiree.NewNamedPondPool(maxWorkers, maxCapacity, "graph", options...)
+	r.pool = soiree.NewNamedPondPool(maxWorkers, "graph", options...)
 	// add metrics
 	r.pool.NewStatsCollector()
 }

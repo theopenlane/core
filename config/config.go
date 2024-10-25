@@ -136,8 +136,6 @@ type TLS struct {
 type PondPool struct {
 	// MaxWorkers is the maximum number of workers in the pool
 	MaxWorkers int `json:"maxWorkers" koanf:"maxWorkers" default:"100"`
-	// MaxCapacity is the maximum number of tasks that can be queued
-	MaxCapacity int `json:"maxCapacity" koanf:"maxCapacity" default:"1000"`
 }
 
 // Load is responsible for loading the configuration from a YAML file and environment variables.

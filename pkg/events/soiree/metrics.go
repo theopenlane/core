@@ -21,14 +21,6 @@ func (p *PondPool) NewStatsCollector() {
 		func() float64 {
 			return float64(p.Running())
 		}))
-	prometheus.MustRegister(prometheus.NewGaugeFunc(
-		prometheus.GaugeOpts{
-			Name: fmt.Sprintf("pool_%s_workers_idle", name),
-			Help: "Number of idle worker goroutines",
-		},
-		func() float64 {
-			return float64(p.IdleWorkers())
-		}))
 
 	// Task metrics
 	prometheus.MustRegister(prometheus.NewCounterFunc(

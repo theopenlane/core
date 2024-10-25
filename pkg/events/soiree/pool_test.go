@@ -8,7 +8,7 @@ import (
 )
 
 func TestEmitEventWithPool(t *testing.T) {
-	soiree := NewEventPool(WithPool(NewPondPool(10, 100)))
+	soiree := NewEventPool(WithPool(NewPondPool(10)))
 
 	var processedEvents int32
 
@@ -57,7 +57,7 @@ func TestEmitEventWithPool(t *testing.T) {
 
 func TestEmitMultipleEventsWithPool(t *testing.T) {
 	// Create a EventPool instance with a PondPool.
-	soiree := NewEventPool(WithPool(NewPondPool(10, 100)))
+	soiree := NewEventPool(WithPool(NewPondPool(10)))
 
 	// Define the number of concurrent events to emit
 	numConcurrentEvents := 10
