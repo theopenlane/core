@@ -196,7 +196,6 @@ PondPool contains the settings for the goroutine pool
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
 |**maxWorkers**|`integer`|MaxWorkers is the maximum number of workers in the pool<br/>||
-|**maxCapacity**|`integer`|MaxCapacity is the maximum number of tasks that can be queued<br/>||
 
 **Additional Properties:** not allowed  
 <a name="entconfig"></a>

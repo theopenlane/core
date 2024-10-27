@@ -116,10 +116,6 @@
         "maxWorkers": {
           "type": "integer",
           "description": "MaxWorkers is the maximum number of workers in the pool"
-        },
-        "maxCapacity": {
-          "type": "integer",
-          "description": "MaxCapacity is the maximum number of tasks that can be queued"
         }
       },
       "additionalProperties": false,

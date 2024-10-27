@@ -23,8 +23,6 @@ import (
 const (
 	// defaultMaxWorkers is the default number of workers in the pond pool when the pool was not created on server startup
 	defaultMaxWorkers = 10
-	// defaultMaxCapacity is the default capacity of the pond pool when the pool was not created on server startup
-	defaultMaxCapacity = 100
 )
 
 // withTransactionalMutation automatically wrap the GraphQL mutations with a database transaction.
@@ -126,7 +124,7 @@ func (r *queryResolver) withPool() *soiree.PondPool {
 		return r.pool
 	}
 
-	r.pool = soiree.NewPondPool(defaultMaxWorkers, defaultMaxCapacity)
+	r.pool = soiree.NewPondPool(defaultMaxWorkers)
 
 	return r.pool
 }

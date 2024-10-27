@@ -292,7 +292,7 @@ func TestEventPoolClose(t *testing.T) {
 	}
 
 	// Use a Pool
-	pool := NewPondPool(10, 1000)
+	pool := NewPondPool(10)
 	soiree.SetPool(pool)
 
 	// Close the soiree

@@ -12,7 +12,7 @@ import (
 
 func main() {
 	// Initialize a goroutine pool with 5 workers and a maximum capacity of 1000 tasks
-	pool := soiree.NewPondPool(100, 1000)
+	pool := soiree.NewPondPool(100)
 
 	// Create a new soiree instance using the custom pool
 	e := soiree.NewEventPool(soiree.WithPool(pool))
@@ -24,14 +24,6 @@ func main() {
 		},
 		func() float64 {
 			return float64(pool.Running())
-		}))
-	prometheus.MustRegister(prometheus.NewGaugeFunc(
-		prometheus.GaugeOpts{
-			Name: "pool_workers_idle",
-			Help: "Number of idle worker goroutines",
-		},
-		func() float64 {
-			return float64(pool.IdleWorkers())
 		}))
 
 	// Task metrics
