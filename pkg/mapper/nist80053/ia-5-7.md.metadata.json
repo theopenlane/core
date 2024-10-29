@@ -1,0 +1,8 @@
+{
+    "metadataAttributes": {
+        "framework": "NIST 800-53v5",
+        "id": "ia-5.7",
+        "title": "No Embedded Unencrypted Static Authenticators",
+        "summary": ""
+    }
+}

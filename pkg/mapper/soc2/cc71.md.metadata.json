@@ -1,0 +1,8 @@
+{
+    "metadataAttributes": {
+        "framework": "SOC 2",
+        "id": "cc_7_1",
+        "title": "",
+        "summary": "CC7.1 To meet its objectives, the entity uses detection and monitoring procedures to identify (1) changes to configurations that result in the introduction of new vulnerabilities, and (2) susceptibilities to newly discovered vulnerabilities"
+    }
+}

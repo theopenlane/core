@@ -1,0 +1,8 @@
+{
+    "metadataAttributes": {
+        "framework": "NIST 800-53v5",
+        "id": "ra-5",
+        "title": "Vulnerability Monitoring and Scanning",
+        "summary": ""
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "metadataAttributes": {
+        "framework": "SOC 2",
+        "id": "cc_7_2",
+        "title": "",
+        "summary": "CC7.2 The entity monitors system components and the operation of those components for anomalies that are indicative of malicious acts, natural disasters, and errors affecting the entity's ability to meet its objectives; anomalies are analyzed to determine whether they represent security events"
+    }
+}

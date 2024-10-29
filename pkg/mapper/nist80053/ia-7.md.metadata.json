@@ -1,0 +1,8 @@
+{
+    "metadataAttributes": {
+        "framework": "NIST 800-53v5",
+        "id": "ia-7",
+        "title": "Cryptographic Module Authentication",
+        "summary": ""
+    }
+}

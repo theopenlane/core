@@ -1,0 +1,8 @@
+{
+    "metadataAttributes": {
+        "framework": "NIST 800-53v5",
+        "id": "si-4.1",
+        "title": "System-wide Intrusion Detection System",
+        "summary": ""
+    }
+}

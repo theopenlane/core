@@ -1,0 +1,8 @@
+{
+    "metadataAttributes": {
+        "framework": "NIST 800-53v5",
+        "id": "sr-11",
+        "title": "Component Authenticity",
+        "summary": ""
+    }
+}

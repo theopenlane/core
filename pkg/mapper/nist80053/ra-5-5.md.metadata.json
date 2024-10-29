@@ -1,0 +1,8 @@
+{
+    "metadataAttributes": {
+        "framework": "NIST 800-53v5",
+        "id": "ra-5.5",
+        "title": "Privileged Access",
+        "summary": ""
+    }
+}

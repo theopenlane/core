@@ -1,0 +1,8 @@
+{
+    "metadataAttributes": {
+        "framework": "NIST 800-53v5",
+        "id": "ia-12.3",
+        "title": "Identity Evidence Validation and Verification",
+        "summary": ""
+    }
+}

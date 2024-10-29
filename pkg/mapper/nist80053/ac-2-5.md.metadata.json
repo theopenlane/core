@@ -1,0 +1,8 @@
+{
+    "metadataAttributes": {
+        "framework": "NIST 800-53v5",
+        "id": "ac-2.5",
+        "title": "Inactivity Logout",
+        "summary": ""
+    }
+}

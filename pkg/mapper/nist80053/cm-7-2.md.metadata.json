@@ -1,0 +1,8 @@
+{
+    "metadataAttributes": {
+        "framework": "NIST 800-53v5",
+        "id": "cm-7.2",
+        "title": "Prevent Program Execution",
+        "summary": ""
+    }
+}

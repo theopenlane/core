@@ -1,0 +1,8 @@
+{
+    "metadataAttributes": {
+        "framework": "NIST 800-53v5",
+        "id": "ac-19.5",
+        "title": "Full Device or Container-based Encryption",
+        "summary": ""
+    }
+}

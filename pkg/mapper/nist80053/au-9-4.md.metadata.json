@@ -1,0 +1,8 @@
+{
+    "metadataAttributes": {
+        "framework": "NIST 800-53v5",
+        "id": "au-9.4",
+        "title": "Access by Subset of Privileged Users",
+        "summary": ""
+    }
+}

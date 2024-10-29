@@ -1,0 +1,8 @@
+{
+    "metadataAttributes": {
+        "framework": "NIST 800-53v5",
+        "id": "ac-2.1",
+        "title": "Automated System Account Management",
+        "summary": ""
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "metadataAttributes": {
+        "framework": "NIST 800-53v5",
+        "id": "si-2.2",
+        "title": "Automated Flaw Remediation Status",
+        "summary": ""
+    }
+}

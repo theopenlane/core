@@ -1,0 +1,8 @@
+{
+    "metadataAttributes": {
+        "framework": "NIST 800-53v5",
+        "id": "sc-12",
+        "title": "Cryptographic Key Establishment and Management",
+        "summary": ""
+    }
+}

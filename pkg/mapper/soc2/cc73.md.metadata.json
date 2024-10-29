@@ -1,0 +1,8 @@
+{
+    "metadataAttributes": {
+        "framework": "SOC 2",
+        "id": "cc_7_3",
+        "title": "",
+        "summary": "CC7.3 The entity evaluates security events to determine whether they could or have resulted in a failure of the entity to meet its objectives (security incidents) and, if so, takes actions to prevent or address such failures"
+    }
+}

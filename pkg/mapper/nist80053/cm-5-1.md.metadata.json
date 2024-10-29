@@ -1,0 +1,8 @@
+{
+    "metadataAttributes": {
+        "framework": "NIST 800-53v5",
+        "id": "cm-5.1",
+        "title": "Automated Access Enforcement and Audit Records",
+        "summary": ""
+    }
+}

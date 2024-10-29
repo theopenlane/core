@@ -1,0 +1,10 @@
+# NIST 800-53v5 - SA-5 - System Documentation
+- Obtain or develop administrator documentation for the system, system component, or system service that describes:
+- Obtain or develop user documentation for the system, system component, or system service that describes:
+- Document attempts to obtain system, system component, or system service documentation when such documentation is either unavailable or nonexistent and take \[ Assignment: actions \] in response; and
+- Distribute documentation to \[ Assignment: personnel or roles \].
+## Guidance
+System documentation helps personnel understand the implementation and operation of controls. Organizations consider establishing specific measures to determine the quality and completeness of the content provided. System documentation may be used to support the management of supply chain risk, incident response, and other functions. Personnel or roles that require documentation include system owners, system security officers, and system administrators. Attempts to obtain documentation include contacting manufacturers or suppliers and conducting web-based searches. The inability to obtain documentation may occur due to the age of the system or component or the lack of support from developers and contractors. When documentation cannot be obtained, organizations may need to recreate the documentation if it is essential to the implementation or operation of the controls. The protection provided for the documentation is commensurate with the security category or classification of the system. Documentation that addresses system vulnerabilities may require an increased level of protection. Secure operation of the system includes initially starting the system and resuming secure system operation after a lapse in system operation.
+## Mapped SCF controls
+- [AST-04.1 - Asset Scope Classification](../scf/ast-041-assetscopeclassification.md)
+- [TDA-04 - Documentation Requirements](../scf/tda-04-documentationrequirements.md)

@@ -1,0 +1,8 @@
+{
+    "metadataAttributes": {
+        "framework": "NIST 800-53v5",
+        "id": "ia-2.5",
+        "title": "Individual Authentication with Group Authentication",
+        "summary": ""
+    }
+}

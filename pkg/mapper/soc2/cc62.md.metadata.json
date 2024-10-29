@@ -1,0 +1,8 @@
+{
+    "metadataAttributes": {
+        "framework": "SOC 2",
+        "id": "cc_6_2",
+        "title": "",
+        "summary": "CC6.2 Prior to issuing system credentials and granting system access, the entity registers and authorizes new internal and external users whose access is administered by the entity"
+    }
+}

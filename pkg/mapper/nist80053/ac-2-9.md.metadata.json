@@ -1,0 +1,8 @@
+{
+    "metadataAttributes": {
+        "framework": "NIST 800-53v5",
+        "id": "ac-2.9",
+        "title": "Restrictions on Use of Shared and Group Accounts",
+        "summary": ""
+    }
+}

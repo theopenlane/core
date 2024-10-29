@@ -1,0 +1,8 @@
+{
+    "metadataAttributes": {
+        "framework": "NIST 800-53v5",
+        "id": "sc-2",
+        "title": "Separation of System and User Functionality",
+        "summary": ""
+    }
+}

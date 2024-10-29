@@ -1,0 +1,8 @@
+{
+    "metadataAttributes": {
+        "framework": "NIST 800-53v5",
+        "id": "cm-2.3",
+        "title": "Retention of Previous Configurations",
+        "summary": ""
+    }
+}

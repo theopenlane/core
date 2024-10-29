@@ -1,0 +1,15 @@
+# NIST 800-53v5 - CP-2 - Contingency Plan
+- Develop a contingency plan for the system that:
+- Distribute copies of the contingency plan to \[ Assignment: organization-defined key contingency personnel (identified by name and/or by role) and organizational elements \];
+- Coordinate contingency planning activities with incident handling activities;
+- Review the contingency plan for the system \[ Assignment: frequency \];
+- Update the contingency plan to address changes to the organization, system, or environment of operation and problems encountered during contingency plan implementation, execution, or testing;
+- Communicate contingency plan changes to \[ Assignment: organization-defined key contingency personnel (identified by name and/or by role) and organizational elements \];
+- Incorporate lessons learned from contingency plan testing, training, or actual contingency activities into contingency testing and training; and
+- Protect the contingency plan from unauthorized disclosure and modification.
+-
+## Guidance
+Contingency planning for systems is part of an overall program for achieving continuity of operations for organizational mission and business functions. Contingency planning addresses system restoration and implementation of alternative mission or business processes when systems are compromised or breached. Contingency planning is considered throughout the system development life cycle and is a fundamental part of the system design. Systems can be designed for redundancy, to provide backup capabilities, and for resilience. Contingency plans reflect the degree of restoration required for organizational systems since not all systems need to fully recover to achieve the level of continuity of operations desired. System recovery objectives reflect applicable laws, executive orders, directives, regulations, policies, standards, guidelines, organizational risk tolerance, and system impact level.\n\nActions addressed in contingency plans include orderly system degradation, system shutdown, fallback to a manual mode, alternate information flows, and operating in modes reserved for when systems are under attack. By coordinating contingency planning with incident handling activities, organizations ensure that the necessary planning activities are in place and activated in the event of an incident. Organizations consider whether continuity of operations during an incident conflicts with the capability to automatically disable the system, as specified in [IR-4(5)](#ir-4.5) . Incident response planning is part of contingency planning for organizations and is addressed in the [IR](#ir) (Incident Response) family.
+## Mapped SCF controls
+- [BCD-01 - Business Continuity Management System (BCMS)](../scf/bcd-01-businesscontinuitymanagementsystembcms.md)
+- [BCD-06 - Ongoing Contingency Planning](../scf/bcd-06-ongoingcontingencyplanning.md)

@@ -1,0 +1,8 @@
+{
+    "metadataAttributes": {
+        "framework": "NIST 800-53v5",
+        "id": "ac-6.10",
+        "title": "Prohibit Non-privileged Users from Executing Privileged Functions",
+        "summary": ""
+    }
+}

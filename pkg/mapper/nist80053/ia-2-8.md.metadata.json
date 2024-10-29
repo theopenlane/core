@@ -1,0 +1,8 @@
+{
+    "metadataAttributes": {
+        "framework": "NIST 800-53v5",
+        "id": "ia-2.8",
+        "title": "Access to Accounts — Replay Resistant",
+        "summary": ""
+    }
+}

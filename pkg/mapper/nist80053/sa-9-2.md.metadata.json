@@ -1,0 +1,8 @@
+{
+    "metadataAttributes": {
+        "framework": "NIST 800-53v5",
+        "id": "sa-9.2",
+        "title": "Identification of Functions, Ports, Protocols, and Services",
+        "summary": ""
+    }
+}

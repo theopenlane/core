@@ -1,0 +1,8 @@
+{
+    "metadataAttributes": {
+        "framework": "NIST 800-53v5",
+        "id": "ia-8.1",
+        "title": "Acceptance of PIV Credentials from Other Agencies",
+        "summary": ""
+    }
+}

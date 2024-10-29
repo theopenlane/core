@@ -1,0 +1,8 @@
+{
+    "metadataAttributes": {
+        "framework": "NIST 800-53v5",
+        "id": "ac-4",
+        "title": "Information Flow Enforcement",
+        "summary": ""
+    }
+}

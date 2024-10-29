@@ -1,0 +1,8 @@
+{
+    "metadataAttributes": {
+        "framework": "NIST 800-53v5",
+        "id": "ac-2.13",
+        "title": "Disable Accounts for High-risk Individuals",
+        "summary": ""
+    }
+}

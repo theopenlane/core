@@ -1,0 +1,8 @@
+{
+    "metadataAttributes": {
+        "framework": "NIST 800-53v5",
+        "id": "au-3",
+        "title": "Content of Audit Records",
+        "summary": ""
+    }
+}

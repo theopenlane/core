@@ -1,0 +1,8 @@
+{
+    "metadataAttributes": {
+        "framework": "SOC 2",
+        "id": "cc_6_5",
+        "title": "",
+        "summary": "CC6.5 The entity discontinues logical and physical protections over physical assets only after the ability to read or recover data and software from those assets has been diminished and is no longer required to meet the entity’s objectives"
+    }
+}

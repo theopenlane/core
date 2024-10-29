@@ -1,0 +1,8 @@
+{
+    "metadataAttributes": {
+        "framework": "NIST 800-53v5",
+        "id": "ac-17.2",
+        "title": "Protection of Confidentiality and Integrity Using Encryption",
+        "summary": ""
+    }
+}

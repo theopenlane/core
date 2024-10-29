@@ -1,0 +1,8 @@
+{
+    "metadataAttributes": {
+        "framework": "NIST 800-53v5",
+        "id": "sc-4",
+        "title": "Information in Shared System Resources",
+        "summary": ""
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "metadataAttributes": {
+        "framework": "NIST 800-53v5",
+        "id": "au-7",
+        "title": "Audit Record Reduction and Report Generation",
+        "summary": ""
+    }
+}

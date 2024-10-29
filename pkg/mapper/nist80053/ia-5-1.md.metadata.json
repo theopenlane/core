@@ -1,0 +1,8 @@
+{
+    "metadataAttributes": {
+        "framework": "NIST 800-53v5",
+        "id": "ia-5.1",
+        "title": "Password-based Authentication",
+        "summary": ""
+    }
+}

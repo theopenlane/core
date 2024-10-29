@@ -1,0 +1,8 @@
+{
+    "metadataAttributes": {
+        "framework": "NIST 800-53v5",
+        "id": "ia-2.1",
+        "title": "Multi-factor Authentication to Privileged Accounts",
+        "summary": ""
+    }
+}

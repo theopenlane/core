@@ -1,0 +1,8 @@
+{
+    "metadataAttributes": {
+        "framework": "NIST 800-53v5",
+        "id": "ma-3.3",
+        "title": "Prevent Unauthorized Removal",
+        "summary": ""
+    }
+}

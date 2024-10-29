@@ -1,0 +1,8 @@
+{
+    "metadataAttributes": {
+        "framework": "NIST 800-53v5",
+        "id": "sc-45.1",
+        "title": "Synchronization with Authoritative Time Source",
+        "summary": ""
+    }
+}

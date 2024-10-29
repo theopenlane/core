@@ -1,0 +1,8 @@
+{
+    "metadataAttributes": {
+        "framework": "NIST 800-53v5",
+        "id": "sc-21",
+        "title": "Secure Name/Address Resolution Service (Recursive or Caching Resolver)",
+        "summary": ""
+    }
+}

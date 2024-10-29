@@ -1,5 +1,5 @@
 [files]
-extend-exclude = ["db","internal/ent/generated/**","go.mod","go.sum","pkg/testutils/","internal/graphapi/tools_test.go","internal/httpserve/handlers/tools_test.go"]
+extend-exclude = ["db","internal/ent/generated/**","go.mod","go.sum","pkg/testutils/","internal/graphapi/tools_test.go","internal/httpserve/handlers/tools_test.go", "pkg/mapper/**"]
 ignore-hidden = true
 ignore-files = true
 ignore-dot = true

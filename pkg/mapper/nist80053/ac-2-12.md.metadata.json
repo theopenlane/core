@@ -1,0 +1,8 @@
+{
+    "metadataAttributes": {
+        "framework": "NIST 800-53v5",
+        "id": "ac-2.12",
+        "title": "Account Monitoring for Atypical Usage",
+        "summary": ""
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "metadataAttributes": {
+        "framework": "NIST 800-53v5",
+        "id": "ac-6.9",
+        "title": "Log Use of Privileged Functions",
+        "summary": ""
+    }
+}

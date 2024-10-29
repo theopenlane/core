@@ -1,0 +1,8 @@
+{
+    "metadataAttributes": {
+        "framework": "NIST 800-53v5",
+        "id": "pe-2",
+        "title": "Physical Access Authorizations",
+        "summary": ""
+    }
+}

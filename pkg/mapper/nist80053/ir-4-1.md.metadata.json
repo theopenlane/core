@@ -1,0 +1,8 @@
+{
+    "metadataAttributes": {
+        "framework": "NIST 800-53v5",
+        "id": "ir-4.1",
+        "title": "Automated Incident Handling Processes",
+        "summary": ""
+    }
+}

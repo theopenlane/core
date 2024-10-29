@@ -1,0 +1,8 @@
+{
+    "metadataAttributes": {
+        "framework": "NIST 800-53v5",
+        "id": "mp-6",
+        "title": "Media Sanitization",
+        "summary": ""
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "metadataAttributes": {
+        "framework": "NIST 800-53v5",
+        "id": "si-4.4",
+        "title": "Inbound and Outbound Communications Traffic",
+        "summary": ""
+    }
+}

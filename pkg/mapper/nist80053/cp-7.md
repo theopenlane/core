@@ -1,0 +1,9 @@
+# NIST 800-53v5 - CP-7 - Alternate Processing Site
+- Establish an alternate processing site, including necessary agreements to permit the transfer and resumption of \[ Assignment: system operations \] for essential mission and business functions within {{ insert: param, cp-07_odp.02 }} when the primary processing capabilities are unavailable;
+- Make available at the alternate processing site, the equipment and supplies required to transfer and resume operations or put contracts in place to support delivery to the site within the organization-defined time period for transfer and resumption; and
+- Provide controls at the alternate processing site that are equivalent to those at the primary site.
+-
+## Guidance
+Alternate processing sites are geographically distinct from primary processing sites and provide processing capability if the primary processing site is not available. The alternate processing capability may be addressed using a physical processing site or other alternatives, such as failover to a cloud-based service provider or other internally or externally provided processing service. Geographically distributed architectures that support contingency requirements may also be considered alternate processing sites. Controls that are covered by alternate processing site agreements include the environmental conditions at alternate sites, access rules, physical and environmental protection requirements, and the coordination for the transfer and assignment of personnel. Requirements are allocated to alternate processing sites that reflect the requirements in contingency plans to maintain essential mission and business functions despite disruption, compromise, or failure in organizational systems.
+## Mapped SCF controls
+- [BCD-09 - Alternate Processing Site](../scf/bcd-09-alternateprocessingsite.md)

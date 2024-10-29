@@ -1,0 +1,8 @@
+{
+    "metadataAttributes": {
+        "framework": "NIST 800-53v5",
+        "id": "cp-8.2",
+        "title": "Single Points of Failure",
+        "summary": ""
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "metadataAttributes": {
+        "framework": "NIST 800-53v5",
+        "id": "si-7.7",
+        "title": "Integration of Detection and Response",
+        "summary": ""
+    }
+}

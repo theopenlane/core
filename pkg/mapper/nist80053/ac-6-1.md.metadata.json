@@ -1,0 +1,8 @@
+{
+    "metadataAttributes": {
+        "framework": "NIST 800-53v5",
+        "id": "ac-6.1",
+        "title": "Authorize Access to Security Functions",
+        "summary": ""
+    }
+}
