@@ -148,27 +148,3 @@ func registerAppleMerchantHandler(router *Router) (err error) {
 
 	return nil
 }
-
-//go:embed mta-sts.txt
-var mtasts embed.FS
-
-// registerMTASTSHandler serves up the text output of the mta-sts.txt
-func registerMTASTSHandler(router *Router) (err error) {
-	path := "/.well-known/mta-sts.txt"
-	method := http.MethodGet
-	name := "MTASTS"
-
-	route := echo.Route{
-		Name:        name,
-		Method:      method,
-		Path:        path,
-		Middlewares: mw,
-		Handler:     echo.StaticFileHandler("mta-sts.txt", mtasts),
-	}
-
-	if err := router.AddEchoOnlyRoute(path, method, route); err != nil {
-		return err
-	}
-
-	return nil
-}
