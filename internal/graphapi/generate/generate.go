@@ -23,7 +23,7 @@ func main() {
 	if err := api.Generate(cfg,
 		api.ReplacePlugin(resolvergen.New()), // replace the resolvergen plugin
 		api.AddPlugin(bulkgen.New()),         // add the bulkgen plugin
-		api.AddPlugin(searchgen.New()),       // add the search plugin
+		api.AddPlugin(searchgen.New("github.com/theopenlane/core/internal/ent/generated")), // add the search plugin
 	); err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 		os.Exit(3)
