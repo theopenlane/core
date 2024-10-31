@@ -17,7 +17,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/credentials v1.17.42
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.66.2
 	github.com/barkimedes/go-deepcopy v0.0.0-20220514131651-17c30cfc62df
-	github.com/brianvoe/gofakeit/v7 v7.1.1
+	github.com/brianvoe/gofakeit/v7 v7.1.2
 	github.com/danielgtaylor/huma/v2 v2.24.0
 	github.com/dustinkirkland/golang-petname v0.0.0-20240428194347-eebcea082ee0
 	github.com/gertd/go-pluralize v0.2.1
