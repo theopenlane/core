@@ -49,8 +49,8 @@ require (
 	github.com/prometheus/client_golang v1.20.5
 	github.com/ravilushqa/otelgqlgen v0.17.0
 	github.com/redis/go-redis/v9 v9.7.0
-	github.com/riverqueue/river v0.14.0
-	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.14.0
+	github.com/riverqueue/river v0.14.1
+	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.14.1
 	github.com/rs/zerolog v1.33.0
 	github.com/samber/lo v1.47.0
 	github.com/santhosh-tekuri/jsonschema/v6 v6.0.1
@@ -229,9 +229,9 @@ require (
 	github.com/prometheus/procfs v0.15.1 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
 	github.com/resend/resend-go/v2 v2.11.0 // indirect
-	github.com/riverqueue/river/riverdriver v0.14.0 // indirect
-	github.com/riverqueue/river/rivershared v0.14.0 // indirect
-	github.com/riverqueue/river/rivertype v0.14.0 // indirect
+	github.com/riverqueue/river/riverdriver v0.14.1 // indirect
+	github.com/riverqueue/river/rivershared v0.14.1 // indirect
+	github.com/riverqueue/river/rivertype v0.14.1 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/sagikazarmark/locafero v0.6.0 // indirect
