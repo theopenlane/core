@@ -74,7 +74,7 @@ require (
 	github.com/wundergraph/graphql-go-tools v1.67.4
 	gocloud.dev v0.40.0
 	golang.org/x/crypto v0.28.0
-	golang.org/x/oauth2 v0.23.0
+	golang.org/x/oauth2 v0.24.0
 	golang.org/x/term v0.25.0
 	golang.org/x/text v0.19.0
 	golang.org/x/tools v0.26.0
