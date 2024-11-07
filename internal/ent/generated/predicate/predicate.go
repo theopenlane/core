@@ -150,6 +150,12 @@ type Subscriber func(*sql.Selector)
 // TFASetting is the predicate function for tfasetting builders.
 type TFASetting func(*sql.Selector)
 
+// Task is the predicate function for task builders.
+type Task func(*sql.Selector)
+
+// TaskHistory is the predicate function for taskhistory builders.
+type TaskHistory func(*sql.Selector)
+
 // Template is the predicate function for template builders.
 type Template func(*sql.Selector)
 

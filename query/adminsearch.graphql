@@ -246,6 +246,20 @@ query AdminSearch($query: String!) {
           recoveryCodes
         }
       }
+      ... on TaskSearchResult {
+        tasks {
+          id
+          deletedBy
+          tags
+          organizationID
+          groupID
+          title
+          description
+          details
+          assignee
+          assigner
+        }
+      }
       ... on TemplateSearchResult {
         templates {
           deletedBy

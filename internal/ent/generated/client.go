@@ -66,6 +66,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/taskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
@@ -191,6 +193,10 @@ type Client struct {
 	Subscriber *SubscriberClient
 	// TFASetting is the client for interacting with the TFASetting builders.
 	TFASetting *TFASettingClient
+	// Task is the client for interacting with the Task builders.
+	Task *TaskClient
+	// TaskHistory is the client for interacting with the TaskHistory builders.
+	TaskHistory *TaskHistoryClient
 	// Template is the client for interacting with the Template builders.
 	Template *TemplateClient
 	// TemplateHistory is the client for interacting with the TemplateHistory builders.
@@ -277,6 +283,8 @@ func (c *Client) init() {
 	c.PersonalAccessToken = NewPersonalAccessTokenClient(c.config)
 	c.Subscriber = NewSubscriberClient(c.config)
 	c.TFASetting = NewTFASettingClient(c.config)
+	c.Task = NewTaskClient(c.config)
+	c.TaskHistory = NewTaskHistoryClient(c.config)
 	c.Template = NewTemplateClient(c.config)
 	c.TemplateHistory = NewTemplateHistoryClient(c.config)
 	c.User = NewUserClient(c.config)
@@ -487,6 +495,8 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		PersonalAccessToken:           NewPersonalAccessTokenClient(cfg),
 		Subscriber:                    NewSubscriberClient(cfg),
 		TFASetting:                    NewTFASettingClient(cfg),
+		Task:                          NewTaskClient(cfg),
+		TaskHistory:                   NewTaskHistoryClient(cfg),
 		Template:                      NewTemplateClient(cfg),
 		TemplateHistory:               NewTemplateHistoryClient(cfg),
 		User:                          NewUserClient(cfg),
@@ -563,6 +573,8 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		PersonalAccessToken:           NewPersonalAccessTokenClient(cfg),
 		Subscriber:                    NewSubscriberClient(cfg),
 		TFASetting:                    NewTFASettingClient(cfg),
+		Task:                          NewTaskClient(cfg),
+		TaskHistory:                   NewTaskHistoryClient(cfg),
 		Template:                      NewTemplateClient(cfg),
 		TemplateHistory:               NewTemplateHistoryClient(cfg),
 		User:                          NewUserClient(cfg),
@@ -612,9 +624,9 @@ func (c *Client) Use(hooks ...Hook) {
 		c.NoteHistory, c.OauthProvider, c.OauthProviderHistory, c.OhAuthTooToken,
 		c.OrgMembership, c.OrgMembershipHistory, c.Organization, c.OrganizationHistory,
 		c.OrganizationSetting, c.OrganizationSettingHistory, c.PasswordResetToken,
-		c.PersonalAccessToken, c.Subscriber, c.TFASetting, c.Template,
-		c.TemplateHistory, c.User, c.UserHistory, c.UserSetting, c.UserSettingHistory,
-		c.Webauthn, c.Webhook, c.WebhookHistory,
+		c.PersonalAccessToken, c.Subscriber, c.TFASetting, c.Task, c.TaskHistory,
+		c.Template, c.TemplateHistory, c.User, c.UserHistory, c.UserSetting,
+		c.UserSettingHistory, c.Webauthn, c.Webhook, c.WebhookHistory,
 	} {
 		n.Use(hooks...)
 	}
@@ -635,9 +647,9 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.NoteHistory, c.OauthProvider, c.OauthProviderHistory, c.OhAuthTooToken,
 		c.OrgMembership, c.OrgMembershipHistory, c.Organization, c.OrganizationHistory,
 		c.OrganizationSetting, c.OrganizationSettingHistory, c.PasswordResetToken,
-		c.PersonalAccessToken, c.Subscriber, c.TFASetting, c.Template,
-		c.TemplateHistory, c.User, c.UserHistory, c.UserSetting, c.UserSettingHistory,
-		c.Webauthn, c.Webhook, c.WebhookHistory,
+		c.PersonalAccessToken, c.Subscriber, c.TFASetting, c.Task, c.TaskHistory,
+		c.Template, c.TemplateHistory, c.User, c.UserHistory, c.UserSetting,
+		c.UserSettingHistory, c.Webauthn, c.Webhook, c.WebhookHistory,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -810,6 +822,10 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Subscriber.mutate(ctx, m)
 	case *TFASettingMutation:
 		return c.TFASetting.mutate(ctx, m)
+	case *TaskMutation:
+		return c.Task.mutate(ctx, m)
+	case *TaskHistoryMutation:
+		return c.TaskHistory.mutate(ctx, m)
 	case *TemplateMutation:
 		return c.Template.mutate(ctx, m)
 	case *TemplateHistoryMutation:
@@ -5181,6 +5197,25 @@ func (c *GroupClient) QueryFiles(gr *Group) *FileQuery {
 	return query
 }
 
+// QueryTasks queries the tasks edge of a Group.
+func (c *GroupClient) QueryTasks(gr *Group) *TaskQuery {
+	query := (&TaskClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := gr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, id),
+			sqlgraph.To(task.Table, task.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, group.TasksTable, group.TasksPrimaryKey...),
+		)
+		schemaConfig := gr.schemaConfig
+		step.To.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.GroupTasks
+		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryMembers queries the members edge of a Group.
 func (c *GroupClient) QueryMembers(gr *Group) *GroupMembershipQuery {
 	query := (&GroupMembershipClient{config: c.config}).Query()
@@ -8538,6 +8573,25 @@ func (c *OrganizationClient) QueryNotes(o *Organization) *NoteQuery {
 	return query
 }
 
+// QueryTasks queries the tasks edge of a Organization.
+func (c *OrganizationClient) QueryTasks(o *Organization) *TaskQuery {
+	query := (&TaskClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(task.Table, task.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, organization.TasksTable, organization.TasksPrimaryKey...),
+		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.OrganizationTasks
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryMembers queries the members edge of a Organization.
 func (c *OrganizationClient) QueryMembers(o *Organization) *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: c.config}).Query()
@@ -9700,6 +9754,333 @@ func (c *TFASettingClient) mutate(ctx context.Context, m *TFASettingMutation) (V
 	}
 }
 
+// TaskClient is a client for the Task schema.
+type TaskClient struct {
+	config
+}
+
+// NewTaskClient returns a client for the Task from the given config.
+func NewTaskClient(c config) *TaskClient {
+	return &TaskClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `task.Hooks(f(g(h())))`.
+func (c *TaskClient) Use(hooks ...Hook) {
+	c.hooks.Task = append(c.hooks.Task, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `task.Intercept(f(g(h())))`.
+func (c *TaskClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Task = append(c.inters.Task, interceptors...)
+}
+
+// Create returns a builder for creating a Task entity.
+func (c *TaskClient) Create() *TaskCreate {
+	mutation := newTaskMutation(c.config, OpCreate)
+	return &TaskCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Task entities.
+func (c *TaskClient) CreateBulk(builders ...*TaskCreate) *TaskCreateBulk {
+	return &TaskCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *TaskClient) MapCreateBulk(slice any, setFunc func(*TaskCreate, int)) *TaskCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &TaskCreateBulk{err: fmt.Errorf("calling to TaskClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*TaskCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &TaskCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Task.
+func (c *TaskClient) Update() *TaskUpdate {
+	mutation := newTaskMutation(c.config, OpUpdate)
+	return &TaskUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *TaskClient) UpdateOne(t *Task) *TaskUpdateOne {
+	mutation := newTaskMutation(c.config, OpUpdateOne, withTask(t))
+	return &TaskUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *TaskClient) UpdateOneID(id string) *TaskUpdateOne {
+	mutation := newTaskMutation(c.config, OpUpdateOne, withTaskID(id))
+	return &TaskUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Task.
+func (c *TaskClient) Delete() *TaskDelete {
+	mutation := newTaskMutation(c.config, OpDelete)
+	return &TaskDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *TaskClient) DeleteOne(t *Task) *TaskDeleteOne {
+	return c.DeleteOneID(t.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *TaskClient) DeleteOneID(id string) *TaskDeleteOne {
+	builder := c.Delete().Where(task.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &TaskDeleteOne{builder}
+}
+
+// Query returns a query builder for Task.
+func (c *TaskClient) Query() *TaskQuery {
+	return &TaskQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeTask},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Task entity by its id.
+func (c *TaskClient) Get(ctx context.Context, id string) (*Task, error) {
+	return c.Query().Where(task.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *TaskClient) GetX(ctx context.Context, id string) *Task {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryUser queries the user edge of a Task.
+func (c *TaskClient) QueryUser(t *Task) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := t.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(task.Table, task.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, task.UserTable, task.UserColumn),
+		)
+		schemaConfig := t.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Task
+		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryOrganization queries the organization edge of a Task.
+func (c *TaskClient) QueryOrganization(t *Task) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := t.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(task.Table, task.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, task.OrganizationTable, task.OrganizationPrimaryKey...),
+		)
+		schemaConfig := t.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.OrganizationTasks
+		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryGroup queries the group edge of a Task.
+func (c *TaskClient) QueryGroup(t *Task) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := t.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(task.Table, task.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, task.GroupTable, task.GroupPrimaryKey...),
+		)
+		schemaConfig := t.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.GroupTasks
+		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *TaskClient) Hooks() []Hook {
+	hooks := c.hooks.Task
+	return append(hooks[:len(hooks):len(hooks)], task.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *TaskClient) Interceptors() []Interceptor {
+	inters := c.inters.Task
+	return append(inters[:len(inters):len(inters)], task.Interceptors[:]...)
+}
+
+func (c *TaskClient) mutate(ctx context.Context, m *TaskMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&TaskCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&TaskUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&TaskUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&TaskDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown Task mutation op: %q", m.Op())
+	}
+}
+
+// TaskHistoryClient is a client for the TaskHistory schema.
+type TaskHistoryClient struct {
+	config
+}
+
+// NewTaskHistoryClient returns a client for the TaskHistory from the given config.
+func NewTaskHistoryClient(c config) *TaskHistoryClient {
+	return &TaskHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `taskhistory.Hooks(f(g(h())))`.
+func (c *TaskHistoryClient) Use(hooks ...Hook) {
+	c.hooks.TaskHistory = append(c.hooks.TaskHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `taskhistory.Intercept(f(g(h())))`.
+func (c *TaskHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.TaskHistory = append(c.inters.TaskHistory, interceptors...)
+}
+
+// Create returns a builder for creating a TaskHistory entity.
+func (c *TaskHistoryClient) Create() *TaskHistoryCreate {
+	mutation := newTaskHistoryMutation(c.config, OpCreate)
+	return &TaskHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of TaskHistory entities.
+func (c *TaskHistoryClient) CreateBulk(builders ...*TaskHistoryCreate) *TaskHistoryCreateBulk {
+	return &TaskHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *TaskHistoryClient) MapCreateBulk(slice any, setFunc func(*TaskHistoryCreate, int)) *TaskHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &TaskHistoryCreateBulk{err: fmt.Errorf("calling to TaskHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*TaskHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &TaskHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for TaskHistory.
+func (c *TaskHistoryClient) Update() *TaskHistoryUpdate {
+	mutation := newTaskHistoryMutation(c.config, OpUpdate)
+	return &TaskHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *TaskHistoryClient) UpdateOne(th *TaskHistory) *TaskHistoryUpdateOne {
+	mutation := newTaskHistoryMutation(c.config, OpUpdateOne, withTaskHistory(th))
+	return &TaskHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *TaskHistoryClient) UpdateOneID(id string) *TaskHistoryUpdateOne {
+	mutation := newTaskHistoryMutation(c.config, OpUpdateOne, withTaskHistoryID(id))
+	return &TaskHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for TaskHistory.
+func (c *TaskHistoryClient) Delete() *TaskHistoryDelete {
+	mutation := newTaskHistoryMutation(c.config, OpDelete)
+	return &TaskHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *TaskHistoryClient) DeleteOne(th *TaskHistory) *TaskHistoryDeleteOne {
+	return c.DeleteOneID(th.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *TaskHistoryClient) DeleteOneID(id string) *TaskHistoryDeleteOne {
+	builder := c.Delete().Where(taskhistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &TaskHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for TaskHistory.
+func (c *TaskHistoryClient) Query() *TaskHistoryQuery {
+	return &TaskHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeTaskHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a TaskHistory entity by its id.
+func (c *TaskHistoryClient) Get(ctx context.Context, id string) (*TaskHistory, error) {
+	return c.Query().Where(taskhistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *TaskHistoryClient) GetX(ctx context.Context, id string) *TaskHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *TaskHistoryClient) Hooks() []Hook {
+	hooks := c.hooks.TaskHistory
+	return append(hooks[:len(hooks):len(hooks)], taskhistory.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *TaskHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.TaskHistory
+	return append(inters[:len(inters):len(inters)], taskhistory.Interceptors[:]...)
+}
+
+func (c *TaskHistoryClient) mutate(ctx context.Context, m *TaskHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&TaskHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&TaskHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&TaskHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&TaskHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown TaskHistory mutation op: %q", m.Op())
+	}
+}
+
 // TemplateClient is a client for the Template schema.
 type TemplateClient struct {
 	config
@@ -10338,6 +10719,25 @@ func (c *UserClient) QueryEvents(u *User) *EventQuery {
 		schemaConfig := u.schemaConfig
 		step.To.Schema = schemaConfig.Event
 		step.Edge.Schema = schemaConfig.UserEvents
+		fromV = sqlgraph.Neighbors(u.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTasks queries the tasks edge of a User.
+func (c *UserClient) QueryTasks(u *User) *TaskQuery {
+	query := (&TaskClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := u.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, id),
+			sqlgraph.To(task.Table, task.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, user.TasksTable, user.TasksColumn),
+		)
+		schemaConfig := u.schemaConfig
+		step.To.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.Task
 		fromV = sqlgraph.Neighbors(u.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -11363,8 +11763,9 @@ type (
 		OauthProvider, OauthProviderHistory, OhAuthTooToken, OrgMembership,
 		OrgMembershipHistory, Organization, OrganizationHistory, OrganizationSetting,
 		OrganizationSettingHistory, PasswordResetToken, PersonalAccessToken,
-		Subscriber, TFASetting, Template, TemplateHistory, User, UserHistory,
-		UserSetting, UserSettingHistory, Webauthn, Webhook, WebhookHistory []ent.Hook
+		Subscriber, TFASetting, Task, TaskHistory, Template, TemplateHistory, User,
+		UserHistory, UserSetting, UserSettingHistory, Webauthn, Webhook,
+		WebhookHistory []ent.Hook
 	}
 	inters struct {
 		APIToken, Contact, ContactHistory, DocumentData, DocumentDataHistory,
@@ -11377,8 +11778,8 @@ type (
 		OauthProvider, OauthProviderHistory, OhAuthTooToken, OrgMembership,
 		OrgMembershipHistory, Organization, OrganizationHistory, OrganizationSetting,
 		OrganizationSettingHistory, PasswordResetToken, PersonalAccessToken,
-		Subscriber, TFASetting, Template, TemplateHistory, User, UserHistory,
-		UserSetting, UserSettingHistory, Webauthn, Webhook,
+		Subscriber, TFASetting, Task, TaskHistory, Template, TemplateHistory, User,
+		UserHistory, UserSetting, UserSettingHistory, Webauthn, Webhook,
 		WebhookHistory []ent.Interceptor
 	}
 )

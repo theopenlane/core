@@ -189,6 +189,15 @@ extend type Query{
         query: String!
     ): TFASettingSearchResult
     """
+    Search across Task objects
+    """
+    taskSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): TaskSearchResult
+    """
     Search across Template objects
     """
     templateSearch(
@@ -247,6 +256,7 @@ union SearchResult =
   | PersonalAccessTokenSearchResult
   | SubscriberSearchResult
   | TFASettingSearchResult
+  | TaskSearchResult
   | TemplateSearchResult
   | UserSearchResult
   | UserSettingSearchResult
@@ -361,6 +371,10 @@ type  SubscriberSearchResult {
 
 type  TFASettingSearchResult {
    tFASettings: [ TFASetting!]
+}
+
+type  TaskSearchResult {
+   tasks: [ Task!]
 }
 
 type  TemplateSearchResult {

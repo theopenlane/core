@@ -23,6 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
@@ -49,6 +50,7 @@ type UserQuery struct {
 	withFiles                        *FileQuery
 	withFile                         *FileQuery
 	withEvents                       *EventQuery
+	withTasks                        *TaskQuery
 	withGroupMemberships             *GroupMembershipQuery
 	withOrgMemberships               *OrgMembershipQuery
 	loadTotal                        []func(context.Context, []*User) error
@@ -62,6 +64,7 @@ type UserQuery struct {
 	withNamedWebauthn                map[string]*WebauthnQuery
 	withNamedFiles                   map[string]*FileQuery
 	withNamedEvents                  map[string]*EventQuery
+	withNamedTasks                   map[string]*TaskQuery
 	withNamedGroupMemberships        map[string]*GroupMembershipQuery
 	withNamedOrgMemberships          map[string]*OrgMembershipQuery
 	// intermediate query (i.e. traversal path).
@@ -375,6 +378,31 @@ func (uq *UserQuery) QueryEvents() *EventQuery {
 	return query
 }
 
+// QueryTasks chains the current query on the "tasks" edge.
+func (uq *UserQuery) QueryTasks() *TaskQuery {
+	query := (&TaskClient{config: uq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := uq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := uq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, selector),
+			sqlgraph.To(task.Table, task.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, user.TasksTable, user.TasksColumn),
+		)
+		schemaConfig := uq.schemaConfig
+		step.To.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.Task
+		fromU = sqlgraph.SetNeighbors(uq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryGroupMemberships chains the current query on the "group_memberships" edge.
 func (uq *UserQuery) QueryGroupMemberships() *GroupMembershipQuery {
 	query := (&GroupMembershipClient{config: uq.config}).Query()
@@ -628,6 +656,7 @@ func (uq *UserQuery) Clone() *UserQuery {
 		withFiles:                   uq.withFiles.Clone(),
 		withFile:                    uq.withFile.Clone(),
 		withEvents:                  uq.withEvents.Clone(),
+		withTasks:                   uq.withTasks.Clone(),
 		withGroupMemberships:        uq.withGroupMemberships.Clone(),
 		withOrgMemberships:          uq.withOrgMemberships.Clone(),
 		// clone intermediate query.
@@ -758,6 +787,17 @@ func (uq *UserQuery) WithEvents(opts ...func(*EventQuery)) *UserQuery {
 	return uq
 }
 
+// WithTasks tells the query-builder to eager-load the nodes that are connected to
+// the "tasks" edge. The optional arguments are used to configure the query builder of the edge.
+func (uq *UserQuery) WithTasks(opts ...func(*TaskQuery)) *UserQuery {
+	query := (&TaskClient{config: uq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	uq.withTasks = query
+	return uq
+}
+
 // WithGroupMemberships tells the query-builder to eager-load the nodes that are connected to
 // the "group_memberships" edge. The optional arguments are used to configure the query builder of the edge.
 func (uq *UserQuery) WithGroupMemberships(opts ...func(*GroupMembershipQuery)) *UserQuery {
@@ -864,7 +904,7 @@ func (uq *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 	var (
 		nodes       = []*User{}
 		_spec       = uq.querySpec()
-		loadedTypes = [13]bool{
+		loadedTypes = [14]bool{
 			uq.withPersonalAccessTokens != nil,
 			uq.withTfaSettings != nil,
 			uq.withSetting != nil,
@@ -876,6 +916,7 @@ func (uq *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 			uq.withFiles != nil,
 			uq.withFile != nil,
 			uq.withEvents != nil,
+			uq.withTasks != nil,
 			uq.withGroupMemberships != nil,
 			uq.withOrgMemberships != nil,
 		}
@@ -984,6 +1025,13 @@ func (uq *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 			return nil, err
 		}
 	}
+	if query := uq.withTasks; query != nil {
+		if err := uq.loadTasks(ctx, query, nodes,
+			func(n *User) { n.Edges.Tasks = []*Task{} },
+			func(n *User, e *Task) { n.Edges.Tasks = append(n.Edges.Tasks, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := uq.withGroupMemberships; query != nil {
 		if err := uq.loadGroupMemberships(ctx, query, nodes,
 			func(n *User) { n.Edges.GroupMemberships = []*GroupMembership{} },
@@ -1058,6 +1106,13 @@ func (uq *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 		if err := uq.loadEvents(ctx, query, nodes,
 			func(n *User) { n.appendNamedEvents(name) },
 			func(n *User, e *Event) { n.appendNamedEvents(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range uq.withNamedTasks {
+		if err := uq.loadTasks(ctx, query, nodes,
+			func(n *User) { n.appendNamedTasks(name) },
+			func(n *User, e *Task) { n.appendNamedTasks(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1541,6 +1596,36 @@ func (uq *UserQuery) loadEvents(ctx context.Context, query *EventQuery, nodes []
 	}
 	return nil
 }
+func (uq *UserQuery) loadTasks(ctx context.Context, query *TaskQuery, nodes []*User, init func(*User), assign func(*User, *Task)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*User)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(task.FieldAssigner)
+	}
+	query.Where(predicate.Task(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(user.TasksColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.Assigner
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "assigner" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (uq *UserQuery) loadGroupMemberships(ctx context.Context, query *GroupMembershipQuery, nodes []*User, init func(*User), assign func(*User, *GroupMembership)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*User)
@@ -1826,6 +1911,20 @@ func (uq *UserQuery) WithNamedEvents(name string, opts ...func(*EventQuery)) *Us
 		uq.withNamedEvents = make(map[string]*EventQuery)
 	}
 	uq.withNamedEvents[name] = query
+	return uq
+}
+
+// WithNamedTasks tells the query-builder to eager-load the nodes that are connected to the "tasks"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (uq *UserQuery) WithNamedTasks(name string, opts ...func(*TaskQuery)) *UserQuery {
+	query := (&TaskClient{config: uq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if uq.withNamedTasks == nil {
+		uq.withNamedTasks = make(map[string]*TaskQuery)
+	}
+	uq.withNamedTasks[name] = query
 	return uq
 }
 

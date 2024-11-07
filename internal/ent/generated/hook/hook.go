@@ -585,6 +585,30 @@ func (f TFASettingFunc) Mutate(ctx context.Context, m generated.Mutation) (gener
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.TFASettingMutation", m)
 }
 
+// The TaskFunc type is an adapter to allow the use of ordinary
+// function as Task mutator.
+type TaskFunc func(context.Context, *generated.TaskMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f TaskFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.TaskMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.TaskMutation", m)
+}
+
+// The TaskHistoryFunc type is an adapter to allow the use of ordinary
+// function as TaskHistory mutator.
+type TaskHistoryFunc func(context.Context, *generated.TaskHistoryMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f TaskHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.TaskHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.TaskHistoryMutation", m)
+}
+
 // The TemplateFunc type is an adapter to allow the use of ordinary
 // function as Template mutator.
 type TemplateFunc func(context.Context, *generated.TemplateMutation) (generated.Value, error)

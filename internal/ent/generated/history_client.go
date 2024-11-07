@@ -68,6 +68,9 @@ func (c *Client) WithHistory() {
 	for _, hook := range history.HistoryHooks[*OrganizationSettingMutation]() {
 		c.OrganizationSetting.Use(hook)
 	}
+	for _, hook := range history.HistoryHooks[*TaskMutation]() {
+		c.Task.Use(hook)
+	}
 	for _, hook := range history.HistoryHooks[*TemplateMutation]() {
 		c.Template.Use(hook)
 	}

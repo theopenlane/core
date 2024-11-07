@@ -28,6 +28,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organizationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembershiphistory"
+	"github.com/theopenlane/core/internal/ent/generated/taskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
 	"github.com/theopenlane/core/internal/ent/generated/usersettinghistory"
@@ -951,6 +952,52 @@ func (oshq *OrganizationSettingHistoryQuery) AsOf(ctx context.Context, time time
 	return oshq.
 		Where(organizationsettinghistory.HistoryTimeLTE(time)).
 		Order(organizationsettinghistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (t *Task) History() *TaskHistoryQuery {
+	historyClient := NewTaskHistoryClient(t.config)
+	return historyClient.Query().Where(taskhistory.Ref(t.ID))
+}
+
+func (th *TaskHistory) Next(ctx context.Context) (*TaskHistory, error) {
+	client := NewTaskHistoryClient(th.config)
+	return client.Query().
+		Where(
+			taskhistory.Ref(th.Ref),
+			taskhistory.HistoryTimeGT(th.HistoryTime),
+		).
+		Order(taskhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (th *TaskHistory) Prev(ctx context.Context) (*TaskHistory, error) {
+	client := NewTaskHistoryClient(th.config)
+	return client.Query().
+		Where(
+			taskhistory.Ref(th.Ref),
+			taskhistory.HistoryTimeLT(th.HistoryTime),
+		).
+		Order(taskhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (thq *TaskHistoryQuery) Earliest(ctx context.Context) (*TaskHistory, error) {
+	return thq.
+		Order(taskhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (thq *TaskHistoryQuery) Latest(ctx context.Context) (*TaskHistory, error) {
+	return thq.
+		Order(taskhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (thq *TaskHistoryQuery) AsOf(ctx context.Context, time time.Time) (*TaskHistory, error) {
+	return thq.
+		Where(taskhistory.HistoryTimeLTE(time)).
+		Order(taskhistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
 }
 

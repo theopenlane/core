@@ -1770,6 +1770,80 @@ var (
 			},
 		},
 	}
+	// TasksColumns holds the columns for the "tasks" table.
+	TasksColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "mapping_id", Type: field.TypeString, Unique: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "organization_id", Type: field.TypeString, Nullable: true},
+		{Name: "group_id", Type: field.TypeString, Nullable: true},
+		{Name: "title", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "details", Type: field.TypeJSON, Nullable: true},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"OPEN", "IN_PROGRESS", "IN_REVIEW", "COMPLETED", "WONT_DO"}, Default: "OPEN"},
+		{Name: "due", Type: field.TypeTime, Nullable: true},
+		{Name: "completed", Type: field.TypeTime, Nullable: true},
+		{Name: "assignee", Type: field.TypeString, Nullable: true},
+		{Name: "assigner", Type: field.TypeString},
+	}
+	// TasksTable holds the schema information for the "tasks" table.
+	TasksTable = &schema.Table{
+		Name:       "tasks",
+		Columns:    TasksColumns,
+		PrimaryKey: []*schema.Column{TasksColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "tasks_users_tasks",
+				Columns:    []*schema.Column{TasksColumns[18]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+	}
+	// TaskHistoryColumns holds the columns for the "task_history" table.
+	TaskHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "mapping_id", Type: field.TypeString},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "organization_id", Type: field.TypeString, Nullable: true},
+		{Name: "group_id", Type: field.TypeString, Nullable: true},
+		{Name: "title", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "details", Type: field.TypeJSON, Nullable: true},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"OPEN", "IN_PROGRESS", "IN_REVIEW", "COMPLETED", "WONT_DO"}, Default: "OPEN"},
+		{Name: "due", Type: field.TypeTime, Nullable: true},
+		{Name: "completed", Type: field.TypeTime, Nullable: true},
+		{Name: "assignee", Type: field.TypeString, Nullable: true},
+		{Name: "assigner", Type: field.TypeString},
+	}
+	// TaskHistoryTable holds the schema information for the "task_history" table.
+	TaskHistoryTable = &schema.Table{
+		Name:       "task_history",
+		Columns:    TaskHistoryColumns,
+		PrimaryKey: []*schema.Column{TaskHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "taskhistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{TaskHistoryColumns[1]},
+			},
+		},
+	}
 	// TemplatesColumns holds the columns for the "templates" table.
 	TemplatesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -2441,6 +2515,31 @@ var (
 			},
 		},
 	}
+	// GroupTasksColumns holds the columns for the "group_tasks" table.
+	GroupTasksColumns = []*schema.Column{
+		{Name: "group_id", Type: field.TypeString},
+		{Name: "task_id", Type: field.TypeString},
+	}
+	// GroupTasksTable holds the schema information for the "group_tasks" table.
+	GroupTasksTable = &schema.Table{
+		Name:       "group_tasks",
+		Columns:    GroupTasksColumns,
+		PrimaryKey: []*schema.Column{GroupTasksColumns[0], GroupTasksColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "group_tasks_group_id",
+				Columns:    []*schema.Column{GroupTasksColumns[0]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "group_tasks_task_id",
+				Columns:    []*schema.Column{GroupTasksColumns[1]},
+				RefColumns: []*schema.Column{TasksColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// GroupMembershipEventsColumns holds the columns for the "group_membership_events" table.
 	GroupMembershipEventsColumns = []*schema.Column{
 		{Name: "group_membership_id", Type: field.TypeString},
@@ -2766,6 +2865,31 @@ var (
 			},
 		},
 	}
+	// OrganizationTasksColumns holds the columns for the "organization_tasks" table.
+	OrganizationTasksColumns = []*schema.Column{
+		{Name: "organization_id", Type: field.TypeString},
+		{Name: "task_id", Type: field.TypeString},
+	}
+	// OrganizationTasksTable holds the schema information for the "organization_tasks" table.
+	OrganizationTasksTable = &schema.Table{
+		Name:       "organization_tasks",
+		Columns:    OrganizationTasksColumns,
+		PrimaryKey: []*schema.Column{OrganizationTasksColumns[0], OrganizationTasksColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "organization_tasks_organization_id",
+				Columns:    []*schema.Column{OrganizationTasksColumns[0]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "organization_tasks_task_id",
+				Columns:    []*schema.Column{OrganizationTasksColumns[1]},
+				RefColumns: []*schema.Column{TasksColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// OrganizationSettingFilesColumns holds the columns for the "organization_setting_files" table.
 	OrganizationSettingFilesColumns = []*schema.Column{
 		{Name: "organization_setting_id", Type: field.TypeString},
@@ -3016,6 +3140,8 @@ var (
 		PersonalAccessTokensTable,
 		SubscribersTable,
 		TfaSettingsTable,
+		TasksTable,
+		TaskHistoryTable,
 		TemplatesTable,
 		TemplateHistoryTable,
 		UsersTable,
@@ -3037,6 +3163,7 @@ var (
 		FileEventsTable,
 		GroupEventsTable,
 		GroupFilesTable,
+		GroupTasksTable,
 		GroupMembershipEventsTable,
 		HushEventsTable,
 		IntegrationSecretsTable,
@@ -3050,6 +3177,7 @@ var (
 		OrganizationEventsTable,
 		OrganizationSecretsTable,
 		OrganizationFilesTable,
+		OrganizationTasksTable,
 		OrganizationSettingFilesTable,
 		PersonalAccessTokenEventsTable,
 		SubscriberEventsTable,
@@ -3157,6 +3285,10 @@ func init() {
 	PersonalAccessTokensTable.ForeignKeys[0].RefTable = UsersTable
 	SubscribersTable.ForeignKeys[0].RefTable = OrganizationsTable
 	TfaSettingsTable.ForeignKeys[0].RefTable = UsersTable
+	TasksTable.ForeignKeys[0].RefTable = UsersTable
+	TaskHistoryTable.Annotation = &entsql.Annotation{
+		Table: "task_history",
+	}
 	TemplatesTable.ForeignKeys[0].RefTable = OrganizationsTable
 	TemplateHistoryTable.Annotation = &entsql.Annotation{
 		Table: "template_history",
@@ -3199,6 +3331,8 @@ func init() {
 	GroupEventsTable.ForeignKeys[1].RefTable = EventsTable
 	GroupFilesTable.ForeignKeys[0].RefTable = GroupsTable
 	GroupFilesTable.ForeignKeys[1].RefTable = FilesTable
+	GroupTasksTable.ForeignKeys[0].RefTable = GroupsTable
+	GroupTasksTable.ForeignKeys[1].RefTable = TasksTable
 	GroupMembershipEventsTable.ForeignKeys[0].RefTable = GroupMembershipsTable
 	GroupMembershipEventsTable.ForeignKeys[1].RefTable = EventsTable
 	HushEventsTable.ForeignKeys[0].RefTable = HushesTable
@@ -3225,6 +3359,8 @@ func init() {
 	OrganizationSecretsTable.ForeignKeys[1].RefTable = HushesTable
 	OrganizationFilesTable.ForeignKeys[0].RefTable = OrganizationsTable
 	OrganizationFilesTable.ForeignKeys[1].RefTable = FilesTable
+	OrganizationTasksTable.ForeignKeys[0].RefTable = OrganizationsTable
+	OrganizationTasksTable.ForeignKeys[1].RefTable = TasksTable
 	OrganizationSettingFilesTable.ForeignKeys[0].RefTable = OrganizationSettingsTable
 	OrganizationSettingFilesTable.ForeignKeys[1].RefTable = FilesTable
 	PersonalAccessTokenEventsTable.ForeignKeys[0].RefTable = PersonalAccessTokensTable

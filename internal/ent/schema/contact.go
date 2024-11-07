@@ -67,7 +67,7 @@ func (Contact) Fields() []ent.Field {
 		field.Enum("status").
 			Comment("status of the contact").
 			GoType(enums.UserStatus("")).
-			Default(string(enums.UserStatusActive)),
+			Default(enums.UserStatusActive.String()),
 	}
 }
 

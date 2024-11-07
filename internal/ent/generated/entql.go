@@ -51,6 +51,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/taskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
@@ -70,7 +72,7 @@ import (
 
 // schemaGraph holds a representation of ent/schema at runtime.
 var schemaGraph = func() *sqlgraph.Schema {
-	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 57)}
+	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 59)}
 	graph.Nodes[0] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   apitoken.Table,
@@ -1413,6 +1415,71 @@ var schemaGraph = func() *sqlgraph.Schema {
 	}
 	graph.Nodes[48] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
+			Table:   task.Table,
+			Columns: task.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeString,
+				Column: task.FieldID,
+			},
+		},
+		Type: "Task",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			task.FieldCreatedAt:      {Type: field.TypeTime, Column: task.FieldCreatedAt},
+			task.FieldUpdatedAt:      {Type: field.TypeTime, Column: task.FieldUpdatedAt},
+			task.FieldCreatedBy:      {Type: field.TypeString, Column: task.FieldCreatedBy},
+			task.FieldUpdatedBy:      {Type: field.TypeString, Column: task.FieldUpdatedBy},
+			task.FieldMappingID:      {Type: field.TypeString, Column: task.FieldMappingID},
+			task.FieldDeletedAt:      {Type: field.TypeTime, Column: task.FieldDeletedAt},
+			task.FieldDeletedBy:      {Type: field.TypeString, Column: task.FieldDeletedBy},
+			task.FieldTags:           {Type: field.TypeJSON, Column: task.FieldTags},
+			task.FieldOrganizationID: {Type: field.TypeString, Column: task.FieldOrganizationID},
+			task.FieldGroupID:        {Type: field.TypeString, Column: task.FieldGroupID},
+			task.FieldTitle:          {Type: field.TypeString, Column: task.FieldTitle},
+			task.FieldDescription:    {Type: field.TypeString, Column: task.FieldDescription},
+			task.FieldDetails:        {Type: field.TypeJSON, Column: task.FieldDetails},
+			task.FieldStatus:         {Type: field.TypeEnum, Column: task.FieldStatus},
+			task.FieldDue:            {Type: field.TypeTime, Column: task.FieldDue},
+			task.FieldCompleted:      {Type: field.TypeTime, Column: task.FieldCompleted},
+			task.FieldAssignee:       {Type: field.TypeString, Column: task.FieldAssignee},
+			task.FieldAssigner:       {Type: field.TypeString, Column: task.FieldAssigner},
+		},
+	}
+	graph.Nodes[49] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
+			Table:   taskhistory.Table,
+			Columns: taskhistory.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeString,
+				Column: taskhistory.FieldID,
+			},
+		},
+		Type: "TaskHistory",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			taskhistory.FieldHistoryTime:    {Type: field.TypeTime, Column: taskhistory.FieldHistoryTime},
+			taskhistory.FieldRef:            {Type: field.TypeString, Column: taskhistory.FieldRef},
+			taskhistory.FieldOperation:      {Type: field.TypeEnum, Column: taskhistory.FieldOperation},
+			taskhistory.FieldCreatedAt:      {Type: field.TypeTime, Column: taskhistory.FieldCreatedAt},
+			taskhistory.FieldUpdatedAt:      {Type: field.TypeTime, Column: taskhistory.FieldUpdatedAt},
+			taskhistory.FieldCreatedBy:      {Type: field.TypeString, Column: taskhistory.FieldCreatedBy},
+			taskhistory.FieldUpdatedBy:      {Type: field.TypeString, Column: taskhistory.FieldUpdatedBy},
+			taskhistory.FieldMappingID:      {Type: field.TypeString, Column: taskhistory.FieldMappingID},
+			taskhistory.FieldDeletedAt:      {Type: field.TypeTime, Column: taskhistory.FieldDeletedAt},
+			taskhistory.FieldDeletedBy:      {Type: field.TypeString, Column: taskhistory.FieldDeletedBy},
+			taskhistory.FieldTags:           {Type: field.TypeJSON, Column: taskhistory.FieldTags},
+			taskhistory.FieldOrganizationID: {Type: field.TypeString, Column: taskhistory.FieldOrganizationID},
+			taskhistory.FieldGroupID:        {Type: field.TypeString, Column: taskhistory.FieldGroupID},
+			taskhistory.FieldTitle:          {Type: field.TypeString, Column: taskhistory.FieldTitle},
+			taskhistory.FieldDescription:    {Type: field.TypeString, Column: taskhistory.FieldDescription},
+			taskhistory.FieldDetails:        {Type: field.TypeJSON, Column: taskhistory.FieldDetails},
+			taskhistory.FieldStatus:         {Type: field.TypeEnum, Column: taskhistory.FieldStatus},
+			taskhistory.FieldDue:            {Type: field.TypeTime, Column: taskhistory.FieldDue},
+			taskhistory.FieldCompleted:      {Type: field.TypeTime, Column: taskhistory.FieldCompleted},
+			taskhistory.FieldAssignee:       {Type: field.TypeString, Column: taskhistory.FieldAssignee},
+			taskhistory.FieldAssigner:       {Type: field.TypeString, Column: taskhistory.FieldAssigner},
+		},
+	}
+	graph.Nodes[50] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
 			Table:   template.Table,
 			Columns: template.Columns,
 			ID: &sqlgraph.FieldSpec{
@@ -1438,7 +1505,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			template.FieldUischema:     {Type: field.TypeJSON, Column: template.FieldUischema},
 		},
 	}
-	graph.Nodes[49] = &sqlgraph.Node{
+	graph.Nodes[51] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   templatehistory.Table,
 			Columns: templatehistory.Columns,
@@ -1468,7 +1535,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			templatehistory.FieldUischema:     {Type: field.TypeJSON, Column: templatehistory.FieldUischema},
 		},
 	}
-	graph.Nodes[50] = &sqlgraph.Node{
+	graph.Nodes[52] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   user.Table,
 			Columns: user.Columns,
@@ -1502,7 +1569,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			user.FieldRole:              {Type: field.TypeEnum, Column: user.FieldRole},
 		},
 	}
-	graph.Nodes[51] = &sqlgraph.Node{
+	graph.Nodes[53] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   userhistory.Table,
 			Columns: userhistory.Columns,
@@ -1539,7 +1606,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			userhistory.FieldRole:              {Type: field.TypeEnum, Column: userhistory.FieldRole},
 		},
 	}
-	graph.Nodes[52] = &sqlgraph.Node{
+	graph.Nodes[54] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   usersetting.Table,
 			Columns: usersetting.Columns,
@@ -1569,7 +1636,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			usersetting.FieldPhoneNumber:       {Type: field.TypeString, Column: usersetting.FieldPhoneNumber},
 		},
 	}
-	graph.Nodes[53] = &sqlgraph.Node{
+	graph.Nodes[55] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   usersettinghistory.Table,
 			Columns: usersettinghistory.Columns,
@@ -1602,7 +1669,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			usersettinghistory.FieldPhoneNumber:       {Type: field.TypeString, Column: usersettinghistory.FieldPhoneNumber},
 		},
 	}
-	graph.Nodes[54] = &sqlgraph.Node{
+	graph.Nodes[56] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   webauthn.Table,
 			Columns: webauthn.Columns,
@@ -1632,7 +1699,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			webauthn.FieldUserVerified:    {Type: field.TypeBool, Column: webauthn.FieldUserVerified},
 		},
 	}
-	graph.Nodes[55] = &sqlgraph.Node{
+	graph.Nodes[57] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   webhook.Table,
 			Columns: webhook.Columns,
@@ -1664,7 +1731,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			webhook.FieldLastResponse:   {Type: field.TypeString, Column: webhook.FieldLastResponse},
 		},
 	}
-	graph.Nodes[56] = &sqlgraph.Node{
+	graph.Nodes[58] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   webhookhistory.Table,
 			Columns: webhookhistory.Columns,
@@ -2504,6 +2571,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"File",
 	)
 	graph.MustAddE(
+		"tasks",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   group.TasksTable,
+			Columns: group.TasksPrimaryKey,
+			Bidi:    false,
+		},
+		"Group",
+		"Task",
+	)
+	graph.MustAddE(
 		"members",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -3092,6 +3171,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Note",
 	)
 	graph.MustAddE(
+		"tasks",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   organization.TasksTable,
+			Columns: organization.TasksPrimaryKey,
+			Bidi:    false,
+		},
+		"Organization",
+		"Task",
+	)
+	graph.MustAddE(
 		"members",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -3210,6 +3301,42 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"TFASetting",
 		"User",
+	)
+	graph.MustAddE(
+		"user",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   task.UserTable,
+			Columns: []string{task.UserColumn},
+			Bidi:    false,
+		},
+		"Task",
+		"User",
+	)
+	graph.MustAddE(
+		"organization",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   task.OrganizationTable,
+			Columns: task.OrganizationPrimaryKey,
+			Bidi:    false,
+		},
+		"Task",
+		"Organization",
+	)
+	graph.MustAddE(
+		"group",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   task.GroupTable,
+			Columns: task.GroupPrimaryKey,
+			Bidi:    false,
+		},
+		"Task",
+		"Group",
 	)
 	graph.MustAddE(
 		"owner",
@@ -3378,6 +3505,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"User",
 		"Event",
+	)
+	graph.MustAddE(
+		"tasks",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.TasksTable,
+			Columns: []string{user.TasksColumn},
+			Bidi:    false,
+		},
+		"User",
+		"Task",
 	)
 	graph.MustAddE(
 		"group_memberships",
@@ -7109,6 +7248,20 @@ func (f *GroupFilter) WhereHasFilesWith(preds ...predicate.File) {
 	})))
 }
 
+// WhereHasTasks applies a predicate to check if query has an edge tasks.
+func (f *GroupFilter) WhereHasTasks() {
+	f.Where(entql.HasEdge("tasks"))
+}
+
+// WhereHasTasksWith applies a predicate to check if query has an edge tasks with a given conditions (other predicates).
+func (f *GroupFilter) WhereHasTasksWith(preds ...predicate.Task) {
+	f.Where(entql.HasEdgeWith("tasks", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasMembers applies a predicate to check if query has an edge members.
 func (f *GroupFilter) WhereHasMembers() {
 	f.Where(entql.HasEdge("members"))
@@ -9780,6 +9933,20 @@ func (f *OrganizationFilter) WhereHasNotesWith(preds ...predicate.Note) {
 	})))
 }
 
+// WhereHasTasks applies a predicate to check if query has an edge tasks.
+func (f *OrganizationFilter) WhereHasTasks() {
+	f.Where(entql.HasEdge("tasks"))
+}
+
+// WhereHasTasksWith applies a predicate to check if query has an edge tasks with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasTasksWith(preds ...predicate.Task) {
+	f.Where(entql.HasEdgeWith("tasks", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasMembers applies a predicate to check if query has an edge members.
 func (f *OrganizationFilter) WhereHasMembers() {
 	f.Where(entql.HasEdge("members"))
@@ -10761,6 +10928,323 @@ func (f *TFASettingFilter) WhereHasOwnerWith(preds ...predicate.User) {
 }
 
 // addPredicate implements the predicateAdder interface.
+func (tq *TaskQuery) addPredicate(pred func(s *sql.Selector)) {
+	tq.predicates = append(tq.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the TaskQuery builder.
+func (tq *TaskQuery) Filter() *TaskFilter {
+	return &TaskFilter{config: tq.config, predicateAdder: tq}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *TaskMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the TaskMutation builder.
+func (m *TaskMutation) Filter() *TaskFilter {
+	return &TaskFilter{config: m.config, predicateAdder: m}
+}
+
+// TaskFilter provides a generic filtering capability at runtime for TaskQuery.
+type TaskFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *TaskFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[48].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql string predicate on the id field.
+func (f *TaskFilter) WhereID(p entql.StringP) {
+	f.Where(p.Field(task.FieldID))
+}
+
+// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
+func (f *TaskFilter) WhereCreatedAt(p entql.TimeP) {
+	f.Where(p.Field(task.FieldCreatedAt))
+}
+
+// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
+func (f *TaskFilter) WhereUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(task.FieldUpdatedAt))
+}
+
+// WhereCreatedBy applies the entql string predicate on the created_by field.
+func (f *TaskFilter) WhereCreatedBy(p entql.StringP) {
+	f.Where(p.Field(task.FieldCreatedBy))
+}
+
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *TaskFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(task.FieldUpdatedBy))
+}
+
+// WhereMappingID applies the entql string predicate on the mapping_id field.
+func (f *TaskFilter) WhereMappingID(p entql.StringP) {
+	f.Where(p.Field(task.FieldMappingID))
+}
+
+// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
+func (f *TaskFilter) WhereDeletedAt(p entql.TimeP) {
+	f.Where(p.Field(task.FieldDeletedAt))
+}
+
+// WhereDeletedBy applies the entql string predicate on the deleted_by field.
+func (f *TaskFilter) WhereDeletedBy(p entql.StringP) {
+	f.Where(p.Field(task.FieldDeletedBy))
+}
+
+// WhereTags applies the entql json.RawMessage predicate on the tags field.
+func (f *TaskFilter) WhereTags(p entql.BytesP) {
+	f.Where(p.Field(task.FieldTags))
+}
+
+// WhereOrganizationID applies the entql string predicate on the organization_id field.
+func (f *TaskFilter) WhereOrganizationID(p entql.StringP) {
+	f.Where(p.Field(task.FieldOrganizationID))
+}
+
+// WhereGroupID applies the entql string predicate on the group_id field.
+func (f *TaskFilter) WhereGroupID(p entql.StringP) {
+	f.Where(p.Field(task.FieldGroupID))
+}
+
+// WhereTitle applies the entql string predicate on the title field.
+func (f *TaskFilter) WhereTitle(p entql.StringP) {
+	f.Where(p.Field(task.FieldTitle))
+}
+
+// WhereDescription applies the entql string predicate on the description field.
+func (f *TaskFilter) WhereDescription(p entql.StringP) {
+	f.Where(p.Field(task.FieldDescription))
+}
+
+// WhereDetails applies the entql json.RawMessage predicate on the details field.
+func (f *TaskFilter) WhereDetails(p entql.BytesP) {
+	f.Where(p.Field(task.FieldDetails))
+}
+
+// WhereStatus applies the entql string predicate on the status field.
+func (f *TaskFilter) WhereStatus(p entql.StringP) {
+	f.Where(p.Field(task.FieldStatus))
+}
+
+// WhereDue applies the entql time.Time predicate on the due field.
+func (f *TaskFilter) WhereDue(p entql.TimeP) {
+	f.Where(p.Field(task.FieldDue))
+}
+
+// WhereCompleted applies the entql time.Time predicate on the completed field.
+func (f *TaskFilter) WhereCompleted(p entql.TimeP) {
+	f.Where(p.Field(task.FieldCompleted))
+}
+
+// WhereAssignee applies the entql string predicate on the assignee field.
+func (f *TaskFilter) WhereAssignee(p entql.StringP) {
+	f.Where(p.Field(task.FieldAssignee))
+}
+
+// WhereAssigner applies the entql string predicate on the assigner field.
+func (f *TaskFilter) WhereAssigner(p entql.StringP) {
+	f.Where(p.Field(task.FieldAssigner))
+}
+
+// WhereHasUser applies a predicate to check if query has an edge user.
+func (f *TaskFilter) WhereHasUser() {
+	f.Where(entql.HasEdge("user"))
+}
+
+// WhereHasUserWith applies a predicate to check if query has an edge user with a given conditions (other predicates).
+func (f *TaskFilter) WhereHasUserWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("user", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasOrganization applies a predicate to check if query has an edge organization.
+func (f *TaskFilter) WhereHasOrganization() {
+	f.Where(entql.HasEdge("organization"))
+}
+
+// WhereHasOrganizationWith applies a predicate to check if query has an edge organization with a given conditions (other predicates).
+func (f *TaskFilter) WhereHasOrganizationWith(preds ...predicate.Organization) {
+	f.Where(entql.HasEdgeWith("organization", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasGroup applies a predicate to check if query has an edge group.
+func (f *TaskFilter) WhereHasGroup() {
+	f.Where(entql.HasEdge("group"))
+}
+
+// WhereHasGroupWith applies a predicate to check if query has an edge group with a given conditions (other predicates).
+func (f *TaskFilter) WhereHasGroupWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("group", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// addPredicate implements the predicateAdder interface.
+func (thq *TaskHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	thq.predicates = append(thq.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the TaskHistoryQuery builder.
+func (thq *TaskHistoryQuery) Filter() *TaskHistoryFilter {
+	return &TaskHistoryFilter{config: thq.config, predicateAdder: thq}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *TaskHistoryMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the TaskHistoryMutation builder.
+func (m *TaskHistoryMutation) Filter() *TaskHistoryFilter {
+	return &TaskHistoryFilter{config: m.config, predicateAdder: m}
+}
+
+// TaskHistoryFilter provides a generic filtering capability at runtime for TaskHistoryQuery.
+type TaskHistoryFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *TaskHistoryFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[49].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql string predicate on the id field.
+func (f *TaskHistoryFilter) WhereID(p entql.StringP) {
+	f.Where(p.Field(taskhistory.FieldID))
+}
+
+// WhereHistoryTime applies the entql time.Time predicate on the history_time field.
+func (f *TaskHistoryFilter) WhereHistoryTime(p entql.TimeP) {
+	f.Where(p.Field(taskhistory.FieldHistoryTime))
+}
+
+// WhereRef applies the entql string predicate on the ref field.
+func (f *TaskHistoryFilter) WhereRef(p entql.StringP) {
+	f.Where(p.Field(taskhistory.FieldRef))
+}
+
+// WhereOperation applies the entql string predicate on the operation field.
+func (f *TaskHistoryFilter) WhereOperation(p entql.StringP) {
+	f.Where(p.Field(taskhistory.FieldOperation))
+}
+
+// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
+func (f *TaskHistoryFilter) WhereCreatedAt(p entql.TimeP) {
+	f.Where(p.Field(taskhistory.FieldCreatedAt))
+}
+
+// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
+func (f *TaskHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(taskhistory.FieldUpdatedAt))
+}
+
+// WhereCreatedBy applies the entql string predicate on the created_by field.
+func (f *TaskHistoryFilter) WhereCreatedBy(p entql.StringP) {
+	f.Where(p.Field(taskhistory.FieldCreatedBy))
+}
+
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *TaskHistoryFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(taskhistory.FieldUpdatedBy))
+}
+
+// WhereMappingID applies the entql string predicate on the mapping_id field.
+func (f *TaskHistoryFilter) WhereMappingID(p entql.StringP) {
+	f.Where(p.Field(taskhistory.FieldMappingID))
+}
+
+// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
+func (f *TaskHistoryFilter) WhereDeletedAt(p entql.TimeP) {
+	f.Where(p.Field(taskhistory.FieldDeletedAt))
+}
+
+// WhereDeletedBy applies the entql string predicate on the deleted_by field.
+func (f *TaskHistoryFilter) WhereDeletedBy(p entql.StringP) {
+	f.Where(p.Field(taskhistory.FieldDeletedBy))
+}
+
+// WhereTags applies the entql json.RawMessage predicate on the tags field.
+func (f *TaskHistoryFilter) WhereTags(p entql.BytesP) {
+	f.Where(p.Field(taskhistory.FieldTags))
+}
+
+// WhereOrganizationID applies the entql string predicate on the organization_id field.
+func (f *TaskHistoryFilter) WhereOrganizationID(p entql.StringP) {
+	f.Where(p.Field(taskhistory.FieldOrganizationID))
+}
+
+// WhereGroupID applies the entql string predicate on the group_id field.
+func (f *TaskHistoryFilter) WhereGroupID(p entql.StringP) {
+	f.Where(p.Field(taskhistory.FieldGroupID))
+}
+
+// WhereTitle applies the entql string predicate on the title field.
+func (f *TaskHistoryFilter) WhereTitle(p entql.StringP) {
+	f.Where(p.Field(taskhistory.FieldTitle))
+}
+
+// WhereDescription applies the entql string predicate on the description field.
+func (f *TaskHistoryFilter) WhereDescription(p entql.StringP) {
+	f.Where(p.Field(taskhistory.FieldDescription))
+}
+
+// WhereDetails applies the entql json.RawMessage predicate on the details field.
+func (f *TaskHistoryFilter) WhereDetails(p entql.BytesP) {
+	f.Where(p.Field(taskhistory.FieldDetails))
+}
+
+// WhereStatus applies the entql string predicate on the status field.
+func (f *TaskHistoryFilter) WhereStatus(p entql.StringP) {
+	f.Where(p.Field(taskhistory.FieldStatus))
+}
+
+// WhereDue applies the entql time.Time predicate on the due field.
+func (f *TaskHistoryFilter) WhereDue(p entql.TimeP) {
+	f.Where(p.Field(taskhistory.FieldDue))
+}
+
+// WhereCompleted applies the entql time.Time predicate on the completed field.
+func (f *TaskHistoryFilter) WhereCompleted(p entql.TimeP) {
+	f.Where(p.Field(taskhistory.FieldCompleted))
+}
+
+// WhereAssignee applies the entql string predicate on the assignee field.
+func (f *TaskHistoryFilter) WhereAssignee(p entql.StringP) {
+	f.Where(p.Field(taskhistory.FieldAssignee))
+}
+
+// WhereAssigner applies the entql string predicate on the assigner field.
+func (f *TaskHistoryFilter) WhereAssigner(p entql.StringP) {
+	f.Where(p.Field(taskhistory.FieldAssigner))
+}
+
+// addPredicate implements the predicateAdder interface.
 func (tq *TemplateQuery) addPredicate(pred func(s *sql.Selector)) {
 	tq.predicates = append(tq.predicates, pred)
 }
@@ -10789,7 +11273,7 @@ type TemplateFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TemplateFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[48].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[50].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -10941,7 +11425,7 @@ type TemplateHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TemplateHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[49].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[51].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -11066,7 +11550,7 @@ type UserFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[50].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[52].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -11336,6 +11820,20 @@ func (f *UserFilter) WhereHasEventsWith(preds ...predicate.Event) {
 	})))
 }
 
+// WhereHasTasks applies a predicate to check if query has an edge tasks.
+func (f *UserFilter) WhereHasTasks() {
+	f.Where(entql.HasEdge("tasks"))
+}
+
+// WhereHasTasksWith applies a predicate to check if query has an edge tasks with a given conditions (other predicates).
+func (f *UserFilter) WhereHasTasksWith(preds ...predicate.Task) {
+	f.Where(entql.HasEdgeWith("tasks", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasGroupMemberships applies a predicate to check if query has an edge group_memberships.
 func (f *UserFilter) WhereHasGroupMemberships() {
 	f.Where(entql.HasEdge("group_memberships"))
@@ -11393,7 +11891,7 @@ type UserHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[51].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[53].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -11553,7 +12051,7 @@ type UserSettingFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserSettingFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[52].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[54].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -11720,7 +12218,7 @@ type UserSettingHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserSettingHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[53].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[55].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -11860,7 +12358,7 @@ type WebauthnFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WebauthnFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[54].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[56].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -11999,7 +12497,7 @@ type WebhookFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WebhookFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[55].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[57].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -12176,7 +12674,7 @@ type WebhookHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WebhookHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[56].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[58].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})

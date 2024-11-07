@@ -136,6 +136,12 @@ query GlobalSearch($query: String!) {
           tags
         }
       }
+      ... on TaskSearchResult {
+        tasks {
+          id
+          tags
+        }
+      }
       ... on TemplateSearchResult {
         templates {
           id

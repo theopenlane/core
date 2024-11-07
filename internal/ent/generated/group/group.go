@@ -55,6 +55,8 @@ const (
 	EdgeIntegrations = "integrations"
 	// EdgeFiles holds the string denoting the files edge name in mutations.
 	EdgeFiles = "files"
+	// EdgeTasks holds the string denoting the tasks edge name in mutations.
+	EdgeTasks = "tasks"
 	// EdgeMembers holds the string denoting the members edge name in mutations.
 	EdgeMembers = "members"
 	// Table holds the table name of the group in the database.
@@ -95,6 +97,11 @@ const (
 	// FilesInverseTable is the table name for the File entity.
 	// It exists in this package in order to avoid circular dependency with the "file" package.
 	FilesInverseTable = "files"
+	// TasksTable is the table that holds the tasks relation/edge. The primary key declared below.
+	TasksTable = "group_tasks"
+	// TasksInverseTable is the table name for the Task entity.
+	// It exists in this package in order to avoid circular dependency with the "task" package.
+	TasksInverseTable = "tasks"
 	// MembersTable is the table that holds the members relation/edge.
 	MembersTable = "group_memberships"
 	// MembersInverseTable is the table name for the GroupMembership entity.
@@ -133,6 +140,9 @@ var (
 	// FilesPrimaryKey and FilesColumn2 are the table columns denoting the
 	// primary key for the files relation (M2M).
 	FilesPrimaryKey = []string{"group_id", "file_id"}
+	// TasksPrimaryKey and TasksColumn2 are the table columns denoting the
+	// primary key for the tasks relation (M2M).
+	TasksPrimaryKey = []string{"group_id", "task_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -319,6 +329,20 @@ func ByFiles(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByTasksCount orders the results by tasks count.
+func ByTasksCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newTasksStep(), opts...)
+	}
+}
+
+// ByTasks orders the results by tasks terms.
+func ByTasks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTasksStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByMembersCount orders the results by members count.
 func ByMembersCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -372,6 +396,13 @@ func newFilesStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(FilesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, FilesTable, FilesPrimaryKey...),
+	)
+}
+func newTasksStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TasksInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, TasksTable, TasksPrimaryKey...),
 	)
 }
 func newMembersStep() *sqlgraph.Step {

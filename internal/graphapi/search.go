@@ -29,6 +29,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -755,6 +756,43 @@ func adminSearchTFASettings(ctx context.Context, query string) ([]*generated.TFA
 				likeQuery := "%" + query + "%"
 				s.Where(sql.ExprP("(recoverycodes)::text LIKE $5", likeQuery)) // search by RecoveryCodes
 			},
+		),
+	).All(ctx)
+}
+
+// searchTask searches for Task based on the query string looking for matches
+func searchTasks(ctx context.Context, query string) ([]*generated.Task, error) {
+	return withTransactionalMutation(ctx).Task.Query().Where(
+		task.Or(
+			task.IDContainsFold(query), // search by ID
+			func(s *sql.Selector) {
+				likeQuery := "%" + query + "%"
+				s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
+			},
+		),
+	).All(ctx)
+}
+
+// searchTask searches for Task based on the query string looking for matches
+func adminSearchTasks(ctx context.Context, query string) ([]*generated.Task, error) {
+	return withTransactionalMutation(ctx).Task.Query().Where(
+		task.Or(
+			task.IDContainsFold(query),        // search by ID
+			task.DeletedByContainsFold(query), // search by DeletedBy
+			func(s *sql.Selector) {
+				likeQuery := "%" + query + "%"
+				s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+			},
+			task.OrganizationIDContainsFold(query), // search by OrganizationID
+			task.GroupIDContainsFold(query),        // search by GroupID
+			task.TitleContainsFold(query),          // search by Title
+			task.DescriptionContainsFold(query),    // search by Description
+			func(s *sql.Selector) {
+				likeQuery := "%" + query + "%"
+				s.Where(sql.ExprP("(details)::text LIKE $8", likeQuery)) // search by Details
+			},
+			task.AssigneeContainsFold(query), // search by Assignee
+			task.AssignerContainsFold(query), // search by Assigner
 		),
 	).All(ctx)
 }

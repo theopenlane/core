@@ -1726,6 +1726,35 @@ func HasNotesWith(preds ...predicate.Note) predicate.Organization {
 	})
 }
 
+// HasTasks applies the HasEdge predicate on the "tasks" edge.
+func HasTasks() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, TasksTable, TasksPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.OrganizationTasks
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasTasksWith applies the HasEdge predicate on the "tasks" edge with a given conditions (other predicates).
+func HasTasksWith(preds ...predicate.Task) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newTasksStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.OrganizationTasks
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasMembers applies the HasEdge predicate on the "members" edge.
 func HasMembers() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {

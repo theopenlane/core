@@ -53,6 +53,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/taskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
@@ -1236,13 +1238,10 @@ func init() {
 	}
 	fileMixinHooks0 := fileMixin[0].Hooks()
 	fileMixinHooks1 := fileMixin[1].Hooks()
-	fileMixinHooks4 := fileMixin[4].Hooks()
 
 	file.Hooks[1] = fileMixinHooks0[0]
 
 	file.Hooks[2] = fileMixinHooks1[0]
-
-	file.Hooks[3] = fileMixinHooks4[0]
 	fileMixinInters1 := fileMixin[1].Interceptors()
 	fileMixinInters4 := fileMixin[4].Interceptors()
 	file.Interceptors[0] = fileMixinInters1[0]
@@ -2767,6 +2766,121 @@ func init() {
 	tfasettingDescID := tfasettingMixinFields1[0].Descriptor()
 	// tfasetting.DefaultID holds the default value on creation for the id field.
 	tfasetting.DefaultID = tfasettingDescID.Default.(func() string)
+	taskMixin := schema.Task{}.Mixin()
+	task.Policy = privacy.NewPolicies(schema.Task{})
+	task.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := task.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	taskMixinHooks0 := taskMixin[0].Hooks()
+	taskMixinHooks2 := taskMixin[2].Hooks()
+	taskMixinHooks4 := taskMixin[4].Hooks()
+	taskHooks := schema.Task{}.Hooks()
+
+	task.Hooks[1] = taskMixinHooks0[0]
+
+	task.Hooks[2] = taskMixinHooks2[0]
+
+	task.Hooks[3] = taskMixinHooks4[0]
+
+	task.Hooks[4] = taskMixinHooks4[1]
+
+	task.Hooks[5] = taskHooks[0]
+	taskMixinInters2 := taskMixin[2].Interceptors()
+	taskMixinInters4 := taskMixin[4].Interceptors()
+	task.Interceptors[0] = taskMixinInters2[0]
+	task.Interceptors[1] = taskMixinInters4[0]
+	taskMixinFields0 := taskMixin[0].Fields()
+	_ = taskMixinFields0
+	taskMixinFields1 := taskMixin[1].Fields()
+	_ = taskMixinFields1
+	taskMixinFields3 := taskMixin[3].Fields()
+	_ = taskMixinFields3
+	taskMixinFields4 := taskMixin[4].Fields()
+	_ = taskMixinFields4
+	taskFields := schema.Task{}.Fields()
+	_ = taskFields
+	// taskDescCreatedAt is the schema descriptor for created_at field.
+	taskDescCreatedAt := taskMixinFields0[0].Descriptor()
+	// task.DefaultCreatedAt holds the default value on creation for the created_at field.
+	task.DefaultCreatedAt = taskDescCreatedAt.Default.(func() time.Time)
+	// taskDescUpdatedAt is the schema descriptor for updated_at field.
+	taskDescUpdatedAt := taskMixinFields0[1].Descriptor()
+	// task.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	task.DefaultUpdatedAt = taskDescUpdatedAt.Default.(func() time.Time)
+	// task.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	task.UpdateDefaultUpdatedAt = taskDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// taskDescMappingID is the schema descriptor for mapping_id field.
+	taskDescMappingID := taskMixinFields1[1].Descriptor()
+	// task.DefaultMappingID holds the default value on creation for the mapping_id field.
+	task.DefaultMappingID = taskDescMappingID.Default.(func() string)
+	// taskDescTags is the schema descriptor for tags field.
+	taskDescTags := taskMixinFields3[0].Descriptor()
+	// task.DefaultTags holds the default value on creation for the tags field.
+	task.DefaultTags = taskDescTags.Default.([]string)
+	// taskDescOrganizationID is the schema descriptor for organization_id field.
+	taskDescOrganizationID := taskMixinFields4[0].Descriptor()
+	// task.OrganizationIDValidator is a validator for the "organization_id" field. It is called by the builders before save.
+	task.OrganizationIDValidator = taskDescOrganizationID.Validators[0].(func(string) error)
+	// taskDescGroupID is the schema descriptor for group_id field.
+	taskDescGroupID := taskMixinFields4[1].Descriptor()
+	// task.GroupIDValidator is a validator for the "group_id" field. It is called by the builders before save.
+	task.GroupIDValidator = taskDescGroupID.Validators[0].(func(string) error)
+	// taskDescTitle is the schema descriptor for title field.
+	taskDescTitle := taskFields[0].Descriptor()
+	// task.TitleValidator is a validator for the "title" field. It is called by the builders before save.
+	task.TitleValidator = taskDescTitle.Validators[0].(func(string) error)
+	// taskDescAssigner is the schema descriptor for assigner field.
+	taskDescAssigner := taskFields[7].Descriptor()
+	// task.AssignerValidator is a validator for the "assigner" field. It is called by the builders before save.
+	task.AssignerValidator = taskDescAssigner.Validators[0].(func(string) error)
+	// taskDescID is the schema descriptor for id field.
+	taskDescID := taskMixinFields1[0].Descriptor()
+	// task.DefaultID holds the default value on creation for the id field.
+	task.DefaultID = taskDescID.Default.(func() string)
+	taskhistory.Policy = privacy.NewPolicies(schema.TaskHistory{})
+	taskhistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := taskhistory.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	taskhistoryInters := schema.TaskHistory{}.Interceptors()
+	taskhistory.Interceptors[0] = taskhistoryInters[0]
+	taskhistoryFields := schema.TaskHistory{}.Fields()
+	_ = taskhistoryFields
+	// taskhistoryDescHistoryTime is the schema descriptor for history_time field.
+	taskhistoryDescHistoryTime := taskhistoryFields[0].Descriptor()
+	// taskhistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	taskhistory.DefaultHistoryTime = taskhistoryDescHistoryTime.Default.(func() time.Time)
+	// taskhistoryDescCreatedAt is the schema descriptor for created_at field.
+	taskhistoryDescCreatedAt := taskhistoryFields[3].Descriptor()
+	// taskhistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	taskhistory.DefaultCreatedAt = taskhistoryDescCreatedAt.Default.(func() time.Time)
+	// taskhistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	taskhistoryDescUpdatedAt := taskhistoryFields[4].Descriptor()
+	// taskhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	taskhistory.DefaultUpdatedAt = taskhistoryDescUpdatedAt.Default.(func() time.Time)
+	// taskhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	taskhistory.UpdateDefaultUpdatedAt = taskhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// taskhistoryDescMappingID is the schema descriptor for mapping_id field.
+	taskhistoryDescMappingID := taskhistoryFields[8].Descriptor()
+	// taskhistory.DefaultMappingID holds the default value on creation for the mapping_id field.
+	taskhistory.DefaultMappingID = taskhistoryDescMappingID.Default.(func() string)
+	// taskhistoryDescTags is the schema descriptor for tags field.
+	taskhistoryDescTags := taskhistoryFields[11].Descriptor()
+	// taskhistory.DefaultTags holds the default value on creation for the tags field.
+	taskhistory.DefaultTags = taskhistoryDescTags.Default.([]string)
+	// taskhistoryDescID is the schema descriptor for id field.
+	taskhistoryDescID := taskhistoryFields[7].Descriptor()
+	// taskhistory.DefaultID holds the default value on creation for the id field.
+	taskhistory.DefaultID = taskhistoryDescID.Default.(func() string)
 	templateMixin := schema.Template{}.Mixin()
 	template.Policy = privacy.NewPolicies(schema.Template{})
 	template.Hooks[0] = func(next ent.Mutator) ent.Mutator {

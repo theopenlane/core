@@ -55,6 +55,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgmembershiphistory"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/taskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
@@ -3876,6 +3878,19 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				*wq = *query
 			})
 
+		case "tasks":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&TaskClient{config: gr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, taskImplementors)...); err != nil {
+				return err
+			}
+			gr.WithNamedTasks(alias, func(wq *TaskQuery) {
+				*wq = *query
+			})
+
 		case "members":
 			var (
 				alias = field.Alias
@@ -7003,6 +7018,19 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				*wq = *query
 			})
 
+		case "tasks":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&TaskClient{config: o.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, taskImplementors)...); err != nil {
+				return err
+			}
+			o.WithNamedTasks(alias, func(wq *TaskQuery) {
+				*wq = *query
+			})
+
 		case "members":
 			var (
 				alias = field.Alias
@@ -8080,6 +8108,356 @@ func newTFASettingPaginateArgs(rv map[string]any) *tfasettingPaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (t *TaskQuery) CollectFields(ctx context.Context, satisfies ...string) (*TaskQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return t, nil
+	}
+	if err := t.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return t, nil
+}
+
+func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(task.Columns))
+		selectedFields = []string{task.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+
+		case "user":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&UserClient{config: t.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+				return err
+			}
+			t.withUser = query
+			if _, ok := fieldSeen[task.FieldAssigner]; !ok {
+				selectedFields = append(selectedFields, task.FieldAssigner)
+				fieldSeen[task.FieldAssigner] = struct{}{}
+			}
+
+		case "organization":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: t.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			t.WithNamedOrganization(alias, func(wq *OrganizationQuery) {
+				*wq = *query
+			})
+
+		case "group":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&GroupClient{config: t.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
+				return err
+			}
+			t.WithNamedGroup(alias, func(wq *GroupQuery) {
+				*wq = *query
+			})
+		case "createdAt":
+			if _, ok := fieldSeen[task.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, task.FieldCreatedAt)
+				fieldSeen[task.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[task.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, task.FieldUpdatedAt)
+				fieldSeen[task.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[task.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, task.FieldCreatedBy)
+				fieldSeen[task.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[task.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, task.FieldUpdatedBy)
+				fieldSeen[task.FieldUpdatedBy] = struct{}{}
+			}
+		case "deletedAt":
+			if _, ok := fieldSeen[task.FieldDeletedAt]; !ok {
+				selectedFields = append(selectedFields, task.FieldDeletedAt)
+				fieldSeen[task.FieldDeletedAt] = struct{}{}
+			}
+		case "deletedBy":
+			if _, ok := fieldSeen[task.FieldDeletedBy]; !ok {
+				selectedFields = append(selectedFields, task.FieldDeletedBy)
+				fieldSeen[task.FieldDeletedBy] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[task.FieldTags]; !ok {
+				selectedFields = append(selectedFields, task.FieldTags)
+				fieldSeen[task.FieldTags] = struct{}{}
+			}
+		case "organizationID":
+			if _, ok := fieldSeen[task.FieldOrganizationID]; !ok {
+				selectedFields = append(selectedFields, task.FieldOrganizationID)
+				fieldSeen[task.FieldOrganizationID] = struct{}{}
+			}
+		case "groupID":
+			if _, ok := fieldSeen[task.FieldGroupID]; !ok {
+				selectedFields = append(selectedFields, task.FieldGroupID)
+				fieldSeen[task.FieldGroupID] = struct{}{}
+			}
+		case "title":
+			if _, ok := fieldSeen[task.FieldTitle]; !ok {
+				selectedFields = append(selectedFields, task.FieldTitle)
+				fieldSeen[task.FieldTitle] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[task.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, task.FieldDescription)
+				fieldSeen[task.FieldDescription] = struct{}{}
+			}
+		case "details":
+			if _, ok := fieldSeen[task.FieldDetails]; !ok {
+				selectedFields = append(selectedFields, task.FieldDetails)
+				fieldSeen[task.FieldDetails] = struct{}{}
+			}
+		case "status":
+			if _, ok := fieldSeen[task.FieldStatus]; !ok {
+				selectedFields = append(selectedFields, task.FieldStatus)
+				fieldSeen[task.FieldStatus] = struct{}{}
+			}
+		case "due":
+			if _, ok := fieldSeen[task.FieldDue]; !ok {
+				selectedFields = append(selectedFields, task.FieldDue)
+				fieldSeen[task.FieldDue] = struct{}{}
+			}
+		case "completed":
+			if _, ok := fieldSeen[task.FieldCompleted]; !ok {
+				selectedFields = append(selectedFields, task.FieldCompleted)
+				fieldSeen[task.FieldCompleted] = struct{}{}
+			}
+		case "assignee":
+			if _, ok := fieldSeen[task.FieldAssignee]; !ok {
+				selectedFields = append(selectedFields, task.FieldAssignee)
+				fieldSeen[task.FieldAssignee] = struct{}{}
+			}
+		case "assigner":
+			if _, ok := fieldSeen[task.FieldAssigner]; !ok {
+				selectedFields = append(selectedFields, task.FieldAssigner)
+				fieldSeen[task.FieldAssigner] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		t.Select(selectedFields...)
+	}
+	return nil
+}
+
+type taskPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []TaskPaginateOption
+}
+
+func newTaskPaginateArgs(rv map[string]any) *taskPaginateArgs {
+	args := &taskPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*TaskWhereInput); ok {
+		args.opts = append(args.opts, WithTaskFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (th *TaskHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*TaskHistoryQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return th, nil
+	}
+	if err := th.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return th, nil
+}
+
+func (th *TaskHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(taskhistory.Columns))
+		selectedFields = []string{taskhistory.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "historyTime":
+			if _, ok := fieldSeen[taskhistory.FieldHistoryTime]; !ok {
+				selectedFields = append(selectedFields, taskhistory.FieldHistoryTime)
+				fieldSeen[taskhistory.FieldHistoryTime] = struct{}{}
+			}
+		case "ref":
+			if _, ok := fieldSeen[taskhistory.FieldRef]; !ok {
+				selectedFields = append(selectedFields, taskhistory.FieldRef)
+				fieldSeen[taskhistory.FieldRef] = struct{}{}
+			}
+		case "operation":
+			if _, ok := fieldSeen[taskhistory.FieldOperation]; !ok {
+				selectedFields = append(selectedFields, taskhistory.FieldOperation)
+				fieldSeen[taskhistory.FieldOperation] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[taskhistory.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, taskhistory.FieldCreatedAt)
+				fieldSeen[taskhistory.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[taskhistory.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, taskhistory.FieldUpdatedAt)
+				fieldSeen[taskhistory.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[taskhistory.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, taskhistory.FieldCreatedBy)
+				fieldSeen[taskhistory.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[taskhistory.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, taskhistory.FieldUpdatedBy)
+				fieldSeen[taskhistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "deletedAt":
+			if _, ok := fieldSeen[taskhistory.FieldDeletedAt]; !ok {
+				selectedFields = append(selectedFields, taskhistory.FieldDeletedAt)
+				fieldSeen[taskhistory.FieldDeletedAt] = struct{}{}
+			}
+		case "deletedBy":
+			if _, ok := fieldSeen[taskhistory.FieldDeletedBy]; !ok {
+				selectedFields = append(selectedFields, taskhistory.FieldDeletedBy)
+				fieldSeen[taskhistory.FieldDeletedBy] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[taskhistory.FieldTags]; !ok {
+				selectedFields = append(selectedFields, taskhistory.FieldTags)
+				fieldSeen[taskhistory.FieldTags] = struct{}{}
+			}
+		case "organizationID":
+			if _, ok := fieldSeen[taskhistory.FieldOrganizationID]; !ok {
+				selectedFields = append(selectedFields, taskhistory.FieldOrganizationID)
+				fieldSeen[taskhistory.FieldOrganizationID] = struct{}{}
+			}
+		case "groupID":
+			if _, ok := fieldSeen[taskhistory.FieldGroupID]; !ok {
+				selectedFields = append(selectedFields, taskhistory.FieldGroupID)
+				fieldSeen[taskhistory.FieldGroupID] = struct{}{}
+			}
+		case "title":
+			if _, ok := fieldSeen[taskhistory.FieldTitle]; !ok {
+				selectedFields = append(selectedFields, taskhistory.FieldTitle)
+				fieldSeen[taskhistory.FieldTitle] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[taskhistory.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, taskhistory.FieldDescription)
+				fieldSeen[taskhistory.FieldDescription] = struct{}{}
+			}
+		case "details":
+			if _, ok := fieldSeen[taskhistory.FieldDetails]; !ok {
+				selectedFields = append(selectedFields, taskhistory.FieldDetails)
+				fieldSeen[taskhistory.FieldDetails] = struct{}{}
+			}
+		case "status":
+			if _, ok := fieldSeen[taskhistory.FieldStatus]; !ok {
+				selectedFields = append(selectedFields, taskhistory.FieldStatus)
+				fieldSeen[taskhistory.FieldStatus] = struct{}{}
+			}
+		case "due":
+			if _, ok := fieldSeen[taskhistory.FieldDue]; !ok {
+				selectedFields = append(selectedFields, taskhistory.FieldDue)
+				fieldSeen[taskhistory.FieldDue] = struct{}{}
+			}
+		case "completed":
+			if _, ok := fieldSeen[taskhistory.FieldCompleted]; !ok {
+				selectedFields = append(selectedFields, taskhistory.FieldCompleted)
+				fieldSeen[taskhistory.FieldCompleted] = struct{}{}
+			}
+		case "assignee":
+			if _, ok := fieldSeen[taskhistory.FieldAssignee]; !ok {
+				selectedFields = append(selectedFields, taskhistory.FieldAssignee)
+				fieldSeen[taskhistory.FieldAssignee] = struct{}{}
+			}
+		case "assigner":
+			if _, ok := fieldSeen[taskhistory.FieldAssigner]; !ok {
+				selectedFields = append(selectedFields, taskhistory.FieldAssigner)
+				fieldSeen[taskhistory.FieldAssigner] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		th.Select(selectedFields...)
+	}
+	return nil
+}
+
+type taskhistoryPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []TaskHistoryPaginateOption
+}
+
+func newTaskHistoryPaginateArgs(rv map[string]any) *taskhistoryPaginateArgs {
+	args := &taskhistoryPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*TaskHistoryWhereInput); ok {
+		args.opts = append(args.opts, WithTaskHistoryFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
 func (t *TemplateQuery) CollectFields(ctx context.Context, satisfies ...string) (*TemplateQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
@@ -8556,6 +8934,19 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				return err
 			}
 			u.WithNamedEvents(alias, func(wq *EventQuery) {
+				*wq = *query
+			})
+
+		case "tasks":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&TaskClient{config: u.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, taskImplementors)...); err != nil {
+				return err
+			}
+			u.WithNamedTasks(alias, func(wq *TaskQuery) {
 				*wq = *query
 			})
 

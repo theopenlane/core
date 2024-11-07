@@ -189,6 +189,15 @@ extend type Query{
         query: String!
     ): TFASettingSearchResult
     """
+    Search across Task objects
+    """
+    adminTaskSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): TaskSearchResult
+    """
     Search across Template objects
     """
     adminTemplateSearch(

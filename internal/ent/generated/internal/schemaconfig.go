@@ -42,6 +42,7 @@ type SchemaConfig struct {
 	Group                            string // Group table.
 	GroupEvents                      string // Group-events->Event table.
 	GroupFiles                       string // Group-files->File table.
+	GroupTasks                       string // Group-tasks->Task table.
 	GroupHistory                     string // GroupHistory table.
 	GroupMembership                  string // GroupMembership table.
 	GroupMembershipEvents            string // GroupMembership-events->Event table.
@@ -73,6 +74,7 @@ type SchemaConfig struct {
 	OrganizationEvents               string // Organization-events->Event table.
 	OrganizationSecrets              string // Organization-secrets->Hush table.
 	OrganizationFiles                string // Organization-files->File table.
+	OrganizationTasks                string // Organization-tasks->Task table.
 	OrganizationHistory              string // OrganizationHistory table.
 	OrganizationSetting              string // OrganizationSetting table.
 	OrganizationSettingFiles         string // OrganizationSetting-files->File table.
@@ -83,6 +85,8 @@ type SchemaConfig struct {
 	Subscriber                       string // Subscriber table.
 	SubscriberEvents                 string // Subscriber-events->Event table.
 	TFASetting                       string // TFASetting table.
+	Task                             string // Task table.
+	TaskHistory                      string // TaskHistory table.
 	Template                         string // Template table.
 	TemplateFiles                    string // Template-files->File table.
 	TemplateHistory                  string // TemplateHistory table.

@@ -54,6 +54,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgmembershiphistory"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/taskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
@@ -299,6 +301,16 @@ var tfasettingImplementors = []string{"TFASetting", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*TFASetting) IsNode() {}
+
+var taskImplementors = []string{"Task", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*Task) IsNode() {}
+
+var taskhistoryImplementors = []string{"TaskHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*TaskHistory) IsNode() {}
 
 var templateImplementors = []string{"Template", "Node"}
 
@@ -808,6 +820,24 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(tfasetting.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, tfasettingImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case task.Table:
+		query := c.Task.Query().
+			Where(task.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, taskImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case taskhistory.Table:
+		query := c.TaskHistory.Query().
+			Where(taskhistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, taskhistoryImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -1681,6 +1711,38 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.TFASetting.Query().
 			Where(tfasetting.IDIn(ids...))
 		query, err := query.CollectFields(ctx, tfasettingImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case task.Table:
+		query := c.Task.Query().
+			Where(task.IDIn(ids...))
+		query, err := query.CollectFields(ctx, taskImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case taskhistory.Table:
+		query := c.TaskHistory.Query().
+			Where(taskhistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, taskhistoryImplementors...)
 		if err != nil {
 			return nil, err
 		}

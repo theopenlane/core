@@ -732,6 +732,18 @@ func (gr *Group) Files(ctx context.Context) (result []*File, err error) {
 	return result, err
 }
 
+func (gr *Group) Tasks(ctx context.Context) (result []*Task, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = gr.NamedTasks(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = gr.Edges.TasksOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = gr.QueryTasks().All(ctx)
+	}
+	return result, err
+}
+
 func (gr *Group) Members(ctx context.Context) (result []*GroupMembership, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = gr.NamedMembers(graphql.GetFieldContext(ctx).Field.Alias)
@@ -1281,6 +1293,18 @@ func (o *Organization) Notes(ctx context.Context) (result []*Note, err error) {
 	return result, err
 }
 
+func (o *Organization) Tasks(ctx context.Context) (result []*Task, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = o.NamedTasks(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = o.Edges.TasksOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = o.QueryTasks().All(ctx)
+	}
+	return result, err
+}
+
 func (o *Organization) Members(ctx context.Context) (result []*OrgMembership, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = o.NamedMembers(graphql.GetFieldContext(ctx).Field.Alias)
@@ -1371,6 +1395,38 @@ func (ts *TFASetting) Owner(ctx context.Context) (*User, error) {
 		result, err = ts.QueryOwner().Only(ctx)
 	}
 	return result, MaskNotFound(err)
+}
+
+func (t *Task) User(ctx context.Context) (*User, error) {
+	result, err := t.Edges.UserOrErr()
+	if IsNotLoaded(err) {
+		result, err = t.QueryUser().Only(ctx)
+	}
+	return result, err
+}
+
+func (t *Task) Organization(ctx context.Context) (result []*Organization, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = t.NamedOrganization(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = t.Edges.OrganizationOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = t.QueryOrganization().All(ctx)
+	}
+	return result, err
+}
+
+func (t *Task) Group(ctx context.Context) (result []*Group, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = t.NamedGroup(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = t.Edges.GroupOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = t.QueryGroup().All(ctx)
+	}
+	return result, err
 }
 
 func (t *Template) Owner(ctx context.Context) (*Organization, error) {
@@ -1489,6 +1545,18 @@ func (u *User) Events(ctx context.Context) (result []*Event, err error) {
 	}
 	if IsNotLoaded(err) {
 		result, err = u.QueryEvents().All(ctx)
+	}
+	return result, err
+}
+
+func (u *User) Tasks(ctx context.Context) (result []*Task, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = u.NamedTasks(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = u.Edges.TasksOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = u.QueryTasks().All(ctx)
 	}
 	return result, err
 }

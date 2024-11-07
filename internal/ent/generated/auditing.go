@@ -32,6 +32,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organizationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembershiphistory"
+	"github.com/theopenlane/core/internal/ent/generated/taskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
 	"github.com/theopenlane/core/internal/ent/generated/usersettinghistory"
@@ -1414,6 +1415,87 @@ func (osh *OrganizationSettingHistory) Diff(history *OrganizationSettingHistory)
 	return nil, IdenticalHistoryError
 }
 
+func (th *TaskHistory) changes(new *TaskHistory) []Change {
+	var changes []Change
+	if !reflect.DeepEqual(th.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(taskhistory.FieldCreatedAt, th.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(th.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(taskhistory.FieldUpdatedAt, th.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(th.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(taskhistory.FieldCreatedBy, th.CreatedBy, new.CreatedBy))
+	}
+	if !reflect.DeepEqual(th.MappingID, new.MappingID) {
+		changes = append(changes, NewChange(taskhistory.FieldMappingID, th.MappingID, new.MappingID))
+	}
+	if !reflect.DeepEqual(th.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(taskhistory.FieldDeletedAt, th.DeletedAt, new.DeletedAt))
+	}
+	if !reflect.DeepEqual(th.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(taskhistory.FieldDeletedBy, th.DeletedBy, new.DeletedBy))
+	}
+	if !reflect.DeepEqual(th.Tags, new.Tags) {
+		changes = append(changes, NewChange(taskhistory.FieldTags, th.Tags, new.Tags))
+	}
+	if !reflect.DeepEqual(th.OrganizationID, new.OrganizationID) {
+		changes = append(changes, NewChange(taskhistory.FieldOrganizationID, th.OrganizationID, new.OrganizationID))
+	}
+	if !reflect.DeepEqual(th.GroupID, new.GroupID) {
+		changes = append(changes, NewChange(taskhistory.FieldGroupID, th.GroupID, new.GroupID))
+	}
+	if !reflect.DeepEqual(th.Title, new.Title) {
+		changes = append(changes, NewChange(taskhistory.FieldTitle, th.Title, new.Title))
+	}
+	if !reflect.DeepEqual(th.Description, new.Description) {
+		changes = append(changes, NewChange(taskhistory.FieldDescription, th.Description, new.Description))
+	}
+	if !reflect.DeepEqual(th.Details, new.Details) {
+		changes = append(changes, NewChange(taskhistory.FieldDetails, th.Details, new.Details))
+	}
+	if !reflect.DeepEqual(th.Status, new.Status) {
+		changes = append(changes, NewChange(taskhistory.FieldStatus, th.Status, new.Status))
+	}
+	if !reflect.DeepEqual(th.Due, new.Due) {
+		changes = append(changes, NewChange(taskhistory.FieldDue, th.Due, new.Due))
+	}
+	if !reflect.DeepEqual(th.Completed, new.Completed) {
+		changes = append(changes, NewChange(taskhistory.FieldCompleted, th.Completed, new.Completed))
+	}
+	if !reflect.DeepEqual(th.Assignee, new.Assignee) {
+		changes = append(changes, NewChange(taskhistory.FieldAssignee, th.Assignee, new.Assignee))
+	}
+	if !reflect.DeepEqual(th.Assigner, new.Assigner) {
+		changes = append(changes, NewChange(taskhistory.FieldAssigner, th.Assigner, new.Assigner))
+	}
+	return changes
+}
+
+func (th *TaskHistory) Diff(history *TaskHistory) (*HistoryDiff[TaskHistory], error) {
+	if th.Ref != history.Ref {
+		return nil, MismatchedRefError
+	}
+
+	thUnix, historyUnix := th.HistoryTime.Unix(), history.HistoryTime.Unix()
+	thOlder := thUnix < historyUnix || (thUnix == historyUnix && th.ID < history.ID)
+	historyOlder := thUnix > historyUnix || (thUnix == historyUnix && th.ID > history.ID)
+
+	if thOlder {
+		return &HistoryDiff[TaskHistory]{
+			Old:     th,
+			New:     history,
+			Changes: th.changes(history),
+		}, nil
+	} else if historyOlder {
+		return &HistoryDiff[TaskHistory]{
+			Old:     history,
+			New:     th,
+			Changes: history.changes(th),
+		}, nil
+	}
+	return nil, IdenticalHistoryError
+}
+
 func (th *TemplateHistory) changes(new *TemplateHistory) []Change {
 	var changes []Change
 	if !reflect.DeepEqual(th.CreatedAt, new.CreatedAt) {
@@ -1889,6 +1971,12 @@ func (c *Client) Audit(ctx context.Context) ([][]string, error) {
 	}
 	records = append(records, record...)
 
+	record, err = auditTaskHistory(ctx, c.config)
+	if err != nil {
+		return nil, err
+	}
+	records = append(records, record...)
+
 	record, err = auditTemplateHistory(ctx, c.config)
 	if err != nil {
 		return nil, err
@@ -2096,6 +2184,15 @@ func (c *Client) AuditWithFilter(ctx context.Context, tableName string) ([][]str
 
 	if tableName == "" || tableName == strings.TrimSuffix("OrganizationSettingHistory", "History") {
 		record, err = auditOrganizationSettingHistory(ctx, c.config)
+		if err != nil {
+			return nil, err
+		}
+
+		records = append(records, record...)
+	}
+
+	if tableName == "" || tableName == strings.TrimSuffix("TaskHistory", "History") {
+		record, err = auditTaskHistory(ctx, c.config)
 		if err != nil {
 			return nil, err
 		}
@@ -3221,6 +3318,59 @@ func auditOrganizationSettingHistory(ctx context.Context, config config) ([][]st
 			default:
 				if i == 0 {
 					record.Changes = (&OrganizationSettingHistory{}).changes(curr)
+				} else {
+					record.Changes = histories[i-1].changes(curr)
+				}
+			}
+			records = append(records, record.toRow())
+		}
+	}
+	return records, nil
+}
+
+type taskhistoryref struct {
+	Ref string
+}
+
+func auditTaskHistory(ctx context.Context, config config) ([][]string, error) {
+	var records = [][]string{}
+	var refs []taskhistoryref
+	client := NewTaskHistoryClient(config)
+	err := client.Query().
+		Unique(true).
+		Order(taskhistory.ByRef()).
+		Select(taskhistory.FieldRef).
+		Scan(ctx, &refs)
+
+	if err != nil {
+		return nil, err
+	}
+	for _, currRef := range refs {
+		histories, err := client.Query().
+			Where(taskhistory.Ref(currRef.Ref)).
+			Order(taskhistory.ByHistoryTime()).
+			All(ctx)
+		if err != nil {
+			return nil, err
+		}
+
+		for i := 0; i < len(histories); i++ {
+			curr := histories[i]
+			record := record{
+				Table:       "TaskHistory",
+				RefId:       curr.Ref,
+				HistoryTime: curr.HistoryTime,
+				Operation:   curr.Operation,
+				UpdatedBy:   curr.UpdatedBy,
+			}
+			switch curr.Operation {
+			case history.OpTypeInsert:
+				record.Changes = (&TaskHistory{}).changes(curr)
+			case history.OpTypeDelete:
+				record.Changes = curr.changes(&TaskHistory{})
+			default:
+				if i == 0 {
+					record.Changes = (&TaskHistory{}).changes(curr)
 				} else {
 					record.Changes = histories[i-1].changes(curr)
 				}

@@ -32,6 +32,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/webhook"
@@ -648,6 +649,21 @@ func (oc *OrganizationCreate) AddNotes(n ...*Note) *OrganizationCreate {
 		ids[i] = n[i].ID
 	}
 	return oc.AddNoteIDs(ids...)
+}
+
+// AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
+func (oc *OrganizationCreate) AddTaskIDs(ids ...string) *OrganizationCreate {
+	oc.mutation.AddTaskIDs(ids...)
+	return oc
+}
+
+// AddTasks adds the "tasks" edges to the Task entity.
+func (oc *OrganizationCreate) AddTasks(t ...*Task) *OrganizationCreate {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return oc.AddTaskIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -1315,6 +1331,23 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			},
 		}
 		edge.Schema = oc.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := oc.mutation.TasksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   organization.TasksTable,
+			Columns: organization.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = oc.schemaConfig.OrganizationTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

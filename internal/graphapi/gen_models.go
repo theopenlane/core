@@ -752,6 +752,36 @@ type TFASettingUpdatePayload struct {
 	TfaSetting *generated.TFASetting `json:"tfaSetting"`
 }
 
+// Return response for createBulkTask mutation
+type TaskBulkCreatePayload struct {
+	// Created tasks
+	Tasks []*generated.Task `json:"tasks,omitempty"`
+}
+
+// Return response for createTask mutation
+type TaskCreatePayload struct {
+	// Created task
+	Task *generated.Task `json:"task"`
+}
+
+// Return response for deleteTask mutation
+type TaskDeletePayload struct {
+	// Deleted task ID
+	DeletedID string `json:"deletedID"`
+}
+
+type TaskSearchResult struct {
+	Tasks []*generated.Task `json:"tasks,omitempty"`
+}
+
+func (TaskSearchResult) IsSearchResult() {}
+
+// Return response for updateTask mutation
+type TaskUpdatePayload struct {
+	// Updated task
+	Task *generated.Task `json:"task"`
+}
+
 // Return response for createBulkTemplate mutation
 type TemplateBulkCreatePayload struct {
 	// Created templates

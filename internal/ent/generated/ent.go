@@ -59,6 +59,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/taskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
@@ -177,6 +179,8 @@ func checkColumn(table, column string) error {
 			personalaccesstoken.Table:           personalaccesstoken.ValidColumn,
 			subscriber.Table:                    subscriber.ValidColumn,
 			tfasetting.Table:                    tfasetting.ValidColumn,
+			task.Table:                          task.ValidColumn,
+			taskhistory.Table:                   taskhistory.ValidColumn,
 			template.Table:                      template.ValidColumn,
 			templatehistory.Table:               templatehistory.ValidColumn,
 			user.Table:                          user.ValidColumn,

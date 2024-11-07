@@ -495,3 +495,143 @@ tests:
           can_view: true
           can_edit: true
           can_delete: true
+  - name: files
+    description: files can be associated to many objects and users can access files based on their permissions
+    tuples: 
+      - user: user:ulid-admin
+        relation: can_delete
+        object: file:file-1
+      - user: user:ulid-other-1
+        relation: can_view
+        object: file:file-1  # direct access
+      - user: user:ulid-other-2
+        relation: member
+        object: program:program-1  # indirect access
+      - user: program:program-1
+        relation: parent
+        object: file:file-1 # program has access to file
+      - user: control:control-1
+        relation: parent
+        object: file:file-2 # control has access to file
+      - user: program:program-2
+        relation: parent
+        object: control:control-1 # program has access to control
+      - user: user:ulid-other-3
+        relation: admin
+        object: program:program-2
+      - user: contact:contact-1
+        relation: parent
+        object: file:file-3 # contact has access to file
+      - user: user:ulid-contact-1
+        relation: owner
+        object: organization:contact-org
+      - user: organization:contact-org
+        relation: parent
+        object: contact:contact-1
+    check: 
+      - user: user:ulid-admin # admin of the file should have all permissions
+        object: file:file-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:ulid-other-1 # user with direct view access to file
+        object: file:file-1
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-other-2 # user with indirect view access to file
+        object: file:file-1
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-no-access # user with no access to file
+        object: file:file-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-other-3 # admin of program that has access to file
+        object: file:file-2
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:ulid-contact-1 # owner of contact org that is the parent of the file
+        object: file:file-3
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+  - name: tasks
+    description: tasks can be associated to many objects and users can access tasks based on their permissions
+    tuples: 
+      - user: user:ulid-admin
+        relation: can_delete
+        object: task:task-1
+      - user: user:ulid-other-1
+        relation: can_view
+        object: task:task-1  # direct access
+      - user: user:ulid-other-2
+        relation: member
+        object: program:program-1  # indirect access
+      - user: program:program-1
+        relation: parent
+        object: task:task-1 # program has access to task
+      - user: control:control-1
+        relation: parent
+        object: task:task-2 # control has access to task
+      - user: program:program-2
+        relation: parent
+        object: control:control-1 # program has access to control
+      - user: user:ulid-other-3
+        relation: admin
+        object: program:program-2
+      - user: group:group-1
+        relation: parent
+        object: task:task-3 # group has access to task
+      - user: user:ulid-group-1
+        relation: owner
+        object: organization:group-org
+      - user: organization:group-org
+        relation: parent
+        object: group:group-1
+    check: 
+      - user: user:ulid-admin # admin of the task should have all permissions
+        object: task:task-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:ulid-other-1 # user with direct view access to task
+        object: task:task-1
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-other-2 # user with indirect view access to task
+        object: task:task-1
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-no-access # user with no access to task
+        object: task:task-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-other-3 # admin of program that has access to task
+        object: task:task-2
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:ulid-group-1 # owner of group org that is the parent of the task
+        object: task:task-3
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true

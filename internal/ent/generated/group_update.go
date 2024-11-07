@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -313,6 +314,21 @@ func (gu *GroupUpdate) AddFiles(f ...*File) *GroupUpdate {
 	return gu.AddFileIDs(ids...)
 }
 
+// AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
+func (gu *GroupUpdate) AddTaskIDs(ids ...string) *GroupUpdate {
+	gu.mutation.AddTaskIDs(ids...)
+	return gu
+}
+
+// AddTasks adds the "tasks" edges to the Task entity.
+func (gu *GroupUpdate) AddTasks(t ...*Task) *GroupUpdate {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return gu.AddTaskIDs(ids...)
+}
+
 // AddMemberIDs adds the "members" edge to the GroupMembership entity by IDs.
 func (gu *GroupUpdate) AddMemberIDs(ids ...string) *GroupUpdate {
 	gu.mutation.AddMemberIDs(ids...)
@@ -427,6 +443,27 @@ func (gu *GroupUpdate) RemoveFiles(f ...*File) *GroupUpdate {
 		ids[i] = f[i].ID
 	}
 	return gu.RemoveFileIDs(ids...)
+}
+
+// ClearTasks clears all "tasks" edges to the Task entity.
+func (gu *GroupUpdate) ClearTasks() *GroupUpdate {
+	gu.mutation.ClearTasks()
+	return gu
+}
+
+// RemoveTaskIDs removes the "tasks" edge to Task entities by IDs.
+func (gu *GroupUpdate) RemoveTaskIDs(ids ...string) *GroupUpdate {
+	gu.mutation.RemoveTaskIDs(ids...)
+	return gu
+}
+
+// RemoveTasks removes "tasks" edges to Task entities.
+func (gu *GroupUpdate) RemoveTasks(t ...*Task) *GroupUpdate {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return gu.RemoveTaskIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the GroupMembership entity.
@@ -873,6 +910,54 @@ func (gu *GroupUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if gu.mutation.TasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   group.TasksTable,
+			Columns: group.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.GroupTasks
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := gu.mutation.RemovedTasksIDs(); len(nodes) > 0 && !gu.mutation.TasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   group.TasksTable,
+			Columns: group.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.GroupTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := gu.mutation.TasksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   group.TasksTable,
+			Columns: group.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.GroupTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if gu.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -1219,6 +1304,21 @@ func (guo *GroupUpdateOne) AddFiles(f ...*File) *GroupUpdateOne {
 	return guo.AddFileIDs(ids...)
 }
 
+// AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
+func (guo *GroupUpdateOne) AddTaskIDs(ids ...string) *GroupUpdateOne {
+	guo.mutation.AddTaskIDs(ids...)
+	return guo
+}
+
+// AddTasks adds the "tasks" edges to the Task entity.
+func (guo *GroupUpdateOne) AddTasks(t ...*Task) *GroupUpdateOne {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return guo.AddTaskIDs(ids...)
+}
+
 // AddMemberIDs adds the "members" edge to the GroupMembership entity by IDs.
 func (guo *GroupUpdateOne) AddMemberIDs(ids ...string) *GroupUpdateOne {
 	guo.mutation.AddMemberIDs(ids...)
@@ -1333,6 +1433,27 @@ func (guo *GroupUpdateOne) RemoveFiles(f ...*File) *GroupUpdateOne {
 		ids[i] = f[i].ID
 	}
 	return guo.RemoveFileIDs(ids...)
+}
+
+// ClearTasks clears all "tasks" edges to the Task entity.
+func (guo *GroupUpdateOne) ClearTasks() *GroupUpdateOne {
+	guo.mutation.ClearTasks()
+	return guo
+}
+
+// RemoveTaskIDs removes the "tasks" edge to Task entities by IDs.
+func (guo *GroupUpdateOne) RemoveTaskIDs(ids ...string) *GroupUpdateOne {
+	guo.mutation.RemoveTaskIDs(ids...)
+	return guo
+}
+
+// RemoveTasks removes "tasks" edges to Task entities.
+func (guo *GroupUpdateOne) RemoveTasks(t ...*Task) *GroupUpdateOne {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return guo.RemoveTaskIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the GroupMembership entity.
@@ -1804,6 +1925,54 @@ func (guo *GroupUpdateOne) sqlSave(ctx context.Context) (_node *Group, err error
 			},
 		}
 		edge.Schema = guo.schemaConfig.GroupFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if guo.mutation.TasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   group.TasksTable,
+			Columns: group.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.GroupTasks
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := guo.mutation.RemovedTasksIDs(); len(nodes) > 0 && !guo.mutation.TasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   group.TasksTable,
+			Columns: group.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.GroupTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := guo.mutation.TasksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   group.TasksTable,
+			Columns: group.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.GroupTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
