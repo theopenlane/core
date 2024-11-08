@@ -122,7 +122,8 @@ type contact
     define parent: [organization]
 type task
   relations
-    define can_view: [user, service] or can_delete or can_edit or can_view from parent
-    define can_edit: [user, service] or can_delete or can_edit from parent
+    define can_view: [user, service] or assignee or can_delete or can_edit or can_view from parent
+    define can_edit: [user, service] or assignee or can_delete or can_edit from parent
     define can_delete: [user, service] or can_delete from parent
+    define assignee: [user]
     define parent: [user, service, program, organization, control, procedure, group, policy]

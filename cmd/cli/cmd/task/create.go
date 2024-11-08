@@ -2,6 +2,7 @@ package task
 
 import (
 	"context"
+	"time"
 
 	"github.com/spf13/cobra"
 
@@ -26,6 +27,10 @@ func init() {
 	createCmd.Flags().StringP("title", "t", "", "title of the task")
 	createCmd.Flags().StringP("description", "d", "", "description of the task")
 	createCmd.Flags().StringP("status", "s", "", "status of the task")
+	createCmd.Flags().StringP("assignee", "a", "", "assignee (user ID) of the task")
+	createCmd.Flags().Duration("due", 0, "time until due date of the task")
+	createCmd.Flags().StringP("organization", "o", "", "organization ID of the task to own the task, this will give the organization access to the task")
+	createCmd.Flags().StringP("group", "g", "", "group ID of the task to own the task, this will give the group access to the task")
 }
 
 // createValidation validates the required fields for the command
@@ -47,7 +52,26 @@ func createValidation() (input openlaneclient.CreateTaskInput, err error) {
 		input.Status = enums.ToTaskStatus(status)
 	}
 
-	// TODO: add additional fields for the task entity
+	assignee := cmd.Config.String("assignee")
+	if assignee != "" {
+		input.Assignee = &assignee
+	}
+
+	due := cmd.Config.Duration("due")
+	if due != 0 {
+		dueDate := time.Now().Add(due)
+		input.Due = &dueDate
+	}
+
+	organization := cmd.Config.String("organization")
+	if organization != "" {
+		input.OrganizationID = &organization
+	}
+
+	group := cmd.Config.String("group")
+	if group != "" {
+		input.GroupID = &group
+	}
 
 	return input, nil
 }

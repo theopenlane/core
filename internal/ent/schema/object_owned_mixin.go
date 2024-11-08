@@ -170,15 +170,7 @@ func (o ObjectOwnedMixin) Interceptors() []ent.Interceptor {
 
 // P adds a storage-level predicate to the queries and mutations.
 func (o ObjectOwnedMixin) P(w interface{ WhereP(...func(*sql.Selector)) }, objectIDs []string) {
-	var filters []func(*sql.Selector)
-
-	for _, fields := range o.FieldNames {
-		filters = append(filters, sql.FieldIn(fields, objectIDs...))
-	}
-
-	w.WhereP(
-		filters...,
-	)
+	w.WhereP(sql.FieldIn("id", objectIDs...))
 }
 
 // defaultObjectHookCreateFunc is the default hook function for the object owned mixin

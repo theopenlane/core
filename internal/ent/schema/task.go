@@ -107,6 +107,7 @@ func (Task) Annotations() []schema.Annotation {
 func (Task) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookTaskCreate(),
+		hooks.HookTaskAssignee(),
 	}
 }
 

@@ -2,10 +2,12 @@ package task
 
 import (
 	"context"
+	"time"
 
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -25,6 +27,12 @@ func init() {
 
 	// command line flags for the update command
 	updateCmd.Flags().StringP("title", "n", "", "title of the task")
+	updateCmd.Flags().StringP("description", "d", "", "description of the task")
+	updateCmd.Flags().StringP("status", "s", "", "status of the task")
+	updateCmd.Flags().StringP("assignee", "a", "", "assignee (user ID) of the task")
+	updateCmd.Flags().Duration("due", 0, "time until due date of the task")
+	updateCmd.Flags().StringP("organization", "o", "", "organization ID of the task to own the task, this will give the organization access to the task")
+	updateCmd.Flags().StringP("group", "g", "", "group ID of the task to own the task, this will give the group access to the task")
 }
 
 // updateValidation validates the required fields for the command
@@ -39,6 +47,37 @@ func updateValidation() (id string, input openlaneclient.UpdateTaskInput, err er
 	title := cmd.Config.String("title")
 	if title != "" {
 		input.Title = &title
+	}
+
+	description := cmd.Config.String("description")
+	if description != "" {
+		input.Description = &description
+	}
+
+	status := cmd.Config.String("status")
+	if status != "" {
+		input.Status = enums.ToTaskStatus(status)
+	}
+
+	assignee := cmd.Config.String("assignee")
+	if assignee != "" {
+		input.Assignee = &assignee
+	}
+
+	due := cmd.Config.Duration("due")
+	if due != 0 {
+		dueDate := time.Now().Add(due)
+		input.Due = &dueDate
+	}
+
+	organization := cmd.Config.String("organization")
+	if organization != "" {
+		input.OrganizationID = &organization
+	}
+
+	group := cmd.Config.String("group")
+	if group != "" {
+		input.GroupID = &group
 	}
 
 	return id, input, nil

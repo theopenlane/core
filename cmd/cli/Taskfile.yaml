@@ -1,7 +1,7 @@
 version: "3"
 
 env: 
-  DEFAULT_USER_EMAIL: "mitb@theopenlane.io"
+  DEFAULT_USER_EMAIL: "mitb1@theopenlane.io"
   SECOND_USER_EMAIL: "funk@theopenlane.io"
 
 tasks:
@@ -64,7 +64,7 @@ tasks:
       - task: verifyuser
       - task: login
 
-  user:all:again:
+  user:all:another:
     desc: a task to register, verify, and login another user
     cmds:
       - task: verifyuser
@@ -74,6 +74,12 @@ tasks:
         vars:
           EMAIL_ADDRESS: "{{ .SECOND_USER_EMAIL }}"
 
+  login:another:
+    desc: a task to login another user
+    cmds:
+      - task: login
+        vars:
+          EMAIL_ADDRESS: "{{ .SECOND_USER_EMAIL }}"
 
   login:google:
     desc: a task to login with google oauth
