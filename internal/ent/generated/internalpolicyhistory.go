@@ -53,10 +53,10 @@ type InternalPolicyHistory struct {
 	Version string `json:"version,omitempty"`
 	// purpose and scope
 	PurposeAndScope string `json:"purpose_and_scope,omitempty"`
-	// background
+	// background of the policy
 	Background string `json:"background,omitempty"`
-	// json schema
-	Jsonschema   map[string]interface{} `json:"jsonschema,omitempty"`
+	// json data for the policy document
+	Details      map[string]interface{} `json:"details,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -65,7 +65,7 @@ func (*InternalPolicyHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case internalpolicyhistory.FieldTags, internalpolicyhistory.FieldJsonschema:
+		case internalpolicyhistory.FieldTags, internalpolicyhistory.FieldDetails:
 			values[i] = new([]byte)
 		case internalpolicyhistory.FieldOperation:
 			values[i] = new(history.OpType)
@@ -204,12 +204,12 @@ func (iph *InternalPolicyHistory) assignValues(columns []string, values []any) e
 			} else if value.Valid {
 				iph.Background = value.String
 			}
-		case internalpolicyhistory.FieldJsonschema:
+		case internalpolicyhistory.FieldDetails:
 			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field jsonschema", values[i])
+				return fmt.Errorf("unexpected type %T for field details", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &iph.Jsonschema); err != nil {
-					return fmt.Errorf("unmarshal field jsonschema: %w", err)
+				if err := json.Unmarshal(*value, &iph.Details); err != nil {
+					return fmt.Errorf("unmarshal field details: %w", err)
 				}
 			}
 		default:
@@ -302,8 +302,8 @@ func (iph *InternalPolicyHistory) String() string {
 	builder.WriteString("background=")
 	builder.WriteString(iph.Background)
 	builder.WriteString(", ")
-	builder.WriteString("jsonschema=")
-	builder.WriteString(fmt.Sprintf("%v", iph.Jsonschema))
+	builder.WriteString("details=")
+	builder.WriteString(fmt.Sprintf("%v", iph.Details))
 	builder.WriteByte(')')
 	return builder.String()
 }

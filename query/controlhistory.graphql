@@ -4,20 +4,19 @@ query GetAllControlHistories {
   controlHistories {
     edges {
       node {
-        controlClass
-        controlFamily
+        class
         controlNumber
         controlType
         createdAt
         createdBy
         description
+        details
+        family
         historyTime
         id
-        jsonschema
         mappedFrameworks
         name
         operation
-        owner
         ref
         satisfies
         source
@@ -35,20 +34,19 @@ query GetControlHistories($where: ControlHistoryWhereInput) {
   controlHistories(where: $where) {
     edges {
       node {
-        controlClass
-        controlFamily
+        class
         controlNumber
         controlType
         createdAt
         createdBy
         description
+        details
+        family
         historyTime
         id
-        jsonschema
         mappedFrameworks
         name
         operation
-        owner
         ref
         satisfies
         source

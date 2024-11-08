@@ -27,21 +27,18 @@ func (ActionPlan) Fields() []ent.Field {
 		field.String("status").
 			Optional().
 			Comment("status of the action plan"),
-		field.String("assigned").
+		field.Time("due_date").
 			Optional().
-			Comment("assigned to"),
-		field.String("due_date").
-			Optional().
-			Comment("due date"),
+			Comment("due date of the action plan"),
 		field.String("priority").
 			Optional().
-			Comment("priority"),
+			Comment("priority of the action plan"),
 		field.String("source").
 			Optional().
 			Comment("source of the action plan"),
-		field.JSON("jsonschema", map[string]interface{}{}).
+		field.JSON("details", map[string]interface{}{}).
 			Optional().
-			Comment("json schema"),
+			Comment("json data including details of the action plan"),
 	}
 }
 
@@ -51,6 +48,10 @@ func (ActionPlan) Edges() []ent.Edge {
 		edge.From("standard", Standard.Type).
 			Ref("actionplans"),
 		edge.From("risk", Risk.Type).
+			Ref("actionplans"),
+		edge.From("control", Control.Type).
+			Ref("actionplans"),
+		edge.From("user", User.Type).
 			Ref("actionplans"),
 	}
 }

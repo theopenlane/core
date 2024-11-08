@@ -782,14 +782,14 @@ func SatisfiesContainsFold(v string) predicate.Narrative {
 	return predicate.Narrative(sql.FieldContainsFold(FieldSatisfies, v))
 }
 
-// JsonschemaIsNil applies the IsNil predicate on the "jsonschema" field.
-func JsonschemaIsNil() predicate.Narrative {
-	return predicate.Narrative(sql.FieldIsNull(FieldJsonschema))
+// DetailsIsNil applies the IsNil predicate on the "details" field.
+func DetailsIsNil() predicate.Narrative {
+	return predicate.Narrative(sql.FieldIsNull(FieldDetails))
 }
 
-// JsonschemaNotNil applies the NotNil predicate on the "jsonschema" field.
-func JsonschemaNotNil() predicate.Narrative {
-	return predicate.Narrative(sql.FieldNotNull(FieldJsonschema))
+// DetailsNotNil applies the NotNil predicate on the "details" field.
+func DetailsNotNil() predicate.Narrative {
+	return predicate.Narrative(sql.FieldNotNull(FieldDetails))
 }
 
 // HasPolicy applies the HasEdge predicate on the "policy" edge.

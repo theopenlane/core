@@ -117,13 +117,8 @@ func Status(v string) predicate.ActionPlan {
 	return predicate.ActionPlan(sql.FieldEQ(FieldStatus, v))
 }
 
-// Assigned applies equality check predicate on the "assigned" field. It's identical to AssignedEQ.
-func Assigned(v string) predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldEQ(FieldAssigned, v))
-}
-
 // DueDate applies equality check predicate on the "due_date" field. It's identical to DueDateEQ.
-func DueDate(v string) predicate.ActionPlan {
+func DueDate(v time.Time) predicate.ActionPlan {
 	return predicate.ActionPlan(sql.FieldEQ(FieldDueDate, v))
 }
 
@@ -802,134 +797,44 @@ func StatusContainsFold(v string) predicate.ActionPlan {
 	return predicate.ActionPlan(sql.FieldContainsFold(FieldStatus, v))
 }
 
-// AssignedEQ applies the EQ predicate on the "assigned" field.
-func AssignedEQ(v string) predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldEQ(FieldAssigned, v))
-}
-
-// AssignedNEQ applies the NEQ predicate on the "assigned" field.
-func AssignedNEQ(v string) predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldNEQ(FieldAssigned, v))
-}
-
-// AssignedIn applies the In predicate on the "assigned" field.
-func AssignedIn(vs ...string) predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldIn(FieldAssigned, vs...))
-}
-
-// AssignedNotIn applies the NotIn predicate on the "assigned" field.
-func AssignedNotIn(vs ...string) predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldNotIn(FieldAssigned, vs...))
-}
-
-// AssignedGT applies the GT predicate on the "assigned" field.
-func AssignedGT(v string) predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldGT(FieldAssigned, v))
-}
-
-// AssignedGTE applies the GTE predicate on the "assigned" field.
-func AssignedGTE(v string) predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldGTE(FieldAssigned, v))
-}
-
-// AssignedLT applies the LT predicate on the "assigned" field.
-func AssignedLT(v string) predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldLT(FieldAssigned, v))
-}
-
-// AssignedLTE applies the LTE predicate on the "assigned" field.
-func AssignedLTE(v string) predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldLTE(FieldAssigned, v))
-}
-
-// AssignedContains applies the Contains predicate on the "assigned" field.
-func AssignedContains(v string) predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldContains(FieldAssigned, v))
-}
-
-// AssignedHasPrefix applies the HasPrefix predicate on the "assigned" field.
-func AssignedHasPrefix(v string) predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldHasPrefix(FieldAssigned, v))
-}
-
-// AssignedHasSuffix applies the HasSuffix predicate on the "assigned" field.
-func AssignedHasSuffix(v string) predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldHasSuffix(FieldAssigned, v))
-}
-
-// AssignedIsNil applies the IsNil predicate on the "assigned" field.
-func AssignedIsNil() predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldIsNull(FieldAssigned))
-}
-
-// AssignedNotNil applies the NotNil predicate on the "assigned" field.
-func AssignedNotNil() predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldNotNull(FieldAssigned))
-}
-
-// AssignedEqualFold applies the EqualFold predicate on the "assigned" field.
-func AssignedEqualFold(v string) predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldEqualFold(FieldAssigned, v))
-}
-
-// AssignedContainsFold applies the ContainsFold predicate on the "assigned" field.
-func AssignedContainsFold(v string) predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldContainsFold(FieldAssigned, v))
-}
-
 // DueDateEQ applies the EQ predicate on the "due_date" field.
-func DueDateEQ(v string) predicate.ActionPlan {
+func DueDateEQ(v time.Time) predicate.ActionPlan {
 	return predicate.ActionPlan(sql.FieldEQ(FieldDueDate, v))
 }
 
 // DueDateNEQ applies the NEQ predicate on the "due_date" field.
-func DueDateNEQ(v string) predicate.ActionPlan {
+func DueDateNEQ(v time.Time) predicate.ActionPlan {
 	return predicate.ActionPlan(sql.FieldNEQ(FieldDueDate, v))
 }
 
 // DueDateIn applies the In predicate on the "due_date" field.
-func DueDateIn(vs ...string) predicate.ActionPlan {
+func DueDateIn(vs ...time.Time) predicate.ActionPlan {
 	return predicate.ActionPlan(sql.FieldIn(FieldDueDate, vs...))
 }
 
 // DueDateNotIn applies the NotIn predicate on the "due_date" field.
-func DueDateNotIn(vs ...string) predicate.ActionPlan {
+func DueDateNotIn(vs ...time.Time) predicate.ActionPlan {
 	return predicate.ActionPlan(sql.FieldNotIn(FieldDueDate, vs...))
 }
 
 // DueDateGT applies the GT predicate on the "due_date" field.
-func DueDateGT(v string) predicate.ActionPlan {
+func DueDateGT(v time.Time) predicate.ActionPlan {
 	return predicate.ActionPlan(sql.FieldGT(FieldDueDate, v))
 }
 
 // DueDateGTE applies the GTE predicate on the "due_date" field.
-func DueDateGTE(v string) predicate.ActionPlan {
+func DueDateGTE(v time.Time) predicate.ActionPlan {
 	return predicate.ActionPlan(sql.FieldGTE(FieldDueDate, v))
 }
 
 // DueDateLT applies the LT predicate on the "due_date" field.
-func DueDateLT(v string) predicate.ActionPlan {
+func DueDateLT(v time.Time) predicate.ActionPlan {
 	return predicate.ActionPlan(sql.FieldLT(FieldDueDate, v))
 }
 
 // DueDateLTE applies the LTE predicate on the "due_date" field.
-func DueDateLTE(v string) predicate.ActionPlan {
+func DueDateLTE(v time.Time) predicate.ActionPlan {
 	return predicate.ActionPlan(sql.FieldLTE(FieldDueDate, v))
-}
-
-// DueDateContains applies the Contains predicate on the "due_date" field.
-func DueDateContains(v string) predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldContains(FieldDueDate, v))
-}
-
-// DueDateHasPrefix applies the HasPrefix predicate on the "due_date" field.
-func DueDateHasPrefix(v string) predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldHasPrefix(FieldDueDate, v))
-}
-
-// DueDateHasSuffix applies the HasSuffix predicate on the "due_date" field.
-func DueDateHasSuffix(v string) predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldHasSuffix(FieldDueDate, v))
 }
 
 // DueDateIsNil applies the IsNil predicate on the "due_date" field.
@@ -940,16 +845,6 @@ func DueDateIsNil() predicate.ActionPlan {
 // DueDateNotNil applies the NotNil predicate on the "due_date" field.
 func DueDateNotNil() predicate.ActionPlan {
 	return predicate.ActionPlan(sql.FieldNotNull(FieldDueDate))
-}
-
-// DueDateEqualFold applies the EqualFold predicate on the "due_date" field.
-func DueDateEqualFold(v string) predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldEqualFold(FieldDueDate, v))
-}
-
-// DueDateContainsFold applies the ContainsFold predicate on the "due_date" field.
-func DueDateContainsFold(v string) predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldContainsFold(FieldDueDate, v))
 }
 
 // PriorityEQ applies the EQ predicate on the "priority" field.
@@ -1102,14 +997,14 @@ func SourceContainsFold(v string) predicate.ActionPlan {
 	return predicate.ActionPlan(sql.FieldContainsFold(FieldSource, v))
 }
 
-// JsonschemaIsNil applies the IsNil predicate on the "jsonschema" field.
-func JsonschemaIsNil() predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldIsNull(FieldJsonschema))
+// DetailsIsNil applies the IsNil predicate on the "details" field.
+func DetailsIsNil() predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldIsNull(FieldDetails))
 }
 
-// JsonschemaNotNil applies the NotNil predicate on the "jsonschema" field.
-func JsonschemaNotNil() predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldNotNull(FieldJsonschema))
+// DetailsNotNil applies the NotNil predicate on the "details" field.
+func DetailsNotNil() predicate.ActionPlan {
+	return predicate.ActionPlan(sql.FieldNotNull(FieldDetails))
 }
 
 // HasStandard applies the HasEdge predicate on the "standard" edge.
@@ -1162,6 +1057,64 @@ func HasRiskWith(preds ...predicate.Risk) predicate.ActionPlan {
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Risk
 		step.Edge.Schema = schemaConfig.RiskActionplans
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasControl applies the HasEdge predicate on the "control" edge.
+func HasControl() predicate.ActionPlan {
+	return predicate.ActionPlan(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, ControlTable, ControlPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.ControlActionplans
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasControlWith applies the HasEdge predicate on the "control" edge with a given conditions (other predicates).
+func HasControlWith(preds ...predicate.Control) predicate.ActionPlan {
+	return predicate.ActionPlan(func(s *sql.Selector) {
+		step := newControlStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.ControlActionplans
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasUser applies the HasEdge predicate on the "user" edge.
+func HasUser() predicate.ActionPlan {
+	return predicate.ActionPlan(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, UserTable, UserPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.UserActionplans
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasUserWith applies the HasEdge predicate on the "user" edge with a given conditions (other predicates).
+func HasUserWith(preds ...predicate.User) predicate.ActionPlan {
+	return predicate.ActionPlan(func(s *sql.Selector) {
+		step := newUserStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.UserActionplans
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

@@ -53,11 +53,15 @@ type NoteEdges struct {
 	Owner *Organization `json:"owner,omitempty"`
 	// Entity holds the value of the entity edge.
 	Entity *Entity `json:"entity,omitempty"`
+	// Subcontrols holds the value of the subcontrols edge.
+	Subcontrols []*Subcontrol `json:"subcontrols,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [3]bool
 	// totalCount holds the count of the edges above.
-	totalCount [2]map[string]int
+	totalCount [3]map[string]int
+
+	namedSubcontrols map[string][]*Subcontrol
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -80,6 +84,15 @@ func (e NoteEdges) EntityOrErr() (*Entity, error) {
 		return nil, &NotFoundError{label: entity.Label}
 	}
 	return nil, &NotLoadedError{edge: "entity"}
+}
+
+// SubcontrolsOrErr returns the Subcontrols value or an error if the edge
+// was not loaded in eager-loading.
+func (e NoteEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
+	if e.loadedTypes[2] {
+		return e.Subcontrols, nil
+	}
+	return nil, &NotLoadedError{edge: "subcontrols"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -208,6 +221,11 @@ func (n *Note) QueryEntity() *EntityQuery {
 	return NewNoteClient(n.config).QueryEntity(n)
 }
 
+// QuerySubcontrols queries the "subcontrols" edge of the Note entity.
+func (n *Note) QuerySubcontrols() *SubcontrolQuery {
+	return NewNoteClient(n.config).QuerySubcontrols(n)
+}
+
 // Update returns a builder for updating this Note.
 // Note that you need to call Note.Unwrap() before calling this method if this Note
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -262,6 +280,30 @@ func (n *Note) String() string {
 	builder.WriteString(n.Text)
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedSubcontrols returns the Subcontrols named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (n *Note) NamedSubcontrols(name string) ([]*Subcontrol, error) {
+	if n.Edges.namedSubcontrols == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := n.Edges.namedSubcontrols[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (n *Note) appendNamedSubcontrols(name string, edges ...*Subcontrol) {
+	if n.Edges.namedSubcontrols == nil {
+		n.Edges.namedSubcontrols = make(map[string][]*Subcontrol)
+	}
+	if len(edges) == 0 {
+		n.Edges.namedSubcontrols[name] = []*Subcontrol{}
+	} else {
+		n.Edges.namedSubcontrols[name] = append(n.Edges.namedSubcontrols[name], edges...)
+	}
 }
 
 // Notes is a parsable slice of Note.

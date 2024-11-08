@@ -216,26 +216,6 @@ func (cohu *ControlObjectiveHistoryUpdate) ClearVersion() *ControlObjectiveHisto
 	return cohu
 }
 
-// SetOwner sets the "owner" field.
-func (cohu *ControlObjectiveHistoryUpdate) SetOwner(s string) *ControlObjectiveHistoryUpdate {
-	cohu.mutation.SetOwner(s)
-	return cohu
-}
-
-// SetNillableOwner sets the "owner" field if the given value is not nil.
-func (cohu *ControlObjectiveHistoryUpdate) SetNillableOwner(s *string) *ControlObjectiveHistoryUpdate {
-	if s != nil {
-		cohu.SetOwner(*s)
-	}
-	return cohu
-}
-
-// ClearOwner clears the value of the "owner" field.
-func (cohu *ControlObjectiveHistoryUpdate) ClearOwner() *ControlObjectiveHistoryUpdate {
-	cohu.mutation.ClearOwner()
-	return cohu
-}
-
 // SetControlNumber sets the "control_number" field.
 func (cohu *ControlObjectiveHistoryUpdate) SetControlNumber(s string) *ControlObjectiveHistoryUpdate {
 	cohu.mutation.SetControlNumber(s)
@@ -256,43 +236,43 @@ func (cohu *ControlObjectiveHistoryUpdate) ClearControlNumber() *ControlObjectiv
 	return cohu
 }
 
-// SetControlFamily sets the "control_family" field.
-func (cohu *ControlObjectiveHistoryUpdate) SetControlFamily(s string) *ControlObjectiveHistoryUpdate {
-	cohu.mutation.SetControlFamily(s)
+// SetFamily sets the "family" field.
+func (cohu *ControlObjectiveHistoryUpdate) SetFamily(s string) *ControlObjectiveHistoryUpdate {
+	cohu.mutation.SetFamily(s)
 	return cohu
 }
 
-// SetNillableControlFamily sets the "control_family" field if the given value is not nil.
-func (cohu *ControlObjectiveHistoryUpdate) SetNillableControlFamily(s *string) *ControlObjectiveHistoryUpdate {
+// SetNillableFamily sets the "family" field if the given value is not nil.
+func (cohu *ControlObjectiveHistoryUpdate) SetNillableFamily(s *string) *ControlObjectiveHistoryUpdate {
 	if s != nil {
-		cohu.SetControlFamily(*s)
+		cohu.SetFamily(*s)
 	}
 	return cohu
 }
 
-// ClearControlFamily clears the value of the "control_family" field.
-func (cohu *ControlObjectiveHistoryUpdate) ClearControlFamily() *ControlObjectiveHistoryUpdate {
-	cohu.mutation.ClearControlFamily()
+// ClearFamily clears the value of the "family" field.
+func (cohu *ControlObjectiveHistoryUpdate) ClearFamily() *ControlObjectiveHistoryUpdate {
+	cohu.mutation.ClearFamily()
 	return cohu
 }
 
-// SetControlClass sets the "control_class" field.
-func (cohu *ControlObjectiveHistoryUpdate) SetControlClass(s string) *ControlObjectiveHistoryUpdate {
-	cohu.mutation.SetControlClass(s)
+// SetClass sets the "class" field.
+func (cohu *ControlObjectiveHistoryUpdate) SetClass(s string) *ControlObjectiveHistoryUpdate {
+	cohu.mutation.SetClass(s)
 	return cohu
 }
 
-// SetNillableControlClass sets the "control_class" field if the given value is not nil.
-func (cohu *ControlObjectiveHistoryUpdate) SetNillableControlClass(s *string) *ControlObjectiveHistoryUpdate {
+// SetNillableClass sets the "class" field if the given value is not nil.
+func (cohu *ControlObjectiveHistoryUpdate) SetNillableClass(s *string) *ControlObjectiveHistoryUpdate {
 	if s != nil {
-		cohu.SetControlClass(*s)
+		cohu.SetClass(*s)
 	}
 	return cohu
 }
 
-// ClearControlClass clears the value of the "control_class" field.
-func (cohu *ControlObjectiveHistoryUpdate) ClearControlClass() *ControlObjectiveHistoryUpdate {
-	cohu.mutation.ClearControlClass()
+// ClearClass clears the value of the "class" field.
+func (cohu *ControlObjectiveHistoryUpdate) ClearClass() *ControlObjectiveHistoryUpdate {
+	cohu.mutation.ClearClass()
 	return cohu
 }
 
@@ -336,15 +316,15 @@ func (cohu *ControlObjectiveHistoryUpdate) ClearMappedFrameworks() *ControlObjec
 	return cohu
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (cohu *ControlObjectiveHistoryUpdate) SetJsonschema(m map[string]interface{}) *ControlObjectiveHistoryUpdate {
-	cohu.mutation.SetJsonschema(m)
+// SetDetails sets the "details" field.
+func (cohu *ControlObjectiveHistoryUpdate) SetDetails(m map[string]interface{}) *ControlObjectiveHistoryUpdate {
+	cohu.mutation.SetDetails(m)
 	return cohu
 }
 
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (cohu *ControlObjectiveHistoryUpdate) ClearJsonschema() *ControlObjectiveHistoryUpdate {
-	cohu.mutation.ClearJsonschema()
+// ClearDetails clears the value of the "details" field.
+func (cohu *ControlObjectiveHistoryUpdate) ClearDetails() *ControlObjectiveHistoryUpdate {
+	cohu.mutation.ClearDetails()
 	return cohu
 }
 
@@ -475,29 +455,23 @@ func (cohu *ControlObjectiveHistoryUpdate) sqlSave(ctx context.Context) (n int, 
 	if cohu.mutation.VersionCleared() {
 		_spec.ClearField(controlobjectivehistory.FieldVersion, field.TypeString)
 	}
-	if value, ok := cohu.mutation.Owner(); ok {
-		_spec.SetField(controlobjectivehistory.FieldOwner, field.TypeString, value)
-	}
-	if cohu.mutation.OwnerCleared() {
-		_spec.ClearField(controlobjectivehistory.FieldOwner, field.TypeString)
-	}
 	if value, ok := cohu.mutation.ControlNumber(); ok {
 		_spec.SetField(controlobjectivehistory.FieldControlNumber, field.TypeString, value)
 	}
 	if cohu.mutation.ControlNumberCleared() {
 		_spec.ClearField(controlobjectivehistory.FieldControlNumber, field.TypeString)
 	}
-	if value, ok := cohu.mutation.ControlFamily(); ok {
-		_spec.SetField(controlobjectivehistory.FieldControlFamily, field.TypeString, value)
+	if value, ok := cohu.mutation.Family(); ok {
+		_spec.SetField(controlobjectivehistory.FieldFamily, field.TypeString, value)
 	}
-	if cohu.mutation.ControlFamilyCleared() {
-		_spec.ClearField(controlobjectivehistory.FieldControlFamily, field.TypeString)
+	if cohu.mutation.FamilyCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldFamily, field.TypeString)
 	}
-	if value, ok := cohu.mutation.ControlClass(); ok {
-		_spec.SetField(controlobjectivehistory.FieldControlClass, field.TypeString, value)
+	if value, ok := cohu.mutation.Class(); ok {
+		_spec.SetField(controlobjectivehistory.FieldClass, field.TypeString, value)
 	}
-	if cohu.mutation.ControlClassCleared() {
-		_spec.ClearField(controlobjectivehistory.FieldControlClass, field.TypeString)
+	if cohu.mutation.ClassCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldClass, field.TypeString)
 	}
 	if value, ok := cohu.mutation.Source(); ok {
 		_spec.SetField(controlobjectivehistory.FieldSource, field.TypeString, value)
@@ -511,11 +485,11 @@ func (cohu *ControlObjectiveHistoryUpdate) sqlSave(ctx context.Context) (n int, 
 	if cohu.mutation.MappedFrameworksCleared() {
 		_spec.ClearField(controlobjectivehistory.FieldMappedFrameworks, field.TypeString)
 	}
-	if value, ok := cohu.mutation.Jsonschema(); ok {
-		_spec.SetField(controlobjectivehistory.FieldJsonschema, field.TypeJSON, value)
+	if value, ok := cohu.mutation.Details(); ok {
+		_spec.SetField(controlobjectivehistory.FieldDetails, field.TypeJSON, value)
 	}
-	if cohu.mutation.JsonschemaCleared() {
-		_spec.ClearField(controlobjectivehistory.FieldJsonschema, field.TypeJSON)
+	if cohu.mutation.DetailsCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldDetails, field.TypeJSON)
 	}
 	_spec.Node.Schema = cohu.schemaConfig.ControlObjectiveHistory
 	ctx = internal.NewSchemaConfigContext(ctx, cohu.schemaConfig)
@@ -725,26 +699,6 @@ func (cohuo *ControlObjectiveHistoryUpdateOne) ClearVersion() *ControlObjectiveH
 	return cohuo
 }
 
-// SetOwner sets the "owner" field.
-func (cohuo *ControlObjectiveHistoryUpdateOne) SetOwner(s string) *ControlObjectiveHistoryUpdateOne {
-	cohuo.mutation.SetOwner(s)
-	return cohuo
-}
-
-// SetNillableOwner sets the "owner" field if the given value is not nil.
-func (cohuo *ControlObjectiveHistoryUpdateOne) SetNillableOwner(s *string) *ControlObjectiveHistoryUpdateOne {
-	if s != nil {
-		cohuo.SetOwner(*s)
-	}
-	return cohuo
-}
-
-// ClearOwner clears the value of the "owner" field.
-func (cohuo *ControlObjectiveHistoryUpdateOne) ClearOwner() *ControlObjectiveHistoryUpdateOne {
-	cohuo.mutation.ClearOwner()
-	return cohuo
-}
-
 // SetControlNumber sets the "control_number" field.
 func (cohuo *ControlObjectiveHistoryUpdateOne) SetControlNumber(s string) *ControlObjectiveHistoryUpdateOne {
 	cohuo.mutation.SetControlNumber(s)
@@ -765,43 +719,43 @@ func (cohuo *ControlObjectiveHistoryUpdateOne) ClearControlNumber() *ControlObje
 	return cohuo
 }
 
-// SetControlFamily sets the "control_family" field.
-func (cohuo *ControlObjectiveHistoryUpdateOne) SetControlFamily(s string) *ControlObjectiveHistoryUpdateOne {
-	cohuo.mutation.SetControlFamily(s)
+// SetFamily sets the "family" field.
+func (cohuo *ControlObjectiveHistoryUpdateOne) SetFamily(s string) *ControlObjectiveHistoryUpdateOne {
+	cohuo.mutation.SetFamily(s)
 	return cohuo
 }
 
-// SetNillableControlFamily sets the "control_family" field if the given value is not nil.
-func (cohuo *ControlObjectiveHistoryUpdateOne) SetNillableControlFamily(s *string) *ControlObjectiveHistoryUpdateOne {
+// SetNillableFamily sets the "family" field if the given value is not nil.
+func (cohuo *ControlObjectiveHistoryUpdateOne) SetNillableFamily(s *string) *ControlObjectiveHistoryUpdateOne {
 	if s != nil {
-		cohuo.SetControlFamily(*s)
+		cohuo.SetFamily(*s)
 	}
 	return cohuo
 }
 
-// ClearControlFamily clears the value of the "control_family" field.
-func (cohuo *ControlObjectiveHistoryUpdateOne) ClearControlFamily() *ControlObjectiveHistoryUpdateOne {
-	cohuo.mutation.ClearControlFamily()
+// ClearFamily clears the value of the "family" field.
+func (cohuo *ControlObjectiveHistoryUpdateOne) ClearFamily() *ControlObjectiveHistoryUpdateOne {
+	cohuo.mutation.ClearFamily()
 	return cohuo
 }
 
-// SetControlClass sets the "control_class" field.
-func (cohuo *ControlObjectiveHistoryUpdateOne) SetControlClass(s string) *ControlObjectiveHistoryUpdateOne {
-	cohuo.mutation.SetControlClass(s)
+// SetClass sets the "class" field.
+func (cohuo *ControlObjectiveHistoryUpdateOne) SetClass(s string) *ControlObjectiveHistoryUpdateOne {
+	cohuo.mutation.SetClass(s)
 	return cohuo
 }
 
-// SetNillableControlClass sets the "control_class" field if the given value is not nil.
-func (cohuo *ControlObjectiveHistoryUpdateOne) SetNillableControlClass(s *string) *ControlObjectiveHistoryUpdateOne {
+// SetNillableClass sets the "class" field if the given value is not nil.
+func (cohuo *ControlObjectiveHistoryUpdateOne) SetNillableClass(s *string) *ControlObjectiveHistoryUpdateOne {
 	if s != nil {
-		cohuo.SetControlClass(*s)
+		cohuo.SetClass(*s)
 	}
 	return cohuo
 }
 
-// ClearControlClass clears the value of the "control_class" field.
-func (cohuo *ControlObjectiveHistoryUpdateOne) ClearControlClass() *ControlObjectiveHistoryUpdateOne {
-	cohuo.mutation.ClearControlClass()
+// ClearClass clears the value of the "class" field.
+func (cohuo *ControlObjectiveHistoryUpdateOne) ClearClass() *ControlObjectiveHistoryUpdateOne {
+	cohuo.mutation.ClearClass()
 	return cohuo
 }
 
@@ -845,15 +799,15 @@ func (cohuo *ControlObjectiveHistoryUpdateOne) ClearMappedFrameworks() *ControlO
 	return cohuo
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (cohuo *ControlObjectiveHistoryUpdateOne) SetJsonschema(m map[string]interface{}) *ControlObjectiveHistoryUpdateOne {
-	cohuo.mutation.SetJsonschema(m)
+// SetDetails sets the "details" field.
+func (cohuo *ControlObjectiveHistoryUpdateOne) SetDetails(m map[string]interface{}) *ControlObjectiveHistoryUpdateOne {
+	cohuo.mutation.SetDetails(m)
 	return cohuo
 }
 
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (cohuo *ControlObjectiveHistoryUpdateOne) ClearJsonschema() *ControlObjectiveHistoryUpdateOne {
-	cohuo.mutation.ClearJsonschema()
+// ClearDetails clears the value of the "details" field.
+func (cohuo *ControlObjectiveHistoryUpdateOne) ClearDetails() *ControlObjectiveHistoryUpdateOne {
+	cohuo.mutation.ClearDetails()
 	return cohuo
 }
 
@@ -1014,29 +968,23 @@ func (cohuo *ControlObjectiveHistoryUpdateOne) sqlSave(ctx context.Context) (_no
 	if cohuo.mutation.VersionCleared() {
 		_spec.ClearField(controlobjectivehistory.FieldVersion, field.TypeString)
 	}
-	if value, ok := cohuo.mutation.Owner(); ok {
-		_spec.SetField(controlobjectivehistory.FieldOwner, field.TypeString, value)
-	}
-	if cohuo.mutation.OwnerCleared() {
-		_spec.ClearField(controlobjectivehistory.FieldOwner, field.TypeString)
-	}
 	if value, ok := cohuo.mutation.ControlNumber(); ok {
 		_spec.SetField(controlobjectivehistory.FieldControlNumber, field.TypeString, value)
 	}
 	if cohuo.mutation.ControlNumberCleared() {
 		_spec.ClearField(controlobjectivehistory.FieldControlNumber, field.TypeString)
 	}
-	if value, ok := cohuo.mutation.ControlFamily(); ok {
-		_spec.SetField(controlobjectivehistory.FieldControlFamily, field.TypeString, value)
+	if value, ok := cohuo.mutation.Family(); ok {
+		_spec.SetField(controlobjectivehistory.FieldFamily, field.TypeString, value)
 	}
-	if cohuo.mutation.ControlFamilyCleared() {
-		_spec.ClearField(controlobjectivehistory.FieldControlFamily, field.TypeString)
+	if cohuo.mutation.FamilyCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldFamily, field.TypeString)
 	}
-	if value, ok := cohuo.mutation.ControlClass(); ok {
-		_spec.SetField(controlobjectivehistory.FieldControlClass, field.TypeString, value)
+	if value, ok := cohuo.mutation.Class(); ok {
+		_spec.SetField(controlobjectivehistory.FieldClass, field.TypeString, value)
 	}
-	if cohuo.mutation.ControlClassCleared() {
-		_spec.ClearField(controlobjectivehistory.FieldControlClass, field.TypeString)
+	if cohuo.mutation.ClassCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldClass, field.TypeString)
 	}
 	if value, ok := cohuo.mutation.Source(); ok {
 		_spec.SetField(controlobjectivehistory.FieldSource, field.TypeString, value)
@@ -1050,11 +998,11 @@ func (cohuo *ControlObjectiveHistoryUpdateOne) sqlSave(ctx context.Context) (_no
 	if cohuo.mutation.MappedFrameworksCleared() {
 		_spec.ClearField(controlobjectivehistory.FieldMappedFrameworks, field.TypeString)
 	}
-	if value, ok := cohuo.mutation.Jsonschema(); ok {
-		_spec.SetField(controlobjectivehistory.FieldJsonschema, field.TypeJSON, value)
+	if value, ok := cohuo.mutation.Details(); ok {
+		_spec.SetField(controlobjectivehistory.FieldDetails, field.TypeJSON, value)
 	}
-	if cohuo.mutation.JsonschemaCleared() {
-		_spec.ClearField(controlobjectivehistory.FieldJsonschema, field.TypeJSON)
+	if cohuo.mutation.DetailsCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldDetails, field.TypeJSON)
 	}
 	_spec.Node.Schema = cohuo.schemaConfig.ControlObjectiveHistory
 	ctx = internal.NewSchemaConfigContext(ctx, cohuo.schemaConfig)

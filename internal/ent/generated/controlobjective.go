@@ -34,30 +34,28 @@ type ControlObjective struct {
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the name of the control
+	// the name of the control objective
 	Name string `json:"name,omitempty"`
-	// description of the control
+	// description of the control objective
 	Description string `json:"description,omitempty"`
-	// status of the control
+	// status of the control objective
 	Status string `json:"status,omitempty"`
 	// type of the control objective
 	ControlObjectiveType string `json:"control_objective_type,omitempty"`
-	// version of the control
+	// version of the control objective
 	Version string `json:"version,omitempty"`
-	// owner of the control
-	Owner string `json:"owner,omitempty"`
-	// control number
+	// number of the control objective
 	ControlNumber string `json:"control_number,omitempty"`
-	// control family
-	ControlFamily string `json:"control_family,omitempty"`
-	// control class
-	ControlClass string `json:"control_class,omitempty"`
-	// source of the control
+	// family of the control objective
+	Family string `json:"family,omitempty"`
+	// class associated with the control objective
+	Class string `json:"class,omitempty"`
+	// source of the control objective, e.g. framework, template, user-defined, etc.
 	Source string `json:"source,omitempty"`
 	// mapped frameworks
 	MappedFrameworks string `json:"mapped_frameworks,omitempty"`
-	// json schema
-	Jsonschema map[string]interface{} `json:"jsonschema,omitempty"`
+	// json data including details of the control objective
+	Details map[string]interface{} `json:"details,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ControlObjectiveQuery when eager-loading is set.
 	Edges                     ControlObjectiveEdges `json:"edges"`
@@ -164,9 +162,9 @@ func (*ControlObjective) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case controlobjective.FieldTags, controlobjective.FieldJsonschema:
+		case controlobjective.FieldTags, controlobjective.FieldDetails:
 			values[i] = new([]byte)
-		case controlobjective.FieldID, controlobjective.FieldCreatedBy, controlobjective.FieldUpdatedBy, controlobjective.FieldDeletedBy, controlobjective.FieldMappingID, controlobjective.FieldName, controlobjective.FieldDescription, controlobjective.FieldStatus, controlobjective.FieldControlObjectiveType, controlobjective.FieldVersion, controlobjective.FieldOwner, controlobjective.FieldControlNumber, controlobjective.FieldControlFamily, controlobjective.FieldControlClass, controlobjective.FieldSource, controlobjective.FieldMappedFrameworks:
+		case controlobjective.FieldID, controlobjective.FieldCreatedBy, controlobjective.FieldUpdatedBy, controlobjective.FieldDeletedBy, controlobjective.FieldMappingID, controlobjective.FieldName, controlobjective.FieldDescription, controlobjective.FieldStatus, controlobjective.FieldControlObjectiveType, controlobjective.FieldVersion, controlobjective.FieldControlNumber, controlobjective.FieldFamily, controlobjective.FieldClass, controlobjective.FieldSource, controlobjective.FieldMappedFrameworks:
 			values[i] = new(sql.NullString)
 		case controlobjective.FieldCreatedAt, controlobjective.FieldUpdatedAt, controlobjective.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -273,29 +271,23 @@ func (co *ControlObjective) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				co.Version = value.String
 			}
-		case controlobjective.FieldOwner:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field owner", values[i])
-			} else if value.Valid {
-				co.Owner = value.String
-			}
 		case controlobjective.FieldControlNumber:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field control_number", values[i])
 			} else if value.Valid {
 				co.ControlNumber = value.String
 			}
-		case controlobjective.FieldControlFamily:
+		case controlobjective.FieldFamily:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field control_family", values[i])
+				return fmt.Errorf("unexpected type %T for field family", values[i])
 			} else if value.Valid {
-				co.ControlFamily = value.String
+				co.Family = value.String
 			}
-		case controlobjective.FieldControlClass:
+		case controlobjective.FieldClass:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field control_class", values[i])
+				return fmt.Errorf("unexpected type %T for field class", values[i])
 			} else if value.Valid {
-				co.ControlClass = value.String
+				co.Class = value.String
 			}
 		case controlobjective.FieldSource:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -309,12 +301,12 @@ func (co *ControlObjective) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				co.MappedFrameworks = value.String
 			}
-		case controlobjective.FieldJsonschema:
+		case controlobjective.FieldDetails:
 			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field jsonschema", values[i])
+				return fmt.Errorf("unexpected type %T for field details", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &co.Jsonschema); err != nil {
-					return fmt.Errorf("unmarshal field jsonschema: %w", err)
+				if err := json.Unmarshal(*value, &co.Details); err != nil {
+					return fmt.Errorf("unmarshal field details: %w", err)
 				}
 			}
 		case controlobjective.ForeignKeys[0]:
@@ -434,17 +426,14 @@ func (co *ControlObjective) String() string {
 	builder.WriteString("version=")
 	builder.WriteString(co.Version)
 	builder.WriteString(", ")
-	builder.WriteString("owner=")
-	builder.WriteString(co.Owner)
-	builder.WriteString(", ")
 	builder.WriteString("control_number=")
 	builder.WriteString(co.ControlNumber)
 	builder.WriteString(", ")
-	builder.WriteString("control_family=")
-	builder.WriteString(co.ControlFamily)
+	builder.WriteString("family=")
+	builder.WriteString(co.Family)
 	builder.WriteString(", ")
-	builder.WriteString("control_class=")
-	builder.WriteString(co.ControlClass)
+	builder.WriteString("class=")
+	builder.WriteString(co.Class)
 	builder.WriteString(", ")
 	builder.WriteString("source=")
 	builder.WriteString(co.Source)
@@ -452,8 +441,8 @@ func (co *ControlObjective) String() string {
 	builder.WriteString("mapped_frameworks=")
 	builder.WriteString(co.MappedFrameworks)
 	builder.WriteString(", ")
-	builder.WriteString("jsonschema=")
-	builder.WriteString(fmt.Sprintf("%v", co.Jsonschema))
+	builder.WriteString("details=")
+	builder.WriteString(fmt.Sprintf("%v", co.Details))
 	builder.WriteByte(')')
 	return builder.String()
 }

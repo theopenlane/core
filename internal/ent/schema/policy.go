@@ -37,10 +37,10 @@ func (InternalPolicy) Fields() []ent.Field {
 			Comment("purpose and scope"),
 		field.Text("background").
 			Optional().
-			Comment("background"),
-		field.JSON("jsonschema", map[string]interface{}{}).
+			Comment("background of the policy"),
+		field.JSON("details", map[string]interface{}{}).
 			Optional().
-			Comment("json schema"),
+			Comment("json data for the policy document"),
 	}
 }
 

@@ -276,15 +276,15 @@ func (phu *ProcedureHistoryUpdate) ClearSatisfies() *ProcedureHistoryUpdate {
 	return phu
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (phu *ProcedureHistoryUpdate) SetJsonschema(m map[string]interface{}) *ProcedureHistoryUpdate {
-	phu.mutation.SetJsonschema(m)
+// SetDetails sets the "details" field.
+func (phu *ProcedureHistoryUpdate) SetDetails(m map[string]interface{}) *ProcedureHistoryUpdate {
+	phu.mutation.SetDetails(m)
 	return phu
 }
 
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (phu *ProcedureHistoryUpdate) ClearJsonschema() *ProcedureHistoryUpdate {
-	phu.mutation.ClearJsonschema()
+// ClearDetails clears the value of the "details" field.
+func (phu *ProcedureHistoryUpdate) ClearDetails() *ProcedureHistoryUpdate {
+	phu.mutation.ClearDetails()
 	return phu
 }
 
@@ -433,11 +433,11 @@ func (phu *ProcedureHistoryUpdate) sqlSave(ctx context.Context) (n int, err erro
 	if phu.mutation.SatisfiesCleared() {
 		_spec.ClearField(procedurehistory.FieldSatisfies, field.TypeString)
 	}
-	if value, ok := phu.mutation.Jsonschema(); ok {
-		_spec.SetField(procedurehistory.FieldJsonschema, field.TypeJSON, value)
+	if value, ok := phu.mutation.Details(); ok {
+		_spec.SetField(procedurehistory.FieldDetails, field.TypeJSON, value)
 	}
-	if phu.mutation.JsonschemaCleared() {
-		_spec.ClearField(procedurehistory.FieldJsonschema, field.TypeJSON)
+	if phu.mutation.DetailsCleared() {
+		_spec.ClearField(procedurehistory.FieldDetails, field.TypeJSON)
 	}
 	_spec.Node.Schema = phu.schemaConfig.ProcedureHistory
 	ctx = internal.NewSchemaConfigContext(ctx, phu.schemaConfig)
@@ -707,15 +707,15 @@ func (phuo *ProcedureHistoryUpdateOne) ClearSatisfies() *ProcedureHistoryUpdateO
 	return phuo
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (phuo *ProcedureHistoryUpdateOne) SetJsonschema(m map[string]interface{}) *ProcedureHistoryUpdateOne {
-	phuo.mutation.SetJsonschema(m)
+// SetDetails sets the "details" field.
+func (phuo *ProcedureHistoryUpdateOne) SetDetails(m map[string]interface{}) *ProcedureHistoryUpdateOne {
+	phuo.mutation.SetDetails(m)
 	return phuo
 }
 
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (phuo *ProcedureHistoryUpdateOne) ClearJsonschema() *ProcedureHistoryUpdateOne {
-	phuo.mutation.ClearJsonschema()
+// ClearDetails clears the value of the "details" field.
+func (phuo *ProcedureHistoryUpdateOne) ClearDetails() *ProcedureHistoryUpdateOne {
+	phuo.mutation.ClearDetails()
 	return phuo
 }
 
@@ -894,11 +894,11 @@ func (phuo *ProcedureHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Proc
 	if phuo.mutation.SatisfiesCleared() {
 		_spec.ClearField(procedurehistory.FieldSatisfies, field.TypeString)
 	}
-	if value, ok := phuo.mutation.Jsonschema(); ok {
-		_spec.SetField(procedurehistory.FieldJsonschema, field.TypeJSON, value)
+	if value, ok := phuo.mutation.Details(); ok {
+		_spec.SetField(procedurehistory.FieldDetails, field.TypeJSON, value)
 	}
-	if phuo.mutation.JsonschemaCleared() {
-		_spec.ClearField(procedurehistory.FieldJsonschema, field.TypeJSON)
+	if phuo.mutation.DetailsCleared() {
+		_spec.ClearField(procedurehistory.FieldDetails, field.TypeJSON)
 	}
 	_spec.Node.Schema = phuo.schemaConfig.ProcedureHistory
 	ctx = internal.NewSchemaConfigContext(ctx, phuo.schemaConfig)

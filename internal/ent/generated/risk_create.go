@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 // RiskCreate is the builder for creating a Risk entity.
@@ -190,29 +191,29 @@ func (rc *RiskCreate) SetNillableBusinessCosts(s *string) *RiskCreate {
 }
 
 // SetImpact sets the "impact" field.
-func (rc *RiskCreate) SetImpact(s string) *RiskCreate {
-	rc.mutation.SetImpact(s)
+func (rc *RiskCreate) SetImpact(ei enums.RiskImpact) *RiskCreate {
+	rc.mutation.SetImpact(ei)
 	return rc
 }
 
 // SetNillableImpact sets the "impact" field if the given value is not nil.
-func (rc *RiskCreate) SetNillableImpact(s *string) *RiskCreate {
-	if s != nil {
-		rc.SetImpact(*s)
+func (rc *RiskCreate) SetNillableImpact(ei *enums.RiskImpact) *RiskCreate {
+	if ei != nil {
+		rc.SetImpact(*ei)
 	}
 	return rc
 }
 
 // SetLikelihood sets the "likelihood" field.
-func (rc *RiskCreate) SetLikelihood(s string) *RiskCreate {
-	rc.mutation.SetLikelihood(s)
+func (rc *RiskCreate) SetLikelihood(el enums.RiskLikelihood) *RiskCreate {
+	rc.mutation.SetLikelihood(el)
 	return rc
 }
 
 // SetNillableLikelihood sets the "likelihood" field if the given value is not nil.
-func (rc *RiskCreate) SetNillableLikelihood(s *string) *RiskCreate {
-	if s != nil {
-		rc.SetLikelihood(*s)
+func (rc *RiskCreate) SetNillableLikelihood(el *enums.RiskLikelihood) *RiskCreate {
+	if el != nil {
+		rc.SetLikelihood(*el)
 	}
 	return rc
 }
@@ -245,23 +246,9 @@ func (rc *RiskCreate) SetNillableSatisfies(s *string) *RiskCreate {
 	return rc
 }
 
-// SetSeverity sets the "severity" field.
-func (rc *RiskCreate) SetSeverity(s string) *RiskCreate {
-	rc.mutation.SetSeverity(s)
-	return rc
-}
-
-// SetNillableSeverity sets the "severity" field if the given value is not nil.
-func (rc *RiskCreate) SetNillableSeverity(s *string) *RiskCreate {
-	if s != nil {
-		rc.SetSeverity(*s)
-	}
-	return rc
-}
-
-// SetJsonschema sets the "jsonschema" field.
-func (rc *RiskCreate) SetJsonschema(m map[string]interface{}) *RiskCreate {
-	rc.mutation.SetJsonschema(m)
+// SetDetails sets the "details" field.
+func (rc *RiskCreate) SetDetails(m map[string]interface{}) *RiskCreate {
+	rc.mutation.SetDetails(m)
 	return rc
 }
 
@@ -404,6 +391,16 @@ func (rc *RiskCreate) check() error {
 	if _, ok := rc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "Risk.name"`)}
 	}
+	if v, ok := rc.mutation.Impact(); ok {
+		if err := risk.ImpactValidator(v); err != nil {
+			return &ValidationError{Name: "impact", err: fmt.Errorf(`generated: validator failed for field "Risk.impact": %w`, err)}
+		}
+	}
+	if v, ok := rc.mutation.Likelihood(); ok {
+		if err := risk.LikelihoodValidator(v); err != nil {
+			return &ValidationError{Name: "likelihood", err: fmt.Errorf(`generated: validator failed for field "Risk.likelihood": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -493,11 +490,11 @@ func (rc *RiskCreate) createSpec() (*Risk, *sqlgraph.CreateSpec) {
 		_node.BusinessCosts = value
 	}
 	if value, ok := rc.mutation.Impact(); ok {
-		_spec.SetField(risk.FieldImpact, field.TypeString, value)
+		_spec.SetField(risk.FieldImpact, field.TypeEnum, value)
 		_node.Impact = value
 	}
 	if value, ok := rc.mutation.Likelihood(); ok {
-		_spec.SetField(risk.FieldLikelihood, field.TypeString, value)
+		_spec.SetField(risk.FieldLikelihood, field.TypeEnum, value)
 		_node.Likelihood = value
 	}
 	if value, ok := rc.mutation.Mitigation(); ok {
@@ -508,13 +505,9 @@ func (rc *RiskCreate) createSpec() (*Risk, *sqlgraph.CreateSpec) {
 		_spec.SetField(risk.FieldSatisfies, field.TypeString, value)
 		_node.Satisfies = value
 	}
-	if value, ok := rc.mutation.Severity(); ok {
-		_spec.SetField(risk.FieldSeverity, field.TypeString, value)
-		_node.Severity = value
-	}
-	if value, ok := rc.mutation.Jsonschema(); ok {
-		_spec.SetField(risk.FieldJsonschema, field.TypeJSON, value)
-		_node.Jsonschema = value
+	if value, ok := rc.mutation.Details(); ok {
+		_spec.SetField(risk.FieldDetails, field.TypeJSON, value)
+		_node.Details = value
 	}
 	if nodes := rc.mutation.ControlIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

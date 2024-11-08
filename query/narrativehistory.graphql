@@ -7,9 +7,9 @@ query GetAllNarrativeHistories {
         createdAt
         createdBy
         description
+        details
         historyTime
         id
-        jsonschema
         name
         operation
         ref
@@ -29,9 +29,9 @@ query GetNarrativeHistories($where: NarrativeHistoryWhereInput) {
         createdAt
         createdBy
         description
+        details
         historyTime
         id
-        jsonschema
         name
         operation
         ref

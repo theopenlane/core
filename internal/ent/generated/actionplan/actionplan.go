@@ -37,20 +37,22 @@ const (
 	FieldDescription = "description"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
-	// FieldAssigned holds the string denoting the assigned field in the database.
-	FieldAssigned = "assigned"
 	// FieldDueDate holds the string denoting the due_date field in the database.
 	FieldDueDate = "due_date"
 	// FieldPriority holds the string denoting the priority field in the database.
 	FieldPriority = "priority"
 	// FieldSource holds the string denoting the source field in the database.
 	FieldSource = "source"
-	// FieldJsonschema holds the string denoting the jsonschema field in the database.
-	FieldJsonschema = "jsonschema"
+	// FieldDetails holds the string denoting the details field in the database.
+	FieldDetails = "details"
 	// EdgeStandard holds the string denoting the standard edge name in mutations.
 	EdgeStandard = "standard"
 	// EdgeRisk holds the string denoting the risk edge name in mutations.
 	EdgeRisk = "risk"
+	// EdgeControl holds the string denoting the control edge name in mutations.
+	EdgeControl = "control"
+	// EdgeUser holds the string denoting the user edge name in mutations.
+	EdgeUser = "user"
 	// Table holds the table name of the actionplan in the database.
 	Table = "action_plans"
 	// StandardTable is the table that holds the standard relation/edge. The primary key declared below.
@@ -63,6 +65,16 @@ const (
 	// RiskInverseTable is the table name for the Risk entity.
 	// It exists in this package in order to avoid circular dependency with the "risk" package.
 	RiskInverseTable = "risks"
+	// ControlTable is the table that holds the control relation/edge. The primary key declared below.
+	ControlTable = "control_actionplans"
+	// ControlInverseTable is the table name for the Control entity.
+	// It exists in this package in order to avoid circular dependency with the "control" package.
+	ControlInverseTable = "controls"
+	// UserTable is the table that holds the user relation/edge. The primary key declared below.
+	UserTable = "user_actionplans"
+	// UserInverseTable is the table name for the User entity.
+	// It exists in this package in order to avoid circular dependency with the "user" package.
+	UserInverseTable = "users"
 )
 
 // Columns holds all SQL columns for actionplan fields.
@@ -79,11 +91,10 @@ var Columns = []string{
 	FieldName,
 	FieldDescription,
 	FieldStatus,
-	FieldAssigned,
 	FieldDueDate,
 	FieldPriority,
 	FieldSource,
-	FieldJsonschema,
+	FieldDetails,
 }
 
 var (
@@ -93,6 +104,12 @@ var (
 	// RiskPrimaryKey and RiskColumn2 are the table columns denoting the
 	// primary key for the risk relation (M2M).
 	RiskPrimaryKey = []string{"risk_id", "action_plan_id"}
+	// ControlPrimaryKey and ControlColumn2 are the table columns denoting the
+	// primary key for the control relation (M2M).
+	ControlPrimaryKey = []string{"control_id", "action_plan_id"}
+	// UserPrimaryKey and UserColumn2 are the table columns denoting the
+	// primary key for the user relation (M2M).
+	UserPrimaryKey = []string{"user_id", "action_plan_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -185,11 +202,6 @@ func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
 }
 
-// ByAssigned orders the results by the assigned field.
-func ByAssigned(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldAssigned, opts...).ToFunc()
-}
-
 // ByDueDate orders the results by the due_date field.
 func ByDueDate(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDueDate, opts...).ToFunc()
@@ -232,6 +244,34 @@ func ByRisk(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newRiskStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByControlCount orders the results by control count.
+func ByControlCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newControlStep(), opts...)
+	}
+}
+
+// ByControl orders the results by control terms.
+func ByControl(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newControlStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByUserCount orders the results by user count.
+func ByUserCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newUserStep(), opts...)
+	}
+}
+
+// ByUser orders the results by user terms.
+func ByUser(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newUserStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newStandardStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -244,5 +284,19 @@ func newRiskStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(RiskInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, RiskTable, RiskPrimaryKey...),
+	)
+}
+func newControlStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ControlInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ControlTable, ControlPrimaryKey...),
+	)
+}
+func newUserStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(UserInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, UserTable, UserPrimaryKey...),
 	)
 }

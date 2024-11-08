@@ -176,15 +176,15 @@ func (nhu *NarrativeHistoryUpdate) ClearSatisfies() *NarrativeHistoryUpdate {
 	return nhu
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (nhu *NarrativeHistoryUpdate) SetJsonschema(m map[string]interface{}) *NarrativeHistoryUpdate {
-	nhu.mutation.SetJsonschema(m)
+// SetDetails sets the "details" field.
+func (nhu *NarrativeHistoryUpdate) SetDetails(m map[string]interface{}) *NarrativeHistoryUpdate {
+	nhu.mutation.SetDetails(m)
 	return nhu
 }
 
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (nhu *NarrativeHistoryUpdate) ClearJsonschema() *NarrativeHistoryUpdate {
-	nhu.mutation.ClearJsonschema()
+// ClearDetails clears the value of the "details" field.
+func (nhu *NarrativeHistoryUpdate) ClearDetails() *NarrativeHistoryUpdate {
+	nhu.mutation.ClearDetails()
 	return nhu
 }
 
@@ -303,11 +303,11 @@ func (nhu *NarrativeHistoryUpdate) sqlSave(ctx context.Context) (n int, err erro
 	if nhu.mutation.SatisfiesCleared() {
 		_spec.ClearField(narrativehistory.FieldSatisfies, field.TypeString)
 	}
-	if value, ok := nhu.mutation.Jsonschema(); ok {
-		_spec.SetField(narrativehistory.FieldJsonschema, field.TypeJSON, value)
+	if value, ok := nhu.mutation.Details(); ok {
+		_spec.SetField(narrativehistory.FieldDetails, field.TypeJSON, value)
 	}
-	if nhu.mutation.JsonschemaCleared() {
-		_spec.ClearField(narrativehistory.FieldJsonschema, field.TypeJSON)
+	if nhu.mutation.DetailsCleared() {
+		_spec.ClearField(narrativehistory.FieldDetails, field.TypeJSON)
 	}
 	_spec.Node.Schema = nhu.schemaConfig.NarrativeHistory
 	ctx = internal.NewSchemaConfigContext(ctx, nhu.schemaConfig)
@@ -477,15 +477,15 @@ func (nhuo *NarrativeHistoryUpdateOne) ClearSatisfies() *NarrativeHistoryUpdateO
 	return nhuo
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (nhuo *NarrativeHistoryUpdateOne) SetJsonschema(m map[string]interface{}) *NarrativeHistoryUpdateOne {
-	nhuo.mutation.SetJsonschema(m)
+// SetDetails sets the "details" field.
+func (nhuo *NarrativeHistoryUpdateOne) SetDetails(m map[string]interface{}) *NarrativeHistoryUpdateOne {
+	nhuo.mutation.SetDetails(m)
 	return nhuo
 }
 
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (nhuo *NarrativeHistoryUpdateOne) ClearJsonschema() *NarrativeHistoryUpdateOne {
-	nhuo.mutation.ClearJsonschema()
+// ClearDetails clears the value of the "details" field.
+func (nhuo *NarrativeHistoryUpdateOne) ClearDetails() *NarrativeHistoryUpdateOne {
+	nhuo.mutation.ClearDetails()
 	return nhuo
 }
 
@@ -634,11 +634,11 @@ func (nhuo *NarrativeHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Narr
 	if nhuo.mutation.SatisfiesCleared() {
 		_spec.ClearField(narrativehistory.FieldSatisfies, field.TypeString)
 	}
-	if value, ok := nhuo.mutation.Jsonschema(); ok {
-		_spec.SetField(narrativehistory.FieldJsonschema, field.TypeJSON, value)
+	if value, ok := nhuo.mutation.Details(); ok {
+		_spec.SetField(narrativehistory.FieldDetails, field.TypeJSON, value)
 	}
-	if nhuo.mutation.JsonschemaCleared() {
-		_spec.ClearField(narrativehistory.FieldJsonschema, field.TypeJSON)
+	if nhuo.mutation.DetailsCleared() {
+		_spec.ClearField(narrativehistory.FieldDetails, field.TypeJSON)
 	}
 	_spec.Node.Schema = nhuo.schemaConfig.NarrativeHistory
 	ctx = internal.NewSchemaConfigContext(ctx, nhuo.schemaConfig)

@@ -89,10 +89,6 @@ func (m *ActionPlanMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetStatus(status)
 	}
 
-	if assigned, exists := m.Assigned(); exists {
-		create = create.SetAssigned(assigned)
-	}
-
 	if dueDate, exists := m.DueDate(); exists {
 		create = create.SetDueDate(dueDate)
 	}
@@ -105,8 +101,8 @@ func (m *ActionPlanMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetSource(source)
 	}
 
-	if jsonschema, exists := m.Jsonschema(); exists {
-		create = create.SetJsonschema(jsonschema)
+	if details, exists := m.Details(); exists {
+		create = create.SetDetails(details)
 	}
 
 	_, err := create.Save(ctx)
@@ -205,12 +201,6 @@ func (m *ActionPlanMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetStatus(actionplan.Status)
 		}
 
-		if assigned, exists := m.Assigned(); exists {
-			create = create.SetAssigned(assigned)
-		} else {
-			create = create.SetAssigned(actionplan.Assigned)
-		}
-
 		if dueDate, exists := m.DueDate(); exists {
 			create = create.SetDueDate(dueDate)
 		} else {
@@ -229,10 +219,10 @@ func (m *ActionPlanMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetSource(actionplan.Source)
 		}
 
-		if jsonschema, exists := m.Jsonschema(); exists {
-			create = create.SetJsonschema(jsonschema)
+		if details, exists := m.Details(); exists {
+			create = create.SetDetails(details)
 		} else {
-			create = create.SetJsonschema(actionplan.Jsonschema)
+			create = create.SetDetails(actionplan.Details)
 		}
 
 		if _, err := create.Save(ctx); err != nil {
@@ -278,11 +268,10 @@ func (m *ActionPlanMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetName(actionplan.Name).
 			SetDescription(actionplan.Description).
 			SetStatus(actionplan.Status).
-			SetAssigned(actionplan.Assigned).
 			SetDueDate(actionplan.DueDate).
 			SetPriority(actionplan.Priority).
 			SetSource(actionplan.Source).
-			SetJsonschema(actionplan.Jsonschema).
+			SetDetails(actionplan.Details).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -621,20 +610,16 @@ func (m *ControlMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetVersion(version)
 	}
 
-	if owner, exists := m.Owner(); exists {
-		create = create.SetOwner(owner)
-	}
-
 	if controlNumber, exists := m.ControlNumber(); exists {
 		create = create.SetControlNumber(controlNumber)
 	}
 
-	if controlFamily, exists := m.ControlFamily(); exists {
-		create = create.SetControlFamily(controlFamily)
+	if family, exists := m.Family(); exists {
+		create = create.SetFamily(family)
 	}
 
-	if controlClass, exists := m.ControlClass(); exists {
-		create = create.SetControlClass(controlClass)
+	if class, exists := m.Class(); exists {
+		create = create.SetClass(class)
 	}
 
 	if source, exists := m.Source(); exists {
@@ -649,8 +634,8 @@ func (m *ControlMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetMappedFrameworks(mappedFrameworks)
 	}
 
-	if jsonschema, exists := m.Jsonschema(); exists {
-		create = create.SetJsonschema(jsonschema)
+	if details, exists := m.Details(); exists {
+		create = create.SetDetails(details)
 	}
 
 	_, err := create.Save(ctx)
@@ -761,28 +746,22 @@ func (m *ControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetVersion(control.Version)
 		}
 
-		if owner, exists := m.Owner(); exists {
-			create = create.SetOwner(owner)
-		} else {
-			create = create.SetOwner(control.Owner)
-		}
-
 		if controlNumber, exists := m.ControlNumber(); exists {
 			create = create.SetControlNumber(controlNumber)
 		} else {
 			create = create.SetControlNumber(control.ControlNumber)
 		}
 
-		if controlFamily, exists := m.ControlFamily(); exists {
-			create = create.SetControlFamily(controlFamily)
+		if family, exists := m.Family(); exists {
+			create = create.SetFamily(family)
 		} else {
-			create = create.SetControlFamily(control.ControlFamily)
+			create = create.SetFamily(control.Family)
 		}
 
-		if controlClass, exists := m.ControlClass(); exists {
-			create = create.SetControlClass(controlClass)
+		if class, exists := m.Class(); exists {
+			create = create.SetClass(class)
 		} else {
-			create = create.SetControlClass(control.ControlClass)
+			create = create.SetClass(control.Class)
 		}
 
 		if source, exists := m.Source(); exists {
@@ -803,10 +782,10 @@ func (m *ControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetMappedFrameworks(control.MappedFrameworks)
 		}
 
-		if jsonschema, exists := m.Jsonschema(); exists {
-			create = create.SetJsonschema(jsonschema)
+		if details, exists := m.Details(); exists {
+			create = create.SetDetails(details)
 		} else {
-			create = create.SetJsonschema(control.Jsonschema)
+			create = create.SetDetails(control.Details)
 		}
 
 		if _, err := create.Save(ctx); err != nil {
@@ -854,14 +833,13 @@ func (m *ControlMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetStatus(control.Status).
 			SetControlType(control.ControlType).
 			SetVersion(control.Version).
-			SetOwner(control.Owner).
 			SetControlNumber(control.ControlNumber).
-			SetControlFamily(control.ControlFamily).
-			SetControlClass(control.ControlClass).
+			SetFamily(control.Family).
+			SetClass(control.Class).
 			SetSource(control.Source).
 			SetSatisfies(control.Satisfies).
 			SetMappedFrameworks(control.MappedFrameworks).
-			SetJsonschema(control.Jsonschema).
+			SetDetails(control.Details).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -938,20 +916,16 @@ func (m *ControlObjectiveMutation) CreateHistoryFromCreate(ctx context.Context) 
 		create = create.SetVersion(version)
 	}
 
-	if owner, exists := m.Owner(); exists {
-		create = create.SetOwner(owner)
-	}
-
 	if controlNumber, exists := m.ControlNumber(); exists {
 		create = create.SetControlNumber(controlNumber)
 	}
 
-	if controlFamily, exists := m.ControlFamily(); exists {
-		create = create.SetControlFamily(controlFamily)
+	if family, exists := m.Family(); exists {
+		create = create.SetFamily(family)
 	}
 
-	if controlClass, exists := m.ControlClass(); exists {
-		create = create.SetControlClass(controlClass)
+	if class, exists := m.Class(); exists {
+		create = create.SetClass(class)
 	}
 
 	if source, exists := m.Source(); exists {
@@ -962,8 +936,8 @@ func (m *ControlObjectiveMutation) CreateHistoryFromCreate(ctx context.Context) 
 		create = create.SetMappedFrameworks(mappedFrameworks)
 	}
 
-	if jsonschema, exists := m.Jsonschema(); exists {
-		create = create.SetJsonschema(jsonschema)
+	if details, exists := m.Details(); exists {
+		create = create.SetDetails(details)
 	}
 
 	_, err := create.Save(ctx)
@@ -1074,28 +1048,22 @@ func (m *ControlObjectiveMutation) CreateHistoryFromUpdate(ctx context.Context) 
 			create = create.SetVersion(controlobjective.Version)
 		}
 
-		if owner, exists := m.Owner(); exists {
-			create = create.SetOwner(owner)
-		} else {
-			create = create.SetOwner(controlobjective.Owner)
-		}
-
 		if controlNumber, exists := m.ControlNumber(); exists {
 			create = create.SetControlNumber(controlNumber)
 		} else {
 			create = create.SetControlNumber(controlobjective.ControlNumber)
 		}
 
-		if controlFamily, exists := m.ControlFamily(); exists {
-			create = create.SetControlFamily(controlFamily)
+		if family, exists := m.Family(); exists {
+			create = create.SetFamily(family)
 		} else {
-			create = create.SetControlFamily(controlobjective.ControlFamily)
+			create = create.SetFamily(controlobjective.Family)
 		}
 
-		if controlClass, exists := m.ControlClass(); exists {
-			create = create.SetControlClass(controlClass)
+		if class, exists := m.Class(); exists {
+			create = create.SetClass(class)
 		} else {
-			create = create.SetControlClass(controlobjective.ControlClass)
+			create = create.SetClass(controlobjective.Class)
 		}
 
 		if source, exists := m.Source(); exists {
@@ -1110,10 +1078,10 @@ func (m *ControlObjectiveMutation) CreateHistoryFromUpdate(ctx context.Context) 
 			create = create.SetMappedFrameworks(controlobjective.MappedFrameworks)
 		}
 
-		if jsonschema, exists := m.Jsonschema(); exists {
-			create = create.SetJsonschema(jsonschema)
+		if details, exists := m.Details(); exists {
+			create = create.SetDetails(details)
 		} else {
-			create = create.SetJsonschema(controlobjective.Jsonschema)
+			create = create.SetDetails(controlobjective.Details)
 		}
 
 		if _, err := create.Save(ctx); err != nil {
@@ -1161,13 +1129,12 @@ func (m *ControlObjectiveMutation) CreateHistoryFromDelete(ctx context.Context) 
 			SetStatus(controlobjective.Status).
 			SetControlObjectiveType(controlobjective.ControlObjectiveType).
 			SetVersion(controlobjective.Version).
-			SetOwner(controlobjective.Owner).
 			SetControlNumber(controlobjective.ControlNumber).
-			SetControlFamily(controlobjective.ControlFamily).
-			SetControlClass(controlobjective.ControlClass).
+			SetFamily(controlobjective.Family).
+			SetClass(controlobjective.Class).
 			SetSource(controlobjective.Source).
 			SetMappedFrameworks(controlobjective.MappedFrameworks).
-			SetJsonschema(controlobjective.Jsonschema).
+			SetDetails(controlobjective.Details).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -4491,8 +4458,8 @@ func (m *InternalPolicyMutation) CreateHistoryFromCreate(ctx context.Context) er
 		create = create.SetBackground(background)
 	}
 
-	if jsonschema, exists := m.Jsonschema(); exists {
-		create = create.SetJsonschema(jsonschema)
+	if details, exists := m.Details(); exists {
+		create = create.SetDetails(details)
 	}
 
 	_, err := create.Save(ctx)
@@ -4615,10 +4582,10 @@ func (m *InternalPolicyMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetBackground(internalpolicy.Background)
 		}
 
-		if jsonschema, exists := m.Jsonschema(); exists {
-			create = create.SetJsonschema(jsonschema)
+		if details, exists := m.Details(); exists {
+			create = create.SetDetails(details)
 		} else {
-			create = create.SetJsonschema(internalpolicy.Jsonschema)
+			create = create.SetDetails(internalpolicy.Details)
 		}
 
 		if _, err := create.Save(ctx); err != nil {
@@ -4668,7 +4635,7 @@ func (m *InternalPolicyMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetVersion(internalpolicy.Version).
 			SetPurposeAndScope(internalpolicy.PurposeAndScope).
 			SetBackground(internalpolicy.Background).
-			SetJsonschema(internalpolicy.Jsonschema).
+			SetDetails(internalpolicy.Details).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -4737,8 +4704,8 @@ func (m *NarrativeMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetSatisfies(satisfies)
 	}
 
-	if jsonschema, exists := m.Jsonschema(); exists {
-		create = create.SetJsonschema(jsonschema)
+	if details, exists := m.Details(); exists {
+		create = create.SetDetails(details)
 	}
 
 	_, err := create.Save(ctx)
@@ -4837,10 +4804,10 @@ func (m *NarrativeMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetSatisfies(narrative.Satisfies)
 		}
 
-		if jsonschema, exists := m.Jsonschema(); exists {
-			create = create.SetJsonschema(jsonschema)
+		if details, exists := m.Details(); exists {
+			create = create.SetDetails(details)
 		} else {
-			create = create.SetJsonschema(narrative.Jsonschema)
+			create = create.SetDetails(narrative.Details)
 		}
 
 		if _, err := create.Save(ctx); err != nil {
@@ -4886,7 +4853,7 @@ func (m *NarrativeMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetName(narrative.Name).
 			SetDescription(narrative.Description).
 			SetSatisfies(narrative.Satisfies).
-			SetJsonschema(narrative.Jsonschema).
+			SetDetails(narrative.Details).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -6164,8 +6131,8 @@ func (m *ProcedureMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetSatisfies(satisfies)
 	}
 
-	if jsonschema, exists := m.Jsonschema(); exists {
-		create = create.SetJsonschema(jsonschema)
+	if details, exists := m.Details(); exists {
+		create = create.SetDetails(details)
 	}
 
 	_, err := create.Save(ctx)
@@ -6294,10 +6261,10 @@ func (m *ProcedureMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetSatisfies(procedure.Satisfies)
 		}
 
-		if jsonschema, exists := m.Jsonschema(); exists {
-			create = create.SetJsonschema(jsonschema)
+		if details, exists := m.Details(); exists {
+			create = create.SetDetails(details)
 		} else {
-			create = create.SetJsonschema(procedure.Jsonschema)
+			create = create.SetDetails(procedure.Details)
 		}
 
 		if _, err := create.Save(ctx); err != nil {
@@ -6348,7 +6315,7 @@ func (m *ProcedureMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetPurposeAndScope(procedure.PurposeAndScope).
 			SetBackground(procedure.Background).
 			SetSatisfies(procedure.Satisfies).
-			SetJsonschema(procedure.Jsonschema).
+			SetDetails(procedure.Details).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -6441,12 +6408,8 @@ func (m *RiskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetSatisfies(satisfies)
 	}
 
-	if severity, exists := m.Severity(); exists {
-		create = create.SetSeverity(severity)
-	}
-
-	if jsonschema, exists := m.Jsonschema(); exists {
-		create = create.SetJsonschema(jsonschema)
+	if details, exists := m.Details(); exists {
+		create = create.SetDetails(details)
 	}
 
 	_, err := create.Save(ctx)
@@ -6581,16 +6544,10 @@ func (m *RiskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetSatisfies(risk.Satisfies)
 		}
 
-		if severity, exists := m.Severity(); exists {
-			create = create.SetSeverity(severity)
+		if details, exists := m.Details(); exists {
+			create = create.SetDetails(details)
 		} else {
-			create = create.SetSeverity(risk.Severity)
-		}
-
-		if jsonschema, exists := m.Jsonschema(); exists {
-			create = create.SetJsonschema(jsonschema)
-		} else {
-			create = create.SetJsonschema(risk.Jsonschema)
+			create = create.SetDetails(risk.Details)
 		}
 
 		if _, err := create.Save(ctx); err != nil {
@@ -6642,8 +6599,7 @@ func (m *RiskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetLikelihood(risk.Likelihood).
 			SetMitigation(risk.Mitigation).
 			SetSatisfies(risk.Satisfies).
-			SetSeverity(risk.Severity).
-			SetJsonschema(risk.Jsonschema).
+			SetDetails(risk.Details).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -6736,8 +6692,8 @@ func (m *StandardMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetSatisfies(satisfies)
 	}
 
-	if jsonschema, exists := m.Jsonschema(); exists {
-		create = create.SetJsonschema(jsonschema)
+	if details, exists := m.Details(); exists {
+		create = create.SetDetails(details)
 	}
 
 	_, err := create.Save(ctx)
@@ -6872,10 +6828,10 @@ func (m *StandardMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetSatisfies(standard.Satisfies)
 		}
 
-		if jsonschema, exists := m.Jsonschema(); exists {
-			create = create.SetJsonschema(jsonschema)
+		if details, exists := m.Details(); exists {
+			create = create.SetDetails(details)
 		} else {
-			create = create.SetJsonschema(standard.Jsonschema)
+			create = create.SetDetails(standard.Details)
 		}
 
 		if _, err := create.Save(ctx); err != nil {
@@ -6927,7 +6883,7 @@ func (m *StandardMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetPurposeAndScope(standard.PurposeAndScope).
 			SetBackground(standard.Background).
 			SetSatisfies(standard.Satisfies).
-			SetJsonschema(standard.Jsonschema).
+			SetDetails(standard.Details).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -7004,20 +6960,16 @@ func (m *SubcontrolMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetVersion(version)
 	}
 
-	if owner, exists := m.Owner(); exists {
-		create = create.SetOwner(owner)
-	}
-
 	if subcontrolNumber, exists := m.SubcontrolNumber(); exists {
 		create = create.SetSubcontrolNumber(subcontrolNumber)
 	}
 
-	if subcontrolFamily, exists := m.SubcontrolFamily(); exists {
-		create = create.SetSubcontrolFamily(subcontrolFamily)
+	if family, exists := m.Family(); exists {
+		create = create.SetFamily(family)
 	}
 
-	if subcontrolClass, exists := m.SubcontrolClass(); exists {
-		create = create.SetSubcontrolClass(subcontrolClass)
+	if class, exists := m.Class(); exists {
+		create = create.SetClass(class)
 	}
 
 	if source, exists := m.Source(); exists {
@@ -7028,24 +6980,16 @@ func (m *SubcontrolMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetMappedFrameworks(mappedFrameworks)
 	}
 
-	if assignedTo, exists := m.AssignedTo(); exists {
-		create = create.SetAssignedTo(assignedTo)
+	if implementationEvidence, exists := m.ImplementationEvidence(); exists {
+		create = create.SetImplementationEvidence(implementationEvidence)
 	}
 
 	if implementationStatus, exists := m.ImplementationStatus(); exists {
 		create = create.SetImplementationStatus(implementationStatus)
 	}
 
-	if implementationNotes, exists := m.ImplementationNotes(); exists {
-		create = create.SetImplementationNotes(implementationNotes)
-	}
-
 	if implementationDate, exists := m.ImplementationDate(); exists {
 		create = create.SetImplementationDate(implementationDate)
-	}
-
-	if implementationEvidence, exists := m.ImplementationEvidence(); exists {
-		create = create.SetImplementationEvidence(implementationEvidence)
 	}
 
 	if implementationVerification, exists := m.ImplementationVerification(); exists {
@@ -7056,8 +7000,8 @@ func (m *SubcontrolMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetImplementationVerificationDate(implementationVerificationDate)
 	}
 
-	if jsonschema, exists := m.Jsonschema(); exists {
-		create = create.SetJsonschema(jsonschema)
+	if details, exists := m.Details(); exists {
+		create = create.SetDetails(details)
 	}
 
 	_, err := create.Save(ctx)
@@ -7168,28 +7112,22 @@ func (m *SubcontrolMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetVersion(subcontrol.Version)
 		}
 
-		if owner, exists := m.Owner(); exists {
-			create = create.SetOwner(owner)
-		} else {
-			create = create.SetOwner(subcontrol.Owner)
-		}
-
 		if subcontrolNumber, exists := m.SubcontrolNumber(); exists {
 			create = create.SetSubcontrolNumber(subcontrolNumber)
 		} else {
 			create = create.SetSubcontrolNumber(subcontrol.SubcontrolNumber)
 		}
 
-		if subcontrolFamily, exists := m.SubcontrolFamily(); exists {
-			create = create.SetSubcontrolFamily(subcontrolFamily)
+		if family, exists := m.Family(); exists {
+			create = create.SetFamily(family)
 		} else {
-			create = create.SetSubcontrolFamily(subcontrol.SubcontrolFamily)
+			create = create.SetFamily(subcontrol.Family)
 		}
 
-		if subcontrolClass, exists := m.SubcontrolClass(); exists {
-			create = create.SetSubcontrolClass(subcontrolClass)
+		if class, exists := m.Class(); exists {
+			create = create.SetClass(class)
 		} else {
-			create = create.SetSubcontrolClass(subcontrol.SubcontrolClass)
+			create = create.SetClass(subcontrol.Class)
 		}
 
 		if source, exists := m.Source(); exists {
@@ -7204,10 +7142,10 @@ func (m *SubcontrolMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetMappedFrameworks(subcontrol.MappedFrameworks)
 		}
 
-		if assignedTo, exists := m.AssignedTo(); exists {
-			create = create.SetAssignedTo(assignedTo)
+		if implementationEvidence, exists := m.ImplementationEvidence(); exists {
+			create = create.SetImplementationEvidence(implementationEvidence)
 		} else {
-			create = create.SetAssignedTo(subcontrol.AssignedTo)
+			create = create.SetImplementationEvidence(subcontrol.ImplementationEvidence)
 		}
 
 		if implementationStatus, exists := m.ImplementationStatus(); exists {
@@ -7216,22 +7154,10 @@ func (m *SubcontrolMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetImplementationStatus(subcontrol.ImplementationStatus)
 		}
 
-		if implementationNotes, exists := m.ImplementationNotes(); exists {
-			create = create.SetImplementationNotes(implementationNotes)
-		} else {
-			create = create.SetImplementationNotes(subcontrol.ImplementationNotes)
-		}
-
 		if implementationDate, exists := m.ImplementationDate(); exists {
 			create = create.SetImplementationDate(implementationDate)
 		} else {
 			create = create.SetImplementationDate(subcontrol.ImplementationDate)
-		}
-
-		if implementationEvidence, exists := m.ImplementationEvidence(); exists {
-			create = create.SetImplementationEvidence(implementationEvidence)
-		} else {
-			create = create.SetImplementationEvidence(subcontrol.ImplementationEvidence)
 		}
 
 		if implementationVerification, exists := m.ImplementationVerification(); exists {
@@ -7246,10 +7172,10 @@ func (m *SubcontrolMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetImplementationVerificationDate(subcontrol.ImplementationVerificationDate)
 		}
 
-		if jsonschema, exists := m.Jsonschema(); exists {
-			create = create.SetJsonschema(jsonschema)
+		if details, exists := m.Details(); exists {
+			create = create.SetDetails(details)
 		} else {
-			create = create.SetJsonschema(subcontrol.Jsonschema)
+			create = create.SetDetails(subcontrol.Details)
 		}
 
 		if _, err := create.Save(ctx); err != nil {
@@ -7297,20 +7223,17 @@ func (m *SubcontrolMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetStatus(subcontrol.Status).
 			SetSubcontrolType(subcontrol.SubcontrolType).
 			SetVersion(subcontrol.Version).
-			SetOwner(subcontrol.Owner).
 			SetSubcontrolNumber(subcontrol.SubcontrolNumber).
-			SetSubcontrolFamily(subcontrol.SubcontrolFamily).
-			SetSubcontrolClass(subcontrol.SubcontrolClass).
+			SetFamily(subcontrol.Family).
+			SetClass(subcontrol.Class).
 			SetSource(subcontrol.Source).
 			SetMappedFrameworks(subcontrol.MappedFrameworks).
-			SetAssignedTo(subcontrol.AssignedTo).
-			SetImplementationStatus(subcontrol.ImplementationStatus).
-			SetImplementationNotes(subcontrol.ImplementationNotes).
-			SetImplementationDate(subcontrol.ImplementationDate).
 			SetImplementationEvidence(subcontrol.ImplementationEvidence).
+			SetImplementationStatus(subcontrol.ImplementationStatus).
+			SetImplementationDate(subcontrol.ImplementationDate).
 			SetImplementationVerification(subcontrol.ImplementationVerification).
 			SetImplementationVerificationDate(subcontrol.ImplementationVerificationDate).
-			SetJsonschema(subcontrol.Jsonschema).
+			SetDetails(subcontrol.Details).
 			Save(ctx)
 		if err != nil {
 			return err

@@ -180,15 +180,15 @@ func (nu *NarrativeUpdate) ClearSatisfies() *NarrativeUpdate {
 	return nu
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (nu *NarrativeUpdate) SetJsonschema(m map[string]interface{}) *NarrativeUpdate {
-	nu.mutation.SetJsonschema(m)
+// SetDetails sets the "details" field.
+func (nu *NarrativeUpdate) SetDetails(m map[string]interface{}) *NarrativeUpdate {
+	nu.mutation.SetDetails(m)
 	return nu
 }
 
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (nu *NarrativeUpdate) ClearJsonschema() *NarrativeUpdate {
-	nu.mutation.ClearJsonschema()
+// ClearDetails clears the value of the "details" field.
+func (nu *NarrativeUpdate) ClearDetails() *NarrativeUpdate {
+	nu.mutation.ClearDetails()
 	return nu
 }
 
@@ -454,11 +454,11 @@ func (nu *NarrativeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if nu.mutation.SatisfiesCleared() {
 		_spec.ClearField(narrative.FieldSatisfies, field.TypeString)
 	}
-	if value, ok := nu.mutation.Jsonschema(); ok {
-		_spec.SetField(narrative.FieldJsonschema, field.TypeJSON, value)
+	if value, ok := nu.mutation.Details(); ok {
+		_spec.SetField(narrative.FieldDetails, field.TypeJSON, value)
 	}
-	if nu.mutation.JsonschemaCleared() {
-		_spec.ClearField(narrative.FieldJsonschema, field.TypeJSON)
+	if nu.mutation.DetailsCleared() {
+		_spec.ClearField(narrative.FieldDetails, field.TypeJSON)
 	}
 	if nu.mutation.PolicyCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -820,15 +820,15 @@ func (nuo *NarrativeUpdateOne) ClearSatisfies() *NarrativeUpdateOne {
 	return nuo
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (nuo *NarrativeUpdateOne) SetJsonschema(m map[string]interface{}) *NarrativeUpdateOne {
-	nuo.mutation.SetJsonschema(m)
+// SetDetails sets the "details" field.
+func (nuo *NarrativeUpdateOne) SetDetails(m map[string]interface{}) *NarrativeUpdateOne {
+	nuo.mutation.SetDetails(m)
 	return nuo
 }
 
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (nuo *NarrativeUpdateOne) ClearJsonschema() *NarrativeUpdateOne {
-	nuo.mutation.ClearJsonschema()
+// ClearDetails clears the value of the "details" field.
+func (nuo *NarrativeUpdateOne) ClearDetails() *NarrativeUpdateOne {
+	nuo.mutation.ClearDetails()
 	return nuo
 }
 
@@ -1124,11 +1124,11 @@ func (nuo *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, e
 	if nuo.mutation.SatisfiesCleared() {
 		_spec.ClearField(narrative.FieldSatisfies, field.TypeString)
 	}
-	if value, ok := nuo.mutation.Jsonschema(); ok {
-		_spec.SetField(narrative.FieldJsonschema, field.TypeJSON, value)
+	if value, ok := nuo.mutation.Details(); ok {
+		_spec.SetField(narrative.FieldDetails, field.TypeJSON, value)
 	}
-	if nuo.mutation.JsonschemaCleared() {
-		_spec.ClearField(narrative.FieldJsonschema, field.TypeJSON)
+	if nuo.mutation.DetailsCleared() {
+		_spec.ClearField(narrative.FieldDetails, field.TypeJSON)
 	}
 	if nuo.mutation.PolicyCleared() {
 		edge := &sqlgraph.EdgeSpec{

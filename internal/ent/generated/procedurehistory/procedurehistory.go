@@ -54,8 +54,8 @@ const (
 	FieldBackground = "background"
 	// FieldSatisfies holds the string denoting the satisfies field in the database.
 	FieldSatisfies = "satisfies"
-	// FieldJsonschema holds the string denoting the jsonschema field in the database.
-	FieldJsonschema = "jsonschema"
+	// FieldDetails holds the string denoting the details field in the database.
+	FieldDetails = "details"
 	// Table holds the table name of the procedurehistory in the database.
 	Table = "procedure_history"
 )
@@ -82,7 +82,7 @@ var Columns = []string{
 	FieldPurposeAndScope,
 	FieldBackground,
 	FieldSatisfies,
-	FieldJsonschema,
+	FieldDetails,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).

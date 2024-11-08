@@ -2,25 +2,22 @@
 mutation CreateBulkCSVSubcontrol($input: Upload!) {
   createBulkCSVSubcontrol(input: $input) {
     subcontrols {
-      assignedTo
+      class
       createdAt
       createdBy
       description
+      details
+      family
       id
       implementationDate
       implementationEvidence
-      implementationNotes
       implementationStatus
       implementationVerification
       implementationVerificationDate
-      jsonschema
       mappedFrameworks
       name
-      owner
       source
       status
-      subcontrolClass
-      subcontrolFamily
       subcontrolNumber
       subcontrolType
       tags
@@ -34,25 +31,22 @@ mutation CreateBulkCSVSubcontrol($input: Upload!) {
 mutation CreateBulkSubcontrol($input: [CreateSubcontrolInput!]) {
   createBulkSubcontrol(input: $input) {
     subcontrols {
-      assignedTo
+      class
       createdAt
       createdBy
       description
+      details
+      family
       id
       implementationDate
       implementationEvidence
-      implementationNotes
       implementationStatus
       implementationVerification
       implementationVerificationDate
-      jsonschema
       mappedFrameworks
       name
-      owner
       source
       status
-      subcontrolClass
-      subcontrolFamily
       subcontrolNumber
       subcontrolType
       tags
@@ -66,25 +60,22 @@ mutation CreateBulkSubcontrol($input: [CreateSubcontrolInput!]) {
 mutation CreateSubcontrol($input: CreateSubcontrolInput!) {
   createSubcontrol(input: $input) {
     subcontrol {
-      assignedTo
+      class
       createdAt
       createdBy
       description
+      details
+      family
       id
       implementationDate
       implementationEvidence
-      implementationNotes
       implementationStatus
       implementationVerification
       implementationVerificationDate
-      jsonschema
       mappedFrameworks
       name
-      owner
       source
       status
-      subcontrolClass
-      subcontrolFamily
       subcontrolNumber
       subcontrolType
       tags
@@ -105,25 +96,22 @@ query GetAllSubcontrols {
   subcontrols {
     edges {
       node {
-        assignedTo
+        class
         createdAt
         createdBy
         description
+        details
+        family
         id
         implementationDate
         implementationEvidence
-        implementationNotes
         implementationStatus
         implementationVerification
         implementationVerificationDate
-        jsonschema
         mappedFrameworks
         name
-        owner
         source
         status
-        subcontrolClass
-        subcontrolFamily
         subcontrolNumber
         subcontrolType
         tags
@@ -136,25 +124,22 @@ query GetAllSubcontrols {
 }
 query GetSubcontrolByID($subcontrolId: ID!) {
   subcontrol(id: $subcontrolId) {
-    assignedTo
+    class
     createdAt
     createdBy
     description
+    details
+    family
     id
     implementationDate
     implementationEvidence
-    implementationNotes
     implementationStatus
     implementationVerification
     implementationVerificationDate
-    jsonschema
     mappedFrameworks
     name
-    owner
     source
     status
-    subcontrolClass
-    subcontrolFamily
     subcontrolNumber
     subcontrolType
     tags
@@ -168,25 +153,22 @@ query GetSubcontrols($where: SubcontrolWhereInput) {
   subcontrols(where: $where) {
     edges {
       node {
-        assignedTo
+        class
         createdAt
         createdBy
         description
+        details
+        family
         id
         implementationDate
         implementationEvidence
-        implementationNotes
         implementationStatus
         implementationVerification
         implementationVerificationDate
-        jsonschema
         mappedFrameworks
         name
-        owner
         source
         status
-        subcontrolClass
-        subcontrolFamily
         subcontrolNumber
         subcontrolType
         tags
@@ -200,25 +182,22 @@ query GetSubcontrols($where: SubcontrolWhereInput) {
 mutation UpdateSubcontrol($updateSubcontrolId: ID!, $input: UpdateSubcontrolInput!) {
   updateSubcontrol(id: $updateSubcontrolId, input: $input) {
     subcontrol {
-      assignedTo
+      class
       createdAt
       createdBy
       description
+      details
+      family
       id
       implementationDate
       implementationEvidence
-      implementationNotes
       implementationStatus
       implementationVerification
       implementationVerificationDate
-      jsonschema
       mappedFrameworks
       name
-      owner
       source
       status
-      subcontrolClass
-      subcontrolFamily
       subcontrolNumber
       subcontrolType
       tags

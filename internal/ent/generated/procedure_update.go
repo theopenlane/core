@@ -280,15 +280,15 @@ func (pu *ProcedureUpdate) ClearSatisfies() *ProcedureUpdate {
 	return pu
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (pu *ProcedureUpdate) SetJsonschema(m map[string]interface{}) *ProcedureUpdate {
-	pu.mutation.SetJsonschema(m)
+// SetDetails sets the "details" field.
+func (pu *ProcedureUpdate) SetDetails(m map[string]interface{}) *ProcedureUpdate {
+	pu.mutation.SetDetails(m)
 	return pu
 }
 
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (pu *ProcedureUpdate) ClearJsonschema() *ProcedureUpdate {
-	pu.mutation.ClearJsonschema()
+// ClearDetails clears the value of the "details" field.
+func (pu *ProcedureUpdate) ClearDetails() *ProcedureUpdate {
+	pu.mutation.ClearDetails()
 	return pu
 }
 
@@ -584,11 +584,11 @@ func (pu *ProcedureUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if pu.mutation.SatisfiesCleared() {
 		_spec.ClearField(procedure.FieldSatisfies, field.TypeString)
 	}
-	if value, ok := pu.mutation.Jsonschema(); ok {
-		_spec.SetField(procedure.FieldJsonschema, field.TypeJSON, value)
+	if value, ok := pu.mutation.Details(); ok {
+		_spec.SetField(procedure.FieldDetails, field.TypeJSON, value)
 	}
-	if pu.mutation.JsonschemaCleared() {
-		_spec.ClearField(procedure.FieldJsonschema, field.TypeJSON)
+	if pu.mutation.DetailsCleared() {
+		_spec.ClearField(procedure.FieldDetails, field.TypeJSON)
 	}
 	if pu.mutation.ControlCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1050,15 +1050,15 @@ func (puo *ProcedureUpdateOne) ClearSatisfies() *ProcedureUpdateOne {
 	return puo
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (puo *ProcedureUpdateOne) SetJsonschema(m map[string]interface{}) *ProcedureUpdateOne {
-	puo.mutation.SetJsonschema(m)
+// SetDetails sets the "details" field.
+func (puo *ProcedureUpdateOne) SetDetails(m map[string]interface{}) *ProcedureUpdateOne {
+	puo.mutation.SetDetails(m)
 	return puo
 }
 
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (puo *ProcedureUpdateOne) ClearJsonschema() *ProcedureUpdateOne {
-	puo.mutation.ClearJsonschema()
+// ClearDetails clears the value of the "details" field.
+func (puo *ProcedureUpdateOne) ClearDetails() *ProcedureUpdateOne {
+	puo.mutation.ClearDetails()
 	return puo
 }
 
@@ -1384,11 +1384,11 @@ func (puo *ProcedureUpdateOne) sqlSave(ctx context.Context) (_node *Procedure, e
 	if puo.mutation.SatisfiesCleared() {
 		_spec.ClearField(procedure.FieldSatisfies, field.TypeString)
 	}
-	if value, ok := puo.mutation.Jsonschema(); ok {
-		_spec.SetField(procedure.FieldJsonschema, field.TypeJSON, value)
+	if value, ok := puo.mutation.Details(); ok {
+		_spec.SetField(procedure.FieldDetails, field.TypeJSON, value)
 	}
-	if puo.mutation.JsonschemaCleared() {
-		_spec.ClearField(procedure.FieldJsonschema, field.TypeJSON)
+	if puo.mutation.DetailsCleared() {
+		_spec.ClearField(procedure.FieldDetails, field.TypeJSON)
 	}
 	if puo.mutation.ControlCleared() {
 		edge := &sqlgraph.EdgeSpec{

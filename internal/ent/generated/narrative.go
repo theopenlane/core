@@ -34,14 +34,14 @@ type Narrative struct {
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the name of the file provided in the payload key without the extension
+	// the name of the narrative
 	Name string `json:"name,omitempty"`
 	// the description of the narrative
 	Description string `json:"description,omitempty"`
 	// which controls are satisfied by the narrative
 	Satisfies string `json:"satisfies,omitempty"`
-	// json schema
-	Jsonschema map[string]interface{} `json:"jsonschema,omitempty"`
+	// json data for the narrative document
+	Details map[string]interface{} `json:"details,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the NarrativeQuery when eager-loading is set.
 	Edges        NarrativeEdges `json:"edges"`
@@ -111,7 +111,7 @@ func (*Narrative) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case narrative.FieldTags, narrative.FieldJsonschema:
+		case narrative.FieldTags, narrative.FieldDetails:
 			values[i] = new([]byte)
 		case narrative.FieldID, narrative.FieldCreatedBy, narrative.FieldUpdatedBy, narrative.FieldDeletedBy, narrative.FieldMappingID, narrative.FieldName, narrative.FieldDescription, narrative.FieldSatisfies:
 			values[i] = new(sql.NullString)
@@ -206,12 +206,12 @@ func (n *Narrative) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				n.Satisfies = value.String
 			}
-		case narrative.FieldJsonschema:
+		case narrative.FieldDetails:
 			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field jsonschema", values[i])
+				return fmt.Errorf("unexpected type %T for field details", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &n.Jsonschema); err != nil {
-					return fmt.Errorf("unmarshal field jsonschema: %w", err)
+				if err := json.Unmarshal(*value, &n.Details); err != nil {
+					return fmt.Errorf("unmarshal field details: %w", err)
 				}
 			}
 		default:
@@ -303,8 +303,8 @@ func (n *Narrative) String() string {
 	builder.WriteString("satisfies=")
 	builder.WriteString(n.Satisfies)
 	builder.WriteString(", ")
-	builder.WriteString("jsonschema=")
-	builder.WriteString(fmt.Sprintf("%v", n.Jsonschema))
+	builder.WriteString("details=")
+	builder.WriteString(fmt.Sprintf("%v", n.Details))
 	builder.WriteByte(')')
 	return builder.String()
 }

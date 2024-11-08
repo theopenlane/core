@@ -41,14 +41,14 @@ type NarrativeHistory struct {
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the name of the file provided in the payload key without the extension
+	// the name of the narrative
 	Name string `json:"name,omitempty"`
 	// the description of the narrative
 	Description string `json:"description,omitempty"`
 	// which controls are satisfied by the narrative
 	Satisfies string `json:"satisfies,omitempty"`
-	// json schema
-	Jsonschema   map[string]interface{} `json:"jsonschema,omitempty"`
+	// json data for the narrative document
+	Details      map[string]interface{} `json:"details,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -57,7 +57,7 @@ func (*NarrativeHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case narrativehistory.FieldTags, narrativehistory.FieldJsonschema:
+		case narrativehistory.FieldTags, narrativehistory.FieldDetails:
 			values[i] = new([]byte)
 		case narrativehistory.FieldOperation:
 			values[i] = new(history.OpType)
@@ -172,12 +172,12 @@ func (nh *NarrativeHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				nh.Satisfies = value.String
 			}
-		case narrativehistory.FieldJsonschema:
+		case narrativehistory.FieldDetails:
 			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field jsonschema", values[i])
+				return fmt.Errorf("unexpected type %T for field details", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &nh.Jsonschema); err != nil {
-					return fmt.Errorf("unmarshal field jsonschema: %w", err)
+				if err := json.Unmarshal(*value, &nh.Details); err != nil {
+					return fmt.Errorf("unmarshal field details: %w", err)
 				}
 			}
 		default:
@@ -258,8 +258,8 @@ func (nh *NarrativeHistory) String() string {
 	builder.WriteString("satisfies=")
 	builder.WriteString(nh.Satisfies)
 	builder.WriteString(", ")
-	builder.WriteString("jsonschema=")
-	builder.WriteString(fmt.Sprintf("%v", nh.Jsonschema))
+	builder.WriteString("details=")
+	builder.WriteString(fmt.Sprintf("%v", nh.Details))
 	builder.WriteByte(')')
 	return builder.String()
 }

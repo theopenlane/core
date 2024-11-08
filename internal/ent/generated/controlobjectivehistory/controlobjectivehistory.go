@@ -48,20 +48,18 @@ const (
 	FieldControlObjectiveType = "control_objective_type"
 	// FieldVersion holds the string denoting the version field in the database.
 	FieldVersion = "version"
-	// FieldOwner holds the string denoting the owner field in the database.
-	FieldOwner = "owner"
 	// FieldControlNumber holds the string denoting the control_number field in the database.
 	FieldControlNumber = "control_number"
-	// FieldControlFamily holds the string denoting the control_family field in the database.
-	FieldControlFamily = "control_family"
-	// FieldControlClass holds the string denoting the control_class field in the database.
-	FieldControlClass = "control_class"
+	// FieldFamily holds the string denoting the family field in the database.
+	FieldFamily = "family"
+	// FieldClass holds the string denoting the class field in the database.
+	FieldClass = "class"
 	// FieldSource holds the string denoting the source field in the database.
 	FieldSource = "source"
 	// FieldMappedFrameworks holds the string denoting the mapped_frameworks field in the database.
 	FieldMappedFrameworks = "mapped_frameworks"
-	// FieldJsonschema holds the string denoting the jsonschema field in the database.
-	FieldJsonschema = "jsonschema"
+	// FieldDetails holds the string denoting the details field in the database.
+	FieldDetails = "details"
 	// Table holds the table name of the controlobjectivehistory in the database.
 	Table = "control_objective_history"
 )
@@ -85,13 +83,12 @@ var Columns = []string{
 	FieldStatus,
 	FieldControlObjectiveType,
 	FieldVersion,
-	FieldOwner,
 	FieldControlNumber,
-	FieldControlFamily,
-	FieldControlClass,
+	FieldFamily,
+	FieldClass,
 	FieldSource,
 	FieldMappedFrameworks,
-	FieldJsonschema,
+	FieldDetails,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -214,24 +211,19 @@ func ByVersion(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldVersion, opts...).ToFunc()
 }
 
-// ByOwner orders the results by the owner field.
-func ByOwner(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldOwner, opts...).ToFunc()
-}
-
 // ByControlNumber orders the results by the control_number field.
 func ByControlNumber(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldControlNumber, opts...).ToFunc()
 }
 
-// ByControlFamily orders the results by the control_family field.
-func ByControlFamily(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldControlFamily, opts...).ToFunc()
+// ByFamily orders the results by the family field.
+func ByFamily(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFamily, opts...).ToFunc()
 }
 
-// ByControlClass orders the results by the control_class field.
-func ByControlClass(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldControlClass, opts...).ToFunc()
+// ByClass orders the results by the class field.
+func ByClass(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldClass, opts...).ToFunc()
 }
 
 // BySource orders the results by the source field.

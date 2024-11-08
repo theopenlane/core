@@ -40,6 +40,30 @@ func (ap *ActionPlan) Risk(ctx context.Context) (result []*Risk, err error) {
 	return result, err
 }
 
+func (ap *ActionPlan) Control(ctx context.Context) (result []*Control, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = ap.NamedControl(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = ap.Edges.ControlOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = ap.QueryControl().All(ctx)
+	}
+	return result, err
+}
+
+func (ap *ActionPlan) User(ctx context.Context) (result []*User, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = ap.NamedUser(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = ap.Edges.UserOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = ap.QueryUser().All(ctx)
+	}
+	return result, err
+}
+
 func (c *Contact) Owner(ctx context.Context) (*Organization, error) {
 	result, err := c.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {
@@ -140,6 +164,18 @@ func (c *Control) Risks(ctx context.Context) (result []*Risk, err error) {
 	}
 	if IsNotLoaded(err) {
 		result, err = c.QueryRisks().All(ctx)
+	}
+	return result, err
+}
+
+func (c *Control) Actionplans(ctx context.Context) (result []*ActionPlan, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = c.NamedActionplans(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = c.Edges.ActionplansOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = c.QueryActionplans().All(ctx)
 	}
 	return result, err
 }
@@ -1184,6 +1220,18 @@ func (n *Note) Entity(ctx context.Context) (*Entity, error) {
 	return result, MaskNotFound(err)
 }
 
+func (n *Note) Subcontrols(ctx context.Context) (result []*Subcontrol, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = n.NamedSubcontrols(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = n.Edges.SubcontrolsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = n.QuerySubcontrols().All(ctx)
+	}
+	return result, err
+}
+
 func (op *OauthProvider) Owner(ctx context.Context) (*Organization, error) {
 	result, err := op.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {
@@ -1765,6 +1813,26 @@ func (s *Subcontrol) Control(ctx context.Context) (result []*Control, err error)
 	return result, err
 }
 
+func (s *Subcontrol) User(ctx context.Context) (result []*User, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = s.NamedUser(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = s.Edges.UserOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = s.QueryUser().All(ctx)
+	}
+	return result, err
+}
+
+func (s *Subcontrol) Notes(ctx context.Context) (*Note, error) {
+	result, err := s.Edges.NotesOrErr()
+	if IsNotLoaded(err) {
+		result, err = s.QueryNotes().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (s *Subscriber) Owner(ctx context.Context) (*Organization, error) {
 	result, err := s.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {
@@ -1909,6 +1977,30 @@ func (u *User) Events(ctx context.Context) (result []*Event, err error) {
 	}
 	if IsNotLoaded(err) {
 		result, err = u.QueryEvents().All(ctx)
+	}
+	return result, err
+}
+
+func (u *User) Actionplans(ctx context.Context) (result []*ActionPlan, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = u.NamedActionplans(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = u.Edges.ActionplansOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = u.QueryActionplans().All(ctx)
+	}
+	return result, err
+}
+
+func (u *User) Subcontrols(ctx context.Context) (result []*Subcontrol, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = u.NamedSubcontrols(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = u.Edges.SubcontrolsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = u.QuerySubcontrols().All(ctx)
 	}
 	return result, err
 }

@@ -300,15 +300,15 @@ func (su *StandardUpdate) ClearSatisfies() *StandardUpdate {
 	return su
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (su *StandardUpdate) SetJsonschema(m map[string]interface{}) *StandardUpdate {
-	su.mutation.SetJsonschema(m)
+// SetDetails sets the "details" field.
+func (su *StandardUpdate) SetDetails(m map[string]interface{}) *StandardUpdate {
+	su.mutation.SetDetails(m)
 	return su
 }
 
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (su *StandardUpdate) ClearJsonschema() *StandardUpdate {
-	su.mutation.ClearJsonschema()
+// ClearDetails clears the value of the "details" field.
+func (su *StandardUpdate) ClearDetails() *StandardUpdate {
+	su.mutation.ClearDetails()
 	return su
 }
 
@@ -610,11 +610,11 @@ func (su *StandardUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if su.mutation.SatisfiesCleared() {
 		_spec.ClearField(standard.FieldSatisfies, field.TypeString)
 	}
-	if value, ok := su.mutation.Jsonschema(); ok {
-		_spec.SetField(standard.FieldJsonschema, field.TypeJSON, value)
+	if value, ok := su.mutation.Details(); ok {
+		_spec.SetField(standard.FieldDetails, field.TypeJSON, value)
 	}
-	if su.mutation.JsonschemaCleared() {
-		_spec.ClearField(standard.FieldJsonschema, field.TypeJSON)
+	if su.mutation.DetailsCleared() {
+		_spec.ClearField(standard.FieldDetails, field.TypeJSON)
 	}
 	if su.mutation.ControlobjectivesCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1096,15 +1096,15 @@ func (suo *StandardUpdateOne) ClearSatisfies() *StandardUpdateOne {
 	return suo
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (suo *StandardUpdateOne) SetJsonschema(m map[string]interface{}) *StandardUpdateOne {
-	suo.mutation.SetJsonschema(m)
+// SetDetails sets the "details" field.
+func (suo *StandardUpdateOne) SetDetails(m map[string]interface{}) *StandardUpdateOne {
+	suo.mutation.SetDetails(m)
 	return suo
 }
 
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (suo *StandardUpdateOne) ClearJsonschema() *StandardUpdateOne {
-	suo.mutation.ClearJsonschema()
+// ClearDetails clears the value of the "details" field.
+func (suo *StandardUpdateOne) ClearDetails() *StandardUpdateOne {
+	suo.mutation.ClearDetails()
 	return suo
 }
 
@@ -1436,11 +1436,11 @@ func (suo *StandardUpdateOne) sqlSave(ctx context.Context) (_node *Standard, err
 	if suo.mutation.SatisfiesCleared() {
 		_spec.ClearField(standard.FieldSatisfies, field.TypeString)
 	}
-	if value, ok := suo.mutation.Jsonschema(); ok {
-		_spec.SetField(standard.FieldJsonschema, field.TypeJSON, value)
+	if value, ok := suo.mutation.Details(); ok {
+		_spec.SetField(standard.FieldDetails, field.TypeJSON, value)
 	}
-	if suo.mutation.JsonschemaCleared() {
-		_spec.ClearField(standard.FieldJsonschema, field.TypeJSON)
+	if suo.mutation.DetailsCleared() {
+		_spec.ClearField(standard.FieldDetails, field.TypeJSON)
 	}
 	if suo.mutation.ControlobjectivesCleared() {
 		edge := &sqlgraph.EdgeSpec{

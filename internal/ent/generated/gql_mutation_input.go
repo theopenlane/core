@@ -127,13 +127,14 @@ type CreateActionPlanInput struct {
 	Name        string
 	Description *string
 	Status      *string
-	Assigned    *string
-	DueDate     *string
+	DueDate     *time.Time
 	Priority    *string
 	Source      *string
-	Jsonschema  map[string]interface{}
+	Details     map[string]interface{}
 	StandardIDs []string
 	RiskIDs     []string
+	ControlIDs  []string
+	UserIDs     []string
 }
 
 // Mutate applies the CreateActionPlanInput on the ActionPlanMutation builder.
@@ -148,9 +149,6 @@ func (i *CreateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
 	}
-	if v := i.Assigned; v != nil {
-		m.SetAssigned(*v)
-	}
 	if v := i.DueDate; v != nil {
 		m.SetDueDate(*v)
 	}
@@ -160,14 +158,20 @@ func (i *CreateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	if v := i.Source; v != nil {
 		m.SetSource(*v)
 	}
-	if v := i.Jsonschema; v != nil {
-		m.SetJsonschema(v)
+	if v := i.Details; v != nil {
+		m.SetDetails(v)
 	}
 	if v := i.StandardIDs; len(v) > 0 {
 		m.AddStandardIDs(v...)
 	}
 	if v := i.RiskIDs; len(v) > 0 {
 		m.AddRiskIDs(v...)
+	}
+	if v := i.ControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
+	if v := i.UserIDs; len(v) > 0 {
+		m.AddUserIDs(v...)
 	}
 }
 
@@ -187,22 +191,26 @@ type UpdateActionPlanInput struct {
 	Description       *string
 	ClearStatus       bool
 	Status            *string
-	ClearAssigned     bool
-	Assigned          *string
 	ClearDueDate      bool
-	DueDate           *string
+	DueDate           *time.Time
 	ClearPriority     bool
 	Priority          *string
 	ClearSource       bool
 	Source            *string
-	ClearJsonschema   bool
-	Jsonschema        map[string]interface{}
+	ClearDetails      bool
+	Details           map[string]interface{}
 	ClearStandard     bool
 	AddStandardIDs    []string
 	RemoveStandardIDs []string
 	ClearRisk         bool
 	AddRiskIDs        []string
 	RemoveRiskIDs     []string
+	ClearControl      bool
+	AddControlIDs     []string
+	RemoveControlIDs  []string
+	ClearUser         bool
+	AddUserIDs        []string
+	RemoveUserIDs     []string
 }
 
 // Mutate applies the UpdateActionPlanInput on the ActionPlanMutation builder.
@@ -231,12 +239,6 @@ func (i *UpdateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
 	}
-	if i.ClearAssigned {
-		m.ClearAssigned()
-	}
-	if v := i.Assigned; v != nil {
-		m.SetAssigned(*v)
-	}
 	if i.ClearDueDate {
 		m.ClearDueDate()
 	}
@@ -255,11 +257,11 @@ func (i *UpdateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	if v := i.Source; v != nil {
 		m.SetSource(*v)
 	}
-	if i.ClearJsonschema {
-		m.ClearJsonschema()
+	if i.ClearDetails {
+		m.ClearDetails()
 	}
-	if v := i.Jsonschema; v != nil {
-		m.SetJsonschema(v)
+	if v := i.Details; v != nil {
+		m.SetDetails(v)
 	}
 	if i.ClearStandard {
 		m.ClearStandard()
@@ -278,6 +280,24 @@ func (i *UpdateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	}
 	if v := i.RemoveRiskIDs; len(v) > 0 {
 		m.RemoveRiskIDs(v...)
+	}
+	if i.ClearControl {
+		m.ClearControl()
+	}
+	if v := i.AddControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
+	if v := i.RemoveControlIDs; len(v) > 0 {
+		m.RemoveControlIDs(v...)
+	}
+	if i.ClearUser {
+		m.ClearUser()
+	}
+	if v := i.AddUserIDs; len(v) > 0 {
+		m.AddUserIDs(v...)
+	}
+	if v := i.RemoveUserIDs; len(v) > 0 {
+		m.RemoveUserIDs(v...)
 	}
 }
 
@@ -469,20 +489,20 @@ type CreateControlInput struct {
 	Status              *string
 	ControlType         *string
 	Version             *string
-	Owner               *string
 	ControlNumber       *string
-	ControlFamily       *string
-	ControlClass        *string
+	Family              *string
+	Class               *string
 	Source              *string
 	Satisfies           *string
 	MappedFrameworks    *string
-	Jsonschema          map[string]interface{}
+	Details             map[string]interface{}
 	ProcedureIDs        []string
 	SubcontrolIDs       []string
 	ControlobjectiveIDs []string
 	StandardIDs         []string
 	NarrativeIDs        []string
 	RiskIDs             []string
+	ActionplanIDs       []string
 }
 
 // Mutate applies the CreateControlInput on the ControlMutation builder.
@@ -503,17 +523,14 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	if v := i.Version; v != nil {
 		m.SetVersion(*v)
 	}
-	if v := i.Owner; v != nil {
-		m.SetOwner(*v)
-	}
 	if v := i.ControlNumber; v != nil {
 		m.SetControlNumber(*v)
 	}
-	if v := i.ControlFamily; v != nil {
-		m.SetControlFamily(*v)
+	if v := i.Family; v != nil {
+		m.SetFamily(*v)
 	}
-	if v := i.ControlClass; v != nil {
-		m.SetControlClass(*v)
+	if v := i.Class; v != nil {
+		m.SetClass(*v)
 	}
 	if v := i.Source; v != nil {
 		m.SetSource(*v)
@@ -524,8 +541,8 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	if v := i.MappedFrameworks; v != nil {
 		m.SetMappedFrameworks(*v)
 	}
-	if v := i.Jsonschema; v != nil {
-		m.SetJsonschema(v)
+	if v := i.Details; v != nil {
+		m.SetDetails(v)
 	}
 	if v := i.ProcedureIDs; len(v) > 0 {
 		m.AddProcedureIDs(v...)
@@ -544,6 +561,9 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	}
 	if v := i.RiskIDs; len(v) > 0 {
 		m.AddRiskIDs(v...)
+	}
+	if v := i.ActionplanIDs; len(v) > 0 {
+		m.AddActionplanIDs(v...)
 	}
 }
 
@@ -567,22 +587,20 @@ type UpdateControlInput struct {
 	ControlType               *string
 	ClearVersion              bool
 	Version                   *string
-	ClearOwner                bool
-	Owner                     *string
 	ClearControlNumber        bool
 	ControlNumber             *string
-	ClearControlFamily        bool
-	ControlFamily             *string
-	ClearControlClass         bool
-	ControlClass              *string
+	ClearFamily               bool
+	Family                    *string
+	ClearClass                bool
+	Class                     *string
 	ClearSource               bool
 	Source                    *string
 	ClearSatisfies            bool
 	Satisfies                 *string
 	ClearMappedFrameworks     bool
 	MappedFrameworks          *string
-	ClearJsonschema           bool
-	Jsonschema                map[string]interface{}
+	ClearDetails              bool
+	Details                   map[string]interface{}
 	ClearProcedures           bool
 	AddProcedureIDs           []string
 	RemoveProcedureIDs        []string
@@ -601,6 +619,9 @@ type UpdateControlInput struct {
 	ClearRisks                bool
 	AddRiskIDs                []string
 	RemoveRiskIDs             []string
+	ClearActionplans          bool
+	AddActionplanIDs          []string
+	RemoveActionplanIDs       []string
 }
 
 // Mutate applies the UpdateControlInput on the ControlMutation builder.
@@ -641,29 +662,23 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	if v := i.Version; v != nil {
 		m.SetVersion(*v)
 	}
-	if i.ClearOwner {
-		m.ClearOwner()
-	}
-	if v := i.Owner; v != nil {
-		m.SetOwner(*v)
-	}
 	if i.ClearControlNumber {
 		m.ClearControlNumber()
 	}
 	if v := i.ControlNumber; v != nil {
 		m.SetControlNumber(*v)
 	}
-	if i.ClearControlFamily {
-		m.ClearControlFamily()
+	if i.ClearFamily {
+		m.ClearFamily()
 	}
-	if v := i.ControlFamily; v != nil {
-		m.SetControlFamily(*v)
+	if v := i.Family; v != nil {
+		m.SetFamily(*v)
 	}
-	if i.ClearControlClass {
-		m.ClearControlClass()
+	if i.ClearClass {
+		m.ClearClass()
 	}
-	if v := i.ControlClass; v != nil {
-		m.SetControlClass(*v)
+	if v := i.Class; v != nil {
+		m.SetClass(*v)
 	}
 	if i.ClearSource {
 		m.ClearSource()
@@ -683,11 +698,11 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	if v := i.MappedFrameworks; v != nil {
 		m.SetMappedFrameworks(*v)
 	}
-	if i.ClearJsonschema {
-		m.ClearJsonschema()
+	if i.ClearDetails {
+		m.ClearDetails()
 	}
-	if v := i.Jsonschema; v != nil {
-		m.SetJsonschema(v)
+	if v := i.Details; v != nil {
+		m.SetDetails(v)
 	}
 	if i.ClearProcedures {
 		m.ClearProcedures()
@@ -743,6 +758,15 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	if v := i.RemoveRiskIDs; len(v) > 0 {
 		m.RemoveRiskIDs(v...)
 	}
+	if i.ClearActionplans {
+		m.ClearActionplans()
+	}
+	if v := i.AddActionplanIDs; len(v) > 0 {
+		m.AddActionplanIDs(v...)
+	}
+	if v := i.RemoveActionplanIDs; len(v) > 0 {
+		m.RemoveActionplanIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the UpdateControlInput on the ControlUpdate builder.
@@ -765,13 +789,12 @@ type CreateControlObjectiveInput struct {
 	Status               *string
 	ControlObjectiveType *string
 	Version              *string
-	Owner                *string
 	ControlNumber        *string
-	ControlFamily        *string
-	ControlClass         *string
+	Family               *string
+	Class                *string
 	Source               *string
 	MappedFrameworks     *string
-	Jsonschema           map[string]interface{}
+	Details              map[string]interface{}
 	PolicyIDs            []string
 	ControlIDs           []string
 	ProcedureIDs         []string
@@ -799,17 +822,14 @@ func (i *CreateControlObjectiveInput) Mutate(m *ControlObjectiveMutation) {
 	if v := i.Version; v != nil {
 		m.SetVersion(*v)
 	}
-	if v := i.Owner; v != nil {
-		m.SetOwner(*v)
-	}
 	if v := i.ControlNumber; v != nil {
 		m.SetControlNumber(*v)
 	}
-	if v := i.ControlFamily; v != nil {
-		m.SetControlFamily(*v)
+	if v := i.Family; v != nil {
+		m.SetFamily(*v)
 	}
-	if v := i.ControlClass; v != nil {
-		m.SetControlClass(*v)
+	if v := i.Class; v != nil {
+		m.SetClass(*v)
 	}
 	if v := i.Source; v != nil {
 		m.SetSource(*v)
@@ -817,8 +837,8 @@ func (i *CreateControlObjectiveInput) Mutate(m *ControlObjectiveMutation) {
 	if v := i.MappedFrameworks; v != nil {
 		m.SetMappedFrameworks(*v)
 	}
-	if v := i.Jsonschema; v != nil {
-		m.SetJsonschema(v)
+	if v := i.Details; v != nil {
+		m.SetDetails(v)
 	}
 	if v := i.PolicyIDs; len(v) > 0 {
 		m.AddPolicyIDs(v...)
@@ -863,20 +883,18 @@ type UpdateControlObjectiveInput struct {
 	ControlObjectiveType      *string
 	ClearVersion              bool
 	Version                   *string
-	ClearOwner                bool
-	Owner                     *string
 	ClearControlNumber        bool
 	ControlNumber             *string
-	ClearControlFamily        bool
-	ControlFamily             *string
-	ClearControlClass         bool
-	ControlClass              *string
+	ClearFamily               bool
+	Family                    *string
+	ClearClass                bool
+	Class                     *string
 	ClearSource               bool
 	Source                    *string
 	ClearMappedFrameworks     bool
 	MappedFrameworks          *string
-	ClearJsonschema           bool
-	Jsonschema                map[string]interface{}
+	ClearDetails              bool
+	Details                   map[string]interface{}
 	ClearPolicy               bool
 	AddPolicyIDs              []string
 	RemovePolicyIDs           []string
@@ -938,29 +956,23 @@ func (i *UpdateControlObjectiveInput) Mutate(m *ControlObjectiveMutation) {
 	if v := i.Version; v != nil {
 		m.SetVersion(*v)
 	}
-	if i.ClearOwner {
-		m.ClearOwner()
-	}
-	if v := i.Owner; v != nil {
-		m.SetOwner(*v)
-	}
 	if i.ClearControlNumber {
 		m.ClearControlNumber()
 	}
 	if v := i.ControlNumber; v != nil {
 		m.SetControlNumber(*v)
 	}
-	if i.ClearControlFamily {
-		m.ClearControlFamily()
+	if i.ClearFamily {
+		m.ClearFamily()
 	}
-	if v := i.ControlFamily; v != nil {
-		m.SetControlFamily(*v)
+	if v := i.Family; v != nil {
+		m.SetFamily(*v)
 	}
-	if i.ClearControlClass {
-		m.ClearControlClass()
+	if i.ClearClass {
+		m.ClearClass()
 	}
-	if v := i.ControlClass; v != nil {
-		m.SetControlClass(*v)
+	if v := i.Class; v != nil {
+		m.SetClass(*v)
 	}
 	if i.ClearSource {
 		m.ClearSource()
@@ -974,11 +986,11 @@ func (i *UpdateControlObjectiveInput) Mutate(m *ControlObjectiveMutation) {
 	if v := i.MappedFrameworks; v != nil {
 		m.SetMappedFrameworks(*v)
 	}
-	if i.ClearJsonschema {
-		m.ClearJsonschema()
+	if i.ClearDetails {
+		m.ClearDetails()
 	}
-	if v := i.Jsonschema; v != nil {
-		m.SetJsonschema(v)
+	if v := i.Details; v != nil {
+		m.SetDetails(v)
 	}
 	if i.ClearPolicy {
 		m.ClearPolicy()
@@ -3257,7 +3269,7 @@ type CreateInternalPolicyInput struct {
 	Version             *string
 	PurposeAndScope     *string
 	Background          *string
-	Jsonschema          map[string]interface{}
+	Details             map[string]interface{}
 	ControlobjectiveIDs []string
 	ControlIDs          []string
 	ProcedureIDs        []string
@@ -3286,8 +3298,8 @@ func (i *CreateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	if v := i.Background; v != nil {
 		m.SetBackground(*v)
 	}
-	if v := i.Jsonschema; v != nil {
-		m.SetJsonschema(v)
+	if v := i.Details; v != nil {
+		m.SetDetails(v)
 	}
 	if v := i.ControlobjectiveIDs; len(v) > 0 {
 		m.AddControlobjectiveIDs(v...)
@@ -3326,8 +3338,8 @@ type UpdateInternalPolicyInput struct {
 	PurposeAndScope           *string
 	ClearBackground           bool
 	Background                *string
-	ClearJsonschema           bool
-	Jsonschema                map[string]interface{}
+	ClearDetails              bool
+	Details                   map[string]interface{}
 	ClearControlobjectives    bool
 	AddControlobjectiveIDs    []string
 	RemoveControlobjectiveIDs []string
@@ -3389,11 +3401,11 @@ func (i *UpdateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	if v := i.Background; v != nil {
 		m.SetBackground(*v)
 	}
-	if i.ClearJsonschema {
-		m.ClearJsonschema()
+	if i.ClearDetails {
+		m.ClearDetails()
 	}
-	if v := i.Jsonschema; v != nil {
-		m.SetJsonschema(v)
+	if v := i.Details; v != nil {
+		m.SetDetails(v)
 	}
 	if i.ClearControlobjectives {
 		m.ClearControlobjectives()
@@ -3555,7 +3567,7 @@ type CreateNarrativeInput struct {
 	Name                string
 	Description         *string
 	Satisfies           *string
-	Jsonschema          map[string]interface{}
+	Details             map[string]interface{}
 	PolicyIDs           []string
 	ControlIDs          []string
 	ProcedureIDs        []string
@@ -3574,8 +3586,8 @@ func (i *CreateNarrativeInput) Mutate(m *NarrativeMutation) {
 	if v := i.Satisfies; v != nil {
 		m.SetSatisfies(*v)
 	}
-	if v := i.Jsonschema; v != nil {
-		m.SetJsonschema(v)
+	if v := i.Details; v != nil {
+		m.SetDetails(v)
 	}
 	if v := i.PolicyIDs; len(v) > 0 {
 		m.AddPolicyIDs(v...)
@@ -3607,8 +3619,8 @@ type UpdateNarrativeInput struct {
 	Description               *string
 	ClearSatisfies            bool
 	Satisfies                 *string
-	ClearJsonschema           bool
-	Jsonschema                map[string]interface{}
+	ClearDetails              bool
+	Details                   map[string]interface{}
 	ClearPolicy               bool
 	AddPolicyIDs              []string
 	RemovePolicyIDs           []string
@@ -3649,11 +3661,11 @@ func (i *UpdateNarrativeInput) Mutate(m *NarrativeMutation) {
 	if v := i.Satisfies; v != nil {
 		m.SetSatisfies(*v)
 	}
-	if i.ClearJsonschema {
-		m.ClearJsonschema()
+	if i.ClearDetails {
+		m.ClearDetails()
 	}
-	if v := i.Jsonschema; v != nil {
-		m.SetJsonschema(v)
+	if v := i.Details; v != nil {
+		m.SetDetails(v)
 	}
 	if i.ClearPolicy {
 		m.ClearPolicy()
@@ -3707,10 +3719,11 @@ func (c *NarrativeUpdateOne) SetInput(i UpdateNarrativeInput) *NarrativeUpdateOn
 
 // CreateNoteInput represents a mutation input for creating notes.
 type CreateNoteInput struct {
-	Tags     []string
-	Text     string
-	OwnerID  *string
-	EntityID *string
+	Tags          []string
+	Text          string
+	OwnerID       *string
+	EntityID      *string
+	SubcontrolIDs []string
 }
 
 // Mutate applies the CreateNoteInput on the NoteMutation builder.
@@ -3725,6 +3738,9 @@ func (i *CreateNoteInput) Mutate(m *NoteMutation) {
 	if v := i.EntityID; v != nil {
 		m.SetEntityID(*v)
 	}
+	if v := i.SubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateNoteInput on the NoteCreate builder.
@@ -3735,14 +3751,17 @@ func (c *NoteCreate) SetInput(i CreateNoteInput) *NoteCreate {
 
 // UpdateNoteInput represents a mutation input for updating notes.
 type UpdateNoteInput struct {
-	ClearTags   bool
-	Tags        []string
-	AppendTags  []string
-	Text        *string
-	ClearOwner  bool
-	OwnerID     *string
-	ClearEntity bool
-	EntityID    *string
+	ClearTags           bool
+	Tags                []string
+	AppendTags          []string
+	Text                *string
+	ClearOwner          bool
+	OwnerID             *string
+	ClearEntity         bool
+	EntityID            *string
+	ClearSubcontrols    bool
+	AddSubcontrolIDs    []string
+	RemoveSubcontrolIDs []string
 }
 
 // Mutate applies the UpdateNoteInput on the NoteMutation builder.
@@ -3770,6 +3789,15 @@ func (i *UpdateNoteInput) Mutate(m *NoteMutation) {
 	}
 	if v := i.EntityID; v != nil {
 		m.SetEntityID(*v)
+	}
+	if i.ClearSubcontrols {
+		m.ClearSubcontrols()
+	}
+	if v := i.AddSubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
+	if v := i.RemoveSubcontrolIDs; len(v) > 0 {
+		m.RemoveSubcontrolIDs(v...)
 	}
 }
 
@@ -4924,7 +4952,7 @@ type CreateProcedureInput struct {
 	PurposeAndScope   *string
 	Background        *string
 	Satisfies         *string
-	Jsonschema        map[string]interface{}
+	Details           map[string]interface{}
 	ControlIDs        []string
 	InternalpolicyIDs []string
 	NarrativeIDs      []string
@@ -4958,8 +4986,8 @@ func (i *CreateProcedureInput) Mutate(m *ProcedureMutation) {
 	if v := i.Satisfies; v != nil {
 		m.SetSatisfies(*v)
 	}
-	if v := i.Jsonschema; v != nil {
-		m.SetJsonschema(v)
+	if v := i.Details; v != nil {
+		m.SetDetails(v)
 	}
 	if v := i.ControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)
@@ -5001,8 +5029,8 @@ type UpdateProcedureInput struct {
 	Background              *string
 	ClearSatisfies          bool
 	Satisfies               *string
-	ClearJsonschema         bool
-	Jsonschema              map[string]interface{}
+	ClearDetails            bool
+	Details                 map[string]interface{}
 	ClearControl            bool
 	AddControlIDs           []string
 	RemoveControlIDs        []string
@@ -5073,11 +5101,11 @@ func (i *UpdateProcedureInput) Mutate(m *ProcedureMutation) {
 	if v := i.Satisfies; v != nil {
 		m.SetSatisfies(*v)
 	}
-	if i.ClearJsonschema {
-		m.ClearJsonschema()
+	if i.ClearDetails {
+		m.ClearDetails()
 	}
-	if v := i.Jsonschema; v != nil {
-		m.SetJsonschema(v)
+	if v := i.Details; v != nil {
+		m.SetDetails(v)
 	}
 	if i.ClearControl {
 		m.ClearControl()
@@ -5137,12 +5165,11 @@ type CreateRiskInput struct {
 	Status        *string
 	RiskType      *string
 	BusinessCosts *string
-	Impact        *string
-	Likelihood    *string
+	Impact        *enums.RiskImpact
+	Likelihood    *enums.RiskLikelihood
 	Mitigation    *string
 	Satisfies     *string
-	Severity      *string
-	Jsonschema    map[string]interface{}
+	Details       map[string]interface{}
 	ControlIDs    []string
 	ProcedureIDs  []string
 	ActionplanIDs []string
@@ -5178,11 +5205,8 @@ func (i *CreateRiskInput) Mutate(m *RiskMutation) {
 	if v := i.Satisfies; v != nil {
 		m.SetSatisfies(*v)
 	}
-	if v := i.Severity; v != nil {
-		m.SetSeverity(*v)
-	}
-	if v := i.Jsonschema; v != nil {
-		m.SetJsonschema(v)
+	if v := i.Details; v != nil {
+		m.SetDetails(v)
 	}
 	if v := i.ControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)
@@ -5216,17 +5240,15 @@ type UpdateRiskInput struct {
 	ClearBusinessCosts  bool
 	BusinessCosts       *string
 	ClearImpact         bool
-	Impact              *string
+	Impact              *enums.RiskImpact
 	ClearLikelihood     bool
-	Likelihood          *string
+	Likelihood          *enums.RiskLikelihood
 	ClearMitigation     bool
 	Mitigation          *string
 	ClearSatisfies      bool
 	Satisfies           *string
-	ClearSeverity       bool
-	Severity            *string
-	ClearJsonschema     bool
-	Jsonschema          map[string]interface{}
+	ClearDetails        bool
+	Details             map[string]interface{}
 	ClearControl        bool
 	AddControlIDs       []string
 	RemoveControlIDs    []string
@@ -5300,17 +5322,11 @@ func (i *UpdateRiskInput) Mutate(m *RiskMutation) {
 	if v := i.Satisfies; v != nil {
 		m.SetSatisfies(*v)
 	}
-	if i.ClearSeverity {
-		m.ClearSeverity()
+	if i.ClearDetails {
+		m.ClearDetails()
 	}
-	if v := i.Severity; v != nil {
-		m.SetSeverity(*v)
-	}
-	if i.ClearJsonschema {
-		m.ClearJsonschema()
-	}
-	if v := i.Jsonschema; v != nil {
-		m.SetJsonschema(v)
+	if v := i.Details; v != nil {
+		m.SetDetails(v)
 	}
 	if i.ClearControl {
 		m.ClearControl()
@@ -5365,7 +5381,7 @@ type CreateStandardInput struct {
 	PurposeAndScope     *string
 	Background          *string
 	Satisfies           *string
-	Jsonschema          map[string]interface{}
+	Details             map[string]interface{}
 	ControlobjectiveIDs []string
 	ControlIDs          []string
 	ProcedureIDs        []string
@@ -5402,8 +5418,8 @@ func (i *CreateStandardInput) Mutate(m *StandardMutation) {
 	if v := i.Satisfies; v != nil {
 		m.SetSatisfies(*v)
 	}
-	if v := i.Jsonschema; v != nil {
-		m.SetJsonschema(v)
+	if v := i.Details; v != nil {
+		m.SetDetails(v)
 	}
 	if v := i.ControlobjectiveIDs; len(v) > 0 {
 		m.AddControlobjectiveIDs(v...)
@@ -5447,8 +5463,8 @@ type UpdateStandardInput struct {
 	Background                *string
 	ClearSatisfies            bool
 	Satisfies                 *string
-	ClearJsonschema           bool
-	Jsonschema                map[string]interface{}
+	ClearDetails              bool
+	Details                   map[string]interface{}
 	ClearControlobjectives    bool
 	AddControlobjectiveIDs    []string
 	RemoveControlobjectiveIDs []string
@@ -5525,11 +5541,11 @@ func (i *UpdateStandardInput) Mutate(m *StandardMutation) {
 	if v := i.Satisfies; v != nil {
 		m.SetSatisfies(*v)
 	}
-	if i.ClearJsonschema {
-		m.ClearJsonschema()
+	if i.ClearDetails {
+		m.ClearDetails()
 	}
-	if v := i.Jsonschema; v != nil {
-		m.SetJsonschema(v)
+	if v := i.Details; v != nil {
+		m.SetDetails(v)
 	}
 	if i.ClearControlobjectives {
 		m.ClearControlobjectives()
@@ -5589,21 +5605,20 @@ type CreateSubcontrolInput struct {
 	Status                         *string
 	SubcontrolType                 *string
 	Version                        *string
-	Owner                          *string
 	SubcontrolNumber               *string
-	SubcontrolFamily               *string
-	SubcontrolClass                *string
+	Family                         *string
+	Class                          *string
 	Source                         *string
 	MappedFrameworks               *string
-	AssignedTo                     *string
-	ImplementationStatus           *string
-	ImplementationNotes            *string
-	ImplementationDate             *string
 	ImplementationEvidence         *string
+	ImplementationStatus           *string
+	ImplementationDate             *time.Time
 	ImplementationVerification     *string
-	ImplementationVerificationDate *string
-	Jsonschema                     map[string]interface{}
+	ImplementationVerificationDate *time.Time
+	Details                        map[string]interface{}
 	ControlIDs                     []string
+	UserIDs                        []string
+	NotesID                        *string
 }
 
 // Mutate applies the CreateSubcontrolInput on the SubcontrolMutation builder.
@@ -5624,17 +5639,14 @@ func (i *CreateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	if v := i.Version; v != nil {
 		m.SetVersion(*v)
 	}
-	if v := i.Owner; v != nil {
-		m.SetOwner(*v)
-	}
 	if v := i.SubcontrolNumber; v != nil {
 		m.SetSubcontrolNumber(*v)
 	}
-	if v := i.SubcontrolFamily; v != nil {
-		m.SetSubcontrolFamily(*v)
+	if v := i.Family; v != nil {
+		m.SetFamily(*v)
 	}
-	if v := i.SubcontrolClass; v != nil {
-		m.SetSubcontrolClass(*v)
+	if v := i.Class; v != nil {
+		m.SetClass(*v)
 	}
 	if v := i.Source; v != nil {
 		m.SetSource(*v)
@@ -5642,20 +5654,14 @@ func (i *CreateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	if v := i.MappedFrameworks; v != nil {
 		m.SetMappedFrameworks(*v)
 	}
-	if v := i.AssignedTo; v != nil {
-		m.SetAssignedTo(*v)
+	if v := i.ImplementationEvidence; v != nil {
+		m.SetImplementationEvidence(*v)
 	}
 	if v := i.ImplementationStatus; v != nil {
 		m.SetImplementationStatus(*v)
 	}
-	if v := i.ImplementationNotes; v != nil {
-		m.SetImplementationNotes(*v)
-	}
 	if v := i.ImplementationDate; v != nil {
 		m.SetImplementationDate(*v)
-	}
-	if v := i.ImplementationEvidence; v != nil {
-		m.SetImplementationEvidence(*v)
 	}
 	if v := i.ImplementationVerification; v != nil {
 		m.SetImplementationVerification(*v)
@@ -5663,11 +5669,17 @@ func (i *CreateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	if v := i.ImplementationVerificationDate; v != nil {
 		m.SetImplementationVerificationDate(*v)
 	}
-	if v := i.Jsonschema; v != nil {
-		m.SetJsonschema(v)
+	if v := i.Details; v != nil {
+		m.SetDetails(v)
 	}
 	if v := i.ControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)
+	}
+	if v := i.UserIDs; len(v) > 0 {
+		m.AddUserIDs(v...)
+	}
+	if v := i.NotesID; v != nil {
+		m.SetNotesID(*v)
 	}
 }
 
@@ -5691,37 +5703,36 @@ type UpdateSubcontrolInput struct {
 	SubcontrolType                      *string
 	ClearVersion                        bool
 	Version                             *string
-	ClearOwner                          bool
-	Owner                               *string
 	ClearSubcontrolNumber               bool
 	SubcontrolNumber                    *string
-	ClearSubcontrolFamily               bool
-	SubcontrolFamily                    *string
-	ClearSubcontrolClass                bool
-	SubcontrolClass                     *string
+	ClearFamily                         bool
+	Family                              *string
+	ClearClass                          bool
+	Class                               *string
 	ClearSource                         bool
 	Source                              *string
 	ClearMappedFrameworks               bool
 	MappedFrameworks                    *string
-	ClearAssignedTo                     bool
-	AssignedTo                          *string
-	ClearImplementationStatus           bool
-	ImplementationStatus                *string
-	ClearImplementationNotes            bool
-	ImplementationNotes                 *string
-	ClearImplementationDate             bool
-	ImplementationDate                  *string
 	ClearImplementationEvidence         bool
 	ImplementationEvidence              *string
+	ClearImplementationStatus           bool
+	ImplementationStatus                *string
+	ClearImplementationDate             bool
+	ImplementationDate                  *time.Time
 	ClearImplementationVerification     bool
 	ImplementationVerification          *string
 	ClearImplementationVerificationDate bool
-	ImplementationVerificationDate      *string
-	ClearJsonschema                     bool
-	Jsonschema                          map[string]interface{}
+	ImplementationVerificationDate      *time.Time
+	ClearDetails                        bool
+	Details                             map[string]interface{}
 	ClearControl                        bool
 	AddControlIDs                       []string
 	RemoveControlIDs                    []string
+	ClearUser                           bool
+	AddUserIDs                          []string
+	RemoveUserIDs                       []string
+	ClearNotes                          bool
+	NotesID                             *string
 }
 
 // Mutate applies the UpdateSubcontrolInput on the SubcontrolMutation builder.
@@ -5762,29 +5773,23 @@ func (i *UpdateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	if v := i.Version; v != nil {
 		m.SetVersion(*v)
 	}
-	if i.ClearOwner {
-		m.ClearOwner()
-	}
-	if v := i.Owner; v != nil {
-		m.SetOwner(*v)
-	}
 	if i.ClearSubcontrolNumber {
 		m.ClearSubcontrolNumber()
 	}
 	if v := i.SubcontrolNumber; v != nil {
 		m.SetSubcontrolNumber(*v)
 	}
-	if i.ClearSubcontrolFamily {
-		m.ClearSubcontrolFamily()
+	if i.ClearFamily {
+		m.ClearFamily()
 	}
-	if v := i.SubcontrolFamily; v != nil {
-		m.SetSubcontrolFamily(*v)
+	if v := i.Family; v != nil {
+		m.SetFamily(*v)
 	}
-	if i.ClearSubcontrolClass {
-		m.ClearSubcontrolClass()
+	if i.ClearClass {
+		m.ClearClass()
 	}
-	if v := i.SubcontrolClass; v != nil {
-		m.SetSubcontrolClass(*v)
+	if v := i.Class; v != nil {
+		m.SetClass(*v)
 	}
 	if i.ClearSource {
 		m.ClearSource()
@@ -5798,11 +5803,11 @@ func (i *UpdateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	if v := i.MappedFrameworks; v != nil {
 		m.SetMappedFrameworks(*v)
 	}
-	if i.ClearAssignedTo {
-		m.ClearAssignedTo()
+	if i.ClearImplementationEvidence {
+		m.ClearImplementationEvidence()
 	}
-	if v := i.AssignedTo; v != nil {
-		m.SetAssignedTo(*v)
+	if v := i.ImplementationEvidence; v != nil {
+		m.SetImplementationEvidence(*v)
 	}
 	if i.ClearImplementationStatus {
 		m.ClearImplementationStatus()
@@ -5810,23 +5815,11 @@ func (i *UpdateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	if v := i.ImplementationStatus; v != nil {
 		m.SetImplementationStatus(*v)
 	}
-	if i.ClearImplementationNotes {
-		m.ClearImplementationNotes()
-	}
-	if v := i.ImplementationNotes; v != nil {
-		m.SetImplementationNotes(*v)
-	}
 	if i.ClearImplementationDate {
 		m.ClearImplementationDate()
 	}
 	if v := i.ImplementationDate; v != nil {
 		m.SetImplementationDate(*v)
-	}
-	if i.ClearImplementationEvidence {
-		m.ClearImplementationEvidence()
-	}
-	if v := i.ImplementationEvidence; v != nil {
-		m.SetImplementationEvidence(*v)
 	}
 	if i.ClearImplementationVerification {
 		m.ClearImplementationVerification()
@@ -5840,11 +5833,11 @@ func (i *UpdateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	if v := i.ImplementationVerificationDate; v != nil {
 		m.SetImplementationVerificationDate(*v)
 	}
-	if i.ClearJsonschema {
-		m.ClearJsonschema()
+	if i.ClearDetails {
+		m.ClearDetails()
 	}
-	if v := i.Jsonschema; v != nil {
-		m.SetJsonschema(v)
+	if v := i.Details; v != nil {
+		m.SetDetails(v)
 	}
 	if i.ClearControl {
 		m.ClearControl()
@@ -5854,6 +5847,21 @@ func (i *UpdateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	}
 	if v := i.RemoveControlIDs; len(v) > 0 {
 		m.RemoveControlIDs(v...)
+	}
+	if i.ClearUser {
+		m.ClearUser()
+	}
+	if v := i.AddUserIDs; len(v) > 0 {
+		m.AddUserIDs(v...)
+	}
+	if v := i.RemoveUserIDs; len(v) > 0 {
+		m.RemoveUserIDs(v...)
+	}
+	if i.ClearNotes {
+		m.ClearNotes()
+	}
+	if v := i.NotesID; v != nil {
+		m.SetNotesID(*v)
 	}
 }
 
@@ -6201,6 +6209,8 @@ type CreateUserInput struct {
 	FileIDs                   []string
 	FileID                    *string
 	EventIDs                  []string
+	ActionplanIDs             []string
+	SubcontrolIDs             []string
 }
 
 // Mutate applies the CreateUserInput on the UserMutation builder.
@@ -6271,6 +6281,12 @@ func (i *CreateUserInput) Mutate(m *UserMutation) {
 	if v := i.EventIDs; len(v) > 0 {
 		m.AddEventIDs(v...)
 	}
+	if v := i.ActionplanIDs; len(v) > 0 {
+		m.AddActionplanIDs(v...)
+	}
+	if v := i.SubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateUserInput on the UserCreate builder.
@@ -6335,6 +6351,12 @@ type UpdateUserInput struct {
 	ClearEvents                     bool
 	AddEventIDs                     []string
 	RemoveEventIDs                  []string
+	ClearActionplans                bool
+	AddActionplanIDs                []string
+	RemoveActionplanIDs             []string
+	ClearSubcontrols                bool
+	AddSubcontrolIDs                []string
+	RemoveSubcontrolIDs             []string
 }
 
 // Mutate applies the UpdateUserInput on the UserMutation builder.
@@ -6500,6 +6522,24 @@ func (i *UpdateUserInput) Mutate(m *UserMutation) {
 	}
 	if v := i.RemoveEventIDs; len(v) > 0 {
 		m.RemoveEventIDs(v...)
+	}
+	if i.ClearActionplans {
+		m.ClearActionplans()
+	}
+	if v := i.AddActionplanIDs; len(v) > 0 {
+		m.AddActionplanIDs(v...)
+	}
+	if v := i.RemoveActionplanIDs; len(v) > 0 {
+		m.RemoveActionplanIDs(v...)
+	}
+	if i.ClearSubcontrols {
+		m.ClearSubcontrols()
+	}
+	if v := i.AddSubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
+	if v := i.RemoveSubcontrolIDs; len(v) > 0 {
+		m.RemoveSubcontrolIDs(v...)
 	}
 }
 

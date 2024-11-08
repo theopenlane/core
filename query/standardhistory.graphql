@@ -8,10 +8,10 @@ query GetAllStandardHistories {
         createdAt
         createdBy
         description
+        details
         family
         historyTime
         id
-        jsonschema
         name
         operation
         purposeAndScope
@@ -36,10 +36,10 @@ query GetStandardHistories($where: StandardHistoryWhereInput) {
         createdAt
         createdBy
         description
+        details
         family
         historyTime
         id
-        jsonschema
         name
         operation
         purposeAndScope

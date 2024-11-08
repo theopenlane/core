@@ -46,12 +46,12 @@ type Procedure struct {
 	Version string `json:"version,omitempty"`
 	// purpose and scope
 	PurposeAndScope string `json:"purpose_and_scope,omitempty"`
-	// background
+	// background of the procedure
 	Background string `json:"background,omitempty"`
 	// which controls are satisfied by the procedure
 	Satisfies string `json:"satisfies,omitempty"`
-	// json schema
-	Jsonschema map[string]interface{} `json:"jsonschema,omitempty"`
+	// json data for the procedure document
+	Details map[string]interface{} `json:"details,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ProcedureQuery when eager-loading is set.
 	Edges                        ProcedureEdges `json:"edges"`
@@ -123,7 +123,7 @@ func (*Procedure) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case procedure.FieldTags, procedure.FieldJsonschema:
+		case procedure.FieldTags, procedure.FieldDetails:
 			values[i] = new([]byte)
 		case procedure.FieldID, procedure.FieldCreatedBy, procedure.FieldUpdatedBy, procedure.FieldDeletedBy, procedure.FieldMappingID, procedure.FieldName, procedure.FieldDescription, procedure.FieldStatus, procedure.FieldProcedureType, procedure.FieldVersion, procedure.FieldPurposeAndScope, procedure.FieldBackground, procedure.FieldSatisfies:
 			values[i] = new(sql.NullString)
@@ -252,12 +252,12 @@ func (pr *Procedure) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				pr.Satisfies = value.String
 			}
-		case procedure.FieldJsonschema:
+		case procedure.FieldDetails:
 			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field jsonschema", values[i])
+				return fmt.Errorf("unexpected type %T for field details", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &pr.Jsonschema); err != nil {
-					return fmt.Errorf("unmarshal field jsonschema: %w", err)
+				if err := json.Unmarshal(*value, &pr.Details); err != nil {
+					return fmt.Errorf("unmarshal field details: %w", err)
 				}
 			}
 		case procedure.ForeignKeys[0]:
@@ -378,8 +378,8 @@ func (pr *Procedure) String() string {
 	builder.WriteString("satisfies=")
 	builder.WriteString(pr.Satisfies)
 	builder.WriteString(", ")
-	builder.WriteString("jsonschema=")
-	builder.WriteString(fmt.Sprintf("%v", pr.Jsonschema))
+	builder.WriteString("details=")
+	builder.WriteString(fmt.Sprintf("%v", pr.Details))
 	builder.WriteByte(')')
 	return builder.String()
 }

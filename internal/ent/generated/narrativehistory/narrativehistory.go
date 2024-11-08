@@ -44,8 +44,8 @@ const (
 	FieldDescription = "description"
 	// FieldSatisfies holds the string denoting the satisfies field in the database.
 	FieldSatisfies = "satisfies"
-	// FieldJsonschema holds the string denoting the jsonschema field in the database.
-	FieldJsonschema = "jsonschema"
+	// FieldDetails holds the string denoting the details field in the database.
+	FieldDetails = "details"
 	// Table holds the table name of the narrativehistory in the database.
 	Table = "narrative_history"
 )
@@ -67,7 +67,7 @@ var Columns = []string{
 	FieldName,
 	FieldDescription,
 	FieldSatisfies,
-	FieldJsonschema,
+	FieldDetails,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).

@@ -93,15 +93,19 @@ type UserEdges struct {
 	File *File `json:"file,omitempty"`
 	// Events holds the value of the events edge.
 	Events []*Event `json:"events,omitempty"`
+	// Actionplans holds the value of the actionplans edge.
+	Actionplans []*ActionPlan `json:"actionplans,omitempty"`
+	// Subcontrols holds the value of the subcontrols edge.
+	Subcontrols []*Subcontrol `json:"subcontrols,omitempty"`
 	// GroupMemberships holds the value of the group_memberships edge.
 	GroupMemberships []*GroupMembership `json:"group_memberships,omitempty"`
 	// OrgMemberships holds the value of the org_memberships edge.
 	OrgMemberships []*OrgMembership `json:"org_memberships,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [13]bool
+	loadedTypes [15]bool
 	// totalCount holds the count of the edges above.
-	totalCount [10]map[string]int
+	totalCount [12]map[string]int
 
 	namedPersonalAccessTokens    map[string][]*PersonalAccessToken
 	namedTfaSettings             map[string][]*TFASetting
@@ -112,6 +116,8 @@ type UserEdges struct {
 	namedWebauthn                map[string][]*Webauthn
 	namedFiles                   map[string][]*File
 	namedEvents                  map[string][]*Event
+	namedActionplans             map[string][]*ActionPlan
+	namedSubcontrols             map[string][]*Subcontrol
 	namedGroupMemberships        map[string][]*GroupMembership
 	namedOrgMemberships          map[string][]*OrgMembership
 }
@@ -219,10 +225,28 @@ func (e UserEdges) EventsOrErr() ([]*Event, error) {
 	return nil, &NotLoadedError{edge: "events"}
 }
 
+// ActionplansOrErr returns the Actionplans value or an error if the edge
+// was not loaded in eager-loading.
+func (e UserEdges) ActionplansOrErr() ([]*ActionPlan, error) {
+	if e.loadedTypes[11] {
+		return e.Actionplans, nil
+	}
+	return nil, &NotLoadedError{edge: "actionplans"}
+}
+
+// SubcontrolsOrErr returns the Subcontrols value or an error if the edge
+// was not loaded in eager-loading.
+func (e UserEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
+	if e.loadedTypes[12] {
+		return e.Subcontrols, nil
+	}
+	return nil, &NotLoadedError{edge: "subcontrols"}
+}
+
 // GroupMembershipsOrErr returns the GroupMemberships value or an error if the edge
 // was not loaded in eager-loading.
 func (e UserEdges) GroupMembershipsOrErr() ([]*GroupMembership, error) {
-	if e.loadedTypes[11] {
+	if e.loadedTypes[13] {
 		return e.GroupMemberships, nil
 	}
 	return nil, &NotLoadedError{edge: "group_memberships"}
@@ -231,7 +255,7 @@ func (e UserEdges) GroupMembershipsOrErr() ([]*GroupMembership, error) {
 // OrgMembershipsOrErr returns the OrgMemberships value or an error if the edge
 // was not loaded in eager-loading.
 func (e UserEdges) OrgMembershipsOrErr() ([]*OrgMembership, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[14] {
 		return e.OrgMemberships, nil
 	}
 	return nil, &NotLoadedError{edge: "org_memberships"}
@@ -469,6 +493,16 @@ func (u *User) QueryFile() *FileQuery {
 // QueryEvents queries the "events" edge of the User entity.
 func (u *User) QueryEvents() *EventQuery {
 	return NewUserClient(u.config).QueryEvents(u)
+}
+
+// QueryActionplans queries the "actionplans" edge of the User entity.
+func (u *User) QueryActionplans() *ActionPlanQuery {
+	return NewUserClient(u.config).QueryActionplans(u)
+}
+
+// QuerySubcontrols queries the "subcontrols" edge of the User entity.
+func (u *User) QuerySubcontrols() *SubcontrolQuery {
+	return NewUserClient(u.config).QuerySubcontrols(u)
 }
 
 // QueryGroupMemberships queries the "group_memberships" edge of the User entity.
@@ -792,6 +826,54 @@ func (u *User) appendNamedEvents(name string, edges ...*Event) {
 		u.Edges.namedEvents[name] = []*Event{}
 	} else {
 		u.Edges.namedEvents[name] = append(u.Edges.namedEvents[name], edges...)
+	}
+}
+
+// NamedActionplans returns the Actionplans named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (u *User) NamedActionplans(name string) ([]*ActionPlan, error) {
+	if u.Edges.namedActionplans == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := u.Edges.namedActionplans[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (u *User) appendNamedActionplans(name string, edges ...*ActionPlan) {
+	if u.Edges.namedActionplans == nil {
+		u.Edges.namedActionplans = make(map[string][]*ActionPlan)
+	}
+	if len(edges) == 0 {
+		u.Edges.namedActionplans[name] = []*ActionPlan{}
+	} else {
+		u.Edges.namedActionplans[name] = append(u.Edges.namedActionplans[name], edges...)
+	}
+}
+
+// NamedSubcontrols returns the Subcontrols named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (u *User) NamedSubcontrols(name string) ([]*Subcontrol, error) {
+	if u.Edges.namedSubcontrols == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := u.Edges.namedSubcontrols[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (u *User) appendNamedSubcontrols(name string, edges ...*Subcontrol) {
+	if u.Edges.namedSubcontrols == nil {
+		u.Edges.namedSubcontrols = make(map[string][]*Subcontrol)
+	}
+	if len(edges) == 0 {
+		u.Edges.namedSubcontrols[name] = []*Subcontrol{}
+	} else {
+		u.Edges.namedSubcontrols[name] = append(u.Edges.namedSubcontrols[name], edges...)
 	}
 }
 

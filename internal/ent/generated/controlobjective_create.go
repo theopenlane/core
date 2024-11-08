@@ -193,20 +193,6 @@ func (coc *ControlObjectiveCreate) SetNillableVersion(s *string) *ControlObjecti
 	return coc
 }
 
-// SetOwner sets the "owner" field.
-func (coc *ControlObjectiveCreate) SetOwner(s string) *ControlObjectiveCreate {
-	coc.mutation.SetOwner(s)
-	return coc
-}
-
-// SetNillableOwner sets the "owner" field if the given value is not nil.
-func (coc *ControlObjectiveCreate) SetNillableOwner(s *string) *ControlObjectiveCreate {
-	if s != nil {
-		coc.SetOwner(*s)
-	}
-	return coc
-}
-
 // SetControlNumber sets the "control_number" field.
 func (coc *ControlObjectiveCreate) SetControlNumber(s string) *ControlObjectiveCreate {
 	coc.mutation.SetControlNumber(s)
@@ -221,30 +207,30 @@ func (coc *ControlObjectiveCreate) SetNillableControlNumber(s *string) *ControlO
 	return coc
 }
 
-// SetControlFamily sets the "control_family" field.
-func (coc *ControlObjectiveCreate) SetControlFamily(s string) *ControlObjectiveCreate {
-	coc.mutation.SetControlFamily(s)
+// SetFamily sets the "family" field.
+func (coc *ControlObjectiveCreate) SetFamily(s string) *ControlObjectiveCreate {
+	coc.mutation.SetFamily(s)
 	return coc
 }
 
-// SetNillableControlFamily sets the "control_family" field if the given value is not nil.
-func (coc *ControlObjectiveCreate) SetNillableControlFamily(s *string) *ControlObjectiveCreate {
+// SetNillableFamily sets the "family" field if the given value is not nil.
+func (coc *ControlObjectiveCreate) SetNillableFamily(s *string) *ControlObjectiveCreate {
 	if s != nil {
-		coc.SetControlFamily(*s)
+		coc.SetFamily(*s)
 	}
 	return coc
 }
 
-// SetControlClass sets the "control_class" field.
-func (coc *ControlObjectiveCreate) SetControlClass(s string) *ControlObjectiveCreate {
-	coc.mutation.SetControlClass(s)
+// SetClass sets the "class" field.
+func (coc *ControlObjectiveCreate) SetClass(s string) *ControlObjectiveCreate {
+	coc.mutation.SetClass(s)
 	return coc
 }
 
-// SetNillableControlClass sets the "control_class" field if the given value is not nil.
-func (coc *ControlObjectiveCreate) SetNillableControlClass(s *string) *ControlObjectiveCreate {
+// SetNillableClass sets the "class" field if the given value is not nil.
+func (coc *ControlObjectiveCreate) SetNillableClass(s *string) *ControlObjectiveCreate {
 	if s != nil {
-		coc.SetControlClass(*s)
+		coc.SetClass(*s)
 	}
 	return coc
 }
@@ -277,9 +263,9 @@ func (coc *ControlObjectiveCreate) SetNillableMappedFrameworks(s *string) *Contr
 	return coc
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (coc *ControlObjectiveCreate) SetJsonschema(m map[string]interface{}) *ControlObjectiveCreate {
-	coc.mutation.SetJsonschema(m)
+// SetDetails sets the "details" field.
+func (coc *ControlObjectiveCreate) SetDetails(m map[string]interface{}) *ControlObjectiveCreate {
+	coc.mutation.SetDetails(m)
 	return coc
 }
 
@@ -570,21 +556,17 @@ func (coc *ControlObjectiveCreate) createSpec() (*ControlObjective, *sqlgraph.Cr
 		_spec.SetField(controlobjective.FieldVersion, field.TypeString, value)
 		_node.Version = value
 	}
-	if value, ok := coc.mutation.Owner(); ok {
-		_spec.SetField(controlobjective.FieldOwner, field.TypeString, value)
-		_node.Owner = value
-	}
 	if value, ok := coc.mutation.ControlNumber(); ok {
 		_spec.SetField(controlobjective.FieldControlNumber, field.TypeString, value)
 		_node.ControlNumber = value
 	}
-	if value, ok := coc.mutation.ControlFamily(); ok {
-		_spec.SetField(controlobjective.FieldControlFamily, field.TypeString, value)
-		_node.ControlFamily = value
+	if value, ok := coc.mutation.Family(); ok {
+		_spec.SetField(controlobjective.FieldFamily, field.TypeString, value)
+		_node.Family = value
 	}
-	if value, ok := coc.mutation.ControlClass(); ok {
-		_spec.SetField(controlobjective.FieldControlClass, field.TypeString, value)
-		_node.ControlClass = value
+	if value, ok := coc.mutation.Class(); ok {
+		_spec.SetField(controlobjective.FieldClass, field.TypeString, value)
+		_node.Class = value
 	}
 	if value, ok := coc.mutation.Source(); ok {
 		_spec.SetField(controlobjective.FieldSource, field.TypeString, value)
@@ -594,9 +576,9 @@ func (coc *ControlObjectiveCreate) createSpec() (*ControlObjective, *sqlgraph.Cr
 		_spec.SetField(controlobjective.FieldMappedFrameworks, field.TypeString, value)
 		_node.MappedFrameworks = value
 	}
-	if value, ok := coc.mutation.Jsonschema(); ok {
-		_spec.SetField(controlobjective.FieldJsonschema, field.TypeJSON, value)
-		_node.Jsonschema = value
+	if value, ok := coc.mutation.Details(); ok {
+		_spec.SetField(controlobjective.FieldDetails, field.TypeJSON, value)
+		_node.Details = value
 	}
 	if nodes := coc.mutation.PolicyIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

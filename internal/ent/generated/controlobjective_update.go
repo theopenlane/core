@@ -223,26 +223,6 @@ func (cou *ControlObjectiveUpdate) ClearVersion() *ControlObjectiveUpdate {
 	return cou
 }
 
-// SetOwner sets the "owner" field.
-func (cou *ControlObjectiveUpdate) SetOwner(s string) *ControlObjectiveUpdate {
-	cou.mutation.SetOwner(s)
-	return cou
-}
-
-// SetNillableOwner sets the "owner" field if the given value is not nil.
-func (cou *ControlObjectiveUpdate) SetNillableOwner(s *string) *ControlObjectiveUpdate {
-	if s != nil {
-		cou.SetOwner(*s)
-	}
-	return cou
-}
-
-// ClearOwner clears the value of the "owner" field.
-func (cou *ControlObjectiveUpdate) ClearOwner() *ControlObjectiveUpdate {
-	cou.mutation.ClearOwner()
-	return cou
-}
-
 // SetControlNumber sets the "control_number" field.
 func (cou *ControlObjectiveUpdate) SetControlNumber(s string) *ControlObjectiveUpdate {
 	cou.mutation.SetControlNumber(s)
@@ -263,43 +243,43 @@ func (cou *ControlObjectiveUpdate) ClearControlNumber() *ControlObjectiveUpdate 
 	return cou
 }
 
-// SetControlFamily sets the "control_family" field.
-func (cou *ControlObjectiveUpdate) SetControlFamily(s string) *ControlObjectiveUpdate {
-	cou.mutation.SetControlFamily(s)
+// SetFamily sets the "family" field.
+func (cou *ControlObjectiveUpdate) SetFamily(s string) *ControlObjectiveUpdate {
+	cou.mutation.SetFamily(s)
 	return cou
 }
 
-// SetNillableControlFamily sets the "control_family" field if the given value is not nil.
-func (cou *ControlObjectiveUpdate) SetNillableControlFamily(s *string) *ControlObjectiveUpdate {
+// SetNillableFamily sets the "family" field if the given value is not nil.
+func (cou *ControlObjectiveUpdate) SetNillableFamily(s *string) *ControlObjectiveUpdate {
 	if s != nil {
-		cou.SetControlFamily(*s)
+		cou.SetFamily(*s)
 	}
 	return cou
 }
 
-// ClearControlFamily clears the value of the "control_family" field.
-func (cou *ControlObjectiveUpdate) ClearControlFamily() *ControlObjectiveUpdate {
-	cou.mutation.ClearControlFamily()
+// ClearFamily clears the value of the "family" field.
+func (cou *ControlObjectiveUpdate) ClearFamily() *ControlObjectiveUpdate {
+	cou.mutation.ClearFamily()
 	return cou
 }
 
-// SetControlClass sets the "control_class" field.
-func (cou *ControlObjectiveUpdate) SetControlClass(s string) *ControlObjectiveUpdate {
-	cou.mutation.SetControlClass(s)
+// SetClass sets the "class" field.
+func (cou *ControlObjectiveUpdate) SetClass(s string) *ControlObjectiveUpdate {
+	cou.mutation.SetClass(s)
 	return cou
 }
 
-// SetNillableControlClass sets the "control_class" field if the given value is not nil.
-func (cou *ControlObjectiveUpdate) SetNillableControlClass(s *string) *ControlObjectiveUpdate {
+// SetNillableClass sets the "class" field if the given value is not nil.
+func (cou *ControlObjectiveUpdate) SetNillableClass(s *string) *ControlObjectiveUpdate {
 	if s != nil {
-		cou.SetControlClass(*s)
+		cou.SetClass(*s)
 	}
 	return cou
 }
 
-// ClearControlClass clears the value of the "control_class" field.
-func (cou *ControlObjectiveUpdate) ClearControlClass() *ControlObjectiveUpdate {
-	cou.mutation.ClearControlClass()
+// ClearClass clears the value of the "class" field.
+func (cou *ControlObjectiveUpdate) ClearClass() *ControlObjectiveUpdate {
+	cou.mutation.ClearClass()
 	return cou
 }
 
@@ -343,15 +323,15 @@ func (cou *ControlObjectiveUpdate) ClearMappedFrameworks() *ControlObjectiveUpda
 	return cou
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (cou *ControlObjectiveUpdate) SetJsonschema(m map[string]interface{}) *ControlObjectiveUpdate {
-	cou.mutation.SetJsonschema(m)
+// SetDetails sets the "details" field.
+func (cou *ControlObjectiveUpdate) SetDetails(m map[string]interface{}) *ControlObjectiveUpdate {
+	cou.mutation.SetDetails(m)
 	return cou
 }
 
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (cou *ControlObjectiveUpdate) ClearJsonschema() *ControlObjectiveUpdate {
-	cou.mutation.ClearJsonschema()
+// ClearDetails clears the value of the "details" field.
+func (cou *ControlObjectiveUpdate) ClearDetails() *ControlObjectiveUpdate {
+	cou.mutation.ClearDetails()
 	return cou
 }
 
@@ -737,29 +717,23 @@ func (cou *ControlObjectiveUpdate) sqlSave(ctx context.Context) (n int, err erro
 	if cou.mutation.VersionCleared() {
 		_spec.ClearField(controlobjective.FieldVersion, field.TypeString)
 	}
-	if value, ok := cou.mutation.Owner(); ok {
-		_spec.SetField(controlobjective.FieldOwner, field.TypeString, value)
-	}
-	if cou.mutation.OwnerCleared() {
-		_spec.ClearField(controlobjective.FieldOwner, field.TypeString)
-	}
 	if value, ok := cou.mutation.ControlNumber(); ok {
 		_spec.SetField(controlobjective.FieldControlNumber, field.TypeString, value)
 	}
 	if cou.mutation.ControlNumberCleared() {
 		_spec.ClearField(controlobjective.FieldControlNumber, field.TypeString)
 	}
-	if value, ok := cou.mutation.ControlFamily(); ok {
-		_spec.SetField(controlobjective.FieldControlFamily, field.TypeString, value)
+	if value, ok := cou.mutation.Family(); ok {
+		_spec.SetField(controlobjective.FieldFamily, field.TypeString, value)
 	}
-	if cou.mutation.ControlFamilyCleared() {
-		_spec.ClearField(controlobjective.FieldControlFamily, field.TypeString)
+	if cou.mutation.FamilyCleared() {
+		_spec.ClearField(controlobjective.FieldFamily, field.TypeString)
 	}
-	if value, ok := cou.mutation.ControlClass(); ok {
-		_spec.SetField(controlobjective.FieldControlClass, field.TypeString, value)
+	if value, ok := cou.mutation.Class(); ok {
+		_spec.SetField(controlobjective.FieldClass, field.TypeString, value)
 	}
-	if cou.mutation.ControlClassCleared() {
-		_spec.ClearField(controlobjective.FieldControlClass, field.TypeString)
+	if cou.mutation.ClassCleared() {
+		_spec.ClearField(controlobjective.FieldClass, field.TypeString)
 	}
 	if value, ok := cou.mutation.Source(); ok {
 		_spec.SetField(controlobjective.FieldSource, field.TypeString, value)
@@ -773,11 +747,11 @@ func (cou *ControlObjectiveUpdate) sqlSave(ctx context.Context) (n int, err erro
 	if cou.mutation.MappedFrameworksCleared() {
 		_spec.ClearField(controlobjective.FieldMappedFrameworks, field.TypeString)
 	}
-	if value, ok := cou.mutation.Jsonschema(); ok {
-		_spec.SetField(controlobjective.FieldJsonschema, field.TypeJSON, value)
+	if value, ok := cou.mutation.Details(); ok {
+		_spec.SetField(controlobjective.FieldDetails, field.TypeJSON, value)
 	}
-	if cou.mutation.JsonschemaCleared() {
-		_spec.ClearField(controlobjective.FieldJsonschema, field.TypeJSON)
+	if cou.mutation.DetailsCleared() {
+		_spec.ClearField(controlobjective.FieldDetails, field.TypeJSON)
 	}
 	if cou.mutation.PolicyCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1323,26 +1297,6 @@ func (couo *ControlObjectiveUpdateOne) ClearVersion() *ControlObjectiveUpdateOne
 	return couo
 }
 
-// SetOwner sets the "owner" field.
-func (couo *ControlObjectiveUpdateOne) SetOwner(s string) *ControlObjectiveUpdateOne {
-	couo.mutation.SetOwner(s)
-	return couo
-}
-
-// SetNillableOwner sets the "owner" field if the given value is not nil.
-func (couo *ControlObjectiveUpdateOne) SetNillableOwner(s *string) *ControlObjectiveUpdateOne {
-	if s != nil {
-		couo.SetOwner(*s)
-	}
-	return couo
-}
-
-// ClearOwner clears the value of the "owner" field.
-func (couo *ControlObjectiveUpdateOne) ClearOwner() *ControlObjectiveUpdateOne {
-	couo.mutation.ClearOwner()
-	return couo
-}
-
 // SetControlNumber sets the "control_number" field.
 func (couo *ControlObjectiveUpdateOne) SetControlNumber(s string) *ControlObjectiveUpdateOne {
 	couo.mutation.SetControlNumber(s)
@@ -1363,43 +1317,43 @@ func (couo *ControlObjectiveUpdateOne) ClearControlNumber() *ControlObjectiveUpd
 	return couo
 }
 
-// SetControlFamily sets the "control_family" field.
-func (couo *ControlObjectiveUpdateOne) SetControlFamily(s string) *ControlObjectiveUpdateOne {
-	couo.mutation.SetControlFamily(s)
+// SetFamily sets the "family" field.
+func (couo *ControlObjectiveUpdateOne) SetFamily(s string) *ControlObjectiveUpdateOne {
+	couo.mutation.SetFamily(s)
 	return couo
 }
 
-// SetNillableControlFamily sets the "control_family" field if the given value is not nil.
-func (couo *ControlObjectiveUpdateOne) SetNillableControlFamily(s *string) *ControlObjectiveUpdateOne {
+// SetNillableFamily sets the "family" field if the given value is not nil.
+func (couo *ControlObjectiveUpdateOne) SetNillableFamily(s *string) *ControlObjectiveUpdateOne {
 	if s != nil {
-		couo.SetControlFamily(*s)
+		couo.SetFamily(*s)
 	}
 	return couo
 }
 
-// ClearControlFamily clears the value of the "control_family" field.
-func (couo *ControlObjectiveUpdateOne) ClearControlFamily() *ControlObjectiveUpdateOne {
-	couo.mutation.ClearControlFamily()
+// ClearFamily clears the value of the "family" field.
+func (couo *ControlObjectiveUpdateOne) ClearFamily() *ControlObjectiveUpdateOne {
+	couo.mutation.ClearFamily()
 	return couo
 }
 
-// SetControlClass sets the "control_class" field.
-func (couo *ControlObjectiveUpdateOne) SetControlClass(s string) *ControlObjectiveUpdateOne {
-	couo.mutation.SetControlClass(s)
+// SetClass sets the "class" field.
+func (couo *ControlObjectiveUpdateOne) SetClass(s string) *ControlObjectiveUpdateOne {
+	couo.mutation.SetClass(s)
 	return couo
 }
 
-// SetNillableControlClass sets the "control_class" field if the given value is not nil.
-func (couo *ControlObjectiveUpdateOne) SetNillableControlClass(s *string) *ControlObjectiveUpdateOne {
+// SetNillableClass sets the "class" field if the given value is not nil.
+func (couo *ControlObjectiveUpdateOne) SetNillableClass(s *string) *ControlObjectiveUpdateOne {
 	if s != nil {
-		couo.SetControlClass(*s)
+		couo.SetClass(*s)
 	}
 	return couo
 }
 
-// ClearControlClass clears the value of the "control_class" field.
-func (couo *ControlObjectiveUpdateOne) ClearControlClass() *ControlObjectiveUpdateOne {
-	couo.mutation.ClearControlClass()
+// ClearClass clears the value of the "class" field.
+func (couo *ControlObjectiveUpdateOne) ClearClass() *ControlObjectiveUpdateOne {
+	couo.mutation.ClearClass()
 	return couo
 }
 
@@ -1443,15 +1397,15 @@ func (couo *ControlObjectiveUpdateOne) ClearMappedFrameworks() *ControlObjective
 	return couo
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (couo *ControlObjectiveUpdateOne) SetJsonschema(m map[string]interface{}) *ControlObjectiveUpdateOne {
-	couo.mutation.SetJsonschema(m)
+// SetDetails sets the "details" field.
+func (couo *ControlObjectiveUpdateOne) SetDetails(m map[string]interface{}) *ControlObjectiveUpdateOne {
+	couo.mutation.SetDetails(m)
 	return couo
 }
 
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (couo *ControlObjectiveUpdateOne) ClearJsonschema() *ControlObjectiveUpdateOne {
-	couo.mutation.ClearJsonschema()
+// ClearDetails clears the value of the "details" field.
+func (couo *ControlObjectiveUpdateOne) ClearDetails() *ControlObjectiveUpdateOne {
+	couo.mutation.ClearDetails()
 	return couo
 }
 
@@ -1867,29 +1821,23 @@ func (couo *ControlObjectiveUpdateOne) sqlSave(ctx context.Context) (_node *Cont
 	if couo.mutation.VersionCleared() {
 		_spec.ClearField(controlobjective.FieldVersion, field.TypeString)
 	}
-	if value, ok := couo.mutation.Owner(); ok {
-		_spec.SetField(controlobjective.FieldOwner, field.TypeString, value)
-	}
-	if couo.mutation.OwnerCleared() {
-		_spec.ClearField(controlobjective.FieldOwner, field.TypeString)
-	}
 	if value, ok := couo.mutation.ControlNumber(); ok {
 		_spec.SetField(controlobjective.FieldControlNumber, field.TypeString, value)
 	}
 	if couo.mutation.ControlNumberCleared() {
 		_spec.ClearField(controlobjective.FieldControlNumber, field.TypeString)
 	}
-	if value, ok := couo.mutation.ControlFamily(); ok {
-		_spec.SetField(controlobjective.FieldControlFamily, field.TypeString, value)
+	if value, ok := couo.mutation.Family(); ok {
+		_spec.SetField(controlobjective.FieldFamily, field.TypeString, value)
 	}
-	if couo.mutation.ControlFamilyCleared() {
-		_spec.ClearField(controlobjective.FieldControlFamily, field.TypeString)
+	if couo.mutation.FamilyCleared() {
+		_spec.ClearField(controlobjective.FieldFamily, field.TypeString)
 	}
-	if value, ok := couo.mutation.ControlClass(); ok {
-		_spec.SetField(controlobjective.FieldControlClass, field.TypeString, value)
+	if value, ok := couo.mutation.Class(); ok {
+		_spec.SetField(controlobjective.FieldClass, field.TypeString, value)
 	}
-	if couo.mutation.ControlClassCleared() {
-		_spec.ClearField(controlobjective.FieldControlClass, field.TypeString)
+	if couo.mutation.ClassCleared() {
+		_spec.ClearField(controlobjective.FieldClass, field.TypeString)
 	}
 	if value, ok := couo.mutation.Source(); ok {
 		_spec.SetField(controlobjective.FieldSource, field.TypeString, value)
@@ -1903,11 +1851,11 @@ func (couo *ControlObjectiveUpdateOne) sqlSave(ctx context.Context) (_node *Cont
 	if couo.mutation.MappedFrameworksCleared() {
 		_spec.ClearField(controlobjective.FieldMappedFrameworks, field.TypeString)
 	}
-	if value, ok := couo.mutation.Jsonschema(); ok {
-		_spec.SetField(controlobjective.FieldJsonschema, field.TypeJSON, value)
+	if value, ok := couo.mutation.Details(); ok {
+		_spec.SetField(controlobjective.FieldDetails, field.TypeJSON, value)
 	}
-	if couo.mutation.JsonschemaCleared() {
-		_spec.ClearField(controlobjective.FieldJsonschema, field.TypeJSON)
+	if couo.mutation.DetailsCleared() {
+		_spec.ClearField(controlobjective.FieldDetails, field.TypeJSON)
 	}
 	if couo.mutation.PolicyCleared() {
 		edge := &sqlgraph.EdgeSpec{

@@ -48,34 +48,28 @@ const (
 	FieldSubcontrolType = "subcontrol_type"
 	// FieldVersion holds the string denoting the version field in the database.
 	FieldVersion = "version"
-	// FieldOwner holds the string denoting the owner field in the database.
-	FieldOwner = "owner"
 	// FieldSubcontrolNumber holds the string denoting the subcontrol_number field in the database.
 	FieldSubcontrolNumber = "subcontrol_number"
-	// FieldSubcontrolFamily holds the string denoting the subcontrol_family field in the database.
-	FieldSubcontrolFamily = "subcontrol_family"
-	// FieldSubcontrolClass holds the string denoting the subcontrol_class field in the database.
-	FieldSubcontrolClass = "subcontrol_class"
+	// FieldFamily holds the string denoting the family field in the database.
+	FieldFamily = "family"
+	// FieldClass holds the string denoting the class field in the database.
+	FieldClass = "class"
 	// FieldSource holds the string denoting the source field in the database.
 	FieldSource = "source"
 	// FieldMappedFrameworks holds the string denoting the mapped_frameworks field in the database.
 	FieldMappedFrameworks = "mapped_frameworks"
-	// FieldAssignedTo holds the string denoting the assigned_to field in the database.
-	FieldAssignedTo = "assigned_to"
-	// FieldImplementationStatus holds the string denoting the implementation_status field in the database.
-	FieldImplementationStatus = "implementation_status"
-	// FieldImplementationNotes holds the string denoting the implementation_notes field in the database.
-	FieldImplementationNotes = "implementation_notes"
-	// FieldImplementationDate holds the string denoting the implementation_date field in the database.
-	FieldImplementationDate = "implementation_date"
 	// FieldImplementationEvidence holds the string denoting the implementation_evidence field in the database.
 	FieldImplementationEvidence = "implementation_evidence"
+	// FieldImplementationStatus holds the string denoting the implementation_status field in the database.
+	FieldImplementationStatus = "implementation_status"
+	// FieldImplementationDate holds the string denoting the implementation_date field in the database.
+	FieldImplementationDate = "implementation_date"
 	// FieldImplementationVerification holds the string denoting the implementation_verification field in the database.
 	FieldImplementationVerification = "implementation_verification"
 	// FieldImplementationVerificationDate holds the string denoting the implementation_verification_date field in the database.
 	FieldImplementationVerificationDate = "implementation_verification_date"
-	// FieldJsonschema holds the string denoting the jsonschema field in the database.
-	FieldJsonschema = "jsonschema"
+	// FieldDetails holds the string denoting the details field in the database.
+	FieldDetails = "details"
 	// Table holds the table name of the subcontrolhistory in the database.
 	Table = "subcontrol_history"
 )
@@ -99,20 +93,17 @@ var Columns = []string{
 	FieldStatus,
 	FieldSubcontrolType,
 	FieldVersion,
-	FieldOwner,
 	FieldSubcontrolNumber,
-	FieldSubcontrolFamily,
-	FieldSubcontrolClass,
+	FieldFamily,
+	FieldClass,
 	FieldSource,
 	FieldMappedFrameworks,
-	FieldAssignedTo,
-	FieldImplementationStatus,
-	FieldImplementationNotes,
-	FieldImplementationDate,
 	FieldImplementationEvidence,
+	FieldImplementationStatus,
+	FieldImplementationDate,
 	FieldImplementationVerification,
 	FieldImplementationVerificationDate,
-	FieldJsonschema,
+	FieldDetails,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -235,24 +226,19 @@ func ByVersion(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldVersion, opts...).ToFunc()
 }
 
-// ByOwner orders the results by the owner field.
-func ByOwner(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldOwner, opts...).ToFunc()
-}
-
 // BySubcontrolNumber orders the results by the subcontrol_number field.
 func BySubcontrolNumber(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSubcontrolNumber, opts...).ToFunc()
 }
 
-// BySubcontrolFamily orders the results by the subcontrol_family field.
-func BySubcontrolFamily(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldSubcontrolFamily, opts...).ToFunc()
+// ByFamily orders the results by the family field.
+func ByFamily(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFamily, opts...).ToFunc()
 }
 
-// BySubcontrolClass orders the results by the subcontrol_class field.
-func BySubcontrolClass(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldSubcontrolClass, opts...).ToFunc()
+// ByClass orders the results by the class field.
+func ByClass(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldClass, opts...).ToFunc()
 }
 
 // BySource orders the results by the source field.
@@ -265,9 +251,9 @@ func ByMappedFrameworks(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldMappedFrameworks, opts...).ToFunc()
 }
 
-// ByAssignedTo orders the results by the assigned_to field.
-func ByAssignedTo(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldAssignedTo, opts...).ToFunc()
+// ByImplementationEvidence orders the results by the implementation_evidence field.
+func ByImplementationEvidence(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldImplementationEvidence, opts...).ToFunc()
 }
 
 // ByImplementationStatus orders the results by the implementation_status field.
@@ -275,19 +261,9 @@ func ByImplementationStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldImplementationStatus, opts...).ToFunc()
 }
 
-// ByImplementationNotes orders the results by the implementation_notes field.
-func ByImplementationNotes(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldImplementationNotes, opts...).ToFunc()
-}
-
 // ByImplementationDate orders the results by the implementation_date field.
 func ByImplementationDate(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldImplementationDate, opts...).ToFunc()
-}
-
-// ByImplementationEvidence orders the results by the implementation_evidence field.
-func ByImplementationEvidence(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldImplementationEvidence, opts...).ToFunc()
 }
 
 // ByImplementationVerification orders the results by the implementation_verification field.

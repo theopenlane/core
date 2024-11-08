@@ -19,11 +19,9 @@ query AdminSearch($query: String!) {
           name
           description
           status
-          assigned
-          dueDate
           priority
           source
-          jsonschema
+          details
         }
       }
       ... on ContactSearchResult {
@@ -50,14 +48,13 @@ query AdminSearch($query: String!) {
           status
           controlType
           version
-          owner
           controlNumber
-          controlFamily
-          controlClass
+          family
+          class
           source
           satisfies
           mappedFrameworks
-          jsonschema
+          details
         }
       }
       ... on ControlObjectiveSearchResult {
@@ -70,13 +67,12 @@ query AdminSearch($query: String!) {
           status
           controlObjectiveType
           version
-          owner
           controlNumber
-          controlFamily
-          controlClass
+          family
+          class
           source
           mappedFrameworks
-          jsonschema
+          details
         }
       }
       ... on DocumentDataSearchResult {
@@ -228,7 +224,7 @@ query AdminSearch($query: String!) {
           version
           purposeAndScope
           background
-          jsonschema
+          details
         }
       }
       ... on NarrativeSearchResult {
@@ -239,7 +235,7 @@ query AdminSearch($query: String!) {
           name
           description
           satisfies
-          jsonschema
+          details
         }
       }
       ... on OauthProviderSearchResult {
@@ -320,7 +316,7 @@ query AdminSearch($query: String!) {
           purposeAndScope
           background
           satisfies
-          jsonschema
+          details
         }
       }
       ... on RiskSearchResult {
@@ -333,12 +329,9 @@ query AdminSearch($query: String!) {
           status
           riskType
           businessCosts
-          impact
-          likelihood
           mitigation
           satisfies
-          severity
-          jsonschema
+          details
         }
       }
       ... on StandardSearchResult {
@@ -355,7 +348,7 @@ query AdminSearch($query: String!) {
           purposeAndScope
           background
           satisfies
-          jsonschema
+          details
         }
       }
       ... on SubcontrolSearchResult {
@@ -368,20 +361,15 @@ query AdminSearch($query: String!) {
           status
           subcontrolType
           version
-          owner
           subcontrolNumber
-          subcontrolFamily
-          subcontrolClass
+          family
+          class
           source
           mappedFrameworks
-          assignedTo
-          implementationStatus
-          implementationNotes
-          implementationDate
           implementationEvidence
+          implementationStatus
           implementationVerification
-          implementationVerificationDate
-          jsonschema
+          details
         }
       }
       ... on SubscriberSearchResult {

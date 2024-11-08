@@ -2,18 +2,17 @@
 mutation CreateBulkCSVControl($input: Upload!) {
   createBulkCSVControl(input: $input) {
     controls {
-      controlClass
-      controlFamily
+      class
       controlNumber
       controlType
       createdAt
       createdBy
       description
+      details
+      family
       id
-      jsonschema
       mappedFrameworks
       name
-      owner
       satisfies
       source
       status
@@ -28,18 +27,17 @@ mutation CreateBulkCSVControl($input: Upload!) {
 mutation CreateBulkControl($input: [CreateControlInput!]) {
   createBulkControl(input: $input) {
     controls {
-      controlClass
-      controlFamily
+      class
       controlNumber
       controlType
       createdAt
       createdBy
       description
+      details
+      family
       id
-      jsonschema
       mappedFrameworks
       name
-      owner
       satisfies
       source
       status
@@ -54,18 +52,17 @@ mutation CreateBulkControl($input: [CreateControlInput!]) {
 mutation CreateControl($input: CreateControlInput!) {
   createControl(input: $input) {
     control {
-      controlClass
-      controlFamily
+      class
       controlNumber
       controlType
       createdAt
       createdBy
       description
+      details
+      family
       id
-      jsonschema
       mappedFrameworks
       name
-      owner
       satisfies
       source
       status
@@ -87,18 +84,17 @@ query GetAllControls {
   controls {
     edges {
       node {
-        controlClass
-        controlFamily
+        class
         controlNumber
         controlType
         createdAt
         createdBy
         description
+        details
+        family
         id
-        jsonschema
         mappedFrameworks
         name
-        owner
         satisfies
         source
         status
@@ -112,18 +108,17 @@ query GetAllControls {
 }
 query GetControlByID($controlId: ID!) {
   control(id: $controlId) {
-    controlClass
-    controlFamily
+    class
     controlNumber
     controlType
     createdAt
     createdBy
     description
+    details
+    family
     id
-    jsonschema
     mappedFrameworks
     name
-    owner
     satisfies
     source
     status
@@ -138,18 +133,17 @@ query GetControls($where: ControlWhereInput) {
   controls(where: $where) {
     edges {
       node {
-        controlClass
-        controlFamily
+        class
         controlNumber
         controlType
         createdAt
         createdBy
         description
+        details
+        family
         id
-        jsonschema
         mappedFrameworks
         name
-        owner
         satisfies
         source
         status
@@ -164,18 +158,17 @@ query GetControls($where: ControlWhereInput) {
 mutation UpdateControl($updateControlId: ID!, $input: UpdateControlInput!) {
   updateControl(id: $updateControlId, input: $input) {
     control {
-      controlClass
-      controlFamily
+      class
       controlNumber
       controlType
       createdAt
       createdBy
       description
+      details
+      family
       id
-      jsonschema
       mappedFrameworks
       name
-      owner
       satisfies
       source
       status

@@ -44,16 +44,14 @@ const (
 	FieldDescription = "description"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
-	// FieldAssigned holds the string denoting the assigned field in the database.
-	FieldAssigned = "assigned"
 	// FieldDueDate holds the string denoting the due_date field in the database.
 	FieldDueDate = "due_date"
 	// FieldPriority holds the string denoting the priority field in the database.
 	FieldPriority = "priority"
 	// FieldSource holds the string denoting the source field in the database.
 	FieldSource = "source"
-	// FieldJsonschema holds the string denoting the jsonschema field in the database.
-	FieldJsonschema = "jsonschema"
+	// FieldDetails holds the string denoting the details field in the database.
+	FieldDetails = "details"
 	// Table holds the table name of the actionplanhistory in the database.
 	Table = "action_plan_history"
 )
@@ -75,11 +73,10 @@ var Columns = []string{
 	FieldName,
 	FieldDescription,
 	FieldStatus,
-	FieldAssigned,
 	FieldDueDate,
 	FieldPriority,
 	FieldSource,
-	FieldJsonschema,
+	FieldDetails,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -190,11 +187,6 @@ func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 // ByStatus orders the results by the status field.
 func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
-}
-
-// ByAssigned orders the results by the assigned field.
-func ByAssigned(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldAssigned, opts...).ToFunc()
 }
 
 // ByDueDate orders the results by the due_date field.

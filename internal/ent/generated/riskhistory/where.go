@@ -7,6 +7,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -135,16 +136,6 @@ func BusinessCosts(v string) predicate.RiskHistory {
 	return predicate.RiskHistory(sql.FieldEQ(FieldBusinessCosts, v))
 }
 
-// Impact applies equality check predicate on the "impact" field. It's identical to ImpactEQ.
-func Impact(v string) predicate.RiskHistory {
-	return predicate.RiskHistory(sql.FieldEQ(FieldImpact, v))
-}
-
-// Likelihood applies equality check predicate on the "likelihood" field. It's identical to LikelihoodEQ.
-func Likelihood(v string) predicate.RiskHistory {
-	return predicate.RiskHistory(sql.FieldEQ(FieldLikelihood, v))
-}
-
 // Mitigation applies equality check predicate on the "mitigation" field. It's identical to MitigationEQ.
 func Mitigation(v string) predicate.RiskHistory {
 	return predicate.RiskHistory(sql.FieldEQ(FieldMitigation, v))
@@ -153,11 +144,6 @@ func Mitigation(v string) predicate.RiskHistory {
 // Satisfies applies equality check predicate on the "satisfies" field. It's identical to SatisfiesEQ.
 func Satisfies(v string) predicate.RiskHistory {
 	return predicate.RiskHistory(sql.FieldEQ(FieldSatisfies, v))
-}
-
-// Severity applies equality check predicate on the "severity" field. It's identical to SeverityEQ.
-func Severity(v string) predicate.RiskHistory {
-	return predicate.RiskHistory(sql.FieldEQ(FieldSeverity, v))
 }
 
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
@@ -1111,58 +1097,33 @@ func BusinessCostsContainsFold(v string) predicate.RiskHistory {
 }
 
 // ImpactEQ applies the EQ predicate on the "impact" field.
-func ImpactEQ(v string) predicate.RiskHistory {
-	return predicate.RiskHistory(sql.FieldEQ(FieldImpact, v))
+func ImpactEQ(v enums.RiskImpact) predicate.RiskHistory {
+	vc := v
+	return predicate.RiskHistory(sql.FieldEQ(FieldImpact, vc))
 }
 
 // ImpactNEQ applies the NEQ predicate on the "impact" field.
-func ImpactNEQ(v string) predicate.RiskHistory {
-	return predicate.RiskHistory(sql.FieldNEQ(FieldImpact, v))
+func ImpactNEQ(v enums.RiskImpact) predicate.RiskHistory {
+	vc := v
+	return predicate.RiskHistory(sql.FieldNEQ(FieldImpact, vc))
 }
 
 // ImpactIn applies the In predicate on the "impact" field.
-func ImpactIn(vs ...string) predicate.RiskHistory {
-	return predicate.RiskHistory(sql.FieldIn(FieldImpact, vs...))
+func ImpactIn(vs ...enums.RiskImpact) predicate.RiskHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.RiskHistory(sql.FieldIn(FieldImpact, v...))
 }
 
 // ImpactNotIn applies the NotIn predicate on the "impact" field.
-func ImpactNotIn(vs ...string) predicate.RiskHistory {
-	return predicate.RiskHistory(sql.FieldNotIn(FieldImpact, vs...))
-}
-
-// ImpactGT applies the GT predicate on the "impact" field.
-func ImpactGT(v string) predicate.RiskHistory {
-	return predicate.RiskHistory(sql.FieldGT(FieldImpact, v))
-}
-
-// ImpactGTE applies the GTE predicate on the "impact" field.
-func ImpactGTE(v string) predicate.RiskHistory {
-	return predicate.RiskHistory(sql.FieldGTE(FieldImpact, v))
-}
-
-// ImpactLT applies the LT predicate on the "impact" field.
-func ImpactLT(v string) predicate.RiskHistory {
-	return predicate.RiskHistory(sql.FieldLT(FieldImpact, v))
-}
-
-// ImpactLTE applies the LTE predicate on the "impact" field.
-func ImpactLTE(v string) predicate.RiskHistory {
-	return predicate.RiskHistory(sql.FieldLTE(FieldImpact, v))
-}
-
-// ImpactContains applies the Contains predicate on the "impact" field.
-func ImpactContains(v string) predicate.RiskHistory {
-	return predicate.RiskHistory(sql.FieldContains(FieldImpact, v))
-}
-
-// ImpactHasPrefix applies the HasPrefix predicate on the "impact" field.
-func ImpactHasPrefix(v string) predicate.RiskHistory {
-	return predicate.RiskHistory(sql.FieldHasPrefix(FieldImpact, v))
-}
-
-// ImpactHasSuffix applies the HasSuffix predicate on the "impact" field.
-func ImpactHasSuffix(v string) predicate.RiskHistory {
-	return predicate.RiskHistory(sql.FieldHasSuffix(FieldImpact, v))
+func ImpactNotIn(vs ...enums.RiskImpact) predicate.RiskHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.RiskHistory(sql.FieldNotIn(FieldImpact, v...))
 }
 
 // ImpactIsNil applies the IsNil predicate on the "impact" field.
@@ -1175,69 +1136,34 @@ func ImpactNotNil() predicate.RiskHistory {
 	return predicate.RiskHistory(sql.FieldNotNull(FieldImpact))
 }
 
-// ImpactEqualFold applies the EqualFold predicate on the "impact" field.
-func ImpactEqualFold(v string) predicate.RiskHistory {
-	return predicate.RiskHistory(sql.FieldEqualFold(FieldImpact, v))
-}
-
-// ImpactContainsFold applies the ContainsFold predicate on the "impact" field.
-func ImpactContainsFold(v string) predicate.RiskHistory {
-	return predicate.RiskHistory(sql.FieldContainsFold(FieldImpact, v))
-}
-
 // LikelihoodEQ applies the EQ predicate on the "likelihood" field.
-func LikelihoodEQ(v string) predicate.RiskHistory {
-	return predicate.RiskHistory(sql.FieldEQ(FieldLikelihood, v))
+func LikelihoodEQ(v enums.RiskLikelihood) predicate.RiskHistory {
+	vc := v
+	return predicate.RiskHistory(sql.FieldEQ(FieldLikelihood, vc))
 }
 
 // LikelihoodNEQ applies the NEQ predicate on the "likelihood" field.
-func LikelihoodNEQ(v string) predicate.RiskHistory {
-	return predicate.RiskHistory(sql.FieldNEQ(FieldLikelihood, v))
+func LikelihoodNEQ(v enums.RiskLikelihood) predicate.RiskHistory {
+	vc := v
+	return predicate.RiskHistory(sql.FieldNEQ(FieldLikelihood, vc))
 }
 
 // LikelihoodIn applies the In predicate on the "likelihood" field.
-func LikelihoodIn(vs ...string) predicate.RiskHistory {
-	return predicate.RiskHistory(sql.FieldIn(FieldLikelihood, vs...))
+func LikelihoodIn(vs ...enums.RiskLikelihood) predicate.RiskHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.RiskHistory(sql.FieldIn(FieldLikelihood, v...))
 }
 
 // LikelihoodNotIn applies the NotIn predicate on the "likelihood" field.
-func LikelihoodNotIn(vs ...string) predicate.RiskHistory {
-	return predicate.RiskHistory(sql.FieldNotIn(FieldLikelihood, vs...))
-}
-
-// LikelihoodGT applies the GT predicate on the "likelihood" field.
-func LikelihoodGT(v string) predicate.RiskHistory {
-	return predicate.RiskHistory(sql.FieldGT(FieldLikelihood, v))
-}
-
-// LikelihoodGTE applies the GTE predicate on the "likelihood" field.
-func LikelihoodGTE(v string) predicate.RiskHistory {
-	return predicate.RiskHistory(sql.FieldGTE(FieldLikelihood, v))
-}
-
-// LikelihoodLT applies the LT predicate on the "likelihood" field.
-func LikelihoodLT(v string) predicate.RiskHistory {
-	return predicate.RiskHistory(sql.FieldLT(FieldLikelihood, v))
-}
-
-// LikelihoodLTE applies the LTE predicate on the "likelihood" field.
-func LikelihoodLTE(v string) predicate.RiskHistory {
-	return predicate.RiskHistory(sql.FieldLTE(FieldLikelihood, v))
-}
-
-// LikelihoodContains applies the Contains predicate on the "likelihood" field.
-func LikelihoodContains(v string) predicate.RiskHistory {
-	return predicate.RiskHistory(sql.FieldContains(FieldLikelihood, v))
-}
-
-// LikelihoodHasPrefix applies the HasPrefix predicate on the "likelihood" field.
-func LikelihoodHasPrefix(v string) predicate.RiskHistory {
-	return predicate.RiskHistory(sql.FieldHasPrefix(FieldLikelihood, v))
-}
-
-// LikelihoodHasSuffix applies the HasSuffix predicate on the "likelihood" field.
-func LikelihoodHasSuffix(v string) predicate.RiskHistory {
-	return predicate.RiskHistory(sql.FieldHasSuffix(FieldLikelihood, v))
+func LikelihoodNotIn(vs ...enums.RiskLikelihood) predicate.RiskHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.RiskHistory(sql.FieldNotIn(FieldLikelihood, v...))
 }
 
 // LikelihoodIsNil applies the IsNil predicate on the "likelihood" field.
@@ -1248,16 +1174,6 @@ func LikelihoodIsNil() predicate.RiskHistory {
 // LikelihoodNotNil applies the NotNil predicate on the "likelihood" field.
 func LikelihoodNotNil() predicate.RiskHistory {
 	return predicate.RiskHistory(sql.FieldNotNull(FieldLikelihood))
-}
-
-// LikelihoodEqualFold applies the EqualFold predicate on the "likelihood" field.
-func LikelihoodEqualFold(v string) predicate.RiskHistory {
-	return predicate.RiskHistory(sql.FieldEqualFold(FieldLikelihood, v))
-}
-
-// LikelihoodContainsFold applies the ContainsFold predicate on the "likelihood" field.
-func LikelihoodContainsFold(v string) predicate.RiskHistory {
-	return predicate.RiskHistory(sql.FieldContainsFold(FieldLikelihood, v))
 }
 
 // MitigationEQ applies the EQ predicate on the "mitigation" field.
@@ -1410,89 +1326,14 @@ func SatisfiesContainsFold(v string) predicate.RiskHistory {
 	return predicate.RiskHistory(sql.FieldContainsFold(FieldSatisfies, v))
 }
 
-// SeverityEQ applies the EQ predicate on the "severity" field.
-func SeverityEQ(v string) predicate.RiskHistory {
-	return predicate.RiskHistory(sql.FieldEQ(FieldSeverity, v))
+// DetailsIsNil applies the IsNil predicate on the "details" field.
+func DetailsIsNil() predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldIsNull(FieldDetails))
 }
 
-// SeverityNEQ applies the NEQ predicate on the "severity" field.
-func SeverityNEQ(v string) predicate.RiskHistory {
-	return predicate.RiskHistory(sql.FieldNEQ(FieldSeverity, v))
-}
-
-// SeverityIn applies the In predicate on the "severity" field.
-func SeverityIn(vs ...string) predicate.RiskHistory {
-	return predicate.RiskHistory(sql.FieldIn(FieldSeverity, vs...))
-}
-
-// SeverityNotIn applies the NotIn predicate on the "severity" field.
-func SeverityNotIn(vs ...string) predicate.RiskHistory {
-	return predicate.RiskHistory(sql.FieldNotIn(FieldSeverity, vs...))
-}
-
-// SeverityGT applies the GT predicate on the "severity" field.
-func SeverityGT(v string) predicate.RiskHistory {
-	return predicate.RiskHistory(sql.FieldGT(FieldSeverity, v))
-}
-
-// SeverityGTE applies the GTE predicate on the "severity" field.
-func SeverityGTE(v string) predicate.RiskHistory {
-	return predicate.RiskHistory(sql.FieldGTE(FieldSeverity, v))
-}
-
-// SeverityLT applies the LT predicate on the "severity" field.
-func SeverityLT(v string) predicate.RiskHistory {
-	return predicate.RiskHistory(sql.FieldLT(FieldSeverity, v))
-}
-
-// SeverityLTE applies the LTE predicate on the "severity" field.
-func SeverityLTE(v string) predicate.RiskHistory {
-	return predicate.RiskHistory(sql.FieldLTE(FieldSeverity, v))
-}
-
-// SeverityContains applies the Contains predicate on the "severity" field.
-func SeverityContains(v string) predicate.RiskHistory {
-	return predicate.RiskHistory(sql.FieldContains(FieldSeverity, v))
-}
-
-// SeverityHasPrefix applies the HasPrefix predicate on the "severity" field.
-func SeverityHasPrefix(v string) predicate.RiskHistory {
-	return predicate.RiskHistory(sql.FieldHasPrefix(FieldSeverity, v))
-}
-
-// SeverityHasSuffix applies the HasSuffix predicate on the "severity" field.
-func SeverityHasSuffix(v string) predicate.RiskHistory {
-	return predicate.RiskHistory(sql.FieldHasSuffix(FieldSeverity, v))
-}
-
-// SeverityIsNil applies the IsNil predicate on the "severity" field.
-func SeverityIsNil() predicate.RiskHistory {
-	return predicate.RiskHistory(sql.FieldIsNull(FieldSeverity))
-}
-
-// SeverityNotNil applies the NotNil predicate on the "severity" field.
-func SeverityNotNil() predicate.RiskHistory {
-	return predicate.RiskHistory(sql.FieldNotNull(FieldSeverity))
-}
-
-// SeverityEqualFold applies the EqualFold predicate on the "severity" field.
-func SeverityEqualFold(v string) predicate.RiskHistory {
-	return predicate.RiskHistory(sql.FieldEqualFold(FieldSeverity, v))
-}
-
-// SeverityContainsFold applies the ContainsFold predicate on the "severity" field.
-func SeverityContainsFold(v string) predicate.RiskHistory {
-	return predicate.RiskHistory(sql.FieldContainsFold(FieldSeverity, v))
-}
-
-// JsonschemaIsNil applies the IsNil predicate on the "jsonschema" field.
-func JsonschemaIsNil() predicate.RiskHistory {
-	return predicate.RiskHistory(sql.FieldIsNull(FieldJsonschema))
-}
-
-// JsonschemaNotNil applies the NotNil predicate on the "jsonschema" field.
-func JsonschemaNotNil() predicate.RiskHistory {
-	return predicate.RiskHistory(sql.FieldNotNull(FieldJsonschema))
+// DetailsNotNil applies the NotNil predicate on the "details" field.
+func DetailsNotNil() predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldNotNull(FieldDetails))
 }
 
 // And groups predicates with the AND operator between them.

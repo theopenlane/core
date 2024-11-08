@@ -46,10 +46,10 @@ type InternalPolicy struct {
 	Version string `json:"version,omitempty"`
 	// purpose and scope
 	PurposeAndScope string `json:"purpose_and_scope,omitempty"`
-	// background
+	// background of the policy
 	Background string `json:"background,omitempty"`
-	// json schema
-	Jsonschema map[string]interface{} `json:"jsonschema,omitempty"`
+	// json data for the policy document
+	Details map[string]interface{} `json:"details,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the InternalPolicyQuery when eager-loading is set.
 	Edges        InternalPolicyEdges `json:"edges"`
@@ -119,7 +119,7 @@ func (*InternalPolicy) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case internalpolicy.FieldTags, internalpolicy.FieldJsonschema:
+		case internalpolicy.FieldTags, internalpolicy.FieldDetails:
 			values[i] = new([]byte)
 		case internalpolicy.FieldID, internalpolicy.FieldCreatedBy, internalpolicy.FieldUpdatedBy, internalpolicy.FieldDeletedBy, internalpolicy.FieldMappingID, internalpolicy.FieldName, internalpolicy.FieldDescription, internalpolicy.FieldStatus, internalpolicy.FieldPolicyType, internalpolicy.FieldVersion, internalpolicy.FieldPurposeAndScope, internalpolicy.FieldBackground:
 			values[i] = new(sql.NullString)
@@ -238,12 +238,12 @@ func (ip *InternalPolicy) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ip.Background = value.String
 			}
-		case internalpolicy.FieldJsonschema:
+		case internalpolicy.FieldDetails:
 			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field jsonschema", values[i])
+				return fmt.Errorf("unexpected type %T for field details", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ip.Jsonschema); err != nil {
-					return fmt.Errorf("unmarshal field jsonschema: %w", err)
+				if err := json.Unmarshal(*value, &ip.Details); err != nil {
+					return fmt.Errorf("unmarshal field details: %w", err)
 				}
 			}
 		default:
@@ -347,8 +347,8 @@ func (ip *InternalPolicy) String() string {
 	builder.WriteString("background=")
 	builder.WriteString(ip.Background)
 	builder.WriteString(", ")
-	builder.WriteString("jsonschema=")
-	builder.WriteString(fmt.Sprintf("%v", ip.Jsonschema))
+	builder.WriteString("details=")
+	builder.WriteString(fmt.Sprintf("%v", ip.Details))
 	builder.WriteByte(')')
 	return builder.String()
 }

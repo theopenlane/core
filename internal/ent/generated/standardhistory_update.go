@@ -296,15 +296,15 @@ func (shu *StandardHistoryUpdate) ClearSatisfies() *StandardHistoryUpdate {
 	return shu
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (shu *StandardHistoryUpdate) SetJsonschema(m map[string]interface{}) *StandardHistoryUpdate {
-	shu.mutation.SetJsonschema(m)
+// SetDetails sets the "details" field.
+func (shu *StandardHistoryUpdate) SetDetails(m map[string]interface{}) *StandardHistoryUpdate {
+	shu.mutation.SetDetails(m)
 	return shu
 }
 
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (shu *StandardHistoryUpdate) ClearJsonschema() *StandardHistoryUpdate {
-	shu.mutation.ClearJsonschema()
+// ClearDetails clears the value of the "details" field.
+func (shu *StandardHistoryUpdate) ClearDetails() *StandardHistoryUpdate {
+	shu.mutation.ClearDetails()
 	return shu
 }
 
@@ -459,11 +459,11 @@ func (shu *StandardHistoryUpdate) sqlSave(ctx context.Context) (n int, err error
 	if shu.mutation.SatisfiesCleared() {
 		_spec.ClearField(standardhistory.FieldSatisfies, field.TypeString)
 	}
-	if value, ok := shu.mutation.Jsonschema(); ok {
-		_spec.SetField(standardhistory.FieldJsonschema, field.TypeJSON, value)
+	if value, ok := shu.mutation.Details(); ok {
+		_spec.SetField(standardhistory.FieldDetails, field.TypeJSON, value)
 	}
-	if shu.mutation.JsonschemaCleared() {
-		_spec.ClearField(standardhistory.FieldJsonschema, field.TypeJSON)
+	if shu.mutation.DetailsCleared() {
+		_spec.ClearField(standardhistory.FieldDetails, field.TypeJSON)
 	}
 	_spec.Node.Schema = shu.schemaConfig.StandardHistory
 	ctx = internal.NewSchemaConfigContext(ctx, shu.schemaConfig)
@@ -753,15 +753,15 @@ func (shuo *StandardHistoryUpdateOne) ClearSatisfies() *StandardHistoryUpdateOne
 	return shuo
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (shuo *StandardHistoryUpdateOne) SetJsonschema(m map[string]interface{}) *StandardHistoryUpdateOne {
-	shuo.mutation.SetJsonschema(m)
+// SetDetails sets the "details" field.
+func (shuo *StandardHistoryUpdateOne) SetDetails(m map[string]interface{}) *StandardHistoryUpdateOne {
+	shuo.mutation.SetDetails(m)
 	return shuo
 }
 
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (shuo *StandardHistoryUpdateOne) ClearJsonschema() *StandardHistoryUpdateOne {
-	shuo.mutation.ClearJsonschema()
+// ClearDetails clears the value of the "details" field.
+func (shuo *StandardHistoryUpdateOne) ClearDetails() *StandardHistoryUpdateOne {
+	shuo.mutation.ClearDetails()
 	return shuo
 }
 
@@ -946,11 +946,11 @@ func (shuo *StandardHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Stand
 	if shuo.mutation.SatisfiesCleared() {
 		_spec.ClearField(standardhistory.FieldSatisfies, field.TypeString)
 	}
-	if value, ok := shuo.mutation.Jsonschema(); ok {
-		_spec.SetField(standardhistory.FieldJsonschema, field.TypeJSON, value)
+	if value, ok := shuo.mutation.Details(); ok {
+		_spec.SetField(standardhistory.FieldDetails, field.TypeJSON, value)
 	}
-	if shuo.mutation.JsonschemaCleared() {
-		_spec.ClearField(standardhistory.FieldJsonschema, field.TypeJSON)
+	if shuo.mutation.DetailsCleared() {
+		_spec.ClearField(standardhistory.FieldDetails, field.TypeJSON)
 	}
 	_spec.Node.Schema = shuo.schemaConfig.StandardHistory
 	ctx = internal.NewSchemaConfigContext(ctx, shuo.schemaConfig)

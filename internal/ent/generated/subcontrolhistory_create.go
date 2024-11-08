@@ -221,20 +221,6 @@ func (shc *SubcontrolHistoryCreate) SetNillableVersion(s *string) *SubcontrolHis
 	return shc
 }
 
-// SetOwner sets the "owner" field.
-func (shc *SubcontrolHistoryCreate) SetOwner(s string) *SubcontrolHistoryCreate {
-	shc.mutation.SetOwner(s)
-	return shc
-}
-
-// SetNillableOwner sets the "owner" field if the given value is not nil.
-func (shc *SubcontrolHistoryCreate) SetNillableOwner(s *string) *SubcontrolHistoryCreate {
-	if s != nil {
-		shc.SetOwner(*s)
-	}
-	return shc
-}
-
 // SetSubcontrolNumber sets the "subcontrol_number" field.
 func (shc *SubcontrolHistoryCreate) SetSubcontrolNumber(s string) *SubcontrolHistoryCreate {
 	shc.mutation.SetSubcontrolNumber(s)
@@ -249,30 +235,30 @@ func (shc *SubcontrolHistoryCreate) SetNillableSubcontrolNumber(s *string) *Subc
 	return shc
 }
 
-// SetSubcontrolFamily sets the "subcontrol_family" field.
-func (shc *SubcontrolHistoryCreate) SetSubcontrolFamily(s string) *SubcontrolHistoryCreate {
-	shc.mutation.SetSubcontrolFamily(s)
+// SetFamily sets the "family" field.
+func (shc *SubcontrolHistoryCreate) SetFamily(s string) *SubcontrolHistoryCreate {
+	shc.mutation.SetFamily(s)
 	return shc
 }
 
-// SetNillableSubcontrolFamily sets the "subcontrol_family" field if the given value is not nil.
-func (shc *SubcontrolHistoryCreate) SetNillableSubcontrolFamily(s *string) *SubcontrolHistoryCreate {
+// SetNillableFamily sets the "family" field if the given value is not nil.
+func (shc *SubcontrolHistoryCreate) SetNillableFamily(s *string) *SubcontrolHistoryCreate {
 	if s != nil {
-		shc.SetSubcontrolFamily(*s)
+		shc.SetFamily(*s)
 	}
 	return shc
 }
 
-// SetSubcontrolClass sets the "subcontrol_class" field.
-func (shc *SubcontrolHistoryCreate) SetSubcontrolClass(s string) *SubcontrolHistoryCreate {
-	shc.mutation.SetSubcontrolClass(s)
+// SetClass sets the "class" field.
+func (shc *SubcontrolHistoryCreate) SetClass(s string) *SubcontrolHistoryCreate {
+	shc.mutation.SetClass(s)
 	return shc
 }
 
-// SetNillableSubcontrolClass sets the "subcontrol_class" field if the given value is not nil.
-func (shc *SubcontrolHistoryCreate) SetNillableSubcontrolClass(s *string) *SubcontrolHistoryCreate {
+// SetNillableClass sets the "class" field if the given value is not nil.
+func (shc *SubcontrolHistoryCreate) SetNillableClass(s *string) *SubcontrolHistoryCreate {
 	if s != nil {
-		shc.SetSubcontrolClass(*s)
+		shc.SetClass(*s)
 	}
 	return shc
 }
@@ -305,16 +291,16 @@ func (shc *SubcontrolHistoryCreate) SetNillableMappedFrameworks(s *string) *Subc
 	return shc
 }
 
-// SetAssignedTo sets the "assigned_to" field.
-func (shc *SubcontrolHistoryCreate) SetAssignedTo(s string) *SubcontrolHistoryCreate {
-	shc.mutation.SetAssignedTo(s)
+// SetImplementationEvidence sets the "implementation_evidence" field.
+func (shc *SubcontrolHistoryCreate) SetImplementationEvidence(s string) *SubcontrolHistoryCreate {
+	shc.mutation.SetImplementationEvidence(s)
 	return shc
 }
 
-// SetNillableAssignedTo sets the "assigned_to" field if the given value is not nil.
-func (shc *SubcontrolHistoryCreate) SetNillableAssignedTo(s *string) *SubcontrolHistoryCreate {
+// SetNillableImplementationEvidence sets the "implementation_evidence" field if the given value is not nil.
+func (shc *SubcontrolHistoryCreate) SetNillableImplementationEvidence(s *string) *SubcontrolHistoryCreate {
 	if s != nil {
-		shc.SetAssignedTo(*s)
+		shc.SetImplementationEvidence(*s)
 	}
 	return shc
 }
@@ -333,44 +319,16 @@ func (shc *SubcontrolHistoryCreate) SetNillableImplementationStatus(s *string) *
 	return shc
 }
 
-// SetImplementationNotes sets the "implementation_notes" field.
-func (shc *SubcontrolHistoryCreate) SetImplementationNotes(s string) *SubcontrolHistoryCreate {
-	shc.mutation.SetImplementationNotes(s)
-	return shc
-}
-
-// SetNillableImplementationNotes sets the "implementation_notes" field if the given value is not nil.
-func (shc *SubcontrolHistoryCreate) SetNillableImplementationNotes(s *string) *SubcontrolHistoryCreate {
-	if s != nil {
-		shc.SetImplementationNotes(*s)
-	}
-	return shc
-}
-
 // SetImplementationDate sets the "implementation_date" field.
-func (shc *SubcontrolHistoryCreate) SetImplementationDate(s string) *SubcontrolHistoryCreate {
-	shc.mutation.SetImplementationDate(s)
+func (shc *SubcontrolHistoryCreate) SetImplementationDate(t time.Time) *SubcontrolHistoryCreate {
+	shc.mutation.SetImplementationDate(t)
 	return shc
 }
 
 // SetNillableImplementationDate sets the "implementation_date" field if the given value is not nil.
-func (shc *SubcontrolHistoryCreate) SetNillableImplementationDate(s *string) *SubcontrolHistoryCreate {
-	if s != nil {
-		shc.SetImplementationDate(*s)
-	}
-	return shc
-}
-
-// SetImplementationEvidence sets the "implementation_evidence" field.
-func (shc *SubcontrolHistoryCreate) SetImplementationEvidence(s string) *SubcontrolHistoryCreate {
-	shc.mutation.SetImplementationEvidence(s)
-	return shc
-}
-
-// SetNillableImplementationEvidence sets the "implementation_evidence" field if the given value is not nil.
-func (shc *SubcontrolHistoryCreate) SetNillableImplementationEvidence(s *string) *SubcontrolHistoryCreate {
-	if s != nil {
-		shc.SetImplementationEvidence(*s)
+func (shc *SubcontrolHistoryCreate) SetNillableImplementationDate(t *time.Time) *SubcontrolHistoryCreate {
+	if t != nil {
+		shc.SetImplementationDate(*t)
 	}
 	return shc
 }
@@ -390,22 +348,22 @@ func (shc *SubcontrolHistoryCreate) SetNillableImplementationVerification(s *str
 }
 
 // SetImplementationVerificationDate sets the "implementation_verification_date" field.
-func (shc *SubcontrolHistoryCreate) SetImplementationVerificationDate(s string) *SubcontrolHistoryCreate {
-	shc.mutation.SetImplementationVerificationDate(s)
+func (shc *SubcontrolHistoryCreate) SetImplementationVerificationDate(t time.Time) *SubcontrolHistoryCreate {
+	shc.mutation.SetImplementationVerificationDate(t)
 	return shc
 }
 
 // SetNillableImplementationVerificationDate sets the "implementation_verification_date" field if the given value is not nil.
-func (shc *SubcontrolHistoryCreate) SetNillableImplementationVerificationDate(s *string) *SubcontrolHistoryCreate {
-	if s != nil {
-		shc.SetImplementationVerificationDate(*s)
+func (shc *SubcontrolHistoryCreate) SetNillableImplementationVerificationDate(t *time.Time) *SubcontrolHistoryCreate {
+	if t != nil {
+		shc.SetImplementationVerificationDate(*t)
 	}
 	return shc
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (shc *SubcontrolHistoryCreate) SetJsonschema(m map[string]interface{}) *SubcontrolHistoryCreate {
-	shc.mutation.SetJsonschema(m)
+// SetDetails sets the "details" field.
+func (shc *SubcontrolHistoryCreate) SetDetails(m map[string]interface{}) *SubcontrolHistoryCreate {
+	shc.mutation.SetDetails(m)
 	return shc
 }
 
@@ -603,21 +561,17 @@ func (shc *SubcontrolHistoryCreate) createSpec() (*SubcontrolHistory, *sqlgraph.
 		_spec.SetField(subcontrolhistory.FieldVersion, field.TypeString, value)
 		_node.Version = value
 	}
-	if value, ok := shc.mutation.Owner(); ok {
-		_spec.SetField(subcontrolhistory.FieldOwner, field.TypeString, value)
-		_node.Owner = value
-	}
 	if value, ok := shc.mutation.SubcontrolNumber(); ok {
 		_spec.SetField(subcontrolhistory.FieldSubcontrolNumber, field.TypeString, value)
 		_node.SubcontrolNumber = value
 	}
-	if value, ok := shc.mutation.SubcontrolFamily(); ok {
-		_spec.SetField(subcontrolhistory.FieldSubcontrolFamily, field.TypeString, value)
-		_node.SubcontrolFamily = value
+	if value, ok := shc.mutation.Family(); ok {
+		_spec.SetField(subcontrolhistory.FieldFamily, field.TypeString, value)
+		_node.Family = value
 	}
-	if value, ok := shc.mutation.SubcontrolClass(); ok {
-		_spec.SetField(subcontrolhistory.FieldSubcontrolClass, field.TypeString, value)
-		_node.SubcontrolClass = value
+	if value, ok := shc.mutation.Class(); ok {
+		_spec.SetField(subcontrolhistory.FieldClass, field.TypeString, value)
+		_node.Class = value
 	}
 	if value, ok := shc.mutation.Source(); ok {
 		_spec.SetField(subcontrolhistory.FieldSource, field.TypeString, value)
@@ -627,37 +581,29 @@ func (shc *SubcontrolHistoryCreate) createSpec() (*SubcontrolHistory, *sqlgraph.
 		_spec.SetField(subcontrolhistory.FieldMappedFrameworks, field.TypeString, value)
 		_node.MappedFrameworks = value
 	}
-	if value, ok := shc.mutation.AssignedTo(); ok {
-		_spec.SetField(subcontrolhistory.FieldAssignedTo, field.TypeString, value)
-		_node.AssignedTo = value
+	if value, ok := shc.mutation.ImplementationEvidence(); ok {
+		_spec.SetField(subcontrolhistory.FieldImplementationEvidence, field.TypeString, value)
+		_node.ImplementationEvidence = value
 	}
 	if value, ok := shc.mutation.ImplementationStatus(); ok {
 		_spec.SetField(subcontrolhistory.FieldImplementationStatus, field.TypeString, value)
 		_node.ImplementationStatus = value
 	}
-	if value, ok := shc.mutation.ImplementationNotes(); ok {
-		_spec.SetField(subcontrolhistory.FieldImplementationNotes, field.TypeString, value)
-		_node.ImplementationNotes = value
-	}
 	if value, ok := shc.mutation.ImplementationDate(); ok {
-		_spec.SetField(subcontrolhistory.FieldImplementationDate, field.TypeString, value)
+		_spec.SetField(subcontrolhistory.FieldImplementationDate, field.TypeTime, value)
 		_node.ImplementationDate = value
-	}
-	if value, ok := shc.mutation.ImplementationEvidence(); ok {
-		_spec.SetField(subcontrolhistory.FieldImplementationEvidence, field.TypeString, value)
-		_node.ImplementationEvidence = value
 	}
 	if value, ok := shc.mutation.ImplementationVerification(); ok {
 		_spec.SetField(subcontrolhistory.FieldImplementationVerification, field.TypeString, value)
 		_node.ImplementationVerification = value
 	}
 	if value, ok := shc.mutation.ImplementationVerificationDate(); ok {
-		_spec.SetField(subcontrolhistory.FieldImplementationVerificationDate, field.TypeString, value)
+		_spec.SetField(subcontrolhistory.FieldImplementationVerificationDate, field.TypeTime, value)
 		_node.ImplementationVerificationDate = value
 	}
-	if value, ok := shc.mutation.Jsonschema(); ok {
-		_spec.SetField(subcontrolhistory.FieldJsonschema, field.TypeJSON, value)
-		_node.Jsonschema = value
+	if value, ok := shc.mutation.Details(); ok {
+		_spec.SetField(subcontrolhistory.FieldDetails, field.TypeJSON, value)
+		_node.Details = value
 	}
 	return _node, _spec
 }

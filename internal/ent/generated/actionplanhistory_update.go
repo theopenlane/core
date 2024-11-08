@@ -176,36 +176,16 @@ func (aphu *ActionPlanHistoryUpdate) ClearStatus() *ActionPlanHistoryUpdate {
 	return aphu
 }
 
-// SetAssigned sets the "assigned" field.
-func (aphu *ActionPlanHistoryUpdate) SetAssigned(s string) *ActionPlanHistoryUpdate {
-	aphu.mutation.SetAssigned(s)
-	return aphu
-}
-
-// SetNillableAssigned sets the "assigned" field if the given value is not nil.
-func (aphu *ActionPlanHistoryUpdate) SetNillableAssigned(s *string) *ActionPlanHistoryUpdate {
-	if s != nil {
-		aphu.SetAssigned(*s)
-	}
-	return aphu
-}
-
-// ClearAssigned clears the value of the "assigned" field.
-func (aphu *ActionPlanHistoryUpdate) ClearAssigned() *ActionPlanHistoryUpdate {
-	aphu.mutation.ClearAssigned()
-	return aphu
-}
-
 // SetDueDate sets the "due_date" field.
-func (aphu *ActionPlanHistoryUpdate) SetDueDate(s string) *ActionPlanHistoryUpdate {
-	aphu.mutation.SetDueDate(s)
+func (aphu *ActionPlanHistoryUpdate) SetDueDate(t time.Time) *ActionPlanHistoryUpdate {
+	aphu.mutation.SetDueDate(t)
 	return aphu
 }
 
 // SetNillableDueDate sets the "due_date" field if the given value is not nil.
-func (aphu *ActionPlanHistoryUpdate) SetNillableDueDate(s *string) *ActionPlanHistoryUpdate {
-	if s != nil {
-		aphu.SetDueDate(*s)
+func (aphu *ActionPlanHistoryUpdate) SetNillableDueDate(t *time.Time) *ActionPlanHistoryUpdate {
+	if t != nil {
+		aphu.SetDueDate(*t)
 	}
 	return aphu
 }
@@ -256,15 +236,15 @@ func (aphu *ActionPlanHistoryUpdate) ClearSource() *ActionPlanHistoryUpdate {
 	return aphu
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (aphu *ActionPlanHistoryUpdate) SetJsonschema(m map[string]interface{}) *ActionPlanHistoryUpdate {
-	aphu.mutation.SetJsonschema(m)
+// SetDetails sets the "details" field.
+func (aphu *ActionPlanHistoryUpdate) SetDetails(m map[string]interface{}) *ActionPlanHistoryUpdate {
+	aphu.mutation.SetDetails(m)
 	return aphu
 }
 
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (aphu *ActionPlanHistoryUpdate) ClearJsonschema() *ActionPlanHistoryUpdate {
-	aphu.mutation.ClearJsonschema()
+// ClearDetails clears the value of the "details" field.
+func (aphu *ActionPlanHistoryUpdate) ClearDetails() *ActionPlanHistoryUpdate {
+	aphu.mutation.ClearDetails()
 	return aphu
 }
 
@@ -383,17 +363,11 @@ func (aphu *ActionPlanHistoryUpdate) sqlSave(ctx context.Context) (n int, err er
 	if aphu.mutation.StatusCleared() {
 		_spec.ClearField(actionplanhistory.FieldStatus, field.TypeString)
 	}
-	if value, ok := aphu.mutation.Assigned(); ok {
-		_spec.SetField(actionplanhistory.FieldAssigned, field.TypeString, value)
-	}
-	if aphu.mutation.AssignedCleared() {
-		_spec.ClearField(actionplanhistory.FieldAssigned, field.TypeString)
-	}
 	if value, ok := aphu.mutation.DueDate(); ok {
-		_spec.SetField(actionplanhistory.FieldDueDate, field.TypeString, value)
+		_spec.SetField(actionplanhistory.FieldDueDate, field.TypeTime, value)
 	}
 	if aphu.mutation.DueDateCleared() {
-		_spec.ClearField(actionplanhistory.FieldDueDate, field.TypeString)
+		_spec.ClearField(actionplanhistory.FieldDueDate, field.TypeTime)
 	}
 	if value, ok := aphu.mutation.Priority(); ok {
 		_spec.SetField(actionplanhistory.FieldPriority, field.TypeString, value)
@@ -407,11 +381,11 @@ func (aphu *ActionPlanHistoryUpdate) sqlSave(ctx context.Context) (n int, err er
 	if aphu.mutation.SourceCleared() {
 		_spec.ClearField(actionplanhistory.FieldSource, field.TypeString)
 	}
-	if value, ok := aphu.mutation.Jsonschema(); ok {
-		_spec.SetField(actionplanhistory.FieldJsonschema, field.TypeJSON, value)
+	if value, ok := aphu.mutation.Details(); ok {
+		_spec.SetField(actionplanhistory.FieldDetails, field.TypeJSON, value)
 	}
-	if aphu.mutation.JsonschemaCleared() {
-		_spec.ClearField(actionplanhistory.FieldJsonschema, field.TypeJSON)
+	if aphu.mutation.DetailsCleared() {
+		_spec.ClearField(actionplanhistory.FieldDetails, field.TypeJSON)
 	}
 	_spec.Node.Schema = aphu.schemaConfig.ActionPlanHistory
 	ctx = internal.NewSchemaConfigContext(ctx, aphu.schemaConfig)
@@ -581,36 +555,16 @@ func (aphuo *ActionPlanHistoryUpdateOne) ClearStatus() *ActionPlanHistoryUpdateO
 	return aphuo
 }
 
-// SetAssigned sets the "assigned" field.
-func (aphuo *ActionPlanHistoryUpdateOne) SetAssigned(s string) *ActionPlanHistoryUpdateOne {
-	aphuo.mutation.SetAssigned(s)
-	return aphuo
-}
-
-// SetNillableAssigned sets the "assigned" field if the given value is not nil.
-func (aphuo *ActionPlanHistoryUpdateOne) SetNillableAssigned(s *string) *ActionPlanHistoryUpdateOne {
-	if s != nil {
-		aphuo.SetAssigned(*s)
-	}
-	return aphuo
-}
-
-// ClearAssigned clears the value of the "assigned" field.
-func (aphuo *ActionPlanHistoryUpdateOne) ClearAssigned() *ActionPlanHistoryUpdateOne {
-	aphuo.mutation.ClearAssigned()
-	return aphuo
-}
-
 // SetDueDate sets the "due_date" field.
-func (aphuo *ActionPlanHistoryUpdateOne) SetDueDate(s string) *ActionPlanHistoryUpdateOne {
-	aphuo.mutation.SetDueDate(s)
+func (aphuo *ActionPlanHistoryUpdateOne) SetDueDate(t time.Time) *ActionPlanHistoryUpdateOne {
+	aphuo.mutation.SetDueDate(t)
 	return aphuo
 }
 
 // SetNillableDueDate sets the "due_date" field if the given value is not nil.
-func (aphuo *ActionPlanHistoryUpdateOne) SetNillableDueDate(s *string) *ActionPlanHistoryUpdateOne {
-	if s != nil {
-		aphuo.SetDueDate(*s)
+func (aphuo *ActionPlanHistoryUpdateOne) SetNillableDueDate(t *time.Time) *ActionPlanHistoryUpdateOne {
+	if t != nil {
+		aphuo.SetDueDate(*t)
 	}
 	return aphuo
 }
@@ -661,15 +615,15 @@ func (aphuo *ActionPlanHistoryUpdateOne) ClearSource() *ActionPlanHistoryUpdateO
 	return aphuo
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (aphuo *ActionPlanHistoryUpdateOne) SetJsonschema(m map[string]interface{}) *ActionPlanHistoryUpdateOne {
-	aphuo.mutation.SetJsonschema(m)
+// SetDetails sets the "details" field.
+func (aphuo *ActionPlanHistoryUpdateOne) SetDetails(m map[string]interface{}) *ActionPlanHistoryUpdateOne {
+	aphuo.mutation.SetDetails(m)
 	return aphuo
 }
 
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (aphuo *ActionPlanHistoryUpdateOne) ClearJsonschema() *ActionPlanHistoryUpdateOne {
-	aphuo.mutation.ClearJsonschema()
+// ClearDetails clears the value of the "details" field.
+func (aphuo *ActionPlanHistoryUpdateOne) ClearDetails() *ActionPlanHistoryUpdateOne {
+	aphuo.mutation.ClearDetails()
 	return aphuo
 }
 
@@ -818,17 +772,11 @@ func (aphuo *ActionPlanHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Ac
 	if aphuo.mutation.StatusCleared() {
 		_spec.ClearField(actionplanhistory.FieldStatus, field.TypeString)
 	}
-	if value, ok := aphuo.mutation.Assigned(); ok {
-		_spec.SetField(actionplanhistory.FieldAssigned, field.TypeString, value)
-	}
-	if aphuo.mutation.AssignedCleared() {
-		_spec.ClearField(actionplanhistory.FieldAssigned, field.TypeString)
-	}
 	if value, ok := aphuo.mutation.DueDate(); ok {
-		_spec.SetField(actionplanhistory.FieldDueDate, field.TypeString, value)
+		_spec.SetField(actionplanhistory.FieldDueDate, field.TypeTime, value)
 	}
 	if aphuo.mutation.DueDateCleared() {
-		_spec.ClearField(actionplanhistory.FieldDueDate, field.TypeString)
+		_spec.ClearField(actionplanhistory.FieldDueDate, field.TypeTime)
 	}
 	if value, ok := aphuo.mutation.Priority(); ok {
 		_spec.SetField(actionplanhistory.FieldPriority, field.TypeString, value)
@@ -842,11 +790,11 @@ func (aphuo *ActionPlanHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Ac
 	if aphuo.mutation.SourceCleared() {
 		_spec.ClearField(actionplanhistory.FieldSource, field.TypeString)
 	}
-	if value, ok := aphuo.mutation.Jsonschema(); ok {
-		_spec.SetField(actionplanhistory.FieldJsonschema, field.TypeJSON, value)
+	if value, ok := aphuo.mutation.Details(); ok {
+		_spec.SetField(actionplanhistory.FieldDetails, field.TypeJSON, value)
 	}
-	if aphuo.mutation.JsonschemaCleared() {
-		_spec.ClearField(actionplanhistory.FieldJsonschema, field.TypeJSON)
+	if aphuo.mutation.DetailsCleared() {
+		_spec.ClearField(actionplanhistory.FieldDetails, field.TypeJSON)
 	}
 	_spec.Node.Schema = aphuo.schemaConfig.ActionPlanHistory
 	ctx = internal.NewSchemaConfigContext(ctx, aphuo.schemaConfig)

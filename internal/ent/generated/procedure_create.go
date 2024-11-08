@@ -232,9 +232,9 @@ func (pc *ProcedureCreate) SetNillableSatisfies(s *string) *ProcedureCreate {
 	return pc
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (pc *ProcedureCreate) SetJsonschema(m map[string]interface{}) *ProcedureCreate {
-	pc.mutation.SetJsonschema(m)
+// SetDetails sets the "details" field.
+func (pc *ProcedureCreate) SetDetails(m map[string]interface{}) *ProcedureCreate {
+	pc.mutation.SetDetails(m)
 	return pc
 }
 
@@ -492,9 +492,9 @@ func (pc *ProcedureCreate) createSpec() (*Procedure, *sqlgraph.CreateSpec) {
 		_spec.SetField(procedure.FieldSatisfies, field.TypeString, value)
 		_node.Satisfies = value
 	}
-	if value, ok := pc.mutation.Jsonschema(); ok {
-		_spec.SetField(procedure.FieldJsonschema, field.TypeJSON, value)
-		_node.Jsonschema = value
+	if value, ok := pc.mutation.Details(); ok {
+		_spec.SetField(procedure.FieldDetails, field.TypeJSON, value)
+		_node.Details = value
 	}
 	if nodes := pc.mutation.ControlIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

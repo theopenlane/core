@@ -193,30 +193,16 @@ func (aphc *ActionPlanHistoryCreate) SetNillableStatus(s *string) *ActionPlanHis
 	return aphc
 }
 
-// SetAssigned sets the "assigned" field.
-func (aphc *ActionPlanHistoryCreate) SetAssigned(s string) *ActionPlanHistoryCreate {
-	aphc.mutation.SetAssigned(s)
-	return aphc
-}
-
-// SetNillableAssigned sets the "assigned" field if the given value is not nil.
-func (aphc *ActionPlanHistoryCreate) SetNillableAssigned(s *string) *ActionPlanHistoryCreate {
-	if s != nil {
-		aphc.SetAssigned(*s)
-	}
-	return aphc
-}
-
 // SetDueDate sets the "due_date" field.
-func (aphc *ActionPlanHistoryCreate) SetDueDate(s string) *ActionPlanHistoryCreate {
-	aphc.mutation.SetDueDate(s)
+func (aphc *ActionPlanHistoryCreate) SetDueDate(t time.Time) *ActionPlanHistoryCreate {
+	aphc.mutation.SetDueDate(t)
 	return aphc
 }
 
 // SetNillableDueDate sets the "due_date" field if the given value is not nil.
-func (aphc *ActionPlanHistoryCreate) SetNillableDueDate(s *string) *ActionPlanHistoryCreate {
-	if s != nil {
-		aphc.SetDueDate(*s)
+func (aphc *ActionPlanHistoryCreate) SetNillableDueDate(t *time.Time) *ActionPlanHistoryCreate {
+	if t != nil {
+		aphc.SetDueDate(*t)
 	}
 	return aphc
 }
@@ -249,9 +235,9 @@ func (aphc *ActionPlanHistoryCreate) SetNillableSource(s *string) *ActionPlanHis
 	return aphc
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (aphc *ActionPlanHistoryCreate) SetJsonschema(m map[string]interface{}) *ActionPlanHistoryCreate {
-	aphc.mutation.SetJsonschema(m)
+// SetDetails sets the "details" field.
+func (aphc *ActionPlanHistoryCreate) SetDetails(m map[string]interface{}) *ActionPlanHistoryCreate {
+	aphc.mutation.SetDetails(m)
 	return aphc
 }
 
@@ -441,12 +427,8 @@ func (aphc *ActionPlanHistoryCreate) createSpec() (*ActionPlanHistory, *sqlgraph
 		_spec.SetField(actionplanhistory.FieldStatus, field.TypeString, value)
 		_node.Status = value
 	}
-	if value, ok := aphc.mutation.Assigned(); ok {
-		_spec.SetField(actionplanhistory.FieldAssigned, field.TypeString, value)
-		_node.Assigned = value
-	}
 	if value, ok := aphc.mutation.DueDate(); ok {
-		_spec.SetField(actionplanhistory.FieldDueDate, field.TypeString, value)
+		_spec.SetField(actionplanhistory.FieldDueDate, field.TypeTime, value)
 		_node.DueDate = value
 	}
 	if value, ok := aphc.mutation.Priority(); ok {
@@ -457,9 +439,9 @@ func (aphc *ActionPlanHistoryCreate) createSpec() (*ActionPlanHistory, *sqlgraph
 		_spec.SetField(actionplanhistory.FieldSource, field.TypeString, value)
 		_node.Source = value
 	}
-	if value, ok := aphc.mutation.Jsonschema(); ok {
-		_spec.SetField(actionplanhistory.FieldJsonschema, field.TypeJSON, value)
-		_node.Jsonschema = value
+	if value, ok := aphc.mutation.Details(); ok {
+		_spec.SetField(actionplanhistory.FieldDetails, field.TypeJSON, value)
+		_node.Details = value
 	}
 	return _node, _spec
 }

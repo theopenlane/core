@@ -13,8 +13,10 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -217,26 +219,6 @@ func (su *SubcontrolUpdate) ClearVersion() *SubcontrolUpdate {
 	return su
 }
 
-// SetOwner sets the "owner" field.
-func (su *SubcontrolUpdate) SetOwner(s string) *SubcontrolUpdate {
-	su.mutation.SetOwner(s)
-	return su
-}
-
-// SetNillableOwner sets the "owner" field if the given value is not nil.
-func (su *SubcontrolUpdate) SetNillableOwner(s *string) *SubcontrolUpdate {
-	if s != nil {
-		su.SetOwner(*s)
-	}
-	return su
-}
-
-// ClearOwner clears the value of the "owner" field.
-func (su *SubcontrolUpdate) ClearOwner() *SubcontrolUpdate {
-	su.mutation.ClearOwner()
-	return su
-}
-
 // SetSubcontrolNumber sets the "subcontrol_number" field.
 func (su *SubcontrolUpdate) SetSubcontrolNumber(s string) *SubcontrolUpdate {
 	su.mutation.SetSubcontrolNumber(s)
@@ -257,43 +239,43 @@ func (su *SubcontrolUpdate) ClearSubcontrolNumber() *SubcontrolUpdate {
 	return su
 }
 
-// SetSubcontrolFamily sets the "subcontrol_family" field.
-func (su *SubcontrolUpdate) SetSubcontrolFamily(s string) *SubcontrolUpdate {
-	su.mutation.SetSubcontrolFamily(s)
+// SetFamily sets the "family" field.
+func (su *SubcontrolUpdate) SetFamily(s string) *SubcontrolUpdate {
+	su.mutation.SetFamily(s)
 	return su
 }
 
-// SetNillableSubcontrolFamily sets the "subcontrol_family" field if the given value is not nil.
-func (su *SubcontrolUpdate) SetNillableSubcontrolFamily(s *string) *SubcontrolUpdate {
+// SetNillableFamily sets the "family" field if the given value is not nil.
+func (su *SubcontrolUpdate) SetNillableFamily(s *string) *SubcontrolUpdate {
 	if s != nil {
-		su.SetSubcontrolFamily(*s)
+		su.SetFamily(*s)
 	}
 	return su
 }
 
-// ClearSubcontrolFamily clears the value of the "subcontrol_family" field.
-func (su *SubcontrolUpdate) ClearSubcontrolFamily() *SubcontrolUpdate {
-	su.mutation.ClearSubcontrolFamily()
+// ClearFamily clears the value of the "family" field.
+func (su *SubcontrolUpdate) ClearFamily() *SubcontrolUpdate {
+	su.mutation.ClearFamily()
 	return su
 }
 
-// SetSubcontrolClass sets the "subcontrol_class" field.
-func (su *SubcontrolUpdate) SetSubcontrolClass(s string) *SubcontrolUpdate {
-	su.mutation.SetSubcontrolClass(s)
+// SetClass sets the "class" field.
+func (su *SubcontrolUpdate) SetClass(s string) *SubcontrolUpdate {
+	su.mutation.SetClass(s)
 	return su
 }
 
-// SetNillableSubcontrolClass sets the "subcontrol_class" field if the given value is not nil.
-func (su *SubcontrolUpdate) SetNillableSubcontrolClass(s *string) *SubcontrolUpdate {
+// SetNillableClass sets the "class" field if the given value is not nil.
+func (su *SubcontrolUpdate) SetNillableClass(s *string) *SubcontrolUpdate {
 	if s != nil {
-		su.SetSubcontrolClass(*s)
+		su.SetClass(*s)
 	}
 	return su
 }
 
-// ClearSubcontrolClass clears the value of the "subcontrol_class" field.
-func (su *SubcontrolUpdate) ClearSubcontrolClass() *SubcontrolUpdate {
-	su.mutation.ClearSubcontrolClass()
+// ClearClass clears the value of the "class" field.
+func (su *SubcontrolUpdate) ClearClass() *SubcontrolUpdate {
+	su.mutation.ClearClass()
 	return su
 }
 
@@ -337,23 +319,23 @@ func (su *SubcontrolUpdate) ClearMappedFrameworks() *SubcontrolUpdate {
 	return su
 }
 
-// SetAssignedTo sets the "assigned_to" field.
-func (su *SubcontrolUpdate) SetAssignedTo(s string) *SubcontrolUpdate {
-	su.mutation.SetAssignedTo(s)
+// SetImplementationEvidence sets the "implementation_evidence" field.
+func (su *SubcontrolUpdate) SetImplementationEvidence(s string) *SubcontrolUpdate {
+	su.mutation.SetImplementationEvidence(s)
 	return su
 }
 
-// SetNillableAssignedTo sets the "assigned_to" field if the given value is not nil.
-func (su *SubcontrolUpdate) SetNillableAssignedTo(s *string) *SubcontrolUpdate {
+// SetNillableImplementationEvidence sets the "implementation_evidence" field if the given value is not nil.
+func (su *SubcontrolUpdate) SetNillableImplementationEvidence(s *string) *SubcontrolUpdate {
 	if s != nil {
-		su.SetAssignedTo(*s)
+		su.SetImplementationEvidence(*s)
 	}
 	return su
 }
 
-// ClearAssignedTo clears the value of the "assigned_to" field.
-func (su *SubcontrolUpdate) ClearAssignedTo() *SubcontrolUpdate {
-	su.mutation.ClearAssignedTo()
+// ClearImplementationEvidence clears the value of the "implementation_evidence" field.
+func (su *SubcontrolUpdate) ClearImplementationEvidence() *SubcontrolUpdate {
+	su.mutation.ClearImplementationEvidence()
 	return su
 }
 
@@ -377,36 +359,16 @@ func (su *SubcontrolUpdate) ClearImplementationStatus() *SubcontrolUpdate {
 	return su
 }
 
-// SetImplementationNotes sets the "implementation_notes" field.
-func (su *SubcontrolUpdate) SetImplementationNotes(s string) *SubcontrolUpdate {
-	su.mutation.SetImplementationNotes(s)
-	return su
-}
-
-// SetNillableImplementationNotes sets the "implementation_notes" field if the given value is not nil.
-func (su *SubcontrolUpdate) SetNillableImplementationNotes(s *string) *SubcontrolUpdate {
-	if s != nil {
-		su.SetImplementationNotes(*s)
-	}
-	return su
-}
-
-// ClearImplementationNotes clears the value of the "implementation_notes" field.
-func (su *SubcontrolUpdate) ClearImplementationNotes() *SubcontrolUpdate {
-	su.mutation.ClearImplementationNotes()
-	return su
-}
-
 // SetImplementationDate sets the "implementation_date" field.
-func (su *SubcontrolUpdate) SetImplementationDate(s string) *SubcontrolUpdate {
-	su.mutation.SetImplementationDate(s)
+func (su *SubcontrolUpdate) SetImplementationDate(t time.Time) *SubcontrolUpdate {
+	su.mutation.SetImplementationDate(t)
 	return su
 }
 
 // SetNillableImplementationDate sets the "implementation_date" field if the given value is not nil.
-func (su *SubcontrolUpdate) SetNillableImplementationDate(s *string) *SubcontrolUpdate {
-	if s != nil {
-		su.SetImplementationDate(*s)
+func (su *SubcontrolUpdate) SetNillableImplementationDate(t *time.Time) *SubcontrolUpdate {
+	if t != nil {
+		su.SetImplementationDate(*t)
 	}
 	return su
 }
@@ -414,26 +376,6 @@ func (su *SubcontrolUpdate) SetNillableImplementationDate(s *string) *Subcontrol
 // ClearImplementationDate clears the value of the "implementation_date" field.
 func (su *SubcontrolUpdate) ClearImplementationDate() *SubcontrolUpdate {
 	su.mutation.ClearImplementationDate()
-	return su
-}
-
-// SetImplementationEvidence sets the "implementation_evidence" field.
-func (su *SubcontrolUpdate) SetImplementationEvidence(s string) *SubcontrolUpdate {
-	su.mutation.SetImplementationEvidence(s)
-	return su
-}
-
-// SetNillableImplementationEvidence sets the "implementation_evidence" field if the given value is not nil.
-func (su *SubcontrolUpdate) SetNillableImplementationEvidence(s *string) *SubcontrolUpdate {
-	if s != nil {
-		su.SetImplementationEvidence(*s)
-	}
-	return su
-}
-
-// ClearImplementationEvidence clears the value of the "implementation_evidence" field.
-func (su *SubcontrolUpdate) ClearImplementationEvidence() *SubcontrolUpdate {
-	su.mutation.ClearImplementationEvidence()
 	return su
 }
 
@@ -458,15 +400,15 @@ func (su *SubcontrolUpdate) ClearImplementationVerification() *SubcontrolUpdate 
 }
 
 // SetImplementationVerificationDate sets the "implementation_verification_date" field.
-func (su *SubcontrolUpdate) SetImplementationVerificationDate(s string) *SubcontrolUpdate {
-	su.mutation.SetImplementationVerificationDate(s)
+func (su *SubcontrolUpdate) SetImplementationVerificationDate(t time.Time) *SubcontrolUpdate {
+	su.mutation.SetImplementationVerificationDate(t)
 	return su
 }
 
 // SetNillableImplementationVerificationDate sets the "implementation_verification_date" field if the given value is not nil.
-func (su *SubcontrolUpdate) SetNillableImplementationVerificationDate(s *string) *SubcontrolUpdate {
-	if s != nil {
-		su.SetImplementationVerificationDate(*s)
+func (su *SubcontrolUpdate) SetNillableImplementationVerificationDate(t *time.Time) *SubcontrolUpdate {
+	if t != nil {
+		su.SetImplementationVerificationDate(*t)
 	}
 	return su
 }
@@ -477,15 +419,15 @@ func (su *SubcontrolUpdate) ClearImplementationVerificationDate() *SubcontrolUpd
 	return su
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (su *SubcontrolUpdate) SetJsonschema(m map[string]interface{}) *SubcontrolUpdate {
-	su.mutation.SetJsonschema(m)
+// SetDetails sets the "details" field.
+func (su *SubcontrolUpdate) SetDetails(m map[string]interface{}) *SubcontrolUpdate {
+	su.mutation.SetDetails(m)
 	return su
 }
 
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (su *SubcontrolUpdate) ClearJsonschema() *SubcontrolUpdate {
-	su.mutation.ClearJsonschema()
+// ClearDetails clears the value of the "details" field.
+func (su *SubcontrolUpdate) ClearDetails() *SubcontrolUpdate {
+	su.mutation.ClearDetails()
 	return su
 }
 
@@ -502,6 +444,40 @@ func (su *SubcontrolUpdate) AddControl(c ...*Control) *SubcontrolUpdate {
 		ids[i] = c[i].ID
 	}
 	return su.AddControlIDs(ids...)
+}
+
+// AddUserIDs adds the "user" edge to the User entity by IDs.
+func (su *SubcontrolUpdate) AddUserIDs(ids ...string) *SubcontrolUpdate {
+	su.mutation.AddUserIDs(ids...)
+	return su
+}
+
+// AddUser adds the "user" edges to the User entity.
+func (su *SubcontrolUpdate) AddUser(u ...*User) *SubcontrolUpdate {
+	ids := make([]string, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return su.AddUserIDs(ids...)
+}
+
+// SetNotesID sets the "notes" edge to the Note entity by ID.
+func (su *SubcontrolUpdate) SetNotesID(id string) *SubcontrolUpdate {
+	su.mutation.SetNotesID(id)
+	return su
+}
+
+// SetNillableNotesID sets the "notes" edge to the Note entity by ID if the given value is not nil.
+func (su *SubcontrolUpdate) SetNillableNotesID(id *string) *SubcontrolUpdate {
+	if id != nil {
+		su = su.SetNotesID(*id)
+	}
+	return su
+}
+
+// SetNotes sets the "notes" edge to the Note entity.
+func (su *SubcontrolUpdate) SetNotes(n *Note) *SubcontrolUpdate {
+	return su.SetNotesID(n.ID)
 }
 
 // Mutation returns the SubcontrolMutation object of the builder.
@@ -528,6 +504,33 @@ func (su *SubcontrolUpdate) RemoveControl(c ...*Control) *SubcontrolUpdate {
 		ids[i] = c[i].ID
 	}
 	return su.RemoveControlIDs(ids...)
+}
+
+// ClearUser clears all "user" edges to the User entity.
+func (su *SubcontrolUpdate) ClearUser() *SubcontrolUpdate {
+	su.mutation.ClearUser()
+	return su
+}
+
+// RemoveUserIDs removes the "user" edge to User entities by IDs.
+func (su *SubcontrolUpdate) RemoveUserIDs(ids ...string) *SubcontrolUpdate {
+	su.mutation.RemoveUserIDs(ids...)
+	return su
+}
+
+// RemoveUser removes "user" edges to User entities.
+func (su *SubcontrolUpdate) RemoveUser(u ...*User) *SubcontrolUpdate {
+	ids := make([]string, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return su.RemoveUserIDs(ids...)
+}
+
+// ClearNotes clears the "notes" edge to the Note entity.
+func (su *SubcontrolUpdate) ClearNotes() *SubcontrolUpdate {
+	su.mutation.ClearNotes()
+	return su
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -655,29 +658,23 @@ func (su *SubcontrolUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if su.mutation.VersionCleared() {
 		_spec.ClearField(subcontrol.FieldVersion, field.TypeString)
 	}
-	if value, ok := su.mutation.Owner(); ok {
-		_spec.SetField(subcontrol.FieldOwner, field.TypeString, value)
-	}
-	if su.mutation.OwnerCleared() {
-		_spec.ClearField(subcontrol.FieldOwner, field.TypeString)
-	}
 	if value, ok := su.mutation.SubcontrolNumber(); ok {
 		_spec.SetField(subcontrol.FieldSubcontrolNumber, field.TypeString, value)
 	}
 	if su.mutation.SubcontrolNumberCleared() {
 		_spec.ClearField(subcontrol.FieldSubcontrolNumber, field.TypeString)
 	}
-	if value, ok := su.mutation.SubcontrolFamily(); ok {
-		_spec.SetField(subcontrol.FieldSubcontrolFamily, field.TypeString, value)
+	if value, ok := su.mutation.Family(); ok {
+		_spec.SetField(subcontrol.FieldFamily, field.TypeString, value)
 	}
-	if su.mutation.SubcontrolFamilyCleared() {
-		_spec.ClearField(subcontrol.FieldSubcontrolFamily, field.TypeString)
+	if su.mutation.FamilyCleared() {
+		_spec.ClearField(subcontrol.FieldFamily, field.TypeString)
 	}
-	if value, ok := su.mutation.SubcontrolClass(); ok {
-		_spec.SetField(subcontrol.FieldSubcontrolClass, field.TypeString, value)
+	if value, ok := su.mutation.Class(); ok {
+		_spec.SetField(subcontrol.FieldClass, field.TypeString, value)
 	}
-	if su.mutation.SubcontrolClassCleared() {
-		_spec.ClearField(subcontrol.FieldSubcontrolClass, field.TypeString)
+	if su.mutation.ClassCleared() {
+		_spec.ClearField(subcontrol.FieldClass, field.TypeString)
 	}
 	if value, ok := su.mutation.Source(); ok {
 		_spec.SetField(subcontrol.FieldSource, field.TypeString, value)
@@ -691,11 +688,11 @@ func (su *SubcontrolUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if su.mutation.MappedFrameworksCleared() {
 		_spec.ClearField(subcontrol.FieldMappedFrameworks, field.TypeString)
 	}
-	if value, ok := su.mutation.AssignedTo(); ok {
-		_spec.SetField(subcontrol.FieldAssignedTo, field.TypeString, value)
+	if value, ok := su.mutation.ImplementationEvidence(); ok {
+		_spec.SetField(subcontrol.FieldImplementationEvidence, field.TypeString, value)
 	}
-	if su.mutation.AssignedToCleared() {
-		_spec.ClearField(subcontrol.FieldAssignedTo, field.TypeString)
+	if su.mutation.ImplementationEvidenceCleared() {
+		_spec.ClearField(subcontrol.FieldImplementationEvidence, field.TypeString)
 	}
 	if value, ok := su.mutation.ImplementationStatus(); ok {
 		_spec.SetField(subcontrol.FieldImplementationStatus, field.TypeString, value)
@@ -703,23 +700,11 @@ func (su *SubcontrolUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if su.mutation.ImplementationStatusCleared() {
 		_spec.ClearField(subcontrol.FieldImplementationStatus, field.TypeString)
 	}
-	if value, ok := su.mutation.ImplementationNotes(); ok {
-		_spec.SetField(subcontrol.FieldImplementationNotes, field.TypeString, value)
-	}
-	if su.mutation.ImplementationNotesCleared() {
-		_spec.ClearField(subcontrol.FieldImplementationNotes, field.TypeString)
-	}
 	if value, ok := su.mutation.ImplementationDate(); ok {
-		_spec.SetField(subcontrol.FieldImplementationDate, field.TypeString, value)
+		_spec.SetField(subcontrol.FieldImplementationDate, field.TypeTime, value)
 	}
 	if su.mutation.ImplementationDateCleared() {
-		_spec.ClearField(subcontrol.FieldImplementationDate, field.TypeString)
-	}
-	if value, ok := su.mutation.ImplementationEvidence(); ok {
-		_spec.SetField(subcontrol.FieldImplementationEvidence, field.TypeString, value)
-	}
-	if su.mutation.ImplementationEvidenceCleared() {
-		_spec.ClearField(subcontrol.FieldImplementationEvidence, field.TypeString)
+		_spec.ClearField(subcontrol.FieldImplementationDate, field.TypeTime)
 	}
 	if value, ok := su.mutation.ImplementationVerification(); ok {
 		_spec.SetField(subcontrol.FieldImplementationVerification, field.TypeString, value)
@@ -728,16 +713,16 @@ func (su *SubcontrolUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.ClearField(subcontrol.FieldImplementationVerification, field.TypeString)
 	}
 	if value, ok := su.mutation.ImplementationVerificationDate(); ok {
-		_spec.SetField(subcontrol.FieldImplementationVerificationDate, field.TypeString, value)
+		_spec.SetField(subcontrol.FieldImplementationVerificationDate, field.TypeTime, value)
 	}
 	if su.mutation.ImplementationVerificationDateCleared() {
-		_spec.ClearField(subcontrol.FieldImplementationVerificationDate, field.TypeString)
+		_spec.ClearField(subcontrol.FieldImplementationVerificationDate, field.TypeTime)
 	}
-	if value, ok := su.mutation.Jsonschema(); ok {
-		_spec.SetField(subcontrol.FieldJsonschema, field.TypeJSON, value)
+	if value, ok := su.mutation.Details(); ok {
+		_spec.SetField(subcontrol.FieldDetails, field.TypeJSON, value)
 	}
-	if su.mutation.JsonschemaCleared() {
-		_spec.ClearField(subcontrol.FieldJsonschema, field.TypeJSON)
+	if su.mutation.DetailsCleared() {
+		_spec.ClearField(subcontrol.FieldDetails, field.TypeJSON)
 	}
 	if su.mutation.ControlCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -782,6 +767,85 @@ func (su *SubcontrolUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			},
 		}
 		edge.Schema = su.schemaConfig.ControlSubcontrols
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if su.mutation.UserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subcontrol.UserTable,
+			Columns: subcontrol.UserPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = su.schemaConfig.UserSubcontrols
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.RemovedUserIDs(); len(nodes) > 0 && !su.mutation.UserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subcontrol.UserTable,
+			Columns: subcontrol.UserPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = su.schemaConfig.UserSubcontrols
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.UserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subcontrol.UserTable,
+			Columns: subcontrol.UserPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = su.schemaConfig.UserSubcontrols
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if su.mutation.NotesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   subcontrol.NotesTable,
+			Columns: []string{subcontrol.NotesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = su.schemaConfig.Subcontrol
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.NotesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   subcontrol.NotesTable,
+			Columns: []string{subcontrol.NotesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = su.schemaConfig.Subcontrol
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -995,26 +1059,6 @@ func (suo *SubcontrolUpdateOne) ClearVersion() *SubcontrolUpdateOne {
 	return suo
 }
 
-// SetOwner sets the "owner" field.
-func (suo *SubcontrolUpdateOne) SetOwner(s string) *SubcontrolUpdateOne {
-	suo.mutation.SetOwner(s)
-	return suo
-}
-
-// SetNillableOwner sets the "owner" field if the given value is not nil.
-func (suo *SubcontrolUpdateOne) SetNillableOwner(s *string) *SubcontrolUpdateOne {
-	if s != nil {
-		suo.SetOwner(*s)
-	}
-	return suo
-}
-
-// ClearOwner clears the value of the "owner" field.
-func (suo *SubcontrolUpdateOne) ClearOwner() *SubcontrolUpdateOne {
-	suo.mutation.ClearOwner()
-	return suo
-}
-
 // SetSubcontrolNumber sets the "subcontrol_number" field.
 func (suo *SubcontrolUpdateOne) SetSubcontrolNumber(s string) *SubcontrolUpdateOne {
 	suo.mutation.SetSubcontrolNumber(s)
@@ -1035,43 +1079,43 @@ func (suo *SubcontrolUpdateOne) ClearSubcontrolNumber() *SubcontrolUpdateOne {
 	return suo
 }
 
-// SetSubcontrolFamily sets the "subcontrol_family" field.
-func (suo *SubcontrolUpdateOne) SetSubcontrolFamily(s string) *SubcontrolUpdateOne {
-	suo.mutation.SetSubcontrolFamily(s)
+// SetFamily sets the "family" field.
+func (suo *SubcontrolUpdateOne) SetFamily(s string) *SubcontrolUpdateOne {
+	suo.mutation.SetFamily(s)
 	return suo
 }
 
-// SetNillableSubcontrolFamily sets the "subcontrol_family" field if the given value is not nil.
-func (suo *SubcontrolUpdateOne) SetNillableSubcontrolFamily(s *string) *SubcontrolUpdateOne {
+// SetNillableFamily sets the "family" field if the given value is not nil.
+func (suo *SubcontrolUpdateOne) SetNillableFamily(s *string) *SubcontrolUpdateOne {
 	if s != nil {
-		suo.SetSubcontrolFamily(*s)
+		suo.SetFamily(*s)
 	}
 	return suo
 }
 
-// ClearSubcontrolFamily clears the value of the "subcontrol_family" field.
-func (suo *SubcontrolUpdateOne) ClearSubcontrolFamily() *SubcontrolUpdateOne {
-	suo.mutation.ClearSubcontrolFamily()
+// ClearFamily clears the value of the "family" field.
+func (suo *SubcontrolUpdateOne) ClearFamily() *SubcontrolUpdateOne {
+	suo.mutation.ClearFamily()
 	return suo
 }
 
-// SetSubcontrolClass sets the "subcontrol_class" field.
-func (suo *SubcontrolUpdateOne) SetSubcontrolClass(s string) *SubcontrolUpdateOne {
-	suo.mutation.SetSubcontrolClass(s)
+// SetClass sets the "class" field.
+func (suo *SubcontrolUpdateOne) SetClass(s string) *SubcontrolUpdateOne {
+	suo.mutation.SetClass(s)
 	return suo
 }
 
-// SetNillableSubcontrolClass sets the "subcontrol_class" field if the given value is not nil.
-func (suo *SubcontrolUpdateOne) SetNillableSubcontrolClass(s *string) *SubcontrolUpdateOne {
+// SetNillableClass sets the "class" field if the given value is not nil.
+func (suo *SubcontrolUpdateOne) SetNillableClass(s *string) *SubcontrolUpdateOne {
 	if s != nil {
-		suo.SetSubcontrolClass(*s)
+		suo.SetClass(*s)
 	}
 	return suo
 }
 
-// ClearSubcontrolClass clears the value of the "subcontrol_class" field.
-func (suo *SubcontrolUpdateOne) ClearSubcontrolClass() *SubcontrolUpdateOne {
-	suo.mutation.ClearSubcontrolClass()
+// ClearClass clears the value of the "class" field.
+func (suo *SubcontrolUpdateOne) ClearClass() *SubcontrolUpdateOne {
+	suo.mutation.ClearClass()
 	return suo
 }
 
@@ -1115,23 +1159,23 @@ func (suo *SubcontrolUpdateOne) ClearMappedFrameworks() *SubcontrolUpdateOne {
 	return suo
 }
 
-// SetAssignedTo sets the "assigned_to" field.
-func (suo *SubcontrolUpdateOne) SetAssignedTo(s string) *SubcontrolUpdateOne {
-	suo.mutation.SetAssignedTo(s)
+// SetImplementationEvidence sets the "implementation_evidence" field.
+func (suo *SubcontrolUpdateOne) SetImplementationEvidence(s string) *SubcontrolUpdateOne {
+	suo.mutation.SetImplementationEvidence(s)
 	return suo
 }
 
-// SetNillableAssignedTo sets the "assigned_to" field if the given value is not nil.
-func (suo *SubcontrolUpdateOne) SetNillableAssignedTo(s *string) *SubcontrolUpdateOne {
+// SetNillableImplementationEvidence sets the "implementation_evidence" field if the given value is not nil.
+func (suo *SubcontrolUpdateOne) SetNillableImplementationEvidence(s *string) *SubcontrolUpdateOne {
 	if s != nil {
-		suo.SetAssignedTo(*s)
+		suo.SetImplementationEvidence(*s)
 	}
 	return suo
 }
 
-// ClearAssignedTo clears the value of the "assigned_to" field.
-func (suo *SubcontrolUpdateOne) ClearAssignedTo() *SubcontrolUpdateOne {
-	suo.mutation.ClearAssignedTo()
+// ClearImplementationEvidence clears the value of the "implementation_evidence" field.
+func (suo *SubcontrolUpdateOne) ClearImplementationEvidence() *SubcontrolUpdateOne {
+	suo.mutation.ClearImplementationEvidence()
 	return suo
 }
 
@@ -1155,36 +1199,16 @@ func (suo *SubcontrolUpdateOne) ClearImplementationStatus() *SubcontrolUpdateOne
 	return suo
 }
 
-// SetImplementationNotes sets the "implementation_notes" field.
-func (suo *SubcontrolUpdateOne) SetImplementationNotes(s string) *SubcontrolUpdateOne {
-	suo.mutation.SetImplementationNotes(s)
-	return suo
-}
-
-// SetNillableImplementationNotes sets the "implementation_notes" field if the given value is not nil.
-func (suo *SubcontrolUpdateOne) SetNillableImplementationNotes(s *string) *SubcontrolUpdateOne {
-	if s != nil {
-		suo.SetImplementationNotes(*s)
-	}
-	return suo
-}
-
-// ClearImplementationNotes clears the value of the "implementation_notes" field.
-func (suo *SubcontrolUpdateOne) ClearImplementationNotes() *SubcontrolUpdateOne {
-	suo.mutation.ClearImplementationNotes()
-	return suo
-}
-
 // SetImplementationDate sets the "implementation_date" field.
-func (suo *SubcontrolUpdateOne) SetImplementationDate(s string) *SubcontrolUpdateOne {
-	suo.mutation.SetImplementationDate(s)
+func (suo *SubcontrolUpdateOne) SetImplementationDate(t time.Time) *SubcontrolUpdateOne {
+	suo.mutation.SetImplementationDate(t)
 	return suo
 }
 
 // SetNillableImplementationDate sets the "implementation_date" field if the given value is not nil.
-func (suo *SubcontrolUpdateOne) SetNillableImplementationDate(s *string) *SubcontrolUpdateOne {
-	if s != nil {
-		suo.SetImplementationDate(*s)
+func (suo *SubcontrolUpdateOne) SetNillableImplementationDate(t *time.Time) *SubcontrolUpdateOne {
+	if t != nil {
+		suo.SetImplementationDate(*t)
 	}
 	return suo
 }
@@ -1192,26 +1216,6 @@ func (suo *SubcontrolUpdateOne) SetNillableImplementationDate(s *string) *Subcon
 // ClearImplementationDate clears the value of the "implementation_date" field.
 func (suo *SubcontrolUpdateOne) ClearImplementationDate() *SubcontrolUpdateOne {
 	suo.mutation.ClearImplementationDate()
-	return suo
-}
-
-// SetImplementationEvidence sets the "implementation_evidence" field.
-func (suo *SubcontrolUpdateOne) SetImplementationEvidence(s string) *SubcontrolUpdateOne {
-	suo.mutation.SetImplementationEvidence(s)
-	return suo
-}
-
-// SetNillableImplementationEvidence sets the "implementation_evidence" field if the given value is not nil.
-func (suo *SubcontrolUpdateOne) SetNillableImplementationEvidence(s *string) *SubcontrolUpdateOne {
-	if s != nil {
-		suo.SetImplementationEvidence(*s)
-	}
-	return suo
-}
-
-// ClearImplementationEvidence clears the value of the "implementation_evidence" field.
-func (suo *SubcontrolUpdateOne) ClearImplementationEvidence() *SubcontrolUpdateOne {
-	suo.mutation.ClearImplementationEvidence()
 	return suo
 }
 
@@ -1236,15 +1240,15 @@ func (suo *SubcontrolUpdateOne) ClearImplementationVerification() *SubcontrolUpd
 }
 
 // SetImplementationVerificationDate sets the "implementation_verification_date" field.
-func (suo *SubcontrolUpdateOne) SetImplementationVerificationDate(s string) *SubcontrolUpdateOne {
-	suo.mutation.SetImplementationVerificationDate(s)
+func (suo *SubcontrolUpdateOne) SetImplementationVerificationDate(t time.Time) *SubcontrolUpdateOne {
+	suo.mutation.SetImplementationVerificationDate(t)
 	return suo
 }
 
 // SetNillableImplementationVerificationDate sets the "implementation_verification_date" field if the given value is not nil.
-func (suo *SubcontrolUpdateOne) SetNillableImplementationVerificationDate(s *string) *SubcontrolUpdateOne {
-	if s != nil {
-		suo.SetImplementationVerificationDate(*s)
+func (suo *SubcontrolUpdateOne) SetNillableImplementationVerificationDate(t *time.Time) *SubcontrolUpdateOne {
+	if t != nil {
+		suo.SetImplementationVerificationDate(*t)
 	}
 	return suo
 }
@@ -1255,15 +1259,15 @@ func (suo *SubcontrolUpdateOne) ClearImplementationVerificationDate() *Subcontro
 	return suo
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (suo *SubcontrolUpdateOne) SetJsonschema(m map[string]interface{}) *SubcontrolUpdateOne {
-	suo.mutation.SetJsonschema(m)
+// SetDetails sets the "details" field.
+func (suo *SubcontrolUpdateOne) SetDetails(m map[string]interface{}) *SubcontrolUpdateOne {
+	suo.mutation.SetDetails(m)
 	return suo
 }
 
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (suo *SubcontrolUpdateOne) ClearJsonschema() *SubcontrolUpdateOne {
-	suo.mutation.ClearJsonschema()
+// ClearDetails clears the value of the "details" field.
+func (suo *SubcontrolUpdateOne) ClearDetails() *SubcontrolUpdateOne {
+	suo.mutation.ClearDetails()
 	return suo
 }
 
@@ -1280,6 +1284,40 @@ func (suo *SubcontrolUpdateOne) AddControl(c ...*Control) *SubcontrolUpdateOne {
 		ids[i] = c[i].ID
 	}
 	return suo.AddControlIDs(ids...)
+}
+
+// AddUserIDs adds the "user" edge to the User entity by IDs.
+func (suo *SubcontrolUpdateOne) AddUserIDs(ids ...string) *SubcontrolUpdateOne {
+	suo.mutation.AddUserIDs(ids...)
+	return suo
+}
+
+// AddUser adds the "user" edges to the User entity.
+func (suo *SubcontrolUpdateOne) AddUser(u ...*User) *SubcontrolUpdateOne {
+	ids := make([]string, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return suo.AddUserIDs(ids...)
+}
+
+// SetNotesID sets the "notes" edge to the Note entity by ID.
+func (suo *SubcontrolUpdateOne) SetNotesID(id string) *SubcontrolUpdateOne {
+	suo.mutation.SetNotesID(id)
+	return suo
+}
+
+// SetNillableNotesID sets the "notes" edge to the Note entity by ID if the given value is not nil.
+func (suo *SubcontrolUpdateOne) SetNillableNotesID(id *string) *SubcontrolUpdateOne {
+	if id != nil {
+		suo = suo.SetNotesID(*id)
+	}
+	return suo
+}
+
+// SetNotes sets the "notes" edge to the Note entity.
+func (suo *SubcontrolUpdateOne) SetNotes(n *Note) *SubcontrolUpdateOne {
+	return suo.SetNotesID(n.ID)
 }
 
 // Mutation returns the SubcontrolMutation object of the builder.
@@ -1306,6 +1344,33 @@ func (suo *SubcontrolUpdateOne) RemoveControl(c ...*Control) *SubcontrolUpdateOn
 		ids[i] = c[i].ID
 	}
 	return suo.RemoveControlIDs(ids...)
+}
+
+// ClearUser clears all "user" edges to the User entity.
+func (suo *SubcontrolUpdateOne) ClearUser() *SubcontrolUpdateOne {
+	suo.mutation.ClearUser()
+	return suo
+}
+
+// RemoveUserIDs removes the "user" edge to User entities by IDs.
+func (suo *SubcontrolUpdateOne) RemoveUserIDs(ids ...string) *SubcontrolUpdateOne {
+	suo.mutation.RemoveUserIDs(ids...)
+	return suo
+}
+
+// RemoveUser removes "user" edges to User entities.
+func (suo *SubcontrolUpdateOne) RemoveUser(u ...*User) *SubcontrolUpdateOne {
+	ids := make([]string, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return suo.RemoveUserIDs(ids...)
+}
+
+// ClearNotes clears the "notes" edge to the Note entity.
+func (suo *SubcontrolUpdateOne) ClearNotes() *SubcontrolUpdateOne {
+	suo.mutation.ClearNotes()
+	return suo
 }
 
 // Where appends a list predicates to the SubcontrolUpdate builder.
@@ -1463,29 +1528,23 @@ func (suo *SubcontrolUpdateOne) sqlSave(ctx context.Context) (_node *Subcontrol,
 	if suo.mutation.VersionCleared() {
 		_spec.ClearField(subcontrol.FieldVersion, field.TypeString)
 	}
-	if value, ok := suo.mutation.Owner(); ok {
-		_spec.SetField(subcontrol.FieldOwner, field.TypeString, value)
-	}
-	if suo.mutation.OwnerCleared() {
-		_spec.ClearField(subcontrol.FieldOwner, field.TypeString)
-	}
 	if value, ok := suo.mutation.SubcontrolNumber(); ok {
 		_spec.SetField(subcontrol.FieldSubcontrolNumber, field.TypeString, value)
 	}
 	if suo.mutation.SubcontrolNumberCleared() {
 		_spec.ClearField(subcontrol.FieldSubcontrolNumber, field.TypeString)
 	}
-	if value, ok := suo.mutation.SubcontrolFamily(); ok {
-		_spec.SetField(subcontrol.FieldSubcontrolFamily, field.TypeString, value)
+	if value, ok := suo.mutation.Family(); ok {
+		_spec.SetField(subcontrol.FieldFamily, field.TypeString, value)
 	}
-	if suo.mutation.SubcontrolFamilyCleared() {
-		_spec.ClearField(subcontrol.FieldSubcontrolFamily, field.TypeString)
+	if suo.mutation.FamilyCleared() {
+		_spec.ClearField(subcontrol.FieldFamily, field.TypeString)
 	}
-	if value, ok := suo.mutation.SubcontrolClass(); ok {
-		_spec.SetField(subcontrol.FieldSubcontrolClass, field.TypeString, value)
+	if value, ok := suo.mutation.Class(); ok {
+		_spec.SetField(subcontrol.FieldClass, field.TypeString, value)
 	}
-	if suo.mutation.SubcontrolClassCleared() {
-		_spec.ClearField(subcontrol.FieldSubcontrolClass, field.TypeString)
+	if suo.mutation.ClassCleared() {
+		_spec.ClearField(subcontrol.FieldClass, field.TypeString)
 	}
 	if value, ok := suo.mutation.Source(); ok {
 		_spec.SetField(subcontrol.FieldSource, field.TypeString, value)
@@ -1499,11 +1558,11 @@ func (suo *SubcontrolUpdateOne) sqlSave(ctx context.Context) (_node *Subcontrol,
 	if suo.mutation.MappedFrameworksCleared() {
 		_spec.ClearField(subcontrol.FieldMappedFrameworks, field.TypeString)
 	}
-	if value, ok := suo.mutation.AssignedTo(); ok {
-		_spec.SetField(subcontrol.FieldAssignedTo, field.TypeString, value)
+	if value, ok := suo.mutation.ImplementationEvidence(); ok {
+		_spec.SetField(subcontrol.FieldImplementationEvidence, field.TypeString, value)
 	}
-	if suo.mutation.AssignedToCleared() {
-		_spec.ClearField(subcontrol.FieldAssignedTo, field.TypeString)
+	if suo.mutation.ImplementationEvidenceCleared() {
+		_spec.ClearField(subcontrol.FieldImplementationEvidence, field.TypeString)
 	}
 	if value, ok := suo.mutation.ImplementationStatus(); ok {
 		_spec.SetField(subcontrol.FieldImplementationStatus, field.TypeString, value)
@@ -1511,23 +1570,11 @@ func (suo *SubcontrolUpdateOne) sqlSave(ctx context.Context) (_node *Subcontrol,
 	if suo.mutation.ImplementationStatusCleared() {
 		_spec.ClearField(subcontrol.FieldImplementationStatus, field.TypeString)
 	}
-	if value, ok := suo.mutation.ImplementationNotes(); ok {
-		_spec.SetField(subcontrol.FieldImplementationNotes, field.TypeString, value)
-	}
-	if suo.mutation.ImplementationNotesCleared() {
-		_spec.ClearField(subcontrol.FieldImplementationNotes, field.TypeString)
-	}
 	if value, ok := suo.mutation.ImplementationDate(); ok {
-		_spec.SetField(subcontrol.FieldImplementationDate, field.TypeString, value)
+		_spec.SetField(subcontrol.FieldImplementationDate, field.TypeTime, value)
 	}
 	if suo.mutation.ImplementationDateCleared() {
-		_spec.ClearField(subcontrol.FieldImplementationDate, field.TypeString)
-	}
-	if value, ok := suo.mutation.ImplementationEvidence(); ok {
-		_spec.SetField(subcontrol.FieldImplementationEvidence, field.TypeString, value)
-	}
-	if suo.mutation.ImplementationEvidenceCleared() {
-		_spec.ClearField(subcontrol.FieldImplementationEvidence, field.TypeString)
+		_spec.ClearField(subcontrol.FieldImplementationDate, field.TypeTime)
 	}
 	if value, ok := suo.mutation.ImplementationVerification(); ok {
 		_spec.SetField(subcontrol.FieldImplementationVerification, field.TypeString, value)
@@ -1536,16 +1583,16 @@ func (suo *SubcontrolUpdateOne) sqlSave(ctx context.Context) (_node *Subcontrol,
 		_spec.ClearField(subcontrol.FieldImplementationVerification, field.TypeString)
 	}
 	if value, ok := suo.mutation.ImplementationVerificationDate(); ok {
-		_spec.SetField(subcontrol.FieldImplementationVerificationDate, field.TypeString, value)
+		_spec.SetField(subcontrol.FieldImplementationVerificationDate, field.TypeTime, value)
 	}
 	if suo.mutation.ImplementationVerificationDateCleared() {
-		_spec.ClearField(subcontrol.FieldImplementationVerificationDate, field.TypeString)
+		_spec.ClearField(subcontrol.FieldImplementationVerificationDate, field.TypeTime)
 	}
-	if value, ok := suo.mutation.Jsonschema(); ok {
-		_spec.SetField(subcontrol.FieldJsonschema, field.TypeJSON, value)
+	if value, ok := suo.mutation.Details(); ok {
+		_spec.SetField(subcontrol.FieldDetails, field.TypeJSON, value)
 	}
-	if suo.mutation.JsonschemaCleared() {
-		_spec.ClearField(subcontrol.FieldJsonschema, field.TypeJSON)
+	if suo.mutation.DetailsCleared() {
+		_spec.ClearField(subcontrol.FieldDetails, field.TypeJSON)
 	}
 	if suo.mutation.ControlCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1590,6 +1637,85 @@ func (suo *SubcontrolUpdateOne) sqlSave(ctx context.Context) (_node *Subcontrol,
 			},
 		}
 		edge.Schema = suo.schemaConfig.ControlSubcontrols
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if suo.mutation.UserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subcontrol.UserTable,
+			Columns: subcontrol.UserPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = suo.schemaConfig.UserSubcontrols
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.RemovedUserIDs(); len(nodes) > 0 && !suo.mutation.UserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subcontrol.UserTable,
+			Columns: subcontrol.UserPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = suo.schemaConfig.UserSubcontrols
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.UserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subcontrol.UserTable,
+			Columns: subcontrol.UserPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = suo.schemaConfig.UserSubcontrols
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if suo.mutation.NotesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   subcontrol.NotesTable,
+			Columns: []string{subcontrol.NotesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = suo.schemaConfig.Subcontrol
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.NotesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   subcontrol.NotesTable,
+			Columns: []string{subcontrol.NotesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = suo.schemaConfig.Subcontrol
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

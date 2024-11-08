@@ -38,13 +38,13 @@ func (Procedure) Fields() []ent.Field {
 			Comment("purpose and scope"),
 		field.Text("background").
 			Optional().
-			Comment("background"),
+			Comment("background of the procedure"),
 		field.Text("satisfies").
 			Optional().
 			Comment("which controls are satisfied by the procedure"),
-		field.JSON("jsonschema", map[string]interface{}{}).
+		field.JSON("details", map[string]interface{}{}).
 			Optional().
-			Comment("json schema"),
+			Comment("json data for the procedure document"),
 	}
 }
 

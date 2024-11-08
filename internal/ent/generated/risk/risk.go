@@ -3,11 +3,14 @@
 package risk
 
 import (
+	"fmt"
 	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 const (
@@ -49,10 +52,8 @@ const (
 	FieldMitigation = "mitigation"
 	// FieldSatisfies holds the string denoting the satisfies field in the database.
 	FieldSatisfies = "satisfies"
-	// FieldSeverity holds the string denoting the severity field in the database.
-	FieldSeverity = "severity"
-	// FieldJsonschema holds the string denoting the jsonschema field in the database.
-	FieldJsonschema = "jsonschema"
+	// FieldDetails holds the string denoting the details field in the database.
+	FieldDetails = "details"
 	// EdgeControl holds the string denoting the control edge name in mutations.
 	EdgeControl = "control"
 	// EdgeProcedure holds the string denoting the procedure edge name in mutations.
@@ -98,8 +99,7 @@ var Columns = []string{
 	FieldLikelihood,
 	FieldMitigation,
 	FieldSatisfies,
-	FieldSeverity,
-	FieldJsonschema,
+	FieldDetails,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "risks"
@@ -156,6 +156,26 @@ var (
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
+
+// ImpactValidator is a validator for the "impact" field enum values. It is called by the builders before save.
+func ImpactValidator(i enums.RiskImpact) error {
+	switch i.String() {
+	case "LOW", "MODERATE", "HIGH":
+		return nil
+	default:
+		return fmt.Errorf("risk: invalid enum value for impact field: %q", i)
+	}
+}
+
+// LikelihoodValidator is a validator for the "likelihood" field enum values. It is called by the builders before save.
+func LikelihoodValidator(l enums.RiskLikelihood) error {
+	switch l.String() {
+	case "UNLIKELY", "LIKELY", "HIGHLY_LIKELY":
+		return nil
+	default:
+		return fmt.Errorf("risk: invalid enum value for likelihood field: %q", l)
+	}
+}
 
 // OrderOption defines the ordering options for the Risk queries.
 type OrderOption func(*sql.Selector)
@@ -245,11 +265,6 @@ func BySatisfies(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSatisfies, opts...).ToFunc()
 }
 
-// BySeverity orders the results by the severity field.
-func BySeverity(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldSeverity, opts...).ToFunc()
-}
-
 // ByControlCount orders the results by control count.
 func ByControlCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -312,3 +327,17 @@ func newActionplansStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, false, ActionplansTable, ActionplansPrimaryKey...),
 	)
 }
+
+var (
+	// enums.RiskImpact must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.RiskImpact)(nil)
+	// enums.RiskImpact must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.RiskImpact)(nil)
+)
+
+var (
+	// enums.RiskLikelihood must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.RiskLikelihood)(nil)
+	// enums.RiskLikelihood must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.RiskLikelihood)(nil)
+)

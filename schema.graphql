@@ -307,15 +307,11 @@ type ActionPlan implements Node {
 	"""
 	status: String
 	"""
-	assigned to
+	due date of the action plan
 	"""
-	assigned: String
+	dueDate: Time
 	"""
-	due date
-	"""
-	dueDate: String
-	"""
-	priority
+	priority of the action plan
 	"""
 	priority: String
 	"""
@@ -323,11 +319,13 @@ type ActionPlan implements Node {
 	"""
 	source: String
 	"""
-	json schema
+	json data including details of the action plan
 	"""
-	jsonschema: Map
+	details: Map
 	standard: [Standard!]
 	risk: [Risk!]
+	control: [Control!]
+	user: [User!]
 }
 """
 Return response for createBulkActionPlan mutation
@@ -414,15 +412,11 @@ type ActionPlanHistory implements Node {
 	"""
 	status: String
 	"""
-	assigned to
+	due date of the action plan
 	"""
-	assigned: String
+	dueDate: Time
 	"""
-	due date
-	"""
-	dueDate: String
-	"""
-	priority
+	priority of the action plan
 	"""
 	priority: String
 	"""
@@ -430,9 +424,9 @@ type ActionPlanHistory implements Node {
 	"""
 	source: String
 	"""
-	json schema
+	json data including details of the action plan
 	"""
-	jsonschema: Map
+	details: Map
 }
 """
 A connection to a list of items.
@@ -675,41 +669,18 @@ input ActionPlanHistoryWhereInput {
 	statusEqualFold: String
 	statusContainsFold: String
 	"""
-	assigned field predicates
-	"""
-	assigned: String
-	assignedNEQ: String
-	assignedIn: [String!]
-	assignedNotIn: [String!]
-	assignedGT: String
-	assignedGTE: String
-	assignedLT: String
-	assignedLTE: String
-	assignedContains: String
-	assignedHasPrefix: String
-	assignedHasSuffix: String
-	assignedIsNil: Boolean
-	assignedNotNil: Boolean
-	assignedEqualFold: String
-	assignedContainsFold: String
-	"""
 	due_date field predicates
 	"""
-	dueDate: String
-	dueDateNEQ: String
-	dueDateIn: [String!]
-	dueDateNotIn: [String!]
-	dueDateGT: String
-	dueDateGTE: String
-	dueDateLT: String
-	dueDateLTE: String
-	dueDateContains: String
-	dueDateHasPrefix: String
-	dueDateHasSuffix: String
+	dueDate: Time
+	dueDateNEQ: Time
+	dueDateIn: [Time!]
+	dueDateNotIn: [Time!]
+	dueDateGT: Time
+	dueDateGTE: Time
+	dueDateLT: Time
+	dueDateLTE: Time
 	dueDateIsNil: Boolean
 	dueDateNotNil: Boolean
-	dueDateEqualFold: String
-	dueDateContainsFold: String
 	"""
 	priority field predicates
 	"""
@@ -926,41 +897,18 @@ input ActionPlanWhereInput {
 	statusEqualFold: String
 	statusContainsFold: String
 	"""
-	assigned field predicates
-	"""
-	assigned: String
-	assignedNEQ: String
-	assignedIn: [String!]
-	assignedNotIn: [String!]
-	assignedGT: String
-	assignedGTE: String
-	assignedLT: String
-	assignedLTE: String
-	assignedContains: String
-	assignedHasPrefix: String
-	assignedHasSuffix: String
-	assignedIsNil: Boolean
-	assignedNotNil: Boolean
-	assignedEqualFold: String
-	assignedContainsFold: String
-	"""
 	due_date field predicates
 	"""
-	dueDate: String
-	dueDateNEQ: String
-	dueDateIn: [String!]
-	dueDateNotIn: [String!]
-	dueDateGT: String
-	dueDateGTE: String
-	dueDateLT: String
-	dueDateLTE: String
-	dueDateContains: String
-	dueDateHasPrefix: String
-	dueDateHasSuffix: String
+	dueDate: Time
+	dueDateNEQ: Time
+	dueDateIn: [Time!]
+	dueDateNotIn: [Time!]
+	dueDateGT: Time
+	dueDateGTE: Time
+	dueDateLT: Time
+	dueDateLTE: Time
 	dueDateIsNil: Boolean
 	dueDateNotNil: Boolean
-	dueDateEqualFold: String
-	dueDateContainsFold: String
 	"""
 	priority field predicates
 	"""
@@ -1007,6 +955,16 @@ input ActionPlanWhereInput {
 	"""
 	hasRisk: Boolean
 	hasRiskWith: [RiskWhereInput!]
+	"""
+	control edge predicates
+	"""
+	hasControl: Boolean
+	hasControlWith: [ControlWhereInput!]
+	"""
+	user edge predicates
+	"""
+	hasUser: Boolean
+	hasUserWith: [UserWhereInput!]
 }
 type AuditLog implements Node {
 	table: String
@@ -1853,23 +1811,19 @@ type Control implements Node {
 	"""
 	version: String
 	"""
-	owner of the control
-	"""
-	owner: String
-	"""
-	control number
+	control number or identifier
 	"""
 	controlNumber: String
 	"""
-	control family
+	family associated with the control
 	"""
-	controlFamily: String
+	family: String
 	"""
-	control class
+	class associated with the control
 	"""
-	controlClass: String
+	class: String
 	"""
-	source of the control
+	source of the control, e.g. framework, template, custom, etc.
 	"""
 	source: String
 	"""
@@ -1881,15 +1835,16 @@ type Control implements Node {
 	"""
 	mappedFrameworks: String
 	"""
-	json schema
+	json data including details of the control
 	"""
-	jsonschema: Map
+	details: Map
 	procedures: [Procedure!]
 	subcontrols: [Subcontrol!]
 	controlobjectives: [ControlObjective!]
 	standard: [Standard!]
 	narratives: [Narrative!]
 	risks: [Risk!]
+	actionplans: [ActionPlan!]
 }
 """
 Return response for createBulkControl mutation
@@ -1984,23 +1939,19 @@ type ControlHistory implements Node {
 	"""
 	version: String
 	"""
-	owner of the control
-	"""
-	owner: String
-	"""
-	control number
+	control number or identifier
 	"""
 	controlNumber: String
 	"""
-	control family
+	family associated with the control
 	"""
-	controlFamily: String
+	family: String
 	"""
-	control class
+	class associated with the control
 	"""
-	controlClass: String
+	class: String
 	"""
-	source of the control
+	source of the control, e.g. framework, template, custom, etc.
 	"""
 	source: String
 	"""
@@ -2012,9 +1963,9 @@ type ControlHistory implements Node {
 	"""
 	mappedFrameworks: String
 	"""
-	json schema
+	json data including details of the control
 	"""
-	jsonschema: Map
+	details: Map
 }
 """
 A connection to a list of items.
@@ -2293,24 +2244,6 @@ input ControlHistoryWhereInput {
 	versionEqualFold: String
 	versionContainsFold: String
 	"""
-	owner field predicates
-	"""
-	owner: String
-	ownerNEQ: String
-	ownerIn: [String!]
-	ownerNotIn: [String!]
-	ownerGT: String
-	ownerGTE: String
-	ownerLT: String
-	ownerLTE: String
-	ownerContains: String
-	ownerHasPrefix: String
-	ownerHasSuffix: String
-	ownerIsNil: Boolean
-	ownerNotNil: Boolean
-	ownerEqualFold: String
-	ownerContainsFold: String
-	"""
 	control_number field predicates
 	"""
 	controlNumber: String
@@ -2329,41 +2262,41 @@ input ControlHistoryWhereInput {
 	controlNumberEqualFold: String
 	controlNumberContainsFold: String
 	"""
-	control_family field predicates
+	family field predicates
 	"""
-	controlFamily: String
-	controlFamilyNEQ: String
-	controlFamilyIn: [String!]
-	controlFamilyNotIn: [String!]
-	controlFamilyGT: String
-	controlFamilyGTE: String
-	controlFamilyLT: String
-	controlFamilyLTE: String
-	controlFamilyContains: String
-	controlFamilyHasPrefix: String
-	controlFamilyHasSuffix: String
-	controlFamilyIsNil: Boolean
-	controlFamilyNotNil: Boolean
-	controlFamilyEqualFold: String
-	controlFamilyContainsFold: String
+	family: String
+	familyNEQ: String
+	familyIn: [String!]
+	familyNotIn: [String!]
+	familyGT: String
+	familyGTE: String
+	familyLT: String
+	familyLTE: String
+	familyContains: String
+	familyHasPrefix: String
+	familyHasSuffix: String
+	familyIsNil: Boolean
+	familyNotNil: Boolean
+	familyEqualFold: String
+	familyContainsFold: String
 	"""
-	control_class field predicates
+	class field predicates
 	"""
-	controlClass: String
-	controlClassNEQ: String
-	controlClassIn: [String!]
-	controlClassNotIn: [String!]
-	controlClassGT: String
-	controlClassGTE: String
-	controlClassLT: String
-	controlClassLTE: String
-	controlClassContains: String
-	controlClassHasPrefix: String
-	controlClassHasSuffix: String
-	controlClassIsNil: Boolean
-	controlClassNotNil: Boolean
-	controlClassEqualFold: String
-	controlClassContainsFold: String
+	class: String
+	classNEQ: String
+	classIn: [String!]
+	classNotIn: [String!]
+	classGT: String
+	classGTE: String
+	classLT: String
+	classLTE: String
+	classContains: String
+	classHasPrefix: String
+	classHasSuffix: String
+	classIsNil: Boolean
+	classNotNil: Boolean
+	classEqualFold: String
+	classContainsFold: String
 	"""
 	source field predicates
 	"""
@@ -2432,15 +2365,15 @@ type ControlObjective implements Node {
 	"""
 	tags: [String!]
 	"""
-	the name of the control
+	the name of the control objective
 	"""
 	name: String!
 	"""
-	description of the control
+	description of the control objective
 	"""
 	description: String
 	"""
-	status of the control
+	status of the control objective
 	"""
 	status: String
 	"""
@@ -2448,27 +2381,23 @@ type ControlObjective implements Node {
 	"""
 	controlObjectiveType: String
 	"""
-	version of the control
+	version of the control objective
 	"""
 	version: String
 	"""
-	owner of the control
-	"""
-	owner: String
-	"""
-	control number
+	number of the control objective
 	"""
 	controlNumber: String
 	"""
-	control family
+	family of the control objective
 	"""
-	controlFamily: String
+	family: String
 	"""
-	control class
+	class associated with the control objective
 	"""
-	controlClass: String
+	class: String
 	"""
-	source of the control
+	source of the control objective, e.g. framework, template, user-defined, etc.
 	"""
 	source: String
 	"""
@@ -2476,9 +2405,9 @@ type ControlObjective implements Node {
 	"""
 	mappedFrameworks: String
 	"""
-	json schema
+	json data including details of the control objective
 	"""
-	jsonschema: Map
+	details: Map
 	policy: [InternalPolicy!]
 	controls: [Control!]
 	procedures: [Procedure!]
@@ -2560,15 +2489,15 @@ type ControlObjectiveHistory implements Node {
 	"""
 	tags: [String!]
 	"""
-	the name of the control
+	the name of the control objective
 	"""
 	name: String!
 	"""
-	description of the control
+	description of the control objective
 	"""
 	description: String
 	"""
-	status of the control
+	status of the control objective
 	"""
 	status: String
 	"""
@@ -2576,27 +2505,23 @@ type ControlObjectiveHistory implements Node {
 	"""
 	controlObjectiveType: String
 	"""
-	version of the control
+	version of the control objective
 	"""
 	version: String
 	"""
-	owner of the control
-	"""
-	owner: String
-	"""
-	control number
+	number of the control objective
 	"""
 	controlNumber: String
 	"""
-	control family
+	family of the control objective
 	"""
-	controlFamily: String
+	family: String
 	"""
-	control class
+	class associated with the control objective
 	"""
-	controlClass: String
+	class: String
 	"""
-	source of the control
+	source of the control objective, e.g. framework, template, user-defined, etc.
 	"""
 	source: String
 	"""
@@ -2604,9 +2529,9 @@ type ControlObjectiveHistory implements Node {
 	"""
 	mappedFrameworks: String
 	"""
-	json schema
+	json data including details of the control objective
 	"""
-	jsonschema: Map
+	details: Map
 }
 """
 A connection to a list of items.
@@ -2885,24 +2810,6 @@ input ControlObjectiveHistoryWhereInput {
 	versionEqualFold: String
 	versionContainsFold: String
 	"""
-	owner field predicates
-	"""
-	owner: String
-	ownerNEQ: String
-	ownerIn: [String!]
-	ownerNotIn: [String!]
-	ownerGT: String
-	ownerGTE: String
-	ownerLT: String
-	ownerLTE: String
-	ownerContains: String
-	ownerHasPrefix: String
-	ownerHasSuffix: String
-	ownerIsNil: Boolean
-	ownerNotNil: Boolean
-	ownerEqualFold: String
-	ownerContainsFold: String
-	"""
 	control_number field predicates
 	"""
 	controlNumber: String
@@ -2921,41 +2828,41 @@ input ControlObjectiveHistoryWhereInput {
 	controlNumberEqualFold: String
 	controlNumberContainsFold: String
 	"""
-	control_family field predicates
+	family field predicates
 	"""
-	controlFamily: String
-	controlFamilyNEQ: String
-	controlFamilyIn: [String!]
-	controlFamilyNotIn: [String!]
-	controlFamilyGT: String
-	controlFamilyGTE: String
-	controlFamilyLT: String
-	controlFamilyLTE: String
-	controlFamilyContains: String
-	controlFamilyHasPrefix: String
-	controlFamilyHasSuffix: String
-	controlFamilyIsNil: Boolean
-	controlFamilyNotNil: Boolean
-	controlFamilyEqualFold: String
-	controlFamilyContainsFold: String
+	family: String
+	familyNEQ: String
+	familyIn: [String!]
+	familyNotIn: [String!]
+	familyGT: String
+	familyGTE: String
+	familyLT: String
+	familyLTE: String
+	familyContains: String
+	familyHasPrefix: String
+	familyHasSuffix: String
+	familyIsNil: Boolean
+	familyNotNil: Boolean
+	familyEqualFold: String
+	familyContainsFold: String
 	"""
-	control_class field predicates
+	class field predicates
 	"""
-	controlClass: String
-	controlClassNEQ: String
-	controlClassIn: [String!]
-	controlClassNotIn: [String!]
-	controlClassGT: String
-	controlClassGTE: String
-	controlClassLT: String
-	controlClassLTE: String
-	controlClassContains: String
-	controlClassHasPrefix: String
-	controlClassHasSuffix: String
-	controlClassIsNil: Boolean
-	controlClassNotNil: Boolean
-	controlClassEqualFold: String
-	controlClassContainsFold: String
+	class: String
+	classNEQ: String
+	classIn: [String!]
+	classNotIn: [String!]
+	classGT: String
+	classGTE: String
+	classLT: String
+	classLTE: String
+	classContains: String
+	classHasPrefix: String
+	classHasSuffix: String
+	classIsNil: Boolean
+	classNotNil: Boolean
+	classEqualFold: String
+	classContainsFold: String
 	"""
 	source field predicates
 	"""
@@ -3208,24 +3115,6 @@ input ControlObjectiveWhereInput {
 	versionEqualFold: String
 	versionContainsFold: String
 	"""
-	owner field predicates
-	"""
-	owner: String
-	ownerNEQ: String
-	ownerIn: [String!]
-	ownerNotIn: [String!]
-	ownerGT: String
-	ownerGTE: String
-	ownerLT: String
-	ownerLTE: String
-	ownerContains: String
-	ownerHasPrefix: String
-	ownerHasSuffix: String
-	ownerIsNil: Boolean
-	ownerNotNil: Boolean
-	ownerEqualFold: String
-	ownerContainsFold: String
-	"""
 	control_number field predicates
 	"""
 	controlNumber: String
@@ -3244,41 +3133,41 @@ input ControlObjectiveWhereInput {
 	controlNumberEqualFold: String
 	controlNumberContainsFold: String
 	"""
-	control_family field predicates
+	family field predicates
 	"""
-	controlFamily: String
-	controlFamilyNEQ: String
-	controlFamilyIn: [String!]
-	controlFamilyNotIn: [String!]
-	controlFamilyGT: String
-	controlFamilyGTE: String
-	controlFamilyLT: String
-	controlFamilyLTE: String
-	controlFamilyContains: String
-	controlFamilyHasPrefix: String
-	controlFamilyHasSuffix: String
-	controlFamilyIsNil: Boolean
-	controlFamilyNotNil: Boolean
-	controlFamilyEqualFold: String
-	controlFamilyContainsFold: String
+	family: String
+	familyNEQ: String
+	familyIn: [String!]
+	familyNotIn: [String!]
+	familyGT: String
+	familyGTE: String
+	familyLT: String
+	familyLTE: String
+	familyContains: String
+	familyHasPrefix: String
+	familyHasSuffix: String
+	familyIsNil: Boolean
+	familyNotNil: Boolean
+	familyEqualFold: String
+	familyContainsFold: String
 	"""
-	control_class field predicates
+	class field predicates
 	"""
-	controlClass: String
-	controlClassNEQ: String
-	controlClassIn: [String!]
-	controlClassNotIn: [String!]
-	controlClassGT: String
-	controlClassGTE: String
-	controlClassLT: String
-	controlClassLTE: String
-	controlClassContains: String
-	controlClassHasPrefix: String
-	controlClassHasSuffix: String
-	controlClassIsNil: Boolean
-	controlClassNotNil: Boolean
-	controlClassEqualFold: String
-	controlClassContainsFold: String
+	class: String
+	classNEQ: String
+	classIn: [String!]
+	classNotIn: [String!]
+	classGT: String
+	classGTE: String
+	classLT: String
+	classLTE: String
+	classContains: String
+	classHasPrefix: String
+	classHasSuffix: String
+	classIsNil: Boolean
+	classNotNil: Boolean
+	classEqualFold: String
+	classContainsFold: String
 	"""
 	source field predicates
 	"""
@@ -3566,24 +3455,6 @@ input ControlWhereInput {
 	versionEqualFold: String
 	versionContainsFold: String
 	"""
-	owner field predicates
-	"""
-	owner: String
-	ownerNEQ: String
-	ownerIn: [String!]
-	ownerNotIn: [String!]
-	ownerGT: String
-	ownerGTE: String
-	ownerLT: String
-	ownerLTE: String
-	ownerContains: String
-	ownerHasPrefix: String
-	ownerHasSuffix: String
-	ownerIsNil: Boolean
-	ownerNotNil: Boolean
-	ownerEqualFold: String
-	ownerContainsFold: String
-	"""
 	control_number field predicates
 	"""
 	controlNumber: String
@@ -3602,41 +3473,41 @@ input ControlWhereInput {
 	controlNumberEqualFold: String
 	controlNumberContainsFold: String
 	"""
-	control_family field predicates
+	family field predicates
 	"""
-	controlFamily: String
-	controlFamilyNEQ: String
-	controlFamilyIn: [String!]
-	controlFamilyNotIn: [String!]
-	controlFamilyGT: String
-	controlFamilyGTE: String
-	controlFamilyLT: String
-	controlFamilyLTE: String
-	controlFamilyContains: String
-	controlFamilyHasPrefix: String
-	controlFamilyHasSuffix: String
-	controlFamilyIsNil: Boolean
-	controlFamilyNotNil: Boolean
-	controlFamilyEqualFold: String
-	controlFamilyContainsFold: String
+	family: String
+	familyNEQ: String
+	familyIn: [String!]
+	familyNotIn: [String!]
+	familyGT: String
+	familyGTE: String
+	familyLT: String
+	familyLTE: String
+	familyContains: String
+	familyHasPrefix: String
+	familyHasSuffix: String
+	familyIsNil: Boolean
+	familyNotNil: Boolean
+	familyEqualFold: String
+	familyContainsFold: String
 	"""
-	control_class field predicates
+	class field predicates
 	"""
-	controlClass: String
-	controlClassNEQ: String
-	controlClassIn: [String!]
-	controlClassNotIn: [String!]
-	controlClassGT: String
-	controlClassGTE: String
-	controlClassLT: String
-	controlClassLTE: String
-	controlClassContains: String
-	controlClassHasPrefix: String
-	controlClassHasSuffix: String
-	controlClassIsNil: Boolean
-	controlClassNotNil: Boolean
-	controlClassEqualFold: String
-	controlClassContainsFold: String
+	class: String
+	classNEQ: String
+	classIn: [String!]
+	classNotIn: [String!]
+	classGT: String
+	classGTE: String
+	classLT: String
+	classLTE: String
+	classContains: String
+	classHasPrefix: String
+	classHasSuffix: String
+	classIsNil: Boolean
+	classNotNil: Boolean
+	classEqualFold: String
+	classContainsFold: String
 	"""
 	source field predicates
 	"""
@@ -3721,6 +3592,11 @@ input ControlWhereInput {
 	"""
 	hasRisks: Boolean
 	hasRisksWith: [RiskWhereInput!]
+	"""
+	actionplans edge predicates
+	"""
+	hasActionplans: Boolean
+	hasActionplansWith: [ActionPlanWhereInput!]
 }
 """
 CreateAPITokenInput is used for create APIToken object.
@@ -3769,15 +3645,11 @@ input CreateActionPlanInput {
 	"""
 	status: String
 	"""
-	assigned to
+	due date of the action plan
 	"""
-	assigned: String
+	dueDate: Time
 	"""
-	due date
-	"""
-	dueDate: String
-	"""
-	priority
+	priority of the action plan
 	"""
 	priority: String
 	"""
@@ -3785,11 +3657,13 @@ input CreateActionPlanInput {
 	"""
 	source: String
 	"""
-	json schema
+	json data including details of the action plan
 	"""
-	jsonschema: Map
+	details: Map
 	standardIDs: [ID!]
 	riskIDs: [ID!]
+	controlIDs: [ID!]
+	userIDs: [ID!]
 }
 """
 CreateContactInput is used for create Contact object.
@@ -3862,23 +3736,19 @@ input CreateControlInput {
 	"""
 	version: String
 	"""
-	owner of the control
-	"""
-	owner: String
-	"""
-	control number
+	control number or identifier
 	"""
 	controlNumber: String
 	"""
-	control family
+	family associated with the control
 	"""
-	controlFamily: String
+	family: String
 	"""
-	control class
+	class associated with the control
 	"""
-	controlClass: String
+	class: String
 	"""
-	source of the control
+	source of the control, e.g. framework, template, custom, etc.
 	"""
 	source: String
 	"""
@@ -3890,15 +3760,16 @@ input CreateControlInput {
 	"""
 	mappedFrameworks: String
 	"""
-	json schema
+	json data including details of the control
 	"""
-	jsonschema: Map
+	details: Map
 	procedureIDs: [ID!]
 	subcontrolIDs: [ID!]
 	controlobjectiveIDs: [ID!]
 	standardIDs: [ID!]
 	narrativeIDs: [ID!]
 	riskIDs: [ID!]
+	actionplanIDs: [ID!]
 }
 """
 CreateControlObjectiveInput is used for create ControlObjective object.
@@ -3910,15 +3781,15 @@ input CreateControlObjectiveInput {
 	"""
 	tags: [String!]
 	"""
-	the name of the control
+	the name of the control objective
 	"""
 	name: String!
 	"""
-	description of the control
+	description of the control objective
 	"""
 	description: String
 	"""
-	status of the control
+	status of the control objective
 	"""
 	status: String
 	"""
@@ -3926,27 +3797,23 @@ input CreateControlObjectiveInput {
 	"""
 	controlObjectiveType: String
 	"""
-	version of the control
+	version of the control objective
 	"""
 	version: String
 	"""
-	owner of the control
-	"""
-	owner: String
-	"""
-	control number
+	number of the control objective
 	"""
 	controlNumber: String
 	"""
-	control family
+	family of the control objective
 	"""
-	controlFamily: String
+	family: String
 	"""
-	control class
+	class associated with the control objective
 	"""
-	controlClass: String
+	class: String
 	"""
-	source of the control
+	source of the control objective, e.g. framework, template, user-defined, etc.
 	"""
 	source: String
 	"""
@@ -3954,9 +3821,9 @@ input CreateControlObjectiveInput {
 	"""
 	mappedFrameworks: String
 	"""
-	json schema
+	json data including details of the control objective
 	"""
-	jsonschema: Map
+	details: Map
 	policyIDs: [ID!]
 	controlIDs: [ID!]
 	procedureIDs: [ID!]
@@ -4409,13 +4276,13 @@ input CreateInternalPolicyInput {
 	"""
 	purposeAndScope: String
 	"""
-	background
+	background of the policy
 	"""
 	background: String
 	"""
-	json schema
+	json data for the policy document
 	"""
-	jsonschema: Map
+	details: Map
 	controlobjectiveIDs: [ID!]
 	controlIDs: [ID!]
 	procedureIDs: [ID!]
@@ -4460,7 +4327,7 @@ input CreateNarrativeInput {
 	"""
 	tags: [String!]
 	"""
-	the name of the file provided in the payload key without the extension
+	the name of the narrative
 	"""
 	name: String!
 	"""
@@ -4472,9 +4339,9 @@ input CreateNarrativeInput {
 	"""
 	satisfies: String
 	"""
-	json schema
+	json data for the narrative document
 	"""
-	jsonschema: Map
+	details: Map
 	policyIDs: [ID!]
 	controlIDs: [ID!]
 	procedureIDs: [ID!]
@@ -4495,6 +4362,7 @@ input CreateNoteInput {
 	text: String!
 	ownerID: ID
 	entityID: ID
+	subcontrolIDs: [ID!]
 }
 """
 CreateOauthProviderInput is used for create OauthProvider object.
@@ -4737,7 +4605,7 @@ input CreateProcedureInput {
 	"""
 	purposeAndScope: String
 	"""
-	background
+	background of the procedure
 	"""
 	background: String
 	"""
@@ -4745,9 +4613,9 @@ input CreateProcedureInput {
 	"""
 	satisfies: String
 	"""
-	json schema
+	json data for the procedure document
 	"""
-	jsonschema: Map
+	details: Map
 	controlIDs: [ID!]
 	internalpolicyIDs: [ID!]
 	narrativeIDs: [ID!]
@@ -4783,15 +4651,15 @@ input CreateRiskInput {
 	"""
 	businessCosts: String
 	"""
-	impact of the risk
+	impact of the risk - high, medium, low
 	"""
-	impact: String
+	impact: RiskRiskImpact
 	"""
-	likelihood of the risk
+	likelihood of the risk occurring; unlikely, likely, highly likely
 	"""
-	likelihood: String
+	likelihood: RiskRiskLikelihood
 	"""
-	mitigation of the risk
+	mitigation for the risk
 	"""
 	mitigation: String
 	"""
@@ -4799,13 +4667,9 @@ input CreateRiskInput {
 	"""
 	satisfies: String
 	"""
-	severity of the risk, e.g. high medium low
+	json data for the risk document
 	"""
-	severity: String
-	"""
-	json schema
-	"""
-	jsonschema: Map
+	details: Map
 	controlIDs: [ID!]
 	procedureIDs: [ID!]
 	actionplanIDs: [ID!]
@@ -4848,7 +4712,7 @@ input CreateStandardInput {
 	"""
 	purposeAndScope: String
 	"""
-	background
+	background of the standard
 	"""
 	background: String
 	"""
@@ -4856,9 +4720,9 @@ input CreateStandardInput {
 	"""
 	satisfies: String
 	"""
-	json schema
+	json data with details of the standard
 	"""
-	jsonschema: Map
+	details: Map
 	controlobjectiveIDs: [ID!]
 	controlIDs: [ID!]
 	procedureIDs: [ID!]
@@ -4894,62 +4758,52 @@ input CreateSubcontrolInput {
 	"""
 	version: String
 	"""
-	owner of the subcontrol
-	"""
-	owner: String
-	"""
-	control number
+	number of the subcontrol
 	"""
 	subcontrolNumber: String
 	"""
-	control family
+	subcontrol family 
 	"""
-	subcontrolFamily: String
+	family: String
 	"""
-	control class
+	subcontrol class
 	"""
-	subcontrolClass: String
+	class: String
 	"""
-	source of the control
+	source of the control, e.g. framework, template, user-defined, etc.
 	"""
 	source: String
 	"""
-	mapped frameworks
+	mapped frameworks that the subcontrol is part of
 	"""
 	mappedFrameworks: String
 	"""
-	assigned to
+	implementation evidence of the subcontrol
 	"""
-	assignedTo: String
+	implementationEvidence: String
 	"""
 	implementation status
 	"""
 	implementationStatus: String
 	"""
-	implementation notes
+	date the subcontrol was implemented
 	"""
-	implementationNotes: String
-	"""
-	implementation date
-	"""
-	implementationDate: String
-	"""
-	implementation evidence
-	"""
-	implementationEvidence: String
+	implementationDate: Time
 	"""
 	implementation verification
 	"""
 	implementationVerification: String
 	"""
-	implementation verification date
+	date the subcontrol implementation was verified
 	"""
-	implementationVerificationDate: String
+	implementationVerificationDate: Time
 	"""
-	json schema
+	json data details of the subcontrol
 	"""
-	jsonschema: Map
+	details: Map
 	controlIDs: [ID!]
+	userIDs: [ID!]
+	notesID: ID
 }
 """
 CreateSubscriberInput is used for create Subscriber object.
@@ -5078,6 +4932,8 @@ input CreateUserInput {
 	fileIDs: [ID!]
 	fileID: ID
 	eventIDs: [ID!]
+	actionplanIDs: [ID!]
+	subcontrolIDs: [ID!]
 }
 """
 CreateUserSettingInput is used for create UserSetting object.
@@ -13814,13 +13670,13 @@ type InternalPolicy implements Node {
 	"""
 	purposeAndScope: String
 	"""
-	background
+	background of the policy
 	"""
 	background: String
 	"""
-	json schema
+	json data for the policy document
 	"""
-	jsonschema: Map
+	details: Map
 	controlobjectives: [ControlObjective!]
 	controls: [Control!]
 	procedures: [Procedure!]
@@ -13923,13 +13779,13 @@ type InternalPolicyHistory implements Node {
 	"""
 	purposeAndScope: String
 	"""
-	background
+	background of the policy
 	"""
 	background: String
 	"""
-	json schema
+	json data for the policy document
 	"""
-	jsonschema: Map
+	details: Map
 }
 """
 A connection to a list of items.
@@ -16673,7 +16529,7 @@ type Narrative implements Node {
 	"""
 	tags: [String!]
 	"""
-	the name of the file provided in the payload key without the extension
+	the name of the narrative
 	"""
 	name: String!
 	"""
@@ -16685,9 +16541,9 @@ type Narrative implements Node {
 	"""
 	satisfies: String
 	"""
-	json schema
+	json data for the narrative document
 	"""
-	jsonschema: Map
+	details: Map
 	policy: [InternalPolicy!]
 	control: [Control!]
 	procedure: [Procedure!]
@@ -16766,7 +16622,7 @@ type NarrativeHistory implements Node {
 	"""
 	tags: [String!]
 	"""
-	the name of the file provided in the payload key without the extension
+	the name of the narrative
 	"""
 	name: String!
 	"""
@@ -16778,9 +16634,9 @@ type NarrativeHistory implements Node {
 	"""
 	satisfies: String
 	"""
-	json schema
+	json data for the narrative document
 	"""
-	jsonschema: Map
+	details: Map
 }
 """
 A connection to a list of items.
@@ -17254,6 +17110,7 @@ type Note implements Node {
 	text: String!
 	owner: Organization
 	entity: Entity
+	subcontrols: [Subcontrol!]
 }
 """
 A connection to a list of items.
@@ -17690,6 +17547,11 @@ input NoteWhereInput {
 	"""
 	hasEntity: Boolean
 	hasEntityWith: [EntityWhereInput!]
+	"""
+	subcontrols edge predicates
+	"""
+	hasSubcontrols: Boolean
+	hasSubcontrolsWith: [SubcontrolWhereInput!]
 }
 type OauthProvider implements Node {
 	id: ID!
@@ -21084,7 +20946,7 @@ type Procedure implements Node {
 	"""
 	purposeAndScope: String
 	"""
-	background
+	background of the procedure
 	"""
 	background: String
 	"""
@@ -21092,9 +20954,9 @@ type Procedure implements Node {
 	"""
 	satisfies: String
 	"""
-	json schema
+	json data for the procedure document
 	"""
-	jsonschema: Map
+	details: Map
 	control: [Control!]
 	internalpolicy: [InternalPolicy!]
 	narratives: [Narrative!]
@@ -21197,7 +21059,7 @@ type ProcedureHistory implements Node {
 	"""
 	purposeAndScope: String
 	"""
-	background
+	background of the procedure
 	"""
 	background: String
 	"""
@@ -21205,9 +21067,9 @@ type ProcedureHistory implements Node {
 	"""
 	satisfies: String
 	"""
-	json schema
+	json data for the procedure document
 	"""
-	jsonschema: Map
+	details: Map
 }
 """
 A connection to a list of items.
@@ -24842,15 +24704,15 @@ type Risk implements Node {
 	"""
 	businessCosts: String
 	"""
-	impact of the risk
+	impact of the risk - high, medium, low
 	"""
-	impact: String
+	impact: RiskRiskImpact
 	"""
-	likelihood of the risk
+	likelihood of the risk occurring; unlikely, likely, highly likely
 	"""
-	likelihood: String
+	likelihood: RiskRiskLikelihood
 	"""
-	mitigation of the risk
+	mitigation for the risk
 	"""
 	mitigation: String
 	"""
@@ -24858,13 +24720,9 @@ type Risk implements Node {
 	"""
 	satisfies: String
 	"""
-	severity of the risk, e.g. high medium low
+	json data for the risk document
 	"""
-	severity: String
-	"""
-	json schema
-	"""
-	jsonschema: Map
+	details: Map
 	control: [Control!]
 	procedure: [Procedure!]
 	actionplans: [ActionPlan!]
@@ -24962,15 +24820,15 @@ type RiskHistory implements Node {
 	"""
 	businessCosts: String
 	"""
-	impact of the risk
+	impact of the risk - high, medium, low
 	"""
-	impact: String
+	impact: RiskHistoryRiskImpact
 	"""
-	likelihood of the risk
+	likelihood of the risk occurring; unlikely, likely, highly likely
 	"""
-	likelihood: String
+	likelihood: RiskHistoryRiskLikelihood
 	"""
-	mitigation of the risk
+	mitigation for the risk
 	"""
 	mitigation: String
 	"""
@@ -24978,13 +24836,9 @@ type RiskHistory implements Node {
 	"""
 	satisfies: String
 	"""
-	severity of the risk, e.g. high medium low
+	json data for the risk document
 	"""
-	severity: String
-	"""
-	json schema
-	"""
-	jsonschema: Map
+	details: Map
 }
 """
 A connection to a list of items.
@@ -25023,6 +24877,22 @@ enum RiskHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpTy
 	INSERT
 	UPDATE
 	DELETE
+}
+"""
+RiskHistoryRiskImpact is enum for the field impact
+"""
+enum RiskHistoryRiskImpact @goModel(model: "github.com/theopenlane/core/pkg/enums.RiskImpact") {
+	LOW
+	MODERATE
+	HIGH
+}
+"""
+RiskHistoryRiskLikelihood is enum for the field likelihood
+"""
+enum RiskHistoryRiskLikelihood @goModel(model: "github.com/theopenlane/core/pkg/enums.RiskLikelihood") {
+	UNLIKELY
+	LIKELY
+	HIGHLY_LIKELY
 }
 """
 RiskHistoryWhereInput is used for filtering RiskHistory objects.
@@ -25265,39 +25135,21 @@ input RiskHistoryWhereInput {
 	"""
 	impact field predicates
 	"""
-	impact: String
-	impactNEQ: String
-	impactIn: [String!]
-	impactNotIn: [String!]
-	impactGT: String
-	impactGTE: String
-	impactLT: String
-	impactLTE: String
-	impactContains: String
-	impactHasPrefix: String
-	impactHasSuffix: String
+	impact: RiskHistoryRiskImpact
+	impactNEQ: RiskHistoryRiskImpact
+	impactIn: [RiskHistoryRiskImpact!]
+	impactNotIn: [RiskHistoryRiskImpact!]
 	impactIsNil: Boolean
 	impactNotNil: Boolean
-	impactEqualFold: String
-	impactContainsFold: String
 	"""
 	likelihood field predicates
 	"""
-	likelihood: String
-	likelihoodNEQ: String
-	likelihoodIn: [String!]
-	likelihoodNotIn: [String!]
-	likelihoodGT: String
-	likelihoodGTE: String
-	likelihoodLT: String
-	likelihoodLTE: String
-	likelihoodContains: String
-	likelihoodHasPrefix: String
-	likelihoodHasSuffix: String
+	likelihood: RiskHistoryRiskLikelihood
+	likelihoodNEQ: RiskHistoryRiskLikelihood
+	likelihoodIn: [RiskHistoryRiskLikelihood!]
+	likelihoodNotIn: [RiskHistoryRiskLikelihood!]
 	likelihoodIsNil: Boolean
 	likelihoodNotNil: Boolean
-	likelihoodEqualFold: String
-	likelihoodContainsFold: String
 	"""
 	mitigation field predicates
 	"""
@@ -25334,24 +25186,22 @@ input RiskHistoryWhereInput {
 	satisfiesNotNil: Boolean
 	satisfiesEqualFold: String
 	satisfiesContainsFold: String
-	"""
-	severity field predicates
-	"""
-	severity: String
-	severityNEQ: String
-	severityIn: [String!]
-	severityNotIn: [String!]
-	severityGT: String
-	severityGTE: String
-	severityLT: String
-	severityLTE: String
-	severityContains: String
-	severityHasPrefix: String
-	severityHasSuffix: String
-	severityIsNil: Boolean
-	severityNotNil: Boolean
-	severityEqualFold: String
-	severityContainsFold: String
+}
+"""
+RiskRiskImpact is enum for the field impact
+"""
+enum RiskRiskImpact @goModel(model: "github.com/theopenlane/core/pkg/enums.RiskImpact") {
+	LOW
+	MODERATE
+	HIGH
+}
+"""
+RiskRiskLikelihood is enum for the field likelihood
+"""
+enum RiskRiskLikelihood @goModel(model: "github.com/theopenlane/core/pkg/enums.RiskLikelihood") {
+	UNLIKELY
+	LIKELY
+	HIGHLY_LIKELY
 }
 type RiskSearchResult {
 	risks: [Risk!]
@@ -25570,39 +25420,21 @@ input RiskWhereInput {
 	"""
 	impact field predicates
 	"""
-	impact: String
-	impactNEQ: String
-	impactIn: [String!]
-	impactNotIn: [String!]
-	impactGT: String
-	impactGTE: String
-	impactLT: String
-	impactLTE: String
-	impactContains: String
-	impactHasPrefix: String
-	impactHasSuffix: String
+	impact: RiskRiskImpact
+	impactNEQ: RiskRiskImpact
+	impactIn: [RiskRiskImpact!]
+	impactNotIn: [RiskRiskImpact!]
 	impactIsNil: Boolean
 	impactNotNil: Boolean
-	impactEqualFold: String
-	impactContainsFold: String
 	"""
 	likelihood field predicates
 	"""
-	likelihood: String
-	likelihoodNEQ: String
-	likelihoodIn: [String!]
-	likelihoodNotIn: [String!]
-	likelihoodGT: String
-	likelihoodGTE: String
-	likelihoodLT: String
-	likelihoodLTE: String
-	likelihoodContains: String
-	likelihoodHasPrefix: String
-	likelihoodHasSuffix: String
+	likelihood: RiskRiskLikelihood
+	likelihoodNEQ: RiskRiskLikelihood
+	likelihoodIn: [RiskRiskLikelihood!]
+	likelihoodNotIn: [RiskRiskLikelihood!]
 	likelihoodIsNil: Boolean
 	likelihoodNotNil: Boolean
-	likelihoodEqualFold: String
-	likelihoodContainsFold: String
 	"""
 	mitigation field predicates
 	"""
@@ -25639,24 +25471,6 @@ input RiskWhereInput {
 	satisfiesNotNil: Boolean
 	satisfiesEqualFold: String
 	satisfiesContainsFold: String
-	"""
-	severity field predicates
-	"""
-	severity: String
-	severityNEQ: String
-	severityIn: [String!]
-	severityNotIn: [String!]
-	severityGT: String
-	severityGTE: String
-	severityLT: String
-	severityLTE: String
-	severityContains: String
-	severityHasPrefix: String
-	severityHasSuffix: String
-	severityIsNil: Boolean
-	severityNotNil: Boolean
-	severityEqualFold: String
-	severityContainsFold: String
 	"""
 	control edge predicates
 	"""
@@ -25719,7 +25533,7 @@ type Standard implements Node {
 	"""
 	purposeAndScope: String
 	"""
-	background
+	background of the standard
 	"""
 	background: String
 	"""
@@ -25727,9 +25541,9 @@ type Standard implements Node {
 	"""
 	satisfies: String
 	"""
-	json schema
+	json data with details of the standard
 	"""
-	jsonschema: Map
+	details: Map
 	controlobjectives: [ControlObjective!]
 	controls: [Control!]
 	procedures: [Procedure!]
@@ -25836,7 +25650,7 @@ type StandardHistory implements Node {
 	"""
 	purposeAndScope: String
 	"""
-	background
+	background of the standard
 	"""
 	background: String
 	"""
@@ -25844,9 +25658,9 @@ type StandardHistory implements Node {
 	"""
 	satisfies: String
 	"""
-	json schema
+	json data with details of the standard
 	"""
-	jsonschema: Map
+	details: Map
 }
 """
 A connection to a list of items.
@@ -26537,62 +26351,52 @@ type Subcontrol implements Node {
 	"""
 	version: String
 	"""
-	owner of the subcontrol
-	"""
-	owner: String
-	"""
-	control number
+	number of the subcontrol
 	"""
 	subcontrolNumber: String
 	"""
-	control family
+	subcontrol family 
 	"""
-	subcontrolFamily: String
+	family: String
 	"""
-	control class
+	subcontrol class
 	"""
-	subcontrolClass: String
+	class: String
 	"""
-	source of the control
+	source of the control, e.g. framework, template, user-defined, etc.
 	"""
 	source: String
 	"""
-	mapped frameworks
+	mapped frameworks that the subcontrol is part of
 	"""
 	mappedFrameworks: String
 	"""
-	assigned to
+	implementation evidence of the subcontrol
 	"""
-	assignedTo: String
+	implementationEvidence: String
 	"""
 	implementation status
 	"""
 	implementationStatus: String
 	"""
-	implementation notes
+	date the subcontrol was implemented
 	"""
-	implementationNotes: String
-	"""
-	implementation date
-	"""
-	implementationDate: String
-	"""
-	implementation evidence
-	"""
-	implementationEvidence: String
+	implementationDate: Time
 	"""
 	implementation verification
 	"""
 	implementationVerification: String
 	"""
-	implementation verification date
+	date the subcontrol implementation was verified
 	"""
-	implementationVerificationDate: String
+	implementationVerificationDate: Time
 	"""
-	json schema
+	json data details of the subcontrol
 	"""
-	jsonschema: Map
+	details: Map
 	control: [Control!]
+	user: [User!]
+	notes: Note
 }
 """
 Return response for createBulkSubcontrol mutation
@@ -26687,61 +26491,49 @@ type SubcontrolHistory implements Node {
 	"""
 	version: String
 	"""
-	owner of the subcontrol
-	"""
-	owner: String
-	"""
-	control number
+	number of the subcontrol
 	"""
 	subcontrolNumber: String
 	"""
-	control family
+	subcontrol family 
 	"""
-	subcontrolFamily: String
+	family: String
 	"""
-	control class
+	subcontrol class
 	"""
-	subcontrolClass: String
+	class: String
 	"""
-	source of the control
+	source of the control, e.g. framework, template, user-defined, etc.
 	"""
 	source: String
 	"""
-	mapped frameworks
+	mapped frameworks that the subcontrol is part of
 	"""
 	mappedFrameworks: String
 	"""
-	assigned to
+	implementation evidence of the subcontrol
 	"""
-	assignedTo: String
+	implementationEvidence: String
 	"""
 	implementation status
 	"""
 	implementationStatus: String
 	"""
-	implementation notes
+	date the subcontrol was implemented
 	"""
-	implementationNotes: String
-	"""
-	implementation date
-	"""
-	implementationDate: String
-	"""
-	implementation evidence
-	"""
-	implementationEvidence: String
+	implementationDate: Time
 	"""
 	implementation verification
 	"""
 	implementationVerification: String
 	"""
-	implementation verification date
+	date the subcontrol implementation was verified
 	"""
-	implementationVerificationDate: String
+	implementationVerificationDate: Time
 	"""
-	json schema
+	json data details of the subcontrol
 	"""
-	jsonschema: Map
+	details: Map
 }
 """
 A connection to a list of items.
@@ -27020,24 +26812,6 @@ input SubcontrolHistoryWhereInput {
 	versionEqualFold: String
 	versionContainsFold: String
 	"""
-	owner field predicates
-	"""
-	owner: String
-	ownerNEQ: String
-	ownerIn: [String!]
-	ownerNotIn: [String!]
-	ownerGT: String
-	ownerGTE: String
-	ownerLT: String
-	ownerLTE: String
-	ownerContains: String
-	ownerHasPrefix: String
-	ownerHasSuffix: String
-	ownerIsNil: Boolean
-	ownerNotNil: Boolean
-	ownerEqualFold: String
-	ownerContainsFold: String
-	"""
 	subcontrol_number field predicates
 	"""
 	subcontrolNumber: String
@@ -27056,41 +26830,41 @@ input SubcontrolHistoryWhereInput {
 	subcontrolNumberEqualFold: String
 	subcontrolNumberContainsFold: String
 	"""
-	subcontrol_family field predicates
+	family field predicates
 	"""
-	subcontrolFamily: String
-	subcontrolFamilyNEQ: String
-	subcontrolFamilyIn: [String!]
-	subcontrolFamilyNotIn: [String!]
-	subcontrolFamilyGT: String
-	subcontrolFamilyGTE: String
-	subcontrolFamilyLT: String
-	subcontrolFamilyLTE: String
-	subcontrolFamilyContains: String
-	subcontrolFamilyHasPrefix: String
-	subcontrolFamilyHasSuffix: String
-	subcontrolFamilyIsNil: Boolean
-	subcontrolFamilyNotNil: Boolean
-	subcontrolFamilyEqualFold: String
-	subcontrolFamilyContainsFold: String
+	family: String
+	familyNEQ: String
+	familyIn: [String!]
+	familyNotIn: [String!]
+	familyGT: String
+	familyGTE: String
+	familyLT: String
+	familyLTE: String
+	familyContains: String
+	familyHasPrefix: String
+	familyHasSuffix: String
+	familyIsNil: Boolean
+	familyNotNil: Boolean
+	familyEqualFold: String
+	familyContainsFold: String
 	"""
-	subcontrol_class field predicates
+	class field predicates
 	"""
-	subcontrolClass: String
-	subcontrolClassNEQ: String
-	subcontrolClassIn: [String!]
-	subcontrolClassNotIn: [String!]
-	subcontrolClassGT: String
-	subcontrolClassGTE: String
-	subcontrolClassLT: String
-	subcontrolClassLTE: String
-	subcontrolClassContains: String
-	subcontrolClassHasPrefix: String
-	subcontrolClassHasSuffix: String
-	subcontrolClassIsNil: Boolean
-	subcontrolClassNotNil: Boolean
-	subcontrolClassEqualFold: String
-	subcontrolClassContainsFold: String
+	class: String
+	classNEQ: String
+	classIn: [String!]
+	classNotIn: [String!]
+	classGT: String
+	classGTE: String
+	classLT: String
+	classLTE: String
+	classContains: String
+	classHasPrefix: String
+	classHasSuffix: String
+	classIsNil: Boolean
+	classNotNil: Boolean
+	classEqualFold: String
+	classContainsFold: String
 	"""
 	source field predicates
 	"""
@@ -27128,23 +26902,23 @@ input SubcontrolHistoryWhereInput {
 	mappedFrameworksEqualFold: String
 	mappedFrameworksContainsFold: String
 	"""
-	assigned_to field predicates
+	implementation_evidence field predicates
 	"""
-	assignedTo: String
-	assignedToNEQ: String
-	assignedToIn: [String!]
-	assignedToNotIn: [String!]
-	assignedToGT: String
-	assignedToGTE: String
-	assignedToLT: String
-	assignedToLTE: String
-	assignedToContains: String
-	assignedToHasPrefix: String
-	assignedToHasSuffix: String
-	assignedToIsNil: Boolean
-	assignedToNotNil: Boolean
-	assignedToEqualFold: String
-	assignedToContainsFold: String
+	implementationEvidence: String
+	implementationEvidenceNEQ: String
+	implementationEvidenceIn: [String!]
+	implementationEvidenceNotIn: [String!]
+	implementationEvidenceGT: String
+	implementationEvidenceGTE: String
+	implementationEvidenceLT: String
+	implementationEvidenceLTE: String
+	implementationEvidenceContains: String
+	implementationEvidenceHasPrefix: String
+	implementationEvidenceHasSuffix: String
+	implementationEvidenceIsNil: Boolean
+	implementationEvidenceNotNil: Boolean
+	implementationEvidenceEqualFold: String
+	implementationEvidenceContainsFold: String
 	"""
 	implementation_status field predicates
 	"""
@@ -27164,59 +26938,18 @@ input SubcontrolHistoryWhereInput {
 	implementationStatusEqualFold: String
 	implementationStatusContainsFold: String
 	"""
-	implementation_notes field predicates
-	"""
-	implementationNotes: String
-	implementationNotesNEQ: String
-	implementationNotesIn: [String!]
-	implementationNotesNotIn: [String!]
-	implementationNotesGT: String
-	implementationNotesGTE: String
-	implementationNotesLT: String
-	implementationNotesLTE: String
-	implementationNotesContains: String
-	implementationNotesHasPrefix: String
-	implementationNotesHasSuffix: String
-	implementationNotesIsNil: Boolean
-	implementationNotesNotNil: Boolean
-	implementationNotesEqualFold: String
-	implementationNotesContainsFold: String
-	"""
 	implementation_date field predicates
 	"""
-	implementationDate: String
-	implementationDateNEQ: String
-	implementationDateIn: [String!]
-	implementationDateNotIn: [String!]
-	implementationDateGT: String
-	implementationDateGTE: String
-	implementationDateLT: String
-	implementationDateLTE: String
-	implementationDateContains: String
-	implementationDateHasPrefix: String
-	implementationDateHasSuffix: String
+	implementationDate: Time
+	implementationDateNEQ: Time
+	implementationDateIn: [Time!]
+	implementationDateNotIn: [Time!]
+	implementationDateGT: Time
+	implementationDateGTE: Time
+	implementationDateLT: Time
+	implementationDateLTE: Time
 	implementationDateIsNil: Boolean
 	implementationDateNotNil: Boolean
-	implementationDateEqualFold: String
-	implementationDateContainsFold: String
-	"""
-	implementation_evidence field predicates
-	"""
-	implementationEvidence: String
-	implementationEvidenceNEQ: String
-	implementationEvidenceIn: [String!]
-	implementationEvidenceNotIn: [String!]
-	implementationEvidenceGT: String
-	implementationEvidenceGTE: String
-	implementationEvidenceLT: String
-	implementationEvidenceLTE: String
-	implementationEvidenceContains: String
-	implementationEvidenceHasPrefix: String
-	implementationEvidenceHasSuffix: String
-	implementationEvidenceIsNil: Boolean
-	implementationEvidenceNotNil: Boolean
-	implementationEvidenceEqualFold: String
-	implementationEvidenceContainsFold: String
 	"""
 	implementation_verification field predicates
 	"""
@@ -27238,21 +26971,16 @@ input SubcontrolHistoryWhereInput {
 	"""
 	implementation_verification_date field predicates
 	"""
-	implementationVerificationDate: String
-	implementationVerificationDateNEQ: String
-	implementationVerificationDateIn: [String!]
-	implementationVerificationDateNotIn: [String!]
-	implementationVerificationDateGT: String
-	implementationVerificationDateGTE: String
-	implementationVerificationDateLT: String
-	implementationVerificationDateLTE: String
-	implementationVerificationDateContains: String
-	implementationVerificationDateHasPrefix: String
-	implementationVerificationDateHasSuffix: String
+	implementationVerificationDate: Time
+	implementationVerificationDateNEQ: Time
+	implementationVerificationDateIn: [Time!]
+	implementationVerificationDateNotIn: [Time!]
+	implementationVerificationDateGT: Time
+	implementationVerificationDateGTE: Time
+	implementationVerificationDateLT: Time
+	implementationVerificationDateLTE: Time
 	implementationVerificationDateIsNil: Boolean
 	implementationVerificationDateNotNil: Boolean
-	implementationVerificationDateEqualFold: String
-	implementationVerificationDateContainsFold: String
 }
 type SubcontrolSearchResult {
 	subcontrols: [Subcontrol!]
@@ -27469,24 +27197,6 @@ input SubcontrolWhereInput {
 	versionEqualFold: String
 	versionContainsFold: String
 	"""
-	owner field predicates
-	"""
-	owner: String
-	ownerNEQ: String
-	ownerIn: [String!]
-	ownerNotIn: [String!]
-	ownerGT: String
-	ownerGTE: String
-	ownerLT: String
-	ownerLTE: String
-	ownerContains: String
-	ownerHasPrefix: String
-	ownerHasSuffix: String
-	ownerIsNil: Boolean
-	ownerNotNil: Boolean
-	ownerEqualFold: String
-	ownerContainsFold: String
-	"""
 	subcontrol_number field predicates
 	"""
 	subcontrolNumber: String
@@ -27505,41 +27215,41 @@ input SubcontrolWhereInput {
 	subcontrolNumberEqualFold: String
 	subcontrolNumberContainsFold: String
 	"""
-	subcontrol_family field predicates
+	family field predicates
 	"""
-	subcontrolFamily: String
-	subcontrolFamilyNEQ: String
-	subcontrolFamilyIn: [String!]
-	subcontrolFamilyNotIn: [String!]
-	subcontrolFamilyGT: String
-	subcontrolFamilyGTE: String
-	subcontrolFamilyLT: String
-	subcontrolFamilyLTE: String
-	subcontrolFamilyContains: String
-	subcontrolFamilyHasPrefix: String
-	subcontrolFamilyHasSuffix: String
-	subcontrolFamilyIsNil: Boolean
-	subcontrolFamilyNotNil: Boolean
-	subcontrolFamilyEqualFold: String
-	subcontrolFamilyContainsFold: String
+	family: String
+	familyNEQ: String
+	familyIn: [String!]
+	familyNotIn: [String!]
+	familyGT: String
+	familyGTE: String
+	familyLT: String
+	familyLTE: String
+	familyContains: String
+	familyHasPrefix: String
+	familyHasSuffix: String
+	familyIsNil: Boolean
+	familyNotNil: Boolean
+	familyEqualFold: String
+	familyContainsFold: String
 	"""
-	subcontrol_class field predicates
+	class field predicates
 	"""
-	subcontrolClass: String
-	subcontrolClassNEQ: String
-	subcontrolClassIn: [String!]
-	subcontrolClassNotIn: [String!]
-	subcontrolClassGT: String
-	subcontrolClassGTE: String
-	subcontrolClassLT: String
-	subcontrolClassLTE: String
-	subcontrolClassContains: String
-	subcontrolClassHasPrefix: String
-	subcontrolClassHasSuffix: String
-	subcontrolClassIsNil: Boolean
-	subcontrolClassNotNil: Boolean
-	subcontrolClassEqualFold: String
-	subcontrolClassContainsFold: String
+	class: String
+	classNEQ: String
+	classIn: [String!]
+	classNotIn: [String!]
+	classGT: String
+	classGTE: String
+	classLT: String
+	classLTE: String
+	classContains: String
+	classHasPrefix: String
+	classHasSuffix: String
+	classIsNil: Boolean
+	classNotNil: Boolean
+	classEqualFold: String
+	classContainsFold: String
 	"""
 	source field predicates
 	"""
@@ -27577,23 +27287,23 @@ input SubcontrolWhereInput {
 	mappedFrameworksEqualFold: String
 	mappedFrameworksContainsFold: String
 	"""
-	assigned_to field predicates
+	implementation_evidence field predicates
 	"""
-	assignedTo: String
-	assignedToNEQ: String
-	assignedToIn: [String!]
-	assignedToNotIn: [String!]
-	assignedToGT: String
-	assignedToGTE: String
-	assignedToLT: String
-	assignedToLTE: String
-	assignedToContains: String
-	assignedToHasPrefix: String
-	assignedToHasSuffix: String
-	assignedToIsNil: Boolean
-	assignedToNotNil: Boolean
-	assignedToEqualFold: String
-	assignedToContainsFold: String
+	implementationEvidence: String
+	implementationEvidenceNEQ: String
+	implementationEvidenceIn: [String!]
+	implementationEvidenceNotIn: [String!]
+	implementationEvidenceGT: String
+	implementationEvidenceGTE: String
+	implementationEvidenceLT: String
+	implementationEvidenceLTE: String
+	implementationEvidenceContains: String
+	implementationEvidenceHasPrefix: String
+	implementationEvidenceHasSuffix: String
+	implementationEvidenceIsNil: Boolean
+	implementationEvidenceNotNil: Boolean
+	implementationEvidenceEqualFold: String
+	implementationEvidenceContainsFold: String
 	"""
 	implementation_status field predicates
 	"""
@@ -27613,59 +27323,18 @@ input SubcontrolWhereInput {
 	implementationStatusEqualFold: String
 	implementationStatusContainsFold: String
 	"""
-	implementation_notes field predicates
-	"""
-	implementationNotes: String
-	implementationNotesNEQ: String
-	implementationNotesIn: [String!]
-	implementationNotesNotIn: [String!]
-	implementationNotesGT: String
-	implementationNotesGTE: String
-	implementationNotesLT: String
-	implementationNotesLTE: String
-	implementationNotesContains: String
-	implementationNotesHasPrefix: String
-	implementationNotesHasSuffix: String
-	implementationNotesIsNil: Boolean
-	implementationNotesNotNil: Boolean
-	implementationNotesEqualFold: String
-	implementationNotesContainsFold: String
-	"""
 	implementation_date field predicates
 	"""
-	implementationDate: String
-	implementationDateNEQ: String
-	implementationDateIn: [String!]
-	implementationDateNotIn: [String!]
-	implementationDateGT: String
-	implementationDateGTE: String
-	implementationDateLT: String
-	implementationDateLTE: String
-	implementationDateContains: String
-	implementationDateHasPrefix: String
-	implementationDateHasSuffix: String
+	implementationDate: Time
+	implementationDateNEQ: Time
+	implementationDateIn: [Time!]
+	implementationDateNotIn: [Time!]
+	implementationDateGT: Time
+	implementationDateGTE: Time
+	implementationDateLT: Time
+	implementationDateLTE: Time
 	implementationDateIsNil: Boolean
 	implementationDateNotNil: Boolean
-	implementationDateEqualFold: String
-	implementationDateContainsFold: String
-	"""
-	implementation_evidence field predicates
-	"""
-	implementationEvidence: String
-	implementationEvidenceNEQ: String
-	implementationEvidenceIn: [String!]
-	implementationEvidenceNotIn: [String!]
-	implementationEvidenceGT: String
-	implementationEvidenceGTE: String
-	implementationEvidenceLT: String
-	implementationEvidenceLTE: String
-	implementationEvidenceContains: String
-	implementationEvidenceHasPrefix: String
-	implementationEvidenceHasSuffix: String
-	implementationEvidenceIsNil: Boolean
-	implementationEvidenceNotNil: Boolean
-	implementationEvidenceEqualFold: String
-	implementationEvidenceContainsFold: String
 	"""
 	implementation_verification field predicates
 	"""
@@ -27687,26 +27356,31 @@ input SubcontrolWhereInput {
 	"""
 	implementation_verification_date field predicates
 	"""
-	implementationVerificationDate: String
-	implementationVerificationDateNEQ: String
-	implementationVerificationDateIn: [String!]
-	implementationVerificationDateNotIn: [String!]
-	implementationVerificationDateGT: String
-	implementationVerificationDateGTE: String
-	implementationVerificationDateLT: String
-	implementationVerificationDateLTE: String
-	implementationVerificationDateContains: String
-	implementationVerificationDateHasPrefix: String
-	implementationVerificationDateHasSuffix: String
+	implementationVerificationDate: Time
+	implementationVerificationDateNEQ: Time
+	implementationVerificationDateIn: [Time!]
+	implementationVerificationDateNotIn: [Time!]
+	implementationVerificationDateGT: Time
+	implementationVerificationDateGTE: Time
+	implementationVerificationDateLT: Time
+	implementationVerificationDateLTE: Time
 	implementationVerificationDateIsNil: Boolean
 	implementationVerificationDateNotNil: Boolean
-	implementationVerificationDateEqualFold: String
-	implementationVerificationDateContainsFold: String
 	"""
 	control edge predicates
 	"""
 	hasControl: Boolean
 	hasControlWith: [ControlWhereInput!]
+	"""
+	user edge predicates
+	"""
+	hasUser: Boolean
+	hasUserWith: [UserWhereInput!]
+	"""
+	notes edge predicates
+	"""
+	hasNotes: Boolean
+	hasNotesWith: [NoteWhereInput!]
 }
 type Subscriber implements Node {
 	id: ID!
@@ -28939,17 +28613,12 @@ input UpdateActionPlanInput {
 	status: String
 	clearStatus: Boolean
 	"""
-	assigned to
+	due date of the action plan
 	"""
-	assigned: String
-	clearAssigned: Boolean
-	"""
-	due date
-	"""
-	dueDate: String
+	dueDate: Time
 	clearDueDate: Boolean
 	"""
-	priority
+	priority of the action plan
 	"""
 	priority: String
 	clearPriority: Boolean
@@ -28959,16 +28628,22 @@ input UpdateActionPlanInput {
 	source: String
 	clearSource: Boolean
 	"""
-	json schema
+	json data including details of the action plan
 	"""
-	jsonschema: Map
-	clearJsonschema: Boolean
+	details: Map
+	clearDetails: Boolean
 	addStandardIDs: [ID!]
 	removeStandardIDs: [ID!]
 	clearStandard: Boolean
 	addRiskIDs: [ID!]
 	removeRiskIDs: [ID!]
 	clearRisk: Boolean
+	addControlIDs: [ID!]
+	removeControlIDs: [ID!]
+	clearControl: Boolean
+	addUserIDs: [ID!]
+	removeUserIDs: [ID!]
+	clearUser: Boolean
 }
 """
 UpdateContactInput is used for update Contact object.
@@ -29059,27 +28734,22 @@ input UpdateControlInput {
 	version: String
 	clearVersion: Boolean
 	"""
-	owner of the control
-	"""
-	owner: String
-	clearOwner: Boolean
-	"""
-	control number
+	control number or identifier
 	"""
 	controlNumber: String
 	clearControlNumber: Boolean
 	"""
-	control family
+	family associated with the control
 	"""
-	controlFamily: String
-	clearControlFamily: Boolean
+	family: String
+	clearFamily: Boolean
 	"""
-	control class
+	class associated with the control
 	"""
-	controlClass: String
-	clearControlClass: Boolean
+	class: String
+	clearClass: Boolean
 	"""
-	source of the control
+	source of the control, e.g. framework, template, custom, etc.
 	"""
 	source: String
 	clearSource: Boolean
@@ -29094,10 +28764,10 @@ input UpdateControlInput {
 	mappedFrameworks: String
 	clearMappedFrameworks: Boolean
 	"""
-	json schema
+	json data including details of the control
 	"""
-	jsonschema: Map
-	clearJsonschema: Boolean
+	details: Map
+	clearDetails: Boolean
 	addProcedureIDs: [ID!]
 	removeProcedureIDs: [ID!]
 	clearProcedures: Boolean
@@ -29116,6 +28786,9 @@ input UpdateControlInput {
 	addRiskIDs: [ID!]
 	removeRiskIDs: [ID!]
 	clearRisks: Boolean
+	addActionplanIDs: [ID!]
+	removeActionplanIDs: [ID!]
+	clearActionplans: Boolean
 }
 """
 UpdateControlObjectiveInput is used for update ControlObjective object.
@@ -29129,16 +28802,16 @@ input UpdateControlObjectiveInput {
 	appendTags: [String!]
 	clearTags: Boolean
 	"""
-	the name of the control
+	the name of the control objective
 	"""
 	name: String
 	"""
-	description of the control
+	description of the control objective
 	"""
 	description: String
 	clearDescription: Boolean
 	"""
-	status of the control
+	status of the control objective
 	"""
 	status: String
 	clearStatus: Boolean
@@ -29148,32 +28821,27 @@ input UpdateControlObjectiveInput {
 	controlObjectiveType: String
 	clearControlObjectiveType: Boolean
 	"""
-	version of the control
+	version of the control objective
 	"""
 	version: String
 	clearVersion: Boolean
 	"""
-	owner of the control
-	"""
-	owner: String
-	clearOwner: Boolean
-	"""
-	control number
+	number of the control objective
 	"""
 	controlNumber: String
 	clearControlNumber: Boolean
 	"""
-	control family
+	family of the control objective
 	"""
-	controlFamily: String
-	clearControlFamily: Boolean
+	family: String
+	clearFamily: Boolean
 	"""
-	control class
+	class associated with the control objective
 	"""
-	controlClass: String
-	clearControlClass: Boolean
+	class: String
+	clearClass: Boolean
 	"""
-	source of the control
+	source of the control objective, e.g. framework, template, user-defined, etc.
 	"""
 	source: String
 	clearSource: Boolean
@@ -29183,10 +28851,10 @@ input UpdateControlObjectiveInput {
 	mappedFrameworks: String
 	clearMappedFrameworks: Boolean
 	"""
-	json schema
+	json data including details of the control objective
 	"""
-	jsonschema: Map
-	clearJsonschema: Boolean
+	details: Map
+	clearDetails: Boolean
 	addPolicyIDs: [ID!]
 	removePolicyIDs: [ID!]
 	clearPolicy: Boolean
@@ -29807,15 +29475,15 @@ input UpdateInternalPolicyInput {
 	purposeAndScope: String
 	clearPurposeAndScope: Boolean
 	"""
-	background
+	background of the policy
 	"""
 	background: String
 	clearBackground: Boolean
 	"""
-	json schema
+	json data for the policy document
 	"""
-	jsonschema: Map
-	clearJsonschema: Boolean
+	details: Map
+	clearDetails: Boolean
 	addControlobjectiveIDs: [ID!]
 	removeControlobjectiveIDs: [ID!]
 	clearControlobjectives: Boolean
@@ -29866,7 +29534,7 @@ input UpdateNarrativeInput {
 	appendTags: [String!]
 	clearTags: Boolean
 	"""
-	the name of the file provided in the payload key without the extension
+	the name of the narrative
 	"""
 	name: String
 	"""
@@ -29880,10 +29548,10 @@ input UpdateNarrativeInput {
 	satisfies: String
 	clearSatisfies: Boolean
 	"""
-	json schema
+	json data for the narrative document
 	"""
-	jsonschema: Map
-	clearJsonschema: Boolean
+	details: Map
+	clearDetails: Boolean
 	addPolicyIDs: [ID!]
 	removePolicyIDs: [ID!]
 	clearPolicy: Boolean
@@ -29916,6 +29584,9 @@ input UpdateNoteInput {
 	clearOwner: Boolean
 	entityID: ID
 	clearEntity: Boolean
+	addSubcontrolIDs: [ID!]
+	removeSubcontrolIDs: [ID!]
+	clearSubcontrols: Boolean
 }
 """
 UpdateOauthProviderInput is used for update OauthProvider object.
@@ -30239,7 +29910,7 @@ input UpdateProcedureInput {
 	purposeAndScope: String
 	clearPurposeAndScope: Boolean
 	"""
-	background
+	background of the procedure
 	"""
 	background: String
 	clearBackground: Boolean
@@ -30249,10 +29920,10 @@ input UpdateProcedureInput {
 	satisfies: String
 	clearSatisfies: Boolean
 	"""
-	json schema
+	json data for the procedure document
 	"""
-	jsonschema: Map
-	clearJsonschema: Boolean
+	details: Map
+	clearDetails: Boolean
 	addControlIDs: [ID!]
 	removeControlIDs: [ID!]
 	clearControl: Boolean
@@ -30302,17 +29973,17 @@ input UpdateRiskInput {
 	businessCosts: String
 	clearBusinessCosts: Boolean
 	"""
-	impact of the risk
+	impact of the risk - high, medium, low
 	"""
-	impact: String
+	impact: RiskRiskImpact
 	clearImpact: Boolean
 	"""
-	likelihood of the risk
+	likelihood of the risk occurring; unlikely, likely, highly likely
 	"""
-	likelihood: String
+	likelihood: RiskRiskLikelihood
 	clearLikelihood: Boolean
 	"""
-	mitigation of the risk
+	mitigation for the risk
 	"""
 	mitigation: String
 	clearMitigation: Boolean
@@ -30322,15 +29993,10 @@ input UpdateRiskInput {
 	satisfies: String
 	clearSatisfies: Boolean
 	"""
-	severity of the risk, e.g. high medium low
+	json data for the risk document
 	"""
-	severity: String
-	clearSeverity: Boolean
-	"""
-	json schema
-	"""
-	jsonschema: Map
-	clearJsonschema: Boolean
+	details: Map
+	clearDetails: Boolean
 	addControlIDs: [ID!]
 	removeControlIDs: [ID!]
 	clearControl: Boolean
@@ -30387,7 +30053,7 @@ input UpdateStandardInput {
 	purposeAndScope: String
 	clearPurposeAndScope: Boolean
 	"""
-	background
+	background of the standard
 	"""
 	background: String
 	clearBackground: Boolean
@@ -30397,10 +30063,10 @@ input UpdateStandardInput {
 	satisfies: String
 	clearSatisfies: Boolean
 	"""
-	json schema
+	json data with details of the standard
 	"""
-	jsonschema: Map
-	clearJsonschema: Boolean
+	details: Map
+	clearDetails: Boolean
 	addControlobjectiveIDs: [ID!]
 	removeControlobjectiveIDs: [ID!]
 	clearControlobjectives: Boolean
@@ -30450,78 +30116,68 @@ input UpdateSubcontrolInput {
 	version: String
 	clearVersion: Boolean
 	"""
-	owner of the subcontrol
-	"""
-	owner: String
-	clearOwner: Boolean
-	"""
-	control number
+	number of the subcontrol
 	"""
 	subcontrolNumber: String
 	clearSubcontrolNumber: Boolean
 	"""
-	control family
+	subcontrol family 
 	"""
-	subcontrolFamily: String
-	clearSubcontrolFamily: Boolean
+	family: String
+	clearFamily: Boolean
 	"""
-	control class
+	subcontrol class
 	"""
-	subcontrolClass: String
-	clearSubcontrolClass: Boolean
+	class: String
+	clearClass: Boolean
 	"""
-	source of the control
+	source of the control, e.g. framework, template, user-defined, etc.
 	"""
 	source: String
 	clearSource: Boolean
 	"""
-	mapped frameworks
+	mapped frameworks that the subcontrol is part of
 	"""
 	mappedFrameworks: String
 	clearMappedFrameworks: Boolean
 	"""
-	assigned to
+	implementation evidence of the subcontrol
 	"""
-	assignedTo: String
-	clearAssignedTo: Boolean
+	implementationEvidence: String
+	clearImplementationEvidence: Boolean
 	"""
 	implementation status
 	"""
 	implementationStatus: String
 	clearImplementationStatus: Boolean
 	"""
-	implementation notes
+	date the subcontrol was implemented
 	"""
-	implementationNotes: String
-	clearImplementationNotes: Boolean
-	"""
-	implementation date
-	"""
-	implementationDate: String
+	implementationDate: Time
 	clearImplementationDate: Boolean
-	"""
-	implementation evidence
-	"""
-	implementationEvidence: String
-	clearImplementationEvidence: Boolean
 	"""
 	implementation verification
 	"""
 	implementationVerification: String
 	clearImplementationVerification: Boolean
 	"""
-	implementation verification date
+	date the subcontrol implementation was verified
 	"""
-	implementationVerificationDate: String
+	implementationVerificationDate: Time
 	clearImplementationVerificationDate: Boolean
 	"""
-	json schema
+	json data details of the subcontrol
 	"""
-	jsonschema: Map
-	clearJsonschema: Boolean
+	details: Map
+	clearDetails: Boolean
 	addControlIDs: [ID!]
 	removeControlIDs: [ID!]
 	clearControl: Boolean
+	addUserIDs: [ID!]
+	removeUserIDs: [ID!]
+	clearUser: Boolean
+	notesID: ID
+	clearNotes: Boolean
 }
 """
 UpdateSubscriberInput is used for update Subscriber object.
@@ -30705,6 +30361,12 @@ input UpdateUserInput {
 	addEventIDs: [ID!]
 	removeEventIDs: [ID!]
 	clearEvents: Boolean
+	addActionplanIDs: [ID!]
+	removeActionplanIDs: [ID!]
+	clearActionplans: Boolean
+	addSubcontrolIDs: [ID!]
+	removeSubcontrolIDs: [ID!]
+	clearSubcontrols: Boolean
 }
 """
 UpdateUserSettingInput is used for update UserSetting object.
@@ -30869,6 +30531,8 @@ type User implements Node {
 	files: [File!]
 	file: File
 	events: [Event!]
+	actionplans: [ActionPlan!]
+	subcontrols: [Subcontrol!]
 	groupMemberships: [GroupMembership!]
 	orgMemberships: [OrgMembership!]
 }
@@ -32421,6 +32085,16 @@ input UserWhereInput {
 	"""
 	hasEvents: Boolean
 	hasEventsWith: [EventWhereInput!]
+	"""
+	actionplans edge predicates
+	"""
+	hasActionplans: Boolean
+	hasActionplansWith: [ActionPlanWhereInput!]
+	"""
+	subcontrols edge predicates
+	"""
+	hasSubcontrols: Boolean
+	hasSubcontrolsWith: [SubcontrolWhereInput!]
 	"""
 	group_memberships edge predicates
 	"""

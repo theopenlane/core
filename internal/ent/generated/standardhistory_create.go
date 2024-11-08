@@ -277,9 +277,9 @@ func (shc *StandardHistoryCreate) SetNillableSatisfies(s *string) *StandardHisto
 	return shc
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (shc *StandardHistoryCreate) SetJsonschema(m map[string]interface{}) *StandardHistoryCreate {
-	shc.mutation.SetJsonschema(m)
+// SetDetails sets the "details" field.
+func (shc *StandardHistoryCreate) SetDetails(m map[string]interface{}) *StandardHistoryCreate {
+	shc.mutation.SetDetails(m)
 	return shc
 }
 
@@ -493,9 +493,9 @@ func (shc *StandardHistoryCreate) createSpec() (*StandardHistory, *sqlgraph.Crea
 		_spec.SetField(standardhistory.FieldSatisfies, field.TypeString, value)
 		_node.Satisfies = value
 	}
-	if value, ok := shc.mutation.Jsonschema(); ok {
-		_spec.SetField(standardhistory.FieldJsonschema, field.TypeJSON, value)
-		_node.Jsonschema = value
+	if value, ok := shc.mutation.Details(); ok {
+		_spec.SetField(standardhistory.FieldDetails, field.TypeJSON, value)
+		_node.Details = value
 	}
 	return _node, _spec
 }

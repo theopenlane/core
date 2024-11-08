@@ -349,13 +349,12 @@ func NewClient(cli *http.Client, baseURL string, options *clientv2.Options, inte
 }
 
 type CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans struct {
-	Assigned    *string                "json:\"assigned,omitempty\" graphql:\"assigned\""
 	CreatedAt   *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description *string                "json:\"description,omitempty\" graphql:\"description\""
-	DueDate     *string                "json:\"dueDate,omitempty\" graphql:\"dueDate\""
+	Details     map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
+	DueDate     *time.Time             "json:\"dueDate,omitempty\" graphql:\"dueDate\""
 	ID          string                 "json:\"id\" graphql:\"id\""
-	Jsonschema  map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	Name        string                 "json:\"name\" graphql:\"name\""
 	Priority    *string                "json:\"priority,omitempty\" graphql:\"priority\""
 	Source      *string                "json:\"source,omitempty\" graphql:\"source\""
@@ -365,12 +364,6 @@ type CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans struct {
 	UpdatedBy   *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans) GetAssigned() *string {
-	if t == nil {
-		t = &CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans{}
-	}
-	return t.Assigned
-}
 func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans{}
@@ -389,7 +382,13 @@ func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans) GetDescrip
 	}
 	return t.Description
 }
-func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans) GetDueDate() *string {
+func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans{}
+	}
+	return t.Details
+}
+func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans) GetDueDate() *time.Time {
 	if t == nil {
 		t = &CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans{}
 	}
@@ -400,12 +399,6 @@ func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans) GetID() st
 		t = &CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans{}
 	}
 	return t.ID
-}
-func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans{}
-	}
-	return t.Jsonschema
 }
 func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans) GetName() string {
 	if t == nil {
@@ -462,13 +455,12 @@ func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan) GetActionPlans() []*Cr
 }
 
 type CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans struct {
-	Assigned    *string                "json:\"assigned,omitempty\" graphql:\"assigned\""
 	CreatedAt   *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description *string                "json:\"description,omitempty\" graphql:\"description\""
-	DueDate     *string                "json:\"dueDate,omitempty\" graphql:\"dueDate\""
+	Details     map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
+	DueDate     *time.Time             "json:\"dueDate,omitempty\" graphql:\"dueDate\""
 	ID          string                 "json:\"id\" graphql:\"id\""
-	Jsonschema  map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	Name        string                 "json:\"name\" graphql:\"name\""
 	Priority    *string                "json:\"priority,omitempty\" graphql:\"priority\""
 	Source      *string                "json:\"source,omitempty\" graphql:\"source\""
@@ -478,12 +470,6 @@ type CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans struct {
 	UpdatedBy   *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans) GetAssigned() *string {
-	if t == nil {
-		t = &CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans{}
-	}
-	return t.Assigned
-}
 func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans{}
@@ -502,7 +488,13 @@ func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans) GetDescription()
 	}
 	return t.Description
 }
-func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans) GetDueDate() *string {
+func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans{}
+	}
+	return t.Details
+}
+func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans) GetDueDate() *time.Time {
 	if t == nil {
 		t = &CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans{}
 	}
@@ -513,12 +505,6 @@ func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans) GetID() string {
 		t = &CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans{}
 	}
 	return t.ID
-}
-func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans{}
-	}
-	return t.Jsonschema
 }
 func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans) GetName() string {
 	if t == nil {
@@ -575,13 +561,12 @@ func (t *CreateBulkActionPlan_CreateBulkActionPlan) GetActionPlans() []*CreateBu
 }
 
 type CreateActionPlan_CreateActionPlan_ActionPlan struct {
-	Assigned    *string                "json:\"assigned,omitempty\" graphql:\"assigned\""
 	CreatedAt   *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description *string                "json:\"description,omitempty\" graphql:\"description\""
-	DueDate     *string                "json:\"dueDate,omitempty\" graphql:\"dueDate\""
+	Details     map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
+	DueDate     *time.Time             "json:\"dueDate,omitempty\" graphql:\"dueDate\""
 	ID          string                 "json:\"id\" graphql:\"id\""
-	Jsonschema  map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	Name        string                 "json:\"name\" graphql:\"name\""
 	Priority    *string                "json:\"priority,omitempty\" graphql:\"priority\""
 	Source      *string                "json:\"source,omitempty\" graphql:\"source\""
@@ -591,12 +576,6 @@ type CreateActionPlan_CreateActionPlan_ActionPlan struct {
 	UpdatedBy   *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *CreateActionPlan_CreateActionPlan_ActionPlan) GetAssigned() *string {
-	if t == nil {
-		t = &CreateActionPlan_CreateActionPlan_ActionPlan{}
-	}
-	return t.Assigned
-}
 func (t *CreateActionPlan_CreateActionPlan_ActionPlan) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &CreateActionPlan_CreateActionPlan_ActionPlan{}
@@ -615,7 +594,13 @@ func (t *CreateActionPlan_CreateActionPlan_ActionPlan) GetDescription() *string 
 	}
 	return t.Description
 }
-func (t *CreateActionPlan_CreateActionPlan_ActionPlan) GetDueDate() *string {
+func (t *CreateActionPlan_CreateActionPlan_ActionPlan) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &CreateActionPlan_CreateActionPlan_ActionPlan{}
+	}
+	return t.Details
+}
+func (t *CreateActionPlan_CreateActionPlan_ActionPlan) GetDueDate() *time.Time {
 	if t == nil {
 		t = &CreateActionPlan_CreateActionPlan_ActionPlan{}
 	}
@@ -626,12 +611,6 @@ func (t *CreateActionPlan_CreateActionPlan_ActionPlan) GetID() string {
 		t = &CreateActionPlan_CreateActionPlan_ActionPlan{}
 	}
 	return t.ID
-}
-func (t *CreateActionPlan_CreateActionPlan_ActionPlan) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &CreateActionPlan_CreateActionPlan_ActionPlan{}
-	}
-	return t.Jsonschema
 }
 func (t *CreateActionPlan_CreateActionPlan_ActionPlan) GetName() string {
 	if t == nil {
@@ -699,13 +678,12 @@ func (t *DeleteActionPlan_DeleteActionPlan) GetDeletedID() string {
 }
 
 type GetAllActionPlans_ActionPlans_Edges_Node struct {
-	Assigned    *string                "json:\"assigned,omitempty\" graphql:\"assigned\""
 	CreatedAt   *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description *string                "json:\"description,omitempty\" graphql:\"description\""
-	DueDate     *string                "json:\"dueDate,omitempty\" graphql:\"dueDate\""
+	Details     map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
+	DueDate     *time.Time             "json:\"dueDate,omitempty\" graphql:\"dueDate\""
 	ID          string                 "json:\"id\" graphql:\"id\""
-	Jsonschema  map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	Name        string                 "json:\"name\" graphql:\"name\""
 	Priority    *string                "json:\"priority,omitempty\" graphql:\"priority\""
 	Source      *string                "json:\"source,omitempty\" graphql:\"source\""
@@ -715,12 +693,6 @@ type GetAllActionPlans_ActionPlans_Edges_Node struct {
 	UpdatedBy   *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *GetAllActionPlans_ActionPlans_Edges_Node) GetAssigned() *string {
-	if t == nil {
-		t = &GetAllActionPlans_ActionPlans_Edges_Node{}
-	}
-	return t.Assigned
-}
 func (t *GetAllActionPlans_ActionPlans_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &GetAllActionPlans_ActionPlans_Edges_Node{}
@@ -739,7 +711,13 @@ func (t *GetAllActionPlans_ActionPlans_Edges_Node) GetDescription() *string {
 	}
 	return t.Description
 }
-func (t *GetAllActionPlans_ActionPlans_Edges_Node) GetDueDate() *string {
+func (t *GetAllActionPlans_ActionPlans_Edges_Node) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetAllActionPlans_ActionPlans_Edges_Node{}
+	}
+	return t.Details
+}
+func (t *GetAllActionPlans_ActionPlans_Edges_Node) GetDueDate() *time.Time {
 	if t == nil {
 		t = &GetAllActionPlans_ActionPlans_Edges_Node{}
 	}
@@ -750,12 +728,6 @@ func (t *GetAllActionPlans_ActionPlans_Edges_Node) GetID() string {
 		t = &GetAllActionPlans_ActionPlans_Edges_Node{}
 	}
 	return t.ID
-}
-func (t *GetAllActionPlans_ActionPlans_Edges_Node) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &GetAllActionPlans_ActionPlans_Edges_Node{}
-	}
-	return t.Jsonschema
 }
 func (t *GetAllActionPlans_ActionPlans_Edges_Node) GetName() string {
 	if t == nil {
@@ -823,13 +795,12 @@ func (t *GetAllActionPlans_ActionPlans) GetEdges() []*GetAllActionPlans_ActionPl
 }
 
 type GetActionPlanByID_ActionPlan struct {
-	Assigned    *string                "json:\"assigned,omitempty\" graphql:\"assigned\""
 	CreatedAt   *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description *string                "json:\"description,omitempty\" graphql:\"description\""
-	DueDate     *string                "json:\"dueDate,omitempty\" graphql:\"dueDate\""
+	Details     map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
+	DueDate     *time.Time             "json:\"dueDate,omitempty\" graphql:\"dueDate\""
 	ID          string                 "json:\"id\" graphql:\"id\""
-	Jsonschema  map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	Name        string                 "json:\"name\" graphql:\"name\""
 	Priority    *string                "json:\"priority,omitempty\" graphql:\"priority\""
 	Source      *string                "json:\"source,omitempty\" graphql:\"source\""
@@ -839,12 +810,6 @@ type GetActionPlanByID_ActionPlan struct {
 	UpdatedBy   *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *GetActionPlanByID_ActionPlan) GetAssigned() *string {
-	if t == nil {
-		t = &GetActionPlanByID_ActionPlan{}
-	}
-	return t.Assigned
-}
 func (t *GetActionPlanByID_ActionPlan) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &GetActionPlanByID_ActionPlan{}
@@ -863,7 +828,13 @@ func (t *GetActionPlanByID_ActionPlan) GetDescription() *string {
 	}
 	return t.Description
 }
-func (t *GetActionPlanByID_ActionPlan) GetDueDate() *string {
+func (t *GetActionPlanByID_ActionPlan) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetActionPlanByID_ActionPlan{}
+	}
+	return t.Details
+}
+func (t *GetActionPlanByID_ActionPlan) GetDueDate() *time.Time {
 	if t == nil {
 		t = &GetActionPlanByID_ActionPlan{}
 	}
@@ -874,12 +845,6 @@ func (t *GetActionPlanByID_ActionPlan) GetID() string {
 		t = &GetActionPlanByID_ActionPlan{}
 	}
 	return t.ID
-}
-func (t *GetActionPlanByID_ActionPlan) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &GetActionPlanByID_ActionPlan{}
-	}
-	return t.Jsonschema
 }
 func (t *GetActionPlanByID_ActionPlan) GetName() string {
 	if t == nil {
@@ -925,13 +890,12 @@ func (t *GetActionPlanByID_ActionPlan) GetUpdatedBy() *string {
 }
 
 type GetActionPlans_ActionPlans_Edges_Node struct {
-	Assigned    *string                "json:\"assigned,omitempty\" graphql:\"assigned\""
 	CreatedAt   *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description *string                "json:\"description,omitempty\" graphql:\"description\""
-	DueDate     *string                "json:\"dueDate,omitempty\" graphql:\"dueDate\""
+	Details     map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
+	DueDate     *time.Time             "json:\"dueDate,omitempty\" graphql:\"dueDate\""
 	ID          string                 "json:\"id\" graphql:\"id\""
-	Jsonschema  map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	Name        string                 "json:\"name\" graphql:\"name\""
 	Priority    *string                "json:\"priority,omitempty\" graphql:\"priority\""
 	Source      *string                "json:\"source,omitempty\" graphql:\"source\""
@@ -941,12 +905,6 @@ type GetActionPlans_ActionPlans_Edges_Node struct {
 	UpdatedBy   *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *GetActionPlans_ActionPlans_Edges_Node) GetAssigned() *string {
-	if t == nil {
-		t = &GetActionPlans_ActionPlans_Edges_Node{}
-	}
-	return t.Assigned
-}
 func (t *GetActionPlans_ActionPlans_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &GetActionPlans_ActionPlans_Edges_Node{}
@@ -965,7 +923,13 @@ func (t *GetActionPlans_ActionPlans_Edges_Node) GetDescription() *string {
 	}
 	return t.Description
 }
-func (t *GetActionPlans_ActionPlans_Edges_Node) GetDueDate() *string {
+func (t *GetActionPlans_ActionPlans_Edges_Node) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetActionPlans_ActionPlans_Edges_Node{}
+	}
+	return t.Details
+}
+func (t *GetActionPlans_ActionPlans_Edges_Node) GetDueDate() *time.Time {
 	if t == nil {
 		t = &GetActionPlans_ActionPlans_Edges_Node{}
 	}
@@ -976,12 +940,6 @@ func (t *GetActionPlans_ActionPlans_Edges_Node) GetID() string {
 		t = &GetActionPlans_ActionPlans_Edges_Node{}
 	}
 	return t.ID
-}
-func (t *GetActionPlans_ActionPlans_Edges_Node) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &GetActionPlans_ActionPlans_Edges_Node{}
-	}
-	return t.Jsonschema
 }
 func (t *GetActionPlans_ActionPlans_Edges_Node) GetName() string {
 	if t == nil {
@@ -1049,13 +1007,12 @@ func (t *GetActionPlans_ActionPlans) GetEdges() []*GetActionPlans_ActionPlans_Ed
 }
 
 type UpdateActionPlan_UpdateActionPlan_ActionPlan struct {
-	Assigned    *string                "json:\"assigned,omitempty\" graphql:\"assigned\""
 	CreatedAt   *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description *string                "json:\"description,omitempty\" graphql:\"description\""
-	DueDate     *string                "json:\"dueDate,omitempty\" graphql:\"dueDate\""
+	Details     map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
+	DueDate     *time.Time             "json:\"dueDate,omitempty\" graphql:\"dueDate\""
 	ID          string                 "json:\"id\" graphql:\"id\""
-	Jsonschema  map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	Name        string                 "json:\"name\" graphql:\"name\""
 	Priority    *string                "json:\"priority,omitempty\" graphql:\"priority\""
 	Source      *string                "json:\"source,omitempty\" graphql:\"source\""
@@ -1065,12 +1022,6 @@ type UpdateActionPlan_UpdateActionPlan_ActionPlan struct {
 	UpdatedBy   *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan) GetAssigned() *string {
-	if t == nil {
-		t = &UpdateActionPlan_UpdateActionPlan_ActionPlan{}
-	}
-	return t.Assigned
-}
 func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &UpdateActionPlan_UpdateActionPlan_ActionPlan{}
@@ -1089,7 +1040,13 @@ func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan) GetDescription() *string 
 	}
 	return t.Description
 }
-func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan) GetDueDate() *string {
+func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &UpdateActionPlan_UpdateActionPlan_ActionPlan{}
+	}
+	return t.Details
+}
+func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan) GetDueDate() *time.Time {
 	if t == nil {
 		t = &UpdateActionPlan_UpdateActionPlan_ActionPlan{}
 	}
@@ -1100,12 +1057,6 @@ func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan) GetID() string {
 		t = &UpdateActionPlan_UpdateActionPlan_ActionPlan{}
 	}
 	return t.ID
-}
-func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &UpdateActionPlan_UpdateActionPlan_ActionPlan{}
-	}
-	return t.Jsonschema
 }
 func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan) GetName() string {
 	if t == nil {
@@ -1162,14 +1113,13 @@ func (t *UpdateActionPlan_UpdateActionPlan) GetActionPlan() *UpdateActionPlan_Up
 }
 
 type GetAllActionPlanHistories_ActionPlanHistories_Edges_Node struct {
-	Assigned    *string                "json:\"assigned,omitempty\" graphql:\"assigned\""
 	CreatedAt   *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description *string                "json:\"description,omitempty\" graphql:\"description\""
-	DueDate     *string                "json:\"dueDate,omitempty\" graphql:\"dueDate\""
+	Details     map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
+	DueDate     *time.Time             "json:\"dueDate,omitempty\" graphql:\"dueDate\""
 	HistoryTime time.Time              "json:\"historyTime\" graphql:\"historyTime\""
 	ID          string                 "json:\"id\" graphql:\"id\""
-	Jsonschema  map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	Name        string                 "json:\"name\" graphql:\"name\""
 	Operation   history.OpType         "json:\"operation\" graphql:\"operation\""
 	Priority    *string                "json:\"priority,omitempty\" graphql:\"priority\""
@@ -1181,12 +1131,6 @@ type GetAllActionPlanHistories_ActionPlanHistories_Edges_Node struct {
 	UpdatedBy   *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *GetAllActionPlanHistories_ActionPlanHistories_Edges_Node) GetAssigned() *string {
-	if t == nil {
-		t = &GetAllActionPlanHistories_ActionPlanHistories_Edges_Node{}
-	}
-	return t.Assigned
-}
 func (t *GetAllActionPlanHistories_ActionPlanHistories_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &GetAllActionPlanHistories_ActionPlanHistories_Edges_Node{}
@@ -1205,7 +1149,13 @@ func (t *GetAllActionPlanHistories_ActionPlanHistories_Edges_Node) GetDescriptio
 	}
 	return t.Description
 }
-func (t *GetAllActionPlanHistories_ActionPlanHistories_Edges_Node) GetDueDate() *string {
+func (t *GetAllActionPlanHistories_ActionPlanHistories_Edges_Node) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetAllActionPlanHistories_ActionPlanHistories_Edges_Node{}
+	}
+	return t.Details
+}
+func (t *GetAllActionPlanHistories_ActionPlanHistories_Edges_Node) GetDueDate() *time.Time {
 	if t == nil {
 		t = &GetAllActionPlanHistories_ActionPlanHistories_Edges_Node{}
 	}
@@ -1222,12 +1172,6 @@ func (t *GetAllActionPlanHistories_ActionPlanHistories_Edges_Node) GetID() strin
 		t = &GetAllActionPlanHistories_ActionPlanHistories_Edges_Node{}
 	}
 	return t.ID
-}
-func (t *GetAllActionPlanHistories_ActionPlanHistories_Edges_Node) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &GetAllActionPlanHistories_ActionPlanHistories_Edges_Node{}
-	}
-	return t.Jsonschema
 }
 func (t *GetAllActionPlanHistories_ActionPlanHistories_Edges_Node) GetName() string {
 	if t == nil {
@@ -1307,14 +1251,13 @@ func (t *GetAllActionPlanHistories_ActionPlanHistories) GetEdges() []*GetAllActi
 }
 
 type GetActionPlanHistories_ActionPlanHistories_Edges_Node struct {
-	Assigned    *string                "json:\"assigned,omitempty\" graphql:\"assigned\""
 	CreatedAt   *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description *string                "json:\"description,omitempty\" graphql:\"description\""
-	DueDate     *string                "json:\"dueDate,omitempty\" graphql:\"dueDate\""
+	Details     map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
+	DueDate     *time.Time             "json:\"dueDate,omitempty\" graphql:\"dueDate\""
 	HistoryTime time.Time              "json:\"historyTime\" graphql:\"historyTime\""
 	ID          string                 "json:\"id\" graphql:\"id\""
-	Jsonschema  map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	Name        string                 "json:\"name\" graphql:\"name\""
 	Operation   history.OpType         "json:\"operation\" graphql:\"operation\""
 	Priority    *string                "json:\"priority,omitempty\" graphql:\"priority\""
@@ -1326,12 +1269,6 @@ type GetActionPlanHistories_ActionPlanHistories_Edges_Node struct {
 	UpdatedBy   *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
-func (t *GetActionPlanHistories_ActionPlanHistories_Edges_Node) GetAssigned() *string {
-	if t == nil {
-		t = &GetActionPlanHistories_ActionPlanHistories_Edges_Node{}
-	}
-	return t.Assigned
-}
 func (t *GetActionPlanHistories_ActionPlanHistories_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &GetActionPlanHistories_ActionPlanHistories_Edges_Node{}
@@ -1350,7 +1287,13 @@ func (t *GetActionPlanHistories_ActionPlanHistories_Edges_Node) GetDescription()
 	}
 	return t.Description
 }
-func (t *GetActionPlanHistories_ActionPlanHistories_Edges_Node) GetDueDate() *string {
+func (t *GetActionPlanHistories_ActionPlanHistories_Edges_Node) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetActionPlanHistories_ActionPlanHistories_Edges_Node{}
+	}
+	return t.Details
+}
+func (t *GetActionPlanHistories_ActionPlanHistories_Edges_Node) GetDueDate() *time.Time {
 	if t == nil {
 		t = &GetActionPlanHistories_ActionPlanHistories_Edges_Node{}
 	}
@@ -1367,12 +1310,6 @@ func (t *GetActionPlanHistories_ActionPlanHistories_Edges_Node) GetID() string {
 		t = &GetActionPlanHistories_ActionPlanHistories_Edges_Node{}
 	}
 	return t.ID
-}
-func (t *GetActionPlanHistories_ActionPlanHistories_Edges_Node) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &GetActionPlanHistories_ActionPlanHistories_Edges_Node{}
-	}
-	return t.Jsonschema
 }
 func (t *GetActionPlanHistories_ActionPlanHistories_Edges_Node) GetName() string {
 	if t == nil {
@@ -1515,11 +1452,9 @@ type AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans struct {
 	Name        string                 "json:\"name\" graphql:\"name\""
 	Description *string                "json:\"description,omitempty\" graphql:\"description\""
 	Status      *string                "json:\"status,omitempty\" graphql:\"status\""
-	Assigned    *string                "json:\"assigned,omitempty\" graphql:\"assigned\""
-	DueDate     *string                "json:\"dueDate,omitempty\" graphql:\"dueDate\""
 	Priority    *string                "json:\"priority,omitempty\" graphql:\"priority\""
 	Source      *string                "json:\"source,omitempty\" graphql:\"source\""
-	Jsonschema  map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
+	Details     map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 }
 
 func (t *AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans) GetDeletedBy() *string {
@@ -1558,18 +1493,6 @@ func (t *AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans) GetSt
 	}
 	return t.Status
 }
-func (t *AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans) GetAssigned() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans{}
-	}
-	return t.Assigned
-}
-func (t *AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans) GetDueDate() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans{}
-	}
-	return t.DueDate
-}
 func (t *AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans) GetPriority() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans{}
@@ -1582,11 +1505,11 @@ func (t *AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans) GetSo
 	}
 	return t.Source
 }
-func (t *AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans) GetJsonschema() map[string]interface{} {
+func (t *AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans) GetDetails() map[string]interface{} {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans{}
 	}
-	return t.Jsonschema
+	return t.Details
 }
 
 type AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult struct {
@@ -1694,14 +1617,13 @@ type AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls struct {
 	Status           *string                "json:\"status,omitempty\" graphql:\"status\""
 	ControlType      *string                "json:\"controlType,omitempty\" graphql:\"controlType\""
 	Version          *string                "json:\"version,omitempty\" graphql:\"version\""
-	Owner            *string                "json:\"owner,omitempty\" graphql:\"owner\""
 	ControlNumber    *string                "json:\"controlNumber,omitempty\" graphql:\"controlNumber\""
-	ControlFamily    *string                "json:\"controlFamily,omitempty\" graphql:\"controlFamily\""
-	ControlClass     *string                "json:\"controlClass,omitempty\" graphql:\"controlClass\""
+	Family           *string                "json:\"family,omitempty\" graphql:\"family\""
+	Class            *string                "json:\"class,omitempty\" graphql:\"class\""
 	Source           *string                "json:\"source,omitempty\" graphql:\"source\""
 	Satisfies        *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
 	MappedFrameworks *string                "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
-	Jsonschema       map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
+	Details          map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 }
 
 func (t *AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls) GetDeletedBy() *string {
@@ -1752,29 +1674,23 @@ func (t *AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls) GetVersion(
 	}
 	return t.Version
 }
-func (t *AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls) GetOwner() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls{}
-	}
-	return t.Owner
-}
 func (t *AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls) GetControlNumber() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls{}
 	}
 	return t.ControlNumber
 }
-func (t *AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls) GetControlFamily() *string {
+func (t *AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls) GetFamily() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls{}
 	}
-	return t.ControlFamily
+	return t.Family
 }
-func (t *AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls) GetControlClass() *string {
+func (t *AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls) GetClass() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls{}
 	}
-	return t.ControlClass
+	return t.Class
 }
 func (t *AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls) GetSource() *string {
 	if t == nil {
@@ -1794,11 +1710,11 @@ func (t *AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls) GetMappedFr
 	}
 	return t.MappedFrameworks
 }
-func (t *AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls) GetJsonschema() map[string]interface{} {
+func (t *AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls) GetDetails() map[string]interface{} {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls{}
 	}
-	return t.Jsonschema
+	return t.Details
 }
 
 type AdminSearch_AdminSearch_Nodes_ControlSearchResult struct {
@@ -1821,13 +1737,12 @@ type AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjective
 	Status               *string                "json:\"status,omitempty\" graphql:\"status\""
 	ControlObjectiveType *string                "json:\"controlObjectiveType,omitempty\" graphql:\"controlObjectiveType\""
 	Version              *string                "json:\"version,omitempty\" graphql:\"version\""
-	Owner                *string                "json:\"owner,omitempty\" graphql:\"owner\""
 	ControlNumber        *string                "json:\"controlNumber,omitempty\" graphql:\"controlNumber\""
-	ControlFamily        *string                "json:\"controlFamily,omitempty\" graphql:\"controlFamily\""
-	ControlClass         *string                "json:\"controlClass,omitempty\" graphql:\"controlClass\""
+	Family               *string                "json:\"family,omitempty\" graphql:\"family\""
+	Class                *string                "json:\"class,omitempty\" graphql:\"class\""
 	Source               *string                "json:\"source,omitempty\" graphql:\"source\""
 	MappedFrameworks     *string                "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
-	Jsonschema           map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
+	Details              map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 }
 
 func (t *AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives) GetDeletedBy() *string {
@@ -1878,29 +1793,23 @@ func (t *AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjec
 	}
 	return t.Version
 }
-func (t *AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives) GetOwner() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives{}
-	}
-	return t.Owner
-}
 func (t *AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives) GetControlNumber() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives{}
 	}
 	return t.ControlNumber
 }
-func (t *AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives) GetControlFamily() *string {
+func (t *AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives) GetFamily() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives{}
 	}
-	return t.ControlFamily
+	return t.Family
 }
-func (t *AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives) GetControlClass() *string {
+func (t *AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives) GetClass() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives{}
 	}
-	return t.ControlClass
+	return t.Class
 }
 func (t *AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives) GetSource() *string {
 	if t == nil {
@@ -1914,11 +1823,11 @@ func (t *AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjec
 	}
 	return t.MappedFrameworks
 }
-func (t *AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives) GetJsonschema() map[string]interface{} {
+func (t *AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives) GetDetails() map[string]interface{} {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult_ControlObjectives{}
 	}
-	return t.Jsonschema
+	return t.Details
 }
 
 type AdminSearch_AdminSearch_Nodes_ControlObjectiveSearchResult struct {
@@ -2746,7 +2655,7 @@ type AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies s
 	Version         *string                "json:\"version,omitempty\" graphql:\"version\""
 	PurposeAndScope *string                "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
 	Background      *string                "json:\"background,omitempty\" graphql:\"background\""
-	Jsonschema      map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
+	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 }
 
 func (t *AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies) GetDeletedBy() *string {
@@ -2809,11 +2718,11 @@ func (t *AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolici
 	}
 	return t.Background
 }
-func (t *AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies) GetJsonschema() map[string]interface{} {
+func (t *AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies) GetDetails() map[string]interface{} {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies{}
 	}
-	return t.Jsonschema
+	return t.Details
 }
 
 type AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult struct {
@@ -2834,7 +2743,7 @@ type AdminSearch_AdminSearch_Nodes_NarrativeSearchResult_Narratives struct {
 	Name        string                 "json:\"name\" graphql:\"name\""
 	Description *string                "json:\"description,omitempty\" graphql:\"description\""
 	Satisfies   *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Jsonschema  map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
+	Details     map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 }
 
 func (t *AdminSearch_AdminSearch_Nodes_NarrativeSearchResult_Narratives) GetDeletedBy() *string {
@@ -2873,11 +2782,11 @@ func (t *AdminSearch_AdminSearch_Nodes_NarrativeSearchResult_Narratives) GetSati
 	}
 	return t.Satisfies
 }
-func (t *AdminSearch_AdminSearch_Nodes_NarrativeSearchResult_Narratives) GetJsonschema() map[string]interface{} {
+func (t *AdminSearch_AdminSearch_Nodes_NarrativeSearchResult_Narratives) GetDetails() map[string]interface{} {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_NarrativeSearchResult_Narratives{}
 	}
-	return t.Jsonschema
+	return t.Details
 }
 
 type AdminSearch_AdminSearch_Nodes_NarrativeSearchResult struct {
@@ -3293,7 +3202,7 @@ type AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures struct {
 	PurposeAndScope *string                "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
 	Background      *string                "json:\"background,omitempty\" graphql:\"background\""
 	Satisfies       *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Jsonschema      map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
+	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 }
 
 func (t *AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures) GetDeletedBy() *string {
@@ -3362,11 +3271,11 @@ func (t *AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures) GetSati
 	}
 	return t.Satisfies
 }
-func (t *AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures) GetJsonschema() map[string]interface{} {
+func (t *AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures) GetDetails() map[string]interface{} {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures{}
 	}
-	return t.Jsonschema
+	return t.Details
 }
 
 type AdminSearch_AdminSearch_Nodes_ProcedureSearchResult struct {
@@ -3389,12 +3298,9 @@ type AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks struct {
 	Status        *string                "json:\"status,omitempty\" graphql:\"status\""
 	RiskType      *string                "json:\"riskType,omitempty\" graphql:\"riskType\""
 	BusinessCosts *string                "json:\"businessCosts,omitempty\" graphql:\"businessCosts\""
-	Impact        *string                "json:\"impact,omitempty\" graphql:\"impact\""
-	Likelihood    *string                "json:\"likelihood,omitempty\" graphql:\"likelihood\""
 	Mitigation    *string                "json:\"mitigation,omitempty\" graphql:\"mitigation\""
 	Satisfies     *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Severity      *string                "json:\"severity,omitempty\" graphql:\"severity\""
-	Jsonschema    map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
+	Details       map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 }
 
 func (t *AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks) GetDeletedBy() *string {
@@ -3445,18 +3351,6 @@ func (t *AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks) GetBusinessCosts(
 	}
 	return t.BusinessCosts
 }
-func (t *AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks) GetImpact() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks{}
-	}
-	return t.Impact
-}
-func (t *AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks) GetLikelihood() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks{}
-	}
-	return t.Likelihood
-}
 func (t *AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks) GetMitigation() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks{}
@@ -3469,17 +3363,11 @@ func (t *AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks) GetSatisfies() *s
 	}
 	return t.Satisfies
 }
-func (t *AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks) GetSeverity() *string {
+func (t *AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks) GetDetails() map[string]interface{} {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks{}
 	}
-	return t.Severity
-}
-func (t *AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks{}
-	}
-	return t.Jsonschema
+	return t.Details
 }
 
 type AdminSearch_AdminSearch_Nodes_RiskSearchResult struct {
@@ -3506,7 +3394,7 @@ type AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards struct {
 	PurposeAndScope *string                "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
 	Background      *string                "json:\"background,omitempty\" graphql:\"background\""
 	Satisfies       *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Jsonschema      map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
+	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 }
 
 func (t *AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards) GetDeletedBy() *string {
@@ -3581,11 +3469,11 @@ func (t *AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards) GetSatisf
 	}
 	return t.Satisfies
 }
-func (t *AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards) GetJsonschema() map[string]interface{} {
+func (t *AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards) GetDetails() map[string]interface{} {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_StandardSearchResult_Standards{}
 	}
-	return t.Jsonschema
+	return t.Details
 }
 
 type AdminSearch_AdminSearch_Nodes_StandardSearchResult struct {
@@ -3600,28 +3488,23 @@ func (t *AdminSearch_AdminSearch_Nodes_StandardSearchResult) GetStandards() []*A
 }
 
 type AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols struct {
-	DeletedBy                      *string                "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
-	ID                             string                 "json:\"id\" graphql:\"id\""
-	Tags                           []string               "json:\"tags,omitempty\" graphql:\"tags\""
-	Name                           string                 "json:\"name\" graphql:\"name\""
-	Description                    *string                "json:\"description,omitempty\" graphql:\"description\""
-	Status                         *string                "json:\"status,omitempty\" graphql:\"status\""
-	SubcontrolType                 *string                "json:\"subcontrolType,omitempty\" graphql:\"subcontrolType\""
-	Version                        *string                "json:\"version,omitempty\" graphql:\"version\""
-	Owner                          *string                "json:\"owner,omitempty\" graphql:\"owner\""
-	SubcontrolNumber               *string                "json:\"subcontrolNumber,omitempty\" graphql:\"subcontrolNumber\""
-	SubcontrolFamily               *string                "json:\"subcontrolFamily,omitempty\" graphql:\"subcontrolFamily\""
-	SubcontrolClass                *string                "json:\"subcontrolClass,omitempty\" graphql:\"subcontrolClass\""
-	Source                         *string                "json:\"source,omitempty\" graphql:\"source\""
-	MappedFrameworks               *string                "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
-	AssignedTo                     *string                "json:\"assignedTo,omitempty\" graphql:\"assignedTo\""
-	ImplementationStatus           *string                "json:\"implementationStatus,omitempty\" graphql:\"implementationStatus\""
-	ImplementationNotes            *string                "json:\"implementationNotes,omitempty\" graphql:\"implementationNotes\""
-	ImplementationDate             *string                "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
-	ImplementationEvidence         *string                "json:\"implementationEvidence,omitempty\" graphql:\"implementationEvidence\""
-	ImplementationVerification     *string                "json:\"implementationVerification,omitempty\" graphql:\"implementationVerification\""
-	ImplementationVerificationDate *string                "json:\"implementationVerificationDate,omitempty\" graphql:\"implementationVerificationDate\""
-	Jsonschema                     map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
+	DeletedBy                  *string                "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	ID                         string                 "json:\"id\" graphql:\"id\""
+	Tags                       []string               "json:\"tags,omitempty\" graphql:\"tags\""
+	Name                       string                 "json:\"name\" graphql:\"name\""
+	Description                *string                "json:\"description,omitempty\" graphql:\"description\""
+	Status                     *string                "json:\"status,omitempty\" graphql:\"status\""
+	SubcontrolType             *string                "json:\"subcontrolType,omitempty\" graphql:\"subcontrolType\""
+	Version                    *string                "json:\"version,omitempty\" graphql:\"version\""
+	SubcontrolNumber           *string                "json:\"subcontrolNumber,omitempty\" graphql:\"subcontrolNumber\""
+	Family                     *string                "json:\"family,omitempty\" graphql:\"family\""
+	Class                      *string                "json:\"class,omitempty\" graphql:\"class\""
+	Source                     *string                "json:\"source,omitempty\" graphql:\"source\""
+	MappedFrameworks           *string                "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
+	ImplementationEvidence     *string                "json:\"implementationEvidence,omitempty\" graphql:\"implementationEvidence\""
+	ImplementationStatus       *string                "json:\"implementationStatus,omitempty\" graphql:\"implementationStatus\""
+	ImplementationVerification *string                "json:\"implementationVerification,omitempty\" graphql:\"implementationVerification\""
+	Details                    map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 }
 
 func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetDeletedBy() *string {
@@ -3672,29 +3555,23 @@ func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetVe
 	}
 	return t.Version
 }
-func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetOwner() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols{}
-	}
-	return t.Owner
-}
 func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetSubcontrolNumber() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols{}
 	}
 	return t.SubcontrolNumber
 }
-func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetSubcontrolFamily() *string {
+func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetFamily() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols{}
 	}
-	return t.SubcontrolFamily
+	return t.Family
 }
-func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetSubcontrolClass() *string {
+func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetClass() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols{}
 	}
-	return t.SubcontrolClass
+	return t.Class
 }
 func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetSource() *string {
 	if t == nil {
@@ -3708,11 +3585,11 @@ func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetMa
 	}
 	return t.MappedFrameworks
 }
-func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetAssignedTo() *string {
+func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetImplementationEvidence() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols{}
 	}
-	return t.AssignedTo
+	return t.ImplementationEvidence
 }
 func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetImplementationStatus() *string {
 	if t == nil {
@@ -3720,41 +3597,17 @@ func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetIm
 	}
 	return t.ImplementationStatus
 }
-func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetImplementationNotes() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols{}
-	}
-	return t.ImplementationNotes
-}
-func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetImplementationDate() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols{}
-	}
-	return t.ImplementationDate
-}
-func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetImplementationEvidence() *string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols{}
-	}
-	return t.ImplementationEvidence
-}
 func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetImplementationVerification() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols{}
 	}
 	return t.ImplementationVerification
 }
-func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetImplementationVerificationDate() *string {
+func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetDetails() map[string]interface{} {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols{}
 	}
-	return t.ImplementationVerificationDate
-}
-func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols{}
-	}
-	return t.Jsonschema
+	return t.Details
 }
 
 type AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult struct {
@@ -5960,18 +5813,17 @@ func (t *GetContactHistories_ContactHistories) GetEdges() []*GetContactHistories
 }
 
 type CreateBulkCSVControl_CreateBulkCSVControl_Controls struct {
-	ControlClass     *string                "json:\"controlClass,omitempty\" graphql:\"controlClass\""
-	ControlFamily    *string                "json:\"controlFamily,omitempty\" graphql:\"controlFamily\""
+	Class            *string                "json:\"class,omitempty\" graphql:\"class\""
 	ControlNumber    *string                "json:\"controlNumber,omitempty\" graphql:\"controlNumber\""
 	ControlType      *string                "json:\"controlType,omitempty\" graphql:\"controlType\""
 	CreatedAt        *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy        *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description      *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details          map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
+	Family           *string                "json:\"family,omitempty\" graphql:\"family\""
 	ID               string                 "json:\"id\" graphql:\"id\""
-	Jsonschema       map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	MappedFrameworks *string                "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
 	Name             string                 "json:\"name\" graphql:\"name\""
-	Owner            *string                "json:\"owner,omitempty\" graphql:\"owner\""
 	Satisfies        *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
 	Source           *string                "json:\"source,omitempty\" graphql:\"source\""
 	Status           *string                "json:\"status,omitempty\" graphql:\"status\""
@@ -5981,17 +5833,11 @@ type CreateBulkCSVControl_CreateBulkCSVControl_Controls struct {
 	Version          *string                "json:\"version,omitempty\" graphql:\"version\""
 }
 
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetControlClass() *string {
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetClass() *string {
 	if t == nil {
 		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
 	}
-	return t.ControlClass
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetControlFamily() *string {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.ControlFamily
+	return t.Class
 }
 func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetControlNumber() *string {
 	if t == nil {
@@ -6023,17 +5869,23 @@ func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetDescription() *s
 	}
 	return t.Description
 }
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.Details
+}
+func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetFamily() *string {
+	if t == nil {
+		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
+	}
+	return t.Family
+}
 func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetID() string {
 	if t == nil {
 		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
 	}
 	return t.ID
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.Jsonschema
 }
 func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetMappedFrameworks() *string {
 	if t == nil {
@@ -6046,12 +5898,6 @@ func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetName() string {
 		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
 	}
 	return t.Name
-}
-func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetOwner() *string {
-	if t == nil {
-		t = &CreateBulkCSVControl_CreateBulkCSVControl_Controls{}
-	}
-	return t.Owner
 }
 func (t *CreateBulkCSVControl_CreateBulkCSVControl_Controls) GetSatisfies() *string {
 	if t == nil {
@@ -6108,18 +5954,17 @@ func (t *CreateBulkCSVControl_CreateBulkCSVControl) GetControls() []*CreateBulkC
 }
 
 type CreateBulkControl_CreateBulkControl_Controls struct {
-	ControlClass     *string                "json:\"controlClass,omitempty\" graphql:\"controlClass\""
-	ControlFamily    *string                "json:\"controlFamily,omitempty\" graphql:\"controlFamily\""
+	Class            *string                "json:\"class,omitempty\" graphql:\"class\""
 	ControlNumber    *string                "json:\"controlNumber,omitempty\" graphql:\"controlNumber\""
 	ControlType      *string                "json:\"controlType,omitempty\" graphql:\"controlType\""
 	CreatedAt        *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy        *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description      *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details          map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
+	Family           *string                "json:\"family,omitempty\" graphql:\"family\""
 	ID               string                 "json:\"id\" graphql:\"id\""
-	Jsonschema       map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	MappedFrameworks *string                "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
 	Name             string                 "json:\"name\" graphql:\"name\""
-	Owner            *string                "json:\"owner,omitempty\" graphql:\"owner\""
 	Satisfies        *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
 	Source           *string                "json:\"source,omitempty\" graphql:\"source\""
 	Status           *string                "json:\"status,omitempty\" graphql:\"status\""
@@ -6129,17 +5974,11 @@ type CreateBulkControl_CreateBulkControl_Controls struct {
 	Version          *string                "json:\"version,omitempty\" graphql:\"version\""
 }
 
-func (t *CreateBulkControl_CreateBulkControl_Controls) GetControlClass() *string {
+func (t *CreateBulkControl_CreateBulkControl_Controls) GetClass() *string {
 	if t == nil {
 		t = &CreateBulkControl_CreateBulkControl_Controls{}
 	}
-	return t.ControlClass
-}
-func (t *CreateBulkControl_CreateBulkControl_Controls) GetControlFamily() *string {
-	if t == nil {
-		t = &CreateBulkControl_CreateBulkControl_Controls{}
-	}
-	return t.ControlFamily
+	return t.Class
 }
 func (t *CreateBulkControl_CreateBulkControl_Controls) GetControlNumber() *string {
 	if t == nil {
@@ -6171,17 +6010,23 @@ func (t *CreateBulkControl_CreateBulkControl_Controls) GetDescription() *string 
 	}
 	return t.Description
 }
+func (t *CreateBulkControl_CreateBulkControl_Controls) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &CreateBulkControl_CreateBulkControl_Controls{}
+	}
+	return t.Details
+}
+func (t *CreateBulkControl_CreateBulkControl_Controls) GetFamily() *string {
+	if t == nil {
+		t = &CreateBulkControl_CreateBulkControl_Controls{}
+	}
+	return t.Family
+}
 func (t *CreateBulkControl_CreateBulkControl_Controls) GetID() string {
 	if t == nil {
 		t = &CreateBulkControl_CreateBulkControl_Controls{}
 	}
 	return t.ID
-}
-func (t *CreateBulkControl_CreateBulkControl_Controls) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &CreateBulkControl_CreateBulkControl_Controls{}
-	}
-	return t.Jsonschema
 }
 func (t *CreateBulkControl_CreateBulkControl_Controls) GetMappedFrameworks() *string {
 	if t == nil {
@@ -6194,12 +6039,6 @@ func (t *CreateBulkControl_CreateBulkControl_Controls) GetName() string {
 		t = &CreateBulkControl_CreateBulkControl_Controls{}
 	}
 	return t.Name
-}
-func (t *CreateBulkControl_CreateBulkControl_Controls) GetOwner() *string {
-	if t == nil {
-		t = &CreateBulkControl_CreateBulkControl_Controls{}
-	}
-	return t.Owner
 }
 func (t *CreateBulkControl_CreateBulkControl_Controls) GetSatisfies() *string {
 	if t == nil {
@@ -6256,18 +6095,17 @@ func (t *CreateBulkControl_CreateBulkControl) GetControls() []*CreateBulkControl
 }
 
 type CreateControl_CreateControl_Control struct {
-	ControlClass     *string                "json:\"controlClass,omitempty\" graphql:\"controlClass\""
-	ControlFamily    *string                "json:\"controlFamily,omitempty\" graphql:\"controlFamily\""
+	Class            *string                "json:\"class,omitempty\" graphql:\"class\""
 	ControlNumber    *string                "json:\"controlNumber,omitempty\" graphql:\"controlNumber\""
 	ControlType      *string                "json:\"controlType,omitempty\" graphql:\"controlType\""
 	CreatedAt        *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy        *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description      *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details          map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
+	Family           *string                "json:\"family,omitempty\" graphql:\"family\""
 	ID               string                 "json:\"id\" graphql:\"id\""
-	Jsonschema       map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	MappedFrameworks *string                "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
 	Name             string                 "json:\"name\" graphql:\"name\""
-	Owner            *string                "json:\"owner,omitempty\" graphql:\"owner\""
 	Satisfies        *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
 	Source           *string                "json:\"source,omitempty\" graphql:\"source\""
 	Status           *string                "json:\"status,omitempty\" graphql:\"status\""
@@ -6277,17 +6115,11 @@ type CreateControl_CreateControl_Control struct {
 	Version          *string                "json:\"version,omitempty\" graphql:\"version\""
 }
 
-func (t *CreateControl_CreateControl_Control) GetControlClass() *string {
+func (t *CreateControl_CreateControl_Control) GetClass() *string {
 	if t == nil {
 		t = &CreateControl_CreateControl_Control{}
 	}
-	return t.ControlClass
-}
-func (t *CreateControl_CreateControl_Control) GetControlFamily() *string {
-	if t == nil {
-		t = &CreateControl_CreateControl_Control{}
-	}
-	return t.ControlFamily
+	return t.Class
 }
 func (t *CreateControl_CreateControl_Control) GetControlNumber() *string {
 	if t == nil {
@@ -6319,17 +6151,23 @@ func (t *CreateControl_CreateControl_Control) GetDescription() *string {
 	}
 	return t.Description
 }
+func (t *CreateControl_CreateControl_Control) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &CreateControl_CreateControl_Control{}
+	}
+	return t.Details
+}
+func (t *CreateControl_CreateControl_Control) GetFamily() *string {
+	if t == nil {
+		t = &CreateControl_CreateControl_Control{}
+	}
+	return t.Family
+}
 func (t *CreateControl_CreateControl_Control) GetID() string {
 	if t == nil {
 		t = &CreateControl_CreateControl_Control{}
 	}
 	return t.ID
-}
-func (t *CreateControl_CreateControl_Control) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &CreateControl_CreateControl_Control{}
-	}
-	return t.Jsonschema
 }
 func (t *CreateControl_CreateControl_Control) GetMappedFrameworks() *string {
 	if t == nil {
@@ -6342,12 +6180,6 @@ func (t *CreateControl_CreateControl_Control) GetName() string {
 		t = &CreateControl_CreateControl_Control{}
 	}
 	return t.Name
-}
-func (t *CreateControl_CreateControl_Control) GetOwner() *string {
-	if t == nil {
-		t = &CreateControl_CreateControl_Control{}
-	}
-	return t.Owner
 }
 func (t *CreateControl_CreateControl_Control) GetSatisfies() *string {
 	if t == nil {
@@ -6415,18 +6247,17 @@ func (t *DeleteControl_DeleteControl) GetDeletedID() string {
 }
 
 type GetAllControls_Controls_Edges_Node struct {
-	ControlClass     *string                "json:\"controlClass,omitempty\" graphql:\"controlClass\""
-	ControlFamily    *string                "json:\"controlFamily,omitempty\" graphql:\"controlFamily\""
+	Class            *string                "json:\"class,omitempty\" graphql:\"class\""
 	ControlNumber    *string                "json:\"controlNumber,omitempty\" graphql:\"controlNumber\""
 	ControlType      *string                "json:\"controlType,omitempty\" graphql:\"controlType\""
 	CreatedAt        *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy        *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description      *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details          map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
+	Family           *string                "json:\"family,omitempty\" graphql:\"family\""
 	ID               string                 "json:\"id\" graphql:\"id\""
-	Jsonschema       map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	MappedFrameworks *string                "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
 	Name             string                 "json:\"name\" graphql:\"name\""
-	Owner            *string                "json:\"owner,omitempty\" graphql:\"owner\""
 	Satisfies        *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
 	Source           *string                "json:\"source,omitempty\" graphql:\"source\""
 	Status           *string                "json:\"status,omitempty\" graphql:\"status\""
@@ -6436,17 +6267,11 @@ type GetAllControls_Controls_Edges_Node struct {
 	Version          *string                "json:\"version,omitempty\" graphql:\"version\""
 }
 
-func (t *GetAllControls_Controls_Edges_Node) GetControlClass() *string {
+func (t *GetAllControls_Controls_Edges_Node) GetClass() *string {
 	if t == nil {
 		t = &GetAllControls_Controls_Edges_Node{}
 	}
-	return t.ControlClass
-}
-func (t *GetAllControls_Controls_Edges_Node) GetControlFamily() *string {
-	if t == nil {
-		t = &GetAllControls_Controls_Edges_Node{}
-	}
-	return t.ControlFamily
+	return t.Class
 }
 func (t *GetAllControls_Controls_Edges_Node) GetControlNumber() *string {
 	if t == nil {
@@ -6478,17 +6303,23 @@ func (t *GetAllControls_Controls_Edges_Node) GetDescription() *string {
 	}
 	return t.Description
 }
+func (t *GetAllControls_Controls_Edges_Node) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetAllControls_Controls_Edges_Node{}
+	}
+	return t.Details
+}
+func (t *GetAllControls_Controls_Edges_Node) GetFamily() *string {
+	if t == nil {
+		t = &GetAllControls_Controls_Edges_Node{}
+	}
+	return t.Family
+}
 func (t *GetAllControls_Controls_Edges_Node) GetID() string {
 	if t == nil {
 		t = &GetAllControls_Controls_Edges_Node{}
 	}
 	return t.ID
-}
-func (t *GetAllControls_Controls_Edges_Node) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &GetAllControls_Controls_Edges_Node{}
-	}
-	return t.Jsonschema
 }
 func (t *GetAllControls_Controls_Edges_Node) GetMappedFrameworks() *string {
 	if t == nil {
@@ -6501,12 +6332,6 @@ func (t *GetAllControls_Controls_Edges_Node) GetName() string {
 		t = &GetAllControls_Controls_Edges_Node{}
 	}
 	return t.Name
-}
-func (t *GetAllControls_Controls_Edges_Node) GetOwner() *string {
-	if t == nil {
-		t = &GetAllControls_Controls_Edges_Node{}
-	}
-	return t.Owner
 }
 func (t *GetAllControls_Controls_Edges_Node) GetSatisfies() *string {
 	if t == nil {
@@ -6574,18 +6399,17 @@ func (t *GetAllControls_Controls) GetEdges() []*GetAllControls_Controls_Edges {
 }
 
 type GetControlByID_Control struct {
-	ControlClass     *string                "json:\"controlClass,omitempty\" graphql:\"controlClass\""
-	ControlFamily    *string                "json:\"controlFamily,omitempty\" graphql:\"controlFamily\""
+	Class            *string                "json:\"class,omitempty\" graphql:\"class\""
 	ControlNumber    *string                "json:\"controlNumber,omitempty\" graphql:\"controlNumber\""
 	ControlType      *string                "json:\"controlType,omitempty\" graphql:\"controlType\""
 	CreatedAt        *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy        *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description      *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details          map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
+	Family           *string                "json:\"family,omitempty\" graphql:\"family\""
 	ID               string                 "json:\"id\" graphql:\"id\""
-	Jsonschema       map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	MappedFrameworks *string                "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
 	Name             string                 "json:\"name\" graphql:\"name\""
-	Owner            *string                "json:\"owner,omitempty\" graphql:\"owner\""
 	Satisfies        *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
 	Source           *string                "json:\"source,omitempty\" graphql:\"source\""
 	Status           *string                "json:\"status,omitempty\" graphql:\"status\""
@@ -6595,17 +6419,11 @@ type GetControlByID_Control struct {
 	Version          *string                "json:\"version,omitempty\" graphql:\"version\""
 }
 
-func (t *GetControlByID_Control) GetControlClass() *string {
+func (t *GetControlByID_Control) GetClass() *string {
 	if t == nil {
 		t = &GetControlByID_Control{}
 	}
-	return t.ControlClass
-}
-func (t *GetControlByID_Control) GetControlFamily() *string {
-	if t == nil {
-		t = &GetControlByID_Control{}
-	}
-	return t.ControlFamily
+	return t.Class
 }
 func (t *GetControlByID_Control) GetControlNumber() *string {
 	if t == nil {
@@ -6637,17 +6455,23 @@ func (t *GetControlByID_Control) GetDescription() *string {
 	}
 	return t.Description
 }
+func (t *GetControlByID_Control) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetControlByID_Control{}
+	}
+	return t.Details
+}
+func (t *GetControlByID_Control) GetFamily() *string {
+	if t == nil {
+		t = &GetControlByID_Control{}
+	}
+	return t.Family
+}
 func (t *GetControlByID_Control) GetID() string {
 	if t == nil {
 		t = &GetControlByID_Control{}
 	}
 	return t.ID
-}
-func (t *GetControlByID_Control) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &GetControlByID_Control{}
-	}
-	return t.Jsonschema
 }
 func (t *GetControlByID_Control) GetMappedFrameworks() *string {
 	if t == nil {
@@ -6660,12 +6484,6 @@ func (t *GetControlByID_Control) GetName() string {
 		t = &GetControlByID_Control{}
 	}
 	return t.Name
-}
-func (t *GetControlByID_Control) GetOwner() *string {
-	if t == nil {
-		t = &GetControlByID_Control{}
-	}
-	return t.Owner
 }
 func (t *GetControlByID_Control) GetSatisfies() *string {
 	if t == nil {
@@ -6711,18 +6529,17 @@ func (t *GetControlByID_Control) GetVersion() *string {
 }
 
 type GetControls_Controls_Edges_Node struct {
-	ControlClass     *string                "json:\"controlClass,omitempty\" graphql:\"controlClass\""
-	ControlFamily    *string                "json:\"controlFamily,omitempty\" graphql:\"controlFamily\""
+	Class            *string                "json:\"class,omitempty\" graphql:\"class\""
 	ControlNumber    *string                "json:\"controlNumber,omitempty\" graphql:\"controlNumber\""
 	ControlType      *string                "json:\"controlType,omitempty\" graphql:\"controlType\""
 	CreatedAt        *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy        *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description      *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details          map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
+	Family           *string                "json:\"family,omitempty\" graphql:\"family\""
 	ID               string                 "json:\"id\" graphql:\"id\""
-	Jsonschema       map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	MappedFrameworks *string                "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
 	Name             string                 "json:\"name\" graphql:\"name\""
-	Owner            *string                "json:\"owner,omitempty\" graphql:\"owner\""
 	Satisfies        *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
 	Source           *string                "json:\"source,omitempty\" graphql:\"source\""
 	Status           *string                "json:\"status,omitempty\" graphql:\"status\""
@@ -6732,17 +6549,11 @@ type GetControls_Controls_Edges_Node struct {
 	Version          *string                "json:\"version,omitempty\" graphql:\"version\""
 }
 
-func (t *GetControls_Controls_Edges_Node) GetControlClass() *string {
+func (t *GetControls_Controls_Edges_Node) GetClass() *string {
 	if t == nil {
 		t = &GetControls_Controls_Edges_Node{}
 	}
-	return t.ControlClass
-}
-func (t *GetControls_Controls_Edges_Node) GetControlFamily() *string {
-	if t == nil {
-		t = &GetControls_Controls_Edges_Node{}
-	}
-	return t.ControlFamily
+	return t.Class
 }
 func (t *GetControls_Controls_Edges_Node) GetControlNumber() *string {
 	if t == nil {
@@ -6774,17 +6585,23 @@ func (t *GetControls_Controls_Edges_Node) GetDescription() *string {
 	}
 	return t.Description
 }
+func (t *GetControls_Controls_Edges_Node) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetControls_Controls_Edges_Node{}
+	}
+	return t.Details
+}
+func (t *GetControls_Controls_Edges_Node) GetFamily() *string {
+	if t == nil {
+		t = &GetControls_Controls_Edges_Node{}
+	}
+	return t.Family
+}
 func (t *GetControls_Controls_Edges_Node) GetID() string {
 	if t == nil {
 		t = &GetControls_Controls_Edges_Node{}
 	}
 	return t.ID
-}
-func (t *GetControls_Controls_Edges_Node) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &GetControls_Controls_Edges_Node{}
-	}
-	return t.Jsonschema
 }
 func (t *GetControls_Controls_Edges_Node) GetMappedFrameworks() *string {
 	if t == nil {
@@ -6797,12 +6614,6 @@ func (t *GetControls_Controls_Edges_Node) GetName() string {
 		t = &GetControls_Controls_Edges_Node{}
 	}
 	return t.Name
-}
-func (t *GetControls_Controls_Edges_Node) GetOwner() *string {
-	if t == nil {
-		t = &GetControls_Controls_Edges_Node{}
-	}
-	return t.Owner
 }
 func (t *GetControls_Controls_Edges_Node) GetSatisfies() *string {
 	if t == nil {
@@ -6870,18 +6681,17 @@ func (t *GetControls_Controls) GetEdges() []*GetControls_Controls_Edges {
 }
 
 type UpdateControl_UpdateControl_Control struct {
-	ControlClass     *string                "json:\"controlClass,omitempty\" graphql:\"controlClass\""
-	ControlFamily    *string                "json:\"controlFamily,omitempty\" graphql:\"controlFamily\""
+	Class            *string                "json:\"class,omitempty\" graphql:\"class\""
 	ControlNumber    *string                "json:\"controlNumber,omitempty\" graphql:\"controlNumber\""
 	ControlType      *string                "json:\"controlType,omitempty\" graphql:\"controlType\""
 	CreatedAt        *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy        *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description      *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details          map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
+	Family           *string                "json:\"family,omitempty\" graphql:\"family\""
 	ID               string                 "json:\"id\" graphql:\"id\""
-	Jsonschema       map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	MappedFrameworks *string                "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
 	Name             string                 "json:\"name\" graphql:\"name\""
-	Owner            *string                "json:\"owner,omitempty\" graphql:\"owner\""
 	Satisfies        *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
 	Source           *string                "json:\"source,omitempty\" graphql:\"source\""
 	Status           *string                "json:\"status,omitempty\" graphql:\"status\""
@@ -6891,17 +6701,11 @@ type UpdateControl_UpdateControl_Control struct {
 	Version          *string                "json:\"version,omitempty\" graphql:\"version\""
 }
 
-func (t *UpdateControl_UpdateControl_Control) GetControlClass() *string {
+func (t *UpdateControl_UpdateControl_Control) GetClass() *string {
 	if t == nil {
 		t = &UpdateControl_UpdateControl_Control{}
 	}
-	return t.ControlClass
-}
-func (t *UpdateControl_UpdateControl_Control) GetControlFamily() *string {
-	if t == nil {
-		t = &UpdateControl_UpdateControl_Control{}
-	}
-	return t.ControlFamily
+	return t.Class
 }
 func (t *UpdateControl_UpdateControl_Control) GetControlNumber() *string {
 	if t == nil {
@@ -6933,17 +6737,23 @@ func (t *UpdateControl_UpdateControl_Control) GetDescription() *string {
 	}
 	return t.Description
 }
+func (t *UpdateControl_UpdateControl_Control) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &UpdateControl_UpdateControl_Control{}
+	}
+	return t.Details
+}
+func (t *UpdateControl_UpdateControl_Control) GetFamily() *string {
+	if t == nil {
+		t = &UpdateControl_UpdateControl_Control{}
+	}
+	return t.Family
+}
 func (t *UpdateControl_UpdateControl_Control) GetID() string {
 	if t == nil {
 		t = &UpdateControl_UpdateControl_Control{}
 	}
 	return t.ID
-}
-func (t *UpdateControl_UpdateControl_Control) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &UpdateControl_UpdateControl_Control{}
-	}
-	return t.Jsonschema
 }
 func (t *UpdateControl_UpdateControl_Control) GetMappedFrameworks() *string {
 	if t == nil {
@@ -6956,12 +6766,6 @@ func (t *UpdateControl_UpdateControl_Control) GetName() string {
 		t = &UpdateControl_UpdateControl_Control{}
 	}
 	return t.Name
-}
-func (t *UpdateControl_UpdateControl_Control) GetOwner() *string {
-	if t == nil {
-		t = &UpdateControl_UpdateControl_Control{}
-	}
-	return t.Owner
 }
 func (t *UpdateControl_UpdateControl_Control) GetSatisfies() *string {
 	if t == nil {
@@ -7018,20 +6822,19 @@ func (t *UpdateControl_UpdateControl) GetControl() *UpdateControl_UpdateControl_
 }
 
 type GetAllControlHistories_ControlHistories_Edges_Node struct {
-	ControlClass     *string                "json:\"controlClass,omitempty\" graphql:\"controlClass\""
-	ControlFamily    *string                "json:\"controlFamily,omitempty\" graphql:\"controlFamily\""
+	Class            *string                "json:\"class,omitempty\" graphql:\"class\""
 	ControlNumber    *string                "json:\"controlNumber,omitempty\" graphql:\"controlNumber\""
 	ControlType      *string                "json:\"controlType,omitempty\" graphql:\"controlType\""
 	CreatedAt        *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy        *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description      *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details          map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
+	Family           *string                "json:\"family,omitempty\" graphql:\"family\""
 	HistoryTime      time.Time              "json:\"historyTime\" graphql:\"historyTime\""
 	ID               string                 "json:\"id\" graphql:\"id\""
-	Jsonschema       map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	MappedFrameworks *string                "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
 	Name             string                 "json:\"name\" graphql:\"name\""
 	Operation        history.OpType         "json:\"operation\" graphql:\"operation\""
-	Owner            *string                "json:\"owner,omitempty\" graphql:\"owner\""
 	Ref              *string                "json:\"ref,omitempty\" graphql:\"ref\""
 	Satisfies        *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
 	Source           *string                "json:\"source,omitempty\" graphql:\"source\""
@@ -7042,17 +6845,11 @@ type GetAllControlHistories_ControlHistories_Edges_Node struct {
 	Version          *string                "json:\"version,omitempty\" graphql:\"version\""
 }
 
-func (t *GetAllControlHistories_ControlHistories_Edges_Node) GetControlClass() *string {
+func (t *GetAllControlHistories_ControlHistories_Edges_Node) GetClass() *string {
 	if t == nil {
 		t = &GetAllControlHistories_ControlHistories_Edges_Node{}
 	}
-	return t.ControlClass
-}
-func (t *GetAllControlHistories_ControlHistories_Edges_Node) GetControlFamily() *string {
-	if t == nil {
-		t = &GetAllControlHistories_ControlHistories_Edges_Node{}
-	}
-	return t.ControlFamily
+	return t.Class
 }
 func (t *GetAllControlHistories_ControlHistories_Edges_Node) GetControlNumber() *string {
 	if t == nil {
@@ -7084,6 +6881,18 @@ func (t *GetAllControlHistories_ControlHistories_Edges_Node) GetDescription() *s
 	}
 	return t.Description
 }
+func (t *GetAllControlHistories_ControlHistories_Edges_Node) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetAllControlHistories_ControlHistories_Edges_Node{}
+	}
+	return t.Details
+}
+func (t *GetAllControlHistories_ControlHistories_Edges_Node) GetFamily() *string {
+	if t == nil {
+		t = &GetAllControlHistories_ControlHistories_Edges_Node{}
+	}
+	return t.Family
+}
 func (t *GetAllControlHistories_ControlHistories_Edges_Node) GetHistoryTime() *time.Time {
 	if t == nil {
 		t = &GetAllControlHistories_ControlHistories_Edges_Node{}
@@ -7095,12 +6904,6 @@ func (t *GetAllControlHistories_ControlHistories_Edges_Node) GetID() string {
 		t = &GetAllControlHistories_ControlHistories_Edges_Node{}
 	}
 	return t.ID
-}
-func (t *GetAllControlHistories_ControlHistories_Edges_Node) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &GetAllControlHistories_ControlHistories_Edges_Node{}
-	}
-	return t.Jsonschema
 }
 func (t *GetAllControlHistories_ControlHistories_Edges_Node) GetMappedFrameworks() *string {
 	if t == nil {
@@ -7119,12 +6922,6 @@ func (t *GetAllControlHistories_ControlHistories_Edges_Node) GetOperation() *his
 		t = &GetAllControlHistories_ControlHistories_Edges_Node{}
 	}
 	return &t.Operation
-}
-func (t *GetAllControlHistories_ControlHistories_Edges_Node) GetOwner() *string {
-	if t == nil {
-		t = &GetAllControlHistories_ControlHistories_Edges_Node{}
-	}
-	return t.Owner
 }
 func (t *GetAllControlHistories_ControlHistories_Edges_Node) GetRef() *string {
 	if t == nil {
@@ -7198,20 +6995,19 @@ func (t *GetAllControlHistories_ControlHistories) GetEdges() []*GetAllControlHis
 }
 
 type GetControlHistories_ControlHistories_Edges_Node struct {
-	ControlClass     *string                "json:\"controlClass,omitempty\" graphql:\"controlClass\""
-	ControlFamily    *string                "json:\"controlFamily,omitempty\" graphql:\"controlFamily\""
+	Class            *string                "json:\"class,omitempty\" graphql:\"class\""
 	ControlNumber    *string                "json:\"controlNumber,omitempty\" graphql:\"controlNumber\""
 	ControlType      *string                "json:\"controlType,omitempty\" graphql:\"controlType\""
 	CreatedAt        *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy        *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description      *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details          map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
+	Family           *string                "json:\"family,omitempty\" graphql:\"family\""
 	HistoryTime      time.Time              "json:\"historyTime\" graphql:\"historyTime\""
 	ID               string                 "json:\"id\" graphql:\"id\""
-	Jsonschema       map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	MappedFrameworks *string                "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
 	Name             string                 "json:\"name\" graphql:\"name\""
 	Operation        history.OpType         "json:\"operation\" graphql:\"operation\""
-	Owner            *string                "json:\"owner,omitempty\" graphql:\"owner\""
 	Ref              *string                "json:\"ref,omitempty\" graphql:\"ref\""
 	Satisfies        *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
 	Source           *string                "json:\"source,omitempty\" graphql:\"source\""
@@ -7222,17 +7018,11 @@ type GetControlHistories_ControlHistories_Edges_Node struct {
 	Version          *string                "json:\"version,omitempty\" graphql:\"version\""
 }
 
-func (t *GetControlHistories_ControlHistories_Edges_Node) GetControlClass() *string {
+func (t *GetControlHistories_ControlHistories_Edges_Node) GetClass() *string {
 	if t == nil {
 		t = &GetControlHistories_ControlHistories_Edges_Node{}
 	}
-	return t.ControlClass
-}
-func (t *GetControlHistories_ControlHistories_Edges_Node) GetControlFamily() *string {
-	if t == nil {
-		t = &GetControlHistories_ControlHistories_Edges_Node{}
-	}
-	return t.ControlFamily
+	return t.Class
 }
 func (t *GetControlHistories_ControlHistories_Edges_Node) GetControlNumber() *string {
 	if t == nil {
@@ -7264,6 +7054,18 @@ func (t *GetControlHistories_ControlHistories_Edges_Node) GetDescription() *stri
 	}
 	return t.Description
 }
+func (t *GetControlHistories_ControlHistories_Edges_Node) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetControlHistories_ControlHistories_Edges_Node{}
+	}
+	return t.Details
+}
+func (t *GetControlHistories_ControlHistories_Edges_Node) GetFamily() *string {
+	if t == nil {
+		t = &GetControlHistories_ControlHistories_Edges_Node{}
+	}
+	return t.Family
+}
 func (t *GetControlHistories_ControlHistories_Edges_Node) GetHistoryTime() *time.Time {
 	if t == nil {
 		t = &GetControlHistories_ControlHistories_Edges_Node{}
@@ -7275,12 +7077,6 @@ func (t *GetControlHistories_ControlHistories_Edges_Node) GetID() string {
 		t = &GetControlHistories_ControlHistories_Edges_Node{}
 	}
 	return t.ID
-}
-func (t *GetControlHistories_ControlHistories_Edges_Node) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &GetControlHistories_ControlHistories_Edges_Node{}
-	}
-	return t.Jsonschema
 }
 func (t *GetControlHistories_ControlHistories_Edges_Node) GetMappedFrameworks() *string {
 	if t == nil {
@@ -7299,12 +7095,6 @@ func (t *GetControlHistories_ControlHistories_Edges_Node) GetOperation() *histor
 		t = &GetControlHistories_ControlHistories_Edges_Node{}
 	}
 	return &t.Operation
-}
-func (t *GetControlHistories_ControlHistories_Edges_Node) GetOwner() *string {
-	if t == nil {
-		t = &GetControlHistories_ControlHistories_Edges_Node{}
-	}
-	return t.Owner
 }
 func (t *GetControlHistories_ControlHistories_Edges_Node) GetRef() *string {
 	if t == nil {
@@ -7378,18 +7168,17 @@ func (t *GetControlHistories_ControlHistories) GetEdges() []*GetControlHistories
 }
 
 type CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives struct {
-	ControlClass         *string                "json:\"controlClass,omitempty\" graphql:\"controlClass\""
-	ControlFamily        *string                "json:\"controlFamily,omitempty\" graphql:\"controlFamily\""
+	Class                *string                "json:\"class,omitempty\" graphql:\"class\""
 	ControlNumber        *string                "json:\"controlNumber,omitempty\" graphql:\"controlNumber\""
 	ControlObjectiveType *string                "json:\"controlObjectiveType,omitempty\" graphql:\"controlObjectiveType\""
 	CreatedAt            *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy            *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description          *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details              map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
+	Family               *string                "json:\"family,omitempty\" graphql:\"family\""
 	ID                   string                 "json:\"id\" graphql:\"id\""
-	Jsonschema           map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	MappedFrameworks     *string                "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
 	Name                 string                 "json:\"name\" graphql:\"name\""
-	Owner                *string                "json:\"owner,omitempty\" graphql:\"owner\""
 	Source               *string                "json:\"source,omitempty\" graphql:\"source\""
 	Status               *string                "json:\"status,omitempty\" graphql:\"status\""
 	Tags                 []string               "json:\"tags,omitempty\" graphql:\"tags\""
@@ -7398,17 +7187,11 @@ type CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectiv
 	Version              *string                "json:\"version,omitempty\" graphql:\"version\""
 }
 
-func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetControlClass() *string {
+func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetClass() *string {
 	if t == nil {
 		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
 	}
-	return t.ControlClass
-}
-func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetControlFamily() *string {
-	if t == nil {
-		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
-	}
-	return t.ControlFamily
+	return t.Class
 }
 func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetControlNumber() *string {
 	if t == nil {
@@ -7440,17 +7223,23 @@ func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObje
 	}
 	return t.Description
 }
+func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
+	}
+	return t.Details
+}
+func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetFamily() *string {
+	if t == nil {
+		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
+	}
+	return t.Family
+}
 func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetID() string {
 	if t == nil {
 		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
 	}
 	return t.ID
-}
-func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
-	}
-	return t.Jsonschema
 }
 func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetMappedFrameworks() *string {
 	if t == nil {
@@ -7463,12 +7252,6 @@ func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObje
 		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
 	}
 	return t.Name
-}
-func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetOwner() *string {
-	if t == nil {
-		t = &CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives{}
-	}
-	return t.Owner
 }
 func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective_ControlObjectives) GetSource() *string {
 	if t == nil {
@@ -7519,18 +7302,17 @@ func (t *CreateBulkCSVControlObjective_CreateBulkCSVControlObjective) GetControl
 }
 
 type CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives struct {
-	ControlClass         *string                "json:\"controlClass,omitempty\" graphql:\"controlClass\""
-	ControlFamily        *string                "json:\"controlFamily,omitempty\" graphql:\"controlFamily\""
+	Class                *string                "json:\"class,omitempty\" graphql:\"class\""
 	ControlNumber        *string                "json:\"controlNumber,omitempty\" graphql:\"controlNumber\""
 	ControlObjectiveType *string                "json:\"controlObjectiveType,omitempty\" graphql:\"controlObjectiveType\""
 	CreatedAt            *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy            *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description          *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details              map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
+	Family               *string                "json:\"family,omitempty\" graphql:\"family\""
 	ID                   string                 "json:\"id\" graphql:\"id\""
-	Jsonschema           map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	MappedFrameworks     *string                "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
 	Name                 string                 "json:\"name\" graphql:\"name\""
-	Owner                *string                "json:\"owner,omitempty\" graphql:\"owner\""
 	Source               *string                "json:\"source,omitempty\" graphql:\"source\""
 	Status               *string                "json:\"status,omitempty\" graphql:\"status\""
 	Tags                 []string               "json:\"tags,omitempty\" graphql:\"tags\""
@@ -7539,17 +7321,11 @@ type CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives str
 	Version              *string                "json:\"version,omitempty\" graphql:\"version\""
 }
 
-func (t *CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives) GetControlClass() *string {
+func (t *CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives) GetClass() *string {
 	if t == nil {
 		t = &CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives{}
 	}
-	return t.ControlClass
-}
-func (t *CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives) GetControlFamily() *string {
-	if t == nil {
-		t = &CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives{}
-	}
-	return t.ControlFamily
+	return t.Class
 }
 func (t *CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives) GetControlNumber() *string {
 	if t == nil {
@@ -7581,17 +7357,23 @@ func (t *CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives
 	}
 	return t.Description
 }
+func (t *CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives{}
+	}
+	return t.Details
+}
+func (t *CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives) GetFamily() *string {
+	if t == nil {
+		t = &CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives{}
+	}
+	return t.Family
+}
 func (t *CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives) GetID() string {
 	if t == nil {
 		t = &CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives{}
 	}
 	return t.ID
-}
-func (t *CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives{}
-	}
-	return t.Jsonschema
 }
 func (t *CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives) GetMappedFrameworks() *string {
 	if t == nil {
@@ -7604,12 +7386,6 @@ func (t *CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives
 		t = &CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives{}
 	}
 	return t.Name
-}
-func (t *CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives) GetOwner() *string {
-	if t == nil {
-		t = &CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives{}
-	}
-	return t.Owner
 }
 func (t *CreateBulkControlObjective_CreateBulkControlObjective_ControlObjectives) GetSource() *string {
 	if t == nil {
@@ -7660,18 +7436,17 @@ func (t *CreateBulkControlObjective_CreateBulkControlObjective) GetControlObject
 }
 
 type CreateControlObjective_CreateControlObjective_ControlObjective struct {
-	ControlClass         *string                "json:\"controlClass,omitempty\" graphql:\"controlClass\""
-	ControlFamily        *string                "json:\"controlFamily,omitempty\" graphql:\"controlFamily\""
+	Class                *string                "json:\"class,omitempty\" graphql:\"class\""
 	ControlNumber        *string                "json:\"controlNumber,omitempty\" graphql:\"controlNumber\""
 	ControlObjectiveType *string                "json:\"controlObjectiveType,omitempty\" graphql:\"controlObjectiveType\""
 	CreatedAt            *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy            *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description          *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details              map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
+	Family               *string                "json:\"family,omitempty\" graphql:\"family\""
 	ID                   string                 "json:\"id\" graphql:\"id\""
-	Jsonschema           map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	MappedFrameworks     *string                "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
 	Name                 string                 "json:\"name\" graphql:\"name\""
-	Owner                *string                "json:\"owner,omitempty\" graphql:\"owner\""
 	Source               *string                "json:\"source,omitempty\" graphql:\"source\""
 	Status               *string                "json:\"status,omitempty\" graphql:\"status\""
 	Tags                 []string               "json:\"tags,omitempty\" graphql:\"tags\""
@@ -7680,17 +7455,11 @@ type CreateControlObjective_CreateControlObjective_ControlObjective struct {
 	Version              *string                "json:\"version,omitempty\" graphql:\"version\""
 }
 
-func (t *CreateControlObjective_CreateControlObjective_ControlObjective) GetControlClass() *string {
+func (t *CreateControlObjective_CreateControlObjective_ControlObjective) GetClass() *string {
 	if t == nil {
 		t = &CreateControlObjective_CreateControlObjective_ControlObjective{}
 	}
-	return t.ControlClass
-}
-func (t *CreateControlObjective_CreateControlObjective_ControlObjective) GetControlFamily() *string {
-	if t == nil {
-		t = &CreateControlObjective_CreateControlObjective_ControlObjective{}
-	}
-	return t.ControlFamily
+	return t.Class
 }
 func (t *CreateControlObjective_CreateControlObjective_ControlObjective) GetControlNumber() *string {
 	if t == nil {
@@ -7722,17 +7491,23 @@ func (t *CreateControlObjective_CreateControlObjective_ControlObjective) GetDesc
 	}
 	return t.Description
 }
+func (t *CreateControlObjective_CreateControlObjective_ControlObjective) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &CreateControlObjective_CreateControlObjective_ControlObjective{}
+	}
+	return t.Details
+}
+func (t *CreateControlObjective_CreateControlObjective_ControlObjective) GetFamily() *string {
+	if t == nil {
+		t = &CreateControlObjective_CreateControlObjective_ControlObjective{}
+	}
+	return t.Family
+}
 func (t *CreateControlObjective_CreateControlObjective_ControlObjective) GetID() string {
 	if t == nil {
 		t = &CreateControlObjective_CreateControlObjective_ControlObjective{}
 	}
 	return t.ID
-}
-func (t *CreateControlObjective_CreateControlObjective_ControlObjective) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &CreateControlObjective_CreateControlObjective_ControlObjective{}
-	}
-	return t.Jsonschema
 }
 func (t *CreateControlObjective_CreateControlObjective_ControlObjective) GetMappedFrameworks() *string {
 	if t == nil {
@@ -7745,12 +7520,6 @@ func (t *CreateControlObjective_CreateControlObjective_ControlObjective) GetName
 		t = &CreateControlObjective_CreateControlObjective_ControlObjective{}
 	}
 	return t.Name
-}
-func (t *CreateControlObjective_CreateControlObjective_ControlObjective) GetOwner() *string {
-	if t == nil {
-		t = &CreateControlObjective_CreateControlObjective_ControlObjective{}
-	}
-	return t.Owner
 }
 func (t *CreateControlObjective_CreateControlObjective_ControlObjective) GetSource() *string {
 	if t == nil {
@@ -7812,18 +7581,17 @@ func (t *DeleteControlObjective_DeleteControlObjective) GetDeletedID() string {
 }
 
 type GetAllControlObjectives_ControlObjectives_Edges_Node struct {
-	ControlClass         *string                "json:\"controlClass,omitempty\" graphql:\"controlClass\""
-	ControlFamily        *string                "json:\"controlFamily,omitempty\" graphql:\"controlFamily\""
+	Class                *string                "json:\"class,omitempty\" graphql:\"class\""
 	ControlNumber        *string                "json:\"controlNumber,omitempty\" graphql:\"controlNumber\""
 	ControlObjectiveType *string                "json:\"controlObjectiveType,omitempty\" graphql:\"controlObjectiveType\""
 	CreatedAt            *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy            *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description          *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details              map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
+	Family               *string                "json:\"family,omitempty\" graphql:\"family\""
 	ID                   string                 "json:\"id\" graphql:\"id\""
-	Jsonschema           map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	MappedFrameworks     *string                "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
 	Name                 string                 "json:\"name\" graphql:\"name\""
-	Owner                *string                "json:\"owner,omitempty\" graphql:\"owner\""
 	Source               *string                "json:\"source,omitempty\" graphql:\"source\""
 	Status               *string                "json:\"status,omitempty\" graphql:\"status\""
 	Tags                 []string               "json:\"tags,omitempty\" graphql:\"tags\""
@@ -7832,17 +7600,11 @@ type GetAllControlObjectives_ControlObjectives_Edges_Node struct {
 	Version              *string                "json:\"version,omitempty\" graphql:\"version\""
 }
 
-func (t *GetAllControlObjectives_ControlObjectives_Edges_Node) GetControlClass() *string {
+func (t *GetAllControlObjectives_ControlObjectives_Edges_Node) GetClass() *string {
 	if t == nil {
 		t = &GetAllControlObjectives_ControlObjectives_Edges_Node{}
 	}
-	return t.ControlClass
-}
-func (t *GetAllControlObjectives_ControlObjectives_Edges_Node) GetControlFamily() *string {
-	if t == nil {
-		t = &GetAllControlObjectives_ControlObjectives_Edges_Node{}
-	}
-	return t.ControlFamily
+	return t.Class
 }
 func (t *GetAllControlObjectives_ControlObjectives_Edges_Node) GetControlNumber() *string {
 	if t == nil {
@@ -7874,17 +7636,23 @@ func (t *GetAllControlObjectives_ControlObjectives_Edges_Node) GetDescription() 
 	}
 	return t.Description
 }
+func (t *GetAllControlObjectives_ControlObjectives_Edges_Node) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetAllControlObjectives_ControlObjectives_Edges_Node{}
+	}
+	return t.Details
+}
+func (t *GetAllControlObjectives_ControlObjectives_Edges_Node) GetFamily() *string {
+	if t == nil {
+		t = &GetAllControlObjectives_ControlObjectives_Edges_Node{}
+	}
+	return t.Family
+}
 func (t *GetAllControlObjectives_ControlObjectives_Edges_Node) GetID() string {
 	if t == nil {
 		t = &GetAllControlObjectives_ControlObjectives_Edges_Node{}
 	}
 	return t.ID
-}
-func (t *GetAllControlObjectives_ControlObjectives_Edges_Node) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &GetAllControlObjectives_ControlObjectives_Edges_Node{}
-	}
-	return t.Jsonschema
 }
 func (t *GetAllControlObjectives_ControlObjectives_Edges_Node) GetMappedFrameworks() *string {
 	if t == nil {
@@ -7897,12 +7665,6 @@ func (t *GetAllControlObjectives_ControlObjectives_Edges_Node) GetName() string 
 		t = &GetAllControlObjectives_ControlObjectives_Edges_Node{}
 	}
 	return t.Name
-}
-func (t *GetAllControlObjectives_ControlObjectives_Edges_Node) GetOwner() *string {
-	if t == nil {
-		t = &GetAllControlObjectives_ControlObjectives_Edges_Node{}
-	}
-	return t.Owner
 }
 func (t *GetAllControlObjectives_ControlObjectives_Edges_Node) GetSource() *string {
 	if t == nil {
@@ -7964,18 +7726,17 @@ func (t *GetAllControlObjectives_ControlObjectives) GetEdges() []*GetAllControlO
 }
 
 type GetControlObjectiveByID_ControlObjective struct {
-	ControlClass         *string                "json:\"controlClass,omitempty\" graphql:\"controlClass\""
-	ControlFamily        *string                "json:\"controlFamily,omitempty\" graphql:\"controlFamily\""
+	Class                *string                "json:\"class,omitempty\" graphql:\"class\""
 	ControlNumber        *string                "json:\"controlNumber,omitempty\" graphql:\"controlNumber\""
 	ControlObjectiveType *string                "json:\"controlObjectiveType,omitempty\" graphql:\"controlObjectiveType\""
 	CreatedAt            *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy            *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description          *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details              map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
+	Family               *string                "json:\"family,omitempty\" graphql:\"family\""
 	ID                   string                 "json:\"id\" graphql:\"id\""
-	Jsonschema           map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	MappedFrameworks     *string                "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
 	Name                 string                 "json:\"name\" graphql:\"name\""
-	Owner                *string                "json:\"owner,omitempty\" graphql:\"owner\""
 	Source               *string                "json:\"source,omitempty\" graphql:\"source\""
 	Status               *string                "json:\"status,omitempty\" graphql:\"status\""
 	Tags                 []string               "json:\"tags,omitempty\" graphql:\"tags\""
@@ -7984,17 +7745,11 @@ type GetControlObjectiveByID_ControlObjective struct {
 	Version              *string                "json:\"version,omitempty\" graphql:\"version\""
 }
 
-func (t *GetControlObjectiveByID_ControlObjective) GetControlClass() *string {
+func (t *GetControlObjectiveByID_ControlObjective) GetClass() *string {
 	if t == nil {
 		t = &GetControlObjectiveByID_ControlObjective{}
 	}
-	return t.ControlClass
-}
-func (t *GetControlObjectiveByID_ControlObjective) GetControlFamily() *string {
-	if t == nil {
-		t = &GetControlObjectiveByID_ControlObjective{}
-	}
-	return t.ControlFamily
+	return t.Class
 }
 func (t *GetControlObjectiveByID_ControlObjective) GetControlNumber() *string {
 	if t == nil {
@@ -8026,17 +7781,23 @@ func (t *GetControlObjectiveByID_ControlObjective) GetDescription() *string {
 	}
 	return t.Description
 }
+func (t *GetControlObjectiveByID_ControlObjective) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetControlObjectiveByID_ControlObjective{}
+	}
+	return t.Details
+}
+func (t *GetControlObjectiveByID_ControlObjective) GetFamily() *string {
+	if t == nil {
+		t = &GetControlObjectiveByID_ControlObjective{}
+	}
+	return t.Family
+}
 func (t *GetControlObjectiveByID_ControlObjective) GetID() string {
 	if t == nil {
 		t = &GetControlObjectiveByID_ControlObjective{}
 	}
 	return t.ID
-}
-func (t *GetControlObjectiveByID_ControlObjective) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &GetControlObjectiveByID_ControlObjective{}
-	}
-	return t.Jsonschema
 }
 func (t *GetControlObjectiveByID_ControlObjective) GetMappedFrameworks() *string {
 	if t == nil {
@@ -8049,12 +7810,6 @@ func (t *GetControlObjectiveByID_ControlObjective) GetName() string {
 		t = &GetControlObjectiveByID_ControlObjective{}
 	}
 	return t.Name
-}
-func (t *GetControlObjectiveByID_ControlObjective) GetOwner() *string {
-	if t == nil {
-		t = &GetControlObjectiveByID_ControlObjective{}
-	}
-	return t.Owner
 }
 func (t *GetControlObjectiveByID_ControlObjective) GetSource() *string {
 	if t == nil {
@@ -8094,18 +7849,17 @@ func (t *GetControlObjectiveByID_ControlObjective) GetVersion() *string {
 }
 
 type GetControlObjectives_ControlObjectives_Edges_Node struct {
-	ControlClass         *string                "json:\"controlClass,omitempty\" graphql:\"controlClass\""
-	ControlFamily        *string                "json:\"controlFamily,omitempty\" graphql:\"controlFamily\""
+	Class                *string                "json:\"class,omitempty\" graphql:\"class\""
 	ControlNumber        *string                "json:\"controlNumber,omitempty\" graphql:\"controlNumber\""
 	ControlObjectiveType *string                "json:\"controlObjectiveType,omitempty\" graphql:\"controlObjectiveType\""
 	CreatedAt            *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy            *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description          *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details              map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
+	Family               *string                "json:\"family,omitempty\" graphql:\"family\""
 	ID                   string                 "json:\"id\" graphql:\"id\""
-	Jsonschema           map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	MappedFrameworks     *string                "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
 	Name                 string                 "json:\"name\" graphql:\"name\""
-	Owner                *string                "json:\"owner,omitempty\" graphql:\"owner\""
 	Source               *string                "json:\"source,omitempty\" graphql:\"source\""
 	Status               *string                "json:\"status,omitempty\" graphql:\"status\""
 	Tags                 []string               "json:\"tags,omitempty\" graphql:\"tags\""
@@ -8114,17 +7868,11 @@ type GetControlObjectives_ControlObjectives_Edges_Node struct {
 	Version              *string                "json:\"version,omitempty\" graphql:\"version\""
 }
 
-func (t *GetControlObjectives_ControlObjectives_Edges_Node) GetControlClass() *string {
+func (t *GetControlObjectives_ControlObjectives_Edges_Node) GetClass() *string {
 	if t == nil {
 		t = &GetControlObjectives_ControlObjectives_Edges_Node{}
 	}
-	return t.ControlClass
-}
-func (t *GetControlObjectives_ControlObjectives_Edges_Node) GetControlFamily() *string {
-	if t == nil {
-		t = &GetControlObjectives_ControlObjectives_Edges_Node{}
-	}
-	return t.ControlFamily
+	return t.Class
 }
 func (t *GetControlObjectives_ControlObjectives_Edges_Node) GetControlNumber() *string {
 	if t == nil {
@@ -8156,17 +7904,23 @@ func (t *GetControlObjectives_ControlObjectives_Edges_Node) GetDescription() *st
 	}
 	return t.Description
 }
+func (t *GetControlObjectives_ControlObjectives_Edges_Node) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetControlObjectives_ControlObjectives_Edges_Node{}
+	}
+	return t.Details
+}
+func (t *GetControlObjectives_ControlObjectives_Edges_Node) GetFamily() *string {
+	if t == nil {
+		t = &GetControlObjectives_ControlObjectives_Edges_Node{}
+	}
+	return t.Family
+}
 func (t *GetControlObjectives_ControlObjectives_Edges_Node) GetID() string {
 	if t == nil {
 		t = &GetControlObjectives_ControlObjectives_Edges_Node{}
 	}
 	return t.ID
-}
-func (t *GetControlObjectives_ControlObjectives_Edges_Node) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &GetControlObjectives_ControlObjectives_Edges_Node{}
-	}
-	return t.Jsonschema
 }
 func (t *GetControlObjectives_ControlObjectives_Edges_Node) GetMappedFrameworks() *string {
 	if t == nil {
@@ -8179,12 +7933,6 @@ func (t *GetControlObjectives_ControlObjectives_Edges_Node) GetName() string {
 		t = &GetControlObjectives_ControlObjectives_Edges_Node{}
 	}
 	return t.Name
-}
-func (t *GetControlObjectives_ControlObjectives_Edges_Node) GetOwner() *string {
-	if t == nil {
-		t = &GetControlObjectives_ControlObjectives_Edges_Node{}
-	}
-	return t.Owner
 }
 func (t *GetControlObjectives_ControlObjectives_Edges_Node) GetSource() *string {
 	if t == nil {
@@ -8246,18 +7994,17 @@ func (t *GetControlObjectives_ControlObjectives) GetEdges() []*GetControlObjecti
 }
 
 type UpdateControlObjective_UpdateControlObjective_ControlObjective struct {
-	ControlClass         *string                "json:\"controlClass,omitempty\" graphql:\"controlClass\""
-	ControlFamily        *string                "json:\"controlFamily,omitempty\" graphql:\"controlFamily\""
+	Class                *string                "json:\"class,omitempty\" graphql:\"class\""
 	ControlNumber        *string                "json:\"controlNumber,omitempty\" graphql:\"controlNumber\""
 	ControlObjectiveType *string                "json:\"controlObjectiveType,omitempty\" graphql:\"controlObjectiveType\""
 	CreatedAt            *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy            *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description          *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details              map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
+	Family               *string                "json:\"family,omitempty\" graphql:\"family\""
 	ID                   string                 "json:\"id\" graphql:\"id\""
-	Jsonschema           map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	MappedFrameworks     *string                "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
 	Name                 string                 "json:\"name\" graphql:\"name\""
-	Owner                *string                "json:\"owner,omitempty\" graphql:\"owner\""
 	Source               *string                "json:\"source,omitempty\" graphql:\"source\""
 	Status               *string                "json:\"status,omitempty\" graphql:\"status\""
 	Tags                 []string               "json:\"tags,omitempty\" graphql:\"tags\""
@@ -8266,17 +8013,11 @@ type UpdateControlObjective_UpdateControlObjective_ControlObjective struct {
 	Version              *string                "json:\"version,omitempty\" graphql:\"version\""
 }
 
-func (t *UpdateControlObjective_UpdateControlObjective_ControlObjective) GetControlClass() *string {
+func (t *UpdateControlObjective_UpdateControlObjective_ControlObjective) GetClass() *string {
 	if t == nil {
 		t = &UpdateControlObjective_UpdateControlObjective_ControlObjective{}
 	}
-	return t.ControlClass
-}
-func (t *UpdateControlObjective_UpdateControlObjective_ControlObjective) GetControlFamily() *string {
-	if t == nil {
-		t = &UpdateControlObjective_UpdateControlObjective_ControlObjective{}
-	}
-	return t.ControlFamily
+	return t.Class
 }
 func (t *UpdateControlObjective_UpdateControlObjective_ControlObjective) GetControlNumber() *string {
 	if t == nil {
@@ -8308,17 +8049,23 @@ func (t *UpdateControlObjective_UpdateControlObjective_ControlObjective) GetDesc
 	}
 	return t.Description
 }
+func (t *UpdateControlObjective_UpdateControlObjective_ControlObjective) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &UpdateControlObjective_UpdateControlObjective_ControlObjective{}
+	}
+	return t.Details
+}
+func (t *UpdateControlObjective_UpdateControlObjective_ControlObjective) GetFamily() *string {
+	if t == nil {
+		t = &UpdateControlObjective_UpdateControlObjective_ControlObjective{}
+	}
+	return t.Family
+}
 func (t *UpdateControlObjective_UpdateControlObjective_ControlObjective) GetID() string {
 	if t == nil {
 		t = &UpdateControlObjective_UpdateControlObjective_ControlObjective{}
 	}
 	return t.ID
-}
-func (t *UpdateControlObjective_UpdateControlObjective_ControlObjective) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &UpdateControlObjective_UpdateControlObjective_ControlObjective{}
-	}
-	return t.Jsonschema
 }
 func (t *UpdateControlObjective_UpdateControlObjective_ControlObjective) GetMappedFrameworks() *string {
 	if t == nil {
@@ -8331,12 +8078,6 @@ func (t *UpdateControlObjective_UpdateControlObjective_ControlObjective) GetName
 		t = &UpdateControlObjective_UpdateControlObjective_ControlObjective{}
 	}
 	return t.Name
-}
-func (t *UpdateControlObjective_UpdateControlObjective_ControlObjective) GetOwner() *string {
-	if t == nil {
-		t = &UpdateControlObjective_UpdateControlObjective_ControlObjective{}
-	}
-	return t.Owner
 }
 func (t *UpdateControlObjective_UpdateControlObjective_ControlObjective) GetSource() *string {
 	if t == nil {
@@ -8387,20 +8128,19 @@ func (t *UpdateControlObjective_UpdateControlObjective) GetControlObjective() *U
 }
 
 type GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node struct {
-	ControlClass         *string                "json:\"controlClass,omitempty\" graphql:\"controlClass\""
-	ControlFamily        *string                "json:\"controlFamily,omitempty\" graphql:\"controlFamily\""
+	Class                *string                "json:\"class,omitempty\" graphql:\"class\""
 	ControlNumber        *string                "json:\"controlNumber,omitempty\" graphql:\"controlNumber\""
 	ControlObjectiveType *string                "json:\"controlObjectiveType,omitempty\" graphql:\"controlObjectiveType\""
 	CreatedAt            *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy            *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description          *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details              map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
+	Family               *string                "json:\"family,omitempty\" graphql:\"family\""
 	HistoryTime          time.Time              "json:\"historyTime\" graphql:\"historyTime\""
 	ID                   string                 "json:\"id\" graphql:\"id\""
-	Jsonschema           map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	MappedFrameworks     *string                "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
 	Name                 string                 "json:\"name\" graphql:\"name\""
 	Operation            history.OpType         "json:\"operation\" graphql:\"operation\""
-	Owner                *string                "json:\"owner,omitempty\" graphql:\"owner\""
 	Ref                  *string                "json:\"ref,omitempty\" graphql:\"ref\""
 	Source               *string                "json:\"source,omitempty\" graphql:\"source\""
 	Status               *string                "json:\"status,omitempty\" graphql:\"status\""
@@ -8410,17 +8150,11 @@ type GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node struct
 	Version              *string                "json:\"version,omitempty\" graphql:\"version\""
 }
 
-func (t *GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetControlClass() *string {
+func (t *GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetClass() *string {
 	if t == nil {
 		t = &GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node{}
 	}
-	return t.ControlClass
-}
-func (t *GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetControlFamily() *string {
-	if t == nil {
-		t = &GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node{}
-	}
-	return t.ControlFamily
+	return t.Class
 }
 func (t *GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetControlNumber() *string {
 	if t == nil {
@@ -8452,6 +8186,18 @@ func (t *GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) G
 	}
 	return t.Description
 }
+func (t *GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node{}
+	}
+	return t.Details
+}
+func (t *GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetFamily() *string {
+	if t == nil {
+		t = &GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node{}
+	}
+	return t.Family
+}
 func (t *GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetHistoryTime() *time.Time {
 	if t == nil {
 		t = &GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node{}
@@ -8463,12 +8209,6 @@ func (t *GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) G
 		t = &GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node{}
 	}
 	return t.ID
-}
-func (t *GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node{}
-	}
-	return t.Jsonschema
 }
 func (t *GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetMappedFrameworks() *string {
 	if t == nil {
@@ -8487,12 +8227,6 @@ func (t *GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) G
 		t = &GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node{}
 	}
 	return &t.Operation
-}
-func (t *GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetOwner() *string {
-	if t == nil {
-		t = &GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node{}
-	}
-	return t.Owner
 }
 func (t *GetAllControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetRef() *string {
 	if t == nil {
@@ -8560,20 +8294,19 @@ func (t *GetAllControlObjectiveHistories_ControlObjectiveHistories) GetEdges() [
 }
 
 type GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node struct {
-	ControlClass         *string                "json:\"controlClass,omitempty\" graphql:\"controlClass\""
-	ControlFamily        *string                "json:\"controlFamily,omitempty\" graphql:\"controlFamily\""
+	Class                *string                "json:\"class,omitempty\" graphql:\"class\""
 	ControlNumber        *string                "json:\"controlNumber,omitempty\" graphql:\"controlNumber\""
 	ControlObjectiveType *string                "json:\"controlObjectiveType,omitempty\" graphql:\"controlObjectiveType\""
 	CreatedAt            *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy            *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description          *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details              map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
+	Family               *string                "json:\"family,omitempty\" graphql:\"family\""
 	HistoryTime          time.Time              "json:\"historyTime\" graphql:\"historyTime\""
 	ID                   string                 "json:\"id\" graphql:\"id\""
-	Jsonschema           map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	MappedFrameworks     *string                "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
 	Name                 string                 "json:\"name\" graphql:\"name\""
 	Operation            history.OpType         "json:\"operation\" graphql:\"operation\""
-	Owner                *string                "json:\"owner,omitempty\" graphql:\"owner\""
 	Ref                  *string                "json:\"ref,omitempty\" graphql:\"ref\""
 	Source               *string                "json:\"source,omitempty\" graphql:\"source\""
 	Status               *string                "json:\"status,omitempty\" graphql:\"status\""
@@ -8583,17 +8316,11 @@ type GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node struct {
 	Version              *string                "json:\"version,omitempty\" graphql:\"version\""
 }
 
-func (t *GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetControlClass() *string {
+func (t *GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetClass() *string {
 	if t == nil {
 		t = &GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node{}
 	}
-	return t.ControlClass
-}
-func (t *GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetControlFamily() *string {
-	if t == nil {
-		t = &GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node{}
-	}
-	return t.ControlFamily
+	return t.Class
 }
 func (t *GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetControlNumber() *string {
 	if t == nil {
@@ -8625,6 +8352,18 @@ func (t *GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetD
 	}
 	return t.Description
 }
+func (t *GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node{}
+	}
+	return t.Details
+}
+func (t *GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetFamily() *string {
+	if t == nil {
+		t = &GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node{}
+	}
+	return t.Family
+}
 func (t *GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetHistoryTime() *time.Time {
 	if t == nil {
 		t = &GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node{}
@@ -8636,12 +8375,6 @@ func (t *GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetI
 		t = &GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node{}
 	}
 	return t.ID
-}
-func (t *GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node{}
-	}
-	return t.Jsonschema
 }
 func (t *GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetMappedFrameworks() *string {
 	if t == nil {
@@ -8660,12 +8393,6 @@ func (t *GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetO
 		t = &GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node{}
 	}
 	return &t.Operation
-}
-func (t *GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetOwner() *string {
-	if t == nil {
-		t = &GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node{}
-	}
-	return t.Owner
 }
 func (t *GetControlObjectiveHistories_ControlObjectiveHistories_Edges_Node) GetRef() *string {
 	if t == nil {
@@ -23537,8 +23264,8 @@ type CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies st
 	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy       *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description     string                 "json:\"description\" graphql:\"description\""
+	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	ID              string                 "json:\"id\" graphql:\"id\""
-	Jsonschema      map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	Name            string                 "json:\"name\" graphql:\"name\""
 	PolicyType      *string                "json:\"policyType,omitempty\" graphql:\"policyType\""
 	PurposeAndScope *string                "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
@@ -23573,17 +23300,17 @@ func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicie
 	}
 	return t.Description
 }
+func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies{}
+	}
+	return t.Details
+}
 func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies) GetID() string {
 	if t == nil {
 		t = &CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies{}
 	}
 	return t.ID
-}
-func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies{}
-	}
-	return t.Jsonschema
 }
 func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies) GetName() string {
 	if t == nil {
@@ -23650,8 +23377,8 @@ type CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies struct {
 	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy       *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description     string                 "json:\"description\" graphql:\"description\""
+	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	ID              string                 "json:\"id\" graphql:\"id\""
-	Jsonschema      map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	Name            string                 "json:\"name\" graphql:\"name\""
 	PolicyType      *string                "json:\"policyType,omitempty\" graphql:\"policyType\""
 	PurposeAndScope *string                "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
@@ -23686,17 +23413,17 @@ func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies) Get
 	}
 	return t.Description
 }
+func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies{}
+	}
+	return t.Details
+}
 func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies) GetID() string {
 	if t == nil {
 		t = &CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies{}
 	}
 	return t.ID
-}
-func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies{}
-	}
-	return t.Jsonschema
 }
 func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies) GetName() string {
 	if t == nil {
@@ -23763,8 +23490,8 @@ type CreateInternalPolicy_CreateInternalPolicy_InternalPolicy struct {
 	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy       *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description     string                 "json:\"description\" graphql:\"description\""
+	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	ID              string                 "json:\"id\" graphql:\"id\""
-	Jsonschema      map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	Name            string                 "json:\"name\" graphql:\"name\""
 	PolicyType      *string                "json:\"policyType,omitempty\" graphql:\"policyType\""
 	PurposeAndScope *string                "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
@@ -23799,17 +23526,17 @@ func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetDescriptio
 	}
 	return t.Description
 }
+func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &CreateInternalPolicy_CreateInternalPolicy_InternalPolicy{}
+	}
+	return t.Details
+}
 func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetID() string {
 	if t == nil {
 		t = &CreateInternalPolicy_CreateInternalPolicy_InternalPolicy{}
 	}
 	return t.ID
-}
-func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &CreateInternalPolicy_CreateInternalPolicy_InternalPolicy{}
-	}
-	return t.Jsonschema
 }
 func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetName() string {
 	if t == nil {
@@ -23887,8 +23614,8 @@ type GetAllInternalPolicies_InternalPolicies_Edges_Node struct {
 	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy       *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description     string                 "json:\"description\" graphql:\"description\""
+	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	ID              string                 "json:\"id\" graphql:\"id\""
-	Jsonschema      map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	Name            string                 "json:\"name\" graphql:\"name\""
 	PolicyType      *string                "json:\"policyType,omitempty\" graphql:\"policyType\""
 	PurposeAndScope *string                "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
@@ -23923,17 +23650,17 @@ func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node) GetDescription() st
 	}
 	return t.Description
 }
+func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetAllInternalPolicies_InternalPolicies_Edges_Node{}
+	}
+	return t.Details
+}
 func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node) GetID() string {
 	if t == nil {
 		t = &GetAllInternalPolicies_InternalPolicies_Edges_Node{}
 	}
 	return t.ID
-}
-func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &GetAllInternalPolicies_InternalPolicies_Edges_Node{}
-	}
-	return t.Jsonschema
 }
 func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node) GetName() string {
 	if t == nil {
@@ -24011,8 +23738,8 @@ type GetInternalPolicyByID_InternalPolicy struct {
 	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy       *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description     string                 "json:\"description\" graphql:\"description\""
+	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	ID              string                 "json:\"id\" graphql:\"id\""
-	Jsonschema      map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	Name            string                 "json:\"name\" graphql:\"name\""
 	PolicyType      *string                "json:\"policyType,omitempty\" graphql:\"policyType\""
 	PurposeAndScope *string                "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
@@ -24047,17 +23774,17 @@ func (t *GetInternalPolicyByID_InternalPolicy) GetDescription() string {
 	}
 	return t.Description
 }
+func (t *GetInternalPolicyByID_InternalPolicy) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy{}
+	}
+	return t.Details
+}
 func (t *GetInternalPolicyByID_InternalPolicy) GetID() string {
 	if t == nil {
 		t = &GetInternalPolicyByID_InternalPolicy{}
 	}
 	return t.ID
-}
-func (t *GetInternalPolicyByID_InternalPolicy) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &GetInternalPolicyByID_InternalPolicy{}
-	}
-	return t.Jsonschema
 }
 func (t *GetInternalPolicyByID_InternalPolicy) GetName() string {
 	if t == nil {
@@ -24113,8 +23840,8 @@ type GetInternalPolicies_InternalPolicies_Edges_Node struct {
 	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy       *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description     string                 "json:\"description\" graphql:\"description\""
+	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	ID              string                 "json:\"id\" graphql:\"id\""
-	Jsonschema      map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	Name            string                 "json:\"name\" graphql:\"name\""
 	PolicyType      *string                "json:\"policyType,omitempty\" graphql:\"policyType\""
 	PurposeAndScope *string                "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
@@ -24149,17 +23876,17 @@ func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetDescription() strin
 	}
 	return t.Description
 }
+func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetInternalPolicies_InternalPolicies_Edges_Node{}
+	}
+	return t.Details
+}
 func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetID() string {
 	if t == nil {
 		t = &GetInternalPolicies_InternalPolicies_Edges_Node{}
 	}
 	return t.ID
-}
-func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &GetInternalPolicies_InternalPolicies_Edges_Node{}
-	}
-	return t.Jsonschema
 }
 func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetName() string {
 	if t == nil {
@@ -24237,8 +23964,8 @@ type UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy struct {
 	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy       *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description     string                 "json:\"description\" graphql:\"description\""
+	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	ID              string                 "json:\"id\" graphql:\"id\""
-	Jsonschema      map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	Name            string                 "json:\"name\" graphql:\"name\""
 	PolicyType      *string                "json:\"policyType,omitempty\" graphql:\"policyType\""
 	PurposeAndScope *string                "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
@@ -24273,17 +24000,17 @@ func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy) GetDescriptio
 	}
 	return t.Description
 }
+func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy{}
+	}
+	return t.Details
+}
 func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy) GetID() string {
 	if t == nil {
 		t = &UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy{}
 	}
 	return t.ID
-}
-func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy{}
-	}
-	return t.Jsonschema
 }
 func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy) GetName() string {
 	if t == nil {
@@ -24350,9 +24077,9 @@ type GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node struct {
 	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy       *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description     string                 "json:\"description\" graphql:\"description\""
+	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	HistoryTime     time.Time              "json:\"historyTime\" graphql:\"historyTime\""
 	ID              string                 "json:\"id\" graphql:\"id\""
-	Jsonschema      map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	Name            string                 "json:\"name\" graphql:\"name\""
 	Operation       history.OpType         "json:\"operation\" graphql:\"operation\""
 	PolicyType      *string                "json:\"policyType,omitempty\" graphql:\"policyType\""
@@ -24389,6 +24116,12 @@ func (t *GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetDe
 	}
 	return t.Description
 }
+func (t *GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node{}
+	}
+	return t.Details
+}
 func (t *GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetHistoryTime() *time.Time {
 	if t == nil {
 		t = &GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node{}
@@ -24400,12 +24133,6 @@ func (t *GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetID
 		t = &GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node{}
 	}
 	return t.ID
-}
-func (t *GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node{}
-	}
-	return t.Jsonschema
 }
 func (t *GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetName() string {
 	if t == nil {
@@ -24495,9 +24222,9 @@ type GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node struct {
 	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy       *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description     string                 "json:\"description\" graphql:\"description\""
+	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	HistoryTime     time.Time              "json:\"historyTime\" graphql:\"historyTime\""
 	ID              string                 "json:\"id\" graphql:\"id\""
-	Jsonschema      map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	Name            string                 "json:\"name\" graphql:\"name\""
 	Operation       history.OpType         "json:\"operation\" graphql:\"operation\""
 	PolicyType      *string                "json:\"policyType,omitempty\" graphql:\"policyType\""
@@ -24534,6 +24261,12 @@ func (t *GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetDescr
 	}
 	return t.Description
 }
+func (t *GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node{}
+	}
+	return t.Details
+}
 func (t *GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetHistoryTime() *time.Time {
 	if t == nil {
 		t = &GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node{}
@@ -24545,12 +24278,6 @@ func (t *GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetID() 
 		t = &GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node{}
 	}
 	return t.ID
-}
-func (t *GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node{}
-	}
-	return t.Jsonschema
 }
 func (t *GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetName() string {
 	if t == nil {
@@ -25117,8 +24844,8 @@ type CreateBulkCSVNarrative_CreateBulkCSVNarrative_Narratives struct {
 	CreatedAt   *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details     map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	ID          string                 "json:\"id\" graphql:\"id\""
-	Jsonschema  map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	Name        string                 "json:\"name\" graphql:\"name\""
 	Satisfies   *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
 	Tags        []string               "json:\"tags,omitempty\" graphql:\"tags\""
@@ -25144,17 +24871,17 @@ func (t *CreateBulkCSVNarrative_CreateBulkCSVNarrative_Narratives) GetDescriptio
 	}
 	return t.Description
 }
+func (t *CreateBulkCSVNarrative_CreateBulkCSVNarrative_Narratives) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &CreateBulkCSVNarrative_CreateBulkCSVNarrative_Narratives{}
+	}
+	return t.Details
+}
 func (t *CreateBulkCSVNarrative_CreateBulkCSVNarrative_Narratives) GetID() string {
 	if t == nil {
 		t = &CreateBulkCSVNarrative_CreateBulkCSVNarrative_Narratives{}
 	}
 	return t.ID
-}
-func (t *CreateBulkCSVNarrative_CreateBulkCSVNarrative_Narratives) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &CreateBulkCSVNarrative_CreateBulkCSVNarrative_Narratives{}
-	}
-	return t.Jsonschema
 }
 func (t *CreateBulkCSVNarrative_CreateBulkCSVNarrative_Narratives) GetName() string {
 	if t == nil {
@@ -25202,8 +24929,8 @@ type CreateBulkNarrative_CreateBulkNarrative_Narratives struct {
 	CreatedAt   *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details     map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	ID          string                 "json:\"id\" graphql:\"id\""
-	Jsonschema  map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	Name        string                 "json:\"name\" graphql:\"name\""
 	Satisfies   *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
 	Tags        []string               "json:\"tags,omitempty\" graphql:\"tags\""
@@ -25229,17 +24956,17 @@ func (t *CreateBulkNarrative_CreateBulkNarrative_Narratives) GetDescription() *s
 	}
 	return t.Description
 }
+func (t *CreateBulkNarrative_CreateBulkNarrative_Narratives) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &CreateBulkNarrative_CreateBulkNarrative_Narratives{}
+	}
+	return t.Details
+}
 func (t *CreateBulkNarrative_CreateBulkNarrative_Narratives) GetID() string {
 	if t == nil {
 		t = &CreateBulkNarrative_CreateBulkNarrative_Narratives{}
 	}
 	return t.ID
-}
-func (t *CreateBulkNarrative_CreateBulkNarrative_Narratives) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &CreateBulkNarrative_CreateBulkNarrative_Narratives{}
-	}
-	return t.Jsonschema
 }
 func (t *CreateBulkNarrative_CreateBulkNarrative_Narratives) GetName() string {
 	if t == nil {
@@ -25287,8 +25014,8 @@ type CreateNarrative_CreateNarrative_Narrative struct {
 	CreatedAt   *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details     map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	ID          string                 "json:\"id\" graphql:\"id\""
-	Jsonschema  map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	Name        string                 "json:\"name\" graphql:\"name\""
 	Satisfies   *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
 	Tags        []string               "json:\"tags,omitempty\" graphql:\"tags\""
@@ -25314,17 +25041,17 @@ func (t *CreateNarrative_CreateNarrative_Narrative) GetDescription() *string {
 	}
 	return t.Description
 }
+func (t *CreateNarrative_CreateNarrative_Narrative) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &CreateNarrative_CreateNarrative_Narrative{}
+	}
+	return t.Details
+}
 func (t *CreateNarrative_CreateNarrative_Narrative) GetID() string {
 	if t == nil {
 		t = &CreateNarrative_CreateNarrative_Narrative{}
 	}
 	return t.ID
-}
-func (t *CreateNarrative_CreateNarrative_Narrative) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &CreateNarrative_CreateNarrative_Narrative{}
-	}
-	return t.Jsonschema
 }
 func (t *CreateNarrative_CreateNarrative_Narrative) GetName() string {
 	if t == nil {
@@ -25383,8 +25110,8 @@ type GetAllNarratives_Narratives_Edges_Node struct {
 	CreatedAt   *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details     map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	ID          string                 "json:\"id\" graphql:\"id\""
-	Jsonschema  map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	Name        string                 "json:\"name\" graphql:\"name\""
 	Satisfies   *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
 	Tags        []string               "json:\"tags,omitempty\" graphql:\"tags\""
@@ -25410,17 +25137,17 @@ func (t *GetAllNarratives_Narratives_Edges_Node) GetDescription() *string {
 	}
 	return t.Description
 }
+func (t *GetAllNarratives_Narratives_Edges_Node) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetAllNarratives_Narratives_Edges_Node{}
+	}
+	return t.Details
+}
 func (t *GetAllNarratives_Narratives_Edges_Node) GetID() string {
 	if t == nil {
 		t = &GetAllNarratives_Narratives_Edges_Node{}
 	}
 	return t.ID
-}
-func (t *GetAllNarratives_Narratives_Edges_Node) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &GetAllNarratives_Narratives_Edges_Node{}
-	}
-	return t.Jsonschema
 }
 func (t *GetAllNarratives_Narratives_Edges_Node) GetName() string {
 	if t == nil {
@@ -25479,8 +25206,8 @@ type GetNarrativeByID_Narrative struct {
 	CreatedAt   *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details     map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	ID          string                 "json:\"id\" graphql:\"id\""
-	Jsonschema  map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	Name        string                 "json:\"name\" graphql:\"name\""
 	Satisfies   *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
 	Tags        []string               "json:\"tags,omitempty\" graphql:\"tags\""
@@ -25506,17 +25233,17 @@ func (t *GetNarrativeByID_Narrative) GetDescription() *string {
 	}
 	return t.Description
 }
+func (t *GetNarrativeByID_Narrative) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetNarrativeByID_Narrative{}
+	}
+	return t.Details
+}
 func (t *GetNarrativeByID_Narrative) GetID() string {
 	if t == nil {
 		t = &GetNarrativeByID_Narrative{}
 	}
 	return t.ID
-}
-func (t *GetNarrativeByID_Narrative) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &GetNarrativeByID_Narrative{}
-	}
-	return t.Jsonschema
 }
 func (t *GetNarrativeByID_Narrative) GetName() string {
 	if t == nil {
@@ -25553,8 +25280,8 @@ type GetNarratives_Narratives_Edges_Node struct {
 	CreatedAt   *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details     map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	ID          string                 "json:\"id\" graphql:\"id\""
-	Jsonschema  map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	Name        string                 "json:\"name\" graphql:\"name\""
 	Satisfies   *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
 	Tags        []string               "json:\"tags,omitempty\" graphql:\"tags\""
@@ -25580,17 +25307,17 @@ func (t *GetNarratives_Narratives_Edges_Node) GetDescription() *string {
 	}
 	return t.Description
 }
+func (t *GetNarratives_Narratives_Edges_Node) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetNarratives_Narratives_Edges_Node{}
+	}
+	return t.Details
+}
 func (t *GetNarratives_Narratives_Edges_Node) GetID() string {
 	if t == nil {
 		t = &GetNarratives_Narratives_Edges_Node{}
 	}
 	return t.ID
-}
-func (t *GetNarratives_Narratives_Edges_Node) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &GetNarratives_Narratives_Edges_Node{}
-	}
-	return t.Jsonschema
 }
 func (t *GetNarratives_Narratives_Edges_Node) GetName() string {
 	if t == nil {
@@ -25649,8 +25376,8 @@ type UpdateNarrative_UpdateNarrative_Narrative struct {
 	CreatedAt   *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details     map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	ID          string                 "json:\"id\" graphql:\"id\""
-	Jsonschema  map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	Name        string                 "json:\"name\" graphql:\"name\""
 	Satisfies   *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
 	Tags        []string               "json:\"tags,omitempty\" graphql:\"tags\""
@@ -25676,17 +25403,17 @@ func (t *UpdateNarrative_UpdateNarrative_Narrative) GetDescription() *string {
 	}
 	return t.Description
 }
+func (t *UpdateNarrative_UpdateNarrative_Narrative) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &UpdateNarrative_UpdateNarrative_Narrative{}
+	}
+	return t.Details
+}
 func (t *UpdateNarrative_UpdateNarrative_Narrative) GetID() string {
 	if t == nil {
 		t = &UpdateNarrative_UpdateNarrative_Narrative{}
 	}
 	return t.ID
-}
-func (t *UpdateNarrative_UpdateNarrative_Narrative) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &UpdateNarrative_UpdateNarrative_Narrative{}
-	}
-	return t.Jsonschema
 }
 func (t *UpdateNarrative_UpdateNarrative_Narrative) GetName() string {
 	if t == nil {
@@ -25734,9 +25461,9 @@ type GetAllNarrativeHistories_NarrativeHistories_Edges_Node struct {
 	CreatedAt   *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details     map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	HistoryTime time.Time              "json:\"historyTime\" graphql:\"historyTime\""
 	ID          string                 "json:\"id\" graphql:\"id\""
-	Jsonschema  map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	Name        string                 "json:\"name\" graphql:\"name\""
 	Operation   history.OpType         "json:\"operation\" graphql:\"operation\""
 	Ref         *string                "json:\"ref,omitempty\" graphql:\"ref\""
@@ -25764,6 +25491,12 @@ func (t *GetAllNarrativeHistories_NarrativeHistories_Edges_Node) GetDescription(
 	}
 	return t.Description
 }
+func (t *GetAllNarrativeHistories_NarrativeHistories_Edges_Node) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetAllNarrativeHistories_NarrativeHistories_Edges_Node{}
+	}
+	return t.Details
+}
 func (t *GetAllNarrativeHistories_NarrativeHistories_Edges_Node) GetHistoryTime() *time.Time {
 	if t == nil {
 		t = &GetAllNarrativeHistories_NarrativeHistories_Edges_Node{}
@@ -25775,12 +25508,6 @@ func (t *GetAllNarrativeHistories_NarrativeHistories_Edges_Node) GetID() string 
 		t = &GetAllNarrativeHistories_NarrativeHistories_Edges_Node{}
 	}
 	return t.ID
-}
-func (t *GetAllNarrativeHistories_NarrativeHistories_Edges_Node) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &GetAllNarrativeHistories_NarrativeHistories_Edges_Node{}
-	}
-	return t.Jsonschema
 }
 func (t *GetAllNarrativeHistories_NarrativeHistories_Edges_Node) GetName() string {
 	if t == nil {
@@ -25851,9 +25578,9 @@ type GetNarrativeHistories_NarrativeHistories_Edges_Node struct {
 	CreatedAt   *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details     map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	HistoryTime time.Time              "json:\"historyTime\" graphql:\"historyTime\""
 	ID          string                 "json:\"id\" graphql:\"id\""
-	Jsonschema  map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	Name        string                 "json:\"name\" graphql:\"name\""
 	Operation   history.OpType         "json:\"operation\" graphql:\"operation\""
 	Ref         *string                "json:\"ref,omitempty\" graphql:\"ref\""
@@ -25881,6 +25608,12 @@ func (t *GetNarrativeHistories_NarrativeHistories_Edges_Node) GetDescription() *
 	}
 	return t.Description
 }
+func (t *GetNarrativeHistories_NarrativeHistories_Edges_Node) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetNarrativeHistories_NarrativeHistories_Edges_Node{}
+	}
+	return t.Details
+}
 func (t *GetNarrativeHistories_NarrativeHistories_Edges_Node) GetHistoryTime() *time.Time {
 	if t == nil {
 		t = &GetNarrativeHistories_NarrativeHistories_Edges_Node{}
@@ -25892,12 +25625,6 @@ func (t *GetNarrativeHistories_NarrativeHistories_Edges_Node) GetID() string {
 		t = &GetNarrativeHistories_NarrativeHistories_Edges_Node{}
 	}
 	return t.ID
-}
-func (t *GetNarrativeHistories_NarrativeHistories_Edges_Node) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &GetNarrativeHistories_NarrativeHistories_Edges_Node{}
-	}
-	return t.Jsonschema
 }
 func (t *GetNarrativeHistories_NarrativeHistories_Edges_Node) GetName() string {
 	if t == nil {
@@ -31014,8 +30741,8 @@ type CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures struct {
 	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy       *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description     *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	ID              string                 "json:\"id\" graphql:\"id\""
-	Jsonschema      map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	Name            string                 "json:\"name\" graphql:\"name\""
 	ProcedureType   *string                "json:\"procedureType,omitempty\" graphql:\"procedureType\""
 	PurposeAndScope *string                "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
@@ -31051,17 +30778,17 @@ func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures) GetDescriptio
 	}
 	return t.Description
 }
+func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures{}
+	}
+	return t.Details
+}
 func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures) GetID() string {
 	if t == nil {
 		t = &CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures{}
 	}
 	return t.ID
-}
-func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures{}
-	}
-	return t.Jsonschema
 }
 func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures) GetName() string {
 	if t == nil {
@@ -31134,8 +30861,8 @@ type CreateBulkProcedure_CreateBulkProcedure_Procedures struct {
 	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy       *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description     *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	ID              string                 "json:\"id\" graphql:\"id\""
-	Jsonschema      map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	Name            string                 "json:\"name\" graphql:\"name\""
 	ProcedureType   *string                "json:\"procedureType,omitempty\" graphql:\"procedureType\""
 	PurposeAndScope *string                "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
@@ -31171,17 +30898,17 @@ func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures) GetDescription() *s
 	}
 	return t.Description
 }
+func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &CreateBulkProcedure_CreateBulkProcedure_Procedures{}
+	}
+	return t.Details
+}
 func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures) GetID() string {
 	if t == nil {
 		t = &CreateBulkProcedure_CreateBulkProcedure_Procedures{}
 	}
 	return t.ID
-}
-func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &CreateBulkProcedure_CreateBulkProcedure_Procedures{}
-	}
-	return t.Jsonschema
 }
 func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures) GetName() string {
 	if t == nil {
@@ -31254,8 +30981,8 @@ type CreateProcedure_CreateProcedure_Procedure struct {
 	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy       *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description     *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	ID              string                 "json:\"id\" graphql:\"id\""
-	Jsonschema      map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	Name            string                 "json:\"name\" graphql:\"name\""
 	ProcedureType   *string                "json:\"procedureType,omitempty\" graphql:\"procedureType\""
 	PurposeAndScope *string                "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
@@ -31291,17 +31018,17 @@ func (t *CreateProcedure_CreateProcedure_Procedure) GetDescription() *string {
 	}
 	return t.Description
 }
+func (t *CreateProcedure_CreateProcedure_Procedure) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &CreateProcedure_CreateProcedure_Procedure{}
+	}
+	return t.Details
+}
 func (t *CreateProcedure_CreateProcedure_Procedure) GetID() string {
 	if t == nil {
 		t = &CreateProcedure_CreateProcedure_Procedure{}
 	}
 	return t.ID
-}
-func (t *CreateProcedure_CreateProcedure_Procedure) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &CreateProcedure_CreateProcedure_Procedure{}
-	}
-	return t.Jsonschema
 }
 func (t *CreateProcedure_CreateProcedure_Procedure) GetName() string {
 	if t == nil {
@@ -31385,8 +31112,8 @@ type GetAllProcedures_Procedures_Edges_Node struct {
 	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy       *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description     *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	ID              string                 "json:\"id\" graphql:\"id\""
-	Jsonschema      map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	Name            string                 "json:\"name\" graphql:\"name\""
 	ProcedureType   *string                "json:\"procedureType,omitempty\" graphql:\"procedureType\""
 	PurposeAndScope *string                "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
@@ -31422,17 +31149,17 @@ func (t *GetAllProcedures_Procedures_Edges_Node) GetDescription() *string {
 	}
 	return t.Description
 }
+func (t *GetAllProcedures_Procedures_Edges_Node) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetAllProcedures_Procedures_Edges_Node{}
+	}
+	return t.Details
+}
 func (t *GetAllProcedures_Procedures_Edges_Node) GetID() string {
 	if t == nil {
 		t = &GetAllProcedures_Procedures_Edges_Node{}
 	}
 	return t.ID
-}
-func (t *GetAllProcedures_Procedures_Edges_Node) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &GetAllProcedures_Procedures_Edges_Node{}
-	}
-	return t.Jsonschema
 }
 func (t *GetAllProcedures_Procedures_Edges_Node) GetName() string {
 	if t == nil {
@@ -31516,8 +31243,8 @@ type GetProcedureByID_Procedure struct {
 	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy       *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description     *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	ID              string                 "json:\"id\" graphql:\"id\""
-	Jsonschema      map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	Name            string                 "json:\"name\" graphql:\"name\""
 	ProcedureType   *string                "json:\"procedureType,omitempty\" graphql:\"procedureType\""
 	PurposeAndScope *string                "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
@@ -31553,17 +31280,17 @@ func (t *GetProcedureByID_Procedure) GetDescription() *string {
 	}
 	return t.Description
 }
+func (t *GetProcedureByID_Procedure) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetProcedureByID_Procedure{}
+	}
+	return t.Details
+}
 func (t *GetProcedureByID_Procedure) GetID() string {
 	if t == nil {
 		t = &GetProcedureByID_Procedure{}
 	}
 	return t.ID
-}
-func (t *GetProcedureByID_Procedure) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &GetProcedureByID_Procedure{}
-	}
-	return t.Jsonschema
 }
 func (t *GetProcedureByID_Procedure) GetName() string {
 	if t == nil {
@@ -31625,8 +31352,8 @@ type GetProcedures_Procedures_Edges_Node struct {
 	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy       *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description     *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	ID              string                 "json:\"id\" graphql:\"id\""
-	Jsonschema      map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	Name            string                 "json:\"name\" graphql:\"name\""
 	ProcedureType   *string                "json:\"procedureType,omitempty\" graphql:\"procedureType\""
 	PurposeAndScope *string                "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
@@ -31662,17 +31389,17 @@ func (t *GetProcedures_Procedures_Edges_Node) GetDescription() *string {
 	}
 	return t.Description
 }
+func (t *GetProcedures_Procedures_Edges_Node) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetProcedures_Procedures_Edges_Node{}
+	}
+	return t.Details
+}
 func (t *GetProcedures_Procedures_Edges_Node) GetID() string {
 	if t == nil {
 		t = &GetProcedures_Procedures_Edges_Node{}
 	}
 	return t.ID
-}
-func (t *GetProcedures_Procedures_Edges_Node) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &GetProcedures_Procedures_Edges_Node{}
-	}
-	return t.Jsonschema
 }
 func (t *GetProcedures_Procedures_Edges_Node) GetName() string {
 	if t == nil {
@@ -31756,8 +31483,8 @@ type UpdateProcedure_UpdateProcedure_Procedure struct {
 	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy       *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description     *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	ID              string                 "json:\"id\" graphql:\"id\""
-	Jsonschema      map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	Name            string                 "json:\"name\" graphql:\"name\""
 	ProcedureType   *string                "json:\"procedureType,omitempty\" graphql:\"procedureType\""
 	PurposeAndScope *string                "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
@@ -31793,17 +31520,17 @@ func (t *UpdateProcedure_UpdateProcedure_Procedure) GetDescription() *string {
 	}
 	return t.Description
 }
+func (t *UpdateProcedure_UpdateProcedure_Procedure) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &UpdateProcedure_UpdateProcedure_Procedure{}
+	}
+	return t.Details
+}
 func (t *UpdateProcedure_UpdateProcedure_Procedure) GetID() string {
 	if t == nil {
 		t = &UpdateProcedure_UpdateProcedure_Procedure{}
 	}
 	return t.ID
-}
-func (t *UpdateProcedure_UpdateProcedure_Procedure) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &UpdateProcedure_UpdateProcedure_Procedure{}
-	}
-	return t.Jsonschema
 }
 func (t *UpdateProcedure_UpdateProcedure_Procedure) GetName() string {
 	if t == nil {
@@ -31876,9 +31603,9 @@ type GetAllProcedureHistories_ProcedureHistories_Edges_Node struct {
 	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy       *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description     *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	HistoryTime     time.Time              "json:\"historyTime\" graphql:\"historyTime\""
 	ID              string                 "json:\"id\" graphql:\"id\""
-	Jsonschema      map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	Name            string                 "json:\"name\" graphql:\"name\""
 	Operation       history.OpType         "json:\"operation\" graphql:\"operation\""
 	ProcedureType   *string                "json:\"procedureType,omitempty\" graphql:\"procedureType\""
@@ -31916,6 +31643,12 @@ func (t *GetAllProcedureHistories_ProcedureHistories_Edges_Node) GetDescription(
 	}
 	return t.Description
 }
+func (t *GetAllProcedureHistories_ProcedureHistories_Edges_Node) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetAllProcedureHistories_ProcedureHistories_Edges_Node{}
+	}
+	return t.Details
+}
 func (t *GetAllProcedureHistories_ProcedureHistories_Edges_Node) GetHistoryTime() *time.Time {
 	if t == nil {
 		t = &GetAllProcedureHistories_ProcedureHistories_Edges_Node{}
@@ -31927,12 +31660,6 @@ func (t *GetAllProcedureHistories_ProcedureHistories_Edges_Node) GetID() string 
 		t = &GetAllProcedureHistories_ProcedureHistories_Edges_Node{}
 	}
 	return t.ID
-}
-func (t *GetAllProcedureHistories_ProcedureHistories_Edges_Node) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &GetAllProcedureHistories_ProcedureHistories_Edges_Node{}
-	}
-	return t.Jsonschema
 }
 func (t *GetAllProcedureHistories_ProcedureHistories_Edges_Node) GetName() string {
 	if t == nil {
@@ -32028,9 +31755,9 @@ type GetProcedureHistories_ProcedureHistories_Edges_Node struct {
 	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy       *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description     *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	HistoryTime     time.Time              "json:\"historyTime\" graphql:\"historyTime\""
 	ID              string                 "json:\"id\" graphql:\"id\""
-	Jsonschema      map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	Name            string                 "json:\"name\" graphql:\"name\""
 	Operation       history.OpType         "json:\"operation\" graphql:\"operation\""
 	ProcedureType   *string                "json:\"procedureType,omitempty\" graphql:\"procedureType\""
@@ -32068,6 +31795,12 @@ func (t *GetProcedureHistories_ProcedureHistories_Edges_Node) GetDescription() *
 	}
 	return t.Description
 }
+func (t *GetProcedureHistories_ProcedureHistories_Edges_Node) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetProcedureHistories_ProcedureHistories_Edges_Node{}
+	}
+	return t.Details
+}
 func (t *GetProcedureHistories_ProcedureHistories_Edges_Node) GetHistoryTime() *time.Time {
 	if t == nil {
 		t = &GetProcedureHistories_ProcedureHistories_Edges_Node{}
@@ -32079,12 +31812,6 @@ func (t *GetProcedureHistories_ProcedureHistories_Edges_Node) GetID() string {
 		t = &GetProcedureHistories_ProcedureHistories_Edges_Node{}
 	}
 	return t.ID
-}
-func (t *GetProcedureHistories_ProcedureHistories_Edges_Node) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &GetProcedureHistories_ProcedureHistories_Edges_Node{}
-	}
-	return t.Jsonschema
 }
 func (t *GetProcedureHistories_ProcedureHistories_Edges_Node) GetName() string {
 	if t == nil {
@@ -32180,15 +31907,14 @@ type CreateBulkCSVRisk_CreateBulkCSVRisk_Risks struct {
 	CreatedAt     *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description   *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details       map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	ID            string                 "json:\"id\" graphql:\"id\""
-	Impact        *string                "json:\"impact,omitempty\" graphql:\"impact\""
-	Jsonschema    map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
-	Likelihood    *string                "json:\"likelihood,omitempty\" graphql:\"likelihood\""
+	Impact        *enums.RiskImpact      "json:\"impact,omitempty\" graphql:\"impact\""
+	Likelihood    *enums.RiskLikelihood  "json:\"likelihood,omitempty\" graphql:\"likelihood\""
 	Mitigation    *string                "json:\"mitigation,omitempty\" graphql:\"mitigation\""
 	Name          string                 "json:\"name\" graphql:\"name\""
 	RiskType      *string                "json:\"riskType,omitempty\" graphql:\"riskType\""
 	Satisfies     *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Severity      *string                "json:\"severity,omitempty\" graphql:\"severity\""
 	Status        *string                "json:\"status,omitempty\" graphql:\"status\""
 	Tags          []string               "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt     *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -32219,25 +31945,25 @@ func (t *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks) GetDescription() *string {
 	}
 	return t.Description
 }
+func (t *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &CreateBulkCSVRisk_CreateBulkCSVRisk_Risks{}
+	}
+	return t.Details
+}
 func (t *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks) GetID() string {
 	if t == nil {
 		t = &CreateBulkCSVRisk_CreateBulkCSVRisk_Risks{}
 	}
 	return t.ID
 }
-func (t *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks) GetImpact() *string {
+func (t *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks) GetImpact() *enums.RiskImpact {
 	if t == nil {
 		t = &CreateBulkCSVRisk_CreateBulkCSVRisk_Risks{}
 	}
 	return t.Impact
 }
-func (t *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &CreateBulkCSVRisk_CreateBulkCSVRisk_Risks{}
-	}
-	return t.Jsonschema
-}
-func (t *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks) GetLikelihood() *string {
+func (t *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks) GetLikelihood() *enums.RiskLikelihood {
 	if t == nil {
 		t = &CreateBulkCSVRisk_CreateBulkCSVRisk_Risks{}
 	}
@@ -32266,12 +31992,6 @@ func (t *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks) GetSatisfies() *string {
 		t = &CreateBulkCSVRisk_CreateBulkCSVRisk_Risks{}
 	}
 	return t.Satisfies
-}
-func (t *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks) GetSeverity() *string {
-	if t == nil {
-		t = &CreateBulkCSVRisk_CreateBulkCSVRisk_Risks{}
-	}
-	return t.Severity
 }
 func (t *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks) GetStatus() *string {
 	if t == nil {
@@ -32314,15 +32034,14 @@ type CreateBulkRisk_CreateBulkRisk_Risks struct {
 	CreatedAt     *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description   *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details       map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	ID            string                 "json:\"id\" graphql:\"id\""
-	Impact        *string                "json:\"impact,omitempty\" graphql:\"impact\""
-	Jsonschema    map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
-	Likelihood    *string                "json:\"likelihood,omitempty\" graphql:\"likelihood\""
+	Impact        *enums.RiskImpact      "json:\"impact,omitempty\" graphql:\"impact\""
+	Likelihood    *enums.RiskLikelihood  "json:\"likelihood,omitempty\" graphql:\"likelihood\""
 	Mitigation    *string                "json:\"mitigation,omitempty\" graphql:\"mitigation\""
 	Name          string                 "json:\"name\" graphql:\"name\""
 	RiskType      *string                "json:\"riskType,omitempty\" graphql:\"riskType\""
 	Satisfies     *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Severity      *string                "json:\"severity,omitempty\" graphql:\"severity\""
 	Status        *string                "json:\"status,omitempty\" graphql:\"status\""
 	Tags          []string               "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt     *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -32353,25 +32072,25 @@ func (t *CreateBulkRisk_CreateBulkRisk_Risks) GetDescription() *string {
 	}
 	return t.Description
 }
+func (t *CreateBulkRisk_CreateBulkRisk_Risks) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &CreateBulkRisk_CreateBulkRisk_Risks{}
+	}
+	return t.Details
+}
 func (t *CreateBulkRisk_CreateBulkRisk_Risks) GetID() string {
 	if t == nil {
 		t = &CreateBulkRisk_CreateBulkRisk_Risks{}
 	}
 	return t.ID
 }
-func (t *CreateBulkRisk_CreateBulkRisk_Risks) GetImpact() *string {
+func (t *CreateBulkRisk_CreateBulkRisk_Risks) GetImpact() *enums.RiskImpact {
 	if t == nil {
 		t = &CreateBulkRisk_CreateBulkRisk_Risks{}
 	}
 	return t.Impact
 }
-func (t *CreateBulkRisk_CreateBulkRisk_Risks) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &CreateBulkRisk_CreateBulkRisk_Risks{}
-	}
-	return t.Jsonschema
-}
-func (t *CreateBulkRisk_CreateBulkRisk_Risks) GetLikelihood() *string {
+func (t *CreateBulkRisk_CreateBulkRisk_Risks) GetLikelihood() *enums.RiskLikelihood {
 	if t == nil {
 		t = &CreateBulkRisk_CreateBulkRisk_Risks{}
 	}
@@ -32400,12 +32119,6 @@ func (t *CreateBulkRisk_CreateBulkRisk_Risks) GetSatisfies() *string {
 		t = &CreateBulkRisk_CreateBulkRisk_Risks{}
 	}
 	return t.Satisfies
-}
-func (t *CreateBulkRisk_CreateBulkRisk_Risks) GetSeverity() *string {
-	if t == nil {
-		t = &CreateBulkRisk_CreateBulkRisk_Risks{}
-	}
-	return t.Severity
 }
 func (t *CreateBulkRisk_CreateBulkRisk_Risks) GetStatus() *string {
 	if t == nil {
@@ -32448,15 +32161,14 @@ type CreateRisk_CreateRisk_Risk struct {
 	CreatedAt     *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description   *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details       map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	ID            string                 "json:\"id\" graphql:\"id\""
-	Impact        *string                "json:\"impact,omitempty\" graphql:\"impact\""
-	Jsonschema    map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
-	Likelihood    *string                "json:\"likelihood,omitempty\" graphql:\"likelihood\""
+	Impact        *enums.RiskImpact      "json:\"impact,omitempty\" graphql:\"impact\""
+	Likelihood    *enums.RiskLikelihood  "json:\"likelihood,omitempty\" graphql:\"likelihood\""
 	Mitigation    *string                "json:\"mitigation,omitempty\" graphql:\"mitigation\""
 	Name          string                 "json:\"name\" graphql:\"name\""
 	RiskType      *string                "json:\"riskType,omitempty\" graphql:\"riskType\""
 	Satisfies     *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Severity      *string                "json:\"severity,omitempty\" graphql:\"severity\""
 	Status        *string                "json:\"status,omitempty\" graphql:\"status\""
 	Tags          []string               "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt     *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -32487,25 +32199,25 @@ func (t *CreateRisk_CreateRisk_Risk) GetDescription() *string {
 	}
 	return t.Description
 }
+func (t *CreateRisk_CreateRisk_Risk) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &CreateRisk_CreateRisk_Risk{}
+	}
+	return t.Details
+}
 func (t *CreateRisk_CreateRisk_Risk) GetID() string {
 	if t == nil {
 		t = &CreateRisk_CreateRisk_Risk{}
 	}
 	return t.ID
 }
-func (t *CreateRisk_CreateRisk_Risk) GetImpact() *string {
+func (t *CreateRisk_CreateRisk_Risk) GetImpact() *enums.RiskImpact {
 	if t == nil {
 		t = &CreateRisk_CreateRisk_Risk{}
 	}
 	return t.Impact
 }
-func (t *CreateRisk_CreateRisk_Risk) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &CreateRisk_CreateRisk_Risk{}
-	}
-	return t.Jsonschema
-}
-func (t *CreateRisk_CreateRisk_Risk) GetLikelihood() *string {
+func (t *CreateRisk_CreateRisk_Risk) GetLikelihood() *enums.RiskLikelihood {
 	if t == nil {
 		t = &CreateRisk_CreateRisk_Risk{}
 	}
@@ -32534,12 +32246,6 @@ func (t *CreateRisk_CreateRisk_Risk) GetSatisfies() *string {
 		t = &CreateRisk_CreateRisk_Risk{}
 	}
 	return t.Satisfies
-}
-func (t *CreateRisk_CreateRisk_Risk) GetSeverity() *string {
-	if t == nil {
-		t = &CreateRisk_CreateRisk_Risk{}
-	}
-	return t.Severity
 }
 func (t *CreateRisk_CreateRisk_Risk) GetStatus() *string {
 	if t == nil {
@@ -32593,15 +32299,14 @@ type GetAllRisks_Risks_Edges_Node struct {
 	CreatedAt     *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description   *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details       map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	ID            string                 "json:\"id\" graphql:\"id\""
-	Impact        *string                "json:\"impact,omitempty\" graphql:\"impact\""
-	Jsonschema    map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
-	Likelihood    *string                "json:\"likelihood,omitempty\" graphql:\"likelihood\""
+	Impact        *enums.RiskImpact      "json:\"impact,omitempty\" graphql:\"impact\""
+	Likelihood    *enums.RiskLikelihood  "json:\"likelihood,omitempty\" graphql:\"likelihood\""
 	Mitigation    *string                "json:\"mitigation,omitempty\" graphql:\"mitigation\""
 	Name          string                 "json:\"name\" graphql:\"name\""
 	RiskType      *string                "json:\"riskType,omitempty\" graphql:\"riskType\""
 	Satisfies     *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Severity      *string                "json:\"severity,omitempty\" graphql:\"severity\""
 	Status        *string                "json:\"status,omitempty\" graphql:\"status\""
 	Tags          []string               "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt     *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -32632,25 +32337,25 @@ func (t *GetAllRisks_Risks_Edges_Node) GetDescription() *string {
 	}
 	return t.Description
 }
+func (t *GetAllRisks_Risks_Edges_Node) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetAllRisks_Risks_Edges_Node{}
+	}
+	return t.Details
+}
 func (t *GetAllRisks_Risks_Edges_Node) GetID() string {
 	if t == nil {
 		t = &GetAllRisks_Risks_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *GetAllRisks_Risks_Edges_Node) GetImpact() *string {
+func (t *GetAllRisks_Risks_Edges_Node) GetImpact() *enums.RiskImpact {
 	if t == nil {
 		t = &GetAllRisks_Risks_Edges_Node{}
 	}
 	return t.Impact
 }
-func (t *GetAllRisks_Risks_Edges_Node) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &GetAllRisks_Risks_Edges_Node{}
-	}
-	return t.Jsonschema
-}
-func (t *GetAllRisks_Risks_Edges_Node) GetLikelihood() *string {
+func (t *GetAllRisks_Risks_Edges_Node) GetLikelihood() *enums.RiskLikelihood {
 	if t == nil {
 		t = &GetAllRisks_Risks_Edges_Node{}
 	}
@@ -32679,12 +32384,6 @@ func (t *GetAllRisks_Risks_Edges_Node) GetSatisfies() *string {
 		t = &GetAllRisks_Risks_Edges_Node{}
 	}
 	return t.Satisfies
-}
-func (t *GetAllRisks_Risks_Edges_Node) GetSeverity() *string {
-	if t == nil {
-		t = &GetAllRisks_Risks_Edges_Node{}
-	}
-	return t.Severity
 }
 func (t *GetAllRisks_Risks_Edges_Node) GetStatus() *string {
 	if t == nil {
@@ -32738,15 +32437,14 @@ type GetRiskByID_Risk struct {
 	CreatedAt     *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description   *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details       map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	ID            string                 "json:\"id\" graphql:\"id\""
-	Impact        *string                "json:\"impact,omitempty\" graphql:\"impact\""
-	Jsonschema    map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
-	Likelihood    *string                "json:\"likelihood,omitempty\" graphql:\"likelihood\""
+	Impact        *enums.RiskImpact      "json:\"impact,omitempty\" graphql:\"impact\""
+	Likelihood    *enums.RiskLikelihood  "json:\"likelihood,omitempty\" graphql:\"likelihood\""
 	Mitigation    *string                "json:\"mitigation,omitempty\" graphql:\"mitigation\""
 	Name          string                 "json:\"name\" graphql:\"name\""
 	RiskType      *string                "json:\"riskType,omitempty\" graphql:\"riskType\""
 	Satisfies     *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Severity      *string                "json:\"severity,omitempty\" graphql:\"severity\""
 	Status        *string                "json:\"status,omitempty\" graphql:\"status\""
 	Tags          []string               "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt     *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -32777,25 +32475,25 @@ func (t *GetRiskByID_Risk) GetDescription() *string {
 	}
 	return t.Description
 }
+func (t *GetRiskByID_Risk) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetRiskByID_Risk{}
+	}
+	return t.Details
+}
 func (t *GetRiskByID_Risk) GetID() string {
 	if t == nil {
 		t = &GetRiskByID_Risk{}
 	}
 	return t.ID
 }
-func (t *GetRiskByID_Risk) GetImpact() *string {
+func (t *GetRiskByID_Risk) GetImpact() *enums.RiskImpact {
 	if t == nil {
 		t = &GetRiskByID_Risk{}
 	}
 	return t.Impact
 }
-func (t *GetRiskByID_Risk) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &GetRiskByID_Risk{}
-	}
-	return t.Jsonschema
-}
-func (t *GetRiskByID_Risk) GetLikelihood() *string {
+func (t *GetRiskByID_Risk) GetLikelihood() *enums.RiskLikelihood {
 	if t == nil {
 		t = &GetRiskByID_Risk{}
 	}
@@ -32824,12 +32522,6 @@ func (t *GetRiskByID_Risk) GetSatisfies() *string {
 		t = &GetRiskByID_Risk{}
 	}
 	return t.Satisfies
-}
-func (t *GetRiskByID_Risk) GetSeverity() *string {
-	if t == nil {
-		t = &GetRiskByID_Risk{}
-	}
-	return t.Severity
 }
 func (t *GetRiskByID_Risk) GetStatus() *string {
 	if t == nil {
@@ -32861,15 +32553,14 @@ type GetRisks_Risks_Edges_Node struct {
 	CreatedAt     *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description   *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details       map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	ID            string                 "json:\"id\" graphql:\"id\""
-	Impact        *string                "json:\"impact,omitempty\" graphql:\"impact\""
-	Jsonschema    map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
-	Likelihood    *string                "json:\"likelihood,omitempty\" graphql:\"likelihood\""
+	Impact        *enums.RiskImpact      "json:\"impact,omitempty\" graphql:\"impact\""
+	Likelihood    *enums.RiskLikelihood  "json:\"likelihood,omitempty\" graphql:\"likelihood\""
 	Mitigation    *string                "json:\"mitigation,omitempty\" graphql:\"mitigation\""
 	Name          string                 "json:\"name\" graphql:\"name\""
 	RiskType      *string                "json:\"riskType,omitempty\" graphql:\"riskType\""
 	Satisfies     *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Severity      *string                "json:\"severity,omitempty\" graphql:\"severity\""
 	Status        *string                "json:\"status,omitempty\" graphql:\"status\""
 	Tags          []string               "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt     *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -32900,25 +32591,25 @@ func (t *GetRisks_Risks_Edges_Node) GetDescription() *string {
 	}
 	return t.Description
 }
+func (t *GetRisks_Risks_Edges_Node) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetRisks_Risks_Edges_Node{}
+	}
+	return t.Details
+}
 func (t *GetRisks_Risks_Edges_Node) GetID() string {
 	if t == nil {
 		t = &GetRisks_Risks_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *GetRisks_Risks_Edges_Node) GetImpact() *string {
+func (t *GetRisks_Risks_Edges_Node) GetImpact() *enums.RiskImpact {
 	if t == nil {
 		t = &GetRisks_Risks_Edges_Node{}
 	}
 	return t.Impact
 }
-func (t *GetRisks_Risks_Edges_Node) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &GetRisks_Risks_Edges_Node{}
-	}
-	return t.Jsonschema
-}
-func (t *GetRisks_Risks_Edges_Node) GetLikelihood() *string {
+func (t *GetRisks_Risks_Edges_Node) GetLikelihood() *enums.RiskLikelihood {
 	if t == nil {
 		t = &GetRisks_Risks_Edges_Node{}
 	}
@@ -32947,12 +32638,6 @@ func (t *GetRisks_Risks_Edges_Node) GetSatisfies() *string {
 		t = &GetRisks_Risks_Edges_Node{}
 	}
 	return t.Satisfies
-}
-func (t *GetRisks_Risks_Edges_Node) GetSeverity() *string {
-	if t == nil {
-		t = &GetRisks_Risks_Edges_Node{}
-	}
-	return t.Severity
 }
 func (t *GetRisks_Risks_Edges_Node) GetStatus() *string {
 	if t == nil {
@@ -33006,15 +32691,14 @@ type UpdateRisk_UpdateRisk_Risk struct {
 	CreatedAt     *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description   *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details       map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	ID            string                 "json:\"id\" graphql:\"id\""
-	Impact        *string                "json:\"impact,omitempty\" graphql:\"impact\""
-	Jsonschema    map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
-	Likelihood    *string                "json:\"likelihood,omitempty\" graphql:\"likelihood\""
+	Impact        *enums.RiskImpact      "json:\"impact,omitempty\" graphql:\"impact\""
+	Likelihood    *enums.RiskLikelihood  "json:\"likelihood,omitempty\" graphql:\"likelihood\""
 	Mitigation    *string                "json:\"mitigation,omitempty\" graphql:\"mitigation\""
 	Name          string                 "json:\"name\" graphql:\"name\""
 	RiskType      *string                "json:\"riskType,omitempty\" graphql:\"riskType\""
 	Satisfies     *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Severity      *string                "json:\"severity,omitempty\" graphql:\"severity\""
 	Status        *string                "json:\"status,omitempty\" graphql:\"status\""
 	Tags          []string               "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt     *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -33045,25 +32729,25 @@ func (t *UpdateRisk_UpdateRisk_Risk) GetDescription() *string {
 	}
 	return t.Description
 }
+func (t *UpdateRisk_UpdateRisk_Risk) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &UpdateRisk_UpdateRisk_Risk{}
+	}
+	return t.Details
+}
 func (t *UpdateRisk_UpdateRisk_Risk) GetID() string {
 	if t == nil {
 		t = &UpdateRisk_UpdateRisk_Risk{}
 	}
 	return t.ID
 }
-func (t *UpdateRisk_UpdateRisk_Risk) GetImpact() *string {
+func (t *UpdateRisk_UpdateRisk_Risk) GetImpact() *enums.RiskImpact {
 	if t == nil {
 		t = &UpdateRisk_UpdateRisk_Risk{}
 	}
 	return t.Impact
 }
-func (t *UpdateRisk_UpdateRisk_Risk) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &UpdateRisk_UpdateRisk_Risk{}
-	}
-	return t.Jsonschema
-}
-func (t *UpdateRisk_UpdateRisk_Risk) GetLikelihood() *string {
+func (t *UpdateRisk_UpdateRisk_Risk) GetLikelihood() *enums.RiskLikelihood {
 	if t == nil {
 		t = &UpdateRisk_UpdateRisk_Risk{}
 	}
@@ -33092,12 +32776,6 @@ func (t *UpdateRisk_UpdateRisk_Risk) GetSatisfies() *string {
 		t = &UpdateRisk_UpdateRisk_Risk{}
 	}
 	return t.Satisfies
-}
-func (t *UpdateRisk_UpdateRisk_Risk) GetSeverity() *string {
-	if t == nil {
-		t = &UpdateRisk_UpdateRisk_Risk{}
-	}
-	return t.Severity
 }
 func (t *UpdateRisk_UpdateRisk_Risk) GetStatus() *string {
 	if t == nil {
@@ -33140,18 +32818,17 @@ type GetAllRiskHistories_RiskHistories_Edges_Node struct {
 	CreatedAt     *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description   *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details       map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	HistoryTime   time.Time              "json:\"historyTime\" graphql:\"historyTime\""
 	ID            string                 "json:\"id\" graphql:\"id\""
-	Impact        *string                "json:\"impact,omitempty\" graphql:\"impact\""
-	Jsonschema    map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
-	Likelihood    *string                "json:\"likelihood,omitempty\" graphql:\"likelihood\""
+	Impact        *enums.RiskImpact      "json:\"impact,omitempty\" graphql:\"impact\""
+	Likelihood    *enums.RiskLikelihood  "json:\"likelihood,omitempty\" graphql:\"likelihood\""
 	Mitigation    *string                "json:\"mitigation,omitempty\" graphql:\"mitigation\""
 	Name          string                 "json:\"name\" graphql:\"name\""
 	Operation     history.OpType         "json:\"operation\" graphql:\"operation\""
 	Ref           *string                "json:\"ref,omitempty\" graphql:\"ref\""
 	RiskType      *string                "json:\"riskType,omitempty\" graphql:\"riskType\""
 	Satisfies     *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Severity      *string                "json:\"severity,omitempty\" graphql:\"severity\""
 	Status        *string                "json:\"status,omitempty\" graphql:\"status\""
 	Tags          []string               "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt     *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -33182,6 +32859,12 @@ func (t *GetAllRiskHistories_RiskHistories_Edges_Node) GetDescription() *string 
 	}
 	return t.Description
 }
+func (t *GetAllRiskHistories_RiskHistories_Edges_Node) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetAllRiskHistories_RiskHistories_Edges_Node{}
+	}
+	return t.Details
+}
 func (t *GetAllRiskHistories_RiskHistories_Edges_Node) GetHistoryTime() *time.Time {
 	if t == nil {
 		t = &GetAllRiskHistories_RiskHistories_Edges_Node{}
@@ -33194,19 +32877,13 @@ func (t *GetAllRiskHistories_RiskHistories_Edges_Node) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetAllRiskHistories_RiskHistories_Edges_Node) GetImpact() *string {
+func (t *GetAllRiskHistories_RiskHistories_Edges_Node) GetImpact() *enums.RiskImpact {
 	if t == nil {
 		t = &GetAllRiskHistories_RiskHistories_Edges_Node{}
 	}
 	return t.Impact
 }
-func (t *GetAllRiskHistories_RiskHistories_Edges_Node) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &GetAllRiskHistories_RiskHistories_Edges_Node{}
-	}
-	return t.Jsonschema
-}
-func (t *GetAllRiskHistories_RiskHistories_Edges_Node) GetLikelihood() *string {
+func (t *GetAllRiskHistories_RiskHistories_Edges_Node) GetLikelihood() *enums.RiskLikelihood {
 	if t == nil {
 		t = &GetAllRiskHistories_RiskHistories_Edges_Node{}
 	}
@@ -33247,12 +32924,6 @@ func (t *GetAllRiskHistories_RiskHistories_Edges_Node) GetSatisfies() *string {
 		t = &GetAllRiskHistories_RiskHistories_Edges_Node{}
 	}
 	return t.Satisfies
-}
-func (t *GetAllRiskHistories_RiskHistories_Edges_Node) GetSeverity() *string {
-	if t == nil {
-		t = &GetAllRiskHistories_RiskHistories_Edges_Node{}
-	}
-	return t.Severity
 }
 func (t *GetAllRiskHistories_RiskHistories_Edges_Node) GetStatus() *string {
 	if t == nil {
@@ -33306,18 +32977,17 @@ type GetRiskHistories_RiskHistories_Edges_Node struct {
 	CreatedAt     *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy     *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description   *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details       map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	HistoryTime   time.Time              "json:\"historyTime\" graphql:\"historyTime\""
 	ID            string                 "json:\"id\" graphql:\"id\""
-	Impact        *string                "json:\"impact,omitempty\" graphql:\"impact\""
-	Jsonschema    map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
-	Likelihood    *string                "json:\"likelihood,omitempty\" graphql:\"likelihood\""
+	Impact        *enums.RiskImpact      "json:\"impact,omitempty\" graphql:\"impact\""
+	Likelihood    *enums.RiskLikelihood  "json:\"likelihood,omitempty\" graphql:\"likelihood\""
 	Mitigation    *string                "json:\"mitigation,omitempty\" graphql:\"mitigation\""
 	Name          string                 "json:\"name\" graphql:\"name\""
 	Operation     history.OpType         "json:\"operation\" graphql:\"operation\""
 	Ref           *string                "json:\"ref,omitempty\" graphql:\"ref\""
 	RiskType      *string                "json:\"riskType,omitempty\" graphql:\"riskType\""
 	Satisfies     *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Severity      *string                "json:\"severity,omitempty\" graphql:\"severity\""
 	Status        *string                "json:\"status,omitempty\" graphql:\"status\""
 	Tags          []string               "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt     *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -33348,6 +33018,12 @@ func (t *GetRiskHistories_RiskHistories_Edges_Node) GetDescription() *string {
 	}
 	return t.Description
 }
+func (t *GetRiskHistories_RiskHistories_Edges_Node) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetRiskHistories_RiskHistories_Edges_Node{}
+	}
+	return t.Details
+}
 func (t *GetRiskHistories_RiskHistories_Edges_Node) GetHistoryTime() *time.Time {
 	if t == nil {
 		t = &GetRiskHistories_RiskHistories_Edges_Node{}
@@ -33360,19 +33036,13 @@ func (t *GetRiskHistories_RiskHistories_Edges_Node) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetRiskHistories_RiskHistories_Edges_Node) GetImpact() *string {
+func (t *GetRiskHistories_RiskHistories_Edges_Node) GetImpact() *enums.RiskImpact {
 	if t == nil {
 		t = &GetRiskHistories_RiskHistories_Edges_Node{}
 	}
 	return t.Impact
 }
-func (t *GetRiskHistories_RiskHistories_Edges_Node) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &GetRiskHistories_RiskHistories_Edges_Node{}
-	}
-	return t.Jsonschema
-}
-func (t *GetRiskHistories_RiskHistories_Edges_Node) GetLikelihood() *string {
+func (t *GetRiskHistories_RiskHistories_Edges_Node) GetLikelihood() *enums.RiskLikelihood {
 	if t == nil {
 		t = &GetRiskHistories_RiskHistories_Edges_Node{}
 	}
@@ -33413,12 +33083,6 @@ func (t *GetRiskHistories_RiskHistories_Edges_Node) GetSatisfies() *string {
 		t = &GetRiskHistories_RiskHistories_Edges_Node{}
 	}
 	return t.Satisfies
-}
-func (t *GetRiskHistories_RiskHistories_Edges_Node) GetSeverity() *string {
-	if t == nil {
-		t = &GetRiskHistories_RiskHistories_Edges_Node{}
-	}
-	return t.Severity
 }
 func (t *GetRiskHistories_RiskHistories_Edges_Node) GetStatus() *string {
 	if t == nil {
@@ -34788,9 +34452,9 @@ type CreateBulkCSVStandard_CreateBulkCSVStandard_Standards struct {
 	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy       *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description     *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	Family          *string                "json:\"family,omitempty\" graphql:\"family\""
 	ID              string                 "json:\"id\" graphql:\"id\""
-	Jsonschema      map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	Name            string                 "json:\"name\" graphql:\"name\""
 	PurposeAndScope *string                "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
 	Satisfies       *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
@@ -34826,6 +34490,12 @@ func (t *CreateBulkCSVStandard_CreateBulkCSVStandard_Standards) GetDescription()
 	}
 	return t.Description
 }
+func (t *CreateBulkCSVStandard_CreateBulkCSVStandard_Standards) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &CreateBulkCSVStandard_CreateBulkCSVStandard_Standards{}
+	}
+	return t.Details
+}
 func (t *CreateBulkCSVStandard_CreateBulkCSVStandard_Standards) GetFamily() *string {
 	if t == nil {
 		t = &CreateBulkCSVStandard_CreateBulkCSVStandard_Standards{}
@@ -34837,12 +34507,6 @@ func (t *CreateBulkCSVStandard_CreateBulkCSVStandard_Standards) GetID() string {
 		t = &CreateBulkCSVStandard_CreateBulkCSVStandard_Standards{}
 	}
 	return t.ID
-}
-func (t *CreateBulkCSVStandard_CreateBulkCSVStandard_Standards) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &CreateBulkCSVStandard_CreateBulkCSVStandard_Standards{}
-	}
-	return t.Jsonschema
 }
 func (t *CreateBulkCSVStandard_CreateBulkCSVStandard_Standards) GetName() string {
 	if t == nil {
@@ -34915,9 +34579,9 @@ type CreateBulkStandard_CreateBulkStandard_Standards struct {
 	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy       *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description     *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	Family          *string                "json:\"family,omitempty\" graphql:\"family\""
 	ID              string                 "json:\"id\" graphql:\"id\""
-	Jsonschema      map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	Name            string                 "json:\"name\" graphql:\"name\""
 	PurposeAndScope *string                "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
 	Satisfies       *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
@@ -34953,6 +34617,12 @@ func (t *CreateBulkStandard_CreateBulkStandard_Standards) GetDescription() *stri
 	}
 	return t.Description
 }
+func (t *CreateBulkStandard_CreateBulkStandard_Standards) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &CreateBulkStandard_CreateBulkStandard_Standards{}
+	}
+	return t.Details
+}
 func (t *CreateBulkStandard_CreateBulkStandard_Standards) GetFamily() *string {
 	if t == nil {
 		t = &CreateBulkStandard_CreateBulkStandard_Standards{}
@@ -34964,12 +34634,6 @@ func (t *CreateBulkStandard_CreateBulkStandard_Standards) GetID() string {
 		t = &CreateBulkStandard_CreateBulkStandard_Standards{}
 	}
 	return t.ID
-}
-func (t *CreateBulkStandard_CreateBulkStandard_Standards) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &CreateBulkStandard_CreateBulkStandard_Standards{}
-	}
-	return t.Jsonschema
 }
 func (t *CreateBulkStandard_CreateBulkStandard_Standards) GetName() string {
 	if t == nil {
@@ -35042,9 +34706,9 @@ type CreateStandard_CreateStandard_Standard struct {
 	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy       *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description     *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	Family          *string                "json:\"family,omitempty\" graphql:\"family\""
 	ID              string                 "json:\"id\" graphql:\"id\""
-	Jsonschema      map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	Name            string                 "json:\"name\" graphql:\"name\""
 	PurposeAndScope *string                "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
 	Satisfies       *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
@@ -35080,6 +34744,12 @@ func (t *CreateStandard_CreateStandard_Standard) GetDescription() *string {
 	}
 	return t.Description
 }
+func (t *CreateStandard_CreateStandard_Standard) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &CreateStandard_CreateStandard_Standard{}
+	}
+	return t.Details
+}
 func (t *CreateStandard_CreateStandard_Standard) GetFamily() *string {
 	if t == nil {
 		t = &CreateStandard_CreateStandard_Standard{}
@@ -35091,12 +34761,6 @@ func (t *CreateStandard_CreateStandard_Standard) GetID() string {
 		t = &CreateStandard_CreateStandard_Standard{}
 	}
 	return t.ID
-}
-func (t *CreateStandard_CreateStandard_Standard) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &CreateStandard_CreateStandard_Standard{}
-	}
-	return t.Jsonschema
 }
 func (t *CreateStandard_CreateStandard_Standard) GetName() string {
 	if t == nil {
@@ -35180,9 +34844,9 @@ type GetAllStandards_Standards_Edges_Node struct {
 	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy       *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description     *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	Family          *string                "json:\"family,omitempty\" graphql:\"family\""
 	ID              string                 "json:\"id\" graphql:\"id\""
-	Jsonschema      map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	Name            string                 "json:\"name\" graphql:\"name\""
 	PurposeAndScope *string                "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
 	Satisfies       *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
@@ -35218,6 +34882,12 @@ func (t *GetAllStandards_Standards_Edges_Node) GetDescription() *string {
 	}
 	return t.Description
 }
+func (t *GetAllStandards_Standards_Edges_Node) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetAllStandards_Standards_Edges_Node{}
+	}
+	return t.Details
+}
 func (t *GetAllStandards_Standards_Edges_Node) GetFamily() *string {
 	if t == nil {
 		t = &GetAllStandards_Standards_Edges_Node{}
@@ -35229,12 +34899,6 @@ func (t *GetAllStandards_Standards_Edges_Node) GetID() string {
 		t = &GetAllStandards_Standards_Edges_Node{}
 	}
 	return t.ID
-}
-func (t *GetAllStandards_Standards_Edges_Node) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &GetAllStandards_Standards_Edges_Node{}
-	}
-	return t.Jsonschema
 }
 func (t *GetAllStandards_Standards_Edges_Node) GetName() string {
 	if t == nil {
@@ -35318,9 +34982,9 @@ type GetStandardByID_Standard struct {
 	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy       *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description     *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	Family          *string                "json:\"family,omitempty\" graphql:\"family\""
 	ID              string                 "json:\"id\" graphql:\"id\""
-	Jsonschema      map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	Name            string                 "json:\"name\" graphql:\"name\""
 	PurposeAndScope *string                "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
 	Satisfies       *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
@@ -35356,6 +35020,12 @@ func (t *GetStandardByID_Standard) GetDescription() *string {
 	}
 	return t.Description
 }
+func (t *GetStandardByID_Standard) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetStandardByID_Standard{}
+	}
+	return t.Details
+}
 func (t *GetStandardByID_Standard) GetFamily() *string {
 	if t == nil {
 		t = &GetStandardByID_Standard{}
@@ -35367,12 +35037,6 @@ func (t *GetStandardByID_Standard) GetID() string {
 		t = &GetStandardByID_Standard{}
 	}
 	return t.ID
-}
-func (t *GetStandardByID_Standard) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &GetStandardByID_Standard{}
-	}
-	return t.Jsonschema
 }
 func (t *GetStandardByID_Standard) GetName() string {
 	if t == nil {
@@ -35434,9 +35098,9 @@ type GetStandards_Standards_Edges_Node struct {
 	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy       *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description     *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	Family          *string                "json:\"family,omitempty\" graphql:\"family\""
 	ID              string                 "json:\"id\" graphql:\"id\""
-	Jsonschema      map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	Name            string                 "json:\"name\" graphql:\"name\""
 	PurposeAndScope *string                "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
 	Satisfies       *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
@@ -35472,6 +35136,12 @@ func (t *GetStandards_Standards_Edges_Node) GetDescription() *string {
 	}
 	return t.Description
 }
+func (t *GetStandards_Standards_Edges_Node) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetStandards_Standards_Edges_Node{}
+	}
+	return t.Details
+}
 func (t *GetStandards_Standards_Edges_Node) GetFamily() *string {
 	if t == nil {
 		t = &GetStandards_Standards_Edges_Node{}
@@ -35483,12 +35153,6 @@ func (t *GetStandards_Standards_Edges_Node) GetID() string {
 		t = &GetStandards_Standards_Edges_Node{}
 	}
 	return t.ID
-}
-func (t *GetStandards_Standards_Edges_Node) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &GetStandards_Standards_Edges_Node{}
-	}
-	return t.Jsonschema
 }
 func (t *GetStandards_Standards_Edges_Node) GetName() string {
 	if t == nil {
@@ -35572,9 +35236,9 @@ type UpdateStandard_UpdateStandard_Standard struct {
 	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy       *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description     *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	Family          *string                "json:\"family,omitempty\" graphql:\"family\""
 	ID              string                 "json:\"id\" graphql:\"id\""
-	Jsonschema      map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	Name            string                 "json:\"name\" graphql:\"name\""
 	PurposeAndScope *string                "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
 	Satisfies       *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
@@ -35610,6 +35274,12 @@ func (t *UpdateStandard_UpdateStandard_Standard) GetDescription() *string {
 	}
 	return t.Description
 }
+func (t *UpdateStandard_UpdateStandard_Standard) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &UpdateStandard_UpdateStandard_Standard{}
+	}
+	return t.Details
+}
 func (t *UpdateStandard_UpdateStandard_Standard) GetFamily() *string {
 	if t == nil {
 		t = &UpdateStandard_UpdateStandard_Standard{}
@@ -35621,12 +35291,6 @@ func (t *UpdateStandard_UpdateStandard_Standard) GetID() string {
 		t = &UpdateStandard_UpdateStandard_Standard{}
 	}
 	return t.ID
-}
-func (t *UpdateStandard_UpdateStandard_Standard) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &UpdateStandard_UpdateStandard_Standard{}
-	}
-	return t.Jsonschema
 }
 func (t *UpdateStandard_UpdateStandard_Standard) GetName() string {
 	if t == nil {
@@ -35699,10 +35363,10 @@ type GetAllStandardHistories_StandardHistories_Edges_Node struct {
 	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy       *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description     *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	Family          *string                "json:\"family,omitempty\" graphql:\"family\""
 	HistoryTime     time.Time              "json:\"historyTime\" graphql:\"historyTime\""
 	ID              string                 "json:\"id\" graphql:\"id\""
-	Jsonschema      map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	Name            string                 "json:\"name\" graphql:\"name\""
 	Operation       history.OpType         "json:\"operation\" graphql:\"operation\""
 	PurposeAndScope *string                "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
@@ -35740,6 +35404,12 @@ func (t *GetAllStandardHistories_StandardHistories_Edges_Node) GetDescription() 
 	}
 	return t.Description
 }
+func (t *GetAllStandardHistories_StandardHistories_Edges_Node) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetAllStandardHistories_StandardHistories_Edges_Node{}
+	}
+	return t.Details
+}
 func (t *GetAllStandardHistories_StandardHistories_Edges_Node) GetFamily() *string {
 	if t == nil {
 		t = &GetAllStandardHistories_StandardHistories_Edges_Node{}
@@ -35757,12 +35427,6 @@ func (t *GetAllStandardHistories_StandardHistories_Edges_Node) GetID() string {
 		t = &GetAllStandardHistories_StandardHistories_Edges_Node{}
 	}
 	return t.ID
-}
-func (t *GetAllStandardHistories_StandardHistories_Edges_Node) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &GetAllStandardHistories_StandardHistories_Edges_Node{}
-	}
-	return t.Jsonschema
 }
 func (t *GetAllStandardHistories_StandardHistories_Edges_Node) GetName() string {
 	if t == nil {
@@ -35858,10 +35522,10 @@ type GetStandardHistories_StandardHistories_Edges_Node struct {
 	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy       *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description     *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	Family          *string                "json:\"family,omitempty\" graphql:\"family\""
 	HistoryTime     time.Time              "json:\"historyTime\" graphql:\"historyTime\""
 	ID              string                 "json:\"id\" graphql:\"id\""
-	Jsonschema      map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
 	Name            string                 "json:\"name\" graphql:\"name\""
 	Operation       history.OpType         "json:\"operation\" graphql:\"operation\""
 	PurposeAndScope *string                "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
@@ -35899,6 +35563,12 @@ func (t *GetStandardHistories_StandardHistories_Edges_Node) GetDescription() *st
 	}
 	return t.Description
 }
+func (t *GetStandardHistories_StandardHistories_Edges_Node) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetStandardHistories_StandardHistories_Edges_Node{}
+	}
+	return t.Details
+}
 func (t *GetStandardHistories_StandardHistories_Edges_Node) GetFamily() *string {
 	if t == nil {
 		t = &GetStandardHistories_StandardHistories_Edges_Node{}
@@ -35916,12 +35586,6 @@ func (t *GetStandardHistories_StandardHistories_Edges_Node) GetID() string {
 		t = &GetStandardHistories_StandardHistories_Edges_Node{}
 	}
 	return t.ID
-}
-func (t *GetStandardHistories_StandardHistories_Edges_Node) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &GetStandardHistories_StandardHistories_Edges_Node{}
-	}
-	return t.Jsonschema
 }
 func (t *GetStandardHistories_StandardHistories_Edges_Node) GetName() string {
 	if t == nil {
@@ -36013,25 +35677,22 @@ func (t *GetStandardHistories_StandardHistories) GetEdges() []*GetStandardHistor
 }
 
 type CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols struct {
-	AssignedTo                     *string                "json:\"assignedTo,omitempty\" graphql:\"assignedTo\""
+	Class                          *string                "json:\"class,omitempty\" graphql:\"class\""
 	CreatedAt                      *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy                      *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description                    *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details                        map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
+	Family                         *string                "json:\"family,omitempty\" graphql:\"family\""
 	ID                             string                 "json:\"id\" graphql:\"id\""
-	ImplementationDate             *string                "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
+	ImplementationDate             *time.Time             "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
 	ImplementationEvidence         *string                "json:\"implementationEvidence,omitempty\" graphql:\"implementationEvidence\""
-	ImplementationNotes            *string                "json:\"implementationNotes,omitempty\" graphql:\"implementationNotes\""
 	ImplementationStatus           *string                "json:\"implementationStatus,omitempty\" graphql:\"implementationStatus\""
 	ImplementationVerification     *string                "json:\"implementationVerification,omitempty\" graphql:\"implementationVerification\""
-	ImplementationVerificationDate *string                "json:\"implementationVerificationDate,omitempty\" graphql:\"implementationVerificationDate\""
-	Jsonschema                     map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
+	ImplementationVerificationDate *time.Time             "json:\"implementationVerificationDate,omitempty\" graphql:\"implementationVerificationDate\""
 	MappedFrameworks               *string                "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
 	Name                           string                 "json:\"name\" graphql:\"name\""
-	Owner                          *string                "json:\"owner,omitempty\" graphql:\"owner\""
 	Source                         *string                "json:\"source,omitempty\" graphql:\"source\""
 	Status                         *string                "json:\"status,omitempty\" graphql:\"status\""
-	SubcontrolClass                *string                "json:\"subcontrolClass,omitempty\" graphql:\"subcontrolClass\""
-	SubcontrolFamily               *string                "json:\"subcontrolFamily,omitempty\" graphql:\"subcontrolFamily\""
 	SubcontrolNumber               *string                "json:\"subcontrolNumber,omitempty\" graphql:\"subcontrolNumber\""
 	SubcontrolType                 *string                "json:\"subcontrolType,omitempty\" graphql:\"subcontrolType\""
 	Tags                           []string               "json:\"tags,omitempty\" graphql:\"tags\""
@@ -36040,11 +35701,11 @@ type CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols struct {
 	Version                        *string                "json:\"version,omitempty\" graphql:\"version\""
 }
 
-func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetAssignedTo() *string {
+func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetClass() *string {
 	if t == nil {
 		t = &CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols{}
 	}
-	return t.AssignedTo
+	return t.Class
 }
 func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetCreatedAt() *time.Time {
 	if t == nil {
@@ -36064,13 +35725,25 @@ func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetDescrip
 	}
 	return t.Description
 }
+func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols{}
+	}
+	return t.Details
+}
+func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetFamily() *string {
+	if t == nil {
+		t = &CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols{}
+	}
+	return t.Family
+}
 func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetID() string {
 	if t == nil {
 		t = &CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols{}
 	}
 	return t.ID
 }
-func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetImplementationDate() *string {
+func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetImplementationDate() *time.Time {
 	if t == nil {
 		t = &CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols{}
 	}
@@ -36081,12 +35754,6 @@ func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetImpleme
 		t = &CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols{}
 	}
 	return t.ImplementationEvidence
-}
-func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetImplementationNotes() *string {
-	if t == nil {
-		t = &CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols{}
-	}
-	return t.ImplementationNotes
 }
 func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetImplementationStatus() *string {
 	if t == nil {
@@ -36100,17 +35767,11 @@ func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetImpleme
 	}
 	return t.ImplementationVerification
 }
-func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetImplementationVerificationDate() *string {
+func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetImplementationVerificationDate() *time.Time {
 	if t == nil {
 		t = &CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols{}
 	}
 	return t.ImplementationVerificationDate
-}
-func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols{}
-	}
-	return t.Jsonschema
 }
 func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetMappedFrameworks() *string {
 	if t == nil {
@@ -36124,12 +35785,6 @@ func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetName() 
 	}
 	return t.Name
 }
-func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetOwner() *string {
-	if t == nil {
-		t = &CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols{}
-	}
-	return t.Owner
-}
 func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetSource() *string {
 	if t == nil {
 		t = &CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols{}
@@ -36141,18 +35796,6 @@ func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetStatus(
 		t = &CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols{}
 	}
 	return t.Status
-}
-func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetSubcontrolClass() *string {
-	if t == nil {
-		t = &CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols{}
-	}
-	return t.SubcontrolClass
-}
-func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetSubcontrolFamily() *string {
-	if t == nil {
-		t = &CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols{}
-	}
-	return t.SubcontrolFamily
 }
 func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol_Subcontrols) GetSubcontrolNumber() *string {
 	if t == nil {
@@ -36203,25 +35846,22 @@ func (t *CreateBulkCSVSubcontrol_CreateBulkCSVSubcontrol) GetSubcontrols() []*Cr
 }
 
 type CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols struct {
-	AssignedTo                     *string                "json:\"assignedTo,omitempty\" graphql:\"assignedTo\""
+	Class                          *string                "json:\"class,omitempty\" graphql:\"class\""
 	CreatedAt                      *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy                      *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description                    *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details                        map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
+	Family                         *string                "json:\"family,omitempty\" graphql:\"family\""
 	ID                             string                 "json:\"id\" graphql:\"id\""
-	ImplementationDate             *string                "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
+	ImplementationDate             *time.Time             "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
 	ImplementationEvidence         *string                "json:\"implementationEvidence,omitempty\" graphql:\"implementationEvidence\""
-	ImplementationNotes            *string                "json:\"implementationNotes,omitempty\" graphql:\"implementationNotes\""
 	ImplementationStatus           *string                "json:\"implementationStatus,omitempty\" graphql:\"implementationStatus\""
 	ImplementationVerification     *string                "json:\"implementationVerification,omitempty\" graphql:\"implementationVerification\""
-	ImplementationVerificationDate *string                "json:\"implementationVerificationDate,omitempty\" graphql:\"implementationVerificationDate\""
-	Jsonschema                     map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
+	ImplementationVerificationDate *time.Time             "json:\"implementationVerificationDate,omitempty\" graphql:\"implementationVerificationDate\""
 	MappedFrameworks               *string                "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
 	Name                           string                 "json:\"name\" graphql:\"name\""
-	Owner                          *string                "json:\"owner,omitempty\" graphql:\"owner\""
 	Source                         *string                "json:\"source,omitempty\" graphql:\"source\""
 	Status                         *string                "json:\"status,omitempty\" graphql:\"status\""
-	SubcontrolClass                *string                "json:\"subcontrolClass,omitempty\" graphql:\"subcontrolClass\""
-	SubcontrolFamily               *string                "json:\"subcontrolFamily,omitempty\" graphql:\"subcontrolFamily\""
 	SubcontrolNumber               *string                "json:\"subcontrolNumber,omitempty\" graphql:\"subcontrolNumber\""
 	SubcontrolType                 *string                "json:\"subcontrolType,omitempty\" graphql:\"subcontrolType\""
 	Tags                           []string               "json:\"tags,omitempty\" graphql:\"tags\""
@@ -36230,11 +35870,11 @@ type CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols struct {
 	Version                        *string                "json:\"version,omitempty\" graphql:\"version\""
 }
 
-func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetAssignedTo() *string {
+func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetClass() *string {
 	if t == nil {
 		t = &CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols{}
 	}
-	return t.AssignedTo
+	return t.Class
 }
 func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetCreatedAt() *time.Time {
 	if t == nil {
@@ -36254,13 +35894,25 @@ func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetDescription()
 	}
 	return t.Description
 }
+func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols{}
+	}
+	return t.Details
+}
+func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetFamily() *string {
+	if t == nil {
+		t = &CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols{}
+	}
+	return t.Family
+}
 func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetID() string {
 	if t == nil {
 		t = &CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols{}
 	}
 	return t.ID
 }
-func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetImplementationDate() *string {
+func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetImplementationDate() *time.Time {
 	if t == nil {
 		t = &CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols{}
 	}
@@ -36271,12 +35923,6 @@ func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetImplementatio
 		t = &CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols{}
 	}
 	return t.ImplementationEvidence
-}
-func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetImplementationNotes() *string {
-	if t == nil {
-		t = &CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols{}
-	}
-	return t.ImplementationNotes
 }
 func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetImplementationStatus() *string {
 	if t == nil {
@@ -36290,17 +35936,11 @@ func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetImplementatio
 	}
 	return t.ImplementationVerification
 }
-func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetImplementationVerificationDate() *string {
+func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetImplementationVerificationDate() *time.Time {
 	if t == nil {
 		t = &CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols{}
 	}
 	return t.ImplementationVerificationDate
-}
-func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols{}
-	}
-	return t.Jsonschema
 }
 func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetMappedFrameworks() *string {
 	if t == nil {
@@ -36314,12 +35954,6 @@ func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetName() string
 	}
 	return t.Name
 }
-func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetOwner() *string {
-	if t == nil {
-		t = &CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols{}
-	}
-	return t.Owner
-}
 func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetSource() *string {
 	if t == nil {
 		t = &CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols{}
@@ -36331,18 +35965,6 @@ func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetStatus() *str
 		t = &CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols{}
 	}
 	return t.Status
-}
-func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetSubcontrolClass() *string {
-	if t == nil {
-		t = &CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols{}
-	}
-	return t.SubcontrolClass
-}
-func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetSubcontrolFamily() *string {
-	if t == nil {
-		t = &CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols{}
-	}
-	return t.SubcontrolFamily
 }
 func (t *CreateBulkSubcontrol_CreateBulkSubcontrol_Subcontrols) GetSubcontrolNumber() *string {
 	if t == nil {
@@ -36393,25 +36015,22 @@ func (t *CreateBulkSubcontrol_CreateBulkSubcontrol) GetSubcontrols() []*CreateBu
 }
 
 type CreateSubcontrol_CreateSubcontrol_Subcontrol struct {
-	AssignedTo                     *string                "json:\"assignedTo,omitempty\" graphql:\"assignedTo\""
+	Class                          *string                "json:\"class,omitempty\" graphql:\"class\""
 	CreatedAt                      *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy                      *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description                    *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details                        map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
+	Family                         *string                "json:\"family,omitempty\" graphql:\"family\""
 	ID                             string                 "json:\"id\" graphql:\"id\""
-	ImplementationDate             *string                "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
+	ImplementationDate             *time.Time             "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
 	ImplementationEvidence         *string                "json:\"implementationEvidence,omitempty\" graphql:\"implementationEvidence\""
-	ImplementationNotes            *string                "json:\"implementationNotes,omitempty\" graphql:\"implementationNotes\""
 	ImplementationStatus           *string                "json:\"implementationStatus,omitempty\" graphql:\"implementationStatus\""
 	ImplementationVerification     *string                "json:\"implementationVerification,omitempty\" graphql:\"implementationVerification\""
-	ImplementationVerificationDate *string                "json:\"implementationVerificationDate,omitempty\" graphql:\"implementationVerificationDate\""
-	Jsonschema                     map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
+	ImplementationVerificationDate *time.Time             "json:\"implementationVerificationDate,omitempty\" graphql:\"implementationVerificationDate\""
 	MappedFrameworks               *string                "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
 	Name                           string                 "json:\"name\" graphql:\"name\""
-	Owner                          *string                "json:\"owner,omitempty\" graphql:\"owner\""
 	Source                         *string                "json:\"source,omitempty\" graphql:\"source\""
 	Status                         *string                "json:\"status,omitempty\" graphql:\"status\""
-	SubcontrolClass                *string                "json:\"subcontrolClass,omitempty\" graphql:\"subcontrolClass\""
-	SubcontrolFamily               *string                "json:\"subcontrolFamily,omitempty\" graphql:\"subcontrolFamily\""
 	SubcontrolNumber               *string                "json:\"subcontrolNumber,omitempty\" graphql:\"subcontrolNumber\""
 	SubcontrolType                 *string                "json:\"subcontrolType,omitempty\" graphql:\"subcontrolType\""
 	Tags                           []string               "json:\"tags,omitempty\" graphql:\"tags\""
@@ -36420,11 +36039,11 @@ type CreateSubcontrol_CreateSubcontrol_Subcontrol struct {
 	Version                        *string                "json:\"version,omitempty\" graphql:\"version\""
 }
 
-func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetAssignedTo() *string {
+func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetClass() *string {
 	if t == nil {
 		t = &CreateSubcontrol_CreateSubcontrol_Subcontrol{}
 	}
-	return t.AssignedTo
+	return t.Class
 }
 func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetCreatedAt() *time.Time {
 	if t == nil {
@@ -36444,13 +36063,25 @@ func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetDescription() *string 
 	}
 	return t.Description
 }
+func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &CreateSubcontrol_CreateSubcontrol_Subcontrol{}
+	}
+	return t.Details
+}
+func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetFamily() *string {
+	if t == nil {
+		t = &CreateSubcontrol_CreateSubcontrol_Subcontrol{}
+	}
+	return t.Family
+}
 func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetID() string {
 	if t == nil {
 		t = &CreateSubcontrol_CreateSubcontrol_Subcontrol{}
 	}
 	return t.ID
 }
-func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetImplementationDate() *string {
+func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetImplementationDate() *time.Time {
 	if t == nil {
 		t = &CreateSubcontrol_CreateSubcontrol_Subcontrol{}
 	}
@@ -36461,12 +36092,6 @@ func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetImplementationEvidence
 		t = &CreateSubcontrol_CreateSubcontrol_Subcontrol{}
 	}
 	return t.ImplementationEvidence
-}
-func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetImplementationNotes() *string {
-	if t == nil {
-		t = &CreateSubcontrol_CreateSubcontrol_Subcontrol{}
-	}
-	return t.ImplementationNotes
 }
 func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetImplementationStatus() *string {
 	if t == nil {
@@ -36480,17 +36105,11 @@ func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetImplementationVerifica
 	}
 	return t.ImplementationVerification
 }
-func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetImplementationVerificationDate() *string {
+func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetImplementationVerificationDate() *time.Time {
 	if t == nil {
 		t = &CreateSubcontrol_CreateSubcontrol_Subcontrol{}
 	}
 	return t.ImplementationVerificationDate
-}
-func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &CreateSubcontrol_CreateSubcontrol_Subcontrol{}
-	}
-	return t.Jsonschema
 }
 func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetMappedFrameworks() *string {
 	if t == nil {
@@ -36504,12 +36123,6 @@ func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetName() string {
 	}
 	return t.Name
 }
-func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetOwner() *string {
-	if t == nil {
-		t = &CreateSubcontrol_CreateSubcontrol_Subcontrol{}
-	}
-	return t.Owner
-}
 func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetSource() *string {
 	if t == nil {
 		t = &CreateSubcontrol_CreateSubcontrol_Subcontrol{}
@@ -36521,18 +36134,6 @@ func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetStatus() *string {
 		t = &CreateSubcontrol_CreateSubcontrol_Subcontrol{}
 	}
 	return t.Status
-}
-func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetSubcontrolClass() *string {
-	if t == nil {
-		t = &CreateSubcontrol_CreateSubcontrol_Subcontrol{}
-	}
-	return t.SubcontrolClass
-}
-func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetSubcontrolFamily() *string {
-	if t == nil {
-		t = &CreateSubcontrol_CreateSubcontrol_Subcontrol{}
-	}
-	return t.SubcontrolFamily
 }
 func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetSubcontrolNumber() *string {
 	if t == nil {
@@ -36594,25 +36195,22 @@ func (t *DeleteSubcontrol_DeleteSubcontrol) GetDeletedID() string {
 }
 
 type GetAllSubcontrols_Subcontrols_Edges_Node struct {
-	AssignedTo                     *string                "json:\"assignedTo,omitempty\" graphql:\"assignedTo\""
+	Class                          *string                "json:\"class,omitempty\" graphql:\"class\""
 	CreatedAt                      *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy                      *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description                    *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details                        map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
+	Family                         *string                "json:\"family,omitempty\" graphql:\"family\""
 	ID                             string                 "json:\"id\" graphql:\"id\""
-	ImplementationDate             *string                "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
+	ImplementationDate             *time.Time             "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
 	ImplementationEvidence         *string                "json:\"implementationEvidence,omitempty\" graphql:\"implementationEvidence\""
-	ImplementationNotes            *string                "json:\"implementationNotes,omitempty\" graphql:\"implementationNotes\""
 	ImplementationStatus           *string                "json:\"implementationStatus,omitempty\" graphql:\"implementationStatus\""
 	ImplementationVerification     *string                "json:\"implementationVerification,omitempty\" graphql:\"implementationVerification\""
-	ImplementationVerificationDate *string                "json:\"implementationVerificationDate,omitempty\" graphql:\"implementationVerificationDate\""
-	Jsonschema                     map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
+	ImplementationVerificationDate *time.Time             "json:\"implementationVerificationDate,omitempty\" graphql:\"implementationVerificationDate\""
 	MappedFrameworks               *string                "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
 	Name                           string                 "json:\"name\" graphql:\"name\""
-	Owner                          *string                "json:\"owner,omitempty\" graphql:\"owner\""
 	Source                         *string                "json:\"source,omitempty\" graphql:\"source\""
 	Status                         *string                "json:\"status,omitempty\" graphql:\"status\""
-	SubcontrolClass                *string                "json:\"subcontrolClass,omitempty\" graphql:\"subcontrolClass\""
-	SubcontrolFamily               *string                "json:\"subcontrolFamily,omitempty\" graphql:\"subcontrolFamily\""
 	SubcontrolNumber               *string                "json:\"subcontrolNumber,omitempty\" graphql:\"subcontrolNumber\""
 	SubcontrolType                 *string                "json:\"subcontrolType,omitempty\" graphql:\"subcontrolType\""
 	Tags                           []string               "json:\"tags,omitempty\" graphql:\"tags\""
@@ -36621,11 +36219,11 @@ type GetAllSubcontrols_Subcontrols_Edges_Node struct {
 	Version                        *string                "json:\"version,omitempty\" graphql:\"version\""
 }
 
-func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetAssignedTo() *string {
+func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetClass() *string {
 	if t == nil {
 		t = &GetAllSubcontrols_Subcontrols_Edges_Node{}
 	}
-	return t.AssignedTo
+	return t.Class
 }
 func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
@@ -36645,13 +36243,25 @@ func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetDescription() *string {
 	}
 	return t.Description
 }
+func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetAllSubcontrols_Subcontrols_Edges_Node{}
+	}
+	return t.Details
+}
+func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetFamily() *string {
+	if t == nil {
+		t = &GetAllSubcontrols_Subcontrols_Edges_Node{}
+	}
+	return t.Family
+}
 func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetID() string {
 	if t == nil {
 		t = &GetAllSubcontrols_Subcontrols_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetImplementationDate() *string {
+func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetImplementationDate() *time.Time {
 	if t == nil {
 		t = &GetAllSubcontrols_Subcontrols_Edges_Node{}
 	}
@@ -36662,12 +36272,6 @@ func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetImplementationEvidence() *
 		t = &GetAllSubcontrols_Subcontrols_Edges_Node{}
 	}
 	return t.ImplementationEvidence
-}
-func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetImplementationNotes() *string {
-	if t == nil {
-		t = &GetAllSubcontrols_Subcontrols_Edges_Node{}
-	}
-	return t.ImplementationNotes
 }
 func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetImplementationStatus() *string {
 	if t == nil {
@@ -36681,17 +36285,11 @@ func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetImplementationVerification
 	}
 	return t.ImplementationVerification
 }
-func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetImplementationVerificationDate() *string {
+func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetImplementationVerificationDate() *time.Time {
 	if t == nil {
 		t = &GetAllSubcontrols_Subcontrols_Edges_Node{}
 	}
 	return t.ImplementationVerificationDate
-}
-func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &GetAllSubcontrols_Subcontrols_Edges_Node{}
-	}
-	return t.Jsonschema
 }
 func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetMappedFrameworks() *string {
 	if t == nil {
@@ -36705,12 +36303,6 @@ func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetName() string {
 	}
 	return t.Name
 }
-func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetOwner() *string {
-	if t == nil {
-		t = &GetAllSubcontrols_Subcontrols_Edges_Node{}
-	}
-	return t.Owner
-}
 func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetSource() *string {
 	if t == nil {
 		t = &GetAllSubcontrols_Subcontrols_Edges_Node{}
@@ -36722,18 +36314,6 @@ func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetStatus() *string {
 		t = &GetAllSubcontrols_Subcontrols_Edges_Node{}
 	}
 	return t.Status
-}
-func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetSubcontrolClass() *string {
-	if t == nil {
-		t = &GetAllSubcontrols_Subcontrols_Edges_Node{}
-	}
-	return t.SubcontrolClass
-}
-func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetSubcontrolFamily() *string {
-	if t == nil {
-		t = &GetAllSubcontrols_Subcontrols_Edges_Node{}
-	}
-	return t.SubcontrolFamily
 }
 func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetSubcontrolNumber() *string {
 	if t == nil {
@@ -36795,25 +36375,22 @@ func (t *GetAllSubcontrols_Subcontrols) GetEdges() []*GetAllSubcontrols_Subcontr
 }
 
 type GetSubcontrolByID_Subcontrol struct {
-	AssignedTo                     *string                "json:\"assignedTo,omitempty\" graphql:\"assignedTo\""
+	Class                          *string                "json:\"class,omitempty\" graphql:\"class\""
 	CreatedAt                      *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy                      *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description                    *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details                        map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
+	Family                         *string                "json:\"family,omitempty\" graphql:\"family\""
 	ID                             string                 "json:\"id\" graphql:\"id\""
-	ImplementationDate             *string                "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
+	ImplementationDate             *time.Time             "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
 	ImplementationEvidence         *string                "json:\"implementationEvidence,omitempty\" graphql:\"implementationEvidence\""
-	ImplementationNotes            *string                "json:\"implementationNotes,omitempty\" graphql:\"implementationNotes\""
 	ImplementationStatus           *string                "json:\"implementationStatus,omitempty\" graphql:\"implementationStatus\""
 	ImplementationVerification     *string                "json:\"implementationVerification,omitempty\" graphql:\"implementationVerification\""
-	ImplementationVerificationDate *string                "json:\"implementationVerificationDate,omitempty\" graphql:\"implementationVerificationDate\""
-	Jsonschema                     map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
+	ImplementationVerificationDate *time.Time             "json:\"implementationVerificationDate,omitempty\" graphql:\"implementationVerificationDate\""
 	MappedFrameworks               *string                "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
 	Name                           string                 "json:\"name\" graphql:\"name\""
-	Owner                          *string                "json:\"owner,omitempty\" graphql:\"owner\""
 	Source                         *string                "json:\"source,omitempty\" graphql:\"source\""
 	Status                         *string                "json:\"status,omitempty\" graphql:\"status\""
-	SubcontrolClass                *string                "json:\"subcontrolClass,omitempty\" graphql:\"subcontrolClass\""
-	SubcontrolFamily               *string                "json:\"subcontrolFamily,omitempty\" graphql:\"subcontrolFamily\""
 	SubcontrolNumber               *string                "json:\"subcontrolNumber,omitempty\" graphql:\"subcontrolNumber\""
 	SubcontrolType                 *string                "json:\"subcontrolType,omitempty\" graphql:\"subcontrolType\""
 	Tags                           []string               "json:\"tags,omitempty\" graphql:\"tags\""
@@ -36822,11 +36399,11 @@ type GetSubcontrolByID_Subcontrol struct {
 	Version                        *string                "json:\"version,omitempty\" graphql:\"version\""
 }
 
-func (t *GetSubcontrolByID_Subcontrol) GetAssignedTo() *string {
+func (t *GetSubcontrolByID_Subcontrol) GetClass() *string {
 	if t == nil {
 		t = &GetSubcontrolByID_Subcontrol{}
 	}
-	return t.AssignedTo
+	return t.Class
 }
 func (t *GetSubcontrolByID_Subcontrol) GetCreatedAt() *time.Time {
 	if t == nil {
@@ -36846,13 +36423,25 @@ func (t *GetSubcontrolByID_Subcontrol) GetDescription() *string {
 	}
 	return t.Description
 }
+func (t *GetSubcontrolByID_Subcontrol) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetSubcontrolByID_Subcontrol{}
+	}
+	return t.Details
+}
+func (t *GetSubcontrolByID_Subcontrol) GetFamily() *string {
+	if t == nil {
+		t = &GetSubcontrolByID_Subcontrol{}
+	}
+	return t.Family
+}
 func (t *GetSubcontrolByID_Subcontrol) GetID() string {
 	if t == nil {
 		t = &GetSubcontrolByID_Subcontrol{}
 	}
 	return t.ID
 }
-func (t *GetSubcontrolByID_Subcontrol) GetImplementationDate() *string {
+func (t *GetSubcontrolByID_Subcontrol) GetImplementationDate() *time.Time {
 	if t == nil {
 		t = &GetSubcontrolByID_Subcontrol{}
 	}
@@ -36863,12 +36452,6 @@ func (t *GetSubcontrolByID_Subcontrol) GetImplementationEvidence() *string {
 		t = &GetSubcontrolByID_Subcontrol{}
 	}
 	return t.ImplementationEvidence
-}
-func (t *GetSubcontrolByID_Subcontrol) GetImplementationNotes() *string {
-	if t == nil {
-		t = &GetSubcontrolByID_Subcontrol{}
-	}
-	return t.ImplementationNotes
 }
 func (t *GetSubcontrolByID_Subcontrol) GetImplementationStatus() *string {
 	if t == nil {
@@ -36882,17 +36465,11 @@ func (t *GetSubcontrolByID_Subcontrol) GetImplementationVerification() *string {
 	}
 	return t.ImplementationVerification
 }
-func (t *GetSubcontrolByID_Subcontrol) GetImplementationVerificationDate() *string {
+func (t *GetSubcontrolByID_Subcontrol) GetImplementationVerificationDate() *time.Time {
 	if t == nil {
 		t = &GetSubcontrolByID_Subcontrol{}
 	}
 	return t.ImplementationVerificationDate
-}
-func (t *GetSubcontrolByID_Subcontrol) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &GetSubcontrolByID_Subcontrol{}
-	}
-	return t.Jsonschema
 }
 func (t *GetSubcontrolByID_Subcontrol) GetMappedFrameworks() *string {
 	if t == nil {
@@ -36906,12 +36483,6 @@ func (t *GetSubcontrolByID_Subcontrol) GetName() string {
 	}
 	return t.Name
 }
-func (t *GetSubcontrolByID_Subcontrol) GetOwner() *string {
-	if t == nil {
-		t = &GetSubcontrolByID_Subcontrol{}
-	}
-	return t.Owner
-}
 func (t *GetSubcontrolByID_Subcontrol) GetSource() *string {
 	if t == nil {
 		t = &GetSubcontrolByID_Subcontrol{}
@@ -36923,18 +36494,6 @@ func (t *GetSubcontrolByID_Subcontrol) GetStatus() *string {
 		t = &GetSubcontrolByID_Subcontrol{}
 	}
 	return t.Status
-}
-func (t *GetSubcontrolByID_Subcontrol) GetSubcontrolClass() *string {
-	if t == nil {
-		t = &GetSubcontrolByID_Subcontrol{}
-	}
-	return t.SubcontrolClass
-}
-func (t *GetSubcontrolByID_Subcontrol) GetSubcontrolFamily() *string {
-	if t == nil {
-		t = &GetSubcontrolByID_Subcontrol{}
-	}
-	return t.SubcontrolFamily
 }
 func (t *GetSubcontrolByID_Subcontrol) GetSubcontrolNumber() *string {
 	if t == nil {
@@ -36974,25 +36533,22 @@ func (t *GetSubcontrolByID_Subcontrol) GetVersion() *string {
 }
 
 type GetSubcontrols_Subcontrols_Edges_Node struct {
-	AssignedTo                     *string                "json:\"assignedTo,omitempty\" graphql:\"assignedTo\""
+	Class                          *string                "json:\"class,omitempty\" graphql:\"class\""
 	CreatedAt                      *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy                      *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description                    *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details                        map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
+	Family                         *string                "json:\"family,omitempty\" graphql:\"family\""
 	ID                             string                 "json:\"id\" graphql:\"id\""
-	ImplementationDate             *string                "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
+	ImplementationDate             *time.Time             "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
 	ImplementationEvidence         *string                "json:\"implementationEvidence,omitempty\" graphql:\"implementationEvidence\""
-	ImplementationNotes            *string                "json:\"implementationNotes,omitempty\" graphql:\"implementationNotes\""
 	ImplementationStatus           *string                "json:\"implementationStatus,omitempty\" graphql:\"implementationStatus\""
 	ImplementationVerification     *string                "json:\"implementationVerification,omitempty\" graphql:\"implementationVerification\""
-	ImplementationVerificationDate *string                "json:\"implementationVerificationDate,omitempty\" graphql:\"implementationVerificationDate\""
-	Jsonschema                     map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
+	ImplementationVerificationDate *time.Time             "json:\"implementationVerificationDate,omitempty\" graphql:\"implementationVerificationDate\""
 	MappedFrameworks               *string                "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
 	Name                           string                 "json:\"name\" graphql:\"name\""
-	Owner                          *string                "json:\"owner,omitempty\" graphql:\"owner\""
 	Source                         *string                "json:\"source,omitempty\" graphql:\"source\""
 	Status                         *string                "json:\"status,omitempty\" graphql:\"status\""
-	SubcontrolClass                *string                "json:\"subcontrolClass,omitempty\" graphql:\"subcontrolClass\""
-	SubcontrolFamily               *string                "json:\"subcontrolFamily,omitempty\" graphql:\"subcontrolFamily\""
 	SubcontrolNumber               *string                "json:\"subcontrolNumber,omitempty\" graphql:\"subcontrolNumber\""
 	SubcontrolType                 *string                "json:\"subcontrolType,omitempty\" graphql:\"subcontrolType\""
 	Tags                           []string               "json:\"tags,omitempty\" graphql:\"tags\""
@@ -37001,11 +36557,11 @@ type GetSubcontrols_Subcontrols_Edges_Node struct {
 	Version                        *string                "json:\"version,omitempty\" graphql:\"version\""
 }
 
-func (t *GetSubcontrols_Subcontrols_Edges_Node) GetAssignedTo() *string {
+func (t *GetSubcontrols_Subcontrols_Edges_Node) GetClass() *string {
 	if t == nil {
 		t = &GetSubcontrols_Subcontrols_Edges_Node{}
 	}
-	return t.AssignedTo
+	return t.Class
 }
 func (t *GetSubcontrols_Subcontrols_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
@@ -37025,13 +36581,25 @@ func (t *GetSubcontrols_Subcontrols_Edges_Node) GetDescription() *string {
 	}
 	return t.Description
 }
+func (t *GetSubcontrols_Subcontrols_Edges_Node) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetSubcontrols_Subcontrols_Edges_Node{}
+	}
+	return t.Details
+}
+func (t *GetSubcontrols_Subcontrols_Edges_Node) GetFamily() *string {
+	if t == nil {
+		t = &GetSubcontrols_Subcontrols_Edges_Node{}
+	}
+	return t.Family
+}
 func (t *GetSubcontrols_Subcontrols_Edges_Node) GetID() string {
 	if t == nil {
 		t = &GetSubcontrols_Subcontrols_Edges_Node{}
 	}
 	return t.ID
 }
-func (t *GetSubcontrols_Subcontrols_Edges_Node) GetImplementationDate() *string {
+func (t *GetSubcontrols_Subcontrols_Edges_Node) GetImplementationDate() *time.Time {
 	if t == nil {
 		t = &GetSubcontrols_Subcontrols_Edges_Node{}
 	}
@@ -37042,12 +36610,6 @@ func (t *GetSubcontrols_Subcontrols_Edges_Node) GetImplementationEvidence() *str
 		t = &GetSubcontrols_Subcontrols_Edges_Node{}
 	}
 	return t.ImplementationEvidence
-}
-func (t *GetSubcontrols_Subcontrols_Edges_Node) GetImplementationNotes() *string {
-	if t == nil {
-		t = &GetSubcontrols_Subcontrols_Edges_Node{}
-	}
-	return t.ImplementationNotes
 }
 func (t *GetSubcontrols_Subcontrols_Edges_Node) GetImplementationStatus() *string {
 	if t == nil {
@@ -37061,17 +36623,11 @@ func (t *GetSubcontrols_Subcontrols_Edges_Node) GetImplementationVerification() 
 	}
 	return t.ImplementationVerification
 }
-func (t *GetSubcontrols_Subcontrols_Edges_Node) GetImplementationVerificationDate() *string {
+func (t *GetSubcontrols_Subcontrols_Edges_Node) GetImplementationVerificationDate() *time.Time {
 	if t == nil {
 		t = &GetSubcontrols_Subcontrols_Edges_Node{}
 	}
 	return t.ImplementationVerificationDate
-}
-func (t *GetSubcontrols_Subcontrols_Edges_Node) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &GetSubcontrols_Subcontrols_Edges_Node{}
-	}
-	return t.Jsonschema
 }
 func (t *GetSubcontrols_Subcontrols_Edges_Node) GetMappedFrameworks() *string {
 	if t == nil {
@@ -37085,12 +36641,6 @@ func (t *GetSubcontrols_Subcontrols_Edges_Node) GetName() string {
 	}
 	return t.Name
 }
-func (t *GetSubcontrols_Subcontrols_Edges_Node) GetOwner() *string {
-	if t == nil {
-		t = &GetSubcontrols_Subcontrols_Edges_Node{}
-	}
-	return t.Owner
-}
 func (t *GetSubcontrols_Subcontrols_Edges_Node) GetSource() *string {
 	if t == nil {
 		t = &GetSubcontrols_Subcontrols_Edges_Node{}
@@ -37102,18 +36652,6 @@ func (t *GetSubcontrols_Subcontrols_Edges_Node) GetStatus() *string {
 		t = &GetSubcontrols_Subcontrols_Edges_Node{}
 	}
 	return t.Status
-}
-func (t *GetSubcontrols_Subcontrols_Edges_Node) GetSubcontrolClass() *string {
-	if t == nil {
-		t = &GetSubcontrols_Subcontrols_Edges_Node{}
-	}
-	return t.SubcontrolClass
-}
-func (t *GetSubcontrols_Subcontrols_Edges_Node) GetSubcontrolFamily() *string {
-	if t == nil {
-		t = &GetSubcontrols_Subcontrols_Edges_Node{}
-	}
-	return t.SubcontrolFamily
 }
 func (t *GetSubcontrols_Subcontrols_Edges_Node) GetSubcontrolNumber() *string {
 	if t == nil {
@@ -37175,25 +36713,22 @@ func (t *GetSubcontrols_Subcontrols) GetEdges() []*GetSubcontrols_Subcontrols_Ed
 }
 
 type UpdateSubcontrol_UpdateSubcontrol_Subcontrol struct {
-	AssignedTo                     *string                "json:\"assignedTo,omitempty\" graphql:\"assignedTo\""
+	Class                          *string                "json:\"class,omitempty\" graphql:\"class\""
 	CreatedAt                      *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy                      *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description                    *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details                        map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
+	Family                         *string                "json:\"family,omitempty\" graphql:\"family\""
 	ID                             string                 "json:\"id\" graphql:\"id\""
-	ImplementationDate             *string                "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
+	ImplementationDate             *time.Time             "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
 	ImplementationEvidence         *string                "json:\"implementationEvidence,omitempty\" graphql:\"implementationEvidence\""
-	ImplementationNotes            *string                "json:\"implementationNotes,omitempty\" graphql:\"implementationNotes\""
 	ImplementationStatus           *string                "json:\"implementationStatus,omitempty\" graphql:\"implementationStatus\""
 	ImplementationVerification     *string                "json:\"implementationVerification,omitempty\" graphql:\"implementationVerification\""
-	ImplementationVerificationDate *string                "json:\"implementationVerificationDate,omitempty\" graphql:\"implementationVerificationDate\""
-	Jsonschema                     map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
+	ImplementationVerificationDate *time.Time             "json:\"implementationVerificationDate,omitempty\" graphql:\"implementationVerificationDate\""
 	MappedFrameworks               *string                "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
 	Name                           string                 "json:\"name\" graphql:\"name\""
-	Owner                          *string                "json:\"owner,omitempty\" graphql:\"owner\""
 	Source                         *string                "json:\"source,omitempty\" graphql:\"source\""
 	Status                         *string                "json:\"status,omitempty\" graphql:\"status\""
-	SubcontrolClass                *string                "json:\"subcontrolClass,omitempty\" graphql:\"subcontrolClass\""
-	SubcontrolFamily               *string                "json:\"subcontrolFamily,omitempty\" graphql:\"subcontrolFamily\""
 	SubcontrolNumber               *string                "json:\"subcontrolNumber,omitempty\" graphql:\"subcontrolNumber\""
 	SubcontrolType                 *string                "json:\"subcontrolType,omitempty\" graphql:\"subcontrolType\""
 	Tags                           []string               "json:\"tags,omitempty\" graphql:\"tags\""
@@ -37202,11 +36737,11 @@ type UpdateSubcontrol_UpdateSubcontrol_Subcontrol struct {
 	Version                        *string                "json:\"version,omitempty\" graphql:\"version\""
 }
 
-func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetAssignedTo() *string {
+func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetClass() *string {
 	if t == nil {
 		t = &UpdateSubcontrol_UpdateSubcontrol_Subcontrol{}
 	}
-	return t.AssignedTo
+	return t.Class
 }
 func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetCreatedAt() *time.Time {
 	if t == nil {
@@ -37226,13 +36761,25 @@ func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetDescription() *string 
 	}
 	return t.Description
 }
+func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &UpdateSubcontrol_UpdateSubcontrol_Subcontrol{}
+	}
+	return t.Details
+}
+func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetFamily() *string {
+	if t == nil {
+		t = &UpdateSubcontrol_UpdateSubcontrol_Subcontrol{}
+	}
+	return t.Family
+}
 func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetID() string {
 	if t == nil {
 		t = &UpdateSubcontrol_UpdateSubcontrol_Subcontrol{}
 	}
 	return t.ID
 }
-func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetImplementationDate() *string {
+func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetImplementationDate() *time.Time {
 	if t == nil {
 		t = &UpdateSubcontrol_UpdateSubcontrol_Subcontrol{}
 	}
@@ -37243,12 +36790,6 @@ func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetImplementationEvidence
 		t = &UpdateSubcontrol_UpdateSubcontrol_Subcontrol{}
 	}
 	return t.ImplementationEvidence
-}
-func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetImplementationNotes() *string {
-	if t == nil {
-		t = &UpdateSubcontrol_UpdateSubcontrol_Subcontrol{}
-	}
-	return t.ImplementationNotes
 }
 func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetImplementationStatus() *string {
 	if t == nil {
@@ -37262,17 +36803,11 @@ func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetImplementationVerifica
 	}
 	return t.ImplementationVerification
 }
-func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetImplementationVerificationDate() *string {
+func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetImplementationVerificationDate() *time.Time {
 	if t == nil {
 		t = &UpdateSubcontrol_UpdateSubcontrol_Subcontrol{}
 	}
 	return t.ImplementationVerificationDate
-}
-func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &UpdateSubcontrol_UpdateSubcontrol_Subcontrol{}
-	}
-	return t.Jsonschema
 }
 func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetMappedFrameworks() *string {
 	if t == nil {
@@ -37286,12 +36821,6 @@ func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetName() string {
 	}
 	return t.Name
 }
-func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetOwner() *string {
-	if t == nil {
-		t = &UpdateSubcontrol_UpdateSubcontrol_Subcontrol{}
-	}
-	return t.Owner
-}
 func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetSource() *string {
 	if t == nil {
 		t = &UpdateSubcontrol_UpdateSubcontrol_Subcontrol{}
@@ -37303,18 +36832,6 @@ func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetStatus() *string {
 		t = &UpdateSubcontrol_UpdateSubcontrol_Subcontrol{}
 	}
 	return t.Status
-}
-func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetSubcontrolClass() *string {
-	if t == nil {
-		t = &UpdateSubcontrol_UpdateSubcontrol_Subcontrol{}
-	}
-	return t.SubcontrolClass
-}
-func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetSubcontrolFamily() *string {
-	if t == nil {
-		t = &UpdateSubcontrol_UpdateSubcontrol_Subcontrol{}
-	}
-	return t.SubcontrolFamily
 }
 func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetSubcontrolNumber() *string {
 	if t == nil {
@@ -37365,28 +36882,25 @@ func (t *UpdateSubcontrol_UpdateSubcontrol) GetSubcontrol() *UpdateSubcontrol_Up
 }
 
 type GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node struct {
-	AssignedTo                     *string                "json:\"assignedTo,omitempty\" graphql:\"assignedTo\""
+	Class                          *string                "json:\"class,omitempty\" graphql:\"class\""
 	CreatedAt                      *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy                      *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description                    *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details                        map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
+	Family                         *string                "json:\"family,omitempty\" graphql:\"family\""
 	HistoryTime                    time.Time              "json:\"historyTime\" graphql:\"historyTime\""
 	ID                             string                 "json:\"id\" graphql:\"id\""
-	ImplementationDate             *string                "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
+	ImplementationDate             *time.Time             "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
 	ImplementationEvidence         *string                "json:\"implementationEvidence,omitempty\" graphql:\"implementationEvidence\""
-	ImplementationNotes            *string                "json:\"implementationNotes,omitempty\" graphql:\"implementationNotes\""
 	ImplementationStatus           *string                "json:\"implementationStatus,omitempty\" graphql:\"implementationStatus\""
 	ImplementationVerification     *string                "json:\"implementationVerification,omitempty\" graphql:\"implementationVerification\""
-	ImplementationVerificationDate *string                "json:\"implementationVerificationDate,omitempty\" graphql:\"implementationVerificationDate\""
-	Jsonschema                     map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
+	ImplementationVerificationDate *time.Time             "json:\"implementationVerificationDate,omitempty\" graphql:\"implementationVerificationDate\""
 	MappedFrameworks               *string                "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
 	Name                           string                 "json:\"name\" graphql:\"name\""
 	Operation                      history.OpType         "json:\"operation\" graphql:\"operation\""
-	Owner                          *string                "json:\"owner,omitempty\" graphql:\"owner\""
 	Ref                            *string                "json:\"ref,omitempty\" graphql:\"ref\""
 	Source                         *string                "json:\"source,omitempty\" graphql:\"source\""
 	Status                         *string                "json:\"status,omitempty\" graphql:\"status\""
-	SubcontrolClass                *string                "json:\"subcontrolClass,omitempty\" graphql:\"subcontrolClass\""
-	SubcontrolFamily               *string                "json:\"subcontrolFamily,omitempty\" graphql:\"subcontrolFamily\""
 	SubcontrolNumber               *string                "json:\"subcontrolNumber,omitempty\" graphql:\"subcontrolNumber\""
 	SubcontrolType                 *string                "json:\"subcontrolType,omitempty\" graphql:\"subcontrolType\""
 	Tags                           []string               "json:\"tags,omitempty\" graphql:\"tags\""
@@ -37395,11 +36909,11 @@ type GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node struct {
 	Version                        *string                "json:\"version,omitempty\" graphql:\"version\""
 }
 
-func (t *GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node) GetAssignedTo() *string {
+func (t *GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node) GetClass() *string {
 	if t == nil {
 		t = &GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node{}
 	}
-	return t.AssignedTo
+	return t.Class
 }
 func (t *GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
@@ -37419,6 +36933,18 @@ func (t *GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node) GetDescriptio
 	}
 	return t.Description
 }
+func (t *GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node{}
+	}
+	return t.Details
+}
+func (t *GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node) GetFamily() *string {
+	if t == nil {
+		t = &GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node{}
+	}
+	return t.Family
+}
 func (t *GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node) GetHistoryTime() *time.Time {
 	if t == nil {
 		t = &GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node{}
@@ -37431,7 +36957,7 @@ func (t *GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node) GetID() strin
 	}
 	return t.ID
 }
-func (t *GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node) GetImplementationDate() *string {
+func (t *GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node) GetImplementationDate() *time.Time {
 	if t == nil {
 		t = &GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node{}
 	}
@@ -37442,12 +36968,6 @@ func (t *GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node) GetImplementa
 		t = &GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node{}
 	}
 	return t.ImplementationEvidence
-}
-func (t *GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node) GetImplementationNotes() *string {
-	if t == nil {
-		t = &GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node{}
-	}
-	return t.ImplementationNotes
 }
 func (t *GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node) GetImplementationStatus() *string {
 	if t == nil {
@@ -37461,17 +36981,11 @@ func (t *GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node) GetImplementa
 	}
 	return t.ImplementationVerification
 }
-func (t *GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node) GetImplementationVerificationDate() *string {
+func (t *GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node) GetImplementationVerificationDate() *time.Time {
 	if t == nil {
 		t = &GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node{}
 	}
 	return t.ImplementationVerificationDate
-}
-func (t *GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node{}
-	}
-	return t.Jsonschema
 }
 func (t *GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node) GetMappedFrameworks() *string {
 	if t == nil {
@@ -37491,12 +37005,6 @@ func (t *GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node) GetOperation(
 	}
 	return &t.Operation
 }
-func (t *GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node) GetOwner() *string {
-	if t == nil {
-		t = &GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node{}
-	}
-	return t.Owner
-}
 func (t *GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node) GetRef() *string {
 	if t == nil {
 		t = &GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node{}
@@ -37514,18 +37022,6 @@ func (t *GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node) GetStatus() *
 		t = &GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node{}
 	}
 	return t.Status
-}
-func (t *GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node) GetSubcontrolClass() *string {
-	if t == nil {
-		t = &GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node{}
-	}
-	return t.SubcontrolClass
-}
-func (t *GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node) GetSubcontrolFamily() *string {
-	if t == nil {
-		t = &GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node{}
-	}
-	return t.SubcontrolFamily
 }
 func (t *GetAllSubcontrolHistories_SubcontrolHistories_Edges_Node) GetSubcontrolNumber() *string {
 	if t == nil {
@@ -37587,28 +37083,25 @@ func (t *GetAllSubcontrolHistories_SubcontrolHistories) GetEdges() []*GetAllSubc
 }
 
 type GetSubcontrolHistories_SubcontrolHistories_Edges_Node struct {
-	AssignedTo                     *string                "json:\"assignedTo,omitempty\" graphql:\"assignedTo\""
+	Class                          *string                "json:\"class,omitempty\" graphql:\"class\""
 	CreatedAt                      *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy                      *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description                    *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details                        map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
+	Family                         *string                "json:\"family,omitempty\" graphql:\"family\""
 	HistoryTime                    time.Time              "json:\"historyTime\" graphql:\"historyTime\""
 	ID                             string                 "json:\"id\" graphql:\"id\""
-	ImplementationDate             *string                "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
+	ImplementationDate             *time.Time             "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
 	ImplementationEvidence         *string                "json:\"implementationEvidence,omitempty\" graphql:\"implementationEvidence\""
-	ImplementationNotes            *string                "json:\"implementationNotes,omitempty\" graphql:\"implementationNotes\""
 	ImplementationStatus           *string                "json:\"implementationStatus,omitempty\" graphql:\"implementationStatus\""
 	ImplementationVerification     *string                "json:\"implementationVerification,omitempty\" graphql:\"implementationVerification\""
-	ImplementationVerificationDate *string                "json:\"implementationVerificationDate,omitempty\" graphql:\"implementationVerificationDate\""
-	Jsonschema                     map[string]interface{} "json:\"jsonschema,omitempty\" graphql:\"jsonschema\""
+	ImplementationVerificationDate *time.Time             "json:\"implementationVerificationDate,omitempty\" graphql:\"implementationVerificationDate\""
 	MappedFrameworks               *string                "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
 	Name                           string                 "json:\"name\" graphql:\"name\""
 	Operation                      history.OpType         "json:\"operation\" graphql:\"operation\""
-	Owner                          *string                "json:\"owner,omitempty\" graphql:\"owner\""
 	Ref                            *string                "json:\"ref,omitempty\" graphql:\"ref\""
 	Source                         *string                "json:\"source,omitempty\" graphql:\"source\""
 	Status                         *string                "json:\"status,omitempty\" graphql:\"status\""
-	SubcontrolClass                *string                "json:\"subcontrolClass,omitempty\" graphql:\"subcontrolClass\""
-	SubcontrolFamily               *string                "json:\"subcontrolFamily,omitempty\" graphql:\"subcontrolFamily\""
 	SubcontrolNumber               *string                "json:\"subcontrolNumber,omitempty\" graphql:\"subcontrolNumber\""
 	SubcontrolType                 *string                "json:\"subcontrolType,omitempty\" graphql:\"subcontrolType\""
 	Tags                           []string               "json:\"tags,omitempty\" graphql:\"tags\""
@@ -37617,11 +37110,11 @@ type GetSubcontrolHistories_SubcontrolHistories_Edges_Node struct {
 	Version                        *string                "json:\"version,omitempty\" graphql:\"version\""
 }
 
-func (t *GetSubcontrolHistories_SubcontrolHistories_Edges_Node) GetAssignedTo() *string {
+func (t *GetSubcontrolHistories_SubcontrolHistories_Edges_Node) GetClass() *string {
 	if t == nil {
 		t = &GetSubcontrolHistories_SubcontrolHistories_Edges_Node{}
 	}
-	return t.AssignedTo
+	return t.Class
 }
 func (t *GetSubcontrolHistories_SubcontrolHistories_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
@@ -37641,6 +37134,18 @@ func (t *GetSubcontrolHistories_SubcontrolHistories_Edges_Node) GetDescription()
 	}
 	return t.Description
 }
+func (t *GetSubcontrolHistories_SubcontrolHistories_Edges_Node) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetSubcontrolHistories_SubcontrolHistories_Edges_Node{}
+	}
+	return t.Details
+}
+func (t *GetSubcontrolHistories_SubcontrolHistories_Edges_Node) GetFamily() *string {
+	if t == nil {
+		t = &GetSubcontrolHistories_SubcontrolHistories_Edges_Node{}
+	}
+	return t.Family
+}
 func (t *GetSubcontrolHistories_SubcontrolHistories_Edges_Node) GetHistoryTime() *time.Time {
 	if t == nil {
 		t = &GetSubcontrolHistories_SubcontrolHistories_Edges_Node{}
@@ -37653,7 +37158,7 @@ func (t *GetSubcontrolHistories_SubcontrolHistories_Edges_Node) GetID() string {
 	}
 	return t.ID
 }
-func (t *GetSubcontrolHistories_SubcontrolHistories_Edges_Node) GetImplementationDate() *string {
+func (t *GetSubcontrolHistories_SubcontrolHistories_Edges_Node) GetImplementationDate() *time.Time {
 	if t == nil {
 		t = &GetSubcontrolHistories_SubcontrolHistories_Edges_Node{}
 	}
@@ -37664,12 +37169,6 @@ func (t *GetSubcontrolHistories_SubcontrolHistories_Edges_Node) GetImplementatio
 		t = &GetSubcontrolHistories_SubcontrolHistories_Edges_Node{}
 	}
 	return t.ImplementationEvidence
-}
-func (t *GetSubcontrolHistories_SubcontrolHistories_Edges_Node) GetImplementationNotes() *string {
-	if t == nil {
-		t = &GetSubcontrolHistories_SubcontrolHistories_Edges_Node{}
-	}
-	return t.ImplementationNotes
 }
 func (t *GetSubcontrolHistories_SubcontrolHistories_Edges_Node) GetImplementationStatus() *string {
 	if t == nil {
@@ -37683,17 +37182,11 @@ func (t *GetSubcontrolHistories_SubcontrolHistories_Edges_Node) GetImplementatio
 	}
 	return t.ImplementationVerification
 }
-func (t *GetSubcontrolHistories_SubcontrolHistories_Edges_Node) GetImplementationVerificationDate() *string {
+func (t *GetSubcontrolHistories_SubcontrolHistories_Edges_Node) GetImplementationVerificationDate() *time.Time {
 	if t == nil {
 		t = &GetSubcontrolHistories_SubcontrolHistories_Edges_Node{}
 	}
 	return t.ImplementationVerificationDate
-}
-func (t *GetSubcontrolHistories_SubcontrolHistories_Edges_Node) GetJsonschema() map[string]interface{} {
-	if t == nil {
-		t = &GetSubcontrolHistories_SubcontrolHistories_Edges_Node{}
-	}
-	return t.Jsonschema
 }
 func (t *GetSubcontrolHistories_SubcontrolHistories_Edges_Node) GetMappedFrameworks() *string {
 	if t == nil {
@@ -37713,12 +37206,6 @@ func (t *GetSubcontrolHistories_SubcontrolHistories_Edges_Node) GetOperation() *
 	}
 	return &t.Operation
 }
-func (t *GetSubcontrolHistories_SubcontrolHistories_Edges_Node) GetOwner() *string {
-	if t == nil {
-		t = &GetSubcontrolHistories_SubcontrolHistories_Edges_Node{}
-	}
-	return t.Owner
-}
 func (t *GetSubcontrolHistories_SubcontrolHistories_Edges_Node) GetRef() *string {
 	if t == nil {
 		t = &GetSubcontrolHistories_SubcontrolHistories_Edges_Node{}
@@ -37736,18 +37223,6 @@ func (t *GetSubcontrolHistories_SubcontrolHistories_Edges_Node) GetStatus() *str
 		t = &GetSubcontrolHistories_SubcontrolHistories_Edges_Node{}
 	}
 	return t.Status
-}
-func (t *GetSubcontrolHistories_SubcontrolHistories_Edges_Node) GetSubcontrolClass() *string {
-	if t == nil {
-		t = &GetSubcontrolHistories_SubcontrolHistories_Edges_Node{}
-	}
-	return t.SubcontrolClass
-}
-func (t *GetSubcontrolHistories_SubcontrolHistories_Edges_Node) GetSubcontrolFamily() *string {
-	if t == nil {
-		t = &GetSubcontrolHistories_SubcontrolHistories_Edges_Node{}
-	}
-	return t.SubcontrolFamily
 }
 func (t *GetSubcontrolHistories_SubcontrolHistories_Edges_Node) GetSubcontrolNumber() *string {
 	if t == nil {
@@ -46163,13 +45638,12 @@ func (t *GetWebhookHistories) GetWebhookHistories() *GetWebhookHistories_Webhook
 const CreateBulkCSVActionPlanDocument = `mutation CreateBulkCSVActionPlan ($input: Upload!) {
 	createBulkCSVActionPlan(input: $input) {
 		actionPlans {
-			assigned
 			createdAt
 			createdBy
 			description
+			details
 			dueDate
 			id
-			jsonschema
 			name
 			priority
 			source
@@ -46202,13 +45676,12 @@ func (c *Client) CreateBulkCSVActionPlan(ctx context.Context, input graphql.Uplo
 const CreateBulkActionPlanDocument = `mutation CreateBulkActionPlan ($input: [CreateActionPlanInput!]) {
 	createBulkActionPlan(input: $input) {
 		actionPlans {
-			assigned
 			createdAt
 			createdBy
 			description
+			details
 			dueDate
 			id
-			jsonschema
 			name
 			priority
 			source
@@ -46241,13 +45714,12 @@ func (c *Client) CreateBulkActionPlan(ctx context.Context, input []*CreateAction
 const CreateActionPlanDocument = `mutation CreateActionPlan ($input: CreateActionPlanInput!) {
 	createActionPlan(input: $input) {
 		actionPlan {
-			assigned
 			createdAt
 			createdBy
 			description
+			details
 			dueDate
 			id
-			jsonschema
 			name
 			priority
 			source
@@ -46305,13 +45777,12 @@ const GetAllActionPlansDocument = `query GetAllActionPlans {
 	actionPlans {
 		edges {
 			node {
-				assigned
 				createdAt
 				createdBy
 				description
+				details
 				dueDate
 				id
-				jsonschema
 				name
 				priority
 				source
@@ -46342,13 +45813,12 @@ func (c *Client) GetAllActionPlans(ctx context.Context, interceptors ...clientv2
 
 const GetActionPlanByIDDocument = `query GetActionPlanByID ($actionPlanId: ID!) {
 	actionPlan(id: $actionPlanId) {
-		assigned
 		createdAt
 		createdBy
 		description
+		details
 		dueDate
 		id
-		jsonschema
 		name
 		priority
 		source
@@ -46381,13 +45851,12 @@ const GetActionPlansDocument = `query GetActionPlans ($where: ActionPlanWhereInp
 	actionPlans(where: $where) {
 		edges {
 			node {
-				assigned
 				createdAt
 				createdBy
 				description
+				details
 				dueDate
 				id
-				jsonschema
 				name
 				priority
 				source
@@ -46421,13 +45890,12 @@ func (c *Client) GetActionPlans(ctx context.Context, where *ActionPlanWhereInput
 const UpdateActionPlanDocument = `mutation UpdateActionPlan ($updateActionPlanId: ID!, $input: UpdateActionPlanInput!) {
 	updateActionPlan(id: $updateActionPlanId, input: $input) {
 		actionPlan {
-			assigned
 			createdAt
 			createdBy
 			description
+			details
 			dueDate
 			id
-			jsonschema
 			name
 			priority
 			source
@@ -46462,14 +45930,13 @@ const GetAllActionPlanHistoriesDocument = `query GetAllActionPlanHistories {
 	actionPlanHistories {
 		edges {
 			node {
-				assigned
 				createdAt
 				createdBy
 				description
+				details
 				dueDate
 				historyTime
 				id
-				jsonschema
 				name
 				operation
 				priority
@@ -46504,14 +45971,13 @@ const GetActionPlanHistoriesDocument = `query GetActionPlanHistories ($where: Ac
 	actionPlanHistories(where: $where) {
 		edges {
 			node {
-				assigned
 				createdAt
 				createdBy
 				description
+				details
 				dueDate
 				historyTime
 				id
-				jsonschema
 				name
 				operation
 				priority
@@ -46565,11 +46031,9 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					name
 					description
 					status
-					assigned
-					dueDate
 					priority
 					source
-					jsonschema
+					details
 				}
 			}
 			... on ContactSearchResult {
@@ -46596,14 +46060,13 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					status
 					controlType
 					version
-					owner
 					controlNumber
-					controlFamily
-					controlClass
+					family
+					class
 					source
 					satisfies
 					mappedFrameworks
-					jsonschema
+					details
 				}
 			}
 			... on ControlObjectiveSearchResult {
@@ -46616,13 +46079,12 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					status
 					controlObjectiveType
 					version
-					owner
 					controlNumber
-					controlFamily
-					controlClass
+					family
+					class
 					source
 					mappedFrameworks
-					jsonschema
+					details
 				}
 			}
 			... on DocumentDataSearchResult {
@@ -46774,7 +46236,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					version
 					purposeAndScope
 					background
-					jsonschema
+					details
 				}
 			}
 			... on NarrativeSearchResult {
@@ -46785,7 +46247,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					name
 					description
 					satisfies
-					jsonschema
+					details
 				}
 			}
 			... on OauthProviderSearchResult {
@@ -46866,7 +46328,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					purposeAndScope
 					background
 					satisfies
-					jsonschema
+					details
 				}
 			}
 			... on RiskSearchResult {
@@ -46879,12 +46341,9 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					status
 					riskType
 					businessCosts
-					impact
-					likelihood
 					mitigation
 					satisfies
-					severity
-					jsonschema
+					details
 				}
 			}
 			... on StandardSearchResult {
@@ -46901,7 +46360,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					purposeAndScope
 					background
 					satisfies
-					jsonschema
+					details
 				}
 			}
 			... on SubcontrolSearchResult {
@@ -46914,20 +46373,15 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					status
 					subcontrolType
 					version
-					owner
 					subcontrolNumber
-					subcontrolFamily
-					subcontrolClass
+					family
+					class
 					source
 					mappedFrameworks
-					assignedTo
-					implementationStatus
-					implementationNotes
-					implementationDate
 					implementationEvidence
+					implementationStatus
 					implementationVerification
-					implementationVerificationDate
-					jsonschema
+					details
 				}
 			}
 			... on SubscriberSearchResult {
@@ -47584,18 +47038,17 @@ func (c *Client) GetContactHistories(ctx context.Context, where *ContactHistoryW
 const CreateBulkCSVControlDocument = `mutation CreateBulkCSVControl ($input: Upload!) {
 	createBulkCSVControl(input: $input) {
 		controls {
-			controlClass
-			controlFamily
+			class
 			controlNumber
 			controlType
 			createdAt
 			createdBy
 			description
+			details
+			family
 			id
-			jsonschema
 			mappedFrameworks
 			name
-			owner
 			satisfies
 			source
 			status
@@ -47628,18 +47081,17 @@ func (c *Client) CreateBulkCSVControl(ctx context.Context, input graphql.Upload,
 const CreateBulkControlDocument = `mutation CreateBulkControl ($input: [CreateControlInput!]) {
 	createBulkControl(input: $input) {
 		controls {
-			controlClass
-			controlFamily
+			class
 			controlNumber
 			controlType
 			createdAt
 			createdBy
 			description
+			details
+			family
 			id
-			jsonschema
 			mappedFrameworks
 			name
-			owner
 			satisfies
 			source
 			status
@@ -47672,18 +47124,17 @@ func (c *Client) CreateBulkControl(ctx context.Context, input []*CreateControlIn
 const CreateControlDocument = `mutation CreateControl ($input: CreateControlInput!) {
 	createControl(input: $input) {
 		control {
-			controlClass
-			controlFamily
+			class
 			controlNumber
 			controlType
 			createdAt
 			createdBy
 			description
+			details
+			family
 			id
-			jsonschema
 			mappedFrameworks
 			name
-			owner
 			satisfies
 			source
 			status
@@ -47741,18 +47192,17 @@ const GetAllControlsDocument = `query GetAllControls {
 	controls {
 		edges {
 			node {
-				controlClass
-				controlFamily
+				class
 				controlNumber
 				controlType
 				createdAt
 				createdBy
 				description
+				details
+				family
 				id
-				jsonschema
 				mappedFrameworks
 				name
-				owner
 				satisfies
 				source
 				status
@@ -47783,18 +47233,17 @@ func (c *Client) GetAllControls(ctx context.Context, interceptors ...clientv2.Re
 
 const GetControlByIDDocument = `query GetControlByID ($controlId: ID!) {
 	control(id: $controlId) {
-		controlClass
-		controlFamily
+		class
 		controlNumber
 		controlType
 		createdAt
 		createdBy
 		description
+		details
+		family
 		id
-		jsonschema
 		mappedFrameworks
 		name
-		owner
 		satisfies
 		source
 		status
@@ -47827,18 +47276,17 @@ const GetControlsDocument = `query GetControls ($where: ControlWhereInput) {
 	controls(where: $where) {
 		edges {
 			node {
-				controlClass
-				controlFamily
+				class
 				controlNumber
 				controlType
 				createdAt
 				createdBy
 				description
+				details
+				family
 				id
-				jsonschema
 				mappedFrameworks
 				name
-				owner
 				satisfies
 				source
 				status
@@ -47872,18 +47320,17 @@ func (c *Client) GetControls(ctx context.Context, where *ControlWhereInput, inte
 const UpdateControlDocument = `mutation UpdateControl ($updateControlId: ID!, $input: UpdateControlInput!) {
 	updateControl(id: $updateControlId, input: $input) {
 		control {
-			controlClass
-			controlFamily
+			class
 			controlNumber
 			controlType
 			createdAt
 			createdBy
 			description
+			details
+			family
 			id
-			jsonschema
 			mappedFrameworks
 			name
-			owner
 			satisfies
 			source
 			status
@@ -47918,20 +47365,19 @@ const GetAllControlHistoriesDocument = `query GetAllControlHistories {
 	controlHistories {
 		edges {
 			node {
-				controlClass
-				controlFamily
+				class
 				controlNumber
 				controlType
 				createdAt
 				createdBy
 				description
+				details
+				family
 				historyTime
 				id
-				jsonschema
 				mappedFrameworks
 				name
 				operation
-				owner
 				ref
 				satisfies
 				source
@@ -47965,20 +47411,19 @@ const GetControlHistoriesDocument = `query GetControlHistories ($where: ControlH
 	controlHistories(where: $where) {
 		edges {
 			node {
-				controlClass
-				controlFamily
+				class
 				controlNumber
 				controlType
 				createdAt
 				createdBy
 				description
+				details
+				family
 				historyTime
 				id
-				jsonschema
 				mappedFrameworks
 				name
 				operation
-				owner
 				ref
 				satisfies
 				source
@@ -48013,18 +47458,17 @@ func (c *Client) GetControlHistories(ctx context.Context, where *ControlHistoryW
 const CreateBulkCSVControlObjectiveDocument = `mutation CreateBulkCSVControlObjective ($input: Upload!) {
 	createBulkCSVControlObjective(input: $input) {
 		controlObjectives {
-			controlClass
-			controlFamily
+			class
 			controlNumber
 			controlObjectiveType
 			createdAt
 			createdBy
 			description
+			details
+			family
 			id
-			jsonschema
 			mappedFrameworks
 			name
-			owner
 			source
 			status
 			tags
@@ -48056,18 +47500,17 @@ func (c *Client) CreateBulkCSVControlObjective(ctx context.Context, input graphq
 const CreateBulkControlObjectiveDocument = `mutation CreateBulkControlObjective ($input: [CreateControlObjectiveInput!]) {
 	createBulkControlObjective(input: $input) {
 		controlObjectives {
-			controlClass
-			controlFamily
+			class
 			controlNumber
 			controlObjectiveType
 			createdAt
 			createdBy
 			description
+			details
+			family
 			id
-			jsonschema
 			mappedFrameworks
 			name
-			owner
 			source
 			status
 			tags
@@ -48099,18 +47542,17 @@ func (c *Client) CreateBulkControlObjective(ctx context.Context, input []*Create
 const CreateControlObjectiveDocument = `mutation CreateControlObjective ($input: CreateControlObjectiveInput!) {
 	createControlObjective(input: $input) {
 		controlObjective {
-			controlClass
-			controlFamily
+			class
 			controlNumber
 			controlObjectiveType
 			createdAt
 			createdBy
 			description
+			details
+			family
 			id
-			jsonschema
 			mappedFrameworks
 			name
-			owner
 			source
 			status
 			tags
@@ -48167,18 +47609,17 @@ const GetAllControlObjectivesDocument = `query GetAllControlObjectives {
 	controlObjectives {
 		edges {
 			node {
-				controlClass
-				controlFamily
+				class
 				controlNumber
 				controlObjectiveType
 				createdAt
 				createdBy
 				description
+				details
+				family
 				id
-				jsonschema
 				mappedFrameworks
 				name
-				owner
 				source
 				status
 				tags
@@ -48208,18 +47649,17 @@ func (c *Client) GetAllControlObjectives(ctx context.Context, interceptors ...cl
 
 const GetControlObjectiveByIDDocument = `query GetControlObjectiveByID ($controlObjectiveId: ID!) {
 	controlObjective(id: $controlObjectiveId) {
-		controlClass
-		controlFamily
+		class
 		controlNumber
 		controlObjectiveType
 		createdAt
 		createdBy
 		description
+		details
+		family
 		id
-		jsonschema
 		mappedFrameworks
 		name
-		owner
 		source
 		status
 		tags
@@ -48251,18 +47691,17 @@ const GetControlObjectivesDocument = `query GetControlObjectives ($where: Contro
 	controlObjectives(where: $where) {
 		edges {
 			node {
-				controlClass
-				controlFamily
+				class
 				controlNumber
 				controlObjectiveType
 				createdAt
 				createdBy
 				description
+				details
+				family
 				id
-				jsonschema
 				mappedFrameworks
 				name
-				owner
 				source
 				status
 				tags
@@ -48295,18 +47734,17 @@ func (c *Client) GetControlObjectives(ctx context.Context, where *ControlObjecti
 const UpdateControlObjectiveDocument = `mutation UpdateControlObjective ($updateControlObjectiveId: ID!, $input: UpdateControlObjectiveInput!) {
 	updateControlObjective(id: $updateControlObjectiveId, input: $input) {
 		controlObjective {
-			controlClass
-			controlFamily
+			class
 			controlNumber
 			controlObjectiveType
 			createdAt
 			createdBy
 			description
+			details
+			family
 			id
-			jsonschema
 			mappedFrameworks
 			name
-			owner
 			source
 			status
 			tags
@@ -48340,20 +47778,19 @@ const GetAllControlObjectiveHistoriesDocument = `query GetAllControlObjectiveHis
 	controlObjectiveHistories {
 		edges {
 			node {
-				controlClass
-				controlFamily
+				class
 				controlNumber
 				controlObjectiveType
 				createdAt
 				createdBy
 				description
+				details
+				family
 				historyTime
 				id
-				jsonschema
 				mappedFrameworks
 				name
 				operation
-				owner
 				ref
 				source
 				status
@@ -48386,20 +47823,19 @@ const GetControlObjectiveHistoriesDocument = `query GetControlObjectiveHistories
 	controlObjectiveHistories(where: $where) {
 		edges {
 			node {
-				controlClass
-				controlFamily
+				class
 				controlNumber
 				controlObjectiveType
 				createdAt
 				createdBy
 				description
+				details
+				family
 				historyTime
 				id
-				jsonschema
 				mappedFrameworks
 				name
 				operation
-				owner
 				ref
 				source
 				status
@@ -53480,8 +52916,8 @@ const CreateBulkCSVInternalPolicyDocument = `mutation CreateBulkCSVInternalPolic
 			createdAt
 			createdBy
 			description
+			details
 			id
-			jsonschema
 			name
 			policyType
 			purposeAndScope
@@ -53519,8 +52955,8 @@ const CreateBulkInternalPolicyDocument = `mutation CreateBulkInternalPolicy ($in
 			createdAt
 			createdBy
 			description
+			details
 			id
-			jsonschema
 			name
 			policyType
 			purposeAndScope
@@ -53558,8 +52994,8 @@ const CreateInternalPolicyDocument = `mutation CreateInternalPolicy ($input: Cre
 			createdAt
 			createdBy
 			description
+			details
 			id
-			jsonschema
 			name
 			policyType
 			purposeAndScope
@@ -53622,8 +53058,8 @@ const GetAllInternalPoliciesDocument = `query GetAllInternalPolicies {
 				createdAt
 				createdBy
 				description
+				details
 				id
-				jsonschema
 				name
 				policyType
 				purposeAndScope
@@ -53659,8 +53095,8 @@ const GetInternalPolicyByIDDocument = `query GetInternalPolicyByID ($internalPol
 		createdAt
 		createdBy
 		description
+		details
 		id
-		jsonschema
 		name
 		policyType
 		purposeAndScope
@@ -53698,8 +53134,8 @@ const GetInternalPoliciesDocument = `query GetInternalPolicies ($where: Internal
 				createdAt
 				createdBy
 				description
+				details
 				id
-				jsonschema
 				name
 				policyType
 				purposeAndScope
@@ -53738,8 +53174,8 @@ const UpdateInternalPolicyDocument = `mutation UpdateInternalPolicy ($updateInte
 			createdAt
 			createdBy
 			description
+			details
 			id
-			jsonschema
 			name
 			policyType
 			purposeAndScope
@@ -53779,9 +53215,9 @@ const GetAllInternalPolicyHistoriesDocument = `query GetAllInternalPolicyHistori
 				createdAt
 				createdBy
 				description
+				details
 				historyTime
 				id
-				jsonschema
 				name
 				operation
 				policyType
@@ -53821,9 +53257,9 @@ const GetInternalPolicyHistoriesDocument = `query GetInternalPolicyHistories ($w
 				createdAt
 				createdBy
 				description
+				details
 				historyTime
 				id
-				jsonschema
 				name
 				operation
 				policyType
@@ -54091,8 +53527,8 @@ const CreateBulkCSVNarrativeDocument = `mutation CreateBulkCSVNarrative ($input:
 			createdAt
 			createdBy
 			description
+			details
 			id
-			jsonschema
 			name
 			satisfies
 			tags
@@ -54126,8 +53562,8 @@ const CreateBulkNarrativeDocument = `mutation CreateBulkNarrative ($input: [Crea
 			createdAt
 			createdBy
 			description
+			details
 			id
-			jsonschema
 			name
 			satisfies
 			tags
@@ -54161,8 +53597,8 @@ const CreateNarrativeDocument = `mutation CreateNarrative ($input: CreateNarrati
 			createdAt
 			createdBy
 			description
+			details
 			id
-			jsonschema
 			name
 			satisfies
 			tags
@@ -54221,8 +53657,8 @@ const GetAllNarrativesDocument = `query GetAllNarratives {
 				createdAt
 				createdBy
 				description
+				details
 				id
-				jsonschema
 				name
 				satisfies
 				tags
@@ -54254,8 +53690,8 @@ const GetNarrativeByIDDocument = `query GetNarrativeByID ($narrativeId: ID!) {
 		createdAt
 		createdBy
 		description
+		details
 		id
-		jsonschema
 		name
 		satisfies
 		tags
@@ -54289,8 +53725,8 @@ const GetNarrativesDocument = `query GetNarratives ($where: NarrativeWhereInput)
 				createdAt
 				createdBy
 				description
+				details
 				id
-				jsonschema
 				name
 				satisfies
 				tags
@@ -54325,8 +53761,8 @@ const UpdateNarrativeDocument = `mutation UpdateNarrative ($updateNarrativeId: I
 			createdAt
 			createdBy
 			description
+			details
 			id
-			jsonschema
 			name
 			satisfies
 			tags
@@ -54362,9 +53798,9 @@ const GetAllNarrativeHistoriesDocument = `query GetAllNarrativeHistories {
 				createdAt
 				createdBy
 				description
+				details
 				historyTime
 				id
-				jsonschema
 				name
 				operation
 				ref
@@ -54400,9 +53836,9 @@ const GetNarrativeHistoriesDocument = `query GetNarrativeHistories ($where: Narr
 				createdAt
 				createdBy
 				description
+				details
 				historyTime
 				id
-				jsonschema
 				name
 				operation
 				ref
@@ -56113,8 +55549,8 @@ const CreateBulkCSVProcedureDocument = `mutation CreateBulkCSVProcedure ($input:
 			createdAt
 			createdBy
 			description
+			details
 			id
-			jsonschema
 			name
 			procedureType
 			purposeAndScope
@@ -56153,8 +55589,8 @@ const CreateBulkProcedureDocument = `mutation CreateBulkProcedure ($input: [Crea
 			createdAt
 			createdBy
 			description
+			details
 			id
-			jsonschema
 			name
 			procedureType
 			purposeAndScope
@@ -56193,8 +55629,8 @@ const CreateProcedureDocument = `mutation CreateProcedure ($input: CreateProcedu
 			createdAt
 			createdBy
 			description
+			details
 			id
-			jsonschema
 			name
 			procedureType
 			purposeAndScope
@@ -56258,8 +55694,8 @@ const GetAllProceduresDocument = `query GetAllProcedures {
 				createdAt
 				createdBy
 				description
+				details
 				id
-				jsonschema
 				name
 				procedureType
 				purposeAndScope
@@ -56296,8 +55732,8 @@ const GetProcedureByIDDocument = `query GetProcedureByID ($procedureId: ID!) {
 		createdAt
 		createdBy
 		description
+		details
 		id
-		jsonschema
 		name
 		procedureType
 		purposeAndScope
@@ -56336,8 +55772,8 @@ const GetProceduresDocument = `query GetProcedures ($where: ProcedureWhereInput)
 				createdAt
 				createdBy
 				description
+				details
 				id
-				jsonschema
 				name
 				procedureType
 				purposeAndScope
@@ -56377,8 +55813,8 @@ const UpdateProcedureDocument = `mutation UpdateProcedure ($updateProcedureId: I
 			createdAt
 			createdBy
 			description
+			details
 			id
-			jsonschema
 			name
 			procedureType
 			purposeAndScope
@@ -56419,9 +55855,9 @@ const GetAllProcedureHistoriesDocument = `query GetAllProcedureHistories {
 				createdAt
 				createdBy
 				description
+				details
 				historyTime
 				id
-				jsonschema
 				name
 				operation
 				procedureType
@@ -56462,9 +55898,9 @@ const GetProcedureHistoriesDocument = `query GetProcedureHistories ($where: Proc
 				createdAt
 				createdBy
 				description
+				details
 				historyTime
 				id
-				jsonschema
 				name
 				operation
 				procedureType
@@ -56506,15 +55942,14 @@ const CreateBulkCSVRiskDocument = `mutation CreateBulkCSVRisk ($input: Upload!) 
 			createdAt
 			createdBy
 			description
+			details
 			id
 			impact
-			jsonschema
 			likelihood
 			mitigation
 			name
 			riskType
 			satisfies
-			severity
 			status
 			tags
 			updatedAt
@@ -56548,15 +55983,14 @@ const CreateBulkRiskDocument = `mutation CreateBulkRisk ($input: [CreateRiskInpu
 			createdAt
 			createdBy
 			description
+			details
 			id
 			impact
-			jsonschema
 			likelihood
 			mitigation
 			name
 			riskType
 			satisfies
-			severity
 			status
 			tags
 			updatedAt
@@ -56590,15 +56024,14 @@ const CreateRiskDocument = `mutation CreateRisk ($input: CreateRiskInput!) {
 			createdAt
 			createdBy
 			description
+			details
 			id
 			impact
-			jsonschema
 			likelihood
 			mitigation
 			name
 			riskType
 			satisfies
-			severity
 			status
 			tags
 			updatedAt
@@ -56657,15 +56090,14 @@ const GetAllRisksDocument = `query GetAllRisks {
 				createdAt
 				createdBy
 				description
+				details
 				id
 				impact
-				jsonschema
 				likelihood
 				mitigation
 				name
 				riskType
 				satisfies
-				severity
 				status
 				tags
 				updatedAt
@@ -56697,15 +56129,14 @@ const GetRiskByIDDocument = `query GetRiskByID ($riskId: ID!) {
 		createdAt
 		createdBy
 		description
+		details
 		id
 		impact
-		jsonschema
 		likelihood
 		mitigation
 		name
 		riskType
 		satisfies
-		severity
 		status
 		tags
 		updatedAt
@@ -56739,15 +56170,14 @@ const GetRisksDocument = `query GetRisks ($where: RiskWhereInput) {
 				createdAt
 				createdBy
 				description
+				details
 				id
 				impact
-				jsonschema
 				likelihood
 				mitigation
 				name
 				riskType
 				satisfies
-				severity
 				status
 				tags
 				updatedAt
@@ -56782,15 +56212,14 @@ const UpdateRiskDocument = `mutation UpdateRisk ($updateRiskId: ID!, $input: Upd
 			createdAt
 			createdBy
 			description
+			details
 			id
 			impact
-			jsonschema
 			likelihood
 			mitigation
 			name
 			riskType
 			satisfies
-			severity
 			status
 			tags
 			updatedAt
@@ -56826,10 +56255,10 @@ const GetAllRiskHistoriesDocument = `query GetAllRiskHistories {
 				createdAt
 				createdBy
 				description
+				details
 				historyTime
 				id
 				impact
-				jsonschema
 				likelihood
 				mitigation
 				name
@@ -56837,7 +56266,6 @@ const GetAllRiskHistoriesDocument = `query GetAllRiskHistories {
 				ref
 				riskType
 				satisfies
-				severity
 				status
 				tags
 				updatedAt
@@ -56871,10 +56299,10 @@ const GetRiskHistoriesDocument = `query GetRiskHistories ($where: RiskHistoryWhe
 				createdAt
 				createdBy
 				description
+				details
 				historyTime
 				id
 				impact
-				jsonschema
 				likelihood
 				mitigation
 				name
@@ -56882,7 +56310,6 @@ const GetRiskHistoriesDocument = `query GetRiskHistories ($where: RiskHistoryWhe
 				ref
 				riskType
 				satisfies
-				severity
 				status
 				tags
 				updatedAt
@@ -57157,9 +56584,9 @@ const CreateBulkCSVStandardDocument = `mutation CreateBulkCSVStandard ($input: U
 			createdAt
 			createdBy
 			description
+			details
 			family
 			id
-			jsonschema
 			name
 			purposeAndScope
 			satisfies
@@ -57198,9 +56625,9 @@ const CreateBulkStandardDocument = `mutation CreateBulkStandard ($input: [Create
 			createdAt
 			createdBy
 			description
+			details
 			family
 			id
-			jsonschema
 			name
 			purposeAndScope
 			satisfies
@@ -57239,9 +56666,9 @@ const CreateStandardDocument = `mutation CreateStandard ($input: CreateStandardI
 			createdAt
 			createdBy
 			description
+			details
 			family
 			id
-			jsonschema
 			name
 			purposeAndScope
 			satisfies
@@ -57305,9 +56732,9 @@ const GetAllStandardsDocument = `query GetAllStandards {
 				createdAt
 				createdBy
 				description
+				details
 				family
 				id
-				jsonschema
 				name
 				purposeAndScope
 				satisfies
@@ -57344,9 +56771,9 @@ const GetStandardByIDDocument = `query GetStandardByID ($standardId: ID!) {
 		createdAt
 		createdBy
 		description
+		details
 		family
 		id
-		jsonschema
 		name
 		purposeAndScope
 		satisfies
@@ -57385,9 +56812,9 @@ const GetStandardsDocument = `query GetStandards ($where: StandardWhereInput) {
 				createdAt
 				createdBy
 				description
+				details
 				family
 				id
-				jsonschema
 				name
 				purposeAndScope
 				satisfies
@@ -57427,9 +56854,9 @@ const UpdateStandardDocument = `mutation UpdateStandard ($updateStandardId: ID!,
 			createdAt
 			createdBy
 			description
+			details
 			family
 			id
-			jsonschema
 			name
 			purposeAndScope
 			satisfies
@@ -57470,10 +56897,10 @@ const GetAllStandardHistoriesDocument = `query GetAllStandardHistories {
 				createdAt
 				createdBy
 				description
+				details
 				family
 				historyTime
 				id
-				jsonschema
 				name
 				operation
 				purposeAndScope
@@ -57514,10 +56941,10 @@ const GetStandardHistoriesDocument = `query GetStandardHistories ($where: Standa
 				createdAt
 				createdBy
 				description
+				details
 				family
 				historyTime
 				id
-				jsonschema
 				name
 				operation
 				purposeAndScope
@@ -57555,25 +56982,22 @@ func (c *Client) GetStandardHistories(ctx context.Context, where *StandardHistor
 const CreateBulkCSVSubcontrolDocument = `mutation CreateBulkCSVSubcontrol ($input: Upload!) {
 	createBulkCSVSubcontrol(input: $input) {
 		subcontrols {
-			assignedTo
+			class
 			createdAt
 			createdBy
 			description
+			details
+			family
 			id
 			implementationDate
 			implementationEvidence
-			implementationNotes
 			implementationStatus
 			implementationVerification
 			implementationVerificationDate
-			jsonschema
 			mappedFrameworks
 			name
-			owner
 			source
 			status
-			subcontrolClass
-			subcontrolFamily
 			subcontrolNumber
 			subcontrolType
 			tags
@@ -57605,25 +57029,22 @@ func (c *Client) CreateBulkCSVSubcontrol(ctx context.Context, input graphql.Uplo
 const CreateBulkSubcontrolDocument = `mutation CreateBulkSubcontrol ($input: [CreateSubcontrolInput!]) {
 	createBulkSubcontrol(input: $input) {
 		subcontrols {
-			assignedTo
+			class
 			createdAt
 			createdBy
 			description
+			details
+			family
 			id
 			implementationDate
 			implementationEvidence
-			implementationNotes
 			implementationStatus
 			implementationVerification
 			implementationVerificationDate
-			jsonschema
 			mappedFrameworks
 			name
-			owner
 			source
 			status
-			subcontrolClass
-			subcontrolFamily
 			subcontrolNumber
 			subcontrolType
 			tags
@@ -57655,25 +57076,22 @@ func (c *Client) CreateBulkSubcontrol(ctx context.Context, input []*CreateSubcon
 const CreateSubcontrolDocument = `mutation CreateSubcontrol ($input: CreateSubcontrolInput!) {
 	createSubcontrol(input: $input) {
 		subcontrol {
-			assignedTo
+			class
 			createdAt
 			createdBy
 			description
+			details
+			family
 			id
 			implementationDate
 			implementationEvidence
-			implementationNotes
 			implementationStatus
 			implementationVerification
 			implementationVerificationDate
-			jsonschema
 			mappedFrameworks
 			name
-			owner
 			source
 			status
-			subcontrolClass
-			subcontrolFamily
 			subcontrolNumber
 			subcontrolType
 			tags
@@ -57730,25 +57148,22 @@ const GetAllSubcontrolsDocument = `query GetAllSubcontrols {
 	subcontrols {
 		edges {
 			node {
-				assignedTo
+				class
 				createdAt
 				createdBy
 				description
+				details
+				family
 				id
 				implementationDate
 				implementationEvidence
-				implementationNotes
 				implementationStatus
 				implementationVerification
 				implementationVerificationDate
-				jsonschema
 				mappedFrameworks
 				name
-				owner
 				source
 				status
-				subcontrolClass
-				subcontrolFamily
 				subcontrolNumber
 				subcontrolType
 				tags
@@ -57778,25 +57193,22 @@ func (c *Client) GetAllSubcontrols(ctx context.Context, interceptors ...clientv2
 
 const GetSubcontrolByIDDocument = `query GetSubcontrolByID ($subcontrolId: ID!) {
 	subcontrol(id: $subcontrolId) {
-		assignedTo
+		class
 		createdAt
 		createdBy
 		description
+		details
+		family
 		id
 		implementationDate
 		implementationEvidence
-		implementationNotes
 		implementationStatus
 		implementationVerification
 		implementationVerificationDate
-		jsonschema
 		mappedFrameworks
 		name
-		owner
 		source
 		status
-		subcontrolClass
-		subcontrolFamily
 		subcontrolNumber
 		subcontrolType
 		tags
@@ -57828,25 +57240,22 @@ const GetSubcontrolsDocument = `query GetSubcontrols ($where: SubcontrolWhereInp
 	subcontrols(where: $where) {
 		edges {
 			node {
-				assignedTo
+				class
 				createdAt
 				createdBy
 				description
+				details
+				family
 				id
 				implementationDate
 				implementationEvidence
-				implementationNotes
 				implementationStatus
 				implementationVerification
 				implementationVerificationDate
-				jsonschema
 				mappedFrameworks
 				name
-				owner
 				source
 				status
-				subcontrolClass
-				subcontrolFamily
 				subcontrolNumber
 				subcontrolType
 				tags
@@ -57879,25 +57288,22 @@ func (c *Client) GetSubcontrols(ctx context.Context, where *SubcontrolWhereInput
 const UpdateSubcontrolDocument = `mutation UpdateSubcontrol ($updateSubcontrolId: ID!, $input: UpdateSubcontrolInput!) {
 	updateSubcontrol(id: $updateSubcontrolId, input: $input) {
 		subcontrol {
-			assignedTo
+			class
 			createdAt
 			createdBy
 			description
+			details
+			family
 			id
 			implementationDate
 			implementationEvidence
-			implementationNotes
 			implementationStatus
 			implementationVerification
 			implementationVerificationDate
-			jsonschema
 			mappedFrameworks
 			name
-			owner
 			source
 			status
-			subcontrolClass
-			subcontrolFamily
 			subcontrolNumber
 			subcontrolType
 			tags
@@ -57931,28 +57337,25 @@ const GetAllSubcontrolHistoriesDocument = `query GetAllSubcontrolHistories {
 	subcontrolHistories {
 		edges {
 			node {
-				assignedTo
+				class
 				createdAt
 				createdBy
 				description
+				details
+				family
 				historyTime
 				id
 				implementationDate
 				implementationEvidence
-				implementationNotes
 				implementationStatus
 				implementationVerification
 				implementationVerificationDate
-				jsonschema
 				mappedFrameworks
 				name
 				operation
-				owner
 				ref
 				source
 				status
-				subcontrolClass
-				subcontrolFamily
 				subcontrolNumber
 				subcontrolType
 				tags
@@ -57984,28 +57387,25 @@ const GetSubcontrolHistoriesDocument = `query GetSubcontrolHistories ($where: Su
 	subcontrolHistories(where: $where) {
 		edges {
 			node {
-				assignedTo
+				class
 				createdAt
 				createdBy
 				description
+				details
+				family
 				historyTime
 				id
 				implementationDate
 				implementationEvidence
-				implementationNotes
 				implementationStatus
 				implementationVerification
 				implementationVerificationDate
-				jsonschema
 				mappedFrameworks
 				name
 				operation
-				owner
 				ref
 				source
 				status
-				subcontrolClass
-				subcontrolFamily
 				subcontrolNumber
 				subcontrolType
 				tags

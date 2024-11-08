@@ -51,22 +51,20 @@ type ControlHistory struct {
 	ControlType string `json:"control_type,omitempty"`
 	// version of the control
 	Version string `json:"version,omitempty"`
-	// owner of the control
-	Owner string `json:"owner,omitempty"`
-	// control number
+	// control number or identifier
 	ControlNumber string `json:"control_number,omitempty"`
-	// control family
-	ControlFamily string `json:"control_family,omitempty"`
-	// control class
-	ControlClass string `json:"control_class,omitempty"`
-	// source of the control
+	// family associated with the control
+	Family string `json:"family,omitempty"`
+	// class associated with the control
+	Class string `json:"class,omitempty"`
+	// source of the control, e.g. framework, template, custom, etc.
 	Source string `json:"source,omitempty"`
 	// which control objectives are satisfied by the control
 	Satisfies string `json:"satisfies,omitempty"`
 	// mapped frameworks
 	MappedFrameworks string `json:"mapped_frameworks,omitempty"`
-	// json schema
-	Jsonschema   map[string]interface{} `json:"jsonschema,omitempty"`
+	// json data including details of the control
+	Details      map[string]interface{} `json:"details,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -75,11 +73,11 @@ func (*ControlHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case controlhistory.FieldTags, controlhistory.FieldJsonschema:
+		case controlhistory.FieldTags, controlhistory.FieldDetails:
 			values[i] = new([]byte)
 		case controlhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case controlhistory.FieldID, controlhistory.FieldRef, controlhistory.FieldCreatedBy, controlhistory.FieldUpdatedBy, controlhistory.FieldDeletedBy, controlhistory.FieldMappingID, controlhistory.FieldName, controlhistory.FieldDescription, controlhistory.FieldStatus, controlhistory.FieldControlType, controlhistory.FieldVersion, controlhistory.FieldOwner, controlhistory.FieldControlNumber, controlhistory.FieldControlFamily, controlhistory.FieldControlClass, controlhistory.FieldSource, controlhistory.FieldSatisfies, controlhistory.FieldMappedFrameworks:
+		case controlhistory.FieldID, controlhistory.FieldRef, controlhistory.FieldCreatedBy, controlhistory.FieldUpdatedBy, controlhistory.FieldDeletedBy, controlhistory.FieldMappingID, controlhistory.FieldName, controlhistory.FieldDescription, controlhistory.FieldStatus, controlhistory.FieldControlType, controlhistory.FieldVersion, controlhistory.FieldControlNumber, controlhistory.FieldFamily, controlhistory.FieldClass, controlhistory.FieldSource, controlhistory.FieldSatisfies, controlhistory.FieldMappedFrameworks:
 			values[i] = new(sql.NullString)
 		case controlhistory.FieldHistoryTime, controlhistory.FieldCreatedAt, controlhistory.FieldUpdatedAt, controlhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -202,29 +200,23 @@ func (ch *ControlHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ch.Version = value.String
 			}
-		case controlhistory.FieldOwner:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field owner", values[i])
-			} else if value.Valid {
-				ch.Owner = value.String
-			}
 		case controlhistory.FieldControlNumber:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field control_number", values[i])
 			} else if value.Valid {
 				ch.ControlNumber = value.String
 			}
-		case controlhistory.FieldControlFamily:
+		case controlhistory.FieldFamily:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field control_family", values[i])
+				return fmt.Errorf("unexpected type %T for field family", values[i])
 			} else if value.Valid {
-				ch.ControlFamily = value.String
+				ch.Family = value.String
 			}
-		case controlhistory.FieldControlClass:
+		case controlhistory.FieldClass:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field control_class", values[i])
+				return fmt.Errorf("unexpected type %T for field class", values[i])
 			} else if value.Valid {
-				ch.ControlClass = value.String
+				ch.Class = value.String
 			}
 		case controlhistory.FieldSource:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -244,12 +236,12 @@ func (ch *ControlHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ch.MappedFrameworks = value.String
 			}
-		case controlhistory.FieldJsonschema:
+		case controlhistory.FieldDetails:
 			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field jsonschema", values[i])
+				return fmt.Errorf("unexpected type %T for field details", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ch.Jsonschema); err != nil {
-					return fmt.Errorf("unmarshal field jsonschema: %w", err)
+				if err := json.Unmarshal(*value, &ch.Details); err != nil {
+					return fmt.Errorf("unmarshal field details: %w", err)
 				}
 			}
 		default:
@@ -336,17 +328,14 @@ func (ch *ControlHistory) String() string {
 	builder.WriteString("version=")
 	builder.WriteString(ch.Version)
 	builder.WriteString(", ")
-	builder.WriteString("owner=")
-	builder.WriteString(ch.Owner)
-	builder.WriteString(", ")
 	builder.WriteString("control_number=")
 	builder.WriteString(ch.ControlNumber)
 	builder.WriteString(", ")
-	builder.WriteString("control_family=")
-	builder.WriteString(ch.ControlFamily)
+	builder.WriteString("family=")
+	builder.WriteString(ch.Family)
 	builder.WriteString(", ")
-	builder.WriteString("control_class=")
-	builder.WriteString(ch.ControlClass)
+	builder.WriteString("class=")
+	builder.WriteString(ch.Class)
 	builder.WriteString(", ")
 	builder.WriteString("source=")
 	builder.WriteString(ch.Source)
@@ -357,8 +346,8 @@ func (ch *ControlHistory) String() string {
 	builder.WriteString("mapped_frameworks=")
 	builder.WriteString(ch.MappedFrameworks)
 	builder.WriteString(", ")
-	builder.WriteString("jsonschema=")
-	builder.WriteString(fmt.Sprintf("%v", ch.Jsonschema))
+	builder.WriteString("details=")
+	builder.WriteString(fmt.Sprintf("%v", ch.Details))
 	builder.WriteByte(')')
 	return builder.String()
 }

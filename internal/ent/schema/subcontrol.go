@@ -33,48 +33,39 @@ func (Subcontrol) Fields() []ent.Field {
 		field.String("version").
 			Optional().
 			Comment("version of the control"),
-		field.String("owner").
-			Optional().
-			Comment("owner of the subcontrol"),
 		field.String("subcontrol_number").
 			Optional().
-			Comment("control number"),
-		field.Text("subcontrol_family").
+			Comment("number of the subcontrol"),
+		field.Text("family").
 			Optional().
-			Comment("control family"),
-		field.String("subcontrol_class").
+			Comment("subcontrol family "),
+		field.String("class").
 			Optional().
-			Comment("control class"),
+			Comment("subcontrol class"),
 		field.String("source").
 			Optional().
-			Comment("source of the control"),
+			Comment("source of the control, e.g. framework, template, user-defined, etc."),
 		field.Text("mapped_frameworks").
 			Optional().
-			Comment("mapped frameworks"),
-		field.String("assigned_to").
+			Comment("mapped frameworks that the subcontrol is part of"),
+		field.String("implementation_evidence").
 			Optional().
-			Comment("assigned to"),
+			Comment("implementation evidence of the subcontrol"),
 		field.String("implementation_status").
 			Optional().
 			Comment("implementation status"),
-		field.String("implementation_notes").
+		field.Time("implementation_date").
 			Optional().
-			Comment("implementation notes"),
-		field.String("implementation_date").
-			Optional().
-			Comment("implementation date"),
-		field.String("implementation_evidence").
-			Optional().
-			Comment("implementation evidence"),
+			Comment("date the subcontrol was implemented"),
 		field.String("implementation_verification").
 			Optional().
 			Comment("implementation verification"),
-		field.String("implementation_verification_date").
+		field.Time("implementation_verification_date").
 			Optional().
-			Comment("implementation verification date"),
-		field.JSON("jsonschema", map[string]interface{}{}).
+			Comment("date the subcontrol implementation was verified"),
+		field.JSON("details", map[string]interface{}{}).
 			Optional().
-			Comment("json schema"),
+			Comment("json data details of the subcontrol"),
 	}
 }
 
@@ -82,6 +73,11 @@ func (Subcontrol) Fields() []ent.Field {
 func (Subcontrol) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("control", Control.Type).
+			Ref("subcontrols"),
+		edge.From("user", User.Type).
+			Ref("subcontrols"),
+		edge.From("notes", Note.Type).
+			Unique().
 			Ref("subcontrols"),
 	}
 }

@@ -6,15 +6,14 @@ mutation CreateBulkCSVRisk($input: Upload!) {
       createdAt
       createdBy
       description
+      details
       id
       impact
-      jsonschema
       likelihood
       mitigation
       name
       riskType
       satisfies
-      severity
       status
       tags
       updatedAt
@@ -30,15 +29,14 @@ mutation CreateBulkRisk($input: [CreateRiskInput!]) {
       createdAt
       createdBy
       description
+      details
       id
       impact
-      jsonschema
       likelihood
       mitigation
       name
       riskType
       satisfies
-      severity
       status
       tags
       updatedAt
@@ -54,15 +52,14 @@ mutation CreateRisk($input: CreateRiskInput!) {
       createdAt
       createdBy
       description
+      details
       id
       impact
-      jsonschema
       likelihood
       mitigation
       name
       riskType
       satisfies
-      severity
       status
       tags
       updatedAt
@@ -85,15 +82,14 @@ query GetAllRisks {
         createdAt
         createdBy
         description
+        details
         id
         impact
-        jsonschema
         likelihood
         mitigation
         name
         riskType
         satisfies
-        severity
         status
         tags
         updatedAt
@@ -108,15 +104,14 @@ query GetRiskByID($riskId: ID!) {
     createdAt
     createdBy
     description
+    details
     id
     impact
-    jsonschema
     likelihood
     mitigation
     name
     riskType
     satisfies
-    severity
     status
     tags
     updatedAt
@@ -132,15 +127,14 @@ query GetRisks($where: RiskWhereInput) {
         createdAt
         createdBy
         description
+        details
         id
         impact
-        jsonschema
         likelihood
         mitigation
         name
         riskType
         satisfies
-        severity
         status
         tags
         updatedAt
@@ -156,15 +150,14 @@ mutation UpdateRisk($updateRiskId: ID!, $input: UpdateRiskInput!) {
       createdAt
       createdBy
       description
+      details
       id
       impact
-      jsonschema
       likelihood
       mitigation
       name
       riskType
       satisfies
-      severity
       status
       tags
       updatedAt

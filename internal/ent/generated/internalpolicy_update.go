@@ -254,15 +254,15 @@ func (ipu *InternalPolicyUpdate) ClearBackground() *InternalPolicyUpdate {
 	return ipu
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (ipu *InternalPolicyUpdate) SetJsonschema(m map[string]interface{}) *InternalPolicyUpdate {
-	ipu.mutation.SetJsonschema(m)
+// SetDetails sets the "details" field.
+func (ipu *InternalPolicyUpdate) SetDetails(m map[string]interface{}) *InternalPolicyUpdate {
+	ipu.mutation.SetDetails(m)
 	return ipu
 }
 
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (ipu *InternalPolicyUpdate) ClearJsonschema() *InternalPolicyUpdate {
-	ipu.mutation.ClearJsonschema()
+// ClearDetails clears the value of the "details" field.
+func (ipu *InternalPolicyUpdate) ClearDetails() *InternalPolicyUpdate {
+	ipu.mutation.ClearDetails()
 	return ipu
 }
 
@@ -549,11 +549,11 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 	if ipu.mutation.BackgroundCleared() {
 		_spec.ClearField(internalpolicy.FieldBackground, field.TypeString)
 	}
-	if value, ok := ipu.mutation.Jsonschema(); ok {
-		_spec.SetField(internalpolicy.FieldJsonschema, field.TypeJSON, value)
+	if value, ok := ipu.mutation.Details(); ok {
+		_spec.SetField(internalpolicy.FieldDetails, field.TypeJSON, value)
 	}
-	if ipu.mutation.JsonschemaCleared() {
-		_spec.ClearField(internalpolicy.FieldJsonschema, field.TypeJSON)
+	if ipu.mutation.DetailsCleared() {
+		_spec.ClearField(internalpolicy.FieldDetails, field.TypeJSON)
 	}
 	if ipu.mutation.ControlobjectivesCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -989,15 +989,15 @@ func (ipuo *InternalPolicyUpdateOne) ClearBackground() *InternalPolicyUpdateOne 
 	return ipuo
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (ipuo *InternalPolicyUpdateOne) SetJsonschema(m map[string]interface{}) *InternalPolicyUpdateOne {
-	ipuo.mutation.SetJsonschema(m)
+// SetDetails sets the "details" field.
+func (ipuo *InternalPolicyUpdateOne) SetDetails(m map[string]interface{}) *InternalPolicyUpdateOne {
+	ipuo.mutation.SetDetails(m)
 	return ipuo
 }
 
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (ipuo *InternalPolicyUpdateOne) ClearJsonschema() *InternalPolicyUpdateOne {
-	ipuo.mutation.ClearJsonschema()
+// ClearDetails clears the value of the "details" field.
+func (ipuo *InternalPolicyUpdateOne) ClearDetails() *InternalPolicyUpdateOne {
+	ipuo.mutation.ClearDetails()
 	return ipuo
 }
 
@@ -1314,11 +1314,11 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 	if ipuo.mutation.BackgroundCleared() {
 		_spec.ClearField(internalpolicy.FieldBackground, field.TypeString)
 	}
-	if value, ok := ipuo.mutation.Jsonschema(); ok {
-		_spec.SetField(internalpolicy.FieldJsonschema, field.TypeJSON, value)
+	if value, ok := ipuo.mutation.Details(); ok {
+		_spec.SetField(internalpolicy.FieldDetails, field.TypeJSON, value)
 	}
-	if ipuo.mutation.JsonschemaCleared() {
-		_spec.ClearField(internalpolicy.FieldJsonschema, field.TypeJSON)
+	if ipuo.mutation.DetailsCleared() {
+		_spec.ClearField(internalpolicy.FieldDetails, field.TypeJSON)
 	}
 	if ipuo.mutation.ControlobjectivesCleared() {
 		edge := &sqlgraph.EdgeSpec{

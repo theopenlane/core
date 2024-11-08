@@ -11,8 +11,10 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // ActionPlanCreate is the builder for creating a ActionPlan entity.
@@ -160,30 +162,16 @@ func (apc *ActionPlanCreate) SetNillableStatus(s *string) *ActionPlanCreate {
 	return apc
 }
 
-// SetAssigned sets the "assigned" field.
-func (apc *ActionPlanCreate) SetAssigned(s string) *ActionPlanCreate {
-	apc.mutation.SetAssigned(s)
-	return apc
-}
-
-// SetNillableAssigned sets the "assigned" field if the given value is not nil.
-func (apc *ActionPlanCreate) SetNillableAssigned(s *string) *ActionPlanCreate {
-	if s != nil {
-		apc.SetAssigned(*s)
-	}
-	return apc
-}
-
 // SetDueDate sets the "due_date" field.
-func (apc *ActionPlanCreate) SetDueDate(s string) *ActionPlanCreate {
-	apc.mutation.SetDueDate(s)
+func (apc *ActionPlanCreate) SetDueDate(t time.Time) *ActionPlanCreate {
+	apc.mutation.SetDueDate(t)
 	return apc
 }
 
 // SetNillableDueDate sets the "due_date" field if the given value is not nil.
-func (apc *ActionPlanCreate) SetNillableDueDate(s *string) *ActionPlanCreate {
-	if s != nil {
-		apc.SetDueDate(*s)
+func (apc *ActionPlanCreate) SetNillableDueDate(t *time.Time) *ActionPlanCreate {
+	if t != nil {
+		apc.SetDueDate(*t)
 	}
 	return apc
 }
@@ -216,9 +204,9 @@ func (apc *ActionPlanCreate) SetNillableSource(s *string) *ActionPlanCreate {
 	return apc
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (apc *ActionPlanCreate) SetJsonschema(m map[string]interface{}) *ActionPlanCreate {
-	apc.mutation.SetJsonschema(m)
+// SetDetails sets the "details" field.
+func (apc *ActionPlanCreate) SetDetails(m map[string]interface{}) *ActionPlanCreate {
+	apc.mutation.SetDetails(m)
 	return apc
 }
 
@@ -264,6 +252,36 @@ func (apc *ActionPlanCreate) AddRisk(r ...*Risk) *ActionPlanCreate {
 		ids[i] = r[i].ID
 	}
 	return apc.AddRiskIDs(ids...)
+}
+
+// AddControlIDs adds the "control" edge to the Control entity by IDs.
+func (apc *ActionPlanCreate) AddControlIDs(ids ...string) *ActionPlanCreate {
+	apc.mutation.AddControlIDs(ids...)
+	return apc
+}
+
+// AddControl adds the "control" edges to the Control entity.
+func (apc *ActionPlanCreate) AddControl(c ...*Control) *ActionPlanCreate {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return apc.AddControlIDs(ids...)
+}
+
+// AddUserIDs adds the "user" edge to the User entity by IDs.
+func (apc *ActionPlanCreate) AddUserIDs(ids ...string) *ActionPlanCreate {
+	apc.mutation.AddUserIDs(ids...)
+	return apc
+}
+
+// AddUser adds the "user" edges to the User entity.
+func (apc *ActionPlanCreate) AddUser(u ...*User) *ActionPlanCreate {
+	ids := make([]string, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return apc.AddUserIDs(ids...)
 }
 
 // Mutation returns the ActionPlanMutation object of the builder.
@@ -426,12 +444,8 @@ func (apc *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 		_spec.SetField(actionplan.FieldStatus, field.TypeString, value)
 		_node.Status = value
 	}
-	if value, ok := apc.mutation.Assigned(); ok {
-		_spec.SetField(actionplan.FieldAssigned, field.TypeString, value)
-		_node.Assigned = value
-	}
 	if value, ok := apc.mutation.DueDate(); ok {
-		_spec.SetField(actionplan.FieldDueDate, field.TypeString, value)
+		_spec.SetField(actionplan.FieldDueDate, field.TypeTime, value)
 		_node.DueDate = value
 	}
 	if value, ok := apc.mutation.Priority(); ok {
@@ -442,9 +456,9 @@ func (apc *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 		_spec.SetField(actionplan.FieldSource, field.TypeString, value)
 		_node.Source = value
 	}
-	if value, ok := apc.mutation.Jsonschema(); ok {
-		_spec.SetField(actionplan.FieldJsonschema, field.TypeJSON, value)
-		_node.Jsonschema = value
+	if value, ok := apc.mutation.Details(); ok {
+		_spec.SetField(actionplan.FieldDetails, field.TypeJSON, value)
+		_node.Details = value
 	}
 	if nodes := apc.mutation.StandardIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -475,6 +489,40 @@ func (apc *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = apc.schemaConfig.RiskActionplans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := apc.mutation.ControlIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.ControlTable,
+			Columns: actionplan.ControlPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = apc.schemaConfig.ControlActionplans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := apc.mutation.UserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.UserTable,
+			Columns: actionplan.UserPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = apc.schemaConfig.UserActionplans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

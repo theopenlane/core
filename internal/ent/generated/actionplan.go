@@ -40,16 +40,14 @@ type ActionPlan struct {
 	Description string `json:"description,omitempty"`
 	// status of the action plan
 	Status string `json:"status,omitempty"`
-	// assigned to
-	Assigned string `json:"assigned,omitempty"`
-	// due date
-	DueDate string `json:"due_date,omitempty"`
-	// priority
+	// due date of the action plan
+	DueDate time.Time `json:"due_date,omitempty"`
+	// priority of the action plan
 	Priority string `json:"priority,omitempty"`
 	// source of the action plan
 	Source string `json:"source,omitempty"`
-	// json schema
-	Jsonschema map[string]interface{} `json:"jsonschema,omitempty"`
+	// json data including details of the action plan
+	Details map[string]interface{} `json:"details,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ActionPlanQuery when eager-loading is set.
 	Edges        ActionPlanEdges `json:"edges"`
@@ -62,14 +60,20 @@ type ActionPlanEdges struct {
 	Standard []*Standard `json:"standard,omitempty"`
 	// Risk holds the value of the risk edge.
 	Risk []*Risk `json:"risk,omitempty"`
+	// Control holds the value of the control edge.
+	Control []*Control `json:"control,omitempty"`
+	// User holds the value of the user edge.
+	User []*User `json:"user,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [4]bool
 	// totalCount holds the count of the edges above.
-	totalCount [2]map[string]int
+	totalCount [4]map[string]int
 
 	namedStandard map[string][]*Standard
 	namedRisk     map[string][]*Risk
+	namedControl  map[string][]*Control
+	namedUser     map[string][]*User
 }
 
 // StandardOrErr returns the Standard value or an error if the edge
@@ -90,16 +94,34 @@ func (e ActionPlanEdges) RiskOrErr() ([]*Risk, error) {
 	return nil, &NotLoadedError{edge: "risk"}
 }
 
+// ControlOrErr returns the Control value or an error if the edge
+// was not loaded in eager-loading.
+func (e ActionPlanEdges) ControlOrErr() ([]*Control, error) {
+	if e.loadedTypes[2] {
+		return e.Control, nil
+	}
+	return nil, &NotLoadedError{edge: "control"}
+}
+
+// UserOrErr returns the User value or an error if the edge
+// was not loaded in eager-loading.
+func (e ActionPlanEdges) UserOrErr() ([]*User, error) {
+	if e.loadedTypes[3] {
+		return e.User, nil
+	}
+	return nil, &NotLoadedError{edge: "user"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*ActionPlan) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case actionplan.FieldTags, actionplan.FieldJsonschema:
+		case actionplan.FieldTags, actionplan.FieldDetails:
 			values[i] = new([]byte)
-		case actionplan.FieldID, actionplan.FieldCreatedBy, actionplan.FieldUpdatedBy, actionplan.FieldDeletedBy, actionplan.FieldMappingID, actionplan.FieldName, actionplan.FieldDescription, actionplan.FieldStatus, actionplan.FieldAssigned, actionplan.FieldDueDate, actionplan.FieldPriority, actionplan.FieldSource:
+		case actionplan.FieldID, actionplan.FieldCreatedBy, actionplan.FieldUpdatedBy, actionplan.FieldDeletedBy, actionplan.FieldMappingID, actionplan.FieldName, actionplan.FieldDescription, actionplan.FieldStatus, actionplan.FieldPriority, actionplan.FieldSource:
 			values[i] = new(sql.NullString)
-		case actionplan.FieldCreatedAt, actionplan.FieldUpdatedAt, actionplan.FieldDeletedAt:
+		case actionplan.FieldCreatedAt, actionplan.FieldUpdatedAt, actionplan.FieldDeletedAt, actionplan.FieldDueDate:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -190,17 +212,11 @@ func (ap *ActionPlan) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ap.Status = value.String
 			}
-		case actionplan.FieldAssigned:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field assigned", values[i])
-			} else if value.Valid {
-				ap.Assigned = value.String
-			}
 		case actionplan.FieldDueDate:
-			if value, ok := values[i].(*sql.NullString); !ok {
+			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field due_date", values[i])
 			} else if value.Valid {
-				ap.DueDate = value.String
+				ap.DueDate = value.Time
 			}
 		case actionplan.FieldPriority:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -214,12 +230,12 @@ func (ap *ActionPlan) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ap.Source = value.String
 			}
-		case actionplan.FieldJsonschema:
+		case actionplan.FieldDetails:
 			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field jsonschema", values[i])
+				return fmt.Errorf("unexpected type %T for field details", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ap.Jsonschema); err != nil {
-					return fmt.Errorf("unmarshal field jsonschema: %w", err)
+				if err := json.Unmarshal(*value, &ap.Details); err != nil {
+					return fmt.Errorf("unmarshal field details: %w", err)
 				}
 			}
 		default:
@@ -243,6 +259,16 @@ func (ap *ActionPlan) QueryStandard() *StandardQuery {
 // QueryRisk queries the "risk" edge of the ActionPlan entity.
 func (ap *ActionPlan) QueryRisk() *RiskQuery {
 	return NewActionPlanClient(ap.config).QueryRisk(ap)
+}
+
+// QueryControl queries the "control" edge of the ActionPlan entity.
+func (ap *ActionPlan) QueryControl() *ControlQuery {
+	return NewActionPlanClient(ap.config).QueryControl(ap)
+}
+
+// QueryUser queries the "user" edge of the ActionPlan entity.
+func (ap *ActionPlan) QueryUser() *UserQuery {
+	return NewActionPlanClient(ap.config).QueryUser(ap)
 }
 
 // Update returns a builder for updating this ActionPlan.
@@ -301,11 +327,8 @@ func (ap *ActionPlan) String() string {
 	builder.WriteString("status=")
 	builder.WriteString(ap.Status)
 	builder.WriteString(", ")
-	builder.WriteString("assigned=")
-	builder.WriteString(ap.Assigned)
-	builder.WriteString(", ")
 	builder.WriteString("due_date=")
-	builder.WriteString(ap.DueDate)
+	builder.WriteString(ap.DueDate.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("priority=")
 	builder.WriteString(ap.Priority)
@@ -313,8 +336,8 @@ func (ap *ActionPlan) String() string {
 	builder.WriteString("source=")
 	builder.WriteString(ap.Source)
 	builder.WriteString(", ")
-	builder.WriteString("jsonschema=")
-	builder.WriteString(fmt.Sprintf("%v", ap.Jsonschema))
+	builder.WriteString("details=")
+	builder.WriteString(fmt.Sprintf("%v", ap.Details))
 	builder.WriteByte(')')
 	return builder.String()
 }
@@ -364,6 +387,54 @@ func (ap *ActionPlan) appendNamedRisk(name string, edges ...*Risk) {
 		ap.Edges.namedRisk[name] = []*Risk{}
 	} else {
 		ap.Edges.namedRisk[name] = append(ap.Edges.namedRisk[name], edges...)
+	}
+}
+
+// NamedControl returns the Control named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (ap *ActionPlan) NamedControl(name string) ([]*Control, error) {
+	if ap.Edges.namedControl == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := ap.Edges.namedControl[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (ap *ActionPlan) appendNamedControl(name string, edges ...*Control) {
+	if ap.Edges.namedControl == nil {
+		ap.Edges.namedControl = make(map[string][]*Control)
+	}
+	if len(edges) == 0 {
+		ap.Edges.namedControl[name] = []*Control{}
+	} else {
+		ap.Edges.namedControl[name] = append(ap.Edges.namedControl[name], edges...)
+	}
+}
+
+// NamedUser returns the User named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (ap *ActionPlan) NamedUser(name string) ([]*User, error) {
+	if ap.Edges.namedUser == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := ap.Edges.namedUser[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (ap *ActionPlan) appendNamedUser(name string, edges ...*User) {
+	if ap.Edges.namedUser == nil {
+		ap.Edges.namedUser = make(map[string][]*User)
+	}
+	if len(edges) == 0 {
+		ap.Edges.namedUser[name] = []*User{}
+	} else {
+		ap.Edges.namedUser[name] = append(ap.Edges.namedUser[name], edges...)
 	}
 }
 

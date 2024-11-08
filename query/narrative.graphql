@@ -5,8 +5,8 @@ mutation CreateBulkCSVNarrative($input: Upload!) {
       createdAt
       createdBy
       description
+      details
       id
-      jsonschema
       name
       satisfies
       tags
@@ -22,8 +22,8 @@ mutation CreateBulkNarrative($input: [CreateNarrativeInput!]) {
       createdAt
       createdBy
       description
+      details
       id
-      jsonschema
       name
       satisfies
       tags
@@ -39,8 +39,8 @@ mutation CreateNarrative($input: CreateNarrativeInput!) {
       createdAt
       createdBy
       description
+      details
       id
-      jsonschema
       name
       satisfies
       tags
@@ -63,8 +63,8 @@ query GetAllNarratives {
         createdAt
         createdBy
         description
+        details
         id
-        jsonschema
         name
         satisfies
         tags
@@ -79,8 +79,8 @@ query GetNarrativeByID($narrativeId: ID!) {
     createdAt
     createdBy
     description
+    details
     id
-    jsonschema
     name
     satisfies
     tags
@@ -96,8 +96,8 @@ query GetNarratives($where: NarrativeWhereInput) {
         createdAt
         createdBy
         description
+        details
         id
-        jsonschema
         name
         satisfies
         tags
@@ -113,8 +113,8 @@ mutation UpdateNarrative($updateNarrativeId: ID!, $input: UpdateNarrativeInput!)
       createdAt
       createdBy
       description
+      details
       id
-      jsonschema
       name
       satisfies
       tags

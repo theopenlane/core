@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -51,18 +52,16 @@ type RiskHistory struct {
 	RiskType string `json:"risk_type,omitempty"`
 	// business costs associated with the risk
 	BusinessCosts string `json:"business_costs,omitempty"`
-	// impact of the risk
-	Impact string `json:"impact,omitempty"`
-	// likelihood of the risk
-	Likelihood string `json:"likelihood,omitempty"`
-	// mitigation of the risk
+	// impact of the risk - high, medium, low
+	Impact enums.RiskImpact `json:"impact,omitempty"`
+	// likelihood of the risk occurring; unlikely, likely, highly likely
+	Likelihood enums.RiskLikelihood `json:"likelihood,omitempty"`
+	// mitigation for the risk
 	Mitigation string `json:"mitigation,omitempty"`
 	// which controls are satisfied by the risk
 	Satisfies string `json:"satisfies,omitempty"`
-	// severity of the risk, e.g. high medium low
-	Severity string `json:"severity,omitempty"`
-	// json schema
-	Jsonschema   map[string]interface{} `json:"jsonschema,omitempty"`
+	// json data for the risk document
+	Details      map[string]interface{} `json:"details,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -71,11 +70,11 @@ func (*RiskHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case riskhistory.FieldTags, riskhistory.FieldJsonschema:
+		case riskhistory.FieldTags, riskhistory.FieldDetails:
 			values[i] = new([]byte)
 		case riskhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case riskhistory.FieldID, riskhistory.FieldRef, riskhistory.FieldCreatedBy, riskhistory.FieldUpdatedBy, riskhistory.FieldDeletedBy, riskhistory.FieldMappingID, riskhistory.FieldName, riskhistory.FieldDescription, riskhistory.FieldStatus, riskhistory.FieldRiskType, riskhistory.FieldBusinessCosts, riskhistory.FieldImpact, riskhistory.FieldLikelihood, riskhistory.FieldMitigation, riskhistory.FieldSatisfies, riskhistory.FieldSeverity:
+		case riskhistory.FieldID, riskhistory.FieldRef, riskhistory.FieldCreatedBy, riskhistory.FieldUpdatedBy, riskhistory.FieldDeletedBy, riskhistory.FieldMappingID, riskhistory.FieldName, riskhistory.FieldDescription, riskhistory.FieldStatus, riskhistory.FieldRiskType, riskhistory.FieldBusinessCosts, riskhistory.FieldImpact, riskhistory.FieldLikelihood, riskhistory.FieldMitigation, riskhistory.FieldSatisfies:
 			values[i] = new(sql.NullString)
 		case riskhistory.FieldHistoryTime, riskhistory.FieldCreatedAt, riskhistory.FieldUpdatedAt, riskhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -202,13 +201,13 @@ func (rh *RiskHistory) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field impact", values[i])
 			} else if value.Valid {
-				rh.Impact = value.String
+				rh.Impact = enums.RiskImpact(value.String)
 			}
 		case riskhistory.FieldLikelihood:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field likelihood", values[i])
 			} else if value.Valid {
-				rh.Likelihood = value.String
+				rh.Likelihood = enums.RiskLikelihood(value.String)
 			}
 		case riskhistory.FieldMitigation:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -222,18 +221,12 @@ func (rh *RiskHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				rh.Satisfies = value.String
 			}
-		case riskhistory.FieldSeverity:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field severity", values[i])
-			} else if value.Valid {
-				rh.Severity = value.String
-			}
-		case riskhistory.FieldJsonschema:
+		case riskhistory.FieldDetails:
 			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field jsonschema", values[i])
+				return fmt.Errorf("unexpected type %T for field details", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &rh.Jsonschema); err != nil {
-					return fmt.Errorf("unmarshal field jsonschema: %w", err)
+				if err := json.Unmarshal(*value, &rh.Details); err != nil {
+					return fmt.Errorf("unmarshal field details: %w", err)
 				}
 			}
 		default:
@@ -321,10 +314,10 @@ func (rh *RiskHistory) String() string {
 	builder.WriteString(rh.BusinessCosts)
 	builder.WriteString(", ")
 	builder.WriteString("impact=")
-	builder.WriteString(rh.Impact)
+	builder.WriteString(fmt.Sprintf("%v", rh.Impact))
 	builder.WriteString(", ")
 	builder.WriteString("likelihood=")
-	builder.WriteString(rh.Likelihood)
+	builder.WriteString(fmt.Sprintf("%v", rh.Likelihood))
 	builder.WriteString(", ")
 	builder.WriteString("mitigation=")
 	builder.WriteString(rh.Mitigation)
@@ -332,11 +325,8 @@ func (rh *RiskHistory) String() string {
 	builder.WriteString("satisfies=")
 	builder.WriteString(rh.Satisfies)
 	builder.WriteString(", ")
-	builder.WriteString("severity=")
-	builder.WriteString(rh.Severity)
-	builder.WriteString(", ")
-	builder.WriteString("jsonschema=")
-	builder.WriteString(fmt.Sprintf("%v", rh.Jsonschema))
+	builder.WriteString("details=")
+	builder.WriteString(fmt.Sprintf("%v", rh.Details))
 	builder.WriteByte(')')
 	return builder.String()
 }

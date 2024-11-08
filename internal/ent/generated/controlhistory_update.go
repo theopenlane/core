@@ -216,26 +216,6 @@ func (chu *ControlHistoryUpdate) ClearVersion() *ControlHistoryUpdate {
 	return chu
 }
 
-// SetOwner sets the "owner" field.
-func (chu *ControlHistoryUpdate) SetOwner(s string) *ControlHistoryUpdate {
-	chu.mutation.SetOwner(s)
-	return chu
-}
-
-// SetNillableOwner sets the "owner" field if the given value is not nil.
-func (chu *ControlHistoryUpdate) SetNillableOwner(s *string) *ControlHistoryUpdate {
-	if s != nil {
-		chu.SetOwner(*s)
-	}
-	return chu
-}
-
-// ClearOwner clears the value of the "owner" field.
-func (chu *ControlHistoryUpdate) ClearOwner() *ControlHistoryUpdate {
-	chu.mutation.ClearOwner()
-	return chu
-}
-
 // SetControlNumber sets the "control_number" field.
 func (chu *ControlHistoryUpdate) SetControlNumber(s string) *ControlHistoryUpdate {
 	chu.mutation.SetControlNumber(s)
@@ -256,43 +236,43 @@ func (chu *ControlHistoryUpdate) ClearControlNumber() *ControlHistoryUpdate {
 	return chu
 }
 
-// SetControlFamily sets the "control_family" field.
-func (chu *ControlHistoryUpdate) SetControlFamily(s string) *ControlHistoryUpdate {
-	chu.mutation.SetControlFamily(s)
+// SetFamily sets the "family" field.
+func (chu *ControlHistoryUpdate) SetFamily(s string) *ControlHistoryUpdate {
+	chu.mutation.SetFamily(s)
 	return chu
 }
 
-// SetNillableControlFamily sets the "control_family" field if the given value is not nil.
-func (chu *ControlHistoryUpdate) SetNillableControlFamily(s *string) *ControlHistoryUpdate {
+// SetNillableFamily sets the "family" field if the given value is not nil.
+func (chu *ControlHistoryUpdate) SetNillableFamily(s *string) *ControlHistoryUpdate {
 	if s != nil {
-		chu.SetControlFamily(*s)
+		chu.SetFamily(*s)
 	}
 	return chu
 }
 
-// ClearControlFamily clears the value of the "control_family" field.
-func (chu *ControlHistoryUpdate) ClearControlFamily() *ControlHistoryUpdate {
-	chu.mutation.ClearControlFamily()
+// ClearFamily clears the value of the "family" field.
+func (chu *ControlHistoryUpdate) ClearFamily() *ControlHistoryUpdate {
+	chu.mutation.ClearFamily()
 	return chu
 }
 
-// SetControlClass sets the "control_class" field.
-func (chu *ControlHistoryUpdate) SetControlClass(s string) *ControlHistoryUpdate {
-	chu.mutation.SetControlClass(s)
+// SetClass sets the "class" field.
+func (chu *ControlHistoryUpdate) SetClass(s string) *ControlHistoryUpdate {
+	chu.mutation.SetClass(s)
 	return chu
 }
 
-// SetNillableControlClass sets the "control_class" field if the given value is not nil.
-func (chu *ControlHistoryUpdate) SetNillableControlClass(s *string) *ControlHistoryUpdate {
+// SetNillableClass sets the "class" field if the given value is not nil.
+func (chu *ControlHistoryUpdate) SetNillableClass(s *string) *ControlHistoryUpdate {
 	if s != nil {
-		chu.SetControlClass(*s)
+		chu.SetClass(*s)
 	}
 	return chu
 }
 
-// ClearControlClass clears the value of the "control_class" field.
-func (chu *ControlHistoryUpdate) ClearControlClass() *ControlHistoryUpdate {
-	chu.mutation.ClearControlClass()
+// ClearClass clears the value of the "class" field.
+func (chu *ControlHistoryUpdate) ClearClass() *ControlHistoryUpdate {
+	chu.mutation.ClearClass()
 	return chu
 }
 
@@ -356,15 +336,15 @@ func (chu *ControlHistoryUpdate) ClearMappedFrameworks() *ControlHistoryUpdate {
 	return chu
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (chu *ControlHistoryUpdate) SetJsonschema(m map[string]interface{}) *ControlHistoryUpdate {
-	chu.mutation.SetJsonschema(m)
+// SetDetails sets the "details" field.
+func (chu *ControlHistoryUpdate) SetDetails(m map[string]interface{}) *ControlHistoryUpdate {
+	chu.mutation.SetDetails(m)
 	return chu
 }
 
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (chu *ControlHistoryUpdate) ClearJsonschema() *ControlHistoryUpdate {
-	chu.mutation.ClearJsonschema()
+// ClearDetails clears the value of the "details" field.
+func (chu *ControlHistoryUpdate) ClearDetails() *ControlHistoryUpdate {
+	chu.mutation.ClearDetails()
 	return chu
 }
 
@@ -495,29 +475,23 @@ func (chu *ControlHistoryUpdate) sqlSave(ctx context.Context) (n int, err error)
 	if chu.mutation.VersionCleared() {
 		_spec.ClearField(controlhistory.FieldVersion, field.TypeString)
 	}
-	if value, ok := chu.mutation.Owner(); ok {
-		_spec.SetField(controlhistory.FieldOwner, field.TypeString, value)
-	}
-	if chu.mutation.OwnerCleared() {
-		_spec.ClearField(controlhistory.FieldOwner, field.TypeString)
-	}
 	if value, ok := chu.mutation.ControlNumber(); ok {
 		_spec.SetField(controlhistory.FieldControlNumber, field.TypeString, value)
 	}
 	if chu.mutation.ControlNumberCleared() {
 		_spec.ClearField(controlhistory.FieldControlNumber, field.TypeString)
 	}
-	if value, ok := chu.mutation.ControlFamily(); ok {
-		_spec.SetField(controlhistory.FieldControlFamily, field.TypeString, value)
+	if value, ok := chu.mutation.Family(); ok {
+		_spec.SetField(controlhistory.FieldFamily, field.TypeString, value)
 	}
-	if chu.mutation.ControlFamilyCleared() {
-		_spec.ClearField(controlhistory.FieldControlFamily, field.TypeString)
+	if chu.mutation.FamilyCleared() {
+		_spec.ClearField(controlhistory.FieldFamily, field.TypeString)
 	}
-	if value, ok := chu.mutation.ControlClass(); ok {
-		_spec.SetField(controlhistory.FieldControlClass, field.TypeString, value)
+	if value, ok := chu.mutation.Class(); ok {
+		_spec.SetField(controlhistory.FieldClass, field.TypeString, value)
 	}
-	if chu.mutation.ControlClassCleared() {
-		_spec.ClearField(controlhistory.FieldControlClass, field.TypeString)
+	if chu.mutation.ClassCleared() {
+		_spec.ClearField(controlhistory.FieldClass, field.TypeString)
 	}
 	if value, ok := chu.mutation.Source(); ok {
 		_spec.SetField(controlhistory.FieldSource, field.TypeString, value)
@@ -537,11 +511,11 @@ func (chu *ControlHistoryUpdate) sqlSave(ctx context.Context) (n int, err error)
 	if chu.mutation.MappedFrameworksCleared() {
 		_spec.ClearField(controlhistory.FieldMappedFrameworks, field.TypeString)
 	}
-	if value, ok := chu.mutation.Jsonschema(); ok {
-		_spec.SetField(controlhistory.FieldJsonschema, field.TypeJSON, value)
+	if value, ok := chu.mutation.Details(); ok {
+		_spec.SetField(controlhistory.FieldDetails, field.TypeJSON, value)
 	}
-	if chu.mutation.JsonschemaCleared() {
-		_spec.ClearField(controlhistory.FieldJsonschema, field.TypeJSON)
+	if chu.mutation.DetailsCleared() {
+		_spec.ClearField(controlhistory.FieldDetails, field.TypeJSON)
 	}
 	_spec.Node.Schema = chu.schemaConfig.ControlHistory
 	ctx = internal.NewSchemaConfigContext(ctx, chu.schemaConfig)
@@ -751,26 +725,6 @@ func (chuo *ControlHistoryUpdateOne) ClearVersion() *ControlHistoryUpdateOne {
 	return chuo
 }
 
-// SetOwner sets the "owner" field.
-func (chuo *ControlHistoryUpdateOne) SetOwner(s string) *ControlHistoryUpdateOne {
-	chuo.mutation.SetOwner(s)
-	return chuo
-}
-
-// SetNillableOwner sets the "owner" field if the given value is not nil.
-func (chuo *ControlHistoryUpdateOne) SetNillableOwner(s *string) *ControlHistoryUpdateOne {
-	if s != nil {
-		chuo.SetOwner(*s)
-	}
-	return chuo
-}
-
-// ClearOwner clears the value of the "owner" field.
-func (chuo *ControlHistoryUpdateOne) ClearOwner() *ControlHistoryUpdateOne {
-	chuo.mutation.ClearOwner()
-	return chuo
-}
-
 // SetControlNumber sets the "control_number" field.
 func (chuo *ControlHistoryUpdateOne) SetControlNumber(s string) *ControlHistoryUpdateOne {
 	chuo.mutation.SetControlNumber(s)
@@ -791,43 +745,43 @@ func (chuo *ControlHistoryUpdateOne) ClearControlNumber() *ControlHistoryUpdateO
 	return chuo
 }
 
-// SetControlFamily sets the "control_family" field.
-func (chuo *ControlHistoryUpdateOne) SetControlFamily(s string) *ControlHistoryUpdateOne {
-	chuo.mutation.SetControlFamily(s)
+// SetFamily sets the "family" field.
+func (chuo *ControlHistoryUpdateOne) SetFamily(s string) *ControlHistoryUpdateOne {
+	chuo.mutation.SetFamily(s)
 	return chuo
 }
 
-// SetNillableControlFamily sets the "control_family" field if the given value is not nil.
-func (chuo *ControlHistoryUpdateOne) SetNillableControlFamily(s *string) *ControlHistoryUpdateOne {
+// SetNillableFamily sets the "family" field if the given value is not nil.
+func (chuo *ControlHistoryUpdateOne) SetNillableFamily(s *string) *ControlHistoryUpdateOne {
 	if s != nil {
-		chuo.SetControlFamily(*s)
+		chuo.SetFamily(*s)
 	}
 	return chuo
 }
 
-// ClearControlFamily clears the value of the "control_family" field.
-func (chuo *ControlHistoryUpdateOne) ClearControlFamily() *ControlHistoryUpdateOne {
-	chuo.mutation.ClearControlFamily()
+// ClearFamily clears the value of the "family" field.
+func (chuo *ControlHistoryUpdateOne) ClearFamily() *ControlHistoryUpdateOne {
+	chuo.mutation.ClearFamily()
 	return chuo
 }
 
-// SetControlClass sets the "control_class" field.
-func (chuo *ControlHistoryUpdateOne) SetControlClass(s string) *ControlHistoryUpdateOne {
-	chuo.mutation.SetControlClass(s)
+// SetClass sets the "class" field.
+func (chuo *ControlHistoryUpdateOne) SetClass(s string) *ControlHistoryUpdateOne {
+	chuo.mutation.SetClass(s)
 	return chuo
 }
 
-// SetNillableControlClass sets the "control_class" field if the given value is not nil.
-func (chuo *ControlHistoryUpdateOne) SetNillableControlClass(s *string) *ControlHistoryUpdateOne {
+// SetNillableClass sets the "class" field if the given value is not nil.
+func (chuo *ControlHistoryUpdateOne) SetNillableClass(s *string) *ControlHistoryUpdateOne {
 	if s != nil {
-		chuo.SetControlClass(*s)
+		chuo.SetClass(*s)
 	}
 	return chuo
 }
 
-// ClearControlClass clears the value of the "control_class" field.
-func (chuo *ControlHistoryUpdateOne) ClearControlClass() *ControlHistoryUpdateOne {
-	chuo.mutation.ClearControlClass()
+// ClearClass clears the value of the "class" field.
+func (chuo *ControlHistoryUpdateOne) ClearClass() *ControlHistoryUpdateOne {
+	chuo.mutation.ClearClass()
 	return chuo
 }
 
@@ -891,15 +845,15 @@ func (chuo *ControlHistoryUpdateOne) ClearMappedFrameworks() *ControlHistoryUpda
 	return chuo
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (chuo *ControlHistoryUpdateOne) SetJsonschema(m map[string]interface{}) *ControlHistoryUpdateOne {
-	chuo.mutation.SetJsonschema(m)
+// SetDetails sets the "details" field.
+func (chuo *ControlHistoryUpdateOne) SetDetails(m map[string]interface{}) *ControlHistoryUpdateOne {
+	chuo.mutation.SetDetails(m)
 	return chuo
 }
 
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (chuo *ControlHistoryUpdateOne) ClearJsonschema() *ControlHistoryUpdateOne {
-	chuo.mutation.ClearJsonschema()
+// ClearDetails clears the value of the "details" field.
+func (chuo *ControlHistoryUpdateOne) ClearDetails() *ControlHistoryUpdateOne {
+	chuo.mutation.ClearDetails()
 	return chuo
 }
 
@@ -1060,29 +1014,23 @@ func (chuo *ControlHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Contro
 	if chuo.mutation.VersionCleared() {
 		_spec.ClearField(controlhistory.FieldVersion, field.TypeString)
 	}
-	if value, ok := chuo.mutation.Owner(); ok {
-		_spec.SetField(controlhistory.FieldOwner, field.TypeString, value)
-	}
-	if chuo.mutation.OwnerCleared() {
-		_spec.ClearField(controlhistory.FieldOwner, field.TypeString)
-	}
 	if value, ok := chuo.mutation.ControlNumber(); ok {
 		_spec.SetField(controlhistory.FieldControlNumber, field.TypeString, value)
 	}
 	if chuo.mutation.ControlNumberCleared() {
 		_spec.ClearField(controlhistory.FieldControlNumber, field.TypeString)
 	}
-	if value, ok := chuo.mutation.ControlFamily(); ok {
-		_spec.SetField(controlhistory.FieldControlFamily, field.TypeString, value)
+	if value, ok := chuo.mutation.Family(); ok {
+		_spec.SetField(controlhistory.FieldFamily, field.TypeString, value)
 	}
-	if chuo.mutation.ControlFamilyCleared() {
-		_spec.ClearField(controlhistory.FieldControlFamily, field.TypeString)
+	if chuo.mutation.FamilyCleared() {
+		_spec.ClearField(controlhistory.FieldFamily, field.TypeString)
 	}
-	if value, ok := chuo.mutation.ControlClass(); ok {
-		_spec.SetField(controlhistory.FieldControlClass, field.TypeString, value)
+	if value, ok := chuo.mutation.Class(); ok {
+		_spec.SetField(controlhistory.FieldClass, field.TypeString, value)
 	}
-	if chuo.mutation.ControlClassCleared() {
-		_spec.ClearField(controlhistory.FieldControlClass, field.TypeString)
+	if chuo.mutation.ClassCleared() {
+		_spec.ClearField(controlhistory.FieldClass, field.TypeString)
 	}
 	if value, ok := chuo.mutation.Source(); ok {
 		_spec.SetField(controlhistory.FieldSource, field.TypeString, value)
@@ -1102,11 +1050,11 @@ func (chuo *ControlHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Contro
 	if chuo.mutation.MappedFrameworksCleared() {
 		_spec.ClearField(controlhistory.FieldMappedFrameworks, field.TypeString)
 	}
-	if value, ok := chuo.mutation.Jsonschema(); ok {
-		_spec.SetField(controlhistory.FieldJsonschema, field.TypeJSON, value)
+	if value, ok := chuo.mutation.Details(); ok {
+		_spec.SetField(controlhistory.FieldDetails, field.TypeJSON, value)
 	}
-	if chuo.mutation.JsonschemaCleared() {
-		_spec.ClearField(controlhistory.FieldJsonschema, field.TypeJSON)
+	if chuo.mutation.DetailsCleared() {
+		_spec.ClearField(controlhistory.FieldDetails, field.TypeJSON)
 	}
 	_spec.Node.Schema = chuo.schemaConfig.ControlHistory
 	ctx = internal.NewSchemaConfigContext(ctx, chuo.schemaConfig)

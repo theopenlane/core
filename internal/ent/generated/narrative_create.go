@@ -162,9 +162,9 @@ func (nc *NarrativeCreate) SetNillableSatisfies(s *string) *NarrativeCreate {
 	return nc
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (nc *NarrativeCreate) SetJsonschema(m map[string]interface{}) *NarrativeCreate {
-	nc.mutation.SetJsonschema(m)
+// SetDetails sets the "details" field.
+func (nc *NarrativeCreate) SetDetails(m map[string]interface{}) *NarrativeCreate {
+	nc.mutation.SetDetails(m)
 	return nc
 }
 
@@ -402,9 +402,9 @@ func (nc *NarrativeCreate) createSpec() (*Narrative, *sqlgraph.CreateSpec) {
 		_spec.SetField(narrative.FieldSatisfies, field.TypeString, value)
 		_node.Satisfies = value
 	}
-	if value, ok := nc.mutation.Jsonschema(); ok {
-		_spec.SetField(narrative.FieldJsonschema, field.TypeJSON, value)
-		_node.Jsonschema = value
+	if value, ok := nc.mutation.Details(); ok {
+		_spec.SetField(narrative.FieldDetails, field.TypeJSON, value)
+		_node.Details = value
 	}
 	if nodes := nc.mutation.PolicyIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

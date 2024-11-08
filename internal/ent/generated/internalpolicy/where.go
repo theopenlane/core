@@ -1092,14 +1092,14 @@ func BackgroundContainsFold(v string) predicate.InternalPolicy {
 	return predicate.InternalPolicy(sql.FieldContainsFold(FieldBackground, v))
 }
 
-// JsonschemaIsNil applies the IsNil predicate on the "jsonschema" field.
-func JsonschemaIsNil() predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldIsNull(FieldJsonschema))
+// DetailsIsNil applies the IsNil predicate on the "details" field.
+func DetailsIsNil() predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldIsNull(FieldDetails))
 }
 
-// JsonschemaNotNil applies the NotNil predicate on the "jsonschema" field.
-func JsonschemaNotNil() predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldNotNull(FieldJsonschema))
+// DetailsNotNil applies the NotNil predicate on the "details" field.
+func DetailsNotNil() predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldNotNull(FieldDetails))
 }
 
 // HasControlobjectives applies the HasEdge predicate on the "controlobjectives" edge.

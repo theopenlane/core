@@ -8,10 +8,10 @@ query GetAllRiskHistories {
         createdAt
         createdBy
         description
+        details
         historyTime
         id
         impact
-        jsonschema
         likelihood
         mitigation
         name
@@ -19,7 +19,6 @@ query GetAllRiskHistories {
         ref
         riskType
         satisfies
-        severity
         status
         tags
         updatedAt
@@ -37,10 +36,10 @@ query GetRiskHistories($where: RiskHistoryWhereInput) {
         createdAt
         createdBy
         description
+        details
         historyTime
         id
         impact
-        jsonschema
         likelihood
         mitigation
         name
@@ -48,7 +47,6 @@ query GetRiskHistories($where: RiskHistoryWhereInput) {
         ref
         riskType
         satisfies
-        severity
         status
         tags
         updatedAt

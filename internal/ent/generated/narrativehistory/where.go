@@ -925,14 +925,14 @@ func SatisfiesContainsFold(v string) predicate.NarrativeHistory {
 	return predicate.NarrativeHistory(sql.FieldContainsFold(FieldSatisfies, v))
 }
 
-// JsonschemaIsNil applies the IsNil predicate on the "jsonschema" field.
-func JsonschemaIsNil() predicate.NarrativeHistory {
-	return predicate.NarrativeHistory(sql.FieldIsNull(FieldJsonschema))
+// DetailsIsNil applies the IsNil predicate on the "details" field.
+func DetailsIsNil() predicate.NarrativeHistory {
+	return predicate.NarrativeHistory(sql.FieldIsNull(FieldDetails))
 }
 
-// JsonschemaNotNil applies the NotNil predicate on the "jsonschema" field.
-func JsonschemaNotNil() predicate.NarrativeHistory {
-	return predicate.NarrativeHistory(sql.FieldNotNull(FieldJsonschema))
+// DetailsNotNil applies the NotNil predicate on the "details" field.
+func DetailsNotNil() predicate.NarrativeHistory {
+	return predicate.NarrativeHistory(sql.FieldNotNull(FieldDetails))
 }
 
 // And groups predicates with the AND operator between them.

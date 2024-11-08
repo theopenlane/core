@@ -250,15 +250,15 @@ func (iphu *InternalPolicyHistoryUpdate) ClearBackground() *InternalPolicyHistor
 	return iphu
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (iphu *InternalPolicyHistoryUpdate) SetJsonschema(m map[string]interface{}) *InternalPolicyHistoryUpdate {
-	iphu.mutation.SetJsonschema(m)
+// SetDetails sets the "details" field.
+func (iphu *InternalPolicyHistoryUpdate) SetDetails(m map[string]interface{}) *InternalPolicyHistoryUpdate {
+	iphu.mutation.SetDetails(m)
 	return iphu
 }
 
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (iphu *InternalPolicyHistoryUpdate) ClearJsonschema() *InternalPolicyHistoryUpdate {
-	iphu.mutation.ClearJsonschema()
+// ClearDetails clears the value of the "details" field.
+func (iphu *InternalPolicyHistoryUpdate) ClearDetails() *InternalPolicyHistoryUpdate {
+	iphu.mutation.ClearDetails()
 	return iphu
 }
 
@@ -398,11 +398,11 @@ func (iphu *InternalPolicyHistoryUpdate) sqlSave(ctx context.Context) (n int, er
 	if iphu.mutation.BackgroundCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldBackground, field.TypeString)
 	}
-	if value, ok := iphu.mutation.Jsonschema(); ok {
-		_spec.SetField(internalpolicyhistory.FieldJsonschema, field.TypeJSON, value)
+	if value, ok := iphu.mutation.Details(); ok {
+		_spec.SetField(internalpolicyhistory.FieldDetails, field.TypeJSON, value)
 	}
-	if iphu.mutation.JsonschemaCleared() {
-		_spec.ClearField(internalpolicyhistory.FieldJsonschema, field.TypeJSON)
+	if iphu.mutation.DetailsCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldDetails, field.TypeJSON)
 	}
 	_spec.Node.Schema = iphu.schemaConfig.InternalPolicyHistory
 	ctx = internal.NewSchemaConfigContext(ctx, iphu.schemaConfig)
@@ -646,15 +646,15 @@ func (iphuo *InternalPolicyHistoryUpdateOne) ClearBackground() *InternalPolicyHi
 	return iphuo
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) SetJsonschema(m map[string]interface{}) *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.SetJsonschema(m)
+// SetDetails sets the "details" field.
+func (iphuo *InternalPolicyHistoryUpdateOne) SetDetails(m map[string]interface{}) *InternalPolicyHistoryUpdateOne {
+	iphuo.mutation.SetDetails(m)
 	return iphuo
 }
 
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (iphuo *InternalPolicyHistoryUpdateOne) ClearJsonschema() *InternalPolicyHistoryUpdateOne {
-	iphuo.mutation.ClearJsonschema()
+// ClearDetails clears the value of the "details" field.
+func (iphuo *InternalPolicyHistoryUpdateOne) ClearDetails() *InternalPolicyHistoryUpdateOne {
+	iphuo.mutation.ClearDetails()
 	return iphuo
 }
 
@@ -824,11 +824,11 @@ func (iphuo *InternalPolicyHistoryUpdateOne) sqlSave(ctx context.Context) (_node
 	if iphuo.mutation.BackgroundCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldBackground, field.TypeString)
 	}
-	if value, ok := iphuo.mutation.Jsonschema(); ok {
-		_spec.SetField(internalpolicyhistory.FieldJsonschema, field.TypeJSON, value)
+	if value, ok := iphuo.mutation.Details(); ok {
+		_spec.SetField(internalpolicyhistory.FieldDetails, field.TypeJSON, value)
 	}
-	if iphuo.mutation.JsonschemaCleared() {
-		_spec.ClearField(internalpolicyhistory.FieldJsonschema, field.TypeJSON)
+	if iphuo.mutation.DetailsCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldDetails, field.TypeJSON)
 	}
 	_spec.Node.Schema = iphuo.schemaConfig.InternalPolicyHistory
 	ctx = internal.NewSchemaConfigContext(ctx, iphuo.schemaConfig)

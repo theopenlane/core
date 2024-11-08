@@ -44,22 +44,20 @@ type Control struct {
 	ControlType string `json:"control_type,omitempty"`
 	// version of the control
 	Version string `json:"version,omitempty"`
-	// owner of the control
-	Owner string `json:"owner,omitempty"`
-	// control number
+	// control number or identifier
 	ControlNumber string `json:"control_number,omitempty"`
-	// control family
-	ControlFamily string `json:"control_family,omitempty"`
-	// control class
-	ControlClass string `json:"control_class,omitempty"`
-	// source of the control
+	// family associated with the control
+	Family string `json:"family,omitempty"`
+	// class associated with the control
+	Class string `json:"class,omitempty"`
+	// source of the control, e.g. framework, template, custom, etc.
 	Source string `json:"source,omitempty"`
 	// which control objectives are satisfied by the control
 	Satisfies string `json:"satisfies,omitempty"`
 	// mapped frameworks
 	MappedFrameworks string `json:"mapped_frameworks,omitempty"`
-	// json schema
-	Jsonschema map[string]interface{} `json:"jsonschema,omitempty"`
+	// json data including details of the control
+	Details map[string]interface{} `json:"details,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ControlQuery when eager-loading is set.
 	Edges                      ControlEdges `json:"edges"`
@@ -82,11 +80,13 @@ type ControlEdges struct {
 	Narratives []*Narrative `json:"narratives,omitempty"`
 	// Risks holds the value of the risks edge.
 	Risks []*Risk `json:"risks,omitempty"`
+	// Actionplans holds the value of the actionplans edge.
+	Actionplans []*ActionPlan `json:"actionplans,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [6]bool
+	loadedTypes [7]bool
 	// totalCount holds the count of the edges above.
-	totalCount [6]map[string]int
+	totalCount [7]map[string]int
 
 	namedProcedures        map[string][]*Procedure
 	namedSubcontrols       map[string][]*Subcontrol
@@ -94,6 +94,7 @@ type ControlEdges struct {
 	namedStandard          map[string][]*Standard
 	namedNarratives        map[string][]*Narrative
 	namedRisks             map[string][]*Risk
+	namedActionplans       map[string][]*ActionPlan
 }
 
 // ProceduresOrErr returns the Procedures value or an error if the edge
@@ -150,14 +151,23 @@ func (e ControlEdges) RisksOrErr() ([]*Risk, error) {
 	return nil, &NotLoadedError{edge: "risks"}
 }
 
+// ActionplansOrErr returns the Actionplans value or an error if the edge
+// was not loaded in eager-loading.
+func (e ControlEdges) ActionplansOrErr() ([]*ActionPlan, error) {
+	if e.loadedTypes[6] {
+		return e.Actionplans, nil
+	}
+	return nil, &NotLoadedError{edge: "actionplans"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Control) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case control.FieldTags, control.FieldJsonschema:
+		case control.FieldTags, control.FieldDetails:
 			values[i] = new([]byte)
-		case control.FieldID, control.FieldCreatedBy, control.FieldUpdatedBy, control.FieldDeletedBy, control.FieldMappingID, control.FieldName, control.FieldDescription, control.FieldStatus, control.FieldControlType, control.FieldVersion, control.FieldOwner, control.FieldControlNumber, control.FieldControlFamily, control.FieldControlClass, control.FieldSource, control.FieldSatisfies, control.FieldMappedFrameworks:
+		case control.FieldID, control.FieldCreatedBy, control.FieldUpdatedBy, control.FieldDeletedBy, control.FieldMappingID, control.FieldName, control.FieldDescription, control.FieldStatus, control.FieldControlType, control.FieldVersion, control.FieldControlNumber, control.FieldFamily, control.FieldClass, control.FieldSource, control.FieldSatisfies, control.FieldMappedFrameworks:
 			values[i] = new(sql.NullString)
 		case control.FieldCreatedAt, control.FieldUpdatedAt, control.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -266,29 +276,23 @@ func (c *Control) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				c.Version = value.String
 			}
-		case control.FieldOwner:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field owner", values[i])
-			} else if value.Valid {
-				c.Owner = value.String
-			}
 		case control.FieldControlNumber:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field control_number", values[i])
 			} else if value.Valid {
 				c.ControlNumber = value.String
 			}
-		case control.FieldControlFamily:
+		case control.FieldFamily:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field control_family", values[i])
+				return fmt.Errorf("unexpected type %T for field family", values[i])
 			} else if value.Valid {
-				c.ControlFamily = value.String
+				c.Family = value.String
 			}
-		case control.FieldControlClass:
+		case control.FieldClass:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field control_class", values[i])
+				return fmt.Errorf("unexpected type %T for field class", values[i])
 			} else if value.Valid {
-				c.ControlClass = value.String
+				c.Class = value.String
 			}
 		case control.FieldSource:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -308,12 +312,12 @@ func (c *Control) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				c.MappedFrameworks = value.String
 			}
-		case control.FieldJsonschema:
+		case control.FieldDetails:
 			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field jsonschema", values[i])
+				return fmt.Errorf("unexpected type %T for field details", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &c.Jsonschema); err != nil {
-					return fmt.Errorf("unmarshal field jsonschema: %w", err)
+				if err := json.Unmarshal(*value, &c.Details); err != nil {
+					return fmt.Errorf("unmarshal field details: %w", err)
 				}
 			}
 		case control.ForeignKeys[0]:
@@ -371,6 +375,11 @@ func (c *Control) QueryNarratives() *NarrativeQuery {
 // QueryRisks queries the "risks" edge of the Control entity.
 func (c *Control) QueryRisks() *RiskQuery {
 	return NewControlClient(c.config).QueryRisks(c)
+}
+
+// QueryActionplans queries the "actionplans" edge of the Control entity.
+func (c *Control) QueryActionplans() *ActionPlanQuery {
+	return NewControlClient(c.config).QueryActionplans(c)
 }
 
 // Update returns a builder for updating this Control.
@@ -435,17 +444,14 @@ func (c *Control) String() string {
 	builder.WriteString("version=")
 	builder.WriteString(c.Version)
 	builder.WriteString(", ")
-	builder.WriteString("owner=")
-	builder.WriteString(c.Owner)
-	builder.WriteString(", ")
 	builder.WriteString("control_number=")
 	builder.WriteString(c.ControlNumber)
 	builder.WriteString(", ")
-	builder.WriteString("control_family=")
-	builder.WriteString(c.ControlFamily)
+	builder.WriteString("family=")
+	builder.WriteString(c.Family)
 	builder.WriteString(", ")
-	builder.WriteString("control_class=")
-	builder.WriteString(c.ControlClass)
+	builder.WriteString("class=")
+	builder.WriteString(c.Class)
 	builder.WriteString(", ")
 	builder.WriteString("source=")
 	builder.WriteString(c.Source)
@@ -456,8 +462,8 @@ func (c *Control) String() string {
 	builder.WriteString("mapped_frameworks=")
 	builder.WriteString(c.MappedFrameworks)
 	builder.WriteString(", ")
-	builder.WriteString("jsonschema=")
-	builder.WriteString(fmt.Sprintf("%v", c.Jsonschema))
+	builder.WriteString("details=")
+	builder.WriteString(fmt.Sprintf("%v", c.Details))
 	builder.WriteByte(')')
 	return builder.String()
 }
@@ -603,6 +609,30 @@ func (c *Control) appendNamedRisks(name string, edges ...*Risk) {
 		c.Edges.namedRisks[name] = []*Risk{}
 	} else {
 		c.Edges.namedRisks[name] = append(c.Edges.namedRisks[name], edges...)
+	}
+}
+
+// NamedActionplans returns the Actionplans named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (c *Control) NamedActionplans(name string) ([]*ActionPlan, error) {
+	if c.Edges.namedActionplans == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := c.Edges.namedActionplans[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (c *Control) appendNamedActionplans(name string, edges ...*ActionPlan) {
+	if c.Edges.namedActionplans == nil {
+		c.Edges.namedActionplans = make(map[string][]*ActionPlan)
+	}
+	if len(edges) == 0 {
+		c.Edges.namedActionplans[name] = []*ActionPlan{}
+	} else {
+		c.Edges.namedActionplans[name] = append(c.Edges.namedActionplans[name], edges...)
 	}
 }
 

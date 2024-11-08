@@ -52,8 +52,8 @@ const (
 	FieldPurposeAndScope = "purpose_and_scope"
 	// FieldBackground holds the string denoting the background field in the database.
 	FieldBackground = "background"
-	// FieldJsonschema holds the string denoting the jsonschema field in the database.
-	FieldJsonschema = "jsonschema"
+	// FieldDetails holds the string denoting the details field in the database.
+	FieldDetails = "details"
 	// Table holds the table name of the internalpolicyhistory in the database.
 	Table = "internal_policy_history"
 )
@@ -79,7 +79,7 @@ var Columns = []string{
 	FieldVersion,
 	FieldPurposeAndScope,
 	FieldBackground,
-	FieldJsonschema,
+	FieldDetails,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).

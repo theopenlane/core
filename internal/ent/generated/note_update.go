@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -182,6 +183,21 @@ func (nu *NoteUpdate) SetEntity(e *Entity) *NoteUpdate {
 	return nu.SetEntityID(e.ID)
 }
 
+// AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
+func (nu *NoteUpdate) AddSubcontrolIDs(ids ...string) *NoteUpdate {
+	nu.mutation.AddSubcontrolIDs(ids...)
+	return nu
+}
+
+// AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
+func (nu *NoteUpdate) AddSubcontrols(s ...*Subcontrol) *NoteUpdate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return nu.AddSubcontrolIDs(ids...)
+}
+
 // Mutation returns the NoteMutation object of the builder.
 func (nu *NoteUpdate) Mutation() *NoteMutation {
 	return nu.mutation
@@ -197,6 +213,27 @@ func (nu *NoteUpdate) ClearOwner() *NoteUpdate {
 func (nu *NoteUpdate) ClearEntity() *NoteUpdate {
 	nu.mutation.ClearEntity()
 	return nu
+}
+
+// ClearSubcontrols clears all "subcontrols" edges to the Subcontrol entity.
+func (nu *NoteUpdate) ClearSubcontrols() *NoteUpdate {
+	nu.mutation.ClearSubcontrols()
+	return nu
+}
+
+// RemoveSubcontrolIDs removes the "subcontrols" edge to Subcontrol entities by IDs.
+func (nu *NoteUpdate) RemoveSubcontrolIDs(ids ...string) *NoteUpdate {
+	nu.mutation.RemoveSubcontrolIDs(ids...)
+	return nu
+}
+
+// RemoveSubcontrols removes "subcontrols" edges to Subcontrol entities.
+func (nu *NoteUpdate) RemoveSubcontrols(s ...*Subcontrol) *NoteUpdate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return nu.RemoveSubcontrolIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -380,6 +417,54 @@ func (nu *NoteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if nu.mutation.SubcontrolsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   note.SubcontrolsTable,
+			Columns: []string{note.SubcontrolsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nu.schemaConfig.Subcontrol
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := nu.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !nu.mutation.SubcontrolsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   note.SubcontrolsTable,
+			Columns: []string{note.SubcontrolsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nu.schemaConfig.Subcontrol
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := nu.mutation.SubcontrolsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   note.SubcontrolsTable,
+			Columns: []string{note.SubcontrolsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nu.schemaConfig.Subcontrol
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = nu.schemaConfig.Note
 	ctx = internal.NewSchemaConfigContext(ctx, nu.schemaConfig)
 	_spec.AddModifiers(nu.modifiers...)
@@ -552,6 +637,21 @@ func (nuo *NoteUpdateOne) SetEntity(e *Entity) *NoteUpdateOne {
 	return nuo.SetEntityID(e.ID)
 }
 
+// AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
+func (nuo *NoteUpdateOne) AddSubcontrolIDs(ids ...string) *NoteUpdateOne {
+	nuo.mutation.AddSubcontrolIDs(ids...)
+	return nuo
+}
+
+// AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
+func (nuo *NoteUpdateOne) AddSubcontrols(s ...*Subcontrol) *NoteUpdateOne {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return nuo.AddSubcontrolIDs(ids...)
+}
+
 // Mutation returns the NoteMutation object of the builder.
 func (nuo *NoteUpdateOne) Mutation() *NoteMutation {
 	return nuo.mutation
@@ -567,6 +667,27 @@ func (nuo *NoteUpdateOne) ClearOwner() *NoteUpdateOne {
 func (nuo *NoteUpdateOne) ClearEntity() *NoteUpdateOne {
 	nuo.mutation.ClearEntity()
 	return nuo
+}
+
+// ClearSubcontrols clears all "subcontrols" edges to the Subcontrol entity.
+func (nuo *NoteUpdateOne) ClearSubcontrols() *NoteUpdateOne {
+	nuo.mutation.ClearSubcontrols()
+	return nuo
+}
+
+// RemoveSubcontrolIDs removes the "subcontrols" edge to Subcontrol entities by IDs.
+func (nuo *NoteUpdateOne) RemoveSubcontrolIDs(ids ...string) *NoteUpdateOne {
+	nuo.mutation.RemoveSubcontrolIDs(ids...)
+	return nuo
+}
+
+// RemoveSubcontrols removes "subcontrols" edges to Subcontrol entities.
+func (nuo *NoteUpdateOne) RemoveSubcontrols(s ...*Subcontrol) *NoteUpdateOne {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return nuo.RemoveSubcontrolIDs(ids...)
 }
 
 // Where appends a list predicates to the NoteUpdate builder.
@@ -775,6 +896,54 @@ func (nuo *NoteUpdateOne) sqlSave(ctx context.Context) (_node *Note, err error) 
 			},
 		}
 		edge.Schema = nuo.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if nuo.mutation.SubcontrolsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   note.SubcontrolsTable,
+			Columns: []string{note.SubcontrolsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nuo.schemaConfig.Subcontrol
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := nuo.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !nuo.mutation.SubcontrolsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   note.SubcontrolsTable,
+			Columns: []string{note.SubcontrolsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nuo.schemaConfig.Subcontrol
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := nuo.mutation.SubcontrolsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   note.SubcontrolsTable,
+			Columns: []string{note.SubcontrolsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nuo.schemaConfig.Subcontrol
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

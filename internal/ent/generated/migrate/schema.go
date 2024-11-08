@@ -63,11 +63,10 @@ var (
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "status", Type: field.TypeString, Nullable: true},
-		{Name: "assigned", Type: field.TypeString, Nullable: true},
-		{Name: "due_date", Type: field.TypeString, Nullable: true},
+		{Name: "due_date", Type: field.TypeTime, Nullable: true},
 		{Name: "priority", Type: field.TypeString, Nullable: true},
 		{Name: "source", Type: field.TypeString, Nullable: true},
-		{Name: "jsonschema", Type: field.TypeJSON, Nullable: true},
+		{Name: "details", Type: field.TypeJSON, Nullable: true},
 	}
 	// ActionPlansTable holds the schema information for the "action_plans" table.
 	ActionPlansTable = &schema.Table{
@@ -92,11 +91,10 @@ var (
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "status", Type: field.TypeString, Nullable: true},
-		{Name: "assigned", Type: field.TypeString, Nullable: true},
-		{Name: "due_date", Type: field.TypeString, Nullable: true},
+		{Name: "due_date", Type: field.TypeTime, Nullable: true},
 		{Name: "priority", Type: field.TypeString, Nullable: true},
 		{Name: "source", Type: field.TypeString, Nullable: true},
-		{Name: "jsonschema", Type: field.TypeJSON, Nullable: true},
+		{Name: "details", Type: field.TypeJSON, Nullable: true},
 	}
 	// ActionPlanHistoryTable holds the schema information for the "action_plan_history" table.
 	ActionPlanHistoryTable = &schema.Table{
@@ -197,14 +195,13 @@ var (
 		{Name: "status", Type: field.TypeString, Nullable: true},
 		{Name: "control_type", Type: field.TypeString, Nullable: true},
 		{Name: "version", Type: field.TypeString, Nullable: true},
-		{Name: "owner", Type: field.TypeString, Nullable: true},
 		{Name: "control_number", Type: field.TypeString, Nullable: true},
-		{Name: "control_family", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "control_class", Type: field.TypeString, Nullable: true},
+		{Name: "family", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "class", Type: field.TypeString, Nullable: true},
 		{Name: "source", Type: field.TypeString, Nullable: true},
 		{Name: "satisfies", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "mapped_frameworks", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "jsonschema", Type: field.TypeJSON, Nullable: true},
+		{Name: "details", Type: field.TypeJSON, Nullable: true},
 		{Name: "control_objective_controls", Type: field.TypeString, Nullable: true},
 		{Name: "internal_policy_controls", Type: field.TypeString, Nullable: true},
 	}
@@ -216,13 +213,13 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "controls_control_objectives_controls",
-				Columns:    []*schema.Column{ControlsColumns[22]},
+				Columns:    []*schema.Column{ControlsColumns[21]},
 				RefColumns: []*schema.Column{ControlObjectivesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "controls_internal_policies_controls",
-				Columns:    []*schema.Column{ControlsColumns[23]},
+				Columns:    []*schema.Column{ControlsColumns[22]},
 				RefColumns: []*schema.Column{InternalPoliciesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -247,14 +244,13 @@ var (
 		{Name: "status", Type: field.TypeString, Nullable: true},
 		{Name: "control_type", Type: field.TypeString, Nullable: true},
 		{Name: "version", Type: field.TypeString, Nullable: true},
-		{Name: "owner", Type: field.TypeString, Nullable: true},
 		{Name: "control_number", Type: field.TypeString, Nullable: true},
-		{Name: "control_family", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "control_class", Type: field.TypeString, Nullable: true},
+		{Name: "family", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "class", Type: field.TypeString, Nullable: true},
 		{Name: "source", Type: field.TypeString, Nullable: true},
 		{Name: "satisfies", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "mapped_frameworks", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "jsonschema", Type: field.TypeJSON, Nullable: true},
+		{Name: "details", Type: field.TypeJSON, Nullable: true},
 	}
 	// ControlHistoryTable holds the schema information for the "control_history" table.
 	ControlHistoryTable = &schema.Table{
@@ -285,13 +281,12 @@ var (
 		{Name: "status", Type: field.TypeString, Nullable: true},
 		{Name: "control_objective_type", Type: field.TypeString, Nullable: true},
 		{Name: "version", Type: field.TypeString, Nullable: true},
-		{Name: "owner", Type: field.TypeString, Nullable: true},
 		{Name: "control_number", Type: field.TypeString, Nullable: true},
-		{Name: "control_family", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "control_class", Type: field.TypeString, Nullable: true},
+		{Name: "family", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "class", Type: field.TypeString, Nullable: true},
 		{Name: "source", Type: field.TypeString, Nullable: true},
 		{Name: "mapped_frameworks", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "jsonschema", Type: field.TypeJSON, Nullable: true},
+		{Name: "details", Type: field.TypeJSON, Nullable: true},
 		{Name: "control_controlobjectives", Type: field.TypeString, Nullable: true},
 	}
 	// ControlObjectivesTable holds the schema information for the "control_objectives" table.
@@ -302,7 +297,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "control_objectives_controls_controlobjectives",
-				Columns:    []*schema.Column{ControlObjectivesColumns[21]},
+				Columns:    []*schema.Column{ControlObjectivesColumns[20]},
 				RefColumns: []*schema.Column{ControlsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -327,13 +322,12 @@ var (
 		{Name: "status", Type: field.TypeString, Nullable: true},
 		{Name: "control_objective_type", Type: field.TypeString, Nullable: true},
 		{Name: "version", Type: field.TypeString, Nullable: true},
-		{Name: "owner", Type: field.TypeString, Nullable: true},
 		{Name: "control_number", Type: field.TypeString, Nullable: true},
-		{Name: "control_family", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "control_class", Type: field.TypeString, Nullable: true},
+		{Name: "family", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "class", Type: field.TypeString, Nullable: true},
 		{Name: "source", Type: field.TypeString, Nullable: true},
 		{Name: "mapped_frameworks", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "jsonschema", Type: field.TypeJSON, Nullable: true},
+		{Name: "details", Type: field.TypeJSON, Nullable: true},
 	}
 	// ControlObjectiveHistoryTable holds the schema information for the "control_objective_history" table.
 	ControlObjectiveHistoryTable = &schema.Table{
@@ -1420,7 +1414,7 @@ var (
 		{Name: "version", Type: field.TypeString, Nullable: true},
 		{Name: "purpose_and_scope", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "background", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "jsonschema", Type: field.TypeJSON, Nullable: true},
+		{Name: "details", Type: field.TypeJSON, Nullable: true},
 	}
 	// InternalPoliciesTable holds the schema information for the "internal_policies" table.
 	InternalPoliciesTable = &schema.Table{
@@ -1449,7 +1443,7 @@ var (
 		{Name: "version", Type: field.TypeString, Nullable: true},
 		{Name: "purpose_and_scope", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "background", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "jsonschema", Type: field.TypeJSON, Nullable: true},
+		{Name: "details", Type: field.TypeJSON, Nullable: true},
 	}
 	// InternalPolicyHistoryTable holds the schema information for the "internal_policy_history" table.
 	InternalPolicyHistoryTable = &schema.Table{
@@ -1522,7 +1516,7 @@ var (
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "satisfies", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "jsonschema", Type: field.TypeJSON, Nullable: true},
+		{Name: "details", Type: field.TypeJSON, Nullable: true},
 	}
 	// NarrativesTable holds the schema information for the "narratives" table.
 	NarrativesTable = &schema.Table{
@@ -1547,7 +1541,7 @@ var (
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "satisfies", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "jsonschema", Type: field.TypeJSON, Nullable: true},
+		{Name: "details", Type: field.TypeJSON, Nullable: true},
 	}
 	// NarrativeHistoryTable holds the schema information for the "narrative_history" table.
 	NarrativeHistoryTable = &schema.Table{
@@ -2046,7 +2040,7 @@ var (
 		{Name: "purpose_and_scope", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "background", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "satisfies", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "jsonschema", Type: field.TypeJSON, Nullable: true},
+		{Name: "details", Type: field.TypeJSON, Nullable: true},
 		{Name: "control_objective_procedures", Type: field.TypeString, Nullable: true},
 		{Name: "standard_procedures", Type: field.TypeString, Nullable: true},
 	}
@@ -2092,7 +2086,7 @@ var (
 		{Name: "purpose_and_scope", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "background", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "satisfies", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "jsonschema", Type: field.TypeJSON, Nullable: true},
+		{Name: "details", Type: field.TypeJSON, Nullable: true},
 	}
 	// ProcedureHistoryTable holds the schema information for the "procedure_history" table.
 	ProcedureHistoryTable = &schema.Table{
@@ -2123,12 +2117,11 @@ var (
 		{Name: "status", Type: field.TypeString, Nullable: true},
 		{Name: "risk_type", Type: field.TypeString, Nullable: true},
 		{Name: "business_costs", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "impact", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "likelihood", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "impact", Type: field.TypeEnum, Nullable: true, Enums: []string{"LOW", "MODERATE", "HIGH"}},
+		{Name: "likelihood", Type: field.TypeEnum, Nullable: true, Enums: []string{"UNLIKELY", "LIKELY", "HIGHLY_LIKELY"}},
 		{Name: "mitigation", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "satisfies", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "severity", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "jsonschema", Type: field.TypeJSON, Nullable: true},
+		{Name: "details", Type: field.TypeJSON, Nullable: true},
 		{Name: "control_objective_risks", Type: field.TypeString, Nullable: true},
 	}
 	// RisksTable holds the schema information for the "risks" table.
@@ -2139,7 +2132,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "risks_control_objectives_risks",
-				Columns:    []*schema.Column{RisksColumns[20]},
+				Columns:    []*schema.Column{RisksColumns[19]},
 				RefColumns: []*schema.Column{ControlObjectivesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -2164,12 +2157,11 @@ var (
 		{Name: "status", Type: field.TypeString, Nullable: true},
 		{Name: "risk_type", Type: field.TypeString, Nullable: true},
 		{Name: "business_costs", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "impact", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "likelihood", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "impact", Type: field.TypeEnum, Nullable: true, Enums: []string{"LOW", "MODERATE", "HIGH"}},
+		{Name: "likelihood", Type: field.TypeEnum, Nullable: true, Enums: []string{"UNLIKELY", "LIKELY", "HIGHLY_LIKELY"}},
 		{Name: "mitigation", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "satisfies", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "severity", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "jsonschema", Type: field.TypeJSON, Nullable: true},
+		{Name: "details", Type: field.TypeJSON, Nullable: true},
 	}
 	// RiskHistoryTable holds the schema information for the "risk_history" table.
 	RiskHistoryTable = &schema.Table{
@@ -2204,7 +2196,7 @@ var (
 		{Name: "purpose_and_scope", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "background", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "satisfies", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "jsonschema", Type: field.TypeJSON, Nullable: true},
+		{Name: "details", Type: field.TypeJSON, Nullable: true},
 	}
 	// StandardsTable holds the schema information for the "standards" table.
 	StandardsTable = &schema.Table{
@@ -2235,7 +2227,7 @@ var (
 		{Name: "purpose_and_scope", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "background", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "satisfies", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "jsonschema", Type: field.TypeJSON, Nullable: true},
+		{Name: "details", Type: field.TypeJSON, Nullable: true},
 	}
 	// StandardHistoryTable holds the schema information for the "standard_history" table.
 	StandardHistoryTable = &schema.Table{
@@ -2266,21 +2258,19 @@ var (
 		{Name: "status", Type: field.TypeString, Nullable: true},
 		{Name: "subcontrol_type", Type: field.TypeString, Nullable: true},
 		{Name: "version", Type: field.TypeString, Nullable: true},
-		{Name: "owner", Type: field.TypeString, Nullable: true},
 		{Name: "subcontrol_number", Type: field.TypeString, Nullable: true},
-		{Name: "subcontrol_family", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "subcontrol_class", Type: field.TypeString, Nullable: true},
+		{Name: "family", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "class", Type: field.TypeString, Nullable: true},
 		{Name: "source", Type: field.TypeString, Nullable: true},
 		{Name: "mapped_frameworks", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "assigned_to", Type: field.TypeString, Nullable: true},
-		{Name: "implementation_status", Type: field.TypeString, Nullable: true},
-		{Name: "implementation_notes", Type: field.TypeString, Nullable: true},
-		{Name: "implementation_date", Type: field.TypeString, Nullable: true},
 		{Name: "implementation_evidence", Type: field.TypeString, Nullable: true},
+		{Name: "implementation_status", Type: field.TypeString, Nullable: true},
+		{Name: "implementation_date", Type: field.TypeTime, Nullable: true},
 		{Name: "implementation_verification", Type: field.TypeString, Nullable: true},
-		{Name: "implementation_verification_date", Type: field.TypeString, Nullable: true},
-		{Name: "jsonschema", Type: field.TypeJSON, Nullable: true},
+		{Name: "implementation_verification_date", Type: field.TypeTime, Nullable: true},
+		{Name: "details", Type: field.TypeJSON, Nullable: true},
 		{Name: "control_objective_subcontrols", Type: field.TypeString, Nullable: true},
+		{Name: "note_subcontrols", Type: field.TypeString, Nullable: true},
 	}
 	// SubcontrolsTable holds the schema information for the "subcontrols" table.
 	SubcontrolsTable = &schema.Table{
@@ -2290,8 +2280,14 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "subcontrols_control_objectives_subcontrols",
-				Columns:    []*schema.Column{SubcontrolsColumns[28]},
+				Columns:    []*schema.Column{SubcontrolsColumns[25]},
 				RefColumns: []*schema.Column{ControlObjectivesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "subcontrols_notes_subcontrols",
+				Columns:    []*schema.Column{SubcontrolsColumns[26]},
+				RefColumns: []*schema.Column{NotesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -2315,20 +2311,17 @@ var (
 		{Name: "status", Type: field.TypeString, Nullable: true},
 		{Name: "subcontrol_type", Type: field.TypeString, Nullable: true},
 		{Name: "version", Type: field.TypeString, Nullable: true},
-		{Name: "owner", Type: field.TypeString, Nullable: true},
 		{Name: "subcontrol_number", Type: field.TypeString, Nullable: true},
-		{Name: "subcontrol_family", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "subcontrol_class", Type: field.TypeString, Nullable: true},
+		{Name: "family", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "class", Type: field.TypeString, Nullable: true},
 		{Name: "source", Type: field.TypeString, Nullable: true},
 		{Name: "mapped_frameworks", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "assigned_to", Type: field.TypeString, Nullable: true},
-		{Name: "implementation_status", Type: field.TypeString, Nullable: true},
-		{Name: "implementation_notes", Type: field.TypeString, Nullable: true},
-		{Name: "implementation_date", Type: field.TypeString, Nullable: true},
 		{Name: "implementation_evidence", Type: field.TypeString, Nullable: true},
+		{Name: "implementation_status", Type: field.TypeString, Nullable: true},
+		{Name: "implementation_date", Type: field.TypeTime, Nullable: true},
 		{Name: "implementation_verification", Type: field.TypeString, Nullable: true},
-		{Name: "implementation_verification_date", Type: field.TypeString, Nullable: true},
-		{Name: "jsonschema", Type: field.TypeJSON, Nullable: true},
+		{Name: "implementation_verification_date", Type: field.TypeTime, Nullable: true},
+		{Name: "details", Type: field.TypeJSON, Nullable: true},
 	}
 	// SubcontrolHistoryTable holds the schema information for the "subcontrol_history" table.
 	SubcontrolHistoryTable = &schema.Table{
@@ -2923,6 +2916,31 @@ var (
 				Symbol:     "control_risks_risk_id",
 				Columns:    []*schema.Column{ControlRisksColumns[1]},
 				RefColumns: []*schema.Column{RisksColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// ControlActionplansColumns holds the columns for the "control_actionplans" table.
+	ControlActionplansColumns = []*schema.Column{
+		{Name: "control_id", Type: field.TypeString},
+		{Name: "action_plan_id", Type: field.TypeString},
+	}
+	// ControlActionplansTable holds the schema information for the "control_actionplans" table.
+	ControlActionplansTable = &schema.Table{
+		Name:       "control_actionplans",
+		Columns:    ControlActionplansColumns,
+		PrimaryKey: []*schema.Column{ControlActionplansColumns[0], ControlActionplansColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "control_actionplans_control_id",
+				Columns:    []*schema.Column{ControlActionplansColumns[0]},
+				RefColumns: []*schema.Column{ControlsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "control_actionplans_action_plan_id",
+				Columns:    []*schema.Column{ControlActionplansColumns[1]},
+				RefColumns: []*schema.Column{ActionPlansColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 		},
@@ -3927,6 +3945,56 @@ var (
 			},
 		},
 	}
+	// UserActionplansColumns holds the columns for the "user_actionplans" table.
+	UserActionplansColumns = []*schema.Column{
+		{Name: "user_id", Type: field.TypeString},
+		{Name: "action_plan_id", Type: field.TypeString},
+	}
+	// UserActionplansTable holds the schema information for the "user_actionplans" table.
+	UserActionplansTable = &schema.Table{
+		Name:       "user_actionplans",
+		Columns:    UserActionplansColumns,
+		PrimaryKey: []*schema.Column{UserActionplansColumns[0], UserActionplansColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "user_actionplans_user_id",
+				Columns:    []*schema.Column{UserActionplansColumns[0]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "user_actionplans_action_plan_id",
+				Columns:    []*schema.Column{UserActionplansColumns[1]},
+				RefColumns: []*schema.Column{ActionPlansColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// UserSubcontrolsColumns holds the columns for the "user_subcontrols" table.
+	UserSubcontrolsColumns = []*schema.Column{
+		{Name: "user_id", Type: field.TypeString},
+		{Name: "subcontrol_id", Type: field.TypeString},
+	}
+	// UserSubcontrolsTable holds the schema information for the "user_subcontrols" table.
+	UserSubcontrolsTable = &schema.Table{
+		Name:       "user_subcontrols",
+		Columns:    UserSubcontrolsColumns,
+		PrimaryKey: []*schema.Column{UserSubcontrolsColumns[0], UserSubcontrolsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "user_subcontrols_user_id",
+				Columns:    []*schema.Column{UserSubcontrolsColumns[0]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "user_subcontrols_subcontrol_id",
+				Columns:    []*schema.Column{UserSubcontrolsColumns[1]},
+				RefColumns: []*schema.Column{SubcontrolsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// UserSettingFilesColumns holds the columns for the "user_setting_files" table.
 	UserSettingFilesColumns = []*schema.Column{
 		{Name: "user_setting_id", Type: field.TypeString},
@@ -4059,6 +4127,7 @@ var (
 		ControlSubcontrolsTable,
 		ControlNarrativesTable,
 		ControlRisksTable,
+		ControlActionplansTable,
 		ControlObjectiveNarrativesTable,
 		DocumentDataFilesTable,
 		EntitlementEventsTable,
@@ -4099,6 +4168,8 @@ var (
 		TemplateFilesTable,
 		UserFilesTable,
 		UserEventsTable,
+		UserActionplansTable,
+		UserSubcontrolsTable,
 		UserSettingFilesTable,
 		WebhookEventsTable,
 	}
@@ -4229,6 +4300,7 @@ func init() {
 		Table: "standard_history",
 	}
 	SubcontrolsTable.ForeignKeys[0].RefTable = ControlObjectivesTable
+	SubcontrolsTable.ForeignKeys[1].RefTable = NotesTable
 	SubcontrolHistoryTable.Annotation = &entsql.Annotation{
 		Table: "subcontrol_history",
 	}
@@ -4262,6 +4334,8 @@ func init() {
 	ControlNarrativesTable.ForeignKeys[1].RefTable = NarrativesTable
 	ControlRisksTable.ForeignKeys[0].RefTable = ControlsTable
 	ControlRisksTable.ForeignKeys[1].RefTable = RisksTable
+	ControlActionplansTable.ForeignKeys[0].RefTable = ControlsTable
+	ControlActionplansTable.ForeignKeys[1].RefTable = ActionPlansTable
 	ControlObjectiveNarrativesTable.ForeignKeys[0].RefTable = ControlObjectivesTable
 	ControlObjectiveNarrativesTable.ForeignKeys[1].RefTable = NarrativesTable
 	DocumentDataFilesTable.ForeignKeys[0].RefTable = DocumentDataTable
@@ -4342,6 +4416,10 @@ func init() {
 	UserFilesTable.ForeignKeys[1].RefTable = FilesTable
 	UserEventsTable.ForeignKeys[0].RefTable = UsersTable
 	UserEventsTable.ForeignKeys[1].RefTable = EventsTable
+	UserActionplansTable.ForeignKeys[0].RefTable = UsersTable
+	UserActionplansTable.ForeignKeys[1].RefTable = ActionPlansTable
+	UserSubcontrolsTable.ForeignKeys[0].RefTable = UsersTable
+	UserSubcontrolsTable.ForeignKeys[1].RefTable = SubcontrolsTable
 	UserSettingFilesTable.ForeignKeys[0].RefTable = UserSettingsTable
 	UserSettingFilesTable.ForeignKeys[1].RefTable = FilesTable
 	WebhookEventsTable.ForeignKeys[0].RefTable = WebhooksTable

@@ -262,18 +262,18 @@ type ActionPlan struct {
 	Description *string `json:"description,omitempty"`
 	// status of the action plan
 	Status *string `json:"status,omitempty"`
-	// assigned to
-	Assigned *string `json:"assigned,omitempty"`
-	// due date
-	DueDate *string `json:"dueDate,omitempty"`
-	// priority
+	// due date of the action plan
+	DueDate *time.Time `json:"dueDate,omitempty"`
+	// priority of the action plan
 	Priority *string `json:"priority,omitempty"`
 	// source of the action plan
 	Source *string `json:"source,omitempty"`
-	// json schema
-	Jsonschema map[string]interface{} `json:"jsonschema,omitempty"`
-	Standard   []*Standard            `json:"standard,omitempty"`
-	Risk       []*Risk                `json:"risk,omitempty"`
+	// json data including details of the action plan
+	Details  map[string]interface{} `json:"details,omitempty"`
+	Standard []*Standard            `json:"standard,omitempty"`
+	Risk     []*Risk                `json:"risk,omitempty"`
+	Control  []*Control             `json:"control,omitempty"`
+	User     []*User                `json:"user,omitempty"`
 }
 
 func (ActionPlan) IsNode() {}
@@ -333,16 +333,14 @@ type ActionPlanHistory struct {
 	Description *string `json:"description,omitempty"`
 	// status of the action plan
 	Status *string `json:"status,omitempty"`
-	// assigned to
-	Assigned *string `json:"assigned,omitempty"`
-	// due date
-	DueDate *string `json:"dueDate,omitempty"`
-	// priority
+	// due date of the action plan
+	DueDate *time.Time `json:"dueDate,omitempty"`
+	// priority of the action plan
 	Priority *string `json:"priority,omitempty"`
 	// source of the action plan
 	Source *string `json:"source,omitempty"`
-	// json schema
-	Jsonschema map[string]interface{} `json:"jsonschema,omitempty"`
+	// json data including details of the action plan
+	Details map[string]interface{} `json:"details,omitempty"`
 }
 
 func (ActionPlanHistory) IsNode() {}
@@ -539,38 +537,17 @@ type ActionPlanHistoryWhereInput struct {
 	StatusNotNil       *bool    `json:"statusNotNil,omitempty"`
 	StatusEqualFold    *string  `json:"statusEqualFold,omitempty"`
 	StatusContainsFold *string  `json:"statusContainsFold,omitempty"`
-	// assigned field predicates
-	Assigned             *string  `json:"assigned,omitempty"`
-	AssignedNeq          *string  `json:"assignedNEQ,omitempty"`
-	AssignedIn           []string `json:"assignedIn,omitempty"`
-	AssignedNotIn        []string `json:"assignedNotIn,omitempty"`
-	AssignedGt           *string  `json:"assignedGT,omitempty"`
-	AssignedGte          *string  `json:"assignedGTE,omitempty"`
-	AssignedLt           *string  `json:"assignedLT,omitempty"`
-	AssignedLte          *string  `json:"assignedLTE,omitempty"`
-	AssignedContains     *string  `json:"assignedContains,omitempty"`
-	AssignedHasPrefix    *string  `json:"assignedHasPrefix,omitempty"`
-	AssignedHasSuffix    *string  `json:"assignedHasSuffix,omitempty"`
-	AssignedIsNil        *bool    `json:"assignedIsNil,omitempty"`
-	AssignedNotNil       *bool    `json:"assignedNotNil,omitempty"`
-	AssignedEqualFold    *string  `json:"assignedEqualFold,omitempty"`
-	AssignedContainsFold *string  `json:"assignedContainsFold,omitempty"`
 	// due_date field predicates
-	DueDate             *string  `json:"dueDate,omitempty"`
-	DueDateNeq          *string  `json:"dueDateNEQ,omitempty"`
-	DueDateIn           []string `json:"dueDateIn,omitempty"`
-	DueDateNotIn        []string `json:"dueDateNotIn,omitempty"`
-	DueDateGt           *string  `json:"dueDateGT,omitempty"`
-	DueDateGte          *string  `json:"dueDateGTE,omitempty"`
-	DueDateLt           *string  `json:"dueDateLT,omitempty"`
-	DueDateLte          *string  `json:"dueDateLTE,omitempty"`
-	DueDateContains     *string  `json:"dueDateContains,omitempty"`
-	DueDateHasPrefix    *string  `json:"dueDateHasPrefix,omitempty"`
-	DueDateHasSuffix    *string  `json:"dueDateHasSuffix,omitempty"`
-	DueDateIsNil        *bool    `json:"dueDateIsNil,omitempty"`
-	DueDateNotNil       *bool    `json:"dueDateNotNil,omitempty"`
-	DueDateEqualFold    *string  `json:"dueDateEqualFold,omitempty"`
-	DueDateContainsFold *string  `json:"dueDateContainsFold,omitempty"`
+	DueDate       *time.Time   `json:"dueDate,omitempty"`
+	DueDateNeq    *time.Time   `json:"dueDateNEQ,omitempty"`
+	DueDateIn     []*time.Time `json:"dueDateIn,omitempty"`
+	DueDateNotIn  []*time.Time `json:"dueDateNotIn,omitempty"`
+	DueDateGt     *time.Time   `json:"dueDateGT,omitempty"`
+	DueDateGte    *time.Time   `json:"dueDateGTE,omitempty"`
+	DueDateLt     *time.Time   `json:"dueDateLT,omitempty"`
+	DueDateLte    *time.Time   `json:"dueDateLTE,omitempty"`
+	DueDateIsNil  *bool        `json:"dueDateIsNil,omitempty"`
+	DueDateNotNil *bool        `json:"dueDateNotNil,omitempty"`
 	// priority field predicates
 	Priority             *string  `json:"priority,omitempty"`
 	PriorityNeq          *string  `json:"priorityNEQ,omitempty"`
@@ -761,38 +738,17 @@ type ActionPlanWhereInput struct {
 	StatusNotNil       *bool    `json:"statusNotNil,omitempty"`
 	StatusEqualFold    *string  `json:"statusEqualFold,omitempty"`
 	StatusContainsFold *string  `json:"statusContainsFold,omitempty"`
-	// assigned field predicates
-	Assigned             *string  `json:"assigned,omitempty"`
-	AssignedNeq          *string  `json:"assignedNEQ,omitempty"`
-	AssignedIn           []string `json:"assignedIn,omitempty"`
-	AssignedNotIn        []string `json:"assignedNotIn,omitempty"`
-	AssignedGt           *string  `json:"assignedGT,omitempty"`
-	AssignedGte          *string  `json:"assignedGTE,omitempty"`
-	AssignedLt           *string  `json:"assignedLT,omitempty"`
-	AssignedLte          *string  `json:"assignedLTE,omitempty"`
-	AssignedContains     *string  `json:"assignedContains,omitempty"`
-	AssignedHasPrefix    *string  `json:"assignedHasPrefix,omitempty"`
-	AssignedHasSuffix    *string  `json:"assignedHasSuffix,omitempty"`
-	AssignedIsNil        *bool    `json:"assignedIsNil,omitempty"`
-	AssignedNotNil       *bool    `json:"assignedNotNil,omitempty"`
-	AssignedEqualFold    *string  `json:"assignedEqualFold,omitempty"`
-	AssignedContainsFold *string  `json:"assignedContainsFold,omitempty"`
 	// due_date field predicates
-	DueDate             *string  `json:"dueDate,omitempty"`
-	DueDateNeq          *string  `json:"dueDateNEQ,omitempty"`
-	DueDateIn           []string `json:"dueDateIn,omitempty"`
-	DueDateNotIn        []string `json:"dueDateNotIn,omitempty"`
-	DueDateGt           *string  `json:"dueDateGT,omitempty"`
-	DueDateGte          *string  `json:"dueDateGTE,omitempty"`
-	DueDateLt           *string  `json:"dueDateLT,omitempty"`
-	DueDateLte          *string  `json:"dueDateLTE,omitempty"`
-	DueDateContains     *string  `json:"dueDateContains,omitempty"`
-	DueDateHasPrefix    *string  `json:"dueDateHasPrefix,omitempty"`
-	DueDateHasSuffix    *string  `json:"dueDateHasSuffix,omitempty"`
-	DueDateIsNil        *bool    `json:"dueDateIsNil,omitempty"`
-	DueDateNotNil       *bool    `json:"dueDateNotNil,omitempty"`
-	DueDateEqualFold    *string  `json:"dueDateEqualFold,omitempty"`
-	DueDateContainsFold *string  `json:"dueDateContainsFold,omitempty"`
+	DueDate       *time.Time   `json:"dueDate,omitempty"`
+	DueDateNeq    *time.Time   `json:"dueDateNEQ,omitempty"`
+	DueDateIn     []*time.Time `json:"dueDateIn,omitempty"`
+	DueDateNotIn  []*time.Time `json:"dueDateNotIn,omitempty"`
+	DueDateGt     *time.Time   `json:"dueDateGT,omitempty"`
+	DueDateGte    *time.Time   `json:"dueDateGTE,omitempty"`
+	DueDateLt     *time.Time   `json:"dueDateLT,omitempty"`
+	DueDateLte    *time.Time   `json:"dueDateLTE,omitempty"`
+	DueDateIsNil  *bool        `json:"dueDateIsNil,omitempty"`
+	DueDateNotNil *bool        `json:"dueDateNotNil,omitempty"`
 	// priority field predicates
 	Priority             *string  `json:"priority,omitempty"`
 	PriorityNeq          *string  `json:"priorityNEQ,omitempty"`
@@ -831,6 +787,12 @@ type ActionPlanWhereInput struct {
 	// risk edge predicates
 	HasRisk     *bool             `json:"hasRisk,omitempty"`
 	HasRiskWith []*RiskWhereInput `json:"hasRiskWith,omitempty"`
+	// control edge predicates
+	HasControl     *bool                `json:"hasControl,omitempty"`
+	HasControlWith []*ControlWhereInput `json:"hasControlWith,omitempty"`
+	// user edge predicates
+	HasUser     *bool             `json:"hasUser,omitempty"`
+	HasUserWith []*UserWhereInput `json:"hasUserWith,omitempty"`
 }
 
 type AuditLog struct {
@@ -1492,28 +1454,27 @@ type Control struct {
 	ControlType *string `json:"controlType,omitempty"`
 	// version of the control
 	Version *string `json:"version,omitempty"`
-	// owner of the control
-	Owner *string `json:"owner,omitempty"`
-	// control number
+	// control number or identifier
 	ControlNumber *string `json:"controlNumber,omitempty"`
-	// control family
-	ControlFamily *string `json:"controlFamily,omitempty"`
-	// control class
-	ControlClass *string `json:"controlClass,omitempty"`
-	// source of the control
+	// family associated with the control
+	Family *string `json:"family,omitempty"`
+	// class associated with the control
+	Class *string `json:"class,omitempty"`
+	// source of the control, e.g. framework, template, custom, etc.
 	Source *string `json:"source,omitempty"`
 	// which control objectives are satisfied by the control
 	Satisfies *string `json:"satisfies,omitempty"`
 	// mapped frameworks
 	MappedFrameworks *string `json:"mappedFrameworks,omitempty"`
-	// json schema
-	Jsonschema        map[string]interface{} `json:"jsonschema,omitempty"`
+	// json data including details of the control
+	Details           map[string]interface{} `json:"details,omitempty"`
 	Procedures        []*Procedure           `json:"procedures,omitempty"`
 	Subcontrols       []*Subcontrol          `json:"subcontrols,omitempty"`
 	Controlobjectives []*ControlObjective    `json:"controlobjectives,omitempty"`
 	Standard          []*Standard            `json:"standard,omitempty"`
 	Narratives        []*Narrative           `json:"narratives,omitempty"`
 	Risks             []*Risk                `json:"risks,omitempty"`
+	Actionplans       []*ActionPlan          `json:"actionplans,omitempty"`
 }
 
 func (Control) IsNode() {}
@@ -1577,22 +1538,20 @@ type ControlHistory struct {
 	ControlType *string `json:"controlType,omitempty"`
 	// version of the control
 	Version *string `json:"version,omitempty"`
-	// owner of the control
-	Owner *string `json:"owner,omitempty"`
-	// control number
+	// control number or identifier
 	ControlNumber *string `json:"controlNumber,omitempty"`
-	// control family
-	ControlFamily *string `json:"controlFamily,omitempty"`
-	// control class
-	ControlClass *string `json:"controlClass,omitempty"`
-	// source of the control
+	// family associated with the control
+	Family *string `json:"family,omitempty"`
+	// class associated with the control
+	Class *string `json:"class,omitempty"`
+	// source of the control, e.g. framework, template, custom, etc.
 	Source *string `json:"source,omitempty"`
 	// which control objectives are satisfied by the control
 	Satisfies *string `json:"satisfies,omitempty"`
 	// mapped frameworks
 	MappedFrameworks *string `json:"mappedFrameworks,omitempty"`
-	// json schema
-	Jsonschema map[string]interface{} `json:"jsonschema,omitempty"`
+	// json data including details of the control
+	Details map[string]interface{} `json:"details,omitempty"`
 }
 
 func (ControlHistory) IsNode() {}
@@ -1821,22 +1780,6 @@ type ControlHistoryWhereInput struct {
 	VersionNotNil       *bool    `json:"versionNotNil,omitempty"`
 	VersionEqualFold    *string  `json:"versionEqualFold,omitempty"`
 	VersionContainsFold *string  `json:"versionContainsFold,omitempty"`
-	// owner field predicates
-	Owner             *string  `json:"owner,omitempty"`
-	OwnerNeq          *string  `json:"ownerNEQ,omitempty"`
-	OwnerIn           []string `json:"ownerIn,omitempty"`
-	OwnerNotIn        []string `json:"ownerNotIn,omitempty"`
-	OwnerGt           *string  `json:"ownerGT,omitempty"`
-	OwnerGte          *string  `json:"ownerGTE,omitempty"`
-	OwnerLt           *string  `json:"ownerLT,omitempty"`
-	OwnerLte          *string  `json:"ownerLTE,omitempty"`
-	OwnerContains     *string  `json:"ownerContains,omitempty"`
-	OwnerHasPrefix    *string  `json:"ownerHasPrefix,omitempty"`
-	OwnerHasSuffix    *string  `json:"ownerHasSuffix,omitempty"`
-	OwnerIsNil        *bool    `json:"ownerIsNil,omitempty"`
-	OwnerNotNil       *bool    `json:"ownerNotNil,omitempty"`
-	OwnerEqualFold    *string  `json:"ownerEqualFold,omitempty"`
-	OwnerContainsFold *string  `json:"ownerContainsFold,omitempty"`
 	// control_number field predicates
 	ControlNumber             *string  `json:"controlNumber,omitempty"`
 	ControlNumberNeq          *string  `json:"controlNumberNEQ,omitempty"`
@@ -1853,38 +1796,38 @@ type ControlHistoryWhereInput struct {
 	ControlNumberNotNil       *bool    `json:"controlNumberNotNil,omitempty"`
 	ControlNumberEqualFold    *string  `json:"controlNumberEqualFold,omitempty"`
 	ControlNumberContainsFold *string  `json:"controlNumberContainsFold,omitempty"`
-	// control_family field predicates
-	ControlFamily             *string  `json:"controlFamily,omitempty"`
-	ControlFamilyNeq          *string  `json:"controlFamilyNEQ,omitempty"`
-	ControlFamilyIn           []string `json:"controlFamilyIn,omitempty"`
-	ControlFamilyNotIn        []string `json:"controlFamilyNotIn,omitempty"`
-	ControlFamilyGt           *string  `json:"controlFamilyGT,omitempty"`
-	ControlFamilyGte          *string  `json:"controlFamilyGTE,omitempty"`
-	ControlFamilyLt           *string  `json:"controlFamilyLT,omitempty"`
-	ControlFamilyLte          *string  `json:"controlFamilyLTE,omitempty"`
-	ControlFamilyContains     *string  `json:"controlFamilyContains,omitempty"`
-	ControlFamilyHasPrefix    *string  `json:"controlFamilyHasPrefix,omitempty"`
-	ControlFamilyHasSuffix    *string  `json:"controlFamilyHasSuffix,omitempty"`
-	ControlFamilyIsNil        *bool    `json:"controlFamilyIsNil,omitempty"`
-	ControlFamilyNotNil       *bool    `json:"controlFamilyNotNil,omitempty"`
-	ControlFamilyEqualFold    *string  `json:"controlFamilyEqualFold,omitempty"`
-	ControlFamilyContainsFold *string  `json:"controlFamilyContainsFold,omitempty"`
-	// control_class field predicates
-	ControlClass             *string  `json:"controlClass,omitempty"`
-	ControlClassNeq          *string  `json:"controlClassNEQ,omitempty"`
-	ControlClassIn           []string `json:"controlClassIn,omitempty"`
-	ControlClassNotIn        []string `json:"controlClassNotIn,omitempty"`
-	ControlClassGt           *string  `json:"controlClassGT,omitempty"`
-	ControlClassGte          *string  `json:"controlClassGTE,omitempty"`
-	ControlClassLt           *string  `json:"controlClassLT,omitempty"`
-	ControlClassLte          *string  `json:"controlClassLTE,omitempty"`
-	ControlClassContains     *string  `json:"controlClassContains,omitempty"`
-	ControlClassHasPrefix    *string  `json:"controlClassHasPrefix,omitempty"`
-	ControlClassHasSuffix    *string  `json:"controlClassHasSuffix,omitempty"`
-	ControlClassIsNil        *bool    `json:"controlClassIsNil,omitempty"`
-	ControlClassNotNil       *bool    `json:"controlClassNotNil,omitempty"`
-	ControlClassEqualFold    *string  `json:"controlClassEqualFold,omitempty"`
-	ControlClassContainsFold *string  `json:"controlClassContainsFold,omitempty"`
+	// family field predicates
+	Family             *string  `json:"family,omitempty"`
+	FamilyNeq          *string  `json:"familyNEQ,omitempty"`
+	FamilyIn           []string `json:"familyIn,omitempty"`
+	FamilyNotIn        []string `json:"familyNotIn,omitempty"`
+	FamilyGt           *string  `json:"familyGT,omitempty"`
+	FamilyGte          *string  `json:"familyGTE,omitempty"`
+	FamilyLt           *string  `json:"familyLT,omitempty"`
+	FamilyLte          *string  `json:"familyLTE,omitempty"`
+	FamilyContains     *string  `json:"familyContains,omitempty"`
+	FamilyHasPrefix    *string  `json:"familyHasPrefix,omitempty"`
+	FamilyHasSuffix    *string  `json:"familyHasSuffix,omitempty"`
+	FamilyIsNil        *bool    `json:"familyIsNil,omitempty"`
+	FamilyNotNil       *bool    `json:"familyNotNil,omitempty"`
+	FamilyEqualFold    *string  `json:"familyEqualFold,omitempty"`
+	FamilyContainsFold *string  `json:"familyContainsFold,omitempty"`
+	// class field predicates
+	Class             *string  `json:"class,omitempty"`
+	ClassNeq          *string  `json:"classNEQ,omitempty"`
+	ClassIn           []string `json:"classIn,omitempty"`
+	ClassNotIn        []string `json:"classNotIn,omitempty"`
+	ClassGt           *string  `json:"classGT,omitempty"`
+	ClassGte          *string  `json:"classGTE,omitempty"`
+	ClassLt           *string  `json:"classLT,omitempty"`
+	ClassLte          *string  `json:"classLTE,omitempty"`
+	ClassContains     *string  `json:"classContains,omitempty"`
+	ClassHasPrefix    *string  `json:"classHasPrefix,omitempty"`
+	ClassHasSuffix    *string  `json:"classHasSuffix,omitempty"`
+	ClassIsNil        *bool    `json:"classIsNil,omitempty"`
+	ClassNotNil       *bool    `json:"classNotNil,omitempty"`
+	ClassEqualFold    *string  `json:"classEqualFold,omitempty"`
+	ClassContainsFold *string  `json:"classContainsFold,omitempty"`
 	// source field predicates
 	Source             *string  `json:"source,omitempty"`
 	SourceNeq          *string  `json:"sourceNEQ,omitempty"`
@@ -1945,30 +1888,28 @@ type ControlObjective struct {
 	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the name of the control
+	// the name of the control objective
 	Name string `json:"name"`
-	// description of the control
+	// description of the control objective
 	Description *string `json:"description,omitempty"`
-	// status of the control
+	// status of the control objective
 	Status *string `json:"status,omitempty"`
 	// type of the control objective
 	ControlObjectiveType *string `json:"controlObjectiveType,omitempty"`
-	// version of the control
+	// version of the control objective
 	Version *string `json:"version,omitempty"`
-	// owner of the control
-	Owner *string `json:"owner,omitempty"`
-	// control number
+	// number of the control objective
 	ControlNumber *string `json:"controlNumber,omitempty"`
-	// control family
-	ControlFamily *string `json:"controlFamily,omitempty"`
-	// control class
-	ControlClass *string `json:"controlClass,omitempty"`
-	// source of the control
+	// family of the control objective
+	Family *string `json:"family,omitempty"`
+	// class associated with the control objective
+	Class *string `json:"class,omitempty"`
+	// source of the control objective, e.g. framework, template, user-defined, etc.
 	Source *string `json:"source,omitempty"`
 	// mapped frameworks
 	MappedFrameworks *string `json:"mappedFrameworks,omitempty"`
-	// json schema
-	Jsonschema  map[string]interface{} `json:"jsonschema,omitempty"`
+	// json data including details of the control objective
+	Details     map[string]interface{} `json:"details,omitempty"`
 	Policy      []*InternalPolicy      `json:"policy,omitempty"`
 	Controls    []*Control             `json:"controls,omitempty"`
 	Procedures  []*Procedure           `json:"procedures,omitempty"`
@@ -2029,30 +1970,28 @@ type ControlObjectiveHistory struct {
 	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the name of the control
+	// the name of the control objective
 	Name string `json:"name"`
-	// description of the control
+	// description of the control objective
 	Description *string `json:"description,omitempty"`
-	// status of the control
+	// status of the control objective
 	Status *string `json:"status,omitempty"`
 	// type of the control objective
 	ControlObjectiveType *string `json:"controlObjectiveType,omitempty"`
-	// version of the control
+	// version of the control objective
 	Version *string `json:"version,omitempty"`
-	// owner of the control
-	Owner *string `json:"owner,omitempty"`
-	// control number
+	// number of the control objective
 	ControlNumber *string `json:"controlNumber,omitempty"`
-	// control family
-	ControlFamily *string `json:"controlFamily,omitempty"`
-	// control class
-	ControlClass *string `json:"controlClass,omitempty"`
-	// source of the control
+	// family of the control objective
+	Family *string `json:"family,omitempty"`
+	// class associated with the control objective
+	Class *string `json:"class,omitempty"`
+	// source of the control objective, e.g. framework, template, user-defined, etc.
 	Source *string `json:"source,omitempty"`
 	// mapped frameworks
 	MappedFrameworks *string `json:"mappedFrameworks,omitempty"`
-	// json schema
-	Jsonschema map[string]interface{} `json:"jsonschema,omitempty"`
+	// json data including details of the control objective
+	Details map[string]interface{} `json:"details,omitempty"`
 }
 
 func (ControlObjectiveHistory) IsNode() {}
@@ -2281,22 +2220,6 @@ type ControlObjectiveHistoryWhereInput struct {
 	VersionNotNil       *bool    `json:"versionNotNil,omitempty"`
 	VersionEqualFold    *string  `json:"versionEqualFold,omitempty"`
 	VersionContainsFold *string  `json:"versionContainsFold,omitempty"`
-	// owner field predicates
-	Owner             *string  `json:"owner,omitempty"`
-	OwnerNeq          *string  `json:"ownerNEQ,omitempty"`
-	OwnerIn           []string `json:"ownerIn,omitempty"`
-	OwnerNotIn        []string `json:"ownerNotIn,omitempty"`
-	OwnerGt           *string  `json:"ownerGT,omitempty"`
-	OwnerGte          *string  `json:"ownerGTE,omitempty"`
-	OwnerLt           *string  `json:"ownerLT,omitempty"`
-	OwnerLte          *string  `json:"ownerLTE,omitempty"`
-	OwnerContains     *string  `json:"ownerContains,omitempty"`
-	OwnerHasPrefix    *string  `json:"ownerHasPrefix,omitempty"`
-	OwnerHasSuffix    *string  `json:"ownerHasSuffix,omitempty"`
-	OwnerIsNil        *bool    `json:"ownerIsNil,omitempty"`
-	OwnerNotNil       *bool    `json:"ownerNotNil,omitempty"`
-	OwnerEqualFold    *string  `json:"ownerEqualFold,omitempty"`
-	OwnerContainsFold *string  `json:"ownerContainsFold,omitempty"`
 	// control_number field predicates
 	ControlNumber             *string  `json:"controlNumber,omitempty"`
 	ControlNumberNeq          *string  `json:"controlNumberNEQ,omitempty"`
@@ -2313,38 +2236,38 @@ type ControlObjectiveHistoryWhereInput struct {
 	ControlNumberNotNil       *bool    `json:"controlNumberNotNil,omitempty"`
 	ControlNumberEqualFold    *string  `json:"controlNumberEqualFold,omitempty"`
 	ControlNumberContainsFold *string  `json:"controlNumberContainsFold,omitempty"`
-	// control_family field predicates
-	ControlFamily             *string  `json:"controlFamily,omitempty"`
-	ControlFamilyNeq          *string  `json:"controlFamilyNEQ,omitempty"`
-	ControlFamilyIn           []string `json:"controlFamilyIn,omitempty"`
-	ControlFamilyNotIn        []string `json:"controlFamilyNotIn,omitempty"`
-	ControlFamilyGt           *string  `json:"controlFamilyGT,omitempty"`
-	ControlFamilyGte          *string  `json:"controlFamilyGTE,omitempty"`
-	ControlFamilyLt           *string  `json:"controlFamilyLT,omitempty"`
-	ControlFamilyLte          *string  `json:"controlFamilyLTE,omitempty"`
-	ControlFamilyContains     *string  `json:"controlFamilyContains,omitempty"`
-	ControlFamilyHasPrefix    *string  `json:"controlFamilyHasPrefix,omitempty"`
-	ControlFamilyHasSuffix    *string  `json:"controlFamilyHasSuffix,omitempty"`
-	ControlFamilyIsNil        *bool    `json:"controlFamilyIsNil,omitempty"`
-	ControlFamilyNotNil       *bool    `json:"controlFamilyNotNil,omitempty"`
-	ControlFamilyEqualFold    *string  `json:"controlFamilyEqualFold,omitempty"`
-	ControlFamilyContainsFold *string  `json:"controlFamilyContainsFold,omitempty"`
-	// control_class field predicates
-	ControlClass             *string  `json:"controlClass,omitempty"`
-	ControlClassNeq          *string  `json:"controlClassNEQ,omitempty"`
-	ControlClassIn           []string `json:"controlClassIn,omitempty"`
-	ControlClassNotIn        []string `json:"controlClassNotIn,omitempty"`
-	ControlClassGt           *string  `json:"controlClassGT,omitempty"`
-	ControlClassGte          *string  `json:"controlClassGTE,omitempty"`
-	ControlClassLt           *string  `json:"controlClassLT,omitempty"`
-	ControlClassLte          *string  `json:"controlClassLTE,omitempty"`
-	ControlClassContains     *string  `json:"controlClassContains,omitempty"`
-	ControlClassHasPrefix    *string  `json:"controlClassHasPrefix,omitempty"`
-	ControlClassHasSuffix    *string  `json:"controlClassHasSuffix,omitempty"`
-	ControlClassIsNil        *bool    `json:"controlClassIsNil,omitempty"`
-	ControlClassNotNil       *bool    `json:"controlClassNotNil,omitempty"`
-	ControlClassEqualFold    *string  `json:"controlClassEqualFold,omitempty"`
-	ControlClassContainsFold *string  `json:"controlClassContainsFold,omitempty"`
+	// family field predicates
+	Family             *string  `json:"family,omitempty"`
+	FamilyNeq          *string  `json:"familyNEQ,omitempty"`
+	FamilyIn           []string `json:"familyIn,omitempty"`
+	FamilyNotIn        []string `json:"familyNotIn,omitempty"`
+	FamilyGt           *string  `json:"familyGT,omitempty"`
+	FamilyGte          *string  `json:"familyGTE,omitempty"`
+	FamilyLt           *string  `json:"familyLT,omitempty"`
+	FamilyLte          *string  `json:"familyLTE,omitempty"`
+	FamilyContains     *string  `json:"familyContains,omitempty"`
+	FamilyHasPrefix    *string  `json:"familyHasPrefix,omitempty"`
+	FamilyHasSuffix    *string  `json:"familyHasSuffix,omitempty"`
+	FamilyIsNil        *bool    `json:"familyIsNil,omitempty"`
+	FamilyNotNil       *bool    `json:"familyNotNil,omitempty"`
+	FamilyEqualFold    *string  `json:"familyEqualFold,omitempty"`
+	FamilyContainsFold *string  `json:"familyContainsFold,omitempty"`
+	// class field predicates
+	Class             *string  `json:"class,omitempty"`
+	ClassNeq          *string  `json:"classNEQ,omitempty"`
+	ClassIn           []string `json:"classIn,omitempty"`
+	ClassNotIn        []string `json:"classNotIn,omitempty"`
+	ClassGt           *string  `json:"classGT,omitempty"`
+	ClassGte          *string  `json:"classGTE,omitempty"`
+	ClassLt           *string  `json:"classLT,omitempty"`
+	ClassLte          *string  `json:"classLTE,omitempty"`
+	ClassContains     *string  `json:"classContains,omitempty"`
+	ClassHasPrefix    *string  `json:"classHasPrefix,omitempty"`
+	ClassHasSuffix    *string  `json:"classHasSuffix,omitempty"`
+	ClassIsNil        *bool    `json:"classIsNil,omitempty"`
+	ClassNotNil       *bool    `json:"classNotNil,omitempty"`
+	ClassEqualFold    *string  `json:"classEqualFold,omitempty"`
+	ClassContainsFold *string  `json:"classContainsFold,omitempty"`
 	// source field predicates
 	Source             *string  `json:"source,omitempty"`
 	SourceNeq          *string  `json:"sourceNEQ,omitempty"`
@@ -2567,22 +2490,6 @@ type ControlObjectiveWhereInput struct {
 	VersionNotNil       *bool    `json:"versionNotNil,omitempty"`
 	VersionEqualFold    *string  `json:"versionEqualFold,omitempty"`
 	VersionContainsFold *string  `json:"versionContainsFold,omitempty"`
-	// owner field predicates
-	Owner             *string  `json:"owner,omitempty"`
-	OwnerNeq          *string  `json:"ownerNEQ,omitempty"`
-	OwnerIn           []string `json:"ownerIn,omitempty"`
-	OwnerNotIn        []string `json:"ownerNotIn,omitempty"`
-	OwnerGt           *string  `json:"ownerGT,omitempty"`
-	OwnerGte          *string  `json:"ownerGTE,omitempty"`
-	OwnerLt           *string  `json:"ownerLT,omitempty"`
-	OwnerLte          *string  `json:"ownerLTE,omitempty"`
-	OwnerContains     *string  `json:"ownerContains,omitempty"`
-	OwnerHasPrefix    *string  `json:"ownerHasPrefix,omitempty"`
-	OwnerHasSuffix    *string  `json:"ownerHasSuffix,omitempty"`
-	OwnerIsNil        *bool    `json:"ownerIsNil,omitempty"`
-	OwnerNotNil       *bool    `json:"ownerNotNil,omitempty"`
-	OwnerEqualFold    *string  `json:"ownerEqualFold,omitempty"`
-	OwnerContainsFold *string  `json:"ownerContainsFold,omitempty"`
 	// control_number field predicates
 	ControlNumber             *string  `json:"controlNumber,omitempty"`
 	ControlNumberNeq          *string  `json:"controlNumberNEQ,omitempty"`
@@ -2599,38 +2506,38 @@ type ControlObjectiveWhereInput struct {
 	ControlNumberNotNil       *bool    `json:"controlNumberNotNil,omitempty"`
 	ControlNumberEqualFold    *string  `json:"controlNumberEqualFold,omitempty"`
 	ControlNumberContainsFold *string  `json:"controlNumberContainsFold,omitempty"`
-	// control_family field predicates
-	ControlFamily             *string  `json:"controlFamily,omitempty"`
-	ControlFamilyNeq          *string  `json:"controlFamilyNEQ,omitempty"`
-	ControlFamilyIn           []string `json:"controlFamilyIn,omitempty"`
-	ControlFamilyNotIn        []string `json:"controlFamilyNotIn,omitempty"`
-	ControlFamilyGt           *string  `json:"controlFamilyGT,omitempty"`
-	ControlFamilyGte          *string  `json:"controlFamilyGTE,omitempty"`
-	ControlFamilyLt           *string  `json:"controlFamilyLT,omitempty"`
-	ControlFamilyLte          *string  `json:"controlFamilyLTE,omitempty"`
-	ControlFamilyContains     *string  `json:"controlFamilyContains,omitempty"`
-	ControlFamilyHasPrefix    *string  `json:"controlFamilyHasPrefix,omitempty"`
-	ControlFamilyHasSuffix    *string  `json:"controlFamilyHasSuffix,omitempty"`
-	ControlFamilyIsNil        *bool    `json:"controlFamilyIsNil,omitempty"`
-	ControlFamilyNotNil       *bool    `json:"controlFamilyNotNil,omitempty"`
-	ControlFamilyEqualFold    *string  `json:"controlFamilyEqualFold,omitempty"`
-	ControlFamilyContainsFold *string  `json:"controlFamilyContainsFold,omitempty"`
-	// control_class field predicates
-	ControlClass             *string  `json:"controlClass,omitempty"`
-	ControlClassNeq          *string  `json:"controlClassNEQ,omitempty"`
-	ControlClassIn           []string `json:"controlClassIn,omitempty"`
-	ControlClassNotIn        []string `json:"controlClassNotIn,omitempty"`
-	ControlClassGt           *string  `json:"controlClassGT,omitempty"`
-	ControlClassGte          *string  `json:"controlClassGTE,omitempty"`
-	ControlClassLt           *string  `json:"controlClassLT,omitempty"`
-	ControlClassLte          *string  `json:"controlClassLTE,omitempty"`
-	ControlClassContains     *string  `json:"controlClassContains,omitempty"`
-	ControlClassHasPrefix    *string  `json:"controlClassHasPrefix,omitempty"`
-	ControlClassHasSuffix    *string  `json:"controlClassHasSuffix,omitempty"`
-	ControlClassIsNil        *bool    `json:"controlClassIsNil,omitempty"`
-	ControlClassNotNil       *bool    `json:"controlClassNotNil,omitempty"`
-	ControlClassEqualFold    *string  `json:"controlClassEqualFold,omitempty"`
-	ControlClassContainsFold *string  `json:"controlClassContainsFold,omitempty"`
+	// family field predicates
+	Family             *string  `json:"family,omitempty"`
+	FamilyNeq          *string  `json:"familyNEQ,omitempty"`
+	FamilyIn           []string `json:"familyIn,omitempty"`
+	FamilyNotIn        []string `json:"familyNotIn,omitempty"`
+	FamilyGt           *string  `json:"familyGT,omitempty"`
+	FamilyGte          *string  `json:"familyGTE,omitempty"`
+	FamilyLt           *string  `json:"familyLT,omitempty"`
+	FamilyLte          *string  `json:"familyLTE,omitempty"`
+	FamilyContains     *string  `json:"familyContains,omitempty"`
+	FamilyHasPrefix    *string  `json:"familyHasPrefix,omitempty"`
+	FamilyHasSuffix    *string  `json:"familyHasSuffix,omitempty"`
+	FamilyIsNil        *bool    `json:"familyIsNil,omitempty"`
+	FamilyNotNil       *bool    `json:"familyNotNil,omitempty"`
+	FamilyEqualFold    *string  `json:"familyEqualFold,omitempty"`
+	FamilyContainsFold *string  `json:"familyContainsFold,omitempty"`
+	// class field predicates
+	Class             *string  `json:"class,omitempty"`
+	ClassNeq          *string  `json:"classNEQ,omitempty"`
+	ClassIn           []string `json:"classIn,omitempty"`
+	ClassNotIn        []string `json:"classNotIn,omitempty"`
+	ClassGt           *string  `json:"classGT,omitempty"`
+	ClassGte          *string  `json:"classGTE,omitempty"`
+	ClassLt           *string  `json:"classLT,omitempty"`
+	ClassLte          *string  `json:"classLTE,omitempty"`
+	ClassContains     *string  `json:"classContains,omitempty"`
+	ClassHasPrefix    *string  `json:"classHasPrefix,omitempty"`
+	ClassHasSuffix    *string  `json:"classHasSuffix,omitempty"`
+	ClassIsNil        *bool    `json:"classIsNil,omitempty"`
+	ClassNotNil       *bool    `json:"classNotNil,omitempty"`
+	ClassEqualFold    *string  `json:"classEqualFold,omitempty"`
+	ClassContainsFold *string  `json:"classContainsFold,omitempty"`
 	// source field predicates
 	Source             *string  `json:"source,omitempty"`
 	SourceNeq          *string  `json:"sourceNEQ,omitempty"`
@@ -2874,22 +2781,6 @@ type ControlWhereInput struct {
 	VersionNotNil       *bool    `json:"versionNotNil,omitempty"`
 	VersionEqualFold    *string  `json:"versionEqualFold,omitempty"`
 	VersionContainsFold *string  `json:"versionContainsFold,omitempty"`
-	// owner field predicates
-	Owner             *string  `json:"owner,omitempty"`
-	OwnerNeq          *string  `json:"ownerNEQ,omitempty"`
-	OwnerIn           []string `json:"ownerIn,omitempty"`
-	OwnerNotIn        []string `json:"ownerNotIn,omitempty"`
-	OwnerGt           *string  `json:"ownerGT,omitempty"`
-	OwnerGte          *string  `json:"ownerGTE,omitempty"`
-	OwnerLt           *string  `json:"ownerLT,omitempty"`
-	OwnerLte          *string  `json:"ownerLTE,omitempty"`
-	OwnerContains     *string  `json:"ownerContains,omitempty"`
-	OwnerHasPrefix    *string  `json:"ownerHasPrefix,omitempty"`
-	OwnerHasSuffix    *string  `json:"ownerHasSuffix,omitempty"`
-	OwnerIsNil        *bool    `json:"ownerIsNil,omitempty"`
-	OwnerNotNil       *bool    `json:"ownerNotNil,omitempty"`
-	OwnerEqualFold    *string  `json:"ownerEqualFold,omitempty"`
-	OwnerContainsFold *string  `json:"ownerContainsFold,omitempty"`
 	// control_number field predicates
 	ControlNumber             *string  `json:"controlNumber,omitempty"`
 	ControlNumberNeq          *string  `json:"controlNumberNEQ,omitempty"`
@@ -2906,38 +2797,38 @@ type ControlWhereInput struct {
 	ControlNumberNotNil       *bool    `json:"controlNumberNotNil,omitempty"`
 	ControlNumberEqualFold    *string  `json:"controlNumberEqualFold,omitempty"`
 	ControlNumberContainsFold *string  `json:"controlNumberContainsFold,omitempty"`
-	// control_family field predicates
-	ControlFamily             *string  `json:"controlFamily,omitempty"`
-	ControlFamilyNeq          *string  `json:"controlFamilyNEQ,omitempty"`
-	ControlFamilyIn           []string `json:"controlFamilyIn,omitempty"`
-	ControlFamilyNotIn        []string `json:"controlFamilyNotIn,omitempty"`
-	ControlFamilyGt           *string  `json:"controlFamilyGT,omitempty"`
-	ControlFamilyGte          *string  `json:"controlFamilyGTE,omitempty"`
-	ControlFamilyLt           *string  `json:"controlFamilyLT,omitempty"`
-	ControlFamilyLte          *string  `json:"controlFamilyLTE,omitempty"`
-	ControlFamilyContains     *string  `json:"controlFamilyContains,omitempty"`
-	ControlFamilyHasPrefix    *string  `json:"controlFamilyHasPrefix,omitempty"`
-	ControlFamilyHasSuffix    *string  `json:"controlFamilyHasSuffix,omitempty"`
-	ControlFamilyIsNil        *bool    `json:"controlFamilyIsNil,omitempty"`
-	ControlFamilyNotNil       *bool    `json:"controlFamilyNotNil,omitempty"`
-	ControlFamilyEqualFold    *string  `json:"controlFamilyEqualFold,omitempty"`
-	ControlFamilyContainsFold *string  `json:"controlFamilyContainsFold,omitempty"`
-	// control_class field predicates
-	ControlClass             *string  `json:"controlClass,omitempty"`
-	ControlClassNeq          *string  `json:"controlClassNEQ,omitempty"`
-	ControlClassIn           []string `json:"controlClassIn,omitempty"`
-	ControlClassNotIn        []string `json:"controlClassNotIn,omitempty"`
-	ControlClassGt           *string  `json:"controlClassGT,omitempty"`
-	ControlClassGte          *string  `json:"controlClassGTE,omitempty"`
-	ControlClassLt           *string  `json:"controlClassLT,omitempty"`
-	ControlClassLte          *string  `json:"controlClassLTE,omitempty"`
-	ControlClassContains     *string  `json:"controlClassContains,omitempty"`
-	ControlClassHasPrefix    *string  `json:"controlClassHasPrefix,omitempty"`
-	ControlClassHasSuffix    *string  `json:"controlClassHasSuffix,omitempty"`
-	ControlClassIsNil        *bool    `json:"controlClassIsNil,omitempty"`
-	ControlClassNotNil       *bool    `json:"controlClassNotNil,omitempty"`
-	ControlClassEqualFold    *string  `json:"controlClassEqualFold,omitempty"`
-	ControlClassContainsFold *string  `json:"controlClassContainsFold,omitempty"`
+	// family field predicates
+	Family             *string  `json:"family,omitempty"`
+	FamilyNeq          *string  `json:"familyNEQ,omitempty"`
+	FamilyIn           []string `json:"familyIn,omitempty"`
+	FamilyNotIn        []string `json:"familyNotIn,omitempty"`
+	FamilyGt           *string  `json:"familyGT,omitempty"`
+	FamilyGte          *string  `json:"familyGTE,omitempty"`
+	FamilyLt           *string  `json:"familyLT,omitempty"`
+	FamilyLte          *string  `json:"familyLTE,omitempty"`
+	FamilyContains     *string  `json:"familyContains,omitempty"`
+	FamilyHasPrefix    *string  `json:"familyHasPrefix,omitempty"`
+	FamilyHasSuffix    *string  `json:"familyHasSuffix,omitempty"`
+	FamilyIsNil        *bool    `json:"familyIsNil,omitempty"`
+	FamilyNotNil       *bool    `json:"familyNotNil,omitempty"`
+	FamilyEqualFold    *string  `json:"familyEqualFold,omitempty"`
+	FamilyContainsFold *string  `json:"familyContainsFold,omitempty"`
+	// class field predicates
+	Class             *string  `json:"class,omitempty"`
+	ClassNeq          *string  `json:"classNEQ,omitempty"`
+	ClassIn           []string `json:"classIn,omitempty"`
+	ClassNotIn        []string `json:"classNotIn,omitempty"`
+	ClassGt           *string  `json:"classGT,omitempty"`
+	ClassGte          *string  `json:"classGTE,omitempty"`
+	ClassLt           *string  `json:"classLT,omitempty"`
+	ClassLte          *string  `json:"classLTE,omitempty"`
+	ClassContains     *string  `json:"classContains,omitempty"`
+	ClassHasPrefix    *string  `json:"classHasPrefix,omitempty"`
+	ClassHasSuffix    *string  `json:"classHasSuffix,omitempty"`
+	ClassIsNil        *bool    `json:"classIsNil,omitempty"`
+	ClassNotNil       *bool    `json:"classNotNil,omitempty"`
+	ClassEqualFold    *string  `json:"classEqualFold,omitempty"`
+	ClassContainsFold *string  `json:"classContainsFold,omitempty"`
 	// source field predicates
 	Source             *string  `json:"source,omitempty"`
 	SourceNeq          *string  `json:"sourceNEQ,omitempty"`
@@ -3004,6 +2895,9 @@ type ControlWhereInput struct {
 	// risks edge predicates
 	HasRisks     *bool             `json:"hasRisks,omitempty"`
 	HasRisksWith []*RiskWhereInput `json:"hasRisksWith,omitempty"`
+	// actionplans edge predicates
+	HasActionplans     *bool                   `json:"hasActionplans,omitempty"`
+	HasActionplansWith []*ActionPlanWhereInput `json:"hasActionplansWith,omitempty"`
 }
 
 // CreateAPITokenInput is used for create APIToken object.
@@ -3033,18 +2927,18 @@ type CreateActionPlanInput struct {
 	Description *string `json:"description,omitempty"`
 	// status of the action plan
 	Status *string `json:"status,omitempty"`
-	// assigned to
-	Assigned *string `json:"assigned,omitempty"`
-	// due date
-	DueDate *string `json:"dueDate,omitempty"`
-	// priority
+	// due date of the action plan
+	DueDate *time.Time `json:"dueDate,omitempty"`
+	// priority of the action plan
 	Priority *string `json:"priority,omitempty"`
 	// source of the action plan
 	Source *string `json:"source,omitempty"`
-	// json schema
-	Jsonschema  map[string]interface{} `json:"jsonschema,omitempty"`
+	// json data including details of the action plan
+	Details     map[string]interface{} `json:"details,omitempty"`
 	StandardIDs []string               `json:"standardIDs,omitempty"`
 	RiskIDs     []string               `json:"riskIDs,omitempty"`
+	ControlIDs  []string               `json:"controlIDs,omitempty"`
+	UserIDs     []string               `json:"userIDs,omitempty"`
 }
 
 // CreateContactInput is used for create Contact object.
@@ -3086,28 +2980,27 @@ type CreateControlInput struct {
 	ControlType *string `json:"controlType,omitempty"`
 	// version of the control
 	Version *string `json:"version,omitempty"`
-	// owner of the control
-	Owner *string `json:"owner,omitempty"`
-	// control number
+	// control number or identifier
 	ControlNumber *string `json:"controlNumber,omitempty"`
-	// control family
-	ControlFamily *string `json:"controlFamily,omitempty"`
-	// control class
-	ControlClass *string `json:"controlClass,omitempty"`
-	// source of the control
+	// family associated with the control
+	Family *string `json:"family,omitempty"`
+	// class associated with the control
+	Class *string `json:"class,omitempty"`
+	// source of the control, e.g. framework, template, custom, etc.
 	Source *string `json:"source,omitempty"`
 	// which control objectives are satisfied by the control
 	Satisfies *string `json:"satisfies,omitempty"`
 	// mapped frameworks
 	MappedFrameworks *string `json:"mappedFrameworks,omitempty"`
-	// json schema
-	Jsonschema          map[string]interface{} `json:"jsonschema,omitempty"`
+	// json data including details of the control
+	Details             map[string]interface{} `json:"details,omitempty"`
 	ProcedureIDs        []string               `json:"procedureIDs,omitempty"`
 	SubcontrolIDs       []string               `json:"subcontrolIDs,omitempty"`
 	ControlobjectiveIDs []string               `json:"controlobjectiveIDs,omitempty"`
 	StandardIDs         []string               `json:"standardIDs,omitempty"`
 	NarrativeIDs        []string               `json:"narrativeIDs,omitempty"`
 	RiskIDs             []string               `json:"riskIDs,omitempty"`
+	ActionplanIDs       []string               `json:"actionplanIDs,omitempty"`
 }
 
 // CreateControlObjectiveInput is used for create ControlObjective object.
@@ -3115,30 +3008,28 @@ type CreateControlInput struct {
 type CreateControlObjectiveInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the name of the control
+	// the name of the control objective
 	Name string `json:"name"`
-	// description of the control
+	// description of the control objective
 	Description *string `json:"description,omitempty"`
-	// status of the control
+	// status of the control objective
 	Status *string `json:"status,omitempty"`
 	// type of the control objective
 	ControlObjectiveType *string `json:"controlObjectiveType,omitempty"`
-	// version of the control
+	// version of the control objective
 	Version *string `json:"version,omitempty"`
-	// owner of the control
-	Owner *string `json:"owner,omitempty"`
-	// control number
+	// number of the control objective
 	ControlNumber *string `json:"controlNumber,omitempty"`
-	// control family
-	ControlFamily *string `json:"controlFamily,omitempty"`
-	// control class
-	ControlClass *string `json:"controlClass,omitempty"`
-	// source of the control
+	// family of the control objective
+	Family *string `json:"family,omitempty"`
+	// class associated with the control objective
+	Class *string `json:"class,omitempty"`
+	// source of the control objective, e.g. framework, template, user-defined, etc.
 	Source *string `json:"source,omitempty"`
 	// mapped frameworks
 	MappedFrameworks *string `json:"mappedFrameworks,omitempty"`
-	// json schema
-	Jsonschema    map[string]interface{} `json:"jsonschema,omitempty"`
+	// json data including details of the control objective
+	Details       map[string]interface{} `json:"details,omitempty"`
 	PolicyIDs     []string               `json:"policyIDs,omitempty"`
 	ControlIDs    []string               `json:"controlIDs,omitempty"`
 	ProcedureIDs  []string               `json:"procedureIDs,omitempty"`
@@ -3437,10 +3328,10 @@ type CreateInternalPolicyInput struct {
 	Version *string `json:"version,omitempty"`
 	// purpose and scope
 	PurposeAndScope *string `json:"purposeAndScope,omitempty"`
-	// background
+	// background of the policy
 	Background *string `json:"background,omitempty"`
-	// json schema
-	Jsonschema          map[string]interface{} `json:"jsonschema,omitempty"`
+	// json data for the policy document
+	Details             map[string]interface{} `json:"details,omitempty"`
 	ControlobjectiveIDs []string               `json:"controlobjectiveIDs,omitempty"`
 	ControlIDs          []string               `json:"controlIDs,omitempty"`
 	ProcedureIDs        []string               `json:"procedureIDs,omitempty"`
@@ -3470,14 +3361,14 @@ type CreateInviteInput struct {
 type CreateNarrativeInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the name of the file provided in the payload key without the extension
+	// the name of the narrative
 	Name string `json:"name"`
 	// the description of the narrative
 	Description *string `json:"description,omitempty"`
 	// which controls are satisfied by the narrative
 	Satisfies *string `json:"satisfies,omitempty"`
-	// json schema
-	Jsonschema          map[string]interface{} `json:"jsonschema,omitempty"`
+	// json data for the narrative document
+	Details             map[string]interface{} `json:"details,omitempty"`
 	PolicyIDs           []string               `json:"policyIDs,omitempty"`
 	ControlIDs          []string               `json:"controlIDs,omitempty"`
 	ProcedureIDs        []string               `json:"procedureIDs,omitempty"`
@@ -3490,9 +3381,10 @@ type CreateNoteInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the text of the note
-	Text     string  `json:"text"`
-	OwnerID  *string `json:"ownerID,omitempty"`
-	EntityID *string `json:"entityID,omitempty"`
+	Text          string   `json:"text"`
+	OwnerID       *string  `json:"ownerID,omitempty"`
+	EntityID      *string  `json:"entityID,omitempty"`
+	SubcontrolIDs []string `json:"subcontrolIDs,omitempty"`
 }
 
 // CreateOauthProviderInput is used for create OauthProvider object.
@@ -3653,12 +3545,12 @@ type CreateProcedureInput struct {
 	Version *string `json:"version,omitempty"`
 	// purpose and scope
 	PurposeAndScope *string `json:"purposeAndScope,omitempty"`
-	// background
+	// background of the procedure
 	Background *string `json:"background,omitempty"`
 	// which controls are satisfied by the procedure
 	Satisfies *string `json:"satisfies,omitempty"`
-	// json schema
-	Jsonschema        map[string]interface{} `json:"jsonschema,omitempty"`
+	// json data for the procedure document
+	Details           map[string]interface{} `json:"details,omitempty"`
 	ControlIDs        []string               `json:"controlIDs,omitempty"`
 	InternalpolicyIDs []string               `json:"internalpolicyIDs,omitempty"`
 	NarrativeIDs      []string               `json:"narrativeIDs,omitempty"`
@@ -3680,18 +3572,16 @@ type CreateRiskInput struct {
 	RiskType *string `json:"riskType,omitempty"`
 	// business costs associated with the risk
 	BusinessCosts *string `json:"businessCosts,omitempty"`
-	// impact of the risk
-	Impact *string `json:"impact,omitempty"`
-	// likelihood of the risk
-	Likelihood *string `json:"likelihood,omitempty"`
-	// mitigation of the risk
+	// impact of the risk - high, medium, low
+	Impact *enums.RiskImpact `json:"impact,omitempty"`
+	// likelihood of the risk occurring; unlikely, likely, highly likely
+	Likelihood *enums.RiskLikelihood `json:"likelihood,omitempty"`
+	// mitigation for the risk
 	Mitigation *string `json:"mitigation,omitempty"`
 	// which controls are satisfied by the risk
 	Satisfies *string `json:"satisfies,omitempty"`
-	// severity of the risk, e.g. high medium low
-	Severity *string `json:"severity,omitempty"`
-	// json schema
-	Jsonschema    map[string]interface{} `json:"jsonschema,omitempty"`
+	// json data for the risk document
+	Details       map[string]interface{} `json:"details,omitempty"`
 	ControlIDs    []string               `json:"controlIDs,omitempty"`
 	ProcedureIDs  []string               `json:"procedureIDs,omitempty"`
 	ActionplanIDs []string               `json:"actionplanIDs,omitempty"`
@@ -3716,12 +3606,12 @@ type CreateStandardInput struct {
 	Version *string `json:"version,omitempty"`
 	// purpose and scope
 	PurposeAndScope *string `json:"purposeAndScope,omitempty"`
-	// background
+	// background of the standard
 	Background *string `json:"background,omitempty"`
 	// which controls are satisfied by the standard
 	Satisfies *string `json:"satisfies,omitempty"`
-	// json schema
-	Jsonschema          map[string]interface{} `json:"jsonschema,omitempty"`
+	// json data with details of the standard
+	Details             map[string]interface{} `json:"details,omitempty"`
 	ControlobjectiveIDs []string               `json:"controlobjectiveIDs,omitempty"`
 	ControlIDs          []string               `json:"controlIDs,omitempty"`
 	ProcedureIDs        []string               `json:"procedureIDs,omitempty"`
@@ -3743,35 +3633,31 @@ type CreateSubcontrolInput struct {
 	SubcontrolType *string `json:"subcontrolType,omitempty"`
 	// version of the control
 	Version *string `json:"version,omitempty"`
-	// owner of the subcontrol
-	Owner *string `json:"owner,omitempty"`
-	// control number
+	// number of the subcontrol
 	SubcontrolNumber *string `json:"subcontrolNumber,omitempty"`
-	// control family
-	SubcontrolFamily *string `json:"subcontrolFamily,omitempty"`
-	// control class
-	SubcontrolClass *string `json:"subcontrolClass,omitempty"`
-	// source of the control
+	// subcontrol family
+	Family *string `json:"family,omitempty"`
+	// subcontrol class
+	Class *string `json:"class,omitempty"`
+	// source of the control, e.g. framework, template, user-defined, etc.
 	Source *string `json:"source,omitempty"`
-	// mapped frameworks
+	// mapped frameworks that the subcontrol is part of
 	MappedFrameworks *string `json:"mappedFrameworks,omitempty"`
-	// assigned to
-	AssignedTo *string `json:"assignedTo,omitempty"`
+	// implementation evidence of the subcontrol
+	ImplementationEvidence *string `json:"implementationEvidence,omitempty"`
 	// implementation status
 	ImplementationStatus *string `json:"implementationStatus,omitempty"`
-	// implementation notes
-	ImplementationNotes *string `json:"implementationNotes,omitempty"`
-	// implementation date
-	ImplementationDate *string `json:"implementationDate,omitempty"`
-	// implementation evidence
-	ImplementationEvidence *string `json:"implementationEvidence,omitempty"`
+	// date the subcontrol was implemented
+	ImplementationDate *time.Time `json:"implementationDate,omitempty"`
 	// implementation verification
 	ImplementationVerification *string `json:"implementationVerification,omitempty"`
-	// implementation verification date
-	ImplementationVerificationDate *string `json:"implementationVerificationDate,omitempty"`
-	// json schema
-	Jsonschema map[string]interface{} `json:"jsonschema,omitempty"`
+	// date the subcontrol implementation was verified
+	ImplementationVerificationDate *time.Time `json:"implementationVerificationDate,omitempty"`
+	// json data details of the subcontrol
+	Details    map[string]interface{} `json:"details,omitempty"`
 	ControlIDs []string               `json:"controlIDs,omitempty"`
+	UserIDs    []string               `json:"userIDs,omitempty"`
+	NotesID    *string                `json:"notesID,omitempty"`
 }
 
 // CreateSubscriberInput is used for create Subscriber object.
@@ -3854,6 +3740,8 @@ type CreateUserInput struct {
 	FileIDs                   []string    `json:"fileIDs,omitempty"`
 	FileID                    *string     `json:"fileID,omitempty"`
 	EventIDs                  []string    `json:"eventIDs,omitempty"`
+	ActionplanIDs             []string    `json:"actionplanIDs,omitempty"`
+	SubcontrolIDs             []string    `json:"subcontrolIDs,omitempty"`
 }
 
 // CreateUserSettingInput is used for create UserSetting object.
@@ -10700,10 +10588,10 @@ type InternalPolicy struct {
 	Version *string `json:"version,omitempty"`
 	// purpose and scope
 	PurposeAndScope *string `json:"purposeAndScope,omitempty"`
-	// background
+	// background of the policy
 	Background *string `json:"background,omitempty"`
-	// json schema
-	Jsonschema        map[string]interface{} `json:"jsonschema,omitempty"`
+	// json data for the policy document
+	Details           map[string]interface{} `json:"details,omitempty"`
 	Controlobjectives []*ControlObjective    `json:"controlobjectives,omitempty"`
 	Controls          []*Control             `json:"controls,omitempty"`
 	Procedures        []*Procedure           `json:"procedures,omitempty"`
@@ -10773,10 +10661,10 @@ type InternalPolicyHistory struct {
 	Version *string `json:"version,omitempty"`
 	// purpose and scope
 	PurposeAndScope *string `json:"purposeAndScope,omitempty"`
-	// background
+	// background of the policy
 	Background *string `json:"background,omitempty"`
-	// json schema
-	Jsonschema map[string]interface{} `json:"jsonschema,omitempty"`
+	// json data for the policy document
+	Details map[string]interface{} `json:"details,omitempty"`
 }
 
 func (InternalPolicyHistory) IsNode() {}
@@ -11533,14 +11421,14 @@ type Narrative struct {
 	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the name of the file provided in the payload key without the extension
+	// the name of the narrative
 	Name string `json:"name"`
 	// the description of the narrative
 	Description *string `json:"description,omitempty"`
 	// which controls are satisfied by the narrative
 	Satisfies *string `json:"satisfies,omitempty"`
-	// json schema
-	Jsonschema       map[string]interface{} `json:"jsonschema,omitempty"`
+	// json data for the narrative document
+	Details          map[string]interface{} `json:"details,omitempty"`
 	Policy           []*InternalPolicy      `json:"policy,omitempty"`
 	Control          []*Control             `json:"control,omitempty"`
 	Procedure        []*Procedure           `json:"procedure,omitempty"`
@@ -11598,14 +11486,14 @@ type NarrativeHistory struct {
 	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the name of the file provided in the payload key without the extension
+	// the name of the narrative
 	Name string `json:"name"`
 	// the description of the narrative
 	Description *string `json:"description,omitempty"`
 	// which controls are satisfied by the narrative
 	Satisfies *string `json:"satisfies,omitempty"`
-	// json schema
-	Jsonschema map[string]interface{} `json:"jsonschema,omitempty"`
+	// json data for the narrative document
+	Details map[string]interface{} `json:"details,omitempty"`
 }
 
 func (NarrativeHistory) IsNode() {}
@@ -11987,9 +11875,10 @@ type Note struct {
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the text of the note
-	Text   string        `json:"text"`
-	Owner  *Organization `json:"owner,omitempty"`
-	Entity *Entity       `json:"entity,omitempty"`
+	Text        string        `json:"text"`
+	Owner       *Organization `json:"owner,omitempty"`
+	Entity      *Entity       `json:"entity,omitempty"`
+	Subcontrols []*Subcontrol `json:"subcontrols,omitempty"`
 }
 
 func (Note) IsNode() {}
@@ -12345,6 +12234,9 @@ type NoteWhereInput struct {
 	// entity edge predicates
 	HasEntity     *bool               `json:"hasEntity,omitempty"`
 	HasEntityWith []*EntityWhereInput `json:"hasEntityWith,omitempty"`
+	// subcontrols edge predicates
+	HasSubcontrols     *bool                   `json:"hasSubcontrols,omitempty"`
+	HasSubcontrolsWith []*SubcontrolWhereInput `json:"hasSubcontrolsWith,omitempty"`
 }
 
 type OauthProvider struct {
@@ -14968,12 +14860,12 @@ type Procedure struct {
 	Version *string `json:"version,omitempty"`
 	// purpose and scope
 	PurposeAndScope *string `json:"purposeAndScope,omitempty"`
-	// background
+	// background of the procedure
 	Background *string `json:"background,omitempty"`
 	// which controls are satisfied by the procedure
 	Satisfies *string `json:"satisfies,omitempty"`
-	// json schema
-	Jsonschema     map[string]interface{} `json:"jsonschema,omitempty"`
+	// json data for the procedure document
+	Details        map[string]interface{} `json:"details,omitempty"`
 	Control        []*Control             `json:"control,omitempty"`
 	Internalpolicy []*InternalPolicy      `json:"internalpolicy,omitempty"`
 	Narratives     []*Narrative           `json:"narratives,omitempty"`
@@ -15043,12 +14935,12 @@ type ProcedureHistory struct {
 	Version *string `json:"version,omitempty"`
 	// purpose and scope
 	PurposeAndScope *string `json:"purposeAndScope,omitempty"`
-	// background
+	// background of the procedure
 	Background *string `json:"background,omitempty"`
 	// which controls are satisfied by the procedure
 	Satisfies *string `json:"satisfies,omitempty"`
-	// json schema
-	Jsonschema map[string]interface{} `json:"jsonschema,omitempty"`
+	// json data for the procedure document
+	Details map[string]interface{} `json:"details,omitempty"`
 }
 
 func (ProcedureHistory) IsNode() {}
@@ -15600,18 +15492,16 @@ type Risk struct {
 	RiskType *string `json:"riskType,omitempty"`
 	// business costs associated with the risk
 	BusinessCosts *string `json:"businessCosts,omitempty"`
-	// impact of the risk
-	Impact *string `json:"impact,omitempty"`
-	// likelihood of the risk
-	Likelihood *string `json:"likelihood,omitempty"`
-	// mitigation of the risk
+	// impact of the risk - high, medium, low
+	Impact *enums.RiskImpact `json:"impact,omitempty"`
+	// likelihood of the risk occurring; unlikely, likely, highly likely
+	Likelihood *enums.RiskLikelihood `json:"likelihood,omitempty"`
+	// mitigation for the risk
 	Mitigation *string `json:"mitigation,omitempty"`
 	// which controls are satisfied by the risk
 	Satisfies *string `json:"satisfies,omitempty"`
-	// severity of the risk, e.g. high medium low
-	Severity *string `json:"severity,omitempty"`
-	// json schema
-	Jsonschema  map[string]interface{} `json:"jsonschema,omitempty"`
+	// json data for the risk document
+	Details     map[string]interface{} `json:"details,omitempty"`
 	Control     []*Control             `json:"control,omitempty"`
 	Procedure   []*Procedure           `json:"procedure,omitempty"`
 	Actionplans []*ActionPlan          `json:"actionplans,omitempty"`
@@ -15678,18 +15568,16 @@ type RiskHistory struct {
 	RiskType *string `json:"riskType,omitempty"`
 	// business costs associated with the risk
 	BusinessCosts *string `json:"businessCosts,omitempty"`
-	// impact of the risk
-	Impact *string `json:"impact,omitempty"`
-	// likelihood of the risk
-	Likelihood *string `json:"likelihood,omitempty"`
-	// mitigation of the risk
+	// impact of the risk - high, medium, low
+	Impact *enums.RiskImpact `json:"impact,omitempty"`
+	// likelihood of the risk occurring; unlikely, likely, highly likely
+	Likelihood *enums.RiskLikelihood `json:"likelihood,omitempty"`
+	// mitigation for the risk
 	Mitigation *string `json:"mitigation,omitempty"`
 	// which controls are satisfied by the risk
 	Satisfies *string `json:"satisfies,omitempty"`
-	// severity of the risk, e.g. high medium low
-	Severity *string `json:"severity,omitempty"`
-	// json schema
-	Jsonschema map[string]interface{} `json:"jsonschema,omitempty"`
+	// json data for the risk document
+	Details map[string]interface{} `json:"details,omitempty"`
 }
 
 func (RiskHistory) IsNode() {}
@@ -15919,37 +15807,19 @@ type RiskHistoryWhereInput struct {
 	BusinessCostsEqualFold    *string  `json:"businessCostsEqualFold,omitempty"`
 	BusinessCostsContainsFold *string  `json:"businessCostsContainsFold,omitempty"`
 	// impact field predicates
-	Impact             *string  `json:"impact,omitempty"`
-	ImpactNeq          *string  `json:"impactNEQ,omitempty"`
-	ImpactIn           []string `json:"impactIn,omitempty"`
-	ImpactNotIn        []string `json:"impactNotIn,omitempty"`
-	ImpactGt           *string  `json:"impactGT,omitempty"`
-	ImpactGte          *string  `json:"impactGTE,omitempty"`
-	ImpactLt           *string  `json:"impactLT,omitempty"`
-	ImpactLte          *string  `json:"impactLTE,omitempty"`
-	ImpactContains     *string  `json:"impactContains,omitempty"`
-	ImpactHasPrefix    *string  `json:"impactHasPrefix,omitempty"`
-	ImpactHasSuffix    *string  `json:"impactHasSuffix,omitempty"`
-	ImpactIsNil        *bool    `json:"impactIsNil,omitempty"`
-	ImpactNotNil       *bool    `json:"impactNotNil,omitempty"`
-	ImpactEqualFold    *string  `json:"impactEqualFold,omitempty"`
-	ImpactContainsFold *string  `json:"impactContainsFold,omitempty"`
+	Impact       *enums.RiskImpact  `json:"impact,omitempty"`
+	ImpactNeq    *enums.RiskImpact  `json:"impactNEQ,omitempty"`
+	ImpactIn     []enums.RiskImpact `json:"impactIn,omitempty"`
+	ImpactNotIn  []enums.RiskImpact `json:"impactNotIn,omitempty"`
+	ImpactIsNil  *bool              `json:"impactIsNil,omitempty"`
+	ImpactNotNil *bool              `json:"impactNotNil,omitempty"`
 	// likelihood field predicates
-	Likelihood             *string  `json:"likelihood,omitempty"`
-	LikelihoodNeq          *string  `json:"likelihoodNEQ,omitempty"`
-	LikelihoodIn           []string `json:"likelihoodIn,omitempty"`
-	LikelihoodNotIn        []string `json:"likelihoodNotIn,omitempty"`
-	LikelihoodGt           *string  `json:"likelihoodGT,omitempty"`
-	LikelihoodGte          *string  `json:"likelihoodGTE,omitempty"`
-	LikelihoodLt           *string  `json:"likelihoodLT,omitempty"`
-	LikelihoodLte          *string  `json:"likelihoodLTE,omitempty"`
-	LikelihoodContains     *string  `json:"likelihoodContains,omitempty"`
-	LikelihoodHasPrefix    *string  `json:"likelihoodHasPrefix,omitempty"`
-	LikelihoodHasSuffix    *string  `json:"likelihoodHasSuffix,omitempty"`
-	LikelihoodIsNil        *bool    `json:"likelihoodIsNil,omitempty"`
-	LikelihoodNotNil       *bool    `json:"likelihoodNotNil,omitempty"`
-	LikelihoodEqualFold    *string  `json:"likelihoodEqualFold,omitempty"`
-	LikelihoodContainsFold *string  `json:"likelihoodContainsFold,omitempty"`
+	Likelihood       *enums.RiskLikelihood  `json:"likelihood,omitempty"`
+	LikelihoodNeq    *enums.RiskLikelihood  `json:"likelihoodNEQ,omitempty"`
+	LikelihoodIn     []enums.RiskLikelihood `json:"likelihoodIn,omitempty"`
+	LikelihoodNotIn  []enums.RiskLikelihood `json:"likelihoodNotIn,omitempty"`
+	LikelihoodIsNil  *bool                  `json:"likelihoodIsNil,omitempty"`
+	LikelihoodNotNil *bool                  `json:"likelihoodNotNil,omitempty"`
 	// mitigation field predicates
 	Mitigation             *string  `json:"mitigation,omitempty"`
 	MitigationNeq          *string  `json:"mitigationNEQ,omitempty"`
@@ -15982,22 +15852,6 @@ type RiskHistoryWhereInput struct {
 	SatisfiesNotNil       *bool    `json:"satisfiesNotNil,omitempty"`
 	SatisfiesEqualFold    *string  `json:"satisfiesEqualFold,omitempty"`
 	SatisfiesContainsFold *string  `json:"satisfiesContainsFold,omitempty"`
-	// severity field predicates
-	Severity             *string  `json:"severity,omitempty"`
-	SeverityNeq          *string  `json:"severityNEQ,omitempty"`
-	SeverityIn           []string `json:"severityIn,omitempty"`
-	SeverityNotIn        []string `json:"severityNotIn,omitempty"`
-	SeverityGt           *string  `json:"severityGT,omitempty"`
-	SeverityGte          *string  `json:"severityGTE,omitempty"`
-	SeverityLt           *string  `json:"severityLT,omitempty"`
-	SeverityLte          *string  `json:"severityLTE,omitempty"`
-	SeverityContains     *string  `json:"severityContains,omitempty"`
-	SeverityHasPrefix    *string  `json:"severityHasPrefix,omitempty"`
-	SeverityHasSuffix    *string  `json:"severityHasSuffix,omitempty"`
-	SeverityIsNil        *bool    `json:"severityIsNil,omitempty"`
-	SeverityNotNil       *bool    `json:"severityNotNil,omitempty"`
-	SeverityEqualFold    *string  `json:"severityEqualFold,omitempty"`
-	SeverityContainsFold *string  `json:"severityContainsFold,omitempty"`
 }
 
 type RiskSearchResult struct {
@@ -16189,37 +16043,19 @@ type RiskWhereInput struct {
 	BusinessCostsEqualFold    *string  `json:"businessCostsEqualFold,omitempty"`
 	BusinessCostsContainsFold *string  `json:"businessCostsContainsFold,omitempty"`
 	// impact field predicates
-	Impact             *string  `json:"impact,omitempty"`
-	ImpactNeq          *string  `json:"impactNEQ,omitempty"`
-	ImpactIn           []string `json:"impactIn,omitempty"`
-	ImpactNotIn        []string `json:"impactNotIn,omitempty"`
-	ImpactGt           *string  `json:"impactGT,omitempty"`
-	ImpactGte          *string  `json:"impactGTE,omitempty"`
-	ImpactLt           *string  `json:"impactLT,omitempty"`
-	ImpactLte          *string  `json:"impactLTE,omitempty"`
-	ImpactContains     *string  `json:"impactContains,omitempty"`
-	ImpactHasPrefix    *string  `json:"impactHasPrefix,omitempty"`
-	ImpactHasSuffix    *string  `json:"impactHasSuffix,omitempty"`
-	ImpactIsNil        *bool    `json:"impactIsNil,omitempty"`
-	ImpactNotNil       *bool    `json:"impactNotNil,omitempty"`
-	ImpactEqualFold    *string  `json:"impactEqualFold,omitempty"`
-	ImpactContainsFold *string  `json:"impactContainsFold,omitempty"`
+	Impact       *enums.RiskImpact  `json:"impact,omitempty"`
+	ImpactNeq    *enums.RiskImpact  `json:"impactNEQ,omitempty"`
+	ImpactIn     []enums.RiskImpact `json:"impactIn,omitempty"`
+	ImpactNotIn  []enums.RiskImpact `json:"impactNotIn,omitempty"`
+	ImpactIsNil  *bool              `json:"impactIsNil,omitempty"`
+	ImpactNotNil *bool              `json:"impactNotNil,omitempty"`
 	// likelihood field predicates
-	Likelihood             *string  `json:"likelihood,omitempty"`
-	LikelihoodNeq          *string  `json:"likelihoodNEQ,omitempty"`
-	LikelihoodIn           []string `json:"likelihoodIn,omitempty"`
-	LikelihoodNotIn        []string `json:"likelihoodNotIn,omitempty"`
-	LikelihoodGt           *string  `json:"likelihoodGT,omitempty"`
-	LikelihoodGte          *string  `json:"likelihoodGTE,omitempty"`
-	LikelihoodLt           *string  `json:"likelihoodLT,omitempty"`
-	LikelihoodLte          *string  `json:"likelihoodLTE,omitempty"`
-	LikelihoodContains     *string  `json:"likelihoodContains,omitempty"`
-	LikelihoodHasPrefix    *string  `json:"likelihoodHasPrefix,omitempty"`
-	LikelihoodHasSuffix    *string  `json:"likelihoodHasSuffix,omitempty"`
-	LikelihoodIsNil        *bool    `json:"likelihoodIsNil,omitempty"`
-	LikelihoodNotNil       *bool    `json:"likelihoodNotNil,omitempty"`
-	LikelihoodEqualFold    *string  `json:"likelihoodEqualFold,omitempty"`
-	LikelihoodContainsFold *string  `json:"likelihoodContainsFold,omitempty"`
+	Likelihood       *enums.RiskLikelihood  `json:"likelihood,omitempty"`
+	LikelihoodNeq    *enums.RiskLikelihood  `json:"likelihoodNEQ,omitempty"`
+	LikelihoodIn     []enums.RiskLikelihood `json:"likelihoodIn,omitempty"`
+	LikelihoodNotIn  []enums.RiskLikelihood `json:"likelihoodNotIn,omitempty"`
+	LikelihoodIsNil  *bool                  `json:"likelihoodIsNil,omitempty"`
+	LikelihoodNotNil *bool                  `json:"likelihoodNotNil,omitempty"`
 	// mitigation field predicates
 	Mitigation             *string  `json:"mitigation,omitempty"`
 	MitigationNeq          *string  `json:"mitigationNEQ,omitempty"`
@@ -16252,22 +16088,6 @@ type RiskWhereInput struct {
 	SatisfiesNotNil       *bool    `json:"satisfiesNotNil,omitempty"`
 	SatisfiesEqualFold    *string  `json:"satisfiesEqualFold,omitempty"`
 	SatisfiesContainsFold *string  `json:"satisfiesContainsFold,omitempty"`
-	// severity field predicates
-	Severity             *string  `json:"severity,omitempty"`
-	SeverityNeq          *string  `json:"severityNEQ,omitempty"`
-	SeverityIn           []string `json:"severityIn,omitempty"`
-	SeverityNotIn        []string `json:"severityNotIn,omitempty"`
-	SeverityGt           *string  `json:"severityGT,omitempty"`
-	SeverityGte          *string  `json:"severityGTE,omitempty"`
-	SeverityLt           *string  `json:"severityLT,omitempty"`
-	SeverityLte          *string  `json:"severityLTE,omitempty"`
-	SeverityContains     *string  `json:"severityContains,omitempty"`
-	SeverityHasPrefix    *string  `json:"severityHasPrefix,omitempty"`
-	SeverityHasSuffix    *string  `json:"severityHasSuffix,omitempty"`
-	SeverityIsNil        *bool    `json:"severityIsNil,omitempty"`
-	SeverityNotNil       *bool    `json:"severityNotNil,omitempty"`
-	SeverityEqualFold    *string  `json:"severityEqualFold,omitempty"`
-	SeverityContainsFold *string  `json:"severityContainsFold,omitempty"`
 	// control edge predicates
 	HasControl     *bool                `json:"hasControl,omitempty"`
 	HasControlWith []*ControlWhereInput `json:"hasControlWith,omitempty"`
@@ -16308,12 +16128,12 @@ type Standard struct {
 	Version *string `json:"version,omitempty"`
 	// purpose and scope
 	PurposeAndScope *string `json:"purposeAndScope,omitempty"`
-	// background
+	// background of the standard
 	Background *string `json:"background,omitempty"`
 	// which controls are satisfied by the standard
 	Satisfies *string `json:"satisfies,omitempty"`
-	// json schema
-	Jsonschema        map[string]interface{} `json:"jsonschema,omitempty"`
+	// json data with details of the standard
+	Details           map[string]interface{} `json:"details,omitempty"`
 	Controlobjectives []*ControlObjective    `json:"controlobjectives,omitempty"`
 	Controls          []*Control             `json:"controls,omitempty"`
 	Procedures        []*Procedure           `json:"procedures,omitempty"`
@@ -16385,12 +16205,12 @@ type StandardHistory struct {
 	Version *string `json:"version,omitempty"`
 	// purpose and scope
 	PurposeAndScope *string `json:"purposeAndScope,omitempty"`
-	// background
+	// background of the standard
 	Background *string `json:"background,omitempty"`
 	// which controls are satisfied by the standard
 	Satisfies *string `json:"satisfies,omitempty"`
-	// json schema
-	Jsonschema map[string]interface{} `json:"jsonschema,omitempty"`
+	// json data with details of the standard
+	Details map[string]interface{} `json:"details,omitempty"`
 }
 
 func (StandardHistory) IsNode() {}
@@ -16971,35 +16791,31 @@ type Subcontrol struct {
 	SubcontrolType *string `json:"subcontrolType,omitempty"`
 	// version of the control
 	Version *string `json:"version,omitempty"`
-	// owner of the subcontrol
-	Owner *string `json:"owner,omitempty"`
-	// control number
+	// number of the subcontrol
 	SubcontrolNumber *string `json:"subcontrolNumber,omitempty"`
-	// control family
-	SubcontrolFamily *string `json:"subcontrolFamily,omitempty"`
-	// control class
-	SubcontrolClass *string `json:"subcontrolClass,omitempty"`
-	// source of the control
+	// subcontrol family
+	Family *string `json:"family,omitempty"`
+	// subcontrol class
+	Class *string `json:"class,omitempty"`
+	// source of the control, e.g. framework, template, user-defined, etc.
 	Source *string `json:"source,omitempty"`
-	// mapped frameworks
+	// mapped frameworks that the subcontrol is part of
 	MappedFrameworks *string `json:"mappedFrameworks,omitempty"`
-	// assigned to
-	AssignedTo *string `json:"assignedTo,omitempty"`
+	// implementation evidence of the subcontrol
+	ImplementationEvidence *string `json:"implementationEvidence,omitempty"`
 	// implementation status
 	ImplementationStatus *string `json:"implementationStatus,omitempty"`
-	// implementation notes
-	ImplementationNotes *string `json:"implementationNotes,omitempty"`
-	// implementation date
-	ImplementationDate *string `json:"implementationDate,omitempty"`
-	// implementation evidence
-	ImplementationEvidence *string `json:"implementationEvidence,omitempty"`
+	// date the subcontrol was implemented
+	ImplementationDate *time.Time `json:"implementationDate,omitempty"`
 	// implementation verification
 	ImplementationVerification *string `json:"implementationVerification,omitempty"`
-	// implementation verification date
-	ImplementationVerificationDate *string `json:"implementationVerificationDate,omitempty"`
-	// json schema
-	Jsonschema map[string]interface{} `json:"jsonschema,omitempty"`
-	Control    []*Control             `json:"control,omitempty"`
+	// date the subcontrol implementation was verified
+	ImplementationVerificationDate *time.Time `json:"implementationVerificationDate,omitempty"`
+	// json data details of the subcontrol
+	Details map[string]interface{} `json:"details,omitempty"`
+	Control []*Control             `json:"control,omitempty"`
+	User    []*User                `json:"user,omitempty"`
+	Notes   *Note                  `json:"notes,omitempty"`
 }
 
 func (Subcontrol) IsNode() {}
@@ -17063,34 +16879,28 @@ type SubcontrolHistory struct {
 	SubcontrolType *string `json:"subcontrolType,omitempty"`
 	// version of the control
 	Version *string `json:"version,omitempty"`
-	// owner of the subcontrol
-	Owner *string `json:"owner,omitempty"`
-	// control number
+	// number of the subcontrol
 	SubcontrolNumber *string `json:"subcontrolNumber,omitempty"`
-	// control family
-	SubcontrolFamily *string `json:"subcontrolFamily,omitempty"`
-	// control class
-	SubcontrolClass *string `json:"subcontrolClass,omitempty"`
-	// source of the control
+	// subcontrol family
+	Family *string `json:"family,omitempty"`
+	// subcontrol class
+	Class *string `json:"class,omitempty"`
+	// source of the control, e.g. framework, template, user-defined, etc.
 	Source *string `json:"source,omitempty"`
-	// mapped frameworks
+	// mapped frameworks that the subcontrol is part of
 	MappedFrameworks *string `json:"mappedFrameworks,omitempty"`
-	// assigned to
-	AssignedTo *string `json:"assignedTo,omitempty"`
+	// implementation evidence of the subcontrol
+	ImplementationEvidence *string `json:"implementationEvidence,omitempty"`
 	// implementation status
 	ImplementationStatus *string `json:"implementationStatus,omitempty"`
-	// implementation notes
-	ImplementationNotes *string `json:"implementationNotes,omitempty"`
-	// implementation date
-	ImplementationDate *string `json:"implementationDate,omitempty"`
-	// implementation evidence
-	ImplementationEvidence *string `json:"implementationEvidence,omitempty"`
+	// date the subcontrol was implemented
+	ImplementationDate *time.Time `json:"implementationDate,omitempty"`
 	// implementation verification
 	ImplementationVerification *string `json:"implementationVerification,omitempty"`
-	// implementation verification date
-	ImplementationVerificationDate *string `json:"implementationVerificationDate,omitempty"`
-	// json schema
-	Jsonschema map[string]interface{} `json:"jsonschema,omitempty"`
+	// date the subcontrol implementation was verified
+	ImplementationVerificationDate *time.Time `json:"implementationVerificationDate,omitempty"`
+	// json data details of the subcontrol
+	Details map[string]interface{} `json:"details,omitempty"`
 }
 
 func (SubcontrolHistory) IsNode() {}
@@ -17319,22 +17129,6 @@ type SubcontrolHistoryWhereInput struct {
 	VersionNotNil       *bool    `json:"versionNotNil,omitempty"`
 	VersionEqualFold    *string  `json:"versionEqualFold,omitempty"`
 	VersionContainsFold *string  `json:"versionContainsFold,omitempty"`
-	// owner field predicates
-	Owner             *string  `json:"owner,omitempty"`
-	OwnerNeq          *string  `json:"ownerNEQ,omitempty"`
-	OwnerIn           []string `json:"ownerIn,omitempty"`
-	OwnerNotIn        []string `json:"ownerNotIn,omitempty"`
-	OwnerGt           *string  `json:"ownerGT,omitempty"`
-	OwnerGte          *string  `json:"ownerGTE,omitempty"`
-	OwnerLt           *string  `json:"ownerLT,omitempty"`
-	OwnerLte          *string  `json:"ownerLTE,omitempty"`
-	OwnerContains     *string  `json:"ownerContains,omitempty"`
-	OwnerHasPrefix    *string  `json:"ownerHasPrefix,omitempty"`
-	OwnerHasSuffix    *string  `json:"ownerHasSuffix,omitempty"`
-	OwnerIsNil        *bool    `json:"ownerIsNil,omitempty"`
-	OwnerNotNil       *bool    `json:"ownerNotNil,omitempty"`
-	OwnerEqualFold    *string  `json:"ownerEqualFold,omitempty"`
-	OwnerContainsFold *string  `json:"ownerContainsFold,omitempty"`
 	// subcontrol_number field predicates
 	SubcontrolNumber             *string  `json:"subcontrolNumber,omitempty"`
 	SubcontrolNumberNeq          *string  `json:"subcontrolNumberNEQ,omitempty"`
@@ -17351,38 +17145,38 @@ type SubcontrolHistoryWhereInput struct {
 	SubcontrolNumberNotNil       *bool    `json:"subcontrolNumberNotNil,omitempty"`
 	SubcontrolNumberEqualFold    *string  `json:"subcontrolNumberEqualFold,omitempty"`
 	SubcontrolNumberContainsFold *string  `json:"subcontrolNumberContainsFold,omitempty"`
-	// subcontrol_family field predicates
-	SubcontrolFamily             *string  `json:"subcontrolFamily,omitempty"`
-	SubcontrolFamilyNeq          *string  `json:"subcontrolFamilyNEQ,omitempty"`
-	SubcontrolFamilyIn           []string `json:"subcontrolFamilyIn,omitempty"`
-	SubcontrolFamilyNotIn        []string `json:"subcontrolFamilyNotIn,omitempty"`
-	SubcontrolFamilyGt           *string  `json:"subcontrolFamilyGT,omitempty"`
-	SubcontrolFamilyGte          *string  `json:"subcontrolFamilyGTE,omitempty"`
-	SubcontrolFamilyLt           *string  `json:"subcontrolFamilyLT,omitempty"`
-	SubcontrolFamilyLte          *string  `json:"subcontrolFamilyLTE,omitempty"`
-	SubcontrolFamilyContains     *string  `json:"subcontrolFamilyContains,omitempty"`
-	SubcontrolFamilyHasPrefix    *string  `json:"subcontrolFamilyHasPrefix,omitempty"`
-	SubcontrolFamilyHasSuffix    *string  `json:"subcontrolFamilyHasSuffix,omitempty"`
-	SubcontrolFamilyIsNil        *bool    `json:"subcontrolFamilyIsNil,omitempty"`
-	SubcontrolFamilyNotNil       *bool    `json:"subcontrolFamilyNotNil,omitempty"`
-	SubcontrolFamilyEqualFold    *string  `json:"subcontrolFamilyEqualFold,omitempty"`
-	SubcontrolFamilyContainsFold *string  `json:"subcontrolFamilyContainsFold,omitempty"`
-	// subcontrol_class field predicates
-	SubcontrolClass             *string  `json:"subcontrolClass,omitempty"`
-	SubcontrolClassNeq          *string  `json:"subcontrolClassNEQ,omitempty"`
-	SubcontrolClassIn           []string `json:"subcontrolClassIn,omitempty"`
-	SubcontrolClassNotIn        []string `json:"subcontrolClassNotIn,omitempty"`
-	SubcontrolClassGt           *string  `json:"subcontrolClassGT,omitempty"`
-	SubcontrolClassGte          *string  `json:"subcontrolClassGTE,omitempty"`
-	SubcontrolClassLt           *string  `json:"subcontrolClassLT,omitempty"`
-	SubcontrolClassLte          *string  `json:"subcontrolClassLTE,omitempty"`
-	SubcontrolClassContains     *string  `json:"subcontrolClassContains,omitempty"`
-	SubcontrolClassHasPrefix    *string  `json:"subcontrolClassHasPrefix,omitempty"`
-	SubcontrolClassHasSuffix    *string  `json:"subcontrolClassHasSuffix,omitempty"`
-	SubcontrolClassIsNil        *bool    `json:"subcontrolClassIsNil,omitempty"`
-	SubcontrolClassNotNil       *bool    `json:"subcontrolClassNotNil,omitempty"`
-	SubcontrolClassEqualFold    *string  `json:"subcontrolClassEqualFold,omitempty"`
-	SubcontrolClassContainsFold *string  `json:"subcontrolClassContainsFold,omitempty"`
+	// family field predicates
+	Family             *string  `json:"family,omitempty"`
+	FamilyNeq          *string  `json:"familyNEQ,omitempty"`
+	FamilyIn           []string `json:"familyIn,omitempty"`
+	FamilyNotIn        []string `json:"familyNotIn,omitempty"`
+	FamilyGt           *string  `json:"familyGT,omitempty"`
+	FamilyGte          *string  `json:"familyGTE,omitempty"`
+	FamilyLt           *string  `json:"familyLT,omitempty"`
+	FamilyLte          *string  `json:"familyLTE,omitempty"`
+	FamilyContains     *string  `json:"familyContains,omitempty"`
+	FamilyHasPrefix    *string  `json:"familyHasPrefix,omitempty"`
+	FamilyHasSuffix    *string  `json:"familyHasSuffix,omitempty"`
+	FamilyIsNil        *bool    `json:"familyIsNil,omitempty"`
+	FamilyNotNil       *bool    `json:"familyNotNil,omitempty"`
+	FamilyEqualFold    *string  `json:"familyEqualFold,omitempty"`
+	FamilyContainsFold *string  `json:"familyContainsFold,omitempty"`
+	// class field predicates
+	Class             *string  `json:"class,omitempty"`
+	ClassNeq          *string  `json:"classNEQ,omitempty"`
+	ClassIn           []string `json:"classIn,omitempty"`
+	ClassNotIn        []string `json:"classNotIn,omitempty"`
+	ClassGt           *string  `json:"classGT,omitempty"`
+	ClassGte          *string  `json:"classGTE,omitempty"`
+	ClassLt           *string  `json:"classLT,omitempty"`
+	ClassLte          *string  `json:"classLTE,omitempty"`
+	ClassContains     *string  `json:"classContains,omitempty"`
+	ClassHasPrefix    *string  `json:"classHasPrefix,omitempty"`
+	ClassHasSuffix    *string  `json:"classHasSuffix,omitempty"`
+	ClassIsNil        *bool    `json:"classIsNil,omitempty"`
+	ClassNotNil       *bool    `json:"classNotNil,omitempty"`
+	ClassEqualFold    *string  `json:"classEqualFold,omitempty"`
+	ClassContainsFold *string  `json:"classContainsFold,omitempty"`
 	// source field predicates
 	Source             *string  `json:"source,omitempty"`
 	SourceNeq          *string  `json:"sourceNEQ,omitempty"`
@@ -17415,70 +17209,6 @@ type SubcontrolHistoryWhereInput struct {
 	MappedFrameworksNotNil       *bool    `json:"mappedFrameworksNotNil,omitempty"`
 	MappedFrameworksEqualFold    *string  `json:"mappedFrameworksEqualFold,omitempty"`
 	MappedFrameworksContainsFold *string  `json:"mappedFrameworksContainsFold,omitempty"`
-	// assigned_to field predicates
-	AssignedTo             *string  `json:"assignedTo,omitempty"`
-	AssignedToNeq          *string  `json:"assignedToNEQ,omitempty"`
-	AssignedToIn           []string `json:"assignedToIn,omitempty"`
-	AssignedToNotIn        []string `json:"assignedToNotIn,omitempty"`
-	AssignedToGt           *string  `json:"assignedToGT,omitempty"`
-	AssignedToGte          *string  `json:"assignedToGTE,omitempty"`
-	AssignedToLt           *string  `json:"assignedToLT,omitempty"`
-	AssignedToLte          *string  `json:"assignedToLTE,omitempty"`
-	AssignedToContains     *string  `json:"assignedToContains,omitempty"`
-	AssignedToHasPrefix    *string  `json:"assignedToHasPrefix,omitempty"`
-	AssignedToHasSuffix    *string  `json:"assignedToHasSuffix,omitempty"`
-	AssignedToIsNil        *bool    `json:"assignedToIsNil,omitempty"`
-	AssignedToNotNil       *bool    `json:"assignedToNotNil,omitempty"`
-	AssignedToEqualFold    *string  `json:"assignedToEqualFold,omitempty"`
-	AssignedToContainsFold *string  `json:"assignedToContainsFold,omitempty"`
-	// implementation_status field predicates
-	ImplementationStatus             *string  `json:"implementationStatus,omitempty"`
-	ImplementationStatusNeq          *string  `json:"implementationStatusNEQ,omitempty"`
-	ImplementationStatusIn           []string `json:"implementationStatusIn,omitempty"`
-	ImplementationStatusNotIn        []string `json:"implementationStatusNotIn,omitempty"`
-	ImplementationStatusGt           *string  `json:"implementationStatusGT,omitempty"`
-	ImplementationStatusGte          *string  `json:"implementationStatusGTE,omitempty"`
-	ImplementationStatusLt           *string  `json:"implementationStatusLT,omitempty"`
-	ImplementationStatusLte          *string  `json:"implementationStatusLTE,omitempty"`
-	ImplementationStatusContains     *string  `json:"implementationStatusContains,omitempty"`
-	ImplementationStatusHasPrefix    *string  `json:"implementationStatusHasPrefix,omitempty"`
-	ImplementationStatusHasSuffix    *string  `json:"implementationStatusHasSuffix,omitempty"`
-	ImplementationStatusIsNil        *bool    `json:"implementationStatusIsNil,omitempty"`
-	ImplementationStatusNotNil       *bool    `json:"implementationStatusNotNil,omitempty"`
-	ImplementationStatusEqualFold    *string  `json:"implementationStatusEqualFold,omitempty"`
-	ImplementationStatusContainsFold *string  `json:"implementationStatusContainsFold,omitempty"`
-	// implementation_notes field predicates
-	ImplementationNotes             *string  `json:"implementationNotes,omitempty"`
-	ImplementationNotesNeq          *string  `json:"implementationNotesNEQ,omitempty"`
-	ImplementationNotesIn           []string `json:"implementationNotesIn,omitempty"`
-	ImplementationNotesNotIn        []string `json:"implementationNotesNotIn,omitempty"`
-	ImplementationNotesGt           *string  `json:"implementationNotesGT,omitempty"`
-	ImplementationNotesGte          *string  `json:"implementationNotesGTE,omitempty"`
-	ImplementationNotesLt           *string  `json:"implementationNotesLT,omitempty"`
-	ImplementationNotesLte          *string  `json:"implementationNotesLTE,omitempty"`
-	ImplementationNotesContains     *string  `json:"implementationNotesContains,omitempty"`
-	ImplementationNotesHasPrefix    *string  `json:"implementationNotesHasPrefix,omitempty"`
-	ImplementationNotesHasSuffix    *string  `json:"implementationNotesHasSuffix,omitempty"`
-	ImplementationNotesIsNil        *bool    `json:"implementationNotesIsNil,omitempty"`
-	ImplementationNotesNotNil       *bool    `json:"implementationNotesNotNil,omitempty"`
-	ImplementationNotesEqualFold    *string  `json:"implementationNotesEqualFold,omitempty"`
-	ImplementationNotesContainsFold *string  `json:"implementationNotesContainsFold,omitempty"`
-	// implementation_date field predicates
-	ImplementationDate             *string  `json:"implementationDate,omitempty"`
-	ImplementationDateNeq          *string  `json:"implementationDateNEQ,omitempty"`
-	ImplementationDateIn           []string `json:"implementationDateIn,omitempty"`
-	ImplementationDateNotIn        []string `json:"implementationDateNotIn,omitempty"`
-	ImplementationDateGt           *string  `json:"implementationDateGT,omitempty"`
-	ImplementationDateGte          *string  `json:"implementationDateGTE,omitempty"`
-	ImplementationDateLt           *string  `json:"implementationDateLT,omitempty"`
-	ImplementationDateLte          *string  `json:"implementationDateLTE,omitempty"`
-	ImplementationDateContains     *string  `json:"implementationDateContains,omitempty"`
-	ImplementationDateHasPrefix    *string  `json:"implementationDateHasPrefix,omitempty"`
-	ImplementationDateHasSuffix    *string  `json:"implementationDateHasSuffix,omitempty"`
-	ImplementationDateIsNil        *bool    `json:"implementationDateIsNil,omitempty"`
-	ImplementationDateNotNil       *bool    `json:"implementationDateNotNil,omitempty"`
-	ImplementationDateEqualFold    *string  `json:"implementationDateEqualFold,omitempty"`
-	ImplementationDateContainsFold *string  `json:"implementationDateContainsFold,omitempty"`
 	// implementation_evidence field predicates
 	ImplementationEvidence             *string  `json:"implementationEvidence,omitempty"`
 	ImplementationEvidenceNeq          *string  `json:"implementationEvidenceNEQ,omitempty"`
@@ -17495,6 +17225,33 @@ type SubcontrolHistoryWhereInput struct {
 	ImplementationEvidenceNotNil       *bool    `json:"implementationEvidenceNotNil,omitempty"`
 	ImplementationEvidenceEqualFold    *string  `json:"implementationEvidenceEqualFold,omitempty"`
 	ImplementationEvidenceContainsFold *string  `json:"implementationEvidenceContainsFold,omitempty"`
+	// implementation_status field predicates
+	ImplementationStatus             *string  `json:"implementationStatus,omitempty"`
+	ImplementationStatusNeq          *string  `json:"implementationStatusNEQ,omitempty"`
+	ImplementationStatusIn           []string `json:"implementationStatusIn,omitempty"`
+	ImplementationStatusNotIn        []string `json:"implementationStatusNotIn,omitempty"`
+	ImplementationStatusGt           *string  `json:"implementationStatusGT,omitempty"`
+	ImplementationStatusGte          *string  `json:"implementationStatusGTE,omitempty"`
+	ImplementationStatusLt           *string  `json:"implementationStatusLT,omitempty"`
+	ImplementationStatusLte          *string  `json:"implementationStatusLTE,omitempty"`
+	ImplementationStatusContains     *string  `json:"implementationStatusContains,omitempty"`
+	ImplementationStatusHasPrefix    *string  `json:"implementationStatusHasPrefix,omitempty"`
+	ImplementationStatusHasSuffix    *string  `json:"implementationStatusHasSuffix,omitempty"`
+	ImplementationStatusIsNil        *bool    `json:"implementationStatusIsNil,omitempty"`
+	ImplementationStatusNotNil       *bool    `json:"implementationStatusNotNil,omitempty"`
+	ImplementationStatusEqualFold    *string  `json:"implementationStatusEqualFold,omitempty"`
+	ImplementationStatusContainsFold *string  `json:"implementationStatusContainsFold,omitempty"`
+	// implementation_date field predicates
+	ImplementationDate       *time.Time   `json:"implementationDate,omitempty"`
+	ImplementationDateNeq    *time.Time   `json:"implementationDateNEQ,omitempty"`
+	ImplementationDateIn     []*time.Time `json:"implementationDateIn,omitempty"`
+	ImplementationDateNotIn  []*time.Time `json:"implementationDateNotIn,omitempty"`
+	ImplementationDateGt     *time.Time   `json:"implementationDateGT,omitempty"`
+	ImplementationDateGte    *time.Time   `json:"implementationDateGTE,omitempty"`
+	ImplementationDateLt     *time.Time   `json:"implementationDateLT,omitempty"`
+	ImplementationDateLte    *time.Time   `json:"implementationDateLTE,omitempty"`
+	ImplementationDateIsNil  *bool        `json:"implementationDateIsNil,omitempty"`
+	ImplementationDateNotNil *bool        `json:"implementationDateNotNil,omitempty"`
 	// implementation_verification field predicates
 	ImplementationVerification             *string  `json:"implementationVerification,omitempty"`
 	ImplementationVerificationNeq          *string  `json:"implementationVerificationNEQ,omitempty"`
@@ -17512,21 +17269,16 @@ type SubcontrolHistoryWhereInput struct {
 	ImplementationVerificationEqualFold    *string  `json:"implementationVerificationEqualFold,omitempty"`
 	ImplementationVerificationContainsFold *string  `json:"implementationVerificationContainsFold,omitempty"`
 	// implementation_verification_date field predicates
-	ImplementationVerificationDate             *string  `json:"implementationVerificationDate,omitempty"`
-	ImplementationVerificationDateNeq          *string  `json:"implementationVerificationDateNEQ,omitempty"`
-	ImplementationVerificationDateIn           []string `json:"implementationVerificationDateIn,omitempty"`
-	ImplementationVerificationDateNotIn        []string `json:"implementationVerificationDateNotIn,omitempty"`
-	ImplementationVerificationDateGt           *string  `json:"implementationVerificationDateGT,omitempty"`
-	ImplementationVerificationDateGte          *string  `json:"implementationVerificationDateGTE,omitempty"`
-	ImplementationVerificationDateLt           *string  `json:"implementationVerificationDateLT,omitempty"`
-	ImplementationVerificationDateLte          *string  `json:"implementationVerificationDateLTE,omitempty"`
-	ImplementationVerificationDateContains     *string  `json:"implementationVerificationDateContains,omitempty"`
-	ImplementationVerificationDateHasPrefix    *string  `json:"implementationVerificationDateHasPrefix,omitempty"`
-	ImplementationVerificationDateHasSuffix    *string  `json:"implementationVerificationDateHasSuffix,omitempty"`
-	ImplementationVerificationDateIsNil        *bool    `json:"implementationVerificationDateIsNil,omitempty"`
-	ImplementationVerificationDateNotNil       *bool    `json:"implementationVerificationDateNotNil,omitempty"`
-	ImplementationVerificationDateEqualFold    *string  `json:"implementationVerificationDateEqualFold,omitempty"`
-	ImplementationVerificationDateContainsFold *string  `json:"implementationVerificationDateContainsFold,omitempty"`
+	ImplementationVerificationDate       *time.Time   `json:"implementationVerificationDate,omitempty"`
+	ImplementationVerificationDateNeq    *time.Time   `json:"implementationVerificationDateNEQ,omitempty"`
+	ImplementationVerificationDateIn     []*time.Time `json:"implementationVerificationDateIn,omitempty"`
+	ImplementationVerificationDateNotIn  []*time.Time `json:"implementationVerificationDateNotIn,omitempty"`
+	ImplementationVerificationDateGt     *time.Time   `json:"implementationVerificationDateGT,omitempty"`
+	ImplementationVerificationDateGte    *time.Time   `json:"implementationVerificationDateGTE,omitempty"`
+	ImplementationVerificationDateLt     *time.Time   `json:"implementationVerificationDateLT,omitempty"`
+	ImplementationVerificationDateLte    *time.Time   `json:"implementationVerificationDateLTE,omitempty"`
+	ImplementationVerificationDateIsNil  *bool        `json:"implementationVerificationDateIsNil,omitempty"`
+	ImplementationVerificationDateNotNil *bool        `json:"implementationVerificationDateNotNil,omitempty"`
 }
 
 type SubcontrolSearchResult struct {
@@ -17717,22 +17469,6 @@ type SubcontrolWhereInput struct {
 	VersionNotNil       *bool    `json:"versionNotNil,omitempty"`
 	VersionEqualFold    *string  `json:"versionEqualFold,omitempty"`
 	VersionContainsFold *string  `json:"versionContainsFold,omitempty"`
-	// owner field predicates
-	Owner             *string  `json:"owner,omitempty"`
-	OwnerNeq          *string  `json:"ownerNEQ,omitempty"`
-	OwnerIn           []string `json:"ownerIn,omitempty"`
-	OwnerNotIn        []string `json:"ownerNotIn,omitempty"`
-	OwnerGt           *string  `json:"ownerGT,omitempty"`
-	OwnerGte          *string  `json:"ownerGTE,omitempty"`
-	OwnerLt           *string  `json:"ownerLT,omitempty"`
-	OwnerLte          *string  `json:"ownerLTE,omitempty"`
-	OwnerContains     *string  `json:"ownerContains,omitempty"`
-	OwnerHasPrefix    *string  `json:"ownerHasPrefix,omitempty"`
-	OwnerHasSuffix    *string  `json:"ownerHasSuffix,omitempty"`
-	OwnerIsNil        *bool    `json:"ownerIsNil,omitempty"`
-	OwnerNotNil       *bool    `json:"ownerNotNil,omitempty"`
-	OwnerEqualFold    *string  `json:"ownerEqualFold,omitempty"`
-	OwnerContainsFold *string  `json:"ownerContainsFold,omitempty"`
 	// subcontrol_number field predicates
 	SubcontrolNumber             *string  `json:"subcontrolNumber,omitempty"`
 	SubcontrolNumberNeq          *string  `json:"subcontrolNumberNEQ,omitempty"`
@@ -17749,38 +17485,38 @@ type SubcontrolWhereInput struct {
 	SubcontrolNumberNotNil       *bool    `json:"subcontrolNumberNotNil,omitempty"`
 	SubcontrolNumberEqualFold    *string  `json:"subcontrolNumberEqualFold,omitempty"`
 	SubcontrolNumberContainsFold *string  `json:"subcontrolNumberContainsFold,omitempty"`
-	// subcontrol_family field predicates
-	SubcontrolFamily             *string  `json:"subcontrolFamily,omitempty"`
-	SubcontrolFamilyNeq          *string  `json:"subcontrolFamilyNEQ,omitempty"`
-	SubcontrolFamilyIn           []string `json:"subcontrolFamilyIn,omitempty"`
-	SubcontrolFamilyNotIn        []string `json:"subcontrolFamilyNotIn,omitempty"`
-	SubcontrolFamilyGt           *string  `json:"subcontrolFamilyGT,omitempty"`
-	SubcontrolFamilyGte          *string  `json:"subcontrolFamilyGTE,omitempty"`
-	SubcontrolFamilyLt           *string  `json:"subcontrolFamilyLT,omitempty"`
-	SubcontrolFamilyLte          *string  `json:"subcontrolFamilyLTE,omitempty"`
-	SubcontrolFamilyContains     *string  `json:"subcontrolFamilyContains,omitempty"`
-	SubcontrolFamilyHasPrefix    *string  `json:"subcontrolFamilyHasPrefix,omitempty"`
-	SubcontrolFamilyHasSuffix    *string  `json:"subcontrolFamilyHasSuffix,omitempty"`
-	SubcontrolFamilyIsNil        *bool    `json:"subcontrolFamilyIsNil,omitempty"`
-	SubcontrolFamilyNotNil       *bool    `json:"subcontrolFamilyNotNil,omitempty"`
-	SubcontrolFamilyEqualFold    *string  `json:"subcontrolFamilyEqualFold,omitempty"`
-	SubcontrolFamilyContainsFold *string  `json:"subcontrolFamilyContainsFold,omitempty"`
-	// subcontrol_class field predicates
-	SubcontrolClass             *string  `json:"subcontrolClass,omitempty"`
-	SubcontrolClassNeq          *string  `json:"subcontrolClassNEQ,omitempty"`
-	SubcontrolClassIn           []string `json:"subcontrolClassIn,omitempty"`
-	SubcontrolClassNotIn        []string `json:"subcontrolClassNotIn,omitempty"`
-	SubcontrolClassGt           *string  `json:"subcontrolClassGT,omitempty"`
-	SubcontrolClassGte          *string  `json:"subcontrolClassGTE,omitempty"`
-	SubcontrolClassLt           *string  `json:"subcontrolClassLT,omitempty"`
-	SubcontrolClassLte          *string  `json:"subcontrolClassLTE,omitempty"`
-	SubcontrolClassContains     *string  `json:"subcontrolClassContains,omitempty"`
-	SubcontrolClassHasPrefix    *string  `json:"subcontrolClassHasPrefix,omitempty"`
-	SubcontrolClassHasSuffix    *string  `json:"subcontrolClassHasSuffix,omitempty"`
-	SubcontrolClassIsNil        *bool    `json:"subcontrolClassIsNil,omitempty"`
-	SubcontrolClassNotNil       *bool    `json:"subcontrolClassNotNil,omitempty"`
-	SubcontrolClassEqualFold    *string  `json:"subcontrolClassEqualFold,omitempty"`
-	SubcontrolClassContainsFold *string  `json:"subcontrolClassContainsFold,omitempty"`
+	// family field predicates
+	Family             *string  `json:"family,omitempty"`
+	FamilyNeq          *string  `json:"familyNEQ,omitempty"`
+	FamilyIn           []string `json:"familyIn,omitempty"`
+	FamilyNotIn        []string `json:"familyNotIn,omitempty"`
+	FamilyGt           *string  `json:"familyGT,omitempty"`
+	FamilyGte          *string  `json:"familyGTE,omitempty"`
+	FamilyLt           *string  `json:"familyLT,omitempty"`
+	FamilyLte          *string  `json:"familyLTE,omitempty"`
+	FamilyContains     *string  `json:"familyContains,omitempty"`
+	FamilyHasPrefix    *string  `json:"familyHasPrefix,omitempty"`
+	FamilyHasSuffix    *string  `json:"familyHasSuffix,omitempty"`
+	FamilyIsNil        *bool    `json:"familyIsNil,omitempty"`
+	FamilyNotNil       *bool    `json:"familyNotNil,omitempty"`
+	FamilyEqualFold    *string  `json:"familyEqualFold,omitempty"`
+	FamilyContainsFold *string  `json:"familyContainsFold,omitempty"`
+	// class field predicates
+	Class             *string  `json:"class,omitempty"`
+	ClassNeq          *string  `json:"classNEQ,omitempty"`
+	ClassIn           []string `json:"classIn,omitempty"`
+	ClassNotIn        []string `json:"classNotIn,omitempty"`
+	ClassGt           *string  `json:"classGT,omitempty"`
+	ClassGte          *string  `json:"classGTE,omitempty"`
+	ClassLt           *string  `json:"classLT,omitempty"`
+	ClassLte          *string  `json:"classLTE,omitempty"`
+	ClassContains     *string  `json:"classContains,omitempty"`
+	ClassHasPrefix    *string  `json:"classHasPrefix,omitempty"`
+	ClassHasSuffix    *string  `json:"classHasSuffix,omitempty"`
+	ClassIsNil        *bool    `json:"classIsNil,omitempty"`
+	ClassNotNil       *bool    `json:"classNotNil,omitempty"`
+	ClassEqualFold    *string  `json:"classEqualFold,omitempty"`
+	ClassContainsFold *string  `json:"classContainsFold,omitempty"`
 	// source field predicates
 	Source             *string  `json:"source,omitempty"`
 	SourceNeq          *string  `json:"sourceNEQ,omitempty"`
@@ -17813,70 +17549,6 @@ type SubcontrolWhereInput struct {
 	MappedFrameworksNotNil       *bool    `json:"mappedFrameworksNotNil,omitempty"`
 	MappedFrameworksEqualFold    *string  `json:"mappedFrameworksEqualFold,omitempty"`
 	MappedFrameworksContainsFold *string  `json:"mappedFrameworksContainsFold,omitempty"`
-	// assigned_to field predicates
-	AssignedTo             *string  `json:"assignedTo,omitempty"`
-	AssignedToNeq          *string  `json:"assignedToNEQ,omitempty"`
-	AssignedToIn           []string `json:"assignedToIn,omitempty"`
-	AssignedToNotIn        []string `json:"assignedToNotIn,omitempty"`
-	AssignedToGt           *string  `json:"assignedToGT,omitempty"`
-	AssignedToGte          *string  `json:"assignedToGTE,omitempty"`
-	AssignedToLt           *string  `json:"assignedToLT,omitempty"`
-	AssignedToLte          *string  `json:"assignedToLTE,omitempty"`
-	AssignedToContains     *string  `json:"assignedToContains,omitempty"`
-	AssignedToHasPrefix    *string  `json:"assignedToHasPrefix,omitempty"`
-	AssignedToHasSuffix    *string  `json:"assignedToHasSuffix,omitempty"`
-	AssignedToIsNil        *bool    `json:"assignedToIsNil,omitempty"`
-	AssignedToNotNil       *bool    `json:"assignedToNotNil,omitempty"`
-	AssignedToEqualFold    *string  `json:"assignedToEqualFold,omitempty"`
-	AssignedToContainsFold *string  `json:"assignedToContainsFold,omitempty"`
-	// implementation_status field predicates
-	ImplementationStatus             *string  `json:"implementationStatus,omitempty"`
-	ImplementationStatusNeq          *string  `json:"implementationStatusNEQ,omitempty"`
-	ImplementationStatusIn           []string `json:"implementationStatusIn,omitempty"`
-	ImplementationStatusNotIn        []string `json:"implementationStatusNotIn,omitempty"`
-	ImplementationStatusGt           *string  `json:"implementationStatusGT,omitempty"`
-	ImplementationStatusGte          *string  `json:"implementationStatusGTE,omitempty"`
-	ImplementationStatusLt           *string  `json:"implementationStatusLT,omitempty"`
-	ImplementationStatusLte          *string  `json:"implementationStatusLTE,omitempty"`
-	ImplementationStatusContains     *string  `json:"implementationStatusContains,omitempty"`
-	ImplementationStatusHasPrefix    *string  `json:"implementationStatusHasPrefix,omitempty"`
-	ImplementationStatusHasSuffix    *string  `json:"implementationStatusHasSuffix,omitempty"`
-	ImplementationStatusIsNil        *bool    `json:"implementationStatusIsNil,omitempty"`
-	ImplementationStatusNotNil       *bool    `json:"implementationStatusNotNil,omitempty"`
-	ImplementationStatusEqualFold    *string  `json:"implementationStatusEqualFold,omitempty"`
-	ImplementationStatusContainsFold *string  `json:"implementationStatusContainsFold,omitempty"`
-	// implementation_notes field predicates
-	ImplementationNotes             *string  `json:"implementationNotes,omitempty"`
-	ImplementationNotesNeq          *string  `json:"implementationNotesNEQ,omitempty"`
-	ImplementationNotesIn           []string `json:"implementationNotesIn,omitempty"`
-	ImplementationNotesNotIn        []string `json:"implementationNotesNotIn,omitempty"`
-	ImplementationNotesGt           *string  `json:"implementationNotesGT,omitempty"`
-	ImplementationNotesGte          *string  `json:"implementationNotesGTE,omitempty"`
-	ImplementationNotesLt           *string  `json:"implementationNotesLT,omitempty"`
-	ImplementationNotesLte          *string  `json:"implementationNotesLTE,omitempty"`
-	ImplementationNotesContains     *string  `json:"implementationNotesContains,omitempty"`
-	ImplementationNotesHasPrefix    *string  `json:"implementationNotesHasPrefix,omitempty"`
-	ImplementationNotesHasSuffix    *string  `json:"implementationNotesHasSuffix,omitempty"`
-	ImplementationNotesIsNil        *bool    `json:"implementationNotesIsNil,omitempty"`
-	ImplementationNotesNotNil       *bool    `json:"implementationNotesNotNil,omitempty"`
-	ImplementationNotesEqualFold    *string  `json:"implementationNotesEqualFold,omitempty"`
-	ImplementationNotesContainsFold *string  `json:"implementationNotesContainsFold,omitempty"`
-	// implementation_date field predicates
-	ImplementationDate             *string  `json:"implementationDate,omitempty"`
-	ImplementationDateNeq          *string  `json:"implementationDateNEQ,omitempty"`
-	ImplementationDateIn           []string `json:"implementationDateIn,omitempty"`
-	ImplementationDateNotIn        []string `json:"implementationDateNotIn,omitempty"`
-	ImplementationDateGt           *string  `json:"implementationDateGT,omitempty"`
-	ImplementationDateGte          *string  `json:"implementationDateGTE,omitempty"`
-	ImplementationDateLt           *string  `json:"implementationDateLT,omitempty"`
-	ImplementationDateLte          *string  `json:"implementationDateLTE,omitempty"`
-	ImplementationDateContains     *string  `json:"implementationDateContains,omitempty"`
-	ImplementationDateHasPrefix    *string  `json:"implementationDateHasPrefix,omitempty"`
-	ImplementationDateHasSuffix    *string  `json:"implementationDateHasSuffix,omitempty"`
-	ImplementationDateIsNil        *bool    `json:"implementationDateIsNil,omitempty"`
-	ImplementationDateNotNil       *bool    `json:"implementationDateNotNil,omitempty"`
-	ImplementationDateEqualFold    *string  `json:"implementationDateEqualFold,omitempty"`
-	ImplementationDateContainsFold *string  `json:"implementationDateContainsFold,omitempty"`
 	// implementation_evidence field predicates
 	ImplementationEvidence             *string  `json:"implementationEvidence,omitempty"`
 	ImplementationEvidenceNeq          *string  `json:"implementationEvidenceNEQ,omitempty"`
@@ -17893,6 +17565,33 @@ type SubcontrolWhereInput struct {
 	ImplementationEvidenceNotNil       *bool    `json:"implementationEvidenceNotNil,omitempty"`
 	ImplementationEvidenceEqualFold    *string  `json:"implementationEvidenceEqualFold,omitempty"`
 	ImplementationEvidenceContainsFold *string  `json:"implementationEvidenceContainsFold,omitempty"`
+	// implementation_status field predicates
+	ImplementationStatus             *string  `json:"implementationStatus,omitempty"`
+	ImplementationStatusNeq          *string  `json:"implementationStatusNEQ,omitempty"`
+	ImplementationStatusIn           []string `json:"implementationStatusIn,omitempty"`
+	ImplementationStatusNotIn        []string `json:"implementationStatusNotIn,omitempty"`
+	ImplementationStatusGt           *string  `json:"implementationStatusGT,omitempty"`
+	ImplementationStatusGte          *string  `json:"implementationStatusGTE,omitempty"`
+	ImplementationStatusLt           *string  `json:"implementationStatusLT,omitempty"`
+	ImplementationStatusLte          *string  `json:"implementationStatusLTE,omitempty"`
+	ImplementationStatusContains     *string  `json:"implementationStatusContains,omitempty"`
+	ImplementationStatusHasPrefix    *string  `json:"implementationStatusHasPrefix,omitempty"`
+	ImplementationStatusHasSuffix    *string  `json:"implementationStatusHasSuffix,omitempty"`
+	ImplementationStatusIsNil        *bool    `json:"implementationStatusIsNil,omitempty"`
+	ImplementationStatusNotNil       *bool    `json:"implementationStatusNotNil,omitempty"`
+	ImplementationStatusEqualFold    *string  `json:"implementationStatusEqualFold,omitempty"`
+	ImplementationStatusContainsFold *string  `json:"implementationStatusContainsFold,omitempty"`
+	// implementation_date field predicates
+	ImplementationDate       *time.Time   `json:"implementationDate,omitempty"`
+	ImplementationDateNeq    *time.Time   `json:"implementationDateNEQ,omitempty"`
+	ImplementationDateIn     []*time.Time `json:"implementationDateIn,omitempty"`
+	ImplementationDateNotIn  []*time.Time `json:"implementationDateNotIn,omitempty"`
+	ImplementationDateGt     *time.Time   `json:"implementationDateGT,omitempty"`
+	ImplementationDateGte    *time.Time   `json:"implementationDateGTE,omitempty"`
+	ImplementationDateLt     *time.Time   `json:"implementationDateLT,omitempty"`
+	ImplementationDateLte    *time.Time   `json:"implementationDateLTE,omitempty"`
+	ImplementationDateIsNil  *bool        `json:"implementationDateIsNil,omitempty"`
+	ImplementationDateNotNil *bool        `json:"implementationDateNotNil,omitempty"`
 	// implementation_verification field predicates
 	ImplementationVerification             *string  `json:"implementationVerification,omitempty"`
 	ImplementationVerificationNeq          *string  `json:"implementationVerificationNEQ,omitempty"`
@@ -17910,24 +17609,25 @@ type SubcontrolWhereInput struct {
 	ImplementationVerificationEqualFold    *string  `json:"implementationVerificationEqualFold,omitempty"`
 	ImplementationVerificationContainsFold *string  `json:"implementationVerificationContainsFold,omitempty"`
 	// implementation_verification_date field predicates
-	ImplementationVerificationDate             *string  `json:"implementationVerificationDate,omitempty"`
-	ImplementationVerificationDateNeq          *string  `json:"implementationVerificationDateNEQ,omitempty"`
-	ImplementationVerificationDateIn           []string `json:"implementationVerificationDateIn,omitempty"`
-	ImplementationVerificationDateNotIn        []string `json:"implementationVerificationDateNotIn,omitempty"`
-	ImplementationVerificationDateGt           *string  `json:"implementationVerificationDateGT,omitempty"`
-	ImplementationVerificationDateGte          *string  `json:"implementationVerificationDateGTE,omitempty"`
-	ImplementationVerificationDateLt           *string  `json:"implementationVerificationDateLT,omitempty"`
-	ImplementationVerificationDateLte          *string  `json:"implementationVerificationDateLTE,omitempty"`
-	ImplementationVerificationDateContains     *string  `json:"implementationVerificationDateContains,omitempty"`
-	ImplementationVerificationDateHasPrefix    *string  `json:"implementationVerificationDateHasPrefix,omitempty"`
-	ImplementationVerificationDateHasSuffix    *string  `json:"implementationVerificationDateHasSuffix,omitempty"`
-	ImplementationVerificationDateIsNil        *bool    `json:"implementationVerificationDateIsNil,omitempty"`
-	ImplementationVerificationDateNotNil       *bool    `json:"implementationVerificationDateNotNil,omitempty"`
-	ImplementationVerificationDateEqualFold    *string  `json:"implementationVerificationDateEqualFold,omitempty"`
-	ImplementationVerificationDateContainsFold *string  `json:"implementationVerificationDateContainsFold,omitempty"`
+	ImplementationVerificationDate       *time.Time   `json:"implementationVerificationDate,omitempty"`
+	ImplementationVerificationDateNeq    *time.Time   `json:"implementationVerificationDateNEQ,omitempty"`
+	ImplementationVerificationDateIn     []*time.Time `json:"implementationVerificationDateIn,omitempty"`
+	ImplementationVerificationDateNotIn  []*time.Time `json:"implementationVerificationDateNotIn,omitempty"`
+	ImplementationVerificationDateGt     *time.Time   `json:"implementationVerificationDateGT,omitempty"`
+	ImplementationVerificationDateGte    *time.Time   `json:"implementationVerificationDateGTE,omitempty"`
+	ImplementationVerificationDateLt     *time.Time   `json:"implementationVerificationDateLT,omitempty"`
+	ImplementationVerificationDateLte    *time.Time   `json:"implementationVerificationDateLTE,omitempty"`
+	ImplementationVerificationDateIsNil  *bool        `json:"implementationVerificationDateIsNil,omitempty"`
+	ImplementationVerificationDateNotNil *bool        `json:"implementationVerificationDateNotNil,omitempty"`
 	// control edge predicates
 	HasControl     *bool                `json:"hasControl,omitempty"`
 	HasControlWith []*ControlWhereInput `json:"hasControlWith,omitempty"`
+	// user edge predicates
+	HasUser     *bool             `json:"hasUser,omitempty"`
+	HasUserWith []*UserWhereInput `json:"hasUserWith,omitempty"`
+	// notes edge predicates
+	HasNotes     *bool             `json:"hasNotes,omitempty"`
+	HasNotesWith []*NoteWhereInput `json:"hasNotesWith,omitempty"`
 }
 
 type Subscriber struct {
@@ -18870,27 +18570,30 @@ type UpdateActionPlanInput struct {
 	// status of the action plan
 	Status      *string `json:"status,omitempty"`
 	ClearStatus *bool   `json:"clearStatus,omitempty"`
-	// assigned to
-	Assigned      *string `json:"assigned,omitempty"`
-	ClearAssigned *bool   `json:"clearAssigned,omitempty"`
-	// due date
-	DueDate      *string `json:"dueDate,omitempty"`
-	ClearDueDate *bool   `json:"clearDueDate,omitempty"`
-	// priority
+	// due date of the action plan
+	DueDate      *time.Time `json:"dueDate,omitempty"`
+	ClearDueDate *bool      `json:"clearDueDate,omitempty"`
+	// priority of the action plan
 	Priority      *string `json:"priority,omitempty"`
 	ClearPriority *bool   `json:"clearPriority,omitempty"`
 	// source of the action plan
 	Source      *string `json:"source,omitempty"`
 	ClearSource *bool   `json:"clearSource,omitempty"`
-	// json schema
-	Jsonschema        map[string]interface{} `json:"jsonschema,omitempty"`
-	ClearJsonschema   *bool                  `json:"clearJsonschema,omitempty"`
+	// json data including details of the action plan
+	Details           map[string]interface{} `json:"details,omitempty"`
+	ClearDetails      *bool                  `json:"clearDetails,omitempty"`
 	AddStandardIDs    []string               `json:"addStandardIDs,omitempty"`
 	RemoveStandardIDs []string               `json:"removeStandardIDs,omitempty"`
 	ClearStandard     *bool                  `json:"clearStandard,omitempty"`
 	AddRiskIDs        []string               `json:"addRiskIDs,omitempty"`
 	RemoveRiskIDs     []string               `json:"removeRiskIDs,omitempty"`
 	ClearRisk         *bool                  `json:"clearRisk,omitempty"`
+	AddControlIDs     []string               `json:"addControlIDs,omitempty"`
+	RemoveControlIDs  []string               `json:"removeControlIDs,omitempty"`
+	ClearControl      *bool                  `json:"clearControl,omitempty"`
+	AddUserIDs        []string               `json:"addUserIDs,omitempty"`
+	RemoveUserIDs     []string               `json:"removeUserIDs,omitempty"`
+	ClearUser         *bool                  `json:"clearUser,omitempty"`
 }
 
 // UpdateContactInput is used for update Contact object.
@@ -18950,19 +18653,16 @@ type UpdateControlInput struct {
 	// version of the control
 	Version      *string `json:"version,omitempty"`
 	ClearVersion *bool   `json:"clearVersion,omitempty"`
-	// owner of the control
-	Owner      *string `json:"owner,omitempty"`
-	ClearOwner *bool   `json:"clearOwner,omitempty"`
-	// control number
+	// control number or identifier
 	ControlNumber      *string `json:"controlNumber,omitempty"`
 	ClearControlNumber *bool   `json:"clearControlNumber,omitempty"`
-	// control family
-	ControlFamily      *string `json:"controlFamily,omitempty"`
-	ClearControlFamily *bool   `json:"clearControlFamily,omitempty"`
-	// control class
-	ControlClass      *string `json:"controlClass,omitempty"`
-	ClearControlClass *bool   `json:"clearControlClass,omitempty"`
-	// source of the control
+	// family associated with the control
+	Family      *string `json:"family,omitempty"`
+	ClearFamily *bool   `json:"clearFamily,omitempty"`
+	// class associated with the control
+	Class      *string `json:"class,omitempty"`
+	ClearClass *bool   `json:"clearClass,omitempty"`
+	// source of the control, e.g. framework, template, custom, etc.
 	Source      *string `json:"source,omitempty"`
 	ClearSource *bool   `json:"clearSource,omitempty"`
 	// which control objectives are satisfied by the control
@@ -18971,9 +18671,9 @@ type UpdateControlInput struct {
 	// mapped frameworks
 	MappedFrameworks      *string `json:"mappedFrameworks,omitempty"`
 	ClearMappedFrameworks *bool   `json:"clearMappedFrameworks,omitempty"`
-	// json schema
-	Jsonschema                map[string]interface{} `json:"jsonschema,omitempty"`
-	ClearJsonschema           *bool                  `json:"clearJsonschema,omitempty"`
+	// json data including details of the control
+	Details                   map[string]interface{} `json:"details,omitempty"`
+	ClearDetails              *bool                  `json:"clearDetails,omitempty"`
 	AddProcedureIDs           []string               `json:"addProcedureIDs,omitempty"`
 	RemoveProcedureIDs        []string               `json:"removeProcedureIDs,omitempty"`
 	ClearProcedures           *bool                  `json:"clearProcedures,omitempty"`
@@ -18992,6 +18692,9 @@ type UpdateControlInput struct {
 	AddRiskIDs                []string               `json:"addRiskIDs,omitempty"`
 	RemoveRiskIDs             []string               `json:"removeRiskIDs,omitempty"`
 	ClearRisks                *bool                  `json:"clearRisks,omitempty"`
+	AddActionplanIDs          []string               `json:"addActionplanIDs,omitempty"`
+	RemoveActionplanIDs       []string               `json:"removeActionplanIDs,omitempty"`
+	ClearActionplans          *bool                  `json:"clearActionplans,omitempty"`
 }
 
 // UpdateControlObjectiveInput is used for update ControlObjective object.
@@ -19001,41 +18704,38 @@ type UpdateControlObjectiveInput struct {
 	Tags       []string `json:"tags,omitempty"`
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
-	// the name of the control
+	// the name of the control objective
 	Name *string `json:"name,omitempty"`
-	// description of the control
+	// description of the control objective
 	Description      *string `json:"description,omitempty"`
 	ClearDescription *bool   `json:"clearDescription,omitempty"`
-	// status of the control
+	// status of the control objective
 	Status      *string `json:"status,omitempty"`
 	ClearStatus *bool   `json:"clearStatus,omitempty"`
 	// type of the control objective
 	ControlObjectiveType      *string `json:"controlObjectiveType,omitempty"`
 	ClearControlObjectiveType *bool   `json:"clearControlObjectiveType,omitempty"`
-	// version of the control
+	// version of the control objective
 	Version      *string `json:"version,omitempty"`
 	ClearVersion *bool   `json:"clearVersion,omitempty"`
-	// owner of the control
-	Owner      *string `json:"owner,omitempty"`
-	ClearOwner *bool   `json:"clearOwner,omitempty"`
-	// control number
+	// number of the control objective
 	ControlNumber      *string `json:"controlNumber,omitempty"`
 	ClearControlNumber *bool   `json:"clearControlNumber,omitempty"`
-	// control family
-	ControlFamily      *string `json:"controlFamily,omitempty"`
-	ClearControlFamily *bool   `json:"clearControlFamily,omitempty"`
-	// control class
-	ControlClass      *string `json:"controlClass,omitempty"`
-	ClearControlClass *bool   `json:"clearControlClass,omitempty"`
-	// source of the control
+	// family of the control objective
+	Family      *string `json:"family,omitempty"`
+	ClearFamily *bool   `json:"clearFamily,omitempty"`
+	// class associated with the control objective
+	Class      *string `json:"class,omitempty"`
+	ClearClass *bool   `json:"clearClass,omitempty"`
+	// source of the control objective, e.g. framework, template, user-defined, etc.
 	Source      *string `json:"source,omitempty"`
 	ClearSource *bool   `json:"clearSource,omitempty"`
 	// mapped frameworks
 	MappedFrameworks      *string `json:"mappedFrameworks,omitempty"`
 	ClearMappedFrameworks *bool   `json:"clearMappedFrameworks,omitempty"`
-	// json schema
-	Jsonschema          map[string]interface{} `json:"jsonschema,omitempty"`
-	ClearJsonschema     *bool                  `json:"clearJsonschema,omitempty"`
+	// json data including details of the control objective
+	Details             map[string]interface{} `json:"details,omitempty"`
+	ClearDetails        *bool                  `json:"clearDetails,omitempty"`
 	AddPolicyIDs        []string               `json:"addPolicyIDs,omitempty"`
 	RemovePolicyIDs     []string               `json:"removePolicyIDs,omitempty"`
 	ClearPolicy         *bool                  `json:"clearPolicy,omitempty"`
@@ -19512,12 +19212,12 @@ type UpdateInternalPolicyInput struct {
 	// purpose and scope
 	PurposeAndScope      *string `json:"purposeAndScope,omitempty"`
 	ClearPurposeAndScope *bool   `json:"clearPurposeAndScope,omitempty"`
-	// background
+	// background of the policy
 	Background      *string `json:"background,omitempty"`
 	ClearBackground *bool   `json:"clearBackground,omitempty"`
-	// json schema
-	Jsonschema                map[string]interface{} `json:"jsonschema,omitempty"`
-	ClearJsonschema           *bool                  `json:"clearJsonschema,omitempty"`
+	// json data for the policy document
+	Details                   map[string]interface{} `json:"details,omitempty"`
+	ClearDetails              *bool                  `json:"clearDetails,omitempty"`
 	AddControlobjectiveIDs    []string               `json:"addControlobjectiveIDs,omitempty"`
 	RemoveControlobjectiveIDs []string               `json:"removeControlobjectiveIDs,omitempty"`
 	ClearControlobjectives    *bool                  `json:"clearControlobjectives,omitempty"`
@@ -19557,7 +19257,7 @@ type UpdateNarrativeInput struct {
 	Tags       []string `json:"tags,omitempty"`
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
-	// the name of the file provided in the payload key without the extension
+	// the name of the narrative
 	Name *string `json:"name,omitempty"`
 	// the description of the narrative
 	Description      *string `json:"description,omitempty"`
@@ -19565,9 +19265,9 @@ type UpdateNarrativeInput struct {
 	// which controls are satisfied by the narrative
 	Satisfies      *string `json:"satisfies,omitempty"`
 	ClearSatisfies *bool   `json:"clearSatisfies,omitempty"`
-	// json schema
-	Jsonschema                map[string]interface{} `json:"jsonschema,omitempty"`
-	ClearJsonschema           *bool                  `json:"clearJsonschema,omitempty"`
+	// json data for the narrative document
+	Details                   map[string]interface{} `json:"details,omitempty"`
+	ClearDetails              *bool                  `json:"clearDetails,omitempty"`
 	AddPolicyIDs              []string               `json:"addPolicyIDs,omitempty"`
 	RemovePolicyIDs           []string               `json:"removePolicyIDs,omitempty"`
 	ClearPolicy               *bool                  `json:"clearPolicy,omitempty"`
@@ -19590,11 +19290,14 @@ type UpdateNoteInput struct {
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
 	// the text of the note
-	Text        *string `json:"text,omitempty"`
-	OwnerID     *string `json:"ownerID,omitempty"`
-	ClearOwner  *bool   `json:"clearOwner,omitempty"`
-	EntityID    *string `json:"entityID,omitempty"`
-	ClearEntity *bool   `json:"clearEntity,omitempty"`
+	Text                *string  `json:"text,omitempty"`
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	ClearOwner          *bool    `json:"clearOwner,omitempty"`
+	EntityID            *string  `json:"entityID,omitempty"`
+	ClearEntity         *bool    `json:"clearEntity,omitempty"`
+	AddSubcontrolIDs    []string `json:"addSubcontrolIDs,omitempty"`
+	RemoveSubcontrolIDs []string `json:"removeSubcontrolIDs,omitempty"`
+	ClearSubcontrols    *bool    `json:"clearSubcontrols,omitempty"`
 }
 
 // UpdateOauthProviderInput is used for update OauthProvider object.
@@ -19842,15 +19545,15 @@ type UpdateProcedureInput struct {
 	// purpose and scope
 	PurposeAndScope      *string `json:"purposeAndScope,omitempty"`
 	ClearPurposeAndScope *bool   `json:"clearPurposeAndScope,omitempty"`
-	// background
+	// background of the procedure
 	Background      *string `json:"background,omitempty"`
 	ClearBackground *bool   `json:"clearBackground,omitempty"`
 	// which controls are satisfied by the procedure
 	Satisfies      *string `json:"satisfies,omitempty"`
 	ClearSatisfies *bool   `json:"clearSatisfies,omitempty"`
-	// json schema
-	Jsonschema              map[string]interface{} `json:"jsonschema,omitempty"`
-	ClearJsonschema         *bool                  `json:"clearJsonschema,omitempty"`
+	// json data for the procedure document
+	Details                 map[string]interface{} `json:"details,omitempty"`
+	ClearDetails            *bool                  `json:"clearDetails,omitempty"`
 	AddControlIDs           []string               `json:"addControlIDs,omitempty"`
 	RemoveControlIDs        []string               `json:"removeControlIDs,omitempty"`
 	ClearControl            *bool                  `json:"clearControl,omitempty"`
@@ -19886,24 +19589,21 @@ type UpdateRiskInput struct {
 	// business costs associated with the risk
 	BusinessCosts      *string `json:"businessCosts,omitempty"`
 	ClearBusinessCosts *bool   `json:"clearBusinessCosts,omitempty"`
-	// impact of the risk
-	Impact      *string `json:"impact,omitempty"`
-	ClearImpact *bool   `json:"clearImpact,omitempty"`
-	// likelihood of the risk
-	Likelihood      *string `json:"likelihood,omitempty"`
-	ClearLikelihood *bool   `json:"clearLikelihood,omitempty"`
-	// mitigation of the risk
+	// impact of the risk - high, medium, low
+	Impact      *enums.RiskImpact `json:"impact,omitempty"`
+	ClearImpact *bool             `json:"clearImpact,omitempty"`
+	// likelihood of the risk occurring; unlikely, likely, highly likely
+	Likelihood      *enums.RiskLikelihood `json:"likelihood,omitempty"`
+	ClearLikelihood *bool                 `json:"clearLikelihood,omitempty"`
+	// mitigation for the risk
 	Mitigation      *string `json:"mitigation,omitempty"`
 	ClearMitigation *bool   `json:"clearMitigation,omitempty"`
 	// which controls are satisfied by the risk
 	Satisfies      *string `json:"satisfies,omitempty"`
 	ClearSatisfies *bool   `json:"clearSatisfies,omitempty"`
-	// severity of the risk, e.g. high medium low
-	Severity      *string `json:"severity,omitempty"`
-	ClearSeverity *bool   `json:"clearSeverity,omitempty"`
-	// json schema
-	Jsonschema          map[string]interface{} `json:"jsonschema,omitempty"`
-	ClearJsonschema     *bool                  `json:"clearJsonschema,omitempty"`
+	// json data for the risk document
+	Details             map[string]interface{} `json:"details,omitempty"`
+	ClearDetails        *bool                  `json:"clearDetails,omitempty"`
 	AddControlIDs       []string               `json:"addControlIDs,omitempty"`
 	RemoveControlIDs    []string               `json:"removeControlIDs,omitempty"`
 	ClearControl        *bool                  `json:"clearControl,omitempty"`
@@ -19942,15 +19642,15 @@ type UpdateStandardInput struct {
 	// purpose and scope
 	PurposeAndScope      *string `json:"purposeAndScope,omitempty"`
 	ClearPurposeAndScope *bool   `json:"clearPurposeAndScope,omitempty"`
-	// background
+	// background of the standard
 	Background      *string `json:"background,omitempty"`
 	ClearBackground *bool   `json:"clearBackground,omitempty"`
 	// which controls are satisfied by the standard
 	Satisfies      *string `json:"satisfies,omitempty"`
 	ClearSatisfies *bool   `json:"clearSatisfies,omitempty"`
-	// json schema
-	Jsonschema                map[string]interface{} `json:"jsonschema,omitempty"`
-	ClearJsonschema           *bool                  `json:"clearJsonschema,omitempty"`
+	// json data with details of the standard
+	Details                   map[string]interface{} `json:"details,omitempty"`
+	ClearDetails              *bool                  `json:"clearDetails,omitempty"`
 	AddControlobjectiveIDs    []string               `json:"addControlobjectiveIDs,omitempty"`
 	RemoveControlobjectiveIDs []string               `json:"removeControlobjectiveIDs,omitempty"`
 	ClearControlobjectives    *bool                  `json:"clearControlobjectives,omitempty"`
@@ -19986,51 +19686,47 @@ type UpdateSubcontrolInput struct {
 	// version of the control
 	Version      *string `json:"version,omitempty"`
 	ClearVersion *bool   `json:"clearVersion,omitempty"`
-	// owner of the subcontrol
-	Owner      *string `json:"owner,omitempty"`
-	ClearOwner *bool   `json:"clearOwner,omitempty"`
-	// control number
+	// number of the subcontrol
 	SubcontrolNumber      *string `json:"subcontrolNumber,omitempty"`
 	ClearSubcontrolNumber *bool   `json:"clearSubcontrolNumber,omitempty"`
-	// control family
-	SubcontrolFamily      *string `json:"subcontrolFamily,omitempty"`
-	ClearSubcontrolFamily *bool   `json:"clearSubcontrolFamily,omitempty"`
-	// control class
-	SubcontrolClass      *string `json:"subcontrolClass,omitempty"`
-	ClearSubcontrolClass *bool   `json:"clearSubcontrolClass,omitempty"`
-	// source of the control
+	// subcontrol family
+	Family      *string `json:"family,omitempty"`
+	ClearFamily *bool   `json:"clearFamily,omitempty"`
+	// subcontrol class
+	Class      *string `json:"class,omitempty"`
+	ClearClass *bool   `json:"clearClass,omitempty"`
+	// source of the control, e.g. framework, template, user-defined, etc.
 	Source      *string `json:"source,omitempty"`
 	ClearSource *bool   `json:"clearSource,omitempty"`
-	// mapped frameworks
+	// mapped frameworks that the subcontrol is part of
 	MappedFrameworks      *string `json:"mappedFrameworks,omitempty"`
 	ClearMappedFrameworks *bool   `json:"clearMappedFrameworks,omitempty"`
-	// assigned to
-	AssignedTo      *string `json:"assignedTo,omitempty"`
-	ClearAssignedTo *bool   `json:"clearAssignedTo,omitempty"`
+	// implementation evidence of the subcontrol
+	ImplementationEvidence      *string `json:"implementationEvidence,omitempty"`
+	ClearImplementationEvidence *bool   `json:"clearImplementationEvidence,omitempty"`
 	// implementation status
 	ImplementationStatus      *string `json:"implementationStatus,omitempty"`
 	ClearImplementationStatus *bool   `json:"clearImplementationStatus,omitempty"`
-	// implementation notes
-	ImplementationNotes      *string `json:"implementationNotes,omitempty"`
-	ClearImplementationNotes *bool   `json:"clearImplementationNotes,omitempty"`
-	// implementation date
-	ImplementationDate      *string `json:"implementationDate,omitempty"`
-	ClearImplementationDate *bool   `json:"clearImplementationDate,omitempty"`
-	// implementation evidence
-	ImplementationEvidence      *string `json:"implementationEvidence,omitempty"`
-	ClearImplementationEvidence *bool   `json:"clearImplementationEvidence,omitempty"`
+	// date the subcontrol was implemented
+	ImplementationDate      *time.Time `json:"implementationDate,omitempty"`
+	ClearImplementationDate *bool      `json:"clearImplementationDate,omitempty"`
 	// implementation verification
 	ImplementationVerification      *string `json:"implementationVerification,omitempty"`
 	ClearImplementationVerification *bool   `json:"clearImplementationVerification,omitempty"`
-	// implementation verification date
-	ImplementationVerificationDate      *string `json:"implementationVerificationDate,omitempty"`
-	ClearImplementationVerificationDate *bool   `json:"clearImplementationVerificationDate,omitempty"`
-	// json schema
-	Jsonschema       map[string]interface{} `json:"jsonschema,omitempty"`
-	ClearJsonschema  *bool                  `json:"clearJsonschema,omitempty"`
+	// date the subcontrol implementation was verified
+	ImplementationVerificationDate      *time.Time `json:"implementationVerificationDate,omitempty"`
+	ClearImplementationVerificationDate *bool      `json:"clearImplementationVerificationDate,omitempty"`
+	// json data details of the subcontrol
+	Details          map[string]interface{} `json:"details,omitempty"`
+	ClearDetails     *bool                  `json:"clearDetails,omitempty"`
 	AddControlIDs    []string               `json:"addControlIDs,omitempty"`
 	RemoveControlIDs []string               `json:"removeControlIDs,omitempty"`
 	ClearControl     *bool                  `json:"clearControl,omitempty"`
+	AddUserIDs       []string               `json:"addUserIDs,omitempty"`
+	RemoveUserIDs    []string               `json:"removeUserIDs,omitempty"`
+	ClearUser        *bool                  `json:"clearUser,omitempty"`
+	NotesID          *string                `json:"notesID,omitempty"`
+	ClearNotes       *bool                  `json:"clearNotes,omitempty"`
 }
 
 // UpdateSubscriberInput is used for update Subscriber object.
@@ -20164,6 +19860,12 @@ type UpdateUserInput struct {
 	AddEventIDs                     []string    `json:"addEventIDs,omitempty"`
 	RemoveEventIDs                  []string    `json:"removeEventIDs,omitempty"`
 	ClearEvents                     *bool       `json:"clearEvents,omitempty"`
+	AddActionplanIDs                []string    `json:"addActionplanIDs,omitempty"`
+	RemoveActionplanIDs             []string    `json:"removeActionplanIDs,omitempty"`
+	ClearActionplans                *bool       `json:"clearActionplans,omitempty"`
+	AddSubcontrolIDs                []string    `json:"addSubcontrolIDs,omitempty"`
+	RemoveSubcontrolIDs             []string    `json:"removeSubcontrolIDs,omitempty"`
+	ClearSubcontrols                *bool       `json:"clearSubcontrols,omitempty"`
 }
 
 // UpdateUserSettingInput is used for update UserSetting object.
@@ -20274,6 +19976,8 @@ type User struct {
 	Files                []*File                `json:"files,omitempty"`
 	File                 *File                  `json:"file,omitempty"`
 	Events               []*Event               `json:"events,omitempty"`
+	Actionplans          []*ActionPlan          `json:"actionplans,omitempty"`
+	Subcontrols          []*Subcontrol          `json:"subcontrols,omitempty"`
 	GroupMemberships     []*GroupMembership     `json:"groupMemberships,omitempty"`
 	OrgMemberships       []*OrgMembership       `json:"orgMemberships,omitempty"`
 }
@@ -21450,6 +21154,12 @@ type UserWhereInput struct {
 	// events edge predicates
 	HasEvents     *bool              `json:"hasEvents,omitempty"`
 	HasEventsWith []*EventWhereInput `json:"hasEventsWith,omitempty"`
+	// actionplans edge predicates
+	HasActionplans     *bool                   `json:"hasActionplans,omitempty"`
+	HasActionplansWith []*ActionPlanWhereInput `json:"hasActionplansWith,omitempty"`
+	// subcontrols edge predicates
+	HasSubcontrols     *bool                   `json:"hasSubcontrols,omitempty"`
+	HasSubcontrolsWith []*SubcontrolWhereInput `json:"hasSubcontrolsWith,omitempty"`
 	// group_memberships edge predicates
 	HasGroupMemberships     *bool                        `json:"hasGroupMemberships,omitempty"`
 	HasGroupMembershipsWith []*GroupMembershipWhereInput `json:"hasGroupMembershipsWith,omitempty"`

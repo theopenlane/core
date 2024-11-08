@@ -4,28 +4,25 @@ query GetAllSubcontrolHistories {
   subcontrolHistories {
     edges {
       node {
-        assignedTo
+        class
         createdAt
         createdBy
         description
+        details
+        family
         historyTime
         id
         implementationDate
         implementationEvidence
-        implementationNotes
         implementationStatus
         implementationVerification
         implementationVerificationDate
-        jsonschema
         mappedFrameworks
         name
         operation
-        owner
         ref
         source
         status
-        subcontrolClass
-        subcontrolFamily
         subcontrolNumber
         subcontrolType
         tags
@@ -41,28 +38,25 @@ query GetSubcontrolHistories($where: SubcontrolHistoryWhereInput) {
   subcontrolHistories(where: $where) {
     edges {
       node {
-        assignedTo
+        class
         createdAt
         createdBy
         description
+        details
+        family
         historyTime
         id
         implementationDate
         implementationEvidence
-        implementationNotes
         implementationStatus
         implementationVerification
         implementationVerificationDate
-        jsonschema
         mappedFrameworks
         name
         operation
-        owner
         ref
         source
         status
-        subcontrolClass
-        subcontrolFamily
         subcontrolNumber
         subcontrolType
         tags

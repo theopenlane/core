@@ -20,40 +20,37 @@ type ControlObjective struct {
 func (ControlObjective) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("name").
-			Comment("the name of the control"),
+			Comment("the name of the control objective"),
 		field.Text("description").
 			Optional().
-			Comment("description of the control"),
+			Comment("description of the control objective"),
 		field.String("status").
 			Optional().
-			Comment("status of the control"),
+			Comment("status of the control objective"),
 		field.String("control_objective_type").
 			Optional().
 			Comment("type of the control objective"),
 		field.String("version").
 			Optional().
-			Comment("version of the control"),
-		field.String("owner").
-			Optional().
-			Comment("owner of the control"),
+			Comment("version of the control objective"),
 		field.String("control_number").
 			Optional().
-			Comment("control number"),
-		field.Text("control_family").
+			Comment("number of the control objective"),
+		field.Text("family").
 			Optional().
-			Comment("control family"),
-		field.String("control_class").
+			Comment("family of the control objective"),
+		field.String("class").
 			Optional().
-			Comment("control class"),
+			Comment("class associated with the control objective"),
 		field.String("source").
 			Optional().
-			Comment("source of the control"),
+			Comment("source of the control objective, e.g. framework, template, user-defined, etc."),
 		field.Text("mapped_frameworks").
 			Optional().
 			Comment("mapped frameworks"),
-		field.JSON("jsonschema", map[string]interface{}{}).
+		field.JSON("details", map[string]interface{}{}).
 			Optional().
-			Comment("json schema"),
+			Comment("json data including details of the control objective"),
 	}
 }
 

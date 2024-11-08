@@ -246,9 +246,9 @@ func (sc *StandardCreate) SetNillableSatisfies(s *string) *StandardCreate {
 	return sc
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (sc *StandardCreate) SetJsonschema(m map[string]interface{}) *StandardCreate {
-	sc.mutation.SetJsonschema(m)
+// SetDetails sets the "details" field.
+func (sc *StandardCreate) SetDetails(m map[string]interface{}) *StandardCreate {
+	sc.mutation.SetDetails(m)
 	return sc
 }
 
@@ -510,9 +510,9 @@ func (sc *StandardCreate) createSpec() (*Standard, *sqlgraph.CreateSpec) {
 		_spec.SetField(standard.FieldSatisfies, field.TypeString, value)
 		_node.Satisfies = value
 	}
-	if value, ok := sc.mutation.Jsonschema(); ok {
-		_spec.SetField(standard.FieldJsonschema, field.TypeJSON, value)
-		_node.Jsonschema = value
+	if value, ok := sc.mutation.Details(); ok {
+		_spec.SetField(standard.FieldDetails, field.TypeJSON, value)
+		_node.Details = value
 	}
 	if nodes := sc.mutation.ControlobjectivesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

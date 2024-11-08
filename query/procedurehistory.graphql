@@ -8,9 +8,9 @@ query GetAllProcedureHistories {
         createdAt
         createdBy
         description
+        details
         historyTime
         id
-        jsonschema
         name
         operation
         procedureType
@@ -35,9 +35,9 @@ query GetProcedureHistories($where: ProcedureHistoryWhereInput) {
         createdAt
         createdBy
         description
+        details
         historyTime
         id
-        jsonschema
         name
         operation
         procedureType

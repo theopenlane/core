@@ -1262,14 +1262,14 @@ func SatisfiesContainsFold(v string) predicate.Standard {
 	return predicate.Standard(sql.FieldContainsFold(FieldSatisfies, v))
 }
 
-// JsonschemaIsNil applies the IsNil predicate on the "jsonschema" field.
-func JsonschemaIsNil() predicate.Standard {
-	return predicate.Standard(sql.FieldIsNull(FieldJsonschema))
+// DetailsIsNil applies the IsNil predicate on the "details" field.
+func DetailsIsNil() predicate.Standard {
+	return predicate.Standard(sql.FieldIsNull(FieldDetails))
 }
 
-// JsonschemaNotNil applies the NotNil predicate on the "jsonschema" field.
-func JsonschemaNotNil() predicate.Standard {
-	return predicate.Standard(sql.FieldNotNull(FieldJsonschema))
+// DetailsNotNil applies the NotNil predicate on the "details" field.
+func DetailsNotNil() predicate.Standard {
+	return predicate.Standard(sql.FieldNotNull(FieldDetails))
 }
 
 // HasControlobjectives applies the HasEdge predicate on the "controlobjectives" edge.

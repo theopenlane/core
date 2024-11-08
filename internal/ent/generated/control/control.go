@@ -41,22 +41,20 @@ const (
 	FieldControlType = "control_type"
 	// FieldVersion holds the string denoting the version field in the database.
 	FieldVersion = "version"
-	// FieldOwner holds the string denoting the owner field in the database.
-	FieldOwner = "owner"
 	// FieldControlNumber holds the string denoting the control_number field in the database.
 	FieldControlNumber = "control_number"
-	// FieldControlFamily holds the string denoting the control_family field in the database.
-	FieldControlFamily = "control_family"
-	// FieldControlClass holds the string denoting the control_class field in the database.
-	FieldControlClass = "control_class"
+	// FieldFamily holds the string denoting the family field in the database.
+	FieldFamily = "family"
+	// FieldClass holds the string denoting the class field in the database.
+	FieldClass = "class"
 	// FieldSource holds the string denoting the source field in the database.
 	FieldSource = "source"
 	// FieldSatisfies holds the string denoting the satisfies field in the database.
 	FieldSatisfies = "satisfies"
 	// FieldMappedFrameworks holds the string denoting the mapped_frameworks field in the database.
 	FieldMappedFrameworks = "mapped_frameworks"
-	// FieldJsonschema holds the string denoting the jsonschema field in the database.
-	FieldJsonschema = "jsonschema"
+	// FieldDetails holds the string denoting the details field in the database.
+	FieldDetails = "details"
 	// EdgeProcedures holds the string denoting the procedures edge name in mutations.
 	EdgeProcedures = "procedures"
 	// EdgeSubcontrols holds the string denoting the subcontrols edge name in mutations.
@@ -69,6 +67,8 @@ const (
 	EdgeNarratives = "narratives"
 	// EdgeRisks holds the string denoting the risks edge name in mutations.
 	EdgeRisks = "risks"
+	// EdgeActionplans holds the string denoting the actionplans edge name in mutations.
+	EdgeActionplans = "actionplans"
 	// Table holds the table name of the control in the database.
 	Table = "controls"
 	// ProceduresTable is the table that holds the procedures relation/edge. The primary key declared below.
@@ -103,6 +103,11 @@ const (
 	// RisksInverseTable is the table name for the Risk entity.
 	// It exists in this package in order to avoid circular dependency with the "risk" package.
 	RisksInverseTable = "risks"
+	// ActionplansTable is the table that holds the actionplans relation/edge. The primary key declared below.
+	ActionplansTable = "control_actionplans"
+	// ActionplansInverseTable is the table name for the ActionPlan entity.
+	// It exists in this package in order to avoid circular dependency with the "actionplan" package.
+	ActionplansInverseTable = "action_plans"
 )
 
 // Columns holds all SQL columns for control fields.
@@ -121,14 +126,13 @@ var Columns = []string{
 	FieldStatus,
 	FieldControlType,
 	FieldVersion,
-	FieldOwner,
 	FieldControlNumber,
-	FieldControlFamily,
-	FieldControlClass,
+	FieldFamily,
+	FieldClass,
 	FieldSource,
 	FieldSatisfies,
 	FieldMappedFrameworks,
-	FieldJsonschema,
+	FieldDetails,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "controls"
@@ -154,6 +158,9 @@ var (
 	// RisksPrimaryKey and RisksColumn2 are the table columns denoting the
 	// primary key for the risks relation (M2M).
 	RisksPrimaryKey = []string{"control_id", "risk_id"}
+	// ActionplansPrimaryKey and ActionplansColumn2 are the table columns denoting the
+	// primary key for the actionplans relation (M2M).
+	ActionplansPrimaryKey = []string{"control_id", "action_plan_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -261,24 +268,19 @@ func ByVersion(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldVersion, opts...).ToFunc()
 }
 
-// ByOwner orders the results by the owner field.
-func ByOwner(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldOwner, opts...).ToFunc()
-}
-
 // ByControlNumber orders the results by the control_number field.
 func ByControlNumber(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldControlNumber, opts...).ToFunc()
 }
 
-// ByControlFamily orders the results by the control_family field.
-func ByControlFamily(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldControlFamily, opts...).ToFunc()
+// ByFamily orders the results by the family field.
+func ByFamily(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFamily, opts...).ToFunc()
 }
 
-// ByControlClass orders the results by the control_class field.
-func ByControlClass(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldControlClass, opts...).ToFunc()
+// ByClass orders the results by the class field.
+func ByClass(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldClass, opts...).ToFunc()
 }
 
 // BySource orders the results by the source field.
@@ -379,6 +381,20 @@ func ByRisks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newRisksStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByActionplansCount orders the results by actionplans count.
+func ByActionplansCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newActionplansStep(), opts...)
+	}
+}
+
+// ByActionplans orders the results by actionplans terms.
+func ByActionplans(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newActionplansStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newProceduresStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -419,5 +435,12 @@ func newRisksStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(RisksInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, RisksTable, RisksPrimaryKey...),
+	)
+}
+func newActionplansStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ActionplansInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, ActionplansTable, ActionplansPrimaryKey...),
 	)
 }

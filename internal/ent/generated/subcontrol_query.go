@@ -13,8 +13,10 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -27,10 +29,13 @@ type SubcontrolQuery struct {
 	inters           []Interceptor
 	predicates       []predicate.Subcontrol
 	withControl      *ControlQuery
+	withUser         *UserQuery
+	withNotes        *NoteQuery
 	withFKs          bool
 	loadTotal        []func(context.Context, []*Subcontrol) error
 	modifiers        []func(*sql.Selector)
 	withNamedControl map[string]*ControlQuery
+	withNamedUser    map[string]*UserQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -86,6 +91,56 @@ func (sq *SubcontrolQuery) QueryControl() *ControlQuery {
 		schemaConfig := sq.schemaConfig
 		step.To.Schema = schemaConfig.Control
 		step.Edge.Schema = schemaConfig.ControlSubcontrols
+		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryUser chains the current query on the "user" edge.
+func (sq *SubcontrolQuery) QueryUser() *UserQuery {
+	query := (&UserClient{config: sq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := sq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := sq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, subcontrol.UserTable, subcontrol.UserPrimaryKey...),
+		)
+		schemaConfig := sq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.UserSubcontrols
+		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryNotes chains the current query on the "notes" edge.
+func (sq *SubcontrolQuery) QueryNotes() *NoteQuery {
+	query := (&NoteClient{config: sq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := sq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := sq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, selector),
+			sqlgraph.To(note.Table, note.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, subcontrol.NotesTable, subcontrol.NotesColumn),
+		)
+		schemaConfig := sq.schemaConfig
+		step.To.Schema = schemaConfig.Note
+		step.Edge.Schema = schemaConfig.Subcontrol
 		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -285,6 +340,8 @@ func (sq *SubcontrolQuery) Clone() *SubcontrolQuery {
 		inters:      append([]Interceptor{}, sq.inters...),
 		predicates:  append([]predicate.Subcontrol{}, sq.predicates...),
 		withControl: sq.withControl.Clone(),
+		withUser:    sq.withUser.Clone(),
+		withNotes:   sq.withNotes.Clone(),
 		// clone intermediate query.
 		sql:       sq.sql.Clone(),
 		path:      sq.path,
@@ -300,6 +357,28 @@ func (sq *SubcontrolQuery) WithControl(opts ...func(*ControlQuery)) *SubcontrolQ
 		opt(query)
 	}
 	sq.withControl = query
+	return sq
+}
+
+// WithUser tells the query-builder to eager-load the nodes that are connected to
+// the "user" edge. The optional arguments are used to configure the query builder of the edge.
+func (sq *SubcontrolQuery) WithUser(opts ...func(*UserQuery)) *SubcontrolQuery {
+	query := (&UserClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	sq.withUser = query
+	return sq
+}
+
+// WithNotes tells the query-builder to eager-load the nodes that are connected to
+// the "notes" edge. The optional arguments are used to configure the query builder of the edge.
+func (sq *SubcontrolQuery) WithNotes(opts ...func(*NoteQuery)) *SubcontrolQuery {
+	query := (&NoteClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	sq.withNotes = query
 	return sq
 }
 
@@ -382,10 +461,15 @@ func (sq *SubcontrolQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 		nodes       = []*Subcontrol{}
 		withFKs     = sq.withFKs
 		_spec       = sq.querySpec()
-		loadedTypes = [1]bool{
+		loadedTypes = [3]bool{
 			sq.withControl != nil,
+			sq.withUser != nil,
+			sq.withNotes != nil,
 		}
 	)
+	if sq.withNotes != nil {
+		withFKs = true
+	}
 	if withFKs {
 		_spec.Node.Columns = append(_spec.Node.Columns, subcontrol.ForeignKeys...)
 	}
@@ -419,10 +503,30 @@ func (sq *SubcontrolQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 			return nil, err
 		}
 	}
+	if query := sq.withUser; query != nil {
+		if err := sq.loadUser(ctx, query, nodes,
+			func(n *Subcontrol) { n.Edges.User = []*User{} },
+			func(n *Subcontrol, e *User) { n.Edges.User = append(n.Edges.User, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := sq.withNotes; query != nil {
+		if err := sq.loadNotes(ctx, query, nodes, nil,
+			func(n *Subcontrol, e *Note) { n.Edges.Notes = e }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range sq.withNamedControl {
 		if err := sq.loadControl(ctx, query, nodes,
 			func(n *Subcontrol) { n.appendNamedControl(name) },
 			func(n *Subcontrol, e *Control) { n.appendNamedControl(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range sq.withNamedUser {
+		if err := sq.loadUser(ctx, query, nodes,
+			func(n *Subcontrol) { n.appendNamedUser(name) },
+			func(n *Subcontrol, e *User) { n.appendNamedUser(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -492,6 +596,100 @@ func (sq *SubcontrolQuery) loadControl(ctx context.Context, query *ControlQuery,
 		}
 		for kn := range nodes {
 			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (sq *SubcontrolQuery) loadUser(ctx context.Context, query *UserQuery, nodes []*Subcontrol, init func(*Subcontrol), assign func(*Subcontrol, *User)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Subcontrol)
+	nids := make(map[string]map[*Subcontrol]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(subcontrol.UserTable)
+		joinT.Schema(sq.schemaConfig.UserSubcontrols)
+		s.Join(joinT).On(s.C(user.FieldID), joinT.C(subcontrol.UserPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(subcontrol.UserPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(subcontrol.UserPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Subcontrol]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*User](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "user" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (sq *SubcontrolQuery) loadNotes(ctx context.Context, query *NoteQuery, nodes []*Subcontrol, init func(*Subcontrol), assign func(*Subcontrol, *Note)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Subcontrol)
+	for i := range nodes {
+		if nodes[i].note_subcontrols == nil {
+			continue
+		}
+		fk := *nodes[i].note_subcontrols
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(note.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "note_subcontrols" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
 		}
 	}
 	return nil
@@ -606,6 +804,20 @@ func (sq *SubcontrolQuery) WithNamedControl(name string, opts ...func(*ControlQu
 		sq.withNamedControl = make(map[string]*ControlQuery)
 	}
 	sq.withNamedControl[name] = query
+	return sq
+}
+
+// WithNamedUser tells the query-builder to eager-load the nodes that are connected to the "user"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (sq *SubcontrolQuery) WithNamedUser(name string, opts ...func(*UserQuery)) *SubcontrolQuery {
+	query := (&UserClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if sq.withNamedUser == nil {
+		sq.withNamedUser = make(map[string]*UserQuery)
+	}
+	sq.withNamedUser[name] = query
 	return sq
 }
 

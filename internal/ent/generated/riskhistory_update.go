@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
+	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -217,15 +218,15 @@ func (rhu *RiskHistoryUpdate) ClearBusinessCosts() *RiskHistoryUpdate {
 }
 
 // SetImpact sets the "impact" field.
-func (rhu *RiskHistoryUpdate) SetImpact(s string) *RiskHistoryUpdate {
-	rhu.mutation.SetImpact(s)
+func (rhu *RiskHistoryUpdate) SetImpact(ei enums.RiskImpact) *RiskHistoryUpdate {
+	rhu.mutation.SetImpact(ei)
 	return rhu
 }
 
 // SetNillableImpact sets the "impact" field if the given value is not nil.
-func (rhu *RiskHistoryUpdate) SetNillableImpact(s *string) *RiskHistoryUpdate {
-	if s != nil {
-		rhu.SetImpact(*s)
+func (rhu *RiskHistoryUpdate) SetNillableImpact(ei *enums.RiskImpact) *RiskHistoryUpdate {
+	if ei != nil {
+		rhu.SetImpact(*ei)
 	}
 	return rhu
 }
@@ -237,15 +238,15 @@ func (rhu *RiskHistoryUpdate) ClearImpact() *RiskHistoryUpdate {
 }
 
 // SetLikelihood sets the "likelihood" field.
-func (rhu *RiskHistoryUpdate) SetLikelihood(s string) *RiskHistoryUpdate {
-	rhu.mutation.SetLikelihood(s)
+func (rhu *RiskHistoryUpdate) SetLikelihood(el enums.RiskLikelihood) *RiskHistoryUpdate {
+	rhu.mutation.SetLikelihood(el)
 	return rhu
 }
 
 // SetNillableLikelihood sets the "likelihood" field if the given value is not nil.
-func (rhu *RiskHistoryUpdate) SetNillableLikelihood(s *string) *RiskHistoryUpdate {
-	if s != nil {
-		rhu.SetLikelihood(*s)
+func (rhu *RiskHistoryUpdate) SetNillableLikelihood(el *enums.RiskLikelihood) *RiskHistoryUpdate {
+	if el != nil {
+		rhu.SetLikelihood(*el)
 	}
 	return rhu
 }
@@ -296,35 +297,15 @@ func (rhu *RiskHistoryUpdate) ClearSatisfies() *RiskHistoryUpdate {
 	return rhu
 }
 
-// SetSeverity sets the "severity" field.
-func (rhu *RiskHistoryUpdate) SetSeverity(s string) *RiskHistoryUpdate {
-	rhu.mutation.SetSeverity(s)
+// SetDetails sets the "details" field.
+func (rhu *RiskHistoryUpdate) SetDetails(m map[string]interface{}) *RiskHistoryUpdate {
+	rhu.mutation.SetDetails(m)
 	return rhu
 }
 
-// SetNillableSeverity sets the "severity" field if the given value is not nil.
-func (rhu *RiskHistoryUpdate) SetNillableSeverity(s *string) *RiskHistoryUpdate {
-	if s != nil {
-		rhu.SetSeverity(*s)
-	}
-	return rhu
-}
-
-// ClearSeverity clears the value of the "severity" field.
-func (rhu *RiskHistoryUpdate) ClearSeverity() *RiskHistoryUpdate {
-	rhu.mutation.ClearSeverity()
-	return rhu
-}
-
-// SetJsonschema sets the "jsonschema" field.
-func (rhu *RiskHistoryUpdate) SetJsonschema(m map[string]interface{}) *RiskHistoryUpdate {
-	rhu.mutation.SetJsonschema(m)
-	return rhu
-}
-
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (rhu *RiskHistoryUpdate) ClearJsonschema() *RiskHistoryUpdate {
-	rhu.mutation.ClearJsonschema()
+// ClearDetails clears the value of the "details" field.
+func (rhu *RiskHistoryUpdate) ClearDetails() *RiskHistoryUpdate {
+	rhu.mutation.ClearDetails()
 	return rhu
 }
 
@@ -369,6 +350,21 @@ func (rhu *RiskHistoryUpdate) defaults() {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (rhu *RiskHistoryUpdate) check() error {
+	if v, ok := rhu.mutation.Impact(); ok {
+		if err := riskhistory.ImpactValidator(v); err != nil {
+			return &ValidationError{Name: "impact", err: fmt.Errorf(`generated: validator failed for field "RiskHistory.impact": %w`, err)}
+		}
+	}
+	if v, ok := rhu.mutation.Likelihood(); ok {
+		if err := riskhistory.LikelihoodValidator(v); err != nil {
+			return &ValidationError{Name: "likelihood", err: fmt.Errorf(`generated: validator failed for field "RiskHistory.likelihood": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (rhu *RiskHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *RiskHistoryUpdate {
 	rhu.modifiers = append(rhu.modifiers, modifiers...)
@@ -376,6 +372,9 @@ func (rhu *RiskHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *R
 }
 
 func (rhu *RiskHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
+	if err := rhu.check(); err != nil {
+		return n, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(riskhistory.Table, riskhistory.Columns, sqlgraph.NewFieldSpec(riskhistory.FieldID, field.TypeString))
 	if ps := rhu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -456,16 +455,16 @@ func (rhu *RiskHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.ClearField(riskhistory.FieldBusinessCosts, field.TypeString)
 	}
 	if value, ok := rhu.mutation.Impact(); ok {
-		_spec.SetField(riskhistory.FieldImpact, field.TypeString, value)
+		_spec.SetField(riskhistory.FieldImpact, field.TypeEnum, value)
 	}
 	if rhu.mutation.ImpactCleared() {
-		_spec.ClearField(riskhistory.FieldImpact, field.TypeString)
+		_spec.ClearField(riskhistory.FieldImpact, field.TypeEnum)
 	}
 	if value, ok := rhu.mutation.Likelihood(); ok {
-		_spec.SetField(riskhistory.FieldLikelihood, field.TypeString, value)
+		_spec.SetField(riskhistory.FieldLikelihood, field.TypeEnum, value)
 	}
 	if rhu.mutation.LikelihoodCleared() {
-		_spec.ClearField(riskhistory.FieldLikelihood, field.TypeString)
+		_spec.ClearField(riskhistory.FieldLikelihood, field.TypeEnum)
 	}
 	if value, ok := rhu.mutation.Mitigation(); ok {
 		_spec.SetField(riskhistory.FieldMitigation, field.TypeString, value)
@@ -479,17 +478,11 @@ func (rhu *RiskHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if rhu.mutation.SatisfiesCleared() {
 		_spec.ClearField(riskhistory.FieldSatisfies, field.TypeString)
 	}
-	if value, ok := rhu.mutation.Severity(); ok {
-		_spec.SetField(riskhistory.FieldSeverity, field.TypeString, value)
+	if value, ok := rhu.mutation.Details(); ok {
+		_spec.SetField(riskhistory.FieldDetails, field.TypeJSON, value)
 	}
-	if rhu.mutation.SeverityCleared() {
-		_spec.ClearField(riskhistory.FieldSeverity, field.TypeString)
-	}
-	if value, ok := rhu.mutation.Jsonschema(); ok {
-		_spec.SetField(riskhistory.FieldJsonschema, field.TypeJSON, value)
-	}
-	if rhu.mutation.JsonschemaCleared() {
-		_spec.ClearField(riskhistory.FieldJsonschema, field.TypeJSON)
+	if rhu.mutation.DetailsCleared() {
+		_spec.ClearField(riskhistory.FieldDetails, field.TypeJSON)
 	}
 	_spec.Node.Schema = rhu.schemaConfig.RiskHistory
 	ctx = internal.NewSchemaConfigContext(ctx, rhu.schemaConfig)
@@ -700,15 +693,15 @@ func (rhuo *RiskHistoryUpdateOne) ClearBusinessCosts() *RiskHistoryUpdateOne {
 }
 
 // SetImpact sets the "impact" field.
-func (rhuo *RiskHistoryUpdateOne) SetImpact(s string) *RiskHistoryUpdateOne {
-	rhuo.mutation.SetImpact(s)
+func (rhuo *RiskHistoryUpdateOne) SetImpact(ei enums.RiskImpact) *RiskHistoryUpdateOne {
+	rhuo.mutation.SetImpact(ei)
 	return rhuo
 }
 
 // SetNillableImpact sets the "impact" field if the given value is not nil.
-func (rhuo *RiskHistoryUpdateOne) SetNillableImpact(s *string) *RiskHistoryUpdateOne {
-	if s != nil {
-		rhuo.SetImpact(*s)
+func (rhuo *RiskHistoryUpdateOne) SetNillableImpact(ei *enums.RiskImpact) *RiskHistoryUpdateOne {
+	if ei != nil {
+		rhuo.SetImpact(*ei)
 	}
 	return rhuo
 }
@@ -720,15 +713,15 @@ func (rhuo *RiskHistoryUpdateOne) ClearImpact() *RiskHistoryUpdateOne {
 }
 
 // SetLikelihood sets the "likelihood" field.
-func (rhuo *RiskHistoryUpdateOne) SetLikelihood(s string) *RiskHistoryUpdateOne {
-	rhuo.mutation.SetLikelihood(s)
+func (rhuo *RiskHistoryUpdateOne) SetLikelihood(el enums.RiskLikelihood) *RiskHistoryUpdateOne {
+	rhuo.mutation.SetLikelihood(el)
 	return rhuo
 }
 
 // SetNillableLikelihood sets the "likelihood" field if the given value is not nil.
-func (rhuo *RiskHistoryUpdateOne) SetNillableLikelihood(s *string) *RiskHistoryUpdateOne {
-	if s != nil {
-		rhuo.SetLikelihood(*s)
+func (rhuo *RiskHistoryUpdateOne) SetNillableLikelihood(el *enums.RiskLikelihood) *RiskHistoryUpdateOne {
+	if el != nil {
+		rhuo.SetLikelihood(*el)
 	}
 	return rhuo
 }
@@ -779,35 +772,15 @@ func (rhuo *RiskHistoryUpdateOne) ClearSatisfies() *RiskHistoryUpdateOne {
 	return rhuo
 }
 
-// SetSeverity sets the "severity" field.
-func (rhuo *RiskHistoryUpdateOne) SetSeverity(s string) *RiskHistoryUpdateOne {
-	rhuo.mutation.SetSeverity(s)
+// SetDetails sets the "details" field.
+func (rhuo *RiskHistoryUpdateOne) SetDetails(m map[string]interface{}) *RiskHistoryUpdateOne {
+	rhuo.mutation.SetDetails(m)
 	return rhuo
 }
 
-// SetNillableSeverity sets the "severity" field if the given value is not nil.
-func (rhuo *RiskHistoryUpdateOne) SetNillableSeverity(s *string) *RiskHistoryUpdateOne {
-	if s != nil {
-		rhuo.SetSeverity(*s)
-	}
-	return rhuo
-}
-
-// ClearSeverity clears the value of the "severity" field.
-func (rhuo *RiskHistoryUpdateOne) ClearSeverity() *RiskHistoryUpdateOne {
-	rhuo.mutation.ClearSeverity()
-	return rhuo
-}
-
-// SetJsonschema sets the "jsonschema" field.
-func (rhuo *RiskHistoryUpdateOne) SetJsonschema(m map[string]interface{}) *RiskHistoryUpdateOne {
-	rhuo.mutation.SetJsonschema(m)
-	return rhuo
-}
-
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (rhuo *RiskHistoryUpdateOne) ClearJsonschema() *RiskHistoryUpdateOne {
-	rhuo.mutation.ClearJsonschema()
+// ClearDetails clears the value of the "details" field.
+func (rhuo *RiskHistoryUpdateOne) ClearDetails() *RiskHistoryUpdateOne {
+	rhuo.mutation.ClearDetails()
 	return rhuo
 }
 
@@ -865,6 +838,21 @@ func (rhuo *RiskHistoryUpdateOne) defaults() {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (rhuo *RiskHistoryUpdateOne) check() error {
+	if v, ok := rhuo.mutation.Impact(); ok {
+		if err := riskhistory.ImpactValidator(v); err != nil {
+			return &ValidationError{Name: "impact", err: fmt.Errorf(`generated: validator failed for field "RiskHistory.impact": %w`, err)}
+		}
+	}
+	if v, ok := rhuo.mutation.Likelihood(); ok {
+		if err := riskhistory.LikelihoodValidator(v); err != nil {
+			return &ValidationError{Name: "likelihood", err: fmt.Errorf(`generated: validator failed for field "RiskHistory.likelihood": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (rhuo *RiskHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *RiskHistoryUpdateOne {
 	rhuo.modifiers = append(rhuo.modifiers, modifiers...)
@@ -872,6 +860,9 @@ func (rhuo *RiskHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)
 }
 
 func (rhuo *RiskHistoryUpdateOne) sqlSave(ctx context.Context) (_node *RiskHistory, err error) {
+	if err := rhuo.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(riskhistory.Table, riskhistory.Columns, sqlgraph.NewFieldSpec(riskhistory.FieldID, field.TypeString))
 	id, ok := rhuo.mutation.ID()
 	if !ok {
@@ -969,16 +960,16 @@ func (rhuo *RiskHistoryUpdateOne) sqlSave(ctx context.Context) (_node *RiskHisto
 		_spec.ClearField(riskhistory.FieldBusinessCosts, field.TypeString)
 	}
 	if value, ok := rhuo.mutation.Impact(); ok {
-		_spec.SetField(riskhistory.FieldImpact, field.TypeString, value)
+		_spec.SetField(riskhistory.FieldImpact, field.TypeEnum, value)
 	}
 	if rhuo.mutation.ImpactCleared() {
-		_spec.ClearField(riskhistory.FieldImpact, field.TypeString)
+		_spec.ClearField(riskhistory.FieldImpact, field.TypeEnum)
 	}
 	if value, ok := rhuo.mutation.Likelihood(); ok {
-		_spec.SetField(riskhistory.FieldLikelihood, field.TypeString, value)
+		_spec.SetField(riskhistory.FieldLikelihood, field.TypeEnum, value)
 	}
 	if rhuo.mutation.LikelihoodCleared() {
-		_spec.ClearField(riskhistory.FieldLikelihood, field.TypeString)
+		_spec.ClearField(riskhistory.FieldLikelihood, field.TypeEnum)
 	}
 	if value, ok := rhuo.mutation.Mitigation(); ok {
 		_spec.SetField(riskhistory.FieldMitigation, field.TypeString, value)
@@ -992,17 +983,11 @@ func (rhuo *RiskHistoryUpdateOne) sqlSave(ctx context.Context) (_node *RiskHisto
 	if rhuo.mutation.SatisfiesCleared() {
 		_spec.ClearField(riskhistory.FieldSatisfies, field.TypeString)
 	}
-	if value, ok := rhuo.mutation.Severity(); ok {
-		_spec.SetField(riskhistory.FieldSeverity, field.TypeString, value)
+	if value, ok := rhuo.mutation.Details(); ok {
+		_spec.SetField(riskhistory.FieldDetails, field.TypeJSON, value)
 	}
-	if rhuo.mutation.SeverityCleared() {
-		_spec.ClearField(riskhistory.FieldSeverity, field.TypeString)
-	}
-	if value, ok := rhuo.mutation.Jsonschema(); ok {
-		_spec.SetField(riskhistory.FieldJsonschema, field.TypeJSON, value)
-	}
-	if rhuo.mutation.JsonschemaCleared() {
-		_spec.ClearField(riskhistory.FieldJsonschema, field.TypeJSON)
+	if rhuo.mutation.DetailsCleared() {
+		_spec.ClearField(riskhistory.FieldDetails, field.TypeJSON)
 	}
 	_spec.Node.Schema = rhuo.schemaConfig.RiskHistory
 	ctx = internal.NewSchemaConfigContext(ctx, rhuo.schemaConfig)

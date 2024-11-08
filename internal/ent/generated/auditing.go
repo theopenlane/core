@@ -105,9 +105,6 @@ func (aph *ActionPlanHistory) changes(new *ActionPlanHistory) []Change {
 	if !reflect.DeepEqual(aph.Status, new.Status) {
 		changes = append(changes, NewChange(actionplanhistory.FieldStatus, aph.Status, new.Status))
 	}
-	if !reflect.DeepEqual(aph.Assigned, new.Assigned) {
-		changes = append(changes, NewChange(actionplanhistory.FieldAssigned, aph.Assigned, new.Assigned))
-	}
 	if !reflect.DeepEqual(aph.DueDate, new.DueDate) {
 		changes = append(changes, NewChange(actionplanhistory.FieldDueDate, aph.DueDate, new.DueDate))
 	}
@@ -117,8 +114,8 @@ func (aph *ActionPlanHistory) changes(new *ActionPlanHistory) []Change {
 	if !reflect.DeepEqual(aph.Source, new.Source) {
 		changes = append(changes, NewChange(actionplanhistory.FieldSource, aph.Source, new.Source))
 	}
-	if !reflect.DeepEqual(aph.Jsonschema, new.Jsonschema) {
-		changes = append(changes, NewChange(actionplanhistory.FieldJsonschema, aph.Jsonschema, new.Jsonschema))
+	if !reflect.DeepEqual(aph.Details, new.Details) {
+		changes = append(changes, NewChange(actionplanhistory.FieldDetails, aph.Details, new.Details))
 	}
 	return changes
 }
@@ -261,17 +258,14 @@ func (ch *ControlHistory) changes(new *ControlHistory) []Change {
 	if !reflect.DeepEqual(ch.Version, new.Version) {
 		changes = append(changes, NewChange(controlhistory.FieldVersion, ch.Version, new.Version))
 	}
-	if !reflect.DeepEqual(ch.Owner, new.Owner) {
-		changes = append(changes, NewChange(controlhistory.FieldOwner, ch.Owner, new.Owner))
-	}
 	if !reflect.DeepEqual(ch.ControlNumber, new.ControlNumber) {
 		changes = append(changes, NewChange(controlhistory.FieldControlNumber, ch.ControlNumber, new.ControlNumber))
 	}
-	if !reflect.DeepEqual(ch.ControlFamily, new.ControlFamily) {
-		changes = append(changes, NewChange(controlhistory.FieldControlFamily, ch.ControlFamily, new.ControlFamily))
+	if !reflect.DeepEqual(ch.Family, new.Family) {
+		changes = append(changes, NewChange(controlhistory.FieldFamily, ch.Family, new.Family))
 	}
-	if !reflect.DeepEqual(ch.ControlClass, new.ControlClass) {
-		changes = append(changes, NewChange(controlhistory.FieldControlClass, ch.ControlClass, new.ControlClass))
+	if !reflect.DeepEqual(ch.Class, new.Class) {
+		changes = append(changes, NewChange(controlhistory.FieldClass, ch.Class, new.Class))
 	}
 	if !reflect.DeepEqual(ch.Source, new.Source) {
 		changes = append(changes, NewChange(controlhistory.FieldSource, ch.Source, new.Source))
@@ -282,8 +276,8 @@ func (ch *ControlHistory) changes(new *ControlHistory) []Change {
 	if !reflect.DeepEqual(ch.MappedFrameworks, new.MappedFrameworks) {
 		changes = append(changes, NewChange(controlhistory.FieldMappedFrameworks, ch.MappedFrameworks, new.MappedFrameworks))
 	}
-	if !reflect.DeepEqual(ch.Jsonschema, new.Jsonschema) {
-		changes = append(changes, NewChange(controlhistory.FieldJsonschema, ch.Jsonschema, new.Jsonschema))
+	if !reflect.DeepEqual(ch.Details, new.Details) {
+		changes = append(changes, NewChange(controlhistory.FieldDetails, ch.Details, new.Details))
 	}
 	return changes
 }
@@ -351,17 +345,14 @@ func (coh *ControlObjectiveHistory) changes(new *ControlObjectiveHistory) []Chan
 	if !reflect.DeepEqual(coh.Version, new.Version) {
 		changes = append(changes, NewChange(controlobjectivehistory.FieldVersion, coh.Version, new.Version))
 	}
-	if !reflect.DeepEqual(coh.Owner, new.Owner) {
-		changes = append(changes, NewChange(controlobjectivehistory.FieldOwner, coh.Owner, new.Owner))
-	}
 	if !reflect.DeepEqual(coh.ControlNumber, new.ControlNumber) {
 		changes = append(changes, NewChange(controlobjectivehistory.FieldControlNumber, coh.ControlNumber, new.ControlNumber))
 	}
-	if !reflect.DeepEqual(coh.ControlFamily, new.ControlFamily) {
-		changes = append(changes, NewChange(controlobjectivehistory.FieldControlFamily, coh.ControlFamily, new.ControlFamily))
+	if !reflect.DeepEqual(coh.Family, new.Family) {
+		changes = append(changes, NewChange(controlobjectivehistory.FieldFamily, coh.Family, new.Family))
 	}
-	if !reflect.DeepEqual(coh.ControlClass, new.ControlClass) {
-		changes = append(changes, NewChange(controlobjectivehistory.FieldControlClass, coh.ControlClass, new.ControlClass))
+	if !reflect.DeepEqual(coh.Class, new.Class) {
+		changes = append(changes, NewChange(controlobjectivehistory.FieldClass, coh.Class, new.Class))
 	}
 	if !reflect.DeepEqual(coh.Source, new.Source) {
 		changes = append(changes, NewChange(controlobjectivehistory.FieldSource, coh.Source, new.Source))
@@ -369,8 +360,8 @@ func (coh *ControlObjectiveHistory) changes(new *ControlObjectiveHistory) []Chan
 	if !reflect.DeepEqual(coh.MappedFrameworks, new.MappedFrameworks) {
 		changes = append(changes, NewChange(controlobjectivehistory.FieldMappedFrameworks, coh.MappedFrameworks, new.MappedFrameworks))
 	}
-	if !reflect.DeepEqual(coh.Jsonschema, new.Jsonschema) {
-		changes = append(changes, NewChange(controlobjectivehistory.FieldJsonschema, coh.Jsonschema, new.Jsonschema))
+	if !reflect.DeepEqual(coh.Details, new.Details) {
+		changes = append(changes, NewChange(controlobjectivehistory.FieldDetails, coh.Details, new.Details))
 	}
 	return changes
 }
@@ -1377,8 +1368,8 @@ func (iph *InternalPolicyHistory) changes(new *InternalPolicyHistory) []Change {
 	if !reflect.DeepEqual(iph.Background, new.Background) {
 		changes = append(changes, NewChange(internalpolicyhistory.FieldBackground, iph.Background, new.Background))
 	}
-	if !reflect.DeepEqual(iph.Jsonschema, new.Jsonschema) {
-		changes = append(changes, NewChange(internalpolicyhistory.FieldJsonschema, iph.Jsonschema, new.Jsonschema))
+	if !reflect.DeepEqual(iph.Details, new.Details) {
+		changes = append(changes, NewChange(internalpolicyhistory.FieldDetails, iph.Details, new.Details))
 	}
 	return changes
 }
@@ -1440,8 +1431,8 @@ func (nh *NarrativeHistory) changes(new *NarrativeHistory) []Change {
 	if !reflect.DeepEqual(nh.Satisfies, new.Satisfies) {
 		changes = append(changes, NewChange(narrativehistory.FieldSatisfies, nh.Satisfies, new.Satisfies))
 	}
-	if !reflect.DeepEqual(nh.Jsonschema, new.Jsonschema) {
-		changes = append(changes, NewChange(narrativehistory.FieldJsonschema, nh.Jsonschema, new.Jsonschema))
+	if !reflect.DeepEqual(nh.Details, new.Details) {
+		changes = append(changes, NewChange(narrativehistory.FieldDetails, nh.Details, new.Details))
 	}
 	return changes
 }
@@ -1860,8 +1851,8 @@ func (ph *ProcedureHistory) changes(new *ProcedureHistory) []Change {
 	if !reflect.DeepEqual(ph.Satisfies, new.Satisfies) {
 		changes = append(changes, NewChange(procedurehistory.FieldSatisfies, ph.Satisfies, new.Satisfies))
 	}
-	if !reflect.DeepEqual(ph.Jsonschema, new.Jsonschema) {
-		changes = append(changes, NewChange(procedurehistory.FieldJsonschema, ph.Jsonschema, new.Jsonschema))
+	if !reflect.DeepEqual(ph.Details, new.Details) {
+		changes = append(changes, NewChange(procedurehistory.FieldDetails, ph.Details, new.Details))
 	}
 	return changes
 }
@@ -1941,11 +1932,8 @@ func (rh *RiskHistory) changes(new *RiskHistory) []Change {
 	if !reflect.DeepEqual(rh.Satisfies, new.Satisfies) {
 		changes = append(changes, NewChange(riskhistory.FieldSatisfies, rh.Satisfies, new.Satisfies))
 	}
-	if !reflect.DeepEqual(rh.Severity, new.Severity) {
-		changes = append(changes, NewChange(riskhistory.FieldSeverity, rh.Severity, new.Severity))
-	}
-	if !reflect.DeepEqual(rh.Jsonschema, new.Jsonschema) {
-		changes = append(changes, NewChange(riskhistory.FieldJsonschema, rh.Jsonschema, new.Jsonschema))
+	if !reflect.DeepEqual(rh.Details, new.Details) {
+		changes = append(changes, NewChange(riskhistory.FieldDetails, rh.Details, new.Details))
 	}
 	return changes
 }
@@ -2025,8 +2013,8 @@ func (sh *StandardHistory) changes(new *StandardHistory) []Change {
 	if !reflect.DeepEqual(sh.Satisfies, new.Satisfies) {
 		changes = append(changes, NewChange(standardhistory.FieldSatisfies, sh.Satisfies, new.Satisfies))
 	}
-	if !reflect.DeepEqual(sh.Jsonschema, new.Jsonschema) {
-		changes = append(changes, NewChange(standardhistory.FieldJsonschema, sh.Jsonschema, new.Jsonschema))
+	if !reflect.DeepEqual(sh.Details, new.Details) {
+		changes = append(changes, NewChange(standardhistory.FieldDetails, sh.Details, new.Details))
 	}
 	return changes
 }
@@ -2094,17 +2082,14 @@ func (sh *SubcontrolHistory) changes(new *SubcontrolHistory) []Change {
 	if !reflect.DeepEqual(sh.Version, new.Version) {
 		changes = append(changes, NewChange(subcontrolhistory.FieldVersion, sh.Version, new.Version))
 	}
-	if !reflect.DeepEqual(sh.Owner, new.Owner) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldOwner, sh.Owner, new.Owner))
-	}
 	if !reflect.DeepEqual(sh.SubcontrolNumber, new.SubcontrolNumber) {
 		changes = append(changes, NewChange(subcontrolhistory.FieldSubcontrolNumber, sh.SubcontrolNumber, new.SubcontrolNumber))
 	}
-	if !reflect.DeepEqual(sh.SubcontrolFamily, new.SubcontrolFamily) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldSubcontrolFamily, sh.SubcontrolFamily, new.SubcontrolFamily))
+	if !reflect.DeepEqual(sh.Family, new.Family) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldFamily, sh.Family, new.Family))
 	}
-	if !reflect.DeepEqual(sh.SubcontrolClass, new.SubcontrolClass) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldSubcontrolClass, sh.SubcontrolClass, new.SubcontrolClass))
+	if !reflect.DeepEqual(sh.Class, new.Class) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldClass, sh.Class, new.Class))
 	}
 	if !reflect.DeepEqual(sh.Source, new.Source) {
 		changes = append(changes, NewChange(subcontrolhistory.FieldSource, sh.Source, new.Source))
@@ -2112,20 +2097,14 @@ func (sh *SubcontrolHistory) changes(new *SubcontrolHistory) []Change {
 	if !reflect.DeepEqual(sh.MappedFrameworks, new.MappedFrameworks) {
 		changes = append(changes, NewChange(subcontrolhistory.FieldMappedFrameworks, sh.MappedFrameworks, new.MappedFrameworks))
 	}
-	if !reflect.DeepEqual(sh.AssignedTo, new.AssignedTo) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldAssignedTo, sh.AssignedTo, new.AssignedTo))
+	if !reflect.DeepEqual(sh.ImplementationEvidence, new.ImplementationEvidence) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldImplementationEvidence, sh.ImplementationEvidence, new.ImplementationEvidence))
 	}
 	if !reflect.DeepEqual(sh.ImplementationStatus, new.ImplementationStatus) {
 		changes = append(changes, NewChange(subcontrolhistory.FieldImplementationStatus, sh.ImplementationStatus, new.ImplementationStatus))
 	}
-	if !reflect.DeepEqual(sh.ImplementationNotes, new.ImplementationNotes) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldImplementationNotes, sh.ImplementationNotes, new.ImplementationNotes))
-	}
 	if !reflect.DeepEqual(sh.ImplementationDate, new.ImplementationDate) {
 		changes = append(changes, NewChange(subcontrolhistory.FieldImplementationDate, sh.ImplementationDate, new.ImplementationDate))
-	}
-	if !reflect.DeepEqual(sh.ImplementationEvidence, new.ImplementationEvidence) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldImplementationEvidence, sh.ImplementationEvidence, new.ImplementationEvidence))
 	}
 	if !reflect.DeepEqual(sh.ImplementationVerification, new.ImplementationVerification) {
 		changes = append(changes, NewChange(subcontrolhistory.FieldImplementationVerification, sh.ImplementationVerification, new.ImplementationVerification))
@@ -2133,8 +2112,8 @@ func (sh *SubcontrolHistory) changes(new *SubcontrolHistory) []Change {
 	if !reflect.DeepEqual(sh.ImplementationVerificationDate, new.ImplementationVerificationDate) {
 		changes = append(changes, NewChange(subcontrolhistory.FieldImplementationVerificationDate, sh.ImplementationVerificationDate, new.ImplementationVerificationDate))
 	}
-	if !reflect.DeepEqual(sh.Jsonschema, new.Jsonschema) {
-		changes = append(changes, NewChange(subcontrolhistory.FieldJsonschema, sh.Jsonschema, new.Jsonschema))
+	if !reflect.DeepEqual(sh.Details, new.Details) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldDetails, sh.Details, new.Details))
 	}
 	return changes
 }

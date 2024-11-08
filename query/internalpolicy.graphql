@@ -6,8 +6,8 @@ mutation CreateBulkCSVInternalPolicy($input: Upload!) {
       createdAt
       createdBy
       description
+      details
       id
-      jsonschema
       name
       policyType
       purposeAndScope
@@ -27,8 +27,8 @@ mutation CreateBulkInternalPolicy($input: [CreateInternalPolicyInput!]) {
       createdAt
       createdBy
       description
+      details
       id
-      jsonschema
       name
       policyType
       purposeAndScope
@@ -48,8 +48,8 @@ mutation CreateInternalPolicy($input: CreateInternalPolicyInput!) {
       createdAt
       createdBy
       description
+      details
       id
-      jsonschema
       name
       policyType
       purposeAndScope
@@ -76,8 +76,8 @@ query GetAllInternalPolicies {
         createdAt
         createdBy
         description
+        details
         id
-        jsonschema
         name
         policyType
         purposeAndScope
@@ -96,8 +96,8 @@ query GetInternalPolicyByID($internalPolicyId: ID!) {
     createdAt
     createdBy
     description
+    details
     id
-    jsonschema
     name
     policyType
     purposeAndScope
@@ -117,8 +117,8 @@ query GetInternalPolicies($where: InternalPolicyWhereInput) {
         createdAt
         createdBy
         description
+        details
         id
-        jsonschema
         name
         policyType
         purposeAndScope
@@ -138,8 +138,8 @@ mutation UpdateInternalPolicy($updateInternalPolicyId: ID!, $input: UpdateIntern
       createdAt
       createdBy
       description
+      details
       id
-      jsonschema
       name
       policyType
       purposeAndScope

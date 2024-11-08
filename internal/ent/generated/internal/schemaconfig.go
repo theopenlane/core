@@ -18,6 +18,7 @@ type SchemaConfig struct {
 	ControlSubcontrols               string // Control-subcontrols->Subcontrol table.
 	ControlNarratives                string // Control-narratives->Narrative table.
 	ControlRisks                     string // Control-risks->Risk table.
+	ControlActionplans               string // Control-actionplans->ActionPlan table.
 	ControlHistory                   string // ControlHistory table.
 	ControlObjective                 string // ControlObjective table.
 	ControlObjectiveNarratives       string // ControlObjective-narratives->Narrative table.
@@ -121,6 +122,8 @@ type SchemaConfig struct {
 	User                             string // User table.
 	UserFiles                        string // User-files->File table.
 	UserEvents                       string // User-events->Event table.
+	UserActionplans                  string // User-actionplans->ActionPlan table.
+	UserSubcontrols                  string // User-subcontrols->Subcontrol table.
 	UserHistory                      string // UserHistory table.
 	UserSetting                      string // UserSetting table.
 	UserSettingFiles                 string // UserSetting-files->File table.

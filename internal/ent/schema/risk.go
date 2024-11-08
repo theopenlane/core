@@ -9,6 +9,7 @@ import (
 	emixin "github.com/theopenlane/entx/mixin"
 
 	"github.com/theopenlane/core/internal/ent/mixin"
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 // Risk defines the risk schema.
@@ -33,24 +34,23 @@ func (Risk) Fields() []ent.Field {
 		field.Text("business_costs").
 			Optional().
 			Comment("business costs associated with the risk"),
-		field.Text("impact").
+		field.Enum("impact").
+			GoType(enums.RiskImpact("")).
 			Optional().
-			Comment("impact of the risk"),
-		field.Text("likelihood").
+			Comment("impact of the risk - high, medium, low"),
+		field.Enum("likelihood").
+			GoType(enums.RiskLikelihood("")).
 			Optional().
-			Comment("likelihood of the risk"),
+			Comment("likelihood of the risk occurring; unlikely, likely, highly likely"),
 		field.Text("mitigation").
 			Optional().
-			Comment("mitigation of the risk"),
+			Comment("mitigation for the risk"),
 		field.Text("satisfies").
 			Optional().
 			Comment("which controls are satisfied by the risk"),
-		field.Text("severity").
+		field.JSON("details", map[string]interface{}{}).
 			Optional().
-			Comment("severity of the risk, e.g. high medium low"),
-		field.JSON("jsonschema", map[string]interface{}{}).
-			Optional().
-			Comment("json schema"),
+			Comment("json data for the risk document"),
 	}
 }
 

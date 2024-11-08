@@ -135,24 +135,19 @@ func Version(v string) predicate.ControlHistory {
 	return predicate.ControlHistory(sql.FieldEQ(FieldVersion, v))
 }
 
-// Owner applies equality check predicate on the "owner" field. It's identical to OwnerEQ.
-func Owner(v string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldEQ(FieldOwner, v))
-}
-
 // ControlNumber applies equality check predicate on the "control_number" field. It's identical to ControlNumberEQ.
 func ControlNumber(v string) predicate.ControlHistory {
 	return predicate.ControlHistory(sql.FieldEQ(FieldControlNumber, v))
 }
 
-// ControlFamily applies equality check predicate on the "control_family" field. It's identical to ControlFamilyEQ.
-func ControlFamily(v string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldEQ(FieldControlFamily, v))
+// Family applies equality check predicate on the "family" field. It's identical to FamilyEQ.
+func Family(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldEQ(FieldFamily, v))
 }
 
-// ControlClass applies equality check predicate on the "control_class" field. It's identical to ControlClassEQ.
-func ControlClass(v string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldEQ(FieldControlClass, v))
+// Class applies equality check predicate on the "class" field. It's identical to ClassEQ.
+func Class(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldEQ(FieldClass, v))
 }
 
 // Source applies equality check predicate on the "source" field. It's identical to SourceEQ.
@@ -1120,81 +1115,6 @@ func VersionContainsFold(v string) predicate.ControlHistory {
 	return predicate.ControlHistory(sql.FieldContainsFold(FieldVersion, v))
 }
 
-// OwnerEQ applies the EQ predicate on the "owner" field.
-func OwnerEQ(v string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldEQ(FieldOwner, v))
-}
-
-// OwnerNEQ applies the NEQ predicate on the "owner" field.
-func OwnerNEQ(v string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldNEQ(FieldOwner, v))
-}
-
-// OwnerIn applies the In predicate on the "owner" field.
-func OwnerIn(vs ...string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldIn(FieldOwner, vs...))
-}
-
-// OwnerNotIn applies the NotIn predicate on the "owner" field.
-func OwnerNotIn(vs ...string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldNotIn(FieldOwner, vs...))
-}
-
-// OwnerGT applies the GT predicate on the "owner" field.
-func OwnerGT(v string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldGT(FieldOwner, v))
-}
-
-// OwnerGTE applies the GTE predicate on the "owner" field.
-func OwnerGTE(v string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldGTE(FieldOwner, v))
-}
-
-// OwnerLT applies the LT predicate on the "owner" field.
-func OwnerLT(v string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldLT(FieldOwner, v))
-}
-
-// OwnerLTE applies the LTE predicate on the "owner" field.
-func OwnerLTE(v string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldLTE(FieldOwner, v))
-}
-
-// OwnerContains applies the Contains predicate on the "owner" field.
-func OwnerContains(v string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldContains(FieldOwner, v))
-}
-
-// OwnerHasPrefix applies the HasPrefix predicate on the "owner" field.
-func OwnerHasPrefix(v string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldHasPrefix(FieldOwner, v))
-}
-
-// OwnerHasSuffix applies the HasSuffix predicate on the "owner" field.
-func OwnerHasSuffix(v string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldHasSuffix(FieldOwner, v))
-}
-
-// OwnerIsNil applies the IsNil predicate on the "owner" field.
-func OwnerIsNil() predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldIsNull(FieldOwner))
-}
-
-// OwnerNotNil applies the NotNil predicate on the "owner" field.
-func OwnerNotNil() predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldNotNull(FieldOwner))
-}
-
-// OwnerEqualFold applies the EqualFold predicate on the "owner" field.
-func OwnerEqualFold(v string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldEqualFold(FieldOwner, v))
-}
-
-// OwnerContainsFold applies the ContainsFold predicate on the "owner" field.
-func OwnerContainsFold(v string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldContainsFold(FieldOwner, v))
-}
-
 // ControlNumberEQ applies the EQ predicate on the "control_number" field.
 func ControlNumberEQ(v string) predicate.ControlHistory {
 	return predicate.ControlHistory(sql.FieldEQ(FieldControlNumber, v))
@@ -1270,154 +1190,154 @@ func ControlNumberContainsFold(v string) predicate.ControlHistory {
 	return predicate.ControlHistory(sql.FieldContainsFold(FieldControlNumber, v))
 }
 
-// ControlFamilyEQ applies the EQ predicate on the "control_family" field.
-func ControlFamilyEQ(v string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldEQ(FieldControlFamily, v))
+// FamilyEQ applies the EQ predicate on the "family" field.
+func FamilyEQ(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldEQ(FieldFamily, v))
 }
 
-// ControlFamilyNEQ applies the NEQ predicate on the "control_family" field.
-func ControlFamilyNEQ(v string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldNEQ(FieldControlFamily, v))
+// FamilyNEQ applies the NEQ predicate on the "family" field.
+func FamilyNEQ(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldNEQ(FieldFamily, v))
 }
 
-// ControlFamilyIn applies the In predicate on the "control_family" field.
-func ControlFamilyIn(vs ...string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldIn(FieldControlFamily, vs...))
+// FamilyIn applies the In predicate on the "family" field.
+func FamilyIn(vs ...string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldIn(FieldFamily, vs...))
 }
 
-// ControlFamilyNotIn applies the NotIn predicate on the "control_family" field.
-func ControlFamilyNotIn(vs ...string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldNotIn(FieldControlFamily, vs...))
+// FamilyNotIn applies the NotIn predicate on the "family" field.
+func FamilyNotIn(vs ...string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldNotIn(FieldFamily, vs...))
 }
 
-// ControlFamilyGT applies the GT predicate on the "control_family" field.
-func ControlFamilyGT(v string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldGT(FieldControlFamily, v))
+// FamilyGT applies the GT predicate on the "family" field.
+func FamilyGT(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldGT(FieldFamily, v))
 }
 
-// ControlFamilyGTE applies the GTE predicate on the "control_family" field.
-func ControlFamilyGTE(v string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldGTE(FieldControlFamily, v))
+// FamilyGTE applies the GTE predicate on the "family" field.
+func FamilyGTE(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldGTE(FieldFamily, v))
 }
 
-// ControlFamilyLT applies the LT predicate on the "control_family" field.
-func ControlFamilyLT(v string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldLT(FieldControlFamily, v))
+// FamilyLT applies the LT predicate on the "family" field.
+func FamilyLT(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldLT(FieldFamily, v))
 }
 
-// ControlFamilyLTE applies the LTE predicate on the "control_family" field.
-func ControlFamilyLTE(v string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldLTE(FieldControlFamily, v))
+// FamilyLTE applies the LTE predicate on the "family" field.
+func FamilyLTE(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldLTE(FieldFamily, v))
 }
 
-// ControlFamilyContains applies the Contains predicate on the "control_family" field.
-func ControlFamilyContains(v string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldContains(FieldControlFamily, v))
+// FamilyContains applies the Contains predicate on the "family" field.
+func FamilyContains(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldContains(FieldFamily, v))
 }
 
-// ControlFamilyHasPrefix applies the HasPrefix predicate on the "control_family" field.
-func ControlFamilyHasPrefix(v string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldHasPrefix(FieldControlFamily, v))
+// FamilyHasPrefix applies the HasPrefix predicate on the "family" field.
+func FamilyHasPrefix(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldHasPrefix(FieldFamily, v))
 }
 
-// ControlFamilyHasSuffix applies the HasSuffix predicate on the "control_family" field.
-func ControlFamilyHasSuffix(v string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldHasSuffix(FieldControlFamily, v))
+// FamilyHasSuffix applies the HasSuffix predicate on the "family" field.
+func FamilyHasSuffix(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldHasSuffix(FieldFamily, v))
 }
 
-// ControlFamilyIsNil applies the IsNil predicate on the "control_family" field.
-func ControlFamilyIsNil() predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldIsNull(FieldControlFamily))
+// FamilyIsNil applies the IsNil predicate on the "family" field.
+func FamilyIsNil() predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldIsNull(FieldFamily))
 }
 
-// ControlFamilyNotNil applies the NotNil predicate on the "control_family" field.
-func ControlFamilyNotNil() predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldNotNull(FieldControlFamily))
+// FamilyNotNil applies the NotNil predicate on the "family" field.
+func FamilyNotNil() predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldNotNull(FieldFamily))
 }
 
-// ControlFamilyEqualFold applies the EqualFold predicate on the "control_family" field.
-func ControlFamilyEqualFold(v string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldEqualFold(FieldControlFamily, v))
+// FamilyEqualFold applies the EqualFold predicate on the "family" field.
+func FamilyEqualFold(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldEqualFold(FieldFamily, v))
 }
 
-// ControlFamilyContainsFold applies the ContainsFold predicate on the "control_family" field.
-func ControlFamilyContainsFold(v string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldContainsFold(FieldControlFamily, v))
+// FamilyContainsFold applies the ContainsFold predicate on the "family" field.
+func FamilyContainsFold(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldContainsFold(FieldFamily, v))
 }
 
-// ControlClassEQ applies the EQ predicate on the "control_class" field.
-func ControlClassEQ(v string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldEQ(FieldControlClass, v))
+// ClassEQ applies the EQ predicate on the "class" field.
+func ClassEQ(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldEQ(FieldClass, v))
 }
 
-// ControlClassNEQ applies the NEQ predicate on the "control_class" field.
-func ControlClassNEQ(v string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldNEQ(FieldControlClass, v))
+// ClassNEQ applies the NEQ predicate on the "class" field.
+func ClassNEQ(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldNEQ(FieldClass, v))
 }
 
-// ControlClassIn applies the In predicate on the "control_class" field.
-func ControlClassIn(vs ...string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldIn(FieldControlClass, vs...))
+// ClassIn applies the In predicate on the "class" field.
+func ClassIn(vs ...string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldIn(FieldClass, vs...))
 }
 
-// ControlClassNotIn applies the NotIn predicate on the "control_class" field.
-func ControlClassNotIn(vs ...string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldNotIn(FieldControlClass, vs...))
+// ClassNotIn applies the NotIn predicate on the "class" field.
+func ClassNotIn(vs ...string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldNotIn(FieldClass, vs...))
 }
 
-// ControlClassGT applies the GT predicate on the "control_class" field.
-func ControlClassGT(v string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldGT(FieldControlClass, v))
+// ClassGT applies the GT predicate on the "class" field.
+func ClassGT(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldGT(FieldClass, v))
 }
 
-// ControlClassGTE applies the GTE predicate on the "control_class" field.
-func ControlClassGTE(v string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldGTE(FieldControlClass, v))
+// ClassGTE applies the GTE predicate on the "class" field.
+func ClassGTE(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldGTE(FieldClass, v))
 }
 
-// ControlClassLT applies the LT predicate on the "control_class" field.
-func ControlClassLT(v string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldLT(FieldControlClass, v))
+// ClassLT applies the LT predicate on the "class" field.
+func ClassLT(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldLT(FieldClass, v))
 }
 
-// ControlClassLTE applies the LTE predicate on the "control_class" field.
-func ControlClassLTE(v string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldLTE(FieldControlClass, v))
+// ClassLTE applies the LTE predicate on the "class" field.
+func ClassLTE(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldLTE(FieldClass, v))
 }
 
-// ControlClassContains applies the Contains predicate on the "control_class" field.
-func ControlClassContains(v string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldContains(FieldControlClass, v))
+// ClassContains applies the Contains predicate on the "class" field.
+func ClassContains(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldContains(FieldClass, v))
 }
 
-// ControlClassHasPrefix applies the HasPrefix predicate on the "control_class" field.
-func ControlClassHasPrefix(v string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldHasPrefix(FieldControlClass, v))
+// ClassHasPrefix applies the HasPrefix predicate on the "class" field.
+func ClassHasPrefix(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldHasPrefix(FieldClass, v))
 }
 
-// ControlClassHasSuffix applies the HasSuffix predicate on the "control_class" field.
-func ControlClassHasSuffix(v string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldHasSuffix(FieldControlClass, v))
+// ClassHasSuffix applies the HasSuffix predicate on the "class" field.
+func ClassHasSuffix(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldHasSuffix(FieldClass, v))
 }
 
-// ControlClassIsNil applies the IsNil predicate on the "control_class" field.
-func ControlClassIsNil() predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldIsNull(FieldControlClass))
+// ClassIsNil applies the IsNil predicate on the "class" field.
+func ClassIsNil() predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldIsNull(FieldClass))
 }
 
-// ControlClassNotNil applies the NotNil predicate on the "control_class" field.
-func ControlClassNotNil() predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldNotNull(FieldControlClass))
+// ClassNotNil applies the NotNil predicate on the "class" field.
+func ClassNotNil() predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldNotNull(FieldClass))
 }
 
-// ControlClassEqualFold applies the EqualFold predicate on the "control_class" field.
-func ControlClassEqualFold(v string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldEqualFold(FieldControlClass, v))
+// ClassEqualFold applies the EqualFold predicate on the "class" field.
+func ClassEqualFold(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldEqualFold(FieldClass, v))
 }
 
-// ControlClassContainsFold applies the ContainsFold predicate on the "control_class" field.
-func ControlClassContainsFold(v string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldContainsFold(FieldControlClass, v))
+// ClassContainsFold applies the ContainsFold predicate on the "class" field.
+func ClassContainsFold(v string) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldContainsFold(FieldClass, v))
 }
 
 // SourceEQ applies the EQ predicate on the "source" field.
@@ -1645,14 +1565,14 @@ func MappedFrameworksContainsFold(v string) predicate.ControlHistory {
 	return predicate.ControlHistory(sql.FieldContainsFold(FieldMappedFrameworks, v))
 }
 
-// JsonschemaIsNil applies the IsNil predicate on the "jsonschema" field.
-func JsonschemaIsNil() predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldIsNull(FieldJsonschema))
+// DetailsIsNil applies the IsNil predicate on the "details" field.
+func DetailsIsNil() predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldIsNull(FieldDetails))
 }
 
-// JsonschemaNotNil applies the NotNil predicate on the "jsonschema" field.
-func JsonschemaNotNil() predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldNotNull(FieldJsonschema))
+// DetailsNotNil applies the NotNil predicate on the "details" field.
+func DetailsNotNil() predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldNotNull(FieldDetails))
 }
 
 // And groups predicates with the AND operator between them.

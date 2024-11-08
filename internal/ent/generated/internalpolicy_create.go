@@ -210,9 +210,9 @@ func (ipc *InternalPolicyCreate) SetNillableBackground(s *string) *InternalPolic
 	return ipc
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (ipc *InternalPolicyCreate) SetJsonschema(m map[string]interface{}) *InternalPolicyCreate {
-	ipc.mutation.SetJsonschema(m)
+// SetDetails sets the "details" field.
+func (ipc *InternalPolicyCreate) SetDetails(m map[string]interface{}) *InternalPolicyCreate {
+	ipc.mutation.SetDetails(m)
 	return ipc
 }
 
@@ -469,9 +469,9 @@ func (ipc *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.Create
 		_spec.SetField(internalpolicy.FieldBackground, field.TypeString, value)
 		_node.Background = value
 	}
-	if value, ok := ipc.mutation.Jsonschema(); ok {
-		_spec.SetField(internalpolicy.FieldJsonschema, field.TypeJSON, value)
-		_node.Jsonschema = value
+	if value, ok := ipc.mutation.Details(); ok {
+		_spec.SetField(internalpolicy.FieldDetails, field.TypeJSON, value)
+		_node.Details = value
 	}
 	if nodes := ipc.mutation.ControlobjectivesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

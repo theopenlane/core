@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
@@ -222,26 +223,6 @@ func (cu *ControlUpdate) ClearVersion() *ControlUpdate {
 	return cu
 }
 
-// SetOwner sets the "owner" field.
-func (cu *ControlUpdate) SetOwner(s string) *ControlUpdate {
-	cu.mutation.SetOwner(s)
-	return cu
-}
-
-// SetNillableOwner sets the "owner" field if the given value is not nil.
-func (cu *ControlUpdate) SetNillableOwner(s *string) *ControlUpdate {
-	if s != nil {
-		cu.SetOwner(*s)
-	}
-	return cu
-}
-
-// ClearOwner clears the value of the "owner" field.
-func (cu *ControlUpdate) ClearOwner() *ControlUpdate {
-	cu.mutation.ClearOwner()
-	return cu
-}
-
 // SetControlNumber sets the "control_number" field.
 func (cu *ControlUpdate) SetControlNumber(s string) *ControlUpdate {
 	cu.mutation.SetControlNumber(s)
@@ -262,43 +243,43 @@ func (cu *ControlUpdate) ClearControlNumber() *ControlUpdate {
 	return cu
 }
 
-// SetControlFamily sets the "control_family" field.
-func (cu *ControlUpdate) SetControlFamily(s string) *ControlUpdate {
-	cu.mutation.SetControlFamily(s)
+// SetFamily sets the "family" field.
+func (cu *ControlUpdate) SetFamily(s string) *ControlUpdate {
+	cu.mutation.SetFamily(s)
 	return cu
 }
 
-// SetNillableControlFamily sets the "control_family" field if the given value is not nil.
-func (cu *ControlUpdate) SetNillableControlFamily(s *string) *ControlUpdate {
+// SetNillableFamily sets the "family" field if the given value is not nil.
+func (cu *ControlUpdate) SetNillableFamily(s *string) *ControlUpdate {
 	if s != nil {
-		cu.SetControlFamily(*s)
+		cu.SetFamily(*s)
 	}
 	return cu
 }
 
-// ClearControlFamily clears the value of the "control_family" field.
-func (cu *ControlUpdate) ClearControlFamily() *ControlUpdate {
-	cu.mutation.ClearControlFamily()
+// ClearFamily clears the value of the "family" field.
+func (cu *ControlUpdate) ClearFamily() *ControlUpdate {
+	cu.mutation.ClearFamily()
 	return cu
 }
 
-// SetControlClass sets the "control_class" field.
-func (cu *ControlUpdate) SetControlClass(s string) *ControlUpdate {
-	cu.mutation.SetControlClass(s)
+// SetClass sets the "class" field.
+func (cu *ControlUpdate) SetClass(s string) *ControlUpdate {
+	cu.mutation.SetClass(s)
 	return cu
 }
 
-// SetNillableControlClass sets the "control_class" field if the given value is not nil.
-func (cu *ControlUpdate) SetNillableControlClass(s *string) *ControlUpdate {
+// SetNillableClass sets the "class" field if the given value is not nil.
+func (cu *ControlUpdate) SetNillableClass(s *string) *ControlUpdate {
 	if s != nil {
-		cu.SetControlClass(*s)
+		cu.SetClass(*s)
 	}
 	return cu
 }
 
-// ClearControlClass clears the value of the "control_class" field.
-func (cu *ControlUpdate) ClearControlClass() *ControlUpdate {
-	cu.mutation.ClearControlClass()
+// ClearClass clears the value of the "class" field.
+func (cu *ControlUpdate) ClearClass() *ControlUpdate {
+	cu.mutation.ClearClass()
 	return cu
 }
 
@@ -362,15 +343,15 @@ func (cu *ControlUpdate) ClearMappedFrameworks() *ControlUpdate {
 	return cu
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (cu *ControlUpdate) SetJsonschema(m map[string]interface{}) *ControlUpdate {
-	cu.mutation.SetJsonschema(m)
+// SetDetails sets the "details" field.
+func (cu *ControlUpdate) SetDetails(m map[string]interface{}) *ControlUpdate {
+	cu.mutation.SetDetails(m)
 	return cu
 }
 
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (cu *ControlUpdate) ClearJsonschema() *ControlUpdate {
-	cu.mutation.ClearJsonschema()
+// ClearDetails clears the value of the "details" field.
+func (cu *ControlUpdate) ClearDetails() *ControlUpdate {
+	cu.mutation.ClearDetails()
 	return cu
 }
 
@@ -462,6 +443,21 @@ func (cu *ControlUpdate) AddRisks(r ...*Risk) *ControlUpdate {
 		ids[i] = r[i].ID
 	}
 	return cu.AddRiskIDs(ids...)
+}
+
+// AddActionplanIDs adds the "actionplans" edge to the ActionPlan entity by IDs.
+func (cu *ControlUpdate) AddActionplanIDs(ids ...string) *ControlUpdate {
+	cu.mutation.AddActionplanIDs(ids...)
+	return cu
+}
+
+// AddActionplans adds the "actionplans" edges to the ActionPlan entity.
+func (cu *ControlUpdate) AddActionplans(a ...*ActionPlan) *ControlUpdate {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return cu.AddActionplanIDs(ids...)
 }
 
 // Mutation returns the ControlMutation object of the builder.
@@ -595,6 +591,27 @@ func (cu *ControlUpdate) RemoveRisks(r ...*Risk) *ControlUpdate {
 	return cu.RemoveRiskIDs(ids...)
 }
 
+// ClearActionplans clears all "actionplans" edges to the ActionPlan entity.
+func (cu *ControlUpdate) ClearActionplans() *ControlUpdate {
+	cu.mutation.ClearActionplans()
+	return cu
+}
+
+// RemoveActionplanIDs removes the "actionplans" edge to ActionPlan entities by IDs.
+func (cu *ControlUpdate) RemoveActionplanIDs(ids ...string) *ControlUpdate {
+	cu.mutation.RemoveActionplanIDs(ids...)
+	return cu
+}
+
+// RemoveActionplans removes "actionplans" edges to ActionPlan entities.
+func (cu *ControlUpdate) RemoveActionplans(a ...*ActionPlan) *ControlUpdate {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return cu.RemoveActionplanIDs(ids...)
+}
+
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (cu *ControlUpdate) Save(ctx context.Context) (int, error) {
 	if err := cu.defaults(); err != nil {
@@ -720,29 +737,23 @@ func (cu *ControlUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if cu.mutation.VersionCleared() {
 		_spec.ClearField(control.FieldVersion, field.TypeString)
 	}
-	if value, ok := cu.mutation.Owner(); ok {
-		_spec.SetField(control.FieldOwner, field.TypeString, value)
-	}
-	if cu.mutation.OwnerCleared() {
-		_spec.ClearField(control.FieldOwner, field.TypeString)
-	}
 	if value, ok := cu.mutation.ControlNumber(); ok {
 		_spec.SetField(control.FieldControlNumber, field.TypeString, value)
 	}
 	if cu.mutation.ControlNumberCleared() {
 		_spec.ClearField(control.FieldControlNumber, field.TypeString)
 	}
-	if value, ok := cu.mutation.ControlFamily(); ok {
-		_spec.SetField(control.FieldControlFamily, field.TypeString, value)
+	if value, ok := cu.mutation.Family(); ok {
+		_spec.SetField(control.FieldFamily, field.TypeString, value)
 	}
-	if cu.mutation.ControlFamilyCleared() {
-		_spec.ClearField(control.FieldControlFamily, field.TypeString)
+	if cu.mutation.FamilyCleared() {
+		_spec.ClearField(control.FieldFamily, field.TypeString)
 	}
-	if value, ok := cu.mutation.ControlClass(); ok {
-		_spec.SetField(control.FieldControlClass, field.TypeString, value)
+	if value, ok := cu.mutation.Class(); ok {
+		_spec.SetField(control.FieldClass, field.TypeString, value)
 	}
-	if cu.mutation.ControlClassCleared() {
-		_spec.ClearField(control.FieldControlClass, field.TypeString)
+	if cu.mutation.ClassCleared() {
+		_spec.ClearField(control.FieldClass, field.TypeString)
 	}
 	if value, ok := cu.mutation.Source(); ok {
 		_spec.SetField(control.FieldSource, field.TypeString, value)
@@ -762,11 +773,11 @@ func (cu *ControlUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if cu.mutation.MappedFrameworksCleared() {
 		_spec.ClearField(control.FieldMappedFrameworks, field.TypeString)
 	}
-	if value, ok := cu.mutation.Jsonschema(); ok {
-		_spec.SetField(control.FieldJsonschema, field.TypeJSON, value)
+	if value, ok := cu.mutation.Details(); ok {
+		_spec.SetField(control.FieldDetails, field.TypeJSON, value)
 	}
-	if cu.mutation.JsonschemaCleared() {
-		_spec.ClearField(control.FieldJsonschema, field.TypeJSON)
+	if cu.mutation.DetailsCleared() {
+		_spec.ClearField(control.FieldDetails, field.TypeJSON)
 	}
 	if cu.mutation.ProceduresCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1056,6 +1067,54 @@ func (cu *ControlUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if cu.mutation.ActionplansCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   control.ActionplansTable,
+			Columns: control.ActionplansPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cu.schemaConfig.ControlActionplans
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cu.mutation.RemovedActionplansIDs(); len(nodes) > 0 && !cu.mutation.ActionplansCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   control.ActionplansTable,
+			Columns: control.ActionplansPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cu.schemaConfig.ControlActionplans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cu.mutation.ActionplansIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   control.ActionplansTable,
+			Columns: control.ActionplansPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cu.schemaConfig.ControlActionplans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = cu.schemaConfig.Control
 	ctx = internal.NewSchemaConfigContext(ctx, cu.schemaConfig)
 	_spec.AddModifiers(cu.modifiers...)
@@ -1264,26 +1323,6 @@ func (cuo *ControlUpdateOne) ClearVersion() *ControlUpdateOne {
 	return cuo
 }
 
-// SetOwner sets the "owner" field.
-func (cuo *ControlUpdateOne) SetOwner(s string) *ControlUpdateOne {
-	cuo.mutation.SetOwner(s)
-	return cuo
-}
-
-// SetNillableOwner sets the "owner" field if the given value is not nil.
-func (cuo *ControlUpdateOne) SetNillableOwner(s *string) *ControlUpdateOne {
-	if s != nil {
-		cuo.SetOwner(*s)
-	}
-	return cuo
-}
-
-// ClearOwner clears the value of the "owner" field.
-func (cuo *ControlUpdateOne) ClearOwner() *ControlUpdateOne {
-	cuo.mutation.ClearOwner()
-	return cuo
-}
-
 // SetControlNumber sets the "control_number" field.
 func (cuo *ControlUpdateOne) SetControlNumber(s string) *ControlUpdateOne {
 	cuo.mutation.SetControlNumber(s)
@@ -1304,43 +1343,43 @@ func (cuo *ControlUpdateOne) ClearControlNumber() *ControlUpdateOne {
 	return cuo
 }
 
-// SetControlFamily sets the "control_family" field.
-func (cuo *ControlUpdateOne) SetControlFamily(s string) *ControlUpdateOne {
-	cuo.mutation.SetControlFamily(s)
+// SetFamily sets the "family" field.
+func (cuo *ControlUpdateOne) SetFamily(s string) *ControlUpdateOne {
+	cuo.mutation.SetFamily(s)
 	return cuo
 }
 
-// SetNillableControlFamily sets the "control_family" field if the given value is not nil.
-func (cuo *ControlUpdateOne) SetNillableControlFamily(s *string) *ControlUpdateOne {
+// SetNillableFamily sets the "family" field if the given value is not nil.
+func (cuo *ControlUpdateOne) SetNillableFamily(s *string) *ControlUpdateOne {
 	if s != nil {
-		cuo.SetControlFamily(*s)
+		cuo.SetFamily(*s)
 	}
 	return cuo
 }
 
-// ClearControlFamily clears the value of the "control_family" field.
-func (cuo *ControlUpdateOne) ClearControlFamily() *ControlUpdateOne {
-	cuo.mutation.ClearControlFamily()
+// ClearFamily clears the value of the "family" field.
+func (cuo *ControlUpdateOne) ClearFamily() *ControlUpdateOne {
+	cuo.mutation.ClearFamily()
 	return cuo
 }
 
-// SetControlClass sets the "control_class" field.
-func (cuo *ControlUpdateOne) SetControlClass(s string) *ControlUpdateOne {
-	cuo.mutation.SetControlClass(s)
+// SetClass sets the "class" field.
+func (cuo *ControlUpdateOne) SetClass(s string) *ControlUpdateOne {
+	cuo.mutation.SetClass(s)
 	return cuo
 }
 
-// SetNillableControlClass sets the "control_class" field if the given value is not nil.
-func (cuo *ControlUpdateOne) SetNillableControlClass(s *string) *ControlUpdateOne {
+// SetNillableClass sets the "class" field if the given value is not nil.
+func (cuo *ControlUpdateOne) SetNillableClass(s *string) *ControlUpdateOne {
 	if s != nil {
-		cuo.SetControlClass(*s)
+		cuo.SetClass(*s)
 	}
 	return cuo
 }
 
-// ClearControlClass clears the value of the "control_class" field.
-func (cuo *ControlUpdateOne) ClearControlClass() *ControlUpdateOne {
-	cuo.mutation.ClearControlClass()
+// ClearClass clears the value of the "class" field.
+func (cuo *ControlUpdateOne) ClearClass() *ControlUpdateOne {
+	cuo.mutation.ClearClass()
 	return cuo
 }
 
@@ -1404,15 +1443,15 @@ func (cuo *ControlUpdateOne) ClearMappedFrameworks() *ControlUpdateOne {
 	return cuo
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (cuo *ControlUpdateOne) SetJsonschema(m map[string]interface{}) *ControlUpdateOne {
-	cuo.mutation.SetJsonschema(m)
+// SetDetails sets the "details" field.
+func (cuo *ControlUpdateOne) SetDetails(m map[string]interface{}) *ControlUpdateOne {
+	cuo.mutation.SetDetails(m)
 	return cuo
 }
 
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (cuo *ControlUpdateOne) ClearJsonschema() *ControlUpdateOne {
-	cuo.mutation.ClearJsonschema()
+// ClearDetails clears the value of the "details" field.
+func (cuo *ControlUpdateOne) ClearDetails() *ControlUpdateOne {
+	cuo.mutation.ClearDetails()
 	return cuo
 }
 
@@ -1504,6 +1543,21 @@ func (cuo *ControlUpdateOne) AddRisks(r ...*Risk) *ControlUpdateOne {
 		ids[i] = r[i].ID
 	}
 	return cuo.AddRiskIDs(ids...)
+}
+
+// AddActionplanIDs adds the "actionplans" edge to the ActionPlan entity by IDs.
+func (cuo *ControlUpdateOne) AddActionplanIDs(ids ...string) *ControlUpdateOne {
+	cuo.mutation.AddActionplanIDs(ids...)
+	return cuo
+}
+
+// AddActionplans adds the "actionplans" edges to the ActionPlan entity.
+func (cuo *ControlUpdateOne) AddActionplans(a ...*ActionPlan) *ControlUpdateOne {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return cuo.AddActionplanIDs(ids...)
 }
 
 // Mutation returns the ControlMutation object of the builder.
@@ -1635,6 +1689,27 @@ func (cuo *ControlUpdateOne) RemoveRisks(r ...*Risk) *ControlUpdateOne {
 		ids[i] = r[i].ID
 	}
 	return cuo.RemoveRiskIDs(ids...)
+}
+
+// ClearActionplans clears all "actionplans" edges to the ActionPlan entity.
+func (cuo *ControlUpdateOne) ClearActionplans() *ControlUpdateOne {
+	cuo.mutation.ClearActionplans()
+	return cuo
+}
+
+// RemoveActionplanIDs removes the "actionplans" edge to ActionPlan entities by IDs.
+func (cuo *ControlUpdateOne) RemoveActionplanIDs(ids ...string) *ControlUpdateOne {
+	cuo.mutation.RemoveActionplanIDs(ids...)
+	return cuo
+}
+
+// RemoveActionplans removes "actionplans" edges to ActionPlan entities.
+func (cuo *ControlUpdateOne) RemoveActionplans(a ...*ActionPlan) *ControlUpdateOne {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return cuo.RemoveActionplanIDs(ids...)
 }
 
 // Where appends a list predicates to the ControlUpdate builder.
@@ -1792,29 +1867,23 @@ func (cuo *ControlUpdateOne) sqlSave(ctx context.Context) (_node *Control, err e
 	if cuo.mutation.VersionCleared() {
 		_spec.ClearField(control.FieldVersion, field.TypeString)
 	}
-	if value, ok := cuo.mutation.Owner(); ok {
-		_spec.SetField(control.FieldOwner, field.TypeString, value)
-	}
-	if cuo.mutation.OwnerCleared() {
-		_spec.ClearField(control.FieldOwner, field.TypeString)
-	}
 	if value, ok := cuo.mutation.ControlNumber(); ok {
 		_spec.SetField(control.FieldControlNumber, field.TypeString, value)
 	}
 	if cuo.mutation.ControlNumberCleared() {
 		_spec.ClearField(control.FieldControlNumber, field.TypeString)
 	}
-	if value, ok := cuo.mutation.ControlFamily(); ok {
-		_spec.SetField(control.FieldControlFamily, field.TypeString, value)
+	if value, ok := cuo.mutation.Family(); ok {
+		_spec.SetField(control.FieldFamily, field.TypeString, value)
 	}
-	if cuo.mutation.ControlFamilyCleared() {
-		_spec.ClearField(control.FieldControlFamily, field.TypeString)
+	if cuo.mutation.FamilyCleared() {
+		_spec.ClearField(control.FieldFamily, field.TypeString)
 	}
-	if value, ok := cuo.mutation.ControlClass(); ok {
-		_spec.SetField(control.FieldControlClass, field.TypeString, value)
+	if value, ok := cuo.mutation.Class(); ok {
+		_spec.SetField(control.FieldClass, field.TypeString, value)
 	}
-	if cuo.mutation.ControlClassCleared() {
-		_spec.ClearField(control.FieldControlClass, field.TypeString)
+	if cuo.mutation.ClassCleared() {
+		_spec.ClearField(control.FieldClass, field.TypeString)
 	}
 	if value, ok := cuo.mutation.Source(); ok {
 		_spec.SetField(control.FieldSource, field.TypeString, value)
@@ -1834,11 +1903,11 @@ func (cuo *ControlUpdateOne) sqlSave(ctx context.Context) (_node *Control, err e
 	if cuo.mutation.MappedFrameworksCleared() {
 		_spec.ClearField(control.FieldMappedFrameworks, field.TypeString)
 	}
-	if value, ok := cuo.mutation.Jsonschema(); ok {
-		_spec.SetField(control.FieldJsonschema, field.TypeJSON, value)
+	if value, ok := cuo.mutation.Details(); ok {
+		_spec.SetField(control.FieldDetails, field.TypeJSON, value)
 	}
-	if cuo.mutation.JsonschemaCleared() {
-		_spec.ClearField(control.FieldJsonschema, field.TypeJSON)
+	if cuo.mutation.DetailsCleared() {
+		_spec.ClearField(control.FieldDetails, field.TypeJSON)
 	}
 	if cuo.mutation.ProceduresCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -2123,6 +2192,54 @@ func (cuo *ControlUpdateOne) sqlSave(ctx context.Context) (_node *Control, err e
 			},
 		}
 		edge.Schema = cuo.schemaConfig.ControlRisks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if cuo.mutation.ActionplansCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   control.ActionplansTable,
+			Columns: control.ActionplansPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cuo.schemaConfig.ControlActionplans
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cuo.mutation.RemovedActionplansIDs(); len(nodes) > 0 && !cuo.mutation.ActionplansCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   control.ActionplansTable,
+			Columns: control.ActionplansPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cuo.schemaConfig.ControlActionplans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cuo.mutation.ActionplansIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   control.ActionplansTable,
+			Columns: control.ActionplansPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cuo.schemaConfig.ControlActionplans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

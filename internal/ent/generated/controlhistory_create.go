@@ -221,20 +221,6 @@ func (chc *ControlHistoryCreate) SetNillableVersion(s *string) *ControlHistoryCr
 	return chc
 }
 
-// SetOwner sets the "owner" field.
-func (chc *ControlHistoryCreate) SetOwner(s string) *ControlHistoryCreate {
-	chc.mutation.SetOwner(s)
-	return chc
-}
-
-// SetNillableOwner sets the "owner" field if the given value is not nil.
-func (chc *ControlHistoryCreate) SetNillableOwner(s *string) *ControlHistoryCreate {
-	if s != nil {
-		chc.SetOwner(*s)
-	}
-	return chc
-}
-
 // SetControlNumber sets the "control_number" field.
 func (chc *ControlHistoryCreate) SetControlNumber(s string) *ControlHistoryCreate {
 	chc.mutation.SetControlNumber(s)
@@ -249,30 +235,30 @@ func (chc *ControlHistoryCreate) SetNillableControlNumber(s *string) *ControlHis
 	return chc
 }
 
-// SetControlFamily sets the "control_family" field.
-func (chc *ControlHistoryCreate) SetControlFamily(s string) *ControlHistoryCreate {
-	chc.mutation.SetControlFamily(s)
+// SetFamily sets the "family" field.
+func (chc *ControlHistoryCreate) SetFamily(s string) *ControlHistoryCreate {
+	chc.mutation.SetFamily(s)
 	return chc
 }
 
-// SetNillableControlFamily sets the "control_family" field if the given value is not nil.
-func (chc *ControlHistoryCreate) SetNillableControlFamily(s *string) *ControlHistoryCreate {
+// SetNillableFamily sets the "family" field if the given value is not nil.
+func (chc *ControlHistoryCreate) SetNillableFamily(s *string) *ControlHistoryCreate {
 	if s != nil {
-		chc.SetControlFamily(*s)
+		chc.SetFamily(*s)
 	}
 	return chc
 }
 
-// SetControlClass sets the "control_class" field.
-func (chc *ControlHistoryCreate) SetControlClass(s string) *ControlHistoryCreate {
-	chc.mutation.SetControlClass(s)
+// SetClass sets the "class" field.
+func (chc *ControlHistoryCreate) SetClass(s string) *ControlHistoryCreate {
+	chc.mutation.SetClass(s)
 	return chc
 }
 
-// SetNillableControlClass sets the "control_class" field if the given value is not nil.
-func (chc *ControlHistoryCreate) SetNillableControlClass(s *string) *ControlHistoryCreate {
+// SetNillableClass sets the "class" field if the given value is not nil.
+func (chc *ControlHistoryCreate) SetNillableClass(s *string) *ControlHistoryCreate {
 	if s != nil {
-		chc.SetControlClass(*s)
+		chc.SetClass(*s)
 	}
 	return chc
 }
@@ -319,9 +305,9 @@ func (chc *ControlHistoryCreate) SetNillableMappedFrameworks(s *string) *Control
 	return chc
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (chc *ControlHistoryCreate) SetJsonschema(m map[string]interface{}) *ControlHistoryCreate {
-	chc.mutation.SetJsonschema(m)
+// SetDetails sets the "details" field.
+func (chc *ControlHistoryCreate) SetDetails(m map[string]interface{}) *ControlHistoryCreate {
+	chc.mutation.SetDetails(m)
 	return chc
 }
 
@@ -519,21 +505,17 @@ func (chc *ControlHistoryCreate) createSpec() (*ControlHistory, *sqlgraph.Create
 		_spec.SetField(controlhistory.FieldVersion, field.TypeString, value)
 		_node.Version = value
 	}
-	if value, ok := chc.mutation.Owner(); ok {
-		_spec.SetField(controlhistory.FieldOwner, field.TypeString, value)
-		_node.Owner = value
-	}
 	if value, ok := chc.mutation.ControlNumber(); ok {
 		_spec.SetField(controlhistory.FieldControlNumber, field.TypeString, value)
 		_node.ControlNumber = value
 	}
-	if value, ok := chc.mutation.ControlFamily(); ok {
-		_spec.SetField(controlhistory.FieldControlFamily, field.TypeString, value)
-		_node.ControlFamily = value
+	if value, ok := chc.mutation.Family(); ok {
+		_spec.SetField(controlhistory.FieldFamily, field.TypeString, value)
+		_node.Family = value
 	}
-	if value, ok := chc.mutation.ControlClass(); ok {
-		_spec.SetField(controlhistory.FieldControlClass, field.TypeString, value)
-		_node.ControlClass = value
+	if value, ok := chc.mutation.Class(); ok {
+		_spec.SetField(controlhistory.FieldClass, field.TypeString, value)
+		_node.Class = value
 	}
 	if value, ok := chc.mutation.Source(); ok {
 		_spec.SetField(controlhistory.FieldSource, field.TypeString, value)
@@ -547,9 +529,9 @@ func (chc *ControlHistoryCreate) createSpec() (*ControlHistory, *sqlgraph.Create
 		_spec.SetField(controlhistory.FieldMappedFrameworks, field.TypeString, value)
 		_node.MappedFrameworks = value
 	}
-	if value, ok := chc.mutation.Jsonschema(); ok {
-		_spec.SetField(controlhistory.FieldJsonschema, field.TypeJSON, value)
-		_node.Jsonschema = value
+	if value, ok := chc.mutation.Details(); ok {
+		_spec.SetField(controlhistory.FieldDetails, field.TypeJSON, value)
+		_node.Details = value
 	}
 	return _node, _spec
 }

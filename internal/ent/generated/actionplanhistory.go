@@ -47,16 +47,14 @@ type ActionPlanHistory struct {
 	Description string `json:"description,omitempty"`
 	// status of the action plan
 	Status string `json:"status,omitempty"`
-	// assigned to
-	Assigned string `json:"assigned,omitempty"`
-	// due date
-	DueDate string `json:"due_date,omitempty"`
-	// priority
+	// due date of the action plan
+	DueDate time.Time `json:"due_date,omitempty"`
+	// priority of the action plan
 	Priority string `json:"priority,omitempty"`
 	// source of the action plan
 	Source string `json:"source,omitempty"`
-	// json schema
-	Jsonschema   map[string]interface{} `json:"jsonschema,omitempty"`
+	// json data including details of the action plan
+	Details      map[string]interface{} `json:"details,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -65,13 +63,13 @@ func (*ActionPlanHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case actionplanhistory.FieldTags, actionplanhistory.FieldJsonschema:
+		case actionplanhistory.FieldTags, actionplanhistory.FieldDetails:
 			values[i] = new([]byte)
 		case actionplanhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case actionplanhistory.FieldID, actionplanhistory.FieldRef, actionplanhistory.FieldCreatedBy, actionplanhistory.FieldUpdatedBy, actionplanhistory.FieldDeletedBy, actionplanhistory.FieldMappingID, actionplanhistory.FieldName, actionplanhistory.FieldDescription, actionplanhistory.FieldStatus, actionplanhistory.FieldAssigned, actionplanhistory.FieldDueDate, actionplanhistory.FieldPriority, actionplanhistory.FieldSource:
+		case actionplanhistory.FieldID, actionplanhistory.FieldRef, actionplanhistory.FieldCreatedBy, actionplanhistory.FieldUpdatedBy, actionplanhistory.FieldDeletedBy, actionplanhistory.FieldMappingID, actionplanhistory.FieldName, actionplanhistory.FieldDescription, actionplanhistory.FieldStatus, actionplanhistory.FieldPriority, actionplanhistory.FieldSource:
 			values[i] = new(sql.NullString)
-		case actionplanhistory.FieldHistoryTime, actionplanhistory.FieldCreatedAt, actionplanhistory.FieldUpdatedAt, actionplanhistory.FieldDeletedAt:
+		case actionplanhistory.FieldHistoryTime, actionplanhistory.FieldCreatedAt, actionplanhistory.FieldUpdatedAt, actionplanhistory.FieldDeletedAt, actionplanhistory.FieldDueDate:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -180,17 +178,11 @@ func (aph *ActionPlanHistory) assignValues(columns []string, values []any) error
 			} else if value.Valid {
 				aph.Status = value.String
 			}
-		case actionplanhistory.FieldAssigned:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field assigned", values[i])
-			} else if value.Valid {
-				aph.Assigned = value.String
-			}
 		case actionplanhistory.FieldDueDate:
-			if value, ok := values[i].(*sql.NullString); !ok {
+			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field due_date", values[i])
 			} else if value.Valid {
-				aph.DueDate = value.String
+				aph.DueDate = value.Time
 			}
 		case actionplanhistory.FieldPriority:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -204,12 +196,12 @@ func (aph *ActionPlanHistory) assignValues(columns []string, values []any) error
 			} else if value.Valid {
 				aph.Source = value.String
 			}
-		case actionplanhistory.FieldJsonschema:
+		case actionplanhistory.FieldDetails:
 			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field jsonschema", values[i])
+				return fmt.Errorf("unexpected type %T for field details", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &aph.Jsonschema); err != nil {
-					return fmt.Errorf("unmarshal field jsonschema: %w", err)
+				if err := json.Unmarshal(*value, &aph.Details); err != nil {
+					return fmt.Errorf("unmarshal field details: %w", err)
 				}
 			}
 		default:
@@ -290,11 +282,8 @@ func (aph *ActionPlanHistory) String() string {
 	builder.WriteString("status=")
 	builder.WriteString(aph.Status)
 	builder.WriteString(", ")
-	builder.WriteString("assigned=")
-	builder.WriteString(aph.Assigned)
-	builder.WriteString(", ")
 	builder.WriteString("due_date=")
-	builder.WriteString(aph.DueDate)
+	builder.WriteString(aph.DueDate.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("priority=")
 	builder.WriteString(aph.Priority)
@@ -302,8 +291,8 @@ func (aph *ActionPlanHistory) String() string {
 	builder.WriteString("source=")
 	builder.WriteString(aph.Source)
 	builder.WriteString(", ")
-	builder.WriteString("jsonschema=")
-	builder.WriteString(fmt.Sprintf("%v", aph.Jsonschema))
+	builder.WriteString("details=")
+	builder.WriteString(fmt.Sprintf("%v", aph.Details))
 	builder.WriteByte(')')
 	return builder.String()
 }

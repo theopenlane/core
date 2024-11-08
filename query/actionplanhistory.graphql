@@ -4,14 +4,13 @@ query GetAllActionPlanHistories {
   actionPlanHistories {
     edges {
       node {
-        assigned
         createdAt
         createdBy
         description
+        details
         dueDate
         historyTime
         id
-        jsonschema
         name
         operation
         priority
@@ -30,14 +29,13 @@ query GetActionPlanHistories($where: ActionPlanHistoryWhereInput) {
   actionPlanHistories(where: $where) {
     edges {
       node {
-        assigned
         createdAt
         createdBy
         description
+        details
         dueDate
         historyTime
         id
-        jsonschema
         name
         operation
         priority

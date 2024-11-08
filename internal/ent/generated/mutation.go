@@ -1603,11 +1603,10 @@ type ActionPlanMutation struct {
 	name            *string
 	description     *string
 	status          *string
-	assigned        *string
-	due_date        *string
+	due_date        *time.Time
 	priority        *string
 	source          *string
-	jsonschema      *map[string]interface{}
+	details         *map[string]interface{}
 	clearedFields   map[string]struct{}
 	standard        map[string]struct{}
 	removedstandard map[string]struct{}
@@ -1615,6 +1614,12 @@ type ActionPlanMutation struct {
 	risk            map[string]struct{}
 	removedrisk     map[string]struct{}
 	clearedrisk     bool
+	control         map[string]struct{}
+	removedcontrol  map[string]struct{}
+	clearedcontrol  bool
+	user            map[string]struct{}
+	removeduser     map[string]struct{}
+	cleareduser     bool
 	done            bool
 	oldValue        func(context.Context) (*ActionPlan, error)
 	predicates      []predicate.ActionPlan
@@ -2253,62 +2258,13 @@ func (m *ActionPlanMutation) ResetStatus() {
 	delete(m.clearedFields, actionplan.FieldStatus)
 }
 
-// SetAssigned sets the "assigned" field.
-func (m *ActionPlanMutation) SetAssigned(s string) {
-	m.assigned = &s
-}
-
-// Assigned returns the value of the "assigned" field in the mutation.
-func (m *ActionPlanMutation) Assigned() (r string, exists bool) {
-	v := m.assigned
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldAssigned returns the old "assigned" field's value of the ActionPlan entity.
-// If the ActionPlan object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ActionPlanMutation) OldAssigned(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldAssigned is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldAssigned requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldAssigned: %w", err)
-	}
-	return oldValue.Assigned, nil
-}
-
-// ClearAssigned clears the value of the "assigned" field.
-func (m *ActionPlanMutation) ClearAssigned() {
-	m.assigned = nil
-	m.clearedFields[actionplan.FieldAssigned] = struct{}{}
-}
-
-// AssignedCleared returns if the "assigned" field was cleared in this mutation.
-func (m *ActionPlanMutation) AssignedCleared() bool {
-	_, ok := m.clearedFields[actionplan.FieldAssigned]
-	return ok
-}
-
-// ResetAssigned resets all changes to the "assigned" field.
-func (m *ActionPlanMutation) ResetAssigned() {
-	m.assigned = nil
-	delete(m.clearedFields, actionplan.FieldAssigned)
-}
-
 // SetDueDate sets the "due_date" field.
-func (m *ActionPlanMutation) SetDueDate(s string) {
-	m.due_date = &s
+func (m *ActionPlanMutation) SetDueDate(t time.Time) {
+	m.due_date = &t
 }
 
 // DueDate returns the value of the "due_date" field in the mutation.
-func (m *ActionPlanMutation) DueDate() (r string, exists bool) {
+func (m *ActionPlanMutation) DueDate() (r time.Time, exists bool) {
 	v := m.due_date
 	if v == nil {
 		return
@@ -2319,7 +2275,7 @@ func (m *ActionPlanMutation) DueDate() (r string, exists bool) {
 // OldDueDate returns the old "due_date" field's value of the ActionPlan entity.
 // If the ActionPlan object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ActionPlanMutation) OldDueDate(ctx context.Context) (v string, err error) {
+func (m *ActionPlanMutation) OldDueDate(ctx context.Context) (v time.Time, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldDueDate is only allowed on UpdateOne operations")
 	}
@@ -2449,53 +2405,53 @@ func (m *ActionPlanMutation) ResetSource() {
 	delete(m.clearedFields, actionplan.FieldSource)
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (m *ActionPlanMutation) SetJsonschema(value map[string]interface{}) {
-	m.jsonschema = &value
+// SetDetails sets the "details" field.
+func (m *ActionPlanMutation) SetDetails(value map[string]interface{}) {
+	m.details = &value
 }
 
-// Jsonschema returns the value of the "jsonschema" field in the mutation.
-func (m *ActionPlanMutation) Jsonschema() (r map[string]interface{}, exists bool) {
-	v := m.jsonschema
+// Details returns the value of the "details" field in the mutation.
+func (m *ActionPlanMutation) Details() (r map[string]interface{}, exists bool) {
+	v := m.details
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldJsonschema returns the old "jsonschema" field's value of the ActionPlan entity.
+// OldDetails returns the old "details" field's value of the ActionPlan entity.
 // If the ActionPlan object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ActionPlanMutation) OldJsonschema(ctx context.Context) (v map[string]interface{}, err error) {
+func (m *ActionPlanMutation) OldDetails(ctx context.Context) (v map[string]interface{}, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldJsonschema is only allowed on UpdateOne operations")
+		return v, errors.New("OldDetails is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldJsonschema requires an ID field in the mutation")
+		return v, errors.New("OldDetails requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldJsonschema: %w", err)
+		return v, fmt.Errorf("querying old value for OldDetails: %w", err)
 	}
-	return oldValue.Jsonschema, nil
+	return oldValue.Details, nil
 }
 
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (m *ActionPlanMutation) ClearJsonschema() {
-	m.jsonschema = nil
-	m.clearedFields[actionplan.FieldJsonschema] = struct{}{}
+// ClearDetails clears the value of the "details" field.
+func (m *ActionPlanMutation) ClearDetails() {
+	m.details = nil
+	m.clearedFields[actionplan.FieldDetails] = struct{}{}
 }
 
-// JsonschemaCleared returns if the "jsonschema" field was cleared in this mutation.
-func (m *ActionPlanMutation) JsonschemaCleared() bool {
-	_, ok := m.clearedFields[actionplan.FieldJsonschema]
+// DetailsCleared returns if the "details" field was cleared in this mutation.
+func (m *ActionPlanMutation) DetailsCleared() bool {
+	_, ok := m.clearedFields[actionplan.FieldDetails]
 	return ok
 }
 
-// ResetJsonschema resets all changes to the "jsonschema" field.
-func (m *ActionPlanMutation) ResetJsonschema() {
-	m.jsonschema = nil
-	delete(m.clearedFields, actionplan.FieldJsonschema)
+// ResetDetails resets all changes to the "details" field.
+func (m *ActionPlanMutation) ResetDetails() {
+	m.details = nil
+	delete(m.clearedFields, actionplan.FieldDetails)
 }
 
 // AddStandardIDs adds the "standard" edge to the Standard entity by ids.
@@ -2606,6 +2562,114 @@ func (m *ActionPlanMutation) ResetRisk() {
 	m.removedrisk = nil
 }
 
+// AddControlIDs adds the "control" edge to the Control entity by ids.
+func (m *ActionPlanMutation) AddControlIDs(ids ...string) {
+	if m.control == nil {
+		m.control = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.control[ids[i]] = struct{}{}
+	}
+}
+
+// ClearControl clears the "control" edge to the Control entity.
+func (m *ActionPlanMutation) ClearControl() {
+	m.clearedcontrol = true
+}
+
+// ControlCleared reports if the "control" edge to the Control entity was cleared.
+func (m *ActionPlanMutation) ControlCleared() bool {
+	return m.clearedcontrol
+}
+
+// RemoveControlIDs removes the "control" edge to the Control entity by IDs.
+func (m *ActionPlanMutation) RemoveControlIDs(ids ...string) {
+	if m.removedcontrol == nil {
+		m.removedcontrol = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.control, ids[i])
+		m.removedcontrol[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedControl returns the removed IDs of the "control" edge to the Control entity.
+func (m *ActionPlanMutation) RemovedControlIDs() (ids []string) {
+	for id := range m.removedcontrol {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ControlIDs returns the "control" edge IDs in the mutation.
+func (m *ActionPlanMutation) ControlIDs() (ids []string) {
+	for id := range m.control {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetControl resets all changes to the "control" edge.
+func (m *ActionPlanMutation) ResetControl() {
+	m.control = nil
+	m.clearedcontrol = false
+	m.removedcontrol = nil
+}
+
+// AddUserIDs adds the "user" edge to the User entity by ids.
+func (m *ActionPlanMutation) AddUserIDs(ids ...string) {
+	if m.user == nil {
+		m.user = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.user[ids[i]] = struct{}{}
+	}
+}
+
+// ClearUser clears the "user" edge to the User entity.
+func (m *ActionPlanMutation) ClearUser() {
+	m.cleareduser = true
+}
+
+// UserCleared reports if the "user" edge to the User entity was cleared.
+func (m *ActionPlanMutation) UserCleared() bool {
+	return m.cleareduser
+}
+
+// RemoveUserIDs removes the "user" edge to the User entity by IDs.
+func (m *ActionPlanMutation) RemoveUserIDs(ids ...string) {
+	if m.removeduser == nil {
+		m.removeduser = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.user, ids[i])
+		m.removeduser[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedUser returns the removed IDs of the "user" edge to the User entity.
+func (m *ActionPlanMutation) RemovedUserIDs() (ids []string) {
+	for id := range m.removeduser {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// UserIDs returns the "user" edge IDs in the mutation.
+func (m *ActionPlanMutation) UserIDs() (ids []string) {
+	for id := range m.user {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetUser resets all changes to the "user" edge.
+func (m *ActionPlanMutation) ResetUser() {
+	m.user = nil
+	m.cleareduser = false
+	m.removeduser = nil
+}
+
 // Where appends a list predicates to the ActionPlanMutation builder.
 func (m *ActionPlanMutation) Where(ps ...predicate.ActionPlan) {
 	m.predicates = append(m.predicates, ps...)
@@ -2640,7 +2704,7 @@ func (m *ActionPlanMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ActionPlanMutation) Fields() []string {
-	fields := make([]string, 0, 16)
+	fields := make([]string, 0, 15)
 	if m.created_at != nil {
 		fields = append(fields, actionplan.FieldCreatedAt)
 	}
@@ -2674,9 +2738,6 @@ func (m *ActionPlanMutation) Fields() []string {
 	if m.status != nil {
 		fields = append(fields, actionplan.FieldStatus)
 	}
-	if m.assigned != nil {
-		fields = append(fields, actionplan.FieldAssigned)
-	}
 	if m.due_date != nil {
 		fields = append(fields, actionplan.FieldDueDate)
 	}
@@ -2686,8 +2747,8 @@ func (m *ActionPlanMutation) Fields() []string {
 	if m.source != nil {
 		fields = append(fields, actionplan.FieldSource)
 	}
-	if m.jsonschema != nil {
-		fields = append(fields, actionplan.FieldJsonschema)
+	if m.details != nil {
+		fields = append(fields, actionplan.FieldDetails)
 	}
 	return fields
 }
@@ -2719,16 +2780,14 @@ func (m *ActionPlanMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case actionplan.FieldStatus:
 		return m.Status()
-	case actionplan.FieldAssigned:
-		return m.Assigned()
 	case actionplan.FieldDueDate:
 		return m.DueDate()
 	case actionplan.FieldPriority:
 		return m.Priority()
 	case actionplan.FieldSource:
 		return m.Source()
-	case actionplan.FieldJsonschema:
-		return m.Jsonschema()
+	case actionplan.FieldDetails:
+		return m.Details()
 	}
 	return nil, false
 }
@@ -2760,16 +2819,14 @@ func (m *ActionPlanMutation) OldField(ctx context.Context, name string) (ent.Val
 		return m.OldDescription(ctx)
 	case actionplan.FieldStatus:
 		return m.OldStatus(ctx)
-	case actionplan.FieldAssigned:
-		return m.OldAssigned(ctx)
 	case actionplan.FieldDueDate:
 		return m.OldDueDate(ctx)
 	case actionplan.FieldPriority:
 		return m.OldPriority(ctx)
 	case actionplan.FieldSource:
 		return m.OldSource(ctx)
-	case actionplan.FieldJsonschema:
-		return m.OldJsonschema(ctx)
+	case actionplan.FieldDetails:
+		return m.OldDetails(ctx)
 	}
 	return nil, fmt.Errorf("unknown ActionPlan field %s", name)
 }
@@ -2856,15 +2913,8 @@ func (m *ActionPlanMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetStatus(v)
 		return nil
-	case actionplan.FieldAssigned:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetAssigned(v)
-		return nil
 	case actionplan.FieldDueDate:
-		v, ok := value.(string)
+		v, ok := value.(time.Time)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -2884,12 +2934,12 @@ func (m *ActionPlanMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetSource(v)
 		return nil
-	case actionplan.FieldJsonschema:
+	case actionplan.FieldDetails:
 		v, ok := value.(map[string]interface{})
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetJsonschema(v)
+		m.SetDetails(v)
 		return nil
 	}
 	return fmt.Errorf("unknown ActionPlan field %s", name)
@@ -2948,9 +2998,6 @@ func (m *ActionPlanMutation) ClearedFields() []string {
 	if m.FieldCleared(actionplan.FieldStatus) {
 		fields = append(fields, actionplan.FieldStatus)
 	}
-	if m.FieldCleared(actionplan.FieldAssigned) {
-		fields = append(fields, actionplan.FieldAssigned)
-	}
 	if m.FieldCleared(actionplan.FieldDueDate) {
 		fields = append(fields, actionplan.FieldDueDate)
 	}
@@ -2960,8 +3007,8 @@ func (m *ActionPlanMutation) ClearedFields() []string {
 	if m.FieldCleared(actionplan.FieldSource) {
 		fields = append(fields, actionplan.FieldSource)
 	}
-	if m.FieldCleared(actionplan.FieldJsonschema) {
-		fields = append(fields, actionplan.FieldJsonschema)
+	if m.FieldCleared(actionplan.FieldDetails) {
+		fields = append(fields, actionplan.FieldDetails)
 	}
 	return fields
 }
@@ -3004,9 +3051,6 @@ func (m *ActionPlanMutation) ClearField(name string) error {
 	case actionplan.FieldStatus:
 		m.ClearStatus()
 		return nil
-	case actionplan.FieldAssigned:
-		m.ClearAssigned()
-		return nil
 	case actionplan.FieldDueDate:
 		m.ClearDueDate()
 		return nil
@@ -3016,8 +3060,8 @@ func (m *ActionPlanMutation) ClearField(name string) error {
 	case actionplan.FieldSource:
 		m.ClearSource()
 		return nil
-	case actionplan.FieldJsonschema:
-		m.ClearJsonschema()
+	case actionplan.FieldDetails:
+		m.ClearDetails()
 		return nil
 	}
 	return fmt.Errorf("unknown ActionPlan nullable field %s", name)
@@ -3060,9 +3104,6 @@ func (m *ActionPlanMutation) ResetField(name string) error {
 	case actionplan.FieldStatus:
 		m.ResetStatus()
 		return nil
-	case actionplan.FieldAssigned:
-		m.ResetAssigned()
-		return nil
 	case actionplan.FieldDueDate:
 		m.ResetDueDate()
 		return nil
@@ -3072,8 +3113,8 @@ func (m *ActionPlanMutation) ResetField(name string) error {
 	case actionplan.FieldSource:
 		m.ResetSource()
 		return nil
-	case actionplan.FieldJsonschema:
-		m.ResetJsonschema()
+	case actionplan.FieldDetails:
+		m.ResetDetails()
 		return nil
 	}
 	return fmt.Errorf("unknown ActionPlan field %s", name)
@@ -3081,12 +3122,18 @@ func (m *ActionPlanMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ActionPlanMutation) AddedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 4)
 	if m.standard != nil {
 		edges = append(edges, actionplan.EdgeStandard)
 	}
 	if m.risk != nil {
 		edges = append(edges, actionplan.EdgeRisk)
+	}
+	if m.control != nil {
+		edges = append(edges, actionplan.EdgeControl)
+	}
+	if m.user != nil {
+		edges = append(edges, actionplan.EdgeUser)
 	}
 	return edges
 }
@@ -3107,18 +3154,36 @@ func (m *ActionPlanMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case actionplan.EdgeControl:
+		ids := make([]ent.Value, 0, len(m.control))
+		for id := range m.control {
+			ids = append(ids, id)
+		}
+		return ids
+	case actionplan.EdgeUser:
+		ids := make([]ent.Value, 0, len(m.user))
+		for id := range m.user {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ActionPlanMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 4)
 	if m.removedstandard != nil {
 		edges = append(edges, actionplan.EdgeStandard)
 	}
 	if m.removedrisk != nil {
 		edges = append(edges, actionplan.EdgeRisk)
+	}
+	if m.removedcontrol != nil {
+		edges = append(edges, actionplan.EdgeControl)
+	}
+	if m.removeduser != nil {
+		edges = append(edges, actionplan.EdgeUser)
 	}
 	return edges
 }
@@ -3139,18 +3204,36 @@ func (m *ActionPlanMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case actionplan.EdgeControl:
+		ids := make([]ent.Value, 0, len(m.removedcontrol))
+		for id := range m.removedcontrol {
+			ids = append(ids, id)
+		}
+		return ids
+	case actionplan.EdgeUser:
+		ids := make([]ent.Value, 0, len(m.removeduser))
+		for id := range m.removeduser {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ActionPlanMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 4)
 	if m.clearedstandard {
 		edges = append(edges, actionplan.EdgeStandard)
 	}
 	if m.clearedrisk {
 		edges = append(edges, actionplan.EdgeRisk)
+	}
+	if m.clearedcontrol {
+		edges = append(edges, actionplan.EdgeControl)
+	}
+	if m.cleareduser {
+		edges = append(edges, actionplan.EdgeUser)
 	}
 	return edges
 }
@@ -3163,6 +3246,10 @@ func (m *ActionPlanMutation) EdgeCleared(name string) bool {
 		return m.clearedstandard
 	case actionplan.EdgeRisk:
 		return m.clearedrisk
+	case actionplan.EdgeControl:
+		return m.clearedcontrol
+	case actionplan.EdgeUser:
+		return m.cleareduser
 	}
 	return false
 }
@@ -3184,6 +3271,12 @@ func (m *ActionPlanMutation) ResetEdge(name string) error {
 		return nil
 	case actionplan.EdgeRisk:
 		m.ResetRisk()
+		return nil
+	case actionplan.EdgeControl:
+		m.ResetControl()
+		return nil
+	case actionplan.EdgeUser:
+		m.ResetUser()
 		return nil
 	}
 	return fmt.Errorf("unknown ActionPlan edge %s", name)
@@ -3210,11 +3303,10 @@ type ActionPlanHistoryMutation struct {
 	name          *string
 	description   *string
 	status        *string
-	assigned      *string
-	due_date      *string
+	due_date      *time.Time
 	priority      *string
 	source        *string
-	jsonschema    *map[string]interface{}
+	details       *map[string]interface{}
 	clearedFields map[string]struct{}
 	done          bool
 	oldValue      func(context.Context) (*ActionPlanHistory, error)
@@ -3975,62 +4067,13 @@ func (m *ActionPlanHistoryMutation) ResetStatus() {
 	delete(m.clearedFields, actionplanhistory.FieldStatus)
 }
 
-// SetAssigned sets the "assigned" field.
-func (m *ActionPlanHistoryMutation) SetAssigned(s string) {
-	m.assigned = &s
-}
-
-// Assigned returns the value of the "assigned" field in the mutation.
-func (m *ActionPlanHistoryMutation) Assigned() (r string, exists bool) {
-	v := m.assigned
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldAssigned returns the old "assigned" field's value of the ActionPlanHistory entity.
-// If the ActionPlanHistory object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ActionPlanHistoryMutation) OldAssigned(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldAssigned is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldAssigned requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldAssigned: %w", err)
-	}
-	return oldValue.Assigned, nil
-}
-
-// ClearAssigned clears the value of the "assigned" field.
-func (m *ActionPlanHistoryMutation) ClearAssigned() {
-	m.assigned = nil
-	m.clearedFields[actionplanhistory.FieldAssigned] = struct{}{}
-}
-
-// AssignedCleared returns if the "assigned" field was cleared in this mutation.
-func (m *ActionPlanHistoryMutation) AssignedCleared() bool {
-	_, ok := m.clearedFields[actionplanhistory.FieldAssigned]
-	return ok
-}
-
-// ResetAssigned resets all changes to the "assigned" field.
-func (m *ActionPlanHistoryMutation) ResetAssigned() {
-	m.assigned = nil
-	delete(m.clearedFields, actionplanhistory.FieldAssigned)
-}
-
 // SetDueDate sets the "due_date" field.
-func (m *ActionPlanHistoryMutation) SetDueDate(s string) {
-	m.due_date = &s
+func (m *ActionPlanHistoryMutation) SetDueDate(t time.Time) {
+	m.due_date = &t
 }
 
 // DueDate returns the value of the "due_date" field in the mutation.
-func (m *ActionPlanHistoryMutation) DueDate() (r string, exists bool) {
+func (m *ActionPlanHistoryMutation) DueDate() (r time.Time, exists bool) {
 	v := m.due_date
 	if v == nil {
 		return
@@ -4041,7 +4084,7 @@ func (m *ActionPlanHistoryMutation) DueDate() (r string, exists bool) {
 // OldDueDate returns the old "due_date" field's value of the ActionPlanHistory entity.
 // If the ActionPlanHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ActionPlanHistoryMutation) OldDueDate(ctx context.Context) (v string, err error) {
+func (m *ActionPlanHistoryMutation) OldDueDate(ctx context.Context) (v time.Time, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldDueDate is only allowed on UpdateOne operations")
 	}
@@ -4171,53 +4214,53 @@ func (m *ActionPlanHistoryMutation) ResetSource() {
 	delete(m.clearedFields, actionplanhistory.FieldSource)
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (m *ActionPlanHistoryMutation) SetJsonschema(value map[string]interface{}) {
-	m.jsonschema = &value
+// SetDetails sets the "details" field.
+func (m *ActionPlanHistoryMutation) SetDetails(value map[string]interface{}) {
+	m.details = &value
 }
 
-// Jsonschema returns the value of the "jsonschema" field in the mutation.
-func (m *ActionPlanHistoryMutation) Jsonschema() (r map[string]interface{}, exists bool) {
-	v := m.jsonschema
+// Details returns the value of the "details" field in the mutation.
+func (m *ActionPlanHistoryMutation) Details() (r map[string]interface{}, exists bool) {
+	v := m.details
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldJsonschema returns the old "jsonschema" field's value of the ActionPlanHistory entity.
+// OldDetails returns the old "details" field's value of the ActionPlanHistory entity.
 // If the ActionPlanHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ActionPlanHistoryMutation) OldJsonschema(ctx context.Context) (v map[string]interface{}, err error) {
+func (m *ActionPlanHistoryMutation) OldDetails(ctx context.Context) (v map[string]interface{}, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldJsonschema is only allowed on UpdateOne operations")
+		return v, errors.New("OldDetails is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldJsonschema requires an ID field in the mutation")
+		return v, errors.New("OldDetails requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldJsonschema: %w", err)
+		return v, fmt.Errorf("querying old value for OldDetails: %w", err)
 	}
-	return oldValue.Jsonschema, nil
+	return oldValue.Details, nil
 }
 
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (m *ActionPlanHistoryMutation) ClearJsonschema() {
-	m.jsonschema = nil
-	m.clearedFields[actionplanhistory.FieldJsonschema] = struct{}{}
+// ClearDetails clears the value of the "details" field.
+func (m *ActionPlanHistoryMutation) ClearDetails() {
+	m.details = nil
+	m.clearedFields[actionplanhistory.FieldDetails] = struct{}{}
 }
 
-// JsonschemaCleared returns if the "jsonschema" field was cleared in this mutation.
-func (m *ActionPlanHistoryMutation) JsonschemaCleared() bool {
-	_, ok := m.clearedFields[actionplanhistory.FieldJsonschema]
+// DetailsCleared returns if the "details" field was cleared in this mutation.
+func (m *ActionPlanHistoryMutation) DetailsCleared() bool {
+	_, ok := m.clearedFields[actionplanhistory.FieldDetails]
 	return ok
 }
 
-// ResetJsonschema resets all changes to the "jsonschema" field.
-func (m *ActionPlanHistoryMutation) ResetJsonschema() {
-	m.jsonschema = nil
-	delete(m.clearedFields, actionplanhistory.FieldJsonschema)
+// ResetDetails resets all changes to the "details" field.
+func (m *ActionPlanHistoryMutation) ResetDetails() {
+	m.details = nil
+	delete(m.clearedFields, actionplanhistory.FieldDetails)
 }
 
 // Where appends a list predicates to the ActionPlanHistoryMutation builder.
@@ -4254,7 +4297,7 @@ func (m *ActionPlanHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ActionPlanHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 19)
+	fields := make([]string, 0, 18)
 	if m.history_time != nil {
 		fields = append(fields, actionplanhistory.FieldHistoryTime)
 	}
@@ -4297,9 +4340,6 @@ func (m *ActionPlanHistoryMutation) Fields() []string {
 	if m.status != nil {
 		fields = append(fields, actionplanhistory.FieldStatus)
 	}
-	if m.assigned != nil {
-		fields = append(fields, actionplanhistory.FieldAssigned)
-	}
 	if m.due_date != nil {
 		fields = append(fields, actionplanhistory.FieldDueDate)
 	}
@@ -4309,8 +4349,8 @@ func (m *ActionPlanHistoryMutation) Fields() []string {
 	if m.source != nil {
 		fields = append(fields, actionplanhistory.FieldSource)
 	}
-	if m.jsonschema != nil {
-		fields = append(fields, actionplanhistory.FieldJsonschema)
+	if m.details != nil {
+		fields = append(fields, actionplanhistory.FieldDetails)
 	}
 	return fields
 }
@@ -4348,16 +4388,14 @@ func (m *ActionPlanHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case actionplanhistory.FieldStatus:
 		return m.Status()
-	case actionplanhistory.FieldAssigned:
-		return m.Assigned()
 	case actionplanhistory.FieldDueDate:
 		return m.DueDate()
 	case actionplanhistory.FieldPriority:
 		return m.Priority()
 	case actionplanhistory.FieldSource:
 		return m.Source()
-	case actionplanhistory.FieldJsonschema:
-		return m.Jsonschema()
+	case actionplanhistory.FieldDetails:
+		return m.Details()
 	}
 	return nil, false
 }
@@ -4395,16 +4433,14 @@ func (m *ActionPlanHistoryMutation) OldField(ctx context.Context, name string) (
 		return m.OldDescription(ctx)
 	case actionplanhistory.FieldStatus:
 		return m.OldStatus(ctx)
-	case actionplanhistory.FieldAssigned:
-		return m.OldAssigned(ctx)
 	case actionplanhistory.FieldDueDate:
 		return m.OldDueDate(ctx)
 	case actionplanhistory.FieldPriority:
 		return m.OldPriority(ctx)
 	case actionplanhistory.FieldSource:
 		return m.OldSource(ctx)
-	case actionplanhistory.FieldJsonschema:
-		return m.OldJsonschema(ctx)
+	case actionplanhistory.FieldDetails:
+		return m.OldDetails(ctx)
 	}
 	return nil, fmt.Errorf("unknown ActionPlanHistory field %s", name)
 }
@@ -4512,15 +4548,8 @@ func (m *ActionPlanHistoryMutation) SetField(name string, value ent.Value) error
 		}
 		m.SetStatus(v)
 		return nil
-	case actionplanhistory.FieldAssigned:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetAssigned(v)
-		return nil
 	case actionplanhistory.FieldDueDate:
-		v, ok := value.(string)
+		v, ok := value.(time.Time)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -4540,12 +4569,12 @@ func (m *ActionPlanHistoryMutation) SetField(name string, value ent.Value) error
 		}
 		m.SetSource(v)
 		return nil
-	case actionplanhistory.FieldJsonschema:
+	case actionplanhistory.FieldDetails:
 		v, ok := value.(map[string]interface{})
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetJsonschema(v)
+		m.SetDetails(v)
 		return nil
 	}
 	return fmt.Errorf("unknown ActionPlanHistory field %s", name)
@@ -4607,9 +4636,6 @@ func (m *ActionPlanHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(actionplanhistory.FieldStatus) {
 		fields = append(fields, actionplanhistory.FieldStatus)
 	}
-	if m.FieldCleared(actionplanhistory.FieldAssigned) {
-		fields = append(fields, actionplanhistory.FieldAssigned)
-	}
 	if m.FieldCleared(actionplanhistory.FieldDueDate) {
 		fields = append(fields, actionplanhistory.FieldDueDate)
 	}
@@ -4619,8 +4645,8 @@ func (m *ActionPlanHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(actionplanhistory.FieldSource) {
 		fields = append(fields, actionplanhistory.FieldSource)
 	}
-	if m.FieldCleared(actionplanhistory.FieldJsonschema) {
-		fields = append(fields, actionplanhistory.FieldJsonschema)
+	if m.FieldCleared(actionplanhistory.FieldDetails) {
+		fields = append(fields, actionplanhistory.FieldDetails)
 	}
 	return fields
 }
@@ -4666,9 +4692,6 @@ func (m *ActionPlanHistoryMutation) ClearField(name string) error {
 	case actionplanhistory.FieldStatus:
 		m.ClearStatus()
 		return nil
-	case actionplanhistory.FieldAssigned:
-		m.ClearAssigned()
-		return nil
 	case actionplanhistory.FieldDueDate:
 		m.ClearDueDate()
 		return nil
@@ -4678,8 +4701,8 @@ func (m *ActionPlanHistoryMutation) ClearField(name string) error {
 	case actionplanhistory.FieldSource:
 		m.ClearSource()
 		return nil
-	case actionplanhistory.FieldJsonschema:
-		m.ClearJsonschema()
+	case actionplanhistory.FieldDetails:
+		m.ClearDetails()
 		return nil
 	}
 	return fmt.Errorf("unknown ActionPlanHistory nullable field %s", name)
@@ -4731,9 +4754,6 @@ func (m *ActionPlanHistoryMutation) ResetField(name string) error {
 	case actionplanhistory.FieldStatus:
 		m.ResetStatus()
 		return nil
-	case actionplanhistory.FieldAssigned:
-		m.ResetAssigned()
-		return nil
 	case actionplanhistory.FieldDueDate:
 		m.ResetDueDate()
 		return nil
@@ -4743,8 +4763,8 @@ func (m *ActionPlanHistoryMutation) ResetField(name string) error {
 	case actionplanhistory.FieldSource:
 		m.ResetSource()
 		return nil
-	case actionplanhistory.FieldJsonschema:
-		m.ResetJsonschema()
+	case actionplanhistory.FieldDetails:
+		m.ResetDetails()
 		return nil
 	}
 	return fmt.Errorf("unknown ActionPlanHistory field %s", name)
@@ -8039,14 +8059,13 @@ type ControlMutation struct {
 	status                   *string
 	control_type             *string
 	version                  *string
-	owner                    *string
 	control_number           *string
-	control_family           *string
-	control_class            *string
+	family                   *string
+	class                    *string
 	source                   *string
 	satisfies                *string
 	mapped_frameworks        *string
-	jsonschema               *map[string]interface{}
+	details                  *map[string]interface{}
 	clearedFields            map[string]struct{}
 	procedures               map[string]struct{}
 	removedprocedures        map[string]struct{}
@@ -8066,6 +8085,9 @@ type ControlMutation struct {
 	risks                    map[string]struct{}
 	removedrisks             map[string]struct{}
 	clearedrisks             bool
+	actionplans              map[string]struct{}
+	removedactionplans       map[string]struct{}
+	clearedactionplans       bool
 	done                     bool
 	oldValue                 func(context.Context) (*Control, error)
 	predicates               []predicate.Control
@@ -8802,55 +8824,6 @@ func (m *ControlMutation) ResetVersion() {
 	delete(m.clearedFields, control.FieldVersion)
 }
 
-// SetOwner sets the "owner" field.
-func (m *ControlMutation) SetOwner(s string) {
-	m.owner = &s
-}
-
-// Owner returns the value of the "owner" field in the mutation.
-func (m *ControlMutation) Owner() (r string, exists bool) {
-	v := m.owner
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldOwner returns the old "owner" field's value of the Control entity.
-// If the Control object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ControlMutation) OldOwner(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldOwner is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldOwner requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldOwner: %w", err)
-	}
-	return oldValue.Owner, nil
-}
-
-// ClearOwner clears the value of the "owner" field.
-func (m *ControlMutation) ClearOwner() {
-	m.owner = nil
-	m.clearedFields[control.FieldOwner] = struct{}{}
-}
-
-// OwnerCleared returns if the "owner" field was cleared in this mutation.
-func (m *ControlMutation) OwnerCleared() bool {
-	_, ok := m.clearedFields[control.FieldOwner]
-	return ok
-}
-
-// ResetOwner resets all changes to the "owner" field.
-func (m *ControlMutation) ResetOwner() {
-	m.owner = nil
-	delete(m.clearedFields, control.FieldOwner)
-}
-
 // SetControlNumber sets the "control_number" field.
 func (m *ControlMutation) SetControlNumber(s string) {
 	m.control_number = &s
@@ -8900,102 +8873,102 @@ func (m *ControlMutation) ResetControlNumber() {
 	delete(m.clearedFields, control.FieldControlNumber)
 }
 
-// SetControlFamily sets the "control_family" field.
-func (m *ControlMutation) SetControlFamily(s string) {
-	m.control_family = &s
+// SetFamily sets the "family" field.
+func (m *ControlMutation) SetFamily(s string) {
+	m.family = &s
 }
 
-// ControlFamily returns the value of the "control_family" field in the mutation.
-func (m *ControlMutation) ControlFamily() (r string, exists bool) {
-	v := m.control_family
+// Family returns the value of the "family" field in the mutation.
+func (m *ControlMutation) Family() (r string, exists bool) {
+	v := m.family
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldControlFamily returns the old "control_family" field's value of the Control entity.
+// OldFamily returns the old "family" field's value of the Control entity.
 // If the Control object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ControlMutation) OldControlFamily(ctx context.Context) (v string, err error) {
+func (m *ControlMutation) OldFamily(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldControlFamily is only allowed on UpdateOne operations")
+		return v, errors.New("OldFamily is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldControlFamily requires an ID field in the mutation")
+		return v, errors.New("OldFamily requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldControlFamily: %w", err)
+		return v, fmt.Errorf("querying old value for OldFamily: %w", err)
 	}
-	return oldValue.ControlFamily, nil
+	return oldValue.Family, nil
 }
 
-// ClearControlFamily clears the value of the "control_family" field.
-func (m *ControlMutation) ClearControlFamily() {
-	m.control_family = nil
-	m.clearedFields[control.FieldControlFamily] = struct{}{}
+// ClearFamily clears the value of the "family" field.
+func (m *ControlMutation) ClearFamily() {
+	m.family = nil
+	m.clearedFields[control.FieldFamily] = struct{}{}
 }
 
-// ControlFamilyCleared returns if the "control_family" field was cleared in this mutation.
-func (m *ControlMutation) ControlFamilyCleared() bool {
-	_, ok := m.clearedFields[control.FieldControlFamily]
+// FamilyCleared returns if the "family" field was cleared in this mutation.
+func (m *ControlMutation) FamilyCleared() bool {
+	_, ok := m.clearedFields[control.FieldFamily]
 	return ok
 }
 
-// ResetControlFamily resets all changes to the "control_family" field.
-func (m *ControlMutation) ResetControlFamily() {
-	m.control_family = nil
-	delete(m.clearedFields, control.FieldControlFamily)
+// ResetFamily resets all changes to the "family" field.
+func (m *ControlMutation) ResetFamily() {
+	m.family = nil
+	delete(m.clearedFields, control.FieldFamily)
 }
 
-// SetControlClass sets the "control_class" field.
-func (m *ControlMutation) SetControlClass(s string) {
-	m.control_class = &s
+// SetClass sets the "class" field.
+func (m *ControlMutation) SetClass(s string) {
+	m.class = &s
 }
 
-// ControlClass returns the value of the "control_class" field in the mutation.
-func (m *ControlMutation) ControlClass() (r string, exists bool) {
-	v := m.control_class
+// Class returns the value of the "class" field in the mutation.
+func (m *ControlMutation) Class() (r string, exists bool) {
+	v := m.class
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldControlClass returns the old "control_class" field's value of the Control entity.
+// OldClass returns the old "class" field's value of the Control entity.
 // If the Control object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ControlMutation) OldControlClass(ctx context.Context) (v string, err error) {
+func (m *ControlMutation) OldClass(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldControlClass is only allowed on UpdateOne operations")
+		return v, errors.New("OldClass is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldControlClass requires an ID field in the mutation")
+		return v, errors.New("OldClass requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldControlClass: %w", err)
+		return v, fmt.Errorf("querying old value for OldClass: %w", err)
 	}
-	return oldValue.ControlClass, nil
+	return oldValue.Class, nil
 }
 
-// ClearControlClass clears the value of the "control_class" field.
-func (m *ControlMutation) ClearControlClass() {
-	m.control_class = nil
-	m.clearedFields[control.FieldControlClass] = struct{}{}
+// ClearClass clears the value of the "class" field.
+func (m *ControlMutation) ClearClass() {
+	m.class = nil
+	m.clearedFields[control.FieldClass] = struct{}{}
 }
 
-// ControlClassCleared returns if the "control_class" field was cleared in this mutation.
-func (m *ControlMutation) ControlClassCleared() bool {
-	_, ok := m.clearedFields[control.FieldControlClass]
+// ClassCleared returns if the "class" field was cleared in this mutation.
+func (m *ControlMutation) ClassCleared() bool {
+	_, ok := m.clearedFields[control.FieldClass]
 	return ok
 }
 
-// ResetControlClass resets all changes to the "control_class" field.
-func (m *ControlMutation) ResetControlClass() {
-	m.control_class = nil
-	delete(m.clearedFields, control.FieldControlClass)
+// ResetClass resets all changes to the "class" field.
+func (m *ControlMutation) ResetClass() {
+	m.class = nil
+	delete(m.clearedFields, control.FieldClass)
 }
 
 // SetSource sets the "source" field.
@@ -9145,53 +9118,53 @@ func (m *ControlMutation) ResetMappedFrameworks() {
 	delete(m.clearedFields, control.FieldMappedFrameworks)
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (m *ControlMutation) SetJsonschema(value map[string]interface{}) {
-	m.jsonschema = &value
+// SetDetails sets the "details" field.
+func (m *ControlMutation) SetDetails(value map[string]interface{}) {
+	m.details = &value
 }
 
-// Jsonschema returns the value of the "jsonschema" field in the mutation.
-func (m *ControlMutation) Jsonschema() (r map[string]interface{}, exists bool) {
-	v := m.jsonschema
+// Details returns the value of the "details" field in the mutation.
+func (m *ControlMutation) Details() (r map[string]interface{}, exists bool) {
+	v := m.details
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldJsonschema returns the old "jsonschema" field's value of the Control entity.
+// OldDetails returns the old "details" field's value of the Control entity.
 // If the Control object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ControlMutation) OldJsonschema(ctx context.Context) (v map[string]interface{}, err error) {
+func (m *ControlMutation) OldDetails(ctx context.Context) (v map[string]interface{}, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldJsonschema is only allowed on UpdateOne operations")
+		return v, errors.New("OldDetails is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldJsonschema requires an ID field in the mutation")
+		return v, errors.New("OldDetails requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldJsonschema: %w", err)
+		return v, fmt.Errorf("querying old value for OldDetails: %w", err)
 	}
-	return oldValue.Jsonschema, nil
+	return oldValue.Details, nil
 }
 
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (m *ControlMutation) ClearJsonschema() {
-	m.jsonschema = nil
-	m.clearedFields[control.FieldJsonschema] = struct{}{}
+// ClearDetails clears the value of the "details" field.
+func (m *ControlMutation) ClearDetails() {
+	m.details = nil
+	m.clearedFields[control.FieldDetails] = struct{}{}
 }
 
-// JsonschemaCleared returns if the "jsonschema" field was cleared in this mutation.
-func (m *ControlMutation) JsonschemaCleared() bool {
-	_, ok := m.clearedFields[control.FieldJsonschema]
+// DetailsCleared returns if the "details" field was cleared in this mutation.
+func (m *ControlMutation) DetailsCleared() bool {
+	_, ok := m.clearedFields[control.FieldDetails]
 	return ok
 }
 
-// ResetJsonschema resets all changes to the "jsonschema" field.
-func (m *ControlMutation) ResetJsonschema() {
-	m.jsonschema = nil
-	delete(m.clearedFields, control.FieldJsonschema)
+// ResetDetails resets all changes to the "details" field.
+func (m *ControlMutation) ResetDetails() {
+	m.details = nil
+	delete(m.clearedFields, control.FieldDetails)
 }
 
 // AddProcedureIDs adds the "procedures" edge to the Procedure entity by ids.
@@ -9518,6 +9491,60 @@ func (m *ControlMutation) ResetRisks() {
 	m.removedrisks = nil
 }
 
+// AddActionplanIDs adds the "actionplans" edge to the ActionPlan entity by ids.
+func (m *ControlMutation) AddActionplanIDs(ids ...string) {
+	if m.actionplans == nil {
+		m.actionplans = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.actionplans[ids[i]] = struct{}{}
+	}
+}
+
+// ClearActionplans clears the "actionplans" edge to the ActionPlan entity.
+func (m *ControlMutation) ClearActionplans() {
+	m.clearedactionplans = true
+}
+
+// ActionplansCleared reports if the "actionplans" edge to the ActionPlan entity was cleared.
+func (m *ControlMutation) ActionplansCleared() bool {
+	return m.clearedactionplans
+}
+
+// RemoveActionplanIDs removes the "actionplans" edge to the ActionPlan entity by IDs.
+func (m *ControlMutation) RemoveActionplanIDs(ids ...string) {
+	if m.removedactionplans == nil {
+		m.removedactionplans = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.actionplans, ids[i])
+		m.removedactionplans[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedActionplans returns the removed IDs of the "actionplans" edge to the ActionPlan entity.
+func (m *ControlMutation) RemovedActionplansIDs() (ids []string) {
+	for id := range m.removedactionplans {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ActionplansIDs returns the "actionplans" edge IDs in the mutation.
+func (m *ControlMutation) ActionplansIDs() (ids []string) {
+	for id := range m.actionplans {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetActionplans resets all changes to the "actionplans" edge.
+func (m *ControlMutation) ResetActionplans() {
+	m.actionplans = nil
+	m.clearedactionplans = false
+	m.removedactionplans = nil
+}
+
 // Where appends a list predicates to the ControlMutation builder.
 func (m *ControlMutation) Where(ps ...predicate.Control) {
 	m.predicates = append(m.predicates, ps...)
@@ -9552,7 +9579,7 @@ func (m *ControlMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ControlMutation) Fields() []string {
-	fields := make([]string, 0, 21)
+	fields := make([]string, 0, 20)
 	if m.created_at != nil {
 		fields = append(fields, control.FieldCreatedAt)
 	}
@@ -9592,17 +9619,14 @@ func (m *ControlMutation) Fields() []string {
 	if m.version != nil {
 		fields = append(fields, control.FieldVersion)
 	}
-	if m.owner != nil {
-		fields = append(fields, control.FieldOwner)
-	}
 	if m.control_number != nil {
 		fields = append(fields, control.FieldControlNumber)
 	}
-	if m.control_family != nil {
-		fields = append(fields, control.FieldControlFamily)
+	if m.family != nil {
+		fields = append(fields, control.FieldFamily)
 	}
-	if m.control_class != nil {
-		fields = append(fields, control.FieldControlClass)
+	if m.class != nil {
+		fields = append(fields, control.FieldClass)
 	}
 	if m.source != nil {
 		fields = append(fields, control.FieldSource)
@@ -9613,8 +9637,8 @@ func (m *ControlMutation) Fields() []string {
 	if m.mapped_frameworks != nil {
 		fields = append(fields, control.FieldMappedFrameworks)
 	}
-	if m.jsonschema != nil {
-		fields = append(fields, control.FieldJsonschema)
+	if m.details != nil {
+		fields = append(fields, control.FieldDetails)
 	}
 	return fields
 }
@@ -9650,22 +9674,20 @@ func (m *ControlMutation) Field(name string) (ent.Value, bool) {
 		return m.ControlType()
 	case control.FieldVersion:
 		return m.Version()
-	case control.FieldOwner:
-		return m.Owner()
 	case control.FieldControlNumber:
 		return m.ControlNumber()
-	case control.FieldControlFamily:
-		return m.ControlFamily()
-	case control.FieldControlClass:
-		return m.ControlClass()
+	case control.FieldFamily:
+		return m.Family()
+	case control.FieldClass:
+		return m.Class()
 	case control.FieldSource:
 		return m.Source()
 	case control.FieldSatisfies:
 		return m.Satisfies()
 	case control.FieldMappedFrameworks:
 		return m.MappedFrameworks()
-	case control.FieldJsonschema:
-		return m.Jsonschema()
+	case control.FieldDetails:
+		return m.Details()
 	}
 	return nil, false
 }
@@ -9701,22 +9723,20 @@ func (m *ControlMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldControlType(ctx)
 	case control.FieldVersion:
 		return m.OldVersion(ctx)
-	case control.FieldOwner:
-		return m.OldOwner(ctx)
 	case control.FieldControlNumber:
 		return m.OldControlNumber(ctx)
-	case control.FieldControlFamily:
-		return m.OldControlFamily(ctx)
-	case control.FieldControlClass:
-		return m.OldControlClass(ctx)
+	case control.FieldFamily:
+		return m.OldFamily(ctx)
+	case control.FieldClass:
+		return m.OldClass(ctx)
 	case control.FieldSource:
 		return m.OldSource(ctx)
 	case control.FieldSatisfies:
 		return m.OldSatisfies(ctx)
 	case control.FieldMappedFrameworks:
 		return m.OldMappedFrameworks(ctx)
-	case control.FieldJsonschema:
-		return m.OldJsonschema(ctx)
+	case control.FieldDetails:
+		return m.OldDetails(ctx)
 	}
 	return nil, fmt.Errorf("unknown Control field %s", name)
 }
@@ -9817,13 +9837,6 @@ func (m *ControlMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetVersion(v)
 		return nil
-	case control.FieldOwner:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetOwner(v)
-		return nil
 	case control.FieldControlNumber:
 		v, ok := value.(string)
 		if !ok {
@@ -9831,19 +9844,19 @@ func (m *ControlMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetControlNumber(v)
 		return nil
-	case control.FieldControlFamily:
+	case control.FieldFamily:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetControlFamily(v)
+		m.SetFamily(v)
 		return nil
-	case control.FieldControlClass:
+	case control.FieldClass:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetControlClass(v)
+		m.SetClass(v)
 		return nil
 	case control.FieldSource:
 		v, ok := value.(string)
@@ -9866,12 +9879,12 @@ func (m *ControlMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetMappedFrameworks(v)
 		return nil
-	case control.FieldJsonschema:
+	case control.FieldDetails:
 		v, ok := value.(map[string]interface{})
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetJsonschema(v)
+		m.SetDetails(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Control field %s", name)
@@ -9936,17 +9949,14 @@ func (m *ControlMutation) ClearedFields() []string {
 	if m.FieldCleared(control.FieldVersion) {
 		fields = append(fields, control.FieldVersion)
 	}
-	if m.FieldCleared(control.FieldOwner) {
-		fields = append(fields, control.FieldOwner)
-	}
 	if m.FieldCleared(control.FieldControlNumber) {
 		fields = append(fields, control.FieldControlNumber)
 	}
-	if m.FieldCleared(control.FieldControlFamily) {
-		fields = append(fields, control.FieldControlFamily)
+	if m.FieldCleared(control.FieldFamily) {
+		fields = append(fields, control.FieldFamily)
 	}
-	if m.FieldCleared(control.FieldControlClass) {
-		fields = append(fields, control.FieldControlClass)
+	if m.FieldCleared(control.FieldClass) {
+		fields = append(fields, control.FieldClass)
 	}
 	if m.FieldCleared(control.FieldSource) {
 		fields = append(fields, control.FieldSource)
@@ -9957,8 +9967,8 @@ func (m *ControlMutation) ClearedFields() []string {
 	if m.FieldCleared(control.FieldMappedFrameworks) {
 		fields = append(fields, control.FieldMappedFrameworks)
 	}
-	if m.FieldCleared(control.FieldJsonschema) {
-		fields = append(fields, control.FieldJsonschema)
+	if m.FieldCleared(control.FieldDetails) {
+		fields = append(fields, control.FieldDetails)
 	}
 	return fields
 }
@@ -10007,17 +10017,14 @@ func (m *ControlMutation) ClearField(name string) error {
 	case control.FieldVersion:
 		m.ClearVersion()
 		return nil
-	case control.FieldOwner:
-		m.ClearOwner()
-		return nil
 	case control.FieldControlNumber:
 		m.ClearControlNumber()
 		return nil
-	case control.FieldControlFamily:
-		m.ClearControlFamily()
+	case control.FieldFamily:
+		m.ClearFamily()
 		return nil
-	case control.FieldControlClass:
-		m.ClearControlClass()
+	case control.FieldClass:
+		m.ClearClass()
 		return nil
 	case control.FieldSource:
 		m.ClearSource()
@@ -10028,8 +10035,8 @@ func (m *ControlMutation) ClearField(name string) error {
 	case control.FieldMappedFrameworks:
 		m.ClearMappedFrameworks()
 		return nil
-	case control.FieldJsonschema:
-		m.ClearJsonschema()
+	case control.FieldDetails:
+		m.ClearDetails()
 		return nil
 	}
 	return fmt.Errorf("unknown Control nullable field %s", name)
@@ -10078,17 +10085,14 @@ func (m *ControlMutation) ResetField(name string) error {
 	case control.FieldVersion:
 		m.ResetVersion()
 		return nil
-	case control.FieldOwner:
-		m.ResetOwner()
-		return nil
 	case control.FieldControlNumber:
 		m.ResetControlNumber()
 		return nil
-	case control.FieldControlFamily:
-		m.ResetControlFamily()
+	case control.FieldFamily:
+		m.ResetFamily()
 		return nil
-	case control.FieldControlClass:
-		m.ResetControlClass()
+	case control.FieldClass:
+		m.ResetClass()
 		return nil
 	case control.FieldSource:
 		m.ResetSource()
@@ -10099,8 +10103,8 @@ func (m *ControlMutation) ResetField(name string) error {
 	case control.FieldMappedFrameworks:
 		m.ResetMappedFrameworks()
 		return nil
-	case control.FieldJsonschema:
-		m.ResetJsonschema()
+	case control.FieldDetails:
+		m.ResetDetails()
 		return nil
 	}
 	return fmt.Errorf("unknown Control field %s", name)
@@ -10108,7 +10112,7 @@ func (m *ControlMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ControlMutation) AddedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.procedures != nil {
 		edges = append(edges, control.EdgeProcedures)
 	}
@@ -10126,6 +10130,9 @@ func (m *ControlMutation) AddedEdges() []string {
 	}
 	if m.risks != nil {
 		edges = append(edges, control.EdgeRisks)
+	}
+	if m.actionplans != nil {
+		edges = append(edges, control.EdgeActionplans)
 	}
 	return edges
 }
@@ -10170,13 +10177,19 @@ func (m *ControlMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case control.EdgeActionplans:
+		ids := make([]ent.Value, 0, len(m.actionplans))
+		for id := range m.actionplans {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ControlMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.removedprocedures != nil {
 		edges = append(edges, control.EdgeProcedures)
 	}
@@ -10194,6 +10207,9 @@ func (m *ControlMutation) RemovedEdges() []string {
 	}
 	if m.removedrisks != nil {
 		edges = append(edges, control.EdgeRisks)
+	}
+	if m.removedactionplans != nil {
+		edges = append(edges, control.EdgeActionplans)
 	}
 	return edges
 }
@@ -10238,13 +10254,19 @@ func (m *ControlMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case control.EdgeActionplans:
+		ids := make([]ent.Value, 0, len(m.removedactionplans))
+		for id := range m.removedactionplans {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ControlMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.clearedprocedures {
 		edges = append(edges, control.EdgeProcedures)
 	}
@@ -10262,6 +10284,9 @@ func (m *ControlMutation) ClearedEdges() []string {
 	}
 	if m.clearedrisks {
 		edges = append(edges, control.EdgeRisks)
+	}
+	if m.clearedactionplans {
+		edges = append(edges, control.EdgeActionplans)
 	}
 	return edges
 }
@@ -10282,6 +10307,8 @@ func (m *ControlMutation) EdgeCleared(name string) bool {
 		return m.clearednarratives
 	case control.EdgeRisks:
 		return m.clearedrisks
+	case control.EdgeActionplans:
+		return m.clearedactionplans
 	}
 	return false
 }
@@ -10316,6 +10343,9 @@ func (m *ControlMutation) ResetEdge(name string) error {
 	case control.EdgeRisks:
 		m.ResetRisks()
 		return nil
+	case control.EdgeActionplans:
+		m.ResetActionplans()
+		return nil
 	}
 	return fmt.Errorf("unknown Control edge %s", name)
 }
@@ -10343,14 +10373,13 @@ type ControlHistoryMutation struct {
 	status            *string
 	control_type      *string
 	version           *string
-	owner             *string
 	control_number    *string
-	control_family    *string
-	control_class     *string
+	family            *string
+	class             *string
 	source            *string
 	satisfies         *string
 	mapped_frameworks *string
-	jsonschema        *map[string]interface{}
+	details           *map[string]interface{}
 	clearedFields     map[string]struct{}
 	done              bool
 	oldValue          func(context.Context) (*ControlHistory, error)
@@ -11209,55 +11238,6 @@ func (m *ControlHistoryMutation) ResetVersion() {
 	delete(m.clearedFields, controlhistory.FieldVersion)
 }
 
-// SetOwner sets the "owner" field.
-func (m *ControlHistoryMutation) SetOwner(s string) {
-	m.owner = &s
-}
-
-// Owner returns the value of the "owner" field in the mutation.
-func (m *ControlHistoryMutation) Owner() (r string, exists bool) {
-	v := m.owner
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldOwner returns the old "owner" field's value of the ControlHistory entity.
-// If the ControlHistory object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ControlHistoryMutation) OldOwner(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldOwner is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldOwner requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldOwner: %w", err)
-	}
-	return oldValue.Owner, nil
-}
-
-// ClearOwner clears the value of the "owner" field.
-func (m *ControlHistoryMutation) ClearOwner() {
-	m.owner = nil
-	m.clearedFields[controlhistory.FieldOwner] = struct{}{}
-}
-
-// OwnerCleared returns if the "owner" field was cleared in this mutation.
-func (m *ControlHistoryMutation) OwnerCleared() bool {
-	_, ok := m.clearedFields[controlhistory.FieldOwner]
-	return ok
-}
-
-// ResetOwner resets all changes to the "owner" field.
-func (m *ControlHistoryMutation) ResetOwner() {
-	m.owner = nil
-	delete(m.clearedFields, controlhistory.FieldOwner)
-}
-
 // SetControlNumber sets the "control_number" field.
 func (m *ControlHistoryMutation) SetControlNumber(s string) {
 	m.control_number = &s
@@ -11307,102 +11287,102 @@ func (m *ControlHistoryMutation) ResetControlNumber() {
 	delete(m.clearedFields, controlhistory.FieldControlNumber)
 }
 
-// SetControlFamily sets the "control_family" field.
-func (m *ControlHistoryMutation) SetControlFamily(s string) {
-	m.control_family = &s
+// SetFamily sets the "family" field.
+func (m *ControlHistoryMutation) SetFamily(s string) {
+	m.family = &s
 }
 
-// ControlFamily returns the value of the "control_family" field in the mutation.
-func (m *ControlHistoryMutation) ControlFamily() (r string, exists bool) {
-	v := m.control_family
+// Family returns the value of the "family" field in the mutation.
+func (m *ControlHistoryMutation) Family() (r string, exists bool) {
+	v := m.family
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldControlFamily returns the old "control_family" field's value of the ControlHistory entity.
+// OldFamily returns the old "family" field's value of the ControlHistory entity.
 // If the ControlHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ControlHistoryMutation) OldControlFamily(ctx context.Context) (v string, err error) {
+func (m *ControlHistoryMutation) OldFamily(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldControlFamily is only allowed on UpdateOne operations")
+		return v, errors.New("OldFamily is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldControlFamily requires an ID field in the mutation")
+		return v, errors.New("OldFamily requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldControlFamily: %w", err)
+		return v, fmt.Errorf("querying old value for OldFamily: %w", err)
 	}
-	return oldValue.ControlFamily, nil
+	return oldValue.Family, nil
 }
 
-// ClearControlFamily clears the value of the "control_family" field.
-func (m *ControlHistoryMutation) ClearControlFamily() {
-	m.control_family = nil
-	m.clearedFields[controlhistory.FieldControlFamily] = struct{}{}
+// ClearFamily clears the value of the "family" field.
+func (m *ControlHistoryMutation) ClearFamily() {
+	m.family = nil
+	m.clearedFields[controlhistory.FieldFamily] = struct{}{}
 }
 
-// ControlFamilyCleared returns if the "control_family" field was cleared in this mutation.
-func (m *ControlHistoryMutation) ControlFamilyCleared() bool {
-	_, ok := m.clearedFields[controlhistory.FieldControlFamily]
+// FamilyCleared returns if the "family" field was cleared in this mutation.
+func (m *ControlHistoryMutation) FamilyCleared() bool {
+	_, ok := m.clearedFields[controlhistory.FieldFamily]
 	return ok
 }
 
-// ResetControlFamily resets all changes to the "control_family" field.
-func (m *ControlHistoryMutation) ResetControlFamily() {
-	m.control_family = nil
-	delete(m.clearedFields, controlhistory.FieldControlFamily)
+// ResetFamily resets all changes to the "family" field.
+func (m *ControlHistoryMutation) ResetFamily() {
+	m.family = nil
+	delete(m.clearedFields, controlhistory.FieldFamily)
 }
 
-// SetControlClass sets the "control_class" field.
-func (m *ControlHistoryMutation) SetControlClass(s string) {
-	m.control_class = &s
+// SetClass sets the "class" field.
+func (m *ControlHistoryMutation) SetClass(s string) {
+	m.class = &s
 }
 
-// ControlClass returns the value of the "control_class" field in the mutation.
-func (m *ControlHistoryMutation) ControlClass() (r string, exists bool) {
-	v := m.control_class
+// Class returns the value of the "class" field in the mutation.
+func (m *ControlHistoryMutation) Class() (r string, exists bool) {
+	v := m.class
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldControlClass returns the old "control_class" field's value of the ControlHistory entity.
+// OldClass returns the old "class" field's value of the ControlHistory entity.
 // If the ControlHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ControlHistoryMutation) OldControlClass(ctx context.Context) (v string, err error) {
+func (m *ControlHistoryMutation) OldClass(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldControlClass is only allowed on UpdateOne operations")
+		return v, errors.New("OldClass is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldControlClass requires an ID field in the mutation")
+		return v, errors.New("OldClass requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldControlClass: %w", err)
+		return v, fmt.Errorf("querying old value for OldClass: %w", err)
 	}
-	return oldValue.ControlClass, nil
+	return oldValue.Class, nil
 }
 
-// ClearControlClass clears the value of the "control_class" field.
-func (m *ControlHistoryMutation) ClearControlClass() {
-	m.control_class = nil
-	m.clearedFields[controlhistory.FieldControlClass] = struct{}{}
+// ClearClass clears the value of the "class" field.
+func (m *ControlHistoryMutation) ClearClass() {
+	m.class = nil
+	m.clearedFields[controlhistory.FieldClass] = struct{}{}
 }
 
-// ControlClassCleared returns if the "control_class" field was cleared in this mutation.
-func (m *ControlHistoryMutation) ControlClassCleared() bool {
-	_, ok := m.clearedFields[controlhistory.FieldControlClass]
+// ClassCleared returns if the "class" field was cleared in this mutation.
+func (m *ControlHistoryMutation) ClassCleared() bool {
+	_, ok := m.clearedFields[controlhistory.FieldClass]
 	return ok
 }
 
-// ResetControlClass resets all changes to the "control_class" field.
-func (m *ControlHistoryMutation) ResetControlClass() {
-	m.control_class = nil
-	delete(m.clearedFields, controlhistory.FieldControlClass)
+// ResetClass resets all changes to the "class" field.
+func (m *ControlHistoryMutation) ResetClass() {
+	m.class = nil
+	delete(m.clearedFields, controlhistory.FieldClass)
 }
 
 // SetSource sets the "source" field.
@@ -11552,53 +11532,53 @@ func (m *ControlHistoryMutation) ResetMappedFrameworks() {
 	delete(m.clearedFields, controlhistory.FieldMappedFrameworks)
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (m *ControlHistoryMutation) SetJsonschema(value map[string]interface{}) {
-	m.jsonschema = &value
+// SetDetails sets the "details" field.
+func (m *ControlHistoryMutation) SetDetails(value map[string]interface{}) {
+	m.details = &value
 }
 
-// Jsonschema returns the value of the "jsonschema" field in the mutation.
-func (m *ControlHistoryMutation) Jsonschema() (r map[string]interface{}, exists bool) {
-	v := m.jsonschema
+// Details returns the value of the "details" field in the mutation.
+func (m *ControlHistoryMutation) Details() (r map[string]interface{}, exists bool) {
+	v := m.details
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldJsonschema returns the old "jsonschema" field's value of the ControlHistory entity.
+// OldDetails returns the old "details" field's value of the ControlHistory entity.
 // If the ControlHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ControlHistoryMutation) OldJsonschema(ctx context.Context) (v map[string]interface{}, err error) {
+func (m *ControlHistoryMutation) OldDetails(ctx context.Context) (v map[string]interface{}, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldJsonschema is only allowed on UpdateOne operations")
+		return v, errors.New("OldDetails is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldJsonschema requires an ID field in the mutation")
+		return v, errors.New("OldDetails requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldJsonschema: %w", err)
+		return v, fmt.Errorf("querying old value for OldDetails: %w", err)
 	}
-	return oldValue.Jsonschema, nil
+	return oldValue.Details, nil
 }
 
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (m *ControlHistoryMutation) ClearJsonschema() {
-	m.jsonschema = nil
-	m.clearedFields[controlhistory.FieldJsonschema] = struct{}{}
+// ClearDetails clears the value of the "details" field.
+func (m *ControlHistoryMutation) ClearDetails() {
+	m.details = nil
+	m.clearedFields[controlhistory.FieldDetails] = struct{}{}
 }
 
-// JsonschemaCleared returns if the "jsonschema" field was cleared in this mutation.
-func (m *ControlHistoryMutation) JsonschemaCleared() bool {
-	_, ok := m.clearedFields[controlhistory.FieldJsonschema]
+// DetailsCleared returns if the "details" field was cleared in this mutation.
+func (m *ControlHistoryMutation) DetailsCleared() bool {
+	_, ok := m.clearedFields[controlhistory.FieldDetails]
 	return ok
 }
 
-// ResetJsonschema resets all changes to the "jsonschema" field.
-func (m *ControlHistoryMutation) ResetJsonschema() {
-	m.jsonschema = nil
-	delete(m.clearedFields, controlhistory.FieldJsonschema)
+// ResetDetails resets all changes to the "details" field.
+func (m *ControlHistoryMutation) ResetDetails() {
+	m.details = nil
+	delete(m.clearedFields, controlhistory.FieldDetails)
 }
 
 // Where appends a list predicates to the ControlHistoryMutation builder.
@@ -11635,7 +11615,7 @@ func (m *ControlHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ControlHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 24)
+	fields := make([]string, 0, 23)
 	if m.history_time != nil {
 		fields = append(fields, controlhistory.FieldHistoryTime)
 	}
@@ -11684,17 +11664,14 @@ func (m *ControlHistoryMutation) Fields() []string {
 	if m.version != nil {
 		fields = append(fields, controlhistory.FieldVersion)
 	}
-	if m.owner != nil {
-		fields = append(fields, controlhistory.FieldOwner)
-	}
 	if m.control_number != nil {
 		fields = append(fields, controlhistory.FieldControlNumber)
 	}
-	if m.control_family != nil {
-		fields = append(fields, controlhistory.FieldControlFamily)
+	if m.family != nil {
+		fields = append(fields, controlhistory.FieldFamily)
 	}
-	if m.control_class != nil {
-		fields = append(fields, controlhistory.FieldControlClass)
+	if m.class != nil {
+		fields = append(fields, controlhistory.FieldClass)
 	}
 	if m.source != nil {
 		fields = append(fields, controlhistory.FieldSource)
@@ -11705,8 +11682,8 @@ func (m *ControlHistoryMutation) Fields() []string {
 	if m.mapped_frameworks != nil {
 		fields = append(fields, controlhistory.FieldMappedFrameworks)
 	}
-	if m.jsonschema != nil {
-		fields = append(fields, controlhistory.FieldJsonschema)
+	if m.details != nil {
+		fields = append(fields, controlhistory.FieldDetails)
 	}
 	return fields
 }
@@ -11748,22 +11725,20 @@ func (m *ControlHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.ControlType()
 	case controlhistory.FieldVersion:
 		return m.Version()
-	case controlhistory.FieldOwner:
-		return m.Owner()
 	case controlhistory.FieldControlNumber:
 		return m.ControlNumber()
-	case controlhistory.FieldControlFamily:
-		return m.ControlFamily()
-	case controlhistory.FieldControlClass:
-		return m.ControlClass()
+	case controlhistory.FieldFamily:
+		return m.Family()
+	case controlhistory.FieldClass:
+		return m.Class()
 	case controlhistory.FieldSource:
 		return m.Source()
 	case controlhistory.FieldSatisfies:
 		return m.Satisfies()
 	case controlhistory.FieldMappedFrameworks:
 		return m.MappedFrameworks()
-	case controlhistory.FieldJsonschema:
-		return m.Jsonschema()
+	case controlhistory.FieldDetails:
+		return m.Details()
 	}
 	return nil, false
 }
@@ -11805,22 +11780,20 @@ func (m *ControlHistoryMutation) OldField(ctx context.Context, name string) (ent
 		return m.OldControlType(ctx)
 	case controlhistory.FieldVersion:
 		return m.OldVersion(ctx)
-	case controlhistory.FieldOwner:
-		return m.OldOwner(ctx)
 	case controlhistory.FieldControlNumber:
 		return m.OldControlNumber(ctx)
-	case controlhistory.FieldControlFamily:
-		return m.OldControlFamily(ctx)
-	case controlhistory.FieldControlClass:
-		return m.OldControlClass(ctx)
+	case controlhistory.FieldFamily:
+		return m.OldFamily(ctx)
+	case controlhistory.FieldClass:
+		return m.OldClass(ctx)
 	case controlhistory.FieldSource:
 		return m.OldSource(ctx)
 	case controlhistory.FieldSatisfies:
 		return m.OldSatisfies(ctx)
 	case controlhistory.FieldMappedFrameworks:
 		return m.OldMappedFrameworks(ctx)
-	case controlhistory.FieldJsonschema:
-		return m.OldJsonschema(ctx)
+	case controlhistory.FieldDetails:
+		return m.OldDetails(ctx)
 	}
 	return nil, fmt.Errorf("unknown ControlHistory field %s", name)
 }
@@ -11942,13 +11915,6 @@ func (m *ControlHistoryMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetVersion(v)
 		return nil
-	case controlhistory.FieldOwner:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetOwner(v)
-		return nil
 	case controlhistory.FieldControlNumber:
 		v, ok := value.(string)
 		if !ok {
@@ -11956,19 +11922,19 @@ func (m *ControlHistoryMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetControlNumber(v)
 		return nil
-	case controlhistory.FieldControlFamily:
+	case controlhistory.FieldFamily:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetControlFamily(v)
+		m.SetFamily(v)
 		return nil
-	case controlhistory.FieldControlClass:
+	case controlhistory.FieldClass:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetControlClass(v)
+		m.SetClass(v)
 		return nil
 	case controlhistory.FieldSource:
 		v, ok := value.(string)
@@ -11991,12 +11957,12 @@ func (m *ControlHistoryMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetMappedFrameworks(v)
 		return nil
-	case controlhistory.FieldJsonschema:
+	case controlhistory.FieldDetails:
 		v, ok := value.(map[string]interface{})
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetJsonschema(v)
+		m.SetDetails(v)
 		return nil
 	}
 	return fmt.Errorf("unknown ControlHistory field %s", name)
@@ -12064,17 +12030,14 @@ func (m *ControlHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(controlhistory.FieldVersion) {
 		fields = append(fields, controlhistory.FieldVersion)
 	}
-	if m.FieldCleared(controlhistory.FieldOwner) {
-		fields = append(fields, controlhistory.FieldOwner)
-	}
 	if m.FieldCleared(controlhistory.FieldControlNumber) {
 		fields = append(fields, controlhistory.FieldControlNumber)
 	}
-	if m.FieldCleared(controlhistory.FieldControlFamily) {
-		fields = append(fields, controlhistory.FieldControlFamily)
+	if m.FieldCleared(controlhistory.FieldFamily) {
+		fields = append(fields, controlhistory.FieldFamily)
 	}
-	if m.FieldCleared(controlhistory.FieldControlClass) {
-		fields = append(fields, controlhistory.FieldControlClass)
+	if m.FieldCleared(controlhistory.FieldClass) {
+		fields = append(fields, controlhistory.FieldClass)
 	}
 	if m.FieldCleared(controlhistory.FieldSource) {
 		fields = append(fields, controlhistory.FieldSource)
@@ -12085,8 +12048,8 @@ func (m *ControlHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(controlhistory.FieldMappedFrameworks) {
 		fields = append(fields, controlhistory.FieldMappedFrameworks)
 	}
-	if m.FieldCleared(controlhistory.FieldJsonschema) {
-		fields = append(fields, controlhistory.FieldJsonschema)
+	if m.FieldCleared(controlhistory.FieldDetails) {
+		fields = append(fields, controlhistory.FieldDetails)
 	}
 	return fields
 }
@@ -12138,17 +12101,14 @@ func (m *ControlHistoryMutation) ClearField(name string) error {
 	case controlhistory.FieldVersion:
 		m.ClearVersion()
 		return nil
-	case controlhistory.FieldOwner:
-		m.ClearOwner()
-		return nil
 	case controlhistory.FieldControlNumber:
 		m.ClearControlNumber()
 		return nil
-	case controlhistory.FieldControlFamily:
-		m.ClearControlFamily()
+	case controlhistory.FieldFamily:
+		m.ClearFamily()
 		return nil
-	case controlhistory.FieldControlClass:
-		m.ClearControlClass()
+	case controlhistory.FieldClass:
+		m.ClearClass()
 		return nil
 	case controlhistory.FieldSource:
 		m.ClearSource()
@@ -12159,8 +12119,8 @@ func (m *ControlHistoryMutation) ClearField(name string) error {
 	case controlhistory.FieldMappedFrameworks:
 		m.ClearMappedFrameworks()
 		return nil
-	case controlhistory.FieldJsonschema:
-		m.ClearJsonschema()
+	case controlhistory.FieldDetails:
+		m.ClearDetails()
 		return nil
 	}
 	return fmt.Errorf("unknown ControlHistory nullable field %s", name)
@@ -12218,17 +12178,14 @@ func (m *ControlHistoryMutation) ResetField(name string) error {
 	case controlhistory.FieldVersion:
 		m.ResetVersion()
 		return nil
-	case controlhistory.FieldOwner:
-		m.ResetOwner()
-		return nil
 	case controlhistory.FieldControlNumber:
 		m.ResetControlNumber()
 		return nil
-	case controlhistory.FieldControlFamily:
-		m.ResetControlFamily()
+	case controlhistory.FieldFamily:
+		m.ResetFamily()
 		return nil
-	case controlhistory.FieldControlClass:
-		m.ResetControlClass()
+	case controlhistory.FieldClass:
+		m.ResetClass()
 		return nil
 	case controlhistory.FieldSource:
 		m.ResetSource()
@@ -12239,8 +12196,8 @@ func (m *ControlHistoryMutation) ResetField(name string) error {
 	case controlhistory.FieldMappedFrameworks:
 		m.ResetMappedFrameworks()
 		return nil
-	case controlhistory.FieldJsonschema:
-		m.ResetJsonschema()
+	case controlhistory.FieldDetails:
+		m.ResetDetails()
 		return nil
 	}
 	return fmt.Errorf("unknown ControlHistory field %s", name)
@@ -12314,13 +12271,12 @@ type ControlObjectiveMutation struct {
 	status                 *string
 	control_objective_type *string
 	version                *string
-	owner                  *string
 	control_number         *string
-	control_family         *string
-	control_class          *string
+	family                 *string
+	class                  *string
 	source                 *string
 	mapped_frameworks      *string
-	jsonschema             *map[string]interface{}
+	details                *map[string]interface{}
 	clearedFields          map[string]struct{}
 	policy                 map[string]struct{}
 	removedpolicy          map[string]struct{}
@@ -13079,55 +13035,6 @@ func (m *ControlObjectiveMutation) ResetVersion() {
 	delete(m.clearedFields, controlobjective.FieldVersion)
 }
 
-// SetOwner sets the "owner" field.
-func (m *ControlObjectiveMutation) SetOwner(s string) {
-	m.owner = &s
-}
-
-// Owner returns the value of the "owner" field in the mutation.
-func (m *ControlObjectiveMutation) Owner() (r string, exists bool) {
-	v := m.owner
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldOwner returns the old "owner" field's value of the ControlObjective entity.
-// If the ControlObjective object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ControlObjectiveMutation) OldOwner(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldOwner is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldOwner requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldOwner: %w", err)
-	}
-	return oldValue.Owner, nil
-}
-
-// ClearOwner clears the value of the "owner" field.
-func (m *ControlObjectiveMutation) ClearOwner() {
-	m.owner = nil
-	m.clearedFields[controlobjective.FieldOwner] = struct{}{}
-}
-
-// OwnerCleared returns if the "owner" field was cleared in this mutation.
-func (m *ControlObjectiveMutation) OwnerCleared() bool {
-	_, ok := m.clearedFields[controlobjective.FieldOwner]
-	return ok
-}
-
-// ResetOwner resets all changes to the "owner" field.
-func (m *ControlObjectiveMutation) ResetOwner() {
-	m.owner = nil
-	delete(m.clearedFields, controlobjective.FieldOwner)
-}
-
 // SetControlNumber sets the "control_number" field.
 func (m *ControlObjectiveMutation) SetControlNumber(s string) {
 	m.control_number = &s
@@ -13177,102 +13084,102 @@ func (m *ControlObjectiveMutation) ResetControlNumber() {
 	delete(m.clearedFields, controlobjective.FieldControlNumber)
 }
 
-// SetControlFamily sets the "control_family" field.
-func (m *ControlObjectiveMutation) SetControlFamily(s string) {
-	m.control_family = &s
+// SetFamily sets the "family" field.
+func (m *ControlObjectiveMutation) SetFamily(s string) {
+	m.family = &s
 }
 
-// ControlFamily returns the value of the "control_family" field in the mutation.
-func (m *ControlObjectiveMutation) ControlFamily() (r string, exists bool) {
-	v := m.control_family
+// Family returns the value of the "family" field in the mutation.
+func (m *ControlObjectiveMutation) Family() (r string, exists bool) {
+	v := m.family
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldControlFamily returns the old "control_family" field's value of the ControlObjective entity.
+// OldFamily returns the old "family" field's value of the ControlObjective entity.
 // If the ControlObjective object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ControlObjectiveMutation) OldControlFamily(ctx context.Context) (v string, err error) {
+func (m *ControlObjectiveMutation) OldFamily(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldControlFamily is only allowed on UpdateOne operations")
+		return v, errors.New("OldFamily is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldControlFamily requires an ID field in the mutation")
+		return v, errors.New("OldFamily requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldControlFamily: %w", err)
+		return v, fmt.Errorf("querying old value for OldFamily: %w", err)
 	}
-	return oldValue.ControlFamily, nil
+	return oldValue.Family, nil
 }
 
-// ClearControlFamily clears the value of the "control_family" field.
-func (m *ControlObjectiveMutation) ClearControlFamily() {
-	m.control_family = nil
-	m.clearedFields[controlobjective.FieldControlFamily] = struct{}{}
+// ClearFamily clears the value of the "family" field.
+func (m *ControlObjectiveMutation) ClearFamily() {
+	m.family = nil
+	m.clearedFields[controlobjective.FieldFamily] = struct{}{}
 }
 
-// ControlFamilyCleared returns if the "control_family" field was cleared in this mutation.
-func (m *ControlObjectiveMutation) ControlFamilyCleared() bool {
-	_, ok := m.clearedFields[controlobjective.FieldControlFamily]
+// FamilyCleared returns if the "family" field was cleared in this mutation.
+func (m *ControlObjectiveMutation) FamilyCleared() bool {
+	_, ok := m.clearedFields[controlobjective.FieldFamily]
 	return ok
 }
 
-// ResetControlFamily resets all changes to the "control_family" field.
-func (m *ControlObjectiveMutation) ResetControlFamily() {
-	m.control_family = nil
-	delete(m.clearedFields, controlobjective.FieldControlFamily)
+// ResetFamily resets all changes to the "family" field.
+func (m *ControlObjectiveMutation) ResetFamily() {
+	m.family = nil
+	delete(m.clearedFields, controlobjective.FieldFamily)
 }
 
-// SetControlClass sets the "control_class" field.
-func (m *ControlObjectiveMutation) SetControlClass(s string) {
-	m.control_class = &s
+// SetClass sets the "class" field.
+func (m *ControlObjectiveMutation) SetClass(s string) {
+	m.class = &s
 }
 
-// ControlClass returns the value of the "control_class" field in the mutation.
-func (m *ControlObjectiveMutation) ControlClass() (r string, exists bool) {
-	v := m.control_class
+// Class returns the value of the "class" field in the mutation.
+func (m *ControlObjectiveMutation) Class() (r string, exists bool) {
+	v := m.class
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldControlClass returns the old "control_class" field's value of the ControlObjective entity.
+// OldClass returns the old "class" field's value of the ControlObjective entity.
 // If the ControlObjective object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ControlObjectiveMutation) OldControlClass(ctx context.Context) (v string, err error) {
+func (m *ControlObjectiveMutation) OldClass(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldControlClass is only allowed on UpdateOne operations")
+		return v, errors.New("OldClass is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldControlClass requires an ID field in the mutation")
+		return v, errors.New("OldClass requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldControlClass: %w", err)
+		return v, fmt.Errorf("querying old value for OldClass: %w", err)
 	}
-	return oldValue.ControlClass, nil
+	return oldValue.Class, nil
 }
 
-// ClearControlClass clears the value of the "control_class" field.
-func (m *ControlObjectiveMutation) ClearControlClass() {
-	m.control_class = nil
-	m.clearedFields[controlobjective.FieldControlClass] = struct{}{}
+// ClearClass clears the value of the "class" field.
+func (m *ControlObjectiveMutation) ClearClass() {
+	m.class = nil
+	m.clearedFields[controlobjective.FieldClass] = struct{}{}
 }
 
-// ControlClassCleared returns if the "control_class" field was cleared in this mutation.
-func (m *ControlObjectiveMutation) ControlClassCleared() bool {
-	_, ok := m.clearedFields[controlobjective.FieldControlClass]
+// ClassCleared returns if the "class" field was cleared in this mutation.
+func (m *ControlObjectiveMutation) ClassCleared() bool {
+	_, ok := m.clearedFields[controlobjective.FieldClass]
 	return ok
 }
 
-// ResetControlClass resets all changes to the "control_class" field.
-func (m *ControlObjectiveMutation) ResetControlClass() {
-	m.control_class = nil
-	delete(m.clearedFields, controlobjective.FieldControlClass)
+// ResetClass resets all changes to the "class" field.
+func (m *ControlObjectiveMutation) ResetClass() {
+	m.class = nil
+	delete(m.clearedFields, controlobjective.FieldClass)
 }
 
 // SetSource sets the "source" field.
@@ -13373,53 +13280,53 @@ func (m *ControlObjectiveMutation) ResetMappedFrameworks() {
 	delete(m.clearedFields, controlobjective.FieldMappedFrameworks)
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (m *ControlObjectiveMutation) SetJsonschema(value map[string]interface{}) {
-	m.jsonschema = &value
+// SetDetails sets the "details" field.
+func (m *ControlObjectiveMutation) SetDetails(value map[string]interface{}) {
+	m.details = &value
 }
 
-// Jsonschema returns the value of the "jsonschema" field in the mutation.
-func (m *ControlObjectiveMutation) Jsonschema() (r map[string]interface{}, exists bool) {
-	v := m.jsonschema
+// Details returns the value of the "details" field in the mutation.
+func (m *ControlObjectiveMutation) Details() (r map[string]interface{}, exists bool) {
+	v := m.details
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldJsonschema returns the old "jsonschema" field's value of the ControlObjective entity.
+// OldDetails returns the old "details" field's value of the ControlObjective entity.
 // If the ControlObjective object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ControlObjectiveMutation) OldJsonschema(ctx context.Context) (v map[string]interface{}, err error) {
+func (m *ControlObjectiveMutation) OldDetails(ctx context.Context) (v map[string]interface{}, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldJsonschema is only allowed on UpdateOne operations")
+		return v, errors.New("OldDetails is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldJsonschema requires an ID field in the mutation")
+		return v, errors.New("OldDetails requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldJsonschema: %w", err)
+		return v, fmt.Errorf("querying old value for OldDetails: %w", err)
 	}
-	return oldValue.Jsonschema, nil
+	return oldValue.Details, nil
 }
 
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (m *ControlObjectiveMutation) ClearJsonschema() {
-	m.jsonschema = nil
-	m.clearedFields[controlobjective.FieldJsonschema] = struct{}{}
+// ClearDetails clears the value of the "details" field.
+func (m *ControlObjectiveMutation) ClearDetails() {
+	m.details = nil
+	m.clearedFields[controlobjective.FieldDetails] = struct{}{}
 }
 
-// JsonschemaCleared returns if the "jsonschema" field was cleared in this mutation.
-func (m *ControlObjectiveMutation) JsonschemaCleared() bool {
-	_, ok := m.clearedFields[controlobjective.FieldJsonschema]
+// DetailsCleared returns if the "details" field was cleared in this mutation.
+func (m *ControlObjectiveMutation) DetailsCleared() bool {
+	_, ok := m.clearedFields[controlobjective.FieldDetails]
 	return ok
 }
 
-// ResetJsonschema resets all changes to the "jsonschema" field.
-func (m *ControlObjectiveMutation) ResetJsonschema() {
-	m.jsonschema = nil
-	delete(m.clearedFields, controlobjective.FieldJsonschema)
+// ResetDetails resets all changes to the "details" field.
+func (m *ControlObjectiveMutation) ResetDetails() {
+	m.details = nil
+	delete(m.clearedFields, controlobjective.FieldDetails)
 }
 
 // AddPolicyIDs adds the "policy" edge to the InternalPolicy entity by ids.
@@ -13834,7 +13741,7 @@ func (m *ControlObjectiveMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ControlObjectiveMutation) Fields() []string {
-	fields := make([]string, 0, 20)
+	fields := make([]string, 0, 19)
 	if m.created_at != nil {
 		fields = append(fields, controlobjective.FieldCreatedAt)
 	}
@@ -13874,17 +13781,14 @@ func (m *ControlObjectiveMutation) Fields() []string {
 	if m.version != nil {
 		fields = append(fields, controlobjective.FieldVersion)
 	}
-	if m.owner != nil {
-		fields = append(fields, controlobjective.FieldOwner)
-	}
 	if m.control_number != nil {
 		fields = append(fields, controlobjective.FieldControlNumber)
 	}
-	if m.control_family != nil {
-		fields = append(fields, controlobjective.FieldControlFamily)
+	if m.family != nil {
+		fields = append(fields, controlobjective.FieldFamily)
 	}
-	if m.control_class != nil {
-		fields = append(fields, controlobjective.FieldControlClass)
+	if m.class != nil {
+		fields = append(fields, controlobjective.FieldClass)
 	}
 	if m.source != nil {
 		fields = append(fields, controlobjective.FieldSource)
@@ -13892,8 +13796,8 @@ func (m *ControlObjectiveMutation) Fields() []string {
 	if m.mapped_frameworks != nil {
 		fields = append(fields, controlobjective.FieldMappedFrameworks)
 	}
-	if m.jsonschema != nil {
-		fields = append(fields, controlobjective.FieldJsonschema)
+	if m.details != nil {
+		fields = append(fields, controlobjective.FieldDetails)
 	}
 	return fields
 }
@@ -13929,20 +13833,18 @@ func (m *ControlObjectiveMutation) Field(name string) (ent.Value, bool) {
 		return m.ControlObjectiveType()
 	case controlobjective.FieldVersion:
 		return m.Version()
-	case controlobjective.FieldOwner:
-		return m.Owner()
 	case controlobjective.FieldControlNumber:
 		return m.ControlNumber()
-	case controlobjective.FieldControlFamily:
-		return m.ControlFamily()
-	case controlobjective.FieldControlClass:
-		return m.ControlClass()
+	case controlobjective.FieldFamily:
+		return m.Family()
+	case controlobjective.FieldClass:
+		return m.Class()
 	case controlobjective.FieldSource:
 		return m.Source()
 	case controlobjective.FieldMappedFrameworks:
 		return m.MappedFrameworks()
-	case controlobjective.FieldJsonschema:
-		return m.Jsonschema()
+	case controlobjective.FieldDetails:
+		return m.Details()
 	}
 	return nil, false
 }
@@ -13978,20 +13880,18 @@ func (m *ControlObjectiveMutation) OldField(ctx context.Context, name string) (e
 		return m.OldControlObjectiveType(ctx)
 	case controlobjective.FieldVersion:
 		return m.OldVersion(ctx)
-	case controlobjective.FieldOwner:
-		return m.OldOwner(ctx)
 	case controlobjective.FieldControlNumber:
 		return m.OldControlNumber(ctx)
-	case controlobjective.FieldControlFamily:
-		return m.OldControlFamily(ctx)
-	case controlobjective.FieldControlClass:
-		return m.OldControlClass(ctx)
+	case controlobjective.FieldFamily:
+		return m.OldFamily(ctx)
+	case controlobjective.FieldClass:
+		return m.OldClass(ctx)
 	case controlobjective.FieldSource:
 		return m.OldSource(ctx)
 	case controlobjective.FieldMappedFrameworks:
 		return m.OldMappedFrameworks(ctx)
-	case controlobjective.FieldJsonschema:
-		return m.OldJsonschema(ctx)
+	case controlobjective.FieldDetails:
+		return m.OldDetails(ctx)
 	}
 	return nil, fmt.Errorf("unknown ControlObjective field %s", name)
 }
@@ -14092,13 +13992,6 @@ func (m *ControlObjectiveMutation) SetField(name string, value ent.Value) error 
 		}
 		m.SetVersion(v)
 		return nil
-	case controlobjective.FieldOwner:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetOwner(v)
-		return nil
 	case controlobjective.FieldControlNumber:
 		v, ok := value.(string)
 		if !ok {
@@ -14106,19 +13999,19 @@ func (m *ControlObjectiveMutation) SetField(name string, value ent.Value) error 
 		}
 		m.SetControlNumber(v)
 		return nil
-	case controlobjective.FieldControlFamily:
+	case controlobjective.FieldFamily:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetControlFamily(v)
+		m.SetFamily(v)
 		return nil
-	case controlobjective.FieldControlClass:
+	case controlobjective.FieldClass:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetControlClass(v)
+		m.SetClass(v)
 		return nil
 	case controlobjective.FieldSource:
 		v, ok := value.(string)
@@ -14134,12 +14027,12 @@ func (m *ControlObjectiveMutation) SetField(name string, value ent.Value) error 
 		}
 		m.SetMappedFrameworks(v)
 		return nil
-	case controlobjective.FieldJsonschema:
+	case controlobjective.FieldDetails:
 		v, ok := value.(map[string]interface{})
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetJsonschema(v)
+		m.SetDetails(v)
 		return nil
 	}
 	return fmt.Errorf("unknown ControlObjective field %s", name)
@@ -14204,17 +14097,14 @@ func (m *ControlObjectiveMutation) ClearedFields() []string {
 	if m.FieldCleared(controlobjective.FieldVersion) {
 		fields = append(fields, controlobjective.FieldVersion)
 	}
-	if m.FieldCleared(controlobjective.FieldOwner) {
-		fields = append(fields, controlobjective.FieldOwner)
-	}
 	if m.FieldCleared(controlobjective.FieldControlNumber) {
 		fields = append(fields, controlobjective.FieldControlNumber)
 	}
-	if m.FieldCleared(controlobjective.FieldControlFamily) {
-		fields = append(fields, controlobjective.FieldControlFamily)
+	if m.FieldCleared(controlobjective.FieldFamily) {
+		fields = append(fields, controlobjective.FieldFamily)
 	}
-	if m.FieldCleared(controlobjective.FieldControlClass) {
-		fields = append(fields, controlobjective.FieldControlClass)
+	if m.FieldCleared(controlobjective.FieldClass) {
+		fields = append(fields, controlobjective.FieldClass)
 	}
 	if m.FieldCleared(controlobjective.FieldSource) {
 		fields = append(fields, controlobjective.FieldSource)
@@ -14222,8 +14112,8 @@ func (m *ControlObjectiveMutation) ClearedFields() []string {
 	if m.FieldCleared(controlobjective.FieldMappedFrameworks) {
 		fields = append(fields, controlobjective.FieldMappedFrameworks)
 	}
-	if m.FieldCleared(controlobjective.FieldJsonschema) {
-		fields = append(fields, controlobjective.FieldJsonschema)
+	if m.FieldCleared(controlobjective.FieldDetails) {
+		fields = append(fields, controlobjective.FieldDetails)
 	}
 	return fields
 }
@@ -14272,17 +14162,14 @@ func (m *ControlObjectiveMutation) ClearField(name string) error {
 	case controlobjective.FieldVersion:
 		m.ClearVersion()
 		return nil
-	case controlobjective.FieldOwner:
-		m.ClearOwner()
-		return nil
 	case controlobjective.FieldControlNumber:
 		m.ClearControlNumber()
 		return nil
-	case controlobjective.FieldControlFamily:
-		m.ClearControlFamily()
+	case controlobjective.FieldFamily:
+		m.ClearFamily()
 		return nil
-	case controlobjective.FieldControlClass:
-		m.ClearControlClass()
+	case controlobjective.FieldClass:
+		m.ClearClass()
 		return nil
 	case controlobjective.FieldSource:
 		m.ClearSource()
@@ -14290,8 +14177,8 @@ func (m *ControlObjectiveMutation) ClearField(name string) error {
 	case controlobjective.FieldMappedFrameworks:
 		m.ClearMappedFrameworks()
 		return nil
-	case controlobjective.FieldJsonschema:
-		m.ClearJsonschema()
+	case controlobjective.FieldDetails:
+		m.ClearDetails()
 		return nil
 	}
 	return fmt.Errorf("unknown ControlObjective nullable field %s", name)
@@ -14340,17 +14227,14 @@ func (m *ControlObjectiveMutation) ResetField(name string) error {
 	case controlobjective.FieldVersion:
 		m.ResetVersion()
 		return nil
-	case controlobjective.FieldOwner:
-		m.ResetOwner()
-		return nil
 	case controlobjective.FieldControlNumber:
 		m.ResetControlNumber()
 		return nil
-	case controlobjective.FieldControlFamily:
-		m.ResetControlFamily()
+	case controlobjective.FieldFamily:
+		m.ResetFamily()
 		return nil
-	case controlobjective.FieldControlClass:
-		m.ResetControlClass()
+	case controlobjective.FieldClass:
+		m.ResetClass()
 		return nil
 	case controlobjective.FieldSource:
 		m.ResetSource()
@@ -14358,8 +14242,8 @@ func (m *ControlObjectiveMutation) ResetField(name string) error {
 	case controlobjective.FieldMappedFrameworks:
 		m.ResetMappedFrameworks()
 		return nil
-	case controlobjective.FieldJsonschema:
-		m.ResetJsonschema()
+	case controlobjective.FieldDetails:
+		m.ResetDetails()
 		return nil
 	}
 	return fmt.Errorf("unknown ControlObjective field %s", name)
@@ -14628,13 +14512,12 @@ type ControlObjectiveHistoryMutation struct {
 	status                 *string
 	control_objective_type *string
 	version                *string
-	owner                  *string
 	control_number         *string
-	control_family         *string
-	control_class          *string
+	family                 *string
+	class                  *string
 	source                 *string
 	mapped_frameworks      *string
-	jsonschema             *map[string]interface{}
+	details                *map[string]interface{}
 	clearedFields          map[string]struct{}
 	done                   bool
 	oldValue               func(context.Context) (*ControlObjectiveHistory, error)
@@ -15493,55 +15376,6 @@ func (m *ControlObjectiveHistoryMutation) ResetVersion() {
 	delete(m.clearedFields, controlobjectivehistory.FieldVersion)
 }
 
-// SetOwner sets the "owner" field.
-func (m *ControlObjectiveHistoryMutation) SetOwner(s string) {
-	m.owner = &s
-}
-
-// Owner returns the value of the "owner" field in the mutation.
-func (m *ControlObjectiveHistoryMutation) Owner() (r string, exists bool) {
-	v := m.owner
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldOwner returns the old "owner" field's value of the ControlObjectiveHistory entity.
-// If the ControlObjectiveHistory object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ControlObjectiveHistoryMutation) OldOwner(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldOwner is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldOwner requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldOwner: %w", err)
-	}
-	return oldValue.Owner, nil
-}
-
-// ClearOwner clears the value of the "owner" field.
-func (m *ControlObjectiveHistoryMutation) ClearOwner() {
-	m.owner = nil
-	m.clearedFields[controlobjectivehistory.FieldOwner] = struct{}{}
-}
-
-// OwnerCleared returns if the "owner" field was cleared in this mutation.
-func (m *ControlObjectiveHistoryMutation) OwnerCleared() bool {
-	_, ok := m.clearedFields[controlobjectivehistory.FieldOwner]
-	return ok
-}
-
-// ResetOwner resets all changes to the "owner" field.
-func (m *ControlObjectiveHistoryMutation) ResetOwner() {
-	m.owner = nil
-	delete(m.clearedFields, controlobjectivehistory.FieldOwner)
-}
-
 // SetControlNumber sets the "control_number" field.
 func (m *ControlObjectiveHistoryMutation) SetControlNumber(s string) {
 	m.control_number = &s
@@ -15591,102 +15425,102 @@ func (m *ControlObjectiveHistoryMutation) ResetControlNumber() {
 	delete(m.clearedFields, controlobjectivehistory.FieldControlNumber)
 }
 
-// SetControlFamily sets the "control_family" field.
-func (m *ControlObjectiveHistoryMutation) SetControlFamily(s string) {
-	m.control_family = &s
+// SetFamily sets the "family" field.
+func (m *ControlObjectiveHistoryMutation) SetFamily(s string) {
+	m.family = &s
 }
 
-// ControlFamily returns the value of the "control_family" field in the mutation.
-func (m *ControlObjectiveHistoryMutation) ControlFamily() (r string, exists bool) {
-	v := m.control_family
+// Family returns the value of the "family" field in the mutation.
+func (m *ControlObjectiveHistoryMutation) Family() (r string, exists bool) {
+	v := m.family
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldControlFamily returns the old "control_family" field's value of the ControlObjectiveHistory entity.
+// OldFamily returns the old "family" field's value of the ControlObjectiveHistory entity.
 // If the ControlObjectiveHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ControlObjectiveHistoryMutation) OldControlFamily(ctx context.Context) (v string, err error) {
+func (m *ControlObjectiveHistoryMutation) OldFamily(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldControlFamily is only allowed on UpdateOne operations")
+		return v, errors.New("OldFamily is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldControlFamily requires an ID field in the mutation")
+		return v, errors.New("OldFamily requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldControlFamily: %w", err)
+		return v, fmt.Errorf("querying old value for OldFamily: %w", err)
 	}
-	return oldValue.ControlFamily, nil
+	return oldValue.Family, nil
 }
 
-// ClearControlFamily clears the value of the "control_family" field.
-func (m *ControlObjectiveHistoryMutation) ClearControlFamily() {
-	m.control_family = nil
-	m.clearedFields[controlobjectivehistory.FieldControlFamily] = struct{}{}
+// ClearFamily clears the value of the "family" field.
+func (m *ControlObjectiveHistoryMutation) ClearFamily() {
+	m.family = nil
+	m.clearedFields[controlobjectivehistory.FieldFamily] = struct{}{}
 }
 
-// ControlFamilyCleared returns if the "control_family" field was cleared in this mutation.
-func (m *ControlObjectiveHistoryMutation) ControlFamilyCleared() bool {
-	_, ok := m.clearedFields[controlobjectivehistory.FieldControlFamily]
+// FamilyCleared returns if the "family" field was cleared in this mutation.
+func (m *ControlObjectiveHistoryMutation) FamilyCleared() bool {
+	_, ok := m.clearedFields[controlobjectivehistory.FieldFamily]
 	return ok
 }
 
-// ResetControlFamily resets all changes to the "control_family" field.
-func (m *ControlObjectiveHistoryMutation) ResetControlFamily() {
-	m.control_family = nil
-	delete(m.clearedFields, controlobjectivehistory.FieldControlFamily)
+// ResetFamily resets all changes to the "family" field.
+func (m *ControlObjectiveHistoryMutation) ResetFamily() {
+	m.family = nil
+	delete(m.clearedFields, controlobjectivehistory.FieldFamily)
 }
 
-// SetControlClass sets the "control_class" field.
-func (m *ControlObjectiveHistoryMutation) SetControlClass(s string) {
-	m.control_class = &s
+// SetClass sets the "class" field.
+func (m *ControlObjectiveHistoryMutation) SetClass(s string) {
+	m.class = &s
 }
 
-// ControlClass returns the value of the "control_class" field in the mutation.
-func (m *ControlObjectiveHistoryMutation) ControlClass() (r string, exists bool) {
-	v := m.control_class
+// Class returns the value of the "class" field in the mutation.
+func (m *ControlObjectiveHistoryMutation) Class() (r string, exists bool) {
+	v := m.class
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldControlClass returns the old "control_class" field's value of the ControlObjectiveHistory entity.
+// OldClass returns the old "class" field's value of the ControlObjectiveHistory entity.
 // If the ControlObjectiveHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ControlObjectiveHistoryMutation) OldControlClass(ctx context.Context) (v string, err error) {
+func (m *ControlObjectiveHistoryMutation) OldClass(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldControlClass is only allowed on UpdateOne operations")
+		return v, errors.New("OldClass is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldControlClass requires an ID field in the mutation")
+		return v, errors.New("OldClass requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldControlClass: %w", err)
+		return v, fmt.Errorf("querying old value for OldClass: %w", err)
 	}
-	return oldValue.ControlClass, nil
+	return oldValue.Class, nil
 }
 
-// ClearControlClass clears the value of the "control_class" field.
-func (m *ControlObjectiveHistoryMutation) ClearControlClass() {
-	m.control_class = nil
-	m.clearedFields[controlobjectivehistory.FieldControlClass] = struct{}{}
+// ClearClass clears the value of the "class" field.
+func (m *ControlObjectiveHistoryMutation) ClearClass() {
+	m.class = nil
+	m.clearedFields[controlobjectivehistory.FieldClass] = struct{}{}
 }
 
-// ControlClassCleared returns if the "control_class" field was cleared in this mutation.
-func (m *ControlObjectiveHistoryMutation) ControlClassCleared() bool {
-	_, ok := m.clearedFields[controlobjectivehistory.FieldControlClass]
+// ClassCleared returns if the "class" field was cleared in this mutation.
+func (m *ControlObjectiveHistoryMutation) ClassCleared() bool {
+	_, ok := m.clearedFields[controlobjectivehistory.FieldClass]
 	return ok
 }
 
-// ResetControlClass resets all changes to the "control_class" field.
-func (m *ControlObjectiveHistoryMutation) ResetControlClass() {
-	m.control_class = nil
-	delete(m.clearedFields, controlobjectivehistory.FieldControlClass)
+// ResetClass resets all changes to the "class" field.
+func (m *ControlObjectiveHistoryMutation) ResetClass() {
+	m.class = nil
+	delete(m.clearedFields, controlobjectivehistory.FieldClass)
 }
 
 // SetSource sets the "source" field.
@@ -15787,53 +15621,53 @@ func (m *ControlObjectiveHistoryMutation) ResetMappedFrameworks() {
 	delete(m.clearedFields, controlobjectivehistory.FieldMappedFrameworks)
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (m *ControlObjectiveHistoryMutation) SetJsonschema(value map[string]interface{}) {
-	m.jsonschema = &value
+// SetDetails sets the "details" field.
+func (m *ControlObjectiveHistoryMutation) SetDetails(value map[string]interface{}) {
+	m.details = &value
 }
 
-// Jsonschema returns the value of the "jsonschema" field in the mutation.
-func (m *ControlObjectiveHistoryMutation) Jsonschema() (r map[string]interface{}, exists bool) {
-	v := m.jsonschema
+// Details returns the value of the "details" field in the mutation.
+func (m *ControlObjectiveHistoryMutation) Details() (r map[string]interface{}, exists bool) {
+	v := m.details
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldJsonschema returns the old "jsonschema" field's value of the ControlObjectiveHistory entity.
+// OldDetails returns the old "details" field's value of the ControlObjectiveHistory entity.
 // If the ControlObjectiveHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ControlObjectiveHistoryMutation) OldJsonschema(ctx context.Context) (v map[string]interface{}, err error) {
+func (m *ControlObjectiveHistoryMutation) OldDetails(ctx context.Context) (v map[string]interface{}, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldJsonschema is only allowed on UpdateOne operations")
+		return v, errors.New("OldDetails is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldJsonschema requires an ID field in the mutation")
+		return v, errors.New("OldDetails requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldJsonschema: %w", err)
+		return v, fmt.Errorf("querying old value for OldDetails: %w", err)
 	}
-	return oldValue.Jsonschema, nil
+	return oldValue.Details, nil
 }
 
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (m *ControlObjectiveHistoryMutation) ClearJsonschema() {
-	m.jsonschema = nil
-	m.clearedFields[controlobjectivehistory.FieldJsonschema] = struct{}{}
+// ClearDetails clears the value of the "details" field.
+func (m *ControlObjectiveHistoryMutation) ClearDetails() {
+	m.details = nil
+	m.clearedFields[controlobjectivehistory.FieldDetails] = struct{}{}
 }
 
-// JsonschemaCleared returns if the "jsonschema" field was cleared in this mutation.
-func (m *ControlObjectiveHistoryMutation) JsonschemaCleared() bool {
-	_, ok := m.clearedFields[controlobjectivehistory.FieldJsonschema]
+// DetailsCleared returns if the "details" field was cleared in this mutation.
+func (m *ControlObjectiveHistoryMutation) DetailsCleared() bool {
+	_, ok := m.clearedFields[controlobjectivehistory.FieldDetails]
 	return ok
 }
 
-// ResetJsonschema resets all changes to the "jsonschema" field.
-func (m *ControlObjectiveHistoryMutation) ResetJsonschema() {
-	m.jsonschema = nil
-	delete(m.clearedFields, controlobjectivehistory.FieldJsonschema)
+// ResetDetails resets all changes to the "details" field.
+func (m *ControlObjectiveHistoryMutation) ResetDetails() {
+	m.details = nil
+	delete(m.clearedFields, controlobjectivehistory.FieldDetails)
 }
 
 // Where appends a list predicates to the ControlObjectiveHistoryMutation builder.
@@ -15870,7 +15704,7 @@ func (m *ControlObjectiveHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ControlObjectiveHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 23)
+	fields := make([]string, 0, 22)
 	if m.history_time != nil {
 		fields = append(fields, controlobjectivehistory.FieldHistoryTime)
 	}
@@ -15919,17 +15753,14 @@ func (m *ControlObjectiveHistoryMutation) Fields() []string {
 	if m.version != nil {
 		fields = append(fields, controlobjectivehistory.FieldVersion)
 	}
-	if m.owner != nil {
-		fields = append(fields, controlobjectivehistory.FieldOwner)
-	}
 	if m.control_number != nil {
 		fields = append(fields, controlobjectivehistory.FieldControlNumber)
 	}
-	if m.control_family != nil {
-		fields = append(fields, controlobjectivehistory.FieldControlFamily)
+	if m.family != nil {
+		fields = append(fields, controlobjectivehistory.FieldFamily)
 	}
-	if m.control_class != nil {
-		fields = append(fields, controlobjectivehistory.FieldControlClass)
+	if m.class != nil {
+		fields = append(fields, controlobjectivehistory.FieldClass)
 	}
 	if m.source != nil {
 		fields = append(fields, controlobjectivehistory.FieldSource)
@@ -15937,8 +15768,8 @@ func (m *ControlObjectiveHistoryMutation) Fields() []string {
 	if m.mapped_frameworks != nil {
 		fields = append(fields, controlobjectivehistory.FieldMappedFrameworks)
 	}
-	if m.jsonschema != nil {
-		fields = append(fields, controlobjectivehistory.FieldJsonschema)
+	if m.details != nil {
+		fields = append(fields, controlobjectivehistory.FieldDetails)
 	}
 	return fields
 }
@@ -15980,20 +15811,18 @@ func (m *ControlObjectiveHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.ControlObjectiveType()
 	case controlobjectivehistory.FieldVersion:
 		return m.Version()
-	case controlobjectivehistory.FieldOwner:
-		return m.Owner()
 	case controlobjectivehistory.FieldControlNumber:
 		return m.ControlNumber()
-	case controlobjectivehistory.FieldControlFamily:
-		return m.ControlFamily()
-	case controlobjectivehistory.FieldControlClass:
-		return m.ControlClass()
+	case controlobjectivehistory.FieldFamily:
+		return m.Family()
+	case controlobjectivehistory.FieldClass:
+		return m.Class()
 	case controlobjectivehistory.FieldSource:
 		return m.Source()
 	case controlobjectivehistory.FieldMappedFrameworks:
 		return m.MappedFrameworks()
-	case controlobjectivehistory.FieldJsonschema:
-		return m.Jsonschema()
+	case controlobjectivehistory.FieldDetails:
+		return m.Details()
 	}
 	return nil, false
 }
@@ -16035,20 +15864,18 @@ func (m *ControlObjectiveHistoryMutation) OldField(ctx context.Context, name str
 		return m.OldControlObjectiveType(ctx)
 	case controlobjectivehistory.FieldVersion:
 		return m.OldVersion(ctx)
-	case controlobjectivehistory.FieldOwner:
-		return m.OldOwner(ctx)
 	case controlobjectivehistory.FieldControlNumber:
 		return m.OldControlNumber(ctx)
-	case controlobjectivehistory.FieldControlFamily:
-		return m.OldControlFamily(ctx)
-	case controlobjectivehistory.FieldControlClass:
-		return m.OldControlClass(ctx)
+	case controlobjectivehistory.FieldFamily:
+		return m.OldFamily(ctx)
+	case controlobjectivehistory.FieldClass:
+		return m.OldClass(ctx)
 	case controlobjectivehistory.FieldSource:
 		return m.OldSource(ctx)
 	case controlobjectivehistory.FieldMappedFrameworks:
 		return m.OldMappedFrameworks(ctx)
-	case controlobjectivehistory.FieldJsonschema:
-		return m.OldJsonschema(ctx)
+	case controlobjectivehistory.FieldDetails:
+		return m.OldDetails(ctx)
 	}
 	return nil, fmt.Errorf("unknown ControlObjectiveHistory field %s", name)
 }
@@ -16170,13 +15997,6 @@ func (m *ControlObjectiveHistoryMutation) SetField(name string, value ent.Value)
 		}
 		m.SetVersion(v)
 		return nil
-	case controlobjectivehistory.FieldOwner:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetOwner(v)
-		return nil
 	case controlobjectivehistory.FieldControlNumber:
 		v, ok := value.(string)
 		if !ok {
@@ -16184,19 +16004,19 @@ func (m *ControlObjectiveHistoryMutation) SetField(name string, value ent.Value)
 		}
 		m.SetControlNumber(v)
 		return nil
-	case controlobjectivehistory.FieldControlFamily:
+	case controlobjectivehistory.FieldFamily:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetControlFamily(v)
+		m.SetFamily(v)
 		return nil
-	case controlobjectivehistory.FieldControlClass:
+	case controlobjectivehistory.FieldClass:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetControlClass(v)
+		m.SetClass(v)
 		return nil
 	case controlobjectivehistory.FieldSource:
 		v, ok := value.(string)
@@ -16212,12 +16032,12 @@ func (m *ControlObjectiveHistoryMutation) SetField(name string, value ent.Value)
 		}
 		m.SetMappedFrameworks(v)
 		return nil
-	case controlobjectivehistory.FieldJsonschema:
+	case controlobjectivehistory.FieldDetails:
 		v, ok := value.(map[string]interface{})
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetJsonschema(v)
+		m.SetDetails(v)
 		return nil
 	}
 	return fmt.Errorf("unknown ControlObjectiveHistory field %s", name)
@@ -16285,17 +16105,14 @@ func (m *ControlObjectiveHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(controlobjectivehistory.FieldVersion) {
 		fields = append(fields, controlobjectivehistory.FieldVersion)
 	}
-	if m.FieldCleared(controlobjectivehistory.FieldOwner) {
-		fields = append(fields, controlobjectivehistory.FieldOwner)
-	}
 	if m.FieldCleared(controlobjectivehistory.FieldControlNumber) {
 		fields = append(fields, controlobjectivehistory.FieldControlNumber)
 	}
-	if m.FieldCleared(controlobjectivehistory.FieldControlFamily) {
-		fields = append(fields, controlobjectivehistory.FieldControlFamily)
+	if m.FieldCleared(controlobjectivehistory.FieldFamily) {
+		fields = append(fields, controlobjectivehistory.FieldFamily)
 	}
-	if m.FieldCleared(controlobjectivehistory.FieldControlClass) {
-		fields = append(fields, controlobjectivehistory.FieldControlClass)
+	if m.FieldCleared(controlobjectivehistory.FieldClass) {
+		fields = append(fields, controlobjectivehistory.FieldClass)
 	}
 	if m.FieldCleared(controlobjectivehistory.FieldSource) {
 		fields = append(fields, controlobjectivehistory.FieldSource)
@@ -16303,8 +16120,8 @@ func (m *ControlObjectiveHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(controlobjectivehistory.FieldMappedFrameworks) {
 		fields = append(fields, controlobjectivehistory.FieldMappedFrameworks)
 	}
-	if m.FieldCleared(controlobjectivehistory.FieldJsonschema) {
-		fields = append(fields, controlobjectivehistory.FieldJsonschema)
+	if m.FieldCleared(controlobjectivehistory.FieldDetails) {
+		fields = append(fields, controlobjectivehistory.FieldDetails)
 	}
 	return fields
 }
@@ -16356,17 +16173,14 @@ func (m *ControlObjectiveHistoryMutation) ClearField(name string) error {
 	case controlobjectivehistory.FieldVersion:
 		m.ClearVersion()
 		return nil
-	case controlobjectivehistory.FieldOwner:
-		m.ClearOwner()
-		return nil
 	case controlobjectivehistory.FieldControlNumber:
 		m.ClearControlNumber()
 		return nil
-	case controlobjectivehistory.FieldControlFamily:
-		m.ClearControlFamily()
+	case controlobjectivehistory.FieldFamily:
+		m.ClearFamily()
 		return nil
-	case controlobjectivehistory.FieldControlClass:
-		m.ClearControlClass()
+	case controlobjectivehistory.FieldClass:
+		m.ClearClass()
 		return nil
 	case controlobjectivehistory.FieldSource:
 		m.ClearSource()
@@ -16374,8 +16188,8 @@ func (m *ControlObjectiveHistoryMutation) ClearField(name string) error {
 	case controlobjectivehistory.FieldMappedFrameworks:
 		m.ClearMappedFrameworks()
 		return nil
-	case controlobjectivehistory.FieldJsonschema:
-		m.ClearJsonschema()
+	case controlobjectivehistory.FieldDetails:
+		m.ClearDetails()
 		return nil
 	}
 	return fmt.Errorf("unknown ControlObjectiveHistory nullable field %s", name)
@@ -16433,17 +16247,14 @@ func (m *ControlObjectiveHistoryMutation) ResetField(name string) error {
 	case controlobjectivehistory.FieldVersion:
 		m.ResetVersion()
 		return nil
-	case controlobjectivehistory.FieldOwner:
-		m.ResetOwner()
-		return nil
 	case controlobjectivehistory.FieldControlNumber:
 		m.ResetControlNumber()
 		return nil
-	case controlobjectivehistory.FieldControlFamily:
-		m.ResetControlFamily()
+	case controlobjectivehistory.FieldFamily:
+		m.ResetFamily()
 		return nil
-	case controlobjectivehistory.FieldControlClass:
-		m.ResetControlClass()
+	case controlobjectivehistory.FieldClass:
+		m.ResetClass()
 		return nil
 	case controlobjectivehistory.FieldSource:
 		m.ResetSource()
@@ -16451,8 +16262,8 @@ func (m *ControlObjectiveHistoryMutation) ResetField(name string) error {
 	case controlobjectivehistory.FieldMappedFrameworks:
 		m.ResetMappedFrameworks()
 		return nil
-	case controlobjectivehistory.FieldJsonschema:
-		m.ResetJsonschema()
+	case controlobjectivehistory.FieldDetails:
+		m.ResetDetails()
 		return nil
 	}
 	return fmt.Errorf("unknown ControlObjectiveHistory field %s", name)
@@ -59774,7 +59585,7 @@ type InternalPolicyMutation struct {
 	version                  *string
 	purpose_and_scope        *string
 	background               *string
-	jsonschema               *map[string]interface{}
+	details                  *map[string]interface{}
 	clearedFields            map[string]struct{}
 	controlobjectives        map[string]struct{}
 	removedcontrolobjectives map[string]struct{}
@@ -60609,53 +60420,53 @@ func (m *InternalPolicyMutation) ResetBackground() {
 	delete(m.clearedFields, internalpolicy.FieldBackground)
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (m *InternalPolicyMutation) SetJsonschema(value map[string]interface{}) {
-	m.jsonschema = &value
+// SetDetails sets the "details" field.
+func (m *InternalPolicyMutation) SetDetails(value map[string]interface{}) {
+	m.details = &value
 }
 
-// Jsonschema returns the value of the "jsonschema" field in the mutation.
-func (m *InternalPolicyMutation) Jsonschema() (r map[string]interface{}, exists bool) {
-	v := m.jsonschema
+// Details returns the value of the "details" field in the mutation.
+func (m *InternalPolicyMutation) Details() (r map[string]interface{}, exists bool) {
+	v := m.details
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldJsonschema returns the old "jsonschema" field's value of the InternalPolicy entity.
+// OldDetails returns the old "details" field's value of the InternalPolicy entity.
 // If the InternalPolicy object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *InternalPolicyMutation) OldJsonschema(ctx context.Context) (v map[string]interface{}, err error) {
+func (m *InternalPolicyMutation) OldDetails(ctx context.Context) (v map[string]interface{}, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldJsonschema is only allowed on UpdateOne operations")
+		return v, errors.New("OldDetails is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldJsonschema requires an ID field in the mutation")
+		return v, errors.New("OldDetails requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldJsonschema: %w", err)
+		return v, fmt.Errorf("querying old value for OldDetails: %w", err)
 	}
-	return oldValue.Jsonschema, nil
+	return oldValue.Details, nil
 }
 
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (m *InternalPolicyMutation) ClearJsonschema() {
-	m.jsonschema = nil
-	m.clearedFields[internalpolicy.FieldJsonschema] = struct{}{}
+// ClearDetails clears the value of the "details" field.
+func (m *InternalPolicyMutation) ClearDetails() {
+	m.details = nil
+	m.clearedFields[internalpolicy.FieldDetails] = struct{}{}
 }
 
-// JsonschemaCleared returns if the "jsonschema" field was cleared in this mutation.
-func (m *InternalPolicyMutation) JsonschemaCleared() bool {
-	_, ok := m.clearedFields[internalpolicy.FieldJsonschema]
+// DetailsCleared returns if the "details" field was cleared in this mutation.
+func (m *InternalPolicyMutation) DetailsCleared() bool {
+	_, ok := m.clearedFields[internalpolicy.FieldDetails]
 	return ok
 }
 
-// ResetJsonschema resets all changes to the "jsonschema" field.
-func (m *InternalPolicyMutation) ResetJsonschema() {
-	m.jsonschema = nil
-	delete(m.clearedFields, internalpolicy.FieldJsonschema)
+// ResetDetails resets all changes to the "details" field.
+func (m *InternalPolicyMutation) ResetDetails() {
+	m.details = nil
+	delete(m.clearedFields, internalpolicy.FieldDetails)
 }
 
 // AddControlobjectiveIDs adds the "controlobjectives" edge to the ControlObjective entity by ids.
@@ -60954,8 +60765,8 @@ func (m *InternalPolicyMutation) Fields() []string {
 	if m.background != nil {
 		fields = append(fields, internalpolicy.FieldBackground)
 	}
-	if m.jsonschema != nil {
-		fields = append(fields, internalpolicy.FieldJsonschema)
+	if m.details != nil {
+		fields = append(fields, internalpolicy.FieldDetails)
 	}
 	return fields
 }
@@ -60995,8 +60806,8 @@ func (m *InternalPolicyMutation) Field(name string) (ent.Value, bool) {
 		return m.PurposeAndScope()
 	case internalpolicy.FieldBackground:
 		return m.Background()
-	case internalpolicy.FieldJsonschema:
-		return m.Jsonschema()
+	case internalpolicy.FieldDetails:
+		return m.Details()
 	}
 	return nil, false
 }
@@ -61036,8 +60847,8 @@ func (m *InternalPolicyMutation) OldField(ctx context.Context, name string) (ent
 		return m.OldPurposeAndScope(ctx)
 	case internalpolicy.FieldBackground:
 		return m.OldBackground(ctx)
-	case internalpolicy.FieldJsonschema:
-		return m.OldJsonschema(ctx)
+	case internalpolicy.FieldDetails:
+		return m.OldDetails(ctx)
 	}
 	return nil, fmt.Errorf("unknown InternalPolicy field %s", name)
 }
@@ -61152,12 +60963,12 @@ func (m *InternalPolicyMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetBackground(v)
 		return nil
-	case internalpolicy.FieldJsonschema:
+	case internalpolicy.FieldDetails:
 		v, ok := value.(map[string]interface{})
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetJsonschema(v)
+		m.SetDetails(v)
 		return nil
 	}
 	return fmt.Errorf("unknown InternalPolicy field %s", name)
@@ -61225,8 +61036,8 @@ func (m *InternalPolicyMutation) ClearedFields() []string {
 	if m.FieldCleared(internalpolicy.FieldBackground) {
 		fields = append(fields, internalpolicy.FieldBackground)
 	}
-	if m.FieldCleared(internalpolicy.FieldJsonschema) {
-		fields = append(fields, internalpolicy.FieldJsonschema)
+	if m.FieldCleared(internalpolicy.FieldDetails) {
+		fields = append(fields, internalpolicy.FieldDetails)
 	}
 	return fields
 }
@@ -61278,8 +61089,8 @@ func (m *InternalPolicyMutation) ClearField(name string) error {
 	case internalpolicy.FieldBackground:
 		m.ClearBackground()
 		return nil
-	case internalpolicy.FieldJsonschema:
-		m.ClearJsonschema()
+	case internalpolicy.FieldDetails:
+		m.ClearDetails()
 		return nil
 	}
 	return fmt.Errorf("unknown InternalPolicy nullable field %s", name)
@@ -61334,8 +61145,8 @@ func (m *InternalPolicyMutation) ResetField(name string) error {
 	case internalpolicy.FieldBackground:
 		m.ResetBackground()
 		return nil
-	case internalpolicy.FieldJsonschema:
-		m.ResetJsonschema()
+	case internalpolicy.FieldDetails:
+		m.ResetDetails()
 		return nil
 	}
 	return fmt.Errorf("unknown InternalPolicy field %s", name)
@@ -61528,7 +61339,7 @@ type InternalPolicyHistoryMutation struct {
 	version           *string
 	purpose_and_scope *string
 	background        *string
-	jsonschema        *map[string]interface{}
+	details           *map[string]interface{}
 	clearedFields     map[string]struct{}
 	done              bool
 	oldValue          func(context.Context) (*InternalPolicyHistory, error)
@@ -62472,53 +62283,53 @@ func (m *InternalPolicyHistoryMutation) ResetBackground() {
 	delete(m.clearedFields, internalpolicyhistory.FieldBackground)
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (m *InternalPolicyHistoryMutation) SetJsonschema(value map[string]interface{}) {
-	m.jsonschema = &value
+// SetDetails sets the "details" field.
+func (m *InternalPolicyHistoryMutation) SetDetails(value map[string]interface{}) {
+	m.details = &value
 }
 
-// Jsonschema returns the value of the "jsonschema" field in the mutation.
-func (m *InternalPolicyHistoryMutation) Jsonschema() (r map[string]interface{}, exists bool) {
-	v := m.jsonschema
+// Details returns the value of the "details" field in the mutation.
+func (m *InternalPolicyHistoryMutation) Details() (r map[string]interface{}, exists bool) {
+	v := m.details
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldJsonschema returns the old "jsonschema" field's value of the InternalPolicyHistory entity.
+// OldDetails returns the old "details" field's value of the InternalPolicyHistory entity.
 // If the InternalPolicyHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *InternalPolicyHistoryMutation) OldJsonschema(ctx context.Context) (v map[string]interface{}, err error) {
+func (m *InternalPolicyHistoryMutation) OldDetails(ctx context.Context) (v map[string]interface{}, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldJsonschema is only allowed on UpdateOne operations")
+		return v, errors.New("OldDetails is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldJsonschema requires an ID field in the mutation")
+		return v, errors.New("OldDetails requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldJsonschema: %w", err)
+		return v, fmt.Errorf("querying old value for OldDetails: %w", err)
 	}
-	return oldValue.Jsonschema, nil
+	return oldValue.Details, nil
 }
 
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (m *InternalPolicyHistoryMutation) ClearJsonschema() {
-	m.jsonschema = nil
-	m.clearedFields[internalpolicyhistory.FieldJsonschema] = struct{}{}
+// ClearDetails clears the value of the "details" field.
+func (m *InternalPolicyHistoryMutation) ClearDetails() {
+	m.details = nil
+	m.clearedFields[internalpolicyhistory.FieldDetails] = struct{}{}
 }
 
-// JsonschemaCleared returns if the "jsonschema" field was cleared in this mutation.
-func (m *InternalPolicyHistoryMutation) JsonschemaCleared() bool {
-	_, ok := m.clearedFields[internalpolicyhistory.FieldJsonschema]
+// DetailsCleared returns if the "details" field was cleared in this mutation.
+func (m *InternalPolicyHistoryMutation) DetailsCleared() bool {
+	_, ok := m.clearedFields[internalpolicyhistory.FieldDetails]
 	return ok
 }
 
-// ResetJsonschema resets all changes to the "jsonschema" field.
-func (m *InternalPolicyHistoryMutation) ResetJsonschema() {
-	m.jsonschema = nil
-	delete(m.clearedFields, internalpolicyhistory.FieldJsonschema)
+// ResetDetails resets all changes to the "details" field.
+func (m *InternalPolicyHistoryMutation) ResetDetails() {
+	m.details = nil
+	delete(m.clearedFields, internalpolicyhistory.FieldDetails)
 }
 
 // Where appends a list predicates to the InternalPolicyHistoryMutation builder.
@@ -62610,8 +62421,8 @@ func (m *InternalPolicyHistoryMutation) Fields() []string {
 	if m.background != nil {
 		fields = append(fields, internalpolicyhistory.FieldBackground)
 	}
-	if m.jsonschema != nil {
-		fields = append(fields, internalpolicyhistory.FieldJsonschema)
+	if m.details != nil {
+		fields = append(fields, internalpolicyhistory.FieldDetails)
 	}
 	return fields
 }
@@ -62657,8 +62468,8 @@ func (m *InternalPolicyHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.PurposeAndScope()
 	case internalpolicyhistory.FieldBackground:
 		return m.Background()
-	case internalpolicyhistory.FieldJsonschema:
-		return m.Jsonschema()
+	case internalpolicyhistory.FieldDetails:
+		return m.Details()
 	}
 	return nil, false
 }
@@ -62704,8 +62515,8 @@ func (m *InternalPolicyHistoryMutation) OldField(ctx context.Context, name strin
 		return m.OldPurposeAndScope(ctx)
 	case internalpolicyhistory.FieldBackground:
 		return m.OldBackground(ctx)
-	case internalpolicyhistory.FieldJsonschema:
-		return m.OldJsonschema(ctx)
+	case internalpolicyhistory.FieldDetails:
+		return m.OldDetails(ctx)
 	}
 	return nil, fmt.Errorf("unknown InternalPolicyHistory field %s", name)
 }
@@ -62841,12 +62652,12 @@ func (m *InternalPolicyHistoryMutation) SetField(name string, value ent.Value) e
 		}
 		m.SetBackground(v)
 		return nil
-	case internalpolicyhistory.FieldJsonschema:
+	case internalpolicyhistory.FieldDetails:
 		v, ok := value.(map[string]interface{})
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetJsonschema(v)
+		m.SetDetails(v)
 		return nil
 	}
 	return fmt.Errorf("unknown InternalPolicyHistory field %s", name)
@@ -62917,8 +62728,8 @@ func (m *InternalPolicyHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(internalpolicyhistory.FieldBackground) {
 		fields = append(fields, internalpolicyhistory.FieldBackground)
 	}
-	if m.FieldCleared(internalpolicyhistory.FieldJsonschema) {
-		fields = append(fields, internalpolicyhistory.FieldJsonschema)
+	if m.FieldCleared(internalpolicyhistory.FieldDetails) {
+		fields = append(fields, internalpolicyhistory.FieldDetails)
 	}
 	return fields
 }
@@ -62973,8 +62784,8 @@ func (m *InternalPolicyHistoryMutation) ClearField(name string) error {
 	case internalpolicyhistory.FieldBackground:
 		m.ClearBackground()
 		return nil
-	case internalpolicyhistory.FieldJsonschema:
-		m.ClearJsonschema()
+	case internalpolicyhistory.FieldDetails:
+		m.ClearDetails()
 		return nil
 	}
 	return fmt.Errorf("unknown InternalPolicyHistory nullable field %s", name)
@@ -63038,8 +62849,8 @@ func (m *InternalPolicyHistoryMutation) ResetField(name string) error {
 	case internalpolicyhistory.FieldBackground:
 		m.ResetBackground()
 		return nil
-	case internalpolicyhistory.FieldJsonschema:
-		m.ResetJsonschema()
+	case internalpolicyhistory.FieldDetails:
+		m.ResetDetails()
 		return nil
 	}
 	return fmt.Errorf("unknown InternalPolicyHistory field %s", name)
@@ -64602,7 +64413,7 @@ type NarrativeMutation struct {
 	name                    *string
 	description             *string
 	satisfies               *string
-	jsonschema              *map[string]interface{}
+	details                 *map[string]interface{}
 	clearedFields           map[string]struct{}
 	policy                  map[string]struct{}
 	removedpolicy           map[string]struct{}
@@ -65254,53 +65065,53 @@ func (m *NarrativeMutation) ResetSatisfies() {
 	delete(m.clearedFields, narrative.FieldSatisfies)
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (m *NarrativeMutation) SetJsonschema(value map[string]interface{}) {
-	m.jsonschema = &value
+// SetDetails sets the "details" field.
+func (m *NarrativeMutation) SetDetails(value map[string]interface{}) {
+	m.details = &value
 }
 
-// Jsonschema returns the value of the "jsonschema" field in the mutation.
-func (m *NarrativeMutation) Jsonschema() (r map[string]interface{}, exists bool) {
-	v := m.jsonschema
+// Details returns the value of the "details" field in the mutation.
+func (m *NarrativeMutation) Details() (r map[string]interface{}, exists bool) {
+	v := m.details
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldJsonschema returns the old "jsonschema" field's value of the Narrative entity.
+// OldDetails returns the old "details" field's value of the Narrative entity.
 // If the Narrative object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *NarrativeMutation) OldJsonschema(ctx context.Context) (v map[string]interface{}, err error) {
+func (m *NarrativeMutation) OldDetails(ctx context.Context) (v map[string]interface{}, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldJsonschema is only allowed on UpdateOne operations")
+		return v, errors.New("OldDetails is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldJsonschema requires an ID field in the mutation")
+		return v, errors.New("OldDetails requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldJsonschema: %w", err)
+		return v, fmt.Errorf("querying old value for OldDetails: %w", err)
 	}
-	return oldValue.Jsonschema, nil
+	return oldValue.Details, nil
 }
 
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (m *NarrativeMutation) ClearJsonschema() {
-	m.jsonschema = nil
-	m.clearedFields[narrative.FieldJsonschema] = struct{}{}
+// ClearDetails clears the value of the "details" field.
+func (m *NarrativeMutation) ClearDetails() {
+	m.details = nil
+	m.clearedFields[narrative.FieldDetails] = struct{}{}
 }
 
-// JsonschemaCleared returns if the "jsonschema" field was cleared in this mutation.
-func (m *NarrativeMutation) JsonschemaCleared() bool {
-	_, ok := m.clearedFields[narrative.FieldJsonschema]
+// DetailsCleared returns if the "details" field was cleared in this mutation.
+func (m *NarrativeMutation) DetailsCleared() bool {
+	_, ok := m.clearedFields[narrative.FieldDetails]
 	return ok
 }
 
-// ResetJsonschema resets all changes to the "jsonschema" field.
-func (m *NarrativeMutation) ResetJsonschema() {
-	m.jsonschema = nil
-	delete(m.clearedFields, narrative.FieldJsonschema)
+// ResetDetails resets all changes to the "details" field.
+func (m *NarrativeMutation) ResetDetails() {
+	m.details = nil
+	delete(m.clearedFields, narrative.FieldDetails)
 }
 
 // AddPolicyIDs adds the "policy" edge to the InternalPolicy entity by ids.
@@ -65587,8 +65398,8 @@ func (m *NarrativeMutation) Fields() []string {
 	if m.satisfies != nil {
 		fields = append(fields, narrative.FieldSatisfies)
 	}
-	if m.jsonschema != nil {
-		fields = append(fields, narrative.FieldJsonschema)
+	if m.details != nil {
+		fields = append(fields, narrative.FieldDetails)
 	}
 	return fields
 }
@@ -65620,8 +65431,8 @@ func (m *NarrativeMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case narrative.FieldSatisfies:
 		return m.Satisfies()
-	case narrative.FieldJsonschema:
-		return m.Jsonschema()
+	case narrative.FieldDetails:
+		return m.Details()
 	}
 	return nil, false
 }
@@ -65653,8 +65464,8 @@ func (m *NarrativeMutation) OldField(ctx context.Context, name string) (ent.Valu
 		return m.OldDescription(ctx)
 	case narrative.FieldSatisfies:
 		return m.OldSatisfies(ctx)
-	case narrative.FieldJsonschema:
-		return m.OldJsonschema(ctx)
+	case narrative.FieldDetails:
+		return m.OldDetails(ctx)
 	}
 	return nil, fmt.Errorf("unknown Narrative field %s", name)
 }
@@ -65741,12 +65552,12 @@ func (m *NarrativeMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetSatisfies(v)
 		return nil
-	case narrative.FieldJsonschema:
+	case narrative.FieldDetails:
 		v, ok := value.(map[string]interface{})
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetJsonschema(v)
+		m.SetDetails(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Narrative field %s", name)
@@ -65805,8 +65616,8 @@ func (m *NarrativeMutation) ClearedFields() []string {
 	if m.FieldCleared(narrative.FieldSatisfies) {
 		fields = append(fields, narrative.FieldSatisfies)
 	}
-	if m.FieldCleared(narrative.FieldJsonschema) {
-		fields = append(fields, narrative.FieldJsonschema)
+	if m.FieldCleared(narrative.FieldDetails) {
+		fields = append(fields, narrative.FieldDetails)
 	}
 	return fields
 }
@@ -65849,8 +65660,8 @@ func (m *NarrativeMutation) ClearField(name string) error {
 	case narrative.FieldSatisfies:
 		m.ClearSatisfies()
 		return nil
-	case narrative.FieldJsonschema:
-		m.ClearJsonschema()
+	case narrative.FieldDetails:
+		m.ClearDetails()
 		return nil
 	}
 	return fmt.Errorf("unknown Narrative nullable field %s", name)
@@ -65893,8 +65704,8 @@ func (m *NarrativeMutation) ResetField(name string) error {
 	case narrative.FieldSatisfies:
 		m.ResetSatisfies()
 		return nil
-	case narrative.FieldJsonschema:
-		m.ResetJsonschema()
+	case narrative.FieldDetails:
+		m.ResetDetails()
 		return nil
 	}
 	return fmt.Errorf("unknown Narrative field %s", name)
@@ -66083,7 +65894,7 @@ type NarrativeHistoryMutation struct {
 	name          *string
 	description   *string
 	satisfies     *string
-	jsonschema    *map[string]interface{}
+	details       *map[string]interface{}
 	clearedFields map[string]struct{}
 	done          bool
 	oldValue      func(context.Context) (*NarrativeHistory, error)
@@ -66844,53 +66655,53 @@ func (m *NarrativeHistoryMutation) ResetSatisfies() {
 	delete(m.clearedFields, narrativehistory.FieldSatisfies)
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (m *NarrativeHistoryMutation) SetJsonschema(value map[string]interface{}) {
-	m.jsonschema = &value
+// SetDetails sets the "details" field.
+func (m *NarrativeHistoryMutation) SetDetails(value map[string]interface{}) {
+	m.details = &value
 }
 
-// Jsonschema returns the value of the "jsonschema" field in the mutation.
-func (m *NarrativeHistoryMutation) Jsonschema() (r map[string]interface{}, exists bool) {
-	v := m.jsonschema
+// Details returns the value of the "details" field in the mutation.
+func (m *NarrativeHistoryMutation) Details() (r map[string]interface{}, exists bool) {
+	v := m.details
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldJsonschema returns the old "jsonschema" field's value of the NarrativeHistory entity.
+// OldDetails returns the old "details" field's value of the NarrativeHistory entity.
 // If the NarrativeHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *NarrativeHistoryMutation) OldJsonschema(ctx context.Context) (v map[string]interface{}, err error) {
+func (m *NarrativeHistoryMutation) OldDetails(ctx context.Context) (v map[string]interface{}, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldJsonschema is only allowed on UpdateOne operations")
+		return v, errors.New("OldDetails is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldJsonschema requires an ID field in the mutation")
+		return v, errors.New("OldDetails requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldJsonschema: %w", err)
+		return v, fmt.Errorf("querying old value for OldDetails: %w", err)
 	}
-	return oldValue.Jsonschema, nil
+	return oldValue.Details, nil
 }
 
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (m *NarrativeHistoryMutation) ClearJsonschema() {
-	m.jsonschema = nil
-	m.clearedFields[narrativehistory.FieldJsonschema] = struct{}{}
+// ClearDetails clears the value of the "details" field.
+func (m *NarrativeHistoryMutation) ClearDetails() {
+	m.details = nil
+	m.clearedFields[narrativehistory.FieldDetails] = struct{}{}
 }
 
-// JsonschemaCleared returns if the "jsonschema" field was cleared in this mutation.
-func (m *NarrativeHistoryMutation) JsonschemaCleared() bool {
-	_, ok := m.clearedFields[narrativehistory.FieldJsonschema]
+// DetailsCleared returns if the "details" field was cleared in this mutation.
+func (m *NarrativeHistoryMutation) DetailsCleared() bool {
+	_, ok := m.clearedFields[narrativehistory.FieldDetails]
 	return ok
 }
 
-// ResetJsonschema resets all changes to the "jsonschema" field.
-func (m *NarrativeHistoryMutation) ResetJsonschema() {
-	m.jsonschema = nil
-	delete(m.clearedFields, narrativehistory.FieldJsonschema)
+// ResetDetails resets all changes to the "details" field.
+func (m *NarrativeHistoryMutation) ResetDetails() {
+	m.details = nil
+	delete(m.clearedFields, narrativehistory.FieldDetails)
 }
 
 // Where appends a list predicates to the NarrativeHistoryMutation builder.
@@ -66970,8 +66781,8 @@ func (m *NarrativeHistoryMutation) Fields() []string {
 	if m.satisfies != nil {
 		fields = append(fields, narrativehistory.FieldSatisfies)
 	}
-	if m.jsonschema != nil {
-		fields = append(fields, narrativehistory.FieldJsonschema)
+	if m.details != nil {
+		fields = append(fields, narrativehistory.FieldDetails)
 	}
 	return fields
 }
@@ -67009,8 +66820,8 @@ func (m *NarrativeHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.Description()
 	case narrativehistory.FieldSatisfies:
 		return m.Satisfies()
-	case narrativehistory.FieldJsonschema:
-		return m.Jsonschema()
+	case narrativehistory.FieldDetails:
+		return m.Details()
 	}
 	return nil, false
 }
@@ -67048,8 +66859,8 @@ func (m *NarrativeHistoryMutation) OldField(ctx context.Context, name string) (e
 		return m.OldDescription(ctx)
 	case narrativehistory.FieldSatisfies:
 		return m.OldSatisfies(ctx)
-	case narrativehistory.FieldJsonschema:
-		return m.OldJsonschema(ctx)
+	case narrativehistory.FieldDetails:
+		return m.OldDetails(ctx)
 	}
 	return nil, fmt.Errorf("unknown NarrativeHistory field %s", name)
 }
@@ -67157,12 +66968,12 @@ func (m *NarrativeHistoryMutation) SetField(name string, value ent.Value) error 
 		}
 		m.SetSatisfies(v)
 		return nil
-	case narrativehistory.FieldJsonschema:
+	case narrativehistory.FieldDetails:
 		v, ok := value.(map[string]interface{})
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetJsonschema(v)
+		m.SetDetails(v)
 		return nil
 	}
 	return fmt.Errorf("unknown NarrativeHistory field %s", name)
@@ -67224,8 +67035,8 @@ func (m *NarrativeHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(narrativehistory.FieldSatisfies) {
 		fields = append(fields, narrativehistory.FieldSatisfies)
 	}
-	if m.FieldCleared(narrativehistory.FieldJsonschema) {
-		fields = append(fields, narrativehistory.FieldJsonschema)
+	if m.FieldCleared(narrativehistory.FieldDetails) {
+		fields = append(fields, narrativehistory.FieldDetails)
 	}
 	return fields
 }
@@ -67271,8 +67082,8 @@ func (m *NarrativeHistoryMutation) ClearField(name string) error {
 	case narrativehistory.FieldSatisfies:
 		m.ClearSatisfies()
 		return nil
-	case narrativehistory.FieldJsonschema:
-		m.ClearJsonschema()
+	case narrativehistory.FieldDetails:
+		m.ClearDetails()
 		return nil
 	}
 	return fmt.Errorf("unknown NarrativeHistory nullable field %s", name)
@@ -67324,8 +67135,8 @@ func (m *NarrativeHistoryMutation) ResetField(name string) error {
 	case narrativehistory.FieldSatisfies:
 		m.ResetSatisfies()
 		return nil
-	case narrativehistory.FieldJsonschema:
-		m.ResetJsonschema()
+	case narrativehistory.FieldDetails:
+		m.ResetDetails()
 		return nil
 	}
 	return fmt.Errorf("unknown NarrativeHistory field %s", name)
@@ -67382,27 +67193,30 @@ func (m *NarrativeHistoryMutation) ResetEdge(name string) error {
 // NoteMutation represents an operation that mutates the Note nodes in the graph.
 type NoteMutation struct {
 	config
-	op            Op
-	typ           string
-	id            *string
-	created_at    *time.Time
-	updated_at    *time.Time
-	created_by    *string
-	updated_by    *string
-	mapping_id    *string
-	deleted_at    *time.Time
-	deleted_by    *string
-	tags          *[]string
-	appendtags    []string
-	text          *string
-	clearedFields map[string]struct{}
-	owner         *string
-	clearedowner  bool
-	entity        *string
-	clearedentity bool
-	done          bool
-	oldValue      func(context.Context) (*Note, error)
-	predicates    []predicate.Note
+	op                 Op
+	typ                string
+	id                 *string
+	created_at         *time.Time
+	updated_at         *time.Time
+	created_by         *string
+	updated_by         *string
+	mapping_id         *string
+	deleted_at         *time.Time
+	deleted_by         *string
+	tags               *[]string
+	appendtags         []string
+	text               *string
+	clearedFields      map[string]struct{}
+	owner              *string
+	clearedowner       bool
+	entity             *string
+	clearedentity      bool
+	subcontrols        map[string]struct{}
+	removedsubcontrols map[string]struct{}
+	clearedsubcontrols bool
+	done               bool
+	oldValue           func(context.Context) (*Note, error)
+	predicates         []predicate.Note
 }
 
 var _ ent.Mutation = (*NoteMutation)(nil)
@@ -68055,6 +67869,60 @@ func (m *NoteMutation) ResetEntity() {
 	m.clearedentity = false
 }
 
+// AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by ids.
+func (m *NoteMutation) AddSubcontrolIDs(ids ...string) {
+	if m.subcontrols == nil {
+		m.subcontrols = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.subcontrols[ids[i]] = struct{}{}
+	}
+}
+
+// ClearSubcontrols clears the "subcontrols" edge to the Subcontrol entity.
+func (m *NoteMutation) ClearSubcontrols() {
+	m.clearedsubcontrols = true
+}
+
+// SubcontrolsCleared reports if the "subcontrols" edge to the Subcontrol entity was cleared.
+func (m *NoteMutation) SubcontrolsCleared() bool {
+	return m.clearedsubcontrols
+}
+
+// RemoveSubcontrolIDs removes the "subcontrols" edge to the Subcontrol entity by IDs.
+func (m *NoteMutation) RemoveSubcontrolIDs(ids ...string) {
+	if m.removedsubcontrols == nil {
+		m.removedsubcontrols = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.subcontrols, ids[i])
+		m.removedsubcontrols[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedSubcontrols returns the removed IDs of the "subcontrols" edge to the Subcontrol entity.
+func (m *NoteMutation) RemovedSubcontrolsIDs() (ids []string) {
+	for id := range m.removedsubcontrols {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// SubcontrolsIDs returns the "subcontrols" edge IDs in the mutation.
+func (m *NoteMutation) SubcontrolsIDs() (ids []string) {
+	for id := range m.subcontrols {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetSubcontrols resets all changes to the "subcontrols" edge.
+func (m *NoteMutation) ResetSubcontrols() {
+	m.subcontrols = nil
+	m.clearedsubcontrols = false
+	m.removedsubcontrols = nil
+}
+
 // Where appends a list predicates to the NoteMutation builder.
 func (m *NoteMutation) Where(ps ...predicate.Note) {
 	m.predicates = append(m.predicates, ps...)
@@ -68392,12 +68260,15 @@ func (m *NoteMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *NoteMutation) AddedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 3)
 	if m.owner != nil {
 		edges = append(edges, note.EdgeOwner)
 	}
 	if m.entity != nil {
 		edges = append(edges, note.EdgeEntity)
+	}
+	if m.subcontrols != nil {
+		edges = append(edges, note.EdgeSubcontrols)
 	}
 	return edges
 }
@@ -68414,30 +68285,50 @@ func (m *NoteMutation) AddedIDs(name string) []ent.Value {
 		if id := m.entity; id != nil {
 			return []ent.Value{*id}
 		}
+	case note.EdgeSubcontrols:
+		ids := make([]ent.Value, 0, len(m.subcontrols))
+		for id := range m.subcontrols {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *NoteMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 3)
+	if m.removedsubcontrols != nil {
+		edges = append(edges, note.EdgeSubcontrols)
+	}
 	return edges
 }
 
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
 func (m *NoteMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case note.EdgeSubcontrols:
+		ids := make([]ent.Value, 0, len(m.removedsubcontrols))
+		for id := range m.removedsubcontrols {
+			ids = append(ids, id)
+		}
+		return ids
+	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *NoteMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 3)
 	if m.clearedowner {
 		edges = append(edges, note.EdgeOwner)
 	}
 	if m.clearedentity {
 		edges = append(edges, note.EdgeEntity)
+	}
+	if m.clearedsubcontrols {
+		edges = append(edges, note.EdgeSubcontrols)
 	}
 	return edges
 }
@@ -68450,6 +68341,8 @@ func (m *NoteMutation) EdgeCleared(name string) bool {
 		return m.clearedowner
 	case note.EdgeEntity:
 		return m.clearedentity
+	case note.EdgeSubcontrols:
+		return m.clearedsubcontrols
 	}
 	return false
 }
@@ -68477,6 +68370,9 @@ func (m *NoteMutation) ResetEdge(name string) error {
 		return nil
 	case note.EdgeEntity:
 		m.ResetEntity()
+		return nil
+	case note.EdgeSubcontrols:
+		m.ResetSubcontrols()
 		return nil
 	}
 	return fmt.Errorf("unknown Note edge %s", name)
@@ -87339,7 +87235,7 @@ type ProcedureMutation struct {
 	purpose_and_scope     *string
 	background            *string
 	satisfies             *string
-	jsonschema            *map[string]interface{}
+	details               *map[string]interface{}
 	clearedFields         map[string]struct{}
 	control               map[string]struct{}
 	removedcontrol        map[string]struct{}
@@ -88236,53 +88132,53 @@ func (m *ProcedureMutation) ResetSatisfies() {
 	delete(m.clearedFields, procedure.FieldSatisfies)
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (m *ProcedureMutation) SetJsonschema(value map[string]interface{}) {
-	m.jsonschema = &value
+// SetDetails sets the "details" field.
+func (m *ProcedureMutation) SetDetails(value map[string]interface{}) {
+	m.details = &value
 }
 
-// Jsonschema returns the value of the "jsonschema" field in the mutation.
-func (m *ProcedureMutation) Jsonschema() (r map[string]interface{}, exists bool) {
-	v := m.jsonschema
+// Details returns the value of the "details" field in the mutation.
+func (m *ProcedureMutation) Details() (r map[string]interface{}, exists bool) {
+	v := m.details
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldJsonschema returns the old "jsonschema" field's value of the Procedure entity.
+// OldDetails returns the old "details" field's value of the Procedure entity.
 // If the Procedure object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ProcedureMutation) OldJsonschema(ctx context.Context) (v map[string]interface{}, err error) {
+func (m *ProcedureMutation) OldDetails(ctx context.Context) (v map[string]interface{}, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldJsonschema is only allowed on UpdateOne operations")
+		return v, errors.New("OldDetails is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldJsonschema requires an ID field in the mutation")
+		return v, errors.New("OldDetails requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldJsonschema: %w", err)
+		return v, fmt.Errorf("querying old value for OldDetails: %w", err)
 	}
-	return oldValue.Jsonschema, nil
+	return oldValue.Details, nil
 }
 
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (m *ProcedureMutation) ClearJsonschema() {
-	m.jsonschema = nil
-	m.clearedFields[procedure.FieldJsonschema] = struct{}{}
+// ClearDetails clears the value of the "details" field.
+func (m *ProcedureMutation) ClearDetails() {
+	m.details = nil
+	m.clearedFields[procedure.FieldDetails] = struct{}{}
 }
 
-// JsonschemaCleared returns if the "jsonschema" field was cleared in this mutation.
-func (m *ProcedureMutation) JsonschemaCleared() bool {
-	_, ok := m.clearedFields[procedure.FieldJsonschema]
+// DetailsCleared returns if the "details" field was cleared in this mutation.
+func (m *ProcedureMutation) DetailsCleared() bool {
+	_, ok := m.clearedFields[procedure.FieldDetails]
 	return ok
 }
 
-// ResetJsonschema resets all changes to the "jsonschema" field.
-func (m *ProcedureMutation) ResetJsonschema() {
-	m.jsonschema = nil
-	delete(m.clearedFields, procedure.FieldJsonschema)
+// ResetDetails resets all changes to the "details" field.
+func (m *ProcedureMutation) ResetDetails() {
+	m.details = nil
+	delete(m.clearedFields, procedure.FieldDetails)
 }
 
 // AddControlIDs adds the "control" edge to the Control entity by ids.
@@ -88584,8 +88480,8 @@ func (m *ProcedureMutation) Fields() []string {
 	if m.satisfies != nil {
 		fields = append(fields, procedure.FieldSatisfies)
 	}
-	if m.jsonschema != nil {
-		fields = append(fields, procedure.FieldJsonschema)
+	if m.details != nil {
+		fields = append(fields, procedure.FieldDetails)
 	}
 	return fields
 }
@@ -88627,8 +88523,8 @@ func (m *ProcedureMutation) Field(name string) (ent.Value, bool) {
 		return m.Background()
 	case procedure.FieldSatisfies:
 		return m.Satisfies()
-	case procedure.FieldJsonschema:
-		return m.Jsonschema()
+	case procedure.FieldDetails:
+		return m.Details()
 	}
 	return nil, false
 }
@@ -88670,8 +88566,8 @@ func (m *ProcedureMutation) OldField(ctx context.Context, name string) (ent.Valu
 		return m.OldBackground(ctx)
 	case procedure.FieldSatisfies:
 		return m.OldSatisfies(ctx)
-	case procedure.FieldJsonschema:
-		return m.OldJsonschema(ctx)
+	case procedure.FieldDetails:
+		return m.OldDetails(ctx)
 	}
 	return nil, fmt.Errorf("unknown Procedure field %s", name)
 }
@@ -88793,12 +88689,12 @@ func (m *ProcedureMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetSatisfies(v)
 		return nil
-	case procedure.FieldJsonschema:
+	case procedure.FieldDetails:
 		v, ok := value.(map[string]interface{})
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetJsonschema(v)
+		m.SetDetails(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Procedure field %s", name)
@@ -88872,8 +88768,8 @@ func (m *ProcedureMutation) ClearedFields() []string {
 	if m.FieldCleared(procedure.FieldSatisfies) {
 		fields = append(fields, procedure.FieldSatisfies)
 	}
-	if m.FieldCleared(procedure.FieldJsonschema) {
-		fields = append(fields, procedure.FieldJsonschema)
+	if m.FieldCleared(procedure.FieldDetails) {
+		fields = append(fields, procedure.FieldDetails)
 	}
 	return fields
 }
@@ -88931,8 +88827,8 @@ func (m *ProcedureMutation) ClearField(name string) error {
 	case procedure.FieldSatisfies:
 		m.ClearSatisfies()
 		return nil
-	case procedure.FieldJsonschema:
-		m.ClearJsonschema()
+	case procedure.FieldDetails:
+		m.ClearDetails()
 		return nil
 	}
 	return fmt.Errorf("unknown Procedure nullable field %s", name)
@@ -88990,8 +88886,8 @@ func (m *ProcedureMutation) ResetField(name string) error {
 	case procedure.FieldSatisfies:
 		m.ResetSatisfies()
 		return nil
-	case procedure.FieldJsonschema:
-		m.ResetJsonschema()
+	case procedure.FieldDetails:
+		m.ResetDetails()
 		return nil
 	}
 	return fmt.Errorf("unknown Procedure field %s", name)
@@ -89185,7 +89081,7 @@ type ProcedureHistoryMutation struct {
 	purpose_and_scope *string
 	background        *string
 	satisfies         *string
-	jsonschema        *map[string]interface{}
+	details           *map[string]interface{}
 	clearedFields     map[string]struct{}
 	done              bool
 	oldValue          func(context.Context) (*ProcedureHistory, error)
@@ -90191,53 +90087,53 @@ func (m *ProcedureHistoryMutation) ResetSatisfies() {
 	delete(m.clearedFields, procedurehistory.FieldSatisfies)
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (m *ProcedureHistoryMutation) SetJsonschema(value map[string]interface{}) {
-	m.jsonschema = &value
+// SetDetails sets the "details" field.
+func (m *ProcedureHistoryMutation) SetDetails(value map[string]interface{}) {
+	m.details = &value
 }
 
-// Jsonschema returns the value of the "jsonschema" field in the mutation.
-func (m *ProcedureHistoryMutation) Jsonschema() (r map[string]interface{}, exists bool) {
-	v := m.jsonschema
+// Details returns the value of the "details" field in the mutation.
+func (m *ProcedureHistoryMutation) Details() (r map[string]interface{}, exists bool) {
+	v := m.details
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldJsonschema returns the old "jsonschema" field's value of the ProcedureHistory entity.
+// OldDetails returns the old "details" field's value of the ProcedureHistory entity.
 // If the ProcedureHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ProcedureHistoryMutation) OldJsonschema(ctx context.Context) (v map[string]interface{}, err error) {
+func (m *ProcedureHistoryMutation) OldDetails(ctx context.Context) (v map[string]interface{}, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldJsonschema is only allowed on UpdateOne operations")
+		return v, errors.New("OldDetails is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldJsonschema requires an ID field in the mutation")
+		return v, errors.New("OldDetails requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldJsonschema: %w", err)
+		return v, fmt.Errorf("querying old value for OldDetails: %w", err)
 	}
-	return oldValue.Jsonschema, nil
+	return oldValue.Details, nil
 }
 
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (m *ProcedureHistoryMutation) ClearJsonschema() {
-	m.jsonschema = nil
-	m.clearedFields[procedurehistory.FieldJsonschema] = struct{}{}
+// ClearDetails clears the value of the "details" field.
+func (m *ProcedureHistoryMutation) ClearDetails() {
+	m.details = nil
+	m.clearedFields[procedurehistory.FieldDetails] = struct{}{}
 }
 
-// JsonschemaCleared returns if the "jsonschema" field was cleared in this mutation.
-func (m *ProcedureHistoryMutation) JsonschemaCleared() bool {
-	_, ok := m.clearedFields[procedurehistory.FieldJsonschema]
+// DetailsCleared returns if the "details" field was cleared in this mutation.
+func (m *ProcedureHistoryMutation) DetailsCleared() bool {
+	_, ok := m.clearedFields[procedurehistory.FieldDetails]
 	return ok
 }
 
-// ResetJsonschema resets all changes to the "jsonschema" field.
-func (m *ProcedureHistoryMutation) ResetJsonschema() {
-	m.jsonschema = nil
-	delete(m.clearedFields, procedurehistory.FieldJsonschema)
+// ResetDetails resets all changes to the "details" field.
+func (m *ProcedureHistoryMutation) ResetDetails() {
+	m.details = nil
+	delete(m.clearedFields, procedurehistory.FieldDetails)
 }
 
 // Where appends a list predicates to the ProcedureHistoryMutation builder.
@@ -90332,8 +90228,8 @@ func (m *ProcedureHistoryMutation) Fields() []string {
 	if m.satisfies != nil {
 		fields = append(fields, procedurehistory.FieldSatisfies)
 	}
-	if m.jsonschema != nil {
-		fields = append(fields, procedurehistory.FieldJsonschema)
+	if m.details != nil {
+		fields = append(fields, procedurehistory.FieldDetails)
 	}
 	return fields
 }
@@ -90381,8 +90277,8 @@ func (m *ProcedureHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.Background()
 	case procedurehistory.FieldSatisfies:
 		return m.Satisfies()
-	case procedurehistory.FieldJsonschema:
-		return m.Jsonschema()
+	case procedurehistory.FieldDetails:
+		return m.Details()
 	}
 	return nil, false
 }
@@ -90430,8 +90326,8 @@ func (m *ProcedureHistoryMutation) OldField(ctx context.Context, name string) (e
 		return m.OldBackground(ctx)
 	case procedurehistory.FieldSatisfies:
 		return m.OldSatisfies(ctx)
-	case procedurehistory.FieldJsonschema:
-		return m.OldJsonschema(ctx)
+	case procedurehistory.FieldDetails:
+		return m.OldDetails(ctx)
 	}
 	return nil, fmt.Errorf("unknown ProcedureHistory field %s", name)
 }
@@ -90574,12 +90470,12 @@ func (m *ProcedureHistoryMutation) SetField(name string, value ent.Value) error 
 		}
 		m.SetSatisfies(v)
 		return nil
-	case procedurehistory.FieldJsonschema:
+	case procedurehistory.FieldDetails:
 		v, ok := value.(map[string]interface{})
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetJsonschema(v)
+		m.SetDetails(v)
 		return nil
 	}
 	return fmt.Errorf("unknown ProcedureHistory field %s", name)
@@ -90656,8 +90552,8 @@ func (m *ProcedureHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(procedurehistory.FieldSatisfies) {
 		fields = append(fields, procedurehistory.FieldSatisfies)
 	}
-	if m.FieldCleared(procedurehistory.FieldJsonschema) {
-		fields = append(fields, procedurehistory.FieldJsonschema)
+	if m.FieldCleared(procedurehistory.FieldDetails) {
+		fields = append(fields, procedurehistory.FieldDetails)
 	}
 	return fields
 }
@@ -90718,8 +90614,8 @@ func (m *ProcedureHistoryMutation) ClearField(name string) error {
 	case procedurehistory.FieldSatisfies:
 		m.ClearSatisfies()
 		return nil
-	case procedurehistory.FieldJsonschema:
-		m.ClearJsonschema()
+	case procedurehistory.FieldDetails:
+		m.ClearDetails()
 		return nil
 	}
 	return fmt.Errorf("unknown ProcedureHistory nullable field %s", name)
@@ -90786,8 +90682,8 @@ func (m *ProcedureHistoryMutation) ResetField(name string) error {
 	case procedurehistory.FieldSatisfies:
 		m.ResetSatisfies()
 		return nil
-	case procedurehistory.FieldJsonschema:
-		m.ResetJsonschema()
+	case procedurehistory.FieldDetails:
+		m.ResetDetails()
 		return nil
 	}
 	return fmt.Errorf("unknown ProcedureHistory field %s", name)
@@ -90861,12 +90757,11 @@ type RiskMutation struct {
 	status             *string
 	risk_type          *string
 	business_costs     *string
-	impact             *string
-	likelihood         *string
+	impact             *enums.RiskImpact
+	likelihood         *enums.RiskLikelihood
 	mitigation         *string
 	satisfies          *string
-	severity           *string
-	jsonschema         *map[string]interface{}
+	details            *map[string]interface{}
 	clearedFields      map[string]struct{}
 	control            map[string]struct{}
 	removedcontrol     map[string]struct{}
@@ -91614,12 +91509,12 @@ func (m *RiskMutation) ResetBusinessCosts() {
 }
 
 // SetImpact sets the "impact" field.
-func (m *RiskMutation) SetImpact(s string) {
-	m.impact = &s
+func (m *RiskMutation) SetImpact(ei enums.RiskImpact) {
+	m.impact = &ei
 }
 
 // Impact returns the value of the "impact" field in the mutation.
-func (m *RiskMutation) Impact() (r string, exists bool) {
+func (m *RiskMutation) Impact() (r enums.RiskImpact, exists bool) {
 	v := m.impact
 	if v == nil {
 		return
@@ -91630,7 +91525,7 @@ func (m *RiskMutation) Impact() (r string, exists bool) {
 // OldImpact returns the old "impact" field's value of the Risk entity.
 // If the Risk object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *RiskMutation) OldImpact(ctx context.Context) (v string, err error) {
+func (m *RiskMutation) OldImpact(ctx context.Context) (v enums.RiskImpact, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldImpact is only allowed on UpdateOne operations")
 	}
@@ -91663,12 +91558,12 @@ func (m *RiskMutation) ResetImpact() {
 }
 
 // SetLikelihood sets the "likelihood" field.
-func (m *RiskMutation) SetLikelihood(s string) {
-	m.likelihood = &s
+func (m *RiskMutation) SetLikelihood(el enums.RiskLikelihood) {
+	m.likelihood = &el
 }
 
 // Likelihood returns the value of the "likelihood" field in the mutation.
-func (m *RiskMutation) Likelihood() (r string, exists bool) {
+func (m *RiskMutation) Likelihood() (r enums.RiskLikelihood, exists bool) {
 	v := m.likelihood
 	if v == nil {
 		return
@@ -91679,7 +91574,7 @@ func (m *RiskMutation) Likelihood() (r string, exists bool) {
 // OldLikelihood returns the old "likelihood" field's value of the Risk entity.
 // If the Risk object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *RiskMutation) OldLikelihood(ctx context.Context) (v string, err error) {
+func (m *RiskMutation) OldLikelihood(ctx context.Context) (v enums.RiskLikelihood, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldLikelihood is only allowed on UpdateOne operations")
 	}
@@ -91809,102 +91704,53 @@ func (m *RiskMutation) ResetSatisfies() {
 	delete(m.clearedFields, risk.FieldSatisfies)
 }
 
-// SetSeverity sets the "severity" field.
-func (m *RiskMutation) SetSeverity(s string) {
-	m.severity = &s
+// SetDetails sets the "details" field.
+func (m *RiskMutation) SetDetails(value map[string]interface{}) {
+	m.details = &value
 }
 
-// Severity returns the value of the "severity" field in the mutation.
-func (m *RiskMutation) Severity() (r string, exists bool) {
-	v := m.severity
+// Details returns the value of the "details" field in the mutation.
+func (m *RiskMutation) Details() (r map[string]interface{}, exists bool) {
+	v := m.details
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldSeverity returns the old "severity" field's value of the Risk entity.
+// OldDetails returns the old "details" field's value of the Risk entity.
 // If the Risk object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *RiskMutation) OldSeverity(ctx context.Context) (v string, err error) {
+func (m *RiskMutation) OldDetails(ctx context.Context) (v map[string]interface{}, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldSeverity is only allowed on UpdateOne operations")
+		return v, errors.New("OldDetails is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldSeverity requires an ID field in the mutation")
+		return v, errors.New("OldDetails requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldSeverity: %w", err)
+		return v, fmt.Errorf("querying old value for OldDetails: %w", err)
 	}
-	return oldValue.Severity, nil
+	return oldValue.Details, nil
 }
 
-// ClearSeverity clears the value of the "severity" field.
-func (m *RiskMutation) ClearSeverity() {
-	m.severity = nil
-	m.clearedFields[risk.FieldSeverity] = struct{}{}
+// ClearDetails clears the value of the "details" field.
+func (m *RiskMutation) ClearDetails() {
+	m.details = nil
+	m.clearedFields[risk.FieldDetails] = struct{}{}
 }
 
-// SeverityCleared returns if the "severity" field was cleared in this mutation.
-func (m *RiskMutation) SeverityCleared() bool {
-	_, ok := m.clearedFields[risk.FieldSeverity]
+// DetailsCleared returns if the "details" field was cleared in this mutation.
+func (m *RiskMutation) DetailsCleared() bool {
+	_, ok := m.clearedFields[risk.FieldDetails]
 	return ok
 }
 
-// ResetSeverity resets all changes to the "severity" field.
-func (m *RiskMutation) ResetSeverity() {
-	m.severity = nil
-	delete(m.clearedFields, risk.FieldSeverity)
-}
-
-// SetJsonschema sets the "jsonschema" field.
-func (m *RiskMutation) SetJsonschema(value map[string]interface{}) {
-	m.jsonschema = &value
-}
-
-// Jsonschema returns the value of the "jsonschema" field in the mutation.
-func (m *RiskMutation) Jsonschema() (r map[string]interface{}, exists bool) {
-	v := m.jsonschema
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldJsonschema returns the old "jsonschema" field's value of the Risk entity.
-// If the Risk object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *RiskMutation) OldJsonschema(ctx context.Context) (v map[string]interface{}, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldJsonschema is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldJsonschema requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldJsonschema: %w", err)
-	}
-	return oldValue.Jsonschema, nil
-}
-
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (m *RiskMutation) ClearJsonschema() {
-	m.jsonschema = nil
-	m.clearedFields[risk.FieldJsonschema] = struct{}{}
-}
-
-// JsonschemaCleared returns if the "jsonschema" field was cleared in this mutation.
-func (m *RiskMutation) JsonschemaCleared() bool {
-	_, ok := m.clearedFields[risk.FieldJsonschema]
-	return ok
-}
-
-// ResetJsonschema resets all changes to the "jsonschema" field.
-func (m *RiskMutation) ResetJsonschema() {
-	m.jsonschema = nil
-	delete(m.clearedFields, risk.FieldJsonschema)
+// ResetDetails resets all changes to the "details" field.
+func (m *RiskMutation) ResetDetails() {
+	m.details = nil
+	delete(m.clearedFields, risk.FieldDetails)
 }
 
 // AddControlIDs adds the "control" edge to the Control entity by ids.
@@ -92103,7 +91949,7 @@ func (m *RiskMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *RiskMutation) Fields() []string {
-	fields := make([]string, 0, 19)
+	fields := make([]string, 0, 18)
 	if m.created_at != nil {
 		fields = append(fields, risk.FieldCreatedAt)
 	}
@@ -92155,11 +92001,8 @@ func (m *RiskMutation) Fields() []string {
 	if m.satisfies != nil {
 		fields = append(fields, risk.FieldSatisfies)
 	}
-	if m.severity != nil {
-		fields = append(fields, risk.FieldSeverity)
-	}
-	if m.jsonschema != nil {
-		fields = append(fields, risk.FieldJsonschema)
+	if m.details != nil {
+		fields = append(fields, risk.FieldDetails)
 	}
 	return fields
 }
@@ -92203,10 +92046,8 @@ func (m *RiskMutation) Field(name string) (ent.Value, bool) {
 		return m.Mitigation()
 	case risk.FieldSatisfies:
 		return m.Satisfies()
-	case risk.FieldSeverity:
-		return m.Severity()
-	case risk.FieldJsonschema:
-		return m.Jsonschema()
+	case risk.FieldDetails:
+		return m.Details()
 	}
 	return nil, false
 }
@@ -92250,10 +92091,8 @@ func (m *RiskMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldMitigation(ctx)
 	case risk.FieldSatisfies:
 		return m.OldSatisfies(ctx)
-	case risk.FieldSeverity:
-		return m.OldSeverity(ctx)
-	case risk.FieldJsonschema:
-		return m.OldJsonschema(ctx)
+	case risk.FieldDetails:
+		return m.OldDetails(ctx)
 	}
 	return nil, fmt.Errorf("unknown Risk field %s", name)
 }
@@ -92355,14 +92194,14 @@ func (m *RiskMutation) SetField(name string, value ent.Value) error {
 		m.SetBusinessCosts(v)
 		return nil
 	case risk.FieldImpact:
-		v, ok := value.(string)
+		v, ok := value.(enums.RiskImpact)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetImpact(v)
 		return nil
 	case risk.FieldLikelihood:
-		v, ok := value.(string)
+		v, ok := value.(enums.RiskLikelihood)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -92382,19 +92221,12 @@ func (m *RiskMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetSatisfies(v)
 		return nil
-	case risk.FieldSeverity:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetSeverity(v)
-		return nil
-	case risk.FieldJsonschema:
+	case risk.FieldDetails:
 		v, ok := value.(map[string]interface{})
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetJsonschema(v)
+		m.SetDetails(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Risk field %s", name)
@@ -92471,11 +92303,8 @@ func (m *RiskMutation) ClearedFields() []string {
 	if m.FieldCleared(risk.FieldSatisfies) {
 		fields = append(fields, risk.FieldSatisfies)
 	}
-	if m.FieldCleared(risk.FieldSeverity) {
-		fields = append(fields, risk.FieldSeverity)
-	}
-	if m.FieldCleared(risk.FieldJsonschema) {
-		fields = append(fields, risk.FieldJsonschema)
+	if m.FieldCleared(risk.FieldDetails) {
+		fields = append(fields, risk.FieldDetails)
 	}
 	return fields
 }
@@ -92536,11 +92365,8 @@ func (m *RiskMutation) ClearField(name string) error {
 	case risk.FieldSatisfies:
 		m.ClearSatisfies()
 		return nil
-	case risk.FieldSeverity:
-		m.ClearSeverity()
-		return nil
-	case risk.FieldJsonschema:
-		m.ClearJsonschema()
+	case risk.FieldDetails:
+		m.ClearDetails()
 		return nil
 	}
 	return fmt.Errorf("unknown Risk nullable field %s", name)
@@ -92601,11 +92427,8 @@ func (m *RiskMutation) ResetField(name string) error {
 	case risk.FieldSatisfies:
 		m.ResetSatisfies()
 		return nil
-	case risk.FieldSeverity:
-		m.ResetSeverity()
-		return nil
-	case risk.FieldJsonschema:
-		m.ResetJsonschema()
+	case risk.FieldDetails:
+		m.ResetDetails()
 		return nil
 	}
 	return fmt.Errorf("unknown Risk field %s", name)
@@ -92770,12 +92593,11 @@ type RiskHistoryMutation struct {
 	status         *string
 	risk_type      *string
 	business_costs *string
-	impact         *string
-	likelihood     *string
+	impact         *enums.RiskImpact
+	likelihood     *enums.RiskLikelihood
 	mitigation     *string
 	satisfies      *string
-	severity       *string
-	jsonschema     *map[string]interface{}
+	details        *map[string]interface{}
 	clearedFields  map[string]struct{}
 	done           bool
 	oldValue       func(context.Context) (*RiskHistory, error)
@@ -93635,12 +93457,12 @@ func (m *RiskHistoryMutation) ResetBusinessCosts() {
 }
 
 // SetImpact sets the "impact" field.
-func (m *RiskHistoryMutation) SetImpact(s string) {
-	m.impact = &s
+func (m *RiskHistoryMutation) SetImpact(ei enums.RiskImpact) {
+	m.impact = &ei
 }
 
 // Impact returns the value of the "impact" field in the mutation.
-func (m *RiskHistoryMutation) Impact() (r string, exists bool) {
+func (m *RiskHistoryMutation) Impact() (r enums.RiskImpact, exists bool) {
 	v := m.impact
 	if v == nil {
 		return
@@ -93651,7 +93473,7 @@ func (m *RiskHistoryMutation) Impact() (r string, exists bool) {
 // OldImpact returns the old "impact" field's value of the RiskHistory entity.
 // If the RiskHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *RiskHistoryMutation) OldImpact(ctx context.Context) (v string, err error) {
+func (m *RiskHistoryMutation) OldImpact(ctx context.Context) (v enums.RiskImpact, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldImpact is only allowed on UpdateOne operations")
 	}
@@ -93684,12 +93506,12 @@ func (m *RiskHistoryMutation) ResetImpact() {
 }
 
 // SetLikelihood sets the "likelihood" field.
-func (m *RiskHistoryMutation) SetLikelihood(s string) {
-	m.likelihood = &s
+func (m *RiskHistoryMutation) SetLikelihood(el enums.RiskLikelihood) {
+	m.likelihood = &el
 }
 
 // Likelihood returns the value of the "likelihood" field in the mutation.
-func (m *RiskHistoryMutation) Likelihood() (r string, exists bool) {
+func (m *RiskHistoryMutation) Likelihood() (r enums.RiskLikelihood, exists bool) {
 	v := m.likelihood
 	if v == nil {
 		return
@@ -93700,7 +93522,7 @@ func (m *RiskHistoryMutation) Likelihood() (r string, exists bool) {
 // OldLikelihood returns the old "likelihood" field's value of the RiskHistory entity.
 // If the RiskHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *RiskHistoryMutation) OldLikelihood(ctx context.Context) (v string, err error) {
+func (m *RiskHistoryMutation) OldLikelihood(ctx context.Context) (v enums.RiskLikelihood, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldLikelihood is only allowed on UpdateOne operations")
 	}
@@ -93830,102 +93652,53 @@ func (m *RiskHistoryMutation) ResetSatisfies() {
 	delete(m.clearedFields, riskhistory.FieldSatisfies)
 }
 
-// SetSeverity sets the "severity" field.
-func (m *RiskHistoryMutation) SetSeverity(s string) {
-	m.severity = &s
+// SetDetails sets the "details" field.
+func (m *RiskHistoryMutation) SetDetails(value map[string]interface{}) {
+	m.details = &value
 }
 
-// Severity returns the value of the "severity" field in the mutation.
-func (m *RiskHistoryMutation) Severity() (r string, exists bool) {
-	v := m.severity
+// Details returns the value of the "details" field in the mutation.
+func (m *RiskHistoryMutation) Details() (r map[string]interface{}, exists bool) {
+	v := m.details
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldSeverity returns the old "severity" field's value of the RiskHistory entity.
+// OldDetails returns the old "details" field's value of the RiskHistory entity.
 // If the RiskHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *RiskHistoryMutation) OldSeverity(ctx context.Context) (v string, err error) {
+func (m *RiskHistoryMutation) OldDetails(ctx context.Context) (v map[string]interface{}, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldSeverity is only allowed on UpdateOne operations")
+		return v, errors.New("OldDetails is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldSeverity requires an ID field in the mutation")
+		return v, errors.New("OldDetails requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldSeverity: %w", err)
+		return v, fmt.Errorf("querying old value for OldDetails: %w", err)
 	}
-	return oldValue.Severity, nil
+	return oldValue.Details, nil
 }
 
-// ClearSeverity clears the value of the "severity" field.
-func (m *RiskHistoryMutation) ClearSeverity() {
-	m.severity = nil
-	m.clearedFields[riskhistory.FieldSeverity] = struct{}{}
+// ClearDetails clears the value of the "details" field.
+func (m *RiskHistoryMutation) ClearDetails() {
+	m.details = nil
+	m.clearedFields[riskhistory.FieldDetails] = struct{}{}
 }
 
-// SeverityCleared returns if the "severity" field was cleared in this mutation.
-func (m *RiskHistoryMutation) SeverityCleared() bool {
-	_, ok := m.clearedFields[riskhistory.FieldSeverity]
+// DetailsCleared returns if the "details" field was cleared in this mutation.
+func (m *RiskHistoryMutation) DetailsCleared() bool {
+	_, ok := m.clearedFields[riskhistory.FieldDetails]
 	return ok
 }
 
-// ResetSeverity resets all changes to the "severity" field.
-func (m *RiskHistoryMutation) ResetSeverity() {
-	m.severity = nil
-	delete(m.clearedFields, riskhistory.FieldSeverity)
-}
-
-// SetJsonschema sets the "jsonschema" field.
-func (m *RiskHistoryMutation) SetJsonschema(value map[string]interface{}) {
-	m.jsonschema = &value
-}
-
-// Jsonschema returns the value of the "jsonschema" field in the mutation.
-func (m *RiskHistoryMutation) Jsonschema() (r map[string]interface{}, exists bool) {
-	v := m.jsonschema
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldJsonschema returns the old "jsonschema" field's value of the RiskHistory entity.
-// If the RiskHistory object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *RiskHistoryMutation) OldJsonschema(ctx context.Context) (v map[string]interface{}, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldJsonschema is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldJsonschema requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldJsonschema: %w", err)
-	}
-	return oldValue.Jsonschema, nil
-}
-
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (m *RiskHistoryMutation) ClearJsonschema() {
-	m.jsonschema = nil
-	m.clearedFields[riskhistory.FieldJsonschema] = struct{}{}
-}
-
-// JsonschemaCleared returns if the "jsonschema" field was cleared in this mutation.
-func (m *RiskHistoryMutation) JsonschemaCleared() bool {
-	_, ok := m.clearedFields[riskhistory.FieldJsonschema]
-	return ok
-}
-
-// ResetJsonschema resets all changes to the "jsonschema" field.
-func (m *RiskHistoryMutation) ResetJsonschema() {
-	m.jsonschema = nil
-	delete(m.clearedFields, riskhistory.FieldJsonschema)
+// ResetDetails resets all changes to the "details" field.
+func (m *RiskHistoryMutation) ResetDetails() {
+	m.details = nil
+	delete(m.clearedFields, riskhistory.FieldDetails)
 }
 
 // Where appends a list predicates to the RiskHistoryMutation builder.
@@ -93962,7 +93735,7 @@ func (m *RiskHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *RiskHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 22)
+	fields := make([]string, 0, 21)
 	if m.history_time != nil {
 		fields = append(fields, riskhistory.FieldHistoryTime)
 	}
@@ -94023,11 +93796,8 @@ func (m *RiskHistoryMutation) Fields() []string {
 	if m.satisfies != nil {
 		fields = append(fields, riskhistory.FieldSatisfies)
 	}
-	if m.severity != nil {
-		fields = append(fields, riskhistory.FieldSeverity)
-	}
-	if m.jsonschema != nil {
-		fields = append(fields, riskhistory.FieldJsonschema)
+	if m.details != nil {
+		fields = append(fields, riskhistory.FieldDetails)
 	}
 	return fields
 }
@@ -94077,10 +93847,8 @@ func (m *RiskHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.Mitigation()
 	case riskhistory.FieldSatisfies:
 		return m.Satisfies()
-	case riskhistory.FieldSeverity:
-		return m.Severity()
-	case riskhistory.FieldJsonschema:
-		return m.Jsonschema()
+	case riskhistory.FieldDetails:
+		return m.Details()
 	}
 	return nil, false
 }
@@ -94130,10 +93898,8 @@ func (m *RiskHistoryMutation) OldField(ctx context.Context, name string) (ent.Va
 		return m.OldMitigation(ctx)
 	case riskhistory.FieldSatisfies:
 		return m.OldSatisfies(ctx)
-	case riskhistory.FieldSeverity:
-		return m.OldSeverity(ctx)
-	case riskhistory.FieldJsonschema:
-		return m.OldJsonschema(ctx)
+	case riskhistory.FieldDetails:
+		return m.OldDetails(ctx)
 	}
 	return nil, fmt.Errorf("unknown RiskHistory field %s", name)
 }
@@ -94256,14 +94022,14 @@ func (m *RiskHistoryMutation) SetField(name string, value ent.Value) error {
 		m.SetBusinessCosts(v)
 		return nil
 	case riskhistory.FieldImpact:
-		v, ok := value.(string)
+		v, ok := value.(enums.RiskImpact)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetImpact(v)
 		return nil
 	case riskhistory.FieldLikelihood:
-		v, ok := value.(string)
+		v, ok := value.(enums.RiskLikelihood)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -94283,19 +94049,12 @@ func (m *RiskHistoryMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetSatisfies(v)
 		return nil
-	case riskhistory.FieldSeverity:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetSeverity(v)
-		return nil
-	case riskhistory.FieldJsonschema:
+	case riskhistory.FieldDetails:
 		v, ok := value.(map[string]interface{})
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetJsonschema(v)
+		m.SetDetails(v)
 		return nil
 	}
 	return fmt.Errorf("unknown RiskHistory field %s", name)
@@ -94375,11 +94134,8 @@ func (m *RiskHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(riskhistory.FieldSatisfies) {
 		fields = append(fields, riskhistory.FieldSatisfies)
 	}
-	if m.FieldCleared(riskhistory.FieldSeverity) {
-		fields = append(fields, riskhistory.FieldSeverity)
-	}
-	if m.FieldCleared(riskhistory.FieldJsonschema) {
-		fields = append(fields, riskhistory.FieldJsonschema)
+	if m.FieldCleared(riskhistory.FieldDetails) {
+		fields = append(fields, riskhistory.FieldDetails)
 	}
 	return fields
 }
@@ -94443,11 +94199,8 @@ func (m *RiskHistoryMutation) ClearField(name string) error {
 	case riskhistory.FieldSatisfies:
 		m.ClearSatisfies()
 		return nil
-	case riskhistory.FieldSeverity:
-		m.ClearSeverity()
-		return nil
-	case riskhistory.FieldJsonschema:
-		m.ClearJsonschema()
+	case riskhistory.FieldDetails:
+		m.ClearDetails()
 		return nil
 	}
 	return fmt.Errorf("unknown RiskHistory nullable field %s", name)
@@ -94517,11 +94270,8 @@ func (m *RiskHistoryMutation) ResetField(name string) error {
 	case riskhistory.FieldSatisfies:
 		m.ResetSatisfies()
 		return nil
-	case riskhistory.FieldSeverity:
-		m.ResetSeverity()
-		return nil
-	case riskhistory.FieldJsonschema:
-		m.ResetJsonschema()
+	case riskhistory.FieldDetails:
+		m.ResetDetails()
 		return nil
 	}
 	return fmt.Errorf("unknown RiskHistory field %s", name)
@@ -94599,7 +94349,7 @@ type StandardMutation struct {
 	purpose_and_scope        *string
 	background               *string
 	satisfies                *string
-	jsonschema               *map[string]interface{}
+	details                  *map[string]interface{}
 	clearedFields            map[string]struct{}
 	controlobjectives        map[string]struct{}
 	removedcontrolobjectives map[string]struct{}
@@ -95545,53 +95295,53 @@ func (m *StandardMutation) ResetSatisfies() {
 	delete(m.clearedFields, standard.FieldSatisfies)
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (m *StandardMutation) SetJsonschema(value map[string]interface{}) {
-	m.jsonschema = &value
+// SetDetails sets the "details" field.
+func (m *StandardMutation) SetDetails(value map[string]interface{}) {
+	m.details = &value
 }
 
-// Jsonschema returns the value of the "jsonschema" field in the mutation.
-func (m *StandardMutation) Jsonschema() (r map[string]interface{}, exists bool) {
-	v := m.jsonschema
+// Details returns the value of the "details" field in the mutation.
+func (m *StandardMutation) Details() (r map[string]interface{}, exists bool) {
+	v := m.details
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldJsonschema returns the old "jsonschema" field's value of the Standard entity.
+// OldDetails returns the old "details" field's value of the Standard entity.
 // If the Standard object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *StandardMutation) OldJsonschema(ctx context.Context) (v map[string]interface{}, err error) {
+func (m *StandardMutation) OldDetails(ctx context.Context) (v map[string]interface{}, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldJsonschema is only allowed on UpdateOne operations")
+		return v, errors.New("OldDetails is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldJsonschema requires an ID field in the mutation")
+		return v, errors.New("OldDetails requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldJsonschema: %w", err)
+		return v, fmt.Errorf("querying old value for OldDetails: %w", err)
 	}
-	return oldValue.Jsonschema, nil
+	return oldValue.Details, nil
 }
 
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (m *StandardMutation) ClearJsonschema() {
-	m.jsonschema = nil
-	m.clearedFields[standard.FieldJsonschema] = struct{}{}
+// ClearDetails clears the value of the "details" field.
+func (m *StandardMutation) ClearDetails() {
+	m.details = nil
+	m.clearedFields[standard.FieldDetails] = struct{}{}
 }
 
-// JsonschemaCleared returns if the "jsonschema" field was cleared in this mutation.
-func (m *StandardMutation) JsonschemaCleared() bool {
-	_, ok := m.clearedFields[standard.FieldJsonschema]
+// DetailsCleared returns if the "details" field was cleared in this mutation.
+func (m *StandardMutation) DetailsCleared() bool {
+	_, ok := m.clearedFields[standard.FieldDetails]
 	return ok
 }
 
-// ResetJsonschema resets all changes to the "jsonschema" field.
-func (m *StandardMutation) ResetJsonschema() {
-	m.jsonschema = nil
-	delete(m.clearedFields, standard.FieldJsonschema)
+// ResetDetails resets all changes to the "details" field.
+func (m *StandardMutation) ResetDetails() {
+	m.details = nil
+	delete(m.clearedFields, standard.FieldDetails)
 }
 
 // AddControlobjectiveIDs adds the "controlobjectives" edge to the ControlObjective entity by ids.
@@ -95896,8 +95646,8 @@ func (m *StandardMutation) Fields() []string {
 	if m.satisfies != nil {
 		fields = append(fields, standard.FieldSatisfies)
 	}
-	if m.jsonschema != nil {
-		fields = append(fields, standard.FieldJsonschema)
+	if m.details != nil {
+		fields = append(fields, standard.FieldDetails)
 	}
 	return fields
 }
@@ -95941,8 +95691,8 @@ func (m *StandardMutation) Field(name string) (ent.Value, bool) {
 		return m.Background()
 	case standard.FieldSatisfies:
 		return m.Satisfies()
-	case standard.FieldJsonschema:
-		return m.Jsonschema()
+	case standard.FieldDetails:
+		return m.Details()
 	}
 	return nil, false
 }
@@ -95986,8 +95736,8 @@ func (m *StandardMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldBackground(ctx)
 	case standard.FieldSatisfies:
 		return m.OldSatisfies(ctx)
-	case standard.FieldJsonschema:
-		return m.OldJsonschema(ctx)
+	case standard.FieldDetails:
+		return m.OldDetails(ctx)
 	}
 	return nil, fmt.Errorf("unknown Standard field %s", name)
 }
@@ -96116,12 +95866,12 @@ func (m *StandardMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetSatisfies(v)
 		return nil
-	case standard.FieldJsonschema:
+	case standard.FieldDetails:
 		v, ok := value.(map[string]interface{})
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetJsonschema(v)
+		m.SetDetails(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Standard field %s", name)
@@ -96198,8 +95948,8 @@ func (m *StandardMutation) ClearedFields() []string {
 	if m.FieldCleared(standard.FieldSatisfies) {
 		fields = append(fields, standard.FieldSatisfies)
 	}
-	if m.FieldCleared(standard.FieldJsonschema) {
-		fields = append(fields, standard.FieldJsonschema)
+	if m.FieldCleared(standard.FieldDetails) {
+		fields = append(fields, standard.FieldDetails)
 	}
 	return fields
 }
@@ -96260,8 +96010,8 @@ func (m *StandardMutation) ClearField(name string) error {
 	case standard.FieldSatisfies:
 		m.ClearSatisfies()
 		return nil
-	case standard.FieldJsonschema:
-		m.ClearJsonschema()
+	case standard.FieldDetails:
+		m.ClearDetails()
 		return nil
 	}
 	return fmt.Errorf("unknown Standard nullable field %s", name)
@@ -96322,8 +96072,8 @@ func (m *StandardMutation) ResetField(name string) error {
 	case standard.FieldSatisfies:
 		m.ResetSatisfies()
 		return nil
-	case standard.FieldJsonschema:
-		m.ResetJsonschema()
+	case standard.FieldDetails:
+		m.ResetDetails()
 		return nil
 	}
 	return fmt.Errorf("unknown Standard field %s", name)
@@ -96518,7 +96268,7 @@ type StandardHistoryMutation struct {
 	purpose_and_scope *string
 	background        *string
 	satisfies         *string
-	jsonschema        *map[string]interface{}
+	details           *map[string]interface{}
 	clearedFields     map[string]struct{}
 	done              bool
 	oldValue          func(context.Context) (*StandardHistory, error)
@@ -97573,53 +97323,53 @@ func (m *StandardHistoryMutation) ResetSatisfies() {
 	delete(m.clearedFields, standardhistory.FieldSatisfies)
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (m *StandardHistoryMutation) SetJsonschema(value map[string]interface{}) {
-	m.jsonschema = &value
+// SetDetails sets the "details" field.
+func (m *StandardHistoryMutation) SetDetails(value map[string]interface{}) {
+	m.details = &value
 }
 
-// Jsonschema returns the value of the "jsonschema" field in the mutation.
-func (m *StandardHistoryMutation) Jsonschema() (r map[string]interface{}, exists bool) {
-	v := m.jsonschema
+// Details returns the value of the "details" field in the mutation.
+func (m *StandardHistoryMutation) Details() (r map[string]interface{}, exists bool) {
+	v := m.details
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldJsonschema returns the old "jsonschema" field's value of the StandardHistory entity.
+// OldDetails returns the old "details" field's value of the StandardHistory entity.
 // If the StandardHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *StandardHistoryMutation) OldJsonschema(ctx context.Context) (v map[string]interface{}, err error) {
+func (m *StandardHistoryMutation) OldDetails(ctx context.Context) (v map[string]interface{}, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldJsonschema is only allowed on UpdateOne operations")
+		return v, errors.New("OldDetails is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldJsonschema requires an ID field in the mutation")
+		return v, errors.New("OldDetails requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldJsonschema: %w", err)
+		return v, fmt.Errorf("querying old value for OldDetails: %w", err)
 	}
-	return oldValue.Jsonschema, nil
+	return oldValue.Details, nil
 }
 
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (m *StandardHistoryMutation) ClearJsonschema() {
-	m.jsonschema = nil
-	m.clearedFields[standardhistory.FieldJsonschema] = struct{}{}
+// ClearDetails clears the value of the "details" field.
+func (m *StandardHistoryMutation) ClearDetails() {
+	m.details = nil
+	m.clearedFields[standardhistory.FieldDetails] = struct{}{}
 }
 
-// JsonschemaCleared returns if the "jsonschema" field was cleared in this mutation.
-func (m *StandardHistoryMutation) JsonschemaCleared() bool {
-	_, ok := m.clearedFields[standardhistory.FieldJsonschema]
+// DetailsCleared returns if the "details" field was cleared in this mutation.
+func (m *StandardHistoryMutation) DetailsCleared() bool {
+	_, ok := m.clearedFields[standardhistory.FieldDetails]
 	return ok
 }
 
-// ResetJsonschema resets all changes to the "jsonschema" field.
-func (m *StandardHistoryMutation) ResetJsonschema() {
-	m.jsonschema = nil
-	delete(m.clearedFields, standardhistory.FieldJsonschema)
+// ResetDetails resets all changes to the "details" field.
+func (m *StandardHistoryMutation) ResetDetails() {
+	m.details = nil
+	delete(m.clearedFields, standardhistory.FieldDetails)
 }
 
 // Where appends a list predicates to the StandardHistoryMutation builder.
@@ -97717,8 +97467,8 @@ func (m *StandardHistoryMutation) Fields() []string {
 	if m.satisfies != nil {
 		fields = append(fields, standardhistory.FieldSatisfies)
 	}
-	if m.jsonschema != nil {
-		fields = append(fields, standardhistory.FieldJsonschema)
+	if m.details != nil {
+		fields = append(fields, standardhistory.FieldDetails)
 	}
 	return fields
 }
@@ -97768,8 +97518,8 @@ func (m *StandardHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.Background()
 	case standardhistory.FieldSatisfies:
 		return m.Satisfies()
-	case standardhistory.FieldJsonschema:
-		return m.Jsonschema()
+	case standardhistory.FieldDetails:
+		return m.Details()
 	}
 	return nil, false
 }
@@ -97819,8 +97569,8 @@ func (m *StandardHistoryMutation) OldField(ctx context.Context, name string) (en
 		return m.OldBackground(ctx)
 	case standardhistory.FieldSatisfies:
 		return m.OldSatisfies(ctx)
-	case standardhistory.FieldJsonschema:
-		return m.OldJsonschema(ctx)
+	case standardhistory.FieldDetails:
+		return m.OldDetails(ctx)
 	}
 	return nil, fmt.Errorf("unknown StandardHistory field %s", name)
 }
@@ -97970,12 +97720,12 @@ func (m *StandardHistoryMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetSatisfies(v)
 		return nil
-	case standardhistory.FieldJsonschema:
+	case standardhistory.FieldDetails:
 		v, ok := value.(map[string]interface{})
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetJsonschema(v)
+		m.SetDetails(v)
 		return nil
 	}
 	return fmt.Errorf("unknown StandardHistory field %s", name)
@@ -98055,8 +97805,8 @@ func (m *StandardHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(standardhistory.FieldSatisfies) {
 		fields = append(fields, standardhistory.FieldSatisfies)
 	}
-	if m.FieldCleared(standardhistory.FieldJsonschema) {
-		fields = append(fields, standardhistory.FieldJsonschema)
+	if m.FieldCleared(standardhistory.FieldDetails) {
+		fields = append(fields, standardhistory.FieldDetails)
 	}
 	return fields
 }
@@ -98120,8 +97870,8 @@ func (m *StandardHistoryMutation) ClearField(name string) error {
 	case standardhistory.FieldSatisfies:
 		m.ClearSatisfies()
 		return nil
-	case standardhistory.FieldJsonschema:
-		m.ClearJsonschema()
+	case standardhistory.FieldDetails:
+		m.ClearDetails()
 		return nil
 	}
 	return fmt.Errorf("unknown StandardHistory nullable field %s", name)
@@ -98191,8 +97941,8 @@ func (m *StandardHistoryMutation) ResetField(name string) error {
 	case standardhistory.FieldSatisfies:
 		m.ResetSatisfies()
 		return nil
-	case standardhistory.FieldJsonschema:
-		m.ResetJsonschema()
+	case standardhistory.FieldDetails:
+		m.ResetDetails()
 		return nil
 	}
 	return fmt.Errorf("unknown StandardHistory field %s", name)
@@ -98266,24 +98016,26 @@ type SubcontrolMutation struct {
 	status                           *string
 	subcontrol_type                  *string
 	version                          *string
-	owner                            *string
 	subcontrol_number                *string
-	subcontrol_family                *string
-	subcontrol_class                 *string
+	family                           *string
+	class                            *string
 	source                           *string
 	mapped_frameworks                *string
-	assigned_to                      *string
-	implementation_status            *string
-	implementation_notes             *string
-	implementation_date              *string
 	implementation_evidence          *string
+	implementation_status            *string
+	implementation_date              *time.Time
 	implementation_verification      *string
-	implementation_verification_date *string
-	jsonschema                       *map[string]interface{}
+	implementation_verification_date *time.Time
+	details                          *map[string]interface{}
 	clearedFields                    map[string]struct{}
 	control                          map[string]struct{}
 	removedcontrol                   map[string]struct{}
 	clearedcontrol                   bool
+	user                             map[string]struct{}
+	removeduser                      map[string]struct{}
+	cleareduser                      bool
+	notes                            *string
+	clearednotes                     bool
 	done                             bool
 	oldValue                         func(context.Context) (*Subcontrol, error)
 	predicates                       []predicate.Subcontrol
@@ -99020,55 +98772,6 @@ func (m *SubcontrolMutation) ResetVersion() {
 	delete(m.clearedFields, subcontrol.FieldVersion)
 }
 
-// SetOwner sets the "owner" field.
-func (m *SubcontrolMutation) SetOwner(s string) {
-	m.owner = &s
-}
-
-// Owner returns the value of the "owner" field in the mutation.
-func (m *SubcontrolMutation) Owner() (r string, exists bool) {
-	v := m.owner
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldOwner returns the old "owner" field's value of the Subcontrol entity.
-// If the Subcontrol object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *SubcontrolMutation) OldOwner(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldOwner is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldOwner requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldOwner: %w", err)
-	}
-	return oldValue.Owner, nil
-}
-
-// ClearOwner clears the value of the "owner" field.
-func (m *SubcontrolMutation) ClearOwner() {
-	m.owner = nil
-	m.clearedFields[subcontrol.FieldOwner] = struct{}{}
-}
-
-// OwnerCleared returns if the "owner" field was cleared in this mutation.
-func (m *SubcontrolMutation) OwnerCleared() bool {
-	_, ok := m.clearedFields[subcontrol.FieldOwner]
-	return ok
-}
-
-// ResetOwner resets all changes to the "owner" field.
-func (m *SubcontrolMutation) ResetOwner() {
-	m.owner = nil
-	delete(m.clearedFields, subcontrol.FieldOwner)
-}
-
 // SetSubcontrolNumber sets the "subcontrol_number" field.
 func (m *SubcontrolMutation) SetSubcontrolNumber(s string) {
 	m.subcontrol_number = &s
@@ -99118,102 +98821,102 @@ func (m *SubcontrolMutation) ResetSubcontrolNumber() {
 	delete(m.clearedFields, subcontrol.FieldSubcontrolNumber)
 }
 
-// SetSubcontrolFamily sets the "subcontrol_family" field.
-func (m *SubcontrolMutation) SetSubcontrolFamily(s string) {
-	m.subcontrol_family = &s
+// SetFamily sets the "family" field.
+func (m *SubcontrolMutation) SetFamily(s string) {
+	m.family = &s
 }
 
-// SubcontrolFamily returns the value of the "subcontrol_family" field in the mutation.
-func (m *SubcontrolMutation) SubcontrolFamily() (r string, exists bool) {
-	v := m.subcontrol_family
+// Family returns the value of the "family" field in the mutation.
+func (m *SubcontrolMutation) Family() (r string, exists bool) {
+	v := m.family
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldSubcontrolFamily returns the old "subcontrol_family" field's value of the Subcontrol entity.
+// OldFamily returns the old "family" field's value of the Subcontrol entity.
 // If the Subcontrol object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *SubcontrolMutation) OldSubcontrolFamily(ctx context.Context) (v string, err error) {
+func (m *SubcontrolMutation) OldFamily(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldSubcontrolFamily is only allowed on UpdateOne operations")
+		return v, errors.New("OldFamily is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldSubcontrolFamily requires an ID field in the mutation")
+		return v, errors.New("OldFamily requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldSubcontrolFamily: %w", err)
+		return v, fmt.Errorf("querying old value for OldFamily: %w", err)
 	}
-	return oldValue.SubcontrolFamily, nil
+	return oldValue.Family, nil
 }
 
-// ClearSubcontrolFamily clears the value of the "subcontrol_family" field.
-func (m *SubcontrolMutation) ClearSubcontrolFamily() {
-	m.subcontrol_family = nil
-	m.clearedFields[subcontrol.FieldSubcontrolFamily] = struct{}{}
+// ClearFamily clears the value of the "family" field.
+func (m *SubcontrolMutation) ClearFamily() {
+	m.family = nil
+	m.clearedFields[subcontrol.FieldFamily] = struct{}{}
 }
 
-// SubcontrolFamilyCleared returns if the "subcontrol_family" field was cleared in this mutation.
-func (m *SubcontrolMutation) SubcontrolFamilyCleared() bool {
-	_, ok := m.clearedFields[subcontrol.FieldSubcontrolFamily]
+// FamilyCleared returns if the "family" field was cleared in this mutation.
+func (m *SubcontrolMutation) FamilyCleared() bool {
+	_, ok := m.clearedFields[subcontrol.FieldFamily]
 	return ok
 }
 
-// ResetSubcontrolFamily resets all changes to the "subcontrol_family" field.
-func (m *SubcontrolMutation) ResetSubcontrolFamily() {
-	m.subcontrol_family = nil
-	delete(m.clearedFields, subcontrol.FieldSubcontrolFamily)
+// ResetFamily resets all changes to the "family" field.
+func (m *SubcontrolMutation) ResetFamily() {
+	m.family = nil
+	delete(m.clearedFields, subcontrol.FieldFamily)
 }
 
-// SetSubcontrolClass sets the "subcontrol_class" field.
-func (m *SubcontrolMutation) SetSubcontrolClass(s string) {
-	m.subcontrol_class = &s
+// SetClass sets the "class" field.
+func (m *SubcontrolMutation) SetClass(s string) {
+	m.class = &s
 }
 
-// SubcontrolClass returns the value of the "subcontrol_class" field in the mutation.
-func (m *SubcontrolMutation) SubcontrolClass() (r string, exists bool) {
-	v := m.subcontrol_class
+// Class returns the value of the "class" field in the mutation.
+func (m *SubcontrolMutation) Class() (r string, exists bool) {
+	v := m.class
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldSubcontrolClass returns the old "subcontrol_class" field's value of the Subcontrol entity.
+// OldClass returns the old "class" field's value of the Subcontrol entity.
 // If the Subcontrol object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *SubcontrolMutation) OldSubcontrolClass(ctx context.Context) (v string, err error) {
+func (m *SubcontrolMutation) OldClass(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldSubcontrolClass is only allowed on UpdateOne operations")
+		return v, errors.New("OldClass is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldSubcontrolClass requires an ID field in the mutation")
+		return v, errors.New("OldClass requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldSubcontrolClass: %w", err)
+		return v, fmt.Errorf("querying old value for OldClass: %w", err)
 	}
-	return oldValue.SubcontrolClass, nil
+	return oldValue.Class, nil
 }
 
-// ClearSubcontrolClass clears the value of the "subcontrol_class" field.
-func (m *SubcontrolMutation) ClearSubcontrolClass() {
-	m.subcontrol_class = nil
-	m.clearedFields[subcontrol.FieldSubcontrolClass] = struct{}{}
+// ClearClass clears the value of the "class" field.
+func (m *SubcontrolMutation) ClearClass() {
+	m.class = nil
+	m.clearedFields[subcontrol.FieldClass] = struct{}{}
 }
 
-// SubcontrolClassCleared returns if the "subcontrol_class" field was cleared in this mutation.
-func (m *SubcontrolMutation) SubcontrolClassCleared() bool {
-	_, ok := m.clearedFields[subcontrol.FieldSubcontrolClass]
+// ClassCleared returns if the "class" field was cleared in this mutation.
+func (m *SubcontrolMutation) ClassCleared() bool {
+	_, ok := m.clearedFields[subcontrol.FieldClass]
 	return ok
 }
 
-// ResetSubcontrolClass resets all changes to the "subcontrol_class" field.
-func (m *SubcontrolMutation) ResetSubcontrolClass() {
-	m.subcontrol_class = nil
-	delete(m.clearedFields, subcontrol.FieldSubcontrolClass)
+// ResetClass resets all changes to the "class" field.
+func (m *SubcontrolMutation) ResetClass() {
+	m.class = nil
+	delete(m.clearedFields, subcontrol.FieldClass)
 }
 
 // SetSource sets the "source" field.
@@ -99314,53 +99017,53 @@ func (m *SubcontrolMutation) ResetMappedFrameworks() {
 	delete(m.clearedFields, subcontrol.FieldMappedFrameworks)
 }
 
-// SetAssignedTo sets the "assigned_to" field.
-func (m *SubcontrolMutation) SetAssignedTo(s string) {
-	m.assigned_to = &s
+// SetImplementationEvidence sets the "implementation_evidence" field.
+func (m *SubcontrolMutation) SetImplementationEvidence(s string) {
+	m.implementation_evidence = &s
 }
 
-// AssignedTo returns the value of the "assigned_to" field in the mutation.
-func (m *SubcontrolMutation) AssignedTo() (r string, exists bool) {
-	v := m.assigned_to
+// ImplementationEvidence returns the value of the "implementation_evidence" field in the mutation.
+func (m *SubcontrolMutation) ImplementationEvidence() (r string, exists bool) {
+	v := m.implementation_evidence
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldAssignedTo returns the old "assigned_to" field's value of the Subcontrol entity.
+// OldImplementationEvidence returns the old "implementation_evidence" field's value of the Subcontrol entity.
 // If the Subcontrol object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *SubcontrolMutation) OldAssignedTo(ctx context.Context) (v string, err error) {
+func (m *SubcontrolMutation) OldImplementationEvidence(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldAssignedTo is only allowed on UpdateOne operations")
+		return v, errors.New("OldImplementationEvidence is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldAssignedTo requires an ID field in the mutation")
+		return v, errors.New("OldImplementationEvidence requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldAssignedTo: %w", err)
+		return v, fmt.Errorf("querying old value for OldImplementationEvidence: %w", err)
 	}
-	return oldValue.AssignedTo, nil
+	return oldValue.ImplementationEvidence, nil
 }
 
-// ClearAssignedTo clears the value of the "assigned_to" field.
-func (m *SubcontrolMutation) ClearAssignedTo() {
-	m.assigned_to = nil
-	m.clearedFields[subcontrol.FieldAssignedTo] = struct{}{}
+// ClearImplementationEvidence clears the value of the "implementation_evidence" field.
+func (m *SubcontrolMutation) ClearImplementationEvidence() {
+	m.implementation_evidence = nil
+	m.clearedFields[subcontrol.FieldImplementationEvidence] = struct{}{}
 }
 
-// AssignedToCleared returns if the "assigned_to" field was cleared in this mutation.
-func (m *SubcontrolMutation) AssignedToCleared() bool {
-	_, ok := m.clearedFields[subcontrol.FieldAssignedTo]
+// ImplementationEvidenceCleared returns if the "implementation_evidence" field was cleared in this mutation.
+func (m *SubcontrolMutation) ImplementationEvidenceCleared() bool {
+	_, ok := m.clearedFields[subcontrol.FieldImplementationEvidence]
 	return ok
 }
 
-// ResetAssignedTo resets all changes to the "assigned_to" field.
-func (m *SubcontrolMutation) ResetAssignedTo() {
-	m.assigned_to = nil
-	delete(m.clearedFields, subcontrol.FieldAssignedTo)
+// ResetImplementationEvidence resets all changes to the "implementation_evidence" field.
+func (m *SubcontrolMutation) ResetImplementationEvidence() {
+	m.implementation_evidence = nil
+	delete(m.clearedFields, subcontrol.FieldImplementationEvidence)
 }
 
 // SetImplementationStatus sets the "implementation_status" field.
@@ -99412,62 +99115,13 @@ func (m *SubcontrolMutation) ResetImplementationStatus() {
 	delete(m.clearedFields, subcontrol.FieldImplementationStatus)
 }
 
-// SetImplementationNotes sets the "implementation_notes" field.
-func (m *SubcontrolMutation) SetImplementationNotes(s string) {
-	m.implementation_notes = &s
-}
-
-// ImplementationNotes returns the value of the "implementation_notes" field in the mutation.
-func (m *SubcontrolMutation) ImplementationNotes() (r string, exists bool) {
-	v := m.implementation_notes
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldImplementationNotes returns the old "implementation_notes" field's value of the Subcontrol entity.
-// If the Subcontrol object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *SubcontrolMutation) OldImplementationNotes(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldImplementationNotes is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldImplementationNotes requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldImplementationNotes: %w", err)
-	}
-	return oldValue.ImplementationNotes, nil
-}
-
-// ClearImplementationNotes clears the value of the "implementation_notes" field.
-func (m *SubcontrolMutation) ClearImplementationNotes() {
-	m.implementation_notes = nil
-	m.clearedFields[subcontrol.FieldImplementationNotes] = struct{}{}
-}
-
-// ImplementationNotesCleared returns if the "implementation_notes" field was cleared in this mutation.
-func (m *SubcontrolMutation) ImplementationNotesCleared() bool {
-	_, ok := m.clearedFields[subcontrol.FieldImplementationNotes]
-	return ok
-}
-
-// ResetImplementationNotes resets all changes to the "implementation_notes" field.
-func (m *SubcontrolMutation) ResetImplementationNotes() {
-	m.implementation_notes = nil
-	delete(m.clearedFields, subcontrol.FieldImplementationNotes)
-}
-
 // SetImplementationDate sets the "implementation_date" field.
-func (m *SubcontrolMutation) SetImplementationDate(s string) {
-	m.implementation_date = &s
+func (m *SubcontrolMutation) SetImplementationDate(t time.Time) {
+	m.implementation_date = &t
 }
 
 // ImplementationDate returns the value of the "implementation_date" field in the mutation.
-func (m *SubcontrolMutation) ImplementationDate() (r string, exists bool) {
+func (m *SubcontrolMutation) ImplementationDate() (r time.Time, exists bool) {
 	v := m.implementation_date
 	if v == nil {
 		return
@@ -99478,7 +99132,7 @@ func (m *SubcontrolMutation) ImplementationDate() (r string, exists bool) {
 // OldImplementationDate returns the old "implementation_date" field's value of the Subcontrol entity.
 // If the Subcontrol object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *SubcontrolMutation) OldImplementationDate(ctx context.Context) (v string, err error) {
+func (m *SubcontrolMutation) OldImplementationDate(ctx context.Context) (v time.Time, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldImplementationDate is only allowed on UpdateOne operations")
 	}
@@ -99508,55 +99162,6 @@ func (m *SubcontrolMutation) ImplementationDateCleared() bool {
 func (m *SubcontrolMutation) ResetImplementationDate() {
 	m.implementation_date = nil
 	delete(m.clearedFields, subcontrol.FieldImplementationDate)
-}
-
-// SetImplementationEvidence sets the "implementation_evidence" field.
-func (m *SubcontrolMutation) SetImplementationEvidence(s string) {
-	m.implementation_evidence = &s
-}
-
-// ImplementationEvidence returns the value of the "implementation_evidence" field in the mutation.
-func (m *SubcontrolMutation) ImplementationEvidence() (r string, exists bool) {
-	v := m.implementation_evidence
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldImplementationEvidence returns the old "implementation_evidence" field's value of the Subcontrol entity.
-// If the Subcontrol object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *SubcontrolMutation) OldImplementationEvidence(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldImplementationEvidence is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldImplementationEvidence requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldImplementationEvidence: %w", err)
-	}
-	return oldValue.ImplementationEvidence, nil
-}
-
-// ClearImplementationEvidence clears the value of the "implementation_evidence" field.
-func (m *SubcontrolMutation) ClearImplementationEvidence() {
-	m.implementation_evidence = nil
-	m.clearedFields[subcontrol.FieldImplementationEvidence] = struct{}{}
-}
-
-// ImplementationEvidenceCleared returns if the "implementation_evidence" field was cleared in this mutation.
-func (m *SubcontrolMutation) ImplementationEvidenceCleared() bool {
-	_, ok := m.clearedFields[subcontrol.FieldImplementationEvidence]
-	return ok
-}
-
-// ResetImplementationEvidence resets all changes to the "implementation_evidence" field.
-func (m *SubcontrolMutation) ResetImplementationEvidence() {
-	m.implementation_evidence = nil
-	delete(m.clearedFields, subcontrol.FieldImplementationEvidence)
 }
 
 // SetImplementationVerification sets the "implementation_verification" field.
@@ -99609,12 +99214,12 @@ func (m *SubcontrolMutation) ResetImplementationVerification() {
 }
 
 // SetImplementationVerificationDate sets the "implementation_verification_date" field.
-func (m *SubcontrolMutation) SetImplementationVerificationDate(s string) {
-	m.implementation_verification_date = &s
+func (m *SubcontrolMutation) SetImplementationVerificationDate(t time.Time) {
+	m.implementation_verification_date = &t
 }
 
 // ImplementationVerificationDate returns the value of the "implementation_verification_date" field in the mutation.
-func (m *SubcontrolMutation) ImplementationVerificationDate() (r string, exists bool) {
+func (m *SubcontrolMutation) ImplementationVerificationDate() (r time.Time, exists bool) {
 	v := m.implementation_verification_date
 	if v == nil {
 		return
@@ -99625,7 +99230,7 @@ func (m *SubcontrolMutation) ImplementationVerificationDate() (r string, exists 
 // OldImplementationVerificationDate returns the old "implementation_verification_date" field's value of the Subcontrol entity.
 // If the Subcontrol object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *SubcontrolMutation) OldImplementationVerificationDate(ctx context.Context) (v string, err error) {
+func (m *SubcontrolMutation) OldImplementationVerificationDate(ctx context.Context) (v time.Time, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldImplementationVerificationDate is only allowed on UpdateOne operations")
 	}
@@ -99657,53 +99262,53 @@ func (m *SubcontrolMutation) ResetImplementationVerificationDate() {
 	delete(m.clearedFields, subcontrol.FieldImplementationVerificationDate)
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (m *SubcontrolMutation) SetJsonschema(value map[string]interface{}) {
-	m.jsonschema = &value
+// SetDetails sets the "details" field.
+func (m *SubcontrolMutation) SetDetails(value map[string]interface{}) {
+	m.details = &value
 }
 
-// Jsonschema returns the value of the "jsonschema" field in the mutation.
-func (m *SubcontrolMutation) Jsonschema() (r map[string]interface{}, exists bool) {
-	v := m.jsonschema
+// Details returns the value of the "details" field in the mutation.
+func (m *SubcontrolMutation) Details() (r map[string]interface{}, exists bool) {
+	v := m.details
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldJsonschema returns the old "jsonschema" field's value of the Subcontrol entity.
+// OldDetails returns the old "details" field's value of the Subcontrol entity.
 // If the Subcontrol object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *SubcontrolMutation) OldJsonschema(ctx context.Context) (v map[string]interface{}, err error) {
+func (m *SubcontrolMutation) OldDetails(ctx context.Context) (v map[string]interface{}, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldJsonschema is only allowed on UpdateOne operations")
+		return v, errors.New("OldDetails is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldJsonschema requires an ID field in the mutation")
+		return v, errors.New("OldDetails requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldJsonschema: %w", err)
+		return v, fmt.Errorf("querying old value for OldDetails: %w", err)
 	}
-	return oldValue.Jsonschema, nil
+	return oldValue.Details, nil
 }
 
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (m *SubcontrolMutation) ClearJsonschema() {
-	m.jsonschema = nil
-	m.clearedFields[subcontrol.FieldJsonschema] = struct{}{}
+// ClearDetails clears the value of the "details" field.
+func (m *SubcontrolMutation) ClearDetails() {
+	m.details = nil
+	m.clearedFields[subcontrol.FieldDetails] = struct{}{}
 }
 
-// JsonschemaCleared returns if the "jsonschema" field was cleared in this mutation.
-func (m *SubcontrolMutation) JsonschemaCleared() bool {
-	_, ok := m.clearedFields[subcontrol.FieldJsonschema]
+// DetailsCleared returns if the "details" field was cleared in this mutation.
+func (m *SubcontrolMutation) DetailsCleared() bool {
+	_, ok := m.clearedFields[subcontrol.FieldDetails]
 	return ok
 }
 
-// ResetJsonschema resets all changes to the "jsonschema" field.
-func (m *SubcontrolMutation) ResetJsonschema() {
-	m.jsonschema = nil
-	delete(m.clearedFields, subcontrol.FieldJsonschema)
+// ResetDetails resets all changes to the "details" field.
+func (m *SubcontrolMutation) ResetDetails() {
+	m.details = nil
+	delete(m.clearedFields, subcontrol.FieldDetails)
 }
 
 // AddControlIDs adds the "control" edge to the Control entity by ids.
@@ -99760,6 +99365,99 @@ func (m *SubcontrolMutation) ResetControl() {
 	m.removedcontrol = nil
 }
 
+// AddUserIDs adds the "user" edge to the User entity by ids.
+func (m *SubcontrolMutation) AddUserIDs(ids ...string) {
+	if m.user == nil {
+		m.user = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.user[ids[i]] = struct{}{}
+	}
+}
+
+// ClearUser clears the "user" edge to the User entity.
+func (m *SubcontrolMutation) ClearUser() {
+	m.cleareduser = true
+}
+
+// UserCleared reports if the "user" edge to the User entity was cleared.
+func (m *SubcontrolMutation) UserCleared() bool {
+	return m.cleareduser
+}
+
+// RemoveUserIDs removes the "user" edge to the User entity by IDs.
+func (m *SubcontrolMutation) RemoveUserIDs(ids ...string) {
+	if m.removeduser == nil {
+		m.removeduser = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.user, ids[i])
+		m.removeduser[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedUser returns the removed IDs of the "user" edge to the User entity.
+func (m *SubcontrolMutation) RemovedUserIDs() (ids []string) {
+	for id := range m.removeduser {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// UserIDs returns the "user" edge IDs in the mutation.
+func (m *SubcontrolMutation) UserIDs() (ids []string) {
+	for id := range m.user {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetUser resets all changes to the "user" edge.
+func (m *SubcontrolMutation) ResetUser() {
+	m.user = nil
+	m.cleareduser = false
+	m.removeduser = nil
+}
+
+// SetNotesID sets the "notes" edge to the Note entity by id.
+func (m *SubcontrolMutation) SetNotesID(id string) {
+	m.notes = &id
+}
+
+// ClearNotes clears the "notes" edge to the Note entity.
+func (m *SubcontrolMutation) ClearNotes() {
+	m.clearednotes = true
+}
+
+// NotesCleared reports if the "notes" edge to the Note entity was cleared.
+func (m *SubcontrolMutation) NotesCleared() bool {
+	return m.clearednotes
+}
+
+// NotesID returns the "notes" edge ID in the mutation.
+func (m *SubcontrolMutation) NotesID() (id string, exists bool) {
+	if m.notes != nil {
+		return *m.notes, true
+	}
+	return
+}
+
+// NotesIDs returns the "notes" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// NotesID instead. It exists only for internal usage by the builders.
+func (m *SubcontrolMutation) NotesIDs() (ids []string) {
+	if id := m.notes; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetNotes resets all changes to the "notes" edge.
+func (m *SubcontrolMutation) ResetNotes() {
+	m.notes = nil
+	m.clearednotes = false
+}
+
 // Where appends a list predicates to the SubcontrolMutation builder.
 func (m *SubcontrolMutation) Where(ps ...predicate.Subcontrol) {
 	m.predicates = append(m.predicates, ps...)
@@ -99794,7 +99492,7 @@ func (m *SubcontrolMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *SubcontrolMutation) Fields() []string {
-	fields := make([]string, 0, 27)
+	fields := make([]string, 0, 24)
 	if m.created_at != nil {
 		fields = append(fields, subcontrol.FieldCreatedAt)
 	}
@@ -99834,17 +99532,14 @@ func (m *SubcontrolMutation) Fields() []string {
 	if m.version != nil {
 		fields = append(fields, subcontrol.FieldVersion)
 	}
-	if m.owner != nil {
-		fields = append(fields, subcontrol.FieldOwner)
-	}
 	if m.subcontrol_number != nil {
 		fields = append(fields, subcontrol.FieldSubcontrolNumber)
 	}
-	if m.subcontrol_family != nil {
-		fields = append(fields, subcontrol.FieldSubcontrolFamily)
+	if m.family != nil {
+		fields = append(fields, subcontrol.FieldFamily)
 	}
-	if m.subcontrol_class != nil {
-		fields = append(fields, subcontrol.FieldSubcontrolClass)
+	if m.class != nil {
+		fields = append(fields, subcontrol.FieldClass)
 	}
 	if m.source != nil {
 		fields = append(fields, subcontrol.FieldSource)
@@ -99852,20 +99547,14 @@ func (m *SubcontrolMutation) Fields() []string {
 	if m.mapped_frameworks != nil {
 		fields = append(fields, subcontrol.FieldMappedFrameworks)
 	}
-	if m.assigned_to != nil {
-		fields = append(fields, subcontrol.FieldAssignedTo)
+	if m.implementation_evidence != nil {
+		fields = append(fields, subcontrol.FieldImplementationEvidence)
 	}
 	if m.implementation_status != nil {
 		fields = append(fields, subcontrol.FieldImplementationStatus)
 	}
-	if m.implementation_notes != nil {
-		fields = append(fields, subcontrol.FieldImplementationNotes)
-	}
 	if m.implementation_date != nil {
 		fields = append(fields, subcontrol.FieldImplementationDate)
-	}
-	if m.implementation_evidence != nil {
-		fields = append(fields, subcontrol.FieldImplementationEvidence)
 	}
 	if m.implementation_verification != nil {
 		fields = append(fields, subcontrol.FieldImplementationVerification)
@@ -99873,8 +99562,8 @@ func (m *SubcontrolMutation) Fields() []string {
 	if m.implementation_verification_date != nil {
 		fields = append(fields, subcontrol.FieldImplementationVerificationDate)
 	}
-	if m.jsonschema != nil {
-		fields = append(fields, subcontrol.FieldJsonschema)
+	if m.details != nil {
+		fields = append(fields, subcontrol.FieldDetails)
 	}
 	return fields
 }
@@ -99910,34 +99599,28 @@ func (m *SubcontrolMutation) Field(name string) (ent.Value, bool) {
 		return m.SubcontrolType()
 	case subcontrol.FieldVersion:
 		return m.Version()
-	case subcontrol.FieldOwner:
-		return m.Owner()
 	case subcontrol.FieldSubcontrolNumber:
 		return m.SubcontrolNumber()
-	case subcontrol.FieldSubcontrolFamily:
-		return m.SubcontrolFamily()
-	case subcontrol.FieldSubcontrolClass:
-		return m.SubcontrolClass()
+	case subcontrol.FieldFamily:
+		return m.Family()
+	case subcontrol.FieldClass:
+		return m.Class()
 	case subcontrol.FieldSource:
 		return m.Source()
 	case subcontrol.FieldMappedFrameworks:
 		return m.MappedFrameworks()
-	case subcontrol.FieldAssignedTo:
-		return m.AssignedTo()
-	case subcontrol.FieldImplementationStatus:
-		return m.ImplementationStatus()
-	case subcontrol.FieldImplementationNotes:
-		return m.ImplementationNotes()
-	case subcontrol.FieldImplementationDate:
-		return m.ImplementationDate()
 	case subcontrol.FieldImplementationEvidence:
 		return m.ImplementationEvidence()
+	case subcontrol.FieldImplementationStatus:
+		return m.ImplementationStatus()
+	case subcontrol.FieldImplementationDate:
+		return m.ImplementationDate()
 	case subcontrol.FieldImplementationVerification:
 		return m.ImplementationVerification()
 	case subcontrol.FieldImplementationVerificationDate:
 		return m.ImplementationVerificationDate()
-	case subcontrol.FieldJsonschema:
-		return m.Jsonschema()
+	case subcontrol.FieldDetails:
+		return m.Details()
 	}
 	return nil, false
 }
@@ -99973,34 +99656,28 @@ func (m *SubcontrolMutation) OldField(ctx context.Context, name string) (ent.Val
 		return m.OldSubcontrolType(ctx)
 	case subcontrol.FieldVersion:
 		return m.OldVersion(ctx)
-	case subcontrol.FieldOwner:
-		return m.OldOwner(ctx)
 	case subcontrol.FieldSubcontrolNumber:
 		return m.OldSubcontrolNumber(ctx)
-	case subcontrol.FieldSubcontrolFamily:
-		return m.OldSubcontrolFamily(ctx)
-	case subcontrol.FieldSubcontrolClass:
-		return m.OldSubcontrolClass(ctx)
+	case subcontrol.FieldFamily:
+		return m.OldFamily(ctx)
+	case subcontrol.FieldClass:
+		return m.OldClass(ctx)
 	case subcontrol.FieldSource:
 		return m.OldSource(ctx)
 	case subcontrol.FieldMappedFrameworks:
 		return m.OldMappedFrameworks(ctx)
-	case subcontrol.FieldAssignedTo:
-		return m.OldAssignedTo(ctx)
-	case subcontrol.FieldImplementationStatus:
-		return m.OldImplementationStatus(ctx)
-	case subcontrol.FieldImplementationNotes:
-		return m.OldImplementationNotes(ctx)
-	case subcontrol.FieldImplementationDate:
-		return m.OldImplementationDate(ctx)
 	case subcontrol.FieldImplementationEvidence:
 		return m.OldImplementationEvidence(ctx)
+	case subcontrol.FieldImplementationStatus:
+		return m.OldImplementationStatus(ctx)
+	case subcontrol.FieldImplementationDate:
+		return m.OldImplementationDate(ctx)
 	case subcontrol.FieldImplementationVerification:
 		return m.OldImplementationVerification(ctx)
 	case subcontrol.FieldImplementationVerificationDate:
 		return m.OldImplementationVerificationDate(ctx)
-	case subcontrol.FieldJsonschema:
-		return m.OldJsonschema(ctx)
+	case subcontrol.FieldDetails:
+		return m.OldDetails(ctx)
 	}
 	return nil, fmt.Errorf("unknown Subcontrol field %s", name)
 }
@@ -100101,13 +99778,6 @@ func (m *SubcontrolMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetVersion(v)
 		return nil
-	case subcontrol.FieldOwner:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetOwner(v)
-		return nil
 	case subcontrol.FieldSubcontrolNumber:
 		v, ok := value.(string)
 		if !ok {
@@ -100115,19 +99785,19 @@ func (m *SubcontrolMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetSubcontrolNumber(v)
 		return nil
-	case subcontrol.FieldSubcontrolFamily:
+	case subcontrol.FieldFamily:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetSubcontrolFamily(v)
+		m.SetFamily(v)
 		return nil
-	case subcontrol.FieldSubcontrolClass:
+	case subcontrol.FieldClass:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetSubcontrolClass(v)
+		m.SetClass(v)
 		return nil
 	case subcontrol.FieldSource:
 		v, ok := value.(string)
@@ -100143,12 +99813,12 @@ func (m *SubcontrolMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetMappedFrameworks(v)
 		return nil
-	case subcontrol.FieldAssignedTo:
+	case subcontrol.FieldImplementationEvidence:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetAssignedTo(v)
+		m.SetImplementationEvidence(v)
 		return nil
 	case subcontrol.FieldImplementationStatus:
 		v, ok := value.(string)
@@ -100157,26 +99827,12 @@ func (m *SubcontrolMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetImplementationStatus(v)
 		return nil
-	case subcontrol.FieldImplementationNotes:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetImplementationNotes(v)
-		return nil
 	case subcontrol.FieldImplementationDate:
-		v, ok := value.(string)
+		v, ok := value.(time.Time)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetImplementationDate(v)
-		return nil
-	case subcontrol.FieldImplementationEvidence:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetImplementationEvidence(v)
 		return nil
 	case subcontrol.FieldImplementationVerification:
 		v, ok := value.(string)
@@ -100186,18 +99842,18 @@ func (m *SubcontrolMutation) SetField(name string, value ent.Value) error {
 		m.SetImplementationVerification(v)
 		return nil
 	case subcontrol.FieldImplementationVerificationDate:
-		v, ok := value.(string)
+		v, ok := value.(time.Time)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetImplementationVerificationDate(v)
 		return nil
-	case subcontrol.FieldJsonschema:
+	case subcontrol.FieldDetails:
 		v, ok := value.(map[string]interface{})
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetJsonschema(v)
+		m.SetDetails(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Subcontrol field %s", name)
@@ -100262,17 +99918,14 @@ func (m *SubcontrolMutation) ClearedFields() []string {
 	if m.FieldCleared(subcontrol.FieldVersion) {
 		fields = append(fields, subcontrol.FieldVersion)
 	}
-	if m.FieldCleared(subcontrol.FieldOwner) {
-		fields = append(fields, subcontrol.FieldOwner)
-	}
 	if m.FieldCleared(subcontrol.FieldSubcontrolNumber) {
 		fields = append(fields, subcontrol.FieldSubcontrolNumber)
 	}
-	if m.FieldCleared(subcontrol.FieldSubcontrolFamily) {
-		fields = append(fields, subcontrol.FieldSubcontrolFamily)
+	if m.FieldCleared(subcontrol.FieldFamily) {
+		fields = append(fields, subcontrol.FieldFamily)
 	}
-	if m.FieldCleared(subcontrol.FieldSubcontrolClass) {
-		fields = append(fields, subcontrol.FieldSubcontrolClass)
+	if m.FieldCleared(subcontrol.FieldClass) {
+		fields = append(fields, subcontrol.FieldClass)
 	}
 	if m.FieldCleared(subcontrol.FieldSource) {
 		fields = append(fields, subcontrol.FieldSource)
@@ -100280,20 +99933,14 @@ func (m *SubcontrolMutation) ClearedFields() []string {
 	if m.FieldCleared(subcontrol.FieldMappedFrameworks) {
 		fields = append(fields, subcontrol.FieldMappedFrameworks)
 	}
-	if m.FieldCleared(subcontrol.FieldAssignedTo) {
-		fields = append(fields, subcontrol.FieldAssignedTo)
+	if m.FieldCleared(subcontrol.FieldImplementationEvidence) {
+		fields = append(fields, subcontrol.FieldImplementationEvidence)
 	}
 	if m.FieldCleared(subcontrol.FieldImplementationStatus) {
 		fields = append(fields, subcontrol.FieldImplementationStatus)
 	}
-	if m.FieldCleared(subcontrol.FieldImplementationNotes) {
-		fields = append(fields, subcontrol.FieldImplementationNotes)
-	}
 	if m.FieldCleared(subcontrol.FieldImplementationDate) {
 		fields = append(fields, subcontrol.FieldImplementationDate)
-	}
-	if m.FieldCleared(subcontrol.FieldImplementationEvidence) {
-		fields = append(fields, subcontrol.FieldImplementationEvidence)
 	}
 	if m.FieldCleared(subcontrol.FieldImplementationVerification) {
 		fields = append(fields, subcontrol.FieldImplementationVerification)
@@ -100301,8 +99948,8 @@ func (m *SubcontrolMutation) ClearedFields() []string {
 	if m.FieldCleared(subcontrol.FieldImplementationVerificationDate) {
 		fields = append(fields, subcontrol.FieldImplementationVerificationDate)
 	}
-	if m.FieldCleared(subcontrol.FieldJsonschema) {
-		fields = append(fields, subcontrol.FieldJsonschema)
+	if m.FieldCleared(subcontrol.FieldDetails) {
+		fields = append(fields, subcontrol.FieldDetails)
 	}
 	return fields
 }
@@ -100351,17 +99998,14 @@ func (m *SubcontrolMutation) ClearField(name string) error {
 	case subcontrol.FieldVersion:
 		m.ClearVersion()
 		return nil
-	case subcontrol.FieldOwner:
-		m.ClearOwner()
-		return nil
 	case subcontrol.FieldSubcontrolNumber:
 		m.ClearSubcontrolNumber()
 		return nil
-	case subcontrol.FieldSubcontrolFamily:
-		m.ClearSubcontrolFamily()
+	case subcontrol.FieldFamily:
+		m.ClearFamily()
 		return nil
-	case subcontrol.FieldSubcontrolClass:
-		m.ClearSubcontrolClass()
+	case subcontrol.FieldClass:
+		m.ClearClass()
 		return nil
 	case subcontrol.FieldSource:
 		m.ClearSource()
@@ -100369,20 +100013,14 @@ func (m *SubcontrolMutation) ClearField(name string) error {
 	case subcontrol.FieldMappedFrameworks:
 		m.ClearMappedFrameworks()
 		return nil
-	case subcontrol.FieldAssignedTo:
-		m.ClearAssignedTo()
+	case subcontrol.FieldImplementationEvidence:
+		m.ClearImplementationEvidence()
 		return nil
 	case subcontrol.FieldImplementationStatus:
 		m.ClearImplementationStatus()
 		return nil
-	case subcontrol.FieldImplementationNotes:
-		m.ClearImplementationNotes()
-		return nil
 	case subcontrol.FieldImplementationDate:
 		m.ClearImplementationDate()
-		return nil
-	case subcontrol.FieldImplementationEvidence:
-		m.ClearImplementationEvidence()
 		return nil
 	case subcontrol.FieldImplementationVerification:
 		m.ClearImplementationVerification()
@@ -100390,8 +100028,8 @@ func (m *SubcontrolMutation) ClearField(name string) error {
 	case subcontrol.FieldImplementationVerificationDate:
 		m.ClearImplementationVerificationDate()
 		return nil
-	case subcontrol.FieldJsonschema:
-		m.ClearJsonschema()
+	case subcontrol.FieldDetails:
+		m.ClearDetails()
 		return nil
 	}
 	return fmt.Errorf("unknown Subcontrol nullable field %s", name)
@@ -100440,17 +100078,14 @@ func (m *SubcontrolMutation) ResetField(name string) error {
 	case subcontrol.FieldVersion:
 		m.ResetVersion()
 		return nil
-	case subcontrol.FieldOwner:
-		m.ResetOwner()
-		return nil
 	case subcontrol.FieldSubcontrolNumber:
 		m.ResetSubcontrolNumber()
 		return nil
-	case subcontrol.FieldSubcontrolFamily:
-		m.ResetSubcontrolFamily()
+	case subcontrol.FieldFamily:
+		m.ResetFamily()
 		return nil
-	case subcontrol.FieldSubcontrolClass:
-		m.ResetSubcontrolClass()
+	case subcontrol.FieldClass:
+		m.ResetClass()
 		return nil
 	case subcontrol.FieldSource:
 		m.ResetSource()
@@ -100458,20 +100093,14 @@ func (m *SubcontrolMutation) ResetField(name string) error {
 	case subcontrol.FieldMappedFrameworks:
 		m.ResetMappedFrameworks()
 		return nil
-	case subcontrol.FieldAssignedTo:
-		m.ResetAssignedTo()
+	case subcontrol.FieldImplementationEvidence:
+		m.ResetImplementationEvidence()
 		return nil
 	case subcontrol.FieldImplementationStatus:
 		m.ResetImplementationStatus()
 		return nil
-	case subcontrol.FieldImplementationNotes:
-		m.ResetImplementationNotes()
-		return nil
 	case subcontrol.FieldImplementationDate:
 		m.ResetImplementationDate()
-		return nil
-	case subcontrol.FieldImplementationEvidence:
-		m.ResetImplementationEvidence()
 		return nil
 	case subcontrol.FieldImplementationVerification:
 		m.ResetImplementationVerification()
@@ -100479,8 +100108,8 @@ func (m *SubcontrolMutation) ResetField(name string) error {
 	case subcontrol.FieldImplementationVerificationDate:
 		m.ResetImplementationVerificationDate()
 		return nil
-	case subcontrol.FieldJsonschema:
-		m.ResetJsonschema()
+	case subcontrol.FieldDetails:
+		m.ResetDetails()
 		return nil
 	}
 	return fmt.Errorf("unknown Subcontrol field %s", name)
@@ -100488,9 +100117,15 @@ func (m *SubcontrolMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *SubcontrolMutation) AddedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 3)
 	if m.control != nil {
 		edges = append(edges, subcontrol.EdgeControl)
+	}
+	if m.user != nil {
+		edges = append(edges, subcontrol.EdgeUser)
+	}
+	if m.notes != nil {
+		edges = append(edges, subcontrol.EdgeNotes)
 	}
 	return edges
 }
@@ -100505,15 +100140,28 @@ func (m *SubcontrolMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case subcontrol.EdgeUser:
+		ids := make([]ent.Value, 0, len(m.user))
+		for id := range m.user {
+			ids = append(ids, id)
+		}
+		return ids
+	case subcontrol.EdgeNotes:
+		if id := m.notes; id != nil {
+			return []ent.Value{*id}
+		}
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *SubcontrolMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 3)
 	if m.removedcontrol != nil {
 		edges = append(edges, subcontrol.EdgeControl)
+	}
+	if m.removeduser != nil {
+		edges = append(edges, subcontrol.EdgeUser)
 	}
 	return edges
 }
@@ -100528,15 +100176,27 @@ func (m *SubcontrolMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case subcontrol.EdgeUser:
+		ids := make([]ent.Value, 0, len(m.removeduser))
+		for id := range m.removeduser {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *SubcontrolMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 3)
 	if m.clearedcontrol {
 		edges = append(edges, subcontrol.EdgeControl)
+	}
+	if m.cleareduser {
+		edges = append(edges, subcontrol.EdgeUser)
+	}
+	if m.clearednotes {
+		edges = append(edges, subcontrol.EdgeNotes)
 	}
 	return edges
 }
@@ -100547,6 +100207,10 @@ func (m *SubcontrolMutation) EdgeCleared(name string) bool {
 	switch name {
 	case subcontrol.EdgeControl:
 		return m.clearedcontrol
+	case subcontrol.EdgeUser:
+		return m.cleareduser
+	case subcontrol.EdgeNotes:
+		return m.clearednotes
 	}
 	return false
 }
@@ -100555,6 +100219,9 @@ func (m *SubcontrolMutation) EdgeCleared(name string) bool {
 // if that edge is not defined in the schema.
 func (m *SubcontrolMutation) ClearEdge(name string) error {
 	switch name {
+	case subcontrol.EdgeNotes:
+		m.ClearNotes()
+		return nil
 	}
 	return fmt.Errorf("unknown Subcontrol unique edge %s", name)
 }
@@ -100565,6 +100232,12 @@ func (m *SubcontrolMutation) ResetEdge(name string) error {
 	switch name {
 	case subcontrol.EdgeControl:
 		m.ResetControl()
+		return nil
+	case subcontrol.EdgeUser:
+		m.ResetUser()
+		return nil
+	case subcontrol.EdgeNotes:
+		m.ResetNotes()
 		return nil
 	}
 	return fmt.Errorf("unknown Subcontrol edge %s", name)
@@ -100593,20 +100266,17 @@ type SubcontrolHistoryMutation struct {
 	status                           *string
 	subcontrol_type                  *string
 	version                          *string
-	owner                            *string
 	subcontrol_number                *string
-	subcontrol_family                *string
-	subcontrol_class                 *string
+	family                           *string
+	class                            *string
 	source                           *string
 	mapped_frameworks                *string
-	assigned_to                      *string
-	implementation_status            *string
-	implementation_notes             *string
-	implementation_date              *string
 	implementation_evidence          *string
+	implementation_status            *string
+	implementation_date              *time.Time
 	implementation_verification      *string
-	implementation_verification_date *string
-	jsonschema                       *map[string]interface{}
+	implementation_verification_date *time.Time
+	details                          *map[string]interface{}
 	clearedFields                    map[string]struct{}
 	done                             bool
 	oldValue                         func(context.Context) (*SubcontrolHistory, error)
@@ -101465,55 +101135,6 @@ func (m *SubcontrolHistoryMutation) ResetVersion() {
 	delete(m.clearedFields, subcontrolhistory.FieldVersion)
 }
 
-// SetOwner sets the "owner" field.
-func (m *SubcontrolHistoryMutation) SetOwner(s string) {
-	m.owner = &s
-}
-
-// Owner returns the value of the "owner" field in the mutation.
-func (m *SubcontrolHistoryMutation) Owner() (r string, exists bool) {
-	v := m.owner
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldOwner returns the old "owner" field's value of the SubcontrolHistory entity.
-// If the SubcontrolHistory object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *SubcontrolHistoryMutation) OldOwner(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldOwner is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldOwner requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldOwner: %w", err)
-	}
-	return oldValue.Owner, nil
-}
-
-// ClearOwner clears the value of the "owner" field.
-func (m *SubcontrolHistoryMutation) ClearOwner() {
-	m.owner = nil
-	m.clearedFields[subcontrolhistory.FieldOwner] = struct{}{}
-}
-
-// OwnerCleared returns if the "owner" field was cleared in this mutation.
-func (m *SubcontrolHistoryMutation) OwnerCleared() bool {
-	_, ok := m.clearedFields[subcontrolhistory.FieldOwner]
-	return ok
-}
-
-// ResetOwner resets all changes to the "owner" field.
-func (m *SubcontrolHistoryMutation) ResetOwner() {
-	m.owner = nil
-	delete(m.clearedFields, subcontrolhistory.FieldOwner)
-}
-
 // SetSubcontrolNumber sets the "subcontrol_number" field.
 func (m *SubcontrolHistoryMutation) SetSubcontrolNumber(s string) {
 	m.subcontrol_number = &s
@@ -101563,102 +101184,102 @@ func (m *SubcontrolHistoryMutation) ResetSubcontrolNumber() {
 	delete(m.clearedFields, subcontrolhistory.FieldSubcontrolNumber)
 }
 
-// SetSubcontrolFamily sets the "subcontrol_family" field.
-func (m *SubcontrolHistoryMutation) SetSubcontrolFamily(s string) {
-	m.subcontrol_family = &s
+// SetFamily sets the "family" field.
+func (m *SubcontrolHistoryMutation) SetFamily(s string) {
+	m.family = &s
 }
 
-// SubcontrolFamily returns the value of the "subcontrol_family" field in the mutation.
-func (m *SubcontrolHistoryMutation) SubcontrolFamily() (r string, exists bool) {
-	v := m.subcontrol_family
+// Family returns the value of the "family" field in the mutation.
+func (m *SubcontrolHistoryMutation) Family() (r string, exists bool) {
+	v := m.family
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldSubcontrolFamily returns the old "subcontrol_family" field's value of the SubcontrolHistory entity.
+// OldFamily returns the old "family" field's value of the SubcontrolHistory entity.
 // If the SubcontrolHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *SubcontrolHistoryMutation) OldSubcontrolFamily(ctx context.Context) (v string, err error) {
+func (m *SubcontrolHistoryMutation) OldFamily(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldSubcontrolFamily is only allowed on UpdateOne operations")
+		return v, errors.New("OldFamily is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldSubcontrolFamily requires an ID field in the mutation")
+		return v, errors.New("OldFamily requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldSubcontrolFamily: %w", err)
+		return v, fmt.Errorf("querying old value for OldFamily: %w", err)
 	}
-	return oldValue.SubcontrolFamily, nil
+	return oldValue.Family, nil
 }
 
-// ClearSubcontrolFamily clears the value of the "subcontrol_family" field.
-func (m *SubcontrolHistoryMutation) ClearSubcontrolFamily() {
-	m.subcontrol_family = nil
-	m.clearedFields[subcontrolhistory.FieldSubcontrolFamily] = struct{}{}
+// ClearFamily clears the value of the "family" field.
+func (m *SubcontrolHistoryMutation) ClearFamily() {
+	m.family = nil
+	m.clearedFields[subcontrolhistory.FieldFamily] = struct{}{}
 }
 
-// SubcontrolFamilyCleared returns if the "subcontrol_family" field was cleared in this mutation.
-func (m *SubcontrolHistoryMutation) SubcontrolFamilyCleared() bool {
-	_, ok := m.clearedFields[subcontrolhistory.FieldSubcontrolFamily]
+// FamilyCleared returns if the "family" field was cleared in this mutation.
+func (m *SubcontrolHistoryMutation) FamilyCleared() bool {
+	_, ok := m.clearedFields[subcontrolhistory.FieldFamily]
 	return ok
 }
 
-// ResetSubcontrolFamily resets all changes to the "subcontrol_family" field.
-func (m *SubcontrolHistoryMutation) ResetSubcontrolFamily() {
-	m.subcontrol_family = nil
-	delete(m.clearedFields, subcontrolhistory.FieldSubcontrolFamily)
+// ResetFamily resets all changes to the "family" field.
+func (m *SubcontrolHistoryMutation) ResetFamily() {
+	m.family = nil
+	delete(m.clearedFields, subcontrolhistory.FieldFamily)
 }
 
-// SetSubcontrolClass sets the "subcontrol_class" field.
-func (m *SubcontrolHistoryMutation) SetSubcontrolClass(s string) {
-	m.subcontrol_class = &s
+// SetClass sets the "class" field.
+func (m *SubcontrolHistoryMutation) SetClass(s string) {
+	m.class = &s
 }
 
-// SubcontrolClass returns the value of the "subcontrol_class" field in the mutation.
-func (m *SubcontrolHistoryMutation) SubcontrolClass() (r string, exists bool) {
-	v := m.subcontrol_class
+// Class returns the value of the "class" field in the mutation.
+func (m *SubcontrolHistoryMutation) Class() (r string, exists bool) {
+	v := m.class
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldSubcontrolClass returns the old "subcontrol_class" field's value of the SubcontrolHistory entity.
+// OldClass returns the old "class" field's value of the SubcontrolHistory entity.
 // If the SubcontrolHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *SubcontrolHistoryMutation) OldSubcontrolClass(ctx context.Context) (v string, err error) {
+func (m *SubcontrolHistoryMutation) OldClass(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldSubcontrolClass is only allowed on UpdateOne operations")
+		return v, errors.New("OldClass is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldSubcontrolClass requires an ID field in the mutation")
+		return v, errors.New("OldClass requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldSubcontrolClass: %w", err)
+		return v, fmt.Errorf("querying old value for OldClass: %w", err)
 	}
-	return oldValue.SubcontrolClass, nil
+	return oldValue.Class, nil
 }
 
-// ClearSubcontrolClass clears the value of the "subcontrol_class" field.
-func (m *SubcontrolHistoryMutation) ClearSubcontrolClass() {
-	m.subcontrol_class = nil
-	m.clearedFields[subcontrolhistory.FieldSubcontrolClass] = struct{}{}
+// ClearClass clears the value of the "class" field.
+func (m *SubcontrolHistoryMutation) ClearClass() {
+	m.class = nil
+	m.clearedFields[subcontrolhistory.FieldClass] = struct{}{}
 }
 
-// SubcontrolClassCleared returns if the "subcontrol_class" field was cleared in this mutation.
-func (m *SubcontrolHistoryMutation) SubcontrolClassCleared() bool {
-	_, ok := m.clearedFields[subcontrolhistory.FieldSubcontrolClass]
+// ClassCleared returns if the "class" field was cleared in this mutation.
+func (m *SubcontrolHistoryMutation) ClassCleared() bool {
+	_, ok := m.clearedFields[subcontrolhistory.FieldClass]
 	return ok
 }
 
-// ResetSubcontrolClass resets all changes to the "subcontrol_class" field.
-func (m *SubcontrolHistoryMutation) ResetSubcontrolClass() {
-	m.subcontrol_class = nil
-	delete(m.clearedFields, subcontrolhistory.FieldSubcontrolClass)
+// ResetClass resets all changes to the "class" field.
+func (m *SubcontrolHistoryMutation) ResetClass() {
+	m.class = nil
+	delete(m.clearedFields, subcontrolhistory.FieldClass)
 }
 
 // SetSource sets the "source" field.
@@ -101759,53 +101380,53 @@ func (m *SubcontrolHistoryMutation) ResetMappedFrameworks() {
 	delete(m.clearedFields, subcontrolhistory.FieldMappedFrameworks)
 }
 
-// SetAssignedTo sets the "assigned_to" field.
-func (m *SubcontrolHistoryMutation) SetAssignedTo(s string) {
-	m.assigned_to = &s
+// SetImplementationEvidence sets the "implementation_evidence" field.
+func (m *SubcontrolHistoryMutation) SetImplementationEvidence(s string) {
+	m.implementation_evidence = &s
 }
 
-// AssignedTo returns the value of the "assigned_to" field in the mutation.
-func (m *SubcontrolHistoryMutation) AssignedTo() (r string, exists bool) {
-	v := m.assigned_to
+// ImplementationEvidence returns the value of the "implementation_evidence" field in the mutation.
+func (m *SubcontrolHistoryMutation) ImplementationEvidence() (r string, exists bool) {
+	v := m.implementation_evidence
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldAssignedTo returns the old "assigned_to" field's value of the SubcontrolHistory entity.
+// OldImplementationEvidence returns the old "implementation_evidence" field's value of the SubcontrolHistory entity.
 // If the SubcontrolHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *SubcontrolHistoryMutation) OldAssignedTo(ctx context.Context) (v string, err error) {
+func (m *SubcontrolHistoryMutation) OldImplementationEvidence(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldAssignedTo is only allowed on UpdateOne operations")
+		return v, errors.New("OldImplementationEvidence is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldAssignedTo requires an ID field in the mutation")
+		return v, errors.New("OldImplementationEvidence requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldAssignedTo: %w", err)
+		return v, fmt.Errorf("querying old value for OldImplementationEvidence: %w", err)
 	}
-	return oldValue.AssignedTo, nil
+	return oldValue.ImplementationEvidence, nil
 }
 
-// ClearAssignedTo clears the value of the "assigned_to" field.
-func (m *SubcontrolHistoryMutation) ClearAssignedTo() {
-	m.assigned_to = nil
-	m.clearedFields[subcontrolhistory.FieldAssignedTo] = struct{}{}
+// ClearImplementationEvidence clears the value of the "implementation_evidence" field.
+func (m *SubcontrolHistoryMutation) ClearImplementationEvidence() {
+	m.implementation_evidence = nil
+	m.clearedFields[subcontrolhistory.FieldImplementationEvidence] = struct{}{}
 }
 
-// AssignedToCleared returns if the "assigned_to" field was cleared in this mutation.
-func (m *SubcontrolHistoryMutation) AssignedToCleared() bool {
-	_, ok := m.clearedFields[subcontrolhistory.FieldAssignedTo]
+// ImplementationEvidenceCleared returns if the "implementation_evidence" field was cleared in this mutation.
+func (m *SubcontrolHistoryMutation) ImplementationEvidenceCleared() bool {
+	_, ok := m.clearedFields[subcontrolhistory.FieldImplementationEvidence]
 	return ok
 }
 
-// ResetAssignedTo resets all changes to the "assigned_to" field.
-func (m *SubcontrolHistoryMutation) ResetAssignedTo() {
-	m.assigned_to = nil
-	delete(m.clearedFields, subcontrolhistory.FieldAssignedTo)
+// ResetImplementationEvidence resets all changes to the "implementation_evidence" field.
+func (m *SubcontrolHistoryMutation) ResetImplementationEvidence() {
+	m.implementation_evidence = nil
+	delete(m.clearedFields, subcontrolhistory.FieldImplementationEvidence)
 }
 
 // SetImplementationStatus sets the "implementation_status" field.
@@ -101857,62 +101478,13 @@ func (m *SubcontrolHistoryMutation) ResetImplementationStatus() {
 	delete(m.clearedFields, subcontrolhistory.FieldImplementationStatus)
 }
 
-// SetImplementationNotes sets the "implementation_notes" field.
-func (m *SubcontrolHistoryMutation) SetImplementationNotes(s string) {
-	m.implementation_notes = &s
-}
-
-// ImplementationNotes returns the value of the "implementation_notes" field in the mutation.
-func (m *SubcontrolHistoryMutation) ImplementationNotes() (r string, exists bool) {
-	v := m.implementation_notes
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldImplementationNotes returns the old "implementation_notes" field's value of the SubcontrolHistory entity.
-// If the SubcontrolHistory object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *SubcontrolHistoryMutation) OldImplementationNotes(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldImplementationNotes is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldImplementationNotes requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldImplementationNotes: %w", err)
-	}
-	return oldValue.ImplementationNotes, nil
-}
-
-// ClearImplementationNotes clears the value of the "implementation_notes" field.
-func (m *SubcontrolHistoryMutation) ClearImplementationNotes() {
-	m.implementation_notes = nil
-	m.clearedFields[subcontrolhistory.FieldImplementationNotes] = struct{}{}
-}
-
-// ImplementationNotesCleared returns if the "implementation_notes" field was cleared in this mutation.
-func (m *SubcontrolHistoryMutation) ImplementationNotesCleared() bool {
-	_, ok := m.clearedFields[subcontrolhistory.FieldImplementationNotes]
-	return ok
-}
-
-// ResetImplementationNotes resets all changes to the "implementation_notes" field.
-func (m *SubcontrolHistoryMutation) ResetImplementationNotes() {
-	m.implementation_notes = nil
-	delete(m.clearedFields, subcontrolhistory.FieldImplementationNotes)
-}
-
 // SetImplementationDate sets the "implementation_date" field.
-func (m *SubcontrolHistoryMutation) SetImplementationDate(s string) {
-	m.implementation_date = &s
+func (m *SubcontrolHistoryMutation) SetImplementationDate(t time.Time) {
+	m.implementation_date = &t
 }
 
 // ImplementationDate returns the value of the "implementation_date" field in the mutation.
-func (m *SubcontrolHistoryMutation) ImplementationDate() (r string, exists bool) {
+func (m *SubcontrolHistoryMutation) ImplementationDate() (r time.Time, exists bool) {
 	v := m.implementation_date
 	if v == nil {
 		return
@@ -101923,7 +101495,7 @@ func (m *SubcontrolHistoryMutation) ImplementationDate() (r string, exists bool)
 // OldImplementationDate returns the old "implementation_date" field's value of the SubcontrolHistory entity.
 // If the SubcontrolHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *SubcontrolHistoryMutation) OldImplementationDate(ctx context.Context) (v string, err error) {
+func (m *SubcontrolHistoryMutation) OldImplementationDate(ctx context.Context) (v time.Time, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldImplementationDate is only allowed on UpdateOne operations")
 	}
@@ -101953,55 +101525,6 @@ func (m *SubcontrolHistoryMutation) ImplementationDateCleared() bool {
 func (m *SubcontrolHistoryMutation) ResetImplementationDate() {
 	m.implementation_date = nil
 	delete(m.clearedFields, subcontrolhistory.FieldImplementationDate)
-}
-
-// SetImplementationEvidence sets the "implementation_evidence" field.
-func (m *SubcontrolHistoryMutation) SetImplementationEvidence(s string) {
-	m.implementation_evidence = &s
-}
-
-// ImplementationEvidence returns the value of the "implementation_evidence" field in the mutation.
-func (m *SubcontrolHistoryMutation) ImplementationEvidence() (r string, exists bool) {
-	v := m.implementation_evidence
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldImplementationEvidence returns the old "implementation_evidence" field's value of the SubcontrolHistory entity.
-// If the SubcontrolHistory object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *SubcontrolHistoryMutation) OldImplementationEvidence(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldImplementationEvidence is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldImplementationEvidence requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldImplementationEvidence: %w", err)
-	}
-	return oldValue.ImplementationEvidence, nil
-}
-
-// ClearImplementationEvidence clears the value of the "implementation_evidence" field.
-func (m *SubcontrolHistoryMutation) ClearImplementationEvidence() {
-	m.implementation_evidence = nil
-	m.clearedFields[subcontrolhistory.FieldImplementationEvidence] = struct{}{}
-}
-
-// ImplementationEvidenceCleared returns if the "implementation_evidence" field was cleared in this mutation.
-func (m *SubcontrolHistoryMutation) ImplementationEvidenceCleared() bool {
-	_, ok := m.clearedFields[subcontrolhistory.FieldImplementationEvidence]
-	return ok
-}
-
-// ResetImplementationEvidence resets all changes to the "implementation_evidence" field.
-func (m *SubcontrolHistoryMutation) ResetImplementationEvidence() {
-	m.implementation_evidence = nil
-	delete(m.clearedFields, subcontrolhistory.FieldImplementationEvidence)
 }
 
 // SetImplementationVerification sets the "implementation_verification" field.
@@ -102054,12 +101577,12 @@ func (m *SubcontrolHistoryMutation) ResetImplementationVerification() {
 }
 
 // SetImplementationVerificationDate sets the "implementation_verification_date" field.
-func (m *SubcontrolHistoryMutation) SetImplementationVerificationDate(s string) {
-	m.implementation_verification_date = &s
+func (m *SubcontrolHistoryMutation) SetImplementationVerificationDate(t time.Time) {
+	m.implementation_verification_date = &t
 }
 
 // ImplementationVerificationDate returns the value of the "implementation_verification_date" field in the mutation.
-func (m *SubcontrolHistoryMutation) ImplementationVerificationDate() (r string, exists bool) {
+func (m *SubcontrolHistoryMutation) ImplementationVerificationDate() (r time.Time, exists bool) {
 	v := m.implementation_verification_date
 	if v == nil {
 		return
@@ -102070,7 +101593,7 @@ func (m *SubcontrolHistoryMutation) ImplementationVerificationDate() (r string, 
 // OldImplementationVerificationDate returns the old "implementation_verification_date" field's value of the SubcontrolHistory entity.
 // If the SubcontrolHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *SubcontrolHistoryMutation) OldImplementationVerificationDate(ctx context.Context) (v string, err error) {
+func (m *SubcontrolHistoryMutation) OldImplementationVerificationDate(ctx context.Context) (v time.Time, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldImplementationVerificationDate is only allowed on UpdateOne operations")
 	}
@@ -102102,53 +101625,53 @@ func (m *SubcontrolHistoryMutation) ResetImplementationVerificationDate() {
 	delete(m.clearedFields, subcontrolhistory.FieldImplementationVerificationDate)
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (m *SubcontrolHistoryMutation) SetJsonschema(value map[string]interface{}) {
-	m.jsonschema = &value
+// SetDetails sets the "details" field.
+func (m *SubcontrolHistoryMutation) SetDetails(value map[string]interface{}) {
+	m.details = &value
 }
 
-// Jsonschema returns the value of the "jsonschema" field in the mutation.
-func (m *SubcontrolHistoryMutation) Jsonschema() (r map[string]interface{}, exists bool) {
-	v := m.jsonschema
+// Details returns the value of the "details" field in the mutation.
+func (m *SubcontrolHistoryMutation) Details() (r map[string]interface{}, exists bool) {
+	v := m.details
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldJsonschema returns the old "jsonschema" field's value of the SubcontrolHistory entity.
+// OldDetails returns the old "details" field's value of the SubcontrolHistory entity.
 // If the SubcontrolHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *SubcontrolHistoryMutation) OldJsonschema(ctx context.Context) (v map[string]interface{}, err error) {
+func (m *SubcontrolHistoryMutation) OldDetails(ctx context.Context) (v map[string]interface{}, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldJsonschema is only allowed on UpdateOne operations")
+		return v, errors.New("OldDetails is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldJsonschema requires an ID field in the mutation")
+		return v, errors.New("OldDetails requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldJsonschema: %w", err)
+		return v, fmt.Errorf("querying old value for OldDetails: %w", err)
 	}
-	return oldValue.Jsonschema, nil
+	return oldValue.Details, nil
 }
 
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (m *SubcontrolHistoryMutation) ClearJsonschema() {
-	m.jsonschema = nil
-	m.clearedFields[subcontrolhistory.FieldJsonschema] = struct{}{}
+// ClearDetails clears the value of the "details" field.
+func (m *SubcontrolHistoryMutation) ClearDetails() {
+	m.details = nil
+	m.clearedFields[subcontrolhistory.FieldDetails] = struct{}{}
 }
 
-// JsonschemaCleared returns if the "jsonschema" field was cleared in this mutation.
-func (m *SubcontrolHistoryMutation) JsonschemaCleared() bool {
-	_, ok := m.clearedFields[subcontrolhistory.FieldJsonschema]
+// DetailsCleared returns if the "details" field was cleared in this mutation.
+func (m *SubcontrolHistoryMutation) DetailsCleared() bool {
+	_, ok := m.clearedFields[subcontrolhistory.FieldDetails]
 	return ok
 }
 
-// ResetJsonschema resets all changes to the "jsonschema" field.
-func (m *SubcontrolHistoryMutation) ResetJsonschema() {
-	m.jsonschema = nil
-	delete(m.clearedFields, subcontrolhistory.FieldJsonschema)
+// ResetDetails resets all changes to the "details" field.
+func (m *SubcontrolHistoryMutation) ResetDetails() {
+	m.details = nil
+	delete(m.clearedFields, subcontrolhistory.FieldDetails)
 }
 
 // Where appends a list predicates to the SubcontrolHistoryMutation builder.
@@ -102185,7 +101708,7 @@ func (m *SubcontrolHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *SubcontrolHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 30)
+	fields := make([]string, 0, 27)
 	if m.history_time != nil {
 		fields = append(fields, subcontrolhistory.FieldHistoryTime)
 	}
@@ -102234,17 +101757,14 @@ func (m *SubcontrolHistoryMutation) Fields() []string {
 	if m.version != nil {
 		fields = append(fields, subcontrolhistory.FieldVersion)
 	}
-	if m.owner != nil {
-		fields = append(fields, subcontrolhistory.FieldOwner)
-	}
 	if m.subcontrol_number != nil {
 		fields = append(fields, subcontrolhistory.FieldSubcontrolNumber)
 	}
-	if m.subcontrol_family != nil {
-		fields = append(fields, subcontrolhistory.FieldSubcontrolFamily)
+	if m.family != nil {
+		fields = append(fields, subcontrolhistory.FieldFamily)
 	}
-	if m.subcontrol_class != nil {
-		fields = append(fields, subcontrolhistory.FieldSubcontrolClass)
+	if m.class != nil {
+		fields = append(fields, subcontrolhistory.FieldClass)
 	}
 	if m.source != nil {
 		fields = append(fields, subcontrolhistory.FieldSource)
@@ -102252,20 +101772,14 @@ func (m *SubcontrolHistoryMutation) Fields() []string {
 	if m.mapped_frameworks != nil {
 		fields = append(fields, subcontrolhistory.FieldMappedFrameworks)
 	}
-	if m.assigned_to != nil {
-		fields = append(fields, subcontrolhistory.FieldAssignedTo)
+	if m.implementation_evidence != nil {
+		fields = append(fields, subcontrolhistory.FieldImplementationEvidence)
 	}
 	if m.implementation_status != nil {
 		fields = append(fields, subcontrolhistory.FieldImplementationStatus)
 	}
-	if m.implementation_notes != nil {
-		fields = append(fields, subcontrolhistory.FieldImplementationNotes)
-	}
 	if m.implementation_date != nil {
 		fields = append(fields, subcontrolhistory.FieldImplementationDate)
-	}
-	if m.implementation_evidence != nil {
-		fields = append(fields, subcontrolhistory.FieldImplementationEvidence)
 	}
 	if m.implementation_verification != nil {
 		fields = append(fields, subcontrolhistory.FieldImplementationVerification)
@@ -102273,8 +101787,8 @@ func (m *SubcontrolHistoryMutation) Fields() []string {
 	if m.implementation_verification_date != nil {
 		fields = append(fields, subcontrolhistory.FieldImplementationVerificationDate)
 	}
-	if m.jsonschema != nil {
-		fields = append(fields, subcontrolhistory.FieldJsonschema)
+	if m.details != nil {
+		fields = append(fields, subcontrolhistory.FieldDetails)
 	}
 	return fields
 }
@@ -102316,34 +101830,28 @@ func (m *SubcontrolHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.SubcontrolType()
 	case subcontrolhistory.FieldVersion:
 		return m.Version()
-	case subcontrolhistory.FieldOwner:
-		return m.Owner()
 	case subcontrolhistory.FieldSubcontrolNumber:
 		return m.SubcontrolNumber()
-	case subcontrolhistory.FieldSubcontrolFamily:
-		return m.SubcontrolFamily()
-	case subcontrolhistory.FieldSubcontrolClass:
-		return m.SubcontrolClass()
+	case subcontrolhistory.FieldFamily:
+		return m.Family()
+	case subcontrolhistory.FieldClass:
+		return m.Class()
 	case subcontrolhistory.FieldSource:
 		return m.Source()
 	case subcontrolhistory.FieldMappedFrameworks:
 		return m.MappedFrameworks()
-	case subcontrolhistory.FieldAssignedTo:
-		return m.AssignedTo()
-	case subcontrolhistory.FieldImplementationStatus:
-		return m.ImplementationStatus()
-	case subcontrolhistory.FieldImplementationNotes:
-		return m.ImplementationNotes()
-	case subcontrolhistory.FieldImplementationDate:
-		return m.ImplementationDate()
 	case subcontrolhistory.FieldImplementationEvidence:
 		return m.ImplementationEvidence()
+	case subcontrolhistory.FieldImplementationStatus:
+		return m.ImplementationStatus()
+	case subcontrolhistory.FieldImplementationDate:
+		return m.ImplementationDate()
 	case subcontrolhistory.FieldImplementationVerification:
 		return m.ImplementationVerification()
 	case subcontrolhistory.FieldImplementationVerificationDate:
 		return m.ImplementationVerificationDate()
-	case subcontrolhistory.FieldJsonschema:
-		return m.Jsonschema()
+	case subcontrolhistory.FieldDetails:
+		return m.Details()
 	}
 	return nil, false
 }
@@ -102385,34 +101893,28 @@ func (m *SubcontrolHistoryMutation) OldField(ctx context.Context, name string) (
 		return m.OldSubcontrolType(ctx)
 	case subcontrolhistory.FieldVersion:
 		return m.OldVersion(ctx)
-	case subcontrolhistory.FieldOwner:
-		return m.OldOwner(ctx)
 	case subcontrolhistory.FieldSubcontrolNumber:
 		return m.OldSubcontrolNumber(ctx)
-	case subcontrolhistory.FieldSubcontrolFamily:
-		return m.OldSubcontrolFamily(ctx)
-	case subcontrolhistory.FieldSubcontrolClass:
-		return m.OldSubcontrolClass(ctx)
+	case subcontrolhistory.FieldFamily:
+		return m.OldFamily(ctx)
+	case subcontrolhistory.FieldClass:
+		return m.OldClass(ctx)
 	case subcontrolhistory.FieldSource:
 		return m.OldSource(ctx)
 	case subcontrolhistory.FieldMappedFrameworks:
 		return m.OldMappedFrameworks(ctx)
-	case subcontrolhistory.FieldAssignedTo:
-		return m.OldAssignedTo(ctx)
-	case subcontrolhistory.FieldImplementationStatus:
-		return m.OldImplementationStatus(ctx)
-	case subcontrolhistory.FieldImplementationNotes:
-		return m.OldImplementationNotes(ctx)
-	case subcontrolhistory.FieldImplementationDate:
-		return m.OldImplementationDate(ctx)
 	case subcontrolhistory.FieldImplementationEvidence:
 		return m.OldImplementationEvidence(ctx)
+	case subcontrolhistory.FieldImplementationStatus:
+		return m.OldImplementationStatus(ctx)
+	case subcontrolhistory.FieldImplementationDate:
+		return m.OldImplementationDate(ctx)
 	case subcontrolhistory.FieldImplementationVerification:
 		return m.OldImplementationVerification(ctx)
 	case subcontrolhistory.FieldImplementationVerificationDate:
 		return m.OldImplementationVerificationDate(ctx)
-	case subcontrolhistory.FieldJsonschema:
-		return m.OldJsonschema(ctx)
+	case subcontrolhistory.FieldDetails:
+		return m.OldDetails(ctx)
 	}
 	return nil, fmt.Errorf("unknown SubcontrolHistory field %s", name)
 }
@@ -102534,13 +102036,6 @@ func (m *SubcontrolHistoryMutation) SetField(name string, value ent.Value) error
 		}
 		m.SetVersion(v)
 		return nil
-	case subcontrolhistory.FieldOwner:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetOwner(v)
-		return nil
 	case subcontrolhistory.FieldSubcontrolNumber:
 		v, ok := value.(string)
 		if !ok {
@@ -102548,19 +102043,19 @@ func (m *SubcontrolHistoryMutation) SetField(name string, value ent.Value) error
 		}
 		m.SetSubcontrolNumber(v)
 		return nil
-	case subcontrolhistory.FieldSubcontrolFamily:
+	case subcontrolhistory.FieldFamily:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetSubcontrolFamily(v)
+		m.SetFamily(v)
 		return nil
-	case subcontrolhistory.FieldSubcontrolClass:
+	case subcontrolhistory.FieldClass:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetSubcontrolClass(v)
+		m.SetClass(v)
 		return nil
 	case subcontrolhistory.FieldSource:
 		v, ok := value.(string)
@@ -102576,12 +102071,12 @@ func (m *SubcontrolHistoryMutation) SetField(name string, value ent.Value) error
 		}
 		m.SetMappedFrameworks(v)
 		return nil
-	case subcontrolhistory.FieldAssignedTo:
+	case subcontrolhistory.FieldImplementationEvidence:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetAssignedTo(v)
+		m.SetImplementationEvidence(v)
 		return nil
 	case subcontrolhistory.FieldImplementationStatus:
 		v, ok := value.(string)
@@ -102590,26 +102085,12 @@ func (m *SubcontrolHistoryMutation) SetField(name string, value ent.Value) error
 		}
 		m.SetImplementationStatus(v)
 		return nil
-	case subcontrolhistory.FieldImplementationNotes:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetImplementationNotes(v)
-		return nil
 	case subcontrolhistory.FieldImplementationDate:
-		v, ok := value.(string)
+		v, ok := value.(time.Time)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetImplementationDate(v)
-		return nil
-	case subcontrolhistory.FieldImplementationEvidence:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetImplementationEvidence(v)
 		return nil
 	case subcontrolhistory.FieldImplementationVerification:
 		v, ok := value.(string)
@@ -102619,18 +102100,18 @@ func (m *SubcontrolHistoryMutation) SetField(name string, value ent.Value) error
 		m.SetImplementationVerification(v)
 		return nil
 	case subcontrolhistory.FieldImplementationVerificationDate:
-		v, ok := value.(string)
+		v, ok := value.(time.Time)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetImplementationVerificationDate(v)
 		return nil
-	case subcontrolhistory.FieldJsonschema:
+	case subcontrolhistory.FieldDetails:
 		v, ok := value.(map[string]interface{})
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetJsonschema(v)
+		m.SetDetails(v)
 		return nil
 	}
 	return fmt.Errorf("unknown SubcontrolHistory field %s", name)
@@ -102698,17 +102179,14 @@ func (m *SubcontrolHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(subcontrolhistory.FieldVersion) {
 		fields = append(fields, subcontrolhistory.FieldVersion)
 	}
-	if m.FieldCleared(subcontrolhistory.FieldOwner) {
-		fields = append(fields, subcontrolhistory.FieldOwner)
-	}
 	if m.FieldCleared(subcontrolhistory.FieldSubcontrolNumber) {
 		fields = append(fields, subcontrolhistory.FieldSubcontrolNumber)
 	}
-	if m.FieldCleared(subcontrolhistory.FieldSubcontrolFamily) {
-		fields = append(fields, subcontrolhistory.FieldSubcontrolFamily)
+	if m.FieldCleared(subcontrolhistory.FieldFamily) {
+		fields = append(fields, subcontrolhistory.FieldFamily)
 	}
-	if m.FieldCleared(subcontrolhistory.FieldSubcontrolClass) {
-		fields = append(fields, subcontrolhistory.FieldSubcontrolClass)
+	if m.FieldCleared(subcontrolhistory.FieldClass) {
+		fields = append(fields, subcontrolhistory.FieldClass)
 	}
 	if m.FieldCleared(subcontrolhistory.FieldSource) {
 		fields = append(fields, subcontrolhistory.FieldSource)
@@ -102716,20 +102194,14 @@ func (m *SubcontrolHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(subcontrolhistory.FieldMappedFrameworks) {
 		fields = append(fields, subcontrolhistory.FieldMappedFrameworks)
 	}
-	if m.FieldCleared(subcontrolhistory.FieldAssignedTo) {
-		fields = append(fields, subcontrolhistory.FieldAssignedTo)
+	if m.FieldCleared(subcontrolhistory.FieldImplementationEvidence) {
+		fields = append(fields, subcontrolhistory.FieldImplementationEvidence)
 	}
 	if m.FieldCleared(subcontrolhistory.FieldImplementationStatus) {
 		fields = append(fields, subcontrolhistory.FieldImplementationStatus)
 	}
-	if m.FieldCleared(subcontrolhistory.FieldImplementationNotes) {
-		fields = append(fields, subcontrolhistory.FieldImplementationNotes)
-	}
 	if m.FieldCleared(subcontrolhistory.FieldImplementationDate) {
 		fields = append(fields, subcontrolhistory.FieldImplementationDate)
-	}
-	if m.FieldCleared(subcontrolhistory.FieldImplementationEvidence) {
-		fields = append(fields, subcontrolhistory.FieldImplementationEvidence)
 	}
 	if m.FieldCleared(subcontrolhistory.FieldImplementationVerification) {
 		fields = append(fields, subcontrolhistory.FieldImplementationVerification)
@@ -102737,8 +102209,8 @@ func (m *SubcontrolHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(subcontrolhistory.FieldImplementationVerificationDate) {
 		fields = append(fields, subcontrolhistory.FieldImplementationVerificationDate)
 	}
-	if m.FieldCleared(subcontrolhistory.FieldJsonschema) {
-		fields = append(fields, subcontrolhistory.FieldJsonschema)
+	if m.FieldCleared(subcontrolhistory.FieldDetails) {
+		fields = append(fields, subcontrolhistory.FieldDetails)
 	}
 	return fields
 }
@@ -102790,17 +102262,14 @@ func (m *SubcontrolHistoryMutation) ClearField(name string) error {
 	case subcontrolhistory.FieldVersion:
 		m.ClearVersion()
 		return nil
-	case subcontrolhistory.FieldOwner:
-		m.ClearOwner()
-		return nil
 	case subcontrolhistory.FieldSubcontrolNumber:
 		m.ClearSubcontrolNumber()
 		return nil
-	case subcontrolhistory.FieldSubcontrolFamily:
-		m.ClearSubcontrolFamily()
+	case subcontrolhistory.FieldFamily:
+		m.ClearFamily()
 		return nil
-	case subcontrolhistory.FieldSubcontrolClass:
-		m.ClearSubcontrolClass()
+	case subcontrolhistory.FieldClass:
+		m.ClearClass()
 		return nil
 	case subcontrolhistory.FieldSource:
 		m.ClearSource()
@@ -102808,20 +102277,14 @@ func (m *SubcontrolHistoryMutation) ClearField(name string) error {
 	case subcontrolhistory.FieldMappedFrameworks:
 		m.ClearMappedFrameworks()
 		return nil
-	case subcontrolhistory.FieldAssignedTo:
-		m.ClearAssignedTo()
+	case subcontrolhistory.FieldImplementationEvidence:
+		m.ClearImplementationEvidence()
 		return nil
 	case subcontrolhistory.FieldImplementationStatus:
 		m.ClearImplementationStatus()
 		return nil
-	case subcontrolhistory.FieldImplementationNotes:
-		m.ClearImplementationNotes()
-		return nil
 	case subcontrolhistory.FieldImplementationDate:
 		m.ClearImplementationDate()
-		return nil
-	case subcontrolhistory.FieldImplementationEvidence:
-		m.ClearImplementationEvidence()
 		return nil
 	case subcontrolhistory.FieldImplementationVerification:
 		m.ClearImplementationVerification()
@@ -102829,8 +102292,8 @@ func (m *SubcontrolHistoryMutation) ClearField(name string) error {
 	case subcontrolhistory.FieldImplementationVerificationDate:
 		m.ClearImplementationVerificationDate()
 		return nil
-	case subcontrolhistory.FieldJsonschema:
-		m.ClearJsonschema()
+	case subcontrolhistory.FieldDetails:
+		m.ClearDetails()
 		return nil
 	}
 	return fmt.Errorf("unknown SubcontrolHistory nullable field %s", name)
@@ -102888,17 +102351,14 @@ func (m *SubcontrolHistoryMutation) ResetField(name string) error {
 	case subcontrolhistory.FieldVersion:
 		m.ResetVersion()
 		return nil
-	case subcontrolhistory.FieldOwner:
-		m.ResetOwner()
-		return nil
 	case subcontrolhistory.FieldSubcontrolNumber:
 		m.ResetSubcontrolNumber()
 		return nil
-	case subcontrolhistory.FieldSubcontrolFamily:
-		m.ResetSubcontrolFamily()
+	case subcontrolhistory.FieldFamily:
+		m.ResetFamily()
 		return nil
-	case subcontrolhistory.FieldSubcontrolClass:
-		m.ResetSubcontrolClass()
+	case subcontrolhistory.FieldClass:
+		m.ResetClass()
 		return nil
 	case subcontrolhistory.FieldSource:
 		m.ResetSource()
@@ -102906,20 +102366,14 @@ func (m *SubcontrolHistoryMutation) ResetField(name string) error {
 	case subcontrolhistory.FieldMappedFrameworks:
 		m.ResetMappedFrameworks()
 		return nil
-	case subcontrolhistory.FieldAssignedTo:
-		m.ResetAssignedTo()
+	case subcontrolhistory.FieldImplementationEvidence:
+		m.ResetImplementationEvidence()
 		return nil
 	case subcontrolhistory.FieldImplementationStatus:
 		m.ResetImplementationStatus()
 		return nil
-	case subcontrolhistory.FieldImplementationNotes:
-		m.ResetImplementationNotes()
-		return nil
 	case subcontrolhistory.FieldImplementationDate:
 		m.ResetImplementationDate()
-		return nil
-	case subcontrolhistory.FieldImplementationEvidence:
-		m.ResetImplementationEvidence()
 		return nil
 	case subcontrolhistory.FieldImplementationVerification:
 		m.ResetImplementationVerification()
@@ -102927,8 +102381,8 @@ func (m *SubcontrolHistoryMutation) ResetField(name string) error {
 	case subcontrolhistory.FieldImplementationVerificationDate:
 		m.ResetImplementationVerificationDate()
 		return nil
-	case subcontrolhistory.FieldJsonschema:
-		m.ResetJsonschema()
+	case subcontrolhistory.FieldDetails:
+		m.ResetDetails()
 		return nil
 	}
 	return fmt.Errorf("unknown SubcontrolHistory field %s", name)
@@ -108884,6 +108338,12 @@ type UserMutation struct {
 	events                           map[string]struct{}
 	removedevents                    map[string]struct{}
 	clearedevents                    bool
+	actionplans                      map[string]struct{}
+	removedactionplans               map[string]struct{}
+	clearedactionplans               bool
+	subcontrols                      map[string]struct{}
+	removedsubcontrols               map[string]struct{}
+	clearedsubcontrols               bool
 	group_memberships                map[string]struct{}
 	removedgroup_memberships         map[string]struct{}
 	clearedgroup_memberships         bool
@@ -110557,6 +110017,114 @@ func (m *UserMutation) ResetEvents() {
 	m.removedevents = nil
 }
 
+// AddActionplanIDs adds the "actionplans" edge to the ActionPlan entity by ids.
+func (m *UserMutation) AddActionplanIDs(ids ...string) {
+	if m.actionplans == nil {
+		m.actionplans = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.actionplans[ids[i]] = struct{}{}
+	}
+}
+
+// ClearActionplans clears the "actionplans" edge to the ActionPlan entity.
+func (m *UserMutation) ClearActionplans() {
+	m.clearedactionplans = true
+}
+
+// ActionplansCleared reports if the "actionplans" edge to the ActionPlan entity was cleared.
+func (m *UserMutation) ActionplansCleared() bool {
+	return m.clearedactionplans
+}
+
+// RemoveActionplanIDs removes the "actionplans" edge to the ActionPlan entity by IDs.
+func (m *UserMutation) RemoveActionplanIDs(ids ...string) {
+	if m.removedactionplans == nil {
+		m.removedactionplans = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.actionplans, ids[i])
+		m.removedactionplans[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedActionplans returns the removed IDs of the "actionplans" edge to the ActionPlan entity.
+func (m *UserMutation) RemovedActionplansIDs() (ids []string) {
+	for id := range m.removedactionplans {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ActionplansIDs returns the "actionplans" edge IDs in the mutation.
+func (m *UserMutation) ActionplansIDs() (ids []string) {
+	for id := range m.actionplans {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetActionplans resets all changes to the "actionplans" edge.
+func (m *UserMutation) ResetActionplans() {
+	m.actionplans = nil
+	m.clearedactionplans = false
+	m.removedactionplans = nil
+}
+
+// AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by ids.
+func (m *UserMutation) AddSubcontrolIDs(ids ...string) {
+	if m.subcontrols == nil {
+		m.subcontrols = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.subcontrols[ids[i]] = struct{}{}
+	}
+}
+
+// ClearSubcontrols clears the "subcontrols" edge to the Subcontrol entity.
+func (m *UserMutation) ClearSubcontrols() {
+	m.clearedsubcontrols = true
+}
+
+// SubcontrolsCleared reports if the "subcontrols" edge to the Subcontrol entity was cleared.
+func (m *UserMutation) SubcontrolsCleared() bool {
+	return m.clearedsubcontrols
+}
+
+// RemoveSubcontrolIDs removes the "subcontrols" edge to the Subcontrol entity by IDs.
+func (m *UserMutation) RemoveSubcontrolIDs(ids ...string) {
+	if m.removedsubcontrols == nil {
+		m.removedsubcontrols = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.subcontrols, ids[i])
+		m.removedsubcontrols[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedSubcontrols returns the removed IDs of the "subcontrols" edge to the Subcontrol entity.
+func (m *UserMutation) RemovedSubcontrolsIDs() (ids []string) {
+	for id := range m.removedsubcontrols {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// SubcontrolsIDs returns the "subcontrols" edge IDs in the mutation.
+func (m *UserMutation) SubcontrolsIDs() (ids []string) {
+	for id := range m.subcontrols {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetSubcontrols resets all changes to the "subcontrols" edge.
+func (m *UserMutation) ResetSubcontrols() {
+	m.subcontrols = nil
+	m.clearedsubcontrols = false
+	m.removedsubcontrols = nil
+}
+
 // AddGroupMembershipIDs adds the "group_memberships" edge to the GroupMembership entity by ids.
 func (m *UserMutation) AddGroupMembershipIDs(ids ...string) {
 	if m.group_memberships == nil {
@@ -111243,7 +110811,7 @@ func (m *UserMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *UserMutation) AddedEdges() []string {
-	edges := make([]string, 0, 13)
+	edges := make([]string, 0, 15)
 	if m.personal_access_tokens != nil {
 		edges = append(edges, user.EdgePersonalAccessTokens)
 	}
@@ -111276,6 +110844,12 @@ func (m *UserMutation) AddedEdges() []string {
 	}
 	if m.events != nil {
 		edges = append(edges, user.EdgeEvents)
+	}
+	if m.actionplans != nil {
+		edges = append(edges, user.EdgeActionplans)
+	}
+	if m.subcontrols != nil {
+		edges = append(edges, user.EdgeSubcontrols)
 	}
 	if m.group_memberships != nil {
 		edges = append(edges, user.EdgeGroupMemberships)
@@ -111352,6 +110926,18 @@ func (m *UserMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case user.EdgeActionplans:
+		ids := make([]ent.Value, 0, len(m.actionplans))
+		for id := range m.actionplans {
+			ids = append(ids, id)
+		}
+		return ids
+	case user.EdgeSubcontrols:
+		ids := make([]ent.Value, 0, len(m.subcontrols))
+		for id := range m.subcontrols {
+			ids = append(ids, id)
+		}
+		return ids
 	case user.EdgeGroupMemberships:
 		ids := make([]ent.Value, 0, len(m.group_memberships))
 		for id := range m.group_memberships {
@@ -111370,7 +110956,7 @@ func (m *UserMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *UserMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 13)
+	edges := make([]string, 0, 15)
 	if m.removedpersonal_access_tokens != nil {
 		edges = append(edges, user.EdgePersonalAccessTokens)
 	}
@@ -111397,6 +110983,12 @@ func (m *UserMutation) RemovedEdges() []string {
 	}
 	if m.removedevents != nil {
 		edges = append(edges, user.EdgeEvents)
+	}
+	if m.removedactionplans != nil {
+		edges = append(edges, user.EdgeActionplans)
+	}
+	if m.removedsubcontrols != nil {
+		edges = append(edges, user.EdgeSubcontrols)
 	}
 	if m.removedgroup_memberships != nil {
 		edges = append(edges, user.EdgeGroupMemberships)
@@ -111465,6 +111057,18 @@ func (m *UserMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case user.EdgeActionplans:
+		ids := make([]ent.Value, 0, len(m.removedactionplans))
+		for id := range m.removedactionplans {
+			ids = append(ids, id)
+		}
+		return ids
+	case user.EdgeSubcontrols:
+		ids := make([]ent.Value, 0, len(m.removedsubcontrols))
+		for id := range m.removedsubcontrols {
+			ids = append(ids, id)
+		}
+		return ids
 	case user.EdgeGroupMemberships:
 		ids := make([]ent.Value, 0, len(m.removedgroup_memberships))
 		for id := range m.removedgroup_memberships {
@@ -111483,7 +111087,7 @@ func (m *UserMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *UserMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 13)
+	edges := make([]string, 0, 15)
 	if m.clearedpersonal_access_tokens {
 		edges = append(edges, user.EdgePersonalAccessTokens)
 	}
@@ -111516,6 +111120,12 @@ func (m *UserMutation) ClearedEdges() []string {
 	}
 	if m.clearedevents {
 		edges = append(edges, user.EdgeEvents)
+	}
+	if m.clearedactionplans {
+		edges = append(edges, user.EdgeActionplans)
+	}
+	if m.clearedsubcontrols {
+		edges = append(edges, user.EdgeSubcontrols)
 	}
 	if m.clearedgroup_memberships {
 		edges = append(edges, user.EdgeGroupMemberships)
@@ -111552,6 +111162,10 @@ func (m *UserMutation) EdgeCleared(name string) bool {
 		return m.clearedfile
 	case user.EdgeEvents:
 		return m.clearedevents
+	case user.EdgeActionplans:
+		return m.clearedactionplans
+	case user.EdgeSubcontrols:
+		return m.clearedsubcontrols
 	case user.EdgeGroupMemberships:
 		return m.clearedgroup_memberships
 	case user.EdgeOrgMemberships:
@@ -111610,6 +111224,12 @@ func (m *UserMutation) ResetEdge(name string) error {
 		return nil
 	case user.EdgeEvents:
 		m.ResetEvents()
+		return nil
+	case user.EdgeActionplans:
+		m.ResetActionplans()
+		return nil
+	case user.EdgeSubcontrols:
+		m.ResetSubcontrols()
 		return nil
 	case user.EdgeGroupMemberships:
 		m.ResetGroupMemberships()

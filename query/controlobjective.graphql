@@ -2,18 +2,17 @@
 mutation CreateBulkCSVControlObjective($input: Upload!) {
   createBulkCSVControlObjective(input: $input) {
     controlObjectives {
-      controlClass
-      controlFamily
+      class
       controlNumber
       controlObjectiveType
       createdAt
       createdBy
       description
+      details
+      family
       id
-      jsonschema
       mappedFrameworks
       name
-      owner
       source
       status
       tags
@@ -27,18 +26,17 @@ mutation CreateBulkCSVControlObjective($input: Upload!) {
 mutation CreateBulkControlObjective($input: [CreateControlObjectiveInput!]) {
   createBulkControlObjective(input: $input) {
     controlObjectives {
-      controlClass
-      controlFamily
+      class
       controlNumber
       controlObjectiveType
       createdAt
       createdBy
       description
+      details
+      family
       id
-      jsonschema
       mappedFrameworks
       name
-      owner
       source
       status
       tags
@@ -52,18 +50,17 @@ mutation CreateBulkControlObjective($input: [CreateControlObjectiveInput!]) {
 mutation CreateControlObjective($input: CreateControlObjectiveInput!) {
   createControlObjective(input: $input) {
     controlObjective {
-      controlClass
-      controlFamily
+      class
       controlNumber
       controlObjectiveType
       createdAt
       createdBy
       description
+      details
+      family
       id
-      jsonschema
       mappedFrameworks
       name
-      owner
       source
       status
       tags
@@ -84,18 +81,17 @@ query GetAllControlObjectives {
   controlObjectives {
     edges {
       node {
-        controlClass
-        controlFamily
+        class
         controlNumber
         controlObjectiveType
         createdAt
         createdBy
         description
+        details
+        family
         id
-        jsonschema
         mappedFrameworks
         name
-        owner
         source
         status
         tags
@@ -108,18 +104,17 @@ query GetAllControlObjectives {
 }
 query GetControlObjectiveByID($controlObjectiveId: ID!) {
   controlObjective(id: $controlObjectiveId) {
-    controlClass
-    controlFamily
+    class
     controlNumber
     controlObjectiveType
     createdAt
     createdBy
     description
+    details
+    family
     id
-    jsonschema
     mappedFrameworks
     name
-    owner
     source
     status
     tags
@@ -133,18 +128,17 @@ query GetControlObjectives($where: ControlObjectiveWhereInput) {
   controlObjectives(where: $where) {
     edges {
       node {
-        controlClass
-        controlFamily
+        class
         controlNumber
         controlObjectiveType
         createdAt
         createdBy
         description
+        details
+        family
         id
-        jsonschema
         mappedFrameworks
         name
-        owner
         source
         status
         tags
@@ -158,18 +152,17 @@ query GetControlObjectives($where: ControlObjectiveWhereInput) {
 mutation UpdateControlObjective($updateControlObjectiveId: ID!, $input: UpdateControlObjectiveInput!) {
   updateControlObjective(id: $updateControlObjectiveId, input: $input) {
     controlObjective {
-      controlClass
-      controlFamily
+      class
       controlNumber
       controlObjectiveType
       createdAt
       createdBy
       description
+      details
+      family
       id
-      jsonschema
       mappedFrameworks
       name
-      owner
       source
       status
       tags

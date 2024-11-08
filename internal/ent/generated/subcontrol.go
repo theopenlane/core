@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 )
 
@@ -44,38 +45,33 @@ type Subcontrol struct {
 	SubcontrolType string `json:"subcontrol_type,omitempty"`
 	// version of the control
 	Version string `json:"version,omitempty"`
-	// owner of the subcontrol
-	Owner string `json:"owner,omitempty"`
-	// control number
+	// number of the subcontrol
 	SubcontrolNumber string `json:"subcontrol_number,omitempty"`
-	// control family
-	SubcontrolFamily string `json:"subcontrol_family,omitempty"`
-	// control class
-	SubcontrolClass string `json:"subcontrol_class,omitempty"`
-	// source of the control
+	// subcontrol family
+	Family string `json:"family,omitempty"`
+	// subcontrol class
+	Class string `json:"class,omitempty"`
+	// source of the control, e.g. framework, template, user-defined, etc.
 	Source string `json:"source,omitempty"`
-	// mapped frameworks
+	// mapped frameworks that the subcontrol is part of
 	MappedFrameworks string `json:"mapped_frameworks,omitempty"`
-	// assigned to
-	AssignedTo string `json:"assigned_to,omitempty"`
+	// implementation evidence of the subcontrol
+	ImplementationEvidence string `json:"implementation_evidence,omitempty"`
 	// implementation status
 	ImplementationStatus string `json:"implementation_status,omitempty"`
-	// implementation notes
-	ImplementationNotes string `json:"implementation_notes,omitempty"`
-	// implementation date
-	ImplementationDate string `json:"implementation_date,omitempty"`
-	// implementation evidence
-	ImplementationEvidence string `json:"implementation_evidence,omitempty"`
+	// date the subcontrol was implemented
+	ImplementationDate time.Time `json:"implementation_date,omitempty"`
 	// implementation verification
 	ImplementationVerification string `json:"implementation_verification,omitempty"`
-	// implementation verification date
-	ImplementationVerificationDate string `json:"implementation_verification_date,omitempty"`
-	// json schema
-	Jsonschema map[string]interface{} `json:"jsonschema,omitempty"`
+	// date the subcontrol implementation was verified
+	ImplementationVerificationDate time.Time `json:"implementation_verification_date,omitempty"`
+	// json data details of the subcontrol
+	Details map[string]interface{} `json:"details,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the SubcontrolQuery when eager-loading is set.
 	Edges                         SubcontrolEdges `json:"edges"`
 	control_objective_subcontrols *string
+	note_subcontrols              *string
 	selectValues                  sql.SelectValues
 }
 
@@ -83,13 +79,18 @@ type Subcontrol struct {
 type SubcontrolEdges struct {
 	// Control holds the value of the control edge.
 	Control []*Control `json:"control,omitempty"`
+	// User holds the value of the user edge.
+	User []*User `json:"user,omitempty"`
+	// Notes holds the value of the notes edge.
+	Notes *Note `json:"notes,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
+	loadedTypes [3]bool
 	// totalCount holds the count of the edges above.
-	totalCount [1]map[string]int
+	totalCount [3]map[string]int
 
 	namedControl map[string][]*Control
+	namedUser    map[string][]*User
 }
 
 // ControlOrErr returns the Control value or an error if the edge
@@ -101,18 +102,40 @@ func (e SubcontrolEdges) ControlOrErr() ([]*Control, error) {
 	return nil, &NotLoadedError{edge: "control"}
 }
 
+// UserOrErr returns the User value or an error if the edge
+// was not loaded in eager-loading.
+func (e SubcontrolEdges) UserOrErr() ([]*User, error) {
+	if e.loadedTypes[1] {
+		return e.User, nil
+	}
+	return nil, &NotLoadedError{edge: "user"}
+}
+
+// NotesOrErr returns the Notes value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e SubcontrolEdges) NotesOrErr() (*Note, error) {
+	if e.Notes != nil {
+		return e.Notes, nil
+	} else if e.loadedTypes[2] {
+		return nil, &NotFoundError{label: note.Label}
+	}
+	return nil, &NotLoadedError{edge: "notes"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Subcontrol) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case subcontrol.FieldTags, subcontrol.FieldJsonschema:
+		case subcontrol.FieldTags, subcontrol.FieldDetails:
 			values[i] = new([]byte)
-		case subcontrol.FieldID, subcontrol.FieldCreatedBy, subcontrol.FieldUpdatedBy, subcontrol.FieldDeletedBy, subcontrol.FieldMappingID, subcontrol.FieldName, subcontrol.FieldDescription, subcontrol.FieldStatus, subcontrol.FieldSubcontrolType, subcontrol.FieldVersion, subcontrol.FieldOwner, subcontrol.FieldSubcontrolNumber, subcontrol.FieldSubcontrolFamily, subcontrol.FieldSubcontrolClass, subcontrol.FieldSource, subcontrol.FieldMappedFrameworks, subcontrol.FieldAssignedTo, subcontrol.FieldImplementationStatus, subcontrol.FieldImplementationNotes, subcontrol.FieldImplementationDate, subcontrol.FieldImplementationEvidence, subcontrol.FieldImplementationVerification, subcontrol.FieldImplementationVerificationDate:
+		case subcontrol.FieldID, subcontrol.FieldCreatedBy, subcontrol.FieldUpdatedBy, subcontrol.FieldDeletedBy, subcontrol.FieldMappingID, subcontrol.FieldName, subcontrol.FieldDescription, subcontrol.FieldStatus, subcontrol.FieldSubcontrolType, subcontrol.FieldVersion, subcontrol.FieldSubcontrolNumber, subcontrol.FieldFamily, subcontrol.FieldClass, subcontrol.FieldSource, subcontrol.FieldMappedFrameworks, subcontrol.FieldImplementationEvidence, subcontrol.FieldImplementationStatus, subcontrol.FieldImplementationVerification:
 			values[i] = new(sql.NullString)
-		case subcontrol.FieldCreatedAt, subcontrol.FieldUpdatedAt, subcontrol.FieldDeletedAt:
+		case subcontrol.FieldCreatedAt, subcontrol.FieldUpdatedAt, subcontrol.FieldDeletedAt, subcontrol.FieldImplementationDate, subcontrol.FieldImplementationVerificationDate:
 			values[i] = new(sql.NullTime)
 		case subcontrol.ForeignKeys[0]: // control_objective_subcontrols
+			values[i] = new(sql.NullString)
+		case subcontrol.ForeignKeys[1]: // note_subcontrols
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -215,29 +238,23 @@ func (s *Subcontrol) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				s.Version = value.String
 			}
-		case subcontrol.FieldOwner:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field owner", values[i])
-			} else if value.Valid {
-				s.Owner = value.String
-			}
 		case subcontrol.FieldSubcontrolNumber:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field subcontrol_number", values[i])
 			} else if value.Valid {
 				s.SubcontrolNumber = value.String
 			}
-		case subcontrol.FieldSubcontrolFamily:
+		case subcontrol.FieldFamily:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field subcontrol_family", values[i])
+				return fmt.Errorf("unexpected type %T for field family", values[i])
 			} else if value.Valid {
-				s.SubcontrolFamily = value.String
+				s.Family = value.String
 			}
-		case subcontrol.FieldSubcontrolClass:
+		case subcontrol.FieldClass:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field subcontrol_class", values[i])
+				return fmt.Errorf("unexpected type %T for field class", values[i])
 			} else if value.Valid {
-				s.SubcontrolClass = value.String
+				s.Class = value.String
 			}
 		case subcontrol.FieldSource:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -251,11 +268,11 @@ func (s *Subcontrol) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				s.MappedFrameworks = value.String
 			}
-		case subcontrol.FieldAssignedTo:
+		case subcontrol.FieldImplementationEvidence:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field assigned_to", values[i])
+				return fmt.Errorf("unexpected type %T for field implementation_evidence", values[i])
 			} else if value.Valid {
-				s.AssignedTo = value.String
+				s.ImplementationEvidence = value.String
 			}
 		case subcontrol.FieldImplementationStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -263,23 +280,11 @@ func (s *Subcontrol) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				s.ImplementationStatus = value.String
 			}
-		case subcontrol.FieldImplementationNotes:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field implementation_notes", values[i])
-			} else if value.Valid {
-				s.ImplementationNotes = value.String
-			}
 		case subcontrol.FieldImplementationDate:
-			if value, ok := values[i].(*sql.NullString); !ok {
+			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field implementation_date", values[i])
 			} else if value.Valid {
-				s.ImplementationDate = value.String
-			}
-		case subcontrol.FieldImplementationEvidence:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field implementation_evidence", values[i])
-			} else if value.Valid {
-				s.ImplementationEvidence = value.String
+				s.ImplementationDate = value.Time
 			}
 		case subcontrol.FieldImplementationVerification:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -288,17 +293,17 @@ func (s *Subcontrol) assignValues(columns []string, values []any) error {
 				s.ImplementationVerification = value.String
 			}
 		case subcontrol.FieldImplementationVerificationDate:
-			if value, ok := values[i].(*sql.NullString); !ok {
+			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field implementation_verification_date", values[i])
 			} else if value.Valid {
-				s.ImplementationVerificationDate = value.String
+				s.ImplementationVerificationDate = value.Time
 			}
-		case subcontrol.FieldJsonschema:
+		case subcontrol.FieldDetails:
 			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field jsonschema", values[i])
+				return fmt.Errorf("unexpected type %T for field details", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &s.Jsonschema); err != nil {
-					return fmt.Errorf("unmarshal field jsonschema: %w", err)
+				if err := json.Unmarshal(*value, &s.Details); err != nil {
+					return fmt.Errorf("unmarshal field details: %w", err)
 				}
 			}
 		case subcontrol.ForeignKeys[0]:
@@ -307,6 +312,13 @@ func (s *Subcontrol) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				s.control_objective_subcontrols = new(string)
 				*s.control_objective_subcontrols = value.String
+			}
+		case subcontrol.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field note_subcontrols", values[i])
+			} else if value.Valid {
+				s.note_subcontrols = new(string)
+				*s.note_subcontrols = value.String
 			}
 		default:
 			s.selectValues.Set(columns[i], values[i])
@@ -324,6 +336,16 @@ func (s *Subcontrol) Value(name string) (ent.Value, error) {
 // QueryControl queries the "control" edge of the Subcontrol entity.
 func (s *Subcontrol) QueryControl() *ControlQuery {
 	return NewSubcontrolClient(s.config).QueryControl(s)
+}
+
+// QueryUser queries the "user" edge of the Subcontrol entity.
+func (s *Subcontrol) QueryUser() *UserQuery {
+	return NewSubcontrolClient(s.config).QueryUser(s)
+}
+
+// QueryNotes queries the "notes" edge of the Subcontrol entity.
+func (s *Subcontrol) QueryNotes() *NoteQuery {
+	return NewSubcontrolClient(s.config).QueryNotes(s)
 }
 
 // Update returns a builder for updating this Subcontrol.
@@ -388,17 +410,14 @@ func (s *Subcontrol) String() string {
 	builder.WriteString("version=")
 	builder.WriteString(s.Version)
 	builder.WriteString(", ")
-	builder.WriteString("owner=")
-	builder.WriteString(s.Owner)
-	builder.WriteString(", ")
 	builder.WriteString("subcontrol_number=")
 	builder.WriteString(s.SubcontrolNumber)
 	builder.WriteString(", ")
-	builder.WriteString("subcontrol_family=")
-	builder.WriteString(s.SubcontrolFamily)
+	builder.WriteString("family=")
+	builder.WriteString(s.Family)
 	builder.WriteString(", ")
-	builder.WriteString("subcontrol_class=")
-	builder.WriteString(s.SubcontrolClass)
+	builder.WriteString("class=")
+	builder.WriteString(s.Class)
 	builder.WriteString(", ")
 	builder.WriteString("source=")
 	builder.WriteString(s.Source)
@@ -406,29 +425,23 @@ func (s *Subcontrol) String() string {
 	builder.WriteString("mapped_frameworks=")
 	builder.WriteString(s.MappedFrameworks)
 	builder.WriteString(", ")
-	builder.WriteString("assigned_to=")
-	builder.WriteString(s.AssignedTo)
+	builder.WriteString("implementation_evidence=")
+	builder.WriteString(s.ImplementationEvidence)
 	builder.WriteString(", ")
 	builder.WriteString("implementation_status=")
 	builder.WriteString(s.ImplementationStatus)
 	builder.WriteString(", ")
-	builder.WriteString("implementation_notes=")
-	builder.WriteString(s.ImplementationNotes)
-	builder.WriteString(", ")
 	builder.WriteString("implementation_date=")
-	builder.WriteString(s.ImplementationDate)
-	builder.WriteString(", ")
-	builder.WriteString("implementation_evidence=")
-	builder.WriteString(s.ImplementationEvidence)
+	builder.WriteString(s.ImplementationDate.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("implementation_verification=")
 	builder.WriteString(s.ImplementationVerification)
 	builder.WriteString(", ")
 	builder.WriteString("implementation_verification_date=")
-	builder.WriteString(s.ImplementationVerificationDate)
+	builder.WriteString(s.ImplementationVerificationDate.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("jsonschema=")
-	builder.WriteString(fmt.Sprintf("%v", s.Jsonschema))
+	builder.WriteString("details=")
+	builder.WriteString(fmt.Sprintf("%v", s.Details))
 	builder.WriteByte(')')
 	return builder.String()
 }
@@ -454,6 +467,30 @@ func (s *Subcontrol) appendNamedControl(name string, edges ...*Control) {
 		s.Edges.namedControl[name] = []*Control{}
 	} else {
 		s.Edges.namedControl[name] = append(s.Edges.namedControl[name], edges...)
+	}
+}
+
+// NamedUser returns the User named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (s *Subcontrol) NamedUser(name string) ([]*User, error) {
+	if s.Edges.namedUser == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := s.Edges.namedUser[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (s *Subcontrol) appendNamedUser(name string, edges ...*User) {
+	if s.Edges.namedUser == nil {
+		s.Edges.namedUser = make(map[string][]*User)
+	}
+	if len(edges) == 0 {
+		s.Edges.namedUser[name] = []*User{}
+	} else {
+		s.Edges.namedUser[name] = append(s.Edges.namedUser[name], edges...)
 	}
 }
 

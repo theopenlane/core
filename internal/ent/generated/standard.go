@@ -48,12 +48,12 @@ type Standard struct {
 	Version string `json:"version,omitempty"`
 	// purpose and scope
 	PurposeAndScope string `json:"purpose_and_scope,omitempty"`
-	// background
+	// background of the standard
 	Background string `json:"background,omitempty"`
 	// which controls are satisfied by the standard
 	Satisfies string `json:"satisfies,omitempty"`
-	// json schema
-	Jsonschema map[string]interface{} `json:"jsonschema,omitempty"`
+	// json data with details of the standard
+	Details map[string]interface{} `json:"details,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the StandardQuery when eager-loading is set.
 	Edges        StandardEdges `json:"edges"`
@@ -123,7 +123,7 @@ func (*Standard) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case standard.FieldTags, standard.FieldJsonschema:
+		case standard.FieldTags, standard.FieldDetails:
 			values[i] = new([]byte)
 		case standard.FieldID, standard.FieldCreatedBy, standard.FieldUpdatedBy, standard.FieldDeletedBy, standard.FieldMappingID, standard.FieldName, standard.FieldDescription, standard.FieldFamily, standard.FieldStatus, standard.FieldStandardType, standard.FieldVersion, standard.FieldPurposeAndScope, standard.FieldBackground, standard.FieldSatisfies:
 			values[i] = new(sql.NullString)
@@ -254,12 +254,12 @@ func (s *Standard) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				s.Satisfies = value.String
 			}
-		case standard.FieldJsonschema:
+		case standard.FieldDetails:
 			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field jsonschema", values[i])
+				return fmt.Errorf("unexpected type %T for field details", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &s.Jsonschema); err != nil {
-					return fmt.Errorf("unmarshal field jsonschema: %w", err)
+				if err := json.Unmarshal(*value, &s.Details); err != nil {
+					return fmt.Errorf("unmarshal field details: %w", err)
 				}
 			}
 		default:
@@ -369,8 +369,8 @@ func (s *Standard) String() string {
 	builder.WriteString("satisfies=")
 	builder.WriteString(s.Satisfies)
 	builder.WriteString(", ")
-	builder.WriteString("jsonschema=")
-	builder.WriteString(fmt.Sprintf("%v", s.Jsonschema))
+	builder.WriteString("details=")
+	builder.WriteString(fmt.Sprintf("%v", s.Details))
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -221,20 +221,6 @@ func (cohc *ControlObjectiveHistoryCreate) SetNillableVersion(s *string) *Contro
 	return cohc
 }
 
-// SetOwner sets the "owner" field.
-func (cohc *ControlObjectiveHistoryCreate) SetOwner(s string) *ControlObjectiveHistoryCreate {
-	cohc.mutation.SetOwner(s)
-	return cohc
-}
-
-// SetNillableOwner sets the "owner" field if the given value is not nil.
-func (cohc *ControlObjectiveHistoryCreate) SetNillableOwner(s *string) *ControlObjectiveHistoryCreate {
-	if s != nil {
-		cohc.SetOwner(*s)
-	}
-	return cohc
-}
-
 // SetControlNumber sets the "control_number" field.
 func (cohc *ControlObjectiveHistoryCreate) SetControlNumber(s string) *ControlObjectiveHistoryCreate {
 	cohc.mutation.SetControlNumber(s)
@@ -249,30 +235,30 @@ func (cohc *ControlObjectiveHistoryCreate) SetNillableControlNumber(s *string) *
 	return cohc
 }
 
-// SetControlFamily sets the "control_family" field.
-func (cohc *ControlObjectiveHistoryCreate) SetControlFamily(s string) *ControlObjectiveHistoryCreate {
-	cohc.mutation.SetControlFamily(s)
+// SetFamily sets the "family" field.
+func (cohc *ControlObjectiveHistoryCreate) SetFamily(s string) *ControlObjectiveHistoryCreate {
+	cohc.mutation.SetFamily(s)
 	return cohc
 }
 
-// SetNillableControlFamily sets the "control_family" field if the given value is not nil.
-func (cohc *ControlObjectiveHistoryCreate) SetNillableControlFamily(s *string) *ControlObjectiveHistoryCreate {
+// SetNillableFamily sets the "family" field if the given value is not nil.
+func (cohc *ControlObjectiveHistoryCreate) SetNillableFamily(s *string) *ControlObjectiveHistoryCreate {
 	if s != nil {
-		cohc.SetControlFamily(*s)
+		cohc.SetFamily(*s)
 	}
 	return cohc
 }
 
-// SetControlClass sets the "control_class" field.
-func (cohc *ControlObjectiveHistoryCreate) SetControlClass(s string) *ControlObjectiveHistoryCreate {
-	cohc.mutation.SetControlClass(s)
+// SetClass sets the "class" field.
+func (cohc *ControlObjectiveHistoryCreate) SetClass(s string) *ControlObjectiveHistoryCreate {
+	cohc.mutation.SetClass(s)
 	return cohc
 }
 
-// SetNillableControlClass sets the "control_class" field if the given value is not nil.
-func (cohc *ControlObjectiveHistoryCreate) SetNillableControlClass(s *string) *ControlObjectiveHistoryCreate {
+// SetNillableClass sets the "class" field if the given value is not nil.
+func (cohc *ControlObjectiveHistoryCreate) SetNillableClass(s *string) *ControlObjectiveHistoryCreate {
 	if s != nil {
-		cohc.SetControlClass(*s)
+		cohc.SetClass(*s)
 	}
 	return cohc
 }
@@ -305,9 +291,9 @@ func (cohc *ControlObjectiveHistoryCreate) SetNillableMappedFrameworks(s *string
 	return cohc
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (cohc *ControlObjectiveHistoryCreate) SetJsonschema(m map[string]interface{}) *ControlObjectiveHistoryCreate {
-	cohc.mutation.SetJsonschema(m)
+// SetDetails sets the "details" field.
+func (cohc *ControlObjectiveHistoryCreate) SetDetails(m map[string]interface{}) *ControlObjectiveHistoryCreate {
+	cohc.mutation.SetDetails(m)
 	return cohc
 }
 
@@ -505,21 +491,17 @@ func (cohc *ControlObjectiveHistoryCreate) createSpec() (*ControlObjectiveHistor
 		_spec.SetField(controlobjectivehistory.FieldVersion, field.TypeString, value)
 		_node.Version = value
 	}
-	if value, ok := cohc.mutation.Owner(); ok {
-		_spec.SetField(controlobjectivehistory.FieldOwner, field.TypeString, value)
-		_node.Owner = value
-	}
 	if value, ok := cohc.mutation.ControlNumber(); ok {
 		_spec.SetField(controlobjectivehistory.FieldControlNumber, field.TypeString, value)
 		_node.ControlNumber = value
 	}
-	if value, ok := cohc.mutation.ControlFamily(); ok {
-		_spec.SetField(controlobjectivehistory.FieldControlFamily, field.TypeString, value)
-		_node.ControlFamily = value
+	if value, ok := cohc.mutation.Family(); ok {
+		_spec.SetField(controlobjectivehistory.FieldFamily, field.TypeString, value)
+		_node.Family = value
 	}
-	if value, ok := cohc.mutation.ControlClass(); ok {
-		_spec.SetField(controlobjectivehistory.FieldControlClass, field.TypeString, value)
-		_node.ControlClass = value
+	if value, ok := cohc.mutation.Class(); ok {
+		_spec.SetField(controlobjectivehistory.FieldClass, field.TypeString, value)
+		_node.Class = value
 	}
 	if value, ok := cohc.mutation.Source(); ok {
 		_spec.SetField(controlobjectivehistory.FieldSource, field.TypeString, value)
@@ -529,9 +511,9 @@ func (cohc *ControlObjectiveHistoryCreate) createSpec() (*ControlObjectiveHistor
 		_spec.SetField(controlobjectivehistory.FieldMappedFrameworks, field.TypeString, value)
 		_node.MappedFrameworks = value
 	}
-	if value, ok := cohc.mutation.Jsonschema(); ok {
-		_spec.SetField(controlobjectivehistory.FieldJsonschema, field.TypeJSON, value)
-		_node.Jsonschema = value
+	if value, ok := cohc.mutation.Details(); ok {
+		_spec.SetField(controlobjectivehistory.FieldDetails, field.TypeJSON, value)
+		_node.Details = value
 	}
 	return _node, _spec
 }

@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -222,29 +223,29 @@ func (rhc *RiskHistoryCreate) SetNillableBusinessCosts(s *string) *RiskHistoryCr
 }
 
 // SetImpact sets the "impact" field.
-func (rhc *RiskHistoryCreate) SetImpact(s string) *RiskHistoryCreate {
-	rhc.mutation.SetImpact(s)
+func (rhc *RiskHistoryCreate) SetImpact(ei enums.RiskImpact) *RiskHistoryCreate {
+	rhc.mutation.SetImpact(ei)
 	return rhc
 }
 
 // SetNillableImpact sets the "impact" field if the given value is not nil.
-func (rhc *RiskHistoryCreate) SetNillableImpact(s *string) *RiskHistoryCreate {
-	if s != nil {
-		rhc.SetImpact(*s)
+func (rhc *RiskHistoryCreate) SetNillableImpact(ei *enums.RiskImpact) *RiskHistoryCreate {
+	if ei != nil {
+		rhc.SetImpact(*ei)
 	}
 	return rhc
 }
 
 // SetLikelihood sets the "likelihood" field.
-func (rhc *RiskHistoryCreate) SetLikelihood(s string) *RiskHistoryCreate {
-	rhc.mutation.SetLikelihood(s)
+func (rhc *RiskHistoryCreate) SetLikelihood(el enums.RiskLikelihood) *RiskHistoryCreate {
+	rhc.mutation.SetLikelihood(el)
 	return rhc
 }
 
 // SetNillableLikelihood sets the "likelihood" field if the given value is not nil.
-func (rhc *RiskHistoryCreate) SetNillableLikelihood(s *string) *RiskHistoryCreate {
-	if s != nil {
-		rhc.SetLikelihood(*s)
+func (rhc *RiskHistoryCreate) SetNillableLikelihood(el *enums.RiskLikelihood) *RiskHistoryCreate {
+	if el != nil {
+		rhc.SetLikelihood(*el)
 	}
 	return rhc
 }
@@ -277,23 +278,9 @@ func (rhc *RiskHistoryCreate) SetNillableSatisfies(s *string) *RiskHistoryCreate
 	return rhc
 }
 
-// SetSeverity sets the "severity" field.
-func (rhc *RiskHistoryCreate) SetSeverity(s string) *RiskHistoryCreate {
-	rhc.mutation.SetSeverity(s)
-	return rhc
-}
-
-// SetNillableSeverity sets the "severity" field if the given value is not nil.
-func (rhc *RiskHistoryCreate) SetNillableSeverity(s *string) *RiskHistoryCreate {
-	if s != nil {
-		rhc.SetSeverity(*s)
-	}
-	return rhc
-}
-
-// SetJsonschema sets the "jsonschema" field.
-func (rhc *RiskHistoryCreate) SetJsonschema(m map[string]interface{}) *RiskHistoryCreate {
-	rhc.mutation.SetJsonschema(m)
+// SetDetails sets the "details" field.
+func (rhc *RiskHistoryCreate) SetDetails(m map[string]interface{}) *RiskHistoryCreate {
+	rhc.mutation.SetDetails(m)
 	return rhc
 }
 
@@ -390,6 +377,16 @@ func (rhc *RiskHistoryCreate) check() error {
 	}
 	if _, ok := rhc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "RiskHistory.name"`)}
+	}
+	if v, ok := rhc.mutation.Impact(); ok {
+		if err := riskhistory.ImpactValidator(v); err != nil {
+			return &ValidationError{Name: "impact", err: fmt.Errorf(`generated: validator failed for field "RiskHistory.impact": %w`, err)}
+		}
+	}
+	if v, ok := rhc.mutation.Likelihood(); ok {
+		if err := riskhistory.LikelihoodValidator(v); err != nil {
+			return &ValidationError{Name: "likelihood", err: fmt.Errorf(`generated: validator failed for field "RiskHistory.likelihood": %w`, err)}
+		}
 	}
 	return nil
 }
@@ -492,11 +489,11 @@ func (rhc *RiskHistoryCreate) createSpec() (*RiskHistory, *sqlgraph.CreateSpec) 
 		_node.BusinessCosts = value
 	}
 	if value, ok := rhc.mutation.Impact(); ok {
-		_spec.SetField(riskhistory.FieldImpact, field.TypeString, value)
+		_spec.SetField(riskhistory.FieldImpact, field.TypeEnum, value)
 		_node.Impact = value
 	}
 	if value, ok := rhc.mutation.Likelihood(); ok {
-		_spec.SetField(riskhistory.FieldLikelihood, field.TypeString, value)
+		_spec.SetField(riskhistory.FieldLikelihood, field.TypeEnum, value)
 		_node.Likelihood = value
 	}
 	if value, ok := rhc.mutation.Mitigation(); ok {
@@ -507,13 +504,9 @@ func (rhc *RiskHistoryCreate) createSpec() (*RiskHistory, *sqlgraph.CreateSpec) 
 		_spec.SetField(riskhistory.FieldSatisfies, field.TypeString, value)
 		_node.Satisfies = value
 	}
-	if value, ok := rhc.mutation.Severity(); ok {
-		_spec.SetField(riskhistory.FieldSeverity, field.TypeString, value)
-		_node.Severity = value
-	}
-	if value, ok := rhc.mutation.Jsonschema(); ok {
-		_spec.SetField(riskhistory.FieldJsonschema, field.TypeJSON, value)
-		_node.Jsonschema = value
+	if value, ok := rhc.mutation.Details(); ok {
+		_spec.SetField(riskhistory.FieldDetails, field.TypeJSON, value)
+		_node.Details = value
 	}
 	return _node, _spec
 }

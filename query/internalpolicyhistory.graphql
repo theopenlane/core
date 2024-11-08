@@ -8,9 +8,9 @@ query GetAllInternalPolicyHistories {
         createdAt
         createdBy
         description
+        details
         historyTime
         id
-        jsonschema
         name
         operation
         policyType
@@ -34,9 +34,9 @@ query GetInternalPolicyHistories($where: InternalPolicyHistoryWhereInput) {
         createdAt
         createdBy
         description
+        details
         historyTime
         id
-        jsonschema
         name
         operation
         policyType

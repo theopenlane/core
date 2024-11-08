@@ -41,30 +41,28 @@ type ControlObjectiveHistory struct {
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the name of the control
+	// the name of the control objective
 	Name string `json:"name,omitempty"`
-	// description of the control
+	// description of the control objective
 	Description string `json:"description,omitempty"`
-	// status of the control
+	// status of the control objective
 	Status string `json:"status,omitempty"`
 	// type of the control objective
 	ControlObjectiveType string `json:"control_objective_type,omitempty"`
-	// version of the control
+	// version of the control objective
 	Version string `json:"version,omitempty"`
-	// owner of the control
-	Owner string `json:"owner,omitempty"`
-	// control number
+	// number of the control objective
 	ControlNumber string `json:"control_number,omitempty"`
-	// control family
-	ControlFamily string `json:"control_family,omitempty"`
-	// control class
-	ControlClass string `json:"control_class,omitempty"`
-	// source of the control
+	// family of the control objective
+	Family string `json:"family,omitempty"`
+	// class associated with the control objective
+	Class string `json:"class,omitempty"`
+	// source of the control objective, e.g. framework, template, user-defined, etc.
 	Source string `json:"source,omitempty"`
 	// mapped frameworks
 	MappedFrameworks string `json:"mapped_frameworks,omitempty"`
-	// json schema
-	Jsonschema   map[string]interface{} `json:"jsonschema,omitempty"`
+	// json data including details of the control objective
+	Details      map[string]interface{} `json:"details,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -73,11 +71,11 @@ func (*ControlObjectiveHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case controlobjectivehistory.FieldTags, controlobjectivehistory.FieldJsonschema:
+		case controlobjectivehistory.FieldTags, controlobjectivehistory.FieldDetails:
 			values[i] = new([]byte)
 		case controlobjectivehistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case controlobjectivehistory.FieldID, controlobjectivehistory.FieldRef, controlobjectivehistory.FieldCreatedBy, controlobjectivehistory.FieldUpdatedBy, controlobjectivehistory.FieldDeletedBy, controlobjectivehistory.FieldMappingID, controlobjectivehistory.FieldName, controlobjectivehistory.FieldDescription, controlobjectivehistory.FieldStatus, controlobjectivehistory.FieldControlObjectiveType, controlobjectivehistory.FieldVersion, controlobjectivehistory.FieldOwner, controlobjectivehistory.FieldControlNumber, controlobjectivehistory.FieldControlFamily, controlobjectivehistory.FieldControlClass, controlobjectivehistory.FieldSource, controlobjectivehistory.FieldMappedFrameworks:
+		case controlobjectivehistory.FieldID, controlobjectivehistory.FieldRef, controlobjectivehistory.FieldCreatedBy, controlobjectivehistory.FieldUpdatedBy, controlobjectivehistory.FieldDeletedBy, controlobjectivehistory.FieldMappingID, controlobjectivehistory.FieldName, controlobjectivehistory.FieldDescription, controlobjectivehistory.FieldStatus, controlobjectivehistory.FieldControlObjectiveType, controlobjectivehistory.FieldVersion, controlobjectivehistory.FieldControlNumber, controlobjectivehistory.FieldFamily, controlobjectivehistory.FieldClass, controlobjectivehistory.FieldSource, controlobjectivehistory.FieldMappedFrameworks:
 			values[i] = new(sql.NullString)
 		case controlobjectivehistory.FieldHistoryTime, controlobjectivehistory.FieldCreatedAt, controlobjectivehistory.FieldUpdatedAt, controlobjectivehistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -200,29 +198,23 @@ func (coh *ControlObjectiveHistory) assignValues(columns []string, values []any)
 			} else if value.Valid {
 				coh.Version = value.String
 			}
-		case controlobjectivehistory.FieldOwner:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field owner", values[i])
-			} else if value.Valid {
-				coh.Owner = value.String
-			}
 		case controlobjectivehistory.FieldControlNumber:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field control_number", values[i])
 			} else if value.Valid {
 				coh.ControlNumber = value.String
 			}
-		case controlobjectivehistory.FieldControlFamily:
+		case controlobjectivehistory.FieldFamily:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field control_family", values[i])
+				return fmt.Errorf("unexpected type %T for field family", values[i])
 			} else if value.Valid {
-				coh.ControlFamily = value.String
+				coh.Family = value.String
 			}
-		case controlobjectivehistory.FieldControlClass:
+		case controlobjectivehistory.FieldClass:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field control_class", values[i])
+				return fmt.Errorf("unexpected type %T for field class", values[i])
 			} else if value.Valid {
-				coh.ControlClass = value.String
+				coh.Class = value.String
 			}
 		case controlobjectivehistory.FieldSource:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -236,12 +228,12 @@ func (coh *ControlObjectiveHistory) assignValues(columns []string, values []any)
 			} else if value.Valid {
 				coh.MappedFrameworks = value.String
 			}
-		case controlobjectivehistory.FieldJsonschema:
+		case controlobjectivehistory.FieldDetails:
 			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field jsonschema", values[i])
+				return fmt.Errorf("unexpected type %T for field details", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &coh.Jsonschema); err != nil {
-					return fmt.Errorf("unmarshal field jsonschema: %w", err)
+				if err := json.Unmarshal(*value, &coh.Details); err != nil {
+					return fmt.Errorf("unmarshal field details: %w", err)
 				}
 			}
 		default:
@@ -328,17 +320,14 @@ func (coh *ControlObjectiveHistory) String() string {
 	builder.WriteString("version=")
 	builder.WriteString(coh.Version)
 	builder.WriteString(", ")
-	builder.WriteString("owner=")
-	builder.WriteString(coh.Owner)
-	builder.WriteString(", ")
 	builder.WriteString("control_number=")
 	builder.WriteString(coh.ControlNumber)
 	builder.WriteString(", ")
-	builder.WriteString("control_family=")
-	builder.WriteString(coh.ControlFamily)
+	builder.WriteString("family=")
+	builder.WriteString(coh.Family)
 	builder.WriteString(", ")
-	builder.WriteString("control_class=")
-	builder.WriteString(coh.ControlClass)
+	builder.WriteString("class=")
+	builder.WriteString(coh.Class)
 	builder.WriteString(", ")
 	builder.WriteString("source=")
 	builder.WriteString(coh.Source)
@@ -346,8 +335,8 @@ func (coh *ControlObjectiveHistory) String() string {
 	builder.WriteString("mapped_frameworks=")
 	builder.WriteString(coh.MappedFrameworks)
 	builder.WriteString(", ")
-	builder.WriteString("jsonschema=")
-	builder.WriteString(fmt.Sprintf("%v", coh.Jsonschema))
+	builder.WriteString("details=")
+	builder.WriteString(fmt.Sprintf("%v", coh.Details))
 	builder.WriteByte(')')
 	return builder.String()
 }

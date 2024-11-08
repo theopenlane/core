@@ -41,13 +41,13 @@ func (Standard) Fields() []ent.Field {
 			Comment("purpose and scope"),
 		field.Text("background").
 			Optional().
-			Comment("background"),
+			Comment("background of the standard"),
 		field.Text("satisfies").
 			Optional().
 			Comment("which controls are satisfied by the standard"),
-		field.JSON("jsonschema", map[string]interface{}{}).
+		field.JSON("details", map[string]interface{}{}).
 			Optional().
-			Comment("json schema"),
+			Comment("json data with details of the standard"),
 	}
 }
 

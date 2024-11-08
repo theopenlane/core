@@ -13,9 +13,11 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -29,10 +31,14 @@ type ActionPlanQuery struct {
 	predicates        []predicate.ActionPlan
 	withStandard      *StandardQuery
 	withRisk          *RiskQuery
+	withControl       *ControlQuery
+	withUser          *UserQuery
 	loadTotal         []func(context.Context, []*ActionPlan) error
 	modifiers         []func(*sql.Selector)
 	withNamedStandard map[string]*StandardQuery
 	withNamedRisk     map[string]*RiskQuery
+	withNamedControl  map[string]*ControlQuery
+	withNamedUser     map[string]*UserQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -113,6 +119,56 @@ func (apq *ActionPlanQuery) QueryRisk() *RiskQuery {
 		schemaConfig := apq.schemaConfig
 		step.To.Schema = schemaConfig.Risk
 		step.Edge.Schema = schemaConfig.RiskActionplans
+		fromU = sqlgraph.SetNeighbors(apq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryControl chains the current query on the "control" edge.
+func (apq *ActionPlanQuery) QueryControl() *ControlQuery {
+	query := (&ControlClient{config: apq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := apq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := apq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(actionplan.Table, actionplan.FieldID, selector),
+			sqlgraph.To(control.Table, control.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, actionplan.ControlTable, actionplan.ControlPrimaryKey...),
+		)
+		schemaConfig := apq.schemaConfig
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.ControlActionplans
+		fromU = sqlgraph.SetNeighbors(apq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryUser chains the current query on the "user" edge.
+func (apq *ActionPlanQuery) QueryUser() *UserQuery {
+	query := (&UserClient{config: apq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := apq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := apq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(actionplan.Table, actionplan.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, actionplan.UserTable, actionplan.UserPrimaryKey...),
+		)
+		schemaConfig := apq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.UserActionplans
 		fromU = sqlgraph.SetNeighbors(apq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -313,6 +369,8 @@ func (apq *ActionPlanQuery) Clone() *ActionPlanQuery {
 		predicates:   append([]predicate.ActionPlan{}, apq.predicates...),
 		withStandard: apq.withStandard.Clone(),
 		withRisk:     apq.withRisk.Clone(),
+		withControl:  apq.withControl.Clone(),
+		withUser:     apq.withUser.Clone(),
 		// clone intermediate query.
 		sql:       apq.sql.Clone(),
 		path:      apq.path,
@@ -339,6 +397,28 @@ func (apq *ActionPlanQuery) WithRisk(opts ...func(*RiskQuery)) *ActionPlanQuery 
 		opt(query)
 	}
 	apq.withRisk = query
+	return apq
+}
+
+// WithControl tells the query-builder to eager-load the nodes that are connected to
+// the "control" edge. The optional arguments are used to configure the query builder of the edge.
+func (apq *ActionPlanQuery) WithControl(opts ...func(*ControlQuery)) *ActionPlanQuery {
+	query := (&ControlClient{config: apq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	apq.withControl = query
+	return apq
+}
+
+// WithUser tells the query-builder to eager-load the nodes that are connected to
+// the "user" edge. The optional arguments are used to configure the query builder of the edge.
+func (apq *ActionPlanQuery) WithUser(opts ...func(*UserQuery)) *ActionPlanQuery {
+	query := (&UserClient{config: apq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	apq.withUser = query
 	return apq
 }
 
@@ -420,9 +500,11 @@ func (apq *ActionPlanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 	var (
 		nodes       = []*ActionPlan{}
 		_spec       = apq.querySpec()
-		loadedTypes = [2]bool{
+		loadedTypes = [4]bool{
 			apq.withStandard != nil,
 			apq.withRisk != nil,
+			apq.withControl != nil,
+			apq.withUser != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -462,6 +544,20 @@ func (apq *ActionPlanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 			return nil, err
 		}
 	}
+	if query := apq.withControl; query != nil {
+		if err := apq.loadControl(ctx, query, nodes,
+			func(n *ActionPlan) { n.Edges.Control = []*Control{} },
+			func(n *ActionPlan, e *Control) { n.Edges.Control = append(n.Edges.Control, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := apq.withUser; query != nil {
+		if err := apq.loadUser(ctx, query, nodes,
+			func(n *ActionPlan) { n.Edges.User = []*User{} },
+			func(n *ActionPlan, e *User) { n.Edges.User = append(n.Edges.User, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range apq.withNamedStandard {
 		if err := apq.loadStandard(ctx, query, nodes,
 			func(n *ActionPlan) { n.appendNamedStandard(name) },
@@ -473,6 +569,20 @@ func (apq *ActionPlanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 		if err := apq.loadRisk(ctx, query, nodes,
 			func(n *ActionPlan) { n.appendNamedRisk(name) },
 			func(n *ActionPlan, e *Risk) { n.appendNamedRisk(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range apq.withNamedControl {
+		if err := apq.loadControl(ctx, query, nodes,
+			func(n *ActionPlan) { n.appendNamedControl(name) },
+			func(n *ActionPlan, e *Control) { n.appendNamedControl(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range apq.withNamedUser {
+		if err := apq.loadUser(ctx, query, nodes,
+			func(n *ActionPlan) { n.appendNamedUser(name) },
+			func(n *ActionPlan, e *User) { n.appendNamedUser(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -608,6 +718,130 @@ func (apq *ActionPlanQuery) loadRisk(ctx context.Context, query *RiskQuery, node
 	}
 	return nil
 }
+func (apq *ActionPlanQuery) loadControl(ctx context.Context, query *ControlQuery, nodes []*ActionPlan, init func(*ActionPlan), assign func(*ActionPlan, *Control)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*ActionPlan)
+	nids := make(map[string]map[*ActionPlan]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(actionplan.ControlTable)
+		joinT.Schema(apq.schemaConfig.ControlActionplans)
+		s.Join(joinT).On(s.C(control.FieldID), joinT.C(actionplan.ControlPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(actionplan.ControlPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(actionplan.ControlPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*ActionPlan]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Control](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "control" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (apq *ActionPlanQuery) loadUser(ctx context.Context, query *UserQuery, nodes []*ActionPlan, init func(*ActionPlan), assign func(*ActionPlan, *User)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*ActionPlan)
+	nids := make(map[string]map[*ActionPlan]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(actionplan.UserTable)
+		joinT.Schema(apq.schemaConfig.UserActionplans)
+		s.Join(joinT).On(s.C(user.FieldID), joinT.C(actionplan.UserPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(actionplan.UserPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(actionplan.UserPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*ActionPlan]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*User](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "user" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 
 func (apq *ActionPlanQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := apq.querySpec()
@@ -732,6 +966,34 @@ func (apq *ActionPlanQuery) WithNamedRisk(name string, opts ...func(*RiskQuery))
 		apq.withNamedRisk = make(map[string]*RiskQuery)
 	}
 	apq.withNamedRisk[name] = query
+	return apq
+}
+
+// WithNamedControl tells the query-builder to eager-load the nodes that are connected to the "control"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (apq *ActionPlanQuery) WithNamedControl(name string, opts ...func(*ControlQuery)) *ActionPlanQuery {
+	query := (&ControlClient{config: apq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if apq.withNamedControl == nil {
+		apq.withNamedControl = make(map[string]*ControlQuery)
+	}
+	apq.withNamedControl[name] = query
+	return apq
+}
+
+// WithNamedUser tells the query-builder to eager-load the nodes that are connected to the "user"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (apq *ActionPlanQuery) WithNamedUser(name string, opts ...func(*UserQuery)) *ActionPlanQuery {
+	query := (&UserClient{config: apq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if apq.withNamedUser == nil {
+		apq.withNamedUser = make(map[string]*UserQuery)
+	}
+	apq.withNamedUser[name] = query
 	return apq
 }
 

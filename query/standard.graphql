@@ -6,9 +6,9 @@ mutation CreateBulkCSVStandard($input: Upload!) {
       createdAt
       createdBy
       description
+      details
       family
       id
-      jsonschema
       name
       purposeAndScope
       satisfies
@@ -29,9 +29,9 @@ mutation CreateBulkStandard($input: [CreateStandardInput!]) {
       createdAt
       createdBy
       description
+      details
       family
       id
-      jsonschema
       name
       purposeAndScope
       satisfies
@@ -52,9 +52,9 @@ mutation CreateStandard($input: CreateStandardInput!) {
       createdAt
       createdBy
       description
+      details
       family
       id
-      jsonschema
       name
       purposeAndScope
       satisfies
@@ -82,9 +82,9 @@ query GetAllStandards {
         createdAt
         createdBy
         description
+        details
         family
         id
-        jsonschema
         name
         purposeAndScope
         satisfies
@@ -104,9 +104,9 @@ query GetStandardByID($standardId: ID!) {
     createdAt
     createdBy
     description
+    details
     family
     id
-    jsonschema
     name
     purposeAndScope
     satisfies
@@ -127,9 +127,9 @@ query GetStandards($where: StandardWhereInput) {
         createdAt
         createdBy
         description
+        details
         family
         id
-        jsonschema
         name
         purposeAndScope
         satisfies
@@ -150,9 +150,9 @@ mutation UpdateStandard($updateStandardId: ID!, $input: UpdateStandardInput!) {
       createdAt
       createdBy
       description
+      details
       family
       id
-      jsonschema
       name
       purposeAndScope
       satisfies

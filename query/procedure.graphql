@@ -6,8 +6,8 @@ mutation CreateBulkCSVProcedure($input: Upload!) {
       createdAt
       createdBy
       description
+      details
       id
-      jsonschema
       name
       procedureType
       purposeAndScope
@@ -28,8 +28,8 @@ mutation CreateBulkProcedure($input: [CreateProcedureInput!]) {
       createdAt
       createdBy
       description
+      details
       id
-      jsonschema
       name
       procedureType
       purposeAndScope
@@ -50,8 +50,8 @@ mutation CreateProcedure($input: CreateProcedureInput!) {
       createdAt
       createdBy
       description
+      details
       id
-      jsonschema
       name
       procedureType
       purposeAndScope
@@ -79,8 +79,8 @@ query GetAllProcedures {
         createdAt
         createdBy
         description
+        details
         id
-        jsonschema
         name
         procedureType
         purposeAndScope
@@ -100,8 +100,8 @@ query GetProcedureByID($procedureId: ID!) {
     createdAt
     createdBy
     description
+    details
     id
-    jsonschema
     name
     procedureType
     purposeAndScope
@@ -122,8 +122,8 @@ query GetProcedures($where: ProcedureWhereInput) {
         createdAt
         createdBy
         description
+        details
         id
-        jsonschema
         name
         procedureType
         purposeAndScope
@@ -144,8 +144,8 @@ mutation UpdateProcedure($updateProcedureId: ID!, $input: UpdateProcedureInput!)
       createdAt
       createdBy
       description
+      details
       id
-      jsonschema
       name
       procedureType
       purposeAndScope

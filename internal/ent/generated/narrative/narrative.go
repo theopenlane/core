@@ -37,8 +37,8 @@ const (
 	FieldDescription = "description"
 	// FieldSatisfies holds the string denoting the satisfies field in the database.
 	FieldSatisfies = "satisfies"
-	// FieldJsonschema holds the string denoting the jsonschema field in the database.
-	FieldJsonschema = "jsonschema"
+	// FieldDetails holds the string denoting the details field in the database.
+	FieldDetails = "details"
 	// EdgePolicy holds the string denoting the policy edge name in mutations.
 	EdgePolicy = "policy"
 	// EdgeControl holds the string denoting the control edge name in mutations.
@@ -85,7 +85,7 @@ var Columns = []string{
 	FieldName,
 	FieldDescription,
 	FieldSatisfies,
-	FieldJsonschema,
+	FieldDetails,
 }
 
 var (

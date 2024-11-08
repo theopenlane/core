@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
@@ -37,6 +38,7 @@ type ControlQuery struct {
 	withStandard               *StandardQuery
 	withNarratives             *NarrativeQuery
 	withRisks                  *RiskQuery
+	withActionplans            *ActionPlanQuery
 	withFKs                    bool
 	loadTotal                  []func(context.Context, []*Control) error
 	modifiers                  []func(*sql.Selector)
@@ -46,6 +48,7 @@ type ControlQuery struct {
 	withNamedStandard          map[string]*StandardQuery
 	withNamedNarratives        map[string]*NarrativeQuery
 	withNamedRisks             map[string]*RiskQuery
+	withNamedActionplans       map[string]*ActionPlanQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -226,6 +229,31 @@ func (cq *ControlQuery) QueryRisks() *RiskQuery {
 		schemaConfig := cq.schemaConfig
 		step.To.Schema = schemaConfig.Risk
 		step.Edge.Schema = schemaConfig.ControlRisks
+		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryActionplans chains the current query on the "actionplans" edge.
+func (cq *ControlQuery) QueryActionplans() *ActionPlanQuery {
+	query := (&ActionPlanClient{config: cq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := cq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := cq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, selector),
+			sqlgraph.To(actionplan.Table, actionplan.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, control.ActionplansTable, control.ActionplansPrimaryKey...),
+		)
+		schemaConfig := cq.schemaConfig
+		step.To.Schema = schemaConfig.ActionPlan
+		step.Edge.Schema = schemaConfig.ControlActionplans
 		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -430,6 +458,7 @@ func (cq *ControlQuery) Clone() *ControlQuery {
 		withStandard:          cq.withStandard.Clone(),
 		withNarratives:        cq.withNarratives.Clone(),
 		withRisks:             cq.withRisks.Clone(),
+		withActionplans:       cq.withActionplans.Clone(),
 		// clone intermediate query.
 		sql:       cq.sql.Clone(),
 		path:      cq.path,
@@ -500,6 +529,17 @@ func (cq *ControlQuery) WithRisks(opts ...func(*RiskQuery)) *ControlQuery {
 		opt(query)
 	}
 	cq.withRisks = query
+	return cq
+}
+
+// WithActionplans tells the query-builder to eager-load the nodes that are connected to
+// the "actionplans" edge. The optional arguments are used to configure the query builder of the edge.
+func (cq *ControlQuery) WithActionplans(opts ...func(*ActionPlanQuery)) *ControlQuery {
+	query := (&ActionPlanClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	cq.withActionplans = query
 	return cq
 }
 
@@ -582,13 +622,14 @@ func (cq *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 		nodes       = []*Control{}
 		withFKs     = cq.withFKs
 		_spec       = cq.querySpec()
-		loadedTypes = [6]bool{
+		loadedTypes = [7]bool{
 			cq.withProcedures != nil,
 			cq.withSubcontrols != nil,
 			cq.withControlobjectives != nil,
 			cq.withStandard != nil,
 			cq.withNarratives != nil,
 			cq.withRisks != nil,
+			cq.withActionplans != nil,
 		}
 	)
 	if withFKs {
@@ -661,6 +702,13 @@ func (cq *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 			return nil, err
 		}
 	}
+	if query := cq.withActionplans; query != nil {
+		if err := cq.loadActionplans(ctx, query, nodes,
+			func(n *Control) { n.Edges.Actionplans = []*ActionPlan{} },
+			func(n *Control, e *ActionPlan) { n.Edges.Actionplans = append(n.Edges.Actionplans, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range cq.withNamedProcedures {
 		if err := cq.loadProcedures(ctx, query, nodes,
 			func(n *Control) { n.appendNamedProcedures(name) },
@@ -700,6 +748,13 @@ func (cq *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 		if err := cq.loadRisks(ctx, query, nodes,
 			func(n *Control) { n.appendNamedRisks(name) },
 			func(n *Control, e *Risk) { n.appendNamedRisks(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range cq.withNamedActionplans {
+		if err := cq.loadActionplans(ctx, query, nodes,
+			func(n *Control) { n.appendNamedActionplans(name) },
+			func(n *Control, e *ActionPlan) { n.appendNamedActionplans(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1052,6 +1107,68 @@ func (cq *ControlQuery) loadRisks(ctx context.Context, query *RiskQuery, nodes [
 	}
 	return nil
 }
+func (cq *ControlQuery) loadActionplans(ctx context.Context, query *ActionPlanQuery, nodes []*Control, init func(*Control), assign func(*Control, *ActionPlan)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Control)
+	nids := make(map[string]map[*Control]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(control.ActionplansTable)
+		joinT.Schema(cq.schemaConfig.ControlActionplans)
+		s.Join(joinT).On(s.C(actionplan.FieldID), joinT.C(control.ActionplansPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(control.ActionplansPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(control.ActionplansPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Control]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*ActionPlan](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "actionplans" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 
 func (cq *ControlQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := cq.querySpec()
@@ -1232,6 +1349,20 @@ func (cq *ControlQuery) WithNamedRisks(name string, opts ...func(*RiskQuery)) *C
 		cq.withNamedRisks = make(map[string]*RiskQuery)
 	}
 	cq.withNamedRisks[name] = query
+	return cq
+}
+
+// WithNamedActionplans tells the query-builder to eager-load the nodes that are connected to the "actionplans"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (cq *ControlQuery) WithNamedActionplans(name string, opts ...func(*ActionPlanQuery)) *ControlQuery {
+	query := (&ActionPlanClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if cq.withNamedActionplans == nil {
+		cq.withNamedActionplans = make(map[string]*ActionPlanQuery)
+	}
+	cq.withNamedActionplans[name] = query
 	return cq
 }
 

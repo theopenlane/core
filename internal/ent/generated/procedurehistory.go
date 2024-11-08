@@ -53,12 +53,12 @@ type ProcedureHistory struct {
 	Version string `json:"version,omitempty"`
 	// purpose and scope
 	PurposeAndScope string `json:"purpose_and_scope,omitempty"`
-	// background
+	// background of the procedure
 	Background string `json:"background,omitempty"`
 	// which controls are satisfied by the procedure
 	Satisfies string `json:"satisfies,omitempty"`
-	// json schema
-	Jsonschema   map[string]interface{} `json:"jsonschema,omitempty"`
+	// json data for the procedure document
+	Details      map[string]interface{} `json:"details,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -67,7 +67,7 @@ func (*ProcedureHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case procedurehistory.FieldTags, procedurehistory.FieldJsonschema:
+		case procedurehistory.FieldTags, procedurehistory.FieldDetails:
 			values[i] = new([]byte)
 		case procedurehistory.FieldOperation:
 			values[i] = new(history.OpType)
@@ -212,12 +212,12 @@ func (ph *ProcedureHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ph.Satisfies = value.String
 			}
-		case procedurehistory.FieldJsonschema:
+		case procedurehistory.FieldDetails:
 			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field jsonschema", values[i])
+				return fmt.Errorf("unexpected type %T for field details", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ph.Jsonschema); err != nil {
-					return fmt.Errorf("unmarshal field jsonschema: %w", err)
+				if err := json.Unmarshal(*value, &ph.Details); err != nil {
+					return fmt.Errorf("unmarshal field details: %w", err)
 				}
 			}
 		default:
@@ -313,8 +313,8 @@ func (ph *ProcedureHistory) String() string {
 	builder.WriteString("satisfies=")
 	builder.WriteString(ph.Satisfies)
 	builder.WriteString(", ")
-	builder.WriteString("jsonschema=")
-	builder.WriteString(fmt.Sprintf("%v", ph.Jsonschema))
+	builder.WriteString("details=")
+	builder.WriteString(fmt.Sprintf("%v", ph.Details))
 	builder.WriteByte(')')
 	return builder.String()
 }

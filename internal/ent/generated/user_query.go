@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/file"
@@ -23,6 +24,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
@@ -49,6 +51,8 @@ type UserQuery struct {
 	withFiles                        *FileQuery
 	withFile                         *FileQuery
 	withEvents                       *EventQuery
+	withActionplans                  *ActionPlanQuery
+	withSubcontrols                  *SubcontrolQuery
 	withGroupMemberships             *GroupMembershipQuery
 	withOrgMemberships               *OrgMembershipQuery
 	loadTotal                        []func(context.Context, []*User) error
@@ -62,6 +66,8 @@ type UserQuery struct {
 	withNamedWebauthn                map[string]*WebauthnQuery
 	withNamedFiles                   map[string]*FileQuery
 	withNamedEvents                  map[string]*EventQuery
+	withNamedActionplans             map[string]*ActionPlanQuery
+	withNamedSubcontrols             map[string]*SubcontrolQuery
 	withNamedGroupMemberships        map[string]*GroupMembershipQuery
 	withNamedOrgMemberships          map[string]*OrgMembershipQuery
 	// intermediate query (i.e. traversal path).
@@ -375,6 +381,56 @@ func (uq *UserQuery) QueryEvents() *EventQuery {
 	return query
 }
 
+// QueryActionplans chains the current query on the "actionplans" edge.
+func (uq *UserQuery) QueryActionplans() *ActionPlanQuery {
+	query := (&ActionPlanClient{config: uq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := uq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := uq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, selector),
+			sqlgraph.To(actionplan.Table, actionplan.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, user.ActionplansTable, user.ActionplansPrimaryKey...),
+		)
+		schemaConfig := uq.schemaConfig
+		step.To.Schema = schemaConfig.ActionPlan
+		step.Edge.Schema = schemaConfig.UserActionplans
+		fromU = sqlgraph.SetNeighbors(uq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QuerySubcontrols chains the current query on the "subcontrols" edge.
+func (uq *UserQuery) QuerySubcontrols() *SubcontrolQuery {
+	query := (&SubcontrolClient{config: uq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := uq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := uq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, selector),
+			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, user.SubcontrolsTable, user.SubcontrolsPrimaryKey...),
+		)
+		schemaConfig := uq.schemaConfig
+		step.To.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.UserSubcontrols
+		fromU = sqlgraph.SetNeighbors(uq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryGroupMemberships chains the current query on the "group_memberships" edge.
 func (uq *UserQuery) QueryGroupMemberships() *GroupMembershipQuery {
 	query := (&GroupMembershipClient{config: uq.config}).Query()
@@ -628,6 +684,8 @@ func (uq *UserQuery) Clone() *UserQuery {
 		withFiles:                   uq.withFiles.Clone(),
 		withFile:                    uq.withFile.Clone(),
 		withEvents:                  uq.withEvents.Clone(),
+		withActionplans:             uq.withActionplans.Clone(),
+		withSubcontrols:             uq.withSubcontrols.Clone(),
 		withGroupMemberships:        uq.withGroupMemberships.Clone(),
 		withOrgMemberships:          uq.withOrgMemberships.Clone(),
 		// clone intermediate query.
@@ -758,6 +816,28 @@ func (uq *UserQuery) WithEvents(opts ...func(*EventQuery)) *UserQuery {
 	return uq
 }
 
+// WithActionplans tells the query-builder to eager-load the nodes that are connected to
+// the "actionplans" edge. The optional arguments are used to configure the query builder of the edge.
+func (uq *UserQuery) WithActionplans(opts ...func(*ActionPlanQuery)) *UserQuery {
+	query := (&ActionPlanClient{config: uq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	uq.withActionplans = query
+	return uq
+}
+
+// WithSubcontrols tells the query-builder to eager-load the nodes that are connected to
+// the "subcontrols" edge. The optional arguments are used to configure the query builder of the edge.
+func (uq *UserQuery) WithSubcontrols(opts ...func(*SubcontrolQuery)) *UserQuery {
+	query := (&SubcontrolClient{config: uq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	uq.withSubcontrols = query
+	return uq
+}
+
 // WithGroupMemberships tells the query-builder to eager-load the nodes that are connected to
 // the "group_memberships" edge. The optional arguments are used to configure the query builder of the edge.
 func (uq *UserQuery) WithGroupMemberships(opts ...func(*GroupMembershipQuery)) *UserQuery {
@@ -864,7 +944,7 @@ func (uq *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 	var (
 		nodes       = []*User{}
 		_spec       = uq.querySpec()
-		loadedTypes = [13]bool{
+		loadedTypes = [15]bool{
 			uq.withPersonalAccessTokens != nil,
 			uq.withTfaSettings != nil,
 			uq.withSetting != nil,
@@ -876,6 +956,8 @@ func (uq *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 			uq.withFiles != nil,
 			uq.withFile != nil,
 			uq.withEvents != nil,
+			uq.withActionplans != nil,
+			uq.withSubcontrols != nil,
 			uq.withGroupMemberships != nil,
 			uq.withOrgMemberships != nil,
 		}
@@ -984,6 +1066,20 @@ func (uq *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 			return nil, err
 		}
 	}
+	if query := uq.withActionplans; query != nil {
+		if err := uq.loadActionplans(ctx, query, nodes,
+			func(n *User) { n.Edges.Actionplans = []*ActionPlan{} },
+			func(n *User, e *ActionPlan) { n.Edges.Actionplans = append(n.Edges.Actionplans, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := uq.withSubcontrols; query != nil {
+		if err := uq.loadSubcontrols(ctx, query, nodes,
+			func(n *User) { n.Edges.Subcontrols = []*Subcontrol{} },
+			func(n *User, e *Subcontrol) { n.Edges.Subcontrols = append(n.Edges.Subcontrols, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := uq.withGroupMemberships; query != nil {
 		if err := uq.loadGroupMemberships(ctx, query, nodes,
 			func(n *User) { n.Edges.GroupMemberships = []*GroupMembership{} },
@@ -1058,6 +1154,20 @@ func (uq *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 		if err := uq.loadEvents(ctx, query, nodes,
 			func(n *User) { n.appendNamedEvents(name) },
 			func(n *User, e *Event) { n.appendNamedEvents(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range uq.withNamedActionplans {
+		if err := uq.loadActionplans(ctx, query, nodes,
+			func(n *User) { n.appendNamedActionplans(name) },
+			func(n *User, e *ActionPlan) { n.appendNamedActionplans(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range uq.withNamedSubcontrols {
+		if err := uq.loadSubcontrols(ctx, query, nodes,
+			func(n *User) { n.appendNamedSubcontrols(name) },
+			func(n *User, e *Subcontrol) { n.appendNamedSubcontrols(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1541,6 +1651,130 @@ func (uq *UserQuery) loadEvents(ctx context.Context, query *EventQuery, nodes []
 	}
 	return nil
 }
+func (uq *UserQuery) loadActionplans(ctx context.Context, query *ActionPlanQuery, nodes []*User, init func(*User), assign func(*User, *ActionPlan)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*User)
+	nids := make(map[string]map[*User]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(user.ActionplansTable)
+		joinT.Schema(uq.schemaConfig.UserActionplans)
+		s.Join(joinT).On(s.C(actionplan.FieldID), joinT.C(user.ActionplansPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(user.ActionplansPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(user.ActionplansPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*User]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*ActionPlan](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "actionplans" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (uq *UserQuery) loadSubcontrols(ctx context.Context, query *SubcontrolQuery, nodes []*User, init func(*User), assign func(*User, *Subcontrol)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*User)
+	nids := make(map[string]map[*User]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(user.SubcontrolsTable)
+		joinT.Schema(uq.schemaConfig.UserSubcontrols)
+		s.Join(joinT).On(s.C(subcontrol.FieldID), joinT.C(user.SubcontrolsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(user.SubcontrolsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(user.SubcontrolsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*User]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Subcontrol](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "subcontrols" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (uq *UserQuery) loadGroupMemberships(ctx context.Context, query *GroupMembershipQuery, nodes []*User, init func(*User), assign func(*User, *GroupMembership)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*User)
@@ -1826,6 +2060,34 @@ func (uq *UserQuery) WithNamedEvents(name string, opts ...func(*EventQuery)) *Us
 		uq.withNamedEvents = make(map[string]*EventQuery)
 	}
 	uq.withNamedEvents[name] = query
+	return uq
+}
+
+// WithNamedActionplans tells the query-builder to eager-load the nodes that are connected to the "actionplans"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (uq *UserQuery) WithNamedActionplans(name string, opts ...func(*ActionPlanQuery)) *UserQuery {
+	query := (&ActionPlanClient{config: uq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if uq.withNamedActionplans == nil {
+		uq.withNamedActionplans = make(map[string]*ActionPlanQuery)
+	}
+	uq.withNamedActionplans[name] = query
+	return uq
+}
+
+// WithNamedSubcontrols tells the query-builder to eager-load the nodes that are connected to the "subcontrols"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (uq *UserQuery) WithNamedSubcontrols(name string, opts ...func(*SubcontrolQuery)) *UserQuery {
+	query := (&SubcontrolClient{config: uq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if uq.withNamedSubcontrols == nil {
+		uq.withNamedSubcontrols = make(map[string]*SubcontrolQuery)
+	}
+	uq.withNamedSubcontrols[name] = query
 	return uq
 }
 

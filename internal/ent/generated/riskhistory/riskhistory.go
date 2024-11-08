@@ -8,6 +8,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -56,10 +57,8 @@ const (
 	FieldMitigation = "mitigation"
 	// FieldSatisfies holds the string denoting the satisfies field in the database.
 	FieldSatisfies = "satisfies"
-	// FieldSeverity holds the string denoting the severity field in the database.
-	FieldSeverity = "severity"
-	// FieldJsonschema holds the string denoting the jsonschema field in the database.
-	FieldJsonschema = "jsonschema"
+	// FieldDetails holds the string denoting the details field in the database.
+	FieldDetails = "details"
 	// Table holds the table name of the riskhistory in the database.
 	Table = "risk_history"
 )
@@ -87,8 +86,7 @@ var Columns = []string{
 	FieldLikelihood,
 	FieldMitigation,
 	FieldSatisfies,
-	FieldSeverity,
-	FieldJsonschema,
+	FieldDetails,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -125,6 +123,26 @@ func OperationValidator(o history.OpType) error {
 		return nil
 	default:
 		return fmt.Errorf("riskhistory: invalid enum value for operation field: %q", o)
+	}
+}
+
+// ImpactValidator is a validator for the "impact" field enum values. It is called by the builders before save.
+func ImpactValidator(i enums.RiskImpact) error {
+	switch i.String() {
+	case "LOW", "MODERATE", "HIGH":
+		return nil
+	default:
+		return fmt.Errorf("riskhistory: invalid enum value for impact field: %q", i)
+	}
+}
+
+// LikelihoodValidator is a validator for the "likelihood" field enum values. It is called by the builders before save.
+func LikelihoodValidator(l enums.RiskLikelihood) error {
+	switch l.String() {
+	case "UNLIKELY", "LIKELY", "HIGHLY_LIKELY":
+		return nil
+	default:
+		return fmt.Errorf("riskhistory: invalid enum value for likelihood field: %q", l)
 	}
 }
 
@@ -231,14 +249,23 @@ func BySatisfies(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSatisfies, opts...).ToFunc()
 }
 
-// BySeverity orders the results by the severity field.
-func BySeverity(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldSeverity, opts...).ToFunc()
-}
-
 var (
 	// history.OpType must implement graphql.Marshaler.
 	_ graphql.Marshaler = (*history.OpType)(nil)
 	// history.OpType must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*history.OpType)(nil)
+)
+
+var (
+	// enums.RiskImpact must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.RiskImpact)(nil)
+	// enums.RiskImpact must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.RiskImpact)(nil)
+)
+
+var (
+	// enums.RiskLikelihood must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.RiskLikelihood)(nil)
+	// enums.RiskLikelihood must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.RiskLikelihood)(nil)
 )

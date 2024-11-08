@@ -278,6 +278,32 @@ func (ap *ActionPlanQuery) collectField(ctx context.Context, oneNode bool, opCtx
 			ap.WithNamedRisk(alias, func(wq *RiskQuery) {
 				*wq = *query
 			})
+
+		case "control":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ControlClient{config: ap.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, controlImplementors)...); err != nil {
+				return err
+			}
+			ap.WithNamedControl(alias, func(wq *ControlQuery) {
+				*wq = *query
+			})
+
+		case "user":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&UserClient{config: ap.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+				return err
+			}
+			ap.WithNamedUser(alias, func(wq *UserQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[actionplan.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, actionplan.FieldCreatedAt)
@@ -328,11 +354,6 @@ func (ap *ActionPlanQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				selectedFields = append(selectedFields, actionplan.FieldStatus)
 				fieldSeen[actionplan.FieldStatus] = struct{}{}
 			}
-		case "assigned":
-			if _, ok := fieldSeen[actionplan.FieldAssigned]; !ok {
-				selectedFields = append(selectedFields, actionplan.FieldAssigned)
-				fieldSeen[actionplan.FieldAssigned] = struct{}{}
-			}
 		case "dueDate":
 			if _, ok := fieldSeen[actionplan.FieldDueDate]; !ok {
 				selectedFields = append(selectedFields, actionplan.FieldDueDate)
@@ -348,10 +369,10 @@ func (ap *ActionPlanQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				selectedFields = append(selectedFields, actionplan.FieldSource)
 				fieldSeen[actionplan.FieldSource] = struct{}{}
 			}
-		case "jsonschema":
-			if _, ok := fieldSeen[actionplan.FieldJsonschema]; !ok {
-				selectedFields = append(selectedFields, actionplan.FieldJsonschema)
-				fieldSeen[actionplan.FieldJsonschema] = struct{}{}
+		case "details":
+			if _, ok := fieldSeen[actionplan.FieldDetails]; !ok {
+				selectedFields = append(selectedFields, actionplan.FieldDetails)
+				fieldSeen[actionplan.FieldDetails] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -480,11 +501,6 @@ func (aph *ActionPlanHistoryQuery) collectField(ctx context.Context, oneNode boo
 				selectedFields = append(selectedFields, actionplanhistory.FieldStatus)
 				fieldSeen[actionplanhistory.FieldStatus] = struct{}{}
 			}
-		case "assigned":
-			if _, ok := fieldSeen[actionplanhistory.FieldAssigned]; !ok {
-				selectedFields = append(selectedFields, actionplanhistory.FieldAssigned)
-				fieldSeen[actionplanhistory.FieldAssigned] = struct{}{}
-			}
 		case "dueDate":
 			if _, ok := fieldSeen[actionplanhistory.FieldDueDate]; !ok {
 				selectedFields = append(selectedFields, actionplanhistory.FieldDueDate)
@@ -500,10 +516,10 @@ func (aph *ActionPlanHistoryQuery) collectField(ctx context.Context, oneNode boo
 				selectedFields = append(selectedFields, actionplanhistory.FieldSource)
 				fieldSeen[actionplanhistory.FieldSource] = struct{}{}
 			}
-		case "jsonschema":
-			if _, ok := fieldSeen[actionplanhistory.FieldJsonschema]; !ok {
-				selectedFields = append(selectedFields, actionplanhistory.FieldJsonschema)
-				fieldSeen[actionplanhistory.FieldJsonschema] = struct{}{}
+		case "details":
+			if _, ok := fieldSeen[actionplanhistory.FieldDetails]; !ok {
+				selectedFields = append(selectedFields, actionplanhistory.FieldDetails)
+				fieldSeen[actionplanhistory.FieldDetails] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -975,6 +991,19 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			c.WithNamedRisks(alias, func(wq *RiskQuery) {
 				*wq = *query
 			})
+
+		case "actionplans":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ActionPlanClient{config: c.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, actionplanImplementors)...); err != nil {
+				return err
+			}
+			c.WithNamedActionplans(alias, func(wq *ActionPlanQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[control.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, control.FieldCreatedAt)
@@ -1035,25 +1064,20 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				selectedFields = append(selectedFields, control.FieldVersion)
 				fieldSeen[control.FieldVersion] = struct{}{}
 			}
-		case "owner":
-			if _, ok := fieldSeen[control.FieldOwner]; !ok {
-				selectedFields = append(selectedFields, control.FieldOwner)
-				fieldSeen[control.FieldOwner] = struct{}{}
-			}
 		case "controlNumber":
 			if _, ok := fieldSeen[control.FieldControlNumber]; !ok {
 				selectedFields = append(selectedFields, control.FieldControlNumber)
 				fieldSeen[control.FieldControlNumber] = struct{}{}
 			}
-		case "controlFamily":
-			if _, ok := fieldSeen[control.FieldControlFamily]; !ok {
-				selectedFields = append(selectedFields, control.FieldControlFamily)
-				fieldSeen[control.FieldControlFamily] = struct{}{}
+		case "family":
+			if _, ok := fieldSeen[control.FieldFamily]; !ok {
+				selectedFields = append(selectedFields, control.FieldFamily)
+				fieldSeen[control.FieldFamily] = struct{}{}
 			}
-		case "controlClass":
-			if _, ok := fieldSeen[control.FieldControlClass]; !ok {
-				selectedFields = append(selectedFields, control.FieldControlClass)
-				fieldSeen[control.FieldControlClass] = struct{}{}
+		case "class":
+			if _, ok := fieldSeen[control.FieldClass]; !ok {
+				selectedFields = append(selectedFields, control.FieldClass)
+				fieldSeen[control.FieldClass] = struct{}{}
 			}
 		case "source":
 			if _, ok := fieldSeen[control.FieldSource]; !ok {
@@ -1070,10 +1094,10 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				selectedFields = append(selectedFields, control.FieldMappedFrameworks)
 				fieldSeen[control.FieldMappedFrameworks] = struct{}{}
 			}
-		case "jsonschema":
-			if _, ok := fieldSeen[control.FieldJsonschema]; !ok {
-				selectedFields = append(selectedFields, control.FieldJsonschema)
-				fieldSeen[control.FieldJsonschema] = struct{}{}
+		case "details":
+			if _, ok := fieldSeen[control.FieldDetails]; !ok {
+				selectedFields = append(selectedFields, control.FieldDetails)
+				fieldSeen[control.FieldDetails] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -1212,25 +1236,20 @@ func (ch *ControlHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 				selectedFields = append(selectedFields, controlhistory.FieldVersion)
 				fieldSeen[controlhistory.FieldVersion] = struct{}{}
 			}
-		case "owner":
-			if _, ok := fieldSeen[controlhistory.FieldOwner]; !ok {
-				selectedFields = append(selectedFields, controlhistory.FieldOwner)
-				fieldSeen[controlhistory.FieldOwner] = struct{}{}
-			}
 		case "controlNumber":
 			if _, ok := fieldSeen[controlhistory.FieldControlNumber]; !ok {
 				selectedFields = append(selectedFields, controlhistory.FieldControlNumber)
 				fieldSeen[controlhistory.FieldControlNumber] = struct{}{}
 			}
-		case "controlFamily":
-			if _, ok := fieldSeen[controlhistory.FieldControlFamily]; !ok {
-				selectedFields = append(selectedFields, controlhistory.FieldControlFamily)
-				fieldSeen[controlhistory.FieldControlFamily] = struct{}{}
+		case "family":
+			if _, ok := fieldSeen[controlhistory.FieldFamily]; !ok {
+				selectedFields = append(selectedFields, controlhistory.FieldFamily)
+				fieldSeen[controlhistory.FieldFamily] = struct{}{}
 			}
-		case "controlClass":
-			if _, ok := fieldSeen[controlhistory.FieldControlClass]; !ok {
-				selectedFields = append(selectedFields, controlhistory.FieldControlClass)
-				fieldSeen[controlhistory.FieldControlClass] = struct{}{}
+		case "class":
+			if _, ok := fieldSeen[controlhistory.FieldClass]; !ok {
+				selectedFields = append(selectedFields, controlhistory.FieldClass)
+				fieldSeen[controlhistory.FieldClass] = struct{}{}
 			}
 		case "source":
 			if _, ok := fieldSeen[controlhistory.FieldSource]; !ok {
@@ -1247,10 +1266,10 @@ func (ch *ControlHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 				selectedFields = append(selectedFields, controlhistory.FieldMappedFrameworks)
 				fieldSeen[controlhistory.FieldMappedFrameworks] = struct{}{}
 			}
-		case "jsonschema":
-			if _, ok := fieldSeen[controlhistory.FieldJsonschema]; !ok {
-				selectedFields = append(selectedFields, controlhistory.FieldJsonschema)
-				fieldSeen[controlhistory.FieldJsonschema] = struct{}{}
+		case "details":
+			if _, ok := fieldSeen[controlhistory.FieldDetails]; !ok {
+				selectedFields = append(selectedFields, controlhistory.FieldDetails)
+				fieldSeen[controlhistory.FieldDetails] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -1465,25 +1484,20 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 				selectedFields = append(selectedFields, controlobjective.FieldVersion)
 				fieldSeen[controlobjective.FieldVersion] = struct{}{}
 			}
-		case "owner":
-			if _, ok := fieldSeen[controlobjective.FieldOwner]; !ok {
-				selectedFields = append(selectedFields, controlobjective.FieldOwner)
-				fieldSeen[controlobjective.FieldOwner] = struct{}{}
-			}
 		case "controlNumber":
 			if _, ok := fieldSeen[controlobjective.FieldControlNumber]; !ok {
 				selectedFields = append(selectedFields, controlobjective.FieldControlNumber)
 				fieldSeen[controlobjective.FieldControlNumber] = struct{}{}
 			}
-		case "controlFamily":
-			if _, ok := fieldSeen[controlobjective.FieldControlFamily]; !ok {
-				selectedFields = append(selectedFields, controlobjective.FieldControlFamily)
-				fieldSeen[controlobjective.FieldControlFamily] = struct{}{}
+		case "family":
+			if _, ok := fieldSeen[controlobjective.FieldFamily]; !ok {
+				selectedFields = append(selectedFields, controlobjective.FieldFamily)
+				fieldSeen[controlobjective.FieldFamily] = struct{}{}
 			}
-		case "controlClass":
-			if _, ok := fieldSeen[controlobjective.FieldControlClass]; !ok {
-				selectedFields = append(selectedFields, controlobjective.FieldControlClass)
-				fieldSeen[controlobjective.FieldControlClass] = struct{}{}
+		case "class":
+			if _, ok := fieldSeen[controlobjective.FieldClass]; !ok {
+				selectedFields = append(selectedFields, controlobjective.FieldClass)
+				fieldSeen[controlobjective.FieldClass] = struct{}{}
 			}
 		case "source":
 			if _, ok := fieldSeen[controlobjective.FieldSource]; !ok {
@@ -1495,10 +1509,10 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 				selectedFields = append(selectedFields, controlobjective.FieldMappedFrameworks)
 				fieldSeen[controlobjective.FieldMappedFrameworks] = struct{}{}
 			}
-		case "jsonschema":
-			if _, ok := fieldSeen[controlobjective.FieldJsonschema]; !ok {
-				selectedFields = append(selectedFields, controlobjective.FieldJsonschema)
-				fieldSeen[controlobjective.FieldJsonschema] = struct{}{}
+		case "details":
+			if _, ok := fieldSeen[controlobjective.FieldDetails]; !ok {
+				selectedFields = append(selectedFields, controlobjective.FieldDetails)
+				fieldSeen[controlobjective.FieldDetails] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -1637,25 +1651,20 @@ func (coh *ControlObjectiveHistoryQuery) collectField(ctx context.Context, oneNo
 				selectedFields = append(selectedFields, controlobjectivehistory.FieldVersion)
 				fieldSeen[controlobjectivehistory.FieldVersion] = struct{}{}
 			}
-		case "owner":
-			if _, ok := fieldSeen[controlobjectivehistory.FieldOwner]; !ok {
-				selectedFields = append(selectedFields, controlobjectivehistory.FieldOwner)
-				fieldSeen[controlobjectivehistory.FieldOwner] = struct{}{}
-			}
 		case "controlNumber":
 			if _, ok := fieldSeen[controlobjectivehistory.FieldControlNumber]; !ok {
 				selectedFields = append(selectedFields, controlobjectivehistory.FieldControlNumber)
 				fieldSeen[controlobjectivehistory.FieldControlNumber] = struct{}{}
 			}
-		case "controlFamily":
-			if _, ok := fieldSeen[controlobjectivehistory.FieldControlFamily]; !ok {
-				selectedFields = append(selectedFields, controlobjectivehistory.FieldControlFamily)
-				fieldSeen[controlobjectivehistory.FieldControlFamily] = struct{}{}
+		case "family":
+			if _, ok := fieldSeen[controlobjectivehistory.FieldFamily]; !ok {
+				selectedFields = append(selectedFields, controlobjectivehistory.FieldFamily)
+				fieldSeen[controlobjectivehistory.FieldFamily] = struct{}{}
 			}
-		case "controlClass":
-			if _, ok := fieldSeen[controlobjectivehistory.FieldControlClass]; !ok {
-				selectedFields = append(selectedFields, controlobjectivehistory.FieldControlClass)
-				fieldSeen[controlobjectivehistory.FieldControlClass] = struct{}{}
+		case "class":
+			if _, ok := fieldSeen[controlobjectivehistory.FieldClass]; !ok {
+				selectedFields = append(selectedFields, controlobjectivehistory.FieldClass)
+				fieldSeen[controlobjectivehistory.FieldClass] = struct{}{}
 			}
 		case "source":
 			if _, ok := fieldSeen[controlobjectivehistory.FieldSource]; !ok {
@@ -1667,10 +1676,10 @@ func (coh *ControlObjectiveHistoryQuery) collectField(ctx context.Context, oneNo
 				selectedFields = append(selectedFields, controlobjectivehistory.FieldMappedFrameworks)
 				fieldSeen[controlobjectivehistory.FieldMappedFrameworks] = struct{}{}
 			}
-		case "jsonschema":
-			if _, ok := fieldSeen[controlobjectivehistory.FieldJsonschema]; !ok {
-				selectedFields = append(selectedFields, controlobjectivehistory.FieldJsonschema)
-				fieldSeen[controlobjectivehistory.FieldJsonschema] = struct{}{}
+		case "details":
+			if _, ok := fieldSeen[controlobjectivehistory.FieldDetails]; !ok {
+				selectedFields = append(selectedFields, controlobjectivehistory.FieldDetails)
+				fieldSeen[controlobjectivehistory.FieldDetails] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -6721,10 +6730,10 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 				selectedFields = append(selectedFields, internalpolicy.FieldBackground)
 				fieldSeen[internalpolicy.FieldBackground] = struct{}{}
 			}
-		case "jsonschema":
-			if _, ok := fieldSeen[internalpolicy.FieldJsonschema]; !ok {
-				selectedFields = append(selectedFields, internalpolicy.FieldJsonschema)
-				fieldSeen[internalpolicy.FieldJsonschema] = struct{}{}
+		case "details":
+			if _, ok := fieldSeen[internalpolicy.FieldDetails]; !ok {
+				selectedFields = append(selectedFields, internalpolicy.FieldDetails)
+				fieldSeen[internalpolicy.FieldDetails] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -6873,10 +6882,10 @@ func (iph *InternalPolicyHistoryQuery) collectField(ctx context.Context, oneNode
 				selectedFields = append(selectedFields, internalpolicyhistory.FieldBackground)
 				fieldSeen[internalpolicyhistory.FieldBackground] = struct{}{}
 			}
-		case "jsonschema":
-			if _, ok := fieldSeen[internalpolicyhistory.FieldJsonschema]; !ok {
-				selectedFields = append(selectedFields, internalpolicyhistory.FieldJsonschema)
-				fieldSeen[internalpolicyhistory.FieldJsonschema] = struct{}{}
+		case "details":
+			if _, ok := fieldSeen[internalpolicyhistory.FieldDetails]; !ok {
+				selectedFields = append(selectedFields, internalpolicyhistory.FieldDetails)
+				fieldSeen[internalpolicyhistory.FieldDetails] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -7197,10 +7206,10 @@ func (n *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				selectedFields = append(selectedFields, narrative.FieldSatisfies)
 				fieldSeen[narrative.FieldSatisfies] = struct{}{}
 			}
-		case "jsonschema":
-			if _, ok := fieldSeen[narrative.FieldJsonschema]; !ok {
-				selectedFields = append(selectedFields, narrative.FieldJsonschema)
-				fieldSeen[narrative.FieldJsonschema] = struct{}{}
+		case "details":
+			if _, ok := fieldSeen[narrative.FieldDetails]; !ok {
+				selectedFields = append(selectedFields, narrative.FieldDetails)
+				fieldSeen[narrative.FieldDetails] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -7329,10 +7338,10 @@ func (nh *NarrativeHistoryQuery) collectField(ctx context.Context, oneNode bool,
 				selectedFields = append(selectedFields, narrativehistory.FieldSatisfies)
 				fieldSeen[narrativehistory.FieldSatisfies] = struct{}{}
 			}
-		case "jsonschema":
-			if _, ok := fieldSeen[narrativehistory.FieldJsonschema]; !ok {
-				selectedFields = append(selectedFields, narrativehistory.FieldJsonschema)
-				fieldSeen[narrativehistory.FieldJsonschema] = struct{}{}
+		case "details":
+			if _, ok := fieldSeen[narrativehistory.FieldDetails]; !ok {
+				selectedFields = append(selectedFields, narrativehistory.FieldDetails)
+				fieldSeen[narrativehistory.FieldDetails] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -7422,6 +7431,19 @@ func (n *NoteQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				return err
 			}
 			n.withEntity = query
+
+		case "subcontrols":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&SubcontrolClient{config: n.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, subcontrolImplementors)...); err != nil {
+				return err
+			}
+			n.WithNamedSubcontrols(alias, func(wq *SubcontrolQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[note.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, note.FieldCreatedAt)
@@ -9752,10 +9774,10 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				selectedFields = append(selectedFields, procedure.FieldSatisfies)
 				fieldSeen[procedure.FieldSatisfies] = struct{}{}
 			}
-		case "jsonschema":
-			if _, ok := fieldSeen[procedure.FieldJsonschema]; !ok {
-				selectedFields = append(selectedFields, procedure.FieldJsonschema)
-				fieldSeen[procedure.FieldJsonschema] = struct{}{}
+		case "details":
+			if _, ok := fieldSeen[procedure.FieldDetails]; !ok {
+				selectedFields = append(selectedFields, procedure.FieldDetails)
+				fieldSeen[procedure.FieldDetails] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -9909,10 +9931,10 @@ func (ph *ProcedureHistoryQuery) collectField(ctx context.Context, oneNode bool,
 				selectedFields = append(selectedFields, procedurehistory.FieldSatisfies)
 				fieldSeen[procedurehistory.FieldSatisfies] = struct{}{}
 			}
-		case "jsonschema":
-			if _, ok := fieldSeen[procedurehistory.FieldJsonschema]; !ok {
-				selectedFields = append(selectedFields, procedurehistory.FieldJsonschema)
-				fieldSeen[procedurehistory.FieldJsonschema] = struct{}{}
+		case "details":
+			if _, ok := fieldSeen[procedurehistory.FieldDetails]; !ok {
+				selectedFields = append(selectedFields, procedurehistory.FieldDetails)
+				fieldSeen[procedurehistory.FieldDetails] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -10095,15 +10117,10 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				selectedFields = append(selectedFields, risk.FieldSatisfies)
 				fieldSeen[risk.FieldSatisfies] = struct{}{}
 			}
-		case "severity":
-			if _, ok := fieldSeen[risk.FieldSeverity]; !ok {
-				selectedFields = append(selectedFields, risk.FieldSeverity)
-				fieldSeen[risk.FieldSeverity] = struct{}{}
-			}
-		case "jsonschema":
-			if _, ok := fieldSeen[risk.FieldJsonschema]; !ok {
-				selectedFields = append(selectedFields, risk.FieldJsonschema)
-				fieldSeen[risk.FieldJsonschema] = struct{}{}
+		case "details":
+			if _, ok := fieldSeen[risk.FieldDetails]; !ok {
+				selectedFields = append(selectedFields, risk.FieldDetails)
+				fieldSeen[risk.FieldDetails] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -10262,15 +10279,10 @@ func (rh *RiskHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 				selectedFields = append(selectedFields, riskhistory.FieldSatisfies)
 				fieldSeen[riskhistory.FieldSatisfies] = struct{}{}
 			}
-		case "severity":
-			if _, ok := fieldSeen[riskhistory.FieldSeverity]; !ok {
-				selectedFields = append(selectedFields, riskhistory.FieldSeverity)
-				fieldSeen[riskhistory.FieldSeverity] = struct{}{}
-			}
-		case "jsonschema":
-			if _, ok := fieldSeen[riskhistory.FieldJsonschema]; !ok {
-				selectedFields = append(selectedFields, riskhistory.FieldJsonschema)
-				fieldSeen[riskhistory.FieldJsonschema] = struct{}{}
+		case "details":
+			if _, ok := fieldSeen[riskhistory.FieldDetails]; !ok {
+				selectedFields = append(selectedFields, riskhistory.FieldDetails)
+				fieldSeen[riskhistory.FieldDetails] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -10466,10 +10478,10 @@ func (s *StandardQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				selectedFields = append(selectedFields, standard.FieldSatisfies)
 				fieldSeen[standard.FieldSatisfies] = struct{}{}
 			}
-		case "jsonschema":
-			if _, ok := fieldSeen[standard.FieldJsonschema]; !ok {
-				selectedFields = append(selectedFields, standard.FieldJsonschema)
-				fieldSeen[standard.FieldJsonschema] = struct{}{}
+		case "details":
+			if _, ok := fieldSeen[standard.FieldDetails]; !ok {
+				selectedFields = append(selectedFields, standard.FieldDetails)
+				fieldSeen[standard.FieldDetails] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -10628,10 +10640,10 @@ func (sh *StandardHistoryQuery) collectField(ctx context.Context, oneNode bool, 
 				selectedFields = append(selectedFields, standardhistory.FieldSatisfies)
 				fieldSeen[standardhistory.FieldSatisfies] = struct{}{}
 			}
-		case "jsonschema":
-			if _, ok := fieldSeen[standardhistory.FieldJsonschema]; !ok {
-				selectedFields = append(selectedFields, standardhistory.FieldJsonschema)
-				fieldSeen[standardhistory.FieldJsonschema] = struct{}{}
+		case "details":
+			if _, ok := fieldSeen[standardhistory.FieldDetails]; !ok {
+				selectedFields = append(selectedFields, standardhistory.FieldDetails)
+				fieldSeen[standardhistory.FieldDetails] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -10708,6 +10720,30 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			s.WithNamedControl(alias, func(wq *ControlQuery) {
 				*wq = *query
 			})
+
+		case "user":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&UserClient{config: s.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+				return err
+			}
+			s.WithNamedUser(alias, func(wq *UserQuery) {
+				*wq = *query
+			})
+
+		case "notes":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&NoteClient{config: s.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, noteImplementors)...); err != nil {
+				return err
+			}
+			s.withNotes = query
 		case "createdAt":
 			if _, ok := fieldSeen[subcontrol.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, subcontrol.FieldCreatedAt)
@@ -10768,25 +10804,20 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				selectedFields = append(selectedFields, subcontrol.FieldVersion)
 				fieldSeen[subcontrol.FieldVersion] = struct{}{}
 			}
-		case "owner":
-			if _, ok := fieldSeen[subcontrol.FieldOwner]; !ok {
-				selectedFields = append(selectedFields, subcontrol.FieldOwner)
-				fieldSeen[subcontrol.FieldOwner] = struct{}{}
-			}
 		case "subcontrolNumber":
 			if _, ok := fieldSeen[subcontrol.FieldSubcontrolNumber]; !ok {
 				selectedFields = append(selectedFields, subcontrol.FieldSubcontrolNumber)
 				fieldSeen[subcontrol.FieldSubcontrolNumber] = struct{}{}
 			}
-		case "subcontrolFamily":
-			if _, ok := fieldSeen[subcontrol.FieldSubcontrolFamily]; !ok {
-				selectedFields = append(selectedFields, subcontrol.FieldSubcontrolFamily)
-				fieldSeen[subcontrol.FieldSubcontrolFamily] = struct{}{}
+		case "family":
+			if _, ok := fieldSeen[subcontrol.FieldFamily]; !ok {
+				selectedFields = append(selectedFields, subcontrol.FieldFamily)
+				fieldSeen[subcontrol.FieldFamily] = struct{}{}
 			}
-		case "subcontrolClass":
-			if _, ok := fieldSeen[subcontrol.FieldSubcontrolClass]; !ok {
-				selectedFields = append(selectedFields, subcontrol.FieldSubcontrolClass)
-				fieldSeen[subcontrol.FieldSubcontrolClass] = struct{}{}
+		case "class":
+			if _, ok := fieldSeen[subcontrol.FieldClass]; !ok {
+				selectedFields = append(selectedFields, subcontrol.FieldClass)
+				fieldSeen[subcontrol.FieldClass] = struct{}{}
 			}
 		case "source":
 			if _, ok := fieldSeen[subcontrol.FieldSource]; !ok {
@@ -10798,30 +10829,20 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				selectedFields = append(selectedFields, subcontrol.FieldMappedFrameworks)
 				fieldSeen[subcontrol.FieldMappedFrameworks] = struct{}{}
 			}
-		case "assignedTo":
-			if _, ok := fieldSeen[subcontrol.FieldAssignedTo]; !ok {
-				selectedFields = append(selectedFields, subcontrol.FieldAssignedTo)
-				fieldSeen[subcontrol.FieldAssignedTo] = struct{}{}
+		case "implementationEvidence":
+			if _, ok := fieldSeen[subcontrol.FieldImplementationEvidence]; !ok {
+				selectedFields = append(selectedFields, subcontrol.FieldImplementationEvidence)
+				fieldSeen[subcontrol.FieldImplementationEvidence] = struct{}{}
 			}
 		case "implementationStatus":
 			if _, ok := fieldSeen[subcontrol.FieldImplementationStatus]; !ok {
 				selectedFields = append(selectedFields, subcontrol.FieldImplementationStatus)
 				fieldSeen[subcontrol.FieldImplementationStatus] = struct{}{}
 			}
-		case "implementationNotes":
-			if _, ok := fieldSeen[subcontrol.FieldImplementationNotes]; !ok {
-				selectedFields = append(selectedFields, subcontrol.FieldImplementationNotes)
-				fieldSeen[subcontrol.FieldImplementationNotes] = struct{}{}
-			}
 		case "implementationDate":
 			if _, ok := fieldSeen[subcontrol.FieldImplementationDate]; !ok {
 				selectedFields = append(selectedFields, subcontrol.FieldImplementationDate)
 				fieldSeen[subcontrol.FieldImplementationDate] = struct{}{}
-			}
-		case "implementationEvidence":
-			if _, ok := fieldSeen[subcontrol.FieldImplementationEvidence]; !ok {
-				selectedFields = append(selectedFields, subcontrol.FieldImplementationEvidence)
-				fieldSeen[subcontrol.FieldImplementationEvidence] = struct{}{}
 			}
 		case "implementationVerification":
 			if _, ok := fieldSeen[subcontrol.FieldImplementationVerification]; !ok {
@@ -10833,10 +10854,10 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				selectedFields = append(selectedFields, subcontrol.FieldImplementationVerificationDate)
 				fieldSeen[subcontrol.FieldImplementationVerificationDate] = struct{}{}
 			}
-		case "jsonschema":
-			if _, ok := fieldSeen[subcontrol.FieldJsonschema]; !ok {
-				selectedFields = append(selectedFields, subcontrol.FieldJsonschema)
-				fieldSeen[subcontrol.FieldJsonschema] = struct{}{}
+		case "details":
+			if _, ok := fieldSeen[subcontrol.FieldDetails]; !ok {
+				selectedFields = append(selectedFields, subcontrol.FieldDetails)
+				fieldSeen[subcontrol.FieldDetails] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -10975,25 +10996,20 @@ func (sh *SubcontrolHistoryQuery) collectField(ctx context.Context, oneNode bool
 				selectedFields = append(selectedFields, subcontrolhistory.FieldVersion)
 				fieldSeen[subcontrolhistory.FieldVersion] = struct{}{}
 			}
-		case "owner":
-			if _, ok := fieldSeen[subcontrolhistory.FieldOwner]; !ok {
-				selectedFields = append(selectedFields, subcontrolhistory.FieldOwner)
-				fieldSeen[subcontrolhistory.FieldOwner] = struct{}{}
-			}
 		case "subcontrolNumber":
 			if _, ok := fieldSeen[subcontrolhistory.FieldSubcontrolNumber]; !ok {
 				selectedFields = append(selectedFields, subcontrolhistory.FieldSubcontrolNumber)
 				fieldSeen[subcontrolhistory.FieldSubcontrolNumber] = struct{}{}
 			}
-		case "subcontrolFamily":
-			if _, ok := fieldSeen[subcontrolhistory.FieldSubcontrolFamily]; !ok {
-				selectedFields = append(selectedFields, subcontrolhistory.FieldSubcontrolFamily)
-				fieldSeen[subcontrolhistory.FieldSubcontrolFamily] = struct{}{}
+		case "family":
+			if _, ok := fieldSeen[subcontrolhistory.FieldFamily]; !ok {
+				selectedFields = append(selectedFields, subcontrolhistory.FieldFamily)
+				fieldSeen[subcontrolhistory.FieldFamily] = struct{}{}
 			}
-		case "subcontrolClass":
-			if _, ok := fieldSeen[subcontrolhistory.FieldSubcontrolClass]; !ok {
-				selectedFields = append(selectedFields, subcontrolhistory.FieldSubcontrolClass)
-				fieldSeen[subcontrolhistory.FieldSubcontrolClass] = struct{}{}
+		case "class":
+			if _, ok := fieldSeen[subcontrolhistory.FieldClass]; !ok {
+				selectedFields = append(selectedFields, subcontrolhistory.FieldClass)
+				fieldSeen[subcontrolhistory.FieldClass] = struct{}{}
 			}
 		case "source":
 			if _, ok := fieldSeen[subcontrolhistory.FieldSource]; !ok {
@@ -11005,30 +11021,20 @@ func (sh *SubcontrolHistoryQuery) collectField(ctx context.Context, oneNode bool
 				selectedFields = append(selectedFields, subcontrolhistory.FieldMappedFrameworks)
 				fieldSeen[subcontrolhistory.FieldMappedFrameworks] = struct{}{}
 			}
-		case "assignedTo":
-			if _, ok := fieldSeen[subcontrolhistory.FieldAssignedTo]; !ok {
-				selectedFields = append(selectedFields, subcontrolhistory.FieldAssignedTo)
-				fieldSeen[subcontrolhistory.FieldAssignedTo] = struct{}{}
+		case "implementationEvidence":
+			if _, ok := fieldSeen[subcontrolhistory.FieldImplementationEvidence]; !ok {
+				selectedFields = append(selectedFields, subcontrolhistory.FieldImplementationEvidence)
+				fieldSeen[subcontrolhistory.FieldImplementationEvidence] = struct{}{}
 			}
 		case "implementationStatus":
 			if _, ok := fieldSeen[subcontrolhistory.FieldImplementationStatus]; !ok {
 				selectedFields = append(selectedFields, subcontrolhistory.FieldImplementationStatus)
 				fieldSeen[subcontrolhistory.FieldImplementationStatus] = struct{}{}
 			}
-		case "implementationNotes":
-			if _, ok := fieldSeen[subcontrolhistory.FieldImplementationNotes]; !ok {
-				selectedFields = append(selectedFields, subcontrolhistory.FieldImplementationNotes)
-				fieldSeen[subcontrolhistory.FieldImplementationNotes] = struct{}{}
-			}
 		case "implementationDate":
 			if _, ok := fieldSeen[subcontrolhistory.FieldImplementationDate]; !ok {
 				selectedFields = append(selectedFields, subcontrolhistory.FieldImplementationDate)
 				fieldSeen[subcontrolhistory.FieldImplementationDate] = struct{}{}
-			}
-		case "implementationEvidence":
-			if _, ok := fieldSeen[subcontrolhistory.FieldImplementationEvidence]; !ok {
-				selectedFields = append(selectedFields, subcontrolhistory.FieldImplementationEvidence)
-				fieldSeen[subcontrolhistory.FieldImplementationEvidence] = struct{}{}
 			}
 		case "implementationVerification":
 			if _, ok := fieldSeen[subcontrolhistory.FieldImplementationVerification]; !ok {
@@ -11040,10 +11046,10 @@ func (sh *SubcontrolHistoryQuery) collectField(ctx context.Context, oneNode bool
 				selectedFields = append(selectedFields, subcontrolhistory.FieldImplementationVerificationDate)
 				fieldSeen[subcontrolhistory.FieldImplementationVerificationDate] = struct{}{}
 			}
-		case "jsonschema":
-			if _, ok := fieldSeen[subcontrolhistory.FieldJsonschema]; !ok {
-				selectedFields = append(selectedFields, subcontrolhistory.FieldJsonschema)
-				fieldSeen[subcontrolhistory.FieldJsonschema] = struct{}{}
+		case "details":
+			if _, ok := fieldSeen[subcontrolhistory.FieldDetails]; !ok {
+				selectedFields = append(selectedFields, subcontrolhistory.FieldDetails)
+				fieldSeen[subcontrolhistory.FieldDetails] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -11850,6 +11856,32 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				return err
 			}
 			u.WithNamedEvents(alias, func(wq *EventQuery) {
+				*wq = *query
+			})
+
+		case "actionplans":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ActionPlanClient{config: u.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, actionplanImplementors)...); err != nil {
+				return err
+			}
+			u.WithNamedActionplans(alias, func(wq *ActionPlanQuery) {
+				*wq = *query
+			})
+
+		case "subcontrols":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&SubcontrolClient{config: u.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, subcontrolImplementors)...); err != nil {
+				return err
+			}
+			u.WithNamedSubcontrols(alias, func(wq *SubcontrolQuery) {
 				*wq = *query
 			})
 

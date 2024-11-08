@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
@@ -192,20 +193,6 @@ func (cc *ControlCreate) SetNillableVersion(s *string) *ControlCreate {
 	return cc
 }
 
-// SetOwner sets the "owner" field.
-func (cc *ControlCreate) SetOwner(s string) *ControlCreate {
-	cc.mutation.SetOwner(s)
-	return cc
-}
-
-// SetNillableOwner sets the "owner" field if the given value is not nil.
-func (cc *ControlCreate) SetNillableOwner(s *string) *ControlCreate {
-	if s != nil {
-		cc.SetOwner(*s)
-	}
-	return cc
-}
-
 // SetControlNumber sets the "control_number" field.
 func (cc *ControlCreate) SetControlNumber(s string) *ControlCreate {
 	cc.mutation.SetControlNumber(s)
@@ -220,30 +207,30 @@ func (cc *ControlCreate) SetNillableControlNumber(s *string) *ControlCreate {
 	return cc
 }
 
-// SetControlFamily sets the "control_family" field.
-func (cc *ControlCreate) SetControlFamily(s string) *ControlCreate {
-	cc.mutation.SetControlFamily(s)
+// SetFamily sets the "family" field.
+func (cc *ControlCreate) SetFamily(s string) *ControlCreate {
+	cc.mutation.SetFamily(s)
 	return cc
 }
 
-// SetNillableControlFamily sets the "control_family" field if the given value is not nil.
-func (cc *ControlCreate) SetNillableControlFamily(s *string) *ControlCreate {
+// SetNillableFamily sets the "family" field if the given value is not nil.
+func (cc *ControlCreate) SetNillableFamily(s *string) *ControlCreate {
 	if s != nil {
-		cc.SetControlFamily(*s)
+		cc.SetFamily(*s)
 	}
 	return cc
 }
 
-// SetControlClass sets the "control_class" field.
-func (cc *ControlCreate) SetControlClass(s string) *ControlCreate {
-	cc.mutation.SetControlClass(s)
+// SetClass sets the "class" field.
+func (cc *ControlCreate) SetClass(s string) *ControlCreate {
+	cc.mutation.SetClass(s)
 	return cc
 }
 
-// SetNillableControlClass sets the "control_class" field if the given value is not nil.
-func (cc *ControlCreate) SetNillableControlClass(s *string) *ControlCreate {
+// SetNillableClass sets the "class" field if the given value is not nil.
+func (cc *ControlCreate) SetNillableClass(s *string) *ControlCreate {
 	if s != nil {
-		cc.SetControlClass(*s)
+		cc.SetClass(*s)
 	}
 	return cc
 }
@@ -290,9 +277,9 @@ func (cc *ControlCreate) SetNillableMappedFrameworks(s *string) *ControlCreate {
 	return cc
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (cc *ControlCreate) SetJsonschema(m map[string]interface{}) *ControlCreate {
-	cc.mutation.SetJsonschema(m)
+// SetDetails sets the "details" field.
+func (cc *ControlCreate) SetDetails(m map[string]interface{}) *ControlCreate {
+	cc.mutation.SetDetails(m)
 	return cc
 }
 
@@ -398,6 +385,21 @@ func (cc *ControlCreate) AddRisks(r ...*Risk) *ControlCreate {
 		ids[i] = r[i].ID
 	}
 	return cc.AddRiskIDs(ids...)
+}
+
+// AddActionplanIDs adds the "actionplans" edge to the ActionPlan entity by IDs.
+func (cc *ControlCreate) AddActionplanIDs(ids ...string) *ControlCreate {
+	cc.mutation.AddActionplanIDs(ids...)
+	return cc
+}
+
+// AddActionplans adds the "actionplans" edges to the ActionPlan entity.
+func (cc *ControlCreate) AddActionplans(a ...*ActionPlan) *ControlCreate {
+	ids := make([]string, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return cc.AddActionplanIDs(ids...)
 }
 
 // Mutation returns the ControlMutation object of the builder.
@@ -568,21 +570,17 @@ func (cc *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 		_spec.SetField(control.FieldVersion, field.TypeString, value)
 		_node.Version = value
 	}
-	if value, ok := cc.mutation.Owner(); ok {
-		_spec.SetField(control.FieldOwner, field.TypeString, value)
-		_node.Owner = value
-	}
 	if value, ok := cc.mutation.ControlNumber(); ok {
 		_spec.SetField(control.FieldControlNumber, field.TypeString, value)
 		_node.ControlNumber = value
 	}
-	if value, ok := cc.mutation.ControlFamily(); ok {
-		_spec.SetField(control.FieldControlFamily, field.TypeString, value)
-		_node.ControlFamily = value
+	if value, ok := cc.mutation.Family(); ok {
+		_spec.SetField(control.FieldFamily, field.TypeString, value)
+		_node.Family = value
 	}
-	if value, ok := cc.mutation.ControlClass(); ok {
-		_spec.SetField(control.FieldControlClass, field.TypeString, value)
-		_node.ControlClass = value
+	if value, ok := cc.mutation.Class(); ok {
+		_spec.SetField(control.FieldClass, field.TypeString, value)
+		_node.Class = value
 	}
 	if value, ok := cc.mutation.Source(); ok {
 		_spec.SetField(control.FieldSource, field.TypeString, value)
@@ -596,9 +594,9 @@ func (cc *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 		_spec.SetField(control.FieldMappedFrameworks, field.TypeString, value)
 		_node.MappedFrameworks = value
 	}
-	if value, ok := cc.mutation.Jsonschema(); ok {
-		_spec.SetField(control.FieldJsonschema, field.TypeJSON, value)
-		_node.Jsonschema = value
+	if value, ok := cc.mutation.Details(); ok {
+		_spec.SetField(control.FieldDetails, field.TypeJSON, value)
+		_node.Details = value
 	}
 	if nodes := cc.mutation.ProceduresIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -697,6 +695,23 @@ func (cc *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = cc.schemaConfig.ControlRisks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := cc.mutation.ActionplansIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   control.ActionplansTable,
+			Columns: control.ActionplansPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cc.schemaConfig.ControlActionplans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

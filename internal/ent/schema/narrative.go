@@ -20,16 +20,16 @@ type Narrative struct {
 func (Narrative) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("name").
-			Comment("the name of the file provided in the payload key without the extension"),
+			Comment("the name of the narrative"),
 		field.Text("description").
 			Optional().
 			Comment("the description of the narrative"),
 		field.Text("satisfies").
 			Optional().
 			Comment("which controls are satisfied by the narrative"),
-		field.JSON("jsonschema", map[string]interface{}{}).
+		field.JSON("details", map[string]interface{}{}).
 			Optional().
-			Comment("json schema"),
+			Comment("json data for the narrative document"),
 	}
 }
 

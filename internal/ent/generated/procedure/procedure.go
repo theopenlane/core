@@ -47,8 +47,8 @@ const (
 	FieldBackground = "background"
 	// FieldSatisfies holds the string denoting the satisfies field in the database.
 	FieldSatisfies = "satisfies"
-	// FieldJsonschema holds the string denoting the jsonschema field in the database.
-	FieldJsonschema = "jsonschema"
+	// FieldDetails holds the string denoting the details field in the database.
+	FieldDetails = "details"
 	// EdgeControl holds the string denoting the control edge name in mutations.
 	EdgeControl = "control"
 	// EdgeInternalpolicy holds the string denoting the internalpolicy edge name in mutations.
@@ -100,7 +100,7 @@ var Columns = []string{
 	FieldPurposeAndScope,
 	FieldBackground,
 	FieldSatisfies,
-	FieldJsonschema,
+	FieldDetails,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "procedures"

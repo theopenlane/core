@@ -13,9 +13,11 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -178,36 +180,16 @@ func (apu *ActionPlanUpdate) ClearStatus() *ActionPlanUpdate {
 	return apu
 }
 
-// SetAssigned sets the "assigned" field.
-func (apu *ActionPlanUpdate) SetAssigned(s string) *ActionPlanUpdate {
-	apu.mutation.SetAssigned(s)
-	return apu
-}
-
-// SetNillableAssigned sets the "assigned" field if the given value is not nil.
-func (apu *ActionPlanUpdate) SetNillableAssigned(s *string) *ActionPlanUpdate {
-	if s != nil {
-		apu.SetAssigned(*s)
-	}
-	return apu
-}
-
-// ClearAssigned clears the value of the "assigned" field.
-func (apu *ActionPlanUpdate) ClearAssigned() *ActionPlanUpdate {
-	apu.mutation.ClearAssigned()
-	return apu
-}
-
 // SetDueDate sets the "due_date" field.
-func (apu *ActionPlanUpdate) SetDueDate(s string) *ActionPlanUpdate {
-	apu.mutation.SetDueDate(s)
+func (apu *ActionPlanUpdate) SetDueDate(t time.Time) *ActionPlanUpdate {
+	apu.mutation.SetDueDate(t)
 	return apu
 }
 
 // SetNillableDueDate sets the "due_date" field if the given value is not nil.
-func (apu *ActionPlanUpdate) SetNillableDueDate(s *string) *ActionPlanUpdate {
-	if s != nil {
-		apu.SetDueDate(*s)
+func (apu *ActionPlanUpdate) SetNillableDueDate(t *time.Time) *ActionPlanUpdate {
+	if t != nil {
+		apu.SetDueDate(*t)
 	}
 	return apu
 }
@@ -258,15 +240,15 @@ func (apu *ActionPlanUpdate) ClearSource() *ActionPlanUpdate {
 	return apu
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (apu *ActionPlanUpdate) SetJsonschema(m map[string]interface{}) *ActionPlanUpdate {
-	apu.mutation.SetJsonschema(m)
+// SetDetails sets the "details" field.
+func (apu *ActionPlanUpdate) SetDetails(m map[string]interface{}) *ActionPlanUpdate {
+	apu.mutation.SetDetails(m)
 	return apu
 }
 
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (apu *ActionPlanUpdate) ClearJsonschema() *ActionPlanUpdate {
-	apu.mutation.ClearJsonschema()
+// ClearDetails clears the value of the "details" field.
+func (apu *ActionPlanUpdate) ClearDetails() *ActionPlanUpdate {
+	apu.mutation.ClearDetails()
 	return apu
 }
 
@@ -298,6 +280,36 @@ func (apu *ActionPlanUpdate) AddRisk(r ...*Risk) *ActionPlanUpdate {
 		ids[i] = r[i].ID
 	}
 	return apu.AddRiskIDs(ids...)
+}
+
+// AddControlIDs adds the "control" edge to the Control entity by IDs.
+func (apu *ActionPlanUpdate) AddControlIDs(ids ...string) *ActionPlanUpdate {
+	apu.mutation.AddControlIDs(ids...)
+	return apu
+}
+
+// AddControl adds the "control" edges to the Control entity.
+func (apu *ActionPlanUpdate) AddControl(c ...*Control) *ActionPlanUpdate {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return apu.AddControlIDs(ids...)
+}
+
+// AddUserIDs adds the "user" edge to the User entity by IDs.
+func (apu *ActionPlanUpdate) AddUserIDs(ids ...string) *ActionPlanUpdate {
+	apu.mutation.AddUserIDs(ids...)
+	return apu
+}
+
+// AddUser adds the "user" edges to the User entity.
+func (apu *ActionPlanUpdate) AddUser(u ...*User) *ActionPlanUpdate {
+	ids := make([]string, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return apu.AddUserIDs(ids...)
 }
 
 // Mutation returns the ActionPlanMutation object of the builder.
@@ -345,6 +357,48 @@ func (apu *ActionPlanUpdate) RemoveRisk(r ...*Risk) *ActionPlanUpdate {
 		ids[i] = r[i].ID
 	}
 	return apu.RemoveRiskIDs(ids...)
+}
+
+// ClearControl clears all "control" edges to the Control entity.
+func (apu *ActionPlanUpdate) ClearControl() *ActionPlanUpdate {
+	apu.mutation.ClearControl()
+	return apu
+}
+
+// RemoveControlIDs removes the "control" edge to Control entities by IDs.
+func (apu *ActionPlanUpdate) RemoveControlIDs(ids ...string) *ActionPlanUpdate {
+	apu.mutation.RemoveControlIDs(ids...)
+	return apu
+}
+
+// RemoveControl removes "control" edges to Control entities.
+func (apu *ActionPlanUpdate) RemoveControl(c ...*Control) *ActionPlanUpdate {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return apu.RemoveControlIDs(ids...)
+}
+
+// ClearUser clears all "user" edges to the User entity.
+func (apu *ActionPlanUpdate) ClearUser() *ActionPlanUpdate {
+	apu.mutation.ClearUser()
+	return apu
+}
+
+// RemoveUserIDs removes the "user" edge to User entities by IDs.
+func (apu *ActionPlanUpdate) RemoveUserIDs(ids ...string) *ActionPlanUpdate {
+	apu.mutation.RemoveUserIDs(ids...)
+	return apu
+}
+
+// RemoveUser removes "user" edges to User entities.
+func (apu *ActionPlanUpdate) RemoveUser(u ...*User) *ActionPlanUpdate {
+	ids := make([]string, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return apu.RemoveUserIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -460,17 +514,11 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if apu.mutation.StatusCleared() {
 		_spec.ClearField(actionplan.FieldStatus, field.TypeString)
 	}
-	if value, ok := apu.mutation.Assigned(); ok {
-		_spec.SetField(actionplan.FieldAssigned, field.TypeString, value)
-	}
-	if apu.mutation.AssignedCleared() {
-		_spec.ClearField(actionplan.FieldAssigned, field.TypeString)
-	}
 	if value, ok := apu.mutation.DueDate(); ok {
-		_spec.SetField(actionplan.FieldDueDate, field.TypeString, value)
+		_spec.SetField(actionplan.FieldDueDate, field.TypeTime, value)
 	}
 	if apu.mutation.DueDateCleared() {
-		_spec.ClearField(actionplan.FieldDueDate, field.TypeString)
+		_spec.ClearField(actionplan.FieldDueDate, field.TypeTime)
 	}
 	if value, ok := apu.mutation.Priority(); ok {
 		_spec.SetField(actionplan.FieldPriority, field.TypeString, value)
@@ -484,11 +532,11 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if apu.mutation.SourceCleared() {
 		_spec.ClearField(actionplan.FieldSource, field.TypeString)
 	}
-	if value, ok := apu.mutation.Jsonschema(); ok {
-		_spec.SetField(actionplan.FieldJsonschema, field.TypeJSON, value)
+	if value, ok := apu.mutation.Details(); ok {
+		_spec.SetField(actionplan.FieldDetails, field.TypeJSON, value)
 	}
-	if apu.mutation.JsonschemaCleared() {
-		_spec.ClearField(actionplan.FieldJsonschema, field.TypeJSON)
+	if apu.mutation.DetailsCleared() {
+		_spec.ClearField(actionplan.FieldDetails, field.TypeJSON)
 	}
 	if apu.mutation.StandardCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -581,6 +629,102 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			},
 		}
 		edge.Schema = apu.schemaConfig.RiskActionplans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if apu.mutation.ControlCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.ControlTable,
+			Columns: actionplan.ControlPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = apu.schemaConfig.ControlActionplans
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := apu.mutation.RemovedControlIDs(); len(nodes) > 0 && !apu.mutation.ControlCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.ControlTable,
+			Columns: actionplan.ControlPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = apu.schemaConfig.ControlActionplans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := apu.mutation.ControlIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.ControlTable,
+			Columns: actionplan.ControlPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = apu.schemaConfig.ControlActionplans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if apu.mutation.UserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.UserTable,
+			Columns: actionplan.UserPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = apu.schemaConfig.UserActionplans
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := apu.mutation.RemovedUserIDs(); len(nodes) > 0 && !apu.mutation.UserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.UserTable,
+			Columns: actionplan.UserPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = apu.schemaConfig.UserActionplans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := apu.mutation.UserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.UserTable,
+			Columns: actionplan.UserPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = apu.schemaConfig.UserActionplans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -754,36 +898,16 @@ func (apuo *ActionPlanUpdateOne) ClearStatus() *ActionPlanUpdateOne {
 	return apuo
 }
 
-// SetAssigned sets the "assigned" field.
-func (apuo *ActionPlanUpdateOne) SetAssigned(s string) *ActionPlanUpdateOne {
-	apuo.mutation.SetAssigned(s)
-	return apuo
-}
-
-// SetNillableAssigned sets the "assigned" field if the given value is not nil.
-func (apuo *ActionPlanUpdateOne) SetNillableAssigned(s *string) *ActionPlanUpdateOne {
-	if s != nil {
-		apuo.SetAssigned(*s)
-	}
-	return apuo
-}
-
-// ClearAssigned clears the value of the "assigned" field.
-func (apuo *ActionPlanUpdateOne) ClearAssigned() *ActionPlanUpdateOne {
-	apuo.mutation.ClearAssigned()
-	return apuo
-}
-
 // SetDueDate sets the "due_date" field.
-func (apuo *ActionPlanUpdateOne) SetDueDate(s string) *ActionPlanUpdateOne {
-	apuo.mutation.SetDueDate(s)
+func (apuo *ActionPlanUpdateOne) SetDueDate(t time.Time) *ActionPlanUpdateOne {
+	apuo.mutation.SetDueDate(t)
 	return apuo
 }
 
 // SetNillableDueDate sets the "due_date" field if the given value is not nil.
-func (apuo *ActionPlanUpdateOne) SetNillableDueDate(s *string) *ActionPlanUpdateOne {
-	if s != nil {
-		apuo.SetDueDate(*s)
+func (apuo *ActionPlanUpdateOne) SetNillableDueDate(t *time.Time) *ActionPlanUpdateOne {
+	if t != nil {
+		apuo.SetDueDate(*t)
 	}
 	return apuo
 }
@@ -834,15 +958,15 @@ func (apuo *ActionPlanUpdateOne) ClearSource() *ActionPlanUpdateOne {
 	return apuo
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (apuo *ActionPlanUpdateOne) SetJsonschema(m map[string]interface{}) *ActionPlanUpdateOne {
-	apuo.mutation.SetJsonschema(m)
+// SetDetails sets the "details" field.
+func (apuo *ActionPlanUpdateOne) SetDetails(m map[string]interface{}) *ActionPlanUpdateOne {
+	apuo.mutation.SetDetails(m)
 	return apuo
 }
 
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (apuo *ActionPlanUpdateOne) ClearJsonschema() *ActionPlanUpdateOne {
-	apuo.mutation.ClearJsonschema()
+// ClearDetails clears the value of the "details" field.
+func (apuo *ActionPlanUpdateOne) ClearDetails() *ActionPlanUpdateOne {
+	apuo.mutation.ClearDetails()
 	return apuo
 }
 
@@ -874,6 +998,36 @@ func (apuo *ActionPlanUpdateOne) AddRisk(r ...*Risk) *ActionPlanUpdateOne {
 		ids[i] = r[i].ID
 	}
 	return apuo.AddRiskIDs(ids...)
+}
+
+// AddControlIDs adds the "control" edge to the Control entity by IDs.
+func (apuo *ActionPlanUpdateOne) AddControlIDs(ids ...string) *ActionPlanUpdateOne {
+	apuo.mutation.AddControlIDs(ids...)
+	return apuo
+}
+
+// AddControl adds the "control" edges to the Control entity.
+func (apuo *ActionPlanUpdateOne) AddControl(c ...*Control) *ActionPlanUpdateOne {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return apuo.AddControlIDs(ids...)
+}
+
+// AddUserIDs adds the "user" edge to the User entity by IDs.
+func (apuo *ActionPlanUpdateOne) AddUserIDs(ids ...string) *ActionPlanUpdateOne {
+	apuo.mutation.AddUserIDs(ids...)
+	return apuo
+}
+
+// AddUser adds the "user" edges to the User entity.
+func (apuo *ActionPlanUpdateOne) AddUser(u ...*User) *ActionPlanUpdateOne {
+	ids := make([]string, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return apuo.AddUserIDs(ids...)
 }
 
 // Mutation returns the ActionPlanMutation object of the builder.
@@ -921,6 +1075,48 @@ func (apuo *ActionPlanUpdateOne) RemoveRisk(r ...*Risk) *ActionPlanUpdateOne {
 		ids[i] = r[i].ID
 	}
 	return apuo.RemoveRiskIDs(ids...)
+}
+
+// ClearControl clears all "control" edges to the Control entity.
+func (apuo *ActionPlanUpdateOne) ClearControl() *ActionPlanUpdateOne {
+	apuo.mutation.ClearControl()
+	return apuo
+}
+
+// RemoveControlIDs removes the "control" edge to Control entities by IDs.
+func (apuo *ActionPlanUpdateOne) RemoveControlIDs(ids ...string) *ActionPlanUpdateOne {
+	apuo.mutation.RemoveControlIDs(ids...)
+	return apuo
+}
+
+// RemoveControl removes "control" edges to Control entities.
+func (apuo *ActionPlanUpdateOne) RemoveControl(c ...*Control) *ActionPlanUpdateOne {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return apuo.RemoveControlIDs(ids...)
+}
+
+// ClearUser clears all "user" edges to the User entity.
+func (apuo *ActionPlanUpdateOne) ClearUser() *ActionPlanUpdateOne {
+	apuo.mutation.ClearUser()
+	return apuo
+}
+
+// RemoveUserIDs removes the "user" edge to User entities by IDs.
+func (apuo *ActionPlanUpdateOne) RemoveUserIDs(ids ...string) *ActionPlanUpdateOne {
+	apuo.mutation.RemoveUserIDs(ids...)
+	return apuo
+}
+
+// RemoveUser removes "user" edges to User entities.
+func (apuo *ActionPlanUpdateOne) RemoveUser(u ...*User) *ActionPlanUpdateOne {
+	ids := make([]string, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return apuo.RemoveUserIDs(ids...)
 }
 
 // Where appends a list predicates to the ActionPlanUpdate builder.
@@ -1066,17 +1262,11 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 	if apuo.mutation.StatusCleared() {
 		_spec.ClearField(actionplan.FieldStatus, field.TypeString)
 	}
-	if value, ok := apuo.mutation.Assigned(); ok {
-		_spec.SetField(actionplan.FieldAssigned, field.TypeString, value)
-	}
-	if apuo.mutation.AssignedCleared() {
-		_spec.ClearField(actionplan.FieldAssigned, field.TypeString)
-	}
 	if value, ok := apuo.mutation.DueDate(); ok {
-		_spec.SetField(actionplan.FieldDueDate, field.TypeString, value)
+		_spec.SetField(actionplan.FieldDueDate, field.TypeTime, value)
 	}
 	if apuo.mutation.DueDateCleared() {
-		_spec.ClearField(actionplan.FieldDueDate, field.TypeString)
+		_spec.ClearField(actionplan.FieldDueDate, field.TypeTime)
 	}
 	if value, ok := apuo.mutation.Priority(); ok {
 		_spec.SetField(actionplan.FieldPriority, field.TypeString, value)
@@ -1090,11 +1280,11 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 	if apuo.mutation.SourceCleared() {
 		_spec.ClearField(actionplan.FieldSource, field.TypeString)
 	}
-	if value, ok := apuo.mutation.Jsonschema(); ok {
-		_spec.SetField(actionplan.FieldJsonschema, field.TypeJSON, value)
+	if value, ok := apuo.mutation.Details(); ok {
+		_spec.SetField(actionplan.FieldDetails, field.TypeJSON, value)
 	}
-	if apuo.mutation.JsonschemaCleared() {
-		_spec.ClearField(actionplan.FieldJsonschema, field.TypeJSON)
+	if apuo.mutation.DetailsCleared() {
+		_spec.ClearField(actionplan.FieldDetails, field.TypeJSON)
 	}
 	if apuo.mutation.StandardCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1187,6 +1377,102 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 			},
 		}
 		edge.Schema = apuo.schemaConfig.RiskActionplans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if apuo.mutation.ControlCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.ControlTable,
+			Columns: actionplan.ControlPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = apuo.schemaConfig.ControlActionplans
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := apuo.mutation.RemovedControlIDs(); len(nodes) > 0 && !apuo.mutation.ControlCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.ControlTable,
+			Columns: actionplan.ControlPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = apuo.schemaConfig.ControlActionplans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := apuo.mutation.ControlIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.ControlTable,
+			Columns: actionplan.ControlPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = apuo.schemaConfig.ControlActionplans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if apuo.mutation.UserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.UserTable,
+			Columns: actionplan.UserPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = apuo.schemaConfig.UserActionplans
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := apuo.mutation.RemovedUserIDs(); len(nodes) > 0 && !apuo.mutation.UserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.UserTable,
+			Columns: actionplan.UserPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = apuo.schemaConfig.UserActionplans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := apuo.mutation.UserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.UserTable,
+			Columns: actionplan.UserPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = apuo.schemaConfig.UserActionplans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

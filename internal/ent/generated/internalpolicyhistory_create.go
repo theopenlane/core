@@ -241,9 +241,9 @@ func (iphc *InternalPolicyHistoryCreate) SetNillableBackground(s *string) *Inter
 	return iphc
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (iphc *InternalPolicyHistoryCreate) SetJsonschema(m map[string]interface{}) *InternalPolicyHistoryCreate {
-	iphc.mutation.SetJsonschema(m)
+// SetDetails sets the "details" field.
+func (iphc *InternalPolicyHistoryCreate) SetDetails(m map[string]interface{}) *InternalPolicyHistoryCreate {
+	iphc.mutation.SetDetails(m)
 	return iphc
 }
 
@@ -452,9 +452,9 @@ func (iphc *InternalPolicyHistoryCreate) createSpec() (*InternalPolicyHistory, *
 		_spec.SetField(internalpolicyhistory.FieldBackground, field.TypeString, value)
 		_node.Background = value
 	}
-	if value, ok := iphc.mutation.Jsonschema(); ok {
-		_spec.SetField(internalpolicyhistory.FieldJsonschema, field.TypeJSON, value)
-		_node.Jsonschema = value
+	if value, ok := iphc.mutation.Details(); ok {
+		_spec.SetField(internalpolicyhistory.FieldDetails, field.TypeJSON, value)
+		_node.Details = value
 	}
 	return _node, _spec
 }

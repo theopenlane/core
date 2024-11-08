@@ -216,26 +216,6 @@ func (shu *SubcontrolHistoryUpdate) ClearVersion() *SubcontrolHistoryUpdate {
 	return shu
 }
 
-// SetOwner sets the "owner" field.
-func (shu *SubcontrolHistoryUpdate) SetOwner(s string) *SubcontrolHistoryUpdate {
-	shu.mutation.SetOwner(s)
-	return shu
-}
-
-// SetNillableOwner sets the "owner" field if the given value is not nil.
-func (shu *SubcontrolHistoryUpdate) SetNillableOwner(s *string) *SubcontrolHistoryUpdate {
-	if s != nil {
-		shu.SetOwner(*s)
-	}
-	return shu
-}
-
-// ClearOwner clears the value of the "owner" field.
-func (shu *SubcontrolHistoryUpdate) ClearOwner() *SubcontrolHistoryUpdate {
-	shu.mutation.ClearOwner()
-	return shu
-}
-
 // SetSubcontrolNumber sets the "subcontrol_number" field.
 func (shu *SubcontrolHistoryUpdate) SetSubcontrolNumber(s string) *SubcontrolHistoryUpdate {
 	shu.mutation.SetSubcontrolNumber(s)
@@ -256,43 +236,43 @@ func (shu *SubcontrolHistoryUpdate) ClearSubcontrolNumber() *SubcontrolHistoryUp
 	return shu
 }
 
-// SetSubcontrolFamily sets the "subcontrol_family" field.
-func (shu *SubcontrolHistoryUpdate) SetSubcontrolFamily(s string) *SubcontrolHistoryUpdate {
-	shu.mutation.SetSubcontrolFamily(s)
+// SetFamily sets the "family" field.
+func (shu *SubcontrolHistoryUpdate) SetFamily(s string) *SubcontrolHistoryUpdate {
+	shu.mutation.SetFamily(s)
 	return shu
 }
 
-// SetNillableSubcontrolFamily sets the "subcontrol_family" field if the given value is not nil.
-func (shu *SubcontrolHistoryUpdate) SetNillableSubcontrolFamily(s *string) *SubcontrolHistoryUpdate {
+// SetNillableFamily sets the "family" field if the given value is not nil.
+func (shu *SubcontrolHistoryUpdate) SetNillableFamily(s *string) *SubcontrolHistoryUpdate {
 	if s != nil {
-		shu.SetSubcontrolFamily(*s)
+		shu.SetFamily(*s)
 	}
 	return shu
 }
 
-// ClearSubcontrolFamily clears the value of the "subcontrol_family" field.
-func (shu *SubcontrolHistoryUpdate) ClearSubcontrolFamily() *SubcontrolHistoryUpdate {
-	shu.mutation.ClearSubcontrolFamily()
+// ClearFamily clears the value of the "family" field.
+func (shu *SubcontrolHistoryUpdate) ClearFamily() *SubcontrolHistoryUpdate {
+	shu.mutation.ClearFamily()
 	return shu
 }
 
-// SetSubcontrolClass sets the "subcontrol_class" field.
-func (shu *SubcontrolHistoryUpdate) SetSubcontrolClass(s string) *SubcontrolHistoryUpdate {
-	shu.mutation.SetSubcontrolClass(s)
+// SetClass sets the "class" field.
+func (shu *SubcontrolHistoryUpdate) SetClass(s string) *SubcontrolHistoryUpdate {
+	shu.mutation.SetClass(s)
 	return shu
 }
 
-// SetNillableSubcontrolClass sets the "subcontrol_class" field if the given value is not nil.
-func (shu *SubcontrolHistoryUpdate) SetNillableSubcontrolClass(s *string) *SubcontrolHistoryUpdate {
+// SetNillableClass sets the "class" field if the given value is not nil.
+func (shu *SubcontrolHistoryUpdate) SetNillableClass(s *string) *SubcontrolHistoryUpdate {
 	if s != nil {
-		shu.SetSubcontrolClass(*s)
+		shu.SetClass(*s)
 	}
 	return shu
 }
 
-// ClearSubcontrolClass clears the value of the "subcontrol_class" field.
-func (shu *SubcontrolHistoryUpdate) ClearSubcontrolClass() *SubcontrolHistoryUpdate {
-	shu.mutation.ClearSubcontrolClass()
+// ClearClass clears the value of the "class" field.
+func (shu *SubcontrolHistoryUpdate) ClearClass() *SubcontrolHistoryUpdate {
+	shu.mutation.ClearClass()
 	return shu
 }
 
@@ -336,23 +316,23 @@ func (shu *SubcontrolHistoryUpdate) ClearMappedFrameworks() *SubcontrolHistoryUp
 	return shu
 }
 
-// SetAssignedTo sets the "assigned_to" field.
-func (shu *SubcontrolHistoryUpdate) SetAssignedTo(s string) *SubcontrolHistoryUpdate {
-	shu.mutation.SetAssignedTo(s)
+// SetImplementationEvidence sets the "implementation_evidence" field.
+func (shu *SubcontrolHistoryUpdate) SetImplementationEvidence(s string) *SubcontrolHistoryUpdate {
+	shu.mutation.SetImplementationEvidence(s)
 	return shu
 }
 
-// SetNillableAssignedTo sets the "assigned_to" field if the given value is not nil.
-func (shu *SubcontrolHistoryUpdate) SetNillableAssignedTo(s *string) *SubcontrolHistoryUpdate {
+// SetNillableImplementationEvidence sets the "implementation_evidence" field if the given value is not nil.
+func (shu *SubcontrolHistoryUpdate) SetNillableImplementationEvidence(s *string) *SubcontrolHistoryUpdate {
 	if s != nil {
-		shu.SetAssignedTo(*s)
+		shu.SetImplementationEvidence(*s)
 	}
 	return shu
 }
 
-// ClearAssignedTo clears the value of the "assigned_to" field.
-func (shu *SubcontrolHistoryUpdate) ClearAssignedTo() *SubcontrolHistoryUpdate {
-	shu.mutation.ClearAssignedTo()
+// ClearImplementationEvidence clears the value of the "implementation_evidence" field.
+func (shu *SubcontrolHistoryUpdate) ClearImplementationEvidence() *SubcontrolHistoryUpdate {
+	shu.mutation.ClearImplementationEvidence()
 	return shu
 }
 
@@ -376,36 +356,16 @@ func (shu *SubcontrolHistoryUpdate) ClearImplementationStatus() *SubcontrolHisto
 	return shu
 }
 
-// SetImplementationNotes sets the "implementation_notes" field.
-func (shu *SubcontrolHistoryUpdate) SetImplementationNotes(s string) *SubcontrolHistoryUpdate {
-	shu.mutation.SetImplementationNotes(s)
-	return shu
-}
-
-// SetNillableImplementationNotes sets the "implementation_notes" field if the given value is not nil.
-func (shu *SubcontrolHistoryUpdate) SetNillableImplementationNotes(s *string) *SubcontrolHistoryUpdate {
-	if s != nil {
-		shu.SetImplementationNotes(*s)
-	}
-	return shu
-}
-
-// ClearImplementationNotes clears the value of the "implementation_notes" field.
-func (shu *SubcontrolHistoryUpdate) ClearImplementationNotes() *SubcontrolHistoryUpdate {
-	shu.mutation.ClearImplementationNotes()
-	return shu
-}
-
 // SetImplementationDate sets the "implementation_date" field.
-func (shu *SubcontrolHistoryUpdate) SetImplementationDate(s string) *SubcontrolHistoryUpdate {
-	shu.mutation.SetImplementationDate(s)
+func (shu *SubcontrolHistoryUpdate) SetImplementationDate(t time.Time) *SubcontrolHistoryUpdate {
+	shu.mutation.SetImplementationDate(t)
 	return shu
 }
 
 // SetNillableImplementationDate sets the "implementation_date" field if the given value is not nil.
-func (shu *SubcontrolHistoryUpdate) SetNillableImplementationDate(s *string) *SubcontrolHistoryUpdate {
-	if s != nil {
-		shu.SetImplementationDate(*s)
+func (shu *SubcontrolHistoryUpdate) SetNillableImplementationDate(t *time.Time) *SubcontrolHistoryUpdate {
+	if t != nil {
+		shu.SetImplementationDate(*t)
 	}
 	return shu
 }
@@ -413,26 +373,6 @@ func (shu *SubcontrolHistoryUpdate) SetNillableImplementationDate(s *string) *Su
 // ClearImplementationDate clears the value of the "implementation_date" field.
 func (shu *SubcontrolHistoryUpdate) ClearImplementationDate() *SubcontrolHistoryUpdate {
 	shu.mutation.ClearImplementationDate()
-	return shu
-}
-
-// SetImplementationEvidence sets the "implementation_evidence" field.
-func (shu *SubcontrolHistoryUpdate) SetImplementationEvidence(s string) *SubcontrolHistoryUpdate {
-	shu.mutation.SetImplementationEvidence(s)
-	return shu
-}
-
-// SetNillableImplementationEvidence sets the "implementation_evidence" field if the given value is not nil.
-func (shu *SubcontrolHistoryUpdate) SetNillableImplementationEvidence(s *string) *SubcontrolHistoryUpdate {
-	if s != nil {
-		shu.SetImplementationEvidence(*s)
-	}
-	return shu
-}
-
-// ClearImplementationEvidence clears the value of the "implementation_evidence" field.
-func (shu *SubcontrolHistoryUpdate) ClearImplementationEvidence() *SubcontrolHistoryUpdate {
-	shu.mutation.ClearImplementationEvidence()
 	return shu
 }
 
@@ -457,15 +397,15 @@ func (shu *SubcontrolHistoryUpdate) ClearImplementationVerification() *Subcontro
 }
 
 // SetImplementationVerificationDate sets the "implementation_verification_date" field.
-func (shu *SubcontrolHistoryUpdate) SetImplementationVerificationDate(s string) *SubcontrolHistoryUpdate {
-	shu.mutation.SetImplementationVerificationDate(s)
+func (shu *SubcontrolHistoryUpdate) SetImplementationVerificationDate(t time.Time) *SubcontrolHistoryUpdate {
+	shu.mutation.SetImplementationVerificationDate(t)
 	return shu
 }
 
 // SetNillableImplementationVerificationDate sets the "implementation_verification_date" field if the given value is not nil.
-func (shu *SubcontrolHistoryUpdate) SetNillableImplementationVerificationDate(s *string) *SubcontrolHistoryUpdate {
-	if s != nil {
-		shu.SetImplementationVerificationDate(*s)
+func (shu *SubcontrolHistoryUpdate) SetNillableImplementationVerificationDate(t *time.Time) *SubcontrolHistoryUpdate {
+	if t != nil {
+		shu.SetImplementationVerificationDate(*t)
 	}
 	return shu
 }
@@ -476,15 +416,15 @@ func (shu *SubcontrolHistoryUpdate) ClearImplementationVerificationDate() *Subco
 	return shu
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (shu *SubcontrolHistoryUpdate) SetJsonschema(m map[string]interface{}) *SubcontrolHistoryUpdate {
-	shu.mutation.SetJsonschema(m)
+// SetDetails sets the "details" field.
+func (shu *SubcontrolHistoryUpdate) SetDetails(m map[string]interface{}) *SubcontrolHistoryUpdate {
+	shu.mutation.SetDetails(m)
 	return shu
 }
 
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (shu *SubcontrolHistoryUpdate) ClearJsonschema() *SubcontrolHistoryUpdate {
-	shu.mutation.ClearJsonschema()
+// ClearDetails clears the value of the "details" field.
+func (shu *SubcontrolHistoryUpdate) ClearDetails() *SubcontrolHistoryUpdate {
+	shu.mutation.ClearDetails()
 	return shu
 }
 
@@ -615,29 +555,23 @@ func (shu *SubcontrolHistoryUpdate) sqlSave(ctx context.Context) (n int, err err
 	if shu.mutation.VersionCleared() {
 		_spec.ClearField(subcontrolhistory.FieldVersion, field.TypeString)
 	}
-	if value, ok := shu.mutation.Owner(); ok {
-		_spec.SetField(subcontrolhistory.FieldOwner, field.TypeString, value)
-	}
-	if shu.mutation.OwnerCleared() {
-		_spec.ClearField(subcontrolhistory.FieldOwner, field.TypeString)
-	}
 	if value, ok := shu.mutation.SubcontrolNumber(); ok {
 		_spec.SetField(subcontrolhistory.FieldSubcontrolNumber, field.TypeString, value)
 	}
 	if shu.mutation.SubcontrolNumberCleared() {
 		_spec.ClearField(subcontrolhistory.FieldSubcontrolNumber, field.TypeString)
 	}
-	if value, ok := shu.mutation.SubcontrolFamily(); ok {
-		_spec.SetField(subcontrolhistory.FieldSubcontrolFamily, field.TypeString, value)
+	if value, ok := shu.mutation.Family(); ok {
+		_spec.SetField(subcontrolhistory.FieldFamily, field.TypeString, value)
 	}
-	if shu.mutation.SubcontrolFamilyCleared() {
-		_spec.ClearField(subcontrolhistory.FieldSubcontrolFamily, field.TypeString)
+	if shu.mutation.FamilyCleared() {
+		_spec.ClearField(subcontrolhistory.FieldFamily, field.TypeString)
 	}
-	if value, ok := shu.mutation.SubcontrolClass(); ok {
-		_spec.SetField(subcontrolhistory.FieldSubcontrolClass, field.TypeString, value)
+	if value, ok := shu.mutation.Class(); ok {
+		_spec.SetField(subcontrolhistory.FieldClass, field.TypeString, value)
 	}
-	if shu.mutation.SubcontrolClassCleared() {
-		_spec.ClearField(subcontrolhistory.FieldSubcontrolClass, field.TypeString)
+	if shu.mutation.ClassCleared() {
+		_spec.ClearField(subcontrolhistory.FieldClass, field.TypeString)
 	}
 	if value, ok := shu.mutation.Source(); ok {
 		_spec.SetField(subcontrolhistory.FieldSource, field.TypeString, value)
@@ -651,11 +585,11 @@ func (shu *SubcontrolHistoryUpdate) sqlSave(ctx context.Context) (n int, err err
 	if shu.mutation.MappedFrameworksCleared() {
 		_spec.ClearField(subcontrolhistory.FieldMappedFrameworks, field.TypeString)
 	}
-	if value, ok := shu.mutation.AssignedTo(); ok {
-		_spec.SetField(subcontrolhistory.FieldAssignedTo, field.TypeString, value)
+	if value, ok := shu.mutation.ImplementationEvidence(); ok {
+		_spec.SetField(subcontrolhistory.FieldImplementationEvidence, field.TypeString, value)
 	}
-	if shu.mutation.AssignedToCleared() {
-		_spec.ClearField(subcontrolhistory.FieldAssignedTo, field.TypeString)
+	if shu.mutation.ImplementationEvidenceCleared() {
+		_spec.ClearField(subcontrolhistory.FieldImplementationEvidence, field.TypeString)
 	}
 	if value, ok := shu.mutation.ImplementationStatus(); ok {
 		_spec.SetField(subcontrolhistory.FieldImplementationStatus, field.TypeString, value)
@@ -663,23 +597,11 @@ func (shu *SubcontrolHistoryUpdate) sqlSave(ctx context.Context) (n int, err err
 	if shu.mutation.ImplementationStatusCleared() {
 		_spec.ClearField(subcontrolhistory.FieldImplementationStatus, field.TypeString)
 	}
-	if value, ok := shu.mutation.ImplementationNotes(); ok {
-		_spec.SetField(subcontrolhistory.FieldImplementationNotes, field.TypeString, value)
-	}
-	if shu.mutation.ImplementationNotesCleared() {
-		_spec.ClearField(subcontrolhistory.FieldImplementationNotes, field.TypeString)
-	}
 	if value, ok := shu.mutation.ImplementationDate(); ok {
-		_spec.SetField(subcontrolhistory.FieldImplementationDate, field.TypeString, value)
+		_spec.SetField(subcontrolhistory.FieldImplementationDate, field.TypeTime, value)
 	}
 	if shu.mutation.ImplementationDateCleared() {
-		_spec.ClearField(subcontrolhistory.FieldImplementationDate, field.TypeString)
-	}
-	if value, ok := shu.mutation.ImplementationEvidence(); ok {
-		_spec.SetField(subcontrolhistory.FieldImplementationEvidence, field.TypeString, value)
-	}
-	if shu.mutation.ImplementationEvidenceCleared() {
-		_spec.ClearField(subcontrolhistory.FieldImplementationEvidence, field.TypeString)
+		_spec.ClearField(subcontrolhistory.FieldImplementationDate, field.TypeTime)
 	}
 	if value, ok := shu.mutation.ImplementationVerification(); ok {
 		_spec.SetField(subcontrolhistory.FieldImplementationVerification, field.TypeString, value)
@@ -688,16 +610,16 @@ func (shu *SubcontrolHistoryUpdate) sqlSave(ctx context.Context) (n int, err err
 		_spec.ClearField(subcontrolhistory.FieldImplementationVerification, field.TypeString)
 	}
 	if value, ok := shu.mutation.ImplementationVerificationDate(); ok {
-		_spec.SetField(subcontrolhistory.FieldImplementationVerificationDate, field.TypeString, value)
+		_spec.SetField(subcontrolhistory.FieldImplementationVerificationDate, field.TypeTime, value)
 	}
 	if shu.mutation.ImplementationVerificationDateCleared() {
-		_spec.ClearField(subcontrolhistory.FieldImplementationVerificationDate, field.TypeString)
+		_spec.ClearField(subcontrolhistory.FieldImplementationVerificationDate, field.TypeTime)
 	}
-	if value, ok := shu.mutation.Jsonschema(); ok {
-		_spec.SetField(subcontrolhistory.FieldJsonschema, field.TypeJSON, value)
+	if value, ok := shu.mutation.Details(); ok {
+		_spec.SetField(subcontrolhistory.FieldDetails, field.TypeJSON, value)
 	}
-	if shu.mutation.JsonschemaCleared() {
-		_spec.ClearField(subcontrolhistory.FieldJsonschema, field.TypeJSON)
+	if shu.mutation.DetailsCleared() {
+		_spec.ClearField(subcontrolhistory.FieldDetails, field.TypeJSON)
 	}
 	_spec.Node.Schema = shu.schemaConfig.SubcontrolHistory
 	ctx = internal.NewSchemaConfigContext(ctx, shu.schemaConfig)
@@ -907,26 +829,6 @@ func (shuo *SubcontrolHistoryUpdateOne) ClearVersion() *SubcontrolHistoryUpdateO
 	return shuo
 }
 
-// SetOwner sets the "owner" field.
-func (shuo *SubcontrolHistoryUpdateOne) SetOwner(s string) *SubcontrolHistoryUpdateOne {
-	shuo.mutation.SetOwner(s)
-	return shuo
-}
-
-// SetNillableOwner sets the "owner" field if the given value is not nil.
-func (shuo *SubcontrolHistoryUpdateOne) SetNillableOwner(s *string) *SubcontrolHistoryUpdateOne {
-	if s != nil {
-		shuo.SetOwner(*s)
-	}
-	return shuo
-}
-
-// ClearOwner clears the value of the "owner" field.
-func (shuo *SubcontrolHistoryUpdateOne) ClearOwner() *SubcontrolHistoryUpdateOne {
-	shuo.mutation.ClearOwner()
-	return shuo
-}
-
 // SetSubcontrolNumber sets the "subcontrol_number" field.
 func (shuo *SubcontrolHistoryUpdateOne) SetSubcontrolNumber(s string) *SubcontrolHistoryUpdateOne {
 	shuo.mutation.SetSubcontrolNumber(s)
@@ -947,43 +849,43 @@ func (shuo *SubcontrolHistoryUpdateOne) ClearSubcontrolNumber() *SubcontrolHisto
 	return shuo
 }
 
-// SetSubcontrolFamily sets the "subcontrol_family" field.
-func (shuo *SubcontrolHistoryUpdateOne) SetSubcontrolFamily(s string) *SubcontrolHistoryUpdateOne {
-	shuo.mutation.SetSubcontrolFamily(s)
+// SetFamily sets the "family" field.
+func (shuo *SubcontrolHistoryUpdateOne) SetFamily(s string) *SubcontrolHistoryUpdateOne {
+	shuo.mutation.SetFamily(s)
 	return shuo
 }
 
-// SetNillableSubcontrolFamily sets the "subcontrol_family" field if the given value is not nil.
-func (shuo *SubcontrolHistoryUpdateOne) SetNillableSubcontrolFamily(s *string) *SubcontrolHistoryUpdateOne {
+// SetNillableFamily sets the "family" field if the given value is not nil.
+func (shuo *SubcontrolHistoryUpdateOne) SetNillableFamily(s *string) *SubcontrolHistoryUpdateOne {
 	if s != nil {
-		shuo.SetSubcontrolFamily(*s)
+		shuo.SetFamily(*s)
 	}
 	return shuo
 }
 
-// ClearSubcontrolFamily clears the value of the "subcontrol_family" field.
-func (shuo *SubcontrolHistoryUpdateOne) ClearSubcontrolFamily() *SubcontrolHistoryUpdateOne {
-	shuo.mutation.ClearSubcontrolFamily()
+// ClearFamily clears the value of the "family" field.
+func (shuo *SubcontrolHistoryUpdateOne) ClearFamily() *SubcontrolHistoryUpdateOne {
+	shuo.mutation.ClearFamily()
 	return shuo
 }
 
-// SetSubcontrolClass sets the "subcontrol_class" field.
-func (shuo *SubcontrolHistoryUpdateOne) SetSubcontrolClass(s string) *SubcontrolHistoryUpdateOne {
-	shuo.mutation.SetSubcontrolClass(s)
+// SetClass sets the "class" field.
+func (shuo *SubcontrolHistoryUpdateOne) SetClass(s string) *SubcontrolHistoryUpdateOne {
+	shuo.mutation.SetClass(s)
 	return shuo
 }
 
-// SetNillableSubcontrolClass sets the "subcontrol_class" field if the given value is not nil.
-func (shuo *SubcontrolHistoryUpdateOne) SetNillableSubcontrolClass(s *string) *SubcontrolHistoryUpdateOne {
+// SetNillableClass sets the "class" field if the given value is not nil.
+func (shuo *SubcontrolHistoryUpdateOne) SetNillableClass(s *string) *SubcontrolHistoryUpdateOne {
 	if s != nil {
-		shuo.SetSubcontrolClass(*s)
+		shuo.SetClass(*s)
 	}
 	return shuo
 }
 
-// ClearSubcontrolClass clears the value of the "subcontrol_class" field.
-func (shuo *SubcontrolHistoryUpdateOne) ClearSubcontrolClass() *SubcontrolHistoryUpdateOne {
-	shuo.mutation.ClearSubcontrolClass()
+// ClearClass clears the value of the "class" field.
+func (shuo *SubcontrolHistoryUpdateOne) ClearClass() *SubcontrolHistoryUpdateOne {
+	shuo.mutation.ClearClass()
 	return shuo
 }
 
@@ -1027,23 +929,23 @@ func (shuo *SubcontrolHistoryUpdateOne) ClearMappedFrameworks() *SubcontrolHisto
 	return shuo
 }
 
-// SetAssignedTo sets the "assigned_to" field.
-func (shuo *SubcontrolHistoryUpdateOne) SetAssignedTo(s string) *SubcontrolHistoryUpdateOne {
-	shuo.mutation.SetAssignedTo(s)
+// SetImplementationEvidence sets the "implementation_evidence" field.
+func (shuo *SubcontrolHistoryUpdateOne) SetImplementationEvidence(s string) *SubcontrolHistoryUpdateOne {
+	shuo.mutation.SetImplementationEvidence(s)
 	return shuo
 }
 
-// SetNillableAssignedTo sets the "assigned_to" field if the given value is not nil.
-func (shuo *SubcontrolHistoryUpdateOne) SetNillableAssignedTo(s *string) *SubcontrolHistoryUpdateOne {
+// SetNillableImplementationEvidence sets the "implementation_evidence" field if the given value is not nil.
+func (shuo *SubcontrolHistoryUpdateOne) SetNillableImplementationEvidence(s *string) *SubcontrolHistoryUpdateOne {
 	if s != nil {
-		shuo.SetAssignedTo(*s)
+		shuo.SetImplementationEvidence(*s)
 	}
 	return shuo
 }
 
-// ClearAssignedTo clears the value of the "assigned_to" field.
-func (shuo *SubcontrolHistoryUpdateOne) ClearAssignedTo() *SubcontrolHistoryUpdateOne {
-	shuo.mutation.ClearAssignedTo()
+// ClearImplementationEvidence clears the value of the "implementation_evidence" field.
+func (shuo *SubcontrolHistoryUpdateOne) ClearImplementationEvidence() *SubcontrolHistoryUpdateOne {
+	shuo.mutation.ClearImplementationEvidence()
 	return shuo
 }
 
@@ -1067,36 +969,16 @@ func (shuo *SubcontrolHistoryUpdateOne) ClearImplementationStatus() *SubcontrolH
 	return shuo
 }
 
-// SetImplementationNotes sets the "implementation_notes" field.
-func (shuo *SubcontrolHistoryUpdateOne) SetImplementationNotes(s string) *SubcontrolHistoryUpdateOne {
-	shuo.mutation.SetImplementationNotes(s)
-	return shuo
-}
-
-// SetNillableImplementationNotes sets the "implementation_notes" field if the given value is not nil.
-func (shuo *SubcontrolHistoryUpdateOne) SetNillableImplementationNotes(s *string) *SubcontrolHistoryUpdateOne {
-	if s != nil {
-		shuo.SetImplementationNotes(*s)
-	}
-	return shuo
-}
-
-// ClearImplementationNotes clears the value of the "implementation_notes" field.
-func (shuo *SubcontrolHistoryUpdateOne) ClearImplementationNotes() *SubcontrolHistoryUpdateOne {
-	shuo.mutation.ClearImplementationNotes()
-	return shuo
-}
-
 // SetImplementationDate sets the "implementation_date" field.
-func (shuo *SubcontrolHistoryUpdateOne) SetImplementationDate(s string) *SubcontrolHistoryUpdateOne {
-	shuo.mutation.SetImplementationDate(s)
+func (shuo *SubcontrolHistoryUpdateOne) SetImplementationDate(t time.Time) *SubcontrolHistoryUpdateOne {
+	shuo.mutation.SetImplementationDate(t)
 	return shuo
 }
 
 // SetNillableImplementationDate sets the "implementation_date" field if the given value is not nil.
-func (shuo *SubcontrolHistoryUpdateOne) SetNillableImplementationDate(s *string) *SubcontrolHistoryUpdateOne {
-	if s != nil {
-		shuo.SetImplementationDate(*s)
+func (shuo *SubcontrolHistoryUpdateOne) SetNillableImplementationDate(t *time.Time) *SubcontrolHistoryUpdateOne {
+	if t != nil {
+		shuo.SetImplementationDate(*t)
 	}
 	return shuo
 }
@@ -1104,26 +986,6 @@ func (shuo *SubcontrolHistoryUpdateOne) SetNillableImplementationDate(s *string)
 // ClearImplementationDate clears the value of the "implementation_date" field.
 func (shuo *SubcontrolHistoryUpdateOne) ClearImplementationDate() *SubcontrolHistoryUpdateOne {
 	shuo.mutation.ClearImplementationDate()
-	return shuo
-}
-
-// SetImplementationEvidence sets the "implementation_evidence" field.
-func (shuo *SubcontrolHistoryUpdateOne) SetImplementationEvidence(s string) *SubcontrolHistoryUpdateOne {
-	shuo.mutation.SetImplementationEvidence(s)
-	return shuo
-}
-
-// SetNillableImplementationEvidence sets the "implementation_evidence" field if the given value is not nil.
-func (shuo *SubcontrolHistoryUpdateOne) SetNillableImplementationEvidence(s *string) *SubcontrolHistoryUpdateOne {
-	if s != nil {
-		shuo.SetImplementationEvidence(*s)
-	}
-	return shuo
-}
-
-// ClearImplementationEvidence clears the value of the "implementation_evidence" field.
-func (shuo *SubcontrolHistoryUpdateOne) ClearImplementationEvidence() *SubcontrolHistoryUpdateOne {
-	shuo.mutation.ClearImplementationEvidence()
 	return shuo
 }
 
@@ -1148,15 +1010,15 @@ func (shuo *SubcontrolHistoryUpdateOne) ClearImplementationVerification() *Subco
 }
 
 // SetImplementationVerificationDate sets the "implementation_verification_date" field.
-func (shuo *SubcontrolHistoryUpdateOne) SetImplementationVerificationDate(s string) *SubcontrolHistoryUpdateOne {
-	shuo.mutation.SetImplementationVerificationDate(s)
+func (shuo *SubcontrolHistoryUpdateOne) SetImplementationVerificationDate(t time.Time) *SubcontrolHistoryUpdateOne {
+	shuo.mutation.SetImplementationVerificationDate(t)
 	return shuo
 }
 
 // SetNillableImplementationVerificationDate sets the "implementation_verification_date" field if the given value is not nil.
-func (shuo *SubcontrolHistoryUpdateOne) SetNillableImplementationVerificationDate(s *string) *SubcontrolHistoryUpdateOne {
-	if s != nil {
-		shuo.SetImplementationVerificationDate(*s)
+func (shuo *SubcontrolHistoryUpdateOne) SetNillableImplementationVerificationDate(t *time.Time) *SubcontrolHistoryUpdateOne {
+	if t != nil {
+		shuo.SetImplementationVerificationDate(*t)
 	}
 	return shuo
 }
@@ -1167,15 +1029,15 @@ func (shuo *SubcontrolHistoryUpdateOne) ClearImplementationVerificationDate() *S
 	return shuo
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (shuo *SubcontrolHistoryUpdateOne) SetJsonschema(m map[string]interface{}) *SubcontrolHistoryUpdateOne {
-	shuo.mutation.SetJsonschema(m)
+// SetDetails sets the "details" field.
+func (shuo *SubcontrolHistoryUpdateOne) SetDetails(m map[string]interface{}) *SubcontrolHistoryUpdateOne {
+	shuo.mutation.SetDetails(m)
 	return shuo
 }
 
-// ClearJsonschema clears the value of the "jsonschema" field.
-func (shuo *SubcontrolHistoryUpdateOne) ClearJsonschema() *SubcontrolHistoryUpdateOne {
-	shuo.mutation.ClearJsonschema()
+// ClearDetails clears the value of the "details" field.
+func (shuo *SubcontrolHistoryUpdateOne) ClearDetails() *SubcontrolHistoryUpdateOne {
+	shuo.mutation.ClearDetails()
 	return shuo
 }
 
@@ -1336,29 +1198,23 @@ func (shuo *SubcontrolHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Sub
 	if shuo.mutation.VersionCleared() {
 		_spec.ClearField(subcontrolhistory.FieldVersion, field.TypeString)
 	}
-	if value, ok := shuo.mutation.Owner(); ok {
-		_spec.SetField(subcontrolhistory.FieldOwner, field.TypeString, value)
-	}
-	if shuo.mutation.OwnerCleared() {
-		_spec.ClearField(subcontrolhistory.FieldOwner, field.TypeString)
-	}
 	if value, ok := shuo.mutation.SubcontrolNumber(); ok {
 		_spec.SetField(subcontrolhistory.FieldSubcontrolNumber, field.TypeString, value)
 	}
 	if shuo.mutation.SubcontrolNumberCleared() {
 		_spec.ClearField(subcontrolhistory.FieldSubcontrolNumber, field.TypeString)
 	}
-	if value, ok := shuo.mutation.SubcontrolFamily(); ok {
-		_spec.SetField(subcontrolhistory.FieldSubcontrolFamily, field.TypeString, value)
+	if value, ok := shuo.mutation.Family(); ok {
+		_spec.SetField(subcontrolhistory.FieldFamily, field.TypeString, value)
 	}
-	if shuo.mutation.SubcontrolFamilyCleared() {
-		_spec.ClearField(subcontrolhistory.FieldSubcontrolFamily, field.TypeString)
+	if shuo.mutation.FamilyCleared() {
+		_spec.ClearField(subcontrolhistory.FieldFamily, field.TypeString)
 	}
-	if value, ok := shuo.mutation.SubcontrolClass(); ok {
-		_spec.SetField(subcontrolhistory.FieldSubcontrolClass, field.TypeString, value)
+	if value, ok := shuo.mutation.Class(); ok {
+		_spec.SetField(subcontrolhistory.FieldClass, field.TypeString, value)
 	}
-	if shuo.mutation.SubcontrolClassCleared() {
-		_spec.ClearField(subcontrolhistory.FieldSubcontrolClass, field.TypeString)
+	if shuo.mutation.ClassCleared() {
+		_spec.ClearField(subcontrolhistory.FieldClass, field.TypeString)
 	}
 	if value, ok := shuo.mutation.Source(); ok {
 		_spec.SetField(subcontrolhistory.FieldSource, field.TypeString, value)
@@ -1372,11 +1228,11 @@ func (shuo *SubcontrolHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Sub
 	if shuo.mutation.MappedFrameworksCleared() {
 		_spec.ClearField(subcontrolhistory.FieldMappedFrameworks, field.TypeString)
 	}
-	if value, ok := shuo.mutation.AssignedTo(); ok {
-		_spec.SetField(subcontrolhistory.FieldAssignedTo, field.TypeString, value)
+	if value, ok := shuo.mutation.ImplementationEvidence(); ok {
+		_spec.SetField(subcontrolhistory.FieldImplementationEvidence, field.TypeString, value)
 	}
-	if shuo.mutation.AssignedToCleared() {
-		_spec.ClearField(subcontrolhistory.FieldAssignedTo, field.TypeString)
+	if shuo.mutation.ImplementationEvidenceCleared() {
+		_spec.ClearField(subcontrolhistory.FieldImplementationEvidence, field.TypeString)
 	}
 	if value, ok := shuo.mutation.ImplementationStatus(); ok {
 		_spec.SetField(subcontrolhistory.FieldImplementationStatus, field.TypeString, value)
@@ -1384,23 +1240,11 @@ func (shuo *SubcontrolHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Sub
 	if shuo.mutation.ImplementationStatusCleared() {
 		_spec.ClearField(subcontrolhistory.FieldImplementationStatus, field.TypeString)
 	}
-	if value, ok := shuo.mutation.ImplementationNotes(); ok {
-		_spec.SetField(subcontrolhistory.FieldImplementationNotes, field.TypeString, value)
-	}
-	if shuo.mutation.ImplementationNotesCleared() {
-		_spec.ClearField(subcontrolhistory.FieldImplementationNotes, field.TypeString)
-	}
 	if value, ok := shuo.mutation.ImplementationDate(); ok {
-		_spec.SetField(subcontrolhistory.FieldImplementationDate, field.TypeString, value)
+		_spec.SetField(subcontrolhistory.FieldImplementationDate, field.TypeTime, value)
 	}
 	if shuo.mutation.ImplementationDateCleared() {
-		_spec.ClearField(subcontrolhistory.FieldImplementationDate, field.TypeString)
-	}
-	if value, ok := shuo.mutation.ImplementationEvidence(); ok {
-		_spec.SetField(subcontrolhistory.FieldImplementationEvidence, field.TypeString, value)
-	}
-	if shuo.mutation.ImplementationEvidenceCleared() {
-		_spec.ClearField(subcontrolhistory.FieldImplementationEvidence, field.TypeString)
+		_spec.ClearField(subcontrolhistory.FieldImplementationDate, field.TypeTime)
 	}
 	if value, ok := shuo.mutation.ImplementationVerification(); ok {
 		_spec.SetField(subcontrolhistory.FieldImplementationVerification, field.TypeString, value)
@@ -1409,16 +1253,16 @@ func (shuo *SubcontrolHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Sub
 		_spec.ClearField(subcontrolhistory.FieldImplementationVerification, field.TypeString)
 	}
 	if value, ok := shuo.mutation.ImplementationVerificationDate(); ok {
-		_spec.SetField(subcontrolhistory.FieldImplementationVerificationDate, field.TypeString, value)
+		_spec.SetField(subcontrolhistory.FieldImplementationVerificationDate, field.TypeTime, value)
 	}
 	if shuo.mutation.ImplementationVerificationDateCleared() {
-		_spec.ClearField(subcontrolhistory.FieldImplementationVerificationDate, field.TypeString)
+		_spec.ClearField(subcontrolhistory.FieldImplementationVerificationDate, field.TypeTime)
 	}
-	if value, ok := shuo.mutation.Jsonschema(); ok {
-		_spec.SetField(subcontrolhistory.FieldJsonschema, field.TypeJSON, value)
+	if value, ok := shuo.mutation.Details(); ok {
+		_spec.SetField(subcontrolhistory.FieldDetails, field.TypeJSON, value)
 	}
-	if shuo.mutation.JsonschemaCleared() {
-		_spec.ClearField(subcontrolhistory.FieldJsonschema, field.TypeJSON)
+	if shuo.mutation.DetailsCleared() {
+		_spec.ClearField(subcontrolhistory.FieldDetails, field.TypeJSON)
 	}
 	_spec.Node.Schema = shuo.schemaConfig.SubcontrolHistory
 	ctx = internal.NewSchemaConfigContext(ctx, shuo.schemaConfig)

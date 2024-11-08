@@ -263,9 +263,9 @@ func (phc *ProcedureHistoryCreate) SetNillableSatisfies(s *string) *ProcedureHis
 	return phc
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (phc *ProcedureHistoryCreate) SetJsonschema(m map[string]interface{}) *ProcedureHistoryCreate {
-	phc.mutation.SetJsonschema(m)
+// SetDetails sets the "details" field.
+func (phc *ProcedureHistoryCreate) SetDetails(m map[string]interface{}) *ProcedureHistoryCreate {
+	phc.mutation.SetDetails(m)
 	return phc
 }
 
@@ -475,9 +475,9 @@ func (phc *ProcedureHistoryCreate) createSpec() (*ProcedureHistory, *sqlgraph.Cr
 		_spec.SetField(procedurehistory.FieldSatisfies, field.TypeString, value)
 		_node.Satisfies = value
 	}
-	if value, ok := phc.mutation.Jsonschema(); ok {
-		_spec.SetField(procedurehistory.FieldJsonschema, field.TypeJSON, value)
-		_node.Jsonschema = value
+	if value, ok := phc.mutation.Details(); ok {
+		_spec.SetField(procedurehistory.FieldDetails, field.TypeJSON, value)
+		_node.Details = value
 	}
 	return _node, _spec
 }

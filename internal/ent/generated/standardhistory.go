@@ -55,12 +55,12 @@ type StandardHistory struct {
 	Version string `json:"version,omitempty"`
 	// purpose and scope
 	PurposeAndScope string `json:"purpose_and_scope,omitempty"`
-	// background
+	// background of the standard
 	Background string `json:"background,omitempty"`
 	// which controls are satisfied by the standard
 	Satisfies string `json:"satisfies,omitempty"`
-	// json schema
-	Jsonschema   map[string]interface{} `json:"jsonschema,omitempty"`
+	// json data with details of the standard
+	Details      map[string]interface{} `json:"details,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -69,7 +69,7 @@ func (*StandardHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case standardhistory.FieldTags, standardhistory.FieldJsonschema:
+		case standardhistory.FieldTags, standardhistory.FieldDetails:
 			values[i] = new([]byte)
 		case standardhistory.FieldOperation:
 			values[i] = new(history.OpType)
@@ -220,12 +220,12 @@ func (sh *StandardHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				sh.Satisfies = value.String
 			}
-		case standardhistory.FieldJsonschema:
+		case standardhistory.FieldDetails:
 			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field jsonschema", values[i])
+				return fmt.Errorf("unexpected type %T for field details", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &sh.Jsonschema); err != nil {
-					return fmt.Errorf("unmarshal field jsonschema: %w", err)
+				if err := json.Unmarshal(*value, &sh.Details); err != nil {
+					return fmt.Errorf("unmarshal field details: %w", err)
 				}
 			}
 		default:
@@ -324,8 +324,8 @@ func (sh *StandardHistory) String() string {
 	builder.WriteString("satisfies=")
 	builder.WriteString(sh.Satisfies)
 	builder.WriteString(", ")
-	builder.WriteString("jsonschema=")
-	builder.WriteString(fmt.Sprintf("%v", sh.Jsonschema))
+	builder.WriteString("details=")
+	builder.WriteString(fmt.Sprintf("%v", sh.Details))
 	builder.WriteByte(')')
 	return builder.String()
 }

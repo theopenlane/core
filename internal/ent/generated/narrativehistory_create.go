@@ -193,9 +193,9 @@ func (nhc *NarrativeHistoryCreate) SetNillableSatisfies(s *string) *NarrativeHis
 	return nhc
 }
 
-// SetJsonschema sets the "jsonschema" field.
-func (nhc *NarrativeHistoryCreate) SetJsonschema(m map[string]interface{}) *NarrativeHistoryCreate {
-	nhc.mutation.SetJsonschema(m)
+// SetDetails sets the "details" field.
+func (nhc *NarrativeHistoryCreate) SetDetails(m map[string]interface{}) *NarrativeHistoryCreate {
+	nhc.mutation.SetDetails(m)
 	return nhc
 }
 
@@ -385,9 +385,9 @@ func (nhc *NarrativeHistoryCreate) createSpec() (*NarrativeHistory, *sqlgraph.Cr
 		_spec.SetField(narrativehistory.FieldSatisfies, field.TypeString, value)
 		_node.Satisfies = value
 	}
-	if value, ok := nhc.mutation.Jsonschema(); ok {
-		_spec.SetField(narrativehistory.FieldJsonschema, field.TypeJSON, value)
-		_node.Jsonschema = value
+	if value, ok := nhc.mutation.Details(); ok {
+		_spec.SetField(narrativehistory.FieldDetails, field.TypeJSON, value)
+		_node.Details = value
 	}
 	return _node, _spec
 }
