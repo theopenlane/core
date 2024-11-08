@@ -170,6 +170,15 @@ func (o ObjectOwnedMixin) Interceptors() []ent.Interceptor {
 
 // P adds a storage-level predicate to the queries and mutations.
 func (o ObjectOwnedMixin) P(w interface{ WhereP(...func(*sql.Selector)) }, objectIDs []string) {
+	// if the field is only owned by one field, use that field
+	// this is used by the organization owned mixin
+	if len(o.FieldNames) == 1 && o.FieldNames[0] == "owner_id" {
+		w.WhereP(sql.FieldIn(o.FieldNames[0], objectIDs...))
+		return
+	}
+
+	// otherwise we are using getting all objects that the user has access to
+	// and should use the id field
 	w.WhereP(sql.FieldIn("id", objectIDs...))
 }
 

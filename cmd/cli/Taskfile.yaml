@@ -1,7 +1,7 @@
 version: "3"
 
 env: 
-  DEFAULT_USER_EMAIL: "mitb1@theopenlane.io"
+  DEFAULT_USER_EMAIL: "mitb@theopenlane.io"
   SECOND_USER_EMAIL: "funk@theopenlane.io"
 
 tasks:
