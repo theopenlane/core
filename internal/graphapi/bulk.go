@@ -616,6 +616,25 @@ func (r *mutationResolver) bulkCreateSubscriber(ctx context.Context, input []*ge
 	}, nil
 }
 
+// bulkCreateTask uses the CreateBulk function to create multiple Task entities
+func (r *mutationResolver) bulkCreateTask(ctx context.Context, input []*generated.CreateTaskInput) (*TaskBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.TaskCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.Task.Create().SetInput(*data)
+	}
+
+	res, err := c.Task.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "task"})
+	}
+
+	// return response
+	return &TaskBulkCreatePayload{
+		Tasks: res,
+	}, nil
+}
+
 // bulkCreateTemplate uses the CreateBulk function to create multiple Template entities
 func (r *mutationResolver) bulkCreateTemplate(ctx context.Context, input []*generated.CreateTemplateInput) (*TemplateBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)

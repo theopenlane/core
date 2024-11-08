@@ -74,6 +74,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/taskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
@@ -1924,6 +1926,60 @@ func (f TraverseTFASetting) Traverse(ctx context.Context, q generated.Query) err
 	return fmt.Errorf("unexpected query type %T. expect *generated.TFASettingQuery", q)
 }
 
+// The TaskFunc type is an adapter to allow the use of ordinary function as a Querier.
+type TaskFunc func(context.Context, *generated.TaskQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f TaskFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.TaskQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.TaskQuery", q)
+}
+
+// The TraverseTask type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseTask func(context.Context, *generated.TaskQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseTask) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseTask) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.TaskQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.TaskQuery", q)
+}
+
+// The TaskHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type TaskHistoryFunc func(context.Context, *generated.TaskHistoryQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f TaskHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.TaskHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.TaskHistoryQuery", q)
+}
+
+// The TraverseTaskHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseTaskHistory func(context.Context, *generated.TaskHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseTaskHistory) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseTaskHistory) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.TaskHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.TaskHistoryQuery", q)
+}
+
 // The TemplateFunc type is an adapter to allow the use of ordinary function as a Querier.
 type TemplateFunc func(context.Context, *generated.TemplateQuery) (generated.Value, error)
 
@@ -2302,6 +2358,10 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.SubscriberQuery, predicate.Subscriber, subscriber.OrderOption]{typ: generated.TypeSubscriber, tq: q}, nil
 	case *generated.TFASettingQuery:
 		return &query[*generated.TFASettingQuery, predicate.TFASetting, tfasetting.OrderOption]{typ: generated.TypeTFASetting, tq: q}, nil
+	case *generated.TaskQuery:
+		return &query[*generated.TaskQuery, predicate.Task, task.OrderOption]{typ: generated.TypeTask, tq: q}, nil
+	case *generated.TaskHistoryQuery:
+		return &query[*generated.TaskHistoryQuery, predicate.TaskHistory, taskhistory.OrderOption]{typ: generated.TypeTaskHistory, tq: q}, nil
 	case *generated.TemplateQuery:
 		return &query[*generated.TemplateQuery, predicate.Template, template.OrderOption]{typ: generated.TypeTemplate, tq: q}, nil
 	case *generated.TemplateHistoryQuery:

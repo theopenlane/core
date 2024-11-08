@@ -81,16 +81,19 @@ type SubcontrolEdges struct {
 	Control []*Control `json:"control,omitempty"`
 	// User holds the value of the user edge.
 	User []*User `json:"user,omitempty"`
+	// Tasks holds the value of the tasks edge.
+	Tasks []*Task `json:"tasks,omitempty"`
 	// Notes holds the value of the notes edge.
 	Notes *Note `json:"notes,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [4]bool
 	// totalCount holds the count of the edges above.
-	totalCount [3]map[string]int
+	totalCount [4]map[string]int
 
 	namedControl map[string][]*Control
 	namedUser    map[string][]*User
+	namedTasks   map[string][]*Task
 }
 
 // ControlOrErr returns the Control value or an error if the edge
@@ -111,12 +114,21 @@ func (e SubcontrolEdges) UserOrErr() ([]*User, error) {
 	return nil, &NotLoadedError{edge: "user"}
 }
 
+// TasksOrErr returns the Tasks value or an error if the edge
+// was not loaded in eager-loading.
+func (e SubcontrolEdges) TasksOrErr() ([]*Task, error) {
+	if e.loadedTypes[2] {
+		return e.Tasks, nil
+	}
+	return nil, &NotLoadedError{edge: "tasks"}
+}
+
 // NotesOrErr returns the Notes value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e SubcontrolEdges) NotesOrErr() (*Note, error) {
 	if e.Notes != nil {
 		return e.Notes, nil
-	} else if e.loadedTypes[2] {
+	} else if e.loadedTypes[3] {
 		return nil, &NotFoundError{label: note.Label}
 	}
 	return nil, &NotLoadedError{edge: "notes"}
@@ -343,6 +355,11 @@ func (s *Subcontrol) QueryUser() *UserQuery {
 	return NewSubcontrolClient(s.config).QueryUser(s)
 }
 
+// QueryTasks queries the "tasks" edge of the Subcontrol entity.
+func (s *Subcontrol) QueryTasks() *TaskQuery {
+	return NewSubcontrolClient(s.config).QueryTasks(s)
+}
+
 // QueryNotes queries the "notes" edge of the Subcontrol entity.
 func (s *Subcontrol) QueryNotes() *NoteQuery {
 	return NewSubcontrolClient(s.config).QueryNotes(s)
@@ -491,6 +508,30 @@ func (s *Subcontrol) appendNamedUser(name string, edges ...*User) {
 		s.Edges.namedUser[name] = []*User{}
 	} else {
 		s.Edges.namedUser[name] = append(s.Edges.namedUser[name], edges...)
+	}
+}
+
+// NamedTasks returns the Tasks named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (s *Subcontrol) NamedTasks(name string) ([]*Task, error) {
+	if s.Edges.namedTasks == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := s.Edges.namedTasks[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (s *Subcontrol) appendNamedTasks(name string, edges ...*Task) {
+	if s.Edges.namedTasks == nil {
+		s.Edges.namedTasks = make(map[string][]*Task)
+	}
+	if len(edges) == 0 {
+		s.Edges.namedTasks[name] = []*Task{}
+	} else {
+		s.Edges.namedTasks[name] = append(s.Edges.namedTasks[name], edges...)
 	}
 }
 

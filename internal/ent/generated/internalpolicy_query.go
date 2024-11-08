@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/internal/ent/generated/task"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -33,12 +34,14 @@ type InternalPolicyQuery struct {
 	withControls               *ControlQuery
 	withProcedures             *ProcedureQuery
 	withNarratives             *NarrativeQuery
+	withTasks                  *TaskQuery
 	loadTotal                  []func(context.Context, []*InternalPolicy) error
 	modifiers                  []func(*sql.Selector)
 	withNamedControlobjectives map[string]*ControlObjectiveQuery
 	withNamedControls          map[string]*ControlQuery
 	withNamedProcedures        map[string]*ProcedureQuery
 	withNamedNarratives        map[string]*NarrativeQuery
+	withNamedTasks             map[string]*TaskQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -169,6 +172,31 @@ func (ipq *InternalPolicyQuery) QueryNarratives() *NarrativeQuery {
 		schemaConfig := ipq.schemaConfig
 		step.To.Schema = schemaConfig.Narrative
 		step.Edge.Schema = schemaConfig.InternalPolicyNarratives
+		fromU = sqlgraph.SetNeighbors(ipq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryTasks chains the current query on the "tasks" edge.
+func (ipq *InternalPolicyQuery) QueryTasks() *TaskQuery {
+	query := (&TaskClient{config: ipq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := ipq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := ipq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, selector),
+			sqlgraph.To(task.Table, task.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, internalpolicy.TasksTable, internalpolicy.TasksPrimaryKey...),
+		)
+		schemaConfig := ipq.schemaConfig
+		step.To.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.InternalPolicyTasks
 		fromU = sqlgraph.SetNeighbors(ipq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -371,6 +399,7 @@ func (ipq *InternalPolicyQuery) Clone() *InternalPolicyQuery {
 		withControls:          ipq.withControls.Clone(),
 		withProcedures:        ipq.withProcedures.Clone(),
 		withNarratives:        ipq.withNarratives.Clone(),
+		withTasks:             ipq.withTasks.Clone(),
 		// clone intermediate query.
 		sql:       ipq.sql.Clone(),
 		path:      ipq.path,
@@ -419,6 +448,17 @@ func (ipq *InternalPolicyQuery) WithNarratives(opts ...func(*NarrativeQuery)) *I
 		opt(query)
 	}
 	ipq.withNarratives = query
+	return ipq
+}
+
+// WithTasks tells the query-builder to eager-load the nodes that are connected to
+// the "tasks" edge. The optional arguments are used to configure the query builder of the edge.
+func (ipq *InternalPolicyQuery) WithTasks(opts ...func(*TaskQuery)) *InternalPolicyQuery {
+	query := (&TaskClient{config: ipq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	ipq.withTasks = query
 	return ipq
 }
 
@@ -500,11 +540,12 @@ func (ipq *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) 
 	var (
 		nodes       = []*InternalPolicy{}
 		_spec       = ipq.querySpec()
-		loadedTypes = [4]bool{
+		loadedTypes = [5]bool{
 			ipq.withControlobjectives != nil,
 			ipq.withControls != nil,
 			ipq.withProcedures != nil,
 			ipq.withNarratives != nil,
+			ipq.withTasks != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -560,6 +601,13 @@ func (ipq *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) 
 			return nil, err
 		}
 	}
+	if query := ipq.withTasks; query != nil {
+		if err := ipq.loadTasks(ctx, query, nodes,
+			func(n *InternalPolicy) { n.Edges.Tasks = []*Task{} },
+			func(n *InternalPolicy, e *Task) { n.Edges.Tasks = append(n.Edges.Tasks, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range ipq.withNamedControlobjectives {
 		if err := ipq.loadControlobjectives(ctx, query, nodes,
 			func(n *InternalPolicy) { n.appendNamedControlobjectives(name) },
@@ -585,6 +633,13 @@ func (ipq *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) 
 		if err := ipq.loadNarratives(ctx, query, nodes,
 			func(n *InternalPolicy) { n.appendNamedNarratives(name) },
 			func(n *InternalPolicy, e *Narrative) { n.appendNamedNarratives(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range ipq.withNamedTasks {
+		if err := ipq.loadTasks(ctx, query, nodes,
+			func(n *InternalPolicy) { n.appendNamedTasks(name) },
+			func(n *InternalPolicy, e *Task) { n.appendNamedTasks(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -813,6 +868,68 @@ func (ipq *InternalPolicyQuery) loadNarratives(ctx context.Context, query *Narra
 	}
 	return nil
 }
+func (ipq *InternalPolicyQuery) loadTasks(ctx context.Context, query *TaskQuery, nodes []*InternalPolicy, init func(*InternalPolicy), assign func(*InternalPolicy, *Task)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*InternalPolicy)
+	nids := make(map[string]map[*InternalPolicy]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(internalpolicy.TasksTable)
+		joinT.Schema(ipq.schemaConfig.InternalPolicyTasks)
+		s.Join(joinT).On(s.C(task.FieldID), joinT.C(internalpolicy.TasksPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(internalpolicy.TasksPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(internalpolicy.TasksPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*InternalPolicy]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Task](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "tasks" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 
 func (ipq *InternalPolicyQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := ipq.querySpec()
@@ -965,6 +1082,20 @@ func (ipq *InternalPolicyQuery) WithNamedNarratives(name string, opts ...func(*N
 		ipq.withNamedNarratives = make(map[string]*NarrativeQuery)
 	}
 	ipq.withNamedNarratives[name] = query
+	return ipq
+}
+
+// WithNamedTasks tells the query-builder to eager-load the nodes that are connected to the "tasks"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (ipq *InternalPolicyQuery) WithNamedTasks(name string, opts ...func(*TaskQuery)) *InternalPolicyQuery {
+	query := (&TaskClient{config: ipq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if ipq.withNamedTasks == nil {
+		ipq.withNamedTasks = make(map[string]*TaskQuery)
+	}
+	ipq.withNamedTasks[name] = query
 	return ipq
 }
 

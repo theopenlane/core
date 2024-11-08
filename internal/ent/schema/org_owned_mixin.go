@@ -31,11 +31,11 @@ func NewOrgOwnMixinWithRef(ref string) ObjectOwnedMixin {
 // NewOrgOwnedMixin creates a new OrgOwnedMixin with the given ObjectOwnedMixin
 // and sets the Kind to ownerFieldName and the HookFunc to defaultOrgHookFunc
 func NewOrgOwnedMixin(o ObjectOwnedMixin) ObjectOwnedMixin {
-	o.FieldName = ownerFieldName
+	o.FieldNames = []string{ownerFieldName}
 	o.Kind = Organization.Type
 
-	if o.HookFunc == nil {
-		o.HookFunc = defaultOrgHookFunc
+	if o.HookFuncs == nil {
+		o.HookFuncs = []HookFunc{defaultOrgHookFunc}
 	}
 
 	if o.InterceptorFunc == nil {

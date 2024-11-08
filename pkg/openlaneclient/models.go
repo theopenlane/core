@@ -1475,6 +1475,7 @@ type Control struct {
 	Narratives        []*Narrative           `json:"narratives,omitempty"`
 	Risks             []*Risk                `json:"risks,omitempty"`
 	Actionplans       []*ActionPlan          `json:"actionplans,omitempty"`
+	Tasks             []*Task                `json:"tasks,omitempty"`
 }
 
 func (Control) IsNode() {}
@@ -1917,6 +1918,7 @@ type ControlObjective struct {
 	Subcontrols []*Subcontrol          `json:"subcontrols,omitempty"`
 	Standard    []*Standard            `json:"standard,omitempty"`
 	Narratives  []*Narrative           `json:"narratives,omitempty"`
+	Tasks       []*Task                `json:"tasks,omitempty"`
 }
 
 func (ControlObjective) IsNode() {}
@@ -2591,6 +2593,9 @@ type ControlObjectiveWhereInput struct {
 	// narratives edge predicates
 	HasNarratives     *bool                  `json:"hasNarratives,omitempty"`
 	HasNarrativesWith []*NarrativeWhereInput `json:"hasNarrativesWith,omitempty"`
+	// tasks edge predicates
+	HasTasks     *bool             `json:"hasTasks,omitempty"`
+	HasTasksWith []*TaskWhereInput `json:"hasTasksWith,omitempty"`
 }
 
 type ControlSearchResult struct {
@@ -2898,6 +2903,9 @@ type ControlWhereInput struct {
 	// actionplans edge predicates
 	HasActionplans     *bool                   `json:"hasActionplans,omitempty"`
 	HasActionplansWith []*ActionPlanWhereInput `json:"hasActionplansWith,omitempty"`
+	// tasks edge predicates
+	HasTasks     *bool             `json:"hasTasks,omitempty"`
+	HasTasksWith []*TaskWhereInput `json:"hasTasksWith,omitempty"`
 }
 
 // CreateAPITokenInput is used for create APIToken object.
@@ -3001,6 +3009,7 @@ type CreateControlInput struct {
 	NarrativeIDs        []string               `json:"narrativeIDs,omitempty"`
 	RiskIDs             []string               `json:"riskIDs,omitempty"`
 	ActionplanIDs       []string               `json:"actionplanIDs,omitempty"`
+	TaskIDs             []string               `json:"taskIDs,omitempty"`
 }
 
 // CreateControlObjectiveInput is used for create ControlObjective object.
@@ -3037,6 +3046,7 @@ type CreateControlObjectiveInput struct {
 	SubcontrolIDs []string               `json:"subcontrolIDs,omitempty"`
 	StandardIDs   []string               `json:"standardIDs,omitempty"`
 	NarrativeIDs  []string               `json:"narrativeIDs,omitempty"`
+	TaskIDs       []string               `json:"taskIDs,omitempty"`
 }
 
 // CreateDocumentDataInput is used for create DocumentData object.
@@ -3248,6 +3258,7 @@ type CreateGroupInput struct {
 	EventIDs            []string                 `json:"eventIDs,omitempty"`
 	IntegrationIDs      []string                 `json:"integrationIDs,omitempty"`
 	FileIDs             []string                 `json:"fileIDs,omitempty"`
+	TaskIDs             []string                 `json:"taskIDs,omitempty"`
 	CreateGroupSettings *CreateGroupSettingInput `json:"createGroupSettings,omitempty"`
 }
 
@@ -3336,6 +3347,7 @@ type CreateInternalPolicyInput struct {
 	ControlIDs          []string               `json:"controlIDs,omitempty"`
 	ProcedureIDs        []string               `json:"procedureIDs,omitempty"`
 	NarrativeIDs        []string               `json:"narrativeIDs,omitempty"`
+	TaskIDs             []string               `json:"taskIDs,omitempty"`
 }
 
 // CreateInviteInput is used for create Invite object.
@@ -3484,6 +3496,7 @@ type CreateOrganizationInput struct {
 	EntitytypeIDs              []string                        `json:"entitytypeIDs,omitempty"`
 	ContactIDs                 []string                        `json:"contactIDs,omitempty"`
 	NoteIDs                    []string                        `json:"noteIDs,omitempty"`
+	TaskIDs                    []string                        `json:"taskIDs,omitempty"`
 	CreateOrgSettings          *CreateOrganizationSettingInput `json:"createOrgSettings,omitempty"`
 }
 
@@ -3555,6 +3568,7 @@ type CreateProcedureInput struct {
 	InternalpolicyIDs []string               `json:"internalpolicyIDs,omitempty"`
 	NarrativeIDs      []string               `json:"narrativeIDs,omitempty"`
 	RiskIDs           []string               `json:"riskIDs,omitempty"`
+	TaskIDs           []string               `json:"taskIDs,omitempty"`
 }
 
 // CreateRiskInput is used for create Risk object.
@@ -3657,6 +3671,7 @@ type CreateSubcontrolInput struct {
 	Details    map[string]interface{} `json:"details,omitempty"`
 	ControlIDs []string               `json:"controlIDs,omitempty"`
 	UserIDs    []string               `json:"userIDs,omitempty"`
+	TaskIDs    []string               `json:"taskIDs,omitempty"`
 	NotesID    *string                `json:"notesID,omitempty"`
 }
 
@@ -3681,6 +3696,35 @@ type CreateTFASettingInput struct {
 	// specifies a user may complete authentication by verifying a TOTP code delivered through an authenticator app
 	TotpAllowed *bool   `json:"totpAllowed,omitempty"`
 	OwnerID     *string `json:"ownerID,omitempty"`
+}
+
+// CreateTaskInput is used for create Task object.
+// Input was generated by ent.
+type CreateTaskInput struct {
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
+	// the title of the task
+	Title string `json:"title"`
+	// the description of the task
+	Description *string `json:"description,omitempty"`
+	// the details of the task
+	Details map[string]interface{} `json:"details,omitempty"`
+	// the status of the task
+	Status *enums.TaskStatus `json:"status,omitempty"`
+	// the due date of the task
+	Due *time.Time `json:"due,omitempty"`
+	// the completion date of the task
+	Completed *time.Time `json:"completed,omitempty"`
+	// the assignee of the task
+	Assignee            *string  `json:"assignee,omitempty"`
+	UserID              string   `json:"userID"`
+	OrganizationIDs     []string `json:"organizationIDs,omitempty"`
+	GroupIDs            []string `json:"groupIDs,omitempty"`
+	PolicyIDs           []string `json:"policyIDs,omitempty"`
+	ProcedureIDs        []string `json:"procedureIDs,omitempty"`
+	ControlIDs          []string `json:"controlIDs,omitempty"`
+	ControlObjectiveIDs []string `json:"controlObjectiveIDs,omitempty"`
+	SubcontrolIDs       []string `json:"subcontrolIDs,omitempty"`
 }
 
 // CreateTemplateInput is used for create Template object.
@@ -3742,6 +3786,7 @@ type CreateUserInput struct {
 	EventIDs                  []string    `json:"eventIDs,omitempty"`
 	ActionplanIDs             []string    `json:"actionplanIDs,omitempty"`
 	SubcontrolIDs             []string    `json:"subcontrolIDs,omitempty"`
+	TaskIDs                   []string    `json:"taskIDs,omitempty"`
 }
 
 // CreateUserSettingInput is used for create UserSetting object.
@@ -8397,6 +8442,7 @@ type Group struct {
 	Events       []*Event           `json:"events,omitempty"`
 	Integrations []*Integration     `json:"integrations,omitempty"`
 	Files        []*File            `json:"files,omitempty"`
+	Tasks        []*Task            `json:"tasks,omitempty"`
 	Members      []*GroupMembership `json:"members,omitempty"`
 }
 
@@ -9636,6 +9682,9 @@ type GroupWhereInput struct {
 	// files edge predicates
 	HasFiles     *bool             `json:"hasFiles,omitempty"`
 	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
+	// tasks edge predicates
+	HasTasks     *bool             `json:"hasTasks,omitempty"`
+	HasTasksWith []*TaskWhereInput `json:"hasTasksWith,omitempty"`
 	// members edge predicates
 	HasMembers     *bool                        `json:"hasMembers,omitempty"`
 	HasMembersWith []*GroupMembershipWhereInput `json:"hasMembersWith,omitempty"`
@@ -10596,6 +10645,7 @@ type InternalPolicy struct {
 	Controls          []*Control             `json:"controls,omitempty"`
 	Procedures        []*Procedure           `json:"procedures,omitempty"`
 	Narratives        []*Narrative           `json:"narratives,omitempty"`
+	Tasks             []*Task                `json:"tasks,omitempty"`
 }
 
 func (InternalPolicy) IsNode() {}
@@ -11155,6 +11205,9 @@ type InternalPolicyWhereInput struct {
 	// narratives edge predicates
 	HasNarratives     *bool                  `json:"hasNarratives,omitempty"`
 	HasNarrativesWith []*NarrativeWhereInput `json:"hasNarrativesWith,omitempty"`
+	// tasks edge predicates
+	HasTasks     *bool             `json:"hasTasks,omitempty"`
+	HasTasksWith []*TaskWhereInput `json:"hasTasksWith,omitempty"`
 }
 
 type Invite struct {
@@ -13503,6 +13556,7 @@ type Organization struct {
 	Entitytypes             []*EntityType             `json:"entitytypes,omitempty"`
 	Contacts                []*Contact                `json:"contacts,omitempty"`
 	Notes                   []*Note                   `json:"notes,omitempty"`
+	Tasks                   []*Task                   `json:"tasks,omitempty"`
 	Members                 []*OrgMembership          `json:"members,omitempty"`
 }
 
@@ -14600,6 +14654,9 @@ type OrganizationWhereInput struct {
 	// notes edge predicates
 	HasNotes     *bool             `json:"hasNotes,omitempty"`
 	HasNotesWith []*NoteWhereInput `json:"hasNotesWith,omitempty"`
+	// tasks edge predicates
+	HasTasks     *bool             `json:"hasTasks,omitempty"`
+	HasTasksWith []*TaskWhereInput `json:"hasTasksWith,omitempty"`
 	// members edge predicates
 	HasMembers     *bool                      `json:"hasMembers,omitempty"`
 	HasMembersWith []*OrgMembershipWhereInput `json:"hasMembersWith,omitempty"`
@@ -14870,6 +14927,7 @@ type Procedure struct {
 	Internalpolicy []*InternalPolicy      `json:"internalpolicy,omitempty"`
 	Narratives     []*Narrative           `json:"narratives,omitempty"`
 	Risks          []*Risk                `json:"risks,omitempty"`
+	Tasks          []*Task                `json:"tasks,omitempty"`
 }
 
 func (Procedure) IsNode() {}
@@ -15467,6 +15525,9 @@ type ProcedureWhereInput struct {
 	// risks edge predicates
 	HasRisks     *bool             `json:"hasRisks,omitempty"`
 	HasRisksWith []*RiskWhereInput `json:"hasRisksWith,omitempty"`
+	// tasks edge predicates
+	HasTasks     *bool             `json:"hasTasks,omitempty"`
+	HasTasksWith []*TaskWhereInput `json:"hasTasksWith,omitempty"`
 }
 
 type Query struct {
@@ -16815,6 +16876,7 @@ type Subcontrol struct {
 	Details map[string]interface{} `json:"details,omitempty"`
 	Control []*Control             `json:"control,omitempty"`
 	User    []*User                `json:"user,omitempty"`
+	Tasks   []*Task                `json:"tasks,omitempty"`
 	Notes   *Note                  `json:"notes,omitempty"`
 }
 
@@ -17625,6 +17687,9 @@ type SubcontrolWhereInput struct {
 	// user edge predicates
 	HasUser     *bool             `json:"hasUser,omitempty"`
 	HasUserWith []*UserWhereInput `json:"hasUserWith,omitempty"`
+	// tasks edge predicates
+	HasTasks     *bool             `json:"hasTasks,omitempty"`
+	HasTasksWith []*TaskWhereInput `json:"hasTasksWith,omitempty"`
 	// notes edge predicates
 	HasNotes     *bool             `json:"hasNotes,omitempty"`
 	HasNotesWith []*NoteWhereInput `json:"hasNotesWith,omitempty"`
@@ -18051,6 +18116,571 @@ type TFASettingWhereInput struct {
 	// owner edge predicates
 	HasOwner     *bool             `json:"hasOwner,omitempty"`
 	HasOwnerWith []*UserWhereInput `json:"hasOwnerWith,omitempty"`
+}
+
+type Task struct {
+	ID        string     `json:"id"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	DeletedAt *time.Time `json:"deletedAt,omitempty"`
+	DeletedBy *string    `json:"deletedBy,omitempty"`
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
+	// the title of the task
+	Title string `json:"title"`
+	// the description of the task
+	Description *string `json:"description,omitempty"`
+	// the details of the task
+	Details map[string]interface{} `json:"details,omitempty"`
+	// the status of the task
+	Status enums.TaskStatus `json:"status"`
+	// the due date of the task
+	Due *time.Time `json:"due,omitempty"`
+	// the completion date of the task
+	Completed *time.Time `json:"completed,omitempty"`
+	// the assignee of the task
+	Assignee *string `json:"assignee,omitempty"`
+	// the assigner of the task
+	Assigner         string              `json:"assigner"`
+	User             *User               `json:"user"`
+	Organization     []*Organization     `json:"organization,omitempty"`
+	Group            []*Group            `json:"group,omitempty"`
+	Policy           []*InternalPolicy   `json:"policy,omitempty"`
+	Procedure        []*Procedure        `json:"procedure,omitempty"`
+	Control          []*Control          `json:"control,omitempty"`
+	ControlObjective []*ControlObjective `json:"controlObjective,omitempty"`
+	Subcontrol       []*Subcontrol       `json:"subcontrol,omitempty"`
+}
+
+func (Task) IsNode() {}
+
+// Return response for createBulkTask mutation
+type TaskBulkCreatePayload struct {
+	// Created tasks
+	Tasks []*Task `json:"tasks,omitempty"`
+}
+
+// A connection to a list of items.
+type TaskConnection struct {
+	// A list of edges.
+	Edges []*TaskEdge `json:"edges,omitempty"`
+	// Information to aid in pagination.
+	PageInfo *PageInfo `json:"pageInfo"`
+	// Identifies the total count of items in the connection.
+	TotalCount int64 `json:"totalCount"`
+}
+
+// Return response for createTask mutation
+type TaskCreatePayload struct {
+	// Created task
+	Task *Task `json:"task"`
+}
+
+// Return response for deleteTask mutation
+type TaskDeletePayload struct {
+	// Deleted task ID
+	DeletedID string `json:"deletedID"`
+}
+
+// An edge in a connection.
+type TaskEdge struct {
+	// The item at the end of the edge.
+	Node *Task `json:"node,omitempty"`
+	// A cursor for use in pagination.
+	Cursor string `json:"cursor"`
+}
+
+type TaskHistory struct {
+	ID          string         `json:"id"`
+	HistoryTime time.Time      `json:"historyTime"`
+	Ref         *string        `json:"ref,omitempty"`
+	Operation   history.OpType `json:"operation"`
+	CreatedAt   *time.Time     `json:"createdAt,omitempty"`
+	UpdatedAt   *time.Time     `json:"updatedAt,omitempty"`
+	CreatedBy   *string        `json:"createdBy,omitempty"`
+	UpdatedBy   *string        `json:"updatedBy,omitempty"`
+	DeletedAt   *time.Time     `json:"deletedAt,omitempty"`
+	DeletedBy   *string        `json:"deletedBy,omitempty"`
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
+	// the title of the task
+	Title string `json:"title"`
+	// the description of the task
+	Description *string `json:"description,omitempty"`
+	// the details of the task
+	Details map[string]interface{} `json:"details,omitempty"`
+	// the status of the task
+	Status enums.TaskStatus `json:"status"`
+	// the due date of the task
+	Due *time.Time `json:"due,omitempty"`
+	// the completion date of the task
+	Completed *time.Time `json:"completed,omitempty"`
+	// the assignee of the task
+	Assignee *string `json:"assignee,omitempty"`
+	// the assigner of the task
+	Assigner string `json:"assigner"`
+}
+
+func (TaskHistory) IsNode() {}
+
+// A connection to a list of items.
+type TaskHistoryConnection struct {
+	// A list of edges.
+	Edges []*TaskHistoryEdge `json:"edges,omitempty"`
+	// Information to aid in pagination.
+	PageInfo *PageInfo `json:"pageInfo"`
+	// Identifies the total count of items in the connection.
+	TotalCount int64 `json:"totalCount"`
+}
+
+// An edge in a connection.
+type TaskHistoryEdge struct {
+	// The item at the end of the edge.
+	Node *TaskHistory `json:"node,omitempty"`
+	// A cursor for use in pagination.
+	Cursor string `json:"cursor"`
+}
+
+// TaskHistoryWhereInput is used for filtering TaskHistory objects.
+// Input was generated by ent.
+type TaskHistoryWhereInput struct {
+	Not *TaskHistoryWhereInput   `json:"not,omitempty"`
+	And []*TaskHistoryWhereInput `json:"and,omitempty"`
+	Or  []*TaskHistoryWhereInput `json:"or,omitempty"`
+	// id field predicates
+	ID             *string  `json:"id,omitempty"`
+	IDNeq          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDGt           *string  `json:"idGT,omitempty"`
+	IDGte          *string  `json:"idGTE,omitempty"`
+	IDLt           *string  `json:"idLT,omitempty"`
+	IDLte          *string  `json:"idLTE,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+	// history_time field predicates
+	HistoryTime      *time.Time   `json:"historyTime,omitempty"`
+	HistoryTimeNeq   *time.Time   `json:"historyTimeNEQ,omitempty"`
+	HistoryTimeIn    []*time.Time `json:"historyTimeIn,omitempty"`
+	HistoryTimeNotIn []*time.Time `json:"historyTimeNotIn,omitempty"`
+	HistoryTimeGt    *time.Time   `json:"historyTimeGT,omitempty"`
+	HistoryTimeGte   *time.Time   `json:"historyTimeGTE,omitempty"`
+	HistoryTimeLt    *time.Time   `json:"historyTimeLT,omitempty"`
+	HistoryTimeLte   *time.Time   `json:"historyTimeLTE,omitempty"`
+	// ref field predicates
+	Ref             *string  `json:"ref,omitempty"`
+	RefNeq          *string  `json:"refNEQ,omitempty"`
+	RefIn           []string `json:"refIn,omitempty"`
+	RefNotIn        []string `json:"refNotIn,omitempty"`
+	RefGt           *string  `json:"refGT,omitempty"`
+	RefGte          *string  `json:"refGTE,omitempty"`
+	RefLt           *string  `json:"refLT,omitempty"`
+	RefLte          *string  `json:"refLTE,omitempty"`
+	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
+	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
+	RefIsNil        *bool    `json:"refIsNil,omitempty"`
+	RefNotNil       *bool    `json:"refNotNil,omitempty"`
+	RefEqualFold    *string  `json:"refEqualFold,omitempty"`
+	RefContainsFold *string  `json:"refContainsFold,omitempty"`
+	// operation field predicates
+	Operation      *history.OpType  `json:"operation,omitempty"`
+	OperationNeq   *history.OpType  `json:"operationNEQ,omitempty"`
+	OperationIn    []history.OpType `json:"operationIn,omitempty"`
+	OperationNotIn []history.OpType `json:"operationNotIn,omitempty"`
+	// created_at field predicates
+	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
+	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn     []*time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn  []*time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGt     *time.Time   `json:"createdAtGT,omitempty"`
+	CreatedAtGte    *time.Time   `json:"createdAtGTE,omitempty"`
+	CreatedAtLt     *time.Time   `json:"createdAtLT,omitempty"`
+	CreatedAtLte    *time.Time   `json:"createdAtLTE,omitempty"`
+	CreatedAtIsNil  *bool        `json:"createdAtIsNil,omitempty"`
+	CreatedAtNotNil *bool        `json:"createdAtNotNil,omitempty"`
+	// updated_at field predicates
+	UpdatedAt       *time.Time   `json:"updatedAt,omitempty"`
+	UpdatedAtNeq    *time.Time   `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn     []*time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn  []*time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGt     *time.Time   `json:"updatedAtGT,omitempty"`
+	UpdatedAtGte    *time.Time   `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLt     *time.Time   `json:"updatedAtLT,omitempty"`
+	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
+	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
+	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
+	// created_by field predicates
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGt           *string  `json:"createdByGT,omitempty"`
+	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLt           *string  `json:"createdByLT,omitempty"`
+	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// deleted_at field predicates
+	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
+	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
+	DeletedAtIn     []*time.Time `json:"deletedAtIn,omitempty"`
+	DeletedAtNotIn  []*time.Time `json:"deletedAtNotIn,omitempty"`
+	DeletedAtGt     *time.Time   `json:"deletedAtGT,omitempty"`
+	DeletedAtGte    *time.Time   `json:"deletedAtGTE,omitempty"`
+	DeletedAtLt     *time.Time   `json:"deletedAtLT,omitempty"`
+	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
+	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
+	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
+	// deleted_by field predicates
+	DeletedBy             *string  `json:"deletedBy,omitempty"`
+	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
+	DeletedByIn           []string `json:"deletedByIn,omitempty"`
+	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
+	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
+	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
+	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
+	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
+	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
+	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
+	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
+	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
+	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
+	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
+	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// title field predicates
+	Title             *string  `json:"title,omitempty"`
+	TitleNeq          *string  `json:"titleNEQ,omitempty"`
+	TitleIn           []string `json:"titleIn,omitempty"`
+	TitleNotIn        []string `json:"titleNotIn,omitempty"`
+	TitleGt           *string  `json:"titleGT,omitempty"`
+	TitleGte          *string  `json:"titleGTE,omitempty"`
+	TitleLt           *string  `json:"titleLT,omitempty"`
+	TitleLte          *string  `json:"titleLTE,omitempty"`
+	TitleContains     *string  `json:"titleContains,omitempty"`
+	TitleHasPrefix    *string  `json:"titleHasPrefix,omitempty"`
+	TitleHasSuffix    *string  `json:"titleHasSuffix,omitempty"`
+	TitleEqualFold    *string  `json:"titleEqualFold,omitempty"`
+	TitleContainsFold *string  `json:"titleContainsFold,omitempty"`
+	// description field predicates
+	Description             *string  `json:"description,omitempty"`
+	DescriptionNeq          *string  `json:"descriptionNEQ,omitempty"`
+	DescriptionIn           []string `json:"descriptionIn,omitempty"`
+	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
+	DescriptionGt           *string  `json:"descriptionGT,omitempty"`
+	DescriptionGte          *string  `json:"descriptionGTE,omitempty"`
+	DescriptionLt           *string  `json:"descriptionLT,omitempty"`
+	DescriptionLte          *string  `json:"descriptionLTE,omitempty"`
+	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
+	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
+	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
+	DescriptionIsNil        *bool    `json:"descriptionIsNil,omitempty"`
+	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
+	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
+	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+	// status field predicates
+	Status      *enums.TaskStatus  `json:"status,omitempty"`
+	StatusNeq   *enums.TaskStatus  `json:"statusNEQ,omitempty"`
+	StatusIn    []enums.TaskStatus `json:"statusIn,omitempty"`
+	StatusNotIn []enums.TaskStatus `json:"statusNotIn,omitempty"`
+	// due field predicates
+	Due       *time.Time   `json:"due,omitempty"`
+	DueNeq    *time.Time   `json:"dueNEQ,omitempty"`
+	DueIn     []*time.Time `json:"dueIn,omitempty"`
+	DueNotIn  []*time.Time `json:"dueNotIn,omitempty"`
+	DueGt     *time.Time   `json:"dueGT,omitempty"`
+	DueGte    *time.Time   `json:"dueGTE,omitempty"`
+	DueLt     *time.Time   `json:"dueLT,omitempty"`
+	DueLte    *time.Time   `json:"dueLTE,omitempty"`
+	DueIsNil  *bool        `json:"dueIsNil,omitempty"`
+	DueNotNil *bool        `json:"dueNotNil,omitempty"`
+	// completed field predicates
+	Completed       *time.Time   `json:"completed,omitempty"`
+	CompletedNeq    *time.Time   `json:"completedNEQ,omitempty"`
+	CompletedIn     []*time.Time `json:"completedIn,omitempty"`
+	CompletedNotIn  []*time.Time `json:"completedNotIn,omitempty"`
+	CompletedGt     *time.Time   `json:"completedGT,omitempty"`
+	CompletedGte    *time.Time   `json:"completedGTE,omitempty"`
+	CompletedLt     *time.Time   `json:"completedLT,omitempty"`
+	CompletedLte    *time.Time   `json:"completedLTE,omitempty"`
+	CompletedIsNil  *bool        `json:"completedIsNil,omitempty"`
+	CompletedNotNil *bool        `json:"completedNotNil,omitempty"`
+	// assignee field predicates
+	Assignee             *string  `json:"assignee,omitempty"`
+	AssigneeNeq          *string  `json:"assigneeNEQ,omitempty"`
+	AssigneeIn           []string `json:"assigneeIn,omitempty"`
+	AssigneeNotIn        []string `json:"assigneeNotIn,omitempty"`
+	AssigneeGt           *string  `json:"assigneeGT,omitempty"`
+	AssigneeGte          *string  `json:"assigneeGTE,omitempty"`
+	AssigneeLt           *string  `json:"assigneeLT,omitempty"`
+	AssigneeLte          *string  `json:"assigneeLTE,omitempty"`
+	AssigneeContains     *string  `json:"assigneeContains,omitempty"`
+	AssigneeHasPrefix    *string  `json:"assigneeHasPrefix,omitempty"`
+	AssigneeHasSuffix    *string  `json:"assigneeHasSuffix,omitempty"`
+	AssigneeIsNil        *bool    `json:"assigneeIsNil,omitempty"`
+	AssigneeNotNil       *bool    `json:"assigneeNotNil,omitempty"`
+	AssigneeEqualFold    *string  `json:"assigneeEqualFold,omitempty"`
+	AssigneeContainsFold *string  `json:"assigneeContainsFold,omitempty"`
+	// assigner field predicates
+	Assigner             *string  `json:"assigner,omitempty"`
+	AssignerNeq          *string  `json:"assignerNEQ,omitempty"`
+	AssignerIn           []string `json:"assignerIn,omitempty"`
+	AssignerNotIn        []string `json:"assignerNotIn,omitempty"`
+	AssignerGt           *string  `json:"assignerGT,omitempty"`
+	AssignerGte          *string  `json:"assignerGTE,omitempty"`
+	AssignerLt           *string  `json:"assignerLT,omitempty"`
+	AssignerLte          *string  `json:"assignerLTE,omitempty"`
+	AssignerContains     *string  `json:"assignerContains,omitempty"`
+	AssignerHasPrefix    *string  `json:"assignerHasPrefix,omitempty"`
+	AssignerHasSuffix    *string  `json:"assignerHasSuffix,omitempty"`
+	AssignerEqualFold    *string  `json:"assignerEqualFold,omitempty"`
+	AssignerContainsFold *string  `json:"assignerContainsFold,omitempty"`
+}
+
+type TaskSearchResult struct {
+	Tasks []*Task `json:"tasks,omitempty"`
+}
+
+func (TaskSearchResult) IsSearchResult() {}
+
+// Return response for updateTask mutation
+type TaskUpdatePayload struct {
+	// Updated task
+	Task *Task `json:"task"`
+}
+
+// TaskWhereInput is used for filtering Task objects.
+// Input was generated by ent.
+type TaskWhereInput struct {
+	Not *TaskWhereInput   `json:"not,omitempty"`
+	And []*TaskWhereInput `json:"and,omitempty"`
+	Or  []*TaskWhereInput `json:"or,omitempty"`
+	// id field predicates
+	ID             *string  `json:"id,omitempty"`
+	IDNeq          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDGt           *string  `json:"idGT,omitempty"`
+	IDGte          *string  `json:"idGTE,omitempty"`
+	IDLt           *string  `json:"idLT,omitempty"`
+	IDLte          *string  `json:"idLTE,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+	// created_at field predicates
+	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
+	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn     []*time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn  []*time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGt     *time.Time   `json:"createdAtGT,omitempty"`
+	CreatedAtGte    *time.Time   `json:"createdAtGTE,omitempty"`
+	CreatedAtLt     *time.Time   `json:"createdAtLT,omitempty"`
+	CreatedAtLte    *time.Time   `json:"createdAtLTE,omitempty"`
+	CreatedAtIsNil  *bool        `json:"createdAtIsNil,omitempty"`
+	CreatedAtNotNil *bool        `json:"createdAtNotNil,omitempty"`
+	// updated_at field predicates
+	UpdatedAt       *time.Time   `json:"updatedAt,omitempty"`
+	UpdatedAtNeq    *time.Time   `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn     []*time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn  []*time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGt     *time.Time   `json:"updatedAtGT,omitempty"`
+	UpdatedAtGte    *time.Time   `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLt     *time.Time   `json:"updatedAtLT,omitempty"`
+	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
+	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
+	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
+	// created_by field predicates
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGt           *string  `json:"createdByGT,omitempty"`
+	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLt           *string  `json:"createdByLT,omitempty"`
+	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// deleted_at field predicates
+	DeletedAt       *time.Time   `json:"deletedAt,omitempty"`
+	DeletedAtNeq    *time.Time   `json:"deletedAtNEQ,omitempty"`
+	DeletedAtIn     []*time.Time `json:"deletedAtIn,omitempty"`
+	DeletedAtNotIn  []*time.Time `json:"deletedAtNotIn,omitempty"`
+	DeletedAtGt     *time.Time   `json:"deletedAtGT,omitempty"`
+	DeletedAtGte    *time.Time   `json:"deletedAtGTE,omitempty"`
+	DeletedAtLt     *time.Time   `json:"deletedAtLT,omitempty"`
+	DeletedAtLte    *time.Time   `json:"deletedAtLTE,omitempty"`
+	DeletedAtIsNil  *bool        `json:"deletedAtIsNil,omitempty"`
+	DeletedAtNotNil *bool        `json:"deletedAtNotNil,omitempty"`
+	// deleted_by field predicates
+	DeletedBy             *string  `json:"deletedBy,omitempty"`
+	DeletedByNeq          *string  `json:"deletedByNEQ,omitempty"`
+	DeletedByIn           []string `json:"deletedByIn,omitempty"`
+	DeletedByNotIn        []string `json:"deletedByNotIn,omitempty"`
+	DeletedByGt           *string  `json:"deletedByGT,omitempty"`
+	DeletedByGte          *string  `json:"deletedByGTE,omitempty"`
+	DeletedByLt           *string  `json:"deletedByLT,omitempty"`
+	DeletedByLte          *string  `json:"deletedByLTE,omitempty"`
+	DeletedByContains     *string  `json:"deletedByContains,omitempty"`
+	DeletedByHasPrefix    *string  `json:"deletedByHasPrefix,omitempty"`
+	DeletedByHasSuffix    *string  `json:"deletedByHasSuffix,omitempty"`
+	DeletedByIsNil        *bool    `json:"deletedByIsNil,omitempty"`
+	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
+	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
+	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// title field predicates
+	Title             *string  `json:"title,omitempty"`
+	TitleNeq          *string  `json:"titleNEQ,omitempty"`
+	TitleIn           []string `json:"titleIn,omitempty"`
+	TitleNotIn        []string `json:"titleNotIn,omitempty"`
+	TitleGt           *string  `json:"titleGT,omitempty"`
+	TitleGte          *string  `json:"titleGTE,omitempty"`
+	TitleLt           *string  `json:"titleLT,omitempty"`
+	TitleLte          *string  `json:"titleLTE,omitempty"`
+	TitleContains     *string  `json:"titleContains,omitempty"`
+	TitleHasPrefix    *string  `json:"titleHasPrefix,omitempty"`
+	TitleHasSuffix    *string  `json:"titleHasSuffix,omitempty"`
+	TitleEqualFold    *string  `json:"titleEqualFold,omitempty"`
+	TitleContainsFold *string  `json:"titleContainsFold,omitempty"`
+	// description field predicates
+	Description             *string  `json:"description,omitempty"`
+	DescriptionNeq          *string  `json:"descriptionNEQ,omitempty"`
+	DescriptionIn           []string `json:"descriptionIn,omitempty"`
+	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
+	DescriptionGt           *string  `json:"descriptionGT,omitempty"`
+	DescriptionGte          *string  `json:"descriptionGTE,omitempty"`
+	DescriptionLt           *string  `json:"descriptionLT,omitempty"`
+	DescriptionLte          *string  `json:"descriptionLTE,omitempty"`
+	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
+	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
+	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
+	DescriptionIsNil        *bool    `json:"descriptionIsNil,omitempty"`
+	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
+	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
+	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+	// status field predicates
+	Status      *enums.TaskStatus  `json:"status,omitempty"`
+	StatusNeq   *enums.TaskStatus  `json:"statusNEQ,omitempty"`
+	StatusIn    []enums.TaskStatus `json:"statusIn,omitempty"`
+	StatusNotIn []enums.TaskStatus `json:"statusNotIn,omitempty"`
+	// due field predicates
+	Due       *time.Time   `json:"due,omitempty"`
+	DueNeq    *time.Time   `json:"dueNEQ,omitempty"`
+	DueIn     []*time.Time `json:"dueIn,omitempty"`
+	DueNotIn  []*time.Time `json:"dueNotIn,omitempty"`
+	DueGt     *time.Time   `json:"dueGT,omitempty"`
+	DueGte    *time.Time   `json:"dueGTE,omitempty"`
+	DueLt     *time.Time   `json:"dueLT,omitempty"`
+	DueLte    *time.Time   `json:"dueLTE,omitempty"`
+	DueIsNil  *bool        `json:"dueIsNil,omitempty"`
+	DueNotNil *bool        `json:"dueNotNil,omitempty"`
+	// completed field predicates
+	Completed       *time.Time   `json:"completed,omitempty"`
+	CompletedNeq    *time.Time   `json:"completedNEQ,omitempty"`
+	CompletedIn     []*time.Time `json:"completedIn,omitempty"`
+	CompletedNotIn  []*time.Time `json:"completedNotIn,omitempty"`
+	CompletedGt     *time.Time   `json:"completedGT,omitempty"`
+	CompletedGte    *time.Time   `json:"completedGTE,omitempty"`
+	CompletedLt     *time.Time   `json:"completedLT,omitempty"`
+	CompletedLte    *time.Time   `json:"completedLTE,omitempty"`
+	CompletedIsNil  *bool        `json:"completedIsNil,omitempty"`
+	CompletedNotNil *bool        `json:"completedNotNil,omitempty"`
+	// assignee field predicates
+	Assignee             *string  `json:"assignee,omitempty"`
+	AssigneeNeq          *string  `json:"assigneeNEQ,omitempty"`
+	AssigneeIn           []string `json:"assigneeIn,omitempty"`
+	AssigneeNotIn        []string `json:"assigneeNotIn,omitempty"`
+	AssigneeGt           *string  `json:"assigneeGT,omitempty"`
+	AssigneeGte          *string  `json:"assigneeGTE,omitempty"`
+	AssigneeLt           *string  `json:"assigneeLT,omitempty"`
+	AssigneeLte          *string  `json:"assigneeLTE,omitempty"`
+	AssigneeContains     *string  `json:"assigneeContains,omitempty"`
+	AssigneeHasPrefix    *string  `json:"assigneeHasPrefix,omitempty"`
+	AssigneeHasSuffix    *string  `json:"assigneeHasSuffix,omitempty"`
+	AssigneeIsNil        *bool    `json:"assigneeIsNil,omitempty"`
+	AssigneeNotNil       *bool    `json:"assigneeNotNil,omitempty"`
+	AssigneeEqualFold    *string  `json:"assigneeEqualFold,omitempty"`
+	AssigneeContainsFold *string  `json:"assigneeContainsFold,omitempty"`
+	// assigner field predicates
+	Assigner             *string  `json:"assigner,omitempty"`
+	AssignerNeq          *string  `json:"assignerNEQ,omitempty"`
+	AssignerIn           []string `json:"assignerIn,omitempty"`
+	AssignerNotIn        []string `json:"assignerNotIn,omitempty"`
+	AssignerGt           *string  `json:"assignerGT,omitempty"`
+	AssignerGte          *string  `json:"assignerGTE,omitempty"`
+	AssignerLt           *string  `json:"assignerLT,omitempty"`
+	AssignerLte          *string  `json:"assignerLTE,omitempty"`
+	AssignerContains     *string  `json:"assignerContains,omitempty"`
+	AssignerHasPrefix    *string  `json:"assignerHasPrefix,omitempty"`
+	AssignerHasSuffix    *string  `json:"assignerHasSuffix,omitempty"`
+	AssignerEqualFold    *string  `json:"assignerEqualFold,omitempty"`
+	AssignerContainsFold *string  `json:"assignerContainsFold,omitempty"`
+	// user edge predicates
+	HasUser     *bool             `json:"hasUser,omitempty"`
+	HasUserWith []*UserWhereInput `json:"hasUserWith,omitempty"`
+	// organization edge predicates
+	HasOrganization     *bool                     `json:"hasOrganization,omitempty"`
+	HasOrganizationWith []*OrganizationWhereInput `json:"hasOrganizationWith,omitempty"`
+	// group edge predicates
+	HasGroup     *bool              `json:"hasGroup,omitempty"`
+	HasGroupWith []*GroupWhereInput `json:"hasGroupWith,omitempty"`
+	// policy edge predicates
+	HasPolicy     *bool                       `json:"hasPolicy,omitempty"`
+	HasPolicyWith []*InternalPolicyWhereInput `json:"hasPolicyWith,omitempty"`
+	// procedure edge predicates
+	HasProcedure     *bool                  `json:"hasProcedure,omitempty"`
+	HasProcedureWith []*ProcedureWhereInput `json:"hasProcedureWith,omitempty"`
+	// control edge predicates
+	HasControl     *bool                `json:"hasControl,omitempty"`
+	HasControlWith []*ControlWhereInput `json:"hasControlWith,omitempty"`
+	// control_objective edge predicates
+	HasControlObjective     *bool                         `json:"hasControlObjective,omitempty"`
+	HasControlObjectiveWith []*ControlObjectiveWhereInput `json:"hasControlObjectiveWith,omitempty"`
+	// subcontrol edge predicates
+	HasSubcontrol     *bool                   `json:"hasSubcontrol,omitempty"`
+	HasSubcontrolWith []*SubcontrolWhereInput `json:"hasSubcontrolWith,omitempty"`
 }
 
 type Template struct {
@@ -18695,6 +19325,9 @@ type UpdateControlInput struct {
 	AddActionplanIDs          []string               `json:"addActionplanIDs,omitempty"`
 	RemoveActionplanIDs       []string               `json:"removeActionplanIDs,omitempty"`
 	ClearActionplans          *bool                  `json:"clearActionplans,omitempty"`
+	AddTaskIDs                []string               `json:"addTaskIDs,omitempty"`
+	RemoveTaskIDs             []string               `json:"removeTaskIDs,omitempty"`
+	ClearTasks                *bool                  `json:"clearTasks,omitempty"`
 }
 
 // UpdateControlObjectiveInput is used for update ControlObjective object.
@@ -18757,6 +19390,9 @@ type UpdateControlObjectiveInput struct {
 	AddNarrativeIDs     []string               `json:"addNarrativeIDs,omitempty"`
 	RemoveNarrativeIDs  []string               `json:"removeNarrativeIDs,omitempty"`
 	ClearNarratives     *bool                  `json:"clearNarratives,omitempty"`
+	AddTaskIDs          []string               `json:"addTaskIDs,omitempty"`
+	RemoveTaskIDs       []string               `json:"removeTaskIDs,omitempty"`
+	ClearTasks          *bool                  `json:"clearTasks,omitempty"`
 }
 
 // UpdateDocumentDataInput is used for update DocumentData object.
@@ -19103,6 +19739,9 @@ type UpdateGroupInput struct {
 	AddFileIDs           []string                      `json:"addFileIDs,omitempty"`
 	RemoveFileIDs        []string                      `json:"removeFileIDs,omitempty"`
 	ClearFiles           *bool                         `json:"clearFiles,omitempty"`
+	AddTaskIDs           []string                      `json:"addTaskIDs,omitempty"`
+	RemoveTaskIDs        []string                      `json:"removeTaskIDs,omitempty"`
+	ClearTasks           *bool                         `json:"clearTasks,omitempty"`
 	AddGroupMembers      []*CreateGroupMembershipInput `json:"addGroupMembers,omitempty"`
 	UpdateGroupSettings  *UpdateGroupSettingInput      `json:"updateGroupSettings,omitempty"`
 }
@@ -19230,6 +19869,9 @@ type UpdateInternalPolicyInput struct {
 	AddNarrativeIDs           []string               `json:"addNarrativeIDs,omitempty"`
 	RemoveNarrativeIDs        []string               `json:"removeNarrativeIDs,omitempty"`
 	ClearNarratives           *bool                  `json:"clearNarratives,omitempty"`
+	AddTaskIDs                []string               `json:"addTaskIDs,omitempty"`
+	RemoveTaskIDs             []string               `json:"removeTaskIDs,omitempty"`
+	ClearTasks                *bool                  `json:"clearTasks,omitempty"`
 }
 
 // UpdateInviteInput is used for update Invite object.
@@ -19456,6 +20098,9 @@ type UpdateOrganizationInput struct {
 	AddNoteIDs                       []string                        `json:"addNoteIDs,omitempty"`
 	RemoveNoteIDs                    []string                        `json:"removeNoteIDs,omitempty"`
 	ClearNotes                       *bool                           `json:"clearNotes,omitempty"`
+	AddTaskIDs                       []string                        `json:"addTaskIDs,omitempty"`
+	RemoveTaskIDs                    []string                        `json:"removeTaskIDs,omitempty"`
+	ClearTasks                       *bool                           `json:"clearTasks,omitempty"`
 	AddOrgMembers                    []*CreateOrgMembershipInput     `json:"addOrgMembers,omitempty"`
 	UpdateOrgSettings                *UpdateOrganizationSettingInput `json:"updateOrgSettings,omitempty"`
 }
@@ -19566,6 +20211,9 @@ type UpdateProcedureInput struct {
 	AddRiskIDs              []string               `json:"addRiskIDs,omitempty"`
 	RemoveRiskIDs           []string               `json:"removeRiskIDs,omitempty"`
 	ClearRisks              *bool                  `json:"clearRisks,omitempty"`
+	AddTaskIDs              []string               `json:"addTaskIDs,omitempty"`
+	RemoveTaskIDs           []string               `json:"removeTaskIDs,omitempty"`
+	ClearTasks              *bool                  `json:"clearTasks,omitempty"`
 }
 
 // UpdateRiskInput is used for update Risk object.
@@ -19725,6 +20373,9 @@ type UpdateSubcontrolInput struct {
 	AddUserIDs       []string               `json:"addUserIDs,omitempty"`
 	RemoveUserIDs    []string               `json:"removeUserIDs,omitempty"`
 	ClearUser        *bool                  `json:"clearUser,omitempty"`
+	AddTaskIDs       []string               `json:"addTaskIDs,omitempty"`
+	RemoveTaskIDs    []string               `json:"removeTaskIDs,omitempty"`
+	ClearTasks       *bool                  `json:"clearTasks,omitempty"`
 	NotesID          *string                `json:"notesID,omitempty"`
 	ClearNotes       *bool                  `json:"clearNotes,omitempty"`
 }
@@ -19762,6 +20413,56 @@ type UpdateTFASettingInput struct {
 	ClearTotpAllowed *bool `json:"clearTotpAllowed,omitempty"`
 	// Whether to regenerate backup codes
 	RegenBackupCodes *bool `json:"regenBackupCodes,omitempty"`
+}
+
+// UpdateTaskInput is used for update Task object.
+// Input was generated by ent.
+type UpdateTaskInput struct {
+	// tags associated with the object
+	Tags       []string `json:"tags,omitempty"`
+	AppendTags []string `json:"appendTags,omitempty"`
+	ClearTags  *bool    `json:"clearTags,omitempty"`
+	// the title of the task
+	Title *string `json:"title,omitempty"`
+	// the description of the task
+	Description      *string `json:"description,omitempty"`
+	ClearDescription *bool   `json:"clearDescription,omitempty"`
+	// the details of the task
+	Details      map[string]interface{} `json:"details,omitempty"`
+	ClearDetails *bool                  `json:"clearDetails,omitempty"`
+	// the status of the task
+	Status *enums.TaskStatus `json:"status,omitempty"`
+	// the due date of the task
+	Due      *time.Time `json:"due,omitempty"`
+	ClearDue *bool      `json:"clearDue,omitempty"`
+	// the completion date of the task
+	Completed      *time.Time `json:"completed,omitempty"`
+	ClearCompleted *bool      `json:"clearCompleted,omitempty"`
+	// the assignee of the task
+	Assignee                  *string  `json:"assignee,omitempty"`
+	ClearAssignee             *bool    `json:"clearAssignee,omitempty"`
+	UserID                    *string  `json:"userID,omitempty"`
+	AddOrganizationIDs        []string `json:"addOrganizationIDs,omitempty"`
+	RemoveOrganizationIDs     []string `json:"removeOrganizationIDs,omitempty"`
+	ClearOrganization         *bool    `json:"clearOrganization,omitempty"`
+	AddGroupIDs               []string `json:"addGroupIDs,omitempty"`
+	RemoveGroupIDs            []string `json:"removeGroupIDs,omitempty"`
+	ClearGroup                *bool    `json:"clearGroup,omitempty"`
+	AddPolicyIDs              []string `json:"addPolicyIDs,omitempty"`
+	RemovePolicyIDs           []string `json:"removePolicyIDs,omitempty"`
+	ClearPolicy               *bool    `json:"clearPolicy,omitempty"`
+	AddProcedureIDs           []string `json:"addProcedureIDs,omitempty"`
+	RemoveProcedureIDs        []string `json:"removeProcedureIDs,omitempty"`
+	ClearProcedure            *bool    `json:"clearProcedure,omitempty"`
+	AddControlIDs             []string `json:"addControlIDs,omitempty"`
+	RemoveControlIDs          []string `json:"removeControlIDs,omitempty"`
+	ClearControl              *bool    `json:"clearControl,omitempty"`
+	AddControlObjectiveIDs    []string `json:"addControlObjectiveIDs,omitempty"`
+	RemoveControlObjectiveIDs []string `json:"removeControlObjectiveIDs,omitempty"`
+	ClearControlObjective     *bool    `json:"clearControlObjective,omitempty"`
+	AddSubcontrolIDs          []string `json:"addSubcontrolIDs,omitempty"`
+	RemoveSubcontrolIDs       []string `json:"removeSubcontrolIDs,omitempty"`
+	ClearSubcontrol           *bool    `json:"clearSubcontrol,omitempty"`
 }
 
 // UpdateTemplateInput is used for update Template object.
@@ -19866,6 +20567,9 @@ type UpdateUserInput struct {
 	AddSubcontrolIDs                []string    `json:"addSubcontrolIDs,omitempty"`
 	RemoveSubcontrolIDs             []string    `json:"removeSubcontrolIDs,omitempty"`
 	ClearSubcontrols                *bool       `json:"clearSubcontrols,omitempty"`
+	AddTaskIDs                      []string    `json:"addTaskIDs,omitempty"`
+	RemoveTaskIDs                   []string    `json:"removeTaskIDs,omitempty"`
+	ClearTasks                      *bool       `json:"clearTasks,omitempty"`
 }
 
 // UpdateUserSettingInput is used for update UserSetting object.
@@ -19978,6 +20682,7 @@ type User struct {
 	Events               []*Event               `json:"events,omitempty"`
 	Actionplans          []*ActionPlan          `json:"actionplans,omitempty"`
 	Subcontrols          []*Subcontrol          `json:"subcontrols,omitempty"`
+	Tasks                []*Task                `json:"tasks,omitempty"`
 	GroupMemberships     []*GroupMembership     `json:"groupMemberships,omitempty"`
 	OrgMemberships       []*OrgMembership       `json:"orgMemberships,omitempty"`
 }
@@ -21160,6 +21865,9 @@ type UserWhereInput struct {
 	// subcontrols edge predicates
 	HasSubcontrols     *bool                   `json:"hasSubcontrols,omitempty"`
 	HasSubcontrolsWith []*SubcontrolWhereInput `json:"hasSubcontrolsWith,omitempty"`
+	// tasks edge predicates
+	HasTasks     *bool             `json:"hasTasks,omitempty"`
+	HasTasksWith []*TaskWhereInput `json:"hasTasksWith,omitempty"`
 	// group_memberships edge predicates
 	HasGroupMemberships     *bool                        `json:"hasGroupMemberships,omitempty"`
 	HasGroupMembershipsWith []*GroupMembershipWhereInput `json:"hasGroupMembershipsWith,omitempty"`

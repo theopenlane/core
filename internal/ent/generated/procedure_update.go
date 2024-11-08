@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/internal/ent/generated/task"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -352,6 +353,21 @@ func (pu *ProcedureUpdate) AddRisks(r ...*Risk) *ProcedureUpdate {
 	return pu.AddRiskIDs(ids...)
 }
 
+// AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
+func (pu *ProcedureUpdate) AddTaskIDs(ids ...string) *ProcedureUpdate {
+	pu.mutation.AddTaskIDs(ids...)
+	return pu
+}
+
+// AddTasks adds the "tasks" edges to the Task entity.
+func (pu *ProcedureUpdate) AddTasks(t ...*Task) *ProcedureUpdate {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return pu.AddTaskIDs(ids...)
+}
+
 // Mutation returns the ProcedureMutation object of the builder.
 func (pu *ProcedureUpdate) Mutation() *ProcedureMutation {
 	return pu.mutation
@@ -439,6 +455,27 @@ func (pu *ProcedureUpdate) RemoveRisks(r ...*Risk) *ProcedureUpdate {
 		ids[i] = r[i].ID
 	}
 	return pu.RemoveRiskIDs(ids...)
+}
+
+// ClearTasks clears all "tasks" edges to the Task entity.
+func (pu *ProcedureUpdate) ClearTasks() *ProcedureUpdate {
+	pu.mutation.ClearTasks()
+	return pu
+}
+
+// RemoveTaskIDs removes the "tasks" edge to Task entities by IDs.
+func (pu *ProcedureUpdate) RemoveTaskIDs(ids ...string) *ProcedureUpdate {
+	pu.mutation.RemoveTaskIDs(ids...)
+	return pu
+}
+
+// RemoveTasks removes "tasks" edges to Task entities.
+func (pu *ProcedureUpdate) RemoveTasks(t ...*Task) *ProcedureUpdate {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return pu.RemoveTaskIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -777,6 +814,54 @@ func (pu *ProcedureUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			},
 		}
 		edge.Schema = pu.schemaConfig.ProcedureRisks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if pu.mutation.TasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   procedure.TasksTable,
+			Columns: procedure.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pu.schemaConfig.ProcedureTasks
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.RemovedTasksIDs(); len(nodes) > 0 && !pu.mutation.TasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   procedure.TasksTable,
+			Columns: procedure.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pu.schemaConfig.ProcedureTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.TasksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   procedure.TasksTable,
+			Columns: procedure.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pu.schemaConfig.ProcedureTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1122,6 +1207,21 @@ func (puo *ProcedureUpdateOne) AddRisks(r ...*Risk) *ProcedureUpdateOne {
 	return puo.AddRiskIDs(ids...)
 }
 
+// AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
+func (puo *ProcedureUpdateOne) AddTaskIDs(ids ...string) *ProcedureUpdateOne {
+	puo.mutation.AddTaskIDs(ids...)
+	return puo
+}
+
+// AddTasks adds the "tasks" edges to the Task entity.
+func (puo *ProcedureUpdateOne) AddTasks(t ...*Task) *ProcedureUpdateOne {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return puo.AddTaskIDs(ids...)
+}
+
 // Mutation returns the ProcedureMutation object of the builder.
 func (puo *ProcedureUpdateOne) Mutation() *ProcedureMutation {
 	return puo.mutation
@@ -1209,6 +1309,27 @@ func (puo *ProcedureUpdateOne) RemoveRisks(r ...*Risk) *ProcedureUpdateOne {
 		ids[i] = r[i].ID
 	}
 	return puo.RemoveRiskIDs(ids...)
+}
+
+// ClearTasks clears all "tasks" edges to the Task entity.
+func (puo *ProcedureUpdateOne) ClearTasks() *ProcedureUpdateOne {
+	puo.mutation.ClearTasks()
+	return puo
+}
+
+// RemoveTaskIDs removes the "tasks" edge to Task entities by IDs.
+func (puo *ProcedureUpdateOne) RemoveTaskIDs(ids ...string) *ProcedureUpdateOne {
+	puo.mutation.RemoveTaskIDs(ids...)
+	return puo
+}
+
+// RemoveTasks removes "tasks" edges to Task entities.
+func (puo *ProcedureUpdateOne) RemoveTasks(t ...*Task) *ProcedureUpdateOne {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return puo.RemoveTaskIDs(ids...)
 }
 
 // Where appends a list predicates to the ProcedureUpdate builder.
@@ -1577,6 +1698,54 @@ func (puo *ProcedureUpdateOne) sqlSave(ctx context.Context) (_node *Procedure, e
 			},
 		}
 		edge.Schema = puo.schemaConfig.ProcedureRisks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if puo.mutation.TasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   procedure.TasksTable,
+			Columns: procedure.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = puo.schemaConfig.ProcedureTasks
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.RemovedTasksIDs(); len(nodes) > 0 && !puo.mutation.TasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   procedure.TasksTable,
+			Columns: procedure.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = puo.schemaConfig.ProcedureTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.TasksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   procedure.TasksTable,
+			Columns: procedure.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = puo.schemaConfig.ProcedureTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

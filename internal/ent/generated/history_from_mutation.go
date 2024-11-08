@@ -7243,6 +7243,268 @@ func (m *SubcontrolMutation) CreateHistoryFromDelete(ctx context.Context) error 
 	return nil
 }
 
+func (m *TaskMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.TaskHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if mappingID, exists := m.MappingID(); exists {
+		create = create.SetMappingID(mappingID)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	if title, exists := m.Title(); exists {
+		create = create.SetTitle(title)
+	}
+
+	if description, exists := m.Description(); exists {
+		create = create.SetDescription(description)
+	}
+
+	if details, exists := m.Details(); exists {
+		create = create.SetDetails(details)
+	}
+
+	if status, exists := m.Status(); exists {
+		create = create.SetStatus(status)
+	}
+
+	if due, exists := m.Due(); exists {
+		create = create.SetDue(due)
+	}
+
+	if completed, exists := m.Completed(); exists {
+		create = create.SetCompleted(completed)
+	}
+
+	if assignee, exists := m.Assignee(); exists {
+		create = create.SetAssignee(assignee)
+	}
+
+	if assigner, exists := m.Assigner(); exists {
+		create = create.SetAssigner(assigner)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *TaskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDelete(ctx) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		task, err := client.Task.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.TaskHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(task.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(task.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(task.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(task.UpdatedBy)
+		}
+
+		if mappingID, exists := m.MappingID(); exists {
+			create = create.SetMappingID(mappingID)
+		} else {
+			create = create.SetMappingID(task.MappingID)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(task.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(task.DeletedBy)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(task.Tags)
+		}
+
+		if title, exists := m.Title(); exists {
+			create = create.SetTitle(title)
+		} else {
+			create = create.SetTitle(task.Title)
+		}
+
+		if description, exists := m.Description(); exists {
+			create = create.SetDescription(description)
+		} else {
+			create = create.SetDescription(task.Description)
+		}
+
+		if details, exists := m.Details(); exists {
+			create = create.SetDetails(details)
+		} else {
+			create = create.SetDetails(task.Details)
+		}
+
+		if status, exists := m.Status(); exists {
+			create = create.SetStatus(status)
+		} else {
+			create = create.SetStatus(task.Status)
+		}
+
+		if due, exists := m.Due(); exists {
+			create = create.SetDue(due)
+		} else {
+			create = create.SetDue(task.Due)
+		}
+
+		if completed, exists := m.Completed(); exists {
+			create = create.SetCompleted(completed)
+		} else {
+			create = create.SetCompleted(task.Completed)
+		}
+
+		if assignee, exists := m.Assignee(); exists {
+			create = create.SetAssignee(assignee)
+		} else {
+			create = create.SetAssignee(task.Assignee)
+		}
+
+		if assigner, exists := m.Assigner(); exists {
+			create = create.SetAssigner(assigner)
+		} else {
+			create = create.SetAssigner(task.Assigner)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *TaskMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDelete(ctx) {
+		return nil
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		task, err := client.Task.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.TaskHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(task.CreatedAt).
+			SetUpdatedAt(task.UpdatedAt).
+			SetCreatedBy(task.CreatedBy).
+			SetUpdatedBy(task.UpdatedBy).
+			SetMappingID(task.MappingID).
+			SetDeletedAt(task.DeletedAt).
+			SetDeletedBy(task.DeletedBy).
+			SetTags(task.Tags).
+			SetTitle(task.Title).
+			SetDescription(task.Description).
+			SetDetails(task.Details).
+			SetStatus(task.Status).
+			SetDue(task.Due).
+			SetCompleted(task.Completed).
+			SetAssignee(task.Assignee).
+			SetAssigner(task.Assigner).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *TemplateMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	client := m.Client()
 

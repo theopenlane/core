@@ -19,9 +19,11 @@ type SchemaConfig struct {
 	ControlNarratives                string // Control-narratives->Narrative table.
 	ControlRisks                     string // Control-risks->Risk table.
 	ControlActionplans               string // Control-actionplans->ActionPlan table.
+	ControlTasks                     string // Control-tasks->Task table.
 	ControlHistory                   string // ControlHistory table.
 	ControlObjective                 string // ControlObjective table.
 	ControlObjectiveNarratives       string // ControlObjective-narratives->Narrative table.
+	ControlObjectiveTasks            string // ControlObjective-tasks->Task table.
 	ControlObjectiveHistory          string // ControlObjectiveHistory table.
 	DocumentData                     string // DocumentData table.
 	DocumentDataFiles                string // DocumentData-files->File table.
@@ -54,6 +56,7 @@ type SchemaConfig struct {
 	Group                            string // Group table.
 	GroupEvents                      string // Group-events->Event table.
 	GroupFiles                       string // Group-files->File table.
+	GroupTasks                       string // Group-tasks->Task table.
 	GroupHistory                     string // GroupHistory table.
 	GroupMembership                  string // GroupMembership table.
 	GroupMembershipEvents            string // GroupMembership-events->Event table.
@@ -73,6 +76,7 @@ type SchemaConfig struct {
 	InternalPolicyControlobjectives  string // InternalPolicy-controlobjectives->ControlObjective table.
 	InternalPolicyProcedures         string // InternalPolicy-procedures->Procedure table.
 	InternalPolicyNarratives         string // InternalPolicy-narratives->Narrative table.
+	InternalPolicyTasks              string // InternalPolicy-tasks->Task table.
 	InternalPolicyHistory            string // InternalPolicyHistory table.
 	Invite                           string // Invite table.
 	InviteEvents                     string // Invite-events->Event table.
@@ -92,6 +96,7 @@ type SchemaConfig struct {
 	OrganizationEvents               string // Organization-events->Event table.
 	OrganizationSecrets              string // Organization-secrets->Hush table.
 	OrganizationFiles                string // Organization-files->File table.
+	OrganizationTasks                string // Organization-tasks->Task table.
 	OrganizationHistory              string // OrganizationHistory table.
 	OrganizationSetting              string // OrganizationSetting table.
 	OrganizationSettingFiles         string // OrganizationSetting-files->File table.
@@ -102,6 +107,7 @@ type SchemaConfig struct {
 	Procedure                        string // Procedure table.
 	ProcedureNarratives              string // Procedure-narratives->Narrative table.
 	ProcedureRisks                   string // Procedure-risks->Risk table.
+	ProcedureTasks                   string // Procedure-tasks->Task table.
 	ProcedureHistory                 string // ProcedureHistory table.
 	Risk                             string // Risk table.
 	RiskActionplans                  string // Risk-actionplans->ActionPlan table.
@@ -112,10 +118,13 @@ type SchemaConfig struct {
 	StandardActionplans              string // Standard-actionplans->ActionPlan table.
 	StandardHistory                  string // StandardHistory table.
 	Subcontrol                       string // Subcontrol table.
+	SubcontrolTasks                  string // Subcontrol-tasks->Task table.
 	SubcontrolHistory                string // SubcontrolHistory table.
 	Subscriber                       string // Subscriber table.
 	SubscriberEvents                 string // Subscriber-events->Event table.
 	TFASetting                       string // TFASetting table.
+	Task                             string // Task table.
+	TaskHistory                      string // TaskHistory table.
 	Template                         string // Template table.
 	TemplateFiles                    string // Template-files->File table.
 	TemplateHistory                  string // TemplateHistory table.

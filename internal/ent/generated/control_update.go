@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/task"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -460,6 +461,21 @@ func (cu *ControlUpdate) AddActionplans(a ...*ActionPlan) *ControlUpdate {
 	return cu.AddActionplanIDs(ids...)
 }
 
+// AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
+func (cu *ControlUpdate) AddTaskIDs(ids ...string) *ControlUpdate {
+	cu.mutation.AddTaskIDs(ids...)
+	return cu
+}
+
+// AddTasks adds the "tasks" edges to the Task entity.
+func (cu *ControlUpdate) AddTasks(t ...*Task) *ControlUpdate {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return cu.AddTaskIDs(ids...)
+}
+
 // Mutation returns the ControlMutation object of the builder.
 func (cu *ControlUpdate) Mutation() *ControlMutation {
 	return cu.mutation
@@ -610,6 +626,27 @@ func (cu *ControlUpdate) RemoveActionplans(a ...*ActionPlan) *ControlUpdate {
 		ids[i] = a[i].ID
 	}
 	return cu.RemoveActionplanIDs(ids...)
+}
+
+// ClearTasks clears all "tasks" edges to the Task entity.
+func (cu *ControlUpdate) ClearTasks() *ControlUpdate {
+	cu.mutation.ClearTasks()
+	return cu
+}
+
+// RemoveTaskIDs removes the "tasks" edge to Task entities by IDs.
+func (cu *ControlUpdate) RemoveTaskIDs(ids ...string) *ControlUpdate {
+	cu.mutation.RemoveTaskIDs(ids...)
+	return cu
+}
+
+// RemoveTasks removes "tasks" edges to Task entities.
+func (cu *ControlUpdate) RemoveTasks(t ...*Task) *ControlUpdate {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return cu.RemoveTaskIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -1115,6 +1152,54 @@ func (cu *ControlUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if cu.mutation.TasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   control.TasksTable,
+			Columns: control.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cu.schemaConfig.ControlTasks
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cu.mutation.RemovedTasksIDs(); len(nodes) > 0 && !cu.mutation.TasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   control.TasksTable,
+			Columns: control.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cu.schemaConfig.ControlTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cu.mutation.TasksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   control.TasksTable,
+			Columns: control.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cu.schemaConfig.ControlTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = cu.schemaConfig.Control
 	ctx = internal.NewSchemaConfigContext(ctx, cu.schemaConfig)
 	_spec.AddModifiers(cu.modifiers...)
@@ -1560,6 +1645,21 @@ func (cuo *ControlUpdateOne) AddActionplans(a ...*ActionPlan) *ControlUpdateOne 
 	return cuo.AddActionplanIDs(ids...)
 }
 
+// AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
+func (cuo *ControlUpdateOne) AddTaskIDs(ids ...string) *ControlUpdateOne {
+	cuo.mutation.AddTaskIDs(ids...)
+	return cuo
+}
+
+// AddTasks adds the "tasks" edges to the Task entity.
+func (cuo *ControlUpdateOne) AddTasks(t ...*Task) *ControlUpdateOne {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return cuo.AddTaskIDs(ids...)
+}
+
 // Mutation returns the ControlMutation object of the builder.
 func (cuo *ControlUpdateOne) Mutation() *ControlMutation {
 	return cuo.mutation
@@ -1710,6 +1810,27 @@ func (cuo *ControlUpdateOne) RemoveActionplans(a ...*ActionPlan) *ControlUpdateO
 		ids[i] = a[i].ID
 	}
 	return cuo.RemoveActionplanIDs(ids...)
+}
+
+// ClearTasks clears all "tasks" edges to the Task entity.
+func (cuo *ControlUpdateOne) ClearTasks() *ControlUpdateOne {
+	cuo.mutation.ClearTasks()
+	return cuo
+}
+
+// RemoveTaskIDs removes the "tasks" edge to Task entities by IDs.
+func (cuo *ControlUpdateOne) RemoveTaskIDs(ids ...string) *ControlUpdateOne {
+	cuo.mutation.RemoveTaskIDs(ids...)
+	return cuo
+}
+
+// RemoveTasks removes "tasks" edges to Task entities.
+func (cuo *ControlUpdateOne) RemoveTasks(t ...*Task) *ControlUpdateOne {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return cuo.RemoveTaskIDs(ids...)
 }
 
 // Where appends a list predicates to the ControlUpdate builder.
@@ -2240,6 +2361,54 @@ func (cuo *ControlUpdateOne) sqlSave(ctx context.Context) (_node *Control, err e
 			},
 		}
 		edge.Schema = cuo.schemaConfig.ControlActionplans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if cuo.mutation.TasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   control.TasksTable,
+			Columns: control.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cuo.schemaConfig.ControlTasks
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cuo.mutation.RemovedTasksIDs(); len(nodes) > 0 && !cuo.mutation.TasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   control.TasksTable,
+			Columns: control.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cuo.schemaConfig.ControlTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cuo.mutation.TasksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   control.TasksTable,
+			Columns: control.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cuo.schemaConfig.ControlTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

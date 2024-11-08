@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -30,12 +31,14 @@ type SubcontrolQuery struct {
 	predicates       []predicate.Subcontrol
 	withControl      *ControlQuery
 	withUser         *UserQuery
+	withTasks        *TaskQuery
 	withNotes        *NoteQuery
 	withFKs          bool
 	loadTotal        []func(context.Context, []*Subcontrol) error
 	modifiers        []func(*sql.Selector)
 	withNamedControl map[string]*ControlQuery
 	withNamedUser    map[string]*UserQuery
+	withNamedTasks   map[string]*TaskQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -116,6 +119,31 @@ func (sq *SubcontrolQuery) QueryUser() *UserQuery {
 		schemaConfig := sq.schemaConfig
 		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.UserSubcontrols
+		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryTasks chains the current query on the "tasks" edge.
+func (sq *SubcontrolQuery) QueryTasks() *TaskQuery {
+	query := (&TaskClient{config: sq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := sq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := sq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, selector),
+			sqlgraph.To(task.Table, task.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, subcontrol.TasksTable, subcontrol.TasksPrimaryKey...),
+		)
+		schemaConfig := sq.schemaConfig
+		step.To.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.SubcontrolTasks
 		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -341,6 +369,7 @@ func (sq *SubcontrolQuery) Clone() *SubcontrolQuery {
 		predicates:  append([]predicate.Subcontrol{}, sq.predicates...),
 		withControl: sq.withControl.Clone(),
 		withUser:    sq.withUser.Clone(),
+		withTasks:   sq.withTasks.Clone(),
 		withNotes:   sq.withNotes.Clone(),
 		// clone intermediate query.
 		sql:       sq.sql.Clone(),
@@ -368,6 +397,17 @@ func (sq *SubcontrolQuery) WithUser(opts ...func(*UserQuery)) *SubcontrolQuery {
 		opt(query)
 	}
 	sq.withUser = query
+	return sq
+}
+
+// WithTasks tells the query-builder to eager-load the nodes that are connected to
+// the "tasks" edge. The optional arguments are used to configure the query builder of the edge.
+func (sq *SubcontrolQuery) WithTasks(opts ...func(*TaskQuery)) *SubcontrolQuery {
+	query := (&TaskClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	sq.withTasks = query
 	return sq
 }
 
@@ -461,9 +501,10 @@ func (sq *SubcontrolQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 		nodes       = []*Subcontrol{}
 		withFKs     = sq.withFKs
 		_spec       = sq.querySpec()
-		loadedTypes = [3]bool{
+		loadedTypes = [4]bool{
 			sq.withControl != nil,
 			sq.withUser != nil,
+			sq.withTasks != nil,
 			sq.withNotes != nil,
 		}
 	)
@@ -510,6 +551,13 @@ func (sq *SubcontrolQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 			return nil, err
 		}
 	}
+	if query := sq.withTasks; query != nil {
+		if err := sq.loadTasks(ctx, query, nodes,
+			func(n *Subcontrol) { n.Edges.Tasks = []*Task{} },
+			func(n *Subcontrol, e *Task) { n.Edges.Tasks = append(n.Edges.Tasks, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := sq.withNotes; query != nil {
 		if err := sq.loadNotes(ctx, query, nodes, nil,
 			func(n *Subcontrol, e *Note) { n.Edges.Notes = e }); err != nil {
@@ -527,6 +575,13 @@ func (sq *SubcontrolQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 		if err := sq.loadUser(ctx, query, nodes,
 			func(n *Subcontrol) { n.appendNamedUser(name) },
 			func(n *Subcontrol, e *User) { n.appendNamedUser(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range sq.withNamedTasks {
+		if err := sq.loadTasks(ctx, query, nodes,
+			func(n *Subcontrol) { n.appendNamedTasks(name) },
+			func(n *Subcontrol, e *Task) { n.appendNamedTasks(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -655,6 +710,68 @@ func (sq *SubcontrolQuery) loadUser(ctx context.Context, query *UserQuery, nodes
 		nodes, ok := nids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected "user" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (sq *SubcontrolQuery) loadTasks(ctx context.Context, query *TaskQuery, nodes []*Subcontrol, init func(*Subcontrol), assign func(*Subcontrol, *Task)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Subcontrol)
+	nids := make(map[string]map[*Subcontrol]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(subcontrol.TasksTable)
+		joinT.Schema(sq.schemaConfig.SubcontrolTasks)
+		s.Join(joinT).On(s.C(task.FieldID), joinT.C(subcontrol.TasksPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(subcontrol.TasksPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(subcontrol.TasksPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Subcontrol]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Task](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "tasks" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -818,6 +935,20 @@ func (sq *SubcontrolQuery) WithNamedUser(name string, opts ...func(*UserQuery)) 
 		sq.withNamedUser = make(map[string]*UserQuery)
 	}
 	sq.withNamedUser[name] = query
+	return sq
+}
+
+// WithNamedTasks tells the query-builder to eager-load the nodes that are connected to the "tasks"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (sq *SubcontrolQuery) WithNamedTasks(name string, opts ...func(*TaskQuery)) *SubcontrolQuery {
+	query := (&TaskClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if sq.withNamedTasks == nil {
+		sq.withNamedTasks = make(map[string]*TaskQuery)
+	}
+	sq.withNamedTasks[name] = query
 	return sq
 }
 

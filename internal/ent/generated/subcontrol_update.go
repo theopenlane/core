@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -461,6 +462,21 @@ func (su *SubcontrolUpdate) AddUser(u ...*User) *SubcontrolUpdate {
 	return su.AddUserIDs(ids...)
 }
 
+// AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
+func (su *SubcontrolUpdate) AddTaskIDs(ids ...string) *SubcontrolUpdate {
+	su.mutation.AddTaskIDs(ids...)
+	return su
+}
+
+// AddTasks adds the "tasks" edges to the Task entity.
+func (su *SubcontrolUpdate) AddTasks(t ...*Task) *SubcontrolUpdate {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return su.AddTaskIDs(ids...)
+}
+
 // SetNotesID sets the "notes" edge to the Note entity by ID.
 func (su *SubcontrolUpdate) SetNotesID(id string) *SubcontrolUpdate {
 	su.mutation.SetNotesID(id)
@@ -525,6 +541,27 @@ func (su *SubcontrolUpdate) RemoveUser(u ...*User) *SubcontrolUpdate {
 		ids[i] = u[i].ID
 	}
 	return su.RemoveUserIDs(ids...)
+}
+
+// ClearTasks clears all "tasks" edges to the Task entity.
+func (su *SubcontrolUpdate) ClearTasks() *SubcontrolUpdate {
+	su.mutation.ClearTasks()
+	return su
+}
+
+// RemoveTaskIDs removes the "tasks" edge to Task entities by IDs.
+func (su *SubcontrolUpdate) RemoveTaskIDs(ids ...string) *SubcontrolUpdate {
+	su.mutation.RemoveTaskIDs(ids...)
+	return su
+}
+
+// RemoveTasks removes "tasks" edges to Task entities.
+func (su *SubcontrolUpdate) RemoveTasks(t ...*Task) *SubcontrolUpdate {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return su.RemoveTaskIDs(ids...)
 }
 
 // ClearNotes clears the "notes" edge to the Note entity.
@@ -815,6 +852,54 @@ func (su *SubcontrolUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			},
 		}
 		edge.Schema = su.schemaConfig.UserSubcontrols
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if su.mutation.TasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   subcontrol.TasksTable,
+			Columns: subcontrol.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = su.schemaConfig.SubcontrolTasks
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.RemovedTasksIDs(); len(nodes) > 0 && !su.mutation.TasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   subcontrol.TasksTable,
+			Columns: subcontrol.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = su.schemaConfig.SubcontrolTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.TasksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   subcontrol.TasksTable,
+			Columns: subcontrol.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = su.schemaConfig.SubcontrolTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1301,6 +1386,21 @@ func (suo *SubcontrolUpdateOne) AddUser(u ...*User) *SubcontrolUpdateOne {
 	return suo.AddUserIDs(ids...)
 }
 
+// AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
+func (suo *SubcontrolUpdateOne) AddTaskIDs(ids ...string) *SubcontrolUpdateOne {
+	suo.mutation.AddTaskIDs(ids...)
+	return suo
+}
+
+// AddTasks adds the "tasks" edges to the Task entity.
+func (suo *SubcontrolUpdateOne) AddTasks(t ...*Task) *SubcontrolUpdateOne {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return suo.AddTaskIDs(ids...)
+}
+
 // SetNotesID sets the "notes" edge to the Note entity by ID.
 func (suo *SubcontrolUpdateOne) SetNotesID(id string) *SubcontrolUpdateOne {
 	suo.mutation.SetNotesID(id)
@@ -1365,6 +1465,27 @@ func (suo *SubcontrolUpdateOne) RemoveUser(u ...*User) *SubcontrolUpdateOne {
 		ids[i] = u[i].ID
 	}
 	return suo.RemoveUserIDs(ids...)
+}
+
+// ClearTasks clears all "tasks" edges to the Task entity.
+func (suo *SubcontrolUpdateOne) ClearTasks() *SubcontrolUpdateOne {
+	suo.mutation.ClearTasks()
+	return suo
+}
+
+// RemoveTaskIDs removes the "tasks" edge to Task entities by IDs.
+func (suo *SubcontrolUpdateOne) RemoveTaskIDs(ids ...string) *SubcontrolUpdateOne {
+	suo.mutation.RemoveTaskIDs(ids...)
+	return suo
+}
+
+// RemoveTasks removes "tasks" edges to Task entities.
+func (suo *SubcontrolUpdateOne) RemoveTasks(t ...*Task) *SubcontrolUpdateOne {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return suo.RemoveTaskIDs(ids...)
 }
 
 // ClearNotes clears the "notes" edge to the Note entity.
@@ -1685,6 +1806,54 @@ func (suo *SubcontrolUpdateOne) sqlSave(ctx context.Context) (_node *Subcontrol,
 			},
 		}
 		edge.Schema = suo.schemaConfig.UserSubcontrols
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if suo.mutation.TasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   subcontrol.TasksTable,
+			Columns: subcontrol.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = suo.schemaConfig.SubcontrolTasks
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.RemovedTasksIDs(); len(nodes) > 0 && !suo.mutation.TasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   subcontrol.TasksTable,
+			Columns: subcontrol.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = suo.schemaConfig.SubcontrolTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.TasksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   subcontrol.TasksTable,
+			Columns: subcontrol.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = suo.schemaConfig.SubcontrolTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

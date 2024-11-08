@@ -82,11 +82,13 @@ type ControlEdges struct {
 	Risks []*Risk `json:"risks,omitempty"`
 	// Actionplans holds the value of the actionplans edge.
 	Actionplans []*ActionPlan `json:"actionplans,omitempty"`
+	// Tasks holds the value of the tasks edge.
+	Tasks []*Task `json:"tasks,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [7]bool
+	loadedTypes [8]bool
 	// totalCount holds the count of the edges above.
-	totalCount [7]map[string]int
+	totalCount [8]map[string]int
 
 	namedProcedures        map[string][]*Procedure
 	namedSubcontrols       map[string][]*Subcontrol
@@ -95,6 +97,7 @@ type ControlEdges struct {
 	namedNarratives        map[string][]*Narrative
 	namedRisks             map[string][]*Risk
 	namedActionplans       map[string][]*ActionPlan
+	namedTasks             map[string][]*Task
 }
 
 // ProceduresOrErr returns the Procedures value or an error if the edge
@@ -158,6 +161,15 @@ func (e ControlEdges) ActionplansOrErr() ([]*ActionPlan, error) {
 		return e.Actionplans, nil
 	}
 	return nil, &NotLoadedError{edge: "actionplans"}
+}
+
+// TasksOrErr returns the Tasks value or an error if the edge
+// was not loaded in eager-loading.
+func (e ControlEdges) TasksOrErr() ([]*Task, error) {
+	if e.loadedTypes[7] {
+		return e.Tasks, nil
+	}
+	return nil, &NotLoadedError{edge: "tasks"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -380,6 +392,11 @@ func (c *Control) QueryRisks() *RiskQuery {
 // QueryActionplans queries the "actionplans" edge of the Control entity.
 func (c *Control) QueryActionplans() *ActionPlanQuery {
 	return NewControlClient(c.config).QueryActionplans(c)
+}
+
+// QueryTasks queries the "tasks" edge of the Control entity.
+func (c *Control) QueryTasks() *TaskQuery {
+	return NewControlClient(c.config).QueryTasks(c)
 }
 
 // Update returns a builder for updating this Control.
@@ -633,6 +650,30 @@ func (c *Control) appendNamedActionplans(name string, edges ...*ActionPlan) {
 		c.Edges.namedActionplans[name] = []*ActionPlan{}
 	} else {
 		c.Edges.namedActionplans[name] = append(c.Edges.namedActionplans[name], edges...)
+	}
+}
+
+// NamedTasks returns the Tasks named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (c *Control) NamedTasks(name string) ([]*Task, error) {
+	if c.Edges.namedTasks == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := c.Edges.namedTasks[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (c *Control) appendNamedTasks(name string, edges ...*Task) {
+	if c.Edges.namedTasks == nil {
+		c.Edges.namedTasks = make(map[string][]*Task)
+	}
+	if len(edges) == 0 {
+		c.Edges.namedTasks[name] = []*Task{}
+	} else {
+		c.Edges.namedTasks[name] = append(c.Edges.namedTasks[name], edges...)
 	}
 }
 

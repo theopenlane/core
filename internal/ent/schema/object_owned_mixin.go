@@ -2,7 +2,6 @@ package schema
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"reflect"
 	"strings"
@@ -14,7 +13,9 @@ import (
 	"entgo.io/ent/schema/mixin"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
@@ -27,8 +28,10 @@ type ObjectOwnedMixin struct {
 	Ref string
 	// Kind of the object
 	Kind any
-	// FieldName is the name of the field in the schema, e.g. "owner_id" or "program_id"
-	FieldName string
+	// FieldNames are the name of the field in the schema that can own / controls permissions of the object, e.g. "owner_id" or "program_id"
+	FieldNames []string
+	// SkipUserTuple skips the user tuple creation for the object owned mixin
+	SkipUserTuple bool
 	// Required makes the owner id field required as input
 	Required bool
 	// AllowEmpty allows the owner id field to be empty
@@ -40,9 +43,9 @@ type ObjectOwnedMixin struct {
 	SkipInterceptor interceptors.SkipMode
 	// SkipTokenType skips the traverser or hook if the token type is found in the context
 	SkipTokenType []token.PrivacyToken
-	// HookFunc is the hook function for the object owned mixin
+	// HookFuncs is the hook functions for the object owned mixin
 	// that will be called on all mutations
-	HookFunc HookFunc
+	HookFuncs []HookFunc
 	// InterceptorFunc is the interceptor function for the object owned mixin
 	// that will be called on all queries
 	InterceptorFunc InterceptorFunc
@@ -64,10 +67,8 @@ func NewObjectOwnMixinWithRef(ref string) ObjectOwnedMixin {
 // NewObjectOwnedMixin creates a new ObjectOwnedMixin with the given ObjectOwnedMixin
 // and sets the HookFunc to defaultOrgHookFunc
 func NewObjectOwnedMixin(o ObjectOwnedMixin) ObjectOwnedMixin {
-	o.Kind = Organization.Type
-
-	if o.HookFunc == nil {
-		o.HookFunc = defaultObjectHookFunc
+	if o.HookFuncs == nil {
+		o.HookFuncs = []HookFunc{defaultObjectHookFunc, defaultObjectHookCreateFunc}
 	}
 
 	if o.InterceptorFunc == nil {
@@ -80,53 +81,57 @@ func NewObjectOwnedMixin(o ObjectOwnedMixin) ObjectOwnedMixin {
 // Fields of the ObjectOwnedMixin
 func (o ObjectOwnedMixin) Fields() []ent.Field {
 	// if the field name is not defined, skip adding a field
-	if o.FieldName == "" {
+	if len(o.FieldNames) == 0 || o.Kind == nil {
 		return []ent.Field{}
 	}
 
-	objectType := o.Kind
-	objectIDField := field.
-		String(o.FieldName).
-		Comment(fmt.Sprintf("the %v id that owns the object", getObjectType(objectType)))
+	var fields []ent.Field
 
-	if !o.Required {
-		objectIDField.Optional()
+	for _, fieldName := range o.FieldNames {
+		objectType := o.Kind
+		objectIDField := field.
+			String(fieldName).
+			Comment(fmt.Sprintf("the %v id that owns the object", getObjectType(objectType)))
 
-		// if explicitly set to allow empty values, otherwise ensure it is not empty
-		if !o.AllowEmpty {
-			objectIDField.NotEmpty()
+		if !o.Required {
+			objectIDField.Optional()
+
+			// if explicitly set to allow empty values, otherwise ensure it is not empty
+			if !o.AllowEmpty {
+				objectIDField.NotEmpty()
+			}
 		}
+
+		fields = append(fields, objectIDField)
 	}
 
-	return []ent.Field{
-		objectIDField,
-	}
+	return fields
 }
 
 // Edges of the ObjectOwnedMixin
 func (o ObjectOwnedMixin) Edges() []ent.Edge {
-	if o.Kind == nil {
-		panic(errors.New("kind must be non-empty type")) // nolint: goerr113
-	}
-
 	// if there is no ref, don't add the edge
-	if o.Ref == "" {
+	if o.Ref == "" || o.Kind == nil {
 		return []ent.Edge{}
 	}
 
-	ownerEdge := edge.
-		From("owner", o.Kind).
-		Field(o.FieldName).
-		Ref(o.Ref).
-		Unique()
+	var edges []ent.Edge
 
-	if o.Required {
-		ownerEdge.Required()
+	for _, fieldName := range o.FieldNames {
+		ownerEdge := edge.
+			From("owner", o.Kind).
+			Field(fieldName).
+			Ref(o.Ref).
+			Unique()
+
+		if o.Required {
+			ownerEdge.Required()
+		}
+
+		edges = append(edges, ownerEdge)
 	}
 
-	return []ent.Edge{
-		ownerEdge,
-	}
+	return edges
 }
 
 // Hooks of the ObjectOwnedMixin
@@ -136,9 +141,12 @@ func (o ObjectOwnedMixin) Hooks() []ent.Hook {
 		return []ent.Hook{}
 	}
 
-	return []ent.Hook{
-		o.HookFunc(o),
+	res := []ent.Hook{}
+	for _, hookFunc := range o.HookFuncs {
+		res = append(res, hookFunc(o))
 	}
+
+	return res
 }
 
 // Interceptors of the ObjectOwnedMixin
@@ -155,8 +163,24 @@ func (o ObjectOwnedMixin) Interceptors() []ent.Interceptor {
 
 // P adds a storage-level predicate to the queries and mutations.
 func (o ObjectOwnedMixin) P(w interface{ WhereP(...func(*sql.Selector)) }, objectIDs []string) {
-	w.WhereP(
-		sql.FieldIn(o.FieldName, objectIDs...),
+	// if the field is only owned by one field, use that field
+	// this is used by the organization owned mixin
+	if len(o.FieldNames) == 1 && o.FieldNames[0] == "owner_id" {
+		w.WhereP(sql.FieldIn(o.FieldNames[0], objectIDs...))
+		return
+	}
+
+	// otherwise we are using getting all objects that the user has access to
+	// and should use the id field
+	w.WhereP(sql.FieldIn("id", objectIDs...))
+}
+
+// defaultObjectHookCreateFunc is the default hook function for the object owned mixin
+// to add tuples to the database when creating an object
+var defaultObjectHookCreateFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
+	return hook.On(
+		hooks.HookObjectOwnedTuples(o.FieldNames, o.SkipUserTuple),
+		ent.OpCreate,
 	)
 }
 
@@ -192,15 +216,6 @@ var defaultObjectHookFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 				o.P(mx, objectIDs)
 			}
 
-			return next.Mutate(ctx, m)
-		})
-	}
-}
-
-// emptyObjectHookFunc is a hook function that does not add any hooks but satisfies the HookFunc type
-var emptyObjectHookFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
-	return func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 			return next.Mutate(ctx, m)
 		})
 	}

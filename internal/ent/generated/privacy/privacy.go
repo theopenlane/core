@@ -1695,6 +1695,54 @@ func (f TFASettingMutationRuleFunc) EvalMutation(ctx context.Context, m generate
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.TFASettingMutation", m)
 }
 
+// The TaskQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type TaskQueryRuleFunc func(context.Context, *generated.TaskQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f TaskQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.TaskQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.TaskQuery", q)
+}
+
+// The TaskMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type TaskMutationRuleFunc func(context.Context, *generated.TaskMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f TaskMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.TaskMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.TaskMutation", m)
+}
+
+// The TaskHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type TaskHistoryQueryRuleFunc func(context.Context, *generated.TaskHistoryQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f TaskHistoryQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.TaskHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.TaskHistoryQuery", q)
+}
+
+// The TaskHistoryMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type TaskHistoryMutationRuleFunc func(context.Context, *generated.TaskHistoryMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f TaskHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.TaskHistoryMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.TaskHistoryMutation", m)
+}
+
 // The TemplateQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type TemplateQueryRuleFunc func(context.Context, *generated.TemplateQuery) error
@@ -2078,6 +2126,10 @@ func queryFilter(q generated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *generated.TFASettingQuery:
 		return q.Filter(), nil
+	case *generated.TaskQuery:
+		return q.Filter(), nil
+	case *generated.TaskHistoryQuery:
+		return q.Filter(), nil
 	case *generated.TemplateQuery:
 		return q.Filter(), nil
 	case *generated.TemplateHistoryQuery:
@@ -2234,6 +2286,10 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 	case *generated.SubscriberMutation:
 		return m.Filter(), nil
 	case *generated.TFASettingMutation:
+		return m.Filter(), nil
+	case *generated.TaskMutation:
+		return m.Filter(), nil
+	case *generated.TaskHistoryMutation:
 		return m.Filter(), nil
 	case *generated.TemplateMutation:
 		return m.Filter(), nil

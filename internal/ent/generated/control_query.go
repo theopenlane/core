@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/task"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -39,6 +40,7 @@ type ControlQuery struct {
 	withNarratives             *NarrativeQuery
 	withRisks                  *RiskQuery
 	withActionplans            *ActionPlanQuery
+	withTasks                  *TaskQuery
 	withFKs                    bool
 	loadTotal                  []func(context.Context, []*Control) error
 	modifiers                  []func(*sql.Selector)
@@ -49,6 +51,7 @@ type ControlQuery struct {
 	withNamedNarratives        map[string]*NarrativeQuery
 	withNamedRisks             map[string]*RiskQuery
 	withNamedActionplans       map[string]*ActionPlanQuery
+	withNamedTasks             map[string]*TaskQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -260,6 +263,31 @@ func (cq *ControlQuery) QueryActionplans() *ActionPlanQuery {
 	return query
 }
 
+// QueryTasks chains the current query on the "tasks" edge.
+func (cq *ControlQuery) QueryTasks() *TaskQuery {
+	query := (&TaskClient{config: cq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := cq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := cq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, selector),
+			sqlgraph.To(task.Table, task.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, control.TasksTable, control.TasksPrimaryKey...),
+		)
+		schemaConfig := cq.schemaConfig
+		step.To.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.ControlTasks
+		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first Control entity from the query.
 // Returns a *NotFoundError when no Control was found.
 func (cq *ControlQuery) First(ctx context.Context) (*Control, error) {
@@ -459,6 +487,7 @@ func (cq *ControlQuery) Clone() *ControlQuery {
 		withNarratives:        cq.withNarratives.Clone(),
 		withRisks:             cq.withRisks.Clone(),
 		withActionplans:       cq.withActionplans.Clone(),
+		withTasks:             cq.withTasks.Clone(),
 		// clone intermediate query.
 		sql:       cq.sql.Clone(),
 		path:      cq.path,
@@ -543,6 +572,17 @@ func (cq *ControlQuery) WithActionplans(opts ...func(*ActionPlanQuery)) *Control
 	return cq
 }
 
+// WithTasks tells the query-builder to eager-load the nodes that are connected to
+// the "tasks" edge. The optional arguments are used to configure the query builder of the edge.
+func (cq *ControlQuery) WithTasks(opts ...func(*TaskQuery)) *ControlQuery {
+	query := (&TaskClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	cq.withTasks = query
+	return cq
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -622,7 +662,7 @@ func (cq *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 		nodes       = []*Control{}
 		withFKs     = cq.withFKs
 		_spec       = cq.querySpec()
-		loadedTypes = [7]bool{
+		loadedTypes = [8]bool{
 			cq.withProcedures != nil,
 			cq.withSubcontrols != nil,
 			cq.withControlobjectives != nil,
@@ -630,6 +670,7 @@ func (cq *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 			cq.withNarratives != nil,
 			cq.withRisks != nil,
 			cq.withActionplans != nil,
+			cq.withTasks != nil,
 		}
 	)
 	if withFKs {
@@ -709,6 +750,13 @@ func (cq *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 			return nil, err
 		}
 	}
+	if query := cq.withTasks; query != nil {
+		if err := cq.loadTasks(ctx, query, nodes,
+			func(n *Control) { n.Edges.Tasks = []*Task{} },
+			func(n *Control, e *Task) { n.Edges.Tasks = append(n.Edges.Tasks, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range cq.withNamedProcedures {
 		if err := cq.loadProcedures(ctx, query, nodes,
 			func(n *Control) { n.appendNamedProcedures(name) },
@@ -755,6 +803,13 @@ func (cq *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 		if err := cq.loadActionplans(ctx, query, nodes,
 			func(n *Control) { n.appendNamedActionplans(name) },
 			func(n *Control, e *ActionPlan) { n.appendNamedActionplans(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range cq.withNamedTasks {
+		if err := cq.loadTasks(ctx, query, nodes,
+			func(n *Control) { n.appendNamedTasks(name) },
+			func(n *Control, e *Task) { n.appendNamedTasks(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1169,6 +1224,68 @@ func (cq *ControlQuery) loadActionplans(ctx context.Context, query *ActionPlanQu
 	}
 	return nil
 }
+func (cq *ControlQuery) loadTasks(ctx context.Context, query *TaskQuery, nodes []*Control, init func(*Control), assign func(*Control, *Task)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Control)
+	nids := make(map[string]map[*Control]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(control.TasksTable)
+		joinT.Schema(cq.schemaConfig.ControlTasks)
+		s.Join(joinT).On(s.C(task.FieldID), joinT.C(control.TasksPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(control.TasksPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(control.TasksPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Control]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Task](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "tasks" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 
 func (cq *ControlQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := cq.querySpec()
@@ -1363,6 +1480,20 @@ func (cq *ControlQuery) WithNamedActionplans(name string, opts ...func(*ActionPl
 		cq.withNamedActionplans = make(map[string]*ActionPlanQuery)
 	}
 	cq.withNamedActionplans[name] = query
+	return cq
+}
+
+// WithNamedTasks tells the query-builder to eager-load the nodes that are connected to the "tasks"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (cq *ControlQuery) WithNamedTasks(name string, opts ...func(*TaskQuery)) *ControlQuery {
+	query := (&TaskClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if cq.withNamedTasks == nil {
+		cq.withNamedTasks = make(map[string]*TaskQuery)
+	}
+	cq.withNamedTasks[name] = query
 	return cq
 }
 

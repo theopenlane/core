@@ -77,6 +77,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/taskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
@@ -213,6 +215,8 @@ func checkColumn(table, column string) error {
 			subcontrolhistory.Table:             subcontrolhistory.ValidColumn,
 			subscriber.Table:                    subscriber.ValidColumn,
 			tfasetting.Table:                    tfasetting.ValidColumn,
+			task.Table:                          task.ValidColumn,
+			taskhistory.Table:                   taskhistory.ValidColumn,
 			template.Table:                      template.ValidColumn,
 			templatehistory.Table:               templatehistory.ValidColumn,
 			user.Table:                          user.ValidColumn,
