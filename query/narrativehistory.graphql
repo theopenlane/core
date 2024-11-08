@@ -1,0 +1,45 @@
+
+
+query GetAllNarrativeHistories {
+  narrativeHistories {
+    edges {
+      node {
+        createdAt
+        createdBy
+        description
+        details
+        historyTime
+        id
+        name
+        operation
+        ref
+        satisfies
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+query GetNarrativeHistories($where: NarrativeHistoryWhereInput) {
+  narrativeHistories(where: $where) {
+    edges {
+      node {
+        createdAt
+        createdBy
+        description
+        details
+        historyTime
+        id
+        name
+        operation
+        ref
+        satisfies
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}

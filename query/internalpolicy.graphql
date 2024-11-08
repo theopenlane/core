@@ -1,0 +1,153 @@
+
+mutation CreateBulkCSVInternalPolicy($input: Upload!) {
+  createBulkCSVInternalPolicy(input: $input) {
+    internalPolicies {
+      background
+      createdAt
+      createdBy
+      description
+      details
+      id
+      name
+      policyType
+      purposeAndScope
+      status
+      tags
+      updatedAt
+      updatedBy
+      version
+    }
+  }
+}
+
+mutation CreateBulkInternalPolicy($input: [CreateInternalPolicyInput!]) {
+  createBulkInternalPolicy(input: $input) {
+    internalPolicies {
+      background
+      createdAt
+      createdBy
+      description
+      details
+      id
+      name
+      policyType
+      purposeAndScope
+      status
+      tags
+      updatedAt
+      updatedBy
+      version
+    }
+  }
+}
+
+mutation CreateInternalPolicy($input: CreateInternalPolicyInput!) {
+  createInternalPolicy(input: $input) {
+    internalPolicy {
+      background
+      createdAt
+      createdBy
+      description
+      details
+      id
+      name
+      policyType
+      purposeAndScope
+      status
+      tags
+      updatedAt
+      updatedBy
+      version
+    }
+  }
+}
+
+mutation DeleteInternalPolicy($deleteInternalPolicyId: ID!) {
+  deleteInternalPolicy(id: $deleteInternalPolicyId) {
+    deletedID
+  }
+}
+
+query GetAllInternalPolicies {
+  internalPolicies {
+    edges {
+      node {
+        background
+        createdAt
+        createdBy
+        description
+        details
+        id
+        name
+        policyType
+        purposeAndScope
+        status
+        tags
+        updatedAt
+        updatedBy
+        version
+      }
+    }
+  }
+}
+query GetInternalPolicyByID($internalPolicyId: ID!) {
+  internalPolicy(id: $internalPolicyId) {
+    background
+    createdAt
+    createdBy
+    description
+    details
+    id
+    name
+    policyType
+    purposeAndScope
+    status
+    tags
+    updatedAt
+    updatedBy
+    version
+  }
+}
+
+query GetInternalPolicies($where: InternalPolicyWhereInput) {
+  internalPolicies(where: $where) {
+    edges {
+      node {
+        background
+        createdAt
+        createdBy
+        description
+        details
+        id
+        name
+        policyType
+        purposeAndScope
+        status
+        tags
+        updatedAt
+        updatedBy
+        version
+      }
+    }
+  }
+}
+mutation UpdateInternalPolicy($updateInternalPolicyId: ID!, $input: UpdateInternalPolicyInput!) {
+  updateInternalPolicy(id: $updateInternalPolicyId, input: $input) {
+    internalPolicy {
+      background
+      createdAt
+      createdBy
+      description
+      details
+      id
+      name
+      policyType
+      purposeAndScope
+      status
+      tags
+      updatedAt
+      updatedBy
+      version
+    }
+  }
+}

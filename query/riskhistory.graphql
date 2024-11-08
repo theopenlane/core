@@ -1,0 +1,57 @@
+
+
+query GetAllRiskHistories {
+  riskHistories {
+    edges {
+      node {
+        businessCosts
+        createdAt
+        createdBy
+        description
+        details
+        historyTime
+        id
+        impact
+        likelihood
+        mitigation
+        name
+        operation
+        ref
+        riskType
+        satisfies
+        status
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+query GetRiskHistories($where: RiskHistoryWhereInput) {
+  riskHistories(where: $where) {
+    edges {
+      node {
+        businessCosts
+        createdAt
+        createdBy
+        description
+        details
+        historyTime
+        id
+        impact
+        likelihood
+        mitigation
+        name
+        operation
+        ref
+        riskType
+        satisfies
+        status
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}

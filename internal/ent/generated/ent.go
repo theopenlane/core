@@ -12,9 +12,15 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/actionplanhistory"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/contacthistory"
+	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/controlhistory"
+	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/documentdatahistory"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
@@ -44,7 +50,11 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hushhistory"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/integrationhistory"
+	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/internal/ent/generated/internalpolicyhistory"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
+	"github.com/theopenlane/core/internal/ent/generated/narrative"
+	"github.com/theopenlane/core/internal/ent/generated/narrativehistory"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/notehistory"
 	"github.com/theopenlane/core/internal/ent/generated/oauthprovider"
@@ -58,6 +68,14 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgmembershiphistory"
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
+	"github.com/theopenlane/core/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/internal/ent/generated/procedurehistory"
+	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
+	"github.com/theopenlane/core/internal/ent/generated/standard"
+	"github.com/theopenlane/core/internal/ent/generated/standardhistory"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
@@ -130,8 +148,14 @@ func checkColumn(table, column string) error {
 	initCheck.Do(func() {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
 			apitoken.Table:                      apitoken.ValidColumn,
+			actionplan.Table:                    actionplan.ValidColumn,
+			actionplanhistory.Table:             actionplanhistory.ValidColumn,
 			contact.Table:                       contact.ValidColumn,
 			contacthistory.Table:                contacthistory.ValidColumn,
+			control.Table:                       control.ValidColumn,
+			controlhistory.Table:                controlhistory.ValidColumn,
+			controlobjective.Table:              controlobjective.ValidColumn,
+			controlobjectivehistory.Table:       controlobjectivehistory.ValidColumn,
 			documentdata.Table:                  documentdata.ValidColumn,
 			documentdatahistory.Table:           documentdatahistory.ValidColumn,
 			emailverificationtoken.Table:        emailverificationtoken.ValidColumn,
@@ -161,7 +185,11 @@ func checkColumn(table, column string) error {
 			hushhistory.Table:                   hushhistory.ValidColumn,
 			integration.Table:                   integration.ValidColumn,
 			integrationhistory.Table:            integrationhistory.ValidColumn,
+			internalpolicy.Table:                internalpolicy.ValidColumn,
+			internalpolicyhistory.Table:         internalpolicyhistory.ValidColumn,
 			invite.Table:                        invite.ValidColumn,
+			narrative.Table:                     narrative.ValidColumn,
+			narrativehistory.Table:              narrativehistory.ValidColumn,
 			note.Table:                          note.ValidColumn,
 			notehistory.Table:                   notehistory.ValidColumn,
 			oauthprovider.Table:                 oauthprovider.ValidColumn,
@@ -175,6 +203,14 @@ func checkColumn(table, column string) error {
 			organizationsettinghistory.Table:    organizationsettinghistory.ValidColumn,
 			passwordresettoken.Table:            passwordresettoken.ValidColumn,
 			personalaccesstoken.Table:           personalaccesstoken.ValidColumn,
+			procedure.Table:                     procedure.ValidColumn,
+			procedurehistory.Table:              procedurehistory.ValidColumn,
+			risk.Table:                          risk.ValidColumn,
+			riskhistory.Table:                   riskhistory.ValidColumn,
+			standard.Table:                      standard.ValidColumn,
+			standardhistory.Table:               standardhistory.ValidColumn,
+			subcontrol.Table:                    subcontrol.ValidColumn,
+			subcontrolhistory.Table:             subcontrolhistory.ValidColumn,
 			subscriber.Table:                    subscriber.ValidColumn,
 			tfasetting.Table:                    tfasetting.ValidColumn,
 			template.Table:                      template.ValidColumn,

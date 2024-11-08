@@ -1,0 +1,53 @@
+
+
+query GetAllInternalPolicyHistories {
+  internalPolicyHistories {
+    edges {
+      node {
+        background
+        createdAt
+        createdBy
+        description
+        details
+        historyTime
+        id
+        name
+        operation
+        policyType
+        purposeAndScope
+        ref
+        status
+        tags
+        updatedAt
+        updatedBy
+        version
+      }
+    }
+  }
+}
+
+query GetInternalPolicyHistories($where: InternalPolicyHistoryWhereInput) {
+  internalPolicyHistories(where: $where) {
+    edges {
+      node {
+        background
+        createdAt
+        createdBy
+        description
+        details
+        historyTime
+        id
+        name
+        operation
+        policyType
+        purposeAndScope
+        ref
+        status
+        tags
+        updatedAt
+        updatedBy
+        version
+      }
+    }
+  }
+}

@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 )
 
 // NoteCreate is the builder for creating a Note entity.
@@ -182,6 +183,21 @@ func (nc *NoteCreate) SetNillableEntityID(id *string) *NoteCreate {
 // SetEntity sets the "entity" edge to the Entity entity.
 func (nc *NoteCreate) SetEntity(e *Entity) *NoteCreate {
 	return nc.SetEntityID(e.ID)
+}
+
+// AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
+func (nc *NoteCreate) AddSubcontrolIDs(ids ...string) *NoteCreate {
+	nc.mutation.AddSubcontrolIDs(ids...)
+	return nc
+}
+
+// AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
+func (nc *NoteCreate) AddSubcontrols(s ...*Subcontrol) *NoteCreate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return nc.AddSubcontrolIDs(ids...)
 }
 
 // Mutation returns the NoteMutation object of the builder.
@@ -380,6 +396,23 @@ func (nc *NoteCreate) createSpec() (*Note, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.entity_notes = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := nc.mutation.SubcontrolsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   note.SubcontrolsTable,
+			Columns: []string{note.SubcontrolsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nc.schemaConfig.Subcontrol
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

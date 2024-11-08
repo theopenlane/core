@@ -39,7 +39,7 @@ func (Note) Mixin() []ent.Mixin {
 		emixin.IDMixin{},
 		mixin.SoftDeleteMixin{},
 		emixin.TagMixin{},
-		NewOrgOwnMixinWithRef("notes"),
+		NewOrgOwnMixinWithRef("notes"), // TODO: update to object owned mixin instead of org owned
 	}
 }
 
@@ -49,6 +49,7 @@ func (Note) Edges() []ent.Edge {
 		edge.From("entity", Entity.Type).
 			Unique().
 			Ref("notes"),
+		edge.To("subcontrols", Subcontrol.Type),
 	}
 }
 

@@ -121,6 +121,198 @@ func (c *APITokenUpdateOne) SetInput(i UpdateAPITokenInput) *APITokenUpdateOne {
 	return c
 }
 
+// CreateActionPlanInput represents a mutation input for creating actionplans.
+type CreateActionPlanInput struct {
+	Tags        []string
+	Name        string
+	Description *string
+	Status      *string
+	DueDate     *time.Time
+	Priority    *string
+	Source      *string
+	Details     map[string]interface{}
+	StandardIDs []string
+	RiskIDs     []string
+	ControlIDs  []string
+	UserIDs     []string
+}
+
+// Mutate applies the CreateActionPlanInput on the ActionPlanMutation builder.
+func (i *CreateActionPlanInput) Mutate(m *ActionPlanMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	m.SetName(i.Name)
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if v := i.DueDate; v != nil {
+		m.SetDueDate(*v)
+	}
+	if v := i.Priority; v != nil {
+		m.SetPriority(*v)
+	}
+	if v := i.Source; v != nil {
+		m.SetSource(*v)
+	}
+	if v := i.Details; v != nil {
+		m.SetDetails(v)
+	}
+	if v := i.StandardIDs; len(v) > 0 {
+		m.AddStandardIDs(v...)
+	}
+	if v := i.RiskIDs; len(v) > 0 {
+		m.AddRiskIDs(v...)
+	}
+	if v := i.ControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
+	if v := i.UserIDs; len(v) > 0 {
+		m.AddUserIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateActionPlanInput on the ActionPlanCreate builder.
+func (c *ActionPlanCreate) SetInput(i CreateActionPlanInput) *ActionPlanCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateActionPlanInput represents a mutation input for updating actionplans.
+type UpdateActionPlanInput struct {
+	ClearTags         bool
+	Tags              []string
+	AppendTags        []string
+	Name              *string
+	ClearDescription  bool
+	Description       *string
+	ClearStatus       bool
+	Status            *string
+	ClearDueDate      bool
+	DueDate           *time.Time
+	ClearPriority     bool
+	Priority          *string
+	ClearSource       bool
+	Source            *string
+	ClearDetails      bool
+	Details           map[string]interface{}
+	ClearStandard     bool
+	AddStandardIDs    []string
+	RemoveStandardIDs []string
+	ClearRisk         bool
+	AddRiskIDs        []string
+	RemoveRiskIDs     []string
+	ClearControl      bool
+	AddControlIDs     []string
+	RemoveControlIDs  []string
+	ClearUser         bool
+	AddUserIDs        []string
+	RemoveUserIDs     []string
+}
+
+// Mutate applies the UpdateActionPlanInput on the ActionPlanMutation builder.
+func (i *UpdateActionPlanInput) Mutate(m *ActionPlanMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if v := i.Name; v != nil {
+		m.SetName(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if i.ClearStatus {
+		m.ClearStatus()
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if i.ClearDueDate {
+		m.ClearDueDate()
+	}
+	if v := i.DueDate; v != nil {
+		m.SetDueDate(*v)
+	}
+	if i.ClearPriority {
+		m.ClearPriority()
+	}
+	if v := i.Priority; v != nil {
+		m.SetPriority(*v)
+	}
+	if i.ClearSource {
+		m.ClearSource()
+	}
+	if v := i.Source; v != nil {
+		m.SetSource(*v)
+	}
+	if i.ClearDetails {
+		m.ClearDetails()
+	}
+	if v := i.Details; v != nil {
+		m.SetDetails(v)
+	}
+	if i.ClearStandard {
+		m.ClearStandard()
+	}
+	if v := i.AddStandardIDs; len(v) > 0 {
+		m.AddStandardIDs(v...)
+	}
+	if v := i.RemoveStandardIDs; len(v) > 0 {
+		m.RemoveStandardIDs(v...)
+	}
+	if i.ClearRisk {
+		m.ClearRisk()
+	}
+	if v := i.AddRiskIDs; len(v) > 0 {
+		m.AddRiskIDs(v...)
+	}
+	if v := i.RemoveRiskIDs; len(v) > 0 {
+		m.RemoveRiskIDs(v...)
+	}
+	if i.ClearControl {
+		m.ClearControl()
+	}
+	if v := i.AddControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
+	if v := i.RemoveControlIDs; len(v) > 0 {
+		m.RemoveControlIDs(v...)
+	}
+	if i.ClearUser {
+		m.ClearUser()
+	}
+	if v := i.AddUserIDs; len(v) > 0 {
+		m.AddUserIDs(v...)
+	}
+	if v := i.RemoveUserIDs; len(v) > 0 {
+		m.RemoveUserIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateActionPlanInput on the ActionPlanUpdate builder.
+func (c *ActionPlanUpdate) SetInput(i UpdateActionPlanInput) *ActionPlanUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateActionPlanInput on the ActionPlanUpdateOne builder.
+func (c *ActionPlanUpdateOne) SetInput(i UpdateActionPlanInput) *ActionPlanUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
 // CreateContactInput represents a mutation input for creating contacts.
 type CreateContactInput struct {
 	Tags        []string
@@ -285,6 +477,594 @@ func (c *ContactUpdate) SetInput(i UpdateContactInput) *ContactUpdate {
 
 // SetInput applies the change-set in the UpdateContactInput on the ContactUpdateOne builder.
 func (c *ContactUpdateOne) SetInput(i UpdateContactInput) *ContactUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateControlInput represents a mutation input for creating controls.
+type CreateControlInput struct {
+	Tags                []string
+	Name                string
+	Description         *string
+	Status              *string
+	ControlType         *string
+	Version             *string
+	ControlNumber       *string
+	Family              *string
+	Class               *string
+	Source              *string
+	Satisfies           *string
+	MappedFrameworks    *string
+	Details             map[string]interface{}
+	ProcedureIDs        []string
+	SubcontrolIDs       []string
+	ControlobjectiveIDs []string
+	StandardIDs         []string
+	NarrativeIDs        []string
+	RiskIDs             []string
+	ActionplanIDs       []string
+}
+
+// Mutate applies the CreateControlInput on the ControlMutation builder.
+func (i *CreateControlInput) Mutate(m *ControlMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	m.SetName(i.Name)
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if v := i.ControlType; v != nil {
+		m.SetControlType(*v)
+	}
+	if v := i.Version; v != nil {
+		m.SetVersion(*v)
+	}
+	if v := i.ControlNumber; v != nil {
+		m.SetControlNumber(*v)
+	}
+	if v := i.Family; v != nil {
+		m.SetFamily(*v)
+	}
+	if v := i.Class; v != nil {
+		m.SetClass(*v)
+	}
+	if v := i.Source; v != nil {
+		m.SetSource(*v)
+	}
+	if v := i.Satisfies; v != nil {
+		m.SetSatisfies(*v)
+	}
+	if v := i.MappedFrameworks; v != nil {
+		m.SetMappedFrameworks(*v)
+	}
+	if v := i.Details; v != nil {
+		m.SetDetails(v)
+	}
+	if v := i.ProcedureIDs; len(v) > 0 {
+		m.AddProcedureIDs(v...)
+	}
+	if v := i.SubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
+	if v := i.ControlobjectiveIDs; len(v) > 0 {
+		m.AddControlobjectiveIDs(v...)
+	}
+	if v := i.StandardIDs; len(v) > 0 {
+		m.AddStandardIDs(v...)
+	}
+	if v := i.NarrativeIDs; len(v) > 0 {
+		m.AddNarrativeIDs(v...)
+	}
+	if v := i.RiskIDs; len(v) > 0 {
+		m.AddRiskIDs(v...)
+	}
+	if v := i.ActionplanIDs; len(v) > 0 {
+		m.AddActionplanIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateControlInput on the ControlCreate builder.
+func (c *ControlCreate) SetInput(i CreateControlInput) *ControlCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateControlInput represents a mutation input for updating controls.
+type UpdateControlInput struct {
+	ClearTags                 bool
+	Tags                      []string
+	AppendTags                []string
+	Name                      *string
+	ClearDescription          bool
+	Description               *string
+	ClearStatus               bool
+	Status                    *string
+	ClearControlType          bool
+	ControlType               *string
+	ClearVersion              bool
+	Version                   *string
+	ClearControlNumber        bool
+	ControlNumber             *string
+	ClearFamily               bool
+	Family                    *string
+	ClearClass                bool
+	Class                     *string
+	ClearSource               bool
+	Source                    *string
+	ClearSatisfies            bool
+	Satisfies                 *string
+	ClearMappedFrameworks     bool
+	MappedFrameworks          *string
+	ClearDetails              bool
+	Details                   map[string]interface{}
+	ClearProcedures           bool
+	AddProcedureIDs           []string
+	RemoveProcedureIDs        []string
+	ClearSubcontrols          bool
+	AddSubcontrolIDs          []string
+	RemoveSubcontrolIDs       []string
+	ClearControlobjectives    bool
+	AddControlobjectiveIDs    []string
+	RemoveControlobjectiveIDs []string
+	ClearStandard             bool
+	AddStandardIDs            []string
+	RemoveStandardIDs         []string
+	ClearNarratives           bool
+	AddNarrativeIDs           []string
+	RemoveNarrativeIDs        []string
+	ClearRisks                bool
+	AddRiskIDs                []string
+	RemoveRiskIDs             []string
+	ClearActionplans          bool
+	AddActionplanIDs          []string
+	RemoveActionplanIDs       []string
+}
+
+// Mutate applies the UpdateControlInput on the ControlMutation builder.
+func (i *UpdateControlInput) Mutate(m *ControlMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if v := i.Name; v != nil {
+		m.SetName(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if i.ClearStatus {
+		m.ClearStatus()
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if i.ClearControlType {
+		m.ClearControlType()
+	}
+	if v := i.ControlType; v != nil {
+		m.SetControlType(*v)
+	}
+	if i.ClearVersion {
+		m.ClearVersion()
+	}
+	if v := i.Version; v != nil {
+		m.SetVersion(*v)
+	}
+	if i.ClearControlNumber {
+		m.ClearControlNumber()
+	}
+	if v := i.ControlNumber; v != nil {
+		m.SetControlNumber(*v)
+	}
+	if i.ClearFamily {
+		m.ClearFamily()
+	}
+	if v := i.Family; v != nil {
+		m.SetFamily(*v)
+	}
+	if i.ClearClass {
+		m.ClearClass()
+	}
+	if v := i.Class; v != nil {
+		m.SetClass(*v)
+	}
+	if i.ClearSource {
+		m.ClearSource()
+	}
+	if v := i.Source; v != nil {
+		m.SetSource(*v)
+	}
+	if i.ClearSatisfies {
+		m.ClearSatisfies()
+	}
+	if v := i.Satisfies; v != nil {
+		m.SetSatisfies(*v)
+	}
+	if i.ClearMappedFrameworks {
+		m.ClearMappedFrameworks()
+	}
+	if v := i.MappedFrameworks; v != nil {
+		m.SetMappedFrameworks(*v)
+	}
+	if i.ClearDetails {
+		m.ClearDetails()
+	}
+	if v := i.Details; v != nil {
+		m.SetDetails(v)
+	}
+	if i.ClearProcedures {
+		m.ClearProcedures()
+	}
+	if v := i.AddProcedureIDs; len(v) > 0 {
+		m.AddProcedureIDs(v...)
+	}
+	if v := i.RemoveProcedureIDs; len(v) > 0 {
+		m.RemoveProcedureIDs(v...)
+	}
+	if i.ClearSubcontrols {
+		m.ClearSubcontrols()
+	}
+	if v := i.AddSubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
+	if v := i.RemoveSubcontrolIDs; len(v) > 0 {
+		m.RemoveSubcontrolIDs(v...)
+	}
+	if i.ClearControlobjectives {
+		m.ClearControlobjectives()
+	}
+	if v := i.AddControlobjectiveIDs; len(v) > 0 {
+		m.AddControlobjectiveIDs(v...)
+	}
+	if v := i.RemoveControlobjectiveIDs; len(v) > 0 {
+		m.RemoveControlobjectiveIDs(v...)
+	}
+	if i.ClearStandard {
+		m.ClearStandard()
+	}
+	if v := i.AddStandardIDs; len(v) > 0 {
+		m.AddStandardIDs(v...)
+	}
+	if v := i.RemoveStandardIDs; len(v) > 0 {
+		m.RemoveStandardIDs(v...)
+	}
+	if i.ClearNarratives {
+		m.ClearNarratives()
+	}
+	if v := i.AddNarrativeIDs; len(v) > 0 {
+		m.AddNarrativeIDs(v...)
+	}
+	if v := i.RemoveNarrativeIDs; len(v) > 0 {
+		m.RemoveNarrativeIDs(v...)
+	}
+	if i.ClearRisks {
+		m.ClearRisks()
+	}
+	if v := i.AddRiskIDs; len(v) > 0 {
+		m.AddRiskIDs(v...)
+	}
+	if v := i.RemoveRiskIDs; len(v) > 0 {
+		m.RemoveRiskIDs(v...)
+	}
+	if i.ClearActionplans {
+		m.ClearActionplans()
+	}
+	if v := i.AddActionplanIDs; len(v) > 0 {
+		m.AddActionplanIDs(v...)
+	}
+	if v := i.RemoveActionplanIDs; len(v) > 0 {
+		m.RemoveActionplanIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateControlInput on the ControlUpdate builder.
+func (c *ControlUpdate) SetInput(i UpdateControlInput) *ControlUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateControlInput on the ControlUpdateOne builder.
+func (c *ControlUpdateOne) SetInput(i UpdateControlInput) *ControlUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateControlObjectiveInput represents a mutation input for creating controlobjectives.
+type CreateControlObjectiveInput struct {
+	Tags                 []string
+	Name                 string
+	Description          *string
+	Status               *string
+	ControlObjectiveType *string
+	Version              *string
+	ControlNumber        *string
+	Family               *string
+	Class                *string
+	Source               *string
+	MappedFrameworks     *string
+	Details              map[string]interface{}
+	PolicyIDs            []string
+	ControlIDs           []string
+	ProcedureIDs         []string
+	RiskIDs              []string
+	SubcontrolIDs        []string
+	StandardIDs          []string
+	NarrativeIDs         []string
+}
+
+// Mutate applies the CreateControlObjectiveInput on the ControlObjectiveMutation builder.
+func (i *CreateControlObjectiveInput) Mutate(m *ControlObjectiveMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	m.SetName(i.Name)
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if v := i.ControlObjectiveType; v != nil {
+		m.SetControlObjectiveType(*v)
+	}
+	if v := i.Version; v != nil {
+		m.SetVersion(*v)
+	}
+	if v := i.ControlNumber; v != nil {
+		m.SetControlNumber(*v)
+	}
+	if v := i.Family; v != nil {
+		m.SetFamily(*v)
+	}
+	if v := i.Class; v != nil {
+		m.SetClass(*v)
+	}
+	if v := i.Source; v != nil {
+		m.SetSource(*v)
+	}
+	if v := i.MappedFrameworks; v != nil {
+		m.SetMappedFrameworks(*v)
+	}
+	if v := i.Details; v != nil {
+		m.SetDetails(v)
+	}
+	if v := i.PolicyIDs; len(v) > 0 {
+		m.AddPolicyIDs(v...)
+	}
+	if v := i.ControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
+	if v := i.ProcedureIDs; len(v) > 0 {
+		m.AddProcedureIDs(v...)
+	}
+	if v := i.RiskIDs; len(v) > 0 {
+		m.AddRiskIDs(v...)
+	}
+	if v := i.SubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
+	if v := i.StandardIDs; len(v) > 0 {
+		m.AddStandardIDs(v...)
+	}
+	if v := i.NarrativeIDs; len(v) > 0 {
+		m.AddNarrativeIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateControlObjectiveInput on the ControlObjectiveCreate builder.
+func (c *ControlObjectiveCreate) SetInput(i CreateControlObjectiveInput) *ControlObjectiveCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateControlObjectiveInput represents a mutation input for updating controlobjectives.
+type UpdateControlObjectiveInput struct {
+	ClearTags                 bool
+	Tags                      []string
+	AppendTags                []string
+	Name                      *string
+	ClearDescription          bool
+	Description               *string
+	ClearStatus               bool
+	Status                    *string
+	ClearControlObjectiveType bool
+	ControlObjectiveType      *string
+	ClearVersion              bool
+	Version                   *string
+	ClearControlNumber        bool
+	ControlNumber             *string
+	ClearFamily               bool
+	Family                    *string
+	ClearClass                bool
+	Class                     *string
+	ClearSource               bool
+	Source                    *string
+	ClearMappedFrameworks     bool
+	MappedFrameworks          *string
+	ClearDetails              bool
+	Details                   map[string]interface{}
+	ClearPolicy               bool
+	AddPolicyIDs              []string
+	RemovePolicyIDs           []string
+	ClearControls             bool
+	AddControlIDs             []string
+	RemoveControlIDs          []string
+	ClearProcedures           bool
+	AddProcedureIDs           []string
+	RemoveProcedureIDs        []string
+	ClearRisks                bool
+	AddRiskIDs                []string
+	RemoveRiskIDs             []string
+	ClearSubcontrols          bool
+	AddSubcontrolIDs          []string
+	RemoveSubcontrolIDs       []string
+	ClearStandard             bool
+	AddStandardIDs            []string
+	RemoveStandardIDs         []string
+	ClearNarratives           bool
+	AddNarrativeIDs           []string
+	RemoveNarrativeIDs        []string
+}
+
+// Mutate applies the UpdateControlObjectiveInput on the ControlObjectiveMutation builder.
+func (i *UpdateControlObjectiveInput) Mutate(m *ControlObjectiveMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if v := i.Name; v != nil {
+		m.SetName(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if i.ClearStatus {
+		m.ClearStatus()
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if i.ClearControlObjectiveType {
+		m.ClearControlObjectiveType()
+	}
+	if v := i.ControlObjectiveType; v != nil {
+		m.SetControlObjectiveType(*v)
+	}
+	if i.ClearVersion {
+		m.ClearVersion()
+	}
+	if v := i.Version; v != nil {
+		m.SetVersion(*v)
+	}
+	if i.ClearControlNumber {
+		m.ClearControlNumber()
+	}
+	if v := i.ControlNumber; v != nil {
+		m.SetControlNumber(*v)
+	}
+	if i.ClearFamily {
+		m.ClearFamily()
+	}
+	if v := i.Family; v != nil {
+		m.SetFamily(*v)
+	}
+	if i.ClearClass {
+		m.ClearClass()
+	}
+	if v := i.Class; v != nil {
+		m.SetClass(*v)
+	}
+	if i.ClearSource {
+		m.ClearSource()
+	}
+	if v := i.Source; v != nil {
+		m.SetSource(*v)
+	}
+	if i.ClearMappedFrameworks {
+		m.ClearMappedFrameworks()
+	}
+	if v := i.MappedFrameworks; v != nil {
+		m.SetMappedFrameworks(*v)
+	}
+	if i.ClearDetails {
+		m.ClearDetails()
+	}
+	if v := i.Details; v != nil {
+		m.SetDetails(v)
+	}
+	if i.ClearPolicy {
+		m.ClearPolicy()
+	}
+	if v := i.AddPolicyIDs; len(v) > 0 {
+		m.AddPolicyIDs(v...)
+	}
+	if v := i.RemovePolicyIDs; len(v) > 0 {
+		m.RemovePolicyIDs(v...)
+	}
+	if i.ClearControls {
+		m.ClearControls()
+	}
+	if v := i.AddControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
+	if v := i.RemoveControlIDs; len(v) > 0 {
+		m.RemoveControlIDs(v...)
+	}
+	if i.ClearProcedures {
+		m.ClearProcedures()
+	}
+	if v := i.AddProcedureIDs; len(v) > 0 {
+		m.AddProcedureIDs(v...)
+	}
+	if v := i.RemoveProcedureIDs; len(v) > 0 {
+		m.RemoveProcedureIDs(v...)
+	}
+	if i.ClearRisks {
+		m.ClearRisks()
+	}
+	if v := i.AddRiskIDs; len(v) > 0 {
+		m.AddRiskIDs(v...)
+	}
+	if v := i.RemoveRiskIDs; len(v) > 0 {
+		m.RemoveRiskIDs(v...)
+	}
+	if i.ClearSubcontrols {
+		m.ClearSubcontrols()
+	}
+	if v := i.AddSubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
+	if v := i.RemoveSubcontrolIDs; len(v) > 0 {
+		m.RemoveSubcontrolIDs(v...)
+	}
+	if i.ClearStandard {
+		m.ClearStandard()
+	}
+	if v := i.AddStandardIDs; len(v) > 0 {
+		m.AddStandardIDs(v...)
+	}
+	if v := i.RemoveStandardIDs; len(v) > 0 {
+		m.RemoveStandardIDs(v...)
+	}
+	if i.ClearNarratives {
+		m.ClearNarratives()
+	}
+	if v := i.AddNarrativeIDs; len(v) > 0 {
+		m.AddNarrativeIDs(v...)
+	}
+	if v := i.RemoveNarrativeIDs; len(v) > 0 {
+		m.RemoveNarrativeIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateControlObjectiveInput on the ControlObjectiveUpdate builder.
+func (c *ControlObjectiveUpdate) SetInput(i UpdateControlObjectiveInput) *ControlObjectiveUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateControlObjectiveInput on the ControlObjectiveUpdateOne builder.
+func (c *ControlObjectiveUpdateOne) SetInput(i UpdateControlObjectiveInput) *ControlObjectiveUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }
@@ -2479,6 +3259,204 @@ func (c *IntegrationUpdateOne) SetInput(i UpdateIntegrationInput) *IntegrationUp
 	return c
 }
 
+// CreateInternalPolicyInput represents a mutation input for creating internalpolicies.
+type CreateInternalPolicyInput struct {
+	Tags                []string
+	Name                string
+	Description         string
+	Status              *string
+	PolicyType          *string
+	Version             *string
+	PurposeAndScope     *string
+	Background          *string
+	Details             map[string]interface{}
+	ControlobjectiveIDs []string
+	ControlIDs          []string
+	ProcedureIDs        []string
+	NarrativeIDs        []string
+}
+
+// Mutate applies the CreateInternalPolicyInput on the InternalPolicyMutation builder.
+func (i *CreateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	m.SetName(i.Name)
+	m.SetDescription(i.Description)
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if v := i.PolicyType; v != nil {
+		m.SetPolicyType(*v)
+	}
+	if v := i.Version; v != nil {
+		m.SetVersion(*v)
+	}
+	if v := i.PurposeAndScope; v != nil {
+		m.SetPurposeAndScope(*v)
+	}
+	if v := i.Background; v != nil {
+		m.SetBackground(*v)
+	}
+	if v := i.Details; v != nil {
+		m.SetDetails(v)
+	}
+	if v := i.ControlobjectiveIDs; len(v) > 0 {
+		m.AddControlobjectiveIDs(v...)
+	}
+	if v := i.ControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
+	if v := i.ProcedureIDs; len(v) > 0 {
+		m.AddProcedureIDs(v...)
+	}
+	if v := i.NarrativeIDs; len(v) > 0 {
+		m.AddNarrativeIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateInternalPolicyInput on the InternalPolicyCreate builder.
+func (c *InternalPolicyCreate) SetInput(i CreateInternalPolicyInput) *InternalPolicyCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateInternalPolicyInput represents a mutation input for updating internalpolicies.
+type UpdateInternalPolicyInput struct {
+	ClearTags                 bool
+	Tags                      []string
+	AppendTags                []string
+	Name                      *string
+	Description               *string
+	ClearStatus               bool
+	Status                    *string
+	ClearPolicyType           bool
+	PolicyType                *string
+	ClearVersion              bool
+	Version                   *string
+	ClearPurposeAndScope      bool
+	PurposeAndScope           *string
+	ClearBackground           bool
+	Background                *string
+	ClearDetails              bool
+	Details                   map[string]interface{}
+	ClearControlobjectives    bool
+	AddControlobjectiveIDs    []string
+	RemoveControlobjectiveIDs []string
+	ClearControls             bool
+	AddControlIDs             []string
+	RemoveControlIDs          []string
+	ClearProcedures           bool
+	AddProcedureIDs           []string
+	RemoveProcedureIDs        []string
+	ClearNarratives           bool
+	AddNarrativeIDs           []string
+	RemoveNarrativeIDs        []string
+}
+
+// Mutate applies the UpdateInternalPolicyInput on the InternalPolicyMutation builder.
+func (i *UpdateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if v := i.Name; v != nil {
+		m.SetName(*v)
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if i.ClearStatus {
+		m.ClearStatus()
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if i.ClearPolicyType {
+		m.ClearPolicyType()
+	}
+	if v := i.PolicyType; v != nil {
+		m.SetPolicyType(*v)
+	}
+	if i.ClearVersion {
+		m.ClearVersion()
+	}
+	if v := i.Version; v != nil {
+		m.SetVersion(*v)
+	}
+	if i.ClearPurposeAndScope {
+		m.ClearPurposeAndScope()
+	}
+	if v := i.PurposeAndScope; v != nil {
+		m.SetPurposeAndScope(*v)
+	}
+	if i.ClearBackground {
+		m.ClearBackground()
+	}
+	if v := i.Background; v != nil {
+		m.SetBackground(*v)
+	}
+	if i.ClearDetails {
+		m.ClearDetails()
+	}
+	if v := i.Details; v != nil {
+		m.SetDetails(v)
+	}
+	if i.ClearControlobjectives {
+		m.ClearControlobjectives()
+	}
+	if v := i.AddControlobjectiveIDs; len(v) > 0 {
+		m.AddControlobjectiveIDs(v...)
+	}
+	if v := i.RemoveControlobjectiveIDs; len(v) > 0 {
+		m.RemoveControlobjectiveIDs(v...)
+	}
+	if i.ClearControls {
+		m.ClearControls()
+	}
+	if v := i.AddControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
+	if v := i.RemoveControlIDs; len(v) > 0 {
+		m.RemoveControlIDs(v...)
+	}
+	if i.ClearProcedures {
+		m.ClearProcedures()
+	}
+	if v := i.AddProcedureIDs; len(v) > 0 {
+		m.AddProcedureIDs(v...)
+	}
+	if v := i.RemoveProcedureIDs; len(v) > 0 {
+		m.RemoveProcedureIDs(v...)
+	}
+	if i.ClearNarratives {
+		m.ClearNarratives()
+	}
+	if v := i.AddNarrativeIDs; len(v) > 0 {
+		m.AddNarrativeIDs(v...)
+	}
+	if v := i.RemoveNarrativeIDs; len(v) > 0 {
+		m.RemoveNarrativeIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateInternalPolicyInput on the InternalPolicyUpdate builder.
+func (c *InternalPolicyUpdate) SetInput(i UpdateInternalPolicyInput) *InternalPolicyUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateInternalPolicyInput on the InternalPolicyUpdateOne builder.
+func (c *InternalPolicyUpdateOne) SetInput(i UpdateInternalPolicyInput) *InternalPolicyUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
 // CreateInviteInput represents a mutation input for creating invites.
 type CreateInviteInput struct {
 	Expires      *time.Time
@@ -2583,12 +3561,169 @@ func (c *InviteUpdateOne) SetInput(i UpdateInviteInput) *InviteUpdateOne {
 	return c
 }
 
+// CreateNarrativeInput represents a mutation input for creating narratives.
+type CreateNarrativeInput struct {
+	Tags                []string
+	Name                string
+	Description         *string
+	Satisfies           *string
+	Details             map[string]interface{}
+	PolicyIDs           []string
+	ControlIDs          []string
+	ProcedureIDs        []string
+	ControlobjectiveIDs []string
+}
+
+// Mutate applies the CreateNarrativeInput on the NarrativeMutation builder.
+func (i *CreateNarrativeInput) Mutate(m *NarrativeMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	m.SetName(i.Name)
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.Satisfies; v != nil {
+		m.SetSatisfies(*v)
+	}
+	if v := i.Details; v != nil {
+		m.SetDetails(v)
+	}
+	if v := i.PolicyIDs; len(v) > 0 {
+		m.AddPolicyIDs(v...)
+	}
+	if v := i.ControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
+	if v := i.ProcedureIDs; len(v) > 0 {
+		m.AddProcedureIDs(v...)
+	}
+	if v := i.ControlobjectiveIDs; len(v) > 0 {
+		m.AddControlobjectiveIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateNarrativeInput on the NarrativeCreate builder.
+func (c *NarrativeCreate) SetInput(i CreateNarrativeInput) *NarrativeCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateNarrativeInput represents a mutation input for updating narratives.
+type UpdateNarrativeInput struct {
+	ClearTags                 bool
+	Tags                      []string
+	AppendTags                []string
+	Name                      *string
+	ClearDescription          bool
+	Description               *string
+	ClearSatisfies            bool
+	Satisfies                 *string
+	ClearDetails              bool
+	Details                   map[string]interface{}
+	ClearPolicy               bool
+	AddPolicyIDs              []string
+	RemovePolicyIDs           []string
+	ClearControl              bool
+	AddControlIDs             []string
+	RemoveControlIDs          []string
+	ClearProcedure            bool
+	AddProcedureIDs           []string
+	RemoveProcedureIDs        []string
+	ClearControlobjective     bool
+	AddControlobjectiveIDs    []string
+	RemoveControlobjectiveIDs []string
+}
+
+// Mutate applies the UpdateNarrativeInput on the NarrativeMutation builder.
+func (i *UpdateNarrativeInput) Mutate(m *NarrativeMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if v := i.Name; v != nil {
+		m.SetName(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if i.ClearSatisfies {
+		m.ClearSatisfies()
+	}
+	if v := i.Satisfies; v != nil {
+		m.SetSatisfies(*v)
+	}
+	if i.ClearDetails {
+		m.ClearDetails()
+	}
+	if v := i.Details; v != nil {
+		m.SetDetails(v)
+	}
+	if i.ClearPolicy {
+		m.ClearPolicy()
+	}
+	if v := i.AddPolicyIDs; len(v) > 0 {
+		m.AddPolicyIDs(v...)
+	}
+	if v := i.RemovePolicyIDs; len(v) > 0 {
+		m.RemovePolicyIDs(v...)
+	}
+	if i.ClearControl {
+		m.ClearControl()
+	}
+	if v := i.AddControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
+	if v := i.RemoveControlIDs; len(v) > 0 {
+		m.RemoveControlIDs(v...)
+	}
+	if i.ClearProcedure {
+		m.ClearProcedure()
+	}
+	if v := i.AddProcedureIDs; len(v) > 0 {
+		m.AddProcedureIDs(v...)
+	}
+	if v := i.RemoveProcedureIDs; len(v) > 0 {
+		m.RemoveProcedureIDs(v...)
+	}
+	if i.ClearControlobjective {
+		m.ClearControlobjective()
+	}
+	if v := i.AddControlobjectiveIDs; len(v) > 0 {
+		m.AddControlobjectiveIDs(v...)
+	}
+	if v := i.RemoveControlobjectiveIDs; len(v) > 0 {
+		m.RemoveControlobjectiveIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateNarrativeInput on the NarrativeUpdate builder.
+func (c *NarrativeUpdate) SetInput(i UpdateNarrativeInput) *NarrativeUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateNarrativeInput on the NarrativeUpdateOne builder.
+func (c *NarrativeUpdateOne) SetInput(i UpdateNarrativeInput) *NarrativeUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
 // CreateNoteInput represents a mutation input for creating notes.
 type CreateNoteInput struct {
-	Tags     []string
-	Text     string
-	OwnerID  *string
-	EntityID *string
+	Tags          []string
+	Text          string
+	OwnerID       *string
+	EntityID      *string
+	SubcontrolIDs []string
 }
 
 // Mutate applies the CreateNoteInput on the NoteMutation builder.
@@ -2603,6 +3738,9 @@ func (i *CreateNoteInput) Mutate(m *NoteMutation) {
 	if v := i.EntityID; v != nil {
 		m.SetEntityID(*v)
 	}
+	if v := i.SubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateNoteInput on the NoteCreate builder.
@@ -2613,14 +3751,17 @@ func (c *NoteCreate) SetInput(i CreateNoteInput) *NoteCreate {
 
 // UpdateNoteInput represents a mutation input for updating notes.
 type UpdateNoteInput struct {
-	ClearTags   bool
-	Tags        []string
-	AppendTags  []string
-	Text        *string
-	ClearOwner  bool
-	OwnerID     *string
-	ClearEntity bool
-	EntityID    *string
+	ClearTags           bool
+	Tags                []string
+	AppendTags          []string
+	Text                *string
+	ClearOwner          bool
+	OwnerID             *string
+	ClearEntity         bool
+	EntityID            *string
+	ClearSubcontrols    bool
+	AddSubcontrolIDs    []string
+	RemoveSubcontrolIDs []string
 }
 
 // Mutate applies the UpdateNoteInput on the NoteMutation builder.
@@ -2648,6 +3789,15 @@ func (i *UpdateNoteInput) Mutate(m *NoteMutation) {
 	}
 	if v := i.EntityID; v != nil {
 		m.SetEntityID(*v)
+	}
+	if i.ClearSubcontrols {
+		m.ClearSubcontrols()
+	}
+	if v := i.AddSubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
+	if v := i.RemoveSubcontrolIDs; len(v) > 0 {
+		m.RemoveSubcontrolIDs(v...)
 	}
 }
 
@@ -3791,6 +4941,942 @@ func (c *PersonalAccessTokenUpdateOne) SetInput(i UpdatePersonalAccessTokenInput
 	return c
 }
 
+// CreateProcedureInput represents a mutation input for creating procedures.
+type CreateProcedureInput struct {
+	Tags              []string
+	Name              string
+	Description       *string
+	Status            *string
+	ProcedureType     *string
+	Version           *string
+	PurposeAndScope   *string
+	Background        *string
+	Satisfies         *string
+	Details           map[string]interface{}
+	ControlIDs        []string
+	InternalpolicyIDs []string
+	NarrativeIDs      []string
+	RiskIDs           []string
+}
+
+// Mutate applies the CreateProcedureInput on the ProcedureMutation builder.
+func (i *CreateProcedureInput) Mutate(m *ProcedureMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	m.SetName(i.Name)
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if v := i.ProcedureType; v != nil {
+		m.SetProcedureType(*v)
+	}
+	if v := i.Version; v != nil {
+		m.SetVersion(*v)
+	}
+	if v := i.PurposeAndScope; v != nil {
+		m.SetPurposeAndScope(*v)
+	}
+	if v := i.Background; v != nil {
+		m.SetBackground(*v)
+	}
+	if v := i.Satisfies; v != nil {
+		m.SetSatisfies(*v)
+	}
+	if v := i.Details; v != nil {
+		m.SetDetails(v)
+	}
+	if v := i.ControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
+	if v := i.InternalpolicyIDs; len(v) > 0 {
+		m.AddInternalpolicyIDs(v...)
+	}
+	if v := i.NarrativeIDs; len(v) > 0 {
+		m.AddNarrativeIDs(v...)
+	}
+	if v := i.RiskIDs; len(v) > 0 {
+		m.AddRiskIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateProcedureInput on the ProcedureCreate builder.
+func (c *ProcedureCreate) SetInput(i CreateProcedureInput) *ProcedureCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateProcedureInput represents a mutation input for updating procedures.
+type UpdateProcedureInput struct {
+	ClearTags               bool
+	Tags                    []string
+	AppendTags              []string
+	Name                    *string
+	ClearDescription        bool
+	Description             *string
+	ClearStatus             bool
+	Status                  *string
+	ClearProcedureType      bool
+	ProcedureType           *string
+	ClearVersion            bool
+	Version                 *string
+	ClearPurposeAndScope    bool
+	PurposeAndScope         *string
+	ClearBackground         bool
+	Background              *string
+	ClearSatisfies          bool
+	Satisfies               *string
+	ClearDetails            bool
+	Details                 map[string]interface{}
+	ClearControl            bool
+	AddControlIDs           []string
+	RemoveControlIDs        []string
+	ClearInternalpolicy     bool
+	AddInternalpolicyIDs    []string
+	RemoveInternalpolicyIDs []string
+	ClearNarratives         bool
+	AddNarrativeIDs         []string
+	RemoveNarrativeIDs      []string
+	ClearRisks              bool
+	AddRiskIDs              []string
+	RemoveRiskIDs           []string
+}
+
+// Mutate applies the UpdateProcedureInput on the ProcedureMutation builder.
+func (i *UpdateProcedureInput) Mutate(m *ProcedureMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if v := i.Name; v != nil {
+		m.SetName(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if i.ClearStatus {
+		m.ClearStatus()
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if i.ClearProcedureType {
+		m.ClearProcedureType()
+	}
+	if v := i.ProcedureType; v != nil {
+		m.SetProcedureType(*v)
+	}
+	if i.ClearVersion {
+		m.ClearVersion()
+	}
+	if v := i.Version; v != nil {
+		m.SetVersion(*v)
+	}
+	if i.ClearPurposeAndScope {
+		m.ClearPurposeAndScope()
+	}
+	if v := i.PurposeAndScope; v != nil {
+		m.SetPurposeAndScope(*v)
+	}
+	if i.ClearBackground {
+		m.ClearBackground()
+	}
+	if v := i.Background; v != nil {
+		m.SetBackground(*v)
+	}
+	if i.ClearSatisfies {
+		m.ClearSatisfies()
+	}
+	if v := i.Satisfies; v != nil {
+		m.SetSatisfies(*v)
+	}
+	if i.ClearDetails {
+		m.ClearDetails()
+	}
+	if v := i.Details; v != nil {
+		m.SetDetails(v)
+	}
+	if i.ClearControl {
+		m.ClearControl()
+	}
+	if v := i.AddControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
+	if v := i.RemoveControlIDs; len(v) > 0 {
+		m.RemoveControlIDs(v...)
+	}
+	if i.ClearInternalpolicy {
+		m.ClearInternalpolicy()
+	}
+	if v := i.AddInternalpolicyIDs; len(v) > 0 {
+		m.AddInternalpolicyIDs(v...)
+	}
+	if v := i.RemoveInternalpolicyIDs; len(v) > 0 {
+		m.RemoveInternalpolicyIDs(v...)
+	}
+	if i.ClearNarratives {
+		m.ClearNarratives()
+	}
+	if v := i.AddNarrativeIDs; len(v) > 0 {
+		m.AddNarrativeIDs(v...)
+	}
+	if v := i.RemoveNarrativeIDs; len(v) > 0 {
+		m.RemoveNarrativeIDs(v...)
+	}
+	if i.ClearRisks {
+		m.ClearRisks()
+	}
+	if v := i.AddRiskIDs; len(v) > 0 {
+		m.AddRiskIDs(v...)
+	}
+	if v := i.RemoveRiskIDs; len(v) > 0 {
+		m.RemoveRiskIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateProcedureInput on the ProcedureUpdate builder.
+func (c *ProcedureUpdate) SetInput(i UpdateProcedureInput) *ProcedureUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateProcedureInput on the ProcedureUpdateOne builder.
+func (c *ProcedureUpdateOne) SetInput(i UpdateProcedureInput) *ProcedureUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateRiskInput represents a mutation input for creating risks.
+type CreateRiskInput struct {
+	Tags          []string
+	Name          string
+	Description   *string
+	Status        *string
+	RiskType      *string
+	BusinessCosts *string
+	Impact        *enums.RiskImpact
+	Likelihood    *enums.RiskLikelihood
+	Mitigation    *string
+	Satisfies     *string
+	Details       map[string]interface{}
+	ControlIDs    []string
+	ProcedureIDs  []string
+	ActionplanIDs []string
+}
+
+// Mutate applies the CreateRiskInput on the RiskMutation builder.
+func (i *CreateRiskInput) Mutate(m *RiskMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	m.SetName(i.Name)
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if v := i.RiskType; v != nil {
+		m.SetRiskType(*v)
+	}
+	if v := i.BusinessCosts; v != nil {
+		m.SetBusinessCosts(*v)
+	}
+	if v := i.Impact; v != nil {
+		m.SetImpact(*v)
+	}
+	if v := i.Likelihood; v != nil {
+		m.SetLikelihood(*v)
+	}
+	if v := i.Mitigation; v != nil {
+		m.SetMitigation(*v)
+	}
+	if v := i.Satisfies; v != nil {
+		m.SetSatisfies(*v)
+	}
+	if v := i.Details; v != nil {
+		m.SetDetails(v)
+	}
+	if v := i.ControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
+	if v := i.ProcedureIDs; len(v) > 0 {
+		m.AddProcedureIDs(v...)
+	}
+	if v := i.ActionplanIDs; len(v) > 0 {
+		m.AddActionplanIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateRiskInput on the RiskCreate builder.
+func (c *RiskCreate) SetInput(i CreateRiskInput) *RiskCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateRiskInput represents a mutation input for updating risks.
+type UpdateRiskInput struct {
+	ClearTags           bool
+	Tags                []string
+	AppendTags          []string
+	Name                *string
+	ClearDescription    bool
+	Description         *string
+	ClearStatus         bool
+	Status              *string
+	ClearRiskType       bool
+	RiskType            *string
+	ClearBusinessCosts  bool
+	BusinessCosts       *string
+	ClearImpact         bool
+	Impact              *enums.RiskImpact
+	ClearLikelihood     bool
+	Likelihood          *enums.RiskLikelihood
+	ClearMitigation     bool
+	Mitigation          *string
+	ClearSatisfies      bool
+	Satisfies           *string
+	ClearDetails        bool
+	Details             map[string]interface{}
+	ClearControl        bool
+	AddControlIDs       []string
+	RemoveControlIDs    []string
+	ClearProcedure      bool
+	AddProcedureIDs     []string
+	RemoveProcedureIDs  []string
+	ClearActionplans    bool
+	AddActionplanIDs    []string
+	RemoveActionplanIDs []string
+}
+
+// Mutate applies the UpdateRiskInput on the RiskMutation builder.
+func (i *UpdateRiskInput) Mutate(m *RiskMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if v := i.Name; v != nil {
+		m.SetName(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if i.ClearStatus {
+		m.ClearStatus()
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if i.ClearRiskType {
+		m.ClearRiskType()
+	}
+	if v := i.RiskType; v != nil {
+		m.SetRiskType(*v)
+	}
+	if i.ClearBusinessCosts {
+		m.ClearBusinessCosts()
+	}
+	if v := i.BusinessCosts; v != nil {
+		m.SetBusinessCosts(*v)
+	}
+	if i.ClearImpact {
+		m.ClearImpact()
+	}
+	if v := i.Impact; v != nil {
+		m.SetImpact(*v)
+	}
+	if i.ClearLikelihood {
+		m.ClearLikelihood()
+	}
+	if v := i.Likelihood; v != nil {
+		m.SetLikelihood(*v)
+	}
+	if i.ClearMitigation {
+		m.ClearMitigation()
+	}
+	if v := i.Mitigation; v != nil {
+		m.SetMitigation(*v)
+	}
+	if i.ClearSatisfies {
+		m.ClearSatisfies()
+	}
+	if v := i.Satisfies; v != nil {
+		m.SetSatisfies(*v)
+	}
+	if i.ClearDetails {
+		m.ClearDetails()
+	}
+	if v := i.Details; v != nil {
+		m.SetDetails(v)
+	}
+	if i.ClearControl {
+		m.ClearControl()
+	}
+	if v := i.AddControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
+	if v := i.RemoveControlIDs; len(v) > 0 {
+		m.RemoveControlIDs(v...)
+	}
+	if i.ClearProcedure {
+		m.ClearProcedure()
+	}
+	if v := i.AddProcedureIDs; len(v) > 0 {
+		m.AddProcedureIDs(v...)
+	}
+	if v := i.RemoveProcedureIDs; len(v) > 0 {
+		m.RemoveProcedureIDs(v...)
+	}
+	if i.ClearActionplans {
+		m.ClearActionplans()
+	}
+	if v := i.AddActionplanIDs; len(v) > 0 {
+		m.AddActionplanIDs(v...)
+	}
+	if v := i.RemoveActionplanIDs; len(v) > 0 {
+		m.RemoveActionplanIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateRiskInput on the RiskUpdate builder.
+func (c *RiskUpdate) SetInput(i UpdateRiskInput) *RiskUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateRiskInput on the RiskUpdateOne builder.
+func (c *RiskUpdateOne) SetInput(i UpdateRiskInput) *RiskUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateStandardInput represents a mutation input for creating standards.
+type CreateStandardInput struct {
+	Tags                []string
+	Name                string
+	Description         *string
+	Family              *string
+	Status              *string
+	StandardType        *string
+	Version             *string
+	PurposeAndScope     *string
+	Background          *string
+	Satisfies           *string
+	Details             map[string]interface{}
+	ControlobjectiveIDs []string
+	ControlIDs          []string
+	ProcedureIDs        []string
+	ActionplanIDs       []string
+}
+
+// Mutate applies the CreateStandardInput on the StandardMutation builder.
+func (i *CreateStandardInput) Mutate(m *StandardMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	m.SetName(i.Name)
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.Family; v != nil {
+		m.SetFamily(*v)
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if v := i.StandardType; v != nil {
+		m.SetStandardType(*v)
+	}
+	if v := i.Version; v != nil {
+		m.SetVersion(*v)
+	}
+	if v := i.PurposeAndScope; v != nil {
+		m.SetPurposeAndScope(*v)
+	}
+	if v := i.Background; v != nil {
+		m.SetBackground(*v)
+	}
+	if v := i.Satisfies; v != nil {
+		m.SetSatisfies(*v)
+	}
+	if v := i.Details; v != nil {
+		m.SetDetails(v)
+	}
+	if v := i.ControlobjectiveIDs; len(v) > 0 {
+		m.AddControlobjectiveIDs(v...)
+	}
+	if v := i.ControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
+	if v := i.ProcedureIDs; len(v) > 0 {
+		m.AddProcedureIDs(v...)
+	}
+	if v := i.ActionplanIDs; len(v) > 0 {
+		m.AddActionplanIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateStandardInput on the StandardCreate builder.
+func (c *StandardCreate) SetInput(i CreateStandardInput) *StandardCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateStandardInput represents a mutation input for updating standards.
+type UpdateStandardInput struct {
+	ClearTags                 bool
+	Tags                      []string
+	AppendTags                []string
+	Name                      *string
+	ClearDescription          bool
+	Description               *string
+	ClearFamily               bool
+	Family                    *string
+	ClearStatus               bool
+	Status                    *string
+	ClearStandardType         bool
+	StandardType              *string
+	ClearVersion              bool
+	Version                   *string
+	ClearPurposeAndScope      bool
+	PurposeAndScope           *string
+	ClearBackground           bool
+	Background                *string
+	ClearSatisfies            bool
+	Satisfies                 *string
+	ClearDetails              bool
+	Details                   map[string]interface{}
+	ClearControlobjectives    bool
+	AddControlobjectiveIDs    []string
+	RemoveControlobjectiveIDs []string
+	ClearControls             bool
+	AddControlIDs             []string
+	RemoveControlIDs          []string
+	ClearProcedures           bool
+	AddProcedureIDs           []string
+	RemoveProcedureIDs        []string
+	ClearActionplans          bool
+	AddActionplanIDs          []string
+	RemoveActionplanIDs       []string
+}
+
+// Mutate applies the UpdateStandardInput on the StandardMutation builder.
+func (i *UpdateStandardInput) Mutate(m *StandardMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if v := i.Name; v != nil {
+		m.SetName(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if i.ClearFamily {
+		m.ClearFamily()
+	}
+	if v := i.Family; v != nil {
+		m.SetFamily(*v)
+	}
+	if i.ClearStatus {
+		m.ClearStatus()
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if i.ClearStandardType {
+		m.ClearStandardType()
+	}
+	if v := i.StandardType; v != nil {
+		m.SetStandardType(*v)
+	}
+	if i.ClearVersion {
+		m.ClearVersion()
+	}
+	if v := i.Version; v != nil {
+		m.SetVersion(*v)
+	}
+	if i.ClearPurposeAndScope {
+		m.ClearPurposeAndScope()
+	}
+	if v := i.PurposeAndScope; v != nil {
+		m.SetPurposeAndScope(*v)
+	}
+	if i.ClearBackground {
+		m.ClearBackground()
+	}
+	if v := i.Background; v != nil {
+		m.SetBackground(*v)
+	}
+	if i.ClearSatisfies {
+		m.ClearSatisfies()
+	}
+	if v := i.Satisfies; v != nil {
+		m.SetSatisfies(*v)
+	}
+	if i.ClearDetails {
+		m.ClearDetails()
+	}
+	if v := i.Details; v != nil {
+		m.SetDetails(v)
+	}
+	if i.ClearControlobjectives {
+		m.ClearControlobjectives()
+	}
+	if v := i.AddControlobjectiveIDs; len(v) > 0 {
+		m.AddControlobjectiveIDs(v...)
+	}
+	if v := i.RemoveControlobjectiveIDs; len(v) > 0 {
+		m.RemoveControlobjectiveIDs(v...)
+	}
+	if i.ClearControls {
+		m.ClearControls()
+	}
+	if v := i.AddControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
+	if v := i.RemoveControlIDs; len(v) > 0 {
+		m.RemoveControlIDs(v...)
+	}
+	if i.ClearProcedures {
+		m.ClearProcedures()
+	}
+	if v := i.AddProcedureIDs; len(v) > 0 {
+		m.AddProcedureIDs(v...)
+	}
+	if v := i.RemoveProcedureIDs; len(v) > 0 {
+		m.RemoveProcedureIDs(v...)
+	}
+	if i.ClearActionplans {
+		m.ClearActionplans()
+	}
+	if v := i.AddActionplanIDs; len(v) > 0 {
+		m.AddActionplanIDs(v...)
+	}
+	if v := i.RemoveActionplanIDs; len(v) > 0 {
+		m.RemoveActionplanIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateStandardInput on the StandardUpdate builder.
+func (c *StandardUpdate) SetInput(i UpdateStandardInput) *StandardUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateStandardInput on the StandardUpdateOne builder.
+func (c *StandardUpdateOne) SetInput(i UpdateStandardInput) *StandardUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateSubcontrolInput represents a mutation input for creating subcontrols.
+type CreateSubcontrolInput struct {
+	Tags                           []string
+	Name                           string
+	Description                    *string
+	Status                         *string
+	SubcontrolType                 *string
+	Version                        *string
+	SubcontrolNumber               *string
+	Family                         *string
+	Class                          *string
+	Source                         *string
+	MappedFrameworks               *string
+	ImplementationEvidence         *string
+	ImplementationStatus           *string
+	ImplementationDate             *time.Time
+	ImplementationVerification     *string
+	ImplementationVerificationDate *time.Time
+	Details                        map[string]interface{}
+	ControlIDs                     []string
+	UserIDs                        []string
+	NotesID                        *string
+}
+
+// Mutate applies the CreateSubcontrolInput on the SubcontrolMutation builder.
+func (i *CreateSubcontrolInput) Mutate(m *SubcontrolMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	m.SetName(i.Name)
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if v := i.SubcontrolType; v != nil {
+		m.SetSubcontrolType(*v)
+	}
+	if v := i.Version; v != nil {
+		m.SetVersion(*v)
+	}
+	if v := i.SubcontrolNumber; v != nil {
+		m.SetSubcontrolNumber(*v)
+	}
+	if v := i.Family; v != nil {
+		m.SetFamily(*v)
+	}
+	if v := i.Class; v != nil {
+		m.SetClass(*v)
+	}
+	if v := i.Source; v != nil {
+		m.SetSource(*v)
+	}
+	if v := i.MappedFrameworks; v != nil {
+		m.SetMappedFrameworks(*v)
+	}
+	if v := i.ImplementationEvidence; v != nil {
+		m.SetImplementationEvidence(*v)
+	}
+	if v := i.ImplementationStatus; v != nil {
+		m.SetImplementationStatus(*v)
+	}
+	if v := i.ImplementationDate; v != nil {
+		m.SetImplementationDate(*v)
+	}
+	if v := i.ImplementationVerification; v != nil {
+		m.SetImplementationVerification(*v)
+	}
+	if v := i.ImplementationVerificationDate; v != nil {
+		m.SetImplementationVerificationDate(*v)
+	}
+	if v := i.Details; v != nil {
+		m.SetDetails(v)
+	}
+	if v := i.ControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
+	if v := i.UserIDs; len(v) > 0 {
+		m.AddUserIDs(v...)
+	}
+	if v := i.NotesID; v != nil {
+		m.SetNotesID(*v)
+	}
+}
+
+// SetInput applies the change-set in the CreateSubcontrolInput on the SubcontrolCreate builder.
+func (c *SubcontrolCreate) SetInput(i CreateSubcontrolInput) *SubcontrolCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateSubcontrolInput represents a mutation input for updating subcontrols.
+type UpdateSubcontrolInput struct {
+	ClearTags                           bool
+	Tags                                []string
+	AppendTags                          []string
+	Name                                *string
+	ClearDescription                    bool
+	Description                         *string
+	ClearStatus                         bool
+	Status                              *string
+	ClearSubcontrolType                 bool
+	SubcontrolType                      *string
+	ClearVersion                        bool
+	Version                             *string
+	ClearSubcontrolNumber               bool
+	SubcontrolNumber                    *string
+	ClearFamily                         bool
+	Family                              *string
+	ClearClass                          bool
+	Class                               *string
+	ClearSource                         bool
+	Source                              *string
+	ClearMappedFrameworks               bool
+	MappedFrameworks                    *string
+	ClearImplementationEvidence         bool
+	ImplementationEvidence              *string
+	ClearImplementationStatus           bool
+	ImplementationStatus                *string
+	ClearImplementationDate             bool
+	ImplementationDate                  *time.Time
+	ClearImplementationVerification     bool
+	ImplementationVerification          *string
+	ClearImplementationVerificationDate bool
+	ImplementationVerificationDate      *time.Time
+	ClearDetails                        bool
+	Details                             map[string]interface{}
+	ClearControl                        bool
+	AddControlIDs                       []string
+	RemoveControlIDs                    []string
+	ClearUser                           bool
+	AddUserIDs                          []string
+	RemoveUserIDs                       []string
+	ClearNotes                          bool
+	NotesID                             *string
+}
+
+// Mutate applies the UpdateSubcontrolInput on the SubcontrolMutation builder.
+func (i *UpdateSubcontrolInput) Mutate(m *SubcontrolMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if v := i.Name; v != nil {
+		m.SetName(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if i.ClearStatus {
+		m.ClearStatus()
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if i.ClearSubcontrolType {
+		m.ClearSubcontrolType()
+	}
+	if v := i.SubcontrolType; v != nil {
+		m.SetSubcontrolType(*v)
+	}
+	if i.ClearVersion {
+		m.ClearVersion()
+	}
+	if v := i.Version; v != nil {
+		m.SetVersion(*v)
+	}
+	if i.ClearSubcontrolNumber {
+		m.ClearSubcontrolNumber()
+	}
+	if v := i.SubcontrolNumber; v != nil {
+		m.SetSubcontrolNumber(*v)
+	}
+	if i.ClearFamily {
+		m.ClearFamily()
+	}
+	if v := i.Family; v != nil {
+		m.SetFamily(*v)
+	}
+	if i.ClearClass {
+		m.ClearClass()
+	}
+	if v := i.Class; v != nil {
+		m.SetClass(*v)
+	}
+	if i.ClearSource {
+		m.ClearSource()
+	}
+	if v := i.Source; v != nil {
+		m.SetSource(*v)
+	}
+	if i.ClearMappedFrameworks {
+		m.ClearMappedFrameworks()
+	}
+	if v := i.MappedFrameworks; v != nil {
+		m.SetMappedFrameworks(*v)
+	}
+	if i.ClearImplementationEvidence {
+		m.ClearImplementationEvidence()
+	}
+	if v := i.ImplementationEvidence; v != nil {
+		m.SetImplementationEvidence(*v)
+	}
+	if i.ClearImplementationStatus {
+		m.ClearImplementationStatus()
+	}
+	if v := i.ImplementationStatus; v != nil {
+		m.SetImplementationStatus(*v)
+	}
+	if i.ClearImplementationDate {
+		m.ClearImplementationDate()
+	}
+	if v := i.ImplementationDate; v != nil {
+		m.SetImplementationDate(*v)
+	}
+	if i.ClearImplementationVerification {
+		m.ClearImplementationVerification()
+	}
+	if v := i.ImplementationVerification; v != nil {
+		m.SetImplementationVerification(*v)
+	}
+	if i.ClearImplementationVerificationDate {
+		m.ClearImplementationVerificationDate()
+	}
+	if v := i.ImplementationVerificationDate; v != nil {
+		m.SetImplementationVerificationDate(*v)
+	}
+	if i.ClearDetails {
+		m.ClearDetails()
+	}
+	if v := i.Details; v != nil {
+		m.SetDetails(v)
+	}
+	if i.ClearControl {
+		m.ClearControl()
+	}
+	if v := i.AddControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
+	if v := i.RemoveControlIDs; len(v) > 0 {
+		m.RemoveControlIDs(v...)
+	}
+	if i.ClearUser {
+		m.ClearUser()
+	}
+	if v := i.AddUserIDs; len(v) > 0 {
+		m.AddUserIDs(v...)
+	}
+	if v := i.RemoveUserIDs; len(v) > 0 {
+		m.RemoveUserIDs(v...)
+	}
+	if i.ClearNotes {
+		m.ClearNotes()
+	}
+	if v := i.NotesID; v != nil {
+		m.SetNotesID(*v)
+	}
+}
+
+// SetInput applies the change-set in the UpdateSubcontrolInput on the SubcontrolUpdate builder.
+func (c *SubcontrolUpdate) SetInput(i UpdateSubcontrolInput) *SubcontrolUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateSubcontrolInput on the SubcontrolUpdateOne builder.
+func (c *SubcontrolUpdateOne) SetInput(i UpdateSubcontrolInput) *SubcontrolUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
 // CreateSubscriberInput represents a mutation input for creating subscribers.
 type CreateSubscriberInput struct {
 	Tags        []string
@@ -4123,6 +6209,8 @@ type CreateUserInput struct {
 	FileIDs                   []string
 	FileID                    *string
 	EventIDs                  []string
+	ActionplanIDs             []string
+	SubcontrolIDs             []string
 }
 
 // Mutate applies the CreateUserInput on the UserMutation builder.
@@ -4193,6 +6281,12 @@ func (i *CreateUserInput) Mutate(m *UserMutation) {
 	if v := i.EventIDs; len(v) > 0 {
 		m.AddEventIDs(v...)
 	}
+	if v := i.ActionplanIDs; len(v) > 0 {
+		m.AddActionplanIDs(v...)
+	}
+	if v := i.SubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateUserInput on the UserCreate builder.
@@ -4257,6 +6351,12 @@ type UpdateUserInput struct {
 	ClearEvents                     bool
 	AddEventIDs                     []string
 	RemoveEventIDs                  []string
+	ClearActionplans                bool
+	AddActionplanIDs                []string
+	RemoveActionplanIDs             []string
+	ClearSubcontrols                bool
+	AddSubcontrolIDs                []string
+	RemoveSubcontrolIDs             []string
 }
 
 // Mutate applies the UpdateUserInput on the UserMutation builder.
@@ -4422,6 +6522,24 @@ func (i *UpdateUserInput) Mutate(m *UserMutation) {
 	}
 	if v := i.RemoveEventIDs; len(v) > 0 {
 		m.RemoveEventIDs(v...)
+	}
+	if i.ClearActionplans {
+		m.ClearActionplans()
+	}
+	if v := i.AddActionplanIDs; len(v) > 0 {
+		m.AddActionplanIDs(v...)
+	}
+	if v := i.RemoveActionplanIDs; len(v) > 0 {
+		m.RemoveActionplanIDs(v...)
+	}
+	if i.ClearSubcontrols {
+		m.ClearSubcontrols()
+	}
+	if v := i.AddSubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
+	if v := i.RemoveSubcontrolIDs; len(v) > 0 {
+		m.RemoveSubcontrolIDs(v...)
 	}
 }
 

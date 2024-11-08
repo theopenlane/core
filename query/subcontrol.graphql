@@ -1,0 +1,209 @@
+
+mutation CreateBulkCSVSubcontrol($input: Upload!) {
+  createBulkCSVSubcontrol(input: $input) {
+    subcontrols {
+      class
+      createdAt
+      createdBy
+      description
+      details
+      family
+      id
+      implementationDate
+      implementationEvidence
+      implementationStatus
+      implementationVerification
+      implementationVerificationDate
+      mappedFrameworks
+      name
+      source
+      status
+      subcontrolNumber
+      subcontrolType
+      tags
+      updatedAt
+      updatedBy
+      version
+    }
+  }
+}
+
+mutation CreateBulkSubcontrol($input: [CreateSubcontrolInput!]) {
+  createBulkSubcontrol(input: $input) {
+    subcontrols {
+      class
+      createdAt
+      createdBy
+      description
+      details
+      family
+      id
+      implementationDate
+      implementationEvidence
+      implementationStatus
+      implementationVerification
+      implementationVerificationDate
+      mappedFrameworks
+      name
+      source
+      status
+      subcontrolNumber
+      subcontrolType
+      tags
+      updatedAt
+      updatedBy
+      version
+    }
+  }
+}
+
+mutation CreateSubcontrol($input: CreateSubcontrolInput!) {
+  createSubcontrol(input: $input) {
+    subcontrol {
+      class
+      createdAt
+      createdBy
+      description
+      details
+      family
+      id
+      implementationDate
+      implementationEvidence
+      implementationStatus
+      implementationVerification
+      implementationVerificationDate
+      mappedFrameworks
+      name
+      source
+      status
+      subcontrolNumber
+      subcontrolType
+      tags
+      updatedAt
+      updatedBy
+      version
+    }
+  }
+}
+
+mutation DeleteSubcontrol($deleteSubcontrolId: ID!) {
+  deleteSubcontrol(id: $deleteSubcontrolId) {
+    deletedID
+  }
+}
+
+query GetAllSubcontrols {
+  subcontrols {
+    edges {
+      node {
+        class
+        createdAt
+        createdBy
+        description
+        details
+        family
+        id
+        implementationDate
+        implementationEvidence
+        implementationStatus
+        implementationVerification
+        implementationVerificationDate
+        mappedFrameworks
+        name
+        source
+        status
+        subcontrolNumber
+        subcontrolType
+        tags
+        updatedAt
+        updatedBy
+        version
+      }
+    }
+  }
+}
+query GetSubcontrolByID($subcontrolId: ID!) {
+  subcontrol(id: $subcontrolId) {
+    class
+    createdAt
+    createdBy
+    description
+    details
+    family
+    id
+    implementationDate
+    implementationEvidence
+    implementationStatus
+    implementationVerification
+    implementationVerificationDate
+    mappedFrameworks
+    name
+    source
+    status
+    subcontrolNumber
+    subcontrolType
+    tags
+    updatedAt
+    updatedBy
+    version
+  }
+}
+
+query GetSubcontrols($where: SubcontrolWhereInput) {
+  subcontrols(where: $where) {
+    edges {
+      node {
+        class
+        createdAt
+        createdBy
+        description
+        details
+        family
+        id
+        implementationDate
+        implementationEvidence
+        implementationStatus
+        implementationVerification
+        implementationVerificationDate
+        mappedFrameworks
+        name
+        source
+        status
+        subcontrolNumber
+        subcontrolType
+        tags
+        updatedAt
+        updatedBy
+        version
+      }
+    }
+  }
+}
+mutation UpdateSubcontrol($updateSubcontrolId: ID!, $input: UpdateSubcontrolInput!) {
+  updateSubcontrol(id: $updateSubcontrolId, input: $input) {
+    subcontrol {
+      class
+      createdAt
+      createdBy
+      description
+      details
+      family
+      id
+      implementationDate
+      implementationEvidence
+      implementationStatus
+      implementationVerification
+      implementationVerificationDate
+      mappedFrameworks
+      name
+      source
+      status
+      subcontrolNumber
+      subcontrolType
+      tags
+      updatedAt
+      updatedBy
+      version
+    }
+  }
+}

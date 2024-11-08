@@ -30,6 +30,257 @@ func EntOpToHistoryOp(op ent.Op) history.OpType {
 	}
 }
 
+func (m *ActionPlanMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.ActionPlanHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if mappingID, exists := m.MappingID(); exists {
+		create = create.SetMappingID(mappingID)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	if name, exists := m.Name(); exists {
+		create = create.SetName(name)
+	}
+
+	if description, exists := m.Description(); exists {
+		create = create.SetDescription(description)
+	}
+
+	if status, exists := m.Status(); exists {
+		create = create.SetStatus(status)
+	}
+
+	if dueDate, exists := m.DueDate(); exists {
+		create = create.SetDueDate(dueDate)
+	}
+
+	if priority, exists := m.Priority(); exists {
+		create = create.SetPriority(priority)
+	}
+
+	if source, exists := m.Source(); exists {
+		create = create.SetSource(source)
+	}
+
+	if details, exists := m.Details(); exists {
+		create = create.SetDetails(details)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *ActionPlanMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDelete(ctx) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		actionplan, err := client.ActionPlan.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.ActionPlanHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(actionplan.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(actionplan.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(actionplan.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(actionplan.UpdatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(actionplan.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(actionplan.DeletedBy)
+		}
+
+		if mappingID, exists := m.MappingID(); exists {
+			create = create.SetMappingID(mappingID)
+		} else {
+			create = create.SetMappingID(actionplan.MappingID)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(actionplan.Tags)
+		}
+
+		if name, exists := m.Name(); exists {
+			create = create.SetName(name)
+		} else {
+			create = create.SetName(actionplan.Name)
+		}
+
+		if description, exists := m.Description(); exists {
+			create = create.SetDescription(description)
+		} else {
+			create = create.SetDescription(actionplan.Description)
+		}
+
+		if status, exists := m.Status(); exists {
+			create = create.SetStatus(status)
+		} else {
+			create = create.SetStatus(actionplan.Status)
+		}
+
+		if dueDate, exists := m.DueDate(); exists {
+			create = create.SetDueDate(dueDate)
+		} else {
+			create = create.SetDueDate(actionplan.DueDate)
+		}
+
+		if priority, exists := m.Priority(); exists {
+			create = create.SetPriority(priority)
+		} else {
+			create = create.SetPriority(actionplan.Priority)
+		}
+
+		if source, exists := m.Source(); exists {
+			create = create.SetSource(source)
+		} else {
+			create = create.SetSource(actionplan.Source)
+		}
+
+		if details, exists := m.Details(); exists {
+			create = create.SetDetails(details)
+		} else {
+			create = create.SetDetails(actionplan.Details)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ActionPlanMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDelete(ctx) {
+		return nil
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		actionplan, err := client.ActionPlan.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.ActionPlanHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(actionplan.CreatedAt).
+			SetUpdatedAt(actionplan.UpdatedAt).
+			SetCreatedBy(actionplan.CreatedBy).
+			SetUpdatedBy(actionplan.UpdatedBy).
+			SetDeletedAt(actionplan.DeletedAt).
+			SetDeletedBy(actionplan.DeletedBy).
+			SetMappingID(actionplan.MappingID).
+			SetTags(actionplan.Tags).
+			SetName(actionplan.Name).
+			SetDescription(actionplan.Description).
+			SetStatus(actionplan.Status).
+			SetDueDate(actionplan.DueDate).
+			SetPriority(actionplan.Priority).
+			SetSource(actionplan.Source).
+			SetDetails(actionplan.Details).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *ContactMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	client := m.Client()
 
@@ -283,6 +534,607 @@ func (m *ContactMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetPhoneNumber(contact.PhoneNumber).
 			SetAddress(contact.Address).
 			SetStatus(contact.Status).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ControlMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.ControlHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if mappingID, exists := m.MappingID(); exists {
+		create = create.SetMappingID(mappingID)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	if name, exists := m.Name(); exists {
+		create = create.SetName(name)
+	}
+
+	if description, exists := m.Description(); exists {
+		create = create.SetDescription(description)
+	}
+
+	if status, exists := m.Status(); exists {
+		create = create.SetStatus(status)
+	}
+
+	if controlType, exists := m.ControlType(); exists {
+		create = create.SetControlType(controlType)
+	}
+
+	if version, exists := m.Version(); exists {
+		create = create.SetVersion(version)
+	}
+
+	if controlNumber, exists := m.ControlNumber(); exists {
+		create = create.SetControlNumber(controlNumber)
+	}
+
+	if family, exists := m.Family(); exists {
+		create = create.SetFamily(family)
+	}
+
+	if class, exists := m.Class(); exists {
+		create = create.SetClass(class)
+	}
+
+	if source, exists := m.Source(); exists {
+		create = create.SetSource(source)
+	}
+
+	if satisfies, exists := m.Satisfies(); exists {
+		create = create.SetSatisfies(satisfies)
+	}
+
+	if mappedFrameworks, exists := m.MappedFrameworks(); exists {
+		create = create.SetMappedFrameworks(mappedFrameworks)
+	}
+
+	if details, exists := m.Details(); exists {
+		create = create.SetDetails(details)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *ControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDelete(ctx) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		control, err := client.Control.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.ControlHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(control.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(control.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(control.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(control.UpdatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(control.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(control.DeletedBy)
+		}
+
+		if mappingID, exists := m.MappingID(); exists {
+			create = create.SetMappingID(mappingID)
+		} else {
+			create = create.SetMappingID(control.MappingID)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(control.Tags)
+		}
+
+		if name, exists := m.Name(); exists {
+			create = create.SetName(name)
+		} else {
+			create = create.SetName(control.Name)
+		}
+
+		if description, exists := m.Description(); exists {
+			create = create.SetDescription(description)
+		} else {
+			create = create.SetDescription(control.Description)
+		}
+
+		if status, exists := m.Status(); exists {
+			create = create.SetStatus(status)
+		} else {
+			create = create.SetStatus(control.Status)
+		}
+
+		if controlType, exists := m.ControlType(); exists {
+			create = create.SetControlType(controlType)
+		} else {
+			create = create.SetControlType(control.ControlType)
+		}
+
+		if version, exists := m.Version(); exists {
+			create = create.SetVersion(version)
+		} else {
+			create = create.SetVersion(control.Version)
+		}
+
+		if controlNumber, exists := m.ControlNumber(); exists {
+			create = create.SetControlNumber(controlNumber)
+		} else {
+			create = create.SetControlNumber(control.ControlNumber)
+		}
+
+		if family, exists := m.Family(); exists {
+			create = create.SetFamily(family)
+		} else {
+			create = create.SetFamily(control.Family)
+		}
+
+		if class, exists := m.Class(); exists {
+			create = create.SetClass(class)
+		} else {
+			create = create.SetClass(control.Class)
+		}
+
+		if source, exists := m.Source(); exists {
+			create = create.SetSource(source)
+		} else {
+			create = create.SetSource(control.Source)
+		}
+
+		if satisfies, exists := m.Satisfies(); exists {
+			create = create.SetSatisfies(satisfies)
+		} else {
+			create = create.SetSatisfies(control.Satisfies)
+		}
+
+		if mappedFrameworks, exists := m.MappedFrameworks(); exists {
+			create = create.SetMappedFrameworks(mappedFrameworks)
+		} else {
+			create = create.SetMappedFrameworks(control.MappedFrameworks)
+		}
+
+		if details, exists := m.Details(); exists {
+			create = create.SetDetails(details)
+		} else {
+			create = create.SetDetails(control.Details)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ControlMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDelete(ctx) {
+		return nil
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		control, err := client.Control.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.ControlHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(control.CreatedAt).
+			SetUpdatedAt(control.UpdatedAt).
+			SetCreatedBy(control.CreatedBy).
+			SetUpdatedBy(control.UpdatedBy).
+			SetDeletedAt(control.DeletedAt).
+			SetDeletedBy(control.DeletedBy).
+			SetMappingID(control.MappingID).
+			SetTags(control.Tags).
+			SetName(control.Name).
+			SetDescription(control.Description).
+			SetStatus(control.Status).
+			SetControlType(control.ControlType).
+			SetVersion(control.Version).
+			SetControlNumber(control.ControlNumber).
+			SetFamily(control.Family).
+			SetClass(control.Class).
+			SetSource(control.Source).
+			SetSatisfies(control.Satisfies).
+			SetMappedFrameworks(control.MappedFrameworks).
+			SetDetails(control.Details).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ControlObjectiveMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.ControlObjectiveHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if mappingID, exists := m.MappingID(); exists {
+		create = create.SetMappingID(mappingID)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	if name, exists := m.Name(); exists {
+		create = create.SetName(name)
+	}
+
+	if description, exists := m.Description(); exists {
+		create = create.SetDescription(description)
+	}
+
+	if status, exists := m.Status(); exists {
+		create = create.SetStatus(status)
+	}
+
+	if controlObjectiveType, exists := m.ControlObjectiveType(); exists {
+		create = create.SetControlObjectiveType(controlObjectiveType)
+	}
+
+	if version, exists := m.Version(); exists {
+		create = create.SetVersion(version)
+	}
+
+	if controlNumber, exists := m.ControlNumber(); exists {
+		create = create.SetControlNumber(controlNumber)
+	}
+
+	if family, exists := m.Family(); exists {
+		create = create.SetFamily(family)
+	}
+
+	if class, exists := m.Class(); exists {
+		create = create.SetClass(class)
+	}
+
+	if source, exists := m.Source(); exists {
+		create = create.SetSource(source)
+	}
+
+	if mappedFrameworks, exists := m.MappedFrameworks(); exists {
+		create = create.SetMappedFrameworks(mappedFrameworks)
+	}
+
+	if details, exists := m.Details(); exists {
+		create = create.SetDetails(details)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *ControlObjectiveMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDelete(ctx) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		controlobjective, err := client.ControlObjective.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.ControlObjectiveHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(controlobjective.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(controlobjective.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(controlobjective.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(controlobjective.UpdatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(controlobjective.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(controlobjective.DeletedBy)
+		}
+
+		if mappingID, exists := m.MappingID(); exists {
+			create = create.SetMappingID(mappingID)
+		} else {
+			create = create.SetMappingID(controlobjective.MappingID)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(controlobjective.Tags)
+		}
+
+		if name, exists := m.Name(); exists {
+			create = create.SetName(name)
+		} else {
+			create = create.SetName(controlobjective.Name)
+		}
+
+		if description, exists := m.Description(); exists {
+			create = create.SetDescription(description)
+		} else {
+			create = create.SetDescription(controlobjective.Description)
+		}
+
+		if status, exists := m.Status(); exists {
+			create = create.SetStatus(status)
+		} else {
+			create = create.SetStatus(controlobjective.Status)
+		}
+
+		if controlObjectiveType, exists := m.ControlObjectiveType(); exists {
+			create = create.SetControlObjectiveType(controlObjectiveType)
+		} else {
+			create = create.SetControlObjectiveType(controlobjective.ControlObjectiveType)
+		}
+
+		if version, exists := m.Version(); exists {
+			create = create.SetVersion(version)
+		} else {
+			create = create.SetVersion(controlobjective.Version)
+		}
+
+		if controlNumber, exists := m.ControlNumber(); exists {
+			create = create.SetControlNumber(controlNumber)
+		} else {
+			create = create.SetControlNumber(controlobjective.ControlNumber)
+		}
+
+		if family, exists := m.Family(); exists {
+			create = create.SetFamily(family)
+		} else {
+			create = create.SetFamily(controlobjective.Family)
+		}
+
+		if class, exists := m.Class(); exists {
+			create = create.SetClass(class)
+		} else {
+			create = create.SetClass(controlobjective.Class)
+		}
+
+		if source, exists := m.Source(); exists {
+			create = create.SetSource(source)
+		} else {
+			create = create.SetSource(controlobjective.Source)
+		}
+
+		if mappedFrameworks, exists := m.MappedFrameworks(); exists {
+			create = create.SetMappedFrameworks(mappedFrameworks)
+		} else {
+			create = create.SetMappedFrameworks(controlobjective.MappedFrameworks)
+		}
+
+		if details, exists := m.Details(); exists {
+			create = create.SetDetails(details)
+		} else {
+			create = create.SetDetails(controlobjective.Details)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ControlObjectiveMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDelete(ctx) {
+		return nil
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		controlobjective, err := client.ControlObjective.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.ControlObjectiveHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(controlobjective.CreatedAt).
+			SetUpdatedAt(controlobjective.UpdatedAt).
+			SetCreatedBy(controlobjective.CreatedBy).
+			SetUpdatedBy(controlobjective.UpdatedBy).
+			SetDeletedAt(controlobjective.DeletedAt).
+			SetDeletedBy(controlobjective.DeletedBy).
+			SetMappingID(controlobjective.MappingID).
+			SetTags(controlobjective.Tags).
+			SetName(controlobjective.Name).
+			SetDescription(controlobjective.Description).
+			SetStatus(controlobjective.Status).
+			SetControlObjectiveType(controlobjective.ControlObjectiveType).
+			SetVersion(controlobjective.Version).
+			SetControlNumber(controlobjective.ControlNumber).
+			SetFamily(controlobjective.Family).
+			SetClass(controlobjective.Class).
+			SetSource(controlobjective.Source).
+			SetMappedFrameworks(controlobjective.MappedFrameworks).
+			SetDetails(controlobjective.Details).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -3531,6 +4383,486 @@ func (m *IntegrationMutation) CreateHistoryFromDelete(ctx context.Context) error
 	return nil
 }
 
+func (m *InternalPolicyMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.InternalPolicyHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if mappingID, exists := m.MappingID(); exists {
+		create = create.SetMappingID(mappingID)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	if name, exists := m.Name(); exists {
+		create = create.SetName(name)
+	}
+
+	if description, exists := m.Description(); exists {
+		create = create.SetDescription(description)
+	}
+
+	if status, exists := m.Status(); exists {
+		create = create.SetStatus(status)
+	}
+
+	if policyType, exists := m.PolicyType(); exists {
+		create = create.SetPolicyType(policyType)
+	}
+
+	if version, exists := m.Version(); exists {
+		create = create.SetVersion(version)
+	}
+
+	if purposeAndScope, exists := m.PurposeAndScope(); exists {
+		create = create.SetPurposeAndScope(purposeAndScope)
+	}
+
+	if background, exists := m.Background(); exists {
+		create = create.SetBackground(background)
+	}
+
+	if details, exists := m.Details(); exists {
+		create = create.SetDetails(details)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *InternalPolicyMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDelete(ctx) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		internalpolicy, err := client.InternalPolicy.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.InternalPolicyHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(internalpolicy.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(internalpolicy.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(internalpolicy.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(internalpolicy.UpdatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(internalpolicy.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(internalpolicy.DeletedBy)
+		}
+
+		if mappingID, exists := m.MappingID(); exists {
+			create = create.SetMappingID(mappingID)
+		} else {
+			create = create.SetMappingID(internalpolicy.MappingID)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(internalpolicy.Tags)
+		}
+
+		if name, exists := m.Name(); exists {
+			create = create.SetName(name)
+		} else {
+			create = create.SetName(internalpolicy.Name)
+		}
+
+		if description, exists := m.Description(); exists {
+			create = create.SetDescription(description)
+		} else {
+			create = create.SetDescription(internalpolicy.Description)
+		}
+
+		if status, exists := m.Status(); exists {
+			create = create.SetStatus(status)
+		} else {
+			create = create.SetStatus(internalpolicy.Status)
+		}
+
+		if policyType, exists := m.PolicyType(); exists {
+			create = create.SetPolicyType(policyType)
+		} else {
+			create = create.SetPolicyType(internalpolicy.PolicyType)
+		}
+
+		if version, exists := m.Version(); exists {
+			create = create.SetVersion(version)
+		} else {
+			create = create.SetVersion(internalpolicy.Version)
+		}
+
+		if purposeAndScope, exists := m.PurposeAndScope(); exists {
+			create = create.SetPurposeAndScope(purposeAndScope)
+		} else {
+			create = create.SetPurposeAndScope(internalpolicy.PurposeAndScope)
+		}
+
+		if background, exists := m.Background(); exists {
+			create = create.SetBackground(background)
+		} else {
+			create = create.SetBackground(internalpolicy.Background)
+		}
+
+		if details, exists := m.Details(); exists {
+			create = create.SetDetails(details)
+		} else {
+			create = create.SetDetails(internalpolicy.Details)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *InternalPolicyMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDelete(ctx) {
+		return nil
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		internalpolicy, err := client.InternalPolicy.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.InternalPolicyHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(internalpolicy.CreatedAt).
+			SetUpdatedAt(internalpolicy.UpdatedAt).
+			SetCreatedBy(internalpolicy.CreatedBy).
+			SetUpdatedBy(internalpolicy.UpdatedBy).
+			SetDeletedAt(internalpolicy.DeletedAt).
+			SetDeletedBy(internalpolicy.DeletedBy).
+			SetMappingID(internalpolicy.MappingID).
+			SetTags(internalpolicy.Tags).
+			SetName(internalpolicy.Name).
+			SetDescription(internalpolicy.Description).
+			SetStatus(internalpolicy.Status).
+			SetPolicyType(internalpolicy.PolicyType).
+			SetVersion(internalpolicy.Version).
+			SetPurposeAndScope(internalpolicy.PurposeAndScope).
+			SetBackground(internalpolicy.Background).
+			SetDetails(internalpolicy.Details).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *NarrativeMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.NarrativeHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if mappingID, exists := m.MappingID(); exists {
+		create = create.SetMappingID(mappingID)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	if name, exists := m.Name(); exists {
+		create = create.SetName(name)
+	}
+
+	if description, exists := m.Description(); exists {
+		create = create.SetDescription(description)
+	}
+
+	if satisfies, exists := m.Satisfies(); exists {
+		create = create.SetSatisfies(satisfies)
+	}
+
+	if details, exists := m.Details(); exists {
+		create = create.SetDetails(details)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *NarrativeMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDelete(ctx) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		narrative, err := client.Narrative.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.NarrativeHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(narrative.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(narrative.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(narrative.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(narrative.UpdatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(narrative.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(narrative.DeletedBy)
+		}
+
+		if mappingID, exists := m.MappingID(); exists {
+			create = create.SetMappingID(mappingID)
+		} else {
+			create = create.SetMappingID(narrative.MappingID)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(narrative.Tags)
+		}
+
+		if name, exists := m.Name(); exists {
+			create = create.SetName(name)
+		} else {
+			create = create.SetName(narrative.Name)
+		}
+
+		if description, exists := m.Description(); exists {
+			create = create.SetDescription(description)
+		} else {
+			create = create.SetDescription(narrative.Description)
+		}
+
+		if satisfies, exists := m.Satisfies(); exists {
+			create = create.SetSatisfies(satisfies)
+		} else {
+			create = create.SetSatisfies(narrative.Satisfies)
+		}
+
+		if details, exists := m.Details(); exists {
+			create = create.SetDetails(details)
+		} else {
+			create = create.SetDetails(narrative.Details)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *NarrativeMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDelete(ctx) {
+		return nil
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		narrative, err := client.Narrative.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.NarrativeHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(narrative.CreatedAt).
+			SetUpdatedAt(narrative.UpdatedAt).
+			SetCreatedBy(narrative.CreatedBy).
+			SetUpdatedBy(narrative.UpdatedBy).
+			SetDeletedAt(narrative.DeletedAt).
+			SetDeletedBy(narrative.DeletedBy).
+			SetMappingID(narrative.MappingID).
+			SetTags(narrative.Tags).
+			SetName(narrative.Name).
+			SetDescription(narrative.Description).
+			SetSatisfies(narrative.Satisfies).
+			SetDetails(narrative.Details).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *NoteMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	client := m.Client()
 
@@ -4711,6 +6043,1197 @@ func (m *OrganizationSettingMutation) CreateHistoryFromDelete(ctx context.Contex
 			SetTaxIdentifier(organizationsetting.TaxIdentifier).
 			SetGeoLocation(organizationsetting.GeoLocation).
 			SetOrganizationID(organizationsetting.OrganizationID).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ProcedureMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.ProcedureHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if mappingID, exists := m.MappingID(); exists {
+		create = create.SetMappingID(mappingID)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	if name, exists := m.Name(); exists {
+		create = create.SetName(name)
+	}
+
+	if description, exists := m.Description(); exists {
+		create = create.SetDescription(description)
+	}
+
+	if status, exists := m.Status(); exists {
+		create = create.SetStatus(status)
+	}
+
+	if procedureType, exists := m.ProcedureType(); exists {
+		create = create.SetProcedureType(procedureType)
+	}
+
+	if version, exists := m.Version(); exists {
+		create = create.SetVersion(version)
+	}
+
+	if purposeAndScope, exists := m.PurposeAndScope(); exists {
+		create = create.SetPurposeAndScope(purposeAndScope)
+	}
+
+	if background, exists := m.Background(); exists {
+		create = create.SetBackground(background)
+	}
+
+	if satisfies, exists := m.Satisfies(); exists {
+		create = create.SetSatisfies(satisfies)
+	}
+
+	if details, exists := m.Details(); exists {
+		create = create.SetDetails(details)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *ProcedureMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDelete(ctx) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		procedure, err := client.Procedure.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.ProcedureHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(procedure.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(procedure.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(procedure.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(procedure.UpdatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(procedure.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(procedure.DeletedBy)
+		}
+
+		if mappingID, exists := m.MappingID(); exists {
+			create = create.SetMappingID(mappingID)
+		} else {
+			create = create.SetMappingID(procedure.MappingID)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(procedure.Tags)
+		}
+
+		if name, exists := m.Name(); exists {
+			create = create.SetName(name)
+		} else {
+			create = create.SetName(procedure.Name)
+		}
+
+		if description, exists := m.Description(); exists {
+			create = create.SetDescription(description)
+		} else {
+			create = create.SetDescription(procedure.Description)
+		}
+
+		if status, exists := m.Status(); exists {
+			create = create.SetStatus(status)
+		} else {
+			create = create.SetStatus(procedure.Status)
+		}
+
+		if procedureType, exists := m.ProcedureType(); exists {
+			create = create.SetProcedureType(procedureType)
+		} else {
+			create = create.SetProcedureType(procedure.ProcedureType)
+		}
+
+		if version, exists := m.Version(); exists {
+			create = create.SetVersion(version)
+		} else {
+			create = create.SetVersion(procedure.Version)
+		}
+
+		if purposeAndScope, exists := m.PurposeAndScope(); exists {
+			create = create.SetPurposeAndScope(purposeAndScope)
+		} else {
+			create = create.SetPurposeAndScope(procedure.PurposeAndScope)
+		}
+
+		if background, exists := m.Background(); exists {
+			create = create.SetBackground(background)
+		} else {
+			create = create.SetBackground(procedure.Background)
+		}
+
+		if satisfies, exists := m.Satisfies(); exists {
+			create = create.SetSatisfies(satisfies)
+		} else {
+			create = create.SetSatisfies(procedure.Satisfies)
+		}
+
+		if details, exists := m.Details(); exists {
+			create = create.SetDetails(details)
+		} else {
+			create = create.SetDetails(procedure.Details)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ProcedureMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDelete(ctx) {
+		return nil
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		procedure, err := client.Procedure.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.ProcedureHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(procedure.CreatedAt).
+			SetUpdatedAt(procedure.UpdatedAt).
+			SetCreatedBy(procedure.CreatedBy).
+			SetUpdatedBy(procedure.UpdatedBy).
+			SetDeletedAt(procedure.DeletedAt).
+			SetDeletedBy(procedure.DeletedBy).
+			SetMappingID(procedure.MappingID).
+			SetTags(procedure.Tags).
+			SetName(procedure.Name).
+			SetDescription(procedure.Description).
+			SetStatus(procedure.Status).
+			SetProcedureType(procedure.ProcedureType).
+			SetVersion(procedure.Version).
+			SetPurposeAndScope(procedure.PurposeAndScope).
+			SetBackground(procedure.Background).
+			SetSatisfies(procedure.Satisfies).
+			SetDetails(procedure.Details).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *RiskMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.RiskHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if mappingID, exists := m.MappingID(); exists {
+		create = create.SetMappingID(mappingID)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	if name, exists := m.Name(); exists {
+		create = create.SetName(name)
+	}
+
+	if description, exists := m.Description(); exists {
+		create = create.SetDescription(description)
+	}
+
+	if status, exists := m.Status(); exists {
+		create = create.SetStatus(status)
+	}
+
+	if riskType, exists := m.RiskType(); exists {
+		create = create.SetRiskType(riskType)
+	}
+
+	if businessCosts, exists := m.BusinessCosts(); exists {
+		create = create.SetBusinessCosts(businessCosts)
+	}
+
+	if impact, exists := m.Impact(); exists {
+		create = create.SetImpact(impact)
+	}
+
+	if likelihood, exists := m.Likelihood(); exists {
+		create = create.SetLikelihood(likelihood)
+	}
+
+	if mitigation, exists := m.Mitigation(); exists {
+		create = create.SetMitigation(mitigation)
+	}
+
+	if satisfies, exists := m.Satisfies(); exists {
+		create = create.SetSatisfies(satisfies)
+	}
+
+	if details, exists := m.Details(); exists {
+		create = create.SetDetails(details)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *RiskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDelete(ctx) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		risk, err := client.Risk.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.RiskHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(risk.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(risk.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(risk.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(risk.UpdatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(risk.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(risk.DeletedBy)
+		}
+
+		if mappingID, exists := m.MappingID(); exists {
+			create = create.SetMappingID(mappingID)
+		} else {
+			create = create.SetMappingID(risk.MappingID)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(risk.Tags)
+		}
+
+		if name, exists := m.Name(); exists {
+			create = create.SetName(name)
+		} else {
+			create = create.SetName(risk.Name)
+		}
+
+		if description, exists := m.Description(); exists {
+			create = create.SetDescription(description)
+		} else {
+			create = create.SetDescription(risk.Description)
+		}
+
+		if status, exists := m.Status(); exists {
+			create = create.SetStatus(status)
+		} else {
+			create = create.SetStatus(risk.Status)
+		}
+
+		if riskType, exists := m.RiskType(); exists {
+			create = create.SetRiskType(riskType)
+		} else {
+			create = create.SetRiskType(risk.RiskType)
+		}
+
+		if businessCosts, exists := m.BusinessCosts(); exists {
+			create = create.SetBusinessCosts(businessCosts)
+		} else {
+			create = create.SetBusinessCosts(risk.BusinessCosts)
+		}
+
+		if impact, exists := m.Impact(); exists {
+			create = create.SetImpact(impact)
+		} else {
+			create = create.SetImpact(risk.Impact)
+		}
+
+		if likelihood, exists := m.Likelihood(); exists {
+			create = create.SetLikelihood(likelihood)
+		} else {
+			create = create.SetLikelihood(risk.Likelihood)
+		}
+
+		if mitigation, exists := m.Mitigation(); exists {
+			create = create.SetMitigation(mitigation)
+		} else {
+			create = create.SetMitigation(risk.Mitigation)
+		}
+
+		if satisfies, exists := m.Satisfies(); exists {
+			create = create.SetSatisfies(satisfies)
+		} else {
+			create = create.SetSatisfies(risk.Satisfies)
+		}
+
+		if details, exists := m.Details(); exists {
+			create = create.SetDetails(details)
+		} else {
+			create = create.SetDetails(risk.Details)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *RiskMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDelete(ctx) {
+		return nil
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		risk, err := client.Risk.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.RiskHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(risk.CreatedAt).
+			SetUpdatedAt(risk.UpdatedAt).
+			SetCreatedBy(risk.CreatedBy).
+			SetUpdatedBy(risk.UpdatedBy).
+			SetDeletedAt(risk.DeletedAt).
+			SetDeletedBy(risk.DeletedBy).
+			SetMappingID(risk.MappingID).
+			SetTags(risk.Tags).
+			SetName(risk.Name).
+			SetDescription(risk.Description).
+			SetStatus(risk.Status).
+			SetRiskType(risk.RiskType).
+			SetBusinessCosts(risk.BusinessCosts).
+			SetImpact(risk.Impact).
+			SetLikelihood(risk.Likelihood).
+			SetMitigation(risk.Mitigation).
+			SetSatisfies(risk.Satisfies).
+			SetDetails(risk.Details).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *StandardMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.StandardHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if mappingID, exists := m.MappingID(); exists {
+		create = create.SetMappingID(mappingID)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	if name, exists := m.Name(); exists {
+		create = create.SetName(name)
+	}
+
+	if description, exists := m.Description(); exists {
+		create = create.SetDescription(description)
+	}
+
+	if family, exists := m.Family(); exists {
+		create = create.SetFamily(family)
+	}
+
+	if status, exists := m.Status(); exists {
+		create = create.SetStatus(status)
+	}
+
+	if standardType, exists := m.StandardType(); exists {
+		create = create.SetStandardType(standardType)
+	}
+
+	if version, exists := m.Version(); exists {
+		create = create.SetVersion(version)
+	}
+
+	if purposeAndScope, exists := m.PurposeAndScope(); exists {
+		create = create.SetPurposeAndScope(purposeAndScope)
+	}
+
+	if background, exists := m.Background(); exists {
+		create = create.SetBackground(background)
+	}
+
+	if satisfies, exists := m.Satisfies(); exists {
+		create = create.SetSatisfies(satisfies)
+	}
+
+	if details, exists := m.Details(); exists {
+		create = create.SetDetails(details)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *StandardMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDelete(ctx) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		standard, err := client.Standard.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.StandardHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(standard.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(standard.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(standard.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(standard.UpdatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(standard.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(standard.DeletedBy)
+		}
+
+		if mappingID, exists := m.MappingID(); exists {
+			create = create.SetMappingID(mappingID)
+		} else {
+			create = create.SetMappingID(standard.MappingID)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(standard.Tags)
+		}
+
+		if name, exists := m.Name(); exists {
+			create = create.SetName(name)
+		} else {
+			create = create.SetName(standard.Name)
+		}
+
+		if description, exists := m.Description(); exists {
+			create = create.SetDescription(description)
+		} else {
+			create = create.SetDescription(standard.Description)
+		}
+
+		if family, exists := m.Family(); exists {
+			create = create.SetFamily(family)
+		} else {
+			create = create.SetFamily(standard.Family)
+		}
+
+		if status, exists := m.Status(); exists {
+			create = create.SetStatus(status)
+		} else {
+			create = create.SetStatus(standard.Status)
+		}
+
+		if standardType, exists := m.StandardType(); exists {
+			create = create.SetStandardType(standardType)
+		} else {
+			create = create.SetStandardType(standard.StandardType)
+		}
+
+		if version, exists := m.Version(); exists {
+			create = create.SetVersion(version)
+		} else {
+			create = create.SetVersion(standard.Version)
+		}
+
+		if purposeAndScope, exists := m.PurposeAndScope(); exists {
+			create = create.SetPurposeAndScope(purposeAndScope)
+		} else {
+			create = create.SetPurposeAndScope(standard.PurposeAndScope)
+		}
+
+		if background, exists := m.Background(); exists {
+			create = create.SetBackground(background)
+		} else {
+			create = create.SetBackground(standard.Background)
+		}
+
+		if satisfies, exists := m.Satisfies(); exists {
+			create = create.SetSatisfies(satisfies)
+		} else {
+			create = create.SetSatisfies(standard.Satisfies)
+		}
+
+		if details, exists := m.Details(); exists {
+			create = create.SetDetails(details)
+		} else {
+			create = create.SetDetails(standard.Details)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *StandardMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDelete(ctx) {
+		return nil
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		standard, err := client.Standard.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.StandardHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(standard.CreatedAt).
+			SetUpdatedAt(standard.UpdatedAt).
+			SetCreatedBy(standard.CreatedBy).
+			SetUpdatedBy(standard.UpdatedBy).
+			SetDeletedAt(standard.DeletedAt).
+			SetDeletedBy(standard.DeletedBy).
+			SetMappingID(standard.MappingID).
+			SetTags(standard.Tags).
+			SetName(standard.Name).
+			SetDescription(standard.Description).
+			SetFamily(standard.Family).
+			SetStatus(standard.Status).
+			SetStandardType(standard.StandardType).
+			SetVersion(standard.Version).
+			SetPurposeAndScope(standard.PurposeAndScope).
+			SetBackground(standard.Background).
+			SetSatisfies(standard.Satisfies).
+			SetDetails(standard.Details).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *SubcontrolMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.SubcontrolHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if mappingID, exists := m.MappingID(); exists {
+		create = create.SetMappingID(mappingID)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	if name, exists := m.Name(); exists {
+		create = create.SetName(name)
+	}
+
+	if description, exists := m.Description(); exists {
+		create = create.SetDescription(description)
+	}
+
+	if status, exists := m.Status(); exists {
+		create = create.SetStatus(status)
+	}
+
+	if subcontrolType, exists := m.SubcontrolType(); exists {
+		create = create.SetSubcontrolType(subcontrolType)
+	}
+
+	if version, exists := m.Version(); exists {
+		create = create.SetVersion(version)
+	}
+
+	if subcontrolNumber, exists := m.SubcontrolNumber(); exists {
+		create = create.SetSubcontrolNumber(subcontrolNumber)
+	}
+
+	if family, exists := m.Family(); exists {
+		create = create.SetFamily(family)
+	}
+
+	if class, exists := m.Class(); exists {
+		create = create.SetClass(class)
+	}
+
+	if source, exists := m.Source(); exists {
+		create = create.SetSource(source)
+	}
+
+	if mappedFrameworks, exists := m.MappedFrameworks(); exists {
+		create = create.SetMappedFrameworks(mappedFrameworks)
+	}
+
+	if implementationEvidence, exists := m.ImplementationEvidence(); exists {
+		create = create.SetImplementationEvidence(implementationEvidence)
+	}
+
+	if implementationStatus, exists := m.ImplementationStatus(); exists {
+		create = create.SetImplementationStatus(implementationStatus)
+	}
+
+	if implementationDate, exists := m.ImplementationDate(); exists {
+		create = create.SetImplementationDate(implementationDate)
+	}
+
+	if implementationVerification, exists := m.ImplementationVerification(); exists {
+		create = create.SetImplementationVerification(implementationVerification)
+	}
+
+	if implementationVerificationDate, exists := m.ImplementationVerificationDate(); exists {
+		create = create.SetImplementationVerificationDate(implementationVerificationDate)
+	}
+
+	if details, exists := m.Details(); exists {
+		create = create.SetDetails(details)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *SubcontrolMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDelete(ctx) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		subcontrol, err := client.Subcontrol.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.SubcontrolHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(subcontrol.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(subcontrol.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(subcontrol.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(subcontrol.UpdatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(subcontrol.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(subcontrol.DeletedBy)
+		}
+
+		if mappingID, exists := m.MappingID(); exists {
+			create = create.SetMappingID(mappingID)
+		} else {
+			create = create.SetMappingID(subcontrol.MappingID)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(subcontrol.Tags)
+		}
+
+		if name, exists := m.Name(); exists {
+			create = create.SetName(name)
+		} else {
+			create = create.SetName(subcontrol.Name)
+		}
+
+		if description, exists := m.Description(); exists {
+			create = create.SetDescription(description)
+		} else {
+			create = create.SetDescription(subcontrol.Description)
+		}
+
+		if status, exists := m.Status(); exists {
+			create = create.SetStatus(status)
+		} else {
+			create = create.SetStatus(subcontrol.Status)
+		}
+
+		if subcontrolType, exists := m.SubcontrolType(); exists {
+			create = create.SetSubcontrolType(subcontrolType)
+		} else {
+			create = create.SetSubcontrolType(subcontrol.SubcontrolType)
+		}
+
+		if version, exists := m.Version(); exists {
+			create = create.SetVersion(version)
+		} else {
+			create = create.SetVersion(subcontrol.Version)
+		}
+
+		if subcontrolNumber, exists := m.SubcontrolNumber(); exists {
+			create = create.SetSubcontrolNumber(subcontrolNumber)
+		} else {
+			create = create.SetSubcontrolNumber(subcontrol.SubcontrolNumber)
+		}
+
+		if family, exists := m.Family(); exists {
+			create = create.SetFamily(family)
+		} else {
+			create = create.SetFamily(subcontrol.Family)
+		}
+
+		if class, exists := m.Class(); exists {
+			create = create.SetClass(class)
+		} else {
+			create = create.SetClass(subcontrol.Class)
+		}
+
+		if source, exists := m.Source(); exists {
+			create = create.SetSource(source)
+		} else {
+			create = create.SetSource(subcontrol.Source)
+		}
+
+		if mappedFrameworks, exists := m.MappedFrameworks(); exists {
+			create = create.SetMappedFrameworks(mappedFrameworks)
+		} else {
+			create = create.SetMappedFrameworks(subcontrol.MappedFrameworks)
+		}
+
+		if implementationEvidence, exists := m.ImplementationEvidence(); exists {
+			create = create.SetImplementationEvidence(implementationEvidence)
+		} else {
+			create = create.SetImplementationEvidence(subcontrol.ImplementationEvidence)
+		}
+
+		if implementationStatus, exists := m.ImplementationStatus(); exists {
+			create = create.SetImplementationStatus(implementationStatus)
+		} else {
+			create = create.SetImplementationStatus(subcontrol.ImplementationStatus)
+		}
+
+		if implementationDate, exists := m.ImplementationDate(); exists {
+			create = create.SetImplementationDate(implementationDate)
+		} else {
+			create = create.SetImplementationDate(subcontrol.ImplementationDate)
+		}
+
+		if implementationVerification, exists := m.ImplementationVerification(); exists {
+			create = create.SetImplementationVerification(implementationVerification)
+		} else {
+			create = create.SetImplementationVerification(subcontrol.ImplementationVerification)
+		}
+
+		if implementationVerificationDate, exists := m.ImplementationVerificationDate(); exists {
+			create = create.SetImplementationVerificationDate(implementationVerificationDate)
+		} else {
+			create = create.SetImplementationVerificationDate(subcontrol.ImplementationVerificationDate)
+		}
+
+		if details, exists := m.Details(); exists {
+			create = create.SetDetails(details)
+		} else {
+			create = create.SetDetails(subcontrol.Details)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *SubcontrolMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDelete(ctx) {
+		return nil
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		subcontrol, err := client.Subcontrol.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.SubcontrolHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(subcontrol.CreatedAt).
+			SetUpdatedAt(subcontrol.UpdatedAt).
+			SetCreatedBy(subcontrol.CreatedBy).
+			SetUpdatedBy(subcontrol.UpdatedBy).
+			SetDeletedAt(subcontrol.DeletedAt).
+			SetDeletedBy(subcontrol.DeletedBy).
+			SetMappingID(subcontrol.MappingID).
+			SetTags(subcontrol.Tags).
+			SetName(subcontrol.Name).
+			SetDescription(subcontrol.Description).
+			SetStatus(subcontrol.Status).
+			SetSubcontrolType(subcontrol.SubcontrolType).
+			SetVersion(subcontrol.Version).
+			SetSubcontrolNumber(subcontrol.SubcontrolNumber).
+			SetFamily(subcontrol.Family).
+			SetClass(subcontrol.Class).
+			SetSource(subcontrol.Source).
+			SetMappedFrameworks(subcontrol.MappedFrameworks).
+			SetImplementationEvidence(subcontrol.ImplementationEvidence).
+			SetImplementationStatus(subcontrol.ImplementationStatus).
+			SetImplementationDate(subcontrol.ImplementationDate).
+			SetImplementationVerification(subcontrol.ImplementationVerification).
+			SetImplementationVerificationDate(subcontrol.ImplementationVerificationDate).
+			SetDetails(subcontrol.Details).
 			Save(ctx)
 		if err != nil {
 			return err
