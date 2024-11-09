@@ -52,10 +52,6 @@ const (
 	FieldDue = "due"
 	// FieldCompleted holds the string denoting the completed field in the database.
 	FieldCompleted = "completed"
-	// FieldAssignee holds the string denoting the assignee field in the database.
-	FieldAssignee = "assignee"
-	// FieldAssigner holds the string denoting the assigner field in the database.
-	FieldAssigner = "assigner"
 	// Table holds the table name of the taskhistory in the database.
 	Table = "task_history"
 )
@@ -80,8 +76,6 @@ var Columns = []string{
 	FieldStatus,
 	FieldDue,
 	FieldCompleted,
-	FieldAssignee,
-	FieldAssigner,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -222,16 +216,6 @@ func ByDue(opts ...sql.OrderTermOption) OrderOption {
 // ByCompleted orders the results by the completed field.
 func ByCompleted(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCompleted, opts...).ToFunc()
-}
-
-// ByAssignee orders the results by the assignee field.
-func ByAssignee(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldAssignee, opts...).ToFunc()
-}
-
-// ByAssigner orders the results by the assigner field.
-func ByAssigner(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldAssigner, opts...).ToFunc()
 }
 
 var (

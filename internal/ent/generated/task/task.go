@@ -46,12 +46,10 @@ const (
 	FieldDue = "due"
 	// FieldCompleted holds the string denoting the completed field in the database.
 	FieldCompleted = "completed"
-	// FieldAssignee holds the string denoting the assignee field in the database.
-	FieldAssignee = "assignee"
-	// FieldAssigner holds the string denoting the assigner field in the database.
-	FieldAssigner = "assigner"
-	// EdgeUser holds the string denoting the user edge name in mutations.
-	EdgeUser = "user"
+	// EdgeAssigner holds the string denoting the assigner edge name in mutations.
+	EdgeAssigner = "assigner"
+	// EdgeAssignee holds the string denoting the assignee edge name in mutations.
+	EdgeAssignee = "assignee"
 	// EdgeOrganization holds the string denoting the organization edge name in mutations.
 	EdgeOrganization = "organization"
 	// EdgeGroup holds the string denoting the group edge name in mutations.
@@ -68,13 +66,20 @@ const (
 	EdgeSubcontrol = "subcontrol"
 	// Table holds the table name of the task in the database.
 	Table = "tasks"
-	// UserTable is the table that holds the user relation/edge.
-	UserTable = "tasks"
-	// UserInverseTable is the table name for the User entity.
+	// AssignerTable is the table that holds the assigner relation/edge.
+	AssignerTable = "tasks"
+	// AssignerInverseTable is the table name for the User entity.
 	// It exists in this package in order to avoid circular dependency with the "user" package.
-	UserInverseTable = "users"
-	// UserColumn is the table column denoting the user relation/edge.
-	UserColumn = "assigner"
+	AssignerInverseTable = "users"
+	// AssignerColumn is the table column denoting the assigner relation/edge.
+	AssignerColumn = "user_assigner_tasks"
+	// AssigneeTable is the table that holds the assignee relation/edge.
+	AssigneeTable = "tasks"
+	// AssigneeInverseTable is the table name for the User entity.
+	// It exists in this package in order to avoid circular dependency with the "user" package.
+	AssigneeInverseTable = "users"
+	// AssigneeColumn is the table column denoting the assignee relation/edge.
+	AssigneeColumn = "user_assignee_tasks"
 	// OrganizationTable is the table that holds the organization relation/edge. The primary key declared below.
 	OrganizationTable = "organization_tasks"
 	// OrganizationInverseTable is the table name for the Organization entity.
@@ -129,8 +134,13 @@ var Columns = []string{
 	FieldStatus,
 	FieldDue,
 	FieldCompleted,
-	FieldAssignee,
-	FieldAssigner,
+}
+
+// ForeignKeys holds the SQL foreign-keys that are owned by the "tasks"
+// table and are not defined as standalone fields in the schema.
+var ForeignKeys = []string{
+	"user_assigner_tasks",
+	"user_assignee_tasks",
 }
 
 var (
@@ -164,6 +174,11 @@ func ValidColumn(column string) bool {
 			return true
 		}
 	}
+	for i := range ForeignKeys {
+		if column == ForeignKeys[i] {
+			return true
+		}
+	}
 	return false
 }
 
@@ -188,8 +203,6 @@ var (
 	DefaultTags []string
 	// TitleValidator is a validator for the "title" field. It is called by the builders before save.
 	TitleValidator func(string) error
-	// AssignerValidator is a validator for the "assigner" field. It is called by the builders before save.
-	AssignerValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -274,20 +287,17 @@ func ByCompleted(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCompleted, opts...).ToFunc()
 }
 
-// ByAssignee orders the results by the assignee field.
-func ByAssignee(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldAssignee, opts...).ToFunc()
-}
-
-// ByAssigner orders the results by the assigner field.
-func ByAssigner(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldAssigner, opts...).ToFunc()
-}
-
-// ByUserField orders the results by user field.
-func ByUserField(field string, opts ...sql.OrderTermOption) OrderOption {
+// ByAssignerField orders the results by assigner field.
+func ByAssignerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newUserStep(), sql.OrderByField(field, opts...))
+		sqlgraph.OrderByNeighborTerms(s, newAssignerStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByAssigneeField orders the results by assignee field.
+func ByAssigneeField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAssigneeStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -388,11 +398,18 @@ func BySubcontrol(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newSubcontrolStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
-func newUserStep() *sqlgraph.Step {
+func newAssignerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(UserInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, true, UserTable, UserColumn),
+		sqlgraph.To(AssignerInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, AssignerTable, AssignerColumn),
+	)
+}
+func newAssigneeStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AssigneeInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, AssigneeTable, AssigneeColumn),
 	)
 }
 func newOrganizationStep() *sqlgraph.Step {

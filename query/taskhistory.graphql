@@ -4,8 +4,6 @@ query GetAllTaskHistories {
   taskHistories {
     edges {
       node {
-        assignee
-        assigner
         completed
         createdAt
         createdBy
@@ -30,8 +28,6 @@ query GetTaskHistories($where: TaskHistoryWhereInput) {
   taskHistories(where: $where) {
     edges {
       node {
-        assignee
-        assigner
         completed
         createdAt
         createdBy

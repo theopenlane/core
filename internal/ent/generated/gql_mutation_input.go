@@ -6164,8 +6164,8 @@ type CreateTaskInput struct {
 	Status              *enums.TaskStatus
 	Due                 *time.Time
 	Completed           *time.Time
-	Assignee            *string
-	UserID              string
+	AssignerID          string
+	AssigneeID          *string
 	OrganizationIDs     []string
 	GroupIDs            []string
 	PolicyIDs           []string
@@ -6196,10 +6196,10 @@ func (i *CreateTaskInput) Mutate(m *TaskMutation) {
 	if v := i.Completed; v != nil {
 		m.SetCompleted(*v)
 	}
-	if v := i.Assignee; v != nil {
-		m.SetAssignee(*v)
+	m.SetAssignerID(i.AssignerID)
+	if v := i.AssigneeID; v != nil {
+		m.SetAssigneeID(*v)
 	}
-	m.SetUserID(i.UserID)
 	if v := i.OrganizationIDs; len(v) > 0 {
 		m.AddOrganizationIDs(v...)
 	}
@@ -6244,9 +6244,9 @@ type UpdateTaskInput struct {
 	Due                       *time.Time
 	ClearCompleted            bool
 	Completed                 *time.Time
+	AssignerID                *string
 	ClearAssignee             bool
-	Assignee                  *string
-	UserID                    *string
+	AssigneeID                *string
 	ClearOrganization         bool
 	AddOrganizationIDs        []string
 	RemoveOrganizationIDs     []string
@@ -6311,14 +6311,14 @@ func (i *UpdateTaskInput) Mutate(m *TaskMutation) {
 	if v := i.Completed; v != nil {
 		m.SetCompleted(*v)
 	}
+	if v := i.AssignerID; v != nil {
+		m.SetAssignerID(*v)
+	}
 	if i.ClearAssignee {
 		m.ClearAssignee()
 	}
-	if v := i.Assignee; v != nil {
-		m.SetAssignee(*v)
-	}
-	if v := i.UserID; v != nil {
-		m.SetUserID(*v)
+	if v := i.AssigneeID; v != nil {
+		m.SetAssigneeID(*v)
 	}
 	if i.ClearOrganization {
 		m.ClearOrganization()
@@ -6565,7 +6565,8 @@ type CreateUserInput struct {
 	EventIDs                  []string
 	ActionplanIDs             []string
 	SubcontrolIDs             []string
-	TaskIDs                   []string
+	AssignerTaskIDs           []string
+	AssigneeTaskIDs           []string
 }
 
 // Mutate applies the CreateUserInput on the UserMutation builder.
@@ -6642,8 +6643,11 @@ func (i *CreateUserInput) Mutate(m *UserMutation) {
 	if v := i.SubcontrolIDs; len(v) > 0 {
 		m.AddSubcontrolIDs(v...)
 	}
-	if v := i.TaskIDs; len(v) > 0 {
-		m.AddTaskIDs(v...)
+	if v := i.AssignerTaskIDs; len(v) > 0 {
+		m.AddAssignerTaskIDs(v...)
+	}
+	if v := i.AssigneeTaskIDs; len(v) > 0 {
+		m.AddAssigneeTaskIDs(v...)
 	}
 }
 
@@ -6715,9 +6719,12 @@ type UpdateUserInput struct {
 	ClearSubcontrols                bool
 	AddSubcontrolIDs                []string
 	RemoveSubcontrolIDs             []string
-	ClearTasks                      bool
-	AddTaskIDs                      []string
-	RemoveTaskIDs                   []string
+	ClearAssignerTasks              bool
+	AddAssignerTaskIDs              []string
+	RemoveAssignerTaskIDs           []string
+	ClearAssigneeTasks              bool
+	AddAssigneeTaskIDs              []string
+	RemoveAssigneeTaskIDs           []string
 }
 
 // Mutate applies the UpdateUserInput on the UserMutation builder.
@@ -6902,14 +6909,23 @@ func (i *UpdateUserInput) Mutate(m *UserMutation) {
 	if v := i.RemoveSubcontrolIDs; len(v) > 0 {
 		m.RemoveSubcontrolIDs(v...)
 	}
-	if i.ClearTasks {
-		m.ClearTasks()
+	if i.ClearAssignerTasks {
+		m.ClearAssignerTasks()
 	}
-	if v := i.AddTaskIDs; len(v) > 0 {
-		m.AddTaskIDs(v...)
+	if v := i.AddAssignerTaskIDs; len(v) > 0 {
+		m.AddAssignerTaskIDs(v...)
 	}
-	if v := i.RemoveTaskIDs; len(v) > 0 {
-		m.RemoveTaskIDs(v...)
+	if v := i.RemoveAssignerTaskIDs; len(v) > 0 {
+		m.RemoveAssignerTaskIDs(v...)
+	}
+	if i.ClearAssigneeTasks {
+		m.ClearAssigneeTasks()
+	}
+	if v := i.AddAssigneeTaskIDs; len(v) > 0 {
+		m.AddAssigneeTaskIDs(v...)
+	}
+	if v := i.RemoveAssigneeTaskIDs; len(v) > 0 {
+		m.RemoveAssigneeTaskIDs(v...)
 	}
 }
 

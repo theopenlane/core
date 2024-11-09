@@ -201,26 +201,6 @@ func (tc *TaskCreate) SetNillableCompleted(t *time.Time) *TaskCreate {
 	return tc
 }
 
-// SetAssignee sets the "assignee" field.
-func (tc *TaskCreate) SetAssignee(s string) *TaskCreate {
-	tc.mutation.SetAssignee(s)
-	return tc
-}
-
-// SetNillableAssignee sets the "assignee" field if the given value is not nil.
-func (tc *TaskCreate) SetNillableAssignee(s *string) *TaskCreate {
-	if s != nil {
-		tc.SetAssignee(*s)
-	}
-	return tc
-}
-
-// SetAssigner sets the "assigner" field.
-func (tc *TaskCreate) SetAssigner(s string) *TaskCreate {
-	tc.mutation.SetAssigner(s)
-	return tc
-}
-
 // SetID sets the "id" field.
 func (tc *TaskCreate) SetID(s string) *TaskCreate {
 	tc.mutation.SetID(s)
@@ -235,15 +215,34 @@ func (tc *TaskCreate) SetNillableID(s *string) *TaskCreate {
 	return tc
 }
 
-// SetUserID sets the "user" edge to the User entity by ID.
-func (tc *TaskCreate) SetUserID(id string) *TaskCreate {
-	tc.mutation.SetUserID(id)
+// SetAssignerID sets the "assigner" edge to the User entity by ID.
+func (tc *TaskCreate) SetAssignerID(id string) *TaskCreate {
+	tc.mutation.SetAssignerID(id)
 	return tc
 }
 
-// SetUser sets the "user" edge to the User entity.
-func (tc *TaskCreate) SetUser(u *User) *TaskCreate {
-	return tc.SetUserID(u.ID)
+// SetAssigner sets the "assigner" edge to the User entity.
+func (tc *TaskCreate) SetAssigner(u *User) *TaskCreate {
+	return tc.SetAssignerID(u.ID)
+}
+
+// SetAssigneeID sets the "assignee" edge to the User entity by ID.
+func (tc *TaskCreate) SetAssigneeID(id string) *TaskCreate {
+	tc.mutation.SetAssigneeID(id)
+	return tc
+}
+
+// SetNillableAssigneeID sets the "assignee" edge to the User entity by ID if the given value is not nil.
+func (tc *TaskCreate) SetNillableAssigneeID(id *string) *TaskCreate {
+	if id != nil {
+		tc = tc.SetAssigneeID(*id)
+	}
+	return tc
+}
+
+// SetAssignee sets the "assignee" edge to the User entity.
+func (tc *TaskCreate) SetAssignee(u *User) *TaskCreate {
+	return tc.SetAssigneeID(u.ID)
 }
 
 // AddOrganizationIDs adds the "organization" edge to the Organization entity by IDs.
@@ -448,16 +447,8 @@ func (tc *TaskCreate) check() error {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Task.status": %w`, err)}
 		}
 	}
-	if _, ok := tc.mutation.Assigner(); !ok {
-		return &ValidationError{Name: "assigner", err: errors.New(`generated: missing required field "Task.assigner"`)}
-	}
-	if v, ok := tc.mutation.Assigner(); ok {
-		if err := task.AssignerValidator(v); err != nil {
-			return &ValidationError{Name: "assigner", err: fmt.Errorf(`generated: validator failed for field "Task.assigner": %w`, err)}
-		}
-	}
-	if len(tc.mutation.UserIDs()) == 0 {
-		return &ValidationError{Name: "user", err: errors.New(`generated: missing required edge "Task.user"`)}
+	if len(tc.mutation.AssignerIDs()) == 0 {
+		return &ValidationError{Name: "assigner", err: errors.New(`generated: missing required edge "Task.assigner"`)}
 	}
 	return nil
 }
@@ -551,16 +542,12 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 		_spec.SetField(task.FieldCompleted, field.TypeTime, value)
 		_node.Completed = value
 	}
-	if value, ok := tc.mutation.Assignee(); ok {
-		_spec.SetField(task.FieldAssignee, field.TypeString, value)
-		_node.Assignee = value
-	}
-	if nodes := tc.mutation.UserIDs(); len(nodes) > 0 {
+	if nodes := tc.mutation.AssignerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   task.UserTable,
-			Columns: []string{task.UserColumn},
+			Table:   task.AssignerTable,
+			Columns: []string{task.AssignerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
@@ -570,7 +557,25 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.Assigner = nodes[0]
+		_node.user_assigner_tasks = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := tc.mutation.AssigneeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   task.AssigneeTable,
+			Columns: []string{task.AssigneeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tc.schemaConfig.Task
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.user_assignee_tasks = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := tc.mutation.OrganizationIDs(); len(nodes) > 0 {

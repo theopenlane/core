@@ -228,26 +228,6 @@ func (thc *TaskHistoryCreate) SetNillableCompleted(t *time.Time) *TaskHistoryCre
 	return thc
 }
 
-// SetAssignee sets the "assignee" field.
-func (thc *TaskHistoryCreate) SetAssignee(s string) *TaskHistoryCreate {
-	thc.mutation.SetAssignee(s)
-	return thc
-}
-
-// SetNillableAssignee sets the "assignee" field if the given value is not nil.
-func (thc *TaskHistoryCreate) SetNillableAssignee(s *string) *TaskHistoryCreate {
-	if s != nil {
-		thc.SetAssignee(*s)
-	}
-	return thc
-}
-
-// SetAssigner sets the "assigner" field.
-func (thc *TaskHistoryCreate) SetAssigner(s string) *TaskHistoryCreate {
-	thc.mutation.SetAssigner(s)
-	return thc
-}
-
 // SetID sets the "id" field.
 func (thc *TaskHistoryCreate) SetID(s string) *TaskHistoryCreate {
 	thc.mutation.SetID(s)
@@ -372,9 +352,6 @@ func (thc *TaskHistoryCreate) check() error {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "TaskHistory.status": %w`, err)}
 		}
 	}
-	if _, ok := thc.mutation.Assigner(); !ok {
-		return &ValidationError{Name: "assigner", err: errors.New(`generated: missing required field "TaskHistory.assigner"`)}
-	}
 	return nil
 }
 
@@ -478,14 +455,6 @@ func (thc *TaskHistoryCreate) createSpec() (*TaskHistory, *sqlgraph.CreateSpec) 
 	if value, ok := thc.mutation.Completed(); ok {
 		_spec.SetField(taskhistory.FieldCompleted, field.TypeTime, value)
 		_node.Completed = value
-	}
-	if value, ok := thc.mutation.Assignee(); ok {
-		_spec.SetField(taskhistory.FieldAssignee, field.TypeString, value)
-		_node.Assignee = value
-	}
-	if value, ok := thc.mutation.Assigner(); ok {
-		_spec.SetField(taskhistory.FieldAssigner, field.TypeString, value)
-		_node.Assigner = value
 	}
 	return _node, _spec
 }

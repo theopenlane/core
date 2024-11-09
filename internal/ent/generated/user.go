@@ -97,17 +97,19 @@ type UserEdges struct {
 	Actionplans []*ActionPlan `json:"actionplans,omitempty"`
 	// Subcontrols holds the value of the subcontrols edge.
 	Subcontrols []*Subcontrol `json:"subcontrols,omitempty"`
-	// Tasks holds the value of the tasks edge.
-	Tasks []*Task `json:"tasks,omitempty"`
+	// AssignerTasks holds the value of the assigner_tasks edge.
+	AssignerTasks []*Task `json:"assigner_tasks,omitempty"`
+	// AssigneeTasks holds the value of the assignee_tasks edge.
+	AssigneeTasks []*Task `json:"assignee_tasks,omitempty"`
 	// GroupMemberships holds the value of the group_memberships edge.
 	GroupMemberships []*GroupMembership `json:"group_memberships,omitempty"`
 	// OrgMemberships holds the value of the org_memberships edge.
 	OrgMemberships []*OrgMembership `json:"org_memberships,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [16]bool
+	loadedTypes [17]bool
 	// totalCount holds the count of the edges above.
-	totalCount [13]map[string]int
+	totalCount [14]map[string]int
 
 	namedPersonalAccessTokens    map[string][]*PersonalAccessToken
 	namedTfaSettings             map[string][]*TFASetting
@@ -120,7 +122,8 @@ type UserEdges struct {
 	namedEvents                  map[string][]*Event
 	namedActionplans             map[string][]*ActionPlan
 	namedSubcontrols             map[string][]*Subcontrol
-	namedTasks                   map[string][]*Task
+	namedAssignerTasks           map[string][]*Task
+	namedAssigneeTasks           map[string][]*Task
 	namedGroupMemberships        map[string][]*GroupMembership
 	namedOrgMemberships          map[string][]*OrgMembership
 }
@@ -246,19 +249,28 @@ func (e UserEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 	return nil, &NotLoadedError{edge: "subcontrols"}
 }
 
-// TasksOrErr returns the Tasks value or an error if the edge
+// AssignerTasksOrErr returns the AssignerTasks value or an error if the edge
 // was not loaded in eager-loading.
-func (e UserEdges) TasksOrErr() ([]*Task, error) {
+func (e UserEdges) AssignerTasksOrErr() ([]*Task, error) {
 	if e.loadedTypes[13] {
-		return e.Tasks, nil
+		return e.AssignerTasks, nil
 	}
-	return nil, &NotLoadedError{edge: "tasks"}
+	return nil, &NotLoadedError{edge: "assigner_tasks"}
+}
+
+// AssigneeTasksOrErr returns the AssigneeTasks value or an error if the edge
+// was not loaded in eager-loading.
+func (e UserEdges) AssigneeTasksOrErr() ([]*Task, error) {
+	if e.loadedTypes[14] {
+		return e.AssigneeTasks, nil
+	}
+	return nil, &NotLoadedError{edge: "assignee_tasks"}
 }
 
 // GroupMembershipsOrErr returns the GroupMemberships value or an error if the edge
 // was not loaded in eager-loading.
 func (e UserEdges) GroupMembershipsOrErr() ([]*GroupMembership, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[15] {
 		return e.GroupMemberships, nil
 	}
 	return nil, &NotLoadedError{edge: "group_memberships"}
@@ -267,7 +279,7 @@ func (e UserEdges) GroupMembershipsOrErr() ([]*GroupMembership, error) {
 // OrgMembershipsOrErr returns the OrgMemberships value or an error if the edge
 // was not loaded in eager-loading.
 func (e UserEdges) OrgMembershipsOrErr() ([]*OrgMembership, error) {
-	if e.loadedTypes[15] {
+	if e.loadedTypes[16] {
 		return e.OrgMemberships, nil
 	}
 	return nil, &NotLoadedError{edge: "org_memberships"}
@@ -517,9 +529,14 @@ func (u *User) QuerySubcontrols() *SubcontrolQuery {
 	return NewUserClient(u.config).QuerySubcontrols(u)
 }
 
-// QueryTasks queries the "tasks" edge of the User entity.
-func (u *User) QueryTasks() *TaskQuery {
-	return NewUserClient(u.config).QueryTasks(u)
+// QueryAssignerTasks queries the "assigner_tasks" edge of the User entity.
+func (u *User) QueryAssignerTasks() *TaskQuery {
+	return NewUserClient(u.config).QueryAssignerTasks(u)
+}
+
+// QueryAssigneeTasks queries the "assignee_tasks" edge of the User entity.
+func (u *User) QueryAssigneeTasks() *TaskQuery {
+	return NewUserClient(u.config).QueryAssigneeTasks(u)
 }
 
 // QueryGroupMemberships queries the "group_memberships" edge of the User entity.
@@ -894,27 +911,51 @@ func (u *User) appendNamedSubcontrols(name string, edges ...*Subcontrol) {
 	}
 }
 
-// NamedTasks returns the Tasks named value or an error if the edge was not
+// NamedAssignerTasks returns the AssignerTasks named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (u *User) NamedTasks(name string) ([]*Task, error) {
-	if u.Edges.namedTasks == nil {
+func (u *User) NamedAssignerTasks(name string) ([]*Task, error) {
+	if u.Edges.namedAssignerTasks == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := u.Edges.namedTasks[name]
+	nodes, ok := u.Edges.namedAssignerTasks[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (u *User) appendNamedTasks(name string, edges ...*Task) {
-	if u.Edges.namedTasks == nil {
-		u.Edges.namedTasks = make(map[string][]*Task)
+func (u *User) appendNamedAssignerTasks(name string, edges ...*Task) {
+	if u.Edges.namedAssignerTasks == nil {
+		u.Edges.namedAssignerTasks = make(map[string][]*Task)
 	}
 	if len(edges) == 0 {
-		u.Edges.namedTasks[name] = []*Task{}
+		u.Edges.namedAssignerTasks[name] = []*Task{}
 	} else {
-		u.Edges.namedTasks[name] = append(u.Edges.namedTasks[name], edges...)
+		u.Edges.namedAssignerTasks[name] = append(u.Edges.namedAssignerTasks[name], edges...)
+	}
+}
+
+// NamedAssigneeTasks returns the AssigneeTasks named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (u *User) NamedAssigneeTasks(name string) ([]*Task, error) {
+	if u.Edges.namedAssigneeTasks == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := u.Edges.namedAssigneeTasks[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (u *User) appendNamedAssigneeTasks(name string, edges ...*Task) {
+	if u.Edges.namedAssigneeTasks == nil {
+		u.Edges.namedAssigneeTasks = make(map[string][]*Task)
+	}
+	if len(edges) == 0 {
+		u.Edges.namedAssigneeTasks[name] = []*Task{}
+	} else {
+		u.Edges.namedAssigneeTasks[name] = append(u.Edges.namedAssigneeTasks[name], edges...)
 	}
 }
 

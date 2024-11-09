@@ -2441,8 +2441,8 @@ var (
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"OPEN", "IN_PROGRESS", "IN_REVIEW", "COMPLETED", "WONT_DO"}, Default: "OPEN"},
 		{Name: "due", Type: field.TypeTime, Nullable: true},
 		{Name: "completed", Type: field.TypeTime, Nullable: true},
-		{Name: "assignee", Type: field.TypeString, Nullable: true},
-		{Name: "assigner", Type: field.TypeString},
+		{Name: "user_assigner_tasks", Type: field.TypeString},
+		{Name: "user_assignee_tasks", Type: field.TypeString, Nullable: true},
 	}
 	// TasksTable holds the schema information for the "tasks" table.
 	TasksTable = &schema.Table{
@@ -2451,10 +2451,16 @@ var (
 		PrimaryKey: []*schema.Column{TasksColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "tasks_users_tasks",
-				Columns:    []*schema.Column{TasksColumns[16]},
+				Symbol:     "tasks_users_assigner_tasks",
+				Columns:    []*schema.Column{TasksColumns[15]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "tasks_users_assignee_tasks",
+				Columns:    []*schema.Column{TasksColumns[16]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
 			},
 		},
 	}
@@ -2478,8 +2484,6 @@ var (
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"OPEN", "IN_PROGRESS", "IN_REVIEW", "COMPLETED", "WONT_DO"}, Default: "OPEN"},
 		{Name: "due", Type: field.TypeTime, Nullable: true},
 		{Name: "completed", Type: field.TypeTime, Nullable: true},
-		{Name: "assignee", Type: field.TypeString, Nullable: true},
-		{Name: "assigner", Type: field.TypeString},
 	}
 	// TaskHistoryTable holds the schema information for the "task_history" table.
 	TaskHistoryTable = &schema.Table{
@@ -4561,6 +4565,7 @@ func init() {
 	SubscribersTable.ForeignKeys[0].RefTable = OrganizationsTable
 	TfaSettingsTable.ForeignKeys[0].RefTable = UsersTable
 	TasksTable.ForeignKeys[0].RefTable = UsersTable
+	TasksTable.ForeignKeys[1].RefTable = UsersTable
 	TaskHistoryTable.Annotation = &entsql.Annotation{
 		Table: "task_history",
 	}

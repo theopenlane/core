@@ -1945,12 +1945,20 @@ func (ts *TFASetting) Owner(ctx context.Context) (*User, error) {
 	return result, MaskNotFound(err)
 }
 
-func (t *Task) User(ctx context.Context) (*User, error) {
-	result, err := t.Edges.UserOrErr()
+func (t *Task) Assigner(ctx context.Context) (*User, error) {
+	result, err := t.Edges.AssignerOrErr()
 	if IsNotLoaded(err) {
-		result, err = t.QueryUser().Only(ctx)
+		result, err = t.QueryAssigner().Only(ctx)
 	}
 	return result, err
+}
+
+func (t *Task) Assignee(ctx context.Context) (*User, error) {
+	result, err := t.Edges.AssigneeOrErr()
+	if IsNotLoaded(err) {
+		result, err = t.QueryAssignee().Only(ctx)
+	}
+	return result, MaskNotFound(err)
 }
 
 func (t *Task) Organization(ctx context.Context) (result []*Organization, err error) {
@@ -2181,14 +2189,26 @@ func (u *User) Subcontrols(ctx context.Context) (result []*Subcontrol, err error
 	return result, err
 }
 
-func (u *User) Tasks(ctx context.Context) (result []*Task, err error) {
+func (u *User) AssignerTasks(ctx context.Context) (result []*Task, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = u.NamedTasks(graphql.GetFieldContext(ctx).Field.Alias)
+		result, err = u.NamedAssignerTasks(graphql.GetFieldContext(ctx).Field.Alias)
 	} else {
-		result, err = u.Edges.TasksOrErr()
+		result, err = u.Edges.AssignerTasksOrErr()
 	}
 	if IsNotLoaded(err) {
-		result, err = u.QueryTasks().All(ctx)
+		result, err = u.QueryAssignerTasks().All(ctx)
+	}
+	return result, err
+}
+
+func (u *User) AssigneeTasks(ctx context.Context) (result []*Task, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = u.NamedAssigneeTasks(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = u.Edges.AssigneeTasksOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = u.QueryAssigneeTasks().All(ctx)
 	}
 	return result, err
 }

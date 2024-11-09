@@ -45,12 +45,6 @@ func (Task) Fields() []ent.Field {
 		field.Time("completed").
 			Comment("the completion date of the task").
 			Optional(),
-		field.String("assignee").
-			Comment("the assignee of the task").
-			Optional(),
-		field.String("assigner").
-			Comment("the assigner of the task").
-			NotEmpty(),
 	}
 }
 
@@ -71,11 +65,13 @@ func (Task) Mixin() []ent.Mixin {
 // Edges of the Task
 func (Task) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("user", User.Type).
-			Ref("tasks").
+		edge.From("assigner", User.Type).
+			Ref("assigner_tasks").
 			Required().
-			Unique().
-			Field("assigner"),
+			Unique(),
+		edge.From("assignee", User.Type).
+			Ref("assignee_tasks").
+			Unique(),
 		edge.From("organization", Organization.Type).
 			Ref("tasks"),
 		edge.From("group", Group.Type).

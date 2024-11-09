@@ -11494,7 +11494,7 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
-		case "user":
+		case "assigner":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -11503,11 +11503,18 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
 				return err
 			}
-			t.withUser = query
-			if _, ok := fieldSeen[task.FieldAssigner]; !ok {
-				selectedFields = append(selectedFields, task.FieldAssigner)
-				fieldSeen[task.FieldAssigner] = struct{}{}
+			t.withAssigner = query
+
+		case "assignee":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&UserClient{config: t.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+				return err
 			}
+			t.withAssignee = query
 
 		case "organization":
 			var (
@@ -11664,16 +11671,6 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				selectedFields = append(selectedFields, task.FieldCompleted)
 				fieldSeen[task.FieldCompleted] = struct{}{}
 			}
-		case "assignee":
-			if _, ok := fieldSeen[task.FieldAssignee]; !ok {
-				selectedFields = append(selectedFields, task.FieldAssignee)
-				fieldSeen[task.FieldAssignee] = struct{}{}
-			}
-		case "assigner":
-			if _, ok := fieldSeen[task.FieldAssigner]; !ok {
-				selectedFields = append(selectedFields, task.FieldAssigner)
-				fieldSeen[task.FieldAssigner] = struct{}{}
-			}
 		case "id":
 		case "__typename":
 		default:
@@ -11815,16 +11812,6 @@ func (th *TaskHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if _, ok := fieldSeen[taskhistory.FieldCompleted]; !ok {
 				selectedFields = append(selectedFields, taskhistory.FieldCompleted)
 				fieldSeen[taskhistory.FieldCompleted] = struct{}{}
-			}
-		case "assignee":
-			if _, ok := fieldSeen[taskhistory.FieldAssignee]; !ok {
-				selectedFields = append(selectedFields, taskhistory.FieldAssignee)
-				fieldSeen[taskhistory.FieldAssignee] = struct{}{}
-			}
-		case "assigner":
-			if _, ok := fieldSeen[taskhistory.FieldAssigner]; !ok {
-				selectedFields = append(selectedFields, taskhistory.FieldAssigner)
-				fieldSeen[taskhistory.FieldAssigner] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -12373,7 +12360,7 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				*wq = *query
 			})
 
-		case "tasks":
+		case "assignerTasks":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -12382,7 +12369,20 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, taskImplementors)...); err != nil {
 				return err
 			}
-			u.WithNamedTasks(alias, func(wq *TaskQuery) {
+			u.WithNamedAssignerTasks(alias, func(wq *TaskQuery) {
+				*wq = *query
+			})
+
+		case "assigneeTasks":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&TaskClient{config: u.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, taskImplementors)...); err != nil {
+				return err
+			}
+			u.WithNamedAssigneeTasks(alias, func(wq *TaskQuery) {
 				*wq = *query
 			})
 

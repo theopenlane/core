@@ -4892,11 +4892,8 @@ input CreateTaskInput {
 	the completion date of the task
 	"""
 	completed: Time
-	"""
-	the assignee of the task
-	"""
-	assignee: String
-	userID: ID!
+	assignerID: ID!
+	assigneeID: ID
 	organizationIDs: [ID!]
 	groupIDs: [ID!]
 	policyIDs: [ID!]
@@ -4999,7 +4996,8 @@ input CreateUserInput {
 	eventIDs: [ID!]
 	actionplanIDs: [ID!]
 	subcontrolIDs: [ID!]
-	taskIDs: [ID!]
+	assignerTaskIDs: [ID!]
+	assigneeTaskIDs: [ID!]
 }
 """
 CreateUserSettingInput is used for create UserSetting object.
@@ -28174,15 +28172,8 @@ type Task implements Node {
 	the completion date of the task
 	"""
 	completed: Time
-	"""
-	the assignee of the task
-	"""
-	assignee: String
-	"""
-	the assigner of the task
-	"""
-	assigner: ID!
-	user: User!
+	assigner: User!
+	assignee: User
 	organization: [Organization!]
 	group: [Group!]
 	policy: [InternalPolicy!]
@@ -28287,14 +28278,6 @@ type TaskHistory implements Node {
 	the completion date of the task
 	"""
 	completed: Time
-	"""
-	the assignee of the task
-	"""
-	assignee: String
-	"""
-	the assigner of the task
-	"""
-	assigner: String!
 }
 """
 A connection to a list of items.
@@ -28561,40 +28544,6 @@ input TaskHistoryWhereInput {
 	completedLTE: Time
 	completedIsNil: Boolean
 	completedNotNil: Boolean
-	"""
-	assignee field predicates
-	"""
-	assignee: String
-	assigneeNEQ: String
-	assigneeIn: [String!]
-	assigneeNotIn: [String!]
-	assigneeGT: String
-	assigneeGTE: String
-	assigneeLT: String
-	assigneeLTE: String
-	assigneeContains: String
-	assigneeHasPrefix: String
-	assigneeHasSuffix: String
-	assigneeIsNil: Boolean
-	assigneeNotNil: Boolean
-	assigneeEqualFold: String
-	assigneeContainsFold: String
-	"""
-	assigner field predicates
-	"""
-	assigner: String
-	assignerNEQ: String
-	assignerIn: [String!]
-	assignerNotIn: [String!]
-	assignerGT: String
-	assignerGTE: String
-	assignerLT: String
-	assignerLTE: String
-	assignerContains: String
-	assignerHasPrefix: String
-	assignerHasSuffix: String
-	assignerEqualFold: String
-	assignerContainsFold: String
 }
 type TaskSearchResult {
 	tasks: [Task!]
@@ -28800,44 +28749,15 @@ input TaskWhereInput {
 	completedIsNil: Boolean
 	completedNotNil: Boolean
 	"""
-	assignee field predicates
+	assigner edge predicates
 	"""
-	assignee: String
-	assigneeNEQ: String
-	assigneeIn: [String!]
-	assigneeNotIn: [String!]
-	assigneeGT: String
-	assigneeGTE: String
-	assigneeLT: String
-	assigneeLTE: String
-	assigneeContains: String
-	assigneeHasPrefix: String
-	assigneeHasSuffix: String
-	assigneeIsNil: Boolean
-	assigneeNotNil: Boolean
-	assigneeEqualFold: String
-	assigneeContainsFold: String
+	hasAssigner: Boolean
+	hasAssignerWith: [UserWhereInput!]
 	"""
-	assigner field predicates
+	assignee edge predicates
 	"""
-	assigner: ID
-	assignerNEQ: ID
-	assignerIn: [ID!]
-	assignerNotIn: [ID!]
-	assignerGT: ID
-	assignerGTE: ID
-	assignerLT: ID
-	assignerLTE: ID
-	assignerContains: ID
-	assignerHasPrefix: ID
-	assignerHasSuffix: ID
-	assignerEqualFold: ID
-	assignerContainsFold: ID
-	"""
-	user edge predicates
-	"""
-	hasUser: Boolean
-	hasUserWith: [UserWhereInput!]
+	hasAssignee: Boolean
+	hasAssigneeWith: [UserWhereInput!]
 	"""
 	organization edge predicates
 	"""
@@ -31251,12 +31171,9 @@ input UpdateTaskInput {
 	"""
 	completed: Time
 	clearCompleted: Boolean
-	"""
-	the assignee of the task
-	"""
-	assignee: String
+	assignerID: ID
+	assigneeID: ID
 	clearAssignee: Boolean
-	userID: ID
 	addOrganizationIDs: [ID!]
 	removeOrganizationIDs: [ID!]
 	clearOrganization: Boolean
@@ -31416,9 +31333,12 @@ input UpdateUserInput {
 	addSubcontrolIDs: [ID!]
 	removeSubcontrolIDs: [ID!]
 	clearSubcontrols: Boolean
-	addTaskIDs: [ID!]
-	removeTaskIDs: [ID!]
-	clearTasks: Boolean
+	addAssignerTaskIDs: [ID!]
+	removeAssignerTaskIDs: [ID!]
+	clearAssignerTasks: Boolean
+	addAssigneeTaskIDs: [ID!]
+	removeAssigneeTaskIDs: [ID!]
+	clearAssigneeTasks: Boolean
 }
 """
 UpdateUserSettingInput is used for update UserSetting object.
@@ -31585,7 +31505,8 @@ type User implements Node {
 	events: [Event!]
 	actionplans: [ActionPlan!]
 	subcontrols: [Subcontrol!]
-	tasks: [Task!]
+	assignerTasks: [Task!]
+	assigneeTasks: [Task!]
 	groupMemberships: [GroupMembership!]
 	orgMemberships: [OrgMembership!]
 }
@@ -33149,10 +33070,15 @@ input UserWhereInput {
 	hasSubcontrols: Boolean
 	hasSubcontrolsWith: [SubcontrolWhereInput!]
 	"""
-	tasks edge predicates
+	assigner_tasks edge predicates
 	"""
-	hasTasks: Boolean
-	hasTasksWith: [TaskWhereInput!]
+	hasAssignerTasks: Boolean
+	hasAssignerTasksWith: [TaskWhereInput!]
+	"""
+	assignee_tasks edge predicates
+	"""
+	hasAssigneeTasks: Boolean
+	hasAssigneeTasksWith: [TaskWhereInput!]
 	"""
 	group_memberships edge predicates
 	"""

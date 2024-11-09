@@ -231,49 +231,34 @@ func (tu *TaskUpdate) ClearCompleted() *TaskUpdate {
 	return tu
 }
 
-// SetAssignee sets the "assignee" field.
-func (tu *TaskUpdate) SetAssignee(s string) *TaskUpdate {
-	tu.mutation.SetAssignee(s)
+// SetAssignerID sets the "assigner" edge to the User entity by ID.
+func (tu *TaskUpdate) SetAssignerID(id string) *TaskUpdate {
+	tu.mutation.SetAssignerID(id)
 	return tu
 }
 
-// SetNillableAssignee sets the "assignee" field if the given value is not nil.
-func (tu *TaskUpdate) SetNillableAssignee(s *string) *TaskUpdate {
-	if s != nil {
-		tu.SetAssignee(*s)
+// SetAssigner sets the "assigner" edge to the User entity.
+func (tu *TaskUpdate) SetAssigner(u *User) *TaskUpdate {
+	return tu.SetAssignerID(u.ID)
+}
+
+// SetAssigneeID sets the "assignee" edge to the User entity by ID.
+func (tu *TaskUpdate) SetAssigneeID(id string) *TaskUpdate {
+	tu.mutation.SetAssigneeID(id)
+	return tu
+}
+
+// SetNillableAssigneeID sets the "assignee" edge to the User entity by ID if the given value is not nil.
+func (tu *TaskUpdate) SetNillableAssigneeID(id *string) *TaskUpdate {
+	if id != nil {
+		tu = tu.SetAssigneeID(*id)
 	}
 	return tu
 }
 
-// ClearAssignee clears the value of the "assignee" field.
-func (tu *TaskUpdate) ClearAssignee() *TaskUpdate {
-	tu.mutation.ClearAssignee()
-	return tu
-}
-
-// SetAssigner sets the "assigner" field.
-func (tu *TaskUpdate) SetAssigner(s string) *TaskUpdate {
-	tu.mutation.SetAssigner(s)
-	return tu
-}
-
-// SetNillableAssigner sets the "assigner" field if the given value is not nil.
-func (tu *TaskUpdate) SetNillableAssigner(s *string) *TaskUpdate {
-	if s != nil {
-		tu.SetAssigner(*s)
-	}
-	return tu
-}
-
-// SetUserID sets the "user" edge to the User entity by ID.
-func (tu *TaskUpdate) SetUserID(id string) *TaskUpdate {
-	tu.mutation.SetUserID(id)
-	return tu
-}
-
-// SetUser sets the "user" edge to the User entity.
-func (tu *TaskUpdate) SetUser(u *User) *TaskUpdate {
-	return tu.SetUserID(u.ID)
+// SetAssignee sets the "assignee" edge to the User entity.
+func (tu *TaskUpdate) SetAssignee(u *User) *TaskUpdate {
+	return tu.SetAssigneeID(u.ID)
 }
 
 // AddOrganizationIDs adds the "organization" edge to the Organization entity by IDs.
@@ -386,9 +371,15 @@ func (tu *TaskUpdate) Mutation() *TaskMutation {
 	return tu.mutation
 }
 
-// ClearUser clears the "user" edge to the User entity.
-func (tu *TaskUpdate) ClearUser() *TaskUpdate {
-	tu.mutation.ClearUser()
+// ClearAssigner clears the "assigner" edge to the User entity.
+func (tu *TaskUpdate) ClearAssigner() *TaskUpdate {
+	tu.mutation.ClearAssigner()
+	return tu
+}
+
+// ClearAssignee clears the "assignee" edge to the User entity.
+func (tu *TaskUpdate) ClearAssignee() *TaskUpdate {
+	tu.mutation.ClearAssignee()
 	return tu
 }
 
@@ -593,13 +584,8 @@ func (tu *TaskUpdate) check() error {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Task.status": %w`, err)}
 		}
 	}
-	if v, ok := tu.mutation.Assigner(); ok {
-		if err := task.AssignerValidator(v); err != nil {
-			return &ValidationError{Name: "assigner", err: fmt.Errorf(`generated: validator failed for field "Task.assigner": %w`, err)}
-		}
-	}
-	if tu.mutation.UserCleared() && len(tu.mutation.UserIDs()) > 0 {
-		return errors.New(`generated: clearing a required unique edge "Task.user"`)
+	if tu.mutation.AssignerCleared() && len(tu.mutation.AssignerIDs()) > 0 {
+		return errors.New(`generated: clearing a required unique edge "Task.assigner"`)
 	}
 	return nil
 }
@@ -693,18 +679,12 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if tu.mutation.CompletedCleared() {
 		_spec.ClearField(task.FieldCompleted, field.TypeTime)
 	}
-	if value, ok := tu.mutation.Assignee(); ok {
-		_spec.SetField(task.FieldAssignee, field.TypeString, value)
-	}
-	if tu.mutation.AssigneeCleared() {
-		_spec.ClearField(task.FieldAssignee, field.TypeString)
-	}
-	if tu.mutation.UserCleared() {
+	if tu.mutation.AssignerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   task.UserTable,
-			Columns: []string{task.UserColumn},
+			Table:   task.AssignerTable,
+			Columns: []string{task.AssignerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
@@ -713,12 +693,43 @@ func (tu *TaskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge.Schema = tu.schemaConfig.Task
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tu.mutation.UserIDs(); len(nodes) > 0 {
+	if nodes := tu.mutation.AssignerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   task.UserTable,
-			Columns: []string{task.UserColumn},
+			Table:   task.AssignerTable,
+			Columns: []string{task.AssignerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tu.schemaConfig.Task
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if tu.mutation.AssigneeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   task.AssigneeTable,
+			Columns: []string{task.AssigneeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tu.schemaConfig.Task
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tu.mutation.AssigneeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   task.AssigneeTable,
+			Columns: []string{task.AssigneeColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
@@ -1280,49 +1291,34 @@ func (tuo *TaskUpdateOne) ClearCompleted() *TaskUpdateOne {
 	return tuo
 }
 
-// SetAssignee sets the "assignee" field.
-func (tuo *TaskUpdateOne) SetAssignee(s string) *TaskUpdateOne {
-	tuo.mutation.SetAssignee(s)
+// SetAssignerID sets the "assigner" edge to the User entity by ID.
+func (tuo *TaskUpdateOne) SetAssignerID(id string) *TaskUpdateOne {
+	tuo.mutation.SetAssignerID(id)
 	return tuo
 }
 
-// SetNillableAssignee sets the "assignee" field if the given value is not nil.
-func (tuo *TaskUpdateOne) SetNillableAssignee(s *string) *TaskUpdateOne {
-	if s != nil {
-		tuo.SetAssignee(*s)
+// SetAssigner sets the "assigner" edge to the User entity.
+func (tuo *TaskUpdateOne) SetAssigner(u *User) *TaskUpdateOne {
+	return tuo.SetAssignerID(u.ID)
+}
+
+// SetAssigneeID sets the "assignee" edge to the User entity by ID.
+func (tuo *TaskUpdateOne) SetAssigneeID(id string) *TaskUpdateOne {
+	tuo.mutation.SetAssigneeID(id)
+	return tuo
+}
+
+// SetNillableAssigneeID sets the "assignee" edge to the User entity by ID if the given value is not nil.
+func (tuo *TaskUpdateOne) SetNillableAssigneeID(id *string) *TaskUpdateOne {
+	if id != nil {
+		tuo = tuo.SetAssigneeID(*id)
 	}
 	return tuo
 }
 
-// ClearAssignee clears the value of the "assignee" field.
-func (tuo *TaskUpdateOne) ClearAssignee() *TaskUpdateOne {
-	tuo.mutation.ClearAssignee()
-	return tuo
-}
-
-// SetAssigner sets the "assigner" field.
-func (tuo *TaskUpdateOne) SetAssigner(s string) *TaskUpdateOne {
-	tuo.mutation.SetAssigner(s)
-	return tuo
-}
-
-// SetNillableAssigner sets the "assigner" field if the given value is not nil.
-func (tuo *TaskUpdateOne) SetNillableAssigner(s *string) *TaskUpdateOne {
-	if s != nil {
-		tuo.SetAssigner(*s)
-	}
-	return tuo
-}
-
-// SetUserID sets the "user" edge to the User entity by ID.
-func (tuo *TaskUpdateOne) SetUserID(id string) *TaskUpdateOne {
-	tuo.mutation.SetUserID(id)
-	return tuo
-}
-
-// SetUser sets the "user" edge to the User entity.
-func (tuo *TaskUpdateOne) SetUser(u *User) *TaskUpdateOne {
-	return tuo.SetUserID(u.ID)
+// SetAssignee sets the "assignee" edge to the User entity.
+func (tuo *TaskUpdateOne) SetAssignee(u *User) *TaskUpdateOne {
+	return tuo.SetAssigneeID(u.ID)
 }
 
 // AddOrganizationIDs adds the "organization" edge to the Organization entity by IDs.
@@ -1435,9 +1431,15 @@ func (tuo *TaskUpdateOne) Mutation() *TaskMutation {
 	return tuo.mutation
 }
 
-// ClearUser clears the "user" edge to the User entity.
-func (tuo *TaskUpdateOne) ClearUser() *TaskUpdateOne {
-	tuo.mutation.ClearUser()
+// ClearAssigner clears the "assigner" edge to the User entity.
+func (tuo *TaskUpdateOne) ClearAssigner() *TaskUpdateOne {
+	tuo.mutation.ClearAssigner()
+	return tuo
+}
+
+// ClearAssignee clears the "assignee" edge to the User entity.
+func (tuo *TaskUpdateOne) ClearAssignee() *TaskUpdateOne {
+	tuo.mutation.ClearAssignee()
 	return tuo
 }
 
@@ -1655,13 +1657,8 @@ func (tuo *TaskUpdateOne) check() error {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Task.status": %w`, err)}
 		}
 	}
-	if v, ok := tuo.mutation.Assigner(); ok {
-		if err := task.AssignerValidator(v); err != nil {
-			return &ValidationError{Name: "assigner", err: fmt.Errorf(`generated: validator failed for field "Task.assigner": %w`, err)}
-		}
-	}
-	if tuo.mutation.UserCleared() && len(tuo.mutation.UserIDs()) > 0 {
-		return errors.New(`generated: clearing a required unique edge "Task.user"`)
+	if tuo.mutation.AssignerCleared() && len(tuo.mutation.AssignerIDs()) > 0 {
+		return errors.New(`generated: clearing a required unique edge "Task.assigner"`)
 	}
 	return nil
 }
@@ -1772,18 +1769,12 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 	if tuo.mutation.CompletedCleared() {
 		_spec.ClearField(task.FieldCompleted, field.TypeTime)
 	}
-	if value, ok := tuo.mutation.Assignee(); ok {
-		_spec.SetField(task.FieldAssignee, field.TypeString, value)
-	}
-	if tuo.mutation.AssigneeCleared() {
-		_spec.ClearField(task.FieldAssignee, field.TypeString)
-	}
-	if tuo.mutation.UserCleared() {
+	if tuo.mutation.AssignerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   task.UserTable,
-			Columns: []string{task.UserColumn},
+			Table:   task.AssignerTable,
+			Columns: []string{task.AssignerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
@@ -1792,12 +1783,43 @@ func (tuo *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) 
 		edge.Schema = tuo.schemaConfig.Task
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tuo.mutation.UserIDs(); len(nodes) > 0 {
+	if nodes := tuo.mutation.AssignerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   task.UserTable,
-			Columns: []string{task.UserColumn},
+			Table:   task.AssignerTable,
+			Columns: []string{task.AssignerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tuo.schemaConfig.Task
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if tuo.mutation.AssigneeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   task.AssigneeTable,
+			Columns: []string{task.AssigneeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tuo.schemaConfig.Task
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := tuo.mutation.AssigneeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   task.AssigneeTable,
+			Columns: []string{task.AssigneeColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),

@@ -399,8 +399,6 @@ query AdminSearch($query: String!) {
           title
           description
           details
-          assignee
-          assigner
         }
       }
       ... on TemplateSearchResult {

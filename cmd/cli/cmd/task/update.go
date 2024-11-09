@@ -61,7 +61,7 @@ func updateValidation() (id string, input openlaneclient.UpdateTaskInput, err er
 
 	assignee := cmd.Config.String("assignee")
 	if assignee != "" {
-		input.Assignee = &assignee
+		input.AssigneeID = &assignee
 	}
 
 	due := cmd.Config.Duration("due")

@@ -1150,8 +1150,6 @@ func adminSearchTasks(ctx context.Context, query string) ([]*generated.Task, err
 				likeQuery := "%" + query + "%"
 				s.Where(sql.ExprP("(details)::text LIKE $6", likeQuery)) // search by Details
 			},
-			task.AssigneeContainsFold(query), // search by Assignee
-			task.AssignerContainsFold(query), // search by Assigner
 		),
 	).All(ctx)
 }

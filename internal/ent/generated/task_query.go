@@ -34,7 +34,8 @@ type TaskQuery struct {
 	order                     []task.OrderOption
 	inters                    []Interceptor
 	predicates                []predicate.Task
-	withUser                  *UserQuery
+	withAssigner              *UserQuery
+	withAssignee              *UserQuery
 	withOrganization          *OrganizationQuery
 	withGroup                 *GroupQuery
 	withPolicy                *InternalPolicyQuery
@@ -42,6 +43,7 @@ type TaskQuery struct {
 	withControl               *ControlQuery
 	withControlObjective      *ControlObjectiveQuery
 	withSubcontrol            *SubcontrolQuery
+	withFKs                   bool
 	loadTotal                 []func(context.Context, []*Task) error
 	modifiers                 []func(*sql.Selector)
 	withNamedOrganization     map[string]*OrganizationQuery
@@ -87,8 +89,8 @@ func (tq *TaskQuery) Order(o ...task.OrderOption) *TaskQuery {
 	return tq
 }
 
-// QueryUser chains the current query on the "user" edge.
-func (tq *TaskQuery) QueryUser() *UserQuery {
+// QueryAssigner chains the current query on the "assigner" edge.
+func (tq *TaskQuery) QueryAssigner() *UserQuery {
 	query := (&UserClient{config: tq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := tq.prepareQuery(ctx); err != nil {
@@ -101,7 +103,32 @@ func (tq *TaskQuery) QueryUser() *UserQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(task.Table, task.FieldID, selector),
 			sqlgraph.To(user.Table, user.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, task.UserTable, task.UserColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, task.AssignerTable, task.AssignerColumn),
+		)
+		schemaConfig := tq.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Task
+		fromU = sqlgraph.SetNeighbors(tq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryAssignee chains the current query on the "assignee" edge.
+func (tq *TaskQuery) QueryAssignee() *UserQuery {
+	query := (&UserClient{config: tq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := tq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := tq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(task.Table, task.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, task.AssigneeTable, task.AssigneeColumn),
 		)
 		schemaConfig := tq.schemaConfig
 		step.To.Schema = schemaConfig.User
@@ -479,7 +506,8 @@ func (tq *TaskQuery) Clone() *TaskQuery {
 		order:                append([]task.OrderOption{}, tq.order...),
 		inters:               append([]Interceptor{}, tq.inters...),
 		predicates:           append([]predicate.Task{}, tq.predicates...),
-		withUser:             tq.withUser.Clone(),
+		withAssigner:         tq.withAssigner.Clone(),
+		withAssignee:         tq.withAssignee.Clone(),
 		withOrganization:     tq.withOrganization.Clone(),
 		withGroup:            tq.withGroup.Clone(),
 		withPolicy:           tq.withPolicy.Clone(),
@@ -494,14 +522,25 @@ func (tq *TaskQuery) Clone() *TaskQuery {
 	}
 }
 
-// WithUser tells the query-builder to eager-load the nodes that are connected to
-// the "user" edge. The optional arguments are used to configure the query builder of the edge.
-func (tq *TaskQuery) WithUser(opts ...func(*UserQuery)) *TaskQuery {
+// WithAssigner tells the query-builder to eager-load the nodes that are connected to
+// the "assigner" edge. The optional arguments are used to configure the query builder of the edge.
+func (tq *TaskQuery) WithAssigner(opts ...func(*UserQuery)) *TaskQuery {
 	query := (&UserClient{config: tq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	tq.withUser = query
+	tq.withAssigner = query
+	return tq
+}
+
+// WithAssignee tells the query-builder to eager-load the nodes that are connected to
+// the "assignee" edge. The optional arguments are used to configure the query builder of the edge.
+func (tq *TaskQuery) WithAssignee(opts ...func(*UserQuery)) *TaskQuery {
+	query := (&UserClient{config: tq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	tq.withAssignee = query
 	return tq
 }
 
@@ -665,9 +704,11 @@ func (tq *TaskQuery) prepareQuery(ctx context.Context) error {
 func (tq *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, error) {
 	var (
 		nodes       = []*Task{}
+		withFKs     = tq.withFKs
 		_spec       = tq.querySpec()
-		loadedTypes = [8]bool{
-			tq.withUser != nil,
+		loadedTypes = [9]bool{
+			tq.withAssigner != nil,
+			tq.withAssignee != nil,
 			tq.withOrganization != nil,
 			tq.withGroup != nil,
 			tq.withPolicy != nil,
@@ -677,6 +718,12 @@ func (tq *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, e
 			tq.withSubcontrol != nil,
 		}
 	)
+	if tq.withAssigner != nil || tq.withAssignee != nil {
+		withFKs = true
+	}
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, task.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Task).scanValues(nil, columns)
 	}
@@ -700,9 +747,15 @@ func (tq *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, e
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := tq.withUser; query != nil {
-		if err := tq.loadUser(ctx, query, nodes, nil,
-			func(n *Task, e *User) { n.Edges.User = e }); err != nil {
+	if query := tq.withAssigner; query != nil {
+		if err := tq.loadAssigner(ctx, query, nodes, nil,
+			func(n *Task, e *User) { n.Edges.Assigner = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := tq.withAssignee; query != nil {
+		if err := tq.loadAssignee(ctx, query, nodes, nil,
+			func(n *Task, e *User) { n.Edges.Assignee = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -812,11 +865,14 @@ func (tq *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, e
 	return nodes, nil
 }
 
-func (tq *TaskQuery) loadUser(ctx context.Context, query *UserQuery, nodes []*Task, init func(*Task), assign func(*Task, *User)) error {
+func (tq *TaskQuery) loadAssigner(ctx context.Context, query *UserQuery, nodes []*Task, init func(*Task), assign func(*Task, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Task)
 	for i := range nodes {
-		fk := nodes[i].Assigner
+		if nodes[i].user_assigner_tasks == nil {
+			continue
+		}
+		fk := *nodes[i].user_assigner_tasks
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -833,7 +889,39 @@ func (tq *TaskQuery) loadUser(ctx context.Context, query *UserQuery, nodes []*Ta
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "assigner" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "user_assigner_tasks" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (tq *TaskQuery) loadAssignee(ctx context.Context, query *UserQuery, nodes []*Task, init func(*Task), assign func(*Task, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Task)
+	for i := range nodes {
+		if nodes[i].user_assignee_tasks == nil {
+			continue
+		}
+		fk := *nodes[i].user_assignee_tasks
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "user_assignee_tasks" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -1305,9 +1393,6 @@ func (tq *TaskQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != task.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
-		}
-		if tq.withUser != nil {
-			_spec.Node.AddColumnOnce(task.FieldAssigner)
 		}
 	}
 	if ps := tq.predicates; len(ps) > 0 {

@@ -53,11 +53,7 @@ type TaskHistory struct {
 	// the due date of the task
 	Due time.Time `json:"due,omitempty"`
 	// the completion date of the task
-	Completed time.Time `json:"completed,omitempty"`
-	// the assignee of the task
-	Assignee string `json:"assignee,omitempty"`
-	// the assigner of the task
-	Assigner     string `json:"assigner,omitempty"`
+	Completed    time.Time `json:"completed,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -70,7 +66,7 @@ func (*TaskHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case taskhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case taskhistory.FieldID, taskhistory.FieldRef, taskhistory.FieldCreatedBy, taskhistory.FieldUpdatedBy, taskhistory.FieldMappingID, taskhistory.FieldDeletedBy, taskhistory.FieldTitle, taskhistory.FieldDescription, taskhistory.FieldStatus, taskhistory.FieldAssignee, taskhistory.FieldAssigner:
+		case taskhistory.FieldID, taskhistory.FieldRef, taskhistory.FieldCreatedBy, taskhistory.FieldUpdatedBy, taskhistory.FieldMappingID, taskhistory.FieldDeletedBy, taskhistory.FieldTitle, taskhistory.FieldDescription, taskhistory.FieldStatus:
 			values[i] = new(sql.NullString)
 		case taskhistory.FieldHistoryTime, taskhistory.FieldCreatedAt, taskhistory.FieldUpdatedAt, taskhistory.FieldDeletedAt, taskhistory.FieldDue, taskhistory.FieldCompleted:
 			values[i] = new(sql.NullTime)
@@ -201,18 +197,6 @@ func (th *TaskHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				th.Completed = value.Time
 			}
-		case taskhistory.FieldAssignee:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field assignee", values[i])
-			} else if value.Valid {
-				th.Assignee = value.String
-			}
-		case taskhistory.FieldAssigner:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field assigner", values[i])
-			} else if value.Valid {
-				th.Assigner = value.String
-			}
 		default:
 			th.selectValues.Set(columns[i], values[i])
 		}
@@ -299,12 +283,6 @@ func (th *TaskHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("completed=")
 	builder.WriteString(th.Completed.Format(time.ANSIC))
-	builder.WriteString(", ")
-	builder.WriteString("assignee=")
-	builder.WriteString(th.Assignee)
-	builder.WriteString(", ")
-	builder.WriteString("assigner=")
-	builder.WriteString(th.Assigner)
 	builder.WriteByte(')')
 	return builder.String()
 }

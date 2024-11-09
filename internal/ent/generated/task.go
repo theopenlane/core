@@ -48,20 +48,20 @@ type Task struct {
 	Due time.Time `json:"due,omitempty"`
 	// the completion date of the task
 	Completed time.Time `json:"completed,omitempty"`
-	// the assignee of the task
-	Assignee string `json:"assignee,omitempty"`
-	// the assigner of the task
-	Assigner string `json:"assigner,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the TaskQuery when eager-loading is set.
-	Edges        TaskEdges `json:"edges"`
-	selectValues sql.SelectValues
+	Edges               TaskEdges `json:"edges"`
+	user_assigner_tasks *string
+	user_assignee_tasks *string
+	selectValues        sql.SelectValues
 }
 
 // TaskEdges holds the relations/edges for other nodes in the graph.
 type TaskEdges struct {
-	// User holds the value of the user edge.
-	User *User `json:"user,omitempty"`
+	// Assigner holds the value of the assigner edge.
+	Assigner *User `json:"assigner,omitempty"`
+	// Assignee holds the value of the assignee edge.
+	Assignee *User `json:"assignee,omitempty"`
 	// Organization holds the value of the organization edge.
 	Organization []*Organization `json:"organization,omitempty"`
 	// Group holds the value of the group edge.
@@ -78,9 +78,9 @@ type TaskEdges struct {
 	Subcontrol []*Subcontrol `json:"subcontrol,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [8]bool
+	loadedTypes [9]bool
 	// totalCount holds the count of the edges above.
-	totalCount [8]map[string]int
+	totalCount [9]map[string]int
 
 	namedOrganization     map[string][]*Organization
 	namedGroup            map[string][]*Group
@@ -91,21 +91,32 @@ type TaskEdges struct {
 	namedSubcontrol       map[string][]*Subcontrol
 }
 
-// UserOrErr returns the User value or an error if the edge
+// AssignerOrErr returns the Assigner value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e TaskEdges) UserOrErr() (*User, error) {
-	if e.User != nil {
-		return e.User, nil
+func (e TaskEdges) AssignerOrErr() (*User, error) {
+	if e.Assigner != nil {
+		return e.Assigner, nil
 	} else if e.loadedTypes[0] {
 		return nil, &NotFoundError{label: user.Label}
 	}
-	return nil, &NotLoadedError{edge: "user"}
+	return nil, &NotLoadedError{edge: "assigner"}
+}
+
+// AssigneeOrErr returns the Assignee value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e TaskEdges) AssigneeOrErr() (*User, error) {
+	if e.Assignee != nil {
+		return e.Assignee, nil
+	} else if e.loadedTypes[1] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "assignee"}
 }
 
 // OrganizationOrErr returns the Organization value or an error if the edge
 // was not loaded in eager-loading.
 func (e TaskEdges) OrganizationOrErr() ([]*Organization, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[2] {
 		return e.Organization, nil
 	}
 	return nil, &NotLoadedError{edge: "organization"}
@@ -114,7 +125,7 @@ func (e TaskEdges) OrganizationOrErr() ([]*Organization, error) {
 // GroupOrErr returns the Group value or an error if the edge
 // was not loaded in eager-loading.
 func (e TaskEdges) GroupOrErr() ([]*Group, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[3] {
 		return e.Group, nil
 	}
 	return nil, &NotLoadedError{edge: "group"}
@@ -123,7 +134,7 @@ func (e TaskEdges) GroupOrErr() ([]*Group, error) {
 // PolicyOrErr returns the Policy value or an error if the edge
 // was not loaded in eager-loading.
 func (e TaskEdges) PolicyOrErr() ([]*InternalPolicy, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[4] {
 		return e.Policy, nil
 	}
 	return nil, &NotLoadedError{edge: "policy"}
@@ -132,7 +143,7 @@ func (e TaskEdges) PolicyOrErr() ([]*InternalPolicy, error) {
 // ProcedureOrErr returns the Procedure value or an error if the edge
 // was not loaded in eager-loading.
 func (e TaskEdges) ProcedureOrErr() ([]*Procedure, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[5] {
 		return e.Procedure, nil
 	}
 	return nil, &NotLoadedError{edge: "procedure"}
@@ -141,7 +152,7 @@ func (e TaskEdges) ProcedureOrErr() ([]*Procedure, error) {
 // ControlOrErr returns the Control value or an error if the edge
 // was not loaded in eager-loading.
 func (e TaskEdges) ControlOrErr() ([]*Control, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[6] {
 		return e.Control, nil
 	}
 	return nil, &NotLoadedError{edge: "control"}
@@ -150,7 +161,7 @@ func (e TaskEdges) ControlOrErr() ([]*Control, error) {
 // ControlObjectiveOrErr returns the ControlObjective value or an error if the edge
 // was not loaded in eager-loading.
 func (e TaskEdges) ControlObjectiveOrErr() ([]*ControlObjective, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[7] {
 		return e.ControlObjective, nil
 	}
 	return nil, &NotLoadedError{edge: "control_objective"}
@@ -159,7 +170,7 @@ func (e TaskEdges) ControlObjectiveOrErr() ([]*ControlObjective, error) {
 // SubcontrolOrErr returns the Subcontrol value or an error if the edge
 // was not loaded in eager-loading.
 func (e TaskEdges) SubcontrolOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[8] {
 		return e.Subcontrol, nil
 	}
 	return nil, &NotLoadedError{edge: "subcontrol"}
@@ -172,10 +183,14 @@ func (*Task) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case task.FieldTags, task.FieldDetails:
 			values[i] = new([]byte)
-		case task.FieldID, task.FieldCreatedBy, task.FieldUpdatedBy, task.FieldMappingID, task.FieldDeletedBy, task.FieldTitle, task.FieldDescription, task.FieldStatus, task.FieldAssignee, task.FieldAssigner:
+		case task.FieldID, task.FieldCreatedBy, task.FieldUpdatedBy, task.FieldMappingID, task.FieldDeletedBy, task.FieldTitle, task.FieldDescription, task.FieldStatus:
 			values[i] = new(sql.NullString)
 		case task.FieldCreatedAt, task.FieldUpdatedAt, task.FieldDeletedAt, task.FieldDue, task.FieldCompleted:
 			values[i] = new(sql.NullTime)
+		case task.ForeignKeys[0]: // user_assigner_tasks
+			values[i] = new(sql.NullString)
+		case task.ForeignKeys[1]: // user_assignee_tasks
+			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -285,17 +300,19 @@ func (t *Task) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				t.Completed = value.Time
 			}
-		case task.FieldAssignee:
+		case task.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field assignee", values[i])
+				return fmt.Errorf("unexpected type %T for field user_assigner_tasks", values[i])
 			} else if value.Valid {
-				t.Assignee = value.String
+				t.user_assigner_tasks = new(string)
+				*t.user_assigner_tasks = value.String
 			}
-		case task.FieldAssigner:
+		case task.ForeignKeys[1]:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field assigner", values[i])
+				return fmt.Errorf("unexpected type %T for field user_assignee_tasks", values[i])
 			} else if value.Valid {
-				t.Assigner = value.String
+				t.user_assignee_tasks = new(string)
+				*t.user_assignee_tasks = value.String
 			}
 		default:
 			t.selectValues.Set(columns[i], values[i])
@@ -310,9 +327,14 @@ func (t *Task) Value(name string) (ent.Value, error) {
 	return t.selectValues.Get(name)
 }
 
-// QueryUser queries the "user" edge of the Task entity.
-func (t *Task) QueryUser() *UserQuery {
-	return NewTaskClient(t.config).QueryUser(t)
+// QueryAssigner queries the "assigner" edge of the Task entity.
+func (t *Task) QueryAssigner() *UserQuery {
+	return NewTaskClient(t.config).QueryAssigner(t)
+}
+
+// QueryAssignee queries the "assignee" edge of the Task entity.
+func (t *Task) QueryAssignee() *UserQuery {
+	return NewTaskClient(t.config).QueryAssignee(t)
 }
 
 // QueryOrganization queries the "organization" edge of the Task entity.
@@ -414,12 +436,6 @@ func (t *Task) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("completed=")
 	builder.WriteString(t.Completed.Format(time.ANSIC))
-	builder.WriteString(", ")
-	builder.WriteString("assignee=")
-	builder.WriteString(t.Assignee)
-	builder.WriteString(", ")
-	builder.WriteString("assigner=")
-	builder.WriteString(t.Assigner)
 	builder.WriteByte(')')
 	return builder.String()
 }

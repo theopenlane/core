@@ -7314,14 +7314,6 @@ func (m *TaskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetCompleted(completed)
 	}
 
-	if assignee, exists := m.Assignee(); exists {
-		create = create.SetAssignee(assignee)
-	}
-
-	if assigner, exists := m.Assigner(); exists {
-		create = create.SetAssigner(assigner)
-	}
-
 	_, err := create.Save(ctx)
 
 	return err
@@ -7436,18 +7428,6 @@ func (m *TaskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetCompleted(task.Completed)
 		}
 
-		if assignee, exists := m.Assignee(); exists {
-			create = create.SetAssignee(assignee)
-		} else {
-			create = create.SetAssignee(task.Assignee)
-		}
-
-		if assigner, exists := m.Assigner(); exists {
-			create = create.SetAssigner(assigner)
-		} else {
-			create = create.SetAssigner(task.Assigner)
-		}
-
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -7494,8 +7474,6 @@ func (m *TaskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetStatus(task.Status).
 			SetDue(task.Due).
 			SetCompleted(task.Completed).
-			SetAssignee(task.Assignee).
-			SetAssigner(task.Assigner).
 			Save(ctx)
 		if err != nil {
 			return err

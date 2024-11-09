@@ -86,8 +86,10 @@ const (
 	EdgeActionplans = "actionplans"
 	// EdgeSubcontrols holds the string denoting the subcontrols edge name in mutations.
 	EdgeSubcontrols = "subcontrols"
-	// EdgeTasks holds the string denoting the tasks edge name in mutations.
-	EdgeTasks = "tasks"
+	// EdgeAssignerTasks holds the string denoting the assigner_tasks edge name in mutations.
+	EdgeAssignerTasks = "assigner_tasks"
+	// EdgeAssigneeTasks holds the string denoting the assignee_tasks edge name in mutations.
+	EdgeAssigneeTasks = "assignee_tasks"
 	// EdgeGroupMemberships holds the string denoting the group_memberships edge name in mutations.
 	EdgeGroupMemberships = "group_memberships"
 	// EdgeOrgMemberships holds the string denoting the org_memberships edge name in mutations.
@@ -173,13 +175,20 @@ const (
 	// SubcontrolsInverseTable is the table name for the Subcontrol entity.
 	// It exists in this package in order to avoid circular dependency with the "subcontrol" package.
 	SubcontrolsInverseTable = "subcontrols"
-	// TasksTable is the table that holds the tasks relation/edge.
-	TasksTable = "tasks"
-	// TasksInverseTable is the table name for the Task entity.
+	// AssignerTasksTable is the table that holds the assigner_tasks relation/edge.
+	AssignerTasksTable = "tasks"
+	// AssignerTasksInverseTable is the table name for the Task entity.
 	// It exists in this package in order to avoid circular dependency with the "task" package.
-	TasksInverseTable = "tasks"
-	// TasksColumn is the table column denoting the tasks relation/edge.
-	TasksColumn = "assigner"
+	AssignerTasksInverseTable = "tasks"
+	// AssignerTasksColumn is the table column denoting the assigner_tasks relation/edge.
+	AssignerTasksColumn = "user_assigner_tasks"
+	// AssigneeTasksTable is the table that holds the assignee_tasks relation/edge.
+	AssigneeTasksTable = "tasks"
+	// AssigneeTasksInverseTable is the table name for the Task entity.
+	// It exists in this package in order to avoid circular dependency with the "task" package.
+	AssigneeTasksInverseTable = "tasks"
+	// AssigneeTasksColumn is the table column denoting the assignee_tasks relation/edge.
+	AssigneeTasksColumn = "user_assignee_tasks"
 	// GroupMembershipsTable is the table that holds the group_memberships relation/edge.
 	GroupMembershipsTable = "group_memberships"
 	// GroupMembershipsInverseTable is the table name for the GroupMembership entity.
@@ -592,17 +601,31 @@ func BySubcontrols(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByTasksCount orders the results by tasks count.
-func ByTasksCount(opts ...sql.OrderTermOption) OrderOption {
+// ByAssignerTasksCount orders the results by assigner_tasks count.
+func ByAssignerTasksCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newTasksStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newAssignerTasksStep(), opts...)
 	}
 }
 
-// ByTasks orders the results by tasks terms.
-func ByTasks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByAssignerTasks orders the results by assigner_tasks terms.
+func ByAssignerTasks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newTasksStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newAssignerTasksStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByAssigneeTasksCount orders the results by assignee_tasks count.
+func ByAssigneeTasksCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newAssigneeTasksStep(), opts...)
+	}
+}
+
+// ByAssigneeTasks orders the results by assignee_tasks terms.
+func ByAssigneeTasks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAssigneeTasksStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -724,11 +747,18 @@ func newSubcontrolsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, false, SubcontrolsTable, SubcontrolsPrimaryKey...),
 	)
 }
-func newTasksStep() *sqlgraph.Step {
+func newAssignerTasksStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(TasksInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, TasksTable, TasksColumn),
+		sqlgraph.To(AssignerTasksInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, AssignerTasksTable, AssignerTasksColumn),
+	)
+}
+func newAssigneeTasksStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AssigneeTasksInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, AssigneeTasksTable, AssigneeTasksColumn),
 	)
 }
 func newGroupMembershipsStep() *sqlgraph.Step {

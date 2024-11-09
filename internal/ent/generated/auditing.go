@@ -2185,12 +2185,6 @@ func (th *TaskHistory) changes(new *TaskHistory) []Change {
 	if !reflect.DeepEqual(th.Completed, new.Completed) {
 		changes = append(changes, NewChange(taskhistory.FieldCompleted, th.Completed, new.Completed))
 	}
-	if !reflect.DeepEqual(th.Assignee, new.Assignee) {
-		changes = append(changes, NewChange(taskhistory.FieldAssignee, th.Assignee, new.Assignee))
-	}
-	if !reflect.DeepEqual(th.Assigner, new.Assigner) {
-		changes = append(changes, NewChange(taskhistory.FieldAssigner, th.Assigner, new.Assigner))
-	}
 	return changes
 }
 

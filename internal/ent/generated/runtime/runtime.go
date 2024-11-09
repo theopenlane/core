@@ -3429,10 +3429,6 @@ func init() {
 	taskDescTitle := taskFields[0].Descriptor()
 	// task.TitleValidator is a validator for the "title" field. It is called by the builders before save.
 	task.TitleValidator = taskDescTitle.Validators[0].(func(string) error)
-	// taskDescAssigner is the schema descriptor for assigner field.
-	taskDescAssigner := taskFields[7].Descriptor()
-	// task.AssignerValidator is a validator for the "assigner" field. It is called by the builders before save.
-	task.AssignerValidator = taskDescAssigner.Validators[0].(func(string) error)
 	// taskDescID is the schema descriptor for id field.
 	taskDescID := taskMixinFields1[0].Descriptor()
 	// task.DefaultID holds the default value on creation for the id field.

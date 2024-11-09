@@ -56089,41 +56089,13 @@ type TaskWhereInput struct {
 	CompletedIsNil  bool        `json:"completedIsNil,omitempty"`
 	CompletedNotNil bool        `json:"completedNotNil,omitempty"`
 
-	// "assignee" field predicates.
-	Assignee             *string  `json:"assignee,omitempty"`
-	AssigneeNEQ          *string  `json:"assigneeNEQ,omitempty"`
-	AssigneeIn           []string `json:"assigneeIn,omitempty"`
-	AssigneeNotIn        []string `json:"assigneeNotIn,omitempty"`
-	AssigneeGT           *string  `json:"assigneeGT,omitempty"`
-	AssigneeGTE          *string  `json:"assigneeGTE,omitempty"`
-	AssigneeLT           *string  `json:"assigneeLT,omitempty"`
-	AssigneeLTE          *string  `json:"assigneeLTE,omitempty"`
-	AssigneeContains     *string  `json:"assigneeContains,omitempty"`
-	AssigneeHasPrefix    *string  `json:"assigneeHasPrefix,omitempty"`
-	AssigneeHasSuffix    *string  `json:"assigneeHasSuffix,omitempty"`
-	AssigneeIsNil        bool     `json:"assigneeIsNil,omitempty"`
-	AssigneeNotNil       bool     `json:"assigneeNotNil,omitempty"`
-	AssigneeEqualFold    *string  `json:"assigneeEqualFold,omitempty"`
-	AssigneeContainsFold *string  `json:"assigneeContainsFold,omitempty"`
+	// "assigner" edge predicates.
+	HasAssigner     *bool             `json:"hasAssigner,omitempty"`
+	HasAssignerWith []*UserWhereInput `json:"hasAssignerWith,omitempty"`
 
-	// "assigner" field predicates.
-	Assigner             *string  `json:"assigner,omitempty"`
-	AssignerNEQ          *string  `json:"assignerNEQ,omitempty"`
-	AssignerIn           []string `json:"assignerIn,omitempty"`
-	AssignerNotIn        []string `json:"assignerNotIn,omitempty"`
-	AssignerGT           *string  `json:"assignerGT,omitempty"`
-	AssignerGTE          *string  `json:"assignerGTE,omitempty"`
-	AssignerLT           *string  `json:"assignerLT,omitempty"`
-	AssignerLTE          *string  `json:"assignerLTE,omitempty"`
-	AssignerContains     *string  `json:"assignerContains,omitempty"`
-	AssignerHasPrefix    *string  `json:"assignerHasPrefix,omitempty"`
-	AssignerHasSuffix    *string  `json:"assignerHasSuffix,omitempty"`
-	AssignerEqualFold    *string  `json:"assignerEqualFold,omitempty"`
-	AssignerContainsFold *string  `json:"assignerContainsFold,omitempty"`
-
-	// "user" edge predicates.
-	HasUser     *bool             `json:"hasUser,omitempty"`
-	HasUserWith []*UserWhereInput `json:"hasUserWith,omitempty"`
+	// "assignee" edge predicates.
+	HasAssignee     *bool             `json:"hasAssignee,omitempty"`
+	HasAssigneeWith []*UserWhereInput `json:"hasAssigneeWith,omitempty"`
 
 	// "organization" edge predicates.
 	HasOrganization     *bool                     `json:"hasOrganization,omitempty"`
@@ -56636,108 +56608,42 @@ func (i *TaskWhereInput) P() (predicate.Task, error) {
 	if i.CompletedNotNil {
 		predicates = append(predicates, task.CompletedNotNil())
 	}
-	if i.Assignee != nil {
-		predicates = append(predicates, task.AssigneeEQ(*i.Assignee))
-	}
-	if i.AssigneeNEQ != nil {
-		predicates = append(predicates, task.AssigneeNEQ(*i.AssigneeNEQ))
-	}
-	if len(i.AssigneeIn) > 0 {
-		predicates = append(predicates, task.AssigneeIn(i.AssigneeIn...))
-	}
-	if len(i.AssigneeNotIn) > 0 {
-		predicates = append(predicates, task.AssigneeNotIn(i.AssigneeNotIn...))
-	}
-	if i.AssigneeGT != nil {
-		predicates = append(predicates, task.AssigneeGT(*i.AssigneeGT))
-	}
-	if i.AssigneeGTE != nil {
-		predicates = append(predicates, task.AssigneeGTE(*i.AssigneeGTE))
-	}
-	if i.AssigneeLT != nil {
-		predicates = append(predicates, task.AssigneeLT(*i.AssigneeLT))
-	}
-	if i.AssigneeLTE != nil {
-		predicates = append(predicates, task.AssigneeLTE(*i.AssigneeLTE))
-	}
-	if i.AssigneeContains != nil {
-		predicates = append(predicates, task.AssigneeContains(*i.AssigneeContains))
-	}
-	if i.AssigneeHasPrefix != nil {
-		predicates = append(predicates, task.AssigneeHasPrefix(*i.AssigneeHasPrefix))
-	}
-	if i.AssigneeHasSuffix != nil {
-		predicates = append(predicates, task.AssigneeHasSuffix(*i.AssigneeHasSuffix))
-	}
-	if i.AssigneeIsNil {
-		predicates = append(predicates, task.AssigneeIsNil())
-	}
-	if i.AssigneeNotNil {
-		predicates = append(predicates, task.AssigneeNotNil())
-	}
-	if i.AssigneeEqualFold != nil {
-		predicates = append(predicates, task.AssigneeEqualFold(*i.AssigneeEqualFold))
-	}
-	if i.AssigneeContainsFold != nil {
-		predicates = append(predicates, task.AssigneeContainsFold(*i.AssigneeContainsFold))
-	}
-	if i.Assigner != nil {
-		predicates = append(predicates, task.AssignerEQ(*i.Assigner))
-	}
-	if i.AssignerNEQ != nil {
-		predicates = append(predicates, task.AssignerNEQ(*i.AssignerNEQ))
-	}
-	if len(i.AssignerIn) > 0 {
-		predicates = append(predicates, task.AssignerIn(i.AssignerIn...))
-	}
-	if len(i.AssignerNotIn) > 0 {
-		predicates = append(predicates, task.AssignerNotIn(i.AssignerNotIn...))
-	}
-	if i.AssignerGT != nil {
-		predicates = append(predicates, task.AssignerGT(*i.AssignerGT))
-	}
-	if i.AssignerGTE != nil {
-		predicates = append(predicates, task.AssignerGTE(*i.AssignerGTE))
-	}
-	if i.AssignerLT != nil {
-		predicates = append(predicates, task.AssignerLT(*i.AssignerLT))
-	}
-	if i.AssignerLTE != nil {
-		predicates = append(predicates, task.AssignerLTE(*i.AssignerLTE))
-	}
-	if i.AssignerContains != nil {
-		predicates = append(predicates, task.AssignerContains(*i.AssignerContains))
-	}
-	if i.AssignerHasPrefix != nil {
-		predicates = append(predicates, task.AssignerHasPrefix(*i.AssignerHasPrefix))
-	}
-	if i.AssignerHasSuffix != nil {
-		predicates = append(predicates, task.AssignerHasSuffix(*i.AssignerHasSuffix))
-	}
-	if i.AssignerEqualFold != nil {
-		predicates = append(predicates, task.AssignerEqualFold(*i.AssignerEqualFold))
-	}
-	if i.AssignerContainsFold != nil {
-		predicates = append(predicates, task.AssignerContainsFold(*i.AssignerContainsFold))
-	}
 
-	if i.HasUser != nil {
-		p := task.HasUser()
-		if !*i.HasUser {
+	if i.HasAssigner != nil {
+		p := task.HasAssigner()
+		if !*i.HasAssigner {
 			p = task.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasUserWith) > 0 {
-		with := make([]predicate.User, 0, len(i.HasUserWith))
-		for _, w := range i.HasUserWith {
+	if len(i.HasAssignerWith) > 0 {
+		with := make([]predicate.User, 0, len(i.HasAssignerWith))
+		for _, w := range i.HasAssignerWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasUserWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasAssignerWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, task.HasUserWith(with...))
+		predicates = append(predicates, task.HasAssignerWith(with...))
+	}
+	if i.HasAssignee != nil {
+		p := task.HasAssignee()
+		if !*i.HasAssignee {
+			p = task.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasAssigneeWith) > 0 {
+		with := make([]predicate.User, 0, len(i.HasAssigneeWith))
+		for _, w := range i.HasAssigneeWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasAssigneeWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, task.HasAssigneeWith(with...))
 	}
 	if i.HasOrganization != nil {
 		p := task.HasOrganization()
@@ -57075,38 +56981,6 @@ type TaskHistoryWhereInput struct {
 	CompletedLTE    *time.Time  `json:"completedLTE,omitempty"`
 	CompletedIsNil  bool        `json:"completedIsNil,omitempty"`
 	CompletedNotNil bool        `json:"completedNotNil,omitempty"`
-
-	// "assignee" field predicates.
-	Assignee             *string  `json:"assignee,omitempty"`
-	AssigneeNEQ          *string  `json:"assigneeNEQ,omitempty"`
-	AssigneeIn           []string `json:"assigneeIn,omitempty"`
-	AssigneeNotIn        []string `json:"assigneeNotIn,omitempty"`
-	AssigneeGT           *string  `json:"assigneeGT,omitempty"`
-	AssigneeGTE          *string  `json:"assigneeGTE,omitempty"`
-	AssigneeLT           *string  `json:"assigneeLT,omitempty"`
-	AssigneeLTE          *string  `json:"assigneeLTE,omitempty"`
-	AssigneeContains     *string  `json:"assigneeContains,omitempty"`
-	AssigneeHasPrefix    *string  `json:"assigneeHasPrefix,omitempty"`
-	AssigneeHasSuffix    *string  `json:"assigneeHasSuffix,omitempty"`
-	AssigneeIsNil        bool     `json:"assigneeIsNil,omitempty"`
-	AssigneeNotNil       bool     `json:"assigneeNotNil,omitempty"`
-	AssigneeEqualFold    *string  `json:"assigneeEqualFold,omitempty"`
-	AssigneeContainsFold *string  `json:"assigneeContainsFold,omitempty"`
-
-	// "assigner" field predicates.
-	Assigner             *string  `json:"assigner,omitempty"`
-	AssignerNEQ          *string  `json:"assignerNEQ,omitempty"`
-	AssignerIn           []string `json:"assignerIn,omitempty"`
-	AssignerNotIn        []string `json:"assignerNotIn,omitempty"`
-	AssignerGT           *string  `json:"assignerGT,omitempty"`
-	AssignerGTE          *string  `json:"assignerGTE,omitempty"`
-	AssignerLT           *string  `json:"assignerLT,omitempty"`
-	AssignerLTE          *string  `json:"assignerLTE,omitempty"`
-	AssignerContains     *string  `json:"assignerContains,omitempty"`
-	AssignerHasPrefix    *string  `json:"assignerHasPrefix,omitempty"`
-	AssignerHasSuffix    *string  `json:"assignerHasSuffix,omitempty"`
-	AssignerEqualFold    *string  `json:"assignerEqualFold,omitempty"`
-	AssignerContainsFold *string  `json:"assignerContainsFold,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -57671,90 +57545,6 @@ func (i *TaskHistoryWhereInput) P() (predicate.TaskHistory, error) {
 	}
 	if i.CompletedNotNil {
 		predicates = append(predicates, taskhistory.CompletedNotNil())
-	}
-	if i.Assignee != nil {
-		predicates = append(predicates, taskhistory.AssigneeEQ(*i.Assignee))
-	}
-	if i.AssigneeNEQ != nil {
-		predicates = append(predicates, taskhistory.AssigneeNEQ(*i.AssigneeNEQ))
-	}
-	if len(i.AssigneeIn) > 0 {
-		predicates = append(predicates, taskhistory.AssigneeIn(i.AssigneeIn...))
-	}
-	if len(i.AssigneeNotIn) > 0 {
-		predicates = append(predicates, taskhistory.AssigneeNotIn(i.AssigneeNotIn...))
-	}
-	if i.AssigneeGT != nil {
-		predicates = append(predicates, taskhistory.AssigneeGT(*i.AssigneeGT))
-	}
-	if i.AssigneeGTE != nil {
-		predicates = append(predicates, taskhistory.AssigneeGTE(*i.AssigneeGTE))
-	}
-	if i.AssigneeLT != nil {
-		predicates = append(predicates, taskhistory.AssigneeLT(*i.AssigneeLT))
-	}
-	if i.AssigneeLTE != nil {
-		predicates = append(predicates, taskhistory.AssigneeLTE(*i.AssigneeLTE))
-	}
-	if i.AssigneeContains != nil {
-		predicates = append(predicates, taskhistory.AssigneeContains(*i.AssigneeContains))
-	}
-	if i.AssigneeHasPrefix != nil {
-		predicates = append(predicates, taskhistory.AssigneeHasPrefix(*i.AssigneeHasPrefix))
-	}
-	if i.AssigneeHasSuffix != nil {
-		predicates = append(predicates, taskhistory.AssigneeHasSuffix(*i.AssigneeHasSuffix))
-	}
-	if i.AssigneeIsNil {
-		predicates = append(predicates, taskhistory.AssigneeIsNil())
-	}
-	if i.AssigneeNotNil {
-		predicates = append(predicates, taskhistory.AssigneeNotNil())
-	}
-	if i.AssigneeEqualFold != nil {
-		predicates = append(predicates, taskhistory.AssigneeEqualFold(*i.AssigneeEqualFold))
-	}
-	if i.AssigneeContainsFold != nil {
-		predicates = append(predicates, taskhistory.AssigneeContainsFold(*i.AssigneeContainsFold))
-	}
-	if i.Assigner != nil {
-		predicates = append(predicates, taskhistory.AssignerEQ(*i.Assigner))
-	}
-	if i.AssignerNEQ != nil {
-		predicates = append(predicates, taskhistory.AssignerNEQ(*i.AssignerNEQ))
-	}
-	if len(i.AssignerIn) > 0 {
-		predicates = append(predicates, taskhistory.AssignerIn(i.AssignerIn...))
-	}
-	if len(i.AssignerNotIn) > 0 {
-		predicates = append(predicates, taskhistory.AssignerNotIn(i.AssignerNotIn...))
-	}
-	if i.AssignerGT != nil {
-		predicates = append(predicates, taskhistory.AssignerGT(*i.AssignerGT))
-	}
-	if i.AssignerGTE != nil {
-		predicates = append(predicates, taskhistory.AssignerGTE(*i.AssignerGTE))
-	}
-	if i.AssignerLT != nil {
-		predicates = append(predicates, taskhistory.AssignerLT(*i.AssignerLT))
-	}
-	if i.AssignerLTE != nil {
-		predicates = append(predicates, taskhistory.AssignerLTE(*i.AssignerLTE))
-	}
-	if i.AssignerContains != nil {
-		predicates = append(predicates, taskhistory.AssignerContains(*i.AssignerContains))
-	}
-	if i.AssignerHasPrefix != nil {
-		predicates = append(predicates, taskhistory.AssignerHasPrefix(*i.AssignerHasPrefix))
-	}
-	if i.AssignerHasSuffix != nil {
-		predicates = append(predicates, taskhistory.AssignerHasSuffix(*i.AssignerHasSuffix))
-	}
-	if i.AssignerEqualFold != nil {
-		predicates = append(predicates, taskhistory.AssignerEqualFold(*i.AssignerEqualFold))
-	}
-	if i.AssignerContainsFold != nil {
-		predicates = append(predicates, taskhistory.AssignerContainsFold(*i.AssignerContainsFold))
 	}
 
 	switch len(predicates) {
@@ -59560,9 +59350,13 @@ type UserWhereInput struct {
 	HasSubcontrols     *bool                   `json:"hasSubcontrols,omitempty"`
 	HasSubcontrolsWith []*SubcontrolWhereInput `json:"hasSubcontrolsWith,omitempty"`
 
-	// "tasks" edge predicates.
-	HasTasks     *bool             `json:"hasTasks,omitempty"`
-	HasTasksWith []*TaskWhereInput `json:"hasTasksWith,omitempty"`
+	// "assigner_tasks" edge predicates.
+	HasAssignerTasks     *bool             `json:"hasAssignerTasks,omitempty"`
+	HasAssignerTasksWith []*TaskWhereInput `json:"hasAssignerTasksWith,omitempty"`
+
+	// "assignee_tasks" edge predicates.
+	HasAssigneeTasks     *bool             `json:"hasAssigneeTasks,omitempty"`
+	HasAssigneeTasksWith []*TaskWhereInput `json:"hasAssigneeTasksWith,omitempty"`
 
 	// "group_memberships" edge predicates.
 	HasGroupMemberships     *bool                        `json:"hasGroupMemberships,omitempty"`
@@ -60563,23 +60357,41 @@ func (i *UserWhereInput) P() (predicate.User, error) {
 		}
 		predicates = append(predicates, user.HasSubcontrolsWith(with...))
 	}
-	if i.HasTasks != nil {
-		p := user.HasTasks()
-		if !*i.HasTasks {
+	if i.HasAssignerTasks != nil {
+		p := user.HasAssignerTasks()
+		if !*i.HasAssignerTasks {
 			p = user.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasTasksWith) > 0 {
-		with := make([]predicate.Task, 0, len(i.HasTasksWith))
-		for _, w := range i.HasTasksWith {
+	if len(i.HasAssignerTasksWith) > 0 {
+		with := make([]predicate.Task, 0, len(i.HasAssignerTasksWith))
+		for _, w := range i.HasAssignerTasksWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasTasksWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasAssignerTasksWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, user.HasTasksWith(with...))
+		predicates = append(predicates, user.HasAssignerTasksWith(with...))
+	}
+	if i.HasAssigneeTasks != nil {
+		p := user.HasAssigneeTasks()
+		if !*i.HasAssigneeTasks {
+			p = user.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasAssigneeTasksWith) > 0 {
+		with := make([]predicate.Task, 0, len(i.HasAssigneeTasksWith))
+		for _, w := range i.HasAssigneeTasksWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasAssigneeTasksWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, user.HasAssigneeTasksWith(with...))
 	}
 	if i.HasGroupMemberships != nil {
 		p := user.HasGroupMemberships()

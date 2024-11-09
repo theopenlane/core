@@ -2035,8 +2035,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			task.FieldStatus:      {Type: field.TypeEnum, Column: task.FieldStatus},
 			task.FieldDue:         {Type: field.TypeTime, Column: task.FieldDue},
 			task.FieldCompleted:   {Type: field.TypeTime, Column: task.FieldCompleted},
-			task.FieldAssignee:    {Type: field.TypeString, Column: task.FieldAssignee},
-			task.FieldAssigner:    {Type: field.TypeString, Column: task.FieldAssigner},
 		},
 	}
 	graph.Nodes[67] = &sqlgraph.Node{
@@ -2067,8 +2065,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			taskhistory.FieldStatus:      {Type: field.TypeEnum, Column: taskhistory.FieldStatus},
 			taskhistory.FieldDue:         {Type: field.TypeTime, Column: taskhistory.FieldDue},
 			taskhistory.FieldCompleted:   {Type: field.TypeTime, Column: taskhistory.FieldCompleted},
-			taskhistory.FieldAssignee:    {Type: field.TypeString, Column: taskhistory.FieldAssignee},
-			taskhistory.FieldAssigner:    {Type: field.TypeString, Column: taskhistory.FieldAssigner},
 		},
 	}
 	graph.Nodes[68] = &sqlgraph.Node{
@@ -4448,12 +4444,24 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"User",
 	)
 	graph.MustAddE(
-		"user",
+		"assigner",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   task.UserTable,
-			Columns: []string{task.UserColumn},
+			Table:   task.AssignerTable,
+			Columns: []string{task.AssignerColumn},
+			Bidi:    false,
+		},
+		"Task",
+		"User",
+	)
+	graph.MustAddE(
+		"assignee",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   task.AssigneeTable,
+			Columns: []string{task.AssigneeColumn},
 			Bidi:    false,
 		},
 		"Task",
@@ -4736,12 +4744,24 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Subcontrol",
 	)
 	graph.MustAddE(
-		"tasks",
+		"assigner_tasks",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   user.TasksTable,
-			Columns: []string{user.TasksColumn},
+			Table:   user.AssignerTasksTable,
+			Columns: []string{user.AssignerTasksColumn},
+			Bidi:    false,
+		},
+		"User",
+		"Task",
+	)
+	graph.MustAddE(
+		"assignee_tasks",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.AssigneeTasksTable,
+			Columns: []string{user.AssigneeTasksColumn},
 			Bidi:    false,
 		},
 		"User",
@@ -15355,24 +15375,28 @@ func (f *TaskFilter) WhereCompleted(p entql.TimeP) {
 	f.Where(p.Field(task.FieldCompleted))
 }
 
-// WhereAssignee applies the entql string predicate on the assignee field.
-func (f *TaskFilter) WhereAssignee(p entql.StringP) {
-	f.Where(p.Field(task.FieldAssignee))
+// WhereHasAssigner applies a predicate to check if query has an edge assigner.
+func (f *TaskFilter) WhereHasAssigner() {
+	f.Where(entql.HasEdge("assigner"))
 }
 
-// WhereAssigner applies the entql string predicate on the assigner field.
-func (f *TaskFilter) WhereAssigner(p entql.StringP) {
-	f.Where(p.Field(task.FieldAssigner))
+// WhereHasAssignerWith applies a predicate to check if query has an edge assigner with a given conditions (other predicates).
+func (f *TaskFilter) WhereHasAssignerWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("assigner", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
-// WhereHasUser applies a predicate to check if query has an edge user.
-func (f *TaskFilter) WhereHasUser() {
-	f.Where(entql.HasEdge("user"))
+// WhereHasAssignee applies a predicate to check if query has an edge assignee.
+func (f *TaskFilter) WhereHasAssignee() {
+	f.Where(entql.HasEdge("assignee"))
 }
 
-// WhereHasUserWith applies a predicate to check if query has an edge user with a given conditions (other predicates).
-func (f *TaskFilter) WhereHasUserWith(preds ...predicate.User) {
-	f.Where(entql.HasEdgeWith("user", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasAssigneeWith applies a predicate to check if query has an edge assignee with a given conditions (other predicates).
+func (f *TaskFilter) WhereHasAssigneeWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("assignee", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -15600,16 +15624,6 @@ func (f *TaskHistoryFilter) WhereDue(p entql.TimeP) {
 // WhereCompleted applies the entql time.Time predicate on the completed field.
 func (f *TaskHistoryFilter) WhereCompleted(p entql.TimeP) {
 	f.Where(p.Field(taskhistory.FieldCompleted))
-}
-
-// WhereAssignee applies the entql string predicate on the assignee field.
-func (f *TaskHistoryFilter) WhereAssignee(p entql.StringP) {
-	f.Where(p.Field(taskhistory.FieldAssignee))
-}
-
-// WhereAssigner applies the entql string predicate on the assigner field.
-func (f *TaskHistoryFilter) WhereAssigner(p entql.StringP) {
-	f.Where(p.Field(taskhistory.FieldAssigner))
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -16216,14 +16230,28 @@ func (f *UserFilter) WhereHasSubcontrolsWith(preds ...predicate.Subcontrol) {
 	})))
 }
 
-// WhereHasTasks applies a predicate to check if query has an edge tasks.
-func (f *UserFilter) WhereHasTasks() {
-	f.Where(entql.HasEdge("tasks"))
+// WhereHasAssignerTasks applies a predicate to check if query has an edge assigner_tasks.
+func (f *UserFilter) WhereHasAssignerTasks() {
+	f.Where(entql.HasEdge("assigner_tasks"))
 }
 
-// WhereHasTasksWith applies a predicate to check if query has an edge tasks with a given conditions (other predicates).
-func (f *UserFilter) WhereHasTasksWith(preds ...predicate.Task) {
-	f.Where(entql.HasEdgeWith("tasks", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasAssignerTasksWith applies a predicate to check if query has an edge assigner_tasks with a given conditions (other predicates).
+func (f *UserFilter) WhereHasAssignerTasksWith(preds ...predicate.Task) {
+	f.Where(entql.HasEdgeWith("assigner_tasks", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasAssigneeTasks applies a predicate to check if query has an edge assignee_tasks.
+func (f *UserFilter) WhereHasAssigneeTasks() {
+	f.Where(entql.HasEdge("assignee_tasks"))
+}
+
+// WhereHasAssigneeTasksWith applies a predicate to check if query has an edge assignee_tasks with a given conditions (other predicates).
+func (f *UserFilter) WhereHasAssigneeTasksWith(preds ...predicate.Task) {
+	f.Where(entql.HasEdgeWith("assignee_tasks", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

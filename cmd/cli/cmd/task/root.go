@@ -90,7 +90,12 @@ func tableOutput(out []openlaneclient.Task) {
 	// create a table writer
 	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "Title", "Description", "Details", "Assignee", "Assigner", "Status", "Due")
 	for _, i := range out {
-		writer.AddRow(i.ID, i.Title, *i.Description, i.Details, *i.Assignee, i.Assigner, i.Status, i.Due)
+		assignee := ""
+		if i.Assignee != nil {
+			assignee = *&i.Assignee.ID
+		}
+
+		writer.AddRow(i.ID, i.Title, *i.Description, i.Details, assignee, i.Assigner.ID, i.Status, i.Due)
 	}
 
 	writer.Render()

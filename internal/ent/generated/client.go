@@ -13302,15 +13302,34 @@ func (c *TaskClient) GetX(ctx context.Context, id string) *Task {
 	return obj
 }
 
-// QueryUser queries the user edge of a Task.
-func (c *TaskClient) QueryUser(t *Task) *UserQuery {
+// QueryAssigner queries the assigner edge of a Task.
+func (c *TaskClient) QueryAssigner(t *Task) *UserQuery {
 	query := (&UserClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := t.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(task.Table, task.FieldID, id),
 			sqlgraph.To(user.Table, user.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, task.UserTable, task.UserColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, task.AssignerTable, task.AssignerColumn),
+		)
+		schemaConfig := t.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Task
+		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAssignee queries the assignee edge of a Task.
+func (c *TaskClient) QueryAssignee(t *Task) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := t.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(task.Table, task.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, task.AssigneeTable, task.AssigneeColumn),
 		)
 		schemaConfig := t.schemaConfig
 		step.To.Schema = schemaConfig.User
@@ -14298,15 +14317,34 @@ func (c *UserClient) QuerySubcontrols(u *User) *SubcontrolQuery {
 	return query
 }
 
-// QueryTasks queries the tasks edge of a User.
-func (c *UserClient) QueryTasks(u *User) *TaskQuery {
+// QueryAssignerTasks queries the assigner_tasks edge of a User.
+func (c *UserClient) QueryAssignerTasks(u *User) *TaskQuery {
 	query := (&TaskClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := u.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(user.Table, user.FieldID, id),
 			sqlgraph.To(task.Table, task.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, user.TasksTable, user.TasksColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, user.AssignerTasksTable, user.AssignerTasksColumn),
+		)
+		schemaConfig := u.schemaConfig
+		step.To.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.Task
+		fromV = sqlgraph.Neighbors(u.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAssigneeTasks queries the assignee_tasks edge of a User.
+func (c *UserClient) QueryAssigneeTasks(u *User) *TaskQuery {
+	query := (&TaskClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := u.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, id),
+			sqlgraph.To(task.Table, task.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, user.AssigneeTasksTable, user.AssigneeTasksColumn),
 		)
 		schemaConfig := u.schemaConfig
 		step.To.Schema = schemaConfig.Task

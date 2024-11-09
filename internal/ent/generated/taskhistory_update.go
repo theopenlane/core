@@ -223,40 +223,6 @@ func (thu *TaskHistoryUpdate) ClearCompleted() *TaskHistoryUpdate {
 	return thu
 }
 
-// SetAssignee sets the "assignee" field.
-func (thu *TaskHistoryUpdate) SetAssignee(s string) *TaskHistoryUpdate {
-	thu.mutation.SetAssignee(s)
-	return thu
-}
-
-// SetNillableAssignee sets the "assignee" field if the given value is not nil.
-func (thu *TaskHistoryUpdate) SetNillableAssignee(s *string) *TaskHistoryUpdate {
-	if s != nil {
-		thu.SetAssignee(*s)
-	}
-	return thu
-}
-
-// ClearAssignee clears the value of the "assignee" field.
-func (thu *TaskHistoryUpdate) ClearAssignee() *TaskHistoryUpdate {
-	thu.mutation.ClearAssignee()
-	return thu
-}
-
-// SetAssigner sets the "assigner" field.
-func (thu *TaskHistoryUpdate) SetAssigner(s string) *TaskHistoryUpdate {
-	thu.mutation.SetAssigner(s)
-	return thu
-}
-
-// SetNillableAssigner sets the "assigner" field if the given value is not nil.
-func (thu *TaskHistoryUpdate) SetNillableAssigner(s *string) *TaskHistoryUpdate {
-	if s != nil {
-		thu.SetAssigner(*s)
-	}
-	return thu
-}
-
 // Mutation returns the TaskHistoryMutation object of the builder.
 func (thu *TaskHistoryUpdate) Mutation() *TaskHistoryMutation {
 	return thu.mutation
@@ -405,15 +371,6 @@ func (thu *TaskHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if thu.mutation.CompletedCleared() {
 		_spec.ClearField(taskhistory.FieldCompleted, field.TypeTime)
-	}
-	if value, ok := thu.mutation.Assignee(); ok {
-		_spec.SetField(taskhistory.FieldAssignee, field.TypeString, value)
-	}
-	if thu.mutation.AssigneeCleared() {
-		_spec.ClearField(taskhistory.FieldAssignee, field.TypeString)
-	}
-	if value, ok := thu.mutation.Assigner(); ok {
-		_spec.SetField(taskhistory.FieldAssigner, field.TypeString, value)
 	}
 	_spec.Node.Schema = thu.schemaConfig.TaskHistory
 	ctx = internal.NewSchemaConfigContext(ctx, thu.schemaConfig)
@@ -629,40 +586,6 @@ func (thuo *TaskHistoryUpdateOne) ClearCompleted() *TaskHistoryUpdateOne {
 	return thuo
 }
 
-// SetAssignee sets the "assignee" field.
-func (thuo *TaskHistoryUpdateOne) SetAssignee(s string) *TaskHistoryUpdateOne {
-	thuo.mutation.SetAssignee(s)
-	return thuo
-}
-
-// SetNillableAssignee sets the "assignee" field if the given value is not nil.
-func (thuo *TaskHistoryUpdateOne) SetNillableAssignee(s *string) *TaskHistoryUpdateOne {
-	if s != nil {
-		thuo.SetAssignee(*s)
-	}
-	return thuo
-}
-
-// ClearAssignee clears the value of the "assignee" field.
-func (thuo *TaskHistoryUpdateOne) ClearAssignee() *TaskHistoryUpdateOne {
-	thuo.mutation.ClearAssignee()
-	return thuo
-}
-
-// SetAssigner sets the "assigner" field.
-func (thuo *TaskHistoryUpdateOne) SetAssigner(s string) *TaskHistoryUpdateOne {
-	thuo.mutation.SetAssigner(s)
-	return thuo
-}
-
-// SetNillableAssigner sets the "assigner" field if the given value is not nil.
-func (thuo *TaskHistoryUpdateOne) SetNillableAssigner(s *string) *TaskHistoryUpdateOne {
-	if s != nil {
-		thuo.SetAssigner(*s)
-	}
-	return thuo
-}
-
 // Mutation returns the TaskHistoryMutation object of the builder.
 func (thuo *TaskHistoryUpdateOne) Mutation() *TaskHistoryMutation {
 	return thuo.mutation
@@ -841,15 +764,6 @@ func (thuo *TaskHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TaskHisto
 	}
 	if thuo.mutation.CompletedCleared() {
 		_spec.ClearField(taskhistory.FieldCompleted, field.TypeTime)
-	}
-	if value, ok := thuo.mutation.Assignee(); ok {
-		_spec.SetField(taskhistory.FieldAssignee, field.TypeString, value)
-	}
-	if thuo.mutation.AssigneeCleared() {
-		_spec.ClearField(taskhistory.FieldAssignee, field.TypeString)
-	}
-	if value, ok := thuo.mutation.Assigner(); ok {
-		_spec.SetField(taskhistory.FieldAssigner, field.TypeString, value)
 	}
 	_spec.Node.Schema = thuo.schemaConfig.TaskHistory
 	ctx = internal.NewSchemaConfigContext(ctx, thuo.schemaConfig)
