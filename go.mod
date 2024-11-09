@@ -65,7 +65,7 @@ require (
 	github.com/theopenlane/entx v0.2.2
 	github.com/theopenlane/gqlgen-plugins v0.3.0
 	github.com/theopenlane/httpsling v0.2.1
-	github.com/theopenlane/iam v0.2.3
+	github.com/theopenlane/iam v0.2.4
 	github.com/theopenlane/newman v0.1.1
 	github.com/theopenlane/riverboat v0.0.7
 	github.com/theopenlane/utils v0.3.0
@@ -107,8 +107,8 @@ require (
 
 require (
 	ariga.io/atlas v0.26.1 // indirect
-	cloud.google.com/go/auth v0.9.9 // indirect
-	cloud.google.com/go/auth/oauth2adapt v0.2.4 // indirect
+	cloud.google.com/go/auth v0.10.1 // indirect
+	cloud.google.com/go/auth/oauth2adapt v0.2.5 // indirect
 	cloud.google.com/go/compute/metadata v0.5.2 // indirect
 	github.com/99designs/go-keychain v0.0.0-20191008050251-8e49817e8af4 // indirect
 	github.com/Azure/go-ansiterm v0.0.0-20230124172434-306776ec8161 // indirect
@@ -173,7 +173,7 @@ require (
 	github.com/googleapis/gax-go/v2 v2.13.0 // indirect
 	github.com/gorilla/css v1.0.1 // indirect
 	github.com/gorilla/securecookie v1.1.2 // indirect
-	github.com/grpc-ecosystem/grpc-gateway/v2 v2.22.0 // indirect
+	github.com/grpc-ecosystem/grpc-gateway/v2 v2.23.0 // indirect
 	github.com/gsterjov/go-libsecret v0.0.0-20161001094733-a6f4afe4910c // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
@@ -216,9 +216,9 @@ require (
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/opencontainers/image-spec v1.1.0 // indirect
 	github.com/opencontainers/runc v1.1.14 // indirect
-	github.com/openfga/api/proto v0.0.0-20241016183012-297cfdbbde98 // indirect
+	github.com/openfga/api/proto v0.0.0-20241107182745-c14fb4b3d4b4 // indirect
 	github.com/openfga/language/pkg/go v0.2.0-beta.2.0.20240926131254-992b301a003f // indirect
-	github.com/openfga/openfga v1.7.0 // indirect
+	github.com/openfga/openfga v1.8.0 // indirect
 	github.com/ory/dockertest v3.3.5+incompatible // indirect
 	github.com/pelletier/go-toml/v2 v2.2.3 // indirect
 	github.com/perimeterx/marshmallow v1.1.5 // indirect
@@ -284,9 +284,9 @@ require (
 	golang.org/x/sys v0.27.0 // indirect
 	golang.org/x/time v0.7.0 // indirect
 	golang.org/x/xerrors v0.0.0-20240716161551-93cc26a95ae9 // indirect
-	google.golang.org/api v0.203.0 // indirect
-	google.golang.org/genproto/googleapis/api v0.0.0-20241007155032-5fefd90f89a9 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20241015192408-796eee8c2d53 // indirect
+	google.golang.org/api v0.205.0 // indirect
+	google.golang.org/genproto/googleapis/api v0.0.0-20241021214115-324edc3d5d38 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20241021214115-324edc3d5d38 // indirect
 	google.golang.org/grpc v1.67.1 // indirect
 	google.golang.org/protobuf v1.35.1 // indirect
 	gopkg.in/cheggaaa/pb.v2 v2.0.7
