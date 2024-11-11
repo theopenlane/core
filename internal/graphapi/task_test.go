@@ -163,7 +163,6 @@ func (suite *GraphTestSuite) TestMutationCreateTask() {
 		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		numWrites   int
-		allowed     bool
 		expectedErr string
 	}{
 		{
@@ -174,7 +173,6 @@ func (suite *GraphTestSuite) TestMutationCreateTask() {
 			client:    suite.client.api,
 			ctx:       reqCtx,
 			numWrites: 1, // write permission for the task to the user
-			allowed:   true,
 		},
 		{
 			name: "happy path, all input",
@@ -192,7 +190,6 @@ func (suite *GraphTestSuite) TestMutationCreateTask() {
 			client:    suite.client.api,
 			ctx:       reqCtx,
 			numWrites: 2, // assignee+assigner and organization write permissions
-			allowed:   true,
 		},
 		{
 			name: "happy path, using pat",
@@ -202,7 +199,6 @@ func (suite *GraphTestSuite) TestMutationCreateTask() {
 			client:    suite.client.apiWithPAT,
 			ctx:       context.Background(),
 			numWrites: 1, // write permission for the task to the user
-			allowed:   true,
 		},
 		{
 			name: "missing title, but display name provided",
@@ -211,7 +207,6 @@ func (suite *GraphTestSuite) TestMutationCreateTask() {
 			},
 			client:      suite.client.api,
 			ctx:         reqCtx,
-			allowed:     true,
 			expectedErr: "value is less than the required length",
 		},
 	}
@@ -401,7 +396,6 @@ func (suite *GraphTestSuite) TestMutationDeleteTask() {
 		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		allowed     bool
-		checkAccess bool
 		expectedErr string
 	}{
 		{
