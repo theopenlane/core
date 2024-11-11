@@ -897,6 +897,30 @@ type ProgramDeletePayload struct {
 	DeletedID string `json:"deletedID"`
 }
 
+// Return response for createBulkProgramMembership mutation
+type ProgramMembershipBulkCreatePayload struct {
+	// Created programMemberships
+	ProgramMemberships []*generated.ProgramMembership `json:"programMemberships,omitempty"`
+}
+
+// Return response for createProgramMembership mutation
+type ProgramMembershipCreatePayload struct {
+	// Created programMembership
+	ProgramMembership *generated.ProgramMembership `json:"programMembership"`
+}
+
+// Return response for deleteProgramMembership mutation
+type ProgramMembershipDeletePayload struct {
+	// Deleted programMembership ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateProgramMembership mutation
+type ProgramMembershipUpdatePayload struct {
+	// Updated programMembership
+	ProgramMembership *generated.ProgramMembership `json:"programMembership"`
+}
+
 type ProgramSearchResult struct {
 	Programs []*generated.Program `json:"programs,omitempty"`
 }

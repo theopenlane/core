@@ -483,6 +483,28 @@ func (r *queryResolver) ProgramHistories(ctx context.Context, after *entgql.Curs
 		generated.WithProgramHistoryFilter(where.Filter))
 }
 
+// ProgramMemberships is the resolver for the programMemberships field.
+func (r *queryResolver) ProgramMemberships(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ProgramMembershipWhereInput) (*generated.ProgramMembershipConnection, error) {
+	return withTransactionalMutation(ctx).ProgramMembership.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithProgramMembershipFilter(where.Filter))
+}
+
+// ProgramMembershipHistories is the resolver for the programMembershipHistories field.
+func (r *queryResolver) ProgramMembershipHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ProgramMembershipHistoryWhereInput) (*generated.ProgramMembershipHistoryConnection, error) {
+	return withTransactionalMutation(ctx).ProgramMembershipHistory.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithProgramMembershipHistoryFilter(where.Filter))
+}
+
 // Risks is the resolver for the risks field.
 func (r *queryResolver) Risks(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.RiskWhereInput) (*generated.RiskConnection, error) {
 	return withTransactionalMutation(ctx).Risk.Query().Paginate(

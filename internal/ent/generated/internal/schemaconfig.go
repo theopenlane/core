@@ -122,6 +122,8 @@ type SchemaConfig struct {
 	ProgramNarratives                string // Program-narratives->Narrative table.
 	ProgramActionplans               string // Program-actionplans->ActionPlan table.
 	ProgramHistory                   string // ProgramHistory table.
+	ProgramMembership                string // ProgramMembership table.
+	ProgramMembershipHistory         string // ProgramMembershipHistory table.
 	Risk                             string // Risk table.
 	RiskActionplans                  string // Risk-actionplans->ActionPlan table.
 	RiskHistory                      string // RiskHistory table.
@@ -147,7 +149,6 @@ type SchemaConfig struct {
 	UserEvents                       string // User-events->Event table.
 	UserActionplans                  string // User-actionplans->ActionPlan table.
 	UserSubcontrols                  string // User-subcontrols->Subcontrol table.
-	UserPrograms                     string // User-programs->Program table.
 	UserHistory                      string // UserHistory table.
 	UserSetting                      string // UserSetting table.
 	UserSettingFiles                 string // UserSetting-files->File table.

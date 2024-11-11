@@ -79,6 +79,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/procedurehistory"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/programhistory"
+	"github.com/theopenlane/core/internal/ent/generated/programmembership"
+	"github.com/theopenlane/core/internal/ent/generated/programmembershiphistory"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
@@ -237,6 +239,10 @@ type Client struct {
 	Program *ProgramClient
 	// ProgramHistory is the client for interacting with the ProgramHistory builders.
 	ProgramHistory *ProgramHistoryClient
+	// ProgramMembership is the client for interacting with the ProgramMembership builders.
+	ProgramMembership *ProgramMembershipClient
+	// ProgramMembershipHistory is the client for interacting with the ProgramMembershipHistory builders.
+	ProgramMembershipHistory *ProgramMembershipHistoryClient
 	// Risk is the client for interacting with the Risk builders.
 	Risk *RiskClient
 	// RiskHistory is the client for interacting with the RiskHistory builders.
@@ -355,6 +361,8 @@ func (c *Client) init() {
 	c.ProcedureHistory = NewProcedureHistoryClient(c.config)
 	c.Program = NewProgramClient(c.config)
 	c.ProgramHistory = NewProgramHistoryClient(c.config)
+	c.ProgramMembership = NewProgramMembershipClient(c.config)
+	c.ProgramMembershipHistory = NewProgramMembershipHistoryClient(c.config)
 	c.Risk = NewRiskClient(c.config)
 	c.RiskHistory = NewRiskHistoryClient(c.config)
 	c.Standard = NewStandardClient(c.config)
@@ -587,6 +595,8 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		ProcedureHistory:              NewProcedureHistoryClient(cfg),
 		Program:                       NewProgramClient(cfg),
 		ProgramHistory:                NewProgramHistoryClient(cfg),
+		ProgramMembership:             NewProgramMembershipClient(cfg),
+		ProgramMembershipHistory:      NewProgramMembershipHistoryClient(cfg),
 		Risk:                          NewRiskClient(cfg),
 		RiskHistory:                   NewRiskHistoryClient(cfg),
 		Standard:                      NewStandardClient(cfg),
@@ -685,6 +695,8 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		ProcedureHistory:              NewProcedureHistoryClient(cfg),
 		Program:                       NewProgramClient(cfg),
 		ProgramHistory:                NewProgramHistoryClient(cfg),
+		ProgramMembership:             NewProgramMembershipClient(cfg),
+		ProgramMembershipHistory:      NewProgramMembershipHistoryClient(cfg),
 		Risk:                          NewRiskClient(cfg),
 		RiskHistory:                   NewRiskHistoryClient(cfg),
 		Standard:                      NewStandardClient(cfg),
@@ -748,10 +760,11 @@ func (c *Client) Use(hooks ...Hook) {
 		c.OrgMembershipHistory, c.Organization, c.OrganizationHistory,
 		c.OrganizationSetting, c.OrganizationSettingHistory, c.PasswordResetToken,
 		c.PersonalAccessToken, c.Procedure, c.ProcedureHistory, c.Program,
-		c.ProgramHistory, c.Risk, c.RiskHistory, c.Standard, c.StandardHistory,
-		c.Subcontrol, c.SubcontrolHistory, c.Subscriber, c.TFASetting, c.Task,
-		c.TaskHistory, c.Template, c.TemplateHistory, c.User, c.UserHistory,
-		c.UserSetting, c.UserSettingHistory, c.Webauthn, c.Webhook, c.WebhookHistory,
+		c.ProgramHistory, c.ProgramMembership, c.ProgramMembershipHistory, c.Risk,
+		c.RiskHistory, c.Standard, c.StandardHistory, c.Subcontrol,
+		c.SubcontrolHistory, c.Subscriber, c.TFASetting, c.Task, c.TaskHistory,
+		c.Template, c.TemplateHistory, c.User, c.UserHistory, c.UserSetting,
+		c.UserSettingHistory, c.Webauthn, c.Webhook, c.WebhookHistory,
 	} {
 		n.Use(hooks...)
 	}
@@ -776,10 +789,11 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.OrgMembershipHistory, c.Organization, c.OrganizationHistory,
 		c.OrganizationSetting, c.OrganizationSettingHistory, c.PasswordResetToken,
 		c.PersonalAccessToken, c.Procedure, c.ProcedureHistory, c.Program,
-		c.ProgramHistory, c.Risk, c.RiskHistory, c.Standard, c.StandardHistory,
-		c.Subcontrol, c.SubcontrolHistory, c.Subscriber, c.TFASetting, c.Task,
-		c.TaskHistory, c.Template, c.TemplateHistory, c.User, c.UserHistory,
-		c.UserSetting, c.UserSettingHistory, c.Webauthn, c.Webhook, c.WebhookHistory,
+		c.ProgramHistory, c.ProgramMembership, c.ProgramMembershipHistory, c.Risk,
+		c.RiskHistory, c.Standard, c.StandardHistory, c.Subcontrol,
+		c.SubcontrolHistory, c.Subscriber, c.TFASetting, c.Task, c.TaskHistory,
+		c.Template, c.TemplateHistory, c.User, c.UserHistory, c.UserSetting,
+		c.UserSettingHistory, c.Webauthn, c.Webhook, c.WebhookHistory,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -795,6 +809,10 @@ func (c *Client) WithAuthz() {
 
 		for _, hook := range entfga.AuthzHooks[*OrgMembershipMutation]() {
 			c.OrgMembership.Use(hook)
+		}
+
+		for _, hook := range entfga.AuthzHooks[*ProgramMembershipMutation]() {
+			c.ProgramMembership.Use(hook)
 		}
 
 		c.authzActivated = true
@@ -976,6 +994,10 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Program.mutate(ctx, m)
 	case *ProgramHistoryMutation:
 		return c.ProgramHistory.mutate(ctx, m)
+	case *ProgramMembershipMutation:
+		return c.ProgramMembership.mutate(ctx, m)
+	case *ProgramMembershipHistoryMutation:
+		return c.ProgramMembershipHistory.mutate(ctx, m)
 	case *RiskMutation:
 		return c.Risk.mutate(ctx, m)
 	case *RiskHistoryMutation:
@@ -12408,7 +12430,26 @@ func (c *ProgramClient) QueryUsers(pr *Program) *UserQuery {
 		)
 		schemaConfig := pr.schemaConfig
 		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.UserPrograms
+		step.Edge.Schema = schemaConfig.ProgramMembership
+		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryMembers queries the members edge of a Program.
+func (c *ProgramClient) QueryMembers(pr *Program) *ProgramMembershipQuery {
+	query := (&ProgramMembershipClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(program.Table, program.FieldID, id),
+			sqlgraph.To(programmembership.Table, programmembership.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, program.MembersTable, program.MembersColumn),
+		)
+		schemaConfig := pr.schemaConfig
+		step.To.Schema = schemaConfig.ProgramMembership
+		step.Edge.Schema = schemaConfig.ProgramMembership
 		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -12572,6 +12613,314 @@ func (c *ProgramHistoryClient) mutate(ctx context.Context, m *ProgramHistoryMuta
 		return (&ProgramHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("generated: unknown ProgramHistory mutation op: %q", m.Op())
+	}
+}
+
+// ProgramMembershipClient is a client for the ProgramMembership schema.
+type ProgramMembershipClient struct {
+	config
+}
+
+// NewProgramMembershipClient returns a client for the ProgramMembership from the given config.
+func NewProgramMembershipClient(c config) *ProgramMembershipClient {
+	return &ProgramMembershipClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `programmembership.Hooks(f(g(h())))`.
+func (c *ProgramMembershipClient) Use(hooks ...Hook) {
+	c.hooks.ProgramMembership = append(c.hooks.ProgramMembership, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `programmembership.Intercept(f(g(h())))`.
+func (c *ProgramMembershipClient) Intercept(interceptors ...Interceptor) {
+	c.inters.ProgramMembership = append(c.inters.ProgramMembership, interceptors...)
+}
+
+// Create returns a builder for creating a ProgramMembership entity.
+func (c *ProgramMembershipClient) Create() *ProgramMembershipCreate {
+	mutation := newProgramMembershipMutation(c.config, OpCreate)
+	return &ProgramMembershipCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of ProgramMembership entities.
+func (c *ProgramMembershipClient) CreateBulk(builders ...*ProgramMembershipCreate) *ProgramMembershipCreateBulk {
+	return &ProgramMembershipCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ProgramMembershipClient) MapCreateBulk(slice any, setFunc func(*ProgramMembershipCreate, int)) *ProgramMembershipCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ProgramMembershipCreateBulk{err: fmt.Errorf("calling to ProgramMembershipClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ProgramMembershipCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ProgramMembershipCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for ProgramMembership.
+func (c *ProgramMembershipClient) Update() *ProgramMembershipUpdate {
+	mutation := newProgramMembershipMutation(c.config, OpUpdate)
+	return &ProgramMembershipUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ProgramMembershipClient) UpdateOne(pm *ProgramMembership) *ProgramMembershipUpdateOne {
+	mutation := newProgramMembershipMutation(c.config, OpUpdateOne, withProgramMembership(pm))
+	return &ProgramMembershipUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ProgramMembershipClient) UpdateOneID(id string) *ProgramMembershipUpdateOne {
+	mutation := newProgramMembershipMutation(c.config, OpUpdateOne, withProgramMembershipID(id))
+	return &ProgramMembershipUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for ProgramMembership.
+func (c *ProgramMembershipClient) Delete() *ProgramMembershipDelete {
+	mutation := newProgramMembershipMutation(c.config, OpDelete)
+	return &ProgramMembershipDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ProgramMembershipClient) DeleteOne(pm *ProgramMembership) *ProgramMembershipDeleteOne {
+	return c.DeleteOneID(pm.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ProgramMembershipClient) DeleteOneID(id string) *ProgramMembershipDeleteOne {
+	builder := c.Delete().Where(programmembership.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ProgramMembershipDeleteOne{builder}
+}
+
+// Query returns a query builder for ProgramMembership.
+func (c *ProgramMembershipClient) Query() *ProgramMembershipQuery {
+	return &ProgramMembershipQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeProgramMembership},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a ProgramMembership entity by its id.
+func (c *ProgramMembershipClient) Get(ctx context.Context, id string) (*ProgramMembership, error) {
+	return c.Query().Where(programmembership.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ProgramMembershipClient) GetX(ctx context.Context, id string) *ProgramMembership {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryProgram queries the program edge of a ProgramMembership.
+func (c *ProgramMembershipClient) QueryProgram(pm *ProgramMembership) *ProgramQuery {
+	query := (&ProgramClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pm.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(programmembership.Table, programmembership.FieldID, id),
+			sqlgraph.To(program.Table, program.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, programmembership.ProgramTable, programmembership.ProgramColumn),
+		)
+		schemaConfig := pm.schemaConfig
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.ProgramMembership
+		fromV = sqlgraph.Neighbors(pm.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUser queries the user edge of a ProgramMembership.
+func (c *ProgramMembershipClient) QueryUser(pm *ProgramMembership) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pm.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(programmembership.Table, programmembership.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, programmembership.UserTable, programmembership.UserColumn),
+		)
+		schemaConfig := pm.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.ProgramMembership
+		fromV = sqlgraph.Neighbors(pm.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *ProgramMembershipClient) Hooks() []Hook {
+	hooks := c.hooks.ProgramMembership
+	return append(hooks[:len(hooks):len(hooks)], programmembership.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *ProgramMembershipClient) Interceptors() []Interceptor {
+	inters := c.inters.ProgramMembership
+	return append(inters[:len(inters):len(inters)], programmembership.Interceptors[:]...)
+}
+
+func (c *ProgramMembershipClient) mutate(ctx context.Context, m *ProgramMembershipMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ProgramMembershipCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ProgramMembershipUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ProgramMembershipUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ProgramMembershipDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown ProgramMembership mutation op: %q", m.Op())
+	}
+}
+
+// ProgramMembershipHistoryClient is a client for the ProgramMembershipHistory schema.
+type ProgramMembershipHistoryClient struct {
+	config
+}
+
+// NewProgramMembershipHistoryClient returns a client for the ProgramMembershipHistory from the given config.
+func NewProgramMembershipHistoryClient(c config) *ProgramMembershipHistoryClient {
+	return &ProgramMembershipHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `programmembershiphistory.Hooks(f(g(h())))`.
+func (c *ProgramMembershipHistoryClient) Use(hooks ...Hook) {
+	c.hooks.ProgramMembershipHistory = append(c.hooks.ProgramMembershipHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `programmembershiphistory.Intercept(f(g(h())))`.
+func (c *ProgramMembershipHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.ProgramMembershipHistory = append(c.inters.ProgramMembershipHistory, interceptors...)
+}
+
+// Create returns a builder for creating a ProgramMembershipHistory entity.
+func (c *ProgramMembershipHistoryClient) Create() *ProgramMembershipHistoryCreate {
+	mutation := newProgramMembershipHistoryMutation(c.config, OpCreate)
+	return &ProgramMembershipHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of ProgramMembershipHistory entities.
+func (c *ProgramMembershipHistoryClient) CreateBulk(builders ...*ProgramMembershipHistoryCreate) *ProgramMembershipHistoryCreateBulk {
+	return &ProgramMembershipHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ProgramMembershipHistoryClient) MapCreateBulk(slice any, setFunc func(*ProgramMembershipHistoryCreate, int)) *ProgramMembershipHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ProgramMembershipHistoryCreateBulk{err: fmt.Errorf("calling to ProgramMembershipHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ProgramMembershipHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ProgramMembershipHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for ProgramMembershipHistory.
+func (c *ProgramMembershipHistoryClient) Update() *ProgramMembershipHistoryUpdate {
+	mutation := newProgramMembershipHistoryMutation(c.config, OpUpdate)
+	return &ProgramMembershipHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ProgramMembershipHistoryClient) UpdateOne(pmh *ProgramMembershipHistory) *ProgramMembershipHistoryUpdateOne {
+	mutation := newProgramMembershipHistoryMutation(c.config, OpUpdateOne, withProgramMembershipHistory(pmh))
+	return &ProgramMembershipHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ProgramMembershipHistoryClient) UpdateOneID(id string) *ProgramMembershipHistoryUpdateOne {
+	mutation := newProgramMembershipHistoryMutation(c.config, OpUpdateOne, withProgramMembershipHistoryID(id))
+	return &ProgramMembershipHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for ProgramMembershipHistory.
+func (c *ProgramMembershipHistoryClient) Delete() *ProgramMembershipHistoryDelete {
+	mutation := newProgramMembershipHistoryMutation(c.config, OpDelete)
+	return &ProgramMembershipHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ProgramMembershipHistoryClient) DeleteOne(pmh *ProgramMembershipHistory) *ProgramMembershipHistoryDeleteOne {
+	return c.DeleteOneID(pmh.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ProgramMembershipHistoryClient) DeleteOneID(id string) *ProgramMembershipHistoryDeleteOne {
+	builder := c.Delete().Where(programmembershiphistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ProgramMembershipHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for ProgramMembershipHistory.
+func (c *ProgramMembershipHistoryClient) Query() *ProgramMembershipHistoryQuery {
+	return &ProgramMembershipHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeProgramMembershipHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a ProgramMembershipHistory entity by its id.
+func (c *ProgramMembershipHistoryClient) Get(ctx context.Context, id string) (*ProgramMembershipHistory, error) {
+	return c.Query().Where(programmembershiphistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ProgramMembershipHistoryClient) GetX(ctx context.Context, id string) *ProgramMembershipHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *ProgramMembershipHistoryClient) Hooks() []Hook {
+	hooks := c.hooks.ProgramMembershipHistory
+	return append(hooks[:len(hooks):len(hooks)], programmembershiphistory.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *ProgramMembershipHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.ProgramMembershipHistory
+	return append(inters[:len(inters):len(inters)], programmembershiphistory.Interceptors[:]...)
+}
+
+func (c *ProgramMembershipHistoryClient) mutate(ctx context.Context, m *ProgramMembershipHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ProgramMembershipHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ProgramMembershipHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ProgramMembershipHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ProgramMembershipHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown ProgramMembershipHistory mutation op: %q", m.Op())
 	}
 }
 
@@ -15164,7 +15513,7 @@ func (c *UserClient) QueryPrograms(u *User) *ProgramQuery {
 		)
 		schemaConfig := u.schemaConfig
 		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.UserPrograms
+		step.Edge.Schema = schemaConfig.ProgramMembership
 		fromV = sqlgraph.Neighbors(u.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -15203,6 +15552,25 @@ func (c *UserClient) QueryOrgMemberships(u *User) *OrgMembershipQuery {
 		schemaConfig := u.schemaConfig
 		step.To.Schema = schemaConfig.OrgMembership
 		step.Edge.Schema = schemaConfig.OrgMembership
+		fromV = sqlgraph.Neighbors(u.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryProgramMemberships queries the program_memberships edge of a User.
+func (c *UserClient) QueryProgramMemberships(u *User) *ProgramMembershipQuery {
+	query := (&ProgramMembershipClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := u.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, id),
+			sqlgraph.To(programmembership.Table, programmembership.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, user.ProgramMembershipsTable, user.ProgramMembershipsColumn),
+		)
+		schemaConfig := u.schemaConfig
+		step.To.Schema = schemaConfig.ProgramMembership
+		step.Edge.Schema = schemaConfig.ProgramMembership
 		fromV = sqlgraph.Neighbors(u.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -16193,10 +16561,10 @@ type (
 		OrgMembership, OrgMembershipHistory, Organization, OrganizationHistory,
 		OrganizationSetting, OrganizationSettingHistory, PasswordResetToken,
 		PersonalAccessToken, Procedure, ProcedureHistory, Program, ProgramHistory,
-		Risk, RiskHistory, Standard, StandardHistory, Subcontrol, SubcontrolHistory,
-		Subscriber, TFASetting, Task, TaskHistory, Template, TemplateHistory, User,
-		UserHistory, UserSetting, UserSettingHistory, Webauthn, Webhook,
-		WebhookHistory []ent.Hook
+		ProgramMembership, ProgramMembershipHistory, Risk, RiskHistory, Standard,
+		StandardHistory, Subcontrol, SubcontrolHistory, Subscriber, TFASetting, Task,
+		TaskHistory, Template, TemplateHistory, User, UserHistory, UserSetting,
+		UserSettingHistory, Webauthn, Webhook, WebhookHistory []ent.Hook
 	}
 	inters struct {
 		APIToken, ActionPlan, ActionPlanHistory, Contact, ContactHistory, Control,
@@ -16212,10 +16580,10 @@ type (
 		OrgMembership, OrgMembershipHistory, Organization, OrganizationHistory,
 		OrganizationSetting, OrganizationSettingHistory, PasswordResetToken,
 		PersonalAccessToken, Procedure, ProcedureHistory, Program, ProgramHistory,
-		Risk, RiskHistory, Standard, StandardHistory, Subcontrol, SubcontrolHistory,
-		Subscriber, TFASetting, Task, TaskHistory, Template, TemplateHistory, User,
-		UserHistory, UserSetting, UserSettingHistory, Webauthn, Webhook,
-		WebhookHistory []ent.Interceptor
+		ProgramMembership, ProgramMembershipHistory, Risk, RiskHistory, Standard,
+		StandardHistory, Subcontrol, SubcontrolHistory, Subscriber, TFASetting, Task,
+		TaskHistory, Template, TemplateHistory, User, UserHistory, UserSetting,
+		UserSettingHistory, Webauthn, Webhook, WebhookHistory []ent.Interceptor
 	}
 )
 

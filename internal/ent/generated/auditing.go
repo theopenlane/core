@@ -39,6 +39,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgmembershiphistory"
 	"github.com/theopenlane/core/internal/ent/generated/procedurehistory"
 	"github.com/theopenlane/core/internal/ent/generated/programhistory"
+	"github.com/theopenlane/core/internal/ent/generated/programmembershiphistory"
 	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/standardhistory"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrolhistory"
@@ -1962,6 +1963,63 @@ func (ph *ProgramHistory) Diff(history *ProgramHistory) (*HistoryDiff[ProgramHis
 	return nil, IdenticalHistoryError
 }
 
+func (pmh *ProgramMembershipHistory) changes(new *ProgramMembershipHistory) []Change {
+	var changes []Change
+	if !reflect.DeepEqual(pmh.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(programmembershiphistory.FieldCreatedAt, pmh.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(pmh.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(programmembershiphistory.FieldUpdatedAt, pmh.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(pmh.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(programmembershiphistory.FieldCreatedBy, pmh.CreatedBy, new.CreatedBy))
+	}
+	if !reflect.DeepEqual(pmh.MappingID, new.MappingID) {
+		changes = append(changes, NewChange(programmembershiphistory.FieldMappingID, pmh.MappingID, new.MappingID))
+	}
+	if !reflect.DeepEqual(pmh.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(programmembershiphistory.FieldDeletedAt, pmh.DeletedAt, new.DeletedAt))
+	}
+	if !reflect.DeepEqual(pmh.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(programmembershiphistory.FieldDeletedBy, pmh.DeletedBy, new.DeletedBy))
+	}
+	if !reflect.DeepEqual(pmh.Role, new.Role) {
+		changes = append(changes, NewChange(programmembershiphistory.FieldRole, pmh.Role, new.Role))
+	}
+	if !reflect.DeepEqual(pmh.ProgramID, new.ProgramID) {
+		changes = append(changes, NewChange(programmembershiphistory.FieldProgramID, pmh.ProgramID, new.ProgramID))
+	}
+	if !reflect.DeepEqual(pmh.UserID, new.UserID) {
+		changes = append(changes, NewChange(programmembershiphistory.FieldUserID, pmh.UserID, new.UserID))
+	}
+	return changes
+}
+
+func (pmh *ProgramMembershipHistory) Diff(history *ProgramMembershipHistory) (*HistoryDiff[ProgramMembershipHistory], error) {
+	if pmh.Ref != history.Ref {
+		return nil, MismatchedRefError
+	}
+
+	pmhUnix, historyUnix := pmh.HistoryTime.Unix(), history.HistoryTime.Unix()
+	pmhOlder := pmhUnix < historyUnix || (pmhUnix == historyUnix && pmh.ID < history.ID)
+	historyOlder := pmhUnix > historyUnix || (pmhUnix == historyUnix && pmh.ID > history.ID)
+
+	if pmhOlder {
+		return &HistoryDiff[ProgramMembershipHistory]{
+			Old:     pmh,
+			New:     history,
+			Changes: pmh.changes(history),
+		}, nil
+	} else if historyOlder {
+		return &HistoryDiff[ProgramMembershipHistory]{
+			Old:     history,
+			New:     pmh,
+			Changes: history.changes(pmh),
+		}, nil
+	}
+	return nil, IdenticalHistoryError
+}
+
 func (rh *RiskHistory) changes(new *RiskHistory) []Change {
 	var changes []Change
 	if !reflect.DeepEqual(rh.CreatedAt, new.CreatedAt) {
@@ -2809,6 +2867,12 @@ func (c *Client) Audit(ctx context.Context) ([][]string, error) {
 	}
 	records = append(records, record...)
 
+	record, err = auditProgramMembershipHistory(ctx, c.config)
+	if err != nil {
+		return nil, err
+	}
+	records = append(records, record...)
+
 	record, err = auditRiskHistory(ctx, c.config)
 	if err != nil {
 		return nil, err
@@ -3103,6 +3167,15 @@ func (c *Client) AuditWithFilter(ctx context.Context, tableName string) ([][]str
 
 	if tableName == "" || tableName == strings.TrimSuffix("ProgramHistory", "History") {
 		record, err = auditProgramHistory(ctx, c.config)
+		if err != nil {
+			return nil, err
+		}
+
+		records = append(records, record...)
+	}
+
+	if tableName == "" || tableName == strings.TrimSuffix("ProgramMembershipHistory", "History") {
+		record, err = auditProgramMembershipHistory(ctx, c.config)
 		if err != nil {
 			return nil, err
 		}
@@ -4635,6 +4708,59 @@ func auditProgramHistory(ctx context.Context, config config) ([][]string, error)
 			default:
 				if i == 0 {
 					record.Changes = (&ProgramHistory{}).changes(curr)
+				} else {
+					record.Changes = histories[i-1].changes(curr)
+				}
+			}
+			records = append(records, record.toRow())
+		}
+	}
+	return records, nil
+}
+
+type programmembershiphistoryref struct {
+	Ref string
+}
+
+func auditProgramMembershipHistory(ctx context.Context, config config) ([][]string, error) {
+	var records = [][]string{}
+	var refs []programmembershiphistoryref
+	client := NewProgramMembershipHistoryClient(config)
+	err := client.Query().
+		Unique(true).
+		Order(programmembershiphistory.ByRef()).
+		Select(programmembershiphistory.FieldRef).
+		Scan(ctx, &refs)
+
+	if err != nil {
+		return nil, err
+	}
+	for _, currRef := range refs {
+		histories, err := client.Query().
+			Where(programmembershiphistory.Ref(currRef.Ref)).
+			Order(programmembershiphistory.ByHistoryTime()).
+			All(ctx)
+		if err != nil {
+			return nil, err
+		}
+
+		for i := 0; i < len(histories); i++ {
+			curr := histories[i]
+			record := record{
+				Table:       "ProgramMembershipHistory",
+				RefId:       curr.Ref,
+				HistoryTime: curr.HistoryTime,
+				Operation:   curr.Operation,
+				UpdatedBy:   curr.UpdatedBy,
+			}
+			switch curr.Operation {
+			case history.OpTypeInsert:
+				record.Changes = (&ProgramMembershipHistory{}).changes(curr)
+			case history.OpTypeDelete:
+				record.Changes = curr.changes(&ProgramMembershipHistory{})
+			default:
+				if i == 0 {
+					record.Changes = (&ProgramMembershipHistory{}).changes(curr)
 				} else {
 					record.Changes = histories[i-1].changes(curr)
 				}

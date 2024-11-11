@@ -68,6 +68,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/procedurehistory"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/programhistory"
+	"github.com/theopenlane/core/internal/ent/generated/programmembership"
+	"github.com/theopenlane/core/internal/ent/generated/programmembershiphistory"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
@@ -10381,6 +10383,19 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			pr.WithNamedUsers(alias, func(wq *UserQuery) {
 				*wq = *query
 			})
+
+		case "members":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ProgramMembershipClient{config: pr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, programmembershipImplementors)...); err != nil {
+				return err
+			}
+			pr.WithNamedMembers(alias, func(wq *ProgramMembershipQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[program.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, program.FieldCreatedAt)
@@ -10655,6 +10670,265 @@ func newProgramHistoryPaginateArgs(rv map[string]any) *programhistoryPaginateArg
 	}
 	if v, ok := rv[whereField].(*ProgramHistoryWhereInput); ok {
 		args.opts = append(args.opts, WithProgramHistoryFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (pm *ProgramMembershipQuery) CollectFields(ctx context.Context, satisfies ...string) (*ProgramMembershipQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return pm, nil
+	}
+	if err := pm.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return pm, nil
+}
+
+func (pm *ProgramMembershipQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(programmembership.Columns))
+		selectedFields = []string{programmembership.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+
+		case "program":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ProgramClient{config: pm.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, programImplementors)...); err != nil {
+				return err
+			}
+			pm.withProgram = query
+			if _, ok := fieldSeen[programmembership.FieldProgramID]; !ok {
+				selectedFields = append(selectedFields, programmembership.FieldProgramID)
+				fieldSeen[programmembership.FieldProgramID] = struct{}{}
+			}
+
+		case "user":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&UserClient{config: pm.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+				return err
+			}
+			pm.withUser = query
+			if _, ok := fieldSeen[programmembership.FieldUserID]; !ok {
+				selectedFields = append(selectedFields, programmembership.FieldUserID)
+				fieldSeen[programmembership.FieldUserID] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[programmembership.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, programmembership.FieldCreatedAt)
+				fieldSeen[programmembership.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[programmembership.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, programmembership.FieldUpdatedAt)
+				fieldSeen[programmembership.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[programmembership.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, programmembership.FieldCreatedBy)
+				fieldSeen[programmembership.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[programmembership.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, programmembership.FieldUpdatedBy)
+				fieldSeen[programmembership.FieldUpdatedBy] = struct{}{}
+			}
+		case "deletedAt":
+			if _, ok := fieldSeen[programmembership.FieldDeletedAt]; !ok {
+				selectedFields = append(selectedFields, programmembership.FieldDeletedAt)
+				fieldSeen[programmembership.FieldDeletedAt] = struct{}{}
+			}
+		case "deletedBy":
+			if _, ok := fieldSeen[programmembership.FieldDeletedBy]; !ok {
+				selectedFields = append(selectedFields, programmembership.FieldDeletedBy)
+				fieldSeen[programmembership.FieldDeletedBy] = struct{}{}
+			}
+		case "role":
+			if _, ok := fieldSeen[programmembership.FieldRole]; !ok {
+				selectedFields = append(selectedFields, programmembership.FieldRole)
+				fieldSeen[programmembership.FieldRole] = struct{}{}
+			}
+		case "programID":
+			if _, ok := fieldSeen[programmembership.FieldProgramID]; !ok {
+				selectedFields = append(selectedFields, programmembership.FieldProgramID)
+				fieldSeen[programmembership.FieldProgramID] = struct{}{}
+			}
+		case "userID":
+			if _, ok := fieldSeen[programmembership.FieldUserID]; !ok {
+				selectedFields = append(selectedFields, programmembership.FieldUserID)
+				fieldSeen[programmembership.FieldUserID] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		pm.Select(selectedFields...)
+	}
+	return nil
+}
+
+type programmembershipPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []ProgramMembershipPaginateOption
+}
+
+func newProgramMembershipPaginateArgs(rv map[string]any) *programmembershipPaginateArgs {
+	args := &programmembershipPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*ProgramMembershipWhereInput); ok {
+		args.opts = append(args.opts, WithProgramMembershipFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (pmh *ProgramMembershipHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*ProgramMembershipHistoryQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return pmh, nil
+	}
+	if err := pmh.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return pmh, nil
+}
+
+func (pmh *ProgramMembershipHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(programmembershiphistory.Columns))
+		selectedFields = []string{programmembershiphistory.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "historyTime":
+			if _, ok := fieldSeen[programmembershiphistory.FieldHistoryTime]; !ok {
+				selectedFields = append(selectedFields, programmembershiphistory.FieldHistoryTime)
+				fieldSeen[programmembershiphistory.FieldHistoryTime] = struct{}{}
+			}
+		case "ref":
+			if _, ok := fieldSeen[programmembershiphistory.FieldRef]; !ok {
+				selectedFields = append(selectedFields, programmembershiphistory.FieldRef)
+				fieldSeen[programmembershiphistory.FieldRef] = struct{}{}
+			}
+		case "operation":
+			if _, ok := fieldSeen[programmembershiphistory.FieldOperation]; !ok {
+				selectedFields = append(selectedFields, programmembershiphistory.FieldOperation)
+				fieldSeen[programmembershiphistory.FieldOperation] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[programmembershiphistory.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, programmembershiphistory.FieldCreatedAt)
+				fieldSeen[programmembershiphistory.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[programmembershiphistory.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, programmembershiphistory.FieldUpdatedAt)
+				fieldSeen[programmembershiphistory.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[programmembershiphistory.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, programmembershiphistory.FieldCreatedBy)
+				fieldSeen[programmembershiphistory.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[programmembershiphistory.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, programmembershiphistory.FieldUpdatedBy)
+				fieldSeen[programmembershiphistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "deletedAt":
+			if _, ok := fieldSeen[programmembershiphistory.FieldDeletedAt]; !ok {
+				selectedFields = append(selectedFields, programmembershiphistory.FieldDeletedAt)
+				fieldSeen[programmembershiphistory.FieldDeletedAt] = struct{}{}
+			}
+		case "deletedBy":
+			if _, ok := fieldSeen[programmembershiphistory.FieldDeletedBy]; !ok {
+				selectedFields = append(selectedFields, programmembershiphistory.FieldDeletedBy)
+				fieldSeen[programmembershiphistory.FieldDeletedBy] = struct{}{}
+			}
+		case "role":
+			if _, ok := fieldSeen[programmembershiphistory.FieldRole]; !ok {
+				selectedFields = append(selectedFields, programmembershiphistory.FieldRole)
+				fieldSeen[programmembershiphistory.FieldRole] = struct{}{}
+			}
+		case "programID":
+			if _, ok := fieldSeen[programmembershiphistory.FieldProgramID]; !ok {
+				selectedFields = append(selectedFields, programmembershiphistory.FieldProgramID)
+				fieldSeen[programmembershiphistory.FieldProgramID] = struct{}{}
+			}
+		case "userID":
+			if _, ok := fieldSeen[programmembershiphistory.FieldUserID]; !ok {
+				selectedFields = append(selectedFields, programmembershiphistory.FieldUserID)
+				fieldSeen[programmembershiphistory.FieldUserID] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		pmh.Select(selectedFields...)
+	}
+	return nil
+}
+
+type programmembershiphistoryPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []ProgramMembershipHistoryPaginateOption
+}
+
+func newProgramMembershipHistoryPaginateArgs(rv map[string]any) *programmembershiphistoryPaginateArgs {
+	args := &programmembershiphistoryPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*ProgramMembershipHistoryWhereInput); ok {
+		args.opts = append(args.opts, WithProgramMembershipHistoryFilter(v.Filter))
 	}
 	return args
 }
@@ -13076,6 +13350,19 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				return err
 			}
 			u.WithNamedOrgMemberships(alias, func(wq *OrgMembershipQuery) {
+				*wq = *query
+			})
+
+		case "programMemberships":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ProgramMembershipClient{config: u.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, programmembershipImplementors)...); err != nil {
+				return err
+			}
+			u.WithNamedProgramMemberships(alias, func(wq *ProgramMembershipQuery) {
 				*wq = *query
 			})
 		case "createdAt":

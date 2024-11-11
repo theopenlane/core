@@ -604,6 +604,20 @@ func ProgramHistoryEdgeCleanup(ctx context.Context, id string) error {
 	return nil
 }
 
+func ProgramMembershipEdgeCleanup(ctx context.Context, id string) error {
+	// If a user has access to delete the object, they have access to delete all edges
+	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup programmembership edge"))
+
+	return nil
+}
+
+func ProgramMembershipHistoryEdgeCleanup(ctx context.Context, id string) error {
+	// If a user has access to delete the object, they have access to delete all edges
+	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup programmembershiphistory edge"))
+
+	return nil
+}
+
 func RiskEdgeCleanup(ctx context.Context, id string) error {
 	// If a user has access to delete the object, they have access to delete all edges
 	ctx = privacy.DecisionContext(ctx, privacy.Allowf("cleanup risk edge"))

@@ -2173,6 +2173,80 @@ var (
 			},
 		},
 	}
+	// ProgramMembershipsColumns holds the columns for the "program_memberships" table.
+	ProgramMembershipsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "mapping_id", Type: field.TypeString, Unique: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "role", Type: field.TypeEnum, Enums: []string{"ADMIN", "MEMBER", "USER"}, Default: "MEMBER"},
+		{Name: "program_id", Type: field.TypeString},
+		{Name: "user_id", Type: field.TypeString},
+	}
+	// ProgramMembershipsTable holds the schema information for the "program_memberships" table.
+	ProgramMembershipsTable = &schema.Table{
+		Name:       "program_memberships",
+		Columns:    ProgramMembershipsColumns,
+		PrimaryKey: []*schema.Column{ProgramMembershipsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "program_memberships_programs_program",
+				Columns:    []*schema.Column{ProgramMembershipsColumns[9]},
+				RefColumns: []*schema.Column{ProgramsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "program_memberships_users_user",
+				Columns:    []*schema.Column{ProgramMembershipsColumns[10]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "programmembership_user_id_program_id",
+				Unique:  true,
+				Columns: []*schema.Column{ProgramMembershipsColumns[10], ProgramMembershipsColumns[9]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+		},
+	}
+	// ProgramMembershipHistoryColumns holds the columns for the "program_membership_history" table.
+	ProgramMembershipHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "mapping_id", Type: field.TypeString},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "role", Type: field.TypeEnum, Enums: []string{"ADMIN", "MEMBER", "USER"}, Default: "MEMBER"},
+		{Name: "program_id", Type: field.TypeString},
+		{Name: "user_id", Type: field.TypeString},
+	}
+	// ProgramMembershipHistoryTable holds the schema information for the "program_membership_history" table.
+	ProgramMembershipHistoryTable = &schema.Table{
+		Name:       "program_membership_history",
+		Columns:    ProgramMembershipHistoryColumns,
+		PrimaryKey: []*schema.Column{ProgramMembershipHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "programmembershiphistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{ProgramMembershipHistoryColumns[1]},
+			},
+		},
+	}
 	// RisksColumns holds the columns for the "risks" table.
 	RisksColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -4616,31 +4690,6 @@ var (
 			},
 		},
 	}
-	// UserProgramsColumns holds the columns for the "user_programs" table.
-	UserProgramsColumns = []*schema.Column{
-		{Name: "user_id", Type: field.TypeString},
-		{Name: "program_id", Type: field.TypeString},
-	}
-	// UserProgramsTable holds the schema information for the "user_programs" table.
-	UserProgramsTable = &schema.Table{
-		Name:       "user_programs",
-		Columns:    UserProgramsColumns,
-		PrimaryKey: []*schema.Column{UserProgramsColumns[0], UserProgramsColumns[1]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "user_programs_user_id",
-				Columns:    []*schema.Column{UserProgramsColumns[0]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-			{
-				Symbol:     "user_programs_program_id",
-				Columns:    []*schema.Column{UserProgramsColumns[1]},
-				RefColumns: []*schema.Column{ProgramsColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-		},
-	}
 	// UserSettingFilesColumns holds the columns for the "user_setting_files" table.
 	UserSettingFilesColumns = []*schema.Column{
 		{Name: "user_setting_id", Type: field.TypeString},
@@ -4753,6 +4802,8 @@ var (
 		ProcedureHistoryTable,
 		ProgramsTable,
 		ProgramHistoryTable,
+		ProgramMembershipsTable,
+		ProgramMembershipHistoryTable,
 		RisksTable,
 		RiskHistoryTable,
 		StandardsTable,
@@ -4839,7 +4890,6 @@ var (
 		UserEventsTable,
 		UserActionplansTable,
 		UserSubcontrolsTable,
-		UserProgramsTable,
 		UserSettingFilesTable,
 		WebhookEventsTable,
 	}
@@ -4965,6 +5015,11 @@ func init() {
 	ProgramsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	ProgramHistoryTable.Annotation = &entsql.Annotation{
 		Table: "program_history",
+	}
+	ProgramMembershipsTable.ForeignKeys[0].RefTable = ProgramsTable
+	ProgramMembershipsTable.ForeignKeys[1].RefTable = UsersTable
+	ProgramMembershipHistoryTable.Annotation = &entsql.Annotation{
+		Table: "program_membership_history",
 	}
 	RisksTable.ForeignKeys[0].RefTable = ControlObjectivesTable
 	RiskHistoryTable.Annotation = &entsql.Annotation{
@@ -5137,8 +5192,6 @@ func init() {
 	UserActionplansTable.ForeignKeys[1].RefTable = ActionPlansTable
 	UserSubcontrolsTable.ForeignKeys[0].RefTable = UsersTable
 	UserSubcontrolsTable.ForeignKeys[1].RefTable = SubcontrolsTable
-	UserProgramsTable.ForeignKeys[0].RefTable = UsersTable
-	UserProgramsTable.ForeignKeys[1].RefTable = ProgramsTable
 	UserSettingFilesTable.ForeignKeys[0].RefTable = UserSettingsTable
 	UserSettingFilesTable.ForeignKeys[1].RefTable = FilesTable
 	WebhookEventsTable.ForeignKeys[0].RefTable = WebhooksTable

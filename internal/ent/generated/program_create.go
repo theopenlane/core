@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
@@ -461,6 +462,21 @@ func (pc *ProgramCreate) AddUsers(u ...*User) *ProgramCreate {
 		ids[i] = u[i].ID
 	}
 	return pc.AddUserIDs(ids...)
+}
+
+// AddMemberIDs adds the "members" edge to the ProgramMembership entity by IDs.
+func (pc *ProgramCreate) AddMemberIDs(ids ...string) *ProgramCreate {
+	pc.mutation.AddMemberIDs(ids...)
+	return pc
+}
+
+// AddMembers adds the "members" edges to the ProgramMembership entity.
+func (pc *ProgramCreate) AddMembers(p ...*ProgramMembership) *ProgramCreate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return pc.AddMemberIDs(ids...)
 }
 
 // Mutation returns the ProgramMutation object of the builder.
@@ -925,7 +941,31 @@ func (pc *ProgramCreate) createSpec() (*Program, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pc.schemaConfig.UserPrograms
+		edge.Schema = pc.schemaConfig.ProgramMembership
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		createE := &ProgramMembershipCreate{config: pc.config, mutation: newProgramMembershipMutation(pc.config, OpCreate)}
+		_ = createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		if specE.ID.Value != nil {
+			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := pc.mutation.MembersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   program.MembersTable,
+			Columns: []string{program.MembersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(programmembership.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pc.schemaConfig.ProgramMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

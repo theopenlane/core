@@ -23,6 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
@@ -53,6 +54,7 @@ type ProgramQuery struct {
 	withActionplans            *ActionPlanQuery
 	withStandards              *StandardQuery
 	withUsers                  *UserQuery
+	withMembers                *ProgramMembershipQuery
 	loadTotal                  []func(context.Context, []*Program) error
 	modifiers                  []func(*sql.Selector)
 	withNamedControls          map[string]*ControlQuery
@@ -68,6 +70,7 @@ type ProgramQuery struct {
 	withNamedActionplans       map[string]*ActionPlanQuery
 	withNamedStandards         map[string]*StandardQuery
 	withNamedUsers             map[string]*UserQuery
+	withNamedMembers           map[string]*ProgramMembershipQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -447,7 +450,32 @@ func (pq *ProgramQuery) QueryUsers() *UserQuery {
 		)
 		schemaConfig := pq.schemaConfig
 		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.UserPrograms
+		step.Edge.Schema = schemaConfig.ProgramMembership
+		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryMembers chains the current query on the "members" edge.
+func (pq *ProgramQuery) QueryMembers() *ProgramMembershipQuery {
+	query := (&ProgramMembershipClient{config: pq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := pq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(program.Table, program.FieldID, selector),
+			sqlgraph.To(programmembership.Table, programmembership.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, program.MembersTable, program.MembersColumn),
+		)
+		schemaConfig := pq.schemaConfig
+		step.To.Schema = schemaConfig.ProgramMembership
+		step.Edge.Schema = schemaConfig.ProgramMembership
 		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -660,6 +688,7 @@ func (pq *ProgramQuery) Clone() *ProgramQuery {
 		withActionplans:       pq.withActionplans.Clone(),
 		withStandards:         pq.withStandards.Clone(),
 		withUsers:             pq.withUsers.Clone(),
+		withMembers:           pq.withMembers.Clone(),
 		// clone intermediate query.
 		sql:       pq.sql.Clone(),
 		path:      pq.path,
@@ -821,6 +850,17 @@ func (pq *ProgramQuery) WithUsers(opts ...func(*UserQuery)) *ProgramQuery {
 	return pq
 }
 
+// WithMembers tells the query-builder to eager-load the nodes that are connected to
+// the "members" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *ProgramQuery) WithMembers(opts ...func(*ProgramMembershipQuery)) *ProgramQuery {
+	query := (&ProgramMembershipClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	pq.withMembers = query
+	return pq
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -899,7 +939,7 @@ func (pq *ProgramQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Prog
 	var (
 		nodes       = []*Program{}
 		_spec       = pq.querySpec()
-		loadedTypes = [14]bool{
+		loadedTypes = [15]bool{
 			pq.withOrganization != nil,
 			pq.withControls != nil,
 			pq.withSubcontrols != nil,
@@ -914,6 +954,7 @@ func (pq *ProgramQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Prog
 			pq.withActionplans != nil,
 			pq.withStandards != nil,
 			pq.withUsers != nil,
+			pq.withMembers != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -1038,6 +1079,13 @@ func (pq *ProgramQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Prog
 			return nil, err
 		}
 	}
+	if query := pq.withMembers; query != nil {
+		if err := pq.loadMembers(ctx, query, nodes,
+			func(n *Program) { n.Edges.Members = []*ProgramMembership{} },
+			func(n *Program, e *ProgramMembership) { n.Edges.Members = append(n.Edges.Members, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range pq.withNamedControls {
 		if err := pq.loadControls(ctx, query, nodes,
 			func(n *Program) { n.appendNamedControls(name) },
@@ -1126,6 +1174,13 @@ func (pq *ProgramQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Prog
 		if err := pq.loadUsers(ctx, query, nodes,
 			func(n *Program) { n.appendNamedUsers(name) },
 			func(n *Program, e *User) { n.appendNamedUsers(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range pq.withNamedMembers {
+		if err := pq.loadMembers(ctx, query, nodes,
+			func(n *Program) { n.appendNamedMembers(name) },
+			func(n *Program, e *ProgramMembership) { n.appendNamedMembers(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1923,7 +1978,7 @@ func (pq *ProgramQuery) loadUsers(ctx context.Context, query *UserQuery, nodes [
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(program.UsersTable)
-		joinT.Schema(pq.schemaConfig.UserPrograms)
+		joinT.Schema(pq.schemaConfig.ProgramMembership)
 		s.Join(joinT).On(s.C(user.FieldID), joinT.C(program.UsersPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(program.UsersPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1969,6 +2024,36 @@ func (pq *ProgramQuery) loadUsers(ctx context.Context, query *UserQuery, nodes [
 		for kn := range nodes {
 			assign(kn, n)
 		}
+	}
+	return nil
+}
+func (pq *ProgramQuery) loadMembers(ctx context.Context, query *ProgramMembershipQuery, nodes []*Program, init func(*Program), assign func(*Program, *ProgramMembership)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Program)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(programmembership.FieldProgramID)
+	}
+	query.Where(predicate.ProgramMembership(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(program.MembersColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.ProgramID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "program_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
 	}
 	return nil
 }
@@ -2253,6 +2338,20 @@ func (pq *ProgramQuery) WithNamedUsers(name string, opts ...func(*UserQuery)) *P
 		pq.withNamedUsers = make(map[string]*UserQuery)
 	}
 	pq.withNamedUsers[name] = query
+	return pq
+}
+
+// WithNamedMembers tells the query-builder to eager-load the nodes that are connected to the "members"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (pq *ProgramQuery) WithNamedMembers(name string, opts ...func(*ProgramMembershipQuery)) *ProgramQuery {
+	query := (&ProgramMembershipClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if pq.withNamedMembers == nil {
+		pq.withNamedMembers = make(map[string]*ProgramMembershipQuery)
+	}
+	pq.withNamedMembers[name] = query
 	return pq
 }
 

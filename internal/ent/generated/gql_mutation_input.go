@@ -5735,6 +5735,52 @@ func (c *ProgramUpdateOne) SetInput(i UpdateProgramInput) *ProgramUpdateOne {
 	return c
 }
 
+// CreateProgramMembershipInput represents a mutation input for creating programmemberships.
+type CreateProgramMembershipInput struct {
+	Role      *enums.Role
+	ProgramID string
+	UserID    string
+}
+
+// Mutate applies the CreateProgramMembershipInput on the ProgramMembershipMutation builder.
+func (i *CreateProgramMembershipInput) Mutate(m *ProgramMembershipMutation) {
+	if v := i.Role; v != nil {
+		m.SetRole(*v)
+	}
+	m.SetProgramID(i.ProgramID)
+	m.SetUserID(i.UserID)
+}
+
+// SetInput applies the change-set in the CreateProgramMembershipInput on the ProgramMembershipCreate builder.
+func (c *ProgramMembershipCreate) SetInput(i CreateProgramMembershipInput) *ProgramMembershipCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateProgramMembershipInput represents a mutation input for updating programmemberships.
+type UpdateProgramMembershipInput struct {
+	Role *enums.Role
+}
+
+// Mutate applies the UpdateProgramMembershipInput on the ProgramMembershipMutation builder.
+func (i *UpdateProgramMembershipInput) Mutate(m *ProgramMembershipMutation) {
+	if v := i.Role; v != nil {
+		m.SetRole(*v)
+	}
+}
+
+// SetInput applies the change-set in the UpdateProgramMembershipInput on the ProgramMembershipUpdate builder.
+func (c *ProgramMembershipUpdate) SetInput(i UpdateProgramMembershipInput) *ProgramMembershipUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateProgramMembershipInput on the ProgramMembershipUpdateOne builder.
+func (c *ProgramMembershipUpdateOne) SetInput(i UpdateProgramMembershipInput) *ProgramMembershipUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
 // CreateRiskInput represents a mutation input for creating risks.
 type CreateRiskInput struct {
 	Tags          []string

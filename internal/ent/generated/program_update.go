@@ -23,6 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
@@ -481,6 +482,21 @@ func (pu *ProgramUpdate) AddUsers(u ...*User) *ProgramUpdate {
 	return pu.AddUserIDs(ids...)
 }
 
+// AddMemberIDs adds the "members" edge to the ProgramMembership entity by IDs.
+func (pu *ProgramUpdate) AddMemberIDs(ids ...string) *ProgramUpdate {
+	pu.mutation.AddMemberIDs(ids...)
+	return pu
+}
+
+// AddMembers adds the "members" edges to the ProgramMembership entity.
+func (pu *ProgramUpdate) AddMembers(p ...*ProgramMembership) *ProgramUpdate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return pu.AddMemberIDs(ids...)
+}
+
 // Mutation returns the ProgramMutation object of the builder.
 func (pu *ProgramUpdate) Mutation() *ProgramMutation {
 	return pu.mutation
@@ -763,6 +779,27 @@ func (pu *ProgramUpdate) RemoveUsers(u ...*User) *ProgramUpdate {
 		ids[i] = u[i].ID
 	}
 	return pu.RemoveUserIDs(ids...)
+}
+
+// ClearMembers clears all "members" edges to the ProgramMembership entity.
+func (pu *ProgramUpdate) ClearMembers() *ProgramUpdate {
+	pu.mutation.ClearMembers()
+	return pu
+}
+
+// RemoveMemberIDs removes the "members" edge to ProgramMembership entities by IDs.
+func (pu *ProgramUpdate) RemoveMemberIDs(ids ...string) *ProgramUpdate {
+	pu.mutation.RemoveMemberIDs(ids...)
+	return pu
+}
+
+// RemoveMembers removes "members" edges to ProgramMembership entities.
+func (pu *ProgramUpdate) RemoveMembers(p ...*ProgramMembership) *ProgramUpdate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return pu.RemoveMemberIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -1540,7 +1577,14 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.UserPrograms
+		edge.Schema = pu.schemaConfig.ProgramMembership
+		createE := &ProgramMembershipCreate{config: pu.config, mutation: newProgramMembershipMutation(pu.config, OpCreate)}
+		_ = createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		if specE.ID.Value != nil {
+			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := pu.mutation.RemovedUsersIDs(); len(nodes) > 0 && !pu.mutation.UsersCleared() {
@@ -1554,9 +1598,16 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.UserPrograms
+		edge.Schema = pu.schemaConfig.ProgramMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		createE := &ProgramMembershipCreate{config: pu.config, mutation: newProgramMembershipMutation(pu.config, OpCreate)}
+		_ = createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		if specE.ID.Value != nil {
+			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
@@ -1571,7 +1622,62 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = pu.schemaConfig.UserPrograms
+		edge.Schema = pu.schemaConfig.ProgramMembership
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		createE := &ProgramMembershipCreate{config: pu.config, mutation: newProgramMembershipMutation(pu.config, OpCreate)}
+		_ = createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		if specE.ID.Value != nil {
+			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if pu.mutation.MembersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   program.MembersTable,
+			Columns: []string{program.MembersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(programmembership.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pu.schemaConfig.ProgramMembership
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.RemovedMembersIDs(); len(nodes) > 0 && !pu.mutation.MembersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   program.MembersTable,
+			Columns: []string{program.MembersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(programmembership.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pu.schemaConfig.ProgramMembership
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.MembersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   program.MembersTable,
+			Columns: []string{program.MembersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(programmembership.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pu.schemaConfig.ProgramMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2035,6 +2141,21 @@ func (puo *ProgramUpdateOne) AddUsers(u ...*User) *ProgramUpdateOne {
 	return puo.AddUserIDs(ids...)
 }
 
+// AddMemberIDs adds the "members" edge to the ProgramMembership entity by IDs.
+func (puo *ProgramUpdateOne) AddMemberIDs(ids ...string) *ProgramUpdateOne {
+	puo.mutation.AddMemberIDs(ids...)
+	return puo
+}
+
+// AddMembers adds the "members" edges to the ProgramMembership entity.
+func (puo *ProgramUpdateOne) AddMembers(p ...*ProgramMembership) *ProgramUpdateOne {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return puo.AddMemberIDs(ids...)
+}
+
 // Mutation returns the ProgramMutation object of the builder.
 func (puo *ProgramUpdateOne) Mutation() *ProgramMutation {
 	return puo.mutation
@@ -2317,6 +2438,27 @@ func (puo *ProgramUpdateOne) RemoveUsers(u ...*User) *ProgramUpdateOne {
 		ids[i] = u[i].ID
 	}
 	return puo.RemoveUserIDs(ids...)
+}
+
+// ClearMembers clears all "members" edges to the ProgramMembership entity.
+func (puo *ProgramUpdateOne) ClearMembers() *ProgramUpdateOne {
+	puo.mutation.ClearMembers()
+	return puo
+}
+
+// RemoveMemberIDs removes the "members" edge to ProgramMembership entities by IDs.
+func (puo *ProgramUpdateOne) RemoveMemberIDs(ids ...string) *ProgramUpdateOne {
+	puo.mutation.RemoveMemberIDs(ids...)
+	return puo
+}
+
+// RemoveMembers removes "members" edges to ProgramMembership entities.
+func (puo *ProgramUpdateOne) RemoveMembers(p ...*ProgramMembership) *ProgramUpdateOne {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return puo.RemoveMemberIDs(ids...)
 }
 
 // Where appends a list predicates to the ProgramUpdate builder.
@@ -3124,7 +3266,14 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.UserPrograms
+		edge.Schema = puo.schemaConfig.ProgramMembership
+		createE := &ProgramMembershipCreate{config: puo.config, mutation: newProgramMembershipMutation(puo.config, OpCreate)}
+		_ = createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		if specE.ID.Value != nil {
+			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := puo.mutation.RemovedUsersIDs(); len(nodes) > 0 && !puo.mutation.UsersCleared() {
@@ -3138,9 +3287,16 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.UserPrograms
+		edge.Schema = puo.schemaConfig.ProgramMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		createE := &ProgramMembershipCreate{config: puo.config, mutation: newProgramMembershipMutation(puo.config, OpCreate)}
+		_ = createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		if specE.ID.Value != nil {
+			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
@@ -3155,7 +3311,62 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = puo.schemaConfig.UserPrograms
+		edge.Schema = puo.schemaConfig.ProgramMembership
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		createE := &ProgramMembershipCreate{config: puo.config, mutation: newProgramMembershipMutation(puo.config, OpCreate)}
+		_ = createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		if specE.ID.Value != nil {
+			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if puo.mutation.MembersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   program.MembersTable,
+			Columns: []string{program.MembersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(programmembership.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = puo.schemaConfig.ProgramMembership
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.RemovedMembersIDs(); len(nodes) > 0 && !puo.mutation.MembersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   program.MembersTable,
+			Columns: []string{program.MembersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(programmembership.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = puo.schemaConfig.ProgramMembership
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.MembersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   program.MembersTable,
+			Columns: []string{program.MembersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(programmembership.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = puo.schemaConfig.ProgramMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

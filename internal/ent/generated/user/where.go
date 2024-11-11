@@ -1877,7 +1877,7 @@ func HasPrograms() predicate.User {
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.UserPrograms
+		step.Edge.Schema = schemaConfig.ProgramMembership
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1888,7 +1888,7 @@ func HasProgramsWith(preds ...predicate.Program) predicate.User {
 		step := newProgramsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.UserPrograms
+		step.Edge.Schema = schemaConfig.ProgramMembership
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1947,6 +1947,35 @@ func HasOrgMembershipsWith(preds ...predicate.OrgMembership) predicate.User {
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.OrgMembership
 		step.Edge.Schema = schemaConfig.OrgMembership
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasProgramMemberships applies the HasEdge predicate on the "program_memberships" edge.
+func HasProgramMemberships() predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, ProgramMembershipsTable, ProgramMembershipsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.ProgramMembership
+		step.Edge.Schema = schemaConfig.ProgramMembership
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasProgramMembershipsWith applies the HasEdge predicate on the "program_memberships" edge with a given conditions (other predicates).
+func HasProgramMembershipsWith(preds ...predicate.ProgramMembership) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := newProgramMembershipsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.ProgramMembership
+		step.Edge.Schema = schemaConfig.ProgramMembership
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

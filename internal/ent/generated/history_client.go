@@ -89,6 +89,9 @@ func (c *Client) WithHistory() {
 	for _, hook := range history.HistoryHooks[*ProgramMutation]() {
 		c.Program.Use(hook)
 	}
+	for _, hook := range history.HistoryHooks[*ProgramMembershipMutation]() {
+		c.ProgramMembership.Use(hook)
+	}
 	for _, hook := range history.HistoryHooks[*RiskMutation]() {
 		c.Risk.Use(hook)
 	}

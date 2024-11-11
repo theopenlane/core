@@ -67,6 +67,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/procedurehistory"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/programhistory"
+	"github.com/theopenlane/core/internal/ent/generated/programmembership"
+	"github.com/theopenlane/core/internal/ent/generated/programmembershiphistory"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
@@ -381,6 +383,16 @@ var programhistoryImplementors = []string{"ProgramHistory", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*ProgramHistory) IsNode() {}
+
+var programmembershipImplementors = []string{"ProgramMembership", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*ProgramMembership) IsNode() {}
+
+var programmembershiphistoryImplementors = []string{"ProgramMembershipHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*ProgramMembershipHistory) IsNode() {}
 
 var riskImplementors = []string{"Risk", "Node"}
 
@@ -1048,6 +1060,24 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(programhistory.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, programhistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case programmembership.Table:
+		query := c.ProgramMembership.Query().
+			Where(programmembership.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, programmembershipImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case programmembershiphistory.Table:
+		query := c.ProgramMembershipHistory.Query().
+			Where(programmembershiphistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, programmembershiphistoryImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -2203,6 +2233,38 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.ProgramHistory.Query().
 			Where(programhistory.IDIn(ids...))
 		query, err := query.CollectFields(ctx, programhistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case programmembership.Table:
+		query := c.ProgramMembership.Query().
+			Where(programmembership.IDIn(ids...))
+		query, err := query.CollectFields(ctx, programmembershipImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case programmembershiphistory.Table:
+		query := c.ProgramMembershipHistory.Query().
+			Where(programmembershiphistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, programmembershiphistoryImplementors...)
 		if err != nil {
 			return nil, err
 		}

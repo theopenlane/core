@@ -72,6 +72,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/procedurehistory"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/programhistory"
+	"github.com/theopenlane/core/internal/ent/generated/programmembership"
+	"github.com/theopenlane/core/internal/ent/generated/programmembershiphistory"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
@@ -211,6 +213,8 @@ func checkColumn(table, column string) error {
 			procedurehistory.Table:              procedurehistory.ValidColumn,
 			program.Table:                       program.ValidColumn,
 			programhistory.Table:                programhistory.ValidColumn,
+			programmembership.Table:             programmembership.ValidColumn,
+			programmembershiphistory.Table:      programmembershiphistory.ValidColumn,
 			risk.Table:                          risk.ValidColumn,
 			riskhistory.Table:                   riskhistory.ValidColumn,
 			standard.Table:                      standard.ValidColumn,

@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
@@ -591,6 +592,21 @@ func (uc *UserCreate) AddOrgMemberships(o ...*OrgMembership) *UserCreate {
 	return uc.AddOrgMembershipIDs(ids...)
 }
 
+// AddProgramMembershipIDs adds the "program_memberships" edge to the ProgramMembership entity by IDs.
+func (uc *UserCreate) AddProgramMembershipIDs(ids ...string) *UserCreate {
+	uc.mutation.AddProgramMembershipIDs(ids...)
+	return uc
+}
+
+// AddProgramMemberships adds the "program_memberships" edges to the ProgramMembership entity.
+func (uc *UserCreate) AddProgramMemberships(p ...*ProgramMembership) *UserCreate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return uc.AddProgramMembershipIDs(ids...)
+}
+
 // Mutation returns the UserMutation object of the builder.
 func (uc *UserCreate) Mutation() *UserMutation {
 	return uc.mutation
@@ -1125,9 +1141,16 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = uc.schemaConfig.UserPrograms
+		edge.Schema = uc.schemaConfig.ProgramMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		createE := &ProgramMembershipCreate{config: uc.config, mutation: newProgramMembershipMutation(uc.config, OpCreate)}
+		_ = createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		if specE.ID.Value != nil {
+			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
@@ -1160,6 +1183,23 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = uc.schemaConfig.OrgMembership
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := uc.mutation.ProgramMembershipsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   user.ProgramMembershipsTable,
+			Columns: []string{user.ProgramMembershipsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(programmembership.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = uc.schemaConfig.ProgramMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -25,6 +25,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
@@ -60,6 +61,7 @@ type UserQuery struct {
 	withPrograms                     *ProgramQuery
 	withGroupMemberships             *GroupMembershipQuery
 	withOrgMemberships               *OrgMembershipQuery
+	withProgramMemberships           *ProgramMembershipQuery
 	loadTotal                        []func(context.Context, []*User) error
 	modifiers                        []func(*sql.Selector)
 	withNamedPersonalAccessTokens    map[string]*PersonalAccessTokenQuery
@@ -78,6 +80,7 @@ type UserQuery struct {
 	withNamedPrograms                map[string]*ProgramQuery
 	withNamedGroupMemberships        map[string]*GroupMembershipQuery
 	withNamedOrgMemberships          map[string]*OrgMembershipQuery
+	withNamedProgramMemberships      map[string]*ProgramMembershipQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -507,7 +510,7 @@ func (uq *UserQuery) QueryPrograms() *ProgramQuery {
 		)
 		schemaConfig := uq.schemaConfig
 		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.UserPrograms
+		step.Edge.Schema = schemaConfig.ProgramMembership
 		fromU = sqlgraph.SetNeighbors(uq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -558,6 +561,31 @@ func (uq *UserQuery) QueryOrgMemberships() *OrgMembershipQuery {
 		schemaConfig := uq.schemaConfig
 		step.To.Schema = schemaConfig.OrgMembership
 		step.Edge.Schema = schemaConfig.OrgMembership
+		fromU = sqlgraph.SetNeighbors(uq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryProgramMemberships chains the current query on the "program_memberships" edge.
+func (uq *UserQuery) QueryProgramMemberships() *ProgramMembershipQuery {
+	query := (&ProgramMembershipClient{config: uq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := uq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := uq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, selector),
+			sqlgraph.To(programmembership.Table, programmembership.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, user.ProgramMembershipsTable, user.ProgramMembershipsColumn),
+		)
+		schemaConfig := uq.schemaConfig
+		step.To.Schema = schemaConfig.ProgramMembership
+		step.Edge.Schema = schemaConfig.ProgramMembership
 		fromU = sqlgraph.SetNeighbors(uq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -774,6 +802,7 @@ func (uq *UserQuery) Clone() *UserQuery {
 		withPrograms:                uq.withPrograms.Clone(),
 		withGroupMemberships:        uq.withGroupMemberships.Clone(),
 		withOrgMemberships:          uq.withOrgMemberships.Clone(),
+		withProgramMemberships:      uq.withProgramMemberships.Clone(),
 		// clone intermediate query.
 		sql:       uq.sql.Clone(),
 		path:      uq.path,
@@ -979,6 +1008,17 @@ func (uq *UserQuery) WithOrgMemberships(opts ...func(*OrgMembershipQuery)) *User
 	return uq
 }
 
+// WithProgramMemberships tells the query-builder to eager-load the nodes that are connected to
+// the "program_memberships" edge. The optional arguments are used to configure the query builder of the edge.
+func (uq *UserQuery) WithProgramMemberships(opts ...func(*ProgramMembershipQuery)) *UserQuery {
+	query := (&ProgramMembershipClient{config: uq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	uq.withProgramMemberships = query
+	return uq
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -1063,7 +1103,7 @@ func (uq *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 	var (
 		nodes       = []*User{}
 		_spec       = uq.querySpec()
-		loadedTypes = [18]bool{
+		loadedTypes = [19]bool{
 			uq.withPersonalAccessTokens != nil,
 			uq.withTfaSettings != nil,
 			uq.withSetting != nil,
@@ -1082,6 +1122,7 @@ func (uq *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 			uq.withPrograms != nil,
 			uq.withGroupMemberships != nil,
 			uq.withOrgMemberships != nil,
+			uq.withProgramMemberships != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -1237,6 +1278,15 @@ func (uq *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 			return nil, err
 		}
 	}
+	if query := uq.withProgramMemberships; query != nil {
+		if err := uq.loadProgramMemberships(ctx, query, nodes,
+			func(n *User) { n.Edges.ProgramMemberships = []*ProgramMembership{} },
+			func(n *User, e *ProgramMembership) {
+				n.Edges.ProgramMemberships = append(n.Edges.ProgramMemberships, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range uq.withNamedPersonalAccessTokens {
 		if err := uq.loadPersonalAccessTokens(ctx, query, nodes,
 			func(n *User) { n.appendNamedPersonalAccessTokens(name) },
@@ -1346,6 +1396,13 @@ func (uq *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 		if err := uq.loadOrgMemberships(ctx, query, nodes,
 			func(n *User) { n.appendNamedOrgMemberships(name) },
 			func(n *User, e *OrgMembership) { n.appendNamedOrgMemberships(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range uq.withNamedProgramMemberships {
+		if err := uq.loadProgramMemberships(ctx, query, nodes,
+			func(n *User) { n.appendNamedProgramMemberships(name) },
+			func(n *User, e *ProgramMembership) { n.appendNamedProgramMemberships(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2014,7 +2071,7 @@ func (uq *UserQuery) loadPrograms(ctx context.Context, query *ProgramQuery, node
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(user.ProgramsTable)
-		joinT.Schema(uq.schemaConfig.UserPrograms)
+		joinT.Schema(uq.schemaConfig.ProgramMembership)
 		s.Join(joinT).On(s.C(program.FieldID), joinT.C(user.ProgramsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(user.ProgramsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2108,6 +2165,36 @@ func (uq *UserQuery) loadOrgMemberships(ctx context.Context, query *OrgMembershi
 	}
 	query.Where(predicate.OrgMembership(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(user.OrgMembershipsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.UserID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "user_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (uq *UserQuery) loadProgramMemberships(ctx context.Context, query *ProgramMembershipQuery, nodes []*User, init func(*User), assign func(*User, *ProgramMembership)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*User)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(programmembership.FieldUserID)
+	}
+	query.Where(predicate.ProgramMembership(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(user.ProgramMembershipsColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -2446,6 +2533,20 @@ func (uq *UserQuery) WithNamedOrgMemberships(name string, opts ...func(*OrgMembe
 		uq.withNamedOrgMemberships = make(map[string]*OrgMembershipQuery)
 	}
 	uq.withNamedOrgMemberships[name] = query
+	return uq
+}
+
+// WithNamedProgramMemberships tells the query-builder to eager-load the nodes that are connected to the "program_memberships"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (uq *UserQuery) WithNamedProgramMemberships(name string, opts ...func(*ProgramMembershipQuery)) *UserQuery {
+	query := (&ProgramMembershipClient{config: uq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if uq.withNamedProgramMemberships == nil {
+		uq.withNamedProgramMemberships = make(map[string]*ProgramMembershipQuery)
+	}
+	uq.withNamedProgramMemberships[name] = query
 	return uq
 }
 

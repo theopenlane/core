@@ -2061,6 +2061,34 @@ func (pr *Program) Users(ctx context.Context) (result []*User, err error) {
 	return result, err
 }
 
+func (pr *Program) Members(ctx context.Context) (result []*ProgramMembership, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = pr.NamedMembers(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = pr.Edges.MembersOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = pr.QueryMembers().All(ctx)
+	}
+	return result, err
+}
+
+func (pm *ProgramMembership) Program(ctx context.Context) (*Program, error) {
+	result, err := pm.Edges.ProgramOrErr()
+	if IsNotLoaded(err) {
+		result, err = pm.QueryProgram().Only(ctx)
+	}
+	return result, err
+}
+
+func (pm *ProgramMembership) User(ctx context.Context) (*User, error) {
+	result, err := pm.Edges.UserOrErr()
+	if IsNotLoaded(err) {
+		result, err = pm.QueryUser().Only(ctx)
+	}
+	return result, err
+}
+
 func (r *Risk) Control(ctx context.Context) (result []*Control, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = r.NamedControl(graphql.GetFieldContext(ctx).Field.Alias)
@@ -2565,6 +2593,18 @@ func (u *User) OrgMemberships(ctx context.Context) (result []*OrgMembership, err
 	}
 	if IsNotLoaded(err) {
 		result, err = u.QueryOrgMemberships().All(ctx)
+	}
+	return result, err
+}
+
+func (u *User) ProgramMemberships(ctx context.Context) (result []*ProgramMembership, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = u.NamedProgramMemberships(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = u.Edges.ProgramMembershipsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = u.QueryProgramMemberships().All(ctx)
 	}
 	return result, err
 }

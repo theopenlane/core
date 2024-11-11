@@ -80,6 +80,8 @@ const (
 	EdgeStandards = "standards"
 	// EdgeUsers holds the string denoting the users edge name in mutations.
 	EdgeUsers = "users"
+	// EdgeMembers holds the string denoting the members edge name in mutations.
+	EdgeMembers = "members"
 	// Table holds the table name of the program in the database.
 	Table = "programs"
 	// OrganizationTable is the table that holds the organization relation/edge.
@@ -150,10 +152,17 @@ const (
 	// It exists in this package in order to avoid circular dependency with the "standard" package.
 	StandardsInverseTable = "standards"
 	// UsersTable is the table that holds the users relation/edge. The primary key declared below.
-	UsersTable = "user_programs"
+	UsersTable = "program_memberships"
 	// UsersInverseTable is the table name for the User entity.
 	// It exists in this package in order to avoid circular dependency with the "user" package.
 	UsersInverseTable = "users"
+	// MembersTable is the table that holds the members relation/edge.
+	MembersTable = "program_memberships"
+	// MembersInverseTable is the table name for the ProgramMembership entity.
+	// It exists in this package in order to avoid circular dependency with the "programmembership" package.
+	MembersInverseTable = "program_memberships"
+	// MembersColumn is the table column denoting the members relation/edge.
+	MembersColumn = "program_id"
 )
 
 // Columns holds all SQL columns for program fields.
@@ -550,6 +559,20 @@ func ByUsers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newUsersStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByMembersCount orders the results by members count.
+func ByMembersCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newMembersStep(), opts...)
+	}
+}
+
+// ByMembers orders the results by members terms.
+func ByMembers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newMembersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newOrganizationStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -646,6 +669,13 @@ func newUsersStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(UsersInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, UsersTable, UsersPrimaryKey...),
+	)
+}
+func newMembersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(MembersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, true, MembersTable, MembersColumn),
 	)
 }
 

@@ -1551,6 +1551,54 @@ func (f ProgramHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m gene
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.ProgramHistoryMutation", m)
 }
 
+// The ProgramMembershipQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type ProgramMembershipQueryRuleFunc func(context.Context, *generated.ProgramMembershipQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f ProgramMembershipQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ProgramMembershipQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.ProgramMembershipQuery", q)
+}
+
+// The ProgramMembershipMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type ProgramMembershipMutationRuleFunc func(context.Context, *generated.ProgramMembershipMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f ProgramMembershipMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.ProgramMembershipMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.ProgramMembershipMutation", m)
+}
+
+// The ProgramMembershipHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type ProgramMembershipHistoryQueryRuleFunc func(context.Context, *generated.ProgramMembershipHistoryQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f ProgramMembershipHistoryQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ProgramMembershipHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.ProgramMembershipHistoryQuery", q)
+}
+
+// The ProgramMembershipHistoryMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type ProgramMembershipHistoryMutationRuleFunc func(context.Context, *generated.ProgramMembershipHistoryMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f ProgramMembershipHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.ProgramMembershipHistoryMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.ProgramMembershipHistoryMutation", m)
+}
+
 // The RiskQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type RiskQueryRuleFunc func(context.Context, *generated.RiskQuery) error
@@ -2162,6 +2210,10 @@ func queryFilter(q generated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *generated.ProgramHistoryQuery:
 		return q.Filter(), nil
+	case *generated.ProgramMembershipQuery:
+		return q.Filter(), nil
+	case *generated.ProgramMembershipHistoryQuery:
+		return q.Filter(), nil
 	case *generated.RiskQuery:
 		return q.Filter(), nil
 	case *generated.RiskHistoryQuery:
@@ -2326,6 +2378,10 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 	case *generated.ProgramMutation:
 		return m.Filter(), nil
 	case *generated.ProgramHistoryMutation:
+		return m.Filter(), nil
+	case *generated.ProgramMembershipMutation:
+		return m.Filter(), nil
+	case *generated.ProgramMembershipHistoryMutation:
 		return m.Filter(), nil
 	case *generated.RiskMutation:
 		return m.Filter(), nil

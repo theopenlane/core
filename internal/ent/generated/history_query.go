@@ -35,6 +35,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgmembershiphistory"
 	"github.com/theopenlane/core/internal/ent/generated/procedurehistory"
 	"github.com/theopenlane/core/internal/ent/generated/programhistory"
+	"github.com/theopenlane/core/internal/ent/generated/programmembershiphistory"
 	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/standardhistory"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrolhistory"
@@ -1284,6 +1285,52 @@ func (phq *ProgramHistoryQuery) AsOf(ctx context.Context, time time.Time) (*Prog
 	return phq.
 		Where(programhistory.HistoryTimeLTE(time)).
 		Order(programhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (pm *ProgramMembership) History() *ProgramMembershipHistoryQuery {
+	historyClient := NewProgramMembershipHistoryClient(pm.config)
+	return historyClient.Query().Where(programmembershiphistory.Ref(pm.ID))
+}
+
+func (pmh *ProgramMembershipHistory) Next(ctx context.Context) (*ProgramMembershipHistory, error) {
+	client := NewProgramMembershipHistoryClient(pmh.config)
+	return client.Query().
+		Where(
+			programmembershiphistory.Ref(pmh.Ref),
+			programmembershiphistory.HistoryTimeGT(pmh.HistoryTime),
+		).
+		Order(programmembershiphistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (pmh *ProgramMembershipHistory) Prev(ctx context.Context) (*ProgramMembershipHistory, error) {
+	client := NewProgramMembershipHistoryClient(pmh.config)
+	return client.Query().
+		Where(
+			programmembershiphistory.Ref(pmh.Ref),
+			programmembershiphistory.HistoryTimeLT(pmh.HistoryTime),
+		).
+		Order(programmembershiphistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (pmhq *ProgramMembershipHistoryQuery) Earliest(ctx context.Context) (*ProgramMembershipHistory, error) {
+	return pmhq.
+		Order(programmembershiphistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (pmhq *ProgramMembershipHistoryQuery) Latest(ctx context.Context) (*ProgramMembershipHistory, error) {
+	return pmhq.
+		Order(programmembershiphistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (pmhq *ProgramMembershipHistoryQuery) AsOf(ctx context.Context, time time.Time) (*ProgramMembershipHistory, error) {
+	return pmhq.
+		Where(programmembershiphistory.HistoryTimeLTE(time)).
+		Order(programmembershiphistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
 }
 

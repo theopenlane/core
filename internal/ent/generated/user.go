@@ -107,11 +107,13 @@ type UserEdges struct {
 	GroupMemberships []*GroupMembership `json:"group_memberships,omitempty"`
 	// OrgMemberships holds the value of the org_memberships edge.
 	OrgMemberships []*OrgMembership `json:"org_memberships,omitempty"`
+	// ProgramMemberships holds the value of the program_memberships edge.
+	ProgramMemberships []*ProgramMembership `json:"program_memberships,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [18]bool
+	loadedTypes [19]bool
 	// totalCount holds the count of the edges above.
-	totalCount [15]map[string]int
+	totalCount [16]map[string]int
 
 	namedPersonalAccessTokens    map[string][]*PersonalAccessToken
 	namedTfaSettings             map[string][]*TFASetting
@@ -129,6 +131,7 @@ type UserEdges struct {
 	namedPrograms                map[string][]*Program
 	namedGroupMemberships        map[string][]*GroupMembership
 	namedOrgMemberships          map[string][]*OrgMembership
+	namedProgramMemberships      map[string][]*ProgramMembership
 }
 
 // PersonalAccessTokensOrErr returns the PersonalAccessTokens value or an error if the edge
@@ -295,6 +298,15 @@ func (e UserEdges) OrgMembershipsOrErr() ([]*OrgMembership, error) {
 		return e.OrgMemberships, nil
 	}
 	return nil, &NotLoadedError{edge: "org_memberships"}
+}
+
+// ProgramMembershipsOrErr returns the ProgramMemberships value or an error if the edge
+// was not loaded in eager-loading.
+func (e UserEdges) ProgramMembershipsOrErr() ([]*ProgramMembership, error) {
+	if e.loadedTypes[18] {
+		return e.ProgramMemberships, nil
+	}
+	return nil, &NotLoadedError{edge: "program_memberships"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -564,6 +576,11 @@ func (u *User) QueryGroupMemberships() *GroupMembershipQuery {
 // QueryOrgMemberships queries the "org_memberships" edge of the User entity.
 func (u *User) QueryOrgMemberships() *OrgMembershipQuery {
 	return NewUserClient(u.config).QueryOrgMemberships(u)
+}
+
+// QueryProgramMemberships queries the "program_memberships" edge of the User entity.
+func (u *User) QueryProgramMemberships() *ProgramMembershipQuery {
+	return NewUserClient(u.config).QueryProgramMemberships(u)
 }
 
 // Update returns a builder for updating this User.
@@ -1045,6 +1062,30 @@ func (u *User) appendNamedOrgMemberships(name string, edges ...*OrgMembership) {
 		u.Edges.namedOrgMemberships[name] = []*OrgMembership{}
 	} else {
 		u.Edges.namedOrgMemberships[name] = append(u.Edges.namedOrgMemberships[name], edges...)
+	}
+}
+
+// NamedProgramMemberships returns the ProgramMemberships named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (u *User) NamedProgramMemberships(name string) ([]*ProgramMembership, error) {
+	if u.Edges.namedProgramMemberships == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := u.Edges.namedProgramMemberships[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (u *User) appendNamedProgramMemberships(name string, edges ...*ProgramMembership) {
+	if u.Edges.namedProgramMemberships == nil {
+		u.Edges.namedProgramMemberships = make(map[string][]*ProgramMembership)
+	}
+	if len(edges) == 0 {
+		u.Edges.namedProgramMemberships[name] = []*ProgramMembership{}
+	} else {
+		u.Edges.namedProgramMemberships[name] = append(u.Edges.namedProgramMemberships[name], edges...)
 	}
 }
 

@@ -1344,7 +1344,7 @@ func HasUsers() predicate.Program {
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.UserPrograms
+		step.Edge.Schema = schemaConfig.ProgramMembership
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1355,7 +1355,36 @@ func HasUsersWith(preds ...predicate.User) predicate.Program {
 		step := newUsersStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.UserPrograms
+		step.Edge.Schema = schemaConfig.ProgramMembership
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasMembers applies the HasEdge predicate on the "members" edge.
+func HasMembers() predicate.Program {
+	return predicate.Program(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, MembersTable, MembersColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.ProgramMembership
+		step.Edge.Schema = schemaConfig.ProgramMembership
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasMembersWith applies the HasEdge predicate on the "members" edge with a given conditions (other predicates).
+func HasMembersWith(preds ...predicate.ProgramMembership) predicate.Program {
+	return predicate.Program(func(s *sql.Selector) {
+		step := newMembersStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.ProgramMembership
+		step.Edge.Schema = schemaConfig.ProgramMembership
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

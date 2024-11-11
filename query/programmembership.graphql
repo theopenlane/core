@@ -1,0 +1,111 @@
+
+mutation CreateBulkCSVProgramMembership($input: Upload!) {
+  createBulkCSVProgramMembership(input: $input) {
+    programMemberships {
+      createdAt
+      createdBy
+      id
+      programID
+      role
+      updatedAt
+      updatedBy
+      userID
+    }
+  }
+}
+
+mutation CreateBulkProgramMembership($input: [CreateProgramMembershipInput!]) {
+  createBulkProgramMembership(input: $input) {
+    programMemberships {
+      createdAt
+      createdBy
+      id
+      programID
+      role
+      updatedAt
+      updatedBy
+      userID
+    }
+  }
+}
+
+mutation CreateProgramMembership($input: CreateProgramMembershipInput!) {
+  createProgramMembership(input: $input) {
+    programMembership {
+      createdAt
+      createdBy
+      id
+      programID
+      role
+      updatedAt
+      updatedBy
+      userID
+    }
+  }
+}
+
+mutation DeleteProgramMembership($deleteProgramMembershipId: ID!) {
+  deleteProgramMembership(id: $deleteProgramMembershipId) {
+    deletedID
+  }
+}
+
+query GetAllProgramMemberships {
+  programMemberships {
+    edges {
+      node {
+        createdAt
+        createdBy
+        id
+        programID
+        role
+        updatedAt
+        updatedBy
+        userID
+      }
+    }
+  }
+}
+query GetProgramMembershipByID($programMembershipId: ID!) {
+  programMembership(id: $programMembershipId) {
+    createdAt
+    createdBy
+    id
+    programID
+    role
+    updatedAt
+    updatedBy
+    userID
+  }
+}
+
+query GetProgramMemberships($where: ProgramMembershipWhereInput) {
+  programMemberships(where: $where) {
+    edges {
+      node {
+        createdAt
+        createdBy
+        id
+        programID
+        role
+        updatedAt
+        updatedBy
+        userID
+      }
+    }
+  }
+}
+mutation UpdateProgramMembership($updateProgramMembershipId: ID!, $input: UpdateProgramMembershipInput!) {
+  updateProgramMembership(id: $updateProgramMembershipId, input: $input) {
+    programMembership {
+      createdAt
+      createdBy
+      id
+      programID
+      role
+      updatedAt
+      updatedBy
+      userID
+    }
+  }
+}

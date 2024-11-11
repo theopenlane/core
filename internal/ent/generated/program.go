@@ -90,11 +90,13 @@ type ProgramEdges struct {
 	Standards []*Standard `json:"standards,omitempty"`
 	// Users holds the value of the users edge.
 	Users []*User `json:"users,omitempty"`
+	// Members holds the value of the members edge.
+	Members []*ProgramMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [14]bool
+	loadedTypes [15]bool
 	// totalCount holds the count of the edges above.
-	totalCount [14]map[string]int
+	totalCount [15]map[string]int
 
 	namedControls          map[string][]*Control
 	namedSubcontrols       map[string][]*Subcontrol
@@ -109,6 +111,7 @@ type ProgramEdges struct {
 	namedActionplans       map[string][]*ActionPlan
 	namedStandards         map[string][]*Standard
 	namedUsers             map[string][]*User
+	namedMembers           map[string][]*ProgramMembership
 }
 
 // OrganizationOrErr returns the Organization value or an error if the edge
@@ -237,6 +240,15 @@ func (e ProgramEdges) UsersOrErr() ([]*User, error) {
 		return e.Users, nil
 	}
 	return nil, &NotLoadedError{edge: "users"}
+}
+
+// MembersOrErr returns the Members value or an error if the edge
+// was not loaded in eager-loading.
+func (e ProgramEdges) MembersOrErr() ([]*ProgramMembership, error) {
+	if e.loadedTypes[14] {
+		return e.Members, nil
+	}
+	return nil, &NotLoadedError{edge: "members"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -458,6 +470,11 @@ func (pr *Program) QueryStandards() *StandardQuery {
 // QueryUsers queries the "users" edge of the Program entity.
 func (pr *Program) QueryUsers() *UserQuery {
 	return NewProgramClient(pr.config).QueryUsers(pr)
+}
+
+// QueryMembers queries the "members" edge of the Program entity.
+func (pr *Program) QueryMembers() *ProgramMembershipQuery {
+	return NewProgramClient(pr.config).QueryMembers(pr)
 }
 
 // Update returns a builder for updating this Program.
@@ -846,6 +863,30 @@ func (pr *Program) appendNamedUsers(name string, edges ...*User) {
 		pr.Edges.namedUsers[name] = []*User{}
 	} else {
 		pr.Edges.namedUsers[name] = append(pr.Edges.namedUsers[name], edges...)
+	}
+}
+
+// NamedMembers returns the Members named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (pr *Program) NamedMembers(name string) ([]*ProgramMembership, error) {
+	if pr.Edges.namedMembers == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := pr.Edges.namedMembers[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (pr *Program) appendNamedMembers(name string, edges ...*ProgramMembership) {
+	if pr.Edges.namedMembers == nil {
+		pr.Edges.namedMembers = make(map[string][]*ProgramMembership)
+	}
+	if len(edges) == 0 {
+		pr.Edges.namedMembers[name] = []*ProgramMembership{}
+	} else {
+		pr.Edges.namedMembers[name] = append(pr.Edges.namedMembers[name], edges...)
 	}
 }
 
