@@ -13,7 +13,7 @@ steps:
         key: "generate"
         cancel_on_build_failing: true
         plugins:
-          - docker#v5.11.0:
+          - docker#v5.12.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               command: ["task", "ci"]
@@ -23,7 +23,7 @@ steps:
         key: "generate_config"
         cancel_on_build_failing: true
         plugins:
-          - docker#v5.11.0:
+          - docker#v5.12.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               command: ["task", "config:ci"]
@@ -36,7 +36,7 @@ steps:
         cancel_on_build_failing: true
         key: "lint"
         plugins:
-          - docker#v5.11.0:
+          - docker#v5.12.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               command: ["task", "go:lint"]
               always_pull: true
@@ -57,7 +57,7 @@ steps:
               - 17-alpine
               - 16-alpine
         plugins:
-          - docker#v5.11.0:
+          - docker#v5.12.0:
               image: ghcr.io/theopenlane/build-image:latest
               always_pull: true
               command: ["task", "go:test:cover"]
@@ -71,7 +71,7 @@ steps:
       - label: ":auth0: fga model test"
         key: "fga_test"
         plugins:
-          - docker#v5.11.0:
+          - docker#v5.12.0:
               image: openfga/cli:v0.5.1
               command: ["model", "test", "--tests", "fga/tests/tests.yaml"]
   - group: ":closed_lock_with_key: Security Checks"
@@ -80,7 +80,7 @@ steps:
       - label: ":closed_lock_with_key: gosec"
         key: "gosec"
         plugins:
-          - docker#v5.11.0:
+          - docker#v5.12.0:
               image: "securego/gosec:2.20.0"
               command: ["-no-fail", "-exclude-generated", "-fmt sonarqube", "-out", "results.txt", "./..."]
               environment:
@@ -96,7 +96,7 @@ steps:
           - artifacts#v1.9.4:
               download: "coverage.out"
               step: "go_test"
-          - docker#v5.11.0:
+          - docker#v5.12.0:
               image: "sonarsource/sonar-scanner-cli:11.0"
               environment:
                 - "SONAR_TOKEN"
@@ -112,7 +112,7 @@ steps:
           - artifacts#v1.9.4:
               download: coverage.out
               step: "go_test"
-          - docker#v5.11.0:
+          - docker#v5.12.0:
               image: "sonarsource/sonar-scanner-cli:11.0"
               environment:
                 - "SONAR_TOKEN"
@@ -124,7 +124,7 @@ steps:
         key: "gobuild-server"
         artifact_paths: "bin/${APP_NAME}"
         plugins:
-          - docker#v5.11.0:
+          - docker#v5.12.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               environment:
@@ -135,7 +135,7 @@ steps:
         key: "gobuild-cli"
         artifact_paths: "bin/openlane-cli"
         plugins:
-          - docker#v5.11.0:
+          - docker#v5.12.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               environment:
