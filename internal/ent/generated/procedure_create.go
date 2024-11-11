@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/internal/ent/generated/task"
 )
 
 // ProcedureCreate is the builder for creating a Procedure entity.
@@ -312,6 +313,21 @@ func (pc *ProcedureCreate) AddRisks(r ...*Risk) *ProcedureCreate {
 	return pc.AddRiskIDs(ids...)
 }
 
+// AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
+func (pc *ProcedureCreate) AddTaskIDs(ids ...string) *ProcedureCreate {
+	pc.mutation.AddTaskIDs(ids...)
+	return pc
+}
+
+// AddTasks adds the "tasks" edges to the Task entity.
+func (pc *ProcedureCreate) AddTasks(t ...*Task) *ProcedureCreate {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return pc.AddTaskIDs(ids...)
+}
+
 // Mutation returns the ProcedureMutation object of the builder.
 func (pc *ProcedureCreate) Mutation() *ProcedureMutation {
 	return pc.mutation
@@ -559,6 +575,23 @@ func (pc *ProcedureCreate) createSpec() (*Procedure, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = pc.schemaConfig.ProcedureRisks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := pc.mutation.TasksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   procedure.TasksTable,
+			Columns: procedure.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pc.schemaConfig.ProcedureTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

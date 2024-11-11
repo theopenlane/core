@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/internal/ent/generated/task"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -33,6 +34,7 @@ type ProcedureQuery struct {
 	withInternalpolicy      *InternalPolicyQuery
 	withNarratives          *NarrativeQuery
 	withRisks               *RiskQuery
+	withTasks               *TaskQuery
 	withFKs                 bool
 	loadTotal               []func(context.Context, []*Procedure) error
 	modifiers               []func(*sql.Selector)
@@ -40,6 +42,7 @@ type ProcedureQuery struct {
 	withNamedInternalpolicy map[string]*InternalPolicyQuery
 	withNamedNarratives     map[string]*NarrativeQuery
 	withNamedRisks          map[string]*RiskQuery
+	withNamedTasks          map[string]*TaskQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -170,6 +173,31 @@ func (pq *ProcedureQuery) QueryRisks() *RiskQuery {
 		schemaConfig := pq.schemaConfig
 		step.To.Schema = schemaConfig.Risk
 		step.Edge.Schema = schemaConfig.ProcedureRisks
+		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryTasks chains the current query on the "tasks" edge.
+func (pq *ProcedureQuery) QueryTasks() *TaskQuery {
+	query := (&TaskClient{config: pq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := pq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(procedure.Table, procedure.FieldID, selector),
+			sqlgraph.To(task.Table, task.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, procedure.TasksTable, procedure.TasksPrimaryKey...),
+		)
+		schemaConfig := pq.schemaConfig
+		step.To.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.ProcedureTasks
 		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -372,6 +400,7 @@ func (pq *ProcedureQuery) Clone() *ProcedureQuery {
 		withInternalpolicy: pq.withInternalpolicy.Clone(),
 		withNarratives:     pq.withNarratives.Clone(),
 		withRisks:          pq.withRisks.Clone(),
+		withTasks:          pq.withTasks.Clone(),
 		// clone intermediate query.
 		sql:       pq.sql.Clone(),
 		path:      pq.path,
@@ -420,6 +449,17 @@ func (pq *ProcedureQuery) WithRisks(opts ...func(*RiskQuery)) *ProcedureQuery {
 		opt(query)
 	}
 	pq.withRisks = query
+	return pq
+}
+
+// WithTasks tells the query-builder to eager-load the nodes that are connected to
+// the "tasks" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *ProcedureQuery) WithTasks(opts ...func(*TaskQuery)) *ProcedureQuery {
+	query := (&TaskClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	pq.withTasks = query
 	return pq
 }
 
@@ -502,11 +542,12 @@ func (pq *ProcedureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pr
 		nodes       = []*Procedure{}
 		withFKs     = pq.withFKs
 		_spec       = pq.querySpec()
-		loadedTypes = [4]bool{
+		loadedTypes = [5]bool{
 			pq.withControl != nil,
 			pq.withInternalpolicy != nil,
 			pq.withNarratives != nil,
 			pq.withRisks != nil,
+			pq.withTasks != nil,
 		}
 	)
 	if withFKs {
@@ -563,6 +604,13 @@ func (pq *ProcedureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pr
 			return nil, err
 		}
 	}
+	if query := pq.withTasks; query != nil {
+		if err := pq.loadTasks(ctx, query, nodes,
+			func(n *Procedure) { n.Edges.Tasks = []*Task{} },
+			func(n *Procedure, e *Task) { n.Edges.Tasks = append(n.Edges.Tasks, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range pq.withNamedControl {
 		if err := pq.loadControl(ctx, query, nodes,
 			func(n *Procedure) { n.appendNamedControl(name) },
@@ -588,6 +636,13 @@ func (pq *ProcedureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pr
 		if err := pq.loadRisks(ctx, query, nodes,
 			func(n *Procedure) { n.appendNamedRisks(name) },
 			func(n *Procedure, e *Risk) { n.appendNamedRisks(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range pq.withNamedTasks {
+		if err := pq.loadTasks(ctx, query, nodes,
+			func(n *Procedure) { n.appendNamedTasks(name) },
+			func(n *Procedure, e *Task) { n.appendNamedTasks(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -847,6 +902,68 @@ func (pq *ProcedureQuery) loadRisks(ctx context.Context, query *RiskQuery, nodes
 	}
 	return nil
 }
+func (pq *ProcedureQuery) loadTasks(ctx context.Context, query *TaskQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *Task)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Procedure)
+	nids := make(map[string]map[*Procedure]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(procedure.TasksTable)
+		joinT.Schema(pq.schemaConfig.ProcedureTasks)
+		s.Join(joinT).On(s.C(task.FieldID), joinT.C(procedure.TasksPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(procedure.TasksPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(procedure.TasksPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Procedure]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Task](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "tasks" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 
 func (pq *ProcedureQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := pq.querySpec()
@@ -999,6 +1116,20 @@ func (pq *ProcedureQuery) WithNamedRisks(name string, opts ...func(*RiskQuery)) 
 		pq.withNamedRisks = make(map[string]*RiskQuery)
 	}
 	pq.withNamedRisks[name] = query
+	return pq
+}
+
+// WithNamedTasks tells the query-builder to eager-load the nodes that are connected to the "tasks"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (pq *ProcedureQuery) WithNamedTasks(name string, opts ...func(*TaskQuery)) *ProcedureQuery {
+	query := (&TaskClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if pq.withNamedTasks == nil {
+		pq.withNamedTasks = make(map[string]*TaskQuery)
+	}
+	pq.withNamedTasks[name] = query
 	return pq
 }
 

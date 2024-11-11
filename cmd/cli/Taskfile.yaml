@@ -1,5 +1,9 @@
 version: "3"
 
+env: 
+  DEFAULT_USER_EMAIL: "mitb@theopenlane.io"
+  SECOND_USER_EMAIL: "funk@theopenlane.io"
+
 tasks:
   generate:all:history:
     desc: generates a new cli cmd for all missing history commands from the query/ directory
@@ -44,7 +48,7 @@ tasks:
       - curl http://localhost:17608/v1/verify?token={{.VERIFY_TOKEN}}
     vars:
       VERIFY_TOKEN:
-        sh: go run main.go register --email="mitb@theopenlane.io" --first-name="matt" --last-name="anderson" --password="mattisthebest1234" | jq -r .token
+        sh: go run main.go register --email="{{ .EMAIL_ADDRESS | default .DEFAULT_USER_EMAIL }}" --first-name="matt" --last-name="anderson" --password="mattisthebest1234" | jq -r .token
 
   login:creds:
     desc: a task to login the verified user
@@ -52,13 +56,30 @@ tasks:
     env:
       CORE_PASSWORD: mattisthebest1234
     cmds:
-      - go run main.go login -u mitb@theopenlane.io
+      - go run main.go login -u {{ .EMAIL_ADDRESS | default .DEFAULT_USER_EMAIL }}
 
   user:all:
     desc: a task to register, verify, and login a new user
     cmds:
       - task: verifyuser
       - task: login
+
+  user:all:another:
+    desc: a task to register, verify, and login another user
+    cmds:
+      - task: verifyuser
+        vars:
+          EMAIL_ADDRESS: "{{ .SECOND_USER_EMAIL }}"
+      - task: login
+        vars:
+          EMAIL_ADDRESS: "{{ .SECOND_USER_EMAIL }}"
+
+  login:another:
+    desc: a task to login another user
+    cmds:
+      - task: login
+        vars:
+          EMAIL_ADDRESS: "{{ .SECOND_USER_EMAIL }}"
 
   login:google:
     desc: a task to login with google oauth

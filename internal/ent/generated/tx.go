@@ -144,6 +144,10 @@ type Tx struct {
 	Subscriber *SubscriberClient
 	// TFASetting is the client for interacting with the TFASetting builders.
 	TFASetting *TFASettingClient
+	// Task is the client for interacting with the Task builders.
+	Task *TaskClient
+	// TaskHistory is the client for interacting with the TaskHistory builders.
+	TaskHistory *TaskHistoryClient
 	// Template is the client for interacting with the Template builders.
 	Template *TemplateClient
 	// TemplateHistory is the client for interacting with the TemplateHistory builders.
@@ -359,6 +363,8 @@ func (tx *Tx) init() {
 	tx.SubcontrolHistory = NewSubcontrolHistoryClient(tx.config)
 	tx.Subscriber = NewSubscriberClient(tx.config)
 	tx.TFASetting = NewTFASettingClient(tx.config)
+	tx.Task = NewTaskClient(tx.config)
+	tx.TaskHistory = NewTaskHistoryClient(tx.config)
 	tx.Template = NewTemplateClient(tx.config)
 	tx.TemplateHistory = NewTemplateHistoryClient(tx.config)
 	tx.User = NewUserClient(tx.config)

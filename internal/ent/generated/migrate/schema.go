@@ -2424,6 +2424,80 @@ var (
 			},
 		},
 	}
+	// TasksColumns holds the columns for the "tasks" table.
+	TasksColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "mapping_id", Type: field.TypeString, Unique: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "title", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "details", Type: field.TypeJSON, Nullable: true},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"OPEN", "IN_PROGRESS", "IN_REVIEW", "COMPLETED", "WONT_DO"}, Default: "OPEN"},
+		{Name: "due", Type: field.TypeTime, Nullable: true},
+		{Name: "completed", Type: field.TypeTime, Nullable: true},
+		{Name: "user_assigner_tasks", Type: field.TypeString},
+		{Name: "user_assignee_tasks", Type: field.TypeString, Nullable: true},
+	}
+	// TasksTable holds the schema information for the "tasks" table.
+	TasksTable = &schema.Table{
+		Name:       "tasks",
+		Columns:    TasksColumns,
+		PrimaryKey: []*schema.Column{TasksColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "tasks_users_assigner_tasks",
+				Columns:    []*schema.Column{TasksColumns[15]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "tasks_users_assignee_tasks",
+				Columns:    []*schema.Column{TasksColumns[16]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
+	// TaskHistoryColumns holds the columns for the "task_history" table.
+	TaskHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "mapping_id", Type: field.TypeString},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "title", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "details", Type: field.TypeJSON, Nullable: true},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"OPEN", "IN_PROGRESS", "IN_REVIEW", "COMPLETED", "WONT_DO"}, Default: "OPEN"},
+		{Name: "due", Type: field.TypeTime, Nullable: true},
+		{Name: "completed", Type: field.TypeTime, Nullable: true},
+	}
+	// TaskHistoryTable holds the schema information for the "task_history" table.
+	TaskHistoryTable = &schema.Table{
+		Name:       "task_history",
+		Columns:    TaskHistoryColumns,
+		PrimaryKey: []*schema.Column{TaskHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "taskhistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{TaskHistoryColumns[1]},
+			},
+		},
+	}
 	// TemplatesColumns holds the columns for the "templates" table.
 	TemplatesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -2945,6 +3019,31 @@ var (
 			},
 		},
 	}
+	// ControlTasksColumns holds the columns for the "control_tasks" table.
+	ControlTasksColumns = []*schema.Column{
+		{Name: "control_id", Type: field.TypeString},
+		{Name: "task_id", Type: field.TypeString},
+	}
+	// ControlTasksTable holds the schema information for the "control_tasks" table.
+	ControlTasksTable = &schema.Table{
+		Name:       "control_tasks",
+		Columns:    ControlTasksColumns,
+		PrimaryKey: []*schema.Column{ControlTasksColumns[0], ControlTasksColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "control_tasks_control_id",
+				Columns:    []*schema.Column{ControlTasksColumns[0]},
+				RefColumns: []*schema.Column{ControlsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "control_tasks_task_id",
+				Columns:    []*schema.Column{ControlTasksColumns[1]},
+				RefColumns: []*schema.Column{TasksColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// ControlObjectiveNarrativesColumns holds the columns for the "control_objective_narratives" table.
 	ControlObjectiveNarrativesColumns = []*schema.Column{
 		{Name: "control_objective_id", Type: field.TypeString},
@@ -2966,6 +3065,31 @@ var (
 				Symbol:     "control_objective_narratives_narrative_id",
 				Columns:    []*schema.Column{ControlObjectiveNarrativesColumns[1]},
 				RefColumns: []*schema.Column{NarrativesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// ControlObjectiveTasksColumns holds the columns for the "control_objective_tasks" table.
+	ControlObjectiveTasksColumns = []*schema.Column{
+		{Name: "control_objective_id", Type: field.TypeString},
+		{Name: "task_id", Type: field.TypeString},
+	}
+	// ControlObjectiveTasksTable holds the schema information for the "control_objective_tasks" table.
+	ControlObjectiveTasksTable = &schema.Table{
+		Name:       "control_objective_tasks",
+		Columns:    ControlObjectiveTasksColumns,
+		PrimaryKey: []*schema.Column{ControlObjectiveTasksColumns[0], ControlObjectiveTasksColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "control_objective_tasks_control_objective_id",
+				Columns:    []*schema.Column{ControlObjectiveTasksColumns[0]},
+				RefColumns: []*schema.Column{ControlObjectivesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "control_objective_tasks_task_id",
+				Columns:    []*schema.Column{ControlObjectiveTasksColumns[1]},
+				RefColumns: []*schema.Column{TasksColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 		},
@@ -3245,6 +3369,31 @@ var (
 			},
 		},
 	}
+	// GroupTasksColumns holds the columns for the "group_tasks" table.
+	GroupTasksColumns = []*schema.Column{
+		{Name: "group_id", Type: field.TypeString},
+		{Name: "task_id", Type: field.TypeString},
+	}
+	// GroupTasksTable holds the schema information for the "group_tasks" table.
+	GroupTasksTable = &schema.Table{
+		Name:       "group_tasks",
+		Columns:    GroupTasksColumns,
+		PrimaryKey: []*schema.Column{GroupTasksColumns[0], GroupTasksColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "group_tasks_group_id",
+				Columns:    []*schema.Column{GroupTasksColumns[0]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "group_tasks_task_id",
+				Columns:    []*schema.Column{GroupTasksColumns[1]},
+				RefColumns: []*schema.Column{TasksColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// GroupMembershipEventsColumns holds the columns for the "group_membership_events" table.
 	GroupMembershipEventsColumns = []*schema.Column{
 		{Name: "group_membership_id", Type: field.TypeString},
@@ -3470,6 +3619,31 @@ var (
 			},
 		},
 	}
+	// InternalPolicyTasksColumns holds the columns for the "internal_policy_tasks" table.
+	InternalPolicyTasksColumns = []*schema.Column{
+		{Name: "internal_policy_id", Type: field.TypeString},
+		{Name: "task_id", Type: field.TypeString},
+	}
+	// InternalPolicyTasksTable holds the schema information for the "internal_policy_tasks" table.
+	InternalPolicyTasksTable = &schema.Table{
+		Name:       "internal_policy_tasks",
+		Columns:    InternalPolicyTasksColumns,
+		PrimaryKey: []*schema.Column{InternalPolicyTasksColumns[0], InternalPolicyTasksColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "internal_policy_tasks_internal_policy_id",
+				Columns:    []*schema.Column{InternalPolicyTasksColumns[0]},
+				RefColumns: []*schema.Column{InternalPoliciesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "internal_policy_tasks_task_id",
+				Columns:    []*schema.Column{InternalPolicyTasksColumns[1]},
+				RefColumns: []*schema.Column{TasksColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// InviteEventsColumns holds the columns for the "invite_events" table.
 	InviteEventsColumns = []*schema.Column{
 		{Name: "invite_id", Type: field.TypeString},
@@ -3645,6 +3819,31 @@ var (
 			},
 		},
 	}
+	// OrganizationTasksColumns holds the columns for the "organization_tasks" table.
+	OrganizationTasksColumns = []*schema.Column{
+		{Name: "organization_id", Type: field.TypeString},
+		{Name: "task_id", Type: field.TypeString},
+	}
+	// OrganizationTasksTable holds the schema information for the "organization_tasks" table.
+	OrganizationTasksTable = &schema.Table{
+		Name:       "organization_tasks",
+		Columns:    OrganizationTasksColumns,
+		PrimaryKey: []*schema.Column{OrganizationTasksColumns[0], OrganizationTasksColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "organization_tasks_organization_id",
+				Columns:    []*schema.Column{OrganizationTasksColumns[0]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "organization_tasks_task_id",
+				Columns:    []*schema.Column{OrganizationTasksColumns[1]},
+				RefColumns: []*schema.Column{TasksColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// OrganizationSettingFilesColumns holds the columns for the "organization_setting_files" table.
 	OrganizationSettingFilesColumns = []*schema.Column{
 		{Name: "organization_setting_id", Type: field.TypeString},
@@ -3745,6 +3944,31 @@ var (
 			},
 		},
 	}
+	// ProcedureTasksColumns holds the columns for the "procedure_tasks" table.
+	ProcedureTasksColumns = []*schema.Column{
+		{Name: "procedure_id", Type: field.TypeString},
+		{Name: "task_id", Type: field.TypeString},
+	}
+	// ProcedureTasksTable holds the schema information for the "procedure_tasks" table.
+	ProcedureTasksTable = &schema.Table{
+		Name:       "procedure_tasks",
+		Columns:    ProcedureTasksColumns,
+		PrimaryKey: []*schema.Column{ProcedureTasksColumns[0], ProcedureTasksColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "procedure_tasks_procedure_id",
+				Columns:    []*schema.Column{ProcedureTasksColumns[0]},
+				RefColumns: []*schema.Column{ProceduresColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "procedure_tasks_task_id",
+				Columns:    []*schema.Column{ProcedureTasksColumns[1]},
+				RefColumns: []*schema.Column{TasksColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// RiskActionplansColumns holds the columns for the "risk_actionplans" table.
 	RiskActionplansColumns = []*schema.Column{
 		{Name: "risk_id", Type: field.TypeString},
@@ -3841,6 +4065,31 @@ var (
 				Symbol:     "standard_actionplans_action_plan_id",
 				Columns:    []*schema.Column{StandardActionplansColumns[1]},
 				RefColumns: []*schema.Column{ActionPlansColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// SubcontrolTasksColumns holds the columns for the "subcontrol_tasks" table.
+	SubcontrolTasksColumns = []*schema.Column{
+		{Name: "subcontrol_id", Type: field.TypeString},
+		{Name: "task_id", Type: field.TypeString},
+	}
+	// SubcontrolTasksTable holds the schema information for the "subcontrol_tasks" table.
+	SubcontrolTasksTable = &schema.Table{
+		Name:       "subcontrol_tasks",
+		Columns:    SubcontrolTasksColumns,
+		PrimaryKey: []*schema.Column{SubcontrolTasksColumns[0], SubcontrolTasksColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "subcontrol_tasks_subcontrol_id",
+				Columns:    []*schema.Column{SubcontrolTasksColumns[0]},
+				RefColumns: []*schema.Column{SubcontrolsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "subcontrol_tasks_task_id",
+				Columns:    []*schema.Column{SubcontrolTasksColumns[1]},
+				RefColumns: []*schema.Column{TasksColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 		},
@@ -4113,6 +4362,8 @@ var (
 		SubcontrolHistoryTable,
 		SubscribersTable,
 		TfaSettingsTable,
+		TasksTable,
+		TaskHistoryTable,
 		TemplatesTable,
 		TemplateHistoryTable,
 		UsersTable,
@@ -4128,7 +4379,9 @@ var (
 		ControlNarrativesTable,
 		ControlRisksTable,
 		ControlActionplansTable,
+		ControlTasksTable,
 		ControlObjectiveNarrativesTable,
+		ControlObjectiveTasksTable,
 		DocumentDataFilesTable,
 		EntitlementEventsTable,
 		EntitlementPlanEventsTable,
@@ -4140,6 +4393,7 @@ var (
 		FileEventsTable,
 		GroupEventsTable,
 		GroupFilesTable,
+		GroupTasksTable,
 		GroupMembershipEventsTable,
 		HushEventsTable,
 		IntegrationSecretsTable,
@@ -4149,6 +4403,7 @@ var (
 		InternalPolicyControlobjectivesTable,
 		InternalPolicyProceduresTable,
 		InternalPolicyNarrativesTable,
+		InternalPolicyTasksTable,
 		InviteEventsTable,
 		OhAuthTooTokenEventsTable,
 		OrgMembershipEventsTable,
@@ -4156,14 +4411,17 @@ var (
 		OrganizationEventsTable,
 		OrganizationSecretsTable,
 		OrganizationFilesTable,
+		OrganizationTasksTable,
 		OrganizationSettingFilesTable,
 		PersonalAccessTokenEventsTable,
 		ProcedureNarrativesTable,
 		ProcedureRisksTable,
+		ProcedureTasksTable,
 		RiskActionplansTable,
 		StandardControlobjectivesTable,
 		StandardControlsTable,
 		StandardActionplansTable,
+		SubcontrolTasksTable,
 		SubscriberEventsTable,
 		TemplateFilesTable,
 		UserFilesTable,
@@ -4306,6 +4564,11 @@ func init() {
 	}
 	SubscribersTable.ForeignKeys[0].RefTable = OrganizationsTable
 	TfaSettingsTable.ForeignKeys[0].RefTable = UsersTable
+	TasksTable.ForeignKeys[0].RefTable = UsersTable
+	TasksTable.ForeignKeys[1].RefTable = UsersTable
+	TaskHistoryTable.Annotation = &entsql.Annotation{
+		Table: "task_history",
+	}
 	TemplatesTable.ForeignKeys[0].RefTable = OrganizationsTable
 	TemplateHistoryTable.Annotation = &entsql.Annotation{
 		Table: "template_history",
@@ -4336,8 +4599,12 @@ func init() {
 	ControlRisksTable.ForeignKeys[1].RefTable = RisksTable
 	ControlActionplansTable.ForeignKeys[0].RefTable = ControlsTable
 	ControlActionplansTable.ForeignKeys[1].RefTable = ActionPlansTable
+	ControlTasksTable.ForeignKeys[0].RefTable = ControlsTable
+	ControlTasksTable.ForeignKeys[1].RefTable = TasksTable
 	ControlObjectiveNarrativesTable.ForeignKeys[0].RefTable = ControlObjectivesTable
 	ControlObjectiveNarrativesTable.ForeignKeys[1].RefTable = NarrativesTable
+	ControlObjectiveTasksTable.ForeignKeys[0].RefTable = ControlObjectivesTable
+	ControlObjectiveTasksTable.ForeignKeys[1].RefTable = TasksTable
 	DocumentDataFilesTable.ForeignKeys[0].RefTable = DocumentDataTable
 	DocumentDataFilesTable.ForeignKeys[1].RefTable = FilesTable
 	EntitlementEventsTable.ForeignKeys[0].RefTable = EntitlementsTable
@@ -4360,6 +4627,8 @@ func init() {
 	GroupEventsTable.ForeignKeys[1].RefTable = EventsTable
 	GroupFilesTable.ForeignKeys[0].RefTable = GroupsTable
 	GroupFilesTable.ForeignKeys[1].RefTable = FilesTable
+	GroupTasksTable.ForeignKeys[0].RefTable = GroupsTable
+	GroupTasksTable.ForeignKeys[1].RefTable = TasksTable
 	GroupMembershipEventsTable.ForeignKeys[0].RefTable = GroupMembershipsTable
 	GroupMembershipEventsTable.ForeignKeys[1].RefTable = EventsTable
 	HushEventsTable.ForeignKeys[0].RefTable = HushesTable
@@ -4378,6 +4647,8 @@ func init() {
 	InternalPolicyProceduresTable.ForeignKeys[1].RefTable = ProceduresTable
 	InternalPolicyNarrativesTable.ForeignKeys[0].RefTable = InternalPoliciesTable
 	InternalPolicyNarrativesTable.ForeignKeys[1].RefTable = NarrativesTable
+	InternalPolicyTasksTable.ForeignKeys[0].RefTable = InternalPoliciesTable
+	InternalPolicyTasksTable.ForeignKeys[1].RefTable = TasksTable
 	InviteEventsTable.ForeignKeys[0].RefTable = InvitesTable
 	InviteEventsTable.ForeignKeys[1].RefTable = EventsTable
 	OhAuthTooTokenEventsTable.ForeignKeys[0].RefTable = OhAuthTooTokensTable
@@ -4392,6 +4663,8 @@ func init() {
 	OrganizationSecretsTable.ForeignKeys[1].RefTable = HushesTable
 	OrganizationFilesTable.ForeignKeys[0].RefTable = OrganizationsTable
 	OrganizationFilesTable.ForeignKeys[1].RefTable = FilesTable
+	OrganizationTasksTable.ForeignKeys[0].RefTable = OrganizationsTable
+	OrganizationTasksTable.ForeignKeys[1].RefTable = TasksTable
 	OrganizationSettingFilesTable.ForeignKeys[0].RefTable = OrganizationSettingsTable
 	OrganizationSettingFilesTable.ForeignKeys[1].RefTable = FilesTable
 	PersonalAccessTokenEventsTable.ForeignKeys[0].RefTable = PersonalAccessTokensTable
@@ -4400,6 +4673,8 @@ func init() {
 	ProcedureNarrativesTable.ForeignKeys[1].RefTable = NarrativesTable
 	ProcedureRisksTable.ForeignKeys[0].RefTable = ProceduresTable
 	ProcedureRisksTable.ForeignKeys[1].RefTable = RisksTable
+	ProcedureTasksTable.ForeignKeys[0].RefTable = ProceduresTable
+	ProcedureTasksTable.ForeignKeys[1].RefTable = TasksTable
 	RiskActionplansTable.ForeignKeys[0].RefTable = RisksTable
 	RiskActionplansTable.ForeignKeys[1].RefTable = ActionPlansTable
 	StandardControlobjectivesTable.ForeignKeys[0].RefTable = StandardsTable
@@ -4408,6 +4683,8 @@ func init() {
 	StandardControlsTable.ForeignKeys[1].RefTable = ControlsTable
 	StandardActionplansTable.ForeignKeys[0].RefTable = StandardsTable
 	StandardActionplansTable.ForeignKeys[1].RefTable = ActionPlansTable
+	SubcontrolTasksTable.ForeignKeys[0].RefTable = SubcontrolsTable
+	SubcontrolTasksTable.ForeignKeys[1].RefTable = TasksTable
 	SubscriberEventsTable.ForeignKeys[0].RefTable = SubscribersTable
 	SubscriberEventsTable.ForeignKeys[1].RefTable = EventsTable
 	TemplateFilesTable.ForeignKeys[0].RefTable = TemplatesTable

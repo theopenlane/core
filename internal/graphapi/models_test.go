@@ -238,6 +238,19 @@ type ContactCleanup struct {
 	ID string
 }
 
+type TaskBuilder struct {
+	client *client
+
+	// Fields
+	Title          string
+	Description    string
+	Status         enums.TaskStatus
+	AssigneeID     string
+	Due            time.Time
+	OrganizationID string
+	GroupID        string
+}
+
 // MustNew organization builder is used to create, without authz checks, orgs in the database
 func (o *OrganizationBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Organization {
 	// no auth, so allow policy
@@ -862,4 +875,56 @@ func (e *ContactCleanup) MustDelete(ctx context.Context, t *testing.T) {
 
 	// clear mocks before going to tests
 	mock_fga.ClearMocks(e.client.fga)
+}
+
+// MustNew task builder is used to create, without authz checks, tasks in the database
+func (e *TaskBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Task {
+	mock_fga.ClearMocks(e.client.fga)
+
+	// add client to context, required for hooks that expect the client to be in the context
+	ctx = ent.NewContext(ctx, e.client.db)
+
+	// write tuples on task creation
+	mock_fga.WriteAny(t, e.client.fga)
+
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+
+	if e.Title == "" {
+		e.Title = gofakeit.AppName()
+	}
+
+	if e.Description == "" {
+		e.Description = gofakeit.HipsterSentence(5)
+	}
+
+	taskCreate := e.client.db.Task.Create().
+		SetTitle(e.Title).
+		SetDescription(e.Description)
+
+	if e.Status != "" {
+		taskCreate.SetStatus(e.Status)
+	}
+
+	if e.AssigneeID != "" {
+		taskCreate.SetAssigneeID(e.AssigneeID)
+	}
+
+	if !e.Due.IsZero() {
+		taskCreate.SetDue(e.Due)
+	}
+
+	if e.OrganizationID != "" {
+		taskCreate.AddOrganizationIDs(e.OrganizationID)
+	}
+
+	if e.GroupID != "" {
+		taskCreate.AddGroupIDs(e.GroupID)
+	}
+
+	task := taskCreate.SaveX(ctx)
+
+	// clear mocks before going to tests
+	mock_fga.ClearMocks(e.client.fga)
+
+	return task
 }

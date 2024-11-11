@@ -1,0 +1,49 @@
+
+
+query GetAllTaskHistories {
+  taskHistories {
+    edges {
+      node {
+        completed
+        createdAt
+        createdBy
+        description
+        details
+        due
+        historyTime
+        id
+        operation
+        ref
+        status
+        tags
+        title
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+query GetTaskHistories($where: TaskHistoryWhereInput) {
+  taskHistories(where: $where) {
+    edges {
+      node {
+        completed
+        createdAt
+        createdBy
+        description
+        details
+        due
+        historyTime
+        id
+        operation
+        ref
+        status
+        tags
+        title
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}

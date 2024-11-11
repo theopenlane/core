@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
@@ -379,6 +380,21 @@ func (sc *SubcontrolCreate) AddUser(u ...*User) *SubcontrolCreate {
 	return sc.AddUserIDs(ids...)
 }
 
+// AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
+func (sc *SubcontrolCreate) AddTaskIDs(ids ...string) *SubcontrolCreate {
+	sc.mutation.AddTaskIDs(ids...)
+	return sc
+}
+
+// AddTasks adds the "tasks" edges to the Task entity.
+func (sc *SubcontrolCreate) AddTasks(t ...*Task) *SubcontrolCreate {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return sc.AddTaskIDs(ids...)
+}
+
 // SetNotesID sets the "notes" edge to the Note entity by ID.
 func (sc *SubcontrolCreate) SetNotesID(id string) *SubcontrolCreate {
 	sc.mutation.SetNotesID(id)
@@ -639,6 +655,23 @@ func (sc *SubcontrolCreate) createSpec() (*Subcontrol, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = sc.schemaConfig.UserSubcontrols
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := sc.mutation.TasksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   subcontrol.TasksTable,
+			Columns: subcontrol.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = sc.schemaConfig.SubcontrolTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

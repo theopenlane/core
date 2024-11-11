@@ -51,6 +51,7 @@ func (InternalPolicy) Edges() []ent.Edge {
 		edge.To("controls", Control.Type),
 		edge.To("procedures", Procedure.Type),
 		edge.To("narratives", Narrative.Type),
+		edge.To("tasks", Task.Type),
 	}
 }
 

@@ -68,6 +68,7 @@ func (Control) Edges() []ent.Edge {
 		edge.To("narratives", Narrative.Type),
 		edge.To("risks", Risk.Type),
 		edge.To("actionplans", ActionPlan.Type),
+		edge.To("tasks", Task.Type),
 	}
 }
 

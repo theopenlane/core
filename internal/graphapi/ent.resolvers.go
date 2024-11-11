@@ -537,6 +537,28 @@ func (r *queryResolver) TfaSettings(ctx context.Context, after *entgql.Cursor[st
 	return withTransactionalMutation(ctx).TFASetting.Query().Paginate(ctx, after, first, before, last, generated.WithTFASettingFilter(where.Filter))
 }
 
+// Tasks is the resolver for the tasks field.
+func (r *queryResolver) Tasks(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.TaskWhereInput) (*generated.TaskConnection, error) {
+	return withTransactionalMutation(ctx).Task.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithTaskFilter(where.Filter))
+}
+
+// TaskHistories is the resolver for the taskHistories field.
+func (r *queryResolver) TaskHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.TaskHistoryWhereInput) (*generated.TaskHistoryConnection, error) {
+	return withTransactionalMutation(ctx).TaskHistory.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithTaskHistoryFilter(where.Filter))
+}
+
 // Templates is the resolver for the templates field.
 func (r *queryResolver) Templates(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.TemplateOrder, where *generated.TemplateWhereInput) (*generated.TemplateConnection, error) {
 	return withTransactionalMutation(ctx).Template.Query().Paginate(ctx, after, first, before, last, generated.WithTemplateOrder(orderBy), generated.WithTemplateFilter(where.Filter))

@@ -103,7 +103,7 @@ func (File) Mixin() []ent.Mixin {
 		emixin.IDMixin{},
 		emixin.TagMixin{},
 		NewObjectOwnedMixin(ObjectOwnedMixin{
-			HookFunc: emptyObjectHookFunc, // use an empty hook, file processing is handled in middleware
+			HookFuncs: []HookFunc{}, // use an empty hook, file processing is handled in middleware
 		}),
 	}
 }

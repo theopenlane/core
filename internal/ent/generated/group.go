@@ -68,18 +68,21 @@ type GroupEdges struct {
 	Integrations []*Integration `json:"integrations,omitempty"`
 	// Files holds the value of the files edge.
 	Files []*File `json:"files,omitempty"`
+	// Tasks holds the value of the tasks edge.
+	Tasks []*Task `json:"tasks,omitempty"`
 	// Members holds the value of the members edge.
 	Members []*GroupMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [7]bool
+	loadedTypes [8]bool
 	// totalCount holds the count of the edges above.
-	totalCount [7]map[string]int
+	totalCount [8]map[string]int
 
 	namedUsers        map[string][]*User
 	namedEvents       map[string][]*Event
 	namedIntegrations map[string][]*Integration
 	namedFiles        map[string][]*File
+	namedTasks        map[string][]*Task
 	namedMembers      map[string][]*GroupMembership
 }
 
@@ -141,10 +144,19 @@ func (e GroupEdges) FilesOrErr() ([]*File, error) {
 	return nil, &NotLoadedError{edge: "files"}
 }
 
+// TasksOrErr returns the Tasks value or an error if the edge
+// was not loaded in eager-loading.
+func (e GroupEdges) TasksOrErr() ([]*Task, error) {
+	if e.loadedTypes[6] {
+		return e.Tasks, nil
+	}
+	return nil, &NotLoadedError{edge: "tasks"}
+}
+
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) MembersOrErr() ([]*GroupMembership, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[7] {
 		return e.Members, nil
 	}
 	return nil, &NotLoadedError{edge: "members"}
@@ -309,6 +321,11 @@ func (gr *Group) QueryIntegrations() *IntegrationQuery {
 // QueryFiles queries the "files" edge of the Group entity.
 func (gr *Group) QueryFiles() *FileQuery {
 	return NewGroupClient(gr.config).QueryFiles(gr)
+}
+
+// QueryTasks queries the "tasks" edge of the Group entity.
+func (gr *Group) QueryTasks() *TaskQuery {
+	return NewGroupClient(gr.config).QueryTasks(gr)
 }
 
 // QueryMembers queries the "members" edge of the Group entity.
@@ -477,6 +494,30 @@ func (gr *Group) appendNamedFiles(name string, edges ...*File) {
 		gr.Edges.namedFiles[name] = []*File{}
 	} else {
 		gr.Edges.namedFiles[name] = append(gr.Edges.namedFiles[name], edges...)
+	}
+}
+
+// NamedTasks returns the Tasks named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (gr *Group) NamedTasks(name string) ([]*Task, error) {
+	if gr.Edges.namedTasks == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := gr.Edges.namedTasks[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (gr *Group) appendNamedTasks(name string, edges ...*Task) {
+	if gr.Edges.namedTasks == nil {
+		gr.Edges.namedTasks = make(map[string][]*Task)
+	}
+	if len(edges) == 0 {
+		gr.Edges.namedTasks[name] = []*Task{}
+	} else {
+		gr.Edges.namedTasks[name] = append(gr.Edges.namedTasks[name], edges...)
 	}
 }
 

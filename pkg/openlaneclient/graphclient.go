@@ -303,6 +303,16 @@ type OpenlaneGraphClient interface {
 	GetSubscriberByEmail(ctx context.Context, email string, interceptors ...clientv2.RequestInterceptor) (*GetSubscriberByEmail, error)
 	GetSubscribers(ctx context.Context, where *SubscriberWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetSubscribers, error)
 	UpdateSubscriber(ctx context.Context, email string, input UpdateSubscriberInput, interceptors ...clientv2.RequestInterceptor) (*UpdateSubscriber, error)
+	CreateBulkCSVTask(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVTask, error)
+	CreateBulkTask(ctx context.Context, input []*CreateTaskInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkTask, error)
+	CreateTask(ctx context.Context, input CreateTaskInput, interceptors ...clientv2.RequestInterceptor) (*CreateTask, error)
+	DeleteTask(ctx context.Context, deleteTaskID string, interceptors ...clientv2.RequestInterceptor) (*DeleteTask, error)
+	GetAllTasks(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTasks, error)
+	GetTaskByID(ctx context.Context, taskID string, interceptors ...clientv2.RequestInterceptor) (*GetTaskByID, error)
+	GetTasks(ctx context.Context, where *TaskWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTasks, error)
+	UpdateTask(ctx context.Context, updateTaskID string, input UpdateTaskInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTask, error)
+	GetAllTaskHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTaskHistories, error)
+	GetTaskHistories(ctx context.Context, where *TaskHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTaskHistories, error)
 	CreateBulkCSVTemplate(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVTemplate, error)
 	CreateBulkTemplate(ctx context.Context, input []*CreateTemplateInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkTemplate, error)
 	CreateTemplate(ctx context.Context, input CreateTemplateInput, interceptors ...clientv2.RequestInterceptor) (*CreateTemplate, error)
@@ -3728,6 +3738,63 @@ func (t *AdminSearch_AdminSearch_Nodes_TFASettingSearchResult) GetTFASettings() 
 	return t.TFASettings
 }
 
+type AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks struct {
+	ID          string                 "json:\"id\" graphql:\"id\""
+	DeletedBy   *string                "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	Tags        []string               "json:\"tags,omitempty\" graphql:\"tags\""
+	Title       string                 "json:\"title\" graphql:\"title\""
+	Description *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details     map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
+}
+
+func (t *AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks) GetID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks{}
+	}
+	return t.ID
+}
+func (t *AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks) GetDeletedBy() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks{}
+	}
+	return t.DeletedBy
+}
+func (t *AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks) GetTags() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks{}
+	}
+	return t.Tags
+}
+func (t *AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks) GetTitle() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks{}
+	}
+	return t.Title
+}
+func (t *AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks) GetDescription() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks{}
+	}
+	return t.Description
+}
+func (t *AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks{}
+	}
+	return t.Details
+}
+
+type AdminSearch_AdminSearch_Nodes_TaskSearchResult struct {
+	Tasks []*AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks "json:\"tasks,omitempty\" graphql:\"tasks\""
+}
+
+func (t *AdminSearch_AdminSearch_Nodes_TaskSearchResult) GetTasks() []*AdminSearch_AdminSearch_Nodes_TaskSearchResult_Tasks {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_TaskSearchResult{}
+	}
+	return t.Tasks
+}
+
 type AdminSearch_AdminSearch_Nodes_TemplateSearchResult_Templates struct {
 	DeletedBy   *string         "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	ID          string          "json:\"id\" graphql:\"id\""
@@ -4036,6 +4103,7 @@ type AdminSearch_AdminSearch_Nodes struct {
 	SubcontrolSearchResult             AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult             "graphql:\"... on SubcontrolSearchResult\""
 	SubscriberSearchResult             AdminSearch_AdminSearch_Nodes_SubscriberSearchResult             "graphql:\"... on SubscriberSearchResult\""
 	TFASettingSearchResult             AdminSearch_AdminSearch_Nodes_TFASettingSearchResult             "graphql:\"... on TFASettingSearchResult\""
+	TaskSearchResult                   AdminSearch_AdminSearch_Nodes_TaskSearchResult                   "graphql:\"... on TaskSearchResult\""
 	TemplateSearchResult               AdminSearch_AdminSearch_Nodes_TemplateSearchResult               "graphql:\"... on TemplateSearchResult\""
 	UserSearchResult                   AdminSearch_AdminSearch_Nodes_UserSearchResult                   "graphql:\"... on UserSearchResult\""
 	UserSettingSearchResult            AdminSearch_AdminSearch_Nodes_UserSettingSearchResult            "graphql:\"... on UserSettingSearchResult\""
@@ -4221,6 +4289,12 @@ func (t *AdminSearch_AdminSearch_Nodes) GetTFASettingSearchResult() *AdminSearch
 		t = &AdminSearch_AdminSearch_Nodes{}
 	}
 	return &t.TFASettingSearchResult
+}
+func (t *AdminSearch_AdminSearch_Nodes) GetTaskSearchResult() *AdminSearch_AdminSearch_Nodes_TaskSearchResult {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes{}
+	}
+	return &t.TaskSearchResult
 }
 func (t *AdminSearch_AdminSearch_Nodes) GetTemplateSearchResult() *AdminSearch_AdminSearch_Nodes_TemplateSearchResult {
 	if t == nil {
@@ -34064,6 +34138,35 @@ func (t *GlobalSearch_Search_Nodes_TFASettingSearchResult) GetTFASettings() []*G
 	return t.TFASettings
 }
 
+type GlobalSearch_Search_Nodes_TaskSearchResult_Tasks struct {
+	ID   string   "json:\"id\" graphql:\"id\""
+	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *GlobalSearch_Search_Nodes_TaskSearchResult_Tasks) GetID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_TaskSearchResult_Tasks{}
+	}
+	return t.ID
+}
+func (t *GlobalSearch_Search_Nodes_TaskSearchResult_Tasks) GetTags() []string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_TaskSearchResult_Tasks{}
+	}
+	return t.Tags
+}
+
+type GlobalSearch_Search_Nodes_TaskSearchResult struct {
+	Tasks []*GlobalSearch_Search_Nodes_TaskSearchResult_Tasks "json:\"tasks,omitempty\" graphql:\"tasks\""
+}
+
+func (t *GlobalSearch_Search_Nodes_TaskSearchResult) GetTasks() []*GlobalSearch_Search_Nodes_TaskSearchResult_Tasks {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_TaskSearchResult{}
+	}
+	return t.Tasks
+}
+
 type GlobalSearch_Search_Nodes_TemplateSearchResult_Templates struct {
 	ID         string          "json:\"id\" graphql:\"id\""
 	Jsonconfig json.RawMessage "json:\"jsonconfig\" graphql:\"jsonconfig\""
@@ -34225,6 +34328,7 @@ type GlobalSearch_Search_Nodes struct {
 	SubcontrolSearchResult             GlobalSearch_Search_Nodes_SubcontrolSearchResult             "graphql:\"... on SubcontrolSearchResult\""
 	SubscriberSearchResult             GlobalSearch_Search_Nodes_SubscriberSearchResult             "graphql:\"... on SubscriberSearchResult\""
 	TFASettingSearchResult             GlobalSearch_Search_Nodes_TFASettingSearchResult             "graphql:\"... on TFASettingSearchResult\""
+	TaskSearchResult                   GlobalSearch_Search_Nodes_TaskSearchResult                   "graphql:\"... on TaskSearchResult\""
 	TemplateSearchResult               GlobalSearch_Search_Nodes_TemplateSearchResult               "graphql:\"... on TemplateSearchResult\""
 	UserSearchResult                   GlobalSearch_Search_Nodes_UserSearchResult                   "graphql:\"... on UserSearchResult\""
 	UserSettingSearchResult            GlobalSearch_Search_Nodes_UserSettingSearchResult            "graphql:\"... on UserSettingSearchResult\""
@@ -34410,6 +34514,12 @@ func (t *GlobalSearch_Search_Nodes) GetTFASettingSearchResult() *GlobalSearch_Se
 		t = &GlobalSearch_Search_Nodes{}
 	}
 	return &t.TFASettingSearchResult
+}
+func (t *GlobalSearch_Search_Nodes) GetTaskSearchResult() *GlobalSearch_Search_Nodes_TaskSearchResult {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes{}
+	}
+	return &t.TaskSearchResult
 }
 func (t *GlobalSearch_Search_Nodes) GetTemplateSearchResult() *GlobalSearch_Search_Nodes_TemplateSearchResult {
 	if t == nil {
@@ -37695,6 +37805,1481 @@ func (t *UpdateSubscriber_UpdateSubscriber) GetSubscriber() *UpdateSubscriber_Up
 		t = &UpdateSubscriber_UpdateSubscriber{}
 	}
 	return &t.Subscriber
+}
+
+type CreateBulkCSVTask_CreateBulkCSVTask_Tasks_Assignee struct {
+	ID        string  "json:\"id\" graphql:\"id\""
+	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
+	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+}
+
+func (t *CreateBulkCSVTask_CreateBulkCSVTask_Tasks_Assignee) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVTask_CreateBulkCSVTask_Tasks_Assignee{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVTask_CreateBulkCSVTask_Tasks_Assignee) GetFirstName() *string {
+	if t == nil {
+		t = &CreateBulkCSVTask_CreateBulkCSVTask_Tasks_Assignee{}
+	}
+	return t.FirstName
+}
+func (t *CreateBulkCSVTask_CreateBulkCSVTask_Tasks_Assignee) GetLastName() *string {
+	if t == nil {
+		t = &CreateBulkCSVTask_CreateBulkCSVTask_Tasks_Assignee{}
+	}
+	return t.LastName
+}
+
+type CreateBulkCSVTask_CreateBulkCSVTask_Tasks_Assigner struct {
+	ID        string  "json:\"id\" graphql:\"id\""
+	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
+	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+}
+
+func (t *CreateBulkCSVTask_CreateBulkCSVTask_Tasks_Assigner) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVTask_CreateBulkCSVTask_Tasks_Assigner{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVTask_CreateBulkCSVTask_Tasks_Assigner) GetFirstName() *string {
+	if t == nil {
+		t = &CreateBulkCSVTask_CreateBulkCSVTask_Tasks_Assigner{}
+	}
+	return t.FirstName
+}
+func (t *CreateBulkCSVTask_CreateBulkCSVTask_Tasks_Assigner) GetLastName() *string {
+	if t == nil {
+		t = &CreateBulkCSVTask_CreateBulkCSVTask_Tasks_Assigner{}
+	}
+	return t.LastName
+}
+
+type CreateBulkCSVTask_CreateBulkCSVTask_Tasks struct {
+	Assignee    *CreateBulkCSVTask_CreateBulkCSVTask_Tasks_Assignee "json:\"assignee,omitempty\" graphql:\"assignee\""
+	Assigner    CreateBulkCSVTask_CreateBulkCSVTask_Tasks_Assigner  "json:\"assigner\" graphql:\"assigner\""
+	Completed   *time.Time                                          "json:\"completed,omitempty\" graphql:\"completed\""
+	CreatedAt   *time.Time                                          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string                                             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description *string                                             "json:\"description,omitempty\" graphql:\"description\""
+	Details     map[string]interface{}                              "json:\"details,omitempty\" graphql:\"details\""
+	Due         *time.Time                                          "json:\"due,omitempty\" graphql:\"due\""
+	ID          string                                              "json:\"id\" graphql:\"id\""
+	Status      enums.TaskStatus                                    "json:\"status\" graphql:\"status\""
+	Tags        []string                                            "json:\"tags,omitempty\" graphql:\"tags\""
+	Title       string                                              "json:\"title\" graphql:\"title\""
+	UpdatedAt   *time.Time                                          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string                                             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkCSVTask_CreateBulkCSVTask_Tasks) GetAssignee() *CreateBulkCSVTask_CreateBulkCSVTask_Tasks_Assignee {
+	if t == nil {
+		t = &CreateBulkCSVTask_CreateBulkCSVTask_Tasks{}
+	}
+	return t.Assignee
+}
+func (t *CreateBulkCSVTask_CreateBulkCSVTask_Tasks) GetAssigner() *CreateBulkCSVTask_CreateBulkCSVTask_Tasks_Assigner {
+	if t == nil {
+		t = &CreateBulkCSVTask_CreateBulkCSVTask_Tasks{}
+	}
+	return &t.Assigner
+}
+func (t *CreateBulkCSVTask_CreateBulkCSVTask_Tasks) GetCompleted() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVTask_CreateBulkCSVTask_Tasks{}
+	}
+	return t.Completed
+}
+func (t *CreateBulkCSVTask_CreateBulkCSVTask_Tasks) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVTask_CreateBulkCSVTask_Tasks{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkCSVTask_CreateBulkCSVTask_Tasks) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVTask_CreateBulkCSVTask_Tasks{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkCSVTask_CreateBulkCSVTask_Tasks) GetDescription() *string {
+	if t == nil {
+		t = &CreateBulkCSVTask_CreateBulkCSVTask_Tasks{}
+	}
+	return t.Description
+}
+func (t *CreateBulkCSVTask_CreateBulkCSVTask_Tasks) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &CreateBulkCSVTask_CreateBulkCSVTask_Tasks{}
+	}
+	return t.Details
+}
+func (t *CreateBulkCSVTask_CreateBulkCSVTask_Tasks) GetDue() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVTask_CreateBulkCSVTask_Tasks{}
+	}
+	return t.Due
+}
+func (t *CreateBulkCSVTask_CreateBulkCSVTask_Tasks) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVTask_CreateBulkCSVTask_Tasks{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVTask_CreateBulkCSVTask_Tasks) GetStatus() *enums.TaskStatus {
+	if t == nil {
+		t = &CreateBulkCSVTask_CreateBulkCSVTask_Tasks{}
+	}
+	return &t.Status
+}
+func (t *CreateBulkCSVTask_CreateBulkCSVTask_Tasks) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkCSVTask_CreateBulkCSVTask_Tasks{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkCSVTask_CreateBulkCSVTask_Tasks) GetTitle() string {
+	if t == nil {
+		t = &CreateBulkCSVTask_CreateBulkCSVTask_Tasks{}
+	}
+	return t.Title
+}
+func (t *CreateBulkCSVTask_CreateBulkCSVTask_Tasks) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVTask_CreateBulkCSVTask_Tasks{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkCSVTask_CreateBulkCSVTask_Tasks) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVTask_CreateBulkCSVTask_Tasks{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkCSVTask_CreateBulkCSVTask struct {
+	Tasks []*CreateBulkCSVTask_CreateBulkCSVTask_Tasks "json:\"tasks,omitempty\" graphql:\"tasks\""
+}
+
+func (t *CreateBulkCSVTask_CreateBulkCSVTask) GetTasks() []*CreateBulkCSVTask_CreateBulkCSVTask_Tasks {
+	if t == nil {
+		t = &CreateBulkCSVTask_CreateBulkCSVTask{}
+	}
+	return t.Tasks
+}
+
+type CreateBulkTask_CreateBulkTask_Tasks_Assignee struct {
+	ID        string  "json:\"id\" graphql:\"id\""
+	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
+	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+}
+
+func (t *CreateBulkTask_CreateBulkTask_Tasks_Assignee) GetID() string {
+	if t == nil {
+		t = &CreateBulkTask_CreateBulkTask_Tasks_Assignee{}
+	}
+	return t.ID
+}
+func (t *CreateBulkTask_CreateBulkTask_Tasks_Assignee) GetFirstName() *string {
+	if t == nil {
+		t = &CreateBulkTask_CreateBulkTask_Tasks_Assignee{}
+	}
+	return t.FirstName
+}
+func (t *CreateBulkTask_CreateBulkTask_Tasks_Assignee) GetLastName() *string {
+	if t == nil {
+		t = &CreateBulkTask_CreateBulkTask_Tasks_Assignee{}
+	}
+	return t.LastName
+}
+
+type CreateBulkTask_CreateBulkTask_Tasks_Assigner struct {
+	ID        string  "json:\"id\" graphql:\"id\""
+	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
+	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+}
+
+func (t *CreateBulkTask_CreateBulkTask_Tasks_Assigner) GetID() string {
+	if t == nil {
+		t = &CreateBulkTask_CreateBulkTask_Tasks_Assigner{}
+	}
+	return t.ID
+}
+func (t *CreateBulkTask_CreateBulkTask_Tasks_Assigner) GetFirstName() *string {
+	if t == nil {
+		t = &CreateBulkTask_CreateBulkTask_Tasks_Assigner{}
+	}
+	return t.FirstName
+}
+func (t *CreateBulkTask_CreateBulkTask_Tasks_Assigner) GetLastName() *string {
+	if t == nil {
+		t = &CreateBulkTask_CreateBulkTask_Tasks_Assigner{}
+	}
+	return t.LastName
+}
+
+type CreateBulkTask_CreateBulkTask_Tasks struct {
+	Assignee    *CreateBulkTask_CreateBulkTask_Tasks_Assignee "json:\"assignee,omitempty\" graphql:\"assignee\""
+	Assigner    CreateBulkTask_CreateBulkTask_Tasks_Assigner  "json:\"assigner\" graphql:\"assigner\""
+	Completed   *time.Time                                    "json:\"completed,omitempty\" graphql:\"completed\""
+	CreatedAt   *time.Time                                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string                                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description *string                                       "json:\"description,omitempty\" graphql:\"description\""
+	Details     map[string]interface{}                        "json:\"details,omitempty\" graphql:\"details\""
+	Due         *time.Time                                    "json:\"due,omitempty\" graphql:\"due\""
+	ID          string                                        "json:\"id\" graphql:\"id\""
+	Status      enums.TaskStatus                              "json:\"status\" graphql:\"status\""
+	Tags        []string                                      "json:\"tags,omitempty\" graphql:\"tags\""
+	Title       string                                        "json:\"title\" graphql:\"title\""
+	UpdatedAt   *time.Time                                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string                                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkTask_CreateBulkTask_Tasks) GetAssignee() *CreateBulkTask_CreateBulkTask_Tasks_Assignee {
+	if t == nil {
+		t = &CreateBulkTask_CreateBulkTask_Tasks{}
+	}
+	return t.Assignee
+}
+func (t *CreateBulkTask_CreateBulkTask_Tasks) GetAssigner() *CreateBulkTask_CreateBulkTask_Tasks_Assigner {
+	if t == nil {
+		t = &CreateBulkTask_CreateBulkTask_Tasks{}
+	}
+	return &t.Assigner
+}
+func (t *CreateBulkTask_CreateBulkTask_Tasks) GetCompleted() *time.Time {
+	if t == nil {
+		t = &CreateBulkTask_CreateBulkTask_Tasks{}
+	}
+	return t.Completed
+}
+func (t *CreateBulkTask_CreateBulkTask_Tasks) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkTask_CreateBulkTask_Tasks{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkTask_CreateBulkTask_Tasks) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkTask_CreateBulkTask_Tasks{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkTask_CreateBulkTask_Tasks) GetDescription() *string {
+	if t == nil {
+		t = &CreateBulkTask_CreateBulkTask_Tasks{}
+	}
+	return t.Description
+}
+func (t *CreateBulkTask_CreateBulkTask_Tasks) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &CreateBulkTask_CreateBulkTask_Tasks{}
+	}
+	return t.Details
+}
+func (t *CreateBulkTask_CreateBulkTask_Tasks) GetDue() *time.Time {
+	if t == nil {
+		t = &CreateBulkTask_CreateBulkTask_Tasks{}
+	}
+	return t.Due
+}
+func (t *CreateBulkTask_CreateBulkTask_Tasks) GetID() string {
+	if t == nil {
+		t = &CreateBulkTask_CreateBulkTask_Tasks{}
+	}
+	return t.ID
+}
+func (t *CreateBulkTask_CreateBulkTask_Tasks) GetStatus() *enums.TaskStatus {
+	if t == nil {
+		t = &CreateBulkTask_CreateBulkTask_Tasks{}
+	}
+	return &t.Status
+}
+func (t *CreateBulkTask_CreateBulkTask_Tasks) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkTask_CreateBulkTask_Tasks{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkTask_CreateBulkTask_Tasks) GetTitle() string {
+	if t == nil {
+		t = &CreateBulkTask_CreateBulkTask_Tasks{}
+	}
+	return t.Title
+}
+func (t *CreateBulkTask_CreateBulkTask_Tasks) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkTask_CreateBulkTask_Tasks{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkTask_CreateBulkTask_Tasks) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkTask_CreateBulkTask_Tasks{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkTask_CreateBulkTask struct {
+	Tasks []*CreateBulkTask_CreateBulkTask_Tasks "json:\"tasks,omitempty\" graphql:\"tasks\""
+}
+
+func (t *CreateBulkTask_CreateBulkTask) GetTasks() []*CreateBulkTask_CreateBulkTask_Tasks {
+	if t == nil {
+		t = &CreateBulkTask_CreateBulkTask{}
+	}
+	return t.Tasks
+}
+
+type CreateTask_CreateTask_Task_Assignee struct {
+	ID        string  "json:\"id\" graphql:\"id\""
+	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
+	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+}
+
+func (t *CreateTask_CreateTask_Task_Assignee) GetID() string {
+	if t == nil {
+		t = &CreateTask_CreateTask_Task_Assignee{}
+	}
+	return t.ID
+}
+func (t *CreateTask_CreateTask_Task_Assignee) GetFirstName() *string {
+	if t == nil {
+		t = &CreateTask_CreateTask_Task_Assignee{}
+	}
+	return t.FirstName
+}
+func (t *CreateTask_CreateTask_Task_Assignee) GetLastName() *string {
+	if t == nil {
+		t = &CreateTask_CreateTask_Task_Assignee{}
+	}
+	return t.LastName
+}
+
+type CreateTask_CreateTask_Task_Assigner struct {
+	ID        string  "json:\"id\" graphql:\"id\""
+	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
+	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+}
+
+func (t *CreateTask_CreateTask_Task_Assigner) GetID() string {
+	if t == nil {
+		t = &CreateTask_CreateTask_Task_Assigner{}
+	}
+	return t.ID
+}
+func (t *CreateTask_CreateTask_Task_Assigner) GetFirstName() *string {
+	if t == nil {
+		t = &CreateTask_CreateTask_Task_Assigner{}
+	}
+	return t.FirstName
+}
+func (t *CreateTask_CreateTask_Task_Assigner) GetLastName() *string {
+	if t == nil {
+		t = &CreateTask_CreateTask_Task_Assigner{}
+	}
+	return t.LastName
+}
+
+type CreateTask_CreateTask_Task struct {
+	Assignee    *CreateTask_CreateTask_Task_Assignee "json:\"assignee,omitempty\" graphql:\"assignee\""
+	Assigner    CreateTask_CreateTask_Task_Assigner  "json:\"assigner\" graphql:\"assigner\""
+	Completed   *time.Time                           "json:\"completed,omitempty\" graphql:\"completed\""
+	CreatedAt   *time.Time                           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string                              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description *string                              "json:\"description,omitempty\" graphql:\"description\""
+	Details     map[string]interface{}               "json:\"details,omitempty\" graphql:\"details\""
+	Due         *time.Time                           "json:\"due,omitempty\" graphql:\"due\""
+	ID          string                               "json:\"id\" graphql:\"id\""
+	Status      enums.TaskStatus                     "json:\"status\" graphql:\"status\""
+	Tags        []string                             "json:\"tags,omitempty\" graphql:\"tags\""
+	Title       string                               "json:\"title\" graphql:\"title\""
+	UpdatedAt   *time.Time                           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string                              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateTask_CreateTask_Task) GetAssignee() *CreateTask_CreateTask_Task_Assignee {
+	if t == nil {
+		t = &CreateTask_CreateTask_Task{}
+	}
+	return t.Assignee
+}
+func (t *CreateTask_CreateTask_Task) GetAssigner() *CreateTask_CreateTask_Task_Assigner {
+	if t == nil {
+		t = &CreateTask_CreateTask_Task{}
+	}
+	return &t.Assigner
+}
+func (t *CreateTask_CreateTask_Task) GetCompleted() *time.Time {
+	if t == nil {
+		t = &CreateTask_CreateTask_Task{}
+	}
+	return t.Completed
+}
+func (t *CreateTask_CreateTask_Task) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateTask_CreateTask_Task{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateTask_CreateTask_Task) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateTask_CreateTask_Task{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateTask_CreateTask_Task) GetDescription() *string {
+	if t == nil {
+		t = &CreateTask_CreateTask_Task{}
+	}
+	return t.Description
+}
+func (t *CreateTask_CreateTask_Task) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &CreateTask_CreateTask_Task{}
+	}
+	return t.Details
+}
+func (t *CreateTask_CreateTask_Task) GetDue() *time.Time {
+	if t == nil {
+		t = &CreateTask_CreateTask_Task{}
+	}
+	return t.Due
+}
+func (t *CreateTask_CreateTask_Task) GetID() string {
+	if t == nil {
+		t = &CreateTask_CreateTask_Task{}
+	}
+	return t.ID
+}
+func (t *CreateTask_CreateTask_Task) GetStatus() *enums.TaskStatus {
+	if t == nil {
+		t = &CreateTask_CreateTask_Task{}
+	}
+	return &t.Status
+}
+func (t *CreateTask_CreateTask_Task) GetTags() []string {
+	if t == nil {
+		t = &CreateTask_CreateTask_Task{}
+	}
+	return t.Tags
+}
+func (t *CreateTask_CreateTask_Task) GetTitle() string {
+	if t == nil {
+		t = &CreateTask_CreateTask_Task{}
+	}
+	return t.Title
+}
+func (t *CreateTask_CreateTask_Task) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateTask_CreateTask_Task{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateTask_CreateTask_Task) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateTask_CreateTask_Task{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateTask_CreateTask struct {
+	Task CreateTask_CreateTask_Task "json:\"task\" graphql:\"task\""
+}
+
+func (t *CreateTask_CreateTask) GetTask() *CreateTask_CreateTask_Task {
+	if t == nil {
+		t = &CreateTask_CreateTask{}
+	}
+	return &t.Task
+}
+
+type DeleteTask_DeleteTask struct {
+	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
+}
+
+func (t *DeleteTask_DeleteTask) GetDeletedID() string {
+	if t == nil {
+		t = &DeleteTask_DeleteTask{}
+	}
+	return t.DeletedID
+}
+
+type GetAllTasks_Tasks_Edges_Node_Assignee struct {
+	ID        string  "json:\"id\" graphql:\"id\""
+	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
+	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+}
+
+func (t *GetAllTasks_Tasks_Edges_Node_Assignee) GetID() string {
+	if t == nil {
+		t = &GetAllTasks_Tasks_Edges_Node_Assignee{}
+	}
+	return t.ID
+}
+func (t *GetAllTasks_Tasks_Edges_Node_Assignee) GetFirstName() *string {
+	if t == nil {
+		t = &GetAllTasks_Tasks_Edges_Node_Assignee{}
+	}
+	return t.FirstName
+}
+func (t *GetAllTasks_Tasks_Edges_Node_Assignee) GetLastName() *string {
+	if t == nil {
+		t = &GetAllTasks_Tasks_Edges_Node_Assignee{}
+	}
+	return t.LastName
+}
+
+type GetAllTasks_Tasks_Edges_Node_Assigner struct {
+	ID        string  "json:\"id\" graphql:\"id\""
+	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
+	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+}
+
+func (t *GetAllTasks_Tasks_Edges_Node_Assigner) GetID() string {
+	if t == nil {
+		t = &GetAllTasks_Tasks_Edges_Node_Assigner{}
+	}
+	return t.ID
+}
+func (t *GetAllTasks_Tasks_Edges_Node_Assigner) GetFirstName() *string {
+	if t == nil {
+		t = &GetAllTasks_Tasks_Edges_Node_Assigner{}
+	}
+	return t.FirstName
+}
+func (t *GetAllTasks_Tasks_Edges_Node_Assigner) GetLastName() *string {
+	if t == nil {
+		t = &GetAllTasks_Tasks_Edges_Node_Assigner{}
+	}
+	return t.LastName
+}
+
+type GetAllTasks_Tasks_Edges_Node_Organization struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetAllTasks_Tasks_Edges_Node_Organization) GetID() string {
+	if t == nil {
+		t = &GetAllTasks_Tasks_Edges_Node_Organization{}
+	}
+	return t.ID
+}
+func (t *GetAllTasks_Tasks_Edges_Node_Organization) GetName() string {
+	if t == nil {
+		t = &GetAllTasks_Tasks_Edges_Node_Organization{}
+	}
+	return t.Name
+}
+
+type GetAllTasks_Tasks_Edges_Node struct {
+	Assignee     *GetAllTasks_Tasks_Edges_Node_Assignee       "json:\"assignee,omitempty\" graphql:\"assignee\""
+	Assigner     GetAllTasks_Tasks_Edges_Node_Assigner        "json:\"assigner\" graphql:\"assigner\""
+	Organization []*GetAllTasks_Tasks_Edges_Node_Organization "json:\"organization,omitempty\" graphql:\"organization\""
+	Completed    *time.Time                                   "json:\"completed,omitempty\" graphql:\"completed\""
+	CreatedAt    *time.Time                                   "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy    *string                                      "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description  *string                                      "json:\"description,omitempty\" graphql:\"description\""
+	Details      map[string]interface{}                       "json:\"details,omitempty\" graphql:\"details\""
+	Due          *time.Time                                   "json:\"due,omitempty\" graphql:\"due\""
+	ID           string                                       "json:\"id\" graphql:\"id\""
+	Status       enums.TaskStatus                             "json:\"status\" graphql:\"status\""
+	Tags         []string                                     "json:\"tags,omitempty\" graphql:\"tags\""
+	Title        string                                       "json:\"title\" graphql:\"title\""
+	UpdatedAt    *time.Time                                   "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy    *string                                      "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllTasks_Tasks_Edges_Node) GetAssignee() *GetAllTasks_Tasks_Edges_Node_Assignee {
+	if t == nil {
+		t = &GetAllTasks_Tasks_Edges_Node{}
+	}
+	return t.Assignee
+}
+func (t *GetAllTasks_Tasks_Edges_Node) GetAssigner() *GetAllTasks_Tasks_Edges_Node_Assigner {
+	if t == nil {
+		t = &GetAllTasks_Tasks_Edges_Node{}
+	}
+	return &t.Assigner
+}
+func (t *GetAllTasks_Tasks_Edges_Node) GetOrganization() []*GetAllTasks_Tasks_Edges_Node_Organization {
+	if t == nil {
+		t = &GetAllTasks_Tasks_Edges_Node{}
+	}
+	return t.Organization
+}
+func (t *GetAllTasks_Tasks_Edges_Node) GetCompleted() *time.Time {
+	if t == nil {
+		t = &GetAllTasks_Tasks_Edges_Node{}
+	}
+	return t.Completed
+}
+func (t *GetAllTasks_Tasks_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllTasks_Tasks_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllTasks_Tasks_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllTasks_Tasks_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllTasks_Tasks_Edges_Node) GetDescription() *string {
+	if t == nil {
+		t = &GetAllTasks_Tasks_Edges_Node{}
+	}
+	return t.Description
+}
+func (t *GetAllTasks_Tasks_Edges_Node) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetAllTasks_Tasks_Edges_Node{}
+	}
+	return t.Details
+}
+func (t *GetAllTasks_Tasks_Edges_Node) GetDue() *time.Time {
+	if t == nil {
+		t = &GetAllTasks_Tasks_Edges_Node{}
+	}
+	return t.Due
+}
+func (t *GetAllTasks_Tasks_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllTasks_Tasks_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllTasks_Tasks_Edges_Node) GetStatus() *enums.TaskStatus {
+	if t == nil {
+		t = &GetAllTasks_Tasks_Edges_Node{}
+	}
+	return &t.Status
+}
+func (t *GetAllTasks_Tasks_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllTasks_Tasks_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllTasks_Tasks_Edges_Node) GetTitle() string {
+	if t == nil {
+		t = &GetAllTasks_Tasks_Edges_Node{}
+	}
+	return t.Title
+}
+func (t *GetAllTasks_Tasks_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllTasks_Tasks_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllTasks_Tasks_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllTasks_Tasks_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllTasks_Tasks_Edges struct {
+	Node *GetAllTasks_Tasks_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllTasks_Tasks_Edges) GetNode() *GetAllTasks_Tasks_Edges_Node {
+	if t == nil {
+		t = &GetAllTasks_Tasks_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllTasks_Tasks struct {
+	Edges []*GetAllTasks_Tasks_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetAllTasks_Tasks) GetEdges() []*GetAllTasks_Tasks_Edges {
+	if t == nil {
+		t = &GetAllTasks_Tasks{}
+	}
+	return t.Edges
+}
+
+type GetTaskByID_Task_Assignee struct {
+	ID        string  "json:\"id\" graphql:\"id\""
+	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
+	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+}
+
+func (t *GetTaskByID_Task_Assignee) GetID() string {
+	if t == nil {
+		t = &GetTaskByID_Task_Assignee{}
+	}
+	return t.ID
+}
+func (t *GetTaskByID_Task_Assignee) GetFirstName() *string {
+	if t == nil {
+		t = &GetTaskByID_Task_Assignee{}
+	}
+	return t.FirstName
+}
+func (t *GetTaskByID_Task_Assignee) GetLastName() *string {
+	if t == nil {
+		t = &GetTaskByID_Task_Assignee{}
+	}
+	return t.LastName
+}
+
+type GetTaskByID_Task_Assigner struct {
+	ID        string  "json:\"id\" graphql:\"id\""
+	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
+	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+}
+
+func (t *GetTaskByID_Task_Assigner) GetID() string {
+	if t == nil {
+		t = &GetTaskByID_Task_Assigner{}
+	}
+	return t.ID
+}
+func (t *GetTaskByID_Task_Assigner) GetFirstName() *string {
+	if t == nil {
+		t = &GetTaskByID_Task_Assigner{}
+	}
+	return t.FirstName
+}
+func (t *GetTaskByID_Task_Assigner) GetLastName() *string {
+	if t == nil {
+		t = &GetTaskByID_Task_Assigner{}
+	}
+	return t.LastName
+}
+
+type GetTaskByID_Task_Organization struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetTaskByID_Task_Organization) GetID() string {
+	if t == nil {
+		t = &GetTaskByID_Task_Organization{}
+	}
+	return t.ID
+}
+func (t *GetTaskByID_Task_Organization) GetName() string {
+	if t == nil {
+		t = &GetTaskByID_Task_Organization{}
+	}
+	return t.Name
+}
+
+type GetTaskByID_Task struct {
+	Assignee     *GetTaskByID_Task_Assignee       "json:\"assignee,omitempty\" graphql:\"assignee\""
+	Assigner     GetTaskByID_Task_Assigner        "json:\"assigner\" graphql:\"assigner\""
+	Organization []*GetTaskByID_Task_Organization "json:\"organization,omitempty\" graphql:\"organization\""
+	Completed    *time.Time                       "json:\"completed,omitempty\" graphql:\"completed\""
+	CreatedAt    *time.Time                       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy    *string                          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description  *string                          "json:\"description,omitempty\" graphql:\"description\""
+	Details      map[string]interface{}           "json:\"details,omitempty\" graphql:\"details\""
+	Due          *time.Time                       "json:\"due,omitempty\" graphql:\"due\""
+	ID           string                           "json:\"id\" graphql:\"id\""
+	Status       enums.TaskStatus                 "json:\"status\" graphql:\"status\""
+	Tags         []string                         "json:\"tags,omitempty\" graphql:\"tags\""
+	Title        string                           "json:\"title\" graphql:\"title\""
+	UpdatedAt    *time.Time                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy    *string                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetTaskByID_Task) GetAssignee() *GetTaskByID_Task_Assignee {
+	if t == nil {
+		t = &GetTaskByID_Task{}
+	}
+	return t.Assignee
+}
+func (t *GetTaskByID_Task) GetAssigner() *GetTaskByID_Task_Assigner {
+	if t == nil {
+		t = &GetTaskByID_Task{}
+	}
+	return &t.Assigner
+}
+func (t *GetTaskByID_Task) GetOrganization() []*GetTaskByID_Task_Organization {
+	if t == nil {
+		t = &GetTaskByID_Task{}
+	}
+	return t.Organization
+}
+func (t *GetTaskByID_Task) GetCompleted() *time.Time {
+	if t == nil {
+		t = &GetTaskByID_Task{}
+	}
+	return t.Completed
+}
+func (t *GetTaskByID_Task) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetTaskByID_Task{}
+	}
+	return t.CreatedAt
+}
+func (t *GetTaskByID_Task) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetTaskByID_Task{}
+	}
+	return t.CreatedBy
+}
+func (t *GetTaskByID_Task) GetDescription() *string {
+	if t == nil {
+		t = &GetTaskByID_Task{}
+	}
+	return t.Description
+}
+func (t *GetTaskByID_Task) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetTaskByID_Task{}
+	}
+	return t.Details
+}
+func (t *GetTaskByID_Task) GetDue() *time.Time {
+	if t == nil {
+		t = &GetTaskByID_Task{}
+	}
+	return t.Due
+}
+func (t *GetTaskByID_Task) GetID() string {
+	if t == nil {
+		t = &GetTaskByID_Task{}
+	}
+	return t.ID
+}
+func (t *GetTaskByID_Task) GetStatus() *enums.TaskStatus {
+	if t == nil {
+		t = &GetTaskByID_Task{}
+	}
+	return &t.Status
+}
+func (t *GetTaskByID_Task) GetTags() []string {
+	if t == nil {
+		t = &GetTaskByID_Task{}
+	}
+	return t.Tags
+}
+func (t *GetTaskByID_Task) GetTitle() string {
+	if t == nil {
+		t = &GetTaskByID_Task{}
+	}
+	return t.Title
+}
+func (t *GetTaskByID_Task) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetTaskByID_Task{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetTaskByID_Task) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetTaskByID_Task{}
+	}
+	return t.UpdatedBy
+}
+
+type GetTasks_Tasks_Edges_Node_Assignee struct {
+	ID        string  "json:\"id\" graphql:\"id\""
+	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
+	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+}
+
+func (t *GetTasks_Tasks_Edges_Node_Assignee) GetID() string {
+	if t == nil {
+		t = &GetTasks_Tasks_Edges_Node_Assignee{}
+	}
+	return t.ID
+}
+func (t *GetTasks_Tasks_Edges_Node_Assignee) GetFirstName() *string {
+	if t == nil {
+		t = &GetTasks_Tasks_Edges_Node_Assignee{}
+	}
+	return t.FirstName
+}
+func (t *GetTasks_Tasks_Edges_Node_Assignee) GetLastName() *string {
+	if t == nil {
+		t = &GetTasks_Tasks_Edges_Node_Assignee{}
+	}
+	return t.LastName
+}
+
+type GetTasks_Tasks_Edges_Node_Assigner struct {
+	ID        string  "json:\"id\" graphql:\"id\""
+	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
+	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+}
+
+func (t *GetTasks_Tasks_Edges_Node_Assigner) GetID() string {
+	if t == nil {
+		t = &GetTasks_Tasks_Edges_Node_Assigner{}
+	}
+	return t.ID
+}
+func (t *GetTasks_Tasks_Edges_Node_Assigner) GetFirstName() *string {
+	if t == nil {
+		t = &GetTasks_Tasks_Edges_Node_Assigner{}
+	}
+	return t.FirstName
+}
+func (t *GetTasks_Tasks_Edges_Node_Assigner) GetLastName() *string {
+	if t == nil {
+		t = &GetTasks_Tasks_Edges_Node_Assigner{}
+	}
+	return t.LastName
+}
+
+type GetTasks_Tasks_Edges_Node struct {
+	Assignee    *GetTasks_Tasks_Edges_Node_Assignee "json:\"assignee,omitempty\" graphql:\"assignee\""
+	Assigner    GetTasks_Tasks_Edges_Node_Assigner  "json:\"assigner\" graphql:\"assigner\""
+	Completed   *time.Time                          "json:\"completed,omitempty\" graphql:\"completed\""
+	CreatedAt   *time.Time                          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string                             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description *string                             "json:\"description,omitempty\" graphql:\"description\""
+	Details     map[string]interface{}              "json:\"details,omitempty\" graphql:\"details\""
+	Due         *time.Time                          "json:\"due,omitempty\" graphql:\"due\""
+	ID          string                              "json:\"id\" graphql:\"id\""
+	Status      enums.TaskStatus                    "json:\"status\" graphql:\"status\""
+	Tags        []string                            "json:\"tags,omitempty\" graphql:\"tags\""
+	Title       string                              "json:\"title\" graphql:\"title\""
+	UpdatedAt   *time.Time                          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string                             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetTasks_Tasks_Edges_Node) GetAssignee() *GetTasks_Tasks_Edges_Node_Assignee {
+	if t == nil {
+		t = &GetTasks_Tasks_Edges_Node{}
+	}
+	return t.Assignee
+}
+func (t *GetTasks_Tasks_Edges_Node) GetAssigner() *GetTasks_Tasks_Edges_Node_Assigner {
+	if t == nil {
+		t = &GetTasks_Tasks_Edges_Node{}
+	}
+	return &t.Assigner
+}
+func (t *GetTasks_Tasks_Edges_Node) GetCompleted() *time.Time {
+	if t == nil {
+		t = &GetTasks_Tasks_Edges_Node{}
+	}
+	return t.Completed
+}
+func (t *GetTasks_Tasks_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetTasks_Tasks_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetTasks_Tasks_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetTasks_Tasks_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetTasks_Tasks_Edges_Node) GetDescription() *string {
+	if t == nil {
+		t = &GetTasks_Tasks_Edges_Node{}
+	}
+	return t.Description
+}
+func (t *GetTasks_Tasks_Edges_Node) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetTasks_Tasks_Edges_Node{}
+	}
+	return t.Details
+}
+func (t *GetTasks_Tasks_Edges_Node) GetDue() *time.Time {
+	if t == nil {
+		t = &GetTasks_Tasks_Edges_Node{}
+	}
+	return t.Due
+}
+func (t *GetTasks_Tasks_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetTasks_Tasks_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetTasks_Tasks_Edges_Node) GetStatus() *enums.TaskStatus {
+	if t == nil {
+		t = &GetTasks_Tasks_Edges_Node{}
+	}
+	return &t.Status
+}
+func (t *GetTasks_Tasks_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetTasks_Tasks_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetTasks_Tasks_Edges_Node) GetTitle() string {
+	if t == nil {
+		t = &GetTasks_Tasks_Edges_Node{}
+	}
+	return t.Title
+}
+func (t *GetTasks_Tasks_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetTasks_Tasks_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetTasks_Tasks_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetTasks_Tasks_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetTasks_Tasks_Edges struct {
+	Node *GetTasks_Tasks_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetTasks_Tasks_Edges) GetNode() *GetTasks_Tasks_Edges_Node {
+	if t == nil {
+		t = &GetTasks_Tasks_Edges{}
+	}
+	return t.Node
+}
+
+type GetTasks_Tasks struct {
+	Edges []*GetTasks_Tasks_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetTasks_Tasks) GetEdges() []*GetTasks_Tasks_Edges {
+	if t == nil {
+		t = &GetTasks_Tasks{}
+	}
+	return t.Edges
+}
+
+type UpdateTask_UpdateTask_Task_Assignee struct {
+	ID        string  "json:\"id\" graphql:\"id\""
+	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
+	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+}
+
+func (t *UpdateTask_UpdateTask_Task_Assignee) GetID() string {
+	if t == nil {
+		t = &UpdateTask_UpdateTask_Task_Assignee{}
+	}
+	return t.ID
+}
+func (t *UpdateTask_UpdateTask_Task_Assignee) GetFirstName() *string {
+	if t == nil {
+		t = &UpdateTask_UpdateTask_Task_Assignee{}
+	}
+	return t.FirstName
+}
+func (t *UpdateTask_UpdateTask_Task_Assignee) GetLastName() *string {
+	if t == nil {
+		t = &UpdateTask_UpdateTask_Task_Assignee{}
+	}
+	return t.LastName
+}
+
+type UpdateTask_UpdateTask_Task_Assigner struct {
+	ID        string  "json:\"id\" graphql:\"id\""
+	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
+	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+}
+
+func (t *UpdateTask_UpdateTask_Task_Assigner) GetID() string {
+	if t == nil {
+		t = &UpdateTask_UpdateTask_Task_Assigner{}
+	}
+	return t.ID
+}
+func (t *UpdateTask_UpdateTask_Task_Assigner) GetFirstName() *string {
+	if t == nil {
+		t = &UpdateTask_UpdateTask_Task_Assigner{}
+	}
+	return t.FirstName
+}
+func (t *UpdateTask_UpdateTask_Task_Assigner) GetLastName() *string {
+	if t == nil {
+		t = &UpdateTask_UpdateTask_Task_Assigner{}
+	}
+	return t.LastName
+}
+
+type UpdateTask_UpdateTask_Task struct {
+	Assignee    *UpdateTask_UpdateTask_Task_Assignee "json:\"assignee,omitempty\" graphql:\"assignee\""
+	Assigner    UpdateTask_UpdateTask_Task_Assigner  "json:\"assigner\" graphql:\"assigner\""
+	Completed   *time.Time                           "json:\"completed,omitempty\" graphql:\"completed\""
+	CreatedAt   *time.Time                           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string                              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description *string                              "json:\"description,omitempty\" graphql:\"description\""
+	Details     map[string]interface{}               "json:\"details,omitempty\" graphql:\"details\""
+	Due         *time.Time                           "json:\"due,omitempty\" graphql:\"due\""
+	ID          string                               "json:\"id\" graphql:\"id\""
+	Status      enums.TaskStatus                     "json:\"status\" graphql:\"status\""
+	Tags        []string                             "json:\"tags,omitempty\" graphql:\"tags\""
+	Title       string                               "json:\"title\" graphql:\"title\""
+	UpdatedAt   *time.Time                           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string                              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *UpdateTask_UpdateTask_Task) GetAssignee() *UpdateTask_UpdateTask_Task_Assignee {
+	if t == nil {
+		t = &UpdateTask_UpdateTask_Task{}
+	}
+	return t.Assignee
+}
+func (t *UpdateTask_UpdateTask_Task) GetAssigner() *UpdateTask_UpdateTask_Task_Assigner {
+	if t == nil {
+		t = &UpdateTask_UpdateTask_Task{}
+	}
+	return &t.Assigner
+}
+func (t *UpdateTask_UpdateTask_Task) GetCompleted() *time.Time {
+	if t == nil {
+		t = &UpdateTask_UpdateTask_Task{}
+	}
+	return t.Completed
+}
+func (t *UpdateTask_UpdateTask_Task) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateTask_UpdateTask_Task{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateTask_UpdateTask_Task) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateTask_UpdateTask_Task{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateTask_UpdateTask_Task) GetDescription() *string {
+	if t == nil {
+		t = &UpdateTask_UpdateTask_Task{}
+	}
+	return t.Description
+}
+func (t *UpdateTask_UpdateTask_Task) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &UpdateTask_UpdateTask_Task{}
+	}
+	return t.Details
+}
+func (t *UpdateTask_UpdateTask_Task) GetDue() *time.Time {
+	if t == nil {
+		t = &UpdateTask_UpdateTask_Task{}
+	}
+	return t.Due
+}
+func (t *UpdateTask_UpdateTask_Task) GetID() string {
+	if t == nil {
+		t = &UpdateTask_UpdateTask_Task{}
+	}
+	return t.ID
+}
+func (t *UpdateTask_UpdateTask_Task) GetStatus() *enums.TaskStatus {
+	if t == nil {
+		t = &UpdateTask_UpdateTask_Task{}
+	}
+	return &t.Status
+}
+func (t *UpdateTask_UpdateTask_Task) GetTags() []string {
+	if t == nil {
+		t = &UpdateTask_UpdateTask_Task{}
+	}
+	return t.Tags
+}
+func (t *UpdateTask_UpdateTask_Task) GetTitle() string {
+	if t == nil {
+		t = &UpdateTask_UpdateTask_Task{}
+	}
+	return t.Title
+}
+func (t *UpdateTask_UpdateTask_Task) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateTask_UpdateTask_Task{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateTask_UpdateTask_Task) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateTask_UpdateTask_Task{}
+	}
+	return t.UpdatedBy
+}
+
+type UpdateTask_UpdateTask struct {
+	Task UpdateTask_UpdateTask_Task "json:\"task\" graphql:\"task\""
+}
+
+func (t *UpdateTask_UpdateTask) GetTask() *UpdateTask_UpdateTask_Task {
+	if t == nil {
+		t = &UpdateTask_UpdateTask{}
+	}
+	return &t.Task
+}
+
+type GetAllTaskHistories_TaskHistories_Edges_Node struct {
+	Completed   *time.Time             "json:\"completed,omitempty\" graphql:\"completed\""
+	CreatedAt   *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details     map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
+	Due         *time.Time             "json:\"due,omitempty\" graphql:\"due\""
+	HistoryTime time.Time              "json:\"historyTime\" graphql:\"historyTime\""
+	ID          string                 "json:\"id\" graphql:\"id\""
+	Operation   history.OpType         "json:\"operation\" graphql:\"operation\""
+	Ref         *string                "json:\"ref,omitempty\" graphql:\"ref\""
+	Status      enums.TaskStatus       "json:\"status\" graphql:\"status\""
+	Tags        []string               "json:\"tags,omitempty\" graphql:\"tags\""
+	Title       string                 "json:\"title\" graphql:\"title\""
+	UpdatedAt   *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllTaskHistories_TaskHistories_Edges_Node) GetCompleted() *time.Time {
+	if t == nil {
+		t = &GetAllTaskHistories_TaskHistories_Edges_Node{}
+	}
+	return t.Completed
+}
+func (t *GetAllTaskHistories_TaskHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllTaskHistories_TaskHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllTaskHistories_TaskHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllTaskHistories_TaskHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllTaskHistories_TaskHistories_Edges_Node) GetDescription() *string {
+	if t == nil {
+		t = &GetAllTaskHistories_TaskHistories_Edges_Node{}
+	}
+	return t.Description
+}
+func (t *GetAllTaskHistories_TaskHistories_Edges_Node) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetAllTaskHistories_TaskHistories_Edges_Node{}
+	}
+	return t.Details
+}
+func (t *GetAllTaskHistories_TaskHistories_Edges_Node) GetDue() *time.Time {
+	if t == nil {
+		t = &GetAllTaskHistories_TaskHistories_Edges_Node{}
+	}
+	return t.Due
+}
+func (t *GetAllTaskHistories_TaskHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetAllTaskHistories_TaskHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetAllTaskHistories_TaskHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllTaskHistories_TaskHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllTaskHistories_TaskHistories_Edges_Node) GetOperation() *history.OpType {
+	if t == nil {
+		t = &GetAllTaskHistories_TaskHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetAllTaskHistories_TaskHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetAllTaskHistories_TaskHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetAllTaskHistories_TaskHistories_Edges_Node) GetStatus() *enums.TaskStatus {
+	if t == nil {
+		t = &GetAllTaskHistories_TaskHistories_Edges_Node{}
+	}
+	return &t.Status
+}
+func (t *GetAllTaskHistories_TaskHistories_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllTaskHistories_TaskHistories_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllTaskHistories_TaskHistories_Edges_Node) GetTitle() string {
+	if t == nil {
+		t = &GetAllTaskHistories_TaskHistories_Edges_Node{}
+	}
+	return t.Title
+}
+func (t *GetAllTaskHistories_TaskHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllTaskHistories_TaskHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllTaskHistories_TaskHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllTaskHistories_TaskHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllTaskHistories_TaskHistories_Edges struct {
+	Node *GetAllTaskHistories_TaskHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllTaskHistories_TaskHistories_Edges) GetNode() *GetAllTaskHistories_TaskHistories_Edges_Node {
+	if t == nil {
+		t = &GetAllTaskHistories_TaskHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllTaskHistories_TaskHistories struct {
+	Edges []*GetAllTaskHistories_TaskHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetAllTaskHistories_TaskHistories) GetEdges() []*GetAllTaskHistories_TaskHistories_Edges {
+	if t == nil {
+		t = &GetAllTaskHistories_TaskHistories{}
+	}
+	return t.Edges
+}
+
+type GetTaskHistories_TaskHistories_Edges_Node struct {
+	Completed   *time.Time             "json:\"completed,omitempty\" graphql:\"completed\""
+	CreatedAt   *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details     map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
+	Due         *time.Time             "json:\"due,omitempty\" graphql:\"due\""
+	HistoryTime time.Time              "json:\"historyTime\" graphql:\"historyTime\""
+	ID          string                 "json:\"id\" graphql:\"id\""
+	Operation   history.OpType         "json:\"operation\" graphql:\"operation\""
+	Ref         *string                "json:\"ref,omitempty\" graphql:\"ref\""
+	Status      enums.TaskStatus       "json:\"status\" graphql:\"status\""
+	Tags        []string               "json:\"tags,omitempty\" graphql:\"tags\""
+	Title       string                 "json:\"title\" graphql:\"title\""
+	UpdatedAt   *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetTaskHistories_TaskHistories_Edges_Node) GetCompleted() *time.Time {
+	if t == nil {
+		t = &GetTaskHistories_TaskHistories_Edges_Node{}
+	}
+	return t.Completed
+}
+func (t *GetTaskHistories_TaskHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetTaskHistories_TaskHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetTaskHistories_TaskHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetTaskHistories_TaskHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetTaskHistories_TaskHistories_Edges_Node) GetDescription() *string {
+	if t == nil {
+		t = &GetTaskHistories_TaskHistories_Edges_Node{}
+	}
+	return t.Description
+}
+func (t *GetTaskHistories_TaskHistories_Edges_Node) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetTaskHistories_TaskHistories_Edges_Node{}
+	}
+	return t.Details
+}
+func (t *GetTaskHistories_TaskHistories_Edges_Node) GetDue() *time.Time {
+	if t == nil {
+		t = &GetTaskHistories_TaskHistories_Edges_Node{}
+	}
+	return t.Due
+}
+func (t *GetTaskHistories_TaskHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetTaskHistories_TaskHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetTaskHistories_TaskHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetTaskHistories_TaskHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetTaskHistories_TaskHistories_Edges_Node) GetOperation() *history.OpType {
+	if t == nil {
+		t = &GetTaskHistories_TaskHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetTaskHistories_TaskHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetTaskHistories_TaskHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetTaskHistories_TaskHistories_Edges_Node) GetStatus() *enums.TaskStatus {
+	if t == nil {
+		t = &GetTaskHistories_TaskHistories_Edges_Node{}
+	}
+	return &t.Status
+}
+func (t *GetTaskHistories_TaskHistories_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetTaskHistories_TaskHistories_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetTaskHistories_TaskHistories_Edges_Node) GetTitle() string {
+	if t == nil {
+		t = &GetTaskHistories_TaskHistories_Edges_Node{}
+	}
+	return t.Title
+}
+func (t *GetTaskHistories_TaskHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetTaskHistories_TaskHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetTaskHistories_TaskHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetTaskHistories_TaskHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetTaskHistories_TaskHistories_Edges struct {
+	Node *GetTaskHistories_TaskHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetTaskHistories_TaskHistories_Edges) GetNode() *GetTaskHistories_TaskHistories_Edges_Node {
+	if t == nil {
+		t = &GetTaskHistories_TaskHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetTaskHistories_TaskHistories struct {
+	Edges []*GetTaskHistories_TaskHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetTaskHistories_TaskHistories) GetEdges() []*GetTaskHistories_TaskHistories_Edges {
+	if t == nil {
+		t = &GetTaskHistories_TaskHistories{}
+	}
+	return t.Edges
 }
 
 type CreateBulkCSVTemplate_CreateBulkCSVTemplate_Templates_Owner struct {
@@ -45250,6 +46835,116 @@ func (t *UpdateSubscriber) GetUpdateSubscriber() *UpdateSubscriber_UpdateSubscri
 	return &t.UpdateSubscriber
 }
 
+type CreateBulkCSVTask struct {
+	CreateBulkCSVTask CreateBulkCSVTask_CreateBulkCSVTask "json:\"createBulkCSVTask\" graphql:\"createBulkCSVTask\""
+}
+
+func (t *CreateBulkCSVTask) GetCreateBulkCSVTask() *CreateBulkCSVTask_CreateBulkCSVTask {
+	if t == nil {
+		t = &CreateBulkCSVTask{}
+	}
+	return &t.CreateBulkCSVTask
+}
+
+type CreateBulkTask struct {
+	CreateBulkTask CreateBulkTask_CreateBulkTask "json:\"createBulkTask\" graphql:\"createBulkTask\""
+}
+
+func (t *CreateBulkTask) GetCreateBulkTask() *CreateBulkTask_CreateBulkTask {
+	if t == nil {
+		t = &CreateBulkTask{}
+	}
+	return &t.CreateBulkTask
+}
+
+type CreateTask struct {
+	CreateTask CreateTask_CreateTask "json:\"createTask\" graphql:\"createTask\""
+}
+
+func (t *CreateTask) GetCreateTask() *CreateTask_CreateTask {
+	if t == nil {
+		t = &CreateTask{}
+	}
+	return &t.CreateTask
+}
+
+type DeleteTask struct {
+	DeleteTask DeleteTask_DeleteTask "json:\"deleteTask\" graphql:\"deleteTask\""
+}
+
+func (t *DeleteTask) GetDeleteTask() *DeleteTask_DeleteTask {
+	if t == nil {
+		t = &DeleteTask{}
+	}
+	return &t.DeleteTask
+}
+
+type GetAllTasks struct {
+	Tasks GetAllTasks_Tasks "json:\"tasks\" graphql:\"tasks\""
+}
+
+func (t *GetAllTasks) GetTasks() *GetAllTasks_Tasks {
+	if t == nil {
+		t = &GetAllTasks{}
+	}
+	return &t.Tasks
+}
+
+type GetTaskByID struct {
+	Task GetTaskByID_Task "json:\"task\" graphql:\"task\""
+}
+
+func (t *GetTaskByID) GetTask() *GetTaskByID_Task {
+	if t == nil {
+		t = &GetTaskByID{}
+	}
+	return &t.Task
+}
+
+type GetTasks struct {
+	Tasks GetTasks_Tasks "json:\"tasks\" graphql:\"tasks\""
+}
+
+func (t *GetTasks) GetTasks() *GetTasks_Tasks {
+	if t == nil {
+		t = &GetTasks{}
+	}
+	return &t.Tasks
+}
+
+type UpdateTask struct {
+	UpdateTask UpdateTask_UpdateTask "json:\"updateTask\" graphql:\"updateTask\""
+}
+
+func (t *UpdateTask) GetUpdateTask() *UpdateTask_UpdateTask {
+	if t == nil {
+		t = &UpdateTask{}
+	}
+	return &t.UpdateTask
+}
+
+type GetAllTaskHistories struct {
+	TaskHistories GetAllTaskHistories_TaskHistories "json:\"taskHistories\" graphql:\"taskHistories\""
+}
+
+func (t *GetAllTaskHistories) GetTaskHistories() *GetAllTaskHistories_TaskHistories {
+	if t == nil {
+		t = &GetAllTaskHistories{}
+	}
+	return &t.TaskHistories
+}
+
+type GetTaskHistories struct {
+	TaskHistories GetTaskHistories_TaskHistories "json:\"taskHistories\" graphql:\"taskHistories\""
+}
+
+func (t *GetTaskHistories) GetTaskHistories() *GetTaskHistories_TaskHistories {
+	if t == nil {
+		t = &GetTaskHistories{}
+	}
+	return &t.TaskHistories
+}
+
 type CreateBulkCSVTemplate struct {
 	CreateBulkCSVTemplate CreateBulkCSVTemplate_CreateBulkCSVTemplate "json:\"createBulkCSVTemplate\" graphql:\"createBulkCSVTemplate\""
 }
@@ -46401,6 +48096,16 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					tags
 					tfaSecret
 					recoveryCodes
+				}
+			}
+			... on TaskSearchResult {
+				tasks {
+					id
+					deletedBy
+					tags
+					title
+					description
+					details
 				}
 			}
 			... on TemplateSearchResult {
@@ -56529,6 +58234,12 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 					tags
 				}
 			}
+			... on TaskSearchResult {
+				tasks {
+					id
+					tags
+				}
+			}
 			... on TemplateSearchResult {
 				templates {
 					id
@@ -57667,6 +59378,450 @@ func (c *Client) UpdateSubscriber(ctx context.Context, email string, input Updat
 
 	var res UpdateSubscriber
 	if err := c.Client.Post(ctx, "UpdateSubscriber", UpdateSubscriberDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkCSVTaskDocument = `mutation CreateBulkCSVTask ($input: Upload!) {
+	createBulkCSVTask(input: $input) {
+		tasks {
+			assignee {
+				id
+				firstName
+				lastName
+			}
+			assigner {
+				id
+				firstName
+				lastName
+			}
+			completed
+			createdAt
+			createdBy
+			description
+			details
+			due
+			id
+			status
+			tags
+			title
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkCSVTask(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVTask, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkCSVTask
+	if err := c.Client.Post(ctx, "CreateBulkCSVTask", CreateBulkCSVTaskDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkTaskDocument = `mutation CreateBulkTask ($input: [CreateTaskInput!]) {
+	createBulkTask(input: $input) {
+		tasks {
+			assignee {
+				id
+				firstName
+				lastName
+			}
+			assigner {
+				id
+				firstName
+				lastName
+			}
+			completed
+			createdAt
+			createdBy
+			description
+			details
+			due
+			id
+			status
+			tags
+			title
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkTask(ctx context.Context, input []*CreateTaskInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkTask, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkTask
+	if err := c.Client.Post(ctx, "CreateBulkTask", CreateBulkTaskDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateTaskDocument = `mutation CreateTask ($input: CreateTaskInput!) {
+	createTask(input: $input) {
+		task {
+			assignee {
+				id
+				firstName
+				lastName
+			}
+			assigner {
+				id
+				firstName
+				lastName
+			}
+			completed
+			createdAt
+			createdBy
+			description
+			details
+			due
+			id
+			status
+			tags
+			title
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateTask(ctx context.Context, input CreateTaskInput, interceptors ...clientv2.RequestInterceptor) (*CreateTask, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateTask
+	if err := c.Client.Post(ctx, "CreateTask", CreateTaskDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteTaskDocument = `mutation DeleteTask ($deleteTaskId: ID!) {
+	deleteTask(id: $deleteTaskId) {
+		deletedID
+	}
+}
+`
+
+func (c *Client) DeleteTask(ctx context.Context, deleteTaskID string, interceptors ...clientv2.RequestInterceptor) (*DeleteTask, error) {
+	vars := map[string]any{
+		"deleteTaskId": deleteTaskID,
+	}
+
+	var res DeleteTask
+	if err := c.Client.Post(ctx, "DeleteTask", DeleteTaskDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllTasksDocument = `query GetAllTasks {
+	tasks {
+		edges {
+			node {
+				assignee {
+					id
+					firstName
+					lastName
+				}
+				assigner {
+					id
+					firstName
+					lastName
+				}
+				organization {
+					id
+					name
+				}
+				completed
+				createdAt
+				createdBy
+				description
+				details
+				due
+				id
+				status
+				tags
+				title
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllTasks(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTasks, error) {
+	vars := map[string]any{}
+
+	var res GetAllTasks
+	if err := c.Client.Post(ctx, "GetAllTasks", GetAllTasksDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetTaskByIDDocument = `query GetTaskByID ($taskId: ID!) {
+	task(id: $taskId) {
+		assignee {
+			id
+			firstName
+			lastName
+		}
+		assigner {
+			id
+			firstName
+			lastName
+		}
+		organization {
+			id
+			name
+		}
+		completed
+		createdAt
+		createdBy
+		description
+		details
+		due
+		id
+		status
+		tags
+		title
+		updatedAt
+		updatedBy
+	}
+}
+`
+
+func (c *Client) GetTaskByID(ctx context.Context, taskID string, interceptors ...clientv2.RequestInterceptor) (*GetTaskByID, error) {
+	vars := map[string]any{
+		"taskId": taskID,
+	}
+
+	var res GetTaskByID
+	if err := c.Client.Post(ctx, "GetTaskByID", GetTaskByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetTasksDocument = `query GetTasks ($where: TaskWhereInput) {
+	tasks(where: $where) {
+		edges {
+			node {
+				assignee {
+					id
+					firstName
+					lastName
+				}
+				assigner {
+					id
+					firstName
+					lastName
+				}
+				completed
+				createdAt
+				createdBy
+				description
+				details
+				due
+				id
+				status
+				tags
+				title
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetTasks(ctx context.Context, where *TaskWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTasks, error) {
+	vars := map[string]any{
+		"where": where,
+	}
+
+	var res GetTasks
+	if err := c.Client.Post(ctx, "GetTasks", GetTasksDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateTaskDocument = `mutation UpdateTask ($updateTaskId: ID!, $input: UpdateTaskInput!) {
+	updateTask(id: $updateTaskId, input: $input) {
+		task {
+			assignee {
+				id
+				firstName
+				lastName
+			}
+			assigner {
+				id
+				firstName
+				lastName
+			}
+			completed
+			createdAt
+			createdBy
+			description
+			details
+			due
+			id
+			status
+			tags
+			title
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) UpdateTask(ctx context.Context, updateTaskID string, input UpdateTaskInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTask, error) {
+	vars := map[string]any{
+		"updateTaskId": updateTaskID,
+		"input":        input,
+	}
+
+	var res UpdateTask
+	if err := c.Client.Post(ctx, "UpdateTask", UpdateTaskDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllTaskHistoriesDocument = `query GetAllTaskHistories {
+	taskHistories {
+		edges {
+			node {
+				completed
+				createdAt
+				createdBy
+				description
+				details
+				due
+				historyTime
+				id
+				operation
+				ref
+				status
+				tags
+				title
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllTaskHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTaskHistories, error) {
+	vars := map[string]any{}
+
+	var res GetAllTaskHistories
+	if err := c.Client.Post(ctx, "GetAllTaskHistories", GetAllTaskHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetTaskHistoriesDocument = `query GetTaskHistories ($where: TaskHistoryWhereInput) {
+	taskHistories(where: $where) {
+		edges {
+			node {
+				completed
+				createdAt
+				createdBy
+				description
+				details
+				due
+				historyTime
+				id
+				operation
+				ref
+				status
+				tags
+				title
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetTaskHistories(ctx context.Context, where *TaskHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTaskHistories, error) {
+	vars := map[string]any{
+		"where": where,
+	}
+
+	var res GetTaskHistories
+	if err := c.Client.Post(ctx, "GetTaskHistories", GetTaskHistoriesDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -59396,6 +61551,16 @@ var DocumentOperationNames = map[string]string{
 	GetSubscriberByEmailDocument:                  "GetSubscriberByEmail",
 	GetSubscribersDocument:                        "GetSubscribers",
 	UpdateSubscriberDocument:                      "UpdateSubscriber",
+	CreateBulkCSVTaskDocument:                     "CreateBulkCSVTask",
+	CreateBulkTaskDocument:                        "CreateBulkTask",
+	CreateTaskDocument:                            "CreateTask",
+	DeleteTaskDocument:                            "DeleteTask",
+	GetAllTasksDocument:                           "GetAllTasks",
+	GetTaskByIDDocument:                           "GetTaskByID",
+	GetTasksDocument:                              "GetTasks",
+	UpdateTaskDocument:                            "UpdateTask",
+	GetAllTaskHistoriesDocument:                   "GetAllTaskHistories",
+	GetTaskHistoriesDocument:                      "GetTaskHistories",
 	CreateBulkCSVTemplateDocument:                 "CreateBulkCSVTemplate",
 	CreateBulkTemplateDocument:                    "CreateBulkTemplate",
 	CreateTemplateDocument:                        "CreateTemplate",

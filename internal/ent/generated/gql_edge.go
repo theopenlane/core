@@ -180,6 +180,18 @@ func (c *Control) Actionplans(ctx context.Context) (result []*ActionPlan, err er
 	return result, err
 }
 
+func (c *Control) Tasks(ctx context.Context) (result []*Task, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = c.NamedTasks(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = c.Edges.TasksOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = c.QueryTasks().All(ctx)
+	}
+	return result, err
+}
+
 func (co *ControlObjective) Policy(ctx context.Context) (result []*InternalPolicy, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = co.NamedPolicy(graphql.GetFieldContext(ctx).Field.Alias)
@@ -260,6 +272,18 @@ func (co *ControlObjective) Narratives(ctx context.Context) (result []*Narrative
 	}
 	if IsNotLoaded(err) {
 		result, err = co.QueryNarratives().All(ctx)
+	}
+	return result, err
+}
+
+func (co *ControlObjective) Tasks(ctx context.Context) (result []*Task, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = co.NamedTasks(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = co.Edges.TasksOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = co.QueryTasks().All(ctx)
 	}
 	return result, err
 }
@@ -948,6 +972,18 @@ func (gr *Group) Files(ctx context.Context) (result []*File, err error) {
 	return result, err
 }
 
+func (gr *Group) Tasks(ctx context.Context) (result []*Task, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = gr.NamedTasks(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = gr.Edges.TasksOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = gr.QueryTasks().All(ctx)
+	}
+	return result, err
+}
+
 func (gr *Group) Members(ctx context.Context) (result []*GroupMembership, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = gr.NamedMembers(graphql.GetFieldContext(ctx).Field.Alias)
@@ -1132,6 +1168,18 @@ func (ip *InternalPolicy) Narratives(ctx context.Context) (result []*Narrative, 
 	}
 	if IsNotLoaded(err) {
 		result, err = ip.QueryNarratives().All(ctx)
+	}
+	return result, err
+}
+
+func (ip *InternalPolicy) Tasks(ctx context.Context) (result []*Task, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = ip.NamedTasks(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = ip.Edges.TasksOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = ip.QueryTasks().All(ctx)
 	}
 	return result, err
 }
@@ -1605,6 +1653,18 @@ func (o *Organization) Notes(ctx context.Context) (result []*Note, err error) {
 	return result, err
 }
 
+func (o *Organization) Tasks(ctx context.Context) (result []*Task, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = o.NamedTasks(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = o.Edges.TasksOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = o.QueryTasks().All(ctx)
+	}
+	return result, err
+}
+
 func (o *Organization) Members(ctx context.Context) (result []*OrgMembership, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = o.NamedMembers(graphql.GetFieldContext(ctx).Field.Alias)
@@ -1717,6 +1777,18 @@ func (pr *Procedure) Risks(ctx context.Context) (result []*Risk, err error) {
 	return result, err
 }
 
+func (pr *Procedure) Tasks(ctx context.Context) (result []*Task, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = pr.NamedTasks(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = pr.Edges.TasksOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = pr.QueryTasks().All(ctx)
+	}
+	return result, err
+}
+
 func (r *Risk) Control(ctx context.Context) (result []*Control, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = r.NamedControl(graphql.GetFieldContext(ctx).Field.Alias)
@@ -1825,6 +1897,18 @@ func (s *Subcontrol) User(ctx context.Context) (result []*User, err error) {
 	return result, err
 }
 
+func (s *Subcontrol) Tasks(ctx context.Context) (result []*Task, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = s.NamedTasks(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = s.Edges.TasksOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = s.QueryTasks().All(ctx)
+	}
+	return result, err
+}
+
 func (s *Subcontrol) Notes(ctx context.Context) (*Note, error) {
 	result, err := s.Edges.NotesOrErr()
 	if IsNotLoaded(err) {
@@ -1859,6 +1943,106 @@ func (ts *TFASetting) Owner(ctx context.Context) (*User, error) {
 		result, err = ts.QueryOwner().Only(ctx)
 	}
 	return result, MaskNotFound(err)
+}
+
+func (t *Task) Assigner(ctx context.Context) (*User, error) {
+	result, err := t.Edges.AssignerOrErr()
+	if IsNotLoaded(err) {
+		result, err = t.QueryAssigner().Only(ctx)
+	}
+	return result, err
+}
+
+func (t *Task) Assignee(ctx context.Context) (*User, error) {
+	result, err := t.Edges.AssigneeOrErr()
+	if IsNotLoaded(err) {
+		result, err = t.QueryAssignee().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (t *Task) Organization(ctx context.Context) (result []*Organization, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = t.NamedOrganization(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = t.Edges.OrganizationOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = t.QueryOrganization().All(ctx)
+	}
+	return result, err
+}
+
+func (t *Task) Group(ctx context.Context) (result []*Group, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = t.NamedGroup(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = t.Edges.GroupOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = t.QueryGroup().All(ctx)
+	}
+	return result, err
+}
+
+func (t *Task) Policy(ctx context.Context) (result []*InternalPolicy, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = t.NamedPolicy(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = t.Edges.PolicyOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = t.QueryPolicy().All(ctx)
+	}
+	return result, err
+}
+
+func (t *Task) Procedure(ctx context.Context) (result []*Procedure, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = t.NamedProcedure(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = t.Edges.ProcedureOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = t.QueryProcedure().All(ctx)
+	}
+	return result, err
+}
+
+func (t *Task) Control(ctx context.Context) (result []*Control, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = t.NamedControl(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = t.Edges.ControlOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = t.QueryControl().All(ctx)
+	}
+	return result, err
+}
+
+func (t *Task) ControlObjective(ctx context.Context) (result []*ControlObjective, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = t.NamedControlObjective(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = t.Edges.ControlObjectiveOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = t.QueryControlObjective().All(ctx)
+	}
+	return result, err
+}
+
+func (t *Task) Subcontrol(ctx context.Context) (result []*Subcontrol, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = t.NamedSubcontrol(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = t.Edges.SubcontrolOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = t.QuerySubcontrol().All(ctx)
+	}
+	return result, err
 }
 
 func (t *Template) Owner(ctx context.Context) (*Organization, error) {
@@ -2001,6 +2185,30 @@ func (u *User) Subcontrols(ctx context.Context) (result []*Subcontrol, err error
 	}
 	if IsNotLoaded(err) {
 		result, err = u.QuerySubcontrols().All(ctx)
+	}
+	return result, err
+}
+
+func (u *User) AssignerTasks(ctx context.Context) (result []*Task, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = u.NamedAssignerTasks(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = u.Edges.AssignerTasksOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = u.QueryAssignerTasks().All(ctx)
+	}
+	return result, err
+}
+
+func (u *User) AssigneeTasks(ctx context.Context) (result []*Task, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = u.NamedAssigneeTasks(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = u.Edges.AssigneeTasksOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = u.QueryAssigneeTasks().All(ctx)
 	}
 	return result, err
 }

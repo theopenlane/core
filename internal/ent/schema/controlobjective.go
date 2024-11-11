@@ -66,6 +66,7 @@ func (ControlObjective) Edges() []ent.Edge {
 		edge.From("standard", Standard.Type).
 			Ref("controlobjectives"),
 		edge.To("narratives", Narrative.Type),
+		edge.To("tasks", Task.Type),
 	}
 }
 

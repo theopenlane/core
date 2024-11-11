@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/task"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -39,6 +40,7 @@ type ControlObjectiveQuery struct {
 	withSubcontrols      *SubcontrolQuery
 	withStandard         *StandardQuery
 	withNarratives       *NarrativeQuery
+	withTasks            *TaskQuery
 	withFKs              bool
 	loadTotal            []func(context.Context, []*ControlObjective) error
 	modifiers            []func(*sql.Selector)
@@ -49,6 +51,7 @@ type ControlObjectiveQuery struct {
 	withNamedSubcontrols map[string]*SubcontrolQuery
 	withNamedStandard    map[string]*StandardQuery
 	withNamedNarratives  map[string]*NarrativeQuery
+	withNamedTasks       map[string]*TaskQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -260,6 +263,31 @@ func (coq *ControlObjectiveQuery) QueryNarratives() *NarrativeQuery {
 	return query
 }
 
+// QueryTasks chains the current query on the "tasks" edge.
+func (coq *ControlObjectiveQuery) QueryTasks() *TaskQuery {
+	query := (&TaskClient{config: coq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := coq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := coq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(controlobjective.Table, controlobjective.FieldID, selector),
+			sqlgraph.To(task.Table, task.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, controlobjective.TasksTable, controlobjective.TasksPrimaryKey...),
+		)
+		schemaConfig := coq.schemaConfig
+		step.To.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.ControlObjectiveTasks
+		fromU = sqlgraph.SetNeighbors(coq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first ControlObjective entity from the query.
 // Returns a *NotFoundError when no ControlObjective was found.
 func (coq *ControlObjectiveQuery) First(ctx context.Context) (*ControlObjective, error) {
@@ -459,6 +487,7 @@ func (coq *ControlObjectiveQuery) Clone() *ControlObjectiveQuery {
 		withSubcontrols: coq.withSubcontrols.Clone(),
 		withStandard:    coq.withStandard.Clone(),
 		withNarratives:  coq.withNarratives.Clone(),
+		withTasks:       coq.withTasks.Clone(),
 		// clone intermediate query.
 		sql:       coq.sql.Clone(),
 		path:      coq.path,
@@ -543,6 +572,17 @@ func (coq *ControlObjectiveQuery) WithNarratives(opts ...func(*NarrativeQuery)) 
 	return coq
 }
 
+// WithTasks tells the query-builder to eager-load the nodes that are connected to
+// the "tasks" edge. The optional arguments are used to configure the query builder of the edge.
+func (coq *ControlObjectiveQuery) WithTasks(opts ...func(*TaskQuery)) *ControlObjectiveQuery {
+	query := (&TaskClient{config: coq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	coq.withTasks = query
+	return coq
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -622,7 +662,7 @@ func (coq *ControlObjectiveQuery) sqlAll(ctx context.Context, hooks ...queryHook
 		nodes       = []*ControlObjective{}
 		withFKs     = coq.withFKs
 		_spec       = coq.querySpec()
-		loadedTypes = [7]bool{
+		loadedTypes = [8]bool{
 			coq.withPolicy != nil,
 			coq.withControls != nil,
 			coq.withProcedures != nil,
@@ -630,6 +670,7 @@ func (coq *ControlObjectiveQuery) sqlAll(ctx context.Context, hooks ...queryHook
 			coq.withSubcontrols != nil,
 			coq.withStandard != nil,
 			coq.withNarratives != nil,
+			coq.withTasks != nil,
 		}
 	)
 	if withFKs {
@@ -707,6 +748,13 @@ func (coq *ControlObjectiveQuery) sqlAll(ctx context.Context, hooks ...queryHook
 			return nil, err
 		}
 	}
+	if query := coq.withTasks; query != nil {
+		if err := coq.loadTasks(ctx, query, nodes,
+			func(n *ControlObjective) { n.Edges.Tasks = []*Task{} },
+			func(n *ControlObjective, e *Task) { n.Edges.Tasks = append(n.Edges.Tasks, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range coq.withNamedPolicy {
 		if err := coq.loadPolicy(ctx, query, nodes,
 			func(n *ControlObjective) { n.appendNamedPolicy(name) },
@@ -753,6 +801,13 @@ func (coq *ControlObjectiveQuery) sqlAll(ctx context.Context, hooks ...queryHook
 		if err := coq.loadNarratives(ctx, query, nodes,
 			func(n *ControlObjective) { n.appendNamedNarratives(name) },
 			func(n *ControlObjective, e *Narrative) { n.appendNamedNarratives(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range coq.withNamedTasks {
+		if err := coq.loadTasks(ctx, query, nodes,
+			func(n *ControlObjective) { n.appendNamedTasks(name) },
+			func(n *ControlObjective, e *Task) { n.appendNamedTasks(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1074,6 +1129,68 @@ func (coq *ControlObjectiveQuery) loadNarratives(ctx context.Context, query *Nar
 	}
 	return nil
 }
+func (coq *ControlObjectiveQuery) loadTasks(ctx context.Context, query *TaskQuery, nodes []*ControlObjective, init func(*ControlObjective), assign func(*ControlObjective, *Task)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*ControlObjective)
+	nids := make(map[string]map[*ControlObjective]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(controlobjective.TasksTable)
+		joinT.Schema(coq.schemaConfig.ControlObjectiveTasks)
+		s.Join(joinT).On(s.C(task.FieldID), joinT.C(controlobjective.TasksPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(controlobjective.TasksPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(controlobjective.TasksPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*ControlObjective]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Task](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "tasks" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 
 func (coq *ControlObjectiveQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := coq.querySpec()
@@ -1268,6 +1385,20 @@ func (coq *ControlObjectiveQuery) WithNamedNarratives(name string, opts ...func(
 		coq.withNamedNarratives = make(map[string]*NarrativeQuery)
 	}
 	coq.withNamedNarratives[name] = query
+	return coq
+}
+
+// WithNamedTasks tells the query-builder to eager-load the nodes that are connected to the "tasks"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (coq *ControlObjectiveQuery) WithNamedTasks(name string, opts ...func(*TaskQuery)) *ControlObjectiveQuery {
+	query := (&TaskClient{config: coq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if coq.withNamedTasks == nil {
+		coq.withNamedTasks = make(map[string]*TaskQuery)
+	}
+	coq.withNamedTasks[name] = query
 	return coq
 }
 

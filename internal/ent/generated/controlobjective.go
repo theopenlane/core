@@ -79,11 +79,13 @@ type ControlObjectiveEdges struct {
 	Standard []*Standard `json:"standard,omitempty"`
 	// Narratives holds the value of the narratives edge.
 	Narratives []*Narrative `json:"narratives,omitempty"`
+	// Tasks holds the value of the tasks edge.
+	Tasks []*Task `json:"tasks,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [7]bool
+	loadedTypes [8]bool
 	// totalCount holds the count of the edges above.
-	totalCount [7]map[string]int
+	totalCount [8]map[string]int
 
 	namedPolicy      map[string][]*InternalPolicy
 	namedControls    map[string][]*Control
@@ -92,6 +94,7 @@ type ControlObjectiveEdges struct {
 	namedSubcontrols map[string][]*Subcontrol
 	namedStandard    map[string][]*Standard
 	namedNarratives  map[string][]*Narrative
+	namedTasks       map[string][]*Task
 }
 
 // PolicyOrErr returns the Policy value or an error if the edge
@@ -155,6 +158,15 @@ func (e ControlObjectiveEdges) NarrativesOrErr() ([]*Narrative, error) {
 		return e.Narratives, nil
 	}
 	return nil, &NotLoadedError{edge: "narratives"}
+}
+
+// TasksOrErr returns the Tasks value or an error if the edge
+// was not loaded in eager-loading.
+func (e ControlObjectiveEdges) TasksOrErr() ([]*Task, error) {
+	if e.loadedTypes[7] {
+		return e.Tasks, nil
+	}
+	return nil, &NotLoadedError{edge: "tasks"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -362,6 +374,11 @@ func (co *ControlObjective) QueryStandard() *StandardQuery {
 // QueryNarratives queries the "narratives" edge of the ControlObjective entity.
 func (co *ControlObjective) QueryNarratives() *NarrativeQuery {
 	return NewControlObjectiveClient(co.config).QueryNarratives(co)
+}
+
+// QueryTasks queries the "tasks" edge of the ControlObjective entity.
+func (co *ControlObjective) QueryTasks() *TaskQuery {
+	return NewControlObjectiveClient(co.config).QueryTasks(co)
 }
 
 // Update returns a builder for updating this ControlObjective.
@@ -612,6 +629,30 @@ func (co *ControlObjective) appendNamedNarratives(name string, edges ...*Narrati
 		co.Edges.namedNarratives[name] = []*Narrative{}
 	} else {
 		co.Edges.namedNarratives[name] = append(co.Edges.namedNarratives[name], edges...)
+	}
+}
+
+// NamedTasks returns the Tasks named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (co *ControlObjective) NamedTasks(name string) ([]*Task, error) {
+	if co.Edges.namedTasks == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := co.Edges.namedTasks[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (co *ControlObjective) appendNamedTasks(name string, edges ...*Task) {
+	if co.Edges.namedTasks == nil {
+		co.Edges.namedTasks = make(map[string][]*Task)
+	}
+	if len(edges) == 0 {
+		co.Edges.namedTasks[name] = []*Task{}
+	} else {
+		co.Edges.namedTasks[name] = append(co.Edges.namedTasks[name], edges...)
 	}
 }
 

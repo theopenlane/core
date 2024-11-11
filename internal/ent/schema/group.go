@@ -93,6 +93,7 @@ func (Group) Edges() []ent.Edge {
 		edge.To("events", Event.Type),
 		edge.To("integrations", Integration.Type),
 		edge.To("files", File.Type),
+		edge.To("tasks", Task.Type),
 	}
 }
 

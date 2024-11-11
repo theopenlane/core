@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/task"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -440,6 +441,21 @@ func (cou *ControlObjectiveUpdate) AddNarratives(n ...*Narrative) *ControlObject
 	return cou.AddNarrativeIDs(ids...)
 }
 
+// AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
+func (cou *ControlObjectiveUpdate) AddTaskIDs(ids ...string) *ControlObjectiveUpdate {
+	cou.mutation.AddTaskIDs(ids...)
+	return cou
+}
+
+// AddTasks adds the "tasks" edges to the Task entity.
+func (cou *ControlObjectiveUpdate) AddTasks(t ...*Task) *ControlObjectiveUpdate {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return cou.AddTaskIDs(ids...)
+}
+
 // Mutation returns the ControlObjectiveMutation object of the builder.
 func (cou *ControlObjectiveUpdate) Mutation() *ControlObjectiveMutation {
 	return cou.mutation
@@ -590,6 +606,27 @@ func (cou *ControlObjectiveUpdate) RemoveNarratives(n ...*Narrative) *ControlObj
 		ids[i] = n[i].ID
 	}
 	return cou.RemoveNarrativeIDs(ids...)
+}
+
+// ClearTasks clears all "tasks" edges to the Task entity.
+func (cou *ControlObjectiveUpdate) ClearTasks() *ControlObjectiveUpdate {
+	cou.mutation.ClearTasks()
+	return cou
+}
+
+// RemoveTaskIDs removes the "tasks" edge to Task entities by IDs.
+func (cou *ControlObjectiveUpdate) RemoveTaskIDs(ids ...string) *ControlObjectiveUpdate {
+	cou.mutation.RemoveTaskIDs(ids...)
+	return cou
+}
+
+// RemoveTasks removes "tasks" edges to Task entities.
+func (cou *ControlObjectiveUpdate) RemoveTasks(t ...*Task) *ControlObjectiveUpdate {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return cou.RemoveTaskIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -1089,6 +1126,54 @@ func (cou *ControlObjectiveUpdate) sqlSave(ctx context.Context) (n int, err erro
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if cou.mutation.TasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlobjective.TasksTable,
+			Columns: controlobjective.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cou.schemaConfig.ControlObjectiveTasks
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cou.mutation.RemovedTasksIDs(); len(nodes) > 0 && !cou.mutation.TasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlobjective.TasksTable,
+			Columns: controlobjective.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cou.schemaConfig.ControlObjectiveTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cou.mutation.TasksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlobjective.TasksTable,
+			Columns: controlobjective.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cou.schemaConfig.ControlObjectiveTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = cou.schemaConfig.ControlObjective
 	ctx = internal.NewSchemaConfigContext(ctx, cou.schemaConfig)
 	_spec.AddModifiers(cou.modifiers...)
@@ -1514,6 +1599,21 @@ func (couo *ControlObjectiveUpdateOne) AddNarratives(n ...*Narrative) *ControlOb
 	return couo.AddNarrativeIDs(ids...)
 }
 
+// AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
+func (couo *ControlObjectiveUpdateOne) AddTaskIDs(ids ...string) *ControlObjectiveUpdateOne {
+	couo.mutation.AddTaskIDs(ids...)
+	return couo
+}
+
+// AddTasks adds the "tasks" edges to the Task entity.
+func (couo *ControlObjectiveUpdateOne) AddTasks(t ...*Task) *ControlObjectiveUpdateOne {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return couo.AddTaskIDs(ids...)
+}
+
 // Mutation returns the ControlObjectiveMutation object of the builder.
 func (couo *ControlObjectiveUpdateOne) Mutation() *ControlObjectiveMutation {
 	return couo.mutation
@@ -1664,6 +1764,27 @@ func (couo *ControlObjectiveUpdateOne) RemoveNarratives(n ...*Narrative) *Contro
 		ids[i] = n[i].ID
 	}
 	return couo.RemoveNarrativeIDs(ids...)
+}
+
+// ClearTasks clears all "tasks" edges to the Task entity.
+func (couo *ControlObjectiveUpdateOne) ClearTasks() *ControlObjectiveUpdateOne {
+	couo.mutation.ClearTasks()
+	return couo
+}
+
+// RemoveTaskIDs removes the "tasks" edge to Task entities by IDs.
+func (couo *ControlObjectiveUpdateOne) RemoveTaskIDs(ids ...string) *ControlObjectiveUpdateOne {
+	couo.mutation.RemoveTaskIDs(ids...)
+	return couo
+}
+
+// RemoveTasks removes "tasks" edges to Task entities.
+func (couo *ControlObjectiveUpdateOne) RemoveTasks(t ...*Task) *ControlObjectiveUpdateOne {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return couo.RemoveTaskIDs(ids...)
 }
 
 // Where appends a list predicates to the ControlObjectiveUpdate builder.
@@ -2188,6 +2309,54 @@ func (couo *ControlObjectiveUpdateOne) sqlSave(ctx context.Context) (_node *Cont
 			},
 		}
 		edge.Schema = couo.schemaConfig.ControlObjectiveNarratives
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if couo.mutation.TasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlobjective.TasksTable,
+			Columns: controlobjective.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = couo.schemaConfig.ControlObjectiveTasks
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := couo.mutation.RemovedTasksIDs(); len(nodes) > 0 && !couo.mutation.TasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlobjective.TasksTable,
+			Columns: controlobjective.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = couo.schemaConfig.ControlObjectiveTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := couo.mutation.TasksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlobjective.TasksTable,
+			Columns: controlobjective.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = couo.schemaConfig.ControlObjectiveTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

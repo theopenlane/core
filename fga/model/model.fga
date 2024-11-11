@@ -8,6 +8,12 @@ type user
     define can_delete: _self
     
 type service
+  relations
+    define _self: [service]
+    define can_view: _self
+    define can_edit: _self
+    define can_delete: _self
+
 type role
   relations
     define assignee: [user]
@@ -84,6 +90,18 @@ type control
     define can_edit: [user] or can_edit from parent
     define can_delete: [user] or can_delete from parent
     define parent: [program]
+type subcontrol
+  relations
+    define can_view: [user] or can_view from parent
+    define can_edit: [user] or can_edit from parent
+    define can_delete: [user] or can_delete from parent
+    define parent: [program]
+type control_objective
+  relations
+    define can_view: [user] or can_view from parent
+    define can_edit: [user] or can_edit from parent
+    define can_delete: [user] or can_delete from parent
+    define parent: [program]
 type policy
   relations
     define can_view: [user] or can_view from parent
@@ -114,3 +132,10 @@ type contact
     define can_edit: [user] or can_edit from parent
     define can_delete: [user] or can_delete from parent
     define parent: [organization]
+type task
+  relations
+    define can_view: [user, service] or assignee or can_delete or can_edit or can_view from parent
+    define can_edit: [user, service] or assignee or can_delete or can_edit from parent
+    define can_delete: [user, service] or can_delete from parent
+    define assignee: [user]
+    define parent: [user, service, program, organization, control, procedure, group, policy, subcontrol, control_objective]

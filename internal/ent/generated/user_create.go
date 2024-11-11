@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
@@ -512,6 +513,36 @@ func (uc *UserCreate) AddSubcontrols(s ...*Subcontrol) *UserCreate {
 		ids[i] = s[i].ID
 	}
 	return uc.AddSubcontrolIDs(ids...)
+}
+
+// AddAssignerTaskIDs adds the "assigner_tasks" edge to the Task entity by IDs.
+func (uc *UserCreate) AddAssignerTaskIDs(ids ...string) *UserCreate {
+	uc.mutation.AddAssignerTaskIDs(ids...)
+	return uc
+}
+
+// AddAssignerTasks adds the "assigner_tasks" edges to the Task entity.
+func (uc *UserCreate) AddAssignerTasks(t ...*Task) *UserCreate {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return uc.AddAssignerTaskIDs(ids...)
+}
+
+// AddAssigneeTaskIDs adds the "assignee_tasks" edge to the Task entity by IDs.
+func (uc *UserCreate) AddAssigneeTaskIDs(ids ...string) *UserCreate {
+	uc.mutation.AddAssigneeTaskIDs(ids...)
+	return uc
+}
+
+// AddAssigneeTasks adds the "assignee_tasks" edges to the Task entity.
+func (uc *UserCreate) AddAssigneeTasks(t ...*Task) *UserCreate {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return uc.AddAssigneeTaskIDs(ids...)
 }
 
 // AddGroupMembershipIDs adds the "group_memberships" edge to the GroupMembership entity by IDs.
@@ -1028,6 +1059,40 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = uc.schemaConfig.UserSubcontrols
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := uc.mutation.AssignerTasksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.AssignerTasksTable,
+			Columns: []string{user.AssignerTasksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = uc.schemaConfig.Task
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := uc.mutation.AssigneeTasksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.AssigneeTasksTable,
+			Columns: []string{user.AssigneeTasksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = uc.schemaConfig.Task
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -66,16 +66,19 @@ type InternalPolicyEdges struct {
 	Procedures []*Procedure `json:"procedures,omitempty"`
 	// Narratives holds the value of the narratives edge.
 	Narratives []*Narrative `json:"narratives,omitempty"`
+	// Tasks holds the value of the tasks edge.
+	Tasks []*Task `json:"tasks,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [4]bool
+	loadedTypes [5]bool
 	// totalCount holds the count of the edges above.
-	totalCount [4]map[string]int
+	totalCount [5]map[string]int
 
 	namedControlobjectives map[string][]*ControlObjective
 	namedControls          map[string][]*Control
 	namedProcedures        map[string][]*Procedure
 	namedNarratives        map[string][]*Narrative
+	namedTasks             map[string][]*Task
 }
 
 // ControlobjectivesOrErr returns the Controlobjectives value or an error if the edge
@@ -112,6 +115,15 @@ func (e InternalPolicyEdges) NarrativesOrErr() ([]*Narrative, error) {
 		return e.Narratives, nil
 	}
 	return nil, &NotLoadedError{edge: "narratives"}
+}
+
+// TasksOrErr returns the Tasks value or an error if the edge
+// was not loaded in eager-loading.
+func (e InternalPolicyEdges) TasksOrErr() ([]*Task, error) {
+	if e.loadedTypes[4] {
+		return e.Tasks, nil
+	}
+	return nil, &NotLoadedError{edge: "tasks"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -277,6 +289,11 @@ func (ip *InternalPolicy) QueryProcedures() *ProcedureQuery {
 // QueryNarratives queries the "narratives" edge of the InternalPolicy entity.
 func (ip *InternalPolicy) QueryNarratives() *NarrativeQuery {
 	return NewInternalPolicyClient(ip.config).QueryNarratives(ip)
+}
+
+// QueryTasks queries the "tasks" edge of the InternalPolicy entity.
+func (ip *InternalPolicy) QueryTasks() *TaskQuery {
+	return NewInternalPolicyClient(ip.config).QueryTasks(ip)
 }
 
 // Update returns a builder for updating this InternalPolicy.
@@ -446,6 +463,30 @@ func (ip *InternalPolicy) appendNamedNarratives(name string, edges ...*Narrative
 		ip.Edges.namedNarratives[name] = []*Narrative{}
 	} else {
 		ip.Edges.namedNarratives[name] = append(ip.Edges.namedNarratives[name], edges...)
+	}
+}
+
+// NamedTasks returns the Tasks named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (ip *InternalPolicy) NamedTasks(name string) ([]*Task, error) {
+	if ip.Edges.namedTasks == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := ip.Edges.namedTasks[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (ip *InternalPolicy) appendNamedTasks(name string, edges ...*Task) {
+	if ip.Edges.namedTasks == nil {
+		ip.Edges.namedTasks = make(map[string][]*Task)
+	}
+	if len(edges) == 0 {
+		ip.Edges.namedTasks[name] = []*Task{}
+	} else {
+		ip.Edges.namedTasks[name] = append(ip.Edges.namedTasks[name], edges...)
 	}
 }
 

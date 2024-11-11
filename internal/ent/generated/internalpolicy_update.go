@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/internal/ent/generated/task"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -326,6 +327,21 @@ func (ipu *InternalPolicyUpdate) AddNarratives(n ...*Narrative) *InternalPolicyU
 	return ipu.AddNarrativeIDs(ids...)
 }
 
+// AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
+func (ipu *InternalPolicyUpdate) AddTaskIDs(ids ...string) *InternalPolicyUpdate {
+	ipu.mutation.AddTaskIDs(ids...)
+	return ipu
+}
+
+// AddTasks adds the "tasks" edges to the Task entity.
+func (ipu *InternalPolicyUpdate) AddTasks(t ...*Task) *InternalPolicyUpdate {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return ipu.AddTaskIDs(ids...)
+}
+
 // Mutation returns the InternalPolicyMutation object of the builder.
 func (ipu *InternalPolicyUpdate) Mutation() *InternalPolicyMutation {
 	return ipu.mutation
@@ -413,6 +429,27 @@ func (ipu *InternalPolicyUpdate) RemoveNarratives(n ...*Narrative) *InternalPoli
 		ids[i] = n[i].ID
 	}
 	return ipu.RemoveNarrativeIDs(ids...)
+}
+
+// ClearTasks clears all "tasks" edges to the Task entity.
+func (ipu *InternalPolicyUpdate) ClearTasks() *InternalPolicyUpdate {
+	ipu.mutation.ClearTasks()
+	return ipu
+}
+
+// RemoveTaskIDs removes the "tasks" edge to Task entities by IDs.
+func (ipu *InternalPolicyUpdate) RemoveTaskIDs(ids ...string) *InternalPolicyUpdate {
+	ipu.mutation.RemoveTaskIDs(ids...)
+	return ipu
+}
+
+// RemoveTasks removes "tasks" edges to Task entities.
+func (ipu *InternalPolicyUpdate) RemoveTasks(t ...*Task) *InternalPolicyUpdate {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return ipu.RemoveTaskIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -747,6 +784,54 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if ipu.mutation.TasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.TasksTable,
+			Columns: internalpolicy.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipu.schemaConfig.InternalPolicyTasks
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ipu.mutation.RemovedTasksIDs(); len(nodes) > 0 && !ipu.mutation.TasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.TasksTable,
+			Columns: internalpolicy.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipu.schemaConfig.InternalPolicyTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ipu.mutation.TasksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.TasksTable,
+			Columns: internalpolicy.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipu.schemaConfig.InternalPolicyTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = ipu.schemaConfig.InternalPolicy
 	ctx = internal.NewSchemaConfigContext(ctx, ipu.schemaConfig)
 	_spec.AddModifiers(ipu.modifiers...)
@@ -1061,6 +1146,21 @@ func (ipuo *InternalPolicyUpdateOne) AddNarratives(n ...*Narrative) *InternalPol
 	return ipuo.AddNarrativeIDs(ids...)
 }
 
+// AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
+func (ipuo *InternalPolicyUpdateOne) AddTaskIDs(ids ...string) *InternalPolicyUpdateOne {
+	ipuo.mutation.AddTaskIDs(ids...)
+	return ipuo
+}
+
+// AddTasks adds the "tasks" edges to the Task entity.
+func (ipuo *InternalPolicyUpdateOne) AddTasks(t ...*Task) *InternalPolicyUpdateOne {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return ipuo.AddTaskIDs(ids...)
+}
+
 // Mutation returns the InternalPolicyMutation object of the builder.
 func (ipuo *InternalPolicyUpdateOne) Mutation() *InternalPolicyMutation {
 	return ipuo.mutation
@@ -1148,6 +1248,27 @@ func (ipuo *InternalPolicyUpdateOne) RemoveNarratives(n ...*Narrative) *Internal
 		ids[i] = n[i].ID
 	}
 	return ipuo.RemoveNarrativeIDs(ids...)
+}
+
+// ClearTasks clears all "tasks" edges to the Task entity.
+func (ipuo *InternalPolicyUpdateOne) ClearTasks() *InternalPolicyUpdateOne {
+	ipuo.mutation.ClearTasks()
+	return ipuo
+}
+
+// RemoveTaskIDs removes the "tasks" edge to Task entities by IDs.
+func (ipuo *InternalPolicyUpdateOne) RemoveTaskIDs(ids ...string) *InternalPolicyUpdateOne {
+	ipuo.mutation.RemoveTaskIDs(ids...)
+	return ipuo
+}
+
+// RemoveTasks removes "tasks" edges to Task entities.
+func (ipuo *InternalPolicyUpdateOne) RemoveTasks(t ...*Task) *InternalPolicyUpdateOne {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return ipuo.RemoveTaskIDs(ids...)
 }
 
 // Where appends a list predicates to the InternalPolicyUpdate builder.
@@ -1507,6 +1628,54 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 			},
 		}
 		edge.Schema = ipuo.schemaConfig.InternalPolicyNarratives
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ipuo.mutation.TasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.TasksTable,
+			Columns: internalpolicy.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipuo.schemaConfig.InternalPolicyTasks
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ipuo.mutation.RemovedTasksIDs(); len(nodes) > 0 && !ipuo.mutation.TasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.TasksTable,
+			Columns: internalpolicy.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipuo.schemaConfig.InternalPolicyTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ipuo.mutation.TasksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.TasksTable,
+			Columns: internalpolicy.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipuo.schemaConfig.InternalPolicyTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

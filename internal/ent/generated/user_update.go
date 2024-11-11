@@ -24,6 +24,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
@@ -558,6 +559,36 @@ func (uu *UserUpdate) AddSubcontrols(s ...*Subcontrol) *UserUpdate {
 	return uu.AddSubcontrolIDs(ids...)
 }
 
+// AddAssignerTaskIDs adds the "assigner_tasks" edge to the Task entity by IDs.
+func (uu *UserUpdate) AddAssignerTaskIDs(ids ...string) *UserUpdate {
+	uu.mutation.AddAssignerTaskIDs(ids...)
+	return uu
+}
+
+// AddAssignerTasks adds the "assigner_tasks" edges to the Task entity.
+func (uu *UserUpdate) AddAssignerTasks(t ...*Task) *UserUpdate {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return uu.AddAssignerTaskIDs(ids...)
+}
+
+// AddAssigneeTaskIDs adds the "assignee_tasks" edge to the Task entity by IDs.
+func (uu *UserUpdate) AddAssigneeTaskIDs(ids ...string) *UserUpdate {
+	uu.mutation.AddAssigneeTaskIDs(ids...)
+	return uu
+}
+
+// AddAssigneeTasks adds the "assignee_tasks" edges to the Task entity.
+func (uu *UserUpdate) AddAssigneeTasks(t ...*Task) *UserUpdate {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return uu.AddAssigneeTaskIDs(ids...)
+}
+
 // AddGroupMembershipIDs adds the "group_memberships" edge to the GroupMembership entity by IDs.
 func (uu *UserUpdate) AddGroupMembershipIDs(ids ...string) *UserUpdate {
 	uu.mutation.AddGroupMembershipIDs(ids...)
@@ -834,6 +865,48 @@ func (uu *UserUpdate) RemoveSubcontrols(s ...*Subcontrol) *UserUpdate {
 		ids[i] = s[i].ID
 	}
 	return uu.RemoveSubcontrolIDs(ids...)
+}
+
+// ClearAssignerTasks clears all "assigner_tasks" edges to the Task entity.
+func (uu *UserUpdate) ClearAssignerTasks() *UserUpdate {
+	uu.mutation.ClearAssignerTasks()
+	return uu
+}
+
+// RemoveAssignerTaskIDs removes the "assigner_tasks" edge to Task entities by IDs.
+func (uu *UserUpdate) RemoveAssignerTaskIDs(ids ...string) *UserUpdate {
+	uu.mutation.RemoveAssignerTaskIDs(ids...)
+	return uu
+}
+
+// RemoveAssignerTasks removes "assigner_tasks" edges to Task entities.
+func (uu *UserUpdate) RemoveAssignerTasks(t ...*Task) *UserUpdate {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return uu.RemoveAssignerTaskIDs(ids...)
+}
+
+// ClearAssigneeTasks clears all "assignee_tasks" edges to the Task entity.
+func (uu *UserUpdate) ClearAssigneeTasks() *UserUpdate {
+	uu.mutation.ClearAssigneeTasks()
+	return uu
+}
+
+// RemoveAssigneeTaskIDs removes the "assignee_tasks" edge to Task entities by IDs.
+func (uu *UserUpdate) RemoveAssigneeTaskIDs(ids ...string) *UserUpdate {
+	uu.mutation.RemoveAssigneeTaskIDs(ids...)
+	return uu
+}
+
+// RemoveAssigneeTasks removes "assignee_tasks" edges to Task entities.
+func (uu *UserUpdate) RemoveAssigneeTasks(t ...*Task) *UserUpdate {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return uu.RemoveAssigneeTaskIDs(ids...)
 }
 
 // ClearGroupMemberships clears all "group_memberships" edges to the GroupMembership entity.
@@ -1736,6 +1809,102 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if uu.mutation.AssignerTasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.AssignerTasksTable,
+			Columns: []string{user.AssignerTasksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = uu.schemaConfig.Task
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uu.mutation.RemovedAssignerTasksIDs(); len(nodes) > 0 && !uu.mutation.AssignerTasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.AssignerTasksTable,
+			Columns: []string{user.AssignerTasksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = uu.schemaConfig.Task
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uu.mutation.AssignerTasksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.AssignerTasksTable,
+			Columns: []string{user.AssignerTasksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = uu.schemaConfig.Task
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if uu.mutation.AssigneeTasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.AssigneeTasksTable,
+			Columns: []string{user.AssigneeTasksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = uu.schemaConfig.Task
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uu.mutation.RemovedAssigneeTasksIDs(); len(nodes) > 0 && !uu.mutation.AssigneeTasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.AssigneeTasksTable,
+			Columns: []string{user.AssigneeTasksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = uu.schemaConfig.Task
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uu.mutation.AssigneeTasksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.AssigneeTasksTable,
+			Columns: []string{user.AssigneeTasksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = uu.schemaConfig.Task
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if uu.mutation.GroupMembershipsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -2367,6 +2536,36 @@ func (uuo *UserUpdateOne) AddSubcontrols(s ...*Subcontrol) *UserUpdateOne {
 	return uuo.AddSubcontrolIDs(ids...)
 }
 
+// AddAssignerTaskIDs adds the "assigner_tasks" edge to the Task entity by IDs.
+func (uuo *UserUpdateOne) AddAssignerTaskIDs(ids ...string) *UserUpdateOne {
+	uuo.mutation.AddAssignerTaskIDs(ids...)
+	return uuo
+}
+
+// AddAssignerTasks adds the "assigner_tasks" edges to the Task entity.
+func (uuo *UserUpdateOne) AddAssignerTasks(t ...*Task) *UserUpdateOne {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return uuo.AddAssignerTaskIDs(ids...)
+}
+
+// AddAssigneeTaskIDs adds the "assignee_tasks" edge to the Task entity by IDs.
+func (uuo *UserUpdateOne) AddAssigneeTaskIDs(ids ...string) *UserUpdateOne {
+	uuo.mutation.AddAssigneeTaskIDs(ids...)
+	return uuo
+}
+
+// AddAssigneeTasks adds the "assignee_tasks" edges to the Task entity.
+func (uuo *UserUpdateOne) AddAssigneeTasks(t ...*Task) *UserUpdateOne {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return uuo.AddAssigneeTaskIDs(ids...)
+}
+
 // AddGroupMembershipIDs adds the "group_memberships" edge to the GroupMembership entity by IDs.
 func (uuo *UserUpdateOne) AddGroupMembershipIDs(ids ...string) *UserUpdateOne {
 	uuo.mutation.AddGroupMembershipIDs(ids...)
@@ -2643,6 +2842,48 @@ func (uuo *UserUpdateOne) RemoveSubcontrols(s ...*Subcontrol) *UserUpdateOne {
 		ids[i] = s[i].ID
 	}
 	return uuo.RemoveSubcontrolIDs(ids...)
+}
+
+// ClearAssignerTasks clears all "assigner_tasks" edges to the Task entity.
+func (uuo *UserUpdateOne) ClearAssignerTasks() *UserUpdateOne {
+	uuo.mutation.ClearAssignerTasks()
+	return uuo
+}
+
+// RemoveAssignerTaskIDs removes the "assigner_tasks" edge to Task entities by IDs.
+func (uuo *UserUpdateOne) RemoveAssignerTaskIDs(ids ...string) *UserUpdateOne {
+	uuo.mutation.RemoveAssignerTaskIDs(ids...)
+	return uuo
+}
+
+// RemoveAssignerTasks removes "assigner_tasks" edges to Task entities.
+func (uuo *UserUpdateOne) RemoveAssignerTasks(t ...*Task) *UserUpdateOne {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return uuo.RemoveAssignerTaskIDs(ids...)
+}
+
+// ClearAssigneeTasks clears all "assignee_tasks" edges to the Task entity.
+func (uuo *UserUpdateOne) ClearAssigneeTasks() *UserUpdateOne {
+	uuo.mutation.ClearAssigneeTasks()
+	return uuo
+}
+
+// RemoveAssigneeTaskIDs removes the "assignee_tasks" edge to Task entities by IDs.
+func (uuo *UserUpdateOne) RemoveAssigneeTaskIDs(ids ...string) *UserUpdateOne {
+	uuo.mutation.RemoveAssigneeTaskIDs(ids...)
+	return uuo
+}
+
+// RemoveAssigneeTasks removes "assignee_tasks" edges to Task entities.
+func (uuo *UserUpdateOne) RemoveAssigneeTasks(t ...*Task) *UserUpdateOne {
+	ids := make([]string, len(t))
+	for i := range t {
+		ids[i] = t[i].ID
+	}
+	return uuo.RemoveAssigneeTaskIDs(ids...)
 }
 
 // ClearGroupMemberships clears all "group_memberships" edges to the GroupMembership entity.
@@ -3570,6 +3811,102 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 			},
 		}
 		edge.Schema = uuo.schemaConfig.UserSubcontrols
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if uuo.mutation.AssignerTasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.AssignerTasksTable,
+			Columns: []string{user.AssignerTasksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = uuo.schemaConfig.Task
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uuo.mutation.RemovedAssignerTasksIDs(); len(nodes) > 0 && !uuo.mutation.AssignerTasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.AssignerTasksTable,
+			Columns: []string{user.AssignerTasksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = uuo.schemaConfig.Task
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uuo.mutation.AssignerTasksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.AssignerTasksTable,
+			Columns: []string{user.AssignerTasksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = uuo.schemaConfig.Task
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if uuo.mutation.AssigneeTasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.AssigneeTasksTable,
+			Columns: []string{user.AssigneeTasksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = uuo.schemaConfig.Task
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uuo.mutation.RemovedAssigneeTasksIDs(); len(nodes) > 0 && !uuo.mutation.AssigneeTasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.AssigneeTasksTable,
+			Columns: []string{user.AssigneeTasksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = uuo.schemaConfig.Task
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uuo.mutation.AssigneeTasksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.AssigneeTasksTable,
+			Columns: []string{user.AssigneeTasksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = uuo.schemaConfig.Task
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

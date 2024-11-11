@@ -76,6 +76,7 @@ func (Subcontrol) Edges() []ent.Edge {
 			Ref("subcontrols"),
 		edge.From("user", User.Type).
 			Ref("subcontrols"),
+		edge.To("tasks", Task.Type),
 		edge.From("notes", Note.Type).
 			Unique().
 			Ref("subcontrols"),
