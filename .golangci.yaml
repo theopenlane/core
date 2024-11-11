@@ -2,6 +2,7 @@ run:
   timeout: 15m
   allow-serial-runners: true
   concurrency: 0
+  tests: false
 linters-settings:
   goimports:
     local-prefixes: github.com/theopenlane/core
@@ -13,29 +14,30 @@ linters-settings:
     ignore-generated-header: true
 linters:
   enable:
+    # default linters
+    - errcheck 
+    - gosimple
+    - govet
+    - ineffassign
+    - staticcheck
+    - unused
+    # additional linters
     - bodyclose
-    - errcheck
     - gocritic
     - gocyclo
     - err113
     - gofmt
     - goimports
     - mnd
-    - gosimple
-    - govet
     - gosec
-    - ineffassign
     - misspell
     - noctx
     - revive
-    - staticcheck
     - stylecheck
     - typecheck
-    - unused
     - whitespace
     - wsl
 issues:
-  fix: true
   exclude-use-default: true
   exclude-dirs:
     - pkg/testutils/*
@@ -55,3 +57,5 @@ issues:
     - internal/graphapi/gen_models.go
     - internal/openlaneclient/graphclient.go
     - pkg/openlaneclient/graphclient.go
+output:
+  show-stats: true
