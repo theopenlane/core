@@ -147,6 +147,7 @@ type SchemaConfig struct {
 	UserEvents                       string // User-events->Event table.
 	UserActionplans                  string // User-actionplans->ActionPlan table.
 	UserSubcontrols                  string // User-subcontrols->Subcontrol table.
+	UserPrograms                     string // User-programs->Program table.
 	UserHistory                      string // UserHistory table.
 	UserSetting                      string // UserSetting table.
 	UserSettingFiles                 string // UserSetting-files->File table.

@@ -96,6 +96,8 @@ func (Program) Edges() []ent.Edge {
 		edge.From("standards", Standard.Type).
 			Ref("programs").
 			Comment("the framework(s) that the program is based on"),
+		edge.From("users", User.Type).
+			Ref("programs"),
 	}
 }
 

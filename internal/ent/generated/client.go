@@ -12396,6 +12396,25 @@ func (c *ProgramClient) QueryStandards(pr *Program) *StandardQuery {
 	return query
 }
 
+// QueryUsers queries the users edge of a Program.
+func (c *ProgramClient) QueryUsers(pr *Program) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(program.Table, program.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, program.UsersTable, program.UsersPrimaryKey...),
+		)
+		schemaConfig := pr.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.UserPrograms
+		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *ProgramClient) Hooks() []Hook {
 	hooks := c.hooks.Program
@@ -15127,6 +15146,25 @@ func (c *UserClient) QueryAssigneeTasks(u *User) *TaskQuery {
 		schemaConfig := u.schemaConfig
 		step.To.Schema = schemaConfig.Task
 		step.Edge.Schema = schemaConfig.Task
+		fromV = sqlgraph.Neighbors(u.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPrograms queries the programs edge of a User.
+func (c *UserClient) QueryPrograms(u *User) *ProgramQuery {
+	query := (&ProgramClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := u.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, id),
+			sqlgraph.To(program.Table, program.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, user.ProgramsTable, user.ProgramsPrimaryKey...),
+		)
+		schemaConfig := u.schemaConfig
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.UserPrograms
 		fromV = sqlgraph.Neighbors(u.driver.Dialect(), step)
 		return fromV, nil
 	}

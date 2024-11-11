@@ -90,6 +90,8 @@ const (
 	EdgeAssignerTasks = "assigner_tasks"
 	// EdgeAssigneeTasks holds the string denoting the assignee_tasks edge name in mutations.
 	EdgeAssigneeTasks = "assignee_tasks"
+	// EdgePrograms holds the string denoting the programs edge name in mutations.
+	EdgePrograms = "programs"
 	// EdgeGroupMemberships holds the string denoting the group_memberships edge name in mutations.
 	EdgeGroupMemberships = "group_memberships"
 	// EdgeOrgMemberships holds the string denoting the org_memberships edge name in mutations.
@@ -189,6 +191,11 @@ const (
 	AssigneeTasksInverseTable = "tasks"
 	// AssigneeTasksColumn is the table column denoting the assignee_tasks relation/edge.
 	AssigneeTasksColumn = "user_assignee_tasks"
+	// ProgramsTable is the table that holds the programs relation/edge. The primary key declared below.
+	ProgramsTable = "user_programs"
+	// ProgramsInverseTable is the table name for the Program entity.
+	// It exists in this package in order to avoid circular dependency with the "program" package.
+	ProgramsInverseTable = "programs"
 	// GroupMembershipsTable is the table that holds the group_memberships relation/edge.
 	GroupMembershipsTable = "group_memberships"
 	// GroupMembershipsInverseTable is the table name for the GroupMembership entity.
@@ -250,6 +257,9 @@ var (
 	// SubcontrolsPrimaryKey and SubcontrolsColumn2 are the table columns denoting the
 	// primary key for the subcontrols relation (M2M).
 	SubcontrolsPrimaryKey = []string{"user_id", "subcontrol_id"}
+	// ProgramsPrimaryKey and ProgramsColumn2 are the table columns denoting the
+	// primary key for the programs relation (M2M).
+	ProgramsPrimaryKey = []string{"user_id", "program_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -629,6 +639,20 @@ func ByAssigneeTasks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByProgramsCount orders the results by programs count.
+func ByProgramsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newProgramsStep(), opts...)
+	}
+}
+
+// ByPrograms orders the results by programs terms.
+func ByPrograms(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newProgramsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByGroupMembershipsCount orders the results by group_memberships count.
 func ByGroupMembershipsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -759,6 +783,13 @@ func newAssigneeTasksStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(AssigneeTasksInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, AssigneeTasksTable, AssigneeTasksColumn),
+	)
+}
+func newProgramsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ProgramsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, ProgramsTable, ProgramsPrimaryKey...),
 	)
 }
 func newGroupMembershipsStep() *sqlgraph.Step {

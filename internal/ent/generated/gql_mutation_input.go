@@ -5421,6 +5421,7 @@ type CreateProgramInput struct {
 	NarrativeIDs         []string
 	ActionplanIDs        []string
 	StandardIDs          []string
+	UserIDs              []string
 }
 
 // Mutate applies the CreateProgramInput on the ProgramMutation builder.
@@ -5487,6 +5488,9 @@ func (i *CreateProgramInput) Mutate(m *ProgramMutation) {
 	if v := i.StandardIDs; len(v) > 0 {
 		m.AddStandardIDs(v...)
 	}
+	if v := i.UserIDs; len(v) > 0 {
+		m.AddUserIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateProgramInput on the ProgramCreate builder.
@@ -5548,6 +5552,9 @@ type UpdateProgramInput struct {
 	ClearStandards            bool
 	AddStandardIDs            []string
 	RemoveStandardIDs         []string
+	ClearUsers                bool
+	AddUserIDs                []string
+	RemoveUserIDs             []string
 }
 
 // Mutate applies the UpdateProgramInput on the ProgramMutation builder.
@@ -5704,6 +5711,15 @@ func (i *UpdateProgramInput) Mutate(m *ProgramMutation) {
 	}
 	if v := i.RemoveStandardIDs; len(v) > 0 {
 		m.RemoveStandardIDs(v...)
+	}
+	if i.ClearUsers {
+		m.ClearUsers()
+	}
+	if v := i.AddUserIDs; len(v) > 0 {
+		m.AddUserIDs(v...)
+	}
+	if v := i.RemoveUserIDs; len(v) > 0 {
+		m.RemoveUserIDs(v...)
 	}
 }
 
@@ -7097,6 +7113,7 @@ type CreateUserInput struct {
 	SubcontrolIDs             []string
 	AssignerTaskIDs           []string
 	AssigneeTaskIDs           []string
+	ProgramIDs                []string
 }
 
 // Mutate applies the CreateUserInput on the UserMutation builder.
@@ -7179,6 +7196,9 @@ func (i *CreateUserInput) Mutate(m *UserMutation) {
 	if v := i.AssigneeTaskIDs; len(v) > 0 {
 		m.AddAssigneeTaskIDs(v...)
 	}
+	if v := i.ProgramIDs; len(v) > 0 {
+		m.AddProgramIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateUserInput on the UserCreate builder.
@@ -7255,6 +7275,9 @@ type UpdateUserInput struct {
 	ClearAssigneeTasks              bool
 	AddAssigneeTaskIDs              []string
 	RemoveAssigneeTaskIDs           []string
+	ClearPrograms                   bool
+	AddProgramIDs                   []string
+	RemoveProgramIDs                []string
 }
 
 // Mutate applies the UpdateUserInput on the UserMutation builder.
@@ -7456,6 +7479,15 @@ func (i *UpdateUserInput) Mutate(m *UserMutation) {
 	}
 	if v := i.RemoveAssigneeTaskIDs; len(v) > 0 {
 		m.RemoveAssigneeTaskIDs(v...)
+	}
+	if i.ClearPrograms {
+		m.ClearPrograms()
+	}
+	if v := i.AddProgramIDs; len(v) > 0 {
+		m.AddProgramIDs(v...)
+	}
+	if v := i.RemoveProgramIDs; len(v) > 0 {
+		m.RemoveProgramIDs(v...)
 	}
 }
 

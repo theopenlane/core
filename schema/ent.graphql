@@ -4476,6 +4476,7 @@ input CreateProgramInput {
   narrativeIDs: [ID!]
   actionplanIDs: [ID!]
   standardIDs: [ID!]
+  userIDs: [ID!]
 }
 """
 CreateRiskInput is used for create Risk object.
@@ -4840,6 +4841,7 @@ input CreateUserInput {
   subcontrolIDs: [ID!]
   assignerTaskIDs: [ID!]
   assigneeTaskIDs: [ID!]
+  programIDs: [ID!]
 }
 """
 CreateUserSettingInput is used for create UserSetting object.
@@ -19013,6 +19015,7 @@ type Program implements Node {
   the framework(s) that the program is based on
   """
   standards: [Standard!]
+  users: [User!]
 }
 """
 A connection to a list of items.
@@ -19680,6 +19683,11 @@ input ProgramWhereInput {
   """
   hasStandards: Boolean
   hasStandardsWith: [StandardWhereInput!]
+  """
+  users edge predicates
+  """
+  hasUsers: Boolean
+  hasUsersWith: [UserWhereInput!]
 }
 type Query {
   """
@@ -27584,6 +27592,9 @@ input UpdateProgramInput {
   addStandardIDs: [ID!]
   removeStandardIDs: [ID!]
   clearStandards: Boolean
+  addUserIDs: [ID!]
+  removeUserIDs: [ID!]
+  clearUsers: Boolean
 }
 """
 UpdateRiskInput is used for update Risk object.
@@ -28096,6 +28107,9 @@ input UpdateUserInput {
   addAssigneeTaskIDs: [ID!]
   removeAssigneeTaskIDs: [ID!]
   clearAssigneeTasks: Boolean
+  addProgramIDs: [ID!]
+  removeProgramIDs: [ID!]
+  clearPrograms: Boolean
 }
 """
 UpdateUserSettingInput is used for update UserSetting object.
@@ -28263,6 +28277,7 @@ type User implements Node {
   subcontrols: [Subcontrol!]
   assignerTasks: [Task!]
   assigneeTasks: [Task!]
+  programs: [Program!]
   groupMemberships: [GroupMembership!]
   orgMemberships: [OrgMembership!]
 }
@@ -29766,6 +29781,11 @@ input UserWhereInput {
   """
   hasAssigneeTasks: Boolean
   hasAssigneeTasksWith: [TaskWhereInput!]
+  """
+  programs edge predicates
+  """
+  hasPrograms: Boolean
+  hasProgramsWith: [ProgramWhereInput!]
   """
   group_memberships edge predicates
   """

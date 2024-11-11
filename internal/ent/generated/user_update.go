@@ -23,6 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
@@ -589,6 +590,21 @@ func (uu *UserUpdate) AddAssigneeTasks(t ...*Task) *UserUpdate {
 	return uu.AddAssigneeTaskIDs(ids...)
 }
 
+// AddProgramIDs adds the "programs" edge to the Program entity by IDs.
+func (uu *UserUpdate) AddProgramIDs(ids ...string) *UserUpdate {
+	uu.mutation.AddProgramIDs(ids...)
+	return uu
+}
+
+// AddPrograms adds the "programs" edges to the Program entity.
+func (uu *UserUpdate) AddPrograms(p ...*Program) *UserUpdate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return uu.AddProgramIDs(ids...)
+}
+
 // AddGroupMembershipIDs adds the "group_memberships" edge to the GroupMembership entity by IDs.
 func (uu *UserUpdate) AddGroupMembershipIDs(ids ...string) *UserUpdate {
 	uu.mutation.AddGroupMembershipIDs(ids...)
@@ -907,6 +923,27 @@ func (uu *UserUpdate) RemoveAssigneeTasks(t ...*Task) *UserUpdate {
 		ids[i] = t[i].ID
 	}
 	return uu.RemoveAssigneeTaskIDs(ids...)
+}
+
+// ClearPrograms clears all "programs" edges to the Program entity.
+func (uu *UserUpdate) ClearPrograms() *UserUpdate {
+	uu.mutation.ClearPrograms()
+	return uu
+}
+
+// RemoveProgramIDs removes the "programs" edge to Program entities by IDs.
+func (uu *UserUpdate) RemoveProgramIDs(ids ...string) *UserUpdate {
+	uu.mutation.RemoveProgramIDs(ids...)
+	return uu
+}
+
+// RemovePrograms removes "programs" edges to Program entities.
+func (uu *UserUpdate) RemovePrograms(p ...*Program) *UserUpdate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return uu.RemoveProgramIDs(ids...)
 }
 
 // ClearGroupMemberships clears all "group_memberships" edges to the GroupMembership entity.
@@ -1905,6 +1942,54 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if uu.mutation.ProgramsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   user.ProgramsTable,
+			Columns: user.ProgramsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = uu.schemaConfig.UserPrograms
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uu.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !uu.mutation.ProgramsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   user.ProgramsTable,
+			Columns: user.ProgramsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = uu.schemaConfig.UserPrograms
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uu.mutation.ProgramsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   user.ProgramsTable,
+			Columns: user.ProgramsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = uu.schemaConfig.UserPrograms
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if uu.mutation.GroupMembershipsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -2566,6 +2651,21 @@ func (uuo *UserUpdateOne) AddAssigneeTasks(t ...*Task) *UserUpdateOne {
 	return uuo.AddAssigneeTaskIDs(ids...)
 }
 
+// AddProgramIDs adds the "programs" edge to the Program entity by IDs.
+func (uuo *UserUpdateOne) AddProgramIDs(ids ...string) *UserUpdateOne {
+	uuo.mutation.AddProgramIDs(ids...)
+	return uuo
+}
+
+// AddPrograms adds the "programs" edges to the Program entity.
+func (uuo *UserUpdateOne) AddPrograms(p ...*Program) *UserUpdateOne {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return uuo.AddProgramIDs(ids...)
+}
+
 // AddGroupMembershipIDs adds the "group_memberships" edge to the GroupMembership entity by IDs.
 func (uuo *UserUpdateOne) AddGroupMembershipIDs(ids ...string) *UserUpdateOne {
 	uuo.mutation.AddGroupMembershipIDs(ids...)
@@ -2884,6 +2984,27 @@ func (uuo *UserUpdateOne) RemoveAssigneeTasks(t ...*Task) *UserUpdateOne {
 		ids[i] = t[i].ID
 	}
 	return uuo.RemoveAssigneeTaskIDs(ids...)
+}
+
+// ClearPrograms clears all "programs" edges to the Program entity.
+func (uuo *UserUpdateOne) ClearPrograms() *UserUpdateOne {
+	uuo.mutation.ClearPrograms()
+	return uuo
+}
+
+// RemoveProgramIDs removes the "programs" edge to Program entities by IDs.
+func (uuo *UserUpdateOne) RemoveProgramIDs(ids ...string) *UserUpdateOne {
+	uuo.mutation.RemoveProgramIDs(ids...)
+	return uuo
+}
+
+// RemovePrograms removes "programs" edges to Program entities.
+func (uuo *UserUpdateOne) RemovePrograms(p ...*Program) *UserUpdateOne {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return uuo.RemoveProgramIDs(ids...)
 }
 
 // ClearGroupMemberships clears all "group_memberships" edges to the GroupMembership entity.
@@ -3907,6 +4028,54 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 			},
 		}
 		edge.Schema = uuo.schemaConfig.Task
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if uuo.mutation.ProgramsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   user.ProgramsTable,
+			Columns: user.ProgramsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = uuo.schemaConfig.UserPrograms
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uuo.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !uuo.mutation.ProgramsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   user.ProgramsTable,
+			Columns: user.ProgramsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = uuo.schemaConfig.UserPrograms
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uuo.mutation.ProgramsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   user.ProgramsTable,
+			Columns: user.ProgramsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = uuo.schemaConfig.UserPrograms
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

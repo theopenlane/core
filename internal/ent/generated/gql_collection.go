@@ -10368,6 +10368,19 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			pr.WithNamedStandards(alias, func(wq *StandardQuery) {
 				*wq = *query
 			})
+
+		case "users":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&UserClient{config: pr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+				return err
+			}
+			pr.WithNamedUsers(alias, func(wq *UserQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[program.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, program.FieldCreatedAt)
@@ -13024,6 +13037,19 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				return err
 			}
 			u.WithNamedAssigneeTasks(alias, func(wq *TaskQuery) {
+				*wq = *query
+			})
+
+		case "programs":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ProgramClient{config: u.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, programImplementors)...); err != nil {
+				return err
+			}
+			u.WithNamedPrograms(alias, func(wq *ProgramQuery) {
 				*wq = *query
 			})
 

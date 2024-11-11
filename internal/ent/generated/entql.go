@@ -4605,6 +4605,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Standard",
 	)
 	graph.MustAddE(
+		"users",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   program.UsersTable,
+			Columns: program.UsersPrimaryKey,
+			Bidi:    false,
+		},
+		"Program",
+		"User",
+	)
+	graph.MustAddE(
 		"control",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -5143,6 +5155,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"User",
 		"Task",
+	)
+	graph.MustAddE(
+		"programs",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   user.ProgramsTable,
+			Columns: user.ProgramsPrimaryKey,
+			Bidi:    false,
+		},
+		"User",
+		"Program",
 	)
 	graph.MustAddE(
 		"group_memberships",
@@ -14754,6 +14778,20 @@ func (f *ProgramFilter) WhereHasStandardsWith(preds ...predicate.Standard) {
 	})))
 }
 
+// WhereHasUsers applies a predicate to check if query has an edge users.
+func (f *ProgramFilter) WhereHasUsers() {
+	f.Where(entql.HasEdge("users"))
+}
+
+// WhereHasUsersWith applies a predicate to check if query has an edge users with a given conditions (other predicates).
+func (f *ProgramFilter) WhereHasUsersWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("users", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // addPredicate implements the predicateAdder interface.
 func (phq *ProgramHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
 	phq.predicates = append(phq.predicates, pred)
@@ -17258,6 +17296,20 @@ func (f *UserFilter) WhereHasAssigneeTasks() {
 // WhereHasAssigneeTasksWith applies a predicate to check if query has an edge assignee_tasks with a given conditions (other predicates).
 func (f *UserFilter) WhereHasAssigneeTasksWith(preds ...predicate.Task) {
 	f.Where(entql.HasEdgeWith("assignee_tasks", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasPrograms applies a predicate to check if query has an edge programs.
+func (f *UserFilter) WhereHasPrograms() {
+	f.Where(entql.HasEdge("programs"))
+}
+
+// WhereHasProgramsWith applies a predicate to check if query has an edge programs with a given conditions (other predicates).
+func (f *UserFilter) WhereHasProgramsWith(preds ...predicate.Program) {
+	f.Where(entql.HasEdgeWith("programs", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

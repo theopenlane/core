@@ -48047,6 +48047,10 @@ type ProgramWhereInput struct {
 	// "standards" edge predicates.
 	HasStandards     *bool                 `json:"hasStandards,omitempty"`
 	HasStandardsWith []*StandardWhereInput `json:"hasStandardsWith,omitempty"`
+
+	// "users" edge predicates.
+	HasUsers     *bool             `json:"hasUsers,omitempty"`
+	HasUsersWith []*UserWhereInput `json:"hasUsersWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -48822,6 +48826,24 @@ func (i *ProgramWhereInput) P() (predicate.Program, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, program.HasStandardsWith(with...))
+	}
+	if i.HasUsers != nil {
+		p := program.HasUsers()
+		if !*i.HasUsers {
+			p = program.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasUsersWith) > 0 {
+		with := make([]predicate.User, 0, len(i.HasUsersWith))
+		for _, w := range i.HasUsersWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasUsersWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, program.HasUsersWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -61538,6 +61560,10 @@ type UserWhereInput struct {
 	HasAssigneeTasks     *bool             `json:"hasAssigneeTasks,omitempty"`
 	HasAssigneeTasksWith []*TaskWhereInput `json:"hasAssigneeTasksWith,omitempty"`
 
+	// "programs" edge predicates.
+	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
+	HasProgramsWith []*ProgramWhereInput `json:"hasProgramsWith,omitempty"`
+
 	// "group_memberships" edge predicates.
 	HasGroupMemberships     *bool                        `json:"hasGroupMemberships,omitempty"`
 	HasGroupMembershipsWith []*GroupMembershipWhereInput `json:"hasGroupMembershipsWith,omitempty"`
@@ -62572,6 +62598,24 @@ func (i *UserWhereInput) P() (predicate.User, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, user.HasAssigneeTasksWith(with...))
+	}
+	if i.HasPrograms != nil {
+		p := user.HasPrograms()
+		if !*i.HasPrograms {
+			p = user.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasProgramsWith) > 0 {
+		with := make([]predicate.Program, 0, len(i.HasProgramsWith))
+		for _, w := range i.HasProgramsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasProgramsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, user.HasProgramsWith(with...))
 	}
 	if i.HasGroupMemberships != nil {
 		p := user.HasGroupMemberships()

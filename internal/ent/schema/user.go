@@ -180,6 +180,7 @@ func (User) Edges() []ent.Edge {
 		edge.To("subcontrols", Subcontrol.Type),
 		edge.To("assigner_tasks", Task.Type),
 		edge.To("assignee_tasks", Task.Type),
+		edge.To("programs", Program.Type),
 	}
 }
 

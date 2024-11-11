@@ -4616,6 +4616,31 @@ var (
 			},
 		},
 	}
+	// UserProgramsColumns holds the columns for the "user_programs" table.
+	UserProgramsColumns = []*schema.Column{
+		{Name: "user_id", Type: field.TypeString},
+		{Name: "program_id", Type: field.TypeString},
+	}
+	// UserProgramsTable holds the schema information for the "user_programs" table.
+	UserProgramsTable = &schema.Table{
+		Name:       "user_programs",
+		Columns:    UserProgramsColumns,
+		PrimaryKey: []*schema.Column{UserProgramsColumns[0], UserProgramsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "user_programs_user_id",
+				Columns:    []*schema.Column{UserProgramsColumns[0]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "user_programs_program_id",
+				Columns:    []*schema.Column{UserProgramsColumns[1]},
+				RefColumns: []*schema.Column{ProgramsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// UserSettingFilesColumns holds the columns for the "user_setting_files" table.
 	UserSettingFilesColumns = []*schema.Column{
 		{Name: "user_setting_id", Type: field.TypeString},
@@ -4814,6 +4839,7 @@ var (
 		UserEventsTable,
 		UserActionplansTable,
 		UserSubcontrolsTable,
+		UserProgramsTable,
 		UserSettingFilesTable,
 		WebhookEventsTable,
 	}
@@ -5111,6 +5137,8 @@ func init() {
 	UserActionplansTable.ForeignKeys[1].RefTable = ActionPlansTable
 	UserSubcontrolsTable.ForeignKeys[0].RefTable = UsersTable
 	UserSubcontrolsTable.ForeignKeys[1].RefTable = SubcontrolsTable
+	UserProgramsTable.ForeignKeys[0].RefTable = UsersTable
+	UserProgramsTable.ForeignKeys[1].RefTable = ProgramsTable
 	UserSettingFilesTable.ForeignKeys[0].RefTable = UserSettingsTable
 	UserSettingFilesTable.ForeignKeys[1].RefTable = FilesTable
 	WebhookEventsTable.ForeignKeys[0].RefTable = WebhooksTable

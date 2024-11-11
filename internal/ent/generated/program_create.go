@@ -24,6 +24,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -445,6 +446,21 @@ func (pc *ProgramCreate) AddStandards(s ...*Standard) *ProgramCreate {
 		ids[i] = s[i].ID
 	}
 	return pc.AddStandardIDs(ids...)
+}
+
+// AddUserIDs adds the "users" edge to the User entity by IDs.
+func (pc *ProgramCreate) AddUserIDs(ids ...string) *ProgramCreate {
+	pc.mutation.AddUserIDs(ids...)
+	return pc
+}
+
+// AddUsers adds the "users" edges to the User entity.
+func (pc *ProgramCreate) AddUsers(u ...*User) *ProgramCreate {
+	ids := make([]string, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return pc.AddUserIDs(ids...)
 }
 
 // Mutation returns the ProgramMutation object of the builder.
@@ -893,6 +909,23 @@ func (pc *ProgramCreate) createSpec() (*Program, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = pc.schemaConfig.StandardPrograms
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := pc.mutation.UsersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   program.UsersTable,
+			Columns: program.UsersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pc.schemaConfig.UserPrograms
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

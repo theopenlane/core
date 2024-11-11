@@ -1868,6 +1868,35 @@ func HasAssigneeTasksWith(preds ...predicate.Task) predicate.User {
 	})
 }
 
+// HasPrograms applies the HasEdge predicate on the "programs" edge.
+func HasPrograms() predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, ProgramsTable, ProgramsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.UserPrograms
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasProgramsWith applies the HasEdge predicate on the "programs" edge with a given conditions (other predicates).
+func HasProgramsWith(preds ...predicate.Program) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := newProgramsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.UserPrograms
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasGroupMemberships applies the HasEdge predicate on the "group_memberships" edge.
 func HasGroupMemberships() predicate.User {
 	return predicate.User(func(s *sql.Selector) {

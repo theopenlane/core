@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
+	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
@@ -543,6 +544,21 @@ func (uc *UserCreate) AddAssigneeTasks(t ...*Task) *UserCreate {
 		ids[i] = t[i].ID
 	}
 	return uc.AddAssigneeTaskIDs(ids...)
+}
+
+// AddProgramIDs adds the "programs" edge to the Program entity by IDs.
+func (uc *UserCreate) AddProgramIDs(ids ...string) *UserCreate {
+	uc.mutation.AddProgramIDs(ids...)
+	return uc
+}
+
+// AddPrograms adds the "programs" edges to the Program entity.
+func (uc *UserCreate) AddPrograms(p ...*Program) *UserCreate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return uc.AddProgramIDs(ids...)
 }
 
 // AddGroupMembershipIDs adds the "group_memberships" edge to the GroupMembership entity by IDs.
@@ -1093,6 +1109,23 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = uc.schemaConfig.Task
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := uc.mutation.ProgramsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   user.ProgramsTable,
+			Columns: user.ProgramsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = uc.schemaConfig.UserPrograms
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

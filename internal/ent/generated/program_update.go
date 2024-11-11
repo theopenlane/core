@@ -27,6 +27,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -465,6 +466,21 @@ func (pu *ProgramUpdate) AddStandards(s ...*Standard) *ProgramUpdate {
 	return pu.AddStandardIDs(ids...)
 }
 
+// AddUserIDs adds the "users" edge to the User entity by IDs.
+func (pu *ProgramUpdate) AddUserIDs(ids ...string) *ProgramUpdate {
+	pu.mutation.AddUserIDs(ids...)
+	return pu
+}
+
+// AddUsers adds the "users" edges to the User entity.
+func (pu *ProgramUpdate) AddUsers(u ...*User) *ProgramUpdate {
+	ids := make([]string, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return pu.AddUserIDs(ids...)
+}
+
 // Mutation returns the ProgramMutation object of the builder.
 func (pu *ProgramUpdate) Mutation() *ProgramMutation {
 	return pu.mutation
@@ -726,6 +742,27 @@ func (pu *ProgramUpdate) RemoveStandards(s ...*Standard) *ProgramUpdate {
 		ids[i] = s[i].ID
 	}
 	return pu.RemoveStandardIDs(ids...)
+}
+
+// ClearUsers clears all "users" edges to the User entity.
+func (pu *ProgramUpdate) ClearUsers() *ProgramUpdate {
+	pu.mutation.ClearUsers()
+	return pu
+}
+
+// RemoveUserIDs removes the "users" edge to User entities by IDs.
+func (pu *ProgramUpdate) RemoveUserIDs(ids ...string) *ProgramUpdate {
+	pu.mutation.RemoveUserIDs(ids...)
+	return pu
+}
+
+// RemoveUsers removes "users" edges to User entities.
+func (pu *ProgramUpdate) RemoveUsers(u ...*User) *ProgramUpdate {
+	ids := make([]string, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return pu.RemoveUserIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -1492,6 +1529,54 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if pu.mutation.UsersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   program.UsersTable,
+			Columns: program.UsersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pu.schemaConfig.UserPrograms
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.RemovedUsersIDs(); len(nodes) > 0 && !pu.mutation.UsersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   program.UsersTable,
+			Columns: program.UsersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pu.schemaConfig.UserPrograms
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.UsersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   program.UsersTable,
+			Columns: program.UsersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pu.schemaConfig.UserPrograms
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = pu.schemaConfig.Program
 	ctx = internal.NewSchemaConfigContext(ctx, pu.schemaConfig)
 	_spec.AddModifiers(pu.modifiers...)
@@ -1935,6 +2020,21 @@ func (puo *ProgramUpdateOne) AddStandards(s ...*Standard) *ProgramUpdateOne {
 	return puo.AddStandardIDs(ids...)
 }
 
+// AddUserIDs adds the "users" edge to the User entity by IDs.
+func (puo *ProgramUpdateOne) AddUserIDs(ids ...string) *ProgramUpdateOne {
+	puo.mutation.AddUserIDs(ids...)
+	return puo
+}
+
+// AddUsers adds the "users" edges to the User entity.
+func (puo *ProgramUpdateOne) AddUsers(u ...*User) *ProgramUpdateOne {
+	ids := make([]string, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return puo.AddUserIDs(ids...)
+}
+
 // Mutation returns the ProgramMutation object of the builder.
 func (puo *ProgramUpdateOne) Mutation() *ProgramMutation {
 	return puo.mutation
@@ -2196,6 +2296,27 @@ func (puo *ProgramUpdateOne) RemoveStandards(s ...*Standard) *ProgramUpdateOne {
 		ids[i] = s[i].ID
 	}
 	return puo.RemoveStandardIDs(ids...)
+}
+
+// ClearUsers clears all "users" edges to the User entity.
+func (puo *ProgramUpdateOne) ClearUsers() *ProgramUpdateOne {
+	puo.mutation.ClearUsers()
+	return puo
+}
+
+// RemoveUserIDs removes the "users" edge to User entities by IDs.
+func (puo *ProgramUpdateOne) RemoveUserIDs(ids ...string) *ProgramUpdateOne {
+	puo.mutation.RemoveUserIDs(ids...)
+	return puo
+}
+
+// RemoveUsers removes "users" edges to User entities.
+func (puo *ProgramUpdateOne) RemoveUsers(u ...*User) *ProgramUpdateOne {
+	ids := make([]string, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return puo.RemoveUserIDs(ids...)
 }
 
 // Where appends a list predicates to the ProgramUpdate builder.
@@ -2987,6 +3108,54 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 			},
 		}
 		edge.Schema = puo.schemaConfig.StandardPrograms
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if puo.mutation.UsersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   program.UsersTable,
+			Columns: program.UsersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = puo.schemaConfig.UserPrograms
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.RemovedUsersIDs(); len(nodes) > 0 && !puo.mutation.UsersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   program.UsersTable,
+			Columns: program.UsersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = puo.schemaConfig.UserPrograms
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.UsersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   program.UsersTable,
+			Columns: program.UsersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = puo.schemaConfig.UserPrograms
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

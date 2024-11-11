@@ -92052,6 +92052,9 @@ type ProgramMutation struct {
 	standards                map[string]struct{}
 	removedstandards         map[string]struct{}
 	clearedstandards         bool
+	users                    map[string]struct{}
+	removedusers             map[string]struct{}
+	clearedusers             bool
 	done                     bool
 	oldValue                 func(context.Context) (*Program, error)
 	predicates               []predicate.Program
@@ -93594,6 +93597,60 @@ func (m *ProgramMutation) ResetStandards() {
 	m.removedstandards = nil
 }
 
+// AddUserIDs adds the "users" edge to the User entity by ids.
+func (m *ProgramMutation) AddUserIDs(ids ...string) {
+	if m.users == nil {
+		m.users = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.users[ids[i]] = struct{}{}
+	}
+}
+
+// ClearUsers clears the "users" edge to the User entity.
+func (m *ProgramMutation) ClearUsers() {
+	m.clearedusers = true
+}
+
+// UsersCleared reports if the "users" edge to the User entity was cleared.
+func (m *ProgramMutation) UsersCleared() bool {
+	return m.clearedusers
+}
+
+// RemoveUserIDs removes the "users" edge to the User entity by IDs.
+func (m *ProgramMutation) RemoveUserIDs(ids ...string) {
+	if m.removedusers == nil {
+		m.removedusers = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.users, ids[i])
+		m.removedusers[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedUsers returns the removed IDs of the "users" edge to the User entity.
+func (m *ProgramMutation) RemovedUsersIDs() (ids []string) {
+	for id := range m.removedusers {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// UsersIDs returns the "users" edge IDs in the mutation.
+func (m *ProgramMutation) UsersIDs() (ids []string) {
+	for id := range m.users {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetUsers resets all changes to the "users" edge.
+func (m *ProgramMutation) ResetUsers() {
+	m.users = nil
+	m.clearedusers = false
+	m.removedusers = nil
+}
+
 // Where appends a list predicates to the ProgramMutation builder.
 func (m *ProgramMutation) Where(ps ...predicate.Program) {
 	m.predicates = append(m.predicates, ps...)
@@ -94062,7 +94119,7 @@ func (m *ProgramMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ProgramMutation) AddedEdges() []string {
-	edges := make([]string, 0, 13)
+	edges := make([]string, 0, 14)
 	if m.organization != nil {
 		edges = append(edges, program.EdgeOrganization)
 	}
@@ -94101,6 +94158,9 @@ func (m *ProgramMutation) AddedEdges() []string {
 	}
 	if m.standards != nil {
 		edges = append(edges, program.EdgeStandards)
+	}
+	if m.users != nil {
+		edges = append(edges, program.EdgeUsers)
 	}
 	return edges
 }
@@ -94185,13 +94245,19 @@ func (m *ProgramMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case program.EdgeUsers:
+		ids := make([]ent.Value, 0, len(m.users))
+		for id := range m.users {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ProgramMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 13)
+	edges := make([]string, 0, 14)
 	if m.removedcontrols != nil {
 		edges = append(edges, program.EdgeControls)
 	}
@@ -94227,6 +94293,9 @@ func (m *ProgramMutation) RemovedEdges() []string {
 	}
 	if m.removedstandards != nil {
 		edges = append(edges, program.EdgeStandards)
+	}
+	if m.removedusers != nil {
+		edges = append(edges, program.EdgeUsers)
 	}
 	return edges
 }
@@ -94307,13 +94376,19 @@ func (m *ProgramMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case program.EdgeUsers:
+		ids := make([]ent.Value, 0, len(m.removedusers))
+		for id := range m.removedusers {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ProgramMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 13)
+	edges := make([]string, 0, 14)
 	if m.clearedorganization {
 		edges = append(edges, program.EdgeOrganization)
 	}
@@ -94353,6 +94428,9 @@ func (m *ProgramMutation) ClearedEdges() []string {
 	if m.clearedstandards {
 		edges = append(edges, program.EdgeStandards)
 	}
+	if m.clearedusers {
+		edges = append(edges, program.EdgeUsers)
+	}
 	return edges
 }
 
@@ -94386,6 +94464,8 @@ func (m *ProgramMutation) EdgeCleared(name string) bool {
 		return m.clearedactionplans
 	case program.EdgeStandards:
 		return m.clearedstandards
+	case program.EdgeUsers:
+		return m.clearedusers
 	}
 	return false
 }
@@ -94443,6 +94523,9 @@ func (m *ProgramMutation) ResetEdge(name string) error {
 		return nil
 	case program.EdgeStandards:
 		m.ResetStandards()
+		return nil
+	case program.EdgeUsers:
+		m.ResetUsers()
 		return nil
 	}
 	return fmt.Errorf("unknown Program edge %s", name)
@@ -117479,6 +117562,9 @@ type UserMutation struct {
 	assignee_tasks                   map[string]struct{}
 	removedassignee_tasks            map[string]struct{}
 	clearedassignee_tasks            bool
+	programs                         map[string]struct{}
+	removedprograms                  map[string]struct{}
+	clearedprograms                  bool
 	group_memberships                map[string]struct{}
 	removedgroup_memberships         map[string]struct{}
 	clearedgroup_memberships         bool
@@ -119368,6 +119454,60 @@ func (m *UserMutation) ResetAssigneeTasks() {
 	m.removedassignee_tasks = nil
 }
 
+// AddProgramIDs adds the "programs" edge to the Program entity by ids.
+func (m *UserMutation) AddProgramIDs(ids ...string) {
+	if m.programs == nil {
+		m.programs = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.programs[ids[i]] = struct{}{}
+	}
+}
+
+// ClearPrograms clears the "programs" edge to the Program entity.
+func (m *UserMutation) ClearPrograms() {
+	m.clearedprograms = true
+}
+
+// ProgramsCleared reports if the "programs" edge to the Program entity was cleared.
+func (m *UserMutation) ProgramsCleared() bool {
+	return m.clearedprograms
+}
+
+// RemoveProgramIDs removes the "programs" edge to the Program entity by IDs.
+func (m *UserMutation) RemoveProgramIDs(ids ...string) {
+	if m.removedprograms == nil {
+		m.removedprograms = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.programs, ids[i])
+		m.removedprograms[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedPrograms returns the removed IDs of the "programs" edge to the Program entity.
+func (m *UserMutation) RemovedProgramsIDs() (ids []string) {
+	for id := range m.removedprograms {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ProgramsIDs returns the "programs" edge IDs in the mutation.
+func (m *UserMutation) ProgramsIDs() (ids []string) {
+	for id := range m.programs {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetPrograms resets all changes to the "programs" edge.
+func (m *UserMutation) ResetPrograms() {
+	m.programs = nil
+	m.clearedprograms = false
+	m.removedprograms = nil
+}
+
 // AddGroupMembershipIDs adds the "group_memberships" edge to the GroupMembership entity by ids.
 func (m *UserMutation) AddGroupMembershipIDs(ids ...string) {
 	if m.group_memberships == nil {
@@ -120054,7 +120194,7 @@ func (m *UserMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *UserMutation) AddedEdges() []string {
-	edges := make([]string, 0, 17)
+	edges := make([]string, 0, 18)
 	if m.personal_access_tokens != nil {
 		edges = append(edges, user.EdgePersonalAccessTokens)
 	}
@@ -120099,6 +120239,9 @@ func (m *UserMutation) AddedEdges() []string {
 	}
 	if m.assignee_tasks != nil {
 		edges = append(edges, user.EdgeAssigneeTasks)
+	}
+	if m.programs != nil {
+		edges = append(edges, user.EdgePrograms)
 	}
 	if m.group_memberships != nil {
 		edges = append(edges, user.EdgeGroupMemberships)
@@ -120199,6 +120342,12 @@ func (m *UserMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case user.EdgePrograms:
+		ids := make([]ent.Value, 0, len(m.programs))
+		for id := range m.programs {
+			ids = append(ids, id)
+		}
+		return ids
 	case user.EdgeGroupMemberships:
 		ids := make([]ent.Value, 0, len(m.group_memberships))
 		for id := range m.group_memberships {
@@ -120217,7 +120366,7 @@ func (m *UserMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *UserMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 17)
+	edges := make([]string, 0, 18)
 	if m.removedpersonal_access_tokens != nil {
 		edges = append(edges, user.EdgePersonalAccessTokens)
 	}
@@ -120256,6 +120405,9 @@ func (m *UserMutation) RemovedEdges() []string {
 	}
 	if m.removedassignee_tasks != nil {
 		edges = append(edges, user.EdgeAssigneeTasks)
+	}
+	if m.removedprograms != nil {
+		edges = append(edges, user.EdgePrograms)
 	}
 	if m.removedgroup_memberships != nil {
 		edges = append(edges, user.EdgeGroupMemberships)
@@ -120348,6 +120500,12 @@ func (m *UserMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case user.EdgePrograms:
+		ids := make([]ent.Value, 0, len(m.removedprograms))
+		for id := range m.removedprograms {
+			ids = append(ids, id)
+		}
+		return ids
 	case user.EdgeGroupMemberships:
 		ids := make([]ent.Value, 0, len(m.removedgroup_memberships))
 		for id := range m.removedgroup_memberships {
@@ -120366,7 +120524,7 @@ func (m *UserMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *UserMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 17)
+	edges := make([]string, 0, 18)
 	if m.clearedpersonal_access_tokens {
 		edges = append(edges, user.EdgePersonalAccessTokens)
 	}
@@ -120412,6 +120570,9 @@ func (m *UserMutation) ClearedEdges() []string {
 	if m.clearedassignee_tasks {
 		edges = append(edges, user.EdgeAssigneeTasks)
 	}
+	if m.clearedprograms {
+		edges = append(edges, user.EdgePrograms)
+	}
 	if m.clearedgroup_memberships {
 		edges = append(edges, user.EdgeGroupMemberships)
 	}
@@ -120455,6 +120616,8 @@ func (m *UserMutation) EdgeCleared(name string) bool {
 		return m.clearedassigner_tasks
 	case user.EdgeAssigneeTasks:
 		return m.clearedassignee_tasks
+	case user.EdgePrograms:
+		return m.clearedprograms
 	case user.EdgeGroupMemberships:
 		return m.clearedgroup_memberships
 	case user.EdgeOrgMemberships:
@@ -120525,6 +120688,9 @@ func (m *UserMutation) ResetEdge(name string) error {
 		return nil
 	case user.EdgeAssigneeTasks:
 		m.ResetAssigneeTasks()
+		return nil
+	case user.EdgePrograms:
+		m.ResetPrograms()
 		return nil
 	case user.EdgeGroupMemberships:
 		m.ResetGroupMemberships()

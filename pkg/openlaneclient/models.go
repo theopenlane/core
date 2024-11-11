@@ -3626,6 +3626,7 @@ type CreateProgramInput struct {
 	NarrativeIDs        []string `json:"narrativeIDs,omitempty"`
 	ActionplanIDs       []string `json:"actionplanIDs,omitempty"`
 	StandardIDs         []string `json:"standardIDs,omitempty"`
+	UserIDs             []string `json:"userIDs,omitempty"`
 }
 
 // CreateRiskInput is used for create Risk object.
@@ -3848,6 +3849,7 @@ type CreateUserInput struct {
 	SubcontrolIDs             []string    `json:"subcontrolIDs,omitempty"`
 	AssignerTaskIDs           []string    `json:"assignerTaskIDs,omitempty"`
 	AssigneeTaskIDs           []string    `json:"assigneeTaskIDs,omitempty"`
+	ProgramIDs                []string    `json:"programIDs,omitempty"`
 }
 
 // CreateUserSettingInput is used for create UserSetting object.
@@ -15657,6 +15659,7 @@ type Program struct {
 	Actionplans         []*ActionPlan       `json:"actionplans,omitempty"`
 	// the framework(s) that the program is based on
 	Standards []*Standard `json:"standards,omitempty"`
+	Users     []*User     `json:"users,omitempty"`
 }
 
 func (Program) IsNode() {}
@@ -16189,6 +16192,9 @@ type ProgramWhereInput struct {
 	// standards edge predicates
 	HasStandards     *bool                 `json:"hasStandards,omitempty"`
 	HasStandardsWith []*StandardWhereInput `json:"hasStandardsWith,omitempty"`
+	// users edge predicates
+	HasUsers     *bool             `json:"hasUsers,omitempty"`
+	HasUsersWith []*UserWhereInput `json:"hasUsersWith,omitempty"`
 }
 
 type Query struct {
@@ -20919,6 +20925,9 @@ type UpdateProgramInput struct {
 	AddStandardIDs            []string `json:"addStandardIDs,omitempty"`
 	RemoveStandardIDs         []string `json:"removeStandardIDs,omitempty"`
 	ClearStandards            *bool    `json:"clearStandards,omitempty"`
+	AddUserIDs                []string `json:"addUserIDs,omitempty"`
+	RemoveUserIDs             []string `json:"removeUserIDs,omitempty"`
+	ClearUsers                *bool    `json:"clearUsers,omitempty"`
 }
 
 // UpdateRiskInput is used for update Risk object.
@@ -21289,6 +21298,9 @@ type UpdateUserInput struct {
 	AddAssigneeTaskIDs              []string    `json:"addAssigneeTaskIDs,omitempty"`
 	RemoveAssigneeTaskIDs           []string    `json:"removeAssigneeTaskIDs,omitempty"`
 	ClearAssigneeTasks              *bool       `json:"clearAssigneeTasks,omitempty"`
+	AddProgramIDs                   []string    `json:"addProgramIDs,omitempty"`
+	RemoveProgramIDs                []string    `json:"removeProgramIDs,omitempty"`
+	ClearPrograms                   *bool       `json:"clearPrograms,omitempty"`
 }
 
 // UpdateUserSettingInput is used for update UserSetting object.
@@ -21403,6 +21415,7 @@ type User struct {
 	Subcontrols          []*Subcontrol          `json:"subcontrols,omitempty"`
 	AssignerTasks        []*Task                `json:"assignerTasks,omitempty"`
 	AssigneeTasks        []*Task                `json:"assigneeTasks,omitempty"`
+	Programs             []*Program             `json:"programs,omitempty"`
 	GroupMemberships     []*GroupMembership     `json:"groupMemberships,omitempty"`
 	OrgMemberships       []*OrgMembership       `json:"orgMemberships,omitempty"`
 }
@@ -22591,6 +22604,9 @@ type UserWhereInput struct {
 	// assignee_tasks edge predicates
 	HasAssigneeTasks     *bool             `json:"hasAssigneeTasks,omitempty"`
 	HasAssigneeTasksWith []*TaskWhereInput `json:"hasAssigneeTasksWith,omitempty"`
+	// programs edge predicates
+	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
+	HasProgramsWith []*ProgramWhereInput `json:"hasProgramsWith,omitempty"`
 	// group_memberships edge predicates
 	HasGroupMemberships     *bool                        `json:"hasGroupMemberships,omitempty"`
 	HasGroupMembershipsWith []*GroupMembershipWhereInput `json:"hasGroupMembershipsWith,omitempty"`

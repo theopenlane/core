@@ -2049,6 +2049,18 @@ func (pr *Program) Standards(ctx context.Context) (result []*Standard, err error
 	return result, err
 }
 
+func (pr *Program) Users(ctx context.Context) (result []*User, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = pr.NamedUsers(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = pr.Edges.UsersOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = pr.QueryUsers().All(ctx)
+	}
+	return result, err
+}
+
 func (r *Risk) Control(ctx context.Context) (result []*Control, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = r.NamedControl(graphql.GetFieldContext(ctx).Field.Alias)
@@ -2517,6 +2529,18 @@ func (u *User) AssigneeTasks(ctx context.Context) (result []*Task, err error) {
 	}
 	if IsNotLoaded(err) {
 		result, err = u.QueryAssigneeTasks().All(ctx)
+	}
+	return result, err
+}
+
+func (u *User) Programs(ctx context.Context) (result []*Program, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = u.NamedPrograms(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = u.Edges.ProgramsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = u.QueryPrograms().All(ctx)
 	}
 	return result, err
 }

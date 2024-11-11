@@ -101,15 +101,17 @@ type UserEdges struct {
 	AssignerTasks []*Task `json:"assigner_tasks,omitempty"`
 	// AssigneeTasks holds the value of the assignee_tasks edge.
 	AssigneeTasks []*Task `json:"assignee_tasks,omitempty"`
+	// Programs holds the value of the programs edge.
+	Programs []*Program `json:"programs,omitempty"`
 	// GroupMemberships holds the value of the group_memberships edge.
 	GroupMemberships []*GroupMembership `json:"group_memberships,omitempty"`
 	// OrgMemberships holds the value of the org_memberships edge.
 	OrgMemberships []*OrgMembership `json:"org_memberships,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [17]bool
+	loadedTypes [18]bool
 	// totalCount holds the count of the edges above.
-	totalCount [14]map[string]int
+	totalCount [15]map[string]int
 
 	namedPersonalAccessTokens    map[string][]*PersonalAccessToken
 	namedTfaSettings             map[string][]*TFASetting
@@ -124,6 +126,7 @@ type UserEdges struct {
 	namedSubcontrols             map[string][]*Subcontrol
 	namedAssignerTasks           map[string][]*Task
 	namedAssigneeTasks           map[string][]*Task
+	namedPrograms                map[string][]*Program
 	namedGroupMemberships        map[string][]*GroupMembership
 	namedOrgMemberships          map[string][]*OrgMembership
 }
@@ -267,10 +270,19 @@ func (e UserEdges) AssigneeTasksOrErr() ([]*Task, error) {
 	return nil, &NotLoadedError{edge: "assignee_tasks"}
 }
 
+// ProgramsOrErr returns the Programs value or an error if the edge
+// was not loaded in eager-loading.
+func (e UserEdges) ProgramsOrErr() ([]*Program, error) {
+	if e.loadedTypes[15] {
+		return e.Programs, nil
+	}
+	return nil, &NotLoadedError{edge: "programs"}
+}
+
 // GroupMembershipsOrErr returns the GroupMemberships value or an error if the edge
 // was not loaded in eager-loading.
 func (e UserEdges) GroupMembershipsOrErr() ([]*GroupMembership, error) {
-	if e.loadedTypes[15] {
+	if e.loadedTypes[16] {
 		return e.GroupMemberships, nil
 	}
 	return nil, &NotLoadedError{edge: "group_memberships"}
@@ -279,7 +291,7 @@ func (e UserEdges) GroupMembershipsOrErr() ([]*GroupMembership, error) {
 // OrgMembershipsOrErr returns the OrgMemberships value or an error if the edge
 // was not loaded in eager-loading.
 func (e UserEdges) OrgMembershipsOrErr() ([]*OrgMembership, error) {
-	if e.loadedTypes[16] {
+	if e.loadedTypes[17] {
 		return e.OrgMemberships, nil
 	}
 	return nil, &NotLoadedError{edge: "org_memberships"}
@@ -537,6 +549,11 @@ func (u *User) QueryAssignerTasks() *TaskQuery {
 // QueryAssigneeTasks queries the "assignee_tasks" edge of the User entity.
 func (u *User) QueryAssigneeTasks() *TaskQuery {
 	return NewUserClient(u.config).QueryAssigneeTasks(u)
+}
+
+// QueryPrograms queries the "programs" edge of the User entity.
+func (u *User) QueryPrograms() *ProgramQuery {
+	return NewUserClient(u.config).QueryPrograms(u)
 }
 
 // QueryGroupMemberships queries the "group_memberships" edge of the User entity.
@@ -956,6 +973,30 @@ func (u *User) appendNamedAssigneeTasks(name string, edges ...*Task) {
 		u.Edges.namedAssigneeTasks[name] = []*Task{}
 	} else {
 		u.Edges.namedAssigneeTasks[name] = append(u.Edges.namedAssigneeTasks[name], edges...)
+	}
+}
+
+// NamedPrograms returns the Programs named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (u *User) NamedPrograms(name string) ([]*Program, error) {
+	if u.Edges.namedPrograms == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := u.Edges.namedPrograms[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (u *User) appendNamedPrograms(name string, edges ...*Program) {
+	if u.Edges.namedPrograms == nil {
+		u.Edges.namedPrograms = make(map[string][]*Program)
+	}
+	if len(edges) == 0 {
+		u.Edges.namedPrograms[name] = []*Program{}
+	} else {
+		u.Edges.namedPrograms[name] = append(u.Edges.namedPrograms[name], edges...)
 	}
 }
 
