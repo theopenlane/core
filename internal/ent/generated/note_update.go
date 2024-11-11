@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -198,6 +199,21 @@ func (nu *NoteUpdate) AddSubcontrols(s ...*Subcontrol) *NoteUpdate {
 	return nu.AddSubcontrolIDs(ids...)
 }
 
+// AddProgramIDs adds the "program" edge to the Program entity by IDs.
+func (nu *NoteUpdate) AddProgramIDs(ids ...string) *NoteUpdate {
+	nu.mutation.AddProgramIDs(ids...)
+	return nu
+}
+
+// AddProgram adds the "program" edges to the Program entity.
+func (nu *NoteUpdate) AddProgram(p ...*Program) *NoteUpdate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return nu.AddProgramIDs(ids...)
+}
+
 // Mutation returns the NoteMutation object of the builder.
 func (nu *NoteUpdate) Mutation() *NoteMutation {
 	return nu.mutation
@@ -234,6 +250,27 @@ func (nu *NoteUpdate) RemoveSubcontrols(s ...*Subcontrol) *NoteUpdate {
 		ids[i] = s[i].ID
 	}
 	return nu.RemoveSubcontrolIDs(ids...)
+}
+
+// ClearProgram clears all "program" edges to the Program entity.
+func (nu *NoteUpdate) ClearProgram() *NoteUpdate {
+	nu.mutation.ClearProgram()
+	return nu
+}
+
+// RemoveProgramIDs removes the "program" edge to Program entities by IDs.
+func (nu *NoteUpdate) RemoveProgramIDs(ids ...string) *NoteUpdate {
+	nu.mutation.RemoveProgramIDs(ids...)
+	return nu
+}
+
+// RemoveProgram removes "program" edges to Program entities.
+func (nu *NoteUpdate) RemoveProgram(p ...*Program) *NoteUpdate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return nu.RemoveProgramIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -465,6 +502,54 @@ func (nu *NoteUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if nu.mutation.ProgramCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   note.ProgramTable,
+			Columns: note.ProgramPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nu.schemaConfig.ProgramNotes
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := nu.mutation.RemovedProgramIDs(); len(nodes) > 0 && !nu.mutation.ProgramCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   note.ProgramTable,
+			Columns: note.ProgramPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nu.schemaConfig.ProgramNotes
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := nu.mutation.ProgramIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   note.ProgramTable,
+			Columns: note.ProgramPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nu.schemaConfig.ProgramNotes
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = nu.schemaConfig.Note
 	ctx = internal.NewSchemaConfigContext(ctx, nu.schemaConfig)
 	_spec.AddModifiers(nu.modifiers...)
@@ -652,6 +737,21 @@ func (nuo *NoteUpdateOne) AddSubcontrols(s ...*Subcontrol) *NoteUpdateOne {
 	return nuo.AddSubcontrolIDs(ids...)
 }
 
+// AddProgramIDs adds the "program" edge to the Program entity by IDs.
+func (nuo *NoteUpdateOne) AddProgramIDs(ids ...string) *NoteUpdateOne {
+	nuo.mutation.AddProgramIDs(ids...)
+	return nuo
+}
+
+// AddProgram adds the "program" edges to the Program entity.
+func (nuo *NoteUpdateOne) AddProgram(p ...*Program) *NoteUpdateOne {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return nuo.AddProgramIDs(ids...)
+}
+
 // Mutation returns the NoteMutation object of the builder.
 func (nuo *NoteUpdateOne) Mutation() *NoteMutation {
 	return nuo.mutation
@@ -688,6 +788,27 @@ func (nuo *NoteUpdateOne) RemoveSubcontrols(s ...*Subcontrol) *NoteUpdateOne {
 		ids[i] = s[i].ID
 	}
 	return nuo.RemoveSubcontrolIDs(ids...)
+}
+
+// ClearProgram clears all "program" edges to the Program entity.
+func (nuo *NoteUpdateOne) ClearProgram() *NoteUpdateOne {
+	nuo.mutation.ClearProgram()
+	return nuo
+}
+
+// RemoveProgramIDs removes the "program" edge to Program entities by IDs.
+func (nuo *NoteUpdateOne) RemoveProgramIDs(ids ...string) *NoteUpdateOne {
+	nuo.mutation.RemoveProgramIDs(ids...)
+	return nuo
+}
+
+// RemoveProgram removes "program" edges to Program entities.
+func (nuo *NoteUpdateOne) RemoveProgram(p ...*Program) *NoteUpdateOne {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return nuo.RemoveProgramIDs(ids...)
 }
 
 // Where appends a list predicates to the NoteUpdate builder.
@@ -944,6 +1065,54 @@ func (nuo *NoteUpdateOne) sqlSave(ctx context.Context) (_node *Note, err error) 
 			},
 		}
 		edge.Schema = nuo.schemaConfig.Subcontrol
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if nuo.mutation.ProgramCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   note.ProgramTable,
+			Columns: note.ProgramPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nuo.schemaConfig.ProgramNotes
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := nuo.mutation.RemovedProgramIDs(); len(nodes) > 0 && !nuo.mutation.ProgramCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   note.ProgramTable,
+			Columns: note.ProgramPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nuo.schemaConfig.ProgramNotes
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := nuo.mutation.ProgramIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   note.ProgramTable,
+			Columns: note.ProgramPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nuo.schemaConfig.ProgramNotes
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

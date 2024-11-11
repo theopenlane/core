@@ -461,6 +461,28 @@ func (r *queryResolver) ProcedureHistories(ctx context.Context, after *entgql.Cu
 		generated.WithProcedureHistoryFilter(where.Filter))
 }
 
+// Programs is the resolver for the programs field.
+func (r *queryResolver) Programs(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ProgramWhereInput) (*generated.ProgramConnection, error) {
+	return withTransactionalMutation(ctx).Program.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithProgramFilter(where.Filter))
+}
+
+// ProgramHistories is the resolver for the programHistories field.
+func (r *queryResolver) ProgramHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ProgramHistoryWhereInput) (*generated.ProgramHistoryConnection, error) {
+	return withTransactionalMutation(ctx).ProgramHistory.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithProgramHistoryFilter(where.Filter))
+}
+
 // Risks is the resolver for the risks field.
 func (r *queryResolver) Risks(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.RiskWhereInput) (*generated.RiskConnection, error) {
 	return withTransactionalMutation(ctx).Risk.Query().Paginate(

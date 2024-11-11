@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 
@@ -368,6 +369,21 @@ func (pu *ProcedureUpdate) AddTasks(t ...*Task) *ProcedureUpdate {
 	return pu.AddTaskIDs(ids...)
 }
 
+// AddProgramIDs adds the "programs" edge to the Program entity by IDs.
+func (pu *ProcedureUpdate) AddProgramIDs(ids ...string) *ProcedureUpdate {
+	pu.mutation.AddProgramIDs(ids...)
+	return pu
+}
+
+// AddPrograms adds the "programs" edges to the Program entity.
+func (pu *ProcedureUpdate) AddPrograms(p ...*Program) *ProcedureUpdate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return pu.AddProgramIDs(ids...)
+}
+
 // Mutation returns the ProcedureMutation object of the builder.
 func (pu *ProcedureUpdate) Mutation() *ProcedureMutation {
 	return pu.mutation
@@ -476,6 +492,27 @@ func (pu *ProcedureUpdate) RemoveTasks(t ...*Task) *ProcedureUpdate {
 		ids[i] = t[i].ID
 	}
 	return pu.RemoveTaskIDs(ids...)
+}
+
+// ClearPrograms clears all "programs" edges to the Program entity.
+func (pu *ProcedureUpdate) ClearPrograms() *ProcedureUpdate {
+	pu.mutation.ClearPrograms()
+	return pu
+}
+
+// RemoveProgramIDs removes the "programs" edge to Program entities by IDs.
+func (pu *ProcedureUpdate) RemoveProgramIDs(ids ...string) *ProcedureUpdate {
+	pu.mutation.RemoveProgramIDs(ids...)
+	return pu
+}
+
+// RemovePrograms removes "programs" edges to Program entities.
+func (pu *ProcedureUpdate) RemovePrograms(p ...*Program) *ProcedureUpdate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return pu.RemoveProgramIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -867,6 +904,54 @@ func (pu *ProcedureUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if pu.mutation.ProgramsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   procedure.ProgramsTable,
+			Columns: procedure.ProgramsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pu.schemaConfig.ProgramProcedures
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !pu.mutation.ProgramsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   procedure.ProgramsTable,
+			Columns: procedure.ProgramsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pu.schemaConfig.ProgramProcedures
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.ProgramsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   procedure.ProgramsTable,
+			Columns: procedure.ProgramsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pu.schemaConfig.ProgramProcedures
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = pu.schemaConfig.Procedure
 	ctx = internal.NewSchemaConfigContext(ctx, pu.schemaConfig)
 	_spec.AddModifiers(pu.modifiers...)
@@ -1222,6 +1307,21 @@ func (puo *ProcedureUpdateOne) AddTasks(t ...*Task) *ProcedureUpdateOne {
 	return puo.AddTaskIDs(ids...)
 }
 
+// AddProgramIDs adds the "programs" edge to the Program entity by IDs.
+func (puo *ProcedureUpdateOne) AddProgramIDs(ids ...string) *ProcedureUpdateOne {
+	puo.mutation.AddProgramIDs(ids...)
+	return puo
+}
+
+// AddPrograms adds the "programs" edges to the Program entity.
+func (puo *ProcedureUpdateOne) AddPrograms(p ...*Program) *ProcedureUpdateOne {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return puo.AddProgramIDs(ids...)
+}
+
 // Mutation returns the ProcedureMutation object of the builder.
 func (puo *ProcedureUpdateOne) Mutation() *ProcedureMutation {
 	return puo.mutation
@@ -1330,6 +1430,27 @@ func (puo *ProcedureUpdateOne) RemoveTasks(t ...*Task) *ProcedureUpdateOne {
 		ids[i] = t[i].ID
 	}
 	return puo.RemoveTaskIDs(ids...)
+}
+
+// ClearPrograms clears all "programs" edges to the Program entity.
+func (puo *ProcedureUpdateOne) ClearPrograms() *ProcedureUpdateOne {
+	puo.mutation.ClearPrograms()
+	return puo
+}
+
+// RemoveProgramIDs removes the "programs" edge to Program entities by IDs.
+func (puo *ProcedureUpdateOne) RemoveProgramIDs(ids ...string) *ProcedureUpdateOne {
+	puo.mutation.RemoveProgramIDs(ids...)
+	return puo
+}
+
+// RemovePrograms removes "programs" edges to Program entities.
+func (puo *ProcedureUpdateOne) RemovePrograms(p ...*Program) *ProcedureUpdateOne {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return puo.RemoveProgramIDs(ids...)
 }
 
 // Where appends a list predicates to the ProcedureUpdate builder.
@@ -1746,6 +1867,54 @@ func (puo *ProcedureUpdateOne) sqlSave(ctx context.Context) (_node *Procedure, e
 			},
 		}
 		edge.Schema = puo.schemaConfig.ProcedureTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if puo.mutation.ProgramsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   procedure.ProgramsTable,
+			Columns: procedure.ProgramsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = puo.schemaConfig.ProgramProcedures
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !puo.mutation.ProgramsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   procedure.ProgramsTable,
+			Columns: procedure.ProgramsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = puo.schemaConfig.ProgramProcedures
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.ProgramsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   procedure.ProgramsTable,
+			Columns: procedure.ProgramsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = puo.schemaConfig.ProgramProcedures
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

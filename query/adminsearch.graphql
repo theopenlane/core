@@ -319,6 +319,16 @@ query AdminSearch($query: String!) {
           details
         }
       }
+      ... on ProgramSearchResult {
+        programs {
+          id
+          deletedBy
+          tags
+          name
+          description
+          organizationID
+        }
+      }
       ... on RiskSearchResult {
         risks {
           deletedBy

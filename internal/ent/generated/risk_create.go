@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/pkg/enums"
 )
@@ -311,6 +312,21 @@ func (rc *RiskCreate) AddActionplans(a ...*ActionPlan) *RiskCreate {
 	return rc.AddActionplanIDs(ids...)
 }
 
+// AddProgramIDs adds the "program" edge to the Program entity by IDs.
+func (rc *RiskCreate) AddProgramIDs(ids ...string) *RiskCreate {
+	rc.mutation.AddProgramIDs(ids...)
+	return rc
+}
+
+// AddProgram adds the "program" edges to the Program entity.
+func (rc *RiskCreate) AddProgram(p ...*Program) *RiskCreate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return rc.AddProgramIDs(ids...)
+}
+
 // Mutation returns the RiskMutation object of the builder.
 func (rc *RiskCreate) Mutation() *RiskMutation {
 	return rc.mutation
@@ -555,6 +571,23 @@ func (rc *RiskCreate) createSpec() (*Risk, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = rc.schemaConfig.RiskActionplans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := rc.mutation.ProgramIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   risk.ProgramTable,
+			Columns: risk.ProgramPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = rc.schemaConfig.ProgramRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

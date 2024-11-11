@@ -85,15 +85,18 @@ type SubcontrolEdges struct {
 	Tasks []*Task `json:"tasks,omitempty"`
 	// Notes holds the value of the notes edge.
 	Notes *Note `json:"notes,omitempty"`
+	// Programs holds the value of the programs edge.
+	Programs []*Program `json:"programs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [4]bool
+	loadedTypes [5]bool
 	// totalCount holds the count of the edges above.
-	totalCount [4]map[string]int
+	totalCount [5]map[string]int
 
-	namedControl map[string][]*Control
-	namedUser    map[string][]*User
-	namedTasks   map[string][]*Task
+	namedControl  map[string][]*Control
+	namedUser     map[string][]*User
+	namedTasks    map[string][]*Task
+	namedPrograms map[string][]*Program
 }
 
 // ControlOrErr returns the Control value or an error if the edge
@@ -132,6 +135,15 @@ func (e SubcontrolEdges) NotesOrErr() (*Note, error) {
 		return nil, &NotFoundError{label: note.Label}
 	}
 	return nil, &NotLoadedError{edge: "notes"}
+}
+
+// ProgramsOrErr returns the Programs value or an error if the edge
+// was not loaded in eager-loading.
+func (e SubcontrolEdges) ProgramsOrErr() ([]*Program, error) {
+	if e.loadedTypes[4] {
+		return e.Programs, nil
+	}
+	return nil, &NotLoadedError{edge: "programs"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -365,6 +377,11 @@ func (s *Subcontrol) QueryNotes() *NoteQuery {
 	return NewSubcontrolClient(s.config).QueryNotes(s)
 }
 
+// QueryPrograms queries the "programs" edge of the Subcontrol entity.
+func (s *Subcontrol) QueryPrograms() *ProgramQuery {
+	return NewSubcontrolClient(s.config).QueryPrograms(s)
+}
+
 // Update returns a builder for updating this Subcontrol.
 // Note that you need to call Subcontrol.Unwrap() before calling this method if this Subcontrol
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -532,6 +549,30 @@ func (s *Subcontrol) appendNamedTasks(name string, edges ...*Task) {
 		s.Edges.namedTasks[name] = []*Task{}
 	} else {
 		s.Edges.namedTasks[name] = append(s.Edges.namedTasks[name], edges...)
+	}
+}
+
+// NamedPrograms returns the Programs named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (s *Subcontrol) NamedPrograms(name string) ([]*Program, error) {
+	if s.Edges.namedPrograms == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := s.Edges.namedPrograms[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (s *Subcontrol) appendNamedPrograms(name string, edges ...*Program) {
+	if s.Edges.namedPrograms == nil {
+		s.Edges.namedPrograms = make(map[string][]*Program)
+	}
+	if len(edges) == 0 {
+		s.Edges.namedPrograms[name] = []*Program{}
+	} else {
+		s.Edges.namedPrograms[name] = append(s.Edges.namedPrograms[name], edges...)
 	}
 }
 

@@ -70,6 +70,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/procedurehistory"
+	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/programhistory"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
@@ -207,6 +209,8 @@ func checkColumn(table, column string) error {
 			personalaccesstoken.Table:           personalaccesstoken.ValidColumn,
 			procedure.Table:                     procedure.ValidColumn,
 			procedurehistory.Table:              procedurehistory.ValidColumn,
+			program.Table:                       program.ValidColumn,
+			programhistory.Table:                programhistory.ValidColumn,
 			risk.Table:                          risk.ValidColumn,
 			riskhistory.Table:                   riskhistory.ValidColumn,
 			standard.Table:                      standard.ValidColumn,

@@ -2101,6 +2101,78 @@ var (
 			},
 		},
 	}
+	// ProgramsColumns holds the columns for the "programs" table.
+	ProgramsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "mapping_id", Type: field.TypeString, Unique: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "name", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"NOT_STARTED", "IN_PROGRESS", "READY_FOR_AUDITOR", "COMPLETED", "ACTION_REQUIRED"}, Default: "NOT_STARTED"},
+		{Name: "start_date", Type: field.TypeTime, Nullable: true},
+		{Name: "end_date", Type: field.TypeTime, Nullable: true},
+		{Name: "auditor_ready", Type: field.TypeBool, Default: false},
+		{Name: "auditor_write_comments", Type: field.TypeBool, Default: false},
+		{Name: "auditor_read_comments", Type: field.TypeBool, Default: false},
+		{Name: "organization_id", Type: field.TypeString},
+	}
+	// ProgramsTable holds the schema information for the "programs" table.
+	ProgramsTable = &schema.Table{
+		Name:       "programs",
+		Columns:    ProgramsColumns,
+		PrimaryKey: []*schema.Column{ProgramsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "programs_organizations_programs",
+				Columns:    []*schema.Column{ProgramsColumns[17]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+	}
+	// ProgramHistoryColumns holds the columns for the "program_history" table.
+	ProgramHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "mapping_id", Type: field.TypeString},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "name", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"NOT_STARTED", "IN_PROGRESS", "READY_FOR_AUDITOR", "COMPLETED", "ACTION_REQUIRED"}, Default: "NOT_STARTED"},
+		{Name: "start_date", Type: field.TypeTime, Nullable: true},
+		{Name: "end_date", Type: field.TypeTime, Nullable: true},
+		{Name: "organization_id", Type: field.TypeString},
+		{Name: "auditor_ready", Type: field.TypeBool, Default: false},
+		{Name: "auditor_write_comments", Type: field.TypeBool, Default: false},
+		{Name: "auditor_read_comments", Type: field.TypeBool, Default: false},
+	}
+	// ProgramHistoryTable holds the schema information for the "program_history" table.
+	ProgramHistoryTable = &schema.Table{
+		Name:       "program_history",
+		Columns:    ProgramHistoryColumns,
+		PrimaryKey: []*schema.Column{ProgramHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "programhistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{ProgramHistoryColumns[1]},
+			},
+		},
+	}
 	// RisksColumns holds the columns for the "risks" table.
 	RisksColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -3969,6 +4041,281 @@ var (
 			},
 		},
 	}
+	// ProgramControlsColumns holds the columns for the "program_controls" table.
+	ProgramControlsColumns = []*schema.Column{
+		{Name: "program_id", Type: field.TypeString},
+		{Name: "control_id", Type: field.TypeString},
+	}
+	// ProgramControlsTable holds the schema information for the "program_controls" table.
+	ProgramControlsTable = &schema.Table{
+		Name:       "program_controls",
+		Columns:    ProgramControlsColumns,
+		PrimaryKey: []*schema.Column{ProgramControlsColumns[0], ProgramControlsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "program_controls_program_id",
+				Columns:    []*schema.Column{ProgramControlsColumns[0]},
+				RefColumns: []*schema.Column{ProgramsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "program_controls_control_id",
+				Columns:    []*schema.Column{ProgramControlsColumns[1]},
+				RefColumns: []*schema.Column{ControlsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// ProgramSubcontrolsColumns holds the columns for the "program_subcontrols" table.
+	ProgramSubcontrolsColumns = []*schema.Column{
+		{Name: "program_id", Type: field.TypeString},
+		{Name: "subcontrol_id", Type: field.TypeString},
+	}
+	// ProgramSubcontrolsTable holds the schema information for the "program_subcontrols" table.
+	ProgramSubcontrolsTable = &schema.Table{
+		Name:       "program_subcontrols",
+		Columns:    ProgramSubcontrolsColumns,
+		PrimaryKey: []*schema.Column{ProgramSubcontrolsColumns[0], ProgramSubcontrolsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "program_subcontrols_program_id",
+				Columns:    []*schema.Column{ProgramSubcontrolsColumns[0]},
+				RefColumns: []*schema.Column{ProgramsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "program_subcontrols_subcontrol_id",
+				Columns:    []*schema.Column{ProgramSubcontrolsColumns[1]},
+				RefColumns: []*schema.Column{SubcontrolsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// ProgramControlobjectivesColumns holds the columns for the "program_controlobjectives" table.
+	ProgramControlobjectivesColumns = []*schema.Column{
+		{Name: "program_id", Type: field.TypeString},
+		{Name: "control_objective_id", Type: field.TypeString},
+	}
+	// ProgramControlobjectivesTable holds the schema information for the "program_controlobjectives" table.
+	ProgramControlobjectivesTable = &schema.Table{
+		Name:       "program_controlobjectives",
+		Columns:    ProgramControlobjectivesColumns,
+		PrimaryKey: []*schema.Column{ProgramControlobjectivesColumns[0], ProgramControlobjectivesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "program_controlobjectives_program_id",
+				Columns:    []*schema.Column{ProgramControlobjectivesColumns[0]},
+				RefColumns: []*schema.Column{ProgramsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "program_controlobjectives_control_objective_id",
+				Columns:    []*schema.Column{ProgramControlobjectivesColumns[1]},
+				RefColumns: []*schema.Column{ControlObjectivesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// ProgramPoliciesColumns holds the columns for the "program_policies" table.
+	ProgramPoliciesColumns = []*schema.Column{
+		{Name: "program_id", Type: field.TypeString},
+		{Name: "internal_policy_id", Type: field.TypeString},
+	}
+	// ProgramPoliciesTable holds the schema information for the "program_policies" table.
+	ProgramPoliciesTable = &schema.Table{
+		Name:       "program_policies",
+		Columns:    ProgramPoliciesColumns,
+		PrimaryKey: []*schema.Column{ProgramPoliciesColumns[0], ProgramPoliciesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "program_policies_program_id",
+				Columns:    []*schema.Column{ProgramPoliciesColumns[0]},
+				RefColumns: []*schema.Column{ProgramsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "program_policies_internal_policy_id",
+				Columns:    []*schema.Column{ProgramPoliciesColumns[1]},
+				RefColumns: []*schema.Column{InternalPoliciesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// ProgramProceduresColumns holds the columns for the "program_procedures" table.
+	ProgramProceduresColumns = []*schema.Column{
+		{Name: "program_id", Type: field.TypeString},
+		{Name: "procedure_id", Type: field.TypeString},
+	}
+	// ProgramProceduresTable holds the schema information for the "program_procedures" table.
+	ProgramProceduresTable = &schema.Table{
+		Name:       "program_procedures",
+		Columns:    ProgramProceduresColumns,
+		PrimaryKey: []*schema.Column{ProgramProceduresColumns[0], ProgramProceduresColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "program_procedures_program_id",
+				Columns:    []*schema.Column{ProgramProceduresColumns[0]},
+				RefColumns: []*schema.Column{ProgramsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "program_procedures_procedure_id",
+				Columns:    []*schema.Column{ProgramProceduresColumns[1]},
+				RefColumns: []*schema.Column{ProceduresColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// ProgramRisksColumns holds the columns for the "program_risks" table.
+	ProgramRisksColumns = []*schema.Column{
+		{Name: "program_id", Type: field.TypeString},
+		{Name: "risk_id", Type: field.TypeString},
+	}
+	// ProgramRisksTable holds the schema information for the "program_risks" table.
+	ProgramRisksTable = &schema.Table{
+		Name:       "program_risks",
+		Columns:    ProgramRisksColumns,
+		PrimaryKey: []*schema.Column{ProgramRisksColumns[0], ProgramRisksColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "program_risks_program_id",
+				Columns:    []*schema.Column{ProgramRisksColumns[0]},
+				RefColumns: []*schema.Column{ProgramsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "program_risks_risk_id",
+				Columns:    []*schema.Column{ProgramRisksColumns[1]},
+				RefColumns: []*schema.Column{RisksColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// ProgramTasksColumns holds the columns for the "program_tasks" table.
+	ProgramTasksColumns = []*schema.Column{
+		{Name: "program_id", Type: field.TypeString},
+		{Name: "task_id", Type: field.TypeString},
+	}
+	// ProgramTasksTable holds the schema information for the "program_tasks" table.
+	ProgramTasksTable = &schema.Table{
+		Name:       "program_tasks",
+		Columns:    ProgramTasksColumns,
+		PrimaryKey: []*schema.Column{ProgramTasksColumns[0], ProgramTasksColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "program_tasks_program_id",
+				Columns:    []*schema.Column{ProgramTasksColumns[0]},
+				RefColumns: []*schema.Column{ProgramsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "program_tasks_task_id",
+				Columns:    []*schema.Column{ProgramTasksColumns[1]},
+				RefColumns: []*schema.Column{TasksColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// ProgramNotesColumns holds the columns for the "program_notes" table.
+	ProgramNotesColumns = []*schema.Column{
+		{Name: "program_id", Type: field.TypeString},
+		{Name: "note_id", Type: field.TypeString},
+	}
+	// ProgramNotesTable holds the schema information for the "program_notes" table.
+	ProgramNotesTable = &schema.Table{
+		Name:       "program_notes",
+		Columns:    ProgramNotesColumns,
+		PrimaryKey: []*schema.Column{ProgramNotesColumns[0], ProgramNotesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "program_notes_program_id",
+				Columns:    []*schema.Column{ProgramNotesColumns[0]},
+				RefColumns: []*schema.Column{ProgramsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "program_notes_note_id",
+				Columns:    []*schema.Column{ProgramNotesColumns[1]},
+				RefColumns: []*schema.Column{NotesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// ProgramFilesColumns holds the columns for the "program_files" table.
+	ProgramFilesColumns = []*schema.Column{
+		{Name: "program_id", Type: field.TypeString},
+		{Name: "file_id", Type: field.TypeString},
+	}
+	// ProgramFilesTable holds the schema information for the "program_files" table.
+	ProgramFilesTable = &schema.Table{
+		Name:       "program_files",
+		Columns:    ProgramFilesColumns,
+		PrimaryKey: []*schema.Column{ProgramFilesColumns[0], ProgramFilesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "program_files_program_id",
+				Columns:    []*schema.Column{ProgramFilesColumns[0]},
+				RefColumns: []*schema.Column{ProgramsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "program_files_file_id",
+				Columns:    []*schema.Column{ProgramFilesColumns[1]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// ProgramNarrativesColumns holds the columns for the "program_narratives" table.
+	ProgramNarrativesColumns = []*schema.Column{
+		{Name: "program_id", Type: field.TypeString},
+		{Name: "narrative_id", Type: field.TypeString},
+	}
+	// ProgramNarrativesTable holds the schema information for the "program_narratives" table.
+	ProgramNarrativesTable = &schema.Table{
+		Name:       "program_narratives",
+		Columns:    ProgramNarrativesColumns,
+		PrimaryKey: []*schema.Column{ProgramNarrativesColumns[0], ProgramNarrativesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "program_narratives_program_id",
+				Columns:    []*schema.Column{ProgramNarrativesColumns[0]},
+				RefColumns: []*schema.Column{ProgramsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "program_narratives_narrative_id",
+				Columns:    []*schema.Column{ProgramNarrativesColumns[1]},
+				RefColumns: []*schema.Column{NarrativesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// ProgramActionplansColumns holds the columns for the "program_actionplans" table.
+	ProgramActionplansColumns = []*schema.Column{
+		{Name: "program_id", Type: field.TypeString},
+		{Name: "action_plan_id", Type: field.TypeString},
+	}
+	// ProgramActionplansTable holds the schema information for the "program_actionplans" table.
+	ProgramActionplansTable = &schema.Table{
+		Name:       "program_actionplans",
+		Columns:    ProgramActionplansColumns,
+		PrimaryKey: []*schema.Column{ProgramActionplansColumns[0], ProgramActionplansColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "program_actionplans_program_id",
+				Columns:    []*schema.Column{ProgramActionplansColumns[0]},
+				RefColumns: []*schema.Column{ProgramsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "program_actionplans_action_plan_id",
+				Columns:    []*schema.Column{ProgramActionplansColumns[1]},
+				RefColumns: []*schema.Column{ActionPlansColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// RiskActionplansColumns holds the columns for the "risk_actionplans" table.
 	RiskActionplansColumns = []*schema.Column{
 		{Name: "risk_id", Type: field.TypeString},
@@ -4065,6 +4412,31 @@ var (
 				Symbol:     "standard_actionplans_action_plan_id",
 				Columns:    []*schema.Column{StandardActionplansColumns[1]},
 				RefColumns: []*schema.Column{ActionPlansColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// StandardProgramsColumns holds the columns for the "standard_programs" table.
+	StandardProgramsColumns = []*schema.Column{
+		{Name: "standard_id", Type: field.TypeString},
+		{Name: "program_id", Type: field.TypeString},
+	}
+	// StandardProgramsTable holds the schema information for the "standard_programs" table.
+	StandardProgramsTable = &schema.Table{
+		Name:       "standard_programs",
+		Columns:    StandardProgramsColumns,
+		PrimaryKey: []*schema.Column{StandardProgramsColumns[0], StandardProgramsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "standard_programs_standard_id",
+				Columns:    []*schema.Column{StandardProgramsColumns[0]},
+				RefColumns: []*schema.Column{StandardsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "standard_programs_program_id",
+				Columns:    []*schema.Column{StandardProgramsColumns[1]},
+				RefColumns: []*schema.Column{ProgramsColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 		},
@@ -4354,6 +4726,8 @@ var (
 		PersonalAccessTokensTable,
 		ProceduresTable,
 		ProcedureHistoryTable,
+		ProgramsTable,
+		ProgramHistoryTable,
 		RisksTable,
 		RiskHistoryTable,
 		StandardsTable,
@@ -4417,10 +4791,22 @@ var (
 		ProcedureNarrativesTable,
 		ProcedureRisksTable,
 		ProcedureTasksTable,
+		ProgramControlsTable,
+		ProgramSubcontrolsTable,
+		ProgramControlobjectivesTable,
+		ProgramPoliciesTable,
+		ProgramProceduresTable,
+		ProgramRisksTable,
+		ProgramTasksTable,
+		ProgramNotesTable,
+		ProgramFilesTable,
+		ProgramNarrativesTable,
+		ProgramActionplansTable,
 		RiskActionplansTable,
 		StandardControlobjectivesTable,
 		StandardControlsTable,
 		StandardActionplansTable,
+		StandardProgramsTable,
 		SubcontrolTasksTable,
 		SubscriberEventsTable,
 		TemplateFilesTable,
@@ -4550,6 +4936,10 @@ func init() {
 	ProcedureHistoryTable.Annotation = &entsql.Annotation{
 		Table: "procedure_history",
 	}
+	ProgramsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	ProgramHistoryTable.Annotation = &entsql.Annotation{
+		Table: "program_history",
+	}
 	RisksTable.ForeignKeys[0].RefTable = ControlObjectivesTable
 	RiskHistoryTable.Annotation = &entsql.Annotation{
 		Table: "risk_history",
@@ -4675,6 +5065,28 @@ func init() {
 	ProcedureRisksTable.ForeignKeys[1].RefTable = RisksTable
 	ProcedureTasksTable.ForeignKeys[0].RefTable = ProceduresTable
 	ProcedureTasksTable.ForeignKeys[1].RefTable = TasksTable
+	ProgramControlsTable.ForeignKeys[0].RefTable = ProgramsTable
+	ProgramControlsTable.ForeignKeys[1].RefTable = ControlsTable
+	ProgramSubcontrolsTable.ForeignKeys[0].RefTable = ProgramsTable
+	ProgramSubcontrolsTable.ForeignKeys[1].RefTable = SubcontrolsTable
+	ProgramControlobjectivesTable.ForeignKeys[0].RefTable = ProgramsTable
+	ProgramControlobjectivesTable.ForeignKeys[1].RefTable = ControlObjectivesTable
+	ProgramPoliciesTable.ForeignKeys[0].RefTable = ProgramsTable
+	ProgramPoliciesTable.ForeignKeys[1].RefTable = InternalPoliciesTable
+	ProgramProceduresTable.ForeignKeys[0].RefTable = ProgramsTable
+	ProgramProceduresTable.ForeignKeys[1].RefTable = ProceduresTable
+	ProgramRisksTable.ForeignKeys[0].RefTable = ProgramsTable
+	ProgramRisksTable.ForeignKeys[1].RefTable = RisksTable
+	ProgramTasksTable.ForeignKeys[0].RefTable = ProgramsTable
+	ProgramTasksTable.ForeignKeys[1].RefTable = TasksTable
+	ProgramNotesTable.ForeignKeys[0].RefTable = ProgramsTable
+	ProgramNotesTable.ForeignKeys[1].RefTable = NotesTable
+	ProgramFilesTable.ForeignKeys[0].RefTable = ProgramsTable
+	ProgramFilesTable.ForeignKeys[1].RefTable = FilesTable
+	ProgramNarrativesTable.ForeignKeys[0].RefTable = ProgramsTable
+	ProgramNarrativesTable.ForeignKeys[1].RefTable = NarrativesTable
+	ProgramActionplansTable.ForeignKeys[0].RefTable = ProgramsTable
+	ProgramActionplansTable.ForeignKeys[1].RefTable = ActionPlansTable
 	RiskActionplansTable.ForeignKeys[0].RefTable = RisksTable
 	RiskActionplansTable.ForeignKeys[1].RefTable = ActionPlansTable
 	StandardControlobjectivesTable.ForeignKeys[0].RefTable = StandardsTable
@@ -4683,6 +5095,8 @@ func init() {
 	StandardControlsTable.ForeignKeys[1].RefTable = ControlsTable
 	StandardActionplansTable.ForeignKeys[0].RefTable = StandardsTable
 	StandardActionplansTable.ForeignKeys[1].RefTable = ActionPlansTable
+	StandardProgramsTable.ForeignKeys[0].RefTable = StandardsTable
+	StandardProgramsTable.ForeignKeys[1].RefTable = ProgramsTable
 	SubcontrolTasksTable.ForeignKeys[0].RefTable = SubcontrolsTable
 	SubcontrolTasksTable.ForeignKeys[1].RefTable = TasksTable
 	SubscriberEventsTable.ForeignKeys[0].RefTable = SubscribersTable

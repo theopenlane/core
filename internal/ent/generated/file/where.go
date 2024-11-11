@@ -1857,6 +1857,35 @@ func HasEventsWith(preds ...predicate.Event) predicate.File {
 	})
 }
 
+// HasProgram applies the HasEdge predicate on the "program" edge.
+func HasProgram() predicate.File {
+	return predicate.File(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, ProgramTable, ProgramPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.ProgramFiles
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasProgramWith applies the HasEdge predicate on the "program" edge with a given conditions (other predicates).
+func HasProgramWith(preds ...predicate.Program) predicate.File {
+	return predicate.File(func(s *sql.Selector) {
+		step := newProgramStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.ProgramFiles
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.File) predicate.File {
 	return predicate.File(sql.AndPredicates(predicates...))

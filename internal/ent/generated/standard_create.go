@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 )
 
@@ -326,6 +327,21 @@ func (sc *StandardCreate) AddActionplans(a ...*ActionPlan) *StandardCreate {
 	return sc.AddActionplanIDs(ids...)
 }
 
+// AddProgramIDs adds the "programs" edge to the Program entity by IDs.
+func (sc *StandardCreate) AddProgramIDs(ids ...string) *StandardCreate {
+	sc.mutation.AddProgramIDs(ids...)
+	return sc
+}
+
+// AddPrograms adds the "programs" edges to the Program entity.
+func (sc *StandardCreate) AddPrograms(p ...*Program) *StandardCreate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return sc.AddProgramIDs(ids...)
+}
+
 // Mutation returns the StandardMutation object of the builder.
 func (sc *StandardCreate) Mutation() *StandardMutation {
 	return sc.mutation
@@ -577,6 +593,23 @@ func (sc *StandardCreate) createSpec() (*Standard, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = sc.schemaConfig.StandardActionplans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := sc.mutation.ProgramsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   standard.ProgramsTable,
+			Columns: standard.ProgramsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = sc.schemaConfig.StandardPrograms
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

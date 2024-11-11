@@ -879,6 +879,36 @@ type ProcedureUpdatePayload struct {
 	Procedure *generated.Procedure `json:"procedure"`
 }
 
+// Return response for createBulkProgram mutation
+type ProgramBulkCreatePayload struct {
+	// Created programs
+	Programs []*generated.Program `json:"programs,omitempty"`
+}
+
+// Return response for createProgram mutation
+type ProgramCreatePayload struct {
+	// Created program
+	Program *generated.Program `json:"program"`
+}
+
+// Return response for deleteProgram mutation
+type ProgramDeletePayload struct {
+	// Deleted program ID
+	DeletedID string `json:"deletedID"`
+}
+
+type ProgramSearchResult struct {
+	Programs []*generated.Program `json:"programs,omitempty"`
+}
+
+func (ProgramSearchResult) IsSearchResult() {}
+
+// Return response for updateProgram mutation
+type ProgramUpdatePayload struct {
+	// Updated program
+	Program *generated.Program `json:"program"`
+}
+
 // Return response for createBulkRisk mutation
 type RiskBulkCreatePayload struct {
 	// Created risks

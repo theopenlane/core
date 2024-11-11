@@ -6325,6 +6325,279 @@ func (m *ProcedureMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	return nil
 }
 
+func (m *ProgramMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.ProgramHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if mappingID, exists := m.MappingID(); exists {
+		create = create.SetMappingID(mappingID)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	if name, exists := m.Name(); exists {
+		create = create.SetName(name)
+	}
+
+	if description, exists := m.Description(); exists {
+		create = create.SetDescription(description)
+	}
+
+	if status, exists := m.Status(); exists {
+		create = create.SetStatus(status)
+	}
+
+	if startDate, exists := m.StartDate(); exists {
+		create = create.SetStartDate(startDate)
+	}
+
+	if endDate, exists := m.EndDate(); exists {
+		create = create.SetEndDate(endDate)
+	}
+
+	if organizationID, exists := m.OrganizationID(); exists {
+		create = create.SetOrganizationID(organizationID)
+	}
+
+	if auditorReady, exists := m.AuditorReady(); exists {
+		create = create.SetAuditorReady(auditorReady)
+	}
+
+	if auditorWriteComments, exists := m.AuditorWriteComments(); exists {
+		create = create.SetAuditorWriteComments(auditorWriteComments)
+	}
+
+	if auditorReadComments, exists := m.AuditorReadComments(); exists {
+		create = create.SetAuditorReadComments(auditorReadComments)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *ProgramMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDelete(ctx) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		program, err := client.Program.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.ProgramHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(program.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(program.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(program.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(program.UpdatedBy)
+		}
+
+		if mappingID, exists := m.MappingID(); exists {
+			create = create.SetMappingID(mappingID)
+		} else {
+			create = create.SetMappingID(program.MappingID)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(program.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(program.DeletedBy)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(program.Tags)
+		}
+
+		if name, exists := m.Name(); exists {
+			create = create.SetName(name)
+		} else {
+			create = create.SetName(program.Name)
+		}
+
+		if description, exists := m.Description(); exists {
+			create = create.SetDescription(description)
+		} else {
+			create = create.SetDescription(program.Description)
+		}
+
+		if status, exists := m.Status(); exists {
+			create = create.SetStatus(status)
+		} else {
+			create = create.SetStatus(program.Status)
+		}
+
+		if startDate, exists := m.StartDate(); exists {
+			create = create.SetStartDate(startDate)
+		} else {
+			create = create.SetStartDate(program.StartDate)
+		}
+
+		if endDate, exists := m.EndDate(); exists {
+			create = create.SetEndDate(endDate)
+		} else {
+			create = create.SetEndDate(program.EndDate)
+		}
+
+		if organizationID, exists := m.OrganizationID(); exists {
+			create = create.SetOrganizationID(organizationID)
+		} else {
+			create = create.SetOrganizationID(program.OrganizationID)
+		}
+
+		if auditorReady, exists := m.AuditorReady(); exists {
+			create = create.SetAuditorReady(auditorReady)
+		} else {
+			create = create.SetAuditorReady(program.AuditorReady)
+		}
+
+		if auditorWriteComments, exists := m.AuditorWriteComments(); exists {
+			create = create.SetAuditorWriteComments(auditorWriteComments)
+		} else {
+			create = create.SetAuditorWriteComments(program.AuditorWriteComments)
+		}
+
+		if auditorReadComments, exists := m.AuditorReadComments(); exists {
+			create = create.SetAuditorReadComments(auditorReadComments)
+		} else {
+			create = create.SetAuditorReadComments(program.AuditorReadComments)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ProgramMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDelete(ctx) {
+		return nil
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		program, err := client.Program.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.ProgramHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(program.CreatedAt).
+			SetUpdatedAt(program.UpdatedAt).
+			SetCreatedBy(program.CreatedBy).
+			SetUpdatedBy(program.UpdatedBy).
+			SetMappingID(program.MappingID).
+			SetDeletedAt(program.DeletedAt).
+			SetDeletedBy(program.DeletedBy).
+			SetTags(program.Tags).
+			SetName(program.Name).
+			SetDescription(program.Description).
+			SetStatus(program.Status).
+			SetStartDate(program.StartDate).
+			SetEndDate(program.EndDate).
+			SetOrganizationID(program.OrganizationID).
+			SetAuditorReady(program.AuditorReady).
+			SetAuditorWriteComments(program.AuditorWriteComments).
+			SetAuditorReadComments(program.AuditorReadComments).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *RiskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	client := m.Client()
 

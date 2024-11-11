@@ -180,6 +180,12 @@ type Procedure func(*sql.Selector)
 // ProcedureHistory is the predicate function for procedurehistory builders.
 type ProcedureHistory func(*sql.Selector)
 
+// Program is the predicate function for program builders.
+type Program func(*sql.Selector)
+
+// ProgramHistory is the predicate function for programhistory builders.
+type ProgramHistory func(*sql.Selector)
+
 // Risk is the predicate function for risk builders.
 type Risk func(*sql.Selector)
 

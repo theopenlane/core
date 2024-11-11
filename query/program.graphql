@@ -1,0 +1,160 @@
+
+mutation CreateBulkCSVProgram($input: Upload!) {
+  createBulkCSVProgram(input: $input) {
+    programs {
+      auditorReadComments
+      auditorReady
+      auditorWriteComments
+      createdAt
+      createdBy
+      description
+      endDate
+      id
+      name
+      organizationID
+      startDate
+      status
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateBulkProgram($input: [CreateProgramInput!]) {
+  createBulkProgram(input: $input) {
+    programs {
+      auditorReadComments
+      auditorReady
+      auditorWriteComments
+      createdAt
+      createdBy
+      description
+      endDate
+      id
+      name
+      organizationID
+      startDate
+      status
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateProgram($input: CreateProgramInput!) {
+  createProgram(input: $input) {
+    program {
+      auditorReadComments
+      auditorReady
+      auditorWriteComments
+      createdAt
+      createdBy
+      description
+      endDate
+      id
+      name
+      organizationID
+      startDate
+      status
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation DeleteProgram($deleteProgramId: ID!) {
+  deleteProgram(id: $deleteProgramId) {
+    deletedID
+  }
+}
+
+query GetAllPrograms {
+  programs {
+    edges {
+      node {
+        auditorReadComments
+        auditorReady
+        auditorWriteComments
+        createdAt
+        createdBy
+        description
+        endDate
+        id
+        name
+        organizationID
+        startDate
+        status
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+query GetProgramByID($programId: ID!) {
+  program(id: $programId) {
+    auditorReadComments
+    auditorReady
+    auditorWriteComments
+    createdAt
+    createdBy
+    description
+    endDate
+    id
+    name
+    organizationID
+    startDate
+    status
+    tags
+    updatedAt
+    updatedBy
+  }
+}
+
+query GetPrograms($where: ProgramWhereInput) {
+  programs(where: $where) {
+    edges {
+      node {
+        auditorReadComments
+        auditorReady
+        auditorWriteComments
+        createdAt
+        createdBy
+        description
+        endDate
+        id
+        name
+        organizationID
+        startDate
+        status
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+mutation UpdateProgram($updateProgramId: ID!, $input: UpdateProgramInput!) {
+  updateProgram(id: $updateProgramId, input: $input) {
+    program {
+      auditorReadComments
+      auditorReady
+      auditorWriteComments
+      createdAt
+      createdBy
+      description
+      endDate
+      id
+      name
+      organizationID
+      startDate
+      status
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}

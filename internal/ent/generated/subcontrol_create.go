@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/note"
+	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -414,6 +415,21 @@ func (sc *SubcontrolCreate) SetNotes(n *Note) *SubcontrolCreate {
 	return sc.SetNotesID(n.ID)
 }
 
+// AddProgramIDs adds the "programs" edge to the Program entity by IDs.
+func (sc *SubcontrolCreate) AddProgramIDs(ids ...string) *SubcontrolCreate {
+	sc.mutation.AddProgramIDs(ids...)
+	return sc
+}
+
+// AddPrograms adds the "programs" edges to the Program entity.
+func (sc *SubcontrolCreate) AddPrograms(p ...*Program) *SubcontrolCreate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return sc.AddProgramIDs(ids...)
+}
+
 // Mutation returns the SubcontrolMutation object of the builder.
 func (sc *SubcontrolCreate) Mutation() *SubcontrolMutation {
 	return sc.mutation
@@ -693,6 +709,23 @@ func (sc *SubcontrolCreate) createSpec() (*Subcontrol, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.note_subcontrols = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := sc.mutation.ProgramsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subcontrol.ProgramsTable,
+			Columns: subcontrol.ProgramsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = sc.schemaConfig.ProgramSubcontrols
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

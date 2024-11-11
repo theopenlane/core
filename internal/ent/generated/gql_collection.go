@@ -66,6 +66,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/procedurehistory"
+	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/programhistory"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
@@ -304,6 +306,19 @@ func (ap *ActionPlanQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				return err
 			}
 			ap.WithNamedUser(alias, func(wq *UserQuery) {
+				*wq = *query
+			})
+
+		case "program":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ProgramClient{config: ap.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, programImplementors)...); err != nil {
+				return err
+			}
+			ap.WithNamedProgram(alias, func(wq *ProgramQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -1019,6 +1034,19 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			c.WithNamedTasks(alias, func(wq *TaskQuery) {
 				*wq = *query
 			})
+
+		case "programs":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ProgramClient{config: c.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, programImplementors)...); err != nil {
+				return err
+			}
+			c.WithNamedPrograms(alias, func(wq *ProgramQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[control.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, control.FieldCreatedAt)
@@ -1450,6 +1478,19 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 				return err
 			}
 			co.WithNamedTasks(alias, func(wq *TaskQuery) {
+				*wq = *query
+			})
+
+		case "programs":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ProgramClient{config: co.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, programImplementors)...); err != nil {
+				return err
+			}
+			co.WithNamedPrograms(alias, func(wq *ProgramQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -4665,6 +4706,19 @@ func (f *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			f.WithNamedEvents(alias, func(wq *EventQuery) {
 				*wq = *query
 			})
+
+		case "program":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ProgramClient{config: f.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, programImplementors)...); err != nil {
+				return err
+			}
+			f.WithNamedProgram(alias, func(wq *ProgramQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[file.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, file.FieldCreatedAt)
@@ -6714,6 +6768,19 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 			ip.WithNamedTasks(alias, func(wq *TaskQuery) {
 				*wq = *query
 			})
+
+		case "programs":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ProgramClient{config: ip.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, programImplementors)...); err != nil {
+				return err
+			}
+			ip.WithNamedPrograms(alias, func(wq *ProgramQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[internalpolicy.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, internalpolicy.FieldCreatedAt)
@@ -7210,6 +7277,19 @@ func (n *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 			n.WithNamedControlobjective(alias, func(wq *ControlObjectiveQuery) {
 				*wq = *query
 			})
+
+		case "program":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ProgramClient{config: n.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, programImplementors)...); err != nil {
+				return err
+			}
+			n.WithNamedProgram(alias, func(wq *ProgramQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[narrative.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, narrative.FieldCreatedAt)
@@ -7496,6 +7576,19 @@ func (n *NoteQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				return err
 			}
 			n.WithNamedSubcontrols(alias, func(wq *SubcontrolQuery) {
+				*wq = *query
+			})
+
+		case "program":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ProgramClient{config: n.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, programImplementors)...); err != nil {
+				return err
+			}
+			n.WithNamedProgram(alias, func(wq *ProgramQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -8904,6 +8997,19 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				*wq = *query
 			})
 
+		case "programs":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ProgramClient{config: o.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, programImplementors)...); err != nil {
+				return err
+			}
+			o.WithNamedPrograms(alias, func(wq *ProgramQuery) {
+				*wq = *query
+			})
+
 		case "members":
 			var (
 				alias = field.Alias
@@ -9779,6 +9885,19 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			pr.WithNamedTasks(alias, func(wq *TaskQuery) {
 				*wq = *query
 			})
+
+		case "programs":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ProgramClient{config: pr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, programImplementors)...); err != nil {
+				return err
+			}
+			pr.WithNamedPrograms(alias, func(wq *ProgramQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[procedure.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, procedure.FieldCreatedAt)
@@ -10058,6 +10177,476 @@ func newProcedureHistoryPaginateArgs(rv map[string]any) *procedurehistoryPaginat
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (pr *ProgramQuery) CollectFields(ctx context.Context, satisfies ...string) (*ProgramQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return pr, nil
+	}
+	if err := pr.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return pr, nil
+}
+
+func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(program.Columns))
+		selectedFields = []string{program.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+
+		case "organization":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: pr.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			pr.withOrganization = query
+			if _, ok := fieldSeen[program.FieldOrganizationID]; !ok {
+				selectedFields = append(selectedFields, program.FieldOrganizationID)
+				fieldSeen[program.FieldOrganizationID] = struct{}{}
+			}
+
+		case "controls":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ControlClient{config: pr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, controlImplementors)...); err != nil {
+				return err
+			}
+			pr.WithNamedControls(alias, func(wq *ControlQuery) {
+				*wq = *query
+			})
+
+		case "subcontrols":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&SubcontrolClient{config: pr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, subcontrolImplementors)...); err != nil {
+				return err
+			}
+			pr.WithNamedSubcontrols(alias, func(wq *SubcontrolQuery) {
+				*wq = *query
+			})
+
+		case "controlobjectives":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ControlObjectiveClient{config: pr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, controlobjectiveImplementors)...); err != nil {
+				return err
+			}
+			pr.WithNamedControlobjectives(alias, func(wq *ControlObjectiveQuery) {
+				*wq = *query
+			})
+
+		case "policies":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&InternalPolicyClient{config: pr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, internalpolicyImplementors)...); err != nil {
+				return err
+			}
+			pr.WithNamedPolicies(alias, func(wq *InternalPolicyQuery) {
+				*wq = *query
+			})
+
+		case "procedures":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ProcedureClient{config: pr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, procedureImplementors)...); err != nil {
+				return err
+			}
+			pr.WithNamedProcedures(alias, func(wq *ProcedureQuery) {
+				*wq = *query
+			})
+
+		case "risks":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&RiskClient{config: pr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, riskImplementors)...); err != nil {
+				return err
+			}
+			pr.WithNamedRisks(alias, func(wq *RiskQuery) {
+				*wq = *query
+			})
+
+		case "tasks":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&TaskClient{config: pr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, taskImplementors)...); err != nil {
+				return err
+			}
+			pr.WithNamedTasks(alias, func(wq *TaskQuery) {
+				*wq = *query
+			})
+
+		case "notes":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&NoteClient{config: pr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, noteImplementors)...); err != nil {
+				return err
+			}
+			pr.WithNamedNotes(alias, func(wq *NoteQuery) {
+				*wq = *query
+			})
+
+		case "files":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&FileClient{config: pr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, fileImplementors)...); err != nil {
+				return err
+			}
+			pr.WithNamedFiles(alias, func(wq *FileQuery) {
+				*wq = *query
+			})
+
+		case "narratives":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&NarrativeClient{config: pr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, narrativeImplementors)...); err != nil {
+				return err
+			}
+			pr.WithNamedNarratives(alias, func(wq *NarrativeQuery) {
+				*wq = *query
+			})
+
+		case "actionplans":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ActionPlanClient{config: pr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, actionplanImplementors)...); err != nil {
+				return err
+			}
+			pr.WithNamedActionplans(alias, func(wq *ActionPlanQuery) {
+				*wq = *query
+			})
+
+		case "standards":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&StandardClient{config: pr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, standardImplementors)...); err != nil {
+				return err
+			}
+			pr.WithNamedStandards(alias, func(wq *StandardQuery) {
+				*wq = *query
+			})
+		case "createdAt":
+			if _, ok := fieldSeen[program.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, program.FieldCreatedAt)
+				fieldSeen[program.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[program.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, program.FieldUpdatedAt)
+				fieldSeen[program.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[program.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, program.FieldCreatedBy)
+				fieldSeen[program.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[program.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, program.FieldUpdatedBy)
+				fieldSeen[program.FieldUpdatedBy] = struct{}{}
+			}
+		case "deletedAt":
+			if _, ok := fieldSeen[program.FieldDeletedAt]; !ok {
+				selectedFields = append(selectedFields, program.FieldDeletedAt)
+				fieldSeen[program.FieldDeletedAt] = struct{}{}
+			}
+		case "deletedBy":
+			if _, ok := fieldSeen[program.FieldDeletedBy]; !ok {
+				selectedFields = append(selectedFields, program.FieldDeletedBy)
+				fieldSeen[program.FieldDeletedBy] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[program.FieldTags]; !ok {
+				selectedFields = append(selectedFields, program.FieldTags)
+				fieldSeen[program.FieldTags] = struct{}{}
+			}
+		case "name":
+			if _, ok := fieldSeen[program.FieldName]; !ok {
+				selectedFields = append(selectedFields, program.FieldName)
+				fieldSeen[program.FieldName] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[program.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, program.FieldDescription)
+				fieldSeen[program.FieldDescription] = struct{}{}
+			}
+		case "status":
+			if _, ok := fieldSeen[program.FieldStatus]; !ok {
+				selectedFields = append(selectedFields, program.FieldStatus)
+				fieldSeen[program.FieldStatus] = struct{}{}
+			}
+		case "startDate":
+			if _, ok := fieldSeen[program.FieldStartDate]; !ok {
+				selectedFields = append(selectedFields, program.FieldStartDate)
+				fieldSeen[program.FieldStartDate] = struct{}{}
+			}
+		case "endDate":
+			if _, ok := fieldSeen[program.FieldEndDate]; !ok {
+				selectedFields = append(selectedFields, program.FieldEndDate)
+				fieldSeen[program.FieldEndDate] = struct{}{}
+			}
+		case "organizationID":
+			if _, ok := fieldSeen[program.FieldOrganizationID]; !ok {
+				selectedFields = append(selectedFields, program.FieldOrganizationID)
+				fieldSeen[program.FieldOrganizationID] = struct{}{}
+			}
+		case "auditorReady":
+			if _, ok := fieldSeen[program.FieldAuditorReady]; !ok {
+				selectedFields = append(selectedFields, program.FieldAuditorReady)
+				fieldSeen[program.FieldAuditorReady] = struct{}{}
+			}
+		case "auditorWriteComments":
+			if _, ok := fieldSeen[program.FieldAuditorWriteComments]; !ok {
+				selectedFields = append(selectedFields, program.FieldAuditorWriteComments)
+				fieldSeen[program.FieldAuditorWriteComments] = struct{}{}
+			}
+		case "auditorReadComments":
+			if _, ok := fieldSeen[program.FieldAuditorReadComments]; !ok {
+				selectedFields = append(selectedFields, program.FieldAuditorReadComments)
+				fieldSeen[program.FieldAuditorReadComments] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		pr.Select(selectedFields...)
+	}
+	return nil
+}
+
+type programPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []ProgramPaginateOption
+}
+
+func newProgramPaginateArgs(rv map[string]any) *programPaginateArgs {
+	args := &programPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*ProgramWhereInput); ok {
+		args.opts = append(args.opts, WithProgramFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (ph *ProgramHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*ProgramHistoryQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return ph, nil
+	}
+	if err := ph.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return ph, nil
+}
+
+func (ph *ProgramHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(programhistory.Columns))
+		selectedFields = []string{programhistory.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "historyTime":
+			if _, ok := fieldSeen[programhistory.FieldHistoryTime]; !ok {
+				selectedFields = append(selectedFields, programhistory.FieldHistoryTime)
+				fieldSeen[programhistory.FieldHistoryTime] = struct{}{}
+			}
+		case "ref":
+			if _, ok := fieldSeen[programhistory.FieldRef]; !ok {
+				selectedFields = append(selectedFields, programhistory.FieldRef)
+				fieldSeen[programhistory.FieldRef] = struct{}{}
+			}
+		case "operation":
+			if _, ok := fieldSeen[programhistory.FieldOperation]; !ok {
+				selectedFields = append(selectedFields, programhistory.FieldOperation)
+				fieldSeen[programhistory.FieldOperation] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[programhistory.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, programhistory.FieldCreatedAt)
+				fieldSeen[programhistory.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[programhistory.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, programhistory.FieldUpdatedAt)
+				fieldSeen[programhistory.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[programhistory.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, programhistory.FieldCreatedBy)
+				fieldSeen[programhistory.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[programhistory.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, programhistory.FieldUpdatedBy)
+				fieldSeen[programhistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "deletedAt":
+			if _, ok := fieldSeen[programhistory.FieldDeletedAt]; !ok {
+				selectedFields = append(selectedFields, programhistory.FieldDeletedAt)
+				fieldSeen[programhistory.FieldDeletedAt] = struct{}{}
+			}
+		case "deletedBy":
+			if _, ok := fieldSeen[programhistory.FieldDeletedBy]; !ok {
+				selectedFields = append(selectedFields, programhistory.FieldDeletedBy)
+				fieldSeen[programhistory.FieldDeletedBy] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[programhistory.FieldTags]; !ok {
+				selectedFields = append(selectedFields, programhistory.FieldTags)
+				fieldSeen[programhistory.FieldTags] = struct{}{}
+			}
+		case "name":
+			if _, ok := fieldSeen[programhistory.FieldName]; !ok {
+				selectedFields = append(selectedFields, programhistory.FieldName)
+				fieldSeen[programhistory.FieldName] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[programhistory.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, programhistory.FieldDescription)
+				fieldSeen[programhistory.FieldDescription] = struct{}{}
+			}
+		case "status":
+			if _, ok := fieldSeen[programhistory.FieldStatus]; !ok {
+				selectedFields = append(selectedFields, programhistory.FieldStatus)
+				fieldSeen[programhistory.FieldStatus] = struct{}{}
+			}
+		case "startDate":
+			if _, ok := fieldSeen[programhistory.FieldStartDate]; !ok {
+				selectedFields = append(selectedFields, programhistory.FieldStartDate)
+				fieldSeen[programhistory.FieldStartDate] = struct{}{}
+			}
+		case "endDate":
+			if _, ok := fieldSeen[programhistory.FieldEndDate]; !ok {
+				selectedFields = append(selectedFields, programhistory.FieldEndDate)
+				fieldSeen[programhistory.FieldEndDate] = struct{}{}
+			}
+		case "organizationID":
+			if _, ok := fieldSeen[programhistory.FieldOrganizationID]; !ok {
+				selectedFields = append(selectedFields, programhistory.FieldOrganizationID)
+				fieldSeen[programhistory.FieldOrganizationID] = struct{}{}
+			}
+		case "auditorReady":
+			if _, ok := fieldSeen[programhistory.FieldAuditorReady]; !ok {
+				selectedFields = append(selectedFields, programhistory.FieldAuditorReady)
+				fieldSeen[programhistory.FieldAuditorReady] = struct{}{}
+			}
+		case "auditorWriteComments":
+			if _, ok := fieldSeen[programhistory.FieldAuditorWriteComments]; !ok {
+				selectedFields = append(selectedFields, programhistory.FieldAuditorWriteComments)
+				fieldSeen[programhistory.FieldAuditorWriteComments] = struct{}{}
+			}
+		case "auditorReadComments":
+			if _, ok := fieldSeen[programhistory.FieldAuditorReadComments]; !ok {
+				selectedFields = append(selectedFields, programhistory.FieldAuditorReadComments)
+				fieldSeen[programhistory.FieldAuditorReadComments] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		ph.Select(selectedFields...)
+	}
+	return nil
+}
+
+type programhistoryPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []ProgramHistoryPaginateOption
+}
+
+func newProgramHistoryPaginateArgs(rv map[string]any) *programhistoryPaginateArgs {
+	args := &programhistoryPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*ProgramHistoryWhereInput); ok {
+		args.opts = append(args.opts, WithProgramHistoryFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
 func (r *RiskQuery) CollectFields(ctx context.Context, satisfies ...string) (*RiskQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
@@ -10115,6 +10704,19 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				return err
 			}
 			r.WithNamedActionplans(alias, func(wq *ActionPlanQuery) {
+				*wq = *query
+			})
+
+		case "program":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ProgramClient{config: r.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, programImplementors)...); err != nil {
+				return err
+			}
+			r.WithNamedProgram(alias, func(wq *ProgramQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -10478,6 +11080,19 @@ func (s *StandardQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			s.WithNamedActionplans(alias, func(wq *ActionPlanQuery) {
 				*wq = *query
 			})
+
+		case "programs":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ProgramClient{config: s.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, programImplementors)...); err != nil {
+				return err
+			}
+			s.WithNamedPrograms(alias, func(wq *ProgramQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[standard.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, standard.FieldCreatedAt)
@@ -10837,6 +11452,19 @@ func (s *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				return err
 			}
 			s.withNotes = query
+
+		case "programs":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ProgramClient{config: s.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, programImplementors)...); err != nil {
+				return err
+			}
+			s.WithNamedPrograms(alias, func(wq *ProgramQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[subcontrol.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, subcontrol.FieldCreatedAt)
@@ -11604,6 +12232,19 @@ func (t *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				return err
 			}
 			t.WithNamedSubcontrol(alias, func(wq *SubcontrolQuery) {
+				*wq = *query
+			})
+
+		case "program":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ProgramClient{config: t.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, programImplementors)...); err != nil {
+				return err
+			}
+			t.WithNamedProgram(alias, func(wq *ProgramQuery) {
 				*wq = *query
 			})
 		case "createdAt":

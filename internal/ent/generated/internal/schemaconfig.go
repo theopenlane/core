@@ -109,6 +109,19 @@ type SchemaConfig struct {
 	ProcedureRisks                   string // Procedure-risks->Risk table.
 	ProcedureTasks                   string // Procedure-tasks->Task table.
 	ProcedureHistory                 string // ProcedureHistory table.
+	Program                          string // Program table.
+	ProgramControls                  string // Program-controls->Control table.
+	ProgramSubcontrols               string // Program-subcontrols->Subcontrol table.
+	ProgramControlobjectives         string // Program-controlobjectives->ControlObjective table.
+	ProgramPolicies                  string // Program-policies->InternalPolicy table.
+	ProgramProcedures                string // Program-procedures->Procedure table.
+	ProgramRisks                     string // Program-risks->Risk table.
+	ProgramTasks                     string // Program-tasks->Task table.
+	ProgramNotes                     string // Program-notes->Note table.
+	ProgramFiles                     string // Program-files->File table.
+	ProgramNarratives                string // Program-narratives->Narrative table.
+	ProgramActionplans               string // Program-actionplans->ActionPlan table.
+	ProgramHistory                   string // ProgramHistory table.
 	Risk                             string // Risk table.
 	RiskActionplans                  string // Risk-actionplans->ActionPlan table.
 	RiskHistory                      string // RiskHistory table.
@@ -116,6 +129,7 @@ type SchemaConfig struct {
 	StandardControlobjectives        string // Standard-controlobjectives->ControlObjective table.
 	StandardControls                 string // Standard-controls->Control table.
 	StandardActionplans              string // Standard-actionplans->ActionPlan table.
+	StandardPrograms                 string // Standard-programs->Program table.
 	StandardHistory                  string // StandardHistory table.
 	Subcontrol                       string // Subcontrol table.
 	SubcontrolTasks                  string // Subcontrol-tasks->Task table.

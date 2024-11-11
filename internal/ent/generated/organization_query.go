@@ -35,6 +35,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
@@ -78,6 +79,7 @@ type OrganizationQuery struct {
 	withContacts                     *ContactQuery
 	withNotes                        *NoteQuery
 	withTasks                        *TaskQuery
+	withPrograms                     *ProgramQuery
 	withMembers                      *OrgMembershipQuery
 	loadTotal                        []func(context.Context, []*Organization) error
 	modifiers                        []func(*sql.Selector)
@@ -106,6 +108,7 @@ type OrganizationQuery struct {
 	withNamedContacts                map[string]*ContactQuery
 	withNamedNotes                   map[string]*NoteQuery
 	withNamedTasks                   map[string]*TaskQuery
+	withNamedPrograms                map[string]*ProgramQuery
 	withNamedMembers                 map[string]*OrgMembershipQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -818,6 +821,31 @@ func (oq *OrganizationQuery) QueryTasks() *TaskQuery {
 	return query
 }
 
+// QueryPrograms chains the current query on the "programs" edge.
+func (oq *OrganizationQuery) QueryPrograms() *ProgramQuery {
+	query := (&ProgramClient{config: oq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := oq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := oq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(program.Table, program.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.ProgramsTable, organization.ProgramsColumn),
+		)
+		schemaConfig := oq.schemaConfig
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.Program
+		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryMembers chains the current query on the "members" edge.
 func (oq *OrganizationQuery) QueryMembers() *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: oq.config}).Query()
@@ -1062,6 +1090,7 @@ func (oq *OrganizationQuery) Clone() *OrganizationQuery {
 		withContacts:                oq.withContacts.Clone(),
 		withNotes:                   oq.withNotes.Clone(),
 		withTasks:                   oq.withTasks.Clone(),
+		withPrograms:                oq.withPrograms.Clone(),
 		withMembers:                 oq.withMembers.Clone(),
 		// clone intermediate query.
 		sql:       oq.sql.Clone(),
@@ -1367,6 +1396,17 @@ func (oq *OrganizationQuery) WithTasks(opts ...func(*TaskQuery)) *OrganizationQu
 	return oq
 }
 
+// WithPrograms tells the query-builder to eager-load the nodes that are connected to
+// the "programs" edge. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithPrograms(opts ...func(*ProgramQuery)) *OrganizationQuery {
+	query := (&ProgramClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	oq.withPrograms = query
+	return oq
+}
+
 // WithMembers tells the query-builder to eager-load the nodes that are connected to
 // the "members" edge. The optional arguments are used to configure the query builder of the edge.
 func (oq *OrganizationQuery) WithMembers(opts ...func(*OrgMembershipQuery)) *OrganizationQuery {
@@ -1462,7 +1502,7 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = oq.querySpec()
-		loadedTypes = [28]bool{
+		loadedTypes = [29]bool{
 			oq.withParent != nil,
 			oq.withChildren != nil,
 			oq.withGroups != nil,
@@ -1490,6 +1530,7 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			oq.withContacts != nil,
 			oq.withNotes != nil,
 			oq.withTasks != nil,
+			oq.withPrograms != nil,
 			oq.withMembers != nil,
 		}
 	)
@@ -1711,6 +1752,13 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	if query := oq.withPrograms; query != nil {
+		if err := oq.loadPrograms(ctx, query, nodes,
+			func(n *Organization) { n.Edges.Programs = []*Program{} },
+			func(n *Organization, e *Program) { n.Edges.Programs = append(n.Edges.Programs, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := oq.withMembers; query != nil {
 		if err := oq.loadMembers(ctx, query, nodes,
 			func(n *Organization) { n.Edges.Members = []*OrgMembership{} },
@@ -1890,6 +1938,13 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := oq.loadTasks(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedTasks(name) },
 			func(n *Organization, e *Task) { n.appendNamedTasks(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range oq.withNamedPrograms {
+		if err := oq.loadPrograms(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedPrograms(name) },
+			func(n *Organization, e *Program) { n.appendNamedPrograms(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2909,6 +2964,36 @@ func (oq *OrganizationQuery) loadTasks(ctx context.Context, query *TaskQuery, no
 	}
 	return nil
 }
+func (oq *OrganizationQuery) loadPrograms(ctx context.Context, query *ProgramQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Program)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(program.FieldOrganizationID)
+	}
+	query.Where(predicate.Program(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.ProgramsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OrganizationID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "organization_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (oq *OrganizationQuery) loadMembers(ctx context.Context, query *OrgMembershipQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *OrgMembership)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Organization)
@@ -3388,6 +3473,20 @@ func (oq *OrganizationQuery) WithNamedTasks(name string, opts ...func(*TaskQuery
 		oq.withNamedTasks = make(map[string]*TaskQuery)
 	}
 	oq.withNamedTasks[name] = query
+	return oq
+}
+
+// WithNamedPrograms tells the query-builder to eager-load the nodes that are connected to the "programs"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithNamedPrograms(name string, opts ...func(*ProgramQuery)) *OrganizationQuery {
+	query := (&ProgramClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if oq.withNamedPrograms == nil {
+		oq.withNamedPrograms = make(map[string]*ProgramQuery)
+	}
+	oq.withNamedPrograms[name] = query
 	return oq
 }
 

@@ -44,6 +44,8 @@ func (Narrative) Edges() []ent.Edge {
 			Ref("narratives"),
 		edge.From("controlobjective", ControlObjective.Type).
 			Ref("narratives"),
+		edge.From("program", Program.Type).
+			Ref("narratives"),
 	}
 }
 

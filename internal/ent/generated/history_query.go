@@ -34,6 +34,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organizationsettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembershiphistory"
 	"github.com/theopenlane/core/internal/ent/generated/procedurehistory"
+	"github.com/theopenlane/core/internal/ent/generated/programhistory"
 	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/standardhistory"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrolhistory"
@@ -1237,6 +1238,52 @@ func (phq *ProcedureHistoryQuery) AsOf(ctx context.Context, time time.Time) (*Pr
 	return phq.
 		Where(procedurehistory.HistoryTimeLTE(time)).
 		Order(procedurehistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (pr *Program) History() *ProgramHistoryQuery {
+	historyClient := NewProgramHistoryClient(pr.config)
+	return historyClient.Query().Where(programhistory.Ref(pr.ID))
+}
+
+func (ph *ProgramHistory) Next(ctx context.Context) (*ProgramHistory, error) {
+	client := NewProgramHistoryClient(ph.config)
+	return client.Query().
+		Where(
+			programhistory.Ref(ph.Ref),
+			programhistory.HistoryTimeGT(ph.HistoryTime),
+		).
+		Order(programhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (ph *ProgramHistory) Prev(ctx context.Context) (*ProgramHistory, error) {
+	client := NewProgramHistoryClient(ph.config)
+	return client.Query().
+		Where(
+			programhistory.Ref(ph.Ref),
+			programhistory.HistoryTimeLT(ph.HistoryTime),
+		).
+		Order(programhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (phq *ProgramHistoryQuery) Earliest(ctx context.Context) (*ProgramHistory, error) {
+	return phq.
+		Order(programhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (phq *ProgramHistoryQuery) Latest(ctx context.Context) (*ProgramHistory, error) {
+	return phq.
+		Order(programhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (phq *ProgramHistoryQuery) AsOf(ctx context.Context, time time.Time) (*ProgramHistory, error) {
+	return phq.
+		Where(programhistory.HistoryTimeLTE(time)).
+		Order(programhistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
 }
 

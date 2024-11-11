@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -33,12 +34,14 @@ type StandardQuery struct {
 	withControls               *ControlQuery
 	withProcedures             *ProcedureQuery
 	withActionplans            *ActionPlanQuery
+	withPrograms               *ProgramQuery
 	loadTotal                  []func(context.Context, []*Standard) error
 	modifiers                  []func(*sql.Selector)
 	withNamedControlobjectives map[string]*ControlObjectiveQuery
 	withNamedControls          map[string]*ControlQuery
 	withNamedProcedures        map[string]*ProcedureQuery
 	withNamedActionplans       map[string]*ActionPlanQuery
+	withNamedPrograms          map[string]*ProgramQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -169,6 +172,31 @@ func (sq *StandardQuery) QueryActionplans() *ActionPlanQuery {
 		schemaConfig := sq.schemaConfig
 		step.To.Schema = schemaConfig.ActionPlan
 		step.Edge.Schema = schemaConfig.StandardActionplans
+		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryPrograms chains the current query on the "programs" edge.
+func (sq *StandardQuery) QueryPrograms() *ProgramQuery {
+	query := (&ProgramClient{config: sq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := sq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := sq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(standard.Table, standard.FieldID, selector),
+			sqlgraph.To(program.Table, program.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, standard.ProgramsTable, standard.ProgramsPrimaryKey...),
+		)
+		schemaConfig := sq.schemaConfig
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.StandardPrograms
 		fromU = sqlgraph.SetNeighbors(sq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -371,6 +399,7 @@ func (sq *StandardQuery) Clone() *StandardQuery {
 		withControls:          sq.withControls.Clone(),
 		withProcedures:        sq.withProcedures.Clone(),
 		withActionplans:       sq.withActionplans.Clone(),
+		withPrograms:          sq.withPrograms.Clone(),
 		// clone intermediate query.
 		sql:       sq.sql.Clone(),
 		path:      sq.path,
@@ -419,6 +448,17 @@ func (sq *StandardQuery) WithActionplans(opts ...func(*ActionPlanQuery)) *Standa
 		opt(query)
 	}
 	sq.withActionplans = query
+	return sq
+}
+
+// WithPrograms tells the query-builder to eager-load the nodes that are connected to
+// the "programs" edge. The optional arguments are used to configure the query builder of the edge.
+func (sq *StandardQuery) WithPrograms(opts ...func(*ProgramQuery)) *StandardQuery {
+	query := (&ProgramClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	sq.withPrograms = query
 	return sq
 }
 
@@ -500,11 +540,12 @@ func (sq *StandardQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Sta
 	var (
 		nodes       = []*Standard{}
 		_spec       = sq.querySpec()
-		loadedTypes = [4]bool{
+		loadedTypes = [5]bool{
 			sq.withControlobjectives != nil,
 			sq.withControls != nil,
 			sq.withProcedures != nil,
 			sq.withActionplans != nil,
+			sq.withPrograms != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -560,6 +601,13 @@ func (sq *StandardQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Sta
 			return nil, err
 		}
 	}
+	if query := sq.withPrograms; query != nil {
+		if err := sq.loadPrograms(ctx, query, nodes,
+			func(n *Standard) { n.Edges.Programs = []*Program{} },
+			func(n *Standard, e *Program) { n.Edges.Programs = append(n.Edges.Programs, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range sq.withNamedControlobjectives {
 		if err := sq.loadControlobjectives(ctx, query, nodes,
 			func(n *Standard) { n.appendNamedControlobjectives(name) },
@@ -585,6 +633,13 @@ func (sq *StandardQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Sta
 		if err := sq.loadActionplans(ctx, query, nodes,
 			func(n *Standard) { n.appendNamedActionplans(name) },
 			func(n *Standard, e *ActionPlan) { n.appendNamedActionplans(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range sq.withNamedPrograms {
+		if err := sq.loadPrograms(ctx, query, nodes,
+			func(n *Standard) { n.appendNamedPrograms(name) },
+			func(n *Standard, e *Program) { n.appendNamedPrograms(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -813,6 +868,68 @@ func (sq *StandardQuery) loadActionplans(ctx context.Context, query *ActionPlanQ
 	}
 	return nil
 }
+func (sq *StandardQuery) loadPrograms(ctx context.Context, query *ProgramQuery, nodes []*Standard, init func(*Standard), assign func(*Standard, *Program)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Standard)
+	nids := make(map[string]map[*Standard]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(standard.ProgramsTable)
+		joinT.Schema(sq.schemaConfig.StandardPrograms)
+		s.Join(joinT).On(s.C(program.FieldID), joinT.C(standard.ProgramsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(standard.ProgramsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(standard.ProgramsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Standard]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Program](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "programs" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 
 func (sq *StandardQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := sq.querySpec()
@@ -965,6 +1082,20 @@ func (sq *StandardQuery) WithNamedActionplans(name string, opts ...func(*ActionP
 		sq.withNamedActionplans = make(map[string]*ActionPlanQuery)
 	}
 	sq.withNamedActionplans[name] = query
+	return sq
+}
+
+// WithNamedPrograms tells the query-builder to eager-load the nodes that are connected to the "programs"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (sq *StandardQuery) WithNamedPrograms(name string, opts ...func(*ProgramQuery)) *StandardQuery {
+	query := (&ProgramClient{config: sq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if sq.withNamedPrograms == nil {
+		sq.withNamedPrograms = make(map[string]*ProgramQuery)
+	}
+	sq.withNamedPrograms[name] = query
 	return sq
 }
 

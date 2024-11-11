@@ -67,6 +67,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/procedurehistory"
+	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/programhistory"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
@@ -1710,6 +1712,60 @@ func (f TraverseProcedureHistory) Traverse(ctx context.Context, q generated.Quer
 	return fmt.Errorf("unexpected query type %T. expect *generated.ProcedureHistoryQuery", q)
 }
 
+// The ProgramFunc type is an adapter to allow the use of ordinary function as a Querier.
+type ProgramFunc func(context.Context, *generated.ProgramQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f ProgramFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.ProgramQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.ProgramQuery", q)
+}
+
+// The TraverseProgram type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseProgram func(context.Context, *generated.ProgramQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseProgram) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseProgram) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ProgramQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.ProgramQuery", q)
+}
+
+// The ProgramHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type ProgramHistoryFunc func(context.Context, *generated.ProgramHistoryQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f ProgramHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.ProgramHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.ProgramHistoryQuery", q)
+}
+
+// The TraverseProgramHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseProgramHistory func(context.Context, *generated.ProgramHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseProgramHistory) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseProgramHistory) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ProgramHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.ProgramHistoryQuery", q)
+}
+
 // The RiskFunc type is an adapter to allow the use of ordinary function as a Querier.
 type RiskFunc func(context.Context, *generated.RiskQuery) (generated.Value, error)
 
@@ -2342,6 +2398,10 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.ProcedureQuery, predicate.Procedure, procedure.OrderOption]{typ: generated.TypeProcedure, tq: q}, nil
 	case *generated.ProcedureHistoryQuery:
 		return &query[*generated.ProcedureHistoryQuery, predicate.ProcedureHistory, procedurehistory.OrderOption]{typ: generated.TypeProcedureHistory, tq: q}, nil
+	case *generated.ProgramQuery:
+		return &query[*generated.ProgramQuery, predicate.Program, program.OrderOption]{typ: generated.TypeProgram, tq: q}, nil
+	case *generated.ProgramHistoryQuery:
+		return &query[*generated.ProgramHistoryQuery, predicate.ProgramHistory, programhistory.OrderOption]{typ: generated.TypeProgramHistory, tq: q}, nil
 	case *generated.RiskQuery:
 		return &query[*generated.RiskQuery, predicate.Risk, risk.OrderOption]{typ: generated.TypeRisk, tq: q}, nil
 	case *generated.RiskHistoryQuery:

@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/internal/ent/generated/program"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -252,6 +253,21 @@ func (nu *NarrativeUpdate) AddControlobjective(c ...*ControlObjective) *Narrativ
 	return nu.AddControlobjectiveIDs(ids...)
 }
 
+// AddProgramIDs adds the "program" edge to the Program entity by IDs.
+func (nu *NarrativeUpdate) AddProgramIDs(ids ...string) *NarrativeUpdate {
+	nu.mutation.AddProgramIDs(ids...)
+	return nu
+}
+
+// AddProgram adds the "program" edges to the Program entity.
+func (nu *NarrativeUpdate) AddProgram(p ...*Program) *NarrativeUpdate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return nu.AddProgramIDs(ids...)
+}
+
 // Mutation returns the NarrativeMutation object of the builder.
 func (nu *NarrativeUpdate) Mutation() *NarrativeMutation {
 	return nu.mutation
@@ -339,6 +355,27 @@ func (nu *NarrativeUpdate) RemoveControlobjective(c ...*ControlObjective) *Narra
 		ids[i] = c[i].ID
 	}
 	return nu.RemoveControlobjectiveIDs(ids...)
+}
+
+// ClearProgram clears all "program" edges to the Program entity.
+func (nu *NarrativeUpdate) ClearProgram() *NarrativeUpdate {
+	nu.mutation.ClearProgram()
+	return nu
+}
+
+// RemoveProgramIDs removes the "program" edge to Program entities by IDs.
+func (nu *NarrativeUpdate) RemoveProgramIDs(ids ...string) *NarrativeUpdate {
+	nu.mutation.RemoveProgramIDs(ids...)
+	return nu
+}
+
+// RemoveProgram removes "program" edges to Program entities.
+func (nu *NarrativeUpdate) RemoveProgram(p ...*Program) *NarrativeUpdate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return nu.RemoveProgramIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -652,6 +689,54 @@ func (nu *NarrativeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if nu.mutation.ProgramCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   narrative.ProgramTable,
+			Columns: narrative.ProgramPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nu.schemaConfig.ProgramNarratives
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := nu.mutation.RemovedProgramIDs(); len(nodes) > 0 && !nu.mutation.ProgramCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   narrative.ProgramTable,
+			Columns: narrative.ProgramPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nu.schemaConfig.ProgramNarratives
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := nu.mutation.ProgramIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   narrative.ProgramTable,
+			Columns: narrative.ProgramPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nu.schemaConfig.ProgramNarratives
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = nu.schemaConfig.Narrative
 	ctx = internal.NewSchemaConfigContext(ctx, nu.schemaConfig)
 	_spec.AddModifiers(nu.modifiers...)
@@ -892,6 +977,21 @@ func (nuo *NarrativeUpdateOne) AddControlobjective(c ...*ControlObjective) *Narr
 	return nuo.AddControlobjectiveIDs(ids...)
 }
 
+// AddProgramIDs adds the "program" edge to the Program entity by IDs.
+func (nuo *NarrativeUpdateOne) AddProgramIDs(ids ...string) *NarrativeUpdateOne {
+	nuo.mutation.AddProgramIDs(ids...)
+	return nuo
+}
+
+// AddProgram adds the "program" edges to the Program entity.
+func (nuo *NarrativeUpdateOne) AddProgram(p ...*Program) *NarrativeUpdateOne {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return nuo.AddProgramIDs(ids...)
+}
+
 // Mutation returns the NarrativeMutation object of the builder.
 func (nuo *NarrativeUpdateOne) Mutation() *NarrativeMutation {
 	return nuo.mutation
@@ -979,6 +1079,27 @@ func (nuo *NarrativeUpdateOne) RemoveControlobjective(c ...*ControlObjective) *N
 		ids[i] = c[i].ID
 	}
 	return nuo.RemoveControlobjectiveIDs(ids...)
+}
+
+// ClearProgram clears all "program" edges to the Program entity.
+func (nuo *NarrativeUpdateOne) ClearProgram() *NarrativeUpdateOne {
+	nuo.mutation.ClearProgram()
+	return nuo
+}
+
+// RemoveProgramIDs removes the "program" edge to Program entities by IDs.
+func (nuo *NarrativeUpdateOne) RemoveProgramIDs(ids ...string) *NarrativeUpdateOne {
+	nuo.mutation.RemoveProgramIDs(ids...)
+	return nuo
+}
+
+// RemoveProgram removes "program" edges to Program entities.
+func (nuo *NarrativeUpdateOne) RemoveProgram(p ...*Program) *NarrativeUpdateOne {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return nuo.RemoveProgramIDs(ids...)
 }
 
 // Where appends a list predicates to the NarrativeUpdate builder.
@@ -1317,6 +1438,54 @@ func (nuo *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, e
 			},
 		}
 		edge.Schema = nuo.schemaConfig.ControlObjectiveNarratives
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if nuo.mutation.ProgramCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   narrative.ProgramTable,
+			Columns: narrative.ProgramPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nuo.schemaConfig.ProgramNarratives
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := nuo.mutation.RemovedProgramIDs(); len(nodes) > 0 && !nuo.mutation.ProgramCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   narrative.ProgramTable,
+			Columns: narrative.ProgramPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nuo.schemaConfig.ProgramNarratives
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := nuo.mutation.ProgramIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   narrative.ProgramTable,
+			Columns: narrative.ProgramPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nuo.schemaConfig.ProgramNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

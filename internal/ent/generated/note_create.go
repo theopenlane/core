@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 )
 
@@ -198,6 +199,21 @@ func (nc *NoteCreate) AddSubcontrols(s ...*Subcontrol) *NoteCreate {
 		ids[i] = s[i].ID
 	}
 	return nc.AddSubcontrolIDs(ids...)
+}
+
+// AddProgramIDs adds the "program" edge to the Program entity by IDs.
+func (nc *NoteCreate) AddProgramIDs(ids ...string) *NoteCreate {
+	nc.mutation.AddProgramIDs(ids...)
+	return nc
+}
+
+// AddProgram adds the "program" edges to the Program entity.
+func (nc *NoteCreate) AddProgram(p ...*Program) *NoteCreate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return nc.AddProgramIDs(ids...)
 }
 
 // Mutation returns the NoteMutation object of the builder.
@@ -410,6 +426,23 @@ func (nc *NoteCreate) createSpec() (*Note, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = nc.schemaConfig.Subcontrol
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := nc.mutation.ProgramIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   note.ProgramTable,
+			Columns: note.ProgramPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nc.schemaConfig.ProgramNotes
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

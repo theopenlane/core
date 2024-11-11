@@ -77,6 +77,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/procedurehistory"
+	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/programhistory"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
@@ -231,6 +233,10 @@ type Client struct {
 	Procedure *ProcedureClient
 	// ProcedureHistory is the client for interacting with the ProcedureHistory builders.
 	ProcedureHistory *ProcedureHistoryClient
+	// Program is the client for interacting with the Program builders.
+	Program *ProgramClient
+	// ProgramHistory is the client for interacting with the ProgramHistory builders.
+	ProgramHistory *ProgramHistoryClient
 	// Risk is the client for interacting with the Risk builders.
 	Risk *RiskClient
 	// RiskHistory is the client for interacting with the RiskHistory builders.
@@ -347,6 +353,8 @@ func (c *Client) init() {
 	c.PersonalAccessToken = NewPersonalAccessTokenClient(c.config)
 	c.Procedure = NewProcedureClient(c.config)
 	c.ProcedureHistory = NewProcedureHistoryClient(c.config)
+	c.Program = NewProgramClient(c.config)
+	c.ProgramHistory = NewProgramHistoryClient(c.config)
 	c.Risk = NewRiskClient(c.config)
 	c.RiskHistory = NewRiskHistoryClient(c.config)
 	c.Standard = NewStandardClient(c.config)
@@ -577,6 +585,8 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		PersonalAccessToken:           NewPersonalAccessTokenClient(cfg),
 		Procedure:                     NewProcedureClient(cfg),
 		ProcedureHistory:              NewProcedureHistoryClient(cfg),
+		Program:                       NewProgramClient(cfg),
+		ProgramHistory:                NewProgramHistoryClient(cfg),
 		Risk:                          NewRiskClient(cfg),
 		RiskHistory:                   NewRiskHistoryClient(cfg),
 		Standard:                      NewStandardClient(cfg),
@@ -673,6 +683,8 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		PersonalAccessToken:           NewPersonalAccessTokenClient(cfg),
 		Procedure:                     NewProcedureClient(cfg),
 		ProcedureHistory:              NewProcedureHistoryClient(cfg),
+		Program:                       NewProgramClient(cfg),
+		ProgramHistory:                NewProgramHistoryClient(cfg),
 		Risk:                          NewRiskClient(cfg),
 		RiskHistory:                   NewRiskHistoryClient(cfg),
 		Standard:                      NewStandardClient(cfg),
@@ -735,11 +747,11 @@ func (c *Client) Use(hooks ...Hook) {
 		c.OauthProviderHistory, c.OhAuthTooToken, c.OrgMembership,
 		c.OrgMembershipHistory, c.Organization, c.OrganizationHistory,
 		c.OrganizationSetting, c.OrganizationSettingHistory, c.PasswordResetToken,
-		c.PersonalAccessToken, c.Procedure, c.ProcedureHistory, c.Risk, c.RiskHistory,
-		c.Standard, c.StandardHistory, c.Subcontrol, c.SubcontrolHistory, c.Subscriber,
-		c.TFASetting, c.Task, c.TaskHistory, c.Template, c.TemplateHistory, c.User,
-		c.UserHistory, c.UserSetting, c.UserSettingHistory, c.Webauthn, c.Webhook,
-		c.WebhookHistory,
+		c.PersonalAccessToken, c.Procedure, c.ProcedureHistory, c.Program,
+		c.ProgramHistory, c.Risk, c.RiskHistory, c.Standard, c.StandardHistory,
+		c.Subcontrol, c.SubcontrolHistory, c.Subscriber, c.TFASetting, c.Task,
+		c.TaskHistory, c.Template, c.TemplateHistory, c.User, c.UserHistory,
+		c.UserSetting, c.UserSettingHistory, c.Webauthn, c.Webhook, c.WebhookHistory,
 	} {
 		n.Use(hooks...)
 	}
@@ -763,11 +775,11 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.OauthProviderHistory, c.OhAuthTooToken, c.OrgMembership,
 		c.OrgMembershipHistory, c.Organization, c.OrganizationHistory,
 		c.OrganizationSetting, c.OrganizationSettingHistory, c.PasswordResetToken,
-		c.PersonalAccessToken, c.Procedure, c.ProcedureHistory, c.Risk, c.RiskHistory,
-		c.Standard, c.StandardHistory, c.Subcontrol, c.SubcontrolHistory, c.Subscriber,
-		c.TFASetting, c.Task, c.TaskHistory, c.Template, c.TemplateHistory, c.User,
-		c.UserHistory, c.UserSetting, c.UserSettingHistory, c.Webauthn, c.Webhook,
-		c.WebhookHistory,
+		c.PersonalAccessToken, c.Procedure, c.ProcedureHistory, c.Program,
+		c.ProgramHistory, c.Risk, c.RiskHistory, c.Standard, c.StandardHistory,
+		c.Subcontrol, c.SubcontrolHistory, c.Subscriber, c.TFASetting, c.Task,
+		c.TaskHistory, c.Template, c.TemplateHistory, c.User, c.UserHistory,
+		c.UserSetting, c.UserSettingHistory, c.Webauthn, c.Webhook, c.WebhookHistory,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -960,6 +972,10 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Procedure.mutate(ctx, m)
 	case *ProcedureHistoryMutation:
 		return c.ProcedureHistory.mutate(ctx, m)
+	case *ProgramMutation:
+		return c.Program.mutate(ctx, m)
+	case *ProgramHistoryMutation:
+		return c.ProgramHistory.mutate(ctx, m)
 	case *RiskMutation:
 		return c.Risk.mutate(ctx, m)
 	case *RiskHistoryMutation:
@@ -1335,6 +1351,25 @@ func (c *ActionPlanClient) QueryUser(ap *ActionPlan) *UserQuery {
 		schemaConfig := ap.schemaConfig
 		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.UserActionplans
+		fromV = sqlgraph.Neighbors(ap.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryProgram queries the program edge of a ActionPlan.
+func (c *ActionPlanClient) QueryProgram(ap *ActionPlan) *ProgramQuery {
+	query := (&ProgramClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ap.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(actionplan.Table, actionplan.FieldID, id),
+			sqlgraph.To(program.Table, program.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, actionplan.ProgramTable, actionplan.ProgramPrimaryKey...),
+		)
+		schemaConfig := ap.schemaConfig
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.ProgramActionplans
 		fromV = sqlgraph.Neighbors(ap.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -2088,6 +2123,25 @@ func (c *ControlClient) QueryTasks(co *Control) *TaskQuery {
 	return query
 }
 
+// QueryPrograms queries the programs edge of a Control.
+func (c *ControlClient) QueryPrograms(co *Control) *ProgramQuery {
+	query := (&ProgramClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := co.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, id),
+			sqlgraph.To(program.Table, program.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, control.ProgramsTable, control.ProgramsPrimaryKey...),
+		)
+		schemaConfig := co.schemaConfig
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.ProgramControls
+		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *ControlClient) Hooks() []Hook {
 	hooks := c.hooks.Control
@@ -2502,6 +2556,25 @@ func (c *ControlObjectiveClient) QueryTasks(co *ControlObjective) *TaskQuery {
 		schemaConfig := co.schemaConfig
 		step.To.Schema = schemaConfig.Task
 		step.Edge.Schema = schemaConfig.ControlObjectiveTasks
+		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPrograms queries the programs edge of a ControlObjective.
+func (c *ControlObjectiveClient) QueryPrograms(co *ControlObjective) *ProgramQuery {
+	query := (&ProgramClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := co.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(controlobjective.Table, controlobjective.FieldID, id),
+			sqlgraph.To(program.Table, program.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, controlobjective.ProgramsTable, controlobjective.ProgramsPrimaryKey...),
+		)
+		schemaConfig := co.schemaConfig
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.ProgramControlobjectives
 		fromV = sqlgraph.Neighbors(co.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -6151,6 +6224,25 @@ func (c *FileClient) QueryEvents(f *File) *EventQuery {
 	return query
 }
 
+// QueryProgram queries the program edge of a File.
+func (c *FileClient) QueryProgram(f *File) *ProgramQuery {
+	query := (&ProgramClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := f.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, id),
+			sqlgraph.To(program.Table, program.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, file.ProgramTable, file.ProgramPrimaryKey...),
+		)
+		schemaConfig := f.schemaConfig
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.ProgramFiles
+		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *FileClient) Hooks() []Hook {
 	hooks := c.hooks.File
@@ -8244,6 +8336,25 @@ func (c *InternalPolicyClient) QueryTasks(ip *InternalPolicy) *TaskQuery {
 	return query
 }
 
+// QueryPrograms queries the programs edge of a InternalPolicy.
+func (c *InternalPolicyClient) QueryPrograms(ip *InternalPolicy) *ProgramQuery {
+	query := (&ProgramClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ip.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, id),
+			sqlgraph.To(program.Table, program.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, internalpolicy.ProgramsTable, internalpolicy.ProgramsPrimaryKey...),
+		)
+		schemaConfig := ip.schemaConfig
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.ProgramPolicies
+		fromV = sqlgraph.Neighbors(ip.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *InternalPolicyClient) Hooks() []Hook {
 	hooks := c.hooks.InternalPolicy
@@ -8761,6 +8872,25 @@ func (c *NarrativeClient) QueryControlobjective(n *Narrative) *ControlObjectiveQ
 	return query
 }
 
+// QueryProgram queries the program edge of a Narrative.
+func (c *NarrativeClient) QueryProgram(n *Narrative) *ProgramQuery {
+	query := (&ProgramClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := n.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(narrative.Table, narrative.FieldID, id),
+			sqlgraph.To(program.Table, program.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, narrative.ProgramTable, narrative.ProgramPrimaryKey...),
+		)
+		schemaConfig := n.schemaConfig
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.ProgramNarratives
+		fromV = sqlgraph.Neighbors(n.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *NarrativeClient) Hooks() []Hook {
 	hooks := c.hooks.Narrative
@@ -9080,6 +9210,25 @@ func (c *NoteClient) QuerySubcontrols(n *Note) *SubcontrolQuery {
 		schemaConfig := n.schemaConfig
 		step.To.Schema = schemaConfig.Subcontrol
 		step.Edge.Schema = schemaConfig.Subcontrol
+		fromV = sqlgraph.Neighbors(n.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryProgram queries the program edge of a Note.
+func (c *NoteClient) QueryProgram(n *Note) *ProgramQuery {
+	query := (&ProgramClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := n.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(note.Table, note.FieldID, id),
+			sqlgraph.To(program.Table, program.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, note.ProgramTable, note.ProgramPrimaryKey...),
+		)
+		schemaConfig := n.schemaConfig
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.ProgramNotes
 		fromV = sqlgraph.Neighbors(n.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -10656,6 +10805,25 @@ func (c *OrganizationClient) QueryTasks(o *Organization) *TaskQuery {
 	return query
 }
 
+// QueryPrograms queries the programs edge of a Organization.
+func (c *OrganizationClient) QueryPrograms(o *Organization) *ProgramQuery {
+	query := (&ProgramClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(program.Table, program.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.ProgramsTable, organization.ProgramsColumn),
+		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.Program
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryMembers queries the members edge of a Organization.
 func (c *OrganizationClient) QueryMembers(o *Organization) *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: c.config}).Query()
@@ -11694,6 +11862,25 @@ func (c *ProcedureClient) QueryTasks(pr *Procedure) *TaskQuery {
 	return query
 }
 
+// QueryPrograms queries the programs edge of a Procedure.
+func (c *ProcedureClient) QueryPrograms(pr *Procedure) *ProgramQuery {
+	query := (&ProgramClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(procedure.Table, procedure.FieldID, id),
+			sqlgraph.To(program.Table, program.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, procedure.ProgramsTable, procedure.ProgramsPrimaryKey...),
+		)
+		schemaConfig := pr.schemaConfig
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.ProgramProcedures
+		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *ProcedureClient) Hooks() []Hook {
 	hooks := c.hooks.Procedure
@@ -11851,6 +12038,521 @@ func (c *ProcedureHistoryClient) mutate(ctx context.Context, m *ProcedureHistory
 		return (&ProcedureHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("generated: unknown ProcedureHistory mutation op: %q", m.Op())
+	}
+}
+
+// ProgramClient is a client for the Program schema.
+type ProgramClient struct {
+	config
+}
+
+// NewProgramClient returns a client for the Program from the given config.
+func NewProgramClient(c config) *ProgramClient {
+	return &ProgramClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `program.Hooks(f(g(h())))`.
+func (c *ProgramClient) Use(hooks ...Hook) {
+	c.hooks.Program = append(c.hooks.Program, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `program.Intercept(f(g(h())))`.
+func (c *ProgramClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Program = append(c.inters.Program, interceptors...)
+}
+
+// Create returns a builder for creating a Program entity.
+func (c *ProgramClient) Create() *ProgramCreate {
+	mutation := newProgramMutation(c.config, OpCreate)
+	return &ProgramCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Program entities.
+func (c *ProgramClient) CreateBulk(builders ...*ProgramCreate) *ProgramCreateBulk {
+	return &ProgramCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ProgramClient) MapCreateBulk(slice any, setFunc func(*ProgramCreate, int)) *ProgramCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ProgramCreateBulk{err: fmt.Errorf("calling to ProgramClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ProgramCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ProgramCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Program.
+func (c *ProgramClient) Update() *ProgramUpdate {
+	mutation := newProgramMutation(c.config, OpUpdate)
+	return &ProgramUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ProgramClient) UpdateOne(pr *Program) *ProgramUpdateOne {
+	mutation := newProgramMutation(c.config, OpUpdateOne, withProgram(pr))
+	return &ProgramUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ProgramClient) UpdateOneID(id string) *ProgramUpdateOne {
+	mutation := newProgramMutation(c.config, OpUpdateOne, withProgramID(id))
+	return &ProgramUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Program.
+func (c *ProgramClient) Delete() *ProgramDelete {
+	mutation := newProgramMutation(c.config, OpDelete)
+	return &ProgramDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ProgramClient) DeleteOne(pr *Program) *ProgramDeleteOne {
+	return c.DeleteOneID(pr.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ProgramClient) DeleteOneID(id string) *ProgramDeleteOne {
+	builder := c.Delete().Where(program.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ProgramDeleteOne{builder}
+}
+
+// Query returns a query builder for Program.
+func (c *ProgramClient) Query() *ProgramQuery {
+	return &ProgramQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeProgram},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Program entity by its id.
+func (c *ProgramClient) Get(ctx context.Context, id string) (*Program, error) {
+	return c.Query().Where(program.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ProgramClient) GetX(ctx context.Context, id string) *Program {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOrganization queries the organization edge of a Program.
+func (c *ProgramClient) QueryOrganization(pr *Program) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(program.Table, program.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, program.OrganizationTable, program.OrganizationColumn),
+		)
+		schemaConfig := pr.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.Program
+		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryControls queries the controls edge of a Program.
+func (c *ProgramClient) QueryControls(pr *Program) *ControlQuery {
+	query := (&ControlClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(program.Table, program.FieldID, id),
+			sqlgraph.To(control.Table, control.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, program.ControlsTable, program.ControlsPrimaryKey...),
+		)
+		schemaConfig := pr.schemaConfig
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.ProgramControls
+		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySubcontrols queries the subcontrols edge of a Program.
+func (c *ProgramClient) QuerySubcontrols(pr *Program) *SubcontrolQuery {
+	query := (&SubcontrolClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(program.Table, program.FieldID, id),
+			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, program.SubcontrolsTable, program.SubcontrolsPrimaryKey...),
+		)
+		schemaConfig := pr.schemaConfig
+		step.To.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.ProgramSubcontrols
+		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryControlobjectives queries the controlobjectives edge of a Program.
+func (c *ProgramClient) QueryControlobjectives(pr *Program) *ControlObjectiveQuery {
+	query := (&ControlObjectiveClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(program.Table, program.FieldID, id),
+			sqlgraph.To(controlobjective.Table, controlobjective.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, program.ControlobjectivesTable, program.ControlobjectivesPrimaryKey...),
+		)
+		schemaConfig := pr.schemaConfig
+		step.To.Schema = schemaConfig.ControlObjective
+		step.Edge.Schema = schemaConfig.ProgramControlobjectives
+		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPolicies queries the policies edge of a Program.
+func (c *ProgramClient) QueryPolicies(pr *Program) *InternalPolicyQuery {
+	query := (&InternalPolicyClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(program.Table, program.FieldID, id),
+			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, program.PoliciesTable, program.PoliciesPrimaryKey...),
+		)
+		schemaConfig := pr.schemaConfig
+		step.To.Schema = schemaConfig.InternalPolicy
+		step.Edge.Schema = schemaConfig.ProgramPolicies
+		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryProcedures queries the procedures edge of a Program.
+func (c *ProgramClient) QueryProcedures(pr *Program) *ProcedureQuery {
+	query := (&ProcedureClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(program.Table, program.FieldID, id),
+			sqlgraph.To(procedure.Table, procedure.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, program.ProceduresTable, program.ProceduresPrimaryKey...),
+		)
+		schemaConfig := pr.schemaConfig
+		step.To.Schema = schemaConfig.Procedure
+		step.Edge.Schema = schemaConfig.ProgramProcedures
+		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryRisks queries the risks edge of a Program.
+func (c *ProgramClient) QueryRisks(pr *Program) *RiskQuery {
+	query := (&RiskClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(program.Table, program.FieldID, id),
+			sqlgraph.To(risk.Table, risk.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, program.RisksTable, program.RisksPrimaryKey...),
+		)
+		schemaConfig := pr.schemaConfig
+		step.To.Schema = schemaConfig.Risk
+		step.Edge.Schema = schemaConfig.ProgramRisks
+		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTasks queries the tasks edge of a Program.
+func (c *ProgramClient) QueryTasks(pr *Program) *TaskQuery {
+	query := (&TaskClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(program.Table, program.FieldID, id),
+			sqlgraph.To(task.Table, task.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, program.TasksTable, program.TasksPrimaryKey...),
+		)
+		schemaConfig := pr.schemaConfig
+		step.To.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.ProgramTasks
+		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryNotes queries the notes edge of a Program.
+func (c *ProgramClient) QueryNotes(pr *Program) *NoteQuery {
+	query := (&NoteClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(program.Table, program.FieldID, id),
+			sqlgraph.To(note.Table, note.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, program.NotesTable, program.NotesPrimaryKey...),
+		)
+		schemaConfig := pr.schemaConfig
+		step.To.Schema = schemaConfig.Note
+		step.Edge.Schema = schemaConfig.ProgramNotes
+		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryFiles queries the files edge of a Program.
+func (c *ProgramClient) QueryFiles(pr *Program) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(program.Table, program.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, program.FilesTable, program.FilesPrimaryKey...),
+		)
+		schemaConfig := pr.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.ProgramFiles
+		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryNarratives queries the narratives edge of a Program.
+func (c *ProgramClient) QueryNarratives(pr *Program) *NarrativeQuery {
+	query := (&NarrativeClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(program.Table, program.FieldID, id),
+			sqlgraph.To(narrative.Table, narrative.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, program.NarrativesTable, program.NarrativesPrimaryKey...),
+		)
+		schemaConfig := pr.schemaConfig
+		step.To.Schema = schemaConfig.Narrative
+		step.Edge.Schema = schemaConfig.ProgramNarratives
+		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryActionplans queries the actionplans edge of a Program.
+func (c *ProgramClient) QueryActionplans(pr *Program) *ActionPlanQuery {
+	query := (&ActionPlanClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(program.Table, program.FieldID, id),
+			sqlgraph.To(actionplan.Table, actionplan.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, program.ActionplansTable, program.ActionplansPrimaryKey...),
+		)
+		schemaConfig := pr.schemaConfig
+		step.To.Schema = schemaConfig.ActionPlan
+		step.Edge.Schema = schemaConfig.ProgramActionplans
+		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryStandards queries the standards edge of a Program.
+func (c *ProgramClient) QueryStandards(pr *Program) *StandardQuery {
+	query := (&StandardClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(program.Table, program.FieldID, id),
+			sqlgraph.To(standard.Table, standard.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, program.StandardsTable, program.StandardsPrimaryKey...),
+		)
+		schemaConfig := pr.schemaConfig
+		step.To.Schema = schemaConfig.Standard
+		step.Edge.Schema = schemaConfig.StandardPrograms
+		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *ProgramClient) Hooks() []Hook {
+	hooks := c.hooks.Program
+	return append(hooks[:len(hooks):len(hooks)], program.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *ProgramClient) Interceptors() []Interceptor {
+	inters := c.inters.Program
+	return append(inters[:len(inters):len(inters)], program.Interceptors[:]...)
+}
+
+func (c *ProgramClient) mutate(ctx context.Context, m *ProgramMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ProgramCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ProgramUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ProgramUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ProgramDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown Program mutation op: %q", m.Op())
+	}
+}
+
+// ProgramHistoryClient is a client for the ProgramHistory schema.
+type ProgramHistoryClient struct {
+	config
+}
+
+// NewProgramHistoryClient returns a client for the ProgramHistory from the given config.
+func NewProgramHistoryClient(c config) *ProgramHistoryClient {
+	return &ProgramHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `programhistory.Hooks(f(g(h())))`.
+func (c *ProgramHistoryClient) Use(hooks ...Hook) {
+	c.hooks.ProgramHistory = append(c.hooks.ProgramHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `programhistory.Intercept(f(g(h())))`.
+func (c *ProgramHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.ProgramHistory = append(c.inters.ProgramHistory, interceptors...)
+}
+
+// Create returns a builder for creating a ProgramHistory entity.
+func (c *ProgramHistoryClient) Create() *ProgramHistoryCreate {
+	mutation := newProgramHistoryMutation(c.config, OpCreate)
+	return &ProgramHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of ProgramHistory entities.
+func (c *ProgramHistoryClient) CreateBulk(builders ...*ProgramHistoryCreate) *ProgramHistoryCreateBulk {
+	return &ProgramHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ProgramHistoryClient) MapCreateBulk(slice any, setFunc func(*ProgramHistoryCreate, int)) *ProgramHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ProgramHistoryCreateBulk{err: fmt.Errorf("calling to ProgramHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ProgramHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ProgramHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for ProgramHistory.
+func (c *ProgramHistoryClient) Update() *ProgramHistoryUpdate {
+	mutation := newProgramHistoryMutation(c.config, OpUpdate)
+	return &ProgramHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ProgramHistoryClient) UpdateOne(ph *ProgramHistory) *ProgramHistoryUpdateOne {
+	mutation := newProgramHistoryMutation(c.config, OpUpdateOne, withProgramHistory(ph))
+	return &ProgramHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ProgramHistoryClient) UpdateOneID(id string) *ProgramHistoryUpdateOne {
+	mutation := newProgramHistoryMutation(c.config, OpUpdateOne, withProgramHistoryID(id))
+	return &ProgramHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for ProgramHistory.
+func (c *ProgramHistoryClient) Delete() *ProgramHistoryDelete {
+	mutation := newProgramHistoryMutation(c.config, OpDelete)
+	return &ProgramHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ProgramHistoryClient) DeleteOne(ph *ProgramHistory) *ProgramHistoryDeleteOne {
+	return c.DeleteOneID(ph.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ProgramHistoryClient) DeleteOneID(id string) *ProgramHistoryDeleteOne {
+	builder := c.Delete().Where(programhistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ProgramHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for ProgramHistory.
+func (c *ProgramHistoryClient) Query() *ProgramHistoryQuery {
+	return &ProgramHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeProgramHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a ProgramHistory entity by its id.
+func (c *ProgramHistoryClient) Get(ctx context.Context, id string) (*ProgramHistory, error) {
+	return c.Query().Where(programhistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ProgramHistoryClient) GetX(ctx context.Context, id string) *ProgramHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *ProgramHistoryClient) Hooks() []Hook {
+	return c.hooks.ProgramHistory
+}
+
+// Interceptors returns the client interceptors.
+func (c *ProgramHistoryClient) Interceptors() []Interceptor {
+	return c.inters.ProgramHistory
+}
+
+func (c *ProgramHistoryClient) mutate(ctx context.Context, m *ProgramHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ProgramHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ProgramHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ProgramHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ProgramHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown ProgramHistory mutation op: %q", m.Op())
 	}
 }
 
@@ -12013,6 +12715,25 @@ func (c *RiskClient) QueryActionplans(r *Risk) *ActionPlanQuery {
 		schemaConfig := r.schemaConfig
 		step.To.Schema = schemaConfig.ActionPlan
 		step.Edge.Schema = schemaConfig.RiskActionplans
+		fromV = sqlgraph.Neighbors(r.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryProgram queries the program edge of a Risk.
+func (c *RiskClient) QueryProgram(r *Risk) *ProgramQuery {
+	query := (&ProgramClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := r.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, id),
+			sqlgraph.To(program.Table, program.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, risk.ProgramTable, risk.ProgramPrimaryKey...),
+		)
+		schemaConfig := r.schemaConfig
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.ProgramRisks
 		fromV = sqlgraph.Neighbors(r.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -12363,6 +13084,25 @@ func (c *StandardClient) QueryActionplans(s *Standard) *ActionPlanQuery {
 	return query
 }
 
+// QueryPrograms queries the programs edge of a Standard.
+func (c *StandardClient) QueryPrograms(s *Standard) *ProgramQuery {
+	query := (&ProgramClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(standard.Table, standard.FieldID, id),
+			sqlgraph.To(program.Table, program.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, standard.ProgramsTable, standard.ProgramsPrimaryKey...),
+		)
+		schemaConfig := s.schemaConfig
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.StandardPrograms
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *StandardClient) Hooks() []Hook {
 	hooks := c.hooks.Standard
@@ -12701,6 +13441,25 @@ func (c *SubcontrolClient) QueryNotes(s *Subcontrol) *NoteQuery {
 		schemaConfig := s.schemaConfig
 		step.To.Schema = schemaConfig.Note
 		step.Edge.Schema = schemaConfig.Subcontrol
+		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPrograms queries the programs edge of a Subcontrol.
+func (c *SubcontrolClient) QueryPrograms(s *Subcontrol) *ProgramQuery {
+	query := (&ProgramClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := s.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, id),
+			sqlgraph.To(program.Table, program.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, subcontrol.ProgramsTable, subcontrol.ProgramsPrimaryKey...),
+		)
+		schemaConfig := s.schemaConfig
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.ProgramSubcontrols
 		fromV = sqlgraph.Neighbors(s.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -13467,6 +14226,25 @@ func (c *TaskClient) QuerySubcontrol(t *Task) *SubcontrolQuery {
 		schemaConfig := t.schemaConfig
 		step.To.Schema = schemaConfig.Subcontrol
 		step.Edge.Schema = schemaConfig.SubcontrolTasks
+		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryProgram queries the program edge of a Task.
+func (c *TaskClient) QueryProgram(t *Task) *ProgramQuery {
+	query := (&ProgramClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := t.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(task.Table, task.FieldID, id),
+			sqlgraph.To(program.Table, program.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, task.ProgramTable, task.ProgramPrimaryKey...),
+		)
+		schemaConfig := t.schemaConfig
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.ProgramTasks
 		fromV = sqlgraph.Neighbors(t.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -15376,10 +16154,11 @@ type (
 		Note, NoteHistory, OauthProvider, OauthProviderHistory, OhAuthTooToken,
 		OrgMembership, OrgMembershipHistory, Organization, OrganizationHistory,
 		OrganizationSetting, OrganizationSettingHistory, PasswordResetToken,
-		PersonalAccessToken, Procedure, ProcedureHistory, Risk, RiskHistory, Standard,
-		StandardHistory, Subcontrol, SubcontrolHistory, Subscriber, TFASetting, Task,
-		TaskHistory, Template, TemplateHistory, User, UserHistory, UserSetting,
-		UserSettingHistory, Webauthn, Webhook, WebhookHistory []ent.Hook
+		PersonalAccessToken, Procedure, ProcedureHistory, Program, ProgramHistory,
+		Risk, RiskHistory, Standard, StandardHistory, Subcontrol, SubcontrolHistory,
+		Subscriber, TFASetting, Task, TaskHistory, Template, TemplateHistory, User,
+		UserHistory, UserSetting, UserSettingHistory, Webauthn, Webhook,
+		WebhookHistory []ent.Hook
 	}
 	inters struct {
 		APIToken, ActionPlan, ActionPlanHistory, Contact, ContactHistory, Control,
@@ -15394,10 +16173,11 @@ type (
 		Note, NoteHistory, OauthProvider, OauthProviderHistory, OhAuthTooToken,
 		OrgMembership, OrgMembershipHistory, Organization, OrganizationHistory,
 		OrganizationSetting, OrganizationSettingHistory, PasswordResetToken,
-		PersonalAccessToken, Procedure, ProcedureHistory, Risk, RiskHistory, Standard,
-		StandardHistory, Subcontrol, SubcontrolHistory, Subscriber, TFASetting, Task,
-		TaskHistory, Template, TemplateHistory, User, UserHistory, UserSetting,
-		UserSettingHistory, Webauthn, Webhook, WebhookHistory []ent.Interceptor
+		PersonalAccessToken, Procedure, ProcedureHistory, Program, ProgramHistory,
+		Risk, RiskHistory, Standard, StandardHistory, Subcontrol, SubcontrolHistory,
+		Subscriber, TFASetting, Task, TaskHistory, Template, TemplateHistory, User,
+		UserHistory, UserSetting, UserSettingHistory, Webauthn, Webhook,
+		WebhookHistory []ent.Interceptor
 	}
 )
 

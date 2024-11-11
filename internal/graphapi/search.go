@@ -34,6 +34,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
@@ -932,6 +933,36 @@ func adminSearchProcedures(ctx context.Context, query string) ([]*generated.Proc
 				likeQuery := "%" + query + "%"
 				s.Where(sql.ExprP("(details)::text LIKE $12", likeQuery)) // search by Details
 			},
+		),
+	).All(ctx)
+}
+
+// searchProgram searches for Program based on the query string looking for matches
+func searchPrograms(ctx context.Context, query string) ([]*generated.Program, error) {
+	return withTransactionalMutation(ctx).Program.Query().Where(
+		program.Or(
+			program.IDContainsFold(query), // search by ID
+			func(s *sql.Selector) {
+				likeQuery := "%" + query + "%"
+				s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
+			},
+		),
+	).All(ctx)
+}
+
+// searchProgram searches for Program based on the query string looking for matches
+func adminSearchPrograms(ctx context.Context, query string) ([]*generated.Program, error) {
+	return withTransactionalMutation(ctx).Program.Query().Where(
+		program.Or(
+			program.IDContainsFold(query),        // search by ID
+			program.DeletedByContainsFold(query), // search by DeletedBy
+			func(s *sql.Selector) {
+				likeQuery := "%" + query + "%"
+				s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+			},
+			program.NameContainsFold(query),           // search by Name
+			program.DescriptionContainsFold(query),    // search by Description
+			program.OrganizationIDContainsFold(query), // search by OrganizationID
 		),
 	).All(ctx)
 }

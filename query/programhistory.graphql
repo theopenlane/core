@@ -1,0 +1,55 @@
+
+
+query GetAllProgramHistories {
+  programHistories {
+    edges {
+      node {
+        auditorReadComments
+        auditorReady
+        auditorWriteComments
+        createdAt
+        createdBy
+        description
+        endDate
+        historyTime
+        id
+        name
+        operation
+        organizationID
+        ref
+        startDate
+        status
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+query GetProgramHistories($where: ProgramHistoryWhereInput) {
+  programHistories(where: $where) {
+    edges {
+      node {
+        auditorReadComments
+        auditorReady
+        auditorWriteComments
+        createdAt
+        createdBy
+        description
+        endDate
+        historyTime
+        id
+        name
+        operation
+        organizationID
+        ref
+        startDate
+        status
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}

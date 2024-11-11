@@ -68,17 +68,20 @@ type InternalPolicyEdges struct {
 	Narratives []*Narrative `json:"narratives,omitempty"`
 	// Tasks holds the value of the tasks edge.
 	Tasks []*Task `json:"tasks,omitempty"`
+	// Programs holds the value of the programs edge.
+	Programs []*Program `json:"programs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [5]bool
+	loadedTypes [6]bool
 	// totalCount holds the count of the edges above.
-	totalCount [5]map[string]int
+	totalCount [6]map[string]int
 
 	namedControlobjectives map[string][]*ControlObjective
 	namedControls          map[string][]*Control
 	namedProcedures        map[string][]*Procedure
 	namedNarratives        map[string][]*Narrative
 	namedTasks             map[string][]*Task
+	namedPrograms          map[string][]*Program
 }
 
 // ControlobjectivesOrErr returns the Controlobjectives value or an error if the edge
@@ -124,6 +127,15 @@ func (e InternalPolicyEdges) TasksOrErr() ([]*Task, error) {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
+}
+
+// ProgramsOrErr returns the Programs value or an error if the edge
+// was not loaded in eager-loading.
+func (e InternalPolicyEdges) ProgramsOrErr() ([]*Program, error) {
+	if e.loadedTypes[5] {
+		return e.Programs, nil
+	}
+	return nil, &NotLoadedError{edge: "programs"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -294,6 +306,11 @@ func (ip *InternalPolicy) QueryNarratives() *NarrativeQuery {
 // QueryTasks queries the "tasks" edge of the InternalPolicy entity.
 func (ip *InternalPolicy) QueryTasks() *TaskQuery {
 	return NewInternalPolicyClient(ip.config).QueryTasks(ip)
+}
+
+// QueryPrograms queries the "programs" edge of the InternalPolicy entity.
+func (ip *InternalPolicy) QueryPrograms() *ProgramQuery {
+	return NewInternalPolicyClient(ip.config).QueryPrograms(ip)
 }
 
 // Update returns a builder for updating this InternalPolicy.
@@ -487,6 +504,30 @@ func (ip *InternalPolicy) appendNamedTasks(name string, edges ...*Task) {
 		ip.Edges.namedTasks[name] = []*Task{}
 	} else {
 		ip.Edges.namedTasks[name] = append(ip.Edges.namedTasks[name], edges...)
+	}
+}
+
+// NamedPrograms returns the Programs named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (ip *InternalPolicy) NamedPrograms(name string) ([]*Program, error) {
+	if ip.Edges.namedPrograms == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := ip.Edges.namedPrograms[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (ip *InternalPolicy) appendNamedPrograms(name string, edges ...*Program) {
+	if ip.Edges.namedPrograms == nil {
+		ip.Edges.namedPrograms = make(map[string][]*Program)
+	}
+	if len(edges) == 0 {
+		ip.Edges.namedPrograms[name] = []*Program{}
+	} else {
+		ip.Edges.namedPrograms[name] = append(ip.Edges.namedPrograms[name], edges...)
 	}
 }
 

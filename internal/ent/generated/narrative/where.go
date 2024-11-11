@@ -908,6 +908,35 @@ func HasControlobjectiveWith(preds ...predicate.ControlObjective) predicate.Narr
 	})
 }
 
+// HasProgram applies the HasEdge predicate on the "program" edge.
+func HasProgram() predicate.Narrative {
+	return predicate.Narrative(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, ProgramTable, ProgramPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.ProgramNarratives
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasProgramWith applies the HasEdge predicate on the "program" edge with a given conditions (other predicates).
+func HasProgramWith(preds ...predicate.Program) predicate.Narrative {
+	return predicate.Narrative(func(s *sql.Selector) {
+		step := newProgramStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.ProgramNarratives
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.Narrative) predicate.Narrative {
 	return predicate.Narrative(sql.AndPredicates(predicates...))

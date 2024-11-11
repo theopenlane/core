@@ -64,16 +64,19 @@ type ActionPlanEdges struct {
 	Control []*Control `json:"control,omitempty"`
 	// User holds the value of the user edge.
 	User []*User `json:"user,omitempty"`
+	// Program holds the value of the program edge.
+	Program []*Program `json:"program,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [4]bool
+	loadedTypes [5]bool
 	// totalCount holds the count of the edges above.
-	totalCount [4]map[string]int
+	totalCount [5]map[string]int
 
 	namedStandard map[string][]*Standard
 	namedRisk     map[string][]*Risk
 	namedControl  map[string][]*Control
 	namedUser     map[string][]*User
+	namedProgram  map[string][]*Program
 }
 
 // StandardOrErr returns the Standard value or an error if the edge
@@ -110,6 +113,15 @@ func (e ActionPlanEdges) UserOrErr() ([]*User, error) {
 		return e.User, nil
 	}
 	return nil, &NotLoadedError{edge: "user"}
+}
+
+// ProgramOrErr returns the Program value or an error if the edge
+// was not loaded in eager-loading.
+func (e ActionPlanEdges) ProgramOrErr() ([]*Program, error) {
+	if e.loadedTypes[4] {
+		return e.Program, nil
+	}
+	return nil, &NotLoadedError{edge: "program"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -269,6 +281,11 @@ func (ap *ActionPlan) QueryControl() *ControlQuery {
 // QueryUser queries the "user" edge of the ActionPlan entity.
 func (ap *ActionPlan) QueryUser() *UserQuery {
 	return NewActionPlanClient(ap.config).QueryUser(ap)
+}
+
+// QueryProgram queries the "program" edge of the ActionPlan entity.
+func (ap *ActionPlan) QueryProgram() *ProgramQuery {
+	return NewActionPlanClient(ap.config).QueryProgram(ap)
 }
 
 // Update returns a builder for updating this ActionPlan.
@@ -435,6 +452,30 @@ func (ap *ActionPlan) appendNamedUser(name string, edges ...*User) {
 		ap.Edges.namedUser[name] = []*User{}
 	} else {
 		ap.Edges.namedUser[name] = append(ap.Edges.namedUser[name], edges...)
+	}
+}
+
+// NamedProgram returns the Program named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (ap *ActionPlan) NamedProgram(name string) ([]*Program, error) {
+	if ap.Edges.namedProgram == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := ap.Edges.namedProgram[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (ap *ActionPlan) appendNamedProgram(name string, edges ...*Program) {
+	if ap.Edges.namedProgram == nil {
+		ap.Edges.namedProgram = make(map[string][]*Program)
+	}
+	if len(edges) == 0 {
+		ap.Edges.namedProgram[name] = []*Program{}
+	} else {
+		ap.Edges.namedProgram[name] = append(ap.Edges.namedProgram[name], edges...)
 	}
 }
 

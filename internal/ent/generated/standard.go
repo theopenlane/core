@@ -70,16 +70,19 @@ type StandardEdges struct {
 	Procedures []*Procedure `json:"procedures,omitempty"`
 	// Actionplans holds the value of the actionplans edge.
 	Actionplans []*ActionPlan `json:"actionplans,omitempty"`
+	// Programs holds the value of the programs edge.
+	Programs []*Program `json:"programs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [4]bool
+	loadedTypes [5]bool
 	// totalCount holds the count of the edges above.
-	totalCount [4]map[string]int
+	totalCount [5]map[string]int
 
 	namedControlobjectives map[string][]*ControlObjective
 	namedControls          map[string][]*Control
 	namedProcedures        map[string][]*Procedure
 	namedActionplans       map[string][]*ActionPlan
+	namedPrograms          map[string][]*Program
 }
 
 // ControlobjectivesOrErr returns the Controlobjectives value or an error if the edge
@@ -116,6 +119,15 @@ func (e StandardEdges) ActionplansOrErr() ([]*ActionPlan, error) {
 		return e.Actionplans, nil
 	}
 	return nil, &NotLoadedError{edge: "actionplans"}
+}
+
+// ProgramsOrErr returns the Programs value or an error if the edge
+// was not loaded in eager-loading.
+func (e StandardEdges) ProgramsOrErr() ([]*Program, error) {
+	if e.loadedTypes[4] {
+		return e.Programs, nil
+	}
+	return nil, &NotLoadedError{edge: "programs"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -295,6 +307,11 @@ func (s *Standard) QueryActionplans() *ActionPlanQuery {
 	return NewStandardClient(s.config).QueryActionplans(s)
 }
 
+// QueryPrograms queries the "programs" edge of the Standard entity.
+func (s *Standard) QueryPrograms() *ProgramQuery {
+	return NewStandardClient(s.config).QueryPrograms(s)
+}
+
 // Update returns a builder for updating this Standard.
 // Note that you need to call Standard.Unwrap() before calling this method if this Standard
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -468,6 +485,30 @@ func (s *Standard) appendNamedActionplans(name string, edges ...*ActionPlan) {
 		s.Edges.namedActionplans[name] = []*ActionPlan{}
 	} else {
 		s.Edges.namedActionplans[name] = append(s.Edges.namedActionplans[name], edges...)
+	}
+}
+
+// NamedPrograms returns the Programs named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (s *Standard) NamedPrograms(name string) ([]*Program, error) {
+	if s.Edges.namedPrograms == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := s.Edges.namedPrograms[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (s *Standard) appendNamedPrograms(name string, edges ...*Program) {
+	if s.Edges.namedPrograms == nil {
+		s.Edges.namedPrograms = make(map[string][]*Program)
+	}
+	if len(edges) == 0 {
+		s.Edges.namedPrograms[name] = []*Program{}
+	} else {
+		s.Edges.namedPrograms[name] = append(s.Edges.namedPrograms[name], edges...)
 	}
 }
 

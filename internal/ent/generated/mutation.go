@@ -71,6 +71,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/procedurehistory"
+	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/programhistory"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
@@ -161,6 +163,8 @@ const (
 	TypePersonalAccessToken           = "PersonalAccessToken"
 	TypeProcedure                     = "Procedure"
 	TypeProcedureHistory              = "ProcedureHistory"
+	TypeProgram                       = "Program"
+	TypeProgramHistory                = "ProgramHistory"
 	TypeRisk                          = "Risk"
 	TypeRiskHistory                   = "RiskHistory"
 	TypeStandard                      = "Standard"
@@ -1624,6 +1628,9 @@ type ActionPlanMutation struct {
 	user            map[string]struct{}
 	removeduser     map[string]struct{}
 	cleareduser     bool
+	program         map[string]struct{}
+	removedprogram  map[string]struct{}
+	clearedprogram  bool
 	done            bool
 	oldValue        func(context.Context) (*ActionPlan, error)
 	predicates      []predicate.ActionPlan
@@ -2674,6 +2681,60 @@ func (m *ActionPlanMutation) ResetUser() {
 	m.removeduser = nil
 }
 
+// AddProgramIDs adds the "program" edge to the Program entity by ids.
+func (m *ActionPlanMutation) AddProgramIDs(ids ...string) {
+	if m.program == nil {
+		m.program = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.program[ids[i]] = struct{}{}
+	}
+}
+
+// ClearProgram clears the "program" edge to the Program entity.
+func (m *ActionPlanMutation) ClearProgram() {
+	m.clearedprogram = true
+}
+
+// ProgramCleared reports if the "program" edge to the Program entity was cleared.
+func (m *ActionPlanMutation) ProgramCleared() bool {
+	return m.clearedprogram
+}
+
+// RemoveProgramIDs removes the "program" edge to the Program entity by IDs.
+func (m *ActionPlanMutation) RemoveProgramIDs(ids ...string) {
+	if m.removedprogram == nil {
+		m.removedprogram = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.program, ids[i])
+		m.removedprogram[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedProgram returns the removed IDs of the "program" edge to the Program entity.
+func (m *ActionPlanMutation) RemovedProgramIDs() (ids []string) {
+	for id := range m.removedprogram {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ProgramIDs returns the "program" edge IDs in the mutation.
+func (m *ActionPlanMutation) ProgramIDs() (ids []string) {
+	for id := range m.program {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetProgram resets all changes to the "program" edge.
+func (m *ActionPlanMutation) ResetProgram() {
+	m.program = nil
+	m.clearedprogram = false
+	m.removedprogram = nil
+}
+
 // Where appends a list predicates to the ActionPlanMutation builder.
 func (m *ActionPlanMutation) Where(ps ...predicate.ActionPlan) {
 	m.predicates = append(m.predicates, ps...)
@@ -3126,7 +3187,7 @@ func (m *ActionPlanMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ActionPlanMutation) AddedEdges() []string {
-	edges := make([]string, 0, 4)
+	edges := make([]string, 0, 5)
 	if m.standard != nil {
 		edges = append(edges, actionplan.EdgeStandard)
 	}
@@ -3138,6 +3199,9 @@ func (m *ActionPlanMutation) AddedEdges() []string {
 	}
 	if m.user != nil {
 		edges = append(edges, actionplan.EdgeUser)
+	}
+	if m.program != nil {
+		edges = append(edges, actionplan.EdgeProgram)
 	}
 	return edges
 }
@@ -3170,13 +3234,19 @@ func (m *ActionPlanMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case actionplan.EdgeProgram:
+		ids := make([]ent.Value, 0, len(m.program))
+		for id := range m.program {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ActionPlanMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 4)
+	edges := make([]string, 0, 5)
 	if m.removedstandard != nil {
 		edges = append(edges, actionplan.EdgeStandard)
 	}
@@ -3188,6 +3258,9 @@ func (m *ActionPlanMutation) RemovedEdges() []string {
 	}
 	if m.removeduser != nil {
 		edges = append(edges, actionplan.EdgeUser)
+	}
+	if m.removedprogram != nil {
+		edges = append(edges, actionplan.EdgeProgram)
 	}
 	return edges
 }
@@ -3220,13 +3293,19 @@ func (m *ActionPlanMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case actionplan.EdgeProgram:
+		ids := make([]ent.Value, 0, len(m.removedprogram))
+		for id := range m.removedprogram {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ActionPlanMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 4)
+	edges := make([]string, 0, 5)
 	if m.clearedstandard {
 		edges = append(edges, actionplan.EdgeStandard)
 	}
@@ -3238,6 +3317,9 @@ func (m *ActionPlanMutation) ClearedEdges() []string {
 	}
 	if m.cleareduser {
 		edges = append(edges, actionplan.EdgeUser)
+	}
+	if m.clearedprogram {
+		edges = append(edges, actionplan.EdgeProgram)
 	}
 	return edges
 }
@@ -3254,6 +3336,8 @@ func (m *ActionPlanMutation) EdgeCleared(name string) bool {
 		return m.clearedcontrol
 	case actionplan.EdgeUser:
 		return m.cleareduser
+	case actionplan.EdgeProgram:
+		return m.clearedprogram
 	}
 	return false
 }
@@ -3281,6 +3365,9 @@ func (m *ActionPlanMutation) ResetEdge(name string) error {
 		return nil
 	case actionplan.EdgeUser:
 		m.ResetUser()
+		return nil
+	case actionplan.EdgeProgram:
+		m.ResetProgram()
 		return nil
 	}
 	return fmt.Errorf("unknown ActionPlan edge %s", name)
@@ -8095,6 +8182,9 @@ type ControlMutation struct {
 	tasks                    map[string]struct{}
 	removedtasks             map[string]struct{}
 	clearedtasks             bool
+	programs                 map[string]struct{}
+	removedprograms          map[string]struct{}
+	clearedprograms          bool
 	done                     bool
 	oldValue                 func(context.Context) (*Control, error)
 	predicates               []predicate.Control
@@ -9606,6 +9696,60 @@ func (m *ControlMutation) ResetTasks() {
 	m.removedtasks = nil
 }
 
+// AddProgramIDs adds the "programs" edge to the Program entity by ids.
+func (m *ControlMutation) AddProgramIDs(ids ...string) {
+	if m.programs == nil {
+		m.programs = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.programs[ids[i]] = struct{}{}
+	}
+}
+
+// ClearPrograms clears the "programs" edge to the Program entity.
+func (m *ControlMutation) ClearPrograms() {
+	m.clearedprograms = true
+}
+
+// ProgramsCleared reports if the "programs" edge to the Program entity was cleared.
+func (m *ControlMutation) ProgramsCleared() bool {
+	return m.clearedprograms
+}
+
+// RemoveProgramIDs removes the "programs" edge to the Program entity by IDs.
+func (m *ControlMutation) RemoveProgramIDs(ids ...string) {
+	if m.removedprograms == nil {
+		m.removedprograms = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.programs, ids[i])
+		m.removedprograms[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedPrograms returns the removed IDs of the "programs" edge to the Program entity.
+func (m *ControlMutation) RemovedProgramsIDs() (ids []string) {
+	for id := range m.removedprograms {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ProgramsIDs returns the "programs" edge IDs in the mutation.
+func (m *ControlMutation) ProgramsIDs() (ids []string) {
+	for id := range m.programs {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetPrograms resets all changes to the "programs" edge.
+func (m *ControlMutation) ResetPrograms() {
+	m.programs = nil
+	m.clearedprograms = false
+	m.removedprograms = nil
+}
+
 // Where appends a list predicates to the ControlMutation builder.
 func (m *ControlMutation) Where(ps ...predicate.Control) {
 	m.predicates = append(m.predicates, ps...)
@@ -10173,7 +10317,7 @@ func (m *ControlMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ControlMutation) AddedEdges() []string {
-	edges := make([]string, 0, 8)
+	edges := make([]string, 0, 9)
 	if m.procedures != nil {
 		edges = append(edges, control.EdgeProcedures)
 	}
@@ -10197,6 +10341,9 @@ func (m *ControlMutation) AddedEdges() []string {
 	}
 	if m.tasks != nil {
 		edges = append(edges, control.EdgeTasks)
+	}
+	if m.programs != nil {
+		edges = append(edges, control.EdgePrograms)
 	}
 	return edges
 }
@@ -10253,13 +10400,19 @@ func (m *ControlMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case control.EdgePrograms:
+		ids := make([]ent.Value, 0, len(m.programs))
+		for id := range m.programs {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ControlMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 8)
+	edges := make([]string, 0, 9)
 	if m.removedprocedures != nil {
 		edges = append(edges, control.EdgeProcedures)
 	}
@@ -10283,6 +10436,9 @@ func (m *ControlMutation) RemovedEdges() []string {
 	}
 	if m.removedtasks != nil {
 		edges = append(edges, control.EdgeTasks)
+	}
+	if m.removedprograms != nil {
+		edges = append(edges, control.EdgePrograms)
 	}
 	return edges
 }
@@ -10339,13 +10495,19 @@ func (m *ControlMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case control.EdgePrograms:
+		ids := make([]ent.Value, 0, len(m.removedprograms))
+		for id := range m.removedprograms {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ControlMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 8)
+	edges := make([]string, 0, 9)
 	if m.clearedprocedures {
 		edges = append(edges, control.EdgeProcedures)
 	}
@@ -10370,6 +10532,9 @@ func (m *ControlMutation) ClearedEdges() []string {
 	if m.clearedtasks {
 		edges = append(edges, control.EdgeTasks)
 	}
+	if m.clearedprograms {
+		edges = append(edges, control.EdgePrograms)
+	}
 	return edges
 }
 
@@ -10393,6 +10558,8 @@ func (m *ControlMutation) EdgeCleared(name string) bool {
 		return m.clearedactionplans
 	case control.EdgeTasks:
 		return m.clearedtasks
+	case control.EdgePrograms:
+		return m.clearedprograms
 	}
 	return false
 }
@@ -10432,6 +10599,9 @@ func (m *ControlMutation) ResetEdge(name string) error {
 		return nil
 	case control.EdgeTasks:
 		m.ResetTasks()
+		return nil
+	case control.EdgePrograms:
+		m.ResetPrograms()
 		return nil
 	}
 	return fmt.Errorf("unknown Control edge %s", name)
@@ -12389,6 +12559,9 @@ type ControlObjectiveMutation struct {
 	tasks                  map[string]struct{}
 	removedtasks           map[string]struct{}
 	clearedtasks           bool
+	programs               map[string]struct{}
+	removedprograms        map[string]struct{}
+	clearedprograms        bool
 	done                   bool
 	oldValue               func(context.Context) (*ControlObjective, error)
 	predicates             []predicate.ControlObjective
@@ -13851,6 +14024,60 @@ func (m *ControlObjectiveMutation) ResetTasks() {
 	m.removedtasks = nil
 }
 
+// AddProgramIDs adds the "programs" edge to the Program entity by ids.
+func (m *ControlObjectiveMutation) AddProgramIDs(ids ...string) {
+	if m.programs == nil {
+		m.programs = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.programs[ids[i]] = struct{}{}
+	}
+}
+
+// ClearPrograms clears the "programs" edge to the Program entity.
+func (m *ControlObjectiveMutation) ClearPrograms() {
+	m.clearedprograms = true
+}
+
+// ProgramsCleared reports if the "programs" edge to the Program entity was cleared.
+func (m *ControlObjectiveMutation) ProgramsCleared() bool {
+	return m.clearedprograms
+}
+
+// RemoveProgramIDs removes the "programs" edge to the Program entity by IDs.
+func (m *ControlObjectiveMutation) RemoveProgramIDs(ids ...string) {
+	if m.removedprograms == nil {
+		m.removedprograms = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.programs, ids[i])
+		m.removedprograms[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedPrograms returns the removed IDs of the "programs" edge to the Program entity.
+func (m *ControlObjectiveMutation) RemovedProgramsIDs() (ids []string) {
+	for id := range m.removedprograms {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ProgramsIDs returns the "programs" edge IDs in the mutation.
+func (m *ControlObjectiveMutation) ProgramsIDs() (ids []string) {
+	for id := range m.programs {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetPrograms resets all changes to the "programs" edge.
+func (m *ControlObjectiveMutation) ResetPrograms() {
+	m.programs = nil
+	m.clearedprograms = false
+	m.removedprograms = nil
+}
+
 // Where appends a list predicates to the ControlObjectiveMutation builder.
 func (m *ControlObjectiveMutation) Where(ps ...predicate.ControlObjective) {
 	m.predicates = append(m.predicates, ps...)
@@ -14395,7 +14622,7 @@ func (m *ControlObjectiveMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ControlObjectiveMutation) AddedEdges() []string {
-	edges := make([]string, 0, 8)
+	edges := make([]string, 0, 9)
 	if m.policy != nil {
 		edges = append(edges, controlobjective.EdgePolicy)
 	}
@@ -14419,6 +14646,9 @@ func (m *ControlObjectiveMutation) AddedEdges() []string {
 	}
 	if m.tasks != nil {
 		edges = append(edges, controlobjective.EdgeTasks)
+	}
+	if m.programs != nil {
+		edges = append(edges, controlobjective.EdgePrograms)
 	}
 	return edges
 }
@@ -14475,13 +14705,19 @@ func (m *ControlObjectiveMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case controlobjective.EdgePrograms:
+		ids := make([]ent.Value, 0, len(m.programs))
+		for id := range m.programs {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ControlObjectiveMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 8)
+	edges := make([]string, 0, 9)
 	if m.removedpolicy != nil {
 		edges = append(edges, controlobjective.EdgePolicy)
 	}
@@ -14505,6 +14741,9 @@ func (m *ControlObjectiveMutation) RemovedEdges() []string {
 	}
 	if m.removedtasks != nil {
 		edges = append(edges, controlobjective.EdgeTasks)
+	}
+	if m.removedprograms != nil {
+		edges = append(edges, controlobjective.EdgePrograms)
 	}
 	return edges
 }
@@ -14561,13 +14800,19 @@ func (m *ControlObjectiveMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case controlobjective.EdgePrograms:
+		ids := make([]ent.Value, 0, len(m.removedprograms))
+		for id := range m.removedprograms {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ControlObjectiveMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 8)
+	edges := make([]string, 0, 9)
 	if m.clearedpolicy {
 		edges = append(edges, controlobjective.EdgePolicy)
 	}
@@ -14592,6 +14837,9 @@ func (m *ControlObjectiveMutation) ClearedEdges() []string {
 	if m.clearedtasks {
 		edges = append(edges, controlobjective.EdgeTasks)
 	}
+	if m.clearedprograms {
+		edges = append(edges, controlobjective.EdgePrograms)
+	}
 	return edges
 }
 
@@ -14615,6 +14863,8 @@ func (m *ControlObjectiveMutation) EdgeCleared(name string) bool {
 		return m.clearednarratives
 	case controlobjective.EdgeTasks:
 		return m.clearedtasks
+	case controlobjective.EdgePrograms:
+		return m.clearedprograms
 	}
 	return false
 }
@@ -14654,6 +14904,9 @@ func (m *ControlObjectiveMutation) ResetEdge(name string) error {
 		return nil
 	case controlobjective.EdgeTasks:
 		m.ResetTasks()
+		return nil
+	case controlobjective.EdgePrograms:
+		m.ResetPrograms()
 		return nil
 	}
 	return fmt.Errorf("unknown ControlObjective edge %s", name)
@@ -41369,6 +41622,9 @@ type FileMutation struct {
 	events                     map[string]struct{}
 	removedevents              map[string]struct{}
 	clearedevents              bool
+	program                    map[string]struct{}
+	removedprogram             map[string]struct{}
+	clearedprogram             bool
 	done                       bool
 	oldValue                   func(context.Context) (*File, error)
 	predicates                 []predicate.File
@@ -43102,6 +43358,60 @@ func (m *FileMutation) ResetEvents() {
 	m.removedevents = nil
 }
 
+// AddProgramIDs adds the "program" edge to the Program entity by ids.
+func (m *FileMutation) AddProgramIDs(ids ...string) {
+	if m.program == nil {
+		m.program = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.program[ids[i]] = struct{}{}
+	}
+}
+
+// ClearProgram clears the "program" edge to the Program entity.
+func (m *FileMutation) ClearProgram() {
+	m.clearedprogram = true
+}
+
+// ProgramCleared reports if the "program" edge to the Program entity was cleared.
+func (m *FileMutation) ProgramCleared() bool {
+	return m.clearedprogram
+}
+
+// RemoveProgramIDs removes the "program" edge to the Program entity by IDs.
+func (m *FileMutation) RemoveProgramIDs(ids ...string) {
+	if m.removedprogram == nil {
+		m.removedprogram = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.program, ids[i])
+		m.removedprogram[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedProgram returns the removed IDs of the "program" edge to the Program entity.
+func (m *FileMutation) RemovedProgramIDs() (ids []string) {
+	for id := range m.removedprogram {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ProgramIDs returns the "program" edge IDs in the mutation.
+func (m *FileMutation) ProgramIDs() (ids []string) {
+	for id := range m.program {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetProgram resets all changes to the "program" edge.
+func (m *FileMutation) ResetProgram() {
+	m.program = nil
+	m.clearedprogram = false
+	m.removedprogram = nil
+}
+
 // Where appends a list predicates to the FileMutation builder.
 func (m *FileMutation) Where(ps ...predicate.File) {
 	m.predicates = append(m.predicates, ps...)
@@ -43730,7 +44040,7 @@ func (m *FileMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *FileMutation) AddedEdges() []string {
-	edges := make([]string, 0, 10)
+	edges := make([]string, 0, 11)
 	if m.user != nil {
 		edges = append(edges, file.EdgeUser)
 	}
@@ -43760,6 +44070,9 @@ func (m *FileMutation) AddedEdges() []string {
 	}
 	if m.events != nil {
 		edges = append(edges, file.EdgeEvents)
+	}
+	if m.program != nil {
+		edges = append(edges, file.EdgeProgram)
 	}
 	return edges
 }
@@ -43828,13 +44141,19 @@ func (m *FileMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case file.EdgeProgram:
+		ids := make([]ent.Value, 0, len(m.program))
+		for id := range m.program {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *FileMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 10)
+	edges := make([]string, 0, 11)
 	if m.removeduser != nil {
 		edges = append(edges, file.EdgeUser)
 	}
@@ -43864,6 +44183,9 @@ func (m *FileMutation) RemovedEdges() []string {
 	}
 	if m.removedevents != nil {
 		edges = append(edges, file.EdgeEvents)
+	}
+	if m.removedprogram != nil {
+		edges = append(edges, file.EdgeProgram)
 	}
 	return edges
 }
@@ -43932,13 +44254,19 @@ func (m *FileMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case file.EdgeProgram:
+		ids := make([]ent.Value, 0, len(m.removedprogram))
+		for id := range m.removedprogram {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *FileMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 10)
+	edges := make([]string, 0, 11)
 	if m.cleareduser {
 		edges = append(edges, file.EdgeUser)
 	}
@@ -43969,6 +44297,9 @@ func (m *FileMutation) ClearedEdges() []string {
 	if m.clearedevents {
 		edges = append(edges, file.EdgeEvents)
 	}
+	if m.clearedprogram {
+		edges = append(edges, file.EdgeProgram)
+	}
 	return edges
 }
 
@@ -43996,6 +44327,8 @@ func (m *FileMutation) EdgeCleared(name string) bool {
 		return m.cleareddocumentdata
 	case file.EdgeEvents:
 		return m.clearedevents
+	case file.EdgeProgram:
+		return m.clearedprogram
 	}
 	return false
 }
@@ -44041,6 +44374,9 @@ func (m *FileMutation) ResetEdge(name string) error {
 		return nil
 	case file.EdgeEvents:
 		m.ResetEvents()
+		return nil
+	case file.EdgeProgram:
+		m.ResetProgram()
 		return nil
 	}
 	return fmt.Errorf("unknown File edge %s", name)
@@ -59855,6 +60191,9 @@ type InternalPolicyMutation struct {
 	tasks                    map[string]struct{}
 	removedtasks             map[string]struct{}
 	clearedtasks             bool
+	programs                 map[string]struct{}
+	removedprograms          map[string]struct{}
+	clearedprograms          bool
 	done                     bool
 	oldValue                 func(context.Context) (*InternalPolicy, error)
 	predicates               []predicate.InternalPolicy
@@ -60995,6 +61334,60 @@ func (m *InternalPolicyMutation) ResetTasks() {
 	m.removedtasks = nil
 }
 
+// AddProgramIDs adds the "programs" edge to the Program entity by ids.
+func (m *InternalPolicyMutation) AddProgramIDs(ids ...string) {
+	if m.programs == nil {
+		m.programs = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.programs[ids[i]] = struct{}{}
+	}
+}
+
+// ClearPrograms clears the "programs" edge to the Program entity.
+func (m *InternalPolicyMutation) ClearPrograms() {
+	m.clearedprograms = true
+}
+
+// ProgramsCleared reports if the "programs" edge to the Program entity was cleared.
+func (m *InternalPolicyMutation) ProgramsCleared() bool {
+	return m.clearedprograms
+}
+
+// RemoveProgramIDs removes the "programs" edge to the Program entity by IDs.
+func (m *InternalPolicyMutation) RemoveProgramIDs(ids ...string) {
+	if m.removedprograms == nil {
+		m.removedprograms = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.programs, ids[i])
+		m.removedprograms[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedPrograms returns the removed IDs of the "programs" edge to the Program entity.
+func (m *InternalPolicyMutation) RemovedProgramsIDs() (ids []string) {
+	for id := range m.removedprograms {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ProgramsIDs returns the "programs" edge IDs in the mutation.
+func (m *InternalPolicyMutation) ProgramsIDs() (ids []string) {
+	for id := range m.programs {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetPrograms resets all changes to the "programs" edge.
+func (m *InternalPolicyMutation) ResetPrograms() {
+	m.programs = nil
+	m.clearedprograms = false
+	m.removedprograms = nil
+}
+
 // Where appends a list predicates to the InternalPolicyMutation builder.
 func (m *InternalPolicyMutation) Where(ps ...predicate.InternalPolicy) {
 	m.predicates = append(m.predicates, ps...)
@@ -61464,7 +61857,7 @@ func (m *InternalPolicyMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *InternalPolicyMutation) AddedEdges() []string {
-	edges := make([]string, 0, 5)
+	edges := make([]string, 0, 6)
 	if m.controlobjectives != nil {
 		edges = append(edges, internalpolicy.EdgeControlobjectives)
 	}
@@ -61479,6 +61872,9 @@ func (m *InternalPolicyMutation) AddedEdges() []string {
 	}
 	if m.tasks != nil {
 		edges = append(edges, internalpolicy.EdgeTasks)
+	}
+	if m.programs != nil {
+		edges = append(edges, internalpolicy.EdgePrograms)
 	}
 	return edges
 }
@@ -61517,13 +61913,19 @@ func (m *InternalPolicyMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case internalpolicy.EdgePrograms:
+		ids := make([]ent.Value, 0, len(m.programs))
+		for id := range m.programs {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *InternalPolicyMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 5)
+	edges := make([]string, 0, 6)
 	if m.removedcontrolobjectives != nil {
 		edges = append(edges, internalpolicy.EdgeControlobjectives)
 	}
@@ -61538,6 +61940,9 @@ func (m *InternalPolicyMutation) RemovedEdges() []string {
 	}
 	if m.removedtasks != nil {
 		edges = append(edges, internalpolicy.EdgeTasks)
+	}
+	if m.removedprograms != nil {
+		edges = append(edges, internalpolicy.EdgePrograms)
 	}
 	return edges
 }
@@ -61576,13 +61981,19 @@ func (m *InternalPolicyMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case internalpolicy.EdgePrograms:
+		ids := make([]ent.Value, 0, len(m.removedprograms))
+		for id := range m.removedprograms {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *InternalPolicyMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 5)
+	edges := make([]string, 0, 6)
 	if m.clearedcontrolobjectives {
 		edges = append(edges, internalpolicy.EdgeControlobjectives)
 	}
@@ -61597,6 +62008,9 @@ func (m *InternalPolicyMutation) ClearedEdges() []string {
 	}
 	if m.clearedtasks {
 		edges = append(edges, internalpolicy.EdgeTasks)
+	}
+	if m.clearedprograms {
+		edges = append(edges, internalpolicy.EdgePrograms)
 	}
 	return edges
 }
@@ -61615,6 +62029,8 @@ func (m *InternalPolicyMutation) EdgeCleared(name string) bool {
 		return m.clearednarratives
 	case internalpolicy.EdgeTasks:
 		return m.clearedtasks
+	case internalpolicy.EdgePrograms:
+		return m.clearedprograms
 	}
 	return false
 }
@@ -61645,6 +62061,9 @@ func (m *InternalPolicyMutation) ResetEdge(name string) error {
 		return nil
 	case internalpolicy.EdgeTasks:
 		m.ResetTasks()
+		return nil
+	case internalpolicy.EdgePrograms:
+		m.ResetPrograms()
 		return nil
 	}
 	return fmt.Errorf("unknown InternalPolicy edge %s", name)
@@ -64763,6 +65182,9 @@ type NarrativeMutation struct {
 	controlobjective        map[string]struct{}
 	removedcontrolobjective map[string]struct{}
 	clearedcontrolobjective bool
+	program                 map[string]struct{}
+	removedprogram          map[string]struct{}
+	clearedprogram          bool
 	done                    bool
 	oldValue                func(context.Context) (*Narrative, error)
 	predicates              []predicate.Narrative
@@ -65666,6 +66088,60 @@ func (m *NarrativeMutation) ResetControlobjective() {
 	m.removedcontrolobjective = nil
 }
 
+// AddProgramIDs adds the "program" edge to the Program entity by ids.
+func (m *NarrativeMutation) AddProgramIDs(ids ...string) {
+	if m.program == nil {
+		m.program = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.program[ids[i]] = struct{}{}
+	}
+}
+
+// ClearProgram clears the "program" edge to the Program entity.
+func (m *NarrativeMutation) ClearProgram() {
+	m.clearedprogram = true
+}
+
+// ProgramCleared reports if the "program" edge to the Program entity was cleared.
+func (m *NarrativeMutation) ProgramCleared() bool {
+	return m.clearedprogram
+}
+
+// RemoveProgramIDs removes the "program" edge to the Program entity by IDs.
+func (m *NarrativeMutation) RemoveProgramIDs(ids ...string) {
+	if m.removedprogram == nil {
+		m.removedprogram = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.program, ids[i])
+		m.removedprogram[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedProgram returns the removed IDs of the "program" edge to the Program entity.
+func (m *NarrativeMutation) RemovedProgramIDs() (ids []string) {
+	for id := range m.removedprogram {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ProgramIDs returns the "program" edge IDs in the mutation.
+func (m *NarrativeMutation) ProgramIDs() (ids []string) {
+	for id := range m.program {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetProgram resets all changes to the "program" edge.
+func (m *NarrativeMutation) ResetProgram() {
+	m.program = nil
+	m.clearedprogram = false
+	m.removedprogram = nil
+}
+
 // Where appends a list predicates to the NarrativeMutation builder.
 func (m *NarrativeMutation) Where(ps ...predicate.Narrative) {
 	m.predicates = append(m.predicates, ps...)
@@ -66049,7 +66525,7 @@ func (m *NarrativeMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *NarrativeMutation) AddedEdges() []string {
-	edges := make([]string, 0, 4)
+	edges := make([]string, 0, 5)
 	if m.policy != nil {
 		edges = append(edges, narrative.EdgePolicy)
 	}
@@ -66061,6 +66537,9 @@ func (m *NarrativeMutation) AddedEdges() []string {
 	}
 	if m.controlobjective != nil {
 		edges = append(edges, narrative.EdgeControlobjective)
+	}
+	if m.program != nil {
+		edges = append(edges, narrative.EdgeProgram)
 	}
 	return edges
 }
@@ -66093,13 +66572,19 @@ func (m *NarrativeMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case narrative.EdgeProgram:
+		ids := make([]ent.Value, 0, len(m.program))
+		for id := range m.program {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *NarrativeMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 4)
+	edges := make([]string, 0, 5)
 	if m.removedpolicy != nil {
 		edges = append(edges, narrative.EdgePolicy)
 	}
@@ -66111,6 +66596,9 @@ func (m *NarrativeMutation) RemovedEdges() []string {
 	}
 	if m.removedcontrolobjective != nil {
 		edges = append(edges, narrative.EdgeControlobjective)
+	}
+	if m.removedprogram != nil {
+		edges = append(edges, narrative.EdgeProgram)
 	}
 	return edges
 }
@@ -66143,13 +66631,19 @@ func (m *NarrativeMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case narrative.EdgeProgram:
+		ids := make([]ent.Value, 0, len(m.removedprogram))
+		for id := range m.removedprogram {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *NarrativeMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 4)
+	edges := make([]string, 0, 5)
 	if m.clearedpolicy {
 		edges = append(edges, narrative.EdgePolicy)
 	}
@@ -66161,6 +66655,9 @@ func (m *NarrativeMutation) ClearedEdges() []string {
 	}
 	if m.clearedcontrolobjective {
 		edges = append(edges, narrative.EdgeControlobjective)
+	}
+	if m.clearedprogram {
+		edges = append(edges, narrative.EdgeProgram)
 	}
 	return edges
 }
@@ -66177,6 +66674,8 @@ func (m *NarrativeMutation) EdgeCleared(name string) bool {
 		return m.clearedprocedure
 	case narrative.EdgeControlobjective:
 		return m.clearedcontrolobjective
+	case narrative.EdgeProgram:
+		return m.clearedprogram
 	}
 	return false
 }
@@ -66204,6 +66703,9 @@ func (m *NarrativeMutation) ResetEdge(name string) error {
 		return nil
 	case narrative.EdgeControlobjective:
 		m.ResetControlobjective()
+		return nil
+	case narrative.EdgeProgram:
+		m.ResetProgram()
 		return nil
 	}
 	return fmt.Errorf("unknown Narrative edge %s", name)
@@ -67550,6 +68052,9 @@ type NoteMutation struct {
 	subcontrols        map[string]struct{}
 	removedsubcontrols map[string]struct{}
 	clearedsubcontrols bool
+	program            map[string]struct{}
+	removedprogram     map[string]struct{}
+	clearedprogram     bool
 	done               bool
 	oldValue           func(context.Context) (*Note, error)
 	predicates         []predicate.Note
@@ -68259,6 +68764,60 @@ func (m *NoteMutation) ResetSubcontrols() {
 	m.removedsubcontrols = nil
 }
 
+// AddProgramIDs adds the "program" edge to the Program entity by ids.
+func (m *NoteMutation) AddProgramIDs(ids ...string) {
+	if m.program == nil {
+		m.program = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.program[ids[i]] = struct{}{}
+	}
+}
+
+// ClearProgram clears the "program" edge to the Program entity.
+func (m *NoteMutation) ClearProgram() {
+	m.clearedprogram = true
+}
+
+// ProgramCleared reports if the "program" edge to the Program entity was cleared.
+func (m *NoteMutation) ProgramCleared() bool {
+	return m.clearedprogram
+}
+
+// RemoveProgramIDs removes the "program" edge to the Program entity by IDs.
+func (m *NoteMutation) RemoveProgramIDs(ids ...string) {
+	if m.removedprogram == nil {
+		m.removedprogram = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.program, ids[i])
+		m.removedprogram[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedProgram returns the removed IDs of the "program" edge to the Program entity.
+func (m *NoteMutation) RemovedProgramIDs() (ids []string) {
+	for id := range m.removedprogram {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ProgramIDs returns the "program" edge IDs in the mutation.
+func (m *NoteMutation) ProgramIDs() (ids []string) {
+	for id := range m.program {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetProgram resets all changes to the "program" edge.
+func (m *NoteMutation) ResetProgram() {
+	m.program = nil
+	m.clearedprogram = false
+	m.removedprogram = nil
+}
+
 // Where appends a list predicates to the NoteMutation builder.
 func (m *NoteMutation) Where(ps ...predicate.Note) {
 	m.predicates = append(m.predicates, ps...)
@@ -68596,7 +69155,7 @@ func (m *NoteMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *NoteMutation) AddedEdges() []string {
-	edges := make([]string, 0, 3)
+	edges := make([]string, 0, 4)
 	if m.owner != nil {
 		edges = append(edges, note.EdgeOwner)
 	}
@@ -68605,6 +69164,9 @@ func (m *NoteMutation) AddedEdges() []string {
 	}
 	if m.subcontrols != nil {
 		edges = append(edges, note.EdgeSubcontrols)
+	}
+	if m.program != nil {
+		edges = append(edges, note.EdgeProgram)
 	}
 	return edges
 }
@@ -68627,15 +69189,24 @@ func (m *NoteMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case note.EdgeProgram:
+		ids := make([]ent.Value, 0, len(m.program))
+		for id := range m.program {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *NoteMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 3)
+	edges := make([]string, 0, 4)
 	if m.removedsubcontrols != nil {
 		edges = append(edges, note.EdgeSubcontrols)
+	}
+	if m.removedprogram != nil {
+		edges = append(edges, note.EdgeProgram)
 	}
 	return edges
 }
@@ -68650,13 +69221,19 @@ func (m *NoteMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case note.EdgeProgram:
+		ids := make([]ent.Value, 0, len(m.removedprogram))
+		for id := range m.removedprogram {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *NoteMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 3)
+	edges := make([]string, 0, 4)
 	if m.clearedowner {
 		edges = append(edges, note.EdgeOwner)
 	}
@@ -68665,6 +69242,9 @@ func (m *NoteMutation) ClearedEdges() []string {
 	}
 	if m.clearedsubcontrols {
 		edges = append(edges, note.EdgeSubcontrols)
+	}
+	if m.clearedprogram {
+		edges = append(edges, note.EdgeProgram)
 	}
 	return edges
 }
@@ -68679,6 +69259,8 @@ func (m *NoteMutation) EdgeCleared(name string) bool {
 		return m.clearedentity
 	case note.EdgeSubcontrols:
 		return m.clearedsubcontrols
+	case note.EdgeProgram:
+		return m.clearedprogram
 	}
 	return false
 }
@@ -68709,6 +69291,9 @@ func (m *NoteMutation) ResetEdge(name string) error {
 		return nil
 	case note.EdgeSubcontrols:
 		m.ResetSubcontrols()
+		return nil
+	case note.EdgeProgram:
+		m.ResetProgram()
 		return nil
 	}
 	return fmt.Errorf("unknown Note edge %s", name)
@@ -76730,6 +77315,9 @@ type OrganizationMutation struct {
 	tasks                           map[string]struct{}
 	removedtasks                    map[string]struct{}
 	clearedtasks                    bool
+	programs                        map[string]struct{}
+	removedprograms                 map[string]struct{}
+	clearedprograms                 bool
 	members                         map[string]struct{}
 	removedmembers                  map[string]struct{}
 	clearedmembers                  bool
@@ -78970,6 +79558,60 @@ func (m *OrganizationMutation) ResetTasks() {
 	m.removedtasks = nil
 }
 
+// AddProgramIDs adds the "programs" edge to the Program entity by ids.
+func (m *OrganizationMutation) AddProgramIDs(ids ...string) {
+	if m.programs == nil {
+		m.programs = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.programs[ids[i]] = struct{}{}
+	}
+}
+
+// ClearPrograms clears the "programs" edge to the Program entity.
+func (m *OrganizationMutation) ClearPrograms() {
+	m.clearedprograms = true
+}
+
+// ProgramsCleared reports if the "programs" edge to the Program entity was cleared.
+func (m *OrganizationMutation) ProgramsCleared() bool {
+	return m.clearedprograms
+}
+
+// RemoveProgramIDs removes the "programs" edge to the Program entity by IDs.
+func (m *OrganizationMutation) RemoveProgramIDs(ids ...string) {
+	if m.removedprograms == nil {
+		m.removedprograms = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.programs, ids[i])
+		m.removedprograms[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedPrograms returns the removed IDs of the "programs" edge to the Program entity.
+func (m *OrganizationMutation) RemovedProgramsIDs() (ids []string) {
+	for id := range m.removedprograms {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ProgramsIDs returns the "programs" edge IDs in the mutation.
+func (m *OrganizationMutation) ProgramsIDs() (ids []string) {
+	for id := range m.programs {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetPrograms resets all changes to the "programs" edge.
+func (m *OrganizationMutation) ResetPrograms() {
+	m.programs = nil
+	m.clearedprograms = false
+	m.removedprograms = nil
+}
+
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by ids.
 func (m *OrganizationMutation) AddMemberIDs(ids ...string) {
 	if m.members == nil {
@@ -79464,7 +80106,7 @@ func (m *OrganizationMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *OrganizationMutation) AddedEdges() []string {
-	edges := make([]string, 0, 28)
+	edges := make([]string, 0, 29)
 	if m.parent != nil {
 		edges = append(edges, organization.EdgeParent)
 	}
@@ -79545,6 +80187,9 @@ func (m *OrganizationMutation) AddedEdges() []string {
 	}
 	if m.tasks != nil {
 		edges = append(edges, organization.EdgeTasks)
+	}
+	if m.programs != nil {
+		edges = append(edges, organization.EdgePrograms)
 	}
 	if m.members != nil {
 		edges = append(edges, organization.EdgeMembers)
@@ -79714,6 +80359,12 @@ func (m *OrganizationMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case organization.EdgePrograms:
+		ids := make([]ent.Value, 0, len(m.programs))
+		for id := range m.programs {
+			ids = append(ids, id)
+		}
+		return ids
 	case organization.EdgeMembers:
 		ids := make([]ent.Value, 0, len(m.members))
 		for id := range m.members {
@@ -79726,7 +80377,7 @@ func (m *OrganizationMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *OrganizationMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 28)
+	edges := make([]string, 0, 29)
 	if m.removedchildren != nil {
 		edges = append(edges, organization.EdgeChildren)
 	}
@@ -79801,6 +80452,9 @@ func (m *OrganizationMutation) RemovedEdges() []string {
 	}
 	if m.removedtasks != nil {
 		edges = append(edges, organization.EdgeTasks)
+	}
+	if m.removedprograms != nil {
+		edges = append(edges, organization.EdgePrograms)
 	}
 	if m.removedmembers != nil {
 		edges = append(edges, organization.EdgeMembers)
@@ -79962,6 +80616,12 @@ func (m *OrganizationMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case organization.EdgePrograms:
+		ids := make([]ent.Value, 0, len(m.removedprograms))
+		for id := range m.removedprograms {
+			ids = append(ids, id)
+		}
+		return ids
 	case organization.EdgeMembers:
 		ids := make([]ent.Value, 0, len(m.removedmembers))
 		for id := range m.removedmembers {
@@ -79974,7 +80634,7 @@ func (m *OrganizationMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *OrganizationMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 28)
+	edges := make([]string, 0, 29)
 	if m.clearedparent {
 		edges = append(edges, organization.EdgeParent)
 	}
@@ -80056,6 +80716,9 @@ func (m *OrganizationMutation) ClearedEdges() []string {
 	if m.clearedtasks {
 		edges = append(edges, organization.EdgeTasks)
 	}
+	if m.clearedprograms {
+		edges = append(edges, organization.EdgePrograms)
+	}
 	if m.clearedmembers {
 		edges = append(edges, organization.EdgeMembers)
 	}
@@ -80120,6 +80783,8 @@ func (m *OrganizationMutation) EdgeCleared(name string) bool {
 		return m.clearednotes
 	case organization.EdgeTasks:
 		return m.clearedtasks
+	case organization.EdgePrograms:
+		return m.clearedprograms
 	case organization.EdgeMembers:
 		return m.clearedmembers
 	}
@@ -80224,6 +80889,9 @@ func (m *OrganizationMutation) ResetEdge(name string) error {
 		return nil
 	case organization.EdgeTasks:
 		m.ResetTasks()
+		return nil
+	case organization.EdgePrograms:
+		m.ResetPrograms()
 		return nil
 	case organization.EdgeMembers:
 		m.ResetMembers()
@@ -87671,6 +88339,9 @@ type ProcedureMutation struct {
 	tasks                 map[string]struct{}
 	removedtasks          map[string]struct{}
 	clearedtasks          bool
+	programs              map[string]struct{}
+	removedprograms       map[string]struct{}
+	clearedprograms       bool
 	done                  bool
 	oldValue              func(context.Context) (*Procedure, error)
 	predicates            []predicate.Procedure
@@ -88873,6 +89544,60 @@ func (m *ProcedureMutation) ResetTasks() {
 	m.removedtasks = nil
 }
 
+// AddProgramIDs adds the "programs" edge to the Program entity by ids.
+func (m *ProcedureMutation) AddProgramIDs(ids ...string) {
+	if m.programs == nil {
+		m.programs = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.programs[ids[i]] = struct{}{}
+	}
+}
+
+// ClearPrograms clears the "programs" edge to the Program entity.
+func (m *ProcedureMutation) ClearPrograms() {
+	m.clearedprograms = true
+}
+
+// ProgramsCleared reports if the "programs" edge to the Program entity was cleared.
+func (m *ProcedureMutation) ProgramsCleared() bool {
+	return m.clearedprograms
+}
+
+// RemoveProgramIDs removes the "programs" edge to the Program entity by IDs.
+func (m *ProcedureMutation) RemoveProgramIDs(ids ...string) {
+	if m.removedprograms == nil {
+		m.removedprograms = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.programs, ids[i])
+		m.removedprograms[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedPrograms returns the removed IDs of the "programs" edge to the Program entity.
+func (m *ProcedureMutation) RemovedProgramsIDs() (ids []string) {
+	for id := range m.removedprograms {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ProgramsIDs returns the "programs" edge IDs in the mutation.
+func (m *ProcedureMutation) ProgramsIDs() (ids []string) {
+	for id := range m.programs {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetPrograms resets all changes to the "programs" edge.
+func (m *ProcedureMutation) ResetPrograms() {
+	m.programs = nil
+	m.clearedprograms = false
+	m.removedprograms = nil
+}
+
 // Where appends a list predicates to the ProcedureMutation builder.
 func (m *ProcedureMutation) Where(ps ...predicate.Procedure) {
 	m.predicates = append(m.predicates, ps...)
@@ -89371,7 +90096,7 @@ func (m *ProcedureMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ProcedureMutation) AddedEdges() []string {
-	edges := make([]string, 0, 5)
+	edges := make([]string, 0, 6)
 	if m.control != nil {
 		edges = append(edges, procedure.EdgeControl)
 	}
@@ -89386,6 +90111,9 @@ func (m *ProcedureMutation) AddedEdges() []string {
 	}
 	if m.tasks != nil {
 		edges = append(edges, procedure.EdgeTasks)
+	}
+	if m.programs != nil {
+		edges = append(edges, procedure.EdgePrograms)
 	}
 	return edges
 }
@@ -89424,13 +90152,19 @@ func (m *ProcedureMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case procedure.EdgePrograms:
+		ids := make([]ent.Value, 0, len(m.programs))
+		for id := range m.programs {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ProcedureMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 5)
+	edges := make([]string, 0, 6)
 	if m.removedcontrol != nil {
 		edges = append(edges, procedure.EdgeControl)
 	}
@@ -89445,6 +90179,9 @@ func (m *ProcedureMutation) RemovedEdges() []string {
 	}
 	if m.removedtasks != nil {
 		edges = append(edges, procedure.EdgeTasks)
+	}
+	if m.removedprograms != nil {
+		edges = append(edges, procedure.EdgePrograms)
 	}
 	return edges
 }
@@ -89483,13 +90220,19 @@ func (m *ProcedureMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case procedure.EdgePrograms:
+		ids := make([]ent.Value, 0, len(m.removedprograms))
+		for id := range m.removedprograms {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ProcedureMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 5)
+	edges := make([]string, 0, 6)
 	if m.clearedcontrol {
 		edges = append(edges, procedure.EdgeControl)
 	}
@@ -89504,6 +90247,9 @@ func (m *ProcedureMutation) ClearedEdges() []string {
 	}
 	if m.clearedtasks {
 		edges = append(edges, procedure.EdgeTasks)
+	}
+	if m.clearedprograms {
+		edges = append(edges, procedure.EdgePrograms)
 	}
 	return edges
 }
@@ -89522,6 +90268,8 @@ func (m *ProcedureMutation) EdgeCleared(name string) bool {
 		return m.clearedrisks
 	case procedure.EdgeTasks:
 		return m.clearedtasks
+	case procedure.EdgePrograms:
+		return m.clearedprograms
 	}
 	return false
 }
@@ -89552,6 +90300,9 @@ func (m *ProcedureMutation) ResetEdge(name string) error {
 		return nil
 	case procedure.EdgeTasks:
 		m.ResetTasks()
+		return nil
+	case procedure.EdgePrograms:
+		m.ResetPrograms()
 		return nil
 	}
 	return fmt.Errorf("unknown Procedure edge %s", name)
@@ -91239,6 +91990,4051 @@ func (m *ProcedureHistoryMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown ProcedureHistory edge %s", name)
 }
 
+// ProgramMutation represents an operation that mutates the Program nodes in the graph.
+type ProgramMutation struct {
+	config
+	op                       Op
+	typ                      string
+	id                       *string
+	created_at               *time.Time
+	updated_at               *time.Time
+	created_by               *string
+	updated_by               *string
+	mapping_id               *string
+	deleted_at               *time.Time
+	deleted_by               *string
+	tags                     *[]string
+	appendtags               []string
+	name                     *string
+	description              *string
+	status                   *enums.ProgramStatus
+	start_date               *time.Time
+	end_date                 *time.Time
+	auditor_ready            *bool
+	auditor_write_comments   *bool
+	auditor_read_comments    *bool
+	clearedFields            map[string]struct{}
+	organization             *string
+	clearedorganization      bool
+	controls                 map[string]struct{}
+	removedcontrols          map[string]struct{}
+	clearedcontrols          bool
+	subcontrols              map[string]struct{}
+	removedsubcontrols       map[string]struct{}
+	clearedsubcontrols       bool
+	controlobjectives        map[string]struct{}
+	removedcontrolobjectives map[string]struct{}
+	clearedcontrolobjectives bool
+	policies                 map[string]struct{}
+	removedpolicies          map[string]struct{}
+	clearedpolicies          bool
+	procedures               map[string]struct{}
+	removedprocedures        map[string]struct{}
+	clearedprocedures        bool
+	risks                    map[string]struct{}
+	removedrisks             map[string]struct{}
+	clearedrisks             bool
+	tasks                    map[string]struct{}
+	removedtasks             map[string]struct{}
+	clearedtasks             bool
+	notes                    map[string]struct{}
+	removednotes             map[string]struct{}
+	clearednotes             bool
+	files                    map[string]struct{}
+	removedfiles             map[string]struct{}
+	clearedfiles             bool
+	narratives               map[string]struct{}
+	removednarratives        map[string]struct{}
+	clearednarratives        bool
+	actionplans              map[string]struct{}
+	removedactionplans       map[string]struct{}
+	clearedactionplans       bool
+	standards                map[string]struct{}
+	removedstandards         map[string]struct{}
+	clearedstandards         bool
+	done                     bool
+	oldValue                 func(context.Context) (*Program, error)
+	predicates               []predicate.Program
+}
+
+var _ ent.Mutation = (*ProgramMutation)(nil)
+
+// programOption allows management of the mutation configuration using functional options.
+type programOption func(*ProgramMutation)
+
+// newProgramMutation creates new mutation for the Program entity.
+func newProgramMutation(c config, op Op, opts ...programOption) *ProgramMutation {
+	m := &ProgramMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeProgram,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withProgramID sets the ID field of the mutation.
+func withProgramID(id string) programOption {
+	return func(m *ProgramMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *Program
+		)
+		m.oldValue = func(ctx context.Context) (*Program, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().Program.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withProgram sets the old Program of the mutation.
+func withProgram(node *Program) programOption {
+	return func(m *ProgramMutation) {
+		m.oldValue = func(context.Context) (*Program, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m ProgramMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m ProgramMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("generated: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Program entities.
+func (m *ProgramMutation) SetID(id string) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *ProgramMutation) ID() (id string, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *ProgramMutation) IDs(ctx context.Context) ([]string, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []string{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().Program.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *ProgramMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *ProgramMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the Program entity.
+// If the Program object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ClearCreatedAt clears the value of the "created_at" field.
+func (m *ProgramMutation) ClearCreatedAt() {
+	m.created_at = nil
+	m.clearedFields[program.FieldCreatedAt] = struct{}{}
+}
+
+// CreatedAtCleared returns if the "created_at" field was cleared in this mutation.
+func (m *ProgramMutation) CreatedAtCleared() bool {
+	_, ok := m.clearedFields[program.FieldCreatedAt]
+	return ok
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *ProgramMutation) ResetCreatedAt() {
+	m.created_at = nil
+	delete(m.clearedFields, program.FieldCreatedAt)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *ProgramMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *ProgramMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the Program entity.
+// If the Program object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (m *ProgramMutation) ClearUpdatedAt() {
+	m.updated_at = nil
+	m.clearedFields[program.FieldUpdatedAt] = struct{}{}
+}
+
+// UpdatedAtCleared returns if the "updated_at" field was cleared in this mutation.
+func (m *ProgramMutation) UpdatedAtCleared() bool {
+	_, ok := m.clearedFields[program.FieldUpdatedAt]
+	return ok
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *ProgramMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+	delete(m.clearedFields, program.FieldUpdatedAt)
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *ProgramMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *ProgramMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the Program entity.
+// If the Program object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *ProgramMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[program.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *ProgramMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[program.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *ProgramMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, program.FieldCreatedBy)
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *ProgramMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *ProgramMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the Program entity.
+// If the Program object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *ProgramMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[program.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *ProgramMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[program.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *ProgramMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, program.FieldUpdatedBy)
+}
+
+// SetMappingID sets the "mapping_id" field.
+func (m *ProgramMutation) SetMappingID(s string) {
+	m.mapping_id = &s
+}
+
+// MappingID returns the value of the "mapping_id" field in the mutation.
+func (m *ProgramMutation) MappingID() (r string, exists bool) {
+	v := m.mapping_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMappingID returns the old "mapping_id" field's value of the Program entity.
+// If the Program object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramMutation) OldMappingID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMappingID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMappingID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMappingID: %w", err)
+	}
+	return oldValue.MappingID, nil
+}
+
+// ResetMappingID resets all changes to the "mapping_id" field.
+func (m *ProgramMutation) ResetMappingID() {
+	m.mapping_id = nil
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (m *ProgramMutation) SetDeletedAt(t time.Time) {
+	m.deleted_at = &t
+}
+
+// DeletedAt returns the value of the "deleted_at" field in the mutation.
+func (m *ProgramMutation) DeletedAt() (r time.Time, exists bool) {
+	v := m.deleted_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedAt returns the old "deleted_at" field's value of the Program entity.
+// If the Program object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramMutation) OldDeletedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedAt: %w", err)
+	}
+	return oldValue.DeletedAt, nil
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (m *ProgramMutation) ClearDeletedAt() {
+	m.deleted_at = nil
+	m.clearedFields[program.FieldDeletedAt] = struct{}{}
+}
+
+// DeletedAtCleared returns if the "deleted_at" field was cleared in this mutation.
+func (m *ProgramMutation) DeletedAtCleared() bool {
+	_, ok := m.clearedFields[program.FieldDeletedAt]
+	return ok
+}
+
+// ResetDeletedAt resets all changes to the "deleted_at" field.
+func (m *ProgramMutation) ResetDeletedAt() {
+	m.deleted_at = nil
+	delete(m.clearedFields, program.FieldDeletedAt)
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (m *ProgramMutation) SetDeletedBy(s string) {
+	m.deleted_by = &s
+}
+
+// DeletedBy returns the value of the "deleted_by" field in the mutation.
+func (m *ProgramMutation) DeletedBy() (r string, exists bool) {
+	v := m.deleted_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedBy returns the old "deleted_by" field's value of the Program entity.
+// If the Program object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramMutation) OldDeletedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedBy: %w", err)
+	}
+	return oldValue.DeletedBy, nil
+}
+
+// ClearDeletedBy clears the value of the "deleted_by" field.
+func (m *ProgramMutation) ClearDeletedBy() {
+	m.deleted_by = nil
+	m.clearedFields[program.FieldDeletedBy] = struct{}{}
+}
+
+// DeletedByCleared returns if the "deleted_by" field was cleared in this mutation.
+func (m *ProgramMutation) DeletedByCleared() bool {
+	_, ok := m.clearedFields[program.FieldDeletedBy]
+	return ok
+}
+
+// ResetDeletedBy resets all changes to the "deleted_by" field.
+func (m *ProgramMutation) ResetDeletedBy() {
+	m.deleted_by = nil
+	delete(m.clearedFields, program.FieldDeletedBy)
+}
+
+// SetTags sets the "tags" field.
+func (m *ProgramMutation) SetTags(s []string) {
+	m.tags = &s
+	m.appendtags = nil
+}
+
+// Tags returns the value of the "tags" field in the mutation.
+func (m *ProgramMutation) Tags() (r []string, exists bool) {
+	v := m.tags
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTags returns the old "tags" field's value of the Program entity.
+// If the Program object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramMutation) OldTags(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTags is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTags requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTags: %w", err)
+	}
+	return oldValue.Tags, nil
+}
+
+// AppendTags adds s to the "tags" field.
+func (m *ProgramMutation) AppendTags(s []string) {
+	m.appendtags = append(m.appendtags, s...)
+}
+
+// AppendedTags returns the list of values that were appended to the "tags" field in this mutation.
+func (m *ProgramMutation) AppendedTags() ([]string, bool) {
+	if len(m.appendtags) == 0 {
+		return nil, false
+	}
+	return m.appendtags, true
+}
+
+// ClearTags clears the value of the "tags" field.
+func (m *ProgramMutation) ClearTags() {
+	m.tags = nil
+	m.appendtags = nil
+	m.clearedFields[program.FieldTags] = struct{}{}
+}
+
+// TagsCleared returns if the "tags" field was cleared in this mutation.
+func (m *ProgramMutation) TagsCleared() bool {
+	_, ok := m.clearedFields[program.FieldTags]
+	return ok
+}
+
+// ResetTags resets all changes to the "tags" field.
+func (m *ProgramMutation) ResetTags() {
+	m.tags = nil
+	m.appendtags = nil
+	delete(m.clearedFields, program.FieldTags)
+}
+
+// SetName sets the "name" field.
+func (m *ProgramMutation) SetName(s string) {
+	m.name = &s
+}
+
+// Name returns the value of the "name" field in the mutation.
+func (m *ProgramMutation) Name() (r string, exists bool) {
+	v := m.name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldName returns the old "name" field's value of the Program entity.
+// If the Program object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramMutation) OldName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldName: %w", err)
+	}
+	return oldValue.Name, nil
+}
+
+// ResetName resets all changes to the "name" field.
+func (m *ProgramMutation) ResetName() {
+	m.name = nil
+}
+
+// SetDescription sets the "description" field.
+func (m *ProgramMutation) SetDescription(s string) {
+	m.description = &s
+}
+
+// Description returns the value of the "description" field in the mutation.
+func (m *ProgramMutation) Description() (r string, exists bool) {
+	v := m.description
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDescription returns the old "description" field's value of the Program entity.
+// If the Program object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramMutation) OldDescription(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDescription is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDescription requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDescription: %w", err)
+	}
+	return oldValue.Description, nil
+}
+
+// ClearDescription clears the value of the "description" field.
+func (m *ProgramMutation) ClearDescription() {
+	m.description = nil
+	m.clearedFields[program.FieldDescription] = struct{}{}
+}
+
+// DescriptionCleared returns if the "description" field was cleared in this mutation.
+func (m *ProgramMutation) DescriptionCleared() bool {
+	_, ok := m.clearedFields[program.FieldDescription]
+	return ok
+}
+
+// ResetDescription resets all changes to the "description" field.
+func (m *ProgramMutation) ResetDescription() {
+	m.description = nil
+	delete(m.clearedFields, program.FieldDescription)
+}
+
+// SetStatus sets the "status" field.
+func (m *ProgramMutation) SetStatus(es enums.ProgramStatus) {
+	m.status = &es
+}
+
+// Status returns the value of the "status" field in the mutation.
+func (m *ProgramMutation) Status() (r enums.ProgramStatus, exists bool) {
+	v := m.status
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldStatus returns the old "status" field's value of the Program entity.
+// If the Program object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramMutation) OldStatus(ctx context.Context) (v enums.ProgramStatus, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldStatus is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldStatus requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldStatus: %w", err)
+	}
+	return oldValue.Status, nil
+}
+
+// ResetStatus resets all changes to the "status" field.
+func (m *ProgramMutation) ResetStatus() {
+	m.status = nil
+}
+
+// SetStartDate sets the "start_date" field.
+func (m *ProgramMutation) SetStartDate(t time.Time) {
+	m.start_date = &t
+}
+
+// StartDate returns the value of the "start_date" field in the mutation.
+func (m *ProgramMutation) StartDate() (r time.Time, exists bool) {
+	v := m.start_date
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldStartDate returns the old "start_date" field's value of the Program entity.
+// If the Program object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramMutation) OldStartDate(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldStartDate is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldStartDate requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldStartDate: %w", err)
+	}
+	return oldValue.StartDate, nil
+}
+
+// ClearStartDate clears the value of the "start_date" field.
+func (m *ProgramMutation) ClearStartDate() {
+	m.start_date = nil
+	m.clearedFields[program.FieldStartDate] = struct{}{}
+}
+
+// StartDateCleared returns if the "start_date" field was cleared in this mutation.
+func (m *ProgramMutation) StartDateCleared() bool {
+	_, ok := m.clearedFields[program.FieldStartDate]
+	return ok
+}
+
+// ResetStartDate resets all changes to the "start_date" field.
+func (m *ProgramMutation) ResetStartDate() {
+	m.start_date = nil
+	delete(m.clearedFields, program.FieldStartDate)
+}
+
+// SetEndDate sets the "end_date" field.
+func (m *ProgramMutation) SetEndDate(t time.Time) {
+	m.end_date = &t
+}
+
+// EndDate returns the value of the "end_date" field in the mutation.
+func (m *ProgramMutation) EndDate() (r time.Time, exists bool) {
+	v := m.end_date
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldEndDate returns the old "end_date" field's value of the Program entity.
+// If the Program object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramMutation) OldEndDate(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldEndDate is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldEndDate requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldEndDate: %w", err)
+	}
+	return oldValue.EndDate, nil
+}
+
+// ClearEndDate clears the value of the "end_date" field.
+func (m *ProgramMutation) ClearEndDate() {
+	m.end_date = nil
+	m.clearedFields[program.FieldEndDate] = struct{}{}
+}
+
+// EndDateCleared returns if the "end_date" field was cleared in this mutation.
+func (m *ProgramMutation) EndDateCleared() bool {
+	_, ok := m.clearedFields[program.FieldEndDate]
+	return ok
+}
+
+// ResetEndDate resets all changes to the "end_date" field.
+func (m *ProgramMutation) ResetEndDate() {
+	m.end_date = nil
+	delete(m.clearedFields, program.FieldEndDate)
+}
+
+// SetOrganizationID sets the "organization_id" field.
+func (m *ProgramMutation) SetOrganizationID(s string) {
+	m.organization = &s
+}
+
+// OrganizationID returns the value of the "organization_id" field in the mutation.
+func (m *ProgramMutation) OrganizationID() (r string, exists bool) {
+	v := m.organization
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOrganizationID returns the old "organization_id" field's value of the Program entity.
+// If the Program object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramMutation) OldOrganizationID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOrganizationID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOrganizationID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOrganizationID: %w", err)
+	}
+	return oldValue.OrganizationID, nil
+}
+
+// ResetOrganizationID resets all changes to the "organization_id" field.
+func (m *ProgramMutation) ResetOrganizationID() {
+	m.organization = nil
+}
+
+// SetAuditorReady sets the "auditor_ready" field.
+func (m *ProgramMutation) SetAuditorReady(b bool) {
+	m.auditor_ready = &b
+}
+
+// AuditorReady returns the value of the "auditor_ready" field in the mutation.
+func (m *ProgramMutation) AuditorReady() (r bool, exists bool) {
+	v := m.auditor_ready
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAuditorReady returns the old "auditor_ready" field's value of the Program entity.
+// If the Program object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramMutation) OldAuditorReady(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAuditorReady is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAuditorReady requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAuditorReady: %w", err)
+	}
+	return oldValue.AuditorReady, nil
+}
+
+// ResetAuditorReady resets all changes to the "auditor_ready" field.
+func (m *ProgramMutation) ResetAuditorReady() {
+	m.auditor_ready = nil
+}
+
+// SetAuditorWriteComments sets the "auditor_write_comments" field.
+func (m *ProgramMutation) SetAuditorWriteComments(b bool) {
+	m.auditor_write_comments = &b
+}
+
+// AuditorWriteComments returns the value of the "auditor_write_comments" field in the mutation.
+func (m *ProgramMutation) AuditorWriteComments() (r bool, exists bool) {
+	v := m.auditor_write_comments
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAuditorWriteComments returns the old "auditor_write_comments" field's value of the Program entity.
+// If the Program object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramMutation) OldAuditorWriteComments(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAuditorWriteComments is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAuditorWriteComments requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAuditorWriteComments: %w", err)
+	}
+	return oldValue.AuditorWriteComments, nil
+}
+
+// ResetAuditorWriteComments resets all changes to the "auditor_write_comments" field.
+func (m *ProgramMutation) ResetAuditorWriteComments() {
+	m.auditor_write_comments = nil
+}
+
+// SetAuditorReadComments sets the "auditor_read_comments" field.
+func (m *ProgramMutation) SetAuditorReadComments(b bool) {
+	m.auditor_read_comments = &b
+}
+
+// AuditorReadComments returns the value of the "auditor_read_comments" field in the mutation.
+func (m *ProgramMutation) AuditorReadComments() (r bool, exists bool) {
+	v := m.auditor_read_comments
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAuditorReadComments returns the old "auditor_read_comments" field's value of the Program entity.
+// If the Program object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramMutation) OldAuditorReadComments(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAuditorReadComments is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAuditorReadComments requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAuditorReadComments: %w", err)
+	}
+	return oldValue.AuditorReadComments, nil
+}
+
+// ResetAuditorReadComments resets all changes to the "auditor_read_comments" field.
+func (m *ProgramMutation) ResetAuditorReadComments() {
+	m.auditor_read_comments = nil
+}
+
+// ClearOrganization clears the "organization" edge to the Organization entity.
+func (m *ProgramMutation) ClearOrganization() {
+	m.clearedorganization = true
+	m.clearedFields[program.FieldOrganizationID] = struct{}{}
+}
+
+// OrganizationCleared reports if the "organization" edge to the Organization entity was cleared.
+func (m *ProgramMutation) OrganizationCleared() bool {
+	return m.clearedorganization
+}
+
+// OrganizationIDs returns the "organization" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// OrganizationID instead. It exists only for internal usage by the builders.
+func (m *ProgramMutation) OrganizationIDs() (ids []string) {
+	if id := m.organization; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetOrganization resets all changes to the "organization" edge.
+func (m *ProgramMutation) ResetOrganization() {
+	m.organization = nil
+	m.clearedorganization = false
+}
+
+// AddControlIDs adds the "controls" edge to the Control entity by ids.
+func (m *ProgramMutation) AddControlIDs(ids ...string) {
+	if m.controls == nil {
+		m.controls = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.controls[ids[i]] = struct{}{}
+	}
+}
+
+// ClearControls clears the "controls" edge to the Control entity.
+func (m *ProgramMutation) ClearControls() {
+	m.clearedcontrols = true
+}
+
+// ControlsCleared reports if the "controls" edge to the Control entity was cleared.
+func (m *ProgramMutation) ControlsCleared() bool {
+	return m.clearedcontrols
+}
+
+// RemoveControlIDs removes the "controls" edge to the Control entity by IDs.
+func (m *ProgramMutation) RemoveControlIDs(ids ...string) {
+	if m.removedcontrols == nil {
+		m.removedcontrols = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.controls, ids[i])
+		m.removedcontrols[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedControls returns the removed IDs of the "controls" edge to the Control entity.
+func (m *ProgramMutation) RemovedControlsIDs() (ids []string) {
+	for id := range m.removedcontrols {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ControlsIDs returns the "controls" edge IDs in the mutation.
+func (m *ProgramMutation) ControlsIDs() (ids []string) {
+	for id := range m.controls {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetControls resets all changes to the "controls" edge.
+func (m *ProgramMutation) ResetControls() {
+	m.controls = nil
+	m.clearedcontrols = false
+	m.removedcontrols = nil
+}
+
+// AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by ids.
+func (m *ProgramMutation) AddSubcontrolIDs(ids ...string) {
+	if m.subcontrols == nil {
+		m.subcontrols = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.subcontrols[ids[i]] = struct{}{}
+	}
+}
+
+// ClearSubcontrols clears the "subcontrols" edge to the Subcontrol entity.
+func (m *ProgramMutation) ClearSubcontrols() {
+	m.clearedsubcontrols = true
+}
+
+// SubcontrolsCleared reports if the "subcontrols" edge to the Subcontrol entity was cleared.
+func (m *ProgramMutation) SubcontrolsCleared() bool {
+	return m.clearedsubcontrols
+}
+
+// RemoveSubcontrolIDs removes the "subcontrols" edge to the Subcontrol entity by IDs.
+func (m *ProgramMutation) RemoveSubcontrolIDs(ids ...string) {
+	if m.removedsubcontrols == nil {
+		m.removedsubcontrols = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.subcontrols, ids[i])
+		m.removedsubcontrols[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedSubcontrols returns the removed IDs of the "subcontrols" edge to the Subcontrol entity.
+func (m *ProgramMutation) RemovedSubcontrolsIDs() (ids []string) {
+	for id := range m.removedsubcontrols {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// SubcontrolsIDs returns the "subcontrols" edge IDs in the mutation.
+func (m *ProgramMutation) SubcontrolsIDs() (ids []string) {
+	for id := range m.subcontrols {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetSubcontrols resets all changes to the "subcontrols" edge.
+func (m *ProgramMutation) ResetSubcontrols() {
+	m.subcontrols = nil
+	m.clearedsubcontrols = false
+	m.removedsubcontrols = nil
+}
+
+// AddControlobjectiveIDs adds the "controlobjectives" edge to the ControlObjective entity by ids.
+func (m *ProgramMutation) AddControlobjectiveIDs(ids ...string) {
+	if m.controlobjectives == nil {
+		m.controlobjectives = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.controlobjectives[ids[i]] = struct{}{}
+	}
+}
+
+// ClearControlobjectives clears the "controlobjectives" edge to the ControlObjective entity.
+func (m *ProgramMutation) ClearControlobjectives() {
+	m.clearedcontrolobjectives = true
+}
+
+// ControlobjectivesCleared reports if the "controlobjectives" edge to the ControlObjective entity was cleared.
+func (m *ProgramMutation) ControlobjectivesCleared() bool {
+	return m.clearedcontrolobjectives
+}
+
+// RemoveControlobjectiveIDs removes the "controlobjectives" edge to the ControlObjective entity by IDs.
+func (m *ProgramMutation) RemoveControlobjectiveIDs(ids ...string) {
+	if m.removedcontrolobjectives == nil {
+		m.removedcontrolobjectives = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.controlobjectives, ids[i])
+		m.removedcontrolobjectives[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedControlobjectives returns the removed IDs of the "controlobjectives" edge to the ControlObjective entity.
+func (m *ProgramMutation) RemovedControlobjectivesIDs() (ids []string) {
+	for id := range m.removedcontrolobjectives {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ControlobjectivesIDs returns the "controlobjectives" edge IDs in the mutation.
+func (m *ProgramMutation) ControlobjectivesIDs() (ids []string) {
+	for id := range m.controlobjectives {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetControlobjectives resets all changes to the "controlobjectives" edge.
+func (m *ProgramMutation) ResetControlobjectives() {
+	m.controlobjectives = nil
+	m.clearedcontrolobjectives = false
+	m.removedcontrolobjectives = nil
+}
+
+// AddPolicyIDs adds the "policies" edge to the InternalPolicy entity by ids.
+func (m *ProgramMutation) AddPolicyIDs(ids ...string) {
+	if m.policies == nil {
+		m.policies = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.policies[ids[i]] = struct{}{}
+	}
+}
+
+// ClearPolicies clears the "policies" edge to the InternalPolicy entity.
+func (m *ProgramMutation) ClearPolicies() {
+	m.clearedpolicies = true
+}
+
+// PoliciesCleared reports if the "policies" edge to the InternalPolicy entity was cleared.
+func (m *ProgramMutation) PoliciesCleared() bool {
+	return m.clearedpolicies
+}
+
+// RemovePolicyIDs removes the "policies" edge to the InternalPolicy entity by IDs.
+func (m *ProgramMutation) RemovePolicyIDs(ids ...string) {
+	if m.removedpolicies == nil {
+		m.removedpolicies = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.policies, ids[i])
+		m.removedpolicies[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedPolicies returns the removed IDs of the "policies" edge to the InternalPolicy entity.
+func (m *ProgramMutation) RemovedPoliciesIDs() (ids []string) {
+	for id := range m.removedpolicies {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// PoliciesIDs returns the "policies" edge IDs in the mutation.
+func (m *ProgramMutation) PoliciesIDs() (ids []string) {
+	for id := range m.policies {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetPolicies resets all changes to the "policies" edge.
+func (m *ProgramMutation) ResetPolicies() {
+	m.policies = nil
+	m.clearedpolicies = false
+	m.removedpolicies = nil
+}
+
+// AddProcedureIDs adds the "procedures" edge to the Procedure entity by ids.
+func (m *ProgramMutation) AddProcedureIDs(ids ...string) {
+	if m.procedures == nil {
+		m.procedures = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.procedures[ids[i]] = struct{}{}
+	}
+}
+
+// ClearProcedures clears the "procedures" edge to the Procedure entity.
+func (m *ProgramMutation) ClearProcedures() {
+	m.clearedprocedures = true
+}
+
+// ProceduresCleared reports if the "procedures" edge to the Procedure entity was cleared.
+func (m *ProgramMutation) ProceduresCleared() bool {
+	return m.clearedprocedures
+}
+
+// RemoveProcedureIDs removes the "procedures" edge to the Procedure entity by IDs.
+func (m *ProgramMutation) RemoveProcedureIDs(ids ...string) {
+	if m.removedprocedures == nil {
+		m.removedprocedures = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.procedures, ids[i])
+		m.removedprocedures[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedProcedures returns the removed IDs of the "procedures" edge to the Procedure entity.
+func (m *ProgramMutation) RemovedProceduresIDs() (ids []string) {
+	for id := range m.removedprocedures {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ProceduresIDs returns the "procedures" edge IDs in the mutation.
+func (m *ProgramMutation) ProceduresIDs() (ids []string) {
+	for id := range m.procedures {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetProcedures resets all changes to the "procedures" edge.
+func (m *ProgramMutation) ResetProcedures() {
+	m.procedures = nil
+	m.clearedprocedures = false
+	m.removedprocedures = nil
+}
+
+// AddRiskIDs adds the "risks" edge to the Risk entity by ids.
+func (m *ProgramMutation) AddRiskIDs(ids ...string) {
+	if m.risks == nil {
+		m.risks = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.risks[ids[i]] = struct{}{}
+	}
+}
+
+// ClearRisks clears the "risks" edge to the Risk entity.
+func (m *ProgramMutation) ClearRisks() {
+	m.clearedrisks = true
+}
+
+// RisksCleared reports if the "risks" edge to the Risk entity was cleared.
+func (m *ProgramMutation) RisksCleared() bool {
+	return m.clearedrisks
+}
+
+// RemoveRiskIDs removes the "risks" edge to the Risk entity by IDs.
+func (m *ProgramMutation) RemoveRiskIDs(ids ...string) {
+	if m.removedrisks == nil {
+		m.removedrisks = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.risks, ids[i])
+		m.removedrisks[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedRisks returns the removed IDs of the "risks" edge to the Risk entity.
+func (m *ProgramMutation) RemovedRisksIDs() (ids []string) {
+	for id := range m.removedrisks {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// RisksIDs returns the "risks" edge IDs in the mutation.
+func (m *ProgramMutation) RisksIDs() (ids []string) {
+	for id := range m.risks {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetRisks resets all changes to the "risks" edge.
+func (m *ProgramMutation) ResetRisks() {
+	m.risks = nil
+	m.clearedrisks = false
+	m.removedrisks = nil
+}
+
+// AddTaskIDs adds the "tasks" edge to the Task entity by ids.
+func (m *ProgramMutation) AddTaskIDs(ids ...string) {
+	if m.tasks == nil {
+		m.tasks = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.tasks[ids[i]] = struct{}{}
+	}
+}
+
+// ClearTasks clears the "tasks" edge to the Task entity.
+func (m *ProgramMutation) ClearTasks() {
+	m.clearedtasks = true
+}
+
+// TasksCleared reports if the "tasks" edge to the Task entity was cleared.
+func (m *ProgramMutation) TasksCleared() bool {
+	return m.clearedtasks
+}
+
+// RemoveTaskIDs removes the "tasks" edge to the Task entity by IDs.
+func (m *ProgramMutation) RemoveTaskIDs(ids ...string) {
+	if m.removedtasks == nil {
+		m.removedtasks = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.tasks, ids[i])
+		m.removedtasks[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedTasks returns the removed IDs of the "tasks" edge to the Task entity.
+func (m *ProgramMutation) RemovedTasksIDs() (ids []string) {
+	for id := range m.removedtasks {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// TasksIDs returns the "tasks" edge IDs in the mutation.
+func (m *ProgramMutation) TasksIDs() (ids []string) {
+	for id := range m.tasks {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetTasks resets all changes to the "tasks" edge.
+func (m *ProgramMutation) ResetTasks() {
+	m.tasks = nil
+	m.clearedtasks = false
+	m.removedtasks = nil
+}
+
+// AddNoteIDs adds the "notes" edge to the Note entity by ids.
+func (m *ProgramMutation) AddNoteIDs(ids ...string) {
+	if m.notes == nil {
+		m.notes = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.notes[ids[i]] = struct{}{}
+	}
+}
+
+// ClearNotes clears the "notes" edge to the Note entity.
+func (m *ProgramMutation) ClearNotes() {
+	m.clearednotes = true
+}
+
+// NotesCleared reports if the "notes" edge to the Note entity was cleared.
+func (m *ProgramMutation) NotesCleared() bool {
+	return m.clearednotes
+}
+
+// RemoveNoteIDs removes the "notes" edge to the Note entity by IDs.
+func (m *ProgramMutation) RemoveNoteIDs(ids ...string) {
+	if m.removednotes == nil {
+		m.removednotes = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.notes, ids[i])
+		m.removednotes[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedNotes returns the removed IDs of the "notes" edge to the Note entity.
+func (m *ProgramMutation) RemovedNotesIDs() (ids []string) {
+	for id := range m.removednotes {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// NotesIDs returns the "notes" edge IDs in the mutation.
+func (m *ProgramMutation) NotesIDs() (ids []string) {
+	for id := range m.notes {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetNotes resets all changes to the "notes" edge.
+func (m *ProgramMutation) ResetNotes() {
+	m.notes = nil
+	m.clearednotes = false
+	m.removednotes = nil
+}
+
+// AddFileIDs adds the "files" edge to the File entity by ids.
+func (m *ProgramMutation) AddFileIDs(ids ...string) {
+	if m.files == nil {
+		m.files = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.files[ids[i]] = struct{}{}
+	}
+}
+
+// ClearFiles clears the "files" edge to the File entity.
+func (m *ProgramMutation) ClearFiles() {
+	m.clearedfiles = true
+}
+
+// FilesCleared reports if the "files" edge to the File entity was cleared.
+func (m *ProgramMutation) FilesCleared() bool {
+	return m.clearedfiles
+}
+
+// RemoveFileIDs removes the "files" edge to the File entity by IDs.
+func (m *ProgramMutation) RemoveFileIDs(ids ...string) {
+	if m.removedfiles == nil {
+		m.removedfiles = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.files, ids[i])
+		m.removedfiles[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedFiles returns the removed IDs of the "files" edge to the File entity.
+func (m *ProgramMutation) RemovedFilesIDs() (ids []string) {
+	for id := range m.removedfiles {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// FilesIDs returns the "files" edge IDs in the mutation.
+func (m *ProgramMutation) FilesIDs() (ids []string) {
+	for id := range m.files {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetFiles resets all changes to the "files" edge.
+func (m *ProgramMutation) ResetFiles() {
+	m.files = nil
+	m.clearedfiles = false
+	m.removedfiles = nil
+}
+
+// AddNarrativeIDs adds the "narratives" edge to the Narrative entity by ids.
+func (m *ProgramMutation) AddNarrativeIDs(ids ...string) {
+	if m.narratives == nil {
+		m.narratives = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.narratives[ids[i]] = struct{}{}
+	}
+}
+
+// ClearNarratives clears the "narratives" edge to the Narrative entity.
+func (m *ProgramMutation) ClearNarratives() {
+	m.clearednarratives = true
+}
+
+// NarrativesCleared reports if the "narratives" edge to the Narrative entity was cleared.
+func (m *ProgramMutation) NarrativesCleared() bool {
+	return m.clearednarratives
+}
+
+// RemoveNarrativeIDs removes the "narratives" edge to the Narrative entity by IDs.
+func (m *ProgramMutation) RemoveNarrativeIDs(ids ...string) {
+	if m.removednarratives == nil {
+		m.removednarratives = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.narratives, ids[i])
+		m.removednarratives[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedNarratives returns the removed IDs of the "narratives" edge to the Narrative entity.
+func (m *ProgramMutation) RemovedNarrativesIDs() (ids []string) {
+	for id := range m.removednarratives {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// NarrativesIDs returns the "narratives" edge IDs in the mutation.
+func (m *ProgramMutation) NarrativesIDs() (ids []string) {
+	for id := range m.narratives {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetNarratives resets all changes to the "narratives" edge.
+func (m *ProgramMutation) ResetNarratives() {
+	m.narratives = nil
+	m.clearednarratives = false
+	m.removednarratives = nil
+}
+
+// AddActionplanIDs adds the "actionplans" edge to the ActionPlan entity by ids.
+func (m *ProgramMutation) AddActionplanIDs(ids ...string) {
+	if m.actionplans == nil {
+		m.actionplans = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.actionplans[ids[i]] = struct{}{}
+	}
+}
+
+// ClearActionplans clears the "actionplans" edge to the ActionPlan entity.
+func (m *ProgramMutation) ClearActionplans() {
+	m.clearedactionplans = true
+}
+
+// ActionplansCleared reports if the "actionplans" edge to the ActionPlan entity was cleared.
+func (m *ProgramMutation) ActionplansCleared() bool {
+	return m.clearedactionplans
+}
+
+// RemoveActionplanIDs removes the "actionplans" edge to the ActionPlan entity by IDs.
+func (m *ProgramMutation) RemoveActionplanIDs(ids ...string) {
+	if m.removedactionplans == nil {
+		m.removedactionplans = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.actionplans, ids[i])
+		m.removedactionplans[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedActionplans returns the removed IDs of the "actionplans" edge to the ActionPlan entity.
+func (m *ProgramMutation) RemovedActionplansIDs() (ids []string) {
+	for id := range m.removedactionplans {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ActionplansIDs returns the "actionplans" edge IDs in the mutation.
+func (m *ProgramMutation) ActionplansIDs() (ids []string) {
+	for id := range m.actionplans {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetActionplans resets all changes to the "actionplans" edge.
+func (m *ProgramMutation) ResetActionplans() {
+	m.actionplans = nil
+	m.clearedactionplans = false
+	m.removedactionplans = nil
+}
+
+// AddStandardIDs adds the "standards" edge to the Standard entity by ids.
+func (m *ProgramMutation) AddStandardIDs(ids ...string) {
+	if m.standards == nil {
+		m.standards = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.standards[ids[i]] = struct{}{}
+	}
+}
+
+// ClearStandards clears the "standards" edge to the Standard entity.
+func (m *ProgramMutation) ClearStandards() {
+	m.clearedstandards = true
+}
+
+// StandardsCleared reports if the "standards" edge to the Standard entity was cleared.
+func (m *ProgramMutation) StandardsCleared() bool {
+	return m.clearedstandards
+}
+
+// RemoveStandardIDs removes the "standards" edge to the Standard entity by IDs.
+func (m *ProgramMutation) RemoveStandardIDs(ids ...string) {
+	if m.removedstandards == nil {
+		m.removedstandards = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.standards, ids[i])
+		m.removedstandards[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedStandards returns the removed IDs of the "standards" edge to the Standard entity.
+func (m *ProgramMutation) RemovedStandardsIDs() (ids []string) {
+	for id := range m.removedstandards {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// StandardsIDs returns the "standards" edge IDs in the mutation.
+func (m *ProgramMutation) StandardsIDs() (ids []string) {
+	for id := range m.standards {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetStandards resets all changes to the "standards" edge.
+func (m *ProgramMutation) ResetStandards() {
+	m.standards = nil
+	m.clearedstandards = false
+	m.removedstandards = nil
+}
+
+// Where appends a list predicates to the ProgramMutation builder.
+func (m *ProgramMutation) Where(ps ...predicate.Program) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the ProgramMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *ProgramMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.Program, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *ProgramMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *ProgramMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (Program).
+func (m *ProgramMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *ProgramMutation) Fields() []string {
+	fields := make([]string, 0, 17)
+	if m.created_at != nil {
+		fields = append(fields, program.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, program.FieldUpdatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, program.FieldCreatedBy)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, program.FieldUpdatedBy)
+	}
+	if m.mapping_id != nil {
+		fields = append(fields, program.FieldMappingID)
+	}
+	if m.deleted_at != nil {
+		fields = append(fields, program.FieldDeletedAt)
+	}
+	if m.deleted_by != nil {
+		fields = append(fields, program.FieldDeletedBy)
+	}
+	if m.tags != nil {
+		fields = append(fields, program.FieldTags)
+	}
+	if m.name != nil {
+		fields = append(fields, program.FieldName)
+	}
+	if m.description != nil {
+		fields = append(fields, program.FieldDescription)
+	}
+	if m.status != nil {
+		fields = append(fields, program.FieldStatus)
+	}
+	if m.start_date != nil {
+		fields = append(fields, program.FieldStartDate)
+	}
+	if m.end_date != nil {
+		fields = append(fields, program.FieldEndDate)
+	}
+	if m.organization != nil {
+		fields = append(fields, program.FieldOrganizationID)
+	}
+	if m.auditor_ready != nil {
+		fields = append(fields, program.FieldAuditorReady)
+	}
+	if m.auditor_write_comments != nil {
+		fields = append(fields, program.FieldAuditorWriteComments)
+	}
+	if m.auditor_read_comments != nil {
+		fields = append(fields, program.FieldAuditorReadComments)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *ProgramMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case program.FieldCreatedAt:
+		return m.CreatedAt()
+	case program.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case program.FieldCreatedBy:
+		return m.CreatedBy()
+	case program.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case program.FieldMappingID:
+		return m.MappingID()
+	case program.FieldDeletedAt:
+		return m.DeletedAt()
+	case program.FieldDeletedBy:
+		return m.DeletedBy()
+	case program.FieldTags:
+		return m.Tags()
+	case program.FieldName:
+		return m.Name()
+	case program.FieldDescription:
+		return m.Description()
+	case program.FieldStatus:
+		return m.Status()
+	case program.FieldStartDate:
+		return m.StartDate()
+	case program.FieldEndDate:
+		return m.EndDate()
+	case program.FieldOrganizationID:
+		return m.OrganizationID()
+	case program.FieldAuditorReady:
+		return m.AuditorReady()
+	case program.FieldAuditorWriteComments:
+		return m.AuditorWriteComments()
+	case program.FieldAuditorReadComments:
+		return m.AuditorReadComments()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *ProgramMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case program.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case program.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case program.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case program.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case program.FieldMappingID:
+		return m.OldMappingID(ctx)
+	case program.FieldDeletedAt:
+		return m.OldDeletedAt(ctx)
+	case program.FieldDeletedBy:
+		return m.OldDeletedBy(ctx)
+	case program.FieldTags:
+		return m.OldTags(ctx)
+	case program.FieldName:
+		return m.OldName(ctx)
+	case program.FieldDescription:
+		return m.OldDescription(ctx)
+	case program.FieldStatus:
+		return m.OldStatus(ctx)
+	case program.FieldStartDate:
+		return m.OldStartDate(ctx)
+	case program.FieldEndDate:
+		return m.OldEndDate(ctx)
+	case program.FieldOrganizationID:
+		return m.OldOrganizationID(ctx)
+	case program.FieldAuditorReady:
+		return m.OldAuditorReady(ctx)
+	case program.FieldAuditorWriteComments:
+		return m.OldAuditorWriteComments(ctx)
+	case program.FieldAuditorReadComments:
+		return m.OldAuditorReadComments(ctx)
+	}
+	return nil, fmt.Errorf("unknown Program field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ProgramMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case program.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case program.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case program.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case program.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case program.FieldMappingID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMappingID(v)
+		return nil
+	case program.FieldDeletedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedAt(v)
+		return nil
+	case program.FieldDeletedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedBy(v)
+		return nil
+	case program.FieldTags:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTags(v)
+		return nil
+	case program.FieldName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetName(v)
+		return nil
+	case program.FieldDescription:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDescription(v)
+		return nil
+	case program.FieldStatus:
+		v, ok := value.(enums.ProgramStatus)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetStatus(v)
+		return nil
+	case program.FieldStartDate:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetStartDate(v)
+		return nil
+	case program.FieldEndDate:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetEndDate(v)
+		return nil
+	case program.FieldOrganizationID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOrganizationID(v)
+		return nil
+	case program.FieldAuditorReady:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAuditorReady(v)
+		return nil
+	case program.FieldAuditorWriteComments:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAuditorWriteComments(v)
+		return nil
+	case program.FieldAuditorReadComments:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAuditorReadComments(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Program field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *ProgramMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *ProgramMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ProgramMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown Program numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *ProgramMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(program.FieldCreatedAt) {
+		fields = append(fields, program.FieldCreatedAt)
+	}
+	if m.FieldCleared(program.FieldUpdatedAt) {
+		fields = append(fields, program.FieldUpdatedAt)
+	}
+	if m.FieldCleared(program.FieldCreatedBy) {
+		fields = append(fields, program.FieldCreatedBy)
+	}
+	if m.FieldCleared(program.FieldUpdatedBy) {
+		fields = append(fields, program.FieldUpdatedBy)
+	}
+	if m.FieldCleared(program.FieldDeletedAt) {
+		fields = append(fields, program.FieldDeletedAt)
+	}
+	if m.FieldCleared(program.FieldDeletedBy) {
+		fields = append(fields, program.FieldDeletedBy)
+	}
+	if m.FieldCleared(program.FieldTags) {
+		fields = append(fields, program.FieldTags)
+	}
+	if m.FieldCleared(program.FieldDescription) {
+		fields = append(fields, program.FieldDescription)
+	}
+	if m.FieldCleared(program.FieldStartDate) {
+		fields = append(fields, program.FieldStartDate)
+	}
+	if m.FieldCleared(program.FieldEndDate) {
+		fields = append(fields, program.FieldEndDate)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *ProgramMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *ProgramMutation) ClearField(name string) error {
+	switch name {
+	case program.FieldCreatedAt:
+		m.ClearCreatedAt()
+		return nil
+	case program.FieldUpdatedAt:
+		m.ClearUpdatedAt()
+		return nil
+	case program.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case program.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case program.FieldDeletedAt:
+		m.ClearDeletedAt()
+		return nil
+	case program.FieldDeletedBy:
+		m.ClearDeletedBy()
+		return nil
+	case program.FieldTags:
+		m.ClearTags()
+		return nil
+	case program.FieldDescription:
+		m.ClearDescription()
+		return nil
+	case program.FieldStartDate:
+		m.ClearStartDate()
+		return nil
+	case program.FieldEndDate:
+		m.ClearEndDate()
+		return nil
+	}
+	return fmt.Errorf("unknown Program nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *ProgramMutation) ResetField(name string) error {
+	switch name {
+	case program.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case program.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case program.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case program.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case program.FieldMappingID:
+		m.ResetMappingID()
+		return nil
+	case program.FieldDeletedAt:
+		m.ResetDeletedAt()
+		return nil
+	case program.FieldDeletedBy:
+		m.ResetDeletedBy()
+		return nil
+	case program.FieldTags:
+		m.ResetTags()
+		return nil
+	case program.FieldName:
+		m.ResetName()
+		return nil
+	case program.FieldDescription:
+		m.ResetDescription()
+		return nil
+	case program.FieldStatus:
+		m.ResetStatus()
+		return nil
+	case program.FieldStartDate:
+		m.ResetStartDate()
+		return nil
+	case program.FieldEndDate:
+		m.ResetEndDate()
+		return nil
+	case program.FieldOrganizationID:
+		m.ResetOrganizationID()
+		return nil
+	case program.FieldAuditorReady:
+		m.ResetAuditorReady()
+		return nil
+	case program.FieldAuditorWriteComments:
+		m.ResetAuditorWriteComments()
+		return nil
+	case program.FieldAuditorReadComments:
+		m.ResetAuditorReadComments()
+		return nil
+	}
+	return fmt.Errorf("unknown Program field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *ProgramMutation) AddedEdges() []string {
+	edges := make([]string, 0, 13)
+	if m.organization != nil {
+		edges = append(edges, program.EdgeOrganization)
+	}
+	if m.controls != nil {
+		edges = append(edges, program.EdgeControls)
+	}
+	if m.subcontrols != nil {
+		edges = append(edges, program.EdgeSubcontrols)
+	}
+	if m.controlobjectives != nil {
+		edges = append(edges, program.EdgeControlobjectives)
+	}
+	if m.policies != nil {
+		edges = append(edges, program.EdgePolicies)
+	}
+	if m.procedures != nil {
+		edges = append(edges, program.EdgeProcedures)
+	}
+	if m.risks != nil {
+		edges = append(edges, program.EdgeRisks)
+	}
+	if m.tasks != nil {
+		edges = append(edges, program.EdgeTasks)
+	}
+	if m.notes != nil {
+		edges = append(edges, program.EdgeNotes)
+	}
+	if m.files != nil {
+		edges = append(edges, program.EdgeFiles)
+	}
+	if m.narratives != nil {
+		edges = append(edges, program.EdgeNarratives)
+	}
+	if m.actionplans != nil {
+		edges = append(edges, program.EdgeActionplans)
+	}
+	if m.standards != nil {
+		edges = append(edges, program.EdgeStandards)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *ProgramMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case program.EdgeOrganization:
+		if id := m.organization; id != nil {
+			return []ent.Value{*id}
+		}
+	case program.EdgeControls:
+		ids := make([]ent.Value, 0, len(m.controls))
+		for id := range m.controls {
+			ids = append(ids, id)
+		}
+		return ids
+	case program.EdgeSubcontrols:
+		ids := make([]ent.Value, 0, len(m.subcontrols))
+		for id := range m.subcontrols {
+			ids = append(ids, id)
+		}
+		return ids
+	case program.EdgeControlobjectives:
+		ids := make([]ent.Value, 0, len(m.controlobjectives))
+		for id := range m.controlobjectives {
+			ids = append(ids, id)
+		}
+		return ids
+	case program.EdgePolicies:
+		ids := make([]ent.Value, 0, len(m.policies))
+		for id := range m.policies {
+			ids = append(ids, id)
+		}
+		return ids
+	case program.EdgeProcedures:
+		ids := make([]ent.Value, 0, len(m.procedures))
+		for id := range m.procedures {
+			ids = append(ids, id)
+		}
+		return ids
+	case program.EdgeRisks:
+		ids := make([]ent.Value, 0, len(m.risks))
+		for id := range m.risks {
+			ids = append(ids, id)
+		}
+		return ids
+	case program.EdgeTasks:
+		ids := make([]ent.Value, 0, len(m.tasks))
+		for id := range m.tasks {
+			ids = append(ids, id)
+		}
+		return ids
+	case program.EdgeNotes:
+		ids := make([]ent.Value, 0, len(m.notes))
+		for id := range m.notes {
+			ids = append(ids, id)
+		}
+		return ids
+	case program.EdgeFiles:
+		ids := make([]ent.Value, 0, len(m.files))
+		for id := range m.files {
+			ids = append(ids, id)
+		}
+		return ids
+	case program.EdgeNarratives:
+		ids := make([]ent.Value, 0, len(m.narratives))
+		for id := range m.narratives {
+			ids = append(ids, id)
+		}
+		return ids
+	case program.EdgeActionplans:
+		ids := make([]ent.Value, 0, len(m.actionplans))
+		for id := range m.actionplans {
+			ids = append(ids, id)
+		}
+		return ids
+	case program.EdgeStandards:
+		ids := make([]ent.Value, 0, len(m.standards))
+		for id := range m.standards {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *ProgramMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 13)
+	if m.removedcontrols != nil {
+		edges = append(edges, program.EdgeControls)
+	}
+	if m.removedsubcontrols != nil {
+		edges = append(edges, program.EdgeSubcontrols)
+	}
+	if m.removedcontrolobjectives != nil {
+		edges = append(edges, program.EdgeControlobjectives)
+	}
+	if m.removedpolicies != nil {
+		edges = append(edges, program.EdgePolicies)
+	}
+	if m.removedprocedures != nil {
+		edges = append(edges, program.EdgeProcedures)
+	}
+	if m.removedrisks != nil {
+		edges = append(edges, program.EdgeRisks)
+	}
+	if m.removedtasks != nil {
+		edges = append(edges, program.EdgeTasks)
+	}
+	if m.removednotes != nil {
+		edges = append(edges, program.EdgeNotes)
+	}
+	if m.removedfiles != nil {
+		edges = append(edges, program.EdgeFiles)
+	}
+	if m.removednarratives != nil {
+		edges = append(edges, program.EdgeNarratives)
+	}
+	if m.removedactionplans != nil {
+		edges = append(edges, program.EdgeActionplans)
+	}
+	if m.removedstandards != nil {
+		edges = append(edges, program.EdgeStandards)
+	}
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *ProgramMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case program.EdgeControls:
+		ids := make([]ent.Value, 0, len(m.removedcontrols))
+		for id := range m.removedcontrols {
+			ids = append(ids, id)
+		}
+		return ids
+	case program.EdgeSubcontrols:
+		ids := make([]ent.Value, 0, len(m.removedsubcontrols))
+		for id := range m.removedsubcontrols {
+			ids = append(ids, id)
+		}
+		return ids
+	case program.EdgeControlobjectives:
+		ids := make([]ent.Value, 0, len(m.removedcontrolobjectives))
+		for id := range m.removedcontrolobjectives {
+			ids = append(ids, id)
+		}
+		return ids
+	case program.EdgePolicies:
+		ids := make([]ent.Value, 0, len(m.removedpolicies))
+		for id := range m.removedpolicies {
+			ids = append(ids, id)
+		}
+		return ids
+	case program.EdgeProcedures:
+		ids := make([]ent.Value, 0, len(m.removedprocedures))
+		for id := range m.removedprocedures {
+			ids = append(ids, id)
+		}
+		return ids
+	case program.EdgeRisks:
+		ids := make([]ent.Value, 0, len(m.removedrisks))
+		for id := range m.removedrisks {
+			ids = append(ids, id)
+		}
+		return ids
+	case program.EdgeTasks:
+		ids := make([]ent.Value, 0, len(m.removedtasks))
+		for id := range m.removedtasks {
+			ids = append(ids, id)
+		}
+		return ids
+	case program.EdgeNotes:
+		ids := make([]ent.Value, 0, len(m.removednotes))
+		for id := range m.removednotes {
+			ids = append(ids, id)
+		}
+		return ids
+	case program.EdgeFiles:
+		ids := make([]ent.Value, 0, len(m.removedfiles))
+		for id := range m.removedfiles {
+			ids = append(ids, id)
+		}
+		return ids
+	case program.EdgeNarratives:
+		ids := make([]ent.Value, 0, len(m.removednarratives))
+		for id := range m.removednarratives {
+			ids = append(ids, id)
+		}
+		return ids
+	case program.EdgeActionplans:
+		ids := make([]ent.Value, 0, len(m.removedactionplans))
+		for id := range m.removedactionplans {
+			ids = append(ids, id)
+		}
+		return ids
+	case program.EdgeStandards:
+		ids := make([]ent.Value, 0, len(m.removedstandards))
+		for id := range m.removedstandards {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *ProgramMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 13)
+	if m.clearedorganization {
+		edges = append(edges, program.EdgeOrganization)
+	}
+	if m.clearedcontrols {
+		edges = append(edges, program.EdgeControls)
+	}
+	if m.clearedsubcontrols {
+		edges = append(edges, program.EdgeSubcontrols)
+	}
+	if m.clearedcontrolobjectives {
+		edges = append(edges, program.EdgeControlobjectives)
+	}
+	if m.clearedpolicies {
+		edges = append(edges, program.EdgePolicies)
+	}
+	if m.clearedprocedures {
+		edges = append(edges, program.EdgeProcedures)
+	}
+	if m.clearedrisks {
+		edges = append(edges, program.EdgeRisks)
+	}
+	if m.clearedtasks {
+		edges = append(edges, program.EdgeTasks)
+	}
+	if m.clearednotes {
+		edges = append(edges, program.EdgeNotes)
+	}
+	if m.clearedfiles {
+		edges = append(edges, program.EdgeFiles)
+	}
+	if m.clearednarratives {
+		edges = append(edges, program.EdgeNarratives)
+	}
+	if m.clearedactionplans {
+		edges = append(edges, program.EdgeActionplans)
+	}
+	if m.clearedstandards {
+		edges = append(edges, program.EdgeStandards)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *ProgramMutation) EdgeCleared(name string) bool {
+	switch name {
+	case program.EdgeOrganization:
+		return m.clearedorganization
+	case program.EdgeControls:
+		return m.clearedcontrols
+	case program.EdgeSubcontrols:
+		return m.clearedsubcontrols
+	case program.EdgeControlobjectives:
+		return m.clearedcontrolobjectives
+	case program.EdgePolicies:
+		return m.clearedpolicies
+	case program.EdgeProcedures:
+		return m.clearedprocedures
+	case program.EdgeRisks:
+		return m.clearedrisks
+	case program.EdgeTasks:
+		return m.clearedtasks
+	case program.EdgeNotes:
+		return m.clearednotes
+	case program.EdgeFiles:
+		return m.clearedfiles
+	case program.EdgeNarratives:
+		return m.clearednarratives
+	case program.EdgeActionplans:
+		return m.clearedactionplans
+	case program.EdgeStandards:
+		return m.clearedstandards
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *ProgramMutation) ClearEdge(name string) error {
+	switch name {
+	case program.EdgeOrganization:
+		m.ClearOrganization()
+		return nil
+	}
+	return fmt.Errorf("unknown Program unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *ProgramMutation) ResetEdge(name string) error {
+	switch name {
+	case program.EdgeOrganization:
+		m.ResetOrganization()
+		return nil
+	case program.EdgeControls:
+		m.ResetControls()
+		return nil
+	case program.EdgeSubcontrols:
+		m.ResetSubcontrols()
+		return nil
+	case program.EdgeControlobjectives:
+		m.ResetControlobjectives()
+		return nil
+	case program.EdgePolicies:
+		m.ResetPolicies()
+		return nil
+	case program.EdgeProcedures:
+		m.ResetProcedures()
+		return nil
+	case program.EdgeRisks:
+		m.ResetRisks()
+		return nil
+	case program.EdgeTasks:
+		m.ResetTasks()
+		return nil
+	case program.EdgeNotes:
+		m.ResetNotes()
+		return nil
+	case program.EdgeFiles:
+		m.ResetFiles()
+		return nil
+	case program.EdgeNarratives:
+		m.ResetNarratives()
+		return nil
+	case program.EdgeActionplans:
+		m.ResetActionplans()
+		return nil
+	case program.EdgeStandards:
+		m.ResetStandards()
+		return nil
+	}
+	return fmt.Errorf("unknown Program edge %s", name)
+}
+
+// ProgramHistoryMutation represents an operation that mutates the ProgramHistory nodes in the graph.
+type ProgramHistoryMutation struct {
+	config
+	op                     Op
+	typ                    string
+	id                     *string
+	history_time           *time.Time
+	ref                    *string
+	operation              *history.OpType
+	created_at             *time.Time
+	updated_at             *time.Time
+	created_by             *string
+	updated_by             *string
+	mapping_id             *string
+	deleted_at             *time.Time
+	deleted_by             *string
+	tags                   *[]string
+	appendtags             []string
+	name                   *string
+	description            *string
+	status                 *enums.ProgramStatus
+	start_date             *time.Time
+	end_date               *time.Time
+	organization_id        *string
+	auditor_ready          *bool
+	auditor_write_comments *bool
+	auditor_read_comments  *bool
+	clearedFields          map[string]struct{}
+	done                   bool
+	oldValue               func(context.Context) (*ProgramHistory, error)
+	predicates             []predicate.ProgramHistory
+}
+
+var _ ent.Mutation = (*ProgramHistoryMutation)(nil)
+
+// programhistoryOption allows management of the mutation configuration using functional options.
+type programhistoryOption func(*ProgramHistoryMutation)
+
+// newProgramHistoryMutation creates new mutation for the ProgramHistory entity.
+func newProgramHistoryMutation(c config, op Op, opts ...programhistoryOption) *ProgramHistoryMutation {
+	m := &ProgramHistoryMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeProgramHistory,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withProgramHistoryID sets the ID field of the mutation.
+func withProgramHistoryID(id string) programhistoryOption {
+	return func(m *ProgramHistoryMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *ProgramHistory
+		)
+		m.oldValue = func(ctx context.Context) (*ProgramHistory, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().ProgramHistory.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withProgramHistory sets the old ProgramHistory of the mutation.
+func withProgramHistory(node *ProgramHistory) programhistoryOption {
+	return func(m *ProgramHistoryMutation) {
+		m.oldValue = func(context.Context) (*ProgramHistory, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m ProgramHistoryMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m ProgramHistoryMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("generated: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of ProgramHistory entities.
+func (m *ProgramHistoryMutation) SetID(id string) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *ProgramHistoryMutation) ID() (id string, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *ProgramHistoryMutation) IDs(ctx context.Context) ([]string, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []string{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().ProgramHistory.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetHistoryTime sets the "history_time" field.
+func (m *ProgramHistoryMutation) SetHistoryTime(t time.Time) {
+	m.history_time = &t
+}
+
+// HistoryTime returns the value of the "history_time" field in the mutation.
+func (m *ProgramHistoryMutation) HistoryTime() (r time.Time, exists bool) {
+	v := m.history_time
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldHistoryTime returns the old "history_time" field's value of the ProgramHistory entity.
+// If the ProgramHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramHistoryMutation) OldHistoryTime(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldHistoryTime is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldHistoryTime requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldHistoryTime: %w", err)
+	}
+	return oldValue.HistoryTime, nil
+}
+
+// ResetHistoryTime resets all changes to the "history_time" field.
+func (m *ProgramHistoryMutation) ResetHistoryTime() {
+	m.history_time = nil
+}
+
+// SetRef sets the "ref" field.
+func (m *ProgramHistoryMutation) SetRef(s string) {
+	m.ref = &s
+}
+
+// Ref returns the value of the "ref" field in the mutation.
+func (m *ProgramHistoryMutation) Ref() (r string, exists bool) {
+	v := m.ref
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRef returns the old "ref" field's value of the ProgramHistory entity.
+// If the ProgramHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramHistoryMutation) OldRef(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRef is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRef requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRef: %w", err)
+	}
+	return oldValue.Ref, nil
+}
+
+// ClearRef clears the value of the "ref" field.
+func (m *ProgramHistoryMutation) ClearRef() {
+	m.ref = nil
+	m.clearedFields[programhistory.FieldRef] = struct{}{}
+}
+
+// RefCleared returns if the "ref" field was cleared in this mutation.
+func (m *ProgramHistoryMutation) RefCleared() bool {
+	_, ok := m.clearedFields[programhistory.FieldRef]
+	return ok
+}
+
+// ResetRef resets all changes to the "ref" field.
+func (m *ProgramHistoryMutation) ResetRef() {
+	m.ref = nil
+	delete(m.clearedFields, programhistory.FieldRef)
+}
+
+// SetOperation sets the "operation" field.
+func (m *ProgramHistoryMutation) SetOperation(ht history.OpType) {
+	m.operation = &ht
+}
+
+// Operation returns the value of the "operation" field in the mutation.
+func (m *ProgramHistoryMutation) Operation() (r history.OpType, exists bool) {
+	v := m.operation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOperation returns the old "operation" field's value of the ProgramHistory entity.
+// If the ProgramHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramHistoryMutation) OldOperation(ctx context.Context) (v history.OpType, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOperation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOperation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOperation: %w", err)
+	}
+	return oldValue.Operation, nil
+}
+
+// ResetOperation resets all changes to the "operation" field.
+func (m *ProgramHistoryMutation) ResetOperation() {
+	m.operation = nil
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *ProgramHistoryMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *ProgramHistoryMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the ProgramHistory entity.
+// If the ProgramHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramHistoryMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ClearCreatedAt clears the value of the "created_at" field.
+func (m *ProgramHistoryMutation) ClearCreatedAt() {
+	m.created_at = nil
+	m.clearedFields[programhistory.FieldCreatedAt] = struct{}{}
+}
+
+// CreatedAtCleared returns if the "created_at" field was cleared in this mutation.
+func (m *ProgramHistoryMutation) CreatedAtCleared() bool {
+	_, ok := m.clearedFields[programhistory.FieldCreatedAt]
+	return ok
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *ProgramHistoryMutation) ResetCreatedAt() {
+	m.created_at = nil
+	delete(m.clearedFields, programhistory.FieldCreatedAt)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *ProgramHistoryMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *ProgramHistoryMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the ProgramHistory entity.
+// If the ProgramHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramHistoryMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (m *ProgramHistoryMutation) ClearUpdatedAt() {
+	m.updated_at = nil
+	m.clearedFields[programhistory.FieldUpdatedAt] = struct{}{}
+}
+
+// UpdatedAtCleared returns if the "updated_at" field was cleared in this mutation.
+func (m *ProgramHistoryMutation) UpdatedAtCleared() bool {
+	_, ok := m.clearedFields[programhistory.FieldUpdatedAt]
+	return ok
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *ProgramHistoryMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+	delete(m.clearedFields, programhistory.FieldUpdatedAt)
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *ProgramHistoryMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *ProgramHistoryMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the ProgramHistory entity.
+// If the ProgramHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramHistoryMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *ProgramHistoryMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[programhistory.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *ProgramHistoryMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[programhistory.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *ProgramHistoryMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, programhistory.FieldCreatedBy)
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *ProgramHistoryMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *ProgramHistoryMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the ProgramHistory entity.
+// If the ProgramHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramHistoryMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *ProgramHistoryMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[programhistory.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *ProgramHistoryMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[programhistory.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *ProgramHistoryMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, programhistory.FieldUpdatedBy)
+}
+
+// SetMappingID sets the "mapping_id" field.
+func (m *ProgramHistoryMutation) SetMappingID(s string) {
+	m.mapping_id = &s
+}
+
+// MappingID returns the value of the "mapping_id" field in the mutation.
+func (m *ProgramHistoryMutation) MappingID() (r string, exists bool) {
+	v := m.mapping_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMappingID returns the old "mapping_id" field's value of the ProgramHistory entity.
+// If the ProgramHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramHistoryMutation) OldMappingID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMappingID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMappingID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMappingID: %w", err)
+	}
+	return oldValue.MappingID, nil
+}
+
+// ResetMappingID resets all changes to the "mapping_id" field.
+func (m *ProgramHistoryMutation) ResetMappingID() {
+	m.mapping_id = nil
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (m *ProgramHistoryMutation) SetDeletedAt(t time.Time) {
+	m.deleted_at = &t
+}
+
+// DeletedAt returns the value of the "deleted_at" field in the mutation.
+func (m *ProgramHistoryMutation) DeletedAt() (r time.Time, exists bool) {
+	v := m.deleted_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedAt returns the old "deleted_at" field's value of the ProgramHistory entity.
+// If the ProgramHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramHistoryMutation) OldDeletedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedAt: %w", err)
+	}
+	return oldValue.DeletedAt, nil
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (m *ProgramHistoryMutation) ClearDeletedAt() {
+	m.deleted_at = nil
+	m.clearedFields[programhistory.FieldDeletedAt] = struct{}{}
+}
+
+// DeletedAtCleared returns if the "deleted_at" field was cleared in this mutation.
+func (m *ProgramHistoryMutation) DeletedAtCleared() bool {
+	_, ok := m.clearedFields[programhistory.FieldDeletedAt]
+	return ok
+}
+
+// ResetDeletedAt resets all changes to the "deleted_at" field.
+func (m *ProgramHistoryMutation) ResetDeletedAt() {
+	m.deleted_at = nil
+	delete(m.clearedFields, programhistory.FieldDeletedAt)
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (m *ProgramHistoryMutation) SetDeletedBy(s string) {
+	m.deleted_by = &s
+}
+
+// DeletedBy returns the value of the "deleted_by" field in the mutation.
+func (m *ProgramHistoryMutation) DeletedBy() (r string, exists bool) {
+	v := m.deleted_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedBy returns the old "deleted_by" field's value of the ProgramHistory entity.
+// If the ProgramHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramHistoryMutation) OldDeletedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedBy: %w", err)
+	}
+	return oldValue.DeletedBy, nil
+}
+
+// ClearDeletedBy clears the value of the "deleted_by" field.
+func (m *ProgramHistoryMutation) ClearDeletedBy() {
+	m.deleted_by = nil
+	m.clearedFields[programhistory.FieldDeletedBy] = struct{}{}
+}
+
+// DeletedByCleared returns if the "deleted_by" field was cleared in this mutation.
+func (m *ProgramHistoryMutation) DeletedByCleared() bool {
+	_, ok := m.clearedFields[programhistory.FieldDeletedBy]
+	return ok
+}
+
+// ResetDeletedBy resets all changes to the "deleted_by" field.
+func (m *ProgramHistoryMutation) ResetDeletedBy() {
+	m.deleted_by = nil
+	delete(m.clearedFields, programhistory.FieldDeletedBy)
+}
+
+// SetTags sets the "tags" field.
+func (m *ProgramHistoryMutation) SetTags(s []string) {
+	m.tags = &s
+	m.appendtags = nil
+}
+
+// Tags returns the value of the "tags" field in the mutation.
+func (m *ProgramHistoryMutation) Tags() (r []string, exists bool) {
+	v := m.tags
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTags returns the old "tags" field's value of the ProgramHistory entity.
+// If the ProgramHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramHistoryMutation) OldTags(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTags is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTags requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTags: %w", err)
+	}
+	return oldValue.Tags, nil
+}
+
+// AppendTags adds s to the "tags" field.
+func (m *ProgramHistoryMutation) AppendTags(s []string) {
+	m.appendtags = append(m.appendtags, s...)
+}
+
+// AppendedTags returns the list of values that were appended to the "tags" field in this mutation.
+func (m *ProgramHistoryMutation) AppendedTags() ([]string, bool) {
+	if len(m.appendtags) == 0 {
+		return nil, false
+	}
+	return m.appendtags, true
+}
+
+// ClearTags clears the value of the "tags" field.
+func (m *ProgramHistoryMutation) ClearTags() {
+	m.tags = nil
+	m.appendtags = nil
+	m.clearedFields[programhistory.FieldTags] = struct{}{}
+}
+
+// TagsCleared returns if the "tags" field was cleared in this mutation.
+func (m *ProgramHistoryMutation) TagsCleared() bool {
+	_, ok := m.clearedFields[programhistory.FieldTags]
+	return ok
+}
+
+// ResetTags resets all changes to the "tags" field.
+func (m *ProgramHistoryMutation) ResetTags() {
+	m.tags = nil
+	m.appendtags = nil
+	delete(m.clearedFields, programhistory.FieldTags)
+}
+
+// SetName sets the "name" field.
+func (m *ProgramHistoryMutation) SetName(s string) {
+	m.name = &s
+}
+
+// Name returns the value of the "name" field in the mutation.
+func (m *ProgramHistoryMutation) Name() (r string, exists bool) {
+	v := m.name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldName returns the old "name" field's value of the ProgramHistory entity.
+// If the ProgramHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramHistoryMutation) OldName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldName: %w", err)
+	}
+	return oldValue.Name, nil
+}
+
+// ResetName resets all changes to the "name" field.
+func (m *ProgramHistoryMutation) ResetName() {
+	m.name = nil
+}
+
+// SetDescription sets the "description" field.
+func (m *ProgramHistoryMutation) SetDescription(s string) {
+	m.description = &s
+}
+
+// Description returns the value of the "description" field in the mutation.
+func (m *ProgramHistoryMutation) Description() (r string, exists bool) {
+	v := m.description
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDescription returns the old "description" field's value of the ProgramHistory entity.
+// If the ProgramHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramHistoryMutation) OldDescription(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDescription is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDescription requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDescription: %w", err)
+	}
+	return oldValue.Description, nil
+}
+
+// ClearDescription clears the value of the "description" field.
+func (m *ProgramHistoryMutation) ClearDescription() {
+	m.description = nil
+	m.clearedFields[programhistory.FieldDescription] = struct{}{}
+}
+
+// DescriptionCleared returns if the "description" field was cleared in this mutation.
+func (m *ProgramHistoryMutation) DescriptionCleared() bool {
+	_, ok := m.clearedFields[programhistory.FieldDescription]
+	return ok
+}
+
+// ResetDescription resets all changes to the "description" field.
+func (m *ProgramHistoryMutation) ResetDescription() {
+	m.description = nil
+	delete(m.clearedFields, programhistory.FieldDescription)
+}
+
+// SetStatus sets the "status" field.
+func (m *ProgramHistoryMutation) SetStatus(es enums.ProgramStatus) {
+	m.status = &es
+}
+
+// Status returns the value of the "status" field in the mutation.
+func (m *ProgramHistoryMutation) Status() (r enums.ProgramStatus, exists bool) {
+	v := m.status
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldStatus returns the old "status" field's value of the ProgramHistory entity.
+// If the ProgramHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramHistoryMutation) OldStatus(ctx context.Context) (v enums.ProgramStatus, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldStatus is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldStatus requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldStatus: %w", err)
+	}
+	return oldValue.Status, nil
+}
+
+// ResetStatus resets all changes to the "status" field.
+func (m *ProgramHistoryMutation) ResetStatus() {
+	m.status = nil
+}
+
+// SetStartDate sets the "start_date" field.
+func (m *ProgramHistoryMutation) SetStartDate(t time.Time) {
+	m.start_date = &t
+}
+
+// StartDate returns the value of the "start_date" field in the mutation.
+func (m *ProgramHistoryMutation) StartDate() (r time.Time, exists bool) {
+	v := m.start_date
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldStartDate returns the old "start_date" field's value of the ProgramHistory entity.
+// If the ProgramHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramHistoryMutation) OldStartDate(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldStartDate is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldStartDate requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldStartDate: %w", err)
+	}
+	return oldValue.StartDate, nil
+}
+
+// ClearStartDate clears the value of the "start_date" field.
+func (m *ProgramHistoryMutation) ClearStartDate() {
+	m.start_date = nil
+	m.clearedFields[programhistory.FieldStartDate] = struct{}{}
+}
+
+// StartDateCleared returns if the "start_date" field was cleared in this mutation.
+func (m *ProgramHistoryMutation) StartDateCleared() bool {
+	_, ok := m.clearedFields[programhistory.FieldStartDate]
+	return ok
+}
+
+// ResetStartDate resets all changes to the "start_date" field.
+func (m *ProgramHistoryMutation) ResetStartDate() {
+	m.start_date = nil
+	delete(m.clearedFields, programhistory.FieldStartDate)
+}
+
+// SetEndDate sets the "end_date" field.
+func (m *ProgramHistoryMutation) SetEndDate(t time.Time) {
+	m.end_date = &t
+}
+
+// EndDate returns the value of the "end_date" field in the mutation.
+func (m *ProgramHistoryMutation) EndDate() (r time.Time, exists bool) {
+	v := m.end_date
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldEndDate returns the old "end_date" field's value of the ProgramHistory entity.
+// If the ProgramHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramHistoryMutation) OldEndDate(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldEndDate is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldEndDate requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldEndDate: %w", err)
+	}
+	return oldValue.EndDate, nil
+}
+
+// ClearEndDate clears the value of the "end_date" field.
+func (m *ProgramHistoryMutation) ClearEndDate() {
+	m.end_date = nil
+	m.clearedFields[programhistory.FieldEndDate] = struct{}{}
+}
+
+// EndDateCleared returns if the "end_date" field was cleared in this mutation.
+func (m *ProgramHistoryMutation) EndDateCleared() bool {
+	_, ok := m.clearedFields[programhistory.FieldEndDate]
+	return ok
+}
+
+// ResetEndDate resets all changes to the "end_date" field.
+func (m *ProgramHistoryMutation) ResetEndDate() {
+	m.end_date = nil
+	delete(m.clearedFields, programhistory.FieldEndDate)
+}
+
+// SetOrganizationID sets the "organization_id" field.
+func (m *ProgramHistoryMutation) SetOrganizationID(s string) {
+	m.organization_id = &s
+}
+
+// OrganizationID returns the value of the "organization_id" field in the mutation.
+func (m *ProgramHistoryMutation) OrganizationID() (r string, exists bool) {
+	v := m.organization_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOrganizationID returns the old "organization_id" field's value of the ProgramHistory entity.
+// If the ProgramHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramHistoryMutation) OldOrganizationID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOrganizationID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOrganizationID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOrganizationID: %w", err)
+	}
+	return oldValue.OrganizationID, nil
+}
+
+// ResetOrganizationID resets all changes to the "organization_id" field.
+func (m *ProgramHistoryMutation) ResetOrganizationID() {
+	m.organization_id = nil
+}
+
+// SetAuditorReady sets the "auditor_ready" field.
+func (m *ProgramHistoryMutation) SetAuditorReady(b bool) {
+	m.auditor_ready = &b
+}
+
+// AuditorReady returns the value of the "auditor_ready" field in the mutation.
+func (m *ProgramHistoryMutation) AuditorReady() (r bool, exists bool) {
+	v := m.auditor_ready
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAuditorReady returns the old "auditor_ready" field's value of the ProgramHistory entity.
+// If the ProgramHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramHistoryMutation) OldAuditorReady(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAuditorReady is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAuditorReady requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAuditorReady: %w", err)
+	}
+	return oldValue.AuditorReady, nil
+}
+
+// ResetAuditorReady resets all changes to the "auditor_ready" field.
+func (m *ProgramHistoryMutation) ResetAuditorReady() {
+	m.auditor_ready = nil
+}
+
+// SetAuditorWriteComments sets the "auditor_write_comments" field.
+func (m *ProgramHistoryMutation) SetAuditorWriteComments(b bool) {
+	m.auditor_write_comments = &b
+}
+
+// AuditorWriteComments returns the value of the "auditor_write_comments" field in the mutation.
+func (m *ProgramHistoryMutation) AuditorWriteComments() (r bool, exists bool) {
+	v := m.auditor_write_comments
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAuditorWriteComments returns the old "auditor_write_comments" field's value of the ProgramHistory entity.
+// If the ProgramHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramHistoryMutation) OldAuditorWriteComments(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAuditorWriteComments is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAuditorWriteComments requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAuditorWriteComments: %w", err)
+	}
+	return oldValue.AuditorWriteComments, nil
+}
+
+// ResetAuditorWriteComments resets all changes to the "auditor_write_comments" field.
+func (m *ProgramHistoryMutation) ResetAuditorWriteComments() {
+	m.auditor_write_comments = nil
+}
+
+// SetAuditorReadComments sets the "auditor_read_comments" field.
+func (m *ProgramHistoryMutation) SetAuditorReadComments(b bool) {
+	m.auditor_read_comments = &b
+}
+
+// AuditorReadComments returns the value of the "auditor_read_comments" field in the mutation.
+func (m *ProgramHistoryMutation) AuditorReadComments() (r bool, exists bool) {
+	v := m.auditor_read_comments
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAuditorReadComments returns the old "auditor_read_comments" field's value of the ProgramHistory entity.
+// If the ProgramHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramHistoryMutation) OldAuditorReadComments(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAuditorReadComments is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAuditorReadComments requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAuditorReadComments: %w", err)
+	}
+	return oldValue.AuditorReadComments, nil
+}
+
+// ResetAuditorReadComments resets all changes to the "auditor_read_comments" field.
+func (m *ProgramHistoryMutation) ResetAuditorReadComments() {
+	m.auditor_read_comments = nil
+}
+
+// Where appends a list predicates to the ProgramHistoryMutation builder.
+func (m *ProgramHistoryMutation) Where(ps ...predicate.ProgramHistory) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the ProgramHistoryMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *ProgramHistoryMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.ProgramHistory, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *ProgramHistoryMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *ProgramHistoryMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (ProgramHistory).
+func (m *ProgramHistoryMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *ProgramHistoryMutation) Fields() []string {
+	fields := make([]string, 0, 20)
+	if m.history_time != nil {
+		fields = append(fields, programhistory.FieldHistoryTime)
+	}
+	if m.ref != nil {
+		fields = append(fields, programhistory.FieldRef)
+	}
+	if m.operation != nil {
+		fields = append(fields, programhistory.FieldOperation)
+	}
+	if m.created_at != nil {
+		fields = append(fields, programhistory.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, programhistory.FieldUpdatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, programhistory.FieldCreatedBy)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, programhistory.FieldUpdatedBy)
+	}
+	if m.mapping_id != nil {
+		fields = append(fields, programhistory.FieldMappingID)
+	}
+	if m.deleted_at != nil {
+		fields = append(fields, programhistory.FieldDeletedAt)
+	}
+	if m.deleted_by != nil {
+		fields = append(fields, programhistory.FieldDeletedBy)
+	}
+	if m.tags != nil {
+		fields = append(fields, programhistory.FieldTags)
+	}
+	if m.name != nil {
+		fields = append(fields, programhistory.FieldName)
+	}
+	if m.description != nil {
+		fields = append(fields, programhistory.FieldDescription)
+	}
+	if m.status != nil {
+		fields = append(fields, programhistory.FieldStatus)
+	}
+	if m.start_date != nil {
+		fields = append(fields, programhistory.FieldStartDate)
+	}
+	if m.end_date != nil {
+		fields = append(fields, programhistory.FieldEndDate)
+	}
+	if m.organization_id != nil {
+		fields = append(fields, programhistory.FieldOrganizationID)
+	}
+	if m.auditor_ready != nil {
+		fields = append(fields, programhistory.FieldAuditorReady)
+	}
+	if m.auditor_write_comments != nil {
+		fields = append(fields, programhistory.FieldAuditorWriteComments)
+	}
+	if m.auditor_read_comments != nil {
+		fields = append(fields, programhistory.FieldAuditorReadComments)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *ProgramHistoryMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case programhistory.FieldHistoryTime:
+		return m.HistoryTime()
+	case programhistory.FieldRef:
+		return m.Ref()
+	case programhistory.FieldOperation:
+		return m.Operation()
+	case programhistory.FieldCreatedAt:
+		return m.CreatedAt()
+	case programhistory.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case programhistory.FieldCreatedBy:
+		return m.CreatedBy()
+	case programhistory.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case programhistory.FieldMappingID:
+		return m.MappingID()
+	case programhistory.FieldDeletedAt:
+		return m.DeletedAt()
+	case programhistory.FieldDeletedBy:
+		return m.DeletedBy()
+	case programhistory.FieldTags:
+		return m.Tags()
+	case programhistory.FieldName:
+		return m.Name()
+	case programhistory.FieldDescription:
+		return m.Description()
+	case programhistory.FieldStatus:
+		return m.Status()
+	case programhistory.FieldStartDate:
+		return m.StartDate()
+	case programhistory.FieldEndDate:
+		return m.EndDate()
+	case programhistory.FieldOrganizationID:
+		return m.OrganizationID()
+	case programhistory.FieldAuditorReady:
+		return m.AuditorReady()
+	case programhistory.FieldAuditorWriteComments:
+		return m.AuditorWriteComments()
+	case programhistory.FieldAuditorReadComments:
+		return m.AuditorReadComments()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *ProgramHistoryMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case programhistory.FieldHistoryTime:
+		return m.OldHistoryTime(ctx)
+	case programhistory.FieldRef:
+		return m.OldRef(ctx)
+	case programhistory.FieldOperation:
+		return m.OldOperation(ctx)
+	case programhistory.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case programhistory.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case programhistory.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case programhistory.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case programhistory.FieldMappingID:
+		return m.OldMappingID(ctx)
+	case programhistory.FieldDeletedAt:
+		return m.OldDeletedAt(ctx)
+	case programhistory.FieldDeletedBy:
+		return m.OldDeletedBy(ctx)
+	case programhistory.FieldTags:
+		return m.OldTags(ctx)
+	case programhistory.FieldName:
+		return m.OldName(ctx)
+	case programhistory.FieldDescription:
+		return m.OldDescription(ctx)
+	case programhistory.FieldStatus:
+		return m.OldStatus(ctx)
+	case programhistory.FieldStartDate:
+		return m.OldStartDate(ctx)
+	case programhistory.FieldEndDate:
+		return m.OldEndDate(ctx)
+	case programhistory.FieldOrganizationID:
+		return m.OldOrganizationID(ctx)
+	case programhistory.FieldAuditorReady:
+		return m.OldAuditorReady(ctx)
+	case programhistory.FieldAuditorWriteComments:
+		return m.OldAuditorWriteComments(ctx)
+	case programhistory.FieldAuditorReadComments:
+		return m.OldAuditorReadComments(ctx)
+	}
+	return nil, fmt.Errorf("unknown ProgramHistory field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ProgramHistoryMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case programhistory.FieldHistoryTime:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetHistoryTime(v)
+		return nil
+	case programhistory.FieldRef:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRef(v)
+		return nil
+	case programhistory.FieldOperation:
+		v, ok := value.(history.OpType)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOperation(v)
+		return nil
+	case programhistory.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case programhistory.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case programhistory.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case programhistory.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case programhistory.FieldMappingID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMappingID(v)
+		return nil
+	case programhistory.FieldDeletedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedAt(v)
+		return nil
+	case programhistory.FieldDeletedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedBy(v)
+		return nil
+	case programhistory.FieldTags:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTags(v)
+		return nil
+	case programhistory.FieldName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetName(v)
+		return nil
+	case programhistory.FieldDescription:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDescription(v)
+		return nil
+	case programhistory.FieldStatus:
+		v, ok := value.(enums.ProgramStatus)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetStatus(v)
+		return nil
+	case programhistory.FieldStartDate:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetStartDate(v)
+		return nil
+	case programhistory.FieldEndDate:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetEndDate(v)
+		return nil
+	case programhistory.FieldOrganizationID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOrganizationID(v)
+		return nil
+	case programhistory.FieldAuditorReady:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAuditorReady(v)
+		return nil
+	case programhistory.FieldAuditorWriteComments:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAuditorWriteComments(v)
+		return nil
+	case programhistory.FieldAuditorReadComments:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAuditorReadComments(v)
+		return nil
+	}
+	return fmt.Errorf("unknown ProgramHistory field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *ProgramHistoryMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *ProgramHistoryMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ProgramHistoryMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown ProgramHistory numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *ProgramHistoryMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(programhistory.FieldRef) {
+		fields = append(fields, programhistory.FieldRef)
+	}
+	if m.FieldCleared(programhistory.FieldCreatedAt) {
+		fields = append(fields, programhistory.FieldCreatedAt)
+	}
+	if m.FieldCleared(programhistory.FieldUpdatedAt) {
+		fields = append(fields, programhistory.FieldUpdatedAt)
+	}
+	if m.FieldCleared(programhistory.FieldCreatedBy) {
+		fields = append(fields, programhistory.FieldCreatedBy)
+	}
+	if m.FieldCleared(programhistory.FieldUpdatedBy) {
+		fields = append(fields, programhistory.FieldUpdatedBy)
+	}
+	if m.FieldCleared(programhistory.FieldDeletedAt) {
+		fields = append(fields, programhistory.FieldDeletedAt)
+	}
+	if m.FieldCleared(programhistory.FieldDeletedBy) {
+		fields = append(fields, programhistory.FieldDeletedBy)
+	}
+	if m.FieldCleared(programhistory.FieldTags) {
+		fields = append(fields, programhistory.FieldTags)
+	}
+	if m.FieldCleared(programhistory.FieldDescription) {
+		fields = append(fields, programhistory.FieldDescription)
+	}
+	if m.FieldCleared(programhistory.FieldStartDate) {
+		fields = append(fields, programhistory.FieldStartDate)
+	}
+	if m.FieldCleared(programhistory.FieldEndDate) {
+		fields = append(fields, programhistory.FieldEndDate)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *ProgramHistoryMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *ProgramHistoryMutation) ClearField(name string) error {
+	switch name {
+	case programhistory.FieldRef:
+		m.ClearRef()
+		return nil
+	case programhistory.FieldCreatedAt:
+		m.ClearCreatedAt()
+		return nil
+	case programhistory.FieldUpdatedAt:
+		m.ClearUpdatedAt()
+		return nil
+	case programhistory.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case programhistory.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case programhistory.FieldDeletedAt:
+		m.ClearDeletedAt()
+		return nil
+	case programhistory.FieldDeletedBy:
+		m.ClearDeletedBy()
+		return nil
+	case programhistory.FieldTags:
+		m.ClearTags()
+		return nil
+	case programhistory.FieldDescription:
+		m.ClearDescription()
+		return nil
+	case programhistory.FieldStartDate:
+		m.ClearStartDate()
+		return nil
+	case programhistory.FieldEndDate:
+		m.ClearEndDate()
+		return nil
+	}
+	return fmt.Errorf("unknown ProgramHistory nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *ProgramHistoryMutation) ResetField(name string) error {
+	switch name {
+	case programhistory.FieldHistoryTime:
+		m.ResetHistoryTime()
+		return nil
+	case programhistory.FieldRef:
+		m.ResetRef()
+		return nil
+	case programhistory.FieldOperation:
+		m.ResetOperation()
+		return nil
+	case programhistory.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case programhistory.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case programhistory.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case programhistory.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case programhistory.FieldMappingID:
+		m.ResetMappingID()
+		return nil
+	case programhistory.FieldDeletedAt:
+		m.ResetDeletedAt()
+		return nil
+	case programhistory.FieldDeletedBy:
+		m.ResetDeletedBy()
+		return nil
+	case programhistory.FieldTags:
+		m.ResetTags()
+		return nil
+	case programhistory.FieldName:
+		m.ResetName()
+		return nil
+	case programhistory.FieldDescription:
+		m.ResetDescription()
+		return nil
+	case programhistory.FieldStatus:
+		m.ResetStatus()
+		return nil
+	case programhistory.FieldStartDate:
+		m.ResetStartDate()
+		return nil
+	case programhistory.FieldEndDate:
+		m.ResetEndDate()
+		return nil
+	case programhistory.FieldOrganizationID:
+		m.ResetOrganizationID()
+		return nil
+	case programhistory.FieldAuditorReady:
+		m.ResetAuditorReady()
+		return nil
+	case programhistory.FieldAuditorWriteComments:
+		m.ResetAuditorWriteComments()
+		return nil
+	case programhistory.FieldAuditorReadComments:
+		m.ResetAuditorReadComments()
+		return nil
+	}
+	return fmt.Errorf("unknown ProgramHistory field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *ProgramHistoryMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *ProgramHistoryMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *ProgramHistoryMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *ProgramHistoryMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *ProgramHistoryMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *ProgramHistoryMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *ProgramHistoryMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown ProgramHistory unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *ProgramHistoryMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown ProgramHistory edge %s", name)
+}
+
 // RiskMutation represents an operation that mutates the Risk nodes in the graph.
 type RiskMutation struct {
 	config
@@ -91274,6 +96070,9 @@ type RiskMutation struct {
 	actionplans        map[string]struct{}
 	removedactionplans map[string]struct{}
 	clearedactionplans bool
+	program            map[string]struct{}
+	removedprogram     map[string]struct{}
+	clearedprogram     bool
 	done               bool
 	oldValue           func(context.Context) (*Risk, error)
 	predicates         []predicate.Risk
@@ -92417,6 +97216,60 @@ func (m *RiskMutation) ResetActionplans() {
 	m.removedactionplans = nil
 }
 
+// AddProgramIDs adds the "program" edge to the Program entity by ids.
+func (m *RiskMutation) AddProgramIDs(ids ...string) {
+	if m.program == nil {
+		m.program = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.program[ids[i]] = struct{}{}
+	}
+}
+
+// ClearProgram clears the "program" edge to the Program entity.
+func (m *RiskMutation) ClearProgram() {
+	m.clearedprogram = true
+}
+
+// ProgramCleared reports if the "program" edge to the Program entity was cleared.
+func (m *RiskMutation) ProgramCleared() bool {
+	return m.clearedprogram
+}
+
+// RemoveProgramIDs removes the "program" edge to the Program entity by IDs.
+func (m *RiskMutation) RemoveProgramIDs(ids ...string) {
+	if m.removedprogram == nil {
+		m.removedprogram = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.program, ids[i])
+		m.removedprogram[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedProgram returns the removed IDs of the "program" edge to the Program entity.
+func (m *RiskMutation) RemovedProgramIDs() (ids []string) {
+	for id := range m.removedprogram {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ProgramIDs returns the "program" edge IDs in the mutation.
+func (m *RiskMutation) ProgramIDs() (ids []string) {
+	for id := range m.program {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetProgram resets all changes to the "program" edge.
+func (m *RiskMutation) ResetProgram() {
+	m.program = nil
+	m.clearedprogram = false
+	m.removedprogram = nil
+}
+
 // Where appends a list predicates to the RiskMutation builder.
 func (m *RiskMutation) Where(ps ...predicate.Risk) {
 	m.predicates = append(m.predicates, ps...)
@@ -92938,7 +97791,7 @@ func (m *RiskMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *RiskMutation) AddedEdges() []string {
-	edges := make([]string, 0, 3)
+	edges := make([]string, 0, 4)
 	if m.control != nil {
 		edges = append(edges, risk.EdgeControl)
 	}
@@ -92947,6 +97800,9 @@ func (m *RiskMutation) AddedEdges() []string {
 	}
 	if m.actionplans != nil {
 		edges = append(edges, risk.EdgeActionplans)
+	}
+	if m.program != nil {
+		edges = append(edges, risk.EdgeProgram)
 	}
 	return edges
 }
@@ -92973,13 +97829,19 @@ func (m *RiskMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case risk.EdgeProgram:
+		ids := make([]ent.Value, 0, len(m.program))
+		for id := range m.program {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *RiskMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 3)
+	edges := make([]string, 0, 4)
 	if m.removedcontrol != nil {
 		edges = append(edges, risk.EdgeControl)
 	}
@@ -92988,6 +97850,9 @@ func (m *RiskMutation) RemovedEdges() []string {
 	}
 	if m.removedactionplans != nil {
 		edges = append(edges, risk.EdgeActionplans)
+	}
+	if m.removedprogram != nil {
+		edges = append(edges, risk.EdgeProgram)
 	}
 	return edges
 }
@@ -93014,13 +97879,19 @@ func (m *RiskMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case risk.EdgeProgram:
+		ids := make([]ent.Value, 0, len(m.removedprogram))
+		for id := range m.removedprogram {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *RiskMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 3)
+	edges := make([]string, 0, 4)
 	if m.clearedcontrol {
 		edges = append(edges, risk.EdgeControl)
 	}
@@ -93029,6 +97900,9 @@ func (m *RiskMutation) ClearedEdges() []string {
 	}
 	if m.clearedactionplans {
 		edges = append(edges, risk.EdgeActionplans)
+	}
+	if m.clearedprogram {
+		edges = append(edges, risk.EdgeProgram)
 	}
 	return edges
 }
@@ -93043,6 +97917,8 @@ func (m *RiskMutation) EdgeCleared(name string) bool {
 		return m.clearedprocedure
 	case risk.EdgeActionplans:
 		return m.clearedactionplans
+	case risk.EdgeProgram:
+		return m.clearedprogram
 	}
 	return false
 }
@@ -93067,6 +97943,9 @@ func (m *RiskMutation) ResetEdge(name string) error {
 		return nil
 	case risk.EdgeActionplans:
 		m.ResetActionplans()
+		return nil
+	case risk.EdgeProgram:
+		m.ResetProgram()
 		return nil
 	}
 	return fmt.Errorf("unknown Risk edge %s", name)
@@ -94865,6 +99744,9 @@ type StandardMutation struct {
 	actionplans              map[string]struct{}
 	removedactionplans       map[string]struct{}
 	clearedactionplans       bool
+	programs                 map[string]struct{}
+	removedprograms          map[string]struct{}
+	clearedprograms          bool
 	done                     bool
 	oldValue                 func(context.Context) (*Standard, error)
 	predicates               []predicate.Standard
@@ -96062,6 +100944,60 @@ func (m *StandardMutation) ResetActionplans() {
 	m.removedactionplans = nil
 }
 
+// AddProgramIDs adds the "programs" edge to the Program entity by ids.
+func (m *StandardMutation) AddProgramIDs(ids ...string) {
+	if m.programs == nil {
+		m.programs = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.programs[ids[i]] = struct{}{}
+	}
+}
+
+// ClearPrograms clears the "programs" edge to the Program entity.
+func (m *StandardMutation) ClearPrograms() {
+	m.clearedprograms = true
+}
+
+// ProgramsCleared reports if the "programs" edge to the Program entity was cleared.
+func (m *StandardMutation) ProgramsCleared() bool {
+	return m.clearedprograms
+}
+
+// RemoveProgramIDs removes the "programs" edge to the Program entity by IDs.
+func (m *StandardMutation) RemoveProgramIDs(ids ...string) {
+	if m.removedprograms == nil {
+		m.removedprograms = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.programs, ids[i])
+		m.removedprograms[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedPrograms returns the removed IDs of the "programs" edge to the Program entity.
+func (m *StandardMutation) RemovedProgramsIDs() (ids []string) {
+	for id := range m.removedprograms {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ProgramsIDs returns the "programs" edge IDs in the mutation.
+func (m *StandardMutation) ProgramsIDs() (ids []string) {
+	for id := range m.programs {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetPrograms resets all changes to the "programs" edge.
+func (m *StandardMutation) ResetPrograms() {
+	m.programs = nil
+	m.clearedprograms = false
+	m.removedprograms = nil
+}
+
 // Where appends a list predicates to the StandardMutation builder.
 func (m *StandardMutation) Where(ps ...predicate.Standard) {
 	m.predicates = append(m.predicates, ps...)
@@ -96583,7 +101519,7 @@ func (m *StandardMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *StandardMutation) AddedEdges() []string {
-	edges := make([]string, 0, 4)
+	edges := make([]string, 0, 5)
 	if m.controlobjectives != nil {
 		edges = append(edges, standard.EdgeControlobjectives)
 	}
@@ -96595,6 +101531,9 @@ func (m *StandardMutation) AddedEdges() []string {
 	}
 	if m.actionplans != nil {
 		edges = append(edges, standard.EdgeActionplans)
+	}
+	if m.programs != nil {
+		edges = append(edges, standard.EdgePrograms)
 	}
 	return edges
 }
@@ -96627,13 +101566,19 @@ func (m *StandardMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case standard.EdgePrograms:
+		ids := make([]ent.Value, 0, len(m.programs))
+		for id := range m.programs {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *StandardMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 4)
+	edges := make([]string, 0, 5)
 	if m.removedcontrolobjectives != nil {
 		edges = append(edges, standard.EdgeControlobjectives)
 	}
@@ -96645,6 +101590,9 @@ func (m *StandardMutation) RemovedEdges() []string {
 	}
 	if m.removedactionplans != nil {
 		edges = append(edges, standard.EdgeActionplans)
+	}
+	if m.removedprograms != nil {
+		edges = append(edges, standard.EdgePrograms)
 	}
 	return edges
 }
@@ -96677,13 +101625,19 @@ func (m *StandardMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case standard.EdgePrograms:
+		ids := make([]ent.Value, 0, len(m.removedprograms))
+		for id := range m.removedprograms {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *StandardMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 4)
+	edges := make([]string, 0, 5)
 	if m.clearedcontrolobjectives {
 		edges = append(edges, standard.EdgeControlobjectives)
 	}
@@ -96695,6 +101649,9 @@ func (m *StandardMutation) ClearedEdges() []string {
 	}
 	if m.clearedactionplans {
 		edges = append(edges, standard.EdgeActionplans)
+	}
+	if m.clearedprograms {
+		edges = append(edges, standard.EdgePrograms)
 	}
 	return edges
 }
@@ -96711,6 +101668,8 @@ func (m *StandardMutation) EdgeCleared(name string) bool {
 		return m.clearedprocedures
 	case standard.EdgeActionplans:
 		return m.clearedactionplans
+	case standard.EdgePrograms:
+		return m.clearedprograms
 	}
 	return false
 }
@@ -96738,6 +101697,9 @@ func (m *StandardMutation) ResetEdge(name string) error {
 		return nil
 	case standard.EdgeActionplans:
 		m.ResetActionplans()
+		return nil
+	case standard.EdgePrograms:
+		m.ResetPrograms()
 		return nil
 	}
 	return fmt.Errorf("unknown Standard edge %s", name)
@@ -98541,6 +103503,9 @@ type SubcontrolMutation struct {
 	clearedtasks                     bool
 	notes                            *string
 	clearednotes                     bool
+	programs                         map[string]struct{}
+	removedprograms                  map[string]struct{}
+	clearedprograms                  bool
 	done                             bool
 	oldValue                         func(context.Context) (*Subcontrol, error)
 	predicates                       []predicate.Subcontrol
@@ -100017,6 +104982,60 @@ func (m *SubcontrolMutation) ResetNotes() {
 	m.clearednotes = false
 }
 
+// AddProgramIDs adds the "programs" edge to the Program entity by ids.
+func (m *SubcontrolMutation) AddProgramIDs(ids ...string) {
+	if m.programs == nil {
+		m.programs = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.programs[ids[i]] = struct{}{}
+	}
+}
+
+// ClearPrograms clears the "programs" edge to the Program entity.
+func (m *SubcontrolMutation) ClearPrograms() {
+	m.clearedprograms = true
+}
+
+// ProgramsCleared reports if the "programs" edge to the Program entity was cleared.
+func (m *SubcontrolMutation) ProgramsCleared() bool {
+	return m.clearedprograms
+}
+
+// RemoveProgramIDs removes the "programs" edge to the Program entity by IDs.
+func (m *SubcontrolMutation) RemoveProgramIDs(ids ...string) {
+	if m.removedprograms == nil {
+		m.removedprograms = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.programs, ids[i])
+		m.removedprograms[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedPrograms returns the removed IDs of the "programs" edge to the Program entity.
+func (m *SubcontrolMutation) RemovedProgramsIDs() (ids []string) {
+	for id := range m.removedprograms {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ProgramsIDs returns the "programs" edge IDs in the mutation.
+func (m *SubcontrolMutation) ProgramsIDs() (ids []string) {
+	for id := range m.programs {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetPrograms resets all changes to the "programs" edge.
+func (m *SubcontrolMutation) ResetPrograms() {
+	m.programs = nil
+	m.clearedprograms = false
+	m.removedprograms = nil
+}
+
 // Where appends a list predicates to the SubcontrolMutation builder.
 func (m *SubcontrolMutation) Where(ps ...predicate.Subcontrol) {
 	m.predicates = append(m.predicates, ps...)
@@ -100676,7 +105695,7 @@ func (m *SubcontrolMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *SubcontrolMutation) AddedEdges() []string {
-	edges := make([]string, 0, 4)
+	edges := make([]string, 0, 5)
 	if m.control != nil {
 		edges = append(edges, subcontrol.EdgeControl)
 	}
@@ -100688,6 +105707,9 @@ func (m *SubcontrolMutation) AddedEdges() []string {
 	}
 	if m.notes != nil {
 		edges = append(edges, subcontrol.EdgeNotes)
+	}
+	if m.programs != nil {
+		edges = append(edges, subcontrol.EdgePrograms)
 	}
 	return edges
 }
@@ -100718,13 +105740,19 @@ func (m *SubcontrolMutation) AddedIDs(name string) []ent.Value {
 		if id := m.notes; id != nil {
 			return []ent.Value{*id}
 		}
+	case subcontrol.EdgePrograms:
+		ids := make([]ent.Value, 0, len(m.programs))
+		for id := range m.programs {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *SubcontrolMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 4)
+	edges := make([]string, 0, 5)
 	if m.removedcontrol != nil {
 		edges = append(edges, subcontrol.EdgeControl)
 	}
@@ -100733,6 +105761,9 @@ func (m *SubcontrolMutation) RemovedEdges() []string {
 	}
 	if m.removedtasks != nil {
 		edges = append(edges, subcontrol.EdgeTasks)
+	}
+	if m.removedprograms != nil {
+		edges = append(edges, subcontrol.EdgePrograms)
 	}
 	return edges
 }
@@ -100759,13 +105790,19 @@ func (m *SubcontrolMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case subcontrol.EdgePrograms:
+		ids := make([]ent.Value, 0, len(m.removedprograms))
+		for id := range m.removedprograms {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *SubcontrolMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 4)
+	edges := make([]string, 0, 5)
 	if m.clearedcontrol {
 		edges = append(edges, subcontrol.EdgeControl)
 	}
@@ -100777,6 +105814,9 @@ func (m *SubcontrolMutation) ClearedEdges() []string {
 	}
 	if m.clearednotes {
 		edges = append(edges, subcontrol.EdgeNotes)
+	}
+	if m.clearedprograms {
+		edges = append(edges, subcontrol.EdgePrograms)
 	}
 	return edges
 }
@@ -100793,6 +105833,8 @@ func (m *SubcontrolMutation) EdgeCleared(name string) bool {
 		return m.clearedtasks
 	case subcontrol.EdgeNotes:
 		return m.clearednotes
+	case subcontrol.EdgePrograms:
+		return m.clearedprograms
 	}
 	return false
 }
@@ -100823,6 +105865,9 @@ func (m *SubcontrolMutation) ResetEdge(name string) error {
 		return nil
 	case subcontrol.EdgeNotes:
 		m.ResetNotes()
+		return nil
+	case subcontrol.EdgePrograms:
+		m.ResetPrograms()
 		return nil
 	}
 	return fmt.Errorf("unknown Subcontrol edge %s", name)
@@ -106020,6 +111065,9 @@ type TaskMutation struct {
 	subcontrol               map[string]struct{}
 	removedsubcontrol        map[string]struct{}
 	clearedsubcontrol        bool
+	program                  map[string]struct{}
+	removedprogram           map[string]struct{}
+	clearedprogram           bool
 	done                     bool
 	oldValue                 func(context.Context) (*Task, error)
 	predicates               []predicate.Task
@@ -107248,6 +112296,60 @@ func (m *TaskMutation) ResetSubcontrol() {
 	m.removedsubcontrol = nil
 }
 
+// AddProgramIDs adds the "program" edge to the Program entity by ids.
+func (m *TaskMutation) AddProgramIDs(ids ...string) {
+	if m.program == nil {
+		m.program = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.program[ids[i]] = struct{}{}
+	}
+}
+
+// ClearProgram clears the "program" edge to the Program entity.
+func (m *TaskMutation) ClearProgram() {
+	m.clearedprogram = true
+}
+
+// ProgramCleared reports if the "program" edge to the Program entity was cleared.
+func (m *TaskMutation) ProgramCleared() bool {
+	return m.clearedprogram
+}
+
+// RemoveProgramIDs removes the "program" edge to the Program entity by IDs.
+func (m *TaskMutation) RemoveProgramIDs(ids ...string) {
+	if m.removedprogram == nil {
+		m.removedprogram = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.program, ids[i])
+		m.removedprogram[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedProgram returns the removed IDs of the "program" edge to the Program entity.
+func (m *TaskMutation) RemovedProgramIDs() (ids []string) {
+	for id := range m.removedprogram {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ProgramIDs returns the "program" edge IDs in the mutation.
+func (m *TaskMutation) ProgramIDs() (ids []string) {
+	for id := range m.program {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetProgram resets all changes to the "program" edge.
+func (m *TaskMutation) ResetProgram() {
+	m.program = nil
+	m.clearedprogram = false
+	m.removedprogram = nil
+}
+
 // Where appends a list predicates to the TaskMutation builder.
 func (m *TaskMutation) Where(ps ...predicate.Task) {
 	m.predicates = append(m.predicates, ps...)
@@ -107671,7 +112773,7 @@ func (m *TaskMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *TaskMutation) AddedEdges() []string {
-	edges := make([]string, 0, 9)
+	edges := make([]string, 0, 10)
 	if m.assigner != nil {
 		edges = append(edges, task.EdgeAssigner)
 	}
@@ -107698,6 +112800,9 @@ func (m *TaskMutation) AddedEdges() []string {
 	}
 	if m.subcontrol != nil {
 		edges = append(edges, task.EdgeSubcontrol)
+	}
+	if m.program != nil {
+		edges = append(edges, task.EdgeProgram)
 	}
 	return edges
 }
@@ -107756,13 +112861,19 @@ func (m *TaskMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case task.EdgeProgram:
+		ids := make([]ent.Value, 0, len(m.program))
+		for id := range m.program {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *TaskMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 9)
+	edges := make([]string, 0, 10)
 	if m.removedorganization != nil {
 		edges = append(edges, task.EdgeOrganization)
 	}
@@ -107783,6 +112894,9 @@ func (m *TaskMutation) RemovedEdges() []string {
 	}
 	if m.removedsubcontrol != nil {
 		edges = append(edges, task.EdgeSubcontrol)
+	}
+	if m.removedprogram != nil {
+		edges = append(edges, task.EdgeProgram)
 	}
 	return edges
 }
@@ -107833,13 +112947,19 @@ func (m *TaskMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case task.EdgeProgram:
+		ids := make([]ent.Value, 0, len(m.removedprogram))
+		for id := range m.removedprogram {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *TaskMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 9)
+	edges := make([]string, 0, 10)
 	if m.clearedassigner {
 		edges = append(edges, task.EdgeAssigner)
 	}
@@ -107867,6 +112987,9 @@ func (m *TaskMutation) ClearedEdges() []string {
 	if m.clearedsubcontrol {
 		edges = append(edges, task.EdgeSubcontrol)
 	}
+	if m.clearedprogram {
+		edges = append(edges, task.EdgeProgram)
+	}
 	return edges
 }
 
@@ -107892,6 +113015,8 @@ func (m *TaskMutation) EdgeCleared(name string) bool {
 		return m.clearedcontrol_objective
 	case task.EdgeSubcontrol:
 		return m.clearedsubcontrol
+	case task.EdgeProgram:
+		return m.clearedprogram
 	}
 	return false
 }
@@ -107940,6 +113065,9 @@ func (m *TaskMutation) ResetEdge(name string) error {
 		return nil
 	case task.EdgeSubcontrol:
 		m.ResetSubcontrol()
+		return nil
+	case task.EdgeProgram:
+		m.ResetProgram()
 		return nil
 	}
 	return fmt.Errorf("unknown Task edge %s", name)

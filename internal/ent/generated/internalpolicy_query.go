@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -35,6 +36,7 @@ type InternalPolicyQuery struct {
 	withProcedures             *ProcedureQuery
 	withNarratives             *NarrativeQuery
 	withTasks                  *TaskQuery
+	withPrograms               *ProgramQuery
 	loadTotal                  []func(context.Context, []*InternalPolicy) error
 	modifiers                  []func(*sql.Selector)
 	withNamedControlobjectives map[string]*ControlObjectiveQuery
@@ -42,6 +44,7 @@ type InternalPolicyQuery struct {
 	withNamedProcedures        map[string]*ProcedureQuery
 	withNamedNarratives        map[string]*NarrativeQuery
 	withNamedTasks             map[string]*TaskQuery
+	withNamedPrograms          map[string]*ProgramQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -197,6 +200,31 @@ func (ipq *InternalPolicyQuery) QueryTasks() *TaskQuery {
 		schemaConfig := ipq.schemaConfig
 		step.To.Schema = schemaConfig.Task
 		step.Edge.Schema = schemaConfig.InternalPolicyTasks
+		fromU = sqlgraph.SetNeighbors(ipq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryPrograms chains the current query on the "programs" edge.
+func (ipq *InternalPolicyQuery) QueryPrograms() *ProgramQuery {
+	query := (&ProgramClient{config: ipq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := ipq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := ipq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, selector),
+			sqlgraph.To(program.Table, program.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, internalpolicy.ProgramsTable, internalpolicy.ProgramsPrimaryKey...),
+		)
+		schemaConfig := ipq.schemaConfig
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.ProgramPolicies
 		fromU = sqlgraph.SetNeighbors(ipq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -400,6 +428,7 @@ func (ipq *InternalPolicyQuery) Clone() *InternalPolicyQuery {
 		withProcedures:        ipq.withProcedures.Clone(),
 		withNarratives:        ipq.withNarratives.Clone(),
 		withTasks:             ipq.withTasks.Clone(),
+		withPrograms:          ipq.withPrograms.Clone(),
 		// clone intermediate query.
 		sql:       ipq.sql.Clone(),
 		path:      ipq.path,
@@ -459,6 +488,17 @@ func (ipq *InternalPolicyQuery) WithTasks(opts ...func(*TaskQuery)) *InternalPol
 		opt(query)
 	}
 	ipq.withTasks = query
+	return ipq
+}
+
+// WithPrograms tells the query-builder to eager-load the nodes that are connected to
+// the "programs" edge. The optional arguments are used to configure the query builder of the edge.
+func (ipq *InternalPolicyQuery) WithPrograms(opts ...func(*ProgramQuery)) *InternalPolicyQuery {
+	query := (&ProgramClient{config: ipq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	ipq.withPrograms = query
 	return ipq
 }
 
@@ -540,12 +580,13 @@ func (ipq *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) 
 	var (
 		nodes       = []*InternalPolicy{}
 		_spec       = ipq.querySpec()
-		loadedTypes = [5]bool{
+		loadedTypes = [6]bool{
 			ipq.withControlobjectives != nil,
 			ipq.withControls != nil,
 			ipq.withProcedures != nil,
 			ipq.withNarratives != nil,
 			ipq.withTasks != nil,
+			ipq.withPrograms != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -608,6 +649,13 @@ func (ipq *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) 
 			return nil, err
 		}
 	}
+	if query := ipq.withPrograms; query != nil {
+		if err := ipq.loadPrograms(ctx, query, nodes,
+			func(n *InternalPolicy) { n.Edges.Programs = []*Program{} },
+			func(n *InternalPolicy, e *Program) { n.Edges.Programs = append(n.Edges.Programs, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range ipq.withNamedControlobjectives {
 		if err := ipq.loadControlobjectives(ctx, query, nodes,
 			func(n *InternalPolicy) { n.appendNamedControlobjectives(name) },
@@ -640,6 +688,13 @@ func (ipq *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) 
 		if err := ipq.loadTasks(ctx, query, nodes,
 			func(n *InternalPolicy) { n.appendNamedTasks(name) },
 			func(n *InternalPolicy, e *Task) { n.appendNamedTasks(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range ipq.withNamedPrograms {
+		if err := ipq.loadPrograms(ctx, query, nodes,
+			func(n *InternalPolicy) { n.appendNamedPrograms(name) },
+			func(n *InternalPolicy, e *Program) { n.appendNamedPrograms(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -930,6 +985,68 @@ func (ipq *InternalPolicyQuery) loadTasks(ctx context.Context, query *TaskQuery,
 	}
 	return nil
 }
+func (ipq *InternalPolicyQuery) loadPrograms(ctx context.Context, query *ProgramQuery, nodes []*InternalPolicy, init func(*InternalPolicy), assign func(*InternalPolicy, *Program)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*InternalPolicy)
+	nids := make(map[string]map[*InternalPolicy]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(internalpolicy.ProgramsTable)
+		joinT.Schema(ipq.schemaConfig.ProgramPolicies)
+		s.Join(joinT).On(s.C(program.FieldID), joinT.C(internalpolicy.ProgramsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(internalpolicy.ProgramsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(internalpolicy.ProgramsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*InternalPolicy]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Program](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "programs" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 
 func (ipq *InternalPolicyQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := ipq.querySpec()
@@ -1096,6 +1213,20 @@ func (ipq *InternalPolicyQuery) WithNamedTasks(name string, opts ...func(*TaskQu
 		ipq.withNamedTasks = make(map[string]*TaskQuery)
 	}
 	ipq.withNamedTasks[name] = query
+	return ipq
+}
+
+// WithNamedPrograms tells the query-builder to eager-load the nodes that are connected to the "programs"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (ipq *InternalPolicyQuery) WithNamedPrograms(name string, opts ...func(*ProgramQuery)) *InternalPolicyQuery {
+	query := (&ProgramClient{config: ipq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if ipq.withNamedPrograms == nil {
+		ipq.withNamedPrograms = make(map[string]*ProgramQuery)
+	}
+	ipq.withNamedPrograms[name] = query
 	return ipq
 }
 

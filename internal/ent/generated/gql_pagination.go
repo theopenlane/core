@@ -70,6 +70,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/procedurehistory"
+	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/programhistory"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
@@ -14854,6 +14856,504 @@ func (ph *ProcedureHistory) ToEdge(order *ProcedureHistoryOrder) *ProcedureHisto
 		order = DefaultProcedureHistoryOrder
 	}
 	return &ProcedureHistoryEdge{
+		Node:   ph,
+		Cursor: order.Field.toCursor(ph),
+	}
+}
+
+// ProgramEdge is the edge representation of Program.
+type ProgramEdge struct {
+	Node   *Program `json:"node"`
+	Cursor Cursor   `json:"cursor"`
+}
+
+// ProgramConnection is the connection containing edges to Program.
+type ProgramConnection struct {
+	Edges      []*ProgramEdge `json:"edges"`
+	PageInfo   PageInfo       `json:"pageInfo"`
+	TotalCount int            `json:"totalCount"`
+}
+
+func (c *ProgramConnection) build(nodes []*Program, pager *programPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *Program
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *Program {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *Program {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*ProgramEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &ProgramEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// ProgramPaginateOption enables pagination customization.
+type ProgramPaginateOption func(*programPager) error
+
+// WithProgramOrder configures pagination ordering.
+func WithProgramOrder(order *ProgramOrder) ProgramPaginateOption {
+	if order == nil {
+		order = DefaultProgramOrder
+	}
+	o := *order
+	return func(pager *programPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultProgramOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithProgramFilter configures pagination filter.
+func WithProgramFilter(filter func(*ProgramQuery) (*ProgramQuery, error)) ProgramPaginateOption {
+	return func(pager *programPager) error {
+		if filter == nil {
+			return errors.New("ProgramQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type programPager struct {
+	reverse bool
+	order   *ProgramOrder
+	filter  func(*ProgramQuery) (*ProgramQuery, error)
+}
+
+func newProgramPager(opts []ProgramPaginateOption, reverse bool) (*programPager, error) {
+	pager := &programPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultProgramOrder
+	}
+	return pager, nil
+}
+
+func (p *programPager) applyFilter(query *ProgramQuery) (*ProgramQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *programPager) toCursor(pr *Program) Cursor {
+	return p.order.Field.toCursor(pr)
+}
+
+func (p *programPager) applyCursors(query *ProgramQuery, after, before *Cursor) (*ProgramQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultProgramOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *programPager) applyOrder(query *ProgramQuery) *ProgramQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultProgramOrder.Field {
+		query = query.Order(DefaultProgramOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *programPager) orderExpr(query *ProgramQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultProgramOrder.Field {
+			b.Comma().Ident(DefaultProgramOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to Program.
+func (pr *ProgramQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...ProgramPaginateOption,
+) (*ProgramConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newProgramPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if pr, err = pager.applyFilter(pr); err != nil {
+		return nil, err
+	}
+	conn := &ProgramConnection{Edges: []*ProgramEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := pr.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if pr, err = pager.applyCursors(pr, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		pr.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := pr.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	pr = pager.applyOrder(pr)
+	nodes, err := pr.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+// ProgramOrderField defines the ordering field of Program.
+type ProgramOrderField struct {
+	// Value extracts the ordering value from the given Program.
+	Value    func(*Program) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) program.OrderOption
+	toCursor func(*Program) Cursor
+}
+
+// ProgramOrder defines the ordering of Program.
+type ProgramOrder struct {
+	Direction OrderDirection     `json:"direction"`
+	Field     *ProgramOrderField `json:"field"`
+}
+
+// DefaultProgramOrder is the default ordering of Program.
+var DefaultProgramOrder = &ProgramOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &ProgramOrderField{
+		Value: func(pr *Program) (ent.Value, error) {
+			return pr.ID, nil
+		},
+		column: program.FieldID,
+		toTerm: program.ByID,
+		toCursor: func(pr *Program) Cursor {
+			return Cursor{ID: pr.ID}
+		},
+	},
+}
+
+// ToEdge converts Program into ProgramEdge.
+func (pr *Program) ToEdge(order *ProgramOrder) *ProgramEdge {
+	if order == nil {
+		order = DefaultProgramOrder
+	}
+	return &ProgramEdge{
+		Node:   pr,
+		Cursor: order.Field.toCursor(pr),
+	}
+}
+
+// ProgramHistoryEdge is the edge representation of ProgramHistory.
+type ProgramHistoryEdge struct {
+	Node   *ProgramHistory `json:"node"`
+	Cursor Cursor          `json:"cursor"`
+}
+
+// ProgramHistoryConnection is the connection containing edges to ProgramHistory.
+type ProgramHistoryConnection struct {
+	Edges      []*ProgramHistoryEdge `json:"edges"`
+	PageInfo   PageInfo              `json:"pageInfo"`
+	TotalCount int                   `json:"totalCount"`
+}
+
+func (c *ProgramHistoryConnection) build(nodes []*ProgramHistory, pager *programhistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *ProgramHistory
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *ProgramHistory {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *ProgramHistory {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*ProgramHistoryEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &ProgramHistoryEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// ProgramHistoryPaginateOption enables pagination customization.
+type ProgramHistoryPaginateOption func(*programhistoryPager) error
+
+// WithProgramHistoryOrder configures pagination ordering.
+func WithProgramHistoryOrder(order *ProgramHistoryOrder) ProgramHistoryPaginateOption {
+	if order == nil {
+		order = DefaultProgramHistoryOrder
+	}
+	o := *order
+	return func(pager *programhistoryPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultProgramHistoryOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithProgramHistoryFilter configures pagination filter.
+func WithProgramHistoryFilter(filter func(*ProgramHistoryQuery) (*ProgramHistoryQuery, error)) ProgramHistoryPaginateOption {
+	return func(pager *programhistoryPager) error {
+		if filter == nil {
+			return errors.New("ProgramHistoryQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type programhistoryPager struct {
+	reverse bool
+	order   *ProgramHistoryOrder
+	filter  func(*ProgramHistoryQuery) (*ProgramHistoryQuery, error)
+}
+
+func newProgramHistoryPager(opts []ProgramHistoryPaginateOption, reverse bool) (*programhistoryPager, error) {
+	pager := &programhistoryPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultProgramHistoryOrder
+	}
+	return pager, nil
+}
+
+func (p *programhistoryPager) applyFilter(query *ProgramHistoryQuery) (*ProgramHistoryQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *programhistoryPager) toCursor(ph *ProgramHistory) Cursor {
+	return p.order.Field.toCursor(ph)
+}
+
+func (p *programhistoryPager) applyCursors(query *ProgramHistoryQuery, after, before *Cursor) (*ProgramHistoryQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultProgramHistoryOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *programhistoryPager) applyOrder(query *ProgramHistoryQuery) *ProgramHistoryQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultProgramHistoryOrder.Field {
+		query = query.Order(DefaultProgramHistoryOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *programhistoryPager) orderExpr(query *ProgramHistoryQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultProgramHistoryOrder.Field {
+			b.Comma().Ident(DefaultProgramHistoryOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to ProgramHistory.
+func (ph *ProgramHistoryQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...ProgramHistoryPaginateOption,
+) (*ProgramHistoryConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newProgramHistoryPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if ph, err = pager.applyFilter(ph); err != nil {
+		return nil, err
+	}
+	conn := &ProgramHistoryConnection{Edges: []*ProgramHistoryEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := ph.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if ph, err = pager.applyCursors(ph, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		ph.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := ph.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	ph = pager.applyOrder(ph)
+	nodes, err := ph.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+// ProgramHistoryOrderField defines the ordering field of ProgramHistory.
+type ProgramHistoryOrderField struct {
+	// Value extracts the ordering value from the given ProgramHistory.
+	Value    func(*ProgramHistory) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) programhistory.OrderOption
+	toCursor func(*ProgramHistory) Cursor
+}
+
+// ProgramHistoryOrder defines the ordering of ProgramHistory.
+type ProgramHistoryOrder struct {
+	Direction OrderDirection            `json:"direction"`
+	Field     *ProgramHistoryOrderField `json:"field"`
+}
+
+// DefaultProgramHistoryOrder is the default ordering of ProgramHistory.
+var DefaultProgramHistoryOrder = &ProgramHistoryOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &ProgramHistoryOrderField{
+		Value: func(ph *ProgramHistory) (ent.Value, error) {
+			return ph.ID, nil
+		},
+		column: programhistory.FieldID,
+		toTerm: programhistory.ByID,
+		toCursor: func(ph *ProgramHistory) Cursor {
+			return Cursor{ID: ph.ID}
+		},
+	},
+}
+
+// ToEdge converts ProgramHistory into ProgramHistoryEdge.
+func (ph *ProgramHistory) ToEdge(order *ProgramHistoryOrder) *ProgramHistoryEdge {
+	if order == nil {
+		order = DefaultProgramHistoryOrder
+	}
+	return &ProgramHistoryEdge{
 		Node:   ph,
 		Cursor: order.Field.toCursor(ph),
 	}

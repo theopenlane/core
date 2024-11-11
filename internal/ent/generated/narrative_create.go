@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/internal/ent/generated/program"
 )
 
 // NarrativeCreate is the builder for creating a Narrative entity.
@@ -240,6 +241,21 @@ func (nc *NarrativeCreate) AddControlobjective(c ...*ControlObjective) *Narrativ
 		ids[i] = c[i].ID
 	}
 	return nc.AddControlobjectiveIDs(ids...)
+}
+
+// AddProgramIDs adds the "program" edge to the Program entity by IDs.
+func (nc *NarrativeCreate) AddProgramIDs(ids ...string) *NarrativeCreate {
+	nc.mutation.AddProgramIDs(ids...)
+	return nc
+}
+
+// AddProgram adds the "program" edges to the Program entity.
+func (nc *NarrativeCreate) AddProgram(p ...*Program) *NarrativeCreate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return nc.AddProgramIDs(ids...)
 }
 
 // Mutation returns the NarrativeMutation object of the builder.
@@ -469,6 +485,23 @@ func (nc *NarrativeCreate) createSpec() (*Narrative, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = nc.schemaConfig.ControlObjectiveNarratives
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := nc.mutation.ProgramIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   narrative.ProgramTable,
+			Columns: narrative.ProgramPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nc.schemaConfig.ProgramNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

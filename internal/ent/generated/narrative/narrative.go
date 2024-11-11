@@ -47,6 +47,8 @@ const (
 	EdgeProcedure = "procedure"
 	// EdgeControlobjective holds the string denoting the controlobjective edge name in mutations.
 	EdgeControlobjective = "controlobjective"
+	// EdgeProgram holds the string denoting the program edge name in mutations.
+	EdgeProgram = "program"
 	// Table holds the table name of the narrative in the database.
 	Table = "narratives"
 	// PolicyTable is the table that holds the policy relation/edge. The primary key declared below.
@@ -69,6 +71,11 @@ const (
 	// ControlobjectiveInverseTable is the table name for the ControlObjective entity.
 	// It exists in this package in order to avoid circular dependency with the "controlobjective" package.
 	ControlobjectiveInverseTable = "control_objectives"
+	// ProgramTable is the table that holds the program relation/edge. The primary key declared below.
+	ProgramTable = "program_narratives"
+	// ProgramInverseTable is the table name for the Program entity.
+	// It exists in this package in order to avoid circular dependency with the "program" package.
+	ProgramInverseTable = "programs"
 )
 
 // Columns holds all SQL columns for narrative fields.
@@ -101,6 +108,9 @@ var (
 	// ControlobjectivePrimaryKey and ControlobjectiveColumn2 are the table columns denoting the
 	// primary key for the controlobjective relation (M2M).
 	ControlobjectivePrimaryKey = []string{"control_objective_id", "narrative_id"}
+	// ProgramPrimaryKey and ProgramColumn2 are the table columns denoting the
+	// primary key for the program relation (M2M).
+	ProgramPrimaryKey = []string{"program_id", "narrative_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -248,6 +258,20 @@ func ByControlobjective(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption 
 		sqlgraph.OrderByNeighborTerms(s, newControlobjectiveStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByProgramCount orders the results by program count.
+func ByProgramCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newProgramStep(), opts...)
+	}
+}
+
+// ByProgram orders the results by program terms.
+func ByProgram(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newProgramStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newPolicyStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -274,5 +298,12 @@ func newControlobjectiveStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ControlobjectiveInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, ControlobjectiveTable, ControlobjectivePrimaryKey...),
+	)
+}
+func newProgramStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ProgramInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ProgramTable, ProgramPrimaryKey...),
 	)
 }

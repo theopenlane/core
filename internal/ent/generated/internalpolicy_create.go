@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 )
 
@@ -306,6 +307,21 @@ func (ipc *InternalPolicyCreate) AddTasks(t ...*Task) *InternalPolicyCreate {
 	return ipc.AddTaskIDs(ids...)
 }
 
+// AddProgramIDs adds the "programs" edge to the Program entity by IDs.
+func (ipc *InternalPolicyCreate) AddProgramIDs(ids ...string) *InternalPolicyCreate {
+	ipc.mutation.AddProgramIDs(ids...)
+	return ipc
+}
+
+// AddPrograms adds the "programs" edges to the Program entity.
+func (ipc *InternalPolicyCreate) AddPrograms(p ...*Program) *InternalPolicyCreate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return ipc.AddProgramIDs(ids...)
+}
+
 // Mutation returns the InternalPolicyMutation object of the builder.
 func (ipc *InternalPolicyCreate) Mutation() *InternalPolicyMutation {
 	return ipc.mutation
@@ -569,6 +585,23 @@ func (ipc *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.Create
 			},
 		}
 		edge.Schema = ipc.schemaConfig.InternalPolicyTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ipc.mutation.ProgramsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   internalpolicy.ProgramsTable,
+			Columns: internalpolicy.ProgramsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipc.schemaConfig.ProgramPolicies
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

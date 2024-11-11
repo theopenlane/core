@@ -58,6 +58,8 @@ func (Procedure) Edges() []ent.Edge {
 		edge.To("narratives", Narrative.Type),
 		edge.To("risks", Risk.Type),
 		edge.To("tasks", Task.Type),
+		edge.From("programs", Program.Type).
+			Ref("procedures"),
 	}
 }
 

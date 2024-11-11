@@ -53,6 +53,8 @@ func (ActionPlan) Edges() []ent.Edge {
 			Ref("actionplans"),
 		edge.From("user", User.Type).
 			Ref("actionplans"),
+		edge.From("program", Program.Type).
+			Ref("actionplans"),
 	}
 }
 

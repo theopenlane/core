@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
@@ -456,6 +457,21 @@ func (cou *ControlObjectiveUpdate) AddTasks(t ...*Task) *ControlObjectiveUpdate 
 	return cou.AddTaskIDs(ids...)
 }
 
+// AddProgramIDs adds the "programs" edge to the Program entity by IDs.
+func (cou *ControlObjectiveUpdate) AddProgramIDs(ids ...string) *ControlObjectiveUpdate {
+	cou.mutation.AddProgramIDs(ids...)
+	return cou
+}
+
+// AddPrograms adds the "programs" edges to the Program entity.
+func (cou *ControlObjectiveUpdate) AddPrograms(p ...*Program) *ControlObjectiveUpdate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return cou.AddProgramIDs(ids...)
+}
+
 // Mutation returns the ControlObjectiveMutation object of the builder.
 func (cou *ControlObjectiveUpdate) Mutation() *ControlObjectiveMutation {
 	return cou.mutation
@@ -627,6 +643,27 @@ func (cou *ControlObjectiveUpdate) RemoveTasks(t ...*Task) *ControlObjectiveUpda
 		ids[i] = t[i].ID
 	}
 	return cou.RemoveTaskIDs(ids...)
+}
+
+// ClearPrograms clears all "programs" edges to the Program entity.
+func (cou *ControlObjectiveUpdate) ClearPrograms() *ControlObjectiveUpdate {
+	cou.mutation.ClearPrograms()
+	return cou
+}
+
+// RemoveProgramIDs removes the "programs" edge to Program entities by IDs.
+func (cou *ControlObjectiveUpdate) RemoveProgramIDs(ids ...string) *ControlObjectiveUpdate {
+	cou.mutation.RemoveProgramIDs(ids...)
+	return cou
+}
+
+// RemovePrograms removes "programs" edges to Program entities.
+func (cou *ControlObjectiveUpdate) RemovePrograms(p ...*Program) *ControlObjectiveUpdate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return cou.RemoveProgramIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -1174,6 +1211,54 @@ func (cou *ControlObjectiveUpdate) sqlSave(ctx context.Context) (n int, err erro
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if cou.mutation.ProgramsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   controlobjective.ProgramsTable,
+			Columns: controlobjective.ProgramsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cou.schemaConfig.ProgramControlobjectives
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cou.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !cou.mutation.ProgramsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   controlobjective.ProgramsTable,
+			Columns: controlobjective.ProgramsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cou.schemaConfig.ProgramControlobjectives
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cou.mutation.ProgramsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   controlobjective.ProgramsTable,
+			Columns: controlobjective.ProgramsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cou.schemaConfig.ProgramControlobjectives
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = cou.schemaConfig.ControlObjective
 	ctx = internal.NewSchemaConfigContext(ctx, cou.schemaConfig)
 	_spec.AddModifiers(cou.modifiers...)
@@ -1614,6 +1699,21 @@ func (couo *ControlObjectiveUpdateOne) AddTasks(t ...*Task) *ControlObjectiveUpd
 	return couo.AddTaskIDs(ids...)
 }
 
+// AddProgramIDs adds the "programs" edge to the Program entity by IDs.
+func (couo *ControlObjectiveUpdateOne) AddProgramIDs(ids ...string) *ControlObjectiveUpdateOne {
+	couo.mutation.AddProgramIDs(ids...)
+	return couo
+}
+
+// AddPrograms adds the "programs" edges to the Program entity.
+func (couo *ControlObjectiveUpdateOne) AddPrograms(p ...*Program) *ControlObjectiveUpdateOne {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return couo.AddProgramIDs(ids...)
+}
+
 // Mutation returns the ControlObjectiveMutation object of the builder.
 func (couo *ControlObjectiveUpdateOne) Mutation() *ControlObjectiveMutation {
 	return couo.mutation
@@ -1785,6 +1885,27 @@ func (couo *ControlObjectiveUpdateOne) RemoveTasks(t ...*Task) *ControlObjective
 		ids[i] = t[i].ID
 	}
 	return couo.RemoveTaskIDs(ids...)
+}
+
+// ClearPrograms clears all "programs" edges to the Program entity.
+func (couo *ControlObjectiveUpdateOne) ClearPrograms() *ControlObjectiveUpdateOne {
+	couo.mutation.ClearPrograms()
+	return couo
+}
+
+// RemoveProgramIDs removes the "programs" edge to Program entities by IDs.
+func (couo *ControlObjectiveUpdateOne) RemoveProgramIDs(ids ...string) *ControlObjectiveUpdateOne {
+	couo.mutation.RemoveProgramIDs(ids...)
+	return couo
+}
+
+// RemovePrograms removes "programs" edges to Program entities.
+func (couo *ControlObjectiveUpdateOne) RemovePrograms(p ...*Program) *ControlObjectiveUpdateOne {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return couo.RemoveProgramIDs(ids...)
 }
 
 // Where appends a list predicates to the ControlObjectiveUpdate builder.
@@ -2357,6 +2478,54 @@ func (couo *ControlObjectiveUpdateOne) sqlSave(ctx context.Context) (_node *Cont
 			},
 		}
 		edge.Schema = couo.schemaConfig.ControlObjectiveTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if couo.mutation.ProgramsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   controlobjective.ProgramsTable,
+			Columns: controlobjective.ProgramsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = couo.schemaConfig.ProgramControlobjectives
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := couo.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !couo.mutation.ProgramsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   controlobjective.ProgramsTable,
+			Columns: controlobjective.ProgramsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = couo.schemaConfig.ProgramControlobjectives
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := couo.mutation.ProgramsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   controlobjective.ProgramsTable,
+			Columns: controlobjective.ProgramsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = couo.schemaConfig.ProgramControlobjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

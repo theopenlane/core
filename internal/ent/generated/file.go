@@ -90,11 +90,13 @@ type FileEdges struct {
 	Documentdata []*DocumentData `json:"documentdata,omitempty"`
 	// Events holds the value of the events edge.
 	Events []*Event `json:"events,omitempty"`
+	// Program holds the value of the program edge.
+	Program []*Program `json:"program,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [10]bool
+	loadedTypes [11]bool
 	// totalCount holds the count of the edges above.
-	totalCount [10]map[string]int
+	totalCount [11]map[string]int
 
 	namedUser                map[string][]*User
 	namedOrganization        map[string][]*Organization
@@ -106,6 +108,7 @@ type FileEdges struct {
 	namedTemplate            map[string][]*Template
 	namedDocumentdata        map[string][]*DocumentData
 	namedEvents              map[string][]*Event
+	namedProgram             map[string][]*Program
 }
 
 // UserOrErr returns the User value or an error if the edge
@@ -196,6 +199,15 @@ func (e FileEdges) EventsOrErr() ([]*Event, error) {
 		return e.Events, nil
 	}
 	return nil, &NotLoadedError{edge: "events"}
+}
+
+// ProgramOrErr returns the Program value or an error if the edge
+// was not loaded in eager-loading.
+func (e FileEdges) ProgramOrErr() ([]*Program, error) {
+	if e.loadedTypes[10] {
+		return e.Program, nil
+	}
+	return nil, &NotLoadedError{edge: "program"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -427,6 +439,11 @@ func (f *File) QueryDocumentdata() *DocumentDataQuery {
 // QueryEvents queries the "events" edge of the File entity.
 func (f *File) QueryEvents() *EventQuery {
 	return NewFileClient(f.config).QueryEvents(f)
+}
+
+// QueryProgram queries the "program" edge of the File entity.
+func (f *File) QueryProgram() *ProgramQuery {
+	return NewFileClient(f.config).QueryProgram(f)
 }
 
 // Update returns a builder for updating this File.
@@ -758,6 +775,30 @@ func (f *File) appendNamedEvents(name string, edges ...*Event) {
 		f.Edges.namedEvents[name] = []*Event{}
 	} else {
 		f.Edges.namedEvents[name] = append(f.Edges.namedEvents[name], edges...)
+	}
+}
+
+// NamedProgram returns the Program named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (f *File) NamedProgram(name string) ([]*Program, error) {
+	if f.Edges.namedProgram == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := f.Edges.namedProgram[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (f *File) appendNamedProgram(name string, edges ...*Program) {
+	if f.Edges.namedProgram == nil {
+		f.Edges.namedProgram = make(map[string][]*Program)
+	}
+	if len(edges) == 0 {
+		f.Edges.namedProgram[name] = []*Program{}
+	} else {
+		f.Edges.namedProgram[name] = append(f.Edges.namedProgram[name], edges...)
 	}
 }
 

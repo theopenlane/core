@@ -64,6 +64,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/procedurehistory"
+	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/programhistory"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
@@ -3027,6 +3029,103 @@ func init() {
 	procedurehistoryDescID := procedurehistoryFields[9].Descriptor()
 	// procedurehistory.DefaultID holds the default value on creation for the id field.
 	procedurehistory.DefaultID = procedurehistoryDescID.Default.(func() string)
+	programMixin := schema.Program{}.Mixin()
+	programMixinHooks0 := programMixin[0].Hooks()
+	programMixinHooks2 := programMixin[2].Hooks()
+	program.Hooks[0] = programMixinHooks0[0]
+	program.Hooks[1] = programMixinHooks2[0]
+	programMixinInters2 := programMixin[2].Interceptors()
+	program.Interceptors[0] = programMixinInters2[0]
+	programMixinFields0 := programMixin[0].Fields()
+	_ = programMixinFields0
+	programMixinFields1 := programMixin[1].Fields()
+	_ = programMixinFields1
+	programMixinFields3 := programMixin[3].Fields()
+	_ = programMixinFields3
+	programFields := schema.Program{}.Fields()
+	_ = programFields
+	// programDescCreatedAt is the schema descriptor for created_at field.
+	programDescCreatedAt := programMixinFields0[0].Descriptor()
+	// program.DefaultCreatedAt holds the default value on creation for the created_at field.
+	program.DefaultCreatedAt = programDescCreatedAt.Default.(func() time.Time)
+	// programDescUpdatedAt is the schema descriptor for updated_at field.
+	programDescUpdatedAt := programMixinFields0[1].Descriptor()
+	// program.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	program.DefaultUpdatedAt = programDescUpdatedAt.Default.(func() time.Time)
+	// program.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	program.UpdateDefaultUpdatedAt = programDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// programDescMappingID is the schema descriptor for mapping_id field.
+	programDescMappingID := programMixinFields1[1].Descriptor()
+	// program.DefaultMappingID holds the default value on creation for the mapping_id field.
+	program.DefaultMappingID = programDescMappingID.Default.(func() string)
+	// programDescTags is the schema descriptor for tags field.
+	programDescTags := programMixinFields3[0].Descriptor()
+	// program.DefaultTags holds the default value on creation for the tags field.
+	program.DefaultTags = programDescTags.Default.([]string)
+	// programDescName is the schema descriptor for name field.
+	programDescName := programFields[0].Descriptor()
+	// program.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	program.NameValidator = programDescName.Validators[0].(func(string) error)
+	// programDescOrganizationID is the schema descriptor for organization_id field.
+	programDescOrganizationID := programFields[5].Descriptor()
+	// program.OrganizationIDValidator is a validator for the "organization_id" field. It is called by the builders before save.
+	program.OrganizationIDValidator = programDescOrganizationID.Validators[0].(func(string) error)
+	// programDescAuditorReady is the schema descriptor for auditor_ready field.
+	programDescAuditorReady := programFields[6].Descriptor()
+	// program.DefaultAuditorReady holds the default value on creation for the auditor_ready field.
+	program.DefaultAuditorReady = programDescAuditorReady.Default.(bool)
+	// programDescAuditorWriteComments is the schema descriptor for auditor_write_comments field.
+	programDescAuditorWriteComments := programFields[7].Descriptor()
+	// program.DefaultAuditorWriteComments holds the default value on creation for the auditor_write_comments field.
+	program.DefaultAuditorWriteComments = programDescAuditorWriteComments.Default.(bool)
+	// programDescAuditorReadComments is the schema descriptor for auditor_read_comments field.
+	programDescAuditorReadComments := programFields[8].Descriptor()
+	// program.DefaultAuditorReadComments holds the default value on creation for the auditor_read_comments field.
+	program.DefaultAuditorReadComments = programDescAuditorReadComments.Default.(bool)
+	// programDescID is the schema descriptor for id field.
+	programDescID := programMixinFields1[0].Descriptor()
+	// program.DefaultID holds the default value on creation for the id field.
+	program.DefaultID = programDescID.Default.(func() string)
+	programhistoryFields := schema.ProgramHistory{}.Fields()
+	_ = programhistoryFields
+	// programhistoryDescHistoryTime is the schema descriptor for history_time field.
+	programhistoryDescHistoryTime := programhistoryFields[0].Descriptor()
+	// programhistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	programhistory.DefaultHistoryTime = programhistoryDescHistoryTime.Default.(func() time.Time)
+	// programhistoryDescCreatedAt is the schema descriptor for created_at field.
+	programhistoryDescCreatedAt := programhistoryFields[3].Descriptor()
+	// programhistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	programhistory.DefaultCreatedAt = programhistoryDescCreatedAt.Default.(func() time.Time)
+	// programhistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	programhistoryDescUpdatedAt := programhistoryFields[4].Descriptor()
+	// programhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	programhistory.DefaultUpdatedAt = programhistoryDescUpdatedAt.Default.(func() time.Time)
+	// programhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	programhistory.UpdateDefaultUpdatedAt = programhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// programhistoryDescMappingID is the schema descriptor for mapping_id field.
+	programhistoryDescMappingID := programhistoryFields[8].Descriptor()
+	// programhistory.DefaultMappingID holds the default value on creation for the mapping_id field.
+	programhistory.DefaultMappingID = programhistoryDescMappingID.Default.(func() string)
+	// programhistoryDescTags is the schema descriptor for tags field.
+	programhistoryDescTags := programhistoryFields[11].Descriptor()
+	// programhistory.DefaultTags holds the default value on creation for the tags field.
+	programhistory.DefaultTags = programhistoryDescTags.Default.([]string)
+	// programhistoryDescAuditorReady is the schema descriptor for auditor_ready field.
+	programhistoryDescAuditorReady := programhistoryFields[18].Descriptor()
+	// programhistory.DefaultAuditorReady holds the default value on creation for the auditor_ready field.
+	programhistory.DefaultAuditorReady = programhistoryDescAuditorReady.Default.(bool)
+	// programhistoryDescAuditorWriteComments is the schema descriptor for auditor_write_comments field.
+	programhistoryDescAuditorWriteComments := programhistoryFields[19].Descriptor()
+	// programhistory.DefaultAuditorWriteComments holds the default value on creation for the auditor_write_comments field.
+	programhistory.DefaultAuditorWriteComments = programhistoryDescAuditorWriteComments.Default.(bool)
+	// programhistoryDescAuditorReadComments is the schema descriptor for auditor_read_comments field.
+	programhistoryDescAuditorReadComments := programhistoryFields[20].Descriptor()
+	// programhistory.DefaultAuditorReadComments holds the default value on creation for the auditor_read_comments field.
+	programhistory.DefaultAuditorReadComments = programhistoryDescAuditorReadComments.Default.(bool)
+	// programhistoryDescID is the schema descriptor for id field.
+	programhistoryDescID := programhistoryFields[7].Descriptor()
+	// programhistory.DefaultID holds the default value on creation for the id field.
+	programhistory.DefaultID = programhistoryDescID.Default.(func() string)
 	riskMixin := schema.Risk{}.Mixin()
 	riskMixinHooks0 := riskMixin[0].Hooks()
 	riskMixinHooks1 := riskMixin[1].Hooks()

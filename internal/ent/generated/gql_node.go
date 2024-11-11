@@ -65,6 +65,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/procedurehistory"
+	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/programhistory"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
@@ -369,6 +371,16 @@ var procedurehistoryImplementors = []string{"ProcedureHistory", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*ProcedureHistory) IsNode() {}
+
+var programImplementors = []string{"Program", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*Program) IsNode() {}
+
+var programhistoryImplementors = []string{"ProgramHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*ProgramHistory) IsNode() {}
 
 var riskImplementors = []string{"Risk", "Node"}
 
@@ -1018,6 +1030,24 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(procedurehistory.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, procedurehistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case program.Table:
+		query := c.Program.Query().
+			Where(program.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, programImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case programhistory.Table:
+		query := c.ProgramHistory.Query().
+			Where(programhistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, programhistoryImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -2141,6 +2171,38 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.ProcedureHistory.Query().
 			Where(procedurehistory.IDIn(ids...))
 		query, err := query.CollectFields(ctx, procedurehistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case program.Table:
+		query := c.Program.Query().
+			Where(program.IDIn(ids...))
+		query, err := query.CollectFields(ctx, programImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case programhistory.Table:
+		query := c.ProgramHistory.Query().
+			Where(programhistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, programhistoryImplementors...)
 		if err != nil {
 			return nil, err
 		}

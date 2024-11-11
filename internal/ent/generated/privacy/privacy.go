@@ -1503,6 +1503,54 @@ func (f ProcedureHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m ge
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.ProcedureHistoryMutation", m)
 }
 
+// The ProgramQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type ProgramQueryRuleFunc func(context.Context, *generated.ProgramQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f ProgramQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ProgramQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.ProgramQuery", q)
+}
+
+// The ProgramMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type ProgramMutationRuleFunc func(context.Context, *generated.ProgramMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f ProgramMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.ProgramMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.ProgramMutation", m)
+}
+
+// The ProgramHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type ProgramHistoryQueryRuleFunc func(context.Context, *generated.ProgramHistoryQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f ProgramHistoryQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ProgramHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.ProgramHistoryQuery", q)
+}
+
+// The ProgramHistoryMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type ProgramHistoryMutationRuleFunc func(context.Context, *generated.ProgramHistoryMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f ProgramHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.ProgramHistoryMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.ProgramHistoryMutation", m)
+}
+
 // The RiskQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type RiskQueryRuleFunc func(context.Context, *generated.RiskQuery) error
@@ -2110,6 +2158,10 @@ func queryFilter(q generated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *generated.ProcedureHistoryQuery:
 		return q.Filter(), nil
+	case *generated.ProgramQuery:
+		return q.Filter(), nil
+	case *generated.ProgramHistoryQuery:
+		return q.Filter(), nil
 	case *generated.RiskQuery:
 		return q.Filter(), nil
 	case *generated.RiskHistoryQuery:
@@ -2270,6 +2322,10 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 	case *generated.ProcedureMutation:
 		return m.Filter(), nil
 	case *generated.ProcedureHistoryMutation:
+		return m.Filter(), nil
+	case *generated.ProgramMutation:
+		return m.Filter(), nil
+	case *generated.ProgramHistoryMutation:
 		return m.Filter(), nil
 	case *generated.RiskMutation:
 		return m.Filter(), nil
