@@ -130,7 +130,8 @@ func (User) Fields() []ent.Field {
 		field.Enum("role").
 			Comment("the user's role").
 			GoType(enums.Role("")).
-			Default(string(enums.RoleUser)).
+			Values(enums.RoleUser.String()). // add user as a role
+			Default(enums.RoleUser.String()).
 			Optional(),
 	}
 }

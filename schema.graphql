@@ -11468,7 +11468,6 @@ GroupMembershipHistoryRole is enum for the field role
 enum GroupMembershipHistoryRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
 	ADMIN
 	MEMBER
-	USER
 }
 """
 GroupMembershipHistoryWhereInput is used for filtering GroupMembershipHistory objects.
@@ -11666,7 +11665,6 @@ GroupMembershipRole is enum for the field role
 enum GroupMembershipRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
 	ADMIN
 	MEMBER
-	USER
 }
 """
 Return response for updateGroupMembership mutation
@@ -14660,7 +14658,6 @@ InviteRole is enum for the field role
 enum InviteRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
 	ADMIN
 	MEMBER
-	USER
 }
 """
 Return response for updateInvite mutation
@@ -19096,7 +19093,6 @@ OrgMembershipHistoryRole is enum for the field role
 enum OrgMembershipHistoryRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
 	ADMIN
 	MEMBER
-	USER
 	OWNER
 }
 """
@@ -19295,7 +19291,6 @@ OrgMembershipRole is enum for the field role
 enum OrgMembershipRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
 	ADMIN
 	MEMBER
-	USER
 	OWNER
 }
 """
@@ -22665,7 +22660,6 @@ ProgramMembershipHistoryRole is enum for the field role
 enum ProgramMembershipHistoryRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
 	ADMIN
 	MEMBER
-	USER
 }
 """
 ProgramMembershipHistoryWhereInput is used for filtering ProgramMembershipHistory objects.
@@ -22863,7 +22857,6 @@ ProgramMembershipRole is enum for the field role
 enum ProgramMembershipRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
 	ADMIN
 	MEMBER
-	USER
 }
 """
 Return response for updateProgramMembership mutation
