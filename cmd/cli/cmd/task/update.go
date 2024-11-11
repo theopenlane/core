@@ -26,13 +26,15 @@ func init() {
 	updateCmd.Flags().StringP("id", "i", "", "task id to update")
 
 	// command line flags for the update command
-	updateCmd.Flags().StringP("title", "n", "", "title of the task")
+	updateCmd.Flags().StringP("title", "t", "", "title of the task")
 	updateCmd.Flags().StringP("description", "d", "", "description of the task")
 	updateCmd.Flags().StringP("status", "s", "", "status of the task")
 	updateCmd.Flags().StringP("assignee", "a", "", "assignee (user ID) of the task")
 	updateCmd.Flags().Duration("due", 0, "time until due date of the task")
-	updateCmd.Flags().StringP("organization", "o", "", "organization ID of the task to own the task, this will give the organization access to the task")
-	updateCmd.Flags().StringP("group", "g", "", "group ID of the task to own the task, this will give the group access to the task")
+	updateCmd.Flags().StringP("add-organization", "o", "", "organization ID to own the task, this will give the organization access to the task")
+	updateCmd.Flags().String("remove-organization", "", "organization ID to own the task, this will give the organization access to the task")
+	updateCmd.Flags().StringP("add-group", "g", "", "group ID to own the task, this will give the group access to the task")
+	updateCmd.Flags().String("remove-group", "", "group ID to own the task, this will give the group access to the task")
 }
 
 // updateValidation validates the required fields for the command
@@ -70,14 +72,24 @@ func updateValidation() (id string, input openlaneclient.UpdateTaskInput, err er
 		input.Due = &dueDate
 	}
 
-	organization := cmd.Config.String("organization")
+	organization := cmd.Config.String("add-organization")
 	if organization != "" {
 		input.AddOrganizationIDs = []string{organization}
 	}
 
-	group := cmd.Config.String("group")
+	organization = cmd.Config.String("remove-organization")
+	if organization != "" {
+		input.RemoveOrganizationIDs = []string{organization}
+	}
+
+	group := cmd.Config.String("add-group")
 	if group != "" {
 		input.AddGroupIDs = []string{group}
+	}
+
+	group = cmd.Config.String("remove-group")
+	if group != "" {
+		input.RemoveGroupIDs = []string{group}
 	}
 
 	return id, input, nil

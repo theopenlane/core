@@ -38357,21 +38357,40 @@ func (t *GetAllTasks_Tasks_Edges_Node_Assigner) GetLastName() *string {
 	return t.LastName
 }
 
+type GetAllTasks_Tasks_Edges_Node_Organization struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetAllTasks_Tasks_Edges_Node_Organization) GetID() string {
+	if t == nil {
+		t = &GetAllTasks_Tasks_Edges_Node_Organization{}
+	}
+	return t.ID
+}
+func (t *GetAllTasks_Tasks_Edges_Node_Organization) GetName() string {
+	if t == nil {
+		t = &GetAllTasks_Tasks_Edges_Node_Organization{}
+	}
+	return t.Name
+}
+
 type GetAllTasks_Tasks_Edges_Node struct {
-	Assignee    *GetAllTasks_Tasks_Edges_Node_Assignee "json:\"assignee,omitempty\" graphql:\"assignee\""
-	Assigner    GetAllTasks_Tasks_Edges_Node_Assigner  "json:\"assigner\" graphql:\"assigner\""
-	Completed   *time.Time                             "json:\"completed,omitempty\" graphql:\"completed\""
-	CreatedAt   *time.Time                             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description *string                                "json:\"description,omitempty\" graphql:\"description\""
-	Details     map[string]interface{}                 "json:\"details,omitempty\" graphql:\"details\""
-	Due         *time.Time                             "json:\"due,omitempty\" graphql:\"due\""
-	ID          string                                 "json:\"id\" graphql:\"id\""
-	Status      enums.TaskStatus                       "json:\"status\" graphql:\"status\""
-	Tags        []string                               "json:\"tags,omitempty\" graphql:\"tags\""
-	Title       string                                 "json:\"title\" graphql:\"title\""
-	UpdatedAt   *time.Time                             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Assignee     *GetAllTasks_Tasks_Edges_Node_Assignee       "json:\"assignee,omitempty\" graphql:\"assignee\""
+	Assigner     GetAllTasks_Tasks_Edges_Node_Assigner        "json:\"assigner\" graphql:\"assigner\""
+	Organization []*GetAllTasks_Tasks_Edges_Node_Organization "json:\"organization,omitempty\" graphql:\"organization\""
+	Completed    *time.Time                                   "json:\"completed,omitempty\" graphql:\"completed\""
+	CreatedAt    *time.Time                                   "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy    *string                                      "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description  *string                                      "json:\"description,omitempty\" graphql:\"description\""
+	Details      map[string]interface{}                       "json:\"details,omitempty\" graphql:\"details\""
+	Due          *time.Time                                   "json:\"due,omitempty\" graphql:\"due\""
+	ID           string                                       "json:\"id\" graphql:\"id\""
+	Status       enums.TaskStatus                             "json:\"status\" graphql:\"status\""
+	Tags         []string                                     "json:\"tags,omitempty\" graphql:\"tags\""
+	Title        string                                       "json:\"title\" graphql:\"title\""
+	UpdatedAt    *time.Time                                   "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy    *string                                      "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllTasks_Tasks_Edges_Node) GetAssignee() *GetAllTasks_Tasks_Edges_Node_Assignee {
@@ -38385,6 +38404,12 @@ func (t *GetAllTasks_Tasks_Edges_Node) GetAssigner() *GetAllTasks_Tasks_Edges_No
 		t = &GetAllTasks_Tasks_Edges_Node{}
 	}
 	return &t.Assigner
+}
+func (t *GetAllTasks_Tasks_Edges_Node) GetOrganization() []*GetAllTasks_Tasks_Edges_Node_Organization {
+	if t == nil {
+		t = &GetAllTasks_Tasks_Edges_Node{}
+	}
+	return t.Organization
 }
 func (t *GetAllTasks_Tasks_Edges_Node) GetCompleted() *time.Time {
 	if t == nil {
@@ -38531,21 +38556,40 @@ func (t *GetTaskByID_Task_Assigner) GetLastName() *string {
 	return t.LastName
 }
 
+type GetTaskByID_Task_Organization struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetTaskByID_Task_Organization) GetID() string {
+	if t == nil {
+		t = &GetTaskByID_Task_Organization{}
+	}
+	return t.ID
+}
+func (t *GetTaskByID_Task_Organization) GetName() string {
+	if t == nil {
+		t = &GetTaskByID_Task_Organization{}
+	}
+	return t.Name
+}
+
 type GetTaskByID_Task struct {
-	Assignee    *GetTaskByID_Task_Assignee "json:\"assignee,omitempty\" graphql:\"assignee\""
-	Assigner    GetTaskByID_Task_Assigner  "json:\"assigner\" graphql:\"assigner\""
-	Completed   *time.Time                 "json:\"completed,omitempty\" graphql:\"completed\""
-	CreatedAt   *time.Time                 "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description *string                    "json:\"description,omitempty\" graphql:\"description\""
-	Details     map[string]interface{}     "json:\"details,omitempty\" graphql:\"details\""
-	Due         *time.Time                 "json:\"due,omitempty\" graphql:\"due\""
-	ID          string                     "json:\"id\" graphql:\"id\""
-	Status      enums.TaskStatus           "json:\"status\" graphql:\"status\""
-	Tags        []string                   "json:\"tags,omitempty\" graphql:\"tags\""
-	Title       string                     "json:\"title\" graphql:\"title\""
-	UpdatedAt   *time.Time                 "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Assignee     *GetTaskByID_Task_Assignee       "json:\"assignee,omitempty\" graphql:\"assignee\""
+	Assigner     GetTaskByID_Task_Assigner        "json:\"assigner\" graphql:\"assigner\""
+	Organization []*GetTaskByID_Task_Organization "json:\"organization,omitempty\" graphql:\"organization\""
+	Completed    *time.Time                       "json:\"completed,omitempty\" graphql:\"completed\""
+	CreatedAt    *time.Time                       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy    *string                          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description  *string                          "json:\"description,omitempty\" graphql:\"description\""
+	Details      map[string]interface{}           "json:\"details,omitempty\" graphql:\"details\""
+	Due          *time.Time                       "json:\"due,omitempty\" graphql:\"due\""
+	ID           string                           "json:\"id\" graphql:\"id\""
+	Status       enums.TaskStatus                 "json:\"status\" graphql:\"status\""
+	Tags         []string                         "json:\"tags,omitempty\" graphql:\"tags\""
+	Title        string                           "json:\"title\" graphql:\"title\""
+	UpdatedAt    *time.Time                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy    *string                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetTaskByID_Task) GetAssignee() *GetTaskByID_Task_Assignee {
@@ -38559,6 +38603,12 @@ func (t *GetTaskByID_Task) GetAssigner() *GetTaskByID_Task_Assigner {
 		t = &GetTaskByID_Task{}
 	}
 	return &t.Assigner
+}
+func (t *GetTaskByID_Task) GetOrganization() []*GetTaskByID_Task_Organization {
+	if t == nil {
+		t = &GetTaskByID_Task{}
+	}
+	return t.Organization
 }
 func (t *GetTaskByID_Task) GetCompleted() *time.Time {
 	if t == nil {
@@ -59517,6 +59567,10 @@ const GetAllTasksDocument = `query GetAllTasks {
 					firstName
 					lastName
 				}
+				organization {
+					id
+					name
+				}
 				completed
 				createdAt
 				createdBy
@@ -59561,6 +59615,10 @@ const GetTaskByIDDocument = `query GetTaskByID ($taskId: ID!) {
 			id
 			firstName
 			lastName
+		}
+		organization {
+			id
+			name
 		}
 		completed
 		createdAt

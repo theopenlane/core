@@ -106,6 +106,10 @@ query GetAllTasks {
           firstName
           lastName
         }
+        organization{
+          id
+          name
+        }
         completed
         createdAt
         createdBy
@@ -133,6 +137,10 @@ query GetTaskByID($taskId: ID!) {
       id
       firstName
       lastName
+    }
+    organization{
+      id
+      name
     }
     completed
     createdAt

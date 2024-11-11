@@ -29,8 +29,8 @@ func init() {
 	createCmd.Flags().StringP("status", "s", "", "status of the task")
 	createCmd.Flags().StringP("assignee", "a", "", "assignee (user ID) of the task")
 	createCmd.Flags().Duration("due", 0, "time until due date of the task")
-	createCmd.Flags().StringP("organization", "o", "", "organization ID of the task to own the task, this will give the organization access to the task")
-	createCmd.Flags().StringP("group", "g", "", "group ID of the task to own the task, this will give the group access to the task")
+	createCmd.Flags().StringP("organization", "o", "", "organization ID to own the task, this will give the organization access to the task")
+	createCmd.Flags().StringP("group", "g", "", "group ID to own the task, this will give the group access to the task")
 }
 
 // createValidation validates the required fields for the command

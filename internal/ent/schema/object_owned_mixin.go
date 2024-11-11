@@ -68,7 +68,7 @@ func NewObjectOwnMixinWithRef(ref string) ObjectOwnedMixin {
 // and sets the HookFunc to defaultOrgHookFunc
 func NewObjectOwnedMixin(o ObjectOwnedMixin) ObjectOwnedMixin {
 	if o.HookFuncs == nil {
-		o.HookFuncs = []HookFunc{defaultObjectHookFunc, defaultObjectHookCreateFunc}
+		o.HookFuncs = []HookFunc{defaultObjectHookFunc, defaultTupleUpdateFunc}
 	}
 
 	if o.InterceptorFunc == nil {
@@ -175,12 +175,13 @@ func (o ObjectOwnedMixin) P(w interface{ WhereP(...func(*sql.Selector)) }, objec
 	w.WhereP(sql.FieldIn("id", objectIDs...))
 }
 
-// defaultObjectHookCreateFunc is the default hook function for the object owned mixin
-// to add tuples to the database when creating an object
-var defaultObjectHookCreateFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
+// defaultTupleUpdateFunc is the default hook function for the object owned mixin
+// to add tuples to the database when creating or updating an object based on the edges
+// that can own the object
+var defaultTupleUpdateFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 	return hook.On(
 		hooks.HookObjectOwnedTuples(o.FieldNames, o.SkipUserTuple),
-		ent.OpCreate,
+		ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
 	)
 }
 

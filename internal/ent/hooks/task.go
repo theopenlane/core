@@ -33,6 +33,7 @@ func HookTaskCreate() ent.Hook {
 	}, ent.OpCreate)
 }
 
+// HookTaskAssignee runs on task create and update mutations to add and remove the assignee tuple
 func HookTaskAssignee() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.TaskFunc(func(ctx context.Context, m *generated.TaskMutation) (generated.Value, error) {
@@ -72,6 +73,7 @@ func HookTaskAssignee() ent.Hook {
 						// remove the current assignee from the task, this should only be one user but we will loop through it
 						// to ensure we remove all assignees
 						var deleteTuples []fgax.TupleKey
+
 						for _, user := range currentAssignee {
 							deleteTuple := fgax.GetTupleKey(fgax.TupleRequest{
 								SubjectID:   user.Object.Id,
