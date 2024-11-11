@@ -414,7 +414,7 @@ func (suite *GraphTestSuite) TestMutationDeleteTask() {
 			expectedErr: "task not found",
 		},
 		{
-			name:       "happy path, delete entity using personal access token",
+			name:       "happy path, delete task using personal access token",
 			idToDelete: task2.ID,
 			client:     suite.client.apiWithPAT,
 			ctx:        context.Background(),
