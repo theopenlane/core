@@ -135,7 +135,7 @@ func (Group) Policy() ent.Policy {
 	return privacy.Policy{
 		Mutation: privacy.MutationPolicy{
 			privacy.OnMutationOperation(
-				rule.CanCreateGroupsInOrg(),
+				rule.CanCreateObjectsInOrg(),
 				ent.OpCreate,
 			),
 			privacy.OnMutationOperation(

@@ -5,6 +5,7 @@ package generated
 import (
 	"context"
 	"database/sql/driver"
+	"errors"
 	"fmt"
 	"math"
 
@@ -931,6 +932,12 @@ func (pq *ProgramQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		pq.sql = prev
+	}
+	if program.Policy == nil {
+		return errors.New("generated: uninitialized program.Policy (forgotten import generated/runtime?)")
+	}
+	if err := program.Policy.EvalQuery(ctx, pq); err != nil {
+		return err
 	}
 	return nil
 }

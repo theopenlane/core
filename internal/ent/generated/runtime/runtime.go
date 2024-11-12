@@ -3032,12 +3032,24 @@ func init() {
 	// procedurehistory.DefaultID holds the default value on creation for the id field.
 	procedurehistory.DefaultID = procedurehistoryDescID.Default.(func() string)
 	programMixin := schema.Program{}.Mixin()
+	program.Policy = privacy.NewPolicies(schema.Program{})
+	program.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := program.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
 	programMixinHooks0 := programMixin[0].Hooks()
 	programMixinHooks2 := programMixin[2].Hooks()
 	programMixinHooks4 := programMixin[4].Hooks()
-	program.Hooks[0] = programMixinHooks0[0]
-	program.Hooks[1] = programMixinHooks2[0]
-	program.Hooks[2] = programMixinHooks4[0]
+
+	program.Hooks[1] = programMixinHooks0[0]
+
+	program.Hooks[2] = programMixinHooks2[0]
+
+	program.Hooks[3] = programMixinHooks4[0]
 	programMixinInters2 := programMixin[2].Interceptors()
 	programMixinInters4 := programMixin[4].Interceptors()
 	program.Interceptors[0] = programMixinInters2[0]
