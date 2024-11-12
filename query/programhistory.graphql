@@ -15,7 +15,7 @@ query GetAllProgramHistories {
         id
         name
         operation
-        organizationID
+        ownerID
         ref
         startDate
         status
@@ -42,7 +42,7 @@ query GetProgramHistories($where: ProgramHistoryWhereInput) {
         id
         name
         operation
-        organizationID
+        ownerID
         ref
         startDate
         status

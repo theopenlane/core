@@ -2117,7 +2117,6 @@ var (
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"NOT_STARTED", "IN_PROGRESS", "READY_FOR_AUDITOR", "COMPLETED", "ACTION_REQUIRED"}, Default: "NOT_STARTED"},
 		{Name: "start_date", Type: field.TypeTime, Nullable: true},
 		{Name: "end_date", Type: field.TypeTime, Nullable: true},
-		{Name: "organization_id", Type: field.TypeString},
 		{Name: "auditor_ready", Type: field.TypeBool, Default: false},
 		{Name: "auditor_write_comments", Type: field.TypeBool, Default: false},
 		{Name: "auditor_read_comments", Type: field.TypeBool, Default: false},
@@ -2131,7 +2130,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "programs_organizations_programs",
-				Columns:    []*schema.Column{ProgramsColumns[18]},
+				Columns:    []*schema.Column{ProgramsColumns[17]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -2157,7 +2156,6 @@ var (
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"NOT_STARTED", "IN_PROGRESS", "READY_FOR_AUDITOR", "COMPLETED", "ACTION_REQUIRED"}, Default: "NOT_STARTED"},
 		{Name: "start_date", Type: field.TypeTime, Nullable: true},
 		{Name: "end_date", Type: field.TypeTime, Nullable: true},
-		{Name: "organization_id", Type: field.TypeString},
 		{Name: "auditor_ready", Type: field.TypeBool, Default: false},
 		{Name: "auditor_write_comments", Type: field.TypeBool, Default: false},
 		{Name: "auditor_read_comments", Type: field.TypeBool, Default: false},

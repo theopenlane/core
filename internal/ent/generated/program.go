@@ -48,8 +48,6 @@ type Program struct {
 	StartDate time.Time `json:"start_date,omitempty"`
 	// the end date of the period
 	EndDate time.Time `json:"end_date,omitempty"`
-	// the organization that owns the program
-	OrganizationID string `json:"organization_id,omitempty"`
 	// is the program ready for the auditor
 	AuditorReady bool `json:"auditor_ready,omitempty"`
 	// can the auditor write comments
@@ -262,7 +260,7 @@ func (*Program) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case program.FieldAuditorReady, program.FieldAuditorWriteComments, program.FieldAuditorReadComments:
 			values[i] = new(sql.NullBool)
-		case program.FieldID, program.FieldCreatedBy, program.FieldUpdatedBy, program.FieldMappingID, program.FieldDeletedBy, program.FieldOwnerID, program.FieldName, program.FieldDescription, program.FieldStatus, program.FieldOrganizationID:
+		case program.FieldID, program.FieldCreatedBy, program.FieldUpdatedBy, program.FieldMappingID, program.FieldDeletedBy, program.FieldOwnerID, program.FieldName, program.FieldDescription, program.FieldStatus:
 			values[i] = new(sql.NullString)
 		case program.FieldCreatedAt, program.FieldUpdatedAt, program.FieldDeletedAt, program.FieldStartDate, program.FieldEndDate:
 			values[i] = new(sql.NullTime)
@@ -372,12 +370,6 @@ func (pr *Program) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field end_date", values[i])
 			} else if value.Valid {
 				pr.EndDate = value.Time
-			}
-		case program.FieldOrganizationID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field organization_id", values[i])
-			} else if value.Valid {
-				pr.OrganizationID = value.String
 			}
 		case program.FieldAuditorReady:
 			if value, ok := values[i].(*sql.NullBool); !ok {
@@ -549,9 +541,6 @@ func (pr *Program) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("end_date=")
 	builder.WriteString(pr.EndDate.Format(time.ANSIC))
-	builder.WriteString(", ")
-	builder.WriteString("organization_id=")
-	builder.WriteString(pr.OrganizationID)
 	builder.WriteString(", ")
 	builder.WriteString("auditor_ready=")
 	builder.WriteString(fmt.Sprintf("%v", pr.AuditorReady))

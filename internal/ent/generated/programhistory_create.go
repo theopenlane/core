@@ -236,12 +236,6 @@ func (phc *ProgramHistoryCreate) SetNillableEndDate(t *time.Time) *ProgramHistor
 	return phc
 }
 
-// SetOrganizationID sets the "organization_id" field.
-func (phc *ProgramHistoryCreate) SetOrganizationID(s string) *ProgramHistoryCreate {
-	phc.mutation.SetOrganizationID(s)
-	return phc
-}
-
 // SetAuditorReady sets the "auditor_ready" field.
 func (phc *ProgramHistoryCreate) SetAuditorReady(b bool) *ProgramHistoryCreate {
 	phc.mutation.SetAuditorReady(b)
@@ -420,9 +414,6 @@ func (phc *ProgramHistoryCreate) check() error {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "ProgramHistory.status": %w`, err)}
 		}
 	}
-	if _, ok := phc.mutation.OrganizationID(); !ok {
-		return &ValidationError{Name: "organization_id", err: errors.New(`generated: missing required field "ProgramHistory.organization_id"`)}
-	}
 	if _, ok := phc.mutation.AuditorReady(); !ok {
 		return &ValidationError{Name: "auditor_ready", err: errors.New(`generated: missing required field "ProgramHistory.auditor_ready"`)}
 	}
@@ -535,10 +526,6 @@ func (phc *ProgramHistoryCreate) createSpec() (*ProgramHistory, *sqlgraph.Create
 	if value, ok := phc.mutation.EndDate(); ok {
 		_spec.SetField(programhistory.FieldEndDate, field.TypeTime, value)
 		_node.EndDate = value
-	}
-	if value, ok := phc.mutation.OrganizationID(); ok {
-		_spec.SetField(programhistory.FieldOrganizationID, field.TypeString, value)
-		_node.OrganizationID = value
 	}
 	if value, ok := phc.mutation.AuditorReady(); ok {
 		_spec.SetField(programhistory.FieldAuditorReady, field.TypeBool, value)

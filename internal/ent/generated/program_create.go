@@ -216,12 +216,6 @@ func (pc *ProgramCreate) SetNillableEndDate(t *time.Time) *ProgramCreate {
 	return pc
 }
 
-// SetOrganizationID sets the "organization_id" field.
-func (pc *ProgramCreate) SetOrganizationID(s string) *ProgramCreate {
-	pc.mutation.SetOrganizationID(s)
-	return pc
-}
-
 // SetAuditorReady sets the "auditor_ready" field.
 func (pc *ProgramCreate) SetAuditorReady(b bool) *ProgramCreate {
 	pc.mutation.SetAuditorReady(b)
@@ -607,14 +601,6 @@ func (pc *ProgramCreate) check() error {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Program.status": %w`, err)}
 		}
 	}
-	if _, ok := pc.mutation.OrganizationID(); !ok {
-		return &ValidationError{Name: "organization_id", err: errors.New(`generated: missing required field "Program.organization_id"`)}
-	}
-	if v, ok := pc.mutation.OrganizationID(); ok {
-		if err := program.OrganizationIDValidator(v); err != nil {
-			return &ValidationError{Name: "organization_id", err: fmt.Errorf(`generated: validator failed for field "Program.organization_id": %w`, err)}
-		}
-	}
 	if _, ok := pc.mutation.AuditorReady(); !ok {
 		return &ValidationError{Name: "auditor_ready", err: errors.New(`generated: missing required field "Program.auditor_ready"`)}
 	}
@@ -711,10 +697,6 @@ func (pc *ProgramCreate) createSpec() (*Program, *sqlgraph.CreateSpec) {
 	if value, ok := pc.mutation.EndDate(); ok {
 		_spec.SetField(program.FieldEndDate, field.TypeTime, value)
 		_node.EndDate = value
-	}
-	if value, ok := pc.mutation.OrganizationID(); ok {
-		_spec.SetField(program.FieldOrganizationID, field.TypeString, value)
-		_node.OrganizationID = value
 	}
 	if value, ok := pc.mutation.AuditorReady(); ok {
 		_spec.SetField(program.FieldAuditorReady, field.TypeBool, value)

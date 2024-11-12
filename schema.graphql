@@ -4696,10 +4696,6 @@ input CreateProgramInput {
 	"""
 	endDate: Time
 	"""
-	the organization that owns the program
-	"""
-	organizationID: String!
-	"""
 	is the program ready for the auditor
 	"""
 	auditorReady: Boolean
@@ -22098,10 +22094,6 @@ type Program implements Node {
 	"""
 	endDate: Time
 	"""
-	the organization that owns the program
-	"""
-	organizationID: String!
-	"""
 	is the program ready for the auditor
 	"""
 	auditorReady: Boolean!
@@ -22228,10 +22220,6 @@ type ProgramHistory implements Node {
 	the end date of the period
 	"""
 	endDate: Time
-	"""
-	the organization that owns the program
-	"""
-	organizationID: String!
 	"""
 	is the program ready for the auditor
 	"""
@@ -22528,22 +22516,6 @@ input ProgramHistoryWhereInput {
 	endDateLTE: Time
 	endDateIsNil: Boolean
 	endDateNotNil: Boolean
-	"""
-	organization_id field predicates
-	"""
-	organizationID: String
-	organizationIDNEQ: String
-	organizationIDIn: [String!]
-	organizationIDNotIn: [String!]
-	organizationIDGT: String
-	organizationIDGTE: String
-	organizationIDLT: String
-	organizationIDLTE: String
-	organizationIDContains: String
-	organizationIDHasPrefix: String
-	organizationIDHasSuffix: String
-	organizationIDEqualFold: String
-	organizationIDContainsFold: String
 	"""
 	auditor_ready field predicates
 	"""
@@ -23240,22 +23212,6 @@ input ProgramWhereInput {
 	endDateLTE: Time
 	endDateIsNil: Boolean
 	endDateNotNil: Boolean
-	"""
-	organization_id field predicates
-	"""
-	organizationID: String
-	organizationIDNEQ: String
-	organizationIDIn: [String!]
-	organizationIDNotIn: [String!]
-	organizationIDGT: String
-	organizationIDGTE: String
-	organizationIDLT: String
-	organizationIDLTE: String
-	organizationIDContains: String
-	organizationIDHasPrefix: String
-	organizationIDHasSuffix: String
-	organizationIDEqualFold: String
-	organizationIDContainsFold: String
 	"""
 	auditor_ready field predicates
 	"""
@@ -32579,10 +32535,6 @@ input UpdateProgramInput {
 	"""
 	endDate: Time
 	clearEndDate: Boolean
-	"""
-	the organization that owns the program
-	"""
-	organizationID: String
 	"""
 	is the program ready for the auditor
 	"""

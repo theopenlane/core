@@ -10461,11 +10461,6 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				selectedFields = append(selectedFields, program.FieldEndDate)
 				fieldSeen[program.FieldEndDate] = struct{}{}
 			}
-		case "organizationID":
-			if _, ok := fieldSeen[program.FieldOrganizationID]; !ok {
-				selectedFields = append(selectedFields, program.FieldOrganizationID)
-				fieldSeen[program.FieldOrganizationID] = struct{}{}
-			}
 		case "auditorReady":
 			if _, ok := fieldSeen[program.FieldAuditorReady]; !ok {
 				selectedFields = append(selectedFields, program.FieldAuditorReady)
@@ -10622,11 +10617,6 @@ func (ph *ProgramHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 			if _, ok := fieldSeen[programhistory.FieldEndDate]; !ok {
 				selectedFields = append(selectedFields, programhistory.FieldEndDate)
 				fieldSeen[programhistory.FieldEndDate] = struct{}{}
-			}
-		case "organizationID":
-			if _, ok := fieldSeen[programhistory.FieldOrganizationID]; !ok {
-				selectedFields = append(selectedFields, programhistory.FieldOrganizationID)
-				fieldSeen[programhistory.FieldOrganizationID] = struct{}{}
 			}
 		case "auditorReady":
 			if _, ok := fieldSeen[programhistory.FieldAuditorReady]; !ok {

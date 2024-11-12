@@ -327,7 +327,6 @@ query AdminSearch($query: String!) {
           ownerID
           name
           description
-          organizationID
         }
       }
       ... on RiskSearchResult {

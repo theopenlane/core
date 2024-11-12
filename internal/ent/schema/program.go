@@ -38,9 +38,6 @@ func (Program) Fields() []ent.Field {
 		field.Time("end_date").
 			Comment("the end date of the period").
 			Optional(),
-		field.String("organization_id").
-			Comment("the organization that owns the program").
-			NotEmpty(),
 		field.Bool("auditor_ready").
 			Comment("is the program ready for the auditor").
 			Default(false),

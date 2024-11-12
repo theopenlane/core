@@ -47988,21 +47988,6 @@ type ProgramWhereInput struct {
 	EndDateIsNil  bool        `json:"endDateIsNil,omitempty"`
 	EndDateNotNil bool        `json:"endDateNotNil,omitempty"`
 
-	// "organization_id" field predicates.
-	OrganizationID             *string  `json:"organizationID,omitempty"`
-	OrganizationIDNEQ          *string  `json:"organizationIDNEQ,omitempty"`
-	OrganizationIDIn           []string `json:"organizationIDIn,omitempty"`
-	OrganizationIDNotIn        []string `json:"organizationIDNotIn,omitempty"`
-	OrganizationIDGT           *string  `json:"organizationIDGT,omitempty"`
-	OrganizationIDGTE          *string  `json:"organizationIDGTE,omitempty"`
-	OrganizationIDLT           *string  `json:"organizationIDLT,omitempty"`
-	OrganizationIDLTE          *string  `json:"organizationIDLTE,omitempty"`
-	OrganizationIDContains     *string  `json:"organizationIDContains,omitempty"`
-	OrganizationIDHasPrefix    *string  `json:"organizationIDHasPrefix,omitempty"`
-	OrganizationIDHasSuffix    *string  `json:"organizationIDHasSuffix,omitempty"`
-	OrganizationIDEqualFold    *string  `json:"organizationIDEqualFold,omitempty"`
-	OrganizationIDContainsFold *string  `json:"organizationIDContainsFold,omitempty"`
-
 	// "auditor_ready" field predicates.
 	AuditorReady    *bool `json:"auditorReady,omitempty"`
 	AuditorReadyNEQ *bool `json:"auditorReadyNEQ,omitempty"`
@@ -48603,45 +48588,6 @@ func (i *ProgramWhereInput) P() (predicate.Program, error) {
 	if i.EndDateNotNil {
 		predicates = append(predicates, program.EndDateNotNil())
 	}
-	if i.OrganizationID != nil {
-		predicates = append(predicates, program.OrganizationIDEQ(*i.OrganizationID))
-	}
-	if i.OrganizationIDNEQ != nil {
-		predicates = append(predicates, program.OrganizationIDNEQ(*i.OrganizationIDNEQ))
-	}
-	if len(i.OrganizationIDIn) > 0 {
-		predicates = append(predicates, program.OrganizationIDIn(i.OrganizationIDIn...))
-	}
-	if len(i.OrganizationIDNotIn) > 0 {
-		predicates = append(predicates, program.OrganizationIDNotIn(i.OrganizationIDNotIn...))
-	}
-	if i.OrganizationIDGT != nil {
-		predicates = append(predicates, program.OrganizationIDGT(*i.OrganizationIDGT))
-	}
-	if i.OrganizationIDGTE != nil {
-		predicates = append(predicates, program.OrganizationIDGTE(*i.OrganizationIDGTE))
-	}
-	if i.OrganizationIDLT != nil {
-		predicates = append(predicates, program.OrganizationIDLT(*i.OrganizationIDLT))
-	}
-	if i.OrganizationIDLTE != nil {
-		predicates = append(predicates, program.OrganizationIDLTE(*i.OrganizationIDLTE))
-	}
-	if i.OrganizationIDContains != nil {
-		predicates = append(predicates, program.OrganizationIDContains(*i.OrganizationIDContains))
-	}
-	if i.OrganizationIDHasPrefix != nil {
-		predicates = append(predicates, program.OrganizationIDHasPrefix(*i.OrganizationIDHasPrefix))
-	}
-	if i.OrganizationIDHasSuffix != nil {
-		predicates = append(predicates, program.OrganizationIDHasSuffix(*i.OrganizationIDHasSuffix))
-	}
-	if i.OrganizationIDEqualFold != nil {
-		predicates = append(predicates, program.OrganizationIDEqualFold(*i.OrganizationIDEqualFold))
-	}
-	if i.OrganizationIDContainsFold != nil {
-		predicates = append(predicates, program.OrganizationIDContainsFold(*i.OrganizationIDContainsFold))
-	}
 	if i.AuditorReady != nil {
 		predicates = append(predicates, program.AuditorReadyEQ(*i.AuditorReady))
 	}
@@ -49158,21 +49104,6 @@ type ProgramHistoryWhereInput struct {
 	EndDateLTE    *time.Time  `json:"endDateLTE,omitempty"`
 	EndDateIsNil  bool        `json:"endDateIsNil,omitempty"`
 	EndDateNotNil bool        `json:"endDateNotNil,omitempty"`
-
-	// "organization_id" field predicates.
-	OrganizationID             *string  `json:"organizationID,omitempty"`
-	OrganizationIDNEQ          *string  `json:"organizationIDNEQ,omitempty"`
-	OrganizationIDIn           []string `json:"organizationIDIn,omitempty"`
-	OrganizationIDNotIn        []string `json:"organizationIDNotIn,omitempty"`
-	OrganizationIDGT           *string  `json:"organizationIDGT,omitempty"`
-	OrganizationIDGTE          *string  `json:"organizationIDGTE,omitempty"`
-	OrganizationIDLT           *string  `json:"organizationIDLT,omitempty"`
-	OrganizationIDLTE          *string  `json:"organizationIDLTE,omitempty"`
-	OrganizationIDContains     *string  `json:"organizationIDContains,omitempty"`
-	OrganizationIDHasPrefix    *string  `json:"organizationIDHasPrefix,omitempty"`
-	OrganizationIDHasSuffix    *string  `json:"organizationIDHasSuffix,omitempty"`
-	OrganizationIDEqualFold    *string  `json:"organizationIDEqualFold,omitempty"`
-	OrganizationIDContainsFold *string  `json:"organizationIDContainsFold,omitempty"`
 
 	// "auditor_ready" field predicates.
 	AuditorReady    *bool `json:"auditorReady,omitempty"`
@@ -49794,45 +49725,6 @@ func (i *ProgramHistoryWhereInput) P() (predicate.ProgramHistory, error) {
 	}
 	if i.EndDateNotNil {
 		predicates = append(predicates, programhistory.EndDateNotNil())
-	}
-	if i.OrganizationID != nil {
-		predicates = append(predicates, programhistory.OrganizationIDEQ(*i.OrganizationID))
-	}
-	if i.OrganizationIDNEQ != nil {
-		predicates = append(predicates, programhistory.OrganizationIDNEQ(*i.OrganizationIDNEQ))
-	}
-	if len(i.OrganizationIDIn) > 0 {
-		predicates = append(predicates, programhistory.OrganizationIDIn(i.OrganizationIDIn...))
-	}
-	if len(i.OrganizationIDNotIn) > 0 {
-		predicates = append(predicates, programhistory.OrganizationIDNotIn(i.OrganizationIDNotIn...))
-	}
-	if i.OrganizationIDGT != nil {
-		predicates = append(predicates, programhistory.OrganizationIDGT(*i.OrganizationIDGT))
-	}
-	if i.OrganizationIDGTE != nil {
-		predicates = append(predicates, programhistory.OrganizationIDGTE(*i.OrganizationIDGTE))
-	}
-	if i.OrganizationIDLT != nil {
-		predicates = append(predicates, programhistory.OrganizationIDLT(*i.OrganizationIDLT))
-	}
-	if i.OrganizationIDLTE != nil {
-		predicates = append(predicates, programhistory.OrganizationIDLTE(*i.OrganizationIDLTE))
-	}
-	if i.OrganizationIDContains != nil {
-		predicates = append(predicates, programhistory.OrganizationIDContains(*i.OrganizationIDContains))
-	}
-	if i.OrganizationIDHasPrefix != nil {
-		predicates = append(predicates, programhistory.OrganizationIDHasPrefix(*i.OrganizationIDHasPrefix))
-	}
-	if i.OrganizationIDHasSuffix != nil {
-		predicates = append(predicates, programhistory.OrganizationIDHasSuffix(*i.OrganizationIDHasSuffix))
-	}
-	if i.OrganizationIDEqualFold != nil {
-		predicates = append(predicates, programhistory.OrganizationIDEqualFold(*i.OrganizationIDEqualFold))
-	}
-	if i.OrganizationIDContainsFold != nil {
-		predicates = append(predicates, programhistory.OrganizationIDContainsFold(*i.OrganizationIDContainsFold))
 	}
 	if i.AuditorReady != nil {
 		predicates = append(predicates, programhistory.AuditorReadyEQ(*i.AuditorReady))

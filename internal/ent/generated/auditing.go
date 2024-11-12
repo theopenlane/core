@@ -1926,9 +1926,6 @@ func (ph *ProgramHistory) changes(new *ProgramHistory) []Change {
 	if !reflect.DeepEqual(ph.EndDate, new.EndDate) {
 		changes = append(changes, NewChange(programhistory.FieldEndDate, ph.EndDate, new.EndDate))
 	}
-	if !reflect.DeepEqual(ph.OrganizationID, new.OrganizationID) {
-		changes = append(changes, NewChange(programhistory.FieldOrganizationID, ph.OrganizationID, new.OrganizationID))
-	}
 	if !reflect.DeepEqual(ph.AuditorReady, new.AuditorReady) {
 		changes = append(changes, NewChange(programhistory.FieldAuditorReady, ph.AuditorReady, new.AuditorReady))
 	}

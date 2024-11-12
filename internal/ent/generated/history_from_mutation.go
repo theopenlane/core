@@ -6396,10 +6396,6 @@ func (m *ProgramMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetEndDate(endDate)
 	}
 
-	if organizationID, exists := m.OrganizationID(); exists {
-		create = create.SetOrganizationID(organizationID)
-	}
-
 	if auditorReady, exists := m.AuditorReady(); exists {
 		create = create.SetAuditorReady(auditorReady)
 	}
@@ -6526,12 +6522,6 @@ func (m *ProgramMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetEndDate(program.EndDate)
 		}
 
-		if organizationID, exists := m.OrganizationID(); exists {
-			create = create.SetOrganizationID(organizationID)
-		} else {
-			create = create.SetOrganizationID(program.OrganizationID)
-		}
-
 		if auditorReady, exists := m.AuditorReady(); exists {
 			create = create.SetAuditorReady(auditorReady)
 		} else {
@@ -6596,7 +6586,6 @@ func (m *ProgramMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetStatus(program.Status).
 			SetStartDate(program.StartDate).
 			SetEndDate(program.EndDate).
-			SetOrganizationID(program.OrganizationID).
 			SetAuditorReady(program.AuditorReady).
 			SetAuditorWriteComments(program.AuditorWriteComments).
 			SetAuditorReadComments(program.AuditorReadComments).

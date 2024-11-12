@@ -136,11 +136,6 @@ func EndDate(v time.Time) predicate.ProgramHistory {
 	return predicate.ProgramHistory(sql.FieldEQ(FieldEndDate, v))
 }
 
-// OrganizationID applies equality check predicate on the "organization_id" field. It's identical to OrganizationIDEQ.
-func OrganizationID(v string) predicate.ProgramHistory {
-	return predicate.ProgramHistory(sql.FieldEQ(FieldOrganizationID, v))
-}
-
 // AuditorReady applies equality check predicate on the "auditor_ready" field. It's identical to AuditorReadyEQ.
 func AuditorReady(v bool) predicate.ProgramHistory {
 	return predicate.ProgramHistory(sql.FieldEQ(FieldAuditorReady, v))
@@ -1084,71 +1079,6 @@ func EndDateIsNil() predicate.ProgramHistory {
 // EndDateNotNil applies the NotNil predicate on the "end_date" field.
 func EndDateNotNil() predicate.ProgramHistory {
 	return predicate.ProgramHistory(sql.FieldNotNull(FieldEndDate))
-}
-
-// OrganizationIDEQ applies the EQ predicate on the "organization_id" field.
-func OrganizationIDEQ(v string) predicate.ProgramHistory {
-	return predicate.ProgramHistory(sql.FieldEQ(FieldOrganizationID, v))
-}
-
-// OrganizationIDNEQ applies the NEQ predicate on the "organization_id" field.
-func OrganizationIDNEQ(v string) predicate.ProgramHistory {
-	return predicate.ProgramHistory(sql.FieldNEQ(FieldOrganizationID, v))
-}
-
-// OrganizationIDIn applies the In predicate on the "organization_id" field.
-func OrganizationIDIn(vs ...string) predicate.ProgramHistory {
-	return predicate.ProgramHistory(sql.FieldIn(FieldOrganizationID, vs...))
-}
-
-// OrganizationIDNotIn applies the NotIn predicate on the "organization_id" field.
-func OrganizationIDNotIn(vs ...string) predicate.ProgramHistory {
-	return predicate.ProgramHistory(sql.FieldNotIn(FieldOrganizationID, vs...))
-}
-
-// OrganizationIDGT applies the GT predicate on the "organization_id" field.
-func OrganizationIDGT(v string) predicate.ProgramHistory {
-	return predicate.ProgramHistory(sql.FieldGT(FieldOrganizationID, v))
-}
-
-// OrganizationIDGTE applies the GTE predicate on the "organization_id" field.
-func OrganizationIDGTE(v string) predicate.ProgramHistory {
-	return predicate.ProgramHistory(sql.FieldGTE(FieldOrganizationID, v))
-}
-
-// OrganizationIDLT applies the LT predicate on the "organization_id" field.
-func OrganizationIDLT(v string) predicate.ProgramHistory {
-	return predicate.ProgramHistory(sql.FieldLT(FieldOrganizationID, v))
-}
-
-// OrganizationIDLTE applies the LTE predicate on the "organization_id" field.
-func OrganizationIDLTE(v string) predicate.ProgramHistory {
-	return predicate.ProgramHistory(sql.FieldLTE(FieldOrganizationID, v))
-}
-
-// OrganizationIDContains applies the Contains predicate on the "organization_id" field.
-func OrganizationIDContains(v string) predicate.ProgramHistory {
-	return predicate.ProgramHistory(sql.FieldContains(FieldOrganizationID, v))
-}
-
-// OrganizationIDHasPrefix applies the HasPrefix predicate on the "organization_id" field.
-func OrganizationIDHasPrefix(v string) predicate.ProgramHistory {
-	return predicate.ProgramHistory(sql.FieldHasPrefix(FieldOrganizationID, v))
-}
-
-// OrganizationIDHasSuffix applies the HasSuffix predicate on the "organization_id" field.
-func OrganizationIDHasSuffix(v string) predicate.ProgramHistory {
-	return predicate.ProgramHistory(sql.FieldHasSuffix(FieldOrganizationID, v))
-}
-
-// OrganizationIDEqualFold applies the EqualFold predicate on the "organization_id" field.
-func OrganizationIDEqualFold(v string) predicate.ProgramHistory {
-	return predicate.ProgramHistory(sql.FieldEqualFold(FieldOrganizationID, v))
-}
-
-// OrganizationIDContainsFold applies the ContainsFold predicate on the "organization_id" field.
-func OrganizationIDContainsFold(v string) predicate.ProgramHistory {
-	return predicate.ProgramHistory(sql.FieldContainsFold(FieldOrganizationID, v))
 }
 
 // AuditorReadyEQ applies the EQ predicate on the "auditor_ready" field.

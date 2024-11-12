@@ -246,20 +246,6 @@ func (pu *ProgramUpdate) ClearEndDate() *ProgramUpdate {
 	return pu
 }
 
-// SetOrganizationID sets the "organization_id" field.
-func (pu *ProgramUpdate) SetOrganizationID(s string) *ProgramUpdate {
-	pu.mutation.SetOrganizationID(s)
-	return pu
-}
-
-// SetNillableOrganizationID sets the "organization_id" field if the given value is not nil.
-func (pu *ProgramUpdate) SetNillableOrganizationID(s *string) *ProgramUpdate {
-	if s != nil {
-		pu.SetOrganizationID(*s)
-	}
-	return pu
-}
-
 // SetAuditorReady sets the "auditor_ready" field.
 func (pu *ProgramUpdate) SetAuditorReady(b bool) *ProgramUpdate {
 	pu.mutation.SetAuditorReady(b)
@@ -881,11 +867,6 @@ func (pu *ProgramUpdate) check() error {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Program.status": %w`, err)}
 		}
 	}
-	if v, ok := pu.mutation.OrganizationID(); ok {
-		if err := program.OrganizationIDValidator(v); err != nil {
-			return &ValidationError{Name: "organization_id", err: fmt.Errorf(`generated: validator failed for field "Program.organization_id": %w`, err)}
-		}
-	}
 	return nil
 }
 
@@ -971,9 +952,6 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if pu.mutation.EndDateCleared() {
 		_spec.ClearField(program.FieldEndDate, field.TypeTime)
-	}
-	if value, ok := pu.mutation.OrganizationID(); ok {
-		_spec.SetField(program.FieldOrganizationID, field.TypeString, value)
 	}
 	if value, ok := pu.mutation.AuditorReady(); ok {
 		_spec.SetField(program.FieldAuditorReady, field.TypeBool, value)
@@ -1930,20 +1908,6 @@ func (puo *ProgramUpdateOne) ClearEndDate() *ProgramUpdateOne {
 	return puo
 }
 
-// SetOrganizationID sets the "organization_id" field.
-func (puo *ProgramUpdateOne) SetOrganizationID(s string) *ProgramUpdateOne {
-	puo.mutation.SetOrganizationID(s)
-	return puo
-}
-
-// SetNillableOrganizationID sets the "organization_id" field if the given value is not nil.
-func (puo *ProgramUpdateOne) SetNillableOrganizationID(s *string) *ProgramUpdateOne {
-	if s != nil {
-		puo.SetOrganizationID(*s)
-	}
-	return puo
-}
-
 // SetAuditorReady sets the "auditor_ready" field.
 func (puo *ProgramUpdateOne) SetAuditorReady(b bool) *ProgramUpdateOne {
 	puo.mutation.SetAuditorReady(b)
@@ -2578,11 +2542,6 @@ func (puo *ProgramUpdateOne) check() error {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Program.status": %w`, err)}
 		}
 	}
-	if v, ok := puo.mutation.OrganizationID(); ok {
-		if err := program.OrganizationIDValidator(v); err != nil {
-			return &ValidationError{Name: "organization_id", err: fmt.Errorf(`generated: validator failed for field "Program.organization_id": %w`, err)}
-		}
-	}
 	return nil
 }
 
@@ -2685,9 +2644,6 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 	}
 	if puo.mutation.EndDateCleared() {
 		_spec.ClearField(program.FieldEndDate, field.TypeTime)
-	}
-	if value, ok := puo.mutation.OrganizationID(); ok {
-		_spec.SetField(program.FieldOrganizationID, field.TypeString, value)
 	}
 	if value, ok := puo.mutation.AuditorReady(); ok {
 		_spec.SetField(program.FieldAuditorReady, field.TypeBool, value)

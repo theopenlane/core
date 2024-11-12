@@ -1774,7 +1774,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			program.FieldStatus:               {Type: field.TypeEnum, Column: program.FieldStatus},
 			program.FieldStartDate:            {Type: field.TypeTime, Column: program.FieldStartDate},
 			program.FieldEndDate:              {Type: field.TypeTime, Column: program.FieldEndDate},
-			program.FieldOrganizationID:       {Type: field.TypeString, Column: program.FieldOrganizationID},
 			program.FieldAuditorReady:         {Type: field.TypeBool, Column: program.FieldAuditorReady},
 			program.FieldAuditorWriteComments: {Type: field.TypeBool, Column: program.FieldAuditorWriteComments},
 			program.FieldAuditorReadComments:  {Type: field.TypeBool, Column: program.FieldAuditorReadComments},
@@ -1808,7 +1807,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			programhistory.FieldStatus:               {Type: field.TypeEnum, Column: programhistory.FieldStatus},
 			programhistory.FieldStartDate:            {Type: field.TypeTime, Column: programhistory.FieldStartDate},
 			programhistory.FieldEndDate:              {Type: field.TypeTime, Column: programhistory.FieldEndDate},
-			programhistory.FieldOrganizationID:       {Type: field.TypeString, Column: programhistory.FieldOrganizationID},
 			programhistory.FieldAuditorReady:         {Type: field.TypeBool, Column: programhistory.FieldAuditorReady},
 			programhistory.FieldAuditorWriteComments: {Type: field.TypeBool, Column: programhistory.FieldAuditorWriteComments},
 			programhistory.FieldAuditorReadComments:  {Type: field.TypeBool, Column: programhistory.FieldAuditorReadComments},
@@ -14682,11 +14680,6 @@ func (f *ProgramFilter) WhereEndDate(p entql.TimeP) {
 	f.Where(p.Field(program.FieldEndDate))
 }
 
-// WhereOrganizationID applies the entql string predicate on the organization_id field.
-func (f *ProgramFilter) WhereOrganizationID(p entql.StringP) {
-	f.Where(p.Field(program.FieldOrganizationID))
-}
-
 // WhereAuditorReady applies the entql bool predicate on the auditor_ready field.
 func (f *ProgramFilter) WhereAuditorReady(p entql.BoolP) {
 	f.Where(p.Field(program.FieldAuditorReady))
@@ -15035,11 +15028,6 @@ func (f *ProgramHistoryFilter) WhereStartDate(p entql.TimeP) {
 // WhereEndDate applies the entql time.Time predicate on the end_date field.
 func (f *ProgramHistoryFilter) WhereEndDate(p entql.TimeP) {
 	f.Where(p.Field(programhistory.FieldEndDate))
-}
-
-// WhereOrganizationID applies the entql string predicate on the organization_id field.
-func (f *ProgramHistoryFilter) WhereOrganizationID(p entql.StringP) {
-	f.Where(p.Field(programhistory.FieldOrganizationID))
 }
 
 // WhereAuditorReady applies the entql bool predicate on the auditor_ready field.

@@ -46,8 +46,6 @@ const (
 	FieldStartDate = "start_date"
 	// FieldEndDate holds the string denoting the end_date field in the database.
 	FieldEndDate = "end_date"
-	// FieldOrganizationID holds the string denoting the organization_id field in the database.
-	FieldOrganizationID = "organization_id"
 	// FieldAuditorReady holds the string denoting the auditor_ready field in the database.
 	FieldAuditorReady = "auditor_ready"
 	// FieldAuditorWriteComments holds the string denoting the auditor_write_comments field in the database.
@@ -184,7 +182,6 @@ var Columns = []string{
 	FieldStatus,
 	FieldStartDate,
 	FieldEndDate,
-	FieldOrganizationID,
 	FieldAuditorReady,
 	FieldAuditorWriteComments,
 	FieldAuditorReadComments,
@@ -264,8 +261,6 @@ var (
 	OwnerIDValidator func(string) error
 	// NameValidator is a validator for the "name" field. It is called by the builders before save.
 	NameValidator func(string) error
-	// OrganizationIDValidator is a validator for the "organization_id" field. It is called by the builders before save.
-	OrganizationIDValidator func(string) error
 	// DefaultAuditorReady holds the default value on creation for the "auditor_ready" field.
 	DefaultAuditorReady bool
 	// DefaultAuditorWriteComments holds the default value on creation for the "auditor_write_comments" field.
@@ -359,11 +354,6 @@ func ByStartDate(opts ...sql.OrderTermOption) OrderOption {
 // ByEndDate orders the results by the end_date field.
 func ByEndDate(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldEndDate, opts...).ToFunc()
-}
-
-// ByOrganizationID orders the results by the organization_id field.
-func ByOrganizationID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldOrganizationID, opts...).ToFunc()
 }
 
 // ByAuditorReady orders the results by the auditor_ready field.

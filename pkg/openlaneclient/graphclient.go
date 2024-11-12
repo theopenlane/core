@@ -3320,13 +3320,12 @@ func (t *AdminSearch_AdminSearch_Nodes_ProcedureSearchResult) GetProcedures() []
 }
 
 type AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs struct {
-	ID             string   "json:\"id\" graphql:\"id\""
-	DeletedBy      *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
-	Tags           []string "json:\"tags,omitempty\" graphql:\"tags\""
-	OwnerID        *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Name           string   "json:\"name\" graphql:\"name\""
-	Description    *string  "json:\"description,omitempty\" graphql:\"description\""
-	OrganizationID string   "json:\"organizationID\" graphql:\"organizationID\""
+	ID          string   "json:\"id\" graphql:\"id\""
+	DeletedBy   *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
+	OwnerID     *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Name        string   "json:\"name\" graphql:\"name\""
+	Description *string  "json:\"description,omitempty\" graphql:\"description\""
 }
 
 func (t *AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs) GetID() string {
@@ -3364,12 +3363,6 @@ func (t *AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs) GetDescript
 		t = &AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs{}
 	}
 	return t.Description
-}
-func (t *AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs) GetOrganizationID() string {
-	if t == nil {
-		t = &AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs{}
-	}
-	return t.OrganizationID
 }
 
 type AdminSearch_AdminSearch_Nodes_ProgramSearchResult struct {
@@ -32077,7 +32070,7 @@ type CreateBulkCSVProgram_CreateBulkCSVProgram_Programs struct {
 	EndDate              *time.Time          "json:\"endDate,omitempty\" graphql:\"endDate\""
 	ID                   string              "json:\"id\" graphql:\"id\""
 	Name                 string              "json:\"name\" graphql:\"name\""
-	OrganizationID       string              "json:\"organizationID\" graphql:\"organizationID\""
+	OwnerID              *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	StartDate            *time.Time          "json:\"startDate,omitempty\" graphql:\"startDate\""
 	Status               enums.ProgramStatus "json:\"status\" graphql:\"status\""
 	Tags                 []string            "json:\"tags,omitempty\" graphql:\"tags\""
@@ -32139,11 +32132,11 @@ func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs) GetName() string {
 	}
 	return t.Name
 }
-func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs) GetOrganizationID() string {
+func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs) GetOwnerID() *string {
 	if t == nil {
 		t = &CreateBulkCSVProgram_CreateBulkCSVProgram_Programs{}
 	}
-	return t.OrganizationID
+	return t.OwnerID
 }
 func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs) GetStartDate() *time.Time {
 	if t == nil {
@@ -32197,7 +32190,7 @@ type CreateBulkProgram_CreateBulkProgram_Programs struct {
 	EndDate              *time.Time          "json:\"endDate,omitempty\" graphql:\"endDate\""
 	ID                   string              "json:\"id\" graphql:\"id\""
 	Name                 string              "json:\"name\" graphql:\"name\""
-	OrganizationID       string              "json:\"organizationID\" graphql:\"organizationID\""
+	OwnerID              *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	StartDate            *time.Time          "json:\"startDate,omitempty\" graphql:\"startDate\""
 	Status               enums.ProgramStatus "json:\"status\" graphql:\"status\""
 	Tags                 []string            "json:\"tags,omitempty\" graphql:\"tags\""
@@ -32259,11 +32252,11 @@ func (t *CreateBulkProgram_CreateBulkProgram_Programs) GetName() string {
 	}
 	return t.Name
 }
-func (t *CreateBulkProgram_CreateBulkProgram_Programs) GetOrganizationID() string {
+func (t *CreateBulkProgram_CreateBulkProgram_Programs) GetOwnerID() *string {
 	if t == nil {
 		t = &CreateBulkProgram_CreateBulkProgram_Programs{}
 	}
-	return t.OrganizationID
+	return t.OwnerID
 }
 func (t *CreateBulkProgram_CreateBulkProgram_Programs) GetStartDate() *time.Time {
 	if t == nil {
@@ -32317,7 +32310,7 @@ type CreateProgram_CreateProgram_Program struct {
 	EndDate              *time.Time          "json:\"endDate,omitempty\" graphql:\"endDate\""
 	ID                   string              "json:\"id\" graphql:\"id\""
 	Name                 string              "json:\"name\" graphql:\"name\""
-	OrganizationID       string              "json:\"organizationID\" graphql:\"organizationID\""
+	OwnerID              *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	StartDate            *time.Time          "json:\"startDate,omitempty\" graphql:\"startDate\""
 	Status               enums.ProgramStatus "json:\"status\" graphql:\"status\""
 	Tags                 []string            "json:\"tags,omitempty\" graphql:\"tags\""
@@ -32379,11 +32372,11 @@ func (t *CreateProgram_CreateProgram_Program) GetName() string {
 	}
 	return t.Name
 }
-func (t *CreateProgram_CreateProgram_Program) GetOrganizationID() string {
+func (t *CreateProgram_CreateProgram_Program) GetOwnerID() *string {
 	if t == nil {
 		t = &CreateProgram_CreateProgram_Program{}
 	}
-	return t.OrganizationID
+	return t.OwnerID
 }
 func (t *CreateProgram_CreateProgram_Program) GetStartDate() *time.Time {
 	if t == nil {
@@ -32448,7 +32441,7 @@ type GetAllPrograms_Programs_Edges_Node struct {
 	EndDate              *time.Time          "json:\"endDate,omitempty\" graphql:\"endDate\""
 	ID                   string              "json:\"id\" graphql:\"id\""
 	Name                 string              "json:\"name\" graphql:\"name\""
-	OrganizationID       string              "json:\"organizationID\" graphql:\"organizationID\""
+	OwnerID              *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	StartDate            *time.Time          "json:\"startDate,omitempty\" graphql:\"startDate\""
 	Status               enums.ProgramStatus "json:\"status\" graphql:\"status\""
 	Tags                 []string            "json:\"tags,omitempty\" graphql:\"tags\""
@@ -32510,11 +32503,11 @@ func (t *GetAllPrograms_Programs_Edges_Node) GetName() string {
 	}
 	return t.Name
 }
-func (t *GetAllPrograms_Programs_Edges_Node) GetOrganizationID() string {
+func (t *GetAllPrograms_Programs_Edges_Node) GetOwnerID() *string {
 	if t == nil {
 		t = &GetAllPrograms_Programs_Edges_Node{}
 	}
-	return t.OrganizationID
+	return t.OwnerID
 }
 func (t *GetAllPrograms_Programs_Edges_Node) GetStartDate() *time.Time {
 	if t == nil {
@@ -32579,7 +32572,7 @@ type GetProgramByID_Program struct {
 	EndDate              *time.Time          "json:\"endDate,omitempty\" graphql:\"endDate\""
 	ID                   string              "json:\"id\" graphql:\"id\""
 	Name                 string              "json:\"name\" graphql:\"name\""
-	OrganizationID       string              "json:\"organizationID\" graphql:\"organizationID\""
+	OwnerID              *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	StartDate            *time.Time          "json:\"startDate,omitempty\" graphql:\"startDate\""
 	Status               enums.ProgramStatus "json:\"status\" graphql:\"status\""
 	Tags                 []string            "json:\"tags,omitempty\" graphql:\"tags\""
@@ -32641,11 +32634,11 @@ func (t *GetProgramByID_Program) GetName() string {
 	}
 	return t.Name
 }
-func (t *GetProgramByID_Program) GetOrganizationID() string {
+func (t *GetProgramByID_Program) GetOwnerID() *string {
 	if t == nil {
 		t = &GetProgramByID_Program{}
 	}
-	return t.OrganizationID
+	return t.OwnerID
 }
 func (t *GetProgramByID_Program) GetStartDate() *time.Time {
 	if t == nil {
@@ -32688,7 +32681,7 @@ type GetPrograms_Programs_Edges_Node struct {
 	EndDate              *time.Time          "json:\"endDate,omitempty\" graphql:\"endDate\""
 	ID                   string              "json:\"id\" graphql:\"id\""
 	Name                 string              "json:\"name\" graphql:\"name\""
-	OrganizationID       string              "json:\"organizationID\" graphql:\"organizationID\""
+	OwnerID              *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	StartDate            *time.Time          "json:\"startDate,omitempty\" graphql:\"startDate\""
 	Status               enums.ProgramStatus "json:\"status\" graphql:\"status\""
 	Tags                 []string            "json:\"tags,omitempty\" graphql:\"tags\""
@@ -32750,11 +32743,11 @@ func (t *GetPrograms_Programs_Edges_Node) GetName() string {
 	}
 	return t.Name
 }
-func (t *GetPrograms_Programs_Edges_Node) GetOrganizationID() string {
+func (t *GetPrograms_Programs_Edges_Node) GetOwnerID() *string {
 	if t == nil {
 		t = &GetPrograms_Programs_Edges_Node{}
 	}
-	return t.OrganizationID
+	return t.OwnerID
 }
 func (t *GetPrograms_Programs_Edges_Node) GetStartDate() *time.Time {
 	if t == nil {
@@ -32819,7 +32812,7 @@ type UpdateProgram_UpdateProgram_Program struct {
 	EndDate              *time.Time          "json:\"endDate,omitempty\" graphql:\"endDate\""
 	ID                   string              "json:\"id\" graphql:\"id\""
 	Name                 string              "json:\"name\" graphql:\"name\""
-	OrganizationID       string              "json:\"organizationID\" graphql:\"organizationID\""
+	OwnerID              *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	StartDate            *time.Time          "json:\"startDate,omitempty\" graphql:\"startDate\""
 	Status               enums.ProgramStatus "json:\"status\" graphql:\"status\""
 	Tags                 []string            "json:\"tags,omitempty\" graphql:\"tags\""
@@ -32881,11 +32874,11 @@ func (t *UpdateProgram_UpdateProgram_Program) GetName() string {
 	}
 	return t.Name
 }
-func (t *UpdateProgram_UpdateProgram_Program) GetOrganizationID() string {
+func (t *UpdateProgram_UpdateProgram_Program) GetOwnerID() *string {
 	if t == nil {
 		t = &UpdateProgram_UpdateProgram_Program{}
 	}
-	return t.OrganizationID
+	return t.OwnerID
 }
 func (t *UpdateProgram_UpdateProgram_Program) GetStartDate() *time.Time {
 	if t == nil {
@@ -32941,7 +32934,7 @@ type GetAllProgramHistories_ProgramHistories_Edges_Node struct {
 	ID                   string              "json:\"id\" graphql:\"id\""
 	Name                 string              "json:\"name\" graphql:\"name\""
 	Operation            history.OpType      "json:\"operation\" graphql:\"operation\""
-	OrganizationID       string              "json:\"organizationID\" graphql:\"organizationID\""
+	OwnerID              *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Ref                  *string             "json:\"ref,omitempty\" graphql:\"ref\""
 	StartDate            *time.Time          "json:\"startDate,omitempty\" graphql:\"startDate\""
 	Status               enums.ProgramStatus "json:\"status\" graphql:\"status\""
@@ -33016,11 +33009,11 @@ func (t *GetAllProgramHistories_ProgramHistories_Edges_Node) GetOperation() *his
 	}
 	return &t.Operation
 }
-func (t *GetAllProgramHistories_ProgramHistories_Edges_Node) GetOrganizationID() string {
+func (t *GetAllProgramHistories_ProgramHistories_Edges_Node) GetOwnerID() *string {
 	if t == nil {
 		t = &GetAllProgramHistories_ProgramHistories_Edges_Node{}
 	}
-	return t.OrganizationID
+	return t.OwnerID
 }
 func (t *GetAllProgramHistories_ProgramHistories_Edges_Node) GetRef() *string {
 	if t == nil {
@@ -33093,7 +33086,7 @@ type GetProgramHistories_ProgramHistories_Edges_Node struct {
 	ID                   string              "json:\"id\" graphql:\"id\""
 	Name                 string              "json:\"name\" graphql:\"name\""
 	Operation            history.OpType      "json:\"operation\" graphql:\"operation\""
-	OrganizationID       string              "json:\"organizationID\" graphql:\"organizationID\""
+	OwnerID              *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Ref                  *string             "json:\"ref,omitempty\" graphql:\"ref\""
 	StartDate            *time.Time          "json:\"startDate,omitempty\" graphql:\"startDate\""
 	Status               enums.ProgramStatus "json:\"status\" graphql:\"status\""
@@ -33168,11 +33161,11 @@ func (t *GetProgramHistories_ProgramHistories_Edges_Node) GetOperation() *histor
 	}
 	return &t.Operation
 }
-func (t *GetProgramHistories_ProgramHistories_Edges_Node) GetOrganizationID() string {
+func (t *GetProgramHistories_ProgramHistories_Edges_Node) GetOwnerID() *string {
 	if t == nil {
 		t = &GetProgramHistories_ProgramHistories_Edges_Node{}
 	}
-	return t.OrganizationID
+	return t.OwnerID
 }
 func (t *GetProgramHistories_ProgramHistories_Edges_Node) GetRef() *string {
 	if t == nil {
@@ -50272,7 +50265,6 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					ownerID
 					name
 					description
-					organizationID
 				}
 			}
 			... on RiskSearchResult {
@@ -59901,7 +59893,7 @@ const CreateBulkCSVProgramDocument = `mutation CreateBulkCSVProgram ($input: Upl
 			endDate
 			id
 			name
-			organizationID
+			ownerID
 			startDate
 			status
 			tags
@@ -59941,7 +59933,7 @@ const CreateBulkProgramDocument = `mutation CreateBulkProgram ($input: [CreatePr
 			endDate
 			id
 			name
-			organizationID
+			ownerID
 			startDate
 			status
 			tags
@@ -59981,7 +59973,7 @@ const CreateProgramDocument = `mutation CreateProgram ($input: CreateProgramInpu
 			endDate
 			id
 			name
-			organizationID
+			ownerID
 			startDate
 			status
 			tags
@@ -60046,7 +60038,7 @@ const GetAllProgramsDocument = `query GetAllPrograms {
 				endDate
 				id
 				name
-				organizationID
+				ownerID
 				startDate
 				status
 				tags
@@ -60084,7 +60076,7 @@ const GetProgramByIDDocument = `query GetProgramByID ($programId: ID!) {
 		endDate
 		id
 		name
-		organizationID
+		ownerID
 		startDate
 		status
 		tags
@@ -60124,7 +60116,7 @@ const GetProgramsDocument = `query GetPrograms ($where: ProgramWhereInput) {
 				endDate
 				id
 				name
-				organizationID
+				ownerID
 				startDate
 				status
 				tags
@@ -60165,7 +60157,7 @@ const UpdateProgramDocument = `mutation UpdateProgram ($updateProgramId: ID!, $i
 			endDate
 			id
 			name
-			organizationID
+			ownerID
 			startDate
 			status
 			tags
@@ -60209,7 +60201,7 @@ const GetAllProgramHistoriesDocument = `query GetAllProgramHistories {
 				id
 				name
 				operation
-				organizationID
+				ownerID
 				ref
 				startDate
 				status
@@ -60252,7 +60244,7 @@ const GetProgramHistoriesDocument = `query GetProgramHistories ($where: ProgramH
 				id
 				name
 				operation
-				organizationID
+				ownerID
 				ref
 				startDate
 				status

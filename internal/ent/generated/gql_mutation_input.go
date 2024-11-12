@@ -5405,7 +5405,6 @@ type CreateProgramInput struct {
 	Status               *enums.ProgramStatus
 	StartDate            *time.Time
 	EndDate              *time.Time
-	OrganizationID       string
 	AuditorReady         *bool
 	AuditorWriteComments *bool
 	AuditorReadComments  *bool
@@ -5443,7 +5442,6 @@ func (i *CreateProgramInput) Mutate(m *ProgramMutation) {
 	if v := i.EndDate; v != nil {
 		m.SetEndDate(*v)
 	}
-	m.SetOrganizationID(i.OrganizationID)
 	if v := i.AuditorReady; v != nil {
 		m.SetAuditorReady(*v)
 	}
@@ -5516,7 +5514,6 @@ type UpdateProgramInput struct {
 	StartDate                 *time.Time
 	ClearEndDate              bool
 	EndDate                   *time.Time
-	OrganizationID            *string
 	AuditorReady              *bool
 	AuditorWriteComments      *bool
 	AuditorReadComments       *bool
@@ -5597,9 +5594,6 @@ func (i *UpdateProgramInput) Mutate(m *ProgramMutation) {
 	}
 	if v := i.EndDate; v != nil {
 		m.SetEndDate(*v)
-	}
-	if v := i.OrganizationID; v != nil {
-		m.SetOrganizationID(*v)
 	}
 	if v := i.AuditorReady; v != nil {
 		m.SetAuditorReady(*v)

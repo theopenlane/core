@@ -54,8 +54,6 @@ type ProgramHistory struct {
 	StartDate time.Time `json:"start_date,omitempty"`
 	// the end date of the period
 	EndDate time.Time `json:"end_date,omitempty"`
-	// the organization that owns the program
-	OrganizationID string `json:"organization_id,omitempty"`
 	// is the program ready for the auditor
 	AuditorReady bool `json:"auditor_ready,omitempty"`
 	// can the auditor write comments
@@ -76,7 +74,7 @@ func (*ProgramHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case programhistory.FieldAuditorReady, programhistory.FieldAuditorWriteComments, programhistory.FieldAuditorReadComments:
 			values[i] = new(sql.NullBool)
-		case programhistory.FieldID, programhistory.FieldRef, programhistory.FieldCreatedBy, programhistory.FieldUpdatedBy, programhistory.FieldMappingID, programhistory.FieldDeletedBy, programhistory.FieldOwnerID, programhistory.FieldName, programhistory.FieldDescription, programhistory.FieldStatus, programhistory.FieldOrganizationID:
+		case programhistory.FieldID, programhistory.FieldRef, programhistory.FieldCreatedBy, programhistory.FieldUpdatedBy, programhistory.FieldMappingID, programhistory.FieldDeletedBy, programhistory.FieldOwnerID, programhistory.FieldName, programhistory.FieldDescription, programhistory.FieldStatus:
 			values[i] = new(sql.NullString)
 		case programhistory.FieldHistoryTime, programhistory.FieldCreatedAt, programhistory.FieldUpdatedAt, programhistory.FieldDeletedAt, programhistory.FieldStartDate, programhistory.FieldEndDate:
 			values[i] = new(sql.NullTime)
@@ -205,12 +203,6 @@ func (ph *ProgramHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ph.EndDate = value.Time
 			}
-		case programhistory.FieldOrganizationID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field organization_id", values[i])
-			} else if value.Valid {
-				ph.OrganizationID = value.String
-			}
 		case programhistory.FieldAuditorReady:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field auditor_ready", values[i])
@@ -315,9 +307,6 @@ func (ph *ProgramHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("end_date=")
 	builder.WriteString(ph.EndDate.Format(time.ANSIC))
-	builder.WriteString(", ")
-	builder.WriteString("organization_id=")
-	builder.WriteString(ph.OrganizationID)
 	builder.WriteString(", ")
 	builder.WriteString("auditor_ready=")
 	builder.WriteString(fmt.Sprintf("%v", ph.AuditorReady))

@@ -3607,8 +3607,6 @@ type CreateProgramInput struct {
 	StartDate *time.Time `json:"startDate,omitempty"`
 	// the end date of the period
 	EndDate *time.Time `json:"endDate,omitempty"`
-	// the organization that owns the program
-	OrganizationID string `json:"organizationID"`
 	// is the program ready for the auditor
 	AuditorReady *bool `json:"auditorReady,omitempty"`
 	// can the auditor write comments
@@ -15649,8 +15647,6 @@ type Program struct {
 	StartDate *time.Time `json:"startDate,omitempty"`
 	// the end date of the period
 	EndDate *time.Time `json:"endDate,omitempty"`
-	// the organization that owns the program
-	OrganizationID string `json:"organizationID"`
 	// is the program ready for the auditor
 	AuditorReady bool `json:"auditorReady"`
 	// can the auditor write comments
@@ -15738,8 +15734,6 @@ type ProgramHistory struct {
 	StartDate *time.Time `json:"startDate,omitempty"`
 	// the end date of the period
 	EndDate *time.Time `json:"endDate,omitempty"`
-	// the organization that owns the program
-	OrganizationID string `json:"organizationID"`
 	// is the program ready for the auditor
 	AuditorReady bool `json:"auditorReady"`
 	// can the auditor write comments
@@ -15969,20 +15963,6 @@ type ProgramHistoryWhereInput struct {
 	EndDateLte    *time.Time   `json:"endDateLTE,omitempty"`
 	EndDateIsNil  *bool        `json:"endDateIsNil,omitempty"`
 	EndDateNotNil *bool        `json:"endDateNotNil,omitempty"`
-	// organization_id field predicates
-	OrganizationID             *string  `json:"organizationID,omitempty"`
-	OrganizationIdneq          *string  `json:"organizationIDNEQ,omitempty"`
-	OrganizationIDIn           []string `json:"organizationIDIn,omitempty"`
-	OrganizationIDNotIn        []string `json:"organizationIDNotIn,omitempty"`
-	OrganizationIdgt           *string  `json:"organizationIDGT,omitempty"`
-	OrganizationIdgte          *string  `json:"organizationIDGTE,omitempty"`
-	OrganizationIdlt           *string  `json:"organizationIDLT,omitempty"`
-	OrganizationIdlte          *string  `json:"organizationIDLTE,omitempty"`
-	OrganizationIDContains     *string  `json:"organizationIDContains,omitempty"`
-	OrganizationIDHasPrefix    *string  `json:"organizationIDHasPrefix,omitempty"`
-	OrganizationIDHasSuffix    *string  `json:"organizationIDHasSuffix,omitempty"`
-	OrganizationIDEqualFold    *string  `json:"organizationIDEqualFold,omitempty"`
-	OrganizationIDContainsFold *string  `json:"organizationIDContainsFold,omitempty"`
 	// auditor_ready field predicates
 	AuditorReady    *bool `json:"auditorReady,omitempty"`
 	AuditorReadyNeq *bool `json:"auditorReadyNEQ,omitempty"`
@@ -16540,20 +16520,6 @@ type ProgramWhereInput struct {
 	EndDateLte    *time.Time   `json:"endDateLTE,omitempty"`
 	EndDateIsNil  *bool        `json:"endDateIsNil,omitempty"`
 	EndDateNotNil *bool        `json:"endDateNotNil,omitempty"`
-	// organization_id field predicates
-	OrganizationID             *string  `json:"organizationID,omitempty"`
-	OrganizationIdneq          *string  `json:"organizationIDNEQ,omitempty"`
-	OrganizationIDIn           []string `json:"organizationIDIn,omitempty"`
-	OrganizationIDNotIn        []string `json:"organizationIDNotIn,omitempty"`
-	OrganizationIdgt           *string  `json:"organizationIDGT,omitempty"`
-	OrganizationIdgte          *string  `json:"organizationIDGTE,omitempty"`
-	OrganizationIdlt           *string  `json:"organizationIDLT,omitempty"`
-	OrganizationIdlte          *string  `json:"organizationIDLTE,omitempty"`
-	OrganizationIDContains     *string  `json:"organizationIDContains,omitempty"`
-	OrganizationIDHasPrefix    *string  `json:"organizationIDHasPrefix,omitempty"`
-	OrganizationIDHasSuffix    *string  `json:"organizationIDHasSuffix,omitempty"`
-	OrganizationIDEqualFold    *string  `json:"organizationIDEqualFold,omitempty"`
-	OrganizationIDContainsFold *string  `json:"organizationIDContainsFold,omitempty"`
 	// auditor_ready field predicates
 	AuditorReady    *bool `json:"auditorReady,omitempty"`
 	AuditorReadyNeq *bool `json:"auditorReadyNEQ,omitempty"`
@@ -21295,8 +21261,6 @@ type UpdateProgramInput struct {
 	// the end date of the period
 	EndDate      *time.Time `json:"endDate,omitempty"`
 	ClearEndDate *bool      `json:"clearEndDate,omitempty"`
-	// the organization that owns the program
-	OrganizationID *string `json:"organizationID,omitempty"`
 	// is the program ready for the auditor
 	AuditorReady *bool `json:"auditorReady,omitempty"`
 	// can the auditor write comments

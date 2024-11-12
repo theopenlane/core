@@ -231,20 +231,6 @@ func (phu *ProgramHistoryUpdate) ClearEndDate() *ProgramHistoryUpdate {
 	return phu
 }
 
-// SetOrganizationID sets the "organization_id" field.
-func (phu *ProgramHistoryUpdate) SetOrganizationID(s string) *ProgramHistoryUpdate {
-	phu.mutation.SetOrganizationID(s)
-	return phu
-}
-
-// SetNillableOrganizationID sets the "organization_id" field if the given value is not nil.
-func (phu *ProgramHistoryUpdate) SetNillableOrganizationID(s *string) *ProgramHistoryUpdate {
-	if s != nil {
-		phu.SetOrganizationID(*s)
-	}
-	return phu
-}
-
 // SetAuditorReady sets the "auditor_ready" field.
 func (phu *ProgramHistoryUpdate) SetAuditorReady(b bool) *ProgramHistoryUpdate {
 	phu.mutation.SetAuditorReady(b)
@@ -435,9 +421,6 @@ func (phu *ProgramHistoryUpdate) sqlSave(ctx context.Context) (n int, err error)
 	}
 	if phu.mutation.EndDateCleared() {
 		_spec.ClearField(programhistory.FieldEndDate, field.TypeTime)
-	}
-	if value, ok := phu.mutation.OrganizationID(); ok {
-		_spec.SetField(programhistory.FieldOrganizationID, field.TypeString, value)
 	}
 	if value, ok := phu.mutation.AuditorReady(); ok {
 		_spec.SetField(programhistory.FieldAuditorReady, field.TypeBool, value)
@@ -670,20 +653,6 @@ func (phuo *ProgramHistoryUpdateOne) ClearEndDate() *ProgramHistoryUpdateOne {
 	return phuo
 }
 
-// SetOrganizationID sets the "organization_id" field.
-func (phuo *ProgramHistoryUpdateOne) SetOrganizationID(s string) *ProgramHistoryUpdateOne {
-	phuo.mutation.SetOrganizationID(s)
-	return phuo
-}
-
-// SetNillableOrganizationID sets the "organization_id" field if the given value is not nil.
-func (phuo *ProgramHistoryUpdateOne) SetNillableOrganizationID(s *string) *ProgramHistoryUpdateOne {
-	if s != nil {
-		phuo.SetOrganizationID(*s)
-	}
-	return phuo
-}
-
 // SetAuditorReady sets the "auditor_ready" field.
 func (phuo *ProgramHistoryUpdateOne) SetAuditorReady(b bool) *ProgramHistoryUpdateOne {
 	phuo.mutation.SetAuditorReady(b)
@@ -904,9 +873,6 @@ func (phuo *ProgramHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Progra
 	}
 	if phuo.mutation.EndDateCleared() {
 		_spec.ClearField(programhistory.FieldEndDate, field.TypeTime)
-	}
-	if value, ok := phuo.mutation.OrganizationID(); ok {
-		_spec.SetField(programhistory.FieldOrganizationID, field.TypeString, value)
 	}
 	if value, ok := phuo.mutation.AuditorReady(); ok {
 		_spec.SetField(programhistory.FieldAuditorReady, field.TypeBool, value)

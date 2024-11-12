@@ -960,10 +960,9 @@ func adminSearchPrograms(ctx context.Context, query string) ([]*generated.Progra
 				likeQuery := "%" + query + "%"
 				s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
 			},
-			program.OwnerIDContainsFold(query),        // search by OwnerID
-			program.NameContainsFold(query),           // search by Name
-			program.DescriptionContainsFold(query),    // search by Description
-			program.OrganizationIDContainsFold(query), // search by OrganizationID
+			program.OwnerIDContainsFold(query),     // search by OwnerID
+			program.NameContainsFold(query),        // search by Name
+			program.DescriptionContainsFold(query), // search by Description
 		),
 	).All(ctx)
 }
