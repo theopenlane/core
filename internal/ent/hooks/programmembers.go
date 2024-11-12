@@ -10,6 +10,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 )
 
+// HookProgramMembers is a hook that ensures that the user is a member of the organization
+// before allowing them to be added to a program
+// TODO (sfunk): can this be generic across all edges with users that are owned by an organization?
 func HookProgramMembers() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.ProgramMembershipFunc(func(ctx context.Context, m *generated.ProgramMembershipMutation) (generated.Value, error) {

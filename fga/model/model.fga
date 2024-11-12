@@ -69,12 +69,14 @@ type file
 type program 
   relations
     # main roles
-    define admin: [user]
-    define member: [user] or admin
+    define admin: [user] or owner from parent
+    define member: [user] or admin or owner from parent
     # main permission sets based on roles
-    define can_delete: [service] or admin
-    define can_edit: [service] or admin  
-    define can_view: [service] or member or admin or can_edit
+    define can_delete: [service] or admin or owner from parent
+    define can_edit: [service] or admin or owner from parent
+    define can_view: [service] or member or admin or can_edit or owner from parent
+    # add parent relation, only the organization owner will have access to the program by default
+    define parent: [organization]
     # additional fine-grained permissions
     ## allow owner and assigned users to view audit logs
     define audit_log_viewer: [user] or admin

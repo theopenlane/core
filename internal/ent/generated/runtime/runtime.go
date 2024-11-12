@@ -3044,16 +3044,21 @@ func init() {
 	programMixinHooks0 := programMixin[0].Hooks()
 	programMixinHooks2 := programMixin[2].Hooks()
 	programMixinHooks4 := programMixin[4].Hooks()
+	programHooks := schema.Program{}.Hooks()
 
 	program.Hooks[1] = programMixinHooks0[0]
 
 	program.Hooks[2] = programMixinHooks2[0]
 
 	program.Hooks[3] = programMixinHooks4[0]
+
+	program.Hooks[4] = programHooks[0]
 	programMixinInters2 := programMixin[2].Interceptors()
 	programMixinInters4 := programMixin[4].Interceptors()
+	programInters := schema.Program{}.Interceptors()
 	program.Interceptors[0] = programMixinInters2[0]
 	program.Interceptors[1] = programMixinInters4[0]
+	program.Interceptors[2] = programInters[0]
 	programMixinFields0 := programMixin[0].Fields()
 	_ = programMixinFields0
 	programMixinFields1 := programMixin[1].Fields()

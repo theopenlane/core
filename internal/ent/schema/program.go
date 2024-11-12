@@ -11,6 +11,8 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
@@ -131,12 +133,16 @@ func (Program) Annotations() []schema.Annotation {
 
 // Hooks of the Program
 func (Program) Hooks() []ent.Hook {
-	return []ent.Hook{}
+	return []ent.Hook{
+		hooks.HookProgramAuthz(),
+	}
 }
 
 // Interceptors of the Program
 func (Program) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{}
+	return []ent.Interceptor{
+		interceptors.FilterListQuery(),
+	}
 }
 
 // Policy of the program
