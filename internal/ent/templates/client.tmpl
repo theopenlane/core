@@ -27,10 +27,10 @@
             driver := c.driver.(*dialect.DebugDriver)
 
             switch driver.Driver.(type) {
-            case *sql.Driver: // default 
+            case *sql.Driver: // default
                 return driver.Driver.(*sql.Driver).DB()
             case *entcache.Driver: // when using entcache we need to unwrap the driver
-                return driver.Driver.(*entcache.Driver).Driver.(*sql.Driver).DB() 
+                return driver.Driver.(*entcache.Driver).Driver.(*sql.Driver).DB()
             default:
                 panic(fmt.Sprintf("ent: unknown driver type: %T", driver))
             }
@@ -52,7 +52,7 @@ func (c *Client) CloseAll() error {
 {{ end }}
 
 {{ define "client/fields/additional/config" }}
-    // Config is the db client configuration 
+    // Config is the db client configuration
     Config *entx.EntClientConfig
 {{ end }}
 

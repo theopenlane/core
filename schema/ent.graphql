@@ -4666,7 +4666,7 @@ input CreateSubcontrolInput {
   """
   subcontrolNumber: String
   """
-  subcontrol family 
+  subcontrol family
   """
   family: String
   """
@@ -24259,7 +24259,7 @@ type Subcontrol implements Node {
   """
   subcontrolNumber: String
   """
-  subcontrol family 
+  subcontrol family
   """
   family: String
   """
@@ -24374,7 +24374,7 @@ type SubcontrolHistory implements Node {
   """
   subcontrolNumber: String
   """
-  subcontrol family 
+  subcontrol family
   """
   family: String
   """
@@ -28708,7 +28708,7 @@ input UpdateSubcontrolInput {
   subcontrolNumber: String
   clearSubcontrolNumber: Boolean
   """
-  subcontrol family 
+  subcontrol family
   """
   family: String
   clearFamily: Boolean

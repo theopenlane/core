@@ -137,7 +137,7 @@ var errHandler objects.ErrResponseHandler = func(err error, statusCode int) http
   }
 }
 
-// add the following to the objects options: 
+// add the following to the objects options:
 // objects.WithErrorResponseHandler(errHandler)
 ```
 
@@ -158,7 +158,7 @@ var uploader objects.UploaderFunc = func(ctx context.Context, u *objects.Objects
 	return uploadedFiles, nil
 }
 
-// add the following to the objects options: 
+// add the following to the objects options:
 // objects.WithUploaderFunc(uploader)
 ```
 
@@ -189,6 +189,6 @@ var customValidator objects.ValidationFunc = func(f objects.File) error {
  }
 }
 
-// add the following to the objects options: 
+// add the following to the objects options:
 // objects.WithValidationFunc(customValidator)
 ```

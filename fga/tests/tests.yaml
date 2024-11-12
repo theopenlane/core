@@ -427,16 +427,16 @@ tests:
           access:
   - name: files
     description: files can be associated to many objects and users can access files based on their permissions
-    tuples: 
+    tuples:
       - user: user:ulid-admin
         relation: can_delete
         object: file:file-1
       - user: user:ulid-other-1
         relation: can_view
-        object: file:file-1  # direct access
+        object: file:file-1 # direct access
       - user: user:ulid-other-2
         relation: member
-        object: program:program-1  # indirect access
+        object: program:program-1 # indirect access
       - user: program:program-1
         relation: parent
         object: file:file-1 # program has access to file
@@ -458,7 +458,7 @@ tests:
       - user: organization:contact-org
         relation: parent
         object: contact:contact-1
-    check: 
+    check:
       - user: user:ulid-admin # admin of the file should have all permissions
         object: file:file-1
         assertions:
@@ -497,16 +497,16 @@ tests:
           can_delete: true
   - name: files
     description: files can be associated to many objects and users can access files based on their permissions
-    tuples: 
+    tuples:
       - user: user:ulid-admin
         relation: can_delete
         object: file:file-1
       - user: user:ulid-other-1
         relation: can_view
-        object: file:file-1  # direct access
+        object: file:file-1 # direct access
       - user: user:ulid-other-2
         relation: member
-        object: program:program-1  # indirect access
+        object: program:program-1 # indirect access
       - user: program:program-1
         relation: parent
         object: file:file-1 # program has access to file
@@ -528,7 +528,7 @@ tests:
       - user: organization:contact-org
         relation: parent
         object: contact:contact-1
-    check: 
+    check:
       - user: user:ulid-admin # admin of the file should have all permissions
         object: file:file-1
         assertions:
@@ -567,16 +567,16 @@ tests:
           can_delete: true
   - name: tasks
     description: tasks can be associated to many objects and users can access tasks based on their permissions
-    tuples: 
+    tuples:
       - user: user:ulid-admin
         relation: can_delete
         object: task:task-1
       - user: user:ulid-other-1
         relation: can_view
-        object: task:task-1  # direct access
+        object: task:task-1 # direct access
       - user: user:ulid-other-2
         relation: member
-        object: program:program-1  # indirect access
+        object: program:program-1 # indirect access
       - user: program:program-1
         relation: parent
         object: task:task-1 # program has access to task
@@ -598,7 +598,7 @@ tests:
       - user: organization:group-org
         relation: parent
         object: group:group-1
-    check: 
+    check:
       - user: user:ulid-admin # admin of the task should have all permissions
         object: task:task-1
         assertions:

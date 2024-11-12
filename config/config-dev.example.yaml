@@ -84,7 +84,7 @@ email:
       verifySubscriber: https://www.theopenlane.io/subscribe
       verify: https://console.theopenlane.io/verify
       reset: https://console.theopenlane.io/password-reset
-      invite: https://console.theopenlane.io/invite 
+      invite: https://console.theopenlane.io/invite
       root: https://www.theopenlane.io
       docs: https://docs.theopenlane.io
       product: https://console.theopenlane.io
