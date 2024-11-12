@@ -324,6 +324,7 @@ query AdminSearch($query: String!) {
           id
           deletedBy
           tags
+          ownerID
           name
           description
           organizationID

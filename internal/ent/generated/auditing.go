@@ -1908,6 +1908,9 @@ func (ph *ProgramHistory) changes(new *ProgramHistory) []Change {
 	if !reflect.DeepEqual(ph.Tags, new.Tags) {
 		changes = append(changes, NewChange(programhistory.FieldTags, ph.Tags, new.Tags))
 	}
+	if !reflect.DeepEqual(ph.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(programhistory.FieldOwnerID, ph.OwnerID, new.OwnerID))
+	}
 	if !reflect.DeepEqual(ph.Name, new.Name) {
 		changes = append(changes, NewChange(programhistory.FieldName, ph.Name, new.Name))
 	}

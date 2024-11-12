@@ -3607,13 +3607,15 @@ type CreateProgramInput struct {
 	StartDate *time.Time `json:"startDate,omitempty"`
 	// the end date of the period
 	EndDate *time.Time `json:"endDate,omitempty"`
+	// the organization that owns the program
+	OrganizationID string `json:"organizationID"`
 	// is the program ready for the auditor
 	AuditorReady *bool `json:"auditorReady,omitempty"`
 	// can the auditor write comments
 	AuditorWriteComments *bool `json:"auditorWriteComments,omitempty"`
 	// can the auditor read comments
 	AuditorReadComments *bool    `json:"auditorReadComments,omitempty"`
-	OrganizationID      string   `json:"organizationID"`
+	OwnerID             *string  `json:"ownerID,omitempty"`
 	ControlIDs          []string `json:"controlIDs,omitempty"`
 	SubcontrolIDs       []string `json:"subcontrolIDs,omitempty"`
 	ControlobjectiveIDs []string `json:"controlobjectiveIDs,omitempty"`
@@ -15635,6 +15637,8 @@ type Program struct {
 	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// the organization id that owns the object
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the program
 	Name string `json:"name"`
 	// the description of the program
@@ -15653,7 +15657,7 @@ type Program struct {
 	AuditorWriteComments bool `json:"auditorWriteComments"`
 	// can the auditor read comments
 	AuditorReadComments bool                `json:"auditorReadComments"`
-	Organization        *Organization       `json:"organization"`
+	Owner               *Organization       `json:"owner,omitempty"`
 	Controls            []*Control          `json:"controls,omitempty"`
 	Subcontrols         []*Subcontrol       `json:"subcontrols,omitempty"`
 	Controlobjectives   []*ControlObjective `json:"controlobjectives,omitempty"`
@@ -15722,6 +15726,8 @@ type ProgramHistory struct {
 	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// the organization id that owns the object
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the program
 	Name string `json:"name"`
 	// the description of the program
@@ -15890,6 +15896,22 @@ type ProgramHistoryWhereInput struct {
 	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// owner_id field predicates
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        *bool    `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
@@ -16445,6 +16467,22 @@ type ProgramWhereInput struct {
 	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// owner_id field predicates
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        *bool    `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
@@ -16525,9 +16563,9 @@ type ProgramWhereInput struct {
 	// auditor_read_comments field predicates
 	AuditorReadComments    *bool `json:"auditorReadComments,omitempty"`
 	AuditorReadCommentsNeq *bool `json:"auditorReadCommentsNEQ,omitempty"`
-	// organization edge predicates
-	HasOrganization     *bool                     `json:"hasOrganization,omitempty"`
-	HasOrganizationWith []*OrganizationWhereInput `json:"hasOrganizationWith,omitempty"`
+	// owner edge predicates
+	HasOwner     *bool                     `json:"hasOwner,omitempty"`
+	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
 	// controls edge predicates
 	HasControls     *bool                `json:"hasControls,omitempty"`
 	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
@@ -21257,13 +21295,16 @@ type UpdateProgramInput struct {
 	// the end date of the period
 	EndDate      *time.Time `json:"endDate,omitempty"`
 	ClearEndDate *bool      `json:"clearEndDate,omitempty"`
+	// the organization that owns the program
+	OrganizationID *string `json:"organizationID,omitempty"`
 	// is the program ready for the auditor
 	AuditorReady *bool `json:"auditorReady,omitempty"`
 	// can the auditor write comments
 	AuditorWriteComments *bool `json:"auditorWriteComments,omitempty"`
 	// can the auditor read comments
 	AuditorReadComments       *bool    `json:"auditorReadComments,omitempty"`
-	OrganizationID            *string  `json:"organizationID,omitempty"`
+	OwnerID                   *string  `json:"ownerID,omitempty"`
+	ClearOwner                *bool    `json:"clearOwner,omitempty"`
 	AddControlIDs             []string `json:"addControlIDs,omitempty"`
 	RemoveControlIDs          []string `json:"removeControlIDs,omitempty"`
 	ClearControls             *bool    `json:"clearControls,omitempty"`

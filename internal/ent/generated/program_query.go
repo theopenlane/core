@@ -40,7 +40,7 @@ type ProgramQuery struct {
 	order                      []program.OrderOption
 	inters                     []Interceptor
 	predicates                 []predicate.Program
-	withOrganization           *OrganizationQuery
+	withOwner                  *OrganizationQuery
 	withControls               *ControlQuery
 	withSubcontrols            *SubcontrolQuery
 	withControlobjectives      *ControlObjectiveQuery
@@ -107,8 +107,8 @@ func (pq *ProgramQuery) Order(o ...program.OrderOption) *ProgramQuery {
 	return pq
 }
 
-// QueryOrganization chains the current query on the "organization" edge.
-func (pq *ProgramQuery) QueryOrganization() *OrganizationQuery {
+// QueryOwner chains the current query on the "owner" edge.
+func (pq *ProgramQuery) QueryOwner() *OrganizationQuery {
 	query := (&OrganizationClient{config: pq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := pq.prepareQuery(ctx); err != nil {
@@ -121,7 +121,7 @@ func (pq *ProgramQuery) QueryOrganization() *OrganizationQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(program.Table, program.FieldID, selector),
 			sqlgraph.To(organization.Table, organization.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, program.OrganizationTable, program.OrganizationColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, program.OwnerTable, program.OwnerColumn),
 		)
 		schemaConfig := pq.schemaConfig
 		step.To.Schema = schemaConfig.Organization
@@ -674,7 +674,7 @@ func (pq *ProgramQuery) Clone() *ProgramQuery {
 		order:                 append([]program.OrderOption{}, pq.order...),
 		inters:                append([]Interceptor{}, pq.inters...),
 		predicates:            append([]predicate.Program{}, pq.predicates...),
-		withOrganization:      pq.withOrganization.Clone(),
+		withOwner:             pq.withOwner.Clone(),
 		withControls:          pq.withControls.Clone(),
 		withSubcontrols:       pq.withSubcontrols.Clone(),
 		withControlobjectives: pq.withControlobjectives.Clone(),
@@ -696,14 +696,14 @@ func (pq *ProgramQuery) Clone() *ProgramQuery {
 	}
 }
 
-// WithOrganization tells the query-builder to eager-load the nodes that are connected to
-// the "organization" edge. The optional arguments are used to configure the query builder of the edge.
-func (pq *ProgramQuery) WithOrganization(opts ...func(*OrganizationQuery)) *ProgramQuery {
+// WithOwner tells the query-builder to eager-load the nodes that are connected to
+// the "owner" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *ProgramQuery) WithOwner(opts ...func(*OrganizationQuery)) *ProgramQuery {
 	query := (&OrganizationClient{config: pq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	pq.withOrganization = query
+	pq.withOwner = query
 	return pq
 }
 
@@ -940,7 +940,7 @@ func (pq *ProgramQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Prog
 		nodes       = []*Program{}
 		_spec       = pq.querySpec()
 		loadedTypes = [15]bool{
-			pq.withOrganization != nil,
+			pq.withOwner != nil,
 			pq.withControls != nil,
 			pq.withSubcontrols != nil,
 			pq.withControlobjectives != nil,
@@ -980,9 +980,9 @@ func (pq *ProgramQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Prog
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := pq.withOrganization; query != nil {
-		if err := pq.loadOrganization(ctx, query, nodes, nil,
-			func(n *Program, e *Organization) { n.Edges.Organization = e }); err != nil {
+	if query := pq.withOwner; query != nil {
+		if err := pq.loadOwner(ctx, query, nodes, nil,
+			func(n *Program, e *Organization) { n.Edges.Owner = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1192,11 +1192,11 @@ func (pq *ProgramQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Prog
 	return nodes, nil
 }
 
-func (pq *ProgramQuery) loadOrganization(ctx context.Context, query *OrganizationQuery, nodes []*Program, init func(*Program), assign func(*Program, *Organization)) error {
+func (pq *ProgramQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*Program, init func(*Program), assign func(*Program, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Program)
 	for i := range nodes {
-		fk := nodes[i].OrganizationID
+		fk := nodes[i].OwnerID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -1213,7 +1213,7 @@ func (pq *ProgramQuery) loadOrganization(ctx context.Context, query *Organizatio
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "organization_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "owner_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -2088,8 +2088,8 @@ func (pq *ProgramQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if pq.withOrganization != nil {
-			_spec.Node.AddColumnOnce(program.FieldOrganizationID)
+		if pq.withOwner != nil {
+			_spec.Node.AddColumnOnce(program.FieldOwnerID)
 		}
 	}
 	if ps := pq.predicates; len(ps) > 0 {

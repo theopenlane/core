@@ -4696,6 +4696,10 @@ input CreateProgramInput {
 	"""
 	endDate: Time
 	"""
+	the organization that owns the program
+	"""
+	organizationID: String!
+	"""
 	is the program ready for the auditor
 	"""
 	auditorReady: Boolean
@@ -4707,7 +4711,7 @@ input CreateProgramInput {
 	can the auditor read comments
 	"""
 	auditorReadComments: Boolean
-	organizationID: ID!
+	ownerID: ID
 	controlIDs: [ID!]
 	subcontrolIDs: [ID!]
 	controlobjectiveIDs: [ID!]
@@ -22070,6 +22074,10 @@ type Program implements Node {
 	"""
 	tags: [String!]
 	"""
+	the organization id that owns the object
+	"""
+	ownerID: ID
+	"""
 	the name of the program
 	"""
 	name: String!
@@ -22092,7 +22100,7 @@ type Program implements Node {
 	"""
 	the organization that owns the program
 	"""
-	organizationID: ID!
+	organizationID: String!
 	"""
 	is the program ready for the auditor
 	"""
@@ -22105,7 +22113,7 @@ type Program implements Node {
 	can the auditor read comments
 	"""
 	auditorReadComments: Boolean!
-	organization: Organization!
+	owner: Organization
 	controls: [Control!]
 	subcontrols: [Subcontrol!]
 	controlobjectives: [ControlObjective!]
@@ -22196,6 +22204,10 @@ type ProgramHistory implements Node {
 	tags associated with the object
 	"""
 	tags: [String!]
+	"""
+	the organization id that owns the object
+	"""
+	ownerID: String
 	"""
 	the name of the program
 	"""
@@ -22431,6 +22443,24 @@ input ProgramHistoryWhereInput {
 	deletedByNotNil: Boolean
 	deletedByEqualFold: String
 	deletedByContainsFold: String
+	"""
+	owner_id field predicates
+	"""
+	ownerID: String
+	ownerIDNEQ: String
+	ownerIDIn: [String!]
+	ownerIDNotIn: [String!]
+	ownerIDGT: String
+	ownerIDGTE: String
+	ownerIDLT: String
+	ownerIDLTE: String
+	ownerIDContains: String
+	ownerIDHasPrefix: String
+	ownerIDHasSuffix: String
+	ownerIDIsNil: Boolean
+	ownerIDNotNil: Boolean
+	ownerIDEqualFold: String
+	ownerIDContainsFold: String
 	"""
 	name field predicates
 	"""
@@ -23126,6 +23156,24 @@ input ProgramWhereInput {
 	deletedByEqualFold: String
 	deletedByContainsFold: String
 	"""
+	owner_id field predicates
+	"""
+	ownerID: ID
+	ownerIDNEQ: ID
+	ownerIDIn: [ID!]
+	ownerIDNotIn: [ID!]
+	ownerIDGT: ID
+	ownerIDGTE: ID
+	ownerIDLT: ID
+	ownerIDLTE: ID
+	ownerIDContains: ID
+	ownerIDHasPrefix: ID
+	ownerIDHasSuffix: ID
+	ownerIDIsNil: Boolean
+	ownerIDNotNil: Boolean
+	ownerIDEqualFold: ID
+	ownerIDContainsFold: ID
+	"""
 	name field predicates
 	"""
 	name: String
@@ -23195,19 +23243,19 @@ input ProgramWhereInput {
 	"""
 	organization_id field predicates
 	"""
-	organizationID: ID
-	organizationIDNEQ: ID
-	organizationIDIn: [ID!]
-	organizationIDNotIn: [ID!]
-	organizationIDGT: ID
-	organizationIDGTE: ID
-	organizationIDLT: ID
-	organizationIDLTE: ID
-	organizationIDContains: ID
-	organizationIDHasPrefix: ID
-	organizationIDHasSuffix: ID
-	organizationIDEqualFold: ID
-	organizationIDContainsFold: ID
+	organizationID: String
+	organizationIDNEQ: String
+	organizationIDIn: [String!]
+	organizationIDNotIn: [String!]
+	organizationIDGT: String
+	organizationIDGTE: String
+	organizationIDLT: String
+	organizationIDLTE: String
+	organizationIDContains: String
+	organizationIDHasPrefix: String
+	organizationIDHasSuffix: String
+	organizationIDEqualFold: String
+	organizationIDContainsFold: String
 	"""
 	auditor_ready field predicates
 	"""
@@ -23224,10 +23272,10 @@ input ProgramWhereInput {
 	auditorReadComments: Boolean
 	auditorReadCommentsNEQ: Boolean
 	"""
-	organization edge predicates
+	owner edge predicates
 	"""
-	hasOrganization: Boolean
-	hasOrganizationWith: [OrganizationWhereInput!]
+	hasOwner: Boolean
+	hasOwnerWith: [OrganizationWhereInput!]
 	"""
 	controls edge predicates
 	"""
@@ -32532,6 +32580,10 @@ input UpdateProgramInput {
 	endDate: Time
 	clearEndDate: Boolean
 	"""
+	the organization that owns the program
+	"""
+	organizationID: String
+	"""
 	is the program ready for the auditor
 	"""
 	auditorReady: Boolean
@@ -32543,7 +32595,8 @@ input UpdateProgramInput {
 	can the auditor read comments
 	"""
 	auditorReadComments: Boolean
-	organizationID: ID
+	ownerID: ID
+	clearOwner: Boolean
 	addControlIDs: [ID!]
 	removeControlIDs: [ID!]
 	clearControls: Boolean

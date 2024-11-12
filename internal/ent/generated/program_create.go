@@ -140,6 +140,20 @@ func (pc *ProgramCreate) SetTags(s []string) *ProgramCreate {
 	return pc
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (pc *ProgramCreate) SetOwnerID(s string) *ProgramCreate {
+	pc.mutation.SetOwnerID(s)
+	return pc
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (pc *ProgramCreate) SetNillableOwnerID(s *string) *ProgramCreate {
+	if s != nil {
+		pc.SetOwnerID(*s)
+	}
+	return pc
+}
+
 // SetName sets the "name" field.
 func (pc *ProgramCreate) SetName(s string) *ProgramCreate {
 	pc.mutation.SetName(s)
@@ -264,9 +278,9 @@ func (pc *ProgramCreate) SetNillableID(s *string) *ProgramCreate {
 	return pc
 }
 
-// SetOrganization sets the "organization" edge to the Organization entity.
-func (pc *ProgramCreate) SetOrganization(o *Organization) *ProgramCreate {
-	return pc.SetOrganizationID(o.ID)
+// SetOwner sets the "owner" edge to the Organization entity.
+func (pc *ProgramCreate) SetOwner(o *Organization) *ProgramCreate {
+	return pc.SetOwnerID(o.ID)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
@@ -572,6 +586,11 @@ func (pc *ProgramCreate) check() error {
 	if _, ok := pc.mutation.MappingID(); !ok {
 		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "Program.mapping_id"`)}
 	}
+	if v, ok := pc.mutation.OwnerID(); ok {
+		if err := program.OwnerIDValidator(v); err != nil {
+			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Program.owner_id": %w`, err)}
+		}
+	}
 	if _, ok := pc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "Program.name"`)}
 	}
@@ -604,9 +623,6 @@ func (pc *ProgramCreate) check() error {
 	}
 	if _, ok := pc.mutation.AuditorReadComments(); !ok {
 		return &ValidationError{Name: "auditor_read_comments", err: errors.New(`generated: missing required field "Program.auditor_read_comments"`)}
-	}
-	if len(pc.mutation.OrganizationIDs()) == 0 {
-		return &ValidationError{Name: "organization", err: errors.New(`generated: missing required edge "Program.organization"`)}
 	}
 	return nil
 }
@@ -696,6 +712,10 @@ func (pc *ProgramCreate) createSpec() (*Program, *sqlgraph.CreateSpec) {
 		_spec.SetField(program.FieldEndDate, field.TypeTime, value)
 		_node.EndDate = value
 	}
+	if value, ok := pc.mutation.OrganizationID(); ok {
+		_spec.SetField(program.FieldOrganizationID, field.TypeString, value)
+		_node.OrganizationID = value
+	}
 	if value, ok := pc.mutation.AuditorReady(); ok {
 		_spec.SetField(program.FieldAuditorReady, field.TypeBool, value)
 		_node.AuditorReady = value
@@ -708,12 +728,12 @@ func (pc *ProgramCreate) createSpec() (*Program, *sqlgraph.CreateSpec) {
 		_spec.SetField(program.FieldAuditorReadComments, field.TypeBool, value)
 		_node.AuditorReadComments = value
 	}
-	if nodes := pc.mutation.OrganizationIDs(); len(nodes) > 0 {
+	if nodes := pc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   program.OrganizationTable,
-			Columns: []string{program.OrganizationColumn},
+			Table:   program.OwnerTable,
+			Columns: []string{program.OwnerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
@@ -723,7 +743,7 @@ func (pc *ProgramCreate) createSpec() (*Program, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.OrganizationID = nodes[0]
+		_node.OwnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := pc.mutation.ControlsIDs(); len(nodes) > 0 {

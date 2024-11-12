@@ -10200,7 +10200,7 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
-		case "organization":
+		case "owner":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -10209,10 +10209,10 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
 				return err
 			}
-			pr.withOrganization = query
-			if _, ok := fieldSeen[program.FieldOrganizationID]; !ok {
-				selectedFields = append(selectedFields, program.FieldOrganizationID)
-				fieldSeen[program.FieldOrganizationID] = struct{}{}
+			pr.withOwner = query
+			if _, ok := fieldSeen[program.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, program.FieldOwnerID)
+				fieldSeen[program.FieldOwnerID] = struct{}{}
 			}
 
 		case "controls":
@@ -10431,6 +10431,11 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				selectedFields = append(selectedFields, program.FieldTags)
 				fieldSeen[program.FieldTags] = struct{}{}
 			}
+		case "ownerID":
+			if _, ok := fieldSeen[program.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, program.FieldOwnerID)
+				fieldSeen[program.FieldOwnerID] = struct{}{}
+			}
 		case "name":
 			if _, ok := fieldSeen[program.FieldName]; !ok {
 				selectedFields = append(selectedFields, program.FieldName)
@@ -10587,6 +10592,11 @@ func (ph *ProgramHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 			if _, ok := fieldSeen[programhistory.FieldTags]; !ok {
 				selectedFields = append(selectedFields, programhistory.FieldTags)
 				fieldSeen[programhistory.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[programhistory.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, programhistory.FieldOwnerID)
+				fieldSeen[programhistory.FieldOwnerID] = struct{}{}
 			}
 		case "name":
 			if _, ok := fieldSeen[programhistory.FieldName]; !ok {

@@ -138,6 +138,26 @@ func (pu *ProgramUpdate) ClearTags() *ProgramUpdate {
 	return pu
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (pu *ProgramUpdate) SetOwnerID(s string) *ProgramUpdate {
+	pu.mutation.SetOwnerID(s)
+	return pu
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (pu *ProgramUpdate) SetNillableOwnerID(s *string) *ProgramUpdate {
+	if s != nil {
+		pu.SetOwnerID(*s)
+	}
+	return pu
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (pu *ProgramUpdate) ClearOwnerID() *ProgramUpdate {
+	pu.mutation.ClearOwnerID()
+	return pu
+}
+
 // SetName sets the "name" field.
 func (pu *ProgramUpdate) SetName(s string) *ProgramUpdate {
 	pu.mutation.SetName(s)
@@ -282,9 +302,9 @@ func (pu *ProgramUpdate) SetNillableAuditorReadComments(b *bool) *ProgramUpdate 
 	return pu
 }
 
-// SetOrganization sets the "organization" edge to the Organization entity.
-func (pu *ProgramUpdate) SetOrganization(o *Organization) *ProgramUpdate {
-	return pu.SetOrganizationID(o.ID)
+// SetOwner sets the "owner" edge to the Organization entity.
+func (pu *ProgramUpdate) SetOwner(o *Organization) *ProgramUpdate {
+	return pu.SetOwnerID(o.ID)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
@@ -502,9 +522,9 @@ func (pu *ProgramUpdate) Mutation() *ProgramMutation {
 	return pu.mutation
 }
 
-// ClearOrganization clears the "organization" edge to the Organization entity.
-func (pu *ProgramUpdate) ClearOrganization() *ProgramUpdate {
-	pu.mutation.ClearOrganization()
+// ClearOwner clears the "owner" edge to the Organization entity.
+func (pu *ProgramUpdate) ClearOwner() *ProgramUpdate {
+	pu.mutation.ClearOwner()
 	return pu
 }
 
@@ -846,6 +866,11 @@ func (pu *ProgramUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (pu *ProgramUpdate) check() error {
+	if v, ok := pu.mutation.OwnerID(); ok {
+		if err := program.OwnerIDValidator(v); err != nil {
+			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Program.owner_id": %w`, err)}
+		}
+	}
 	if v, ok := pu.mutation.Name(); ok {
 		if err := program.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Program.name": %w`, err)}
@@ -860,9 +885,6 @@ func (pu *ProgramUpdate) check() error {
 		if err := program.OrganizationIDValidator(v); err != nil {
 			return &ValidationError{Name: "organization_id", err: fmt.Errorf(`generated: validator failed for field "Program.organization_id": %w`, err)}
 		}
-	}
-	if pu.mutation.OrganizationCleared() && len(pu.mutation.OrganizationIDs()) > 0 {
-		return errors.New(`generated: clearing a required unique edge "Program.organization"`)
 	}
 	return nil
 }
@@ -950,6 +972,9 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if pu.mutation.EndDateCleared() {
 		_spec.ClearField(program.FieldEndDate, field.TypeTime)
 	}
+	if value, ok := pu.mutation.OrganizationID(); ok {
+		_spec.SetField(program.FieldOrganizationID, field.TypeString, value)
+	}
 	if value, ok := pu.mutation.AuditorReady(); ok {
 		_spec.SetField(program.FieldAuditorReady, field.TypeBool, value)
 	}
@@ -959,12 +984,12 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := pu.mutation.AuditorReadComments(); ok {
 		_spec.SetField(program.FieldAuditorReadComments, field.TypeBool, value)
 	}
-	if pu.mutation.OrganizationCleared() {
+	if pu.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   program.OrganizationTable,
-			Columns: []string{program.OrganizationColumn},
+			Table:   program.OwnerTable,
+			Columns: []string{program.OwnerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
@@ -973,12 +998,12 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge.Schema = pu.schemaConfig.Program
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := pu.mutation.OrganizationIDs(); len(nodes) > 0 {
+	if nodes := pu.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   program.OrganizationTable,
-			Columns: []string{program.OrganizationColumn},
+			Table:   program.OwnerTable,
+			Columns: []string{program.OwnerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
@@ -1797,6 +1822,26 @@ func (puo *ProgramUpdateOne) ClearTags() *ProgramUpdateOne {
 	return puo
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (puo *ProgramUpdateOne) SetOwnerID(s string) *ProgramUpdateOne {
+	puo.mutation.SetOwnerID(s)
+	return puo
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (puo *ProgramUpdateOne) SetNillableOwnerID(s *string) *ProgramUpdateOne {
+	if s != nil {
+		puo.SetOwnerID(*s)
+	}
+	return puo
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (puo *ProgramUpdateOne) ClearOwnerID() *ProgramUpdateOne {
+	puo.mutation.ClearOwnerID()
+	return puo
+}
+
 // SetName sets the "name" field.
 func (puo *ProgramUpdateOne) SetName(s string) *ProgramUpdateOne {
 	puo.mutation.SetName(s)
@@ -1941,9 +1986,9 @@ func (puo *ProgramUpdateOne) SetNillableAuditorReadComments(b *bool) *ProgramUpd
 	return puo
 }
 
-// SetOrganization sets the "organization" edge to the Organization entity.
-func (puo *ProgramUpdateOne) SetOrganization(o *Organization) *ProgramUpdateOne {
-	return puo.SetOrganizationID(o.ID)
+// SetOwner sets the "owner" edge to the Organization entity.
+func (puo *ProgramUpdateOne) SetOwner(o *Organization) *ProgramUpdateOne {
+	return puo.SetOwnerID(o.ID)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
@@ -2161,9 +2206,9 @@ func (puo *ProgramUpdateOne) Mutation() *ProgramMutation {
 	return puo.mutation
 }
 
-// ClearOrganization clears the "organization" edge to the Organization entity.
-func (puo *ProgramUpdateOne) ClearOrganization() *ProgramUpdateOne {
-	puo.mutation.ClearOrganization()
+// ClearOwner clears the "owner" edge to the Organization entity.
+func (puo *ProgramUpdateOne) ClearOwner() *ProgramUpdateOne {
+	puo.mutation.ClearOwner()
 	return puo
 }
 
@@ -2518,6 +2563,11 @@ func (puo *ProgramUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (puo *ProgramUpdateOne) check() error {
+	if v, ok := puo.mutation.OwnerID(); ok {
+		if err := program.OwnerIDValidator(v); err != nil {
+			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Program.owner_id": %w`, err)}
+		}
+	}
 	if v, ok := puo.mutation.Name(); ok {
 		if err := program.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Program.name": %w`, err)}
@@ -2532,9 +2582,6 @@ func (puo *ProgramUpdateOne) check() error {
 		if err := program.OrganizationIDValidator(v); err != nil {
 			return &ValidationError{Name: "organization_id", err: fmt.Errorf(`generated: validator failed for field "Program.organization_id": %w`, err)}
 		}
-	}
-	if puo.mutation.OrganizationCleared() && len(puo.mutation.OrganizationIDs()) > 0 {
-		return errors.New(`generated: clearing a required unique edge "Program.organization"`)
 	}
 	return nil
 }
@@ -2639,6 +2686,9 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 	if puo.mutation.EndDateCleared() {
 		_spec.ClearField(program.FieldEndDate, field.TypeTime)
 	}
+	if value, ok := puo.mutation.OrganizationID(); ok {
+		_spec.SetField(program.FieldOrganizationID, field.TypeString, value)
+	}
 	if value, ok := puo.mutation.AuditorReady(); ok {
 		_spec.SetField(program.FieldAuditorReady, field.TypeBool, value)
 	}
@@ -2648,12 +2698,12 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 	if value, ok := puo.mutation.AuditorReadComments(); ok {
 		_spec.SetField(program.FieldAuditorReadComments, field.TypeBool, value)
 	}
-	if puo.mutation.OrganizationCleared() {
+	if puo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   program.OrganizationTable,
-			Columns: []string{program.OrganizationColumn},
+			Table:   program.OwnerTable,
+			Columns: []string{program.OwnerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
@@ -2662,12 +2712,12 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 		edge.Schema = puo.schemaConfig.Program
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := puo.mutation.OrganizationIDs(); len(nodes) > 0 {
+	if nodes := puo.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   program.OrganizationTable,
-			Columns: []string{program.OrganizationColumn},
+			Table:   program.OwnerTable,
+			Columns: []string{program.OwnerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),

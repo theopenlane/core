@@ -33,7 +33,7 @@ func HookProgramMembers() ent.Hook {
 			// ensure user is a member of the organization
 			exists, err := m.Client().OrgMembership.Query().
 				Where(orgmembership.UserID(userID)).
-				Where(orgmembership.OrganizationID(program.OrganizationID)).
+				Where(orgmembership.OrganizationID(program.OwnerID)).
 				Exist(ctx)
 			if err != nil {
 				return nil, err

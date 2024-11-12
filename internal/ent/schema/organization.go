@@ -168,7 +168,7 @@ func (Organization) Edges() []ent.Edge {
 		edge.To("tasks", Task.Type).
 			Annotations(entx.CascadeAnnotationField("Organization")),
 		edge.To("programs", Program.Type).
-			Annotations(entx.CascadeAnnotationField("Organization")),
+			Annotations(entx.CascadeAnnotationField("Owner")),
 	}
 }
 

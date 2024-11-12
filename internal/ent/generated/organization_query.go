@@ -2975,7 +2975,7 @@ func (oq *OrganizationQuery) loadPrograms(ctx context.Context, query *ProgramQue
 		}
 	}
 	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(program.FieldOrganizationID)
+		query.ctx.AppendFieldOnce(program.FieldOwnerID)
 	}
 	query.Where(predicate.Program(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(organization.ProgramsColumn), fks...))
@@ -2985,10 +2985,10 @@ func (oq *OrganizationQuery) loadPrograms(ctx context.Context, query *ProgramQue
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.OrganizationID
+		fk := n.OwnerID
 		node, ok := nodeids[fk]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "organization_id" returned %v for node %v`, fk, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
 		}
 		assign(node, n)
 	}

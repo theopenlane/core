@@ -282,7 +282,7 @@ const (
 	// It exists in this package in order to avoid circular dependency with the "program" package.
 	ProgramsInverseTable = "programs"
 	// ProgramsColumn is the table column denoting the programs relation/edge.
-	ProgramsColumn = "organization_id"
+	ProgramsColumn = "owner_id"
 	// MembersTable is the table that holds the members relation/edge.
 	MembersTable = "org_memberships"
 	// MembersInverseTable is the table name for the OrgMembership entity.

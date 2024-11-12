@@ -1768,6 +1768,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			program.FieldDeletedAt:            {Type: field.TypeTime, Column: program.FieldDeletedAt},
 			program.FieldDeletedBy:            {Type: field.TypeString, Column: program.FieldDeletedBy},
 			program.FieldTags:                 {Type: field.TypeJSON, Column: program.FieldTags},
+			program.FieldOwnerID:              {Type: field.TypeString, Column: program.FieldOwnerID},
 			program.FieldName:                 {Type: field.TypeString, Column: program.FieldName},
 			program.FieldDescription:          {Type: field.TypeString, Column: program.FieldDescription},
 			program.FieldStatus:               {Type: field.TypeEnum, Column: program.FieldStatus},
@@ -1801,6 +1802,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			programhistory.FieldDeletedAt:            {Type: field.TypeTime, Column: programhistory.FieldDeletedAt},
 			programhistory.FieldDeletedBy:            {Type: field.TypeString, Column: programhistory.FieldDeletedBy},
 			programhistory.FieldTags:                 {Type: field.TypeJSON, Column: programhistory.FieldTags},
+			programhistory.FieldOwnerID:              {Type: field.TypeString, Column: programhistory.FieldOwnerID},
 			programhistory.FieldName:                 {Type: field.TypeString, Column: programhistory.FieldName},
 			programhistory.FieldDescription:          {Type: field.TypeString, Column: programhistory.FieldDescription},
 			programhistory.FieldStatus:               {Type: field.TypeEnum, Column: programhistory.FieldStatus},
@@ -4500,12 +4502,12 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Program",
 	)
 	graph.MustAddE(
-		"organization",
+		"owner",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   program.OrganizationTable,
-			Columns: []string{program.OrganizationColumn},
+			Table:   program.OwnerTable,
+			Columns: []string{program.OwnerColumn},
 			Bidi:    false,
 		},
 		"Program",
@@ -14650,6 +14652,11 @@ func (f *ProgramFilter) WhereTags(p entql.BytesP) {
 	f.Where(p.Field(program.FieldTags))
 }
 
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *ProgramFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(program.FieldOwnerID))
+}
+
 // WhereName applies the entql string predicate on the name field.
 func (f *ProgramFilter) WhereName(p entql.StringP) {
 	f.Where(p.Field(program.FieldName))
@@ -14695,14 +14702,14 @@ func (f *ProgramFilter) WhereAuditorReadComments(p entql.BoolP) {
 	f.Where(p.Field(program.FieldAuditorReadComments))
 }
 
-// WhereHasOrganization applies a predicate to check if query has an edge organization.
-func (f *ProgramFilter) WhereHasOrganization() {
-	f.Where(entql.HasEdge("organization"))
+// WhereHasOwner applies a predicate to check if query has an edge owner.
+func (f *ProgramFilter) WhereHasOwner() {
+	f.Where(entql.HasEdge("owner"))
 }
 
-// WhereHasOrganizationWith applies a predicate to check if query has an edge organization with a given conditions (other predicates).
-func (f *ProgramFilter) WhereHasOrganizationWith(preds ...predicate.Organization) {
-	f.Where(entql.HasEdgeWith("organization", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasOwnerWith applies a predicate to check if query has an edge owner with a given conditions (other predicates).
+func (f *ProgramFilter) WhereHasOwnerWith(preds ...predicate.Organization) {
+	f.Where(entql.HasEdgeWith("owner", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -14998,6 +15005,11 @@ func (f *ProgramHistoryFilter) WhereDeletedBy(p entql.StringP) {
 // WhereTags applies the entql json.RawMessage predicate on the tags field.
 func (f *ProgramHistoryFilter) WhereTags(p entql.BytesP) {
 	f.Where(p.Field(programhistory.FieldTags))
+}
+
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *ProgramHistoryFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(programhistory.FieldOwnerID))
 }
 
 // WhereName applies the entql string predicate on the name field.

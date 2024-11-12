@@ -123,6 +123,26 @@ func (phu *ProgramHistoryUpdate) ClearTags() *ProgramHistoryUpdate {
 	return phu
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (phu *ProgramHistoryUpdate) SetOwnerID(s string) *ProgramHistoryUpdate {
+	phu.mutation.SetOwnerID(s)
+	return phu
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (phu *ProgramHistoryUpdate) SetNillableOwnerID(s *string) *ProgramHistoryUpdate {
+	if s != nil {
+		phu.SetOwnerID(*s)
+	}
+	return phu
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (phu *ProgramHistoryUpdate) ClearOwnerID() *ProgramHistoryUpdate {
+	phu.mutation.ClearOwnerID()
+	return phu
+}
+
 // SetName sets the "name" field.
 func (phu *ProgramHistoryUpdate) SetName(s string) *ProgramHistoryUpdate {
 	phu.mutation.SetName(s)
@@ -274,7 +294,9 @@ func (phu *ProgramHistoryUpdate) Mutation() *ProgramHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (phu *ProgramHistoryUpdate) Save(ctx context.Context) (int, error) {
-	phu.defaults()
+	if err := phu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, phu.sqlSave, phu.mutation, phu.hooks)
 }
 
@@ -301,11 +323,15 @@ func (phu *ProgramHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (phu *ProgramHistoryUpdate) defaults() {
+func (phu *ProgramHistoryUpdate) defaults() error {
 	if _, ok := phu.mutation.UpdatedAt(); !ok && !phu.mutation.UpdatedAtCleared() {
+		if programhistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized programhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := programhistory.UpdateDefaultUpdatedAt()
 		phu.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -379,6 +405,12 @@ func (phu *ProgramHistoryUpdate) sqlSave(ctx context.Context) (n int, err error)
 	}
 	if phu.mutation.TagsCleared() {
 		_spec.ClearField(programhistory.FieldTags, field.TypeJSON)
+	}
+	if value, ok := phu.mutation.OwnerID(); ok {
+		_spec.SetField(programhistory.FieldOwnerID, field.TypeString, value)
+	}
+	if phu.mutation.OwnerIDCleared() {
+		_spec.ClearField(programhistory.FieldOwnerID, field.TypeString)
 	}
 	if value, ok := phu.mutation.Name(); ok {
 		_spec.SetField(programhistory.FieldName, field.TypeString, value)
@@ -527,6 +559,26 @@ func (phuo *ProgramHistoryUpdateOne) AppendTags(s []string) *ProgramHistoryUpdat
 // ClearTags clears the value of the "tags" field.
 func (phuo *ProgramHistoryUpdateOne) ClearTags() *ProgramHistoryUpdateOne {
 	phuo.mutation.ClearTags()
+	return phuo
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (phuo *ProgramHistoryUpdateOne) SetOwnerID(s string) *ProgramHistoryUpdateOne {
+	phuo.mutation.SetOwnerID(s)
+	return phuo
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (phuo *ProgramHistoryUpdateOne) SetNillableOwnerID(s *string) *ProgramHistoryUpdateOne {
+	if s != nil {
+		phuo.SetOwnerID(*s)
+	}
+	return phuo
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (phuo *ProgramHistoryUpdateOne) ClearOwnerID() *ProgramHistoryUpdateOne {
+	phuo.mutation.ClearOwnerID()
 	return phuo
 }
 
@@ -694,7 +746,9 @@ func (phuo *ProgramHistoryUpdateOne) Select(field string, fields ...string) *Pro
 
 // Save executes the query and returns the updated ProgramHistory entity.
 func (phuo *ProgramHistoryUpdateOne) Save(ctx context.Context) (*ProgramHistory, error) {
-	phuo.defaults()
+	if err := phuo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, phuo.sqlSave, phuo.mutation, phuo.hooks)
 }
 
@@ -721,11 +775,15 @@ func (phuo *ProgramHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (phuo *ProgramHistoryUpdateOne) defaults() {
+func (phuo *ProgramHistoryUpdateOne) defaults() error {
 	if _, ok := phuo.mutation.UpdatedAt(); !ok && !phuo.mutation.UpdatedAtCleared() {
+		if programhistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized programhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := programhistory.UpdateDefaultUpdatedAt()
 		phuo.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -816,6 +874,12 @@ func (phuo *ProgramHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Progra
 	}
 	if phuo.mutation.TagsCleared() {
 		_spec.ClearField(programhistory.FieldTags, field.TypeJSON)
+	}
+	if value, ok := phuo.mutation.OwnerID(); ok {
+		_spec.SetField(programhistory.FieldOwnerID, field.TypeString, value)
+	}
+	if phuo.mutation.OwnerIDCleared() {
+		_spec.ClearField(programhistory.FieldOwnerID, field.TypeString)
 	}
 	if value, ok := phuo.mutation.Name(); ok {
 		_spec.SetField(programhistory.FieldName, field.TypeString, value)

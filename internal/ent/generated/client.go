@@ -12171,15 +12171,15 @@ func (c *ProgramClient) GetX(ctx context.Context, id string) *Program {
 	return obj
 }
 
-// QueryOrganization queries the organization edge of a Program.
-func (c *ProgramClient) QueryOrganization(pr *Program) *OrganizationQuery {
+// QueryOwner queries the owner edge of a Program.
+func (c *ProgramClient) QueryOwner(pr *Program) *OrganizationQuery {
 	query := (&OrganizationClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := pr.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(program.Table, program.FieldID, id),
 			sqlgraph.To(organization.Table, organization.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, program.OrganizationTable, program.OrganizationColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, program.OwnerTable, program.OwnerColumn),
 		)
 		schemaConfig := pr.schemaConfig
 		step.To.Schema = schemaConfig.Organization
@@ -12593,12 +12593,14 @@ func (c *ProgramHistoryClient) GetX(ctx context.Context, id string) *ProgramHist
 
 // Hooks returns the client hooks.
 func (c *ProgramHistoryClient) Hooks() []Hook {
-	return c.hooks.ProgramHistory
+	hooks := c.hooks.ProgramHistory
+	return append(hooks[:len(hooks):len(hooks)], programhistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
 func (c *ProgramHistoryClient) Interceptors() []Interceptor {
-	return c.inters.ProgramHistory
+	inters := c.inters.ProgramHistory
+	return append(inters[:len(inters):len(inters)], programhistory.Interceptors[:]...)
 }
 
 func (c *ProgramHistoryClient) mutate(ctx context.Context, m *ProgramHistoryMutation) (Value, error) {

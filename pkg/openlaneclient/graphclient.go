@@ -3323,6 +3323,7 @@ type AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs struct {
 	ID             string   "json:\"id\" graphql:\"id\""
 	DeletedBy      *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	Tags           []string "json:\"tags,omitempty\" graphql:\"tags\""
+	OwnerID        *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Name           string   "json:\"name\" graphql:\"name\""
 	Description    *string  "json:\"description,omitempty\" graphql:\"description\""
 	OrganizationID string   "json:\"organizationID\" graphql:\"organizationID\""
@@ -3345,6 +3346,12 @@ func (t *AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs) GetTags() [
 		t = &AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs{}
 	}
 	return t.Tags
+}
+func (t *AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs) GetOwnerID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs{}
+	}
+	return t.OwnerID
 }
 func (t *AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs) GetName() string {
 	if t == nil {
@@ -50262,6 +50269,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					id
 					deletedBy
 					tags
+					ownerID
 					name
 					description
 					organizationID

@@ -3034,16 +3034,22 @@ func init() {
 	programMixin := schema.Program{}.Mixin()
 	programMixinHooks0 := programMixin[0].Hooks()
 	programMixinHooks2 := programMixin[2].Hooks()
+	programMixinHooks4 := programMixin[4].Hooks()
 	program.Hooks[0] = programMixinHooks0[0]
 	program.Hooks[1] = programMixinHooks2[0]
+	program.Hooks[2] = programMixinHooks4[0]
 	programMixinInters2 := programMixin[2].Interceptors()
+	programMixinInters4 := programMixin[4].Interceptors()
 	program.Interceptors[0] = programMixinInters2[0]
+	program.Interceptors[1] = programMixinInters4[0]
 	programMixinFields0 := programMixin[0].Fields()
 	_ = programMixinFields0
 	programMixinFields1 := programMixin[1].Fields()
 	_ = programMixinFields1
 	programMixinFields3 := programMixin[3].Fields()
 	_ = programMixinFields3
+	programMixinFields4 := programMixin[4].Fields()
+	_ = programMixinFields4
 	programFields := schema.Program{}.Fields()
 	_ = programFields
 	// programDescCreatedAt is the schema descriptor for created_at field.
@@ -3064,6 +3070,10 @@ func init() {
 	programDescTags := programMixinFields3[0].Descriptor()
 	// program.DefaultTags holds the default value on creation for the tags field.
 	program.DefaultTags = programDescTags.Default.([]string)
+	// programDescOwnerID is the schema descriptor for owner_id field.
+	programDescOwnerID := programMixinFields4[0].Descriptor()
+	// program.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	program.OwnerIDValidator = programDescOwnerID.Validators[0].(func(string) error)
 	// programDescName is the schema descriptor for name field.
 	programDescName := programFields[0].Descriptor()
 	// program.NameValidator is a validator for the "name" field. It is called by the builders before save.
@@ -3088,6 +3098,17 @@ func init() {
 	programDescID := programMixinFields1[0].Descriptor()
 	// program.DefaultID holds the default value on creation for the id field.
 	program.DefaultID = programDescID.Default.(func() string)
+	programhistory.Policy = privacy.NewPolicies(schema.ProgramHistory{})
+	programhistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := programhistory.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	programhistoryInters := schema.ProgramHistory{}.Interceptors()
+	programhistory.Interceptors[0] = programhistoryInters[0]
 	programhistoryFields := schema.ProgramHistory{}.Fields()
 	_ = programhistoryFields
 	// programhistoryDescHistoryTime is the schema descriptor for history_time field.
@@ -3113,15 +3134,15 @@ func init() {
 	// programhistory.DefaultTags holds the default value on creation for the tags field.
 	programhistory.DefaultTags = programhistoryDescTags.Default.([]string)
 	// programhistoryDescAuditorReady is the schema descriptor for auditor_ready field.
-	programhistoryDescAuditorReady := programhistoryFields[18].Descriptor()
+	programhistoryDescAuditorReady := programhistoryFields[19].Descriptor()
 	// programhistory.DefaultAuditorReady holds the default value on creation for the auditor_ready field.
 	programhistory.DefaultAuditorReady = programhistoryDescAuditorReady.Default.(bool)
 	// programhistoryDescAuditorWriteComments is the schema descriptor for auditor_write_comments field.
-	programhistoryDescAuditorWriteComments := programhistoryFields[19].Descriptor()
+	programhistoryDescAuditorWriteComments := programhistoryFields[20].Descriptor()
 	// programhistory.DefaultAuditorWriteComments holds the default value on creation for the auditor_write_comments field.
 	programhistory.DefaultAuditorWriteComments = programhistoryDescAuditorWriteComments.Default.(bool)
 	// programhistoryDescAuditorReadComments is the schema descriptor for auditor_read_comments field.
-	programhistoryDescAuditorReadComments := programhistoryFields[20].Descriptor()
+	programhistoryDescAuditorReadComments := programhistoryFields[21].Descriptor()
 	// programhistory.DefaultAuditorReadComments holds the default value on creation for the auditor_read_comments field.
 	programhistory.DefaultAuditorReadComments = programhistoryDescAuditorReadComments.Default.(bool)
 	// programhistoryDescID is the schema descriptor for id field.

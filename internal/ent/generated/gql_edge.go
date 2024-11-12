@@ -1897,12 +1897,12 @@ func (pr *Procedure) Programs(ctx context.Context) (result []*Program, err error
 	return result, err
 }
 
-func (pr *Program) Organization(ctx context.Context) (*Organization, error) {
-	result, err := pr.Edges.OrganizationOrErr()
+func (pr *Program) Owner(ctx context.Context) (*Organization, error) {
+	result, err := pr.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {
-		result, err = pr.QueryOrganization().Only(ctx)
+		result, err = pr.QueryOwner().Only(ctx)
 	}
-	return result, err
+	return result, MaskNotFound(err)
 }
 
 func (pr *Program) Controls(ctx context.Context) (result []*Control, err error) {

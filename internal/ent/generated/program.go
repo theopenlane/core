@@ -36,6 +36,8 @@ type Program struct {
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// the organization id that owns the object
+	OwnerID string `json:"owner_id,omitempty"`
 	// the name of the program
 	Name string `json:"name,omitempty"`
 	// the description of the program
@@ -62,8 +64,8 @@ type Program struct {
 
 // ProgramEdges holds the relations/edges for other nodes in the graph.
 type ProgramEdges struct {
-	// Organization holds the value of the organization edge.
-	Organization *Organization `json:"organization,omitempty"`
+	// Owner holds the value of the owner edge.
+	Owner *Organization `json:"owner,omitempty"`
 	// Controls holds the value of the controls edge.
 	Controls []*Control `json:"controls,omitempty"`
 	// Subcontrols holds the value of the subcontrols edge.
@@ -114,15 +116,15 @@ type ProgramEdges struct {
 	namedMembers           map[string][]*ProgramMembership
 }
 
-// OrganizationOrErr returns the Organization value or an error if the edge
+// OwnerOrErr returns the Owner value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e ProgramEdges) OrganizationOrErr() (*Organization, error) {
-	if e.Organization != nil {
-		return e.Organization, nil
+func (e ProgramEdges) OwnerOrErr() (*Organization, error) {
+	if e.Owner != nil {
+		return e.Owner, nil
 	} else if e.loadedTypes[0] {
 		return nil, &NotFoundError{label: organization.Label}
 	}
-	return nil, &NotLoadedError{edge: "organization"}
+	return nil, &NotLoadedError{edge: "owner"}
 }
 
 // ControlsOrErr returns the Controls value or an error if the edge
@@ -260,7 +262,7 @@ func (*Program) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case program.FieldAuditorReady, program.FieldAuditorWriteComments, program.FieldAuditorReadComments:
 			values[i] = new(sql.NullBool)
-		case program.FieldID, program.FieldCreatedBy, program.FieldUpdatedBy, program.FieldMappingID, program.FieldDeletedBy, program.FieldName, program.FieldDescription, program.FieldStatus, program.FieldOrganizationID:
+		case program.FieldID, program.FieldCreatedBy, program.FieldUpdatedBy, program.FieldMappingID, program.FieldDeletedBy, program.FieldOwnerID, program.FieldName, program.FieldDescription, program.FieldStatus, program.FieldOrganizationID:
 			values[i] = new(sql.NullString)
 		case program.FieldCreatedAt, program.FieldUpdatedAt, program.FieldDeletedAt, program.FieldStartDate, program.FieldEndDate:
 			values[i] = new(sql.NullTime)
@@ -335,6 +337,12 @@ func (pr *Program) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
+		case program.FieldOwnerID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
+			} else if value.Valid {
+				pr.OwnerID = value.String
+			}
 		case program.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
@@ -402,9 +410,9 @@ func (pr *Program) Value(name string) (ent.Value, error) {
 	return pr.selectValues.Get(name)
 }
 
-// QueryOrganization queries the "organization" edge of the Program entity.
-func (pr *Program) QueryOrganization() *OrganizationQuery {
-	return NewProgramClient(pr.config).QueryOrganization(pr)
+// QueryOwner queries the "owner" edge of the Program entity.
+func (pr *Program) QueryOwner() *OrganizationQuery {
+	return NewProgramClient(pr.config).QueryOwner(pr)
 }
 
 // QueryControls queries the "controls" edge of the Program entity.
@@ -523,6 +531,9 @@ func (pr *Program) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", pr.Tags))
+	builder.WriteString(", ")
+	builder.WriteString("owner_id=")
+	builder.WriteString(pr.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(pr.Name)

@@ -9,7 +9,9 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/entx"
 	emixin "github.com/theopenlane/entx/mixin"
+	"github.com/theopenlane/iam/entfga"
 )
 
 // Program holds the schema definition for the Program entity
@@ -58,18 +60,14 @@ func (Program) Mixin() []ent.Mixin {
 		emixin.IDMixin{},
 		mixin.SoftDeleteMixin{},
 		emixin.TagMixin{},
+		// all programs must be associated to an organization
+		NewOrgOwnMixinWithRef("programs"),
 	}
 }
 
 // Edges of the Program
 func (Program) Edges() []ent.Edge {
 	return []ent.Edge{
-		// all programs must be associated to an organization
-		edge.From("organization", Organization.Type).
-			Ref("programs").
-			Field("organization_id").
-			Required().
-			Unique(),
 		// programs can have 1:many controls
 		edge.To("controls", Control.Type),
 		// programs can have 1:many subcontrols
@@ -113,6 +111,19 @@ func (Program) Annotations() []schema.Annotation {
 		entgql.QueryField(),
 		entgql.RelayConnection(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
+		// Delete groups members when groups are deleted
+		entx.CascadeThroughAnnotationField(
+			[]entx.ThroughCleanup{
+				{
+					Field:   "Program",
+					Through: "ProgramMembership",
+				},
+			},
+		),
+		entfga.Annotations{
+			ObjectType:   "program",
+			IncludeHooks: false,
+		},
 	}
 }
 

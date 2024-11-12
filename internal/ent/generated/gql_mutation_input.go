@@ -5405,10 +5405,11 @@ type CreateProgramInput struct {
 	Status               *enums.ProgramStatus
 	StartDate            *time.Time
 	EndDate              *time.Time
+	OrganizationID       string
 	AuditorReady         *bool
 	AuditorWriteComments *bool
 	AuditorReadComments  *bool
-	OrganizationID       string
+	OwnerID              *string
 	ControlIDs           []string
 	SubcontrolIDs        []string
 	ControlobjectiveIDs  []string
@@ -5442,6 +5443,7 @@ func (i *CreateProgramInput) Mutate(m *ProgramMutation) {
 	if v := i.EndDate; v != nil {
 		m.SetEndDate(*v)
 	}
+	m.SetOrganizationID(i.OrganizationID)
 	if v := i.AuditorReady; v != nil {
 		m.SetAuditorReady(*v)
 	}
@@ -5451,7 +5453,9 @@ func (i *CreateProgramInput) Mutate(m *ProgramMutation) {
 	if v := i.AuditorReadComments; v != nil {
 		m.SetAuditorReadComments(*v)
 	}
-	m.SetOrganizationID(i.OrganizationID)
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
 	if v := i.ControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)
 	}
@@ -5512,10 +5516,12 @@ type UpdateProgramInput struct {
 	StartDate                 *time.Time
 	ClearEndDate              bool
 	EndDate                   *time.Time
+	OrganizationID            *string
 	AuditorReady              *bool
 	AuditorWriteComments      *bool
 	AuditorReadComments       *bool
-	OrganizationID            *string
+	ClearOwner                bool
+	OwnerID                   *string
 	ClearControls             bool
 	AddControlIDs             []string
 	RemoveControlIDs          []string
@@ -5592,6 +5598,9 @@ func (i *UpdateProgramInput) Mutate(m *ProgramMutation) {
 	if v := i.EndDate; v != nil {
 		m.SetEndDate(*v)
 	}
+	if v := i.OrganizationID; v != nil {
+		m.SetOrganizationID(*v)
+	}
 	if v := i.AuditorReady; v != nil {
 		m.SetAuditorReady(*v)
 	}
@@ -5601,8 +5610,11 @@ func (i *UpdateProgramInput) Mutate(m *ProgramMutation) {
 	if v := i.AuditorReadComments; v != nil {
 		m.SetAuditorReadComments(*v)
 	}
-	if v := i.OrganizationID; v != nil {
-		m.SetOrganizationID(*v)
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
 	}
 	if i.ClearControls {
 		m.ClearControls()
