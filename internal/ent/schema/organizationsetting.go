@@ -66,6 +66,9 @@ func (OrganizationSetting) Fields() []ent.Field {
 		field.String("organization_id").
 			Comment("the ID of the organization the settings belong to").
 			Optional(),
+		field.String("stripe_id").
+			Comment("the ID of the stripe customer associated with the organization").
+			Optional(),
 	}
 }
 

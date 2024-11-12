@@ -44,6 +44,9 @@ func (Feature) Fields() []ent.Field {
 		field.JSON("metadata", map[string]interface{}{}).
 			Comment("metadata for the feature").
 			Optional(),
+		field.String("stripe_feature_id").
+			Comment("the feature ID in Stripe").
+			Optional(),
 	}
 }
 
