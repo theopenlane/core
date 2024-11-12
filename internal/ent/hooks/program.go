@@ -48,18 +48,20 @@ func programCreateHook(ctx context.Context, m *generated.ProgramMutation) error 
 			if err := createProgramMemberAdmin(ctx, objID, m); err != nil {
 				return err
 			}
+		} else {
+			if err := addProgramEditPermissions(ctx, objID, m); err != nil {
+				return err
+			}
 		}
 	}
 
-	objType := strings.ToLower(m.Type())
 	org, orgExists := m.OwnerID()
-
 	if exists && orgExists {
 		req := fgax.TupleRequest{
 			SubjectID:   org,
 			SubjectType: "organization",
 			ObjectID:    objID,
-			ObjectType:  objType,
+			ObjectType:  m.Type(),
 		}
 
 		log.Debug().Interface("request", req).
@@ -100,6 +102,37 @@ func createProgramMemberAdmin(ctx context.Context, pID string, m *generated.Prog
 		log.Error().Err(err).Msg("error creating program membership for admin")
 
 		return err
+	}
+
+	return nil
+}
+
+// addProgramEditPermissions adds the edit permissions for the program to the api token
+// this function assumes the auth context is an API token
+func addProgramEditPermissions(ctx context.Context, pID string, m *generated.ProgramMutation) error {
+	// get auth info from context
+	ac, err := auth.GetAuthenticatedUserContext(ctx)
+	if err != nil {
+		log.Error().Err(err).Msg("unable to get user id from context, unable to add user to program")
+
+		return err
+	}
+
+	req := fgax.TupleRequest{
+		SubjectID:   ac.SubjectID,
+		SubjectType: auth.GetAuthzSubjectType(ctx),
+		Relation:    fgax.CanEdit,
+		ObjectID:    pID,
+		ObjectType:  m.Type(),
+	}
+
+	log.Debug().Interface("request", req).
+		Msg("creating edit tuples for api token")
+
+	if _, err := m.Authz.WriteTupleKeys(ctx, []fgax.TupleKey{fgax.GetTupleKey(req)}, nil); err != nil {
+		log.Error().Err(err).Msg("failed to create relationship tuple")
+
+		return ErrInternalServerError
 	}
 
 	return nil
