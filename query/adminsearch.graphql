@@ -108,6 +108,8 @@ query AdminSearch($query: String!) {
           description
           version
           metadata
+          stripeProductID
+          stripePriceID
         }
       }
       ... on EntitlementPlanFeatureSearchResult {
@@ -118,7 +120,9 @@ query AdminSearch($query: String!) {
           ownerID
           metadata
           planID
+          stripeProductID
           featureID
+          stripeFeatureID
         }
       }
       ... on EntitySearchResult {
@@ -164,6 +168,7 @@ query AdminSearch($query: String!) {
           displayName
           description
           metadata
+          stripeFeatureID
         }
       }
       ... on FileSearchResult {
@@ -292,6 +297,7 @@ query AdminSearch($query: String!) {
           billingAddress
           taxIdentifier
           organizationID
+          stripeID
         }
       }
       ... on PersonalAccessTokenSearchResult {

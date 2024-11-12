@@ -223,6 +223,48 @@ func (ec *EntitlementCreate) SetNillableCancelled(b *bool) *EntitlementCreate {
 	return ec
 }
 
+// SetCancelledDate sets the "cancelled_date" field.
+func (ec *EntitlementCreate) SetCancelledDate(t time.Time) *EntitlementCreate {
+	ec.mutation.SetCancelledDate(t)
+	return ec
+}
+
+// SetNillableCancelledDate sets the "cancelled_date" field if the given value is not nil.
+func (ec *EntitlementCreate) SetNillableCancelledDate(t *time.Time) *EntitlementCreate {
+	if t != nil {
+		ec.SetCancelledDate(*t)
+	}
+	return ec
+}
+
+// SetBillStarting sets the "bill_starting" field.
+func (ec *EntitlementCreate) SetBillStarting(t time.Time) *EntitlementCreate {
+	ec.mutation.SetBillStarting(t)
+	return ec
+}
+
+// SetNillableBillStarting sets the "bill_starting" field if the given value is not nil.
+func (ec *EntitlementCreate) SetNillableBillStarting(t *time.Time) *EntitlementCreate {
+	if t != nil {
+		ec.SetBillStarting(*t)
+	}
+	return ec
+}
+
+// SetActive sets the "active" field.
+func (ec *EntitlementCreate) SetActive(b bool) *EntitlementCreate {
+	ec.mutation.SetActive(b)
+	return ec
+}
+
+// SetNillableActive sets the "active" field if the given value is not nil.
+func (ec *EntitlementCreate) SetNillableActive(b *bool) *EntitlementCreate {
+	if b != nil {
+		ec.SetActive(*b)
+	}
+	return ec
+}
+
 // SetID sets the "id" field.
 func (ec *EntitlementCreate) SetID(s string) *EntitlementCreate {
 	ec.mutation.SetID(s)
@@ -337,6 +379,17 @@ func (ec *EntitlementCreate) defaults() error {
 		v := entitlement.DefaultCancelled
 		ec.mutation.SetCancelled(v)
 	}
+	if _, ok := ec.mutation.BillStarting(); !ok {
+		if entitlement.DefaultBillStarting == nil {
+			return fmt.Errorf("generated: uninitialized entitlement.DefaultBillStarting (forgotten import generated/runtime?)")
+		}
+		v := entitlement.DefaultBillStarting()
+		ec.mutation.SetBillStarting(v)
+	}
+	if _, ok := ec.mutation.Active(); !ok {
+		v := entitlement.DefaultActive
+		ec.mutation.SetActive(v)
+	}
 	if _, ok := ec.mutation.ID(); !ok {
 		if entitlement.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized entitlement.DefaultID (forgotten import generated/runtime?)")
@@ -378,6 +431,12 @@ func (ec *EntitlementCreate) check() error {
 	}
 	if _, ok := ec.mutation.Cancelled(); !ok {
 		return &ValidationError{Name: "cancelled", err: errors.New(`generated: missing required field "Entitlement.cancelled"`)}
+	}
+	if _, ok := ec.mutation.BillStarting(); !ok {
+		return &ValidationError{Name: "bill_starting", err: errors.New(`generated: missing required field "Entitlement.bill_starting"`)}
+	}
+	if _, ok := ec.mutation.Active(); !ok {
+		return &ValidationError{Name: "active", err: errors.New(`generated: missing required field "Entitlement.active"`)}
 	}
 	if len(ec.mutation.PlanIDs()) == 0 {
 		return &ValidationError{Name: "plan", err: errors.New(`generated: missing required edge "Entitlement.plan"`)}
@@ -472,6 +531,18 @@ func (ec *EntitlementCreate) createSpec() (*Entitlement, *sqlgraph.CreateSpec) {
 	if value, ok := ec.mutation.Cancelled(); ok {
 		_spec.SetField(entitlement.FieldCancelled, field.TypeBool, value)
 		_node.Cancelled = value
+	}
+	if value, ok := ec.mutation.CancelledDate(); ok {
+		_spec.SetField(entitlement.FieldCancelledDate, field.TypeTime, value)
+		_node.CancelledDate = value
+	}
+	if value, ok := ec.mutation.BillStarting(); ok {
+		_spec.SetField(entitlement.FieldBillStarting, field.TypeTime, value)
+		_node.BillStarting = value
+	}
+	if value, ok := ec.mutation.Active(); ok {
+		_spec.SetField(entitlement.FieldActive, field.TypeBool, value)
+		_node.Active = value
 	}
 	if nodes := ec.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

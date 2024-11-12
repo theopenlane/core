@@ -47,9 +47,13 @@ type EntitlementPlanFeatureHistory struct {
 	Metadata map[string]interface{} `json:"metadata,omitempty"`
 	// PlanID holds the value of the "plan_id" field.
 	PlanID string `json:"plan_id,omitempty"`
+	// the product ID in Stripe
+	StripeProductID string `json:"stripe_product_id,omitempty"`
 	// FeatureID holds the value of the "feature_id" field.
-	FeatureID    string `json:"feature_id,omitempty"`
-	selectValues sql.SelectValues
+	FeatureID string `json:"feature_id,omitempty"`
+	// the feature ID in Stripe
+	StripeFeatureID string `json:"stripe_feature_id,omitempty"`
+	selectValues    sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -61,7 +65,7 @@ func (*EntitlementPlanFeatureHistory) scanValues(columns []string) ([]any, error
 			values[i] = new([]byte)
 		case entitlementplanfeaturehistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case entitlementplanfeaturehistory.FieldID, entitlementplanfeaturehistory.FieldRef, entitlementplanfeaturehistory.FieldCreatedBy, entitlementplanfeaturehistory.FieldUpdatedBy, entitlementplanfeaturehistory.FieldMappingID, entitlementplanfeaturehistory.FieldDeletedBy, entitlementplanfeaturehistory.FieldOwnerID, entitlementplanfeaturehistory.FieldPlanID, entitlementplanfeaturehistory.FieldFeatureID:
+		case entitlementplanfeaturehistory.FieldID, entitlementplanfeaturehistory.FieldRef, entitlementplanfeaturehistory.FieldCreatedBy, entitlementplanfeaturehistory.FieldUpdatedBy, entitlementplanfeaturehistory.FieldMappingID, entitlementplanfeaturehistory.FieldDeletedBy, entitlementplanfeaturehistory.FieldOwnerID, entitlementplanfeaturehistory.FieldPlanID, entitlementplanfeaturehistory.FieldStripeProductID, entitlementplanfeaturehistory.FieldFeatureID, entitlementplanfeaturehistory.FieldStripeFeatureID:
 			values[i] = new(sql.NullString)
 		case entitlementplanfeaturehistory.FieldHistoryTime, entitlementplanfeaturehistory.FieldCreatedAt, entitlementplanfeaturehistory.FieldUpdatedAt, entitlementplanfeaturehistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -174,11 +178,23 @@ func (epfh *EntitlementPlanFeatureHistory) assignValues(columns []string, values
 			} else if value.Valid {
 				epfh.PlanID = value.String
 			}
+		case entitlementplanfeaturehistory.FieldStripeProductID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field stripe_product_id", values[i])
+			} else if value.Valid {
+				epfh.StripeProductID = value.String
+			}
 		case entitlementplanfeaturehistory.FieldFeatureID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field feature_id", values[i])
 			} else if value.Valid {
 				epfh.FeatureID = value.String
+			}
+		case entitlementplanfeaturehistory.FieldStripeFeatureID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field stripe_feature_id", values[i])
+			} else if value.Valid {
+				epfh.StripeFeatureID = value.String
 			}
 		default:
 			epfh.selectValues.Set(columns[i], values[i])
@@ -258,8 +274,14 @@ func (epfh *EntitlementPlanFeatureHistory) String() string {
 	builder.WriteString("plan_id=")
 	builder.WriteString(epfh.PlanID)
 	builder.WriteString(", ")
+	builder.WriteString("stripe_product_id=")
+	builder.WriteString(epfh.StripeProductID)
+	builder.WriteString(", ")
 	builder.WriteString("feature_id=")
 	builder.WriteString(epfh.FeatureID)
+	builder.WriteString(", ")
+	builder.WriteString("stripe_feature_id=")
+	builder.WriteString(epfh.StripeFeatureID)
 	builder.WriteByte(')')
 	return builder.String()
 }

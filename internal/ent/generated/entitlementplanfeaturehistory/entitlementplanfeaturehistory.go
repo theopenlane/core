@@ -45,8 +45,12 @@ const (
 	FieldMetadata = "metadata"
 	// FieldPlanID holds the string denoting the plan_id field in the database.
 	FieldPlanID = "plan_id"
+	// FieldStripeProductID holds the string denoting the stripe_product_id field in the database.
+	FieldStripeProductID = "stripe_product_id"
 	// FieldFeatureID holds the string denoting the feature_id field in the database.
 	FieldFeatureID = "feature_id"
+	// FieldStripeFeatureID holds the string denoting the stripe_feature_id field in the database.
+	FieldStripeFeatureID = "stripe_feature_id"
 	// Table holds the table name of the entitlementplanfeaturehistory in the database.
 	Table = "entitlement_plan_feature_history"
 )
@@ -68,7 +72,9 @@ var Columns = []string{
 	FieldOwnerID,
 	FieldMetadata,
 	FieldPlanID,
+	FieldStripeProductID,
 	FieldFeatureID,
+	FieldStripeFeatureID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -184,9 +190,19 @@ func ByPlanID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPlanID, opts...).ToFunc()
 }
 
+// ByStripeProductID orders the results by the stripe_product_id field.
+func ByStripeProductID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStripeProductID, opts...).ToFunc()
+}
+
 // ByFeatureID orders the results by the feature_id field.
 func ByFeatureID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldFeatureID, opts...).ToFunc()
+}
+
+// ByStripeFeatureID orders the results by the stripe_feature_id field.
+func ByStripeFeatureID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStripeFeatureID, opts...).ToFunc()
 }
 
 var (

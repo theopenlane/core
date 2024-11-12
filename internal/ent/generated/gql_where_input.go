@@ -11014,6 +11014,32 @@ type EntitlementWhereInput struct {
 	Cancelled    *bool `json:"cancelled,omitempty"`
 	CancelledNEQ *bool `json:"cancelledNEQ,omitempty"`
 
+	// "cancelled_date" field predicates.
+	CancelledDate       *time.Time  `json:"cancelledDate,omitempty"`
+	CancelledDateNEQ    *time.Time  `json:"cancelledDateNEQ,omitempty"`
+	CancelledDateIn     []time.Time `json:"cancelledDateIn,omitempty"`
+	CancelledDateNotIn  []time.Time `json:"cancelledDateNotIn,omitempty"`
+	CancelledDateGT     *time.Time  `json:"cancelledDateGT,omitempty"`
+	CancelledDateGTE    *time.Time  `json:"cancelledDateGTE,omitempty"`
+	CancelledDateLT     *time.Time  `json:"cancelledDateLT,omitempty"`
+	CancelledDateLTE    *time.Time  `json:"cancelledDateLTE,omitempty"`
+	CancelledDateIsNil  bool        `json:"cancelledDateIsNil,omitempty"`
+	CancelledDateNotNil bool        `json:"cancelledDateNotNil,omitempty"`
+
+	// "bill_starting" field predicates.
+	BillStarting      *time.Time  `json:"billStarting,omitempty"`
+	BillStartingNEQ   *time.Time  `json:"billStartingNEQ,omitempty"`
+	BillStartingIn    []time.Time `json:"billStartingIn,omitempty"`
+	BillStartingNotIn []time.Time `json:"billStartingNotIn,omitempty"`
+	BillStartingGT    *time.Time  `json:"billStartingGT,omitempty"`
+	BillStartingGTE   *time.Time  `json:"billStartingGTE,omitempty"`
+	BillStartingLT    *time.Time  `json:"billStartingLT,omitempty"`
+	BillStartingLTE   *time.Time  `json:"billStartingLTE,omitempty"`
+
+	// "active" field predicates.
+	Active    *bool `json:"active,omitempty"`
+	ActiveNEQ *bool `json:"activeNEQ,omitempty"`
+
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -11612,6 +11638,66 @@ func (i *EntitlementWhereInput) P() (predicate.Entitlement, error) {
 	if i.CancelledNEQ != nil {
 		predicates = append(predicates, entitlement.CancelledNEQ(*i.CancelledNEQ))
 	}
+	if i.CancelledDate != nil {
+		predicates = append(predicates, entitlement.CancelledDateEQ(*i.CancelledDate))
+	}
+	if i.CancelledDateNEQ != nil {
+		predicates = append(predicates, entitlement.CancelledDateNEQ(*i.CancelledDateNEQ))
+	}
+	if len(i.CancelledDateIn) > 0 {
+		predicates = append(predicates, entitlement.CancelledDateIn(i.CancelledDateIn...))
+	}
+	if len(i.CancelledDateNotIn) > 0 {
+		predicates = append(predicates, entitlement.CancelledDateNotIn(i.CancelledDateNotIn...))
+	}
+	if i.CancelledDateGT != nil {
+		predicates = append(predicates, entitlement.CancelledDateGT(*i.CancelledDateGT))
+	}
+	if i.CancelledDateGTE != nil {
+		predicates = append(predicates, entitlement.CancelledDateGTE(*i.CancelledDateGTE))
+	}
+	if i.CancelledDateLT != nil {
+		predicates = append(predicates, entitlement.CancelledDateLT(*i.CancelledDateLT))
+	}
+	if i.CancelledDateLTE != nil {
+		predicates = append(predicates, entitlement.CancelledDateLTE(*i.CancelledDateLTE))
+	}
+	if i.CancelledDateIsNil {
+		predicates = append(predicates, entitlement.CancelledDateIsNil())
+	}
+	if i.CancelledDateNotNil {
+		predicates = append(predicates, entitlement.CancelledDateNotNil())
+	}
+	if i.BillStarting != nil {
+		predicates = append(predicates, entitlement.BillStartingEQ(*i.BillStarting))
+	}
+	if i.BillStartingNEQ != nil {
+		predicates = append(predicates, entitlement.BillStartingNEQ(*i.BillStartingNEQ))
+	}
+	if len(i.BillStartingIn) > 0 {
+		predicates = append(predicates, entitlement.BillStartingIn(i.BillStartingIn...))
+	}
+	if len(i.BillStartingNotIn) > 0 {
+		predicates = append(predicates, entitlement.BillStartingNotIn(i.BillStartingNotIn...))
+	}
+	if i.BillStartingGT != nil {
+		predicates = append(predicates, entitlement.BillStartingGT(*i.BillStartingGT))
+	}
+	if i.BillStartingGTE != nil {
+		predicates = append(predicates, entitlement.BillStartingGTE(*i.BillStartingGTE))
+	}
+	if i.BillStartingLT != nil {
+		predicates = append(predicates, entitlement.BillStartingLT(*i.BillStartingLT))
+	}
+	if i.BillStartingLTE != nil {
+		predicates = append(predicates, entitlement.BillStartingLTE(*i.BillStartingLTE))
+	}
+	if i.Active != nil {
+		predicates = append(predicates, entitlement.ActiveEQ(*i.Active))
+	}
+	if i.ActiveNEQ != nil {
+		predicates = append(predicates, entitlement.ActiveNEQ(*i.ActiveNEQ))
+	}
 
 	if i.HasOwner != nil {
 		p := entitlement.HasOwner()
@@ -11934,6 +12020,32 @@ type EntitlementHistoryWhereInput struct {
 	// "cancelled" field predicates.
 	Cancelled    *bool `json:"cancelled,omitempty"`
 	CancelledNEQ *bool `json:"cancelledNEQ,omitempty"`
+
+	// "cancelled_date" field predicates.
+	CancelledDate       *time.Time  `json:"cancelledDate,omitempty"`
+	CancelledDateNEQ    *time.Time  `json:"cancelledDateNEQ,omitempty"`
+	CancelledDateIn     []time.Time `json:"cancelledDateIn,omitempty"`
+	CancelledDateNotIn  []time.Time `json:"cancelledDateNotIn,omitempty"`
+	CancelledDateGT     *time.Time  `json:"cancelledDateGT,omitempty"`
+	CancelledDateGTE    *time.Time  `json:"cancelledDateGTE,omitempty"`
+	CancelledDateLT     *time.Time  `json:"cancelledDateLT,omitempty"`
+	CancelledDateLTE    *time.Time  `json:"cancelledDateLTE,omitempty"`
+	CancelledDateIsNil  bool        `json:"cancelledDateIsNil,omitempty"`
+	CancelledDateNotNil bool        `json:"cancelledDateNotNil,omitempty"`
+
+	// "bill_starting" field predicates.
+	BillStarting      *time.Time  `json:"billStarting,omitempty"`
+	BillStartingNEQ   *time.Time  `json:"billStartingNEQ,omitempty"`
+	BillStartingIn    []time.Time `json:"billStartingIn,omitempty"`
+	BillStartingNotIn []time.Time `json:"billStartingNotIn,omitempty"`
+	BillStartingGT    *time.Time  `json:"billStartingGT,omitempty"`
+	BillStartingGTE   *time.Time  `json:"billStartingGTE,omitempty"`
+	BillStartingLT    *time.Time  `json:"billStartingLT,omitempty"`
+	BillStartingLTE   *time.Time  `json:"billStartingLTE,omitempty"`
+
+	// "active" field predicates.
+	Active    *bool `json:"active,omitempty"`
+	ActiveNEQ *bool `json:"activeNEQ,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -12598,6 +12710,66 @@ func (i *EntitlementHistoryWhereInput) P() (predicate.EntitlementHistory, error)
 	if i.CancelledNEQ != nil {
 		predicates = append(predicates, entitlementhistory.CancelledNEQ(*i.CancelledNEQ))
 	}
+	if i.CancelledDate != nil {
+		predicates = append(predicates, entitlementhistory.CancelledDateEQ(*i.CancelledDate))
+	}
+	if i.CancelledDateNEQ != nil {
+		predicates = append(predicates, entitlementhistory.CancelledDateNEQ(*i.CancelledDateNEQ))
+	}
+	if len(i.CancelledDateIn) > 0 {
+		predicates = append(predicates, entitlementhistory.CancelledDateIn(i.CancelledDateIn...))
+	}
+	if len(i.CancelledDateNotIn) > 0 {
+		predicates = append(predicates, entitlementhistory.CancelledDateNotIn(i.CancelledDateNotIn...))
+	}
+	if i.CancelledDateGT != nil {
+		predicates = append(predicates, entitlementhistory.CancelledDateGT(*i.CancelledDateGT))
+	}
+	if i.CancelledDateGTE != nil {
+		predicates = append(predicates, entitlementhistory.CancelledDateGTE(*i.CancelledDateGTE))
+	}
+	if i.CancelledDateLT != nil {
+		predicates = append(predicates, entitlementhistory.CancelledDateLT(*i.CancelledDateLT))
+	}
+	if i.CancelledDateLTE != nil {
+		predicates = append(predicates, entitlementhistory.CancelledDateLTE(*i.CancelledDateLTE))
+	}
+	if i.CancelledDateIsNil {
+		predicates = append(predicates, entitlementhistory.CancelledDateIsNil())
+	}
+	if i.CancelledDateNotNil {
+		predicates = append(predicates, entitlementhistory.CancelledDateNotNil())
+	}
+	if i.BillStarting != nil {
+		predicates = append(predicates, entitlementhistory.BillStartingEQ(*i.BillStarting))
+	}
+	if i.BillStartingNEQ != nil {
+		predicates = append(predicates, entitlementhistory.BillStartingNEQ(*i.BillStartingNEQ))
+	}
+	if len(i.BillStartingIn) > 0 {
+		predicates = append(predicates, entitlementhistory.BillStartingIn(i.BillStartingIn...))
+	}
+	if len(i.BillStartingNotIn) > 0 {
+		predicates = append(predicates, entitlementhistory.BillStartingNotIn(i.BillStartingNotIn...))
+	}
+	if i.BillStartingGT != nil {
+		predicates = append(predicates, entitlementhistory.BillStartingGT(*i.BillStartingGT))
+	}
+	if i.BillStartingGTE != nil {
+		predicates = append(predicates, entitlementhistory.BillStartingGTE(*i.BillStartingGTE))
+	}
+	if i.BillStartingLT != nil {
+		predicates = append(predicates, entitlementhistory.BillStartingLT(*i.BillStartingLT))
+	}
+	if i.BillStartingLTE != nil {
+		predicates = append(predicates, entitlementhistory.BillStartingLTE(*i.BillStartingLTE))
+	}
+	if i.Active != nil {
+		predicates = append(predicates, entitlementhistory.ActiveEQ(*i.Active))
+	}
+	if i.ActiveNEQ != nil {
+		predicates = append(predicates, entitlementhistory.ActiveNEQ(*i.ActiveNEQ))
+	}
 
 	switch len(predicates) {
 	case 0:
@@ -12795,6 +12967,40 @@ type EntitlementPlanWhereInput struct {
 	VersionHasSuffix    *string  `json:"versionHasSuffix,omitempty"`
 	VersionEqualFold    *string  `json:"versionEqualFold,omitempty"`
 	VersionContainsFold *string  `json:"versionContainsFold,omitempty"`
+
+	// "stripe_product_id" field predicates.
+	StripeProductID             *string  `json:"stripeProductID,omitempty"`
+	StripeProductIDNEQ          *string  `json:"stripeProductIDNEQ,omitempty"`
+	StripeProductIDIn           []string `json:"stripeProductIDIn,omitempty"`
+	StripeProductIDNotIn        []string `json:"stripeProductIDNotIn,omitempty"`
+	StripeProductIDGT           *string  `json:"stripeProductIDGT,omitempty"`
+	StripeProductIDGTE          *string  `json:"stripeProductIDGTE,omitempty"`
+	StripeProductIDLT           *string  `json:"stripeProductIDLT,omitempty"`
+	StripeProductIDLTE          *string  `json:"stripeProductIDLTE,omitempty"`
+	StripeProductIDContains     *string  `json:"stripeProductIDContains,omitempty"`
+	StripeProductIDHasPrefix    *string  `json:"stripeProductIDHasPrefix,omitempty"`
+	StripeProductIDHasSuffix    *string  `json:"stripeProductIDHasSuffix,omitempty"`
+	StripeProductIDIsNil        bool     `json:"stripeProductIDIsNil,omitempty"`
+	StripeProductIDNotNil       bool     `json:"stripeProductIDNotNil,omitempty"`
+	StripeProductIDEqualFold    *string  `json:"stripeProductIDEqualFold,omitempty"`
+	StripeProductIDContainsFold *string  `json:"stripeProductIDContainsFold,omitempty"`
+
+	// "stripe_price_id" field predicates.
+	StripePriceID             *string  `json:"stripePriceID,omitempty"`
+	StripePriceIDNEQ          *string  `json:"stripePriceIDNEQ,omitempty"`
+	StripePriceIDIn           []string `json:"stripePriceIDIn,omitempty"`
+	StripePriceIDNotIn        []string `json:"stripePriceIDNotIn,omitempty"`
+	StripePriceIDGT           *string  `json:"stripePriceIDGT,omitempty"`
+	StripePriceIDGTE          *string  `json:"stripePriceIDGTE,omitempty"`
+	StripePriceIDLT           *string  `json:"stripePriceIDLT,omitempty"`
+	StripePriceIDLTE          *string  `json:"stripePriceIDLTE,omitempty"`
+	StripePriceIDContains     *string  `json:"stripePriceIDContains,omitempty"`
+	StripePriceIDHasPrefix    *string  `json:"stripePriceIDHasPrefix,omitempty"`
+	StripePriceIDHasSuffix    *string  `json:"stripePriceIDHasSuffix,omitempty"`
+	StripePriceIDIsNil        bool     `json:"stripePriceIDIsNil,omitempty"`
+	StripePriceIDNotNil       bool     `json:"stripePriceIDNotNil,omitempty"`
+	StripePriceIDEqualFold    *string  `json:"stripePriceIDEqualFold,omitempty"`
+	StripePriceIDContainsFold *string  `json:"stripePriceIDContainsFold,omitempty"`
 
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
@@ -13356,6 +13562,96 @@ func (i *EntitlementPlanWhereInput) P() (predicate.EntitlementPlan, error) {
 	if i.VersionContainsFold != nil {
 		predicates = append(predicates, entitlementplan.VersionContainsFold(*i.VersionContainsFold))
 	}
+	if i.StripeProductID != nil {
+		predicates = append(predicates, entitlementplan.StripeProductIDEQ(*i.StripeProductID))
+	}
+	if i.StripeProductIDNEQ != nil {
+		predicates = append(predicates, entitlementplan.StripeProductIDNEQ(*i.StripeProductIDNEQ))
+	}
+	if len(i.StripeProductIDIn) > 0 {
+		predicates = append(predicates, entitlementplan.StripeProductIDIn(i.StripeProductIDIn...))
+	}
+	if len(i.StripeProductIDNotIn) > 0 {
+		predicates = append(predicates, entitlementplan.StripeProductIDNotIn(i.StripeProductIDNotIn...))
+	}
+	if i.StripeProductIDGT != nil {
+		predicates = append(predicates, entitlementplan.StripeProductIDGT(*i.StripeProductIDGT))
+	}
+	if i.StripeProductIDGTE != nil {
+		predicates = append(predicates, entitlementplan.StripeProductIDGTE(*i.StripeProductIDGTE))
+	}
+	if i.StripeProductIDLT != nil {
+		predicates = append(predicates, entitlementplan.StripeProductIDLT(*i.StripeProductIDLT))
+	}
+	if i.StripeProductIDLTE != nil {
+		predicates = append(predicates, entitlementplan.StripeProductIDLTE(*i.StripeProductIDLTE))
+	}
+	if i.StripeProductIDContains != nil {
+		predicates = append(predicates, entitlementplan.StripeProductIDContains(*i.StripeProductIDContains))
+	}
+	if i.StripeProductIDHasPrefix != nil {
+		predicates = append(predicates, entitlementplan.StripeProductIDHasPrefix(*i.StripeProductIDHasPrefix))
+	}
+	if i.StripeProductIDHasSuffix != nil {
+		predicates = append(predicates, entitlementplan.StripeProductIDHasSuffix(*i.StripeProductIDHasSuffix))
+	}
+	if i.StripeProductIDIsNil {
+		predicates = append(predicates, entitlementplan.StripeProductIDIsNil())
+	}
+	if i.StripeProductIDNotNil {
+		predicates = append(predicates, entitlementplan.StripeProductIDNotNil())
+	}
+	if i.StripeProductIDEqualFold != nil {
+		predicates = append(predicates, entitlementplan.StripeProductIDEqualFold(*i.StripeProductIDEqualFold))
+	}
+	if i.StripeProductIDContainsFold != nil {
+		predicates = append(predicates, entitlementplan.StripeProductIDContainsFold(*i.StripeProductIDContainsFold))
+	}
+	if i.StripePriceID != nil {
+		predicates = append(predicates, entitlementplan.StripePriceIDEQ(*i.StripePriceID))
+	}
+	if i.StripePriceIDNEQ != nil {
+		predicates = append(predicates, entitlementplan.StripePriceIDNEQ(*i.StripePriceIDNEQ))
+	}
+	if len(i.StripePriceIDIn) > 0 {
+		predicates = append(predicates, entitlementplan.StripePriceIDIn(i.StripePriceIDIn...))
+	}
+	if len(i.StripePriceIDNotIn) > 0 {
+		predicates = append(predicates, entitlementplan.StripePriceIDNotIn(i.StripePriceIDNotIn...))
+	}
+	if i.StripePriceIDGT != nil {
+		predicates = append(predicates, entitlementplan.StripePriceIDGT(*i.StripePriceIDGT))
+	}
+	if i.StripePriceIDGTE != nil {
+		predicates = append(predicates, entitlementplan.StripePriceIDGTE(*i.StripePriceIDGTE))
+	}
+	if i.StripePriceIDLT != nil {
+		predicates = append(predicates, entitlementplan.StripePriceIDLT(*i.StripePriceIDLT))
+	}
+	if i.StripePriceIDLTE != nil {
+		predicates = append(predicates, entitlementplan.StripePriceIDLTE(*i.StripePriceIDLTE))
+	}
+	if i.StripePriceIDContains != nil {
+		predicates = append(predicates, entitlementplan.StripePriceIDContains(*i.StripePriceIDContains))
+	}
+	if i.StripePriceIDHasPrefix != nil {
+		predicates = append(predicates, entitlementplan.StripePriceIDHasPrefix(*i.StripePriceIDHasPrefix))
+	}
+	if i.StripePriceIDHasSuffix != nil {
+		predicates = append(predicates, entitlementplan.StripePriceIDHasSuffix(*i.StripePriceIDHasSuffix))
+	}
+	if i.StripePriceIDIsNil {
+		predicates = append(predicates, entitlementplan.StripePriceIDIsNil())
+	}
+	if i.StripePriceIDNotNil {
+		predicates = append(predicates, entitlementplan.StripePriceIDNotNil())
+	}
+	if i.StripePriceIDEqualFold != nil {
+		predicates = append(predicates, entitlementplan.StripePriceIDEqualFold(*i.StripePriceIDEqualFold))
+	}
+	if i.StripePriceIDContainsFold != nil {
+		predicates = append(predicates, entitlementplan.StripePriceIDContainsFold(*i.StripePriceIDContainsFold))
+	}
 
 	if i.HasOwner != nil {
 		p := entitlementplan.HasOwner()
@@ -13595,6 +13891,23 @@ type EntitlementPlanFeatureWhereInput struct {
 	PlanIDEqualFold    *string  `json:"planIDEqualFold,omitempty"`
 	PlanIDContainsFold *string  `json:"planIDContainsFold,omitempty"`
 
+	// "stripe_product_id" field predicates.
+	StripeProductID             *string  `json:"stripeProductID,omitempty"`
+	StripeProductIDNEQ          *string  `json:"stripeProductIDNEQ,omitempty"`
+	StripeProductIDIn           []string `json:"stripeProductIDIn,omitempty"`
+	StripeProductIDNotIn        []string `json:"stripeProductIDNotIn,omitempty"`
+	StripeProductIDGT           *string  `json:"stripeProductIDGT,omitempty"`
+	StripeProductIDGTE          *string  `json:"stripeProductIDGTE,omitempty"`
+	StripeProductIDLT           *string  `json:"stripeProductIDLT,omitempty"`
+	StripeProductIDLTE          *string  `json:"stripeProductIDLTE,omitempty"`
+	StripeProductIDContains     *string  `json:"stripeProductIDContains,omitempty"`
+	StripeProductIDHasPrefix    *string  `json:"stripeProductIDHasPrefix,omitempty"`
+	StripeProductIDHasSuffix    *string  `json:"stripeProductIDHasSuffix,omitempty"`
+	StripeProductIDIsNil        bool     `json:"stripeProductIDIsNil,omitempty"`
+	StripeProductIDNotNil       bool     `json:"stripeProductIDNotNil,omitempty"`
+	StripeProductIDEqualFold    *string  `json:"stripeProductIDEqualFold,omitempty"`
+	StripeProductIDContainsFold *string  `json:"stripeProductIDContainsFold,omitempty"`
+
 	// "feature_id" field predicates.
 	FeatureID             *string  `json:"featureID,omitempty"`
 	FeatureIDNEQ          *string  `json:"featureIDNEQ,omitempty"`
@@ -13609,6 +13922,23 @@ type EntitlementPlanFeatureWhereInput struct {
 	FeatureIDHasSuffix    *string  `json:"featureIDHasSuffix,omitempty"`
 	FeatureIDEqualFold    *string  `json:"featureIDEqualFold,omitempty"`
 	FeatureIDContainsFold *string  `json:"featureIDContainsFold,omitempty"`
+
+	// "stripe_feature_id" field predicates.
+	StripeFeatureID             *string  `json:"stripeFeatureID,omitempty"`
+	StripeFeatureIDNEQ          *string  `json:"stripeFeatureIDNEQ,omitempty"`
+	StripeFeatureIDIn           []string `json:"stripeFeatureIDIn,omitempty"`
+	StripeFeatureIDNotIn        []string `json:"stripeFeatureIDNotIn,omitempty"`
+	StripeFeatureIDGT           *string  `json:"stripeFeatureIDGT,omitempty"`
+	StripeFeatureIDGTE          *string  `json:"stripeFeatureIDGTE,omitempty"`
+	StripeFeatureIDLT           *string  `json:"stripeFeatureIDLT,omitempty"`
+	StripeFeatureIDLTE          *string  `json:"stripeFeatureIDLTE,omitempty"`
+	StripeFeatureIDContains     *string  `json:"stripeFeatureIDContains,omitempty"`
+	StripeFeatureIDHasPrefix    *string  `json:"stripeFeatureIDHasPrefix,omitempty"`
+	StripeFeatureIDHasSuffix    *string  `json:"stripeFeatureIDHasSuffix,omitempty"`
+	StripeFeatureIDIsNil        bool     `json:"stripeFeatureIDIsNil,omitempty"`
+	StripeFeatureIDNotNil       bool     `json:"stripeFeatureIDNotNil,omitempty"`
+	StripeFeatureIDEqualFold    *string  `json:"stripeFeatureIDEqualFold,omitempty"`
+	StripeFeatureIDContainsFold *string  `json:"stripeFeatureIDContainsFold,omitempty"`
 
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
@@ -14037,6 +14367,51 @@ func (i *EntitlementPlanFeatureWhereInput) P() (predicate.EntitlementPlanFeature
 	if i.PlanIDContainsFold != nil {
 		predicates = append(predicates, entitlementplanfeature.PlanIDContainsFold(*i.PlanIDContainsFold))
 	}
+	if i.StripeProductID != nil {
+		predicates = append(predicates, entitlementplanfeature.StripeProductIDEQ(*i.StripeProductID))
+	}
+	if i.StripeProductIDNEQ != nil {
+		predicates = append(predicates, entitlementplanfeature.StripeProductIDNEQ(*i.StripeProductIDNEQ))
+	}
+	if len(i.StripeProductIDIn) > 0 {
+		predicates = append(predicates, entitlementplanfeature.StripeProductIDIn(i.StripeProductIDIn...))
+	}
+	if len(i.StripeProductIDNotIn) > 0 {
+		predicates = append(predicates, entitlementplanfeature.StripeProductIDNotIn(i.StripeProductIDNotIn...))
+	}
+	if i.StripeProductIDGT != nil {
+		predicates = append(predicates, entitlementplanfeature.StripeProductIDGT(*i.StripeProductIDGT))
+	}
+	if i.StripeProductIDGTE != nil {
+		predicates = append(predicates, entitlementplanfeature.StripeProductIDGTE(*i.StripeProductIDGTE))
+	}
+	if i.StripeProductIDLT != nil {
+		predicates = append(predicates, entitlementplanfeature.StripeProductIDLT(*i.StripeProductIDLT))
+	}
+	if i.StripeProductIDLTE != nil {
+		predicates = append(predicates, entitlementplanfeature.StripeProductIDLTE(*i.StripeProductIDLTE))
+	}
+	if i.StripeProductIDContains != nil {
+		predicates = append(predicates, entitlementplanfeature.StripeProductIDContains(*i.StripeProductIDContains))
+	}
+	if i.StripeProductIDHasPrefix != nil {
+		predicates = append(predicates, entitlementplanfeature.StripeProductIDHasPrefix(*i.StripeProductIDHasPrefix))
+	}
+	if i.StripeProductIDHasSuffix != nil {
+		predicates = append(predicates, entitlementplanfeature.StripeProductIDHasSuffix(*i.StripeProductIDHasSuffix))
+	}
+	if i.StripeProductIDIsNil {
+		predicates = append(predicates, entitlementplanfeature.StripeProductIDIsNil())
+	}
+	if i.StripeProductIDNotNil {
+		predicates = append(predicates, entitlementplanfeature.StripeProductIDNotNil())
+	}
+	if i.StripeProductIDEqualFold != nil {
+		predicates = append(predicates, entitlementplanfeature.StripeProductIDEqualFold(*i.StripeProductIDEqualFold))
+	}
+	if i.StripeProductIDContainsFold != nil {
+		predicates = append(predicates, entitlementplanfeature.StripeProductIDContainsFold(*i.StripeProductIDContainsFold))
+	}
 	if i.FeatureID != nil {
 		predicates = append(predicates, entitlementplanfeature.FeatureIDEQ(*i.FeatureID))
 	}
@@ -14075,6 +14450,51 @@ func (i *EntitlementPlanFeatureWhereInput) P() (predicate.EntitlementPlanFeature
 	}
 	if i.FeatureIDContainsFold != nil {
 		predicates = append(predicates, entitlementplanfeature.FeatureIDContainsFold(*i.FeatureIDContainsFold))
+	}
+	if i.StripeFeatureID != nil {
+		predicates = append(predicates, entitlementplanfeature.StripeFeatureIDEQ(*i.StripeFeatureID))
+	}
+	if i.StripeFeatureIDNEQ != nil {
+		predicates = append(predicates, entitlementplanfeature.StripeFeatureIDNEQ(*i.StripeFeatureIDNEQ))
+	}
+	if len(i.StripeFeatureIDIn) > 0 {
+		predicates = append(predicates, entitlementplanfeature.StripeFeatureIDIn(i.StripeFeatureIDIn...))
+	}
+	if len(i.StripeFeatureIDNotIn) > 0 {
+		predicates = append(predicates, entitlementplanfeature.StripeFeatureIDNotIn(i.StripeFeatureIDNotIn...))
+	}
+	if i.StripeFeatureIDGT != nil {
+		predicates = append(predicates, entitlementplanfeature.StripeFeatureIDGT(*i.StripeFeatureIDGT))
+	}
+	if i.StripeFeatureIDGTE != nil {
+		predicates = append(predicates, entitlementplanfeature.StripeFeatureIDGTE(*i.StripeFeatureIDGTE))
+	}
+	if i.StripeFeatureIDLT != nil {
+		predicates = append(predicates, entitlementplanfeature.StripeFeatureIDLT(*i.StripeFeatureIDLT))
+	}
+	if i.StripeFeatureIDLTE != nil {
+		predicates = append(predicates, entitlementplanfeature.StripeFeatureIDLTE(*i.StripeFeatureIDLTE))
+	}
+	if i.StripeFeatureIDContains != nil {
+		predicates = append(predicates, entitlementplanfeature.StripeFeatureIDContains(*i.StripeFeatureIDContains))
+	}
+	if i.StripeFeatureIDHasPrefix != nil {
+		predicates = append(predicates, entitlementplanfeature.StripeFeatureIDHasPrefix(*i.StripeFeatureIDHasPrefix))
+	}
+	if i.StripeFeatureIDHasSuffix != nil {
+		predicates = append(predicates, entitlementplanfeature.StripeFeatureIDHasSuffix(*i.StripeFeatureIDHasSuffix))
+	}
+	if i.StripeFeatureIDIsNil {
+		predicates = append(predicates, entitlementplanfeature.StripeFeatureIDIsNil())
+	}
+	if i.StripeFeatureIDNotNil {
+		predicates = append(predicates, entitlementplanfeature.StripeFeatureIDNotNil())
+	}
+	if i.StripeFeatureIDEqualFold != nil {
+		predicates = append(predicates, entitlementplanfeature.StripeFeatureIDEqualFold(*i.StripeFeatureIDEqualFold))
+	}
+	if i.StripeFeatureIDContainsFold != nil {
+		predicates = append(predicates, entitlementplanfeature.StripeFeatureIDContainsFold(*i.StripeFeatureIDContainsFold))
 	}
 
 	if i.HasOwner != nil {
@@ -14330,6 +14750,23 @@ type EntitlementPlanFeatureHistoryWhereInput struct {
 	PlanIDEqualFold    *string  `json:"planIDEqualFold,omitempty"`
 	PlanIDContainsFold *string  `json:"planIDContainsFold,omitempty"`
 
+	// "stripe_product_id" field predicates.
+	StripeProductID             *string  `json:"stripeProductID,omitempty"`
+	StripeProductIDNEQ          *string  `json:"stripeProductIDNEQ,omitempty"`
+	StripeProductIDIn           []string `json:"stripeProductIDIn,omitempty"`
+	StripeProductIDNotIn        []string `json:"stripeProductIDNotIn,omitempty"`
+	StripeProductIDGT           *string  `json:"stripeProductIDGT,omitempty"`
+	StripeProductIDGTE          *string  `json:"stripeProductIDGTE,omitempty"`
+	StripeProductIDLT           *string  `json:"stripeProductIDLT,omitempty"`
+	StripeProductIDLTE          *string  `json:"stripeProductIDLTE,omitempty"`
+	StripeProductIDContains     *string  `json:"stripeProductIDContains,omitempty"`
+	StripeProductIDHasPrefix    *string  `json:"stripeProductIDHasPrefix,omitempty"`
+	StripeProductIDHasSuffix    *string  `json:"stripeProductIDHasSuffix,omitempty"`
+	StripeProductIDIsNil        bool     `json:"stripeProductIDIsNil,omitempty"`
+	StripeProductIDNotNil       bool     `json:"stripeProductIDNotNil,omitempty"`
+	StripeProductIDEqualFold    *string  `json:"stripeProductIDEqualFold,omitempty"`
+	StripeProductIDContainsFold *string  `json:"stripeProductIDContainsFold,omitempty"`
+
 	// "feature_id" field predicates.
 	FeatureID             *string  `json:"featureID,omitempty"`
 	FeatureIDNEQ          *string  `json:"featureIDNEQ,omitempty"`
@@ -14344,6 +14781,23 @@ type EntitlementPlanFeatureHistoryWhereInput struct {
 	FeatureIDHasSuffix    *string  `json:"featureIDHasSuffix,omitempty"`
 	FeatureIDEqualFold    *string  `json:"featureIDEqualFold,omitempty"`
 	FeatureIDContainsFold *string  `json:"featureIDContainsFold,omitempty"`
+
+	// "stripe_feature_id" field predicates.
+	StripeFeatureID             *string  `json:"stripeFeatureID,omitempty"`
+	StripeFeatureIDNEQ          *string  `json:"stripeFeatureIDNEQ,omitempty"`
+	StripeFeatureIDIn           []string `json:"stripeFeatureIDIn,omitempty"`
+	StripeFeatureIDNotIn        []string `json:"stripeFeatureIDNotIn,omitempty"`
+	StripeFeatureIDGT           *string  `json:"stripeFeatureIDGT,omitempty"`
+	StripeFeatureIDGTE          *string  `json:"stripeFeatureIDGTE,omitempty"`
+	StripeFeatureIDLT           *string  `json:"stripeFeatureIDLT,omitempty"`
+	StripeFeatureIDLTE          *string  `json:"stripeFeatureIDLTE,omitempty"`
+	StripeFeatureIDContains     *string  `json:"stripeFeatureIDContains,omitempty"`
+	StripeFeatureIDHasPrefix    *string  `json:"stripeFeatureIDHasPrefix,omitempty"`
+	StripeFeatureIDHasSuffix    *string  `json:"stripeFeatureIDHasSuffix,omitempty"`
+	StripeFeatureIDIsNil        bool     `json:"stripeFeatureIDIsNil,omitempty"`
+	StripeFeatureIDNotNil       bool     `json:"stripeFeatureIDNotNil,omitempty"`
+	StripeFeatureIDEqualFold    *string  `json:"stripeFeatureIDEqualFold,omitempty"`
+	StripeFeatureIDContainsFold *string  `json:"stripeFeatureIDContainsFold,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -14837,6 +15291,51 @@ func (i *EntitlementPlanFeatureHistoryWhereInput) P() (predicate.EntitlementPlan
 	if i.PlanIDContainsFold != nil {
 		predicates = append(predicates, entitlementplanfeaturehistory.PlanIDContainsFold(*i.PlanIDContainsFold))
 	}
+	if i.StripeProductID != nil {
+		predicates = append(predicates, entitlementplanfeaturehistory.StripeProductIDEQ(*i.StripeProductID))
+	}
+	if i.StripeProductIDNEQ != nil {
+		predicates = append(predicates, entitlementplanfeaturehistory.StripeProductIDNEQ(*i.StripeProductIDNEQ))
+	}
+	if len(i.StripeProductIDIn) > 0 {
+		predicates = append(predicates, entitlementplanfeaturehistory.StripeProductIDIn(i.StripeProductIDIn...))
+	}
+	if len(i.StripeProductIDNotIn) > 0 {
+		predicates = append(predicates, entitlementplanfeaturehistory.StripeProductIDNotIn(i.StripeProductIDNotIn...))
+	}
+	if i.StripeProductIDGT != nil {
+		predicates = append(predicates, entitlementplanfeaturehistory.StripeProductIDGT(*i.StripeProductIDGT))
+	}
+	if i.StripeProductIDGTE != nil {
+		predicates = append(predicates, entitlementplanfeaturehistory.StripeProductIDGTE(*i.StripeProductIDGTE))
+	}
+	if i.StripeProductIDLT != nil {
+		predicates = append(predicates, entitlementplanfeaturehistory.StripeProductIDLT(*i.StripeProductIDLT))
+	}
+	if i.StripeProductIDLTE != nil {
+		predicates = append(predicates, entitlementplanfeaturehistory.StripeProductIDLTE(*i.StripeProductIDLTE))
+	}
+	if i.StripeProductIDContains != nil {
+		predicates = append(predicates, entitlementplanfeaturehistory.StripeProductIDContains(*i.StripeProductIDContains))
+	}
+	if i.StripeProductIDHasPrefix != nil {
+		predicates = append(predicates, entitlementplanfeaturehistory.StripeProductIDHasPrefix(*i.StripeProductIDHasPrefix))
+	}
+	if i.StripeProductIDHasSuffix != nil {
+		predicates = append(predicates, entitlementplanfeaturehistory.StripeProductIDHasSuffix(*i.StripeProductIDHasSuffix))
+	}
+	if i.StripeProductIDIsNil {
+		predicates = append(predicates, entitlementplanfeaturehistory.StripeProductIDIsNil())
+	}
+	if i.StripeProductIDNotNil {
+		predicates = append(predicates, entitlementplanfeaturehistory.StripeProductIDNotNil())
+	}
+	if i.StripeProductIDEqualFold != nil {
+		predicates = append(predicates, entitlementplanfeaturehistory.StripeProductIDEqualFold(*i.StripeProductIDEqualFold))
+	}
+	if i.StripeProductIDContainsFold != nil {
+		predicates = append(predicates, entitlementplanfeaturehistory.StripeProductIDContainsFold(*i.StripeProductIDContainsFold))
+	}
 	if i.FeatureID != nil {
 		predicates = append(predicates, entitlementplanfeaturehistory.FeatureIDEQ(*i.FeatureID))
 	}
@@ -14875,6 +15374,51 @@ func (i *EntitlementPlanFeatureHistoryWhereInput) P() (predicate.EntitlementPlan
 	}
 	if i.FeatureIDContainsFold != nil {
 		predicates = append(predicates, entitlementplanfeaturehistory.FeatureIDContainsFold(*i.FeatureIDContainsFold))
+	}
+	if i.StripeFeatureID != nil {
+		predicates = append(predicates, entitlementplanfeaturehistory.StripeFeatureIDEQ(*i.StripeFeatureID))
+	}
+	if i.StripeFeatureIDNEQ != nil {
+		predicates = append(predicates, entitlementplanfeaturehistory.StripeFeatureIDNEQ(*i.StripeFeatureIDNEQ))
+	}
+	if len(i.StripeFeatureIDIn) > 0 {
+		predicates = append(predicates, entitlementplanfeaturehistory.StripeFeatureIDIn(i.StripeFeatureIDIn...))
+	}
+	if len(i.StripeFeatureIDNotIn) > 0 {
+		predicates = append(predicates, entitlementplanfeaturehistory.StripeFeatureIDNotIn(i.StripeFeatureIDNotIn...))
+	}
+	if i.StripeFeatureIDGT != nil {
+		predicates = append(predicates, entitlementplanfeaturehistory.StripeFeatureIDGT(*i.StripeFeatureIDGT))
+	}
+	if i.StripeFeatureIDGTE != nil {
+		predicates = append(predicates, entitlementplanfeaturehistory.StripeFeatureIDGTE(*i.StripeFeatureIDGTE))
+	}
+	if i.StripeFeatureIDLT != nil {
+		predicates = append(predicates, entitlementplanfeaturehistory.StripeFeatureIDLT(*i.StripeFeatureIDLT))
+	}
+	if i.StripeFeatureIDLTE != nil {
+		predicates = append(predicates, entitlementplanfeaturehistory.StripeFeatureIDLTE(*i.StripeFeatureIDLTE))
+	}
+	if i.StripeFeatureIDContains != nil {
+		predicates = append(predicates, entitlementplanfeaturehistory.StripeFeatureIDContains(*i.StripeFeatureIDContains))
+	}
+	if i.StripeFeatureIDHasPrefix != nil {
+		predicates = append(predicates, entitlementplanfeaturehistory.StripeFeatureIDHasPrefix(*i.StripeFeatureIDHasPrefix))
+	}
+	if i.StripeFeatureIDHasSuffix != nil {
+		predicates = append(predicates, entitlementplanfeaturehistory.StripeFeatureIDHasSuffix(*i.StripeFeatureIDHasSuffix))
+	}
+	if i.StripeFeatureIDIsNil {
+		predicates = append(predicates, entitlementplanfeaturehistory.StripeFeatureIDIsNil())
+	}
+	if i.StripeFeatureIDNotNil {
+		predicates = append(predicates, entitlementplanfeaturehistory.StripeFeatureIDNotNil())
+	}
+	if i.StripeFeatureIDEqualFold != nil {
+		predicates = append(predicates, entitlementplanfeaturehistory.StripeFeatureIDEqualFold(*i.StripeFeatureIDEqualFold))
+	}
+	if i.StripeFeatureIDContainsFold != nil {
+		predicates = append(predicates, entitlementplanfeaturehistory.StripeFeatureIDContainsFold(*i.StripeFeatureIDContainsFold))
 	}
 
 	switch len(predicates) {
@@ -15106,6 +15650,40 @@ type EntitlementPlanHistoryWhereInput struct {
 	VersionHasSuffix    *string  `json:"versionHasSuffix,omitempty"`
 	VersionEqualFold    *string  `json:"versionEqualFold,omitempty"`
 	VersionContainsFold *string  `json:"versionContainsFold,omitempty"`
+
+	// "stripe_product_id" field predicates.
+	StripeProductID             *string  `json:"stripeProductID,omitempty"`
+	StripeProductIDNEQ          *string  `json:"stripeProductIDNEQ,omitempty"`
+	StripeProductIDIn           []string `json:"stripeProductIDIn,omitempty"`
+	StripeProductIDNotIn        []string `json:"stripeProductIDNotIn,omitempty"`
+	StripeProductIDGT           *string  `json:"stripeProductIDGT,omitempty"`
+	StripeProductIDGTE          *string  `json:"stripeProductIDGTE,omitempty"`
+	StripeProductIDLT           *string  `json:"stripeProductIDLT,omitempty"`
+	StripeProductIDLTE          *string  `json:"stripeProductIDLTE,omitempty"`
+	StripeProductIDContains     *string  `json:"stripeProductIDContains,omitempty"`
+	StripeProductIDHasPrefix    *string  `json:"stripeProductIDHasPrefix,omitempty"`
+	StripeProductIDHasSuffix    *string  `json:"stripeProductIDHasSuffix,omitempty"`
+	StripeProductIDIsNil        bool     `json:"stripeProductIDIsNil,omitempty"`
+	StripeProductIDNotNil       bool     `json:"stripeProductIDNotNil,omitempty"`
+	StripeProductIDEqualFold    *string  `json:"stripeProductIDEqualFold,omitempty"`
+	StripeProductIDContainsFold *string  `json:"stripeProductIDContainsFold,omitempty"`
+
+	// "stripe_price_id" field predicates.
+	StripePriceID             *string  `json:"stripePriceID,omitempty"`
+	StripePriceIDNEQ          *string  `json:"stripePriceIDNEQ,omitempty"`
+	StripePriceIDIn           []string `json:"stripePriceIDIn,omitempty"`
+	StripePriceIDNotIn        []string `json:"stripePriceIDNotIn,omitempty"`
+	StripePriceIDGT           *string  `json:"stripePriceIDGT,omitempty"`
+	StripePriceIDGTE          *string  `json:"stripePriceIDGTE,omitempty"`
+	StripePriceIDLT           *string  `json:"stripePriceIDLT,omitempty"`
+	StripePriceIDLTE          *string  `json:"stripePriceIDLTE,omitempty"`
+	StripePriceIDContains     *string  `json:"stripePriceIDContains,omitempty"`
+	StripePriceIDHasPrefix    *string  `json:"stripePriceIDHasPrefix,omitempty"`
+	StripePriceIDHasSuffix    *string  `json:"stripePriceIDHasSuffix,omitempty"`
+	StripePriceIDIsNil        bool     `json:"stripePriceIDIsNil,omitempty"`
+	StripePriceIDNotNil       bool     `json:"stripePriceIDNotNil,omitempty"`
+	StripePriceIDEqualFold    *string  `json:"stripePriceIDEqualFold,omitempty"`
+	StripePriceIDContainsFold *string  `json:"stripePriceIDContainsFold,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -15727,6 +16305,96 @@ func (i *EntitlementPlanHistoryWhereInput) P() (predicate.EntitlementPlanHistory
 	}
 	if i.VersionContainsFold != nil {
 		predicates = append(predicates, entitlementplanhistory.VersionContainsFold(*i.VersionContainsFold))
+	}
+	if i.StripeProductID != nil {
+		predicates = append(predicates, entitlementplanhistory.StripeProductIDEQ(*i.StripeProductID))
+	}
+	if i.StripeProductIDNEQ != nil {
+		predicates = append(predicates, entitlementplanhistory.StripeProductIDNEQ(*i.StripeProductIDNEQ))
+	}
+	if len(i.StripeProductIDIn) > 0 {
+		predicates = append(predicates, entitlementplanhistory.StripeProductIDIn(i.StripeProductIDIn...))
+	}
+	if len(i.StripeProductIDNotIn) > 0 {
+		predicates = append(predicates, entitlementplanhistory.StripeProductIDNotIn(i.StripeProductIDNotIn...))
+	}
+	if i.StripeProductIDGT != nil {
+		predicates = append(predicates, entitlementplanhistory.StripeProductIDGT(*i.StripeProductIDGT))
+	}
+	if i.StripeProductIDGTE != nil {
+		predicates = append(predicates, entitlementplanhistory.StripeProductIDGTE(*i.StripeProductIDGTE))
+	}
+	if i.StripeProductIDLT != nil {
+		predicates = append(predicates, entitlementplanhistory.StripeProductIDLT(*i.StripeProductIDLT))
+	}
+	if i.StripeProductIDLTE != nil {
+		predicates = append(predicates, entitlementplanhistory.StripeProductIDLTE(*i.StripeProductIDLTE))
+	}
+	if i.StripeProductIDContains != nil {
+		predicates = append(predicates, entitlementplanhistory.StripeProductIDContains(*i.StripeProductIDContains))
+	}
+	if i.StripeProductIDHasPrefix != nil {
+		predicates = append(predicates, entitlementplanhistory.StripeProductIDHasPrefix(*i.StripeProductIDHasPrefix))
+	}
+	if i.StripeProductIDHasSuffix != nil {
+		predicates = append(predicates, entitlementplanhistory.StripeProductIDHasSuffix(*i.StripeProductIDHasSuffix))
+	}
+	if i.StripeProductIDIsNil {
+		predicates = append(predicates, entitlementplanhistory.StripeProductIDIsNil())
+	}
+	if i.StripeProductIDNotNil {
+		predicates = append(predicates, entitlementplanhistory.StripeProductIDNotNil())
+	}
+	if i.StripeProductIDEqualFold != nil {
+		predicates = append(predicates, entitlementplanhistory.StripeProductIDEqualFold(*i.StripeProductIDEqualFold))
+	}
+	if i.StripeProductIDContainsFold != nil {
+		predicates = append(predicates, entitlementplanhistory.StripeProductIDContainsFold(*i.StripeProductIDContainsFold))
+	}
+	if i.StripePriceID != nil {
+		predicates = append(predicates, entitlementplanhistory.StripePriceIDEQ(*i.StripePriceID))
+	}
+	if i.StripePriceIDNEQ != nil {
+		predicates = append(predicates, entitlementplanhistory.StripePriceIDNEQ(*i.StripePriceIDNEQ))
+	}
+	if len(i.StripePriceIDIn) > 0 {
+		predicates = append(predicates, entitlementplanhistory.StripePriceIDIn(i.StripePriceIDIn...))
+	}
+	if len(i.StripePriceIDNotIn) > 0 {
+		predicates = append(predicates, entitlementplanhistory.StripePriceIDNotIn(i.StripePriceIDNotIn...))
+	}
+	if i.StripePriceIDGT != nil {
+		predicates = append(predicates, entitlementplanhistory.StripePriceIDGT(*i.StripePriceIDGT))
+	}
+	if i.StripePriceIDGTE != nil {
+		predicates = append(predicates, entitlementplanhistory.StripePriceIDGTE(*i.StripePriceIDGTE))
+	}
+	if i.StripePriceIDLT != nil {
+		predicates = append(predicates, entitlementplanhistory.StripePriceIDLT(*i.StripePriceIDLT))
+	}
+	if i.StripePriceIDLTE != nil {
+		predicates = append(predicates, entitlementplanhistory.StripePriceIDLTE(*i.StripePriceIDLTE))
+	}
+	if i.StripePriceIDContains != nil {
+		predicates = append(predicates, entitlementplanhistory.StripePriceIDContains(*i.StripePriceIDContains))
+	}
+	if i.StripePriceIDHasPrefix != nil {
+		predicates = append(predicates, entitlementplanhistory.StripePriceIDHasPrefix(*i.StripePriceIDHasPrefix))
+	}
+	if i.StripePriceIDHasSuffix != nil {
+		predicates = append(predicates, entitlementplanhistory.StripePriceIDHasSuffix(*i.StripePriceIDHasSuffix))
+	}
+	if i.StripePriceIDIsNil {
+		predicates = append(predicates, entitlementplanhistory.StripePriceIDIsNil())
+	}
+	if i.StripePriceIDNotNil {
+		predicates = append(predicates, entitlementplanhistory.StripePriceIDNotNil())
+	}
+	if i.StripePriceIDEqualFold != nil {
+		predicates = append(predicates, entitlementplanhistory.StripePriceIDEqualFold(*i.StripePriceIDEqualFold))
+	}
+	if i.StripePriceIDContainsFold != nil {
+		predicates = append(predicates, entitlementplanhistory.StripePriceIDContainsFold(*i.StripePriceIDContainsFold))
 	}
 
 	switch len(predicates) {
@@ -20471,6 +21139,23 @@ type FeatureWhereInput struct {
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
 
+	// "stripe_feature_id" field predicates.
+	StripeFeatureID             *string  `json:"stripeFeatureID,omitempty"`
+	StripeFeatureIDNEQ          *string  `json:"stripeFeatureIDNEQ,omitempty"`
+	StripeFeatureIDIn           []string `json:"stripeFeatureIDIn,omitempty"`
+	StripeFeatureIDNotIn        []string `json:"stripeFeatureIDNotIn,omitempty"`
+	StripeFeatureIDGT           *string  `json:"stripeFeatureIDGT,omitempty"`
+	StripeFeatureIDGTE          *string  `json:"stripeFeatureIDGTE,omitempty"`
+	StripeFeatureIDLT           *string  `json:"stripeFeatureIDLT,omitempty"`
+	StripeFeatureIDLTE          *string  `json:"stripeFeatureIDLTE,omitempty"`
+	StripeFeatureIDContains     *string  `json:"stripeFeatureIDContains,omitempty"`
+	StripeFeatureIDHasPrefix    *string  `json:"stripeFeatureIDHasPrefix,omitempty"`
+	StripeFeatureIDHasSuffix    *string  `json:"stripeFeatureIDHasSuffix,omitempty"`
+	StripeFeatureIDIsNil        bool     `json:"stripeFeatureIDIsNil,omitempty"`
+	StripeFeatureIDNotNil       bool     `json:"stripeFeatureIDNotNil,omitempty"`
+	StripeFeatureIDEqualFold    *string  `json:"stripeFeatureIDEqualFold,omitempty"`
+	StripeFeatureIDContainsFold *string  `json:"stripeFeatureIDContainsFold,omitempty"`
+
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -20994,6 +21679,51 @@ func (i *FeatureWhereInput) P() (predicate.Feature, error) {
 	if i.DescriptionContainsFold != nil {
 		predicates = append(predicates, feature.DescriptionContainsFold(*i.DescriptionContainsFold))
 	}
+	if i.StripeFeatureID != nil {
+		predicates = append(predicates, feature.StripeFeatureIDEQ(*i.StripeFeatureID))
+	}
+	if i.StripeFeatureIDNEQ != nil {
+		predicates = append(predicates, feature.StripeFeatureIDNEQ(*i.StripeFeatureIDNEQ))
+	}
+	if len(i.StripeFeatureIDIn) > 0 {
+		predicates = append(predicates, feature.StripeFeatureIDIn(i.StripeFeatureIDIn...))
+	}
+	if len(i.StripeFeatureIDNotIn) > 0 {
+		predicates = append(predicates, feature.StripeFeatureIDNotIn(i.StripeFeatureIDNotIn...))
+	}
+	if i.StripeFeatureIDGT != nil {
+		predicates = append(predicates, feature.StripeFeatureIDGT(*i.StripeFeatureIDGT))
+	}
+	if i.StripeFeatureIDGTE != nil {
+		predicates = append(predicates, feature.StripeFeatureIDGTE(*i.StripeFeatureIDGTE))
+	}
+	if i.StripeFeatureIDLT != nil {
+		predicates = append(predicates, feature.StripeFeatureIDLT(*i.StripeFeatureIDLT))
+	}
+	if i.StripeFeatureIDLTE != nil {
+		predicates = append(predicates, feature.StripeFeatureIDLTE(*i.StripeFeatureIDLTE))
+	}
+	if i.StripeFeatureIDContains != nil {
+		predicates = append(predicates, feature.StripeFeatureIDContains(*i.StripeFeatureIDContains))
+	}
+	if i.StripeFeatureIDHasPrefix != nil {
+		predicates = append(predicates, feature.StripeFeatureIDHasPrefix(*i.StripeFeatureIDHasPrefix))
+	}
+	if i.StripeFeatureIDHasSuffix != nil {
+		predicates = append(predicates, feature.StripeFeatureIDHasSuffix(*i.StripeFeatureIDHasSuffix))
+	}
+	if i.StripeFeatureIDIsNil {
+		predicates = append(predicates, feature.StripeFeatureIDIsNil())
+	}
+	if i.StripeFeatureIDNotNil {
+		predicates = append(predicates, feature.StripeFeatureIDNotNil())
+	}
+	if i.StripeFeatureIDEqualFold != nil {
+		predicates = append(predicates, feature.StripeFeatureIDEqualFold(*i.StripeFeatureIDEqualFold))
+	}
+	if i.StripeFeatureIDContainsFold != nil {
+		predicates = append(predicates, feature.StripeFeatureIDContainsFold(*i.StripeFeatureIDContainsFold))
+	}
 
 	if i.HasOwner != nil {
 		p := feature.HasOwner()
@@ -21285,6 +22015,23 @@ type FeatureHistoryWhereInput struct {
 	DescriptionNotNil       bool     `json:"descriptionNotNil,omitempty"`
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+
+	// "stripe_feature_id" field predicates.
+	StripeFeatureID             *string  `json:"stripeFeatureID,omitempty"`
+	StripeFeatureIDNEQ          *string  `json:"stripeFeatureIDNEQ,omitempty"`
+	StripeFeatureIDIn           []string `json:"stripeFeatureIDIn,omitempty"`
+	StripeFeatureIDNotIn        []string `json:"stripeFeatureIDNotIn,omitempty"`
+	StripeFeatureIDGT           *string  `json:"stripeFeatureIDGT,omitempty"`
+	StripeFeatureIDGTE          *string  `json:"stripeFeatureIDGTE,omitempty"`
+	StripeFeatureIDLT           *string  `json:"stripeFeatureIDLT,omitempty"`
+	StripeFeatureIDLTE          *string  `json:"stripeFeatureIDLTE,omitempty"`
+	StripeFeatureIDContains     *string  `json:"stripeFeatureIDContains,omitempty"`
+	StripeFeatureIDHasPrefix    *string  `json:"stripeFeatureIDHasPrefix,omitempty"`
+	StripeFeatureIDHasSuffix    *string  `json:"stripeFeatureIDHasSuffix,omitempty"`
+	StripeFeatureIDIsNil        bool     `json:"stripeFeatureIDIsNil,omitempty"`
+	StripeFeatureIDNotNil       bool     `json:"stripeFeatureIDNotNil,omitempty"`
+	StripeFeatureIDEqualFold    *string  `json:"stripeFeatureIDEqualFold,omitempty"`
+	StripeFeatureIDContainsFold *string  `json:"stripeFeatureIDContainsFold,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -21873,6 +22620,51 @@ func (i *FeatureHistoryWhereInput) P() (predicate.FeatureHistory, error) {
 	}
 	if i.DescriptionContainsFold != nil {
 		predicates = append(predicates, featurehistory.DescriptionContainsFold(*i.DescriptionContainsFold))
+	}
+	if i.StripeFeatureID != nil {
+		predicates = append(predicates, featurehistory.StripeFeatureIDEQ(*i.StripeFeatureID))
+	}
+	if i.StripeFeatureIDNEQ != nil {
+		predicates = append(predicates, featurehistory.StripeFeatureIDNEQ(*i.StripeFeatureIDNEQ))
+	}
+	if len(i.StripeFeatureIDIn) > 0 {
+		predicates = append(predicates, featurehistory.StripeFeatureIDIn(i.StripeFeatureIDIn...))
+	}
+	if len(i.StripeFeatureIDNotIn) > 0 {
+		predicates = append(predicates, featurehistory.StripeFeatureIDNotIn(i.StripeFeatureIDNotIn...))
+	}
+	if i.StripeFeatureIDGT != nil {
+		predicates = append(predicates, featurehistory.StripeFeatureIDGT(*i.StripeFeatureIDGT))
+	}
+	if i.StripeFeatureIDGTE != nil {
+		predicates = append(predicates, featurehistory.StripeFeatureIDGTE(*i.StripeFeatureIDGTE))
+	}
+	if i.StripeFeatureIDLT != nil {
+		predicates = append(predicates, featurehistory.StripeFeatureIDLT(*i.StripeFeatureIDLT))
+	}
+	if i.StripeFeatureIDLTE != nil {
+		predicates = append(predicates, featurehistory.StripeFeatureIDLTE(*i.StripeFeatureIDLTE))
+	}
+	if i.StripeFeatureIDContains != nil {
+		predicates = append(predicates, featurehistory.StripeFeatureIDContains(*i.StripeFeatureIDContains))
+	}
+	if i.StripeFeatureIDHasPrefix != nil {
+		predicates = append(predicates, featurehistory.StripeFeatureIDHasPrefix(*i.StripeFeatureIDHasPrefix))
+	}
+	if i.StripeFeatureIDHasSuffix != nil {
+		predicates = append(predicates, featurehistory.StripeFeatureIDHasSuffix(*i.StripeFeatureIDHasSuffix))
+	}
+	if i.StripeFeatureIDIsNil {
+		predicates = append(predicates, featurehistory.StripeFeatureIDIsNil())
+	}
+	if i.StripeFeatureIDNotNil {
+		predicates = append(predicates, featurehistory.StripeFeatureIDNotNil())
+	}
+	if i.StripeFeatureIDEqualFold != nil {
+		predicates = append(predicates, featurehistory.StripeFeatureIDEqualFold(*i.StripeFeatureIDEqualFold))
+	}
+	if i.StripeFeatureIDContainsFold != nil {
+		predicates = append(predicates, featurehistory.StripeFeatureIDContainsFold(*i.StripeFeatureIDContainsFold))
 	}
 
 	switch len(predicates) {
@@ -43419,6 +44211,23 @@ type OrganizationSettingWhereInput struct {
 	OrganizationIDEqualFold    *string  `json:"organizationIDEqualFold,omitempty"`
 	OrganizationIDContainsFold *string  `json:"organizationIDContainsFold,omitempty"`
 
+	// "stripe_id" field predicates.
+	StripeID             *string  `json:"stripeID,omitempty"`
+	StripeIDNEQ          *string  `json:"stripeIDNEQ,omitempty"`
+	StripeIDIn           []string `json:"stripeIDIn,omitempty"`
+	StripeIDNotIn        []string `json:"stripeIDNotIn,omitempty"`
+	StripeIDGT           *string  `json:"stripeIDGT,omitempty"`
+	StripeIDGTE          *string  `json:"stripeIDGTE,omitempty"`
+	StripeIDLT           *string  `json:"stripeIDLT,omitempty"`
+	StripeIDLTE          *string  `json:"stripeIDLTE,omitempty"`
+	StripeIDContains     *string  `json:"stripeIDContains,omitempty"`
+	StripeIDHasPrefix    *string  `json:"stripeIDHasPrefix,omitempty"`
+	StripeIDHasSuffix    *string  `json:"stripeIDHasSuffix,omitempty"`
+	StripeIDIsNil        bool     `json:"stripeIDIsNil,omitempty"`
+	StripeIDNotNil       bool     `json:"stripeIDNotNil,omitempty"`
+	StripeIDEqualFold    *string  `json:"stripeIDEqualFold,omitempty"`
+	StripeIDContainsFold *string  `json:"stripeIDContainsFold,omitempty"`
+
 	// "organization" edge predicates.
 	HasOrganization     *bool                     `json:"hasOrganization,omitempty"`
 	HasOrganizationWith []*OrganizationWhereInput `json:"hasOrganizationWith,omitempty"`
@@ -44042,6 +44851,51 @@ func (i *OrganizationSettingWhereInput) P() (predicate.OrganizationSetting, erro
 	if i.OrganizationIDContainsFold != nil {
 		predicates = append(predicates, organizationsetting.OrganizationIDContainsFold(*i.OrganizationIDContainsFold))
 	}
+	if i.StripeID != nil {
+		predicates = append(predicates, organizationsetting.StripeIDEQ(*i.StripeID))
+	}
+	if i.StripeIDNEQ != nil {
+		predicates = append(predicates, organizationsetting.StripeIDNEQ(*i.StripeIDNEQ))
+	}
+	if len(i.StripeIDIn) > 0 {
+		predicates = append(predicates, organizationsetting.StripeIDIn(i.StripeIDIn...))
+	}
+	if len(i.StripeIDNotIn) > 0 {
+		predicates = append(predicates, organizationsetting.StripeIDNotIn(i.StripeIDNotIn...))
+	}
+	if i.StripeIDGT != nil {
+		predicates = append(predicates, organizationsetting.StripeIDGT(*i.StripeIDGT))
+	}
+	if i.StripeIDGTE != nil {
+		predicates = append(predicates, organizationsetting.StripeIDGTE(*i.StripeIDGTE))
+	}
+	if i.StripeIDLT != nil {
+		predicates = append(predicates, organizationsetting.StripeIDLT(*i.StripeIDLT))
+	}
+	if i.StripeIDLTE != nil {
+		predicates = append(predicates, organizationsetting.StripeIDLTE(*i.StripeIDLTE))
+	}
+	if i.StripeIDContains != nil {
+		predicates = append(predicates, organizationsetting.StripeIDContains(*i.StripeIDContains))
+	}
+	if i.StripeIDHasPrefix != nil {
+		predicates = append(predicates, organizationsetting.StripeIDHasPrefix(*i.StripeIDHasPrefix))
+	}
+	if i.StripeIDHasSuffix != nil {
+		predicates = append(predicates, organizationsetting.StripeIDHasSuffix(*i.StripeIDHasSuffix))
+	}
+	if i.StripeIDIsNil {
+		predicates = append(predicates, organizationsetting.StripeIDIsNil())
+	}
+	if i.StripeIDNotNil {
+		predicates = append(predicates, organizationsetting.StripeIDNotNil())
+	}
+	if i.StripeIDEqualFold != nil {
+		predicates = append(predicates, organizationsetting.StripeIDEqualFold(*i.StripeIDEqualFold))
+	}
+	if i.StripeIDContainsFold != nil {
+		predicates = append(predicates, organizationsetting.StripeIDContainsFold(*i.StripeIDContainsFold))
+	}
 
 	if i.HasOrganization != nil {
 		p := organizationsetting.HasOrganization()
@@ -44337,6 +45191,23 @@ type OrganizationSettingHistoryWhereInput struct {
 	OrganizationIDNotNil       bool     `json:"organizationIDNotNil,omitempty"`
 	OrganizationIDEqualFold    *string  `json:"organizationIDEqualFold,omitempty"`
 	OrganizationIDContainsFold *string  `json:"organizationIDContainsFold,omitempty"`
+
+	// "stripe_id" field predicates.
+	StripeID             *string  `json:"stripeID,omitempty"`
+	StripeIDNEQ          *string  `json:"stripeIDNEQ,omitempty"`
+	StripeIDIn           []string `json:"stripeIDIn,omitempty"`
+	StripeIDNotIn        []string `json:"stripeIDNotIn,omitempty"`
+	StripeIDGT           *string  `json:"stripeIDGT,omitempty"`
+	StripeIDGTE          *string  `json:"stripeIDGTE,omitempty"`
+	StripeIDLT           *string  `json:"stripeIDLT,omitempty"`
+	StripeIDLTE          *string  `json:"stripeIDLTE,omitempty"`
+	StripeIDContains     *string  `json:"stripeIDContains,omitempty"`
+	StripeIDHasPrefix    *string  `json:"stripeIDHasPrefix,omitempty"`
+	StripeIDHasSuffix    *string  `json:"stripeIDHasSuffix,omitempty"`
+	StripeIDIsNil        bool     `json:"stripeIDIsNil,omitempty"`
+	StripeIDNotNil       bool     `json:"stripeIDNotNil,omitempty"`
+	StripeIDEqualFold    *string  `json:"stripeIDEqualFold,omitempty"`
+	StripeIDContainsFold *string  `json:"stripeIDContainsFold,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -45033,6 +45904,51 @@ func (i *OrganizationSettingHistoryWhereInput) P() (predicate.OrganizationSettin
 	}
 	if i.OrganizationIDContainsFold != nil {
 		predicates = append(predicates, organizationsettinghistory.OrganizationIDContainsFold(*i.OrganizationIDContainsFold))
+	}
+	if i.StripeID != nil {
+		predicates = append(predicates, organizationsettinghistory.StripeIDEQ(*i.StripeID))
+	}
+	if i.StripeIDNEQ != nil {
+		predicates = append(predicates, organizationsettinghistory.StripeIDNEQ(*i.StripeIDNEQ))
+	}
+	if len(i.StripeIDIn) > 0 {
+		predicates = append(predicates, organizationsettinghistory.StripeIDIn(i.StripeIDIn...))
+	}
+	if len(i.StripeIDNotIn) > 0 {
+		predicates = append(predicates, organizationsettinghistory.StripeIDNotIn(i.StripeIDNotIn...))
+	}
+	if i.StripeIDGT != nil {
+		predicates = append(predicates, organizationsettinghistory.StripeIDGT(*i.StripeIDGT))
+	}
+	if i.StripeIDGTE != nil {
+		predicates = append(predicates, organizationsettinghistory.StripeIDGTE(*i.StripeIDGTE))
+	}
+	if i.StripeIDLT != nil {
+		predicates = append(predicates, organizationsettinghistory.StripeIDLT(*i.StripeIDLT))
+	}
+	if i.StripeIDLTE != nil {
+		predicates = append(predicates, organizationsettinghistory.StripeIDLTE(*i.StripeIDLTE))
+	}
+	if i.StripeIDContains != nil {
+		predicates = append(predicates, organizationsettinghistory.StripeIDContains(*i.StripeIDContains))
+	}
+	if i.StripeIDHasPrefix != nil {
+		predicates = append(predicates, organizationsettinghistory.StripeIDHasPrefix(*i.StripeIDHasPrefix))
+	}
+	if i.StripeIDHasSuffix != nil {
+		predicates = append(predicates, organizationsettinghistory.StripeIDHasSuffix(*i.StripeIDHasSuffix))
+	}
+	if i.StripeIDIsNil {
+		predicates = append(predicates, organizationsettinghistory.StripeIDIsNil())
+	}
+	if i.StripeIDNotNil {
+		predicates = append(predicates, organizationsettinghistory.StripeIDNotNil())
+	}
+	if i.StripeIDEqualFold != nil {
+		predicates = append(predicates, organizationsettinghistory.StripeIDEqualFold(*i.StripeIDEqualFold))
+	}
+	if i.StripeIDContainsFold != nil {
+		predicates = append(predicates, organizationsettinghistory.StripeIDContainsFold(*i.StripeIDContainsFold))
 	}
 
 	switch len(predicates) {

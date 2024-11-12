@@ -1,16 +1,18 @@
 mutation CreateBulkCSVEntitlementPlanFeature($input: Upload!) {
   createBulkCSVEntitlementPlanFeature(input: $input) {
     entitlementPlanFeatures {
+      createdAt
+      createdBy
+      featureID
       id
       metadata
-      plan {
-        id
-        name
-      }
-      feature {
-        id
-        name
-      }
+      ownerID
+      planID
+      stripeFeatureID
+      stripeProductID
+      tags
+      updatedAt
+      updatedBy
     }
   }
 }
@@ -18,16 +20,18 @@ mutation CreateBulkCSVEntitlementPlanFeature($input: Upload!) {
 mutation CreateBulkEntitlementPlanFeature($input: [CreateEntitlementPlanFeatureInput!]) {
   createBulkEntitlementPlanFeature(input: $input) {
     entitlementPlanFeatures {
+      createdAt
+      createdBy
+      featureID
       id
       metadata
-      plan {
-        id
-        name
-      }
-      feature {
-        id
-        name
-      }
+      ownerID
+      planID
+      stripeFeatureID
+      stripeProductID
+      tags
+      updatedAt
+      updatedBy
     }
   }
 }
@@ -35,16 +39,18 @@ mutation CreateBulkEntitlementPlanFeature($input: [CreateEntitlementPlanFeatureI
 mutation CreateEntitlementPlanFeature($input: CreateEntitlementPlanFeatureInput!) {
   createEntitlementPlanFeature(input: $input) {
     entitlementPlanFeature {
+      createdAt
+      createdBy
+      featureID
       id
       metadata
-      plan {
-        id
-        name
-      }
-      feature {
-        id
-        name
-      }
+      ownerID
+      planID
+      stripeFeatureID
+      stripeProductID
+      tags
+      updatedAt
+      updatedBy
     }
   }
 }
@@ -59,16 +65,18 @@ query GetAllEntitlementPlanFeatures {
   entitlementPlanFeatures {
     edges {
       node {
+        createdAt
+        createdBy
+        featureID
         id
-        feature {
-          id
-          name
-        }
         metadata
-        plan {
-          id
-          name
-        }
+        ownerID
+        planID
+        stripeFeatureID
+        stripeProductID
+        tags
+        updatedAt
+        updatedBy
       }
     }
   }
@@ -76,16 +84,18 @@ query GetAllEntitlementPlanFeatures {
 
 query GetEntitlementPlanFeatureByID($entitlementPlanFeatureId: ID!) {
   entitlementPlanFeature(id: $entitlementPlanFeatureId) {
+    createdAt
+    createdBy
+    featureID
     id
     metadata
-    plan {
-      id
-      name
-    }
-    feature {
-      id
-      name
-    }
+    ownerID
+    planID
+    stripeFeatureID
+    stripeProductID
+    tags
+    updatedAt
+    updatedBy
   }
 }
 
@@ -93,16 +103,18 @@ query GetEntitlementPlanFeatures($where: EntitlementPlanFeatureWhereInput) {
   entitlementPlanFeatures(where: $where) {
     edges {
       node {
+        createdAt
+        createdBy
+        featureID
         id
         metadata
-        plan {
-          id
-          name
-        }
-        feature {
-          id
-          name
-        }
+        ownerID
+        planID
+        stripeFeatureID
+        stripeProductID
+        tags
+        updatedAt
+        updatedBy
       }
     }
   }
@@ -111,16 +123,18 @@ query GetEntitlementPlanFeatures($where: EntitlementPlanFeatureWhereInput) {
 mutation UpdateEntitlementPlanFeature($updateEntitlementPlanFeatureId: ID!, $input: UpdateEntitlementPlanFeatureInput!) {
   updateEntitlementPlanFeature(id: $updateEntitlementPlanFeatureId, input: $input) {
     entitlementPlanFeature {
+      createdAt
+      createdBy
+      featureID
       id
       metadata
-      plan {
-        id
-        name
-      }
-      feature {
-        id
-        name
-      }
+      ownerID
+      planID
+      stripeFeatureID
+      stripeProductID
+      tags
+      updatedAt
+      updatedBy
     }
   }
 }

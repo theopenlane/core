@@ -501,6 +501,15 @@ func (eh *EntitlementHistory) changes(new *EntitlementHistory) []Change {
 	if !reflect.DeepEqual(eh.Cancelled, new.Cancelled) {
 		changes = append(changes, NewChange(entitlementhistory.FieldCancelled, eh.Cancelled, new.Cancelled))
 	}
+	if !reflect.DeepEqual(eh.CancelledDate, new.CancelledDate) {
+		changes = append(changes, NewChange(entitlementhistory.FieldCancelledDate, eh.CancelledDate, new.CancelledDate))
+	}
+	if !reflect.DeepEqual(eh.BillStarting, new.BillStarting) {
+		changes = append(changes, NewChange(entitlementhistory.FieldBillStarting, eh.BillStarting, new.BillStarting))
+	}
+	if !reflect.DeepEqual(eh.Active, new.Active) {
+		changes = append(changes, NewChange(entitlementhistory.FieldActive, eh.Active, new.Active))
+	}
 	return changes
 }
 
@@ -570,6 +579,12 @@ func (eph *EntitlementPlanHistory) changes(new *EntitlementPlanHistory) []Change
 	if !reflect.DeepEqual(eph.Metadata, new.Metadata) {
 		changes = append(changes, NewChange(entitlementplanhistory.FieldMetadata, eph.Metadata, new.Metadata))
 	}
+	if !reflect.DeepEqual(eph.StripeProductID, new.StripeProductID) {
+		changes = append(changes, NewChange(entitlementplanhistory.FieldStripeProductID, eph.StripeProductID, new.StripeProductID))
+	}
+	if !reflect.DeepEqual(eph.StripePriceID, new.StripePriceID) {
+		changes = append(changes, NewChange(entitlementplanhistory.FieldStripePriceID, eph.StripePriceID, new.StripePriceID))
+	}
 	return changes
 }
 
@@ -630,8 +645,14 @@ func (epfh *EntitlementPlanFeatureHistory) changes(new *EntitlementPlanFeatureHi
 	if !reflect.DeepEqual(epfh.PlanID, new.PlanID) {
 		changes = append(changes, NewChange(entitlementplanfeaturehistory.FieldPlanID, epfh.PlanID, new.PlanID))
 	}
+	if !reflect.DeepEqual(epfh.StripeProductID, new.StripeProductID) {
+		changes = append(changes, NewChange(entitlementplanfeaturehistory.FieldStripeProductID, epfh.StripeProductID, new.StripeProductID))
+	}
 	if !reflect.DeepEqual(epfh.FeatureID, new.FeatureID) {
 		changes = append(changes, NewChange(entitlementplanfeaturehistory.FieldFeatureID, epfh.FeatureID, new.FeatureID))
+	}
+	if !reflect.DeepEqual(epfh.StripeFeatureID, new.StripeFeatureID) {
+		changes = append(changes, NewChange(entitlementplanfeaturehistory.FieldStripeFeatureID, epfh.StripeFeatureID, new.StripeFeatureID))
 	}
 	return changes
 }
@@ -887,6 +908,9 @@ func (fh *FeatureHistory) changes(new *FeatureHistory) []Change {
 	}
 	if !reflect.DeepEqual(fh.Metadata, new.Metadata) {
 		changes = append(changes, NewChange(featurehistory.FieldMetadata, fh.Metadata, new.Metadata))
+	}
+	if !reflect.DeepEqual(fh.StripeFeatureID, new.StripeFeatureID) {
+		changes = append(changes, NewChange(featurehistory.FieldStripeFeatureID, fh.StripeFeatureID, new.StripeFeatureID))
 	}
 	return changes
 }
@@ -1778,6 +1802,9 @@ func (osh *OrganizationSettingHistory) changes(new *OrganizationSettingHistory) 
 	}
 	if !reflect.DeepEqual(osh.OrganizationID, new.OrganizationID) {
 		changes = append(changes, NewChange(organizationsettinghistory.FieldOrganizationID, osh.OrganizationID, new.OrganizationID))
+	}
+	if !reflect.DeepEqual(osh.StripeID, new.StripeID) {
+		changes = append(changes, NewChange(organizationsettinghistory.FieldStripeID, osh.StripeID, new.StripeID))
 	}
 	return changes
 }

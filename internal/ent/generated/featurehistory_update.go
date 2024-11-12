@@ -208,6 +208,26 @@ func (fhu *FeatureHistoryUpdate) ClearMetadata() *FeatureHistoryUpdate {
 	return fhu
 }
 
+// SetStripeFeatureID sets the "stripe_feature_id" field.
+func (fhu *FeatureHistoryUpdate) SetStripeFeatureID(s string) *FeatureHistoryUpdate {
+	fhu.mutation.SetStripeFeatureID(s)
+	return fhu
+}
+
+// SetNillableStripeFeatureID sets the "stripe_feature_id" field if the given value is not nil.
+func (fhu *FeatureHistoryUpdate) SetNillableStripeFeatureID(s *string) *FeatureHistoryUpdate {
+	if s != nil {
+		fhu.SetStripeFeatureID(*s)
+	}
+	return fhu
+}
+
+// ClearStripeFeatureID clears the value of the "stripe_feature_id" field.
+func (fhu *FeatureHistoryUpdate) ClearStripeFeatureID() *FeatureHistoryUpdate {
+	fhu.mutation.ClearStripeFeatureID()
+	return fhu
+}
+
 // Mutation returns the FeatureHistoryMutation object of the builder.
 func (fhu *FeatureHistoryUpdate) Mutation() *FeatureHistoryMutation {
 	return fhu.mutation
@@ -340,6 +360,12 @@ func (fhu *FeatureHistoryUpdate) sqlSave(ctx context.Context) (n int, err error)
 	}
 	if fhu.mutation.MetadataCleared() {
 		_spec.ClearField(featurehistory.FieldMetadata, field.TypeJSON)
+	}
+	if value, ok := fhu.mutation.StripeFeatureID(); ok {
+		_spec.SetField(featurehistory.FieldStripeFeatureID, field.TypeString, value)
+	}
+	if fhu.mutation.StripeFeatureIDCleared() {
+		_spec.ClearField(featurehistory.FieldStripeFeatureID, field.TypeString)
 	}
 	_spec.Node.Schema = fhu.schemaConfig.FeatureHistory
 	ctx = internal.NewSchemaConfigContext(ctx, fhu.schemaConfig)
@@ -541,6 +567,26 @@ func (fhuo *FeatureHistoryUpdateOne) ClearMetadata() *FeatureHistoryUpdateOne {
 	return fhuo
 }
 
+// SetStripeFeatureID sets the "stripe_feature_id" field.
+func (fhuo *FeatureHistoryUpdateOne) SetStripeFeatureID(s string) *FeatureHistoryUpdateOne {
+	fhuo.mutation.SetStripeFeatureID(s)
+	return fhuo
+}
+
+// SetNillableStripeFeatureID sets the "stripe_feature_id" field if the given value is not nil.
+func (fhuo *FeatureHistoryUpdateOne) SetNillableStripeFeatureID(s *string) *FeatureHistoryUpdateOne {
+	if s != nil {
+		fhuo.SetStripeFeatureID(*s)
+	}
+	return fhuo
+}
+
+// ClearStripeFeatureID clears the value of the "stripe_feature_id" field.
+func (fhuo *FeatureHistoryUpdateOne) ClearStripeFeatureID() *FeatureHistoryUpdateOne {
+	fhuo.mutation.ClearStripeFeatureID()
+	return fhuo
+}
+
 // Mutation returns the FeatureHistoryMutation object of the builder.
 func (fhuo *FeatureHistoryUpdateOne) Mutation() *FeatureHistoryMutation {
 	return fhuo.mutation
@@ -703,6 +749,12 @@ func (fhuo *FeatureHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Featur
 	}
 	if fhuo.mutation.MetadataCleared() {
 		_spec.ClearField(featurehistory.FieldMetadata, field.TypeJSON)
+	}
+	if value, ok := fhuo.mutation.StripeFeatureID(); ok {
+		_spec.SetField(featurehistory.FieldStripeFeatureID, field.TypeString, value)
+	}
+	if fhuo.mutation.StripeFeatureIDCleared() {
+		_spec.ClearField(featurehistory.FieldStripeFeatureID, field.TypeString)
 	}
 	_spec.Node.Schema = fhuo.schemaConfig.FeatureHistory
 	ctx = internal.NewSchemaConfigContext(ctx, fhuo.schemaConfig)

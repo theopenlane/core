@@ -227,6 +227,20 @@ func (fhc *FeatureHistoryCreate) SetMetadata(m map[string]interface{}) *FeatureH
 	return fhc
 }
 
+// SetStripeFeatureID sets the "stripe_feature_id" field.
+func (fhc *FeatureHistoryCreate) SetStripeFeatureID(s string) *FeatureHistoryCreate {
+	fhc.mutation.SetStripeFeatureID(s)
+	return fhc
+}
+
+// SetNillableStripeFeatureID sets the "stripe_feature_id" field if the given value is not nil.
+func (fhc *FeatureHistoryCreate) SetNillableStripeFeatureID(s *string) *FeatureHistoryCreate {
+	if s != nil {
+		fhc.SetStripeFeatureID(*s)
+	}
+	return fhc
+}
+
 // SetID sets the "id" field.
 func (fhc *FeatureHistoryCreate) SetID(s string) *FeatureHistoryCreate {
 	fhc.mutation.SetID(s)
@@ -449,6 +463,10 @@ func (fhc *FeatureHistoryCreate) createSpec() (*FeatureHistory, *sqlgraph.Create
 	if value, ok := fhc.mutation.Metadata(); ok {
 		_spec.SetField(featurehistory.FieldMetadata, field.TypeJSON, value)
 		_node.Metadata = value
+	}
+	if value, ok := fhc.mutation.StripeFeatureID(); ok {
+		_spec.SetField(featurehistory.FieldStripeFeatureID, field.TypeString, value)
+		_node.StripeFeatureID = value
 	}
 	return _node, _spec
 }

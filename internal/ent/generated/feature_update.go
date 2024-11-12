@@ -212,6 +212,26 @@ func (fu *FeatureUpdate) ClearMetadata() *FeatureUpdate {
 	return fu
 }
 
+// SetStripeFeatureID sets the "stripe_feature_id" field.
+func (fu *FeatureUpdate) SetStripeFeatureID(s string) *FeatureUpdate {
+	fu.mutation.SetStripeFeatureID(s)
+	return fu
+}
+
+// SetNillableStripeFeatureID sets the "stripe_feature_id" field if the given value is not nil.
+func (fu *FeatureUpdate) SetNillableStripeFeatureID(s *string) *FeatureUpdate {
+	if s != nil {
+		fu.SetStripeFeatureID(*s)
+	}
+	return fu
+}
+
+// ClearStripeFeatureID clears the value of the "stripe_feature_id" field.
+func (fu *FeatureUpdate) ClearStripeFeatureID() *FeatureUpdate {
+	fu.mutation.ClearStripeFeatureID()
+	return fu
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (fu *FeatureUpdate) SetOwner(o *Organization) *FeatureUpdate {
 	return fu.SetOwnerID(o.ID)
@@ -467,6 +487,12 @@ func (fu *FeatureUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if fu.mutation.MetadataCleared() {
 		_spec.ClearField(feature.FieldMetadata, field.TypeJSON)
+	}
+	if value, ok := fu.mutation.StripeFeatureID(); ok {
+		_spec.SetField(feature.FieldStripeFeatureID, field.TypeString, value)
+	}
+	if fu.mutation.StripeFeatureIDCleared() {
+		_spec.ClearField(feature.FieldStripeFeatureID, field.TypeString)
 	}
 	if fu.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -864,6 +890,26 @@ func (fuo *FeatureUpdateOne) ClearMetadata() *FeatureUpdateOne {
 	return fuo
 }
 
+// SetStripeFeatureID sets the "stripe_feature_id" field.
+func (fuo *FeatureUpdateOne) SetStripeFeatureID(s string) *FeatureUpdateOne {
+	fuo.mutation.SetStripeFeatureID(s)
+	return fuo
+}
+
+// SetNillableStripeFeatureID sets the "stripe_feature_id" field if the given value is not nil.
+func (fuo *FeatureUpdateOne) SetNillableStripeFeatureID(s *string) *FeatureUpdateOne {
+	if s != nil {
+		fuo.SetStripeFeatureID(*s)
+	}
+	return fuo
+}
+
+// ClearStripeFeatureID clears the value of the "stripe_feature_id" field.
+func (fuo *FeatureUpdateOne) ClearStripeFeatureID() *FeatureUpdateOne {
+	fuo.mutation.ClearStripeFeatureID()
+	return fuo
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (fuo *FeatureUpdateOne) SetOwner(o *Organization) *FeatureUpdateOne {
 	return fuo.SetOwnerID(o.ID)
@@ -1149,6 +1195,12 @@ func (fuo *FeatureUpdateOne) sqlSave(ctx context.Context) (_node *Feature, err e
 	}
 	if fuo.mutation.MetadataCleared() {
 		_spec.ClearField(feature.FieldMetadata, field.TypeJSON)
+	}
+	if value, ok := fuo.mutation.StripeFeatureID(); ok {
+		_spec.SetField(feature.FieldStripeFeatureID, field.TypeString, value)
+	}
+	if fuo.mutation.StripeFeatureIDCleared() {
+		_spec.ClearField(feature.FieldStripeFeatureID, field.TypeString)
 	}
 	if fuo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

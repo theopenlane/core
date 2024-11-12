@@ -283,6 +283,26 @@ func (osu *OrganizationSettingUpdate) ClearOrganizationID() *OrganizationSetting
 	return osu
 }
 
+// SetStripeID sets the "stripe_id" field.
+func (osu *OrganizationSettingUpdate) SetStripeID(s string) *OrganizationSettingUpdate {
+	osu.mutation.SetStripeID(s)
+	return osu
+}
+
+// SetNillableStripeID sets the "stripe_id" field if the given value is not nil.
+func (osu *OrganizationSettingUpdate) SetNillableStripeID(s *string) *OrganizationSettingUpdate {
+	if s != nil {
+		osu.SetStripeID(*s)
+	}
+	return osu
+}
+
+// ClearStripeID clears the value of the "stripe_id" field.
+func (osu *OrganizationSettingUpdate) ClearStripeID() *OrganizationSettingUpdate {
+	osu.mutation.ClearStripeID()
+	return osu
+}
+
 // SetOrganization sets the "organization" edge to the Organization entity.
 func (osu *OrganizationSettingUpdate) SetOrganization(o *Organization) *OrganizationSettingUpdate {
 	return osu.SetOrganizationID(o.ID)
@@ -507,6 +527,12 @@ func (osu *OrganizationSettingUpdate) sqlSave(ctx context.Context) (n int, err e
 	}
 	if osu.mutation.GeoLocationCleared() {
 		_spec.ClearField(organizationsetting.FieldGeoLocation, field.TypeEnum)
+	}
+	if value, ok := osu.mutation.StripeID(); ok {
+		_spec.SetField(organizationsetting.FieldStripeID, field.TypeString, value)
+	}
+	if osu.mutation.StripeIDCleared() {
+		_spec.ClearField(organizationsetting.FieldStripeID, field.TypeString)
 	}
 	if osu.mutation.OrganizationCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -859,6 +885,26 @@ func (osuo *OrganizationSettingUpdateOne) ClearOrganizationID() *OrganizationSet
 	return osuo
 }
 
+// SetStripeID sets the "stripe_id" field.
+func (osuo *OrganizationSettingUpdateOne) SetStripeID(s string) *OrganizationSettingUpdateOne {
+	osuo.mutation.SetStripeID(s)
+	return osuo
+}
+
+// SetNillableStripeID sets the "stripe_id" field if the given value is not nil.
+func (osuo *OrganizationSettingUpdateOne) SetNillableStripeID(s *string) *OrganizationSettingUpdateOne {
+	if s != nil {
+		osuo.SetStripeID(*s)
+	}
+	return osuo
+}
+
+// ClearStripeID clears the value of the "stripe_id" field.
+func (osuo *OrganizationSettingUpdateOne) ClearStripeID() *OrganizationSettingUpdateOne {
+	osuo.mutation.ClearStripeID()
+	return osuo
+}
+
 // SetOrganization sets the "organization" edge to the Organization entity.
 func (osuo *OrganizationSettingUpdateOne) SetOrganization(o *Organization) *OrganizationSettingUpdateOne {
 	return osuo.SetOrganizationID(o.ID)
@@ -1113,6 +1159,12 @@ func (osuo *OrganizationSettingUpdateOne) sqlSave(ctx context.Context) (_node *O
 	}
 	if osuo.mutation.GeoLocationCleared() {
 		_spec.ClearField(organizationsetting.FieldGeoLocation, field.TypeEnum)
+	}
+	if value, ok := osuo.mutation.StripeID(); ok {
+		_spec.SetField(organizationsetting.FieldStripeID, field.TypeString, value)
+	}
+	if osuo.mutation.StripeIDCleared() {
+		_spec.ClearField(organizationsetting.FieldStripeID, field.TypeString)
 	}
 	if osuo.mutation.OrganizationCleared() {
 		edge := &sqlgraph.EdgeSpec{

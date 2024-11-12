@@ -341,6 +341,8 @@ func adminSearchEntitlementPlans(ctx context.Context, query string) ([]*generate
 				likeQuery := "%" + query + "%"
 				s.Where(sql.ExprP("(metadata)::text LIKE $9", likeQuery)) // search by Metadata
 			},
+			entitlementplan.StripeProductIDContainsFold(query), // search by StripeProductID
+			entitlementplan.StripePriceIDContainsFold(query),   // search by StripePriceID
 		),
 	).All(ctx)
 }
@@ -373,8 +375,10 @@ func adminSearchEntitlementPlanFeatures(ctx context.Context, query string) ([]*g
 				likeQuery := "%" + query + "%"
 				s.Where(sql.ExprP("(metadata)::text LIKE $5", likeQuery)) // search by Metadata
 			},
-			entitlementplanfeature.PlanIDContainsFold(query),    // search by PlanID
-			entitlementplanfeature.FeatureIDContainsFold(query), // search by FeatureID
+			entitlementplanfeature.PlanIDContainsFold(query),          // search by PlanID
+			entitlementplanfeature.StripeProductIDContainsFold(query), // search by StripeProductID
+			entitlementplanfeature.FeatureIDContainsFold(query),       // search by FeatureID
+			entitlementplanfeature.StripeFeatureIDContainsFold(query), // search by StripeFeatureID
 		),
 	).All(ctx)
 }
@@ -512,6 +516,7 @@ func adminSearchFeatures(ctx context.Context, query string) ([]*generated.Featur
 				likeQuery := "%" + query + "%"
 				s.Where(sql.ExprP("(metadata)::text LIKE $8", likeQuery)) // search by Metadata
 			},
+			feature.StripeFeatureIDContainsFold(query), // search by StripeFeatureID
 		),
 	).All(ctx)
 }
@@ -862,6 +867,7 @@ func adminSearchOrganizationSettings(ctx context.Context, query string) ([]*gene
 			organizationsetting.BillingAddressContainsFold(query), // search by BillingAddress
 			organizationsetting.TaxIdentifierContainsFold(query),  // search by TaxIdentifier
 			organizationsetting.OrganizationIDContainsFold(query), // search by OrganizationID
+			organizationsetting.StripeIDContainsFold(query),       // search by StripeID
 		),
 	).All(ctx)
 }

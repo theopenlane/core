@@ -264,6 +264,20 @@ func (oshc *OrganizationSettingHistoryCreate) SetNillableOrganizationID(s *strin
 	return oshc
 }
 
+// SetStripeID sets the "stripe_id" field.
+func (oshc *OrganizationSettingHistoryCreate) SetStripeID(s string) *OrganizationSettingHistoryCreate {
+	oshc.mutation.SetStripeID(s)
+	return oshc
+}
+
+// SetNillableStripeID sets the "stripe_id" field if the given value is not nil.
+func (oshc *OrganizationSettingHistoryCreate) SetNillableStripeID(s *string) *OrganizationSettingHistoryCreate {
+	if s != nil {
+		oshc.SetStripeID(*s)
+	}
+	return oshc
+}
+
 // SetID sets the "id" field.
 func (oshc *OrganizationSettingHistoryCreate) SetID(s string) *OrganizationSettingHistoryCreate {
 	oshc.mutation.SetID(s)
@@ -493,6 +507,10 @@ func (oshc *OrganizationSettingHistoryCreate) createSpec() (*OrganizationSetting
 	if value, ok := oshc.mutation.OrganizationID(); ok {
 		_spec.SetField(organizationsettinghistory.FieldOrganizationID, field.TypeString, value)
 		_node.OrganizationID = value
+	}
+	if value, ok := oshc.mutation.StripeID(); ok {
+		_spec.SetField(organizationsettinghistory.FieldStripeID, field.TypeString, value)
+		_node.StripeID = value
 	}
 	return _node, _spec
 }

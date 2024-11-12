@@ -230,6 +230,54 @@ func (ehu *EntitlementHistoryUpdate) SetNillableCancelled(b *bool) *EntitlementH
 	return ehu
 }
 
+// SetCancelledDate sets the "cancelled_date" field.
+func (ehu *EntitlementHistoryUpdate) SetCancelledDate(t time.Time) *EntitlementHistoryUpdate {
+	ehu.mutation.SetCancelledDate(t)
+	return ehu
+}
+
+// SetNillableCancelledDate sets the "cancelled_date" field if the given value is not nil.
+func (ehu *EntitlementHistoryUpdate) SetNillableCancelledDate(t *time.Time) *EntitlementHistoryUpdate {
+	if t != nil {
+		ehu.SetCancelledDate(*t)
+	}
+	return ehu
+}
+
+// ClearCancelledDate clears the value of the "cancelled_date" field.
+func (ehu *EntitlementHistoryUpdate) ClearCancelledDate() *EntitlementHistoryUpdate {
+	ehu.mutation.ClearCancelledDate()
+	return ehu
+}
+
+// SetBillStarting sets the "bill_starting" field.
+func (ehu *EntitlementHistoryUpdate) SetBillStarting(t time.Time) *EntitlementHistoryUpdate {
+	ehu.mutation.SetBillStarting(t)
+	return ehu
+}
+
+// SetNillableBillStarting sets the "bill_starting" field if the given value is not nil.
+func (ehu *EntitlementHistoryUpdate) SetNillableBillStarting(t *time.Time) *EntitlementHistoryUpdate {
+	if t != nil {
+		ehu.SetBillStarting(*t)
+	}
+	return ehu
+}
+
+// SetActive sets the "active" field.
+func (ehu *EntitlementHistoryUpdate) SetActive(b bool) *EntitlementHistoryUpdate {
+	ehu.mutation.SetActive(b)
+	return ehu
+}
+
+// SetNillableActive sets the "active" field if the given value is not nil.
+func (ehu *EntitlementHistoryUpdate) SetNillableActive(b *bool) *EntitlementHistoryUpdate {
+	if b != nil {
+		ehu.SetActive(*b)
+	}
+	return ehu
+}
+
 // Mutation returns the EntitlementHistoryMutation object of the builder.
 func (ehu *EntitlementHistoryUpdate) Mutation() *EntitlementHistoryMutation {
 	return ehu.mutation
@@ -365,6 +413,18 @@ func (ehu *EntitlementHistoryUpdate) sqlSave(ctx context.Context) (n int, err er
 	}
 	if value, ok := ehu.mutation.Cancelled(); ok {
 		_spec.SetField(entitlementhistory.FieldCancelled, field.TypeBool, value)
+	}
+	if value, ok := ehu.mutation.CancelledDate(); ok {
+		_spec.SetField(entitlementhistory.FieldCancelledDate, field.TypeTime, value)
+	}
+	if ehu.mutation.CancelledDateCleared() {
+		_spec.ClearField(entitlementhistory.FieldCancelledDate, field.TypeTime)
+	}
+	if value, ok := ehu.mutation.BillStarting(); ok {
+		_spec.SetField(entitlementhistory.FieldBillStarting, field.TypeTime, value)
+	}
+	if value, ok := ehu.mutation.Active(); ok {
+		_spec.SetField(entitlementhistory.FieldActive, field.TypeBool, value)
 	}
 	_spec.Node.Schema = ehu.schemaConfig.EntitlementHistory
 	ctx = internal.NewSchemaConfigContext(ctx, ehu.schemaConfig)
@@ -588,6 +648,54 @@ func (ehuo *EntitlementHistoryUpdateOne) SetNillableCancelled(b *bool) *Entitlem
 	return ehuo
 }
 
+// SetCancelledDate sets the "cancelled_date" field.
+func (ehuo *EntitlementHistoryUpdateOne) SetCancelledDate(t time.Time) *EntitlementHistoryUpdateOne {
+	ehuo.mutation.SetCancelledDate(t)
+	return ehuo
+}
+
+// SetNillableCancelledDate sets the "cancelled_date" field if the given value is not nil.
+func (ehuo *EntitlementHistoryUpdateOne) SetNillableCancelledDate(t *time.Time) *EntitlementHistoryUpdateOne {
+	if t != nil {
+		ehuo.SetCancelledDate(*t)
+	}
+	return ehuo
+}
+
+// ClearCancelledDate clears the value of the "cancelled_date" field.
+func (ehuo *EntitlementHistoryUpdateOne) ClearCancelledDate() *EntitlementHistoryUpdateOne {
+	ehuo.mutation.ClearCancelledDate()
+	return ehuo
+}
+
+// SetBillStarting sets the "bill_starting" field.
+func (ehuo *EntitlementHistoryUpdateOne) SetBillStarting(t time.Time) *EntitlementHistoryUpdateOne {
+	ehuo.mutation.SetBillStarting(t)
+	return ehuo
+}
+
+// SetNillableBillStarting sets the "bill_starting" field if the given value is not nil.
+func (ehuo *EntitlementHistoryUpdateOne) SetNillableBillStarting(t *time.Time) *EntitlementHistoryUpdateOne {
+	if t != nil {
+		ehuo.SetBillStarting(*t)
+	}
+	return ehuo
+}
+
+// SetActive sets the "active" field.
+func (ehuo *EntitlementHistoryUpdateOne) SetActive(b bool) *EntitlementHistoryUpdateOne {
+	ehuo.mutation.SetActive(b)
+	return ehuo
+}
+
+// SetNillableActive sets the "active" field if the given value is not nil.
+func (ehuo *EntitlementHistoryUpdateOne) SetNillableActive(b *bool) *EntitlementHistoryUpdateOne {
+	if b != nil {
+		ehuo.SetActive(*b)
+	}
+	return ehuo
+}
+
 // Mutation returns the EntitlementHistoryMutation object of the builder.
 func (ehuo *EntitlementHistoryUpdateOne) Mutation() *EntitlementHistoryMutation {
 	return ehuo.mutation
@@ -753,6 +861,18 @@ func (ehuo *EntitlementHistoryUpdateOne) sqlSave(ctx context.Context) (_node *En
 	}
 	if value, ok := ehuo.mutation.Cancelled(); ok {
 		_spec.SetField(entitlementhistory.FieldCancelled, field.TypeBool, value)
+	}
+	if value, ok := ehuo.mutation.CancelledDate(); ok {
+		_spec.SetField(entitlementhistory.FieldCancelledDate, field.TypeTime, value)
+	}
+	if ehuo.mutation.CancelledDateCleared() {
+		_spec.ClearField(entitlementhistory.FieldCancelledDate, field.TypeTime)
+	}
+	if value, ok := ehuo.mutation.BillStarting(); ok {
+		_spec.SetField(entitlementhistory.FieldBillStarting, field.TypeTime, value)
+	}
+	if value, ok := ehuo.mutation.Active(); ok {
+		_spec.SetField(entitlementhistory.FieldActive, field.TypeBool, value)
 	}
 	_spec.Node.Schema = ehuo.schemaConfig.EntitlementHistory
 	ctx = internal.NewSchemaConfigContext(ctx, ehuo.schemaConfig)

@@ -196,6 +196,20 @@ func (fc *FeatureCreate) SetMetadata(m map[string]interface{}) *FeatureCreate {
 	return fc
 }
 
+// SetStripeFeatureID sets the "stripe_feature_id" field.
+func (fc *FeatureCreate) SetStripeFeatureID(s string) *FeatureCreate {
+	fc.mutation.SetStripeFeatureID(s)
+	return fc
+}
+
+// SetNillableStripeFeatureID sets the "stripe_feature_id" field if the given value is not nil.
+func (fc *FeatureCreate) SetNillableStripeFeatureID(s *string) *FeatureCreate {
+	if s != nil {
+		fc.SetStripeFeatureID(*s)
+	}
+	return fc
+}
+
 // SetID sets the "id" field.
 func (fc *FeatureCreate) SetID(s string) *FeatureCreate {
 	fc.mutation.SetID(s)
@@ -444,6 +458,10 @@ func (fc *FeatureCreate) createSpec() (*Feature, *sqlgraph.CreateSpec) {
 	if value, ok := fc.mutation.Metadata(); ok {
 		_spec.SetField(feature.FieldMetadata, field.TypeJSON, value)
 		_node.Metadata = value
+	}
+	if value, ok := fc.mutation.StripeFeatureID(); ok {
+		_spec.SetField(feature.FieldStripeFeatureID, field.TypeString, value)
+		_node.StripeFeatureID = value
 	}
 	if nodes := fc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

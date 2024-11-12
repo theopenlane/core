@@ -52,8 +52,10 @@ type FeatureHistory struct {
 	// a description of the feature
 	Description *string `json:"description,omitempty"`
 	// metadata for the feature
-	Metadata     map[string]interface{} `json:"metadata,omitempty"`
-	selectValues sql.SelectValues
+	Metadata map[string]interface{} `json:"metadata,omitempty"`
+	// the feature ID in Stripe
+	StripeFeatureID string `json:"stripe_feature_id,omitempty"`
+	selectValues    sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -67,7 +69,7 @@ func (*FeatureHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case featurehistory.FieldEnabled:
 			values[i] = new(sql.NullBool)
-		case featurehistory.FieldID, featurehistory.FieldRef, featurehistory.FieldCreatedBy, featurehistory.FieldUpdatedBy, featurehistory.FieldDeletedBy, featurehistory.FieldMappingID, featurehistory.FieldOwnerID, featurehistory.FieldName, featurehistory.FieldDisplayName, featurehistory.FieldDescription:
+		case featurehistory.FieldID, featurehistory.FieldRef, featurehistory.FieldCreatedBy, featurehistory.FieldUpdatedBy, featurehistory.FieldDeletedBy, featurehistory.FieldMappingID, featurehistory.FieldOwnerID, featurehistory.FieldName, featurehistory.FieldDisplayName, featurehistory.FieldDescription, featurehistory.FieldStripeFeatureID:
 			values[i] = new(sql.NullString)
 		case featurehistory.FieldHistoryTime, featurehistory.FieldCreatedAt, featurehistory.FieldUpdatedAt, featurehistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -199,6 +201,12 @@ func (fh *FeatureHistory) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field metadata: %w", err)
 				}
 			}
+		case featurehistory.FieldStripeFeatureID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field stripe_feature_id", values[i])
+			} else if value.Valid {
+				fh.StripeFeatureID = value.String
+			}
 		default:
 			fh.selectValues.Set(columns[i], values[i])
 		}
@@ -287,6 +295,9 @@ func (fh *FeatureHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("metadata=")
 	builder.WriteString(fmt.Sprintf("%v", fh.Metadata))
+	builder.WriteString(", ")
+	builder.WriteString("stripe_feature_id=")
+	builder.WriteString(fh.StripeFeatureID)
 	builder.WriteByte(')')
 	return builder.String()
 }

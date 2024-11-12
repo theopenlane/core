@@ -56,6 +56,8 @@ const (
 	FieldGeoLocation = "geo_location"
 	// FieldOrganizationID holds the string denoting the organization_id field in the database.
 	FieldOrganizationID = "organization_id"
+	// FieldStripeID holds the string denoting the stripe_id field in the database.
+	FieldStripeID = "stripe_id"
 	// Table holds the table name of the organizationsettinghistory in the database.
 	Table = "organization_setting_history"
 )
@@ -82,6 +84,7 @@ var Columns = []string{
 	FieldTaxIdentifier,
 	FieldGeoLocation,
 	FieldOrganizationID,
+	FieldStripeID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -232,6 +235,11 @@ func ByGeoLocation(opts ...sql.OrderTermOption) OrderOption {
 // ByOrganizationID orders the results by the organization_id field.
 func ByOrganizationID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOrganizationID, opts...).ToFunc()
+}
+
+// ByStripeID orders the results by the stripe_id field.
+func ByStripeID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStripeID, opts...).ToFunc()
 }
 
 var (

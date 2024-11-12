@@ -2242,6 +2242,21 @@ func (e *EntitlementQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				selectedFields = append(selectedFields, entitlement.FieldCancelled)
 				fieldSeen[entitlement.FieldCancelled] = struct{}{}
 			}
+		case "cancelledDate":
+			if _, ok := fieldSeen[entitlement.FieldCancelledDate]; !ok {
+				selectedFields = append(selectedFields, entitlement.FieldCancelledDate)
+				fieldSeen[entitlement.FieldCancelledDate] = struct{}{}
+			}
+		case "billStarting":
+			if _, ok := fieldSeen[entitlement.FieldBillStarting]; !ok {
+				selectedFields = append(selectedFields, entitlement.FieldBillStarting)
+				fieldSeen[entitlement.FieldBillStarting] = struct{}{}
+			}
+		case "active":
+			if _, ok := fieldSeen[entitlement.FieldActive]; !ok {
+				selectedFields = append(selectedFields, entitlement.FieldActive)
+				fieldSeen[entitlement.FieldActive] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:
@@ -2393,6 +2408,21 @@ func (eh *EntitlementHistoryQuery) collectField(ctx context.Context, oneNode boo
 			if _, ok := fieldSeen[entitlementhistory.FieldCancelled]; !ok {
 				selectedFields = append(selectedFields, entitlementhistory.FieldCancelled)
 				fieldSeen[entitlementhistory.FieldCancelled] = struct{}{}
+			}
+		case "cancelledDate":
+			if _, ok := fieldSeen[entitlementhistory.FieldCancelledDate]; !ok {
+				selectedFields = append(selectedFields, entitlementhistory.FieldCancelledDate)
+				fieldSeen[entitlementhistory.FieldCancelledDate] = struct{}{}
+			}
+		case "billStarting":
+			if _, ok := fieldSeen[entitlementhistory.FieldBillStarting]; !ok {
+				selectedFields = append(selectedFields, entitlementhistory.FieldBillStarting)
+				fieldSeen[entitlementhistory.FieldBillStarting] = struct{}{}
+			}
+		case "active":
+			if _, ok := fieldSeen[entitlementhistory.FieldActive]; !ok {
+				selectedFields = append(selectedFields, entitlementhistory.FieldActive)
+				fieldSeen[entitlementhistory.FieldActive] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -2588,6 +2618,16 @@ func (ep *EntitlementPlanQuery) collectField(ctx context.Context, oneNode bool, 
 				selectedFields = append(selectedFields, entitlementplan.FieldMetadata)
 				fieldSeen[entitlementplan.FieldMetadata] = struct{}{}
 			}
+		case "stripeProductID":
+			if _, ok := fieldSeen[entitlementplan.FieldStripeProductID]; !ok {
+				selectedFields = append(selectedFields, entitlementplan.FieldStripeProductID)
+				fieldSeen[entitlementplan.FieldStripeProductID] = struct{}{}
+			}
+		case "stripePriceID":
+			if _, ok := fieldSeen[entitlementplan.FieldStripePriceID]; !ok {
+				selectedFields = append(selectedFields, entitlementplan.FieldStripePriceID)
+				fieldSeen[entitlementplan.FieldStripePriceID] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:
@@ -2758,10 +2798,20 @@ func (epf *EntitlementPlanFeatureQuery) collectField(ctx context.Context, oneNod
 				selectedFields = append(selectedFields, entitlementplanfeature.FieldPlanID)
 				fieldSeen[entitlementplanfeature.FieldPlanID] = struct{}{}
 			}
+		case "stripeProductID":
+			if _, ok := fieldSeen[entitlementplanfeature.FieldStripeProductID]; !ok {
+				selectedFields = append(selectedFields, entitlementplanfeature.FieldStripeProductID)
+				fieldSeen[entitlementplanfeature.FieldStripeProductID] = struct{}{}
+			}
 		case "featureID":
 			if _, ok := fieldSeen[entitlementplanfeature.FieldFeatureID]; !ok {
 				selectedFields = append(selectedFields, entitlementplanfeature.FieldFeatureID)
 				fieldSeen[entitlementplanfeature.FieldFeatureID] = struct{}{}
+			}
+		case "stripeFeatureID":
+			if _, ok := fieldSeen[entitlementplanfeature.FieldStripeFeatureID]; !ok {
+				selectedFields = append(selectedFields, entitlementplanfeature.FieldStripeFeatureID)
+				fieldSeen[entitlementplanfeature.FieldStripeFeatureID] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -2890,10 +2940,20 @@ func (epfh *EntitlementPlanFeatureHistoryQuery) collectField(ctx context.Context
 				selectedFields = append(selectedFields, entitlementplanfeaturehistory.FieldPlanID)
 				fieldSeen[entitlementplanfeaturehistory.FieldPlanID] = struct{}{}
 			}
+		case "stripeProductID":
+			if _, ok := fieldSeen[entitlementplanfeaturehistory.FieldStripeProductID]; !ok {
+				selectedFields = append(selectedFields, entitlementplanfeaturehistory.FieldStripeProductID)
+				fieldSeen[entitlementplanfeaturehistory.FieldStripeProductID] = struct{}{}
+			}
 		case "featureID":
 			if _, ok := fieldSeen[entitlementplanfeaturehistory.FieldFeatureID]; !ok {
 				selectedFields = append(selectedFields, entitlementplanfeaturehistory.FieldFeatureID)
 				fieldSeen[entitlementplanfeaturehistory.FieldFeatureID] = struct{}{}
+			}
+		case "stripeFeatureID":
+			if _, ok := fieldSeen[entitlementplanfeaturehistory.FieldStripeFeatureID]; !ok {
+				selectedFields = append(selectedFields, entitlementplanfeaturehistory.FieldStripeFeatureID)
+				fieldSeen[entitlementplanfeaturehistory.FieldStripeFeatureID] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -3036,6 +3096,16 @@ func (eph *EntitlementPlanHistoryQuery) collectField(ctx context.Context, oneNod
 			if _, ok := fieldSeen[entitlementplanhistory.FieldMetadata]; !ok {
 				selectedFields = append(selectedFields, entitlementplanhistory.FieldMetadata)
 				fieldSeen[entitlementplanhistory.FieldMetadata] = struct{}{}
+			}
+		case "stripeProductID":
+			if _, ok := fieldSeen[entitlementplanhistory.FieldStripeProductID]; !ok {
+				selectedFields = append(selectedFields, entitlementplanhistory.FieldStripeProductID)
+				fieldSeen[entitlementplanhistory.FieldStripeProductID] = struct{}{}
+			}
+		case "stripePriceID":
+			if _, ok := fieldSeen[entitlementplanhistory.FieldStripePriceID]; !ok {
+				selectedFields = append(selectedFields, entitlementplanhistory.FieldStripePriceID)
+				fieldSeen[entitlementplanhistory.FieldStripePriceID] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -4374,6 +4444,11 @@ func (f *FeatureQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				selectedFields = append(selectedFields, feature.FieldMetadata)
 				fieldSeen[feature.FieldMetadata] = struct{}{}
 			}
+		case "stripeFeatureID":
+			if _, ok := fieldSeen[feature.FieldStripeFeatureID]; !ok {
+				selectedFields = append(selectedFields, feature.FieldStripeFeatureID)
+				fieldSeen[feature.FieldStripeFeatureID] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:
@@ -4515,6 +4590,11 @@ func (fh *FeatureHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 			if _, ok := fieldSeen[featurehistory.FieldMetadata]; !ok {
 				selectedFields = append(selectedFields, featurehistory.FieldMetadata)
 				fieldSeen[featurehistory.FieldMetadata] = struct{}{}
+			}
+		case "stripeFeatureID":
+			if _, ok := fieldSeen[featurehistory.FieldStripeFeatureID]; !ok {
+				selectedFields = append(selectedFields, featurehistory.FieldStripeFeatureID)
+				fieldSeen[featurehistory.FieldStripeFeatureID] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -9440,6 +9520,11 @@ func (os *OrganizationSettingQuery) collectField(ctx context.Context, oneNode bo
 				selectedFields = append(selectedFields, organizationsetting.FieldOrganizationID)
 				fieldSeen[organizationsetting.FieldOrganizationID] = struct{}{}
 			}
+		case "stripeID":
+			if _, ok := fieldSeen[organizationsetting.FieldStripeID]; !ok {
+				selectedFields = append(selectedFields, organizationsetting.FieldStripeID)
+				fieldSeen[organizationsetting.FieldStripeID] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:
@@ -9591,6 +9676,11 @@ func (osh *OrganizationSettingHistoryQuery) collectField(ctx context.Context, on
 			if _, ok := fieldSeen[organizationsettinghistory.FieldOrganizationID]; !ok {
 				selectedFields = append(selectedFields, organizationsettinghistory.FieldOrganizationID)
 				fieldSeen[organizationsettinghistory.FieldOrganizationID] = struct{}{}
+			}
+		case "stripeID":
+			if _, ok := fieldSeen[organizationsettinghistory.FieldStripeID]; !ok {
+				selectedFields = append(selectedFields, organizationsettinghistory.FieldStripeID)
+				fieldSeen[organizationsettinghistory.FieldStripeID] = struct{}{}
 			}
 		case "id":
 		case "__typename":

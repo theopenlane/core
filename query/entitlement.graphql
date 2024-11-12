@@ -2,15 +2,27 @@ mutation CreateBulkCSVEntitlement($input: Upload!) {
   createBulkCSVEntitlement(input: $input) {
     entitlements {
       id
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      tags
+      deletedAt
+      deletedBy
+      planID
+      organizationID
+      externalCustomerID
+      externalSubscriptionID
+      expires
+      expiresAt
+      cancelled
+      cancelledDate
+      billStarting
+      active
       plan {
         id
         name
       }
-      expires
-      expiresAt
-      cancelled
-      externalCustomerID
-      externalSubscriptionID
       organization {
         id
         name
@@ -23,6 +35,23 @@ mutation CreateBulkEntitlement($input: [CreateEntitlementInput!]) {
   createBulkEntitlement(input: $input) {
     entitlements {
       id
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      tags
+      deletedAt
+      deletedBy
+      planID
+      organizationID
+      externalCustomerID
+      externalSubscriptionID
+      expires
+      expiresAt
+      cancelled
+      cancelledDate
+      billStarting
+      active
       plan {
         id
         name
@@ -31,11 +60,6 @@ mutation CreateBulkEntitlement($input: [CreateEntitlementInput!]) {
         id
         name
       }
-      expires
-      expiresAt
-      cancelled
-      externalCustomerID
-      externalSubscriptionID
     }
   }
 }
@@ -44,6 +68,23 @@ mutation CreateEntitlement($input: CreateEntitlementInput!) {
   createEntitlement(input: $input) {
     entitlement {
       id
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      tags
+      deletedAt
+      deletedBy
+      planID
+      organizationID
+      externalCustomerID
+      externalSubscriptionID
+      expires
+      expiresAt
+      cancelled
+      cancelledDate
+      billStarting
+      active
       plan {
         id
         name
@@ -52,11 +93,6 @@ mutation CreateEntitlement($input: CreateEntitlementInput!) {
         id
         name
       }
-      expires
-      expiresAt
-      cancelled
-      externalCustomerID
-      externalSubscriptionID
     }
   }
 }
@@ -71,55 +107,79 @@ query GetAllEntitlements {
   entitlements {
     edges {
       node {
-        id
-        plan {
           id
-          name
-          features {
-            metadata
-            feature {
-              id
-              name
+          createdAt
+          updatedAt
+          createdBy
+          updatedBy
+          tags
+          deletedAt
+          deletedBy
+          planID
+          organizationID
+          externalCustomerID
+          externalSubscriptionID
+          expires
+          expiresAt
+          cancelled
+          cancelledDate
+          billStarting
+          active
+          plan {
+            id
+            name
+            features {
+              metadata
+              feature {
+                id
+                name
+              }
             }
           }
+          organization {
+            id
+            name
+          }
         }
-        organization {
-          id
-          name
-        }
-        expires
-        expiresAt
-        cancelled
-        externalCustomerID
-        externalSubscriptionID
       }
     }
   }
-}
 
 query GetEntitlementByID($entitlementId: ID!) {
   entitlement(id: $entitlementId) {
-    id
-    plan {
       id
-      name
-      features {
-        metadata
-        feature {
-          id
-          name
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      tags
+      deletedAt
+      deletedBy
+      planID
+      organizationID
+      externalCustomerID
+      externalSubscriptionID
+      expires
+      expiresAt
+      cancelled
+      cancelledDate
+      billStarting
+      active
+      plan {
+        id
+        name
+        features {
+          metadata
+          feature {
+            id
+            name
+          }
         }
       }
-    }
-    organization {
-      id
-      name
-    }
-    expires
-    expiresAt
-    cancelled
-    externalCustomerID
-    externalSubscriptionID
+      organization {
+        id
+        name
+      }
   }
 }
 
@@ -128,6 +188,23 @@ query GetEntitlements($where: EntitlementWhereInput) {
     edges {
       node {
         id
+        createdAt
+        updatedAt
+        createdBy
+        updatedBy
+        tags
+        deletedAt
+        deletedBy
+        planID
+        organizationID
+        externalCustomerID
+        externalSubscriptionID
+        expires
+        expiresAt
+        cancelled
+        cancelledDate
+        billStarting
+        active
         plan {
           id
           name
@@ -143,11 +220,6 @@ query GetEntitlements($where: EntitlementWhereInput) {
           id
           name
         }
-        expires
-        expiresAt
-        cancelled
-        externalCustomerID
-        externalSubscriptionID
       }
     }
   }
@@ -157,15 +229,38 @@ mutation UpdateEntitlement($updateEntitlementId: ID!, $input: UpdateEntitlementI
   updateEntitlement(id: $updateEntitlementId, input: $input) {
     entitlement {
       id
-      plan {
-        id
-        name
-      }
+      createdAt
+      updatedAt
+      createdBy
+      updatedBy
+      tags
+      deletedAt
+      deletedBy
+      planID
+      organizationID
+      externalCustomerID
+      externalSubscriptionID
       expires
       expiresAt
       cancelled
-      externalCustomerID
-      externalSubscriptionID
+      cancelledDate
+      billStarting
+      active
+      plan {
+        id
+        name
+        features {
+          metadata
+          feature {
+            id
+            name
+          }
+        }
+      }
+      organization {
+        id
+        name
+      }
     }
   }
 }

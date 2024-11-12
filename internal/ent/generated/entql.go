@@ -482,6 +482,9 @@ var schemaGraph = func() *sqlgraph.Schema {
 			entitlement.FieldExpires:                {Type: field.TypeBool, Column: entitlement.FieldExpires},
 			entitlement.FieldExpiresAt:              {Type: field.TypeTime, Column: entitlement.FieldExpiresAt},
 			entitlement.FieldCancelled:              {Type: field.TypeBool, Column: entitlement.FieldCancelled},
+			entitlement.FieldCancelledDate:          {Type: field.TypeTime, Column: entitlement.FieldCancelledDate},
+			entitlement.FieldBillStarting:           {Type: field.TypeTime, Column: entitlement.FieldBillStarting},
+			entitlement.FieldActive:                 {Type: field.TypeBool, Column: entitlement.FieldActive},
 		},
 	}
 	graph.Nodes[13] = &sqlgraph.Node{
@@ -514,6 +517,9 @@ var schemaGraph = func() *sqlgraph.Schema {
 			entitlementhistory.FieldExpires:                {Type: field.TypeBool, Column: entitlementhistory.FieldExpires},
 			entitlementhistory.FieldExpiresAt:              {Type: field.TypeTime, Column: entitlementhistory.FieldExpiresAt},
 			entitlementhistory.FieldCancelled:              {Type: field.TypeBool, Column: entitlementhistory.FieldCancelled},
+			entitlementhistory.FieldCancelledDate:          {Type: field.TypeTime, Column: entitlementhistory.FieldCancelledDate},
+			entitlementhistory.FieldBillStarting:           {Type: field.TypeTime, Column: entitlementhistory.FieldBillStarting},
+			entitlementhistory.FieldActive:                 {Type: field.TypeBool, Column: entitlementhistory.FieldActive},
 		},
 	}
 	graph.Nodes[14] = &sqlgraph.Node{
@@ -527,20 +533,22 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "EntitlementPlan",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			entitlementplan.FieldCreatedAt:   {Type: field.TypeTime, Column: entitlementplan.FieldCreatedAt},
-			entitlementplan.FieldUpdatedAt:   {Type: field.TypeTime, Column: entitlementplan.FieldUpdatedAt},
-			entitlementplan.FieldCreatedBy:   {Type: field.TypeString, Column: entitlementplan.FieldCreatedBy},
-			entitlementplan.FieldUpdatedBy:   {Type: field.TypeString, Column: entitlementplan.FieldUpdatedBy},
-			entitlementplan.FieldMappingID:   {Type: field.TypeString, Column: entitlementplan.FieldMappingID},
-			entitlementplan.FieldDeletedAt:   {Type: field.TypeTime, Column: entitlementplan.FieldDeletedAt},
-			entitlementplan.FieldDeletedBy:   {Type: field.TypeString, Column: entitlementplan.FieldDeletedBy},
-			entitlementplan.FieldTags:        {Type: field.TypeJSON, Column: entitlementplan.FieldTags},
-			entitlementplan.FieldOwnerID:     {Type: field.TypeString, Column: entitlementplan.FieldOwnerID},
-			entitlementplan.FieldDisplayName: {Type: field.TypeString, Column: entitlementplan.FieldDisplayName},
-			entitlementplan.FieldName:        {Type: field.TypeString, Column: entitlementplan.FieldName},
-			entitlementplan.FieldDescription: {Type: field.TypeString, Column: entitlementplan.FieldDescription},
-			entitlementplan.FieldVersion:     {Type: field.TypeString, Column: entitlementplan.FieldVersion},
-			entitlementplan.FieldMetadata:    {Type: field.TypeJSON, Column: entitlementplan.FieldMetadata},
+			entitlementplan.FieldCreatedAt:       {Type: field.TypeTime, Column: entitlementplan.FieldCreatedAt},
+			entitlementplan.FieldUpdatedAt:       {Type: field.TypeTime, Column: entitlementplan.FieldUpdatedAt},
+			entitlementplan.FieldCreatedBy:       {Type: field.TypeString, Column: entitlementplan.FieldCreatedBy},
+			entitlementplan.FieldUpdatedBy:       {Type: field.TypeString, Column: entitlementplan.FieldUpdatedBy},
+			entitlementplan.FieldMappingID:       {Type: field.TypeString, Column: entitlementplan.FieldMappingID},
+			entitlementplan.FieldDeletedAt:       {Type: field.TypeTime, Column: entitlementplan.FieldDeletedAt},
+			entitlementplan.FieldDeletedBy:       {Type: field.TypeString, Column: entitlementplan.FieldDeletedBy},
+			entitlementplan.FieldTags:            {Type: field.TypeJSON, Column: entitlementplan.FieldTags},
+			entitlementplan.FieldOwnerID:         {Type: field.TypeString, Column: entitlementplan.FieldOwnerID},
+			entitlementplan.FieldDisplayName:     {Type: field.TypeString, Column: entitlementplan.FieldDisplayName},
+			entitlementplan.FieldName:            {Type: field.TypeString, Column: entitlementplan.FieldName},
+			entitlementplan.FieldDescription:     {Type: field.TypeString, Column: entitlementplan.FieldDescription},
+			entitlementplan.FieldVersion:         {Type: field.TypeString, Column: entitlementplan.FieldVersion},
+			entitlementplan.FieldMetadata:        {Type: field.TypeJSON, Column: entitlementplan.FieldMetadata},
+			entitlementplan.FieldStripeProductID: {Type: field.TypeString, Column: entitlementplan.FieldStripeProductID},
+			entitlementplan.FieldStripePriceID:   {Type: field.TypeString, Column: entitlementplan.FieldStripePriceID},
 		},
 	}
 	graph.Nodes[15] = &sqlgraph.Node{
@@ -554,18 +562,20 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "EntitlementPlanFeature",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			entitlementplanfeature.FieldCreatedAt: {Type: field.TypeTime, Column: entitlementplanfeature.FieldCreatedAt},
-			entitlementplanfeature.FieldUpdatedAt: {Type: field.TypeTime, Column: entitlementplanfeature.FieldUpdatedAt},
-			entitlementplanfeature.FieldCreatedBy: {Type: field.TypeString, Column: entitlementplanfeature.FieldCreatedBy},
-			entitlementplanfeature.FieldUpdatedBy: {Type: field.TypeString, Column: entitlementplanfeature.FieldUpdatedBy},
-			entitlementplanfeature.FieldMappingID: {Type: field.TypeString, Column: entitlementplanfeature.FieldMappingID},
-			entitlementplanfeature.FieldDeletedAt: {Type: field.TypeTime, Column: entitlementplanfeature.FieldDeletedAt},
-			entitlementplanfeature.FieldDeletedBy: {Type: field.TypeString, Column: entitlementplanfeature.FieldDeletedBy},
-			entitlementplanfeature.FieldTags:      {Type: field.TypeJSON, Column: entitlementplanfeature.FieldTags},
-			entitlementplanfeature.FieldOwnerID:   {Type: field.TypeString, Column: entitlementplanfeature.FieldOwnerID},
-			entitlementplanfeature.FieldMetadata:  {Type: field.TypeJSON, Column: entitlementplanfeature.FieldMetadata},
-			entitlementplanfeature.FieldPlanID:    {Type: field.TypeString, Column: entitlementplanfeature.FieldPlanID},
-			entitlementplanfeature.FieldFeatureID: {Type: field.TypeString, Column: entitlementplanfeature.FieldFeatureID},
+			entitlementplanfeature.FieldCreatedAt:       {Type: field.TypeTime, Column: entitlementplanfeature.FieldCreatedAt},
+			entitlementplanfeature.FieldUpdatedAt:       {Type: field.TypeTime, Column: entitlementplanfeature.FieldUpdatedAt},
+			entitlementplanfeature.FieldCreatedBy:       {Type: field.TypeString, Column: entitlementplanfeature.FieldCreatedBy},
+			entitlementplanfeature.FieldUpdatedBy:       {Type: field.TypeString, Column: entitlementplanfeature.FieldUpdatedBy},
+			entitlementplanfeature.FieldMappingID:       {Type: field.TypeString, Column: entitlementplanfeature.FieldMappingID},
+			entitlementplanfeature.FieldDeletedAt:       {Type: field.TypeTime, Column: entitlementplanfeature.FieldDeletedAt},
+			entitlementplanfeature.FieldDeletedBy:       {Type: field.TypeString, Column: entitlementplanfeature.FieldDeletedBy},
+			entitlementplanfeature.FieldTags:            {Type: field.TypeJSON, Column: entitlementplanfeature.FieldTags},
+			entitlementplanfeature.FieldOwnerID:         {Type: field.TypeString, Column: entitlementplanfeature.FieldOwnerID},
+			entitlementplanfeature.FieldMetadata:        {Type: field.TypeJSON, Column: entitlementplanfeature.FieldMetadata},
+			entitlementplanfeature.FieldPlanID:          {Type: field.TypeString, Column: entitlementplanfeature.FieldPlanID},
+			entitlementplanfeature.FieldStripeProductID: {Type: field.TypeString, Column: entitlementplanfeature.FieldStripeProductID},
+			entitlementplanfeature.FieldFeatureID:       {Type: field.TypeString, Column: entitlementplanfeature.FieldFeatureID},
+			entitlementplanfeature.FieldStripeFeatureID: {Type: field.TypeString, Column: entitlementplanfeature.FieldStripeFeatureID},
 		},
 	}
 	graph.Nodes[16] = &sqlgraph.Node{
@@ -579,21 +589,23 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "EntitlementPlanFeatureHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			entitlementplanfeaturehistory.FieldHistoryTime: {Type: field.TypeTime, Column: entitlementplanfeaturehistory.FieldHistoryTime},
-			entitlementplanfeaturehistory.FieldRef:         {Type: field.TypeString, Column: entitlementplanfeaturehistory.FieldRef},
-			entitlementplanfeaturehistory.FieldOperation:   {Type: field.TypeEnum, Column: entitlementplanfeaturehistory.FieldOperation},
-			entitlementplanfeaturehistory.FieldCreatedAt:   {Type: field.TypeTime, Column: entitlementplanfeaturehistory.FieldCreatedAt},
-			entitlementplanfeaturehistory.FieldUpdatedAt:   {Type: field.TypeTime, Column: entitlementplanfeaturehistory.FieldUpdatedAt},
-			entitlementplanfeaturehistory.FieldCreatedBy:   {Type: field.TypeString, Column: entitlementplanfeaturehistory.FieldCreatedBy},
-			entitlementplanfeaturehistory.FieldUpdatedBy:   {Type: field.TypeString, Column: entitlementplanfeaturehistory.FieldUpdatedBy},
-			entitlementplanfeaturehistory.FieldMappingID:   {Type: field.TypeString, Column: entitlementplanfeaturehistory.FieldMappingID},
-			entitlementplanfeaturehistory.FieldDeletedAt:   {Type: field.TypeTime, Column: entitlementplanfeaturehistory.FieldDeletedAt},
-			entitlementplanfeaturehistory.FieldDeletedBy:   {Type: field.TypeString, Column: entitlementplanfeaturehistory.FieldDeletedBy},
-			entitlementplanfeaturehistory.FieldTags:        {Type: field.TypeJSON, Column: entitlementplanfeaturehistory.FieldTags},
-			entitlementplanfeaturehistory.FieldOwnerID:     {Type: field.TypeString, Column: entitlementplanfeaturehistory.FieldOwnerID},
-			entitlementplanfeaturehistory.FieldMetadata:    {Type: field.TypeJSON, Column: entitlementplanfeaturehistory.FieldMetadata},
-			entitlementplanfeaturehistory.FieldPlanID:      {Type: field.TypeString, Column: entitlementplanfeaturehistory.FieldPlanID},
-			entitlementplanfeaturehistory.FieldFeatureID:   {Type: field.TypeString, Column: entitlementplanfeaturehistory.FieldFeatureID},
+			entitlementplanfeaturehistory.FieldHistoryTime:     {Type: field.TypeTime, Column: entitlementplanfeaturehistory.FieldHistoryTime},
+			entitlementplanfeaturehistory.FieldRef:             {Type: field.TypeString, Column: entitlementplanfeaturehistory.FieldRef},
+			entitlementplanfeaturehistory.FieldOperation:       {Type: field.TypeEnum, Column: entitlementplanfeaturehistory.FieldOperation},
+			entitlementplanfeaturehistory.FieldCreatedAt:       {Type: field.TypeTime, Column: entitlementplanfeaturehistory.FieldCreatedAt},
+			entitlementplanfeaturehistory.FieldUpdatedAt:       {Type: field.TypeTime, Column: entitlementplanfeaturehistory.FieldUpdatedAt},
+			entitlementplanfeaturehistory.FieldCreatedBy:       {Type: field.TypeString, Column: entitlementplanfeaturehistory.FieldCreatedBy},
+			entitlementplanfeaturehistory.FieldUpdatedBy:       {Type: field.TypeString, Column: entitlementplanfeaturehistory.FieldUpdatedBy},
+			entitlementplanfeaturehistory.FieldMappingID:       {Type: field.TypeString, Column: entitlementplanfeaturehistory.FieldMappingID},
+			entitlementplanfeaturehistory.FieldDeletedAt:       {Type: field.TypeTime, Column: entitlementplanfeaturehistory.FieldDeletedAt},
+			entitlementplanfeaturehistory.FieldDeletedBy:       {Type: field.TypeString, Column: entitlementplanfeaturehistory.FieldDeletedBy},
+			entitlementplanfeaturehistory.FieldTags:            {Type: field.TypeJSON, Column: entitlementplanfeaturehistory.FieldTags},
+			entitlementplanfeaturehistory.FieldOwnerID:         {Type: field.TypeString, Column: entitlementplanfeaturehistory.FieldOwnerID},
+			entitlementplanfeaturehistory.FieldMetadata:        {Type: field.TypeJSON, Column: entitlementplanfeaturehistory.FieldMetadata},
+			entitlementplanfeaturehistory.FieldPlanID:          {Type: field.TypeString, Column: entitlementplanfeaturehistory.FieldPlanID},
+			entitlementplanfeaturehistory.FieldStripeProductID: {Type: field.TypeString, Column: entitlementplanfeaturehistory.FieldStripeProductID},
+			entitlementplanfeaturehistory.FieldFeatureID:       {Type: field.TypeString, Column: entitlementplanfeaturehistory.FieldFeatureID},
+			entitlementplanfeaturehistory.FieldStripeFeatureID: {Type: field.TypeString, Column: entitlementplanfeaturehistory.FieldStripeFeatureID},
 		},
 	}
 	graph.Nodes[17] = &sqlgraph.Node{
@@ -607,23 +619,25 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "EntitlementPlanHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			entitlementplanhistory.FieldHistoryTime: {Type: field.TypeTime, Column: entitlementplanhistory.FieldHistoryTime},
-			entitlementplanhistory.FieldRef:         {Type: field.TypeString, Column: entitlementplanhistory.FieldRef},
-			entitlementplanhistory.FieldOperation:   {Type: field.TypeEnum, Column: entitlementplanhistory.FieldOperation},
-			entitlementplanhistory.FieldCreatedAt:   {Type: field.TypeTime, Column: entitlementplanhistory.FieldCreatedAt},
-			entitlementplanhistory.FieldUpdatedAt:   {Type: field.TypeTime, Column: entitlementplanhistory.FieldUpdatedAt},
-			entitlementplanhistory.FieldCreatedBy:   {Type: field.TypeString, Column: entitlementplanhistory.FieldCreatedBy},
-			entitlementplanhistory.FieldUpdatedBy:   {Type: field.TypeString, Column: entitlementplanhistory.FieldUpdatedBy},
-			entitlementplanhistory.FieldMappingID:   {Type: field.TypeString, Column: entitlementplanhistory.FieldMappingID},
-			entitlementplanhistory.FieldDeletedAt:   {Type: field.TypeTime, Column: entitlementplanhistory.FieldDeletedAt},
-			entitlementplanhistory.FieldDeletedBy:   {Type: field.TypeString, Column: entitlementplanhistory.FieldDeletedBy},
-			entitlementplanhistory.FieldTags:        {Type: field.TypeJSON, Column: entitlementplanhistory.FieldTags},
-			entitlementplanhistory.FieldOwnerID:     {Type: field.TypeString, Column: entitlementplanhistory.FieldOwnerID},
-			entitlementplanhistory.FieldDisplayName: {Type: field.TypeString, Column: entitlementplanhistory.FieldDisplayName},
-			entitlementplanhistory.FieldName:        {Type: field.TypeString, Column: entitlementplanhistory.FieldName},
-			entitlementplanhistory.FieldDescription: {Type: field.TypeString, Column: entitlementplanhistory.FieldDescription},
-			entitlementplanhistory.FieldVersion:     {Type: field.TypeString, Column: entitlementplanhistory.FieldVersion},
-			entitlementplanhistory.FieldMetadata:    {Type: field.TypeJSON, Column: entitlementplanhistory.FieldMetadata},
+			entitlementplanhistory.FieldHistoryTime:     {Type: field.TypeTime, Column: entitlementplanhistory.FieldHistoryTime},
+			entitlementplanhistory.FieldRef:             {Type: field.TypeString, Column: entitlementplanhistory.FieldRef},
+			entitlementplanhistory.FieldOperation:       {Type: field.TypeEnum, Column: entitlementplanhistory.FieldOperation},
+			entitlementplanhistory.FieldCreatedAt:       {Type: field.TypeTime, Column: entitlementplanhistory.FieldCreatedAt},
+			entitlementplanhistory.FieldUpdatedAt:       {Type: field.TypeTime, Column: entitlementplanhistory.FieldUpdatedAt},
+			entitlementplanhistory.FieldCreatedBy:       {Type: field.TypeString, Column: entitlementplanhistory.FieldCreatedBy},
+			entitlementplanhistory.FieldUpdatedBy:       {Type: field.TypeString, Column: entitlementplanhistory.FieldUpdatedBy},
+			entitlementplanhistory.FieldMappingID:       {Type: field.TypeString, Column: entitlementplanhistory.FieldMappingID},
+			entitlementplanhistory.FieldDeletedAt:       {Type: field.TypeTime, Column: entitlementplanhistory.FieldDeletedAt},
+			entitlementplanhistory.FieldDeletedBy:       {Type: field.TypeString, Column: entitlementplanhistory.FieldDeletedBy},
+			entitlementplanhistory.FieldTags:            {Type: field.TypeJSON, Column: entitlementplanhistory.FieldTags},
+			entitlementplanhistory.FieldOwnerID:         {Type: field.TypeString, Column: entitlementplanhistory.FieldOwnerID},
+			entitlementplanhistory.FieldDisplayName:     {Type: field.TypeString, Column: entitlementplanhistory.FieldDisplayName},
+			entitlementplanhistory.FieldName:            {Type: field.TypeString, Column: entitlementplanhistory.FieldName},
+			entitlementplanhistory.FieldDescription:     {Type: field.TypeString, Column: entitlementplanhistory.FieldDescription},
+			entitlementplanhistory.FieldVersion:         {Type: field.TypeString, Column: entitlementplanhistory.FieldVersion},
+			entitlementplanhistory.FieldMetadata:        {Type: field.TypeJSON, Column: entitlementplanhistory.FieldMetadata},
+			entitlementplanhistory.FieldStripeProductID: {Type: field.TypeString, Column: entitlementplanhistory.FieldStripeProductID},
+			entitlementplanhistory.FieldStripePriceID:   {Type: field.TypeString, Column: entitlementplanhistory.FieldStripePriceID},
 		},
 	}
 	graph.Nodes[18] = &sqlgraph.Node{
@@ -794,20 +808,21 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "Feature",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			feature.FieldCreatedAt:   {Type: field.TypeTime, Column: feature.FieldCreatedAt},
-			feature.FieldUpdatedAt:   {Type: field.TypeTime, Column: feature.FieldUpdatedAt},
-			feature.FieldCreatedBy:   {Type: field.TypeString, Column: feature.FieldCreatedBy},
-			feature.FieldUpdatedBy:   {Type: field.TypeString, Column: feature.FieldUpdatedBy},
-			feature.FieldDeletedAt:   {Type: field.TypeTime, Column: feature.FieldDeletedAt},
-			feature.FieldDeletedBy:   {Type: field.TypeString, Column: feature.FieldDeletedBy},
-			feature.FieldMappingID:   {Type: field.TypeString, Column: feature.FieldMappingID},
-			feature.FieldTags:        {Type: field.TypeJSON, Column: feature.FieldTags},
-			feature.FieldOwnerID:     {Type: field.TypeString, Column: feature.FieldOwnerID},
-			feature.FieldName:        {Type: field.TypeString, Column: feature.FieldName},
-			feature.FieldDisplayName: {Type: field.TypeString, Column: feature.FieldDisplayName},
-			feature.FieldEnabled:     {Type: field.TypeBool, Column: feature.FieldEnabled},
-			feature.FieldDescription: {Type: field.TypeString, Column: feature.FieldDescription},
-			feature.FieldMetadata:    {Type: field.TypeJSON, Column: feature.FieldMetadata},
+			feature.FieldCreatedAt:       {Type: field.TypeTime, Column: feature.FieldCreatedAt},
+			feature.FieldUpdatedAt:       {Type: field.TypeTime, Column: feature.FieldUpdatedAt},
+			feature.FieldCreatedBy:       {Type: field.TypeString, Column: feature.FieldCreatedBy},
+			feature.FieldUpdatedBy:       {Type: field.TypeString, Column: feature.FieldUpdatedBy},
+			feature.FieldDeletedAt:       {Type: field.TypeTime, Column: feature.FieldDeletedAt},
+			feature.FieldDeletedBy:       {Type: field.TypeString, Column: feature.FieldDeletedBy},
+			feature.FieldMappingID:       {Type: field.TypeString, Column: feature.FieldMappingID},
+			feature.FieldTags:            {Type: field.TypeJSON, Column: feature.FieldTags},
+			feature.FieldOwnerID:         {Type: field.TypeString, Column: feature.FieldOwnerID},
+			feature.FieldName:            {Type: field.TypeString, Column: feature.FieldName},
+			feature.FieldDisplayName:     {Type: field.TypeString, Column: feature.FieldDisplayName},
+			feature.FieldEnabled:         {Type: field.TypeBool, Column: feature.FieldEnabled},
+			feature.FieldDescription:     {Type: field.TypeString, Column: feature.FieldDescription},
+			feature.FieldMetadata:        {Type: field.TypeJSON, Column: feature.FieldMetadata},
+			feature.FieldStripeFeatureID: {Type: field.TypeString, Column: feature.FieldStripeFeatureID},
 		},
 	}
 	graph.Nodes[25] = &sqlgraph.Node{
@@ -821,23 +836,24 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "FeatureHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			featurehistory.FieldHistoryTime: {Type: field.TypeTime, Column: featurehistory.FieldHistoryTime},
-			featurehistory.FieldRef:         {Type: field.TypeString, Column: featurehistory.FieldRef},
-			featurehistory.FieldOperation:   {Type: field.TypeEnum, Column: featurehistory.FieldOperation},
-			featurehistory.FieldCreatedAt:   {Type: field.TypeTime, Column: featurehistory.FieldCreatedAt},
-			featurehistory.FieldUpdatedAt:   {Type: field.TypeTime, Column: featurehistory.FieldUpdatedAt},
-			featurehistory.FieldCreatedBy:   {Type: field.TypeString, Column: featurehistory.FieldCreatedBy},
-			featurehistory.FieldUpdatedBy:   {Type: field.TypeString, Column: featurehistory.FieldUpdatedBy},
-			featurehistory.FieldDeletedAt:   {Type: field.TypeTime, Column: featurehistory.FieldDeletedAt},
-			featurehistory.FieldDeletedBy:   {Type: field.TypeString, Column: featurehistory.FieldDeletedBy},
-			featurehistory.FieldMappingID:   {Type: field.TypeString, Column: featurehistory.FieldMappingID},
-			featurehistory.FieldTags:        {Type: field.TypeJSON, Column: featurehistory.FieldTags},
-			featurehistory.FieldOwnerID:     {Type: field.TypeString, Column: featurehistory.FieldOwnerID},
-			featurehistory.FieldName:        {Type: field.TypeString, Column: featurehistory.FieldName},
-			featurehistory.FieldDisplayName: {Type: field.TypeString, Column: featurehistory.FieldDisplayName},
-			featurehistory.FieldEnabled:     {Type: field.TypeBool, Column: featurehistory.FieldEnabled},
-			featurehistory.FieldDescription: {Type: field.TypeString, Column: featurehistory.FieldDescription},
-			featurehistory.FieldMetadata:    {Type: field.TypeJSON, Column: featurehistory.FieldMetadata},
+			featurehistory.FieldHistoryTime:     {Type: field.TypeTime, Column: featurehistory.FieldHistoryTime},
+			featurehistory.FieldRef:             {Type: field.TypeString, Column: featurehistory.FieldRef},
+			featurehistory.FieldOperation:       {Type: field.TypeEnum, Column: featurehistory.FieldOperation},
+			featurehistory.FieldCreatedAt:       {Type: field.TypeTime, Column: featurehistory.FieldCreatedAt},
+			featurehistory.FieldUpdatedAt:       {Type: field.TypeTime, Column: featurehistory.FieldUpdatedAt},
+			featurehistory.FieldCreatedBy:       {Type: field.TypeString, Column: featurehistory.FieldCreatedBy},
+			featurehistory.FieldUpdatedBy:       {Type: field.TypeString, Column: featurehistory.FieldUpdatedBy},
+			featurehistory.FieldDeletedAt:       {Type: field.TypeTime, Column: featurehistory.FieldDeletedAt},
+			featurehistory.FieldDeletedBy:       {Type: field.TypeString, Column: featurehistory.FieldDeletedBy},
+			featurehistory.FieldMappingID:       {Type: field.TypeString, Column: featurehistory.FieldMappingID},
+			featurehistory.FieldTags:            {Type: field.TypeJSON, Column: featurehistory.FieldTags},
+			featurehistory.FieldOwnerID:         {Type: field.TypeString, Column: featurehistory.FieldOwnerID},
+			featurehistory.FieldName:            {Type: field.TypeString, Column: featurehistory.FieldName},
+			featurehistory.FieldDisplayName:     {Type: field.TypeString, Column: featurehistory.FieldDisplayName},
+			featurehistory.FieldEnabled:         {Type: field.TypeBool, Column: featurehistory.FieldEnabled},
+			featurehistory.FieldDescription:     {Type: field.TypeString, Column: featurehistory.FieldDescription},
+			featurehistory.FieldMetadata:        {Type: field.TypeJSON, Column: featurehistory.FieldMetadata},
+			featurehistory.FieldStripeFeatureID: {Type: field.TypeString, Column: featurehistory.FieldStripeFeatureID},
 		},
 	}
 	graph.Nodes[26] = &sqlgraph.Node{
@@ -1599,6 +1615,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organizationsetting.FieldTaxIdentifier:  {Type: field.TypeString, Column: organizationsetting.FieldTaxIdentifier},
 			organizationsetting.FieldGeoLocation:    {Type: field.TypeEnum, Column: organizationsetting.FieldGeoLocation},
 			organizationsetting.FieldOrganizationID: {Type: field.TypeString, Column: organizationsetting.FieldOrganizationID},
+			organizationsetting.FieldStripeID:       {Type: field.TypeString, Column: organizationsetting.FieldStripeID},
 		},
 	}
 	graph.Nodes[53] = &sqlgraph.Node{
@@ -1631,6 +1648,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organizationsettinghistory.FieldTaxIdentifier:  {Type: field.TypeString, Column: organizationsettinghistory.FieldTaxIdentifier},
 			organizationsettinghistory.FieldGeoLocation:    {Type: field.TypeEnum, Column: organizationsettinghistory.FieldGeoLocation},
 			organizationsettinghistory.FieldOrganizationID: {Type: field.TypeString, Column: organizationsettinghistory.FieldOrganizationID},
+			organizationsettinghistory.FieldStripeID:       {Type: field.TypeString, Column: organizationsettinghistory.FieldStripeID},
 		},
 	}
 	graph.Nodes[54] = &sqlgraph.Node{
@@ -7452,6 +7470,21 @@ func (f *EntitlementFilter) WhereCancelled(p entql.BoolP) {
 	f.Where(p.Field(entitlement.FieldCancelled))
 }
 
+// WhereCancelledDate applies the entql time.Time predicate on the cancelled_date field.
+func (f *EntitlementFilter) WhereCancelledDate(p entql.TimeP) {
+	f.Where(p.Field(entitlement.FieldCancelledDate))
+}
+
+// WhereBillStarting applies the entql time.Time predicate on the bill_starting field.
+func (f *EntitlementFilter) WhereBillStarting(p entql.TimeP) {
+	f.Where(p.Field(entitlement.FieldBillStarting))
+}
+
+// WhereActive applies the entql bool predicate on the active field.
+func (f *EntitlementFilter) WhereActive(p entql.BoolP) {
+	f.Where(p.Field(entitlement.FieldActive))
+}
+
 // WhereHasOwner applies a predicate to check if query has an edge owner.
 func (f *EntitlementFilter) WhereHasOwner() {
 	f.Where(entql.HasEdge("owner"))
@@ -7643,6 +7676,21 @@ func (f *EntitlementHistoryFilter) WhereCancelled(p entql.BoolP) {
 	f.Where(p.Field(entitlementhistory.FieldCancelled))
 }
 
+// WhereCancelledDate applies the entql time.Time predicate on the cancelled_date field.
+func (f *EntitlementHistoryFilter) WhereCancelledDate(p entql.TimeP) {
+	f.Where(p.Field(entitlementhistory.FieldCancelledDate))
+}
+
+// WhereBillStarting applies the entql time.Time predicate on the bill_starting field.
+func (f *EntitlementHistoryFilter) WhereBillStarting(p entql.TimeP) {
+	f.Where(p.Field(entitlementhistory.FieldBillStarting))
+}
+
+// WhereActive applies the entql bool predicate on the active field.
+func (f *EntitlementHistoryFilter) WhereActive(p entql.BoolP) {
+	f.Where(p.Field(entitlementhistory.FieldActive))
+}
+
 // addPredicate implements the predicateAdder interface.
 func (epq *EntitlementPlanQuery) addPredicate(pred func(s *sql.Selector)) {
 	epq.predicates = append(epq.predicates, pred)
@@ -7751,6 +7799,16 @@ func (f *EntitlementPlanFilter) WhereVersion(p entql.StringP) {
 // WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
 func (f *EntitlementPlanFilter) WhereMetadata(p entql.BytesP) {
 	f.Where(p.Field(entitlementplan.FieldMetadata))
+}
+
+// WhereStripeProductID applies the entql string predicate on the stripe_product_id field.
+func (f *EntitlementPlanFilter) WhereStripeProductID(p entql.StringP) {
+	f.Where(p.Field(entitlementplan.FieldStripeProductID))
+}
+
+// WhereStripePriceID applies the entql string predicate on the stripe_price_id field.
+func (f *EntitlementPlanFilter) WhereStripePriceID(p entql.StringP) {
+	f.Where(p.Field(entitlementplan.FieldStripePriceID))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -7918,9 +7976,19 @@ func (f *EntitlementPlanFeatureFilter) WherePlanID(p entql.StringP) {
 	f.Where(p.Field(entitlementplanfeature.FieldPlanID))
 }
 
+// WhereStripeProductID applies the entql string predicate on the stripe_product_id field.
+func (f *EntitlementPlanFeatureFilter) WhereStripeProductID(p entql.StringP) {
+	f.Where(p.Field(entitlementplanfeature.FieldStripeProductID))
+}
+
 // WhereFeatureID applies the entql string predicate on the feature_id field.
 func (f *EntitlementPlanFeatureFilter) WhereFeatureID(p entql.StringP) {
 	f.Where(p.Field(entitlementplanfeature.FieldFeatureID))
+}
+
+// WhereStripeFeatureID applies the entql string predicate on the stripe_feature_id field.
+func (f *EntitlementPlanFeatureFilter) WhereStripeFeatureID(p entql.StringP) {
+	f.Where(p.Field(entitlementplanfeature.FieldStripeFeatureID))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -8089,9 +8157,19 @@ func (f *EntitlementPlanFeatureHistoryFilter) WherePlanID(p entql.StringP) {
 	f.Where(p.Field(entitlementplanfeaturehistory.FieldPlanID))
 }
 
+// WhereStripeProductID applies the entql string predicate on the stripe_product_id field.
+func (f *EntitlementPlanFeatureHistoryFilter) WhereStripeProductID(p entql.StringP) {
+	f.Where(p.Field(entitlementplanfeaturehistory.FieldStripeProductID))
+}
+
 // WhereFeatureID applies the entql string predicate on the feature_id field.
 func (f *EntitlementPlanFeatureHistoryFilter) WhereFeatureID(p entql.StringP) {
 	f.Where(p.Field(entitlementplanfeaturehistory.FieldFeatureID))
+}
+
+// WhereStripeFeatureID applies the entql string predicate on the stripe_feature_id field.
+func (f *EntitlementPlanFeatureHistoryFilter) WhereStripeFeatureID(p entql.StringP) {
+	f.Where(p.Field(entitlementplanfeaturehistory.FieldStripeFeatureID))
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -8217,6 +8295,16 @@ func (f *EntitlementPlanHistoryFilter) WhereVersion(p entql.StringP) {
 // WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
 func (f *EntitlementPlanHistoryFilter) WhereMetadata(p entql.BytesP) {
 	f.Where(p.Field(entitlementplanhistory.FieldMetadata))
+}
+
+// WhereStripeProductID applies the entql string predicate on the stripe_product_id field.
+func (f *EntitlementPlanHistoryFilter) WhereStripeProductID(p entql.StringP) {
+	f.Where(p.Field(entitlementplanhistory.FieldStripeProductID))
+}
+
+// WhereStripePriceID applies the entql string predicate on the stripe_price_id field.
+func (f *EntitlementPlanHistoryFilter) WhereStripePriceID(p entql.StringP) {
+	f.Where(p.Field(entitlementplanhistory.FieldStripePriceID))
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -9314,6 +9402,11 @@ func (f *FeatureFilter) WhereMetadata(p entql.BytesP) {
 	f.Where(p.Field(feature.FieldMetadata))
 }
 
+// WhereStripeFeatureID applies the entql string predicate on the stripe_feature_id field.
+func (f *FeatureFilter) WhereStripeFeatureID(p entql.StringP) {
+	f.Where(p.Field(feature.FieldStripeFeatureID))
+}
+
 // WhereHasOwner applies a predicate to check if query has an edge owner.
 func (f *FeatureFilter) WhereHasOwner() {
 	f.Where(entql.HasEdge("owner"))
@@ -9493,6 +9586,11 @@ func (f *FeatureHistoryFilter) WhereDescription(p entql.StringP) {
 // WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
 func (f *FeatureHistoryFilter) WhereMetadata(p entql.BytesP) {
 	f.Where(p.Field(featurehistory.FieldMetadata))
+}
+
+// WhereStripeFeatureID applies the entql string predicate on the stripe_feature_id field.
+func (f *FeatureHistoryFilter) WhereStripeFeatureID(p entql.StringP) {
+	f.Where(p.Field(featurehistory.FieldStripeFeatureID))
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -13787,6 +13885,11 @@ func (f *OrganizationSettingFilter) WhereOrganizationID(p entql.StringP) {
 	f.Where(p.Field(organizationsetting.FieldOrganizationID))
 }
 
+// WhereStripeID applies the entql string predicate on the stripe_id field.
+func (f *OrganizationSettingFilter) WhereStripeID(p entql.StringP) {
+	f.Where(p.Field(organizationsetting.FieldStripeID))
+}
+
 // WhereHasOrganization applies a predicate to check if query has an edge organization.
 func (f *OrganizationSettingFilter) WhereHasOrganization() {
 	f.Where(entql.HasEdge("organization"))
@@ -13948,6 +14051,11 @@ func (f *OrganizationSettingHistoryFilter) WhereGeoLocation(p entql.StringP) {
 // WhereOrganizationID applies the entql string predicate on the organization_id field.
 func (f *OrganizationSettingHistoryFilter) WhereOrganizationID(p entql.StringP) {
 	f.Where(p.Field(organizationsettinghistory.FieldOrganizationID))
+}
+
+// WhereStripeID applies the entql string predicate on the stripe_id field.
+func (f *OrganizationSettingHistoryFilter) WhereStripeID(p entql.StringP) {
+	f.Where(p.Field(organizationsettinghistory.FieldStripeID))
 }
 
 // addPredicate implements the predicateAdder interface.

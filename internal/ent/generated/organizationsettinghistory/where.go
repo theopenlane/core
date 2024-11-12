@@ -141,6 +141,11 @@ func OrganizationID(v string) predicate.OrganizationSettingHistory {
 	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldOrganizationID, v))
 }
 
+// StripeID applies equality check predicate on the "stripe_id" field. It's identical to StripeIDEQ.
+func StripeID(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldStripeID, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.OrganizationSettingHistory {
 	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -1224,6 +1229,81 @@ func OrganizationIDEqualFold(v string) predicate.OrganizationSettingHistory {
 // OrganizationIDContainsFold applies the ContainsFold predicate on the "organization_id" field.
 func OrganizationIDContainsFold(v string) predicate.OrganizationSettingHistory {
 	return predicate.OrganizationSettingHistory(sql.FieldContainsFold(FieldOrganizationID, v))
+}
+
+// StripeIDEQ applies the EQ predicate on the "stripe_id" field.
+func StripeIDEQ(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldStripeID, v))
+}
+
+// StripeIDNEQ applies the NEQ predicate on the "stripe_id" field.
+func StripeIDNEQ(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNEQ(FieldStripeID, v))
+}
+
+// StripeIDIn applies the In predicate on the "stripe_id" field.
+func StripeIDIn(vs ...string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldIn(FieldStripeID, vs...))
+}
+
+// StripeIDNotIn applies the NotIn predicate on the "stripe_id" field.
+func StripeIDNotIn(vs ...string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNotIn(FieldStripeID, vs...))
+}
+
+// StripeIDGT applies the GT predicate on the "stripe_id" field.
+func StripeIDGT(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldGT(FieldStripeID, v))
+}
+
+// StripeIDGTE applies the GTE predicate on the "stripe_id" field.
+func StripeIDGTE(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldGTE(FieldStripeID, v))
+}
+
+// StripeIDLT applies the LT predicate on the "stripe_id" field.
+func StripeIDLT(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldLT(FieldStripeID, v))
+}
+
+// StripeIDLTE applies the LTE predicate on the "stripe_id" field.
+func StripeIDLTE(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldLTE(FieldStripeID, v))
+}
+
+// StripeIDContains applies the Contains predicate on the "stripe_id" field.
+func StripeIDContains(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldContains(FieldStripeID, v))
+}
+
+// StripeIDHasPrefix applies the HasPrefix predicate on the "stripe_id" field.
+func StripeIDHasPrefix(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldHasPrefix(FieldStripeID, v))
+}
+
+// StripeIDHasSuffix applies the HasSuffix predicate on the "stripe_id" field.
+func StripeIDHasSuffix(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldHasSuffix(FieldStripeID, v))
+}
+
+// StripeIDIsNil applies the IsNil predicate on the "stripe_id" field.
+func StripeIDIsNil() predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldIsNull(FieldStripeID))
+}
+
+// StripeIDNotNil applies the NotNil predicate on the "stripe_id" field.
+func StripeIDNotNil() predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldNotNull(FieldStripeID))
+}
+
+// StripeIDEqualFold applies the EqualFold predicate on the "stripe_id" field.
+func StripeIDEqualFold(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldEqualFold(FieldStripeID, v))
+}
+
+// StripeIDContainsFold applies the ContainsFold predicate on the "stripe_id" field.
+func StripeIDContainsFold(v string) predicate.OrganizationSettingHistory {
+	return predicate.OrganizationSettingHistory(sql.FieldContainsFold(FieldStripeID, v))
 }
 
 // And groups predicates with the AND operator between them.

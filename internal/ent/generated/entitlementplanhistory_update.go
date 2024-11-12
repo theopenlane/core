@@ -194,6 +194,46 @@ func (ephu *EntitlementPlanHistoryUpdate) ClearMetadata() *EntitlementPlanHistor
 	return ephu
 }
 
+// SetStripeProductID sets the "stripe_product_id" field.
+func (ephu *EntitlementPlanHistoryUpdate) SetStripeProductID(s string) *EntitlementPlanHistoryUpdate {
+	ephu.mutation.SetStripeProductID(s)
+	return ephu
+}
+
+// SetNillableStripeProductID sets the "stripe_product_id" field if the given value is not nil.
+func (ephu *EntitlementPlanHistoryUpdate) SetNillableStripeProductID(s *string) *EntitlementPlanHistoryUpdate {
+	if s != nil {
+		ephu.SetStripeProductID(*s)
+	}
+	return ephu
+}
+
+// ClearStripeProductID clears the value of the "stripe_product_id" field.
+func (ephu *EntitlementPlanHistoryUpdate) ClearStripeProductID() *EntitlementPlanHistoryUpdate {
+	ephu.mutation.ClearStripeProductID()
+	return ephu
+}
+
+// SetStripePriceID sets the "stripe_price_id" field.
+func (ephu *EntitlementPlanHistoryUpdate) SetStripePriceID(s string) *EntitlementPlanHistoryUpdate {
+	ephu.mutation.SetStripePriceID(s)
+	return ephu
+}
+
+// SetNillableStripePriceID sets the "stripe_price_id" field if the given value is not nil.
+func (ephu *EntitlementPlanHistoryUpdate) SetNillableStripePriceID(s *string) *EntitlementPlanHistoryUpdate {
+	if s != nil {
+		ephu.SetStripePriceID(*s)
+	}
+	return ephu
+}
+
+// ClearStripePriceID clears the value of the "stripe_price_id" field.
+func (ephu *EntitlementPlanHistoryUpdate) ClearStripePriceID() *EntitlementPlanHistoryUpdate {
+	ephu.mutation.ClearStripePriceID()
+	return ephu
+}
+
 // Mutation returns the EntitlementPlanHistoryMutation object of the builder.
 func (ephu *EntitlementPlanHistoryUpdate) Mutation() *EntitlementPlanHistoryMutation {
 	return ephu.mutation
@@ -323,6 +363,18 @@ func (ephu *EntitlementPlanHistoryUpdate) sqlSave(ctx context.Context) (n int, e
 	}
 	if ephu.mutation.MetadataCleared() {
 		_spec.ClearField(entitlementplanhistory.FieldMetadata, field.TypeJSON)
+	}
+	if value, ok := ephu.mutation.StripeProductID(); ok {
+		_spec.SetField(entitlementplanhistory.FieldStripeProductID, field.TypeString, value)
+	}
+	if ephu.mutation.StripeProductIDCleared() {
+		_spec.ClearField(entitlementplanhistory.FieldStripeProductID, field.TypeString)
+	}
+	if value, ok := ephu.mutation.StripePriceID(); ok {
+		_spec.SetField(entitlementplanhistory.FieldStripePriceID, field.TypeString, value)
+	}
+	if ephu.mutation.StripePriceIDCleared() {
+		_spec.ClearField(entitlementplanhistory.FieldStripePriceID, field.TypeString)
 	}
 	_spec.Node.Schema = ephu.schemaConfig.EntitlementPlanHistory
 	ctx = internal.NewSchemaConfigContext(ctx, ephu.schemaConfig)
@@ -510,6 +562,46 @@ func (ephuo *EntitlementPlanHistoryUpdateOne) ClearMetadata() *EntitlementPlanHi
 	return ephuo
 }
 
+// SetStripeProductID sets the "stripe_product_id" field.
+func (ephuo *EntitlementPlanHistoryUpdateOne) SetStripeProductID(s string) *EntitlementPlanHistoryUpdateOne {
+	ephuo.mutation.SetStripeProductID(s)
+	return ephuo
+}
+
+// SetNillableStripeProductID sets the "stripe_product_id" field if the given value is not nil.
+func (ephuo *EntitlementPlanHistoryUpdateOne) SetNillableStripeProductID(s *string) *EntitlementPlanHistoryUpdateOne {
+	if s != nil {
+		ephuo.SetStripeProductID(*s)
+	}
+	return ephuo
+}
+
+// ClearStripeProductID clears the value of the "stripe_product_id" field.
+func (ephuo *EntitlementPlanHistoryUpdateOne) ClearStripeProductID() *EntitlementPlanHistoryUpdateOne {
+	ephuo.mutation.ClearStripeProductID()
+	return ephuo
+}
+
+// SetStripePriceID sets the "stripe_price_id" field.
+func (ephuo *EntitlementPlanHistoryUpdateOne) SetStripePriceID(s string) *EntitlementPlanHistoryUpdateOne {
+	ephuo.mutation.SetStripePriceID(s)
+	return ephuo
+}
+
+// SetNillableStripePriceID sets the "stripe_price_id" field if the given value is not nil.
+func (ephuo *EntitlementPlanHistoryUpdateOne) SetNillableStripePriceID(s *string) *EntitlementPlanHistoryUpdateOne {
+	if s != nil {
+		ephuo.SetStripePriceID(*s)
+	}
+	return ephuo
+}
+
+// ClearStripePriceID clears the value of the "stripe_price_id" field.
+func (ephuo *EntitlementPlanHistoryUpdateOne) ClearStripePriceID() *EntitlementPlanHistoryUpdateOne {
+	ephuo.mutation.ClearStripePriceID()
+	return ephuo
+}
+
 // Mutation returns the EntitlementPlanHistoryMutation object of the builder.
 func (ephuo *EntitlementPlanHistoryUpdateOne) Mutation() *EntitlementPlanHistoryMutation {
 	return ephuo.mutation
@@ -669,6 +761,18 @@ func (ephuo *EntitlementPlanHistoryUpdateOne) sqlSave(ctx context.Context) (_nod
 	}
 	if ephuo.mutation.MetadataCleared() {
 		_spec.ClearField(entitlementplanhistory.FieldMetadata, field.TypeJSON)
+	}
+	if value, ok := ephuo.mutation.StripeProductID(); ok {
+		_spec.SetField(entitlementplanhistory.FieldStripeProductID, field.TypeString, value)
+	}
+	if ephuo.mutation.StripeProductIDCleared() {
+		_spec.ClearField(entitlementplanhistory.FieldStripeProductID, field.TypeString)
+	}
+	if value, ok := ephuo.mutation.StripePriceID(); ok {
+		_spec.SetField(entitlementplanhistory.FieldStripePriceID, field.TypeString, value)
+	}
+	if ephuo.mutation.StripePriceIDCleared() {
+		_spec.ClearField(entitlementplanhistory.FieldStripePriceID, field.TypeString)
 	}
 	_spec.Node.Schema = ephuo.schemaConfig.EntitlementPlanHistory
 	ctx = internal.NewSchemaConfigContext(ctx, ephuo.schemaConfig)

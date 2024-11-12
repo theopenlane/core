@@ -1,12 +1,20 @@
+
 mutation CreateBulkCSVFeature($input: Upload!) {
   createBulkCSVFeature(input: $input) {
     features {
+      createdAt
+      createdBy
       description
+      displayName
       enabled
       id
+      metadata
       name
-      displayName
+      ownerID
+      stripeFeatureID
       tags
+      updatedAt
+      updatedBy
     }
   }
 }
@@ -14,12 +22,19 @@ mutation CreateBulkCSVFeature($input: Upload!) {
 mutation CreateBulkFeature($input: [CreateFeatureInput!]) {
   createBulkFeature(input: $input) {
     features {
+      createdAt
+      createdBy
       description
+      displayName
       enabled
       id
+      metadata
       name
-      displayName
+      ownerID
+      stripeFeatureID
       tags
+      updatedAt
+      updatedBy
     }
   }
 }
@@ -27,12 +42,19 @@ mutation CreateBulkFeature($input: [CreateFeatureInput!]) {
 mutation CreateFeature($input: CreateFeatureInput!) {
   createFeature(input: $input) {
     feature {
+      createdAt
+      createdBy
       description
+      displayName
       enabled
       id
+      metadata
       name
-      displayName
+      ownerID
+      stripeFeatureID
       tags
+      updatedAt
+      updatedBy
     }
   }
 }
@@ -47,25 +69,38 @@ query GetAllFeatures {
   features {
     edges {
       node {
+        createdAt
+        createdBy
         description
+        displayName
         enabled
         id
+        metadata
         name
-        displayName
+        ownerID
+        stripeFeatureID
         tags
+        updatedAt
+        updatedBy
       }
     }
   }
 }
-
 query GetFeatureByID($featureId: ID!) {
   feature(id: $featureId) {
+    createdAt
+    createdBy
     description
+    displayName
     enabled
     id
+    metadata
     name
-    displayName
+    ownerID
+    stripeFeatureID
     tags
+    updatedAt
+    updatedBy
   }
 }
 
@@ -73,26 +108,39 @@ query GetFeatures($where: FeatureWhereInput) {
   features(where: $where) {
     edges {
       node {
+        createdAt
+        createdBy
         description
+        displayName
         enabled
         id
+        metadata
         name
-        displayName
+        ownerID
+        stripeFeatureID
         tags
+        updatedAt
+        updatedBy
       }
     }
   }
 }
-
 mutation UpdateFeature($updateFeatureId: ID!, $input: UpdateFeatureInput!) {
   updateFeature(id: $updateFeatureId, input: $input) {
     feature {
+      createdAt
+      createdBy
       description
+      displayName
       enabled
       id
+      metadata
       name
-      displayName
+      ownerID
+      stripeFeatureID
       tags
+      updatedAt
+      updatedBy
     }
   }
 }

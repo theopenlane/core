@@ -1430,6 +1430,18 @@ func (m *EntitlementMutation) CreateHistoryFromCreate(ctx context.Context) error
 		create = create.SetCancelled(cancelled)
 	}
 
+	if cancelledDate, exists := m.CancelledDate(); exists {
+		create = create.SetCancelledDate(cancelledDate)
+	}
+
+	if billStarting, exists := m.BillStarting(); exists {
+		create = create.SetBillStarting(billStarting)
+	}
+
+	if active, exists := m.Active(); exists {
+		create = create.SetActive(active)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -1556,6 +1568,24 @@ func (m *EntitlementMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			create = create.SetCancelled(entitlement.Cancelled)
 		}
 
+		if cancelledDate, exists := m.CancelledDate(); exists {
+			create = create.SetCancelledDate(cancelledDate)
+		} else {
+			create = create.SetCancelledDate(entitlement.CancelledDate)
+		}
+
+		if billStarting, exists := m.BillStarting(); exists {
+			create = create.SetBillStarting(billStarting)
+		} else {
+			create = create.SetBillStarting(entitlement.BillStarting)
+		}
+
+		if active, exists := m.Active(); exists {
+			create = create.SetActive(active)
+		} else {
+			create = create.SetActive(entitlement.Active)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -1604,6 +1634,9 @@ func (m *EntitlementMutation) CreateHistoryFromDelete(ctx context.Context) error
 			SetExpires(entitlement.Expires).
 			SetNillableExpiresAt(entitlement.ExpiresAt).
 			SetCancelled(entitlement.Cancelled).
+			SetCancelledDate(entitlement.CancelledDate).
+			SetBillStarting(entitlement.BillStarting).
+			SetActive(entitlement.Active).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -1682,6 +1715,14 @@ func (m *EntitlementPlanMutation) CreateHistoryFromCreate(ctx context.Context) e
 
 	if metadata, exists := m.Metadata(); exists {
 		create = create.SetMetadata(metadata)
+	}
+
+	if stripeProductID, exists := m.StripeProductID(); exists {
+		create = create.SetStripeProductID(stripeProductID)
+	}
+
+	if stripePriceID, exists := m.StripePriceID(); exists {
+		create = create.SetStripePriceID(stripePriceID)
 	}
 
 	_, err := create.Save(ctx)
@@ -1798,6 +1839,18 @@ func (m *EntitlementPlanMutation) CreateHistoryFromUpdate(ctx context.Context) e
 			create = create.SetMetadata(entitlementplan.Metadata)
 		}
 
+		if stripeProductID, exists := m.StripeProductID(); exists {
+			create = create.SetStripeProductID(stripeProductID)
+		} else {
+			create = create.SetStripeProductID(entitlementplan.StripeProductID)
+		}
+
+		if stripePriceID, exists := m.StripePriceID(); exists {
+			create = create.SetStripePriceID(stripePriceID)
+		} else {
+			create = create.SetStripePriceID(entitlementplan.StripePriceID)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -1844,6 +1897,8 @@ func (m *EntitlementPlanMutation) CreateHistoryFromDelete(ctx context.Context) e
 			SetDescription(entitlementplan.Description).
 			SetVersion(entitlementplan.Version).
 			SetMetadata(entitlementplan.Metadata).
+			SetStripeProductID(entitlementplan.StripeProductID).
+			SetStripePriceID(entitlementplan.StripePriceID).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -1912,8 +1967,16 @@ func (m *EntitlementPlanFeatureMutation) CreateHistoryFromCreate(ctx context.Con
 		create = create.SetPlanID(planID)
 	}
 
+	if stripeProductID, exists := m.StripeProductID(); exists {
+		create = create.SetStripeProductID(stripeProductID)
+	}
+
 	if featureID, exists := m.FeatureID(); exists {
 		create = create.SetFeatureID(featureID)
+	}
+
+	if stripeFeatureID, exists := m.StripeFeatureID(); exists {
+		create = create.SetStripeFeatureID(stripeFeatureID)
 	}
 
 	_, err := create.Save(ctx)
@@ -2012,10 +2075,22 @@ func (m *EntitlementPlanFeatureMutation) CreateHistoryFromUpdate(ctx context.Con
 			create = create.SetPlanID(entitlementplanfeature.PlanID)
 		}
 
+		if stripeProductID, exists := m.StripeProductID(); exists {
+			create = create.SetStripeProductID(stripeProductID)
+		} else {
+			create = create.SetStripeProductID(entitlementplanfeature.StripeProductID)
+		}
+
 		if featureID, exists := m.FeatureID(); exists {
 			create = create.SetFeatureID(featureID)
 		} else {
 			create = create.SetFeatureID(entitlementplanfeature.FeatureID)
+		}
+
+		if stripeFeatureID, exists := m.StripeFeatureID(); exists {
+			create = create.SetStripeFeatureID(stripeFeatureID)
+		} else {
+			create = create.SetStripeFeatureID(entitlementplanfeature.StripeFeatureID)
 		}
 
 		if _, err := create.Save(ctx); err != nil {
@@ -2061,7 +2136,9 @@ func (m *EntitlementPlanFeatureMutation) CreateHistoryFromDelete(ctx context.Con
 			SetOwnerID(entitlementplanfeature.OwnerID).
 			SetMetadata(entitlementplanfeature.Metadata).
 			SetPlanID(entitlementplanfeature.PlanID).
+			SetStripeProductID(entitlementplanfeature.StripeProductID).
 			SetFeatureID(entitlementplanfeature.FeatureID).
+			SetStripeFeatureID(entitlementplanfeature.StripeFeatureID).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -2785,6 +2862,10 @@ func (m *FeatureMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetMetadata(metadata)
 	}
 
+	if stripeFeatureID, exists := m.StripeFeatureID(); exists {
+		create = create.SetStripeFeatureID(stripeFeatureID)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -2899,6 +2980,12 @@ func (m *FeatureMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetMetadata(feature.Metadata)
 		}
 
+		if stripeFeatureID, exists := m.StripeFeatureID(); exists {
+			create = create.SetStripeFeatureID(stripeFeatureID)
+		} else {
+			create = create.SetStripeFeatureID(feature.StripeFeatureID)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -2945,6 +3032,7 @@ func (m *FeatureMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetEnabled(feature.Enabled).
 			SetNillableDescription(feature.Description).
 			SetMetadata(feature.Metadata).
+			SetStripeFeatureID(feature.StripeFeatureID).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -5869,6 +5957,10 @@ func (m *OrganizationSettingMutation) CreateHistoryFromCreate(ctx context.Contex
 		create = create.SetOrganizationID(organizationID)
 	}
 
+	if stripeID, exists := m.StripeID(); exists {
+		create = create.SetStripeID(stripeID)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -5995,6 +6087,12 @@ func (m *OrganizationSettingMutation) CreateHistoryFromUpdate(ctx context.Contex
 			create = create.SetOrganizationID(organizationsetting.OrganizationID)
 		}
 
+		if stripeID, exists := m.StripeID(); exists {
+			create = create.SetStripeID(stripeID)
+		} else {
+			create = create.SetStripeID(organizationsetting.StripeID)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -6043,6 +6141,7 @@ func (m *OrganizationSettingMutation) CreateHistoryFromDelete(ctx context.Contex
 			SetTaxIdentifier(organizationsetting.TaxIdentifier).
 			SetGeoLocation(organizationsetting.GeoLocation).
 			SetOrganizationID(organizationsetting.OrganizationID).
+			SetStripeID(organizationsetting.StripeID).
 			Save(ctx)
 		if err != nil {
 			return err
