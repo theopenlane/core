@@ -90,10 +90,14 @@ const (
 	EdgeAssignerTasks = "assigner_tasks"
 	// EdgeAssigneeTasks holds the string denoting the assignee_tasks edge name in mutations.
 	EdgeAssigneeTasks = "assignee_tasks"
+	// EdgePrograms holds the string denoting the programs edge name in mutations.
+	EdgePrograms = "programs"
 	// EdgeGroupMemberships holds the string denoting the group_memberships edge name in mutations.
 	EdgeGroupMemberships = "group_memberships"
 	// EdgeOrgMemberships holds the string denoting the org_memberships edge name in mutations.
 	EdgeOrgMemberships = "org_memberships"
+	// EdgeProgramMemberships holds the string denoting the program_memberships edge name in mutations.
+	EdgeProgramMemberships = "program_memberships"
 	// Table holds the table name of the user in the database.
 	Table = "users"
 	// PersonalAccessTokensTable is the table that holds the personal_access_tokens relation/edge.
@@ -189,6 +193,11 @@ const (
 	AssigneeTasksInverseTable = "tasks"
 	// AssigneeTasksColumn is the table column denoting the assignee_tasks relation/edge.
 	AssigneeTasksColumn = "user_assignee_tasks"
+	// ProgramsTable is the table that holds the programs relation/edge. The primary key declared below.
+	ProgramsTable = "program_memberships"
+	// ProgramsInverseTable is the table name for the Program entity.
+	// It exists in this package in order to avoid circular dependency with the "program" package.
+	ProgramsInverseTable = "programs"
 	// GroupMembershipsTable is the table that holds the group_memberships relation/edge.
 	GroupMembershipsTable = "group_memberships"
 	// GroupMembershipsInverseTable is the table name for the GroupMembership entity.
@@ -203,6 +212,13 @@ const (
 	OrgMembershipsInverseTable = "org_memberships"
 	// OrgMembershipsColumn is the table column denoting the org_memberships relation/edge.
 	OrgMembershipsColumn = "user_id"
+	// ProgramMembershipsTable is the table that holds the program_memberships relation/edge.
+	ProgramMembershipsTable = "program_memberships"
+	// ProgramMembershipsInverseTable is the table name for the ProgramMembership entity.
+	// It exists in this package in order to avoid circular dependency with the "programmembership" package.
+	ProgramMembershipsInverseTable = "program_memberships"
+	// ProgramMembershipsColumn is the table column denoting the program_memberships relation/edge.
+	ProgramMembershipsColumn = "user_id"
 )
 
 // Columns holds all SQL columns for user fields.
@@ -250,6 +266,9 @@ var (
 	// SubcontrolsPrimaryKey and SubcontrolsColumn2 are the table columns denoting the
 	// primary key for the subcontrols relation (M2M).
 	SubcontrolsPrimaryKey = []string{"user_id", "subcontrol_id"}
+	// ProgramsPrimaryKey and ProgramsColumn2 are the table columns denoting the
+	// primary key for the programs relation (M2M).
+	ProgramsPrimaryKey = []string{"user_id", "program_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -629,6 +648,20 @@ func ByAssigneeTasks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByProgramsCount orders the results by programs count.
+func ByProgramsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newProgramsStep(), opts...)
+	}
+}
+
+// ByPrograms orders the results by programs terms.
+func ByPrograms(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newProgramsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByGroupMembershipsCount orders the results by group_memberships count.
 func ByGroupMembershipsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -654,6 +687,20 @@ func ByOrgMembershipsCount(opts ...sql.OrderTermOption) OrderOption {
 func ByOrgMemberships(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newOrgMembershipsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByProgramMembershipsCount orders the results by program_memberships count.
+func ByProgramMembershipsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newProgramMembershipsStep(), opts...)
+	}
+}
+
+// ByProgramMemberships orders the results by program_memberships terms.
+func ByProgramMemberships(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newProgramMembershipsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 func newPersonalAccessTokensStep() *sqlgraph.Step {
@@ -761,6 +808,13 @@ func newAssigneeTasksStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, false, AssigneeTasksTable, AssigneeTasksColumn),
 	)
 }
+func newProgramsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ProgramsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, ProgramsTable, ProgramsPrimaryKey...),
+	)
+}
 func newGroupMembershipsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -773,6 +827,13 @@ func newOrgMembershipsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(OrgMembershipsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, true, OrgMembershipsTable, OrgMembershipsColumn),
+	)
+}
+func newProgramMembershipsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ProgramMembershipsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, true, ProgramMembershipsTable, ProgramMembershipsColumn),
 	)
 }
 

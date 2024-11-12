@@ -64,6 +64,8 @@ const (
 	EdgeControlObjective = "control_objective"
 	// EdgeSubcontrol holds the string denoting the subcontrol edge name in mutations.
 	EdgeSubcontrol = "subcontrol"
+	// EdgeProgram holds the string denoting the program edge name in mutations.
+	EdgeProgram = "program"
 	// Table holds the table name of the task in the database.
 	Table = "tasks"
 	// AssignerTable is the table that holds the assigner relation/edge.
@@ -115,6 +117,11 @@ const (
 	// SubcontrolInverseTable is the table name for the Subcontrol entity.
 	// It exists in this package in order to avoid circular dependency with the "subcontrol" package.
 	SubcontrolInverseTable = "subcontrols"
+	// ProgramTable is the table that holds the program relation/edge. The primary key declared below.
+	ProgramTable = "program_tasks"
+	// ProgramInverseTable is the table name for the Program entity.
+	// It exists in this package in order to avoid circular dependency with the "program" package.
+	ProgramInverseTable = "programs"
 )
 
 // Columns holds all SQL columns for task fields.
@@ -165,6 +172,9 @@ var (
 	// SubcontrolPrimaryKey and SubcontrolColumn2 are the table columns denoting the
 	// primary key for the subcontrol relation (M2M).
 	SubcontrolPrimaryKey = []string{"subcontrol_id", "task_id"}
+	// ProgramPrimaryKey and ProgramColumn2 are the table columns denoting the
+	// primary key for the program relation (M2M).
+	ProgramPrimaryKey = []string{"program_id", "task_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -398,6 +408,20 @@ func BySubcontrol(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newSubcontrolStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByProgramCount orders the results by program count.
+func ByProgramCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newProgramStep(), opts...)
+	}
+}
+
+// ByProgram orders the results by program terms.
+func ByProgram(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newProgramStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newAssignerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -459,6 +483,13 @@ func newSubcontrolStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(SubcontrolInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, SubcontrolTable, SubcontrolPrimaryKey...),
+	)
+}
+func newProgramStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ProgramInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ProgramTable, ProgramPrimaryKey...),
 	)
 }
 

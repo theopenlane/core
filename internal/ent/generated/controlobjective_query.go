@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
@@ -41,6 +42,7 @@ type ControlObjectiveQuery struct {
 	withStandard         *StandardQuery
 	withNarratives       *NarrativeQuery
 	withTasks            *TaskQuery
+	withPrograms         *ProgramQuery
 	withFKs              bool
 	loadTotal            []func(context.Context, []*ControlObjective) error
 	modifiers            []func(*sql.Selector)
@@ -52,6 +54,7 @@ type ControlObjectiveQuery struct {
 	withNamedStandard    map[string]*StandardQuery
 	withNamedNarratives  map[string]*NarrativeQuery
 	withNamedTasks       map[string]*TaskQuery
+	withNamedPrograms    map[string]*ProgramQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -288,6 +291,31 @@ func (coq *ControlObjectiveQuery) QueryTasks() *TaskQuery {
 	return query
 }
 
+// QueryPrograms chains the current query on the "programs" edge.
+func (coq *ControlObjectiveQuery) QueryPrograms() *ProgramQuery {
+	query := (&ProgramClient{config: coq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := coq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := coq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(controlobjective.Table, controlobjective.FieldID, selector),
+			sqlgraph.To(program.Table, program.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, controlobjective.ProgramsTable, controlobjective.ProgramsPrimaryKey...),
+		)
+		schemaConfig := coq.schemaConfig
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.ProgramControlobjectives
+		fromU = sqlgraph.SetNeighbors(coq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first ControlObjective entity from the query.
 // Returns a *NotFoundError when no ControlObjective was found.
 func (coq *ControlObjectiveQuery) First(ctx context.Context) (*ControlObjective, error) {
@@ -488,6 +516,7 @@ func (coq *ControlObjectiveQuery) Clone() *ControlObjectiveQuery {
 		withStandard:    coq.withStandard.Clone(),
 		withNarratives:  coq.withNarratives.Clone(),
 		withTasks:       coq.withTasks.Clone(),
+		withPrograms:    coq.withPrograms.Clone(),
 		// clone intermediate query.
 		sql:       coq.sql.Clone(),
 		path:      coq.path,
@@ -583,6 +612,17 @@ func (coq *ControlObjectiveQuery) WithTasks(opts ...func(*TaskQuery)) *ControlOb
 	return coq
 }
 
+// WithPrograms tells the query-builder to eager-load the nodes that are connected to
+// the "programs" edge. The optional arguments are used to configure the query builder of the edge.
+func (coq *ControlObjectiveQuery) WithPrograms(opts ...func(*ProgramQuery)) *ControlObjectiveQuery {
+	query := (&ProgramClient{config: coq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	coq.withPrograms = query
+	return coq
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -662,7 +702,7 @@ func (coq *ControlObjectiveQuery) sqlAll(ctx context.Context, hooks ...queryHook
 		nodes       = []*ControlObjective{}
 		withFKs     = coq.withFKs
 		_spec       = coq.querySpec()
-		loadedTypes = [8]bool{
+		loadedTypes = [9]bool{
 			coq.withPolicy != nil,
 			coq.withControls != nil,
 			coq.withProcedures != nil,
@@ -671,6 +711,7 @@ func (coq *ControlObjectiveQuery) sqlAll(ctx context.Context, hooks ...queryHook
 			coq.withStandard != nil,
 			coq.withNarratives != nil,
 			coq.withTasks != nil,
+			coq.withPrograms != nil,
 		}
 	)
 	if withFKs {
@@ -755,6 +796,13 @@ func (coq *ControlObjectiveQuery) sqlAll(ctx context.Context, hooks ...queryHook
 			return nil, err
 		}
 	}
+	if query := coq.withPrograms; query != nil {
+		if err := coq.loadPrograms(ctx, query, nodes,
+			func(n *ControlObjective) { n.Edges.Programs = []*Program{} },
+			func(n *ControlObjective, e *Program) { n.Edges.Programs = append(n.Edges.Programs, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range coq.withNamedPolicy {
 		if err := coq.loadPolicy(ctx, query, nodes,
 			func(n *ControlObjective) { n.appendNamedPolicy(name) },
@@ -808,6 +856,13 @@ func (coq *ControlObjectiveQuery) sqlAll(ctx context.Context, hooks ...queryHook
 		if err := coq.loadTasks(ctx, query, nodes,
 			func(n *ControlObjective) { n.appendNamedTasks(name) },
 			func(n *ControlObjective, e *Task) { n.appendNamedTasks(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range coq.withNamedPrograms {
+		if err := coq.loadPrograms(ctx, query, nodes,
+			func(n *ControlObjective) { n.appendNamedPrograms(name) },
+			func(n *ControlObjective, e *Program) { n.appendNamedPrograms(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1191,6 +1246,68 @@ func (coq *ControlObjectiveQuery) loadTasks(ctx context.Context, query *TaskQuer
 	}
 	return nil
 }
+func (coq *ControlObjectiveQuery) loadPrograms(ctx context.Context, query *ProgramQuery, nodes []*ControlObjective, init func(*ControlObjective), assign func(*ControlObjective, *Program)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*ControlObjective)
+	nids := make(map[string]map[*ControlObjective]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(controlobjective.ProgramsTable)
+		joinT.Schema(coq.schemaConfig.ProgramControlobjectives)
+		s.Join(joinT).On(s.C(program.FieldID), joinT.C(controlobjective.ProgramsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(controlobjective.ProgramsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(controlobjective.ProgramsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*ControlObjective]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Program](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "programs" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 
 func (coq *ControlObjectiveQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := coq.querySpec()
@@ -1399,6 +1516,20 @@ func (coq *ControlObjectiveQuery) WithNamedTasks(name string, opts ...func(*Task
 		coq.withNamedTasks = make(map[string]*TaskQuery)
 	}
 	coq.withNamedTasks[name] = query
+	return coq
+}
+
+// WithNamedPrograms tells the query-builder to eager-load the nodes that are connected to the "programs"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (coq *ControlObjectiveQuery) WithNamedPrograms(name string, opts ...func(*ProgramQuery)) *ControlObjectiveQuery {
+	query := (&ProgramClient{config: coq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if coq.withNamedPrograms == nil {
+		coq.withNamedPrograms = make(map[string]*ProgramQuery)
+	}
+	coq.withNamedPrograms[name] = query
 	return coq
 }
 

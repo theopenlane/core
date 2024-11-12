@@ -86,6 +86,8 @@ func (Task) Edges() []ent.Edge {
 			Ref("tasks"),
 		edge.From("subcontrol", Subcontrol.Type).
 			Ref("tasks"),
+		edge.From("program", Program.Type).
+			Ref("tasks"),
 	}
 }
 

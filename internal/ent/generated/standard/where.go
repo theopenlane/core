@@ -1388,6 +1388,35 @@ func HasActionplansWith(preds ...predicate.ActionPlan) predicate.Standard {
 	})
 }
 
+// HasPrograms applies the HasEdge predicate on the "programs" edge.
+func HasPrograms() predicate.Standard {
+	return predicate.Standard(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, ProgramsTable, ProgramsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.StandardPrograms
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasProgramsWith applies the HasEdge predicate on the "programs" edge with a given conditions (other predicates).
+func HasProgramsWith(preds ...predicate.Program) predicate.Standard {
+	return predicate.Standard(func(s *sql.Selector) {
+		step := newProgramsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.StandardPrograms
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.Standard) predicate.Standard {
 	return predicate.Standard(sql.AndPredicates(predicates...))

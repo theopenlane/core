@@ -72,17 +72,20 @@ type ProcedureEdges struct {
 	Risks []*Risk `json:"risks,omitempty"`
 	// Tasks holds the value of the tasks edge.
 	Tasks []*Task `json:"tasks,omitempty"`
+	// Programs holds the value of the programs edge.
+	Programs []*Program `json:"programs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [5]bool
+	loadedTypes [6]bool
 	// totalCount holds the count of the edges above.
-	totalCount [5]map[string]int
+	totalCount [6]map[string]int
 
 	namedControl        map[string][]*Control
 	namedInternalpolicy map[string][]*InternalPolicy
 	namedNarratives     map[string][]*Narrative
 	namedRisks          map[string][]*Risk
 	namedTasks          map[string][]*Task
+	namedPrograms       map[string][]*Program
 }
 
 // ControlOrErr returns the Control value or an error if the edge
@@ -128,6 +131,15 @@ func (e ProcedureEdges) TasksOrErr() ([]*Task, error) {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
+}
+
+// ProgramsOrErr returns the Programs value or an error if the edge
+// was not loaded in eager-loading.
+func (e ProcedureEdges) ProgramsOrErr() ([]*Program, error) {
+	if e.loadedTypes[5] {
+		return e.Programs, nil
+	}
+	return nil, &NotLoadedError{edge: "programs"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -324,6 +336,11 @@ func (pr *Procedure) QueryTasks() *TaskQuery {
 	return NewProcedureClient(pr.config).QueryTasks(pr)
 }
 
+// QueryPrograms queries the "programs" edge of the Procedure entity.
+func (pr *Procedure) QueryPrograms() *ProgramQuery {
+	return NewProcedureClient(pr.config).QueryPrograms(pr)
+}
+
 // Update returns a builder for updating this Procedure.
 // Note that you need to call Procedure.Unwrap() before calling this method if this Procedure
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -518,6 +535,30 @@ func (pr *Procedure) appendNamedTasks(name string, edges ...*Task) {
 		pr.Edges.namedTasks[name] = []*Task{}
 	} else {
 		pr.Edges.namedTasks[name] = append(pr.Edges.namedTasks[name], edges...)
+	}
+}
+
+// NamedPrograms returns the Programs named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (pr *Procedure) NamedPrograms(name string) ([]*Program, error) {
+	if pr.Edges.namedPrograms == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := pr.Edges.namedPrograms[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (pr *Procedure) appendNamedPrograms(name string, edges ...*Program) {
+	if pr.Edges.namedPrograms == nil {
+		pr.Edges.namedPrograms = make(map[string][]*Program)
+	}
+	if len(edges) == 0 {
+		pr.Edges.namedPrograms[name] = []*Program{}
+	} else {
+		pr.Edges.namedPrograms[name] = append(pr.Edges.namedPrograms[name], edges...)
 	}
 }
 

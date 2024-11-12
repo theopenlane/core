@@ -705,6 +705,54 @@ func (f ProcedureHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) 
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.ProcedureHistoryMutation", m)
 }
 
+// The ProgramFunc type is an adapter to allow the use of ordinary
+// function as Program mutator.
+type ProgramFunc func(context.Context, *generated.ProgramMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ProgramFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.ProgramMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.ProgramMutation", m)
+}
+
+// The ProgramHistoryFunc type is an adapter to allow the use of ordinary
+// function as ProgramHistory mutator.
+type ProgramHistoryFunc func(context.Context, *generated.ProgramHistoryMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ProgramHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.ProgramHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.ProgramHistoryMutation", m)
+}
+
+// The ProgramMembershipFunc type is an adapter to allow the use of ordinary
+// function as ProgramMembership mutator.
+type ProgramMembershipFunc func(context.Context, *generated.ProgramMembershipMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ProgramMembershipFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.ProgramMembershipMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.ProgramMembershipMutation", m)
+}
+
+// The ProgramMembershipHistoryFunc type is an adapter to allow the use of ordinary
+// function as ProgramMembershipHistory mutator.
+type ProgramMembershipHistoryFunc func(context.Context, *generated.ProgramMembershipHistoryMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ProgramMembershipHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.ProgramMembershipHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.ProgramMembershipHistoryMutation", m)
+}
+
 // The RiskFunc type is an adapter to allow the use of ordinary
 // function as Risk mutator.
 type RiskFunc func(context.Context, *generated.RiskMutation) (generated.Value, error)

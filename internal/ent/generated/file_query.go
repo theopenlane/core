@@ -22,6 +22,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
@@ -46,6 +47,7 @@ type FileQuery struct {
 	withTemplate                 *TemplateQuery
 	withDocumentdata             *DocumentDataQuery
 	withEvents                   *EventQuery
+	withProgram                  *ProgramQuery
 	loadTotal                    []func(context.Context, []*File) error
 	modifiers                    []func(*sql.Selector)
 	withNamedUser                map[string]*UserQuery
@@ -58,6 +60,7 @@ type FileQuery struct {
 	withNamedTemplate            map[string]*TemplateQuery
 	withNamedDocumentdata        map[string]*DocumentDataQuery
 	withNamedEvents              map[string]*EventQuery
+	withNamedProgram             map[string]*ProgramQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -344,6 +347,31 @@ func (fq *FileQuery) QueryEvents() *EventQuery {
 	return query
 }
 
+// QueryProgram chains the current query on the "program" edge.
+func (fq *FileQuery) QueryProgram() *ProgramQuery {
+	query := (&ProgramClient{config: fq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := fq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := fq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, selector),
+			sqlgraph.To(program.Table, program.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, file.ProgramTable, file.ProgramPrimaryKey...),
+		)
+		schemaConfig := fq.schemaConfig
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.ProgramFiles
+		fromU = sqlgraph.SetNeighbors(fq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first File entity from the query.
 // Returns a *NotFoundError when no File was found.
 func (fq *FileQuery) First(ctx context.Context) (*File, error) {
@@ -546,6 +574,7 @@ func (fq *FileQuery) Clone() *FileQuery {
 		withTemplate:            fq.withTemplate.Clone(),
 		withDocumentdata:        fq.withDocumentdata.Clone(),
 		withEvents:              fq.withEvents.Clone(),
+		withProgram:             fq.withProgram.Clone(),
 		// clone intermediate query.
 		sql:       fq.sql.Clone(),
 		path:      fq.path,
@@ -663,6 +692,17 @@ func (fq *FileQuery) WithEvents(opts ...func(*EventQuery)) *FileQuery {
 	return fq
 }
 
+// WithProgram tells the query-builder to eager-load the nodes that are connected to
+// the "program" edge. The optional arguments are used to configure the query builder of the edge.
+func (fq *FileQuery) WithProgram(opts ...func(*ProgramQuery)) *FileQuery {
+	query := (&ProgramClient{config: fq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	fq.withProgram = query
+	return fq
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -747,7 +787,7 @@ func (fq *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 	var (
 		nodes       = []*File{}
 		_spec       = fq.querySpec()
-		loadedTypes = [10]bool{
+		loadedTypes = [11]bool{
 			fq.withUser != nil,
 			fq.withOrganization != nil,
 			fq.withGroup != nil,
@@ -758,6 +798,7 @@ func (fq *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 			fq.withTemplate != nil,
 			fq.withDocumentdata != nil,
 			fq.withEvents != nil,
+			fq.withProgram != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -855,6 +896,13 @@ func (fq *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 			return nil, err
 		}
 	}
+	if query := fq.withProgram; query != nil {
+		if err := fq.loadProgram(ctx, query, nodes,
+			func(n *File) { n.Edges.Program = []*Program{} },
+			func(n *File, e *Program) { n.Edges.Program = append(n.Edges.Program, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range fq.withNamedUser {
 		if err := fq.loadUser(ctx, query, nodes,
 			func(n *File) { n.appendNamedUser(name) },
@@ -922,6 +970,13 @@ func (fq *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 		if err := fq.loadEvents(ctx, query, nodes,
 			func(n *File) { n.appendNamedEvents(name) },
 			func(n *File, e *Event) { n.appendNamedEvents(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range fq.withNamedProgram {
+		if err := fq.loadProgram(ctx, query, nodes,
+			func(n *File) { n.appendNamedProgram(name) },
+			func(n *File, e *Program) { n.appendNamedProgram(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1553,6 +1608,68 @@ func (fq *FileQuery) loadEvents(ctx context.Context, query *EventQuery, nodes []
 	}
 	return nil
 }
+func (fq *FileQuery) loadProgram(ctx context.Context, query *ProgramQuery, nodes []*File, init func(*File), assign func(*File, *Program)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*File)
+	nids := make(map[string]map[*File]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(file.ProgramTable)
+		joinT.Schema(fq.schemaConfig.ProgramFiles)
+		s.Join(joinT).On(s.C(program.FieldID), joinT.C(file.ProgramPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(file.ProgramPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(file.ProgramPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*File]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Program](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "program" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 
 func (fq *FileQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := fq.querySpec()
@@ -1789,6 +1906,20 @@ func (fq *FileQuery) WithNamedEvents(name string, opts ...func(*EventQuery)) *Fi
 		fq.withNamedEvents = make(map[string]*EventQuery)
 	}
 	fq.withNamedEvents[name] = query
+	return fq
+}
+
+// WithNamedProgram tells the query-builder to eager-load the nodes that are connected to the "program"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (fq *FileQuery) WithNamedProgram(name string, opts ...func(*ProgramQuery)) *FileQuery {
+	query := (&ProgramClient{config: fq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if fq.withNamedProgram == nil {
+		fq.withNamedProgram = make(map[string]*ProgramQuery)
+	}
+	fq.withNamedProgram[name] = query
 	return fq
 }
 

@@ -128,6 +128,14 @@ type Tx struct {
 	Procedure *ProcedureClient
 	// ProcedureHistory is the client for interacting with the ProcedureHistory builders.
 	ProcedureHistory *ProcedureHistoryClient
+	// Program is the client for interacting with the Program builders.
+	Program *ProgramClient
+	// ProgramHistory is the client for interacting with the ProgramHistory builders.
+	ProgramHistory *ProgramHistoryClient
+	// ProgramMembership is the client for interacting with the ProgramMembership builders.
+	ProgramMembership *ProgramMembershipClient
+	// ProgramMembershipHistory is the client for interacting with the ProgramMembershipHistory builders.
+	ProgramMembershipHistory *ProgramMembershipHistoryClient
 	// Risk is the client for interacting with the Risk builders.
 	Risk *RiskClient
 	// RiskHistory is the client for interacting with the RiskHistory builders.
@@ -355,6 +363,10 @@ func (tx *Tx) init() {
 	tx.PersonalAccessToken = NewPersonalAccessTokenClient(tx.config)
 	tx.Procedure = NewProcedureClient(tx.config)
 	tx.ProcedureHistory = NewProcedureHistoryClient(tx.config)
+	tx.Program = NewProgramClient(tx.config)
+	tx.ProgramHistory = NewProgramHistoryClient(tx.config)
+	tx.ProgramMembership = NewProgramMembershipClient(tx.config)
+	tx.ProgramMembershipHistory = NewProgramMembershipHistoryClient(tx.config)
 	tx.Risk = NewRiskClient(tx.config)
 	tx.RiskHistory = NewRiskHistoryClient(tx.config)
 	tx.Standard = NewStandardClient(tx.config)

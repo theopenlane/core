@@ -42,6 +42,7 @@ func (r *queryResolver) Search(ctx context.Context, query string) (*SearchResult
 		organizationsettingResults    []*generated.OrganizationSetting
 		personalaccesstokenResults    []*generated.PersonalAccessToken
 		procedureResults              []*generated.Procedure
+		programResults                []*generated.Program
 		riskResults                   []*generated.Risk
 		standardResults               []*generated.Standard
 		subcontrolResults             []*generated.Subcontrol
@@ -232,6 +233,13 @@ func (r *queryResolver) Search(ctx context.Context, query string) (*SearchResult
 		},
 		func() {
 			var err error
+			programResults, err = searchPrograms(ctx, query)
+			if err != nil {
+				errors = append(errors, err)
+			}
+		},
+		func() {
+			var err error
 			riskResults, err = searchRisks(ctx, query)
 			if err != nil {
 				errors = append(errors, err)
@@ -386,6 +394,9 @@ func (r *queryResolver) Search(ctx context.Context, query string) (*SearchResult
 			},
 			ProcedureSearchResult{
 				Procedures: procedureResults,
+			},
+			ProgramSearchResult{
+				Programs: programResults,
 			},
 			RiskSearchResult{
 				Risks: riskResults,
@@ -718,6 +729,18 @@ func (r *queryResolver) ProcedureSearch(ctx context.Context, query string) (*Pro
 	// return the results
 	return &ProcedureSearchResult{
 		Procedures: procedureResults,
+	}, nil
+}
+func (r *queryResolver) ProgramSearch(ctx context.Context, query string) (*ProgramSearchResult, error) {
+	programResults, err := searchPrograms(ctx, query)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return &ProgramSearchResult{
+		Programs: programResults,
 	}, nil
 }
 func (r *queryResolver) RiskSearch(ctx context.Context, query string) (*RiskSearchResult, error) {

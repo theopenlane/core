@@ -67,6 +67,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/procedurehistory"
+	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/programhistory"
+	"github.com/theopenlane/core/internal/ent/generated/programmembership"
+	"github.com/theopenlane/core/internal/ent/generated/programmembershiphistory"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
@@ -1710,6 +1714,114 @@ func (f TraverseProcedureHistory) Traverse(ctx context.Context, q generated.Quer
 	return fmt.Errorf("unexpected query type %T. expect *generated.ProcedureHistoryQuery", q)
 }
 
+// The ProgramFunc type is an adapter to allow the use of ordinary function as a Querier.
+type ProgramFunc func(context.Context, *generated.ProgramQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f ProgramFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.ProgramQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.ProgramQuery", q)
+}
+
+// The TraverseProgram type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseProgram func(context.Context, *generated.ProgramQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseProgram) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseProgram) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ProgramQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.ProgramQuery", q)
+}
+
+// The ProgramHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type ProgramHistoryFunc func(context.Context, *generated.ProgramHistoryQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f ProgramHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.ProgramHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.ProgramHistoryQuery", q)
+}
+
+// The TraverseProgramHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseProgramHistory func(context.Context, *generated.ProgramHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseProgramHistory) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseProgramHistory) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ProgramHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.ProgramHistoryQuery", q)
+}
+
+// The ProgramMembershipFunc type is an adapter to allow the use of ordinary function as a Querier.
+type ProgramMembershipFunc func(context.Context, *generated.ProgramMembershipQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f ProgramMembershipFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.ProgramMembershipQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.ProgramMembershipQuery", q)
+}
+
+// The TraverseProgramMembership type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseProgramMembership func(context.Context, *generated.ProgramMembershipQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseProgramMembership) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseProgramMembership) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ProgramMembershipQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.ProgramMembershipQuery", q)
+}
+
+// The ProgramMembershipHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type ProgramMembershipHistoryFunc func(context.Context, *generated.ProgramMembershipHistoryQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f ProgramMembershipHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.ProgramMembershipHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.ProgramMembershipHistoryQuery", q)
+}
+
+// The TraverseProgramMembershipHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseProgramMembershipHistory func(context.Context, *generated.ProgramMembershipHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseProgramMembershipHistory) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseProgramMembershipHistory) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ProgramMembershipHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.ProgramMembershipHistoryQuery", q)
+}
+
 // The RiskFunc type is an adapter to allow the use of ordinary function as a Querier.
 type RiskFunc func(context.Context, *generated.RiskQuery) (generated.Value, error)
 
@@ -2342,6 +2454,14 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.ProcedureQuery, predicate.Procedure, procedure.OrderOption]{typ: generated.TypeProcedure, tq: q}, nil
 	case *generated.ProcedureHistoryQuery:
 		return &query[*generated.ProcedureHistoryQuery, predicate.ProcedureHistory, procedurehistory.OrderOption]{typ: generated.TypeProcedureHistory, tq: q}, nil
+	case *generated.ProgramQuery:
+		return &query[*generated.ProgramQuery, predicate.Program, program.OrderOption]{typ: generated.TypeProgram, tq: q}, nil
+	case *generated.ProgramHistoryQuery:
+		return &query[*generated.ProgramHistoryQuery, predicate.ProgramHistory, programhistory.OrderOption]{typ: generated.TypeProgramHistory, tq: q}, nil
+	case *generated.ProgramMembershipQuery:
+		return &query[*generated.ProgramMembershipQuery, predicate.ProgramMembership, programmembership.OrderOption]{typ: generated.TypeProgramMembership, tq: q}, nil
+	case *generated.ProgramMembershipHistoryQuery:
+		return &query[*generated.ProgramMembershipHistoryQuery, predicate.ProgramMembershipHistory, programmembershiphistory.OrderOption]{typ: generated.TypeProgramMembershipHistory, tq: q}, nil
 	case *generated.RiskQuery:
 		return &query[*generated.RiskQuery, predicate.Risk, risk.OrderOption]{typ: generated.TypeRisk, tq: q}, nil
 	case *generated.RiskHistoryQuery:

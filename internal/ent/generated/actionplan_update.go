@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -312,6 +313,21 @@ func (apu *ActionPlanUpdate) AddUser(u ...*User) *ActionPlanUpdate {
 	return apu.AddUserIDs(ids...)
 }
 
+// AddProgramIDs adds the "program" edge to the Program entity by IDs.
+func (apu *ActionPlanUpdate) AddProgramIDs(ids ...string) *ActionPlanUpdate {
+	apu.mutation.AddProgramIDs(ids...)
+	return apu
+}
+
+// AddProgram adds the "program" edges to the Program entity.
+func (apu *ActionPlanUpdate) AddProgram(p ...*Program) *ActionPlanUpdate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return apu.AddProgramIDs(ids...)
+}
+
 // Mutation returns the ActionPlanMutation object of the builder.
 func (apu *ActionPlanUpdate) Mutation() *ActionPlanMutation {
 	return apu.mutation
@@ -399,6 +415,27 @@ func (apu *ActionPlanUpdate) RemoveUser(u ...*User) *ActionPlanUpdate {
 		ids[i] = u[i].ID
 	}
 	return apu.RemoveUserIDs(ids...)
+}
+
+// ClearProgram clears all "program" edges to the Program entity.
+func (apu *ActionPlanUpdate) ClearProgram() *ActionPlanUpdate {
+	apu.mutation.ClearProgram()
+	return apu
+}
+
+// RemoveProgramIDs removes the "program" edge to Program entities by IDs.
+func (apu *ActionPlanUpdate) RemoveProgramIDs(ids ...string) *ActionPlanUpdate {
+	apu.mutation.RemoveProgramIDs(ids...)
+	return apu
+}
+
+// RemoveProgram removes "program" edges to Program entities.
+func (apu *ActionPlanUpdate) RemoveProgram(p ...*Program) *ActionPlanUpdate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return apu.RemoveProgramIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -730,6 +767,54 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if apu.mutation.ProgramCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.ProgramTable,
+			Columns: actionplan.ProgramPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = apu.schemaConfig.ProgramActionplans
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := apu.mutation.RemovedProgramIDs(); len(nodes) > 0 && !apu.mutation.ProgramCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.ProgramTable,
+			Columns: actionplan.ProgramPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = apu.schemaConfig.ProgramActionplans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := apu.mutation.ProgramIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.ProgramTable,
+			Columns: actionplan.ProgramPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = apu.schemaConfig.ProgramActionplans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = apu.schemaConfig.ActionPlan
 	ctx = internal.NewSchemaConfigContext(ctx, apu.schemaConfig)
 	_spec.AddModifiers(apu.modifiers...)
@@ -1030,6 +1115,21 @@ func (apuo *ActionPlanUpdateOne) AddUser(u ...*User) *ActionPlanUpdateOne {
 	return apuo.AddUserIDs(ids...)
 }
 
+// AddProgramIDs adds the "program" edge to the Program entity by IDs.
+func (apuo *ActionPlanUpdateOne) AddProgramIDs(ids ...string) *ActionPlanUpdateOne {
+	apuo.mutation.AddProgramIDs(ids...)
+	return apuo
+}
+
+// AddProgram adds the "program" edges to the Program entity.
+func (apuo *ActionPlanUpdateOne) AddProgram(p ...*Program) *ActionPlanUpdateOne {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return apuo.AddProgramIDs(ids...)
+}
+
 // Mutation returns the ActionPlanMutation object of the builder.
 func (apuo *ActionPlanUpdateOne) Mutation() *ActionPlanMutation {
 	return apuo.mutation
@@ -1117,6 +1217,27 @@ func (apuo *ActionPlanUpdateOne) RemoveUser(u ...*User) *ActionPlanUpdateOne {
 		ids[i] = u[i].ID
 	}
 	return apuo.RemoveUserIDs(ids...)
+}
+
+// ClearProgram clears all "program" edges to the Program entity.
+func (apuo *ActionPlanUpdateOne) ClearProgram() *ActionPlanUpdateOne {
+	apuo.mutation.ClearProgram()
+	return apuo
+}
+
+// RemoveProgramIDs removes the "program" edge to Program entities by IDs.
+func (apuo *ActionPlanUpdateOne) RemoveProgramIDs(ids ...string) *ActionPlanUpdateOne {
+	apuo.mutation.RemoveProgramIDs(ids...)
+	return apuo
+}
+
+// RemoveProgram removes "program" edges to Program entities.
+func (apuo *ActionPlanUpdateOne) RemoveProgram(p ...*Program) *ActionPlanUpdateOne {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return apuo.RemoveProgramIDs(ids...)
 }
 
 // Where appends a list predicates to the ActionPlanUpdate builder.
@@ -1473,6 +1594,54 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 			},
 		}
 		edge.Schema = apuo.schemaConfig.UserActionplans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if apuo.mutation.ProgramCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.ProgramTable,
+			Columns: actionplan.ProgramPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = apuo.schemaConfig.ProgramActionplans
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := apuo.mutation.RemovedProgramIDs(); len(nodes) > 0 && !apuo.mutation.ProgramCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.ProgramTable,
+			Columns: actionplan.ProgramPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = apuo.schemaConfig.ProgramActionplans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := apuo.mutation.ProgramIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.ProgramTable,
+			Columns: actionplan.ProgramPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = apuo.schemaConfig.ProgramActionplans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

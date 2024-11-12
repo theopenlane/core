@@ -101,15 +101,19 @@ type UserEdges struct {
 	AssignerTasks []*Task `json:"assigner_tasks,omitempty"`
 	// AssigneeTasks holds the value of the assignee_tasks edge.
 	AssigneeTasks []*Task `json:"assignee_tasks,omitempty"`
+	// Programs holds the value of the programs edge.
+	Programs []*Program `json:"programs,omitempty"`
 	// GroupMemberships holds the value of the group_memberships edge.
 	GroupMemberships []*GroupMembership `json:"group_memberships,omitempty"`
 	// OrgMemberships holds the value of the org_memberships edge.
 	OrgMemberships []*OrgMembership `json:"org_memberships,omitempty"`
+	// ProgramMemberships holds the value of the program_memberships edge.
+	ProgramMemberships []*ProgramMembership `json:"program_memberships,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [17]bool
+	loadedTypes [19]bool
 	// totalCount holds the count of the edges above.
-	totalCount [14]map[string]int
+	totalCount [16]map[string]int
 
 	namedPersonalAccessTokens    map[string][]*PersonalAccessToken
 	namedTfaSettings             map[string][]*TFASetting
@@ -124,8 +128,10 @@ type UserEdges struct {
 	namedSubcontrols             map[string][]*Subcontrol
 	namedAssignerTasks           map[string][]*Task
 	namedAssigneeTasks           map[string][]*Task
+	namedPrograms                map[string][]*Program
 	namedGroupMemberships        map[string][]*GroupMembership
 	namedOrgMemberships          map[string][]*OrgMembership
+	namedProgramMemberships      map[string][]*ProgramMembership
 }
 
 // PersonalAccessTokensOrErr returns the PersonalAccessTokens value or an error if the edge
@@ -267,10 +273,19 @@ func (e UserEdges) AssigneeTasksOrErr() ([]*Task, error) {
 	return nil, &NotLoadedError{edge: "assignee_tasks"}
 }
 
+// ProgramsOrErr returns the Programs value or an error if the edge
+// was not loaded in eager-loading.
+func (e UserEdges) ProgramsOrErr() ([]*Program, error) {
+	if e.loadedTypes[15] {
+		return e.Programs, nil
+	}
+	return nil, &NotLoadedError{edge: "programs"}
+}
+
 // GroupMembershipsOrErr returns the GroupMemberships value or an error if the edge
 // was not loaded in eager-loading.
 func (e UserEdges) GroupMembershipsOrErr() ([]*GroupMembership, error) {
-	if e.loadedTypes[15] {
+	if e.loadedTypes[16] {
 		return e.GroupMemberships, nil
 	}
 	return nil, &NotLoadedError{edge: "group_memberships"}
@@ -279,10 +294,19 @@ func (e UserEdges) GroupMembershipsOrErr() ([]*GroupMembership, error) {
 // OrgMembershipsOrErr returns the OrgMemberships value or an error if the edge
 // was not loaded in eager-loading.
 func (e UserEdges) OrgMembershipsOrErr() ([]*OrgMembership, error) {
-	if e.loadedTypes[16] {
+	if e.loadedTypes[17] {
 		return e.OrgMemberships, nil
 	}
 	return nil, &NotLoadedError{edge: "org_memberships"}
+}
+
+// ProgramMembershipsOrErr returns the ProgramMemberships value or an error if the edge
+// was not loaded in eager-loading.
+func (e UserEdges) ProgramMembershipsOrErr() ([]*ProgramMembership, error) {
+	if e.loadedTypes[18] {
+		return e.ProgramMemberships, nil
+	}
+	return nil, &NotLoadedError{edge: "program_memberships"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -539,6 +563,11 @@ func (u *User) QueryAssigneeTasks() *TaskQuery {
 	return NewUserClient(u.config).QueryAssigneeTasks(u)
 }
 
+// QueryPrograms queries the "programs" edge of the User entity.
+func (u *User) QueryPrograms() *ProgramQuery {
+	return NewUserClient(u.config).QueryPrograms(u)
+}
+
 // QueryGroupMemberships queries the "group_memberships" edge of the User entity.
 func (u *User) QueryGroupMemberships() *GroupMembershipQuery {
 	return NewUserClient(u.config).QueryGroupMemberships(u)
@@ -547,6 +576,11 @@ func (u *User) QueryGroupMemberships() *GroupMembershipQuery {
 // QueryOrgMemberships queries the "org_memberships" edge of the User entity.
 func (u *User) QueryOrgMemberships() *OrgMembershipQuery {
 	return NewUserClient(u.config).QueryOrgMemberships(u)
+}
+
+// QueryProgramMemberships queries the "program_memberships" edge of the User entity.
+func (u *User) QueryProgramMemberships() *ProgramMembershipQuery {
+	return NewUserClient(u.config).QueryProgramMemberships(u)
 }
 
 // Update returns a builder for updating this User.
@@ -959,6 +993,30 @@ func (u *User) appendNamedAssigneeTasks(name string, edges ...*Task) {
 	}
 }
 
+// NamedPrograms returns the Programs named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (u *User) NamedPrograms(name string) ([]*Program, error) {
+	if u.Edges.namedPrograms == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := u.Edges.namedPrograms[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (u *User) appendNamedPrograms(name string, edges ...*Program) {
+	if u.Edges.namedPrograms == nil {
+		u.Edges.namedPrograms = make(map[string][]*Program)
+	}
+	if len(edges) == 0 {
+		u.Edges.namedPrograms[name] = []*Program{}
+	} else {
+		u.Edges.namedPrograms[name] = append(u.Edges.namedPrograms[name], edges...)
+	}
+}
+
 // NamedGroupMemberships returns the GroupMemberships named value or an error if the edge was not
 // loaded in eager-loading with this name.
 func (u *User) NamedGroupMemberships(name string) ([]*GroupMembership, error) {
@@ -1004,6 +1062,30 @@ func (u *User) appendNamedOrgMemberships(name string, edges ...*OrgMembership) {
 		u.Edges.namedOrgMemberships[name] = []*OrgMembership{}
 	} else {
 		u.Edges.namedOrgMemberships[name] = append(u.Edges.namedOrgMemberships[name], edges...)
+	}
+}
+
+// NamedProgramMemberships returns the ProgramMemberships named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (u *User) NamedProgramMemberships(name string) ([]*ProgramMembership, error) {
+	if u.Edges.namedProgramMemberships == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := u.Edges.namedProgramMemberships[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (u *User) appendNamedProgramMemberships(name string, edges ...*ProgramMembership) {
+	if u.Edges.namedProgramMemberships == nil {
+		u.Edges.namedProgramMemberships = make(map[string][]*ProgramMembership)
+	}
+	if len(edges) == 0 {
+		u.Edges.namedProgramMemberships[name] = []*ProgramMembership{}
+	} else {
+		u.Edges.namedProgramMemberships[name] = append(u.Edges.namedProgramMemberships[name], edges...)
 	}
 }
 

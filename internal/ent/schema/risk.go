@@ -62,6 +62,8 @@ func (Risk) Edges() []ent.Edge {
 		edge.From("procedure", Procedure.Type).
 			Ref("risks"),
 		edge.To("actionplans", ActionPlan.Type),
+		edge.From("program", Program.Type).
+			Ref("risks"),
 	}
 }
 

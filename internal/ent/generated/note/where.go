@@ -789,6 +789,35 @@ func HasSubcontrolsWith(preds ...predicate.Subcontrol) predicate.Note {
 	})
 }
 
+// HasProgram applies the HasEdge predicate on the "program" edge.
+func HasProgram() predicate.Note {
+	return predicate.Note(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, ProgramTable, ProgramPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.ProgramNotes
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasProgramWith applies the HasEdge predicate on the "program" edge with a given conditions (other predicates).
+func HasProgramWith(preds ...predicate.Program) predicate.Note {
+	return predicate.Note(func(s *sql.Selector) {
+		step := newProgramStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.ProgramNotes
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.Note) predicate.Note {
 	return predicate.Note(sql.AndPredicates(predicates...))

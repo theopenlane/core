@@ -49,8 +49,9 @@ func GetAuthorizedObjectIDs(ctx context.Context, objectType string) ([]string, e
 	}
 
 	req := fgax.ListRequest{
-		SubjectID:  userID,
-		ObjectType: strings.ToLower(objectType),
+		SubjectID:   userID,
+		SubjectType: auth.GetAuthzSubjectType(ctx),
+		ObjectType:  strings.ToLower(objectType),
 	}
 
 	resp, err := generated.FromContext(ctx).Authz.ListObjectsRequest(ctx, req)

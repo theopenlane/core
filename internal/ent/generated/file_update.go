@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
@@ -550,6 +551,21 @@ func (fu *FileUpdate) AddEvents(e ...*Event) *FileUpdate {
 	return fu.AddEventIDs(ids...)
 }
 
+// AddProgramIDs adds the "program" edge to the Program entity by IDs.
+func (fu *FileUpdate) AddProgramIDs(ids ...string) *FileUpdate {
+	fu.mutation.AddProgramIDs(ids...)
+	return fu
+}
+
+// AddProgram adds the "program" edges to the Program entity.
+func (fu *FileUpdate) AddProgram(p ...*Program) *FileUpdate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return fu.AddProgramIDs(ids...)
+}
+
 // Mutation returns the FileMutation object of the builder.
 func (fu *FileUpdate) Mutation() *FileMutation {
 	return fu.mutation
@@ -763,6 +779,27 @@ func (fu *FileUpdate) RemoveEvents(e ...*Event) *FileUpdate {
 		ids[i] = e[i].ID
 	}
 	return fu.RemoveEventIDs(ids...)
+}
+
+// ClearProgram clears all "program" edges to the Program entity.
+func (fu *FileUpdate) ClearProgram() *FileUpdate {
+	fu.mutation.ClearProgram()
+	return fu
+}
+
+// RemoveProgramIDs removes the "program" edge to Program entities by IDs.
+func (fu *FileUpdate) RemoveProgramIDs(ids ...string) *FileUpdate {
+	fu.mutation.RemoveProgramIDs(ids...)
+	return fu
+}
+
+// RemoveProgram removes "program" edges to Program entities.
+func (fu *FileUpdate) RemoveProgram(p ...*Program) *FileUpdate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return fu.RemoveProgramIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -1442,6 +1479,54 @@ func (fu *FileUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if fu.mutation.ProgramCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.ProgramTable,
+			Columns: file.ProgramPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fu.schemaConfig.ProgramFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fu.mutation.RemovedProgramIDs(); len(nodes) > 0 && !fu.mutation.ProgramCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.ProgramTable,
+			Columns: file.ProgramPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fu.schemaConfig.ProgramFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fu.mutation.ProgramIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.ProgramTable,
+			Columns: file.ProgramPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fu.schemaConfig.ProgramFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = fu.schemaConfig.File
 	ctx = internal.NewSchemaConfigContext(ctx, fu.schemaConfig)
 	_spec.AddModifiers(fu.modifiers...)
@@ -1974,6 +2059,21 @@ func (fuo *FileUpdateOne) AddEvents(e ...*Event) *FileUpdateOne {
 	return fuo.AddEventIDs(ids...)
 }
 
+// AddProgramIDs adds the "program" edge to the Program entity by IDs.
+func (fuo *FileUpdateOne) AddProgramIDs(ids ...string) *FileUpdateOne {
+	fuo.mutation.AddProgramIDs(ids...)
+	return fuo
+}
+
+// AddProgram adds the "program" edges to the Program entity.
+func (fuo *FileUpdateOne) AddProgram(p ...*Program) *FileUpdateOne {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return fuo.AddProgramIDs(ids...)
+}
+
 // Mutation returns the FileMutation object of the builder.
 func (fuo *FileUpdateOne) Mutation() *FileMutation {
 	return fuo.mutation
@@ -2187,6 +2287,27 @@ func (fuo *FileUpdateOne) RemoveEvents(e ...*Event) *FileUpdateOne {
 		ids[i] = e[i].ID
 	}
 	return fuo.RemoveEventIDs(ids...)
+}
+
+// ClearProgram clears all "program" edges to the Program entity.
+func (fuo *FileUpdateOne) ClearProgram() *FileUpdateOne {
+	fuo.mutation.ClearProgram()
+	return fuo
+}
+
+// RemoveProgramIDs removes the "program" edge to Program entities by IDs.
+func (fuo *FileUpdateOne) RemoveProgramIDs(ids ...string) *FileUpdateOne {
+	fuo.mutation.RemoveProgramIDs(ids...)
+	return fuo
+}
+
+// RemoveProgram removes "program" edges to Program entities.
+func (fuo *FileUpdateOne) RemoveProgram(p ...*Program) *FileUpdateOne {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return fuo.RemoveProgramIDs(ids...)
 }
 
 // Where appends a list predicates to the FileUpdate builder.
@@ -2891,6 +3012,54 @@ func (fuo *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) 
 			},
 		}
 		edge.Schema = fuo.schemaConfig.FileEvents
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if fuo.mutation.ProgramCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.ProgramTable,
+			Columns: file.ProgramPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fuo.schemaConfig.ProgramFiles
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fuo.mutation.RemovedProgramIDs(); len(nodes) > 0 && !fuo.mutation.ProgramCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.ProgramTable,
+			Columns: file.ProgramPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fuo.schemaConfig.ProgramFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := fuo.mutation.ProgramIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   file.ProgramTable,
+			Columns: file.ProgramPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = fuo.schemaConfig.ProgramFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

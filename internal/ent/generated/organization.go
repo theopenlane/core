@@ -111,13 +111,15 @@ type OrganizationEdges struct {
 	Notes []*Note `json:"notes,omitempty"`
 	// Tasks holds the value of the tasks edge.
 	Tasks []*Task `json:"tasks,omitempty"`
+	// Programs holds the value of the programs edge.
+	Programs []*Program `json:"programs,omitempty"`
 	// Members holds the value of the members edge.
 	Members []*OrgMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [28]bool
+	loadedTypes [29]bool
 	// totalCount holds the count of the edges above.
-	totalCount [28]map[string]int
+	totalCount [29]map[string]int
 
 	namedChildren                map[string][]*Organization
 	namedGroups                  map[string][]*Group
@@ -144,6 +146,7 @@ type OrganizationEdges struct {
 	namedContacts                map[string][]*Contact
 	namedNotes                   map[string][]*Note
 	namedTasks                   map[string][]*Task
+	namedPrograms                map[string][]*Program
 	namedMembers                 map[string][]*OrgMembership
 }
 
@@ -394,10 +397,19 @@ func (e OrganizationEdges) TasksOrErr() ([]*Task, error) {
 	return nil, &NotLoadedError{edge: "tasks"}
 }
 
+// ProgramsOrErr returns the Programs value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) ProgramsOrErr() ([]*Program, error) {
+	if e.loadedTypes[27] {
+		return e.Programs, nil
+	}
+	return nil, &NotLoadedError{edge: "programs"}
+}
+
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) MembersOrErr() ([]*OrgMembership, error) {
-	if e.loadedTypes[27] {
+	if e.loadedTypes[28] {
 		return e.Members, nil
 	}
 	return nil, &NotLoadedError{edge: "members"}
@@ -676,6 +688,11 @@ func (o *Organization) QueryNotes() *NoteQuery {
 // QueryTasks queries the "tasks" edge of the Organization entity.
 func (o *Organization) QueryTasks() *TaskQuery {
 	return NewOrganizationClient(o.config).QueryTasks(o)
+}
+
+// QueryPrograms queries the "programs" edge of the Organization entity.
+func (o *Organization) QueryPrograms() *ProgramQuery {
+	return NewOrganizationClient(o.config).QueryPrograms(o)
 }
 
 // QueryMembers queries the "members" edge of the Organization entity.
@@ -1353,6 +1370,30 @@ func (o *Organization) appendNamedTasks(name string, edges ...*Task) {
 		o.Edges.namedTasks[name] = []*Task{}
 	} else {
 		o.Edges.namedTasks[name] = append(o.Edges.namedTasks[name], edges...)
+	}
+}
+
+// NamedPrograms returns the Programs named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (o *Organization) NamedPrograms(name string) ([]*Program, error) {
+	if o.Edges.namedPrograms == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := o.Edges.namedPrograms[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (o *Organization) appendNamedPrograms(name string, edges ...*Program) {
+	if o.Edges.namedPrograms == nil {
+		o.Edges.namedPrograms = make(map[string][]*Program)
+	}
+	if len(edges) == 0 {
+		o.Edges.namedPrograms[name] = []*Program{}
+	} else {
+		o.Edges.namedPrograms[name] = append(o.Edges.namedPrograms[name], edges...)
 	}
 }
 

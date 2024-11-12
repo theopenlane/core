@@ -58,16 +58,19 @@ type NarrativeEdges struct {
 	Procedure []*Procedure `json:"procedure,omitempty"`
 	// Controlobjective holds the value of the controlobjective edge.
 	Controlobjective []*ControlObjective `json:"controlobjective,omitempty"`
+	// Program holds the value of the program edge.
+	Program []*Program `json:"program,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [4]bool
+	loadedTypes [5]bool
 	// totalCount holds the count of the edges above.
-	totalCount [4]map[string]int
+	totalCount [5]map[string]int
 
 	namedPolicy           map[string][]*InternalPolicy
 	namedControl          map[string][]*Control
 	namedProcedure        map[string][]*Procedure
 	namedControlobjective map[string][]*ControlObjective
+	namedProgram          map[string][]*Program
 }
 
 // PolicyOrErr returns the Policy value or an error if the edge
@@ -104,6 +107,15 @@ func (e NarrativeEdges) ControlobjectiveOrErr() ([]*ControlObjective, error) {
 		return e.Controlobjective, nil
 	}
 	return nil, &NotLoadedError{edge: "controlobjective"}
+}
+
+// ProgramOrErr returns the Program value or an error if the edge
+// was not loaded in eager-loading.
+func (e NarrativeEdges) ProgramOrErr() ([]*Program, error) {
+	if e.loadedTypes[4] {
+		return e.Program, nil
+	}
+	return nil, &NotLoadedError{edge: "program"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -245,6 +257,11 @@ func (n *Narrative) QueryProcedure() *ProcedureQuery {
 // QueryControlobjective queries the "controlobjective" edge of the Narrative entity.
 func (n *Narrative) QueryControlobjective() *ControlObjectiveQuery {
 	return NewNarrativeClient(n.config).QueryControlobjective(n)
+}
+
+// QueryProgram queries the "program" edge of the Narrative entity.
+func (n *Narrative) QueryProgram() *ProgramQuery {
+	return NewNarrativeClient(n.config).QueryProgram(n)
 }
 
 // Update returns a builder for updating this Narrative.
@@ -402,6 +419,30 @@ func (n *Narrative) appendNamedControlobjective(name string, edges ...*ControlOb
 		n.Edges.namedControlobjective[name] = []*ControlObjective{}
 	} else {
 		n.Edges.namedControlobjective[name] = append(n.Edges.namedControlobjective[name], edges...)
+	}
+}
+
+// NamedProgram returns the Program named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (n *Narrative) NamedProgram(name string) ([]*Program, error) {
+	if n.Edges.namedProgram == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := n.Edges.namedProgram[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (n *Narrative) appendNamedProgram(name string, edges ...*Program) {
+	if n.Edges.namedProgram == nil {
+		n.Edges.namedProgram = make(map[string][]*Program)
+	}
+	if len(edges) == 0 {
+		n.Edges.namedProgram[name] = []*Program{}
+	} else {
+		n.Edges.namedProgram[name] = append(n.Edges.namedProgram[name], edges...)
 	}
 }
 

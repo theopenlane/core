@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -43,6 +44,7 @@ type TaskQuery struct {
 	withControl               *ControlQuery
 	withControlObjective      *ControlObjectiveQuery
 	withSubcontrol            *SubcontrolQuery
+	withProgram               *ProgramQuery
 	withFKs                   bool
 	loadTotal                 []func(context.Context, []*Task) error
 	modifiers                 []func(*sql.Selector)
@@ -53,6 +55,7 @@ type TaskQuery struct {
 	withNamedControl          map[string]*ControlQuery
 	withNamedControlObjective map[string]*ControlObjectiveQuery
 	withNamedSubcontrol       map[string]*SubcontrolQuery
+	withNamedProgram          map[string]*ProgramQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -314,6 +317,31 @@ func (tq *TaskQuery) QuerySubcontrol() *SubcontrolQuery {
 	return query
 }
 
+// QueryProgram chains the current query on the "program" edge.
+func (tq *TaskQuery) QueryProgram() *ProgramQuery {
+	query := (&ProgramClient{config: tq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := tq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := tq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(task.Table, task.FieldID, selector),
+			sqlgraph.To(program.Table, program.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, task.ProgramTable, task.ProgramPrimaryKey...),
+		)
+		schemaConfig := tq.schemaConfig
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.ProgramTasks
+		fromU = sqlgraph.SetNeighbors(tq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first Task entity from the query.
 // Returns a *NotFoundError when no Task was found.
 func (tq *TaskQuery) First(ctx context.Context) (*Task, error) {
@@ -515,6 +543,7 @@ func (tq *TaskQuery) Clone() *TaskQuery {
 		withControl:          tq.withControl.Clone(),
 		withControlObjective: tq.withControlObjective.Clone(),
 		withSubcontrol:       tq.withSubcontrol.Clone(),
+		withProgram:          tq.withProgram.Clone(),
 		// clone intermediate query.
 		sql:       tq.sql.Clone(),
 		path:      tq.path,
@@ -621,6 +650,17 @@ func (tq *TaskQuery) WithSubcontrol(opts ...func(*SubcontrolQuery)) *TaskQuery {
 	return tq
 }
 
+// WithProgram tells the query-builder to eager-load the nodes that are connected to
+// the "program" edge. The optional arguments are used to configure the query builder of the edge.
+func (tq *TaskQuery) WithProgram(opts ...func(*ProgramQuery)) *TaskQuery {
+	query := (&ProgramClient{config: tq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	tq.withProgram = query
+	return tq
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -706,7 +746,7 @@ func (tq *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, e
 		nodes       = []*Task{}
 		withFKs     = tq.withFKs
 		_spec       = tq.querySpec()
-		loadedTypes = [9]bool{
+		loadedTypes = [10]bool{
 			tq.withAssigner != nil,
 			tq.withAssignee != nil,
 			tq.withOrganization != nil,
@@ -716,6 +756,7 @@ func (tq *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, e
 			tq.withControl != nil,
 			tq.withControlObjective != nil,
 			tq.withSubcontrol != nil,
+			tq.withProgram != nil,
 		}
 	)
 	if tq.withAssigner != nil || tq.withAssignee != nil {
@@ -808,6 +849,13 @@ func (tq *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, e
 			return nil, err
 		}
 	}
+	if query := tq.withProgram; query != nil {
+		if err := tq.loadProgram(ctx, query, nodes,
+			func(n *Task) { n.Edges.Program = []*Program{} },
+			func(n *Task, e *Program) { n.Edges.Program = append(n.Edges.Program, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range tq.withNamedOrganization {
 		if err := tq.loadOrganization(ctx, query, nodes,
 			func(n *Task) { n.appendNamedOrganization(name) },
@@ -854,6 +902,13 @@ func (tq *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, e
 		if err := tq.loadSubcontrol(ctx, query, nodes,
 			func(n *Task) { n.appendNamedSubcontrol(name) },
 			func(n *Task, e *Subcontrol) { n.appendNamedSubcontrol(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range tq.withNamedProgram {
+		if err := tq.loadProgram(ctx, query, nodes,
+			func(n *Task) { n.appendNamedProgram(name) },
+			func(n *Task, e *Program) { n.appendNamedProgram(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1363,6 +1418,68 @@ func (tq *TaskQuery) loadSubcontrol(ctx context.Context, query *SubcontrolQuery,
 	}
 	return nil
 }
+func (tq *TaskQuery) loadProgram(ctx context.Context, query *ProgramQuery, nodes []*Task, init func(*Task), assign func(*Task, *Program)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Task)
+	nids := make(map[string]map[*Task]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(task.ProgramTable)
+		joinT.Schema(tq.schemaConfig.ProgramTasks)
+		s.Join(joinT).On(s.C(program.FieldID), joinT.C(task.ProgramPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(task.ProgramPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(task.ProgramPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Task]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Program](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "program" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 
 func (tq *TaskQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := tq.querySpec()
@@ -1557,6 +1674,20 @@ func (tq *TaskQuery) WithNamedSubcontrol(name string, opts ...func(*SubcontrolQu
 		tq.withNamedSubcontrol = make(map[string]*SubcontrolQuery)
 	}
 	tq.withNamedSubcontrol[name] = query
+	return tq
+}
+
+// WithNamedProgram tells the query-builder to eager-load the nodes that are connected to the "program"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (tq *TaskQuery) WithNamedProgram(name string, opts ...func(*ProgramQuery)) *TaskQuery {
+	query := (&ProgramClient{config: tq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if tq.withNamedProgram == nil {
+		tq.withNamedProgram = make(map[string]*ProgramQuery)
+	}
+	tq.withNamedProgram[name] = query
 	return tq
 }
 

@@ -316,3 +316,155 @@ func (m *OrgMembershipMutation) CreateTuplesFromDelete(ctx context.Context) erro
 
 	return nil
 }
+
+func (m *ProgramMembershipMutation) CreateTuplesFromCreate(ctx context.Context) error {
+
+	// Get fields for tuple creation
+	userID, _ := m.UserID()
+	objectID, _ := m.ProgramID()
+	role, _ := m.Role()
+
+	// get tuple key
+	req := fgax.TupleRequest{
+		SubjectID:   userID,
+		SubjectType: "user",
+		ObjectID:    objectID,
+		ObjectType:  "program",
+		Relation:    role.String(),
+	}
+	tuple := fgax.GetTupleKey(req)
+
+	if _, err := m.Authz.WriteTupleKeys(ctx, []fgax.TupleKey{tuple}, nil); err != nil {
+		log.Error().Err(err).Msg("failed to create relationship tuple")
+
+		return err
+	}
+
+	log.Debug().Str("relation", role.String()).Str("object", tuple.Object.String()).Msg("created relationship tuple")
+
+	return nil
+}
+
+func (m *ProgramMembershipMutation) CreateTuplesFromUpdate(ctx context.Context) error {
+
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDelete(ctx) {
+		return m.CreateTuplesFromDelete(ctx)
+	}
+
+	// get ids that will be updated
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return err
+	}
+
+	var (
+		writes  []fgax.TupleKey
+		deletes []fgax.TupleKey
+	)
+
+	oldRole, err := m.OldRole(ctx)
+	if err != nil {
+		return err
+	}
+
+	newRole, exists := m.Role()
+	if !exists {
+		return entfga.ErrMissingRole
+	}
+
+	if oldRole == newRole {
+		log.Debug().
+			Str("old_role", oldRole.String()).
+			Str("new_role", newRole.String()).
+			Msg("nothing to update, roles are the same")
+
+		return nil
+	}
+
+	// User the IDs of the memberships and delete all related tuples
+	for _, id := range ids {
+		member, err := m.Client().ProgramMembership.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		req := fgax.TupleRequest{
+			SubjectID:   member.UserID,
+			SubjectType: "user",
+			ObjectID:    member.ProgramID,
+			ObjectType:  "program",
+			Relation:    oldRole.String(),
+		}
+		d := fgax.GetTupleKey(req)
+
+		deletes = append(deletes, d)
+
+		req.Relation = newRole.String()
+		w := fgax.GetTupleKey(req)
+
+		writes = append(writes, w)
+
+		if len(writes) == 0 && len(deletes) == 0 {
+			log.Debug().Msg("no relationships to create or delete")
+
+			return nil
+		}
+
+		if _, err := m.Authz.WriteTupleKeys(ctx, writes, deletes); err != nil {
+			log.Error().Err(err).Msg("failed to update relationship tuple")
+
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ProgramMembershipMutation) CreateTuplesFromDelete(ctx context.Context) error {
+
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDelete(ctx) {
+		return nil
+	}
+
+	// get ids that will be deleted
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return err
+	}
+
+	tuples := []fgax.TupleKey{}
+
+	// User the IDs of the memberships and delete all related tuples
+	for _, id := range ids {
+		// this wont work with soft deletes
+		members, err := m.Client().ProgramMembership.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		req := fgax.TupleRequest{
+			SubjectID:   members.UserID,
+			SubjectType: "user",
+			ObjectID:    members.ProgramID,
+			ObjectType:  "program",
+			Relation:    members.Role.String(),
+		}
+		t := fgax.GetTupleKey(req)
+
+		tuples = append(tuples, t)
+	}
+
+	if len(tuples) > 0 {
+		if _, err := m.Authz.WriteTupleKeys(ctx, nil, tuples); err != nil {
+			log.Error().Err(err).Msg("failed to delete relationship tuple")
+
+			return err
+		}
+
+		log.Debug().Msg("deleted relationship tuples")
+	}
+
+	return nil
+}

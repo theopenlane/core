@@ -80,6 +80,8 @@ func (Subcontrol) Edges() []ent.Edge {
 		edge.From("notes", Note.Type).
 			Unique().
 			Ref("subcontrols"),
+		edge.From("programs", Program.Type).
+			Ref("subcontrols"),
 	}
 }
 

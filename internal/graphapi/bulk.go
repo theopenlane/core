@@ -540,6 +540,44 @@ func (r *mutationResolver) bulkCreateProcedure(ctx context.Context, input []*gen
 	}, nil
 }
 
+// bulkCreateProgram uses the CreateBulk function to create multiple Program entities
+func (r *mutationResolver) bulkCreateProgram(ctx context.Context, input []*generated.CreateProgramInput) (*ProgramBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.ProgramCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.Program.Create().SetInput(*data)
+	}
+
+	res, err := c.Program.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "program"})
+	}
+
+	// return response
+	return &ProgramBulkCreatePayload{
+		Programs: res,
+	}, nil
+}
+
+// bulkCreateProgramMembership uses the CreateBulk function to create multiple ProgramMembership entities
+func (r *mutationResolver) bulkCreateProgramMembership(ctx context.Context, input []*generated.CreateProgramMembershipInput) (*ProgramMembershipBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.ProgramMembershipCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.ProgramMembership.Create().SetInput(*data)
+	}
+
+	res, err := c.ProgramMembership.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "programmembership"})
+	}
+
+	// return response
+	return &ProgramMembershipBulkCreatePayload{
+		ProgramMemberships: res,
+	}, nil
+}
+
 // bulkCreateRisk uses the CreateBulk function to create multiple Risk entities
 func (r *mutationResolver) bulkCreateRisk(ctx context.Context, input []*generated.CreateRiskInput) (*RiskBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)

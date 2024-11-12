@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up programMembership by ID
+    """
+     programMembership(
+        """
+        ID of the programMembership
+        """
+        id: ID!
+    ):  ProgramMembership!
+}
+
+extend type Mutation{
+    """
+    Create a new programMembership
+    """
+    createProgramMembership(
+        """
+        values of the programMembership
+        """
+        input: CreateProgramMembershipInput!
+    ): ProgramMembershipCreatePayload!
+    """
+    Create multiple new programMemberships
+    """
+    createBulkProgramMembership(
+        """
+        values of the programMembership
+        """
+        input: [CreateProgramMembershipInput!]
+    ): ProgramMembershipBulkCreatePayload!
+    """
+    Create multiple new programMemberships via file upload
+    """
+    createBulkCSVProgramMembership(
+        """
+        csv file containing values of the programMembership
+        """
+        input: Upload!
+    ): ProgramMembershipBulkCreatePayload!
+    """
+    Update an existing programMembership
+    """
+    updateProgramMembership(
+        """
+        ID of the programMembership
+        """
+        id: ID!
+        """
+        New values for the programMembership
+        """
+        input: UpdateProgramMembershipInput!
+    ): ProgramMembershipUpdatePayload!
+    """
+    Delete an existing programMembership
+    """
+    deleteProgramMembership(
+        """
+        ID of the programMembership
+        """
+        id: ID!
+    ): ProgramMembershipDeletePayload!
+}
+
+"""
+Return response for createProgramMembership mutation
+"""
+type ProgramMembershipCreatePayload {
+    """
+    Created programMembership
+    """
+    programMembership: ProgramMembership!
+}
+
+"""
+Return response for updateProgramMembership mutation
+"""
+type ProgramMembershipUpdatePayload {
+    """
+    Updated programMembership
+    """
+    programMembership: ProgramMembership!
+}
+
+"""
+Return response for deleteProgramMembership mutation
+"""
+type ProgramMembershipDeletePayload {
+    """
+    Deleted programMembership ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkProgramMembership mutation
+"""
+type ProgramMembershipBulkCreatePayload {
+    """
+    Created programMemberships
+    """
+    programMemberships: [ProgramMembership!]
+}

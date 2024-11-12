@@ -55,13 +55,16 @@ type NoteEdges struct {
 	Entity *Entity `json:"entity,omitempty"`
 	// Subcontrols holds the value of the subcontrols edge.
 	Subcontrols []*Subcontrol `json:"subcontrols,omitempty"`
+	// Program holds the value of the program edge.
+	Program []*Program `json:"program,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [4]bool
 	// totalCount holds the count of the edges above.
-	totalCount [3]map[string]int
+	totalCount [4]map[string]int
 
 	namedSubcontrols map[string][]*Subcontrol
+	namedProgram     map[string][]*Program
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -93,6 +96,15 @@ func (e NoteEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 		return e.Subcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "subcontrols"}
+}
+
+// ProgramOrErr returns the Program value or an error if the edge
+// was not loaded in eager-loading.
+func (e NoteEdges) ProgramOrErr() ([]*Program, error) {
+	if e.loadedTypes[3] {
+		return e.Program, nil
+	}
+	return nil, &NotLoadedError{edge: "program"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -226,6 +238,11 @@ func (n *Note) QuerySubcontrols() *SubcontrolQuery {
 	return NewNoteClient(n.config).QuerySubcontrols(n)
 }
 
+// QueryProgram queries the "program" edge of the Note entity.
+func (n *Note) QueryProgram() *ProgramQuery {
+	return NewNoteClient(n.config).QueryProgram(n)
+}
+
 // Update returns a builder for updating this Note.
 // Note that you need to call Note.Unwrap() before calling this method if this Note
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -303,6 +320,30 @@ func (n *Note) appendNamedSubcontrols(name string, edges ...*Subcontrol) {
 		n.Edges.namedSubcontrols[name] = []*Subcontrol{}
 	} else {
 		n.Edges.namedSubcontrols[name] = append(n.Edges.namedSubcontrols[name], edges...)
+	}
+}
+
+// NamedProgram returns the Program named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (n *Note) NamedProgram(name string) ([]*Program, error) {
+	if n.Edges.namedProgram == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := n.Edges.namedProgram[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (n *Note) appendNamedProgram(name string, edges ...*Program) {
+	if n.Edges.namedProgram == nil {
+		n.Edges.namedProgram = make(map[string][]*Program)
+	}
+	if len(edges) == 0 {
+		n.Edges.namedProgram[name] = []*Program{}
+	} else {
+		n.Edges.namedProgram[name] = append(n.Edges.namedProgram[name], edges...)
 	}
 }
 

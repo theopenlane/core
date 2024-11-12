@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -31,12 +32,14 @@ type RiskQuery struct {
 	withControl          *ControlQuery
 	withProcedure        *ProcedureQuery
 	withActionplans      *ActionPlanQuery
+	withProgram          *ProgramQuery
 	withFKs              bool
 	loadTotal            []func(context.Context, []*Risk) error
 	modifiers            []func(*sql.Selector)
 	withNamedControl     map[string]*ControlQuery
 	withNamedProcedure   map[string]*ProcedureQuery
 	withNamedActionplans map[string]*ActionPlanQuery
+	withNamedProgram     map[string]*ProgramQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -142,6 +145,31 @@ func (rq *RiskQuery) QueryActionplans() *ActionPlanQuery {
 		schemaConfig := rq.schemaConfig
 		step.To.Schema = schemaConfig.ActionPlan
 		step.Edge.Schema = schemaConfig.RiskActionplans
+		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryProgram chains the current query on the "program" edge.
+func (rq *RiskQuery) QueryProgram() *ProgramQuery {
+	query := (&ProgramClient{config: rq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := rq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := rq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, selector),
+			sqlgraph.To(program.Table, program.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, risk.ProgramTable, risk.ProgramPrimaryKey...),
+		)
+		schemaConfig := rq.schemaConfig
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.ProgramRisks
 		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -343,6 +371,7 @@ func (rq *RiskQuery) Clone() *RiskQuery {
 		withControl:     rq.withControl.Clone(),
 		withProcedure:   rq.withProcedure.Clone(),
 		withActionplans: rq.withActionplans.Clone(),
+		withProgram:     rq.withProgram.Clone(),
 		// clone intermediate query.
 		sql:       rq.sql.Clone(),
 		path:      rq.path,
@@ -380,6 +409,17 @@ func (rq *RiskQuery) WithActionplans(opts ...func(*ActionPlanQuery)) *RiskQuery 
 		opt(query)
 	}
 	rq.withActionplans = query
+	return rq
+}
+
+// WithProgram tells the query-builder to eager-load the nodes that are connected to
+// the "program" edge. The optional arguments are used to configure the query builder of the edge.
+func (rq *RiskQuery) WithProgram(opts ...func(*ProgramQuery)) *RiskQuery {
+	query := (&ProgramClient{config: rq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	rq.withProgram = query
 	return rq
 }
 
@@ -462,10 +502,11 @@ func (rq *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 		nodes       = []*Risk{}
 		withFKs     = rq.withFKs
 		_spec       = rq.querySpec()
-		loadedTypes = [3]bool{
+		loadedTypes = [4]bool{
 			rq.withControl != nil,
 			rq.withProcedure != nil,
 			rq.withActionplans != nil,
+			rq.withProgram != nil,
 		}
 	)
 	if withFKs {
@@ -515,6 +556,13 @@ func (rq *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 			return nil, err
 		}
 	}
+	if query := rq.withProgram; query != nil {
+		if err := rq.loadProgram(ctx, query, nodes,
+			func(n *Risk) { n.Edges.Program = []*Program{} },
+			func(n *Risk, e *Program) { n.Edges.Program = append(n.Edges.Program, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range rq.withNamedControl {
 		if err := rq.loadControl(ctx, query, nodes,
 			func(n *Risk) { n.appendNamedControl(name) },
@@ -533,6 +581,13 @@ func (rq *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 		if err := rq.loadActionplans(ctx, query, nodes,
 			func(n *Risk) { n.appendNamedActionplans(name) },
 			func(n *Risk, e *ActionPlan) { n.appendNamedActionplans(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range rq.withNamedProgram {
+		if err := rq.loadProgram(ctx, query, nodes,
+			func(n *Risk) { n.appendNamedProgram(name) },
+			func(n *Risk, e *Program) { n.appendNamedProgram(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -730,6 +785,68 @@ func (rq *RiskQuery) loadActionplans(ctx context.Context, query *ActionPlanQuery
 	}
 	return nil
 }
+func (rq *RiskQuery) loadProgram(ctx context.Context, query *ProgramQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Program)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Risk)
+	nids := make(map[string]map[*Risk]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(risk.ProgramTable)
+		joinT.Schema(rq.schemaConfig.ProgramRisks)
+		s.Join(joinT).On(s.C(program.FieldID), joinT.C(risk.ProgramPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(risk.ProgramPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(risk.ProgramPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Risk]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Program](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "program" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 
 func (rq *RiskQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := rq.querySpec()
@@ -868,6 +985,20 @@ func (rq *RiskQuery) WithNamedActionplans(name string, opts ...func(*ActionPlanQ
 		rq.withNamedActionplans = make(map[string]*ActionPlanQuery)
 	}
 	rq.withNamedActionplans[name] = query
+	return rq
+}
+
+// WithNamedProgram tells the query-builder to eager-load the nodes that are connected to the "program"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (rq *RiskQuery) WithNamedProgram(name string, opts ...func(*ProgramQuery)) *RiskQuery {
+	query := (&ProgramClient{config: rq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if rq.withNamedProgram == nil {
+		rq.withNamedProgram = make(map[string]*ProgramQuery)
+	}
+	rq.withNamedProgram[name] = query
 	return rq
 }
 

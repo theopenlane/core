@@ -41,6 +41,8 @@ const (
 	EdgeEntity = "entity"
 	// EdgeSubcontrols holds the string denoting the subcontrols edge name in mutations.
 	EdgeSubcontrols = "subcontrols"
+	// EdgeProgram holds the string denoting the program edge name in mutations.
+	EdgeProgram = "program"
 	// Table holds the table name of the note in the database.
 	Table = "notes"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -64,6 +66,11 @@ const (
 	SubcontrolsInverseTable = "subcontrols"
 	// SubcontrolsColumn is the table column denoting the subcontrols relation/edge.
 	SubcontrolsColumn = "note_subcontrols"
+	// ProgramTable is the table that holds the program relation/edge. The primary key declared below.
+	ProgramTable = "program_notes"
+	// ProgramInverseTable is the table name for the Program entity.
+	// It exists in this package in order to avoid circular dependency with the "program" package.
+	ProgramInverseTable = "programs"
 )
 
 // Columns holds all SQL columns for note fields.
@@ -86,6 +93,12 @@ var Columns = []string{
 var ForeignKeys = []string{
 	"entity_notes",
 }
+
+var (
+	// ProgramPrimaryKey and ProgramColumn2 are the table columns denoting the
+	// primary key for the program relation (M2M).
+	ProgramPrimaryKey = []string{"program_id", "note_id"}
+)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
@@ -209,6 +222,20 @@ func BySubcontrols(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newSubcontrolsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByProgramCount orders the results by program count.
+func ByProgramCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newProgramStep(), opts...)
+	}
+}
+
+// ByProgram orders the results by program terms.
+func ByProgram(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newProgramStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -228,5 +255,12 @@ func newSubcontrolsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(SubcontrolsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, SubcontrolsTable, SubcontrolsColumn),
+	)
+}
+func newProgramStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ProgramInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ProgramTable, ProgramPrimaryKey...),
 	)
 }

@@ -264,6 +264,26 @@ type OpenlaneGraphClient interface {
 	UpdateProcedure(ctx context.Context, updateProcedureID string, input UpdateProcedureInput, interceptors ...clientv2.RequestInterceptor) (*UpdateProcedure, error)
 	GetAllProcedureHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllProcedureHistories, error)
 	GetProcedureHistories(ctx context.Context, where *ProcedureHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetProcedureHistories, error)
+	CreateBulkCSVProgram(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVProgram, error)
+	CreateBulkProgram(ctx context.Context, input []*CreateProgramInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkProgram, error)
+	CreateProgram(ctx context.Context, input CreateProgramInput, interceptors ...clientv2.RequestInterceptor) (*CreateProgram, error)
+	DeleteProgram(ctx context.Context, deleteProgramID string, interceptors ...clientv2.RequestInterceptor) (*DeleteProgram, error)
+	GetAllPrograms(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllPrograms, error)
+	GetProgramByID(ctx context.Context, programID string, interceptors ...clientv2.RequestInterceptor) (*GetProgramByID, error)
+	GetPrograms(ctx context.Context, where *ProgramWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetPrograms, error)
+	UpdateProgram(ctx context.Context, updateProgramID string, input UpdateProgramInput, interceptors ...clientv2.RequestInterceptor) (*UpdateProgram, error)
+	GetAllProgramHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllProgramHistories, error)
+	GetProgramHistories(ctx context.Context, where *ProgramHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetProgramHistories, error)
+	CreateBulkCSVProgramMembership(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVProgramMembership, error)
+	CreateBulkProgramMembership(ctx context.Context, input []*CreateProgramMembershipInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkProgramMembership, error)
+	CreateProgramMembership(ctx context.Context, input CreateProgramMembershipInput, interceptors ...clientv2.RequestInterceptor) (*CreateProgramMembership, error)
+	DeleteProgramMembership(ctx context.Context, deleteProgramMembershipID string, interceptors ...clientv2.RequestInterceptor) (*DeleteProgramMembership, error)
+	GetAllProgramMemberships(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllProgramMemberships, error)
+	GetProgramMembershipByID(ctx context.Context, programMembershipID string, interceptors ...clientv2.RequestInterceptor) (*GetProgramMembershipByID, error)
+	GetProgramMemberships(ctx context.Context, where *ProgramMembershipWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetProgramMemberships, error)
+	UpdateProgramMembership(ctx context.Context, updateProgramMembershipID string, input UpdateProgramMembershipInput, interceptors ...clientv2.RequestInterceptor) (*UpdateProgramMembership, error)
+	GetAllProgramMembershipHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllProgramMembershipHistories, error)
+	GetProgramMembershipHistories(ctx context.Context, where *ProgramMembershipHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetProgramMembershipHistories, error)
 	CreateBulkCSVRisk(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVRisk, error)
 	CreateBulkRisk(ctx context.Context, input []*CreateRiskInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkRisk, error)
 	CreateRisk(ctx context.Context, input CreateRiskInput, interceptors ...clientv2.RequestInterceptor) (*CreateRisk, error)
@@ -3299,6 +3319,63 @@ func (t *AdminSearch_AdminSearch_Nodes_ProcedureSearchResult) GetProcedures() []
 	return t.Procedures
 }
 
+type AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs struct {
+	ID          string   "json:\"id\" graphql:\"id\""
+	DeletedBy   *string  "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	Tags        []string "json:\"tags,omitempty\" graphql:\"tags\""
+	OwnerID     *string  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Name        string   "json:\"name\" graphql:\"name\""
+	Description *string  "json:\"description,omitempty\" graphql:\"description\""
+}
+
+func (t *AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs) GetID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs{}
+	}
+	return t.ID
+}
+func (t *AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs) GetDeletedBy() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs{}
+	}
+	return t.DeletedBy
+}
+func (t *AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs) GetTags() []string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs{}
+	}
+	return t.Tags
+}
+func (t *AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs) GetOwnerID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs{}
+	}
+	return t.OwnerID
+}
+func (t *AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs) GetName() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs{}
+	}
+	return t.Name
+}
+func (t *AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs) GetDescription() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs{}
+	}
+	return t.Description
+}
+
+type AdminSearch_AdminSearch_Nodes_ProgramSearchResult struct {
+	Programs []*AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs "json:\"programs,omitempty\" graphql:\"programs\""
+}
+
+func (t *AdminSearch_AdminSearch_Nodes_ProgramSearchResult) GetPrograms() []*AdminSearch_AdminSearch_Nodes_ProgramSearchResult_Programs {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_ProgramSearchResult{}
+	}
+	return t.Programs
+}
+
 type AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks struct {
 	DeletedBy     *string                "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	ID            string                 "json:\"id\" graphql:\"id\""
@@ -4098,6 +4175,7 @@ type AdminSearch_AdminSearch_Nodes struct {
 	OrganizationSettingSearchResult    AdminSearch_AdminSearch_Nodes_OrganizationSettingSearchResult    "graphql:\"... on OrganizationSettingSearchResult\""
 	PersonalAccessTokenSearchResult    AdminSearch_AdminSearch_Nodes_PersonalAccessTokenSearchResult    "graphql:\"... on PersonalAccessTokenSearchResult\""
 	ProcedureSearchResult              AdminSearch_AdminSearch_Nodes_ProcedureSearchResult              "graphql:\"... on ProcedureSearchResult\""
+	ProgramSearchResult                AdminSearch_AdminSearch_Nodes_ProgramSearchResult                "graphql:\"... on ProgramSearchResult\""
 	RiskSearchResult                   AdminSearch_AdminSearch_Nodes_RiskSearchResult                   "graphql:\"... on RiskSearchResult\""
 	StandardSearchResult               AdminSearch_AdminSearch_Nodes_StandardSearchResult               "graphql:\"... on StandardSearchResult\""
 	SubcontrolSearchResult             AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult             "graphql:\"... on SubcontrolSearchResult\""
@@ -4259,6 +4337,12 @@ func (t *AdminSearch_AdminSearch_Nodes) GetProcedureSearchResult() *AdminSearch_
 		t = &AdminSearch_AdminSearch_Nodes{}
 	}
 	return &t.ProcedureSearchResult
+}
+func (t *AdminSearch_AdminSearch_Nodes) GetProgramSearchResult() *AdminSearch_AdminSearch_Nodes_ProgramSearchResult {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes{}
+	}
+	return &t.ProgramSearchResult
 }
 func (t *AdminSearch_AdminSearch_Nodes) GetRiskSearchResult() *AdminSearch_AdminSearch_Nodes_RiskSearchResult {
 	if t == nil {
@@ -31976,6 +32060,1897 @@ func (t *GetProcedureHistories_ProcedureHistories) GetEdges() []*GetProcedureHis
 	return t.Edges
 }
 
+type CreateBulkCSVProgram_CreateBulkCSVProgram_Programs struct {
+	AuditorReadComments  bool                "json:\"auditorReadComments\" graphql:\"auditorReadComments\""
+	AuditorReady         bool                "json:\"auditorReady\" graphql:\"auditorReady\""
+	AuditorWriteComments bool                "json:\"auditorWriteComments\" graphql:\"auditorWriteComments\""
+	CreatedAt            *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy            *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description          *string             "json:\"description,omitempty\" graphql:\"description\""
+	EndDate              *time.Time          "json:\"endDate,omitempty\" graphql:\"endDate\""
+	ID                   string              "json:\"id\" graphql:\"id\""
+	Name                 string              "json:\"name\" graphql:\"name\""
+	OwnerID              *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	StartDate            *time.Time          "json:\"startDate,omitempty\" graphql:\"startDate\""
+	Status               enums.ProgramStatus "json:\"status\" graphql:\"status\""
+	Tags                 []string            "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt            *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy            *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs) GetAuditorReadComments() bool {
+	if t == nil {
+		t = &CreateBulkCSVProgram_CreateBulkCSVProgram_Programs{}
+	}
+	return t.AuditorReadComments
+}
+func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs) GetAuditorReady() bool {
+	if t == nil {
+		t = &CreateBulkCSVProgram_CreateBulkCSVProgram_Programs{}
+	}
+	return t.AuditorReady
+}
+func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs) GetAuditorWriteComments() bool {
+	if t == nil {
+		t = &CreateBulkCSVProgram_CreateBulkCSVProgram_Programs{}
+	}
+	return t.AuditorWriteComments
+}
+func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVProgram_CreateBulkCSVProgram_Programs{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVProgram_CreateBulkCSVProgram_Programs{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs) GetDescription() *string {
+	if t == nil {
+		t = &CreateBulkCSVProgram_CreateBulkCSVProgram_Programs{}
+	}
+	return t.Description
+}
+func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs) GetEndDate() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVProgram_CreateBulkCSVProgram_Programs{}
+	}
+	return t.EndDate
+}
+func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVProgram_CreateBulkCSVProgram_Programs{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs) GetName() string {
+	if t == nil {
+		t = &CreateBulkCSVProgram_CreateBulkCSVProgram_Programs{}
+	}
+	return t.Name
+}
+func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkCSVProgram_CreateBulkCSVProgram_Programs{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs) GetStartDate() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVProgram_CreateBulkCSVProgram_Programs{}
+	}
+	return t.StartDate
+}
+func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs) GetStatus() *enums.ProgramStatus {
+	if t == nil {
+		t = &CreateBulkCSVProgram_CreateBulkCSVProgram_Programs{}
+	}
+	return &t.Status
+}
+func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkCSVProgram_CreateBulkCSVProgram_Programs{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVProgram_CreateBulkCSVProgram_Programs{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkCSVProgram_CreateBulkCSVProgram_Programs) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVProgram_CreateBulkCSVProgram_Programs{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkCSVProgram_CreateBulkCSVProgram struct {
+	Programs []*CreateBulkCSVProgram_CreateBulkCSVProgram_Programs "json:\"programs,omitempty\" graphql:\"programs\""
+}
+
+func (t *CreateBulkCSVProgram_CreateBulkCSVProgram) GetPrograms() []*CreateBulkCSVProgram_CreateBulkCSVProgram_Programs {
+	if t == nil {
+		t = &CreateBulkCSVProgram_CreateBulkCSVProgram{}
+	}
+	return t.Programs
+}
+
+type CreateBulkProgram_CreateBulkProgram_Programs struct {
+	AuditorReadComments  bool                "json:\"auditorReadComments\" graphql:\"auditorReadComments\""
+	AuditorReady         bool                "json:\"auditorReady\" graphql:\"auditorReady\""
+	AuditorWriteComments bool                "json:\"auditorWriteComments\" graphql:\"auditorWriteComments\""
+	CreatedAt            *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy            *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description          *string             "json:\"description,omitempty\" graphql:\"description\""
+	EndDate              *time.Time          "json:\"endDate,omitempty\" graphql:\"endDate\""
+	ID                   string              "json:\"id\" graphql:\"id\""
+	Name                 string              "json:\"name\" graphql:\"name\""
+	OwnerID              *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	StartDate            *time.Time          "json:\"startDate,omitempty\" graphql:\"startDate\""
+	Status               enums.ProgramStatus "json:\"status\" graphql:\"status\""
+	Tags                 []string            "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt            *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy            *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateBulkProgram_CreateBulkProgram_Programs) GetAuditorReadComments() bool {
+	if t == nil {
+		t = &CreateBulkProgram_CreateBulkProgram_Programs{}
+	}
+	return t.AuditorReadComments
+}
+func (t *CreateBulkProgram_CreateBulkProgram_Programs) GetAuditorReady() bool {
+	if t == nil {
+		t = &CreateBulkProgram_CreateBulkProgram_Programs{}
+	}
+	return t.AuditorReady
+}
+func (t *CreateBulkProgram_CreateBulkProgram_Programs) GetAuditorWriteComments() bool {
+	if t == nil {
+		t = &CreateBulkProgram_CreateBulkProgram_Programs{}
+	}
+	return t.AuditorWriteComments
+}
+func (t *CreateBulkProgram_CreateBulkProgram_Programs) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkProgram_CreateBulkProgram_Programs{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkProgram_CreateBulkProgram_Programs) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkProgram_CreateBulkProgram_Programs{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkProgram_CreateBulkProgram_Programs) GetDescription() *string {
+	if t == nil {
+		t = &CreateBulkProgram_CreateBulkProgram_Programs{}
+	}
+	return t.Description
+}
+func (t *CreateBulkProgram_CreateBulkProgram_Programs) GetEndDate() *time.Time {
+	if t == nil {
+		t = &CreateBulkProgram_CreateBulkProgram_Programs{}
+	}
+	return t.EndDate
+}
+func (t *CreateBulkProgram_CreateBulkProgram_Programs) GetID() string {
+	if t == nil {
+		t = &CreateBulkProgram_CreateBulkProgram_Programs{}
+	}
+	return t.ID
+}
+func (t *CreateBulkProgram_CreateBulkProgram_Programs) GetName() string {
+	if t == nil {
+		t = &CreateBulkProgram_CreateBulkProgram_Programs{}
+	}
+	return t.Name
+}
+func (t *CreateBulkProgram_CreateBulkProgram_Programs) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkProgram_CreateBulkProgram_Programs{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkProgram_CreateBulkProgram_Programs) GetStartDate() *time.Time {
+	if t == nil {
+		t = &CreateBulkProgram_CreateBulkProgram_Programs{}
+	}
+	return t.StartDate
+}
+func (t *CreateBulkProgram_CreateBulkProgram_Programs) GetStatus() *enums.ProgramStatus {
+	if t == nil {
+		t = &CreateBulkProgram_CreateBulkProgram_Programs{}
+	}
+	return &t.Status
+}
+func (t *CreateBulkProgram_CreateBulkProgram_Programs) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkProgram_CreateBulkProgram_Programs{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkProgram_CreateBulkProgram_Programs) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkProgram_CreateBulkProgram_Programs{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkProgram_CreateBulkProgram_Programs) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkProgram_CreateBulkProgram_Programs{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateBulkProgram_CreateBulkProgram struct {
+	Programs []*CreateBulkProgram_CreateBulkProgram_Programs "json:\"programs,omitempty\" graphql:\"programs\""
+}
+
+func (t *CreateBulkProgram_CreateBulkProgram) GetPrograms() []*CreateBulkProgram_CreateBulkProgram_Programs {
+	if t == nil {
+		t = &CreateBulkProgram_CreateBulkProgram{}
+	}
+	return t.Programs
+}
+
+type CreateProgram_CreateProgram_Program struct {
+	AuditorReadComments  bool                "json:\"auditorReadComments\" graphql:\"auditorReadComments\""
+	AuditorReady         bool                "json:\"auditorReady\" graphql:\"auditorReady\""
+	AuditorWriteComments bool                "json:\"auditorWriteComments\" graphql:\"auditorWriteComments\""
+	CreatedAt            *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy            *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description          *string             "json:\"description,omitempty\" graphql:\"description\""
+	EndDate              *time.Time          "json:\"endDate,omitempty\" graphql:\"endDate\""
+	ID                   string              "json:\"id\" graphql:\"id\""
+	Name                 string              "json:\"name\" graphql:\"name\""
+	OwnerID              *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	StartDate            *time.Time          "json:\"startDate,omitempty\" graphql:\"startDate\""
+	Status               enums.ProgramStatus "json:\"status\" graphql:\"status\""
+	Tags                 []string            "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt            *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy            *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *CreateProgram_CreateProgram_Program) GetAuditorReadComments() bool {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program{}
+	}
+	return t.AuditorReadComments
+}
+func (t *CreateProgram_CreateProgram_Program) GetAuditorReady() bool {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program{}
+	}
+	return t.AuditorReady
+}
+func (t *CreateProgram_CreateProgram_Program) GetAuditorWriteComments() bool {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program{}
+	}
+	return t.AuditorWriteComments
+}
+func (t *CreateProgram_CreateProgram_Program) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateProgram_CreateProgram_Program) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateProgram_CreateProgram_Program) GetDescription() *string {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program{}
+	}
+	return t.Description
+}
+func (t *CreateProgram_CreateProgram_Program) GetEndDate() *time.Time {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program{}
+	}
+	return t.EndDate
+}
+func (t *CreateProgram_CreateProgram_Program) GetID() string {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program{}
+	}
+	return t.ID
+}
+func (t *CreateProgram_CreateProgram_Program) GetName() string {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program{}
+	}
+	return t.Name
+}
+func (t *CreateProgram_CreateProgram_Program) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program{}
+	}
+	return t.OwnerID
+}
+func (t *CreateProgram_CreateProgram_Program) GetStartDate() *time.Time {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program{}
+	}
+	return t.StartDate
+}
+func (t *CreateProgram_CreateProgram_Program) GetStatus() *enums.ProgramStatus {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program{}
+	}
+	return &t.Status
+}
+func (t *CreateProgram_CreateProgram_Program) GetTags() []string {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program{}
+	}
+	return t.Tags
+}
+func (t *CreateProgram_CreateProgram_Program) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateProgram_CreateProgram_Program) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program{}
+	}
+	return t.UpdatedBy
+}
+
+type CreateProgram_CreateProgram struct {
+	Program CreateProgram_CreateProgram_Program "json:\"program\" graphql:\"program\""
+}
+
+func (t *CreateProgram_CreateProgram) GetProgram() *CreateProgram_CreateProgram_Program {
+	if t == nil {
+		t = &CreateProgram_CreateProgram{}
+	}
+	return &t.Program
+}
+
+type DeleteProgram_DeleteProgram struct {
+	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
+}
+
+func (t *DeleteProgram_DeleteProgram) GetDeletedID() string {
+	if t == nil {
+		t = &DeleteProgram_DeleteProgram{}
+	}
+	return t.DeletedID
+}
+
+type GetAllPrograms_Programs_Edges_Node struct {
+	AuditorReadComments  bool                "json:\"auditorReadComments\" graphql:\"auditorReadComments\""
+	AuditorReady         bool                "json:\"auditorReady\" graphql:\"auditorReady\""
+	AuditorWriteComments bool                "json:\"auditorWriteComments\" graphql:\"auditorWriteComments\""
+	CreatedAt            *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy            *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description          *string             "json:\"description,omitempty\" graphql:\"description\""
+	EndDate              *time.Time          "json:\"endDate,omitempty\" graphql:\"endDate\""
+	ID                   string              "json:\"id\" graphql:\"id\""
+	Name                 string              "json:\"name\" graphql:\"name\""
+	OwnerID              *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	StartDate            *time.Time          "json:\"startDate,omitempty\" graphql:\"startDate\""
+	Status               enums.ProgramStatus "json:\"status\" graphql:\"status\""
+	Tags                 []string            "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt            *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy            *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllPrograms_Programs_Edges_Node) GetAuditorReadComments() bool {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node{}
+	}
+	return t.AuditorReadComments
+}
+func (t *GetAllPrograms_Programs_Edges_Node) GetAuditorReady() bool {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node{}
+	}
+	return t.AuditorReady
+}
+func (t *GetAllPrograms_Programs_Edges_Node) GetAuditorWriteComments() bool {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node{}
+	}
+	return t.AuditorWriteComments
+}
+func (t *GetAllPrograms_Programs_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllPrograms_Programs_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllPrograms_Programs_Edges_Node) GetDescription() *string {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node{}
+	}
+	return t.Description
+}
+func (t *GetAllPrograms_Programs_Edges_Node) GetEndDate() *time.Time {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node{}
+	}
+	return t.EndDate
+}
+func (t *GetAllPrograms_Programs_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllPrograms_Programs_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GetAllPrograms_Programs_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllPrograms_Programs_Edges_Node) GetStartDate() *time.Time {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node{}
+	}
+	return t.StartDate
+}
+func (t *GetAllPrograms_Programs_Edges_Node) GetStatus() *enums.ProgramStatus {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node{}
+	}
+	return &t.Status
+}
+func (t *GetAllPrograms_Programs_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllPrograms_Programs_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllPrograms_Programs_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllPrograms_Programs_Edges struct {
+	Node *GetAllPrograms_Programs_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllPrograms_Programs_Edges) GetNode() *GetAllPrograms_Programs_Edges_Node {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllPrograms_Programs struct {
+	Edges []*GetAllPrograms_Programs_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetAllPrograms_Programs) GetEdges() []*GetAllPrograms_Programs_Edges {
+	if t == nil {
+		t = &GetAllPrograms_Programs{}
+	}
+	return t.Edges
+}
+
+type GetProgramByID_Program struct {
+	AuditorReadComments  bool                "json:\"auditorReadComments\" graphql:\"auditorReadComments\""
+	AuditorReady         bool                "json:\"auditorReady\" graphql:\"auditorReady\""
+	AuditorWriteComments bool                "json:\"auditorWriteComments\" graphql:\"auditorWriteComments\""
+	CreatedAt            *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy            *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description          *string             "json:\"description,omitempty\" graphql:\"description\""
+	EndDate              *time.Time          "json:\"endDate,omitempty\" graphql:\"endDate\""
+	ID                   string              "json:\"id\" graphql:\"id\""
+	Name                 string              "json:\"name\" graphql:\"name\""
+	OwnerID              *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	StartDate            *time.Time          "json:\"startDate,omitempty\" graphql:\"startDate\""
+	Status               enums.ProgramStatus "json:\"status\" graphql:\"status\""
+	Tags                 []string            "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt            *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy            *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetProgramByID_Program) GetAuditorReadComments() bool {
+	if t == nil {
+		t = &GetProgramByID_Program{}
+	}
+	return t.AuditorReadComments
+}
+func (t *GetProgramByID_Program) GetAuditorReady() bool {
+	if t == nil {
+		t = &GetProgramByID_Program{}
+	}
+	return t.AuditorReady
+}
+func (t *GetProgramByID_Program) GetAuditorWriteComments() bool {
+	if t == nil {
+		t = &GetProgramByID_Program{}
+	}
+	return t.AuditorWriteComments
+}
+func (t *GetProgramByID_Program) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetProgramByID_Program{}
+	}
+	return t.CreatedAt
+}
+func (t *GetProgramByID_Program) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetProgramByID_Program{}
+	}
+	return t.CreatedBy
+}
+func (t *GetProgramByID_Program) GetDescription() *string {
+	if t == nil {
+		t = &GetProgramByID_Program{}
+	}
+	return t.Description
+}
+func (t *GetProgramByID_Program) GetEndDate() *time.Time {
+	if t == nil {
+		t = &GetProgramByID_Program{}
+	}
+	return t.EndDate
+}
+func (t *GetProgramByID_Program) GetID() string {
+	if t == nil {
+		t = &GetProgramByID_Program{}
+	}
+	return t.ID
+}
+func (t *GetProgramByID_Program) GetName() string {
+	if t == nil {
+		t = &GetProgramByID_Program{}
+	}
+	return t.Name
+}
+func (t *GetProgramByID_Program) GetOwnerID() *string {
+	if t == nil {
+		t = &GetProgramByID_Program{}
+	}
+	return t.OwnerID
+}
+func (t *GetProgramByID_Program) GetStartDate() *time.Time {
+	if t == nil {
+		t = &GetProgramByID_Program{}
+	}
+	return t.StartDate
+}
+func (t *GetProgramByID_Program) GetStatus() *enums.ProgramStatus {
+	if t == nil {
+		t = &GetProgramByID_Program{}
+	}
+	return &t.Status
+}
+func (t *GetProgramByID_Program) GetTags() []string {
+	if t == nil {
+		t = &GetProgramByID_Program{}
+	}
+	return t.Tags
+}
+func (t *GetProgramByID_Program) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetProgramByID_Program{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetProgramByID_Program) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetProgramByID_Program{}
+	}
+	return t.UpdatedBy
+}
+
+type GetPrograms_Programs_Edges_Node struct {
+	AuditorReadComments  bool                "json:\"auditorReadComments\" graphql:\"auditorReadComments\""
+	AuditorReady         bool                "json:\"auditorReady\" graphql:\"auditorReady\""
+	AuditorWriteComments bool                "json:\"auditorWriteComments\" graphql:\"auditorWriteComments\""
+	CreatedAt            *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy            *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description          *string             "json:\"description,omitempty\" graphql:\"description\""
+	EndDate              *time.Time          "json:\"endDate,omitempty\" graphql:\"endDate\""
+	ID                   string              "json:\"id\" graphql:\"id\""
+	Name                 string              "json:\"name\" graphql:\"name\""
+	OwnerID              *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	StartDate            *time.Time          "json:\"startDate,omitempty\" graphql:\"startDate\""
+	Status               enums.ProgramStatus "json:\"status\" graphql:\"status\""
+	Tags                 []string            "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt            *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy            *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetPrograms_Programs_Edges_Node) GetAuditorReadComments() bool {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node{}
+	}
+	return t.AuditorReadComments
+}
+func (t *GetPrograms_Programs_Edges_Node) GetAuditorReady() bool {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node{}
+	}
+	return t.AuditorReady
+}
+func (t *GetPrograms_Programs_Edges_Node) GetAuditorWriteComments() bool {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node{}
+	}
+	return t.AuditorWriteComments
+}
+func (t *GetPrograms_Programs_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetPrograms_Programs_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetPrograms_Programs_Edges_Node) GetDescription() *string {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node{}
+	}
+	return t.Description
+}
+func (t *GetPrograms_Programs_Edges_Node) GetEndDate() *time.Time {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node{}
+	}
+	return t.EndDate
+}
+func (t *GetPrograms_Programs_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetPrograms_Programs_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GetPrograms_Programs_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetPrograms_Programs_Edges_Node) GetStartDate() *time.Time {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node{}
+	}
+	return t.StartDate
+}
+func (t *GetPrograms_Programs_Edges_Node) GetStatus() *enums.ProgramStatus {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node{}
+	}
+	return &t.Status
+}
+func (t *GetPrograms_Programs_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetPrograms_Programs_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetPrograms_Programs_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetPrograms_Programs_Edges struct {
+	Node *GetPrograms_Programs_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetPrograms_Programs_Edges) GetNode() *GetPrograms_Programs_Edges_Node {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges{}
+	}
+	return t.Node
+}
+
+type GetPrograms_Programs struct {
+	Edges []*GetPrograms_Programs_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetPrograms_Programs) GetEdges() []*GetPrograms_Programs_Edges {
+	if t == nil {
+		t = &GetPrograms_Programs{}
+	}
+	return t.Edges
+}
+
+type UpdateProgram_UpdateProgram_Program struct {
+	AuditorReadComments  bool                "json:\"auditorReadComments\" graphql:\"auditorReadComments\""
+	AuditorReady         bool                "json:\"auditorReady\" graphql:\"auditorReady\""
+	AuditorWriteComments bool                "json:\"auditorWriteComments\" graphql:\"auditorWriteComments\""
+	CreatedAt            *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy            *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description          *string             "json:\"description,omitempty\" graphql:\"description\""
+	EndDate              *time.Time          "json:\"endDate,omitempty\" graphql:\"endDate\""
+	ID                   string              "json:\"id\" graphql:\"id\""
+	Name                 string              "json:\"name\" graphql:\"name\""
+	OwnerID              *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	StartDate            *time.Time          "json:\"startDate,omitempty\" graphql:\"startDate\""
+	Status               enums.ProgramStatus "json:\"status\" graphql:\"status\""
+	Tags                 []string            "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt            *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy            *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *UpdateProgram_UpdateProgram_Program) GetAuditorReadComments() bool {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program{}
+	}
+	return t.AuditorReadComments
+}
+func (t *UpdateProgram_UpdateProgram_Program) GetAuditorReady() bool {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program{}
+	}
+	return t.AuditorReady
+}
+func (t *UpdateProgram_UpdateProgram_Program) GetAuditorWriteComments() bool {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program{}
+	}
+	return t.AuditorWriteComments
+}
+func (t *UpdateProgram_UpdateProgram_Program) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateProgram_UpdateProgram_Program) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateProgram_UpdateProgram_Program) GetDescription() *string {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program{}
+	}
+	return t.Description
+}
+func (t *UpdateProgram_UpdateProgram_Program) GetEndDate() *time.Time {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program{}
+	}
+	return t.EndDate
+}
+func (t *UpdateProgram_UpdateProgram_Program) GetID() string {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program{}
+	}
+	return t.ID
+}
+func (t *UpdateProgram_UpdateProgram_Program) GetName() string {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program{}
+	}
+	return t.Name
+}
+func (t *UpdateProgram_UpdateProgram_Program) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program{}
+	}
+	return t.OwnerID
+}
+func (t *UpdateProgram_UpdateProgram_Program) GetStartDate() *time.Time {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program{}
+	}
+	return t.StartDate
+}
+func (t *UpdateProgram_UpdateProgram_Program) GetStatus() *enums.ProgramStatus {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program{}
+	}
+	return &t.Status
+}
+func (t *UpdateProgram_UpdateProgram_Program) GetTags() []string {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program{}
+	}
+	return t.Tags
+}
+func (t *UpdateProgram_UpdateProgram_Program) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateProgram_UpdateProgram_Program) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program{}
+	}
+	return t.UpdatedBy
+}
+
+type UpdateProgram_UpdateProgram struct {
+	Program UpdateProgram_UpdateProgram_Program "json:\"program\" graphql:\"program\""
+}
+
+func (t *UpdateProgram_UpdateProgram) GetProgram() *UpdateProgram_UpdateProgram_Program {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram{}
+	}
+	return &t.Program
+}
+
+type GetAllProgramHistories_ProgramHistories_Edges_Node struct {
+	AuditorReadComments  bool                "json:\"auditorReadComments\" graphql:\"auditorReadComments\""
+	AuditorReady         bool                "json:\"auditorReady\" graphql:\"auditorReady\""
+	AuditorWriteComments bool                "json:\"auditorWriteComments\" graphql:\"auditorWriteComments\""
+	CreatedAt            *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy            *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description          *string             "json:\"description,omitempty\" graphql:\"description\""
+	EndDate              *time.Time          "json:\"endDate,omitempty\" graphql:\"endDate\""
+	HistoryTime          time.Time           "json:\"historyTime\" graphql:\"historyTime\""
+	ID                   string              "json:\"id\" graphql:\"id\""
+	Name                 string              "json:\"name\" graphql:\"name\""
+	Operation            history.OpType      "json:\"operation\" graphql:\"operation\""
+	OwnerID              *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref                  *string             "json:\"ref,omitempty\" graphql:\"ref\""
+	StartDate            *time.Time          "json:\"startDate,omitempty\" graphql:\"startDate\""
+	Status               enums.ProgramStatus "json:\"status\" graphql:\"status\""
+	Tags                 []string            "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt            *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy            *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetAllProgramHistories_ProgramHistories_Edges_Node) GetAuditorReadComments() bool {
+	if t == nil {
+		t = &GetAllProgramHistories_ProgramHistories_Edges_Node{}
+	}
+	return t.AuditorReadComments
+}
+func (t *GetAllProgramHistories_ProgramHistories_Edges_Node) GetAuditorReady() bool {
+	if t == nil {
+		t = &GetAllProgramHistories_ProgramHistories_Edges_Node{}
+	}
+	return t.AuditorReady
+}
+func (t *GetAllProgramHistories_ProgramHistories_Edges_Node) GetAuditorWriteComments() bool {
+	if t == nil {
+		t = &GetAllProgramHistories_ProgramHistories_Edges_Node{}
+	}
+	return t.AuditorWriteComments
+}
+func (t *GetAllProgramHistories_ProgramHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllProgramHistories_ProgramHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllProgramHistories_ProgramHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllProgramHistories_ProgramHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllProgramHistories_ProgramHistories_Edges_Node) GetDescription() *string {
+	if t == nil {
+		t = &GetAllProgramHistories_ProgramHistories_Edges_Node{}
+	}
+	return t.Description
+}
+func (t *GetAllProgramHistories_ProgramHistories_Edges_Node) GetEndDate() *time.Time {
+	if t == nil {
+		t = &GetAllProgramHistories_ProgramHistories_Edges_Node{}
+	}
+	return t.EndDate
+}
+func (t *GetAllProgramHistories_ProgramHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetAllProgramHistories_ProgramHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetAllProgramHistories_ProgramHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllProgramHistories_ProgramHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllProgramHistories_ProgramHistories_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetAllProgramHistories_ProgramHistories_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GetAllProgramHistories_ProgramHistories_Edges_Node) GetOperation() *history.OpType {
+	if t == nil {
+		t = &GetAllProgramHistories_ProgramHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetAllProgramHistories_ProgramHistories_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllProgramHistories_ProgramHistories_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllProgramHistories_ProgramHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetAllProgramHistories_ProgramHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetAllProgramHistories_ProgramHistories_Edges_Node) GetStartDate() *time.Time {
+	if t == nil {
+		t = &GetAllProgramHistories_ProgramHistories_Edges_Node{}
+	}
+	return t.StartDate
+}
+func (t *GetAllProgramHistories_ProgramHistories_Edges_Node) GetStatus() *enums.ProgramStatus {
+	if t == nil {
+		t = &GetAllProgramHistories_ProgramHistories_Edges_Node{}
+	}
+	return &t.Status
+}
+func (t *GetAllProgramHistories_ProgramHistories_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllProgramHistories_ProgramHistories_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllProgramHistories_ProgramHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllProgramHistories_ProgramHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllProgramHistories_ProgramHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllProgramHistories_ProgramHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetAllProgramHistories_ProgramHistories_Edges struct {
+	Node *GetAllProgramHistories_ProgramHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllProgramHistories_ProgramHistories_Edges) GetNode() *GetAllProgramHistories_ProgramHistories_Edges_Node {
+	if t == nil {
+		t = &GetAllProgramHistories_ProgramHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllProgramHistories_ProgramHistories struct {
+	Edges []*GetAllProgramHistories_ProgramHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetAllProgramHistories_ProgramHistories) GetEdges() []*GetAllProgramHistories_ProgramHistories_Edges {
+	if t == nil {
+		t = &GetAllProgramHistories_ProgramHistories{}
+	}
+	return t.Edges
+}
+
+type GetProgramHistories_ProgramHistories_Edges_Node struct {
+	AuditorReadComments  bool                "json:\"auditorReadComments\" graphql:\"auditorReadComments\""
+	AuditorReady         bool                "json:\"auditorReady\" graphql:\"auditorReady\""
+	AuditorWriteComments bool                "json:\"auditorWriteComments\" graphql:\"auditorWriteComments\""
+	CreatedAt            *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy            *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description          *string             "json:\"description,omitempty\" graphql:\"description\""
+	EndDate              *time.Time          "json:\"endDate,omitempty\" graphql:\"endDate\""
+	HistoryTime          time.Time           "json:\"historyTime\" graphql:\"historyTime\""
+	ID                   string              "json:\"id\" graphql:\"id\""
+	Name                 string              "json:\"name\" graphql:\"name\""
+	Operation            history.OpType      "json:\"operation\" graphql:\"operation\""
+	OwnerID              *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Ref                  *string             "json:\"ref,omitempty\" graphql:\"ref\""
+	StartDate            *time.Time          "json:\"startDate,omitempty\" graphql:\"startDate\""
+	Status               enums.ProgramStatus "json:\"status\" graphql:\"status\""
+	Tags                 []string            "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt            *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy            *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetProgramHistories_ProgramHistories_Edges_Node) GetAuditorReadComments() bool {
+	if t == nil {
+		t = &GetProgramHistories_ProgramHistories_Edges_Node{}
+	}
+	return t.AuditorReadComments
+}
+func (t *GetProgramHistories_ProgramHistories_Edges_Node) GetAuditorReady() bool {
+	if t == nil {
+		t = &GetProgramHistories_ProgramHistories_Edges_Node{}
+	}
+	return t.AuditorReady
+}
+func (t *GetProgramHistories_ProgramHistories_Edges_Node) GetAuditorWriteComments() bool {
+	if t == nil {
+		t = &GetProgramHistories_ProgramHistories_Edges_Node{}
+	}
+	return t.AuditorWriteComments
+}
+func (t *GetProgramHistories_ProgramHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetProgramHistories_ProgramHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetProgramHistories_ProgramHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetProgramHistories_ProgramHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetProgramHistories_ProgramHistories_Edges_Node) GetDescription() *string {
+	if t == nil {
+		t = &GetProgramHistories_ProgramHistories_Edges_Node{}
+	}
+	return t.Description
+}
+func (t *GetProgramHistories_ProgramHistories_Edges_Node) GetEndDate() *time.Time {
+	if t == nil {
+		t = &GetProgramHistories_ProgramHistories_Edges_Node{}
+	}
+	return t.EndDate
+}
+func (t *GetProgramHistories_ProgramHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetProgramHistories_ProgramHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetProgramHistories_ProgramHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetProgramHistories_ProgramHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetProgramHistories_ProgramHistories_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetProgramHistories_ProgramHistories_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GetProgramHistories_ProgramHistories_Edges_Node) GetOperation() *history.OpType {
+	if t == nil {
+		t = &GetProgramHistories_ProgramHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetProgramHistories_ProgramHistories_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetProgramHistories_ProgramHistories_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetProgramHistories_ProgramHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetProgramHistories_ProgramHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetProgramHistories_ProgramHistories_Edges_Node) GetStartDate() *time.Time {
+	if t == nil {
+		t = &GetProgramHistories_ProgramHistories_Edges_Node{}
+	}
+	return t.StartDate
+}
+func (t *GetProgramHistories_ProgramHistories_Edges_Node) GetStatus() *enums.ProgramStatus {
+	if t == nil {
+		t = &GetProgramHistories_ProgramHistories_Edges_Node{}
+	}
+	return &t.Status
+}
+func (t *GetProgramHistories_ProgramHistories_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetProgramHistories_ProgramHistories_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetProgramHistories_ProgramHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetProgramHistories_ProgramHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetProgramHistories_ProgramHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetProgramHistories_ProgramHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetProgramHistories_ProgramHistories_Edges struct {
+	Node *GetProgramHistories_ProgramHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetProgramHistories_ProgramHistories_Edges) GetNode() *GetProgramHistories_ProgramHistories_Edges_Node {
+	if t == nil {
+		t = &GetProgramHistories_ProgramHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetProgramHistories_ProgramHistories struct {
+	Edges []*GetProgramHistories_ProgramHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetProgramHistories_ProgramHistories) GetEdges() []*GetProgramHistories_ProgramHistories_Edges {
+	if t == nil {
+		t = &GetProgramHistories_ProgramHistories{}
+	}
+	return t.Edges
+}
+
+type CreateBulkCSVProgramMembership_CreateBulkCSVProgramMembership_ProgramMemberships struct {
+	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID        string     "json:\"id\" graphql:\"id\""
+	ProgramID string     "json:\"programID\" graphql:\"programID\""
+	Role      enums.Role "json:\"role\" graphql:\"role\""
+	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UserID    string     "json:\"userID\" graphql:\"userID\""
+}
+
+func (t *CreateBulkCSVProgramMembership_CreateBulkCSVProgramMembership_ProgramMemberships) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVProgramMembership_CreateBulkCSVProgramMembership_ProgramMemberships{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkCSVProgramMembership_CreateBulkCSVProgramMembership_ProgramMemberships) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVProgramMembership_CreateBulkCSVProgramMembership_ProgramMemberships{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkCSVProgramMembership_CreateBulkCSVProgramMembership_ProgramMemberships) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVProgramMembership_CreateBulkCSVProgramMembership_ProgramMemberships{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVProgramMembership_CreateBulkCSVProgramMembership_ProgramMemberships) GetProgramID() string {
+	if t == nil {
+		t = &CreateBulkCSVProgramMembership_CreateBulkCSVProgramMembership_ProgramMemberships{}
+	}
+	return t.ProgramID
+}
+func (t *CreateBulkCSVProgramMembership_CreateBulkCSVProgramMembership_ProgramMemberships) GetRole() *enums.Role {
+	if t == nil {
+		t = &CreateBulkCSVProgramMembership_CreateBulkCSVProgramMembership_ProgramMemberships{}
+	}
+	return &t.Role
+}
+func (t *CreateBulkCSVProgramMembership_CreateBulkCSVProgramMembership_ProgramMemberships) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVProgramMembership_CreateBulkCSVProgramMembership_ProgramMemberships{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkCSVProgramMembership_CreateBulkCSVProgramMembership_ProgramMemberships) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVProgramMembership_CreateBulkCSVProgramMembership_ProgramMemberships{}
+	}
+	return t.UpdatedBy
+}
+func (t *CreateBulkCSVProgramMembership_CreateBulkCSVProgramMembership_ProgramMemberships) GetUserID() string {
+	if t == nil {
+		t = &CreateBulkCSVProgramMembership_CreateBulkCSVProgramMembership_ProgramMemberships{}
+	}
+	return t.UserID
+}
+
+type CreateBulkCSVProgramMembership_CreateBulkCSVProgramMembership struct {
+	ProgramMemberships []*CreateBulkCSVProgramMembership_CreateBulkCSVProgramMembership_ProgramMemberships "json:\"programMemberships,omitempty\" graphql:\"programMemberships\""
+}
+
+func (t *CreateBulkCSVProgramMembership_CreateBulkCSVProgramMembership) GetProgramMemberships() []*CreateBulkCSVProgramMembership_CreateBulkCSVProgramMembership_ProgramMemberships {
+	if t == nil {
+		t = &CreateBulkCSVProgramMembership_CreateBulkCSVProgramMembership{}
+	}
+	return t.ProgramMemberships
+}
+
+type CreateBulkProgramMembership_CreateBulkProgramMembership_ProgramMemberships struct {
+	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID        string     "json:\"id\" graphql:\"id\""
+	ProgramID string     "json:\"programID\" graphql:\"programID\""
+	Role      enums.Role "json:\"role\" graphql:\"role\""
+	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UserID    string     "json:\"userID\" graphql:\"userID\""
+}
+
+func (t *CreateBulkProgramMembership_CreateBulkProgramMembership_ProgramMemberships) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkProgramMembership_CreateBulkProgramMembership_ProgramMemberships{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkProgramMembership_CreateBulkProgramMembership_ProgramMemberships) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkProgramMembership_CreateBulkProgramMembership_ProgramMemberships{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkProgramMembership_CreateBulkProgramMembership_ProgramMemberships) GetID() string {
+	if t == nil {
+		t = &CreateBulkProgramMembership_CreateBulkProgramMembership_ProgramMemberships{}
+	}
+	return t.ID
+}
+func (t *CreateBulkProgramMembership_CreateBulkProgramMembership_ProgramMemberships) GetProgramID() string {
+	if t == nil {
+		t = &CreateBulkProgramMembership_CreateBulkProgramMembership_ProgramMemberships{}
+	}
+	return t.ProgramID
+}
+func (t *CreateBulkProgramMembership_CreateBulkProgramMembership_ProgramMemberships) GetRole() *enums.Role {
+	if t == nil {
+		t = &CreateBulkProgramMembership_CreateBulkProgramMembership_ProgramMemberships{}
+	}
+	return &t.Role
+}
+func (t *CreateBulkProgramMembership_CreateBulkProgramMembership_ProgramMemberships) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkProgramMembership_CreateBulkProgramMembership_ProgramMemberships{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkProgramMembership_CreateBulkProgramMembership_ProgramMemberships) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkProgramMembership_CreateBulkProgramMembership_ProgramMemberships{}
+	}
+	return t.UpdatedBy
+}
+func (t *CreateBulkProgramMembership_CreateBulkProgramMembership_ProgramMemberships) GetUserID() string {
+	if t == nil {
+		t = &CreateBulkProgramMembership_CreateBulkProgramMembership_ProgramMemberships{}
+	}
+	return t.UserID
+}
+
+type CreateBulkProgramMembership_CreateBulkProgramMembership struct {
+	ProgramMemberships []*CreateBulkProgramMembership_CreateBulkProgramMembership_ProgramMemberships "json:\"programMemberships,omitempty\" graphql:\"programMemberships\""
+}
+
+func (t *CreateBulkProgramMembership_CreateBulkProgramMembership) GetProgramMemberships() []*CreateBulkProgramMembership_CreateBulkProgramMembership_ProgramMemberships {
+	if t == nil {
+		t = &CreateBulkProgramMembership_CreateBulkProgramMembership{}
+	}
+	return t.ProgramMemberships
+}
+
+type CreateProgramMembership_CreateProgramMembership_ProgramMembership struct {
+	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID        string     "json:\"id\" graphql:\"id\""
+	ProgramID string     "json:\"programID\" graphql:\"programID\""
+	Role      enums.Role "json:\"role\" graphql:\"role\""
+	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UserID    string     "json:\"userID\" graphql:\"userID\""
+}
+
+func (t *CreateProgramMembership_CreateProgramMembership_ProgramMembership) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateProgramMembership_CreateProgramMembership_ProgramMembership{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateProgramMembership_CreateProgramMembership_ProgramMembership) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateProgramMembership_CreateProgramMembership_ProgramMembership{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateProgramMembership_CreateProgramMembership_ProgramMembership) GetID() string {
+	if t == nil {
+		t = &CreateProgramMembership_CreateProgramMembership_ProgramMembership{}
+	}
+	return t.ID
+}
+func (t *CreateProgramMembership_CreateProgramMembership_ProgramMembership) GetProgramID() string {
+	if t == nil {
+		t = &CreateProgramMembership_CreateProgramMembership_ProgramMembership{}
+	}
+	return t.ProgramID
+}
+func (t *CreateProgramMembership_CreateProgramMembership_ProgramMembership) GetRole() *enums.Role {
+	if t == nil {
+		t = &CreateProgramMembership_CreateProgramMembership_ProgramMembership{}
+	}
+	return &t.Role
+}
+func (t *CreateProgramMembership_CreateProgramMembership_ProgramMembership) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateProgramMembership_CreateProgramMembership_ProgramMembership{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateProgramMembership_CreateProgramMembership_ProgramMembership) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateProgramMembership_CreateProgramMembership_ProgramMembership{}
+	}
+	return t.UpdatedBy
+}
+func (t *CreateProgramMembership_CreateProgramMembership_ProgramMembership) GetUserID() string {
+	if t == nil {
+		t = &CreateProgramMembership_CreateProgramMembership_ProgramMembership{}
+	}
+	return t.UserID
+}
+
+type CreateProgramMembership_CreateProgramMembership struct {
+	ProgramMembership CreateProgramMembership_CreateProgramMembership_ProgramMembership "json:\"programMembership\" graphql:\"programMembership\""
+}
+
+func (t *CreateProgramMembership_CreateProgramMembership) GetProgramMembership() *CreateProgramMembership_CreateProgramMembership_ProgramMembership {
+	if t == nil {
+		t = &CreateProgramMembership_CreateProgramMembership{}
+	}
+	return &t.ProgramMembership
+}
+
+type DeleteProgramMembership_DeleteProgramMembership struct {
+	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
+}
+
+func (t *DeleteProgramMembership_DeleteProgramMembership) GetDeletedID() string {
+	if t == nil {
+		t = &DeleteProgramMembership_DeleteProgramMembership{}
+	}
+	return t.DeletedID
+}
+
+type GetAllProgramMemberships_ProgramMemberships_Edges_Node struct {
+	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID        string     "json:\"id\" graphql:\"id\""
+	ProgramID string     "json:\"programID\" graphql:\"programID\""
+	Role      enums.Role "json:\"role\" graphql:\"role\""
+	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UserID    string     "json:\"userID\" graphql:\"userID\""
+}
+
+func (t *GetAllProgramMemberships_ProgramMemberships_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllProgramMemberships_ProgramMemberships_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllProgramMemberships_ProgramMemberships_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllProgramMemberships_ProgramMemberships_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllProgramMemberships_ProgramMemberships_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllProgramMemberships_ProgramMemberships_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllProgramMemberships_ProgramMemberships_Edges_Node) GetProgramID() string {
+	if t == nil {
+		t = &GetAllProgramMemberships_ProgramMemberships_Edges_Node{}
+	}
+	return t.ProgramID
+}
+func (t *GetAllProgramMemberships_ProgramMemberships_Edges_Node) GetRole() *enums.Role {
+	if t == nil {
+		t = &GetAllProgramMemberships_ProgramMemberships_Edges_Node{}
+	}
+	return &t.Role
+}
+func (t *GetAllProgramMemberships_ProgramMemberships_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllProgramMemberships_ProgramMemberships_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllProgramMemberships_ProgramMemberships_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllProgramMemberships_ProgramMemberships_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetAllProgramMemberships_ProgramMemberships_Edges_Node) GetUserID() string {
+	if t == nil {
+		t = &GetAllProgramMemberships_ProgramMemberships_Edges_Node{}
+	}
+	return t.UserID
+}
+
+type GetAllProgramMemberships_ProgramMemberships_Edges struct {
+	Node *GetAllProgramMemberships_ProgramMemberships_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllProgramMemberships_ProgramMemberships_Edges) GetNode() *GetAllProgramMemberships_ProgramMemberships_Edges_Node {
+	if t == nil {
+		t = &GetAllProgramMemberships_ProgramMemberships_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllProgramMemberships_ProgramMemberships struct {
+	Edges []*GetAllProgramMemberships_ProgramMemberships_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetAllProgramMemberships_ProgramMemberships) GetEdges() []*GetAllProgramMemberships_ProgramMemberships_Edges {
+	if t == nil {
+		t = &GetAllProgramMemberships_ProgramMemberships{}
+	}
+	return t.Edges
+}
+
+type GetProgramMembershipByID_ProgramMembership struct {
+	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID        string     "json:\"id\" graphql:\"id\""
+	ProgramID string     "json:\"programID\" graphql:\"programID\""
+	Role      enums.Role "json:\"role\" graphql:\"role\""
+	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UserID    string     "json:\"userID\" graphql:\"userID\""
+}
+
+func (t *GetProgramMembershipByID_ProgramMembership) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetProgramMembershipByID_ProgramMembership{}
+	}
+	return t.CreatedAt
+}
+func (t *GetProgramMembershipByID_ProgramMembership) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetProgramMembershipByID_ProgramMembership{}
+	}
+	return t.CreatedBy
+}
+func (t *GetProgramMembershipByID_ProgramMembership) GetID() string {
+	if t == nil {
+		t = &GetProgramMembershipByID_ProgramMembership{}
+	}
+	return t.ID
+}
+func (t *GetProgramMembershipByID_ProgramMembership) GetProgramID() string {
+	if t == nil {
+		t = &GetProgramMembershipByID_ProgramMembership{}
+	}
+	return t.ProgramID
+}
+func (t *GetProgramMembershipByID_ProgramMembership) GetRole() *enums.Role {
+	if t == nil {
+		t = &GetProgramMembershipByID_ProgramMembership{}
+	}
+	return &t.Role
+}
+func (t *GetProgramMembershipByID_ProgramMembership) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetProgramMembershipByID_ProgramMembership{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetProgramMembershipByID_ProgramMembership) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetProgramMembershipByID_ProgramMembership{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetProgramMembershipByID_ProgramMembership) GetUserID() string {
+	if t == nil {
+		t = &GetProgramMembershipByID_ProgramMembership{}
+	}
+	return t.UserID
+}
+
+type GetProgramMemberships_ProgramMemberships_Edges_Node struct {
+	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID        string     "json:\"id\" graphql:\"id\""
+	ProgramID string     "json:\"programID\" graphql:\"programID\""
+	Role      enums.Role "json:\"role\" graphql:\"role\""
+	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UserID    string     "json:\"userID\" graphql:\"userID\""
+}
+
+func (t *GetProgramMemberships_ProgramMemberships_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetProgramMemberships_ProgramMemberships_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetProgramMemberships_ProgramMemberships_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetProgramMemberships_ProgramMemberships_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetProgramMemberships_ProgramMemberships_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetProgramMemberships_ProgramMemberships_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetProgramMemberships_ProgramMemberships_Edges_Node) GetProgramID() string {
+	if t == nil {
+		t = &GetProgramMemberships_ProgramMemberships_Edges_Node{}
+	}
+	return t.ProgramID
+}
+func (t *GetProgramMemberships_ProgramMemberships_Edges_Node) GetRole() *enums.Role {
+	if t == nil {
+		t = &GetProgramMemberships_ProgramMemberships_Edges_Node{}
+	}
+	return &t.Role
+}
+func (t *GetProgramMemberships_ProgramMemberships_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetProgramMemberships_ProgramMemberships_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetProgramMemberships_ProgramMemberships_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetProgramMemberships_ProgramMemberships_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetProgramMemberships_ProgramMemberships_Edges_Node) GetUserID() string {
+	if t == nil {
+		t = &GetProgramMemberships_ProgramMemberships_Edges_Node{}
+	}
+	return t.UserID
+}
+
+type GetProgramMemberships_ProgramMemberships_Edges struct {
+	Node *GetProgramMemberships_ProgramMemberships_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetProgramMemberships_ProgramMemberships_Edges) GetNode() *GetProgramMemberships_ProgramMemberships_Edges_Node {
+	if t == nil {
+		t = &GetProgramMemberships_ProgramMemberships_Edges{}
+	}
+	return t.Node
+}
+
+type GetProgramMemberships_ProgramMemberships struct {
+	Edges []*GetProgramMemberships_ProgramMemberships_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetProgramMemberships_ProgramMemberships) GetEdges() []*GetProgramMemberships_ProgramMemberships_Edges {
+	if t == nil {
+		t = &GetProgramMemberships_ProgramMemberships{}
+	}
+	return t.Edges
+}
+
+type UpdateProgramMembership_UpdateProgramMembership_ProgramMembership struct {
+	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID        string     "json:\"id\" graphql:\"id\""
+	ProgramID string     "json:\"programID\" graphql:\"programID\""
+	Role      enums.Role "json:\"role\" graphql:\"role\""
+	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UserID    string     "json:\"userID\" graphql:\"userID\""
+}
+
+func (t *UpdateProgramMembership_UpdateProgramMembership_ProgramMembership) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateProgramMembership_UpdateProgramMembership_ProgramMembership{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateProgramMembership_UpdateProgramMembership_ProgramMembership) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateProgramMembership_UpdateProgramMembership_ProgramMembership{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateProgramMembership_UpdateProgramMembership_ProgramMembership) GetID() string {
+	if t == nil {
+		t = &UpdateProgramMembership_UpdateProgramMembership_ProgramMembership{}
+	}
+	return t.ID
+}
+func (t *UpdateProgramMembership_UpdateProgramMembership_ProgramMembership) GetProgramID() string {
+	if t == nil {
+		t = &UpdateProgramMembership_UpdateProgramMembership_ProgramMembership{}
+	}
+	return t.ProgramID
+}
+func (t *UpdateProgramMembership_UpdateProgramMembership_ProgramMembership) GetRole() *enums.Role {
+	if t == nil {
+		t = &UpdateProgramMembership_UpdateProgramMembership_ProgramMembership{}
+	}
+	return &t.Role
+}
+func (t *UpdateProgramMembership_UpdateProgramMembership_ProgramMembership) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateProgramMembership_UpdateProgramMembership_ProgramMembership{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateProgramMembership_UpdateProgramMembership_ProgramMembership) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateProgramMembership_UpdateProgramMembership_ProgramMembership{}
+	}
+	return t.UpdatedBy
+}
+func (t *UpdateProgramMembership_UpdateProgramMembership_ProgramMembership) GetUserID() string {
+	if t == nil {
+		t = &UpdateProgramMembership_UpdateProgramMembership_ProgramMembership{}
+	}
+	return t.UserID
+}
+
+type UpdateProgramMembership_UpdateProgramMembership struct {
+	ProgramMembership UpdateProgramMembership_UpdateProgramMembership_ProgramMembership "json:\"programMembership\" graphql:\"programMembership\""
+}
+
+func (t *UpdateProgramMembership_UpdateProgramMembership) GetProgramMembership() *UpdateProgramMembership_UpdateProgramMembership_ProgramMembership {
+	if t == nil {
+		t = &UpdateProgramMembership_UpdateProgramMembership{}
+	}
+	return &t.ProgramMembership
+}
+
+type GetAllProgramMembershipHistories_ProgramMembershipHistories_Edges_Node struct {
+	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID          string         "json:\"id\" graphql:\"id\""
+	Operation   history.OpType "json:\"operation\" graphql:\"operation\""
+	ProgramID   string         "json:\"programID\" graphql:\"programID\""
+	Ref         *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	Role        enums.Role     "json:\"role\" graphql:\"role\""
+	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UserID      string         "json:\"userID\" graphql:\"userID\""
+}
+
+func (t *GetAllProgramMembershipHistories_ProgramMembershipHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllProgramMembershipHistories_ProgramMembershipHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllProgramMembershipHistories_ProgramMembershipHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllProgramMembershipHistories_ProgramMembershipHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllProgramMembershipHistories_ProgramMembershipHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetAllProgramMembershipHistories_ProgramMembershipHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetAllProgramMembershipHistories_ProgramMembershipHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllProgramMembershipHistories_ProgramMembershipHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllProgramMembershipHistories_ProgramMembershipHistories_Edges_Node) GetOperation() *history.OpType {
+	if t == nil {
+		t = &GetAllProgramMembershipHistories_ProgramMembershipHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetAllProgramMembershipHistories_ProgramMembershipHistories_Edges_Node) GetProgramID() string {
+	if t == nil {
+		t = &GetAllProgramMembershipHistories_ProgramMembershipHistories_Edges_Node{}
+	}
+	return t.ProgramID
+}
+func (t *GetAllProgramMembershipHistories_ProgramMembershipHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetAllProgramMembershipHistories_ProgramMembershipHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetAllProgramMembershipHistories_ProgramMembershipHistories_Edges_Node) GetRole() *enums.Role {
+	if t == nil {
+		t = &GetAllProgramMembershipHistories_ProgramMembershipHistories_Edges_Node{}
+	}
+	return &t.Role
+}
+func (t *GetAllProgramMembershipHistories_ProgramMembershipHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllProgramMembershipHistories_ProgramMembershipHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllProgramMembershipHistories_ProgramMembershipHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllProgramMembershipHistories_ProgramMembershipHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetAllProgramMembershipHistories_ProgramMembershipHistories_Edges_Node) GetUserID() string {
+	if t == nil {
+		t = &GetAllProgramMembershipHistories_ProgramMembershipHistories_Edges_Node{}
+	}
+	return t.UserID
+}
+
+type GetAllProgramMembershipHistories_ProgramMembershipHistories_Edges struct {
+	Node *GetAllProgramMembershipHistories_ProgramMembershipHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllProgramMembershipHistories_ProgramMembershipHistories_Edges) GetNode() *GetAllProgramMembershipHistories_ProgramMembershipHistories_Edges_Node {
+	if t == nil {
+		t = &GetAllProgramMembershipHistories_ProgramMembershipHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllProgramMembershipHistories_ProgramMembershipHistories struct {
+	Edges []*GetAllProgramMembershipHistories_ProgramMembershipHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetAllProgramMembershipHistories_ProgramMembershipHistories) GetEdges() []*GetAllProgramMembershipHistories_ProgramMembershipHistories_Edges {
+	if t == nil {
+		t = &GetAllProgramMembershipHistories_ProgramMembershipHistories{}
+	}
+	return t.Edges
+}
+
+type GetProgramMembershipHistories_ProgramMembershipHistories_Edges_Node struct {
+	CreatedAt   *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy   *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	HistoryTime time.Time      "json:\"historyTime\" graphql:\"historyTime\""
+	ID          string         "json:\"id\" graphql:\"id\""
+	Operation   history.OpType "json:\"operation\" graphql:\"operation\""
+	ProgramID   string         "json:\"programID\" graphql:\"programID\""
+	Ref         *string        "json:\"ref,omitempty\" graphql:\"ref\""
+	Role        enums.Role     "json:\"role\" graphql:\"role\""
+	UpdatedAt   *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy   *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UserID      string         "json:\"userID\" graphql:\"userID\""
+}
+
+func (t *GetProgramMembershipHistories_ProgramMembershipHistories_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetProgramMembershipHistories_ProgramMembershipHistories_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetProgramMembershipHistories_ProgramMembershipHistories_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetProgramMembershipHistories_ProgramMembershipHistories_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetProgramMembershipHistories_ProgramMembershipHistories_Edges_Node) GetHistoryTime() *time.Time {
+	if t == nil {
+		t = &GetProgramMembershipHistories_ProgramMembershipHistories_Edges_Node{}
+	}
+	return &t.HistoryTime
+}
+func (t *GetProgramMembershipHistories_ProgramMembershipHistories_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetProgramMembershipHistories_ProgramMembershipHistories_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetProgramMembershipHistories_ProgramMembershipHistories_Edges_Node) GetOperation() *history.OpType {
+	if t == nil {
+		t = &GetProgramMembershipHistories_ProgramMembershipHistories_Edges_Node{}
+	}
+	return &t.Operation
+}
+func (t *GetProgramMembershipHistories_ProgramMembershipHistories_Edges_Node) GetProgramID() string {
+	if t == nil {
+		t = &GetProgramMembershipHistories_ProgramMembershipHistories_Edges_Node{}
+	}
+	return t.ProgramID
+}
+func (t *GetProgramMembershipHistories_ProgramMembershipHistories_Edges_Node) GetRef() *string {
+	if t == nil {
+		t = &GetProgramMembershipHistories_ProgramMembershipHistories_Edges_Node{}
+	}
+	return t.Ref
+}
+func (t *GetProgramMembershipHistories_ProgramMembershipHistories_Edges_Node) GetRole() *enums.Role {
+	if t == nil {
+		t = &GetProgramMembershipHistories_ProgramMembershipHistories_Edges_Node{}
+	}
+	return &t.Role
+}
+func (t *GetProgramMembershipHistories_ProgramMembershipHistories_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetProgramMembershipHistories_ProgramMembershipHistories_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetProgramMembershipHistories_ProgramMembershipHistories_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetProgramMembershipHistories_ProgramMembershipHistories_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetProgramMembershipHistories_ProgramMembershipHistories_Edges_Node) GetUserID() string {
+	if t == nil {
+		t = &GetProgramMembershipHistories_ProgramMembershipHistories_Edges_Node{}
+	}
+	return t.UserID
+}
+
+type GetProgramMembershipHistories_ProgramMembershipHistories_Edges struct {
+	Node *GetProgramMembershipHistories_ProgramMembershipHistories_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetProgramMembershipHistories_ProgramMembershipHistories_Edges) GetNode() *GetProgramMembershipHistories_ProgramMembershipHistories_Edges_Node {
+	if t == nil {
+		t = &GetProgramMembershipHistories_ProgramMembershipHistories_Edges{}
+	}
+	return t.Node
+}
+
+type GetProgramMembershipHistories_ProgramMembershipHistories struct {
+	Edges []*GetProgramMembershipHistories_ProgramMembershipHistories_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetProgramMembershipHistories_ProgramMembershipHistories) GetEdges() []*GetProgramMembershipHistories_ProgramMembershipHistories_Edges {
+	if t == nil {
+		t = &GetProgramMembershipHistories_ProgramMembershipHistories{}
+	}
+	return t.Edges
+}
+
 type CreateBulkCSVRisk_CreateBulkCSVRisk_Risks struct {
 	BusinessCosts *string                "json:\"businessCosts,omitempty\" graphql:\"businessCosts\""
 	CreatedAt     *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
@@ -33986,6 +35961,35 @@ func (t *GlobalSearch_Search_Nodes_ProcedureSearchResult) GetProcedures() []*Glo
 	return t.Procedures
 }
 
+type GlobalSearch_Search_Nodes_ProgramSearchResult_Programs struct {
+	ID   string   "json:\"id\" graphql:\"id\""
+	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *GlobalSearch_Search_Nodes_ProgramSearchResult_Programs) GetID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_ProgramSearchResult_Programs{}
+	}
+	return t.ID
+}
+func (t *GlobalSearch_Search_Nodes_ProgramSearchResult_Programs) GetTags() []string {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_ProgramSearchResult_Programs{}
+	}
+	return t.Tags
+}
+
+type GlobalSearch_Search_Nodes_ProgramSearchResult struct {
+	Programs []*GlobalSearch_Search_Nodes_ProgramSearchResult_Programs "json:\"programs,omitempty\" graphql:\"programs\""
+}
+
+func (t *GlobalSearch_Search_Nodes_ProgramSearchResult) GetPrograms() []*GlobalSearch_Search_Nodes_ProgramSearchResult_Programs {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes_ProgramSearchResult{}
+	}
+	return t.Programs
+}
+
 type GlobalSearch_Search_Nodes_RiskSearchResult_Risks struct {
 	ID   string   "json:\"id\" graphql:\"id\""
 	Tags []string "json:\"tags,omitempty\" graphql:\"tags\""
@@ -34323,6 +36327,7 @@ type GlobalSearch_Search_Nodes struct {
 	OrganizationSettingSearchResult    GlobalSearch_Search_Nodes_OrganizationSettingSearchResult    "graphql:\"... on OrganizationSettingSearchResult\""
 	PersonalAccessTokenSearchResult    GlobalSearch_Search_Nodes_PersonalAccessTokenSearchResult    "graphql:\"... on PersonalAccessTokenSearchResult\""
 	ProcedureSearchResult              GlobalSearch_Search_Nodes_ProcedureSearchResult              "graphql:\"... on ProcedureSearchResult\""
+	ProgramSearchResult                GlobalSearch_Search_Nodes_ProgramSearchResult                "graphql:\"... on ProgramSearchResult\""
 	RiskSearchResult                   GlobalSearch_Search_Nodes_RiskSearchResult                   "graphql:\"... on RiskSearchResult\""
 	StandardSearchResult               GlobalSearch_Search_Nodes_StandardSearchResult               "graphql:\"... on StandardSearchResult\""
 	SubcontrolSearchResult             GlobalSearch_Search_Nodes_SubcontrolSearchResult             "graphql:\"... on SubcontrolSearchResult\""
@@ -34484,6 +36489,12 @@ func (t *GlobalSearch_Search_Nodes) GetProcedureSearchResult() *GlobalSearch_Sea
 		t = &GlobalSearch_Search_Nodes{}
 	}
 	return &t.ProcedureSearchResult
+}
+func (t *GlobalSearch_Search_Nodes) GetProgramSearchResult() *GlobalSearch_Search_Nodes_ProgramSearchResult {
+	if t == nil {
+		t = &GlobalSearch_Search_Nodes{}
+	}
+	return &t.ProgramSearchResult
 }
 func (t *GlobalSearch_Search_Nodes) GetRiskSearchResult() *GlobalSearch_Search_Nodes_RiskSearchResult {
 	if t == nil {
@@ -46406,6 +48417,226 @@ func (t *GetProcedureHistories) GetProcedureHistories() *GetProcedureHistories_P
 	return &t.ProcedureHistories
 }
 
+type CreateBulkCSVProgram struct {
+	CreateBulkCSVProgram CreateBulkCSVProgram_CreateBulkCSVProgram "json:\"createBulkCSVProgram\" graphql:\"createBulkCSVProgram\""
+}
+
+func (t *CreateBulkCSVProgram) GetCreateBulkCSVProgram() *CreateBulkCSVProgram_CreateBulkCSVProgram {
+	if t == nil {
+		t = &CreateBulkCSVProgram{}
+	}
+	return &t.CreateBulkCSVProgram
+}
+
+type CreateBulkProgram struct {
+	CreateBulkProgram CreateBulkProgram_CreateBulkProgram "json:\"createBulkProgram\" graphql:\"createBulkProgram\""
+}
+
+func (t *CreateBulkProgram) GetCreateBulkProgram() *CreateBulkProgram_CreateBulkProgram {
+	if t == nil {
+		t = &CreateBulkProgram{}
+	}
+	return &t.CreateBulkProgram
+}
+
+type CreateProgram struct {
+	CreateProgram CreateProgram_CreateProgram "json:\"createProgram\" graphql:\"createProgram\""
+}
+
+func (t *CreateProgram) GetCreateProgram() *CreateProgram_CreateProgram {
+	if t == nil {
+		t = &CreateProgram{}
+	}
+	return &t.CreateProgram
+}
+
+type DeleteProgram struct {
+	DeleteProgram DeleteProgram_DeleteProgram "json:\"deleteProgram\" graphql:\"deleteProgram\""
+}
+
+func (t *DeleteProgram) GetDeleteProgram() *DeleteProgram_DeleteProgram {
+	if t == nil {
+		t = &DeleteProgram{}
+	}
+	return &t.DeleteProgram
+}
+
+type GetAllPrograms struct {
+	Programs GetAllPrograms_Programs "json:\"programs\" graphql:\"programs\""
+}
+
+func (t *GetAllPrograms) GetPrograms() *GetAllPrograms_Programs {
+	if t == nil {
+		t = &GetAllPrograms{}
+	}
+	return &t.Programs
+}
+
+type GetProgramByID struct {
+	Program GetProgramByID_Program "json:\"program\" graphql:\"program\""
+}
+
+func (t *GetProgramByID) GetProgram() *GetProgramByID_Program {
+	if t == nil {
+		t = &GetProgramByID{}
+	}
+	return &t.Program
+}
+
+type GetPrograms struct {
+	Programs GetPrograms_Programs "json:\"programs\" graphql:\"programs\""
+}
+
+func (t *GetPrograms) GetPrograms() *GetPrograms_Programs {
+	if t == nil {
+		t = &GetPrograms{}
+	}
+	return &t.Programs
+}
+
+type UpdateProgram struct {
+	UpdateProgram UpdateProgram_UpdateProgram "json:\"updateProgram\" graphql:\"updateProgram\""
+}
+
+func (t *UpdateProgram) GetUpdateProgram() *UpdateProgram_UpdateProgram {
+	if t == nil {
+		t = &UpdateProgram{}
+	}
+	return &t.UpdateProgram
+}
+
+type GetAllProgramHistories struct {
+	ProgramHistories GetAllProgramHistories_ProgramHistories "json:\"programHistories\" graphql:\"programHistories\""
+}
+
+func (t *GetAllProgramHistories) GetProgramHistories() *GetAllProgramHistories_ProgramHistories {
+	if t == nil {
+		t = &GetAllProgramHistories{}
+	}
+	return &t.ProgramHistories
+}
+
+type GetProgramHistories struct {
+	ProgramHistories GetProgramHistories_ProgramHistories "json:\"programHistories\" graphql:\"programHistories\""
+}
+
+func (t *GetProgramHistories) GetProgramHistories() *GetProgramHistories_ProgramHistories {
+	if t == nil {
+		t = &GetProgramHistories{}
+	}
+	return &t.ProgramHistories
+}
+
+type CreateBulkCSVProgramMembership struct {
+	CreateBulkCSVProgramMembership CreateBulkCSVProgramMembership_CreateBulkCSVProgramMembership "json:\"createBulkCSVProgramMembership\" graphql:\"createBulkCSVProgramMembership\""
+}
+
+func (t *CreateBulkCSVProgramMembership) GetCreateBulkCSVProgramMembership() *CreateBulkCSVProgramMembership_CreateBulkCSVProgramMembership {
+	if t == nil {
+		t = &CreateBulkCSVProgramMembership{}
+	}
+	return &t.CreateBulkCSVProgramMembership
+}
+
+type CreateBulkProgramMembership struct {
+	CreateBulkProgramMembership CreateBulkProgramMembership_CreateBulkProgramMembership "json:\"createBulkProgramMembership\" graphql:\"createBulkProgramMembership\""
+}
+
+func (t *CreateBulkProgramMembership) GetCreateBulkProgramMembership() *CreateBulkProgramMembership_CreateBulkProgramMembership {
+	if t == nil {
+		t = &CreateBulkProgramMembership{}
+	}
+	return &t.CreateBulkProgramMembership
+}
+
+type CreateProgramMembership struct {
+	CreateProgramMembership CreateProgramMembership_CreateProgramMembership "json:\"createProgramMembership\" graphql:\"createProgramMembership\""
+}
+
+func (t *CreateProgramMembership) GetCreateProgramMembership() *CreateProgramMembership_CreateProgramMembership {
+	if t == nil {
+		t = &CreateProgramMembership{}
+	}
+	return &t.CreateProgramMembership
+}
+
+type DeleteProgramMembership struct {
+	DeleteProgramMembership DeleteProgramMembership_DeleteProgramMembership "json:\"deleteProgramMembership\" graphql:\"deleteProgramMembership\""
+}
+
+func (t *DeleteProgramMembership) GetDeleteProgramMembership() *DeleteProgramMembership_DeleteProgramMembership {
+	if t == nil {
+		t = &DeleteProgramMembership{}
+	}
+	return &t.DeleteProgramMembership
+}
+
+type GetAllProgramMemberships struct {
+	ProgramMemberships GetAllProgramMemberships_ProgramMemberships "json:\"programMemberships\" graphql:\"programMemberships\""
+}
+
+func (t *GetAllProgramMemberships) GetProgramMemberships() *GetAllProgramMemberships_ProgramMemberships {
+	if t == nil {
+		t = &GetAllProgramMemberships{}
+	}
+	return &t.ProgramMemberships
+}
+
+type GetProgramMembershipByID struct {
+	ProgramMembership GetProgramMembershipByID_ProgramMembership "json:\"programMembership\" graphql:\"programMembership\""
+}
+
+func (t *GetProgramMembershipByID) GetProgramMembership() *GetProgramMembershipByID_ProgramMembership {
+	if t == nil {
+		t = &GetProgramMembershipByID{}
+	}
+	return &t.ProgramMembership
+}
+
+type GetProgramMemberships struct {
+	ProgramMemberships GetProgramMemberships_ProgramMemberships "json:\"programMemberships\" graphql:\"programMemberships\""
+}
+
+func (t *GetProgramMemberships) GetProgramMemberships() *GetProgramMemberships_ProgramMemberships {
+	if t == nil {
+		t = &GetProgramMemberships{}
+	}
+	return &t.ProgramMemberships
+}
+
+type UpdateProgramMembership struct {
+	UpdateProgramMembership UpdateProgramMembership_UpdateProgramMembership "json:\"updateProgramMembership\" graphql:\"updateProgramMembership\""
+}
+
+func (t *UpdateProgramMembership) GetUpdateProgramMembership() *UpdateProgramMembership_UpdateProgramMembership {
+	if t == nil {
+		t = &UpdateProgramMembership{}
+	}
+	return &t.UpdateProgramMembership
+}
+
+type GetAllProgramMembershipHistories struct {
+	ProgramMembershipHistories GetAllProgramMembershipHistories_ProgramMembershipHistories "json:\"programMembershipHistories\" graphql:\"programMembershipHistories\""
+}
+
+func (t *GetAllProgramMembershipHistories) GetProgramMembershipHistories() *GetAllProgramMembershipHistories_ProgramMembershipHistories {
+	if t == nil {
+		t = &GetAllProgramMembershipHistories{}
+	}
+	return &t.ProgramMembershipHistories
+}
+
+type GetProgramMembershipHistories struct {
+	ProgramMembershipHistories GetProgramMembershipHistories_ProgramMembershipHistories "json:\"programMembershipHistories\" graphql:\"programMembershipHistories\""
+}
+
+func (t *GetProgramMembershipHistories) GetProgramMembershipHistories() *GetProgramMembershipHistories_ProgramMembershipHistories {
+	if t == nil {
+		t = &GetProgramMembershipHistories{}
+	}
+	return &t.ProgramMembershipHistories
+}
+
 type CreateBulkCSVRisk struct {
 	CreateBulkCSVRisk CreateBulkCSVRisk_CreateBulkCSVRisk "json:\"createBulkCSVRisk\" graphql:\"createBulkCSVRisk\""
 }
@@ -48024,6 +50255,16 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					background
 					satisfies
 					details
+				}
+			}
+			... on ProgramSearchResult {
+				programs {
+					id
+					deletedBy
+					tags
+					ownerID
+					name
+					description
 				}
 			}
 			... on RiskSearchResult {
@@ -57640,6 +59881,729 @@ func (c *Client) GetProcedureHistories(ctx context.Context, where *ProcedureHist
 	return &res, nil
 }
 
+const CreateBulkCSVProgramDocument = `mutation CreateBulkCSVProgram ($input: Upload!) {
+	createBulkCSVProgram(input: $input) {
+		programs {
+			auditorReadComments
+			auditorReady
+			auditorWriteComments
+			createdAt
+			createdBy
+			description
+			endDate
+			id
+			name
+			ownerID
+			startDate
+			status
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkCSVProgram(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVProgram, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkCSVProgram
+	if err := c.Client.Post(ctx, "CreateBulkCSVProgram", CreateBulkCSVProgramDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkProgramDocument = `mutation CreateBulkProgram ($input: [CreateProgramInput!]) {
+	createBulkProgram(input: $input) {
+		programs {
+			auditorReadComments
+			auditorReady
+			auditorWriteComments
+			createdAt
+			createdBy
+			description
+			endDate
+			id
+			name
+			ownerID
+			startDate
+			status
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkProgram(ctx context.Context, input []*CreateProgramInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkProgram, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkProgram
+	if err := c.Client.Post(ctx, "CreateBulkProgram", CreateBulkProgramDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateProgramDocument = `mutation CreateProgram ($input: CreateProgramInput!) {
+	createProgram(input: $input) {
+		program {
+			auditorReadComments
+			auditorReady
+			auditorWriteComments
+			createdAt
+			createdBy
+			description
+			endDate
+			id
+			name
+			ownerID
+			startDate
+			status
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) CreateProgram(ctx context.Context, input CreateProgramInput, interceptors ...clientv2.RequestInterceptor) (*CreateProgram, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateProgram
+	if err := c.Client.Post(ctx, "CreateProgram", CreateProgramDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteProgramDocument = `mutation DeleteProgram ($deleteProgramId: ID!) {
+	deleteProgram(id: $deleteProgramId) {
+		deletedID
+	}
+}
+`
+
+func (c *Client) DeleteProgram(ctx context.Context, deleteProgramID string, interceptors ...clientv2.RequestInterceptor) (*DeleteProgram, error) {
+	vars := map[string]any{
+		"deleteProgramId": deleteProgramID,
+	}
+
+	var res DeleteProgram
+	if err := c.Client.Post(ctx, "DeleteProgram", DeleteProgramDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllProgramsDocument = `query GetAllPrograms {
+	programs {
+		edges {
+			node {
+				auditorReadComments
+				auditorReady
+				auditorWriteComments
+				createdAt
+				createdBy
+				description
+				endDate
+				id
+				name
+				ownerID
+				startDate
+				status
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllPrograms(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllPrograms, error) {
+	vars := map[string]any{}
+
+	var res GetAllPrograms
+	if err := c.Client.Post(ctx, "GetAllPrograms", GetAllProgramsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetProgramByIDDocument = `query GetProgramByID ($programId: ID!) {
+	program(id: $programId) {
+		auditorReadComments
+		auditorReady
+		auditorWriteComments
+		createdAt
+		createdBy
+		description
+		endDate
+		id
+		name
+		ownerID
+		startDate
+		status
+		tags
+		updatedAt
+		updatedBy
+	}
+}
+`
+
+func (c *Client) GetProgramByID(ctx context.Context, programID string, interceptors ...clientv2.RequestInterceptor) (*GetProgramByID, error) {
+	vars := map[string]any{
+		"programId": programID,
+	}
+
+	var res GetProgramByID
+	if err := c.Client.Post(ctx, "GetProgramByID", GetProgramByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetProgramsDocument = `query GetPrograms ($where: ProgramWhereInput) {
+	programs(where: $where) {
+		edges {
+			node {
+				auditorReadComments
+				auditorReady
+				auditorWriteComments
+				createdAt
+				createdBy
+				description
+				endDate
+				id
+				name
+				ownerID
+				startDate
+				status
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetPrograms(ctx context.Context, where *ProgramWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetPrograms, error) {
+	vars := map[string]any{
+		"where": where,
+	}
+
+	var res GetPrograms
+	if err := c.Client.Post(ctx, "GetPrograms", GetProgramsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateProgramDocument = `mutation UpdateProgram ($updateProgramId: ID!, $input: UpdateProgramInput!) {
+	updateProgram(id: $updateProgramId, input: $input) {
+		program {
+			auditorReadComments
+			auditorReady
+			auditorWriteComments
+			createdAt
+			createdBy
+			description
+			endDate
+			id
+			name
+			ownerID
+			startDate
+			status
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
+}
+`
+
+func (c *Client) UpdateProgram(ctx context.Context, updateProgramID string, input UpdateProgramInput, interceptors ...clientv2.RequestInterceptor) (*UpdateProgram, error) {
+	vars := map[string]any{
+		"updateProgramId": updateProgramID,
+		"input":           input,
+	}
+
+	var res UpdateProgram
+	if err := c.Client.Post(ctx, "UpdateProgram", UpdateProgramDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllProgramHistoriesDocument = `query GetAllProgramHistories {
+	programHistories {
+		edges {
+			node {
+				auditorReadComments
+				auditorReady
+				auditorWriteComments
+				createdAt
+				createdBy
+				description
+				endDate
+				historyTime
+				id
+				name
+				operation
+				ownerID
+				ref
+				startDate
+				status
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllProgramHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllProgramHistories, error) {
+	vars := map[string]any{}
+
+	var res GetAllProgramHistories
+	if err := c.Client.Post(ctx, "GetAllProgramHistories", GetAllProgramHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetProgramHistoriesDocument = `query GetProgramHistories ($where: ProgramHistoryWhereInput) {
+	programHistories(where: $where) {
+		edges {
+			node {
+				auditorReadComments
+				auditorReady
+				auditorWriteComments
+				createdAt
+				createdBy
+				description
+				endDate
+				historyTime
+				id
+				name
+				operation
+				ownerID
+				ref
+				startDate
+				status
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetProgramHistories(ctx context.Context, where *ProgramHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetProgramHistories, error) {
+	vars := map[string]any{
+		"where": where,
+	}
+
+	var res GetProgramHistories
+	if err := c.Client.Post(ctx, "GetProgramHistories", GetProgramHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkCSVProgramMembershipDocument = `mutation CreateBulkCSVProgramMembership ($input: Upload!) {
+	createBulkCSVProgramMembership(input: $input) {
+		programMemberships {
+			createdAt
+			createdBy
+			id
+			programID
+			role
+			updatedAt
+			updatedBy
+			userID
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkCSVProgramMembership(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVProgramMembership, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkCSVProgramMembership
+	if err := c.Client.Post(ctx, "CreateBulkCSVProgramMembership", CreateBulkCSVProgramMembershipDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkProgramMembershipDocument = `mutation CreateBulkProgramMembership ($input: [CreateProgramMembershipInput!]) {
+	createBulkProgramMembership(input: $input) {
+		programMemberships {
+			createdAt
+			createdBy
+			id
+			programID
+			role
+			updatedAt
+			updatedBy
+			userID
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkProgramMembership(ctx context.Context, input []*CreateProgramMembershipInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkProgramMembership, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkProgramMembership
+	if err := c.Client.Post(ctx, "CreateBulkProgramMembership", CreateBulkProgramMembershipDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateProgramMembershipDocument = `mutation CreateProgramMembership ($input: CreateProgramMembershipInput!) {
+	createProgramMembership(input: $input) {
+		programMembership {
+			createdAt
+			createdBy
+			id
+			programID
+			role
+			updatedAt
+			updatedBy
+			userID
+		}
+	}
+}
+`
+
+func (c *Client) CreateProgramMembership(ctx context.Context, input CreateProgramMembershipInput, interceptors ...clientv2.RequestInterceptor) (*CreateProgramMembership, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateProgramMembership
+	if err := c.Client.Post(ctx, "CreateProgramMembership", CreateProgramMembershipDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteProgramMembershipDocument = `mutation DeleteProgramMembership ($deleteProgramMembershipId: ID!) {
+	deleteProgramMembership(id: $deleteProgramMembershipId) {
+		deletedID
+	}
+}
+`
+
+func (c *Client) DeleteProgramMembership(ctx context.Context, deleteProgramMembershipID string, interceptors ...clientv2.RequestInterceptor) (*DeleteProgramMembership, error) {
+	vars := map[string]any{
+		"deleteProgramMembershipId": deleteProgramMembershipID,
+	}
+
+	var res DeleteProgramMembership
+	if err := c.Client.Post(ctx, "DeleteProgramMembership", DeleteProgramMembershipDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllProgramMembershipsDocument = `query GetAllProgramMemberships {
+	programMemberships {
+		edges {
+			node {
+				createdAt
+				createdBy
+				id
+				programID
+				role
+				updatedAt
+				updatedBy
+				userID
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllProgramMemberships(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllProgramMemberships, error) {
+	vars := map[string]any{}
+
+	var res GetAllProgramMemberships
+	if err := c.Client.Post(ctx, "GetAllProgramMemberships", GetAllProgramMembershipsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetProgramMembershipByIDDocument = `query GetProgramMembershipByID ($programMembershipId: ID!) {
+	programMembership(id: $programMembershipId) {
+		createdAt
+		createdBy
+		id
+		programID
+		role
+		updatedAt
+		updatedBy
+		userID
+	}
+}
+`
+
+func (c *Client) GetProgramMembershipByID(ctx context.Context, programMembershipID string, interceptors ...clientv2.RequestInterceptor) (*GetProgramMembershipByID, error) {
+	vars := map[string]any{
+		"programMembershipId": programMembershipID,
+	}
+
+	var res GetProgramMembershipByID
+	if err := c.Client.Post(ctx, "GetProgramMembershipByID", GetProgramMembershipByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetProgramMembershipsDocument = `query GetProgramMemberships ($where: ProgramMembershipWhereInput) {
+	programMemberships(where: $where) {
+		edges {
+			node {
+				createdAt
+				createdBy
+				id
+				programID
+				role
+				updatedAt
+				updatedBy
+				userID
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetProgramMemberships(ctx context.Context, where *ProgramMembershipWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetProgramMemberships, error) {
+	vars := map[string]any{
+		"where": where,
+	}
+
+	var res GetProgramMemberships
+	if err := c.Client.Post(ctx, "GetProgramMemberships", GetProgramMembershipsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateProgramMembershipDocument = `mutation UpdateProgramMembership ($updateProgramMembershipId: ID!, $input: UpdateProgramMembershipInput!) {
+	updateProgramMembership(id: $updateProgramMembershipId, input: $input) {
+		programMembership {
+			createdAt
+			createdBy
+			id
+			programID
+			role
+			updatedAt
+			updatedBy
+			userID
+		}
+	}
+}
+`
+
+func (c *Client) UpdateProgramMembership(ctx context.Context, updateProgramMembershipID string, input UpdateProgramMembershipInput, interceptors ...clientv2.RequestInterceptor) (*UpdateProgramMembership, error) {
+	vars := map[string]any{
+		"updateProgramMembershipId": updateProgramMembershipID,
+		"input":                     input,
+	}
+
+	var res UpdateProgramMembership
+	if err := c.Client.Post(ctx, "UpdateProgramMembership", UpdateProgramMembershipDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllProgramMembershipHistoriesDocument = `query GetAllProgramMembershipHistories {
+	programMembershipHistories {
+		edges {
+			node {
+				createdAt
+				createdBy
+				historyTime
+				id
+				operation
+				programID
+				ref
+				role
+				updatedAt
+				updatedBy
+				userID
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllProgramMembershipHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllProgramMembershipHistories, error) {
+	vars := map[string]any{}
+
+	var res GetAllProgramMembershipHistories
+	if err := c.Client.Post(ctx, "GetAllProgramMembershipHistories", GetAllProgramMembershipHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetProgramMembershipHistoriesDocument = `query GetProgramMembershipHistories ($where: ProgramMembershipHistoryWhereInput) {
+	programMembershipHistories(where: $where) {
+		edges {
+			node {
+				createdAt
+				createdBy
+				historyTime
+				id
+				operation
+				programID
+				ref
+				role
+				updatedAt
+				updatedBy
+				userID
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetProgramMembershipHistories(ctx context.Context, where *ProgramMembershipHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetProgramMembershipHistories, error) {
+	vars := map[string]any{
+		"where": where,
+	}
+
+	var res GetProgramMembershipHistories
+	if err := c.Client.Post(ctx, "GetProgramMembershipHistories", GetProgramMembershipHistoriesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const CreateBulkCSVRiskDocument = `mutation CreateBulkCSVRisk ($input: Upload!) {
 	createBulkCSVRisk(input: $input) {
 		risks {
@@ -58199,6 +61163,12 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 			}
 			... on ProcedureSearchResult {
 				procedures {
+					id
+					tags
+				}
+			}
+			... on ProgramSearchResult {
+				programs {
 					id
 					tags
 				}
@@ -61512,6 +64482,26 @@ var DocumentOperationNames = map[string]string{
 	UpdateProcedureDocument:                       "UpdateProcedure",
 	GetAllProcedureHistoriesDocument:              "GetAllProcedureHistories",
 	GetProcedureHistoriesDocument:                 "GetProcedureHistories",
+	CreateBulkCSVProgramDocument:                  "CreateBulkCSVProgram",
+	CreateBulkProgramDocument:                     "CreateBulkProgram",
+	CreateProgramDocument:                         "CreateProgram",
+	DeleteProgramDocument:                         "DeleteProgram",
+	GetAllProgramsDocument:                        "GetAllPrograms",
+	GetProgramByIDDocument:                        "GetProgramByID",
+	GetProgramsDocument:                           "GetPrograms",
+	UpdateProgramDocument:                         "UpdateProgram",
+	GetAllProgramHistoriesDocument:                "GetAllProgramHistories",
+	GetProgramHistoriesDocument:                   "GetProgramHistories",
+	CreateBulkCSVProgramMembershipDocument:        "CreateBulkCSVProgramMembership",
+	CreateBulkProgramMembershipDocument:           "CreateBulkProgramMembership",
+	CreateProgramMembershipDocument:               "CreateProgramMembership",
+	DeleteProgramMembershipDocument:               "DeleteProgramMembership",
+	GetAllProgramMembershipsDocument:              "GetAllProgramMemberships",
+	GetProgramMembershipByIDDocument:              "GetProgramMembershipByID",
+	GetProgramMembershipsDocument:                 "GetProgramMemberships",
+	UpdateProgramMembershipDocument:               "UpdateProgramMembership",
+	GetAllProgramMembershipHistoriesDocument:      "GetAllProgramMembershipHistories",
+	GetProgramMembershipHistoriesDocument:         "GetProgramMembershipHistories",
 	CreateBulkCSVRiskDocument:                     "CreateBulkCSVRisk",
 	CreateBulkRiskDocument:                        "CreateBulkRisk",
 	CreateRiskDocument:                            "CreateRisk",

@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -348,6 +349,21 @@ func (tc *TaskCreate) AddSubcontrol(s ...*Subcontrol) *TaskCreate {
 		ids[i] = s[i].ID
 	}
 	return tc.AddSubcontrolIDs(ids...)
+}
+
+// AddProgramIDs adds the "program" edge to the Program entity by IDs.
+func (tc *TaskCreate) AddProgramIDs(ids ...string) *TaskCreate {
+	tc.mutation.AddProgramIDs(ids...)
+	return tc
+}
+
+// AddProgram adds the "program" edges to the Program entity.
+func (tc *TaskCreate) AddProgram(p ...*Program) *TaskCreate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return tc.AddProgramIDs(ids...)
 }
 
 // Mutation returns the TaskMutation object of the builder.
@@ -692,6 +708,23 @@ func (tc *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = tc.schemaConfig.SubcontrolTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := tc.mutation.ProgramIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   task.ProgramTable,
+			Columns: task.ProgramPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = tc.schemaConfig.ProgramTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

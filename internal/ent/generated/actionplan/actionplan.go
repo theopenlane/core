@@ -53,6 +53,8 @@ const (
 	EdgeControl = "control"
 	// EdgeUser holds the string denoting the user edge name in mutations.
 	EdgeUser = "user"
+	// EdgeProgram holds the string denoting the program edge name in mutations.
+	EdgeProgram = "program"
 	// Table holds the table name of the actionplan in the database.
 	Table = "action_plans"
 	// StandardTable is the table that holds the standard relation/edge. The primary key declared below.
@@ -75,6 +77,11 @@ const (
 	// UserInverseTable is the table name for the User entity.
 	// It exists in this package in order to avoid circular dependency with the "user" package.
 	UserInverseTable = "users"
+	// ProgramTable is the table that holds the program relation/edge. The primary key declared below.
+	ProgramTable = "program_actionplans"
+	// ProgramInverseTable is the table name for the Program entity.
+	// It exists in this package in order to avoid circular dependency with the "program" package.
+	ProgramInverseTable = "programs"
 )
 
 // Columns holds all SQL columns for actionplan fields.
@@ -110,6 +117,9 @@ var (
 	// UserPrimaryKey and UserColumn2 are the table columns denoting the
 	// primary key for the user relation (M2M).
 	UserPrimaryKey = []string{"user_id", "action_plan_id"}
+	// ProgramPrimaryKey and ProgramColumn2 are the table columns denoting the
+	// primary key for the program relation (M2M).
+	ProgramPrimaryKey = []string{"program_id", "action_plan_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -272,6 +282,20 @@ func ByUser(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newUserStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByProgramCount orders the results by program count.
+func ByProgramCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newProgramStep(), opts...)
+	}
+}
+
+// ByProgram orders the results by program terms.
+func ByProgram(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newProgramStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newStandardStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -298,5 +322,12 @@ func newUserStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(UserInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, UserTable, UserPrimaryKey...),
+	)
+}
+func newProgramStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ProgramInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ProgramTable, ProgramPrimaryKey...),
 	)
 }

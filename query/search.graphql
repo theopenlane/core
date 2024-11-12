@@ -159,6 +159,12 @@ query GlobalSearch($query: String!) {
           tags
         }
       }
+      ... on ProgramSearchResult {
+        programs {
+          id
+          tags
+        }
+      }
       ... on RiskSearchResult {
         risks {
           id

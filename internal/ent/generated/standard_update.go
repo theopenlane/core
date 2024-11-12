@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -372,6 +373,21 @@ func (su *StandardUpdate) AddActionplans(a ...*ActionPlan) *StandardUpdate {
 	return su.AddActionplanIDs(ids...)
 }
 
+// AddProgramIDs adds the "programs" edge to the Program entity by IDs.
+func (su *StandardUpdate) AddProgramIDs(ids ...string) *StandardUpdate {
+	su.mutation.AddProgramIDs(ids...)
+	return su
+}
+
+// AddPrograms adds the "programs" edges to the Program entity.
+func (su *StandardUpdate) AddPrograms(p ...*Program) *StandardUpdate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return su.AddProgramIDs(ids...)
+}
+
 // Mutation returns the StandardMutation object of the builder.
 func (su *StandardUpdate) Mutation() *StandardMutation {
 	return su.mutation
@@ -459,6 +475,27 @@ func (su *StandardUpdate) RemoveActionplans(a ...*ActionPlan) *StandardUpdate {
 		ids[i] = a[i].ID
 	}
 	return su.RemoveActionplanIDs(ids...)
+}
+
+// ClearPrograms clears all "programs" edges to the Program entity.
+func (su *StandardUpdate) ClearPrograms() *StandardUpdate {
+	su.mutation.ClearPrograms()
+	return su
+}
+
+// RemoveProgramIDs removes the "programs" edge to Program entities by IDs.
+func (su *StandardUpdate) RemoveProgramIDs(ids ...string) *StandardUpdate {
+	su.mutation.RemoveProgramIDs(ids...)
+	return su
+}
+
+// RemovePrograms removes "programs" edges to Program entities.
+func (su *StandardUpdate) RemovePrograms(p ...*Program) *StandardUpdate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return su.RemoveProgramIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -803,6 +840,54 @@ func (su *StandardUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			},
 		}
 		edge.Schema = su.schemaConfig.StandardActionplans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if su.mutation.ProgramsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   standard.ProgramsTable,
+			Columns: standard.ProgramsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = su.schemaConfig.StandardPrograms
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !su.mutation.ProgramsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   standard.ProgramsTable,
+			Columns: standard.ProgramsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = su.schemaConfig.StandardPrograms
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := su.mutation.ProgramsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   standard.ProgramsTable,
+			Columns: standard.ProgramsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = su.schemaConfig.StandardPrograms
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1168,6 +1253,21 @@ func (suo *StandardUpdateOne) AddActionplans(a ...*ActionPlan) *StandardUpdateOn
 	return suo.AddActionplanIDs(ids...)
 }
 
+// AddProgramIDs adds the "programs" edge to the Program entity by IDs.
+func (suo *StandardUpdateOne) AddProgramIDs(ids ...string) *StandardUpdateOne {
+	suo.mutation.AddProgramIDs(ids...)
+	return suo
+}
+
+// AddPrograms adds the "programs" edges to the Program entity.
+func (suo *StandardUpdateOne) AddPrograms(p ...*Program) *StandardUpdateOne {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return suo.AddProgramIDs(ids...)
+}
+
 // Mutation returns the StandardMutation object of the builder.
 func (suo *StandardUpdateOne) Mutation() *StandardMutation {
 	return suo.mutation
@@ -1255,6 +1355,27 @@ func (suo *StandardUpdateOne) RemoveActionplans(a ...*ActionPlan) *StandardUpdat
 		ids[i] = a[i].ID
 	}
 	return suo.RemoveActionplanIDs(ids...)
+}
+
+// ClearPrograms clears all "programs" edges to the Program entity.
+func (suo *StandardUpdateOne) ClearPrograms() *StandardUpdateOne {
+	suo.mutation.ClearPrograms()
+	return suo
+}
+
+// RemoveProgramIDs removes the "programs" edge to Program entities by IDs.
+func (suo *StandardUpdateOne) RemoveProgramIDs(ids ...string) *StandardUpdateOne {
+	suo.mutation.RemoveProgramIDs(ids...)
+	return suo
+}
+
+// RemovePrograms removes "programs" edges to Program entities.
+func (suo *StandardUpdateOne) RemovePrograms(p ...*Program) *StandardUpdateOne {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return suo.RemoveProgramIDs(ids...)
 }
 
 // Where appends a list predicates to the StandardUpdate builder.
@@ -1629,6 +1750,54 @@ func (suo *StandardUpdateOne) sqlSave(ctx context.Context) (_node *Standard, err
 			},
 		}
 		edge.Schema = suo.schemaConfig.StandardActionplans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if suo.mutation.ProgramsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   standard.ProgramsTable,
+			Columns: standard.ProgramsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = suo.schemaConfig.StandardPrograms
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !suo.mutation.ProgramsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   standard.ProgramsTable,
+			Columns: standard.ProgramsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = suo.schemaConfig.StandardPrograms
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := suo.mutation.ProgramsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   standard.ProgramsTable,
+			Columns: standard.ProgramsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = suo.schemaConfig.StandardPrograms
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

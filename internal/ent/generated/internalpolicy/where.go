@@ -1247,6 +1247,35 @@ func HasTasksWith(preds ...predicate.Task) predicate.InternalPolicy {
 	})
 }
 
+// HasPrograms applies the HasEdge predicate on the "programs" edge.
+func HasPrograms() predicate.InternalPolicy {
+	return predicate.InternalPolicy(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, ProgramsTable, ProgramsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.ProgramPolicies
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasProgramsWith applies the HasEdge predicate on the "programs" edge with a given conditions (other predicates).
+func HasProgramsWith(preds ...predicate.Program) predicate.InternalPolicy {
+	return predicate.InternalPolicy(func(s *sql.Selector) {
+		step := newProgramsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.ProgramPolicies
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.InternalPolicy) predicate.InternalPolicy {
 	return predicate.InternalPolicy(sql.AndPredicates(predicates...))

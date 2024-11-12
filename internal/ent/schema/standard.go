@@ -58,6 +58,7 @@ func (Standard) Edges() []ent.Edge {
 		edge.To("controls", Control.Type),
 		edge.To("procedures", Procedure.Type),
 		edge.To("actionplans", ActionPlan.Type),
+		edge.To("programs", Program.Type),
 	}
 }
 

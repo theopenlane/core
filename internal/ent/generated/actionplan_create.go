@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -284,6 +285,21 @@ func (apc *ActionPlanCreate) AddUser(u ...*User) *ActionPlanCreate {
 	return apc.AddUserIDs(ids...)
 }
 
+// AddProgramIDs adds the "program" edge to the Program entity by IDs.
+func (apc *ActionPlanCreate) AddProgramIDs(ids ...string) *ActionPlanCreate {
+	apc.mutation.AddProgramIDs(ids...)
+	return apc
+}
+
+// AddProgram adds the "program" edges to the Program entity.
+func (apc *ActionPlanCreate) AddProgram(p ...*Program) *ActionPlanCreate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return apc.AddProgramIDs(ids...)
+}
+
 // Mutation returns the ActionPlanMutation object of the builder.
 func (apc *ActionPlanCreate) Mutation() *ActionPlanMutation {
 	return apc.mutation
@@ -523,6 +539,23 @@ func (apc *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = apc.schemaConfig.UserActionplans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := apc.mutation.ProgramIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.ProgramTable,
+			Columns: actionplan.ProgramPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = apc.schemaConfig.ProgramActionplans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

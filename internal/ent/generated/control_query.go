@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
@@ -41,6 +42,7 @@ type ControlQuery struct {
 	withRisks                  *RiskQuery
 	withActionplans            *ActionPlanQuery
 	withTasks                  *TaskQuery
+	withPrograms               *ProgramQuery
 	withFKs                    bool
 	loadTotal                  []func(context.Context, []*Control) error
 	modifiers                  []func(*sql.Selector)
@@ -52,6 +54,7 @@ type ControlQuery struct {
 	withNamedRisks             map[string]*RiskQuery
 	withNamedActionplans       map[string]*ActionPlanQuery
 	withNamedTasks             map[string]*TaskQuery
+	withNamedPrograms          map[string]*ProgramQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -288,6 +291,31 @@ func (cq *ControlQuery) QueryTasks() *TaskQuery {
 	return query
 }
 
+// QueryPrograms chains the current query on the "programs" edge.
+func (cq *ControlQuery) QueryPrograms() *ProgramQuery {
+	query := (&ProgramClient{config: cq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := cq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := cq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, selector),
+			sqlgraph.To(program.Table, program.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, control.ProgramsTable, control.ProgramsPrimaryKey...),
+		)
+		schemaConfig := cq.schemaConfig
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.ProgramControls
+		fromU = sqlgraph.SetNeighbors(cq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first Control entity from the query.
 // Returns a *NotFoundError when no Control was found.
 func (cq *ControlQuery) First(ctx context.Context) (*Control, error) {
@@ -488,6 +516,7 @@ func (cq *ControlQuery) Clone() *ControlQuery {
 		withRisks:             cq.withRisks.Clone(),
 		withActionplans:       cq.withActionplans.Clone(),
 		withTasks:             cq.withTasks.Clone(),
+		withPrograms:          cq.withPrograms.Clone(),
 		// clone intermediate query.
 		sql:       cq.sql.Clone(),
 		path:      cq.path,
@@ -583,6 +612,17 @@ func (cq *ControlQuery) WithTasks(opts ...func(*TaskQuery)) *ControlQuery {
 	return cq
 }
 
+// WithPrograms tells the query-builder to eager-load the nodes that are connected to
+// the "programs" edge. The optional arguments are used to configure the query builder of the edge.
+func (cq *ControlQuery) WithPrograms(opts ...func(*ProgramQuery)) *ControlQuery {
+	query := (&ProgramClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	cq.withPrograms = query
+	return cq
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -662,7 +702,7 @@ func (cq *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 		nodes       = []*Control{}
 		withFKs     = cq.withFKs
 		_spec       = cq.querySpec()
-		loadedTypes = [8]bool{
+		loadedTypes = [9]bool{
 			cq.withProcedures != nil,
 			cq.withSubcontrols != nil,
 			cq.withControlobjectives != nil,
@@ -671,6 +711,7 @@ func (cq *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 			cq.withRisks != nil,
 			cq.withActionplans != nil,
 			cq.withTasks != nil,
+			cq.withPrograms != nil,
 		}
 	)
 	if withFKs {
@@ -757,6 +798,13 @@ func (cq *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 			return nil, err
 		}
 	}
+	if query := cq.withPrograms; query != nil {
+		if err := cq.loadPrograms(ctx, query, nodes,
+			func(n *Control) { n.Edges.Programs = []*Program{} },
+			func(n *Control, e *Program) { n.Edges.Programs = append(n.Edges.Programs, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range cq.withNamedProcedures {
 		if err := cq.loadProcedures(ctx, query, nodes,
 			func(n *Control) { n.appendNamedProcedures(name) },
@@ -810,6 +858,13 @@ func (cq *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 		if err := cq.loadTasks(ctx, query, nodes,
 			func(n *Control) { n.appendNamedTasks(name) },
 			func(n *Control, e *Task) { n.appendNamedTasks(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range cq.withNamedPrograms {
+		if err := cq.loadPrograms(ctx, query, nodes,
+			func(n *Control) { n.appendNamedPrograms(name) },
+			func(n *Control, e *Program) { n.appendNamedPrograms(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1286,6 +1341,68 @@ func (cq *ControlQuery) loadTasks(ctx context.Context, query *TaskQuery, nodes [
 	}
 	return nil
 }
+func (cq *ControlQuery) loadPrograms(ctx context.Context, query *ProgramQuery, nodes []*Control, init func(*Control), assign func(*Control, *Program)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Control)
+	nids := make(map[string]map[*Control]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(control.ProgramsTable)
+		joinT.Schema(cq.schemaConfig.ProgramControls)
+		s.Join(joinT).On(s.C(program.FieldID), joinT.C(control.ProgramsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(control.ProgramsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(control.ProgramsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Control]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Program](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "programs" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 
 func (cq *ControlQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := cq.querySpec()
@@ -1494,6 +1611,20 @@ func (cq *ControlQuery) WithNamedTasks(name string, opts ...func(*TaskQuery)) *C
 		cq.withNamedTasks = make(map[string]*TaskQuery)
 	}
 	cq.withNamedTasks[name] = query
+	return cq
+}
+
+// WithNamedPrograms tells the query-builder to eager-load the nodes that are connected to the "programs"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (cq *ControlQuery) WithNamedPrograms(name string, opts ...func(*ProgramQuery)) *ControlQuery {
+	query := (&ProgramClient{config: cq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if cq.withNamedPrograms == nil {
+		cq.withNamedPrograms = make(map[string]*ProgramQuery)
+	}
+	cq.withNamedPrograms[name] = query
 	return cq
 }
 

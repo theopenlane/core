@@ -130,7 +130,8 @@ func (User) Fields() []ent.Field {
 		field.Enum("role").
 			Comment("the user's role").
 			GoType(enums.Role("")).
-			Default(string(enums.RoleUser)).
+			Values(enums.RoleUser.String()). // add user as a role
+			Default(enums.RoleUser.String()).
 			Optional(),
 	}
 }
@@ -180,6 +181,8 @@ func (User) Edges() []ent.Edge {
 		edge.To("subcontrols", Subcontrol.Type),
 		edge.To("assigner_tasks", Task.Type),
 		edge.To("assignee_tasks", Task.Type),
+		edge.To("programs", Program.Type).
+			Through("program_memberships", ProgramMembership.Type),
 	}
 }
 

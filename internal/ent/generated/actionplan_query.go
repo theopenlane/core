@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -33,12 +34,14 @@ type ActionPlanQuery struct {
 	withRisk          *RiskQuery
 	withControl       *ControlQuery
 	withUser          *UserQuery
+	withProgram       *ProgramQuery
 	loadTotal         []func(context.Context, []*ActionPlan) error
 	modifiers         []func(*sql.Selector)
 	withNamedStandard map[string]*StandardQuery
 	withNamedRisk     map[string]*RiskQuery
 	withNamedControl  map[string]*ControlQuery
 	withNamedUser     map[string]*UserQuery
+	withNamedProgram  map[string]*ProgramQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -169,6 +172,31 @@ func (apq *ActionPlanQuery) QueryUser() *UserQuery {
 		schemaConfig := apq.schemaConfig
 		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.UserActionplans
+		fromU = sqlgraph.SetNeighbors(apq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryProgram chains the current query on the "program" edge.
+func (apq *ActionPlanQuery) QueryProgram() *ProgramQuery {
+	query := (&ProgramClient{config: apq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := apq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := apq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(actionplan.Table, actionplan.FieldID, selector),
+			sqlgraph.To(program.Table, program.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, actionplan.ProgramTable, actionplan.ProgramPrimaryKey...),
+		)
+		schemaConfig := apq.schemaConfig
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.ProgramActionplans
 		fromU = sqlgraph.SetNeighbors(apq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -371,6 +399,7 @@ func (apq *ActionPlanQuery) Clone() *ActionPlanQuery {
 		withRisk:     apq.withRisk.Clone(),
 		withControl:  apq.withControl.Clone(),
 		withUser:     apq.withUser.Clone(),
+		withProgram:  apq.withProgram.Clone(),
 		// clone intermediate query.
 		sql:       apq.sql.Clone(),
 		path:      apq.path,
@@ -419,6 +448,17 @@ func (apq *ActionPlanQuery) WithUser(opts ...func(*UserQuery)) *ActionPlanQuery 
 		opt(query)
 	}
 	apq.withUser = query
+	return apq
+}
+
+// WithProgram tells the query-builder to eager-load the nodes that are connected to
+// the "program" edge. The optional arguments are used to configure the query builder of the edge.
+func (apq *ActionPlanQuery) WithProgram(opts ...func(*ProgramQuery)) *ActionPlanQuery {
+	query := (&ProgramClient{config: apq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	apq.withProgram = query
 	return apq
 }
 
@@ -500,11 +540,12 @@ func (apq *ActionPlanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 	var (
 		nodes       = []*ActionPlan{}
 		_spec       = apq.querySpec()
-		loadedTypes = [4]bool{
+		loadedTypes = [5]bool{
 			apq.withStandard != nil,
 			apq.withRisk != nil,
 			apq.withControl != nil,
 			apq.withUser != nil,
+			apq.withProgram != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -558,6 +599,13 @@ func (apq *ActionPlanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 			return nil, err
 		}
 	}
+	if query := apq.withProgram; query != nil {
+		if err := apq.loadProgram(ctx, query, nodes,
+			func(n *ActionPlan) { n.Edges.Program = []*Program{} },
+			func(n *ActionPlan, e *Program) { n.Edges.Program = append(n.Edges.Program, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range apq.withNamedStandard {
 		if err := apq.loadStandard(ctx, query, nodes,
 			func(n *ActionPlan) { n.appendNamedStandard(name) },
@@ -583,6 +631,13 @@ func (apq *ActionPlanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 		if err := apq.loadUser(ctx, query, nodes,
 			func(n *ActionPlan) { n.appendNamedUser(name) },
 			func(n *ActionPlan, e *User) { n.appendNamedUser(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range apq.withNamedProgram {
+		if err := apq.loadProgram(ctx, query, nodes,
+			func(n *ActionPlan) { n.appendNamedProgram(name) },
+			func(n *ActionPlan, e *Program) { n.appendNamedProgram(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -842,6 +897,68 @@ func (apq *ActionPlanQuery) loadUser(ctx context.Context, query *UserQuery, node
 	}
 	return nil
 }
+func (apq *ActionPlanQuery) loadProgram(ctx context.Context, query *ProgramQuery, nodes []*ActionPlan, init func(*ActionPlan), assign func(*ActionPlan, *Program)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*ActionPlan)
+	nids := make(map[string]map[*ActionPlan]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(actionplan.ProgramTable)
+		joinT.Schema(apq.schemaConfig.ProgramActionplans)
+		s.Join(joinT).On(s.C(program.FieldID), joinT.C(actionplan.ProgramPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(actionplan.ProgramPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(actionplan.ProgramPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*ActionPlan]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Program](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "program" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 
 func (apq *ActionPlanQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := apq.querySpec()
@@ -994,6 +1111,20 @@ func (apq *ActionPlanQuery) WithNamedUser(name string, opts ...func(*UserQuery))
 		apq.withNamedUser = make(map[string]*UserQuery)
 	}
 	apq.withNamedUser[name] = query
+	return apq
+}
+
+// WithNamedProgram tells the query-builder to eager-load the nodes that are connected to the "program"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (apq *ActionPlanQuery) WithNamedProgram(name string, opts ...func(*ProgramQuery)) *ActionPlanQuery {
+	query := (&ProgramClient{config: apq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if apq.withNamedProgram == nil {
+		apq.withNamedProgram = make(map[string]*ProgramQuery)
+	}
+	apq.withNamedProgram[name] = query
 	return apq
 }
 

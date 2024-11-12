@@ -1,0 +1,41 @@
+
+
+query GetAllProgramMembershipHistories {
+  programMembershipHistories {
+    edges {
+      node {
+        createdAt
+        createdBy
+        historyTime
+        id
+        operation
+        programID
+        ref
+        role
+        updatedAt
+        updatedBy
+        userID
+      }
+    }
+  }
+}
+
+query GetProgramMembershipHistories($where: ProgramMembershipHistoryWhereInput) {
+  programMembershipHistories(where: $where) {
+    edges {
+      node {
+        createdAt
+        createdBy
+        historyTime
+        id
+        operation
+        programID
+        ref
+        role
+        updatedAt
+        updatedBy
+        userID
+      }
+    }
+  }
+}

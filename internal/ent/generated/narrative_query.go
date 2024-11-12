@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/internal/ent/generated/program"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -33,12 +34,14 @@ type NarrativeQuery struct {
 	withControl               *ControlQuery
 	withProcedure             *ProcedureQuery
 	withControlobjective      *ControlObjectiveQuery
+	withProgram               *ProgramQuery
 	loadTotal                 []func(context.Context, []*Narrative) error
 	modifiers                 []func(*sql.Selector)
 	withNamedPolicy           map[string]*InternalPolicyQuery
 	withNamedControl          map[string]*ControlQuery
 	withNamedProcedure        map[string]*ProcedureQuery
 	withNamedControlobjective map[string]*ControlObjectiveQuery
+	withNamedProgram          map[string]*ProgramQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -169,6 +172,31 @@ func (nq *NarrativeQuery) QueryControlobjective() *ControlObjectiveQuery {
 		schemaConfig := nq.schemaConfig
 		step.To.Schema = schemaConfig.ControlObjective
 		step.Edge.Schema = schemaConfig.ControlObjectiveNarratives
+		fromU = sqlgraph.SetNeighbors(nq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryProgram chains the current query on the "program" edge.
+func (nq *NarrativeQuery) QueryProgram() *ProgramQuery {
+	query := (&ProgramClient{config: nq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := nq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := nq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(narrative.Table, narrative.FieldID, selector),
+			sqlgraph.To(program.Table, program.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, narrative.ProgramTable, narrative.ProgramPrimaryKey...),
+		)
+		schemaConfig := nq.schemaConfig
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.ProgramNarratives
 		fromU = sqlgraph.SetNeighbors(nq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -371,6 +399,7 @@ func (nq *NarrativeQuery) Clone() *NarrativeQuery {
 		withControl:          nq.withControl.Clone(),
 		withProcedure:        nq.withProcedure.Clone(),
 		withControlobjective: nq.withControlobjective.Clone(),
+		withProgram:          nq.withProgram.Clone(),
 		// clone intermediate query.
 		sql:       nq.sql.Clone(),
 		path:      nq.path,
@@ -419,6 +448,17 @@ func (nq *NarrativeQuery) WithControlobjective(opts ...func(*ControlObjectiveQue
 		opt(query)
 	}
 	nq.withControlobjective = query
+	return nq
+}
+
+// WithProgram tells the query-builder to eager-load the nodes that are connected to
+// the "program" edge. The optional arguments are used to configure the query builder of the edge.
+func (nq *NarrativeQuery) WithProgram(opts ...func(*ProgramQuery)) *NarrativeQuery {
+	query := (&ProgramClient{config: nq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	nq.withProgram = query
 	return nq
 }
 
@@ -500,11 +540,12 @@ func (nq *NarrativeQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Na
 	var (
 		nodes       = []*Narrative{}
 		_spec       = nq.querySpec()
-		loadedTypes = [4]bool{
+		loadedTypes = [5]bool{
 			nq.withPolicy != nil,
 			nq.withControl != nil,
 			nq.withProcedure != nil,
 			nq.withControlobjective != nil,
+			nq.withProgram != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -560,6 +601,13 @@ func (nq *NarrativeQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Na
 			return nil, err
 		}
 	}
+	if query := nq.withProgram; query != nil {
+		if err := nq.loadProgram(ctx, query, nodes,
+			func(n *Narrative) { n.Edges.Program = []*Program{} },
+			func(n *Narrative, e *Program) { n.Edges.Program = append(n.Edges.Program, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range nq.withNamedPolicy {
 		if err := nq.loadPolicy(ctx, query, nodes,
 			func(n *Narrative) { n.appendNamedPolicy(name) },
@@ -585,6 +633,13 @@ func (nq *NarrativeQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Na
 		if err := nq.loadControlobjective(ctx, query, nodes,
 			func(n *Narrative) { n.appendNamedControlobjective(name) },
 			func(n *Narrative, e *ControlObjective) { n.appendNamedControlobjective(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range nq.withNamedProgram {
+		if err := nq.loadProgram(ctx, query, nodes,
+			func(n *Narrative) { n.appendNamedProgram(name) },
+			func(n *Narrative, e *Program) { n.appendNamedProgram(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -844,6 +899,68 @@ func (nq *NarrativeQuery) loadControlobjective(ctx context.Context, query *Contr
 	}
 	return nil
 }
+func (nq *NarrativeQuery) loadProgram(ctx context.Context, query *ProgramQuery, nodes []*Narrative, init func(*Narrative), assign func(*Narrative, *Program)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Narrative)
+	nids := make(map[string]map[*Narrative]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(narrative.ProgramTable)
+		joinT.Schema(nq.schemaConfig.ProgramNarratives)
+		s.Join(joinT).On(s.C(program.FieldID), joinT.C(narrative.ProgramPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(narrative.ProgramPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(narrative.ProgramPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Narrative]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Program](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "program" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 
 func (nq *NarrativeQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := nq.querySpec()
@@ -996,6 +1113,20 @@ func (nq *NarrativeQuery) WithNamedControlobjective(name string, opts ...func(*C
 		nq.withNamedControlobjective = make(map[string]*ControlObjectiveQuery)
 	}
 	nq.withNamedControlobjective[name] = query
+	return nq
+}
+
+// WithNamedProgram tells the query-builder to eager-load the nodes that are connected to the "program"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (nq *NarrativeQuery) WithNamedProgram(name string, opts ...func(*ProgramQuery)) *NarrativeQuery {
+	query := (&ProgramClient{config: nq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if nq.withNamedProgram == nil {
+		nq.withNamedProgram = make(map[string]*ProgramQuery)
+	}
+	nq.withNamedProgram[name] = query
 	return nq
 }
 

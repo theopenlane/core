@@ -225,6 +225,15 @@ extend type Query{
         query: String!
     ): ProcedureSearchResult
     """
+    Search across Program objects
+    """
+    adminProgramSearch(
+        """
+        Search query
+        """
+        query: String!
+    ): ProgramSearchResult
+    """
     Search across Risk objects
     """
     adminRiskSearch(

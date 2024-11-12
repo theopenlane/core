@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
@@ -404,6 +405,21 @@ func (coc *ControlObjectiveCreate) AddTasks(t ...*Task) *ControlObjectiveCreate 
 	return coc.AddTaskIDs(ids...)
 }
 
+// AddProgramIDs adds the "programs" edge to the Program entity by IDs.
+func (coc *ControlObjectiveCreate) AddProgramIDs(ids ...string) *ControlObjectiveCreate {
+	coc.mutation.AddProgramIDs(ids...)
+	return coc
+}
+
+// AddPrograms adds the "programs" edges to the Program entity.
+func (coc *ControlObjectiveCreate) AddPrograms(p ...*Program) *ControlObjectiveCreate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return coc.AddProgramIDs(ids...)
+}
+
 // Mutation returns the ControlObjectiveMutation object of the builder.
 func (coc *ControlObjectiveCreate) Mutation() *ControlObjectiveMutation {
 	return coc.mutation
@@ -727,6 +743,23 @@ func (coc *ControlObjectiveCreate) createSpec() (*ControlObjective, *sqlgraph.Cr
 			},
 		}
 		edge.Schema = coc.schemaConfig.ControlObjectiveTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := coc.mutation.ProgramsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   controlobjective.ProgramsTable,
+			Columns: controlobjective.ProgramsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = coc.schemaConfig.ProgramControlobjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

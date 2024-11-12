@@ -70,15 +70,18 @@ type RiskEdges struct {
 	Procedure []*Procedure `json:"procedure,omitempty"`
 	// Actionplans holds the value of the actionplans edge.
 	Actionplans []*ActionPlan `json:"actionplans,omitempty"`
+	// Program holds the value of the program edge.
+	Program []*Program `json:"program,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [4]bool
 	// totalCount holds the count of the edges above.
-	totalCount [3]map[string]int
+	totalCount [4]map[string]int
 
 	namedControl     map[string][]*Control
 	namedProcedure   map[string][]*Procedure
 	namedActionplans map[string][]*ActionPlan
+	namedProgram     map[string][]*Program
 }
 
 // ControlOrErr returns the Control value or an error if the edge
@@ -106,6 +109,15 @@ func (e RiskEdges) ActionplansOrErr() ([]*ActionPlan, error) {
 		return e.Actionplans, nil
 	}
 	return nil, &NotLoadedError{edge: "actionplans"}
+}
+
+// ProgramOrErr returns the Program value or an error if the edge
+// was not loaded in eager-loading.
+func (e RiskEdges) ProgramOrErr() ([]*Program, error) {
+	if e.loadedTypes[3] {
+		return e.Program, nil
+	}
+	return nil, &NotLoadedError{edge: "program"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -289,6 +301,11 @@ func (r *Risk) QueryActionplans() *ActionPlanQuery {
 	return NewRiskClient(r.config).QueryActionplans(r)
 }
 
+// QueryProgram queries the "program" edge of the Risk entity.
+func (r *Risk) QueryProgram() *ProgramQuery {
+	return NewRiskClient(r.config).QueryProgram(r)
+}
+
 // Update returns a builder for updating this Risk.
 // Note that you need to call Risk.Unwrap() before calling this method if this Risk
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -438,6 +455,30 @@ func (r *Risk) appendNamedActionplans(name string, edges ...*ActionPlan) {
 		r.Edges.namedActionplans[name] = []*ActionPlan{}
 	} else {
 		r.Edges.namedActionplans[name] = append(r.Edges.namedActionplans[name], edges...)
+	}
+}
+
+// NamedProgram returns the Program named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (r *Risk) NamedProgram(name string) ([]*Program, error) {
+	if r.Edges.namedProgram == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := r.Edges.namedProgram[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (r *Risk) appendNamedProgram(name string, edges ...*Program) {
+	if r.Edges.namedProgram == nil {
+		r.Edges.namedProgram = make(map[string][]*Program)
+	}
+	if len(edges) == 0 {
+		r.Edges.namedProgram[name] = []*Program{}
+	} else {
+		r.Edges.namedProgram[name] = append(r.Edges.namedProgram[name], edges...)
 	}
 }
 
