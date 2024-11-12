@@ -75,14 +75,14 @@ type program
     define can_delete: [service] or admin or owner from parent
     define can_edit: [service] or admin or owner from parent
     define can_view: [service] or member or admin or can_edit or owner from parent
-    # add parent relation, only the organization owner will have access to the program by default
+    # parent relation, only the organization owner will have access to the program by default
     define parent: [organization]
     # additional fine-grained permissions
     ## allow owner and assigned users to view audit logs
     define audit_log_viewer: [user] or admin
     ## allow members to invite other members
     define can_invite_members: [user] or member or can_edit
-    ## onnly allow users with edit access to the org to invite other admins
+    ## only allow users with edit access to the org to invite other admins
     define can_invite_admins: [user] or can_edit
     # additional relations
     define user_in_context: [user]
