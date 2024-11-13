@@ -49,13 +49,17 @@ issues:
     - pkg/objects/mocks/*
     - schema/*
     - query/*
-    - fga/*
+    - fga/model/*
+    - fga/tests/*
     - docs/*
     - internal/graphapi/generate/*
+    - db/migrations/*
+    - db/migrations-goose-postgres/*
   exclude-files:
     - internal/graphapi/gen_server.go
     - internal/graphapi/gen_models.go
     - internal/openlaneclient/graphclient.go
     - pkg/openlaneclient/graphclient.go
+    - schema.graphql
 output:
   show-stats: true

@@ -38,7 +38,7 @@ func (Subcontrol) Fields() []ent.Field {
 			Comment("number of the subcontrol"),
 		field.Text("family").
 			Optional().
-			Comment("subcontrol family "),
+			Comment("subcontrol family"),
 		field.String("class").
 			Optional().
 			Comment("subcontrol class"),
