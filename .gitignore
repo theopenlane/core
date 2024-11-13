@@ -26,7 +26,7 @@ server.key
 private_key.pem
 public_key.pem
 
-# emails tests 
+# emails tests
 emails/*
 fixtures/emails/*
 

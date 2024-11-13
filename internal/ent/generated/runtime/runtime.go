@@ -738,6 +738,14 @@ func init() {
 	entitlementDescCancelled := entitlementFields[6].Descriptor()
 	// entitlement.DefaultCancelled holds the default value on creation for the cancelled field.
 	entitlement.DefaultCancelled = entitlementDescCancelled.Default.(bool)
+	// entitlementDescBillStarting is the schema descriptor for bill_starting field.
+	entitlementDescBillStarting := entitlementFields[8].Descriptor()
+	// entitlement.DefaultBillStarting holds the default value on creation for the bill_starting field.
+	entitlement.DefaultBillStarting = entitlementDescBillStarting.Default.(func() time.Time)
+	// entitlementDescActive is the schema descriptor for active field.
+	entitlementDescActive := entitlementFields[9].Descriptor()
+	// entitlement.DefaultActive holds the default value on creation for the active field.
+	entitlement.DefaultActive = entitlementDescActive.Default.(bool)
 	// entitlementDescID is the schema descriptor for id field.
 	entitlementDescID := entitlementMixinFields1[0].Descriptor()
 	// entitlement.DefaultID holds the default value on creation for the id field.
@@ -785,6 +793,14 @@ func init() {
 	entitlementhistoryDescCancelled := entitlementhistoryFields[19].Descriptor()
 	// entitlementhistory.DefaultCancelled holds the default value on creation for the cancelled field.
 	entitlementhistory.DefaultCancelled = entitlementhistoryDescCancelled.Default.(bool)
+	// entitlementhistoryDescBillStarting is the schema descriptor for bill_starting field.
+	entitlementhistoryDescBillStarting := entitlementhistoryFields[21].Descriptor()
+	// entitlementhistory.DefaultBillStarting holds the default value on creation for the bill_starting field.
+	entitlementhistory.DefaultBillStarting = entitlementhistoryDescBillStarting.Default.(func() time.Time)
+	// entitlementhistoryDescActive is the schema descriptor for active field.
+	entitlementhistoryDescActive := entitlementhistoryFields[22].Descriptor()
+	// entitlementhistory.DefaultActive holds the default value on creation for the active field.
+	entitlementhistory.DefaultActive = entitlementhistoryDescActive.Default.(bool)
 	// entitlementhistoryDescID is the schema descriptor for id field.
 	entitlementhistoryDescID := entitlementhistoryFields[7].Descriptor()
 	// entitlementhistory.DefaultID holds the default value on creation for the id field.
@@ -919,7 +935,7 @@ func init() {
 	// entitlementplanfeature.PlanIDValidator is a validator for the "plan_id" field. It is called by the builders before save.
 	entitlementplanfeature.PlanIDValidator = entitlementplanfeatureDescPlanID.Validators[0].(func(string) error)
 	// entitlementplanfeatureDescFeatureID is the schema descriptor for feature_id field.
-	entitlementplanfeatureDescFeatureID := entitlementplanfeatureFields[2].Descriptor()
+	entitlementplanfeatureDescFeatureID := entitlementplanfeatureFields[3].Descriptor()
 	// entitlementplanfeature.FeatureIDValidator is a validator for the "feature_id" field. It is called by the builders before save.
 	entitlementplanfeature.FeatureIDValidator = entitlementplanfeatureDescFeatureID.Validators[0].(func(string) error)
 	// entitlementplanfeatureDescID is the schema descriptor for id field.

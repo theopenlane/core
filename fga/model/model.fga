@@ -6,7 +6,7 @@ type user
     define can_view: _self
     define can_edit: _self
     define can_delete: _self
-    
+
 type service
   relations
     define _self: [service]
@@ -66,7 +66,7 @@ type file
     define can_edit: [user] or can_delete or can_edit from parent
     define can_delete: [user] or can_delete from parent
     define parent: [user, program, organization, control, procedure, group, template, documentdata, contact, policy]
-type program 
+type program
   relations
     # main roles
     define admin: [user] or owner from parent
@@ -110,7 +110,7 @@ type policy
     define can_edit: [user] or can_edit from parent
     define can_delete: [user] or can_delete from parent
     define parent: [organization]
-type procedure 
+type procedure
   relations
     define can_view: [user] or can_view from parent
     define can_edit: [user] or can_edit from parent

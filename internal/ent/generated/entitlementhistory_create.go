@@ -255,6 +255,48 @@ func (ehc *EntitlementHistoryCreate) SetNillableCancelled(b *bool) *EntitlementH
 	return ehc
 }
 
+// SetCancelledDate sets the "cancelled_date" field.
+func (ehc *EntitlementHistoryCreate) SetCancelledDate(t time.Time) *EntitlementHistoryCreate {
+	ehc.mutation.SetCancelledDate(t)
+	return ehc
+}
+
+// SetNillableCancelledDate sets the "cancelled_date" field if the given value is not nil.
+func (ehc *EntitlementHistoryCreate) SetNillableCancelledDate(t *time.Time) *EntitlementHistoryCreate {
+	if t != nil {
+		ehc.SetCancelledDate(*t)
+	}
+	return ehc
+}
+
+// SetBillStarting sets the "bill_starting" field.
+func (ehc *EntitlementHistoryCreate) SetBillStarting(t time.Time) *EntitlementHistoryCreate {
+	ehc.mutation.SetBillStarting(t)
+	return ehc
+}
+
+// SetNillableBillStarting sets the "bill_starting" field if the given value is not nil.
+func (ehc *EntitlementHistoryCreate) SetNillableBillStarting(t *time.Time) *EntitlementHistoryCreate {
+	if t != nil {
+		ehc.SetBillStarting(*t)
+	}
+	return ehc
+}
+
+// SetActive sets the "active" field.
+func (ehc *EntitlementHistoryCreate) SetActive(b bool) *EntitlementHistoryCreate {
+	ehc.mutation.SetActive(b)
+	return ehc
+}
+
+// SetNillableActive sets the "active" field if the given value is not nil.
+func (ehc *EntitlementHistoryCreate) SetNillableActive(b *bool) *EntitlementHistoryCreate {
+	if b != nil {
+		ehc.SetActive(*b)
+	}
+	return ehc
+}
+
 // SetID sets the "id" field.
 func (ehc *EntitlementHistoryCreate) SetID(s string) *EntitlementHistoryCreate {
 	ehc.mutation.SetID(s)
@@ -346,6 +388,17 @@ func (ehc *EntitlementHistoryCreate) defaults() error {
 		v := entitlementhistory.DefaultCancelled
 		ehc.mutation.SetCancelled(v)
 	}
+	if _, ok := ehc.mutation.BillStarting(); !ok {
+		if entitlementhistory.DefaultBillStarting == nil {
+			return fmt.Errorf("generated: uninitialized entitlementhistory.DefaultBillStarting (forgotten import generated/runtime?)")
+		}
+		v := entitlementhistory.DefaultBillStarting()
+		ehc.mutation.SetBillStarting(v)
+	}
+	if _, ok := ehc.mutation.Active(); !ok {
+		v := entitlementhistory.DefaultActive
+		ehc.mutation.SetActive(v)
+	}
 	if _, ok := ehc.mutation.ID(); !ok {
 		if entitlementhistory.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized entitlementhistory.DefaultID (forgotten import generated/runtime?)")
@@ -383,6 +436,12 @@ func (ehc *EntitlementHistoryCreate) check() error {
 	}
 	if _, ok := ehc.mutation.Cancelled(); !ok {
 		return &ValidationError{Name: "cancelled", err: errors.New(`generated: missing required field "EntitlementHistory.cancelled"`)}
+	}
+	if _, ok := ehc.mutation.BillStarting(); !ok {
+		return &ValidationError{Name: "bill_starting", err: errors.New(`generated: missing required field "EntitlementHistory.bill_starting"`)}
+	}
+	if _, ok := ehc.mutation.Active(); !ok {
+		return &ValidationError{Name: "active", err: errors.New(`generated: missing required field "EntitlementHistory.active"`)}
 	}
 	return nil
 }
@@ -495,6 +554,18 @@ func (ehc *EntitlementHistoryCreate) createSpec() (*EntitlementHistory, *sqlgrap
 	if value, ok := ehc.mutation.Cancelled(); ok {
 		_spec.SetField(entitlementhistory.FieldCancelled, field.TypeBool, value)
 		_node.Cancelled = value
+	}
+	if value, ok := ehc.mutation.CancelledDate(); ok {
+		_spec.SetField(entitlementhistory.FieldCancelledDate, field.TypeTime, value)
+		_node.CancelledDate = value
+	}
+	if value, ok := ehc.mutation.BillStarting(); ok {
+		_spec.SetField(entitlementhistory.FieldBillStarting, field.TypeTime, value)
+		_node.BillStarting = value
+	}
+	if value, ok := ehc.mutation.Active(); ok {
+		_spec.SetField(entitlementhistory.FieldActive, field.TypeBool, value)
+		_node.Active = value
 	}
 	return _node, _spec
 }

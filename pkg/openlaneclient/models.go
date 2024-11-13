@@ -3089,7 +3089,13 @@ type CreateEntitlementInput struct {
 	// the time at which a customer's entitlement will expire, e.g. they've cancelled but paid through the end of the month
 	ExpiresAt *time.Time `json:"expiresAt,omitempty"`
 	// whether or not the customer has cancelled their entitlement - usually used in conjunction with expires and expires at
-	Cancelled      *bool    `json:"cancelled,omitempty"`
+	Cancelled *bool `json:"cancelled,omitempty"`
+	// the date at which the customer cancelled their entitlement
+	CancelledDate *time.Time `json:"cancelledDate,omitempty"`
+	// the date at which the customer's billing starts
+	BillStarting *time.Time `json:"billStarting,omitempty"`
+	// whether or not the entitlement is active
+	Active         *bool    `json:"active,omitempty"`
 	OwnerID        *string  `json:"ownerID,omitempty"`
 	PlanID         string   `json:"planID"`
 	OrganizationID string   `json:"organizationID"`
@@ -3102,11 +3108,15 @@ type CreateEntitlementPlanFeatureInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// metadata for the entitlement plan feature such as usage limits
-	Metadata  map[string]interface{} `json:"metadata,omitempty"`
-	OwnerID   *string                `json:"ownerID,omitempty"`
-	PlanID    string                 `json:"planID"`
-	FeatureID string                 `json:"featureID"`
-	EventIDs  []string               `json:"eventIDs,omitempty"`
+	Metadata map[string]interface{} `json:"metadata,omitempty"`
+	// the product ID in Stripe
+	StripeProductID *string `json:"stripeProductID,omitempty"`
+	// the feature ID in Stripe
+	StripeFeatureID *string  `json:"stripeFeatureID,omitempty"`
+	OwnerID         *string  `json:"ownerID,omitempty"`
+	PlanID          string   `json:"planID"`
+	FeatureID       string   `json:"featureID"`
+	EventIDs        []string `json:"eventIDs,omitempty"`
 }
 
 // CreateEntitlementPlanInput is used for create EntitlementPlan object.
@@ -3123,11 +3133,15 @@ type CreateEntitlementPlanInput struct {
 	// the version of the plan
 	Version string `json:"version"`
 	// metadata for the plan
-	Metadata       map[string]interface{} `json:"metadata,omitempty"`
-	OwnerID        *string                `json:"ownerID,omitempty"`
-	EntitlementIDs []string               `json:"entitlementIDs,omitempty"`
-	BaseFeatureIDs []string               `json:"baseFeatureIDs,omitempty"`
-	EventIDs       []string               `json:"eventIDs,omitempty"`
+	Metadata map[string]interface{} `json:"metadata,omitempty"`
+	// the product ID in Stripe
+	StripeProductID *string `json:"stripeProductID,omitempty"`
+	// the price ID in Stripe associated with the product
+	StripePriceID  *string  `json:"stripePriceID,omitempty"`
+	OwnerID        *string  `json:"ownerID,omitempty"`
+	EntitlementIDs []string `json:"entitlementIDs,omitempty"`
+	BaseFeatureIDs []string `json:"baseFeatureIDs,omitempty"`
+	EventIDs       []string `json:"eventIDs,omitempty"`
 }
 
 // CreateEntityInput is used for create Entity object.
@@ -3205,9 +3219,11 @@ type CreateFeatureInput struct {
 	Description *string `json:"description,omitempty"`
 	// metadata for the feature
 	Metadata map[string]interface{} `json:"metadata,omitempty"`
-	OwnerID  *string                `json:"ownerID,omitempty"`
-	PlanIDs  []string               `json:"planIDs,omitempty"`
-	EventIDs []string               `json:"eventIDs,omitempty"`
+	// the feature ID in Stripe
+	StripeFeatureID *string  `json:"stripeFeatureID,omitempty"`
+	OwnerID         *string  `json:"ownerID,omitempty"`
+	PlanIDs         []string `json:"planIDs,omitempty"`
+	EventIDs        []string `json:"eventIDs,omitempty"`
 }
 
 // CreateFileInput is used for create File object.
@@ -3538,9 +3554,11 @@ type CreateOrganizationSettingInput struct {
 	// Usually government-issued tax ID or business ID such as ABN in Australia
 	TaxIdentifier *string `json:"taxIdentifier,omitempty"`
 	// geographical location of the organization
-	GeoLocation    *enums.Region `json:"geoLocation,omitempty"`
-	OrganizationID *string       `json:"organizationID,omitempty"`
-	FileIDs        []string      `json:"fileIDs,omitempty"`
+	GeoLocation *enums.Region `json:"geoLocation,omitempty"`
+	// the ID of the stripe customer associated with the organization
+	StripeID       *string  `json:"stripeID,omitempty"`
+	OrganizationID *string  `json:"organizationID,omitempty"`
+	FileIDs        []string `json:"fileIDs,omitempty"`
 }
 
 // CreatePersonalAccessTokenInput is used for create PersonalAccessToken object.
@@ -4348,7 +4366,13 @@ type Entitlement struct {
 	// the time at which a customer's entitlement will expire, e.g. they've cancelled but paid through the end of the month
 	ExpiresAt *time.Time `json:"expiresAt,omitempty"`
 	// whether or not the customer has cancelled their entitlement - usually used in conjunction with expires and expires at
-	Cancelled    bool             `json:"cancelled"`
+	Cancelled bool `json:"cancelled"`
+	// the date at which the customer cancelled their entitlement
+	CancelledDate *time.Time `json:"cancelledDate,omitempty"`
+	// the date at which the customer's billing starts
+	BillStarting time.Time `json:"billStarting"`
+	// whether or not the entitlement is active
+	Active       bool             `json:"active"`
 	Owner        *Organization    `json:"owner,omitempty"`
 	Plan         *EntitlementPlan `json:"plan"`
 	Organization *Organization    `json:"organization"`
@@ -4422,6 +4446,12 @@ type EntitlementHistory struct {
 	ExpiresAt *time.Time `json:"expiresAt,omitempty"`
 	// whether or not the customer has cancelled their entitlement - usually used in conjunction with expires and expires at
 	Cancelled bool `json:"cancelled"`
+	// the date at which the customer cancelled their entitlement
+	CancelledDate *time.Time `json:"cancelledDate,omitempty"`
+	// the date at which the customer's billing starts
+	BillStarting time.Time `json:"billStarting"`
+	// whether or not the entitlement is active
+	Active bool `json:"active"`
 }
 
 func (EntitlementHistory) IsNode() {}
@@ -4665,6 +4695,29 @@ type EntitlementHistoryWhereInput struct {
 	// cancelled field predicates
 	Cancelled    *bool `json:"cancelled,omitempty"`
 	CancelledNeq *bool `json:"cancelledNEQ,omitempty"`
+	// cancelled_date field predicates
+	CancelledDate       *time.Time   `json:"cancelledDate,omitempty"`
+	CancelledDateNeq    *time.Time   `json:"cancelledDateNEQ,omitempty"`
+	CancelledDateIn     []*time.Time `json:"cancelledDateIn,omitempty"`
+	CancelledDateNotIn  []*time.Time `json:"cancelledDateNotIn,omitempty"`
+	CancelledDateGt     *time.Time   `json:"cancelledDateGT,omitempty"`
+	CancelledDateGte    *time.Time   `json:"cancelledDateGTE,omitempty"`
+	CancelledDateLt     *time.Time   `json:"cancelledDateLT,omitempty"`
+	CancelledDateLte    *time.Time   `json:"cancelledDateLTE,omitempty"`
+	CancelledDateIsNil  *bool        `json:"cancelledDateIsNil,omitempty"`
+	CancelledDateNotNil *bool        `json:"cancelledDateNotNil,omitempty"`
+	// bill_starting field predicates
+	BillStarting      *time.Time   `json:"billStarting,omitempty"`
+	BillStartingNeq   *time.Time   `json:"billStartingNEQ,omitempty"`
+	BillStartingIn    []*time.Time `json:"billStartingIn,omitempty"`
+	BillStartingNotIn []*time.Time `json:"billStartingNotIn,omitempty"`
+	BillStartingGt    *time.Time   `json:"billStartingGT,omitempty"`
+	BillStartingGte   *time.Time   `json:"billStartingGTE,omitempty"`
+	BillStartingLt    *time.Time   `json:"billStartingLT,omitempty"`
+	BillStartingLte   *time.Time   `json:"billStartingLTE,omitempty"`
+	// active field predicates
+	Active    *bool `json:"active,omitempty"`
+	ActiveNeq *bool `json:"activeNEQ,omitempty"`
 }
 
 type EntitlementPlan struct {
@@ -4688,12 +4741,16 @@ type EntitlementPlan struct {
 	// the version of the plan
 	Version string `json:"version"`
 	// metadata for the plan
-	Metadata     map[string]interface{}    `json:"metadata,omitempty"`
-	Owner        *Organization             `json:"owner,omitempty"`
-	Entitlements []*Entitlement            `json:"entitlements,omitempty"`
-	BaseFeatures []*Feature                `json:"baseFeatures,omitempty"`
-	Events       []*Event                  `json:"events,omitempty"`
-	Features     []*EntitlementPlanFeature `json:"features,omitempty"`
+	Metadata map[string]interface{} `json:"metadata,omitempty"`
+	// the product ID in Stripe
+	StripeProductID *string `json:"stripeProductID,omitempty"`
+	// the price ID in Stripe associated with the product
+	StripePriceID *string                   `json:"stripePriceID,omitempty"`
+	Owner         *Organization             `json:"owner,omitempty"`
+	Entitlements  []*Entitlement            `json:"entitlements,omitempty"`
+	BaseFeatures  []*Feature                `json:"baseFeatures,omitempty"`
+	Events        []*Event                  `json:"events,omitempty"`
+	Features      []*EntitlementPlanFeature `json:"features,omitempty"`
 }
 
 func (EntitlementPlan) IsNode() {}
@@ -4747,13 +4804,17 @@ type EntitlementPlanFeature struct {
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// metadata for the entitlement plan feature such as usage limits
-	Metadata  map[string]interface{} `json:"metadata,omitempty"`
-	PlanID    string                 `json:"planID"`
-	FeatureID string                 `json:"featureID"`
-	Owner     *Organization          `json:"owner,omitempty"`
-	Plan      *EntitlementPlan       `json:"plan"`
-	Feature   *Feature               `json:"feature"`
-	Events    []*Event               `json:"events,omitempty"`
+	Metadata map[string]interface{} `json:"metadata,omitempty"`
+	PlanID   string                 `json:"planID"`
+	// the product ID in Stripe
+	StripeProductID *string `json:"stripeProductID,omitempty"`
+	FeatureID       string  `json:"featureID"`
+	// the feature ID in Stripe
+	StripeFeatureID *string          `json:"stripeFeatureID,omitempty"`
+	Owner           *Organization    `json:"owner,omitempty"`
+	Plan            *EntitlementPlan `json:"plan"`
+	Feature         *Feature         `json:"feature"`
+	Events          []*Event         `json:"events,omitempty"`
 }
 
 func (EntitlementPlanFeature) IsNode() {}
@@ -4810,9 +4871,13 @@ type EntitlementPlanFeatureHistory struct {
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// metadata for the entitlement plan feature such as usage limits
-	Metadata  map[string]interface{} `json:"metadata,omitempty"`
-	PlanID    string                 `json:"planID"`
-	FeatureID string                 `json:"featureID"`
+	Metadata map[string]interface{} `json:"metadata,omitempty"`
+	PlanID   string                 `json:"planID"`
+	// the product ID in Stripe
+	StripeProductID *string `json:"stripeProductID,omitempty"`
+	FeatureID       string  `json:"featureID"`
+	// the feature ID in Stripe
+	StripeFeatureID *string `json:"stripeFeatureID,omitempty"`
 }
 
 func (EntitlementPlanFeatureHistory) IsNode() {}
@@ -4993,6 +5058,22 @@ type EntitlementPlanFeatureHistoryWhereInput struct {
 	PlanIDHasSuffix    *string  `json:"planIDHasSuffix,omitempty"`
 	PlanIDEqualFold    *string  `json:"planIDEqualFold,omitempty"`
 	PlanIDContainsFold *string  `json:"planIDContainsFold,omitempty"`
+	// stripe_product_id field predicates
+	StripeProductID             *string  `json:"stripeProductID,omitempty"`
+	StripeProductIdneq          *string  `json:"stripeProductIDNEQ,omitempty"`
+	StripeProductIDIn           []string `json:"stripeProductIDIn,omitempty"`
+	StripeProductIDNotIn        []string `json:"stripeProductIDNotIn,omitempty"`
+	StripeProductIdgt           *string  `json:"stripeProductIDGT,omitempty"`
+	StripeProductIdgte          *string  `json:"stripeProductIDGTE,omitempty"`
+	StripeProductIdlt           *string  `json:"stripeProductIDLT,omitempty"`
+	StripeProductIdlte          *string  `json:"stripeProductIDLTE,omitempty"`
+	StripeProductIDContains     *string  `json:"stripeProductIDContains,omitempty"`
+	StripeProductIDHasPrefix    *string  `json:"stripeProductIDHasPrefix,omitempty"`
+	StripeProductIDHasSuffix    *string  `json:"stripeProductIDHasSuffix,omitempty"`
+	StripeProductIDIsNil        *bool    `json:"stripeProductIDIsNil,omitempty"`
+	StripeProductIDNotNil       *bool    `json:"stripeProductIDNotNil,omitempty"`
+	StripeProductIDEqualFold    *string  `json:"stripeProductIDEqualFold,omitempty"`
+	StripeProductIDContainsFold *string  `json:"stripeProductIDContainsFold,omitempty"`
 	// feature_id field predicates
 	FeatureID             *string  `json:"featureID,omitempty"`
 	FeatureIdneq          *string  `json:"featureIDNEQ,omitempty"`
@@ -5007,6 +5088,22 @@ type EntitlementPlanFeatureHistoryWhereInput struct {
 	FeatureIDHasSuffix    *string  `json:"featureIDHasSuffix,omitempty"`
 	FeatureIDEqualFold    *string  `json:"featureIDEqualFold,omitempty"`
 	FeatureIDContainsFold *string  `json:"featureIDContainsFold,omitempty"`
+	// stripe_feature_id field predicates
+	StripeFeatureID             *string  `json:"stripeFeatureID,omitempty"`
+	StripeFeatureIdneq          *string  `json:"stripeFeatureIDNEQ,omitempty"`
+	StripeFeatureIDIn           []string `json:"stripeFeatureIDIn,omitempty"`
+	StripeFeatureIDNotIn        []string `json:"stripeFeatureIDNotIn,omitempty"`
+	StripeFeatureIdgt           *string  `json:"stripeFeatureIDGT,omitempty"`
+	StripeFeatureIdgte          *string  `json:"stripeFeatureIDGTE,omitempty"`
+	StripeFeatureIdlt           *string  `json:"stripeFeatureIDLT,omitempty"`
+	StripeFeatureIdlte          *string  `json:"stripeFeatureIDLTE,omitempty"`
+	StripeFeatureIDContains     *string  `json:"stripeFeatureIDContains,omitempty"`
+	StripeFeatureIDHasPrefix    *string  `json:"stripeFeatureIDHasPrefix,omitempty"`
+	StripeFeatureIDHasSuffix    *string  `json:"stripeFeatureIDHasSuffix,omitempty"`
+	StripeFeatureIDIsNil        *bool    `json:"stripeFeatureIDIsNil,omitempty"`
+	StripeFeatureIDNotNil       *bool    `json:"stripeFeatureIDNotNil,omitempty"`
+	StripeFeatureIDEqualFold    *string  `json:"stripeFeatureIDEqualFold,omitempty"`
+	StripeFeatureIDContainsFold *string  `json:"stripeFeatureIDContainsFold,omitempty"`
 }
 
 type EntitlementPlanFeatureSearchResult struct {
@@ -5119,6 +5216,38 @@ type EntitlementPlanFeatureWhereInput struct {
 	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// stripe_product_id field predicates
+	StripeProductID             *string  `json:"stripeProductID,omitempty"`
+	StripeProductIdneq          *string  `json:"stripeProductIDNEQ,omitempty"`
+	StripeProductIDIn           []string `json:"stripeProductIDIn,omitempty"`
+	StripeProductIDNotIn        []string `json:"stripeProductIDNotIn,omitempty"`
+	StripeProductIdgt           *string  `json:"stripeProductIDGT,omitempty"`
+	StripeProductIdgte          *string  `json:"stripeProductIDGTE,omitempty"`
+	StripeProductIdlt           *string  `json:"stripeProductIDLT,omitempty"`
+	StripeProductIdlte          *string  `json:"stripeProductIDLTE,omitempty"`
+	StripeProductIDContains     *string  `json:"stripeProductIDContains,omitempty"`
+	StripeProductIDHasPrefix    *string  `json:"stripeProductIDHasPrefix,omitempty"`
+	StripeProductIDHasSuffix    *string  `json:"stripeProductIDHasSuffix,omitempty"`
+	StripeProductIDIsNil        *bool    `json:"stripeProductIDIsNil,omitempty"`
+	StripeProductIDNotNil       *bool    `json:"stripeProductIDNotNil,omitempty"`
+	StripeProductIDEqualFold    *string  `json:"stripeProductIDEqualFold,omitempty"`
+	StripeProductIDContainsFold *string  `json:"stripeProductIDContainsFold,omitempty"`
+	// stripe_feature_id field predicates
+	StripeFeatureID             *string  `json:"stripeFeatureID,omitempty"`
+	StripeFeatureIdneq          *string  `json:"stripeFeatureIDNEQ,omitempty"`
+	StripeFeatureIDIn           []string `json:"stripeFeatureIDIn,omitempty"`
+	StripeFeatureIDNotIn        []string `json:"stripeFeatureIDNotIn,omitempty"`
+	StripeFeatureIdgt           *string  `json:"stripeFeatureIDGT,omitempty"`
+	StripeFeatureIdgte          *string  `json:"stripeFeatureIDGTE,omitempty"`
+	StripeFeatureIdlt           *string  `json:"stripeFeatureIDLT,omitempty"`
+	StripeFeatureIdlte          *string  `json:"stripeFeatureIDLTE,omitempty"`
+	StripeFeatureIDContains     *string  `json:"stripeFeatureIDContains,omitempty"`
+	StripeFeatureIDHasPrefix    *string  `json:"stripeFeatureIDHasPrefix,omitempty"`
+	StripeFeatureIDHasSuffix    *string  `json:"stripeFeatureIDHasSuffix,omitempty"`
+	StripeFeatureIDIsNil        *bool    `json:"stripeFeatureIDIsNil,omitempty"`
+	StripeFeatureIDNotNil       *bool    `json:"stripeFeatureIDNotNil,omitempty"`
+	StripeFeatureIDEqualFold    *string  `json:"stripeFeatureIDEqualFold,omitempty"`
+	StripeFeatureIDContainsFold *string  `json:"stripeFeatureIDContainsFold,omitempty"`
 }
 
 type EntitlementPlanHistory struct {
@@ -5146,6 +5275,10 @@ type EntitlementPlanHistory struct {
 	Version string `json:"version"`
 	// metadata for the plan
 	Metadata map[string]interface{} `json:"metadata,omitempty"`
+	// the product ID in Stripe
+	StripeProductID *string `json:"stripeProductID,omitempty"`
+	// the price ID in Stripe associated with the product
+	StripePriceID *string `json:"stripePriceID,omitempty"`
 }
 
 func (EntitlementPlanHistory) IsNode() {}
@@ -5372,6 +5505,38 @@ type EntitlementPlanHistoryWhereInput struct {
 	VersionHasSuffix    *string  `json:"versionHasSuffix,omitempty"`
 	VersionEqualFold    *string  `json:"versionEqualFold,omitempty"`
 	VersionContainsFold *string  `json:"versionContainsFold,omitempty"`
+	// stripe_product_id field predicates
+	StripeProductID             *string  `json:"stripeProductID,omitempty"`
+	StripeProductIdneq          *string  `json:"stripeProductIDNEQ,omitempty"`
+	StripeProductIDIn           []string `json:"stripeProductIDIn,omitempty"`
+	StripeProductIDNotIn        []string `json:"stripeProductIDNotIn,omitempty"`
+	StripeProductIdgt           *string  `json:"stripeProductIDGT,omitempty"`
+	StripeProductIdgte          *string  `json:"stripeProductIDGTE,omitempty"`
+	StripeProductIdlt           *string  `json:"stripeProductIDLT,omitempty"`
+	StripeProductIdlte          *string  `json:"stripeProductIDLTE,omitempty"`
+	StripeProductIDContains     *string  `json:"stripeProductIDContains,omitempty"`
+	StripeProductIDHasPrefix    *string  `json:"stripeProductIDHasPrefix,omitempty"`
+	StripeProductIDHasSuffix    *string  `json:"stripeProductIDHasSuffix,omitempty"`
+	StripeProductIDIsNil        *bool    `json:"stripeProductIDIsNil,omitempty"`
+	StripeProductIDNotNil       *bool    `json:"stripeProductIDNotNil,omitempty"`
+	StripeProductIDEqualFold    *string  `json:"stripeProductIDEqualFold,omitempty"`
+	StripeProductIDContainsFold *string  `json:"stripeProductIDContainsFold,omitempty"`
+	// stripe_price_id field predicates
+	StripePriceID             *string  `json:"stripePriceID,omitempty"`
+	StripePriceIdneq          *string  `json:"stripePriceIDNEQ,omitempty"`
+	StripePriceIDIn           []string `json:"stripePriceIDIn,omitempty"`
+	StripePriceIDNotIn        []string `json:"stripePriceIDNotIn,omitempty"`
+	StripePriceIdgt           *string  `json:"stripePriceIDGT,omitempty"`
+	StripePriceIdgte          *string  `json:"stripePriceIDGTE,omitempty"`
+	StripePriceIdlt           *string  `json:"stripePriceIDLT,omitempty"`
+	StripePriceIdlte          *string  `json:"stripePriceIDLTE,omitempty"`
+	StripePriceIDContains     *string  `json:"stripePriceIDContains,omitempty"`
+	StripePriceIDHasPrefix    *string  `json:"stripePriceIDHasPrefix,omitempty"`
+	StripePriceIDHasSuffix    *string  `json:"stripePriceIDHasSuffix,omitempty"`
+	StripePriceIDIsNil        *bool    `json:"stripePriceIDIsNil,omitempty"`
+	StripePriceIDNotNil       *bool    `json:"stripePriceIDNotNil,omitempty"`
+	StripePriceIDEqualFold    *string  `json:"stripePriceIDEqualFold,omitempty"`
+	StripePriceIDContainsFold *string  `json:"stripePriceIDContainsFold,omitempty"`
 }
 
 type EntitlementPlanSearchResult struct {
@@ -5560,6 +5725,38 @@ type EntitlementPlanWhereInput struct {
 	VersionHasSuffix    *string  `json:"versionHasSuffix,omitempty"`
 	VersionEqualFold    *string  `json:"versionEqualFold,omitempty"`
 	VersionContainsFold *string  `json:"versionContainsFold,omitempty"`
+	// stripe_product_id field predicates
+	StripeProductID             *string  `json:"stripeProductID,omitempty"`
+	StripeProductIdneq          *string  `json:"stripeProductIDNEQ,omitempty"`
+	StripeProductIDIn           []string `json:"stripeProductIDIn,omitempty"`
+	StripeProductIDNotIn        []string `json:"stripeProductIDNotIn,omitempty"`
+	StripeProductIdgt           *string  `json:"stripeProductIDGT,omitempty"`
+	StripeProductIdgte          *string  `json:"stripeProductIDGTE,omitempty"`
+	StripeProductIdlt           *string  `json:"stripeProductIDLT,omitempty"`
+	StripeProductIdlte          *string  `json:"stripeProductIDLTE,omitempty"`
+	StripeProductIDContains     *string  `json:"stripeProductIDContains,omitempty"`
+	StripeProductIDHasPrefix    *string  `json:"stripeProductIDHasPrefix,omitempty"`
+	StripeProductIDHasSuffix    *string  `json:"stripeProductIDHasSuffix,omitempty"`
+	StripeProductIDIsNil        *bool    `json:"stripeProductIDIsNil,omitempty"`
+	StripeProductIDNotNil       *bool    `json:"stripeProductIDNotNil,omitempty"`
+	StripeProductIDEqualFold    *string  `json:"stripeProductIDEqualFold,omitempty"`
+	StripeProductIDContainsFold *string  `json:"stripeProductIDContainsFold,omitempty"`
+	// stripe_price_id field predicates
+	StripePriceID             *string  `json:"stripePriceID,omitempty"`
+	StripePriceIdneq          *string  `json:"stripePriceIDNEQ,omitempty"`
+	StripePriceIDIn           []string `json:"stripePriceIDIn,omitempty"`
+	StripePriceIDNotIn        []string `json:"stripePriceIDNotIn,omitempty"`
+	StripePriceIdgt           *string  `json:"stripePriceIDGT,omitempty"`
+	StripePriceIdgte          *string  `json:"stripePriceIDGTE,omitempty"`
+	StripePriceIdlt           *string  `json:"stripePriceIDLT,omitempty"`
+	StripePriceIdlte          *string  `json:"stripePriceIDLTE,omitempty"`
+	StripePriceIDContains     *string  `json:"stripePriceIDContains,omitempty"`
+	StripePriceIDHasPrefix    *string  `json:"stripePriceIDHasPrefix,omitempty"`
+	StripePriceIDHasSuffix    *string  `json:"stripePriceIDHasSuffix,omitempty"`
+	StripePriceIDIsNil        *bool    `json:"stripePriceIDIsNil,omitempty"`
+	StripePriceIDNotNil       *bool    `json:"stripePriceIDNotNil,omitempty"`
+	StripePriceIDEqualFold    *string  `json:"stripePriceIDEqualFold,omitempty"`
+	StripePriceIDContainsFold *string  `json:"stripePriceIDContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -5780,6 +5977,29 @@ type EntitlementWhereInput struct {
 	// cancelled field predicates
 	Cancelled    *bool `json:"cancelled,omitempty"`
 	CancelledNeq *bool `json:"cancelledNEQ,omitempty"`
+	// cancelled_date field predicates
+	CancelledDate       *time.Time   `json:"cancelledDate,omitempty"`
+	CancelledDateNeq    *time.Time   `json:"cancelledDateNEQ,omitempty"`
+	CancelledDateIn     []*time.Time `json:"cancelledDateIn,omitempty"`
+	CancelledDateNotIn  []*time.Time `json:"cancelledDateNotIn,omitempty"`
+	CancelledDateGt     *time.Time   `json:"cancelledDateGT,omitempty"`
+	CancelledDateGte    *time.Time   `json:"cancelledDateGTE,omitempty"`
+	CancelledDateLt     *time.Time   `json:"cancelledDateLT,omitempty"`
+	CancelledDateLte    *time.Time   `json:"cancelledDateLTE,omitempty"`
+	CancelledDateIsNil  *bool        `json:"cancelledDateIsNil,omitempty"`
+	CancelledDateNotNil *bool        `json:"cancelledDateNotNil,omitempty"`
+	// bill_starting field predicates
+	BillStarting      *time.Time   `json:"billStarting,omitempty"`
+	BillStartingNeq   *time.Time   `json:"billStartingNEQ,omitempty"`
+	BillStartingIn    []*time.Time `json:"billStartingIn,omitempty"`
+	BillStartingNotIn []*time.Time `json:"billStartingNotIn,omitempty"`
+	BillStartingGt    *time.Time   `json:"billStartingGT,omitempty"`
+	BillStartingGte   *time.Time   `json:"billStartingGTE,omitempty"`
+	BillStartingLt    *time.Time   `json:"billStartingLT,omitempty"`
+	BillStartingLte   *time.Time   `json:"billStartingLTE,omitempty"`
+	// active field predicates
+	Active    *bool `json:"active,omitempty"`
+	ActiveNeq *bool `json:"activeNEQ,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -7226,11 +7446,13 @@ type Feature struct {
 	// a description of the feature
 	Description *string `json:"description,omitempty"`
 	// metadata for the feature
-	Metadata map[string]interface{}    `json:"metadata,omitempty"`
-	Owner    *Organization             `json:"owner,omitempty"`
-	Plans    []*EntitlementPlan        `json:"plans,omitempty"`
-	Events   []*Event                  `json:"events,omitempty"`
-	Features []*EntitlementPlanFeature `json:"features,omitempty"`
+	Metadata map[string]interface{} `json:"metadata,omitempty"`
+	// the feature ID in Stripe
+	StripeFeatureID *string                   `json:"stripeFeatureID,omitempty"`
+	Owner           *Organization             `json:"owner,omitempty"`
+	Plans           []*EntitlementPlan        `json:"plans,omitempty"`
+	Events          []*Event                  `json:"events,omitempty"`
+	Features        []*EntitlementPlanFeature `json:"features,omitempty"`
 }
 
 func (Feature) IsNode() {}
@@ -7296,6 +7518,8 @@ type FeatureHistory struct {
 	Description *string `json:"description,omitempty"`
 	// metadata for the feature
 	Metadata map[string]interface{} `json:"metadata,omitempty"`
+	// the feature ID in Stripe
+	StripeFeatureID *string `json:"stripeFeatureID,omitempty"`
 }
 
 func (FeatureHistory) IsNode() {}
@@ -7511,6 +7735,22 @@ type FeatureHistoryWhereInput struct {
 	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+	// stripe_feature_id field predicates
+	StripeFeatureID             *string  `json:"stripeFeatureID,omitempty"`
+	StripeFeatureIdneq          *string  `json:"stripeFeatureIDNEQ,omitempty"`
+	StripeFeatureIDIn           []string `json:"stripeFeatureIDIn,omitempty"`
+	StripeFeatureIDNotIn        []string `json:"stripeFeatureIDNotIn,omitempty"`
+	StripeFeatureIdgt           *string  `json:"stripeFeatureIDGT,omitempty"`
+	StripeFeatureIdgte          *string  `json:"stripeFeatureIDGTE,omitempty"`
+	StripeFeatureIdlt           *string  `json:"stripeFeatureIDLT,omitempty"`
+	StripeFeatureIdlte          *string  `json:"stripeFeatureIDLTE,omitempty"`
+	StripeFeatureIDContains     *string  `json:"stripeFeatureIDContains,omitempty"`
+	StripeFeatureIDHasPrefix    *string  `json:"stripeFeatureIDHasPrefix,omitempty"`
+	StripeFeatureIDHasSuffix    *string  `json:"stripeFeatureIDHasSuffix,omitempty"`
+	StripeFeatureIDIsNil        *bool    `json:"stripeFeatureIDIsNil,omitempty"`
+	StripeFeatureIDNotNil       *bool    `json:"stripeFeatureIDNotNil,omitempty"`
+	StripeFeatureIDEqualFold    *string  `json:"stripeFeatureIDEqualFold,omitempty"`
+	StripeFeatureIDContainsFold *string  `json:"stripeFeatureIDContainsFold,omitempty"`
 }
 
 type FeatureSearchResult struct {
@@ -7688,6 +7928,22 @@ type FeatureWhereInput struct {
 	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+	// stripe_feature_id field predicates
+	StripeFeatureID             *string  `json:"stripeFeatureID,omitempty"`
+	StripeFeatureIdneq          *string  `json:"stripeFeatureIDNEQ,omitempty"`
+	StripeFeatureIDIn           []string `json:"stripeFeatureIDIn,omitempty"`
+	StripeFeatureIDNotIn        []string `json:"stripeFeatureIDNotIn,omitempty"`
+	StripeFeatureIdgt           *string  `json:"stripeFeatureIDGT,omitempty"`
+	StripeFeatureIdgte          *string  `json:"stripeFeatureIDGTE,omitempty"`
+	StripeFeatureIdlt           *string  `json:"stripeFeatureIDLT,omitempty"`
+	StripeFeatureIdlte          *string  `json:"stripeFeatureIDLTE,omitempty"`
+	StripeFeatureIDContains     *string  `json:"stripeFeatureIDContains,omitempty"`
+	StripeFeatureIDHasPrefix    *string  `json:"stripeFeatureIDHasPrefix,omitempty"`
+	StripeFeatureIDHasSuffix    *string  `json:"stripeFeatureIDHasSuffix,omitempty"`
+	StripeFeatureIDIsNil        *bool    `json:"stripeFeatureIDIsNil,omitempty"`
+	StripeFeatureIDNotNil       *bool    `json:"stripeFeatureIDNotNil,omitempty"`
+	StripeFeatureIDEqualFold    *string  `json:"stripeFeatureIDEqualFold,omitempty"`
+	StripeFeatureIDContainsFold *string  `json:"stripeFeatureIDContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -13961,9 +14217,11 @@ type OrganizationSetting struct {
 	// geographical location of the organization
 	GeoLocation *enums.Region `json:"geoLocation,omitempty"`
 	// the ID of the organization the settings belong to
-	OrganizationID *string       `json:"organizationID,omitempty"`
-	Organization   *Organization `json:"organization,omitempty"`
-	Files          []*File       `json:"files,omitempty"`
+	OrganizationID *string `json:"organizationID,omitempty"`
+	// the ID of the stripe customer associated with the organization
+	StripeID     *string       `json:"stripeID,omitempty"`
+	Organization *Organization `json:"organization,omitempty"`
+	Files        []*File       `json:"files,omitempty"`
 }
 
 func (OrganizationSetting) IsNode() {}
@@ -14033,6 +14291,8 @@ type OrganizationSettingHistory struct {
 	GeoLocation *enums.Region `json:"geoLocation,omitempty"`
 	// the ID of the organization the settings belong to
 	OrganizationID *string `json:"organizationID,omitempty"`
+	// the ID of the stripe customer associated with the organization
+	StripeID *string `json:"stripeID,omitempty"`
 }
 
 func (OrganizationSettingHistory) IsNode() {}
@@ -14286,6 +14546,22 @@ type OrganizationSettingHistoryWhereInput struct {
 	OrganizationIDNotNil       *bool    `json:"organizationIDNotNil,omitempty"`
 	OrganizationIDEqualFold    *string  `json:"organizationIDEqualFold,omitempty"`
 	OrganizationIDContainsFold *string  `json:"organizationIDContainsFold,omitempty"`
+	// stripe_id field predicates
+	StripeID             *string  `json:"stripeID,omitempty"`
+	StripeIdneq          *string  `json:"stripeIDNEQ,omitempty"`
+	StripeIDIn           []string `json:"stripeIDIn,omitempty"`
+	StripeIDNotIn        []string `json:"stripeIDNotIn,omitempty"`
+	StripeIdgt           *string  `json:"stripeIDGT,omitempty"`
+	StripeIdgte          *string  `json:"stripeIDGTE,omitempty"`
+	StripeIdlt           *string  `json:"stripeIDLT,omitempty"`
+	StripeIdlte          *string  `json:"stripeIDLTE,omitempty"`
+	StripeIDContains     *string  `json:"stripeIDContains,omitempty"`
+	StripeIDHasPrefix    *string  `json:"stripeIDHasPrefix,omitempty"`
+	StripeIDHasSuffix    *string  `json:"stripeIDHasSuffix,omitempty"`
+	StripeIDIsNil        *bool    `json:"stripeIDIsNil,omitempty"`
+	StripeIDNotNil       *bool    `json:"stripeIDNotNil,omitempty"`
+	StripeIDEqualFold    *string  `json:"stripeIDEqualFold,omitempty"`
+	StripeIDContainsFold *string  `json:"stripeIDContainsFold,omitempty"`
 }
 
 type OrganizationSettingSearchResult struct {
@@ -14501,6 +14777,22 @@ type OrganizationSettingWhereInput struct {
 	OrganizationIDNotNil       *bool    `json:"organizationIDNotNil,omitempty"`
 	OrganizationIDEqualFold    *string  `json:"organizationIDEqualFold,omitempty"`
 	OrganizationIDContainsFold *string  `json:"organizationIDContainsFold,omitempty"`
+	// stripe_id field predicates
+	StripeID             *string  `json:"stripeID,omitempty"`
+	StripeIdneq          *string  `json:"stripeIDNEQ,omitempty"`
+	StripeIDIn           []string `json:"stripeIDIn,omitempty"`
+	StripeIDNotIn        []string `json:"stripeIDNotIn,omitempty"`
+	StripeIdgt           *string  `json:"stripeIDGT,omitempty"`
+	StripeIdgte          *string  `json:"stripeIDGTE,omitempty"`
+	StripeIdlt           *string  `json:"stripeIDLT,omitempty"`
+	StripeIdlte          *string  `json:"stripeIDLTE,omitempty"`
+	StripeIDContains     *string  `json:"stripeIDContains,omitempty"`
+	StripeIDHasPrefix    *string  `json:"stripeIDHasPrefix,omitempty"`
+	StripeIDHasSuffix    *string  `json:"stripeIDHasSuffix,omitempty"`
+	StripeIDIsNil        *bool    `json:"stripeIDIsNil,omitempty"`
+	StripeIDNotNil       *bool    `json:"stripeIDNotNil,omitempty"`
+	StripeIDEqualFold    *string  `json:"stripeIDEqualFold,omitempty"`
+	StripeIDContainsFold *string  `json:"stripeIDContainsFold,omitempty"`
 	// organization edge predicates
 	HasOrganization     *bool                     `json:"hasOrganization,omitempty"`
 	HasOrganizationWith []*OrganizationWhereInput `json:"hasOrganizationWith,omitempty"`
@@ -20439,7 +20731,14 @@ type UpdateEntitlementInput struct {
 	ExpiresAt      *time.Time `json:"expiresAt,omitempty"`
 	ClearExpiresAt *bool      `json:"clearExpiresAt,omitempty"`
 	// whether or not the customer has cancelled their entitlement - usually used in conjunction with expires and expires at
-	Cancelled      *bool    `json:"cancelled,omitempty"`
+	Cancelled *bool `json:"cancelled,omitempty"`
+	// the date at which the customer cancelled their entitlement
+	CancelledDate      *time.Time `json:"cancelledDate,omitempty"`
+	ClearCancelledDate *bool      `json:"clearCancelledDate,omitempty"`
+	// the date at which the customer's billing starts
+	BillStarting *time.Time `json:"billStarting,omitempty"`
+	// whether or not the entitlement is active
+	Active         *bool    `json:"active,omitempty"`
 	OwnerID        *string  `json:"ownerID,omitempty"`
 	ClearOwner     *bool    `json:"clearOwner,omitempty"`
 	AddEventIDs    []string `json:"addEventIDs,omitempty"`
@@ -20455,13 +20754,19 @@ type UpdateEntitlementPlanFeatureInput struct {
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
 	// metadata for the entitlement plan feature such as usage limits
-	Metadata       map[string]interface{} `json:"metadata,omitempty"`
-	ClearMetadata  *bool                  `json:"clearMetadata,omitempty"`
-	OwnerID        *string                `json:"ownerID,omitempty"`
-	ClearOwner     *bool                  `json:"clearOwner,omitempty"`
-	AddEventIDs    []string               `json:"addEventIDs,omitempty"`
-	RemoveEventIDs []string               `json:"removeEventIDs,omitempty"`
-	ClearEvents    *bool                  `json:"clearEvents,omitempty"`
+	Metadata      map[string]interface{} `json:"metadata,omitempty"`
+	ClearMetadata *bool                  `json:"clearMetadata,omitempty"`
+	// the product ID in Stripe
+	StripeProductID      *string `json:"stripeProductID,omitempty"`
+	ClearStripeProductID *bool   `json:"clearStripeProductID,omitempty"`
+	// the feature ID in Stripe
+	StripeFeatureID      *string  `json:"stripeFeatureID,omitempty"`
+	ClearStripeFeatureID *bool    `json:"clearStripeFeatureID,omitempty"`
+	OwnerID              *string  `json:"ownerID,omitempty"`
+	ClearOwner           *bool    `json:"clearOwner,omitempty"`
+	AddEventIDs          []string `json:"addEventIDs,omitempty"`
+	RemoveEventIDs       []string `json:"removeEventIDs,omitempty"`
+	ClearEvents          *bool    `json:"clearEvents,omitempty"`
 }
 
 // UpdateEntitlementPlanInput is used for update EntitlementPlan object.
@@ -20478,19 +20783,25 @@ type UpdateEntitlementPlanInput struct {
 	Description      *string `json:"description,omitempty"`
 	ClearDescription *bool   `json:"clearDescription,omitempty"`
 	// metadata for the plan
-	Metadata             map[string]interface{} `json:"metadata,omitempty"`
-	ClearMetadata        *bool                  `json:"clearMetadata,omitempty"`
-	OwnerID              *string                `json:"ownerID,omitempty"`
-	ClearOwner           *bool                  `json:"clearOwner,omitempty"`
-	AddEntitlementIDs    []string               `json:"addEntitlementIDs,omitempty"`
-	RemoveEntitlementIDs []string               `json:"removeEntitlementIDs,omitempty"`
-	ClearEntitlements    *bool                  `json:"clearEntitlements,omitempty"`
-	AddBaseFeatureIDs    []string               `json:"addBaseFeatureIDs,omitempty"`
-	RemoveBaseFeatureIDs []string               `json:"removeBaseFeatureIDs,omitempty"`
-	ClearBaseFeatures    *bool                  `json:"clearBaseFeatures,omitempty"`
-	AddEventIDs          []string               `json:"addEventIDs,omitempty"`
-	RemoveEventIDs       []string               `json:"removeEventIDs,omitempty"`
-	ClearEvents          *bool                  `json:"clearEvents,omitempty"`
+	Metadata      map[string]interface{} `json:"metadata,omitempty"`
+	ClearMetadata *bool                  `json:"clearMetadata,omitempty"`
+	// the product ID in Stripe
+	StripeProductID      *string `json:"stripeProductID,omitempty"`
+	ClearStripeProductID *bool   `json:"clearStripeProductID,omitempty"`
+	// the price ID in Stripe associated with the product
+	StripePriceID        *string  `json:"stripePriceID,omitempty"`
+	ClearStripePriceID   *bool    `json:"clearStripePriceID,omitempty"`
+	OwnerID              *string  `json:"ownerID,omitempty"`
+	ClearOwner           *bool    `json:"clearOwner,omitempty"`
+	AddEntitlementIDs    []string `json:"addEntitlementIDs,omitempty"`
+	RemoveEntitlementIDs []string `json:"removeEntitlementIDs,omitempty"`
+	ClearEntitlements    *bool    `json:"clearEntitlements,omitempty"`
+	AddBaseFeatureIDs    []string `json:"addBaseFeatureIDs,omitempty"`
+	RemoveBaseFeatureIDs []string `json:"removeBaseFeatureIDs,omitempty"`
+	ClearBaseFeatures    *bool    `json:"clearBaseFeatures,omitempty"`
+	AddEventIDs          []string `json:"addEventIDs,omitempty"`
+	RemoveEventIDs       []string `json:"removeEventIDs,omitempty"`
+	ClearEvents          *bool    `json:"clearEvents,omitempty"`
 }
 
 // UpdateEntityInput is used for update Entity object.
@@ -20625,16 +20936,19 @@ type UpdateFeatureInput struct {
 	Description      *string `json:"description,omitempty"`
 	ClearDescription *bool   `json:"clearDescription,omitempty"`
 	// metadata for the feature
-	Metadata       map[string]interface{} `json:"metadata,omitempty"`
-	ClearMetadata  *bool                  `json:"clearMetadata,omitempty"`
-	OwnerID        *string                `json:"ownerID,omitempty"`
-	ClearOwner     *bool                  `json:"clearOwner,omitempty"`
-	AddPlanIDs     []string               `json:"addPlanIDs,omitempty"`
-	RemovePlanIDs  []string               `json:"removePlanIDs,omitempty"`
-	ClearPlans     *bool                  `json:"clearPlans,omitempty"`
-	AddEventIDs    []string               `json:"addEventIDs,omitempty"`
-	RemoveEventIDs []string               `json:"removeEventIDs,omitempty"`
-	ClearEvents    *bool                  `json:"clearEvents,omitempty"`
+	Metadata      map[string]interface{} `json:"metadata,omitempty"`
+	ClearMetadata *bool                  `json:"clearMetadata,omitempty"`
+	// the feature ID in Stripe
+	StripeFeatureID      *string  `json:"stripeFeatureID,omitempty"`
+	ClearStripeFeatureID *bool    `json:"clearStripeFeatureID,omitempty"`
+	OwnerID              *string  `json:"ownerID,omitempty"`
+	ClearOwner           *bool    `json:"clearOwner,omitempty"`
+	AddPlanIDs           []string `json:"addPlanIDs,omitempty"`
+	RemovePlanIDs        []string `json:"removePlanIDs,omitempty"`
+	ClearPlans           *bool    `json:"clearPlans,omitempty"`
+	AddEventIDs          []string `json:"addEventIDs,omitempty"`
+	RemoveEventIDs       []string `json:"removeEventIDs,omitempty"`
+	ClearEvents          *bool    `json:"clearEvents,omitempty"`
 }
 
 // UpdateFileInput is used for update File object.
@@ -21154,13 +21468,16 @@ type UpdateOrganizationSettingInput struct {
 	TaxIdentifier      *string `json:"taxIdentifier,omitempty"`
 	ClearTaxIdentifier *bool   `json:"clearTaxIdentifier,omitempty"`
 	// geographical location of the organization
-	GeoLocation       *enums.Region `json:"geoLocation,omitempty"`
-	ClearGeoLocation  *bool         `json:"clearGeoLocation,omitempty"`
-	OrganizationID    *string       `json:"organizationID,omitempty"`
-	ClearOrganization *bool         `json:"clearOrganization,omitempty"`
-	AddFileIDs        []string      `json:"addFileIDs,omitempty"`
-	RemoveFileIDs     []string      `json:"removeFileIDs,omitempty"`
-	ClearFiles        *bool         `json:"clearFiles,omitempty"`
+	GeoLocation      *enums.Region `json:"geoLocation,omitempty"`
+	ClearGeoLocation *bool         `json:"clearGeoLocation,omitempty"`
+	// the ID of the stripe customer associated with the organization
+	StripeID          *string  `json:"stripeID,omitempty"`
+	ClearStripeID     *bool    `json:"clearStripeID,omitempty"`
+	OrganizationID    *string  `json:"organizationID,omitempty"`
+	ClearOrganization *bool    `json:"clearOrganization,omitempty"`
+	AddFileIDs        []string `json:"addFileIDs,omitempty"`
+	RemoveFileIDs     []string `json:"removeFileIDs,omitempty"`
+	ClearFiles        *bool    `json:"clearFiles,omitempty"`
 }
 
 // UpdatePersonalAccessTokenInput is used for update PersonalAccessToken object.

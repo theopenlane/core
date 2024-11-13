@@ -185,9 +185,37 @@ func (epfhc *EntitlementPlanFeatureHistoryCreate) SetPlanID(s string) *Entitleme
 	return epfhc
 }
 
+// SetStripeProductID sets the "stripe_product_id" field.
+func (epfhc *EntitlementPlanFeatureHistoryCreate) SetStripeProductID(s string) *EntitlementPlanFeatureHistoryCreate {
+	epfhc.mutation.SetStripeProductID(s)
+	return epfhc
+}
+
+// SetNillableStripeProductID sets the "stripe_product_id" field if the given value is not nil.
+func (epfhc *EntitlementPlanFeatureHistoryCreate) SetNillableStripeProductID(s *string) *EntitlementPlanFeatureHistoryCreate {
+	if s != nil {
+		epfhc.SetStripeProductID(*s)
+	}
+	return epfhc
+}
+
 // SetFeatureID sets the "feature_id" field.
 func (epfhc *EntitlementPlanFeatureHistoryCreate) SetFeatureID(s string) *EntitlementPlanFeatureHistoryCreate {
 	epfhc.mutation.SetFeatureID(s)
+	return epfhc
+}
+
+// SetStripeFeatureID sets the "stripe_feature_id" field.
+func (epfhc *EntitlementPlanFeatureHistoryCreate) SetStripeFeatureID(s string) *EntitlementPlanFeatureHistoryCreate {
+	epfhc.mutation.SetStripeFeatureID(s)
+	return epfhc
+}
+
+// SetNillableStripeFeatureID sets the "stripe_feature_id" field if the given value is not nil.
+func (epfhc *EntitlementPlanFeatureHistoryCreate) SetNillableStripeFeatureID(s *string) *EntitlementPlanFeatureHistoryCreate {
+	if s != nil {
+		epfhc.SetStripeFeatureID(*s)
+	}
 	return epfhc
 }
 
@@ -398,9 +426,17 @@ func (epfhc *EntitlementPlanFeatureHistoryCreate) createSpec() (*EntitlementPlan
 		_spec.SetField(entitlementplanfeaturehistory.FieldPlanID, field.TypeString, value)
 		_node.PlanID = value
 	}
+	if value, ok := epfhc.mutation.StripeProductID(); ok {
+		_spec.SetField(entitlementplanfeaturehistory.FieldStripeProductID, field.TypeString, value)
+		_node.StripeProductID = value
+	}
 	if value, ok := epfhc.mutation.FeatureID(); ok {
 		_spec.SetField(entitlementplanfeaturehistory.FieldFeatureID, field.TypeString, value)
 		_node.FeatureID = value
+	}
+	if value, ok := epfhc.mutation.StripeFeatureID(); ok {
+		_spec.SetField(entitlementplanfeaturehistory.FieldStripeFeatureID, field.TypeString, value)
+		_node.StripeFeatureID = value
 	}
 	return _node, _spec
 }

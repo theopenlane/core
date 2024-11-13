@@ -135,6 +135,11 @@ func Description(v string) predicate.FeatureHistory {
 	return predicate.FeatureHistory(sql.FieldEQ(FieldDescription, v))
 }
 
+// StripeFeatureID applies equality check predicate on the "stripe_feature_id" field. It's identical to StripeFeatureIDEQ.
+func StripeFeatureID(v string) predicate.FeatureHistory {
+	return predicate.FeatureHistory(sql.FieldEQ(FieldStripeFeatureID, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.FeatureHistory {
 	return predicate.FeatureHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -1028,6 +1033,81 @@ func MetadataIsNil() predicate.FeatureHistory {
 // MetadataNotNil applies the NotNil predicate on the "metadata" field.
 func MetadataNotNil() predicate.FeatureHistory {
 	return predicate.FeatureHistory(sql.FieldNotNull(FieldMetadata))
+}
+
+// StripeFeatureIDEQ applies the EQ predicate on the "stripe_feature_id" field.
+func StripeFeatureIDEQ(v string) predicate.FeatureHistory {
+	return predicate.FeatureHistory(sql.FieldEQ(FieldStripeFeatureID, v))
+}
+
+// StripeFeatureIDNEQ applies the NEQ predicate on the "stripe_feature_id" field.
+func StripeFeatureIDNEQ(v string) predicate.FeatureHistory {
+	return predicate.FeatureHistory(sql.FieldNEQ(FieldStripeFeatureID, v))
+}
+
+// StripeFeatureIDIn applies the In predicate on the "stripe_feature_id" field.
+func StripeFeatureIDIn(vs ...string) predicate.FeatureHistory {
+	return predicate.FeatureHistory(sql.FieldIn(FieldStripeFeatureID, vs...))
+}
+
+// StripeFeatureIDNotIn applies the NotIn predicate on the "stripe_feature_id" field.
+func StripeFeatureIDNotIn(vs ...string) predicate.FeatureHistory {
+	return predicate.FeatureHistory(sql.FieldNotIn(FieldStripeFeatureID, vs...))
+}
+
+// StripeFeatureIDGT applies the GT predicate on the "stripe_feature_id" field.
+func StripeFeatureIDGT(v string) predicate.FeatureHistory {
+	return predicate.FeatureHistory(sql.FieldGT(FieldStripeFeatureID, v))
+}
+
+// StripeFeatureIDGTE applies the GTE predicate on the "stripe_feature_id" field.
+func StripeFeatureIDGTE(v string) predicate.FeatureHistory {
+	return predicate.FeatureHistory(sql.FieldGTE(FieldStripeFeatureID, v))
+}
+
+// StripeFeatureIDLT applies the LT predicate on the "stripe_feature_id" field.
+func StripeFeatureIDLT(v string) predicate.FeatureHistory {
+	return predicate.FeatureHistory(sql.FieldLT(FieldStripeFeatureID, v))
+}
+
+// StripeFeatureIDLTE applies the LTE predicate on the "stripe_feature_id" field.
+func StripeFeatureIDLTE(v string) predicate.FeatureHistory {
+	return predicate.FeatureHistory(sql.FieldLTE(FieldStripeFeatureID, v))
+}
+
+// StripeFeatureIDContains applies the Contains predicate on the "stripe_feature_id" field.
+func StripeFeatureIDContains(v string) predicate.FeatureHistory {
+	return predicate.FeatureHistory(sql.FieldContains(FieldStripeFeatureID, v))
+}
+
+// StripeFeatureIDHasPrefix applies the HasPrefix predicate on the "stripe_feature_id" field.
+func StripeFeatureIDHasPrefix(v string) predicate.FeatureHistory {
+	return predicate.FeatureHistory(sql.FieldHasPrefix(FieldStripeFeatureID, v))
+}
+
+// StripeFeatureIDHasSuffix applies the HasSuffix predicate on the "stripe_feature_id" field.
+func StripeFeatureIDHasSuffix(v string) predicate.FeatureHistory {
+	return predicate.FeatureHistory(sql.FieldHasSuffix(FieldStripeFeatureID, v))
+}
+
+// StripeFeatureIDIsNil applies the IsNil predicate on the "stripe_feature_id" field.
+func StripeFeatureIDIsNil() predicate.FeatureHistory {
+	return predicate.FeatureHistory(sql.FieldIsNull(FieldStripeFeatureID))
+}
+
+// StripeFeatureIDNotNil applies the NotNil predicate on the "stripe_feature_id" field.
+func StripeFeatureIDNotNil() predicate.FeatureHistory {
+	return predicate.FeatureHistory(sql.FieldNotNull(FieldStripeFeatureID))
+}
+
+// StripeFeatureIDEqualFold applies the EqualFold predicate on the "stripe_feature_id" field.
+func StripeFeatureIDEqualFold(v string) predicate.FeatureHistory {
+	return predicate.FeatureHistory(sql.FieldEqualFold(FieldStripeFeatureID, v))
+}
+
+// StripeFeatureIDContainsFold applies the ContainsFold predicate on the "stripe_feature_id" field.
+func StripeFeatureIDContainsFold(v string) predicate.FeatureHistory {
+	return predicate.FeatureHistory(sql.FieldContainsFold(FieldStripeFeatureID, v))
 }
 
 // And groups predicates with the AND operator between them.

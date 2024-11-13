@@ -45,6 +45,12 @@ func (EntitlementPlan) Fields() []ent.Field {
 		field.JSON("metadata", map[string]interface{}{}).
 			Comment("metadata for the plan").
 			Optional(),
+		field.String("stripe_product_id").
+			Comment("the product ID in Stripe").
+			Optional(),
+		field.String("stripe_price_id").
+			Comment("the price ID in Stripe associated with the product").
+			Optional(),
 	}
 }
 

@@ -154,6 +154,46 @@ func (epfhu *EntitlementPlanFeatureHistoryUpdate) ClearMetadata() *EntitlementPl
 	return epfhu
 }
 
+// SetStripeProductID sets the "stripe_product_id" field.
+func (epfhu *EntitlementPlanFeatureHistoryUpdate) SetStripeProductID(s string) *EntitlementPlanFeatureHistoryUpdate {
+	epfhu.mutation.SetStripeProductID(s)
+	return epfhu
+}
+
+// SetNillableStripeProductID sets the "stripe_product_id" field if the given value is not nil.
+func (epfhu *EntitlementPlanFeatureHistoryUpdate) SetNillableStripeProductID(s *string) *EntitlementPlanFeatureHistoryUpdate {
+	if s != nil {
+		epfhu.SetStripeProductID(*s)
+	}
+	return epfhu
+}
+
+// ClearStripeProductID clears the value of the "stripe_product_id" field.
+func (epfhu *EntitlementPlanFeatureHistoryUpdate) ClearStripeProductID() *EntitlementPlanFeatureHistoryUpdate {
+	epfhu.mutation.ClearStripeProductID()
+	return epfhu
+}
+
+// SetStripeFeatureID sets the "stripe_feature_id" field.
+func (epfhu *EntitlementPlanFeatureHistoryUpdate) SetStripeFeatureID(s string) *EntitlementPlanFeatureHistoryUpdate {
+	epfhu.mutation.SetStripeFeatureID(s)
+	return epfhu
+}
+
+// SetNillableStripeFeatureID sets the "stripe_feature_id" field if the given value is not nil.
+func (epfhu *EntitlementPlanFeatureHistoryUpdate) SetNillableStripeFeatureID(s *string) *EntitlementPlanFeatureHistoryUpdate {
+	if s != nil {
+		epfhu.SetStripeFeatureID(*s)
+	}
+	return epfhu
+}
+
+// ClearStripeFeatureID clears the value of the "stripe_feature_id" field.
+func (epfhu *EntitlementPlanFeatureHistoryUpdate) ClearStripeFeatureID() *EntitlementPlanFeatureHistoryUpdate {
+	epfhu.mutation.ClearStripeFeatureID()
+	return epfhu
+}
+
 // Mutation returns the EntitlementPlanFeatureHistoryMutation object of the builder.
 func (epfhu *EntitlementPlanFeatureHistoryUpdate) Mutation() *EntitlementPlanFeatureHistoryMutation {
 	return epfhu.mutation
@@ -271,6 +311,18 @@ func (epfhu *EntitlementPlanFeatureHistoryUpdate) sqlSave(ctx context.Context) (
 	}
 	if epfhu.mutation.MetadataCleared() {
 		_spec.ClearField(entitlementplanfeaturehistory.FieldMetadata, field.TypeJSON)
+	}
+	if value, ok := epfhu.mutation.StripeProductID(); ok {
+		_spec.SetField(entitlementplanfeaturehistory.FieldStripeProductID, field.TypeString, value)
+	}
+	if epfhu.mutation.StripeProductIDCleared() {
+		_spec.ClearField(entitlementplanfeaturehistory.FieldStripeProductID, field.TypeString)
+	}
+	if value, ok := epfhu.mutation.StripeFeatureID(); ok {
+		_spec.SetField(entitlementplanfeaturehistory.FieldStripeFeatureID, field.TypeString, value)
+	}
+	if epfhu.mutation.StripeFeatureIDCleared() {
+		_spec.ClearField(entitlementplanfeaturehistory.FieldStripeFeatureID, field.TypeString)
 	}
 	_spec.Node.Schema = epfhu.schemaConfig.EntitlementPlanFeatureHistory
 	ctx = internal.NewSchemaConfigContext(ctx, epfhu.schemaConfig)
@@ -415,6 +467,46 @@ func (epfhuo *EntitlementPlanFeatureHistoryUpdateOne) SetMetadata(m map[string]i
 // ClearMetadata clears the value of the "metadata" field.
 func (epfhuo *EntitlementPlanFeatureHistoryUpdateOne) ClearMetadata() *EntitlementPlanFeatureHistoryUpdateOne {
 	epfhuo.mutation.ClearMetadata()
+	return epfhuo
+}
+
+// SetStripeProductID sets the "stripe_product_id" field.
+func (epfhuo *EntitlementPlanFeatureHistoryUpdateOne) SetStripeProductID(s string) *EntitlementPlanFeatureHistoryUpdateOne {
+	epfhuo.mutation.SetStripeProductID(s)
+	return epfhuo
+}
+
+// SetNillableStripeProductID sets the "stripe_product_id" field if the given value is not nil.
+func (epfhuo *EntitlementPlanFeatureHistoryUpdateOne) SetNillableStripeProductID(s *string) *EntitlementPlanFeatureHistoryUpdateOne {
+	if s != nil {
+		epfhuo.SetStripeProductID(*s)
+	}
+	return epfhuo
+}
+
+// ClearStripeProductID clears the value of the "stripe_product_id" field.
+func (epfhuo *EntitlementPlanFeatureHistoryUpdateOne) ClearStripeProductID() *EntitlementPlanFeatureHistoryUpdateOne {
+	epfhuo.mutation.ClearStripeProductID()
+	return epfhuo
+}
+
+// SetStripeFeatureID sets the "stripe_feature_id" field.
+func (epfhuo *EntitlementPlanFeatureHistoryUpdateOne) SetStripeFeatureID(s string) *EntitlementPlanFeatureHistoryUpdateOne {
+	epfhuo.mutation.SetStripeFeatureID(s)
+	return epfhuo
+}
+
+// SetNillableStripeFeatureID sets the "stripe_feature_id" field if the given value is not nil.
+func (epfhuo *EntitlementPlanFeatureHistoryUpdateOne) SetNillableStripeFeatureID(s *string) *EntitlementPlanFeatureHistoryUpdateOne {
+	if s != nil {
+		epfhuo.SetStripeFeatureID(*s)
+	}
+	return epfhuo
+}
+
+// ClearStripeFeatureID clears the value of the "stripe_feature_id" field.
+func (epfhuo *EntitlementPlanFeatureHistoryUpdateOne) ClearStripeFeatureID() *EntitlementPlanFeatureHistoryUpdateOne {
+	epfhuo.mutation.ClearStripeFeatureID()
 	return epfhuo
 }
 
@@ -565,6 +657,18 @@ func (epfhuo *EntitlementPlanFeatureHistoryUpdateOne) sqlSave(ctx context.Contex
 	}
 	if epfhuo.mutation.MetadataCleared() {
 		_spec.ClearField(entitlementplanfeaturehistory.FieldMetadata, field.TypeJSON)
+	}
+	if value, ok := epfhuo.mutation.StripeProductID(); ok {
+		_spec.SetField(entitlementplanfeaturehistory.FieldStripeProductID, field.TypeString, value)
+	}
+	if epfhuo.mutation.StripeProductIDCleared() {
+		_spec.ClearField(entitlementplanfeaturehistory.FieldStripeProductID, field.TypeString)
+	}
+	if value, ok := epfhuo.mutation.StripeFeatureID(); ok {
+		_spec.SetField(entitlementplanfeaturehistory.FieldStripeFeatureID, field.TypeString, value)
+	}
+	if epfhuo.mutation.StripeFeatureIDCleared() {
+		_spec.ClearField(entitlementplanfeaturehistory.FieldStripeFeatureID, field.TypeString)
 	}
 	_spec.Node.Schema = epfhuo.schemaConfig.EntitlementPlanFeatureHistory
 	ctx = internal.NewSchemaConfigContext(ctx, epfhuo.schemaConfig)

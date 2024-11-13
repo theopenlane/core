@@ -3910,6 +3910,18 @@ input CreateEntitlementInput {
 	whether or not the customer has cancelled their entitlement - usually used in conjunction with expires and expires at
 	"""
 	cancelled: Boolean
+	"""
+	the date at which the customer cancelled their entitlement
+	"""
+	cancelledDate: Time
+	"""
+	the date at which the customer's billing starts
+	"""
+	billStarting: Time
+	"""
+	whether or not the entitlement is active
+	"""
+	active: Boolean
 	ownerID: ID
 	planID: ID!
 	organizationID: ID!
@@ -3928,6 +3940,14 @@ input CreateEntitlementPlanFeatureInput {
 	metadata for the entitlement plan feature such as usage limits
 	"""
 	metadata: Map
+	"""
+	the product ID in Stripe
+	"""
+	stripeProductID: String
+	"""
+	the feature ID in Stripe
+	"""
+	stripeFeatureID: String
 	ownerID: ID
 	planID: ID!
 	featureID: ID!
@@ -3962,6 +3982,14 @@ input CreateEntitlementPlanInput {
 	metadata for the plan
 	"""
 	metadata: Map
+	"""
+	the product ID in Stripe
+	"""
+	stripeProductID: String
+	"""
+	the price ID in Stripe associated with the product
+	"""
+	stripePriceID: String
 	ownerID: ID
 	entitlementIDs: [ID!]
 	baseFeatureIDs: [ID!]
@@ -4077,6 +4105,10 @@ input CreateFeatureInput {
 	metadata for the feature
 	"""
 	metadata: Map
+	"""
+	the feature ID in Stripe
+	"""
+	stripeFeatureID: String
 	ownerID: ID
 	planIDs: [ID!]
 	eventIDs: [ID!]
@@ -4584,6 +4616,10 @@ input CreateOrganizationSettingInput {
 	geographical location of the organization
 	"""
 	geoLocation: OrganizationSettingRegion
+	"""
+	the ID of the stripe customer associated with the organization
+	"""
+	stripeID: String
 	organizationID: ID
 	fileIDs: [ID!]
 }
@@ -4874,7 +4910,7 @@ input CreateSubcontrolInput {
 	"""
 	subcontrolNumber: String
 	"""
-	subcontrol family 
+	subcontrol family
 	"""
 	family: String
 	"""
@@ -5745,6 +5781,18 @@ type Entitlement implements Node {
 	whether or not the customer has cancelled their entitlement - usually used in conjunction with expires and expires at
 	"""
 	cancelled: Boolean!
+	"""
+	the date at which the customer cancelled their entitlement
+	"""
+	cancelledDate: Time
+	"""
+	the date at which the customer's billing starts
+	"""
+	billStarting: Time!
+	"""
+	whether or not the entitlement is active
+	"""
+	active: Boolean!
 	owner: Organization
 	plan: EntitlementPlan!
 	organization: Organization!
@@ -5854,6 +5902,18 @@ type EntitlementHistory implements Node {
 	whether or not the customer has cancelled their entitlement - usually used in conjunction with expires and expires at
 	"""
 	cancelled: Boolean!
+	"""
+	the date at which the customer cancelled their entitlement
+	"""
+	cancelledDate: Time
+	"""
+	the date at which the customer's billing starts
+	"""
+	billStarting: Time!
+	"""
+	whether or not the entitlement is active
+	"""
+	active: Boolean!
 }
 """
 A connection to a list of items.
@@ -6152,6 +6212,35 @@ input EntitlementHistoryWhereInput {
 	"""
 	cancelled: Boolean
 	cancelledNEQ: Boolean
+	"""
+	cancelled_date field predicates
+	"""
+	cancelledDate: Time
+	cancelledDateNEQ: Time
+	cancelledDateIn: [Time!]
+	cancelledDateNotIn: [Time!]
+	cancelledDateGT: Time
+	cancelledDateGTE: Time
+	cancelledDateLT: Time
+	cancelledDateLTE: Time
+	cancelledDateIsNil: Boolean
+	cancelledDateNotNil: Boolean
+	"""
+	bill_starting field predicates
+	"""
+	billStarting: Time
+	billStartingNEQ: Time
+	billStartingIn: [Time!]
+	billStartingNotIn: [Time!]
+	billStartingGT: Time
+	billStartingGTE: Time
+	billStartingLT: Time
+	billStartingLTE: Time
+	"""
+	active field predicates
+	"""
+	active: Boolean
+	activeNEQ: Boolean
 }
 type EntitlementPlan implements Node {
 	id: ID!
@@ -6189,6 +6278,14 @@ type EntitlementPlan implements Node {
 	metadata for the plan
 	"""
 	metadata: Map
+	"""
+	the product ID in Stripe
+	"""
+	stripeProductID: String
+	"""
+	the price ID in Stripe associated with the product
+	"""
+	stripePriceID: String
 	owner: Organization
 	entitlements: [Entitlement!]
 	baseFeatures: [Feature!]
@@ -6273,7 +6370,15 @@ type EntitlementPlanFeature implements Node {
 	"""
 	metadata: Map
 	planID: ID!
+	"""
+	the product ID in Stripe
+	"""
+	stripeProductID: String
 	featureID: ID!
+	"""
+	the feature ID in Stripe
+	"""
+	stripeFeatureID: String
 	owner: Organization
 	plan: EntitlementPlan!
 	feature: Feature!
@@ -6360,7 +6465,15 @@ type EntitlementPlanFeatureHistory implements Node {
 	"""
 	metadata: Map
 	planID: String!
+	"""
+	the product ID in Stripe
+	"""
+	stripeProductID: String
 	featureID: String!
+	"""
+	the feature ID in Stripe
+	"""
+	stripeFeatureID: String
 }
 """
 A connection to a list of items.
@@ -6585,6 +6698,24 @@ input EntitlementPlanFeatureHistoryWhereInput {
 	planIDEqualFold: String
 	planIDContainsFold: String
 	"""
+	stripe_product_id field predicates
+	"""
+	stripeProductID: String
+	stripeProductIDNEQ: String
+	stripeProductIDIn: [String!]
+	stripeProductIDNotIn: [String!]
+	stripeProductIDGT: String
+	stripeProductIDGTE: String
+	stripeProductIDLT: String
+	stripeProductIDLTE: String
+	stripeProductIDContains: String
+	stripeProductIDHasPrefix: String
+	stripeProductIDHasSuffix: String
+	stripeProductIDIsNil: Boolean
+	stripeProductIDNotNil: Boolean
+	stripeProductIDEqualFold: String
+	stripeProductIDContainsFold: String
+	"""
 	feature_id field predicates
 	"""
 	featureID: String
@@ -6600,6 +6731,24 @@ input EntitlementPlanFeatureHistoryWhereInput {
 	featureIDHasSuffix: String
 	featureIDEqualFold: String
 	featureIDContainsFold: String
+	"""
+	stripe_feature_id field predicates
+	"""
+	stripeFeatureID: String
+	stripeFeatureIDNEQ: String
+	stripeFeatureIDIn: [String!]
+	stripeFeatureIDNotIn: [String!]
+	stripeFeatureIDGT: String
+	stripeFeatureIDGTE: String
+	stripeFeatureIDLT: String
+	stripeFeatureIDLTE: String
+	stripeFeatureIDContains: String
+	stripeFeatureIDHasPrefix: String
+	stripeFeatureIDHasSuffix: String
+	stripeFeatureIDIsNil: Boolean
+	stripeFeatureIDNotNil: Boolean
+	stripeFeatureIDEqualFold: String
+	stripeFeatureIDContainsFold: String
 }
 type EntitlementPlanFeatureSearchResult {
 	entitlementPlanFeatures: [EntitlementPlanFeature!]
@@ -6727,6 +6876,42 @@ input EntitlementPlanFeatureWhereInput {
 	deletedByNotNil: Boolean
 	deletedByEqualFold: String
 	deletedByContainsFold: String
+	"""
+	stripe_product_id field predicates
+	"""
+	stripeProductID: String
+	stripeProductIDNEQ: String
+	stripeProductIDIn: [String!]
+	stripeProductIDNotIn: [String!]
+	stripeProductIDGT: String
+	stripeProductIDGTE: String
+	stripeProductIDLT: String
+	stripeProductIDLTE: String
+	stripeProductIDContains: String
+	stripeProductIDHasPrefix: String
+	stripeProductIDHasSuffix: String
+	stripeProductIDIsNil: Boolean
+	stripeProductIDNotNil: Boolean
+	stripeProductIDEqualFold: String
+	stripeProductIDContainsFold: String
+	"""
+	stripe_feature_id field predicates
+	"""
+	stripeFeatureID: String
+	stripeFeatureIDNEQ: String
+	stripeFeatureIDIn: [String!]
+	stripeFeatureIDNotIn: [String!]
+	stripeFeatureIDGT: String
+	stripeFeatureIDGTE: String
+	stripeFeatureIDLT: String
+	stripeFeatureIDLTE: String
+	stripeFeatureIDContains: String
+	stripeFeatureIDHasPrefix: String
+	stripeFeatureIDHasSuffix: String
+	stripeFeatureIDIsNil: Boolean
+	stripeFeatureIDNotNil: Boolean
+	stripeFeatureIDEqualFold: String
+	stripeFeatureIDContainsFold: String
 }
 type EntitlementPlanHistory implements Node {
 	id: ID!
@@ -6767,6 +6952,14 @@ type EntitlementPlanHistory implements Node {
 	metadata for the plan
 	"""
 	metadata: Map
+	"""
+	the product ID in Stripe
+	"""
+	stripeProductID: String
+	"""
+	the price ID in Stripe associated with the product
+	"""
+	stripePriceID: String
 }
 """
 A connection to a list of items.
@@ -7042,6 +7235,42 @@ input EntitlementPlanHistoryWhereInput {
 	versionHasSuffix: String
 	versionEqualFold: String
 	versionContainsFold: String
+	"""
+	stripe_product_id field predicates
+	"""
+	stripeProductID: String
+	stripeProductIDNEQ: String
+	stripeProductIDIn: [String!]
+	stripeProductIDNotIn: [String!]
+	stripeProductIDGT: String
+	stripeProductIDGTE: String
+	stripeProductIDLT: String
+	stripeProductIDLTE: String
+	stripeProductIDContains: String
+	stripeProductIDHasPrefix: String
+	stripeProductIDHasSuffix: String
+	stripeProductIDIsNil: Boolean
+	stripeProductIDNotNil: Boolean
+	stripeProductIDEqualFold: String
+	stripeProductIDContainsFold: String
+	"""
+	stripe_price_id field predicates
+	"""
+	stripePriceID: String
+	stripePriceIDNEQ: String
+	stripePriceIDIn: [String!]
+	stripePriceIDNotIn: [String!]
+	stripePriceIDGT: String
+	stripePriceIDGTE: String
+	stripePriceIDLT: String
+	stripePriceIDLTE: String
+	stripePriceIDContains: String
+	stripePriceIDHasPrefix: String
+	stripePriceIDHasSuffix: String
+	stripePriceIDIsNil: Boolean
+	stripePriceIDNotNil: Boolean
+	stripePriceIDEqualFold: String
+	stripePriceIDContainsFold: String
 }
 type EntitlementPlanSearchResult {
 	entitlementPlans: [EntitlementPlan!]
@@ -7255,6 +7484,42 @@ input EntitlementPlanWhereInput {
 	versionHasSuffix: String
 	versionEqualFold: String
 	versionContainsFold: String
+	"""
+	stripe_product_id field predicates
+	"""
+	stripeProductID: String
+	stripeProductIDNEQ: String
+	stripeProductIDIn: [String!]
+	stripeProductIDNotIn: [String!]
+	stripeProductIDGT: String
+	stripeProductIDGTE: String
+	stripeProductIDLT: String
+	stripeProductIDLTE: String
+	stripeProductIDContains: String
+	stripeProductIDHasPrefix: String
+	stripeProductIDHasSuffix: String
+	stripeProductIDIsNil: Boolean
+	stripeProductIDNotNil: Boolean
+	stripeProductIDEqualFold: String
+	stripeProductIDContainsFold: String
+	"""
+	stripe_price_id field predicates
+	"""
+	stripePriceID: String
+	stripePriceIDNEQ: String
+	stripePriceIDIn: [String!]
+	stripePriceIDNotIn: [String!]
+	stripePriceIDGT: String
+	stripePriceIDGTE: String
+	stripePriceIDLT: String
+	stripePriceIDLTE: String
+	stripePriceIDContains: String
+	stripePriceIDHasPrefix: String
+	stripePriceIDHasSuffix: String
+	stripePriceIDIsNil: Boolean
+	stripePriceIDNotNil: Boolean
+	stripePriceIDEqualFold: String
+	stripePriceIDContainsFold: String
 	"""
 	owner edge predicates
 	"""
@@ -7516,6 +7781,35 @@ input EntitlementWhereInput {
 	"""
 	cancelled: Boolean
 	cancelledNEQ: Boolean
+	"""
+	cancelled_date field predicates
+	"""
+	cancelledDate: Time
+	cancelledDateNEQ: Time
+	cancelledDateIn: [Time!]
+	cancelledDateNotIn: [Time!]
+	cancelledDateGT: Time
+	cancelledDateGTE: Time
+	cancelledDateLT: Time
+	cancelledDateLTE: Time
+	cancelledDateIsNil: Boolean
+	cancelledDateNotNil: Boolean
+	"""
+	bill_starting field predicates
+	"""
+	billStarting: Time
+	billStartingNEQ: Time
+	billStartingIn: [Time!]
+	billStartingNotIn: [Time!]
+	billStartingGT: Time
+	billStartingGTE: Time
+	billStartingLT: Time
+	billStartingLTE: Time
+	"""
+	active field predicates
+	"""
+	active: Boolean
+	activeNEQ: Boolean
 	"""
 	owner edge predicates
 	"""
@@ -9373,6 +9667,10 @@ type Feature implements Node {
 	metadata for the feature
 	"""
 	metadata: Map
+	"""
+	the feature ID in Stripe
+	"""
+	stripeFeatureID: String
 	owner: Organization
 	plans: [EntitlementPlan!]
 	events: [Event!]
@@ -9474,6 +9772,10 @@ type FeatureHistory implements Node {
 	metadata for the feature
 	"""
 	metadata: Map
+	"""
+	the feature ID in Stripe
+	"""
+	stripeFeatureID: String
 }
 """
 A connection to a list of items.
@@ -9738,6 +10040,24 @@ input FeatureHistoryWhereInput {
 	descriptionNotNil: Boolean
 	descriptionEqualFold: String
 	descriptionContainsFold: String
+	"""
+	stripe_feature_id field predicates
+	"""
+	stripeFeatureID: String
+	stripeFeatureIDNEQ: String
+	stripeFeatureIDIn: [String!]
+	stripeFeatureIDNotIn: [String!]
+	stripeFeatureIDGT: String
+	stripeFeatureIDGTE: String
+	stripeFeatureIDLT: String
+	stripeFeatureIDLTE: String
+	stripeFeatureIDContains: String
+	stripeFeatureIDHasPrefix: String
+	stripeFeatureIDHasSuffix: String
+	stripeFeatureIDIsNil: Boolean
+	stripeFeatureIDNotNil: Boolean
+	stripeFeatureIDEqualFold: String
+	stripeFeatureIDContainsFold: String
 }
 type FeatureSearchResult {
 	features: [Feature!]
@@ -9940,6 +10260,24 @@ input FeatureWhereInput {
 	descriptionNotNil: Boolean
 	descriptionEqualFold: String
 	descriptionContainsFold: String
+	"""
+	stripe_feature_id field predicates
+	"""
+	stripeFeatureID: String
+	stripeFeatureIDNEQ: String
+	stripeFeatureIDIn: [String!]
+	stripeFeatureIDNotIn: [String!]
+	stripeFeatureIDGT: String
+	stripeFeatureIDGTE: String
+	stripeFeatureIDLT: String
+	stripeFeatureIDLTE: String
+	stripeFeatureIDContains: String
+	stripeFeatureIDHasPrefix: String
+	stripeFeatureIDHasSuffix: String
+	stripeFeatureIDIsNil: Boolean
+	stripeFeatureIDNotNil: Boolean
+	stripeFeatureIDEqualFold: String
+	stripeFeatureIDContainsFold: String
 	"""
 	owner edge predicates
 	"""
@@ -19954,6 +20292,10 @@ type OrganizationSetting implements Node {
 	the ID of the organization the settings belong to
 	"""
 	organizationID: ID
+	"""
+	the ID of the stripe customer associated with the organization
+	"""
+	stripeID: String
 	organization: Organization
 	files: [File!]
 }
@@ -20061,6 +20403,10 @@ type OrganizationSettingHistory implements Node {
 	the ID of the organization the settings belong to
 	"""
 	organizationID: String
+	"""
+	the ID of the stripe customer associated with the organization
+	"""
+	stripeID: String
 }
 """
 A connection to a list of items.
@@ -20375,6 +20721,24 @@ input OrganizationSettingHistoryWhereInput {
 	organizationIDNotNil: Boolean
 	organizationIDEqualFold: String
 	organizationIDContainsFold: String
+	"""
+	stripe_id field predicates
+	"""
+	stripeID: String
+	stripeIDNEQ: String
+	stripeIDIn: [String!]
+	stripeIDNotIn: [String!]
+	stripeIDGT: String
+	stripeIDGTE: String
+	stripeIDLT: String
+	stripeIDLTE: String
+	stripeIDContains: String
+	stripeIDHasPrefix: String
+	stripeIDHasSuffix: String
+	stripeIDIsNil: Boolean
+	stripeIDNotNil: Boolean
+	stripeIDEqualFold: String
+	stripeIDContainsFold: String
 }
 """
 OrganizationSettingRegion is enum for the field geo_location
@@ -20627,6 +20991,24 @@ input OrganizationSettingWhereInput {
 	organizationIDNotNil: Boolean
 	organizationIDEqualFold: ID
 	organizationIDContainsFold: ID
+	"""
+	stripe_id field predicates
+	"""
+	stripeID: String
+	stripeIDNEQ: String
+	stripeIDIn: [String!]
+	stripeIDNotIn: [String!]
+	stripeIDGT: String
+	stripeIDGTE: String
+	stripeIDLT: String
+	stripeIDLTE: String
+	stripeIDContains: String
+	stripeIDHasPrefix: String
+	stripeIDHasSuffix: String
+	stripeIDIsNil: Boolean
+	stripeIDNotNil: Boolean
+	stripeIDEqualFold: String
+	stripeIDContainsFold: String
 	"""
 	organization edge predicates
 	"""
@@ -28198,7 +28580,7 @@ type Subcontrol implements Node {
 	"""
 	subcontrolNumber: String
 	"""
-	subcontrol family 
+	subcontrol family
 	"""
 	family: String
 	"""
@@ -28340,7 +28722,7 @@ type SubcontrolHistory implements Node {
 	"""
 	subcontrolNumber: String
 	"""
-	subcontrol family 
+	subcontrol family
 	"""
 	family: String
 	"""
@@ -31466,6 +31848,19 @@ input UpdateEntitlementInput {
 	whether or not the customer has cancelled their entitlement - usually used in conjunction with expires and expires at
 	"""
 	cancelled: Boolean
+	"""
+	the date at which the customer cancelled their entitlement
+	"""
+	cancelledDate: Time
+	clearCancelledDate: Boolean
+	"""
+	the date at which the customer's billing starts
+	"""
+	billStarting: Time
+	"""
+	whether or not the entitlement is active
+	"""
+	active: Boolean
 	ownerID: ID
 	clearOwner: Boolean
 	addEventIDs: [ID!]
@@ -31488,6 +31883,16 @@ input UpdateEntitlementPlanFeatureInput {
 	"""
 	metadata: Map
 	clearMetadata: Boolean
+	"""
+	the product ID in Stripe
+	"""
+	stripeProductID: String
+	clearStripeProductID: Boolean
+	"""
+	the feature ID in Stripe
+	"""
+	stripeFeatureID: String
+	clearStripeFeatureID: Boolean
 	ownerID: ID
 	clearOwner: Boolean
 	addEventIDs: [ID!]
@@ -31520,6 +31925,16 @@ input UpdateEntitlementPlanInput {
 	"""
 	metadata: Map
 	clearMetadata: Boolean
+	"""
+	the product ID in Stripe
+	"""
+	stripeProductID: String
+	clearStripeProductID: Boolean
+	"""
+	the price ID in Stripe associated with the product
+	"""
+	stripePriceID: String
+	clearStripePriceID: Boolean
 	ownerID: ID
 	clearOwner: Boolean
 	addEntitlementIDs: [ID!]
@@ -31699,6 +32114,11 @@ input UpdateFeatureInput {
 	"""
 	metadata: Map
 	clearMetadata: Boolean
+	"""
+	the feature ID in Stripe
+	"""
+	stripeFeatureID: String
+	clearStripeFeatureID: Boolean
 	ownerID: ID
 	clearOwner: Boolean
 	addPlanIDs: [ID!]
@@ -32389,6 +32809,11 @@ input UpdateOrganizationSettingInput {
 	"""
 	geoLocation: OrganizationSettingRegion
 	clearGeoLocation: Boolean
+	"""
+	the ID of the stripe customer associated with the organization
+	"""
+	stripeID: String
+	clearStripeID: Boolean
 	organizationID: ID
 	clearOrganization: Boolean
 	addFileIDs: [ID!]
@@ -32786,7 +33211,7 @@ input UpdateSubcontrolInput {
 	subcontrolNumber: String
 	clearSubcontrolNumber: Boolean
 	"""
-	subcontrol family 
+	subcontrol family
 	"""
 	family: String
 	clearFamily: Boolean

@@ -55,6 +55,12 @@ const (
 	FieldExpiresAt = "expires_at"
 	// FieldCancelled holds the string denoting the cancelled field in the database.
 	FieldCancelled = "cancelled"
+	// FieldCancelledDate holds the string denoting the cancelled_date field in the database.
+	FieldCancelledDate = "cancelled_date"
+	// FieldBillStarting holds the string denoting the bill_starting field in the database.
+	FieldBillStarting = "bill_starting"
+	// FieldActive holds the string denoting the active field in the database.
+	FieldActive = "active"
 	// Table holds the table name of the entitlementhistory in the database.
 	Table = "entitlement_history"
 )
@@ -81,6 +87,9 @@ var Columns = []string{
 	FieldExpires,
 	FieldExpiresAt,
 	FieldCancelled,
+	FieldCancelledDate,
+	FieldBillStarting,
+	FieldActive,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -118,6 +127,10 @@ var (
 	DefaultExpires bool
 	// DefaultCancelled holds the default value on creation for the "cancelled" field.
 	DefaultCancelled bool
+	// DefaultBillStarting holds the default value on creation for the "bill_starting" field.
+	DefaultBillStarting func() time.Time
+	// DefaultActive holds the default value on creation for the "active" field.
+	DefaultActive bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -228,6 +241,21 @@ func ByExpiresAt(opts ...sql.OrderTermOption) OrderOption {
 // ByCancelled orders the results by the cancelled field.
 func ByCancelled(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCancelled, opts...).ToFunc()
+}
+
+// ByCancelledDate orders the results by the cancelled_date field.
+func ByCancelledDate(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCancelledDate, opts...).ToFunc()
+}
+
+// ByBillStarting orders the results by the bill_starting field.
+func ByBillStarting(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldBillStarting, opts...).ToFunc()
+}
+
+// ByActive orders the results by the active field.
+func ByActive(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldActive, opts...).ToFunc()
 }
 
 var (

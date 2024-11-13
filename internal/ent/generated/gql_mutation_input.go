@@ -1264,6 +1264,9 @@ type CreateEntitlementInput struct {
 	ExternalSubscriptionID *string
 	ExpiresAt              *time.Time
 	Cancelled              *bool
+	CancelledDate          *time.Time
+	BillStarting           *time.Time
+	Active                 *bool
 	OwnerID                *string
 	PlanID                 string
 	OrganizationID         string
@@ -1286,6 +1289,15 @@ func (i *CreateEntitlementInput) Mutate(m *EntitlementMutation) {
 	}
 	if v := i.Cancelled; v != nil {
 		m.SetCancelled(*v)
+	}
+	if v := i.CancelledDate; v != nil {
+		m.SetCancelledDate(*v)
+	}
+	if v := i.BillStarting; v != nil {
+		m.SetBillStarting(*v)
+	}
+	if v := i.Active; v != nil {
+		m.SetActive(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -1315,6 +1327,10 @@ type UpdateEntitlementInput struct {
 	ClearExpiresAt              bool
 	ExpiresAt                   *time.Time
 	Cancelled                   *bool
+	ClearCancelledDate          bool
+	CancelledDate               *time.Time
+	BillStarting                *time.Time
+	Active                      *bool
 	ClearOwner                  bool
 	OwnerID                     *string
 	ClearEvents                 bool
@@ -1354,6 +1370,18 @@ func (i *UpdateEntitlementInput) Mutate(m *EntitlementMutation) {
 	if v := i.Cancelled; v != nil {
 		m.SetCancelled(*v)
 	}
+	if i.ClearCancelledDate {
+		m.ClearCancelledDate()
+	}
+	if v := i.CancelledDate; v != nil {
+		m.SetCancelledDate(*v)
+	}
+	if v := i.BillStarting; v != nil {
+		m.SetBillStarting(*v)
+	}
+	if v := i.Active; v != nil {
+		m.SetActive(*v)
+	}
 	if i.ClearOwner {
 		m.ClearOwner()
 	}
@@ -1385,16 +1413,18 @@ func (c *EntitlementUpdateOne) SetInput(i UpdateEntitlementInput) *EntitlementUp
 
 // CreateEntitlementPlanInput represents a mutation input for creating entitlementplans.
 type CreateEntitlementPlanInput struct {
-	Tags           []string
-	DisplayName    *string
-	Name           string
-	Description    *string
-	Version        string
-	Metadata       map[string]interface{}
-	OwnerID        *string
-	EntitlementIDs []string
-	BaseFeatureIDs []string
-	EventIDs       []string
+	Tags            []string
+	DisplayName     *string
+	Name            string
+	Description     *string
+	Version         string
+	Metadata        map[string]interface{}
+	StripeProductID *string
+	StripePriceID   *string
+	OwnerID         *string
+	EntitlementIDs  []string
+	BaseFeatureIDs  []string
+	EventIDs        []string
 }
 
 // Mutate applies the CreateEntitlementPlanInput on the EntitlementPlanMutation builder.
@@ -1412,6 +1442,12 @@ func (i *CreateEntitlementPlanInput) Mutate(m *EntitlementPlanMutation) {
 	m.SetVersion(i.Version)
 	if v := i.Metadata; v != nil {
 		m.SetMetadata(v)
+	}
+	if v := i.StripeProductID; v != nil {
+		m.SetStripeProductID(*v)
+	}
+	if v := i.StripePriceID; v != nil {
+		m.SetStripePriceID(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -1444,6 +1480,10 @@ type UpdateEntitlementPlanInput struct {
 	Description          *string
 	ClearMetadata        bool
 	Metadata             map[string]interface{}
+	ClearStripeProductID bool
+	StripeProductID      *string
+	ClearStripePriceID   bool
+	StripePriceID        *string
 	ClearOwner           bool
 	OwnerID              *string
 	ClearEntitlements    bool
@@ -1485,6 +1525,18 @@ func (i *UpdateEntitlementPlanInput) Mutate(m *EntitlementPlanMutation) {
 	}
 	if v := i.Metadata; v != nil {
 		m.SetMetadata(v)
+	}
+	if i.ClearStripeProductID {
+		m.ClearStripeProductID()
+	}
+	if v := i.StripeProductID; v != nil {
+		m.SetStripeProductID(*v)
+	}
+	if i.ClearStripePriceID {
+		m.ClearStripePriceID()
+	}
+	if v := i.StripePriceID; v != nil {
+		m.SetStripePriceID(*v)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()
@@ -1535,12 +1587,14 @@ func (c *EntitlementPlanUpdateOne) SetInput(i UpdateEntitlementPlanInput) *Entit
 
 // CreateEntitlementPlanFeatureInput represents a mutation input for creating entitlementplanfeatures.
 type CreateEntitlementPlanFeatureInput struct {
-	Tags      []string
-	Metadata  map[string]interface{}
-	OwnerID   *string
-	PlanID    string
-	FeatureID string
-	EventIDs  []string
+	Tags            []string
+	Metadata        map[string]interface{}
+	StripeProductID *string
+	StripeFeatureID *string
+	OwnerID         *string
+	PlanID          string
+	FeatureID       string
+	EventIDs        []string
 }
 
 // Mutate applies the CreateEntitlementPlanFeatureInput on the EntitlementPlanFeatureMutation builder.
@@ -1550,6 +1604,12 @@ func (i *CreateEntitlementPlanFeatureInput) Mutate(m *EntitlementPlanFeatureMuta
 	}
 	if v := i.Metadata; v != nil {
 		m.SetMetadata(v)
+	}
+	if v := i.StripeProductID; v != nil {
+		m.SetStripeProductID(*v)
+	}
+	if v := i.StripeFeatureID; v != nil {
+		m.SetStripeFeatureID(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -1569,16 +1629,20 @@ func (c *EntitlementPlanFeatureCreate) SetInput(i CreateEntitlementPlanFeatureIn
 
 // UpdateEntitlementPlanFeatureInput represents a mutation input for updating entitlementplanfeatures.
 type UpdateEntitlementPlanFeatureInput struct {
-	ClearTags      bool
-	Tags           []string
-	AppendTags     []string
-	ClearMetadata  bool
-	Metadata       map[string]interface{}
-	ClearOwner     bool
-	OwnerID        *string
-	ClearEvents    bool
-	AddEventIDs    []string
-	RemoveEventIDs []string
+	ClearTags            bool
+	Tags                 []string
+	AppendTags           []string
+	ClearMetadata        bool
+	Metadata             map[string]interface{}
+	ClearStripeProductID bool
+	StripeProductID      *string
+	ClearStripeFeatureID bool
+	StripeFeatureID      *string
+	ClearOwner           bool
+	OwnerID              *string
+	ClearEvents          bool
+	AddEventIDs          []string
+	RemoveEventIDs       []string
 }
 
 // Mutate applies the UpdateEntitlementPlanFeatureInput on the EntitlementPlanFeatureMutation builder.
@@ -1597,6 +1661,18 @@ func (i *UpdateEntitlementPlanFeatureInput) Mutate(m *EntitlementPlanFeatureMuta
 	}
 	if v := i.Metadata; v != nil {
 		m.SetMetadata(v)
+	}
+	if i.ClearStripeProductID {
+		m.ClearStripeProductID()
+	}
+	if v := i.StripeProductID; v != nil {
+		m.SetStripeProductID(*v)
+	}
+	if i.ClearStripeFeatureID {
+		m.ClearStripeFeatureID()
+	}
+	if v := i.StripeFeatureID; v != nil {
+		m.SetStripeFeatureID(*v)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()
@@ -2231,15 +2307,16 @@ func (c *EventUpdateOne) SetInput(i UpdateEventInput) *EventUpdateOne {
 
 // CreateFeatureInput represents a mutation input for creating features.
 type CreateFeatureInput struct {
-	Tags        []string
-	Name        string
-	DisplayName *string
-	Enabled     *bool
-	Description *string
-	Metadata    map[string]interface{}
-	OwnerID     *string
-	PlanIDs     []string
-	EventIDs    []string
+	Tags            []string
+	Name            string
+	DisplayName     *string
+	Enabled         *bool
+	Description     *string
+	Metadata        map[string]interface{}
+	StripeFeatureID *string
+	OwnerID         *string
+	PlanIDs         []string
+	EventIDs        []string
 }
 
 // Mutate applies the CreateFeatureInput on the FeatureMutation builder.
@@ -2260,6 +2337,9 @@ func (i *CreateFeatureInput) Mutate(m *FeatureMutation) {
 	if v := i.Metadata; v != nil {
 		m.SetMetadata(v)
 	}
+	if v := i.StripeFeatureID; v != nil {
+		m.SetStripeFeatureID(*v)
+	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
@@ -2279,24 +2359,26 @@ func (c *FeatureCreate) SetInput(i CreateFeatureInput) *FeatureCreate {
 
 // UpdateFeatureInput represents a mutation input for updating features.
 type UpdateFeatureInput struct {
-	ClearTags        bool
-	Tags             []string
-	AppendTags       []string
-	ClearDisplayName bool
-	DisplayName      *string
-	Enabled          *bool
-	ClearDescription bool
-	Description      *string
-	ClearMetadata    bool
-	Metadata         map[string]interface{}
-	ClearOwner       bool
-	OwnerID          *string
-	ClearPlans       bool
-	AddPlanIDs       []string
-	RemovePlanIDs    []string
-	ClearEvents      bool
-	AddEventIDs      []string
-	RemoveEventIDs   []string
+	ClearTags            bool
+	Tags                 []string
+	AppendTags           []string
+	ClearDisplayName     bool
+	DisplayName          *string
+	Enabled              *bool
+	ClearDescription     bool
+	Description          *string
+	ClearMetadata        bool
+	Metadata             map[string]interface{}
+	ClearStripeFeatureID bool
+	StripeFeatureID      *string
+	ClearOwner           bool
+	OwnerID              *string
+	ClearPlans           bool
+	AddPlanIDs           []string
+	RemovePlanIDs        []string
+	ClearEvents          bool
+	AddEventIDs          []string
+	RemoveEventIDs       []string
 }
 
 // Mutate applies the UpdateFeatureInput on the FeatureMutation builder.
@@ -2330,6 +2412,12 @@ func (i *UpdateFeatureInput) Mutate(m *FeatureMutation) {
 	}
 	if v := i.Metadata; v != nil {
 		m.SetMetadata(v)
+	}
+	if i.ClearStripeFeatureID {
+		m.ClearStripeFeatureID()
+	}
+	if v := i.StripeFeatureID; v != nil {
+		m.SetStripeFeatureID(*v)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()
@@ -4859,6 +4947,7 @@ type CreateOrganizationSettingInput struct {
 	BillingAddress *string
 	TaxIdentifier  *string
 	GeoLocation    *enums.Region
+	StripeID       *string
 	OrganizationID *string
 	FileIDs        []string
 }
@@ -4888,6 +4977,9 @@ func (i *CreateOrganizationSettingInput) Mutate(m *OrganizationSettingMutation) 
 	}
 	if v := i.GeoLocation; v != nil {
 		m.SetGeoLocation(*v)
+	}
+	if v := i.StripeID; v != nil {
+		m.SetStripeID(*v)
 	}
 	if v := i.OrganizationID; v != nil {
 		m.SetOrganizationID(*v)
@@ -4923,6 +5015,8 @@ type UpdateOrganizationSettingInput struct {
 	TaxIdentifier       *string
 	ClearGeoLocation    bool
 	GeoLocation         *enums.Region
+	ClearStripeID       bool
+	StripeID            *string
 	ClearOrganization   bool
 	OrganizationID      *string
 	ClearFiles          bool
@@ -4985,6 +5079,12 @@ func (i *UpdateOrganizationSettingInput) Mutate(m *OrganizationSettingMutation) 
 	}
 	if v := i.GeoLocation; v != nil {
 		m.SetGeoLocation(*v)
+	}
+	if i.ClearStripeID {
+		m.ClearStripeID()
+	}
+	if v := i.StripeID; v != nil {
+		m.SetStripeID(*v)
 	}
 	if i.ClearOrganization {
 		m.ClearOrganization()

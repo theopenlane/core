@@ -49,6 +49,7 @@ mutation CreateOrganization($input: CreateOrganizationInput!) {
         taxIdentifier
         geoLocation
         tags
+        stripeID
       }
       parent {
         id
@@ -121,6 +122,7 @@ query GetAllOrganizations {
           taxIdentifier
           geoLocation
           tags
+          stripeID
         }
         createdAt
         updatedAt
@@ -174,6 +176,7 @@ query GetOrganizationByID($organizationId: ID!) {
       taxIdentifier
       geoLocation
       tags
+      stripeID
     }
     createdAt
     createdBy
@@ -229,6 +232,7 @@ query GetOrganizations($where: OrganizationWhereInput) {
           taxIdentifier
           geoLocation
           tags
+          stripeID
         }
         createdAt
         updatedAt
@@ -265,6 +269,7 @@ mutation UpdateOrganization($updateOrganizationId: ID!, $input: UpdateOrganizati
         taxIdentifier
         geoLocation
         tags
+        stripeID
       }
     }
   }

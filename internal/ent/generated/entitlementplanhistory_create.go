@@ -219,6 +219,34 @@ func (ephc *EntitlementPlanHistoryCreate) SetMetadata(m map[string]interface{}) 
 	return ephc
 }
 
+// SetStripeProductID sets the "stripe_product_id" field.
+func (ephc *EntitlementPlanHistoryCreate) SetStripeProductID(s string) *EntitlementPlanHistoryCreate {
+	ephc.mutation.SetStripeProductID(s)
+	return ephc
+}
+
+// SetNillableStripeProductID sets the "stripe_product_id" field if the given value is not nil.
+func (ephc *EntitlementPlanHistoryCreate) SetNillableStripeProductID(s *string) *EntitlementPlanHistoryCreate {
+	if s != nil {
+		ephc.SetStripeProductID(*s)
+	}
+	return ephc
+}
+
+// SetStripePriceID sets the "stripe_price_id" field.
+func (ephc *EntitlementPlanHistoryCreate) SetStripePriceID(s string) *EntitlementPlanHistoryCreate {
+	ephc.mutation.SetStripePriceID(s)
+	return ephc
+}
+
+// SetNillableStripePriceID sets the "stripe_price_id" field if the given value is not nil.
+func (ephc *EntitlementPlanHistoryCreate) SetNillableStripePriceID(s *string) *EntitlementPlanHistoryCreate {
+	if s != nil {
+		ephc.SetStripePriceID(*s)
+	}
+	return ephc
+}
+
 // SetID sets the "id" field.
 func (ephc *EntitlementPlanHistoryCreate) SetID(s string) *EntitlementPlanHistoryCreate {
 	ephc.mutation.SetID(s)
@@ -437,6 +465,14 @@ func (ephc *EntitlementPlanHistoryCreate) createSpec() (*EntitlementPlanHistory,
 	if value, ok := ephc.mutation.Metadata(); ok {
 		_spec.SetField(entitlementplanhistory.FieldMetadata, field.TypeJSON, value)
 		_node.Metadata = value
+	}
+	if value, ok := ephc.mutation.StripeProductID(); ok {
+		_spec.SetField(entitlementplanhistory.FieldStripeProductID, field.TypeString, value)
+		_node.StripeProductID = value
+	}
+	if value, ok := ephc.mutation.StripePriceID(); ok {
+		_spec.SetField(entitlementplanhistory.FieldStripePriceID, field.TypeString, value)
+		_node.StripePriceID = value
 	}
 	return _node, _spec
 }

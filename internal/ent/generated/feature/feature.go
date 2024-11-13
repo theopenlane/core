@@ -43,6 +43,8 @@ const (
 	FieldDescription = "description"
 	// FieldMetadata holds the string denoting the metadata field in the database.
 	FieldMetadata = "metadata"
+	// FieldStripeFeatureID holds the string denoting the stripe_feature_id field in the database.
+	FieldStripeFeatureID = "stripe_feature_id"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgePlans holds the string denoting the plans edge name in mutations.
@@ -96,6 +98,7 @@ var Columns = []string{
 	FieldEnabled,
 	FieldDescription,
 	FieldMetadata,
+	FieldStripeFeatureID,
 }
 
 var (
@@ -212,6 +215,11 @@ func ByEnabled(opts ...sql.OrderTermOption) OrderOption {
 // ByDescription orders the results by the description field.
 func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDescription, opts...).ToFunc()
+}
+
+// ByStripeFeatureID orders the results by the stripe_feature_id field.
+func ByStripeFeatureID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStripeFeatureID, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.

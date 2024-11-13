@@ -142,6 +142,21 @@ func Cancelled(v bool) predicate.Entitlement {
 	return predicate.Entitlement(sql.FieldEQ(FieldCancelled, v))
 }
 
+// CancelledDate applies equality check predicate on the "cancelled_date" field. It's identical to CancelledDateEQ.
+func CancelledDate(v time.Time) predicate.Entitlement {
+	return predicate.Entitlement(sql.FieldEQ(FieldCancelledDate, v))
+}
+
+// BillStarting applies equality check predicate on the "bill_starting" field. It's identical to BillStartingEQ.
+func BillStarting(v time.Time) predicate.Entitlement {
+	return predicate.Entitlement(sql.FieldEQ(FieldBillStarting, v))
+}
+
+// Active applies equality check predicate on the "active" field. It's identical to ActiveEQ.
+func Active(v bool) predicate.Entitlement {
+	return predicate.Entitlement(sql.FieldEQ(FieldActive, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Entitlement {
 	return predicate.Entitlement(sql.FieldEQ(FieldCreatedAt, v))
@@ -1015,6 +1030,106 @@ func CancelledEQ(v bool) predicate.Entitlement {
 // CancelledNEQ applies the NEQ predicate on the "cancelled" field.
 func CancelledNEQ(v bool) predicate.Entitlement {
 	return predicate.Entitlement(sql.FieldNEQ(FieldCancelled, v))
+}
+
+// CancelledDateEQ applies the EQ predicate on the "cancelled_date" field.
+func CancelledDateEQ(v time.Time) predicate.Entitlement {
+	return predicate.Entitlement(sql.FieldEQ(FieldCancelledDate, v))
+}
+
+// CancelledDateNEQ applies the NEQ predicate on the "cancelled_date" field.
+func CancelledDateNEQ(v time.Time) predicate.Entitlement {
+	return predicate.Entitlement(sql.FieldNEQ(FieldCancelledDate, v))
+}
+
+// CancelledDateIn applies the In predicate on the "cancelled_date" field.
+func CancelledDateIn(vs ...time.Time) predicate.Entitlement {
+	return predicate.Entitlement(sql.FieldIn(FieldCancelledDate, vs...))
+}
+
+// CancelledDateNotIn applies the NotIn predicate on the "cancelled_date" field.
+func CancelledDateNotIn(vs ...time.Time) predicate.Entitlement {
+	return predicate.Entitlement(sql.FieldNotIn(FieldCancelledDate, vs...))
+}
+
+// CancelledDateGT applies the GT predicate on the "cancelled_date" field.
+func CancelledDateGT(v time.Time) predicate.Entitlement {
+	return predicate.Entitlement(sql.FieldGT(FieldCancelledDate, v))
+}
+
+// CancelledDateGTE applies the GTE predicate on the "cancelled_date" field.
+func CancelledDateGTE(v time.Time) predicate.Entitlement {
+	return predicate.Entitlement(sql.FieldGTE(FieldCancelledDate, v))
+}
+
+// CancelledDateLT applies the LT predicate on the "cancelled_date" field.
+func CancelledDateLT(v time.Time) predicate.Entitlement {
+	return predicate.Entitlement(sql.FieldLT(FieldCancelledDate, v))
+}
+
+// CancelledDateLTE applies the LTE predicate on the "cancelled_date" field.
+func CancelledDateLTE(v time.Time) predicate.Entitlement {
+	return predicate.Entitlement(sql.FieldLTE(FieldCancelledDate, v))
+}
+
+// CancelledDateIsNil applies the IsNil predicate on the "cancelled_date" field.
+func CancelledDateIsNil() predicate.Entitlement {
+	return predicate.Entitlement(sql.FieldIsNull(FieldCancelledDate))
+}
+
+// CancelledDateNotNil applies the NotNil predicate on the "cancelled_date" field.
+func CancelledDateNotNil() predicate.Entitlement {
+	return predicate.Entitlement(sql.FieldNotNull(FieldCancelledDate))
+}
+
+// BillStartingEQ applies the EQ predicate on the "bill_starting" field.
+func BillStartingEQ(v time.Time) predicate.Entitlement {
+	return predicate.Entitlement(sql.FieldEQ(FieldBillStarting, v))
+}
+
+// BillStartingNEQ applies the NEQ predicate on the "bill_starting" field.
+func BillStartingNEQ(v time.Time) predicate.Entitlement {
+	return predicate.Entitlement(sql.FieldNEQ(FieldBillStarting, v))
+}
+
+// BillStartingIn applies the In predicate on the "bill_starting" field.
+func BillStartingIn(vs ...time.Time) predicate.Entitlement {
+	return predicate.Entitlement(sql.FieldIn(FieldBillStarting, vs...))
+}
+
+// BillStartingNotIn applies the NotIn predicate on the "bill_starting" field.
+func BillStartingNotIn(vs ...time.Time) predicate.Entitlement {
+	return predicate.Entitlement(sql.FieldNotIn(FieldBillStarting, vs...))
+}
+
+// BillStartingGT applies the GT predicate on the "bill_starting" field.
+func BillStartingGT(v time.Time) predicate.Entitlement {
+	return predicate.Entitlement(sql.FieldGT(FieldBillStarting, v))
+}
+
+// BillStartingGTE applies the GTE predicate on the "bill_starting" field.
+func BillStartingGTE(v time.Time) predicate.Entitlement {
+	return predicate.Entitlement(sql.FieldGTE(FieldBillStarting, v))
+}
+
+// BillStartingLT applies the LT predicate on the "bill_starting" field.
+func BillStartingLT(v time.Time) predicate.Entitlement {
+	return predicate.Entitlement(sql.FieldLT(FieldBillStarting, v))
+}
+
+// BillStartingLTE applies the LTE predicate on the "bill_starting" field.
+func BillStartingLTE(v time.Time) predicate.Entitlement {
+	return predicate.Entitlement(sql.FieldLTE(FieldBillStarting, v))
+}
+
+// ActiveEQ applies the EQ predicate on the "active" field.
+func ActiveEQ(v bool) predicate.Entitlement {
+	return predicate.Entitlement(sql.FieldEQ(FieldActive, v))
+}
+
+// ActiveNEQ applies the NEQ predicate on the "active" field.
+func ActiveNEQ(v bool) predicate.Entitlement {
+	return predicate.Entitlement(sql.FieldNEQ(FieldActive, v))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.

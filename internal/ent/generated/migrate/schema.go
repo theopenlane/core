@@ -464,6 +464,9 @@ var (
 		{Name: "expires", Type: field.TypeBool, Default: false},
 		{Name: "expires_at", Type: field.TypeTime, Nullable: true},
 		{Name: "cancelled", Type: field.TypeBool, Default: false},
+		{Name: "cancelled_date", Type: field.TypeTime, Nullable: true},
+		{Name: "bill_starting", Type: field.TypeTime},
+		{Name: "active", Type: field.TypeBool, Default: true},
 		{Name: "plan_id", Type: field.TypeString},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "organization_id", Type: field.TypeString},
@@ -476,19 +479,19 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "entitlements_entitlement_plans_entitlements",
-				Columns:    []*schema.Column{EntitlementsColumns[14]},
+				Columns:    []*schema.Column{EntitlementsColumns[17]},
 				RefColumns: []*schema.Column{EntitlementPlansColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "entitlements_organizations_entitlements",
-				Columns:    []*schema.Column{EntitlementsColumns[15]},
+				Columns:    []*schema.Column{EntitlementsColumns[18]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "entitlements_organizations_organization_entitlement",
-				Columns:    []*schema.Column{EntitlementsColumns[16]},
+				Columns:    []*schema.Column{EntitlementsColumns[19]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -497,7 +500,7 @@ var (
 			{
 				Name:    "entitlement_organization_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{EntitlementsColumns[16], EntitlementsColumns[15]},
+				Columns: []*schema.Column{EntitlementsColumns[19], EntitlementsColumns[18]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL and cancelled = false",
 				},
@@ -526,6 +529,9 @@ var (
 		{Name: "expires", Type: field.TypeBool, Default: false},
 		{Name: "expires_at", Type: field.TypeTime, Nullable: true},
 		{Name: "cancelled", Type: field.TypeBool, Default: false},
+		{Name: "cancelled_date", Type: field.TypeTime, Nullable: true},
+		{Name: "bill_starting", Type: field.TypeTime},
+		{Name: "active", Type: field.TypeBool, Default: true},
 	}
 	// EntitlementHistoryTable holds the schema information for the "entitlement_history" table.
 	EntitlementHistoryTable = &schema.Table{
@@ -556,6 +562,8 @@ var (
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "version", Type: field.TypeString},
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "stripe_product_id", Type: field.TypeString, Nullable: true},
+		{Name: "stripe_price_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// EntitlementPlansTable holds the schema information for the "entitlement_plans" table.
@@ -566,7 +574,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "entitlement_plans_organizations_entitlementplans",
-				Columns:    []*schema.Column{EntitlementPlansColumns[14]},
+				Columns:    []*schema.Column{EntitlementPlansColumns[16]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -575,7 +583,7 @@ var (
 			{
 				Name:    "entitlementplan_name_version_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{EntitlementPlansColumns[10], EntitlementPlansColumns[12], EntitlementPlansColumns[14]},
+				Columns: []*schema.Column{EntitlementPlansColumns[10], EntitlementPlansColumns[12], EntitlementPlansColumns[16]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -594,6 +602,8 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "stripe_product_id", Type: field.TypeString, Nullable: true},
+		{Name: "stripe_feature_id", Type: field.TypeString, Nullable: true},
 		{Name: "plan_id", Type: field.TypeString},
 		{Name: "feature_id", Type: field.TypeString},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
@@ -606,19 +616,19 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "entitlement_plan_features_entitlement_plans_plan",
-				Columns:    []*schema.Column{EntitlementPlanFeaturesColumns[10]},
+				Columns:    []*schema.Column{EntitlementPlanFeaturesColumns[12]},
 				RefColumns: []*schema.Column{EntitlementPlansColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "entitlement_plan_features_features_feature",
-				Columns:    []*schema.Column{EntitlementPlanFeaturesColumns[11]},
+				Columns:    []*schema.Column{EntitlementPlanFeaturesColumns[13]},
 				RefColumns: []*schema.Column{FeaturesColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "entitlement_plan_features_organizations_entitlementplanfeatures",
-				Columns:    []*schema.Column{EntitlementPlanFeaturesColumns[12]},
+				Columns:    []*schema.Column{EntitlementPlanFeaturesColumns[14]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -627,7 +637,7 @@ var (
 			{
 				Name:    "entitlementplanfeature_feature_id_plan_id",
 				Unique:  true,
-				Columns: []*schema.Column{EntitlementPlanFeaturesColumns[11], EntitlementPlanFeaturesColumns[10]},
+				Columns: []*schema.Column{EntitlementPlanFeaturesColumns[13], EntitlementPlanFeaturesColumns[12]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -651,7 +661,9 @@ var (
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
 		{Name: "plan_id", Type: field.TypeString},
+		{Name: "stripe_product_id", Type: field.TypeString, Nullable: true},
 		{Name: "feature_id", Type: field.TypeString},
+		{Name: "stripe_feature_id", Type: field.TypeString, Nullable: true},
 	}
 	// EntitlementPlanFeatureHistoryTable holds the schema information for the "entitlement_plan_feature_history" table.
 	EntitlementPlanFeatureHistoryTable = &schema.Table{
@@ -686,6 +698,8 @@ var (
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "version", Type: field.TypeString},
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "stripe_product_id", Type: field.TypeString, Nullable: true},
+		{Name: "stripe_price_id", Type: field.TypeString, Nullable: true},
 	}
 	// EntitlementPlanHistoryTable holds the schema information for the "entitlement_plan_history" table.
 	EntitlementPlanHistoryTable = &schema.Table{
@@ -925,6 +939,7 @@ var (
 		{Name: "enabled", Type: field.TypeBool, Default: false},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "stripe_feature_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// FeaturesTable holds the schema information for the "features" table.
@@ -935,7 +950,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "features_organizations_features",
-				Columns:    []*schema.Column{FeaturesColumns[14]},
+				Columns:    []*schema.Column{FeaturesColumns[15]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -944,7 +959,7 @@ var (
 			{
 				Name:    "feature_name_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{FeaturesColumns[9], FeaturesColumns[14]},
+				Columns: []*schema.Column{FeaturesColumns[9], FeaturesColumns[15]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -971,6 +986,7 @@ var (
 		{Name: "enabled", Type: field.TypeBool, Default: false},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "stripe_feature_id", Type: field.TypeString, Nullable: true},
 	}
 	// FeatureHistoryTable holds the schema information for the "feature_history" table.
 	FeatureHistoryTable = &schema.Table{
@@ -1889,6 +1905,7 @@ var (
 		{Name: "billing_address", Type: field.TypeString, Nullable: true},
 		{Name: "tax_identifier", Type: field.TypeString, Nullable: true},
 		{Name: "geo_location", Type: field.TypeEnum, Nullable: true, Enums: []string{"AMER", "EMEA", "APAC"}, Default: "AMER"},
+		{Name: "stripe_id", Type: field.TypeString, Nullable: true},
 		{Name: "organization_id", Type: field.TypeString, Unique: true, Nullable: true},
 	}
 	// OrganizationSettingsTable holds the schema information for the "organization_settings" table.
@@ -1899,7 +1916,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "organization_settings_organizations_setting",
-				Columns:    []*schema.Column{OrganizationSettingsColumns[16]},
+				Columns:    []*schema.Column{OrganizationSettingsColumns[17]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1927,6 +1944,7 @@ var (
 		{Name: "tax_identifier", Type: field.TypeString, Nullable: true},
 		{Name: "geo_location", Type: field.TypeEnum, Nullable: true, Enums: []string{"AMER", "EMEA", "APAC"}, Default: "AMER"},
 		{Name: "organization_id", Type: field.TypeString, Nullable: true},
+		{Name: "stripe_id", Type: field.TypeString, Nullable: true},
 	}
 	// OrganizationSettingHistoryTable holds the schema information for the "organization_setting_history" table.
 	OrganizationSettingHistoryTable = &schema.Table{

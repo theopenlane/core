@@ -189,6 +189,34 @@ func (epc *EntitlementPlanCreate) SetMetadata(m map[string]interface{}) *Entitle
 	return epc
 }
 
+// SetStripeProductID sets the "stripe_product_id" field.
+func (epc *EntitlementPlanCreate) SetStripeProductID(s string) *EntitlementPlanCreate {
+	epc.mutation.SetStripeProductID(s)
+	return epc
+}
+
+// SetNillableStripeProductID sets the "stripe_product_id" field if the given value is not nil.
+func (epc *EntitlementPlanCreate) SetNillableStripeProductID(s *string) *EntitlementPlanCreate {
+	if s != nil {
+		epc.SetStripeProductID(*s)
+	}
+	return epc
+}
+
+// SetStripePriceID sets the "stripe_price_id" field.
+func (epc *EntitlementPlanCreate) SetStripePriceID(s string) *EntitlementPlanCreate {
+	epc.mutation.SetStripePriceID(s)
+	return epc
+}
+
+// SetNillableStripePriceID sets the "stripe_price_id" field if the given value is not nil.
+func (epc *EntitlementPlanCreate) SetNillableStripePriceID(s *string) *EntitlementPlanCreate {
+	if s != nil {
+		epc.SetStripePriceID(*s)
+	}
+	return epc
+}
+
 // SetID sets the "id" field.
 func (epc *EntitlementPlanCreate) SetID(s string) *EntitlementPlanCreate {
 	epc.mutation.SetID(s)
@@ -453,6 +481,14 @@ func (epc *EntitlementPlanCreate) createSpec() (*EntitlementPlan, *sqlgraph.Crea
 	if value, ok := epc.mutation.Metadata(); ok {
 		_spec.SetField(entitlementplan.FieldMetadata, field.TypeJSON, value)
 		_node.Metadata = value
+	}
+	if value, ok := epc.mutation.StripeProductID(); ok {
+		_spec.SetField(entitlementplan.FieldStripeProductID, field.TypeString, value)
+		_node.StripeProductID = value
+	}
+	if value, ok := epc.mutation.StripePriceID(); ok {
+		_spec.SetField(entitlementplan.FieldStripePriceID, field.TypeString, value)
+		_node.StripePriceID = value
 	}
 	if nodes := epc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

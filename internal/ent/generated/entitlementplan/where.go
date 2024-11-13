@@ -127,6 +127,16 @@ func Version(v string) predicate.EntitlementPlan {
 	return predicate.EntitlementPlan(sql.FieldEQ(FieldVersion, v))
 }
 
+// StripeProductID applies equality check predicate on the "stripe_product_id" field. It's identical to StripeProductIDEQ.
+func StripeProductID(v string) predicate.EntitlementPlan {
+	return predicate.EntitlementPlan(sql.FieldEQ(FieldStripeProductID, v))
+}
+
+// StripePriceID applies equality check predicate on the "stripe_price_id" field. It's identical to StripePriceIDEQ.
+func StripePriceID(v string) predicate.EntitlementPlan {
+	return predicate.EntitlementPlan(sql.FieldEQ(FieldStripePriceID, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.EntitlementPlan {
 	return predicate.EntitlementPlan(sql.FieldEQ(FieldCreatedAt, v))
@@ -940,6 +950,156 @@ func MetadataIsNil() predicate.EntitlementPlan {
 // MetadataNotNil applies the NotNil predicate on the "metadata" field.
 func MetadataNotNil() predicate.EntitlementPlan {
 	return predicate.EntitlementPlan(sql.FieldNotNull(FieldMetadata))
+}
+
+// StripeProductIDEQ applies the EQ predicate on the "stripe_product_id" field.
+func StripeProductIDEQ(v string) predicate.EntitlementPlan {
+	return predicate.EntitlementPlan(sql.FieldEQ(FieldStripeProductID, v))
+}
+
+// StripeProductIDNEQ applies the NEQ predicate on the "stripe_product_id" field.
+func StripeProductIDNEQ(v string) predicate.EntitlementPlan {
+	return predicate.EntitlementPlan(sql.FieldNEQ(FieldStripeProductID, v))
+}
+
+// StripeProductIDIn applies the In predicate on the "stripe_product_id" field.
+func StripeProductIDIn(vs ...string) predicate.EntitlementPlan {
+	return predicate.EntitlementPlan(sql.FieldIn(FieldStripeProductID, vs...))
+}
+
+// StripeProductIDNotIn applies the NotIn predicate on the "stripe_product_id" field.
+func StripeProductIDNotIn(vs ...string) predicate.EntitlementPlan {
+	return predicate.EntitlementPlan(sql.FieldNotIn(FieldStripeProductID, vs...))
+}
+
+// StripeProductIDGT applies the GT predicate on the "stripe_product_id" field.
+func StripeProductIDGT(v string) predicate.EntitlementPlan {
+	return predicate.EntitlementPlan(sql.FieldGT(FieldStripeProductID, v))
+}
+
+// StripeProductIDGTE applies the GTE predicate on the "stripe_product_id" field.
+func StripeProductIDGTE(v string) predicate.EntitlementPlan {
+	return predicate.EntitlementPlan(sql.FieldGTE(FieldStripeProductID, v))
+}
+
+// StripeProductIDLT applies the LT predicate on the "stripe_product_id" field.
+func StripeProductIDLT(v string) predicate.EntitlementPlan {
+	return predicate.EntitlementPlan(sql.FieldLT(FieldStripeProductID, v))
+}
+
+// StripeProductIDLTE applies the LTE predicate on the "stripe_product_id" field.
+func StripeProductIDLTE(v string) predicate.EntitlementPlan {
+	return predicate.EntitlementPlan(sql.FieldLTE(FieldStripeProductID, v))
+}
+
+// StripeProductIDContains applies the Contains predicate on the "stripe_product_id" field.
+func StripeProductIDContains(v string) predicate.EntitlementPlan {
+	return predicate.EntitlementPlan(sql.FieldContains(FieldStripeProductID, v))
+}
+
+// StripeProductIDHasPrefix applies the HasPrefix predicate on the "stripe_product_id" field.
+func StripeProductIDHasPrefix(v string) predicate.EntitlementPlan {
+	return predicate.EntitlementPlan(sql.FieldHasPrefix(FieldStripeProductID, v))
+}
+
+// StripeProductIDHasSuffix applies the HasSuffix predicate on the "stripe_product_id" field.
+func StripeProductIDHasSuffix(v string) predicate.EntitlementPlan {
+	return predicate.EntitlementPlan(sql.FieldHasSuffix(FieldStripeProductID, v))
+}
+
+// StripeProductIDIsNil applies the IsNil predicate on the "stripe_product_id" field.
+func StripeProductIDIsNil() predicate.EntitlementPlan {
+	return predicate.EntitlementPlan(sql.FieldIsNull(FieldStripeProductID))
+}
+
+// StripeProductIDNotNil applies the NotNil predicate on the "stripe_product_id" field.
+func StripeProductIDNotNil() predicate.EntitlementPlan {
+	return predicate.EntitlementPlan(sql.FieldNotNull(FieldStripeProductID))
+}
+
+// StripeProductIDEqualFold applies the EqualFold predicate on the "stripe_product_id" field.
+func StripeProductIDEqualFold(v string) predicate.EntitlementPlan {
+	return predicate.EntitlementPlan(sql.FieldEqualFold(FieldStripeProductID, v))
+}
+
+// StripeProductIDContainsFold applies the ContainsFold predicate on the "stripe_product_id" field.
+func StripeProductIDContainsFold(v string) predicate.EntitlementPlan {
+	return predicate.EntitlementPlan(sql.FieldContainsFold(FieldStripeProductID, v))
+}
+
+// StripePriceIDEQ applies the EQ predicate on the "stripe_price_id" field.
+func StripePriceIDEQ(v string) predicate.EntitlementPlan {
+	return predicate.EntitlementPlan(sql.FieldEQ(FieldStripePriceID, v))
+}
+
+// StripePriceIDNEQ applies the NEQ predicate on the "stripe_price_id" field.
+func StripePriceIDNEQ(v string) predicate.EntitlementPlan {
+	return predicate.EntitlementPlan(sql.FieldNEQ(FieldStripePriceID, v))
+}
+
+// StripePriceIDIn applies the In predicate on the "stripe_price_id" field.
+func StripePriceIDIn(vs ...string) predicate.EntitlementPlan {
+	return predicate.EntitlementPlan(sql.FieldIn(FieldStripePriceID, vs...))
+}
+
+// StripePriceIDNotIn applies the NotIn predicate on the "stripe_price_id" field.
+func StripePriceIDNotIn(vs ...string) predicate.EntitlementPlan {
+	return predicate.EntitlementPlan(sql.FieldNotIn(FieldStripePriceID, vs...))
+}
+
+// StripePriceIDGT applies the GT predicate on the "stripe_price_id" field.
+func StripePriceIDGT(v string) predicate.EntitlementPlan {
+	return predicate.EntitlementPlan(sql.FieldGT(FieldStripePriceID, v))
+}
+
+// StripePriceIDGTE applies the GTE predicate on the "stripe_price_id" field.
+func StripePriceIDGTE(v string) predicate.EntitlementPlan {
+	return predicate.EntitlementPlan(sql.FieldGTE(FieldStripePriceID, v))
+}
+
+// StripePriceIDLT applies the LT predicate on the "stripe_price_id" field.
+func StripePriceIDLT(v string) predicate.EntitlementPlan {
+	return predicate.EntitlementPlan(sql.FieldLT(FieldStripePriceID, v))
+}
+
+// StripePriceIDLTE applies the LTE predicate on the "stripe_price_id" field.
+func StripePriceIDLTE(v string) predicate.EntitlementPlan {
+	return predicate.EntitlementPlan(sql.FieldLTE(FieldStripePriceID, v))
+}
+
+// StripePriceIDContains applies the Contains predicate on the "stripe_price_id" field.
+func StripePriceIDContains(v string) predicate.EntitlementPlan {
+	return predicate.EntitlementPlan(sql.FieldContains(FieldStripePriceID, v))
+}
+
+// StripePriceIDHasPrefix applies the HasPrefix predicate on the "stripe_price_id" field.
+func StripePriceIDHasPrefix(v string) predicate.EntitlementPlan {
+	return predicate.EntitlementPlan(sql.FieldHasPrefix(FieldStripePriceID, v))
+}
+
+// StripePriceIDHasSuffix applies the HasSuffix predicate on the "stripe_price_id" field.
+func StripePriceIDHasSuffix(v string) predicate.EntitlementPlan {
+	return predicate.EntitlementPlan(sql.FieldHasSuffix(FieldStripePriceID, v))
+}
+
+// StripePriceIDIsNil applies the IsNil predicate on the "stripe_price_id" field.
+func StripePriceIDIsNil() predicate.EntitlementPlan {
+	return predicate.EntitlementPlan(sql.FieldIsNull(FieldStripePriceID))
+}
+
+// StripePriceIDNotNil applies the NotNil predicate on the "stripe_price_id" field.
+func StripePriceIDNotNil() predicate.EntitlementPlan {
+	return predicate.EntitlementPlan(sql.FieldNotNull(FieldStripePriceID))
+}
+
+// StripePriceIDEqualFold applies the EqualFold predicate on the "stripe_price_id" field.
+func StripePriceIDEqualFold(v string) predicate.EntitlementPlan {
+	return predicate.EntitlementPlan(sql.FieldEqualFold(FieldStripePriceID, v))
+}
+
+// StripePriceIDContainsFold applies the ContainsFold predicate on the "stripe_price_id" field.
+func StripePriceIDContainsFold(v string) predicate.EntitlementPlan {
+	return predicate.EntitlementPlan(sql.FieldContainsFold(FieldStripePriceID, v))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.

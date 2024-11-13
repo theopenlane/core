@@ -31,7 +31,13 @@ func (EntitlementPlanFeature) Fields() []ent.Field {
 			Comment("metadata for the entitlement plan feature such as usage limits").
 			Optional(),
 		field.String("plan_id").Immutable().NotEmpty(),
+		field.String("stripe_product_id").
+			Comment("the product ID in Stripe").
+			Optional(),
 		field.String("feature_id").Immutable().NotEmpty(),
+		field.String("stripe_feature_id").
+			Comment("the feature ID in Stripe").
+			Optional(),
 	}
 }
 

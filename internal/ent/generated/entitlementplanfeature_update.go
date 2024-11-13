@@ -156,6 +156,46 @@ func (epfu *EntitlementPlanFeatureUpdate) ClearMetadata() *EntitlementPlanFeatur
 	return epfu
 }
 
+// SetStripeProductID sets the "stripe_product_id" field.
+func (epfu *EntitlementPlanFeatureUpdate) SetStripeProductID(s string) *EntitlementPlanFeatureUpdate {
+	epfu.mutation.SetStripeProductID(s)
+	return epfu
+}
+
+// SetNillableStripeProductID sets the "stripe_product_id" field if the given value is not nil.
+func (epfu *EntitlementPlanFeatureUpdate) SetNillableStripeProductID(s *string) *EntitlementPlanFeatureUpdate {
+	if s != nil {
+		epfu.SetStripeProductID(*s)
+	}
+	return epfu
+}
+
+// ClearStripeProductID clears the value of the "stripe_product_id" field.
+func (epfu *EntitlementPlanFeatureUpdate) ClearStripeProductID() *EntitlementPlanFeatureUpdate {
+	epfu.mutation.ClearStripeProductID()
+	return epfu
+}
+
+// SetStripeFeatureID sets the "stripe_feature_id" field.
+func (epfu *EntitlementPlanFeatureUpdate) SetStripeFeatureID(s string) *EntitlementPlanFeatureUpdate {
+	epfu.mutation.SetStripeFeatureID(s)
+	return epfu
+}
+
+// SetNillableStripeFeatureID sets the "stripe_feature_id" field if the given value is not nil.
+func (epfu *EntitlementPlanFeatureUpdate) SetNillableStripeFeatureID(s *string) *EntitlementPlanFeatureUpdate {
+	if s != nil {
+		epfu.SetStripeFeatureID(*s)
+	}
+	return epfu
+}
+
+// ClearStripeFeatureID clears the value of the "stripe_feature_id" field.
+func (epfu *EntitlementPlanFeatureUpdate) ClearStripeFeatureID() *EntitlementPlanFeatureUpdate {
+	epfu.mutation.ClearStripeFeatureID()
+	return epfu
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (epfu *EntitlementPlanFeatureUpdate) SetOwner(o *Organization) *EntitlementPlanFeatureUpdate {
 	return epfu.SetOwnerID(o.ID)
@@ -330,6 +370,18 @@ func (epfu *EntitlementPlanFeatureUpdate) sqlSave(ctx context.Context) (n int, e
 	}
 	if epfu.mutation.MetadataCleared() {
 		_spec.ClearField(entitlementplanfeature.FieldMetadata, field.TypeJSON)
+	}
+	if value, ok := epfu.mutation.StripeProductID(); ok {
+		_spec.SetField(entitlementplanfeature.FieldStripeProductID, field.TypeString, value)
+	}
+	if epfu.mutation.StripeProductIDCleared() {
+		_spec.ClearField(entitlementplanfeature.FieldStripeProductID, field.TypeString)
+	}
+	if value, ok := epfu.mutation.StripeFeatureID(); ok {
+		_spec.SetField(entitlementplanfeature.FieldStripeFeatureID, field.TypeString, value)
+	}
+	if epfu.mutation.StripeFeatureIDCleared() {
+		_spec.ClearField(entitlementplanfeature.FieldStripeFeatureID, field.TypeString)
 	}
 	if epfu.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -556,6 +608,46 @@ func (epfuo *EntitlementPlanFeatureUpdateOne) ClearMetadata() *EntitlementPlanFe
 	return epfuo
 }
 
+// SetStripeProductID sets the "stripe_product_id" field.
+func (epfuo *EntitlementPlanFeatureUpdateOne) SetStripeProductID(s string) *EntitlementPlanFeatureUpdateOne {
+	epfuo.mutation.SetStripeProductID(s)
+	return epfuo
+}
+
+// SetNillableStripeProductID sets the "stripe_product_id" field if the given value is not nil.
+func (epfuo *EntitlementPlanFeatureUpdateOne) SetNillableStripeProductID(s *string) *EntitlementPlanFeatureUpdateOne {
+	if s != nil {
+		epfuo.SetStripeProductID(*s)
+	}
+	return epfuo
+}
+
+// ClearStripeProductID clears the value of the "stripe_product_id" field.
+func (epfuo *EntitlementPlanFeatureUpdateOne) ClearStripeProductID() *EntitlementPlanFeatureUpdateOne {
+	epfuo.mutation.ClearStripeProductID()
+	return epfuo
+}
+
+// SetStripeFeatureID sets the "stripe_feature_id" field.
+func (epfuo *EntitlementPlanFeatureUpdateOne) SetStripeFeatureID(s string) *EntitlementPlanFeatureUpdateOne {
+	epfuo.mutation.SetStripeFeatureID(s)
+	return epfuo
+}
+
+// SetNillableStripeFeatureID sets the "stripe_feature_id" field if the given value is not nil.
+func (epfuo *EntitlementPlanFeatureUpdateOne) SetNillableStripeFeatureID(s *string) *EntitlementPlanFeatureUpdateOne {
+	if s != nil {
+		epfuo.SetStripeFeatureID(*s)
+	}
+	return epfuo
+}
+
+// ClearStripeFeatureID clears the value of the "stripe_feature_id" field.
+func (epfuo *EntitlementPlanFeatureUpdateOne) ClearStripeFeatureID() *EntitlementPlanFeatureUpdateOne {
+	epfuo.mutation.ClearStripeFeatureID()
+	return epfuo
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (epfuo *EntitlementPlanFeatureUpdateOne) SetOwner(o *Organization) *EntitlementPlanFeatureUpdateOne {
 	return epfuo.SetOwnerID(o.ID)
@@ -760,6 +852,18 @@ func (epfuo *EntitlementPlanFeatureUpdateOne) sqlSave(ctx context.Context) (_nod
 	}
 	if epfuo.mutation.MetadataCleared() {
 		_spec.ClearField(entitlementplanfeature.FieldMetadata, field.TypeJSON)
+	}
+	if value, ok := epfuo.mutation.StripeProductID(); ok {
+		_spec.SetField(entitlementplanfeature.FieldStripeProductID, field.TypeString, value)
+	}
+	if epfuo.mutation.StripeProductIDCleared() {
+		_spec.ClearField(entitlementplanfeature.FieldStripeProductID, field.TypeString)
+	}
+	if value, ok := epfuo.mutation.StripeFeatureID(); ok {
+		_spec.SetField(entitlementplanfeature.FieldStripeFeatureID, field.TypeString, value)
+	}
+	if epfuo.mutation.StripeFeatureIDCleared() {
+		_spec.ClearField(entitlementplanfeature.FieldStripeFeatureID, field.TypeString)
 	}
 	if epfuo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

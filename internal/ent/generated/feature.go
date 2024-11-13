@@ -47,6 +47,8 @@ type Feature struct {
 	Description *string `json:"description,omitempty"`
 	// metadata for the feature
 	Metadata map[string]interface{} `json:"metadata,omitempty"`
+	// the feature ID in Stripe
+	StripeFeatureID string `json:"stripe_feature_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the FeatureQuery when eager-loading is set.
 	Edges        FeatureEdges `json:"edges"`
@@ -121,7 +123,7 @@ func (*Feature) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case feature.FieldEnabled:
 			values[i] = new(sql.NullBool)
-		case feature.FieldID, feature.FieldCreatedBy, feature.FieldUpdatedBy, feature.FieldDeletedBy, feature.FieldMappingID, feature.FieldOwnerID, feature.FieldName, feature.FieldDisplayName, feature.FieldDescription:
+		case feature.FieldID, feature.FieldCreatedBy, feature.FieldUpdatedBy, feature.FieldDeletedBy, feature.FieldMappingID, feature.FieldOwnerID, feature.FieldName, feature.FieldDisplayName, feature.FieldDescription, feature.FieldStripeFeatureID:
 			values[i] = new(sql.NullString)
 		case feature.FieldCreatedAt, feature.FieldUpdatedAt, feature.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -235,6 +237,12 @@ func (f *Feature) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field metadata: %w", err)
 				}
 			}
+		case feature.FieldStripeFeatureID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field stripe_feature_id", values[i])
+			} else if value.Valid {
+				f.StripeFeatureID = value.String
+			}
 		default:
 			f.selectValues.Set(columns[i], values[i])
 		}
@@ -334,6 +342,9 @@ func (f *Feature) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("metadata=")
 	builder.WriteString(fmt.Sprintf("%v", f.Metadata))
+	builder.WriteString(", ")
+	builder.WriteString("stripe_feature_id=")
+	builder.WriteString(f.StripeFeatureID)
 	builder.WriteByte(')')
 	return builder.String()
 }

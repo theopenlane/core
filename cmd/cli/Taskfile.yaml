@@ -1,6 +1,6 @@
 version: "3"
 
-env: 
+env:
   DEFAULT_USER_EMAIL: "mitb@theopenlane.io"
   SECOND_USER_EMAIL: "funk@theopenlane.io"
 

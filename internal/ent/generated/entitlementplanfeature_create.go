@@ -154,9 +154,37 @@ func (epfc *EntitlementPlanFeatureCreate) SetPlanID(s string) *EntitlementPlanFe
 	return epfc
 }
 
+// SetStripeProductID sets the "stripe_product_id" field.
+func (epfc *EntitlementPlanFeatureCreate) SetStripeProductID(s string) *EntitlementPlanFeatureCreate {
+	epfc.mutation.SetStripeProductID(s)
+	return epfc
+}
+
+// SetNillableStripeProductID sets the "stripe_product_id" field if the given value is not nil.
+func (epfc *EntitlementPlanFeatureCreate) SetNillableStripeProductID(s *string) *EntitlementPlanFeatureCreate {
+	if s != nil {
+		epfc.SetStripeProductID(*s)
+	}
+	return epfc
+}
+
 // SetFeatureID sets the "feature_id" field.
 func (epfc *EntitlementPlanFeatureCreate) SetFeatureID(s string) *EntitlementPlanFeatureCreate {
 	epfc.mutation.SetFeatureID(s)
+	return epfc
+}
+
+// SetStripeFeatureID sets the "stripe_feature_id" field.
+func (epfc *EntitlementPlanFeatureCreate) SetStripeFeatureID(s string) *EntitlementPlanFeatureCreate {
+	epfc.mutation.SetStripeFeatureID(s)
+	return epfc
+}
+
+// SetNillableStripeFeatureID sets the "stripe_feature_id" field if the given value is not nil.
+func (epfc *EntitlementPlanFeatureCreate) SetNillableStripeFeatureID(s *string) *EntitlementPlanFeatureCreate {
+	if s != nil {
+		epfc.SetStripeFeatureID(*s)
+	}
 	return epfc
 }
 
@@ -379,6 +407,14 @@ func (epfc *EntitlementPlanFeatureCreate) createSpec() (*EntitlementPlanFeature,
 	if value, ok := epfc.mutation.Metadata(); ok {
 		_spec.SetField(entitlementplanfeature.FieldMetadata, field.TypeJSON, value)
 		_node.Metadata = value
+	}
+	if value, ok := epfc.mutation.StripeProductID(); ok {
+		_spec.SetField(entitlementplanfeature.FieldStripeProductID, field.TypeString, value)
+		_node.StripeProductID = value
+	}
+	if value, ok := epfc.mutation.StripeFeatureID(); ok {
+		_spec.SetField(entitlementplanfeature.FieldStripeFeatureID, field.TypeString, value)
+		_node.StripeFeatureID = value
 	}
 	if nodes := epfc.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

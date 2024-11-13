@@ -232,6 +232,54 @@ func (eu *EntitlementUpdate) SetNillableCancelled(b *bool) *EntitlementUpdate {
 	return eu
 }
 
+// SetCancelledDate sets the "cancelled_date" field.
+func (eu *EntitlementUpdate) SetCancelledDate(t time.Time) *EntitlementUpdate {
+	eu.mutation.SetCancelledDate(t)
+	return eu
+}
+
+// SetNillableCancelledDate sets the "cancelled_date" field if the given value is not nil.
+func (eu *EntitlementUpdate) SetNillableCancelledDate(t *time.Time) *EntitlementUpdate {
+	if t != nil {
+		eu.SetCancelledDate(*t)
+	}
+	return eu
+}
+
+// ClearCancelledDate clears the value of the "cancelled_date" field.
+func (eu *EntitlementUpdate) ClearCancelledDate() *EntitlementUpdate {
+	eu.mutation.ClearCancelledDate()
+	return eu
+}
+
+// SetBillStarting sets the "bill_starting" field.
+func (eu *EntitlementUpdate) SetBillStarting(t time.Time) *EntitlementUpdate {
+	eu.mutation.SetBillStarting(t)
+	return eu
+}
+
+// SetNillableBillStarting sets the "bill_starting" field if the given value is not nil.
+func (eu *EntitlementUpdate) SetNillableBillStarting(t *time.Time) *EntitlementUpdate {
+	if t != nil {
+		eu.SetBillStarting(*t)
+	}
+	return eu
+}
+
+// SetActive sets the "active" field.
+func (eu *EntitlementUpdate) SetActive(b bool) *EntitlementUpdate {
+	eu.mutation.SetActive(b)
+	return eu
+}
+
+// SetNillableActive sets the "active" field if the given value is not nil.
+func (eu *EntitlementUpdate) SetNillableActive(b *bool) *EntitlementUpdate {
+	if b != nil {
+		eu.SetActive(*b)
+	}
+	return eu
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (eu *EntitlementUpdate) SetOwner(o *Organization) *EntitlementUpdate {
 	return eu.SetOwnerID(o.ID)
@@ -424,6 +472,18 @@ func (eu *EntitlementUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := eu.mutation.Cancelled(); ok {
 		_spec.SetField(entitlement.FieldCancelled, field.TypeBool, value)
+	}
+	if value, ok := eu.mutation.CancelledDate(); ok {
+		_spec.SetField(entitlement.FieldCancelledDate, field.TypeTime, value)
+	}
+	if eu.mutation.CancelledDateCleared() {
+		_spec.ClearField(entitlement.FieldCancelledDate, field.TypeTime)
+	}
+	if value, ok := eu.mutation.BillStarting(); ok {
+		_spec.SetField(entitlement.FieldBillStarting, field.TypeTime, value)
+	}
+	if value, ok := eu.mutation.Active(); ok {
+		_spec.SetField(entitlement.FieldActive, field.TypeBool, value)
 	}
 	if eu.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -726,6 +786,54 @@ func (euo *EntitlementUpdateOne) SetNillableCancelled(b *bool) *EntitlementUpdat
 	return euo
 }
 
+// SetCancelledDate sets the "cancelled_date" field.
+func (euo *EntitlementUpdateOne) SetCancelledDate(t time.Time) *EntitlementUpdateOne {
+	euo.mutation.SetCancelledDate(t)
+	return euo
+}
+
+// SetNillableCancelledDate sets the "cancelled_date" field if the given value is not nil.
+func (euo *EntitlementUpdateOne) SetNillableCancelledDate(t *time.Time) *EntitlementUpdateOne {
+	if t != nil {
+		euo.SetCancelledDate(*t)
+	}
+	return euo
+}
+
+// ClearCancelledDate clears the value of the "cancelled_date" field.
+func (euo *EntitlementUpdateOne) ClearCancelledDate() *EntitlementUpdateOne {
+	euo.mutation.ClearCancelledDate()
+	return euo
+}
+
+// SetBillStarting sets the "bill_starting" field.
+func (euo *EntitlementUpdateOne) SetBillStarting(t time.Time) *EntitlementUpdateOne {
+	euo.mutation.SetBillStarting(t)
+	return euo
+}
+
+// SetNillableBillStarting sets the "bill_starting" field if the given value is not nil.
+func (euo *EntitlementUpdateOne) SetNillableBillStarting(t *time.Time) *EntitlementUpdateOne {
+	if t != nil {
+		euo.SetBillStarting(*t)
+	}
+	return euo
+}
+
+// SetActive sets the "active" field.
+func (euo *EntitlementUpdateOne) SetActive(b bool) *EntitlementUpdateOne {
+	euo.mutation.SetActive(b)
+	return euo
+}
+
+// SetNillableActive sets the "active" field if the given value is not nil.
+func (euo *EntitlementUpdateOne) SetNillableActive(b *bool) *EntitlementUpdateOne {
+	if b != nil {
+		euo.SetActive(*b)
+	}
+	return euo
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (euo *EntitlementUpdateOne) SetOwner(o *Organization) *EntitlementUpdateOne {
 	return euo.SetOwnerID(o.ID)
@@ -948,6 +1056,18 @@ func (euo *EntitlementUpdateOne) sqlSave(ctx context.Context) (_node *Entitlemen
 	}
 	if value, ok := euo.mutation.Cancelled(); ok {
 		_spec.SetField(entitlement.FieldCancelled, field.TypeBool, value)
+	}
+	if value, ok := euo.mutation.CancelledDate(); ok {
+		_spec.SetField(entitlement.FieldCancelledDate, field.TypeTime, value)
+	}
+	if euo.mutation.CancelledDateCleared() {
+		_spec.ClearField(entitlement.FieldCancelledDate, field.TypeTime)
+	}
+	if value, ok := euo.mutation.BillStarting(); ok {
+		_spec.SetField(entitlement.FieldBillStarting, field.TypeTime, value)
+	}
+	if value, ok := euo.mutation.Active(); ok {
+		_spec.SetField(entitlement.FieldActive, field.TypeBool, value)
 	}
 	if euo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

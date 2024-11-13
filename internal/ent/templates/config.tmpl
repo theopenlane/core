@@ -9,7 +9,7 @@
     // Job option added by the client template to add the job client.
     func Job(ctx context.Context, opts ...riverqueue.Option) Option {
         return func(c *config) {
-            var err error 
+            var err error
 
             c.Job, err = riverqueue.New(ctx, opts...)
             if err != nil {

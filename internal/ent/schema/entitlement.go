@@ -2,6 +2,7 @@ package schema
 
 import (
 	"context"
+	"time" // Add this import
 
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
@@ -60,6 +61,17 @@ func (Entitlement) Fields() []ent.Field {
 		field.Bool("cancelled").
 			Comment("whether or not the customer has cancelled their entitlement - usually used in conjunction with expires and expires at").
 			Default(false),
+		field.Time("cancelled_date").
+			Comment("the date at which the customer cancelled their entitlement").
+			Optional(),
+		field.Time("bill_starting").
+			Comment("the date at which the customer's billing starts").
+			Default(func() time.Time {
+				return time.Now().AddDate(0, 0, 14) // Set the date 14 days from when the entitlement is created
+			}),
+		field.Bool("active").
+			Comment("whether or not the entitlement is active").
+			Default(true),
 	}
 }
 

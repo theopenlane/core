@@ -43,8 +43,12 @@ type EntitlementPlanFeature struct {
 	Metadata map[string]interface{} `json:"metadata,omitempty"`
 	// PlanID holds the value of the "plan_id" field.
 	PlanID string `json:"plan_id,omitempty"`
+	// the product ID in Stripe
+	StripeProductID string `json:"stripe_product_id,omitempty"`
 	// FeatureID holds the value of the "feature_id" field.
 	FeatureID string `json:"feature_id,omitempty"`
+	// the feature ID in Stripe
+	StripeFeatureID string `json:"stripe_feature_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the EntitlementPlanFeatureQuery when eager-loading is set.
 	Edges        EntitlementPlanFeatureEdges `json:"edges"`
@@ -119,7 +123,7 @@ func (*EntitlementPlanFeature) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case entitlementplanfeature.FieldTags, entitlementplanfeature.FieldMetadata:
 			values[i] = new([]byte)
-		case entitlementplanfeature.FieldID, entitlementplanfeature.FieldCreatedBy, entitlementplanfeature.FieldUpdatedBy, entitlementplanfeature.FieldMappingID, entitlementplanfeature.FieldDeletedBy, entitlementplanfeature.FieldOwnerID, entitlementplanfeature.FieldPlanID, entitlementplanfeature.FieldFeatureID:
+		case entitlementplanfeature.FieldID, entitlementplanfeature.FieldCreatedBy, entitlementplanfeature.FieldUpdatedBy, entitlementplanfeature.FieldMappingID, entitlementplanfeature.FieldDeletedBy, entitlementplanfeature.FieldOwnerID, entitlementplanfeature.FieldPlanID, entitlementplanfeature.FieldStripeProductID, entitlementplanfeature.FieldFeatureID, entitlementplanfeature.FieldStripeFeatureID:
 			values[i] = new(sql.NullString)
 		case entitlementplanfeature.FieldCreatedAt, entitlementplanfeature.FieldUpdatedAt, entitlementplanfeature.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -214,11 +218,23 @@ func (epf *EntitlementPlanFeature) assignValues(columns []string, values []any) 
 			} else if value.Valid {
 				epf.PlanID = value.String
 			}
+		case entitlementplanfeature.FieldStripeProductID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field stripe_product_id", values[i])
+			} else if value.Valid {
+				epf.StripeProductID = value.String
+			}
 		case entitlementplanfeature.FieldFeatureID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field feature_id", values[i])
 			} else if value.Valid {
 				epf.FeatureID = value.String
+			}
+		case entitlementplanfeature.FieldStripeFeatureID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field stripe_feature_id", values[i])
+			} else if value.Valid {
+				epf.StripeFeatureID = value.String
 			}
 		default:
 			epf.selectValues.Set(columns[i], values[i])
@@ -309,8 +325,14 @@ func (epf *EntitlementPlanFeature) String() string {
 	builder.WriteString("plan_id=")
 	builder.WriteString(epf.PlanID)
 	builder.WriteString(", ")
+	builder.WriteString("stripe_product_id=")
+	builder.WriteString(epf.StripeProductID)
+	builder.WriteString(", ")
 	builder.WriteString("feature_id=")
 	builder.WriteString(epf.FeatureID)
+	builder.WriteString(", ")
+	builder.WriteString("stripe_feature_id=")
+	builder.WriteString(epf.StripeFeatureID)
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -43,6 +43,10 @@ const (
 	FieldVersion = "version"
 	// FieldMetadata holds the string denoting the metadata field in the database.
 	FieldMetadata = "metadata"
+	// FieldStripeProductID holds the string denoting the stripe_product_id field in the database.
+	FieldStripeProductID = "stripe_product_id"
+	// FieldStripePriceID holds the string denoting the stripe_price_id field in the database.
+	FieldStripePriceID = "stripe_price_id"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeEntitlements holds the string denoting the entitlements edge name in mutations.
@@ -105,6 +109,8 @@ var Columns = []string{
 	FieldDescription,
 	FieldVersion,
 	FieldMetadata,
+	FieldStripeProductID,
+	FieldStripePriceID,
 }
 
 var (
@@ -221,6 +227,16 @@ func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 // ByVersion orders the results by the version field.
 func ByVersion(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldVersion, opts...).ToFunc()
+}
+
+// ByStripeProductID orders the results by the stripe_product_id field.
+func ByStripeProductID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStripeProductID, opts...).ToFunc()
+}
+
+// ByStripePriceID orders the results by the stripe_price_id field.
+func ByStripePriceID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStripePriceID, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.

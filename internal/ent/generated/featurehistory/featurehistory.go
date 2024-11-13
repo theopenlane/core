@@ -51,6 +51,8 @@ const (
 	FieldDescription = "description"
 	// FieldMetadata holds the string denoting the metadata field in the database.
 	FieldMetadata = "metadata"
+	// FieldStripeFeatureID holds the string denoting the stripe_feature_id field in the database.
+	FieldStripeFeatureID = "stripe_feature_id"
 	// Table holds the table name of the featurehistory in the database.
 	Table = "feature_history"
 )
@@ -75,6 +77,7 @@ var Columns = []string{
 	FieldEnabled,
 	FieldDescription,
 	FieldMetadata,
+	FieldStripeFeatureID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -205,6 +208,11 @@ func ByEnabled(opts ...sql.OrderTermOption) OrderOption {
 // ByDescription orders the results by the description field.
 func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDescription, opts...).ToFunc()
+}
+
+// ByStripeFeatureID orders the results by the stripe_feature_id field.
+func ByStripeFeatureID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStripeFeatureID, opts...).ToFunc()
 }
 
 var (

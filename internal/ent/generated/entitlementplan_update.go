@@ -199,6 +199,46 @@ func (epu *EntitlementPlanUpdate) ClearMetadata() *EntitlementPlanUpdate {
 	return epu
 }
 
+// SetStripeProductID sets the "stripe_product_id" field.
+func (epu *EntitlementPlanUpdate) SetStripeProductID(s string) *EntitlementPlanUpdate {
+	epu.mutation.SetStripeProductID(s)
+	return epu
+}
+
+// SetNillableStripeProductID sets the "stripe_product_id" field if the given value is not nil.
+func (epu *EntitlementPlanUpdate) SetNillableStripeProductID(s *string) *EntitlementPlanUpdate {
+	if s != nil {
+		epu.SetStripeProductID(*s)
+	}
+	return epu
+}
+
+// ClearStripeProductID clears the value of the "stripe_product_id" field.
+func (epu *EntitlementPlanUpdate) ClearStripeProductID() *EntitlementPlanUpdate {
+	epu.mutation.ClearStripeProductID()
+	return epu
+}
+
+// SetStripePriceID sets the "stripe_price_id" field.
+func (epu *EntitlementPlanUpdate) SetStripePriceID(s string) *EntitlementPlanUpdate {
+	epu.mutation.SetStripePriceID(s)
+	return epu
+}
+
+// SetNillableStripePriceID sets the "stripe_price_id" field if the given value is not nil.
+func (epu *EntitlementPlanUpdate) SetNillableStripePriceID(s *string) *EntitlementPlanUpdate {
+	if s != nil {
+		epu.SetStripePriceID(*s)
+	}
+	return epu
+}
+
+// ClearStripePriceID clears the value of the "stripe_price_id" field.
+func (epu *EntitlementPlanUpdate) ClearStripePriceID() *EntitlementPlanUpdate {
+	epu.mutation.ClearStripePriceID()
+	return epu
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (epu *EntitlementPlanUpdate) SetOwner(o *Organization) *EntitlementPlanUpdate {
 	return epu.SetOwnerID(o.ID)
@@ -487,6 +527,18 @@ func (epu *EntitlementPlanUpdate) sqlSave(ctx context.Context) (n int, err error
 	}
 	if epu.mutation.MetadataCleared() {
 		_spec.ClearField(entitlementplan.FieldMetadata, field.TypeJSON)
+	}
+	if value, ok := epu.mutation.StripeProductID(); ok {
+		_spec.SetField(entitlementplan.FieldStripeProductID, field.TypeString, value)
+	}
+	if epu.mutation.StripeProductIDCleared() {
+		_spec.ClearField(entitlementplan.FieldStripeProductID, field.TypeString)
+	}
+	if value, ok := epu.mutation.StripePriceID(); ok {
+		_spec.SetField(entitlementplan.FieldStripePriceID, field.TypeString, value)
+	}
+	if epu.mutation.StripePriceIDCleared() {
+		_spec.ClearField(entitlementplan.FieldStripePriceID, field.TypeString)
 	}
 	if epu.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -918,6 +970,46 @@ func (epuo *EntitlementPlanUpdateOne) ClearMetadata() *EntitlementPlanUpdateOne 
 	return epuo
 }
 
+// SetStripeProductID sets the "stripe_product_id" field.
+func (epuo *EntitlementPlanUpdateOne) SetStripeProductID(s string) *EntitlementPlanUpdateOne {
+	epuo.mutation.SetStripeProductID(s)
+	return epuo
+}
+
+// SetNillableStripeProductID sets the "stripe_product_id" field if the given value is not nil.
+func (epuo *EntitlementPlanUpdateOne) SetNillableStripeProductID(s *string) *EntitlementPlanUpdateOne {
+	if s != nil {
+		epuo.SetStripeProductID(*s)
+	}
+	return epuo
+}
+
+// ClearStripeProductID clears the value of the "stripe_product_id" field.
+func (epuo *EntitlementPlanUpdateOne) ClearStripeProductID() *EntitlementPlanUpdateOne {
+	epuo.mutation.ClearStripeProductID()
+	return epuo
+}
+
+// SetStripePriceID sets the "stripe_price_id" field.
+func (epuo *EntitlementPlanUpdateOne) SetStripePriceID(s string) *EntitlementPlanUpdateOne {
+	epuo.mutation.SetStripePriceID(s)
+	return epuo
+}
+
+// SetNillableStripePriceID sets the "stripe_price_id" field if the given value is not nil.
+func (epuo *EntitlementPlanUpdateOne) SetNillableStripePriceID(s *string) *EntitlementPlanUpdateOne {
+	if s != nil {
+		epuo.SetStripePriceID(*s)
+	}
+	return epuo
+}
+
+// ClearStripePriceID clears the value of the "stripe_price_id" field.
+func (epuo *EntitlementPlanUpdateOne) ClearStripePriceID() *EntitlementPlanUpdateOne {
+	epuo.mutation.ClearStripePriceID()
+	return epuo
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (epuo *EntitlementPlanUpdateOne) SetOwner(o *Organization) *EntitlementPlanUpdateOne {
 	return epuo.SetOwnerID(o.ID)
@@ -1236,6 +1328,18 @@ func (epuo *EntitlementPlanUpdateOne) sqlSave(ctx context.Context) (_node *Entit
 	}
 	if epuo.mutation.MetadataCleared() {
 		_spec.ClearField(entitlementplan.FieldMetadata, field.TypeJSON)
+	}
+	if value, ok := epuo.mutation.StripeProductID(); ok {
+		_spec.SetField(entitlementplan.FieldStripeProductID, field.TypeString, value)
+	}
+	if epuo.mutation.StripeProductIDCleared() {
+		_spec.ClearField(entitlementplan.FieldStripeProductID, field.TypeString)
+	}
+	if value, ok := epuo.mutation.StripePriceID(); ok {
+		_spec.SetField(entitlementplan.FieldStripePriceID, field.TypeString, value)
+	}
+	if epuo.mutation.StripePriceIDCleared() {
+		_spec.ClearField(entitlementplan.FieldStripePriceID, field.TypeString)
 	}
 	if epuo.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

@@ -52,6 +52,12 @@ type Entitlement struct {
 	ExpiresAt *time.Time `json:"expires_at,omitempty"`
 	// whether or not the customer has cancelled their entitlement - usually used in conjunction with expires and expires at
 	Cancelled bool `json:"cancelled,omitempty"`
+	// the date at which the customer cancelled their entitlement
+	CancelledDate time.Time `json:"cancelled_date,omitempty"`
+	// the date at which the customer's billing starts
+	BillStarting time.Time `json:"bill_starting,omitempty"`
+	// whether or not the entitlement is active
+	Active bool `json:"active,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the EntitlementQuery when eager-loading is set.
 	Edges        EntitlementEdges `json:"edges"`
@@ -126,11 +132,11 @@ func (*Entitlement) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case entitlement.FieldTags:
 			values[i] = new([]byte)
-		case entitlement.FieldExpires, entitlement.FieldCancelled:
+		case entitlement.FieldExpires, entitlement.FieldCancelled, entitlement.FieldActive:
 			values[i] = new(sql.NullBool)
 		case entitlement.FieldID, entitlement.FieldCreatedBy, entitlement.FieldUpdatedBy, entitlement.FieldMappingID, entitlement.FieldDeletedBy, entitlement.FieldOwnerID, entitlement.FieldPlanID, entitlement.FieldOrganizationID, entitlement.FieldExternalCustomerID, entitlement.FieldExternalSubscriptionID:
 			values[i] = new(sql.NullString)
-		case entitlement.FieldCreatedAt, entitlement.FieldUpdatedAt, entitlement.FieldDeletedAt, entitlement.FieldExpiresAt:
+		case entitlement.FieldCreatedAt, entitlement.FieldUpdatedAt, entitlement.FieldDeletedAt, entitlement.FieldExpiresAt, entitlement.FieldCancelledDate, entitlement.FieldBillStarting:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -252,6 +258,24 @@ func (e *Entitlement) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				e.Cancelled = value.Bool
 			}
+		case entitlement.FieldCancelledDate:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field cancelled_date", values[i])
+			} else if value.Valid {
+				e.CancelledDate = value.Time
+			}
+		case entitlement.FieldBillStarting:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field bill_starting", values[i])
+			} else if value.Valid {
+				e.BillStarting = value.Time
+			}
+		case entitlement.FieldActive:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field active", values[i])
+			} else if value.Valid {
+				e.Active = value.Bool
+			}
 		default:
 			e.selectValues.Set(columns[i], values[i])
 		}
@@ -357,6 +381,15 @@ func (e *Entitlement) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("cancelled=")
 	builder.WriteString(fmt.Sprintf("%v", e.Cancelled))
+	builder.WriteString(", ")
+	builder.WriteString("cancelled_date=")
+	builder.WriteString(e.CancelledDate.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("bill_starting=")
+	builder.WriteString(e.BillStarting.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("active=")
+	builder.WriteString(fmt.Sprintf("%v", e.Active))
 	builder.WriteByte(')')
 	return builder.String()
 }
