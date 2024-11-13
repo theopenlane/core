@@ -53,7 +53,7 @@ func (Entitlement) Fields() []ent.Field {
 					entgql.SkipMutationUpdateInput,
 				),
 			).
-			Default(true),
+			Default(false),
 		field.Time("expires_at").
 			Comment("the time at which a customer's entitlement will expire, e.g. they've cancelled but paid through the end of the month").
 			Optional().

@@ -3,11 +3,17 @@ mutation CreateBulkCSVEntitlementPlanFeature($input: Upload!) {
     entitlementPlanFeatures {
       createdAt
       createdBy
-      featureID
       id
       metadata
       ownerID
-      planID
+      plan {
+        id
+        name
+      }
+      feature {
+        id
+        name
+      }
       stripeFeatureID
       stripeProductID
       tags
@@ -22,16 +28,22 @@ mutation CreateBulkEntitlementPlanFeature($input: [CreateEntitlementPlanFeatureI
     entitlementPlanFeatures {
       createdAt
       createdBy
-      featureID
       id
       metadata
       ownerID
-      planID
       stripeFeatureID
       stripeProductID
       tags
       updatedAt
       updatedBy
+      plan {
+        id
+        name
+      }
+      feature {
+        id
+        name
+      }
     }
   }
 }
@@ -41,16 +53,22 @@ mutation CreateEntitlementPlanFeature($input: CreateEntitlementPlanFeatureInput!
     entitlementPlanFeature {
       createdAt
       createdBy
-      featureID
       id
       metadata
       ownerID
-      planID
       stripeFeatureID
       stripeProductID
       tags
       updatedAt
       updatedBy
+      plan {
+        id
+        name
+      }
+      feature {
+        id
+        name
+      }
     }
   }
 }
@@ -67,16 +85,22 @@ query GetAllEntitlementPlanFeatures {
       node {
         createdAt
         createdBy
-        featureID
         id
         metadata
         ownerID
-        planID
         stripeFeatureID
         stripeProductID
         tags
         updatedAt
         updatedBy
+        plan {
+          id
+          name
+        }
+        feature {
+          id
+          name
+        }
       }
     }
   }
@@ -86,16 +110,22 @@ query GetEntitlementPlanFeatureByID($entitlementPlanFeatureId: ID!) {
   entitlementPlanFeature(id: $entitlementPlanFeatureId) {
     createdAt
     createdBy
-    featureID
     id
     metadata
     ownerID
-    planID
     stripeFeatureID
     stripeProductID
     tags
     updatedAt
     updatedBy
+    plan {
+      id
+      name
+    }
+    feature {
+      id
+      name
+    }
   }
 }
 
@@ -105,16 +135,22 @@ query GetEntitlementPlanFeatures($where: EntitlementPlanFeatureWhereInput) {
       node {
         createdAt
         createdBy
-        featureID
         id
         metadata
         ownerID
-        planID
         stripeFeatureID
         stripeProductID
         tags
         updatedAt
         updatedBy
+        plan {
+          id
+          name
+        }
+        feature {
+          id
+          name
+        }
       }
     }
   }
@@ -125,16 +161,22 @@ mutation UpdateEntitlementPlanFeature($updateEntitlementPlanFeatureId: ID!, $inp
     entitlementPlanFeature {
       createdAt
       createdBy
-      featureID
       id
       metadata
       ownerID
-      planID
       stripeFeatureID
       stripeProductID
       tags
       updatedAt
       updatedBy
+      plan {
+        id
+        name
+      }
+      feature {
+        id
+        name
+      }
     }
   }
 }
