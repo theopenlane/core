@@ -107,79 +107,79 @@ query GetAllEntitlements {
   entitlements {
     edges {
       node {
+        id
+        createdAt
+        updatedAt
+        createdBy
+        updatedBy
+        tags
+        deletedAt
+        deletedBy
+        planID
+        organizationID
+        externalCustomerID
+        externalSubscriptionID
+        expires
+        expiresAt
+        cancelled
+        cancelledDate
+        billStarting
+        active
+        plan {
           id
-          createdAt
-          updatedAt
-          createdBy
-          updatedBy
-          tags
-          deletedAt
-          deletedBy
-          planID
-          organizationID
-          externalCustomerID
-          externalSubscriptionID
-          expires
-          expiresAt
-          cancelled
-          cancelledDate
-          billStarting
-          active
-          plan {
-            id
-            name
-            features {
-              metadata
-              feature {
-                id
-                name
-              }
+          name
+          features {
+            metadata
+            feature {
+              id
+              name
             }
           }
-          organization {
-            id
-            name
-          }
+        }
+        organization {
+          id
+          name
         }
       }
     }
   }
+}
 
 query GetEntitlementByID($entitlementId: ID!) {
   entitlement(id: $entitlementId) {
+    id
+    createdAt
+    updatedAt
+    createdBy
+    updatedBy
+    tags
+    deletedAt
+    deletedBy
+    planID
+    organizationID
+    externalCustomerID
+    externalSubscriptionID
+    expires
+    expiresAt
+    cancelled
+    cancelledDate
+    billStarting
+    active
+    plan {
       id
-      createdAt
-      updatedAt
-      createdBy
-      updatedBy
-      tags
-      deletedAt
-      deletedBy
-      planID
-      organizationID
-      externalCustomerID
-      externalSubscriptionID
-      expires
-      expiresAt
-      cancelled
-      cancelledDate
-      billStarting
-      active
-      plan {
-        id
-        name
-        features {
-          metadata
-          feature {
-            id
-            name
-          }
+      name
+      features {
+        metadata
+        feature {
+          id
+          name
         }
       }
-      organization {
-        id
-        name
-      }
+    }
+    organization {
+      id
+      name
+    }
   }
 }
 
@@ -237,7 +237,6 @@ mutation UpdateEntitlement($updateEntitlementId: ID!, $input: UpdateEntitlementI
       deletedAt
       deletedBy
       planID
-      organizationID
       externalCustomerID
       externalSubscriptionID
       expires
@@ -256,10 +255,6 @@ mutation UpdateEntitlement($updateEntitlementId: ID!, $input: UpdateEntitlementI
             name
           }
         }
-      }
-      organization {
-        id
-        name
       }
     }
   }

@@ -10429,45 +10429,25 @@ func (t *UpdateEntitlement_UpdateEntitlement_Entitlement_Plan) GetFeatures() []*
 	return t.Features
 }
 
-type UpdateEntitlement_UpdateEntitlement_Entitlement_Organization struct {
-	ID   string "json:\"id\" graphql:\"id\""
-	Name string "json:\"name\" graphql:\"name\""
-}
-
-func (t *UpdateEntitlement_UpdateEntitlement_Entitlement_Organization) GetID() string {
-	if t == nil {
-		t = &UpdateEntitlement_UpdateEntitlement_Entitlement_Organization{}
-	}
-	return t.ID
-}
-func (t *UpdateEntitlement_UpdateEntitlement_Entitlement_Organization) GetName() string {
-	if t == nil {
-		t = &UpdateEntitlement_UpdateEntitlement_Entitlement_Organization{}
-	}
-	return t.Name
-}
-
 type UpdateEntitlement_UpdateEntitlement_Entitlement struct {
-	ID                     string                                                       "json:\"id\" graphql:\"id\""
-	CreatedAt              *time.Time                                                   "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	UpdatedAt              *time.Time                                                   "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	CreatedBy              *string                                                      "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	UpdatedBy              *string                                                      "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Tags                   []string                                                     "json:\"tags,omitempty\" graphql:\"tags\""
-	DeletedAt              *time.Time                                                   "json:\"deletedAt,omitempty\" graphql:\"deletedAt\""
-	DeletedBy              *string                                                      "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
-	PlanID                 string                                                       "json:\"planID\" graphql:\"planID\""
-	OrganizationID         string                                                       "json:\"organizationID\" graphql:\"organizationID\""
-	ExternalCustomerID     *string                                                      "json:\"externalCustomerID,omitempty\" graphql:\"externalCustomerID\""
-	ExternalSubscriptionID *string                                                      "json:\"externalSubscriptionID,omitempty\" graphql:\"externalSubscriptionID\""
-	Expires                bool                                                         "json:\"expires\" graphql:\"expires\""
-	ExpiresAt              *time.Time                                                   "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
-	Cancelled              bool                                                         "json:\"cancelled\" graphql:\"cancelled\""
-	CancelledDate          *time.Time                                                   "json:\"cancelledDate,omitempty\" graphql:\"cancelledDate\""
-	BillStarting           time.Time                                                    "json:\"billStarting\" graphql:\"billStarting\""
-	Active                 bool                                                         "json:\"active\" graphql:\"active\""
-	Plan                   UpdateEntitlement_UpdateEntitlement_Entitlement_Plan         "json:\"plan\" graphql:\"plan\""
-	Organization           UpdateEntitlement_UpdateEntitlement_Entitlement_Organization "json:\"organization\" graphql:\"organization\""
+	ID                     string                                               "json:\"id\" graphql:\"id\""
+	CreatedAt              *time.Time                                           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	UpdatedAt              *time.Time                                           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	CreatedBy              *string                                              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	UpdatedBy              *string                                              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Tags                   []string                                             "json:\"tags,omitempty\" graphql:\"tags\""
+	DeletedAt              *time.Time                                           "json:\"deletedAt,omitempty\" graphql:\"deletedAt\""
+	DeletedBy              *string                                              "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
+	PlanID                 string                                               "json:\"planID\" graphql:\"planID\""
+	ExternalCustomerID     *string                                              "json:\"externalCustomerID,omitempty\" graphql:\"externalCustomerID\""
+	ExternalSubscriptionID *string                                              "json:\"externalSubscriptionID,omitempty\" graphql:\"externalSubscriptionID\""
+	Expires                bool                                                 "json:\"expires\" graphql:\"expires\""
+	ExpiresAt              *time.Time                                           "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
+	Cancelled              bool                                                 "json:\"cancelled\" graphql:\"cancelled\""
+	CancelledDate          *time.Time                                           "json:\"cancelledDate,omitempty\" graphql:\"cancelledDate\""
+	BillStarting           time.Time                                            "json:\"billStarting\" graphql:\"billStarting\""
+	Active                 bool                                                 "json:\"active\" graphql:\"active\""
+	Plan                   UpdateEntitlement_UpdateEntitlement_Entitlement_Plan "json:\"plan\" graphql:\"plan\""
 }
 
 func (t *UpdateEntitlement_UpdateEntitlement_Entitlement) GetID() string {
@@ -10524,12 +10504,6 @@ func (t *UpdateEntitlement_UpdateEntitlement_Entitlement) GetPlanID() string {
 	}
 	return t.PlanID
 }
-func (t *UpdateEntitlement_UpdateEntitlement_Entitlement) GetOrganizationID() string {
-	if t == nil {
-		t = &UpdateEntitlement_UpdateEntitlement_Entitlement{}
-	}
-	return t.OrganizationID
-}
 func (t *UpdateEntitlement_UpdateEntitlement_Entitlement) GetExternalCustomerID() *string {
 	if t == nil {
 		t = &UpdateEntitlement_UpdateEntitlement_Entitlement{}
@@ -10583,12 +10557,6 @@ func (t *UpdateEntitlement_UpdateEntitlement_Entitlement) GetPlan() *UpdateEntit
 		t = &UpdateEntitlement_UpdateEntitlement_Entitlement{}
 	}
 	return &t.Plan
-}
-func (t *UpdateEntitlement_UpdateEntitlement_Entitlement) GetOrganization() *UpdateEntitlement_UpdateEntitlement_Entitlement_Organization {
-	if t == nil {
-		t = &UpdateEntitlement_UpdateEntitlement_Entitlement{}
-	}
-	return &t.Organization
 }
 
 type UpdateEntitlement_UpdateEntitlement struct {
@@ -54044,7 +54012,6 @@ const UpdateEntitlementDocument = `mutation UpdateEntitlement ($updateEntitlemen
 			deletedAt
 			deletedBy
 			planID
-			organizationID
 			externalCustomerID
 			externalSubscriptionID
 			expires
@@ -54063,10 +54030,6 @@ const UpdateEntitlementDocument = `mutation UpdateEntitlement ($updateEntitlemen
 						name
 					}
 				}
-			}
-			organization {
-				id
-				name
 			}
 		}
 	}
