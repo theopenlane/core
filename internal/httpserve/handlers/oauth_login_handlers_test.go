@@ -7,7 +7,6 @@ import (
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	mock_fga "github.com/theopenlane/iam/fgax/mockery"
 
 	"github.com/theopenlane/echox/middleware/echocontext"
 
@@ -129,14 +128,6 @@ func (suite *HandlerTestSuite) TestHandlerCheckAndCreateUser() {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			defer mock_fga.ClearMocks(suite.fga)
-
-			if tt.writes {
-				// add mocks for writes when a new user is created
-				// once for their personal org, and once for the _self relation
-				mock_fga.WriteAny(t, suite.fga)
-			}
-
 			now := time.Now()
 
 			// start transaction because the query expects a transaction in the context

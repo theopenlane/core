@@ -12,7 +12,6 @@ import (
 	"github.com/riverqueue/river/rivertest"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	mock_fga "github.com/theopenlane/iam/fgax/mockery"
 	"github.com/theopenlane/newman"
 	"github.com/theopenlane/riverboat/pkg/jobs"
 
@@ -95,14 +94,6 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			defer mock_fga.ClearMocks(suite.fga)
-
-			// setup mock authz writes
-			if tc.expectedErrMessage == "" {
-				mock_fga.WriteAny(t, suite.fga)
-				mock_fga.CheckAny(t, suite.fga, true)
-			}
-
 			registerJSON := models.RegisterRequest{
 				FirstName: tc.firstName,
 				LastName:  tc.lastName,
@@ -149,8 +140,6 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 				// we haven't set the user's default org yet in the context
 				// so allow the request to go through
 				ctx = privacy.DecisionContext(ctx, privacy.Allow)
-
-				mock_fga.ListUsersAny(t, suite.fga, []string{out.ID}, nil)
 
 				// get the user and make sure things were created as expected
 				u, err := suite.db.UserSetting.Query().Where(usersetting.UserID(out.ID)).WithDefaultOrg().Only(ctx)

@@ -13,10 +13,6 @@ import (
 )
 
 var (
-	redacted = "*****************************"
-)
-
-var (
 	testUser1    testUserDetails
 	testUser2    testUserDetails
 	viewOnlyUser testUserDetails

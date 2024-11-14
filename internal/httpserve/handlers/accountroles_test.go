@@ -1,7 +1,6 @@
 package handlers_test
 
 import (
-	"context"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
@@ -10,11 +9,9 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	mock_fga "github.com/theopenlane/iam/fgax/mockery"
 
 	"github.com/theopenlane/httpsling"
 
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	_ "github.com/theopenlane/core/internal/ent/generated/runtime"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/pkg/models"
@@ -26,46 +23,28 @@ func (suite *HandlerTestSuite) TestAccountRolesHandler() {
 	// add handler
 	suite.e.POST("account/roles", suite.h.AccountRolesHandler)
 
-	// bypass auth
-	ctx := context.Background()
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
-
-	mock_fga.WriteAny(t, suite.fga)
-
-	// setup test data
-	requestor := suite.db.User.Create().
-		SetEmail("milione@theopenlane.io").
-		SetFirstName("Milione").
-		SetLastName("Polo").
-		SaveX(ctx)
-
-	reqCtx, err := userContextWithID(requestor.ID)
-	require.NoError(t, err)
-
-	mock_fga.ClearMocks(suite.fga)
-
 	testCases := []struct {
-		name      string
-		request   models.AccountRolesRequest
-		mockRoles []string
-		errMsg    string
+		name          string
+		request       models.AccountRolesRequest
+		expectedRoles []string
+		errMsg        string
 	}{
 		{
-			name:      "happy path, default roles access",
-			mockRoles: []string{"can_view"},
+			name: "happy path, default roles access",
 			request: models.AccountRolesRequest{
-				ObjectID:   "org-id",
+				ObjectID:   testUser1.OrganizationID,
 				ObjectType: "organization",
 			},
+			expectedRoles: []string{"can_view", "can_edit", "can_delete", "audit_log_viewer", "can_invite_admins", "can_invite_members"},
 		},
 		{
-			name:      "happy path, provide roles",
-			mockRoles: []string{"meow"},
+			name: "happy path, provide roles",
 			request: models.AccountRolesRequest{
-				ObjectID:   "org-id",
+				ObjectID:   testUser1.OrganizationID,
 				ObjectType: "organization",
-				Relations:  []string{"meow", "woof"},
+				Relations:  []string{"owner"},
 			},
+			expectedRoles: []string{"owner"},
 		},
 		{
 			name: "missing object id",
@@ -85,14 +64,10 @@ func (suite *HandlerTestSuite) TestAccountRolesHandler() {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			defer mock_fga.ClearMocks(suite.fga)
-
 			if tc.errMsg == "" {
 				if len(tc.request.Relations) == 0 {
 					tc.request.Relations = handlers.DefaultAllRelations
 				}
-
-				mock_fga.BatchCheck(t, suite.fga, tc.mockRoles, tc.request.Relations)
 			}
 
 			target := "/account/roles"
@@ -109,7 +84,7 @@ func (suite *HandlerTestSuite) TestAccountRolesHandler() {
 			recorder := httptest.NewRecorder()
 
 			// Using the ServerHTTP on echo will trigger the router and middleware
-			suite.e.ServeHTTP(recorder, req.WithContext(reqCtx))
+			suite.e.ServeHTTP(recorder, req.WithContext(testUser1.UserCtx))
 
 			res := recorder.Result()
 			defer res.Body.Close()
@@ -131,7 +106,7 @@ func (suite *HandlerTestSuite) TestAccountRolesHandler() {
 
 			assert.Equal(t, http.StatusOK, recorder.Code)
 			assert.True(t, out.Success)
-			assert.Equal(t, tc.mockRoles, out.Roles)
+			assert.Equal(t, tc.expectedRoles, out.Roles)
 		})
 	}
 }

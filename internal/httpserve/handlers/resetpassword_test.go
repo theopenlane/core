@@ -14,7 +14,6 @@ import (
 	"github.com/riverqueue/river/rivertest"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	mock_fga "github.com/theopenlane/iam/fgax/mockery"
 	"github.com/theopenlane/newman"
 	"github.com/theopenlane/riverboat/pkg/jobs"
 
@@ -172,9 +171,6 @@ func (suite *HandlerTestSuite) TestResetPasswordHandler() {
 func (suite *HandlerTestSuite) createUserWithResetToken(t *testing.T, ec context.Context, email string, ttl string) (*ent.PasswordResetToken, string, error) {
 	ctx := privacy.DecisionContext(ec, privacy.Allow)
 
-	// add mocks for writes
-	mock_fga.WriteAny(t, suite.fga)
-
 	userSetting := suite.db.UserSetting.Create().
 		SetEmailConfirmed(true).
 		SaveX(ctx)
@@ -217,9 +213,6 @@ func (suite *HandlerTestSuite) createUserWithResetToken(t *testing.T, ec context
 		SetSecret(user.PasswordResetSecret).
 		SetTTL(expiry).
 		SaveX(ctx)
-
-	// clear mocks
-	mock_fga.ClearMocks(suite.fga)
 
 	return pr, u.ID, nil
 }

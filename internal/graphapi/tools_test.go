@@ -32,6 +32,7 @@ import (
 )
 
 const (
+	redacted     = "*****************************"
 	fgaModelFile = "../../fga/model/model.fga"
 )
 
@@ -73,7 +74,7 @@ func (suite *GraphTestSuite) SetupTest() {
 
 	ctx := context.Background()
 
-	// setup fga mock
+	// setup fga client
 	fgaClient, err := suite.ofgaTF.NewFgaClient(ctx)
 	require.NoError(t, err)
 
