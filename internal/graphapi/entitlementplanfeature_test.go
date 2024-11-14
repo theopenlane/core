@@ -6,7 +6,6 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	mock_fga "github.com/theopenlane/iam/fgax/mockery"
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/pkg/openlaneclient"
@@ -15,11 +14,7 @@ import (
 func (suite *GraphTestSuite) TestQueryEntitlementPlanFeature() {
 	t := suite.T()
 
-	// setup user context
-	reqCtx, err := userContext()
-	require.NoError(t, err)
-
-	planFeature := (&EntitlementPlanFeatureBuilder{client: suite.client}).MustNew(reqCtx, t)
+	planFeature := (&EntitlementPlanFeatureBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name     string
@@ -32,7 +27,13 @@ func (suite *GraphTestSuite) TestQueryEntitlementPlanFeature() {
 			name:    "happy path",
 			queryID: planFeature.ID,
 			client:  suite.client.api,
-			ctx:     reqCtx,
+			ctx:     testUser1.UserCtx,
+		},
+		{
+			name:    "happy path, view only user",
+			queryID: planFeature.ID,
+			client:  suite.client.api,
+			ctx:     viewOnlyUser.UserCtx,
 		},
 		{
 			name:    "happy path, with api token",
@@ -50,19 +51,13 @@ func (suite *GraphTestSuite) TestQueryEntitlementPlanFeature() {
 			name:     "not found",
 			queryID:  "notfound",
 			client:   suite.client.api,
-			ctx:      reqCtx,
+			ctx:      testUser1.UserCtx,
 			errorMsg: "not found",
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Get "+tc.name, func(t *testing.T) {
-			defer mock_fga.ClearMocks(suite.client.fga)
-
-			if tc.errorMsg == "" {
-				mock_fga.CheckAny(t, suite.client.fga, true)
-			}
-
 			resp, err := tc.client.GetEntitlementPlanFeatureByID(tc.ctx, tc.queryID)
 
 			if tc.errorMsg != "" {
@@ -89,16 +84,8 @@ func (suite *GraphTestSuite) TestQueryEntitlementPlanFeature() {
 func (suite *GraphTestSuite) TestQueryEntitlementPlanFeatures() {
 	t := suite.T()
 
-	// setup user context
-	reqCtx, err := userContext()
-	require.NoError(t, err)
-
-	_ = (&EntitlementPlanFeatureBuilder{client: suite.client}).MustNew(reqCtx, t)
-	_ = (&EntitlementPlanFeatureBuilder{client: suite.client}).MustNew(reqCtx, t)
-
-	otherUser := (&UserBuilder{client: suite.client}).MustNew(reqCtx, t)
-	otherCtx, err := userContextWithID(otherUser.ID)
-	require.NoError(t, err)
+	_ = (&EntitlementPlanFeatureBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	_ = (&EntitlementPlanFeatureBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name            string
@@ -109,7 +96,13 @@ func (suite *GraphTestSuite) TestQueryEntitlementPlanFeatures() {
 		{
 			name:            "happy path",
 			client:          suite.client.api,
-			ctx:             reqCtx,
+			ctx:             testUser1.UserCtx,
+			expectedResults: 2,
+		},
+		{
+			name:            "happy path, view only user",
+			client:          suite.client.api,
+			ctx:             viewOnlyUser.UserCtx,
 			expectedResults: 2,
 		},
 		{
@@ -127,15 +120,13 @@ func (suite *GraphTestSuite) TestQueryEntitlementPlanFeatures() {
 		{
 			name:            "another user, no planFeatures should be returned",
 			client:          suite.client.api,
-			ctx:             otherCtx,
+			ctx:             testUser2.UserCtx,
 			expectedResults: 0,
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("List "+tc.name, func(t *testing.T) {
-			defer mock_fga.ClearMocks(suite.client.fga)
-
 			resp, err := tc.client.GetAllEntitlementPlanFeatures(tc.ctx)
 			require.NoError(t, err)
 			require.NotNil(t, resp)
@@ -148,22 +139,17 @@ func (suite *GraphTestSuite) TestQueryEntitlementPlanFeatures() {
 func (suite *GraphTestSuite) TestMutationCreateEntitlementPlanFeature() {
 	t := suite.T()
 
-	// setup user context
-	reqCtx, err := userContext()
-	require.NoError(t, err)
-
 	// setup for creation of planFeature
-	plan := (&EntitlementPlanBuilder{client: suite.client}).MustNew(reqCtx, t)
-	feature1 := (&FeatureBuilder{client: suite.client}).MustNew(reqCtx, t)
-	feature2 := (&FeatureBuilder{client: suite.client}).MustNew(reqCtx, t)
-	feature3 := (&FeatureBuilder{client: suite.client}).MustNew(reqCtx, t)
+	plan := (&EntitlementPlanBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	feature1 := (&FeatureBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	feature2 := (&FeatureBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	feature3 := (&FeatureBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
 		request     openlaneclient.CreateEntitlementPlanFeatureInput
 		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
-		allowed     bool
 		expectedErr string
 	}{
 		{
@@ -172,9 +158,8 @@ func (suite *GraphTestSuite) TestMutationCreateEntitlementPlanFeature() {
 				PlanID:    plan.ID,
 				FeatureID: feature1.ID,
 			},
-			client:  suite.client.api,
-			ctx:     reqCtx,
-			allowed: true,
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
 		},
 		{
 			name: "happy path, all input using api token",
@@ -186,14 +171,13 @@ func (suite *GraphTestSuite) TestMutationCreateEntitlementPlanFeature() {
 					"limit":      "30",
 				},
 			},
-			client:  suite.client.apiWithToken,
-			ctx:     context.Background(),
-			allowed: true,
+			client: suite.client.apiWithToken,
+			ctx:    context.Background(),
 		},
 		{
 			name: "happy path, all input using personal access token",
 			request: openlaneclient.CreateEntitlementPlanFeatureInput{
-				OwnerID:   &testPersonalOrgID,
+				OwnerID:   &testUser1.OrganizationID,
 				PlanID:    plan.ID,
 				FeatureID: feature3.ID,
 				Metadata: map[string]interface{}{
@@ -201,9 +185,8 @@ func (suite *GraphTestSuite) TestMutationCreateEntitlementPlanFeature() {
 					"limit":      "30",
 				},
 			},
-			client:  suite.client.apiWithPAT,
-			ctx:     context.Background(),
-			allowed: true,
+			client: suite.client.apiWithPAT,
+			ctx:    context.Background(),
 		},
 		{
 			name: "already exists",
@@ -216,20 +199,8 @@ func (suite *GraphTestSuite) TestMutationCreateEntitlementPlanFeature() {
 				},
 			},
 			client:      suite.client.api,
-			ctx:         reqCtx,
-			allowed:     true,
+			ctx:         testUser1.UserCtx,
 			expectedErr: "entitlementplanfeature already exists",
-		},
-		{
-			name: "do not create if not allowed",
-			request: openlaneclient.CreateEntitlementPlanFeatureInput{
-				PlanID:    plan.ID,
-				FeatureID: feature3.ID,
-			},
-			client:      suite.client.api,
-			ctx:         reqCtx,
-			allowed:     false,
-			expectedErr: "you are not authorized to perform this action: create on entitlementplanfeature",
 		},
 		{
 			name: "missing required field, feature",
@@ -237,8 +208,7 @@ func (suite *GraphTestSuite) TestMutationCreateEntitlementPlanFeature() {
 				PlanID: plan.ID,
 			},
 			client:      suite.client.api,
-			ctx:         reqCtx,
-			allowed:     true,
+			ctx:         testUser1.UserCtx,
 			expectedErr: "value is less than the required length",
 		},
 		{
@@ -247,19 +217,13 @@ func (suite *GraphTestSuite) TestMutationCreateEntitlementPlanFeature() {
 				FeatureID: feature1.ID,
 			},
 			client:      suite.client.api,
-			ctx:         reqCtx,
-			allowed:     true,
+			ctx:         testUser1.UserCtx,
 			expectedErr: "value is less than the required length",
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
-			defer mock_fga.ClearMocks(suite.client.fga)
-
-			// check for edit permissions on the organization
-			mock_fga.CheckAny(t, suite.client.fga, tc.allowed)
-
 			resp, err := tc.client.CreateEntitlementPlanFeature(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
 				require.Error(t, err)
@@ -285,18 +249,13 @@ func (suite *GraphTestSuite) TestMutationCreateEntitlementPlanFeature() {
 func (suite *GraphTestSuite) TestMutationUpdateEntitlementPlanFeature() {
 	t := suite.T()
 
-	// setup user context
-	reqCtx, err := userContext()
-	require.NoError(t, err)
-
-	planFeature := (&EntitlementPlanFeatureBuilder{client: suite.client}).MustNew(reqCtx, t)
+	planFeature := (&EntitlementPlanFeatureBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
 		request     openlaneclient.UpdateEntitlementPlanFeatureInput
 		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
-		allowed     bool
 		expectedErr string
 	}{
 		{
@@ -307,9 +266,8 @@ func (suite *GraphTestSuite) TestMutationUpdateEntitlementPlanFeature() {
 					"limit":      "15",
 				},
 			},
-			client:  suite.client.api,
-			ctx:     reqCtx,
-			allowed: true,
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
 		},
 		{
 			name: "happy path, update metadata using api token",
@@ -319,9 +277,8 @@ func (suite *GraphTestSuite) TestMutationUpdateEntitlementPlanFeature() {
 					"limit":      "16",
 				},
 			},
-			client:  suite.client.apiWithToken,
-			ctx:     context.Background(),
-			allowed: true,
+			client: suite.client.apiWithToken,
+			ctx:    context.Background(),
 		},
 		{
 			name: "happy path, update metadata using personal access token",
@@ -331,9 +288,8 @@ func (suite *GraphTestSuite) TestMutationUpdateEntitlementPlanFeature() {
 					"limit":      "77",
 				},
 			},
-			client:  suite.client.apiWithPAT,
-			ctx:     context.Background(),
-			allowed: true,
+			client: suite.client.apiWithPAT,
+			ctx:    context.Background(),
 		},
 		{
 			name: "not allowed to update",
@@ -343,19 +299,13 @@ func (suite *GraphTestSuite) TestMutationUpdateEntitlementPlanFeature() {
 					"limit":      "65",
 				}},
 			client:      suite.client.api,
-			ctx:         reqCtx,
-			allowed:     false,
+			ctx:         viewOnlyUser.UserCtx,
 			expectedErr: "you are not authorized to perform this action: update on entitlementplanfeature",
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Update "+tc.name, func(t *testing.T) {
-			defer mock_fga.ClearMocks(suite.client.fga)
-
-			// check for edit permissions on the organization
-			mock_fga.CheckAny(t, suite.client.fga, tc.allowed)
-
 			resp, err := tc.client.UpdateEntitlementPlanFeature(tc.ctx, planFeature.ID, tc.request)
 			if tc.expectedErr != "" {
 				require.Error(t, err)
@@ -375,85 +325,60 @@ func (suite *GraphTestSuite) TestMutationUpdateEntitlementPlanFeature() {
 func (suite *GraphTestSuite) TestMutationDeleteEntitlementPlanFeature() {
 	t := suite.T()
 
-	// setup user context
-	reqCtx, err := userContext()
-	require.NoError(t, err)
-
-	planFeature1 := (&EntitlementPlanFeatureBuilder{client: suite.client}).MustNew(reqCtx, t)
-	planFeature2 := (&EntitlementPlanFeatureBuilder{client: suite.client}).MustNew(reqCtx, t)
-	planFeature3 := (&EntitlementPlanFeatureBuilder{client: suite.client}).MustNew(reqCtx, t)
+	planFeature1 := (&EntitlementPlanFeatureBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	planFeature2 := (&EntitlementPlanFeatureBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	planFeature3 := (&EntitlementPlanFeatureBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
 		idToDelete  string
 		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
-		allowed     bool
-		checkAccess bool
 		expectedErr string
 	}{
 		{
 			name:        "not allowed to delete",
 			idToDelete:  planFeature1.ID,
 			client:      suite.client.api,
-			ctx:         reqCtx,
-			checkAccess: true,
-			allowed:     false,
+			ctx:         viewOnlyUser.UserCtx,
 			expectedErr: "you are not authorized to perform this action: delete on entitlementplanfeature",
 		},
 		{
-			name:        "happy path, delete plan feature",
-			idToDelete:  planFeature1.ID,
-			client:      suite.client.api,
-			ctx:         reqCtx,
-			checkAccess: true,
-			allowed:     true,
+			name:       "happy path, delete plan feature",
+			idToDelete: planFeature1.ID,
+			client:     suite.client.api,
+			ctx:        testUser1.UserCtx,
 		},
 		{
 			name:        "plan feature already deleted, not found",
 			idToDelete:  planFeature1.ID,
 			client:      suite.client.api,
-			ctx:         reqCtx,
-			checkAccess: false,
-			allowed:     true,
+			ctx:         testUser1.UserCtx,
 			expectedErr: "entitlement_plan_feature not found",
 		},
 		{
-			name:        "happy path, delete plan feature using api token",
-			idToDelete:  planFeature2.ID,
-			client:      suite.client.apiWithToken,
-			ctx:         context.Background(),
-			checkAccess: true,
-			allowed:     true,
+			name:       "happy path, delete plan feature using api token",
+			idToDelete: planFeature2.ID,
+			client:     suite.client.apiWithToken,
+			ctx:        context.Background(),
 		},
 		{
-			name:        "happy path, delete plan feature using personal access token",
-			idToDelete:  planFeature3.ID,
-			client:      suite.client.apiWithPAT,
-			ctx:         context.Background(),
-			checkAccess: true,
-			allowed:     true,
+			name:       "happy path, delete plan feature using personal access token",
+			idToDelete: planFeature3.ID,
+			client:     suite.client.apiWithPAT,
+			ctx:        context.Background(),
 		},
 		{
 			name:        "unknown plan feature, not found",
 			idToDelete:  ulids.New().String(),
 			client:      suite.client.api,
-			ctx:         reqCtx,
-			checkAccess: false,
-			allowed:     true,
+			ctx:         testUser1.UserCtx,
 			expectedErr: "entitlement_plan_feature not found",
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Delete "+tc.name, func(t *testing.T) {
-			defer mock_fga.ClearMocks(suite.client.fga)
-
-			// check for edit permissions on the organization if planFeature exists
-			if tc.checkAccess {
-				mock_fga.CheckAny(t, suite.client.fga, tc.allowed)
-			}
-
 			resp, err := tc.client.DeleteEntitlementPlanFeature(tc.ctx, tc.idToDelete)
 			if tc.expectedErr != "" {
 				require.Error(t, err)

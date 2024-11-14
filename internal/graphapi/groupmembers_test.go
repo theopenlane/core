@@ -2,32 +2,24 @@ package graphapi_test
 
 import (
 	"context"
-	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	mock_fga "github.com/theopenlane/iam/fgax/mockery"
-
-	"github.com/theopenlane/utils/ulids"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
+	"github.com/theopenlane/utils/ulids"
 )
 
 func (suite *GraphTestSuite) TestQueryGroupMembers() {
 	t := suite.T()
 
-	// setup user context
-	reqCtx, err := userContext()
-	require.NoError(t, err)
+	group := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
-	group := (&GroupBuilder{client: suite.client}).MustNew(reqCtx, t)
-
-	// allow access to group
-	checkCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
+	checkCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
 
 	groupMember, err := group.Members(checkCtx)
 	require.NoError(t, err)
@@ -38,7 +30,6 @@ func (suite *GraphTestSuite) TestQueryGroupMembers() {
 		queryID     string
 		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
-		allowed     bool
 		expected    *ent.GroupMembership
 		errExpected bool
 	}{
@@ -46,8 +37,7 @@ func (suite *GraphTestSuite) TestQueryGroupMembers() {
 			name:     "happy path, get group member by group id",
 			queryID:  group.ID,
 			client:   suite.client.api,
-			ctx:      reqCtx,
-			allowed:  true,
+			ctx:      testUser1.UserCtx,
 			expected: groupMember[0],
 		},
 		{
@@ -55,7 +45,6 @@ func (suite *GraphTestSuite) TestQueryGroupMembers() {
 			queryID:  group.ID,
 			client:   suite.client.apiWithToken,
 			ctx:      context.Background(),
-			allowed:  true,
 			expected: groupMember[0],
 		},
 		{
@@ -63,51 +52,37 @@ func (suite *GraphTestSuite) TestQueryGroupMembers() {
 			queryID:  group.ID,
 			client:   suite.client.apiWithPAT,
 			ctx:      context.Background(),
-			allowed:  true,
 			expected: groupMember[0],
 		},
 		{
 			name:        "get group member by group id, no access",
 			queryID:     group.ID,
 			client:      suite.client.api,
-			ctx:         reqCtx,
-			allowed:     false,
+			ctx:         testUser2.UserCtx,
 			expected:    nil,
 			errExpected: true,
 		},
 		{
-			name:     "invalid-id",
-			queryID:  "tacos-for-dinner",
-			client:   suite.client.api,
-			ctx:      reqCtx,
-			allowed:  true,
-			expected: nil,
+			name:        "invalid-id",
+			queryID:     "tacos-for-dinner",
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expected:    nil,
+			errExpected: true,
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Get "+tc.name, func(t *testing.T) {
-			defer mock_fga.ClearMocks(suite.client.fga)
-
 			groupID := tc.queryID
 			whereInput := openlaneclient.GroupMembershipWhereInput{
 				GroupID: &groupID,
 			}
-
-			mock_fga.CheckAny(t, suite.client.fga, tc.allowed)
-
-			if tc.expected != nil {
-				// list groups in order to determine access to group level data
-				mock_fga.ListOnce(t, suite.client.fga, []string{fmt.Sprintf("group:%s", group.ID)}, nil)
-
-				mock_fga.ListUsersAny(t, suite.client.fga, []string{tc.expected.UserID}, nil)
-			}
-
 			resp, err := tc.client.GetGroupMembersByGroupID(tc.ctx, &whereInput)
 
 			if tc.errExpected {
 				require.Error(t, err)
-				assert.ErrorContains(t, err, "deny rule")
+				assert.ErrorContains(t, err, "deny rule") // TODO: (sfunk) this should be a better error message
 
 				return
 			}
@@ -128,28 +103,23 @@ func (suite *GraphTestSuite) TestQueryGroupMembers() {
 	}
 
 	// delete created group
-	(&GroupCleanup{client: suite.client, ID: group.ID}).MustDelete(reqCtx, t)
+	(&GroupCleanup{client: suite.client, ID: group.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
 func (suite *GraphTestSuite) TestMutationCreateGroupMembers() {
 	t := suite.T()
 
-	// setup user context
-	reqCtx, err := userContext()
-	require.NoError(t, err)
+	group1 := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
-	group1 := (&GroupBuilder{client: suite.client}).MustNew(reqCtx, t)
-
-	// allow access to group
-	checkCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
+	checkCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
 
 	groupMember, err := group1.Members(checkCtx)
 	require.NoError(t, err)
 	require.Len(t, groupMember, 1)
 
-	orgMember1 := (&OrgMemberBuilder{client: suite.client, OrgID: testOrgID}).MustNew(reqCtx, t)
-	orgMember2 := (&OrgMemberBuilder{client: suite.client, OrgID: testOrgID}).MustNew(reqCtx, t)
-	orgMember3 := (&OrgMemberBuilder{client: suite.client, OrgID: testOrgID}).MustNew(reqCtx, t)
+	orgMember1 := (&OrgMemberBuilder{client: suite.client, OrgID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
+	orgMember2 := (&OrgMemberBuilder{client: suite.client, OrgID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
+	orgMember3 := (&OrgMemberBuilder{client: suite.client, OrgID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name    string
@@ -158,9 +128,6 @@ func (suite *GraphTestSuite) TestMutationCreateGroupMembers() {
 		role    enums.Role
 		client  *openlaneclient.OpenlaneClient
 		ctx     context.Context
-		allowed bool
-		check   bool
-		list    bool
 		errMsg  string
 	}{
 		{
@@ -169,10 +136,7 @@ func (suite *GraphTestSuite) TestMutationCreateGroupMembers() {
 			userID:  orgMember1.UserID,
 			role:    enums.RoleAdmin,
 			client:  suite.client.api,
-			ctx:     reqCtx,
-			allowed: true,
-			check:   true,
-			list:    true,
+			ctx:     testUser1.UserCtx,
 		},
 		{
 			name:    "happy path, add member using api token",
@@ -181,9 +145,6 @@ func (suite *GraphTestSuite) TestMutationCreateGroupMembers() {
 			role:    enums.RoleMember,
 			client:  suite.client.apiWithToken,
 			ctx:     context.Background(),
-			allowed: true,
-			check:   true,
-			list:    true,
 		},
 		{
 			name:    "happy path, add member using personal access token",
@@ -192,9 +153,6 @@ func (suite *GraphTestSuite) TestMutationCreateGroupMembers() {
 			role:    enums.RoleMember,
 			client:  suite.client.apiWithPAT,
 			ctx:     context.Background(),
-			allowed: true,
-			check:   true,
-			list:    true,
 		},
 		{
 			name:    "add member, no access",
@@ -202,10 +160,7 @@ func (suite *GraphTestSuite) TestMutationCreateGroupMembers() {
 			userID:  orgMember2.UserID,
 			role:    enums.RoleMember,
 			client:  suite.client.api,
-			ctx:     reqCtx,
-			allowed: false,
-			check:   true,
-			list:    false,
+			ctx:     viewOnlyUser.UserCtx,
 			errMsg:  "you are not authorized to perform this action",
 		},
 		{
@@ -214,10 +169,7 @@ func (suite *GraphTestSuite) TestMutationCreateGroupMembers() {
 			userID:  orgMember2.UserID,
 			role:    enums.RoleOwner,
 			client:  suite.client.api,
-			ctx:     reqCtx,
-			allowed: true,
-			check:   false,
-			list:    false,
+			ctx:     testUser1.UserCtx,
 			errMsg:  "OWNER is not a valid GroupMembershipRole",
 		},
 		{
@@ -226,10 +178,7 @@ func (suite *GraphTestSuite) TestMutationCreateGroupMembers() {
 			userID:  orgMember1.UserID,
 			role:    enums.RoleMember,
 			client:  suite.client.api,
-			ctx:     reqCtx,
-			allowed: true,
-			check:   true,
-			list:    true,
+			ctx:     testUser1.UserCtx,
 			errMsg:  "already exists",
 		},
 		{
@@ -238,11 +187,8 @@ func (suite *GraphTestSuite) TestMutationCreateGroupMembers() {
 			userID:  "not-a-valid-user-id",
 			role:    enums.RoleMember,
 			client:  suite.client.api,
-			ctx:     reqCtx,
-			allowed: true,
-			check:   true,
-			list:    true,
-			errMsg:  "constraint failed",
+			ctx:     testUser1.UserCtx,
+			errMsg:  "user not in organization",
 		},
 		{
 			name:    "invalid group",
@@ -250,11 +196,8 @@ func (suite *GraphTestSuite) TestMutationCreateGroupMembers() {
 			userID:  orgMember1.UserID,
 			role:    enums.RoleMember,
 			client:  suite.client.api,
-			ctx:     reqCtx,
-			allowed: true,
-			check:   true,
-			list:    true,
-			errMsg:  "constraint failed",
+			ctx:     testUser1.UserCtx,
+			errMsg:  "you are not authorized to perform this action",
 		},
 		{
 			name:    "invalid role",
@@ -262,36 +205,13 @@ func (suite *GraphTestSuite) TestMutationCreateGroupMembers() {
 			userID:  orgMember1.UserID,
 			role:    enums.RoleInvalid,
 			client:  suite.client.api,
-			ctx:     reqCtx,
-			allowed: true,
-			check:   false,
-			list:    false,
+			ctx:     testUser1.UserCtx,
 			errMsg:  "not a valid GroupMembershipRole",
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
-			defer mock_fga.ClearMocks(suite.client.fga)
-
-			if tc.errMsg == "" {
-				mock_fga.WriteAny(t, suite.client.fga)
-
-				mock_fga.ListUsersAny(t, suite.client.fga, []string{tc.userID}, nil)
-			}
-
-			if tc.check {
-				mock_fga.CheckAny(t, suite.client.fga, tc.allowed)
-			}
-
-			if tc.list {
-				mock_fga.ListOnce(t, suite.client.fga, []string{fmt.Sprintf("organization:%s", group1.OwnerID)}, nil)
-			}
-
-			if tc.errMsg == "" {
-				mock_fga.ListOnce(t, suite.client.fga, []string{fmt.Sprintf("group:%s", group1.ID)}, nil)
-			}
-
 			role := tc.role
 			input := openlaneclient.CreateGroupMembershipInput{
 				GroupID: tc.groupID,
@@ -318,93 +238,59 @@ func (suite *GraphTestSuite) TestMutationCreateGroupMembers() {
 	}
 
 	// delete created group and users
-	(&GroupCleanup{client: suite.client, ID: group1.ID}).MustDelete(reqCtx, t)
-	(&OrgMemberCleanup{client: suite.client, ID: orgMember1.ID}).MustDelete(reqCtx, t)
-	(&OrgMemberCleanup{client: suite.client, ID: orgMember2.ID}).MustDelete(reqCtx, t)
+	(&GroupCleanup{client: suite.client, ID: group1.ID}).MustDelete(testUser1.UserCtx, t)
+	(&OrgMemberCleanup{client: suite.client, ID: orgMember1.ID}).MustDelete(testUser1.UserCtx, t)
+	(&OrgMemberCleanup{client: suite.client, ID: orgMember2.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
 func (suite *GraphTestSuite) TestMutationUpdateGroupMembers() {
 	t := suite.T()
 
-	// setup user context
-	reqCtx, err := userContext()
-	require.NoError(t, err)
-
-	orgMember := (&OrgMemberBuilder{client: suite.client, OrgID: testOrgID}).MustNew(reqCtx, t)
-
-	gm := (&GroupMemberBuilder{client: suite.client, UserID: orgMember.UserID}).MustNew(reqCtx, t)
+	gm := (&GroupMemberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
-		name    string
-		role    enums.Role
-		client  *openlaneclient.OpenlaneClient
-		ctx     context.Context
-		allowed bool
-		check   bool
-		errMsg  string
+		name   string
+		role   enums.Role
+		client *openlaneclient.OpenlaneClient
+		ctx    context.Context
+		errMsg string
 	}{
 		{
-			name:    "happy path, update to admin from member",
-			role:    enums.RoleAdmin,
-			client:  suite.client.api,
-			ctx:     reqCtx,
-			allowed: true,
-			check:   true,
+			name:   "happy path, update to admin from member",
+			role:   enums.RoleAdmin,
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
 		},
 		{
-			name:    "happy path, update to member from admin using api token",
-			role:    enums.RoleMember,
-			client:  suite.client.apiWithToken,
-			ctx:     context.Background(),
-			allowed: true,
-			check:   true,
+			name:   "happy path, update to member from admin using api token",
+			role:   enums.RoleMember,
+			client: suite.client.apiWithToken,
+			ctx:    context.Background(),
 		},
 		{
-			name:    "happy path, update to admin from member using personal access token",
-			role:    enums.RoleAdmin,
-			client:  suite.client.apiWithPAT,
-			ctx:     context.Background(),
-			allowed: true,
-			check:   true,
+			name:   "happy path, update to admin from member using personal access token",
+			role:   enums.RoleAdmin,
+			client: suite.client.apiWithPAT,
+			ctx:    context.Background(),
 		},
 		{
-			name:    "invalid role",
-			role:    enums.RoleInvalid,
-			client:  suite.client.api,
-			ctx:     reqCtx,
-			errMsg:  "not a valid GroupMembershipRole",
-			allowed: true,
-			check:   false,
+			name:   "invalid role",
+			role:   enums.RoleInvalid,
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+			errMsg: "not a valid GroupMembershipRole",
 		},
 		{
-			name:    "no access",
-			role:    enums.RoleMember,
-			client:  suite.client.api,
-			ctx:     reqCtx,
-			errMsg:  "you are not authorized to perform this action",
-			allowed: false,
-			check:   true,
+			name:   "no access",
+			role:   enums.RoleMember,
+			client: suite.client.api,
+			ctx:    viewOnlyUser.UserCtx,
+			errMsg: "you are not authorized to perform this action",
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Update "+tc.name, func(t *testing.T) {
-			defer mock_fga.ClearMocks(suite.client.fga)
-
-			if tc.errMsg == "" {
-				mock_fga.WriteAny(t, suite.client.fga)
-
-				mock_fga.ListUsersAny(t, suite.client.fga, []string{orgMember.UserID}, nil)
-			}
-
-			if tc.check {
-				mock_fga.CheckAny(t, suite.client.fga, tc.allowed)
-			}
-
-			if tc.errMsg == "" {
-				mock_fga.ListOnce(t, suite.client.fga, []string{fmt.Sprintf("group:%s", gm.GroupID)}, nil)
-			}
-
 			role := tc.role
 			input := openlaneclient.UpdateGroupMembershipInput{
 				Role: &role,
@@ -425,98 +311,65 @@ func (suite *GraphTestSuite) TestMutationUpdateGroupMembers() {
 			assert.Equal(t, tc.role, resp.UpdateGroupMembership.GroupMembership.Role)
 		})
 	}
-
-	// delete created objects
-	(&GroupMemberCleanup{client: suite.client, ID: gm.ID}).MustDelete(reqCtx, t)
-	(&OrgMemberCleanup{client: suite.client, ID: orgMember.ID}).MustDelete(reqCtx, t)
-	(&GroupCleanup{client: suite.client, ID: gm.GroupID}).MustDelete(reqCtx, t)
 }
 
 func (suite *GraphTestSuite) TestMutationDeleteGroupMembers() {
 	t := suite.T()
 
-	// setup user context
-	reqCtx, err := userContext()
-	require.NoError(t, err)
-
-	gm1 := (&GroupMemberBuilder{client: suite.client}).MustNew(reqCtx, t)
-	gm2 := (&GroupMemberBuilder{client: suite.client}).MustNew(reqCtx, t)
-	gm3 := (&GroupMemberBuilder{client: suite.client}).MustNew(reqCtx, t)
+	gm1 := (&GroupMemberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	gm2 := (&GroupMemberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	gm3 := (&GroupMemberBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
 		idToDelete  string
 		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
-		allowed     bool
-		checkAccess bool
 		expectedErr string
 	}{
 		{
 			name:        "not allowed to delete",
 			idToDelete:  gm1.ID,
 			client:      suite.client.api,
-			ctx:         reqCtx,
-			checkAccess: true,
-			allowed:     false,
+			ctx:         viewOnlyUser.UserCtx,
 			expectedErr: "you are not authorized to perform this action: delete on groupmembership",
 		},
 		{
-			name:        "happy path, delete org member",
-			idToDelete:  gm1.ID,
-			client:      suite.client.api,
-			ctx:         reqCtx,
-			checkAccess: true,
-			allowed:     true,
+			name:       "happy path, delete group member using api token",
+			idToDelete: gm2.ID,
+			client:     suite.client.apiWithToken,
+			ctx:        context.Background(),
 		},
 		{
-			name:        "group member already deleted, not found",
-			idToDelete:  gm1.ID,
-			client:      suite.client.api,
-			ctx:         reqCtx,
-			checkAccess: false,
-			allowed:     true,
-			expectedErr: "group_membership not found",
+			name:       "happy path, delete org member",
+			idToDelete: gm1.ID,
+			client:     suite.client.api,
+			ctx:        testUser1.UserCtx,
 		},
 		{
-			name:        "happy path, delete group member using api token",
-			idToDelete:  gm2.ID,
-			client:      suite.client.apiWithToken,
-			ctx:         context.Background(),
-			checkAccess: true,
-			allowed:     true,
-		},
-		{
-			name:        "happy path, delete group member using personal access token",
-			idToDelete:  gm3.ID,
-			client:      suite.client.apiWithPAT,
-			ctx:         context.Background(),
-			checkAccess: true,
-			allowed:     true,
+			name:       "happy path, delete group member using personal access token",
+			idToDelete: gm3.ID,
+			client:     suite.client.apiWithPAT,
+			ctx:        context.Background(),
 		},
 		{
 			name:        "unknown group member, not found",
 			idToDelete:  ulids.New().String(),
 			client:      suite.client.api,
-			ctx:         reqCtx,
-			checkAccess: false,
-			allowed:     true,
+			ctx:         testUser1.UserCtx,
+			expectedErr: "group_membership not found",
+		},
+		{
+			name:        "group member already deleted, not found",
+			idToDelete:  gm1.ID,
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
 			expectedErr: "group_membership not found",
 		},
 	}
 
 	for _, tc := range testCases {
-		t.Run("Update "+tc.name, func(t *testing.T) {
-			defer mock_fga.ClearMocks(suite.client.fga)
-
-			if tc.expectedErr == "" {
-				mock_fga.WriteAny(t, suite.client.fga)
-			}
-
-			if tc.checkAccess {
-				mock_fga.CheckAny(t, suite.client.fga, tc.allowed)
-			}
-
+		t.Run("Delete "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.RemoveUserFromGroup(tc.ctx, tc.idToDelete)
 			if tc.expectedErr != "" {
 				require.Error(t, err)

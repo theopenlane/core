@@ -86,25 +86,26 @@ func groupCreateHook(ctx context.Context, m *generated.GroupMutation) error {
 			if err := createGroupMemberOwner(ctx, objID, m); err != nil {
 				return err
 			}
+		} else {
+			if err := addTokenEditPermissions(ctx, objID, m.Type()); err != nil {
+				return err
+			}
 		}
 	}
 
-	objType := strings.ToLower(m.Type())
-	object := fmt.Sprintf("%s:%s", objType, objID)
 	org, orgExists := m.OwnerID()
 
 	if exists && orgExists {
 		log.Debug().
 			Str("relation", fgax.ParentRelation).
 			Str("org", org).
-			Str("object", object).
 			Msg("creating parent relationship tuples")
 
 		req := fgax.TupleRequest{
 			SubjectID:   org,
 			SubjectType: "organization",
 			ObjectID:    objID,
-			ObjectType:  objType,
+			ObjectType:  m.Type(),
 		}
 
 		orgTuple, err := getTupleKeyFromRole(req, fgax.ParentRelation)
@@ -161,7 +162,8 @@ func groupDeleteHook(ctx context.Context, m *generated.GroupMutation) error {
 
 	log.Debug().Str("object", object).Msg("deleting relationship tuples")
 
-	if err := m.Authz.DeleteAllObjectRelations(ctx, object); err != nil {
+	// delete all relationship tuples except for the user, those are handled by the cascade delete of the group membership
+	if err := m.Authz.DeleteAllObjectRelations(ctx, object, []string{"admin", "user", "owner"}); err != nil {
 		log.Error().Err(err).Msg("failed to delete relationship tuples")
 
 		return ErrInternalServerError

@@ -178,7 +178,8 @@ func HookDeleteUser() ent.Hook {
 					return nil, err
 				}
 
-				personalOrgIDs, err := m.Client().User.QueryOrganizations(user).Where(organization.PersonalOrg(true)).IDs(ctx)
+				allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+				personalOrgIDs, err := m.Client().User.QueryOrganizations(user).Where(organization.PersonalOrg(true)).IDs(allowCtx)
 				if err != nil {
 					return nil, err
 				}
@@ -190,7 +191,6 @@ func HookDeleteUser() ent.Hook {
 				}
 
 				// cleanup personal org(s)
-				allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 				if _, err := m.Client().
 					Organization.
 					Delete().

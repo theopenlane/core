@@ -8,7 +8,6 @@ import (
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	mock_fga "github.com/theopenlane/iam/fgax/mockery"
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/pkg/enums"
@@ -18,11 +17,7 @@ import (
 func (suite *GraphTestSuite) TestQueryTask() {
 	t := suite.T()
 
-	// setup user context
-	reqCtx, err := userContext()
-	require.NoError(t, err)
-
-	task := (&TaskBuilder{client: suite.client}).MustNew(reqCtx, t)
+	task := (&TaskBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name     string
@@ -35,7 +30,7 @@ func (suite *GraphTestSuite) TestQueryTask() {
 			name:    "happy path",
 			queryID: task.ID,
 			client:  suite.client.api,
-			ctx:     reqCtx,
+			ctx:     testUser1.UserCtx,
 		},
 		{
 			name:    "happy path using personal access token",
@@ -47,24 +42,13 @@ func (suite *GraphTestSuite) TestQueryTask() {
 			name:     "not found",
 			queryID:  "notfound",
 			client:   suite.client.api,
-			ctx:      reqCtx,
-			errorMsg: "not found",
+			ctx:      testUser1.UserCtx,
+			errorMsg: "you are not authorized to perform this action",
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Get "+tc.name, func(t *testing.T) {
-			defer mock_fga.ClearMocks(suite.client.fga)
-
-			// mock the check and task tuples for the task
-			mock_fga.CheckAny(t, suite.client.fga, true)
-			mock_fga.ListOnce(t, suite.client.fga, []string{"task:" + task.ID}, nil)
-
-			if tc.errorMsg == "" {
-				// mock the user tuple for the task assigner for a successful query
-				mock_fga.ListOnce(t, suite.client.fga, []string{"user:" + testUser.ID}, nil)
-			}
-
 			resp, err := tc.client.GetTaskByID(tc.ctx, tc.queryID)
 
 			if tc.errorMsg != "" {
@@ -89,16 +73,8 @@ func (suite *GraphTestSuite) TestQueryTask() {
 func (suite *GraphTestSuite) TestQueryTasks() {
 	t := suite.T()
 
-	// setup user context
-	reqCtx, err := userContext()
-	require.NoError(t, err)
-
-	task1 := (&TaskBuilder{client: suite.client}).MustNew(reqCtx, t)
-	task2 := (&TaskBuilder{client: suite.client}).MustNew(reqCtx, t)
-
-	otherUser := (&UserBuilder{client: suite.client}).MustNew(reqCtx, t)
-	otherCtx, err := userContextWithID(otherUser.ID)
-	require.NoError(t, err)
+	(&TaskBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	(&TaskBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name            string
@@ -109,7 +85,7 @@ func (suite *GraphTestSuite) TestQueryTasks() {
 		{
 			name:            "happy path",
 			client:          suite.client.api,
-			ctx:             reqCtx,
+			ctx:             testUser1.UserCtx,
 			expectedResults: 2,
 		},
 		{
@@ -121,24 +97,13 @@ func (suite *GraphTestSuite) TestQueryTasks() {
 		{
 			name:            "another user, no entities should be returned",
 			client:          suite.client.api,
-			ctx:             otherCtx,
+			ctx:             testUser2.UserCtx,
 			expectedResults: 0,
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("List "+tc.name, func(t *testing.T) {
-			defer mock_fga.ClearMocks(suite.client.fga)
-
-			// mock the task + user tuple for the task assigner for a successful query
-			if tc.expectedResults > 0 {
-				mock_fga.ListOnce(t, suite.client.fga, []string{"task:" + task1.ID, "task:" + task2.ID}, nil)
-				mock_fga.ListOnce(t, suite.client.fga, []string{"user:" + testUser.ID}, nil)
-			} else {
-				// mock no access to any tasks
-				mock_fga.ListOnce(t, suite.client.fga, []string{}, nil)
-			}
-
 			resp, err := tc.client.GetAllTasks(tc.ctx)
 			require.NoError(t, err)
 			require.NotNil(t, resp)
@@ -151,18 +116,11 @@ func (suite *GraphTestSuite) TestQueryTasks() {
 func (suite *GraphTestSuite) TestMutationCreateTask() {
 	t := suite.T()
 
-	// setup user context
-	reqCtx, err := userContext()
-	require.NoError(t, err)
-
-	otherUser := (&UserBuilder{client: suite.client}).MustNew(reqCtx, t)
-
 	testCases := []struct {
 		name        string
 		request     openlaneclient.CreateTaskInput
 		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
-		numWrites   int
 		expectedErr string
 	}{
 		{
@@ -170,9 +128,8 @@ func (suite *GraphTestSuite) TestMutationCreateTask() {
 			request: openlaneclient.CreateTaskInput{
 				Title: "test-task",
 			},
-			client:    suite.client.api,
-			ctx:       reqCtx,
-			numWrites: 1, // write permission for the task to the user
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
 		},
 		{
 			name: "happy path, all input",
@@ -184,21 +141,19 @@ func (suite *GraphTestSuite) TestMutationCreateTask() {
 					"task": "do all the things for the thing",
 				},
 				Due:             lo.ToPtr(time.Now().Add(time.Hour * 24)),
-				OrganizationIDs: []string{testOrgID}, // add the org to the task
-				AssigneeID:      &otherUser.ID,       // assign the task to another user
+				OrganizationIDs: []string{testUser1.OrganizationID}, // add the org to the task
+				AssigneeID:      &viewOnlyUser.ID,                   // assign the task to another user
 			},
-			client:    suite.client.api,
-			ctx:       reqCtx,
-			numWrites: 2, // assignee+assigner and organization write permissions
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
 		},
 		{
 			name: "happy path, using pat",
 			request: openlaneclient.CreateTaskInput{
 				Title: "test-task",
 			},
-			client:    suite.client.apiWithPAT,
-			ctx:       context.Background(),
-			numWrites: 1, // write permission for the task to the user
+			client: suite.client.apiWithPAT,
+			ctx:    context.Background(),
 		},
 		{
 			name: "missing title, but display name provided",
@@ -206,28 +161,13 @@ func (suite *GraphTestSuite) TestMutationCreateTask() {
 				Description: lo.ToPtr("makin' a list, checkin' it twice"),
 			},
 			client:      suite.client.api,
-			ctx:         reqCtx,
+			ctx:         testUser1.UserCtx,
 			expectedErr: "value is less than the required length",
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
-			defer mock_fga.ClearMocks(suite.client.fga)
-
-			if tc.expectedErr == "" {
-				// mock write permissions
-				for range tc.numWrites {
-					mock_fga.WriteOnce(t, suite.client.fga)
-				}
-
-				if tc.request.AssigneeID != nil {
-					// mock the user tuple for the assignee
-					// there is an assumption in this test that the user has access to the otherUser (this means that they should be in the org)
-					mock_fga.ListUsersAny(t, suite.client.fga, []string{otherUser.ID, testUser.ID}, nil)
-				}
-			}
-
 			resp, err := tc.client.CreateTask(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
 				require.Error(t, err)
@@ -272,22 +212,14 @@ func (suite *GraphTestSuite) TestMutationCreateTask() {
 func (suite *GraphTestSuite) TestMutationUpdateTask() {
 	t := suite.T()
 
-	// setup user context
-	reqCtx, err := userContext()
-	require.NoError(t, err)
-
-	task := (&TaskBuilder{client: suite.client}).MustNew(reqCtx, t)
-	group := (&GroupBuilder{client: suite.client}).MustNew(reqCtx, t)
-
-	otherUser := (&UserBuilder{client: suite.client}).MustNew(reqCtx, t)
+	task := (&TaskBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	group := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
 		request     openlaneclient.UpdateTaskInput
 		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
-		numWrites   int
-		allowed     bool
 		expectedErr string
 	}{
 		{
@@ -295,20 +227,16 @@ func (suite *GraphTestSuite) TestMutationUpdateTask() {
 			request: openlaneclient.UpdateTaskInput{
 				Description: lo.ToPtr(("makin' a list, checkin' it twice")),
 			},
-			client:    suite.client.api,
-			ctx:       reqCtx,
-			numWrites: 0,
-			allowed:   true,
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
 		},
 		{
 			name: "update assignee",
 			request: openlaneclient.UpdateTaskInput{
-				AssigneeID: lo.ToPtr(otherUser.ID),
+				AssigneeID: lo.ToPtr(viewOnlyUser.ID),
 			},
-			client:    suite.client.apiWithPAT,
-			ctx:       context.Background(),
-			numWrites: 1, // assignee write permission
-			allowed:   true,
+			client: suite.client.apiWithPAT,
+			ctx:    context.Background(),
 		},
 		{
 			name: "update status and details",
@@ -316,43 +244,21 @@ func (suite *GraphTestSuite) TestMutationUpdateTask() {
 				Status:  &enums.TaskStatusInProgress,
 				Details: map[string]interface{}{"task": "do all the things for the thing"},
 			},
-			client:  suite.client.api,
-			ctx:     reqCtx,
-			allowed: true,
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
 		},
 		{
 			name: "add to group",
 			request: openlaneclient.UpdateTaskInput{
 				AddGroupIDs: []string{group.ID},
 			},
-			client:    suite.client.api,
-			ctx:       reqCtx,
-			numWrites: 1, // group write permission
-			allowed:   true,
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Update "+tc.name, func(t *testing.T) {
-			defer mock_fga.ClearMocks(suite.client.fga)
-
-			// mock the list objects request for the task
-			mock_fga.ListAny(t, suite.client.fga, []string{"task:" + task.ID})
-			mock_fga.CheckAny(t, suite.client.fga, tc.allowed)
-
-			if tc.expectedErr == "" {
-				// mock write permissions
-				for range tc.numWrites {
-					mock_fga.WriteOnce(t, suite.client.fga)
-				}
-
-				if tc.request.AssigneeID != nil {
-					// mock the user tuple for the assignee
-					// there is an assumption in this test that the user has access to the otherUser (this means that they should be in the org)
-					mock_fga.ListUsersAny(t, suite.client.fga, []string{otherUser.ID, testUser.ID}, nil)
-				}
-			}
-
 			resp, err := tc.client.UpdateTask(tc.ctx, task.ID, tc.request)
 			if tc.expectedErr != "" {
 				require.Error(t, err)
@@ -383,34 +289,34 @@ func (suite *GraphTestSuite) TestMutationUpdateTask() {
 func (suite *GraphTestSuite) TestMutationDeleteTask() {
 	t := suite.T()
 
-	// setup user context
-	reqCtx, err := userContext()
-	require.NoError(t, err)
-
-	task1 := (&TaskBuilder{client: suite.client}).MustNew(reqCtx, t)
-	task2 := (&TaskBuilder{client: suite.client}).MustNew(reqCtx, t)
+	task1 := (&TaskBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	task2 := (&TaskBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
 		idToDelete  string
 		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
-		allowed     bool
 		expectedErr string
 	}{
+		{
+			name:        "not authorized, delete task",
+			idToDelete:  task1.ID,
+			client:      suite.client.api,
+			ctx:         testUser2.UserCtx,
+			expectedErr: "you are not authorized to perform this action: delete on task",
+		},
 		{
 			name:       "happy path, delete task",
 			idToDelete: task1.ID,
 			client:     suite.client.api,
-			ctx:        reqCtx,
-			allowed:    true,
+			ctx:        testUser1.UserCtx,
 		},
 		{
 			name:        "task already deleted, not found",
 			idToDelete:  task1.ID,
 			client:      suite.client.api,
-			ctx:         reqCtx,
-			allowed:     true,
+			ctx:         testUser1.UserCtx,
 			expectedErr: "task not found",
 		},
 		{
@@ -418,25 +324,18 @@ func (suite *GraphTestSuite) TestMutationDeleteTask() {
 			idToDelete: task2.ID,
 			client:     suite.client.apiWithPAT,
 			ctx:        context.Background(),
-			allowed:    true,
 		},
 		{
 			name:        "unknown task, not found",
 			idToDelete:  ulids.New().String(),
 			client:      suite.client.api,
-			ctx:         reqCtx,
-			allowed:     true,
-			expectedErr: "task not found",
+			ctx:         testUser1.UserCtx,
+			expectedErr: "you are not authorized to perform this action: delete on task",
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Delete "+tc.name, func(t *testing.T) {
-			defer mock_fga.ClearMocks(suite.client.fga)
-
-			mock_fga.CheckAny(t, suite.client.fga, tc.allowed)
-			mock_fga.ListAny(t, suite.client.fga, []string{"task:" + tc.idToDelete})
-
 			resp, err := tc.client.DeleteTask(tc.ctx, tc.idToDelete)
 			if tc.expectedErr != "" {
 				require.Error(t, err)

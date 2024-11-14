@@ -2,14 +2,12 @@ package graphapi_test
 
 import (
 	"context"
-	"fmt"
 	"testing"
 	"time"
 
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	mock_fga "github.com/theopenlane/iam/fgax/mockery"
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/pkg/openlaneclient"
@@ -18,63 +16,44 @@ import (
 func (suite *GraphTestSuite) TestQueryEntitlement() {
 	t := suite.T()
 
-	// setup user context
-	reqCtx, err := userContext()
-	require.NoError(t, err)
-
-	entitlement := (&EntitlementBuilder{client: suite.client, OrganizationID: testOrgID}).MustNew(reqCtx, t)
+	entitlement := (&EntitlementBuilder{client: suite.client, OrganizationID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
-		name        string
-		queryID     string
-		client      *openlaneclient.OpenlaneClient
-		listObjects bool
-		ctx         context.Context
-		errorMsg    string
+		name     string
+		queryID  string
+		client   *openlaneclient.OpenlaneClient
+		ctx      context.Context
+		errorMsg string
 	}{
 		{
-			name:        "happy path",
-			queryID:     entitlement.ID,
-			client:      suite.client.api,
-			listObjects: true,
-			ctx:         reqCtx,
+			name:    "happy path",
+			queryID: entitlement.ID,
+			client:  suite.client.api,
+			ctx:     testUser1.UserCtx,
 		},
 		{
-			name:        "happy path, using api token",
-			queryID:     entitlement.ID,
-			client:      suite.client.apiWithToken,
-			listObjects: false, // api token already restricts to a single org
-			ctx:         context.Background(),
+			name:    "happy path, using api token",
+			queryID: entitlement.ID,
+			client:  suite.client.apiWithToken,
+			ctx:     context.Background(),
 		},
 		{
-			name:        "happy path, using personal access token",
-			queryID:     entitlement.ID,
-			client:      suite.client.apiWithPAT,
-			listObjects: true,
-			ctx:         context.Background(),
+			name:    "happy path, using personal access token",
+			queryID: entitlement.ID,
+			client:  suite.client.apiWithPAT,
+			ctx:     context.Background(),
 		},
 		{
-			name:        "not found",
-			queryID:     "notfound",
-			client:      suite.client.api,
-			listObjects: false,
-			ctx:         reqCtx,
-			errorMsg:    "not found",
+			name:     "not found",
+			queryID:  "notfound",
+			client:   suite.client.api,
+			ctx:      testUser1.UserCtx,
+			errorMsg: "not found",
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Get "+tc.name, func(t *testing.T) {
-			defer mock_fga.ClearMocks(suite.client.fga)
-
-			if tc.errorMsg == "" {
-				mock_fga.CheckAny(t, suite.client.fga, true)
-			}
-
-			if tc.listObjects {
-				mock_fga.ListAny(t, suite.client.fga, []string{"organization:" + testOrgID})
-			}
-
 			resp, err := tc.client.GetEntitlementByID(tc.ctx, tc.queryID)
 
 			if tc.errorMsg != "" {
@@ -102,48 +81,39 @@ func (suite *GraphTestSuite) TestQueryEntitlement() {
 func (suite *GraphTestSuite) TestQueryEntitlements() {
 	t := suite.T()
 
-	// setup user context
-	reqCtx, err := userContext()
-	require.NoError(t, err)
+	_ = (&EntitlementBuilder{client: suite.client, OrganizationID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
 
-	_ = (&EntitlementBuilder{client: suite.client, OrganizationID: testOrgID}).MustNew(reqCtx, t)
-
-	otherUser := (&UserBuilder{client: suite.client}).MustNew(reqCtx, t)
+	otherUser := (&UserBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	otherCtx, err := userContextWithID(otherUser.ID)
 	require.NoError(t, err)
 
 	testCases := []struct {
 		name            string
 		client          *openlaneclient.OpenlaneClient
-		listObjects     bool
 		ctx             context.Context
 		expectedResults int
 	}{
 		{
 			name:            "happy path",
 			client:          suite.client.api,
-			listObjects:     true,
-			ctx:             reqCtx,
+			ctx:             testUser1.UserCtx,
 			expectedResults: 1,
 		},
 		{
 			name:            "happy path, using api token",
 			client:          suite.client.apiWithToken,
-			listObjects:     false, // api token already restricts to a single org
 			ctx:             context.Background(),
 			expectedResults: 1,
 		},
 		{
 			name:            "happy path, using pat",
 			client:          suite.client.apiWithPAT,
-			listObjects:     true,
 			ctx:             context.Background(),
 			expectedResults: 1,
 		},
 		{
 			name:            "another user, no entitlements should be returned",
 			client:          suite.client.api,
-			listObjects:     false,
 			ctx:             otherCtx,
 			expectedResults: 0,
 		},
@@ -151,12 +121,6 @@ func (suite *GraphTestSuite) TestQueryEntitlements() {
 
 	for _, tc := range testCases {
 		t.Run("List "+tc.name, func(t *testing.T) {
-			defer mock_fga.ClearMocks(suite.client.fga)
-
-			if tc.listObjects {
-				mock_fga.ListAny(t, suite.client.fga, []string{"organization:" + testOrgID})
-			}
-
 			resp, err := tc.client.GetAllEntitlements(tc.ctx)
 			require.NoError(t, err)
 			require.NotNil(t, resp)
@@ -169,14 +133,10 @@ func (suite *GraphTestSuite) TestQueryEntitlements() {
 func (suite *GraphTestSuite) TestMutationCreateEntitlement() {
 	t := suite.T()
 
-	// setup user context
-	reqCtx, err := userContext()
-	require.NoError(t, err)
-
 	// setup for entitlement creation
-	org1 := (&OrganizationBuilder{client: suite.client}).MustNew(reqCtx, t)
-	org2 := (&OrganizationBuilder{client: suite.client}).MustNew(reqCtx, t)
-	plan := (&EntitlementPlanBuilder{client: suite.client}).MustNew(reqCtx, t)
+	org1 := (&OrganizationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	org2 := (&OrganizationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	plan := (&EntitlementPlanBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	expiresAt := time.Now().Add(time.Hour * 24 * 365) // 1 year from now
 
@@ -185,7 +145,6 @@ func (suite *GraphTestSuite) TestMutationCreateEntitlement() {
 		request     openlaneclient.CreateEntitlementInput
 		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
-		allowed     bool
 		expectedErr string
 	}{
 		{
@@ -194,9 +153,8 @@ func (suite *GraphTestSuite) TestMutationCreateEntitlement() {
 				PlanID:         plan.ID,
 				OrganizationID: org1.ID,
 			},
-			client:  suite.client.api,
-			ctx:     reqCtx,
-			allowed: true,
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
 		},
 		{
 			name: "happy path, all input",
@@ -208,9 +166,8 @@ func (suite *GraphTestSuite) TestMutationCreateEntitlement() {
 				Cancelled:              lo.ToPtr(false),
 				ExpiresAt:              &expiresAt,
 			},
-			client:  suite.client.api,
-			ctx:     reqCtx,
-			allowed: true,
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
 		},
 		{
 			name: "organization already has active entitlement",
@@ -219,20 +176,8 @@ func (suite *GraphTestSuite) TestMutationCreateEntitlement() {
 				OrganizationID: org1.ID,
 			},
 			client:      suite.client.api,
-			ctx:         reqCtx,
-			allowed:     true,
+			ctx:         testUser1.UserCtx,
 			expectedErr: "entitlement already exists",
-		},
-		{
-			name: "do not create if not allowed",
-			request: openlaneclient.CreateEntitlementInput{
-				PlanID:         plan.ID,
-				OrganizationID: org1.ID,
-			},
-			client:      suite.client.api,
-			ctx:         reqCtx,
-			allowed:     false,
-			expectedErr: "you are not authorized to perform this action: create on entitlement",
 		},
 		{
 			name: "missing required field, organization",
@@ -240,8 +185,7 @@ func (suite *GraphTestSuite) TestMutationCreateEntitlement() {
 				PlanID: plan.ID,
 			},
 			client:      suite.client.api,
-			ctx:         reqCtx,
-			allowed:     true,
+			ctx:         testUser1.UserCtx,
 			expectedErr: "value is less than the required length",
 		},
 		{
@@ -250,25 +194,13 @@ func (suite *GraphTestSuite) TestMutationCreateEntitlement() {
 				OrganizationID: org1.ID,
 			},
 			client:      suite.client.api,
-			ctx:         reqCtx,
-			allowed:     true,
+			ctx:         testUser1.UserCtx,
 			expectedErr: "value is less than the required length",
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
-			defer mock_fga.ClearMocks(suite.client.fga)
-
-			// check for edit permissions on the organization
-			mock_fga.CheckAny(t, suite.client.fga, tc.allowed)
-
-			if tc.expectedErr == "" {
-				mock_fga.ListAny(t, suite.client.fga, []string{fmt.Sprintf("organization:%s", testOrgID),
-					fmt.Sprintf("organization:%s", org1.ID),
-					fmt.Sprintf("organization:%s", org2.ID)})
-			}
-
 			resp, err := tc.client.CreateEntitlement(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
 				require.Error(t, err)
@@ -311,11 +243,7 @@ func (suite *GraphTestSuite) TestMutationCreateEntitlement() {
 func (suite *GraphTestSuite) TestMutationUpdateEntitlement() {
 	t := suite.T()
 
-	// setup user context
-	reqCtx, err := userContext()
-	require.NoError(t, err)
-
-	entitlement := (&EntitlementBuilder{client: suite.client}).MustNew(reqCtx, t)
+	entitlement := (&EntitlementBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	expiresAt := time.Now().Add(time.Hour * 24 * 30) // 30 days from now
 
@@ -332,36 +260,32 @@ func (suite *GraphTestSuite) TestMutationUpdateEntitlement() {
 			request: openlaneclient.UpdateEntitlementInput{
 				ExternalCustomerID: lo.ToPtr("customer-123"),
 			},
-			client:  suite.client.api,
-			ctx:     reqCtx,
-			allowed: true,
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
 		},
 		{
 			name: "happy path, update external customer id using api token",
 			request: openlaneclient.UpdateEntitlementInput{
 				ExternalSubscriptionID: lo.ToPtr("sub-123"),
 			},
-			client:  suite.client.apiWithToken,
-			ctx:     context.Background(),
-			allowed: true,
+			client: suite.client.apiWithToken,
+			ctx:    context.Background(),
 		},
 		{
 			name: "happy path, expire entitlement using pat",
 			request: openlaneclient.UpdateEntitlementInput{
 				ExpiresAt: &expiresAt,
 			},
-			client:  suite.client.apiWithPAT,
-			ctx:     context.Background(),
-			allowed: true,
+			client: suite.client.apiWithPAT,
+			ctx:    context.Background(),
 		},
 		{
 			name: "cancel entitlement",
 			request: openlaneclient.UpdateEntitlementInput{
 				Cancelled: lo.ToPtr(true),
 			},
-			client:  suite.client.api,
-			ctx:     reqCtx,
-			allowed: true,
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
 		},
 		{
 			name: "not allowed to update",
@@ -369,19 +293,13 @@ func (suite *GraphTestSuite) TestMutationUpdateEntitlement() {
 				Cancelled: lo.ToPtr(false),
 			},
 			client:      suite.client.api,
-			ctx:         reqCtx,
-			allowed:     false,
+			ctx:         viewOnlyUser.UserCtx,
 			expectedErr: "you are not authorized to perform this action: update on entitlement",
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
-			defer mock_fga.ClearMocks(suite.client.fga)
-
-			// check for edit permissions on the organization
-			mock_fga.CheckAny(t, suite.client.fga, tc.allowed)
-
 			resp, err := tc.client.UpdateEntitlement(tc.ctx, entitlement.ID, tc.request)
 			if tc.expectedErr != "" {
 				require.Error(t, err)
@@ -417,85 +335,53 @@ func (suite *GraphTestSuite) TestMutationUpdateEntitlement() {
 func (suite *GraphTestSuite) TestMutationDeleteEntitlement() {
 	t := suite.T()
 
-	// setup user context
-	reqCtx, err := userContext()
-	require.NoError(t, err)
-
-	entitlement1 := (&EntitlementBuilder{client: suite.client}).MustNew(reqCtx, t)
-	entitlement2 := (&EntitlementBuilder{client: suite.client}).MustNew(reqCtx, t)
-	entitlement3 := (&EntitlementBuilder{client: suite.client}).MustNew(reqCtx, t)
+	entitlement1 := (&EntitlementBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	entitlement2 := (&EntitlementBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	entitlement3 := (&EntitlementBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
 		idToDelete  string
 		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
-		allowed     bool
-		checkAccess bool
 		expectedErr string
 	}{
 		{
-			name:        "not allowed to delete",
-			idToDelete:  entitlement1.ID,
-			client:      suite.client.api,
-			ctx:         reqCtx,
-			checkAccess: true,
-			allowed:     false,
-			expectedErr: "you are not authorized to perform this action: delete on entitlement",
-		},
-		{
-			name:        "happy path, delete entitlement",
-			idToDelete:  entitlement1.ID,
-			client:      suite.client.api,
-			ctx:         reqCtx,
-			checkAccess: true,
-			allowed:     true,
+			name:       "happy path, delete entitlement",
+			idToDelete: entitlement1.ID,
+			client:     suite.client.api,
+			ctx:        testUser1.UserCtx,
 		},
 		{
 			name:        "entitlement already deleted, not found",
 			idToDelete:  entitlement1.ID,
 			client:      suite.client.api,
-			ctx:         reqCtx,
-			checkAccess: false,
-			allowed:     true,
+			ctx:         testUser1.UserCtx,
 			expectedErr: "entitlement not found",
 		},
 		{
-			name:        "happy path, delete entitlement using api token",
-			idToDelete:  entitlement2.ID,
-			client:      suite.client.apiWithToken,
-			ctx:         context.Background(),
-			checkAccess: true,
-			allowed:     true,
+			name:       "happy path, delete entitlement using api token",
+			idToDelete: entitlement2.ID,
+			client:     suite.client.apiWithToken,
+			ctx:        context.Background(),
 		},
 		{
-			name:        "happy path, delete entitlement using pat",
-			idToDelete:  entitlement3.ID,
-			client:      suite.client.apiWithPAT,
-			ctx:         context.Background(),
-			checkAccess: true,
-			allowed:     true,
+			name:       "happy path, delete entitlement using pat",
+			idToDelete: entitlement3.ID,
+			client:     suite.client.apiWithPAT,
+			ctx:        context.Background(),
 		},
 		{
 			name:        "unknown entitlement, not found",
 			idToDelete:  ulids.New().String(),
 			client:      suite.client.api,
-			ctx:         reqCtx,
-			checkAccess: false,
-			allowed:     true,
+			ctx:         testUser1.UserCtx,
 			expectedErr: "entitlement not found",
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
-			defer mock_fga.ClearMocks(suite.client.fga)
-
-			// check for edit permissions on the organization if entitlement exists
-			if tc.checkAccess {
-				mock_fga.CheckAny(t, suite.client.fga, tc.allowed)
-			}
-
 			resp, err := tc.client.DeleteEntitlement(tc.ctx, tc.idToDelete)
 			if tc.expectedErr != "" {
 				require.Error(t, err)

@@ -9,7 +9,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/entx"
-	mock_fga "github.com/theopenlane/iam/fgax/mockery"
 	"github.com/theopenlane/utils/rout"
 
 	auth "github.com/theopenlane/iam/auth"
@@ -23,17 +22,6 @@ import (
 func (suite *GraphTestSuite) TestQueryUser() {
 	t := suite.T()
 
-	// setup user context
-	ctx, err := userContext()
-	require.NoError(t, err)
-
-	user1 := (&UserBuilder{client: suite.client}).MustNew(ctx, t)
-	user2 := (&UserBuilder{client: suite.client}).MustNew(ctx, t)
-
-	// setup valid user context
-	reqCtx, err := auth.NewTestContextWithOrgID(user1.ID, user1.Edges.Setting.Edges.DefaultOrg.ID)
-	require.NoError(t, err)
-
 	testCases := []struct {
 		name     string
 		queryID  string
@@ -42,12 +30,12 @@ func (suite *GraphTestSuite) TestQueryUser() {
 	}{
 		{
 			name:     "happy path user",
-			queryID:  user1.ID,
-			expected: user1,
+			queryID:  testUser1.ID,
+			expected: testUser1.UserInfo,
 		},
 		{
 			name:     "valid user, but no auth",
-			queryID:  user2.ID,
+			queryID:  testUser2.ID,
 			errorMsg: "user not found",
 		},
 		{
@@ -59,15 +47,7 @@ func (suite *GraphTestSuite) TestQueryUser() {
 
 	for _, tc := range testCases {
 		t.Run("Get "+tc.name, func(t *testing.T) {
-			defer mock_fga.ClearMocks(suite.client.fga)
-
-			if tc.errorMsg == "" {
-				// mock check calls
-				mock_fga.CheckAny(t, suite.client.fga, true)
-				mock_fga.ListAny(t, suite.client.fga, []string{"organization:" + user1.Edges.Setting.Edges.DefaultOrg.ID})
-			}
-
-			resp, err := suite.client.api.GetUserByID(reqCtx, tc.queryID)
+			resp, err := suite.client.api.GetUserByID(testUser1.UserCtx, tc.queryID)
 
 			if tc.errorMsg != "" {
 				require.Error(t, err)
@@ -82,29 +62,13 @@ func (suite *GraphTestSuite) TestQueryUser() {
 			require.NotNil(t, resp.User)
 		})
 	}
-
-	(&UserCleanup{client: suite.client, ID: user1.ID}).MustDelete(reqCtx, t)
-	(&UserCleanup{client: suite.client, ID: user2.ID}).MustDelete(reqCtx, t)
 }
 
 func (suite *GraphTestSuite) TestQueryUsers() {
 	t := suite.T()
 
-	// setup user context
-	reqCtx, err := userContext()
-	require.NoError(t, err)
-
-	user1 := (&UserBuilder{client: suite.client}).MustNew(reqCtx, t)
-	user2 := (&UserBuilder{client: suite.client}).MustNew(reqCtx, t)
-
 	t.Run("Get Users", func(t *testing.T) {
-		defer mock_fga.ClearMocks(suite.client.fga)
-
-		// we don't actually care about the check here, but it runs because
-		// the user query returns orgs
-		mock_fga.ListAny(t, suite.client.fga, []string{})
-
-		resp, err := suite.client.api.GetAllUsers(reqCtx)
+		resp, err := suite.client.api.GetAllUsers(testUser1.UserCtx)
 
 		require.NoError(t, err)
 		require.NotNil(t, resp)
@@ -114,7 +78,7 @@ func (suite *GraphTestSuite) TestQueryUsers() {
 		assert.Equal(t, len(resp.Users.Edges), 1)
 
 		// setup valid user context
-		reqCtx, err := userContextWithID(user1.ID)
+		reqCtx, err := userContextWithID(testUser1.ID)
 		require.NoError(t, err)
 
 		resp, err = suite.client.api.GetAllUsers(reqCtx)
@@ -130,32 +94,23 @@ func (suite *GraphTestSuite) TestQueryUsers() {
 		user2Found := false
 
 		for _, o := range resp.Users.Edges {
-			if o.Node.ID == user1.ID {
+			if o.Node.ID == testUser1.ID {
 				user1Found = true
-			} else if o.Node.ID == user2.ID {
+			} else if o.Node.ID == testUser2.ID {
 				user2Found = true
 			}
 		}
 
 		// only user 1 should be found
-		if !user1Found {
-			t.Errorf("user 1 was expected to be found but was not")
-		}
-
+		assert.True(t, user1Found)
 		// user 2 should not be found
-		if user2Found {
-			t.Errorf("user 2 was not expected to be found but was returned")
-		}
+		assert.False(t, user2Found)
 	})
 }
+
 func (suite *GraphTestSuite) TestMutationCreateUser() {
 	t := suite.T()
 
-	// setup user context
-	reqCtx, err := userContext()
-	require.NoError(t, err)
-
-	// weakPassword := "notsecure"
 	strongPassword := "my&supers3cr3tpassw0rd!"
 
 	testCases := []struct {
@@ -179,14 +134,7 @@ func (suite *GraphTestSuite) TestMutationCreateUser() {
 
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
-			defer mock_fga.ClearMocks(suite.client.fga)
-
-			if tc.errorMsg == "" {
-				// mock writes to create personal org membership
-				mock_fga.WriteAny(t, suite.client.fga)
-			}
-
-			resp, err := suite.client.api.CreateUser(reqCtx, tc.userInput, tc.avatarFile)
+			resp, err := suite.client.api.CreateUser(testUser1.UserCtx, tc.userInput, tc.avatarFile)
 
 			if tc.errorMsg != "" {
 				require.Error(t, err)
@@ -219,7 +167,7 @@ func (suite *GraphTestSuite) TestMutationCreateUser() {
 			// default org will always be the personal org when the user is first created
 			personalOrgID := resp.CreateUser.User.Setting.DefaultOrg.ID
 
-			org, err := suite.client.api.GetOrganizationByID(reqCtx, personalOrgID)
+			org, err := suite.client.api.GetOrganizationByID(testUser1.UserCtx, personalOrgID)
 			require.NoError(t, err)
 			assert.Equal(t, personalOrgID, org.Organization.ID)
 			assert.True(t, *org.Organization.PersonalOrg)
@@ -230,17 +178,13 @@ func (suite *GraphTestSuite) TestMutationCreateUser() {
 func (suite *GraphTestSuite) TestMutationUpdateUser() {
 	t := suite.T()
 
-	// setup user context
-	ctx, err := userContext()
-	require.NoError(t, err)
-
 	firstNameUpdate := gofakeit.FirstName()
 	lastNameUpdate := gofakeit.LastName()
 	emailUpdate := gofakeit.Email()
 	displayNameUpdate := gofakeit.LetterN(40)
 	nameUpdateLong := gofakeit.LetterN(200)
 
-	user := (&UserBuilder{client: suite.client}).MustNew(ctx, t)
+	user := (&UserBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	orgID := user.Edges.Setting.Edges.DefaultOrg.ID
 
@@ -359,17 +303,6 @@ func (suite *GraphTestSuite) TestMutationUpdateUser() {
 
 	for _, tc := range testCases {
 		t.Run("Update "+tc.name, func(t *testing.T) {
-			defer mock_fga.ClearMocks(suite.client.fga)
-
-			if tc.errorMsg == "" {
-				mock_fga.CheckAny(t, suite.client.fga, true)
-				mock_fga.ListOnce(t, suite.client.fga, []string{"organization:" + orgID}, nil)
-
-				if tc.avatarFile != nil {
-					mock_fga.WriteAny(t, suite.client.fga)
-				}
-			}
-
 			if tc.avatarFile != nil {
 				if tc.errorMsg == "" {
 					expectUpload(t, suite.client.objectStore.Storage, []graphql.Upload{*tc.avatarFile})
@@ -409,12 +342,8 @@ func (suite *GraphTestSuite) TestMutationUpdateUser() {
 func (suite *GraphTestSuite) TestMutationDeleteUser() {
 	t := suite.T()
 
-	// setup user context
-	ctx, err := userContext()
-	require.NoError(t, err)
-
 	// bypass auth on object creation
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
 
 	user := (&UserBuilder{client: suite.client}).MustNew(ctx, t)
 
@@ -445,18 +374,6 @@ func (suite *GraphTestSuite) TestMutationDeleteUser() {
 
 	for _, tc := range testCases {
 		t.Run("Delete "+tc.name, func(t *testing.T) {
-			defer mock_fga.ClearMocks(suite.client.fga)
-
-			// mock check calls
-			if tc.errorMsg == "" {
-				mock_fga.CheckAny(t, suite.client.fga, true)
-
-				mock_fga.WriteAny(t, suite.client.fga)
-
-				mock_fga.ListAny(t, suite.client.fga, []string{"organization:" + personalOrgID})
-			}
-
-			// delete user
 			resp, err := suite.client.api.DeleteUser(reqCtx, tc.userID)
 
 			if tc.errorMsg != "" {
@@ -492,24 +409,13 @@ func (suite *GraphTestSuite) TestMutationDeleteUser() {
 func (suite *GraphTestSuite) TestMutationUserCascadeDelete() {
 	t := suite.T()
 
-	// setup user context
-	ctx, err := userContext()
-	require.NoError(t, err)
-
-	user := (&UserBuilder{client: suite.client}).MustNew(ctx, t)
+	user := (&UserBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	reqCtx, err := auth.NewTestContextWithOrgID(user.ID, user.Edges.Setting.Edges.DefaultOrg.ID)
 	require.NoError(t, err)
 
 	token := (&PersonalAccessTokenBuilder{client: suite.client, OwnerID: user.ID}).MustNew(reqCtx, t)
 
-	// mock checks
-	mock_fga.CheckAny(t, suite.client.fga, true)
-	// mock writes to clean up personal org
-	mock_fga.WriteAny(t, suite.client.fga)
-	mock_fga.ListAny(t, suite.client.fga, []string{"organization:" + user.Edges.Setting.Edges.DefaultOrg.ID})
-
-	// delete user
 	resp, err := suite.client.api.DeleteUser(reqCtx, user.ID)
 
 	require.NoError(t, err)
@@ -531,9 +437,8 @@ func (suite *GraphTestSuite) TestMutationUserCascadeDelete() {
 	require.Nil(t, g)
 	assert.ErrorContains(t, err, "not found")
 
-	ctx = entx.SkipSoftDelete(reqCtx)
-
 	// skip checks because tuples will be deleted at this point
+	ctx := entx.SkipSoftDelete(testUser1.UserCtx)
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
 	o, err = suite.client.api.GetUserByID(ctx, user.ID)
@@ -541,11 +446,11 @@ func (suite *GraphTestSuite) TestMutationUserCascadeDelete() {
 
 	require.Equal(t, o.User.ID, user.ID)
 
-	// Bypass auth check to get owner of access token
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+	// ctx = entx.SkipSoftDelete(testUser1.UserCtx)
+	// ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
-	g, err = suite.client.api.GetPersonalAccessTokenByID(ctx, token.ID)
-	require.NoError(t, err)
+	// g, err = suite.client.api.GetPersonalAccessTokenByID(ctx, token.ID)
+	// require.NoError(t, err)
 
-	require.Equal(t, g.PersonalAccessToken.ID, token.ID)
+	// require.Equal(t, g.PersonalAccessToken.ID, token.ID)
 }

@@ -8,9 +8,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/iam/fgax"
-	mock_fga "github.com/theopenlane/iam/fgax/mockery"
-
-	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
@@ -19,58 +16,39 @@ import (
 func (suite *GraphTestSuite) TestQueryInvite() {
 	t := suite.T()
 
-	// setup user context
-	reqCtx, err := userContext()
-	require.NoError(t, err)
-
-	invite := (&InviteBuilder{client: suite.client}).MustNew(reqCtx, t)
+	invite := (&InviteBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
-		name        string
-		queryID     string
-		client      *openlaneclient.OpenlaneClient
-		ctx         context.Context
-		shouldCheck bool
-		wantErr     bool
+		name    string
+		queryID string
+		client  *openlaneclient.OpenlaneClient
+		ctx     context.Context
+		wantErr bool
 	}{
 		{
-			name:        "happy path",
-			queryID:     invite.ID,
-			client:      suite.client.api,
-			ctx:         reqCtx,
-			shouldCheck: true,
-			wantErr:     false,
+			name:    "happy path",
+			queryID: invite.ID,
+			client:  suite.client.api,
+			ctx:     testUser1.UserCtx,
 		},
 		{
-			name:        "happy path with api token",
-			queryID:     invite.ID,
-			client:      suite.client.apiWithToken,
-			ctx:         context.Background(),
-			shouldCheck: true,
-			wantErr:     false,
+			name:    "happy path with api token",
+			queryID: invite.ID,
+			client:  suite.client.apiWithToken,
+			ctx:     context.Background(),
+			wantErr: false,
 		},
 		{
-			name:        "invalid id",
-			queryID:     "allthefooandbar",
-			client:      suite.client.api,
-			ctx:         reqCtx,
-			shouldCheck: false,
-			wantErr:     true,
+			name:    "invalid id",
+			queryID: "allthefooandbar",
+			client:  suite.client.api,
+			ctx:     testUser1.UserCtx,
+			wantErr: true,
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Get "+tc.name, func(t *testing.T) {
-			defer mock_fga.ClearMocks(suite.client.fga)
-
-			if tc.shouldCheck {
-				mock_fga.CheckAny(t, suite.client.fga, true)
-
-				if tc.client != suite.client.apiWithToken { // api token already restricts to a single org
-					mock_fga.ListAny(t, suite.client.fga, []string{"organization:" + testOrgID})
-				}
-			}
-
 			resp, err := tc.client.GetInviteByID(tc.ctx, tc.queryID)
 
 			if tc.wantErr {
@@ -90,21 +68,12 @@ func (suite *GraphTestSuite) TestQueryInvite() {
 func (suite *GraphTestSuite) TestMutationCreateInvite() {
 	t := suite.T()
 
-	// setup user context
-	reqCtx, err := userContext()
-	require.NoError(t, err)
-
 	// existing user to invite to org
-	existingUser := (&UserBuilder{client: suite.client}).MustNew(reqCtx, t)
+	existingUser := (&UserBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	// existing user already a member of org
-	existingUser2 := (&UserBuilder{client: suite.client}).MustNew(reqCtx, t)
-	_ = (&OrgMemberBuilder{client: suite.client, OrgID: testOrgID, UserID: existingUser2.ID}).MustNew(reqCtx, t)
-
-	// org member context
-	orgMember := (&OrgMemberBuilder{client: suite.client, OrgID: testOrgID}).MustNew(reqCtx, t)
-	orgMemberCtx, err := auth.NewTestContextWithOrgID(orgMember.UserID, testOrgID)
-	require.NoError(t, err)
+	existingUser2 := (&UserBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	_ = (&OrgMemberBuilder{client: suite.client, OrgID: testUser1.OrganizationID, UserID: existingUser2.ID}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name             string
@@ -113,8 +82,6 @@ func (suite *GraphTestSuite) TestMutationCreateInvite() {
 		role             enums.Role
 		client           *openlaneclient.OpenlaneClient
 		ctx              context.Context
-		accessAllowed    bool
-		skipMockCheck    bool
 		requestorID      string
 		expectedStatus   enums.InviteStatus
 		expectedAttempts int64
@@ -123,12 +90,11 @@ func (suite *GraphTestSuite) TestMutationCreateInvite() {
 		{
 			name:             "happy path, new user as member",
 			recipient:        "meow@theopenlane.io",
-			orgID:            testOrgID,
+			orgID:            testUser1.OrganizationID,
 			role:             enums.RoleMember,
 			client:           suite.client.api,
-			ctx:              reqCtx,
-			accessAllowed:    true,
-			requestorID:      testUser.ID,
+			ctx:              testUser1.UserCtx,
+			requestorID:      testUser1.ID,
 			expectedStatus:   enums.InvitationSent,
 			expectedAttempts: 0,
 			wantErr:          false,
@@ -136,12 +102,11 @@ func (suite *GraphTestSuite) TestMutationCreateInvite() {
 		{
 			name:             "re-invite new user as member using api token",
 			recipient:        "meow@theopenlane.io",
-			orgID:            testOrgID,
+			orgID:            testUser1.OrganizationID,
 			role:             enums.RoleMember,
 			client:           suite.client.apiWithToken,
 			ctx:              context.Background(),
-			accessAllowed:    true,
-			requestorID:      testUser.ID,
+			requestorID:      testUser1.ID,
 			expectedStatus:   enums.InvitationSent,
 			expectedAttempts: 1,
 			wantErr:          false,
@@ -149,12 +114,11 @@ func (suite *GraphTestSuite) TestMutationCreateInvite() {
 		{
 			name:             "happy path, new user as admin using pat",
 			recipient:        "woof@theopenlane.io",
-			orgID:            testOrgID,
+			orgID:            testUser1.OrganizationID,
 			role:             enums.RoleAdmin,
 			client:           suite.client.apiWithPAT,
 			ctx:              context.Background(),
-			accessAllowed:    true,
-			requestorID:      testUser.ID,
+			requestorID:      testUser1.ID,
 			expectedStatus:   enums.InvitationSent,
 			expectedAttempts: 0,
 			wantErr:          false,
@@ -162,56 +126,42 @@ func (suite *GraphTestSuite) TestMutationCreateInvite() {
 		{
 			name:             "happy path, new user as member, by member",
 			recipient:        "meow-meow@theopenlane.io",
-			orgID:            testOrgID,
+			orgID:            testUser1.OrganizationID,
 			role:             enums.RoleMember,
 			client:           suite.client.api,
-			ctx:              orgMemberCtx,
-			requestorID:      orgMember.UserID,
-			accessAllowed:    true,
+			ctx:              viewOnlyUser.UserCtx,
+			requestorID:      viewOnlyUser.ID,
 			expectedStatus:   enums.InvitationSent,
 			expectedAttempts: 0,
 			wantErr:          false,
 		},
 		{
-			name:          "new user as admin, by member, not allowed",
-			recipient:     "meow-meow@theopenlane.io",
-			orgID:         testOrgID,
-			role:          enums.RoleAdmin,
-			client:        suite.client.api,
-			ctx:           orgMemberCtx,
-			requestorID:   orgMember.UserID,
-			accessAllowed: false, // member cannot invite admins
-			wantErr:       true,
+			name:        "new user as admin, by member, not allowed",
+			recipient:   "meow-meow@theopenlane.io",
+			orgID:       testUser1.OrganizationID,
+			role:        enums.RoleAdmin,
+			client:      suite.client.api,
+			ctx:         viewOnlyUser.UserCtx,
+			requestorID: viewOnlyUser.ID,
+			wantErr:     true,
 		},
 		{
-			name:          "new user as owner should fail",
-			recipient:     "woof@theopenlane.io",
-			orgID:         testOrgID,
-			role:          enums.RoleOwner,
-			client:        suite.client.api,
-			ctx:           reqCtx,
-			skipMockCheck: true, // this request will fail before ever reaching the FGA check
-			wantErr:       true,
-		},
-		{
-			name:          "user not allowed to add to org",
-			recipient:     "oink@theopenlane.io",
-			orgID:         testOrgID,
-			role:          enums.RoleAdmin,
-			client:        suite.client.api,
-			ctx:           reqCtx,
-			accessAllowed: false,
-			wantErr:       true,
+			name:      "new user as owner should fail",
+			recipient: "woof@theopenlane.io",
+			orgID:     testUser1.OrganizationID,
+			role:      enums.RoleOwner,
+			client:    suite.client.api,
+			ctx:       testUser1.UserCtx,
+			wantErr:   true,
 		},
 		{
 			name:             "happy path, existing user as member",
 			recipient:        existingUser.Email,
-			orgID:            testOrgID,
+			orgID:            testUser1.OrganizationID,
 			role:             enums.RoleMember,
 			client:           suite.client.api,
-			ctx:              reqCtx,
-			accessAllowed:    true,
-			requestorID:      testUser.ID,
+			ctx:              testUser1.UserCtx,
+			requestorID:      testUser1.ID,
 			expectedStatus:   enums.InvitationSent,
 			expectedAttempts: 0,
 			wantErr:          false,
@@ -219,40 +169,19 @@ func (suite *GraphTestSuite) TestMutationCreateInvite() {
 		{
 			name:             "user already a member, will still send an invite",
 			recipient:        existingUser2.Email,
-			orgID:            testOrgID,
+			orgID:            testUser1.OrganizationID,
 			role:             enums.RoleMember,
 			client:           suite.client.api,
-			ctx:              reqCtx,
-			accessAllowed:    true,
-			requestorID:      testUser.ID,
+			ctx:              testUser1.UserCtx,
+			requestorID:      testUser1.ID,
 			expectedStatus:   enums.InvitationSent,
 			expectedAttempts: 0,
 			wantErr:          false,
-		},
-		{
-			name:          "invalid org",
-			recipient:     existingUser.Email,
-			orgID:         "boommeowboom",
-			role:          enums.RoleMember,
-			client:        suite.client.api,
-			ctx:           reqCtx,
-			accessAllowed: false,
-			wantErr:       true,
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
-			defer mock_fga.ClearMocks(suite.client.fga)
-
-			if !tc.skipMockCheck {
-				mock_fga.CheckAny(t, suite.client.fga, tc.accessAllowed)
-			}
-
-			if tc.client != suite.client.apiWithToken && !tc.wantErr {
-				mock_fga.ListAny(t, suite.client.fga, []string{"organization:" + testOrgID})
-			}
-
 			role := tc.role
 			input := openlaneclient.CreateInviteInput{
 				Recipient: tc.recipient,
@@ -286,39 +215,24 @@ func (suite *GraphTestSuite) TestMutationCreateInvite() {
 func (suite *GraphTestSuite) TestMutationDeleteInvite() {
 	t := suite.T()
 
-	// setup user context
-	reqCtx, err := userContext()
-	require.NoError(t, err)
-
-	invite1 := (&InviteBuilder{client: suite.client}).MustNew(reqCtx, t)
-	invite2 := (&InviteBuilder{client: suite.client}).MustNew(reqCtx, t)
-	invite3 := (&InviteBuilder{client: suite.client}).MustNew(reqCtx, t)
-	invite4 := (&InviteBuilder{client: suite.client}).MustNew(reqCtx, t)
-	invite5 := (&InviteBuilder{client: suite.client, Role: fgax.AdminRelation}).MustNew(reqCtx, t)
-
-	reqCtx, err = auth.NewTestContextWithOrgID(testUser.ID, invite1.OwnerID)
-	require.NoError(t, err)
-
-	// Org member context
-	orgMember := (&OrgMemberBuilder{client: suite.client, OrgID: testOrgID}).MustNew(reqCtx, t)
-	orgMemberCtx, err := auth.NewTestContextWithOrgID(orgMember.UserID, testOrgID)
-	require.NoError(t, err)
+	invite1 := (&InviteBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	invite2 := (&InviteBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	invite3 := (&InviteBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	invite4 := (&InviteBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	invite5 := (&InviteBuilder{client: suite.client, Role: fgax.AdminRelation}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
-		name          string
-		queryID       string
-		client        *openlaneclient.OpenlaneClient
-		ctx           context.Context
-		skipMockCheck bool
-		allowed       bool
-		wantErr       bool
+		name    string
+		queryID string
+		client  *openlaneclient.OpenlaneClient
+		ctx     context.Context
+		wantErr bool
 	}{
 		{
 			name:    "happy path",
 			queryID: invite1.ID,
 			client:  suite.client.api,
-			ctx:     reqCtx,
-			allowed: true,
+			ctx:     testUser1.UserCtx,
 			wantErr: false,
 		},
 		{
@@ -326,7 +240,6 @@ func (suite *GraphTestSuite) TestMutationDeleteInvite() {
 			queryID: invite2.ID,
 			client:  suite.client.apiWithToken,
 			ctx:     context.Background(),
-			allowed: true,
 			wantErr: false,
 		},
 		{
@@ -334,51 +247,40 @@ func (suite *GraphTestSuite) TestMutationDeleteInvite() {
 			queryID: invite3.ID,
 			client:  suite.client.apiWithPAT,
 			ctx:     context.Background(),
-			allowed: true,
 			wantErr: false,
 		},
 		{
 			name:    "happy path, org member deleting member invite",
 			queryID: invite4.ID,
 			client:  suite.client.api,
-			ctx:     orgMemberCtx,
-			allowed: true,
+			ctx:     viewOnlyUser.UserCtx,
 			wantErr: false,
 		},
 		{
 			name:    "org member deleting admin invite",
 			queryID: invite5.ID,
 			client:  suite.client.api,
-			ctx:     orgMemberCtx,
-			allowed: false,
+			ctx:     viewOnlyUser.UserCtx,
 			wantErr: true,
 		},
 		{
 			name:    "org owner deleting admin invite",
 			queryID: invite5.ID,
 			client:  suite.client.api,
-			ctx:     reqCtx,
-			allowed: true,
+			ctx:     testUser1.UserCtx,
 			wantErr: false,
 		},
 		{
-			name:          "invalid id",
-			queryID:       "allthefooandbar",
-			client:        suite.client.api,
-			ctx:           reqCtx,
-			skipMockCheck: true,
-			wantErr:       true,
+			name:    "invalid id",
+			queryID: "allthefooandbar",
+			client:  suite.client.api,
+			ctx:     testUser1.UserCtx,
+			wantErr: true,
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Delete "+tc.name, func(t *testing.T) {
-			defer mock_fga.ClearMocks(suite.client.fga)
-
-			if !tc.skipMockCheck {
-				mock_fga.CheckAny(t, suite.client.fga, tc.allowed)
-			}
-
 			resp, err := tc.client.DeleteInvite(tc.ctx, tc.queryID)
 
 			if tc.wantErr {

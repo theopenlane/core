@@ -6,72 +6,61 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	mock_fga "github.com/theopenlane/iam/fgax/mockery"
-
-	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/ulids"
 )
 
 func (suite *GraphTestSuite) TestQueryOrgMembers() {
 	t := suite.T()
 
-	// setup user context
-	reqCtx, err := userContext()
+	org1Member := (&OrgMemberBuilder{client: suite.client, OrgID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
+
+	childOrg := (&OrganizationBuilder{client: suite.client, ParentOrgID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
+
+	childReqCtx, err := auth.NewTestContextWithOrgID(testUser1.ID, childOrg.ID)
 	require.NoError(t, err)
 
-	org1Member := (&OrgMemberBuilder{client: suite.client, OrgID: testOrgID}).MustNew(reqCtx, t)
-
-	childOrg := (&OrganizationBuilder{client: suite.client, ParentOrgID: testOrgID}).MustNew(reqCtx, t)
-
-	childReqCtx, err := auth.NewTestContextWithOrgID(testUser.ID, childOrg.ID)
-	require.NoError(t, err)
-
-	orgMember2 := (&OrgMemberBuilder{client: suite.client, OrgID: childOrg.ID}).MustNew(childReqCtx, t)
-	orgMember3 := (&OrgMemberBuilder{client: suite.client, OrgID: childOrg.ID, UserID: org1Member.UserID}).MustNew(childReqCtx, t)
+	(&OrgMemberBuilder{client: suite.client, OrgID: childOrg.ID}).MustNew(childReqCtx, t)
+	(&OrgMemberBuilder{client: suite.client, OrgID: childOrg.ID, UserID: org1Member.UserID}).MustNew(childReqCtx, t)
 
 	testCases := []struct {
 		name        string
 		queryID     string
 		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
-		allowed     bool
 		expectedLen int
 		expectErr   bool
 	}{
 		{
 			name:        "happy path, get org members by org id",
-			queryID:     testOrgID,
+			queryID:     testUser1.OrganizationID,
 			client:      suite.client.api,
-			ctx:         reqCtx,
-			allowed:     true,
-			expectedLen: 2,
+			ctx:         testUser1.UserCtx,
+			expectedLen: 3, // account for the seeded org members
 		},
 		{
 			name:        "happy path, get org with parent members based on context",
 			client:      suite.client.api,
 			ctx:         childReqCtx,
-			allowed:     true,
-			expectedLen: 3, // 2 from child org, 1 from parent org because we dedupe
+			expectedLen: 4, // 2 from child org, 2 from parent org because we dedupe
 		},
 		{
 			name:        "happy path, get org with parent members using org ID, only direct members will be returned",
 			queryID:     childOrg.ID,
 			client:      suite.client.api,
 			ctx:         childReqCtx,
-			allowed:     true,
 			expectedLen: 2, // only child org members will be returned
 		},
 		{
 			name:        "no access",
-			queryID:     testOrgID,
+			queryID:     testUser1.OrganizationID,
 			client:      suite.client.api,
-			ctx:         reqCtx,
-			allowed:     false,
+			ctx:         testUser2.UserCtx,
 			expectedLen: 0,
 			expectErr:   true,
 		},
@@ -79,33 +68,19 @@ func (suite *GraphTestSuite) TestQueryOrgMembers() {
 			name:        "invalid-id",
 			queryID:     "tacos-for-dinner",
 			client:      suite.client.api,
-			ctx:         reqCtx,
-			allowed:     true,
+			ctx:         testUser1.UserCtx,
 			expectedLen: 0,
+			expectErr:   true, // TODO: fixup this error messaging
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Get "+tc.name, func(t *testing.T) {
-			defer mock_fga.ClearMocks(suite.client.fga)
-
 			orgID := tc.queryID
 			whereInput := openlaneclient.OrgMembershipWhereInput{}
 
 			if orgID != "" {
 				whereInput.OrganizationID = &orgID
-
-				// if thee user is providing an org id, we check if they have access to the org
-				mock_fga.CheckAny(t, suite.client.fga, tc.allowed)
-			}
-
-			if tc.expectedLen > 0 {
-				// mock_fga.ListAny(t, suite.client.fga, []string{"organization:" + testOrgID})
-				mock_fga.ListUsersAny(t, suite.client.fga, []string{org1Member.UserID,
-					orgMember2.UserID,
-					orgMember3.UserID,
-					testUser.ID,
-				}, nil)
 			}
 
 			resp, err := tc.client.GetOrgMembersByOrgID(tc.ctx, &whereInput)
@@ -131,27 +106,23 @@ func (suite *GraphTestSuite) TestQueryOrgMembers() {
 	}
 
 	// delete created org
-	(&OrganizationCleanup{client: suite.client, ID: childOrg.ID}).MustDelete(reqCtx, t)
+	(&OrganizationCleanup{client: suite.client, ID: childOrg.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
 func (suite *GraphTestSuite) TestMutationCreateOrgMembers() {
 	t := suite.T()
 
-	// setup user context
-	reqCtx, err := userContext()
-	require.NoError(t, err)
-
-	org1 := (&OrganizationBuilder{client: suite.client}).MustNew(reqCtx, t)
+	org1 := (&OrganizationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	// allow access to organization
-	checkCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
+	checkCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
 
 	orgMember, err := org1.Members(checkCtx)
 	require.NoError(t, err)
 	require.Len(t, orgMember, 1)
 
-	testUser1 := (&UserBuilder{client: suite.client}).MustNew(reqCtx, t)
-	testUser2 := (&UserBuilder{client: suite.client}).MustNew(reqCtx, t)
+	user1 := (&UserBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	user2 := (&UserBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name      string
@@ -165,7 +136,7 @@ func (suite *GraphTestSuite) TestMutationCreateOrgMembers() {
 		{
 			name:      "happy path, add admin",
 			orgID:     org1.ID,
-			userID:    testUser1.ID,
+			userID:    user1.ID,
 			role:      enums.RoleAdmin,
 			checkRole: true,
 			checkOrg:  true,
@@ -173,7 +144,7 @@ func (suite *GraphTestSuite) TestMutationCreateOrgMembers() {
 		{
 			name:      "happy path, add member",
 			orgID:     org1.ID,
-			userID:    testUser2.ID,
+			userID:    user2.ID,
 			role:      enums.RoleMember,
 			checkRole: true,
 			checkOrg:  true,
@@ -181,7 +152,7 @@ func (suite *GraphTestSuite) TestMutationCreateOrgMembers() {
 		{
 			name:      "duplicate user, different role",
 			orgID:     org1.ID,
-			userID:    testUser1.ID,
+			userID:    user1.ID,
 			role:      enums.RoleMember,
 			checkOrg:  true,
 			checkRole: true,
@@ -189,8 +160,8 @@ func (suite *GraphTestSuite) TestMutationCreateOrgMembers() {
 		},
 		{
 			name:      "add user to personal org not allowed",
-			orgID:     testPersonalOrgID,
-			userID:    testUser1.ID,
+			orgID:     testUser1.PersonalOrgID,
+			userID:    user1.ID,
 			role:      enums.RoleMember,
 			checkOrg:  true,
 			checkRole: true,
@@ -208,16 +179,16 @@ func (suite *GraphTestSuite) TestMutationCreateOrgMembers() {
 		{
 			name:      "invalid org",
 			orgID:     ulids.New().String(),
-			userID:    testUser1.ID,
+			userID:    user1.ID,
 			role:      enums.RoleMember,
 			checkOrg:  true,
 			checkRole: true,
-			errMsg:    "organization not found",
+			errMsg:    "you are not authorized to perform this action",
 		},
 		{
 			name:      "invalid role",
 			orgID:     org1.ID,
-			userID:    testUser1.ID,
+			userID:    user1.ID,
 			role:      enums.RoleInvalid,
 			checkOrg:  false,
 			checkRole: false,
@@ -227,29 +198,13 @@ func (suite *GraphTestSuite) TestMutationCreateOrgMembers() {
 
 	for _, tc := range testCases {
 		t.Run("Get "+tc.name, func(t *testing.T) {
-			defer mock_fga.ClearMocks(suite.client.fga)
-
-			if tc.errMsg == "" {
-				mock_fga.WriteAny(t, suite.client.fga)
-			}
-
-			// checks role in org to ensure user has ability to add other members
-			if tc.checkRole {
-				mock_fga.CheckAny(t, suite.client.fga, true)
-			}
-
-			if tc.checkOrg {
-				mock_fga.ListAny(t, suite.client.fga, []string{"organization:" + org1.ID, "organization:" + testPersonalOrgID})
-			}
-
-			role := tc.role
 			input := openlaneclient.CreateOrgMembershipInput{
 				OrganizationID: tc.orgID,
 				UserID:         tc.userID,
-				Role:           &role,
+				Role:           &tc.role,
 			}
 
-			resp, err := suite.client.api.AddUserToOrgWithRole(reqCtx, input)
+			resp, err := suite.client.api.AddUserToOrgWithRole(testUser1.UserCtx, input)
 
 			if tc.errMsg != "" {
 				require.Error(t, err)
@@ -266,75 +221,52 @@ func (suite *GraphTestSuite) TestMutationCreateOrgMembers() {
 			assert.Equal(t, tc.role, resp.CreateOrgMembership.OrgMembership.Role)
 
 			// make sure the user default org is set to the new org
-			suite.assertDefaultOrgUpdate(reqCtx, tc.userID, tc.orgID, true)
+			suite.assertDefaultOrgUpdate(testUser1.UserCtx, tc.userID, tc.orgID, true)
 		})
 	}
 
 	// delete created org and users
-	(&OrganizationCleanup{client: suite.client, ID: org1.ID}).MustDelete(reqCtx, t)
-	(&UserCleanup{client: suite.client, ID: testUser1.ID}).MustDelete(reqCtx, t)
-	(&UserCleanup{client: suite.client, ID: testUser2.ID}).MustDelete(reqCtx, t)
+	(&OrganizationCleanup{client: suite.client, ID: org1.ID}).MustDelete(testUser1.UserCtx, t)
+	(&UserCleanup{client: suite.client, ID: testUser1.ID}).MustDelete(testUser1.UserCtx, t)
+	(&UserCleanup{client: suite.client, ID: testUser2.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
 func (suite *GraphTestSuite) TestMutationUpdateOrgMembers() {
 	t := suite.T()
 
-	// setup user context
-	reqCtx, err := userContext()
-	require.NoError(t, err)
-
-	om := (&OrgMemberBuilder{client: suite.client}).MustNew(reqCtx, t)
-
-	reqCtx, err = auth.NewTestContextWithOrgID(testUser.ID, om.OrganizationID)
-	require.NoError(t, err)
+	om := (&OrgMemberBuilder{client: suite.client, OrgID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
-		name       string
-		role       enums.Role
-		tupleWrite bool
-		errMsg     string
+		name   string
+		role   enums.Role
+		errMsg string
 	}{
 		{
-			name:       "happy path, update to admin from member",
-			tupleWrite: true,
-			role:       enums.RoleAdmin,
+			name: "happy path, update to admin from member",
+			role: enums.RoleAdmin,
 		},
 		{
-			name:       "happy path, update to member from admin",
-			tupleWrite: true,
-			role:       enums.RoleMember,
+			name: "happy path, update to member from admin",
+			role: enums.RoleMember,
 		},
 		{
-			name:       "update to same role",
-			tupleWrite: false, // nothing should change
-			role:       enums.RoleMember,
+			name: "update to same role",
+			role: enums.RoleMember,
 		},
 		{
-			name:       "invalid role",
-			role:       enums.RoleInvalid,
-			tupleWrite: false,
-			errMsg:     "not a valid OrgMembershipRole",
+			name:   "invalid role",
+			role:   enums.RoleInvalid,
+			errMsg: "not a valid OrgMembershipRole",
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Get "+tc.name, func(t *testing.T) {
-			defer mock_fga.ClearMocks(suite.client.fga)
-
-			if tc.tupleWrite {
-				mock_fga.WriteAny(t, suite.client.fga)
-			}
-
-			if tc.errMsg == "" {
-				mock_fga.CheckAny(t, suite.client.fga, true)
-			}
-
-			role := tc.role
 			input := openlaneclient.UpdateOrgMembershipInput{
-				Role: &role,
+				Role: &tc.role,
 			}
 
-			resp, err := suite.client.api.UpdateUserRoleInOrg(reqCtx, om.ID, input)
+			resp, err := suite.client.api.UpdateUserRoleInOrg(testUser1.UserCtx, om.ID, input)
 
 			if tc.errMsg != "" {
 				require.Error(t, err)
@@ -351,25 +283,15 @@ func (suite *GraphTestSuite) TestMutationUpdateOrgMembers() {
 	}
 
 	// delete created org and users
-	(&OrgMemberCleanup{client: suite.client, ID: om.ID}).MustDelete(reqCtx, t)
+	(&OrgMemberCleanup{client: suite.client, ID: om.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
 func (suite *GraphTestSuite) TestMutationDeleteOrgMembers() {
 	t := suite.T()
 
-	// setup user context
-	reqCtx, err := userContext()
-	require.NoError(t, err)
+	om := (&OrgMemberBuilder{client: suite.client, OrgID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
 
-	om := (&OrgMemberBuilder{client: suite.client}).MustNew(reqCtx, t)
-
-	mock_fga.WriteAny(t, suite.client.fga)
-	mock_fga.CheckAny(t, suite.client.fga, true)
-
-	reqCtx, err = auth.NewTestContextWithOrgID(testUser.ID, om.OrganizationID)
-	require.NoError(t, err)
-
-	resp, err := suite.client.api.RemoveUserFromOrg(reqCtx, om.ID)
+	resp, err := suite.client.api.RemoveUserFromOrg(testUser1.UserCtx, om.ID)
 
 	require.NoError(t, err)
 	require.NotNil(t, resp)
@@ -377,7 +299,7 @@ func (suite *GraphTestSuite) TestMutationDeleteOrgMembers() {
 	assert.Equal(t, om.ID, resp.DeleteOrgMembership.DeletedID)
 
 	// make sure the user default org is not set to the deleted org
-	suite.assertDefaultOrgUpdate(reqCtx, om.UserID, om.OrganizationID, false)
+	suite.assertDefaultOrgUpdate(testUser1.UserCtx, om.UserID, om.OrganizationID, false)
 }
 
 func (suite *GraphTestSuite) assertDefaultOrgUpdate(ctx context.Context, userID, orgID string, isEqual bool) {

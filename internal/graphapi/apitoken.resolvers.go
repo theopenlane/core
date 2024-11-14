@@ -121,6 +121,10 @@ func (r *queryResolver) APIToken(ctx context.Context, id string) (*generated.API
 			return nil, err
 		}
 
+		if errors.Is(err, privacy.Deny) {
+			return nil, newPermissionDeniedError(ActionGet, "api token")
+		}
+
 		log.Error().Err(err).Msg("failed to get api token")
 
 		return nil, ErrInternalServerError

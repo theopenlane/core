@@ -8,6 +8,9 @@ import (
 	"entgo.io/ent"
 	goUpper "github.com/99designs/gqlgen/codegen/templates"
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/rs/zerolog/log"
+	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 )
 
@@ -185,4 +188,33 @@ func parseGraphqlInputForEdgeIDs(ctx context.Context, parentField string) ([]str
 	}
 
 	return ids, nil
+}
+
+func addTokenEditPermissions(ctx context.Context, oID string, objectType string) error {
+	// get auth info from context
+	ac, err := auth.GetAuthenticatedUserContext(ctx)
+	if err != nil {
+		log.Error().Err(err).Msg("unable to get user id from context, unable to add user to program")
+
+		return err
+	}
+
+	req := fgax.TupleRequest{
+		SubjectID:   ac.SubjectID,
+		SubjectType: auth.GetAuthzSubjectType(ctx),
+		Relation:    fgax.CanEdit,
+		ObjectID:    oID,
+		ObjectType:  objectType,
+	}
+
+	log.Debug().Interface("request", req).
+		Msg("creating edit tuples for api token")
+
+	if _, err := generated.FromContext(ctx).Authz.WriteTupleKeys(ctx, []fgax.TupleKey{fgax.GetTupleKey(req)}, nil); err != nil {
+		log.Error().Err(err).Msg("failed to create relationship tuple")
+
+		return ErrInternalServerError
+	}
+
+	return nil
 }

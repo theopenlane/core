@@ -6,9 +6,6 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	mock_fga "github.com/theopenlane/iam/fgax/mockery"
-
-	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
@@ -18,14 +15,11 @@ func (suite *GraphTestSuite) TestQueryUserSetting() {
 	t := suite.T()
 
 	// setup user context
-	reqCtx, err := userContext()
-	require.NoError(t, err)
+	reqCtx := testUser1.UserCtx
 
 	user2 := (&UserBuilder{client: suite.client}).MustNew(reqCtx, t)
 	user2Setting, err := user2.Setting(reqCtx)
 	require.NoError(t, err)
-
-	mock_fga.ListAny(t, suite.client.fga, []string{})
 
 	// setup valid user context
 	user1SettingResp, err := suite.client.api.GetUserSettings(reqCtx, openlaneclient.UserSettingWhereInput{})
@@ -33,8 +27,6 @@ func (suite *GraphTestSuite) TestQueryUserSetting() {
 	require.Len(t, user1SettingResp.UserSettings.Edges, 1)
 
 	user1Setting := user1SettingResp.UserSettings.Edges[0].Node
-
-	mock_fga.ClearMocks(suite.client.fga)
 
 	testCases := []struct {
 		name     string
@@ -76,13 +68,6 @@ func (suite *GraphTestSuite) TestQueryUserSetting() {
 
 	for _, tc := range testCases {
 		t.Run("Get "+tc.name, func(t *testing.T) {
-			defer mock_fga.ClearMocks(suite.client.fga)
-
-			// we don't care about the result so we can set to empty
-			if tc.errorMsg == "" {
-				mock_fga.ListAny(t, suite.client.fga, []string{})
-			}
-
 			resp, err := tc.client.GetUserSettingByID(tc.ctx, tc.queryID)
 
 			if tc.errorMsg != "" {
@@ -107,8 +92,7 @@ func (suite *GraphTestSuite) TestQueryUserSettings() {
 	t := suite.T()
 
 	// setup user context
-	reqCtx, err := userContext()
-	require.NoError(t, err)
+	reqCtx := testUser1.UserCtx
 
 	user1 := (&UserBuilder{client: suite.client}).MustNew(reqCtx, t)
 	user1Setting, err := user1.Setting(reqCtx)
@@ -118,11 +102,6 @@ func (suite *GraphTestSuite) TestQueryUserSettings() {
 	_ = (&UserBuilder{client: suite.client}).MustNew(reqCtx, t)
 
 	t.Run("Get User Settings", func(t *testing.T) {
-		defer mock_fga.ClearMocks(suite.client.fga)
-
-		// we don't care about the result so we can set to empty
-		mock_fga.ListAny(t, suite.client.fga, []string{})
-
 		resp, err := suite.client.api.GetAllUserSettings(reqCtx)
 
 		require.NoError(t, err)
@@ -148,19 +127,11 @@ func (suite *GraphTestSuite) TestQueryUserSettings() {
 func (suite *GraphTestSuite) TestMutationUpdateUserSetting() {
 	t := suite.T()
 
-	// setup user context
-	ctx, err := userContext()
-	require.NoError(t, err)
-
-	org := (&OrganizationBuilder{client: suite.client}).MustNew(ctx, t)
+	org := (&OrganizationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	// create another user to make sure we don't get their settings back
-	(&UserBuilder{client: suite.client}).MustNew(ctx, t)
-	org2 := (&OrganizationBuilder{client: suite.client}).MustNew(ctx, t)
-
-	// setup valid user context
-	reqCtx, err := auth.NewTestContextWithOrgID(testUser.ID, testPersonalOrgID)
-	require.NoError(t, err)
+	(&UserBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	org2 := (&OrganizationBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -168,8 +139,6 @@ func (suite *GraphTestSuite) TestMutationUpdateUserSetting() {
 		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
 		expectedRes openlaneclient.UpdateUserSetting_UpdateUserSetting_UserSetting
-		allowed     bool
-		checkOrg    bool
 		errorMsg    string
 	}{
 		{
@@ -178,10 +147,8 @@ func (suite *GraphTestSuite) TestMutationUpdateUserSetting() {
 				DefaultOrgID: &org.ID,
 				Tags:         []string{"mitb", "funk"},
 			},
-			client:   suite.client.api,
-			ctx:      reqCtx,
-			allowed:  true,
-			checkOrg: true,
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
 			expectedRes: openlaneclient.UpdateUserSetting_UpdateUserSetting_UserSetting{
 				Status: enums.UserStatusActive,
 				Tags:   []string{"mitb", "funk"},
@@ -196,9 +163,7 @@ func (suite *GraphTestSuite) TestMutationUpdateUserSetting() {
 				DefaultOrgID: &org2.ID,
 			},
 			client:   suite.client.api,
-			ctx:      reqCtx,
-			allowed:  false,
-			checkOrg: true,
+			ctx:      testUser1.UserCtx,
 			errorMsg: "Organization with the specified ID was not found",
 		},
 		{
@@ -207,8 +172,7 @@ func (suite *GraphTestSuite) TestMutationUpdateUserSetting() {
 				Status: &enums.UserStatusInvalid,
 			},
 			client:   suite.client.api,
-			ctx:      reqCtx,
-			checkOrg: false,
+			ctx:      testUser1.UserCtx,
 			errorMsg: "INVALID is not a valid UserSettingUserStatus",
 		},
 		{
@@ -216,9 +180,8 @@ func (suite *GraphTestSuite) TestMutationUpdateUserSetting() {
 			updateInput: openlaneclient.UpdateUserSettingInput{
 				Status: &enums.UserStatusSuspended,
 			},
-			client:   suite.client.apiWithPAT,
-			ctx:      context.Background(),
-			checkOrg: false,
+			client: suite.client.apiWithPAT,
+			ctx:    context.Background(),
 			expectedRes: openlaneclient.UpdateUserSetting_UpdateUserSetting_UserSetting{
 				Status: enums.UserStatusSuspended,
 				Tags:   []string{"mitb", "funk"},
@@ -228,19 +191,8 @@ func (suite *GraphTestSuite) TestMutationUpdateUserSetting() {
 
 	for _, tc := range testCases {
 		t.Run("Update "+tc.name, func(t *testing.T) {
-			defer mock_fga.ClearMocks(suite.client.fga)
-
-			// when attempting to update default org, we do a check
-			if tc.checkOrg {
-				mock_fga.CheckAny(t, suite.client.fga, tc.allowed)
-			}
-
-			if tc.errorMsg == "" {
-				mock_fga.ListAny(t, suite.client.fga, []string{"organization:" + org.ID, "organization:" + testPersonalOrgID})
-			}
-
 			// update user
-			resp, err := tc.client.UpdateUserSetting(tc.ctx, testUser.Edges.Setting.ID, tc.updateInput)
+			resp, err := tc.client.UpdateUserSetting(tc.ctx, testUser1.UserInfo.Edges.Setting.ID, tc.updateInput)
 
 			if tc.errorMsg != "" {
 				require.Error(t, err)
