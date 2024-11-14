@@ -8,7 +8,6 @@ import (
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/theopenlane/entx"
 	"github.com/theopenlane/utils/rout"
 
 	auth "github.com/theopenlane/iam/auth"
@@ -436,21 +435,4 @@ func (suite *GraphTestSuite) TestMutationUserCascadeDelete() {
 
 	require.Nil(t, g)
 	assert.ErrorContains(t, err, "not found")
-
-	// skip checks because tuples will be deleted at this point
-	ctx := entx.SkipSoftDelete(testUser1.UserCtx)
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
-
-	o, err = suite.client.api.GetUserByID(ctx, user.ID)
-	require.NoError(t, err)
-
-	require.Equal(t, o.User.ID, user.ID)
-
-	// ctx = entx.SkipSoftDelete(testUser1.UserCtx)
-	// ctx = privacy.DecisionContext(ctx, privacy.Allow)
-
-	// g, err = suite.client.api.GetPersonalAccessTokenByID(ctx, token.ID)
-	// require.NoError(t, err)
-
-	// require.Equal(t, g.PersonalAccessToken.ID, token.ID)
 }

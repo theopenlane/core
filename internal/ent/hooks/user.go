@@ -178,6 +178,8 @@ func HookDeleteUser() ent.Hook {
 					return nil, err
 				}
 
+				// the user might not be currently in the authorized context to see the personal org
+				// so we need to allow the context to see the personal org
 				allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 				personalOrgIDs, err := m.Client().User.QueryOrganizations(user).Where(organization.PersonalOrg(true)).IDs(allowCtx)
 				if err != nil {
@@ -190,7 +192,7 @@ func HookDeleteUser() ent.Hook {
 					return nil, err
 				}
 
-				// cleanup personal org(s)
+				// cleanup personal org(s) using the allow context set above
 				if _, err := m.Client().
 					Organization.
 					Delete().

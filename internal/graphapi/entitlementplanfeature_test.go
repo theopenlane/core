@@ -54,6 +54,13 @@ func (suite *GraphTestSuite) TestQueryEntitlementPlanFeature() {
 			ctx:      testUser1.UserCtx,
 			errorMsg: "not found",
 		},
+		{
+			name:     "not found",
+			queryID:  planFeature.ID,
+			client:   suite.client.api,
+			ctx:      testUser2.UserCtx,
+			errorMsg: "not found",
+		},
 	}
 
 	for _, tc := range testCases {
@@ -300,7 +307,7 @@ func (suite *GraphTestSuite) TestMutationUpdateEntitlementPlanFeature() {
 				}},
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
-			expectedErr: "you are not authorized to perform this action: update on entitlementplanfeature",
+			expectedErr: "you are not authorized to perform this action",
 		},
 	}
 
@@ -341,7 +348,7 @@ func (suite *GraphTestSuite) TestMutationDeleteEntitlementPlanFeature() {
 			idToDelete:  planFeature1.ID,
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
-			expectedErr: "you are not authorized to perform this action: delete on entitlementplanfeature",
+			expectedErr: "you are not authorized to perform this action",
 		},
 		{
 			name:       "happy path, delete plan feature",
@@ -354,7 +361,7 @@ func (suite *GraphTestSuite) TestMutationDeleteEntitlementPlanFeature() {
 			idToDelete:  planFeature1.ID,
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
-			expectedErr: "entitlement_plan_feature not found",
+			expectedErr: "not found",
 		},
 		{
 			name:       "happy path, delete plan feature using api token",
@@ -373,7 +380,7 @@ func (suite *GraphTestSuite) TestMutationDeleteEntitlementPlanFeature() {
 			idToDelete:  ulids.New().String(),
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
-			expectedErr: "entitlement_plan_feature not found",
+			expectedErr: "not found",
 		},
 	}
 

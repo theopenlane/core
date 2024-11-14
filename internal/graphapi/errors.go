@@ -19,9 +19,6 @@ var (
 	// ErrCascadeDelete is returned when an error occurs while performing cascade deletes on associated objects
 	ErrCascadeDelete = errors.New("error deleting associated objects")
 
-	// ErrSubscriberNotFound is returned when a subscriber is not found
-	ErrSubscriberNotFound = errors.New("subscriber not found")
-
 	// ErrSearchFailed is returned when the search operation fails
 	ErrSearchFailed = errors.New("search failed, please try again")
 
@@ -35,21 +32,19 @@ var (
 	ErrUnableToDetermineObjectType = errors.New("unable to determine parent object type")
 )
 
-// PermissionDeniedError is returned when user is not authorized to perform the requested query or mutation
-type PermissionDeniedError struct {
-	Action     string
+// NotFoundError is returned when the requested object is not found
+type NotFoundError struct {
 	ObjectType string
 }
 
-// Error returns the PermissionDeniedError in string format
-func (e *PermissionDeniedError) Error() string {
-	return fmt.Sprintf("you are not authorized to perform this action: %s on %s", e.Action, e.ObjectType)
+// Error returns the NotFoundError in string format
+func (e *NotFoundError) Error() string {
+	return fmt.Sprintf("%s not found", e.ObjectType)
 }
 
-// newPermissionDeniedError returns a PermissionDeniedError
-func newPermissionDeniedError(a string, o string) *PermissionDeniedError {
-	return &PermissionDeniedError{
-		Action:     a,
+// newPermissionDeniedError returns a NotFoundError
+func newNotFoundError(o string) *NotFoundError {
+	return &NotFoundError{
 		ObjectType: o,
 	}
 }
@@ -138,11 +133,11 @@ func parseRequestError(err error, a action) error {
 	case generated.IsNotFound(err):
 		log.Debug().Err(err).Msg("not found")
 
-		return err
+		return newNotFoundError(a.object)
 	case errors.Is(err, privacy.Deny):
 		log.Debug().Err(err).Msg("permission denied")
 
-		return newPermissionDeniedError(a.action, a.object)
+		return newNotFoundError(a.object)
 	default:
 		log.Error().Err(err).Msg("unexpected error")
 

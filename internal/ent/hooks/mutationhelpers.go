@@ -190,6 +190,7 @@ func parseGraphqlInputForEdgeIDs(ctx context.Context, parentField string) ([]str
 	return ids, nil
 }
 
+// addTokenEditPermissions adds the edit permissions for the api token to the object
 func addTokenEditPermissions(ctx context.Context, oID string, objectType string) error {
 	// get auth info from context
 	ac, err := auth.GetAuthenticatedUserContext(ctx)

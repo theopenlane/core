@@ -82,7 +82,7 @@ func (suite *GraphTestSuite) TestQueryGroupMembers() {
 
 			if tc.errExpected {
 				require.Error(t, err)
-				assert.ErrorContains(t, err, "deny rule") // TODO: (sfunk) this should be a better error message
+				assert.ErrorContains(t, err, "not found")
 
 				return
 			}
@@ -332,7 +332,14 @@ func (suite *GraphTestSuite) TestMutationDeleteGroupMembers() {
 			idToDelete:  gm1.ID,
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
-			expectedErr: "you are not authorized to perform this action: delete on groupmembership",
+			expectedErr: "you are not authorized to perform this action",
+		},
+		{
+			name:        "not allowed to delete, not found",
+			idToDelete:  gm1.ID,
+			client:      suite.client.api,
+			ctx:         testUser2.UserCtx,
+			expectedErr: "not found",
 		},
 		{
 			name:       "happy path, delete group member using api token",
@@ -357,14 +364,14 @@ func (suite *GraphTestSuite) TestMutationDeleteGroupMembers() {
 			idToDelete:  ulids.New().String(),
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
-			expectedErr: "group_membership not found",
+			expectedErr: "not found",
 		},
 		{
 			name:        "group member already deleted, not found",
 			idToDelete:  gm1.ID,
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
-			expectedErr: "group_membership not found",
+			expectedErr: "not found",
 		},
 	}
 

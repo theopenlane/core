@@ -50,6 +50,13 @@ func (suite *GraphTestSuite) TestQueryEntitlement() {
 			ctx:      testUser1.UserCtx,
 			errorMsg: "not found",
 		},
+		{
+			name:     "not found",
+			queryID:  entitlement.ID,
+			client:   suite.client.api,
+			ctx:      testUser2.UserCtx,
+			errorMsg: "not found",
+		},
 	}
 
 	for _, tc := range testCases {
@@ -294,7 +301,16 @@ func (suite *GraphTestSuite) TestMutationUpdateEntitlement() {
 			},
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
-			expectedErr: "you are not authorized to perform this action: update on entitlement",
+			expectedErr: "you are not authorized to perform this action",
+		},
+		{
+			name: "not allowed to update, not found",
+			request: openlaneclient.UpdateEntitlementInput{
+				Cancelled: lo.ToPtr(false),
+			},
+			client:      suite.client.api,
+			ctx:         testUser2.UserCtx,
+			expectedErr: "not found",
 		},
 	}
 
@@ -346,6 +362,20 @@ func (suite *GraphTestSuite) TestMutationDeleteEntitlement() {
 		ctx         context.Context
 		expectedErr string
 	}{
+		{
+			name:        "delete entitlement, no access",
+			idToDelete:  entitlement1.ID,
+			client:      suite.client.api,
+			ctx:         testUser2.UserCtx,
+			expectedErr: "not found",
+		},
+		{
+			name:        "delete entitlement, not enough permissions",
+			idToDelete:  entitlement1.ID,
+			client:      suite.client.api,
+			ctx:         viewOnlyUser.UserCtx,
+			expectedErr: "you are not authorized to perform this action",
+		},
 		{
 			name:       "happy path, delete entitlement",
 			idToDelete: entitlement1.ID,

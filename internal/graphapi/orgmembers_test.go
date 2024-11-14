@@ -70,7 +70,7 @@ func (suite *GraphTestSuite) TestQueryOrgMembers() {
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
 			expectedLen: 0,
-			expectErr:   true, // TODO: fixup this error messaging
+			expectErr:   true,
 		},
 	}
 
@@ -125,86 +125,78 @@ func (suite *GraphTestSuite) TestMutationCreateOrgMembers() {
 	user2 := (&UserBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
-		name      string
-		orgID     string
-		userID    string
-		role      enums.Role
-		checkOrg  bool
-		checkRole bool
-		errMsg    string
+		name   string
+		orgID  string
+		userID string
+		role   enums.Role
+		ctx    context.Context
+		errMsg string
 	}{
 		{
-			name:      "happy path, add admin",
-			orgID:     org1.ID,
-			userID:    user1.ID,
-			role:      enums.RoleAdmin,
-			checkRole: true,
-			checkOrg:  true,
+			name:   "happy path, add admin",
+			orgID:  org1.ID,
+			userID: user1.ID,
+			ctx:    testUser1.UserCtx,
+			role:   enums.RoleAdmin,
 		},
 		{
-			name:      "happy path, add member",
-			orgID:     org1.ID,
-			userID:    user2.ID,
-			role:      enums.RoleMember,
-			checkRole: true,
-			checkOrg:  true,
+			name:   "happy path, add member",
+			orgID:  org1.ID,
+			userID: user2.ID,
+			ctx:    testUser1.UserCtx,
+			role:   enums.RoleMember,
 		},
 		{
-			name:      "duplicate user, different role",
-			orgID:     org1.ID,
-			userID:    user1.ID,
-			role:      enums.RoleMember,
-			checkOrg:  true,
-			checkRole: true,
-			errMsg:    "already exists",
+			name:   "duplicate user, different role",
+			orgID:  org1.ID,
+			userID: user1.ID,
+			role:   enums.RoleMember,
+			ctx:    testUser1.UserCtx,
+			errMsg: "already exists",
 		},
 		{
-			name:      "add user to personal org not allowed",
-			orgID:     testUser1.PersonalOrgID,
-			userID:    user1.ID,
-			role:      enums.RoleMember,
-			checkOrg:  true,
-			checkRole: true,
-			errMsg:    hooks.ErrPersonalOrgsNoMembers.Error(),
+			name:   "add user to personal org not allowed",
+			orgID:  testUser1.PersonalOrgID,
+			userID: user1.ID,
+			role:   enums.RoleMember,
+			ctx:    testUser1.UserCtx,
+			errMsg: hooks.ErrPersonalOrgsNoMembers.Error(),
 		},
 		{
-			name:      "invalid user",
-			orgID:     org1.ID,
-			userID:    ulids.New().String(),
-			role:      enums.RoleMember,
-			checkOrg:  true,
-			checkRole: true,
-			errMsg:    "constraint failed, unable to complete the action",
+			name:   "invalid user",
+			orgID:  org1.ID,
+			userID: ulids.New().String(),
+			role:   enums.RoleMember,
+			ctx:    testUser1.UserCtx,
+			errMsg: "constraint failed, unable to complete the action",
 		},
 		{
-			name:      "invalid org",
-			orgID:     ulids.New().String(),
-			userID:    user1.ID,
-			role:      enums.RoleMember,
-			checkOrg:  true,
-			checkRole: true,
-			errMsg:    "you are not authorized to perform this action",
+			name:   "no access",
+			orgID:  org1.ID,
+			userID: user1.ID,
+			role:   enums.RoleMember,
+			ctx:    viewOnlyUser.UserCtx,
+			errMsg: "you are not authorized to perform this action",
 		},
 		{
-			name:      "invalid role",
-			orgID:     org1.ID,
-			userID:    user1.ID,
-			role:      enums.RoleInvalid,
-			checkOrg:  false,
-			checkRole: false,
-			errMsg:    "not a valid OrgMembershipRole",
+			name:   "invalid role",
+			orgID:  org1.ID,
+			userID: user1.ID,
+			role:   enums.RoleInvalid,
+			ctx:    testUser1.UserCtx,
+			errMsg: "not a valid OrgMembershipRole",
 		},
 	}
 
 	for _, tc := range testCases {
-		t.Run("Get "+tc.name, func(t *testing.T) {
+		t.Run("Create "+tc.name, func(t *testing.T) {
 			input := openlaneclient.CreateOrgMembershipInput{
 				OrganizationID: tc.orgID,
 				UserID:         tc.userID,
 				Role:           &tc.role,
 			}
 
-			resp, err := suite.client.api.AddUserToOrgWithRole(testUser1.UserCtx, input)
+			resp, err := suite.client.api.AddUserToOrgWithRole(tc.ctx, input)
 
 			if tc.errMsg != "" {
 				require.Error(t, err)

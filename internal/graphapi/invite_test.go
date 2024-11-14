@@ -45,6 +45,13 @@ func (suite *GraphTestSuite) TestQueryInvite() {
 			ctx:     testUser1.UserCtx,
 			wantErr: true,
 		},
+		{
+			name:    "no access",
+			queryID: invite.ID,
+			client:  suite.client.api,
+			ctx:     testUser2.UserCtx,
+			wantErr: true,
+		},
 	}
 
 	for _, tc := range testCases {

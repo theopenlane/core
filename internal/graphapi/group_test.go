@@ -32,13 +32,6 @@ func (suite *GraphTestSuite) TestQueryGroup() {
 			ctx:     testUser1.UserCtx,
 			queryID: group1.ID,
 		},
-		// {
-		// 	name:     "happy path group, using api token",
-		// 	client:   suite.client.apiWithToken,
-		// 	ctx:      context.Background(),
-		// 	queryID:  group1.ID,
-		// 	expected: group1,
-		// },
 		{
 			name:    "happy path group, using personal access token",
 			client:  suite.client.apiWithPAT,
@@ -50,7 +43,7 @@ func (suite *GraphTestSuite) TestQueryGroup() {
 			client:   suite.client.api,
 			ctx:      testUser2.UserCtx,
 			queryID:  group1.ID,
-			errorMsg: "you are not authorized to perform this action: get on group",
+			errorMsg: "not found",
 		},
 	}
 
@@ -248,7 +241,7 @@ func (suite *GraphTestSuite) TestMutationCreateGroup() {
 			owner:       testUser1.ID,
 			client:      suite.client.api,
 			ctx:         testUser2.UserCtx,
-			errorMsg:    "not authorized",
+			errorMsg:    "not found",
 		},
 		{
 			name:      "happy path group, minimum fields",
@@ -504,7 +497,7 @@ func (suite *GraphTestSuite) TestMutationDeleteGroup() {
 			client:   suite.client.api,
 			ctx:      viewOnlyUser.UserCtx,
 			groupID:  group1.ID,
-			errorMsg: "not authorized",
+			errorMsg: "not found", // user was not added to the group, so they can't delete it
 		},
 	}
 

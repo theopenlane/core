@@ -48,7 +48,7 @@ func (suite *GraphTestSuite) TestQueryEntityType() {
 			client:   suite.client.api,
 			ctx:      testUser2.UserCtx,
 			queryID:  entityType.ID,
-			errorMsg: "entity_type not found",
+			errorMsg: "not found",
 		},
 	}
 
@@ -105,7 +105,7 @@ func (suite *GraphTestSuite) TestQueryEntityTypes() {
 			expectedResults: 3, // 1 is created in the setup
 		},
 		{
-			name:            "another user, no entities should be returned",
+			name:            "another user, no new entities should be returned",
 			client:          suite.client.api,
 			ctx:             testUser2.UserCtx,
 			expectedResults: 1, // 1 is created in the setup
@@ -165,7 +165,7 @@ func (suite *GraphTestSuite) TestMutationCreateEntityType() {
 			},
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
-			expectedErr: "you are not authorized to perform this action: create on entitytype",
+			expectedErr: "you are not authorized to perform this action",
 		},
 		{
 			name:        "missing required field, name",
@@ -238,7 +238,7 @@ func (suite *GraphTestSuite) TestMutationUpdateEntityType() {
 			},
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
-			expectedErr: "you are not authorized to perform this action: update on entitytype",
+			expectedErr: "you are not authorized to perform this action",
 		},
 	}
 
@@ -279,7 +279,14 @@ func (suite *GraphTestSuite) TestMutationDeleteEntityType() {
 			idToDelete:  entityType1.ID,
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
-			expectedErr: "you are not authorized to perform this action: delete on entitytype",
+			expectedErr: "you are not authorized to perform this action",
+		},
+		{
+			name:        "not allowed to delete, no access",
+			idToDelete:  entityType1.ID,
+			client:      suite.client.api,
+			ctx:         testUser2.UserCtx,
+			expectedErr: "not found",
 		},
 		{
 			name:       "happy path, delete entity type",
@@ -292,7 +299,7 @@ func (suite *GraphTestSuite) TestMutationDeleteEntityType() {
 			idToDelete:  entityType1.ID,
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
-			expectedErr: "entity_type not found",
+			expectedErr: "not found",
 		},
 		{
 			name:       "happy path, delete entity type using api token",
@@ -311,7 +318,7 @@ func (suite *GraphTestSuite) TestMutationDeleteEntityType() {
 			idToDelete:  ulids.New().String(),
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
-			expectedErr: "entity_type not found",
+			expectedErr: "not found",
 		},
 	}
 

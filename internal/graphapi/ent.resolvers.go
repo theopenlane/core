@@ -268,7 +268,12 @@ func (r *queryResolver) GroupHistories(ctx context.Context, after *entgql.Cursor
 
 // GroupMemberships is the resolver for the groupMemberships field.
 func (r *queryResolver) GroupMemberships(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.GroupMembershipWhereInput) (*generated.GroupMembershipConnection, error) {
-	return withTransactionalMutation(ctx).GroupMembership.Query().Paginate(ctx, after, first, before, last, generated.WithGroupMembershipFilter(where.Filter))
+	val, err := withTransactionalMutation(ctx).GroupMembership.Query().Paginate(ctx, after, first, before, last, generated.WithGroupMembershipFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "groupmembership"})
+	}
+
+	return val, nil
 }
 
 // GroupMembershipHistories is the resolver for the groupMembershipHistories field.

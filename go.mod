@@ -1,8 +1,6 @@
 module github.com/theopenlane/core
 
-go 1.23.2
-
-replace github.com/theopenlane/iam => ../iam
+go 1.23.3
 
 require (
 	ariga.io/entcache v0.1.0
@@ -67,7 +65,7 @@ require (
 	github.com/theopenlane/entx v0.2.2
 	github.com/theopenlane/gqlgen-plugins v0.3.0
 	github.com/theopenlane/httpsling v0.2.1
-	github.com/theopenlane/iam v0.2.4
+	github.com/theopenlane/iam v0.3.0
 	github.com/theopenlane/newman v0.1.1
 	github.com/theopenlane/riverboat v0.0.7
 	github.com/theopenlane/utils v0.3.0
@@ -313,7 +311,7 @@ require (
 	google.golang.org/genproto/googleapis/api v0.0.0-20241021214115-324edc3d5d38 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20241021214115-324edc3d5d38 // indirect
 	google.golang.org/grpc v1.67.1 // indirect
-	google.golang.org/protobuf v1.35.1 // indirect
+	google.golang.org/protobuf v1.35.2 // indirect
 	gopkg.in/cheggaaa/pb.v2 v2.0.7
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect

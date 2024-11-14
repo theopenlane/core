@@ -53,7 +53,7 @@ func (suite *GraphTestSuite) TestQueryOrganization() {
 			queryID:  "tacos-for-dinner",
 			client:   suite.client.api,
 			ctx:      testUser1.UserCtx,
-			errorMsg: "you are not authorized to perform this action: get on organization", // TODO: this should return not found
+			errorMsg: "not found",
 		},
 	}
 
@@ -360,6 +360,7 @@ func (suite *GraphTestSuite) TestMutationUpdateOrganization() {
 
 	testCases := []struct {
 		name        string
+		orgID       string
 		updateInput openlaneclient.UpdateOrganizationInput
 		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
@@ -367,7 +368,8 @@ func (suite *GraphTestSuite) TestMutationUpdateOrganization() {
 		errorMsg    string
 	}{
 		{
-			name: "update name, happy path",
+			name:  "update name, happy path",
+			orgID: org.ID,
 			updateInput: openlaneclient.UpdateOrganizationInput{
 				Name: &nameUpdate,
 			},
@@ -381,7 +383,8 @@ func (suite *GraphTestSuite) TestMutationUpdateOrganization() {
 			},
 		},
 		{
-			name: "add member as admin",
+			name:  "add member as admin",
+			orgID: org.ID,
 			updateInput: openlaneclient.UpdateOrganizationInput{
 				AddOrgMembers: []*openlaneclient.CreateOrgMembershipInput{
 					{
@@ -406,7 +409,8 @@ func (suite *GraphTestSuite) TestMutationUpdateOrganization() {
 			},
 		},
 		{
-			name: "update description, happy path",
+			name:  "update description, happy path",
+			orgID: org.ID,
 			updateInput: openlaneclient.UpdateOrganizationInput{
 				Description: &descriptionUpdate,
 			},
@@ -420,7 +424,8 @@ func (suite *GraphTestSuite) TestMutationUpdateOrganization() {
 			},
 		},
 		{
-			name: "update display name, happy path",
+			name:  "update display name, happy path",
+			orgID: org.ID,
 			updateInput: openlaneclient.UpdateOrganizationInput{
 				DisplayName: &displayNameUpdate,
 			},
@@ -434,7 +439,8 @@ func (suite *GraphTestSuite) TestMutationUpdateOrganization() {
 			},
 		},
 		{
-			name: "update settings, happy path",
+			name:  "update settings, happy path",
+			orgID: org.ID,
 			updateInput: openlaneclient.UpdateOrganizationInput{
 				Description: &descriptionUpdate,
 				UpdateOrgSettings: &openlaneclient.UpdateOrganizationSettingInput{
@@ -451,7 +457,8 @@ func (suite *GraphTestSuite) TestMutationUpdateOrganization() {
 			},
 		},
 		{
-			name: "update name, too long",
+			name:  "update name, too long",
+			orgID: org.ID,
 			updateInput: openlaneclient.UpdateOrganizationInput{
 				Name: &nameUpdateLong,
 			},
@@ -459,11 +466,31 @@ func (suite *GraphTestSuite) TestMutationUpdateOrganization() {
 			ctx:      reqCtx,
 			errorMsg: "value is greater than the required length",
 		},
+		{
+			name:  "update name, no access",
+			orgID: viewOnlyUser.OrganizationID,
+			updateInput: openlaneclient.UpdateOrganizationInput{
+				Name: &nameUpdate,
+			},
+			client:   suite.client.api,
+			ctx:      viewOnlyUser.UserCtx,
+			errorMsg: "you are not authorized to perform this action",
+		},
+		{
+			name:  "update name, not found",
+			orgID: org.ID,
+			updateInput: openlaneclient.UpdateOrganizationInput{
+				Name: &nameUpdate,
+			},
+			client:   suite.client.api,
+			ctx:      testUser2.UserCtx,
+			errorMsg: "not found",
+		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Update "+tc.name, func(t *testing.T) {
-			resp, err := tc.client.UpdateOrganization(tc.ctx, org.ID, tc.updateInput)
+			resp, err := tc.client.UpdateOrganization(tc.ctx, tc.orgID, tc.updateInput)
 
 			if tc.errorMsg != "" {
 				require.Error(t, err)
@@ -525,9 +552,15 @@ func (suite *GraphTestSuite) TestMutationDeleteOrganization() {
 	}{
 		{
 			name:     "delete org, access denied",
-			orgID:    org.ID,
+			orgID:    viewOnlyUser.OrganizationID,
 			ctx:      viewOnlyUser.UserCtx,
 			errorMsg: "you are not authorized to perform this action",
+		},
+		{
+			name:     "delete org, not found",
+			orgID:    org.ID,
+			ctx:      testUser2.UserCtx,
+			errorMsg: "not found",
 		},
 		{
 			name:  "delete org, happy path",
@@ -544,7 +577,7 @@ func (suite *GraphTestSuite) TestMutationDeleteOrganization() {
 			name:     "delete org, not found",
 			orgID:    "tacos-tuesday",
 			ctx:      testUser1.UserCtx,
-			errorMsg: "you are not authorized to perform this action",
+			errorMsg: "not found",
 		},
 	}
 

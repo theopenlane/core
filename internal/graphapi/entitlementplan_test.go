@@ -266,7 +266,16 @@ func (suite *GraphTestSuite) TestMutationUpdateEntitlementPlan() {
 			},
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
-			expectedErr: "you are not authorized to perform this action: update on entitlementplan",
+			expectedErr: "you are not authorized to perform this action",
+		},
+		{
+			name: "not allowed to update",
+			request: openlaneclient.UpdateEntitlementPlanInput{
+				Description: lo.ToPtr("Howdy, partner!"),
+			},
+			client:      suite.client.api,
+			ctx:         testUser2.UserCtx,
+			expectedErr: "not found",
 		},
 	}
 
@@ -310,11 +319,18 @@ func (suite *GraphTestSuite) TestMutationDeleteEntitlementPlan() {
 		expectedErr string
 	}{
 		{
+			name:        "not access",
+			idToDelete:  plan1.ID,
+			client:      suite.client.api,
+			ctx:         testUser2.UserCtx,
+			expectedErr: "not found",
+		},
+		{
 			name:        "not allowed to delete",
 			idToDelete:  plan1.ID,
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
-			expectedErr: "you are not authorized to perform this action: delete on entitlementplan",
+			expectedErr: "you are not authorized to perform this action",
 		},
 		{
 			name:       "happy path, delete plan",

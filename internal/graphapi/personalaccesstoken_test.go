@@ -16,7 +16,7 @@ import (
 )
 
 const (
-	notFoundErrorMsg = "personal_access_token not found"
+	notFoundErrorMsg = "not found"
 )
 
 func (suite *GraphTestSuite) TestQueryPersonalAccessToken() {
@@ -27,22 +27,31 @@ func (suite *GraphTestSuite) TestQueryPersonalAccessToken() {
 	testCases := []struct {
 		name     string
 		queryID  string
+		ctx      context.Context
 		errorMsg string
 	}{
 		{
 			name:    "happy path pat",
 			queryID: token.ID,
+			ctx:     testUser1.UserCtx,
 		},
 		{
 			name:     "not found",
 			queryID:  "notfound",
+			ctx:      testUser1.UserCtx,
+			errorMsg: notFoundErrorMsg,
+		},
+		{
+			name:     "not found",
+			queryID:  "notfound",
+			ctx:      testUser2.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Get "+tc.name, func(t *testing.T) {
-			resp, err := suite.client.api.GetPersonalAccessTokenByID(testUser1.UserCtx, tc.queryID)
+			resp, err := suite.client.api.GetPersonalAccessTokenByID(tc.ctx, tc.queryID)
 
 			if tc.errorMsg != "" {
 				require.Error(t, err)

@@ -22,22 +22,31 @@ func (suite *GraphTestSuite) TestQueryApiToken() {
 	testCases := []struct {
 		name     string
 		queryID  string
+		ctx      context.Context
 		errorMsg string
 	}{
 		{
 			name:    "happy path",
 			queryID: apiToken.ID,
+			ctx:     testUser1.UserCtx,
+		},
+		{
+			name:     "not found, no access",
+			queryID:  apiToken.ID,
+			ctx:      testUser2.UserCtx,
+			errorMsg: "not found",
 		},
 		{
 			name:     "not found",
 			queryID:  "notfound",
+			ctx:      testUser1.UserCtx,
 			errorMsg: "not found",
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Get "+tc.name, func(t *testing.T) {
-			resp, err := suite.client.api.GetAPITokenByID(testUser1.UserCtx, tc.queryID)
+			resp, err := suite.client.api.GetAPITokenByID(tc.ctx, tc.queryID)
 
 			if tc.errorMsg != "" {
 				require.Error(t, err)
@@ -60,7 +69,7 @@ func (suite *GraphTestSuite) TestQueryAPITokens() {
 	t := suite.T()
 
 	(&APITokenBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	(&APITokenBuilder{client: suite.client, Scopes: []string{"read", "write"}}).MustNew(testUser1.UserCtx, t)
+	(&APITokenBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name     string
@@ -194,6 +203,7 @@ func (suite *GraphTestSuite) TestMutationUpdateAPIToken() {
 		name     string
 		tokenID  string
 		input    openlaneclient.UpdateAPITokenInput
+		ctx      context.Context
 		errorMsg string
 	}{
 		{
@@ -202,6 +212,16 @@ func (suite *GraphTestSuite) TestMutationUpdateAPIToken() {
 			input: openlaneclient.UpdateAPITokenInput{
 				Name: &tokenName,
 			},
+			ctx: testUser1.UserCtx,
+		},
+		{
+			name:    "update name, no access",
+			tokenID: token.ID,
+			input: openlaneclient.UpdateAPITokenInput{
+				Name: &tokenName,
+			},
+			ctx:      testUser2.UserCtx,
+			errorMsg: "not found",
 		},
 		{
 			name:    "happy path, update description",
@@ -209,6 +229,7 @@ func (suite *GraphTestSuite) TestMutationUpdateAPIToken() {
 			input: openlaneclient.UpdateAPITokenInput{
 				Description: &tokenDescription,
 			},
+			ctx: testUser1.UserCtx,
 		},
 		{
 			name:    "happy path, add scope",
@@ -216,6 +237,7 @@ func (suite *GraphTestSuite) TestMutationUpdateAPIToken() {
 			input: openlaneclient.UpdateAPITokenInput{
 				Scopes: []string{"write"},
 			},
+			ctx: testUser1.UserCtx,
 		},
 		{
 			name:    "invalid token id",
@@ -223,13 +245,14 @@ func (suite *GraphTestSuite) TestMutationUpdateAPIToken() {
 			input: openlaneclient.UpdateAPITokenInput{
 				Description: &tokenDescription,
 			},
+			ctx:      testUser1.UserCtx,
 			errorMsg: "not found",
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			resp, err := suite.client.api.UpdateAPIToken(testUser1.UserCtx, tc.tokenID, tc.input)
+			resp, err := suite.client.api.UpdateAPIToken(tc.ctx, tc.tokenID, tc.input)
 
 			if tc.errorMsg != "" {
 				require.Error(t, err)
@@ -298,7 +321,7 @@ func (suite *GraphTestSuite) TestMutationDeleteAPIToken() {
 		{
 			name:     "delete someone else's token, no go",
 			tokenID:  token2.ID,
-			errorMsg: "api_token not found",
+			errorMsg: "not found",
 			allowed:  false,
 		},
 	}
