@@ -13,174 +13,299 @@ import (
 
 // Node is the resolver for the node field.
 func (r *queryResolver) Node(ctx context.Context, id string) (generated.Noder, error) {
-	return withTransactionalMutation(ctx).Noder(ctx, id)
+	res, err := withTransactionalMutation(ctx).Noder(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "node"})
+	}
+
+	return res, nil
 }
 
 // Nodes is the resolver for the nodes field.
 func (r *queryResolver) Nodes(ctx context.Context, ids []string) ([]generated.Noder, error) {
-	return withTransactionalMutation(ctx).Noders(ctx, ids)
+	res, err := withTransactionalMutation(ctx).Noders(ctx, ids)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "node"})
+	}
+
+	return res, nil
 }
 
 // APITokens is the resolver for the apiTokens field.
 func (r *queryResolver) APITokens(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.APITokenWhereInput) (*generated.APITokenConnection, error) {
-	return withTransactionalMutation(ctx).APIToken.Query().Paginate(ctx, after, first, before, last, generated.WithAPITokenFilter(where.Filter))
+	res, err := withTransactionalMutation(ctx).APIToken.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithAPITokenFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "apitoken"})
+	}
+
+	return res, err
 }
 
 // ActionPlans is the resolver for the actionPlans field.
 func (r *queryResolver) ActionPlans(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ActionPlanWhereInput) (*generated.ActionPlanConnection, error) {
-	return withTransactionalMutation(ctx).ActionPlan.Query().Paginate(
+	res, err := withTransactionalMutation(ctx).ActionPlan.Query().Paginate(
 		ctx,
 		after,
 		first,
 		before,
 		last,
 		generated.WithActionPlanFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "actionplan"})
+	}
+
+	return res, err
 }
 
 // ActionPlanHistories is the resolver for the actionPlanHistories field.
 func (r *queryResolver) ActionPlanHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ActionPlanHistoryWhereInput) (*generated.ActionPlanHistoryConnection, error) {
-	return withTransactionalMutation(ctx).ActionPlanHistory.Query().Paginate(
+	res, err := withTransactionalMutation(ctx).ActionPlanHistory.Query().Paginate(
 		ctx,
 		after,
 		first,
 		before,
 		last,
 		generated.WithActionPlanHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "actionplanhistory"})
+	}
+
+	return res, err
 }
 
 // Contacts is the resolver for the contacts field.
 func (r *queryResolver) Contacts(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ContactWhereInput) (*generated.ContactConnection, error) {
-	return withTransactionalMutation(ctx).Contact.Query().Paginate(
+	res, err := withTransactionalMutation(ctx).Contact.Query().Paginate(
 		ctx,
 		after,
 		first,
 		before,
 		last,
 		generated.WithContactFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "contact"})
+	}
+
+	return res, err
 }
 
 // ContactHistories is the resolver for the contactHistories field.
 func (r *queryResolver) ContactHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ContactHistoryWhereInput) (*generated.ContactHistoryConnection, error) {
-	return withTransactionalMutation(ctx).ContactHistory.Query().Paginate(
+	res, err := withTransactionalMutation(ctx).ContactHistory.Query().Paginate(
 		ctx,
 		after,
 		first,
 		before,
 		last,
 		generated.WithContactHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "contacthistory"})
+	}
+
+	return res, err
 }
 
 // Controls is the resolver for the controls field.
 func (r *queryResolver) Controls(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ControlWhereInput) (*generated.ControlConnection, error) {
-	return withTransactionalMutation(ctx).Control.Query().Paginate(
+	res, err := withTransactionalMutation(ctx).Control.Query().Paginate(
 		ctx,
 		after,
 		first,
 		before,
 		last,
 		generated.WithControlFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "control"})
+	}
+
+	return res, err
 }
 
 // ControlHistories is the resolver for the controlHistories field.
 func (r *queryResolver) ControlHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ControlHistoryWhereInput) (*generated.ControlHistoryConnection, error) {
-	return withTransactionalMutation(ctx).ControlHistory.Query().Paginate(
+	res, err := withTransactionalMutation(ctx).ControlHistory.Query().Paginate(
 		ctx,
 		after,
 		first,
 		before,
 		last,
 		generated.WithControlHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "controlhistory"})
+	}
+
+	return res, err
 }
 
 // ControlObjectives is the resolver for the controlObjectives field.
 func (r *queryResolver) ControlObjectives(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ControlObjectiveWhereInput) (*generated.ControlObjectiveConnection, error) {
-	return withTransactionalMutation(ctx).ControlObjective.Query().Paginate(
+	res, err := withTransactionalMutation(ctx).ControlObjective.Query().Paginate(
 		ctx,
 		after,
 		first,
 		before,
 		last,
 		generated.WithControlObjectiveFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "controlobjective"})
+	}
+
+	return res, err
 }
 
 // ControlObjectiveHistories is the resolver for the controlObjectiveHistories field.
 func (r *queryResolver) ControlObjectiveHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ControlObjectiveHistoryWhereInput) (*generated.ControlObjectiveHistoryConnection, error) {
-	return withTransactionalMutation(ctx).ControlObjectiveHistory.Query().Paginate(
+	res, err := withTransactionalMutation(ctx).ControlObjectiveHistory.Query().Paginate(
 		ctx,
 		after,
 		first,
 		before,
 		last,
 		generated.WithControlObjectiveHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "controlobjectivehistory"})
+	}
+
+	return res, err
 }
 
 // DocumentDataSlice is the resolver for the documentDataSlice field.
 func (r *queryResolver) DocumentDataSlice(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.DocumentDataWhereInput) (*generated.DocumentDataConnection, error) {
-	return withTransactionalMutation(ctx).DocumentData.Query().Paginate(ctx, after, first, before, last, generated.WithDocumentDataFilter(where.Filter))
+	res, err := withTransactionalMutation(ctx).DocumentData.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithDocumentDataFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "documentdata"})
+	}
+
+	return res, err
 }
 
 // DocumentDataHistories is the resolver for the documentDataHistories field.
 func (r *queryResolver) DocumentDataHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.DocumentDataHistoryWhereInput) (*generated.DocumentDataHistoryConnection, error) {
-	return withTransactionalMutation(ctx).DocumentDataHistory.Query().Paginate(ctx, after, first, before, last, generated.WithDocumentDataHistoryFilter(where.Filter))
+	res, err := withTransactionalMutation(ctx).DocumentDataHistory.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithDocumentDataHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "documentdatahistory"})
+	}
+
+	return res, err
 }
 
 // Entitlements is the resolver for the entitlements field.
 func (r *queryResolver) Entitlements(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.EntitlementWhereInput) (*generated.EntitlementConnection, error) {
-	return withTransactionalMutation(ctx).Entitlement.Query().Paginate(ctx, after, first, before, last, generated.WithEntitlementFilter(where.Filter))
+	res, err := withTransactionalMutation(ctx).Entitlement.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithEntitlementFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "entitlement"})
+	}
+
+	return res, err
 }
 
 // EntitlementHistories is the resolver for the entitlementHistories field.
 func (r *queryResolver) EntitlementHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.EntitlementHistoryWhereInput) (*generated.EntitlementHistoryConnection, error) {
-	return withTransactionalMutation(ctx).EntitlementHistory.Query().Paginate(ctx, after, first, before, last, generated.WithEntitlementHistoryFilter(where.Filter))
+	res, err := withTransactionalMutation(ctx).EntitlementHistory.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithEntitlementHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "entitlementhistory"})
+	}
+
+	return res, err
 }
 
 // EntitlementPlans is the resolver for the entitlementPlans field.
 func (r *queryResolver) EntitlementPlans(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.EntitlementPlanWhereInput) (*generated.EntitlementPlanConnection, error) {
-	return withTransactionalMutation(ctx).EntitlementPlan.Query().Paginate(
+	res, err := withTransactionalMutation(ctx).EntitlementPlan.Query().Paginate(
 		ctx,
 		after,
 		first,
 		before,
 		last,
 		generated.WithEntitlementPlanFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "entitlementplan"})
+	}
+
+	return res, err
 }
 
 // EntitlementPlanFeatures is the resolver for the entitlementPlanFeatures field.
 func (r *queryResolver) EntitlementPlanFeatures(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.EntitlementPlanFeatureWhereInput) (*generated.EntitlementPlanFeatureConnection, error) {
-	return withTransactionalMutation(ctx).EntitlementPlanFeature.Query().Paginate(
+	res, err := withTransactionalMutation(ctx).EntitlementPlanFeature.Query().Paginate(
 		ctx,
 		after,
 		first,
 		before,
 		last,
 		generated.WithEntitlementPlanFeatureFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "entitlementplanfeature"})
+	}
+
+	return res, err
 }
 
 // EntitlementPlanFeatureHistories is the resolver for the entitlementPlanFeatureHistories field.
 func (r *queryResolver) EntitlementPlanFeatureHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.EntitlementPlanFeatureHistoryWhereInput) (*generated.EntitlementPlanFeatureHistoryConnection, error) {
-	return withTransactionalMutation(ctx).EntitlementPlanFeatureHistory.Query().Paginate(
+	res, err := withTransactionalMutation(ctx).EntitlementPlanFeatureHistory.Query().Paginate(
 		ctx,
 		after,
 		first,
 		before,
 		last,
 		generated.WithEntitlementPlanFeatureHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "entitlementplanfeaturehistory"})
+	}
+
+	return res, err
 }
 
 // EntitlementPlanHistories is the resolver for the entitlementPlanHistories field.
 func (r *queryResolver) EntitlementPlanHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.EntitlementPlanHistoryWhereInput) (*generated.EntitlementPlanHistoryConnection, error) {
-	return withTransactionalMutation(ctx).EntitlementPlanHistory.Query().Paginate(
+	res, err := withTransactionalMutation(ctx).EntitlementPlanHistory.Query().Paginate(
 		ctx,
 		after,
 		first,
 		before,
 		last,
 		generated.WithEntitlementPlanHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "entitlementplanhistory"})
+	}
+
+	return res, err
 }
 
 // Entities is the resolver for the entities field.
 func (r *queryResolver) Entities(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.EntityOrder, where *generated.EntityWhereInput) (*generated.EntityConnection, error) {
-	return withTransactionalMutation(ctx).Entity.Query().Paginate(
+	res, err := withTransactionalMutation(ctx).Entity.Query().Paginate(
 		ctx,
 		after,
 		first,
@@ -188,11 +313,16 @@ func (r *queryResolver) Entities(ctx context.Context, after *entgql.Cursor[strin
 		last,
 		generated.WithEntityOrder(orderBy),
 		generated.WithEntityFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "entity"})
+	}
+
+	return res, err
 }
 
 // EntityHistories is the resolver for the entityHistories field.
 func (r *queryResolver) EntityHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.EntityHistoryOrder, where *generated.EntityHistoryWhereInput) (*generated.EntityHistoryConnection, error) {
-	return withTransactionalMutation(ctx).EntityHistory.Query().Paginate(
+	res, err := withTransactionalMutation(ctx).EntityHistory.Query().Paginate(
 		ctx,
 		after,
 		first,
@@ -200,11 +330,16 @@ func (r *queryResolver) EntityHistories(ctx context.Context, after *entgql.Curso
 		last,
 		generated.WithEntityHistoryOrder(orderBy),
 		generated.WithEntityHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "entityhistory"})
+	}
+
+	return res, err
 }
 
 // EntityTypes is the resolver for the entityTypes field.
 func (r *queryResolver) EntityTypes(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.EntityTypeOrder, where *generated.EntityTypeWhereInput) (*generated.EntityTypeConnection, error) {
-	return withTransactionalMutation(ctx).EntityType.Query().Paginate(
+	res, err := withTransactionalMutation(ctx).EntityType.Query().Paginate(
 		ctx,
 		after,
 		first,
@@ -212,11 +347,16 @@ func (r *queryResolver) EntityTypes(ctx context.Context, after *entgql.Cursor[st
 		last,
 		generated.WithEntityTypeOrder(orderBy),
 		generated.WithEntityTypeFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "entitytype"})
+	}
+
+	return res, err
 }
 
 // EntityTypeHistories is the resolver for the entityTypeHistories field.
 func (r *queryResolver) EntityTypeHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.EntityTypeHistoryOrder, where *generated.EntityTypeHistoryWhereInput) (*generated.EntityTypeHistoryConnection, error) {
-	return withTransactionalMutation(ctx).EntityTypeHistory.Query().Paginate(
+	res, err := withTransactionalMutation(ctx).EntityTypeHistory.Query().Paginate(
 		ctx,
 		after,
 		first,
@@ -224,428 +364,937 @@ func (r *queryResolver) EntityTypeHistories(ctx context.Context, after *entgql.C
 		last,
 		generated.WithEntityTypeHistoryOrder(orderBy),
 		generated.WithEntityTypeHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "entitytypehistory"})
+	}
+
+	return res, err
 }
 
 // Events is the resolver for the events field.
 func (r *queryResolver) Events(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.EventWhereInput) (*generated.EventConnection, error) {
-	return withTransactionalMutation(ctx).Event.Query().Paginate(ctx, after, first, before, last, generated.WithEventFilter(where.Filter))
+	res, err := withTransactionalMutation(ctx).Event.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithEventFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "event"})
+	}
+
+	return res, err
 }
 
 // EventHistories is the resolver for the eventHistories field.
 func (r *queryResolver) EventHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.EventHistoryWhereInput) (*generated.EventHistoryConnection, error) {
-	return withTransactionalMutation(ctx).EventHistory.Query().Paginate(ctx, after, first, before, last, generated.WithEventHistoryFilter(where.Filter))
+	res, err := withTransactionalMutation(ctx).EventHistory.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithEventHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "eventhistory"})
+	}
+
+	return res, err
 }
 
 // Features is the resolver for the features field.
 func (r *queryResolver) Features(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.FeatureWhereInput) (*generated.FeatureConnection, error) {
-	return withTransactionalMutation(ctx).Feature.Query().Paginate(ctx, after, first, before, last, generated.WithFeatureFilter(where.Filter))
+	res, err := withTransactionalMutation(ctx).Feature.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithFeatureFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "feature"})
+	}
+
+	return res, err
 }
 
 // FeatureHistories is the resolver for the featureHistories field.
 func (r *queryResolver) FeatureHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.FeatureHistoryWhereInput) (*generated.FeatureHistoryConnection, error) {
-	return withTransactionalMutation(ctx).FeatureHistory.Query().Paginate(ctx, after, first, before, last, generated.WithFeatureHistoryFilter(where.Filter))
+	res, err := withTransactionalMutation(ctx).FeatureHistory.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithFeatureHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "featurehistory"})
+	}
+
+	return res, err
 }
 
 // Files is the resolver for the files field.
 func (r *queryResolver) Files(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.FileWhereInput) (*generated.FileConnection, error) {
-	return withTransactionalMutation(ctx).File.Query().Paginate(ctx, after, first, before, last, generated.WithFileFilter(where.Filter))
+	res, err := withTransactionalMutation(ctx).File.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithFileFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "file"})
+	}
+
+	return res, err
 }
 
 // FileHistories is the resolver for the fileHistories field.
 func (r *queryResolver) FileHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.FileHistoryWhereInput) (*generated.FileHistoryConnection, error) {
-	return withTransactionalMutation(ctx).FileHistory.Query().Paginate(ctx, after, first, before, last, generated.WithFileHistoryFilter(where.Filter))
+	res, err := withTransactionalMutation(ctx).FileHistory.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithFileHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "filehistory"})
+	}
+
+	return res, err
 }
 
 // Groups is the resolver for the groups field.
 func (r *queryResolver) Groups(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.GroupOrder, where *generated.GroupWhereInput) (*generated.GroupConnection, error) {
-	return withTransactionalMutation(ctx).Group.Query().Paginate(ctx, after, first, before, last, generated.WithGroupOrder(orderBy), generated.WithGroupFilter(where.Filter))
+	res, err := withTransactionalMutation(ctx).Group.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithGroupOrder(orderBy),
+		generated.WithGroupFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "group"})
+	}
+
+	return res, err
 }
 
 // GroupHistories is the resolver for the groupHistories field.
 func (r *queryResolver) GroupHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.GroupHistoryOrder, where *generated.GroupHistoryWhereInput) (*generated.GroupHistoryConnection, error) {
-	return withTransactionalMutation(ctx).GroupHistory.Query().Paginate(ctx, after, first, before, last, generated.WithGroupHistoryOrder(orderBy), generated.WithGroupHistoryFilter(where.Filter))
+	res, err := withTransactionalMutation(ctx).GroupHistory.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithGroupHistoryOrder(orderBy),
+		generated.WithGroupHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "grouphistory"})
+	}
+
+	return res, err
 }
 
 // GroupMemberships is the resolver for the groupMemberships field.
 func (r *queryResolver) GroupMemberships(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.GroupMembershipWhereInput) (*generated.GroupMembershipConnection, error) {
-	val, err := withTransactionalMutation(ctx).GroupMembership.Query().Paginate(ctx, after, first, before, last, generated.WithGroupMembershipFilter(where.Filter))
+	res, err := withTransactionalMutation(ctx).GroupMembership.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithGroupMembershipFilter(where.Filter))
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionGet, object: "groupmembership"})
 	}
 
-	return val, nil
+	return res, err
 }
 
 // GroupMembershipHistories is the resolver for the groupMembershipHistories field.
 func (r *queryResolver) GroupMembershipHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.GroupMembershipHistoryWhereInput) (*generated.GroupMembershipHistoryConnection, error) {
-	return withTransactionalMutation(ctx).GroupMembershipHistory.Query().Paginate(ctx, after, first, before, last, generated.WithGroupMembershipHistoryFilter(where.Filter))
+	res, err := withTransactionalMutation(ctx).GroupMembershipHistory.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithGroupMembershipHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "groupmembershiphistory"})
+	}
+
+	return res, err
 }
 
 // GroupSettings is the resolver for the groupSettings field.
 func (r *queryResolver) GroupSettings(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.GroupSettingWhereInput) (*generated.GroupSettingConnection, error) {
-	return withTransactionalMutation(ctx).GroupSetting.Query().Paginate(ctx, after, first, before, last, generated.WithGroupSettingFilter(where.Filter))
+	res, err := withTransactionalMutation(ctx).GroupSetting.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithGroupSettingFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "groupsetting"})
+	}
+
+	return res, err
 }
 
 // GroupSettingHistories is the resolver for the groupSettingHistories field.
 func (r *queryResolver) GroupSettingHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.GroupSettingHistoryWhereInput) (*generated.GroupSettingHistoryConnection, error) {
-	return withTransactionalMutation(ctx).GroupSettingHistory.Query().Paginate(ctx, after, first, before, last, generated.WithGroupSettingHistoryFilter(where.Filter))
+	res, err := withTransactionalMutation(ctx).GroupSettingHistory.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithGroupSettingHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "groupsettinghistory"})
+	}
+
+	return res, err
 }
 
 // Hushes is the resolver for the hushes field.
 func (r *queryResolver) Hushes(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.HushOrder, where *generated.HushWhereInput) (*generated.HushConnection, error) {
-	return withTransactionalMutation(ctx).Hush.Query().Paginate(ctx, after, first, before, last, generated.WithHushOrder(orderBy), generated.WithHushFilter(where.Filter))
+	res, err := withTransactionalMutation(ctx).Hush.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithHushOrder(orderBy),
+		generated.WithHushFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "hush"})
+	}
+
+	return res, err
 }
 
 // HushHistories is the resolver for the hushHistories field.
 func (r *queryResolver) HushHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.HushHistoryOrder, where *generated.HushHistoryWhereInput) (*generated.HushHistoryConnection, error) {
-	return withTransactionalMutation(ctx).HushHistory.Query().Paginate(ctx, after, first, before, last, generated.WithHushHistoryOrder(orderBy), generated.WithHushHistoryFilter(where.Filter))
+	res, err := withTransactionalMutation(ctx).HushHistory.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithHushHistoryOrder(orderBy),
+		generated.WithHushHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "hushhistory"})
+	}
+
+	return res, err
 }
 
 // Integrations is the resolver for the integrations field.
 func (r *queryResolver) Integrations(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationOrder, where *generated.IntegrationWhereInput) (*generated.IntegrationConnection, error) {
-	return withTransactionalMutation(ctx).Integration.Query().Paginate(ctx, after, first, before, last, generated.WithIntegrationOrder(orderBy), generated.WithIntegrationFilter(where.Filter))
+	res, err := withTransactionalMutation(ctx).Integration.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithIntegrationOrder(orderBy),
+		generated.WithIntegrationFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "integration"})
+	}
+
+	return res, err
 }
 
 // IntegrationHistories is the resolver for the integrationHistories field.
 func (r *queryResolver) IntegrationHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationHistoryOrder, where *generated.IntegrationHistoryWhereInput) (*generated.IntegrationHistoryConnection, error) {
-	return withTransactionalMutation(ctx).IntegrationHistory.Query().Paginate(ctx, after, first, before, last, generated.WithIntegrationHistoryOrder(orderBy), generated.WithIntegrationHistoryFilter(where.Filter))
+	res, err := withTransactionalMutation(ctx).IntegrationHistory.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithIntegrationHistoryOrder(orderBy),
+		generated.WithIntegrationHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "integrationhistory"})
+	}
+
+	return res, err
 }
 
 // InternalPolicies is the resolver for the internalPolicies field.
 func (r *queryResolver) InternalPolicies(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.InternalPolicyWhereInput) (*generated.InternalPolicyConnection, error) {
-	return withTransactionalMutation(ctx).InternalPolicy.Query().Paginate(
+	res, err := withTransactionalMutation(ctx).InternalPolicy.Query().Paginate(
 		ctx,
 		after,
 		first,
 		before,
 		last,
 		generated.WithInternalPolicyFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "internalpolicy"})
+	}
+
+	return res, err
 }
 
 // InternalPolicyHistories is the resolver for the internalPolicyHistories field.
 func (r *queryResolver) InternalPolicyHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.InternalPolicyHistoryWhereInput) (*generated.InternalPolicyHistoryConnection, error) {
-	return withTransactionalMutation(ctx).InternalPolicyHistory.Query().Paginate(
+	res, err := withTransactionalMutation(ctx).InternalPolicyHistory.Query().Paginate(
 		ctx,
 		after,
 		first,
 		before,
 		last,
 		generated.WithInternalPolicyHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "internalpolicyhistory"})
+	}
+
+	return res, err
 }
 
 // Invites is the resolver for the invites field.
 func (r *queryResolver) Invites(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.InviteWhereInput) (*generated.InviteConnection, error) {
-	return r.db.Invite.Query().Paginate(ctx, after, first, before, last, generated.WithInviteFilter(where.Filter))
+	res, err := withTransactionalMutation(ctx).Invite.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithInviteFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "invite"})
+	}
+
+	return res, err
 }
 
 // Narratives is the resolver for the narratives field.
 func (r *queryResolver) Narratives(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.NarrativeWhereInput) (*generated.NarrativeConnection, error) {
-	return withTransactionalMutation(ctx).Narrative.Query().Paginate(
+	res, err := withTransactionalMutation(ctx).Narrative.Query().Paginate(
 		ctx,
 		after,
 		first,
 		before,
 		last,
 		generated.WithNarrativeFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "narrative"})
+	}
+
+	return res, err
 }
 
 // NarrativeHistories is the resolver for the narrativeHistories field.
 func (r *queryResolver) NarrativeHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.NarrativeHistoryWhereInput) (*generated.NarrativeHistoryConnection, error) {
-	return withTransactionalMutation(ctx).NarrativeHistory.Query().Paginate(
+	res, err := withTransactionalMutation(ctx).NarrativeHistory.Query().Paginate(
 		ctx,
 		after,
 		first,
 		before,
 		last,
 		generated.WithNarrativeHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "narrativehistory"})
+	}
+
+	return res, err
 }
 
 // Notes is the resolver for the notes field.
 func (r *queryResolver) Notes(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.NoteWhereInput) (*generated.NoteConnection, error) {
-	return withTransactionalMutation(ctx).Note.Query().Paginate(
+	res, err := withTransactionalMutation(ctx).Note.Query().Paginate(
 		ctx,
 		after,
 		first,
 		before,
 		last,
 		generated.WithNoteFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "note"})
+	}
+
+	return res, err
 }
 
 // NoteHistories is the resolver for the noteHistories field.
 func (r *queryResolver) NoteHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.NoteHistoryWhereInput) (*generated.NoteHistoryConnection, error) {
-	return withTransactionalMutation(ctx).NoteHistory.Query().Paginate(
+	res, err := withTransactionalMutation(ctx).NoteHistory.Query().Paginate(
 		ctx,
 		after,
 		first,
 		before,
 		last,
 		generated.WithNoteHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "notehistory"})
+	}
+
+	return res, err
 }
 
 // OauthProviders is the resolver for the oauthProviders field.
 func (r *queryResolver) OauthProviders(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.OauthProviderWhereInput) (*generated.OauthProviderConnection, error) {
-	return withTransactionalMutation(ctx).OauthProvider.Query().Paginate(
+	res, err := withTransactionalMutation(ctx).OauthProvider.Query().Paginate(
 		ctx,
 		after,
 		first,
 		before,
 		last,
 		generated.WithOauthProviderFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "oauthprovider"})
+	}
+
+	return res, err
 }
 
 // OauthProviderHistories is the resolver for the oauthProviderHistories field.
 func (r *queryResolver) OauthProviderHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.OauthProviderHistoryWhereInput) (*generated.OauthProviderHistoryConnection, error) {
-	return withTransactionalMutation(ctx).OauthProviderHistory.Query().Paginate(
+	res, err := withTransactionalMutation(ctx).OauthProviderHistory.Query().Paginate(
 		ctx,
 		after,
 		first,
 		before,
 		last,
 		generated.WithOauthProviderHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "oauthproviderhistory"})
+	}
+
+	return res, err
 }
 
 // OhAuthTooTokens is the resolver for the ohAuthTooTokens field.
 func (r *queryResolver) OhAuthTooTokens(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.OhAuthTooTokenWhereInput) (*generated.OhAuthTooTokenConnection, error) {
-	return withTransactionalMutation(ctx).OhAuthTooToken.Query().Paginate(ctx, after, first, before, last, generated.WithOhAuthTooTokenFilter(where.Filter))
+	res, err := withTransactionalMutation(ctx).OhAuthTooToken.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithOhAuthTooTokenFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "ohauthtootoken"})
+	}
+
+	return res, err
 }
 
 // OrgMemberships is the resolver for the orgMemberships field.
 func (r *queryResolver) OrgMemberships(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.OrgMembershipWhereInput) (*generated.OrgMembershipConnection, error) {
-	return withTransactionalMutation(ctx).OrgMembership.Query().Paginate(ctx, after, first, before, last, generated.WithOrgMembershipFilter(where.Filter))
+	res, err := withTransactionalMutation(ctx).OrgMembership.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithOrgMembershipFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "orgmembership"})
+	}
+
+	return res, err
 }
 
 // OrgMembershipHistories is the resolver for the orgMembershipHistories field.
 func (r *queryResolver) OrgMembershipHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.OrgMembershipHistoryWhereInput) (*generated.OrgMembershipHistoryConnection, error) {
-	return withTransactionalMutation(ctx).OrgMembershipHistory.Query().Paginate(ctx, after, first, before, last, generated.WithOrgMembershipHistoryFilter(where.Filter))
+	res, err := withTransactionalMutation(ctx).OrgMembershipHistory.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithOrgMembershipHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "orgmembershiphistory"})
+	}
+
+	return res, err
 }
 
 // Organizations is the resolver for the organizations field.
 func (r *queryResolver) Organizations(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrganizationOrder, where *generated.OrganizationWhereInput) (*generated.OrganizationConnection, error) {
-	return withTransactionalMutation(ctx).Organization.Query().Paginate(ctx, after, first, before, last, generated.WithOrganizationOrder(orderBy), generated.WithOrganizationFilter(where.Filter))
+	res, err := withTransactionalMutation(ctx).Organization.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithOrganizationOrder(orderBy),
+		generated.WithOrganizationFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "organization"})
+	}
+
+	return res, err
 }
 
 // OrganizationHistories is the resolver for the organizationHistories field.
 func (r *queryResolver) OrganizationHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrganizationHistoryOrder, where *generated.OrganizationHistoryWhereInput) (*generated.OrganizationHistoryConnection, error) {
-	return withTransactionalMutation(ctx).OrganizationHistory.Query().Paginate(ctx, after, first, before, last, generated.WithOrganizationHistoryOrder(orderBy), generated.WithOrganizationHistoryFilter(where.Filter))
+	res, err := withTransactionalMutation(ctx).OrganizationHistory.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithOrganizationHistoryOrder(orderBy),
+		generated.WithOrganizationHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "organizationhistory"})
+	}
+
+	return res, err
 }
 
 // OrganizationSettings is the resolver for the organizationSettings field.
 func (r *queryResolver) OrganizationSettings(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.OrganizationSettingWhereInput) (*generated.OrganizationSettingConnection, error) {
-	return withTransactionalMutation(ctx).OrganizationSetting.Query().Paginate(ctx, after, first, before, last, generated.WithOrganizationSettingFilter(where.Filter))
+	res, err := withTransactionalMutation(ctx).OrganizationSetting.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithOrganizationSettingFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "organizationsetting"})
+	}
+
+	return res, err
 }
 
 // OrganizationSettingHistories is the resolver for the organizationSettingHistories field.
 func (r *queryResolver) OrganizationSettingHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.OrganizationSettingHistoryWhereInput) (*generated.OrganizationSettingHistoryConnection, error) {
-	return withTransactionalMutation(ctx).OrganizationSettingHistory.Query().Paginate(ctx, after, first, before, last, generated.WithOrganizationSettingHistoryFilter(where.Filter))
+	res, err := withTransactionalMutation(ctx).OrganizationSettingHistory.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithOrganizationSettingHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "organizationsettinghistory"})
+	}
+
+	return res, err
 }
 
 // PersonalAccessTokens is the resolver for the personalAccessTokens field.
 func (r *queryResolver) PersonalAccessTokens(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.PersonalAccessTokenWhereInput) (*generated.PersonalAccessTokenConnection, error) {
-	return withTransactionalMutation(ctx).PersonalAccessToken.Query().Paginate(ctx, after, first, before, last, generated.WithPersonalAccessTokenFilter(where.Filter))
+	res, err := withTransactionalMutation(ctx).PersonalAccessToken.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithPersonalAccessTokenFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "personalaccesstoken"})
+	}
+
+	return res, err
 }
 
 // Procedures is the resolver for the procedures field.
 func (r *queryResolver) Procedures(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ProcedureWhereInput) (*generated.ProcedureConnection, error) {
-	return withTransactionalMutation(ctx).Procedure.Query().Paginate(
+	res, err := withTransactionalMutation(ctx).Procedure.Query().Paginate(
 		ctx,
 		after,
 		first,
 		before,
 		last,
 		generated.WithProcedureFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "procedure"})
+	}
+
+	return res, err
 }
 
 // ProcedureHistories is the resolver for the procedureHistories field.
 func (r *queryResolver) ProcedureHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ProcedureHistoryWhereInput) (*generated.ProcedureHistoryConnection, error) {
-	return withTransactionalMutation(ctx).ProcedureHistory.Query().Paginate(
+	res, err := withTransactionalMutation(ctx).ProcedureHistory.Query().Paginate(
 		ctx,
 		after,
 		first,
 		before,
 		last,
 		generated.WithProcedureHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "procedurehistory"})
+	}
+
+	return res, err
 }
 
 // Programs is the resolver for the programs field.
 func (r *queryResolver) Programs(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ProgramWhereInput) (*generated.ProgramConnection, error) {
-	return withTransactionalMutation(ctx).Program.Query().Paginate(
+	res, err := withTransactionalMutation(ctx).Program.Query().Paginate(
 		ctx,
 		after,
 		first,
 		before,
 		last,
 		generated.WithProgramFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "program"})
+	}
+
+	return res, err
 }
 
 // ProgramHistories is the resolver for the programHistories field.
 func (r *queryResolver) ProgramHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ProgramHistoryWhereInput) (*generated.ProgramHistoryConnection, error) {
-	return withTransactionalMutation(ctx).ProgramHistory.Query().Paginate(
+	res, err := withTransactionalMutation(ctx).ProgramHistory.Query().Paginate(
 		ctx,
 		after,
 		first,
 		before,
 		last,
 		generated.WithProgramHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "programhistory"})
+	}
+
+	return res, err
 }
 
 // ProgramMemberships is the resolver for the programMemberships field.
 func (r *queryResolver) ProgramMemberships(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ProgramMembershipWhereInput) (*generated.ProgramMembershipConnection, error) {
-	return withTransactionalMutation(ctx).ProgramMembership.Query().Paginate(
+	res, err := withTransactionalMutation(ctx).ProgramMembership.Query().Paginate(
 		ctx,
 		after,
 		first,
 		before,
 		last,
 		generated.WithProgramMembershipFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "programmembership"})
+	}
+
+	return res, err
 }
 
 // ProgramMembershipHistories is the resolver for the programMembershipHistories field.
 func (r *queryResolver) ProgramMembershipHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.ProgramMembershipHistoryWhereInput) (*generated.ProgramMembershipHistoryConnection, error) {
-	return withTransactionalMutation(ctx).ProgramMembershipHistory.Query().Paginate(
+	res, err := withTransactionalMutation(ctx).ProgramMembershipHistory.Query().Paginate(
 		ctx,
 		after,
 		first,
 		before,
 		last,
 		generated.WithProgramMembershipHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "programmembershiphistory"})
+	}
+
+	return res, err
 }
 
 // Risks is the resolver for the risks field.
 func (r *queryResolver) Risks(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.RiskWhereInput) (*generated.RiskConnection, error) {
-	return withTransactionalMutation(ctx).Risk.Query().Paginate(
+	res, err := withTransactionalMutation(ctx).Risk.Query().Paginate(
 		ctx,
 		after,
 		first,
 		before,
 		last,
 		generated.WithRiskFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "risk"})
+	}
+
+	return res, err
 }
 
 // RiskHistories is the resolver for the riskHistories field.
 func (r *queryResolver) RiskHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.RiskHistoryWhereInput) (*generated.RiskHistoryConnection, error) {
-	return withTransactionalMutation(ctx).RiskHistory.Query().Paginate(
+	res, err := withTransactionalMutation(ctx).RiskHistory.Query().Paginate(
 		ctx,
 		after,
 		first,
 		before,
 		last,
 		generated.WithRiskHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "riskhistory"})
+	}
+
+	return res, err
 }
 
 // Standards is the resolver for the standards field.
 func (r *queryResolver) Standards(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.StandardWhereInput) (*generated.StandardConnection, error) {
-	return withTransactionalMutation(ctx).Standard.Query().Paginate(
+	res, err := withTransactionalMutation(ctx).Standard.Query().Paginate(
 		ctx,
 		after,
 		first,
 		before,
 		last,
 		generated.WithStandardFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "standard"})
+	}
+
+	return res, err
 }
 
 // StandardHistories is the resolver for the standardHistories field.
 func (r *queryResolver) StandardHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.StandardHistoryWhereInput) (*generated.StandardHistoryConnection, error) {
-	return withTransactionalMutation(ctx).StandardHistory.Query().Paginate(
+	res, err := withTransactionalMutation(ctx).StandardHistory.Query().Paginate(
 		ctx,
 		after,
 		first,
 		before,
 		last,
 		generated.WithStandardHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "standardhistory"})
+	}
+
+	return res, err
 }
 
 // Subcontrols is the resolver for the subcontrols field.
 func (r *queryResolver) Subcontrols(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.SubcontrolWhereInput) (*generated.SubcontrolConnection, error) {
-	return withTransactionalMutation(ctx).Subcontrol.Query().Paginate(
+	res, err := withTransactionalMutation(ctx).Subcontrol.Query().Paginate(
 		ctx,
 		after,
 		first,
 		before,
 		last,
 		generated.WithSubcontrolFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "subcontrol"})
+	}
+
+	return res, err
 }
 
 // SubcontrolHistories is the resolver for the subcontrolHistories field.
 func (r *queryResolver) SubcontrolHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.SubcontrolHistoryWhereInput) (*generated.SubcontrolHistoryConnection, error) {
-	return withTransactionalMutation(ctx).SubcontrolHistory.Query().Paginate(
+	res, err := withTransactionalMutation(ctx).SubcontrolHistory.Query().Paginate(
 		ctx,
 		after,
 		first,
 		before,
 		last,
 		generated.WithSubcontrolHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "subcontrolhistory"})
+	}
+
+	return res, err
 }
 
 // Subscribers is the resolver for the subscribers field.
 func (r *queryResolver) Subscribers(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.SubscriberWhereInput) (*generated.SubscriberConnection, error) {
-	return withTransactionalMutation(ctx).Subscriber.Query().Paginate(ctx, after, first, before, last, generated.WithSubscriberFilter(where.Filter))
+	res, err := withTransactionalMutation(ctx).Subscriber.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithSubscriberFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "subscriber"})
+	}
+
+	return res, err
 }
 
 // TfaSettings is the resolver for the tfaSettings field.
 func (r *queryResolver) TfaSettings(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.TFASettingWhereInput) (*generated.TFASettingConnection, error) {
-	return withTransactionalMutation(ctx).TFASetting.Query().Paginate(ctx, after, first, before, last, generated.WithTFASettingFilter(where.Filter))
+	res, err := withTransactionalMutation(ctx).TFASetting.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithTFASettingFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "tfasetting"})
+	}
+
+	return res, err
 }
 
 // Tasks is the resolver for the tasks field.
 func (r *queryResolver) Tasks(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.TaskWhereInput) (*generated.TaskConnection, error) {
-	return withTransactionalMutation(ctx).Task.Query().Paginate(
+	res, err := withTransactionalMutation(ctx).Task.Query().Paginate(
 		ctx,
 		after,
 		first,
 		before,
 		last,
 		generated.WithTaskFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "task"})
+	}
+
+	return res, err
 }
 
 // TaskHistories is the resolver for the taskHistories field.
 func (r *queryResolver) TaskHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.TaskHistoryWhereInput) (*generated.TaskHistoryConnection, error) {
-	return withTransactionalMutation(ctx).TaskHistory.Query().Paginate(
+	res, err := withTransactionalMutation(ctx).TaskHistory.Query().Paginate(
 		ctx,
 		after,
 		first,
 		before,
 		last,
 		generated.WithTaskHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "taskhistory"})
+	}
+
+	return res, err
 }
 
 // Templates is the resolver for the templates field.
 func (r *queryResolver) Templates(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.TemplateOrder, where *generated.TemplateWhereInput) (*generated.TemplateConnection, error) {
-	return withTransactionalMutation(ctx).Template.Query().Paginate(ctx, after, first, before, last, generated.WithTemplateOrder(orderBy), generated.WithTemplateFilter(where.Filter))
+	res, err := withTransactionalMutation(ctx).Template.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithTemplateOrder(orderBy),
+		generated.WithTemplateFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "template"})
+	}
+
+	return res, err
 }
 
 // TemplateHistories is the resolver for the templateHistories field.
 func (r *queryResolver) TemplateHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.TemplateHistoryOrder, where *generated.TemplateHistoryWhereInput) (*generated.TemplateHistoryConnection, error) {
-	return withTransactionalMutation(ctx).TemplateHistory.Query().Paginate(ctx, after, first, before, last, generated.WithTemplateHistoryOrder(orderBy), generated.WithTemplateHistoryFilter(where.Filter))
+	res, err := withTransactionalMutation(ctx).TemplateHistory.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithTemplateHistoryOrder(orderBy),
+		generated.WithTemplateHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "templatehistory"})
+	}
+
+	return res, err
 }
 
 // Users is the resolver for the users field.
 func (r *queryResolver) Users(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.UserOrder, where *generated.UserWhereInput) (*generated.UserConnection, error) {
-	return withTransactionalMutation(ctx).User.Query().Paginate(ctx, after, first, before, last, generated.WithUserOrder(orderBy), generated.WithUserFilter(where.Filter))
+	res, err := withTransactionalMutation(ctx).User.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithUserOrder(orderBy),
+		generated.WithUserFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "user"})
+	}
+
+	return res, err
 }
 
 // UserHistories is the resolver for the userHistories field.
 func (r *queryResolver) UserHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.UserHistoryOrder, where *generated.UserHistoryWhereInput) (*generated.UserHistoryConnection, error) {
-	return withTransactionalMutation(ctx).UserHistory.Query().Paginate(ctx, after, first, before, last, generated.WithUserHistoryOrder(orderBy), generated.WithUserHistoryFilter(where.Filter))
+	res, err := withTransactionalMutation(ctx).UserHistory.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithUserHistoryOrder(orderBy),
+		generated.WithUserHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "userhistory"})
+	}
+
+	return res, err
 }
 
 // UserSettings is the resolver for the userSettings field.
 func (r *queryResolver) UserSettings(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.UserSettingWhereInput) (*generated.UserSettingConnection, error) {
-	return withTransactionalMutation(ctx).UserSetting.Query().Paginate(ctx, after, first, before, last, generated.WithUserSettingFilter(where.Filter))
+	res, err := withTransactionalMutation(ctx).UserSetting.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithUserSettingFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "usersetting"})
+	}
+
+	return res, err
 }
 
 // UserSettingHistories is the resolver for the userSettingHistories field.
 func (r *queryResolver) UserSettingHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.UserSettingHistoryWhereInput) (*generated.UserSettingHistoryConnection, error) {
-	return withTransactionalMutation(ctx).UserSettingHistory.Query().Paginate(ctx, after, first, before, last, generated.WithUserSettingHistoryFilter(where.Filter))
+	res, err := withTransactionalMutation(ctx).UserSettingHistory.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithUserSettingHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "usersettinghistory"})
+	}
+
+	return res, err
 }
 
 // Webhooks is the resolver for the webhooks field.
 func (r *queryResolver) Webhooks(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.WebhookOrder, where *generated.WebhookWhereInput) (*generated.WebhookConnection, error) {
-	return withTransactionalMutation(ctx).Webhook.Query().Paginate(ctx, after, first, before, last, generated.WithWebhookOrder(orderBy), generated.WithWebhookFilter(where.Filter))
+	res, err := withTransactionalMutation(ctx).Webhook.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithWebhookOrder(orderBy),
+		generated.WithWebhookFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "webhook"})
+	}
+
+	return res, err
 }
 
 // WebhookHistories is the resolver for the webhookHistories field.
 func (r *queryResolver) WebhookHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.WebhookHistoryOrder, where *generated.WebhookHistoryWhereInput) (*generated.WebhookHistoryConnection, error) {
-	return withTransactionalMutation(ctx).WebhookHistory.Query().Paginate(ctx, after, first, before, last, generated.WithWebhookHistoryOrder(orderBy), generated.WithWebhookHistoryFilter(where.Filter))
+	res, err := withTransactionalMutation(ctx).WebhookHistory.Query().Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithWebhookHistoryOrder(orderBy),
+		generated.WithWebhookHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionGet, object: "webhookhistory"})
+	}
+
+	return res, err
 }
 
 // Query returns QueryResolver implementation.

@@ -3,11 +3,11 @@ package generated
 
 import (
 	"context"
+	"errors"
 
 	"entgo.io/ent/privacy"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
-	"errors"
 
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -148,7 +148,7 @@ func (m *APITokenMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
@@ -188,7 +188,7 @@ func (m *APITokenMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
@@ -254,7 +254,7 @@ func (q *ContactQuery) CheckAccess(ctx context.Context) error {
 	}
 
 	// Skip to the next privacy rule (equivalent to return nil)
-	return ErrPermissionDenied
+	return privacy.Skip
 }
 func (m *ContactMutation) CheckAccessForEdit(ctx context.Context) error {
 	ac := fgax.AccessCheck{
@@ -312,7 +312,7 @@ func (m *ContactMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
@@ -352,7 +352,7 @@ func (m *ContactMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
@@ -541,7 +541,7 @@ func (m *DocumentDataMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
@@ -581,7 +581,7 @@ func (m *DocumentDataMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
@@ -770,7 +770,7 @@ func (m *EntitlementMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
@@ -810,7 +810,7 @@ func (m *EntitlementMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
@@ -999,7 +999,7 @@ func (m *EntitlementPlanMutation) CheckAccessForEdit(ctx context.Context) error 
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
@@ -1039,7 +1039,7 @@ func (m *EntitlementPlanMutation) CheckAccessForDelete(ctx context.Context) erro
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
@@ -1163,7 +1163,7 @@ func (m *EntitlementPlanFeatureMutation) CheckAccessForEdit(ctx context.Context)
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
@@ -1203,7 +1203,7 @@ func (m *EntitlementPlanFeatureMutation) CheckAccessForDelete(ctx context.Contex
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
@@ -1457,7 +1457,7 @@ func (m *EntityMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
@@ -1497,7 +1497,7 @@ func (m *EntityMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
@@ -1686,7 +1686,7 @@ func (m *EntityTypeMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
@@ -1726,7 +1726,7 @@ func (m *EntityTypeMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
@@ -1915,7 +1915,7 @@ func (m *FeatureMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
@@ -1955,7 +1955,7 @@ func (m *FeatureMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
@@ -2143,7 +2143,7 @@ func (m *FileMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
@@ -2183,7 +2183,7 @@ func (m *FileMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
@@ -2371,7 +2371,7 @@ func (m *GroupMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
@@ -2411,7 +2411,7 @@ func (m *GroupMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
@@ -2609,7 +2609,7 @@ func (m *GroupMembershipMutation) CheckAccessForEdit(ctx context.Context) error 
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
@@ -2649,7 +2649,7 @@ func (m *GroupMembershipMutation) CheckAccessForDelete(ctx context.Context) erro
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
@@ -2847,7 +2847,7 @@ func (m *GroupSettingMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
@@ -2887,7 +2887,7 @@ func (m *GroupSettingMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
@@ -3076,7 +3076,7 @@ func (m *IntegrationMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
@@ -3116,7 +3116,7 @@ func (m *IntegrationMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
@@ -3305,7 +3305,7 @@ func (m *InviteMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
@@ -3345,7 +3345,7 @@ func (m *InviteMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
@@ -3469,7 +3469,7 @@ func (m *NoteMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
@@ -3509,7 +3509,7 @@ func (m *NoteMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
@@ -3698,7 +3698,7 @@ func (m *OauthProviderMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
@@ -3738,7 +3738,7 @@ func (m *OauthProviderMutation) CheckAccessForDelete(ctx context.Context) error 
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
@@ -3936,7 +3936,7 @@ func (m *OrgMembershipMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
@@ -3976,7 +3976,7 @@ func (m *OrgMembershipMutation) CheckAccessForDelete(ctx context.Context) error 
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
@@ -4164,7 +4164,7 @@ func (m *OrganizationMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
@@ -4204,7 +4204,7 @@ func (m *OrganizationMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
@@ -4402,7 +4402,7 @@ func (m *OrganizationSettingMutation) CheckAccessForEdit(ctx context.Context) er
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
@@ -4442,7 +4442,7 @@ func (m *OrganizationSettingMutation) CheckAccessForDelete(ctx context.Context) 
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
@@ -4630,7 +4630,7 @@ func (m *ProgramMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
@@ -4670,7 +4670,7 @@ func (m *ProgramMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
@@ -4868,7 +4868,7 @@ func (m *ProgramMembershipMutation) CheckAccessForEdit(ctx context.Context) erro
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
@@ -4908,7 +4908,7 @@ func (m *ProgramMembershipMutation) CheckAccessForDelete(ctx context.Context) er
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
@@ -5097,7 +5097,7 @@ func (m *SubscriberMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
@@ -5137,7 +5137,7 @@ func (m *SubscriberMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
@@ -5260,7 +5260,7 @@ func (m *TaskMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
@@ -5300,7 +5300,7 @@ func (m *TaskMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
@@ -5489,7 +5489,7 @@ func (m *TemplateMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
@@ -5529,7 +5529,7 @@ func (m *TemplateMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
@@ -5727,7 +5727,7 @@ func (m *WebhookMutation) CheckAccessForEdit(ctx context.Context) error {
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
@@ -5767,7 +5767,7 @@ func (m *WebhookMutation) CheckAccessForDelete(ctx context.Context) error {
 		return privacy.Allow
 	}
 
-	// deny if it was a mutation is not allowed
+	// return error if the action is not allowed
 	return ErrPermissionDenied
 }
 
