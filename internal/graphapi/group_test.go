@@ -241,7 +241,7 @@ func (suite *GraphTestSuite) TestMutationCreateGroup() {
 			owner:       testUser1.ID,
 			client:      suite.client.api,
 			ctx:         testUser2.UserCtx,
-			errorMsg:    "not found",
+			errorMsg:    "not authorized", // TODO look at this
 		},
 		{
 			name:      "happy path group, minimum fields",

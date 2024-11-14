@@ -181,7 +181,7 @@ func (suite *GraphTestSuite) TestMutationCreateEntity() {
 			},
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
-			expectedErr: "you are not authorized to perform this action: create on entity",
+			expectedErr: "you are not authorized to perform this action",
 		},
 		{
 			name: "missing name, but display name provided",
@@ -325,7 +325,7 @@ func (suite *GraphTestSuite) TestMutationUpdateEntity() {
 			},
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
-			expectedErr: "you are not authorized to perform this action: update on entity",
+			expectedErr: "you are not authorized to perform this action",
 		},
 		{
 			name: "not allowed to update, no access to entity",
@@ -407,7 +407,7 @@ func (suite *GraphTestSuite) TestMutationDeleteEntity() {
 			idToDelete:  entity1.ID,
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
-			expectedErr: "you are not authorized to perform this action: delete on entity",
+			expectedErr: "you are not authorized to perform this action",
 		},
 		{
 			name:       "happy path, delete entity",

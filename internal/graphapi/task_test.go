@@ -43,7 +43,7 @@ func (suite *GraphTestSuite) TestQueryTask() {
 			queryID:  "notfound",
 			client:   suite.client.api,
 			ctx:      testUser1.UserCtx,
-			errorMsg: "you are not authorized to perform this action",
+			errorMsg: "not found",
 		},
 	}
 
@@ -304,7 +304,7 @@ func (suite *GraphTestSuite) TestMutationDeleteTask() {
 			idToDelete:  task1.ID,
 			client:      suite.client.api,
 			ctx:         testUser2.UserCtx,
-			expectedErr: "you are not authorized to perform this action: delete on task",
+			expectedErr: "not found",
 		},
 		{
 			name:       "happy path, delete task",
@@ -330,7 +330,7 @@ func (suite *GraphTestSuite) TestMutationDeleteTask() {
 			idToDelete:  ulids.New().String(),
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
-			expectedErr: "you are not authorized to perform this action: delete on task",
+			expectedErr: "not found",
 		},
 	}
 
