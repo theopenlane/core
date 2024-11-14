@@ -34,13 +34,13 @@ func (suite *GraphTestSuite) TestQueryApiToken() {
 			name:     "not found, no access",
 			queryID:  apiToken.ID,
 			ctx:      testUser2.UserCtx,
-			errorMsg: "not found",
+			errorMsg: notFoundErrorMsg,
 		},
 		{
-			name:     "not found",
+			name:     notFoundErrorMsg,
 			queryID:  "notfound",
 			ctx:      testUser1.UserCtx,
-			errorMsg: "not found",
+			errorMsg: notFoundErrorMsg,
 		},
 	}
 
@@ -221,7 +221,7 @@ func (suite *GraphTestSuite) TestMutationUpdateAPIToken() {
 				Name: &tokenName,
 			},
 			ctx:      testUser2.UserCtx,
-			errorMsg: "not found",
+			errorMsg: notFoundErrorMsg,
 		},
 		{
 			name:    "happy path, update description",
@@ -246,7 +246,7 @@ func (suite *GraphTestSuite) TestMutationUpdateAPIToken() {
 				Description: &tokenDescription,
 			},
 			ctx:      testUser1.UserCtx,
-			errorMsg: "not found",
+			errorMsg: notFoundErrorMsg,
 		},
 	}
 
@@ -311,18 +311,15 @@ func (suite *GraphTestSuite) TestMutationDeleteAPIToken() {
 		name     string
 		tokenID  string
 		errorMsg string
-		allowed  bool
 	}{
 		{
 			name:    "happy path, delete token",
 			tokenID: token.ID,
-			allowed: true,
 		},
 		{
 			name:     "delete someone else's token, no go",
 			tokenID:  token2.ID,
-			errorMsg: "not found",
-			allowed:  false,
+			errorMsg: notFoundErrorMsg,
 		},
 	}
 

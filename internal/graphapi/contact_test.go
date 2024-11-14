@@ -382,14 +382,14 @@ func (suite *GraphTestSuite) TestMutationDeleteContact() {
 			idToDelete:  contact1.ID,
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
-			expectedErr: "you are not authorized to perform this action",
+			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name:        "not allowed to delete, no access to object",
 			idToDelete:  contact1.ID,
 			client:      suite.client.api,
 			ctx:         testUser2.UserCtx,
-			expectedErr: "not found",
+			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name:       "happy path, delete contact",

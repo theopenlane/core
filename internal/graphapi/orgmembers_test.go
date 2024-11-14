@@ -176,7 +176,7 @@ func (suite *GraphTestSuite) TestMutationCreateOrgMembers() {
 			userID: user1.ID,
 			role:   enums.RoleMember,
 			ctx:    viewOnlyUser.UserCtx,
-			errMsg: "you are not authorized to perform this action",
+			errMsg: notAuthorizedErrorMsg,
 		},
 		{
 			name:   "invalid role",

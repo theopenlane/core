@@ -44,18 +44,18 @@ func (suite *GraphTestSuite) TestQueryEntitlement() {
 			ctx:     context.Background(),
 		},
 		{
-			name:     "not found",
+			name:     notFoundErrorMsg,
 			queryID:  "notfound",
 			client:   suite.client.api,
 			ctx:      testUser1.UserCtx,
-			errorMsg: "not found",
+			errorMsg: notFoundErrorMsg,
 		},
 		{
-			name:     "not found",
+			name:     notFoundErrorMsg,
 			queryID:  entitlement.ID,
 			client:   suite.client.api,
 			ctx:      testUser2.UserCtx,
-			errorMsg: "not found",
+			errorMsg: notFoundErrorMsg,
 		},
 	}
 
@@ -301,7 +301,7 @@ func (suite *GraphTestSuite) TestMutationUpdateEntitlement() {
 			},
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
-			expectedErr: "you are not authorized to perform this action",
+			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name: "not allowed to update, not found",
@@ -310,7 +310,7 @@ func (suite *GraphTestSuite) TestMutationUpdateEntitlement() {
 			},
 			client:      suite.client.api,
 			ctx:         testUser2.UserCtx,
-			expectedErr: "not found",
+			expectedErr: notFoundErrorMsg,
 		},
 	}
 
@@ -367,14 +367,14 @@ func (suite *GraphTestSuite) TestMutationDeleteEntitlement() {
 			idToDelete:  entitlement1.ID,
 			client:      suite.client.api,
 			ctx:         testUser2.UserCtx,
-			expectedErr: "not found",
+			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name:        "delete entitlement, not enough permissions",
 			idToDelete:  entitlement1.ID,
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
-			expectedErr: "you are not authorized to perform this action",
+			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name:       "happy path, delete entitlement",

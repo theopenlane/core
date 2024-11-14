@@ -53,7 +53,7 @@ func (suite *GraphTestSuite) TestQueryOrganization() {
 			queryID:  "tacos-for-dinner",
 			client:   suite.client.api,
 			ctx:      testUser1.UserCtx,
-			errorMsg: "not found",
+			errorMsg: notFoundErrorMsg,
 		},
 	}
 
@@ -474,7 +474,7 @@ func (suite *GraphTestSuite) TestMutationUpdateOrganization() {
 			},
 			client:   suite.client.api,
 			ctx:      viewOnlyUser.UserCtx,
-			errorMsg: "you are not authorized to perform this action",
+			errorMsg: notAuthorizedErrorMsg,
 		},
 		{
 			name:  "update name, not found",
@@ -484,7 +484,7 @@ func (suite *GraphTestSuite) TestMutationUpdateOrganization() {
 			},
 			client:   suite.client.api,
 			ctx:      testUser2.UserCtx,
-			errorMsg: "not found",
+			errorMsg: notFoundErrorMsg,
 		},
 	}
 
@@ -554,13 +554,13 @@ func (suite *GraphTestSuite) TestMutationDeleteOrganization() {
 			name:     "delete org, access denied",
 			orgID:    viewOnlyUser.OrganizationID,
 			ctx:      viewOnlyUser.UserCtx,
-			errorMsg: "you are not authorized to perform this action",
+			errorMsg: notAuthorizedErrorMsg,
 		},
 		{
 			name:     "delete org, not found",
 			orgID:    org.ID,
 			ctx:      testUser2.UserCtx,
-			errorMsg: "not found",
+			errorMsg: notFoundErrorMsg,
 		},
 		{
 			name:  "delete org, happy path",
@@ -577,7 +577,7 @@ func (suite *GraphTestSuite) TestMutationDeleteOrganization() {
 			name:     "delete org, not found",
 			orgID:    "tacos-tuesday",
 			ctx:      testUser1.UserCtx,
-			errorMsg: "not found",
+			errorMsg: notFoundErrorMsg,
 		},
 	}
 
@@ -610,7 +610,7 @@ func (suite *GraphTestSuite) TestMutationDeleteOrganization() {
 
 			require.Nil(t, o)
 			require.Error(t, err)
-			assert.ErrorContains(t, err, "not found")
+			assert.ErrorContains(t, err, notFoundErrorMsg)
 
 			ctx := entx.SkipSoftDelete(reqCtx)
 
@@ -649,19 +649,19 @@ func (suite *GraphTestSuite) TestMutationOrganizationCascadeDelete() {
 
 	require.Nil(t, o)
 	require.Error(t, err)
-	assert.ErrorContains(t, err, "not found")
+	assert.ErrorContains(t, err, notFoundErrorMsg)
 
 	co, err := suite.client.api.GetOrganizationByID(reqCtx, childOrg.ID)
 
 	require.Nil(t, co)
 	require.Error(t, err)
-	assert.ErrorContains(t, err, "not found")
+	assert.ErrorContains(t, err, notFoundErrorMsg)
 
 	g, err := suite.client.api.GetGroupByID(reqCtx, group1.ID)
 
 	require.Nil(t, g)
 	require.Error(t, err)
-	assert.ErrorContains(t, err, "not found")
+	assert.ErrorContains(t, err, notFoundErrorMsg)
 
 	// allow after tuples have been deleted
 	ctx := privacy.DecisionContext(reqCtx, privacy.Allow)

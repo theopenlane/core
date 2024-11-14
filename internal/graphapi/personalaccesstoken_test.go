@@ -15,10 +15,6 @@ import (
 	"github.com/theopenlane/core/pkg/testutils"
 )
 
-const (
-	notFoundErrorMsg = "not found"
-)
-
 func (suite *GraphTestSuite) TestQueryPersonalAccessToken() {
 	t := suite.T()
 
@@ -36,13 +32,13 @@ func (suite *GraphTestSuite) TestQueryPersonalAccessToken() {
 			ctx:     testUser1.UserCtx,
 		},
 		{
-			name:     "not found",
+			name:     notFoundErrorMsg,
 			queryID:  "notfound",
 			ctx:      testUser1.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 		{
-			name:     "not found",
+			name:     notFoundErrorMsg,
 			queryID:  "notfound",
 			ctx:      testUser2.UserCtx,
 			errorMsg: notFoundErrorMsg,

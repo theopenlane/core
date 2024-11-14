@@ -367,7 +367,7 @@ func (suite *GraphTestSuite) TestMutationDeleteUser() {
 		{
 			name:     "delete user, not found",
 			userID:   "tacos-tuesday",
-			errorMsg: "not found",
+			errorMsg: notFoundErrorMsg,
 		},
 	}
 
@@ -391,7 +391,7 @@ func (suite *GraphTestSuite) TestMutationDeleteUser() {
 			org, err := suite.client.api.GetOrganizationByID(reqCtx, personalOrgID)
 			require.Nil(t, org)
 			require.Error(t, err)
-			assert.ErrorContains(t, err, "not found")
+			assert.ErrorContains(t, err, notFoundErrorMsg)
 
 			// make sure the deletedID matches the ID we wanted to delete
 			assert.Equal(t, tc.userID, resp.DeleteUser.DeletedID)
@@ -400,7 +400,7 @@ func (suite *GraphTestSuite) TestMutationDeleteUser() {
 			out, err := suite.client.api.GetUserSettingByID(reqCtx, userSetting.ID)
 			require.Nil(t, out)
 			require.Error(t, err)
-			assert.ErrorContains(t, err, "not found")
+			assert.ErrorContains(t, err, notFoundErrorMsg)
 		})
 	}
 }
@@ -428,11 +428,11 @@ func (suite *GraphTestSuite) TestMutationUserCascadeDelete() {
 
 	require.Nil(t, o)
 	require.Error(t, err)
-	assert.ErrorContains(t, err, "not found")
+	assert.ErrorContains(t, err, notFoundErrorMsg)
 
 	g, err := suite.client.api.GetPersonalAccessTokenByID(reqCtx, token.ID)
 	require.Error(t, err)
 
 	require.Nil(t, g)
-	assert.ErrorContains(t, err, "not found")
+	assert.ErrorContains(t, err, notFoundErrorMsg)
 }

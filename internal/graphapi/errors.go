@@ -131,15 +131,15 @@ func parseRequestError(err error, a action) error {
 
 		return constraintError
 	case generated.IsNotFound(err):
-		log.Debug().Err(err).Msg("not found")
+		log.Debug().Err(err).Msg("request object was not found")
 
 		return newNotFoundError(a.object)
 	case errors.Is(err, privacy.Deny):
-		log.Debug().Err(err).Msg("permission denied")
+		log.Debug().Err(err).Msg("user has not access to the requested object")
 
 		return newNotFoundError(a.object)
 	default:
-		log.Error().Err(err).Msg("unexpected error")
+		log.Error().Err(err).Msg("unexpected error occurred")
 
 		return err
 	}

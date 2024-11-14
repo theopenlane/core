@@ -43,11 +43,11 @@ func (suite *GraphTestSuite) TestQueryFeature() {
 			ctx:     context.Background(),
 		},
 		{
-			name:     "not found",
+			name:     notFoundErrorMsg,
 			queryID:  "notfound",
 			client:   suite.client.api,
 			ctx:      testUser1.UserCtx,
-			errorMsg: "not found",
+			errorMsg: notFoundErrorMsg,
 		},
 	}
 
@@ -177,7 +177,7 @@ func (suite *GraphTestSuite) TestMutationCreateFeature() {
 			},
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
-			expectedErr: "you are not authorized to perform this action",
+			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name: "missing required field",
@@ -271,7 +271,7 @@ func (suite *GraphTestSuite) TestMutationUpdateFeature() {
 			},
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
-			expectedErr: "you are not authorized to perform this action",
+			expectedErr: notAuthorizedErrorMsg,
 		},
 	}
 
@@ -323,7 +323,7 @@ func (suite *GraphTestSuite) TestMutationDeleteFeature() {
 			idToDelete:  feature1.ID,
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
-			expectedErr: "you are not authorized to perform this action",
+			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name:       "happy path, delete feature",
@@ -336,7 +336,7 @@ func (suite *GraphTestSuite) TestMutationDeleteFeature() {
 			idToDelete:  feature1.ID,
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
-			expectedErr: "not found",
+			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name:       "happy path, delete feature using api token",
@@ -355,7 +355,7 @@ func (suite *GraphTestSuite) TestMutationDeleteFeature() {
 			idToDelete:  ulids.New().String(),
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
-			expectedErr: "not found",
+			expectedErr: notFoundErrorMsg,
 		},
 	}
 

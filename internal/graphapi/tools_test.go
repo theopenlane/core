@@ -32,8 +32,13 @@ import (
 )
 
 const (
-	redacted     = "*****************************"
 	fgaModelFile = "../../fga/model/model.fga"
+
+	redacted = "*****************************"
+
+	// common error message strings
+	notFoundErrorMsg      = "not found"
+	notAuthorizedErrorMsg = "you are not authorized to perform this action"
 )
 
 // TestGraphTestSuite runs all the tests in the GraphTestSuite

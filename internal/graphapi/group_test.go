@@ -43,7 +43,7 @@ func (suite *GraphTestSuite) TestQueryGroup() {
 			client:   suite.client.api,
 			ctx:      testUser2.UserCtx,
 			queryID:  group1.ID,
-			errorMsg: "not found",
+			errorMsg: notFoundErrorMsg,
 		},
 	}
 
@@ -497,7 +497,7 @@ func (suite *GraphTestSuite) TestMutationDeleteGroup() {
 			client:   suite.client.api,
 			ctx:      viewOnlyUser.UserCtx,
 			groupID:  group1.ID,
-			errorMsg: "not found", // user was not added to the group, so they can't delete it
+			errorMsg: notFoundErrorMsg, // user was not added to the group, so they can't delete it
 		},
 	}
 

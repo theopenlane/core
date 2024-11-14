@@ -82,7 +82,7 @@ func (suite *GraphTestSuite) TestQueryGroupMembers() {
 
 			if tc.errExpected {
 				require.Error(t, err)
-				assert.ErrorContains(t, err, "not found")
+				assert.ErrorContains(t, err, notFoundErrorMsg)
 
 				return
 			}
@@ -161,7 +161,7 @@ func (suite *GraphTestSuite) TestMutationCreateGroupMembers() {
 			role:    enums.RoleMember,
 			client:  suite.client.api,
 			ctx:     viewOnlyUser.UserCtx,
-			errMsg:  "you are not authorized to perform this action",
+			errMsg:  notAuthorizedErrorMsg,
 		},
 		{
 			name:    "owner relation not valid for groups",
@@ -197,7 +197,7 @@ func (suite *GraphTestSuite) TestMutationCreateGroupMembers() {
 			role:    enums.RoleMember,
 			client:  suite.client.api,
 			ctx:     testUser1.UserCtx,
-			errMsg:  "you are not authorized to perform this action",
+			errMsg:  notAuthorizedErrorMsg,
 		},
 		{
 			name:    "invalid role",
@@ -285,7 +285,7 @@ func (suite *GraphTestSuite) TestMutationUpdateGroupMembers() {
 			role:   enums.RoleMember,
 			client: suite.client.api,
 			ctx:    viewOnlyUser.UserCtx,
-			errMsg: "you are not authorized to perform this action",
+			errMsg: notAuthorizedErrorMsg,
 		},
 	}
 
@@ -332,14 +332,14 @@ func (suite *GraphTestSuite) TestMutationDeleteGroupMembers() {
 			idToDelete:  gm1.ID,
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
-			expectedErr: "you are not authorized to perform this action",
+			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name:        "not allowed to delete, not found",
 			idToDelete:  gm1.ID,
 			client:      suite.client.api,
 			ctx:         testUser2.UserCtx,
-			expectedErr: "not found",
+			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name:       "happy path, delete group member using api token",
@@ -364,14 +364,14 @@ func (suite *GraphTestSuite) TestMutationDeleteGroupMembers() {
 			idToDelete:  ulids.New().String(),
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
-			expectedErr: "not found",
+			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name:        "group member already deleted, not found",
 			idToDelete:  gm1.ID,
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
-			expectedErr: "not found",
+			expectedErr: notFoundErrorMsg,
 		},
 	}
 

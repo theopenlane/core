@@ -39,11 +39,11 @@ func (suite *GraphTestSuite) TestQueryTask() {
 			ctx:     context.Background(),
 		},
 		{
-			name:     "not found",
+			name:     notFoundErrorMsg,
 			queryID:  "notfound",
 			client:   suite.client.api,
 			ctx:      testUser1.UserCtx,
-			errorMsg: "not found",
+			errorMsg: notFoundErrorMsg,
 		},
 	}
 
@@ -304,7 +304,7 @@ func (suite *GraphTestSuite) TestMutationDeleteTask() {
 			idToDelete:  task1.ID,
 			client:      suite.client.api,
 			ctx:         testUser2.UserCtx,
-			expectedErr: "not found",
+			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name:       "happy path, delete task",
@@ -330,7 +330,7 @@ func (suite *GraphTestSuite) TestMutationDeleteTask() {
 			idToDelete:  ulids.New().String(),
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
-			expectedErr: "not found",
+			expectedErr: notFoundErrorMsg,
 		},
 	}
 

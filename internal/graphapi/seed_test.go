@@ -13,19 +13,29 @@ import (
 )
 
 var (
-	testUser1    testUserDetails
-	testUser2    testUserDetails
+	// testUser1 is a test user with a personal org and an organization
+	testUser1 testUserDetails
+	// testUser2 is a test user with a personal org and an organization
+	testUser2 testUserDetails
+	// viewOnlyUser is a test user that is a member of the first user's organization
 	viewOnlyUser testUserDetails
 )
 
+// testUserDetails is a struct that holds the details of a test user
 type testUserDetails struct {
-	ID             string
-	UserInfo       *ent.User
-	PersonalOrgID  string
+	// ID is the ID of the user
+	ID string
+	// UserInfo contains all the details of the user
+	UserInfo *ent.User
+	// PersonalOrgID is the ID of the personal organization of the user
+	PersonalOrgID string
+	// OrganizationID is the ID of the organization of the user
 	OrganizationID string
-	UserCtx        context.Context
+	// UserCtx is the context of the user that should be used for the test requests
+	UserCtx context.Context
 }
 
+// userBuilder creates a new test user and returns the details
 func (suite *GraphTestSuite) userBuilder(ctx context.Context) testUserDetails {
 	t := suite.T()
 
@@ -57,6 +67,8 @@ func (suite *GraphTestSuite) userBuilder(ctx context.Context) testUserDetails {
 }
 
 // setupTestData creates test users and sets up the clients with the necessary tokens
+// this includes three users, two with personal orgs and organizations, and one that is a member of the first user's organization
+// as well as an api token and personal access token for the first user
 func (suite *GraphTestSuite) setupTestData(ctx context.Context) {
 	t := suite.T()
 

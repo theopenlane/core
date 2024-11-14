@@ -55,14 +55,14 @@ func (suite *GraphTestSuite) TestQueryUserSetting() {
 			queryID:  user2Setting.ID,
 			client:   suite.client.api,
 			ctx:      reqCtx,
-			errorMsg: "not found",
+			errorMsg: notFoundErrorMsg,
 		},
 		{
 			name:     "invalid-id",
 			queryID:  "tacos-for-dinner",
 			client:   suite.client.api,
 			ctx:      reqCtx,
-			errorMsg: "not found",
+			errorMsg: notFoundErrorMsg,
 		},
 	}
 

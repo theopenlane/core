@@ -9,9 +9,10 @@ import (
 	goUpper "github.com/99designs/gqlgen/codegen/templates"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
+
+	"github.com/theopenlane/core/internal/ent/generated"
 )
 
 // getTuplesToAdd gets the tuples that need to be added to the authz service based on the edges that were added
@@ -195,7 +196,7 @@ func addTokenEditPermissions(ctx context.Context, oID string, objectType string)
 	// get auth info from context
 	ac, err := auth.GetAuthenticatedUserContext(ctx)
 	if err != nil {
-		log.Error().Err(err).Msg("unable to get user id from context, unable to add user to program")
+		log.Error().Err(err).Msg("unable to get subject id from context, cannot update token permissions")
 
 		return err
 	}

@@ -39,7 +39,7 @@ func (suite *GraphTestSuite) TestQueryTFASetting() {
 			name:     "valid user, but not auth",
 			client:   suite.client.api,
 			ctx:      testUser2.UserCtx,
-			errorMsg: "not found",
+			errorMsg: notFoundErrorMsg,
 		},
 	}
 

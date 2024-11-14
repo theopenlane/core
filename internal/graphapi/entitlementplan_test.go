@@ -43,11 +43,11 @@ func (suite *GraphTestSuite) TestQueryEntitlementPlan() {
 			ctx:     context.Background(),
 		},
 		{
-			name:     "not found",
+			name:     notFoundErrorMsg,
 			queryID:  "notfound",
 			client:   suite.client.api,
 			ctx:      testUser1.UserCtx,
-			errorMsg: "not found",
+			errorMsg: notFoundErrorMsg,
 		},
 	}
 
@@ -266,7 +266,7 @@ func (suite *GraphTestSuite) TestMutationUpdateEntitlementPlan() {
 			},
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
-			expectedErr: "you are not authorized to perform this action",
+			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name: "not allowed to update",
@@ -275,7 +275,7 @@ func (suite *GraphTestSuite) TestMutationUpdateEntitlementPlan() {
 			},
 			client:      suite.client.api,
 			ctx:         testUser2.UserCtx,
-			expectedErr: "not found",
+			expectedErr: notFoundErrorMsg,
 		},
 	}
 
@@ -323,14 +323,14 @@ func (suite *GraphTestSuite) TestMutationDeleteEntitlementPlan() {
 			idToDelete:  plan1.ID,
 			client:      suite.client.api,
 			ctx:         testUser2.UserCtx,
-			expectedErr: "not found",
+			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name:        "not allowed to delete",
 			idToDelete:  plan1.ID,
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
-			expectedErr: "you are not authorized to perform this action",
+			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name:       "happy path, delete plan",
