@@ -95,7 +95,7 @@ func WithDownloadFileOptions(opts *DownloadFileOptions) Option {
 	}
 }
 
-func WithMetdata(mp map[string]interface{}) Option {
+func WithMetadata(mp map[string]interface{}) Option {
 	return func(o *Objects) {
 		if o.UploadFileOptions.Metadata == nil {
 			o.UploadFileOptions.Metadata = map[string]string{}

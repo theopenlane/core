@@ -1,5 +1,3 @@
-
-
 query GetAllUserSettingHistories {
   userSettingHistories {
     edges {
