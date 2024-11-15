@@ -52,15 +52,15 @@ tasks:
       - "docker compose -p redis down"
 
   riverboat:
-      dir: ..
-      desc: brings up the compose environment for riverboat
-      env:
-        RIVERBOAT_TAG: "{{.RIVERBOAT_TAG}}"
-      vars:
-        RIVERBOAT_TAG:
-          sh: "uname=$(uname -m); if [ $uname = 'x86_64' ]; then echo 'amd64-latest'; else echo 'arm64-latest'; fi"
-      cmds:
-        - "docker compose -f ./docker/docker-compose-riverboat.yml -p riverboat up -d"
+    dir: ..
+    desc: brings up the compose environment for riverboat
+    env:
+      RIVERBOAT_TAG: "{{.RIVERBOAT_TAG}}"
+    vars:
+      RIVERBOAT_TAG:
+        sh: "uname=$(uname -m); if [ $uname = 'x86_64' ]; then echo 'amd64-latest'; else echo 'arm64-latest'; fi"
+    cmds:
+      - "docker compose -f ./docker/docker-compose-riverboat.yml -p riverboat up -d"
 
   riverboat:down:
     dir: ..
