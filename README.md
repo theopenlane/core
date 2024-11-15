@@ -40,7 +40,7 @@ extensible services:
 - Queuing and Scheduling: Task management and scheduling with
   [riverqueue](https://github.com/riverqueue/river)
 - External Storage Providers: store data in AWS S3, Google GCS, or locally
-- External Database Providers: Leverage NeonDB, or other PostgreSQL compatible
+- External Database Providers: Leverage NeonDB, or other PostgreSQL compatible 
   vendors and libraries
 - Data Isolation and Management: Hierarchal organizations and granular
   permissions controls
