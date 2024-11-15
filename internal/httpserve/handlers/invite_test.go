@@ -12,16 +12,13 @@ import (
 	"github.com/riverqueue/river/rivertest"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	mock_fga "github.com/theopenlane/iam/fgax/mockery"
-	"github.com/theopenlane/riverboat/pkg/jobs"
-
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/riverboat/pkg/jobs"
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	_ "github.com/theopenlane/core/internal/ent/generated/runtime"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
 func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
@@ -32,28 +29,7 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 
 	// bypass auth
 	ctx := context.Background()
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
-
-	mock_fga.WriteAny(t, suite.fga)
-	mock_fga.CheckAny(t, suite.fga, true)
-	mock_fga.ListAny(t, suite.fga, []string{})
-
-	// setup test data
-	requestor := suite.db.User.Create().
-		SetEmail("rocket@theopenlane.io").
-		SetFirstName("Rocket").
-		SetLastName("Racoon").
-		SaveX(ctx)
-
-	reqCtx, err := userContextWithID(requestor.ID)
-	require.NoError(t, err)
-
-	input := openlaneclient.CreateOrganizationInput{
-		Name: "avengers",
-	}
-
-	org, err := suite.api.CreateOrganization(reqCtx, input)
-	require.NoError(t, err)
+	ctx = privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
 
 	var groot = "groot@theopenlane.io"
 
@@ -65,16 +41,11 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 		SetAuthProvider(enums.AuthProviderGoogle).
 		SaveX(ctx)
 
-	userCtx, err := auth.NewTestContextWithOrgID(requestor.ID, org.CreateOrganization.Organization.ID)
-	require.NoError(t, err)
-
 	userSetting, err := recipient.Setting(ctx)
 	require.NoError(t, err)
 
 	recipientCtx, err := auth.NewTestContextWithOrgID(recipient.ID, userSetting.Edges.DefaultOrg.ID)
 	require.NoError(t, err)
-
-	mock_fga.ClearMocks(suite.fga)
 
 	testCases := []struct {
 		name     string
@@ -108,11 +79,7 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 		t.Run(tc.name, func(t *testing.T) {
 			defer suite.ClearTestData()
 
-			if !tc.wantErr {
-				mock_fga.WriteAny(t, suite.fga)
-			}
-
-			ctx := privacy.DecisionContext(userCtx, privacy.Allow)
+			ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
 
 			invite := suite.db.Invite.Create().
 				SetRecipient(tc.email).SaveX(ctx)
@@ -149,10 +116,8 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 			}
 
 			assert.Equal(t, http.StatusCreated, recorder.Code)
-			assert.Equal(t, org.CreateOrganization.Organization.ID, out.JoinedOrgID)
+			assert.Equal(t, testUser1.OrganizationID, out.JoinedOrgID)
 			assert.Equal(t, tc.email, out.Email)
-
-			mock_fga.ListAny(t, suite.fga, []string{"organization:" + org.CreateOrganization.Organization.ID})
 
 			// Test the default org is updated
 			user, err := suite.api.GetUserByID(recipientCtx, recipient.ID)
@@ -160,7 +125,7 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 			require.NotNil(t, user)
 			require.NotNil(t, user.User.Setting.DefaultOrg)
 
-			assert.Equal(t, org.CreateOrganization.Organization.ID, user.User.Setting.DefaultOrg.ID)
+			assert.Equal(t, testUser1.OrganizationID, user.User.Setting.DefaultOrg.ID)
 
 			// ensure the email jobs are created
 			// there will be two because the first is the invite email and the second is the accepted invite email

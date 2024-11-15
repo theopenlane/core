@@ -52,7 +52,7 @@ func HasOrgMutationAccess() privacy.OrganizationMutationRuleFunc {
 						Str("organization_id", parentOrgID).
 						Msg("access denied to parent org")
 
-					return privacy.Deny
+					return generated.ErrPermissionDenied
 				}
 			}
 
@@ -90,7 +90,7 @@ func HasOrgMutationAccess() privacy.OrganizationMutationRuleFunc {
 		}
 
 		// deny if it was a mutation is not allowed
-		return privacy.Deny
+		return generated.ErrPermissionDenied
 	})
 }
 
@@ -148,7 +148,7 @@ func CanCreateObjectsInOrg() privacy.MutationRuleFunc {
 		}
 
 		// deny if it was a mutation is not allowed
-		return privacy.Deny
+		return generated.ErrPermissionDenied
 	})
 }
 

@@ -18,6 +18,7 @@ func (r *mutationResolver) CreateInvite(ctx context.Context, input generated.Cre
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
+
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
@@ -57,6 +58,7 @@ func (r *mutationResolver) UpdateInvite(ctx context.Context, id string, input ge
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
+
 		return nil, rout.ErrPermissionDenied
 	}
 

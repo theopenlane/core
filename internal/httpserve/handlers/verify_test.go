@@ -11,7 +11,6 @@ import (
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	mock_fga "github.com/theopenlane/iam/fgax/mockery"
 
 	"github.com/theopenlane/echox/middleware/echocontext"
 
@@ -77,8 +76,6 @@ func (suite *HandlerTestSuite) TestVerifyHandler() {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			defer mock_fga.ClearMocks(suite.fga)
-
 			// set privacy allow in order to allow the creation of the users without
 			// authentication in the tests
 			ctx := privacy.DecisionContext(ec, privacy.Allow)
@@ -87,9 +84,6 @@ func (suite *HandlerTestSuite) TestVerifyHandler() {
 			userSetting := suite.db.UserSetting.Create().
 				SetEmailConfirmed(tc.userConfirmed).
 				SaveX(ctx)
-
-			// mock writes for user creation
-			mock_fga.WriteAny(t, suite.fga)
 
 			u := suite.db.User.Create().
 				SetFirstName(gofakeit.FirstName()).

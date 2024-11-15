@@ -47,7 +47,7 @@ type group
     define member: [user] and member from parent
     define parent: [organization]
     # main permission sets based on roles
-    define can_delete: [service] or admin or can_delete from parent
+    define can_delete: [service] or admin or can_edit or can_delete from parent
     define can_edit: [service] or admin or can_edit from parent
     define can_view: [service] or member or admin or can_view from parent
     # additional fine-grained permissions
@@ -72,7 +72,7 @@ type program
     define admin: [user] or owner from parent
     define member: [user] or admin or owner from parent
     # main permission sets based on roles
-    define can_delete: [service] or admin or owner from parent
+    define can_delete: [service] or admin or can_edit or owner from parent
     define can_edit: [service] or admin or owner from parent
     define can_view: [service] or member or admin or can_edit or owner from parent
     # parent relation, only the organization owner will have access to the program by default

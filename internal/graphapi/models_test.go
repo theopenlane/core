@@ -8,7 +8,6 @@ import (
 
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/stretchr/testify/require"
-	mock_fga "github.com/theopenlane/iam/fgax/mockery"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -261,11 +260,6 @@ func (o *OrganizationBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Or
 	// which happens automatically when using the graph resolvers
 	ctx = ent.NewContext(ctx, o.client.db)
 
-	if !o.PersonalOrg {
-		// mock writes
-		mock_fga.WriteOnce(t, o.client.fga)
-	}
-
 	if o.Name == "" {
 		o.Name = gofakeit.LetterN(40)
 	}
@@ -290,9 +284,6 @@ func (o *OrganizationBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Or
 		t.Fatalf("failed to create organization: %s", err)
 	}
 
-	// clear mocks before going to tests
-	mock_fga.ClearMocks(o.client.fga)
-
 	return org
 }
 
@@ -301,16 +292,10 @@ func (o *OrganizationCleanup) MustDelete(ctx context.Context, t *testing.T) {
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
 	o.client.db.Organization.DeleteOneID(o.ID).ExecX(ctx)
-
-	// clear mocks before going to tests
-	mock_fga.ClearMocks(o.client.fga)
 }
 
 // MustNew user builder is used to create, without authz checks, users in the database
 func (u *UserBuilder) MustNew(ctx context.Context, t *testing.T) *ent.User {
-	// mock writes
-	mock_fga.WriteAny(t, u.client.fga)
-
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
 	if u.FirstName == "" {
@@ -343,9 +328,6 @@ func (u *UserBuilder) MustNew(ctx context.Context, t *testing.T) *ent.User {
 	_, err := user.Edges.Setting.DefaultOrg(ctx)
 	require.NoError(t, err)
 
-	// clear mocks before going to tests
-	mock_fga.ClearMocks(u.client.fga)
-
 	return user
 }
 
@@ -354,9 +336,6 @@ func (u *UserCleanup) MustDelete(ctx context.Context, t *testing.T) {
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
 	u.client.db.User.DeleteOneID(u.ID).ExecX(ctx)
-
-	// clear mocks before going to tests
-	mock_fga.ClearMocks(u.client.fga)
 }
 
 // MustNew tfa settings builder is used to create, without authz checks, tfa settings in the database
@@ -386,32 +365,20 @@ func (om *OrgMemberBuilder) MustNew(ctx context.Context, t *testing.T) *ent.OrgM
 		role = &enums.RoleMember
 	}
 
-	// mock writes
-	mock_fga.WriteOnce(t, om.client.fga)
-
 	orgMembers := om.client.db.OrgMembership.Create().
 		SetUserID(om.UserID).
 		SetOrganizationID(om.OrgID).
 		SetRole(*role).
 		SaveX(ctx)
 
-	// clear mocks before going to tests
-	mock_fga.ClearMocks(om.client.fga)
-
 	return orgMembers
 }
 
 // MustDelete is used to cleanup, without authz checks, org members in the database
 func (om *OrgMemberCleanup) MustDelete(ctx context.Context, t *testing.T) {
-	// mock writes
-	mock_fga.WriteOnce(t, om.client.fga)
-
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
 	om.client.db.OrgMembership.DeleteOneID(om.ID).ExecX(ctx)
-
-	// clear mocks before going to tests
-	mock_fga.ClearMocks(om.client.fga)
 }
 
 // MustNew group builder is used to create, without authz checks, groups in the database
@@ -426,36 +393,20 @@ func (g *GroupBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Group {
 	owner := g.Owner
 
 	if g.Owner == "" {
-		owner = testPersonalOrgID
+		owner = testUser1.OrganizationID
 	}
 
-	// mock writes
-	mock_fga.WriteAny(t, g.client.fga)
-
-	mock_fga.ListAny(t, g.client.fga, []string{fmt.Sprintf("group:%s", owner)})
-
 	group := g.client.db.Group.Create().SetName(g.Name).SetOwnerID(owner).SaveX(ctx)
-
-	// clear mocks before going to tests
-	mock_fga.ClearMocks(g.client.fga)
 
 	return group
 }
 
 // MustDelete is used to cleanup, without authz checks, groups in the database
 func (g *GroupCleanup) MustDelete(ctx context.Context, t *testing.T) {
-	mock_fga.ClearMocks(g.client.fga)
-
-	// mock writes
-	mock_fga.ReadAny(t, g.client.fga)
-	mock_fga.ListAny(t, g.client.fga, []string{fmt.Sprintf("group:%s", g.ID)})
-
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
-	g.client.db.Group.DeleteOneID(g.ID).ExecX(ctx)
-
-	// clear mocks before going to tests
-	mock_fga.ClearMocks(g.client.fga)
+	err := g.client.db.Group.DeleteOneID(g.ID).Exec(ctx)
+	require.NoError(t, err)
 }
 
 // MustNew invite builder is used to create, without authz checks, invites in the database
@@ -478,23 +429,14 @@ func (i *InviteBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Invite {
 
 	invite := inviteQuery.SaveX(ctx)
 
-	// clear mocks before going to tests
-	mock_fga.ClearMocks(i.client.fga)
-
 	return invite
 }
 
 // MustDelete is used to cleanup, without authz checks, invites in the database
 func (i *InviteCleanup) MustDelete(ctx context.Context, t *testing.T) {
-	// mock writes
-	mock_fga.ReadAny(t, i.client.fga)
-
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
 	i.client.db.Invite.DeleteOneID(i.ID).ExecX(ctx)
-
-	// clear mocks before going to tests
-	mock_fga.ClearMocks(i.client.fga)
 }
 
 // MustNew subscriber builder is used to create, without authz checks, subscribers in the database
@@ -549,9 +491,6 @@ func (pat *PersonalAccessTokenBuilder) MustNew(ctx context.Context, t *testing.T
 
 	token := request.SaveX(ctx)
 
-	// clear mocks before going to tests
-	mock_fga.ClearMocks(pat.client.fga)
-
 	return token
 }
 
@@ -559,17 +498,16 @@ func (pat *PersonalAccessTokenBuilder) MustNew(ctx context.Context, t *testing.T
 func (at *APITokenBuilder) MustNew(ctx context.Context, t *testing.T) *ent.APIToken {
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
-	// mock writes
-	if len(at.Scopes) > 0 {
-		mock_fga.WriteOnce(t, at.client.fga)
-	}
-
 	if at.Name == "" {
 		at.Name = gofakeit.AppName()
 	}
 
 	if at.Description == "" {
 		at.Description = gofakeit.HipsterSentence(5)
+	}
+
+	if at.Scopes == nil {
+		at.Scopes = []string{"read", "write"}
 	}
 
 	request := at.client.db.APIToken.Create().
@@ -587,9 +525,6 @@ func (at *APITokenBuilder) MustNew(ctx context.Context, t *testing.T) *ent.APITo
 
 	token := request.SaveX(ctx)
 
-	// clear mocks before going to tests
-	mock_fga.ClearMocks(at.client.fga)
-
 	return token
 }
 
@@ -603,36 +538,23 @@ func (gm *GroupMemberBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Gr
 	}
 
 	if gm.UserID == "" {
-		user := (&UserBuilder{client: gm.client}).MustNew(ctx, t)
-		gm.UserID = user.ID
+		orgMember := (&OrgMemberBuilder{client: gm.client, OrgID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
+		gm.UserID = orgMember.UserID
 	}
-
-	// mock writes
-	mock_fga.ListAny(t, gm.client.fga, []string{fmt.Sprintf("organization:%s", testPersonalOrgID)})
-	mock_fga.WriteOnce(t, gm.client.fga)
 
 	groupMember := gm.client.db.GroupMembership.Create().
 		SetUserID(gm.UserID).
 		SetGroupID(gm.GroupID).
 		SaveX(ctx)
 
-	// clear mocks before going to tests
-	mock_fga.ClearMocks(gm.client.fga)
-
 	return groupMember
 }
 
 // MustDelete is used to cleanup, without authz checks, group members in the database
 func (gm *GroupMemberCleanup) MustDelete(ctx context.Context, t *testing.T) {
-	// mock writes
-	mock_fga.WriteOnce(t, gm.client.fga)
-
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
 	gm.client.db.GroupMembership.DeleteOneID(gm.ID).ExecX(ctx)
-
-	// clear mocks before going to tests
-	mock_fga.ClearMocks(gm.client.fga)
 }
 
 // MustNew feature builder is used to create, without authz checks, features in the database
@@ -652,9 +574,6 @@ func (f *FeatureBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Feature
 		SetDescription(f.Description).
 		SetDisplayName(f.DisplayName).
 		SaveX(ctx)
-
-	// clear mocks before going to tests
-	mock_fga.ClearMocks(f.client.fga)
 
 	return feature
 }
@@ -681,9 +600,6 @@ func (p *EntitlementPlanBuilder) MustNew(ctx context.Context, t *testing.T) *ent
 		SetDescription(p.Description).
 		SaveX(ctx)
 
-	// clear mocks before going to tests
-	mock_fga.ClearMocks(p.client.fga)
-
 	return plan
 }
 
@@ -705,9 +621,6 @@ func (e *EntitlementBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Ent
 		SetPlanID(e.PlanID).
 		SetOrganizationID(e.OrganizationID).
 		SaveX(ctx)
-
-	// clear mocks before going to tests
-	mock_fga.ClearMocks(e.client.fga)
 
 	return entitlement
 }
@@ -739,9 +652,6 @@ func (e *EntitlementPlanFeatureBuilder) MustNew(ctx context.Context, t *testing.
 		SetMetadata(e.MetaData).
 		SaveX(ctx)
 
-	// clear mocks before going to tests
-	mock_fga.ClearMocks(e.client.fga)
-
 	return planFeature
 }
 
@@ -757,22 +667,14 @@ func (e *EntityTypeBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Enti
 		SetName(e.Name).
 		SaveX(ctx)
 
-	// clear mocks before going to tests
-	mock_fga.ClearMocks(e.client.fga)
-
 	return entityType
 }
 
 // MustDelete is used to cleanup, without authz checks, entities in the database
 func (e *EntityTypeCleanup) MustDelete(ctx context.Context, t *testing.T) {
-	mock_fga.ClearMocks(e.client.fga)
-
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
 	e.client.db.EntityType.DeleteOneID(e.ID).ExecX(ctx)
-
-	// clear mocks before going to tests
-	mock_fga.ClearMocks(e.client.fga)
 }
 
 // MustNew entity builder is used to create, without authz checks, entities in the database
@@ -803,22 +705,14 @@ func (e *EntityBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Entity {
 		SetDescription(e.Description).
 		SaveX(ctx)
 
-	// clear mocks before going to tests
-	mock_fga.ClearMocks(e.client.fga)
-
 	return entity
 }
 
 // MustDelete is used to cleanup, without authz checks, entities in the database
 func (e *EntityCleanup) MustDelete(ctx context.Context, t *testing.T) {
-	mock_fga.ClearMocks(e.client.fga)
-
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
 	e.client.db.Entity.DeleteOneID(e.ID).ExecX(ctx)
-
-	// clear mocks before going to tests
-	mock_fga.ClearMocks(e.client.fga)
 }
 
 // MustNew contact builder is used to create, without authz checks, contacts in the database
@@ -859,33 +753,20 @@ func (e *ContactBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Contact
 		SetCompany(e.Company).
 		SaveX(ctx)
 
-	// clear mocks before going to tests
-	mock_fga.ClearMocks(e.client.fga)
-
 	return entity
 }
 
 // MustDelete is used to cleanup, without authz checks, contacts in the database
 func (e *ContactCleanup) MustDelete(ctx context.Context, t *testing.T) {
-	mock_fga.ClearMocks(e.client.fga)
-
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
 	e.client.db.Contact.DeleteOneID(e.ID).ExecX(ctx)
-
-	// clear mocks before going to tests
-	mock_fga.ClearMocks(e.client.fga)
 }
 
 // MustNew task builder is used to create, without authz checks, tasks in the database
 func (e *TaskBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Task {
-	mock_fga.ClearMocks(e.client.fga)
-
 	// add client to context, required for hooks that expect the client to be in the context
 	ctx = ent.NewContext(ctx, e.client.db)
-
-	// write tuples on task creation
-	mock_fga.WriteAny(t, e.client.fga)
 
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
@@ -922,9 +803,6 @@ func (e *TaskBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Task {
 	}
 
 	task := taskCreate.SaveX(ctx)
-
-	// clear mocks before going to tests
-	mock_fga.ClearMocks(e.client.fga)
 
 	return task
 }

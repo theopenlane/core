@@ -1,7 +1,6 @@
 package handlers_test
 
 import (
-	"context"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
@@ -10,11 +9,9 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	mock_fga "github.com/theopenlane/iam/fgax/mockery"
 
 	"github.com/theopenlane/httpsling"
 
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	_ "github.com/theopenlane/core/internal/ent/generated/runtime"
 	"github.com/theopenlane/core/pkg/models"
 )
@@ -25,47 +22,29 @@ func (suite *HandlerTestSuite) TestAccountAccessHandler() {
 	// add handler
 	suite.e.POST("account/access", suite.h.AccountAccessHandler)
 
-	// bypass auth
-	ctx := context.Background()
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
-
-	mock_fga.WriteAny(t, suite.fga)
-
-	// setup test data
-	requestor := suite.db.User.Create().
-		SetEmail("marco@theopenlane.io").
-		SetFirstName("Marco").
-		SetLastName("Polo").
-		SaveX(ctx)
-
-	reqCtx, err := userContextWithID(requestor.ID)
-	require.NoError(t, err)
-
-	mock_fga.ClearMocks(suite.fga)
-
 	testCases := []struct {
-		name      string
-		request   models.AccountAccessRequest
-		mockAllow bool
-		errMsg    string
+		name    string
+		request models.AccountAccessRequest
+		allowed bool
+		errMsg  string
 	}{
 		{
-			name:      "happy path, allow access",
-			mockAllow: true,
+			name: "happy path, allow access",
 			request: models.AccountAccessRequest{
-				ObjectID:   "org-id",
+				ObjectID:   testUser1.OrganizationID,
 				ObjectType: "organization",
 				Relation:   "can_view",
 			},
+			allowed: true,
 		},
 		{
-			name:      "access denied",
-			mockAllow: false,
+			name: "access denied",
 			request: models.AccountAccessRequest{
 				ObjectID:   "another-org-id",
 				ObjectType: "organization",
 				Relation:   "can_delete",
 			},
+			allowed: false,
 		},
 		{
 			name: "missing object id",
@@ -95,12 +74,6 @@ func (suite *HandlerTestSuite) TestAccountAccessHandler() {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			defer mock_fga.ClearMocks(suite.fga)
-
-			if tc.errMsg == "" {
-				mock_fga.CheckAny(t, suite.fga, tc.mockAllow)
-			}
-
 			target := "/account/access"
 
 			body, err := json.Marshal(tc.request)
@@ -115,7 +88,7 @@ func (suite *HandlerTestSuite) TestAccountAccessHandler() {
 			recorder := httptest.NewRecorder()
 
 			// Using the ServerHTTP on echo will trigger the router and middleware
-			suite.e.ServeHTTP(recorder, req.WithContext(reqCtx))
+			suite.e.ServeHTTP(recorder, req.WithContext(testUser1.UserCtx))
 
 			res := recorder.Result()
 			defer res.Body.Close()
@@ -137,7 +110,7 @@ func (suite *HandlerTestSuite) TestAccountAccessHandler() {
 
 			assert.Equal(t, http.StatusOK, recorder.Code)
 			assert.True(t, out.Success)
-			assert.Equal(t, tc.mockAllow, out.Allowed)
+			assert.Equal(t, tc.allowed, out.Allowed)
 		})
 	}
 }

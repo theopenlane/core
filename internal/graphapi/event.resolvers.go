@@ -6,43 +6,17 @@ package graphapi
 
 import (
 	"context"
-	"errors"
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 )
 
 // CreateEvent is the resolver for the createEvent field
 func (r *mutationResolver) CreateEvent(ctx context.Context, input generated.CreateEventInput) (*EventCreatePayload, error) {
 	t, err := withTransactionalMutation(ctx).Event.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		if generated.IsValidationError(err) {
-			validationError := err.(*generated.ValidationError)
-
-			log.Debug().Err(validationError).
-				Str("field", validationError.Name).
-				Msg("validation error")
-
-			return nil, validationError
-		}
-
-		if generated.IsConstraintError(err) {
-			constraintError := err.(*generated.ConstraintError)
-
-			log.Debug().Err(constraintError).Msg("constraint error")
-
-			return nil, constraintError
-		}
-
-		if errors.Is(err, privacy.Deny) {
-			return nil, newPermissionDeniedError(ActionCreate, "event")
-		}
-
-		log.Error().Err(err).Msg("failed to create event")
-
-		return nil, err
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "event"})
 	}
 
 	return &EventCreatePayload{Event: t}, nil
@@ -69,36 +43,12 @@ func (r *mutationResolver) CreateBulkCSVEvent(ctx context.Context, input graphql
 func (r *mutationResolver) UpdateEvent(ctx context.Context, id string, input generated.UpdateEventInput) (*EventUpdatePayload, error) {
 	event, err := withTransactionalMutation(ctx).Event.Get(ctx, id)
 	if err != nil {
-		if generated.IsNotFound(err) {
-			return nil, err
-		}
-
-		if errors.Is(err, privacy.Deny) {
-			log.Error().Err(err).Msg("failed to get event on update")
-
-			return nil, newPermissionDeniedError(ActionGet, "event")
-		}
-
-		log.Error().Err(err).Msg("failed to get event")
-
-		return nil, ErrInternalServerError
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "event"})
 	}
 
 	event, err = event.Update().SetInput(input).Save(ctx)
 	if err != nil {
-		if generated.IsValidationError(err) {
-			return nil, err
-		}
-
-		if errors.Is(err, privacy.Deny) {
-			log.Error().Err(err).Msg("failed to update event")
-
-			return nil, newPermissionDeniedError(ActionUpdate, "event")
-		}
-
-		log.Error().Err(err).Msg("failed to update event")
-
-		return nil, ErrInternalServerError
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "event"})
 	}
 
 	return &EventUpdatePayload{Event: event}, nil
@@ -107,17 +57,7 @@ func (r *mutationResolver) UpdateEvent(ctx context.Context, id string, input gen
 // DeleteEvent is the resolver for the deleteEvent field
 func (r *mutationResolver) DeleteEvent(ctx context.Context, id string) (*EventDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Event.DeleteOneID(id).Exec(ctx); err != nil {
-		if generated.IsNotFound(err) {
-			return nil, err
-		}
-
-		if errors.Is(err, privacy.Deny) {
-			return nil, newPermissionDeniedError(ActionDelete, "event")
-		}
-
-		log.Error().Err(err).Msg("failed to delete event")
-
-		return nil, err
+		return nil, parseRequestError(err, action{action: ActionDelete, object: "event"})
 	}
 
 	if err := generated.EventEdgeCleanup(ctx, id); err != nil {
@@ -131,17 +71,7 @@ func (r *mutationResolver) DeleteEvent(ctx context.Context, id string) (*EventDe
 func (r *queryResolver) Event(ctx context.Context, id string) (*generated.Event, error) {
 	event, err := withTransactionalMutation(ctx).Event.Get(ctx, id)
 	if err != nil {
-		log.Error().Err(err).Msg("failed to get event")
-
-		if generated.IsNotFound(err) {
-			return nil, err
-		}
-
-		if errors.Is(err, privacy.Deny) {
-			return nil, newPermissionDeniedError(ActionGet, "event")
-		}
-
-		return nil, ErrInternalServerError
+		return nil, parseRequestError(err, action{action: ActionGet, object: "event"})
 	}
 
 	return event, nil

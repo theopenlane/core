@@ -9,7 +9,6 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	mock_fga "github.com/theopenlane/iam/fgax/mockery"
 
 	"github.com/theopenlane/utils/rout"
 
@@ -38,7 +37,6 @@ func (suite *HandlerTestSuite) TestOauthRegister() {
 	tests := []struct {
 		name            string
 		args            args
-		writes          bool
 		expectedStatus  int
 		expectedErr     string
 		expectedErrCode rout.ErrorCode
@@ -55,7 +53,6 @@ func (suite *HandlerTestSuite) TestOauthRegister() {
 				token:    "gh_thistokenisvalid",
 			},
 			expectedStatus: http.StatusOK,
-			writes:         true,
 		},
 		{
 			name: "happy path, github, same user",
@@ -68,7 +65,6 @@ func (suite *HandlerTestSuite) TestOauthRegister() {
 				token:    "gh_thistokenisvalid",
 			},
 			expectedStatus: http.StatusOK,
-			writes:         false, // user already created, no FGA writes this time
 		},
 		{
 			name: "mismatch email",
@@ -82,17 +78,10 @@ func (suite *HandlerTestSuite) TestOauthRegister() {
 			},
 			expectedStatus:  http.StatusBadRequest,
 			expectedErrCode: handlers.InvalidInputErrCode,
-			writes:          false,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if tt.writes {
-				// add mocks for writes when a new user is created
-				// once for the personal org, and once for the _self relation
-				mock_fga.WriteAny(t, suite.fga)
-			}
-
 			registerJSON := models.OauthTokenRequest{
 				Name:             tt.args.name,
 				Email:            tt.args.email,

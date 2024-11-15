@@ -89,7 +89,7 @@ func HookOrganization() ent.Hook {
 						return v, err
 					}
 
-					if err := postCreation(ctx, orgCreated, m); err != nil {
+					if err := postOrganizationCreation(ctx, orgCreated, m); err != nil {
 						return v, err
 					}
 				}
@@ -116,7 +116,7 @@ func HookOrganizationDelete() ent.Hook {
 			}
 
 			// validate the organization can be deleted
-			if err := validateDeletion(ctx, m); err != nil {
+			if err := validateOrgDeletion(ctx, m); err != nil {
 				return nil, err
 			}
 
@@ -201,8 +201,8 @@ func createEntityTypes(ctx context.Context, orgID string, m *generated.Organizat
 	return nil
 }
 
-// postCreation runs after an organization is created to perform additional setup
-func postCreation(ctx context.Context, orgCreated *generated.Organization, m *generated.OrganizationMutation) error {
+// postOrganizationCreation runs after an organization is created to perform additional setup
+func postOrganizationCreation(ctx context.Context, orgCreated *generated.Organization, m *generated.OrganizationMutation) error {
 	// capture the original org id, ignore error as this will not be set in all cases
 	originalOrg, _ := auth.GetOrganizationIDFromContext(ctx) // nolint: errcheck
 
@@ -226,8 +226,8 @@ func postCreation(ctx context.Context, orgCreated *generated.Organization, m *ge
 	return nil
 }
 
-// validateDeletion ensures the organization can be deleted
-func validateDeletion(ctx context.Context, m *generated.OrganizationMutation) error {
+// validateOrgDeletion ensures the organization can be deleted
+func validateOrgDeletion(ctx context.Context, m *generated.OrganizationMutation) error {
 	deletedID, ok := m.ID()
 	if !ok {
 		return nil
@@ -376,7 +376,7 @@ func createOrgMemberOwner(ctx context.Context, oID string, m *generated.Organiza
 
 	// if this was created with an API token, do not create an owner but add the service tuple to fga
 	if auth.IsAPITokenAuthentication(ctx) {
-		return createServiceTuple(ctx, oID, m)
+		return addTokenEditPermissions(ctx, oID, m.Type())
 	}
 
 	// get userID from context
@@ -403,42 +403,6 @@ func createOrgMemberOwner(ctx context.Context, oID string, m *generated.Organiza
 
 	// set the user's default org to the new org
 	return updateDefaultOrgIfPersonal(ctx, userID, oID, m.Client())
-}
-
-// createServiceTuple creates a service tuple for the organization and api key so the organization can be accessed
-func createServiceTuple(ctx context.Context, oID string, m *generated.OrganizationMutation) error {
-	// get userID from context
-	subjectID, err := auth.GetUserIDFromContext(ctx)
-	if err != nil {
-		log.Error().Err(err).Msg("unable to get user id from context, unable to add user to organization")
-
-		return err
-	}
-
-	// allow the api token to edit the newly created organization, no other users will have access
-	// so this is the minimum required access
-	role := fgax.CanEdit
-
-	// get tuple key
-	req := fgax.TupleRequest{
-		SubjectID:   subjectID,
-		SubjectType: "service",
-		ObjectID:    oID,
-		ObjectType:  "organization",
-		Relation:    role,
-	}
-
-	tuple := fgax.GetTupleKey(req)
-
-	if _, err := m.Authz.WriteTupleKeys(ctx, []fgax.TupleKey{tuple}, nil); err != nil {
-		log.Error().Err(err).Msg("failed to create relationship tuple")
-
-		return err
-	}
-
-	log.Debug().Str("relation", role).Str("object", tuple.Object.String()).Msg("created relationship tuples")
-
-	return nil
 }
 
 // updateDefaultOrgIfPersonal updates the user's default org if the user has no default org or

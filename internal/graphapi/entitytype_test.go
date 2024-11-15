@@ -7,72 +7,53 @@ import (
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	mock_fga "github.com/theopenlane/iam/fgax/mockery"
 
 	"github.com/theopenlane/utils/ulids"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
 func (suite *GraphTestSuite) TestQueryEntityType() {
 	t := suite.T()
 
-	// setup user context
-	reqCtx, err := userContext()
-	require.NoError(t, err)
-
-	entityType := (&EntityTypeBuilder{client: suite.client}).MustNew(reqCtx, t)
+	entityType := (&EntityTypeBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name     string
 		queryID  string
 		client   *openlaneclient.OpenlaneClient
 		ctx      context.Context
-		allowed  bool
-		expected *ent.EntityType
 		errorMsg string
 	}{
 		{
-			name:     "happy path entity type",
-			client:   suite.client.api,
-			ctx:      reqCtx,
-			allowed:  true,
-			queryID:  entityType.ID,
-			expected: entityType,
+			name:    "happy path entity type",
+			client:  suite.client.api,
+			ctx:     testUser1.UserCtx,
+			queryID: entityType.ID,
 		},
 		{
-			name:     "happy path entity type, using api token",
-			client:   suite.client.apiWithToken,
-			ctx:      context.Background(),
-			allowed:  true,
-			queryID:  entityType.ID,
-			expected: entityType,
+			name:    "happy path entity type, using api token",
+			client:  suite.client.apiWithToken,
+			ctx:     context.Background(),
+			queryID: entityType.ID,
 		},
 		{
-			name:     "happy path entity type, using pat",
-			client:   suite.client.apiWithPAT,
-			ctx:      context.Background(),
-			allowed:  true,
-			queryID:  entityType.ID,
-			expected: entityType,
+			name:    "happy path entity type, using pat",
+			client:  suite.client.apiWithPAT,
+			ctx:     context.Background(),
+			queryID: entityType.ID,
 		},
 		{
 			name:     "no access",
 			client:   suite.client.api,
-			ctx:      reqCtx,
-			allowed:  false,
+			ctx:      testUser2.UserCtx,
 			queryID:  entityType.ID,
-			errorMsg: "not authorized",
+			errorMsg: notFoundErrorMsg,
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Get "+tc.name, func(t *testing.T) {
-			defer mock_fga.ClearMocks(suite.client.fga)
-
-			mock_fga.CheckAny(t, suite.client.fga, tc.allowed)
-
 			resp, err := tc.client.GetEntityTypeByID(tc.ctx, tc.queryID)
 
 			if tc.errorMsg != "" {
@@ -90,22 +71,14 @@ func (suite *GraphTestSuite) TestQueryEntityType() {
 	}
 
 	// delete created org and entityType
-	(&EntityTypeCleanup{client: suite.client, ID: entityType.ID}).MustDelete(reqCtx, t)
+	(&EntityTypeCleanup{client: suite.client, ID: entityType.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
 func (suite *GraphTestSuite) TestQueryEntityTypes() {
 	t := suite.T()
 
-	// setup user context
-	reqCtx, err := userContext()
-	require.NoError(t, err)
-
-	_ = (&EntityTypeBuilder{client: suite.client}).MustNew(reqCtx, t)
-	_ = (&EntityTypeBuilder{client: suite.client}).MustNew(reqCtx, t)
-
-	otherUser := (&UserBuilder{client: suite.client}).MustNew(reqCtx, t)
-	otherCtx, err := userContextWithID(otherUser.ID)
-	require.NoError(t, err)
+	_ = (&EntityTypeBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	_ = (&EntityTypeBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name            string
@@ -116,7 +89,7 @@ func (suite *GraphTestSuite) TestQueryEntityTypes() {
 		{
 			name:            "happy path",
 			client:          suite.client.api,
-			ctx:             reqCtx,
+			ctx:             testUser1.UserCtx,
 			expectedResults: 3, // 1 is created in the setup
 		},
 		{
@@ -132,17 +105,15 @@ func (suite *GraphTestSuite) TestQueryEntityTypes() {
 			expectedResults: 3, // 1 is created in the setup
 		},
 		{
-			name:            "another user, no entities should be returned",
+			name:            "another user, no new entities should be returned",
 			client:          suite.client.api,
-			ctx:             otherCtx,
-			expectedResults: 0,
+			ctx:             testUser2.UserCtx,
+			expectedResults: 1, // 1 is created in the setup
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("List "+tc.name, func(t *testing.T) {
-			defer mock_fga.ClearMocks(suite.client.fga)
-
 			resp, err := tc.client.GetAllEntityTypes(tc.ctx)
 			require.NoError(t, err)
 			require.NotNil(t, resp)
@@ -155,16 +126,11 @@ func (suite *GraphTestSuite) TestQueryEntityTypes() {
 func (suite *GraphTestSuite) TestMutationCreateEntityType() {
 	t := suite.T()
 
-	// setup user context
-	reqCtx, err := userContext()
-	require.NoError(t, err)
-
 	testCases := []struct {
 		name        string
 		request     openlaneclient.CreateEntityTypeInput
 		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
-		allowed     bool
 		expectedErr string
 	}{
 		{
@@ -172,28 +138,25 @@ func (suite *GraphTestSuite) TestMutationCreateEntityType() {
 			request: openlaneclient.CreateEntityTypeInput{
 				Name: "cats",
 			},
-			client:  suite.client.api,
-			ctx:     reqCtx,
-			allowed: true,
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
 		},
 		{
 			name: "happy path, all input, using api token",
 			request: openlaneclient.CreateEntityTypeInput{
 				Name: "horses",
 			},
-			client:  suite.client.apiWithToken,
-			ctx:     context.Background(),
-			allowed: true,
+			client: suite.client.apiWithToken,
+			ctx:    context.Background(),
 		},
 		{
 			name: "happy path, all input, using pat",
 			request: openlaneclient.CreateEntityTypeInput{
-				OwnerID: &testOrgID,
+				OwnerID: &testUser1.OrganizationID,
 				Name:    "bunnies",
 			},
-			client:  suite.client.apiWithPAT,
-			ctx:     context.Background(),
-			allowed: true,
+			client: suite.client.apiWithPAT,
+			ctx:    context.Background(),
 		},
 		{
 			name: "do not create if not allowed",
@@ -201,27 +164,20 @@ func (suite *GraphTestSuite) TestMutationCreateEntityType() {
 				Name: "dogs",
 			},
 			client:      suite.client.api,
-			ctx:         reqCtx,
-			allowed:     false,
-			expectedErr: "you are not authorized to perform this action: create on entitytype",
+			ctx:         viewOnlyUser.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name:        "missing required field, name",
 			request:     openlaneclient.CreateEntityTypeInput{},
 			client:      suite.client.api,
-			ctx:         reqCtx,
-			allowed:     true,
+			ctx:         testUser1.UserCtx,
 			expectedErr: "value is less than the required length",
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
-			defer mock_fga.ClearMocks(suite.client.fga)
-
-			// check for edit permissions on the organization
-			mock_fga.CheckAny(t, suite.client.fga, tc.allowed)
-
 			resp, err := tc.client.CreateEntityType(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
 				require.Error(t, err)
@@ -242,18 +198,13 @@ func (suite *GraphTestSuite) TestMutationCreateEntityType() {
 func (suite *GraphTestSuite) TestMutationUpdateEntityType() {
 	t := suite.T()
 
-	// setup user context
-	reqCtx, err := userContext()
-	require.NoError(t, err)
-
-	entityType := (&EntityTypeBuilder{client: suite.client}).MustNew(reqCtx, t)
+	entityType := (&EntityTypeBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
 		request     openlaneclient.UpdateEntityTypeInput
 		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
-		allowed     bool
 		expectedErr string
 	}{
 		{
@@ -261,27 +212,24 @@ func (suite *GraphTestSuite) TestMutationUpdateEntityType() {
 			request: openlaneclient.UpdateEntityTypeInput{
 				Name: lo.ToPtr("maine coons"),
 			},
-			client:  suite.client.api,
-			ctx:     reqCtx,
-			allowed: true,
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
 		},
 		{
 			name: "happy path, update name using api token",
 			request: openlaneclient.UpdateEntityTypeInput{
 				Name: lo.ToPtr("sphynx"),
 			},
-			client:  suite.client.apiWithToken,
-			ctx:     context.Background(),
-			allowed: true,
+			client: suite.client.apiWithToken,
+			ctx:    context.Background(),
 		},
 		{
 			name: "happy path, update name using personal access token",
 			request: openlaneclient.UpdateEntityTypeInput{
 				Name: lo.ToPtr("persian"),
 			},
-			client:  suite.client.apiWithPAT,
-			ctx:     context.Background(),
-			allowed: true,
+			client: suite.client.apiWithPAT,
+			ctx:    context.Background(),
 		},
 		{
 			name: "not allowed to update",
@@ -289,19 +237,13 @@ func (suite *GraphTestSuite) TestMutationUpdateEntityType() {
 				Name: lo.ToPtr("dogs"),
 			},
 			client:      suite.client.api,
-			ctx:         reqCtx,
-			allowed:     false,
-			expectedErr: "you are not authorized to perform this action: update on entitytype",
+			ctx:         viewOnlyUser.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Update "+tc.name, func(t *testing.T) {
-			defer mock_fga.ClearMocks(suite.client.fga)
-
-			// check for edit permissions on the organization
-			mock_fga.CheckAny(t, suite.client.fga, tc.allowed)
-
 			resp, err := tc.client.UpdateEntityType(tc.ctx, entityType.ID, tc.request)
 			if tc.expectedErr != "" {
 				require.Error(t, err)
@@ -321,85 +263,67 @@ func (suite *GraphTestSuite) TestMutationUpdateEntityType() {
 func (suite *GraphTestSuite) TestMutationDeleteEntityType() {
 	t := suite.T()
 
-	// setup user context
-	reqCtx, err := userContext()
-	require.NoError(t, err)
-
-	entityType1 := (&EntityTypeBuilder{client: suite.client}).MustNew(reqCtx, t)
-	entityType2 := (&EntityTypeBuilder{client: suite.client}).MustNew(reqCtx, t)
-	entityType3 := (&EntityTypeBuilder{client: suite.client}).MustNew(reqCtx, t)
+	entityType1 := (&EntityTypeBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	entityType2 := (&EntityTypeBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	entityType3 := (&EntityTypeBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
 		idToDelete  string
 		client      *openlaneclient.OpenlaneClient
 		ctx         context.Context
-		allowed     bool
-		checkAccess bool
 		expectedErr string
 	}{
 		{
 			name:        "not allowed to delete",
 			idToDelete:  entityType1.ID,
 			client:      suite.client.api,
-			ctx:         reqCtx,
-			checkAccess: true,
-			allowed:     false,
-			expectedErr: "you are not authorized to perform this action: delete on entitytype",
+			ctx:         viewOnlyUser.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
-			name:        "happy path, delete entity type",
+			name:        "not allowed to delete, no access",
 			idToDelete:  entityType1.ID,
 			client:      suite.client.api,
-			ctx:         reqCtx,
-			checkAccess: true,
-			allowed:     true,
+			ctx:         testUser2.UserCtx,
+			expectedErr: notFoundErrorMsg,
+		},
+		{
+			name:       "happy path, delete entity type",
+			idToDelete: entityType1.ID,
+			client:     suite.client.api,
+			ctx:        testUser1.UserCtx,
 		},
 		{
 			name:        "entityType already deleted, not found",
 			idToDelete:  entityType1.ID,
 			client:      suite.client.api,
-			ctx:         reqCtx,
-			checkAccess: false,
-			allowed:     true,
-			expectedErr: "entity_type not found",
+			ctx:         testUser1.UserCtx,
+			expectedErr: notFoundErrorMsg,
 		},
 		{
-			name:        "happy path, delete entity type using api token",
-			idToDelete:  entityType2.ID,
-			client:      suite.client.apiWithToken,
-			ctx:         context.Background(),
-			checkAccess: true,
-			allowed:     true,
+			name:       "happy path, delete entity type using api token",
+			idToDelete: entityType2.ID,
+			client:     suite.client.apiWithToken,
+			ctx:        context.Background(),
 		},
 		{
-			name:        "happy path, delete entity type using pat",
-			idToDelete:  entityType3.ID,
-			client:      suite.client.apiWithPAT,
-			ctx:         context.Background(),
-			checkAccess: true,
-			allowed:     true,
+			name:       "happy path, delete entity type using pat",
+			idToDelete: entityType3.ID,
+			client:     suite.client.apiWithPAT,
+			ctx:        context.Background(),
 		},
 		{
 			name:        "unknown entitytype, not found",
 			idToDelete:  ulids.New().String(),
 			client:      suite.client.api,
-			ctx:         reqCtx,
-			checkAccess: false,
-			allowed:     true,
-			expectedErr: "entity_type not found",
+			ctx:         testUser1.UserCtx,
+			expectedErr: notFoundErrorMsg,
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Delete "+tc.name, func(t *testing.T) {
-			defer mock_fga.ClearMocks(suite.client.fga)
-
-			// check for edit permissions on the organization if entityType exists
-			if tc.checkAccess {
-				mock_fga.CheckAny(t, suite.client.fga, tc.allowed)
-			}
-
 			resp, err := tc.client.DeleteEntityType(tc.ctx, tc.idToDelete)
 			if tc.expectedErr != "" {
 				require.Error(t, err)
