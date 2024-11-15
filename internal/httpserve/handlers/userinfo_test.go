@@ -9,37 +9,12 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	mock_fga "github.com/theopenlane/iam/fgax/mockery"
-
-	"github.com/theopenlane/iam/auth"
-
-	"github.com/theopenlane/echox/middleware/echocontext"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 )
 
 func (suite *HandlerTestSuite) TestUserInfoHandler() {
 	t := suite.T()
-
-	// bypass auth
-	ctx := context.Background()
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
-
-	mock_fga.WriteAny(t, suite.fga)
-
-	// setup test data
-	user := suite.db.User.Create().
-		SetEmail("juju@theopenlane.io").
-		SetFirstName("Juju").
-		SetLastName("Bee").
-		SaveX(ctx)
-
-	ec, err := auth.NewTestEchoContextWithValidUser(user.ID)
-	require.NoError(t, err)
-
-	reqCtx := context.WithValue(ec.Request().Context(), echocontext.EchoContextKey, ec)
-
 	suite.e.GET("oauth/userinfo", suite.h.UserInfo)
 
 	tests := []struct {
@@ -49,7 +24,7 @@ func (suite *HandlerTestSuite) TestUserInfoHandler() {
 	}{
 		{
 			name:    "happy path",
-			ctx:     reqCtx,
+			ctx:     testUser1.UserCtx,
 			wantErr: false,
 		},
 		{
@@ -88,7 +63,7 @@ func (suite *HandlerTestSuite) TestUserInfoHandler() {
 			assert.Equal(t, http.StatusOK, recorder.Code)
 			require.NotNil(t, out)
 
-			assert.Equal(t, user.ID, out.ID)
+			assert.Equal(t, testUser1.ID, out.ID)
 		})
 	}
 }

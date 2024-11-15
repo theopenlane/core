@@ -7,7 +7,6 @@ import (
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	mock_fga "github.com/theopenlane/iam/fgax/mockery"
 
 	"github.com/theopenlane/utils/rout"
 
@@ -17,15 +16,7 @@ import (
 func (suite *GraphTestSuite) TestQueryTFASetting() {
 	t := suite.T()
 
-	// setup user context
-	reqCtx, err := userContext()
-	require.NoError(t, err)
-
-	(&TFASettingBuilder{client: suite.client}).MustNew(reqCtx, t, testUser.ID)
-
-	user2 := (&UserBuilder{client: suite.client}).MustNew(reqCtx, t)
-	user2Ctx, err := userContextWithID(user2.ID)
-	require.NoError(t, err)
+	(&TFASettingBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t, testUser1.ID)
 
 	testCases := []struct {
 		name     string
@@ -37,7 +28,7 @@ func (suite *GraphTestSuite) TestQueryTFASetting() {
 		{
 			name:   "happy path user",
 			client: suite.client.api,
-			ctx:    reqCtx,
+			ctx:    testUser1.UserCtx,
 		},
 		{
 			name:   "happy path, using personal access token",
@@ -47,15 +38,13 @@ func (suite *GraphTestSuite) TestQueryTFASetting() {
 		{
 			name:     "valid user, but not auth",
 			client:   suite.client.api,
-			ctx:      user2Ctx,
-			errorMsg: "tfa_setting not found",
+			ctx:      testUser2.UserCtx,
+			errorMsg: notFoundErrorMsg,
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Get "+tc.name, func(t *testing.T) {
-			defer mock_fga.ClearMocks(suite.client.fga)
-
 			resp, err := tc.client.GetTFASetting(tc.ctx)
 
 			if tc.errorMsg != "" {
@@ -70,23 +59,10 @@ func (suite *GraphTestSuite) TestQueryTFASetting() {
 			require.NotNil(t, resp)
 		})
 	}
-
-	(&UserCleanup{client: suite.client, ID: user2.ID}).MustDelete(reqCtx, t)
 }
 
 func (suite *GraphTestSuite) TestMutationCreateTFASetting() {
 	t := suite.T()
-
-	// setup user context
-	ctx, err := userContext()
-	require.NoError(t, err)
-
-	user := (&UserBuilder{client: suite.client}).MustNew(ctx, t)
-	require.NoError(t, err)
-
-	// setup valid user context
-	reqCtx, err := userContextWithID(user.ID)
-	require.NoError(t, err)
 
 	testCases := []struct {
 		name   string
@@ -98,16 +74,16 @@ func (suite *GraphTestSuite) TestMutationCreateTFASetting() {
 	}{
 		{
 			name:   "happy path",
-			userID: user.ID,
+			userID: testUser2.ID,
 			input: openlaneclient.CreateTFASettingInput{
 				TotpAllowed: lo.ToPtr(true),
 			},
 			client: suite.client.api,
-			ctx:    reqCtx,
+			ctx:    testUser2.UserCtx,
 		},
 		{
 			name:   "happy path, using personal access token",
-			userID: testUser.ID,
+			userID: testUser1.ID,
 			input: openlaneclient.CreateTFASettingInput{
 				TotpAllowed: lo.ToPtr(true),
 			},
@@ -116,7 +92,7 @@ func (suite *GraphTestSuite) TestMutationCreateTFASetting() {
 		},
 		{
 			name:   "unable to create using api token",
-			userID: testUser.ID,
+			userID: testUser1.ID,
 			input: openlaneclient.CreateTFASettingInput{
 				TotpAllowed: lo.ToPtr(true),
 			},
@@ -126,12 +102,12 @@ func (suite *GraphTestSuite) TestMutationCreateTFASetting() {
 		},
 		{
 			name:   "already exists",
-			userID: user.ID,
+			userID: testUser1.ID,
 			input: openlaneclient.CreateTFASettingInput{
 				TotpAllowed: lo.ToPtr(true),
 			},
 			client: suite.client.api,
-			ctx:    reqCtx,
+			ctx:    testUser1.UserCtx,
 			errMsg: "tfasetting already exists",
 		},
 	}
@@ -159,7 +135,7 @@ func (suite *GraphTestSuite) TestMutationCreateTFASetting() {
 			assert.Equal(t, tc.userID, resp.CreateTFASetting.TfaSetting.Owner.ID)
 
 			// make sure user setting was not updated
-			userSetting, err := user.Setting(ctx)
+			userSetting, err := testUser1.UserInfo.Setting(testUser1.UserCtx)
 			require.NoError(t, err)
 
 			assert.False(t, userSetting.IsTfaEnabled)
@@ -170,11 +146,7 @@ func (suite *GraphTestSuite) TestMutationCreateTFASetting() {
 func (suite *GraphTestSuite) TestMutationUpdateTFASetting() {
 	t := suite.T()
 
-	// setup user context
-	reqCtx, err := userContext()
-	require.NoError(t, err)
-
-	(&TFASettingBuilder{client: suite.client}).MustNew(reqCtx, t, testUser.ID)
+	(&TFASettingBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t, testUser1.ID)
 
 	recoveryCodes := []string{}
 
@@ -191,7 +163,7 @@ func (suite *GraphTestSuite) TestMutationUpdateTFASetting() {
 				Verified: lo.ToPtr(true),
 			},
 			client: suite.client.api,
-			ctx:    reqCtx,
+			ctx:    testUser1.UserCtx,
 		},
 		{
 			name: "regen codes using personal access token",
@@ -216,19 +188,12 @@ func (suite *GraphTestSuite) TestMutationUpdateTFASetting() {
 				RegenBackupCodes: lo.ToPtr(false),
 			},
 			client: suite.client.api,
-			ctx:    reqCtx,
+			ctx:    testUser1.UserCtx,
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Update "+tc.name, func(t *testing.T) {
-			defer mock_fga.ClearMocks(suite.client.fga)
-
-			if tc.errMsg == "" {
-				// we dont check the org in the response so we can use an empty list
-				mock_fga.ListAny(t, suite.client.fga, []string{})
-			}
-
 			// update tfa settings
 			resp, err := tc.client.UpdateTFASetting(tc.ctx, tc.input)
 

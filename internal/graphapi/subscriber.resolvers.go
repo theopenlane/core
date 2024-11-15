@@ -87,7 +87,7 @@ func (r *mutationResolver) DeleteSubscriber(ctx context.Context, email string, o
 	}
 
 	if num == 0 {
-		return nil, ErrSubscriberNotFound
+		return nil, newNotFoundError("subscriber")
 	}
 
 	return &SubscriberDeletePayload{Email: email}, nil

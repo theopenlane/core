@@ -6,12 +6,10 @@ package graphapi
 
 import (
 	"context"
-	"errors"
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -26,9 +24,7 @@ func (r *mutationResolver) CreateAPIToken(ctx context.Context, input generated.C
 
 	apiToken, err := withTransactionalMutation(ctx).APIToken.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		log.Error().Err(err).Msg("failed to create api token")
-
-		return nil, err
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "api token"})
 	}
 
 	return &APITokenCreatePayload{APIToken: apiToken}, err
@@ -55,37 +51,18 @@ func (r *mutationResolver) CreateBulkCSVAPIToken(ctx context.Context, input grap
 func (r *mutationResolver) UpdateAPIToken(ctx context.Context, id string, input generated.UpdateAPITokenInput) (*APITokenUpdatePayload, error) {
 	apiToken, err := withTransactionalMutation(ctx).APIToken.Get(ctx, id)
 	if err != nil {
-		if generated.IsNotFound(err) {
-			return nil, err
-		}
-
-		if errors.Is(err, privacy.Deny) {
-			return nil, newPermissionDeniedError(ActionGet, "api token")
-		}
-
-		log.Error().Err(err).Msg("failed to get api token")
-		return nil, ErrInternalServerError
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "api token"})
 	}
 
 	if err := setOrganizationInAuthContext(ctx, &apiToken.OwnerID); err != nil {
 		log.Error().Err(err).Msg("failed to set organization in auth context")
 
-		return nil, newPermissionDeniedError(ActionUpdate, "api token")
+		return nil, rout.ErrPermissionDenied
 	}
 
 	apiToken, err = apiToken.Update().SetInput(input).Save(ctx)
 	if err != nil {
-		if generated.IsValidationError(err) {
-			return nil, err
-		}
-
-		if generated.IsConstraintError(err) {
-			return nil, err
-		}
-
-		log.Error().Err(err).Msg("failed to update api token")
-
-		return nil, ErrInternalServerError
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "api token"})
 	}
 
 	return &APITokenUpdatePayload{APIToken: apiToken}, err
@@ -94,16 +71,7 @@ func (r *mutationResolver) UpdateAPIToken(ctx context.Context, id string, input 
 // DeleteAPIToken is the resolver for the deleteAPIToken field.
 func (r *mutationResolver) DeleteAPIToken(ctx context.Context, id string) (*APITokenDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).APIToken.DeleteOneID(id).Exec(ctx); err != nil {
-		if generated.IsNotFound(err) {
-			return nil, err
-		}
-
-		if errors.Is(err, privacy.Deny) {
-			return nil, newPermissionDeniedError(ActionDelete, "api token")
-		}
-
-		log.Error().Err(err).Msg("failed to delete api token")
-		return nil, err
+		return nil, parseRequestError(err, action{action: ActionDelete, object: "api token"})
 	}
 
 	if err := generated.APITokenEdgeCleanup(ctx, id); err != nil {
@@ -117,13 +85,7 @@ func (r *mutationResolver) DeleteAPIToken(ctx context.Context, id string) (*APIT
 func (r *queryResolver) APIToken(ctx context.Context, id string) (*generated.APIToken, error) {
 	apiToken, err := withTransactionalMutation(ctx).APIToken.Get(ctx, id)
 	if err != nil {
-		if generated.IsNotFound(err) {
-			return nil, err
-		}
-
-		log.Error().Err(err).Msg("failed to get api token")
-
-		return nil, ErrInternalServerError
+		return nil, parseRequestError(err, action{action: ActionGet, object: "api token"})
 	}
 
 	return apiToken, nil
