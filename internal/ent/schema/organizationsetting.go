@@ -13,11 +13,13 @@ import (
 
 	emixin "github.com/theopenlane/entx/mixin"
 	"github.com/theopenlane/iam/entfga"
+	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/pkg/enums"
 )
@@ -119,11 +121,17 @@ func (OrganizationSetting) Policy() ent.Policy {
 			privacy.OrganizationSettingMutationRuleFunc(func(ctx context.Context, m *generated.OrganizationSettingMutation) error {
 				return m.CheckAccessForEdit(ctx)
 			}),
+			privacy.OrganizationSettingMutationRuleFunc(func(ctx context.Context, m *generated.OrganizationSettingMutation) error {
+				return rule.CheckOrgAccess(ctx, fgax.CanEdit)
+			}),
 			privacy.AlwaysDenyRule(),
 		},
 		Query: privacy.QueryPolicy{
 			privacy.OrganizationSettingQueryRuleFunc(func(ctx context.Context, q *generated.OrganizationSettingQuery) error {
 				return q.CheckAccess(ctx)
+			}),
+			privacy.OrganizationSettingQueryRuleFunc(func(ctx context.Context, q *generated.OrganizationSettingQuery) error {
+				return rule.CheckOrgAccess(ctx, fgax.CanView)
 			}),
 			privacy.AlwaysDenyRule(),
 		},
