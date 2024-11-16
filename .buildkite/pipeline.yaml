@@ -5,7 +5,7 @@ env:
   IMAGE_TAG: ${BUILDKITE_BUILD_NUMBER}-${BUILDKITE_COMMIT:0:8}
   SONAR_HOST: https://sonarcloud.io
   # see https://github.com/aquasecurity/trivy/discussions/7668
-  TRIVY_DB_REPOSITORY: mirror.gcr.io/aquasecurity/trivy-db
+  TRIVY_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-db
 
 steps:
   - group: ":knife: Pre-check"
