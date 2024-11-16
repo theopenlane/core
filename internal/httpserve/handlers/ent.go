@@ -11,7 +11,6 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
-	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
@@ -505,17 +504,22 @@ func (h *Handler) getOrgByID(ctx context.Context, id string) (*ent.Organization,
 }
 
 // getOrgSettingByOrgID returns the organization settings from an organization ID and context
-func (h *Handler) getOrgSettingByOrgID(ctx context.Context, id string) (*ent.OrganizationSetting, error) {
-	settings, err := transaction.FromContext(ctx).OrganizationSetting.Query().Where(
-		organizationsetting.OrganizationID(id),
-	).Only(ctx)
+func (h *Handler) getOrgSettingByOrgID(ctx context.Context, orgID string) (*ent.OrganizationSetting, error) {
+	org, err := h.getOrgByID(ctx, orgID)
+	if err != nil {
+		log.Error().Err(err).Msg("error obtaining organization from id")
+
+		return nil, err
+	}
+
+	orgSetting, err := org.QuerySetting().Only(ctx)
 	if err != nil {
 		log.Error().Err(err).Msg("error obtaining organization settings from id")
 
 		return nil, err
 	}
 
-	return settings, nil
+	return orgSetting, nil
 }
 
 func (h *Handler) fetchOrCreateStripe(context context.Context, orgsetting *ent.OrganizationSetting) (*stripe.Customer, error) {

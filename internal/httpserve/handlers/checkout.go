@@ -23,7 +23,6 @@ func (h *Handler) CheckoutSessionHandler(ctx echo.Context) error {
 		return h.BadRequest(ctx, err)
 	}
 
-	// get organization from database by id
 	settings, err := h.getOrgSettingByOrgID(reqCtx, orgID)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get organization settings by org id")
