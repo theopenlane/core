@@ -68,7 +68,7 @@ require (
 	github.com/theopenlane/iam v0.3.1
 	github.com/theopenlane/newman v0.1.1
 	github.com/theopenlane/riverboat v0.0.7
-	github.com/theopenlane/utils v0.3.0
+	github.com/theopenlane/utils v0.3.1
 	github.com/vektah/gqlparser/v2 v2.5.19
 	github.com/wk8/go-ordered-map/v2 v2.1.8
 	github.com/wundergraph/graphql-go-tools v1.67.4
@@ -320,7 +320,7 @@ require (
 	modernc.org/libc v1.60.0 // indirect
 	modernc.org/mathutil v1.6.0 // indirect
 	modernc.org/memory v1.8.0 // indirect
-	modernc.org/sqlite v1.33.1 // indirect
+	modernc.org/sqlite v1.34.1 // indirect
 	modernc.org/strutil v1.2.0 // indirect
 	modernc.org/token v1.1.0 // indirect
 )
