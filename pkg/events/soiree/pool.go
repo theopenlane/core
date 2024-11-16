@@ -34,20 +34,46 @@ type PondPool struct {
 	pool pond.Pool
 	// name is the name of the pool used in metrics
 	name string
+	// MaxWorkers is the maximum number of workers in the pool
+	MaxWorkers int `json:"maxWorkers" koanf:"maxWorkers" default:"100"`
+	// opts are the options for the pool
+	opts []pond.Option
 }
 
-// NewPondPool creates a new instance of PondPool with the passed options
-func NewPondPool(maxWorkers int, options ...pond.Option) *PondPool {
-	return &PondPool{
-		pool: pond.NewPool(maxWorkers, options...),
+// NewPondPool creates a new worker pool using the pond library
+func NewPondPool(opts ...PoolOptions) *PondPool {
+	p := &PondPool{}
+
+	for _, opt := range opts {
+		opt(p)
+	}
+
+	p.pool = pond.NewPool(p.MaxWorkers, p.opts...)
+
+	return p
+}
+
+// PoolOptions is a type for setting options on the pool
+type PoolOptions func(*PondPool)
+
+// WithName sets the name of the pool
+func WithName(name string) PoolOptions {
+	return func(p *PondPool) {
+		p.name = name
 	}
 }
 
-// NewNamedPondPool creates a new instance of PondPool with the passed options and name
-func NewNamedPondPool(maxWorkers int, name string, options ...pond.Option) *PondPool {
-	return &PondPool{
-		pool: pond.NewPool(maxWorkers, options...),
-		name: name,
+// WithMaxWorkers sets the maximum number of workers in the pool
+func WithMaxWorkers(maxWorkers int) PoolOptions {
+	return func(p *PondPool) {
+		p.MaxWorkers = maxWorkers
+	}
+}
+
+// WithOptions sets the options for the pool
+func WithOptions(opts ...pond.Option) PoolOptions {
+	return func(p *PondPool) {
+		p.opts = opts
 	}
 }
 
@@ -93,25 +119,25 @@ func (p *PondPool) Stop() {
 
 // SubmittedTasks returns the number of tasks submitted to the pool
 func (p *PondPool) SubmittedTasks() int {
-	return int(p.pool.SubmittedTasks()) // nolint:gosec
+	return int(p.pool.SubmittedTasks())
 }
 
 // WaitingTasks returns the number of tasks waiting in the pool
 func (p *PondPool) WaitingTasks() int {
-	return int(p.pool.WaitingTasks()) // nolint:gosec
+	return int(p.pool.WaitingTasks())
 }
 
 // SuccessfulTasks returns the number of tasks that completed successfully
 func (p *PondPool) SuccessfulTasks() int {
-	return int(p.pool.SuccessfulTasks()) // nolint:gosec
+	return int(p.pool.SuccessfulTasks())
 }
 
 // FailedTasks returns the number of tasks that completed with a panic
 func (p *PondPool) FailedTasks() int {
-	return int(p.pool.FailedTasks()) // nolint:gosec
+	return int(p.pool.FailedTasks())
 }
 
 // CompletedTasks returns the number of tasks that completed either successfully or with a panic
 func (p *PondPool) CompletedTasks() int {
-	return int(p.pool.CompletedTasks()) // nolint:gosec
+	return int(p.pool.CompletedTasks())
 }

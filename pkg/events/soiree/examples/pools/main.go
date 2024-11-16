@@ -9,7 +9,7 @@ import (
 
 func main() {
 	// Initialize a goroutine pool with 5 workers and a maximum capacity of 1000 tasks
-	pool := soiree.NewPondPool(100)
+	pool := soiree.NewPondPool(soiree.WithMaxWorkers(5))
 
 	// Create a new soiree instance using the custom pool
 	e := soiree.NewEventPool(soiree.WithPool(pool))

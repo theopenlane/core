@@ -1,6 +1,9 @@
 package soiree
 
-import "sync"
+import (
+	"context"
+	"sync"
+)
 
 // Event is an interface representing the structure of an instance of an event
 type Event interface {
@@ -18,6 +21,14 @@ type Event interface {
 	SetAborted(bool)
 	// IsAborted checks the event's aborted status
 	IsAborted() bool
+	// Context returns the event's context
+	Context() context.Context
+	// SetContext sets the event's context
+	SetContext(context.Context)
+	// Client returns the event's client
+	Client() interface{}
+	// SetClient sets the event's client
+	SetClient(interface{})
 }
 
 // BaseEvent serves as a basic implementation of the `Event` interface and contains fields for storing the topic,
@@ -31,13 +42,16 @@ type BaseEvent struct {
 	aborted    bool
 	properties Properties
 	mu         sync.RWMutex
+	ctx        context.Context
+	client     interface{}
 }
 
 // NewBaseEvent creates a new instance of BaseEvent with a payload
 func NewBaseEvent(topic string, payload interface{}) *BaseEvent {
 	return &BaseEvent{
-		topic:   topic,
-		payload: payload,
+		topic:      topic,
+		payload:    payload,
+		properties: Properties{},
 	}
 }
 
@@ -71,6 +85,10 @@ func (e *BaseEvent) Properties() Properties {
 
 // SetProperties sets the event's properties
 func (e *BaseEvent) SetProperties(properties Properties) {
+	if properties == nil {
+		properties = NewProperties()
+	}
+
 	e.mu.Lock() // Write lock
 	defer e.mu.Unlock()
 	e.properties = properties
@@ -96,11 +114,58 @@ type Properties map[string]interface{}
 
 // NewProperties creates a new Properties map
 func NewProperties() Properties {
-	return make(Properties, 10) //nolint:mnd
+	return make(Properties)
 }
 
 // Set a property on the Properties map
 func (p Properties) Set(name string, value interface{}) Properties {
+	if p == nil {
+		p = NewProperties()
+	}
+
 	p[name] = value
+
 	return p
+}
+
+// Get a property from the Properties map
+func (p Properties) GetKey(key string) interface{} {
+	value := p[key]
+
+	if value == nil || value == "" {
+		return nil
+	}
+
+	return value
+}
+
+// Context returns the event's context
+func (e *BaseEvent) Context() context.Context {
+	e.mu.RLock() // Read lock
+	defer e.mu.RUnlock()
+
+	return e.ctx
+}
+
+// SetContext sets the event's context
+func (e *BaseEvent) SetContext(ctx context.Context) {
+	e.mu.Lock() // Write lock
+	defer e.mu.Unlock()
+	e.ctx = ctx
+}
+
+// Client returns the event's client
+func (e *BaseEvent) Client() interface{} {
+	e.mu.RLock() // Read lock
+	defer e.mu.RUnlock()
+
+	return e.client
+}
+
+// SetClient sets the event's client
+func (e *BaseEvent) SetClient(client interface{}) {
+	e.mu.Lock() // Write lock
+	defer e.mu.Unlock()
+
+	e.client = client
 }

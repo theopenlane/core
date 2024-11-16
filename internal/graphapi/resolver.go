@@ -178,7 +178,7 @@ func WithSkipCache(h *handler.Server) {
 // WithPool adds a worker pool to the resolver for parallel processing
 func (r *Resolver) WithPool(maxWorkers int, options ...pond.Option) {
 	// create the pool
-	r.pool = soiree.NewNamedPondPool(maxWorkers, "graph", options...)
+	r.pool = soiree.NewPondPool(soiree.WithMaxWorkers(maxWorkers), soiree.WithOptions(options...))
 	// add metrics
 	r.pool.NewStatsCollector()
 }

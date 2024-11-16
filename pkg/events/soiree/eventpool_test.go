@@ -74,9 +74,20 @@ func TestEmitAsyncSuccess(t *testing.T) {
 	}
 }
 
+type TestEvent struct {
+	*BaseEvent
+}
+
+func NewTestEvent(topic string, payload interface{}) *TestEvent {
+	return &TestEvent{
+		BaseEvent: NewBaseEvent(topic, payload),
+	}
+}
+
 // TestEmitAsyncFailure tests the asynchronous Emit method for event handling that returns an error
 func TestEmitAsyncFailure(t *testing.T) {
 	soiree := NewEventPool()
+	event := NewTestEvent("testTopic", "test payload")
 
 	// Create a listener that returns an error
 	listener := func(e Event) error {
@@ -93,7 +104,7 @@ func TestEmitAsyncFailure(t *testing.T) {
 	}
 
 	// Emit the event asynchronously
-	errChan := soiree.Emit("testTopic", "testPayload")
+	errChan := soiree.Emit(event.Topic(), event)
 
 	// Collect errors from the error channel
 	var emitErrors []error
@@ -114,6 +125,7 @@ func TestEmitAsyncFailure(t *testing.T) {
 func TestEmitSyncSuccess(t *testing.T) {
 	soiree := NewEventPool()
 	received := make(chan string, 1) // Buffered channel to receive one message
+	event := NewTestEvent("testTopic", "testPayload")
 
 	// Prepare the listener
 	listener := createTestListener(received)
@@ -123,7 +135,7 @@ func TestEmitSyncSuccess(t *testing.T) {
 		t.Fatalf("On() failed with error: %v", err)
 	}
 
-	soiree.Emit("testTopic", "testPayload")
+	soiree.Emit(event.Topic(), event)
 
 	// Wait for the listener to handle the event or timeout after a specific duration
 	select {
@@ -140,6 +152,7 @@ func TestEmitSyncSuccess(t *testing.T) {
 // TestEmitSyncFailure tests the synchronous EmitSync method for event handling that returns an error
 func TestEmitSyncFailure(t *testing.T) {
 	soiree := NewEventPool()
+	event := NewTestEvent("testTopic", "testPayload")
 
 	// Create a listener that returns an error
 	listener := func(e Event) error {
@@ -152,7 +165,7 @@ func TestEmitSyncFailure(t *testing.T) {
 	}
 
 	// Emit the event synchronously and collect errors
-	errors := soiree.EmitSync("testTopic", "testPayload")
+	errors := soiree.EmitSync(event.Topic(), event)
 
 	// Check that the errors juicy slice is not empty
 	if len(errors) == 0 {
@@ -163,6 +176,7 @@ func TestEmitSyncFailure(t *testing.T) {
 // TestGetTopic tests getting a topic
 func TestGetTopic(t *testing.T) {
 	soiree := NewEventPool()
+	event := NewTestEvent("testTopic", "testPayload")
 
 	// Creating a topic by subscribing to it
 	_, err := soiree.On("testTopic", func(e Event) error { return nil })
@@ -170,7 +184,7 @@ func TestGetTopic(t *testing.T) {
 		t.Fatalf("On() failed with error: %v", err)
 	}
 
-	topic, err := soiree.GetTopic("testTopic")
+	topic, err := soiree.GetTopic(event.Topic())
 
 	if err != nil {
 		t.Fatalf("GetTopic() failed with error: %v", err)
@@ -222,8 +236,9 @@ func TestWildcardSubscriptionAndEmitting(t *testing.T) {
 
 	// On the mock listener to all topics
 	for _, topic := range topics {
+		event := NewTestEvent(topic, "testPayload")
 		topicName := topic
-		_, err := soiree.On(topicName, func(e Event) error {
+		_, err := soiree.On(event.Topic(), func(e Event) error {
 			// Record the event in the receivedEvents map
 			eventPayload := e.Payload().(string)
 			t.Logf("Listener received event on topic: %s with payload: %s", topicName, eventPayload)
@@ -240,8 +255,9 @@ func TestWildcardSubscriptionAndEmitting(t *testing.T) {
 
 	// Emit events to all topics and check if the listeners are notified
 	for eventKey := range expectedMatches {
+		event := NewTestEvent(eventKey, eventKey)
 		t.Logf("Emitting event: %s", eventKey)
-		soiree.Emit(eventKey, eventKey) // Use the eventKey as the payload for identification
+		soiree.Emit(event.Topic(), event) // Use the eventKey as the payload for identification
 	}
 
 	// Allow some time for the events to be processed asynchronously
@@ -292,7 +308,7 @@ func TestEventPoolClose(t *testing.T) {
 	}
 
 	// Use a Pool
-	pool := NewPondPool(10)
+	pool := NewPondPool(WithMaxWorkers(10))
 	soiree.SetPool(pool)
 
 	// Close the soiree

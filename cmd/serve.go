@@ -56,6 +56,7 @@ func serve(ctx context.Context) error {
 		serveropts.WithCacheHeaders(),
 		serveropts.WithCORS(),
 		serveropts.WithObjectStorage(),
+		serveropts.WithEntitlements(),
 	)
 
 	so := serveropts.NewServerOptions(serverOpts, k.String("config"))
@@ -109,6 +110,7 @@ func serve(ctx context.Context) error {
 		ent.SessionConfig(so.Config.Handler.SessionConfig),
 		ent.EntConfig(&so.Config.Settings.EntConfig),
 		ent.Emailer(&so.Config.Settings.Email),
+		ent.EntitlementManager(so.Config.Handler.Entitlements),
 	)
 
 	// Setup DB connection

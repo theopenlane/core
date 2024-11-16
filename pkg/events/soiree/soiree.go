@@ -26,4 +26,8 @@ type Soiree interface {
 	SetErrChanBufferSize(int)
 	// Close gracefully shuts down the Soiree, ensuring all pending events are processed
 	Close() error
+	// SetClient sets the client for the Soiree
+	SetClient(client interface{})
+	// GetClient gets the client for the Soiree
+	GetClient() interface{}
 }

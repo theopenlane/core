@@ -59,3 +59,9 @@ func WithErrChanBufferSize(size int) EventPoolOption {
 		m.SetErrChanBufferSize(size)
 	}
 }
+
+func WithClient(client interface{}) EventPoolOption {
+	return func(m Soiree) {
+		m.SetClient(client)
+	}
+}

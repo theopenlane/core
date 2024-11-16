@@ -780,3 +780,18 @@ var ExampleUploadFilesSuccessResponse = UploadFilesReply{
 		},
 	},
 }
+
+// =========
+// ENTITLEMENTS
+// =========
+
+// EntitlementsRequest holds the fields that should be included on a request to the `/entitlements` endpoint
+type EntitlementsRequest struct {
+	OrganizationID string `json:"organization_id"`
+}
+
+// EntitlementsReply holds the fields that are sent on a response to the `/entitlements` endpoint
+type EntitlementsReply struct {
+	rout.Reply
+	SessionID string `json:"entitlements"`
+}

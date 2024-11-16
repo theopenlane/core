@@ -19,4 +19,6 @@ var (
 	ErrEmitterClosed = errors.New("soiree is closed")
 	// ErrEmitterAlreadyClosed is returned when the soiree is already closed
 	ErrEmitterAlreadyClosed = errors.New("soiree is already closed")
+	// ErrPayloadisNotEvent is returned when the payload is not an event
+	ErrPayloadisNotEvent = errors.New("payload is not an event")
 )

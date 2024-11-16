@@ -25,6 +25,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
+	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/middleware/cachecontrol"
 	"github.com/theopenlane/core/pkg/middleware/cors"
 	"github.com/theopenlane/core/pkg/middleware/mime"
@@ -68,6 +69,8 @@ type Config struct {
 	Ratelimit ratelimit.Config `json:"ratelimit" koanf:"ratelimit"`
 	// ObjectStorage contains the configuration for the object storage backend
 	ObjectStorage objects.Config `json:"objectStorage" koanf:"objectStorage"`
+	// Subscription contains the configuration for the subscription service
+	Entitlements entitlements.Config `json:"subscription" koanf:"subscription"`
 }
 
 // Server settings for the echo server

@@ -163,3 +163,7 @@ data:
   CORE_OBJECTSTORAGE_CREDENTIALSJSON: {{ .Values.core.objectStorage.credentialsJSON }}
   CORE_OBJECTSTORAGE_DEFAULTBUCKET: {{ .Values.core.objectStorage.defaultBucket | default "file_uploads" }}
   CORE_OBJECTSTORAGE_KEYS: {{ .Values.core.objectStorage.keys | default "uploadFile" }}
+  CORE_SUBSCRIPTION_ENABLED: {{ .Values.core.subscription.enabled | default false }}
+  CORE_SUBSCRIPTION_PUBLICSTRIPEKEY: {{ .Values.core.subscription.publicStripeKey }}
+  CORE_SUBSCRIPTION_PRIVATESTRIPEKEY: {{ .Values.core.subscription.privateStripeKey }}
+  CORE_SUBSCRIPTION_STRIPEWEBHOOKSECRET: {{ .Values.core.subscription.stripeWebhookSecret }}

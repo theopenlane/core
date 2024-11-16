@@ -11,21 +11,21 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent/entc"
 	"entgo.io/ent/entc/gen"
-	"github.com/theopenlane/emailtemplates"
-	"github.com/theopenlane/iam/entfga"
-	"github.com/theopenlane/iam/fgax"
+	_ "github.com/jackc/pgx/v5"
 	"gocloud.dev/secrets"
 
+	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/genhooks"
 	"github.com/theopenlane/entx/history"
+	"github.com/theopenlane/iam/entfga"
+	"github.com/theopenlane/iam/fgax"
+	"github.com/theopenlane/iam/sessions"
+	"github.com/theopenlane/iam/tokens"
 	"github.com/theopenlane/iam/totp"
 
 	"github.com/theopenlane/core/internal/ent/entconfig"
-	"github.com/theopenlane/iam/sessions"
-	"github.com/theopenlane/iam/tokens"
-
-	_ "github.com/jackc/pgx/v5"
+	"github.com/theopenlane/core/pkg/entitlements"
 )
 
 const (
@@ -106,6 +106,10 @@ func main() {
 		entc.Dependency(
 			entc.DependencyName("TOTP"),
 			entc.DependencyType(&totp.Manager{}),
+		),
+		entc.Dependency(
+			entc.DependencyName("EntitlementManager"),
+			entc.DependencyType(&entitlements.StripeClient{}),
 		),
 		entc.TemplateDir("./internal/ent/templates"),
 		entc.Extensions(

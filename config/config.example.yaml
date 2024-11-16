@@ -184,6 +184,11 @@ sessions:
     domain: ""
     encryptionKey: encryptionsecret
     signingKey: my-signing-secret
+subscription:
+    enabled: false
+    privateStripeKey: ""
+    publicStripeKey: ""
+    stripeWebhookSecret: ""
 totp:
     codeLength: 6
     enabled: true

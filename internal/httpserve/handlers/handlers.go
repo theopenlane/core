@@ -14,6 +14,7 @@ import (
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
+	"github.com/theopenlane/core/pkg/entitlements"
 )
 
 // Handler contains configuration options for handlers
@@ -44,4 +45,6 @@ type Handler struct {
 	OTPManager *totp.Manager
 	// Email contains email sending configuration for the server
 	Emailer emailtemplates.Config
+	// Entitlements contains the entitlements client
+	Entitlements *entitlements.StripeClient
 }

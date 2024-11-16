@@ -22,6 +22,8 @@ type EventPool struct {
 	closed atomic.Value
 	// Size of the buffer for the error channel in Emit
 	errChanBufferSize int
+	// client is the client for the event pool
+	client interface{}
 }
 
 // NewEventPool initializes a new EventPool with optional configuration options
@@ -42,6 +44,14 @@ func NewEventPool(opts ...EventPoolOption) *EventPool {
 	}
 
 	return m
+}
+
+func (m *EventPool) SetClient(client interface{}) {
+	m.client = client
+}
+
+func (m *EventPool) GetClient() interface{} {
+	return m.client
 }
 
 // On subscribes a listener to a topic with the given name; returns a unique listener ID
@@ -126,7 +136,10 @@ func (m *EventPool) handleEvents(topicName string, payload interface{}, errorHan
 		}
 	}()
 
-	event := NewBaseEvent(topicName, payload)
+	event, ok := payload.(Event)
+	if !ok {
+		event = NewBaseEvent(topicName, payload)
+	}
 
 	m.topics.Range(func(key, value interface{}) bool {
 		topicPattern := key.(string)

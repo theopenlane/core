@@ -34,6 +34,7 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/config"
 	"github.com/theopenlane/core/internal/httpserve/server"
 	objmw "github.com/theopenlane/core/internal/middleware/objects"
+	"github.com/theopenlane/core/pkg/entitlements"
 	authmw "github.com/theopenlane/core/pkg/middleware/auth"
 	"github.com/theopenlane/core/pkg/middleware/cachecontrol"
 	"github.com/theopenlane/core/pkg/middleware/cors"
@@ -451,6 +452,17 @@ func WithObjectStorage() ServerOption {
 			s.Config.Handler.AuthMiddleware = append(s.Config.Handler.AuthMiddleware, uploadMw)
 
 			log.Info().Msg("Object storage initialized")
+		}
+	})
+}
+
+// WithEntitlements sets up the entitlements client for the server which currently only supports stripe
+func WithEntitlements() ServerOption {
+	return newApplyFunc(func(s *ServerOptions) {
+		if s.Config.Settings.Entitlements.Enabled {
+			client := entitlements.NewStripeClient(entitlements.WithAPIKey(s.Config.Settings.Entitlements.PrivateStripeKey))
+
+			s.Config.Handler.Entitlements = client
 		}
 	})
 }

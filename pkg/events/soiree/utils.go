@@ -24,11 +24,41 @@ func matchTopicPattern(pattern, subject string) bool {
 		return false
 	}
 
-	return matchParts(patternParts, subjectParts, 0, 0)
+	return matchParts(patternParts, subjectParts)
 }
 
-// matchParts is a recursive helper function to match pattern parts with subject parts
-func matchParts(patternParts, subjectParts []string, p, s int) bool {
+// matchParts is an iterative function to match pattern parts with subject parts
+func matchParts(patternParts, subjectParts []string) bool {
+	p, s := 0, 0
+
+	for p < len(patternParts) && s < len(subjectParts) {
+		switch patternParts[p] {
+		case singleWildcard:
+			// The single wildcard should match exactly one non-empty subject part
+			s++
+		case multiWildcard:
+			// '**' matches any number of subject parts
+			if p == len(patternParts)-1 {
+				// If '**' is the last part in the pattern, it matches the rest of the subject
+				return true
+			}
+			// Try to match the rest of the pattern with the remaining subject parts
+			for i := s; i <= len(subjectParts); i++ {
+				if matchParts(patternParts[p+1:], subjectParts[i:]) {
+					return true
+				}
+			}
+			return false
+		default:
+			// Exact match required for non-wildcard parts
+			if patternParts[p] != subjectParts[s] {
+				return false
+			}
+			s++
+		}
+		p++
+	}
+
 	// If we've reached the end of pattern parts and subject parts simultaneously, it's a match
 	if p == len(patternParts) && s == len(subjectParts) {
 		return true
@@ -41,38 +71,11 @@ func matchParts(patternParts, subjectParts []string, p, s int) bool {
 				return false
 			}
 		}
-
 		return true
 	}
 
 	// If we've reached the end of the pattern but not the subject, it's not a match
-	if p == len(patternParts) {
-		return false
-	}
-
-	// Match based on the current part of the pattern
-	switch patternParts[p] {
-	case singleWildcard:
-		// The single wildcard should match exactly one non-empty subject part
-		return s < len(subjectParts) && matchParts(patternParts, subjectParts, p+1, s+1)
-	case multiWildcard:
-		// '**' matches any number of subject parts
-		if p == len(patternParts)-1 {
-			// If '**' is the last part in the pattern, it matches the rest of the subject
-			return true
-		}
-		// Try to match '**' with every possible subsequent part
-		for i := s; i <= len(subjectParts); i++ {
-			if matchParts(patternParts, subjectParts, p+1, i) {
-				return true
-			}
-		}
-
-		return false
-	default:
-		// Exact match required for non-wildcard parts
-		return patternParts[p] == subjectParts[s] && matchParts(patternParts, subjectParts, p+1, s+1)
-	}
+	return false
 }
 
 // isValidTopicName checks if the topic name is valid, obviously

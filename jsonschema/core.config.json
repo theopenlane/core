@@ -307,6 +307,24 @@
       "type": "object",
       "description": "Config holds the configuration for the ent server"
     },
+    "entitlements.Config": {
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "publicStripeKey": {
+          "type": "string"
+        },
+        "privateStripeKey": {
+          "type": "string"
+        },
+        "stripeWebhookSecret": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
     "entx.Config": {
       "properties": {
         "debug": {
@@ -990,6 +1008,10 @@
     "objectStorage": {
       "$ref": "#/$defs/objects.Config",
       "description": "ObjectStorage contains the configuration for the object storage backend"
+    },
+    "subscription": {
+      "$ref": "#/$defs/entitlements.Config",
+      "description": "Subscription contains the configuration for the subscription service"
     }
   },
   "additionalProperties": false,

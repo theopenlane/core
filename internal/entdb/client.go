@@ -19,6 +19,7 @@ import (
 
 	migratedb "github.com/theopenlane/core/db"
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 
 	_ "github.com/jackc/pgx/v5/stdlib" // add pgx driver
@@ -127,6 +128,11 @@ func New(ctx context.Context, c entx.Config, jobOpts []riverqueue.Option, opts .
 	}
 
 	db.Intercept(interceptors.QueryLogger())
+
+	// Register the global hooks
+	pool := hooks.InitEventPool(db)
+	hooks.RegisterGlobalHooks(db, pool)
+	hooks.RegisterListeners(pool)
 
 	return db, nil
 }

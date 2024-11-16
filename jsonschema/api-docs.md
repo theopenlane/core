@@ -21,6 +21,7 @@ Config contains the configuration for the core server
 |[**totp**](#totp)|`object`|||
 |[**ratelimit**](#ratelimit)|`object`|Config defines the configuration settings for the default rate limiter<br/>||
 |[**objectStorage**](#objectstorage)|`object`|||
+|[**subscription**](#subscription)|`object`|||
 
 **Additional Properties:** not allowed  
 <a name="server"></a>
@@ -641,4 +642,17 @@ Config defines the configuration settings for the default rate limiter
 **Items**
 
 **Item Type:** `string`  
+<a name="subscription"></a>
+## subscription: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**enabled**|`boolean`|||
+|**publicStripeKey**|`string`|||
+|**privateStripeKey**|`string`|||
+|**stripeWebhookSecret**|`string`|||
+
+**Additional Properties:** not allowed  
 

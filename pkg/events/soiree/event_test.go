@@ -77,3 +77,39 @@ func TestPropertiesMulti(t *testing.T) {
 		t.Errorf("invalid properties produced by chained setters:\n- expected %#v\n- found: %#v", p0, p1)
 	}
 }
+
+func TestEventProperties(t *testing.T) {
+	event := NewTestEvent("test.event", "test payload")
+	event.Properties().Set("key", "value")
+
+	if event.Properties().GetKey("key") != "value" {
+		t.Errorf("expected property 'key' to be 'value', got '%v'", event.Properties().GetKey("key"))
+	}
+}
+
+func TestEventPropertiesSet(t *testing.T) {
+	event := NewTestEvent("test.event", "test payload")
+	event.SetProperties(Properties{"key": "value"})
+
+	if event.Properties().GetKey("key") != "value" {
+		t.Errorf("expected property 'key' to be 'value', got '%v'", event.Properties().GetKey("key"))
+	}
+}
+
+func TestEventPropertiesSetNil(t *testing.T) {
+	event := NewTestEvent("test.event", "test payload")
+	event.SetProperties(nil)
+
+	if event.Properties() == nil {
+		t.Errorf("expected properties to be initialized")
+	}
+}
+
+func TestEventPropertiesSetNilMap(t *testing.T) {
+	event := NewTestEvent("test.event", "test payload")
+	event.SetProperties(Properties(nil))
+
+	if event.Properties() == nil {
+		t.Errorf("expected properties to be initialized")
+	}
+}
