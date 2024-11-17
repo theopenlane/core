@@ -307,6 +307,35 @@ func checkAndUpdateDefaultOrg(ctx context.Context, userID string, oldOrgID strin
 
 // defaultOrganizationSettings creates the default organizations settings for a new org
 func defaultOrganizationSettings(ctx context.Context, m *generated.OrganizationMutation) (string, error) {
+	personalOrg, _ := m.PersonalOrg()
+	if !personalOrg {
+		userID, err := auth.GetUserIDFromContext(ctx)
+		if err != nil {
+			log.Error().Err(err).Msg("unable to get user id from context")
+
+			return "", err
+		}
+
+		user, err := m.Client().User.Get(ctx, userID)
+		if err != nil {
+			log.Error().Err(err).Msg("unable to fetch user from database")
+		}
+
+		billingContact := user.FirstName + " " + user.LastName
+
+		input := generated.CreateOrganizationSettingInput{
+			BillingEmail:   &user.Email,
+			BillingContact: &billingContact,
+		}
+
+		organizationSetting, err := m.Client().OrganizationSetting.Create().SetInput(input).Save(ctx)
+		if err != nil {
+			return "", err
+		}
+
+		return organizationSetting.ID, nil
+	}
+
 	input := generated.CreateOrganizationSettingInput{}
 
 	organizationSetting, err := m.Client().OrganizationSetting.Create().SetInput(input).Save(ctx)

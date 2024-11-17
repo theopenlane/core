@@ -47,6 +47,8 @@ type Plan struct {
 	StripeParams       *stripe.SubscriptionParams
 	StripeSubscription []stripe.Subscription
 	Products           []Product
+	TrialEnd           int64
+	Status             string
 }
 
 // Product holds what we'd more commply call a "tier"
@@ -182,9 +184,10 @@ func (sc *StripeClient) ListOrCreateStripeSubscriptions(customerID string) (*Pla
 		return sub, nil
 	}
 
-	for i.Next() {
-		subs.StripeSubscription = append(subs.StripeSubscription, *i.Subscription())
-	}
+	subs.ID = i.Subscription().ID
+	subs.StartDate = i.Subscription().CurrentPeriodStart
+	subs.EndDate = i.Subscription().CurrentPeriodEnd
+	subs.TrialEnd = i.Subscription().TrialEnd
 
 	return subs, nil
 }
