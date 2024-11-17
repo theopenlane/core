@@ -292,7 +292,7 @@ require (
 	google.golang.org/protobuf v1.35.1 // indirect
 	gopkg.in/cheggaaa/pb.v2 v2.0.7
 	gopkg.in/ini.v1 v1.67.0 // indirect
-	gopkg.in/yaml.v2 v2.4.0 // indirect
+	gopkg.in/yaml.v2 v2.4.0
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	modernc.org/gc/v3 v3.0.0-20240801135723-a856999a2e4a // indirect
 	modernc.org/libc v1.60.0 // indirect

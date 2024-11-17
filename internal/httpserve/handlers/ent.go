@@ -505,21 +505,29 @@ func (h *Handler) getOrgByID(ctx context.Context, id string) (*ent.Organization,
 
 // getOrgSettingByOrgID returns the organization settings from an organization ID and context
 func (h *Handler) getOrgSettingByOrgID(ctx context.Context, orgID string) (*ent.OrganizationSetting, error) {
-	org, err := h.getOrgByID(ctx, orgID)
+	orgGetCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
+	org, err := h.getOrgByID(orgGetCtx, orgID)
 	if err != nil {
-		log.Error().Err(err).Msg("error obtaining organization from id")
+		log.Error().Err(err).Msg("error retrieving organization")
 
 		return nil, err
 	}
 
-	orgSetting, err := org.QuerySetting().Only(ctx)
+	if org.PersonalOrg {
+		log.Error().Msg("personal orgs do not have billing information")
+
+		return nil, ErrPersonalOrgsNoBilling
+	}
+
+	setting, err := org.Setting(ctx)
 	if err != nil {
-		log.Error().Err(err).Msg("error obtaining organization settings from id")
+		log.Error().Err(err).Msg("error retrieving organization setting")
 
 		return nil, err
 	}
 
-	return orgSetting, nil
+	return setting, nil
 }
 
 func (h *Handler) fetchOrCreateStripe(context context.Context, orgsetting *ent.OrganizationSetting) (*stripe.Customer, error) {
@@ -528,10 +536,8 @@ func (h *Handler) fetchOrCreateStripe(context context.Context, orgsetting *ent.O
 		return nil, ErrNoBillingEmail
 	}
 
-	var stripeCustomer *stripe.Customer
-
 	if orgsetting.StripeID != "" {
-		cust, err := h.Entitlements.Client.Customers.Get(orgsetting.BillingEmail, nil)
+		cust, err := h.Entitlements.Client.Customers.Get(orgsetting.StripeID, nil)
 		if err != nil {
 			log.Error().Err(err).Msg("error fetching stripe customer")
 			return nil, err

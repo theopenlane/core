@@ -47,6 +47,7 @@ type Plan struct {
 	StripeParams       *stripe.SubscriptionParams
 	StripeSubscription []stripe.Subscription
 	Products           []Product
+	Features           []Feature
 	TrialEnd           int64
 	Status             string
 }
@@ -188,6 +189,7 @@ func (sc *StripeClient) ListOrCreateStripeSubscriptions(customerID string) (*Pla
 	subs.StartDate = i.Subscription().CurrentPeriodStart
 	subs.EndDate = i.Subscription().CurrentPeriodEnd
 	subs.TrialEnd = i.Subscription().TrialEnd
+	subs.Status = string(i.Subscription().Status)
 
 	return subs, nil
 }

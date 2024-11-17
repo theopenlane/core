@@ -11,13 +11,12 @@ import (
 	"github.com/stripe/stripe-go/v81"
 
 	entgen "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/pkg/events/soiree"
 )
 
 // EventID is a struct to hold the ID of an event
 type EventID struct {
-	ID string `json:"id"`
+	ID string `json:"id,omitempty"`
 }
 
 // EmitEventHook emits an event to the event pool when a mutation is performed
@@ -84,86 +83,11 @@ func RegisterListeners(pool *soiree.EventPool) {
 	}
 
 	for _, event := range []string{"OrganizationSetting.OpUpdate", "OrganizationSetting.OpUpdateOne"} {
-		_, err = pool.On(event, handleSettingsUpdate)
+		_, err = pool.On(event, handleCustomerCreate)
 		if err != nil {
 			log.Error().Err(ErrFailedToRegisterListener)
 		}
-
 	}
-}
-
-func handleSettingsUpdate(event soiree.Event) error {
-	props := event.Properties()
-
-	orgsettingID, exists := props["ID"]
-	if !exists {
-		log.Info().Msg("organizationSetting ID not found in event properties")
-		return nil
-	}
-
-	orgSetting, err := fetchOrganizationSettingbyID(event.Context(), orgsettingID.(string), event.Client())
-	if err != nil {
-		log.Err(err).Msg("failed to fetch OrganizationSetting")
-		return err
-	}
-
-	if orgSetting.StripeID != "" {
-		stripecustomer, err := event.Client().(*entgen.Client).EntitlementManager.Client.Customers.Get(orgSetting.StripeID, nil)
-		if err != nil {
-			log.Err(err).Msg("Failed to retrieve Stripe customer by ID")
-			return err
-		}
-
-		if orgSetting.BillingEmail != "" && stripecustomer.Email != orgSetting.BillingEmail {
-			_, err := event.Client().(*entgen.Client).EntitlementManager.Client.Customers.Update(orgSetting.StripeID, &stripe.CustomerParams{
-				Email: &orgSetting.BillingEmail,
-			})
-			if err != nil {
-				log.Err(err).Msg("failed to update Stripe customer email")
-				return err
-			}
-
-			log.Info().Msg("updated Stripe customer email")
-		}
-
-		if orgSetting.BillingPhone != "" && stripecustomer.Phone != orgSetting.BillingPhone {
-			_, err := event.Client().(*entgen.Client).EntitlementManager.Client.Customers.Update(orgSetting.StripeID, &stripe.CustomerParams{
-				Phone: &orgSetting.BillingPhone,
-			})
-			if err != nil {
-				log.Err(err).Msg("failed to update Stripe customer phone")
-				return err
-			}
-
-			log.Info().Msg("updated Stripe customer phone")
-		}
-
-		// TODO: split out address fields in ent schema
-		if orgSetting.BillingAddress != "" && stripecustomer.Address.Line1 != orgSetting.BillingAddress {
-			_, err := event.Client().(*entgen.Client).EntitlementManager.Client.Customers.Update(orgSetting.StripeID, &stripe.CustomerParams{
-				Address: &stripe.AddressParams{
-					Line1: &orgSetting.BillingAddress,
-				},
-			})
-			if err != nil {
-				log.Err(err).Msg("failed to update Stripe customer address")
-				return err
-			}
-
-			log.Info().Msg("updated Stripe customer address")
-		}
-
-		subs, err := event.Client().(*entgen.Client).EntitlementManager.ListOrCreateStripeSubscriptions(orgSetting.StripeID)
-		if err != nil {
-			log.Err(err).Msg("failed to list or create Stripe subscriptions")
-			return err
-		}
-
-		log.Info().Msgf("Customer subscription already exists with ID %s", subs.ID)
-		log.Info().Msgf("Customer subscription status is %s", subs.Status)
-	}
-
-	return nil
 }
 
 // handleCustomerCreate handles the creation of a customer in Stripe
@@ -254,15 +178,15 @@ func handleCustomerCreate(event soiree.Event) error {
 			}
 
 			log.Info().Msgf("Updated OrganizationSetting with Stripe customer ID: %s", customer.ID)
-
-			subs, err := event.Client().(*entgen.Client).EntitlementManager.ListOrCreateStripeSubscriptions(customer.ID)
-			if err != nil {
-				log.Err(err).Msg("failed to list or create Stripe subscriptions")
-				return err
-			}
-
-			log.Info().Msgf("Created stripe subscription with ID %s", subs.ID)
 		}
+
+		subs, err := event.Client().(*entgen.Client).EntitlementManager.ListOrCreateStripeSubscriptions(i.Customer().ID)
+		if err != nil {
+			log.Err(err).Msg("failed to list or create Stripe subscriptions")
+			return err
+		}
+
+		log.Info().Msgf("Created stripe subscription with ID %s", subs.ID)
 
 		if err := updateOrganizationSettingWithCustomerID(event.Context(), orgsettingID.(string), i.Customer().ID, event.Client()); err != nil {
 			log.Err(err).Msg("Failed to update OrganizationSetting with Stripe customer ID")
@@ -273,18 +197,6 @@ func handleCustomerCreate(event soiree.Event) error {
 	}
 
 	return nil
-}
-
-// fetchOrganizationSettingbyID fetches an OrganizationSetting by ID
-func fetchOrganizationSettingbyID(ctx context.Context, orgID string, client interface{}) (*entgen.OrganizationSetting, error) {
-	orgsetting, err := client.(*entgen.Client).OrganizationSetting.Query().Where(organizationsetting.ID(orgID)).Only(ctx)
-	if err != nil {
-		log.Err(err).Msgf("Failed to fetch OrganizationSetting ID %s", orgID)
-
-		return nil, err
-	}
-
-	return orgsetting, nil
 }
 
 // updateOrganizationSettingWithCustomerID updates an OrganizationSetting with a Stripe customer ID

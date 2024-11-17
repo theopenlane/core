@@ -792,6 +792,5 @@ type EntitlementsRequest struct {
 
 // EntitlementsReply holds the fields that are sent on a response to the `/entitlements` endpoint
 type EntitlementsReply struct {
-	rout.Reply
-	SessionID string `json:"entitlements"`
+	ClientSecret string `json:"client_secret"`
 }

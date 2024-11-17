@@ -5,8 +5,6 @@ import (
 	"github.com/stripe/stripe-go/v81"
 	echo "github.com/theopenlane/echox"
 
-	"github.com/theopenlane/utils/rout"
-
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/pkg/models"
@@ -23,6 +21,8 @@ func (h *Handler) CheckoutSessionHandler(ctx echo.Context) error {
 		return h.BadRequest(ctx, err)
 	}
 
+	log.Warn().Msg("obtained organization ID from context")
+
 	settings, err := h.getOrgSettingByOrgID(reqCtx, orgID)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to get organization settings by org id")
@@ -30,12 +30,16 @@ func (h *Handler) CheckoutSessionHandler(ctx echo.Context) error {
 		return h.BadRequest(ctx, err)
 	}
 
+	log.Warn().Msg("obtained organization settings by org ID")
+
 	cust, err := h.fetchOrCreateStripe(reqCtx, settings)
 	if err != nil {
 		log.Error().Err(err).Msg("unable to fetch or create stripe customer")
 
 		return h.BadRequest(ctx, err)
 	}
+
+	log.Warn().Msg("fetched or created stripe customer")
 
 	params := &stripe.CustomerSessionParams{
 		Customer: stripe.String(cust.ID),
@@ -53,10 +57,12 @@ func (h *Handler) CheckoutSessionHandler(ctx echo.Context) error {
 		return h.BadRequest(ctx, err)
 	}
 
+	log.Warn().Msg("created stripe checkout session")
+	log.Warn().Msgf("sending back client secret %s", result.ClientSecret)
+
 	// set the out attributes we send back to the client only on success
 	out := &models.EntitlementsReply{
-		Reply:     rout.Reply{Success: true},
-		SessionID: result.ClientSecret,
+		ClientSecret: result.ClientSecret,
 	}
 
 	return h.Success(ctx, out)
@@ -64,12 +70,6 @@ func (h *Handler) CheckoutSessionHandler(ctx echo.Context) error {
 
 // CheckoutSuccessHandler is responsible for handling requests to the `/checkout/success` endpoint
 func (h *Handler) CheckoutSuccessHandler(ctx echo.Context) error {
-	checkoutID := ctx.QueryParam("checkout_id")
 
-	out := &models.EntitlementsReply{
-		Reply:     rout.Reply{Success: true},
-		SessionID: checkoutID,
-	}
-
-	return h.Success(ctx, out)
+	return h.Success(ctx, nil)
 }

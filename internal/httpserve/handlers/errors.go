@@ -86,6 +86,8 @@ var (
 
 	// ErrNoBillingEmail is returned when the user has no billing email
 	ErrNoBillingEmail = errors.New("no billing email found")
+	// ErrPersonalOrgsNoBilling is returned when the org ID looked up is a personal org
+	ErrPersonalOrgsNoBilling = errors.New("personal orgs do not have billing")
 )
 
 var (
