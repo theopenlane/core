@@ -140,7 +140,7 @@ type File struct {
 	ContentType string `json:"content_type,omitempty"`
 	// Size in bytes of the uploaded file
 	Size int64 `json:"size,omitempty"`
-	// Metdata is a map of key value pairs that can be used to store additional information about the file
+	// Metadata is a map of key value pairs that can be used to store additional information about the file
 	Metadata map[string]string `json:"metadata,omitempty"`
 	// Bucket is the bucket that the file is stored in
 	Bucket string `json:"bucket,omitempty"`

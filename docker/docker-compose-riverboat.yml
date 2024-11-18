@@ -6,7 +6,7 @@ services:
     image: ghcr.io/theopenlane/riverboat:arm64-78-90832455
     container_name: riverboat
     environment:
-      # this needs to use host.docker.internal since it is a seperate docker-compose file
+      # this needs to use host.docker.internal since it is a separate docker-compose file
       - RIVERBOAT_JOBQUEUE_DATABASEHOST=postgres://postgres:password@host.docker.internal:5432/jobs?sslmode=disable
       - RIVERBOAT_RUNMIGRATIONS=true
     command:

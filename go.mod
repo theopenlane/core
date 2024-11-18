@@ -12,13 +12,13 @@ require (
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
 	github.com/Yamashou/gqlgenc v0.26.1
 	github.com/alicebob/miniredis/v2 v2.33.0
-	github.com/alitto/pond/v2 v2.1.3
+	github.com/alitto/pond/v2 v2.1.4
 	github.com/aws/aws-sdk-go-v2/config v1.28.4
 	github.com/aws/aws-sdk-go-v2/credentials v1.17.45
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.67.0
 	github.com/barkimedes/go-deepcopy v0.0.0-20220514131651-17c30cfc62df
 	github.com/brianvoe/gofakeit/v7 v7.1.2
-	github.com/danielgtaylor/huma/v2 v2.25.0
+	github.com/danielgtaylor/huma/v2 v2.26.0
 	github.com/dustinkirkland/golang-petname v0.0.0-20240428194347-eebcea082ee0
 	github.com/gertd/go-pluralize v0.2.1
 	github.com/getkin/kin-openapi v0.128.0
@@ -49,8 +49,8 @@ require (
 	github.com/prometheus/client_golang v1.20.5
 	github.com/ravilushqa/otelgqlgen v0.17.0
 	github.com/redis/go-redis/v9 v9.7.0
-	github.com/riverqueue/river v0.14.1
-	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.14.1
+	github.com/riverqueue/river v0.14.2
+	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.14.2
 	github.com/rs/zerolog v1.33.0
 	github.com/samber/lo v1.47.0
 	github.com/santhosh-tekuri/jsonschema/v6 v6.0.1
@@ -62,13 +62,13 @@ require (
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.2.0
 	github.com/theopenlane/emailtemplates v0.1.2
-	github.com/theopenlane/entx v0.2.2
+	github.com/theopenlane/entx v0.2.3
 	github.com/theopenlane/gqlgen-plugins v0.3.1
 	github.com/theopenlane/httpsling v0.2.1
 	github.com/theopenlane/iam v0.3.1
 	github.com/theopenlane/newman v0.1.1
 	github.com/theopenlane/riverboat v0.0.7
-	github.com/theopenlane/utils v0.3.0
+	github.com/theopenlane/utils v0.3.1
 	github.com/vektah/gqlparser/v2 v2.5.19
 	github.com/wk8/go-ordered-map/v2 v2.1.8
 	github.com/wundergraph/graphql-go-tools v1.67.4
@@ -137,7 +137,7 @@ require (
 	github.com/Azure/go-ansiterm v0.0.0-20230124172434-306776ec8161 // indirect
 	github.com/Microsoft/go-winio v0.6.2 // indirect
 	github.com/Nvveen/Gotty v0.0.0-20120604004816-cd527374f1e5 // indirect
-	github.com/XSAM/otelsql v0.34.0 // indirect
+	github.com/XSAM/otelsql v0.35.0 // indirect
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/agnivade/levenshtein v1.1.1 // indirect
 	github.com/alicebob/gopher-json v0.0.0-20230218143504-906a9b012302 // indirect
@@ -252,9 +252,9 @@ require (
 	github.com/prometheus/procfs v0.15.1 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
 	github.com/resend/resend-go/v2 v2.11.0 // indirect
-	github.com/riverqueue/river/riverdriver v0.14.1 // indirect
-	github.com/riverqueue/river/rivershared v0.14.1 // indirect
-	github.com/riverqueue/river/rivertype v0.14.1 // indirect
+	github.com/riverqueue/river/riverdriver v0.14.2 // indirect
+	github.com/riverqueue/river/rivershared v0.14.2 // indirect
+	github.com/riverqueue/river/rivertype v0.14.2 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/sagikazarmark/locafero v0.6.0 // indirect
@@ -288,14 +288,14 @@ require (
 	go.opencensus.io v0.24.0 // indirect
 	go.opentelemetry.io/contrib v1.29.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.56.0 // indirect
-	go.opentelemetry.io/otel v1.31.0 // indirect
+	go.opentelemetry.io/otel v1.32.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.31.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc v1.31.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp v1.29.0 // indirect
 	go.opentelemetry.io/otel/exporters/stdout/stdouttrace v1.29.0 // indirect
-	go.opentelemetry.io/otel/metric v1.31.0 // indirect
+	go.opentelemetry.io/otel/metric v1.32.0 // indirect
 	go.opentelemetry.io/otel/sdk v1.31.0 // indirect
-	go.opentelemetry.io/otel/trace v1.31.0 // indirect
+	go.opentelemetry.io/otel/trace v1.32.0 // indirect
 	go.opentelemetry.io/proto/otlp v1.3.1 // indirect
 	go.uber.org/goleak v1.3.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
@@ -320,7 +320,7 @@ require (
 	modernc.org/libc v1.60.0 // indirect
 	modernc.org/mathutil v1.6.0 // indirect
 	modernc.org/memory v1.8.0 // indirect
-	modernc.org/sqlite v1.33.1 // indirect
+	modernc.org/sqlite v1.34.1 // indirect
 	modernc.org/strutil v1.2.0 // indirect
 	modernc.org/token v1.1.0 // indirect
 )
