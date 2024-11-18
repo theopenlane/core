@@ -340,10 +340,8 @@ func (h *Handler) expireAllResetTokensUserByEmail(ctx context.Context, email str
 
 // setEmailConfirmed sets the user setting field email_confirmed to true within a transaction
 func (h *Handler) setEmailConfirmed(ctx context.Context, user *ent.User) error {
-	if _, err := transaction.FromContext(ctx).UserSetting.Update().SetEmailConfirmed(true).
-		Where(
-			usersetting.ID(user.Edges.Setting.ID),
-		).Save(ctx); err != nil {
+	if _, err := transaction.FromContext(ctx).UserSetting.
+		UpdateOne(user.Edges.Setting).SetEmailConfirmed(true).Save(ctx); err != nil {
 		log.Error().Err(err).Msg("error setting email confirmed")
 
 		return err

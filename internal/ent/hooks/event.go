@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"reflect"
 
 	"entgo.io/ent"
 
@@ -26,6 +27,14 @@ func EmitEventHook(pool *soiree.EventPool) ent.Hook {
 			retVal, err := next.Mutate(ctx, mutation)
 			if err != nil {
 				return nil, err
+			}
+
+			// if the return value is an int, it's a count of the number of rows affected
+			// and we don't want to emit an event for that
+			if reflect.TypeOf(retVal).Kind() == reflect.Int {
+				log.Debug().Interface("value", retVal).Msg("mutation returned an int, skipping event emission")
+
+				return retVal, err
 			}
 
 			op := mutation.Op()
