@@ -1014,7 +1014,7 @@
     },
     "subscription": {
       "$ref": "#/$defs/entitlements.Config",
-      "description": "Subscription contains the configuration for the entitlements service"
+      "description": "Entitlements contains the configuration for the entitlements service"
     }
   },
   "additionalProperties": false,
