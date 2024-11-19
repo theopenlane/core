@@ -7,8 +7,22 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/stripe/stripe-go/v81"
 	"github.com/stripe/stripe-go/v81/client"
+	"github.com/stripe/stripe-go/v81/customer"
+	subs "github.com/stripe/stripe-go/v81/subscription"
 	"gopkg.in/yaml.v2"
 )
+
+// StripeClientInterface defines the interface for the Stripe client
+type StripeClientInterface interface {
+	CreateCustomer(params *stripe.CustomerParams) (*stripe.Customer, error)
+	GetCustomer(id string, params *stripe.CustomerParams) (*stripe.Customer, error)
+	UpdateCustomer(id string, params *stripe.CustomerParams) (*stripe.Customer, error)
+	ListCustomers(params *stripe.CustomerListParams) *customer.Iter
+	CreateSubscription(params *stripe.SubscriptionParams) (*stripe.Subscription, error)
+	GetSubscription(id string, params *stripe.SubscriptionParams) (*stripe.Subscription, error)
+	UpdateSubscription(id string, params *stripe.SubscriptionParams) (*stripe.Subscription, error)
+	ListSubscriptions(params *stripe.SubscriptionListParams) *subs.Iter
+}
 
 // StripeClient is a client for the Stripe API
 type StripeClient struct {
@@ -19,7 +33,7 @@ type StripeClient struct {
 	// Customer is a ref to a generic Customer struct used to wrap Stripe customer and Openlane Organizations (typically)
 	Cust Customer
 	// Plans are a nomenclature for the recurring context that holds the payment information and is synonymous with Stripe subscriptions
-	Plans Plan
+	Plan Plan
 	// Product is a stripe product; also know as a "tier"
 	Product Product
 	// Price holds the interval and amount to be billed
@@ -50,6 +64,27 @@ type Plan struct {
 	Features           []Feature
 	TrialEnd           int64
 	Status             string
+}
+
+// Plan is the recurring context that holds the payment information
+type Subscription struct {
+	ID                 string `json:"plan_id" yaml:"plan_id"`
+	Product            string `json:"product_id" yaml:"product_id"`
+	Price              string `json:"price_id" yaml:"price_id"`
+	StartDate          int64  `json:"start_date" yaml:"start_date"`
+	EndDate            int64  `json:"end_date" yaml:"end_date"`
+	StripeParams       *stripe.SubscriptionParams
+	StripeSubscription []stripe.Subscription
+	StripeProduct      []stripe.Product
+	StripeFeature      []stripe.ProductFeature
+	Products           []Product
+	Features           []Feature
+	Prices             []Price
+	TrialEnd           int64
+	Status             string
+	StripeCustomerID   string
+	OrganizationID     string
+	DaysUntilDue       int64
 }
 
 // Product holds what we'd more commply call a "tier"
@@ -168,12 +203,12 @@ func (sc *StripeClient) CreateSubscription(params *stripe.SubscriptionParams) (*
 }
 
 // ListStripeSubscriptions lists stripe subscriptions by customer
-func (sc *StripeClient) ListOrCreateStripeSubscriptions(customerID string) (*Plan, error) {
+func (sc *StripeClient) ListOrCreateStripeSubscriptions(customerID string) (*Subscription, error) {
 	i := sc.Client.Subscriptions.List(&stripe.SubscriptionListParams{
 		Customer: stripe.String(customerID),
 	})
 
-	subs := &Plan{}
+	subs := &Subscription{}
 
 	if !i.Next() {
 		sub, err := sc.CreateTrialSubscription(customerID)
@@ -185,11 +220,8 @@ func (sc *StripeClient) ListOrCreateStripeSubscriptions(customerID string) (*Pla
 		return sub, nil
 	}
 
-	subs.ID = i.Subscription().ID
-	subs.StartDate = i.Subscription().CurrentPeriodStart
-	subs.EndDate = i.Subscription().CurrentPeriodEnd
-	subs.TrialEnd = i.Subscription().TrialEnd
-	subs.Status = string(i.Subscription().Status)
+	// assumes customer can only have 1 subscription if there are any
+	subs = sc.mapStripeSubscription(i.Subscription())
 
 	return subs, nil
 }
@@ -226,8 +258,13 @@ func (sc *StripeClient) CancelSubscription(id string, params *stripe.Subscriptio
 
 var trialdays int64 = 30
 
+type Subs struct {
+	SubsID string
+	Prices []Price
+}
+
 // CreateTrialSubscription creates a trial subscription
-func (sc *StripeClient) CreateTrialSubscription(customerID string) (*Plan, error) {
+func (sc *StripeClient) CreateTrialSubscription(customerID string) (*Subscription, error) {
 	params := &stripe.SubscriptionParams{
 		Customer: stripe.String(customerID),
 		Items: []*stripe.SubscriptionItemsParams{
@@ -254,12 +291,55 @@ func (sc *StripeClient) CreateTrialSubscription(customerID string) (*Plan, error
 
 	log.Info().Msgf("Created trial subscription with ID: %s", subs.ID)
 
-	return &Plan{
-		ID:                 subs.ID,
-		StripeSubscription: []stripe.Subscription{*subs},
-		StartDate:          subs.StartDate,
-		EndDate:            subs.CurrentPeriodEnd,
-	}, nil
+	mappedsubscription := sc.mapStripeSubscription(subs)
+
+	return mappedsubscription, nil
+}
+
+func (sc *StripeClient) mapStripeSubscription(subs *stripe.Subscription) *Subscription {
+	subscript := Subscription{}
+
+	var prices []Price
+
+	for _, item := range subs.Items.Data {
+		prices = append(prices, Price{
+			ID:        item.Price.ID,
+			Price:     float64(item.Price.UnitAmount),
+			ProductID: item.Price.Product.ID,
+			Interval:  string(item.Price.Recurring.Interval),
+		})
+	}
+
+	for _, product := range prices {
+		prodFeat := sc.GetProductFeatures(product.ProductID)
+		for _, feature := range prodFeat {
+			featureList := []Feature{
+				{
+					ID:               feature.FeatureID,
+					ProductFeatureID: feature.ProductFeatureID,
+					Name:             feature.Name,
+					Lookupkey:        feature.Lookupkey,
+				},
+			}
+
+			subscript.Features = append(subscript.Features, featureList...)
+		}
+	}
+
+	subscription := &Subscription{
+		ID:               subs.ID,
+		Prices:           prices,
+		StartDate:        subs.CurrentPeriodStart,
+		EndDate:          subs.CurrentPeriodEnd,
+		TrialEnd:         subs.TrialEnd,
+		Status:           string(subs.Status),
+		StripeCustomerID: subs.Customer.ID,
+		OrganizationID:   subs.Metadata["organization_id"],
+		DaysUntilDue:     subs.DaysUntilDue,
+		Features:         subscript.Features,
+	}
+
+	return subscription
 }
 
 // GetProducts retrieves all products from stripe which are active
@@ -359,7 +439,7 @@ func (sc *StripeClient) GetPrices() []Price {
 
 		prices = append(prices, Price{
 			ID:        priceData.ID,
-			Price:     float64(priceData.UnitAmount) / 100,
+			Price:     float64(priceData.UnitAmount) / 100, // nolint:mnd
 			ProductID: priceData.Product.ID,
 			Interval:  string(priceData.Recurring.Interval),
 		})
@@ -369,34 +449,26 @@ func (sc *StripeClient) GetPrices() []Price {
 }
 
 // CreateCheckoutSession creates a new checkout session for the customer portal and given product and price
-func (sc *StripeClient) CreateCheckoutSession(productID string, priceID string, nickname string) (Checkout, error) {
-	sessionParams := &stripe.CheckoutSessionParams{
-		PaymentMethodTypes: stripe.StringSlice([]string{
-			"card",
-		}),
-		LineItems: []*stripe.CheckoutSessionLineItemParams{
-			{
-				Price:    stripe.String(priceID),
-				Quantity: stripe.Int64(1),
+func (sc *StripeClient) CreateBillingPortalUpdateSession(subsID, custID string) (Checkout, error) {
+	params := &stripe.BillingPortalSessionParams{
+		Customer:  &custID,
+		ReturnURL: stripe.String("http://localhost:3001/organization-settings/billing-usage/pricing"),
+		FlowData: &stripe.BillingPortalSessionFlowDataParams{
+			Type: stripe.String("subscription_update"),
+			SubscriptionUpdate: &stripe.BillingPortalSessionFlowDataSubscriptionUpdateParams{
+				Subscription: &subsID,
 			},
-		},
-		Mode:       stripe.String(string(stripe.CheckoutSessionModePayment)),
-		SuccessURL: stripe.String(os.Getenv("CHECKOUT_SUCCESS_URL") + "?nickname=" + nickname),
-		CancelURL:  stripe.String(os.Getenv("CHECKOUT_CANCEL_URL")),
-		Metadata: map[string]string{
-			"nickname":   nickname,
-			"product_id": productID,
 		},
 	}
 
-	checkoutSession, err := sc.Client.CheckoutSessions.New(sessionParams)
+	billingPortalSession, err := sc.Client.BillingPortalSessions.New(params)
 	if err != nil {
 		return Checkout{}, err
 	}
 
 	return Checkout{
-		ID:  checkoutSession.ID,
-		URL: checkoutSession.URL,
+		ID:  billingPortalSession.ID,
+		URL: billingPortalSession.URL,
 	}, nil
 }
 

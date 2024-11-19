@@ -39,7 +39,6 @@ func EmitEventHook(pool *soiree.EventPool) ent.Hook {
 
 			op := mutation.Op()
 			typ := mutation.Type()
-
 			fields := mutation.Fields()
 
 			out, err := json.Marshal(retVal)
@@ -53,7 +52,6 @@ func EmitEventHook(pool *soiree.EventPool) ent.Hook {
 			}
 
 			event := soiree.NewBaseEvent(fmt.Sprintf("%s.%s", typ, op), mutation)
-
 			event.Properties().Set("ID", other.ID)
 
 			for _, field := range fields {
@@ -187,6 +185,22 @@ func handleCustomerCreate(event soiree.Event) error {
 			}
 
 			log.Info().Msgf("Updated OrganizationSetting with Stripe customer ID: %s", customer.ID)
+
+			subs, err := event.Client().(*entgen.Client).EntitlementManager.ListOrCreateStripeSubscriptions(customer.ID)
+			if err != nil {
+				log.Err(err).Msg("failed to list or create Stripe subscriptions")
+				return err
+			}
+
+			log.Info().Msgf("Stripe subscription with ID exists %s", subs.ID)
+
+			checkout, err := event.Client().(*entgen.Client).EntitlementManager.CreateBillingPortalUpdateSession(subs.ID, customer.ID)
+			if err != nil {
+				log.Err(err).Msg("failed to create billing portal update session")
+				return err
+			}
+
+			log.Warn().Msgf("Created billing portal update session with URL %s", checkout.URL)
 		}
 
 		subs, err := event.Client().(*entgen.Client).EntitlementManager.ListOrCreateStripeSubscriptions(i.Customer().ID)
@@ -195,7 +209,15 @@ func handleCustomerCreate(event soiree.Event) error {
 			return err
 		}
 
-		log.Info().Msgf("Created stripe subscription with ID %s", subs.ID)
+		log.Info().Msgf("Stripe subscription with ID exists %s", subs.ID)
+
+		checkout, err := event.Client().(*entgen.Client).EntitlementManager.CreateBillingPortalUpdateSession(subs.ID, i.Customer().ID)
+		if err != nil {
+			log.Err(err).Msg("failed to create billing portal update session")
+			return err
+		}
+
+		log.Warn().Msgf("Created billing portal update session with URL %s", checkout.URL)
 
 		if err := updateOrganizationSettingWithCustomerID(event.Context(), orgsettingID.(string), i.Customer().ID, event.Client()); err != nil {
 			log.Err(err).Msg("Failed to update OrganizationSetting with Stripe customer ID")
