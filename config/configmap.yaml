@@ -167,3 +167,4 @@ data:
   CORE_SUBSCRIPTION_PUBLICSTRIPEKEY: {{ .Values.core.subscription.publicStripeKey }}
   CORE_SUBSCRIPTION_PRIVATESTRIPEKEY: {{ .Values.core.subscription.privateStripeKey }}
   CORE_SUBSCRIPTION_STRIPEWEBHOOKSECRET: {{ .Values.core.subscription.stripeWebhookSecret }}
+  CORE_SUBSCRIPTION_TRIALSUBSCRIPTIONPRICEID: {{ .Values.core.subscription.trialSubscriptionPriceID | default "price_1QKLyeBvxky1R7SvaZYGWyQb" }}

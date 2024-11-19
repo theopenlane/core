@@ -46,10 +46,12 @@ func NewEventPool(opts ...EventPoolOption) *EventPool {
 	return m
 }
 
+// SetClient sets a client that can be used as a part of the event pool
 func (m *EventPool) SetClient(client interface{}) {
 	m.client = client
 }
 
+// GetClient fetches the set client on the event pool
 func (m *EventPool) GetClient() interface{} {
 	return m.client
 }

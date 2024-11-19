@@ -653,6 +653,7 @@ Config defines the configuration settings for the default rate limiter
 |**publicStripeKey**|`string`|||
 |**privateStripeKey**|`string`|||
 |**stripeWebhookSecret**|`string`|||
+|**trialSubscriptionPriceID**|`string`|||
 
 **Additional Properties:** not allowed  
 

@@ -69,7 +69,7 @@ type Config struct {
 	Ratelimit ratelimit.Config `json:"ratelimit" koanf:"ratelimit"`
 	// ObjectStorage contains the configuration for the object storage backend
 	ObjectStorage objects.Config `json:"objectStorage" koanf:"objectStorage"`
-	// Subscription contains the configuration for the subscription service
+	// Subscription contains the configuration for the entitlements service
 	Entitlements entitlements.Config `json:"subscription" koanf:"subscription"`
 }
 

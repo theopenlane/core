@@ -41,6 +41,7 @@ func (h *Handler) CheckoutSessionHandler(ctx echo.Context) error {
 
 	log.Warn().Msg("fetched or created stripe customer")
 
+	// TODO: determine if customerSession + pricing table is what we want, or if the billingportalsession is the correct URL to return and then redirect the customer
 	params := &stripe.CustomerSessionParams{
 		Customer: stripe.String(cust.ID),
 		Components: &stripe.CustomerSessionComponentsParams{
@@ -70,6 +71,6 @@ func (h *Handler) CheckoutSessionHandler(ctx echo.Context) error {
 
 // CheckoutSuccessHandler is responsible for handling requests to the `/checkout/success` endpoint
 func (h *Handler) CheckoutSuccessHandler(ctx echo.Context) error {
-
+	// TODO[MKA] Determine what is needed of the success handler and implement
 	return h.Success(ctx, nil)
 }

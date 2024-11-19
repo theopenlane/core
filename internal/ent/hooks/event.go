@@ -51,6 +51,8 @@ func EmitEventHook(pool *soiree.EventPool) ent.Hook {
 				log.Err(err).Msg("Failed to unmarshal return value")
 			}
 
+			// create a new event unfilitered for every mutation
+			// this pushes events into the pool but they are only actioned against if there is a listener
 			event := soiree.NewBaseEvent(fmt.Sprintf("%s.%s", typ, op), mutation)
 			event.Properties().Set("ID", other.ID)
 
@@ -75,6 +77,7 @@ func RegisterGlobalHooks(client *entgen.Client, pool *soiree.EventPool) {
 	client.Use(EmitEventHook(pool))
 }
 
+// InitEventPool initializes an event pool with a client and a error handler
 func InitEventPool(client interface{}) *soiree.EventPool {
 	return soiree.NewEventPool(soiree.WithPool(soiree.NewPondPool(soiree.WithMaxWorkers(100), soiree.WithName("ent_event_pool"))), soiree.WithErrorHandler(func(event soiree.Event, err error) error { // nolint: mnd
 		log.Printf("Error encountered during event '%s': %v, with payload: %v", event.Topic(), err, event.Payload())
@@ -82,7 +85,8 @@ func InitEventPool(client interface{}) *soiree.EventPool {
 	}), soiree.WithClient(client))
 }
 
-// RegisterListeners registers listeners for events
+// TODO: template out listeners for all mutation types and create hooks that allow functions to be easily called from within the codebase to perform actions on those events
+// RegisterListeners registers listeners for events on the event pool and is registered with the dbclient
 func RegisterListeners(pool *soiree.EventPool) {
 	_, err := pool.On("OrganizationSetting.OpCreate", handleCustomerCreate)
 	if err != nil {
@@ -203,6 +207,7 @@ func handleCustomerCreate(event soiree.Event) error {
 			log.Warn().Msgf("Created billing portal update session with URL %s", checkout.URL)
 		}
 
+		// TODO create ent db records / corresponding feature / plan records
 		subs, err := event.Client().(*entgen.Client).EntitlementManager.ListOrCreateStripeSubscriptions(i.Customer().ID)
 		if err != nil {
 			log.Err(err).Msg("failed to list or create Stripe subscriptions")

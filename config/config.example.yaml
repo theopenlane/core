@@ -189,6 +189,7 @@ subscription:
     privateStripeKey: ""
     publicStripeKey: ""
     stripeWebhookSecret: ""
+    trialSubscriptionPriceID: price_1QKLyeBvxky1R7SvaZYGWyQb
 totp:
     codeLength: 6
     enabled: true

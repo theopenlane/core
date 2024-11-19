@@ -320,6 +320,9 @@
         },
         "stripeWebhookSecret": {
           "type": "string"
+        },
+        "trialSubscriptionPriceID": {
+          "type": "string"
         }
       },
       "additionalProperties": false,
@@ -1011,7 +1014,7 @@
     },
     "subscription": {
       "$ref": "#/$defs/entitlements.Config",
-      "description": "Subscription contains the configuration for the subscription service"
+      "description": "Subscription contains the configuration for the entitlements service"
     }
   },
   "additionalProperties": false,
