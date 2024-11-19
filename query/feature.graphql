@@ -1,4 +1,3 @@
-
 mutation CreateBulkCSVFeature($input: Upload!) {
   createBulkCSVFeature(input: $input) {
     features {
@@ -86,6 +85,7 @@ query GetAllFeatures {
     }
   }
 }
+
 query GetFeatureByID($featureId: ID!) {
   feature(id: $featureId) {
     createdAt
@@ -125,6 +125,7 @@ query GetFeatures($where: FeatureWhereInput) {
     }
   }
 }
+
 mutation UpdateFeature($updateFeatureId: ID!, $input: UpdateFeatureInput!) {
   updateFeature(id: $updateFeatureId, input: $input) {
     feature {

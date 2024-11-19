@@ -12,7 +12,6 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	mock_fga "github.com/theopenlane/iam/fgax/mockery"
 
 	"github.com/theopenlane/utils/ulids"
 
@@ -46,9 +45,6 @@ func (suite *HandlerTestSuite) TestRefreshHandler() {
 	// set privacy allow in order to allow the creation of the users without
 	// authentication in the tests
 	ec = privacy.DecisionContext(ec, privacy.Allow)
-
-	// add mocks for writes
-	mock_fga.WriteAny(t, suite.fga)
 
 	// create user in the database
 	validUser := gofakeit.Email()

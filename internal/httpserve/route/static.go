@@ -139,7 +139,7 @@ func registerAppleMerchantHandler(router *Router) (err error) {
 		Method:      method,
 		Path:        path,
 		Middlewares: mw,
-		Handler:     echo.StaticFileHandler("apple-developer-merchantid-domain-association", applemerchant),
+		Handler:     echo.StaticFileHandler("applemerchant", applemerchant),
 	}
 
 	if err := router.AddEchoOnlyRoute(path, method, route); err != nil {

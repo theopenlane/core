@@ -10,7 +10,6 @@ import (
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	mock_fga "github.com/theopenlane/iam/fgax/mockery"
 
 	"github.com/theopenlane/httpsling"
 
@@ -30,9 +29,6 @@ func (suite *HandlerTestSuite) TestResendHandler() {
 	ec := echocontext.NewTestEchoContext().Request().Context()
 
 	ctx := privacy.DecisionContext(ec, privacy.Allow)
-
-	// add mocks for writes
-	mock_fga.WriteAny(t, suite.fga)
 
 	// create user in the database
 	userSetting := suite.db.UserSetting.Create().

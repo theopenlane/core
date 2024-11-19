@@ -14,7 +14,6 @@ import (
 	"github.com/riverqueue/river/rivertest"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	mock_fga "github.com/theopenlane/iam/fgax/mockery"
 	"github.com/theopenlane/riverboat/pkg/jobs"
 
 	"github.com/theopenlane/utils/ulids"
@@ -26,7 +25,6 @@ import (
 	_ "github.com/theopenlane/core/internal/ent/generated/runtime"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
 func (suite *HandlerTestSuite) TestVerifySubscribeHandler() {
@@ -34,31 +32,6 @@ func (suite *HandlerTestSuite) TestVerifySubscribeHandler() {
 
 	// add handler
 	suite.e.GET("subscribe/verify", suite.h.VerifySubscriptionHandler)
-
-	// bypass auth
-	ctx := context.Background()
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
-
-	mock_fga.WriteAny(t, suite.fga)
-
-	// setup test data
-	user := suite.db.User.Create().
-		SetEmail(gofakeit.Email()).
-		SetFirstName(gofakeit.FirstName()).
-		SetLastName(gofakeit.LastName()).
-		SaveX(ctx)
-
-	reqCtx, err := userContextWithID(user.ID)
-	require.NoError(t, err)
-
-	ctx = privacy.DecisionContext(reqCtx, privacy.Allow)
-
-	input := openlaneclient.CreateOrganizationInput{
-		Name: "mitb",
-	}
-
-	org, err := suite.api.CreateOrganization(ctx, input)
-	require.NoError(t, err)
 
 	expiredTTL := time.Now().AddDate(0, 0, -1).Format(time.RFC3339Nano)
 
@@ -96,9 +69,7 @@ func (suite *HandlerTestSuite) TestVerifySubscribeHandler() {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			defer mock_fga.ClearMocks(suite.fga)
-
-			sub := suite.createTestSubscriber(t, org.CreateOrganization.Organization.ID, tc.email, tc.ttl)
+			sub := suite.createTestSubscriber(t, testUser1.OrganizationID, tc.email, tc.ttl)
 
 			target := "/subscribe/verify"
 			if tc.tokenSet {

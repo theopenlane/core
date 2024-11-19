@@ -10,11 +10,9 @@ import (
 	"github.com/stretchr/testify/suite"
 
 	echo "github.com/theopenlane/echox"
-	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/emailtemplates"
-	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
-	mock_fga "github.com/theopenlane/iam/fgax/mockery"
+	fgatest "github.com/theopenlane/iam/fgax/testutils"
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/riverboat/pkg/riverqueue"
 	"github.com/theopenlane/utils/testutils"
@@ -37,6 +35,10 @@ var (
 	validPassword = "sup3rs3cu7e!"
 )
 
+const (
+	fgaModelFile = "../../../fga/model/model.fga"
+)
+
 // HandlerTestSuite handles the setup and teardown between tests
 type HandlerTestSuite struct {
 	suite.Suite
@@ -44,8 +46,9 @@ type HandlerTestSuite struct {
 	db          *ent.Client
 	api         *openlaneclient.OpenlaneClient
 	h           *handlers.Handler
-	fga         *mock_fga.MockSdkClient
+	fga         *fgax.Client
 	tf          *testutils.TestFixture
+	ofgaTF      *fgatest.OpenFGATestFixture
 	objectStore *objects.Objects
 }
 
@@ -57,7 +60,11 @@ func TestHandlerTestSuite(t *testing.T) {
 func (suite *HandlerTestSuite) SetupSuite() {
 	zerolog.SetGlobalLevel(zerolog.Disabled)
 
+	// setup db container
 	suite.tf = entdb.NewTestFixture()
+
+	// setup openFGA container
+	suite.ofgaTF = fgatest.NewFGATestcontainer(context.Background(), fgatest.WithModelFile(fgaModelFile))
 }
 
 func (suite *HandlerTestSuite) SetupTest() {
@@ -65,10 +72,9 @@ func (suite *HandlerTestSuite) SetupTest() {
 
 	ctx := context.Background()
 
-	suite.fga = mock_fga.NewMockSdkClient(t)
-
-	// create mock FGA client
-	fc := fgax.NewMockFGAClient(t, suite.fga)
+	// setup fga client
+	fgaClient, err := suite.ofgaTF.NewFgaClient(ctx)
+	require.NoError(t, err)
 
 	tm, err := coreutils.CreateTokenManager(15 * time.Minute) //nolint:mnd
 	require.NoError(t, err)
@@ -84,7 +90,7 @@ func (suite *HandlerTestSuite) SetupTest() {
 	sessionConfig.CookieConfig = &sessions.DebugOnlyCookieConfig
 
 	opts := []ent.Option{
-		ent.Authz(*fc),
+		ent.Authz(*fgaClient),
 		ent.Emailer(&emailtemplates.Config{}),
 		ent.TokenManager(tm),
 		ent.SessionConfig(&sessionConfig),
@@ -116,12 +122,11 @@ func (suite *HandlerTestSuite) SetupTest() {
 
 	// setup echo router
 	suite.e = setupEcho(suite.db)
+
+	suite.setupTestData(ctx)
 }
 
 func (suite *HandlerTestSuite) TearDownTest() {
-	// clear all fga mocks
-	mock_fga.ClearMocks(suite.fga)
-
 	if suite.db != nil {
 		err := suite.db.CloseAll()
 		require.NoError(suite.T(), err)
@@ -129,14 +134,16 @@ func (suite *HandlerTestSuite) TearDownTest() {
 }
 
 func (suite *HandlerTestSuite) ClearTestData() {
-	mock_fga.ClearMocks(suite.fga)
-
 	err := suite.db.Job.TruncateRiverTables(context.Background())
 	require.NoError(suite.T(), err)
 }
 
 func (suite *HandlerTestSuite) TearDownSuite() {
 	testutils.TeardownFixture(suite.tf)
+
+	// terminate all fga containers
+	err := suite.ofgaTF.TeardownFixture()
+	require.NoError(suite.T(), err)
 }
 
 func setupEcho(dbClient *ent.Client) *echo.Echo {
@@ -168,20 +175,4 @@ func handlerSetup(t *testing.T, db *ent.Client) *handlers.Handler {
 	}
 
 	return h
-}
-
-// userContextWithID creates a new user context with the provided user ID
-// and adds it to a new echo context
-func userContextWithID(userID string) (context.Context, error) {
-	// Use that user to create the organization
-	ec, err := auth.NewTestEchoContextWithValidUser(userID)
-	if err != nil {
-		return nil, err
-	}
-
-	reqCtx := context.WithValue(ec.Request().Context(), echocontext.EchoContextKey, ec)
-
-	ec.SetRequest(ec.Request().WithContext(reqCtx))
-
-	return reqCtx, nil
 }

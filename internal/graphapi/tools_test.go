@@ -13,11 +13,9 @@ import (
 
 	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/iam/fgax"
-	mock_fga "github.com/theopenlane/iam/fgax/mockery"
+	fgatest "github.com/theopenlane/iam/fgax/testutils"
 	"github.com/theopenlane/riverboat/pkg/riverqueue"
 
-	"github.com/theopenlane/echox/middleware/echocontext"
-	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/iam/totp"
 	"github.com/theopenlane/utils/testutils"
@@ -33,10 +31,14 @@ import (
 	coreutils "github.com/theopenlane/core/pkg/testutils"
 )
 
-var (
-	testUser          *ent.User
-	testPersonalOrgID string
-	testOrgID         string
+const (
+	fgaModelFile = "../../fga/model/model.fga"
+
+	redacted = "*****************************"
+
+	// common error message strings
+	notFoundErrorMsg      = "not found"
+	notAuthorizedErrorMsg = "you are not authorized to perform this action"
 )
 
 // TestGraphTestSuite runs all the tests in the GraphTestSuite
@@ -49,6 +51,7 @@ type GraphTestSuite struct {
 	suite.Suite
 	client *client
 	tf     *testutils.TestFixture
+	ofgaTF *fgatest.OpenFGATestFixture
 }
 
 // client contains all the clients the test need to interact with
@@ -57,14 +60,18 @@ type client struct {
 	api          *openlaneclient.OpenlaneClient
 	apiWithPAT   *openlaneclient.OpenlaneClient
 	apiWithToken *openlaneclient.OpenlaneClient
-	fga          *mock_fga.MockSdkClient
+	fga          *fgax.Client
 	objectStore  *objects.Objects
 }
 
 func (suite *GraphTestSuite) SetupSuite() {
 	zerolog.SetGlobalLevel(zerolog.Disabled)
 
+	// setup db container
 	suite.tf = entdb.NewTestFixture()
+
+	// setup openFGA container
+	suite.ofgaTF = fgatest.NewFGATestcontainer(context.Background(), fgatest.WithModelFile(fgaModelFile))
 }
 
 func (suite *GraphTestSuite) SetupTest() {
@@ -72,13 +79,13 @@ func (suite *GraphTestSuite) SetupTest() {
 
 	ctx := context.Background()
 
-	// setup fga mock
-	c := &client{
-		fga: mock_fga.NewMockSdkClient(t),
-	}
+	// setup fga client
+	fgaClient, err := suite.ofgaTF.NewFgaClient(ctx)
+	require.NoError(t, err)
 
-	// create mock FGA client
-	fc := fgax.NewMockFGAClient(t, c.fga)
+	c := &client{
+		fga: fgaClient,
+	}
 
 	// setup otp manager
 	otpOpts := []totp.ConfigOption{
@@ -106,7 +113,7 @@ func (suite *GraphTestSuite) SetupTest() {
 	otpMan := totp.NewOTP(otpOpts...)
 
 	opts := []ent.Option{
-		ent.Authz(*fc),
+		ent.Authz(*fgaClient),
 		ent.Emailer(&emailtemplates.Config{}), // add noop email config
 		ent.TOTP(&totp.Manager{
 			TOTPManager: otpMan,
@@ -135,76 +142,23 @@ func (suite *GraphTestSuite) SetupTest() {
 	c.api, err = coreutils.TestClient(t, c.db, c.objectStore)
 	require.NoError(t, err)
 
-	// create test user
-	ctx = echocontext.NewTestContext()
-	testUser = (&UserBuilder{client: c}).MustNew(ctx, t)
-	testPersonalOrg, err := testUser.Edges.Setting.DefaultOrg(ctx)
-	require.NoError(t, err)
-
-	testPersonalOrgID = testPersonalOrg.ID
-
-	userCtx, err := auth.NewTestContextWithOrgID(testUser.ID, testPersonalOrgID)
-	require.NoError(t, err)
-
-	// setup a non-personal org
-	testOrg := (&OrganizationBuilder{client: c}).MustNew(userCtx, t)
-	testOrgID = testOrg.ID
-
-	userCtx, err = userContext()
-	require.NoError(t, err)
-
-	// setup client with a personal access token
-	pat := (&PersonalAccessTokenBuilder{client: c, OwnerID: testUser.ID, OrganizationIDs: []string{testOrgID, testPersonalOrgID}}).MustNew(userCtx, t)
-	authHeaderPAT := openlaneclient.Authorization{
-		BearerToken: pat.Token,
-	}
-
-	c.apiWithPAT, err = coreutils.TestClientWithAuth(t, c.db, c.objectStore, openlaneclient.WithCredentials(authHeaderPAT))
-	require.NoError(t, err)
-
-	// setup client with an API token
-	apiToken := (&APITokenBuilder{client: c}).MustNew(userCtx, t)
-
-	authHeaderAPIToken := openlaneclient.Authorization{
-		BearerToken: apiToken.Token,
-	}
-	c.apiWithToken, err = coreutils.TestClientWithAuth(t, c.db, c.objectStore, openlaneclient.WithCredentials(authHeaderAPIToken))
-	require.NoError(t, err)
-
 	suite.client = c
+
+	// setup test data
+	suite.setupTestData(ctx)
 }
 
 func (suite *GraphTestSuite) TearDownTest() {
-	// clear all fga mocks
-	mock_fga.ClearMocks(suite.client.fga)
-
 	err := suite.client.db.Close()
 	require.NoError(suite.T(), err)
 }
 
 func (suite *GraphTestSuite) TearDownSuite() {
 	testutils.TeardownFixture(suite.tf)
-}
 
-// userContext creates a new user in the database and returns a context with
-// the user claims attached
-func userContext() (context.Context, error) {
-	return auth.NewTestContextWithOrgID(testUser.ID, testOrgID)
-}
-
-// userContextWithID creates a new user context with the provided user ID
-func userContextWithID(userID string) (context.Context, error) {
-	// Use that user to create the organization
-	ec, err := auth.NewTestEchoContextWithValidUser(userID)
-	if err != nil {
-		return nil, err
-	}
-
-	reqCtx := context.WithValue(ec.Request().Context(), echocontext.EchoContextKey, ec)
-
-	ec.SetRequest(ec.Request().WithContext(reqCtx))
-
-	return reqCtx, nil
+	// terminate all fga containers
+	err := suite.ofgaTF.TeardownFixture()
+	require.NoError(suite.T(), err)
 }
 
 // expectUpload sets up the mock object store to expect an upload and related operations

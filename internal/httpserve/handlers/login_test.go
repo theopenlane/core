@@ -10,7 +10,6 @@ import (
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	mock_fga "github.com/theopenlane/iam/fgax/mockery"
 
 	"github.com/theopenlane/utils/rout"
 
@@ -35,9 +34,6 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 	// set privacy allow in order to allow the creation of the users without
 	// authentication in the tests
 	ctx := privacy.DecisionContext(ec, privacy.Allow)
-
-	// add mocks for writes
-	mock_fga.WriteAny(t, suite.fga)
 
 	// create user in the database
 	validConfirmedUser := "rsanchez@theopenlane.io"
@@ -121,8 +117,6 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			defer mock_fga.ClearMocks(suite.fga)
-
 			loginJSON := models.LoginRequest{
 				Username: tc.username,
 				Password: tc.password,
