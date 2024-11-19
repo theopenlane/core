@@ -68,7 +68,7 @@ require (
 	github.com/theopenlane/iam v0.3.1
 	github.com/theopenlane/newman v0.1.1
 	github.com/theopenlane/riverboat v0.0.7
-	github.com/theopenlane/utils v0.3.1
+	github.com/theopenlane/utils v0.4.0
 	github.com/vektah/gqlparser/v2 v2.5.19
 	github.com/wk8/go-ordered-map/v2 v2.1.8
 	github.com/wundergraph/graphql-go-tools v1.67.4
