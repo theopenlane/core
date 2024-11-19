@@ -16,7 +16,7 @@ func (sc *StripeClient) CreateSubscription(params *stripe.SubscriptionParams) (*
 }
 
 // ListStripeSubscriptions lists stripe subscriptions by customer
-func (sc *StripeClient) ListOrCreateStripeSubscriptions(customerID string) (*Subscription, error) {
+func (sc *StripeClient) ListOrCreateSubscriptions(customerID string) (*Subscription, error) {
 	i := sc.Client.Subscriptions.List(&stripe.SubscriptionListParams{
 		Customer: stripe.String(customerID),
 	})

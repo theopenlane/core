@@ -22,8 +22,6 @@ func registerCheckoutSessionHandler(router *Router) (err error) {
 		},
 	}
 
-	//	uploadOperation := router.Handler.BindUploadBander()
-
 	if err := router.Addv1Route(path, method, nil, route); err != nil {
 		return err
 	}
@@ -46,8 +44,6 @@ func registerCheckoutSuccessHandler(router *Router) (err error) {
 			return router.Handler.CheckoutSuccessHandler(c)
 		},
 	}
-
-	//	uploadOperation := router.Handler.BindUploadBander()
 
 	if err := router.Addv1Route(path, method, nil, route); err != nil {
 		return err

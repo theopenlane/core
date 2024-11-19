@@ -1,6 +1,7 @@
 package entitlements
 
 type Config struct {
+	// Enabled determines if the entitlements service is enabled
 	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
 	// PublicStripeKey is the key for the stripe service
 	PublicStripeKey string `json:"publicStripeKey" koanf:"publicStripeKey" default:""`

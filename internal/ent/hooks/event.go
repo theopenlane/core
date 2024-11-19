@@ -175,28 +175,26 @@ func handleCustomerCreate(event soiree.Event) error {
 		i := event.Client().(*entgen.Client).EntitlementManager.Client.Customers.List(&stripe.CustomerListParams{Email: &email})
 
 		if !i.Next() {
-			customer, err := event.Client().(*entgen.Client).EntitlementManager.Client.Customers.New(&stripe.CustomerParams{Email: &email})
+			customer, err := event.Client().(*entgen.Client).EntitlementManager.CreateCustomer(email)
 			if err != nil {
 				log.Err(err).Msg("Failed to create Stripe customer")
 				return err
 			}
 
-			log.Info().Msgf("Created Stripe customer with ID: %s", customer.ID)
+			log.Debug().Msgf("Created Stripe customer with ID: %s", customer.ID)
 
 			if err := updateOrganizationSettingWithCustomerID(event.Context(), orgsettingID.(string), customer.ID, event.Client()); err != nil {
 				log.Err(err).Msg("Failed to update OrganizationSetting with Stripe customer ID")
 				return err
 			}
 
-			log.Info().Msgf("Updated OrganizationSetting with Stripe customer ID: %s", customer.ID)
+			log.Debug().Msgf("Updated OrganizationSetting with Stripe customer ID: %s", customer.ID)
 
-			subs, err := event.Client().(*entgen.Client).EntitlementManager.ListOrCreateStripeSubscriptions(customer.ID)
+			subs, err := event.Client().(*entgen.Client).EntitlementManager.ListOrCreateSubscriptions(customer.ID)
 			if err != nil {
 				log.Err(err).Msg("failed to list or create Stripe subscriptions")
 				return err
 			}
-
-			log.Info().Msgf("Stripe subscription with ID exists %s", subs.ID)
 
 			checkout, err := event.Client().(*entgen.Client).EntitlementManager.CreateBillingPortalUpdateSession(subs.ID, customer.ID)
 			if err != nil {
@@ -204,17 +202,15 @@ func handleCustomerCreate(event soiree.Event) error {
 				return err
 			}
 
-			log.Warn().Msgf("Created billing portal update session with URL %s", checkout.URL)
+			log.Debug().Msgf("Created billing portal update session with URL %s", checkout.URL)
 		}
 
 		// TODO create ent db records / corresponding feature / plan records
-		subs, err := event.Client().(*entgen.Client).EntitlementManager.ListOrCreateStripeSubscriptions(i.Customer().ID)
+		subs, err := event.Client().(*entgen.Client).EntitlementManager.ListOrCreateSubscriptions(i.Customer().ID)
 		if err != nil {
 			log.Err(err).Msg("failed to list or create Stripe subscriptions")
 			return err
 		}
-
-		log.Info().Msgf("Stripe subscription with ID exists %s", subs.ID)
 
 		checkout, err := event.Client().(*entgen.Client).EntitlementManager.CreateBillingPortalUpdateSession(subs.ID, i.Customer().ID)
 		if err != nil {
@@ -222,28 +218,26 @@ func handleCustomerCreate(event soiree.Event) error {
 			return err
 		}
 
-		log.Warn().Msgf("Created billing portal update session with URL %s", checkout.URL)
+		log.Debug().Msgf("Created billing portal update session with URL %s", checkout.URL)
 
 		if err := updateOrganizationSettingWithCustomerID(event.Context(), orgsettingID.(string), i.Customer().ID, event.Client()); err != nil {
 			log.Err(err).Msg("Failed to update OrganizationSetting with Stripe customer ID")
 			return err
 		}
 
-		log.Info().Msgf("Updated OrganizationSetting with Stripe customer ID: %s", i.Customer().ID)
+		log.Debug().Msgf("Updated OrganizationSetting with Stripe customer ID: %s", i.Customer().ID)
 	}
 
 	return nil
 }
 
 // updateOrganizationSettingWithCustomerID updates an OrganizationSetting with a Stripe customer ID
-func updateOrganizationSettingWithCustomerID(ctx context.Context, orgID, customerID string, client interface{}) error {
-	if _, err := client.(*entgen.Client).OrganizationSetting.UpdateOneID(orgID).SetStripeID(customerID).Save(ctx); err != nil {
-		log.Err(err).Msgf("Failed to update OrganizationSetting ID %s with Stripe customer ID %s", orgID, customerID)
+func updateOrganizationSettingWithCustomerID(ctx context.Context, orgsettingID, customerID string, client interface{}) error {
+	if _, err := client.(*entgen.Client).OrganizationSetting.UpdateOneID(orgsettingID).SetStripeID(customerID).Save(ctx); err != nil {
+		log.Err(err).Msgf("Failed to update OrganizationSetting ID %s with Stripe customer ID %s", orgsettingID, customerID)
 
 		return err
 	}
-
-	log.Info().Msgf("Updated OrganizationSetting ID %s with Stripe customer ID %s", orgID, customerID)
 
 	return nil
 }
