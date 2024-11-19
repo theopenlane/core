@@ -59,7 +59,6 @@ func (sc *StripeClient) GetProducts() []Product {
 			Prices:      prices,
 			Features:    features,
 		})
-
 	}
 
 	return products
@@ -89,7 +88,6 @@ func (sc *StripeClient) GetProductFeatures(productID string) []ProductFeature {
 	}
 
 	return productfeatures
-
 }
 
 // GetPrices retrieves all prices from stripe which are active and maps them into a []Price struct

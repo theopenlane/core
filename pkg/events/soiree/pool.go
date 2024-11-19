@@ -1,6 +1,7 @@
 package soiree
 
 import (
+	"math"
 	"sync"
 
 	"github.com/alitto/pond/v2"
@@ -119,12 +120,22 @@ func (p *PondPool) Stop() {
 
 // SubmittedTasks returns the number of tasks submitted to the pool
 func (p *PondPool) SubmittedTasks() int {
-	return int(p.pool.SubmittedTasks())
+	submittedTasks := p.pool.SubmittedTasks()
+	if submittedTasks > uint64(^uint(0)) {
+		return math.MaxInt
+	}
+
+	return int(submittedTasks)
 }
 
 // WaitingTasks returns the number of tasks waiting in the pool
 func (p *PondPool) WaitingTasks() int {
-	return int(p.pool.WaitingTasks())
+	waitingTasks := p.pool.WaitingTasks()
+	if waitingTasks > uint64(^uint(0)) {
+		return math.MaxInt
+	}
+
+	return int(waitingTasks)
 }
 
 // SuccessfulTasks returns the number of tasks that completed successfully
@@ -134,10 +145,20 @@ func (p *PondPool) SuccessfulTasks() int {
 
 // FailedTasks returns the number of tasks that completed with a panic
 func (p *PondPool) FailedTasks() int {
-	return int(p.pool.FailedTasks())
+	failedTasks := p.pool.FailedTasks()
+	if failedTasks > uint64(^uint(0)) {
+		return math.MaxInt
+	}
+
+	return int(failedTasks)
 }
 
 // CompletedTasks returns the number of tasks that completed either successfully or with a panic
 func (p *PondPool) CompletedTasks() int {
-	return int(p.pool.CompletedTasks())
+	completedTasks := p.pool.CompletedTasks()
+	if completedTasks > uint64(^uint(0)) {
+		return math.MaxInt
+	}
+
+	return int(completedTasks)
 }

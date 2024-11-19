@@ -21,8 +21,6 @@ func (sc *StripeClient) ListOrCreateStripeSubscriptions(customerID string) (*Sub
 		Customer: stripe.String(customerID),
 	})
 
-	subs := &Subscription{}
-
 	if !i.Next() {
 		sub, err := sc.CreateTrialSubscription(customerID)
 		if err != nil {
@@ -34,7 +32,7 @@ func (sc *StripeClient) ListOrCreateStripeSubscriptions(customerID string) (*Sub
 	}
 
 	// assumes customer can only have 1 subscription if there are any
-	subs = sc.mapStripeSubscription(i.Subscription())
+	subs := sc.mapStripeSubscription(i.Subscription())
 
 	return subs, nil
 }

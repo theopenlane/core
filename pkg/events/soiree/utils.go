@@ -48,14 +48,17 @@ func matchParts(patternParts, subjectParts []string) bool {
 					return true
 				}
 			}
+
 			return false
 		default:
 			// Exact match required for non-wildcard parts
 			if patternParts[p] != subjectParts[s] {
 				return false
 			}
+
 			s++
 		}
+
 		p++
 	}
 
@@ -71,6 +74,7 @@ func matchParts(patternParts, subjectParts []string) bool {
 				return false
 			}
 		}
+
 		return true
 	}
 

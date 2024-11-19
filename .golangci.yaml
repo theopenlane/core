@@ -55,6 +55,7 @@ issues:
     - internal/graphapi/generate/*
     - db/migrations/*
     - db/migrations-goose-postgres/*
+    - pkg/entitlements/test/*
   exclude-files:
     - internal/graphapi/gen_server.go
     - internal/graphapi/gen_models.go
