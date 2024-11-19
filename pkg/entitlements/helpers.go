@@ -148,7 +148,7 @@ func WritePlansToYAML(product []Product, filename string) error {
 	}
 
 	// Write the YAML data to a file
-	err = os.WriteFile(filename, data, 0644)
+	err = os.WriteFile(filename, data, 0600)
 	if err != nil {
 		return fmt.Errorf("failed to write YAML file: %w", err)
 	}

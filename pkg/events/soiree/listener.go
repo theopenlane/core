@@ -22,3 +22,10 @@ func WithPriority(priority Priority) ListenerOption {
 		item.priority = priority
 	}
 }
+
+// WithClient sets the client of a listener
+func WithListenerClient(client interface{}) ListenerOption {
+	return func(item *listenerItem) {
+		item.client = client
+	}
+}

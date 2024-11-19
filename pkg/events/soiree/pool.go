@@ -120,8 +120,10 @@ func (p *PondPool) Stop() {
 
 // SubmittedTasks returns the number of tasks submitted to the pool
 func (p *PondPool) SubmittedTasks() int {
-	submittedTasks := p.pool.SubmittedTasks()
-	if submittedTasks > uint64(^uint(0)) {
+	submittedTasks := p.pool.WaitingTasks()
+	maxInt := uint64(math.MaxInt)
+
+	if submittedTasks > maxInt {
 		return math.MaxInt
 	}
 
@@ -131,7 +133,9 @@ func (p *PondPool) SubmittedTasks() int {
 // WaitingTasks returns the number of tasks waiting in the pool
 func (p *PondPool) WaitingTasks() int {
 	waitingTasks := p.pool.WaitingTasks()
-	if waitingTasks > uint64(^uint(0)) {
+	maxInt := uint64(math.MaxInt)
+
+	if waitingTasks > maxInt {
 		return math.MaxInt
 	}
 
@@ -140,13 +144,22 @@ func (p *PondPool) WaitingTasks() int {
 
 // SuccessfulTasks returns the number of tasks that completed successfully
 func (p *PondPool) SuccessfulTasks() int {
-	return int(p.pool.SuccessfulTasks())
+	successfulTasks := p.pool.WaitingTasks()
+	maxInt := uint64(math.MaxInt)
+
+	if successfulTasks > maxInt {
+		return math.MaxInt
+	}
+
+	return int(successfulTasks)
 }
 
 // FailedTasks returns the number of tasks that completed with a panic
 func (p *PondPool) FailedTasks() int {
-	failedTasks := p.pool.FailedTasks()
-	if failedTasks > uint64(^uint(0)) {
+	failedTasks := p.pool.WaitingTasks()
+	maxInt := uint64(math.MaxInt)
+
+	if failedTasks > maxInt {
 		return math.MaxInt
 	}
 
@@ -155,8 +168,10 @@ func (p *PondPool) FailedTasks() int {
 
 // CompletedTasks returns the number of tasks that completed either successfully or with a panic
 func (p *PondPool) CompletedTasks() int {
-	completedTasks := p.pool.CompletedTasks()
-	if completedTasks > uint64(^uint(0)) {
+	completedTasks := p.pool.WaitingTasks()
+	maxInt := uint64(math.MaxInt)
+
+	if completedTasks > maxInt {
 		return math.MaxInt
 	}
 
