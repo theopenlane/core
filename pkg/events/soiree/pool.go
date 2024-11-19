@@ -127,7 +127,7 @@ func (p *PondPool) SubmittedTasks() int {
 		return math.MaxInt
 	}
 
-	return int(submittedTasks)
+	return int(submittedTasks) // nolint:gosec
 }
 
 // WaitingTasks returns the number of tasks waiting in the pool
@@ -139,7 +139,7 @@ func (p *PondPool) WaitingTasks() int {
 		return math.MaxInt
 	}
 
-	return int(waitingTasks)
+	return int(waitingTasks) // nolint:gosec
 }
 
 // SuccessfulTasks returns the number of tasks that completed successfully
@@ -151,7 +151,7 @@ func (p *PondPool) SuccessfulTasks() int {
 		return math.MaxInt
 	}
 
-	return int(successfulTasks)
+	return int(successfulTasks) // nolint:gosec
 }
 
 // FailedTasks returns the number of tasks that completed with a panic
@@ -163,7 +163,7 @@ func (p *PondPool) FailedTasks() int {
 		return math.MaxInt
 	}
 
-	return int(failedTasks)
+	return int(failedTasks) // nolint:gosec
 }
 
 // CompletedTasks returns the number of tasks that completed either successfully or with a panic
@@ -175,5 +175,5 @@ func (p *PondPool) CompletedTasks() int {
 		return math.MaxInt
 	}
 
-	return int(completedTasks)
+	return int(completedTasks) // nolint:gosec
 }
