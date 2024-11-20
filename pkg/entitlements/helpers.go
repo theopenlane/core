@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/stripe/stripe-go/v81"
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 )
 
 // GetProducts retrieves all products from stripe which are active

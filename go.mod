@@ -78,7 +78,6 @@ require (
 	golang.org/x/term v0.26.0
 	golang.org/x/text v0.20.0
 	golang.org/x/tools v0.27.0
-	gopkg.in/yaml.v2 v2.4.0
 )
 
 require (
@@ -127,6 +126,7 @@ require (
 	gopkg.in/mattn/go-colorable.v0 v0.1.0 // indirect
 	gopkg.in/mattn/go-isatty.v0 v0.0.4 // indirect
 	gopkg.in/mattn/go-runewidth.v0 v0.0.4 // indirect
+	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
 
 require (
