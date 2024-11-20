@@ -78,6 +78,7 @@ require (
 	golang.org/x/term v0.26.0
 	golang.org/x/text v0.20.0
 	golang.org/x/tools v0.27.0
+	gopkg.in/yaml.v2 v2.4.0
 )
 
 require (
@@ -315,8 +316,7 @@ require (
 	google.golang.org/protobuf v1.35.2 // indirect
 	gopkg.in/cheggaaa/pb.v2 v2.0.7
 	gopkg.in/ini.v1 v1.67.0 // indirect
-	gopkg.in/yaml.v2 v2.4.0
-	gopkg.in/yaml.v3 v3.0.1 // indirect
+	gopkg.in/yaml.v3 v3.0.1
 	modernc.org/gc/v3 v3.0.0-20240801135723-a856999a2e4a // indirect
 	modernc.org/libc v1.60.0 // indirect
 	modernc.org/mathutil v1.6.0 // indirect
