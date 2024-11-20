@@ -339,10 +339,8 @@ func (h *Handler) expireAllResetTokensUserByEmail(ctx context.Context, email str
 
 // setEmailConfirmed sets the user setting field email_confirmed to true within a transaction
 func (h *Handler) setEmailConfirmed(ctx context.Context, user *ent.User) error {
-	if _, err := transaction.FromContext(ctx).UserSetting.Update().SetEmailConfirmed(true).
-		Where(
-			usersetting.ID(user.Edges.Setting.ID),
-		).Save(ctx); err != nil {
+	if _, err := transaction.FromContext(ctx).UserSetting.
+		UpdateOne(user.Edges.Setting).SetEmailConfirmed(true).Save(ctx); err != nil {
 		log.Error().Err(err).Msg("error setting email confirmed")
 
 		return err
@@ -500,4 +498,41 @@ func (h *Handler) getOrgByID(ctx context.Context, id string) (*ent.Organization,
 	}
 
 	return org, nil
+}
+
+// getOrgSettingByOrgID returns the organization settings from an organization ID and context
+func (h *Handler) getOrgSettingByOrgID(ctx context.Context, orgID string) (*ent.OrganizationSetting, error) {
+	org, err := h.getOrgByID(ctx, orgID)
+	if err != nil {
+		log.Error().Err(err).Msg("error retrieving organization")
+
+		return nil, err
+	}
+
+	if org.PersonalOrg {
+		log.Error().Msg("personal orgs do not have billing information")
+
+		return nil, ErrPersonalOrgsNoBilling
+	}
+
+	setting, err := org.Setting(ctx)
+	if err != nil {
+		log.Error().Err(err).Msg("error retrieving organization setting")
+
+		return nil, err
+	}
+
+	return setting, nil
+}
+
+func (h *Handler) updateOrganizationSettingWithCustomerID(ctx context.Context, orgsettingID, customerID string) error {
+	if _, err := transaction.FromContext(ctx).OrganizationSetting.UpdateOneID(orgsettingID).
+		SetStripeID(customerID).
+		Save(ctx); err != nil {
+		log.Error().Err(err).Msg("error updating organization setting with stripe customer id")
+
+		return err
+	}
+
+	return nil
 }

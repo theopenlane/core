@@ -16,7 +16,6 @@ import (
 )
 
 // RefreshHandler allows users to refresh their access token using their refresh token
-
 func (h *Handler) RefreshHandler(ctx echo.Context) error {
 	var in models.RefreshRequest
 	if err := ctx.Bind(&in); err != nil {

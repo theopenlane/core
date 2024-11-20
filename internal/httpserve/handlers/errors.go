@@ -83,6 +83,11 @@ var (
 
 	// ErrAlreadySwitchedIntoOrg is returned when a user attempts to switch into an org they are currently authenticated in
 	ErrAlreadySwitchedIntoOrg = errors.New("user already switched into organization")
+
+	// ErrNoBillingEmail is returned when the user has no billing email
+	ErrNoBillingEmail = errors.New("no billing email found")
+	// ErrPersonalOrgsNoBilling is returned when the org ID looked up is a personal org
+	ErrPersonalOrgsNoBilling = errors.New("personal orgs do not have billing")
 )
 
 var (
@@ -238,4 +243,9 @@ func (h *Handler) SuccessBlob(ctx echo.Context, rep interface{}) error {
 	encoder.SetIndent("  ", "  ")
 
 	return encoder.Encode(rep)
+}
+
+// Redirect returns a 302 Found response with the location header.
+func (h *Handler) Redirect(ctx echo.Context, location string) error {
+	return ctx.Redirect(http.StatusFound, location)
 }

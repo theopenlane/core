@@ -11,7 +11,8 @@ func TestPriorityOrdering(t *testing.T) {
 
 	var mu sync.Mutex // Mutex to protect access to callOrder slice
 
-	topic := "test_priority_topic"
+	event := NewTestEvent("test_priority_topic", "test_payload")
+
 	callOrder := make([]Priority, 0)
 
 	var wg sync.WaitGroup // WaitGroup to wait for listeners to finish
@@ -20,7 +21,7 @@ func TestPriorityOrdering(t *testing.T) {
 	subscribeWithPriority := func(priority Priority) {
 		wg.Add(1) // Increment the WaitGroup counter
 
-		_, err := em.On(topic, func(e Event) error {
+		_, err := em.On(event.Topic(), func(e Event) error {
 			defer wg.Done() // Decrement the counter when the function completes
 			mu.Lock()       // Lock the mutex to safely append to callOrder
 			callOrder = append(callOrder, priority)
@@ -41,7 +42,7 @@ func TestPriorityOrdering(t *testing.T) {
 	subscribeWithPriority(Highest)
 
 	// Emit an event to the topic
-	em.Emit(topic, "test_payload")
+	em.Emit(event.Topic(), event)
 
 	wg.Wait() // Wait for all listeners to process the event
 

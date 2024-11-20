@@ -15,6 +15,7 @@ import (
 	emixin "github.com/theopenlane/entx/mixin"
 
 	"github.com/theopenlane/iam/entfga"
+	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -224,6 +225,9 @@ func (Organization) Policy() ent.Policy {
 			rule.AllowIfContextHasPrivacyTokenOfType(&token.SignUpToken{}),    // Allow sign-up tokens to query the org ID they are subscribing to
 			privacy.OrganizationQueryRuleFunc(func(ctx context.Context, q *generated.OrganizationQuery) error {
 				return q.CheckAccess(ctx)
+			}),
+			privacy.OrganizationQueryRuleFunc(func(ctx context.Context, q *generated.OrganizationQuery) error {
+				return rule.CheckOrgAccess(ctx, fgax.CanView)
 			}),
 			privacy.AlwaysDenyRule(), // Deny all other users
 		},

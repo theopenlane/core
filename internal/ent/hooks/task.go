@@ -12,6 +12,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/internal/ent/privacy/utils"
 )
 
 // HookTaskCreate runs on task create mutations to set default values that are not provided
@@ -59,7 +60,7 @@ func HookTaskAssignee() ent.Hook {
 						})
 
 						// get the current assignee and remove them
-						resp, err := generated.FromContext(ctx).Authz.ListUserRequest(ctx, fgax.ListRequest{
+						resp, err := utils.AuthzClientFromContext(ctx).ListUserRequest(ctx, fgax.ListRequest{
 							ObjectID:   taskID,
 							ObjectType: strings.ToLower(m.Type()),
 							Relation:   "assignee",
@@ -87,7 +88,7 @@ func HookTaskAssignee() ent.Hook {
 						}
 
 						// add the new assignee and remove the old assignee
-						if _, err := generated.FromContext(ctx).Authz.WriteTupleKeys(ctx, []fgax.TupleKey{addTuple}, deleteTuples); err != nil {
+						if _, err := utils.AuthzClientFromContext(ctx).WriteTupleKeys(ctx, []fgax.TupleKey{addTuple}, deleteTuples); err != nil {
 							return nil, err
 						}
 

@@ -124,7 +124,7 @@ func (r *queryResolver) withPool() *soiree.PondPool {
 		return r.pool
 	}
 
-	r.pool = soiree.NewPondPool(defaultMaxWorkers)
+	r.pool = soiree.NewPondPool(soiree.WithMaxWorkers(defaultMaxWorkers))
 
 	return r.pool
 }

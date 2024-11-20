@@ -100,6 +100,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
 	"github.com/theopenlane/core/internal/ent/generated/webhook"
 	"github.com/theopenlane/core/internal/ent/generated/webhookhistory"
+	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/iam/sessions"
@@ -396,14 +397,15 @@ type (
 		// hooks to execute on mutations.
 		hooks *hooks
 		// interceptors to execute on queries.
-		inters        *inters
-		EntConfig     *entconfig.Config
-		Secrets       *secrets.Keeper
-		Authz         fgax.Client
-		TokenManager  *tokens.TokenManager
-		SessionConfig *sessions.SessionConfig
-		Emailer       *emailtemplates.Config
-		TOTP          *totp.Manager
+		inters             *inters
+		EntConfig          *entconfig.Config
+		Secrets            *secrets.Keeper
+		Authz              fgax.Client
+		TokenManager       *tokens.TokenManager
+		SessionConfig      *sessions.SessionConfig
+		Emailer            *emailtemplates.Config
+		TOTP               *totp.Manager
+		EntitlementManager *entitlements.StripeClient
 		// Job is the job client to insert jobs into the queue.
 		Job riverqueue.JobClient
 
@@ -498,6 +500,13 @@ func Emailer(v *emailtemplates.Config) Option {
 func TOTP(v *totp.Manager) Option {
 	return func(c *config) {
 		c.TOTP = v
+	}
+}
+
+// EntitlementManager configures the EntitlementManager.
+func EntitlementManager(v *entitlements.StripeClient) Option {
+	return func(c *config) {
+		c.EntitlementManager = v
 	}
 }
 

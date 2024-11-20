@@ -59,3 +59,10 @@ func WithErrChanBufferSize(size int) EventPoolOption {
 		m.SetErrChanBufferSize(size)
 	}
 }
+
+// WithClient sets a custom client for the Soiree
+func WithClient(client interface{}) EventPoolOption {
+	return func(m Soiree) {
+		m.SetClient(client)
+	}
+}

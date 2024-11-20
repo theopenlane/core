@@ -11,8 +11,8 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
+	"github.com/theopenlane/core/internal/ent/privacy/utils"
 )
 
 // HistoryAccess is a traversal interceptor that checks if the user has the required role for the organization
@@ -36,7 +36,7 @@ func HistoryAccess(relation string, orgOwned, userOwed bool) ent.Interceptor {
 		for _, orgID := range au.OrganizationIDs {
 			req.ObjectID = orgID
 
-			allowed, err := generated.FromContext(ctx).Authz.CheckAccess(ctx, req)
+			allowed, err := utils.AuthzClientFromContext(ctx).CheckAccess(ctx, req)
 			if err != nil {
 				return err
 			}

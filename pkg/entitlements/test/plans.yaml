@@ -1,0 +1,63 @@
+- product_id: prod_RClqj0AttVzg4k
+  name: Enterprise Tier
+  description: ""
+  features:
+    - id: feat_61RSmG7F7asoJOY4E41Bvxky1R7Sv9Im
+      name: Compliance Module
+      lookupkey: compliance-module
+      product_feature_id: prodft_1QKRHKBvxky1R7SvTtTepHP1
+    - id: feat_61RSmKnFOpuguesvn41Bvxky1R7SvHqK
+      name: Vulnerability Management
+      lookupkey: vulnerability-management
+      product_feature_id: prodft_1QKRGtBvxky1R7Sv80VTF4Vr
+    - id: feat_61RSmMdzv0HRMJO4k41Bvxky1R7Sv3Ki
+      name: Continuous Monitoring
+      lookupkey: continuous-monitoring
+      product_feature_id: prodft_1QKRG8Bvxky1R7SvmQpcbJMo
+  prices:
+    - price_id: price_1QKmuZBvxky1R7SvHAwybmEZ
+      price: 4000
+      product_id: prod_RClqj0AttVzg4k
+      interval: year
+    - price_id: price_1QKMJ6Bvxky1R7SvgbFmumzr
+      price: 400
+      product_id: prod_RClqj0AttVzg4k
+      interval: month
+- product_id: prod_RClW8LT3bzMeyG
+  name: Business Tier
+  description: ""
+  features:
+    - id: feat_61RSmG7F7asoJOY4E41Bvxky1R7Sv9Im
+      name: Compliance Module
+      lookupkey: compliance-module
+      product_feature_id: prodft_1QKRHKBvxky1R7SvfJahMY56
+    - id: feat_61RSmKnFOpuguesvn41Bvxky1R7SvHqK
+      name: Vulnerability Management
+      lookupkey: vulnerability-management
+      product_feature_id: prodft_1QKRGtBvxky1R7SvlyWOa09t
+  prices:
+    - price_id: price_1QKmtZBvxky1R7Sv1wNhoHRP
+      price: 2500
+      product_id: prod_RClW8LT3bzMeyG
+      interval: year
+    - price_id: price_1QKLzjBvxky1R7SvtvVT63Kn
+      price: 250
+      product_id: prod_RClW8LT3bzMeyG
+      interval: month
+- product_id: prod_RClVi0ZeIWJHOR
+  name: Starter Tier
+  description: ""
+  features:
+    - id: feat_61RSmG7F7asoJOY4E41Bvxky1R7Sv9Im
+      name: Compliance Module
+      lookupkey: compliance-module
+      product_feature_id: prodft_1QKRHKBvxky1R7Svrz8k8Wk4
+  prices:
+    - price_id: price_1QKO97Bvxky1R7SvcMA1YYG1
+      price: 1000
+      product_id: prod_RClVi0ZeIWJHOR
+      interval: year
+    - price_id: price_1QKLyeBvxky1R7SvaZYGWyQb
+      price: 100
+      product_id: prod_RClVi0ZeIWJHOR
+      interval: month

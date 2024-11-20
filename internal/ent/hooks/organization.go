@@ -309,8 +309,28 @@ func checkAndUpdateDefaultOrg(ctx context.Context, userID string, oldOrgID strin
 func defaultOrganizationSettings(ctx context.Context, m *generated.OrganizationMutation) (string, error) {
 	input := generated.CreateOrganizationSettingInput{}
 
+	personalOrg, _ := m.PersonalOrg()
+
+	if !personalOrg {
+		userID, err := auth.GetUserIDFromContext(ctx)
+		if err != nil {
+			log.Error().Err(err).Msg("unable to get user id from context")
+			return "", err
+		}
+
+		user, err := m.Client().User.Get(ctx, userID)
+		if err != nil {
+			log.Error().Err(err).Msg("unable to fetch user from database")
+		}
+
+		billingContact := user.FirstName + " " + user.LastName
+		input.BillingEmail = &user.Email
+		input.BillingContact = &billingContact
+	}
+
 	organizationSetting, err := m.Client().OrganizationSetting.Create().SetInput(input).Save(ctx)
 	if err != nil {
+		log.Error().Err(err).Msg("error creating organization settings")
 		return "", err
 	}
 

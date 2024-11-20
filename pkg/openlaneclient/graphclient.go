@@ -5,7 +5,6 @@ package openlaneclient
 import (
 	"context"
 	"encoding/json"
-	"net/http"
 	"time"
 
 	"github.com/99designs/gqlgen/graphql"
@@ -374,7 +373,7 @@ type Client struct {
 	Client *clientv2.Client
 }
 
-func NewClient(cli *http.Client, baseURL string, options *clientv2.Options, interceptors ...clientv2.RequestInterceptor) OpenlaneGraphClient {
+func NewClient(cli clientv2.HttpClient, baseURL string, options *clientv2.Options, interceptors ...clientv2.RequestInterceptor) OpenlaneGraphClient {
 	return &Client{Client: clientv2.NewClient(cli, baseURL, options, interceptors...)}
 }
 

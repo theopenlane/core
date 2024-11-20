@@ -39,7 +39,13 @@ tasks:
     desc: creates an organization against a running local instance of the server - see the CLI help commands for other variables
     aliases: [createorg]
     cmds:
-      - go run main.go org create -n your_new_org -d "my new org again"
+      - go run main.go org create -n meowmeow -d "my meow org"
+
+  orgsetting:get:
+    desc: gets the org setting
+    aliases: [getorgsetting]
+    cmds:
+      - go run main.go organization-setting get
 
   user:verify:
     desc: a task to register a user, parse out the token response, and submit it to the verify endpoint
@@ -63,6 +69,9 @@ tasks:
     cmds:
       - task: verifyuser
       - task: login
+      - task: createorg
+      - sleep 2
+      - task: getorgsetting
 
   user:all:another:
     desc: a task to register, verify, and login another user

@@ -10,6 +10,7 @@ type Listener func(Event) error
 type listenerItem struct {
 	listener Listener
 	priority Priority
+	client   interface{}
 }
 
 // ListenerOption is a function type that configures listener behavior
@@ -19,5 +20,12 @@ type ListenerOption func(*listenerItem)
 func WithPriority(priority Priority) ListenerOption {
 	return func(item *listenerItem) {
 		item.priority = priority
+	}
+}
+
+// WithClient sets the client of a listener
+func WithListenerClient(client interface{}) ListenerOption {
+	return func(item *listenerItem) {
+		item.client = client
 	}
 }
