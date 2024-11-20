@@ -11,7 +11,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/pkg/middleware/transaction"
+	"github.com/theopenlane/core/internal/ent/privacy/utils"
 )
 
 // CheckOrgAccess checks if the authenticated user has access to the organization
@@ -34,7 +34,7 @@ func CheckOrgAccess(ctx context.Context, relation string) error {
 		ObjectID:    au.OrganizationID,
 	}
 
-	access, err := transaction.FromContext(ctx).Authz.CheckOrgAccess(ctx, ac)
+	access, err := utils.AuthzClientFromContext(ctx).CheckOrgAccess(ctx, ac)
 	if err != nil {
 		return err
 	}
@@ -170,7 +170,7 @@ func CanCreateObjectsInOrg() privacy.MutationRuleFunc {
 			Relation:    relation,
 		}
 
-		access, err := generated.FromContext(ctx).Authz.CheckOrgAccess(ctx, ac)
+		access, err := utils.AuthzClientFromContext(ctx).CheckOrgAccess(ctx, ac)
 		if err != nil {
 			return privacy.Skipf("unable to check access, %s", err.Error())
 		}

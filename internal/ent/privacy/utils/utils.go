@@ -1,7 +1,13 @@
 package utils
 
 import (
+	"context"
+
+	"github.com/theopenlane/iam/fgax"
+
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/pkg/middleware/transaction"
 )
 
 // NewMutationPolicyWithoutNil is creating a new slice of `privacy.MutationPolicy` by
@@ -16,4 +22,19 @@ func NewMutationPolicyWithoutNil(source privacy.MutationPolicy) privacy.Mutation
 	}
 
 	return newSlice
+}
+
+// AuthzClientFromContext returns the authz client from the context if it exists
+func AuthzClientFromContext(ctx context.Context) *fgax.Client {
+	client := generated.FromContext(ctx)
+	if client != nil {
+		return &client.Authz
+	}
+
+	tx := transaction.FromContext(ctx)
+	if tx != nil {
+		return &tx.Authz
+	}
+
+	return nil
 }

@@ -502,9 +502,7 @@ func (h *Handler) getOrgByID(ctx context.Context, id string) (*ent.Organization,
 
 // getOrgSettingByOrgID returns the organization settings from an organization ID and context
 func (h *Handler) getOrgSettingByOrgID(ctx context.Context, orgID string) (*ent.OrganizationSetting, error) {
-	orgGetCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
-	org, err := h.getOrgByID(orgGetCtx, orgID)
+	org, err := h.getOrgByID(ctx, orgID)
 	if err != nil {
 		log.Error().Err(err).Msg("error retrieving organization")
 

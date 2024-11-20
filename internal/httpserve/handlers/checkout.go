@@ -26,7 +26,7 @@ func (h *Handler) CheckoutSessionHandler(ctx echo.Context) error {
 
 	settings, err := h.getOrgSettingByOrgID(reqCtx, orgID)
 	if err != nil {
-		log.Error().Err(err).Msg("unable to get organization settings by org id")
+		log.Error().Err(err).Str("organization_id", orgID).Msg("unable to get organization settings by org id")
 
 		return h.BadRequest(ctx, err)
 	}

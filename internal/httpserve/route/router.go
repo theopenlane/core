@@ -201,8 +201,13 @@ func RegisterRoutes(router *Router) error {
 		registerAccountRolesHandler,
 		registerAccountRolesOrganizationHandler,
 		registerAppleMerchantHandler,
-		registerCheckoutSessionHandler,
-		registerCheckoutSuccessHandler,
+	}
+
+	// add the checkout handlers if the entitlements are enabled
+	if router.Handler.Entitlements != nil {
+		routeHandlers = append(routeHandlers,
+			registerCheckoutSessionHandler,
+			registerCheckoutSuccessHandler)
 	}
 
 	for _, route := range routeHandlers {

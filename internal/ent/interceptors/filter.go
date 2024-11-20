@@ -9,9 +9,9 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/privacy/utils"
 )
 
 // FilterListQuery filters any list query to only include the objects that the user has access to
@@ -54,7 +54,7 @@ func GetAuthorizedObjectIDs(ctx context.Context, objectType string) ([]string, e
 		ObjectType:  strings.ToLower(objectType),
 	}
 
-	resp, err := generated.FromContext(ctx).Authz.ListObjectsRequest(ctx, req)
+	resp, err := utils.AuthzClientFromContext(ctx).ListObjectsRequest(ctx, req)
 	if err != nil {
 		return []string{}, nil
 	}

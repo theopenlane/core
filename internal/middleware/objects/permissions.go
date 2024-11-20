@@ -8,7 +8,7 @@ import (
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/iam/fgax"
 
-	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/objects"
 )
 
@@ -35,7 +35,7 @@ func AddFilePermissions(ctx context.Context) error {
 				Relation:    "parent", // this will always be parent in an object owned permission setup
 			})
 
-			if _, err := generated.FromContext(ctx).Authz.WriteTupleKeys(ctx, []fgax.TupleKey{req}, nil); err != nil {
+			if _, err := utils.AuthzClientFromContext(ctx).WriteTupleKeys(ctx, []fgax.TupleKey{req}, nil); err != nil {
 				return err
 			}
 

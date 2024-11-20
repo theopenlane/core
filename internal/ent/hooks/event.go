@@ -101,11 +101,19 @@ func RegisterListeners(pool *soiree.EventPool) {
 	}
 }
 
-// handleCustomerCreate handles the creation of a customer in Stripe
+// handleCustomerCreate handles the creation of a customer in Stripe when an OrganizationSetting is created or updated
 func handleCustomerCreate(event soiree.Event) error {
+	client := event.Client().(*entgen.Client)
+
+	if client.EntitlementManager == nil {
+		log.Info().Msg("EntitlementManager not found on client, skipping customer creation")
+
+		return nil
+	}
+
 	props := event.Properties()
 	// TODO: add funcs for default unmarshalling of props and send all props to stripe
-	orgsettingID, exists := props["ID"]
+	orgSettingID, exists := props["ID"]
 	if !exists {
 		log.Info().Msg("organizationSetting ID not found in event properties")
 		return nil
@@ -116,54 +124,18 @@ func handleCustomerCreate(event soiree.Event) error {
 	if exists && stripeID != "" {
 		stripes := stripeID.(string)
 
-		stripecustomer, err := event.Client().(*entgen.Client).EntitlementManager.Client.Customers.Get(stripes, nil)
+		stripeCustomer, err := client.EntitlementManager.Client.Customers.Get(stripes, nil)
 		if err != nil {
 			log.Err(err).Msg("Failed to retrieve Stripe customer by ID")
 			return err
 		}
 
-		billingEmail, exists := props["billing_email"]
-		if exists && billingEmail != "" {
-			email := billingEmail.(string)
-			if stripecustomer.Email != email {
-				_, err := event.Client().(*entgen.Client).EntitlementManager.Client.Customers.Update(stripes, &stripe.CustomerParams{
-					Email: &email,
-				})
-				if err != nil {
-					log.Err(err).Msg("failed to update Stripe customer email")
-					return err
-				}
-			}
-		}
+		// check for updates to billing information and update the Stripe customer if necessary
+		if params, hasUpdate := checkForBillingUpdate(props, stripeCustomer); hasUpdate {
+			if _, err := client.EntitlementManager.Client.Customers.Update(stripes, params); err != nil {
+				log.Err(err).Interface("params", params).Msg("failed to update Stripe customer with new billing information")
 
-		billingPhone, exists := props["billing_phone"]
-		if exists && billingPhone != "" {
-			phone := billingPhone.(string)
-			if stripecustomer.Phone != phone {
-				_, err := event.Client().(*entgen.Client).EntitlementManager.Client.Customers.Update(stripes, &stripe.CustomerParams{
-					Phone: &phone,
-				})
-				if err != nil {
-					log.Err(err).Msg("failed to update Stripe customer phone")
-					return err
-				}
-			}
-		}
-
-		// TODO: split out address fields in ent schema
-		billingAddress, exists := props["billing_address"]
-		if exists && billingAddress != "" {
-			address := billingAddress.(string)
-			if stripecustomer.Address.Line1 != address {
-				_, err := event.Client().(*entgen.Client).EntitlementManager.Client.Customers.Update(stripes, &stripe.CustomerParams{
-					Address: &stripe.AddressParams{
-						Line1: &address,
-					},
-				})
-				if err != nil {
-					log.Err(err).Msg("failed to update Stripe customer address")
-					return err
-				}
+				return err
 			}
 		}
 	}
@@ -172,47 +144,40 @@ func handleCustomerCreate(event soiree.Event) error {
 	if exists && billingEmail != "" {
 		email := billingEmail.(string)
 
-		i := event.Client().(*entgen.Client).EntitlementManager.Client.Customers.List(&stripe.CustomerListParams{Email: &email})
+		i := client.EntitlementManager.Client.Customers.List(&stripe.CustomerListParams{Email: &email})
 
-		if !i.Next() {
-			customer, err := event.Client().(*entgen.Client).EntitlementManager.CreateCustomer(email)
+		var customerID string
+
+		if i.Next() {
+			customerID = i.Customer().ID
+		} else {
+			// if there is no customer with the email, create one
+			customer, err := client.EntitlementManager.CreateCustomer(email)
 			if err != nil {
 				log.Err(err).Msg("Failed to create Stripe customer")
 				return err
 			}
 
+			customerID = customer.ID
+
 			log.Debug().Msgf("Created Stripe customer with ID: %s", customer.ID)
 
-			if err := updateOrganizationSettingWithCustomerID(event.Context(), orgsettingID.(string), customer.ID, event.Client()); err != nil {
+			if err := updateOrganizationSettingWithCustomerID(event.Context(), orgSettingID.(string), customer.ID, event.Client()); err != nil {
 				log.Err(err).Msg("Failed to update OrganizationSetting with Stripe customer ID")
 				return err
 			}
 
 			log.Debug().Msgf("Updated OrganizationSetting with Stripe customer ID: %s", customer.ID)
-
-			subs, err := event.Client().(*entgen.Client).EntitlementManager.ListOrCreateSubscriptions(customer.ID)
-			if err != nil {
-				log.Err(err).Msg("failed to list or create Stripe subscriptions")
-				return err
-			}
-
-			checkout, err := event.Client().(*entgen.Client).EntitlementManager.CreateBillingPortalUpdateSession(subs.ID, customer.ID)
-			if err != nil {
-				log.Err(err).Msg("failed to create billing portal update session")
-				return err
-			}
-
-			log.Debug().Msgf("Created billing portal update session with URL %s", checkout.URL)
 		}
 
 		// TODO create ent db records / corresponding feature / plan records
-		subs, err := event.Client().(*entgen.Client).EntitlementManager.ListOrCreateSubscriptions(i.Customer().ID)
+		subs, err := client.EntitlementManager.ListOrCreateSubscriptions(customerID)
 		if err != nil {
 			log.Err(err).Msg("failed to list or create Stripe subscriptions")
 			return err
 		}
 
-		checkout, err := event.Client().(*entgen.Client).EntitlementManager.CreateBillingPortalUpdateSession(subs.ID, i.Customer().ID)
+		checkout, err := client.EntitlementManager.CreateBillingPortalUpdateSession(subs.ID, customerID)
 		if err != nil {
 			log.Err(err).Msg("failed to create billing portal update session")
 			return err
@@ -220,7 +185,7 @@ func handleCustomerCreate(event soiree.Event) error {
 
 		log.Debug().Msgf("Created billing portal update session with URL %s", checkout.URL)
 
-		if err := updateOrganizationSettingWithCustomerID(event.Context(), orgsettingID.(string), i.Customer().ID, event.Client()); err != nil {
+		if err := updateOrganizationSettingWithCustomerID(event.Context(), orgSettingID.(string), i.Customer().ID, event.Client()); err != nil {
 			log.Err(err).Msg("Failed to update OrganizationSetting with Stripe customer ID")
 			return err
 		}
@@ -240,4 +205,42 @@ func updateOrganizationSettingWithCustomerID(ctx context.Context, orgsettingID, 
 	}
 
 	return nil
+}
+
+// checkForBillingUpdate checks for updates to billing information in the properties and returns a stripe.CustomerParams object with the updated information
+// and a boolean indicating whether there are updates
+func checkForBillingUpdate(props map[string]interface{}, stripeCustomer *stripe.Customer) (params *stripe.CustomerParams, hasUpdate bool) {
+	params = &stripe.CustomerParams{}
+
+	billingEmail, exists := props["billing_email"]
+	if exists && billingEmail != "" {
+		email := billingEmail.(string)
+		if stripeCustomer.Email != email {
+			params.Email = &email
+			hasUpdate = true
+		}
+	}
+
+	billingPhone, exists := props["billing_phone"]
+	if exists && billingPhone != "" {
+		phone := billingPhone.(string)
+		if stripeCustomer.Phone != phone {
+			params.Phone = &phone
+			hasUpdate = true
+		}
+	}
+
+	// TODO: split out address fields in ent schema
+	billingAddress, exists := props["billing_address"]
+	if exists && billingAddress != "" {
+		address := billingAddress.(string)
+		if stripeCustomer.Address.Line1 != address {
+			params.Address = &stripe.AddressParams{
+				Line1: &address,
+			}
+			hasUpdate = true
+		}
+	}
+
+	return
 }

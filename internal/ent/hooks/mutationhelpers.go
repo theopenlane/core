@@ -12,7 +12,7 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
-	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/privacy/utils"
 )
 
 // getTuplesToAdd gets the tuples that need to be added to the authz service based on the edges that were added
@@ -212,7 +212,7 @@ func addTokenEditPermissions(ctx context.Context, oID string, objectType string)
 	log.Debug().Interface("request", req).
 		Msg("creating edit tuples for api token")
 
-	if _, err := generated.FromContext(ctx).Authz.WriteTupleKeys(ctx, []fgax.TupleKey{fgax.GetTupleKey(req)}, nil); err != nil {
+	if _, err := utils.AuthzClientFromContext(ctx).WriteTupleKeys(ctx, []fgax.TupleKey{fgax.GetTupleKey(req)}, nil); err != nil {
 		log.Error().Err(err).Msg("failed to create relationship tuple")
 
 		return ErrInternalServerError
