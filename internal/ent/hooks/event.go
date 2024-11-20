@@ -185,12 +185,12 @@ func handleCustomerCreate(event soiree.Event) error {
 
 		log.Debug().Msgf("Created billing portal update session with URL %s", checkout.URL)
 
-		if err := updateOrganizationSettingWithCustomerID(event.Context(), orgSettingID.(string), i.Customer().ID, event.Client()); err != nil {
+		if err := updateOrganizationSettingWithCustomerID(event.Context(), orgSettingID.(string), customerID, event.Client()); err != nil {
 			log.Err(err).Msg("Failed to update OrganizationSetting with Stripe customer ID")
 			return err
 		}
 
-		log.Debug().Msgf("Updated OrganizationSetting with Stripe customer ID: %s", i.Customer().ID)
+		log.Debug().Msgf("Updated OrganizationSetting with Stripe customer ID: %s", customerID)
 	}
 
 	return nil
