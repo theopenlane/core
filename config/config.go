@@ -2,6 +2,8 @@ package config
 
 import (
 	"crypto/tls"
+	"os"
+
 	"strings"
 	"time"
 
@@ -10,17 +12,16 @@ import (
 	"github.com/knadh/koanf/providers/file"
 	"github.com/knadh/koanf/v2"
 	"github.com/mcuadros/go-defaults"
+	"github.com/rs/zerolog/log"
+
 	"github.com/theopenlane/beacon/otelx"
 	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/fgax"
-	"github.com/theopenlane/riverboat/pkg/riverqueue"
-
-	"github.com/theopenlane/iam/totp"
-
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/iam/tokens"
-
+	"github.com/theopenlane/iam/totp"
+	"github.com/theopenlane/riverboat/pkg/riverqueue"
 	"github.com/theopenlane/utils/cache"
 
 	"github.com/theopenlane/core/internal/ent/entconfig"
@@ -33,10 +34,6 @@ import (
 	"github.com/theopenlane/core/pkg/middleware/redirect"
 	"github.com/theopenlane/core/pkg/middleware/secure"
 	"github.com/theopenlane/core/pkg/objects"
-)
-
-var (
-	DefaultConfigFilePath = "./config/.config.yaml"
 )
 
 // Config contains the configuration for the core server
@@ -141,6 +138,10 @@ type PondPool struct {
 	MaxWorkers int `json:"maxWorkers" koanf:"maxWorkers" default:"100"`
 }
 
+var (
+	DefaultConfigFilePath = "./config/.config.yaml"
+)
+
 // Load is responsible for loading the configuration from a YAML file and environment variables.
 // If the `cfgFile` is empty or nil, it sets the default configuration file path.
 // Config settings are taken from default values, then from the config file, and finally from environment
@@ -152,17 +153,26 @@ func Load(cfgFile *string) (*Config, error) {
 		*cfgFile = DefaultConfigFilePath
 	}
 
+	if _, err := os.Stat(*cfgFile); err != nil {
+		if os.IsNotExist(err) {
+			log.Error().Err(err).Msg("config file not found")
+			return nil, err
+		}
+	}
+
 	// load defaults
 	conf := &Config{}
 	defaults.SetDefaults(conf)
 
 	// parse yaml config
 	if err := k.Load(file.Provider(*cfgFile), yaml.Parser()); err != nil {
+		log.Error().Err(err).Msg("failed to load config file - ensure the .config.yaml is present and valid")
 		panic(err)
 	}
 
 	// unmarshal the config
 	if err := k.Unmarshal("", &conf); err != nil {
+		log.Error().Err(err).Msg("failed to unmarshal config file")
 		panic(err)
 	}
 
@@ -176,11 +186,13 @@ func Load(cfgFile *string) (*Config, error) {
 
 		return key, v
 	}), nil); err != nil {
+		log.Error().Err(err).Msg("failed to load env vars")
 		panic(err)
 	}
 
 	// unmarshal the env vars
 	if err := k.Unmarshal("", &conf); err != nil {
+		log.Error().Err(err).Msg("failed to unmarshal env vars")
 		panic(err)
 	}
 
