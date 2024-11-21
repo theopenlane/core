@@ -234,7 +234,7 @@ tests:
         object: group:cat-lovers
         assertions:
           admin: true
-          member: false
+          member: true
           can_delete: true
           can_edit: true
           can_view: true
@@ -273,6 +273,7 @@ tests:
           admin:
             - group:cat-lovers
           member:
+            - group:cat-lovers
       - user: user:ulid-of-member
         type: group
         assertions:
