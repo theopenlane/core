@@ -54,14 +54,14 @@ func HookObjectOwnedTuples(parents []string, skipUser bool) ent.Hook {
 				addTuples = append(addTuples, userTuple)
 			}
 
-			additionalAddTuples, err := getTuplesParentToAdd(ctx, m, objectID, parents)
+			additionalAddTuples, err := createParentTuples(ctx, m, objectID, parents)
 			if err != nil {
 				return nil, err
 			}
 
 			addTuples = append(addTuples, additionalAddTuples...)
 
-			removeTuples, err := getParentTuplesToRemove(ctx, m, objectID, parents)
+			removeTuples, err := removeParentTuples(ctx, m, objectID, parents)
 			if err != nil {
 				return nil, err
 			}
@@ -97,7 +97,7 @@ func HookEditorTuples(objects map[string]string) ent.Hook {
 				return nil, err
 			}
 
-			addTuples, err := createEditorTuple(ctx, m, objectID, objects)
+			addTuples, err := createEditorTuples(ctx, m, objectID, objects)
 			if err != nil {
 				return nil, err
 			}
@@ -138,7 +138,7 @@ func HookBlockedTuples(objects map[string]string) ent.Hook {
 				return nil, err
 			}
 
-			addTuples, err := createBlockedTuple(ctx, m, objectID, objects)
+			addTuples, err := createBlockedTuples(ctx, m, objectID, objects)
 			if err != nil {
 				return nil, err
 			}

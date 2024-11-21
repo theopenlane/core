@@ -43,6 +43,10 @@ tuples:
   - user: user:ulid-other-3
     relation: member
     object: organization:openlane
+  # setup an auditor for the first program
+  - user: user:ulid-auditor
+    relation: auditor
+    object: program:program-1
 tests:
   - name: organization
     description: test organization relationships
@@ -285,161 +289,6 @@ tests:
         assertions:
           admin:
           member:
-  - name: subscription tier
-    description: subscription tiers are associated to organizations, and members are part of that organization
-    tuples:
-      # setup organization with pro tier
-      - user: organization:openlane
-        relation: subscriber
-        object: subscription_tier:pro
-      # setup organization with free tier
-      - user: organization:startup
-        relation: subscriber
-        object: subscription_tier:free
-    check:
-      - user: organization:openlane
-        object: subscription_tier:pro
-        assertions:
-          subscriber: true
-          subscriber_member: false
-      - user: organization:openlane
-        object: subscription_tier:free
-        assertions:
-          subscriber: false
-          subscriber_member: false
-      - user: organization:startup
-        object: subscription_tier:free
-        assertions:
-          subscriber: true
-          subscriber_member: false
-      - user: user:ulid-of-member
-        object: subscription_tier:pro
-        assertions:
-          subscriber: false
-          subscriber_member: true
-      - user: user:ulid-of-owner
-        object: subscription_tier:pro
-        assertions:
-          subscriber: false
-          subscriber_member: true
-      - user: user:ulid-of-admin
-        object: subscription_tier:pro
-        assertions:
-          subscriber: false
-          subscriber_member: true
-    list_objects:
-      - user: user:ulid-of-owner
-        type: subscription_tier
-        assertions:
-          subscriber_member:
-            - subscription_tier:pro
-          subscriber:
-      - user: user:ulid-of-admin
-        type: subscription_tier
-        assertions:
-          subscriber_member:
-            - subscription_tier:pro
-          subscriber:
-      - user: user:ulid-of-member
-        type: subscription_tier
-        assertions:
-          subscriber_member:
-            - subscription_tier:pro
-          subscriber:
-      - user: organization:openlane
-        type: subscription_tier
-        assertions:
-          subscriber_member:
-          subscriber:
-            - subscription_tier:pro
-      - user: organization:startup
-        type: subscription_tier
-        assertions:
-          subscriber_member:
-          subscriber:
-            - subscription_tier:free
-      - user: organization:none
-        type: subscription_tier
-        assertions:
-          subscriber_member:
-          subscriber:
-  - name: features
-    description: features tiers are associated to subscription tiers, and users can access features based on their subscription tier of their organization
-    tuples:
-      # setup organization with pro tier
-      - user: organization:openlane
-        relation: subscriber
-        object: subscription_tier:pro
-      # setup organization with free tier
-      - user: organization:startup
-        relation: subscriber
-        object: subscription_tier:free
-      # setup org member
-      - user: user:ulid-of-startup-member
-        relation: member
-        object: organization:startup
-      - user: subscription_tier:free
-        relation: associated_subscription_tier
-        object: feature:asset-management
-      - user: subscription_tier:pro
-        relation: associated_subscription_tier
-        object: feature:sso
-    check:
-      - user: user:ulid-of-startup-member
-        object: feature:asset-management
-        assertions:
-          associated_subscription_tier: false
-          access: true
-      - user: user:ulid-of-admin
-        object: feature:sso
-        assertions:
-          associated_subscription_tier: false
-          access: true
-      - user: user:ulid-of-owner
-        object: feature:sso
-        assertions:
-          associated_subscription_tier: false
-          access: true
-      - user: user:ulid-of-member
-        object: feature:sso
-        assertions:
-          associated_subscription_tier: false
-          access: true
-      - user: subscription_tier:pro
-        object: feature:sso
-        assertions:
-          associated_subscription_tier: true
-          access: false
-      - user: subscription_tier:free
-        object: feature:asset-management
-        assertions:
-          associated_subscription_tier: true
-          access: false
-    list_objects:
-      - user: user:ulid-of-owner
-        type: feature
-        assertions:
-          associated_subscription_tier:
-          access:
-            - feature:sso
-      - user: user:ulid-of-startup-member
-        type: feature
-        assertions:
-          associated_subscription_tier:
-          access:
-            - feature:asset-management
-      - user: subscription_tier:free
-        type: feature
-        assertions:
-          associated_subscription_tier:
-            - feature:asset-management
-          access:
-      - user: subscription_tier:pro
-        type: feature
-        assertions:
-          associated_subscription_tier:
-            - feature:sso
-          access:
   - name: files
     description: files can be associated to many objects and users can access files based on their permissions
     tuples:
@@ -650,3 +499,200 @@ tests:
           can_view: true
           can_edit: true
           can_delete: true
+  - name: procedures
+    description: procedures are associated with an organization and by default all user in the organization can view them. edit access is provided by groups.
+    tuples:
+      # setup users and groups
+      - user: user:ulid-group-editor
+        relation: member
+        object: organization:openlane
+      - user: organization:openlane
+        relation: parent
+        object: group:group-editor
+      - user: user:ulid-group-editor
+        relation: member
+        object: group:group-editor
+
+      - user: user:ulid-group-blocked
+        relation: member
+        object: organization:openlane
+      - user: organization:openlane
+        relation: parent
+        object: group:group-blocked
+      - user: user:ulid-group-blocked
+        relation: member
+        object: group:group-blocked
+
+      # setup procedure
+      - user: user:ulid-admin
+        relation: admin
+        object: procedure:procedure-1
+      - user: organization:openlane
+        relation: parent
+        object: procedure:procedure-1
+
+      # setup group permissions for procedure
+      - user: group:group-editor#member
+        relation: editor
+        object: procedure:procedure-1
+      - user: group:group-blocked#member
+        relation: blocked
+        object: procedure:procedure-1
+
+      # setup view permissions for auditors
+      - user: program:program-1#auditor
+        relation: viewer
+        object: procedure:procedure-1
+    check:
+      - user: user:ulid-admin # admin of the procedure should have all permissions
+        object: procedure:procedure-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:ulid-group-editor # editor of the procedure should have edit permissions
+        object: procedure:procedure-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:ulid-group-2 # blocked user of the procedure should have no permissions
+        object: procedure:procedure-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-auditor # auditor of the program should have view permissions
+        object: procedure:procedure-1
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+  - name: internal policies
+    description: policies are associated with an organization and by default all user in the organization can view them. edit access is provided by groups.
+    tuples:
+      # setup users and groups
+      - user: user:ulid-group-editor
+        relation: member
+        object: organization:openlane
+      - user: organization:openlane
+        relation: parent
+        object: group:group-editor
+      - user: user:ulid-group-editor
+        relation: member
+        object: group:group-editor
+
+      - user: user:ulid-group-blocked
+        relation: member
+        object: organization:openlane
+      - user: organization:openlane
+        relation: parent
+        object: group:group-blocked
+      - user: user:ulid-group-blocked
+        relation: member
+        object: group:group-blocked
+
+      # setup internalpolicy
+      - user: user:ulid-admin
+        relation: admin
+        object: internalpolicy:internalpolicy-1
+      - user: organization:openlane
+        relation: parent
+        object: internalpolicy:internalpolicy-1
+
+      # setup group permissions for internalpolicy
+      - user: group:group-editor#member
+        relation: editor
+        object: internalpolicy:internalpolicy-1
+      - user: group:group-blocked#member
+        relation: blocked
+        object: internalpolicy:internalpolicy-1
+
+      # setup view permissions for auditors
+      - user: program:program-1#auditor
+        relation: viewer
+        object: internalpolicy:internalpolicy-1
+    check:
+      - user: user:ulid-admin # admin of the internalpolicy should have all permissions
+        object: internalpolicy:internalpolicy-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:ulid-group-editor # editor of the internalpolicy should have edit permissions
+        object: internalpolicy:internalpolicy-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:ulid-group-2 # blocked user of the internalpolicy should have no permissions
+        object: internalpolicy:internalpolicy-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-auditor # auditor of the program should have view permissions
+        object: internalpolicy:internalpolicy-1
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+  - name: programs
+    description: programs are associated with an organization
+    tuples:
+      # setup users and groups
+      - user: user:ulid-group-editor
+        relation: member
+        object: organization:openlane
+      - user: organization:openlane
+        relation: parent
+        object: group:group-editor
+      - user: user:ulid-group-editor
+        relation: member
+        object: group:group-editor
+
+      - user: user:ulid-group-blocked
+        relation: member
+        object: organization:openlane
+      - user: organization:openlane
+        relation: parent
+        object: group:group-blocked
+      - user: user:ulid-group-blocked
+        relation: member
+        object: group:group-blocked
+
+      - user: user:ulid-admin
+        relation: admin
+        object: organization:openlane
+
+      # setup programs
+      - user: user:ulid-admin
+        relation: admin
+        object: program:program-1
+
+      # setup group permissions for program
+      - user: group:group-editor#member
+        relation: editor
+        object: program:program-1
+      - user: group:group-blocked#member
+        relation: blocked
+        object: program:program-1
+    check:
+      - user: user:ulid-admin # admin of the program should have all permissions
+        object: program:program-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:ulid-group-editor # editor of the program should have edit permissions
+        object: program:program-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: false
+      - user: user:ulid-group-2 # blocked user of the program should have no permissions
+        object: program:program-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false

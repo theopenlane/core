@@ -41,7 +41,7 @@ type organization
     define audit_log_viewer: [user] or owner or audit_log_viewer from parent
     ## allow members to invite other members
     define can_invite_members: [user] or member or can_edit or can_invite_members from parent
-    ## onnly allow users with edit access to the org to invite other admins
+    ## only allow users with edit access to the org to invite other admins
     define can_invite_admins: [user] or can_edit or can_invite_admins from parent
     # additional relations
     define user_in_context: [user]
@@ -57,19 +57,10 @@ type group
     define parent: [organization]
     # main permission sets based on roles
     define can_delete: [service] or admin or can_edit or can_delete from parent
-    define can_edit: [service] or admin or owner from parent or (can_edit from parent but not member from blocked)
-    define can_view: [service] or member or admin or (can_view from parent but not member from blocked)
+    define can_edit: [service] or admin or owner from parent or can_edit from parent
+    define can_view: [service] or member or admin or can_view from parent
     # additional fine-grained permissions
     define audit_log_viewer: [user] or audit_log_viewer from parent
-    define blocked: [user, group]
-type subscription_tier
-  relations
-    define subscriber: [organization]
-    define subscriber_member: member from subscriber
-type feature
-  relations
-    define associated_subscription_tier: [subscription_tier]
-    define access: [user, service] or subscriber_member from associated_subscription_tier
 type file
   relations
     define can_view: [user] or can_delete or can_edit or can_view from parent
@@ -90,16 +81,16 @@ type program
     define auditor: [user]
     # main permission sets based on roles
     define can_delete: [service] or admin or owner from parent
-    define can_edit: [service] or admin or owner from parent or (member from editor  but not member from blocked)
-    define can_view: [service] or member or admin or owner from parent or (member from editor but not member from blocked) or (member from viewer but not member from blocked)
+    define can_edit: [service] or admin or owner from parent or (editor but not blocked)
+    define can_view: [service] or member or admin or owner from parent or ((editor or viewer) but not blocked)
     # parent relation, only the organization owner will have access to the program by default
     define parent: [organization]
     # additional fine-grained permissions
     # allow a group to be assigned to add edit permissions for a set of users
-    define editor: [group]
-    define viewer: [group]
+    define editor: [group#member]
+    define viewer: [group#member]
     # allow users or groups to be blocked from view + edit access
-    define blocked: [user, group]
+    define blocked: [user, group#member]
     ## allow owner and assigned users to view audit logs
     define audit_log_viewer: [user] or admin
     ## allow members to invite other members
@@ -131,69 +122,75 @@ type control_objective
 # groups can be used to give edit (or delete) access to users
 type internalpolicy
   relations
-    define can_view: ([user] and member from parent) or admin or (can_view from parent but not member from blocked)
-    define can_edit: ([user] and member from parent) or admin or (member from editor but not member from blocked)
-    define can_delete: ([user] and member from parent) or admin or can_delete from parent or (member from editor but not member from blocked)
+    define can_view: ([user] and member from parent) or admin or ((can_view from parent or viewer) but not blocked)
+    define can_edit: ([user] and member from parent) or admin or (editor but not blocked)
+    define can_delete: ([user] and member from parent) or admin or ((can_delete from parent or editor) but not blocked)
     # the parent of the policy will be the organization, not all permissions will be inherited
     define parent: [organization]
     # allow a user or service to be assigned to add edit permissions
     define admin: [user,service]
     # allow a group to be assigned to add edit permissions for a set of users
-    define editor: [group]
+    define editor: [group#member]
+    # allow for auditors assigned to the program to view the policy
+    define viewer: [program#auditor]
     # allow users or groups to be blocked from view + edit access
-    define blocked: [user, group]
+    define blocked: [user, group#member]
 # procedures are always assigned to an organization and by default all org members can view
-# groups can be used to exclude users from being able to view a internalpolicy
+# groups can be used to exclude users from being able to view an internal policy
 # groups can be used to give edit (or delete) access to users
 type procedure
   relations
-    define can_view: ([user] and member from parent) or admin or (can_view from parent but not member from blocked)
-    define can_edit: ([user] and member from parent) or admin or (member from editor but not member from blocked)
-    define can_delete: ([user] and member from parent) or admin or can_delete from parent or (member from editor but not member from blocked)
+    define can_view: ([user] and member from parent) or admin or ((can_view from parent or viewer) but not blocked)
+    define can_edit: ([user] and member from parent) or admin or (editor but not blocked)
+    define can_delete: ([user] and member from parent) or admin or ((can_delete from parent or editor) but not blocked)
     # the parent of the procedure will be the organization, not all permissions will be inherited
     define parent: [organization]
     # allow a user or service to be assigned to add edit permissions
     define admin: [user,service]
     # allow a group to be assigned to add edit permissions for a set of users
-    define editor: [group]
+    define editor: [group#member]
+      # allow for auditors assigned to the program to view the procedure
+    define viewer: [program#auditor, group#member]
     # allow users or groups to be blocked from view + edit access
-    define blocked: [group]
+    define blocked: [user, group#member]
 # templates (this encompasses things like questionnaires or jsonschemas) should be able to be
 # created by any user in the parent (organization) with edit access
 # all users in the organization should have view access, unless they are excluded (by a user or group)
 # editors will be assigned by groups and can be excluded by users or groups
 type template
   relations
-    define can_view: [user] or (can_view from parent but not blocked) or (member from viewer but not member from blocked)
-    define can_edit: [user] or (member from editor but not member from blocked)
-    define can_delete: [user] or can_delete from parent or (member from editor but not member from blocked)
+    define can_view: [user] or ((can_view from parent or viewer) but not blocked)
+    define can_edit: [user] or (editor but not blocked)
+    define can_delete: [user] or ((can_delete from parent or editor) but not blocked)
     define parent: [organization]
-    # allow a group to be assigned to add edit permissions for a set of users
-    define editor: [group]
-    define viewer: [group]
+    # allow a group to be assigned to add edit/view permissions for a set of users
+    define editor: [group#member]
+    define viewer: [group#member]
     # allow users or groups to be blocked from view + edit access
-    define blocked: [user, group]
+    define blocked: [user, group#member]
 type documentdata
   relations
-    define can_view: [user] or (can_view from parent but not member from blocked)
-    define can_edit: [user] or can_edit from parent
-    define can_delete: [user] or can_delete from parent or (member from editor but not member from blocked)
+    define can_view: [user] or  ((can_view from parent or viewer) but not blocked)
+    define can_edit: [user] or ((can_edit from parent or editor) but not blocked)
+    define can_delete: [user] or ((can_delete from parent or editor) but not blocked)
     define parent: [template]
-    # allow a group to be assigned to add edit permissions for a set of users
-    define editor: [group]
+    # allow a group to be assigned to add edit/view permissions for a set of users
+    define editor: [group#member]
+    define viewer: [group#member]
     # allow users or groups to be blocked from view + edit access
-    define blocked: [user, group]
+    define blocked: [user, group#member]
 # contacts are always assigned to an organization and permissions are inherited from the organization
 # individual users can also be given permission to a contact but they must be a member of the organization
 type contact
   relations
-    define can_view: ([user] and member from parent) or can_view from parent
-    define can_edit: ([user] and member from parent) or can_edit from parent or (member from editor but not member from blocked)
+    define can_view: ([user] and member from parent) or ((can_view from parent or viewer) but not blocked)
+    define can_edit: ([user] and member from parent) or ((can_edit from parent or editor) but not blocked)
     define can_delete: ([user] and member from parent) or can_delete from parent
     # allow a group to be assigned to add edit permissions for a set of users
-    define editor: [group]
+    define editor: [group#member]
+    define viewer: [group#member]
     # allow users or groups to be blocked from view + edit access
-    define blocked: [user, group]
+    define blocked: [user, group#member]
     define parent: [organization]
 # tasks can be created by any user and permissioned are assigned to the creator (assinger) and the assignee
 # tasks can also be associated with a parent object (like a control or a procedure) and inherit access from that object
