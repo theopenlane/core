@@ -11,8 +11,10 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
@@ -127,6 +129,20 @@ func (pc *ProcedureCreate) SetNillableMappingID(s *string) *ProcedureCreate {
 // SetTags sets the "tags" field.
 func (pc *ProcedureCreate) SetTags(s []string) *ProcedureCreate {
 	pc.mutation.SetTags(s)
+	return pc
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (pc *ProcedureCreate) SetOwnerID(s string) *ProcedureCreate {
+	pc.mutation.SetOwnerID(s)
+	return pc
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (pc *ProcedureCreate) SetNillableOwnerID(s *string) *ProcedureCreate {
+	if s != nil {
+		pc.SetOwnerID(*s)
+	}
 	return pc
 }
 
@@ -254,6 +270,11 @@ func (pc *ProcedureCreate) SetNillableID(s *string) *ProcedureCreate {
 	return pc
 }
 
+// SetOwner sets the "owner" edge to the Organization entity.
+func (pc *ProcedureCreate) SetOwner(o *Organization) *ProcedureCreate {
+	return pc.SetOwnerID(o.ID)
+}
+
 // AddControlIDs adds the "control" edge to the Control entity by IDs.
 func (pc *ProcedureCreate) AddControlIDs(ids ...string) *ProcedureCreate {
 	pc.mutation.AddControlIDs(ids...)
@@ -344,6 +365,36 @@ func (pc *ProcedureCreate) AddPrograms(p ...*Program) *ProcedureCreate {
 	return pc.AddProgramIDs(ids...)
 }
 
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (pc *ProcedureCreate) AddEditorIDs(ids ...string) *ProcedureCreate {
+	pc.mutation.AddEditorIDs(ids...)
+	return pc
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (pc *ProcedureCreate) AddEditors(g ...*Group) *ProcedureCreate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return pc.AddEditorIDs(ids...)
+}
+
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (pc *ProcedureCreate) AddBlockedGroupIDs(ids ...string) *ProcedureCreate {
+	pc.mutation.AddBlockedGroupIDs(ids...)
+	return pc
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (pc *ProcedureCreate) AddBlockedGroups(g ...*Group) *ProcedureCreate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return pc.AddBlockedGroupIDs(ids...)
+}
+
 // Mutation returns the ProcedureMutation object of the builder.
 func (pc *ProcedureCreate) Mutation() *ProcedureMutation {
 	return pc.mutation
@@ -421,8 +472,18 @@ func (pc *ProcedureCreate) check() error {
 	if _, ok := pc.mutation.MappingID(); !ok {
 		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "Procedure.mapping_id"`)}
 	}
+	if v, ok := pc.mutation.OwnerID(); ok {
+		if err := procedure.OwnerIDValidator(v); err != nil {
+			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Procedure.owner_id": %w`, err)}
+		}
+	}
 	if _, ok := pc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "Procedure.name"`)}
+	}
+	if v, ok := pc.mutation.Name(); ok {
+		if err := procedure.NameValidator(v); err != nil {
+			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Procedure.name": %w`, err)}
+		}
 	}
 	return nil
 }
@@ -528,6 +589,24 @@ func (pc *ProcedureCreate) createSpec() (*Procedure, *sqlgraph.CreateSpec) {
 		_spec.SetField(procedure.FieldDetails, field.TypeJSON, value)
 		_node.Details = value
 	}
+	if nodes := pc.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   procedure.OwnerTable,
+			Columns: []string{procedure.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pc.schemaConfig.Procedure
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.OwnerID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := pc.mutation.ControlIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -625,6 +704,40 @@ func (pc *ProcedureCreate) createSpec() (*Procedure, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = pc.schemaConfig.ProgramProcedures
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := pc.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   procedure.EditorsTable,
+			Columns: procedure.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pc.schemaConfig.ProcedureEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := pc.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   procedure.BlockedGroupsTable,
+			Columns: procedure.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pc.schemaConfig.ProcedureBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

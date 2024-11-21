@@ -54,14 +54,14 @@ func HookObjectOwnedTuples(parents []string, skipUser bool) ent.Hook {
 				addTuples = append(addTuples, userTuple)
 			}
 
-			additionalAddTuples, err := getTuplesToAdd(ctx, m, objectID, parents)
+			additionalAddTuples, err := getTuplesParentToAdd(ctx, m, objectID, parents)
 			if err != nil {
 				return nil, err
 			}
 
 			addTuples = append(addTuples, additionalAddTuples...)
 
-			removeTuples, err := getTuplesToRemove(ctx, m, objectID, parents)
+			removeTuples, err := getParentTuplesToRemove(ctx, m, objectID, parents)
 			if err != nil {
 				return nil, err
 			}
@@ -75,6 +75,88 @@ func HookObjectOwnedTuples(parents []string, skipUser bool) ent.Hook {
 
 			log.Debug().Interface("tuples", addTuples).Msg("added object permissions")
 			log.Debug().Interface("tuples", removeTuples).Msg("removed object permissions")
+
+			return retVal, err
+		},
+		)
+	}
+}
+
+// HookEditorTuples is a hook that adds editor tuples for the object being created
+// the objects input is a map of object id fields to the object type
+func HookEditorTuples(objects map[string]string) ent.Hook {
+	return func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			retVal, err := next.Mutate(ctx, m)
+			if err != nil {
+				return nil, err
+			}
+
+			objectID, err := getObjectIDFromEntValue(retVal)
+			if err != nil {
+				return nil, err
+			}
+
+			addTuples, err := createEditorTuple(ctx, m, objectID, objects)
+			if err != nil {
+				return nil, err
+			}
+
+			removeTuples, err := removeEditorTuples(ctx, m, objectID, objects)
+			if err != nil {
+				return nil, err
+			}
+
+			// write the tuples to the authz service
+			if len(addTuples) != 0 || len(removeTuples) != 0 {
+				if _, err := utils.AuthzClientFromContext(ctx).WriteTupleKeys(ctx, addTuples, removeTuples); err != nil {
+					return nil, err
+				}
+			}
+
+			log.Debug().Interface("tuples", addTuples).Msg("added editor permissions")
+			log.Debug().Interface("tuples", removeTuples).Msg("removed editor permissions")
+
+			return retVal, err
+		},
+		)
+	}
+}
+
+// HookBlockedTuples is a hook that adds blocked tuples for the object being created
+// the objects input is a map of object id fields to the object type
+func HookBlockedTuples(objects map[string]string) ent.Hook {
+	return func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			retVal, err := next.Mutate(ctx, m)
+			if err != nil {
+				return nil, err
+			}
+
+			objectID, err := getObjectIDFromEntValue(retVal)
+			if err != nil {
+				return nil, err
+			}
+
+			addTuples, err := createBlockedTuple(ctx, m, objectID, objects)
+			if err != nil {
+				return nil, err
+			}
+
+			removeTuples, err := removeBlockedTuples(ctx, m, objectID, objects)
+			if err != nil {
+				return nil, err
+			}
+
+			// write the tuples to the authz service
+			if len(addTuples) != 0 || len(removeTuples) != 0 {
+				if _, err := utils.AuthzClientFromContext(ctx).WriteTupleKeys(ctx, addTuples, removeTuples); err != nil {
+					return nil, err
+				}
+			}
+
+			log.Debug().Interface("tuples", addTuples).Msg("added blocked permissions")
+			log.Debug().Interface("tuples", removeTuples).Msg("removed blocked permissions")
 
 			return retVal, err
 		},

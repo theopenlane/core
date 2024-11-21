@@ -1,5 +1,7 @@
 model
   schema 1.1
+
+# user is a human with access to the system
 type user
   relations
     define _self: [user]
@@ -7,6 +9,7 @@ type user
     define can_edit: _self
     define can_delete: _self
 
+# service is not associated to a particular user, but instead to an organization
 type service
   relations
     define _self: [service]
@@ -14,12 +17,14 @@ type service
     define can_edit: _self
     define can_delete: _self
 
-type role
-  relations
-    define assignee: [user]
+# search access for the admin search
 type search
   relations
     define admin: [user]
+
+# organization is the highest object access
+# objects can inherit access from the organization
+# or define their own specific access
 type organization
   relations
     # main roles
@@ -40,18 +45,23 @@ type organization
     define can_invite_admins: [user] or can_edit or can_invite_admins from parent
     # additional relations
     define user_in_context: [user]
+# groups are a subset of an organization that can be used to define more fine-grained access to objects
+# users must be members of the organization to be members of a group
+# groups are all visible to all members of the organization, unless they are blocked
+# groups can only be edited by admins of the group or the parent organization owner
 type group
   relations
     # main roles
     define admin: [user] and member from parent
-    define member: [user] and member from parent
+    define member: ([user] and member from parent) or admin
     define parent: [organization]
     # main permission sets based on roles
     define can_delete: [service] or admin or can_edit or can_delete from parent
-    define can_edit: [service] or admin or can_edit from parent
-    define can_view: [service] or member or admin or can_view from parent
+    define can_edit: [service] or admin or owner from parent or (can_edit from parent but not member from blocked)
+    define can_view: [service] or member or admin or (can_view from parent but not member from blocked)
     # additional fine-grained permissions
     define audit_log_viewer: [user] or audit_log_viewer from parent
+    define blocked: [user, group]
 type subscription_tier
   relations
     define subscriber: [organization]
@@ -65,19 +75,31 @@ type file
     define can_view: [user] or can_delete or can_edit or can_view from parent
     define can_edit: [user] or can_delete or can_edit from parent
     define can_delete: [user] or can_delete from parent
-    define parent: [user, program, organization, control, procedure, group, template, documentdata, contact, policy]
+    define parent: [user, program, organization, control, procedure, group, template, documentdata, contact, internalpolicy]
+# programs are associated with an organization but do not inherit access from the organization with
+# the exception of the owner of the organization who will have access to all programs
+# the program creator will be made the admin of the program and all other access with be assigned directly
+# or via groups
 type program
   relations
     # main roles
-    define admin: [user] or owner from parent
-    define member: [user] or admin or owner from parent
+    define admin: ([user] or owner from parent) and member from parent
+    define member: ([user] or admin or owner from parent) and member from parent
+    # auditor role will not have access to everything in the program by default
+    # but can be assigned access to specific objects
+    define auditor: [user]
     # main permission sets based on roles
-    define can_delete: [service] or admin or can_edit or owner from parent
-    define can_edit: [service] or admin or owner from parent
-    define can_view: [service] or member or admin or can_edit or owner from parent
+    define can_delete: [service] or admin or owner from parent
+    define can_edit: [service] or admin or owner from parent or (member from editor  but not member from blocked)
+    define can_view: [service] or member or admin or owner from parent or (member from editor but not member from blocked) or (member from viewer but not member from blocked)
     # parent relation, only the organization owner will have access to the program by default
     define parent: [organization]
     # additional fine-grained permissions
+    # allow a group to be assigned to add edit permissions for a set of users
+    define editor: [group]
+    define viewer: [group]
+    # allow users or groups to be blocked from view + edit access
+    define blocked: [user, group]
     ## allow owner and assigned users to view audit logs
     define audit_log_viewer: [user] or admin
     ## allow members to invite other members
@@ -104,40 +126,81 @@ type control_objective
     define can_edit: [user] or can_edit from parent
     define can_delete: [user] or can_delete from parent
     define parent: [program]
-type policy
+# policies are always assigned to an organization and by default all org members can view
+# groups can be used to exclude users from being able to view a internalpolicy
+# groups can be used to give edit (or delete) access to users
+type internalpolicy
   relations
-    define can_view: [user] or can_view from parent
-    define can_edit: [user] or can_edit from parent
-    define can_delete: [user] or can_delete from parent
+    define can_view: ([user] and member from parent) or admin or (can_view from parent but not member from blocked)
+    define can_edit: ([user] and member from parent) or admin or (member from editor but not member from blocked)
+    define can_delete: ([user] and member from parent) or admin or can_delete from parent or (member from editor but not member from blocked)
+    # the parent of the policy will be the organization, not all permissions will be inherited
     define parent: [organization]
+    # allow a user or service to be assigned to add edit permissions
+    define admin: [user,service]
+    # allow a group to be assigned to add edit permissions for a set of users
+    define editor: [group]
+    # allow users or groups to be blocked from view + edit access
+    define blocked: [user, group]
+# procedures are always assigned to an organization and by default all org members can view
+# groups can be used to exclude users from being able to view a internalpolicy
+# groups can be used to give edit (or delete) access to users
 type procedure
   relations
-    define can_view: [user] or can_view from parent
-    define can_edit: [user] or can_edit from parent
-    define can_delete: [user] or can_delete from parent
+    define can_view: ([user] and member from parent) or admin or (can_view from parent but not member from blocked)
+    define can_edit: ([user] and member from parent) or admin or (member from editor but not member from blocked)
+    define can_delete: ([user] and member from parent) or admin or can_delete from parent or (member from editor but not member from blocked)
+    # the parent of the procedure will be the organization, not all permissions will be inherited
     define parent: [organization]
+    # allow a user or service to be assigned to add edit permissions
+    define admin: [user,service]
+    # allow a group to be assigned to add edit permissions for a set of users
+    define editor: [group]
+    # allow users or groups to be blocked from view + edit access
+    define blocked: [group]
+# templates (this encompasses things like questionnaires or jsonschemas) should be able to be
+# created by any user in the parent (organization) with edit access
+# all users in the organization should have view access, unless they are excluded (by a user or group)
+# editors will be assigned by groups and can be excluded by users or groups
 type template
   relations
-    define can_view: [user] or can_view from parent
-    define can_edit: [user] or can_edit from parent
-    define can_delete: [user] or can_delete from parent
+    define can_view: [user] or (can_view from parent but not blocked) or (member from viewer but not member from blocked)
+    define can_edit: [user] or (member from editor but not member from blocked)
+    define can_delete: [user] or can_delete from parent or (member from editor but not member from blocked)
     define parent: [organization]
+    # allow a group to be assigned to add edit permissions for a set of users
+    define editor: [group]
+    define viewer: [group]
+    # allow users or groups to be blocked from view + edit access
+    define blocked: [user, group]
 type documentdata
   relations
-    define can_view: [user] or can_view from parent
+    define can_view: [user] or (can_view from parent but not member from blocked)
     define can_edit: [user] or can_edit from parent
-    define can_delete: [user] or can_delete from parent
-    define parent: [organization, control, program]
+    define can_delete: [user] or can_delete from parent or (member from editor but not member from blocked)
+    define parent: [template]
+    # allow a group to be assigned to add edit permissions for a set of users
+    define editor: [group]
+    # allow users or groups to be blocked from view + edit access
+    define blocked: [user, group]
+# contacts are always assigned to an organization and permissions are inherited from the organization
+# individual users can also be given permission to a contact but they must be a member of the organization
 type contact
   relations
-    define can_view: [user] or can_view from parent
-    define can_edit: [user] or can_edit from parent
-    define can_delete: [user] or can_delete from parent
+    define can_view: ([user] and member from parent) or can_view from parent
+    define can_edit: ([user] and member from parent) or can_edit from parent or (member from editor but not member from blocked)
+    define can_delete: ([user] and member from parent) or can_delete from parent
+    # allow a group to be assigned to add edit permissions for a set of users
+    define editor: [group]
+    # allow users or groups to be blocked from view + edit access
+    define blocked: [user, group]
     define parent: [organization]
+# tasks can be created by any user and permissioned are assigned to the creator (assinger) and the assignee
+# tasks can also be associated with a parent object (like a control or a procedure) and inherit access from that object
 type task
   relations
     define can_view: [user, service] or assignee or can_delete or can_edit or can_view from parent
     define can_edit: [user, service] or assignee or can_delete or can_edit from parent
     define can_delete: [user, service] or can_delete from parent
     define assignee: [user]
-    define parent: [user, service, program, organization, control, procedure, group, policy, subcontrol, control_objective]
+    define parent: [user, service, program, organization, control, procedure, group, internalpolicy, subcontrol, control_objective]

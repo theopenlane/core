@@ -16,7 +16,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 )
@@ -311,6 +313,66 @@ func (gc *GroupCreate) AddTasks(t ...*Task) *GroupCreate {
 		ids[i] = t[i].ID
 	}
 	return gc.AddTaskIDs(ids...)
+}
+
+// AddProcedureEditorIDs adds the "procedure_editors" edge to the Procedure entity by IDs.
+func (gc *GroupCreate) AddProcedureEditorIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddProcedureEditorIDs(ids...)
+	return gc
+}
+
+// AddProcedureEditors adds the "procedure_editors" edges to the Procedure entity.
+func (gc *GroupCreate) AddProcedureEditors(p ...*Procedure) *GroupCreate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return gc.AddProcedureEditorIDs(ids...)
+}
+
+// AddProcedureBlockedGroupIDs adds the "procedure_blocked_groups" edge to the Procedure entity by IDs.
+func (gc *GroupCreate) AddProcedureBlockedGroupIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddProcedureBlockedGroupIDs(ids...)
+	return gc
+}
+
+// AddProcedureBlockedGroups adds the "procedure_blocked_groups" edges to the Procedure entity.
+func (gc *GroupCreate) AddProcedureBlockedGroups(p ...*Procedure) *GroupCreate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return gc.AddProcedureBlockedGroupIDs(ids...)
+}
+
+// AddInternalpolicyEditorIDs adds the "internalpolicy_editors" edge to the InternalPolicy entity by IDs.
+func (gc *GroupCreate) AddInternalpolicyEditorIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddInternalpolicyEditorIDs(ids...)
+	return gc
+}
+
+// AddInternalpolicyEditors adds the "internalpolicy_editors" edges to the InternalPolicy entity.
+func (gc *GroupCreate) AddInternalpolicyEditors(i ...*InternalPolicy) *GroupCreate {
+	ids := make([]string, len(i))
+	for j := range i {
+		ids[j] = i[j].ID
+	}
+	return gc.AddInternalpolicyEditorIDs(ids...)
+}
+
+// AddInternalpolicyBlockedGroupIDs adds the "internalpolicy_blocked_groups" edge to the InternalPolicy entity by IDs.
+func (gc *GroupCreate) AddInternalpolicyBlockedGroupIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddInternalpolicyBlockedGroupIDs(ids...)
+	return gc
+}
+
+// AddInternalpolicyBlockedGroups adds the "internalpolicy_blocked_groups" edges to the InternalPolicy entity.
+func (gc *GroupCreate) AddInternalpolicyBlockedGroups(i ...*InternalPolicy) *GroupCreate {
+	ids := make([]string, len(i))
+	for j := range i {
+		ids[j] = i[j].ID
+	}
+	return gc.AddInternalpolicyBlockedGroupIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the GroupMembership entity by IDs.
@@ -643,6 +705,74 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = gc.schemaConfig.GroupTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.ProcedureEditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ProcedureEditorsTable,
+			Columns: group.ProcedureEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.ProcedureEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.ProcedureBlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ProcedureBlockedGroupsTable,
+			Columns: group.ProcedureBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.ProcedureBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.InternalpolicyEditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.InternalpolicyEditorsTable,
+			Columns: group.InternalpolicyEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.InternalPolicyEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.InternalpolicyBlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.InternalpolicyBlockedGroupsTable,
+			Columns: group.InternalpolicyBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.InternalPolicyBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

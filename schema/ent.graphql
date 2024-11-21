@@ -3977,6 +3977,10 @@ input CreateGroupInput {
   integrationIDs: [ID!]
   fileIDs: [ID!]
   taskIDs: [ID!]
+  procedureEditorIDs: [ID!]
+  procedureBlockedGroupIDs: [ID!]
+  internalpolicyEditorIDs: [ID!]
+  internalpolicyBlockedGroupIDs: [ID!]
 }
 """
 CreateGroupMembershipInput is used for create GroupMembership object.
@@ -4084,7 +4088,7 @@ input CreateInternalPolicyInput {
   """
   description of the policy
   """
-  description: String!
+  description: String
   """
   status of the policy
   """
@@ -4109,12 +4113,15 @@ input CreateInternalPolicyInput {
   json data for the policy document
   """
   details: Map
+  ownerID: ID
   controlobjectiveIDs: [ID!]
   controlIDs: [ID!]
   procedureIDs: [ID!]
   narrativeIDs: [ID!]
   taskIDs: [ID!]
   programIDs: [ID!]
+  editorIDs: [ID!]
+  blockedGroupIDs: [ID!]
 }
 """
 CreateInviteInput is used for create Invite object.
@@ -4334,6 +4341,8 @@ input CreateOrganizationInput {
   noteIDs: [ID!]
   taskIDs: [ID!]
   programIDs: [ID!]
+  procedureIDs: [ID!]
+  internalpolicyIDs: [ID!]
 }
 """
 CreateOrganizationSettingInput is used for create OrganizationSetting object.
@@ -4451,12 +4460,15 @@ input CreateProcedureInput {
   json data for the procedure document
   """
   details: Map
+  ownerID: ID
   controlIDs: [ID!]
   internalpolicyIDs: [ID!]
   narrativeIDs: [ID!]
   riskIDs: [ID!]
   taskIDs: [ID!]
   programIDs: [ID!]
+  editorIDs: [ID!]
+  blockedGroupIDs: [ID!]
 }
 """
 CreateProgramInput is used for create Program object.
@@ -10749,6 +10761,10 @@ type Group implements Node {
   integrations: [Integration!]
   files: [File!]
   tasks: [Task!]
+  procedureEditors: [Procedure!]
+  procedureBlockedGroups: [Procedure!]
+  internalpolicyEditors: [InternalPolicy!]
+  internalpolicyBlockedGroups: [InternalPolicy!]
   members: [GroupMembership!]
 }
 """
@@ -12257,6 +12273,26 @@ input GroupWhereInput {
   hasTasks: Boolean
   hasTasksWith: [TaskWhereInput!]
   """
+  procedure_editors edge predicates
+  """
+  hasProcedureEditors: Boolean
+  hasProcedureEditorsWith: [ProcedureWhereInput!]
+  """
+  procedure_blocked_groups edge predicates
+  """
+  hasProcedureBlockedGroups: Boolean
+  hasProcedureBlockedGroupsWith: [ProcedureWhereInput!]
+  """
+  internalpolicy_editors edge predicates
+  """
+  hasInternalpolicyEditors: Boolean
+  hasInternalpolicyEditorsWith: [InternalPolicyWhereInput!]
+  """
+  internalpolicy_blocked_groups edge predicates
+  """
+  hasInternalpolicyBlockedGroups: Boolean
+  hasInternalpolicyBlockedGroupsWith: [InternalPolicyWhereInput!]
+  """
   members edge predicates
   """
   hasMembers: Boolean
@@ -13396,13 +13432,17 @@ type InternalPolicy implements Node {
   """
   tags: [String!]
   """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
   the name of the policy
   """
   name: String!
   """
   description of the policy
   """
-  description: String!
+  description: String
   """
   status of the policy
   """
@@ -13427,12 +13467,21 @@ type InternalPolicy implements Node {
   json data for the policy document
   """
   details: Map
+  owner: Organization
   controlobjectives: [ControlObjective!]
   controls: [Control!]
   procedures: [Procedure!]
   narratives: [Narrative!]
   tasks: [Task!]
   programs: [Program!]
+  """
+  provides edit access to the policy to members of the group
+  """
+  editors: [Group!]
+  """
+  groups that are blocked from viewing or editing the policy
+  """
+  blockedGroups: [Group!]
 }
 """
 A connection to a list of items.
@@ -13480,13 +13529,17 @@ type InternalPolicyHistory implements Node {
   """
   tags: [String!]
   """
+  the organization id that owns the object
+  """
+  ownerID: String
+  """
   the name of the policy
   """
   name: String!
   """
   description of the policy
   """
-  description: String!
+  description: String
   """
   status of the policy
   """
@@ -13701,6 +13754,24 @@ input InternalPolicyHistoryWhereInput {
   deletedByEqualFold: String
   deletedByContainsFold: String
   """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
   name field predicates
   """
   name: String
@@ -13730,6 +13801,8 @@ input InternalPolicyHistoryWhereInput {
   descriptionContains: String
   descriptionHasPrefix: String
   descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
   """
@@ -13938,6 +14011,24 @@ input InternalPolicyWhereInput {
   deletedByEqualFold: String
   deletedByContainsFold: String
   """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
   name field predicates
   """
   name: String
@@ -13967,6 +14058,8 @@ input InternalPolicyWhereInput {
   descriptionContains: String
   descriptionHasPrefix: String
   descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
   """
@@ -14060,6 +14153,11 @@ input InternalPolicyWhereInput {
   backgroundEqualFold: String
   backgroundContainsFold: String
   """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
   controlobjectives edge predicates
   """
   hasControlobjectives: Boolean
@@ -14089,6 +14187,16 @@ input InternalPolicyWhereInput {
   """
   hasPrograms: Boolean
   hasProgramsWith: [ProgramWhereInput!]
+  """
+  editors edge predicates
+  """
+  hasEditors: Boolean
+  hasEditorsWith: [GroupWhereInput!]
+  """
+  blocked_groups edge predicates
+  """
+  hasBlockedGroups: Boolean
+  hasBlockedGroupsWith: [GroupWhereInput!]
 }
 type Invite implements Node {
   id: ID!
@@ -16912,6 +17020,8 @@ type Organization implements Node {
   notes: [Note!]
   tasks: [Task!]
   programs: [Program!]
+  procedures: [Procedure!]
+  internalpolicies: [InternalPolicy!]
   members: [OrgMembership!]
 }
 """
@@ -18319,6 +18429,16 @@ input OrganizationWhereInput {
   hasPrograms: Boolean
   hasProgramsWith: [ProgramWhereInput!]
   """
+  procedures edge predicates
+  """
+  hasProcedures: Boolean
+  hasProceduresWith: [ProcedureWhereInput!]
+  """
+  internalpolicies edge predicates
+  """
+  hasInternalpolicies: Boolean
+  hasInternalpoliciesWith: [InternalPolicyWhereInput!]
+  """
   members edge predicates
   """
   hasMembers: Boolean
@@ -18595,6 +18715,10 @@ type Procedure implements Node {
   """
   tags: [String!]
   """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
   the name of the procedure
   """
   name: String!
@@ -18630,12 +18754,21 @@ type Procedure implements Node {
   json data for the procedure document
   """
   details: Map
+  owner: Organization
   control: [Control!]
   internalpolicy: [InternalPolicy!]
   narratives: [Narrative!]
   risks: [Risk!]
   tasks: [Task!]
   programs: [Program!]
+  """
+  provides edit access to the procedure to members of the group
+  """
+  editors: [Group!]
+  """
+  groups that are blocked from viewing or editing the procedure
+  """
+  blockedGroups: [Group!]
 }
 """
 A connection to a list of items.
@@ -18682,6 +18815,10 @@ type ProcedureHistory implements Node {
   tags associated with the object
   """
   tags: [String!]
+  """
+  the organization id that owns the object
+  """
+  ownerID: String
   """
   the name of the procedure
   """
@@ -18907,6 +19044,24 @@ input ProcedureHistoryWhereInput {
   deletedByNotNil: Boolean
   deletedByEqualFold: String
   deletedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
   """
   name field predicates
   """
@@ -19165,6 +19320,24 @@ input ProcedureWhereInput {
   deletedByEqualFold: String
   deletedByContainsFold: String
   """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
   name field predicates
   """
   name: String
@@ -19307,6 +19480,11 @@ input ProcedureWhereInput {
   satisfiesEqualFold: String
   satisfiesContainsFold: String
   """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
   control edge predicates
   """
   hasControl: Boolean
@@ -19336,6 +19514,16 @@ input ProcedureWhereInput {
   """
   hasPrograms: Boolean
   hasProgramsWith: [ProgramWhereInput!]
+  """
+  editors edge predicates
+  """
+  hasEditors: Boolean
+  hasEditorsWith: [GroupWhereInput!]
+  """
+  blocked_groups edge predicates
+  """
+  hasBlockedGroups: Boolean
+  hasBlockedGroupsWith: [GroupWhereInput!]
 }
 type Program implements Node {
   id: ID!
@@ -27785,6 +27973,18 @@ input UpdateGroupInput {
   addTaskIDs: [ID!]
   removeTaskIDs: [ID!]
   clearTasks: Boolean
+  addProcedureEditorIDs: [ID!]
+  removeProcedureEditorIDs: [ID!]
+  clearProcedureEditors: Boolean
+  addProcedureBlockedGroupIDs: [ID!]
+  removeProcedureBlockedGroupIDs: [ID!]
+  clearProcedureBlockedGroups: Boolean
+  addInternalpolicyEditorIDs: [ID!]
+  removeInternalpolicyEditorIDs: [ID!]
+  clearInternalpolicyEditors: Boolean
+  addInternalpolicyBlockedGroupIDs: [ID!]
+  removeInternalpolicyBlockedGroupIDs: [ID!]
+  clearInternalpolicyBlockedGroups: Boolean
 }
 """
 UpdateGroupMembershipInput is used for update GroupMembership object.
@@ -27913,6 +28113,7 @@ input UpdateInternalPolicyInput {
   description of the policy
   """
   description: String
+  clearDescription: Boolean
   """
   status of the policy
   """
@@ -27943,6 +28144,8 @@ input UpdateInternalPolicyInput {
   """
   details: Map
   clearDetails: Boolean
+  ownerID: ID
+  clearOwner: Boolean
   addControlobjectiveIDs: [ID!]
   removeControlobjectiveIDs: [ID!]
   clearControlobjectives: Boolean
@@ -27961,6 +28164,12 @@ input UpdateInternalPolicyInput {
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearPrograms: Boolean
+  addEditorIDs: [ID!]
+  removeEditorIDs: [ID!]
+  clearEditors: Boolean
+  addBlockedGroupIDs: [ID!]
+  removeBlockedGroupIDs: [ID!]
+  clearBlockedGroups: Boolean
 }
 """
 UpdateInviteInput is used for update Invite object.
@@ -28258,6 +28467,12 @@ input UpdateOrganizationInput {
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearPrograms: Boolean
+  addProcedureIDs: [ID!]
+  removeProcedureIDs: [ID!]
+  clearProcedures: Boolean
+  addInternalpolicyIDs: [ID!]
+  removeInternalpolicyIDs: [ID!]
+  clearInternalpolicies: Boolean
 }
 """
 UpdateOrganizationSettingInput is used for update OrganizationSetting object.
@@ -28404,6 +28619,8 @@ input UpdateProcedureInput {
   """
   details: Map
   clearDetails: Boolean
+  ownerID: ID
+  clearOwner: Boolean
   addControlIDs: [ID!]
   removeControlIDs: [ID!]
   clearControl: Boolean
@@ -28422,6 +28639,12 @@ input UpdateProcedureInput {
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearPrograms: Boolean
+  addEditorIDs: [ID!]
+  removeEditorIDs: [ID!]
+  clearEditors: Boolean
+  addBlockedGroupIDs: [ID!]
+  removeBlockedGroupIDs: [ID!]
+  clearBlockedGroups: Boolean
 }
 """
 UpdateProgramInput is used for update Program object.

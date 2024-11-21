@@ -3283,15 +3283,19 @@ type CreateGroupInput struct {
 	// the URL to an image uploaded by the customer for the groups avatar image
 	LogoURL *string `json:"logoURL,omitempty"`
 	// The group's displayed 'friendly' name
-	DisplayName         *string                  `json:"displayName,omitempty"`
-	OwnerID             *string                  `json:"ownerID,omitempty"`
-	SettingID           string                   `json:"settingID"`
-	UserIDs             []string                 `json:"userIDs,omitempty"`
-	EventIDs            []string                 `json:"eventIDs,omitempty"`
-	IntegrationIDs      []string                 `json:"integrationIDs,omitempty"`
-	FileIDs             []string                 `json:"fileIDs,omitempty"`
-	TaskIDs             []string                 `json:"taskIDs,omitempty"`
-	CreateGroupSettings *CreateGroupSettingInput `json:"createGroupSettings,omitempty"`
+	DisplayName                   *string                  `json:"displayName,omitempty"`
+	OwnerID                       *string                  `json:"ownerID,omitempty"`
+	SettingID                     string                   `json:"settingID"`
+	UserIDs                       []string                 `json:"userIDs,omitempty"`
+	EventIDs                      []string                 `json:"eventIDs,omitempty"`
+	IntegrationIDs                []string                 `json:"integrationIDs,omitempty"`
+	FileIDs                       []string                 `json:"fileIDs,omitempty"`
+	TaskIDs                       []string                 `json:"taskIDs,omitempty"`
+	ProcedureEditorIDs            []string                 `json:"procedureEditorIDs,omitempty"`
+	ProcedureBlockedGroupIDs      []string                 `json:"procedureBlockedGroupIDs,omitempty"`
+	InternalpolicyEditorIDs       []string                 `json:"internalpolicyEditorIDs,omitempty"`
+	InternalpolicyBlockedGroupIDs []string                 `json:"internalpolicyBlockedGroupIDs,omitempty"`
+	CreateGroupSettings           *CreateGroupSettingInput `json:"createGroupSettings,omitempty"`
 }
 
 // CreateGroupMembershipInput is used for create GroupMembership object.
@@ -3362,7 +3366,7 @@ type CreateInternalPolicyInput struct {
 	// the name of the policy
 	Name string `json:"name"`
 	// description of the policy
-	Description string `json:"description"`
+	Description *string `json:"description,omitempty"`
 	// status of the policy
 	Status *string `json:"status,omitempty"`
 	// type of the policy
@@ -3375,12 +3379,15 @@ type CreateInternalPolicyInput struct {
 	Background *string `json:"background,omitempty"`
 	// json data for the policy document
 	Details             map[string]interface{} `json:"details,omitempty"`
+	OwnerID             *string                `json:"ownerID,omitempty"`
 	ControlobjectiveIDs []string               `json:"controlobjectiveIDs,omitempty"`
 	ControlIDs          []string               `json:"controlIDs,omitempty"`
 	ProcedureIDs        []string               `json:"procedureIDs,omitempty"`
 	NarrativeIDs        []string               `json:"narrativeIDs,omitempty"`
 	TaskIDs             []string               `json:"taskIDs,omitempty"`
 	ProgramIDs          []string               `json:"programIDs,omitempty"`
+	EditorIDs           []string               `json:"editorIDs,omitempty"`
+	BlockedGroupIDs     []string               `json:"blockedGroupIDs,omitempty"`
 }
 
 // CreateInviteInput is used for create Invite object.
@@ -3533,6 +3540,8 @@ type CreateOrganizationInput struct {
 	NoteIDs                    []string                        `json:"noteIDs,omitempty"`
 	TaskIDs                    []string                        `json:"taskIDs,omitempty"`
 	ProgramIDs                 []string                        `json:"programIDs,omitempty"`
+	ProcedureIDs               []string                        `json:"procedureIDs,omitempty"`
+	InternalpolicyIDs          []string                        `json:"internalpolicyIDs,omitempty"`
 	CreateOrgSettings          *CreateOrganizationSettingInput `json:"createOrgSettings,omitempty"`
 }
 
@@ -3602,12 +3611,15 @@ type CreateProcedureInput struct {
 	Satisfies *string `json:"satisfies,omitempty"`
 	// json data for the procedure document
 	Details           map[string]interface{} `json:"details,omitempty"`
+	OwnerID           *string                `json:"ownerID,omitempty"`
 	ControlIDs        []string               `json:"controlIDs,omitempty"`
 	InternalpolicyIDs []string               `json:"internalpolicyIDs,omitempty"`
 	NarrativeIDs      []string               `json:"narrativeIDs,omitempty"`
 	RiskIDs           []string               `json:"riskIDs,omitempty"`
 	TaskIDs           []string               `json:"taskIDs,omitempty"`
 	ProgramIDs        []string               `json:"programIDs,omitempty"`
+	EditorIDs         []string               `json:"editorIDs,omitempty"`
+	BlockedGroupIDs   []string               `json:"blockedGroupIDs,omitempty"`
 }
 
 // CreateProgramInput is used for create Program object.
@@ -8766,15 +8778,19 @@ type Group struct {
 	// the URL to an image uploaded by the customer for the groups avatar image
 	LogoURL *string `json:"logoURL,omitempty"`
 	// The group's displayed 'friendly' name
-	DisplayName  string             `json:"displayName"`
-	Owner        *Organization      `json:"owner,omitempty"`
-	Setting      *GroupSetting      `json:"setting"`
-	Users        []*User            `json:"users,omitempty"`
-	Events       []*Event           `json:"events,omitempty"`
-	Integrations []*Integration     `json:"integrations,omitempty"`
-	Files        []*File            `json:"files,omitempty"`
-	Tasks        []*Task            `json:"tasks,omitempty"`
-	Members      []*GroupMembership `json:"members,omitempty"`
+	DisplayName                 string             `json:"displayName"`
+	Owner                       *Organization      `json:"owner,omitempty"`
+	Setting                     *GroupSetting      `json:"setting"`
+	Users                       []*User            `json:"users,omitempty"`
+	Events                      []*Event           `json:"events,omitempty"`
+	Integrations                []*Integration     `json:"integrations,omitempty"`
+	Files                       []*File            `json:"files,omitempty"`
+	Tasks                       []*Task            `json:"tasks,omitempty"`
+	ProcedureEditors            []*Procedure       `json:"procedureEditors,omitempty"`
+	ProcedureBlockedGroups      []*Procedure       `json:"procedureBlockedGroups,omitempty"`
+	InternalpolicyEditors       []*InternalPolicy  `json:"internalpolicyEditors,omitempty"`
+	InternalpolicyBlockedGroups []*InternalPolicy  `json:"internalpolicyBlockedGroups,omitempty"`
+	Members                     []*GroupMembership `json:"members,omitempty"`
 }
 
 func (Group) IsNode() {}
@@ -10016,6 +10032,18 @@ type GroupWhereInput struct {
 	// tasks edge predicates
 	HasTasks     *bool             `json:"hasTasks,omitempty"`
 	HasTasksWith []*TaskWhereInput `json:"hasTasksWith,omitempty"`
+	// procedure_editors edge predicates
+	HasProcedureEditors     *bool                  `json:"hasProcedureEditors,omitempty"`
+	HasProcedureEditorsWith []*ProcedureWhereInput `json:"hasProcedureEditorsWith,omitempty"`
+	// procedure_blocked_groups edge predicates
+	HasProcedureBlockedGroups     *bool                  `json:"hasProcedureBlockedGroups,omitempty"`
+	HasProcedureBlockedGroupsWith []*ProcedureWhereInput `json:"hasProcedureBlockedGroupsWith,omitempty"`
+	// internalpolicy_editors edge predicates
+	HasInternalpolicyEditors     *bool                       `json:"hasInternalpolicyEditors,omitempty"`
+	HasInternalpolicyEditorsWith []*InternalPolicyWhereInput `json:"hasInternalpolicyEditorsWith,omitempty"`
+	// internalpolicy_blocked_groups edge predicates
+	HasInternalpolicyBlockedGroups     *bool                       `json:"hasInternalpolicyBlockedGroups,omitempty"`
+	HasInternalpolicyBlockedGroupsWith []*InternalPolicyWhereInput `json:"hasInternalpolicyBlockedGroupsWith,omitempty"`
 	// members edge predicates
 	HasMembers     *bool                        `json:"hasMembers,omitempty"`
 	HasMembersWith []*GroupMembershipWhereInput `json:"hasMembersWith,omitempty"`
@@ -10956,10 +10984,12 @@ type InternalPolicy struct {
 	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// the organization id that owns the object
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the policy
 	Name string `json:"name"`
 	// description of the policy
-	Description string `json:"description"`
+	Description *string `json:"description,omitempty"`
 	// status of the policy
 	Status *string `json:"status,omitempty"`
 	// type of the policy
@@ -10972,12 +11002,17 @@ type InternalPolicy struct {
 	Background *string `json:"background,omitempty"`
 	// json data for the policy document
 	Details           map[string]interface{} `json:"details,omitempty"`
+	Owner             *Organization          `json:"owner,omitempty"`
 	Controlobjectives []*ControlObjective    `json:"controlobjectives,omitempty"`
 	Controls          []*Control             `json:"controls,omitempty"`
 	Procedures        []*Procedure           `json:"procedures,omitempty"`
 	Narratives        []*Narrative           `json:"narratives,omitempty"`
 	Tasks             []*Task                `json:"tasks,omitempty"`
 	Programs          []*Program             `json:"programs,omitempty"`
+	// provides edit access to the policy to members of the group
+	Editors []*Group `json:"editors,omitempty"`
+	// groups that are blocked from viewing or editing the policy
+	BlockedGroups []*Group `json:"blockedGroups,omitempty"`
 }
 
 func (InternalPolicy) IsNode() {}
@@ -11031,10 +11066,12 @@ type InternalPolicyHistory struct {
 	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// the organization id that owns the object
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the policy
 	Name string `json:"name"`
 	// description of the policy
-	Description string `json:"description"`
+	Description *string `json:"description,omitempty"`
 	// status of the policy
 	Status *string `json:"status,omitempty"`
 	// type of the policy
@@ -11197,6 +11234,22 @@ type InternalPolicyHistoryWhereInput struct {
 	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// owner_id field predicates
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        *bool    `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
@@ -11223,6 +11276,8 @@ type InternalPolicyHistoryWhereInput struct {
 	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
 	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
 	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
+	DescriptionIsNil        *bool    `json:"descriptionIsNil,omitempty"`
+	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
 	// status field predicates
@@ -11417,6 +11472,22 @@ type InternalPolicyWhereInput struct {
 	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// owner_id field predicates
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        *bool    `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
@@ -11443,6 +11514,8 @@ type InternalPolicyWhereInput struct {
 	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
 	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
 	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
+	DescriptionIsNil        *bool    `json:"descriptionIsNil,omitempty"`
+	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
 	// status field predicates
@@ -11525,6 +11598,9 @@ type InternalPolicyWhereInput struct {
 	BackgroundNotNil       *bool    `json:"backgroundNotNil,omitempty"`
 	BackgroundEqualFold    *string  `json:"backgroundEqualFold,omitempty"`
 	BackgroundContainsFold *string  `json:"backgroundContainsFold,omitempty"`
+	// owner edge predicates
+	HasOwner     *bool                     `json:"hasOwner,omitempty"`
+	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
 	// controlobjectives edge predicates
 	HasControlobjectives     *bool                         `json:"hasControlobjectives,omitempty"`
 	HasControlobjectivesWith []*ControlObjectiveWhereInput `json:"hasControlobjectivesWith,omitempty"`
@@ -11543,6 +11619,12 @@ type InternalPolicyWhereInput struct {
 	// programs edge predicates
 	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
 	HasProgramsWith []*ProgramWhereInput `json:"hasProgramsWith,omitempty"`
+	// editors edge predicates
+	HasEditors     *bool              `json:"hasEditors,omitempty"`
+	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
+	// blocked_groups edge predicates
+	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
+	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
 }
 
 type Invite struct {
@@ -13901,6 +13983,8 @@ type Organization struct {
 	Notes                   []*Note                   `json:"notes,omitempty"`
 	Tasks                   []*Task                   `json:"tasks,omitempty"`
 	Programs                []*Program                `json:"programs,omitempty"`
+	Procedures              []*Procedure              `json:"procedures,omitempty"`
+	Internalpolicies        []*InternalPolicy         `json:"internalpolicies,omitempty"`
 	Members                 []*OrgMembership          `json:"members,omitempty"`
 }
 
@@ -15040,6 +15124,12 @@ type OrganizationWhereInput struct {
 	// programs edge predicates
 	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
 	HasProgramsWith []*ProgramWhereInput `json:"hasProgramsWith,omitempty"`
+	// procedures edge predicates
+	HasProcedures     *bool                  `json:"hasProcedures,omitempty"`
+	HasProceduresWith []*ProcedureWhereInput `json:"hasProceduresWith,omitempty"`
+	// internalpolicies edge predicates
+	HasInternalpolicies     *bool                       `json:"hasInternalpolicies,omitempty"`
+	HasInternalpoliciesWith []*InternalPolicyWhereInput `json:"hasInternalpoliciesWith,omitempty"`
 	// members edge predicates
 	HasMembers     *bool                      `json:"hasMembers,omitempty"`
 	HasMembersWith []*OrgMembershipWhereInput `json:"hasMembersWith,omitempty"`
@@ -15288,6 +15378,8 @@ type Procedure struct {
 	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// the organization id that owns the object
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the procedure
 	Name string `json:"name"`
 	// description of the procedure
@@ -15306,12 +15398,17 @@ type Procedure struct {
 	Satisfies *string `json:"satisfies,omitempty"`
 	// json data for the procedure document
 	Details        map[string]interface{} `json:"details,omitempty"`
+	Owner          *Organization          `json:"owner,omitempty"`
 	Control        []*Control             `json:"control,omitempty"`
 	Internalpolicy []*InternalPolicy      `json:"internalpolicy,omitempty"`
 	Narratives     []*Narrative           `json:"narratives,omitempty"`
 	Risks          []*Risk                `json:"risks,omitempty"`
 	Tasks          []*Task                `json:"tasks,omitempty"`
 	Programs       []*Program             `json:"programs,omitempty"`
+	// provides edit access to the procedure to members of the group
+	Editors []*Group `json:"editors,omitempty"`
+	// groups that are blocked from viewing or editing the procedure
+	BlockedGroups []*Group `json:"blockedGroups,omitempty"`
 }
 
 func (Procedure) IsNode() {}
@@ -15365,6 +15462,8 @@ type ProcedureHistory struct {
 	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// the organization id that owns the object
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the name of the procedure
 	Name string `json:"name"`
 	// description of the procedure
@@ -15533,6 +15632,22 @@ type ProcedureHistoryWhereInput struct {
 	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// owner_id field predicates
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        *bool    `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
@@ -15771,6 +15886,22 @@ type ProcedureWhereInput struct {
 	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// owner_id field predicates
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        *bool    `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
@@ -15897,6 +16028,9 @@ type ProcedureWhereInput struct {
 	SatisfiesNotNil       *bool    `json:"satisfiesNotNil,omitempty"`
 	SatisfiesEqualFold    *string  `json:"satisfiesEqualFold,omitempty"`
 	SatisfiesContainsFold *string  `json:"satisfiesContainsFold,omitempty"`
+	// owner edge predicates
+	HasOwner     *bool                     `json:"hasOwner,omitempty"`
+	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
 	// control edge predicates
 	HasControl     *bool                `json:"hasControl,omitempty"`
 	HasControlWith []*ControlWhereInput `json:"hasControlWith,omitempty"`
@@ -15915,6 +16049,12 @@ type ProcedureWhereInput struct {
 	// programs edge predicates
 	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
 	HasProgramsWith []*ProgramWhereInput `json:"hasProgramsWith,omitempty"`
+	// editors edge predicates
+	HasEditors     *bool              `json:"hasEditors,omitempty"`
+	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
+	// blocked_groups edge predicates
+	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
+	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
 }
 
 type Program struct {
@@ -21047,27 +21187,39 @@ type UpdateGroupInput struct {
 	LogoURL      *string `json:"logoURL,omitempty"`
 	ClearLogoURL *bool   `json:"clearLogoURL,omitempty"`
 	// The group's displayed 'friendly' name
-	DisplayName          *string                       `json:"displayName,omitempty"`
-	OwnerID              *string                       `json:"ownerID,omitempty"`
-	ClearOwner           *bool                         `json:"clearOwner,omitempty"`
-	SettingID            *string                       `json:"settingID,omitempty"`
-	AddUserIDs           []string                      `json:"addUserIDs,omitempty"`
-	RemoveUserIDs        []string                      `json:"removeUserIDs,omitempty"`
-	ClearUsers           *bool                         `json:"clearUsers,omitempty"`
-	AddEventIDs          []string                      `json:"addEventIDs,omitempty"`
-	RemoveEventIDs       []string                      `json:"removeEventIDs,omitempty"`
-	ClearEvents          *bool                         `json:"clearEvents,omitempty"`
-	AddIntegrationIDs    []string                      `json:"addIntegrationIDs,omitempty"`
-	RemoveIntegrationIDs []string                      `json:"removeIntegrationIDs,omitempty"`
-	ClearIntegrations    *bool                         `json:"clearIntegrations,omitempty"`
-	AddFileIDs           []string                      `json:"addFileIDs,omitempty"`
-	RemoveFileIDs        []string                      `json:"removeFileIDs,omitempty"`
-	ClearFiles           *bool                         `json:"clearFiles,omitempty"`
-	AddTaskIDs           []string                      `json:"addTaskIDs,omitempty"`
-	RemoveTaskIDs        []string                      `json:"removeTaskIDs,omitempty"`
-	ClearTasks           *bool                         `json:"clearTasks,omitempty"`
-	AddGroupMembers      []*CreateGroupMembershipInput `json:"addGroupMembers,omitempty"`
-	UpdateGroupSettings  *UpdateGroupSettingInput      `json:"updateGroupSettings,omitempty"`
+	DisplayName                         *string                       `json:"displayName,omitempty"`
+	OwnerID                             *string                       `json:"ownerID,omitempty"`
+	ClearOwner                          *bool                         `json:"clearOwner,omitempty"`
+	SettingID                           *string                       `json:"settingID,omitempty"`
+	AddUserIDs                          []string                      `json:"addUserIDs,omitempty"`
+	RemoveUserIDs                       []string                      `json:"removeUserIDs,omitempty"`
+	ClearUsers                          *bool                         `json:"clearUsers,omitempty"`
+	AddEventIDs                         []string                      `json:"addEventIDs,omitempty"`
+	RemoveEventIDs                      []string                      `json:"removeEventIDs,omitempty"`
+	ClearEvents                         *bool                         `json:"clearEvents,omitempty"`
+	AddIntegrationIDs                   []string                      `json:"addIntegrationIDs,omitempty"`
+	RemoveIntegrationIDs                []string                      `json:"removeIntegrationIDs,omitempty"`
+	ClearIntegrations                   *bool                         `json:"clearIntegrations,omitempty"`
+	AddFileIDs                          []string                      `json:"addFileIDs,omitempty"`
+	RemoveFileIDs                       []string                      `json:"removeFileIDs,omitempty"`
+	ClearFiles                          *bool                         `json:"clearFiles,omitempty"`
+	AddTaskIDs                          []string                      `json:"addTaskIDs,omitempty"`
+	RemoveTaskIDs                       []string                      `json:"removeTaskIDs,omitempty"`
+	ClearTasks                          *bool                         `json:"clearTasks,omitempty"`
+	AddProcedureEditorIDs               []string                      `json:"addProcedureEditorIDs,omitempty"`
+	RemoveProcedureEditorIDs            []string                      `json:"removeProcedureEditorIDs,omitempty"`
+	ClearProcedureEditors               *bool                         `json:"clearProcedureEditors,omitempty"`
+	AddProcedureBlockedGroupIDs         []string                      `json:"addProcedureBlockedGroupIDs,omitempty"`
+	RemoveProcedureBlockedGroupIDs      []string                      `json:"removeProcedureBlockedGroupIDs,omitempty"`
+	ClearProcedureBlockedGroups         *bool                         `json:"clearProcedureBlockedGroups,omitempty"`
+	AddInternalpolicyEditorIDs          []string                      `json:"addInternalpolicyEditorIDs,omitempty"`
+	RemoveInternalpolicyEditorIDs       []string                      `json:"removeInternalpolicyEditorIDs,omitempty"`
+	ClearInternalpolicyEditors          *bool                         `json:"clearInternalpolicyEditors,omitempty"`
+	AddInternalpolicyBlockedGroupIDs    []string                      `json:"addInternalpolicyBlockedGroupIDs,omitempty"`
+	RemoveInternalpolicyBlockedGroupIDs []string                      `json:"removeInternalpolicyBlockedGroupIDs,omitempty"`
+	ClearInternalpolicyBlockedGroups    *bool                         `json:"clearInternalpolicyBlockedGroups,omitempty"`
+	AddGroupMembers                     []*CreateGroupMembershipInput `json:"addGroupMembers,omitempty"`
+	UpdateGroupSettings                 *UpdateGroupSettingInput      `json:"updateGroupSettings,omitempty"`
 }
 
 // UpdateGroupMembershipInput is used for update GroupMembership object.
@@ -21162,7 +21314,8 @@ type UpdateInternalPolicyInput struct {
 	// the name of the policy
 	Name *string `json:"name,omitempty"`
 	// description of the policy
-	Description *string `json:"description,omitempty"`
+	Description      *string `json:"description,omitempty"`
+	ClearDescription *bool   `json:"clearDescription,omitempty"`
 	// status of the policy
 	Status      *string `json:"status,omitempty"`
 	ClearStatus *bool   `json:"clearStatus,omitempty"`
@@ -21181,6 +21334,8 @@ type UpdateInternalPolicyInput struct {
 	// json data for the policy document
 	Details                   map[string]interface{} `json:"details,omitempty"`
 	ClearDetails              *bool                  `json:"clearDetails,omitempty"`
+	OwnerID                   *string                `json:"ownerID,omitempty"`
+	ClearOwner                *bool                  `json:"clearOwner,omitempty"`
 	AddControlobjectiveIDs    []string               `json:"addControlobjectiveIDs,omitempty"`
 	RemoveControlobjectiveIDs []string               `json:"removeControlobjectiveIDs,omitempty"`
 	ClearControlobjectives    *bool                  `json:"clearControlobjectives,omitempty"`
@@ -21199,6 +21354,12 @@ type UpdateInternalPolicyInput struct {
 	AddProgramIDs             []string               `json:"addProgramIDs,omitempty"`
 	RemoveProgramIDs          []string               `json:"removeProgramIDs,omitempty"`
 	ClearPrograms             *bool                  `json:"clearPrograms,omitempty"`
+	AddEditorIDs              []string               `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs           []string               `json:"removeEditorIDs,omitempty"`
+	ClearEditors              *bool                  `json:"clearEditors,omitempty"`
+	AddBlockedGroupIDs        []string               `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs     []string               `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups        *bool                  `json:"clearBlockedGroups,omitempty"`
 }
 
 // UpdateInviteInput is used for update Invite object.
@@ -21437,6 +21598,12 @@ type UpdateOrganizationInput struct {
 	AddProgramIDs                    []string                        `json:"addProgramIDs,omitempty"`
 	RemoveProgramIDs                 []string                        `json:"removeProgramIDs,omitempty"`
 	ClearPrograms                    *bool                           `json:"clearPrograms,omitempty"`
+	AddProcedureIDs                  []string                        `json:"addProcedureIDs,omitempty"`
+	RemoveProcedureIDs               []string                        `json:"removeProcedureIDs,omitempty"`
+	ClearProcedures                  *bool                           `json:"clearProcedures,omitempty"`
+	AddInternalpolicyIDs             []string                        `json:"addInternalpolicyIDs,omitempty"`
+	RemoveInternalpolicyIDs          []string                        `json:"removeInternalpolicyIDs,omitempty"`
+	ClearInternalpolicies            *bool                           `json:"clearInternalpolicies,omitempty"`
 	AddOrgMembers                    []*CreateOrgMembershipInput     `json:"addOrgMembers,omitempty"`
 	UpdateOrgSettings                *UpdateOrganizationSettingInput `json:"updateOrgSettings,omitempty"`
 }
@@ -21538,6 +21705,8 @@ type UpdateProcedureInput struct {
 	// json data for the procedure document
 	Details                 map[string]interface{} `json:"details,omitempty"`
 	ClearDetails            *bool                  `json:"clearDetails,omitempty"`
+	OwnerID                 *string                `json:"ownerID,omitempty"`
+	ClearOwner              *bool                  `json:"clearOwner,omitempty"`
 	AddControlIDs           []string               `json:"addControlIDs,omitempty"`
 	RemoveControlIDs        []string               `json:"removeControlIDs,omitempty"`
 	ClearControl            *bool                  `json:"clearControl,omitempty"`
@@ -21556,6 +21725,12 @@ type UpdateProcedureInput struct {
 	AddProgramIDs           []string               `json:"addProgramIDs,omitempty"`
 	RemoveProgramIDs        []string               `json:"removeProgramIDs,omitempty"`
 	ClearPrograms           *bool                  `json:"clearPrograms,omitempty"`
+	AddEditorIDs            []string               `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs         []string               `json:"removeEditorIDs,omitempty"`
+	ClearEditors            *bool                  `json:"clearEditors,omitempty"`
+	AddBlockedGroupIDs      []string               `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs   []string               `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups      *bool                  `json:"clearBlockedGroups,omitempty"`
 }
 
 // UpdateProgramInput is used for update Program object.

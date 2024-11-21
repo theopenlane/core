@@ -94,6 +94,14 @@ func (Group) Edges() []ent.Edge {
 		edge.To("integrations", Integration.Type),
 		edge.To("files", File.Type),
 		edge.To("tasks", Task.Type),
+		edge.From("procedure_editors", Procedure.Type).
+			Ref("editors"),
+		edge.From("procedure_blocked_groups", Procedure.Type).
+			Ref("blocked_groups"),
+		edge.From("internalpolicy_editors", InternalPolicy.Type).
+			Ref("editors"),
+		edge.From("internalpolicy_blocked_groups", InternalPolicy.Type).
+			Ref("blocked_groups"),
 	}
 }
 

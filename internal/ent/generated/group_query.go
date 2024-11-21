@@ -19,8 +19,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 
@@ -30,26 +32,34 @@ import (
 // GroupQuery is the builder for querying Group entities.
 type GroupQuery struct {
 	config
-	ctx                   *QueryContext
-	order                 []group.OrderOption
-	inters                []Interceptor
-	predicates            []predicate.Group
-	withOwner             *OrganizationQuery
-	withSetting           *GroupSettingQuery
-	withUsers             *UserQuery
-	withEvents            *EventQuery
-	withIntegrations      *IntegrationQuery
-	withFiles             *FileQuery
-	withTasks             *TaskQuery
-	withMembers           *GroupMembershipQuery
-	loadTotal             []func(context.Context, []*Group) error
-	modifiers             []func(*sql.Selector)
-	withNamedUsers        map[string]*UserQuery
-	withNamedEvents       map[string]*EventQuery
-	withNamedIntegrations map[string]*IntegrationQuery
-	withNamedFiles        map[string]*FileQuery
-	withNamedTasks        map[string]*TaskQuery
-	withNamedMembers      map[string]*GroupMembershipQuery
+	ctx                                  *QueryContext
+	order                                []group.OrderOption
+	inters                               []Interceptor
+	predicates                           []predicate.Group
+	withOwner                            *OrganizationQuery
+	withSetting                          *GroupSettingQuery
+	withUsers                            *UserQuery
+	withEvents                           *EventQuery
+	withIntegrations                     *IntegrationQuery
+	withFiles                            *FileQuery
+	withTasks                            *TaskQuery
+	withProcedureEditors                 *ProcedureQuery
+	withProcedureBlockedGroups           *ProcedureQuery
+	withInternalpolicyEditors            *InternalPolicyQuery
+	withInternalpolicyBlockedGroups      *InternalPolicyQuery
+	withMembers                          *GroupMembershipQuery
+	loadTotal                            []func(context.Context, []*Group) error
+	modifiers                            []func(*sql.Selector)
+	withNamedUsers                       map[string]*UserQuery
+	withNamedEvents                      map[string]*EventQuery
+	withNamedIntegrations                map[string]*IntegrationQuery
+	withNamedFiles                       map[string]*FileQuery
+	withNamedTasks                       map[string]*TaskQuery
+	withNamedProcedureEditors            map[string]*ProcedureQuery
+	withNamedProcedureBlockedGroups      map[string]*ProcedureQuery
+	withNamedInternalpolicyEditors       map[string]*InternalPolicyQuery
+	withNamedInternalpolicyBlockedGroups map[string]*InternalPolicyQuery
+	withNamedMembers                     map[string]*GroupMembershipQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -255,6 +265,106 @@ func (gq *GroupQuery) QueryTasks() *TaskQuery {
 		schemaConfig := gq.schemaConfig
 		step.To.Schema = schemaConfig.Task
 		step.Edge.Schema = schemaConfig.GroupTasks
+		fromU = sqlgraph.SetNeighbors(gq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryProcedureEditors chains the current query on the "procedure_editors" edge.
+func (gq *GroupQuery) QueryProcedureEditors() *ProcedureQuery {
+	query := (&ProcedureClient{config: gq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := gq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := gq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, selector),
+			sqlgraph.To(procedure.Table, procedure.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.ProcedureEditorsTable, group.ProcedureEditorsPrimaryKey...),
+		)
+		schemaConfig := gq.schemaConfig
+		step.To.Schema = schemaConfig.Procedure
+		step.Edge.Schema = schemaConfig.ProcedureEditors
+		fromU = sqlgraph.SetNeighbors(gq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryProcedureBlockedGroups chains the current query on the "procedure_blocked_groups" edge.
+func (gq *GroupQuery) QueryProcedureBlockedGroups() *ProcedureQuery {
+	query := (&ProcedureClient{config: gq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := gq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := gq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, selector),
+			sqlgraph.To(procedure.Table, procedure.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.ProcedureBlockedGroupsTable, group.ProcedureBlockedGroupsPrimaryKey...),
+		)
+		schemaConfig := gq.schemaConfig
+		step.To.Schema = schemaConfig.Procedure
+		step.Edge.Schema = schemaConfig.ProcedureBlockedGroups
+		fromU = sqlgraph.SetNeighbors(gq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryInternalpolicyEditors chains the current query on the "internalpolicy_editors" edge.
+func (gq *GroupQuery) QueryInternalpolicyEditors() *InternalPolicyQuery {
+	query := (&InternalPolicyClient{config: gq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := gq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := gq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, selector),
+			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.InternalpolicyEditorsTable, group.InternalpolicyEditorsPrimaryKey...),
+		)
+		schemaConfig := gq.schemaConfig
+		step.To.Schema = schemaConfig.InternalPolicy
+		step.Edge.Schema = schemaConfig.InternalPolicyEditors
+		fromU = sqlgraph.SetNeighbors(gq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryInternalpolicyBlockedGroups chains the current query on the "internalpolicy_blocked_groups" edge.
+func (gq *GroupQuery) QueryInternalpolicyBlockedGroups() *InternalPolicyQuery {
+	query := (&InternalPolicyClient{config: gq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := gq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := gq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, selector),
+			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.InternalpolicyBlockedGroupsTable, group.InternalpolicyBlockedGroupsPrimaryKey...),
+		)
+		schemaConfig := gq.schemaConfig
+		step.To.Schema = schemaConfig.InternalPolicy
+		step.Edge.Schema = schemaConfig.InternalPolicyBlockedGroups
 		fromU = sqlgraph.SetNeighbors(gq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -473,19 +583,23 @@ func (gq *GroupQuery) Clone() *GroupQuery {
 		return nil
 	}
 	return &GroupQuery{
-		config:           gq.config,
-		ctx:              gq.ctx.Clone(),
-		order:            append([]group.OrderOption{}, gq.order...),
-		inters:           append([]Interceptor{}, gq.inters...),
-		predicates:       append([]predicate.Group{}, gq.predicates...),
-		withOwner:        gq.withOwner.Clone(),
-		withSetting:      gq.withSetting.Clone(),
-		withUsers:        gq.withUsers.Clone(),
-		withEvents:       gq.withEvents.Clone(),
-		withIntegrations: gq.withIntegrations.Clone(),
-		withFiles:        gq.withFiles.Clone(),
-		withTasks:        gq.withTasks.Clone(),
-		withMembers:      gq.withMembers.Clone(),
+		config:                          gq.config,
+		ctx:                             gq.ctx.Clone(),
+		order:                           append([]group.OrderOption{}, gq.order...),
+		inters:                          append([]Interceptor{}, gq.inters...),
+		predicates:                      append([]predicate.Group{}, gq.predicates...),
+		withOwner:                       gq.withOwner.Clone(),
+		withSetting:                     gq.withSetting.Clone(),
+		withUsers:                       gq.withUsers.Clone(),
+		withEvents:                      gq.withEvents.Clone(),
+		withIntegrations:                gq.withIntegrations.Clone(),
+		withFiles:                       gq.withFiles.Clone(),
+		withTasks:                       gq.withTasks.Clone(),
+		withProcedureEditors:            gq.withProcedureEditors.Clone(),
+		withProcedureBlockedGroups:      gq.withProcedureBlockedGroups.Clone(),
+		withInternalpolicyEditors:       gq.withInternalpolicyEditors.Clone(),
+		withInternalpolicyBlockedGroups: gq.withInternalpolicyBlockedGroups.Clone(),
+		withMembers:                     gq.withMembers.Clone(),
 		// clone intermediate query.
 		sql:       gq.sql.Clone(),
 		path:      gq.path,
@@ -567,6 +681,50 @@ func (gq *GroupQuery) WithTasks(opts ...func(*TaskQuery)) *GroupQuery {
 		opt(query)
 	}
 	gq.withTasks = query
+	return gq
+}
+
+// WithProcedureEditors tells the query-builder to eager-load the nodes that are connected to
+// the "procedure_editors" edge. The optional arguments are used to configure the query builder of the edge.
+func (gq *GroupQuery) WithProcedureEditors(opts ...func(*ProcedureQuery)) *GroupQuery {
+	query := (&ProcedureClient{config: gq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	gq.withProcedureEditors = query
+	return gq
+}
+
+// WithProcedureBlockedGroups tells the query-builder to eager-load the nodes that are connected to
+// the "procedure_blocked_groups" edge. The optional arguments are used to configure the query builder of the edge.
+func (gq *GroupQuery) WithProcedureBlockedGroups(opts ...func(*ProcedureQuery)) *GroupQuery {
+	query := (&ProcedureClient{config: gq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	gq.withProcedureBlockedGroups = query
+	return gq
+}
+
+// WithInternalpolicyEditors tells the query-builder to eager-load the nodes that are connected to
+// the "internalpolicy_editors" edge. The optional arguments are used to configure the query builder of the edge.
+func (gq *GroupQuery) WithInternalpolicyEditors(opts ...func(*InternalPolicyQuery)) *GroupQuery {
+	query := (&InternalPolicyClient{config: gq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	gq.withInternalpolicyEditors = query
+	return gq
+}
+
+// WithInternalpolicyBlockedGroups tells the query-builder to eager-load the nodes that are connected to
+// the "internalpolicy_blocked_groups" edge. The optional arguments are used to configure the query builder of the edge.
+func (gq *GroupQuery) WithInternalpolicyBlockedGroups(opts ...func(*InternalPolicyQuery)) *GroupQuery {
+	query := (&InternalPolicyClient{config: gq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	gq.withInternalpolicyBlockedGroups = query
 	return gq
 }
 
@@ -665,7 +823,7 @@ func (gq *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 	var (
 		nodes       = []*Group{}
 		_spec       = gq.querySpec()
-		loadedTypes = [8]bool{
+		loadedTypes = [12]bool{
 			gq.withOwner != nil,
 			gq.withSetting != nil,
 			gq.withUsers != nil,
@@ -673,6 +831,10 @@ func (gq *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 			gq.withIntegrations != nil,
 			gq.withFiles != nil,
 			gq.withTasks != nil,
+			gq.withProcedureEditors != nil,
+			gq.withProcedureBlockedGroups != nil,
+			gq.withInternalpolicyEditors != nil,
+			gq.withInternalpolicyBlockedGroups != nil,
 			gq.withMembers != nil,
 		}
 	)
@@ -746,6 +908,40 @@ func (gq *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 			return nil, err
 		}
 	}
+	if query := gq.withProcedureEditors; query != nil {
+		if err := gq.loadProcedureEditors(ctx, query, nodes,
+			func(n *Group) { n.Edges.ProcedureEditors = []*Procedure{} },
+			func(n *Group, e *Procedure) { n.Edges.ProcedureEditors = append(n.Edges.ProcedureEditors, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := gq.withProcedureBlockedGroups; query != nil {
+		if err := gq.loadProcedureBlockedGroups(ctx, query, nodes,
+			func(n *Group) { n.Edges.ProcedureBlockedGroups = []*Procedure{} },
+			func(n *Group, e *Procedure) {
+				n.Edges.ProcedureBlockedGroups = append(n.Edges.ProcedureBlockedGroups, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := gq.withInternalpolicyEditors; query != nil {
+		if err := gq.loadInternalpolicyEditors(ctx, query, nodes,
+			func(n *Group) { n.Edges.InternalpolicyEditors = []*InternalPolicy{} },
+			func(n *Group, e *InternalPolicy) {
+				n.Edges.InternalpolicyEditors = append(n.Edges.InternalpolicyEditors, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := gq.withInternalpolicyBlockedGroups; query != nil {
+		if err := gq.loadInternalpolicyBlockedGroups(ctx, query, nodes,
+			func(n *Group) { n.Edges.InternalpolicyBlockedGroups = []*InternalPolicy{} },
+			func(n *Group, e *InternalPolicy) {
+				n.Edges.InternalpolicyBlockedGroups = append(n.Edges.InternalpolicyBlockedGroups, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	if query := gq.withMembers; query != nil {
 		if err := gq.loadMembers(ctx, query, nodes,
 			func(n *Group) { n.Edges.Members = []*GroupMembership{} },
@@ -785,6 +981,34 @@ func (gq *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 		if err := gq.loadTasks(ctx, query, nodes,
 			func(n *Group) { n.appendNamedTasks(name) },
 			func(n *Group, e *Task) { n.appendNamedTasks(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range gq.withNamedProcedureEditors {
+		if err := gq.loadProcedureEditors(ctx, query, nodes,
+			func(n *Group) { n.appendNamedProcedureEditors(name) },
+			func(n *Group, e *Procedure) { n.appendNamedProcedureEditors(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range gq.withNamedProcedureBlockedGroups {
+		if err := gq.loadProcedureBlockedGroups(ctx, query, nodes,
+			func(n *Group) { n.appendNamedProcedureBlockedGroups(name) },
+			func(n *Group, e *Procedure) { n.appendNamedProcedureBlockedGroups(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range gq.withNamedInternalpolicyEditors {
+		if err := gq.loadInternalpolicyEditors(ctx, query, nodes,
+			func(n *Group) { n.appendNamedInternalpolicyEditors(name) },
+			func(n *Group, e *InternalPolicy) { n.appendNamedInternalpolicyEditors(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range gq.withNamedInternalpolicyBlockedGroups {
+		if err := gq.loadInternalpolicyBlockedGroups(ctx, query, nodes,
+			func(n *Group) { n.appendNamedInternalpolicyBlockedGroups(name) },
+			func(n *Group, e *InternalPolicy) { n.appendNamedInternalpolicyBlockedGroups(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1138,6 +1362,254 @@ func (gq *GroupQuery) loadTasks(ctx context.Context, query *TaskQuery, nodes []*
 	}
 	return nil
 }
+func (gq *GroupQuery) loadProcedureEditors(ctx context.Context, query *ProcedureQuery, nodes []*Group, init func(*Group), assign func(*Group, *Procedure)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Group)
+	nids := make(map[string]map[*Group]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(group.ProcedureEditorsTable)
+		joinT.Schema(gq.schemaConfig.ProcedureEditors)
+		s.Join(joinT).On(s.C(procedure.FieldID), joinT.C(group.ProcedureEditorsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(group.ProcedureEditorsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(group.ProcedureEditorsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Group]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Procedure](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "procedure_editors" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (gq *GroupQuery) loadProcedureBlockedGroups(ctx context.Context, query *ProcedureQuery, nodes []*Group, init func(*Group), assign func(*Group, *Procedure)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Group)
+	nids := make(map[string]map[*Group]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(group.ProcedureBlockedGroupsTable)
+		joinT.Schema(gq.schemaConfig.ProcedureBlockedGroups)
+		s.Join(joinT).On(s.C(procedure.FieldID), joinT.C(group.ProcedureBlockedGroupsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(group.ProcedureBlockedGroupsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(group.ProcedureBlockedGroupsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Group]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Procedure](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "procedure_blocked_groups" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (gq *GroupQuery) loadInternalpolicyEditors(ctx context.Context, query *InternalPolicyQuery, nodes []*Group, init func(*Group), assign func(*Group, *InternalPolicy)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Group)
+	nids := make(map[string]map[*Group]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(group.InternalpolicyEditorsTable)
+		joinT.Schema(gq.schemaConfig.InternalPolicyEditors)
+		s.Join(joinT).On(s.C(internalpolicy.FieldID), joinT.C(group.InternalpolicyEditorsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(group.InternalpolicyEditorsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(group.InternalpolicyEditorsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Group]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*InternalPolicy](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "internalpolicy_editors" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (gq *GroupQuery) loadInternalpolicyBlockedGroups(ctx context.Context, query *InternalPolicyQuery, nodes []*Group, init func(*Group), assign func(*Group, *InternalPolicy)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Group)
+	nids := make(map[string]map[*Group]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(group.InternalpolicyBlockedGroupsTable)
+		joinT.Schema(gq.schemaConfig.InternalPolicyBlockedGroups)
+		s.Join(joinT).On(s.C(internalpolicy.FieldID), joinT.C(group.InternalpolicyBlockedGroupsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(group.InternalpolicyBlockedGroupsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(group.InternalpolicyBlockedGroupsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Group]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*InternalPolicy](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "internalpolicy_blocked_groups" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (gq *GroupQuery) loadMembers(ctx context.Context, query *GroupMembershipQuery, nodes []*Group, init func(*Group), assign func(*Group, *GroupMembership)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Group)
@@ -1337,6 +1809,62 @@ func (gq *GroupQuery) WithNamedTasks(name string, opts ...func(*TaskQuery)) *Gro
 		gq.withNamedTasks = make(map[string]*TaskQuery)
 	}
 	gq.withNamedTasks[name] = query
+	return gq
+}
+
+// WithNamedProcedureEditors tells the query-builder to eager-load the nodes that are connected to the "procedure_editors"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (gq *GroupQuery) WithNamedProcedureEditors(name string, opts ...func(*ProcedureQuery)) *GroupQuery {
+	query := (&ProcedureClient{config: gq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if gq.withNamedProcedureEditors == nil {
+		gq.withNamedProcedureEditors = make(map[string]*ProcedureQuery)
+	}
+	gq.withNamedProcedureEditors[name] = query
+	return gq
+}
+
+// WithNamedProcedureBlockedGroups tells the query-builder to eager-load the nodes that are connected to the "procedure_blocked_groups"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (gq *GroupQuery) WithNamedProcedureBlockedGroups(name string, opts ...func(*ProcedureQuery)) *GroupQuery {
+	query := (&ProcedureClient{config: gq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if gq.withNamedProcedureBlockedGroups == nil {
+		gq.withNamedProcedureBlockedGroups = make(map[string]*ProcedureQuery)
+	}
+	gq.withNamedProcedureBlockedGroups[name] = query
+	return gq
+}
+
+// WithNamedInternalpolicyEditors tells the query-builder to eager-load the nodes that are connected to the "internalpolicy_editors"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (gq *GroupQuery) WithNamedInternalpolicyEditors(name string, opts ...func(*InternalPolicyQuery)) *GroupQuery {
+	query := (&InternalPolicyClient{config: gq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if gq.withNamedInternalpolicyEditors == nil {
+		gq.withNamedInternalpolicyEditors = make(map[string]*InternalPolicyQuery)
+	}
+	gq.withNamedInternalpolicyEditors[name] = query
+	return gq
+}
+
+// WithNamedInternalpolicyBlockedGroups tells the query-builder to eager-load the nodes that are connected to the "internalpolicy_blocked_groups"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (gq *GroupQuery) WithNamedInternalpolicyBlockedGroups(name string, opts ...func(*InternalPolicyQuery)) *GroupQuery {
+	query := (&InternalPolicyClient{config: gq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if gq.withNamedInternalpolicyBlockedGroups == nil {
+		gq.withNamedInternalpolicyBlockedGroups = make(map[string]*InternalPolicyQuery)
+	}
+	gq.withNamedInternalpolicyBlockedGroups[name] = query
 	return gq
 }
 

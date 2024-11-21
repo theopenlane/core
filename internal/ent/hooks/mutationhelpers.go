@@ -15,67 +15,182 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 )
 
-// getTuplesToAdd gets the tuples that need to be added to the authz service based on the edges that were added
-func getTuplesToAdd(ctx context.Context, m ent.Mutation, objectID string, parents []string) ([]fgax.TupleKey, error) {
+// getTuplesParentToAdd gets the tuples that need to be added to the authz service based on the edges that were added
+// with the parent relation
+func getTuplesParentToAdd(ctx context.Context, m ent.Mutation, objectID string, parents []string) ([]fgax.TupleKey, error) {
 	var addTuples []fgax.TupleKey
 
 	for _, parent := range parents {
-		subjectIDs, err := getAddedParentIDsFromEntMutation(ctx, m, parent)
+		subjectType := strings.ReplaceAll(parent, "_id", "")
+
+		t, err := getTuplesToAdd(ctx, m, objectID, m.Type(), fgax.ParentRelation, subjectType, parent)
 		if err != nil {
 			return nil, err
 		}
 
-		// edge is not set, no need to add a tuple
-		if len(subjectIDs) == 0 {
-			continue
-		}
-
-		subjectType := strings.ReplaceAll(parent, "_id", "")
-
-		for _, subjectID := range subjectIDs {
-			parentTuple := fgax.GetTupleKey(fgax.TupleRequest{
-				SubjectID:   subjectID,
-				SubjectType: subjectType,
-				ObjectID:    objectID, // this is the object id being created
-				ObjectType:  m.Type(), // this is the object type being created
-				Relation:    fgax.ParentRelation,
-			})
-
-			addTuples = append(addTuples, parentTuple)
-		}
+		addTuples = append(addTuples, t...)
 	}
 
 	return addTuples, nil
 }
 
-// getTuplesToRemove gets the tuples that need to be removed from the authz service based on the edges that were removed
-func getTuplesToRemove(ctx context.Context, m ent.Mutation, objectID string, parents []string) ([]fgax.TupleKey, error) {
-	var removeTuples []fgax.TupleKey
+// getTuplesToAdd is the generic function to get the tuples that need to be added to the authz service based on the edges that were added
+// it is recommend to use the helper functions that call this instead of calling this directly
+// for example, to add a parent relationship, use getTuplesParentToAdd, or for an org owner relationship, use createOrgOwnerParentTuple
+func getTuplesToAdd(ctx context.Context, m ent.Mutation, objectID, objectType, relation, subjectType, edgeField string) ([]fgax.TupleKey, error) {
+	var addTuples []fgax.TupleKey
 
-	for _, parent := range parents {
-		subjectIDs, err := getRemovedParentIDsFromEntMutation(ctx, m, parent)
+	subjectIDs, err := getAddedParentIDsFromEntMutation(ctx, m, edgeField)
+	if err != nil {
+		return nil, err
+	}
+
+	// edge is not set, no need to add a tuple
+	if len(subjectIDs) == 0 {
+		return addTuples, nil
+	}
+
+	for _, subjectID := range subjectIDs {
+		tuple := fgax.GetTupleKey(fgax.TupleRequest{
+			SubjectID:   subjectID,
+			SubjectType: subjectType,
+			ObjectID:    objectID,   // this is the object id being created
+			ObjectType:  objectType, // this is the object type being created
+			Relation:    relation,
+		})
+
+		addTuples = append(addTuples, tuple)
+	}
+
+	return addTuples, nil
+}
+
+// createOrgOwnerParentTuple creates the tuple for the parent org owner relationship
+func createOrgOwnerParentTuple(ctx context.Context, m ent.Mutation, objectID string) ([]fgax.TupleKey, error) {
+	var addTuples []fgax.TupleKey
+
+	parentField := "owner_id"
+	subjectType := "organization"
+
+	t, err := getTuplesToAdd(ctx, m, objectID, m.Type(), fgax.ParentRelation, subjectType, parentField)
+	if err != nil {
+		return nil, err
+	}
+
+	addTuples = append(addTuples, t...)
+
+	return addTuples, nil
+}
+
+// createEditorTuple creates the tuple for the editor relationship based on an edge field
+func createEditorTuple(ctx context.Context, m ent.Mutation, objectID string, objects map[string]string) ([]fgax.TupleKey, error) {
+	var addTuples []fgax.TupleKey
+
+	for parentField, subjectType := range objects {
+		t, err := getTuplesToAdd(ctx, m, objectID, m.Type(), fgax.EditorRelation, subjectType, parentField)
 		if err != nil {
 			return nil, err
 		}
 
-		// edge is not set, no need to add a tuple
-		if len(subjectIDs) == 0 {
-			continue
+		addTuples = append(addTuples, t...)
+	}
+
+	return addTuples, nil
+}
+
+// createBlockedTuple creates the tuple for the blocked relationship based on an edge field
+func createBlockedTuple(ctx context.Context, m ent.Mutation, objectID string, objects map[string]string) ([]fgax.TupleKey, error) {
+	var addTuples []fgax.TupleKey
+
+	for parentField, subjectType := range objects {
+		t, err := getTuplesToAdd(ctx, m, objectID, m.Type(), fgax.BlockedRelation, subjectType, parentField)
+		if err != nil {
+			return nil, err
 		}
 
+		addTuples = append(addTuples, t...)
+	}
+
+	return addTuples, nil
+}
+
+// getTuplesToRemove is the generic function to get the tuples that need to be added to the authz service based on the edges that were added
+// it is recommend to use the helper functions that call this instead of calling this directly
+// for example, to add a parent relationship, use getParentTuplesToRemove
+func getTuplesToRemove(ctx context.Context, m ent.Mutation, objectID, objectType, relation, subjectType, edgeField string) ([]fgax.TupleKey, error) {
+	var removeTuples []fgax.TupleKey
+
+	subjectIDs, err := getRemovedParentIDsFromEntMutation(ctx, m, edgeField)
+	if err != nil {
+		return nil, err
+	}
+
+	// edge is not set, no need to add a tuple
+	if len(subjectIDs) == 0 {
+		return removeTuples, nil
+	}
+
+	for _, subjectID := range subjectIDs {
+		parentTuple := fgax.GetTupleKey(fgax.TupleRequest{
+			SubjectID:   subjectID,
+			SubjectType: subjectType,
+			ObjectID:    objectID,   // this is the object id being created
+			ObjectType:  objectType, // this is the object type being created
+			Relation:    relation,
+		})
+
+		removeTuples = append(removeTuples, parentTuple)
+	}
+
+	return removeTuples, nil
+}
+
+// getParentTuplesToRemove gets the tuples that need to be removed from the authz service based on the edges that were removed
+// with the parent relation
+func getParentTuplesToRemove(ctx context.Context, m ent.Mutation, objectID string, parents []string) ([]fgax.TupleKey, error) {
+	var removeTuples []fgax.TupleKey
+
+	for _, parent := range parents {
 		subjectType := strings.ReplaceAll(parent, "_id", "")
 
-		for _, subjectID := range subjectIDs {
-			parentTuple := fgax.GetTupleKey(fgax.TupleRequest{
-				SubjectID:   subjectID,
-				SubjectType: subjectType,
-				ObjectID:    objectID, // this is the object id being created
-				ObjectType:  m.Type(), // this is the object type being created
-				Relation:    fgax.ParentRelation,
-			})
-
-			removeTuples = append(removeTuples, parentTuple)
+		t, err := getTuplesToRemove(ctx, m, objectID, m.Type(), fgax.ParentRelation, subjectType, parent)
+		if err != nil {
+			return nil, err
 		}
+
+		removeTuples = append(removeTuples, t...)
+	}
+
+	return removeTuples, nil
+}
+
+// removeEditorTuples removes the tuple for the editor relationship based on an edge field
+func removeEditorTuples(ctx context.Context, m ent.Mutation, objectID string, objects map[string]string) ([]fgax.TupleKey, error) {
+	var removeTuples []fgax.TupleKey
+
+	for parentField, subjectType := range objects {
+		t, err := getTuplesToRemove(ctx, m, objectID, m.Type(), fgax.EditorRelation, subjectType, parentField)
+		if err != nil {
+			return nil, err
+		}
+
+		removeTuples = append(removeTuples, t...)
+	}
+
+	return removeTuples, nil
+}
+
+// removeBlockedTuples removes the tuple for the blocked relationship based on an edge field
+func removeBlockedTuples(ctx context.Context, m ent.Mutation, objectID string, objects map[string]string) ([]fgax.TupleKey, error) {
+	var removeTuples []fgax.TupleKey
+
+	for parentField, subjectType := range objects {
+		t, err := getTuplesToRemove(ctx, m, objectID, m.Type(), fgax.BlockedRelation, subjectType, parentField)
+		if err != nil {
+			return nil, err
+		}
+
+		removeTuples = append(removeTuples, t...)
 	}
 
 	return removeTuples, nil
@@ -113,7 +228,8 @@ func getAddedParentIDsFromEntMutation(ctx context.Context, m ent.Mutation, paren
 	edges := m.AddedEdges()
 	for _, e := range edges {
 		parentEdge := strings.ReplaceAll(parentField, "_id", "")
-		if e == parentEdge {
+		// check if the edge is the parent field or the parent field pluralized
+		if e == parentEdge || e == parentEdge+"s" {
 			// we need to parse the graphql input to get the ids
 			field := goUpper.ToGo(parentField) + "s"
 			if m.Op() != ent.OpCreate {
@@ -139,7 +255,7 @@ func getRemovedParentIDsFromEntMutation(ctx context.Context, m ent.Mutation, par
 	edges := m.RemovedEdges()
 	for _, e := range edges {
 		parentEdge := strings.ReplaceAll(parentField, "_id", "")
-		if e == parentEdge {
+		if e == parentEdge || e == parentEdge+"s" {
 			// we need to parse the graphql input to get the ids
 			field := goUpper.ToGo(parentField) + "s"
 			if m.Op() != ent.OpCreate {

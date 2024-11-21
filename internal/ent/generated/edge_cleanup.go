@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -26,6 +27,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
+	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
@@ -528,6 +530,20 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 	if exists, err := FromContext(ctx).Program.Query().Where((program.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if programCount, err := FromContext(ctx).Program.Delete().Where(program.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			log.Debug().Err(err).Int("count", programCount).Msg("deleting program")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).Procedure.Query().Where((procedure.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if procedureCount, err := FromContext(ctx).Procedure.Delete().Where(procedure.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", procedureCount).Msg("deleting procedure")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).InternalPolicy.Query().Where((internalpolicy.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if internalpolicyCount, err := FromContext(ctx).InternalPolicy.Delete().Where(internalpolicy.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", internalpolicyCount).Msg("deleting internalpolicy")
 			return err
 		}
 	}

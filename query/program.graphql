@@ -61,6 +61,39 @@ mutation CreateProgram($input: CreateProgramInput!) {
       tags
       updatedAt
       updatedBy
+      procedures {
+        background
+        createdAt
+        createdBy
+        description
+        details
+        id
+        name
+        procedureType
+        purposeAndScope
+        satisfies
+        status
+        tags
+        updatedAt
+        updatedBy
+        version
+      }
+      policies {
+        background
+        createdAt
+        createdBy
+        description
+        details
+        id
+        name
+        policyType
+        purposeAndScope
+        status
+        tags
+        updatedAt
+        updatedBy
+        version
+      }
     }
   }
 }
@@ -90,6 +123,39 @@ query GetAllPrograms {
         tags
         updatedAt
         updatedBy
+        procedures {
+          background
+          createdAt
+          createdBy
+          description
+          details
+          id
+          name
+          procedureType
+          purposeAndScope
+          satisfies
+          status
+          tags
+          updatedAt
+          updatedBy
+          version
+        }
+        policies {
+          background
+          createdAt
+          createdBy
+          description
+          details
+          id
+          name
+          policyType
+          purposeAndScope
+          status
+          tags
+          updatedAt
+          updatedBy
+          version
+        }
       }
     }
   }
@@ -111,6 +177,39 @@ query GetProgramByID($programId: ID!) {
     tags
     updatedAt
     updatedBy
+    procedures {
+      background
+      createdAt
+      createdBy
+      description
+      details
+      id
+      name
+      procedureType
+      purposeAndScope
+      satisfies
+      status
+      tags
+      updatedAt
+      updatedBy
+      version
+    }
+    policies {
+      background
+      createdAt
+      createdBy
+      description
+      details
+      id
+      name
+      policyType
+      purposeAndScope
+      status
+      tags
+      updatedAt
+      updatedBy
+      version
+    }
   }
 }
 
@@ -133,6 +232,39 @@ query GetPrograms($where: ProgramWhereInput) {
         tags
         updatedAt
         updatedBy
+        procedures {
+          background
+          createdAt
+          createdBy
+          description
+          details
+          id
+          name
+          procedureType
+          purposeAndScope
+          satisfies
+          status
+          tags
+          updatedAt
+          updatedBy
+          version
+        }
+        policies {
+          background
+          createdAt
+          createdBy
+          description
+          details
+          id
+          name
+          policyType
+          purposeAndScope
+          status
+          tags
+          updatedAt
+          updatedBy
+          version
+        }
       }
     }
   }
@@ -155,6 +287,39 @@ mutation UpdateProgram($updateProgramId: ID!, $input: UpdateProgramInput!) {
       tags
       updatedAt
       updatedBy
+      procedures {
+        background
+        createdAt
+        createdBy
+        description
+        details
+        id
+        name
+        procedureType
+        purposeAndScope
+        satisfies
+        status
+        tags
+        updatedAt
+        updatedBy
+        version
+      }
+      policies {
+        background
+        createdAt
+        createdBy
+        description
+        details
+        id
+        name
+        policyType
+        purposeAndScope
+        status
+        tags
+        updatedAt
+        updatedBy
+        version
+      }
     }
   }
 }

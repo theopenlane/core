@@ -159,6 +159,20 @@ func (iphc *InternalPolicyHistoryCreate) SetTags(s []string) *InternalPolicyHist
 	return iphc
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (iphc *InternalPolicyHistoryCreate) SetOwnerID(s string) *InternalPolicyHistoryCreate {
+	iphc.mutation.SetOwnerID(s)
+	return iphc
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (iphc *InternalPolicyHistoryCreate) SetNillableOwnerID(s *string) *InternalPolicyHistoryCreate {
+	if s != nil {
+		iphc.SetOwnerID(*s)
+	}
+	return iphc
+}
+
 // SetName sets the "name" field.
 func (iphc *InternalPolicyHistoryCreate) SetName(s string) *InternalPolicyHistoryCreate {
 	iphc.mutation.SetName(s)
@@ -168,6 +182,14 @@ func (iphc *InternalPolicyHistoryCreate) SetName(s string) *InternalPolicyHistor
 // SetDescription sets the "description" field.
 func (iphc *InternalPolicyHistoryCreate) SetDescription(s string) *InternalPolicyHistoryCreate {
 	iphc.mutation.SetDescription(s)
+	return iphc
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (iphc *InternalPolicyHistoryCreate) SetNillableDescription(s *string) *InternalPolicyHistoryCreate {
+	if s != nil {
+		iphc.SetDescription(*s)
+	}
 	return iphc
 }
 
@@ -268,7 +290,9 @@ func (iphc *InternalPolicyHistoryCreate) Mutation() *InternalPolicyHistoryMutati
 
 // Save creates the InternalPolicyHistory in the database.
 func (iphc *InternalPolicyHistoryCreate) Save(ctx context.Context) (*InternalPolicyHistory, error) {
-	iphc.defaults()
+	if err := iphc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, iphc.sqlSave, iphc.mutation, iphc.hooks)
 }
 
@@ -295,20 +319,32 @@ func (iphc *InternalPolicyHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (iphc *InternalPolicyHistoryCreate) defaults() {
+func (iphc *InternalPolicyHistoryCreate) defaults() error {
 	if _, ok := iphc.mutation.HistoryTime(); !ok {
+		if internalpolicyhistory.DefaultHistoryTime == nil {
+			return fmt.Errorf("generated: uninitialized internalpolicyhistory.DefaultHistoryTime (forgotten import generated/runtime?)")
+		}
 		v := internalpolicyhistory.DefaultHistoryTime()
 		iphc.mutation.SetHistoryTime(v)
 	}
 	if _, ok := iphc.mutation.CreatedAt(); !ok {
+		if internalpolicyhistory.DefaultCreatedAt == nil {
+			return fmt.Errorf("generated: uninitialized internalpolicyhistory.DefaultCreatedAt (forgotten import generated/runtime?)")
+		}
 		v := internalpolicyhistory.DefaultCreatedAt()
 		iphc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := iphc.mutation.UpdatedAt(); !ok {
+		if internalpolicyhistory.DefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized internalpolicyhistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := internalpolicyhistory.DefaultUpdatedAt()
 		iphc.mutation.SetUpdatedAt(v)
 	}
 	if _, ok := iphc.mutation.MappingID(); !ok {
+		if internalpolicyhistory.DefaultMappingID == nil {
+			return fmt.Errorf("generated: uninitialized internalpolicyhistory.DefaultMappingID (forgotten import generated/runtime?)")
+		}
 		v := internalpolicyhistory.DefaultMappingID()
 		iphc.mutation.SetMappingID(v)
 	}
@@ -317,9 +353,13 @@ func (iphc *InternalPolicyHistoryCreate) defaults() {
 		iphc.mutation.SetTags(v)
 	}
 	if _, ok := iphc.mutation.ID(); !ok {
+		if internalpolicyhistory.DefaultID == nil {
+			return fmt.Errorf("generated: uninitialized internalpolicyhistory.DefaultID (forgotten import generated/runtime?)")
+		}
 		v := internalpolicyhistory.DefaultID()
 		iphc.mutation.SetID(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -340,9 +380,6 @@ func (iphc *InternalPolicyHistoryCreate) check() error {
 	}
 	if _, ok := iphc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "InternalPolicyHistory.name"`)}
-	}
-	if _, ok := iphc.mutation.Description(); !ok {
-		return &ValidationError{Name: "description", err: errors.New(`generated: missing required field "InternalPolicyHistory.description"`)}
 	}
 	return nil
 }
@@ -423,6 +460,10 @@ func (iphc *InternalPolicyHistoryCreate) createSpec() (*InternalPolicyHistory, *
 	if value, ok := iphc.mutation.Tags(); ok {
 		_spec.SetField(internalpolicyhistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
+	}
+	if value, ok := iphc.mutation.OwnerID(); ok {
+		_spec.SetField(internalpolicyhistory.FieldOwnerID, field.TypeString, value)
+		_node.OwnerID = value
 	}
 	if value, ok := iphc.mutation.Name(); ok {
 		_spec.SetField(internalpolicyhistory.FieldName, field.TypeString, value)

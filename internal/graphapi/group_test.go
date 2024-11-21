@@ -148,8 +148,8 @@ func (suite *GraphTestSuite) TestQueryGroups() {
 		require.NotNil(t, resp)
 		require.NotNil(t, resp.Groups.Edges)
 
-		// make sure two organizations are returned (group 2 and group 3)
-		assert.Equal(t, 2, len(resp.Groups.Edges))
+		// make sure two organizations are returned (group 2 and group 3) and the seeded group
+		assert.Equal(t, 3, len(resp.Groups.Edges))
 
 		group1Found := false
 		group2Found := false
@@ -178,8 +178,8 @@ func (suite *GraphTestSuite) TestQueryGroups() {
 		require.NoError(t, err)
 		require.NotNil(t, resp)
 
-		// make sure only one group is returned
-		assert.Equal(t, 1, len(resp.Groups.Edges))
+		// make sure only two groups are returned, group 1 and the seeded group
+		assert.Equal(t, 2, len(resp.Groups.Edges))
 	})
 }
 

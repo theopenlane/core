@@ -5232,6 +5232,58 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				*wq = *query
 			})
 
+		case "procedureEditors":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ProcedureClient{config: gr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, procedureImplementors)...); err != nil {
+				return err
+			}
+			gr.WithNamedProcedureEditors(alias, func(wq *ProcedureQuery) {
+				*wq = *query
+			})
+
+		case "procedureBlockedGroups":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ProcedureClient{config: gr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, procedureImplementors)...); err != nil {
+				return err
+			}
+			gr.WithNamedProcedureBlockedGroups(alias, func(wq *ProcedureQuery) {
+				*wq = *query
+			})
+
+		case "internalpolicyEditors":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&InternalPolicyClient{config: gr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, internalpolicyImplementors)...); err != nil {
+				return err
+			}
+			gr.WithNamedInternalpolicyEditors(alias, func(wq *InternalPolicyQuery) {
+				*wq = *query
+			})
+
+		case "internalpolicyBlockedGroups":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&InternalPolicyClient{config: gr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, internalpolicyImplementors)...); err != nil {
+				return err
+			}
+			gr.WithNamedInternalpolicyBlockedGroups(alias, func(wq *InternalPolicyQuery) {
+				*wq = *query
+			})
+
 		case "members":
 			var (
 				alias = field.Alias
@@ -6786,6 +6838,21 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
+		case "owner":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: ip.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			ip.withOwner = query
+			if _, ok := fieldSeen[internalpolicy.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, internalpolicy.FieldOwnerID)
+				fieldSeen[internalpolicy.FieldOwnerID] = struct{}{}
+			}
+
 		case "controlobjectives":
 			var (
 				alias = field.Alias
@@ -6863,6 +6930,32 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 			ip.WithNamedPrograms(alias, func(wq *ProgramQuery) {
 				*wq = *query
 			})
+
+		case "editors":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&GroupClient{config: ip.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
+				return err
+			}
+			ip.WithNamedEditors(alias, func(wq *GroupQuery) {
+				*wq = *query
+			})
+
+		case "blockedGroups":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&GroupClient{config: ip.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
+				return err
+			}
+			ip.WithNamedBlockedGroups(alias, func(wq *GroupQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[internalpolicy.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, internalpolicy.FieldCreatedAt)
@@ -6897,6 +6990,11 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 			if _, ok := fieldSeen[internalpolicy.FieldTags]; !ok {
 				selectedFields = append(selectedFields, internalpolicy.FieldTags)
 				fieldSeen[internalpolicy.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[internalpolicy.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, internalpolicy.FieldOwnerID)
+				fieldSeen[internalpolicy.FieldOwnerID] = struct{}{}
 			}
 		case "name":
 			if _, ok := fieldSeen[internalpolicy.FieldName]; !ok {
@@ -7049,6 +7147,11 @@ func (iph *InternalPolicyHistoryQuery) collectField(ctx context.Context, oneNode
 			if _, ok := fieldSeen[internalpolicyhistory.FieldTags]; !ok {
 				selectedFields = append(selectedFields, internalpolicyhistory.FieldTags)
 				fieldSeen[internalpolicyhistory.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[internalpolicyhistory.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, internalpolicyhistory.FieldOwnerID)
+				fieldSeen[internalpolicyhistory.FieldOwnerID] = struct{}{}
 			}
 		case "name":
 			if _, ok := fieldSeen[internalpolicyhistory.FieldName]; !ok {
@@ -9092,6 +9195,32 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				*wq = *query
 			})
 
+		case "procedures":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ProcedureClient{config: o.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, procedureImplementors)...); err != nil {
+				return err
+			}
+			o.WithNamedProcedures(alias, func(wq *ProcedureQuery) {
+				*wq = *query
+			})
+
+		case "internalpolicies":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&InternalPolicyClient{config: o.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, internalpolicyImplementors)...); err != nil {
+				return err
+			}
+			o.WithNamedInternalpolicies(alias, func(wq *InternalPolicyQuery) {
+				*wq = *query
+			})
+
 		case "members":
 			var (
 				alias = field.Alias
@@ -9913,6 +10042,21 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
+		case "owner":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: pr.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			pr.withOwner = query
+			if _, ok := fieldSeen[procedure.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, procedure.FieldOwnerID)
+				fieldSeen[procedure.FieldOwnerID] = struct{}{}
+			}
+
 		case "control":
 			var (
 				alias = field.Alias
@@ -9990,6 +10134,32 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			pr.WithNamedPrograms(alias, func(wq *ProgramQuery) {
 				*wq = *query
 			})
+
+		case "editors":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&GroupClient{config: pr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
+				return err
+			}
+			pr.WithNamedEditors(alias, func(wq *GroupQuery) {
+				*wq = *query
+			})
+
+		case "blockedGroups":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&GroupClient{config: pr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
+				return err
+			}
+			pr.WithNamedBlockedGroups(alias, func(wq *GroupQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[procedure.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, procedure.FieldCreatedAt)
@@ -10024,6 +10194,11 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			if _, ok := fieldSeen[procedure.FieldTags]; !ok {
 				selectedFields = append(selectedFields, procedure.FieldTags)
 				fieldSeen[procedure.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[procedure.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, procedure.FieldOwnerID)
+				fieldSeen[procedure.FieldOwnerID] = struct{}{}
 			}
 		case "name":
 			if _, ok := fieldSeen[procedure.FieldName]; !ok {
@@ -10181,6 +10356,11 @@ func (ph *ProcedureHistoryQuery) collectField(ctx context.Context, oneNode bool,
 			if _, ok := fieldSeen[procedurehistory.FieldTags]; !ok {
 				selectedFields = append(selectedFields, procedurehistory.FieldTags)
 				fieldSeen[procedurehistory.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[procedurehistory.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, procedurehistory.FieldOwnerID)
+				fieldSeen[procedurehistory.FieldOwnerID] = struct{}{}
 			}
 		case "name":
 			if _, ok := fieldSeen[procedurehistory.FieldName]; !ok {

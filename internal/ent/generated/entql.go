@@ -1215,6 +1215,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			internalpolicy.FieldDeletedBy:       {Type: field.TypeString, Column: internalpolicy.FieldDeletedBy},
 			internalpolicy.FieldMappingID:       {Type: field.TypeString, Column: internalpolicy.FieldMappingID},
 			internalpolicy.FieldTags:            {Type: field.TypeJSON, Column: internalpolicy.FieldTags},
+			internalpolicy.FieldOwnerID:         {Type: field.TypeString, Column: internalpolicy.FieldOwnerID},
 			internalpolicy.FieldName:            {Type: field.TypeString, Column: internalpolicy.FieldName},
 			internalpolicy.FieldDescription:     {Type: field.TypeString, Column: internalpolicy.FieldDescription},
 			internalpolicy.FieldStatus:          {Type: field.TypeString, Column: internalpolicy.FieldStatus},
@@ -1247,6 +1248,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			internalpolicyhistory.FieldDeletedBy:       {Type: field.TypeString, Column: internalpolicyhistory.FieldDeletedBy},
 			internalpolicyhistory.FieldMappingID:       {Type: field.TypeString, Column: internalpolicyhistory.FieldMappingID},
 			internalpolicyhistory.FieldTags:            {Type: field.TypeJSON, Column: internalpolicyhistory.FieldTags},
+			internalpolicyhistory.FieldOwnerID:         {Type: field.TypeString, Column: internalpolicyhistory.FieldOwnerID},
 			internalpolicyhistory.FieldName:            {Type: field.TypeString, Column: internalpolicyhistory.FieldName},
 			internalpolicyhistory.FieldDescription:     {Type: field.TypeString, Column: internalpolicyhistory.FieldDescription},
 			internalpolicyhistory.FieldStatus:          {Type: field.TypeString, Column: internalpolicyhistory.FieldStatus},
@@ -1723,6 +1725,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			procedure.FieldDeletedBy:       {Type: field.TypeString, Column: procedure.FieldDeletedBy},
 			procedure.FieldMappingID:       {Type: field.TypeString, Column: procedure.FieldMappingID},
 			procedure.FieldTags:            {Type: field.TypeJSON, Column: procedure.FieldTags},
+			procedure.FieldOwnerID:         {Type: field.TypeString, Column: procedure.FieldOwnerID},
 			procedure.FieldName:            {Type: field.TypeString, Column: procedure.FieldName},
 			procedure.FieldDescription:     {Type: field.TypeString, Column: procedure.FieldDescription},
 			procedure.FieldStatus:          {Type: field.TypeString, Column: procedure.FieldStatus},
@@ -1756,6 +1759,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			procedurehistory.FieldDeletedBy:       {Type: field.TypeString, Column: procedurehistory.FieldDeletedBy},
 			procedurehistory.FieldMappingID:       {Type: field.TypeString, Column: procedurehistory.FieldMappingID},
 			procedurehistory.FieldTags:            {Type: field.TypeJSON, Column: procedurehistory.FieldTags},
+			procedurehistory.FieldOwnerID:         {Type: field.TypeString, Column: procedurehistory.FieldOwnerID},
 			procedurehistory.FieldName:            {Type: field.TypeString, Column: procedurehistory.FieldName},
 			procedurehistory.FieldDescription:     {Type: field.TypeString, Column: procedurehistory.FieldDescription},
 			procedurehistory.FieldStatus:          {Type: field.TypeString, Column: procedurehistory.FieldStatus},
@@ -3594,6 +3598,54 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Task",
 	)
 	graph.MustAddE(
+		"procedure_editors",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ProcedureEditorsTable,
+			Columns: group.ProcedureEditorsPrimaryKey,
+			Bidi:    false,
+		},
+		"Group",
+		"Procedure",
+	)
+	graph.MustAddE(
+		"procedure_blocked_groups",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ProcedureBlockedGroupsTable,
+			Columns: group.ProcedureBlockedGroupsPrimaryKey,
+			Bidi:    false,
+		},
+		"Group",
+		"Procedure",
+	)
+	graph.MustAddE(
+		"internalpolicy_editors",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.InternalpolicyEditorsTable,
+			Columns: group.InternalpolicyEditorsPrimaryKey,
+			Bidi:    false,
+		},
+		"Group",
+		"InternalPolicy",
+	)
+	graph.MustAddE(
+		"internalpolicy_blocked_groups",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.InternalpolicyBlockedGroupsTable,
+			Columns: group.InternalpolicyBlockedGroupsPrimaryKey,
+			Bidi:    false,
+		},
+		"Group",
+		"InternalPolicy",
+	)
+	graph.MustAddE(
 		"members",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -3750,6 +3802,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Webhook",
 	)
 	graph.MustAddE(
+		"owner",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   internalpolicy.OwnerTable,
+			Columns: []string{internalpolicy.OwnerColumn},
+			Bidi:    false,
+		},
+		"InternalPolicy",
+		"Organization",
+	)
+	graph.MustAddE(
 		"controlobjectives",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -3820,6 +3884,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"InternalPolicy",
 		"Program",
+	)
+	graph.MustAddE(
+		"editors",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.EditorsTable,
+			Columns: internalpolicy.EditorsPrimaryKey,
+			Bidi:    false,
+		},
+		"InternalPolicy",
+		"Group",
+	)
+	graph.MustAddE(
+		"blocked_groups",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.BlockedGroupsTable,
+			Columns: internalpolicy.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+		},
+		"InternalPolicy",
+		"Group",
 	)
 	graph.MustAddE(
 		"owner",
@@ -4362,6 +4450,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Program",
 	)
 	graph.MustAddE(
+		"procedures",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ProceduresTable,
+			Columns: []string{organization.ProceduresColumn},
+			Bidi:    false,
+		},
+		"Organization",
+		"Procedure",
+	)
+	graph.MustAddE(
+		"internalpolicies",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.InternalpoliciesTable,
+			Columns: []string{organization.InternalpoliciesColumn},
+			Bidi:    false,
+		},
+		"Organization",
+		"InternalPolicy",
+	)
+	graph.MustAddE(
 		"members",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -4446,6 +4558,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Event",
 	)
 	graph.MustAddE(
+		"owner",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   procedure.OwnerTable,
+			Columns: []string{procedure.OwnerColumn},
+			Bidi:    false,
+		},
+		"Procedure",
+		"Organization",
+	)
+	graph.MustAddE(
 		"control",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -4516,6 +4640,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Procedure",
 		"Program",
+	)
+	graph.MustAddE(
+		"editors",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   procedure.EditorsTable,
+			Columns: procedure.EditorsPrimaryKey,
+			Bidi:    false,
+		},
+		"Procedure",
+		"Group",
+	)
+	graph.MustAddE(
+		"blocked_groups",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   procedure.BlockedGroupsTable,
+			Columns: procedure.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+		},
+		"Procedure",
+		"Group",
 	)
 	graph.MustAddE(
 		"owner",
@@ -10270,6 +10418,62 @@ func (f *GroupFilter) WhereHasTasksWith(preds ...predicate.Task) {
 	})))
 }
 
+// WhereHasProcedureEditors applies a predicate to check if query has an edge procedure_editors.
+func (f *GroupFilter) WhereHasProcedureEditors() {
+	f.Where(entql.HasEdge("procedure_editors"))
+}
+
+// WhereHasProcedureEditorsWith applies a predicate to check if query has an edge procedure_editors with a given conditions (other predicates).
+func (f *GroupFilter) WhereHasProcedureEditorsWith(preds ...predicate.Procedure) {
+	f.Where(entql.HasEdgeWith("procedure_editors", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasProcedureBlockedGroups applies a predicate to check if query has an edge procedure_blocked_groups.
+func (f *GroupFilter) WhereHasProcedureBlockedGroups() {
+	f.Where(entql.HasEdge("procedure_blocked_groups"))
+}
+
+// WhereHasProcedureBlockedGroupsWith applies a predicate to check if query has an edge procedure_blocked_groups with a given conditions (other predicates).
+func (f *GroupFilter) WhereHasProcedureBlockedGroupsWith(preds ...predicate.Procedure) {
+	f.Where(entql.HasEdgeWith("procedure_blocked_groups", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasInternalpolicyEditors applies a predicate to check if query has an edge internalpolicy_editors.
+func (f *GroupFilter) WhereHasInternalpolicyEditors() {
+	f.Where(entql.HasEdge("internalpolicy_editors"))
+}
+
+// WhereHasInternalpolicyEditorsWith applies a predicate to check if query has an edge internalpolicy_editors with a given conditions (other predicates).
+func (f *GroupFilter) WhereHasInternalpolicyEditorsWith(preds ...predicate.InternalPolicy) {
+	f.Where(entql.HasEdgeWith("internalpolicy_editors", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasInternalpolicyBlockedGroups applies a predicate to check if query has an edge internalpolicy_blocked_groups.
+func (f *GroupFilter) WhereHasInternalpolicyBlockedGroups() {
+	f.Where(entql.HasEdge("internalpolicy_blocked_groups"))
+}
+
+// WhereHasInternalpolicyBlockedGroupsWith applies a predicate to check if query has an edge internalpolicy_blocked_groups with a given conditions (other predicates).
+func (f *GroupFilter) WhereHasInternalpolicyBlockedGroupsWith(preds ...predicate.InternalPolicy) {
+	f.Where(entql.HasEdgeWith("internalpolicy_blocked_groups", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasMembers applies a predicate to check if query has an edge members.
 func (f *GroupFilter) WhereHasMembers() {
 	f.Where(entql.HasEdge("members"))
@@ -11507,6 +11711,11 @@ func (f *InternalPolicyFilter) WhereTags(p entql.BytesP) {
 	f.Where(p.Field(internalpolicy.FieldTags))
 }
 
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *InternalPolicyFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(internalpolicy.FieldOwnerID))
+}
+
 // WhereName applies the entql string predicate on the name field.
 func (f *InternalPolicyFilter) WhereName(p entql.StringP) {
 	f.Where(p.Field(internalpolicy.FieldName))
@@ -11545,6 +11754,20 @@ func (f *InternalPolicyFilter) WhereBackground(p entql.StringP) {
 // WhereDetails applies the entql json.RawMessage predicate on the details field.
 func (f *InternalPolicyFilter) WhereDetails(p entql.BytesP) {
 	f.Where(p.Field(internalpolicy.FieldDetails))
+}
+
+// WhereHasOwner applies a predicate to check if query has an edge owner.
+func (f *InternalPolicyFilter) WhereHasOwner() {
+	f.Where(entql.HasEdge("owner"))
+}
+
+// WhereHasOwnerWith applies a predicate to check if query has an edge owner with a given conditions (other predicates).
+func (f *InternalPolicyFilter) WhereHasOwnerWith(preds ...predicate.Organization) {
+	f.Where(entql.HasEdgeWith("owner", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasControlobjectives applies a predicate to check if query has an edge controlobjectives.
@@ -11625,6 +11848,34 @@ func (f *InternalPolicyFilter) WhereHasPrograms() {
 // WhereHasProgramsWith applies a predicate to check if query has an edge programs with a given conditions (other predicates).
 func (f *InternalPolicyFilter) WhereHasProgramsWith(preds ...predicate.Program) {
 	f.Where(entql.HasEdgeWith("programs", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasEditors applies a predicate to check if query has an edge editors.
+func (f *InternalPolicyFilter) WhereHasEditors() {
+	f.Where(entql.HasEdge("editors"))
+}
+
+// WhereHasEditorsWith applies a predicate to check if query has an edge editors with a given conditions (other predicates).
+func (f *InternalPolicyFilter) WhereHasEditorsWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("editors", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasBlockedGroups applies a predicate to check if query has an edge blocked_groups.
+func (f *InternalPolicyFilter) WhereHasBlockedGroups() {
+	f.Where(entql.HasEdge("blocked_groups"))
+}
+
+// WhereHasBlockedGroupsWith applies a predicate to check if query has an edge blocked_groups with a given conditions (other predicates).
+func (f *InternalPolicyFilter) WhereHasBlockedGroupsWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("blocked_groups", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -11724,6 +11975,11 @@ func (f *InternalPolicyHistoryFilter) WhereMappingID(p entql.StringP) {
 // WhereTags applies the entql json.RawMessage predicate on the tags field.
 func (f *InternalPolicyHistoryFilter) WhereTags(p entql.BytesP) {
 	f.Where(p.Field(internalpolicyhistory.FieldTags))
+}
+
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *InternalPolicyHistoryFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(internalpolicyhistory.FieldOwnerID))
 }
 
 // WhereName applies the entql string predicate on the name field.
@@ -13621,6 +13877,34 @@ func (f *OrganizationFilter) WhereHasProgramsWith(preds ...predicate.Program) {
 	})))
 }
 
+// WhereHasProcedures applies a predicate to check if query has an edge procedures.
+func (f *OrganizationFilter) WhereHasProcedures() {
+	f.Where(entql.HasEdge("procedures"))
+}
+
+// WhereHasProceduresWith applies a predicate to check if query has an edge procedures with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasProceduresWith(preds ...predicate.Procedure) {
+	f.Where(entql.HasEdgeWith("procedures", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasInternalpolicies applies a predicate to check if query has an edge internalpolicies.
+func (f *OrganizationFilter) WhereHasInternalpolicies() {
+	f.Where(entql.HasEdge("internalpolicies"))
+}
+
+// WhereHasInternalpoliciesWith applies a predicate to check if query has an edge internalpolicies with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasInternalpoliciesWith(preds ...predicate.InternalPolicy) {
+	f.Where(entql.HasEdgeWith("internalpolicies", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasMembers applies a predicate to check if query has an edge members.
 func (f *OrganizationFilter) WhereHasMembers() {
 	f.Where(entql.HasEdge("members"))
@@ -14409,6 +14693,11 @@ func (f *ProcedureFilter) WhereTags(p entql.BytesP) {
 	f.Where(p.Field(procedure.FieldTags))
 }
 
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *ProcedureFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(procedure.FieldOwnerID))
+}
+
 // WhereName applies the entql string predicate on the name field.
 func (f *ProcedureFilter) WhereName(p entql.StringP) {
 	f.Where(p.Field(procedure.FieldName))
@@ -14452,6 +14741,20 @@ func (f *ProcedureFilter) WhereSatisfies(p entql.StringP) {
 // WhereDetails applies the entql json.RawMessage predicate on the details field.
 func (f *ProcedureFilter) WhereDetails(p entql.BytesP) {
 	f.Where(p.Field(procedure.FieldDetails))
+}
+
+// WhereHasOwner applies a predicate to check if query has an edge owner.
+func (f *ProcedureFilter) WhereHasOwner() {
+	f.Where(entql.HasEdge("owner"))
+}
+
+// WhereHasOwnerWith applies a predicate to check if query has an edge owner with a given conditions (other predicates).
+func (f *ProcedureFilter) WhereHasOwnerWith(preds ...predicate.Organization) {
+	f.Where(entql.HasEdgeWith("owner", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasControl applies a predicate to check if query has an edge control.
@@ -14532,6 +14835,34 @@ func (f *ProcedureFilter) WhereHasPrograms() {
 // WhereHasProgramsWith applies a predicate to check if query has an edge programs with a given conditions (other predicates).
 func (f *ProcedureFilter) WhereHasProgramsWith(preds ...predicate.Program) {
 	f.Where(entql.HasEdgeWith("programs", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasEditors applies a predicate to check if query has an edge editors.
+func (f *ProcedureFilter) WhereHasEditors() {
+	f.Where(entql.HasEdge("editors"))
+}
+
+// WhereHasEditorsWith applies a predicate to check if query has an edge editors with a given conditions (other predicates).
+func (f *ProcedureFilter) WhereHasEditorsWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("editors", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasBlockedGroups applies a predicate to check if query has an edge blocked_groups.
+func (f *ProcedureFilter) WhereHasBlockedGroups() {
+	f.Where(entql.HasEdge("blocked_groups"))
+}
+
+// WhereHasBlockedGroupsWith applies a predicate to check if query has an edge blocked_groups with a given conditions (other predicates).
+func (f *ProcedureFilter) WhereHasBlockedGroupsWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("blocked_groups", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -14631,6 +14962,11 @@ func (f *ProcedureHistoryFilter) WhereMappingID(p entql.StringP) {
 // WhereTags applies the entql json.RawMessage predicate on the tags field.
 func (f *ProcedureHistoryFilter) WhereTags(p entql.BytesP) {
 	f.Where(p.Field(procedurehistory.FieldTags))
+}
+
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *ProcedureHistoryFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(procedurehistory.FieldOwnerID))
 }
 
 // WhereName applies the entql string predicate on the name field.

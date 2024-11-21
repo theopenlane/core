@@ -19,6 +19,8 @@ var (
 	testUser2 testUserDetails
 	// viewOnlyUser is a test user that is a member of the first user's organization
 	viewOnlyUser testUserDetails
+	// adminUser is a test user that is an admin of the first user's organization
+	adminUser testUserDetails
 )
 
 // testUserDetails is a struct that holds the details of a test user
@@ -31,6 +33,8 @@ type testUserDetails struct {
 	PersonalOrgID string
 	// OrganizationID is the ID of the organization of the user
 	OrganizationID string
+	// GroupID is the ID of the group created under the organization
+	GroupID string
 	// UserCtx is the context of the user that should be used for the test requests
 	UserCtx context.Context
 }
@@ -63,6 +67,10 @@ func (suite *GraphTestSuite) userBuilder(ctx context.Context) testUserDetails {
 	testUser.UserCtx, err = auth.NewTestContextWithOrgID(testUser.ID, testUser.OrganizationID)
 	require.NoError(t, err)
 
+	// create a group under the organization
+	testGroup := (&GroupBuilder{client: suite.client, Owner: testUser.OrganizationID}).MustNew(testUser.UserCtx, t)
+	testUser.GroupID = testGroup.ID
+
 	return testUser
 }
 
@@ -79,15 +87,12 @@ func (suite *GraphTestSuite) setupTestData(ctx context.Context) {
 	// setup a test user that is a member of an organization
 	viewOnlyUser = suite.userBuilder(ctx)
 
-	// update organization to be the read-only member of the first test organization
-	(&OrgMemberBuilder{client: suite.client, UserID: viewOnlyUser.ID, OrgID: testUser1.OrganizationID, Role: enums.RoleMember.String()}).MustNew(viewOnlyUser.UserCtx, t)
+	// add the user to the organization
+	suite.addUserToOrganization(&viewOnlyUser, enums.RoleMember, testUser1.OrganizationID)
 
-	viewOnlyUser.OrganizationID = testUser1.OrganizationID
-
-	// update the user context for the org member
-	var err error
-	viewOnlyUser.UserCtx, err = auth.NewTestContextWithOrgID(viewOnlyUser.ID, viewOnlyUser.OrganizationID)
-	require.NoError(t, err)
+	// setup a test user that is an admin of an organization
+	adminUser = suite.userBuilder(ctx)
+	suite.addUserToOrganization(&adminUser, enums.RoleAdmin, testUser1.OrganizationID)
 
 	// setup client with a personal access token
 	pat := (&PersonalAccessTokenBuilder{
@@ -99,6 +104,8 @@ func (suite *GraphTestSuite) setupTestData(ctx context.Context) {
 	authHeaderPAT := openlaneclient.Authorization{
 		BearerToken: pat.Token,
 	}
+
+	var err error
 
 	suite.client.apiWithPAT, err = coreutils.TestClientWithAuth(t,
 		suite.client.db,
@@ -114,6 +121,21 @@ func (suite *GraphTestSuite) setupTestData(ctx context.Context) {
 	}
 
 	suite.client.apiWithToken, err = coreutils.TestClientWithAuth(t, suite.client.db, suite.client.objectStore, openlaneclient.WithCredentials(authHeaderAPIToken))
+	require.NoError(t, err)
+}
+
+// addUserToOrganization adds a user to an organization with the provided role and set's the user's organization ID and user context
+func (suite *GraphTestSuite) addUserToOrganization(userDetails *testUserDetails, role enums.Role, organizationID string) {
+	t := suite.T()
+
+	// update organization to be the read-only member of the first test organization
+	(&OrgMemberBuilder{client: suite.client, UserID: userDetails.ID, OrgID: organizationID, Role: role.String()}).MustNew(userDetails.UserCtx, t)
+
+	userDetails.OrganizationID = organizationID
+
+	// update the user context for the org member
+	var err error
+	userDetails.UserCtx, err = auth.NewTestContextWithOrgID(userDetails.ID, userDetails.OrganizationID)
 	require.NoError(t, err)
 }
 

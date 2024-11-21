@@ -41,13 +41,13 @@ func (suite *GraphTestSuite) TestQueryOrgMembers() {
 			queryID:     testUser1.OrganizationID,
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
-			expectedLen: 3, // account for the seeded org members
+			expectedLen: 4, // account for the seeded org members
 		},
 		{
 			name:        "happy path, get org with parent members based on context",
 			client:      suite.client.api,
 			ctx:         childReqCtx,
-			expectedLen: 4, // 2 from child org, 2 from parent org because we dedupe
+			expectedLen: 5, // 2 from child org, 2 from parent org because we dedupe
 		},
 		{
 			name:        "happy path, get org with parent members using org ID, only direct members will be returned",
@@ -168,7 +168,7 @@ func (suite *GraphTestSuite) TestMutationCreateOrgMembers() {
 			userID: ulids.New().String(),
 			role:   enums.RoleMember,
 			ctx:    testUser1.UserCtx,
-			errMsg: "constraint failed, unable to complete the action",
+			errMsg: "constraint failed, unable to complete the create",
 		},
 		{
 			name:   "no access",

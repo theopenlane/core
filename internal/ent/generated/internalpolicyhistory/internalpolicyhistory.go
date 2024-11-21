@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"time"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/entx/history"
@@ -38,6 +39,8 @@ const (
 	FieldMappingID = "mapping_id"
 	// FieldTags holds the string denoting the tags field in the database.
 	FieldTags = "tags"
+	// FieldOwnerID holds the string denoting the owner_id field in the database.
+	FieldOwnerID = "owner_id"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
 	// FieldDescription holds the string denoting the description field in the database.
@@ -72,6 +75,7 @@ var Columns = []string{
 	FieldDeletedBy,
 	FieldMappingID,
 	FieldTags,
+	FieldOwnerID,
 	FieldName,
 	FieldDescription,
 	FieldStatus,
@@ -92,7 +96,15 @@ func ValidColumn(column string) bool {
 	return false
 }
 
+// Note that the variables below are initialized by the runtime
+// package on the initialization of the application. Therefore,
+// it should be imported in the main as follows:
+//
+//	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
+	Hooks        [1]ent.Hook
+	Interceptors [1]ent.Interceptor
+	Policy       ent.Policy
 	// DefaultHistoryTime holds the default value on creation for the "history_time" field.
 	DefaultHistoryTime func() time.Time
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -175,6 +187,11 @@ func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
 // ByMappingID orders the results by the mapping_id field.
 func ByMappingID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldMappingID, opts...).ToFunc()
+}
+
+// ByOwnerID orders the results by the owner_id field.
+func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
 }
 
 // ByName orders the results by the name field.

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/lib/pq"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/utils/rout"
 
@@ -83,7 +84,11 @@ type ForeignKeyError struct {
 
 // Error returns the ForeignKeyError in string format
 func (e *ForeignKeyError) Error() string {
-	return fmt.Sprintf("constraint failed, unable to complete the action '%s' because the record '%s' does not exist. please try again", e.Action, e.ObjectType)
+	if e.ObjectType == "" {
+		return fmt.Sprintf("constraint failed, unable to complete the %s", e.Action)
+	}
+
+	return fmt.Sprintf("constraint failed, unable to complete the %s because the '%s' record does not exist", e.Action, e.ObjectType)
 }
 
 // newForeignKeyError returns a ForeignKeyError
@@ -126,7 +131,9 @@ func parseRequestError(err error, a action) error {
 
 		// Check for foreign key constraint error
 		if rout.IsForeignKeyConstraintError(constraintError) {
-			return newForeignKeyError(a.action, a.object)
+			object := getConstraintField(constraintError, a.object)
+
+			return newForeignKeyError(a.action, object)
 		}
 
 		return constraintError
@@ -143,4 +150,18 @@ func parseRequestError(err error, a action) error {
 
 		return err
 	}
+}
+
+// getConstraintField returns the field that caused the constraint error
+// this currently only works for postgres errors, which is the supported database of this project
+func getConstraintField(err error, object string) string {
+	unwrappedErr := errors.Unwrap(err)     // Unwrap the error to get the underlying error
+	dbError := errors.Unwrap(unwrappedErr) // Unwrap again to get the postgres error
+
+	if postgresError, ok := dbError.(*pq.Error); ok {
+		// the Table will be the object_edge so we need to remove the object_ prefix
+		return strings.ReplaceAll(postgresError.Table, object+"_", "")
+	}
+
+	return ""
 }

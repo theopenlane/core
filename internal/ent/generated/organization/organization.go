@@ -101,6 +101,10 @@ const (
 	EdgeTasks = "tasks"
 	// EdgePrograms holds the string denoting the programs edge name in mutations.
 	EdgePrograms = "programs"
+	// EdgeProcedures holds the string denoting the procedures edge name in mutations.
+	EdgeProcedures = "procedures"
+	// EdgeInternalpolicies holds the string denoting the internalpolicies edge name in mutations.
+	EdgeInternalpolicies = "internalpolicies"
 	// EdgeMembers holds the string denoting the members edge name in mutations.
 	EdgeMembers = "members"
 	// Table holds the table name of the organization in the database.
@@ -283,6 +287,20 @@ const (
 	ProgramsInverseTable = "programs"
 	// ProgramsColumn is the table column denoting the programs relation/edge.
 	ProgramsColumn = "owner_id"
+	// ProceduresTable is the table that holds the procedures relation/edge.
+	ProceduresTable = "procedures"
+	// ProceduresInverseTable is the table name for the Procedure entity.
+	// It exists in this package in order to avoid circular dependency with the "procedure" package.
+	ProceduresInverseTable = "procedures"
+	// ProceduresColumn is the table column denoting the procedures relation/edge.
+	ProceduresColumn = "owner_id"
+	// InternalpoliciesTable is the table that holds the internalpolicies relation/edge.
+	InternalpoliciesTable = "internal_policies"
+	// InternalpoliciesInverseTable is the table name for the InternalPolicy entity.
+	// It exists in this package in order to avoid circular dependency with the "internalpolicy" package.
+	InternalpoliciesInverseTable = "internal_policies"
+	// InternalpoliciesColumn is the table column denoting the internalpolicies relation/edge.
+	InternalpoliciesColumn = "owner_id"
 	// MembersTable is the table that holds the members relation/edge.
 	MembersTable = "org_memberships"
 	// MembersInverseTable is the table name for the OrgMembership entity.
@@ -834,6 +852,34 @@ func ByPrograms(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByProceduresCount orders the results by procedures count.
+func ByProceduresCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newProceduresStep(), opts...)
+	}
+}
+
+// ByProcedures orders the results by procedures terms.
+func ByProcedures(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newProceduresStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByInternalpoliciesCount orders the results by internalpolicies count.
+func ByInternalpoliciesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newInternalpoliciesStep(), opts...)
+	}
+}
+
+// ByInternalpolicies orders the results by internalpolicies terms.
+func ByInternalpolicies(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newInternalpoliciesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByMembersCount orders the results by members count.
 func ByMembersCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1041,6 +1087,20 @@ func newProgramsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ProgramsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, ProgramsTable, ProgramsColumn),
+	)
+}
+func newProceduresStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ProceduresInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ProceduresTable, ProceduresColumn),
+	)
+}
+func newInternalpoliciesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(InternalpoliciesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, InternalpoliciesTable, InternalpoliciesColumn),
 	)
 }
 func newMembersStep() *sqlgraph.Step {

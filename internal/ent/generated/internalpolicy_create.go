@@ -12,8 +12,10 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/task"
@@ -130,6 +132,20 @@ func (ipc *InternalPolicyCreate) SetTags(s []string) *InternalPolicyCreate {
 	return ipc
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (ipc *InternalPolicyCreate) SetOwnerID(s string) *InternalPolicyCreate {
+	ipc.mutation.SetOwnerID(s)
+	return ipc
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (ipc *InternalPolicyCreate) SetNillableOwnerID(s *string) *InternalPolicyCreate {
+	if s != nil {
+		ipc.SetOwnerID(*s)
+	}
+	return ipc
+}
+
 // SetName sets the "name" field.
 func (ipc *InternalPolicyCreate) SetName(s string) *InternalPolicyCreate {
 	ipc.mutation.SetName(s)
@@ -139,6 +155,14 @@ func (ipc *InternalPolicyCreate) SetName(s string) *InternalPolicyCreate {
 // SetDescription sets the "description" field.
 func (ipc *InternalPolicyCreate) SetDescription(s string) *InternalPolicyCreate {
 	ipc.mutation.SetDescription(s)
+	return ipc
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (ipc *InternalPolicyCreate) SetNillableDescription(s *string) *InternalPolicyCreate {
+	if s != nil {
+		ipc.SetDescription(*s)
+	}
 	return ipc
 }
 
@@ -232,6 +256,11 @@ func (ipc *InternalPolicyCreate) SetNillableID(s *string) *InternalPolicyCreate 
 	return ipc
 }
 
+// SetOwner sets the "owner" edge to the Organization entity.
+func (ipc *InternalPolicyCreate) SetOwner(o *Organization) *InternalPolicyCreate {
+	return ipc.SetOwnerID(o.ID)
+}
+
 // AddControlobjectiveIDs adds the "controlobjectives" edge to the ControlObjective entity by IDs.
 func (ipc *InternalPolicyCreate) AddControlobjectiveIDs(ids ...string) *InternalPolicyCreate {
 	ipc.mutation.AddControlobjectiveIDs(ids...)
@@ -322,6 +351,36 @@ func (ipc *InternalPolicyCreate) AddPrograms(p ...*Program) *InternalPolicyCreat
 	return ipc.AddProgramIDs(ids...)
 }
 
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (ipc *InternalPolicyCreate) AddEditorIDs(ids ...string) *InternalPolicyCreate {
+	ipc.mutation.AddEditorIDs(ids...)
+	return ipc
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (ipc *InternalPolicyCreate) AddEditors(g ...*Group) *InternalPolicyCreate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ipc.AddEditorIDs(ids...)
+}
+
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (ipc *InternalPolicyCreate) AddBlockedGroupIDs(ids ...string) *InternalPolicyCreate {
+	ipc.mutation.AddBlockedGroupIDs(ids...)
+	return ipc
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (ipc *InternalPolicyCreate) AddBlockedGroups(g ...*Group) *InternalPolicyCreate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ipc.AddBlockedGroupIDs(ids...)
+}
+
 // Mutation returns the InternalPolicyMutation object of the builder.
 func (ipc *InternalPolicyCreate) Mutation() *InternalPolicyMutation {
 	return ipc.mutation
@@ -399,11 +458,18 @@ func (ipc *InternalPolicyCreate) check() error {
 	if _, ok := ipc.mutation.MappingID(); !ok {
 		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "InternalPolicy.mapping_id"`)}
 	}
+	if v, ok := ipc.mutation.OwnerID(); ok {
+		if err := internalpolicy.OwnerIDValidator(v); err != nil {
+			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.owner_id": %w`, err)}
+		}
+	}
 	if _, ok := ipc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "InternalPolicy.name"`)}
 	}
-	if _, ok := ipc.mutation.Description(); !ok {
-		return &ValidationError{Name: "description", err: errors.New(`generated: missing required field "InternalPolicy.description"`)}
+	if v, ok := ipc.mutation.Name(); ok {
+		if err := internalpolicy.NameValidator(v); err != nil {
+			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.name": %w`, err)}
+		}
 	}
 	return nil
 }
@@ -505,6 +571,24 @@ func (ipc *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.Create
 		_spec.SetField(internalpolicy.FieldDetails, field.TypeJSON, value)
 		_node.Details = value
 	}
+	if nodes := ipc.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   internalpolicy.OwnerTable,
+			Columns: []string{internalpolicy.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipc.schemaConfig.InternalPolicy
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.OwnerID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := ipc.mutation.ControlobjectivesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -602,6 +686,40 @@ func (ipc *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.Create
 			},
 		}
 		edge.Schema = ipc.schemaConfig.ProgramPolicies
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ipc.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.EditorsTable,
+			Columns: internalpolicy.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipc.schemaConfig.InternalPolicyEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ipc.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.BlockedGroupsTable,
+			Columns: internalpolicy.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipc.schemaConfig.InternalPolicyBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

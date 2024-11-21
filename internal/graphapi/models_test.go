@@ -250,6 +250,33 @@ type TaskBuilder struct {
 	GroupID        string
 }
 
+type ProgramBuilder struct {
+	client *client
+
+	// Fields
+	Name string
+
+	// Create Edges
+	WithProcedure bool
+	WithPolicy    bool
+}
+
+type ProcedureBuilder struct {
+	client *client
+
+	// Fields
+	Name    string
+	GroupID string
+}
+
+type InternalPolicyBuilder struct {
+	client *client
+
+	// Fields
+	Name    string
+	GroupID string
+}
+
 // MustNew organization builder is used to create, without authz checks, orgs in the database
 func (o *OrganizationBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Organization {
 	// no auth, so allow policy
@@ -389,10 +416,10 @@ func (g *GroupBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Group {
 		g.Name = gofakeit.AppName()
 	}
 
-	// create owner if not provided
 	owner := g.Owner
 
-	if g.Owner == "" {
+	// default to test user 1's organization
+	if owner == "" {
 		owner = testUser1.OrganizationID
 	}
 
@@ -716,93 +743,162 @@ func (e *EntityCleanup) MustDelete(ctx context.Context, t *testing.T) {
 }
 
 // MustNew contact builder is used to create, without authz checks, contacts in the database
-func (e *ContactBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Contact {
+func (c *ContactBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Contact {
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
-	if e.Name == "" {
-		e.Name = gofakeit.AppName()
+	if c.Name == "" {
+		c.Name = gofakeit.AppName()
 	}
 
-	if e.Email == "" {
-		e.Email = gofakeit.Email()
+	if c.Email == "" {
+		c.Email = gofakeit.Email()
 	}
 
-	if e.Phone == "" {
-		e.Phone = gofakeit.Phone()
+	if c.Phone == "" {
+		c.Phone = gofakeit.Phone()
 	}
 
-	if e.Address == "" {
+	if c.Address == "" {
 		address := gofakeit.Address()
-		e.Address = fmt.Sprintf("%s, %s, %s, %s", address.Street, address.City, address.State, address.Zip)
+		c.Address = fmt.Sprintf("%s, %s, %s, %s", address.Street, address.City, address.State, address.Zip)
 	}
 
-	if e.Title == "" {
-		e.Title = gofakeit.JobTitle()
+	if c.Title == "" {
+		c.Title = gofakeit.JobTitle()
 	}
 
-	if e.Company == "" {
-		e.Company = gofakeit.Company()
+	if c.Company == "" {
+		c.Company = gofakeit.Company()
 	}
 
-	entity := e.client.db.Contact.Create().
-		SetFullName(e.Name).
-		SetEmail(e.Email).
-		SetPhoneNumber(e.Phone).
-		SetAddress(e.Address).
-		SetTitle(e.Title).
-		SetCompany(e.Company).
+	entity := c.client.db.Contact.Create().
+		SetFullName(c.Name).
+		SetEmail(c.Email).
+		SetPhoneNumber(c.Phone).
+		SetAddress(c.Address).
+		SetTitle(c.Title).
+		SetCompany(c.Company).
 		SaveX(ctx)
 
 	return entity
 }
 
 // MustDelete is used to cleanup, without authz checks, contacts in the database
-func (e *ContactCleanup) MustDelete(ctx context.Context, t *testing.T) {
+func (c *ContactCleanup) MustDelete(ctx context.Context, t *testing.T) {
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
-	e.client.db.Contact.DeleteOneID(e.ID).ExecX(ctx)
+	c.client.db.Contact.DeleteOneID(c.ID).ExecX(ctx)
 }
 
 // MustNew task builder is used to create, without authz checks, tasks in the database
-func (e *TaskBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Task {
+func (c *TaskBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Task {
 	// add client to context, required for hooks that expect the client to be in the context
-	ctx = ent.NewContext(ctx, e.client.db)
+	ctx = ent.NewContext(ctx, c.client.db)
 
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
-	if e.Title == "" {
-		e.Title = gofakeit.AppName()
+	if c.Title == "" {
+		c.Title = gofakeit.AppName()
 	}
 
-	if e.Description == "" {
-		e.Description = gofakeit.HipsterSentence(5)
+	if c.Description == "" {
+		c.Description = gofakeit.HipsterSentence(5)
 	}
 
-	taskCreate := e.client.db.Task.Create().
-		SetTitle(e.Title).
-		SetDescription(e.Description)
+	taskCreate := c.client.db.Task.Create().
+		SetTitle(c.Title).
+		SetDescription(c.Description)
 
-	if e.Status != "" {
-		taskCreate.SetStatus(e.Status)
+	if c.Status != "" {
+		taskCreate.SetStatus(c.Status)
 	}
 
-	if e.AssigneeID != "" {
-		taskCreate.SetAssigneeID(e.AssigneeID)
+	if c.AssigneeID != "" {
+		taskCreate.SetAssigneeID(c.AssigneeID)
 	}
 
-	if !e.Due.IsZero() {
-		taskCreate.SetDue(e.Due)
+	if !c.Due.IsZero() {
+		taskCreate.SetDue(c.Due)
 	}
 
-	if e.OrganizationID != "" {
-		taskCreate.AddOrganizationIDs(e.OrganizationID)
+	if c.OrganizationID != "" {
+		taskCreate.AddOrganizationIDs(c.OrganizationID)
 	}
 
-	if e.GroupID != "" {
-		taskCreate.AddGroupIDs(e.GroupID)
+	if c.GroupID != "" {
+		taskCreate.AddGroupIDs(c.GroupID)
 	}
 
 	task := taskCreate.SaveX(ctx)
 
 	return task
+}
+
+// MustNew program builder is used to create, without authz checks, programs in the database
+func (p *ProgramBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Program {
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+
+	if p.Name == "" {
+		p.Name = gofakeit.AppName()
+	}
+
+	mutations := p.client.db.Program.Create().
+		SetName(p.Name)
+
+	if p.WithProcedure {
+		procedure := (&ProcedureBuilder{client: p.client, Name: gofakeit.AppName()}).MustNew(ctx, t)
+		mutations.AddProcedureIDs(procedure.ID)
+	}
+
+	if p.WithPolicy {
+		policy := (&InternalPolicyBuilder{client: p.client, Name: gofakeit.AppName()}).MustNew(ctx, t)
+		mutations.AddPolicyIDs(policy.ID)
+	}
+
+	program := mutations.
+		SaveX(ctx)
+
+	return program
+}
+
+// MustNew procedure builder is used to create, without authz checks, procedures in the database
+func (p *ProcedureBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Procedure {
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+
+	// add client to context
+	ctx = ent.NewContext(ctx, p.client.db)
+
+	if p.Name == "" {
+		p.Name = gofakeit.AppName()
+	}
+
+	mutation := p.client.db.Procedure.Create().
+		SetName(p.Name)
+
+	if p.GroupID != "" {
+		mutation.AddEditorIDs(p.GroupID)
+	}
+
+	procedure := mutation.
+		SaveX(ctx)
+
+	return procedure
+}
+
+// MustNew policy builder is used to create, without authz checks, policies in the database
+func (p *InternalPolicyBuilder) MustNew(ctx context.Context, t *testing.T) *ent.InternalPolicy {
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+
+	// add client to context
+	ctx = ent.NewContext(ctx, p.client.db)
+
+	if p.Name == "" {
+		p.Name = gofakeit.AppName()
+	}
+
+	policy := p.client.db.InternalPolicy.Create().
+		SetName(p.Name).
+		SaveX(ctx)
+
+	return policy
 }

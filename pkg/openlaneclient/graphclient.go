@@ -190,8 +190,8 @@ type OpenlaneGraphClient interface {
 	CreateInternalPolicy(ctx context.Context, input CreateInternalPolicyInput, interceptors ...clientv2.RequestInterceptor) (*CreateInternalPolicy, error)
 	DeleteInternalPolicy(ctx context.Context, deleteInternalPolicyID string, interceptors ...clientv2.RequestInterceptor) (*DeleteInternalPolicy, error)
 	GetAllInternalPolicies(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllInternalPolicies, error)
-	GetInternalPolicyByID(ctx context.Context, internalPolicyID string, interceptors ...clientv2.RequestInterceptor) (*GetInternalPolicyByID, error)
 	GetInternalPolicies(ctx context.Context, where *InternalPolicyWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetInternalPolicies, error)
+	GetInternalPolicyByID(ctx context.Context, internalPolicyID string, interceptors ...clientv2.RequestInterceptor) (*GetInternalPolicyByID, error)
 	UpdateInternalPolicy(ctx context.Context, updateInternalPolicyID string, input UpdateInternalPolicyInput, interceptors ...clientv2.RequestInterceptor) (*UpdateInternalPolicy, error)
 	GetAllInternalPolicyHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllInternalPolicyHistories, error)
 	GetInternalPolicyHistories(ctx context.Context, where *InternalPolicyHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetInternalPolicyHistories, error)
@@ -2712,8 +2712,9 @@ type AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies s
 	DeletedBy       *string                "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	ID              string                 "json:\"id\" graphql:\"id\""
 	Tags            []string               "json:\"tags,omitempty\" graphql:\"tags\""
+	OwnerID         *string                "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Name            string                 "json:\"name\" graphql:\"name\""
-	Description     string                 "json:\"description\" graphql:\"description\""
+	Description     *string                "json:\"description,omitempty\" graphql:\"description\""
 	Status          *string                "json:\"status,omitempty\" graphql:\"status\""
 	PolicyType      *string                "json:\"policyType,omitempty\" graphql:\"policyType\""
 	Version         *string                "json:\"version,omitempty\" graphql:\"version\""
@@ -2740,13 +2741,19 @@ func (t *AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolici
 	}
 	return t.Tags
 }
+func (t *AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies) GetOwnerID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies{}
+	}
+	return t.OwnerID
+}
 func (t *AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies) GetName() string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies{}
 	}
 	return t.Name
 }
-func (t *AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies) GetDescription() string {
+func (t *AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies) GetDescription() *string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_InternalPolicySearchResult_InternalPolicies{}
 	}
@@ -3265,6 +3272,7 @@ type AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures struct {
 	DeletedBy       *string                "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	ID              string                 "json:\"id\" graphql:\"id\""
 	Tags            []string               "json:\"tags,omitempty\" graphql:\"tags\""
+	OwnerID         *string                "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Name            string                 "json:\"name\" graphql:\"name\""
 	Description     *string                "json:\"description,omitempty\" graphql:\"description\""
 	Status          *string                "json:\"status,omitempty\" graphql:\"status\""
@@ -3293,6 +3301,12 @@ func (t *AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures) GetTags
 		t = &AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures{}
 	}
 	return t.Tags
+}
+func (t *AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures) GetOwnerID() *string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures{}
+	}
+	return t.OwnerID
 }
 func (t *AdminSearch_AdminSearch_Nodes_ProcedureSearchResult_Procedures) GetName() string {
 	if t == nil {
@@ -24993,7 +25007,7 @@ type CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies st
 	Background      *string                "json:\"background,omitempty\" graphql:\"background\""
 	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy       *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description     string                 "json:\"description\" graphql:\"description\""
+	Description     *string                "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	ID              string                 "json:\"id\" graphql:\"id\""
 	Name            string                 "json:\"name\" graphql:\"name\""
@@ -25024,7 +25038,7 @@ func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicie
 	}
 	return t.CreatedBy
 }
-func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies) GetDescription() string {
+func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies) GetDescription() *string {
 	if t == nil {
 		t = &CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies{}
 	}
@@ -25106,7 +25120,7 @@ type CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies struct {
 	Background      *string                "json:\"background,omitempty\" graphql:\"background\""
 	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy       *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description     string                 "json:\"description\" graphql:\"description\""
+	Description     *string                "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	ID              string                 "json:\"id\" graphql:\"id\""
 	Name            string                 "json:\"name\" graphql:\"name\""
@@ -25137,7 +25151,7 @@ func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies) Get
 	}
 	return t.CreatedBy
 }
-func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies) GetDescription() string {
+func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies) GetDescription() *string {
 	if t == nil {
 		t = &CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies{}
 	}
@@ -25215,21 +25229,59 @@ func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy) GetInternalPolicies(
 	return t.InternalPolicies
 }
 
+type CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_Editors struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_Editors) GetID() string {
+	if t == nil {
+		t = &CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_Editors{}
+	}
+	return t.ID
+}
+func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_Editors) GetName() string {
+	if t == nil {
+		t = &CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_Editors{}
+	}
+	return t.Name
+}
+
+type CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_BlockedGroups struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_BlockedGroups) GetID() string {
+	if t == nil {
+		t = &CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_BlockedGroups{}
+	}
+	return t.ID
+}
+func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_BlockedGroups) GetName() string {
+	if t == nil {
+		t = &CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_BlockedGroups{}
+	}
+	return t.Name
+}
+
 type CreateInternalPolicy_CreateInternalPolicy_InternalPolicy struct {
-	Background      *string                "json:\"background,omitempty\" graphql:\"background\""
-	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description     string                 "json:\"description\" graphql:\"description\""
-	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
-	ID              string                 "json:\"id\" graphql:\"id\""
-	Name            string                 "json:\"name\" graphql:\"name\""
-	PolicyType      *string                "json:\"policyType,omitempty\" graphql:\"policyType\""
-	PurposeAndScope *string                "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
-	Status          *string                "json:\"status,omitempty\" graphql:\"status\""
-	Tags            []string               "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt       *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version         *string                "json:\"version,omitempty\" graphql:\"version\""
+	Background      *string                                                                   "json:\"background,omitempty\" graphql:\"background\""
+	CreatedAt       *time.Time                                                                "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string                                                                   "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description     *string                                                                   "json:\"description,omitempty\" graphql:\"description\""
+	Details         map[string]interface{}                                                    "json:\"details,omitempty\" graphql:\"details\""
+	ID              string                                                                    "json:\"id\" graphql:\"id\""
+	Name            string                                                                    "json:\"name\" graphql:\"name\""
+	PolicyType      *string                                                                   "json:\"policyType,omitempty\" graphql:\"policyType\""
+	PurposeAndScope *string                                                                   "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
+	Status          *string                                                                   "json:\"status,omitempty\" graphql:\"status\""
+	Tags            []string                                                                  "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time                                                                "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string                                                                   "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Version         *string                                                                   "json:\"version,omitempty\" graphql:\"version\""
+	Editors         []*CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
+	BlockedGroups   []*CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 }
 
 func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetBackground() *string {
@@ -25250,7 +25302,7 @@ func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetCreatedBy(
 	}
 	return t.CreatedBy
 }
-func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetDescription() string {
+func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetDescription() *string {
 	if t == nil {
 		t = &CreateInternalPolicy_CreateInternalPolicy_InternalPolicy{}
 	}
@@ -25316,6 +25368,18 @@ func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetVersion() 
 	}
 	return t.Version
 }
+func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetEditors() []*CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_Editors {
+	if t == nil {
+		t = &CreateInternalPolicy_CreateInternalPolicy_InternalPolicy{}
+	}
+	return t.Editors
+}
+func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetBlockedGroups() []*CreateInternalPolicy_CreateInternalPolicy_InternalPolicy_BlockedGroups {
+	if t == nil {
+		t = &CreateInternalPolicy_CreateInternalPolicy_InternalPolicy{}
+	}
+	return t.BlockedGroups
+}
 
 type CreateInternalPolicy_CreateInternalPolicy struct {
 	InternalPolicy CreateInternalPolicy_CreateInternalPolicy_InternalPolicy "json:\"internalPolicy\" graphql:\"internalPolicy\""
@@ -25339,21 +25403,59 @@ func (t *DeleteInternalPolicy_DeleteInternalPolicy) GetDeletedID() string {
 	return t.DeletedID
 }
 
+type GetAllInternalPolicies_InternalPolicies_Edges_Node_Editors struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node_Editors) GetID() string {
+	if t == nil {
+		t = &GetAllInternalPolicies_InternalPolicies_Edges_Node_Editors{}
+	}
+	return t.ID
+}
+func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node_Editors) GetName() string {
+	if t == nil {
+		t = &GetAllInternalPolicies_InternalPolicies_Edges_Node_Editors{}
+	}
+	return t.Name
+}
+
+type GetAllInternalPolicies_InternalPolicies_Edges_Node_BlockedGroups struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node_BlockedGroups) GetID() string {
+	if t == nil {
+		t = &GetAllInternalPolicies_InternalPolicies_Edges_Node_BlockedGroups{}
+	}
+	return t.ID
+}
+func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node_BlockedGroups) GetName() string {
+	if t == nil {
+		t = &GetAllInternalPolicies_InternalPolicies_Edges_Node_BlockedGroups{}
+	}
+	return t.Name
+}
+
 type GetAllInternalPolicies_InternalPolicies_Edges_Node struct {
-	Background      *string                "json:\"background,omitempty\" graphql:\"background\""
-	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description     string                 "json:\"description\" graphql:\"description\""
-	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
-	ID              string                 "json:\"id\" graphql:\"id\""
-	Name            string                 "json:\"name\" graphql:\"name\""
-	PolicyType      *string                "json:\"policyType,omitempty\" graphql:\"policyType\""
-	PurposeAndScope *string                "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
-	Status          *string                "json:\"status,omitempty\" graphql:\"status\""
-	Tags            []string               "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt       *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version         *string                "json:\"version,omitempty\" graphql:\"version\""
+	Background      *string                                                             "json:\"background,omitempty\" graphql:\"background\""
+	CreatedAt       *time.Time                                                          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string                                                             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description     *string                                                             "json:\"description,omitempty\" graphql:\"description\""
+	Details         map[string]interface{}                                              "json:\"details,omitempty\" graphql:\"details\""
+	ID              string                                                              "json:\"id\" graphql:\"id\""
+	Name            string                                                              "json:\"name\" graphql:\"name\""
+	PolicyType      *string                                                             "json:\"policyType,omitempty\" graphql:\"policyType\""
+	PurposeAndScope *string                                                             "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
+	Status          *string                                                             "json:\"status,omitempty\" graphql:\"status\""
+	Tags            []string                                                            "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time                                                          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string                                                             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Version         *string                                                             "json:\"version,omitempty\" graphql:\"version\""
+	Editors         []*GetAllInternalPolicies_InternalPolicies_Edges_Node_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
+	BlockedGroups   []*GetAllInternalPolicies_InternalPolicies_Edges_Node_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 }
 
 func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node) GetBackground() *string {
@@ -25374,7 +25476,7 @@ func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node) GetCreatedBy() *str
 	}
 	return t.CreatedBy
 }
-func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node) GetDescription() string {
+func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node) GetDescription() *string {
 	if t == nil {
 		t = &GetAllInternalPolicies_InternalPolicies_Edges_Node{}
 	}
@@ -25440,6 +25542,18 @@ func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node) GetVersion() *strin
 	}
 	return t.Version
 }
+func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node) GetEditors() []*GetAllInternalPolicies_InternalPolicies_Edges_Node_Editors {
+	if t == nil {
+		t = &GetAllInternalPolicies_InternalPolicies_Edges_Node{}
+	}
+	return t.Editors
+}
+func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node) GetBlockedGroups() []*GetAllInternalPolicies_InternalPolicies_Edges_Node_BlockedGroups {
+	if t == nil {
+		t = &GetAllInternalPolicies_InternalPolicies_Edges_Node{}
+	}
+	return t.BlockedGroups
+}
 
 type GetAllInternalPolicies_InternalPolicies_Edges struct {
 	Node *GetAllInternalPolicies_InternalPolicies_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
@@ -25463,123 +25577,59 @@ func (t *GetAllInternalPolicies_InternalPolicies) GetEdges() []*GetAllInternalPo
 	return t.Edges
 }
 
-type GetInternalPolicyByID_InternalPolicy struct {
-	Background      *string                "json:\"background,omitempty\" graphql:\"background\""
-	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description     string                 "json:\"description\" graphql:\"description\""
-	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
-	ID              string                 "json:\"id\" graphql:\"id\""
-	Name            string                 "json:\"name\" graphql:\"name\""
-	PolicyType      *string                "json:\"policyType,omitempty\" graphql:\"policyType\""
-	PurposeAndScope *string                "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
-	Status          *string                "json:\"status,omitempty\" graphql:\"status\""
-	Tags            []string               "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt       *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version         *string                "json:\"version,omitempty\" graphql:\"version\""
+type GetInternalPolicies_InternalPolicies_Edges_Node_Editors struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
 }
 
-func (t *GetInternalPolicyByID_InternalPolicy) GetBackground() *string {
+func (t *GetInternalPolicies_InternalPolicies_Edges_Node_Editors) GetID() string {
 	if t == nil {
-		t = &GetInternalPolicyByID_InternalPolicy{}
-	}
-	return t.Background
-}
-func (t *GetInternalPolicyByID_InternalPolicy) GetCreatedAt() *time.Time {
-	if t == nil {
-		t = &GetInternalPolicyByID_InternalPolicy{}
-	}
-	return t.CreatedAt
-}
-func (t *GetInternalPolicyByID_InternalPolicy) GetCreatedBy() *string {
-	if t == nil {
-		t = &GetInternalPolicyByID_InternalPolicy{}
-	}
-	return t.CreatedBy
-}
-func (t *GetInternalPolicyByID_InternalPolicy) GetDescription() string {
-	if t == nil {
-		t = &GetInternalPolicyByID_InternalPolicy{}
-	}
-	return t.Description
-}
-func (t *GetInternalPolicyByID_InternalPolicy) GetDetails() map[string]interface{} {
-	if t == nil {
-		t = &GetInternalPolicyByID_InternalPolicy{}
-	}
-	return t.Details
-}
-func (t *GetInternalPolicyByID_InternalPolicy) GetID() string {
-	if t == nil {
-		t = &GetInternalPolicyByID_InternalPolicy{}
+		t = &GetInternalPolicies_InternalPolicies_Edges_Node_Editors{}
 	}
 	return t.ID
 }
-func (t *GetInternalPolicyByID_InternalPolicy) GetName() string {
+func (t *GetInternalPolicies_InternalPolicies_Edges_Node_Editors) GetName() string {
 	if t == nil {
-		t = &GetInternalPolicyByID_InternalPolicy{}
+		t = &GetInternalPolicies_InternalPolicies_Edges_Node_Editors{}
 	}
 	return t.Name
 }
-func (t *GetInternalPolicyByID_InternalPolicy) GetPolicyType() *string {
-	if t == nil {
-		t = &GetInternalPolicyByID_InternalPolicy{}
-	}
-	return t.PolicyType
+
+type GetInternalPolicies_InternalPolicies_Edges_Node_BlockedGroups struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
 }
-func (t *GetInternalPolicyByID_InternalPolicy) GetPurposeAndScope() *string {
+
+func (t *GetInternalPolicies_InternalPolicies_Edges_Node_BlockedGroups) GetID() string {
 	if t == nil {
-		t = &GetInternalPolicyByID_InternalPolicy{}
+		t = &GetInternalPolicies_InternalPolicies_Edges_Node_BlockedGroups{}
 	}
-	return t.PurposeAndScope
+	return t.ID
 }
-func (t *GetInternalPolicyByID_InternalPolicy) GetStatus() *string {
+func (t *GetInternalPolicies_InternalPolicies_Edges_Node_BlockedGroups) GetName() string {
 	if t == nil {
-		t = &GetInternalPolicyByID_InternalPolicy{}
+		t = &GetInternalPolicies_InternalPolicies_Edges_Node_BlockedGroups{}
 	}
-	return t.Status
-}
-func (t *GetInternalPolicyByID_InternalPolicy) GetTags() []string {
-	if t == nil {
-		t = &GetInternalPolicyByID_InternalPolicy{}
-	}
-	return t.Tags
-}
-func (t *GetInternalPolicyByID_InternalPolicy) GetUpdatedAt() *time.Time {
-	if t == nil {
-		t = &GetInternalPolicyByID_InternalPolicy{}
-	}
-	return t.UpdatedAt
-}
-func (t *GetInternalPolicyByID_InternalPolicy) GetUpdatedBy() *string {
-	if t == nil {
-		t = &GetInternalPolicyByID_InternalPolicy{}
-	}
-	return t.UpdatedBy
-}
-func (t *GetInternalPolicyByID_InternalPolicy) GetVersion() *string {
-	if t == nil {
-		t = &GetInternalPolicyByID_InternalPolicy{}
-	}
-	return t.Version
+	return t.Name
 }
 
 type GetInternalPolicies_InternalPolicies_Edges_Node struct {
-	Background      *string                "json:\"background,omitempty\" graphql:\"background\""
-	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description     string                 "json:\"description\" graphql:\"description\""
-	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
-	ID              string                 "json:\"id\" graphql:\"id\""
-	Name            string                 "json:\"name\" graphql:\"name\""
-	PolicyType      *string                "json:\"policyType,omitempty\" graphql:\"policyType\""
-	PurposeAndScope *string                "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
-	Status          *string                "json:\"status,omitempty\" graphql:\"status\""
-	Tags            []string               "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt       *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version         *string                "json:\"version,omitempty\" graphql:\"version\""
+	Background      *string                                                          "json:\"background,omitempty\" graphql:\"background\""
+	CreatedAt       *time.Time                                                       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string                                                          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description     *string                                                          "json:\"description,omitempty\" graphql:\"description\""
+	Details         map[string]interface{}                                           "json:\"details,omitempty\" graphql:\"details\""
+	ID              string                                                           "json:\"id\" graphql:\"id\""
+	Name            string                                                           "json:\"name\" graphql:\"name\""
+	PolicyType      *string                                                          "json:\"policyType,omitempty\" graphql:\"policyType\""
+	PurposeAndScope *string                                                          "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
+	Status          *string                                                          "json:\"status,omitempty\" graphql:\"status\""
+	Tags            []string                                                         "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time                                                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string                                                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Version         *string                                                          "json:\"version,omitempty\" graphql:\"version\""
+	Editors         []*GetInternalPolicies_InternalPolicies_Edges_Node_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
+	BlockedGroups   []*GetInternalPolicies_InternalPolicies_Edges_Node_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 }
 
 func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetBackground() *string {
@@ -25600,7 +25650,7 @@ func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetCreatedBy() *string
 	}
 	return t.CreatedBy
 }
-func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetDescription() string {
+func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetDescription() *string {
 	if t == nil {
 		t = &GetInternalPolicies_InternalPolicies_Edges_Node{}
 	}
@@ -25666,6 +25716,18 @@ func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetVersion() *string {
 	}
 	return t.Version
 }
+func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetEditors() []*GetInternalPolicies_InternalPolicies_Edges_Node_Editors {
+	if t == nil {
+		t = &GetInternalPolicies_InternalPolicies_Edges_Node{}
+	}
+	return t.Editors
+}
+func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetBlockedGroups() []*GetInternalPolicies_InternalPolicies_Edges_Node_BlockedGroups {
+	if t == nil {
+		t = &GetInternalPolicies_InternalPolicies_Edges_Node{}
+	}
+	return t.BlockedGroups
+}
 
 type GetInternalPolicies_InternalPolicies_Edges struct {
 	Node *GetInternalPolicies_InternalPolicies_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
@@ -25689,21 +25751,211 @@ func (t *GetInternalPolicies_InternalPolicies) GetEdges() []*GetInternalPolicies
 	return t.Edges
 }
 
+type GetInternalPolicyByID_InternalPolicy_Editors struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetInternalPolicyByID_InternalPolicy_Editors) GetID() string {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy_Editors{}
+	}
+	return t.ID
+}
+func (t *GetInternalPolicyByID_InternalPolicy_Editors) GetName() string {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy_Editors{}
+	}
+	return t.Name
+}
+
+type GetInternalPolicyByID_InternalPolicy_BlockedGroups struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetInternalPolicyByID_InternalPolicy_BlockedGroups) GetID() string {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy_BlockedGroups{}
+	}
+	return t.ID
+}
+func (t *GetInternalPolicyByID_InternalPolicy_BlockedGroups) GetName() string {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy_BlockedGroups{}
+	}
+	return t.Name
+}
+
+type GetInternalPolicyByID_InternalPolicy struct {
+	Background      *string                                               "json:\"background,omitempty\" graphql:\"background\""
+	CreatedAt       *time.Time                                            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string                                               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description     *string                                               "json:\"description,omitempty\" graphql:\"description\""
+	Details         map[string]interface{}                                "json:\"details,omitempty\" graphql:\"details\""
+	ID              string                                                "json:\"id\" graphql:\"id\""
+	Name            string                                                "json:\"name\" graphql:\"name\""
+	PolicyType      *string                                               "json:\"policyType,omitempty\" graphql:\"policyType\""
+	PurposeAndScope *string                                               "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
+	Status          *string                                               "json:\"status,omitempty\" graphql:\"status\""
+	Tags            []string                                              "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time                                            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string                                               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Version         *string                                               "json:\"version,omitempty\" graphql:\"version\""
+	Editors         []*GetInternalPolicyByID_InternalPolicy_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
+	BlockedGroups   []*GetInternalPolicyByID_InternalPolicy_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
+}
+
+func (t *GetInternalPolicyByID_InternalPolicy) GetBackground() *string {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy{}
+	}
+	return t.Background
+}
+func (t *GetInternalPolicyByID_InternalPolicy) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy{}
+	}
+	return t.CreatedAt
+}
+func (t *GetInternalPolicyByID_InternalPolicy) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy{}
+	}
+	return t.CreatedBy
+}
+func (t *GetInternalPolicyByID_InternalPolicy) GetDescription() *string {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy{}
+	}
+	return t.Description
+}
+func (t *GetInternalPolicyByID_InternalPolicy) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy{}
+	}
+	return t.Details
+}
+func (t *GetInternalPolicyByID_InternalPolicy) GetID() string {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy{}
+	}
+	return t.ID
+}
+func (t *GetInternalPolicyByID_InternalPolicy) GetName() string {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy{}
+	}
+	return t.Name
+}
+func (t *GetInternalPolicyByID_InternalPolicy) GetPolicyType() *string {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy{}
+	}
+	return t.PolicyType
+}
+func (t *GetInternalPolicyByID_InternalPolicy) GetPurposeAndScope() *string {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy{}
+	}
+	return t.PurposeAndScope
+}
+func (t *GetInternalPolicyByID_InternalPolicy) GetStatus() *string {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy{}
+	}
+	return t.Status
+}
+func (t *GetInternalPolicyByID_InternalPolicy) GetTags() []string {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy{}
+	}
+	return t.Tags
+}
+func (t *GetInternalPolicyByID_InternalPolicy) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetInternalPolicyByID_InternalPolicy) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetInternalPolicyByID_InternalPolicy) GetVersion() *string {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy{}
+	}
+	return t.Version
+}
+func (t *GetInternalPolicyByID_InternalPolicy) GetEditors() []*GetInternalPolicyByID_InternalPolicy_Editors {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy{}
+	}
+	return t.Editors
+}
+func (t *GetInternalPolicyByID_InternalPolicy) GetBlockedGroups() []*GetInternalPolicyByID_InternalPolicy_BlockedGroups {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy{}
+	}
+	return t.BlockedGroups
+}
+
+type UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy_Editors struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy_Editors) GetID() string {
+	if t == nil {
+		t = &UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy_Editors{}
+	}
+	return t.ID
+}
+func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy_Editors) GetName() string {
+	if t == nil {
+		t = &UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy_Editors{}
+	}
+	return t.Name
+}
+
+type UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy_BlockedGroups struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy_BlockedGroups) GetID() string {
+	if t == nil {
+		t = &UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy_BlockedGroups{}
+	}
+	return t.ID
+}
+func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy_BlockedGroups) GetName() string {
+	if t == nil {
+		t = &UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy_BlockedGroups{}
+	}
+	return t.Name
+}
+
 type UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy struct {
-	Background      *string                "json:\"background,omitempty\" graphql:\"background\""
-	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description     string                 "json:\"description\" graphql:\"description\""
-	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
-	ID              string                 "json:\"id\" graphql:\"id\""
-	Name            string                 "json:\"name\" graphql:\"name\""
-	PolicyType      *string                "json:\"policyType,omitempty\" graphql:\"policyType\""
-	PurposeAndScope *string                "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
-	Status          *string                "json:\"status,omitempty\" graphql:\"status\""
-	Tags            []string               "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt       *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version         *string                "json:\"version,omitempty\" graphql:\"version\""
+	Background      *string                                                                   "json:\"background,omitempty\" graphql:\"background\""
+	CreatedAt       *time.Time                                                                "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string                                                                   "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description     *string                                                                   "json:\"description,omitempty\" graphql:\"description\""
+	Details         map[string]interface{}                                                    "json:\"details,omitempty\" graphql:\"details\""
+	ID              string                                                                    "json:\"id\" graphql:\"id\""
+	Name            string                                                                    "json:\"name\" graphql:\"name\""
+	PolicyType      *string                                                                   "json:\"policyType,omitempty\" graphql:\"policyType\""
+	PurposeAndScope *string                                                                   "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
+	Status          *string                                                                   "json:\"status,omitempty\" graphql:\"status\""
+	Tags            []string                                                                  "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time                                                                "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string                                                                   "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Version         *string                                                                   "json:\"version,omitempty\" graphql:\"version\""
+	Editors         []*UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
+	BlockedGroups   []*UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 }
 
 func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy) GetBackground() *string {
@@ -25724,7 +25976,7 @@ func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy) GetCreatedBy(
 	}
 	return t.CreatedBy
 }
-func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy) GetDescription() string {
+func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy) GetDescription() *string {
 	if t == nil {
 		t = &UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy{}
 	}
@@ -25790,6 +26042,18 @@ func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy) GetVersion() 
 	}
 	return t.Version
 }
+func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy) GetEditors() []*UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy_Editors {
+	if t == nil {
+		t = &UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy{}
+	}
+	return t.Editors
+}
+func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy) GetBlockedGroups() []*UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy_BlockedGroups {
+	if t == nil {
+		t = &UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy{}
+	}
+	return t.BlockedGroups
+}
 
 type UpdateInternalPolicy_UpdateInternalPolicy struct {
 	InternalPolicy UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy "json:\"internalPolicy\" graphql:\"internalPolicy\""
@@ -25806,7 +26070,7 @@ type GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node struct {
 	Background      *string                "json:\"background,omitempty\" graphql:\"background\""
 	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy       *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description     string                 "json:\"description\" graphql:\"description\""
+	Description     *string                "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	HistoryTime     time.Time              "json:\"historyTime\" graphql:\"historyTime\""
 	ID              string                 "json:\"id\" graphql:\"id\""
@@ -25840,7 +26104,7 @@ func (t *GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetCr
 	}
 	return t.CreatedBy
 }
-func (t *GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetDescription() string {
+func (t *GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetDescription() *string {
 	if t == nil {
 		t = &GetAllInternalPolicyHistories_InternalPolicyHistories_Edges_Node{}
 	}
@@ -25951,7 +26215,7 @@ type GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node struct {
 	Background      *string                "json:\"background,omitempty\" graphql:\"background\""
 	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy       *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description     string                 "json:\"description\" graphql:\"description\""
+	Description     *string                "json:\"description,omitempty\" graphql:\"description\""
 	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	HistoryTime     time.Time              "json:\"historyTime\" graphql:\"historyTime\""
 	ID              string                 "json:\"id\" graphql:\"id\""
@@ -25985,7 +26249,7 @@ func (t *GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetCreat
 	}
 	return t.CreatedBy
 }
-func (t *GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetDescription() string {
+func (t *GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node) GetDescription() *string {
 	if t == nil {
 		t = &GetInternalPolicyHistories_InternalPolicyHistories_Edges_Node{}
 	}
@@ -32769,22 +33033,60 @@ func (t *CreateBulkProcedure_CreateBulkProcedure) GetProcedures() []*CreateBulkP
 	return t.Procedures
 }
 
+type CreateProcedure_CreateProcedure_Procedure_Editors struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateProcedure_CreateProcedure_Procedure_Editors) GetID() string {
+	if t == nil {
+		t = &CreateProcedure_CreateProcedure_Procedure_Editors{}
+	}
+	return t.ID
+}
+func (t *CreateProcedure_CreateProcedure_Procedure_Editors) GetName() string {
+	if t == nil {
+		t = &CreateProcedure_CreateProcedure_Procedure_Editors{}
+	}
+	return t.Name
+}
+
+type CreateProcedure_CreateProcedure_Procedure_BlockedGroups struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateProcedure_CreateProcedure_Procedure_BlockedGroups) GetID() string {
+	if t == nil {
+		t = &CreateProcedure_CreateProcedure_Procedure_BlockedGroups{}
+	}
+	return t.ID
+}
+func (t *CreateProcedure_CreateProcedure_Procedure_BlockedGroups) GetName() string {
+	if t == nil {
+		t = &CreateProcedure_CreateProcedure_Procedure_BlockedGroups{}
+	}
+	return t.Name
+}
+
 type CreateProcedure_CreateProcedure_Procedure struct {
-	Background      *string                "json:\"background,omitempty\" graphql:\"background\""
-	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description     *string                "json:\"description,omitempty\" graphql:\"description\""
-	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
-	ID              string                 "json:\"id\" graphql:\"id\""
-	Name            string                 "json:\"name\" graphql:\"name\""
-	ProcedureType   *string                "json:\"procedureType,omitempty\" graphql:\"procedureType\""
-	PurposeAndScope *string                "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
-	Satisfies       *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Status          *string                "json:\"status,omitempty\" graphql:\"status\""
-	Tags            []string               "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt       *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version         *string                "json:\"version,omitempty\" graphql:\"version\""
+	Background      *string                                                    "json:\"background,omitempty\" graphql:\"background\""
+	CreatedAt       *time.Time                                                 "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string                                                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description     *string                                                    "json:\"description,omitempty\" graphql:\"description\""
+	Details         map[string]interface{}                                     "json:\"details,omitempty\" graphql:\"details\""
+	ID              string                                                     "json:\"id\" graphql:\"id\""
+	Name            string                                                     "json:\"name\" graphql:\"name\""
+	ProcedureType   *string                                                    "json:\"procedureType,omitempty\" graphql:\"procedureType\""
+	PurposeAndScope *string                                                    "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
+	Satisfies       *string                                                    "json:\"satisfies,omitempty\" graphql:\"satisfies\""
+	Status          *string                                                    "json:\"status,omitempty\" graphql:\"status\""
+	Tags            []string                                                   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time                                                 "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string                                                    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Version         *string                                                    "json:\"version,omitempty\" graphql:\"version\""
+	Editors         []*CreateProcedure_CreateProcedure_Procedure_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
+	BlockedGroups   []*CreateProcedure_CreateProcedure_Procedure_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 }
 
 func (t *CreateProcedure_CreateProcedure_Procedure) GetBackground() *string {
@@ -32877,6 +33179,18 @@ func (t *CreateProcedure_CreateProcedure_Procedure) GetVersion() *string {
 	}
 	return t.Version
 }
+func (t *CreateProcedure_CreateProcedure_Procedure) GetEditors() []*CreateProcedure_CreateProcedure_Procedure_Editors {
+	if t == nil {
+		t = &CreateProcedure_CreateProcedure_Procedure{}
+	}
+	return t.Editors
+}
+func (t *CreateProcedure_CreateProcedure_Procedure) GetBlockedGroups() []*CreateProcedure_CreateProcedure_Procedure_BlockedGroups {
+	if t == nil {
+		t = &CreateProcedure_CreateProcedure_Procedure{}
+	}
+	return t.BlockedGroups
+}
 
 type CreateProcedure_CreateProcedure struct {
 	Procedure CreateProcedure_CreateProcedure_Procedure "json:\"procedure\" graphql:\"procedure\""
@@ -32900,22 +33214,60 @@ func (t *DeleteProcedure_DeleteProcedure) GetDeletedID() string {
 	return t.DeletedID
 }
 
+type GetAllProcedures_Procedures_Edges_Node_Editors struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetAllProcedures_Procedures_Edges_Node_Editors) GetID() string {
+	if t == nil {
+		t = &GetAllProcedures_Procedures_Edges_Node_Editors{}
+	}
+	return t.ID
+}
+func (t *GetAllProcedures_Procedures_Edges_Node_Editors) GetName() string {
+	if t == nil {
+		t = &GetAllProcedures_Procedures_Edges_Node_Editors{}
+	}
+	return t.Name
+}
+
+type GetAllProcedures_Procedures_Edges_Node_BlockedGroups struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetAllProcedures_Procedures_Edges_Node_BlockedGroups) GetID() string {
+	if t == nil {
+		t = &GetAllProcedures_Procedures_Edges_Node_BlockedGroups{}
+	}
+	return t.ID
+}
+func (t *GetAllProcedures_Procedures_Edges_Node_BlockedGroups) GetName() string {
+	if t == nil {
+		t = &GetAllProcedures_Procedures_Edges_Node_BlockedGroups{}
+	}
+	return t.Name
+}
+
 type GetAllProcedures_Procedures_Edges_Node struct {
-	Background      *string                "json:\"background,omitempty\" graphql:\"background\""
-	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description     *string                "json:\"description,omitempty\" graphql:\"description\""
-	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
-	ID              string                 "json:\"id\" graphql:\"id\""
-	Name            string                 "json:\"name\" graphql:\"name\""
-	ProcedureType   *string                "json:\"procedureType,omitempty\" graphql:\"procedureType\""
-	PurposeAndScope *string                "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
-	Satisfies       *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Status          *string                "json:\"status,omitempty\" graphql:\"status\""
-	Tags            []string               "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt       *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version         *string                "json:\"version,omitempty\" graphql:\"version\""
+	Background      *string                                                 "json:\"background,omitempty\" graphql:\"background\""
+	CreatedAt       *time.Time                                              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string                                                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description     *string                                                 "json:\"description,omitempty\" graphql:\"description\""
+	Details         map[string]interface{}                                  "json:\"details,omitempty\" graphql:\"details\""
+	ID              string                                                  "json:\"id\" graphql:\"id\""
+	Name            string                                                  "json:\"name\" graphql:\"name\""
+	ProcedureType   *string                                                 "json:\"procedureType,omitempty\" graphql:\"procedureType\""
+	PurposeAndScope *string                                                 "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
+	Satisfies       *string                                                 "json:\"satisfies,omitempty\" graphql:\"satisfies\""
+	Status          *string                                                 "json:\"status,omitempty\" graphql:\"status\""
+	Tags            []string                                                "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time                                              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string                                                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Version         *string                                                 "json:\"version,omitempty\" graphql:\"version\""
+	Editors         []*GetAllProcedures_Procedures_Edges_Node_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
+	BlockedGroups   []*GetAllProcedures_Procedures_Edges_Node_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 }
 
 func (t *GetAllProcedures_Procedures_Edges_Node) GetBackground() *string {
@@ -33008,6 +33360,18 @@ func (t *GetAllProcedures_Procedures_Edges_Node) GetVersion() *string {
 	}
 	return t.Version
 }
+func (t *GetAllProcedures_Procedures_Edges_Node) GetEditors() []*GetAllProcedures_Procedures_Edges_Node_Editors {
+	if t == nil {
+		t = &GetAllProcedures_Procedures_Edges_Node{}
+	}
+	return t.Editors
+}
+func (t *GetAllProcedures_Procedures_Edges_Node) GetBlockedGroups() []*GetAllProcedures_Procedures_Edges_Node_BlockedGroups {
+	if t == nil {
+		t = &GetAllProcedures_Procedures_Edges_Node{}
+	}
+	return t.BlockedGroups
+}
 
 type GetAllProcedures_Procedures_Edges struct {
 	Node *GetAllProcedures_Procedures_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
@@ -33031,22 +33395,60 @@ func (t *GetAllProcedures_Procedures) GetEdges() []*GetAllProcedures_Procedures_
 	return t.Edges
 }
 
+type GetProcedureByID_Procedure_Editors struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetProcedureByID_Procedure_Editors) GetID() string {
+	if t == nil {
+		t = &GetProcedureByID_Procedure_Editors{}
+	}
+	return t.ID
+}
+func (t *GetProcedureByID_Procedure_Editors) GetName() string {
+	if t == nil {
+		t = &GetProcedureByID_Procedure_Editors{}
+	}
+	return t.Name
+}
+
+type GetProcedureByID_Procedure_BlockedGroups struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetProcedureByID_Procedure_BlockedGroups) GetID() string {
+	if t == nil {
+		t = &GetProcedureByID_Procedure_BlockedGroups{}
+	}
+	return t.ID
+}
+func (t *GetProcedureByID_Procedure_BlockedGroups) GetName() string {
+	if t == nil {
+		t = &GetProcedureByID_Procedure_BlockedGroups{}
+	}
+	return t.Name
+}
+
 type GetProcedureByID_Procedure struct {
-	Background      *string                "json:\"background,omitempty\" graphql:\"background\""
-	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description     *string                "json:\"description,omitempty\" graphql:\"description\""
-	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
-	ID              string                 "json:\"id\" graphql:\"id\""
-	Name            string                 "json:\"name\" graphql:\"name\""
-	ProcedureType   *string                "json:\"procedureType,omitempty\" graphql:\"procedureType\""
-	PurposeAndScope *string                "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
-	Satisfies       *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Status          *string                "json:\"status,omitempty\" graphql:\"status\""
-	Tags            []string               "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt       *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version         *string                "json:\"version,omitempty\" graphql:\"version\""
+	Background      *string                                     "json:\"background,omitempty\" graphql:\"background\""
+	CreatedAt       *time.Time                                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string                                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description     *string                                     "json:\"description,omitempty\" graphql:\"description\""
+	Details         map[string]interface{}                      "json:\"details,omitempty\" graphql:\"details\""
+	ID              string                                      "json:\"id\" graphql:\"id\""
+	Name            string                                      "json:\"name\" graphql:\"name\""
+	ProcedureType   *string                                     "json:\"procedureType,omitempty\" graphql:\"procedureType\""
+	PurposeAndScope *string                                     "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
+	Satisfies       *string                                     "json:\"satisfies,omitempty\" graphql:\"satisfies\""
+	Status          *string                                     "json:\"status,omitempty\" graphql:\"status\""
+	Tags            []string                                    "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time                                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string                                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Version         *string                                     "json:\"version,omitempty\" graphql:\"version\""
+	Editors         []*GetProcedureByID_Procedure_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
+	BlockedGroups   []*GetProcedureByID_Procedure_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 }
 
 func (t *GetProcedureByID_Procedure) GetBackground() *string {
@@ -33139,23 +33541,73 @@ func (t *GetProcedureByID_Procedure) GetVersion() *string {
 	}
 	return t.Version
 }
+func (t *GetProcedureByID_Procedure) GetEditors() []*GetProcedureByID_Procedure_Editors {
+	if t == nil {
+		t = &GetProcedureByID_Procedure{}
+	}
+	return t.Editors
+}
+func (t *GetProcedureByID_Procedure) GetBlockedGroups() []*GetProcedureByID_Procedure_BlockedGroups {
+	if t == nil {
+		t = &GetProcedureByID_Procedure{}
+	}
+	return t.BlockedGroups
+}
+
+type GetProcedures_Procedures_Edges_Node_Editors struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetProcedures_Procedures_Edges_Node_Editors) GetID() string {
+	if t == nil {
+		t = &GetProcedures_Procedures_Edges_Node_Editors{}
+	}
+	return t.ID
+}
+func (t *GetProcedures_Procedures_Edges_Node_Editors) GetName() string {
+	if t == nil {
+		t = &GetProcedures_Procedures_Edges_Node_Editors{}
+	}
+	return t.Name
+}
+
+type GetProcedures_Procedures_Edges_Node_BlockedGroups struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetProcedures_Procedures_Edges_Node_BlockedGroups) GetID() string {
+	if t == nil {
+		t = &GetProcedures_Procedures_Edges_Node_BlockedGroups{}
+	}
+	return t.ID
+}
+func (t *GetProcedures_Procedures_Edges_Node_BlockedGroups) GetName() string {
+	if t == nil {
+		t = &GetProcedures_Procedures_Edges_Node_BlockedGroups{}
+	}
+	return t.Name
+}
 
 type GetProcedures_Procedures_Edges_Node struct {
-	Background      *string                "json:\"background,omitempty\" graphql:\"background\""
-	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description     *string                "json:\"description,omitempty\" graphql:\"description\""
-	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
-	ID              string                 "json:\"id\" graphql:\"id\""
-	Name            string                 "json:\"name\" graphql:\"name\""
-	ProcedureType   *string                "json:\"procedureType,omitempty\" graphql:\"procedureType\""
-	PurposeAndScope *string                "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
-	Satisfies       *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Status          *string                "json:\"status,omitempty\" graphql:\"status\""
-	Tags            []string               "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt       *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version         *string                "json:\"version,omitempty\" graphql:\"version\""
+	Background      *string                                              "json:\"background,omitempty\" graphql:\"background\""
+	CreatedAt       *time.Time                                           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string                                              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description     *string                                              "json:\"description,omitempty\" graphql:\"description\""
+	Details         map[string]interface{}                               "json:\"details,omitempty\" graphql:\"details\""
+	ID              string                                               "json:\"id\" graphql:\"id\""
+	Name            string                                               "json:\"name\" graphql:\"name\""
+	ProcedureType   *string                                              "json:\"procedureType,omitempty\" graphql:\"procedureType\""
+	PurposeAndScope *string                                              "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
+	Satisfies       *string                                              "json:\"satisfies,omitempty\" graphql:\"satisfies\""
+	Status          *string                                              "json:\"status,omitempty\" graphql:\"status\""
+	Tags            []string                                             "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time                                           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string                                              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Version         *string                                              "json:\"version,omitempty\" graphql:\"version\""
+	Editors         []*GetProcedures_Procedures_Edges_Node_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
+	BlockedGroups   []*GetProcedures_Procedures_Edges_Node_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 }
 
 func (t *GetProcedures_Procedures_Edges_Node) GetBackground() *string {
@@ -33248,6 +33700,18 @@ func (t *GetProcedures_Procedures_Edges_Node) GetVersion() *string {
 	}
 	return t.Version
 }
+func (t *GetProcedures_Procedures_Edges_Node) GetEditors() []*GetProcedures_Procedures_Edges_Node_Editors {
+	if t == nil {
+		t = &GetProcedures_Procedures_Edges_Node{}
+	}
+	return t.Editors
+}
+func (t *GetProcedures_Procedures_Edges_Node) GetBlockedGroups() []*GetProcedures_Procedures_Edges_Node_BlockedGroups {
+	if t == nil {
+		t = &GetProcedures_Procedures_Edges_Node{}
+	}
+	return t.BlockedGroups
+}
 
 type GetProcedures_Procedures_Edges struct {
 	Node *GetProcedures_Procedures_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
@@ -33271,22 +33735,60 @@ func (t *GetProcedures_Procedures) GetEdges() []*GetProcedures_Procedures_Edges 
 	return t.Edges
 }
 
+type UpdateProcedure_UpdateProcedure_Procedure_Editors struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateProcedure_UpdateProcedure_Procedure_Editors) GetID() string {
+	if t == nil {
+		t = &UpdateProcedure_UpdateProcedure_Procedure_Editors{}
+	}
+	return t.ID
+}
+func (t *UpdateProcedure_UpdateProcedure_Procedure_Editors) GetName() string {
+	if t == nil {
+		t = &UpdateProcedure_UpdateProcedure_Procedure_Editors{}
+	}
+	return t.Name
+}
+
+type UpdateProcedure_UpdateProcedure_Procedure_BlockedGroups struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateProcedure_UpdateProcedure_Procedure_BlockedGroups) GetID() string {
+	if t == nil {
+		t = &UpdateProcedure_UpdateProcedure_Procedure_BlockedGroups{}
+	}
+	return t.ID
+}
+func (t *UpdateProcedure_UpdateProcedure_Procedure_BlockedGroups) GetName() string {
+	if t == nil {
+		t = &UpdateProcedure_UpdateProcedure_Procedure_BlockedGroups{}
+	}
+	return t.Name
+}
+
 type UpdateProcedure_UpdateProcedure_Procedure struct {
-	Background      *string                "json:\"background,omitempty\" graphql:\"background\""
-	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy       *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description     *string                "json:\"description,omitempty\" graphql:\"description\""
-	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
-	ID              string                 "json:\"id\" graphql:\"id\""
-	Name            string                 "json:\"name\" graphql:\"name\""
-	ProcedureType   *string                "json:\"procedureType,omitempty\" graphql:\"procedureType\""
-	PurposeAndScope *string                "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
-	Satisfies       *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Status          *string                "json:\"status,omitempty\" graphql:\"status\""
-	Tags            []string               "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt       *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy       *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version         *string                "json:\"version,omitempty\" graphql:\"version\""
+	Background      *string                                                    "json:\"background,omitempty\" graphql:\"background\""
+	CreatedAt       *time.Time                                                 "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string                                                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description     *string                                                    "json:\"description,omitempty\" graphql:\"description\""
+	Details         map[string]interface{}                                     "json:\"details,omitempty\" graphql:\"details\""
+	ID              string                                                     "json:\"id\" graphql:\"id\""
+	Name            string                                                     "json:\"name\" graphql:\"name\""
+	ProcedureType   *string                                                    "json:\"procedureType,omitempty\" graphql:\"procedureType\""
+	PurposeAndScope *string                                                    "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
+	Satisfies       *string                                                    "json:\"satisfies,omitempty\" graphql:\"satisfies\""
+	Status          *string                                                    "json:\"status,omitempty\" graphql:\"status\""
+	Tags            []string                                                   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time                                                 "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string                                                    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Version         *string                                                    "json:\"version,omitempty\" graphql:\"version\""
+	Editors         []*UpdateProcedure_UpdateProcedure_Procedure_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
+	BlockedGroups   []*UpdateProcedure_UpdateProcedure_Procedure_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 }
 
 func (t *UpdateProcedure_UpdateProcedure_Procedure) GetBackground() *string {
@@ -33378,6 +33880,18 @@ func (t *UpdateProcedure_UpdateProcedure_Procedure) GetVersion() *string {
 		t = &UpdateProcedure_UpdateProcedure_Procedure{}
 	}
 	return t.Version
+}
+func (t *UpdateProcedure_UpdateProcedure_Procedure) GetEditors() []*UpdateProcedure_UpdateProcedure_Procedure_Editors {
+	if t == nil {
+		t = &UpdateProcedure_UpdateProcedure_Procedure{}
+	}
+	return t.Editors
+}
+func (t *UpdateProcedure_UpdateProcedure_Procedure) GetBlockedGroups() []*UpdateProcedure_UpdateProcedure_Procedure_BlockedGroups {
+	if t == nil {
+		t = &UpdateProcedure_UpdateProcedure_Procedure{}
+	}
+	return t.BlockedGroups
 }
 
 type UpdateProcedure_UpdateProcedure struct {
@@ -33935,22 +34449,235 @@ func (t *CreateBulkProgram_CreateBulkProgram) GetPrograms() []*CreateBulkProgram
 	return t.Programs
 }
 
+type CreateProgram_CreateProgram_Program_Procedures struct {
+	Background      *string                "json:\"background,omitempty\" graphql:\"background\""
+	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description     *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
+	ID              string                 "json:\"id\" graphql:\"id\""
+	Name            string                 "json:\"name\" graphql:\"name\""
+	ProcedureType   *string                "json:\"procedureType,omitempty\" graphql:\"procedureType\""
+	PurposeAndScope *string                "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
+	Satisfies       *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
+	Status          *string                "json:\"status,omitempty\" graphql:\"status\""
+	Tags            []string               "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Version         *string                "json:\"version,omitempty\" graphql:\"version\""
+}
+
+func (t *CreateProgram_CreateProgram_Program_Procedures) GetBackground() *string {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program_Procedures{}
+	}
+	return t.Background
+}
+func (t *CreateProgram_CreateProgram_Program_Procedures) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program_Procedures{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateProgram_CreateProgram_Program_Procedures) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program_Procedures{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateProgram_CreateProgram_Program_Procedures) GetDescription() *string {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program_Procedures{}
+	}
+	return t.Description
+}
+func (t *CreateProgram_CreateProgram_Program_Procedures) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program_Procedures{}
+	}
+	return t.Details
+}
+func (t *CreateProgram_CreateProgram_Program_Procedures) GetID() string {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program_Procedures{}
+	}
+	return t.ID
+}
+func (t *CreateProgram_CreateProgram_Program_Procedures) GetName() string {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program_Procedures{}
+	}
+	return t.Name
+}
+func (t *CreateProgram_CreateProgram_Program_Procedures) GetProcedureType() *string {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program_Procedures{}
+	}
+	return t.ProcedureType
+}
+func (t *CreateProgram_CreateProgram_Program_Procedures) GetPurposeAndScope() *string {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program_Procedures{}
+	}
+	return t.PurposeAndScope
+}
+func (t *CreateProgram_CreateProgram_Program_Procedures) GetSatisfies() *string {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program_Procedures{}
+	}
+	return t.Satisfies
+}
+func (t *CreateProgram_CreateProgram_Program_Procedures) GetStatus() *string {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program_Procedures{}
+	}
+	return t.Status
+}
+func (t *CreateProgram_CreateProgram_Program_Procedures) GetTags() []string {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program_Procedures{}
+	}
+	return t.Tags
+}
+func (t *CreateProgram_CreateProgram_Program_Procedures) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program_Procedures{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateProgram_CreateProgram_Program_Procedures) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program_Procedures{}
+	}
+	return t.UpdatedBy
+}
+func (t *CreateProgram_CreateProgram_Program_Procedures) GetVersion() *string {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program_Procedures{}
+	}
+	return t.Version
+}
+
+type CreateProgram_CreateProgram_Program_Policies struct {
+	Background      *string                "json:\"background,omitempty\" graphql:\"background\""
+	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description     *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
+	ID              string                 "json:\"id\" graphql:\"id\""
+	Name            string                 "json:\"name\" graphql:\"name\""
+	PolicyType      *string                "json:\"policyType,omitempty\" graphql:\"policyType\""
+	PurposeAndScope *string                "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
+	Status          *string                "json:\"status,omitempty\" graphql:\"status\""
+	Tags            []string               "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Version         *string                "json:\"version,omitempty\" graphql:\"version\""
+}
+
+func (t *CreateProgram_CreateProgram_Program_Policies) GetBackground() *string {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program_Policies{}
+	}
+	return t.Background
+}
+func (t *CreateProgram_CreateProgram_Program_Policies) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program_Policies{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateProgram_CreateProgram_Program_Policies) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program_Policies{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateProgram_CreateProgram_Program_Policies) GetDescription() *string {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program_Policies{}
+	}
+	return t.Description
+}
+func (t *CreateProgram_CreateProgram_Program_Policies) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program_Policies{}
+	}
+	return t.Details
+}
+func (t *CreateProgram_CreateProgram_Program_Policies) GetID() string {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program_Policies{}
+	}
+	return t.ID
+}
+func (t *CreateProgram_CreateProgram_Program_Policies) GetName() string {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program_Policies{}
+	}
+	return t.Name
+}
+func (t *CreateProgram_CreateProgram_Program_Policies) GetPolicyType() *string {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program_Policies{}
+	}
+	return t.PolicyType
+}
+func (t *CreateProgram_CreateProgram_Program_Policies) GetPurposeAndScope() *string {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program_Policies{}
+	}
+	return t.PurposeAndScope
+}
+func (t *CreateProgram_CreateProgram_Program_Policies) GetStatus() *string {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program_Policies{}
+	}
+	return t.Status
+}
+func (t *CreateProgram_CreateProgram_Program_Policies) GetTags() []string {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program_Policies{}
+	}
+	return t.Tags
+}
+func (t *CreateProgram_CreateProgram_Program_Policies) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program_Policies{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateProgram_CreateProgram_Program_Policies) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program_Policies{}
+	}
+	return t.UpdatedBy
+}
+func (t *CreateProgram_CreateProgram_Program_Policies) GetVersion() *string {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program_Policies{}
+	}
+	return t.Version
+}
+
 type CreateProgram_CreateProgram_Program struct {
-	AuditorReadComments  bool                "json:\"auditorReadComments\" graphql:\"auditorReadComments\""
-	AuditorReady         bool                "json:\"auditorReady\" graphql:\"auditorReady\""
-	AuditorWriteComments bool                "json:\"auditorWriteComments\" graphql:\"auditorWriteComments\""
-	CreatedAt            *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy            *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description          *string             "json:\"description,omitempty\" graphql:\"description\""
-	EndDate              *time.Time          "json:\"endDate,omitempty\" graphql:\"endDate\""
-	ID                   string              "json:\"id\" graphql:\"id\""
-	Name                 string              "json:\"name\" graphql:\"name\""
-	OwnerID              *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	StartDate            *time.Time          "json:\"startDate,omitempty\" graphql:\"startDate\""
-	Status               enums.ProgramStatus "json:\"status\" graphql:\"status\""
-	Tags                 []string            "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt            *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy            *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	AuditorReadComments  bool                                              "json:\"auditorReadComments\" graphql:\"auditorReadComments\""
+	AuditorReady         bool                                              "json:\"auditorReady\" graphql:\"auditorReady\""
+	AuditorWriteComments bool                                              "json:\"auditorWriteComments\" graphql:\"auditorWriteComments\""
+	CreatedAt            *time.Time                                        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy            *string                                           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description          *string                                           "json:\"description,omitempty\" graphql:\"description\""
+	EndDate              *time.Time                                        "json:\"endDate,omitempty\" graphql:\"endDate\""
+	ID                   string                                            "json:\"id\" graphql:\"id\""
+	Name                 string                                            "json:\"name\" graphql:\"name\""
+	OwnerID              *string                                           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	StartDate            *time.Time                                        "json:\"startDate,omitempty\" graphql:\"startDate\""
+	Status               enums.ProgramStatus                               "json:\"status\" graphql:\"status\""
+	Tags                 []string                                          "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt            *time.Time                                        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy            *string                                           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Procedures           []*CreateProgram_CreateProgram_Program_Procedures "json:\"procedures,omitempty\" graphql:\"procedures\""
+	Policies             []*CreateProgram_CreateProgram_Program_Policies   "json:\"policies,omitempty\" graphql:\"policies\""
 }
 
 func (t *CreateProgram_CreateProgram_Program) GetAuditorReadComments() bool {
@@ -34043,6 +34770,18 @@ func (t *CreateProgram_CreateProgram_Program) GetUpdatedBy() *string {
 	}
 	return t.UpdatedBy
 }
+func (t *CreateProgram_CreateProgram_Program) GetProcedures() []*CreateProgram_CreateProgram_Program_Procedures {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program{}
+	}
+	return t.Procedures
+}
+func (t *CreateProgram_CreateProgram_Program) GetPolicies() []*CreateProgram_CreateProgram_Program_Policies {
+	if t == nil {
+		t = &CreateProgram_CreateProgram_Program{}
+	}
+	return t.Policies
+}
 
 type CreateProgram_CreateProgram struct {
 	Program CreateProgram_CreateProgram_Program "json:\"program\" graphql:\"program\""
@@ -34066,22 +34805,235 @@ func (t *DeleteProgram_DeleteProgram) GetDeletedID() string {
 	return t.DeletedID
 }
 
+type GetAllPrograms_Programs_Edges_Node_Procedures struct {
+	Background      *string                "json:\"background,omitempty\" graphql:\"background\""
+	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description     *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
+	ID              string                 "json:\"id\" graphql:\"id\""
+	Name            string                 "json:\"name\" graphql:\"name\""
+	ProcedureType   *string                "json:\"procedureType,omitempty\" graphql:\"procedureType\""
+	PurposeAndScope *string                "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
+	Satisfies       *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
+	Status          *string                "json:\"status,omitempty\" graphql:\"status\""
+	Tags            []string               "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Version         *string                "json:\"version,omitempty\" graphql:\"version\""
+}
+
+func (t *GetAllPrograms_Programs_Edges_Node_Procedures) GetBackground() *string {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node_Procedures{}
+	}
+	return t.Background
+}
+func (t *GetAllPrograms_Programs_Edges_Node_Procedures) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node_Procedures{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllPrograms_Programs_Edges_Node_Procedures) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node_Procedures{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllPrograms_Programs_Edges_Node_Procedures) GetDescription() *string {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node_Procedures{}
+	}
+	return t.Description
+}
+func (t *GetAllPrograms_Programs_Edges_Node_Procedures) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node_Procedures{}
+	}
+	return t.Details
+}
+func (t *GetAllPrograms_Programs_Edges_Node_Procedures) GetID() string {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node_Procedures{}
+	}
+	return t.ID
+}
+func (t *GetAllPrograms_Programs_Edges_Node_Procedures) GetName() string {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node_Procedures{}
+	}
+	return t.Name
+}
+func (t *GetAllPrograms_Programs_Edges_Node_Procedures) GetProcedureType() *string {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node_Procedures{}
+	}
+	return t.ProcedureType
+}
+func (t *GetAllPrograms_Programs_Edges_Node_Procedures) GetPurposeAndScope() *string {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node_Procedures{}
+	}
+	return t.PurposeAndScope
+}
+func (t *GetAllPrograms_Programs_Edges_Node_Procedures) GetSatisfies() *string {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node_Procedures{}
+	}
+	return t.Satisfies
+}
+func (t *GetAllPrograms_Programs_Edges_Node_Procedures) GetStatus() *string {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node_Procedures{}
+	}
+	return t.Status
+}
+func (t *GetAllPrograms_Programs_Edges_Node_Procedures) GetTags() []string {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node_Procedures{}
+	}
+	return t.Tags
+}
+func (t *GetAllPrograms_Programs_Edges_Node_Procedures) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node_Procedures{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllPrograms_Programs_Edges_Node_Procedures) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node_Procedures{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetAllPrograms_Programs_Edges_Node_Procedures) GetVersion() *string {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node_Procedures{}
+	}
+	return t.Version
+}
+
+type GetAllPrograms_Programs_Edges_Node_Policies struct {
+	Background      *string                "json:\"background,omitempty\" graphql:\"background\""
+	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description     *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
+	ID              string                 "json:\"id\" graphql:\"id\""
+	Name            string                 "json:\"name\" graphql:\"name\""
+	PolicyType      *string                "json:\"policyType,omitempty\" graphql:\"policyType\""
+	PurposeAndScope *string                "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
+	Status          *string                "json:\"status,omitempty\" graphql:\"status\""
+	Tags            []string               "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Version         *string                "json:\"version,omitempty\" graphql:\"version\""
+}
+
+func (t *GetAllPrograms_Programs_Edges_Node_Policies) GetBackground() *string {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node_Policies{}
+	}
+	return t.Background
+}
+func (t *GetAllPrograms_Programs_Edges_Node_Policies) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node_Policies{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllPrograms_Programs_Edges_Node_Policies) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node_Policies{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllPrograms_Programs_Edges_Node_Policies) GetDescription() *string {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node_Policies{}
+	}
+	return t.Description
+}
+func (t *GetAllPrograms_Programs_Edges_Node_Policies) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node_Policies{}
+	}
+	return t.Details
+}
+func (t *GetAllPrograms_Programs_Edges_Node_Policies) GetID() string {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node_Policies{}
+	}
+	return t.ID
+}
+func (t *GetAllPrograms_Programs_Edges_Node_Policies) GetName() string {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node_Policies{}
+	}
+	return t.Name
+}
+func (t *GetAllPrograms_Programs_Edges_Node_Policies) GetPolicyType() *string {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node_Policies{}
+	}
+	return t.PolicyType
+}
+func (t *GetAllPrograms_Programs_Edges_Node_Policies) GetPurposeAndScope() *string {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node_Policies{}
+	}
+	return t.PurposeAndScope
+}
+func (t *GetAllPrograms_Programs_Edges_Node_Policies) GetStatus() *string {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node_Policies{}
+	}
+	return t.Status
+}
+func (t *GetAllPrograms_Programs_Edges_Node_Policies) GetTags() []string {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node_Policies{}
+	}
+	return t.Tags
+}
+func (t *GetAllPrograms_Programs_Edges_Node_Policies) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node_Policies{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllPrograms_Programs_Edges_Node_Policies) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node_Policies{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetAllPrograms_Programs_Edges_Node_Policies) GetVersion() *string {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node_Policies{}
+	}
+	return t.Version
+}
+
 type GetAllPrograms_Programs_Edges_Node struct {
-	AuditorReadComments  bool                "json:\"auditorReadComments\" graphql:\"auditorReadComments\""
-	AuditorReady         bool                "json:\"auditorReady\" graphql:\"auditorReady\""
-	AuditorWriteComments bool                "json:\"auditorWriteComments\" graphql:\"auditorWriteComments\""
-	CreatedAt            *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy            *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description          *string             "json:\"description,omitempty\" graphql:\"description\""
-	EndDate              *time.Time          "json:\"endDate,omitempty\" graphql:\"endDate\""
-	ID                   string              "json:\"id\" graphql:\"id\""
-	Name                 string              "json:\"name\" graphql:\"name\""
-	OwnerID              *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	StartDate            *time.Time          "json:\"startDate,omitempty\" graphql:\"startDate\""
-	Status               enums.ProgramStatus "json:\"status\" graphql:\"status\""
-	Tags                 []string            "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt            *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy            *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	AuditorReadComments  bool                                             "json:\"auditorReadComments\" graphql:\"auditorReadComments\""
+	AuditorReady         bool                                             "json:\"auditorReady\" graphql:\"auditorReady\""
+	AuditorWriteComments bool                                             "json:\"auditorWriteComments\" graphql:\"auditorWriteComments\""
+	CreatedAt            *time.Time                                       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy            *string                                          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description          *string                                          "json:\"description,omitempty\" graphql:\"description\""
+	EndDate              *time.Time                                       "json:\"endDate,omitempty\" graphql:\"endDate\""
+	ID                   string                                           "json:\"id\" graphql:\"id\""
+	Name                 string                                           "json:\"name\" graphql:\"name\""
+	OwnerID              *string                                          "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	StartDate            *time.Time                                       "json:\"startDate,omitempty\" graphql:\"startDate\""
+	Status               enums.ProgramStatus                              "json:\"status\" graphql:\"status\""
+	Tags                 []string                                         "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt            *time.Time                                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy            *string                                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Procedures           []*GetAllPrograms_Programs_Edges_Node_Procedures "json:\"procedures,omitempty\" graphql:\"procedures\""
+	Policies             []*GetAllPrograms_Programs_Edges_Node_Policies   "json:\"policies,omitempty\" graphql:\"policies\""
 }
 
 func (t *GetAllPrograms_Programs_Edges_Node) GetAuditorReadComments() bool {
@@ -34174,6 +35126,18 @@ func (t *GetAllPrograms_Programs_Edges_Node) GetUpdatedBy() *string {
 	}
 	return t.UpdatedBy
 }
+func (t *GetAllPrograms_Programs_Edges_Node) GetProcedures() []*GetAllPrograms_Programs_Edges_Node_Procedures {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node{}
+	}
+	return t.Procedures
+}
+func (t *GetAllPrograms_Programs_Edges_Node) GetPolicies() []*GetAllPrograms_Programs_Edges_Node_Policies {
+	if t == nil {
+		t = &GetAllPrograms_Programs_Edges_Node{}
+	}
+	return t.Policies
+}
 
 type GetAllPrograms_Programs_Edges struct {
 	Node *GetAllPrograms_Programs_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
@@ -34197,22 +35161,235 @@ func (t *GetAllPrograms_Programs) GetEdges() []*GetAllPrograms_Programs_Edges {
 	return t.Edges
 }
 
+type GetProgramByID_Program_Procedures struct {
+	Background      *string                "json:\"background,omitempty\" graphql:\"background\""
+	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description     *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
+	ID              string                 "json:\"id\" graphql:\"id\""
+	Name            string                 "json:\"name\" graphql:\"name\""
+	ProcedureType   *string                "json:\"procedureType,omitempty\" graphql:\"procedureType\""
+	PurposeAndScope *string                "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
+	Satisfies       *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
+	Status          *string                "json:\"status,omitempty\" graphql:\"status\""
+	Tags            []string               "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Version         *string                "json:\"version,omitempty\" graphql:\"version\""
+}
+
+func (t *GetProgramByID_Program_Procedures) GetBackground() *string {
+	if t == nil {
+		t = &GetProgramByID_Program_Procedures{}
+	}
+	return t.Background
+}
+func (t *GetProgramByID_Program_Procedures) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetProgramByID_Program_Procedures{}
+	}
+	return t.CreatedAt
+}
+func (t *GetProgramByID_Program_Procedures) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetProgramByID_Program_Procedures{}
+	}
+	return t.CreatedBy
+}
+func (t *GetProgramByID_Program_Procedures) GetDescription() *string {
+	if t == nil {
+		t = &GetProgramByID_Program_Procedures{}
+	}
+	return t.Description
+}
+func (t *GetProgramByID_Program_Procedures) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetProgramByID_Program_Procedures{}
+	}
+	return t.Details
+}
+func (t *GetProgramByID_Program_Procedures) GetID() string {
+	if t == nil {
+		t = &GetProgramByID_Program_Procedures{}
+	}
+	return t.ID
+}
+func (t *GetProgramByID_Program_Procedures) GetName() string {
+	if t == nil {
+		t = &GetProgramByID_Program_Procedures{}
+	}
+	return t.Name
+}
+func (t *GetProgramByID_Program_Procedures) GetProcedureType() *string {
+	if t == nil {
+		t = &GetProgramByID_Program_Procedures{}
+	}
+	return t.ProcedureType
+}
+func (t *GetProgramByID_Program_Procedures) GetPurposeAndScope() *string {
+	if t == nil {
+		t = &GetProgramByID_Program_Procedures{}
+	}
+	return t.PurposeAndScope
+}
+func (t *GetProgramByID_Program_Procedures) GetSatisfies() *string {
+	if t == nil {
+		t = &GetProgramByID_Program_Procedures{}
+	}
+	return t.Satisfies
+}
+func (t *GetProgramByID_Program_Procedures) GetStatus() *string {
+	if t == nil {
+		t = &GetProgramByID_Program_Procedures{}
+	}
+	return t.Status
+}
+func (t *GetProgramByID_Program_Procedures) GetTags() []string {
+	if t == nil {
+		t = &GetProgramByID_Program_Procedures{}
+	}
+	return t.Tags
+}
+func (t *GetProgramByID_Program_Procedures) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetProgramByID_Program_Procedures{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetProgramByID_Program_Procedures) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetProgramByID_Program_Procedures{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetProgramByID_Program_Procedures) GetVersion() *string {
+	if t == nil {
+		t = &GetProgramByID_Program_Procedures{}
+	}
+	return t.Version
+}
+
+type GetProgramByID_Program_Policies struct {
+	Background      *string                "json:\"background,omitempty\" graphql:\"background\""
+	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description     *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
+	ID              string                 "json:\"id\" graphql:\"id\""
+	Name            string                 "json:\"name\" graphql:\"name\""
+	PolicyType      *string                "json:\"policyType,omitempty\" graphql:\"policyType\""
+	PurposeAndScope *string                "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
+	Status          *string                "json:\"status,omitempty\" graphql:\"status\""
+	Tags            []string               "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Version         *string                "json:\"version,omitempty\" graphql:\"version\""
+}
+
+func (t *GetProgramByID_Program_Policies) GetBackground() *string {
+	if t == nil {
+		t = &GetProgramByID_Program_Policies{}
+	}
+	return t.Background
+}
+func (t *GetProgramByID_Program_Policies) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetProgramByID_Program_Policies{}
+	}
+	return t.CreatedAt
+}
+func (t *GetProgramByID_Program_Policies) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetProgramByID_Program_Policies{}
+	}
+	return t.CreatedBy
+}
+func (t *GetProgramByID_Program_Policies) GetDescription() *string {
+	if t == nil {
+		t = &GetProgramByID_Program_Policies{}
+	}
+	return t.Description
+}
+func (t *GetProgramByID_Program_Policies) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetProgramByID_Program_Policies{}
+	}
+	return t.Details
+}
+func (t *GetProgramByID_Program_Policies) GetID() string {
+	if t == nil {
+		t = &GetProgramByID_Program_Policies{}
+	}
+	return t.ID
+}
+func (t *GetProgramByID_Program_Policies) GetName() string {
+	if t == nil {
+		t = &GetProgramByID_Program_Policies{}
+	}
+	return t.Name
+}
+func (t *GetProgramByID_Program_Policies) GetPolicyType() *string {
+	if t == nil {
+		t = &GetProgramByID_Program_Policies{}
+	}
+	return t.PolicyType
+}
+func (t *GetProgramByID_Program_Policies) GetPurposeAndScope() *string {
+	if t == nil {
+		t = &GetProgramByID_Program_Policies{}
+	}
+	return t.PurposeAndScope
+}
+func (t *GetProgramByID_Program_Policies) GetStatus() *string {
+	if t == nil {
+		t = &GetProgramByID_Program_Policies{}
+	}
+	return t.Status
+}
+func (t *GetProgramByID_Program_Policies) GetTags() []string {
+	if t == nil {
+		t = &GetProgramByID_Program_Policies{}
+	}
+	return t.Tags
+}
+func (t *GetProgramByID_Program_Policies) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetProgramByID_Program_Policies{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetProgramByID_Program_Policies) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetProgramByID_Program_Policies{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetProgramByID_Program_Policies) GetVersion() *string {
+	if t == nil {
+		t = &GetProgramByID_Program_Policies{}
+	}
+	return t.Version
+}
+
 type GetProgramByID_Program struct {
-	AuditorReadComments  bool                "json:\"auditorReadComments\" graphql:\"auditorReadComments\""
-	AuditorReady         bool                "json:\"auditorReady\" graphql:\"auditorReady\""
-	AuditorWriteComments bool                "json:\"auditorWriteComments\" graphql:\"auditorWriteComments\""
-	CreatedAt            *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy            *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description          *string             "json:\"description,omitempty\" graphql:\"description\""
-	EndDate              *time.Time          "json:\"endDate,omitempty\" graphql:\"endDate\""
-	ID                   string              "json:\"id\" graphql:\"id\""
-	Name                 string              "json:\"name\" graphql:\"name\""
-	OwnerID              *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	StartDate            *time.Time          "json:\"startDate,omitempty\" graphql:\"startDate\""
-	Status               enums.ProgramStatus "json:\"status\" graphql:\"status\""
-	Tags                 []string            "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt            *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy            *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	AuditorReadComments  bool                                 "json:\"auditorReadComments\" graphql:\"auditorReadComments\""
+	AuditorReady         bool                                 "json:\"auditorReady\" graphql:\"auditorReady\""
+	AuditorWriteComments bool                                 "json:\"auditorWriteComments\" graphql:\"auditorWriteComments\""
+	CreatedAt            *time.Time                           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy            *string                              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description          *string                              "json:\"description,omitempty\" graphql:\"description\""
+	EndDate              *time.Time                           "json:\"endDate,omitempty\" graphql:\"endDate\""
+	ID                   string                               "json:\"id\" graphql:\"id\""
+	Name                 string                               "json:\"name\" graphql:\"name\""
+	OwnerID              *string                              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	StartDate            *time.Time                           "json:\"startDate,omitempty\" graphql:\"startDate\""
+	Status               enums.ProgramStatus                  "json:\"status\" graphql:\"status\""
+	Tags                 []string                             "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt            *time.Time                           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy            *string                              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Procedures           []*GetProgramByID_Program_Procedures "json:\"procedures,omitempty\" graphql:\"procedures\""
+	Policies             []*GetProgramByID_Program_Policies   "json:\"policies,omitempty\" graphql:\"policies\""
 }
 
 func (t *GetProgramByID_Program) GetAuditorReadComments() bool {
@@ -34305,23 +35482,248 @@ func (t *GetProgramByID_Program) GetUpdatedBy() *string {
 	}
 	return t.UpdatedBy
 }
+func (t *GetProgramByID_Program) GetProcedures() []*GetProgramByID_Program_Procedures {
+	if t == nil {
+		t = &GetProgramByID_Program{}
+	}
+	return t.Procedures
+}
+func (t *GetProgramByID_Program) GetPolicies() []*GetProgramByID_Program_Policies {
+	if t == nil {
+		t = &GetProgramByID_Program{}
+	}
+	return t.Policies
+}
+
+type GetPrograms_Programs_Edges_Node_Procedures struct {
+	Background      *string                "json:\"background,omitempty\" graphql:\"background\""
+	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description     *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
+	ID              string                 "json:\"id\" graphql:\"id\""
+	Name            string                 "json:\"name\" graphql:\"name\""
+	ProcedureType   *string                "json:\"procedureType,omitempty\" graphql:\"procedureType\""
+	PurposeAndScope *string                "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
+	Satisfies       *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
+	Status          *string                "json:\"status,omitempty\" graphql:\"status\""
+	Tags            []string               "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Version         *string                "json:\"version,omitempty\" graphql:\"version\""
+}
+
+func (t *GetPrograms_Programs_Edges_Node_Procedures) GetBackground() *string {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node_Procedures{}
+	}
+	return t.Background
+}
+func (t *GetPrograms_Programs_Edges_Node_Procedures) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node_Procedures{}
+	}
+	return t.CreatedAt
+}
+func (t *GetPrograms_Programs_Edges_Node_Procedures) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node_Procedures{}
+	}
+	return t.CreatedBy
+}
+func (t *GetPrograms_Programs_Edges_Node_Procedures) GetDescription() *string {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node_Procedures{}
+	}
+	return t.Description
+}
+func (t *GetPrograms_Programs_Edges_Node_Procedures) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node_Procedures{}
+	}
+	return t.Details
+}
+func (t *GetPrograms_Programs_Edges_Node_Procedures) GetID() string {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node_Procedures{}
+	}
+	return t.ID
+}
+func (t *GetPrograms_Programs_Edges_Node_Procedures) GetName() string {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node_Procedures{}
+	}
+	return t.Name
+}
+func (t *GetPrograms_Programs_Edges_Node_Procedures) GetProcedureType() *string {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node_Procedures{}
+	}
+	return t.ProcedureType
+}
+func (t *GetPrograms_Programs_Edges_Node_Procedures) GetPurposeAndScope() *string {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node_Procedures{}
+	}
+	return t.PurposeAndScope
+}
+func (t *GetPrograms_Programs_Edges_Node_Procedures) GetSatisfies() *string {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node_Procedures{}
+	}
+	return t.Satisfies
+}
+func (t *GetPrograms_Programs_Edges_Node_Procedures) GetStatus() *string {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node_Procedures{}
+	}
+	return t.Status
+}
+func (t *GetPrograms_Programs_Edges_Node_Procedures) GetTags() []string {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node_Procedures{}
+	}
+	return t.Tags
+}
+func (t *GetPrograms_Programs_Edges_Node_Procedures) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node_Procedures{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetPrograms_Programs_Edges_Node_Procedures) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node_Procedures{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetPrograms_Programs_Edges_Node_Procedures) GetVersion() *string {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node_Procedures{}
+	}
+	return t.Version
+}
+
+type GetPrograms_Programs_Edges_Node_Policies struct {
+	Background      *string                "json:\"background,omitempty\" graphql:\"background\""
+	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description     *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
+	ID              string                 "json:\"id\" graphql:\"id\""
+	Name            string                 "json:\"name\" graphql:\"name\""
+	PolicyType      *string                "json:\"policyType,omitempty\" graphql:\"policyType\""
+	PurposeAndScope *string                "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
+	Status          *string                "json:\"status,omitempty\" graphql:\"status\""
+	Tags            []string               "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Version         *string                "json:\"version,omitempty\" graphql:\"version\""
+}
+
+func (t *GetPrograms_Programs_Edges_Node_Policies) GetBackground() *string {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node_Policies{}
+	}
+	return t.Background
+}
+func (t *GetPrograms_Programs_Edges_Node_Policies) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node_Policies{}
+	}
+	return t.CreatedAt
+}
+func (t *GetPrograms_Programs_Edges_Node_Policies) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node_Policies{}
+	}
+	return t.CreatedBy
+}
+func (t *GetPrograms_Programs_Edges_Node_Policies) GetDescription() *string {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node_Policies{}
+	}
+	return t.Description
+}
+func (t *GetPrograms_Programs_Edges_Node_Policies) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node_Policies{}
+	}
+	return t.Details
+}
+func (t *GetPrograms_Programs_Edges_Node_Policies) GetID() string {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node_Policies{}
+	}
+	return t.ID
+}
+func (t *GetPrograms_Programs_Edges_Node_Policies) GetName() string {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node_Policies{}
+	}
+	return t.Name
+}
+func (t *GetPrograms_Programs_Edges_Node_Policies) GetPolicyType() *string {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node_Policies{}
+	}
+	return t.PolicyType
+}
+func (t *GetPrograms_Programs_Edges_Node_Policies) GetPurposeAndScope() *string {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node_Policies{}
+	}
+	return t.PurposeAndScope
+}
+func (t *GetPrograms_Programs_Edges_Node_Policies) GetStatus() *string {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node_Policies{}
+	}
+	return t.Status
+}
+func (t *GetPrograms_Programs_Edges_Node_Policies) GetTags() []string {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node_Policies{}
+	}
+	return t.Tags
+}
+func (t *GetPrograms_Programs_Edges_Node_Policies) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node_Policies{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetPrograms_Programs_Edges_Node_Policies) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node_Policies{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetPrograms_Programs_Edges_Node_Policies) GetVersion() *string {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node_Policies{}
+	}
+	return t.Version
+}
 
 type GetPrograms_Programs_Edges_Node struct {
-	AuditorReadComments  bool                "json:\"auditorReadComments\" graphql:\"auditorReadComments\""
-	AuditorReady         bool                "json:\"auditorReady\" graphql:\"auditorReady\""
-	AuditorWriteComments bool                "json:\"auditorWriteComments\" graphql:\"auditorWriteComments\""
-	CreatedAt            *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy            *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description          *string             "json:\"description,omitempty\" graphql:\"description\""
-	EndDate              *time.Time          "json:\"endDate,omitempty\" graphql:\"endDate\""
-	ID                   string              "json:\"id\" graphql:\"id\""
-	Name                 string              "json:\"name\" graphql:\"name\""
-	OwnerID              *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	StartDate            *time.Time          "json:\"startDate,omitempty\" graphql:\"startDate\""
-	Status               enums.ProgramStatus "json:\"status\" graphql:\"status\""
-	Tags                 []string            "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt            *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy            *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	AuditorReadComments  bool                                          "json:\"auditorReadComments\" graphql:\"auditorReadComments\""
+	AuditorReady         bool                                          "json:\"auditorReady\" graphql:\"auditorReady\""
+	AuditorWriteComments bool                                          "json:\"auditorWriteComments\" graphql:\"auditorWriteComments\""
+	CreatedAt            *time.Time                                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy            *string                                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description          *string                                       "json:\"description,omitempty\" graphql:\"description\""
+	EndDate              *time.Time                                    "json:\"endDate,omitempty\" graphql:\"endDate\""
+	ID                   string                                        "json:\"id\" graphql:\"id\""
+	Name                 string                                        "json:\"name\" graphql:\"name\""
+	OwnerID              *string                                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	StartDate            *time.Time                                    "json:\"startDate,omitempty\" graphql:\"startDate\""
+	Status               enums.ProgramStatus                           "json:\"status\" graphql:\"status\""
+	Tags                 []string                                      "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt            *time.Time                                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy            *string                                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Procedures           []*GetPrograms_Programs_Edges_Node_Procedures "json:\"procedures,omitempty\" graphql:\"procedures\""
+	Policies             []*GetPrograms_Programs_Edges_Node_Policies   "json:\"policies,omitempty\" graphql:\"policies\""
 }
 
 func (t *GetPrograms_Programs_Edges_Node) GetAuditorReadComments() bool {
@@ -34414,6 +35816,18 @@ func (t *GetPrograms_Programs_Edges_Node) GetUpdatedBy() *string {
 	}
 	return t.UpdatedBy
 }
+func (t *GetPrograms_Programs_Edges_Node) GetProcedures() []*GetPrograms_Programs_Edges_Node_Procedures {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node{}
+	}
+	return t.Procedures
+}
+func (t *GetPrograms_Programs_Edges_Node) GetPolicies() []*GetPrograms_Programs_Edges_Node_Policies {
+	if t == nil {
+		t = &GetPrograms_Programs_Edges_Node{}
+	}
+	return t.Policies
+}
 
 type GetPrograms_Programs_Edges struct {
 	Node *GetPrograms_Programs_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
@@ -34437,22 +35851,235 @@ func (t *GetPrograms_Programs) GetEdges() []*GetPrograms_Programs_Edges {
 	return t.Edges
 }
 
+type UpdateProgram_UpdateProgram_Program_Procedures struct {
+	Background      *string                "json:\"background,omitempty\" graphql:\"background\""
+	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description     *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
+	ID              string                 "json:\"id\" graphql:\"id\""
+	Name            string                 "json:\"name\" graphql:\"name\""
+	ProcedureType   *string                "json:\"procedureType,omitempty\" graphql:\"procedureType\""
+	PurposeAndScope *string                "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
+	Satisfies       *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
+	Status          *string                "json:\"status,omitempty\" graphql:\"status\""
+	Tags            []string               "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Version         *string                "json:\"version,omitempty\" graphql:\"version\""
+}
+
+func (t *UpdateProgram_UpdateProgram_Program_Procedures) GetBackground() *string {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program_Procedures{}
+	}
+	return t.Background
+}
+func (t *UpdateProgram_UpdateProgram_Program_Procedures) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program_Procedures{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateProgram_UpdateProgram_Program_Procedures) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program_Procedures{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateProgram_UpdateProgram_Program_Procedures) GetDescription() *string {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program_Procedures{}
+	}
+	return t.Description
+}
+func (t *UpdateProgram_UpdateProgram_Program_Procedures) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program_Procedures{}
+	}
+	return t.Details
+}
+func (t *UpdateProgram_UpdateProgram_Program_Procedures) GetID() string {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program_Procedures{}
+	}
+	return t.ID
+}
+func (t *UpdateProgram_UpdateProgram_Program_Procedures) GetName() string {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program_Procedures{}
+	}
+	return t.Name
+}
+func (t *UpdateProgram_UpdateProgram_Program_Procedures) GetProcedureType() *string {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program_Procedures{}
+	}
+	return t.ProcedureType
+}
+func (t *UpdateProgram_UpdateProgram_Program_Procedures) GetPurposeAndScope() *string {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program_Procedures{}
+	}
+	return t.PurposeAndScope
+}
+func (t *UpdateProgram_UpdateProgram_Program_Procedures) GetSatisfies() *string {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program_Procedures{}
+	}
+	return t.Satisfies
+}
+func (t *UpdateProgram_UpdateProgram_Program_Procedures) GetStatus() *string {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program_Procedures{}
+	}
+	return t.Status
+}
+func (t *UpdateProgram_UpdateProgram_Program_Procedures) GetTags() []string {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program_Procedures{}
+	}
+	return t.Tags
+}
+func (t *UpdateProgram_UpdateProgram_Program_Procedures) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program_Procedures{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateProgram_UpdateProgram_Program_Procedures) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program_Procedures{}
+	}
+	return t.UpdatedBy
+}
+func (t *UpdateProgram_UpdateProgram_Program_Procedures) GetVersion() *string {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program_Procedures{}
+	}
+	return t.Version
+}
+
+type UpdateProgram_UpdateProgram_Program_Policies struct {
+	Background      *string                "json:\"background,omitempty\" graphql:\"background\""
+	CreatedAt       *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy       *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description     *string                "json:\"description,omitempty\" graphql:\"description\""
+	Details         map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
+	ID              string                 "json:\"id\" graphql:\"id\""
+	Name            string                 "json:\"name\" graphql:\"name\""
+	PolicyType      *string                "json:\"policyType,omitempty\" graphql:\"policyType\""
+	PurposeAndScope *string                "json:\"purposeAndScope,omitempty\" graphql:\"purposeAndScope\""
+	Status          *string                "json:\"status,omitempty\" graphql:\"status\""
+	Tags            []string               "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt       *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy       *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Version         *string                "json:\"version,omitempty\" graphql:\"version\""
+}
+
+func (t *UpdateProgram_UpdateProgram_Program_Policies) GetBackground() *string {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program_Policies{}
+	}
+	return t.Background
+}
+func (t *UpdateProgram_UpdateProgram_Program_Policies) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program_Policies{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateProgram_UpdateProgram_Program_Policies) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program_Policies{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateProgram_UpdateProgram_Program_Policies) GetDescription() *string {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program_Policies{}
+	}
+	return t.Description
+}
+func (t *UpdateProgram_UpdateProgram_Program_Policies) GetDetails() map[string]interface{} {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program_Policies{}
+	}
+	return t.Details
+}
+func (t *UpdateProgram_UpdateProgram_Program_Policies) GetID() string {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program_Policies{}
+	}
+	return t.ID
+}
+func (t *UpdateProgram_UpdateProgram_Program_Policies) GetName() string {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program_Policies{}
+	}
+	return t.Name
+}
+func (t *UpdateProgram_UpdateProgram_Program_Policies) GetPolicyType() *string {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program_Policies{}
+	}
+	return t.PolicyType
+}
+func (t *UpdateProgram_UpdateProgram_Program_Policies) GetPurposeAndScope() *string {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program_Policies{}
+	}
+	return t.PurposeAndScope
+}
+func (t *UpdateProgram_UpdateProgram_Program_Policies) GetStatus() *string {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program_Policies{}
+	}
+	return t.Status
+}
+func (t *UpdateProgram_UpdateProgram_Program_Policies) GetTags() []string {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program_Policies{}
+	}
+	return t.Tags
+}
+func (t *UpdateProgram_UpdateProgram_Program_Policies) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program_Policies{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateProgram_UpdateProgram_Program_Policies) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program_Policies{}
+	}
+	return t.UpdatedBy
+}
+func (t *UpdateProgram_UpdateProgram_Program_Policies) GetVersion() *string {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program_Policies{}
+	}
+	return t.Version
+}
+
 type UpdateProgram_UpdateProgram_Program struct {
-	AuditorReadComments  bool                "json:\"auditorReadComments\" graphql:\"auditorReadComments\""
-	AuditorReady         bool                "json:\"auditorReady\" graphql:\"auditorReady\""
-	AuditorWriteComments bool                "json:\"auditorWriteComments\" graphql:\"auditorWriteComments\""
-	CreatedAt            *time.Time          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy            *string             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description          *string             "json:\"description,omitempty\" graphql:\"description\""
-	EndDate              *time.Time          "json:\"endDate,omitempty\" graphql:\"endDate\""
-	ID                   string              "json:\"id\" graphql:\"id\""
-	Name                 string              "json:\"name\" graphql:\"name\""
-	OwnerID              *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	StartDate            *time.Time          "json:\"startDate,omitempty\" graphql:\"startDate\""
-	Status               enums.ProgramStatus "json:\"status\" graphql:\"status\""
-	Tags                 []string            "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt            *time.Time          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy            *string             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	AuditorReadComments  bool                                              "json:\"auditorReadComments\" graphql:\"auditorReadComments\""
+	AuditorReady         bool                                              "json:\"auditorReady\" graphql:\"auditorReady\""
+	AuditorWriteComments bool                                              "json:\"auditorWriteComments\" graphql:\"auditorWriteComments\""
+	CreatedAt            *time.Time                                        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy            *string                                           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description          *string                                           "json:\"description,omitempty\" graphql:\"description\""
+	EndDate              *time.Time                                        "json:\"endDate,omitempty\" graphql:\"endDate\""
+	ID                   string                                            "json:\"id\" graphql:\"id\""
+	Name                 string                                            "json:\"name\" graphql:\"name\""
+	OwnerID              *string                                           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	StartDate            *time.Time                                        "json:\"startDate,omitempty\" graphql:\"startDate\""
+	Status               enums.ProgramStatus                               "json:\"status\" graphql:\"status\""
+	Tags                 []string                                          "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt            *time.Time                                        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy            *string                                           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Procedures           []*UpdateProgram_UpdateProgram_Program_Procedures "json:\"procedures,omitempty\" graphql:\"procedures\""
+	Policies             []*UpdateProgram_UpdateProgram_Program_Policies   "json:\"policies,omitempty\" graphql:\"policies\""
 }
 
 func (t *UpdateProgram_UpdateProgram_Program) GetAuditorReadComments() bool {
@@ -34544,6 +36171,18 @@ func (t *UpdateProgram_UpdateProgram_Program) GetUpdatedBy() *string {
 		t = &UpdateProgram_UpdateProgram_Program{}
 	}
 	return t.UpdatedBy
+}
+func (t *UpdateProgram_UpdateProgram_Program) GetProcedures() []*UpdateProgram_UpdateProgram_Program_Procedures {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program{}
+	}
+	return t.Procedures
+}
+func (t *UpdateProgram_UpdateProgram_Program) GetPolicies() []*UpdateProgram_UpdateProgram_Program_Policies {
+	if t == nil {
+		t = &UpdateProgram_UpdateProgram_Program{}
+	}
+	return t.Policies
 }
 
 type UpdateProgram_UpdateProgram struct {
@@ -49249,17 +50888,6 @@ func (t *GetAllInternalPolicies) GetInternalPolicies() *GetAllInternalPolicies_I
 	return &t.InternalPolicies
 }
 
-type GetInternalPolicyByID struct {
-	InternalPolicy GetInternalPolicyByID_InternalPolicy "json:\"internalPolicy\" graphql:\"internalPolicy\""
-}
-
-func (t *GetInternalPolicyByID) GetInternalPolicy() *GetInternalPolicyByID_InternalPolicy {
-	if t == nil {
-		t = &GetInternalPolicyByID{}
-	}
-	return &t.InternalPolicy
-}
-
 type GetInternalPolicies struct {
 	InternalPolicies GetInternalPolicies_InternalPolicies "json:\"internalPolicies\" graphql:\"internalPolicies\""
 }
@@ -49269,6 +50897,17 @@ func (t *GetInternalPolicies) GetInternalPolicies() *GetInternalPolicies_Interna
 		t = &GetInternalPolicies{}
 	}
 	return &t.InternalPolicies
+}
+
+type GetInternalPolicyByID struct {
+	InternalPolicy GetInternalPolicyByID_InternalPolicy "json:\"internalPolicy\" graphql:\"internalPolicy\""
+}
+
+func (t *GetInternalPolicyByID) GetInternalPolicy() *GetInternalPolicyByID_InternalPolicy {
+	if t == nil {
+		t = &GetInternalPolicyByID{}
+	}
+	return &t.InternalPolicy
 }
 
 type UpdateInternalPolicy struct {
@@ -51795,6 +53434,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					deletedBy
 					id
 					tags
+					ownerID
 					name
 					description
 					status
@@ -51887,6 +53527,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					deletedBy
 					id
 					tags
+					ownerID
 					name
 					description
 					status
@@ -58808,6 +60449,14 @@ const CreateInternalPolicyDocument = `mutation CreateInternalPolicy ($input: Cre
 			updatedAt
 			updatedBy
 			version
+			editors {
+				id
+				name
+			}
+			blockedGroups {
+				id
+				name
+			}
 		}
 	}
 }
@@ -58872,6 +60521,14 @@ const GetAllInternalPoliciesDocument = `query GetAllInternalPolicies {
 				updatedAt
 				updatedBy
 				version
+				editors {
+					id
+					name
+				}
+				blockedGroups {
+					id
+					name
+				}
 			}
 		}
 	}
@@ -58883,43 +60540,6 @@ func (c *Client) GetAllInternalPolicies(ctx context.Context, interceptors ...cli
 
 	var res GetAllInternalPolicies
 	if err := c.Client.Post(ctx, "GetAllInternalPolicies", GetAllInternalPoliciesDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
-const GetInternalPolicyByIDDocument = `query GetInternalPolicyByID ($internalPolicyId: ID!) {
-	internalPolicy(id: $internalPolicyId) {
-		background
-		createdAt
-		createdBy
-		description
-		details
-		id
-		name
-		policyType
-		purposeAndScope
-		status
-		tags
-		updatedAt
-		updatedBy
-		version
-	}
-}
-`
-
-func (c *Client) GetInternalPolicyByID(ctx context.Context, internalPolicyID string, interceptors ...clientv2.RequestInterceptor) (*GetInternalPolicyByID, error) {
-	vars := map[string]any{
-		"internalPolicyId": internalPolicyID,
-	}
-
-	var res GetInternalPolicyByID
-	if err := c.Client.Post(ctx, "GetInternalPolicyByID", GetInternalPolicyByIDDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -58948,6 +60568,14 @@ const GetInternalPoliciesDocument = `query GetInternalPolicies ($where: Internal
 				updatedAt
 				updatedBy
 				version
+				editors {
+					id
+					name
+				}
+				blockedGroups {
+					id
+					name
+				}
 			}
 		}
 	}
@@ -58961,6 +60589,51 @@ func (c *Client) GetInternalPolicies(ctx context.Context, where *InternalPolicyW
 
 	var res GetInternalPolicies
 	if err := c.Client.Post(ctx, "GetInternalPolicies", GetInternalPoliciesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetInternalPolicyByIDDocument = `query GetInternalPolicyByID ($internalPolicyId: ID!) {
+	internalPolicy(id: $internalPolicyId) {
+		background
+		createdAt
+		createdBy
+		description
+		details
+		id
+		name
+		policyType
+		purposeAndScope
+		status
+		tags
+		updatedAt
+		updatedBy
+		version
+		editors {
+			id
+			name
+		}
+		blockedGroups {
+			id
+			name
+		}
+	}
+}
+`
+
+func (c *Client) GetInternalPolicyByID(ctx context.Context, internalPolicyID string, interceptors ...clientv2.RequestInterceptor) (*GetInternalPolicyByID, error) {
+	vars := map[string]any{
+		"internalPolicyId": internalPolicyID,
+	}
+
+	var res GetInternalPolicyByID
+	if err := c.Client.Post(ctx, "GetInternalPolicyByID", GetInternalPolicyByIDDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -58988,6 +60661,14 @@ const UpdateInternalPolicyDocument = `mutation UpdateInternalPolicy ($updateInte
 			updatedAt
 			updatedBy
 			version
+			editors {
+				id
+				name
+			}
+			blockedGroups {
+				id
+				name
+			}
 		}
 	}
 }
@@ -61453,6 +63134,14 @@ const CreateProcedureDocument = `mutation CreateProcedure ($input: CreateProcedu
 			updatedAt
 			updatedBy
 			version
+			editors {
+				id
+				name
+			}
+			blockedGroups {
+				id
+				name
+			}
 		}
 	}
 }
@@ -61518,6 +63207,14 @@ const GetAllProceduresDocument = `query GetAllProcedures {
 				updatedAt
 				updatedBy
 				version
+				editors {
+					id
+					name
+				}
+				blockedGroups {
+					id
+					name
+				}
 			}
 		}
 	}
@@ -61556,6 +63253,14 @@ const GetProcedureByIDDocument = `query GetProcedureByID ($procedureId: ID!) {
 		updatedAt
 		updatedBy
 		version
+		editors {
+			id
+			name
+		}
+		blockedGroups {
+			id
+			name
+		}
 	}
 }
 `
@@ -61596,6 +63301,14 @@ const GetProceduresDocument = `query GetProcedures ($where: ProcedureWhereInput)
 				updatedAt
 				updatedBy
 				version
+				editors {
+					id
+					name
+				}
+				blockedGroups {
+					id
+					name
+				}
 			}
 		}
 	}
@@ -61637,6 +63350,14 @@ const UpdateProcedureDocument = `mutation UpdateProcedure ($updateProcedureId: I
 			updatedAt
 			updatedBy
 			version
+			editors {
+				id
+				name
+			}
+			blockedGroups {
+				id
+				name
+			}
 		}
 	}
 }
@@ -61846,6 +63567,39 @@ const CreateProgramDocument = `mutation CreateProgram ($input: CreateProgramInpu
 			tags
 			updatedAt
 			updatedBy
+			procedures {
+				background
+				createdAt
+				createdBy
+				description
+				details
+				id
+				name
+				procedureType
+				purposeAndScope
+				satisfies
+				status
+				tags
+				updatedAt
+				updatedBy
+				version
+			}
+			policies {
+				background
+				createdAt
+				createdBy
+				description
+				details
+				id
+				name
+				policyType
+				purposeAndScope
+				status
+				tags
+				updatedAt
+				updatedBy
+				version
+			}
 		}
 	}
 }
@@ -61911,6 +63665,39 @@ const GetAllProgramsDocument = `query GetAllPrograms {
 				tags
 				updatedAt
 				updatedBy
+				procedures {
+					background
+					createdAt
+					createdBy
+					description
+					details
+					id
+					name
+					procedureType
+					purposeAndScope
+					satisfies
+					status
+					tags
+					updatedAt
+					updatedBy
+					version
+				}
+				policies {
+					background
+					createdAt
+					createdBy
+					description
+					details
+					id
+					name
+					policyType
+					purposeAndScope
+					status
+					tags
+					updatedAt
+					updatedBy
+					version
+				}
 			}
 		}
 	}
@@ -61949,6 +63736,39 @@ const GetProgramByIDDocument = `query GetProgramByID ($programId: ID!) {
 		tags
 		updatedAt
 		updatedBy
+		procedures {
+			background
+			createdAt
+			createdBy
+			description
+			details
+			id
+			name
+			procedureType
+			purposeAndScope
+			satisfies
+			status
+			tags
+			updatedAt
+			updatedBy
+			version
+		}
+		policies {
+			background
+			createdAt
+			createdBy
+			description
+			details
+			id
+			name
+			policyType
+			purposeAndScope
+			status
+			tags
+			updatedAt
+			updatedBy
+			version
+		}
 	}
 }
 `
@@ -61989,6 +63809,39 @@ const GetProgramsDocument = `query GetPrograms ($where: ProgramWhereInput) {
 				tags
 				updatedAt
 				updatedBy
+				procedures {
+					background
+					createdAt
+					createdBy
+					description
+					details
+					id
+					name
+					procedureType
+					purposeAndScope
+					satisfies
+					status
+					tags
+					updatedAt
+					updatedBy
+					version
+				}
+				policies {
+					background
+					createdAt
+					createdBy
+					description
+					details
+					id
+					name
+					policyType
+					purposeAndScope
+					status
+					tags
+					updatedAt
+					updatedBy
+					version
+				}
 			}
 		}
 	}
@@ -62030,6 +63883,39 @@ const UpdateProgramDocument = `mutation UpdateProgram ($updateProgramId: ID!, $i
 			tags
 			updatedAt
 			updatedBy
+			procedures {
+				background
+				createdAt
+				createdBy
+				description
+				details
+				id
+				name
+				procedureType
+				purposeAndScope
+				satisfies
+				status
+				tags
+				updatedAt
+				updatedBy
+				version
+			}
+			policies {
+				background
+				createdAt
+				createdBy
+				description
+				details
+				id
+				name
+				policyType
+				purposeAndScope
+				status
+				tags
+				updatedAt
+				updatedBy
+				version
+			}
 		}
 	}
 }
@@ -66276,8 +68162,8 @@ var DocumentOperationNames = map[string]string{
 	CreateInternalPolicyDocument:                  "CreateInternalPolicy",
 	DeleteInternalPolicyDocument:                  "DeleteInternalPolicy",
 	GetAllInternalPoliciesDocument:                "GetAllInternalPolicies",
-	GetInternalPolicyByIDDocument:                 "GetInternalPolicyByID",
 	GetInternalPoliciesDocument:                   "GetInternalPolicies",
+	GetInternalPolicyByIDDocument:                 "GetInternalPolicyByID",
 	UpdateInternalPolicyDocument:                  "UpdateInternalPolicy",
 	GetAllInternalPolicyHistoriesDocument:         "GetAllInternalPolicyHistories",
 	GetInternalPolicyHistoriesDocument:            "GetInternalPolicyHistories",

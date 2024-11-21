@@ -1,14 +1,23 @@
 package schema
 
 import (
+	"context"
+
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	emixin "github.com/theopenlane/entx/mixin"
+	"github.com/theopenlane/iam/entfga"
 
+	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
 
 // Procedure defines the procedure schema.
@@ -20,7 +29,8 @@ type Procedure struct {
 func (Procedure) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("name").
-			Comment("the name of the procedure"),
+			Comment("the name of the procedure").
+			NotEmpty(),
 		field.Text("description").
 			Optional().
 			Comment("description of the procedure"),
@@ -60,6 +70,10 @@ func (Procedure) Edges() []ent.Edge {
 		edge.To("tasks", Task.Type),
 		edge.From("programs", Program.Type).
 			Ref("procedures"),
+		edge.To("editors", Group.Type).
+			Comment("provides edit access to the procedure to members of the group"),
+		edge.To("blocked_groups", Group.Type).
+			Comment("groups that are blocked from viewing or editing the procedure"),
 	}
 }
 
@@ -70,6 +84,7 @@ func (Procedure) Mixin() []ent.Mixin {
 		mixin.SoftDeleteMixin{},
 		emixin.IDMixin{},
 		emixin.TagMixin{},
+		NewOrgOwnMixinWithRef("procedures"),
 	}
 }
 
@@ -79,5 +94,69 @@ func (Procedure) Annotations() []schema.Annotation {
 		entgql.RelayConnection(),
 		entgql.QueryField(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
+		entfga.Annotations{
+			ObjectType:   "procedure",
+			IncludeHooks: false,
+		},
+	}
+}
+
+// Hooks of the Procedure
+func (Procedure) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hook.On(
+			hooks.HookOrgOwnedTuples(false),
+			ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
+		),
+		hook.On(
+			hooks.HookEditorTuples(map[string]string{
+				"editor_id": "group",
+			}), // add editor tuples for associated groups
+			ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
+		),
+		hook.On(
+			hooks.HookBlockedTuples(map[string]string{
+				"blocked_group_id": "group",
+			}), // add block tuples for associated groups
+			ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
+		),
+	}
+}
+
+// Interceptors of the Procedure
+func (Procedure) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.FilterListQuery(),
+	}
+}
+
+// Procedure of the Procedure
+func (Procedure) Policy() ent.Policy {
+	return privacy.Policy{
+		Mutation: privacy.MutationPolicy{
+			privacy.OnMutationOperation(
+				rule.CanCreateObjectsInOrg(),
+				ent.OpCreate,
+			),
+			privacy.OnMutationOperation(
+				privacy.ProcedureMutationRuleFunc(func(ctx context.Context, m *generated.ProcedureMutation) error {
+					return m.CheckAccessForEdit(ctx)
+				}),
+				ent.OpUpdate|ent.OpUpdateOne|ent.OpUpdate,
+			),
+			privacy.OnMutationOperation(
+				privacy.ProcedureMutationRuleFunc(func(ctx context.Context, m *generated.ProcedureMutation) error {
+					return m.CheckAccessForDelete(ctx)
+				}),
+				ent.OpDelete|ent.OpDeleteOne,
+			),
+			privacy.AlwaysDenyRule(),
+		},
+		Query: privacy.QueryPolicy{
+			privacy.ProcedureQueryRuleFunc(func(ctx context.Context, q *generated.ProcedureQuery) error {
+				return q.CheckAccess(ctx)
+			}),
+			privacy.AlwaysDenyRule(),
+		},
 	}
 }

@@ -4518,6 +4518,10 @@ func (m *InternalPolicyMutation) CreateHistoryFromCreate(ctx context.Context) er
 		create = create.SetTags(tags)
 	}
 
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
 	if name, exists := m.Name(); exists {
 		create = create.SetName(name)
 	}
@@ -4628,6 +4632,12 @@ func (m *InternalPolicyMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetTags(internalpolicy.Tags)
 		}
 
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(internalpolicy.OwnerID)
+		}
+
 		if name, exists := m.Name(); exists {
 			create = create.SetName(name)
 		} else {
@@ -4716,6 +4726,7 @@ func (m *InternalPolicyMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetDeletedBy(internalpolicy.DeletedBy).
 			SetMappingID(internalpolicy.MappingID).
 			SetTags(internalpolicy.Tags).
+			SetOwnerID(internalpolicy.OwnerID).
 			SetName(internalpolicy.Name).
 			SetDescription(internalpolicy.Description).
 			SetStatus(internalpolicy.Status).
@@ -6198,6 +6209,10 @@ func (m *ProcedureMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetTags(tags)
 	}
 
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
 	if name, exists := m.Name(); exists {
 		create = create.SetName(name)
 	}
@@ -6312,6 +6327,12 @@ func (m *ProcedureMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetTags(procedure.Tags)
 		}
 
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(procedure.OwnerID)
+		}
+
 		if name, exists := m.Name(); exists {
 			create = create.SetName(name)
 		} else {
@@ -6406,6 +6427,7 @@ func (m *ProcedureMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDeletedBy(procedure.DeletedBy).
 			SetMappingID(procedure.MappingID).
 			SetTags(procedure.Tags).
+			SetOwnerID(procedure.OwnerID).
 			SetName(procedure.Name).
 			SetDescription(procedure.Description).
 			SetStatus(procedure.Status).
