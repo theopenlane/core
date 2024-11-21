@@ -44,8 +44,8 @@ github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2 h1:ZBbLwSJqkH
 github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2/go.mod h1:VSw57q4QFiWDbRnjdX8Cb3Ow0SFncRw+bA/ofY6Q83w=
 github.com/XSAM/otelsql v0.35.0 h1:nMdbU/XLmBIB6qZF61uDqy46E0LVA4ZgF/FCNw8Had4=
 github.com/XSAM/otelsql v0.35.0/go.mod h1:wO028mnLzmBpstK8XPsoeRLl/kgt417yjAwOGDIptTc=
-github.com/Yamashou/gqlgenc v0.26.1 h1:cdXmPuHeBBfquRdY+QpdKj12JPvGnqgzRGaaNQErKxo=
-github.com/Yamashou/gqlgenc v0.26.1/go.mod h1:G0g1N81xpIklVdnyboW1zwOHcj/n4hNfhTwfN29Rjig=
+github.com/Yamashou/gqlgenc v0.26.2 h1:hrGfuNFBZn9ie/rgDtc9YmzfIurHBtCEvuy9aHDomHI=
+github.com/Yamashou/gqlgenc v0.26.2/go.mod h1:o3fqXA5pNUzs2PWcA4KNpsBOqP7VMMW+g8UQBbBTm6s=
 github.com/agext/levenshtein v1.2.3 h1:YB2fHEn0UJagG8T1rrWknE3ZQzWM06O8AMAatNn7lmo=
 github.com/agext/levenshtein v1.2.3/go.mod h1:JEDfjyjHDjOF/1e4FlBE/PkbqA9OfWu2ki2W0IB5558=
 github.com/agnivade/levenshtein v1.1.1 h1:QY8M92nrzkmr798gCo3kmMyqXFzdQVpxLlGPRBij0P8=
