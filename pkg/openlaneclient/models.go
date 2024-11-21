@@ -3295,6 +3295,9 @@ type CreateGroupInput struct {
 	ProcedureBlockedGroupIDs      []string                 `json:"procedureBlockedGroupIDs,omitempty"`
 	InternalpolicyEditorIDs       []string                 `json:"internalpolicyEditorIDs,omitempty"`
 	InternalpolicyBlockedGroupIDs []string                 `json:"internalpolicyBlockedGroupIDs,omitempty"`
+	ProgramViewerIDs              []string                 `json:"programViewerIDs,omitempty"`
+	ProgramEditorIDs              []string                 `json:"programEditorIDs,omitempty"`
+	ProgramBlockedGroupIDs        []string                 `json:"programBlockedGroupIDs,omitempty"`
 	CreateGroupSettings           *CreateGroupSettingInput `json:"createGroupSettings,omitempty"`
 }
 
@@ -3657,6 +3660,9 @@ type CreateProgramInput struct {
 	ActionplanIDs       []string `json:"actionplanIDs,omitempty"`
 	StandardIDs         []string `json:"standardIDs,omitempty"`
 	UserIDs             []string `json:"userIDs,omitempty"`
+	ViewerIDs           []string `json:"viewerIDs,omitempty"`
+	EditorIDs           []string `json:"editorIDs,omitempty"`
+	BlockedGroupIDs     []string `json:"blockedGroupIDs,omitempty"`
 }
 
 // CreateProgramMembershipInput is used for create ProgramMembership object.
@@ -8790,6 +8796,9 @@ type Group struct {
 	ProcedureBlockedGroups      []*Procedure       `json:"procedureBlockedGroups,omitempty"`
 	InternalpolicyEditors       []*InternalPolicy  `json:"internalpolicyEditors,omitempty"`
 	InternalpolicyBlockedGroups []*InternalPolicy  `json:"internalpolicyBlockedGroups,omitempty"`
+	ProgramViewers              []*Program         `json:"programViewers,omitempty"`
+	ProgramEditors              []*Program         `json:"programEditors,omitempty"`
+	ProgramBlockedGroups        []*Program         `json:"programBlockedGroups,omitempty"`
 	Members                     []*GroupMembership `json:"members,omitempty"`
 }
 
@@ -10044,6 +10053,15 @@ type GroupWhereInput struct {
 	// internalpolicy_blocked_groups edge predicates
 	HasInternalpolicyBlockedGroups     *bool                       `json:"hasInternalpolicyBlockedGroups,omitempty"`
 	HasInternalpolicyBlockedGroupsWith []*InternalPolicyWhereInput `json:"hasInternalpolicyBlockedGroupsWith,omitempty"`
+	// program_viewers edge predicates
+	HasProgramViewers     *bool                `json:"hasProgramViewers,omitempty"`
+	HasProgramViewersWith []*ProgramWhereInput `json:"hasProgramViewersWith,omitempty"`
+	// program_editors edge predicates
+	HasProgramEditors     *bool                `json:"hasProgramEditors,omitempty"`
+	HasProgramEditorsWith []*ProgramWhereInput `json:"hasProgramEditorsWith,omitempty"`
+	// program_blocked_groups edge predicates
+	HasProgramBlockedGroups     *bool                `json:"hasProgramBlockedGroups,omitempty"`
+	HasProgramBlockedGroupsWith []*ProgramWhereInput `json:"hasProgramBlockedGroupsWith,omitempty"`
 	// members edge predicates
 	HasMembers     *bool                        `json:"hasMembers,omitempty"`
 	HasMembersWith []*GroupMembershipWhereInput `json:"hasMembersWith,omitempty"`
@@ -16098,9 +16116,15 @@ type Program struct {
 	Narratives          []*Narrative        `json:"narratives,omitempty"`
 	Actionplans         []*ActionPlan       `json:"actionplans,omitempty"`
 	// the framework(s) that the program is based on
-	Standards []*Standard          `json:"standards,omitempty"`
-	Users     []*User              `json:"users,omitempty"`
-	Members   []*ProgramMembership `json:"members,omitempty"`
+	Standards []*Standard `json:"standards,omitempty"`
+	Users     []*User     `json:"users,omitempty"`
+	// provides view access to the program to members of the group
+	Viewers []*Group `json:"viewers,omitempty"`
+	// provides edit access to the program to members of the group
+	Editors []*Group `json:"editors,omitempty"`
+	// groups that are blocked from viewing or editing the program
+	BlockedGroups []*Group             `json:"blockedGroups,omitempty"`
+	Members       []*ProgramMembership `json:"members,omitempty"`
 }
 
 func (Program) IsNode() {}
@@ -17003,6 +17027,15 @@ type ProgramWhereInput struct {
 	// users edge predicates
 	HasUsers     *bool             `json:"hasUsers,omitempty"`
 	HasUsersWith []*UserWhereInput `json:"hasUsersWith,omitempty"`
+	// viewers edge predicates
+	HasViewers     *bool              `json:"hasViewers,omitempty"`
+	HasViewersWith []*GroupWhereInput `json:"hasViewersWith,omitempty"`
+	// editors edge predicates
+	HasEditors     *bool              `json:"hasEditors,omitempty"`
+	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
+	// blocked_groups edge predicates
+	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
+	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
 	// members edge predicates
 	HasMembers     *bool                          `json:"hasMembers,omitempty"`
 	HasMembersWith []*ProgramMembershipWhereInput `json:"hasMembersWith,omitempty"`
@@ -21218,6 +21251,15 @@ type UpdateGroupInput struct {
 	AddInternalpolicyBlockedGroupIDs    []string                      `json:"addInternalpolicyBlockedGroupIDs,omitempty"`
 	RemoveInternalpolicyBlockedGroupIDs []string                      `json:"removeInternalpolicyBlockedGroupIDs,omitempty"`
 	ClearInternalpolicyBlockedGroups    *bool                         `json:"clearInternalpolicyBlockedGroups,omitempty"`
+	AddProgramViewerIDs                 []string                      `json:"addProgramViewerIDs,omitempty"`
+	RemoveProgramViewerIDs              []string                      `json:"removeProgramViewerIDs,omitempty"`
+	ClearProgramViewers                 *bool                         `json:"clearProgramViewers,omitempty"`
+	AddProgramEditorIDs                 []string                      `json:"addProgramEditorIDs,omitempty"`
+	RemoveProgramEditorIDs              []string                      `json:"removeProgramEditorIDs,omitempty"`
+	ClearProgramEditors                 *bool                         `json:"clearProgramEditors,omitempty"`
+	AddProgramBlockedGroupIDs           []string                      `json:"addProgramBlockedGroupIDs,omitempty"`
+	RemoveProgramBlockedGroupIDs        []string                      `json:"removeProgramBlockedGroupIDs,omitempty"`
+	ClearProgramBlockedGroups           *bool                         `json:"clearProgramBlockedGroups,omitempty"`
 	AddGroupMembers                     []*CreateGroupMembershipInput `json:"addGroupMembers,omitempty"`
 	UpdateGroupSettings                 *UpdateGroupSettingInput      `json:"updateGroupSettings,omitempty"`
 }
@@ -21800,6 +21842,15 @@ type UpdateProgramInput struct {
 	AddUserIDs                []string `json:"addUserIDs,omitempty"`
 	RemoveUserIDs             []string `json:"removeUserIDs,omitempty"`
 	ClearUsers                *bool    `json:"clearUsers,omitempty"`
+	AddViewerIDs              []string `json:"addViewerIDs,omitempty"`
+	RemoveViewerIDs           []string `json:"removeViewerIDs,omitempty"`
+	ClearViewers              *bool    `json:"clearViewers,omitempty"`
+	AddEditorIDs              []string `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs           []string `json:"removeEditorIDs,omitempty"`
+	ClearEditors              *bool    `json:"clearEditors,omitempty"`
+	AddBlockedGroupIDs        []string `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs     []string `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups        *bool    `json:"clearBlockedGroups,omitempty"`
 }
 
 // UpdateProgramMembershipInput is used for update ProgramMembership object.

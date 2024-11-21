@@ -78,13 +78,19 @@ type GroupEdges struct {
 	InternalpolicyEditors []*InternalPolicy `json:"internalpolicy_editors,omitempty"`
 	// InternalpolicyBlockedGroups holds the value of the internalpolicy_blocked_groups edge.
 	InternalpolicyBlockedGroups []*InternalPolicy `json:"internalpolicy_blocked_groups,omitempty"`
+	// ProgramViewers holds the value of the program_viewers edge.
+	ProgramViewers []*Program `json:"program_viewers,omitempty"`
+	// ProgramEditors holds the value of the program_editors edge.
+	ProgramEditors []*Program `json:"program_editors,omitempty"`
+	// ProgramBlockedGroups holds the value of the program_blocked_groups edge.
+	ProgramBlockedGroups []*Program `json:"program_blocked_groups,omitempty"`
 	// Members holds the value of the members edge.
 	Members []*GroupMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [12]bool
+	loadedTypes [15]bool
 	// totalCount holds the count of the edges above.
-	totalCount [12]map[string]int
+	totalCount [15]map[string]int
 
 	namedUsers                       map[string][]*User
 	namedEvents                      map[string][]*Event
@@ -95,6 +101,9 @@ type GroupEdges struct {
 	namedProcedureBlockedGroups      map[string][]*Procedure
 	namedInternalpolicyEditors       map[string][]*InternalPolicy
 	namedInternalpolicyBlockedGroups map[string][]*InternalPolicy
+	namedProgramViewers              map[string][]*Program
+	namedProgramEditors              map[string][]*Program
+	namedProgramBlockedGroups        map[string][]*Program
 	namedMembers                     map[string][]*GroupMembership
 }
 
@@ -201,10 +210,37 @@ func (e GroupEdges) InternalpolicyBlockedGroupsOrErr() ([]*InternalPolicy, error
 	return nil, &NotLoadedError{edge: "internalpolicy_blocked_groups"}
 }
 
+// ProgramViewersOrErr returns the ProgramViewers value or an error if the edge
+// was not loaded in eager-loading.
+func (e GroupEdges) ProgramViewersOrErr() ([]*Program, error) {
+	if e.loadedTypes[11] {
+		return e.ProgramViewers, nil
+	}
+	return nil, &NotLoadedError{edge: "program_viewers"}
+}
+
+// ProgramEditorsOrErr returns the ProgramEditors value or an error if the edge
+// was not loaded in eager-loading.
+func (e GroupEdges) ProgramEditorsOrErr() ([]*Program, error) {
+	if e.loadedTypes[12] {
+		return e.ProgramEditors, nil
+	}
+	return nil, &NotLoadedError{edge: "program_editors"}
+}
+
+// ProgramBlockedGroupsOrErr returns the ProgramBlockedGroups value or an error if the edge
+// was not loaded in eager-loading.
+func (e GroupEdges) ProgramBlockedGroupsOrErr() ([]*Program, error) {
+	if e.loadedTypes[13] {
+		return e.ProgramBlockedGroups, nil
+	}
+	return nil, &NotLoadedError{edge: "program_blocked_groups"}
+}
+
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) MembersOrErr() ([]*GroupMembership, error) {
-	if e.loadedTypes[11] {
+	if e.loadedTypes[14] {
 		return e.Members, nil
 	}
 	return nil, &NotLoadedError{edge: "members"}
@@ -394,6 +430,21 @@ func (gr *Group) QueryInternalpolicyEditors() *InternalPolicyQuery {
 // QueryInternalpolicyBlockedGroups queries the "internalpolicy_blocked_groups" edge of the Group entity.
 func (gr *Group) QueryInternalpolicyBlockedGroups() *InternalPolicyQuery {
 	return NewGroupClient(gr.config).QueryInternalpolicyBlockedGroups(gr)
+}
+
+// QueryProgramViewers queries the "program_viewers" edge of the Group entity.
+func (gr *Group) QueryProgramViewers() *ProgramQuery {
+	return NewGroupClient(gr.config).QueryProgramViewers(gr)
+}
+
+// QueryProgramEditors queries the "program_editors" edge of the Group entity.
+func (gr *Group) QueryProgramEditors() *ProgramQuery {
+	return NewGroupClient(gr.config).QueryProgramEditors(gr)
+}
+
+// QueryProgramBlockedGroups queries the "program_blocked_groups" edge of the Group entity.
+func (gr *Group) QueryProgramBlockedGroups() *ProgramQuery {
+	return NewGroupClient(gr.config).QueryProgramBlockedGroups(gr)
 }
 
 // QueryMembers queries the "members" edge of the Group entity.
@@ -682,6 +733,78 @@ func (gr *Group) appendNamedInternalpolicyBlockedGroups(name string, edges ...*I
 		gr.Edges.namedInternalpolicyBlockedGroups[name] = []*InternalPolicy{}
 	} else {
 		gr.Edges.namedInternalpolicyBlockedGroups[name] = append(gr.Edges.namedInternalpolicyBlockedGroups[name], edges...)
+	}
+}
+
+// NamedProgramViewers returns the ProgramViewers named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (gr *Group) NamedProgramViewers(name string) ([]*Program, error) {
+	if gr.Edges.namedProgramViewers == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := gr.Edges.namedProgramViewers[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (gr *Group) appendNamedProgramViewers(name string, edges ...*Program) {
+	if gr.Edges.namedProgramViewers == nil {
+		gr.Edges.namedProgramViewers = make(map[string][]*Program)
+	}
+	if len(edges) == 0 {
+		gr.Edges.namedProgramViewers[name] = []*Program{}
+	} else {
+		gr.Edges.namedProgramViewers[name] = append(gr.Edges.namedProgramViewers[name], edges...)
+	}
+}
+
+// NamedProgramEditors returns the ProgramEditors named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (gr *Group) NamedProgramEditors(name string) ([]*Program, error) {
+	if gr.Edges.namedProgramEditors == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := gr.Edges.namedProgramEditors[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (gr *Group) appendNamedProgramEditors(name string, edges ...*Program) {
+	if gr.Edges.namedProgramEditors == nil {
+		gr.Edges.namedProgramEditors = make(map[string][]*Program)
+	}
+	if len(edges) == 0 {
+		gr.Edges.namedProgramEditors[name] = []*Program{}
+	} else {
+		gr.Edges.namedProgramEditors[name] = append(gr.Edges.namedProgramEditors[name], edges...)
+	}
+}
+
+// NamedProgramBlockedGroups returns the ProgramBlockedGroups named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (gr *Group) NamedProgramBlockedGroups(name string) ([]*Program, error) {
+	if gr.Edges.namedProgramBlockedGroups == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := gr.Edges.namedProgramBlockedGroups[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (gr *Group) appendNamedProgramBlockedGroups(name string, edges ...*Program) {
+	if gr.Edges.namedProgramBlockedGroups == nil {
+		gr.Edges.namedProgramBlockedGroups = make(map[string][]*Program)
+	}
+	if len(edges) == 0 {
+		gr.Edges.namedProgramBlockedGroups[name] = []*Program{}
+	} else {
+		gr.Edges.namedProgramBlockedGroups[name] = append(gr.Edges.namedProgramBlockedGroups[name], edges...)
 	}
 }
 

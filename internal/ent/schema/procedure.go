@@ -10,6 +10,7 @@ import (
 	"entgo.io/ent/schema/field"
 	emixin "github.com/theopenlane/entx/mixin"
 	"github.com/theopenlane/iam/entfga"
+	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
@@ -109,15 +110,15 @@ func (Procedure) Hooks() []ent.Hook {
 			ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
 		),
 		hook.On(
-			hooks.HookEditorTuples(map[string]string{
+			hooks.HookRelationTuples(map[string]string{
 				"editor_id": "group",
-			}), // add editor tuples for associated groups
+			}, fgax.EditorRelation), // add editor tuples for associated groups
 			ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
 		),
 		hook.On(
-			hooks.HookBlockedTuples(map[string]string{
+			hooks.HookRelationTuples(map[string]string{
 				"blocked_group_id": "group",
-			}), // add block tuples for associated groups
+			}, fgax.BlockedRelation), // add block tuples for associated groups
 			ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
 		),
 	}

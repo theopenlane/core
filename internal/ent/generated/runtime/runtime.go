@@ -3161,6 +3161,12 @@ func init() {
 	program.Hooks[3] = programMixinHooks4[0]
 
 	program.Hooks[4] = programHooks[0]
+
+	program.Hooks[5] = programHooks[1]
+
+	program.Hooks[6] = programHooks[2]
+
+	program.Hooks[7] = programHooks[3]
 	programMixinInters2 := programMixin[2].Interceptors()
 	programMixinInters4 := programMixin[4].Interceptors()
 	programInters := schema.Program{}.Interceptors()

@@ -102,6 +102,12 @@ func (Group) Edges() []ent.Edge {
 			Ref("editors"),
 		edge.From("internalpolicy_blocked_groups", InternalPolicy.Type).
 			Ref("blocked_groups"),
+		edge.From("program_viewers", Program.Type).
+			Ref("viewers"),
+		edge.From("program_editors", Program.Type).
+			Ref("editors"),
+		edge.From("program_blocked_groups", Program.Type).
+			Ref("blocked_groups"),
 	}
 }
 

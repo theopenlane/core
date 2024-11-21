@@ -4526,6 +4526,81 @@ var (
 			},
 		},
 	}
+	// ProgramViewersColumns holds the columns for the "program_viewers" table.
+	ProgramViewersColumns = []*schema.Column{
+		{Name: "program_id", Type: field.TypeString},
+		{Name: "group_id", Type: field.TypeString},
+	}
+	// ProgramViewersTable holds the schema information for the "program_viewers" table.
+	ProgramViewersTable = &schema.Table{
+		Name:       "program_viewers",
+		Columns:    ProgramViewersColumns,
+		PrimaryKey: []*schema.Column{ProgramViewersColumns[0], ProgramViewersColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "program_viewers_program_id",
+				Columns:    []*schema.Column{ProgramViewersColumns[0]},
+				RefColumns: []*schema.Column{ProgramsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "program_viewers_group_id",
+				Columns:    []*schema.Column{ProgramViewersColumns[1]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// ProgramEditorsColumns holds the columns for the "program_editors" table.
+	ProgramEditorsColumns = []*schema.Column{
+		{Name: "program_id", Type: field.TypeString},
+		{Name: "group_id", Type: field.TypeString},
+	}
+	// ProgramEditorsTable holds the schema information for the "program_editors" table.
+	ProgramEditorsTable = &schema.Table{
+		Name:       "program_editors",
+		Columns:    ProgramEditorsColumns,
+		PrimaryKey: []*schema.Column{ProgramEditorsColumns[0], ProgramEditorsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "program_editors_program_id",
+				Columns:    []*schema.Column{ProgramEditorsColumns[0]},
+				RefColumns: []*schema.Column{ProgramsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "program_editors_group_id",
+				Columns:    []*schema.Column{ProgramEditorsColumns[1]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// ProgramBlockedGroupsColumns holds the columns for the "program_blocked_groups" table.
+	ProgramBlockedGroupsColumns = []*schema.Column{
+		{Name: "program_id", Type: field.TypeString},
+		{Name: "group_id", Type: field.TypeString},
+	}
+	// ProgramBlockedGroupsTable holds the schema information for the "program_blocked_groups" table.
+	ProgramBlockedGroupsTable = &schema.Table{
+		Name:       "program_blocked_groups",
+		Columns:    ProgramBlockedGroupsColumns,
+		PrimaryKey: []*schema.Column{ProgramBlockedGroupsColumns[0], ProgramBlockedGroupsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "program_blocked_groups_program_id",
+				Columns:    []*schema.Column{ProgramBlockedGroupsColumns[0]},
+				RefColumns: []*schema.Column{ProgramsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "program_blocked_groups_group_id",
+				Columns:    []*schema.Column{ProgramBlockedGroupsColumns[1]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// RiskActionplansColumns holds the columns for the "risk_actionplans" table.
 	RiskActionplansColumns = []*schema.Column{
 		{Name: "risk_id", Type: field.TypeString},
@@ -5018,6 +5093,9 @@ var (
 		ProgramFilesTable,
 		ProgramNarrativesTable,
 		ProgramActionplansTable,
+		ProgramViewersTable,
+		ProgramEditorsTable,
+		ProgramBlockedGroupsTable,
 		RiskActionplansTable,
 		StandardControlobjectivesTable,
 		StandardControlsTable,
@@ -5318,6 +5396,12 @@ func init() {
 	ProgramNarrativesTable.ForeignKeys[1].RefTable = NarrativesTable
 	ProgramActionplansTable.ForeignKeys[0].RefTable = ProgramsTable
 	ProgramActionplansTable.ForeignKeys[1].RefTable = ActionPlansTable
+	ProgramViewersTable.ForeignKeys[0].RefTable = ProgramsTable
+	ProgramViewersTable.ForeignKeys[1].RefTable = GroupsTable
+	ProgramEditorsTable.ForeignKeys[0].RefTable = ProgramsTable
+	ProgramEditorsTable.ForeignKeys[1].RefTable = GroupsTable
+	ProgramBlockedGroupsTable.ForeignKeys[0].RefTable = ProgramsTable
+	ProgramBlockedGroupsTable.ForeignKeys[1].RefTable = GroupsTable
 	RiskActionplansTable.ForeignKeys[0].RefTable = RisksTable
 	RiskActionplansTable.ForeignKeys[1].RefTable = ActionPlansTable
 	StandardControlobjectivesTable.ForeignKeys[0].RefTable = StandardsTable

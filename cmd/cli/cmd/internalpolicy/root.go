@@ -12,10 +12,10 @@ import (
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
-// command represents the base internalPolicy command when called without any subcommands
+// command represents the base internal policy command when called without any subcommands
 var command = &cobra.Command{
 	Use:   "internal-policy",
-	Short: "the subcommands for working with internalPolicies",
+	Short: "the subcommands for working with internal policies",
 }
 
 func init() {
@@ -24,12 +24,12 @@ func init() {
 
 // consoleOutput prints the output in the console
 func consoleOutput(e any) error {
-	// check if the output format is JSON and print the internalPolicies in JSON format
+	// check if the output format is JSON and print the internal policies in JSON format
 	if strings.EqualFold(cmd.OutputFormat, cmd.JSONOutput) {
 		return jsonOutput(e)
 	}
 
-	// check the type of the internalPolicies and print them in a table format
+	// check the type of the internal policies and print them in a table format
 	switch v := e.(type) {
 	case *openlaneclient.GetAllInternalPolicies:
 		var nodes []*openlaneclient.GetAllInternalPolicies_InternalPolicies_Edges_Node

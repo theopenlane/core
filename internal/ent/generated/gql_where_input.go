@@ -25602,6 +25602,18 @@ type GroupWhereInput struct {
 	HasInternalpolicyBlockedGroups     *bool                       `json:"hasInternalpolicyBlockedGroups,omitempty"`
 	HasInternalpolicyBlockedGroupsWith []*InternalPolicyWhereInput `json:"hasInternalpolicyBlockedGroupsWith,omitempty"`
 
+	// "program_viewers" edge predicates.
+	HasProgramViewers     *bool                `json:"hasProgramViewers,omitempty"`
+	HasProgramViewersWith []*ProgramWhereInput `json:"hasProgramViewersWith,omitempty"`
+
+	// "program_editors" edge predicates.
+	HasProgramEditors     *bool                `json:"hasProgramEditors,omitempty"`
+	HasProgramEditorsWith []*ProgramWhereInput `json:"hasProgramEditorsWith,omitempty"`
+
+	// "program_blocked_groups" edge predicates.
+	HasProgramBlockedGroups     *bool                `json:"hasProgramBlockedGroups,omitempty"`
+	HasProgramBlockedGroupsWith []*ProgramWhereInput `json:"hasProgramBlockedGroupsWith,omitempty"`
+
 	// "members" edge predicates.
 	HasMembers     *bool                        `json:"hasMembers,omitempty"`
 	HasMembersWith []*GroupMembershipWhereInput `json:"hasMembersWith,omitempty"`
@@ -26254,6 +26266,60 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, group.HasInternalpolicyBlockedGroupsWith(with...))
+	}
+	if i.HasProgramViewers != nil {
+		p := group.HasProgramViewers()
+		if !*i.HasProgramViewers {
+			p = group.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasProgramViewersWith) > 0 {
+		with := make([]predicate.Program, 0, len(i.HasProgramViewersWith))
+		for _, w := range i.HasProgramViewersWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasProgramViewersWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, group.HasProgramViewersWith(with...))
+	}
+	if i.HasProgramEditors != nil {
+		p := group.HasProgramEditors()
+		if !*i.HasProgramEditors {
+			p = group.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasProgramEditorsWith) > 0 {
+		with := make([]predicate.Program, 0, len(i.HasProgramEditorsWith))
+		for _, w := range i.HasProgramEditorsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasProgramEditorsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, group.HasProgramEditorsWith(with...))
+	}
+	if i.HasProgramBlockedGroups != nil {
+		p := group.HasProgramBlockedGroups()
+		if !*i.HasProgramBlockedGroups {
+			p = group.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasProgramBlockedGroupsWith) > 0 {
+		with := make([]predicate.Program, 0, len(i.HasProgramBlockedGroupsWith))
+		for _, w := range i.HasProgramBlockedGroupsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasProgramBlockedGroupsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, group.HasProgramBlockedGroupsWith(with...))
 	}
 	if i.HasMembers != nil {
 		p := group.HasMembers()
@@ -49500,6 +49566,18 @@ type ProgramWhereInput struct {
 	HasUsers     *bool             `json:"hasUsers,omitempty"`
 	HasUsersWith []*UserWhereInput `json:"hasUsersWith,omitempty"`
 
+	// "viewers" edge predicates.
+	HasViewers     *bool              `json:"hasViewers,omitempty"`
+	HasViewersWith []*GroupWhereInput `json:"hasViewersWith,omitempty"`
+
+	// "editors" edge predicates.
+	HasEditors     *bool              `json:"hasEditors,omitempty"`
+	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
+
+	// "blocked_groups" edge predicates.
+	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
+	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
+
 	// "members" edge predicates.
 	HasMembers     *bool                          `json:"hasMembers,omitempty"`
 	HasMembersWith []*ProgramMembershipWhereInput `json:"hasMembersWith,omitempty"`
@@ -50302,6 +50380,60 @@ func (i *ProgramWhereInput) P() (predicate.Program, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, program.HasUsersWith(with...))
+	}
+	if i.HasViewers != nil {
+		p := program.HasViewers()
+		if !*i.HasViewers {
+			p = program.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasViewersWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasViewersWith))
+		for _, w := range i.HasViewersWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasViewersWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, program.HasViewersWith(with...))
+	}
+	if i.HasEditors != nil {
+		p := program.HasEditors()
+		if !*i.HasEditors {
+			p = program.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasEditorsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasEditorsWith))
+		for _, w := range i.HasEditorsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasEditorsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, program.HasEditorsWith(with...))
+	}
+	if i.HasBlockedGroups != nil {
+		p := program.HasBlockedGroups()
+		if !*i.HasBlockedGroups {
+			p = program.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasBlockedGroupsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasBlockedGroupsWith))
+		for _, w := range i.HasBlockedGroupsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasBlockedGroupsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, program.HasBlockedGroupsWith(with...))
 	}
 	if i.HasMembers != nil {
 		p := program.HasMembers()

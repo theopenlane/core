@@ -50,9 +50,8 @@ func createParentTuples(ctx context.Context, m ent.Mutation, objectID string, pa
 	for _, parent := range parents {
 		subjectType := strings.ReplaceAll(parent, "_id", "")
 
-		// create the tuple for the parent relationship
-		// and leave the subject id empty, getTuplesToAdd will fill it in
-		// based on the edge field
+		// create the tuple for the parent relationship without the subject id
+		// this will be filled in by getTuplesToAdd based on the parent field
 		tr := fgax.TupleRequest{
 			SubjectType: subjectType,
 			ObjectID:    objectID, // this is the object id being created
@@ -75,9 +74,8 @@ func createParentTuples(ctx context.Context, m ent.Mutation, objectID string, pa
 func createOrgOwnerParentTuple(ctx context.Context, m ent.Mutation, objectID string) ([]fgax.TupleKey, error) {
 	var addTuples []fgax.TupleKey
 
-	// create the tuple for the parent org owner relationship
-	// and leave the subject id empty, getTuplesToAdd will fill it in
-	// based on the edge field
+	// create the tuple for the parent org owner relationship without the subject id
+	// this will be filled in by getTuplesToAdd based on the owner id field
 	tr := fgax.TupleRequest{
 		SubjectType: "organization",
 		ObjectID:    objectID, // this is the object id being created
@@ -95,11 +93,12 @@ func createOrgOwnerParentTuple(ctx context.Context, m ent.Mutation, objectID str
 	return addTuples, nil
 }
 
-// createEditorTuples creates the tuple for the editor relationship based on an edge field
-func createEditorTuples(ctx context.Context, m ent.Mutation, objectID string, objects map[string]string) ([]fgax.TupleKey, error) {
+// createTuplesByRelation creates the tuple for the specified relationship based on an edge field
+// with the member relation for the subject, e.g. group#member
+func createTuplesByRelation(ctx context.Context, m ent.Mutation, objectID string, relation fgax.Relation, objects map[string]string) ([]fgax.TupleKey, error) {
 	var addTuples []fgax.TupleKey
 
-	for parentField, subjectType := range objects {
+	for edgeField, subjectType := range objects {
 		// create the tuple for the editor relationship without the subject id
 		// this will be filled in by getTuplesToAdd based on the edge field
 		tr := fgax.TupleRequest{
@@ -107,38 +106,11 @@ func createEditorTuples(ctx context.Context, m ent.Mutation, objectID string, ob
 			SubjectRelation: fgax.MemberRelation,
 			ObjectID:        objectID, // this is the object id being created
 			ObjectType:      m.Type(), // this is the object type being created
-			Relation:        fgax.EditorRelation,
+			Relation:        relation.String(),
 		}
 
-		// this will create tuples such as group:ulid-of-group#member with the relation editor
-		t, err := getTuplesToAdd(ctx, m, tr, parentField)
-		if err != nil {
-			return nil, err
-		}
-
-		addTuples = append(addTuples, t...)
-	}
-
-	return addTuples, nil
-}
-
-// createBlockedTuples creates the tuple for the blocked relationship based on an edge field
-func createBlockedTuples(ctx context.Context, m ent.Mutation, objectID string, objects map[string]string) ([]fgax.TupleKey, error) {
-	var addTuples []fgax.TupleKey
-
-	for parentField, subjectType := range objects {
-		// create the tuple for the blocked relationship without the subject id
-		// this will be filled in by getTuplesToAdd based on the edge field
-		tr := fgax.TupleRequest{
-			SubjectType:     subjectType,
-			SubjectRelation: fgax.MemberRelation,
-			ObjectID:        objectID, // this is the object id being created
-			ObjectType:      m.Type(), // this is the object type being created
-			Relation:        fgax.BlockedRelation,
-		}
-
-		// this will create tuples such as group:ulid-of-group#member with the relation blocked
-		t, err := getTuplesToAdd(ctx, m, tr, parentField)
+		// this will create tuples such as group:ulid-of-group#member with the relation provided
+		t, err := getTuplesToAdd(ctx, m, tr, edgeField)
 		if err != nil {
 			return nil, err
 		}
@@ -185,7 +157,7 @@ func removeParentTuples(ctx context.Context, m ent.Mutation, objectID string, pa
 		subjectType := strings.ReplaceAll(parent, "_id", "")
 
 		// create the tuple for the parent relationship without the subject id
-		// this will be filled in by getTuplesToAdd based on the parent field
+		// this will be filled in by getTuplesToRemove based on the parent field
 		tr := fgax.TupleRequest{
 			SubjectType: subjectType,
 			ObjectID:    objectID, // this is the object id being created
@@ -204,49 +176,21 @@ func removeParentTuples(ctx context.Context, m ent.Mutation, objectID string, pa
 	return removeTuples, nil
 }
 
-// removeEditorTuples removes the tuple for the editor relationship based on an edge field
-func removeEditorTuples(ctx context.Context, m ent.Mutation, objectID string, objects map[string]string) ([]fgax.TupleKey, error) {
+// removeTuplesByRelation removes the tuple for the provided relationship based on an edge field
+func removeTuplesByRelation(ctx context.Context, m ent.Mutation, objectID string, relation fgax.Relation, objects map[string]string) ([]fgax.TupleKey, error) {
 	var removeTuples []fgax.TupleKey
 
 	for edgeField, subjectType := range objects {
 		// create the tuple to remove for the editor relationship without the subject id
-		// this will be filled in by getTuplesToAdd based on the edge field
+		// this will be filled in by getTuplesToRemove based on the edge field
 		tr := fgax.TupleRequest{
 			SubjectType:     subjectType,
 			SubjectRelation: fgax.MemberRelation,
 			ObjectID:        objectID, // this is the object id being created
 			ObjectType:      m.Type(), // this is the object type being created
-			Relation:        fgax.EditorRelation,
+			Relation:        relation.String(),
 		}
 
-		t, err := getTuplesToRemove(ctx, m, tr, edgeField)
-		if err != nil {
-			return nil, err
-		}
-
-		removeTuples = append(removeTuples, t...)
-	}
-
-	return removeTuples, nil
-}
-
-// removeBlockedTuples removes the tuple for the blocked relationship based on an edge field
-func removeBlockedTuples(ctx context.Context, m ent.Mutation, objectID string, objects map[string]string) ([]fgax.TupleKey, error) {
-	var removeTuples []fgax.TupleKey
-
-	for edgeField, subjectType := range objects {
-		// create the tuple to remove for the blocked relationship
-		// and leave the subject id empty, getTuplesToAdd will fill it in
-		// based on the edge field
-		tr := fgax.TupleRequest{
-			SubjectType:     subjectType,
-			SubjectRelation: fgax.MemberRelation,
-			ObjectID:        objectID, // this is the object id being created
-			ObjectType:      m.Type(), // this is the object type being created
-			Relation:        fgax.BlockedRelation,
-		}
-
-		// this will remove tuples such as group:ulid-of-group#member with the relation blocked
 		t, err := getTuplesToRemove(ctx, m, tr, edgeField)
 		if err != nil {
 			return nil, err

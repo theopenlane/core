@@ -842,20 +842,20 @@ func (p *ProgramBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Program
 		p.Name = gofakeit.AppName()
 	}
 
-	mutations := p.client.db.Program.Create().
+	mutation := p.client.db.Program.Create().
 		SetName(p.Name)
 
 	if p.WithProcedure {
 		procedure := (&ProcedureBuilder{client: p.client, Name: gofakeit.AppName()}).MustNew(ctx, t)
-		mutations.AddProcedureIDs(procedure.ID)
+		mutation.AddProcedureIDs(procedure.ID)
 	}
 
 	if p.WithPolicy {
 		policy := (&InternalPolicyBuilder{client: p.client, Name: gofakeit.AppName()}).MustNew(ctx, t)
-		mutations.AddPolicyIDs(policy.ID)
+		mutation.AddPolicyIDs(policy.ID)
 	}
 
-	program := mutations.
+	program := mutation.
 		SaveX(ctx)
 
 	return program

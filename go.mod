@@ -2,6 +2,8 @@ module github.com/theopenlane/core
 
 go 1.23.3
 
+replace github.com/theopenlane/iam => ../iam
+
 require (
 	ariga.io/entcache v0.1.0
 	dario.cat/mergo v1.0.1

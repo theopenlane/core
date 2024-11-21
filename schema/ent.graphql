@@ -3981,6 +3981,9 @@ input CreateGroupInput {
   procedureBlockedGroupIDs: [ID!]
   internalpolicyEditorIDs: [ID!]
   internalpolicyBlockedGroupIDs: [ID!]
+  programViewerIDs: [ID!]
+  programEditorIDs: [ID!]
+  programBlockedGroupIDs: [ID!]
 }
 """
 CreateGroupMembershipInput is used for create GroupMembership object.
@@ -4525,6 +4528,9 @@ input CreateProgramInput {
   actionplanIDs: [ID!]
   standardIDs: [ID!]
   userIDs: [ID!]
+  viewerIDs: [ID!]
+  editorIDs: [ID!]
+  blockedGroupIDs: [ID!]
 }
 """
 CreateProgramMembershipInput is used for create ProgramMembership object.
@@ -10765,6 +10771,9 @@ type Group implements Node {
   procedureBlockedGroups: [Procedure!]
   internalpolicyEditors: [InternalPolicy!]
   internalpolicyBlockedGroups: [InternalPolicy!]
+  programViewers: [Program!]
+  programEditors: [Program!]
+  programBlockedGroups: [Program!]
   members: [GroupMembership!]
 }
 """
@@ -12292,6 +12301,21 @@ input GroupWhereInput {
   """
   hasInternalpolicyBlockedGroups: Boolean
   hasInternalpolicyBlockedGroupsWith: [InternalPolicyWhereInput!]
+  """
+  program_viewers edge predicates
+  """
+  hasProgramViewers: Boolean
+  hasProgramViewersWith: [ProgramWhereInput!]
+  """
+  program_editors edge predicates
+  """
+  hasProgramEditors: Boolean
+  hasProgramEditorsWith: [ProgramWhereInput!]
+  """
+  program_blocked_groups edge predicates
+  """
+  hasProgramBlockedGroups: Boolean
+  hasProgramBlockedGroupsWith: [ProgramWhereInput!]
   """
   members edge predicates
   """
@@ -19590,6 +19614,18 @@ type Program implements Node {
   """
   standards: [Standard!]
   users: [User!]
+  """
+  provides view access to the program to members of the group
+  """
+  viewers: [Group!]
+  """
+  provides edit access to the program to members of the group
+  """
+  editors: [Group!]
+  """
+  groups that are blocked from viewing or editing the program
+  """
+  blockedGroups: [Group!]
   members: [ProgramMembership!]
 }
 """
@@ -20690,6 +20726,21 @@ input ProgramWhereInput {
   """
   hasUsers: Boolean
   hasUsersWith: [UserWhereInput!]
+  """
+  viewers edge predicates
+  """
+  hasViewers: Boolean
+  hasViewersWith: [GroupWhereInput!]
+  """
+  editors edge predicates
+  """
+  hasEditors: Boolean
+  hasEditorsWith: [GroupWhereInput!]
+  """
+  blocked_groups edge predicates
+  """
+  hasBlockedGroups: Boolean
+  hasBlockedGroupsWith: [GroupWhereInput!]
   """
   members edge predicates
   """
@@ -27985,6 +28036,15 @@ input UpdateGroupInput {
   addInternalpolicyBlockedGroupIDs: [ID!]
   removeInternalpolicyBlockedGroupIDs: [ID!]
   clearInternalpolicyBlockedGroups: Boolean
+  addProgramViewerIDs: [ID!]
+  removeProgramViewerIDs: [ID!]
+  clearProgramViewers: Boolean
+  addProgramEditorIDs: [ID!]
+  removeProgramEditorIDs: [ID!]
+  clearProgramEditors: Boolean
+  addProgramBlockedGroupIDs: [ID!]
+  removeProgramBlockedGroupIDs: [ID!]
+  clearProgramBlockedGroups: Boolean
 }
 """
 UpdateGroupMembershipInput is used for update GroupMembership object.
@@ -28733,6 +28793,15 @@ input UpdateProgramInput {
   addUserIDs: [ID!]
   removeUserIDs: [ID!]
   clearUsers: Boolean
+  addViewerIDs: [ID!]
+  removeViewerIDs: [ID!]
+  clearViewers: Boolean
+  addEditorIDs: [ID!]
+  removeEditorIDs: [ID!]
+  clearEditors: Boolean
+  addBlockedGroupIDs: [ID!]
+  removeBlockedGroupIDs: [ID!]
+  clearBlockedGroups: Boolean
 }
 """
 UpdateProgramMembershipInput is used for update ProgramMembership object.

@@ -2840,6 +2840,9 @@ type CreateGroupInput struct {
 	ProcedureBlockedGroupIDs      []string
 	InternalpolicyEditorIDs       []string
 	InternalpolicyBlockedGroupIDs []string
+	ProgramViewerIDs              []string
+	ProgramEditorIDs              []string
+	ProgramBlockedGroupIDs        []string
 }
 
 // Mutate applies the CreateGroupInput on the GroupMutation builder.
@@ -2890,6 +2893,15 @@ func (i *CreateGroupInput) Mutate(m *GroupMutation) {
 	}
 	if v := i.InternalpolicyBlockedGroupIDs; len(v) > 0 {
 		m.AddInternalpolicyBlockedGroupIDs(v...)
+	}
+	if v := i.ProgramViewerIDs; len(v) > 0 {
+		m.AddProgramViewerIDs(v...)
+	}
+	if v := i.ProgramEditorIDs; len(v) > 0 {
+		m.AddProgramEditorIDs(v...)
+	}
+	if v := i.ProgramBlockedGroupIDs; len(v) > 0 {
+		m.AddProgramBlockedGroupIDs(v...)
 	}
 }
 
@@ -2942,6 +2954,15 @@ type UpdateGroupInput struct {
 	ClearInternalpolicyBlockedGroups    bool
 	AddInternalpolicyBlockedGroupIDs    []string
 	RemoveInternalpolicyBlockedGroupIDs []string
+	ClearProgramViewers                 bool
+	AddProgramViewerIDs                 []string
+	RemoveProgramViewerIDs              []string
+	ClearProgramEditors                 bool
+	AddProgramEditorIDs                 []string
+	RemoveProgramEditorIDs              []string
+	ClearProgramBlockedGroups           bool
+	AddProgramBlockedGroupIDs           []string
+	RemoveProgramBlockedGroupIDs        []string
 }
 
 // Mutate applies the UpdateGroupInput on the GroupMutation builder.
@@ -3068,6 +3089,33 @@ func (i *UpdateGroupInput) Mutate(m *GroupMutation) {
 	}
 	if v := i.RemoveInternalpolicyBlockedGroupIDs; len(v) > 0 {
 		m.RemoveInternalpolicyBlockedGroupIDs(v...)
+	}
+	if i.ClearProgramViewers {
+		m.ClearProgramViewers()
+	}
+	if v := i.AddProgramViewerIDs; len(v) > 0 {
+		m.AddProgramViewerIDs(v...)
+	}
+	if v := i.RemoveProgramViewerIDs; len(v) > 0 {
+		m.RemoveProgramViewerIDs(v...)
+	}
+	if i.ClearProgramEditors {
+		m.ClearProgramEditors()
+	}
+	if v := i.AddProgramEditorIDs; len(v) > 0 {
+		m.AddProgramEditorIDs(v...)
+	}
+	if v := i.RemoveProgramEditorIDs; len(v) > 0 {
+		m.RemoveProgramEditorIDs(v...)
+	}
+	if i.ClearProgramBlockedGroups {
+		m.ClearProgramBlockedGroups()
+	}
+	if v := i.AddProgramBlockedGroupIDs; len(v) > 0 {
+		m.AddProgramBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveProgramBlockedGroupIDs; len(v) > 0 {
+		m.RemoveProgramBlockedGroupIDs(v...)
 	}
 }
 
@@ -5712,6 +5760,9 @@ type CreateProgramInput struct {
 	ActionplanIDs        []string
 	StandardIDs          []string
 	UserIDs              []string
+	ViewerIDs            []string
+	EditorIDs            []string
+	BlockedGroupIDs      []string
 }
 
 // Mutate applies the CreateProgramInput on the ProgramMutation builder.
@@ -5783,6 +5834,15 @@ func (i *CreateProgramInput) Mutate(m *ProgramMutation) {
 	if v := i.UserIDs; len(v) > 0 {
 		m.AddUserIDs(v...)
 	}
+	if v := i.ViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
+	if v := i.EditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.BlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateProgramInput on the ProgramCreate builder.
@@ -5848,6 +5908,15 @@ type UpdateProgramInput struct {
 	ClearUsers                bool
 	AddUserIDs                []string
 	RemoveUserIDs             []string
+	ClearViewers              bool
+	AddViewerIDs              []string
+	RemoveViewerIDs           []string
+	ClearEditors              bool
+	AddEditorIDs              []string
+	RemoveEditorIDs           []string
+	ClearBlockedGroups        bool
+	AddBlockedGroupIDs        []string
+	RemoveBlockedGroupIDs     []string
 }
 
 // Mutate applies the UpdateProgramInput on the ProgramMutation builder.
@@ -6016,6 +6085,33 @@ func (i *UpdateProgramInput) Mutate(m *ProgramMutation) {
 	}
 	if v := i.RemoveUserIDs; len(v) > 0 {
 		m.RemoveUserIDs(v...)
+	}
+	if i.ClearViewers {
+		m.ClearViewers()
+	}
+	if v := i.AddViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
+	if v := i.RemoveViewerIDs; len(v) > 0 {
+		m.RemoveViewerIDs(v...)
+	}
+	if i.ClearEditors {
+		m.ClearEditors()
+	}
+	if v := i.AddEditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.RemoveEditorIDs; len(v) > 0 {
+		m.RemoveEditorIDs(v...)
+	}
+	if i.ClearBlockedGroups {
+		m.ClearBlockedGroups()
+	}
+	if v := i.AddBlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
+		m.RemoveBlockedGroupIDs(v...)
 	}
 }
 

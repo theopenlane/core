@@ -22,6 +22,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 
@@ -391,6 +392,51 @@ func (gu *GroupUpdate) AddInternalpolicyBlockedGroups(i ...*InternalPolicy) *Gro
 	return gu.AddInternalpolicyBlockedGroupIDs(ids...)
 }
 
+// AddProgramViewerIDs adds the "program_viewers" edge to the Program entity by IDs.
+func (gu *GroupUpdate) AddProgramViewerIDs(ids ...string) *GroupUpdate {
+	gu.mutation.AddProgramViewerIDs(ids...)
+	return gu
+}
+
+// AddProgramViewers adds the "program_viewers" edges to the Program entity.
+func (gu *GroupUpdate) AddProgramViewers(p ...*Program) *GroupUpdate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return gu.AddProgramViewerIDs(ids...)
+}
+
+// AddProgramEditorIDs adds the "program_editors" edge to the Program entity by IDs.
+func (gu *GroupUpdate) AddProgramEditorIDs(ids ...string) *GroupUpdate {
+	gu.mutation.AddProgramEditorIDs(ids...)
+	return gu
+}
+
+// AddProgramEditors adds the "program_editors" edges to the Program entity.
+func (gu *GroupUpdate) AddProgramEditors(p ...*Program) *GroupUpdate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return gu.AddProgramEditorIDs(ids...)
+}
+
+// AddProgramBlockedGroupIDs adds the "program_blocked_groups" edge to the Program entity by IDs.
+func (gu *GroupUpdate) AddProgramBlockedGroupIDs(ids ...string) *GroupUpdate {
+	gu.mutation.AddProgramBlockedGroupIDs(ids...)
+	return gu
+}
+
+// AddProgramBlockedGroups adds the "program_blocked_groups" edges to the Program entity.
+func (gu *GroupUpdate) AddProgramBlockedGroups(p ...*Program) *GroupUpdate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return gu.AddProgramBlockedGroupIDs(ids...)
+}
+
 // AddMemberIDs adds the "members" edge to the GroupMembership entity by IDs.
 func (gu *GroupUpdate) AddMemberIDs(ids ...string) *GroupUpdate {
 	gu.mutation.AddMemberIDs(ids...)
@@ -610,6 +656,69 @@ func (gu *GroupUpdate) RemoveInternalpolicyBlockedGroups(i ...*InternalPolicy) *
 		ids[j] = i[j].ID
 	}
 	return gu.RemoveInternalpolicyBlockedGroupIDs(ids...)
+}
+
+// ClearProgramViewers clears all "program_viewers" edges to the Program entity.
+func (gu *GroupUpdate) ClearProgramViewers() *GroupUpdate {
+	gu.mutation.ClearProgramViewers()
+	return gu
+}
+
+// RemoveProgramViewerIDs removes the "program_viewers" edge to Program entities by IDs.
+func (gu *GroupUpdate) RemoveProgramViewerIDs(ids ...string) *GroupUpdate {
+	gu.mutation.RemoveProgramViewerIDs(ids...)
+	return gu
+}
+
+// RemoveProgramViewers removes "program_viewers" edges to Program entities.
+func (gu *GroupUpdate) RemoveProgramViewers(p ...*Program) *GroupUpdate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return gu.RemoveProgramViewerIDs(ids...)
+}
+
+// ClearProgramEditors clears all "program_editors" edges to the Program entity.
+func (gu *GroupUpdate) ClearProgramEditors() *GroupUpdate {
+	gu.mutation.ClearProgramEditors()
+	return gu
+}
+
+// RemoveProgramEditorIDs removes the "program_editors" edge to Program entities by IDs.
+func (gu *GroupUpdate) RemoveProgramEditorIDs(ids ...string) *GroupUpdate {
+	gu.mutation.RemoveProgramEditorIDs(ids...)
+	return gu
+}
+
+// RemoveProgramEditors removes "program_editors" edges to Program entities.
+func (gu *GroupUpdate) RemoveProgramEditors(p ...*Program) *GroupUpdate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return gu.RemoveProgramEditorIDs(ids...)
+}
+
+// ClearProgramBlockedGroups clears all "program_blocked_groups" edges to the Program entity.
+func (gu *GroupUpdate) ClearProgramBlockedGroups() *GroupUpdate {
+	gu.mutation.ClearProgramBlockedGroups()
+	return gu
+}
+
+// RemoveProgramBlockedGroupIDs removes the "program_blocked_groups" edge to Program entities by IDs.
+func (gu *GroupUpdate) RemoveProgramBlockedGroupIDs(ids ...string) *GroupUpdate {
+	gu.mutation.RemoveProgramBlockedGroupIDs(ids...)
+	return gu
+}
+
+// RemoveProgramBlockedGroups removes "program_blocked_groups" edges to Program entities.
+func (gu *GroupUpdate) RemoveProgramBlockedGroups(p ...*Program) *GroupUpdate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return gu.RemoveProgramBlockedGroupIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the GroupMembership entity.
@@ -1296,6 +1405,150 @@ func (gu *GroupUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if gu.mutation.ProgramViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ProgramViewersTable,
+			Columns: group.ProgramViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.ProgramViewers
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := gu.mutation.RemovedProgramViewersIDs(); len(nodes) > 0 && !gu.mutation.ProgramViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ProgramViewersTable,
+			Columns: group.ProgramViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.ProgramViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := gu.mutation.ProgramViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ProgramViewersTable,
+			Columns: group.ProgramViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.ProgramViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if gu.mutation.ProgramEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ProgramEditorsTable,
+			Columns: group.ProgramEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.ProgramEditors
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := gu.mutation.RemovedProgramEditorsIDs(); len(nodes) > 0 && !gu.mutation.ProgramEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ProgramEditorsTable,
+			Columns: group.ProgramEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.ProgramEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := gu.mutation.ProgramEditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ProgramEditorsTable,
+			Columns: group.ProgramEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.ProgramEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if gu.mutation.ProgramBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ProgramBlockedGroupsTable,
+			Columns: group.ProgramBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.ProgramBlockedGroups
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := gu.mutation.RemovedProgramBlockedGroupsIDs(); len(nodes) > 0 && !gu.mutation.ProgramBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ProgramBlockedGroupsTable,
+			Columns: group.ProgramBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.ProgramBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := gu.mutation.ProgramBlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ProgramBlockedGroupsTable,
+			Columns: group.ProgramBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.ProgramBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if gu.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -1717,6 +1970,51 @@ func (guo *GroupUpdateOne) AddInternalpolicyBlockedGroups(i ...*InternalPolicy) 
 	return guo.AddInternalpolicyBlockedGroupIDs(ids...)
 }
 
+// AddProgramViewerIDs adds the "program_viewers" edge to the Program entity by IDs.
+func (guo *GroupUpdateOne) AddProgramViewerIDs(ids ...string) *GroupUpdateOne {
+	guo.mutation.AddProgramViewerIDs(ids...)
+	return guo
+}
+
+// AddProgramViewers adds the "program_viewers" edges to the Program entity.
+func (guo *GroupUpdateOne) AddProgramViewers(p ...*Program) *GroupUpdateOne {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return guo.AddProgramViewerIDs(ids...)
+}
+
+// AddProgramEditorIDs adds the "program_editors" edge to the Program entity by IDs.
+func (guo *GroupUpdateOne) AddProgramEditorIDs(ids ...string) *GroupUpdateOne {
+	guo.mutation.AddProgramEditorIDs(ids...)
+	return guo
+}
+
+// AddProgramEditors adds the "program_editors" edges to the Program entity.
+func (guo *GroupUpdateOne) AddProgramEditors(p ...*Program) *GroupUpdateOne {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return guo.AddProgramEditorIDs(ids...)
+}
+
+// AddProgramBlockedGroupIDs adds the "program_blocked_groups" edge to the Program entity by IDs.
+func (guo *GroupUpdateOne) AddProgramBlockedGroupIDs(ids ...string) *GroupUpdateOne {
+	guo.mutation.AddProgramBlockedGroupIDs(ids...)
+	return guo
+}
+
+// AddProgramBlockedGroups adds the "program_blocked_groups" edges to the Program entity.
+func (guo *GroupUpdateOne) AddProgramBlockedGroups(p ...*Program) *GroupUpdateOne {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return guo.AddProgramBlockedGroupIDs(ids...)
+}
+
 // AddMemberIDs adds the "members" edge to the GroupMembership entity by IDs.
 func (guo *GroupUpdateOne) AddMemberIDs(ids ...string) *GroupUpdateOne {
 	guo.mutation.AddMemberIDs(ids...)
@@ -1936,6 +2234,69 @@ func (guo *GroupUpdateOne) RemoveInternalpolicyBlockedGroups(i ...*InternalPolic
 		ids[j] = i[j].ID
 	}
 	return guo.RemoveInternalpolicyBlockedGroupIDs(ids...)
+}
+
+// ClearProgramViewers clears all "program_viewers" edges to the Program entity.
+func (guo *GroupUpdateOne) ClearProgramViewers() *GroupUpdateOne {
+	guo.mutation.ClearProgramViewers()
+	return guo
+}
+
+// RemoveProgramViewerIDs removes the "program_viewers" edge to Program entities by IDs.
+func (guo *GroupUpdateOne) RemoveProgramViewerIDs(ids ...string) *GroupUpdateOne {
+	guo.mutation.RemoveProgramViewerIDs(ids...)
+	return guo
+}
+
+// RemoveProgramViewers removes "program_viewers" edges to Program entities.
+func (guo *GroupUpdateOne) RemoveProgramViewers(p ...*Program) *GroupUpdateOne {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return guo.RemoveProgramViewerIDs(ids...)
+}
+
+// ClearProgramEditors clears all "program_editors" edges to the Program entity.
+func (guo *GroupUpdateOne) ClearProgramEditors() *GroupUpdateOne {
+	guo.mutation.ClearProgramEditors()
+	return guo
+}
+
+// RemoveProgramEditorIDs removes the "program_editors" edge to Program entities by IDs.
+func (guo *GroupUpdateOne) RemoveProgramEditorIDs(ids ...string) *GroupUpdateOne {
+	guo.mutation.RemoveProgramEditorIDs(ids...)
+	return guo
+}
+
+// RemoveProgramEditors removes "program_editors" edges to Program entities.
+func (guo *GroupUpdateOne) RemoveProgramEditors(p ...*Program) *GroupUpdateOne {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return guo.RemoveProgramEditorIDs(ids...)
+}
+
+// ClearProgramBlockedGroups clears all "program_blocked_groups" edges to the Program entity.
+func (guo *GroupUpdateOne) ClearProgramBlockedGroups() *GroupUpdateOne {
+	guo.mutation.ClearProgramBlockedGroups()
+	return guo
+}
+
+// RemoveProgramBlockedGroupIDs removes the "program_blocked_groups" edge to Program entities by IDs.
+func (guo *GroupUpdateOne) RemoveProgramBlockedGroupIDs(ids ...string) *GroupUpdateOne {
+	guo.mutation.RemoveProgramBlockedGroupIDs(ids...)
+	return guo
+}
+
+// RemoveProgramBlockedGroups removes "program_blocked_groups" edges to Program entities.
+func (guo *GroupUpdateOne) RemoveProgramBlockedGroups(p ...*Program) *GroupUpdateOne {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return guo.RemoveProgramBlockedGroupIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the GroupMembership entity.
@@ -2647,6 +3008,150 @@ func (guo *GroupUpdateOne) sqlSave(ctx context.Context) (_node *Group, err error
 			},
 		}
 		edge.Schema = guo.schemaConfig.InternalPolicyBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if guo.mutation.ProgramViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ProgramViewersTable,
+			Columns: group.ProgramViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.ProgramViewers
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := guo.mutation.RemovedProgramViewersIDs(); len(nodes) > 0 && !guo.mutation.ProgramViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ProgramViewersTable,
+			Columns: group.ProgramViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.ProgramViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := guo.mutation.ProgramViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ProgramViewersTable,
+			Columns: group.ProgramViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.ProgramViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if guo.mutation.ProgramEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ProgramEditorsTable,
+			Columns: group.ProgramEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.ProgramEditors
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := guo.mutation.RemovedProgramEditorsIDs(); len(nodes) > 0 && !guo.mutation.ProgramEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ProgramEditorsTable,
+			Columns: group.ProgramEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.ProgramEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := guo.mutation.ProgramEditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ProgramEditorsTable,
+			Columns: group.ProgramEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.ProgramEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if guo.mutation.ProgramBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ProgramBlockedGroupsTable,
+			Columns: group.ProgramBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.ProgramBlockedGroups
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := guo.mutation.RemovedProgramBlockedGroupsIDs(); len(nodes) > 0 && !guo.mutation.ProgramBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ProgramBlockedGroupsTable,
+			Columns: group.ProgramBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.ProgramBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := guo.mutation.ProgramBlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ProgramBlockedGroupsTable,
+			Columns: group.ProgramBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.ProgramBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

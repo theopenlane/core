@@ -1,4 +1,3 @@
-
 mutation CreateBulkCSVProgram($input: Upload!) {
   createBulkCSVProgram(input: $input) {
     programs {
@@ -94,6 +93,18 @@ mutation CreateProgram($input: CreateProgramInput!) {
         updatedBy
         version
       }
+      editors {
+        id
+        name
+      }
+      viewers {
+        id
+        name
+      }
+      blockedGroups {
+        id
+        name
+      }
     }
   }
 }
@@ -156,10 +167,23 @@ query GetAllPrograms {
           updatedBy
           version
         }
+        editors {
+          id
+          name
+        }
+        viewers {
+          id
+          name
+        }
+        blockedGroups {
+          id
+          name
+        }
       }
     }
   }
 }
+
 query GetProgramByID($programId: ID!) {
   program(id: $programId) {
     auditorReadComments
@@ -209,6 +233,18 @@ query GetProgramByID($programId: ID!) {
       updatedAt
       updatedBy
       version
+    }
+    editors {
+      id
+      name
+    }
+    viewers {
+      id
+      name
+    }
+    blockedGroups {
+      id
+      name
     }
   }
 }
@@ -265,10 +301,23 @@ query GetPrograms($where: ProgramWhereInput) {
           updatedBy
           version
         }
+        editors {
+          id
+          name
+        }
+        viewers {
+          id
+          name
+        }
+        blockedGroups {
+          id
+          name
+        }
       }
     }
   }
 }
+
 mutation UpdateProgram($updateProgramId: ID!, $input: UpdateProgramInput!) {
   updateProgram(id: $updateProgramId, input: $input) {
     program {
@@ -319,6 +368,18 @@ mutation UpdateProgram($updateProgramId: ID!, $input: UpdateProgramInput!) {
         updatedAt
         updatedBy
         version
+      }
+      editors {
+        id
+        name
+      }
+      viewers {
+        id
+        name
+      }
+      blockedGroups {
+        id
+        name
       }
     }
   }

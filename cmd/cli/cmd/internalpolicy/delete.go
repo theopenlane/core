@@ -10,7 +10,7 @@ import (
 
 var deleteCmd = &cobra.Command{
 	Use:   "delete",
-	Short: "delete an existing internalpolicy",
+	Short: "delete an existing internal policy",
 	Run: func(cmd *cobra.Command, args []string) {
 		err := delete(cmd.Context())
 		cobra.CheckErr(err)
@@ -20,20 +20,20 @@ var deleteCmd = &cobra.Command{
 func init() {
 	command.AddCommand(deleteCmd)
 
-	deleteCmd.Flags().StringP("id", "i", "", "internalpolicy id to delete")
+	deleteCmd.Flags().StringP("id", "i", "", "internal policy id to delete")
 }
 
 // deleteValidation validates the required fields for the command
 func deleteValidation() (string, error) {
 	id := cmd.Config.String("id")
 	if id == "" {
-		return "", cmd.NewRequiredFieldMissingError("internalpolicy id")
+		return "", cmd.NewRequiredFieldMissingError("internal policy id")
 	}
 
 	return id, nil
 }
 
-// delete an existing internalPolicy in the platform
+// delete an existing internal policy in the platform
 func delete(ctx context.Context) error {
 	// setup http client
 	client, err := cmd.SetupClientWithAuth(ctx)

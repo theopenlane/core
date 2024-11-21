@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 )
@@ -373,6 +374,51 @@ func (gc *GroupCreate) AddInternalpolicyBlockedGroups(i ...*InternalPolicy) *Gro
 		ids[j] = i[j].ID
 	}
 	return gc.AddInternalpolicyBlockedGroupIDs(ids...)
+}
+
+// AddProgramViewerIDs adds the "program_viewers" edge to the Program entity by IDs.
+func (gc *GroupCreate) AddProgramViewerIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddProgramViewerIDs(ids...)
+	return gc
+}
+
+// AddProgramViewers adds the "program_viewers" edges to the Program entity.
+func (gc *GroupCreate) AddProgramViewers(p ...*Program) *GroupCreate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return gc.AddProgramViewerIDs(ids...)
+}
+
+// AddProgramEditorIDs adds the "program_editors" edge to the Program entity by IDs.
+func (gc *GroupCreate) AddProgramEditorIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddProgramEditorIDs(ids...)
+	return gc
+}
+
+// AddProgramEditors adds the "program_editors" edges to the Program entity.
+func (gc *GroupCreate) AddProgramEditors(p ...*Program) *GroupCreate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return gc.AddProgramEditorIDs(ids...)
+}
+
+// AddProgramBlockedGroupIDs adds the "program_blocked_groups" edge to the Program entity by IDs.
+func (gc *GroupCreate) AddProgramBlockedGroupIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddProgramBlockedGroupIDs(ids...)
+	return gc
+}
+
+// AddProgramBlockedGroups adds the "program_blocked_groups" edges to the Program entity.
+func (gc *GroupCreate) AddProgramBlockedGroups(p ...*Program) *GroupCreate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return gc.AddProgramBlockedGroupIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the GroupMembership entity by IDs.
@@ -773,6 +819,57 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = gc.schemaConfig.InternalPolicyBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.ProgramViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ProgramViewersTable,
+			Columns: group.ProgramViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.ProgramViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.ProgramEditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ProgramEditorsTable,
+			Columns: group.ProgramEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.ProgramEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.ProgramBlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ProgramBlockedGroupsTable,
+			Columns: group.ProgramBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.ProgramBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

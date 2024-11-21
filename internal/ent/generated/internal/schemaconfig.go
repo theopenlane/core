@@ -125,6 +125,9 @@ type SchemaConfig struct {
 	ProgramFiles                     string // Program-files->File table.
 	ProgramNarratives                string // Program-narratives->Narrative table.
 	ProgramActionplans               string // Program-actionplans->ActionPlan table.
+	ProgramViewers                   string // Program-viewers->Group table.
+	ProgramEditors                   string // Program-editors->Group table.
+	ProgramBlockedGroups             string // Program-blocked_groups->Group table.
 	ProgramHistory                   string // ProgramHistory table.
 	ProgramMembership                string // ProgramMembership table.
 	ProgramMembershipHistory         string // ProgramMembershipHistory table.

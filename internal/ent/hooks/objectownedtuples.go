@@ -82,9 +82,10 @@ func HookObjectOwnedTuples(parents []string, skipUser bool) ent.Hook {
 	}
 }
 
-// HookEditorTuples is a hook that adds editor tuples for the object being created
+// HookRelationTuples is a hook that adds tuples for the object being created
 // the objects input is a map of object id fields to the object type
-func HookEditorTuples(objects map[string]string) ent.Hook {
+// these tuples based are based on the direct relation, e.g. a group#member to another object
+func HookRelationTuples(objects map[string]string, relation fgax.Relation) ent.Hook {
 	return func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 			retVal, err := next.Mutate(ctx, m)
@@ -97,53 +98,17 @@ func HookEditorTuples(objects map[string]string) ent.Hook {
 				return nil, err
 			}
 
-			addTuples, err := createEditorTuples(ctx, m, objectID, objects)
+			var (
+				addTuples    []fgax.TupleKey
+				removeTuples []fgax.TupleKey
+			)
+
+			addTuples, err = createTuplesByRelation(ctx, m, objectID, relation, objects)
 			if err != nil {
 				return nil, err
 			}
 
-			removeTuples, err := removeEditorTuples(ctx, m, objectID, objects)
-			if err != nil {
-				return nil, err
-			}
-
-			// write the tuples to the authz service
-			if len(addTuples) != 0 || len(removeTuples) != 0 {
-				if _, err := utils.AuthzClientFromContext(ctx).WriteTupleKeys(ctx, addTuples, removeTuples); err != nil {
-					return nil, err
-				}
-			}
-
-			log.Debug().Interface("tuples", addTuples).Msg("added editor permissions")
-			log.Debug().Interface("tuples", removeTuples).Msg("removed editor permissions")
-
-			return retVal, err
-		},
-		)
-	}
-}
-
-// HookBlockedTuples is a hook that adds blocked tuples for the object being created
-// the objects input is a map of object id fields to the object type
-func HookBlockedTuples(objects map[string]string) ent.Hook {
-	return func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			retVal, err := next.Mutate(ctx, m)
-			if err != nil {
-				return nil, err
-			}
-
-			objectID, err := getObjectIDFromEntValue(retVal)
-			if err != nil {
-				return nil, err
-			}
-
-			addTuples, err := createBlockedTuples(ctx, m, objectID, objects)
-			if err != nil {
-				return nil, err
-			}
-
-			removeTuples, err := removeBlockedTuples(ctx, m, objectID, objects)
+			removeTuples, err = removeTuplesByRelation(ctx, m, objectID, relation, objects)
 			if err != nil {
 				return nil, err
 			}
@@ -155,8 +120,8 @@ func HookBlockedTuples(objects map[string]string) ent.Hook {
 				}
 			}
 
-			log.Debug().Interface("tuples", addTuples).Msg("added blocked permissions")
-			log.Debug().Interface("tuples", removeTuples).Msg("removed blocked permissions")
+			log.Debug().Interface("tuples", addTuples).Msg("added tuples")
+			log.Debug().Interface("tuples", removeTuples).Msg("removed tuples")
 
 			return retVal, err
 		},

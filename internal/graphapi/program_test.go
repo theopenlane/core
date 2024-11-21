@@ -160,9 +160,11 @@ func (suite *GraphTestSuite) TestMutationCreateProgram() {
 	startDate := time.Now().AddDate(0, 0, 1)
 	endDate := time.Now().AddDate(0, 0, 360)
 
-	// // Create some edge objects
+	// Create some edge objects
 	procedure := (&ProcedureBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	policy := (&InternalPolicyBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	blockedGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	viewerGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -204,24 +206,36 @@ func (suite *GraphTestSuite) TestMutationCreateProgram() {
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
 		},
-		// {
-		// 	name: "happy path, using pat",
-		// 	request: openlaneclient.CreateProgramInput{
-		// 		Name:        "mitb program",
-		// 		Description: lo.ToPtr("being the best"),
-		// 	},
-		// 	client: suite.client.apiWithPAT,
-		// 	ctx:    context.Background(),
-		// },
-		// {
-		// 	name: "happy path, using api token",
-		// 	request: openlaneclient.CreateProgramInput{
-		// 		Name:        "mitb program",
-		// 		Description: lo.ToPtr("being the best"),
-		// 	},
-		// 	client: suite.client.apiWithPAT,
-		// 	ctx:    context.Background(),
-		// },
+		{
+			name: "add editor group",
+			request: openlaneclient.CreateProgramInput{
+				Name:            "Test Procedure",
+				EditorIDs:       []string{testUser1.GroupID},
+				BlockedGroupIDs: []string{blockedGroup.ID},
+				ViewerIDs:       []string{viewerGroup.ID},
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
+			name: "happy path, using pat",
+			request: openlaneclient.CreateProgramInput{
+				Name:        "mitb program",
+				Description: lo.ToPtr("being the best"),
+				OwnerID:     &testUser1.OrganizationID,
+			},
+			client: suite.client.apiWithPAT,
+			ctx:    context.Background(),
+		},
+		{
+			name: "happy path, using api token",
+			request: openlaneclient.CreateProgramInput{
+				Name:        "mitb program",
+				Description: lo.ToPtr("being the best"),
+			},
+			client: suite.client.apiWithToken,
+			ctx:    context.Background(),
+		},
 		{
 			name: "user not authorized, not enough permissions",
 			request: openlaneclient.CreateProgramInput{
@@ -231,16 +245,16 @@ func (suite *GraphTestSuite) TestMutationCreateProgram() {
 			ctx:         viewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
-		// {
-		// 	name: "user not authorized, no permissions",
-		// 	request: openlaneclient.CreateProgramInput{
-		// 		Name:    "mitb program",
-		// 		OwnerID: &testUser1.OrganizationID, // check edges this should not be allowed
-		// 	},
-		// 	client:      suite.client.api,
-		// 	ctx:         testUser2.UserCtx,
-		// 	expectedErr: notFoundErrorMsg,
-		// },
+		{
+			name: "user not authorized, no permissions",
+			request: openlaneclient.CreateProgramInput{
+				Name:    "mitb program",
+				OwnerID: &testUser1.OrganizationID,
+			},
+			client:      suite.client.api,
+			ctx:         testUser2.UserCtx,
+			expectedErr: notAuthorizedErrorMsg, // testUser2 is not a a member of that organization
+		},
 		{
 			name: "missing required field",
 			request: openlaneclient.CreateProgramInput{
@@ -326,6 +340,27 @@ func (suite *GraphTestSuite) TestMutationCreateProgram() {
 					assert.Equal(t, policy.ID, edge.ID)
 				}
 			}
+
+			if len(tc.request.EditorIDs) > 0 {
+				require.Len(t, resp.CreateProgram.Program.Editors, 1)
+				for _, edge := range resp.CreateProgram.Program.Editors {
+					assert.Equal(t, testUser1.GroupID, edge.ID)
+				}
+			}
+
+			if len(tc.request.BlockedGroupIDs) > 0 {
+				require.Len(t, resp.CreateProgram.Program.BlockedGroups, 1)
+				for _, edge := range resp.CreateProgram.Program.BlockedGroups {
+					assert.Equal(t, blockedGroup.ID, edge.ID)
+				}
+			}
+
+			if len(tc.request.ViewerIDs) > 0 {
+				require.Len(t, resp.CreateProgram.Program.Viewers, 1)
+				for _, edge := range resp.CreateProgram.Program.Viewers {
+					assert.Equal(t, viewerGroup.ID, edge.ID)
+				}
+			}
 		})
 	}
 }
@@ -343,6 +378,41 @@ func (suite *GraphTestSuite) TestMutationUpdateProgram() {
 	procedure2 := (&ProcedureBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 	policy2 := (&InternalPolicyBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
+	// create another admin user and add them to the same organization and group as testUser1
+	// this will allow us to test the group editor permissions
+	anotherAdminUser := suite.userBuilder(context.Background())
+	suite.addUserToOrganization(&anotherAdminUser, enums.RoleAdmin, testUser1.OrganizationID)
+
+	(&GroupMemberBuilder{client: suite.client, UserID: anotherAdminUser.ID, GroupID: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
+
+	// create a viewer user and add them to the same organization as testUser1
+	// also add them to the same group as testUser1, this should still allow them to edit the policy
+	// despite not not being an organization admin
+	anotherViewerUser := suite.userBuilder(context.Background())
+	suite.addUserToOrganization(&anotherViewerUser, enums.RoleMember, testUser1.OrganizationID)
+
+	(&GroupMemberBuilder{client: suite.client, UserID: anotherViewerUser.ID, GroupID: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
+
+	// create one more group that will be used to test the blocked group permissions and add anotherViewerUser to it
+	blockGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	(&GroupMemberBuilder{client: suite.client, UserID: anotherViewerUser.ID, GroupID: blockGroup.ID}).MustNew(testUser1.UserCtx, t)
+
+	// create a view only user and add them to the same organization as testUser1
+	meowViewerUser := suite.userBuilder(context.Background())
+	suite.addUserToOrganization(&meowViewerUser, enums.RoleMember, testUser1.OrganizationID)
+
+	// create one more group that will be used to test the blocked group permissions and add anotherViewerUser to it
+	viewerGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	(&GroupMemberBuilder{client: suite.client, UserID: meowViewerUser.ID, GroupID: blockGroup.ID}).MustNew(testUser1.UserCtx, t)
+
+	// add add user to the viewer group
+	(&GroupMemberBuilder{client: suite.client, UserID: viewOnlyUser.ID, GroupID: viewerGroup.ID}).MustNew(testUser1.UserCtx, t)
+
+	// ensure the user doesnt currently have access to the program
+	res, err := suite.client.api.GetProgramByID(viewOnlyUser.UserCtx, program.ID)
+	require.Error(t, err)
+	require.Nil(t, res)
+
 	testCases := []struct {
 		name              string
 		request           openlaneclient.UpdateProgramInput
@@ -354,7 +424,9 @@ func (suite *GraphTestSuite) TestMutationUpdateProgram() {
 		{
 			name: "happy path, update field",
 			request: openlaneclient.UpdateProgramInput{
-				Description: lo.ToPtr("new description"),
+				Description:  lo.ToPtr("new description"),
+				AddEditorIDs: []string{testUser1.GroupID}, // add the group to the editor groups for the subsequent tests
+				AddViewerIDs: []string{viewerGroup.ID},    // add the group to the viewer groups and ensure the user has access to the program
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -414,7 +486,7 @@ func (suite *GraphTestSuite) TestMutationUpdateProgram() {
 			},
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
-			expectedErr: notFoundErrorMsg, // programs are not visible to view only users of the organization
+			expectedErr: notAuthorizedErrorMsg, // user in in viewer group, but has no edit access
 		},
 		{
 			name: "update not allowed, no permissions",
@@ -424,6 +496,14 @@ func (suite *GraphTestSuite) TestMutationUpdateProgram() {
 			client:      suite.client.api,
 			ctx:         testUser2.UserCtx,
 			expectedErr: notFoundErrorMsg,
+		},
+		{
+			name: "update allowed, user in editor group",
+			request: openlaneclient.UpdateProgramInput{
+				Description: lo.ToPtr("soc2 2024"),
+			},
+			client: suite.client.api,
+			ctx:    anotherAdminUser.UserCtx, // user assigned to the group which has editor permissions
 		},
 	}
 
@@ -483,6 +563,33 @@ func (suite *GraphTestSuite) TestMutationUpdateProgram() {
 				for _, edge := range resp.UpdateProgram.Program.Policies {
 					assert.Equal(t, policy1.ID, edge.ID)
 				}
+			}
+
+			if len(tc.request.AddEditorIDs) > 0 {
+				require.Len(t, resp.UpdateProgram.Program.Editors, 1)
+				for _, edge := range resp.UpdateProgram.Program.Editors {
+					assert.Equal(t, testUser1.GroupID, edge.ID)
+				}
+			}
+
+			if len(tc.request.AddBlockedGroupIDs) > 0 {
+				require.Len(t, resp.UpdateProgram.Program.BlockedGroups, 1)
+				for _, edge := range resp.UpdateProgram.Program.BlockedGroups {
+					assert.Equal(t, blockGroup.ID, edge.ID)
+				}
+			}
+
+			if len(tc.request.AddViewerIDs) > 0 {
+				require.Len(t, resp.UpdateProgram.Program.Viewers, 1)
+				for _, edge := range resp.UpdateProgram.Program.Viewers {
+					assert.Equal(t, viewerGroup.ID, edge.ID)
+				}
+
+				// ensure the user has access to the program now
+				res, err := suite.client.api.GetProgramByID(viewOnlyUser.UserCtx, program.ID)
+				require.NoError(t, err)
+				require.NotEmpty(t, res)
+				assert.Equal(t, program.ID, res.Program.ID)
 			}
 		})
 	}
