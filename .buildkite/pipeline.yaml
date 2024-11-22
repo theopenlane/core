@@ -32,106 +32,102 @@ steps:
   #             command: ["task", "config:ci"]
   #             environment:
   #               - "GOTOOLCHAIN=auto"
-  # - group: ":test_tube: Tests"
-  #   key: "tests"
-  #   steps:
-  #     - label: ":golangci-lint: lint :lint-roller:"
-  #       agents:
-  #         queue: "hosted-large"
-  #       cancel_on_build_failing: true
-  #       key: "lint"
-  #       plugins:
-  #         - docker#v5.12.0:
-  #             image: "ghcr.io/theopenlane/build-image:latest"
-  #             command: ["task", "go:lint:ci"]
-  #             always_pull: true
-  #             environment:
-  #               - "GOTOOLCHAIN=auto"
-  #       artifact_paths: ["coverage.out"]
-  #     - label: ":golang: go test - {{matrix.version}}"
-  #       key: "go_test"
-  #       cancel_on_build_failing: true
-  #       retry:
-  #         automatic:
-  #           - exit_status: "*"
-  #             limit: 2
-  #       env:
-  #         TEST_DB_URL: "docker://postgres:{{matrix.version}}"
-  #       matrix:
-  #         setup:
-  #           version:
-  #             - 17-alpine
-  #       plugins:
-  #         - docker#v5.12.0:
-  #             image: ghcr.io/theopenlane/build-image:latest
-  #             always_pull: true
-  #             command: ["task", "go:test:cover"]
-  #             environment:
-  #               - "TEST_DB_URL"
-  #               - "TEST_DB_CONTAINER_EXPIRY=8" # container expiry in minutes
-  #               - "TEST_DB_HOST=172.17.0.1" # docker host ip on linux
-  #             volumes:
-  #               - "/var/run/docker.sock:/var/run/docker.sock"
-  #       artifact_paths: ["coverage.out"]
-  #     - label: ":auth0: fga model test"
-  #       agents:
-  #         queue: "hosted-small"
-  #       key: "fga_test"
-  #       plugins:
-  #         - docker#v5.12.0:
-  #             image: openfga/cli:v0.5.1
-  #             command: ["model", "test", "--tests", "fga/tests/tests.yaml"]
-  # - group: ":closed_lock_with_key: Security Checks"
-  #   key: "security"
-  #   steps:
-  #     - label: ":closed_lock_with_key: gosec"
-  #       key: "gosec"
-  #       cancel_on_build_failing: true
-  #       agents:
-  #         queue: "hosted-large"
-  #       plugins:
-  #         - docker#v5.12.0:
-  #             image: "securego/gosec:2.20.0"
-  #             command: ["-no-fail", "-exclude-generated", "-fmt sonarqube", "-out", "results.txt", "./..."]
-  #             environment:
-  #               - "GOTOOLCHAIN=auto"
-  #       artifact_paths: ["results.txt"]
-  #     - label: ":github: upload PR reports"
-  #       key: "scan-upload-pr"
-  #       cancel_on_build_failing: true
-  #       if: build.pull_request.id != null
-  #       depends_on: ["gosec", "go_test"]
-  #       plugins:
-  #         - cluster-secrets#v1.0.0:
-  #           variables:
-  #             SONAR_TOKEN: SONAR_TOKEN
-  #         - artifacts#v1.9.4:
-  #             download: "results.txt"
-  #         - artifacts#v1.9.4:
-  #             download: "coverage.out"
-  #             step: "go_test"
-  #         - docker#v5.12.0:
-  #             image: "sonarsource/sonar-scanner-cli:11.0"
-  #             environment:
-  #               - "SONAR_TOKEN"
-  #               - "SONAR_HOST_URL=$SONAR_HOST"
-  #               - "SONAR_SCANNER_OPTS=-Dsonar.pullrequest.branch=$BUILDKITE_BRANCH -Dsonar.pullrequest.base=$BUILDKITE_PULL_REQUEST_BASE_BRANCH -Dsonar.pullrequest.key=$BUILDKITE_PULL_REQUEST"
-  #     - label: ":github: upload reports"
-  #       key: "scan-upload"
-  #       cancel_on_build_failing: true
-  #       if: build.branch == "main"
-  #       depends_on: ["gosec", "go_test"]
-  #       plugins:
-  #         - artifacts#v1.9.4:
-  #             download: results.txt
-  #         - artifacts#v1.9.4:
-  #             download: coverage.out
-  #             step: "go_test"
-  #         - docker#v5.12.0:
-  #             image: "sonarsource/sonar-scanner-cli:11.0"
-  #             environment:
-  #               - "SONAR_TOKEN"
-  #               - "SONAR_HOST_URL=$SONAR_HOST"
+  - group: ":test_tube: Tests"
+    key: "tests"
+    steps:
+      - label: ":golangci-lint: lint :lint-roller:"
+        agents:
+          queue: "hosted-large"
+        cancel_on_build_failing: true
+        key: "lint"
+        plugins:
+          - docker#v5.12.0:
+              image: "ghcr.io/theopenlane/build-image:latest"
+              command: ["task", "go:lint:ci"]
+              always_pull: true
+              environment:
+                - "GOTOOLCHAIN=auto"
+        artifact_paths: ["coverage.out"]
+      - label: ":golang: go test - {{matrix.version}}"
+        key: "go_test"
+        cancel_on_build_failing: true
+        retry:
+          automatic:
+            - exit_status: "*"
+              limit: 2
+        env:
+          TEST_DB_URL: "docker://postgres:{{matrix.version}}"
+        matrix:
+          setup:
+            version:
+              - 17-alpine
+        plugins:
+          - docker#v5.12.0:
+              image: ghcr.io/theopenlane/build-image:latest
+              always_pull: true
+              command: ["task", "go:test:cover"]
+              environment:
+                - "TEST_DB_URL"
+                - "TEST_DB_CONTAINER_EXPIRY=8" # container expiry in minutes
+                - "TEST_DB_HOST=172.17.0.1" # docker host ip on linux
+              volumes:
+                - "/var/run/docker.sock:/var/run/docker.sock"
+        artifact_paths: ["coverage.out"]
+      - label: ":auth0: fga model test"
+        agents:
+          queue: "hosted-small"
+        key: "fga_test"
+        plugins:
+          - docker#v5.12.0:
+              image: openfga/cli:v0.5.1
+              command: ["model", "test", "--tests", "fga/tests/tests.yaml"]
+  - group: ":closed_lock_with_key: Security Checks"
+    key: "security"
+    steps:
+      # - label: ":closed_lock_with_key: gosec"
+      #   key: "gosec"
+      #   cancel_on_build_failing: true
+      #   agents:
+      #     queue: "hosted-large"
+      #   plugins:
+      #     - docker#v5.12.0:
+      #         image: "sonarsource/sonar-scanner-cli:11.0"
+      #         command: ["-no-fail", "-exclude-generated", "-fmt sonarqube", "-out", "results.txt", "./..."]
+      #         environment:
+      #           - "GOTOOLCHAIN=auto"
+      #   artifact_paths: ["results.txt"]
+      - label: ":github: upload PR reports"
+        key: "scan-upload-pr"
+        cancel_on_build_failing: true
+        if: build.pull_request.id != null
+        depends_on: ["go_test"]
+        plugins:
+          - cluster-secrets#v1.0.0:
+            variables:
+              SONAR_TOKEN: SONAR_TOKEN
+          - artifacts#v1.9.4:
+              download: "coverage.out"
+              step: "go_test"
+          - docker#v5.12.0:
+              image: "sonarsource/sonar-scanner-cli:11.0"
+              environment:
+                - "SONAR_TOKEN"
+                - "SONAR_HOST_URL=$SONAR_HOST"
+                - "SONAR_SCANNER_OPTS=-Dsonar.pullrequest.branch=$BUILDKITE_BRANCH -Dsonar.pullrequest.base=$BUILDKITE_PULL_REQUEST_BASE_BRANCH -Dsonar.pullrequest.key=$BUILDKITE_PULL_REQUEST"
+      - label: ":github: upload reports"
+        key: "scan-upload"
+        cancel_on_build_failing: true
+        if: build.branch == "main"
+        depends_on: ["go_test"]
+        plugins:
+          - artifacts#v1.9.4:
+              download: coverage.out
+              step: "go_test"
+          - docker#v5.12.0:
+              image: "sonarsource/sonar-scanner-cli:11.0"
+              environment:
+                - "SONAR_TOKEN"
+                - "SONAR_HOST_URL=$SONAR_HOST"
   - group: ":golang: Builds"
     key: "go-builds"
     steps:
@@ -147,50 +143,50 @@ steps:
                 - CGO_ENABLED=0
                 - GOOS=linux
               command: ["task", "go:build:ci"]
-              # - label: ":terminal: build cli"
-              #   key: "gobuild-cli"
-              #   agents:
-              #     queue: "hosted-small"
-              #   cancel_on_build_failing: true
-              #   artifact_paths: "bin/openlane-cli"
-              #   plugins:
-              #     - docker#v5.12.0:
-              #         image: "ghcr.io/theopenlane/build-image:latest"
-              #         always_pull: true
-              #         environment:
-              #           - GOOS=darwin
-              #           - GOARCH=arm64
-              #         command: ["task", "go:build-cli:ci"]
-  # - group: ":database: atlas migrate"
-  #   key: "database"
-  #   steps:
-  #     - label: ":postgres: atlas lint"
-  #       key: "atlas_lint"
-  #       agents:
-  #         queue: "hosted-small"
-  #       plugins:
-  #         - cluster-secrets#v1.0.0:
-  #             variables:
-  #               ATLAS_CLOUD_TOKEN: ATLAS_CLOUD_TOKEN
-  #         - theopenlane/atlas#v1.0.0:
-  #             project: core
-  #             dev-url: "docker://postgres/17/dev?search_path=public"
-  #             dir: "file://db/migrations"
-  #             step: lint
-  #     - label: ":rocket: atlas push"
-  #       if: build.branch == "main"
-  #       agents:
-  #         queue: "hosted-small"
-  #       key: "atlas_migrate"
-  #       plugins:
-  #         - cluster-secrets#v1.0.0:
-  #           variables:
-  #             ATLAS_CLOUD_TOKEN: ATLAS_CLOUD_TOKEN
-  #         - theopenlane/atlas#v1.0.0:
-  #             project: core
-  #             dev-url: "docker://postgres/17/dev?search_path=public"
-  #             dir: "file://db/migrations"
-  #             step: migrate
+      - label: ":terminal: build cli"
+        key: "gobuild-cli"
+        agents:
+          queue: "hosted-small"
+        cancel_on_build_failing: true
+        artifact_paths: "bin/openlane-cli"
+        plugins:
+          - docker#v5.12.0:
+              image: "ghcr.io/theopenlane/build-image:latest"
+              always_pull: true
+              environment:
+                - GOOS=darwin
+                - GOARCH=arm64
+              command: ["task", "go:build-cli:ci"]
+  - group: ":database: atlas migrate"
+    key: "database"
+    steps:
+      - label: ":postgres: atlas lint"
+        key: "atlas_lint"
+        agents:
+          queue: "hosted-small"
+        plugins:
+          - cluster-secrets#v1.0.0:
+              variables:
+                ATLAS_CLOUD_TOKEN: ATLAS_CLOUD_TOKEN
+          - theopenlane/atlas#v1.0.0:
+              project: core
+              dev-url: "docker://postgres/17/dev?search_path=public"
+              dir: "file://db/migrations"
+              step: lint
+      - label: ":rocket: atlas push"
+        if: build.branch == "main"
+        agents:
+          queue: "hosted-small"
+        key: "atlas_migrate"
+        plugins:
+          - cluster-secrets#v1.0.0:
+            variables:
+              ATLAS_CLOUD_TOKEN: ATLAS_CLOUD_TOKEN
+          - theopenlane/atlas#v1.0.0:
+              project: core
+              dev-url: "docker://postgres/17/dev?search_path=public"
+              dir: "file://db/migrations"
+              step: migrate
   - group: ":docker: Image Build"
     depends_on: "go-builds"
     key: "image-build"
@@ -228,128 +224,110 @@ steps:
               scanners: misconfig,secret,vuln
               skip-files: "cosign.key,Dockerfile.dev"
               trivy-version: "0.57.1"
-    # - label: ":docker: docker build and publish"
-    #   key: "docker-build"
-    #   cancel_on_build_failing: true
-    #   if: build.branch == "bk-test"
-    #   commands: |
-    #     #!/bin/bash
-    #     ls
-    #   plugins:
-    #     - cluster-secrets#v1.0.0:
-    #       variables:
-    #         SECRET_GHCR_PUBLISH_TOKEN: SECRET_GHCR_PUBLISH_TOKEN
-    #     - docker-login#v3.0.0:
-    #         username: openlane-bender
-    #         password-env: SECRET_GHCR_PUBLISH_TOKEN
-    #         server: ghcr.io
-    #     - theopenlane/docker-metadata#v1.0.0:
-    #         images:
-    #           - "${IMAGE_REPO}"
-    #         extra_tags:
-    #           - "${IMAGE_TAG}"
-    #     - theopenlane/container-build#v1.1.0:
-    #         dockerfile: docker/Dockerfile
-    #         push: true
-    #         build-args:
-    #           - NAME=${APP_NAME}
-    #     - equinixmetal-buildkite/trivy#v1.19.0:
-    #         severity: CRITICAL,HIGH
-    #         ignore-unfixed: true
-    #         scanners: misconfig,secret,vuln
-    #         skip-files: "cosign.key,Dockerfile.dev"
-    #         trivy-version: "0.57.1"
-    # - label: ":docker: docker build and publish all in one"
-    #   key: "docker-build-aio"
-    #   if: build.branch == "main"
-    #   cancel_on_build_failing: true
-    #   commands: |
-    #     #!/bin/bash
-    #   plugins:
-    #     - cluster-secrets#v1.0.0:
-    #       variables:
-    #         SECRET_GCR_PUBLISH_TOKEN: SECRET_GCR_PUBLISH_TOKEN
-    #     - docker-login#v3.0.0:
-    #         username: _json_key_base64
-    #         password-env: SECRET_GCR_PUBLISH_TOKEN
-    #         server: us-west1-docker.pkg.dev
-    #     - theopenlane/docker-metadata#v1.0.0:
-    #         tag_prefix: "aio-"
-    #         debug: true
-    #         images:
-    #           - "${GCR_REPO}"
-    #         extra_tags:
-    #           - "${IMAGE_TAG}"
-    #     - theopenlane/container-build#v1.1.0:
-    #         dockerfile: docker/all-in-one/Dockerfile.all-in-one
-    #         push: true
-    #         build-args:
-    #           - NAME=${APP_NAME}
-    #     - equinixmetal-buildkite/trivy#v1.19.0:
-    #         severity: CRITICAL,HIGH
-    #         ignore-unfixed: true
-    #         security-checks: config,secret,vuln
-    #         skip-files: "cosign.key,Dockerfile.dev"
-    #         trivy-version: "0.57.1"
-    # - label: ":docker: docker build and publish"
-    #   key: "docker-build-and-tag"
-    #   cancel_on_build_failing: true
-    #   if: build.tag != null
-    #   commands: |
-    #     #!/bin/bash
-    #   plugins:
-    #     - cluster-secrets#v1.0.0:
-    #       variables:
-    #         SECRET_GCR_PUBLISH_TOKEN: SECRET_GHCR_PUBLISH_TOKEN
-    #     - docker-login#v3.0.0:
-    #         username: openlane-bender
-    #         password-env: SECRET_GHCR_PUBLISH_TOKEN
-    #         server: ghcr.io
-    #     - theopenlane/docker-metadata#v1.0.0:
-    #         images:
-    #           - "${IMAGE_REPO}"
-    #         extra_tags:
-    #           - "${BUILDKITE_TAG}"
-    #     - theopenlane/container-build#v1.1.0:
-    #         dockerfile: docker/Dockerfile
-    #         push: true
-    #         build-args:
-    #           - NAME=${APP_NAME}
-    #     - equinixmetal-buildkite/trivy#v1.19.0:
-    #         severity: CRITICAL,HIGH
-    #         ignore-unfixed: true
-    #         scanners: misconfig,secret,vuln
-    #         skip-files: "cosign.key,Dockerfile.dev"
-    #         trivy-version: "0.57.1"
-    # - label: ":docker: docker build and publish all in one"
-    #   key: "docker-build-aio-and-tag"
-    #   cancel_on_build_failing: true
-    #   if: build.tag != null
-    #   commands: |
-    #     #!/bin/bash
-    #   plugins:
-    #     - cluster-secrets#v1.0.0:
-    #       variables:
-    #         SECRET_GCR_PUBLISH_TOKEN: SECRET_GCR_PUBLISH_TOKEN
-    #     - docker-login#v3.0.0:
-    #         username: _json_key_base64
-    #         password-env: SECRET_GCR_PUBLISH_TOKEN
-    #         server: us-west1-docker.pkg.dev
-    #     - theopenlane/docker-metadata#v1.0.0:
-    #         tag_prefix: "aio-"
-    #         debug: true
-    #         images:
-    #           - "${GCR_REPO}"
-    #         extra_tags:
-    #           - "${BUILDKITE_TAG}"
-    #     - theopenlane/container-build#v1.1.0:
-    #         dockerfile: docker/all-in-one/Dockerfile.all-in-one
-    #         push: true
-    #         build-args:
-    #           - NAME=${APP_NAME}
-    #     - equinixmetal-buildkite/trivy#v1.19.0:
-    #         severity: CRITICAL,HIGH
-    #         ignore-unfixed: true
-    #         scanners: misconfig,secret,vuln
-    #         skip-files: "cosign.key,Dockerfile.dev"
-    #         trivy-version: "0.57.1"
+      - label: ":docker: docker build and publish"
+        key: "docker-build"
+        cancel_on_build_failing: true
+        if: build.branch == "main"
+        commands: |
+          #!/bin/bash
+          ls
+        plugins:
+          - cluster-secrets#v1.0.0:
+            variables:
+              SECRET_GHCR_PUBLISH_TOKEN: SECRET_GHCR_PUBLISH_TOKEN
+          - docker-login#v3.0.0:
+              username: openlane-bender
+              password-env: SECRET_GHCR_PUBLISH_TOKEN
+              server: ghcr.io
+          - theopenlane/docker-metadata#v1.0.0:
+              images:
+                - "${IMAGE_REPO}"
+              extra_tags:
+                - "${IMAGE_TAG}"
+          - theopenlane/container-build#v1.1.0:
+              dockerfile: docker/Dockerfile
+              push: true
+              build-args:
+                - NAME=${APP_NAME}
+          - equinixmetal-buildkite/trivy#v1.19.0:
+              severity: CRITICAL,HIGH
+              ignore-unfixed: true
+              scanners: misconfig,secret,vuln
+              skip-files: "cosign.key,Dockerfile.dev"
+              trivy-version: "0.57.1"
+      - label: ":docker: docker build and publish all in one"
+        key: "docker-build-aio"
+        if: build.branch == "main"
+        cancel_on_build_failing: true
+        commands: |
+          #!/bin/bash
+        plugins:
+          - cluster-secrets#v1.0.0:
+            variables:
+              SECRET_GCR_PUBLISH_TOKEN: SECRET_GCR_PUBLISH_TOKEN
+          - docker-login#v3.0.0:
+              username: _json_key_base64
+              password-env: SECRET_GCR_PUBLISH_TOKEN
+              server: us-west1-docker.pkg.dev
+          - theopenlane/docker-metadata#v1.0.0:
+              tag_prefix: "aio-"
+              debug: true
+              images:
+                - "${GCR_REPO}"
+              extra_tags:
+                - "${IMAGE_TAG}"
+          - theopenlane/container-build#v1.1.0:
+              dockerfile: docker/all-in-one/Dockerfile.all-in-one
+              push: true
+              build-args:
+                - NAME=${APP_NAME}
+      - label: ":docker: docker build and publish"
+        key: "docker-build-and-tag"
+        cancel_on_build_failing: true
+        if: build.tag != null
+        commands: |
+          #!/bin/bash
+        plugins:
+          - cluster-secrets#v1.0.0:
+            variables:
+              SECRET_GCR_PUBLISH_TOKEN: SECRET_GHCR_PUBLISH_TOKEN
+          - docker-login#v3.0.0:
+              username: openlane-bender
+              password-env: SECRET_GHCR_PUBLISH_TOKEN
+              server: ghcr.io
+          - theopenlane/docker-metadata#v1.0.0:
+              images:
+                - "${IMAGE_REPO}"
+              extra_tags:
+                - "${BUILDKITE_TAG}"
+          - theopenlane/container-build#v1.1.0:
+              dockerfile: docker/Dockerfile
+              push: true
+              build-args:
+                - NAME=${APP_NAME}
+      - label: ":docker: docker build and publish all in one"
+        key: "docker-build-aio-and-tag"
+        cancel_on_build_failing: true
+        if: build.tag != null
+        commands: |
+          #!/bin/bash
+        plugins:
+          - cluster-secrets#v1.0.0:
+            variables:
+              SECRET_GCR_PUBLISH_TOKEN: SECRET_GCR_PUBLISH_TOKEN
+          - docker-login#v3.0.0:
+              username: _json_key_base64
+              password-env: SECRET_GCR_PUBLISH_TOKEN
+              server: us-west1-docker.pkg.dev
+          - theopenlane/docker-metadata#v1.0.0:
+              tag_prefix: "aio-"
+              debug: true
+              images:
+                - "${GCR_REPO}"
+              extra_tags:
+                - "${BUILDKITE_TAG}"
+          - theopenlane/container-build#v1.1.0:
+              dockerfile: docker/all-in-one/Dockerfile.all-in-one
+              push: true
+              build-args:
+                - NAME=${APP_NAME}
