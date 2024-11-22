@@ -221,6 +221,7 @@ steps:
               scanners: misconfig,secret,vuln
               skip-files: "cosign.key,Dockerfile.dev"
               trivy-version: "0.57.1"
+              image-ref: "${IMAGE_REPO}:${IMAGE_TAG}"
       - label: ":docker: docker build and publish"
         key: "docker-build"
         cancel_on_build_failing: true
