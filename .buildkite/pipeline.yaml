@@ -103,8 +103,8 @@ steps:
         depends_on: ["go_test"]
         plugins:
           - cluster-secrets#v1.0.0:
-            variables:
-              SONAR_TOKEN: SONAR_TOKEN
+              variables:
+                SONAR_TOKEN: SONAR_TOKEN
           - artifacts#v1.9.4:
               download: "coverage.out"
               step: "go_test"
@@ -180,8 +180,8 @@ steps:
         key: "atlas_migrate"
         plugins:
           - cluster-secrets#v1.0.0:
-            variables:
-              ATLAS_CLOUD_TOKEN: ATLAS_CLOUD_TOKEN
+              variables:
+                ATLAS_CLOUD_TOKEN: ATLAS_CLOUD_TOKEN
           - theopenlane/atlas#v1.0.0:
               project: core
               dev-url: "docker://postgres/17/dev?search_path=public"
@@ -233,8 +233,8 @@ steps:
           ls
         plugins:
           - cluster-secrets#v1.0.0:
-            variables:
-              SECRET_GHCR_PUBLISH_TOKEN: SECRET_GHCR_PUBLISH_TOKEN
+              variables:
+                SECRET_GHCR_PUBLISH_TOKEN: SECRET_GHCR_PUBLISH_TOKEN
           - docker-login#v3.0.0:
               username: openlane-bender
               password-env: SECRET_GHCR_PUBLISH_TOKEN
@@ -263,8 +263,8 @@ steps:
           #!/bin/bash
         plugins:
           - cluster-secrets#v1.0.0:
-            variables:
-              SECRET_GCR_PUBLISH_TOKEN: SECRET_GCR_PUBLISH_TOKEN
+              variables:
+                SECRET_GCR_PUBLISH_TOKEN: SECRET_GCR_PUBLISH_TOKEN
           - docker-login#v3.0.0:
               username: _json_key_base64
               password-env: SECRET_GCR_PUBLISH_TOKEN
@@ -289,8 +289,8 @@ steps:
           #!/bin/bash
         plugins:
           - cluster-secrets#v1.0.0:
-            variables:
-              SECRET_GCR_PUBLISH_TOKEN: SECRET_GHCR_PUBLISH_TOKEN
+              variables:
+                SECRET_GCR_PUBLISH_TOKEN: SECRET_GHCR_PUBLISH_TOKEN
           - docker-login#v3.0.0:
               username: openlane-bender
               password-env: SECRET_GHCR_PUBLISH_TOKEN
@@ -313,8 +313,8 @@ steps:
           #!/bin/bash
         plugins:
           - cluster-secrets#v1.0.0:
-            variables:
-              SECRET_GCR_PUBLISH_TOKEN: SECRET_GCR_PUBLISH_TOKEN
+              variables:
+                SECRET_GCR_PUBLISH_TOKEN: SECRET_GCR_PUBLISH_TOKEN
           - docker-login#v3.0.0:
               username: _json_key_base64
               password-env: SECRET_GCR_PUBLISH_TOKEN
