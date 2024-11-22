@@ -52,6 +52,7 @@ steps:
         artifact_paths: ["coverage.out"]
       - label: ":golang: go test - {{matrix.version}}"
         key: "go_test"
+        cancel_on_build_failing: true
         agents:
           queue: "hosted-medium"
         retry:
@@ -88,6 +89,7 @@ steps:
     steps:
       - label: ":closed_lock_with_key: gosec"
         key: "gosec"
+        cancel_on_build_failing: true
         agents:
           queue: "hosted-large"
         plugins:
@@ -99,6 +101,7 @@ steps:
         artifact_paths: ["results.txt"]
       - label: ":github: upload PR reports"
         key: "scan-upload-pr"
+        cancel_on_build_failing: true
         if: build.pull_request.id != null
         depends_on: ["gosec", "go_test"]
         plugins:
@@ -118,6 +121,7 @@ steps:
                 - "SONAR_SCANNER_OPTS=-Dsonar.pullrequest.branch=$BUILDKITE_BRANCH -Dsonar.pullrequest.base=$BUILDKITE_PULL_REQUEST_BASE_BRANCH -Dsonar.pullrequest.key=$BUILDKITE_PULL_REQUEST"
       - label: ":github: upload reports"
         key: "scan-upload"
+        cancel_on_build_failing: true
         if: build.branch == "main"
         depends_on: ["gosec", "go_test"]
         plugins:
@@ -136,6 +140,7 @@ steps:
     steps:
       - label: ":golang: build"
         key: "gobuild-server"
+        cancel_on_build_failing: true
         agents:
           queue: "hosted-medium"
         artifact_paths: "bin/${APP_NAME}"
@@ -149,6 +154,7 @@ steps:
               command: ["task", "go:build:ci"]
       - label: ":terminal: build cli"
         key: "gobuild-cli"
+        cancel_on_build_failing: true
         artifact_paths: "bin/openlane-cli"
         plugins:
           - docker#v5.12.0:
@@ -187,11 +193,11 @@ steps:
   - group: ":docker: Image Build"
     depends_on: "go-builds"
     key: "image-build"
-    agents:
-      queue: "hosted-medium"
     steps:
       - label: ":docker: docker pr build"
         key: "docker-pr-build"
+        agents:
+          queue: "hosted-medium"
         cancel_on_build_failing: true
         if: build.branch != "main" && build.tag == null
         commands: |
@@ -216,6 +222,8 @@ steps:
               trivy-version: "0.55.2"
       - label: ":docker: docker build and publish"
         key: "docker-build"
+        agents:
+          queue: "hosted-medium"
         cancel_on_build_failing: true
         if: build.branch == "main"
         commands: |
@@ -248,6 +256,9 @@ steps:
       - label: ":docker: docker build and publish all in one"
         key: "docker-build-aio"
         if: build.branch == "main"
+        cancel_on_build_failing: true
+        agents:
+          queue: "hosted-medium"
         commands: |
           #!/bin/bash
         plugins:
@@ -278,6 +289,9 @@ steps:
               trivy-version: "0.55.2"
       - label: ":docker: docker build and publish"
         key: "docker-build-and-tag"
+        cancel_on_build_failing: true
+        agents:
+          queue: "hosted-medium"
         if: build.tag != null
         commands: |
           #!/bin/bash
@@ -307,6 +321,9 @@ steps:
               trivy-version: "0.55.2"
       - label: ":docker: docker build and publish all in one"
         key: "docker-build-aio-and-tag"
+        cancel_on_build_failing: true
+        agents:
+          queue: "hosted-medium"
         if: build.tag != null
         commands: |
           #!/bin/bash
