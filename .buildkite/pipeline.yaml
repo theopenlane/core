@@ -1,3 +1,6 @@
+agents:
+  queue: "default-hosted"
+
 env:
   APP_NAME: ${BUILDKITE_PIPELINE_SLUG}
   IMAGE_REPO: ghcr.io/theopenlane/${APP_NAME}
@@ -35,6 +38,8 @@ steps:
     key: "tests"
     steps:
       - label: ":golangci-lint: lint :lint-roller:"
+        agents:
+          queue: "hosted-large"
         cancel_on_build_failing: true
         key: "lint"
         plugins:
@@ -47,6 +52,8 @@ steps:
         artifact_paths: ["coverage.out"]
       - label: ":golang: go test - {{matrix.version}}"
         key: "go_test"
+        agents:
+          queue: "hosted-medium"
         retry:
           automatic:
             - exit_status: "*"
@@ -57,7 +64,7 @@ steps:
           setup:
             version:
               - 17-alpine
-              - 16-alpine
+              # - 16-alpine # don't test postgres 16 right now
         plugins:
           - docker#v5.12.0:
               image: ghcr.io/theopenlane/build-image:latest
