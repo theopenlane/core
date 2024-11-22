@@ -7,8 +7,6 @@ env:
   GCR_REPO: us-west1-docker.pkg.dev/neural-vista-433523-c1/openlane/openlane
   IMAGE_TAG: ${BUILDKITE_BUILD_NUMBER}-${BUILDKITE_COMMIT:0:8}
   SONAR_HOST: https://sonarcloud.io
-  # see https://github.com/aquasecurity/trivy/discussions/7668
-  TRIVY_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-db
 
 steps:
   - group: ":knife: Pre-check"
@@ -205,6 +203,9 @@ steps:
           #!/bin/bash
           ls
         plugins:
+          - cluster-secrets#v1.0.0:
+            variables:
+              GITHUB_TOKEN: GITHUB_TOKEN
           - theopenlane/docker-metadata#v1.0.0:
               images:
                 - "${IMAGE_REPO}"
@@ -232,6 +233,7 @@ steps:
           - cluster-secrets#v1.0.0:
             variables:
               SECRET_GHCR_PUBLISH_TOKEN: SECRET_GHCR_PUBLISH_TOKEN
+              GITHUB_TOKEN: GITHUB_TOKEN
           - docker-login#v3.0.0:
               username: openlane-bender
               password-env: SECRET_GHCR_PUBLISH_TOKEN
@@ -251,7 +253,7 @@ steps:
               ignore-unfixed: true
               scanners: misconfig,secret,vuln
               skip-files: "cosign.key,Dockerfile.dev"
-              trivy-version: "0.55.2"
+              trivy-version: "0.57.1"
       - label: ":docker: docker build and publish all in one"
         key: "docker-build-aio"
         if: build.branch == "main"
@@ -262,6 +264,7 @@ steps:
           - cluster-secrets#v1.0.0:
             variables:
               SECRET_GCR_PUBLISH_TOKEN: SECRET_GCR_PUBLISH_TOKEN
+              GITHUB_TOKEN: GITHUB_TOKEN
           - docker-login#v3.0.0:
               username: _json_key_base64
               password-env: SECRET_GCR_PUBLISH_TOKEN
@@ -283,7 +286,7 @@ steps:
               ignore-unfixed: true
               security-checks: config,secret,vuln
               skip-files: "cosign.key,Dockerfile.dev"
-              trivy-version: "0.55.2"
+              trivy-version: "0.57.1"
       - label: ":docker: docker build and publish"
         key: "docker-build-and-tag"
         cancel_on_build_failing: true
@@ -294,6 +297,7 @@ steps:
           - cluster-secrets#v1.0.0:
             variables:
               SECRET_GCR_PUBLISH_TOKEN: SECRET_GHCR_PUBLISH_TOKEN
+              GITHUB_TOKEN: GITHUB_TOKEN
           - docker-login#v3.0.0:
               username: openlane-bender
               password-env: SECRET_GHCR_PUBLISH_TOKEN
@@ -313,7 +317,7 @@ steps:
               ignore-unfixed: true
               scanners: misconfig,secret,vuln
               skip-files: "cosign.key,Dockerfile.dev"
-              trivy-version: "0.55.2"
+              trivy-version: "0.57.1"
       - label: ":docker: docker build and publish all in one"
         key: "docker-build-aio-and-tag"
         cancel_on_build_failing: true
@@ -324,6 +328,7 @@ steps:
           - cluster-secrets#v1.0.0:
             variables:
               SECRET_GCR_PUBLISH_TOKEN: SECRET_GCR_PUBLISH_TOKEN
+              GITHUB_TOKEN: GITHUB_TOKEN
           - docker-login#v3.0.0:
               username: _json_key_base64
               password-env: SECRET_GCR_PUBLISH_TOKEN
@@ -345,4 +350,4 @@ steps:
               ignore-unfixed: true
               scanners: misconfig,secret,vuln
               skip-files: "cosign.key,Dockerfile.dev"
-              trivy-version: "0.55.2"
+              trivy-version: "0.57.1"
