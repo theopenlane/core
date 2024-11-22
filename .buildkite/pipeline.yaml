@@ -53,8 +53,6 @@ steps:
       - label: ":golang: go test - {{matrix.version}}"
         key: "go_test"
         cancel_on_build_failing: true
-        agents:
-          queue: "hosted-medium"
         retry:
           automatic:
             - exit_status: "*"
@@ -65,7 +63,6 @@ steps:
           setup:
             version:
               - 17-alpine
-              # - 16-alpine # don't test postgres 16 right now
         plugins:
           - docker#v5.12.0:
               image: ghcr.io/theopenlane/build-image:latest
@@ -143,8 +140,6 @@ steps:
       - label: ":golang: build"
         key: "gobuild-server"
         cancel_on_build_failing: true
-        agents:
-          queue: "hosted-medium"
         artifact_paths: "bin/${APP_NAME}"
         plugins:
           - docker#v5.12.0:
@@ -204,8 +199,6 @@ steps:
     steps:
       - label: ":docker: docker pr build"
         key: "docker-pr-build"
-        agents:
-          queue: "hosted-medium"
         cancel_on_build_failing: true
         if: build.branch != "main" && build.tag == null
         commands: |
@@ -230,8 +223,6 @@ steps:
               trivy-version: "0.55.2"
       - label: ":docker: docker build and publish"
         key: "docker-build"
-        agents:
-          queue: "hosted-medium"
         cancel_on_build_failing: true
         if: build.branch == "main"
         commands: |
@@ -265,8 +256,6 @@ steps:
         key: "docker-build-aio"
         if: build.branch == "main"
         cancel_on_build_failing: true
-        agents:
-          queue: "hosted-medium"
         commands: |
           #!/bin/bash
         plugins:
@@ -298,8 +287,6 @@ steps:
       - label: ":docker: docker build and publish"
         key: "docker-build-and-tag"
         cancel_on_build_failing: true
-        agents:
-          queue: "hosted-medium"
         if: build.tag != null
         commands: |
           #!/bin/bash
@@ -330,8 +317,6 @@ steps:
       - label: ":docker: docker build and publish all in one"
         key: "docker-build-aio-and-tag"
         cancel_on_build_failing: true
-        agents:
-          queue: "hosted-medium"
         if: build.tag != null
         commands: |
           #!/bin/bash
