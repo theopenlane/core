@@ -195,39 +195,38 @@ steps:
     depends_on: "go-builds"
     key: "image-build"
     steps:
-      # - label: ":docker: docker pr build"
-      #   key: "docker-pr-build"
-      #   agents:
-      #     queue: "hosted-large"
-      #   cancel_on_build_failing: true
-      #   if: build.branch != "main" && build.tag == null
-      #   commands: |
-      #     #!/bin/bash
-      #     ls
-      #   plugins:
-      #     - theopenlane/docker-metadata#v1.0.0:
-      #         images:
-      #           - "${IMAGE_REPO}"
-      #         extra_tags:
-      #           - "${IMAGE_TAG}"
-      #     - theopenlane/container-build#v1.1.0:
-      #         dockerfile: docker/Dockerfile
-      #         push: false
-      #         build-args:
-      #           - NAME=${APP_NAME}
-      #     - equinixmetal-buildkite/trivy#v1.19.0:
-      #         severity: CRITICAL,HIGH
-      #         ignore-unfixed: true
-      #         scanners: misconfig,secret,vuln
-      #         skip-files: "cosign.key,Dockerfile.dev"
-      #         trivy-version: "0.57.1"
-      #         image-ref: "${IMAGE_REPO}:${IMAGE_TAG}"
+      - label: ":docker: docker pr build"
+        key: "docker-pr-build"
+        agents:
+          queue: "hosted-large"
+        cancel_on_build_failing: true
+        if: build.branch != "main" && build.tag == null
+        commands: |
+          #!/bin/bash
+          ls
+        plugins:
+          - theopenlane/docker-metadata#v1.0.0:
+              images:
+                - "${IMAGE_REPO}"
+              extra_tags:
+                - "${IMAGE_TAG}"
+          - theopenlane/container-build#v1.1.0:
+              dockerfile: docker/Dockerfile
+              push: false
+              build-args:
+                - NAME=${APP_NAME}
+          - equinixmetal-buildkite/trivy#v1.19.0:
+            severity: CRITICAL,HIGH
+            ignore-unfixed: true
+            scanners: misconfig,secret,vuln
+            skip-files: "cosign.key,Dockerfile.dev"
+            trivy-version: "0.57.1"
       - label: ":docker: docker build and publish"
         key: "docker-build"
         agents:
           queue: "hosted-large"
         cancel_on_build_failing: true
-        if: build.branch == "bk-test"
+        if: build.branch == "main"
         commands: |
           #!/bin/bash
           ls
