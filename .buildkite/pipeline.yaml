@@ -100,6 +100,9 @@ steps:
         if: build.pull_request.id != null
         depends_on: ["gosec", "go_test"]
         plugins:
+          - cluster-secrets#v1.0.0:
+            variables:
+              SONAR_TOKEN: SONAR_TOKEN
           - artifacts#v1.9.4:
               download: "results.txt"
           - artifacts#v1.9.4:
@@ -157,6 +160,9 @@ steps:
       - label: ":postgres: atlas lint"
         key: "atlas_lint"
         plugins:
+          - cluster-secrets#v1.0.0:
+              variables:
+                ATLAS_CLOUD_TOKEN: ATLAS_CLOUD_TOKEN
           - theopenlane/atlas#v1.0.0:
               project: core
               dev-url: "docker://postgres/17/dev?search_path=public"
@@ -166,6 +172,9 @@ steps:
         if: build.branch == "main"
         key: "atlas_migrate"
         plugins:
+          - cluster-secrets#v1.0.0:
+            variables:
+              ATLAS_CLOUD_TOKEN: ATLAS_CLOUD_TOKEN
           - theopenlane/atlas#v1.0.0:
               project: core
               dev-url: "docker://postgres/17/dev?search_path=public"
@@ -207,6 +216,9 @@ steps:
           #!/bin/bash
           ls
         plugins:
+          - cluster-secrets#v1.0.0:
+            variables:
+              SECRET_GHCR_PUBLISH_TOKEN: SECRET_GHCR_PUBLISH_TOKEN
           - docker-login#v3.0.0:
               username: openlane-bender
               password-env: SECRET_GHCR_PUBLISH_TOKEN
@@ -233,6 +245,9 @@ steps:
         commands: |
           #!/bin/bash
         plugins:
+          - cluster-secrets#v1.0.0:
+            variables:
+              SECRET_GCR_PUBLISH_TOKEN: SECRET_GCR_PUBLISH_TOKEN
           - docker-login#v3.0.0:
               username: _json_key_base64
               password-env: SECRET_GCR_PUBLISH_TOKEN
@@ -261,6 +276,9 @@ steps:
         commands: |
           #!/bin/bash
         plugins:
+          - cluster-secrets#v1.0.0:
+            variables:
+              SECRET_GCR_PUBLISH_TOKEN: SECRET_GHCR_PUBLISH_TOKEN
           - docker-login#v3.0.0:
               username: openlane-bender
               password-env: SECRET_GHCR_PUBLISH_TOKEN
@@ -287,6 +305,9 @@ steps:
         commands: |
           #!/bin/bash
         plugins:
+          - cluster-secrets#v1.0.0:
+            variables:
+              SECRET_GCR_PUBLISH_TOKEN: SECRET_GCR_PUBLISH_TOKEN
           - docker-login#v3.0.0:
               username: _json_key_base64
               password-env: SECRET_GCR_PUBLISH_TOKEN
