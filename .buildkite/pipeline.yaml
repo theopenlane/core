@@ -203,9 +203,6 @@ steps:
           #!/bin/bash
           ls
         plugins:
-          - cluster-secrets#v1.0.0:
-            variables:
-              GITHUB_TOKEN: GITHUB_TOKEN
           - theopenlane/docker-metadata#v1.0.0:
               images:
                 - "${IMAGE_REPO}"
@@ -233,7 +230,6 @@ steps:
           - cluster-secrets#v1.0.0:
             variables:
               SECRET_GHCR_PUBLISH_TOKEN: SECRET_GHCR_PUBLISH_TOKEN
-              GITHUB_TOKEN: GITHUB_TOKEN
           - docker-login#v3.0.0:
               username: openlane-bender
               password-env: SECRET_GHCR_PUBLISH_TOKEN
@@ -264,7 +260,6 @@ steps:
           - cluster-secrets#v1.0.0:
             variables:
               SECRET_GCR_PUBLISH_TOKEN: SECRET_GCR_PUBLISH_TOKEN
-              GITHUB_TOKEN: GITHUB_TOKEN
           - docker-login#v3.0.0:
               username: _json_key_base64
               password-env: SECRET_GCR_PUBLISH_TOKEN
@@ -297,7 +292,6 @@ steps:
           - cluster-secrets#v1.0.0:
             variables:
               SECRET_GCR_PUBLISH_TOKEN: SECRET_GHCR_PUBLISH_TOKEN
-              GITHUB_TOKEN: GITHUB_TOKEN
           - docker-login#v3.0.0:
               username: openlane-bender
               password-env: SECRET_GHCR_PUBLISH_TOKEN
@@ -328,7 +322,6 @@ steps:
           - cluster-secrets#v1.0.0:
             variables:
               SECRET_GCR_PUBLISH_TOKEN: SECRET_GCR_PUBLISH_TOKEN
-              GITHUB_TOKEN: GITHUB_TOKEN
           - docker-login#v3.0.0:
               username: _json_key_base64
               password-env: SECRET_GCR_PUBLISH_TOKEN
