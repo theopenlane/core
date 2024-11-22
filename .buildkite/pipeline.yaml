@@ -216,44 +216,42 @@ steps:
               build-args:
                 - NAME=${APP_NAME}
           - equinixmetal-buildkite/trivy#v1.19.0:
-            severity: CRITICAL,HIGH
-            ignore-unfixed: true
-            scanners: misconfig,secret,vuln
-            skip-files: "cosign.key,Dockerfile.dev"
-            trivy-version: "0.57.1"
-      - label: ":docker: docker build and publish"
-        key: "docker-build"
-        agents:
-          queue: "hosted-large"
-        cancel_on_build_failing: true
-        if: build.branch == "main"
-        commands: |
-          #!/bin/bash
-          ls
-        plugins:
-          - cluster-secrets#v1.0.0:
-              variables:
-                SECRET_GHCR_PUBLISH_TOKEN: SECRET_GHCR_PUBLISH_TOKEN
-          - docker-login#v3.0.0:
-              username: openlane-bender
-              password-env: SECRET_GHCR_PUBLISH_TOKEN
-              server: ghcr.io
-          - theopenlane/docker-metadata#v1.0.0:
-              images:
-                - "${IMAGE_REPO}"
-              extra_tags:
-                - "${IMAGE_TAG}"
-          - theopenlane/container-build#v1.1.0:
-              dockerfile: docker/Dockerfile
-              push: true
-              build-args:
-                - NAME=${APP_NAME}
-          - equinixmetal-buildkite/trivy#v1.19.0:
               severity: CRITICAL,HIGH
               ignore-unfixed: true
               scanners: misconfig,secret,vuln
               skip-files: "cosign.key,Dockerfile.dev"
               trivy-version: "0.57.1"
+    # - label: ":docker: docker build and publish"
+    #   key: "docker-build"
+    #   cancel_on_build_failing: true
+    #   if: build.branch == "bk-test"
+    #   commands: |
+    #     #!/bin/bash
+    #     ls
+    #   plugins:
+    #     - cluster-secrets#v1.0.0:
+    #       variables:
+    #         SECRET_GHCR_PUBLISH_TOKEN: SECRET_GHCR_PUBLISH_TOKEN
+    #     - docker-login#v3.0.0:
+    #         username: openlane-bender
+    #         password-env: SECRET_GHCR_PUBLISH_TOKEN
+    #         server: ghcr.io
+    #     - theopenlane/docker-metadata#v1.0.0:
+    #         images:
+    #           - "${IMAGE_REPO}"
+    #         extra_tags:
+    #           - "${IMAGE_TAG}"
+    #     - theopenlane/container-build#v1.1.0:
+    #         dockerfile: docker/Dockerfile
+    #         push: true
+    #         build-args:
+    #           - NAME=${APP_NAME}
+    #     - equinixmetal-buildkite/trivy#v1.19.0:
+    #         severity: CRITICAL,HIGH
+    #         ignore-unfixed: true
+    #         scanners: misconfig,secret,vuln
+    #         skip-files: "cosign.key,Dockerfile.dev"
+    #         trivy-version: "0.57.1"
     # - label: ":docker: docker build and publish all in one"
     #   key: "docker-build-aio"
     #   if: build.branch == "main"
