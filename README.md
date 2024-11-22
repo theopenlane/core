@@ -8,7 +8,7 @@
 
 </div>
 
-# openlane
+# openlane 
 
 This repository houses the core server and orchestration elements which are at
 the heart of the [openlane](https://theopenlane.io) cloud service.
