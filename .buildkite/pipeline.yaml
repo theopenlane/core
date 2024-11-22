@@ -197,6 +197,8 @@ steps:
     steps:
       - label: ":docker: docker pr build"
         key: "docker-pr-build"
+        agents:
+          queue: "hosted-large"
         cancel_on_build_failing: true
         if: build.branch != "main" && build.tag == null
         commands: |
