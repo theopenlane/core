@@ -205,6 +205,13 @@ steps:
           #!/bin/bash
           ls
         plugins:
+          - cluster-secrets#v1.0.0:
+            variables:
+              SECRET_GHCR_PUBLISH_TOKEN: SECRET_GHCR_PUBLISH_TOKEN
+          - docker-login#v3.0.0: # we need to login for the image to be accessible on the host
+              username: openlane-bender
+              password-env: SECRET_GHCR_PUBLISH_TOKEN
+              server: ghcr.io
           - theopenlane/docker-metadata#v1.0.0:
               images:
                 - "${IMAGE_REPO}"
