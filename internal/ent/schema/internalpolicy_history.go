@@ -2,6 +2,7 @@
 package schema
 
 import (
+	"context"
 	"time"
 
 	"entgo.io/contrib/entgql"
@@ -11,8 +12,12 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
+	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
+	"github.com/theopenlane/iam/entfga"
 )
 
 // InternalPolicyHistory holds the schema definition for the InternalPolicyHistory entity.
@@ -33,6 +38,11 @@ func (InternalPolicyHistory) Annotations() []schema.Annotation {
 		},
 		entgql.QueryField(),
 		entgql.RelayConnection(),
+		entfga.Annotations{
+			ObjectType:   "internalpolicy",
+			IDField:      "Ref",
+			IncludeHooks: false,
+		},
 	}
 }
 
@@ -86,5 +96,24 @@ func (InternalPolicyHistory) Fields() []ent.Field {
 func (InternalPolicyHistory) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("history_time"),
+	}
+}
+
+// Interceptors of the InternalPolicyHistory
+func (InternalPolicyHistory) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.HistoryAccess("audit_log_viewer", true, false),
+	}
+}
+
+// Policy of the InternalPolicyHistory
+func (InternalPolicyHistory) Policy() ent.Policy {
+	return privacy.Policy{
+		Query: privacy.QueryPolicy{
+			privacy.InternalPolicyHistoryQueryRuleFunc(func(ctx context.Context, q *generated.InternalPolicyHistoryQuery) error {
+				return q.CheckAccess(ctx)
+			}),
+			privacy.AlwaysDenyRule(),
+		},
 	}
 }

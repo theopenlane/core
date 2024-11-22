@@ -61,6 +61,14 @@ mutation CreateProcedure($input: CreateProcedureInput!) {
       updatedAt
       updatedBy
       version
+      editors{
+        id
+        name
+      }
+      blockedGroups{
+        id
+        name
+      }
     }
   }
 }
@@ -90,6 +98,14 @@ query GetAllProcedures {
         updatedAt
         updatedBy
         version
+        editors{
+          id
+          name
+        }
+        blockedGroups{
+          id
+          name
+        }
       }
     }
   }
@@ -111,6 +127,14 @@ query GetProcedureByID($procedureId: ID!) {
     updatedAt
     updatedBy
     version
+    editors{
+      id
+      name
+    }
+    blockedGroups{
+      id
+      name
+    }
   }
 }
 
@@ -133,6 +157,14 @@ query GetProcedures($where: ProcedureWhereInput) {
         updatedAt
         updatedBy
         version
+        editors{
+          id
+          name
+        }
+        blockedGroups{
+          id
+          name
+        }
       }
     }
   }
@@ -155,6 +187,14 @@ mutation UpdateProcedure($updateProcedureId: ID!, $input: UpdateProcedureInput!)
       updatedAt
       updatedBy
       version
+      editors{
+        id
+        name
+      }
+      blockedGroups{
+        id
+        name
+      }
     }
   }
 }

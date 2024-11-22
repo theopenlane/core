@@ -2024,18 +2024,45 @@ func init() {
 	// integrationhistory.DefaultID holds the default value on creation for the id field.
 	integrationhistory.DefaultID = integrationhistoryDescID.Default.(func() string)
 	internalpolicyMixin := schema.InternalPolicy{}.Mixin()
+	internalpolicy.Policy = privacy.NewPolicies(schema.InternalPolicy{})
+	internalpolicy.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := internalpolicy.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
 	internalpolicyMixinHooks0 := internalpolicyMixin[0].Hooks()
 	internalpolicyMixinHooks1 := internalpolicyMixin[1].Hooks()
-	internalpolicy.Hooks[0] = internalpolicyMixinHooks0[0]
-	internalpolicy.Hooks[1] = internalpolicyMixinHooks1[0]
+	internalpolicyMixinHooks4 := internalpolicyMixin[4].Hooks()
+	internalpolicyHooks := schema.InternalPolicy{}.Hooks()
+
+	internalpolicy.Hooks[1] = internalpolicyMixinHooks0[0]
+
+	internalpolicy.Hooks[2] = internalpolicyMixinHooks1[0]
+
+	internalpolicy.Hooks[3] = internalpolicyMixinHooks4[0]
+
+	internalpolicy.Hooks[4] = internalpolicyHooks[0]
+
+	internalpolicy.Hooks[5] = internalpolicyHooks[1]
+
+	internalpolicy.Hooks[6] = internalpolicyHooks[2]
 	internalpolicyMixinInters1 := internalpolicyMixin[1].Interceptors()
+	internalpolicyMixinInters4 := internalpolicyMixin[4].Interceptors()
+	internalpolicyInters := schema.InternalPolicy{}.Interceptors()
 	internalpolicy.Interceptors[0] = internalpolicyMixinInters1[0]
+	internalpolicy.Interceptors[1] = internalpolicyMixinInters4[0]
+	internalpolicy.Interceptors[2] = internalpolicyInters[0]
 	internalpolicyMixinFields0 := internalpolicyMixin[0].Fields()
 	_ = internalpolicyMixinFields0
 	internalpolicyMixinFields2 := internalpolicyMixin[2].Fields()
 	_ = internalpolicyMixinFields2
 	internalpolicyMixinFields3 := internalpolicyMixin[3].Fields()
 	_ = internalpolicyMixinFields3
+	internalpolicyMixinFields4 := internalpolicyMixin[4].Fields()
+	_ = internalpolicyMixinFields4
 	internalpolicyFields := schema.InternalPolicy{}.Fields()
 	_ = internalpolicyFields
 	// internalpolicyDescCreatedAt is the schema descriptor for created_at field.
@@ -2056,10 +2083,29 @@ func init() {
 	internalpolicyDescTags := internalpolicyMixinFields3[0].Descriptor()
 	// internalpolicy.DefaultTags holds the default value on creation for the tags field.
 	internalpolicy.DefaultTags = internalpolicyDescTags.Default.([]string)
+	// internalpolicyDescOwnerID is the schema descriptor for owner_id field.
+	internalpolicyDescOwnerID := internalpolicyMixinFields4[0].Descriptor()
+	// internalpolicy.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	internalpolicy.OwnerIDValidator = internalpolicyDescOwnerID.Validators[0].(func(string) error)
+	// internalpolicyDescName is the schema descriptor for name field.
+	internalpolicyDescName := internalpolicyFields[0].Descriptor()
+	// internalpolicy.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	internalpolicy.NameValidator = internalpolicyDescName.Validators[0].(func(string) error)
 	// internalpolicyDescID is the schema descriptor for id field.
 	internalpolicyDescID := internalpolicyMixinFields2[0].Descriptor()
 	// internalpolicy.DefaultID holds the default value on creation for the id field.
 	internalpolicy.DefaultID = internalpolicyDescID.Default.(func() string)
+	internalpolicyhistory.Policy = privacy.NewPolicies(schema.InternalPolicyHistory{})
+	internalpolicyhistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := internalpolicyhistory.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	internalpolicyhistoryInters := schema.InternalPolicyHistory{}.Interceptors()
+	internalpolicyhistory.Interceptors[0] = internalpolicyhistoryInters[0]
 	internalpolicyhistoryFields := schema.InternalPolicyHistory{}.Fields()
 	_ = internalpolicyhistoryFields
 	// internalpolicyhistoryDescHistoryTime is the schema descriptor for history_time field.
@@ -2983,18 +3029,45 @@ func init() {
 	// personalaccesstoken.DefaultID holds the default value on creation for the id field.
 	personalaccesstoken.DefaultID = personalaccesstokenDescID.Default.(func() string)
 	procedureMixin := schema.Procedure{}.Mixin()
+	procedure.Policy = privacy.NewPolicies(schema.Procedure{})
+	procedure.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := procedure.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
 	procedureMixinHooks0 := procedureMixin[0].Hooks()
 	procedureMixinHooks1 := procedureMixin[1].Hooks()
-	procedure.Hooks[0] = procedureMixinHooks0[0]
-	procedure.Hooks[1] = procedureMixinHooks1[0]
+	procedureMixinHooks4 := procedureMixin[4].Hooks()
+	procedureHooks := schema.Procedure{}.Hooks()
+
+	procedure.Hooks[1] = procedureMixinHooks0[0]
+
+	procedure.Hooks[2] = procedureMixinHooks1[0]
+
+	procedure.Hooks[3] = procedureMixinHooks4[0]
+
+	procedure.Hooks[4] = procedureHooks[0]
+
+	procedure.Hooks[5] = procedureHooks[1]
+
+	procedure.Hooks[6] = procedureHooks[2]
 	procedureMixinInters1 := procedureMixin[1].Interceptors()
+	procedureMixinInters4 := procedureMixin[4].Interceptors()
+	procedureInters := schema.Procedure{}.Interceptors()
 	procedure.Interceptors[0] = procedureMixinInters1[0]
+	procedure.Interceptors[1] = procedureMixinInters4[0]
+	procedure.Interceptors[2] = procedureInters[0]
 	procedureMixinFields0 := procedureMixin[0].Fields()
 	_ = procedureMixinFields0
 	procedureMixinFields2 := procedureMixin[2].Fields()
 	_ = procedureMixinFields2
 	procedureMixinFields3 := procedureMixin[3].Fields()
 	_ = procedureMixinFields3
+	procedureMixinFields4 := procedureMixin[4].Fields()
+	_ = procedureMixinFields4
 	procedureFields := schema.Procedure{}.Fields()
 	_ = procedureFields
 	// procedureDescCreatedAt is the schema descriptor for created_at field.
@@ -3015,10 +3088,29 @@ func init() {
 	procedureDescTags := procedureMixinFields3[0].Descriptor()
 	// procedure.DefaultTags holds the default value on creation for the tags field.
 	procedure.DefaultTags = procedureDescTags.Default.([]string)
+	// procedureDescOwnerID is the schema descriptor for owner_id field.
+	procedureDescOwnerID := procedureMixinFields4[0].Descriptor()
+	// procedure.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	procedure.OwnerIDValidator = procedureDescOwnerID.Validators[0].(func(string) error)
+	// procedureDescName is the schema descriptor for name field.
+	procedureDescName := procedureFields[0].Descriptor()
+	// procedure.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	procedure.NameValidator = procedureDescName.Validators[0].(func(string) error)
 	// procedureDescID is the schema descriptor for id field.
 	procedureDescID := procedureMixinFields2[0].Descriptor()
 	// procedure.DefaultID holds the default value on creation for the id field.
 	procedure.DefaultID = procedureDescID.Default.(func() string)
+	procedurehistory.Policy = privacy.NewPolicies(schema.ProcedureHistory{})
+	procedurehistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := procedurehistory.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	procedurehistoryInters := schema.ProcedureHistory{}.Interceptors()
+	procedurehistory.Interceptors[0] = procedurehistoryInters[0]
 	procedurehistoryFields := schema.ProcedureHistory{}.Fields()
 	_ = procedurehistoryFields
 	// procedurehistoryDescHistoryTime is the schema descriptor for history_time field.
@@ -3069,6 +3161,12 @@ func init() {
 	program.Hooks[3] = programMixinHooks4[0]
 
 	program.Hooks[4] = programHooks[0]
+
+	program.Hooks[5] = programHooks[1]
+
+	program.Hooks[6] = programHooks[2]
+
+	program.Hooks[7] = programHooks[3]
 	programMixinInters2 := programMixin[2].Interceptors()
 	programMixinInters4 := programMixin[4].Interceptors()
 	programInters := schema.Program{}.Interceptors()

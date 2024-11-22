@@ -41,6 +41,8 @@ type ProcedureHistory struct {
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// the organization id that owns the object
+	OwnerID string `json:"owner_id,omitempty"`
 	// the name of the procedure
 	Name string `json:"name,omitempty"`
 	// description of the procedure
@@ -71,7 +73,7 @@ func (*ProcedureHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case procedurehistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case procedurehistory.FieldID, procedurehistory.FieldRef, procedurehistory.FieldCreatedBy, procedurehistory.FieldUpdatedBy, procedurehistory.FieldDeletedBy, procedurehistory.FieldMappingID, procedurehistory.FieldName, procedurehistory.FieldDescription, procedurehistory.FieldStatus, procedurehistory.FieldProcedureType, procedurehistory.FieldVersion, procedurehistory.FieldPurposeAndScope, procedurehistory.FieldBackground, procedurehistory.FieldSatisfies:
+		case procedurehistory.FieldID, procedurehistory.FieldRef, procedurehistory.FieldCreatedBy, procedurehistory.FieldUpdatedBy, procedurehistory.FieldDeletedBy, procedurehistory.FieldMappingID, procedurehistory.FieldOwnerID, procedurehistory.FieldName, procedurehistory.FieldDescription, procedurehistory.FieldStatus, procedurehistory.FieldProcedureType, procedurehistory.FieldVersion, procedurehistory.FieldPurposeAndScope, procedurehistory.FieldBackground, procedurehistory.FieldSatisfies:
 			values[i] = new(sql.NullString)
 		case procedurehistory.FieldHistoryTime, procedurehistory.FieldCreatedAt, procedurehistory.FieldUpdatedAt, procedurehistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -163,6 +165,12 @@ func (ph *ProcedureHistory) assignValues(columns []string, values []any) error {
 				if err := json.Unmarshal(*value, &ph.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
+			}
+		case procedurehistory.FieldOwnerID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
+			} else if value.Valid {
+				ph.OwnerID = value.String
 			}
 		case procedurehistory.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -288,6 +296,9 @@ func (ph *ProcedureHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", ph.Tags))
+	builder.WriteString(", ")
+	builder.WriteString("owner_id=")
+	builder.WriteString(ph.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(ph.Name)

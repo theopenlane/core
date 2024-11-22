@@ -77,6 +77,8 @@ type SchemaConfig struct {
 	InternalPolicyProcedures         string // InternalPolicy-procedures->Procedure table.
 	InternalPolicyNarratives         string // InternalPolicy-narratives->Narrative table.
 	InternalPolicyTasks              string // InternalPolicy-tasks->Task table.
+	InternalPolicyEditors            string // InternalPolicy-editors->Group table.
+	InternalPolicyBlockedGroups      string // InternalPolicy-blocked_groups->Group table.
 	InternalPolicyHistory            string // InternalPolicyHistory table.
 	Invite                           string // Invite table.
 	InviteEvents                     string // Invite-events->Event table.
@@ -108,6 +110,8 @@ type SchemaConfig struct {
 	ProcedureNarratives              string // Procedure-narratives->Narrative table.
 	ProcedureRisks                   string // Procedure-risks->Risk table.
 	ProcedureTasks                   string // Procedure-tasks->Task table.
+	ProcedureEditors                 string // Procedure-editors->Group table.
+	ProcedureBlockedGroups           string // Procedure-blocked_groups->Group table.
 	ProcedureHistory                 string // ProcedureHistory table.
 	Program                          string // Program table.
 	ProgramControls                  string // Program-controls->Control table.
@@ -121,6 +125,9 @@ type SchemaConfig struct {
 	ProgramFiles                     string // Program-files->File table.
 	ProgramNarratives                string // Program-narratives->Narrative table.
 	ProgramActionplans               string // Program-actionplans->ActionPlan table.
+	ProgramViewers                   string // Program-viewers->Group table.
+	ProgramEditors                   string // Program-editors->Group table.
+	ProgramBlockedGroups             string // Program-blocked_groups->Group table.
 	ProgramHistory                   string // ProgramHistory table.
 	ProgramMembership                string // ProgramMembership table.
 	ProgramMembershipHistory         string // ProgramMembershipHistory table.

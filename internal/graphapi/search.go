@@ -672,6 +672,7 @@ func adminSearchInternalPolicies(ctx context.Context, query string) ([]*generate
 				likeQuery := "%" + query + "%"
 				s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
 			},
+			internalpolicy.OwnerIDContainsFold(query),         // search by OwnerID
 			internalpolicy.NameContainsFold(query),            // search by Name
 			internalpolicy.DescriptionContainsFold(query),     // search by Description
 			internalpolicy.StatusContainsFold(query),          // search by Status
@@ -681,7 +682,7 @@ func adminSearchInternalPolicies(ctx context.Context, query string) ([]*generate
 			internalpolicy.BackgroundContainsFold(query),      // search by Background
 			func(s *sql.Selector) {
 				likeQuery := "%" + query + "%"
-				s.Where(sql.ExprP("(details)::text LIKE $11", likeQuery)) // search by Details
+				s.Where(sql.ExprP("(details)::text LIKE $12", likeQuery)) // search by Details
 			},
 		),
 	).All(ctx)
@@ -927,6 +928,7 @@ func adminSearchProcedures(ctx context.Context, query string) ([]*generated.Proc
 				likeQuery := "%" + query + "%"
 				s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
 			},
+			procedure.OwnerIDContainsFold(query),         // search by OwnerID
 			procedure.NameContainsFold(query),            // search by Name
 			procedure.DescriptionContainsFold(query),     // search by Description
 			procedure.StatusContainsFold(query),          // search by Status
@@ -937,7 +939,7 @@ func adminSearchProcedures(ctx context.Context, query string) ([]*generated.Proc
 			procedure.SatisfiesContainsFold(query),       // search by Satisfies
 			func(s *sql.Selector) {
 				likeQuery := "%" + query + "%"
-				s.Where(sql.ExprP("(details)::text LIKE $12", likeQuery)) // search by Details
+				s.Where(sql.ExprP("(details)::text LIKE $13", likeQuery)) // search by Details
 			},
 		),
 	).All(ctx)

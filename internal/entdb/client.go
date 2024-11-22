@@ -225,7 +225,9 @@ func NewTestFixture() *testutils.TestFixture {
 		panic(fmt.Sprintf("failed to convert TEST_DB_CONTAINER_EXPIRY to int: %v", err))
 	}
 
-	return testutils.GetTestURI(testDBURI, expiry)
+	return testutils.GetTestURI(testutils.WithImage(testDBURI),
+		testutils.WithExpiryMinutes(expiry),
+		testutils.WithMaxConn(200)) // nolint:mnd
 }
 
 // NewTestClient creates a entdb client that can be used for TEST purposes ONLY

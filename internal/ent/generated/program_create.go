@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/note"
@@ -470,6 +471,51 @@ func (pc *ProgramCreate) AddUsers(u ...*User) *ProgramCreate {
 		ids[i] = u[i].ID
 	}
 	return pc.AddUserIDs(ids...)
+}
+
+// AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
+func (pc *ProgramCreate) AddViewerIDs(ids ...string) *ProgramCreate {
+	pc.mutation.AddViewerIDs(ids...)
+	return pc
+}
+
+// AddViewers adds the "viewers" edges to the Group entity.
+func (pc *ProgramCreate) AddViewers(g ...*Group) *ProgramCreate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return pc.AddViewerIDs(ids...)
+}
+
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (pc *ProgramCreate) AddEditorIDs(ids ...string) *ProgramCreate {
+	pc.mutation.AddEditorIDs(ids...)
+	return pc
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (pc *ProgramCreate) AddEditors(g ...*Group) *ProgramCreate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return pc.AddEditorIDs(ids...)
+}
+
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (pc *ProgramCreate) AddBlockedGroupIDs(ids ...string) *ProgramCreate {
+	pc.mutation.AddBlockedGroupIDs(ids...)
+	return pc
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (pc *ProgramCreate) AddBlockedGroups(g ...*Group) *ProgramCreate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return pc.AddBlockedGroupIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the ProgramMembership entity by IDs.
@@ -953,6 +999,57 @@ func (pc *ProgramCreate) createSpec() (*Program, *sqlgraph.CreateSpec) {
 		edge.Target.Fields = specE.Fields
 		if specE.ID.Value != nil {
 			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := pc.mutation.ViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   program.ViewersTable,
+			Columns: program.ViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pc.schemaConfig.ProgramViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := pc.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   program.EditorsTable,
+			Columns: program.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pc.schemaConfig.ProgramEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := pc.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   program.BlockedGroupsTable,
+			Columns: program.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pc.schemaConfig.ProgramBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}

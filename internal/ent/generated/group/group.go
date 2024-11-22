@@ -57,6 +57,20 @@ const (
 	EdgeFiles = "files"
 	// EdgeTasks holds the string denoting the tasks edge name in mutations.
 	EdgeTasks = "tasks"
+	// EdgeProcedureEditors holds the string denoting the procedure_editors edge name in mutations.
+	EdgeProcedureEditors = "procedure_editors"
+	// EdgeProcedureBlockedGroups holds the string denoting the procedure_blocked_groups edge name in mutations.
+	EdgeProcedureBlockedGroups = "procedure_blocked_groups"
+	// EdgeInternalpolicyEditors holds the string denoting the internalpolicy_editors edge name in mutations.
+	EdgeInternalpolicyEditors = "internalpolicy_editors"
+	// EdgeInternalpolicyBlockedGroups holds the string denoting the internalpolicy_blocked_groups edge name in mutations.
+	EdgeInternalpolicyBlockedGroups = "internalpolicy_blocked_groups"
+	// EdgeProgramViewers holds the string denoting the program_viewers edge name in mutations.
+	EdgeProgramViewers = "program_viewers"
+	// EdgeProgramEditors holds the string denoting the program_editors edge name in mutations.
+	EdgeProgramEditors = "program_editors"
+	// EdgeProgramBlockedGroups holds the string denoting the program_blocked_groups edge name in mutations.
+	EdgeProgramBlockedGroups = "program_blocked_groups"
 	// EdgeMembers holds the string denoting the members edge name in mutations.
 	EdgeMembers = "members"
 	// Table holds the table name of the group in the database.
@@ -102,6 +116,41 @@ const (
 	// TasksInverseTable is the table name for the Task entity.
 	// It exists in this package in order to avoid circular dependency with the "task" package.
 	TasksInverseTable = "tasks"
+	// ProcedureEditorsTable is the table that holds the procedure_editors relation/edge. The primary key declared below.
+	ProcedureEditorsTable = "procedure_editors"
+	// ProcedureEditorsInverseTable is the table name for the Procedure entity.
+	// It exists in this package in order to avoid circular dependency with the "procedure" package.
+	ProcedureEditorsInverseTable = "procedures"
+	// ProcedureBlockedGroupsTable is the table that holds the procedure_blocked_groups relation/edge. The primary key declared below.
+	ProcedureBlockedGroupsTable = "procedure_blocked_groups"
+	// ProcedureBlockedGroupsInverseTable is the table name for the Procedure entity.
+	// It exists in this package in order to avoid circular dependency with the "procedure" package.
+	ProcedureBlockedGroupsInverseTable = "procedures"
+	// InternalpolicyEditorsTable is the table that holds the internalpolicy_editors relation/edge. The primary key declared below.
+	InternalpolicyEditorsTable = "internal_policy_editors"
+	// InternalpolicyEditorsInverseTable is the table name for the InternalPolicy entity.
+	// It exists in this package in order to avoid circular dependency with the "internalpolicy" package.
+	InternalpolicyEditorsInverseTable = "internal_policies"
+	// InternalpolicyBlockedGroupsTable is the table that holds the internalpolicy_blocked_groups relation/edge. The primary key declared below.
+	InternalpolicyBlockedGroupsTable = "internal_policy_blocked_groups"
+	// InternalpolicyBlockedGroupsInverseTable is the table name for the InternalPolicy entity.
+	// It exists in this package in order to avoid circular dependency with the "internalpolicy" package.
+	InternalpolicyBlockedGroupsInverseTable = "internal_policies"
+	// ProgramViewersTable is the table that holds the program_viewers relation/edge. The primary key declared below.
+	ProgramViewersTable = "program_viewers"
+	// ProgramViewersInverseTable is the table name for the Program entity.
+	// It exists in this package in order to avoid circular dependency with the "program" package.
+	ProgramViewersInverseTable = "programs"
+	// ProgramEditorsTable is the table that holds the program_editors relation/edge. The primary key declared below.
+	ProgramEditorsTable = "program_editors"
+	// ProgramEditorsInverseTable is the table name for the Program entity.
+	// It exists in this package in order to avoid circular dependency with the "program" package.
+	ProgramEditorsInverseTable = "programs"
+	// ProgramBlockedGroupsTable is the table that holds the program_blocked_groups relation/edge. The primary key declared below.
+	ProgramBlockedGroupsTable = "program_blocked_groups"
+	// ProgramBlockedGroupsInverseTable is the table name for the Program entity.
+	// It exists in this package in order to avoid circular dependency with the "program" package.
+	ProgramBlockedGroupsInverseTable = "programs"
 	// MembersTable is the table that holds the members relation/edge.
 	MembersTable = "group_memberships"
 	// MembersInverseTable is the table name for the GroupMembership entity.
@@ -143,6 +192,27 @@ var (
 	// TasksPrimaryKey and TasksColumn2 are the table columns denoting the
 	// primary key for the tasks relation (M2M).
 	TasksPrimaryKey = []string{"group_id", "task_id"}
+	// ProcedureEditorsPrimaryKey and ProcedureEditorsColumn2 are the table columns denoting the
+	// primary key for the procedure_editors relation (M2M).
+	ProcedureEditorsPrimaryKey = []string{"procedure_id", "group_id"}
+	// ProcedureBlockedGroupsPrimaryKey and ProcedureBlockedGroupsColumn2 are the table columns denoting the
+	// primary key for the procedure_blocked_groups relation (M2M).
+	ProcedureBlockedGroupsPrimaryKey = []string{"procedure_id", "group_id"}
+	// InternalpolicyEditorsPrimaryKey and InternalpolicyEditorsColumn2 are the table columns denoting the
+	// primary key for the internalpolicy_editors relation (M2M).
+	InternalpolicyEditorsPrimaryKey = []string{"internal_policy_id", "group_id"}
+	// InternalpolicyBlockedGroupsPrimaryKey and InternalpolicyBlockedGroupsColumn2 are the table columns denoting the
+	// primary key for the internalpolicy_blocked_groups relation (M2M).
+	InternalpolicyBlockedGroupsPrimaryKey = []string{"internal_policy_id", "group_id"}
+	// ProgramViewersPrimaryKey and ProgramViewersColumn2 are the table columns denoting the
+	// primary key for the program_viewers relation (M2M).
+	ProgramViewersPrimaryKey = []string{"program_id", "group_id"}
+	// ProgramEditorsPrimaryKey and ProgramEditorsColumn2 are the table columns denoting the
+	// primary key for the program_editors relation (M2M).
+	ProgramEditorsPrimaryKey = []string{"program_id", "group_id"}
+	// ProgramBlockedGroupsPrimaryKey and ProgramBlockedGroupsColumn2 are the table columns denoting the
+	// primary key for the program_blocked_groups relation (M2M).
+	ProgramBlockedGroupsPrimaryKey = []string{"program_id", "group_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -343,6 +413,104 @@ func ByTasks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByProcedureEditorsCount orders the results by procedure_editors count.
+func ByProcedureEditorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newProcedureEditorsStep(), opts...)
+	}
+}
+
+// ByProcedureEditors orders the results by procedure_editors terms.
+func ByProcedureEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newProcedureEditorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByProcedureBlockedGroupsCount orders the results by procedure_blocked_groups count.
+func ByProcedureBlockedGroupsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newProcedureBlockedGroupsStep(), opts...)
+	}
+}
+
+// ByProcedureBlockedGroups orders the results by procedure_blocked_groups terms.
+func ByProcedureBlockedGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newProcedureBlockedGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByInternalpolicyEditorsCount orders the results by internalpolicy_editors count.
+func ByInternalpolicyEditorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newInternalpolicyEditorsStep(), opts...)
+	}
+}
+
+// ByInternalpolicyEditors orders the results by internalpolicy_editors terms.
+func ByInternalpolicyEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newInternalpolicyEditorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByInternalpolicyBlockedGroupsCount orders the results by internalpolicy_blocked_groups count.
+func ByInternalpolicyBlockedGroupsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newInternalpolicyBlockedGroupsStep(), opts...)
+	}
+}
+
+// ByInternalpolicyBlockedGroups orders the results by internalpolicy_blocked_groups terms.
+func ByInternalpolicyBlockedGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newInternalpolicyBlockedGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByProgramViewersCount orders the results by program_viewers count.
+func ByProgramViewersCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newProgramViewersStep(), opts...)
+	}
+}
+
+// ByProgramViewers orders the results by program_viewers terms.
+func ByProgramViewers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newProgramViewersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByProgramEditorsCount orders the results by program_editors count.
+func ByProgramEditorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newProgramEditorsStep(), opts...)
+	}
+}
+
+// ByProgramEditors orders the results by program_editors terms.
+func ByProgramEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newProgramEditorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByProgramBlockedGroupsCount orders the results by program_blocked_groups count.
+func ByProgramBlockedGroupsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newProgramBlockedGroupsStep(), opts...)
+	}
+}
+
+// ByProgramBlockedGroups orders the results by program_blocked_groups terms.
+func ByProgramBlockedGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newProgramBlockedGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByMembersCount orders the results by members count.
 func ByMembersCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -403,6 +571,55 @@ func newTasksStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TasksInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, TasksTable, TasksPrimaryKey...),
+	)
+}
+func newProcedureEditorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ProcedureEditorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ProcedureEditorsTable, ProcedureEditorsPrimaryKey...),
+	)
+}
+func newProcedureBlockedGroupsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ProcedureBlockedGroupsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ProcedureBlockedGroupsTable, ProcedureBlockedGroupsPrimaryKey...),
+	)
+}
+func newInternalpolicyEditorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(InternalpolicyEditorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, InternalpolicyEditorsTable, InternalpolicyEditorsPrimaryKey...),
+	)
+}
+func newInternalpolicyBlockedGroupsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(InternalpolicyBlockedGroupsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, InternalpolicyBlockedGroupsTable, InternalpolicyBlockedGroupsPrimaryKey...),
+	)
+}
+func newProgramViewersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ProgramViewersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ProgramViewersTable, ProgramViewersPrimaryKey...),
+	)
+}
+func newProgramEditorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ProgramEditorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ProgramEditorsTable, ProgramEditorsPrimaryKey...),
+	)
+}
+func newProgramBlockedGroupsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ProgramBlockedGroupsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ProgramBlockedGroupsTable, ProgramBlockedGroupsPrimaryKey...),
 	)
 }
 func newMembersStep() *sqlgraph.Step {

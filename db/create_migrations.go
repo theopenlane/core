@@ -52,7 +52,9 @@ func main() {
 		log.Fatalln("failed to load the ATLAS_POSTGRES_DB_URI env var")
 	}
 
-	tf, err := testutils.GetPostgresDockerTest(pgDBURI, 5*time.Minute)
+	maxConnections := 10
+
+	tf, err := testutils.GetPostgresDockerTest(pgDBURI, 5*time.Minute, maxConnections)
 	if err != nil {
 		log.Fatalf("failed creating postgres test container: %v", err)
 	}

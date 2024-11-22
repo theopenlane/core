@@ -26,6 +26,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/oauthprovider"
@@ -34,6 +35,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/task"
@@ -639,6 +641,36 @@ func (ou *OrganizationUpdate) AddPrograms(p ...*Program) *OrganizationUpdate {
 	return ou.AddProgramIDs(ids...)
 }
 
+// AddProcedureIDs adds the "procedures" edge to the Procedure entity by IDs.
+func (ou *OrganizationUpdate) AddProcedureIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.AddProcedureIDs(ids...)
+	return ou
+}
+
+// AddProcedures adds the "procedures" edges to the Procedure entity.
+func (ou *OrganizationUpdate) AddProcedures(p ...*Procedure) *OrganizationUpdate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return ou.AddProcedureIDs(ids...)
+}
+
+// AddInternalpolicyIDs adds the "internalpolicies" edge to the InternalPolicy entity by IDs.
+func (ou *OrganizationUpdate) AddInternalpolicyIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.AddInternalpolicyIDs(ids...)
+	return ou
+}
+
+// AddInternalpolicies adds the "internalpolicies" edges to the InternalPolicy entity.
+func (ou *OrganizationUpdate) AddInternalpolicies(i ...*InternalPolicy) *OrganizationUpdate {
+	ids := make([]string, len(i))
+	for j := range i {
+		ids[j] = i[j].ID
+	}
+	return ou.AddInternalpolicyIDs(ids...)
+}
+
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
 func (ou *OrganizationUpdate) AddMemberIDs(ids ...string) *OrganizationUpdate {
 	ou.mutation.AddMemberIDs(ids...)
@@ -1209,6 +1241,48 @@ func (ou *OrganizationUpdate) RemovePrograms(p ...*Program) *OrganizationUpdate 
 		ids[i] = p[i].ID
 	}
 	return ou.RemoveProgramIDs(ids...)
+}
+
+// ClearProcedures clears all "procedures" edges to the Procedure entity.
+func (ou *OrganizationUpdate) ClearProcedures() *OrganizationUpdate {
+	ou.mutation.ClearProcedures()
+	return ou
+}
+
+// RemoveProcedureIDs removes the "procedures" edge to Procedure entities by IDs.
+func (ou *OrganizationUpdate) RemoveProcedureIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.RemoveProcedureIDs(ids...)
+	return ou
+}
+
+// RemoveProcedures removes "procedures" edges to Procedure entities.
+func (ou *OrganizationUpdate) RemoveProcedures(p ...*Procedure) *OrganizationUpdate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return ou.RemoveProcedureIDs(ids...)
+}
+
+// ClearInternalpolicies clears all "internalpolicies" edges to the InternalPolicy entity.
+func (ou *OrganizationUpdate) ClearInternalpolicies() *OrganizationUpdate {
+	ou.mutation.ClearInternalpolicies()
+	return ou
+}
+
+// RemoveInternalpolicyIDs removes the "internalpolicies" edge to InternalPolicy entities by IDs.
+func (ou *OrganizationUpdate) RemoveInternalpolicyIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.RemoveInternalpolicyIDs(ids...)
+	return ou
+}
+
+// RemoveInternalpolicies removes "internalpolicies" edges to InternalPolicy entities.
+func (ou *OrganizationUpdate) RemoveInternalpolicies(i ...*InternalPolicy) *OrganizationUpdate {
+	ids := make([]string, len(i))
+	for j := range i {
+		ids[j] = i[j].ID
+	}
+	return ou.RemoveInternalpolicyIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -2677,6 +2751,102 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if ou.mutation.ProceduresCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ProceduresTable,
+			Columns: []string{organization.ProceduresColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Procedure
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.RemovedProceduresIDs(); len(nodes) > 0 && !ou.mutation.ProceduresCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ProceduresTable,
+			Columns: []string{organization.ProceduresColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Procedure
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.ProceduresIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ProceduresTable,
+			Columns: []string{organization.ProceduresColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Procedure
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ou.mutation.InternalpoliciesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.InternalpoliciesTable,
+			Columns: []string{organization.InternalpoliciesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.InternalPolicy
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.RemovedInternalpoliciesIDs(); len(nodes) > 0 && !ou.mutation.InternalpoliciesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.InternalpoliciesTable,
+			Columns: []string{organization.InternalpoliciesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.InternalPolicy
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.InternalpoliciesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.InternalpoliciesTable,
+			Columns: []string{organization.InternalpoliciesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.InternalPolicy
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if ou.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -3330,6 +3500,36 @@ func (ouo *OrganizationUpdateOne) AddPrograms(p ...*Program) *OrganizationUpdate
 	return ouo.AddProgramIDs(ids...)
 }
 
+// AddProcedureIDs adds the "procedures" edge to the Procedure entity by IDs.
+func (ouo *OrganizationUpdateOne) AddProcedureIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.AddProcedureIDs(ids...)
+	return ouo
+}
+
+// AddProcedures adds the "procedures" edges to the Procedure entity.
+func (ouo *OrganizationUpdateOne) AddProcedures(p ...*Procedure) *OrganizationUpdateOne {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return ouo.AddProcedureIDs(ids...)
+}
+
+// AddInternalpolicyIDs adds the "internalpolicies" edge to the InternalPolicy entity by IDs.
+func (ouo *OrganizationUpdateOne) AddInternalpolicyIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.AddInternalpolicyIDs(ids...)
+	return ouo
+}
+
+// AddInternalpolicies adds the "internalpolicies" edges to the InternalPolicy entity.
+func (ouo *OrganizationUpdateOne) AddInternalpolicies(i ...*InternalPolicy) *OrganizationUpdateOne {
+	ids := make([]string, len(i))
+	for j := range i {
+		ids[j] = i[j].ID
+	}
+	return ouo.AddInternalpolicyIDs(ids...)
+}
+
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
 func (ouo *OrganizationUpdateOne) AddMemberIDs(ids ...string) *OrganizationUpdateOne {
 	ouo.mutation.AddMemberIDs(ids...)
@@ -3900,6 +4100,48 @@ func (ouo *OrganizationUpdateOne) RemovePrograms(p ...*Program) *OrganizationUpd
 		ids[i] = p[i].ID
 	}
 	return ouo.RemoveProgramIDs(ids...)
+}
+
+// ClearProcedures clears all "procedures" edges to the Procedure entity.
+func (ouo *OrganizationUpdateOne) ClearProcedures() *OrganizationUpdateOne {
+	ouo.mutation.ClearProcedures()
+	return ouo
+}
+
+// RemoveProcedureIDs removes the "procedures" edge to Procedure entities by IDs.
+func (ouo *OrganizationUpdateOne) RemoveProcedureIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.RemoveProcedureIDs(ids...)
+	return ouo
+}
+
+// RemoveProcedures removes "procedures" edges to Procedure entities.
+func (ouo *OrganizationUpdateOne) RemoveProcedures(p ...*Procedure) *OrganizationUpdateOne {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return ouo.RemoveProcedureIDs(ids...)
+}
+
+// ClearInternalpolicies clears all "internalpolicies" edges to the InternalPolicy entity.
+func (ouo *OrganizationUpdateOne) ClearInternalpolicies() *OrganizationUpdateOne {
+	ouo.mutation.ClearInternalpolicies()
+	return ouo
+}
+
+// RemoveInternalpolicyIDs removes the "internalpolicies" edge to InternalPolicy entities by IDs.
+func (ouo *OrganizationUpdateOne) RemoveInternalpolicyIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.RemoveInternalpolicyIDs(ids...)
+	return ouo
+}
+
+// RemoveInternalpolicies removes "internalpolicies" edges to InternalPolicy entities.
+func (ouo *OrganizationUpdateOne) RemoveInternalpolicies(i ...*InternalPolicy) *OrganizationUpdateOne {
+	ids := make([]string, len(i))
+	for j := range i {
+		ids[j] = i[j].ID
+	}
+	return ouo.RemoveInternalpolicyIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -5393,6 +5635,102 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 			},
 		}
 		edge.Schema = ouo.schemaConfig.Program
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ouo.mutation.ProceduresCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ProceduresTable,
+			Columns: []string{organization.ProceduresColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Procedure
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.RemovedProceduresIDs(); len(nodes) > 0 && !ouo.mutation.ProceduresCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ProceduresTable,
+			Columns: []string{organization.ProceduresColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Procedure
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.ProceduresIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ProceduresTable,
+			Columns: []string{organization.ProceduresColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Procedure
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ouo.mutation.InternalpoliciesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.InternalpoliciesTable,
+			Columns: []string{organization.InternalpoliciesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.InternalPolicy
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.RemovedInternalpoliciesIDs(); len(nodes) > 0 && !ouo.mutation.InternalpoliciesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.InternalpoliciesTable,
+			Columns: []string{organization.InternalpoliciesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.InternalPolicy
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.InternalpoliciesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.InternalpoliciesTable,
+			Columns: []string{organization.InternalpoliciesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.InternalPolicy
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

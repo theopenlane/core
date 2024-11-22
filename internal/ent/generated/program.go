@@ -90,13 +90,19 @@ type ProgramEdges struct {
 	Standards []*Standard `json:"standards,omitempty"`
 	// Users holds the value of the users edge.
 	Users []*User `json:"users,omitempty"`
+	// provides view access to the program to members of the group
+	Viewers []*Group `json:"viewers,omitempty"`
+	// provides edit access to the program to members of the group
+	Editors []*Group `json:"editors,omitempty"`
+	// groups that are blocked from viewing or editing the program
+	BlockedGroups []*Group `json:"blocked_groups,omitempty"`
 	// Members holds the value of the members edge.
 	Members []*ProgramMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [15]bool
+	loadedTypes [18]bool
 	// totalCount holds the count of the edges above.
-	totalCount [15]map[string]int
+	totalCount [18]map[string]int
 
 	namedControls          map[string][]*Control
 	namedSubcontrols       map[string][]*Subcontrol
@@ -111,6 +117,9 @@ type ProgramEdges struct {
 	namedActionplans       map[string][]*ActionPlan
 	namedStandards         map[string][]*Standard
 	namedUsers             map[string][]*User
+	namedViewers           map[string][]*Group
+	namedEditors           map[string][]*Group
+	namedBlockedGroups     map[string][]*Group
 	namedMembers           map[string][]*ProgramMembership
 }
 
@@ -242,10 +251,37 @@ func (e ProgramEdges) UsersOrErr() ([]*User, error) {
 	return nil, &NotLoadedError{edge: "users"}
 }
 
+// ViewersOrErr returns the Viewers value or an error if the edge
+// was not loaded in eager-loading.
+func (e ProgramEdges) ViewersOrErr() ([]*Group, error) {
+	if e.loadedTypes[14] {
+		return e.Viewers, nil
+	}
+	return nil, &NotLoadedError{edge: "viewers"}
+}
+
+// EditorsOrErr returns the Editors value or an error if the edge
+// was not loaded in eager-loading.
+func (e ProgramEdges) EditorsOrErr() ([]*Group, error) {
+	if e.loadedTypes[15] {
+		return e.Editors, nil
+	}
+	return nil, &NotLoadedError{edge: "editors"}
+}
+
+// BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
+// was not loaded in eager-loading.
+func (e ProgramEdges) BlockedGroupsOrErr() ([]*Group, error) {
+	if e.loadedTypes[16] {
+		return e.BlockedGroups, nil
+	}
+	return nil, &NotLoadedError{edge: "blocked_groups"}
+}
+
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProgramEdges) MembersOrErr() ([]*ProgramMembership, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[17] {
 		return e.Members, nil
 	}
 	return nil, &NotLoadedError{edge: "members"}
@@ -470,6 +506,21 @@ func (pr *Program) QueryStandards() *StandardQuery {
 // QueryUsers queries the "users" edge of the Program entity.
 func (pr *Program) QueryUsers() *UserQuery {
 	return NewProgramClient(pr.config).QueryUsers(pr)
+}
+
+// QueryViewers queries the "viewers" edge of the Program entity.
+func (pr *Program) QueryViewers() *GroupQuery {
+	return NewProgramClient(pr.config).QueryViewers(pr)
+}
+
+// QueryEditors queries the "editors" edge of the Program entity.
+func (pr *Program) QueryEditors() *GroupQuery {
+	return NewProgramClient(pr.config).QueryEditors(pr)
+}
+
+// QueryBlockedGroups queries the "blocked_groups" edge of the Program entity.
+func (pr *Program) QueryBlockedGroups() *GroupQuery {
+	return NewProgramClient(pr.config).QueryBlockedGroups(pr)
 }
 
 // QueryMembers queries the "members" edge of the Program entity.
@@ -863,6 +914,78 @@ func (pr *Program) appendNamedUsers(name string, edges ...*User) {
 		pr.Edges.namedUsers[name] = []*User{}
 	} else {
 		pr.Edges.namedUsers[name] = append(pr.Edges.namedUsers[name], edges...)
+	}
+}
+
+// NamedViewers returns the Viewers named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (pr *Program) NamedViewers(name string) ([]*Group, error) {
+	if pr.Edges.namedViewers == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := pr.Edges.namedViewers[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (pr *Program) appendNamedViewers(name string, edges ...*Group) {
+	if pr.Edges.namedViewers == nil {
+		pr.Edges.namedViewers = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		pr.Edges.namedViewers[name] = []*Group{}
+	} else {
+		pr.Edges.namedViewers[name] = append(pr.Edges.namedViewers[name], edges...)
+	}
+}
+
+// NamedEditors returns the Editors named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (pr *Program) NamedEditors(name string) ([]*Group, error) {
+	if pr.Edges.namedEditors == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := pr.Edges.namedEditors[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (pr *Program) appendNamedEditors(name string, edges ...*Group) {
+	if pr.Edges.namedEditors == nil {
+		pr.Edges.namedEditors = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		pr.Edges.namedEditors[name] = []*Group{}
+	} else {
+		pr.Edges.namedEditors[name] = append(pr.Edges.namedEditors[name], edges...)
+	}
+}
+
+// NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (pr *Program) NamedBlockedGroups(name string) ([]*Group, error) {
+	if pr.Edges.namedBlockedGroups == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := pr.Edges.namedBlockedGroups[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (pr *Program) appendNamedBlockedGroups(name string, edges ...*Group) {
+	if pr.Edges.namedBlockedGroups == nil {
+		pr.Edges.namedBlockedGroups = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		pr.Edges.namedBlockedGroups[name] = []*Group{}
+	} else {
+		pr.Edges.namedBlockedGroups[name] = append(pr.Edges.namedBlockedGroups[name], edges...)
 	}
 }
 

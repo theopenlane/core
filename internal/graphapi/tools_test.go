@@ -38,6 +38,7 @@ const (
 
 	// common error message strings
 	notFoundErrorMsg      = "not found"
+	notExistsErrorMsg     = "does not exist"
 	notAuthorizedErrorMsg = "you are not authorized to perform this action"
 )
 

@@ -31,6 +31,8 @@ const (
 	FieldMappingID = "mapping_id"
 	// FieldTags holds the string denoting the tags field in the database.
 	FieldTags = "tags"
+	// FieldOwnerID holds the string denoting the owner_id field in the database.
+	FieldOwnerID = "owner_id"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
 	// FieldDescription holds the string denoting the description field in the database.
@@ -47,6 +49,8 @@ const (
 	FieldBackground = "background"
 	// FieldDetails holds the string denoting the details field in the database.
 	FieldDetails = "details"
+	// EdgeOwner holds the string denoting the owner edge name in mutations.
+	EdgeOwner = "owner"
 	// EdgeControlobjectives holds the string denoting the controlobjectives edge name in mutations.
 	EdgeControlobjectives = "controlobjectives"
 	// EdgeControls holds the string denoting the controls edge name in mutations.
@@ -59,8 +63,19 @@ const (
 	EdgeTasks = "tasks"
 	// EdgePrograms holds the string denoting the programs edge name in mutations.
 	EdgePrograms = "programs"
+	// EdgeEditors holds the string denoting the editors edge name in mutations.
+	EdgeEditors = "editors"
+	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
+	EdgeBlockedGroups = "blocked_groups"
 	// Table holds the table name of the internalpolicy in the database.
 	Table = "internal_policies"
+	// OwnerTable is the table that holds the owner relation/edge.
+	OwnerTable = "internal_policies"
+	// OwnerInverseTable is the table name for the Organization entity.
+	// It exists in this package in order to avoid circular dependency with the "organization" package.
+	OwnerInverseTable = "organizations"
+	// OwnerColumn is the table column denoting the owner relation/edge.
+	OwnerColumn = "owner_id"
 	// ControlobjectivesTable is the table that holds the controlobjectives relation/edge. The primary key declared below.
 	ControlobjectivesTable = "internal_policy_controlobjectives"
 	// ControlobjectivesInverseTable is the table name for the ControlObjective entity.
@@ -93,6 +108,16 @@ const (
 	// ProgramsInverseTable is the table name for the Program entity.
 	// It exists in this package in order to avoid circular dependency with the "program" package.
 	ProgramsInverseTable = "programs"
+	// EditorsTable is the table that holds the editors relation/edge. The primary key declared below.
+	EditorsTable = "internal_policy_editors"
+	// EditorsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	EditorsInverseTable = "groups"
+	// BlockedGroupsTable is the table that holds the blocked_groups relation/edge. The primary key declared below.
+	BlockedGroupsTable = "internal_policy_blocked_groups"
+	// BlockedGroupsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	BlockedGroupsInverseTable = "groups"
 )
 
 // Columns holds all SQL columns for internalpolicy fields.
@@ -106,6 +131,7 @@ var Columns = []string{
 	FieldDeletedBy,
 	FieldMappingID,
 	FieldTags,
+	FieldOwnerID,
 	FieldName,
 	FieldDescription,
 	FieldStatus,
@@ -132,6 +158,12 @@ var (
 	// ProgramsPrimaryKey and ProgramsColumn2 are the table columns denoting the
 	// primary key for the programs relation (M2M).
 	ProgramsPrimaryKey = []string{"program_id", "internal_policy_id"}
+	// EditorsPrimaryKey and EditorsColumn2 are the table columns denoting the
+	// primary key for the editors relation (M2M).
+	EditorsPrimaryKey = []string{"internal_policy_id", "group_id"}
+	// BlockedGroupsPrimaryKey and BlockedGroupsColumn2 are the table columns denoting the
+	// primary key for the blocked_groups relation (M2M).
+	BlockedGroupsPrimaryKey = []string{"internal_policy_id", "group_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -150,8 +182,9 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [2]ent.Hook
-	Interceptors [1]ent.Interceptor
+	Hooks        [7]ent.Hook
+	Interceptors [3]ent.Interceptor
+	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
@@ -162,6 +195,10 @@ var (
 	DefaultMappingID func() string
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
+	// OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	OwnerIDValidator func(string) error
+	// NameValidator is a validator for the "name" field. It is called by the builders before save.
+	NameValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -209,6 +246,11 @@ func ByMappingID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldMappingID, opts...).ToFunc()
 }
 
+// ByOwnerID orders the results by the owner_id field.
+func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
+}
+
 // ByName orders the results by the name field.
 func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
@@ -242,6 +284,13 @@ func ByPurposeAndScope(opts ...sql.OrderTermOption) OrderOption {
 // ByBackground orders the results by the background field.
 func ByBackground(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldBackground, opts...).ToFunc()
+}
+
+// ByOwnerField orders the results by owner field.
+func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newOwnerStep(), sql.OrderByField(field, opts...))
+	}
 }
 
 // ByControlobjectivesCount orders the results by controlobjectives count.
@@ -327,6 +376,41 @@ func ByPrograms(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newProgramsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByEditorsCount orders the results by editors count.
+func ByEditorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newEditorsStep(), opts...)
+	}
+}
+
+// ByEditors orders the results by editors terms.
+func ByEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEditorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByBlockedGroupsCount orders the results by blocked_groups count.
+func ByBlockedGroupsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newBlockedGroupsStep(), opts...)
+	}
+}
+
+// ByBlockedGroups orders the results by blocked_groups terms.
+func ByBlockedGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newBlockedGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+func newOwnerStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(OwnerInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
+	)
+}
 func newControlobjectivesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -367,5 +451,19 @@ func newProgramsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ProgramsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, ProgramsTable, ProgramsPrimaryKey...),
+	)
+}
+func newEditorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EditorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, EditorsTable, EditorsPrimaryKey...),
+	)
+}
+func newBlockedGroupsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(BlockedGroupsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, BlockedGroupsTable, BlockedGroupsPrimaryKey...),
 	)
 }

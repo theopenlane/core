@@ -13,8 +13,10 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
@@ -125,6 +127,26 @@ func (pu *ProcedureUpdate) AppendTags(s []string) *ProcedureUpdate {
 // ClearTags clears the value of the "tags" field.
 func (pu *ProcedureUpdate) ClearTags() *ProcedureUpdate {
 	pu.mutation.ClearTags()
+	return pu
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (pu *ProcedureUpdate) SetOwnerID(s string) *ProcedureUpdate {
+	pu.mutation.SetOwnerID(s)
+	return pu
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (pu *ProcedureUpdate) SetNillableOwnerID(s *string) *ProcedureUpdate {
+	if s != nil {
+		pu.SetOwnerID(*s)
+	}
+	return pu
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (pu *ProcedureUpdate) ClearOwnerID() *ProcedureUpdate {
+	pu.mutation.ClearOwnerID()
 	return pu
 }
 
@@ -294,6 +316,11 @@ func (pu *ProcedureUpdate) ClearDetails() *ProcedureUpdate {
 	return pu
 }
 
+// SetOwner sets the "owner" edge to the Organization entity.
+func (pu *ProcedureUpdate) SetOwner(o *Organization) *ProcedureUpdate {
+	return pu.SetOwnerID(o.ID)
+}
+
 // AddControlIDs adds the "control" edge to the Control entity by IDs.
 func (pu *ProcedureUpdate) AddControlIDs(ids ...string) *ProcedureUpdate {
 	pu.mutation.AddControlIDs(ids...)
@@ -384,9 +411,45 @@ func (pu *ProcedureUpdate) AddPrograms(p ...*Program) *ProcedureUpdate {
 	return pu.AddProgramIDs(ids...)
 }
 
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (pu *ProcedureUpdate) AddEditorIDs(ids ...string) *ProcedureUpdate {
+	pu.mutation.AddEditorIDs(ids...)
+	return pu
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (pu *ProcedureUpdate) AddEditors(g ...*Group) *ProcedureUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return pu.AddEditorIDs(ids...)
+}
+
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (pu *ProcedureUpdate) AddBlockedGroupIDs(ids ...string) *ProcedureUpdate {
+	pu.mutation.AddBlockedGroupIDs(ids...)
+	return pu
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (pu *ProcedureUpdate) AddBlockedGroups(g ...*Group) *ProcedureUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return pu.AddBlockedGroupIDs(ids...)
+}
+
 // Mutation returns the ProcedureMutation object of the builder.
 func (pu *ProcedureUpdate) Mutation() *ProcedureMutation {
 	return pu.mutation
+}
+
+// ClearOwner clears the "owner" edge to the Organization entity.
+func (pu *ProcedureUpdate) ClearOwner() *ProcedureUpdate {
+	pu.mutation.ClearOwner()
+	return pu
 }
 
 // ClearControl clears all "control" edges to the Control entity.
@@ -515,6 +578,48 @@ func (pu *ProcedureUpdate) RemovePrograms(p ...*Program) *ProcedureUpdate {
 	return pu.RemoveProgramIDs(ids...)
 }
 
+// ClearEditors clears all "editors" edges to the Group entity.
+func (pu *ProcedureUpdate) ClearEditors() *ProcedureUpdate {
+	pu.mutation.ClearEditors()
+	return pu
+}
+
+// RemoveEditorIDs removes the "editors" edge to Group entities by IDs.
+func (pu *ProcedureUpdate) RemoveEditorIDs(ids ...string) *ProcedureUpdate {
+	pu.mutation.RemoveEditorIDs(ids...)
+	return pu
+}
+
+// RemoveEditors removes "editors" edges to Group entities.
+func (pu *ProcedureUpdate) RemoveEditors(g ...*Group) *ProcedureUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return pu.RemoveEditorIDs(ids...)
+}
+
+// ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
+func (pu *ProcedureUpdate) ClearBlockedGroups() *ProcedureUpdate {
+	pu.mutation.ClearBlockedGroups()
+	return pu
+}
+
+// RemoveBlockedGroupIDs removes the "blocked_groups" edge to Group entities by IDs.
+func (pu *ProcedureUpdate) RemoveBlockedGroupIDs(ids ...string) *ProcedureUpdate {
+	pu.mutation.RemoveBlockedGroupIDs(ids...)
+	return pu
+}
+
+// RemoveBlockedGroups removes "blocked_groups" edges to Group entities.
+func (pu *ProcedureUpdate) RemoveBlockedGroups(g ...*Group) *ProcedureUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return pu.RemoveBlockedGroupIDs(ids...)
+}
+
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (pu *ProcedureUpdate) Save(ctx context.Context) (int, error) {
 	if err := pu.defaults(); err != nil {
@@ -557,6 +662,21 @@ func (pu *ProcedureUpdate) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (pu *ProcedureUpdate) check() error {
+	if v, ok := pu.mutation.OwnerID(); ok {
+		if err := procedure.OwnerIDValidator(v); err != nil {
+			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Procedure.owner_id": %w`, err)}
+		}
+	}
+	if v, ok := pu.mutation.Name(); ok {
+		if err := procedure.NameValidator(v); err != nil {
+			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Procedure.name": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (pu *ProcedureUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ProcedureUpdate {
 	pu.modifiers = append(pu.modifiers, modifiers...)
@@ -564,6 +684,9 @@ func (pu *ProcedureUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *Proc
 }
 
 func (pu *ProcedureUpdate) sqlSave(ctx context.Context) (n int, err error) {
+	if err := pu.check(); err != nil {
+		return n, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(procedure.Table, procedure.Columns, sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString))
 	if ps := pu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -663,6 +786,37 @@ func (pu *ProcedureUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if pu.mutation.DetailsCleared() {
 		_spec.ClearField(procedure.FieldDetails, field.TypeJSON)
+	}
+	if pu.mutation.OwnerCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   procedure.OwnerTable,
+			Columns: []string{procedure.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pu.schemaConfig.Procedure
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   procedure.OwnerTable,
+			Columns: []string{procedure.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pu.schemaConfig.Procedure
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if pu.mutation.ControlCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -952,6 +1106,102 @@ func (pu *ProcedureUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if pu.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   procedure.EditorsTable,
+			Columns: procedure.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pu.schemaConfig.ProcedureEditors
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !pu.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   procedure.EditorsTable,
+			Columns: procedure.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pu.schemaConfig.ProcedureEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   procedure.EditorsTable,
+			Columns: procedure.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pu.schemaConfig.ProcedureEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if pu.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   procedure.BlockedGroupsTable,
+			Columns: procedure.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pu.schemaConfig.ProcedureBlockedGroups
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !pu.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   procedure.BlockedGroupsTable,
+			Columns: procedure.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pu.schemaConfig.ProcedureBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   procedure.BlockedGroupsTable,
+			Columns: procedure.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pu.schemaConfig.ProcedureBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = pu.schemaConfig.Procedure
 	ctx = internal.NewSchemaConfigContext(ctx, pu.schemaConfig)
 	_spec.AddModifiers(pu.modifiers...)
@@ -1063,6 +1313,26 @@ func (puo *ProcedureUpdateOne) AppendTags(s []string) *ProcedureUpdateOne {
 // ClearTags clears the value of the "tags" field.
 func (puo *ProcedureUpdateOne) ClearTags() *ProcedureUpdateOne {
 	puo.mutation.ClearTags()
+	return puo
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (puo *ProcedureUpdateOne) SetOwnerID(s string) *ProcedureUpdateOne {
+	puo.mutation.SetOwnerID(s)
+	return puo
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (puo *ProcedureUpdateOne) SetNillableOwnerID(s *string) *ProcedureUpdateOne {
+	if s != nil {
+		puo.SetOwnerID(*s)
+	}
+	return puo
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (puo *ProcedureUpdateOne) ClearOwnerID() *ProcedureUpdateOne {
+	puo.mutation.ClearOwnerID()
 	return puo
 }
 
@@ -1232,6 +1502,11 @@ func (puo *ProcedureUpdateOne) ClearDetails() *ProcedureUpdateOne {
 	return puo
 }
 
+// SetOwner sets the "owner" edge to the Organization entity.
+func (puo *ProcedureUpdateOne) SetOwner(o *Organization) *ProcedureUpdateOne {
+	return puo.SetOwnerID(o.ID)
+}
+
 // AddControlIDs adds the "control" edge to the Control entity by IDs.
 func (puo *ProcedureUpdateOne) AddControlIDs(ids ...string) *ProcedureUpdateOne {
 	puo.mutation.AddControlIDs(ids...)
@@ -1322,9 +1597,45 @@ func (puo *ProcedureUpdateOne) AddPrograms(p ...*Program) *ProcedureUpdateOne {
 	return puo.AddProgramIDs(ids...)
 }
 
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (puo *ProcedureUpdateOne) AddEditorIDs(ids ...string) *ProcedureUpdateOne {
+	puo.mutation.AddEditorIDs(ids...)
+	return puo
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (puo *ProcedureUpdateOne) AddEditors(g ...*Group) *ProcedureUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return puo.AddEditorIDs(ids...)
+}
+
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (puo *ProcedureUpdateOne) AddBlockedGroupIDs(ids ...string) *ProcedureUpdateOne {
+	puo.mutation.AddBlockedGroupIDs(ids...)
+	return puo
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (puo *ProcedureUpdateOne) AddBlockedGroups(g ...*Group) *ProcedureUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return puo.AddBlockedGroupIDs(ids...)
+}
+
 // Mutation returns the ProcedureMutation object of the builder.
 func (puo *ProcedureUpdateOne) Mutation() *ProcedureMutation {
 	return puo.mutation
+}
+
+// ClearOwner clears the "owner" edge to the Organization entity.
+func (puo *ProcedureUpdateOne) ClearOwner() *ProcedureUpdateOne {
+	puo.mutation.ClearOwner()
+	return puo
 }
 
 // ClearControl clears all "control" edges to the Control entity.
@@ -1453,6 +1764,48 @@ func (puo *ProcedureUpdateOne) RemovePrograms(p ...*Program) *ProcedureUpdateOne
 	return puo.RemoveProgramIDs(ids...)
 }
 
+// ClearEditors clears all "editors" edges to the Group entity.
+func (puo *ProcedureUpdateOne) ClearEditors() *ProcedureUpdateOne {
+	puo.mutation.ClearEditors()
+	return puo
+}
+
+// RemoveEditorIDs removes the "editors" edge to Group entities by IDs.
+func (puo *ProcedureUpdateOne) RemoveEditorIDs(ids ...string) *ProcedureUpdateOne {
+	puo.mutation.RemoveEditorIDs(ids...)
+	return puo
+}
+
+// RemoveEditors removes "editors" edges to Group entities.
+func (puo *ProcedureUpdateOne) RemoveEditors(g ...*Group) *ProcedureUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return puo.RemoveEditorIDs(ids...)
+}
+
+// ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
+func (puo *ProcedureUpdateOne) ClearBlockedGroups() *ProcedureUpdateOne {
+	puo.mutation.ClearBlockedGroups()
+	return puo
+}
+
+// RemoveBlockedGroupIDs removes the "blocked_groups" edge to Group entities by IDs.
+func (puo *ProcedureUpdateOne) RemoveBlockedGroupIDs(ids ...string) *ProcedureUpdateOne {
+	puo.mutation.RemoveBlockedGroupIDs(ids...)
+	return puo
+}
+
+// RemoveBlockedGroups removes "blocked_groups" edges to Group entities.
+func (puo *ProcedureUpdateOne) RemoveBlockedGroups(g ...*Group) *ProcedureUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return puo.RemoveBlockedGroupIDs(ids...)
+}
+
 // Where appends a list predicates to the ProcedureUpdate builder.
 func (puo *ProcedureUpdateOne) Where(ps ...predicate.Procedure) *ProcedureUpdateOne {
 	puo.mutation.Where(ps...)
@@ -1508,6 +1861,21 @@ func (puo *ProcedureUpdateOne) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (puo *ProcedureUpdateOne) check() error {
+	if v, ok := puo.mutation.OwnerID(); ok {
+		if err := procedure.OwnerIDValidator(v); err != nil {
+			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Procedure.owner_id": %w`, err)}
+		}
+	}
+	if v, ok := puo.mutation.Name(); ok {
+		if err := procedure.NameValidator(v); err != nil {
+			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Procedure.name": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (puo *ProcedureUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ProcedureUpdateOne {
 	puo.modifiers = append(puo.modifiers, modifiers...)
@@ -1515,6 +1883,9 @@ func (puo *ProcedureUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *
 }
 
 func (puo *ProcedureUpdateOne) sqlSave(ctx context.Context) (_node *Procedure, err error) {
+	if err := puo.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(procedure.Table, procedure.Columns, sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString))
 	id, ok := puo.mutation.ID()
 	if !ok {
@@ -1631,6 +2002,37 @@ func (puo *ProcedureUpdateOne) sqlSave(ctx context.Context) (_node *Procedure, e
 	}
 	if puo.mutation.DetailsCleared() {
 		_spec.ClearField(procedure.FieldDetails, field.TypeJSON)
+	}
+	if puo.mutation.OwnerCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   procedure.OwnerTable,
+			Columns: []string{procedure.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = puo.schemaConfig.Procedure
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   procedure.OwnerTable,
+			Columns: []string{procedure.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = puo.schemaConfig.Procedure
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if puo.mutation.ControlCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1915,6 +2317,102 @@ func (puo *ProcedureUpdateOne) sqlSave(ctx context.Context) (_node *Procedure, e
 			},
 		}
 		edge.Schema = puo.schemaConfig.ProgramProcedures
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if puo.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   procedure.EditorsTable,
+			Columns: procedure.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = puo.schemaConfig.ProcedureEditors
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !puo.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   procedure.EditorsTable,
+			Columns: procedure.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = puo.schemaConfig.ProcedureEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   procedure.EditorsTable,
+			Columns: procedure.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = puo.schemaConfig.ProcedureEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if puo.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   procedure.BlockedGroupsTable,
+			Columns: procedure.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = puo.schemaConfig.ProcedureBlockedGroups
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !puo.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   procedure.BlockedGroupsTable,
+			Columns: procedure.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = puo.schemaConfig.ProcedureBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   procedure.BlockedGroupsTable,
+			Columns: procedure.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = puo.schemaConfig.ProcedureBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -150,9 +150,6 @@ func CanCreateObjectsInOrg() privacy.MutationRuleFunc {
 		log.Debug().Msg("checking mutation access")
 
 		relation := fgax.CanEdit
-		if m.Op().Is(ent.OpDelete | ent.OpDeleteOne) {
-			relation = fgax.CanDelete
-		}
 
 		userID, err := auth.GetUserIDFromContext(ctx)
 		if err != nil {

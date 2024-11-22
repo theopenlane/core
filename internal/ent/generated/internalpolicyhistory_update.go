@@ -122,6 +122,26 @@ func (iphu *InternalPolicyHistoryUpdate) ClearTags() *InternalPolicyHistoryUpdat
 	return iphu
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (iphu *InternalPolicyHistoryUpdate) SetOwnerID(s string) *InternalPolicyHistoryUpdate {
+	iphu.mutation.SetOwnerID(s)
+	return iphu
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (iphu *InternalPolicyHistoryUpdate) SetNillableOwnerID(s *string) *InternalPolicyHistoryUpdate {
+	if s != nil {
+		iphu.SetOwnerID(*s)
+	}
+	return iphu
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (iphu *InternalPolicyHistoryUpdate) ClearOwnerID() *InternalPolicyHistoryUpdate {
+	iphu.mutation.ClearOwnerID()
+	return iphu
+}
+
 // SetName sets the "name" field.
 func (iphu *InternalPolicyHistoryUpdate) SetName(s string) *InternalPolicyHistoryUpdate {
 	iphu.mutation.SetName(s)
@@ -147,6 +167,12 @@ func (iphu *InternalPolicyHistoryUpdate) SetNillableDescription(s *string) *Inte
 	if s != nil {
 		iphu.SetDescription(*s)
 	}
+	return iphu
+}
+
+// ClearDescription clears the value of the "description" field.
+func (iphu *InternalPolicyHistoryUpdate) ClearDescription() *InternalPolicyHistoryUpdate {
+	iphu.mutation.ClearDescription()
 	return iphu
 }
 
@@ -269,7 +295,9 @@ func (iphu *InternalPolicyHistoryUpdate) Mutation() *InternalPolicyHistoryMutati
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (iphu *InternalPolicyHistoryUpdate) Save(ctx context.Context) (int, error) {
-	iphu.defaults()
+	if err := iphu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, iphu.sqlSave, iphu.mutation, iphu.hooks)
 }
 
@@ -296,11 +324,15 @@ func (iphu *InternalPolicyHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (iphu *InternalPolicyHistoryUpdate) defaults() {
+func (iphu *InternalPolicyHistoryUpdate) defaults() error {
 	if _, ok := iphu.mutation.UpdatedAt(); !ok && !iphu.mutation.UpdatedAtCleared() {
+		if internalpolicyhistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized internalpolicyhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := internalpolicyhistory.UpdateDefaultUpdatedAt()
 		iphu.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
@@ -362,11 +394,20 @@ func (iphu *InternalPolicyHistoryUpdate) sqlSave(ctx context.Context) (n int, er
 	if iphu.mutation.TagsCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldTags, field.TypeJSON)
 	}
+	if value, ok := iphu.mutation.OwnerID(); ok {
+		_spec.SetField(internalpolicyhistory.FieldOwnerID, field.TypeString, value)
+	}
+	if iphu.mutation.OwnerIDCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldOwnerID, field.TypeString)
+	}
 	if value, ok := iphu.mutation.Name(); ok {
 		_spec.SetField(internalpolicyhistory.FieldName, field.TypeString, value)
 	}
 	if value, ok := iphu.mutation.Description(); ok {
 		_spec.SetField(internalpolicyhistory.FieldDescription, field.TypeString, value)
+	}
+	if iphu.mutation.DescriptionCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldDescription, field.TypeString)
 	}
 	if value, ok := iphu.mutation.Status(); ok {
 		_spec.SetField(internalpolicyhistory.FieldStatus, field.TypeString, value)
@@ -518,6 +559,26 @@ func (iphuo *InternalPolicyHistoryUpdateOne) ClearTags() *InternalPolicyHistoryU
 	return iphuo
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (iphuo *InternalPolicyHistoryUpdateOne) SetOwnerID(s string) *InternalPolicyHistoryUpdateOne {
+	iphuo.mutation.SetOwnerID(s)
+	return iphuo
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (iphuo *InternalPolicyHistoryUpdateOne) SetNillableOwnerID(s *string) *InternalPolicyHistoryUpdateOne {
+	if s != nil {
+		iphuo.SetOwnerID(*s)
+	}
+	return iphuo
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (iphuo *InternalPolicyHistoryUpdateOne) ClearOwnerID() *InternalPolicyHistoryUpdateOne {
+	iphuo.mutation.ClearOwnerID()
+	return iphuo
+}
+
 // SetName sets the "name" field.
 func (iphuo *InternalPolicyHistoryUpdateOne) SetName(s string) *InternalPolicyHistoryUpdateOne {
 	iphuo.mutation.SetName(s)
@@ -543,6 +604,12 @@ func (iphuo *InternalPolicyHistoryUpdateOne) SetNillableDescription(s *string) *
 	if s != nil {
 		iphuo.SetDescription(*s)
 	}
+	return iphuo
+}
+
+// ClearDescription clears the value of the "description" field.
+func (iphuo *InternalPolicyHistoryUpdateOne) ClearDescription() *InternalPolicyHistoryUpdateOne {
+	iphuo.mutation.ClearDescription()
 	return iphuo
 }
 
@@ -678,7 +745,9 @@ func (iphuo *InternalPolicyHistoryUpdateOne) Select(field string, fields ...stri
 
 // Save executes the query and returns the updated InternalPolicyHistory entity.
 func (iphuo *InternalPolicyHistoryUpdateOne) Save(ctx context.Context) (*InternalPolicyHistory, error) {
-	iphuo.defaults()
+	if err := iphuo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, iphuo.sqlSave, iphuo.mutation, iphuo.hooks)
 }
 
@@ -705,11 +774,15 @@ func (iphuo *InternalPolicyHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (iphuo *InternalPolicyHistoryUpdateOne) defaults() {
+func (iphuo *InternalPolicyHistoryUpdateOne) defaults() error {
 	if _, ok := iphuo.mutation.UpdatedAt(); !ok && !iphuo.mutation.UpdatedAtCleared() {
+		if internalpolicyhistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized internalpolicyhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := internalpolicyhistory.UpdateDefaultUpdatedAt()
 		iphuo.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
@@ -788,11 +861,20 @@ func (iphuo *InternalPolicyHistoryUpdateOne) sqlSave(ctx context.Context) (_node
 	if iphuo.mutation.TagsCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldTags, field.TypeJSON)
 	}
+	if value, ok := iphuo.mutation.OwnerID(); ok {
+		_spec.SetField(internalpolicyhistory.FieldOwnerID, field.TypeString, value)
+	}
+	if iphuo.mutation.OwnerIDCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldOwnerID, field.TypeString)
+	}
 	if value, ok := iphuo.mutation.Name(); ok {
 		_spec.SetField(internalpolicyhistory.FieldName, field.TypeString, value)
 	}
 	if value, ok := iphuo.mutation.Description(); ok {
 		_spec.SetField(internalpolicyhistory.FieldDescription, field.TypeString, value)
+	}
+	if iphuo.mutation.DescriptionCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldDescription, field.TypeString)
 	}
 	if value, ok := iphuo.mutation.Status(); ok {
 		_spec.SetField(internalpolicyhistory.FieldStatus, field.TypeString, value)

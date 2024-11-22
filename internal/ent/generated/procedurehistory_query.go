@@ -4,6 +4,7 @@ package generated
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"math"
 
@@ -331,6 +332,12 @@ func (phq *ProcedureHistoryQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		phq.sql = prev
+	}
+	if procedurehistory.Policy == nil {
+		return errors.New("generated: uninitialized procedurehistory.Policy (forgotten import generated/runtime?)")
+	}
+	if err := procedurehistory.Policy.EvalQuery(ctx, phq); err != nil {
+		return err
 	}
 	return nil
 }

@@ -14,8 +14,10 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
@@ -128,6 +130,26 @@ func (ipu *InternalPolicyUpdate) ClearTags() *InternalPolicyUpdate {
 	return ipu
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (ipu *InternalPolicyUpdate) SetOwnerID(s string) *InternalPolicyUpdate {
+	ipu.mutation.SetOwnerID(s)
+	return ipu
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (ipu *InternalPolicyUpdate) SetNillableOwnerID(s *string) *InternalPolicyUpdate {
+	if s != nil {
+		ipu.SetOwnerID(*s)
+	}
+	return ipu
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (ipu *InternalPolicyUpdate) ClearOwnerID() *InternalPolicyUpdate {
+	ipu.mutation.ClearOwnerID()
+	return ipu
+}
+
 // SetName sets the "name" field.
 func (ipu *InternalPolicyUpdate) SetName(s string) *InternalPolicyUpdate {
 	ipu.mutation.SetName(s)
@@ -153,6 +175,12 @@ func (ipu *InternalPolicyUpdate) SetNillableDescription(s *string) *InternalPoli
 	if s != nil {
 		ipu.SetDescription(*s)
 	}
+	return ipu
+}
+
+// ClearDescription clears the value of the "description" field.
+func (ipu *InternalPolicyUpdate) ClearDescription() *InternalPolicyUpdate {
+	ipu.mutation.ClearDescription()
 	return ipu
 }
 
@@ -268,6 +296,11 @@ func (ipu *InternalPolicyUpdate) ClearDetails() *InternalPolicyUpdate {
 	return ipu
 }
 
+// SetOwner sets the "owner" edge to the Organization entity.
+func (ipu *InternalPolicyUpdate) SetOwner(o *Organization) *InternalPolicyUpdate {
+	return ipu.SetOwnerID(o.ID)
+}
+
 // AddControlobjectiveIDs adds the "controlobjectives" edge to the ControlObjective entity by IDs.
 func (ipu *InternalPolicyUpdate) AddControlobjectiveIDs(ids ...string) *InternalPolicyUpdate {
 	ipu.mutation.AddControlobjectiveIDs(ids...)
@@ -358,9 +391,45 @@ func (ipu *InternalPolicyUpdate) AddPrograms(p ...*Program) *InternalPolicyUpdat
 	return ipu.AddProgramIDs(ids...)
 }
 
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (ipu *InternalPolicyUpdate) AddEditorIDs(ids ...string) *InternalPolicyUpdate {
+	ipu.mutation.AddEditorIDs(ids...)
+	return ipu
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (ipu *InternalPolicyUpdate) AddEditors(g ...*Group) *InternalPolicyUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ipu.AddEditorIDs(ids...)
+}
+
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (ipu *InternalPolicyUpdate) AddBlockedGroupIDs(ids ...string) *InternalPolicyUpdate {
+	ipu.mutation.AddBlockedGroupIDs(ids...)
+	return ipu
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (ipu *InternalPolicyUpdate) AddBlockedGroups(g ...*Group) *InternalPolicyUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ipu.AddBlockedGroupIDs(ids...)
+}
+
 // Mutation returns the InternalPolicyMutation object of the builder.
 func (ipu *InternalPolicyUpdate) Mutation() *InternalPolicyMutation {
 	return ipu.mutation
+}
+
+// ClearOwner clears the "owner" edge to the Organization entity.
+func (ipu *InternalPolicyUpdate) ClearOwner() *InternalPolicyUpdate {
+	ipu.mutation.ClearOwner()
+	return ipu
 }
 
 // ClearControlobjectives clears all "controlobjectives" edges to the ControlObjective entity.
@@ -489,6 +558,48 @@ func (ipu *InternalPolicyUpdate) RemovePrograms(p ...*Program) *InternalPolicyUp
 	return ipu.RemoveProgramIDs(ids...)
 }
 
+// ClearEditors clears all "editors" edges to the Group entity.
+func (ipu *InternalPolicyUpdate) ClearEditors() *InternalPolicyUpdate {
+	ipu.mutation.ClearEditors()
+	return ipu
+}
+
+// RemoveEditorIDs removes the "editors" edge to Group entities by IDs.
+func (ipu *InternalPolicyUpdate) RemoveEditorIDs(ids ...string) *InternalPolicyUpdate {
+	ipu.mutation.RemoveEditorIDs(ids...)
+	return ipu
+}
+
+// RemoveEditors removes "editors" edges to Group entities.
+func (ipu *InternalPolicyUpdate) RemoveEditors(g ...*Group) *InternalPolicyUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ipu.RemoveEditorIDs(ids...)
+}
+
+// ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
+func (ipu *InternalPolicyUpdate) ClearBlockedGroups() *InternalPolicyUpdate {
+	ipu.mutation.ClearBlockedGroups()
+	return ipu
+}
+
+// RemoveBlockedGroupIDs removes the "blocked_groups" edge to Group entities by IDs.
+func (ipu *InternalPolicyUpdate) RemoveBlockedGroupIDs(ids ...string) *InternalPolicyUpdate {
+	ipu.mutation.RemoveBlockedGroupIDs(ids...)
+	return ipu
+}
+
+// RemoveBlockedGroups removes "blocked_groups" edges to Group entities.
+func (ipu *InternalPolicyUpdate) RemoveBlockedGroups(g ...*Group) *InternalPolicyUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ipu.RemoveBlockedGroupIDs(ids...)
+}
+
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (ipu *InternalPolicyUpdate) Save(ctx context.Context) (int, error) {
 	if err := ipu.defaults(); err != nil {
@@ -531,6 +642,21 @@ func (ipu *InternalPolicyUpdate) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (ipu *InternalPolicyUpdate) check() error {
+	if v, ok := ipu.mutation.OwnerID(); ok {
+		if err := internalpolicy.OwnerIDValidator(v); err != nil {
+			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.owner_id": %w`, err)}
+		}
+	}
+	if v, ok := ipu.mutation.Name(); ok {
+		if err := internalpolicy.NameValidator(v); err != nil {
+			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.name": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (ipu *InternalPolicyUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *InternalPolicyUpdate {
 	ipu.modifiers = append(ipu.modifiers, modifiers...)
@@ -538,6 +664,9 @@ func (ipu *InternalPolicyUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder))
 }
 
 func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error) {
+	if err := ipu.check(); err != nil {
+		return n, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(internalpolicy.Table, internalpolicy.Columns, sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString))
 	if ps := ipu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -593,6 +722,9 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 	if value, ok := ipu.mutation.Description(); ok {
 		_spec.SetField(internalpolicy.FieldDescription, field.TypeString, value)
 	}
+	if ipu.mutation.DescriptionCleared() {
+		_spec.ClearField(internalpolicy.FieldDescription, field.TypeString)
+	}
 	if value, ok := ipu.mutation.Status(); ok {
 		_spec.SetField(internalpolicy.FieldStatus, field.TypeString, value)
 	}
@@ -628,6 +760,37 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 	}
 	if ipu.mutation.DetailsCleared() {
 		_spec.ClearField(internalpolicy.FieldDetails, field.TypeJSON)
+	}
+	if ipu.mutation.OwnerCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   internalpolicy.OwnerTable,
+			Columns: []string{internalpolicy.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipu.schemaConfig.InternalPolicy
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ipu.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   internalpolicy.OwnerTable,
+			Columns: []string{internalpolicy.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipu.schemaConfig.InternalPolicy
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if ipu.mutation.ControlobjectivesCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -917,6 +1080,102 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if ipu.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.EditorsTable,
+			Columns: internalpolicy.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipu.schemaConfig.InternalPolicyEditors
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ipu.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !ipu.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.EditorsTable,
+			Columns: internalpolicy.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipu.schemaConfig.InternalPolicyEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ipu.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.EditorsTable,
+			Columns: internalpolicy.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipu.schemaConfig.InternalPolicyEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ipu.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.BlockedGroupsTable,
+			Columns: internalpolicy.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipu.schemaConfig.InternalPolicyBlockedGroups
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ipu.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !ipu.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.BlockedGroupsTable,
+			Columns: internalpolicy.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipu.schemaConfig.InternalPolicyBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ipu.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.BlockedGroupsTable,
+			Columns: internalpolicy.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipu.schemaConfig.InternalPolicyBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = ipu.schemaConfig.InternalPolicy
 	ctx = internal.NewSchemaConfigContext(ctx, ipu.schemaConfig)
 	_spec.AddModifiers(ipu.modifiers...)
@@ -1031,6 +1290,26 @@ func (ipuo *InternalPolicyUpdateOne) ClearTags() *InternalPolicyUpdateOne {
 	return ipuo
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (ipuo *InternalPolicyUpdateOne) SetOwnerID(s string) *InternalPolicyUpdateOne {
+	ipuo.mutation.SetOwnerID(s)
+	return ipuo
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (ipuo *InternalPolicyUpdateOne) SetNillableOwnerID(s *string) *InternalPolicyUpdateOne {
+	if s != nil {
+		ipuo.SetOwnerID(*s)
+	}
+	return ipuo
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (ipuo *InternalPolicyUpdateOne) ClearOwnerID() *InternalPolicyUpdateOne {
+	ipuo.mutation.ClearOwnerID()
+	return ipuo
+}
+
 // SetName sets the "name" field.
 func (ipuo *InternalPolicyUpdateOne) SetName(s string) *InternalPolicyUpdateOne {
 	ipuo.mutation.SetName(s)
@@ -1056,6 +1335,12 @@ func (ipuo *InternalPolicyUpdateOne) SetNillableDescription(s *string) *Internal
 	if s != nil {
 		ipuo.SetDescription(*s)
 	}
+	return ipuo
+}
+
+// ClearDescription clears the value of the "description" field.
+func (ipuo *InternalPolicyUpdateOne) ClearDescription() *InternalPolicyUpdateOne {
+	ipuo.mutation.ClearDescription()
 	return ipuo
 }
 
@@ -1171,6 +1456,11 @@ func (ipuo *InternalPolicyUpdateOne) ClearDetails() *InternalPolicyUpdateOne {
 	return ipuo
 }
 
+// SetOwner sets the "owner" edge to the Organization entity.
+func (ipuo *InternalPolicyUpdateOne) SetOwner(o *Organization) *InternalPolicyUpdateOne {
+	return ipuo.SetOwnerID(o.ID)
+}
+
 // AddControlobjectiveIDs adds the "controlobjectives" edge to the ControlObjective entity by IDs.
 func (ipuo *InternalPolicyUpdateOne) AddControlobjectiveIDs(ids ...string) *InternalPolicyUpdateOne {
 	ipuo.mutation.AddControlobjectiveIDs(ids...)
@@ -1261,9 +1551,45 @@ func (ipuo *InternalPolicyUpdateOne) AddPrograms(p ...*Program) *InternalPolicyU
 	return ipuo.AddProgramIDs(ids...)
 }
 
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (ipuo *InternalPolicyUpdateOne) AddEditorIDs(ids ...string) *InternalPolicyUpdateOne {
+	ipuo.mutation.AddEditorIDs(ids...)
+	return ipuo
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (ipuo *InternalPolicyUpdateOne) AddEditors(g ...*Group) *InternalPolicyUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ipuo.AddEditorIDs(ids...)
+}
+
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (ipuo *InternalPolicyUpdateOne) AddBlockedGroupIDs(ids ...string) *InternalPolicyUpdateOne {
+	ipuo.mutation.AddBlockedGroupIDs(ids...)
+	return ipuo
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (ipuo *InternalPolicyUpdateOne) AddBlockedGroups(g ...*Group) *InternalPolicyUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ipuo.AddBlockedGroupIDs(ids...)
+}
+
 // Mutation returns the InternalPolicyMutation object of the builder.
 func (ipuo *InternalPolicyUpdateOne) Mutation() *InternalPolicyMutation {
 	return ipuo.mutation
+}
+
+// ClearOwner clears the "owner" edge to the Organization entity.
+func (ipuo *InternalPolicyUpdateOne) ClearOwner() *InternalPolicyUpdateOne {
+	ipuo.mutation.ClearOwner()
+	return ipuo
 }
 
 // ClearControlobjectives clears all "controlobjectives" edges to the ControlObjective entity.
@@ -1392,6 +1718,48 @@ func (ipuo *InternalPolicyUpdateOne) RemovePrograms(p ...*Program) *InternalPoli
 	return ipuo.RemoveProgramIDs(ids...)
 }
 
+// ClearEditors clears all "editors" edges to the Group entity.
+func (ipuo *InternalPolicyUpdateOne) ClearEditors() *InternalPolicyUpdateOne {
+	ipuo.mutation.ClearEditors()
+	return ipuo
+}
+
+// RemoveEditorIDs removes the "editors" edge to Group entities by IDs.
+func (ipuo *InternalPolicyUpdateOne) RemoveEditorIDs(ids ...string) *InternalPolicyUpdateOne {
+	ipuo.mutation.RemoveEditorIDs(ids...)
+	return ipuo
+}
+
+// RemoveEditors removes "editors" edges to Group entities.
+func (ipuo *InternalPolicyUpdateOne) RemoveEditors(g ...*Group) *InternalPolicyUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ipuo.RemoveEditorIDs(ids...)
+}
+
+// ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
+func (ipuo *InternalPolicyUpdateOne) ClearBlockedGroups() *InternalPolicyUpdateOne {
+	ipuo.mutation.ClearBlockedGroups()
+	return ipuo
+}
+
+// RemoveBlockedGroupIDs removes the "blocked_groups" edge to Group entities by IDs.
+func (ipuo *InternalPolicyUpdateOne) RemoveBlockedGroupIDs(ids ...string) *InternalPolicyUpdateOne {
+	ipuo.mutation.RemoveBlockedGroupIDs(ids...)
+	return ipuo
+}
+
+// RemoveBlockedGroups removes "blocked_groups" edges to Group entities.
+func (ipuo *InternalPolicyUpdateOne) RemoveBlockedGroups(g ...*Group) *InternalPolicyUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ipuo.RemoveBlockedGroupIDs(ids...)
+}
+
 // Where appends a list predicates to the InternalPolicyUpdate builder.
 func (ipuo *InternalPolicyUpdateOne) Where(ps ...predicate.InternalPolicy) *InternalPolicyUpdateOne {
 	ipuo.mutation.Where(ps...)
@@ -1447,6 +1815,21 @@ func (ipuo *InternalPolicyUpdateOne) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (ipuo *InternalPolicyUpdateOne) check() error {
+	if v, ok := ipuo.mutation.OwnerID(); ok {
+		if err := internalpolicy.OwnerIDValidator(v); err != nil {
+			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.owner_id": %w`, err)}
+		}
+	}
+	if v, ok := ipuo.mutation.Name(); ok {
+		if err := internalpolicy.NameValidator(v); err != nil {
+			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.name": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (ipuo *InternalPolicyUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *InternalPolicyUpdateOne {
 	ipuo.modifiers = append(ipuo.modifiers, modifiers...)
@@ -1454,6 +1837,9 @@ func (ipuo *InternalPolicyUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuild
 }
 
 func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *InternalPolicy, err error) {
+	if err := ipuo.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(internalpolicy.Table, internalpolicy.Columns, sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString))
 	id, ok := ipuo.mutation.ID()
 	if !ok {
@@ -1526,6 +1912,9 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 	if value, ok := ipuo.mutation.Description(); ok {
 		_spec.SetField(internalpolicy.FieldDescription, field.TypeString, value)
 	}
+	if ipuo.mutation.DescriptionCleared() {
+		_spec.ClearField(internalpolicy.FieldDescription, field.TypeString)
+	}
 	if value, ok := ipuo.mutation.Status(); ok {
 		_spec.SetField(internalpolicy.FieldStatus, field.TypeString, value)
 	}
@@ -1561,6 +1950,37 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 	}
 	if ipuo.mutation.DetailsCleared() {
 		_spec.ClearField(internalpolicy.FieldDetails, field.TypeJSON)
+	}
+	if ipuo.mutation.OwnerCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   internalpolicy.OwnerTable,
+			Columns: []string{internalpolicy.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipuo.schemaConfig.InternalPolicy
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ipuo.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   internalpolicy.OwnerTable,
+			Columns: []string{internalpolicy.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipuo.schemaConfig.InternalPolicy
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if ipuo.mutation.ControlobjectivesCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1845,6 +2265,102 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 			},
 		}
 		edge.Schema = ipuo.schemaConfig.ProgramPolicies
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ipuo.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.EditorsTable,
+			Columns: internalpolicy.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipuo.schemaConfig.InternalPolicyEditors
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ipuo.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !ipuo.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.EditorsTable,
+			Columns: internalpolicy.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipuo.schemaConfig.InternalPolicyEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ipuo.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.EditorsTable,
+			Columns: internalpolicy.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipuo.schemaConfig.InternalPolicyEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ipuo.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.BlockedGroupsTable,
+			Columns: internalpolicy.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipuo.schemaConfig.InternalPolicyBlockedGroups
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ipuo.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !ipuo.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.BlockedGroupsTable,
+			Columns: internalpolicy.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipuo.schemaConfig.InternalPolicyBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ipuo.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.BlockedGroupsTable,
+			Columns: internalpolicy.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipuo.schemaConfig.InternalPolicyBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

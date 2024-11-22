@@ -27,6 +27,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/oauthprovider"
@@ -35,6 +36,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/task"
@@ -80,6 +82,8 @@ type OrganizationQuery struct {
 	withNotes                        *NoteQuery
 	withTasks                        *TaskQuery
 	withPrograms                     *ProgramQuery
+	withProcedures                   *ProcedureQuery
+	withInternalpolicies             *InternalPolicyQuery
 	withMembers                      *OrgMembershipQuery
 	loadTotal                        []func(context.Context, []*Organization) error
 	modifiers                        []func(*sql.Selector)
@@ -109,6 +113,8 @@ type OrganizationQuery struct {
 	withNamedNotes                   map[string]*NoteQuery
 	withNamedTasks                   map[string]*TaskQuery
 	withNamedPrograms                map[string]*ProgramQuery
+	withNamedProcedures              map[string]*ProcedureQuery
+	withNamedInternalpolicies        map[string]*InternalPolicyQuery
 	withNamedMembers                 map[string]*OrgMembershipQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -846,6 +852,56 @@ func (oq *OrganizationQuery) QueryPrograms() *ProgramQuery {
 	return query
 }
 
+// QueryProcedures chains the current query on the "procedures" edge.
+func (oq *OrganizationQuery) QueryProcedures() *ProcedureQuery {
+	query := (&ProcedureClient{config: oq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := oq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := oq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(procedure.Table, procedure.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.ProceduresTable, organization.ProceduresColumn),
+		)
+		schemaConfig := oq.schemaConfig
+		step.To.Schema = schemaConfig.Procedure
+		step.Edge.Schema = schemaConfig.Procedure
+		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryInternalpolicies chains the current query on the "internalpolicies" edge.
+func (oq *OrganizationQuery) QueryInternalpolicies() *InternalPolicyQuery {
+	query := (&InternalPolicyClient{config: oq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := oq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := oq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.InternalpoliciesTable, organization.InternalpoliciesColumn),
+		)
+		schemaConfig := oq.schemaConfig
+		step.To.Schema = schemaConfig.InternalPolicy
+		step.Edge.Schema = schemaConfig.InternalPolicy
+		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryMembers chains the current query on the "members" edge.
 func (oq *OrganizationQuery) QueryMembers() *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: oq.config}).Query()
@@ -1091,6 +1147,8 @@ func (oq *OrganizationQuery) Clone() *OrganizationQuery {
 		withNotes:                   oq.withNotes.Clone(),
 		withTasks:                   oq.withTasks.Clone(),
 		withPrograms:                oq.withPrograms.Clone(),
+		withProcedures:              oq.withProcedures.Clone(),
+		withInternalpolicies:        oq.withInternalpolicies.Clone(),
 		withMembers:                 oq.withMembers.Clone(),
 		// clone intermediate query.
 		sql:       oq.sql.Clone(),
@@ -1407,6 +1465,28 @@ func (oq *OrganizationQuery) WithPrograms(opts ...func(*ProgramQuery)) *Organiza
 	return oq
 }
 
+// WithProcedures tells the query-builder to eager-load the nodes that are connected to
+// the "procedures" edge. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithProcedures(opts ...func(*ProcedureQuery)) *OrganizationQuery {
+	query := (&ProcedureClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	oq.withProcedures = query
+	return oq
+}
+
+// WithInternalpolicies tells the query-builder to eager-load the nodes that are connected to
+// the "internalpolicies" edge. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithInternalpolicies(opts ...func(*InternalPolicyQuery)) *OrganizationQuery {
+	query := (&InternalPolicyClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	oq.withInternalpolicies = query
+	return oq
+}
+
 // WithMembers tells the query-builder to eager-load the nodes that are connected to
 // the "members" edge. The optional arguments are used to configure the query builder of the edge.
 func (oq *OrganizationQuery) WithMembers(opts ...func(*OrgMembershipQuery)) *OrganizationQuery {
@@ -1502,7 +1582,7 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = oq.querySpec()
-		loadedTypes = [29]bool{
+		loadedTypes = [31]bool{
 			oq.withParent != nil,
 			oq.withChildren != nil,
 			oq.withGroups != nil,
@@ -1531,6 +1611,8 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			oq.withNotes != nil,
 			oq.withTasks != nil,
 			oq.withPrograms != nil,
+			oq.withProcedures != nil,
+			oq.withInternalpolicies != nil,
 			oq.withMembers != nil,
 		}
 	)
@@ -1759,6 +1841,22 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	if query := oq.withProcedures; query != nil {
+		if err := oq.loadProcedures(ctx, query, nodes,
+			func(n *Organization) { n.Edges.Procedures = []*Procedure{} },
+			func(n *Organization, e *Procedure) { n.Edges.Procedures = append(n.Edges.Procedures, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := oq.withInternalpolicies; query != nil {
+		if err := oq.loadInternalpolicies(ctx, query, nodes,
+			func(n *Organization) { n.Edges.Internalpolicies = []*InternalPolicy{} },
+			func(n *Organization, e *InternalPolicy) {
+				n.Edges.Internalpolicies = append(n.Edges.Internalpolicies, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	if query := oq.withMembers; query != nil {
 		if err := oq.loadMembers(ctx, query, nodes,
 			func(n *Organization) { n.Edges.Members = []*OrgMembership{} },
@@ -1945,6 +2043,20 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := oq.loadPrograms(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedPrograms(name) },
 			func(n *Organization, e *Program) { n.appendNamedPrograms(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range oq.withNamedProcedures {
+		if err := oq.loadProcedures(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedProcedures(name) },
+			func(n *Organization, e *Procedure) { n.appendNamedProcedures(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range oq.withNamedInternalpolicies {
+		if err := oq.loadInternalpolicies(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedInternalpolicies(name) },
+			func(n *Organization, e *InternalPolicy) { n.appendNamedInternalpolicies(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2994,6 +3106,67 @@ func (oq *OrganizationQuery) loadPrograms(ctx context.Context, query *ProgramQue
 	}
 	return nil
 }
+func (oq *OrganizationQuery) loadProcedures(ctx context.Context, query *ProcedureQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Procedure)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(procedure.FieldOwnerID)
+	}
+	query.Where(predicate.Procedure(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.ProceduresColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (oq *OrganizationQuery) loadInternalpolicies(ctx context.Context, query *InternalPolicyQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *InternalPolicy)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(internalpolicy.FieldOwnerID)
+	}
+	query.Where(predicate.InternalPolicy(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.InternalpoliciesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (oq *OrganizationQuery) loadMembers(ctx context.Context, query *OrgMembershipQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *OrgMembership)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Organization)
@@ -3487,6 +3660,34 @@ func (oq *OrganizationQuery) WithNamedPrograms(name string, opts ...func(*Progra
 		oq.withNamedPrograms = make(map[string]*ProgramQuery)
 	}
 	oq.withNamedPrograms[name] = query
+	return oq
+}
+
+// WithNamedProcedures tells the query-builder to eager-load the nodes that are connected to the "procedures"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithNamedProcedures(name string, opts ...func(*ProcedureQuery)) *OrganizationQuery {
+	query := (&ProcedureClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if oq.withNamedProcedures == nil {
+		oq.withNamedProcedures = make(map[string]*ProcedureQuery)
+	}
+	oq.withNamedProcedures[name] = query
+	return oq
+}
+
+// WithNamedInternalpolicies tells the query-builder to eager-load the nodes that are connected to the "internalpolicies"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithNamedInternalpolicies(name string, opts ...func(*InternalPolicyQuery)) *OrganizationQuery {
+	query := (&InternalPolicyClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if oq.withNamedInternalpolicies == nil {
+		oq.withNamedInternalpolicies = make(map[string]*InternalPolicyQuery)
+	}
+	oq.withNamedInternalpolicies[name] = query
 	return oq
 }
 

@@ -110,6 +110,11 @@ func MappingID(v string) predicate.InternalPolicyHistory {
 	return predicate.InternalPolicyHistory(sql.FieldEQ(FieldMappingID, v))
 }
 
+// OwnerID applies equality check predicate on the "owner_id" field. It's identical to OwnerIDEQ.
+func OwnerID(v string) predicate.InternalPolicyHistory {
+	return predicate.InternalPolicyHistory(sql.FieldEQ(FieldOwnerID, v))
+}
+
 // Name applies equality check predicate on the "name" field. It's identical to NameEQ.
 func Name(v string) predicate.InternalPolicyHistory {
 	return predicate.InternalPolicyHistory(sql.FieldEQ(FieldName, v))
@@ -730,6 +735,81 @@ func TagsNotNil() predicate.InternalPolicyHistory {
 	return predicate.InternalPolicyHistory(sql.FieldNotNull(FieldTags))
 }
 
+// OwnerIDEQ applies the EQ predicate on the "owner_id" field.
+func OwnerIDEQ(v string) predicate.InternalPolicyHistory {
+	return predicate.InternalPolicyHistory(sql.FieldEQ(FieldOwnerID, v))
+}
+
+// OwnerIDNEQ applies the NEQ predicate on the "owner_id" field.
+func OwnerIDNEQ(v string) predicate.InternalPolicyHistory {
+	return predicate.InternalPolicyHistory(sql.FieldNEQ(FieldOwnerID, v))
+}
+
+// OwnerIDIn applies the In predicate on the "owner_id" field.
+func OwnerIDIn(vs ...string) predicate.InternalPolicyHistory {
+	return predicate.InternalPolicyHistory(sql.FieldIn(FieldOwnerID, vs...))
+}
+
+// OwnerIDNotIn applies the NotIn predicate on the "owner_id" field.
+func OwnerIDNotIn(vs ...string) predicate.InternalPolicyHistory {
+	return predicate.InternalPolicyHistory(sql.FieldNotIn(FieldOwnerID, vs...))
+}
+
+// OwnerIDGT applies the GT predicate on the "owner_id" field.
+func OwnerIDGT(v string) predicate.InternalPolicyHistory {
+	return predicate.InternalPolicyHistory(sql.FieldGT(FieldOwnerID, v))
+}
+
+// OwnerIDGTE applies the GTE predicate on the "owner_id" field.
+func OwnerIDGTE(v string) predicate.InternalPolicyHistory {
+	return predicate.InternalPolicyHistory(sql.FieldGTE(FieldOwnerID, v))
+}
+
+// OwnerIDLT applies the LT predicate on the "owner_id" field.
+func OwnerIDLT(v string) predicate.InternalPolicyHistory {
+	return predicate.InternalPolicyHistory(sql.FieldLT(FieldOwnerID, v))
+}
+
+// OwnerIDLTE applies the LTE predicate on the "owner_id" field.
+func OwnerIDLTE(v string) predicate.InternalPolicyHistory {
+	return predicate.InternalPolicyHistory(sql.FieldLTE(FieldOwnerID, v))
+}
+
+// OwnerIDContains applies the Contains predicate on the "owner_id" field.
+func OwnerIDContains(v string) predicate.InternalPolicyHistory {
+	return predicate.InternalPolicyHistory(sql.FieldContains(FieldOwnerID, v))
+}
+
+// OwnerIDHasPrefix applies the HasPrefix predicate on the "owner_id" field.
+func OwnerIDHasPrefix(v string) predicate.InternalPolicyHistory {
+	return predicate.InternalPolicyHistory(sql.FieldHasPrefix(FieldOwnerID, v))
+}
+
+// OwnerIDHasSuffix applies the HasSuffix predicate on the "owner_id" field.
+func OwnerIDHasSuffix(v string) predicate.InternalPolicyHistory {
+	return predicate.InternalPolicyHistory(sql.FieldHasSuffix(FieldOwnerID, v))
+}
+
+// OwnerIDIsNil applies the IsNil predicate on the "owner_id" field.
+func OwnerIDIsNil() predicate.InternalPolicyHistory {
+	return predicate.InternalPolicyHistory(sql.FieldIsNull(FieldOwnerID))
+}
+
+// OwnerIDNotNil applies the NotNil predicate on the "owner_id" field.
+func OwnerIDNotNil() predicate.InternalPolicyHistory {
+	return predicate.InternalPolicyHistory(sql.FieldNotNull(FieldOwnerID))
+}
+
+// OwnerIDEqualFold applies the EqualFold predicate on the "owner_id" field.
+func OwnerIDEqualFold(v string) predicate.InternalPolicyHistory {
+	return predicate.InternalPolicyHistory(sql.FieldEqualFold(FieldOwnerID, v))
+}
+
+// OwnerIDContainsFold applies the ContainsFold predicate on the "owner_id" field.
+func OwnerIDContainsFold(v string) predicate.InternalPolicyHistory {
+	return predicate.InternalPolicyHistory(sql.FieldContainsFold(FieldOwnerID, v))
+}
+
 // NameEQ applies the EQ predicate on the "name" field.
 func NameEQ(v string) predicate.InternalPolicyHistory {
 	return predicate.InternalPolicyHistory(sql.FieldEQ(FieldName, v))
@@ -848,6 +928,16 @@ func DescriptionHasPrefix(v string) predicate.InternalPolicyHistory {
 // DescriptionHasSuffix applies the HasSuffix predicate on the "description" field.
 func DescriptionHasSuffix(v string) predicate.InternalPolicyHistory {
 	return predicate.InternalPolicyHistory(sql.FieldHasSuffix(FieldDescription, v))
+}
+
+// DescriptionIsNil applies the IsNil predicate on the "description" field.
+func DescriptionIsNil() predicate.InternalPolicyHistory {
+	return predicate.InternalPolicyHistory(sql.FieldIsNull(FieldDescription))
+}
+
+// DescriptionNotNil applies the NotNil predicate on the "description" field.
+func DescriptionNotNil() predicate.InternalPolicyHistory {
+	return predicate.InternalPolicyHistory(sql.FieldNotNull(FieldDescription))
 }
 
 // DescriptionEqualFold applies the EqualFold predicate on the "description" field.

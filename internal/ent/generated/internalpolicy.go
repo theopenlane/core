@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 )
 
 // InternalPolicy is the model entity for the InternalPolicy schema.
@@ -34,6 +35,8 @@ type InternalPolicy struct {
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// the organization id that owns the object
+	OwnerID string `json:"owner_id,omitempty"`
 	// the name of the policy
 	Name string `json:"name,omitempty"`
 	// description of the policy
@@ -58,6 +61,8 @@ type InternalPolicy struct {
 
 // InternalPolicyEdges holds the relations/edges for other nodes in the graph.
 type InternalPolicyEdges struct {
+	// Owner holds the value of the owner edge.
+	Owner *Organization `json:"owner,omitempty"`
 	// Controlobjectives holds the value of the controlobjectives edge.
 	Controlobjectives []*ControlObjective `json:"controlobjectives,omitempty"`
 	// Controls holds the value of the controls edge.
@@ -70,11 +75,15 @@ type InternalPolicyEdges struct {
 	Tasks []*Task `json:"tasks,omitempty"`
 	// Programs holds the value of the programs edge.
 	Programs []*Program `json:"programs,omitempty"`
+	// provides edit access to the policy to members of the group
+	Editors []*Group `json:"editors,omitempty"`
+	// groups that are blocked from viewing or editing the policy
+	BlockedGroups []*Group `json:"blocked_groups,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [6]bool
+	loadedTypes [9]bool
 	// totalCount holds the count of the edges above.
-	totalCount [6]map[string]int
+	totalCount [9]map[string]int
 
 	namedControlobjectives map[string][]*ControlObjective
 	namedControls          map[string][]*Control
@@ -82,12 +91,25 @@ type InternalPolicyEdges struct {
 	namedNarratives        map[string][]*Narrative
 	namedTasks             map[string][]*Task
 	namedPrograms          map[string][]*Program
+	namedEditors           map[string][]*Group
+	namedBlockedGroups     map[string][]*Group
+}
+
+// OwnerOrErr returns the Owner value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e InternalPolicyEdges) OwnerOrErr() (*Organization, error) {
+	if e.Owner != nil {
+		return e.Owner, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: organization.Label}
+	}
+	return nil, &NotLoadedError{edge: "owner"}
 }
 
 // ControlobjectivesOrErr returns the Controlobjectives value or an error if the edge
 // was not loaded in eager-loading.
 func (e InternalPolicyEdges) ControlobjectivesOrErr() ([]*ControlObjective, error) {
-	if e.loadedTypes[0] {
+	if e.loadedTypes[1] {
 		return e.Controlobjectives, nil
 	}
 	return nil, &NotLoadedError{edge: "controlobjectives"}
@@ -96,7 +118,7 @@ func (e InternalPolicyEdges) ControlobjectivesOrErr() ([]*ControlObjective, erro
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e InternalPolicyEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[2] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -105,7 +127,7 @@ func (e InternalPolicyEdges) ControlsOrErr() ([]*Control, error) {
 // ProceduresOrErr returns the Procedures value or an error if the edge
 // was not loaded in eager-loading.
 func (e InternalPolicyEdges) ProceduresOrErr() ([]*Procedure, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[3] {
 		return e.Procedures, nil
 	}
 	return nil, &NotLoadedError{edge: "procedures"}
@@ -114,7 +136,7 @@ func (e InternalPolicyEdges) ProceduresOrErr() ([]*Procedure, error) {
 // NarrativesOrErr returns the Narratives value or an error if the edge
 // was not loaded in eager-loading.
 func (e InternalPolicyEdges) NarrativesOrErr() ([]*Narrative, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[4] {
 		return e.Narratives, nil
 	}
 	return nil, &NotLoadedError{edge: "narratives"}
@@ -123,7 +145,7 @@ func (e InternalPolicyEdges) NarrativesOrErr() ([]*Narrative, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e InternalPolicyEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[5] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -132,10 +154,28 @@ func (e InternalPolicyEdges) TasksOrErr() ([]*Task, error) {
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e InternalPolicyEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[6] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
+}
+
+// EditorsOrErr returns the Editors value or an error if the edge
+// was not loaded in eager-loading.
+func (e InternalPolicyEdges) EditorsOrErr() ([]*Group, error) {
+	if e.loadedTypes[7] {
+		return e.Editors, nil
+	}
+	return nil, &NotLoadedError{edge: "editors"}
+}
+
+// BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
+// was not loaded in eager-loading.
+func (e InternalPolicyEdges) BlockedGroupsOrErr() ([]*Group, error) {
+	if e.loadedTypes[8] {
+		return e.BlockedGroups, nil
+	}
+	return nil, &NotLoadedError{edge: "blocked_groups"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -145,7 +185,7 @@ func (*InternalPolicy) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case internalpolicy.FieldTags, internalpolicy.FieldDetails:
 			values[i] = new([]byte)
-		case internalpolicy.FieldID, internalpolicy.FieldCreatedBy, internalpolicy.FieldUpdatedBy, internalpolicy.FieldDeletedBy, internalpolicy.FieldMappingID, internalpolicy.FieldName, internalpolicy.FieldDescription, internalpolicy.FieldStatus, internalpolicy.FieldPolicyType, internalpolicy.FieldVersion, internalpolicy.FieldPurposeAndScope, internalpolicy.FieldBackground:
+		case internalpolicy.FieldID, internalpolicy.FieldCreatedBy, internalpolicy.FieldUpdatedBy, internalpolicy.FieldDeletedBy, internalpolicy.FieldMappingID, internalpolicy.FieldOwnerID, internalpolicy.FieldName, internalpolicy.FieldDescription, internalpolicy.FieldStatus, internalpolicy.FieldPolicyType, internalpolicy.FieldVersion, internalpolicy.FieldPurposeAndScope, internalpolicy.FieldBackground:
 			values[i] = new(sql.NullString)
 		case internalpolicy.FieldCreatedAt, internalpolicy.FieldUpdatedAt, internalpolicy.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -220,6 +260,12 @@ func (ip *InternalPolicy) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
+		case internalpolicy.FieldOwnerID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
+			} else if value.Valid {
+				ip.OwnerID = value.String
+			}
 		case internalpolicy.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
@@ -283,6 +329,11 @@ func (ip *InternalPolicy) Value(name string) (ent.Value, error) {
 	return ip.selectValues.Get(name)
 }
 
+// QueryOwner queries the "owner" edge of the InternalPolicy entity.
+func (ip *InternalPolicy) QueryOwner() *OrganizationQuery {
+	return NewInternalPolicyClient(ip.config).QueryOwner(ip)
+}
+
 // QueryControlobjectives queries the "controlobjectives" edge of the InternalPolicy entity.
 func (ip *InternalPolicy) QueryControlobjectives() *ControlObjectiveQuery {
 	return NewInternalPolicyClient(ip.config).QueryControlobjectives(ip)
@@ -311,6 +362,16 @@ func (ip *InternalPolicy) QueryTasks() *TaskQuery {
 // QueryPrograms queries the "programs" edge of the InternalPolicy entity.
 func (ip *InternalPolicy) QueryPrograms() *ProgramQuery {
 	return NewInternalPolicyClient(ip.config).QueryPrograms(ip)
+}
+
+// QueryEditors queries the "editors" edge of the InternalPolicy entity.
+func (ip *InternalPolicy) QueryEditors() *GroupQuery {
+	return NewInternalPolicyClient(ip.config).QueryEditors(ip)
+}
+
+// QueryBlockedGroups queries the "blocked_groups" edge of the InternalPolicy entity.
+func (ip *InternalPolicy) QueryBlockedGroups() *GroupQuery {
+	return NewInternalPolicyClient(ip.config).QueryBlockedGroups(ip)
 }
 
 // Update returns a builder for updating this InternalPolicy.
@@ -359,6 +420,9 @@ func (ip *InternalPolicy) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", ip.Tags))
+	builder.WriteString(", ")
+	builder.WriteString("owner_id=")
+	builder.WriteString(ip.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(ip.Name)
@@ -528,6 +592,54 @@ func (ip *InternalPolicy) appendNamedPrograms(name string, edges ...*Program) {
 		ip.Edges.namedPrograms[name] = []*Program{}
 	} else {
 		ip.Edges.namedPrograms[name] = append(ip.Edges.namedPrograms[name], edges...)
+	}
+}
+
+// NamedEditors returns the Editors named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (ip *InternalPolicy) NamedEditors(name string) ([]*Group, error) {
+	if ip.Edges.namedEditors == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := ip.Edges.namedEditors[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (ip *InternalPolicy) appendNamedEditors(name string, edges ...*Group) {
+	if ip.Edges.namedEditors == nil {
+		ip.Edges.namedEditors = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		ip.Edges.namedEditors[name] = []*Group{}
+	} else {
+		ip.Edges.namedEditors[name] = append(ip.Edges.namedEditors[name], edges...)
+	}
+}
+
+// NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (ip *InternalPolicy) NamedBlockedGroups(name string) ([]*Group, error) {
+	if ip.Edges.namedBlockedGroups == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := ip.Edges.namedBlockedGroups[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (ip *InternalPolicy) appendNamedBlockedGroups(name string, edges ...*Group) {
+	if ip.Edges.namedBlockedGroups == nil {
+		ip.Edges.namedBlockedGroups = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		ip.Edges.namedBlockedGroups[name] = []*Group{}
+	} else {
+		ip.Edges.namedBlockedGroups[name] = append(ip.Edges.namedBlockedGroups[name], edges...)
 	}
 }
 

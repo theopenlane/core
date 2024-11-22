@@ -10,10 +10,17 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/utils/rout"
 )
 
 // CreateProcedure is the resolver for the createProcedure field.
 func (r *mutationResolver) CreateProcedure(ctx context.Context, input generated.CreateProcedureInput) (*ProcedureCreatePayload, error) {
+	// set the organization in the auth context if its not done for us
+	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
 	res, err := withTransactionalMutation(ctx).Procedure.Create().SetInput(input).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "procedure"})
@@ -46,6 +53,12 @@ func (r *mutationResolver) UpdateProcedure(ctx context.Context, id string, input
 	res, err := withTransactionalMutation(ctx).Procedure.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "procedure"})
+	}
+
+	// set the organization in the auth context if its not done for us
+	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+		return nil, rout.ErrPermissionDenied
 	}
 
 	// setup update request

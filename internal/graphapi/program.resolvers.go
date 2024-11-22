@@ -10,10 +10,17 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/utils/rout"
 )
 
 // CreateProgram is the resolver for the createProgram field.
 func (r *mutationResolver) CreateProgram(ctx context.Context, input generated.CreateProgramInput) (*ProgramCreatePayload, error) {
+	// set the organization in the auth context if its not done for us
+	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
 	res, err := withTransactionalMutation(ctx).Program.Create().SetInput(input).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "program"})
@@ -46,6 +53,12 @@ func (r *mutationResolver) UpdateProgram(ctx context.Context, id string, input g
 	res, err := withTransactionalMutation(ctx).Program.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "program"})
+	}
+
+	// set the organization in the auth context if its not done for us
+	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+		return nil, rout.ErrPermissionDenied
 	}
 
 	// setup update request

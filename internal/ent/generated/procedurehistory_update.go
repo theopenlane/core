@@ -122,6 +122,26 @@ func (phu *ProcedureHistoryUpdate) ClearTags() *ProcedureHistoryUpdate {
 	return phu
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (phu *ProcedureHistoryUpdate) SetOwnerID(s string) *ProcedureHistoryUpdate {
+	phu.mutation.SetOwnerID(s)
+	return phu
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (phu *ProcedureHistoryUpdate) SetNillableOwnerID(s *string) *ProcedureHistoryUpdate {
+	if s != nil {
+		phu.SetOwnerID(*s)
+	}
+	return phu
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (phu *ProcedureHistoryUpdate) ClearOwnerID() *ProcedureHistoryUpdate {
+	phu.mutation.ClearOwnerID()
+	return phu
+}
+
 // SetName sets the "name" field.
 func (phu *ProcedureHistoryUpdate) SetName(s string) *ProcedureHistoryUpdate {
 	phu.mutation.SetName(s)
@@ -295,7 +315,9 @@ func (phu *ProcedureHistoryUpdate) Mutation() *ProcedureHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (phu *ProcedureHistoryUpdate) Save(ctx context.Context) (int, error) {
-	phu.defaults()
+	if err := phu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, phu.sqlSave, phu.mutation, phu.hooks)
 }
 
@@ -322,11 +344,15 @@ func (phu *ProcedureHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (phu *ProcedureHistoryUpdate) defaults() {
+func (phu *ProcedureHistoryUpdate) defaults() error {
 	if _, ok := phu.mutation.UpdatedAt(); !ok && !phu.mutation.UpdatedAtCleared() {
+		if procedurehistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized procedurehistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := procedurehistory.UpdateDefaultUpdatedAt()
 		phu.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
@@ -387,6 +413,12 @@ func (phu *ProcedureHistoryUpdate) sqlSave(ctx context.Context) (n int, err erro
 	}
 	if phu.mutation.TagsCleared() {
 		_spec.ClearField(procedurehistory.FieldTags, field.TypeJSON)
+	}
+	if value, ok := phu.mutation.OwnerID(); ok {
+		_spec.SetField(procedurehistory.FieldOwnerID, field.TypeString, value)
+	}
+	if phu.mutation.OwnerIDCleared() {
+		_spec.ClearField(procedurehistory.FieldOwnerID, field.TypeString)
 	}
 	if value, ok := phu.mutation.Name(); ok {
 		_spec.SetField(procedurehistory.FieldName, field.TypeString, value)
@@ -550,6 +582,26 @@ func (phuo *ProcedureHistoryUpdateOne) AppendTags(s []string) *ProcedureHistoryU
 // ClearTags clears the value of the "tags" field.
 func (phuo *ProcedureHistoryUpdateOne) ClearTags() *ProcedureHistoryUpdateOne {
 	phuo.mutation.ClearTags()
+	return phuo
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (phuo *ProcedureHistoryUpdateOne) SetOwnerID(s string) *ProcedureHistoryUpdateOne {
+	phuo.mutation.SetOwnerID(s)
+	return phuo
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (phuo *ProcedureHistoryUpdateOne) SetNillableOwnerID(s *string) *ProcedureHistoryUpdateOne {
+	if s != nil {
+		phuo.SetOwnerID(*s)
+	}
+	return phuo
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (phuo *ProcedureHistoryUpdateOne) ClearOwnerID() *ProcedureHistoryUpdateOne {
+	phuo.mutation.ClearOwnerID()
 	return phuo
 }
 
@@ -739,7 +791,9 @@ func (phuo *ProcedureHistoryUpdateOne) Select(field string, fields ...string) *P
 
 // Save executes the query and returns the updated ProcedureHistory entity.
 func (phuo *ProcedureHistoryUpdateOne) Save(ctx context.Context) (*ProcedureHistory, error) {
-	phuo.defaults()
+	if err := phuo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, phuo.sqlSave, phuo.mutation, phuo.hooks)
 }
 
@@ -766,11 +820,15 @@ func (phuo *ProcedureHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (phuo *ProcedureHistoryUpdateOne) defaults() {
+func (phuo *ProcedureHistoryUpdateOne) defaults() error {
 	if _, ok := phuo.mutation.UpdatedAt(); !ok && !phuo.mutation.UpdatedAtCleared() {
+		if procedurehistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized procedurehistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := procedurehistory.UpdateDefaultUpdatedAt()
 		phuo.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
@@ -848,6 +906,12 @@ func (phuo *ProcedureHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Proc
 	}
 	if phuo.mutation.TagsCleared() {
 		_spec.ClearField(procedurehistory.FieldTags, field.TypeJSON)
+	}
+	if value, ok := phuo.mutation.OwnerID(); ok {
+		_spec.SetField(procedurehistory.FieldOwnerID, field.TypeString, value)
+	}
+	if phuo.mutation.OwnerIDCleared() {
+		_spec.ClearField(procedurehistory.FieldOwnerID, field.TypeString)
 	}
 	if value, ok := phuo.mutation.Name(); ok {
 		_spec.SetField(procedurehistory.FieldName, field.TypeString, value)

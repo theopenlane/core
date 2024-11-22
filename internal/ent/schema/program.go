@@ -10,6 +10,7 @@ import (
 	"entgo.io/ent/schema/field"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
@@ -19,6 +20,7 @@ import (
 	"github.com/theopenlane/entx"
 	emixin "github.com/theopenlane/entx/mixin"
 	"github.com/theopenlane/iam/entfga"
+	"github.com/theopenlane/iam/fgax"
 )
 
 // Program holds the schema definition for the Program entity
@@ -101,6 +103,12 @@ func (Program) Edges() []ent.Edge {
 		edge.From("users", User.Type).
 			Ref("programs").
 			Through("members", ProgramMembership.Type),
+		edge.To("viewers", Group.Type).
+			Comment("provides view access to the program to members of the group"),
+		edge.To("editors", Group.Type).
+			Comment("provides edit access to the program to members of the group"),
+		edge.To("blocked_groups", Group.Type).
+			Comment("groups that are blocked from viewing or editing the program"),
 	}
 }
 
@@ -135,6 +143,24 @@ func (Program) Annotations() []schema.Annotation {
 func (Program) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookProgramAuthz(),
+		hook.On(
+			hooks.HookRelationTuples(map[string]string{
+				"editor_id": "group",
+			}, fgax.EditorRelation), // add editor tuples for associated groups
+			ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
+		),
+		hook.On(
+			hooks.HookRelationTuples(map[string]string{
+				"blocked_group_id": "group",
+			}, fgax.BlockedRelation), // add block tuples for associated groups
+			ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
+		),
+		hook.On(
+			hooks.HookRelationTuples(map[string]string{
+				"viewer_id": "group",
+			}, fgax.ViewerRelation), // add viewer tuples for associated groups
+			ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
+		),
 	}
 }
 

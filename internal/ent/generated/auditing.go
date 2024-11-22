@@ -1374,6 +1374,9 @@ func (iph *InternalPolicyHistory) changes(new *InternalPolicyHistory) []Change {
 	if !reflect.DeepEqual(iph.Tags, new.Tags) {
 		changes = append(changes, NewChange(internalpolicyhistory.FieldTags, iph.Tags, new.Tags))
 	}
+	if !reflect.DeepEqual(iph.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(internalpolicyhistory.FieldOwnerID, iph.OwnerID, new.OwnerID))
+	}
 	if !reflect.DeepEqual(iph.Name, new.Name) {
 		changes = append(changes, NewChange(internalpolicyhistory.FieldName, iph.Name, new.Name))
 	}
@@ -1856,6 +1859,9 @@ func (ph *ProcedureHistory) changes(new *ProcedureHistory) []Change {
 	}
 	if !reflect.DeepEqual(ph.Tags, new.Tags) {
 		changes = append(changes, NewChange(procedurehistory.FieldTags, ph.Tags, new.Tags))
+	}
+	if !reflect.DeepEqual(ph.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(procedurehistory.FieldOwnerID, ph.OwnerID, new.OwnerID))
 	}
 	if !reflect.DeepEqual(ph.Name, new.Name) {
 		changes = append(changes, NewChange(procedurehistory.FieldName, ph.Name, new.Name))
