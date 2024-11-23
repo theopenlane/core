@@ -159,7 +159,7 @@ steps:
           - cluster-secrets#v1.0.0:
               variables:
                 ATLAS_CLOUD_TOKEN: ATLAS_CLOUD_TOKEN
-          - theopenlane/atlas#v1.0.0:
+          - theopenlane/atlas#v1.1.0:
               project: core
               dev-url: "docker://postgres/17/dev?search_path=public"
               dir: "file://db/migrations"
@@ -173,7 +173,7 @@ steps:
           - cluster-secrets#v1.0.0:
               variables:
                 ATLAS_CLOUD_TOKEN: ATLAS_CLOUD_TOKEN
-          - theopenlane/atlas#v1.0.0:
+          - theopenlane/atlas#v1.1.0:
               project: core
               dev-url: "docker://postgres/17/dev?search_path=public"
               dir: "file://db/migrations"
