@@ -156,7 +156,7 @@ steps:
         agents:
           queue: "hosted-small"
         plugins:
-          - cluster-secrets#v1.0.0:
+          - cluster-secrets#v1.1.0:
               variables:
                 ATLAS_CLOUD_TOKEN: ATLAS_CLOUD_TOKEN
           - theopenlane/atlas#v1.0.0:
@@ -170,7 +170,7 @@ steps:
           queue: "hosted-small"
         key: "atlas_migrate"
         plugins:
-          - cluster-secrets#v1.0.0:
+          - cluster-secrets#v1.1.0:
               variables:
                 ATLAS_CLOUD_TOKEN: ATLAS_CLOUD_TOKEN
           - theopenlane/atlas#v1.0.0:
