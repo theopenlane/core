@@ -8,6 +8,7 @@ env:
   IMAGE_TAG: ${BUILDKITE_BUILD_NUMBER}-${BUILDKITE_COMMIT:0:8}
   SONAR_HOST: https://sonarcloud.io
   BUILDKITE_PLUGIN_ATLAS_DEBUG: "true"
+  BUILDKITE_PLUGINS_ALWAYS_CLONE_FRESH: "true"
 
 steps:
   # - group: ":knife: Pre-check"
