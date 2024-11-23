@@ -171,14 +171,6 @@ func (aphc *ActionPlanHistoryCreate) SetDescription(s string) *ActionPlanHistory
 	return aphc
 }
 
-// SetNillableDescription sets the "description" field if the given value is not nil.
-func (aphc *ActionPlanHistoryCreate) SetNillableDescription(s *string) *ActionPlanHistoryCreate {
-	if s != nil {
-		aphc.SetDescription(*s)
-	}
-	return aphc
-}
-
 // SetStatus sets the "status" field.
 func (aphc *ActionPlanHistoryCreate) SetStatus(s string) *ActionPlanHistoryCreate {
 	aphc.mutation.SetStatus(s)
@@ -334,6 +326,9 @@ func (aphc *ActionPlanHistoryCreate) check() error {
 	}
 	if _, ok := aphc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "ActionPlanHistory.name"`)}
+	}
+	if _, ok := aphc.mutation.Description(); !ok {
+		return &ValidationError{Name: "description", err: errors.New(`generated: missing required field "ActionPlanHistory.description"`)}
 	}
 	return nil
 }

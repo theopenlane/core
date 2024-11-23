@@ -204,6 +204,10 @@ func init() {
 	actionplanDescTags := actionplanMixinFields3[0].Descriptor()
 	// actionplan.DefaultTags holds the default value on creation for the tags field.
 	actionplan.DefaultTags = actionplanDescTags.Default.([]string)
+	// actionplanDescDescription is the schema descriptor for description field.
+	actionplanDescDescription := actionplanFields[1].Descriptor()
+	// actionplan.DescriptionValidator is a validator for the "description" field. It is called by the builders before save.
+	actionplan.DescriptionValidator = actionplanDescDescription.Validators[0].(func(string) error)
 	// actionplanDescID is the schema descriptor for id field.
 	actionplanDescID := actionplanMixinFields2[0].Descriptor()
 	// actionplan.DefaultID holds the default value on creation for the id field.

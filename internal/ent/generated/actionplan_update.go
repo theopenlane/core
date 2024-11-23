@@ -155,12 +155,6 @@ func (apu *ActionPlanUpdate) SetNillableDescription(s *string) *ActionPlanUpdate
 	return apu
 }
 
-// ClearDescription clears the value of the "description" field.
-func (apu *ActionPlanUpdate) ClearDescription() *ActionPlanUpdate {
-	apu.mutation.ClearDescription()
-	return apu
-}
-
 // SetStatus sets the "status" field.
 func (apu *ActionPlanUpdate) SetStatus(s string) *ActionPlanUpdate {
 	apu.mutation.SetStatus(s)
@@ -480,6 +474,16 @@ func (apu *ActionPlanUpdate) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (apu *ActionPlanUpdate) check() error {
+	if v, ok := apu.mutation.Description(); ok {
+		if err := actionplan.DescriptionValidator(v); err != nil {
+			return &ValidationError{Name: "description", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.description": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (apu *ActionPlanUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ActionPlanUpdate {
 	apu.modifiers = append(apu.modifiers, modifiers...)
@@ -487,6 +491,9 @@ func (apu *ActionPlanUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *Ac
 }
 
 func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
+	if err := apu.check(); err != nil {
+		return n, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(actionplan.Table, actionplan.Columns, sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString))
 	if ps := apu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -541,9 +548,6 @@ func (apu *ActionPlanUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := apu.mutation.Description(); ok {
 		_spec.SetField(actionplan.FieldDescription, field.TypeString, value)
-	}
-	if apu.mutation.DescriptionCleared() {
-		_spec.ClearField(actionplan.FieldDescription, field.TypeString)
 	}
 	if value, ok := apu.mutation.Status(); ok {
 		_spec.SetField(actionplan.FieldStatus, field.TypeString, value)
@@ -957,12 +961,6 @@ func (apuo *ActionPlanUpdateOne) SetNillableDescription(s *string) *ActionPlanUp
 	return apuo
 }
 
-// ClearDescription clears the value of the "description" field.
-func (apuo *ActionPlanUpdateOne) ClearDescription() *ActionPlanUpdateOne {
-	apuo.mutation.ClearDescription()
-	return apuo
-}
-
 // SetStatus sets the "status" field.
 func (apuo *ActionPlanUpdateOne) SetStatus(s string) *ActionPlanUpdateOne {
 	apuo.mutation.SetStatus(s)
@@ -1295,6 +1293,16 @@ func (apuo *ActionPlanUpdateOne) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (apuo *ActionPlanUpdateOne) check() error {
+	if v, ok := apuo.mutation.Description(); ok {
+		if err := actionplan.DescriptionValidator(v); err != nil {
+			return &ValidationError{Name: "description", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.description": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (apuo *ActionPlanUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ActionPlanUpdateOne {
 	apuo.modifiers = append(apuo.modifiers, modifiers...)
@@ -1302,6 +1310,9 @@ func (apuo *ActionPlanUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder))
 }
 
 func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan, err error) {
+	if err := apuo.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(actionplan.Table, actionplan.Columns, sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString))
 	id, ok := apuo.mutation.ID()
 	if !ok {
@@ -1373,9 +1384,6 @@ func (apuo *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan
 	}
 	if value, ok := apuo.mutation.Description(); ok {
 		_spec.SetField(actionplan.FieldDescription, field.TypeString, value)
-	}
-	if apuo.mutation.DescriptionCleared() {
-		_spec.ClearField(actionplan.FieldDescription, field.TypeString)
 	}
 	if value, ok := apuo.mutation.Status(); ok {
 		_spec.SetField(actionplan.FieldStatus, field.TypeString, value)

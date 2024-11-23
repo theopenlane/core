@@ -262,7 +262,7 @@ type ActionPlan implements Node {
   """
   description of the action plan
   """
-  description: String
+  description: String!
   """
   status of the action plan
   """
@@ -341,7 +341,7 @@ type ActionPlanHistory implements Node {
   """
   description of the action plan
   """
-  description: String
+  description: String!
   """
   status of the action plan
   """
@@ -581,8 +581,6 @@ input ActionPlanHistoryWhereInput {
   descriptionContains: String
   descriptionHasPrefix: String
   descriptionHasSuffix: String
-  descriptionIsNil: Boolean
-  descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
   """
@@ -797,8 +795,6 @@ input ActionPlanWhereInput {
   descriptionContains: String
   descriptionHasPrefix: String
   descriptionHasSuffix: String
-  descriptionIsNil: Boolean
-  descriptionNotNil: Boolean
   descriptionEqualFold: String
   descriptionContainsFold: String
   """
@@ -3428,7 +3424,7 @@ input CreateActionPlanInput {
   """
   description of the action plan
   """
-  description: String
+  description: String!
   """
   status of the action plan
   """
@@ -27009,7 +27005,6 @@ input UpdateActionPlanInput {
   description of the action plan
   """
   description: String
-  clearDescription: Boolean
   """
   status of the action plan
   """

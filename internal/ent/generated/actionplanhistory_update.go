@@ -150,12 +150,6 @@ func (aphu *ActionPlanHistoryUpdate) SetNillableDescription(s *string) *ActionPl
 	return aphu
 }
 
-// ClearDescription clears the value of the "description" field.
-func (aphu *ActionPlanHistoryUpdate) ClearDescription() *ActionPlanHistoryUpdate {
-	aphu.mutation.ClearDescription()
-	return aphu
-}
-
 // SetStatus sets the "status" field.
 func (aphu *ActionPlanHistoryUpdate) SetStatus(s string) *ActionPlanHistoryUpdate {
 	aphu.mutation.SetStatus(s)
@@ -354,9 +348,6 @@ func (aphu *ActionPlanHistoryUpdate) sqlSave(ctx context.Context) (n int, err er
 	if value, ok := aphu.mutation.Description(); ok {
 		_spec.SetField(actionplanhistory.FieldDescription, field.TypeString, value)
 	}
-	if aphu.mutation.DescriptionCleared() {
-		_spec.ClearField(actionplanhistory.FieldDescription, field.TypeString)
-	}
 	if value, ok := aphu.mutation.Status(); ok {
 		_spec.SetField(actionplanhistory.FieldStatus, field.TypeString, value)
 	}
@@ -526,12 +517,6 @@ func (aphuo *ActionPlanHistoryUpdateOne) SetNillableDescription(s *string) *Acti
 	if s != nil {
 		aphuo.SetDescription(*s)
 	}
-	return aphuo
-}
-
-// ClearDescription clears the value of the "description" field.
-func (aphuo *ActionPlanHistoryUpdateOne) ClearDescription() *ActionPlanHistoryUpdateOne {
-	aphuo.mutation.ClearDescription()
 	return aphuo
 }
 
@@ -762,9 +747,6 @@ func (aphuo *ActionPlanHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Ac
 	}
 	if value, ok := aphuo.mutation.Description(); ok {
 		_spec.SetField(actionplanhistory.FieldDescription, field.TypeString, value)
-	}
-	if aphuo.mutation.DescriptionCleared() {
-		_spec.ClearField(actionplanhistory.FieldDescription, field.TypeString)
 	}
 	if value, ok := aphuo.mutation.Status(); ok {
 		_spec.SetField(actionplanhistory.FieldStatus, field.TypeString, value)

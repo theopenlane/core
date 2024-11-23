@@ -890,8 +890,6 @@ type ActionPlanWhereInput struct {
 	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
 	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
 	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
-	DescriptionIsNil        bool     `json:"descriptionIsNil,omitempty"`
-	DescriptionNotNil       bool     `json:"descriptionNotNil,omitempty"`
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
 
@@ -1377,12 +1375,6 @@ func (i *ActionPlanWhereInput) P() (predicate.ActionPlan, error) {
 	if i.DescriptionHasSuffix != nil {
 		predicates = append(predicates, actionplan.DescriptionHasSuffix(*i.DescriptionHasSuffix))
 	}
-	if i.DescriptionIsNil {
-		predicates = append(predicates, actionplan.DescriptionIsNil())
-	}
-	if i.DescriptionNotNil {
-		predicates = append(predicates, actionplan.DescriptionNotNil())
-	}
 	if i.DescriptionEqualFold != nil {
 		predicates = append(predicates, actionplan.DescriptionEqualFold(*i.DescriptionEqualFold))
 	}
@@ -1821,8 +1813,6 @@ type ActionPlanHistoryWhereInput struct {
 	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
 	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
 	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
-	DescriptionIsNil        bool     `json:"descriptionIsNil,omitempty"`
-	DescriptionNotNil       bool     `json:"descriptionNotNil,omitempty"`
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
 
@@ -2368,12 +2358,6 @@ func (i *ActionPlanHistoryWhereInput) P() (predicate.ActionPlanHistory, error) {
 	}
 	if i.DescriptionHasSuffix != nil {
 		predicates = append(predicates, actionplanhistory.DescriptionHasSuffix(*i.DescriptionHasSuffix))
-	}
-	if i.DescriptionIsNil {
-		predicates = append(predicates, actionplanhistory.DescriptionIsNil())
-	}
-	if i.DescriptionNotNil {
-		predicates = append(predicates, actionplanhistory.DescriptionNotNil())
 	}
 	if i.DescriptionEqualFold != nil {
 		predicates = append(predicates, actionplanhistory.DescriptionEqualFold(*i.DescriptionEqualFold))

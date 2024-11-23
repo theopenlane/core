@@ -125,7 +125,7 @@ func (c *APITokenUpdateOne) SetInput(i UpdateAPITokenInput) *APITokenUpdateOne {
 type CreateActionPlanInput struct {
 	Tags        []string
 	Name        string
-	Description *string
+	Description string
 	Status      *string
 	DueDate     *time.Time
 	Priority    *string
@@ -144,9 +144,7 @@ func (i *CreateActionPlanInput) Mutate(m *ActionPlanMutation) {
 		m.SetTags(v)
 	}
 	m.SetName(i.Name)
-	if v := i.Description; v != nil {
-		m.SetDescription(*v)
-	}
+	m.SetDescription(i.Description)
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
 	}
@@ -191,7 +189,6 @@ type UpdateActionPlanInput struct {
 	Tags              []string
 	AppendTags        []string
 	Name              *string
-	ClearDescription  bool
 	Description       *string
 	ClearStatus       bool
 	Status            *string
@@ -233,9 +230,6 @@ func (i *UpdateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	}
 	if v := i.Name; v != nil {
 		m.SetName(*v)
-	}
-	if i.ClearDescription {
-		m.ClearDescription()
 	}
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)

@@ -22,7 +22,7 @@ func (ActionPlan) Fields() []ent.Field {
 		field.String("name").
 			Comment("the name of the action plan"),
 		field.Text("description").
-			Optional().
+			NotEmpty().
 			Comment("description of the action plan"),
 		field.String("status").
 			Optional().

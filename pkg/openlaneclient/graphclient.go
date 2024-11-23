@@ -380,7 +380,7 @@ func NewClient(cli clientv2.HttpClient, baseURL string, options *clientv2.Option
 type CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans struct {
 	CreatedAt   *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description *string                "json:\"description,omitempty\" graphql:\"description\""
+	Description string                 "json:\"description\" graphql:\"description\""
 	Details     map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	DueDate     *time.Time             "json:\"dueDate,omitempty\" graphql:\"dueDate\""
 	ID          string                 "json:\"id\" graphql:\"id\""
@@ -405,7 +405,7 @@ func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans) GetCreated
 	}
 	return t.CreatedBy
 }
-func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans) GetDescription() *string {
+func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans) GetDescription() string {
 	if t == nil {
 		t = &CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans{}
 	}
@@ -486,7 +486,7 @@ func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan) GetActionPlans() []*Cr
 type CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans struct {
 	CreatedAt   *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description *string                "json:\"description,omitempty\" graphql:\"description\""
+	Description string                 "json:\"description\" graphql:\"description\""
 	Details     map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	DueDate     *time.Time             "json:\"dueDate,omitempty\" graphql:\"dueDate\""
 	ID          string                 "json:\"id\" graphql:\"id\""
@@ -511,7 +511,7 @@ func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans) GetCreatedBy() *
 	}
 	return t.CreatedBy
 }
-func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans) GetDescription() *string {
+func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans) GetDescription() string {
 	if t == nil {
 		t = &CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans{}
 	}
@@ -592,7 +592,7 @@ func (t *CreateBulkActionPlan_CreateBulkActionPlan) GetActionPlans() []*CreateBu
 type CreateActionPlan_CreateActionPlan_ActionPlan struct {
 	CreatedAt   *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description *string                "json:\"description,omitempty\" graphql:\"description\""
+	Description string                 "json:\"description\" graphql:\"description\""
 	Details     map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	DueDate     *time.Time             "json:\"dueDate,omitempty\" graphql:\"dueDate\""
 	ID          string                 "json:\"id\" graphql:\"id\""
@@ -617,7 +617,7 @@ func (t *CreateActionPlan_CreateActionPlan_ActionPlan) GetCreatedBy() *string {
 	}
 	return t.CreatedBy
 }
-func (t *CreateActionPlan_CreateActionPlan_ActionPlan) GetDescription() *string {
+func (t *CreateActionPlan_CreateActionPlan_ActionPlan) GetDescription() string {
 	if t == nil {
 		t = &CreateActionPlan_CreateActionPlan_ActionPlan{}
 	}
@@ -709,7 +709,7 @@ func (t *DeleteActionPlan_DeleteActionPlan) GetDeletedID() string {
 type GetAllActionPlans_ActionPlans_Edges_Node struct {
 	CreatedAt   *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description *string                "json:\"description,omitempty\" graphql:\"description\""
+	Description string                 "json:\"description\" graphql:\"description\""
 	Details     map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	DueDate     *time.Time             "json:\"dueDate,omitempty\" graphql:\"dueDate\""
 	ID          string                 "json:\"id\" graphql:\"id\""
@@ -734,7 +734,7 @@ func (t *GetAllActionPlans_ActionPlans_Edges_Node) GetCreatedBy() *string {
 	}
 	return t.CreatedBy
 }
-func (t *GetAllActionPlans_ActionPlans_Edges_Node) GetDescription() *string {
+func (t *GetAllActionPlans_ActionPlans_Edges_Node) GetDescription() string {
 	if t == nil {
 		t = &GetAllActionPlans_ActionPlans_Edges_Node{}
 	}
@@ -826,7 +826,7 @@ func (t *GetAllActionPlans_ActionPlans) GetEdges() []*GetAllActionPlans_ActionPl
 type GetActionPlanByID_ActionPlan struct {
 	CreatedAt   *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description *string                "json:\"description,omitempty\" graphql:\"description\""
+	Description string                 "json:\"description\" graphql:\"description\""
 	Details     map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	DueDate     *time.Time             "json:\"dueDate,omitempty\" graphql:\"dueDate\""
 	ID          string                 "json:\"id\" graphql:\"id\""
@@ -851,7 +851,7 @@ func (t *GetActionPlanByID_ActionPlan) GetCreatedBy() *string {
 	}
 	return t.CreatedBy
 }
-func (t *GetActionPlanByID_ActionPlan) GetDescription() *string {
+func (t *GetActionPlanByID_ActionPlan) GetDescription() string {
 	if t == nil {
 		t = &GetActionPlanByID_ActionPlan{}
 	}
@@ -921,7 +921,7 @@ func (t *GetActionPlanByID_ActionPlan) GetUpdatedBy() *string {
 type GetActionPlans_ActionPlans_Edges_Node struct {
 	CreatedAt   *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description *string                "json:\"description,omitempty\" graphql:\"description\""
+	Description string                 "json:\"description\" graphql:\"description\""
 	Details     map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	DueDate     *time.Time             "json:\"dueDate,omitempty\" graphql:\"dueDate\""
 	ID          string                 "json:\"id\" graphql:\"id\""
@@ -946,7 +946,7 @@ func (t *GetActionPlans_ActionPlans_Edges_Node) GetCreatedBy() *string {
 	}
 	return t.CreatedBy
 }
-func (t *GetActionPlans_ActionPlans_Edges_Node) GetDescription() *string {
+func (t *GetActionPlans_ActionPlans_Edges_Node) GetDescription() string {
 	if t == nil {
 		t = &GetActionPlans_ActionPlans_Edges_Node{}
 	}
@@ -1038,7 +1038,7 @@ func (t *GetActionPlans_ActionPlans) GetEdges() []*GetActionPlans_ActionPlans_Ed
 type UpdateActionPlan_UpdateActionPlan_ActionPlan struct {
 	CreatedAt   *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description *string                "json:\"description,omitempty\" graphql:\"description\""
+	Description string                 "json:\"description\" graphql:\"description\""
 	Details     map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	DueDate     *time.Time             "json:\"dueDate,omitempty\" graphql:\"dueDate\""
 	ID          string                 "json:\"id\" graphql:\"id\""
@@ -1063,7 +1063,7 @@ func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan) GetCreatedBy() *string {
 	}
 	return t.CreatedBy
 }
-func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan) GetDescription() *string {
+func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan) GetDescription() string {
 	if t == nil {
 		t = &UpdateActionPlan_UpdateActionPlan_ActionPlan{}
 	}
@@ -1144,7 +1144,7 @@ func (t *UpdateActionPlan_UpdateActionPlan) GetActionPlan() *UpdateActionPlan_Up
 type GetAllActionPlanHistories_ActionPlanHistories_Edges_Node struct {
 	CreatedAt   *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description *string                "json:\"description,omitempty\" graphql:\"description\""
+	Description string                 "json:\"description\" graphql:\"description\""
 	Details     map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	DueDate     *time.Time             "json:\"dueDate,omitempty\" graphql:\"dueDate\""
 	HistoryTime time.Time              "json:\"historyTime\" graphql:\"historyTime\""
@@ -1172,7 +1172,7 @@ func (t *GetAllActionPlanHistories_ActionPlanHistories_Edges_Node) GetCreatedBy(
 	}
 	return t.CreatedBy
 }
-func (t *GetAllActionPlanHistories_ActionPlanHistories_Edges_Node) GetDescription() *string {
+func (t *GetAllActionPlanHistories_ActionPlanHistories_Edges_Node) GetDescription() string {
 	if t == nil {
 		t = &GetAllActionPlanHistories_ActionPlanHistories_Edges_Node{}
 	}
@@ -1282,7 +1282,7 @@ func (t *GetAllActionPlanHistories_ActionPlanHistories) GetEdges() []*GetAllActi
 type GetActionPlanHistories_ActionPlanHistories_Edges_Node struct {
 	CreatedAt   *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy   *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description *string                "json:\"description,omitempty\" graphql:\"description\""
+	Description string                 "json:\"description\" graphql:\"description\""
 	Details     map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
 	DueDate     *time.Time             "json:\"dueDate,omitempty\" graphql:\"dueDate\""
 	HistoryTime time.Time              "json:\"historyTime\" graphql:\"historyTime\""
@@ -1310,7 +1310,7 @@ func (t *GetActionPlanHistories_ActionPlanHistories_Edges_Node) GetCreatedBy() *
 	}
 	return t.CreatedBy
 }
-func (t *GetActionPlanHistories_ActionPlanHistories_Edges_Node) GetDescription() *string {
+func (t *GetActionPlanHistories_ActionPlanHistories_Edges_Node) GetDescription() string {
 	if t == nil {
 		t = &GetActionPlanHistories_ActionPlanHistories_Edges_Node{}
 	}
@@ -1479,7 +1479,7 @@ type AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans struct {
 	ID          string                 "json:\"id\" graphql:\"id\""
 	Tags        []string               "json:\"tags,omitempty\" graphql:\"tags\""
 	Name        string                 "json:\"name\" graphql:\"name\""
-	Description *string                "json:\"description,omitempty\" graphql:\"description\""
+	Description string                 "json:\"description\" graphql:\"description\""
 	Status      *string                "json:\"status,omitempty\" graphql:\"status\""
 	Priority    *string                "json:\"priority,omitempty\" graphql:\"priority\""
 	Source      *string                "json:\"source,omitempty\" graphql:\"source\""
@@ -1510,7 +1510,7 @@ func (t *AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans) GetNa
 	}
 	return t.Name
 }
-func (t *AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans) GetDescription() *string {
+func (t *AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans) GetDescription() string {
 	if t == nil {
 		t = &AdminSearch_AdminSearch_Nodes_ActionPlanSearchResult_ActionPlans{}
 	}

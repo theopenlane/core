@@ -141,14 +141,6 @@ func (apc *ActionPlanCreate) SetDescription(s string) *ActionPlanCreate {
 	return apc
 }
 
-// SetNillableDescription sets the "description" field if the given value is not nil.
-func (apc *ActionPlanCreate) SetNillableDescription(s *string) *ActionPlanCreate {
-	if s != nil {
-		apc.SetDescription(*s)
-	}
-	return apc
-}
-
 // SetStatus sets the "status" field.
 func (apc *ActionPlanCreate) SetStatus(s string) *ActionPlanCreate {
 	apc.mutation.SetStatus(s)
@@ -379,6 +371,14 @@ func (apc *ActionPlanCreate) check() error {
 	}
 	if _, ok := apc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "ActionPlan.name"`)}
+	}
+	if _, ok := apc.mutation.Description(); !ok {
+		return &ValidationError{Name: "description", err: errors.New(`generated: missing required field "ActionPlan.description"`)}
+	}
+	if v, ok := apc.mutation.Description(); ok {
+		if err := actionplan.DescriptionValidator(v); err != nil {
+			return &ValidationError{Name: "description", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.description": %w`, err)}
+		}
 	}
 	return nil
 }

@@ -259,7 +259,7 @@ type ActionPlan struct {
 	// the name of the action plan
 	Name string `json:"name"`
 	// description of the action plan
-	Description *string `json:"description,omitempty"`
+	Description string `json:"description"`
 	// status of the action plan
 	Status *string `json:"status,omitempty"`
 	// due date of the action plan
@@ -331,7 +331,7 @@ type ActionPlanHistory struct {
 	// the name of the action plan
 	Name string `json:"name"`
 	// description of the action plan
-	Description *string `json:"description,omitempty"`
+	Description string `json:"description"`
 	// status of the action plan
 	Status *string `json:"status,omitempty"`
 	// due date of the action plan
@@ -518,8 +518,6 @@ type ActionPlanHistoryWhereInput struct {
 	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
 	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
 	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
-	DescriptionIsNil        *bool    `json:"descriptionIsNil,omitempty"`
-	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
 	// status field predicates
@@ -719,8 +717,6 @@ type ActionPlanWhereInput struct {
 	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
 	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
 	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
-	DescriptionIsNil        *bool    `json:"descriptionIsNil,omitempty"`
-	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
 	// status field predicates
@@ -2944,7 +2940,7 @@ type CreateActionPlanInput struct {
 	// the name of the action plan
 	Name string `json:"name"`
 	// description of the action plan
-	Description *string `json:"description,omitempty"`
+	Description string `json:"description"`
 	// status of the action plan
 	Status *string `json:"status,omitempty"`
 	// due date of the action plan
@@ -20485,8 +20481,7 @@ type UpdateActionPlanInput struct {
 	// the name of the action plan
 	Name *string `json:"name,omitempty"`
 	// description of the action plan
-	Description      *string `json:"description,omitempty"`
-	ClearDescription *bool   `json:"clearDescription,omitempty"`
+	Description *string `json:"description,omitempty"`
 	// status of the action plan
 	Status      *string `json:"status,omitempty"`
 	ClearStatus *bool   `json:"clearStatus,omitempty"`
