@@ -307,7 +307,9 @@ func parseGraphqlInputForEdgeIDs(ctx context.Context, parentField string) ([]str
 		if !ok {
 			return nil, nil
 		} else {
-			return []string{out.(string)}, nil // return the id
+			if strOut, ok := out.(string); ok {
+				return []string{strOut}, nil
+			}
 		}
 	}
 

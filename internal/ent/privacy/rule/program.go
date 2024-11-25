@@ -65,7 +65,7 @@ func CanCreateObjectsInProgram() privacy.MutationRuleFunc {
 }
 
 // getOwnerIDFromEntMutation extracts the object id from a the mutation
-// by attempting to cast the mutation to a group or program mutation
+// by attempting to cast the mutation to a risk mutation
 // if additional object types are needed, they should be added to this function
 func getProgramIDFromEntMutation(m generated.Mutation) (string, error) {
 	if o, ok := m.(*generated.RiskMutation); ok {

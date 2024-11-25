@@ -80,6 +80,22 @@ func TestParseGraphqlInputForEdgeIDs(t *testing.T) {
 			wantErr:     false,
 		},
 		{
+			name: "valid input, singular",
+			ctx: func() context.Context {
+				fCtx := &graphql.FieldContext{
+					Args: map[string]interface{}{
+						"input": map[string]interface{}{
+							"parentField": "id1",
+						},
+					},
+				}
+				return graphql.WithFieldContext(context.Background(), fCtx)
+			}(),
+			parentField: "parentField",
+			want:        []string{"id1"},
+			wantErr:     false,
+		},
+		{
 			name: "missing input",
 			ctx: func() context.Context {
 				fCtx := &graphql.FieldContext{
