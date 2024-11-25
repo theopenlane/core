@@ -5,6 +5,7 @@ package generated
 import (
 	"context"
 	"database/sql/driver"
+	"errors"
 	"fmt"
 	"math"
 
@@ -39,7 +40,6 @@ type RiskQuery struct {
 	withNamedControl     map[string]*ControlQuery
 	withNamedProcedure   map[string]*ProcedureQuery
 	withNamedActionplans map[string]*ActionPlanQuery
-	withNamedProgram     map[string]*ProgramQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -165,11 +165,11 @@ func (rq *RiskQuery) QueryProgram() *ProgramQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(risk.Table, risk.FieldID, selector),
 			sqlgraph.To(program.Table, program.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, risk.ProgramTable, risk.ProgramPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2O, true, risk.ProgramTable, risk.ProgramColumn),
 		)
 		schemaConfig := rq.schemaConfig
 		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.ProgramRisks
+		step.Edge.Schema = schemaConfig.Risk
 		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -494,6 +494,12 @@ func (rq *RiskQuery) prepareQuery(ctx context.Context) error {
 		}
 		rq.sql = prev
 	}
+	if risk.Policy == nil {
+		return errors.New("generated: uninitialized risk.Policy (forgotten import generated/runtime?)")
+	}
+	if err := risk.Policy.EvalQuery(ctx, rq); err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -509,6 +515,9 @@ func (rq *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 			rq.withProgram != nil,
 		}
 	)
+	if rq.withProgram != nil {
+		withFKs = true
+	}
 	if withFKs {
 		_spec.Node.Columns = append(_spec.Node.Columns, risk.ForeignKeys...)
 	}
@@ -557,9 +566,8 @@ func (rq *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 		}
 	}
 	if query := rq.withProgram; query != nil {
-		if err := rq.loadProgram(ctx, query, nodes,
-			func(n *Risk) { n.Edges.Program = []*Program{} },
-			func(n *Risk, e *Program) { n.Edges.Program = append(n.Edges.Program, e) }); err != nil {
+		if err := rq.loadProgram(ctx, query, nodes, nil,
+			func(n *Risk, e *Program) { n.Edges.Program = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -581,13 +589,6 @@ func (rq *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 		if err := rq.loadActionplans(ctx, query, nodes,
 			func(n *Risk) { n.appendNamedActionplans(name) },
 			func(n *Risk, e *ActionPlan) { n.appendNamedActionplans(name, e) }); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range rq.withNamedProgram {
-		if err := rq.loadProgram(ctx, query, nodes,
-			func(n *Risk) { n.appendNamedProgram(name) },
-			func(n *Risk, e *Program) { n.appendNamedProgram(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -786,63 +787,33 @@ func (rq *RiskQuery) loadActionplans(ctx context.Context, query *ActionPlanQuery
 	return nil
 }
 func (rq *RiskQuery) loadProgram(ctx context.Context, query *ProgramQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Program)) error {
-	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[string]*Risk)
-	nids := make(map[string]map[*Risk]struct{})
-	for i, node := range nodes {
-		edgeIDs[i] = node.ID
-		byID[node.ID] = node
-		if init != nil {
-			init(node)
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Risk)
+	for i := range nodes {
+		if nodes[i].program_risks == nil {
+			continue
 		}
+		fk := *nodes[i].program_risks
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
 	}
-	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(risk.ProgramTable)
-		joinT.Schema(rq.schemaConfig.ProgramRisks)
-		s.Join(joinT).On(s.C(program.FieldID), joinT.C(risk.ProgramPrimaryKey[0]))
-		s.Where(sql.InValues(joinT.C(risk.ProgramPrimaryKey[1]), edgeIDs...))
-		columns := s.SelectedColumns()
-		s.Select(joinT.C(risk.ProgramPrimaryKey[1]))
-		s.AppendSelect(columns...)
-		s.SetDistinct(false)
-	})
-	if err := query.prepareQuery(ctx); err != nil {
-		return err
+	if len(ids) == 0 {
+		return nil
 	}
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
-			assign := spec.Assign
-			values := spec.ScanValues
-			spec.ScanValues = func(columns []string) ([]any, error) {
-				values, err := values(columns[1:])
-				if err != nil {
-					return nil, err
-				}
-				return append([]any{new(sql.NullString)}, values...), nil
-			}
-			spec.Assign = func(columns []string, values []any) error {
-				outValue := values[0].(*sql.NullString).String
-				inValue := values[1].(*sql.NullString).String
-				if nids[inValue] == nil {
-					nids[inValue] = map[*Risk]struct{}{byID[outValue]: {}}
-					return assign(columns[1:], values[1:])
-				}
-				nids[inValue][byID[outValue]] = struct{}{}
-				return nil
-			}
-		})
-	})
-	neighbors, err := withInterceptors[[]*Program](ctx, query, qr, query.inters)
+	query.Where(program.IDIn(ids...))
+	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		nodes, ok := nids[n.ID]
+		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected "program" node returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "program_risks" returned %v`, n.ID)
 		}
-		for kn := range nodes {
-			assign(kn, n)
+		for i := range nodes {
+			assign(nodes[i], n)
 		}
 	}
 	return nil
@@ -985,20 +956,6 @@ func (rq *RiskQuery) WithNamedActionplans(name string, opts ...func(*ActionPlanQ
 		rq.withNamedActionplans = make(map[string]*ActionPlanQuery)
 	}
 	rq.withNamedActionplans[name] = query
-	return rq
-}
-
-// WithNamedProgram tells the query-builder to eager-load the nodes that are connected to the "program"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (rq *RiskQuery) WithNamedProgram(name string, opts ...func(*ProgramQuery)) *RiskQuery {
-	query := (&ProgramClient{config: rq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if rq.withNamedProgram == nil {
-		rq.withNamedProgram = make(map[string]*ProgramQuery)
-	}
-	rq.withNamedProgram[name] = query
 	return rq
 }
 

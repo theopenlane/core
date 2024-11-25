@@ -312,19 +312,15 @@ func (rc *RiskCreate) AddActionplans(a ...*ActionPlan) *RiskCreate {
 	return rc.AddActionplanIDs(ids...)
 }
 
-// AddProgramIDs adds the "program" edge to the Program entity by IDs.
-func (rc *RiskCreate) AddProgramIDs(ids ...string) *RiskCreate {
-	rc.mutation.AddProgramIDs(ids...)
+// SetProgramID sets the "program" edge to the Program entity by ID.
+func (rc *RiskCreate) SetProgramID(id string) *RiskCreate {
+	rc.mutation.SetProgramID(id)
 	return rc
 }
 
-// AddProgram adds the "program" edges to the Program entity.
-func (rc *RiskCreate) AddProgram(p ...*Program) *RiskCreate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return rc.AddProgramIDs(ids...)
+// SetProgram sets the "program" edge to the Program entity.
+func (rc *RiskCreate) SetProgram(p *Program) *RiskCreate {
+	return rc.SetProgramID(p.ID)
 }
 
 // Mutation returns the RiskMutation object of the builder.
@@ -389,6 +385,14 @@ func (rc *RiskCreate) defaults() error {
 		v := risk.DefaultTags
 		rc.mutation.SetTags(v)
 	}
+	if _, ok := rc.mutation.Impact(); !ok {
+		v := risk.DefaultImpact
+		rc.mutation.SetImpact(v)
+	}
+	if _, ok := rc.mutation.Likelihood(); !ok {
+		v := risk.DefaultLikelihood
+		rc.mutation.SetLikelihood(v)
+	}
 	if _, ok := rc.mutation.ID(); !ok {
 		if risk.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized risk.DefaultID (forgotten import generated/runtime?)")
@@ -407,6 +411,11 @@ func (rc *RiskCreate) check() error {
 	if _, ok := rc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "Risk.name"`)}
 	}
+	if v, ok := rc.mutation.Name(); ok {
+		if err := risk.NameValidator(v); err != nil {
+			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Risk.name": %w`, err)}
+		}
+	}
 	if v, ok := rc.mutation.Impact(); ok {
 		if err := risk.ImpactValidator(v); err != nil {
 			return &ValidationError{Name: "impact", err: fmt.Errorf(`generated: validator failed for field "Risk.impact": %w`, err)}
@@ -416,6 +425,9 @@ func (rc *RiskCreate) check() error {
 		if err := risk.LikelihoodValidator(v); err != nil {
 			return &ValidationError{Name: "likelihood", err: fmt.Errorf(`generated: validator failed for field "Risk.likelihood": %w`, err)}
 		}
+	}
+	if len(rc.mutation.ProgramIDs()) == 0 {
+		return &ValidationError{Name: "program", err: errors.New(`generated: missing required edge "Risk.program"`)}
 	}
 	return nil
 }
@@ -578,19 +590,20 @@ func (rc *RiskCreate) createSpec() (*Risk, *sqlgraph.CreateSpec) {
 	}
 	if nodes := rc.mutation.ProgramIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.M2O,
 			Inverse: true,
 			Table:   risk.ProgramTable,
-			Columns: risk.ProgramPrimaryKey,
+			Columns: []string{risk.ProgramColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = rc.schemaConfig.ProgramRisks
+		edge.Schema = rc.schemaConfig.Risk
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_node.program_risks = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

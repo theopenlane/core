@@ -1285,11 +1285,11 @@ func HasProgram() predicate.Risk {
 	return predicate.Risk(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, ProgramTable, ProgramPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2O, true, ProgramTable, ProgramColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.ProgramRisks
+		step.Edge.Schema = schemaConfig.Risk
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1300,7 +1300,7 @@ func HasProgramWith(preds ...predicate.Program) predicate.Risk {
 		step := newProgramStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.ProgramRisks
+		step.Edge.Schema = schemaConfig.Risk
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

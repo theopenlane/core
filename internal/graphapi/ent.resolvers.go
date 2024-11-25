@@ -1326,6 +1326,11 @@ func (r *Resolver) UpdateOrganizationInput() UpdateOrganizationInputResolver {
 	return &updateOrganizationInputResolver{r}
 }
 
+// UpdateProgramInput returns UpdateProgramInputResolver implementation.
+func (r *Resolver) UpdateProgramInput() UpdateProgramInputResolver {
+	return &updateProgramInputResolver{r}
+}
+
 // UpdateTFASettingInput returns UpdateTFASettingInputResolver implementation.
 func (r *Resolver) UpdateTFASettingInput() UpdateTFASettingInputResolver {
 	return &updateTFASettingInputResolver{r}
@@ -1338,4 +1343,5 @@ type createOrganizationInputResolver struct{ *Resolver }
 type updateEntityInputResolver struct{ *Resolver }
 type updateGroupInputResolver struct{ *Resolver }
 type updateOrganizationInputResolver struct{ *Resolver }
+type updateProgramInputResolver struct{ *Resolver }
 type updateTFASettingInputResolver struct{ *Resolver }

@@ -2299,12 +2299,13 @@ var (
 		{Name: "status", Type: field.TypeString, Nullable: true},
 		{Name: "risk_type", Type: field.TypeString, Nullable: true},
 		{Name: "business_costs", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "impact", Type: field.TypeEnum, Nullable: true, Enums: []string{"LOW", "MODERATE", "HIGH"}},
-		{Name: "likelihood", Type: field.TypeEnum, Nullable: true, Enums: []string{"UNLIKELY", "LIKELY", "HIGHLY_LIKELY"}},
+		{Name: "impact", Type: field.TypeEnum, Nullable: true, Enums: []string{"LOW", "MODERATE", "HIGH"}, Default: "MODERATE"},
+		{Name: "likelihood", Type: field.TypeEnum, Nullable: true, Enums: []string{"UNLIKELY", "LIKELY", "HIGHLY_LIKELY"}, Default: "LIKELY"},
 		{Name: "mitigation", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "satisfies", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "details", Type: field.TypeJSON, Nullable: true},
 		{Name: "control_objective_risks", Type: field.TypeString, Nullable: true},
+		{Name: "program_risks", Type: field.TypeString},
 	}
 	// RisksTable holds the schema information for the "risks" table.
 	RisksTable = &schema.Table{
@@ -2317,6 +2318,12 @@ var (
 				Columns:    []*schema.Column{RisksColumns[19]},
 				RefColumns: []*schema.Column{ControlObjectivesColumns[0]},
 				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "risks_programs_risks",
+				Columns:    []*schema.Column{RisksColumns[20]},
+				RefColumns: []*schema.Column{ProgramsColumns[0]},
+				OnDelete:   schema.NoAction,
 			},
 		},
 	}
@@ -2339,8 +2346,8 @@ var (
 		{Name: "status", Type: field.TypeString, Nullable: true},
 		{Name: "risk_type", Type: field.TypeString, Nullable: true},
 		{Name: "business_costs", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "impact", Type: field.TypeEnum, Nullable: true, Enums: []string{"LOW", "MODERATE", "HIGH"}},
-		{Name: "likelihood", Type: field.TypeEnum, Nullable: true, Enums: []string{"UNLIKELY", "LIKELY", "HIGHLY_LIKELY"}},
+		{Name: "impact", Type: field.TypeEnum, Nullable: true, Enums: []string{"LOW", "MODERATE", "HIGH"}, Default: "MODERATE"},
+		{Name: "likelihood", Type: field.TypeEnum, Nullable: true, Enums: []string{"UNLIKELY", "LIKELY", "HIGHLY_LIKELY"}, Default: "LIKELY"},
 		{Name: "mitigation", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "satisfies", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "details", Type: field.TypeJSON, Nullable: true},
@@ -4376,31 +4383,6 @@ var (
 			},
 		},
 	}
-	// ProgramRisksColumns holds the columns for the "program_risks" table.
-	ProgramRisksColumns = []*schema.Column{
-		{Name: "program_id", Type: field.TypeString},
-		{Name: "risk_id", Type: field.TypeString},
-	}
-	// ProgramRisksTable holds the schema information for the "program_risks" table.
-	ProgramRisksTable = &schema.Table{
-		Name:       "program_risks",
-		Columns:    ProgramRisksColumns,
-		PrimaryKey: []*schema.Column{ProgramRisksColumns[0], ProgramRisksColumns[1]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "program_risks_program_id",
-				Columns:    []*schema.Column{ProgramRisksColumns[0]},
-				RefColumns: []*schema.Column{ProgramsColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-			{
-				Symbol:     "program_risks_risk_id",
-				Columns:    []*schema.Column{ProgramRisksColumns[1]},
-				RefColumns: []*schema.Column{RisksColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-		},
-	}
 	// ProgramTasksColumns holds the columns for the "program_tasks" table.
 	ProgramTasksColumns = []*schema.Column{
 		{Name: "program_id", Type: field.TypeString},
@@ -5087,7 +5069,6 @@ var (
 		ProgramControlobjectivesTable,
 		ProgramPoliciesTable,
 		ProgramProceduresTable,
-		ProgramRisksTable,
 		ProgramTasksTable,
 		ProgramNotesTable,
 		ProgramFilesTable,
@@ -5242,6 +5223,7 @@ func init() {
 		Table: "program_membership_history",
 	}
 	RisksTable.ForeignKeys[0].RefTable = ControlObjectivesTable
+	RisksTable.ForeignKeys[1].RefTable = ProgramsTable
 	RiskHistoryTable.Annotation = &entsql.Annotation{
 		Table: "risk_history",
 	}
@@ -5384,8 +5366,6 @@ func init() {
 	ProgramPoliciesTable.ForeignKeys[1].RefTable = InternalPoliciesTable
 	ProgramProceduresTable.ForeignKeys[0].RefTable = ProgramsTable
 	ProgramProceduresTable.ForeignKeys[1].RefTable = ProceduresTable
-	ProgramRisksTable.ForeignKeys[0].RefTable = ProgramsTable
-	ProgramRisksTable.ForeignKeys[1].RefTable = RisksTable
 	ProgramTasksTable.ForeignKeys[0].RefTable = ProgramsTable
 	ProgramTasksTable.ForeignKeys[1].RefTable = TasksTable
 	ProgramNotesTable.ForeignKeys[0].RefTable = ProgramsTable

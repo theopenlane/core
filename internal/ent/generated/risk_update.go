@@ -358,19 +358,15 @@ func (ru *RiskUpdate) AddActionplans(a ...*ActionPlan) *RiskUpdate {
 	return ru.AddActionplanIDs(ids...)
 }
 
-// AddProgramIDs adds the "program" edge to the Program entity by IDs.
-func (ru *RiskUpdate) AddProgramIDs(ids ...string) *RiskUpdate {
-	ru.mutation.AddProgramIDs(ids...)
+// SetProgramID sets the "program" edge to the Program entity by ID.
+func (ru *RiskUpdate) SetProgramID(id string) *RiskUpdate {
+	ru.mutation.SetProgramID(id)
 	return ru
 }
 
-// AddProgram adds the "program" edges to the Program entity.
-func (ru *RiskUpdate) AddProgram(p ...*Program) *RiskUpdate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return ru.AddProgramIDs(ids...)
+// SetProgram sets the "program" edge to the Program entity.
+func (ru *RiskUpdate) SetProgram(p *Program) *RiskUpdate {
+	return ru.SetProgramID(p.ID)
 }
 
 // Mutation returns the RiskMutation object of the builder.
@@ -441,25 +437,10 @@ func (ru *RiskUpdate) RemoveActionplans(a ...*ActionPlan) *RiskUpdate {
 	return ru.RemoveActionplanIDs(ids...)
 }
 
-// ClearProgram clears all "program" edges to the Program entity.
+// ClearProgram clears the "program" edge to the Program entity.
 func (ru *RiskUpdate) ClearProgram() *RiskUpdate {
 	ru.mutation.ClearProgram()
 	return ru
-}
-
-// RemoveProgramIDs removes the "program" edge to Program entities by IDs.
-func (ru *RiskUpdate) RemoveProgramIDs(ids ...string) *RiskUpdate {
-	ru.mutation.RemoveProgramIDs(ids...)
-	return ru
-}
-
-// RemoveProgram removes "program" edges to Program entities.
-func (ru *RiskUpdate) RemoveProgram(p ...*Program) *RiskUpdate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return ru.RemoveProgramIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -506,6 +487,11 @@ func (ru *RiskUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (ru *RiskUpdate) check() error {
+	if v, ok := ru.mutation.Name(); ok {
+		if err := risk.NameValidator(v); err != nil {
+			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Risk.name": %w`, err)}
+		}
+	}
 	if v, ok := ru.mutation.Impact(); ok {
 		if err := risk.ImpactValidator(v); err != nil {
 			return &ValidationError{Name: "impact", err: fmt.Errorf(`generated: validator failed for field "Risk.impact": %w`, err)}
@@ -515,6 +501,9 @@ func (ru *RiskUpdate) check() error {
 		if err := risk.LikelihoodValidator(v); err != nil {
 			return &ValidationError{Name: "likelihood", err: fmt.Errorf(`generated: validator failed for field "Risk.likelihood": %w`, err)}
 		}
+	}
+	if ru.mutation.ProgramCleared() && len(ru.mutation.ProgramIDs()) > 0 {
+		return errors.New(`generated: clearing a required unique edge "Risk.program"`)
 	}
 	return nil
 }
@@ -781,47 +770,30 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if ru.mutation.ProgramCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.M2O,
 			Inverse: true,
 			Table:   risk.ProgramTable,
-			Columns: risk.ProgramPrimaryKey,
+			Columns: []string{risk.ProgramColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ru.schemaConfig.ProgramRisks
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := ru.mutation.RemovedProgramIDs(); len(nodes) > 0 && !ru.mutation.ProgramCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   risk.ProgramTable,
-			Columns: risk.ProgramPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ru.schemaConfig.ProgramRisks
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
+		edge.Schema = ru.schemaConfig.Risk
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := ru.mutation.ProgramIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.M2O,
 			Inverse: true,
 			Table:   risk.ProgramTable,
-			Columns: risk.ProgramPrimaryKey,
+			Columns: []string{risk.ProgramColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ru.schemaConfig.ProgramRisks
+		edge.Schema = ru.schemaConfig.Risk
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1172,19 +1144,15 @@ func (ruo *RiskUpdateOne) AddActionplans(a ...*ActionPlan) *RiskUpdateOne {
 	return ruo.AddActionplanIDs(ids...)
 }
 
-// AddProgramIDs adds the "program" edge to the Program entity by IDs.
-func (ruo *RiskUpdateOne) AddProgramIDs(ids ...string) *RiskUpdateOne {
-	ruo.mutation.AddProgramIDs(ids...)
+// SetProgramID sets the "program" edge to the Program entity by ID.
+func (ruo *RiskUpdateOne) SetProgramID(id string) *RiskUpdateOne {
+	ruo.mutation.SetProgramID(id)
 	return ruo
 }
 
-// AddProgram adds the "program" edges to the Program entity.
-func (ruo *RiskUpdateOne) AddProgram(p ...*Program) *RiskUpdateOne {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return ruo.AddProgramIDs(ids...)
+// SetProgram sets the "program" edge to the Program entity.
+func (ruo *RiskUpdateOne) SetProgram(p *Program) *RiskUpdateOne {
+	return ruo.SetProgramID(p.ID)
 }
 
 // Mutation returns the RiskMutation object of the builder.
@@ -1255,25 +1223,10 @@ func (ruo *RiskUpdateOne) RemoveActionplans(a ...*ActionPlan) *RiskUpdateOne {
 	return ruo.RemoveActionplanIDs(ids...)
 }
 
-// ClearProgram clears all "program" edges to the Program entity.
+// ClearProgram clears the "program" edge to the Program entity.
 func (ruo *RiskUpdateOne) ClearProgram() *RiskUpdateOne {
 	ruo.mutation.ClearProgram()
 	return ruo
-}
-
-// RemoveProgramIDs removes the "program" edge to Program entities by IDs.
-func (ruo *RiskUpdateOne) RemoveProgramIDs(ids ...string) *RiskUpdateOne {
-	ruo.mutation.RemoveProgramIDs(ids...)
-	return ruo
-}
-
-// RemoveProgram removes "program" edges to Program entities.
-func (ruo *RiskUpdateOne) RemoveProgram(p ...*Program) *RiskUpdateOne {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return ruo.RemoveProgramIDs(ids...)
 }
 
 // Where appends a list predicates to the RiskUpdate builder.
@@ -1333,6 +1286,11 @@ func (ruo *RiskUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (ruo *RiskUpdateOne) check() error {
+	if v, ok := ruo.mutation.Name(); ok {
+		if err := risk.NameValidator(v); err != nil {
+			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Risk.name": %w`, err)}
+		}
+	}
 	if v, ok := ruo.mutation.Impact(); ok {
 		if err := risk.ImpactValidator(v); err != nil {
 			return &ValidationError{Name: "impact", err: fmt.Errorf(`generated: validator failed for field "Risk.impact": %w`, err)}
@@ -1342,6 +1300,9 @@ func (ruo *RiskUpdateOne) check() error {
 		if err := risk.LikelihoodValidator(v); err != nil {
 			return &ValidationError{Name: "likelihood", err: fmt.Errorf(`generated: validator failed for field "Risk.likelihood": %w`, err)}
 		}
+	}
+	if ruo.mutation.ProgramCleared() && len(ruo.mutation.ProgramIDs()) > 0 {
+		return errors.New(`generated: clearing a required unique edge "Risk.program"`)
 	}
 	return nil
 }
@@ -1625,47 +1586,30 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 	}
 	if ruo.mutation.ProgramCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.M2O,
 			Inverse: true,
 			Table:   risk.ProgramTable,
-			Columns: risk.ProgramPrimaryKey,
+			Columns: []string{risk.ProgramColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ruo.schemaConfig.ProgramRisks
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := ruo.mutation.RemovedProgramIDs(); len(nodes) > 0 && !ruo.mutation.ProgramCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   risk.ProgramTable,
-			Columns: risk.ProgramPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ruo.schemaConfig.ProgramRisks
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
+		edge.Schema = ruo.schemaConfig.Risk
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := ruo.mutation.ProgramIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.M2O,
 			Inverse: true,
 			Table:   risk.ProgramTable,
-			Columns: risk.ProgramPrimaryKey,
+			Columns: []string{risk.ProgramColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ruo.schemaConfig.ProgramRisks
+		edge.Schema = ruo.schemaConfig.Risk
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -12591,11 +12591,11 @@ func (c *ProgramClient) QueryRisks(pr *Program) *RiskQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(program.Table, program.FieldID, id),
 			sqlgraph.To(risk.Table, risk.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, program.RisksTable, program.RisksPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, program.RisksTable, program.RisksColumn),
 		)
 		schemaConfig := pr.schemaConfig
 		step.To.Schema = schemaConfig.Risk
-		step.Edge.Schema = schemaConfig.ProgramRisks
+		step.Edge.Schema = schemaConfig.Risk
 		fromV = sqlgraph.Neighbors(pr.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -13454,11 +13454,11 @@ func (c *RiskClient) QueryProgram(r *Risk) *ProgramQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(risk.Table, risk.FieldID, id),
 			sqlgraph.To(program.Table, program.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, risk.ProgramTable, risk.ProgramPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2O, true, risk.ProgramTable, risk.ProgramColumn),
 		)
 		schemaConfig := r.schemaConfig
 		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.ProgramRisks
+		step.Edge.Schema = schemaConfig.Risk
 		fromV = sqlgraph.Neighbors(r.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -13602,12 +13602,14 @@ func (c *RiskHistoryClient) GetX(ctx context.Context, id string) *RiskHistory {
 
 // Hooks returns the client hooks.
 func (c *RiskHistoryClient) Hooks() []Hook {
-	return c.hooks.RiskHistory
+	hooks := c.hooks.RiskHistory
+	return append(hooks[:len(hooks):len(hooks)], riskhistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
 func (c *RiskHistoryClient) Interceptors() []Interceptor {
-	return c.inters.RiskHistory
+	inters := c.inters.RiskHistory
+	return append(inters[:len(inters):len(inters)], riskhistory.Interceptors[:]...)
 }
 
 func (c *RiskHistoryClient) mutate(ctx context.Context, m *RiskHistoryMutation) (Value, error) {

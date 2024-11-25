@@ -142,7 +142,7 @@ func parseRequestError(err error, a action) error {
 
 		return newNotFoundError(a.object)
 	case errors.Is(err, privacy.Deny):
-		log.Debug().Err(err).Msg("user has not access to the requested object")
+		log.Debug().Err(err).Msg("user has no access to the requested object")
 
 		return newNotFoundError(a.object)
 	default:

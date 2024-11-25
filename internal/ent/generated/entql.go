@@ -4776,10 +4776,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"risks",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   program.RisksTable,
-			Columns: program.RisksPrimaryKey,
+			Columns: []string{program.RisksColumn},
 			Bidi:    false,
 		},
 		"Program",
@@ -4980,10 +4980,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"program",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.M2O,
 			Inverse: true,
 			Table:   risk.ProgramTable,
-			Columns: risk.ProgramPrimaryKey,
+			Columns: []string{risk.ProgramColumn},
 			Bidi:    false,
 		},
 		"Risk",

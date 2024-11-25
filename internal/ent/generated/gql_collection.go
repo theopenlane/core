@@ -11348,12 +11348,10 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				path  = append(path, alias)
 				query = (&ProgramClient{config: r.config}).Query()
 			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, programImplementors)...); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, programImplementors)...); err != nil {
 				return err
 			}
-			r.WithNamedProgram(alias, func(wq *ProgramQuery) {
-				*wq = *query
-			})
+			r.withProgram = query
 		case "createdAt":
 			if _, ok := fieldSeen[risk.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, risk.FieldCreatedAt)

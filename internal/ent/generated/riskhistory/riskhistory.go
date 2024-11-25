@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"time"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/pkg/enums"
@@ -99,7 +100,15 @@ func ValidColumn(column string) bool {
 	return false
 }
 
+// Note that the variables below are initialized by the runtime
+// package on the initialization of the application. Therefore,
+// it should be imported in the main as follows:
+//
+//	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
+	Hooks        [1]ent.Hook
+	Interceptors [1]ent.Interceptor
+	Policy       ent.Policy
 	// DefaultHistoryTime holds the default value on creation for the "history_time" field.
 	DefaultHistoryTime func() time.Time
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -126,6 +135,8 @@ func OperationValidator(o history.OpType) error {
 	}
 }
 
+const DefaultImpact enums.RiskImpact = "MODERATE"
+
 // ImpactValidator is a validator for the "impact" field enum values. It is called by the builders before save.
 func ImpactValidator(i enums.RiskImpact) error {
 	switch i.String() {
@@ -135,6 +146,8 @@ func ImpactValidator(i enums.RiskImpact) error {
 		return fmt.Errorf("riskhistory: invalid enum value for impact field: %q", i)
 	}
 }
+
+const DefaultLikelihood enums.RiskLikelihood = "LIKELY"
 
 // LikelihoodValidator is a validator for the "likelihood" field enum values. It is called by the builders before save.
 func LikelihoodValidator(l enums.RiskLikelihood) error {

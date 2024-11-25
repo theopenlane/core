@@ -79,11 +79,13 @@ const (
 	// ActionplansInverseTable is the table name for the ActionPlan entity.
 	// It exists in this package in order to avoid circular dependency with the "actionplan" package.
 	ActionplansInverseTable = "action_plans"
-	// ProgramTable is the table that holds the program relation/edge. The primary key declared below.
-	ProgramTable = "program_risks"
+	// ProgramTable is the table that holds the program relation/edge.
+	ProgramTable = "risks"
 	// ProgramInverseTable is the table name for the Program entity.
 	// It exists in this package in order to avoid circular dependency with the "program" package.
 	ProgramInverseTable = "programs"
+	// ProgramColumn is the table column denoting the program relation/edge.
+	ProgramColumn = "program_risks"
 )
 
 // Columns holds all SQL columns for risk fields.
@@ -113,6 +115,7 @@ var Columns = []string{
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
 	"control_objective_risks",
+	"program_risks",
 }
 
 var (
@@ -125,9 +128,6 @@ var (
 	// ActionplansPrimaryKey and ActionplansColumn2 are the table columns denoting the
 	// primary key for the actionplans relation (M2M).
 	ActionplansPrimaryKey = []string{"risk_id", "action_plan_id"}
-	// ProgramPrimaryKey and ProgramColumn2 are the table columns denoting the
-	// primary key for the program relation (M2M).
-	ProgramPrimaryKey = []string{"program_id", "risk_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -151,8 +151,9 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [2]ent.Hook
-	Interceptors [1]ent.Interceptor
+	Hooks        [5]ent.Hook
+	Interceptors [3]ent.Interceptor
+	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
@@ -163,9 +164,13 @@ var (
 	DefaultMappingID func() string
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
+	// NameValidator is a validator for the "name" field. It is called by the builders before save.
+	NameValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
+
+const DefaultImpact enums.RiskImpact = "MODERATE"
 
 // ImpactValidator is a validator for the "impact" field enum values. It is called by the builders before save.
 func ImpactValidator(i enums.RiskImpact) error {
@@ -176,6 +181,8 @@ func ImpactValidator(i enums.RiskImpact) error {
 		return fmt.Errorf("risk: invalid enum value for impact field: %q", i)
 	}
 }
+
+const DefaultLikelihood enums.RiskLikelihood = "LIKELY"
 
 // LikelihoodValidator is a validator for the "likelihood" field enum values. It is called by the builders before save.
 func LikelihoodValidator(l enums.RiskLikelihood) error {
@@ -317,17 +324,10 @@ func ByActionplans(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByProgramCount orders the results by program count.
-func ByProgramCount(opts ...sql.OrderTermOption) OrderOption {
+// ByProgramField orders the results by program field.
+func ByProgramField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newProgramStep(), opts...)
-	}
-}
-
-// ByProgram orders the results by program terms.
-func ByProgram(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newProgramStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newProgramStep(), sql.OrderByField(field, opts...))
 	}
 }
 func newControlStep() *sqlgraph.Step {
@@ -355,7 +355,7 @@ func newProgramStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ProgramInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, ProgramTable, ProgramPrimaryKey...),
+		sqlgraph.Edge(sqlgraph.M2O, true, ProgramTable, ProgramColumn),
 	)
 }
 

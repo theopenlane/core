@@ -122,11 +122,13 @@ const (
 	// ProceduresInverseTable is the table name for the Procedure entity.
 	// It exists in this package in order to avoid circular dependency with the "procedure" package.
 	ProceduresInverseTable = "procedures"
-	// RisksTable is the table that holds the risks relation/edge. The primary key declared below.
-	RisksTable = "program_risks"
+	// RisksTable is the table that holds the risks relation/edge.
+	RisksTable = "risks"
 	// RisksInverseTable is the table name for the Risk entity.
 	// It exists in this package in order to avoid circular dependency with the "risk" package.
 	RisksInverseTable = "risks"
+	// RisksColumn is the table column denoting the risks relation/edge.
+	RisksColumn = "program_risks"
 	// TasksTable is the table that holds the tasks relation/edge. The primary key declared below.
 	TasksTable = "program_tasks"
 	// TasksInverseTable is the table name for the Task entity.
@@ -224,9 +226,6 @@ var (
 	// ProceduresPrimaryKey and ProceduresColumn2 are the table columns denoting the
 	// primary key for the procedures relation (M2M).
 	ProceduresPrimaryKey = []string{"program_id", "procedure_id"}
-	// RisksPrimaryKey and RisksColumn2 are the table columns denoting the
-	// primary key for the risks relation (M2M).
-	RisksPrimaryKey = []string{"program_id", "risk_id"}
 	// TasksPrimaryKey and TasksColumn2 are the table columns denoting the
 	// primary key for the tasks relation (M2M).
 	TasksPrimaryKey = []string{"program_id", "task_id"}
@@ -692,7 +691,7 @@ func newRisksStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(RisksInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, RisksTable, RisksPrimaryKey...),
+		sqlgraph.Edge(sqlgraph.O2M, false, RisksTable, RisksColumn),
 	)
 }
 func newTasksStep() *sqlgraph.Step {

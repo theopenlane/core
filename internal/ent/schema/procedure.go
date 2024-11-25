@@ -131,7 +131,7 @@ func (Procedure) Interceptors() []ent.Interceptor {
 	}
 }
 
-// Procedure of the Procedure
+// Policy of the Procedure
 func (Procedure) Policy() ent.Policy {
 	return privacy.Policy{
 		Mutation: privacy.MutationPolicy{

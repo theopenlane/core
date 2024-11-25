@@ -1,0 +1,8 @@
+extend input UpdateProgramInput {
+  addProgramMembers: [CreateProgramMembershipInput!]
+}
+
+extend input ProgramMembershipWhereInput {
+  programID: String
+  userID: String
+}

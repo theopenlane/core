@@ -6189,7 +6189,7 @@ type CreateRiskInput struct {
 	ControlIDs    []string
 	ProcedureIDs  []string
 	ActionplanIDs []string
-	ProgramIDs    []string
+	ProgramID     string
 }
 
 // Mutate applies the CreateRiskInput on the RiskMutation builder.
@@ -6234,9 +6234,7 @@ func (i *CreateRiskInput) Mutate(m *RiskMutation) {
 	if v := i.ActionplanIDs; len(v) > 0 {
 		m.AddActionplanIDs(v...)
 	}
-	if v := i.ProgramIDs; len(v) > 0 {
-		m.AddProgramIDs(v...)
-	}
+	m.SetProgramID(i.ProgramID)
 }
 
 // SetInput applies the change-set in the CreateRiskInput on the RiskCreate builder.
@@ -6278,9 +6276,7 @@ type UpdateRiskInput struct {
 	ClearActionplans    bool
 	AddActionplanIDs    []string
 	RemoveActionplanIDs []string
-	ClearProgram        bool
-	AddProgramIDs       []string
-	RemoveProgramIDs    []string
+	ProgramID           *string
 }
 
 // Mutate applies the UpdateRiskInput on the RiskMutation builder.
@@ -6378,14 +6374,8 @@ func (i *UpdateRiskInput) Mutate(m *RiskMutation) {
 	if v := i.RemoveActionplanIDs; len(v) > 0 {
 		m.RemoveActionplanIDs(v...)
 	}
-	if i.ClearProgram {
-		m.ClearProgram()
-	}
-	if v := i.AddProgramIDs; len(v) > 0 {
-		m.AddProgramIDs(v...)
-	}
-	if v := i.RemoveProgramIDs; len(v) > 0 {
-		m.RemoveProgramIDs(v...)
+	if v := i.ProgramID; v != nil {
+		m.SetProgramID(*v)
 	}
 }
 

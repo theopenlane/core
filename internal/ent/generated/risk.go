@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/pkg/enums"
 )
@@ -59,6 +60,7 @@ type Risk struct {
 	// The values are being populated by the RiskQuery when eager-loading is set.
 	Edges                   RiskEdges `json:"edges"`
 	control_objective_risks *string
+	program_risks           *string
 	selectValues            sql.SelectValues
 }
 
@@ -71,7 +73,7 @@ type RiskEdges struct {
 	// Actionplans holds the value of the actionplans edge.
 	Actionplans []*ActionPlan `json:"actionplans,omitempty"`
 	// Program holds the value of the program edge.
-	Program []*Program `json:"program,omitempty"`
+	Program *Program `json:"program,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [4]bool
@@ -81,7 +83,6 @@ type RiskEdges struct {
 	namedControl     map[string][]*Control
 	namedProcedure   map[string][]*Procedure
 	namedActionplans map[string][]*ActionPlan
-	namedProgram     map[string][]*Program
 }
 
 // ControlOrErr returns the Control value or an error if the edge
@@ -112,10 +113,12 @@ func (e RiskEdges) ActionplansOrErr() ([]*ActionPlan, error) {
 }
 
 // ProgramOrErr returns the Program value or an error if the edge
-// was not loaded in eager-loading.
-func (e RiskEdges) ProgramOrErr() ([]*Program, error) {
-	if e.loadedTypes[3] {
+// was not loaded in eager-loading, or loaded but was not found.
+func (e RiskEdges) ProgramOrErr() (*Program, error) {
+	if e.Program != nil {
 		return e.Program, nil
+	} else if e.loadedTypes[3] {
+		return nil, &NotFoundError{label: program.Label}
 	}
 	return nil, &NotLoadedError{edge: "program"}
 }
@@ -132,6 +135,8 @@ func (*Risk) scanValues(columns []string) ([]any, error) {
 		case risk.FieldCreatedAt, risk.FieldUpdatedAt, risk.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
 		case risk.ForeignKeys[0]: // control_objective_risks
+			values[i] = new(sql.NullString)
+		case risk.ForeignKeys[1]: // program_risks
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -272,6 +277,13 @@ func (r *Risk) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				r.control_objective_risks = new(string)
 				*r.control_objective_risks = value.String
+			}
+		case risk.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field program_risks", values[i])
+			} else if value.Valid {
+				r.program_risks = new(string)
+				*r.program_risks = value.String
 			}
 		default:
 			r.selectValues.Set(columns[i], values[i])
@@ -455,30 +467,6 @@ func (r *Risk) appendNamedActionplans(name string, edges ...*ActionPlan) {
 		r.Edges.namedActionplans[name] = []*ActionPlan{}
 	} else {
 		r.Edges.namedActionplans[name] = append(r.Edges.namedActionplans[name], edges...)
-	}
-}
-
-// NamedProgram returns the Program named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (r *Risk) NamedProgram(name string) ([]*Program, error) {
-	if r.Edges.namedProgram == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := r.Edges.namedProgram[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (r *Risk) appendNamedProgram(name string, edges ...*Program) {
-	if r.Edges.namedProgram == nil {
-		r.Edges.namedProgram = make(map[string][]*Program)
-	}
-	if len(edges) == 0 {
-		r.Edges.namedProgram[name] = []*Program{}
-	} else {
-		r.Edges.namedProgram[name] = append(r.Edges.namedProgram[name], edges...)
 	}
 }
 

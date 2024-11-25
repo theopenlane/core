@@ -119,7 +119,6 @@ type SchemaConfig struct {
 	ProgramControlobjectives         string // Program-controlobjectives->ControlObjective table.
 	ProgramPolicies                  string // Program-policies->InternalPolicy table.
 	ProgramProcedures                string // Program-procedures->Procedure table.
-	ProgramRisks                     string // Program-risks->Risk table.
 	ProgramTasks                     string // Program-tasks->Task table.
 	ProgramNotes                     string // Program-notes->Note table.
 	ProgramFiles                     string // Program-files->File table.

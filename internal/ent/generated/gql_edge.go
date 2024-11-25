@@ -2333,14 +2333,10 @@ func (r *Risk) Actionplans(ctx context.Context) (result []*ActionPlan, err error
 	return result, err
 }
 
-func (r *Risk) Program(ctx context.Context) (result []*Program, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = r.NamedProgram(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = r.Edges.ProgramOrErr()
-	}
+func (r *Risk) Program(ctx context.Context) (*Program, error) {
+	result, err := r.Edges.ProgramOrErr()
 	if IsNotLoaded(err) {
-		result, err = r.QueryProgram().All(ctx)
+		result, err = r.QueryProgram().Only(ctx)
 	}
 	return result, err
 }

@@ -4593,7 +4593,7 @@ input CreateRiskInput {
   controlIDs: [ID!]
   procedureIDs: [ID!]
   actionplanIDs: [ID!]
-  programIDs: [ID!]
+  programID: ID!
 }
 """
 CreateStandardInput is used for create Standard object.
@@ -22940,7 +22940,7 @@ type Risk implements Node {
   control: [Control!]
   procedure: [Procedure!]
   actionplans: [ActionPlan!]
-  program: [Program!]
+  program: Program!
 }
 """
 A connection to a list of items.
@@ -28879,9 +28879,7 @@ input UpdateRiskInput {
   addActionplanIDs: [ID!]
   removeActionplanIDs: [ID!]
   clearActionplans: Boolean
-  addProgramIDs: [ID!]
-  removeProgramIDs: [ID!]
-  clearProgram: Boolean
+  programID: ID
 }
 """
 UpdateStandardInput is used for update Standard object.

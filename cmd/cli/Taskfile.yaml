@@ -47,6 +47,11 @@ tasks:
     cmds:
       - go run main.go organization-setting get
 
+  program:create:
+    desc: creates an program against a running local instance of the server
+    cmds:
+      - go run main.go program create -n "mitb program" -d "program for mitb"
+
   user:verify:
     desc: a task to register a user, parse out the token response, and submit it to the verify endpoint
     aliases: [verifyuser]
@@ -70,8 +75,10 @@ tasks:
       - task: verifyuser
       - task: login
       - task: createorg
+      - task: program:create
       - sleep 2
       - task: getorgsetting
+
 
   user:all:another:
     desc: a task to register, verify, and login another user
