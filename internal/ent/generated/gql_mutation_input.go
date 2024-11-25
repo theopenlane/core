@@ -2843,6 +2843,9 @@ type CreateGroupInput struct {
 	ProgramViewerIDs              []string
 	ProgramEditorIDs              []string
 	ProgramBlockedGroupIDs        []string
+	RiskViewerIDs                 []string
+	RiskEditorIDs                 []string
+	RiskBlockedGroupIDs           []string
 }
 
 // Mutate applies the CreateGroupInput on the GroupMutation builder.
@@ -2902,6 +2905,15 @@ func (i *CreateGroupInput) Mutate(m *GroupMutation) {
 	}
 	if v := i.ProgramBlockedGroupIDs; len(v) > 0 {
 		m.AddProgramBlockedGroupIDs(v...)
+	}
+	if v := i.RiskViewerIDs; len(v) > 0 {
+		m.AddRiskViewerIDs(v...)
+	}
+	if v := i.RiskEditorIDs; len(v) > 0 {
+		m.AddRiskEditorIDs(v...)
+	}
+	if v := i.RiskBlockedGroupIDs; len(v) > 0 {
+		m.AddRiskBlockedGroupIDs(v...)
 	}
 }
 
@@ -2963,6 +2975,15 @@ type UpdateGroupInput struct {
 	ClearProgramBlockedGroups           bool
 	AddProgramBlockedGroupIDs           []string
 	RemoveProgramBlockedGroupIDs        []string
+	ClearRiskViewers                    bool
+	AddRiskViewerIDs                    []string
+	RemoveRiskViewerIDs                 []string
+	ClearRiskEditors                    bool
+	AddRiskEditorIDs                    []string
+	RemoveRiskEditorIDs                 []string
+	ClearRiskBlockedGroups              bool
+	AddRiskBlockedGroupIDs              []string
+	RemoveRiskBlockedGroupIDs           []string
 }
 
 // Mutate applies the UpdateGroupInput on the GroupMutation builder.
@@ -3116,6 +3137,33 @@ func (i *UpdateGroupInput) Mutate(m *GroupMutation) {
 	}
 	if v := i.RemoveProgramBlockedGroupIDs; len(v) > 0 {
 		m.RemoveProgramBlockedGroupIDs(v...)
+	}
+	if i.ClearRiskViewers {
+		m.ClearRiskViewers()
+	}
+	if v := i.AddRiskViewerIDs; len(v) > 0 {
+		m.AddRiskViewerIDs(v...)
+	}
+	if v := i.RemoveRiskViewerIDs; len(v) > 0 {
+		m.RemoveRiskViewerIDs(v...)
+	}
+	if i.ClearRiskEditors {
+		m.ClearRiskEditors()
+	}
+	if v := i.AddRiskEditorIDs; len(v) > 0 {
+		m.AddRiskEditorIDs(v...)
+	}
+	if v := i.RemoveRiskEditorIDs; len(v) > 0 {
+		m.RemoveRiskEditorIDs(v...)
+	}
+	if i.ClearRiskBlockedGroups {
+		m.ClearRiskBlockedGroups()
+	}
+	if v := i.AddRiskBlockedGroupIDs; len(v) > 0 {
+		m.AddRiskBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveRiskBlockedGroupIDs; len(v) > 0 {
+		m.RemoveRiskBlockedGroupIDs(v...)
 	}
 }
 
@@ -6175,21 +6223,24 @@ func (c *ProgramMembershipUpdateOne) SetInput(i UpdateProgramMembershipInput) *P
 
 // CreateRiskInput represents a mutation input for creating risks.
 type CreateRiskInput struct {
-	Tags          []string
-	Name          string
-	Description   *string
-	Status        *string
-	RiskType      *string
-	BusinessCosts *string
-	Impact        *enums.RiskImpact
-	Likelihood    *enums.RiskLikelihood
-	Mitigation    *string
-	Satisfies     *string
-	Details       map[string]interface{}
-	ControlIDs    []string
-	ProcedureIDs  []string
-	ActionplanIDs []string
-	ProgramID     string
+	Tags            []string
+	Name            string
+	Description     *string
+	Status          *string
+	RiskType        *string
+	BusinessCosts   *string
+	Impact          *enums.RiskImpact
+	Likelihood      *enums.RiskLikelihood
+	Mitigation      *string
+	Satisfies       *string
+	Details         map[string]interface{}
+	ControlIDs      []string
+	ProcedureIDs    []string
+	ActionplanIDs   []string
+	ProgramIDs      []string
+	ViewerIDs       []string
+	EditorIDs       []string
+	BlockedGroupIDs []string
 }
 
 // Mutate applies the CreateRiskInput on the RiskMutation builder.
@@ -6234,7 +6285,18 @@ func (i *CreateRiskInput) Mutate(m *RiskMutation) {
 	if v := i.ActionplanIDs; len(v) > 0 {
 		m.AddActionplanIDs(v...)
 	}
-	m.SetProgramID(i.ProgramID)
+	if v := i.ProgramIDs; len(v) > 0 {
+		m.AddProgramIDs(v...)
+	}
+	if v := i.ViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
+	if v := i.EditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.BlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateRiskInput on the RiskCreate builder.
@@ -6245,38 +6307,49 @@ func (c *RiskCreate) SetInput(i CreateRiskInput) *RiskCreate {
 
 // UpdateRiskInput represents a mutation input for updating risks.
 type UpdateRiskInput struct {
-	ClearTags           bool
-	Tags                []string
-	AppendTags          []string
-	Name                *string
-	ClearDescription    bool
-	Description         *string
-	ClearStatus         bool
-	Status              *string
-	ClearRiskType       bool
-	RiskType            *string
-	ClearBusinessCosts  bool
-	BusinessCosts       *string
-	ClearImpact         bool
-	Impact              *enums.RiskImpact
-	ClearLikelihood     bool
-	Likelihood          *enums.RiskLikelihood
-	ClearMitigation     bool
-	Mitigation          *string
-	ClearSatisfies      bool
-	Satisfies           *string
-	ClearDetails        bool
-	Details             map[string]interface{}
-	ClearControl        bool
-	AddControlIDs       []string
-	RemoveControlIDs    []string
-	ClearProcedure      bool
-	AddProcedureIDs     []string
-	RemoveProcedureIDs  []string
-	ClearActionplans    bool
-	AddActionplanIDs    []string
-	RemoveActionplanIDs []string
-	ProgramID           *string
+	ClearTags             bool
+	Tags                  []string
+	AppendTags            []string
+	Name                  *string
+	ClearDescription      bool
+	Description           *string
+	ClearStatus           bool
+	Status                *string
+	ClearRiskType         bool
+	RiskType              *string
+	ClearBusinessCosts    bool
+	BusinessCosts         *string
+	ClearImpact           bool
+	Impact                *enums.RiskImpact
+	ClearLikelihood       bool
+	Likelihood            *enums.RiskLikelihood
+	ClearMitigation       bool
+	Mitigation            *string
+	ClearSatisfies        bool
+	Satisfies             *string
+	ClearDetails          bool
+	Details               map[string]interface{}
+	ClearControl          bool
+	AddControlIDs         []string
+	RemoveControlIDs      []string
+	ClearProcedure        bool
+	AddProcedureIDs       []string
+	RemoveProcedureIDs    []string
+	ClearActionplans      bool
+	AddActionplanIDs      []string
+	RemoveActionplanIDs   []string
+	ClearProgram          bool
+	AddProgramIDs         []string
+	RemoveProgramIDs      []string
+	ClearViewers          bool
+	AddViewerIDs          []string
+	RemoveViewerIDs       []string
+	ClearEditors          bool
+	AddEditorIDs          []string
+	RemoveEditorIDs       []string
+	ClearBlockedGroups    bool
+	AddBlockedGroupIDs    []string
+	RemoveBlockedGroupIDs []string
 }
 
 // Mutate applies the UpdateRiskInput on the RiskMutation builder.
@@ -6374,8 +6447,41 @@ func (i *UpdateRiskInput) Mutate(m *RiskMutation) {
 	if v := i.RemoveActionplanIDs; len(v) > 0 {
 		m.RemoveActionplanIDs(v...)
 	}
-	if v := i.ProgramID; v != nil {
-		m.SetProgramID(*v)
+	if i.ClearProgram {
+		m.ClearProgram()
+	}
+	if v := i.AddProgramIDs; len(v) > 0 {
+		m.AddProgramIDs(v...)
+	}
+	if v := i.RemoveProgramIDs; len(v) > 0 {
+		m.RemoveProgramIDs(v...)
+	}
+	if i.ClearViewers {
+		m.ClearViewers()
+	}
+	if v := i.AddViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
+	if v := i.RemoveViewerIDs; len(v) > 0 {
+		m.RemoveViewerIDs(v...)
+	}
+	if i.ClearEditors {
+		m.ClearEditors()
+	}
+	if v := i.AddEditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.RemoveEditorIDs; len(v) > 0 {
+		m.RemoveEditorIDs(v...)
+	}
+	if i.ClearBlockedGroups {
+		m.ClearBlockedGroups()
+	}
+	if v := i.AddBlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
+		m.RemoveBlockedGroupIDs(v...)
 	}
 }
 

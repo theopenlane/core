@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
@@ -312,15 +313,64 @@ func (rc *RiskCreate) AddActionplans(a ...*ActionPlan) *RiskCreate {
 	return rc.AddActionplanIDs(ids...)
 }
 
-// SetProgramID sets the "program" edge to the Program entity by ID.
-func (rc *RiskCreate) SetProgramID(id string) *RiskCreate {
-	rc.mutation.SetProgramID(id)
+// AddProgramIDs adds the "program" edge to the Program entity by IDs.
+func (rc *RiskCreate) AddProgramIDs(ids ...string) *RiskCreate {
+	rc.mutation.AddProgramIDs(ids...)
 	return rc
 }
 
-// SetProgram sets the "program" edge to the Program entity.
-func (rc *RiskCreate) SetProgram(p *Program) *RiskCreate {
-	return rc.SetProgramID(p.ID)
+// AddProgram adds the "program" edges to the Program entity.
+func (rc *RiskCreate) AddProgram(p ...*Program) *RiskCreate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return rc.AddProgramIDs(ids...)
+}
+
+// AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
+func (rc *RiskCreate) AddViewerIDs(ids ...string) *RiskCreate {
+	rc.mutation.AddViewerIDs(ids...)
+	return rc
+}
+
+// AddViewers adds the "viewers" edges to the Group entity.
+func (rc *RiskCreate) AddViewers(g ...*Group) *RiskCreate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return rc.AddViewerIDs(ids...)
+}
+
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (rc *RiskCreate) AddEditorIDs(ids ...string) *RiskCreate {
+	rc.mutation.AddEditorIDs(ids...)
+	return rc
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (rc *RiskCreate) AddEditors(g ...*Group) *RiskCreate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return rc.AddEditorIDs(ids...)
+}
+
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (rc *RiskCreate) AddBlockedGroupIDs(ids ...string) *RiskCreate {
+	rc.mutation.AddBlockedGroupIDs(ids...)
+	return rc
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (rc *RiskCreate) AddBlockedGroups(g ...*Group) *RiskCreate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return rc.AddBlockedGroupIDs(ids...)
 }
 
 // Mutation returns the RiskMutation object of the builder.
@@ -425,9 +475,6 @@ func (rc *RiskCreate) check() error {
 		if err := risk.LikelihoodValidator(v); err != nil {
 			return &ValidationError{Name: "likelihood", err: fmt.Errorf(`generated: validator failed for field "Risk.likelihood": %w`, err)}
 		}
-	}
-	if len(rc.mutation.ProgramIDs()) == 0 {
-		return &ValidationError{Name: "program", err: errors.New(`generated: missing required edge "Risk.program"`)}
 	}
 	return nil
 }
@@ -590,20 +637,70 @@ func (rc *RiskCreate) createSpec() (*Risk, *sqlgraph.CreateSpec) {
 	}
 	if nodes := rc.mutation.ProgramIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
+			Rel:     sqlgraph.M2M,
 			Inverse: true,
 			Table:   risk.ProgramTable,
-			Columns: []string{risk.ProgramColumn},
+			Columns: risk.ProgramPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = rc.schemaConfig.Risk
+		edge.Schema = rc.schemaConfig.ProgramRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.program_risks = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := rc.mutation.ViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   risk.ViewersTable,
+			Columns: risk.ViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = rc.schemaConfig.RiskViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := rc.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   risk.EditorsTable,
+			Columns: risk.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = rc.schemaConfig.RiskEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := rc.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   risk.BlockedGroupsTable,
+			Columns: risk.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = rc.schemaConfig.RiskBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

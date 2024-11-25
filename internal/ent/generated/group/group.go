@@ -71,6 +71,12 @@ const (
 	EdgeProgramEditors = "program_editors"
 	// EdgeProgramBlockedGroups holds the string denoting the program_blocked_groups edge name in mutations.
 	EdgeProgramBlockedGroups = "program_blocked_groups"
+	// EdgeRiskViewers holds the string denoting the risk_viewers edge name in mutations.
+	EdgeRiskViewers = "risk_viewers"
+	// EdgeRiskEditors holds the string denoting the risk_editors edge name in mutations.
+	EdgeRiskEditors = "risk_editors"
+	// EdgeRiskBlockedGroups holds the string denoting the risk_blocked_groups edge name in mutations.
+	EdgeRiskBlockedGroups = "risk_blocked_groups"
 	// EdgeMembers holds the string denoting the members edge name in mutations.
 	EdgeMembers = "members"
 	// Table holds the table name of the group in the database.
@@ -151,6 +157,21 @@ const (
 	// ProgramBlockedGroupsInverseTable is the table name for the Program entity.
 	// It exists in this package in order to avoid circular dependency with the "program" package.
 	ProgramBlockedGroupsInverseTable = "programs"
+	// RiskViewersTable is the table that holds the risk_viewers relation/edge. The primary key declared below.
+	RiskViewersTable = "risk_viewers"
+	// RiskViewersInverseTable is the table name for the Risk entity.
+	// It exists in this package in order to avoid circular dependency with the "risk" package.
+	RiskViewersInverseTable = "risks"
+	// RiskEditorsTable is the table that holds the risk_editors relation/edge. The primary key declared below.
+	RiskEditorsTable = "risk_editors"
+	// RiskEditorsInverseTable is the table name for the Risk entity.
+	// It exists in this package in order to avoid circular dependency with the "risk" package.
+	RiskEditorsInverseTable = "risks"
+	// RiskBlockedGroupsTable is the table that holds the risk_blocked_groups relation/edge. The primary key declared below.
+	RiskBlockedGroupsTable = "risk_blocked_groups"
+	// RiskBlockedGroupsInverseTable is the table name for the Risk entity.
+	// It exists in this package in order to avoid circular dependency with the "risk" package.
+	RiskBlockedGroupsInverseTable = "risks"
 	// MembersTable is the table that holds the members relation/edge.
 	MembersTable = "group_memberships"
 	// MembersInverseTable is the table name for the GroupMembership entity.
@@ -213,6 +234,15 @@ var (
 	// ProgramBlockedGroupsPrimaryKey and ProgramBlockedGroupsColumn2 are the table columns denoting the
 	// primary key for the program_blocked_groups relation (M2M).
 	ProgramBlockedGroupsPrimaryKey = []string{"program_id", "group_id"}
+	// RiskViewersPrimaryKey and RiskViewersColumn2 are the table columns denoting the
+	// primary key for the risk_viewers relation (M2M).
+	RiskViewersPrimaryKey = []string{"risk_id", "group_id"}
+	// RiskEditorsPrimaryKey and RiskEditorsColumn2 are the table columns denoting the
+	// primary key for the risk_editors relation (M2M).
+	RiskEditorsPrimaryKey = []string{"risk_id", "group_id"}
+	// RiskBlockedGroupsPrimaryKey and RiskBlockedGroupsColumn2 are the table columns denoting the
+	// primary key for the risk_blocked_groups relation (M2M).
+	RiskBlockedGroupsPrimaryKey = []string{"risk_id", "group_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -511,6 +541,48 @@ func ByProgramBlockedGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOpt
 	}
 }
 
+// ByRiskViewersCount orders the results by risk_viewers count.
+func ByRiskViewersCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newRiskViewersStep(), opts...)
+	}
+}
+
+// ByRiskViewers orders the results by risk_viewers terms.
+func ByRiskViewers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newRiskViewersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByRiskEditorsCount orders the results by risk_editors count.
+func ByRiskEditorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newRiskEditorsStep(), opts...)
+	}
+}
+
+// ByRiskEditors orders the results by risk_editors terms.
+func ByRiskEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newRiskEditorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByRiskBlockedGroupsCount orders the results by risk_blocked_groups count.
+func ByRiskBlockedGroupsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newRiskBlockedGroupsStep(), opts...)
+	}
+}
+
+// ByRiskBlockedGroups orders the results by risk_blocked_groups terms.
+func ByRiskBlockedGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newRiskBlockedGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByMembersCount orders the results by members count.
 func ByMembersCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -620,6 +692,27 @@ func newProgramBlockedGroupsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ProgramBlockedGroupsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, ProgramBlockedGroupsTable, ProgramBlockedGroupsPrimaryKey...),
+	)
+}
+func newRiskViewersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(RiskViewersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, RiskViewersTable, RiskViewersPrimaryKey...),
+	)
+}
+func newRiskEditorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(RiskEditorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, RiskEditorsTable, RiskEditorsPrimaryKey...),
+	)
+}
+func newRiskBlockedGroupsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(RiskBlockedGroupsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, RiskBlockedGroupsTable, RiskBlockedGroupsPrimaryKey...),
 	)
 }
 func newMembersStep() *sqlgraph.Step {

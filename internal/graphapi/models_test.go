@@ -971,14 +971,14 @@ func (r *RiskBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Risk {
 		r.Name = gofakeit.AppName()
 	}
 
-	if r.ProgramID == "" {
-		program := (&ProgramBuilder{client: r.client}).MustNew(ctx, t)
-		r.ProgramID = program.ID
+	mutation := r.client.db.Risk.Create().
+		SetName(r.Name)
+
+	if r.ProgramID != "" {
+		mutation.AddProgramIDs(r.ProgramID)
 	}
 
-	risk := r.client.db.Risk.Create().
-		SetName(r.Name).
-		SetProgramID(r.ProgramID).
+	risk := mutation.
 		SaveX(ctx)
 
 	return risk

@@ -10,9 +10,12 @@ import (
 	"entgo.io/ent/schema/field"
 	emixin "github.com/theopenlane/entx/mixin"
 	"github.com/theopenlane/iam/entfga"
+	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
@@ -73,9 +76,13 @@ func (Risk) Edges() []ent.Edge {
 			Ref("risks"),
 		edge.To("actionplans", ActionPlan.Type),
 		edge.From("program", Program.Type).
-			Required(). // risk must be associated with a program
-			Unique().   // a risk can only be associated with one program
-			Ref("risks"),
+			Ref("risks"), // risk can be associated to 1:m programs, this allow permission inheritance from the program(s)
+		edge.To("viewers", Group.Type).
+			Comment("provides view access to the risk to members of the group"),
+		edge.To("editors", Group.Type).
+			Comment("provides edit access to the risk to members of the group"),
+		edge.To("blocked_groups", Group.Type).
+			Comment("groups that are blocked from viewing or editing the risk"),
 	}
 }
 
@@ -88,7 +95,7 @@ func (Risk) Mixin() []ent.Mixin {
 		emixin.TagMixin{},
 		NewObjectOwnedMixin(ObjectOwnedMixin{
 			FieldNames: []string{"program_id"},
-			Required:   true,
+			Required:   false,
 		})}
 }
 
@@ -105,6 +112,30 @@ func (Risk) Annotations() []schema.Annotation {
 	}
 }
 
+// Hooks of the Risk
+func (Risk) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hook.On(
+			hooks.HookRelationTuples(map[string]string{
+				"editor_id": "group",
+			}, fgax.EditorRelation), // add editor tuples for associated groups
+			ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
+		),
+		hook.On(
+			hooks.HookRelationTuples(map[string]string{
+				"blocked_group_id": "group",
+			}, fgax.BlockedRelation), // add block tuples for associated groups
+			ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
+		),
+		hook.On(
+			hooks.HookRelationTuples(map[string]string{
+				"viewer_id": "group",
+			}, fgax.ViewerRelation), // add viewer tuples for associated groups
+			ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
+		),
+	}
+}
+
 // Interceptors of the Risk
 func (Risk) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
@@ -116,12 +147,13 @@ func (Risk) Interceptors() []ent.Interceptor {
 func (Risk) Policy() ent.Policy {
 	return privacy.Policy{
 		Mutation: privacy.MutationPolicy{
-			privacy.OnMutationOperation(
-				rule.CanCreateObjectsInProgram(),
+			rule.CanCreateObjectsInProgram(), // if mutation contains program_id, check access
+			privacy.OnMutationOperation( // if there is no program_id, check access for create in org
+				rule.CanCreateObjectsInOrg(),
 				ent.OpCreate,
 			),
 			privacy.RiskMutationRuleFunc(func(ctx context.Context, m *generated.RiskMutation) error {
-				return m.CheckAccessForEdit(ctx)
+				return m.CheckAccessForEdit(ctx) // check access for edit
 			}),
 			privacy.AlwaysDenyRule(),
 		},

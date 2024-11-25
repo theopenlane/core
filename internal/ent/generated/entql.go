@@ -3682,6 +3682,42 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Program",
 	)
 	graph.MustAddE(
+		"risk_viewers",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.RiskViewersTable,
+			Columns: group.RiskViewersPrimaryKey,
+			Bidi:    false,
+		},
+		"Group",
+		"Risk",
+	)
+	graph.MustAddE(
+		"risk_editors",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.RiskEditorsTable,
+			Columns: group.RiskEditorsPrimaryKey,
+			Bidi:    false,
+		},
+		"Group",
+		"Risk",
+	)
+	graph.MustAddE(
+		"risk_blocked_groups",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.RiskBlockedGroupsTable,
+			Columns: group.RiskBlockedGroupsPrimaryKey,
+			Bidi:    false,
+		},
+		"Group",
+		"Risk",
+	)
+	graph.MustAddE(
 		"members",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -4776,10 +4812,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"risks",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   program.RisksTable,
-			Columns: []string{program.RisksColumn},
+			Columns: program.RisksPrimaryKey,
 			Bidi:    false,
 		},
 		"Program",
@@ -4980,14 +5016,50 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"program",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
+			Rel:     sqlgraph.M2M,
 			Inverse: true,
 			Table:   risk.ProgramTable,
-			Columns: []string{risk.ProgramColumn},
+			Columns: risk.ProgramPrimaryKey,
 			Bidi:    false,
 		},
 		"Risk",
 		"Program",
+	)
+	graph.MustAddE(
+		"viewers",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   risk.ViewersTable,
+			Columns: risk.ViewersPrimaryKey,
+			Bidi:    false,
+		},
+		"Risk",
+		"Group",
+	)
+	graph.MustAddE(
+		"editors",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   risk.EditorsTable,
+			Columns: risk.EditorsPrimaryKey,
+			Bidi:    false,
+		},
+		"Risk",
+		"Group",
+	)
+	graph.MustAddE(
+		"blocked_groups",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   risk.BlockedGroupsTable,
+			Columns: risk.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+		},
+		"Risk",
+		"Group",
 	)
 	graph.MustAddE(
 		"controlobjectives",
@@ -10588,6 +10660,48 @@ func (f *GroupFilter) WhereHasProgramBlockedGroupsWith(preds ...predicate.Progra
 	})))
 }
 
+// WhereHasRiskViewers applies a predicate to check if query has an edge risk_viewers.
+func (f *GroupFilter) WhereHasRiskViewers() {
+	f.Where(entql.HasEdge("risk_viewers"))
+}
+
+// WhereHasRiskViewersWith applies a predicate to check if query has an edge risk_viewers with a given conditions (other predicates).
+func (f *GroupFilter) WhereHasRiskViewersWith(preds ...predicate.Risk) {
+	f.Where(entql.HasEdgeWith("risk_viewers", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasRiskEditors applies a predicate to check if query has an edge risk_editors.
+func (f *GroupFilter) WhereHasRiskEditors() {
+	f.Where(entql.HasEdge("risk_editors"))
+}
+
+// WhereHasRiskEditorsWith applies a predicate to check if query has an edge risk_editors with a given conditions (other predicates).
+func (f *GroupFilter) WhereHasRiskEditorsWith(preds ...predicate.Risk) {
+	f.Where(entql.HasEdgeWith("risk_editors", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasRiskBlockedGroups applies a predicate to check if query has an edge risk_blocked_groups.
+func (f *GroupFilter) WhereHasRiskBlockedGroups() {
+	f.Where(entql.HasEdge("risk_blocked_groups"))
+}
+
+// WhereHasRiskBlockedGroupsWith applies a predicate to check if query has an edge risk_blocked_groups with a given conditions (other predicates).
+func (f *GroupFilter) WhereHasRiskBlockedGroupsWith(preds ...predicate.Risk) {
+	f.Where(entql.HasEdgeWith("risk_blocked_groups", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasMembers applies a predicate to check if query has an edge members.
 func (f *GroupFilter) WhereHasMembers() {
 	f.Where(entql.HasEdge("members"))
@@ -16048,6 +16162,48 @@ func (f *RiskFilter) WhereHasProgram() {
 // WhereHasProgramWith applies a predicate to check if query has an edge program with a given conditions (other predicates).
 func (f *RiskFilter) WhereHasProgramWith(preds ...predicate.Program) {
 	f.Where(entql.HasEdgeWith("program", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasViewers applies a predicate to check if query has an edge viewers.
+func (f *RiskFilter) WhereHasViewers() {
+	f.Where(entql.HasEdge("viewers"))
+}
+
+// WhereHasViewersWith applies a predicate to check if query has an edge viewers with a given conditions (other predicates).
+func (f *RiskFilter) WhereHasViewersWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("viewers", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasEditors applies a predicate to check if query has an edge editors.
+func (f *RiskFilter) WhereHasEditors() {
+	f.Where(entql.HasEdge("editors"))
+}
+
+// WhereHasEditorsWith applies a predicate to check if query has an edge editors with a given conditions (other predicates).
+func (f *RiskFilter) WhereHasEditorsWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("editors", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasBlockedGroups applies a predicate to check if query has an edge blocked_groups.
+func (f *RiskFilter) WhereHasBlockedGroups() {
+	f.Where(entql.HasEdge("blocked_groups"))
+}
+
+// WhereHasBlockedGroupsWith applies a predicate to check if query has an edge blocked_groups with a given conditions (other predicates).
+func (f *RiskFilter) WhereHasBlockedGroupsWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("blocked_groups", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

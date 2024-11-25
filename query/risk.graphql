@@ -1,4 +1,3 @@
-
 mutation CreateBulkCSVRisk($input: Upload!) {
   createBulkCSVRisk(input: $input) {
     risks {
@@ -68,6 +67,18 @@ mutation CreateRisk($input: CreateRiskInput!) {
         id
         name
       }
+      editors {
+        id
+        name
+      }
+      viewers {
+        id
+        name
+      }
+      blockedGroups {
+        id
+        name
+      }
     }
   }
 }
@@ -102,10 +113,23 @@ query GetAllRisks {
           id
           name
         }
+        editors {
+          id
+          name
+        }
+        viewers {
+          id
+          name
+        }
+        blockedGroups {
+          id
+          name
+        }
       }
     }
   }
 }
+
 query GetRiskByID($riskId: ID!) {
   risk(id: $riskId) {
     businessCosts
@@ -125,6 +149,18 @@ query GetRiskByID($riskId: ID!) {
     updatedAt
     updatedBy
     program {
+      id
+      name
+    }
+    editors {
+      id
+      name
+    }
+    viewers {
+      id
+      name
+    }
+    blockedGroups {
       id
       name
     }
@@ -155,10 +191,23 @@ query GetRisks($where: RiskWhereInput) {
           id
           name
         }
+        editors {
+          id
+          name
+        }
+        viewers {
+          id
+          name
+        }
+        blockedGroups {
+          id
+          name
+        }
       }
     }
   }
 }
+
 mutation UpdateRisk($updateRiskId: ID!, $input: UpdateRiskInput!) {
   updateRisk(id: $updateRiskId, input: $input) {
     risk {
@@ -179,6 +228,18 @@ mutation UpdateRisk($updateRiskId: ID!, $input: UpdateRiskInput!) {
       updatedAt
       updatedBy
       program {
+        id
+        name
+      }
+      editors {
+        id
+        name
+      }
+      viewers {
+        id
+        name
+      }
+      blockedGroups {
         id
         name
       }

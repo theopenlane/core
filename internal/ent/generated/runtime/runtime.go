@@ -3369,6 +3369,7 @@ func init() {
 	riskMixinHooks0 := riskMixin[0].Hooks()
 	riskMixinHooks1 := riskMixin[1].Hooks()
 	riskMixinHooks4 := riskMixin[4].Hooks()
+	riskHooks := schema.Risk{}.Hooks()
 
 	risk.Hooks[1] = riskMixinHooks0[0]
 
@@ -3377,6 +3378,12 @@ func init() {
 	risk.Hooks[3] = riskMixinHooks4[0]
 
 	risk.Hooks[4] = riskMixinHooks4[1]
+
+	risk.Hooks[5] = riskHooks[0]
+
+	risk.Hooks[6] = riskHooks[1]
+
+	risk.Hooks[7] = riskHooks[2]
 	riskMixinInters1 := riskMixin[1].Interceptors()
 	riskMixinInters4 := riskMixin[4].Interceptors()
 	riskInters := schema.Risk{}.Interceptors()

@@ -38470,24 +38470,81 @@ func (t *CreateRisk_CreateRisk_Risk_Program) GetName() string {
 	return t.Name
 }
 
+type CreateRisk_CreateRisk_Risk_Editors struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateRisk_CreateRisk_Risk_Editors) GetID() string {
+	if t == nil {
+		t = &CreateRisk_CreateRisk_Risk_Editors{}
+	}
+	return t.ID
+}
+func (t *CreateRisk_CreateRisk_Risk_Editors) GetName() string {
+	if t == nil {
+		t = &CreateRisk_CreateRisk_Risk_Editors{}
+	}
+	return t.Name
+}
+
+type CreateRisk_CreateRisk_Risk_Viewers struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateRisk_CreateRisk_Risk_Viewers) GetID() string {
+	if t == nil {
+		t = &CreateRisk_CreateRisk_Risk_Viewers{}
+	}
+	return t.ID
+}
+func (t *CreateRisk_CreateRisk_Risk_Viewers) GetName() string {
+	if t == nil {
+		t = &CreateRisk_CreateRisk_Risk_Viewers{}
+	}
+	return t.Name
+}
+
+type CreateRisk_CreateRisk_Risk_BlockedGroups struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateRisk_CreateRisk_Risk_BlockedGroups) GetID() string {
+	if t == nil {
+		t = &CreateRisk_CreateRisk_Risk_BlockedGroups{}
+	}
+	return t.ID
+}
+func (t *CreateRisk_CreateRisk_Risk_BlockedGroups) GetName() string {
+	if t == nil {
+		t = &CreateRisk_CreateRisk_Risk_BlockedGroups{}
+	}
+	return t.Name
+}
+
 type CreateRisk_CreateRisk_Risk struct {
-	BusinessCosts *string                            "json:\"businessCosts,omitempty\" graphql:\"businessCosts\""
-	CreatedAt     *time.Time                         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string                            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description   *string                            "json:\"description,omitempty\" graphql:\"description\""
-	Details       map[string]interface{}             "json:\"details,omitempty\" graphql:\"details\""
-	ID            string                             "json:\"id\" graphql:\"id\""
-	Impact        *enums.RiskImpact                  "json:\"impact,omitempty\" graphql:\"impact\""
-	Likelihood    *enums.RiskLikelihood              "json:\"likelihood,omitempty\" graphql:\"likelihood\""
-	Mitigation    *string                            "json:\"mitigation,omitempty\" graphql:\"mitigation\""
-	Name          string                             "json:\"name\" graphql:\"name\""
-	RiskType      *string                            "json:\"riskType,omitempty\" graphql:\"riskType\""
-	Satisfies     *string                            "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Status        *string                            "json:\"status,omitempty\" graphql:\"status\""
-	Tags          []string                           "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt     *time.Time                         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string                            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Program       CreateRisk_CreateRisk_Risk_Program "json:\"program\" graphql:\"program\""
+	BusinessCosts *string                                     "json:\"businessCosts,omitempty\" graphql:\"businessCosts\""
+	CreatedAt     *time.Time                                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description   *string                                     "json:\"description,omitempty\" graphql:\"description\""
+	Details       map[string]interface{}                      "json:\"details,omitempty\" graphql:\"details\""
+	ID            string                                      "json:\"id\" graphql:\"id\""
+	Impact        *enums.RiskImpact                           "json:\"impact,omitempty\" graphql:\"impact\""
+	Likelihood    *enums.RiskLikelihood                       "json:\"likelihood,omitempty\" graphql:\"likelihood\""
+	Mitigation    *string                                     "json:\"mitigation,omitempty\" graphql:\"mitigation\""
+	Name          string                                      "json:\"name\" graphql:\"name\""
+	RiskType      *string                                     "json:\"riskType,omitempty\" graphql:\"riskType\""
+	Satisfies     *string                                     "json:\"satisfies,omitempty\" graphql:\"satisfies\""
+	Status        *string                                     "json:\"status,omitempty\" graphql:\"status\""
+	Tags          []string                                    "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt     *time.Time                                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Program       []*CreateRisk_CreateRisk_Risk_Program       "json:\"program,omitempty\" graphql:\"program\""
+	Editors       []*CreateRisk_CreateRisk_Risk_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
+	Viewers       []*CreateRisk_CreateRisk_Risk_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
+	BlockedGroups []*CreateRisk_CreateRisk_Risk_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 }
 
 func (t *CreateRisk_CreateRisk_Risk) GetBusinessCosts() *string {
@@ -38586,11 +38643,29 @@ func (t *CreateRisk_CreateRisk_Risk) GetUpdatedBy() *string {
 	}
 	return t.UpdatedBy
 }
-func (t *CreateRisk_CreateRisk_Risk) GetProgram() *CreateRisk_CreateRisk_Risk_Program {
+func (t *CreateRisk_CreateRisk_Risk) GetProgram() []*CreateRisk_CreateRisk_Risk_Program {
 	if t == nil {
 		t = &CreateRisk_CreateRisk_Risk{}
 	}
-	return &t.Program
+	return t.Program
+}
+func (t *CreateRisk_CreateRisk_Risk) GetEditors() []*CreateRisk_CreateRisk_Risk_Editors {
+	if t == nil {
+		t = &CreateRisk_CreateRisk_Risk{}
+	}
+	return t.Editors
+}
+func (t *CreateRisk_CreateRisk_Risk) GetViewers() []*CreateRisk_CreateRisk_Risk_Viewers {
+	if t == nil {
+		t = &CreateRisk_CreateRisk_Risk{}
+	}
+	return t.Viewers
+}
+func (t *CreateRisk_CreateRisk_Risk) GetBlockedGroups() []*CreateRisk_CreateRisk_Risk_BlockedGroups {
+	if t == nil {
+		t = &CreateRisk_CreateRisk_Risk{}
+	}
+	return t.BlockedGroups
 }
 
 type CreateRisk_CreateRisk struct {
@@ -38633,24 +38708,81 @@ func (t *GetAllRisks_Risks_Edges_Node_Program) GetName() string {
 	return t.Name
 }
 
+type GetAllRisks_Risks_Edges_Node_Editors struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetAllRisks_Risks_Edges_Node_Editors) GetID() string {
+	if t == nil {
+		t = &GetAllRisks_Risks_Edges_Node_Editors{}
+	}
+	return t.ID
+}
+func (t *GetAllRisks_Risks_Edges_Node_Editors) GetName() string {
+	if t == nil {
+		t = &GetAllRisks_Risks_Edges_Node_Editors{}
+	}
+	return t.Name
+}
+
+type GetAllRisks_Risks_Edges_Node_Viewers struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetAllRisks_Risks_Edges_Node_Viewers) GetID() string {
+	if t == nil {
+		t = &GetAllRisks_Risks_Edges_Node_Viewers{}
+	}
+	return t.ID
+}
+func (t *GetAllRisks_Risks_Edges_Node_Viewers) GetName() string {
+	if t == nil {
+		t = &GetAllRisks_Risks_Edges_Node_Viewers{}
+	}
+	return t.Name
+}
+
+type GetAllRisks_Risks_Edges_Node_BlockedGroups struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetAllRisks_Risks_Edges_Node_BlockedGroups) GetID() string {
+	if t == nil {
+		t = &GetAllRisks_Risks_Edges_Node_BlockedGroups{}
+	}
+	return t.ID
+}
+func (t *GetAllRisks_Risks_Edges_Node_BlockedGroups) GetName() string {
+	if t == nil {
+		t = &GetAllRisks_Risks_Edges_Node_BlockedGroups{}
+	}
+	return t.Name
+}
+
 type GetAllRisks_Risks_Edges_Node struct {
-	BusinessCosts *string                              "json:\"businessCosts,omitempty\" graphql:\"businessCosts\""
-	CreatedAt     *time.Time                           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string                              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description   *string                              "json:\"description,omitempty\" graphql:\"description\""
-	Details       map[string]interface{}               "json:\"details,omitempty\" graphql:\"details\""
-	ID            string                               "json:\"id\" graphql:\"id\""
-	Impact        *enums.RiskImpact                    "json:\"impact,omitempty\" graphql:\"impact\""
-	Likelihood    *enums.RiskLikelihood                "json:\"likelihood,omitempty\" graphql:\"likelihood\""
-	Mitigation    *string                              "json:\"mitigation,omitempty\" graphql:\"mitigation\""
-	Name          string                               "json:\"name\" graphql:\"name\""
-	RiskType      *string                              "json:\"riskType,omitempty\" graphql:\"riskType\""
-	Satisfies     *string                              "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Status        *string                              "json:\"status,omitempty\" graphql:\"status\""
-	Tags          []string                             "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt     *time.Time                           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string                              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Program       GetAllRisks_Risks_Edges_Node_Program "json:\"program\" graphql:\"program\""
+	BusinessCosts *string                                       "json:\"businessCosts,omitempty\" graphql:\"businessCosts\""
+	CreatedAt     *time.Time                                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description   *string                                       "json:\"description,omitempty\" graphql:\"description\""
+	Details       map[string]interface{}                        "json:\"details,omitempty\" graphql:\"details\""
+	ID            string                                        "json:\"id\" graphql:\"id\""
+	Impact        *enums.RiskImpact                             "json:\"impact,omitempty\" graphql:\"impact\""
+	Likelihood    *enums.RiskLikelihood                         "json:\"likelihood,omitempty\" graphql:\"likelihood\""
+	Mitigation    *string                                       "json:\"mitigation,omitempty\" graphql:\"mitigation\""
+	Name          string                                        "json:\"name\" graphql:\"name\""
+	RiskType      *string                                       "json:\"riskType,omitempty\" graphql:\"riskType\""
+	Satisfies     *string                                       "json:\"satisfies,omitempty\" graphql:\"satisfies\""
+	Status        *string                                       "json:\"status,omitempty\" graphql:\"status\""
+	Tags          []string                                      "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt     *time.Time                                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Program       []*GetAllRisks_Risks_Edges_Node_Program       "json:\"program,omitempty\" graphql:\"program\""
+	Editors       []*GetAllRisks_Risks_Edges_Node_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
+	Viewers       []*GetAllRisks_Risks_Edges_Node_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
+	BlockedGroups []*GetAllRisks_Risks_Edges_Node_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 }
 
 func (t *GetAllRisks_Risks_Edges_Node) GetBusinessCosts() *string {
@@ -38749,11 +38881,29 @@ func (t *GetAllRisks_Risks_Edges_Node) GetUpdatedBy() *string {
 	}
 	return t.UpdatedBy
 }
-func (t *GetAllRisks_Risks_Edges_Node) GetProgram() *GetAllRisks_Risks_Edges_Node_Program {
+func (t *GetAllRisks_Risks_Edges_Node) GetProgram() []*GetAllRisks_Risks_Edges_Node_Program {
 	if t == nil {
 		t = &GetAllRisks_Risks_Edges_Node{}
 	}
-	return &t.Program
+	return t.Program
+}
+func (t *GetAllRisks_Risks_Edges_Node) GetEditors() []*GetAllRisks_Risks_Edges_Node_Editors {
+	if t == nil {
+		t = &GetAllRisks_Risks_Edges_Node{}
+	}
+	return t.Editors
+}
+func (t *GetAllRisks_Risks_Edges_Node) GetViewers() []*GetAllRisks_Risks_Edges_Node_Viewers {
+	if t == nil {
+		t = &GetAllRisks_Risks_Edges_Node{}
+	}
+	return t.Viewers
+}
+func (t *GetAllRisks_Risks_Edges_Node) GetBlockedGroups() []*GetAllRisks_Risks_Edges_Node_BlockedGroups {
+	if t == nil {
+		t = &GetAllRisks_Risks_Edges_Node{}
+	}
+	return t.BlockedGroups
 }
 
 type GetAllRisks_Risks_Edges struct {
@@ -38796,24 +38946,81 @@ func (t *GetRiskByID_Risk_Program) GetName() string {
 	return t.Name
 }
 
+type GetRiskByID_Risk_Editors struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetRiskByID_Risk_Editors) GetID() string {
+	if t == nil {
+		t = &GetRiskByID_Risk_Editors{}
+	}
+	return t.ID
+}
+func (t *GetRiskByID_Risk_Editors) GetName() string {
+	if t == nil {
+		t = &GetRiskByID_Risk_Editors{}
+	}
+	return t.Name
+}
+
+type GetRiskByID_Risk_Viewers struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetRiskByID_Risk_Viewers) GetID() string {
+	if t == nil {
+		t = &GetRiskByID_Risk_Viewers{}
+	}
+	return t.ID
+}
+func (t *GetRiskByID_Risk_Viewers) GetName() string {
+	if t == nil {
+		t = &GetRiskByID_Risk_Viewers{}
+	}
+	return t.Name
+}
+
+type GetRiskByID_Risk_BlockedGroups struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetRiskByID_Risk_BlockedGroups) GetID() string {
+	if t == nil {
+		t = &GetRiskByID_Risk_BlockedGroups{}
+	}
+	return t.ID
+}
+func (t *GetRiskByID_Risk_BlockedGroups) GetName() string {
+	if t == nil {
+		t = &GetRiskByID_Risk_BlockedGroups{}
+	}
+	return t.Name
+}
+
 type GetRiskByID_Risk struct {
-	BusinessCosts *string                  "json:\"businessCosts,omitempty\" graphql:\"businessCosts\""
-	CreatedAt     *time.Time               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description   *string                  "json:\"description,omitempty\" graphql:\"description\""
-	Details       map[string]interface{}   "json:\"details,omitempty\" graphql:\"details\""
-	ID            string                   "json:\"id\" graphql:\"id\""
-	Impact        *enums.RiskImpact        "json:\"impact,omitempty\" graphql:\"impact\""
-	Likelihood    *enums.RiskLikelihood    "json:\"likelihood,omitempty\" graphql:\"likelihood\""
-	Mitigation    *string                  "json:\"mitigation,omitempty\" graphql:\"mitigation\""
-	Name          string                   "json:\"name\" graphql:\"name\""
-	RiskType      *string                  "json:\"riskType,omitempty\" graphql:\"riskType\""
-	Satisfies     *string                  "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Status        *string                  "json:\"status,omitempty\" graphql:\"status\""
-	Tags          []string                 "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt     *time.Time               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Program       GetRiskByID_Risk_Program "json:\"program\" graphql:\"program\""
+	BusinessCosts *string                           "json:\"businessCosts,omitempty\" graphql:\"businessCosts\""
+	CreatedAt     *time.Time                        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description   *string                           "json:\"description,omitempty\" graphql:\"description\""
+	Details       map[string]interface{}            "json:\"details,omitempty\" graphql:\"details\""
+	ID            string                            "json:\"id\" graphql:\"id\""
+	Impact        *enums.RiskImpact                 "json:\"impact,omitempty\" graphql:\"impact\""
+	Likelihood    *enums.RiskLikelihood             "json:\"likelihood,omitempty\" graphql:\"likelihood\""
+	Mitigation    *string                           "json:\"mitigation,omitempty\" graphql:\"mitigation\""
+	Name          string                            "json:\"name\" graphql:\"name\""
+	RiskType      *string                           "json:\"riskType,omitempty\" graphql:\"riskType\""
+	Satisfies     *string                           "json:\"satisfies,omitempty\" graphql:\"satisfies\""
+	Status        *string                           "json:\"status,omitempty\" graphql:\"status\""
+	Tags          []string                          "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt     *time.Time                        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Program       []*GetRiskByID_Risk_Program       "json:\"program,omitempty\" graphql:\"program\""
+	Editors       []*GetRiskByID_Risk_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
+	Viewers       []*GetRiskByID_Risk_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
+	BlockedGroups []*GetRiskByID_Risk_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 }
 
 func (t *GetRiskByID_Risk) GetBusinessCosts() *string {
@@ -38912,11 +39119,29 @@ func (t *GetRiskByID_Risk) GetUpdatedBy() *string {
 	}
 	return t.UpdatedBy
 }
-func (t *GetRiskByID_Risk) GetProgram() *GetRiskByID_Risk_Program {
+func (t *GetRiskByID_Risk) GetProgram() []*GetRiskByID_Risk_Program {
 	if t == nil {
 		t = &GetRiskByID_Risk{}
 	}
-	return &t.Program
+	return t.Program
+}
+func (t *GetRiskByID_Risk) GetEditors() []*GetRiskByID_Risk_Editors {
+	if t == nil {
+		t = &GetRiskByID_Risk{}
+	}
+	return t.Editors
+}
+func (t *GetRiskByID_Risk) GetViewers() []*GetRiskByID_Risk_Viewers {
+	if t == nil {
+		t = &GetRiskByID_Risk{}
+	}
+	return t.Viewers
+}
+func (t *GetRiskByID_Risk) GetBlockedGroups() []*GetRiskByID_Risk_BlockedGroups {
+	if t == nil {
+		t = &GetRiskByID_Risk{}
+	}
+	return t.BlockedGroups
 }
 
 type GetRisks_Risks_Edges_Node_Program struct {
@@ -38937,24 +39162,81 @@ func (t *GetRisks_Risks_Edges_Node_Program) GetName() string {
 	return t.Name
 }
 
+type GetRisks_Risks_Edges_Node_Editors struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetRisks_Risks_Edges_Node_Editors) GetID() string {
+	if t == nil {
+		t = &GetRisks_Risks_Edges_Node_Editors{}
+	}
+	return t.ID
+}
+func (t *GetRisks_Risks_Edges_Node_Editors) GetName() string {
+	if t == nil {
+		t = &GetRisks_Risks_Edges_Node_Editors{}
+	}
+	return t.Name
+}
+
+type GetRisks_Risks_Edges_Node_Viewers struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetRisks_Risks_Edges_Node_Viewers) GetID() string {
+	if t == nil {
+		t = &GetRisks_Risks_Edges_Node_Viewers{}
+	}
+	return t.ID
+}
+func (t *GetRisks_Risks_Edges_Node_Viewers) GetName() string {
+	if t == nil {
+		t = &GetRisks_Risks_Edges_Node_Viewers{}
+	}
+	return t.Name
+}
+
+type GetRisks_Risks_Edges_Node_BlockedGroups struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetRisks_Risks_Edges_Node_BlockedGroups) GetID() string {
+	if t == nil {
+		t = &GetRisks_Risks_Edges_Node_BlockedGroups{}
+	}
+	return t.ID
+}
+func (t *GetRisks_Risks_Edges_Node_BlockedGroups) GetName() string {
+	if t == nil {
+		t = &GetRisks_Risks_Edges_Node_BlockedGroups{}
+	}
+	return t.Name
+}
+
 type GetRisks_Risks_Edges_Node struct {
-	BusinessCosts *string                           "json:\"businessCosts,omitempty\" graphql:\"businessCosts\""
-	CreatedAt     *time.Time                        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string                           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description   *string                           "json:\"description,omitempty\" graphql:\"description\""
-	Details       map[string]interface{}            "json:\"details,omitempty\" graphql:\"details\""
-	ID            string                            "json:\"id\" graphql:\"id\""
-	Impact        *enums.RiskImpact                 "json:\"impact,omitempty\" graphql:\"impact\""
-	Likelihood    *enums.RiskLikelihood             "json:\"likelihood,omitempty\" graphql:\"likelihood\""
-	Mitigation    *string                           "json:\"mitigation,omitempty\" graphql:\"mitigation\""
-	Name          string                            "json:\"name\" graphql:\"name\""
-	RiskType      *string                           "json:\"riskType,omitempty\" graphql:\"riskType\""
-	Satisfies     *string                           "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Status        *string                           "json:\"status,omitempty\" graphql:\"status\""
-	Tags          []string                          "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt     *time.Time                        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string                           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Program       GetRisks_Risks_Edges_Node_Program "json:\"program\" graphql:\"program\""
+	BusinessCosts *string                                    "json:\"businessCosts,omitempty\" graphql:\"businessCosts\""
+	CreatedAt     *time.Time                                 "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description   *string                                    "json:\"description,omitempty\" graphql:\"description\""
+	Details       map[string]interface{}                     "json:\"details,omitempty\" graphql:\"details\""
+	ID            string                                     "json:\"id\" graphql:\"id\""
+	Impact        *enums.RiskImpact                          "json:\"impact,omitempty\" graphql:\"impact\""
+	Likelihood    *enums.RiskLikelihood                      "json:\"likelihood,omitempty\" graphql:\"likelihood\""
+	Mitigation    *string                                    "json:\"mitigation,omitempty\" graphql:\"mitigation\""
+	Name          string                                     "json:\"name\" graphql:\"name\""
+	RiskType      *string                                    "json:\"riskType,omitempty\" graphql:\"riskType\""
+	Satisfies     *string                                    "json:\"satisfies,omitempty\" graphql:\"satisfies\""
+	Status        *string                                    "json:\"status,omitempty\" graphql:\"status\""
+	Tags          []string                                   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt     *time.Time                                 "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                                    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Program       []*GetRisks_Risks_Edges_Node_Program       "json:\"program,omitempty\" graphql:\"program\""
+	Editors       []*GetRisks_Risks_Edges_Node_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
+	Viewers       []*GetRisks_Risks_Edges_Node_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
+	BlockedGroups []*GetRisks_Risks_Edges_Node_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 }
 
 func (t *GetRisks_Risks_Edges_Node) GetBusinessCosts() *string {
@@ -39053,11 +39335,29 @@ func (t *GetRisks_Risks_Edges_Node) GetUpdatedBy() *string {
 	}
 	return t.UpdatedBy
 }
-func (t *GetRisks_Risks_Edges_Node) GetProgram() *GetRisks_Risks_Edges_Node_Program {
+func (t *GetRisks_Risks_Edges_Node) GetProgram() []*GetRisks_Risks_Edges_Node_Program {
 	if t == nil {
 		t = &GetRisks_Risks_Edges_Node{}
 	}
-	return &t.Program
+	return t.Program
+}
+func (t *GetRisks_Risks_Edges_Node) GetEditors() []*GetRisks_Risks_Edges_Node_Editors {
+	if t == nil {
+		t = &GetRisks_Risks_Edges_Node{}
+	}
+	return t.Editors
+}
+func (t *GetRisks_Risks_Edges_Node) GetViewers() []*GetRisks_Risks_Edges_Node_Viewers {
+	if t == nil {
+		t = &GetRisks_Risks_Edges_Node{}
+	}
+	return t.Viewers
+}
+func (t *GetRisks_Risks_Edges_Node) GetBlockedGroups() []*GetRisks_Risks_Edges_Node_BlockedGroups {
+	if t == nil {
+		t = &GetRisks_Risks_Edges_Node{}
+	}
+	return t.BlockedGroups
 }
 
 type GetRisks_Risks_Edges struct {
@@ -39100,24 +39400,81 @@ func (t *UpdateRisk_UpdateRisk_Risk_Program) GetName() string {
 	return t.Name
 }
 
+type UpdateRisk_UpdateRisk_Risk_Editors struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateRisk_UpdateRisk_Risk_Editors) GetID() string {
+	if t == nil {
+		t = &UpdateRisk_UpdateRisk_Risk_Editors{}
+	}
+	return t.ID
+}
+func (t *UpdateRisk_UpdateRisk_Risk_Editors) GetName() string {
+	if t == nil {
+		t = &UpdateRisk_UpdateRisk_Risk_Editors{}
+	}
+	return t.Name
+}
+
+type UpdateRisk_UpdateRisk_Risk_Viewers struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateRisk_UpdateRisk_Risk_Viewers) GetID() string {
+	if t == nil {
+		t = &UpdateRisk_UpdateRisk_Risk_Viewers{}
+	}
+	return t.ID
+}
+func (t *UpdateRisk_UpdateRisk_Risk_Viewers) GetName() string {
+	if t == nil {
+		t = &UpdateRisk_UpdateRisk_Risk_Viewers{}
+	}
+	return t.Name
+}
+
+type UpdateRisk_UpdateRisk_Risk_BlockedGroups struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateRisk_UpdateRisk_Risk_BlockedGroups) GetID() string {
+	if t == nil {
+		t = &UpdateRisk_UpdateRisk_Risk_BlockedGroups{}
+	}
+	return t.ID
+}
+func (t *UpdateRisk_UpdateRisk_Risk_BlockedGroups) GetName() string {
+	if t == nil {
+		t = &UpdateRisk_UpdateRisk_Risk_BlockedGroups{}
+	}
+	return t.Name
+}
+
 type UpdateRisk_UpdateRisk_Risk struct {
-	BusinessCosts *string                            "json:\"businessCosts,omitempty\" graphql:\"businessCosts\""
-	CreatedAt     *time.Time                         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string                            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description   *string                            "json:\"description,omitempty\" graphql:\"description\""
-	Details       map[string]interface{}             "json:\"details,omitempty\" graphql:\"details\""
-	ID            string                             "json:\"id\" graphql:\"id\""
-	Impact        *enums.RiskImpact                  "json:\"impact,omitempty\" graphql:\"impact\""
-	Likelihood    *enums.RiskLikelihood              "json:\"likelihood,omitempty\" graphql:\"likelihood\""
-	Mitigation    *string                            "json:\"mitigation,omitempty\" graphql:\"mitigation\""
-	Name          string                             "json:\"name\" graphql:\"name\""
-	RiskType      *string                            "json:\"riskType,omitempty\" graphql:\"riskType\""
-	Satisfies     *string                            "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Status        *string                            "json:\"status,omitempty\" graphql:\"status\""
-	Tags          []string                           "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt     *time.Time                         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string                            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Program       UpdateRisk_UpdateRisk_Risk_Program "json:\"program\" graphql:\"program\""
+	BusinessCosts *string                                     "json:\"businessCosts,omitempty\" graphql:\"businessCosts\""
+	CreatedAt     *time.Time                                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description   *string                                     "json:\"description,omitempty\" graphql:\"description\""
+	Details       map[string]interface{}                      "json:\"details,omitempty\" graphql:\"details\""
+	ID            string                                      "json:\"id\" graphql:\"id\""
+	Impact        *enums.RiskImpact                           "json:\"impact,omitempty\" graphql:\"impact\""
+	Likelihood    *enums.RiskLikelihood                       "json:\"likelihood,omitempty\" graphql:\"likelihood\""
+	Mitigation    *string                                     "json:\"mitigation,omitempty\" graphql:\"mitigation\""
+	Name          string                                      "json:\"name\" graphql:\"name\""
+	RiskType      *string                                     "json:\"riskType,omitempty\" graphql:\"riskType\""
+	Satisfies     *string                                     "json:\"satisfies,omitempty\" graphql:\"satisfies\""
+	Status        *string                                     "json:\"status,omitempty\" graphql:\"status\""
+	Tags          []string                                    "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt     *time.Time                                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Program       []*UpdateRisk_UpdateRisk_Risk_Program       "json:\"program,omitempty\" graphql:\"program\""
+	Editors       []*UpdateRisk_UpdateRisk_Risk_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
+	Viewers       []*UpdateRisk_UpdateRisk_Risk_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
+	BlockedGroups []*UpdateRisk_UpdateRisk_Risk_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 }
 
 func (t *UpdateRisk_UpdateRisk_Risk) GetBusinessCosts() *string {
@@ -39216,11 +39573,29 @@ func (t *UpdateRisk_UpdateRisk_Risk) GetUpdatedBy() *string {
 	}
 	return t.UpdatedBy
 }
-func (t *UpdateRisk_UpdateRisk_Risk) GetProgram() *UpdateRisk_UpdateRisk_Risk_Program {
+func (t *UpdateRisk_UpdateRisk_Risk) GetProgram() []*UpdateRisk_UpdateRisk_Risk_Program {
 	if t == nil {
 		t = &UpdateRisk_UpdateRisk_Risk{}
 	}
-	return &t.Program
+	return t.Program
+}
+func (t *UpdateRisk_UpdateRisk_Risk) GetEditors() []*UpdateRisk_UpdateRisk_Risk_Editors {
+	if t == nil {
+		t = &UpdateRisk_UpdateRisk_Risk{}
+	}
+	return t.Editors
+}
+func (t *UpdateRisk_UpdateRisk_Risk) GetViewers() []*UpdateRisk_UpdateRisk_Risk_Viewers {
+	if t == nil {
+		t = &UpdateRisk_UpdateRisk_Risk{}
+	}
+	return t.Viewers
+}
+func (t *UpdateRisk_UpdateRisk_Risk) GetBlockedGroups() []*UpdateRisk_UpdateRisk_Risk_BlockedGroups {
+	if t == nil {
+		t = &UpdateRisk_UpdateRisk_Risk{}
+	}
+	return t.BlockedGroups
 }
 
 type UpdateRisk_UpdateRisk struct {
@@ -65913,6 +66288,18 @@ const CreateRiskDocument = `mutation CreateRisk ($input: CreateRiskInput!) {
 				id
 				name
 			}
+			editors {
+				id
+				name
+			}
+			viewers {
+				id
+				name
+			}
+			blockedGroups {
+				id
+				name
+			}
 		}
 	}
 }
@@ -65983,6 +66370,18 @@ const GetAllRisksDocument = `query GetAllRisks {
 					id
 					name
 				}
+				editors {
+					id
+					name
+				}
+				viewers {
+					id
+					name
+				}
+				blockedGroups {
+					id
+					name
+				}
 			}
 		}
 	}
@@ -66023,6 +66422,18 @@ const GetRiskByIDDocument = `query GetRiskByID ($riskId: ID!) {
 		updatedAt
 		updatedBy
 		program {
+			id
+			name
+		}
+		editors {
+			id
+			name
+		}
+		viewers {
+			id
+			name
+		}
+		blockedGroups {
 			id
 			name
 		}
@@ -66071,6 +66482,18 @@ const GetRisksDocument = `query GetRisks ($where: RiskWhereInput) {
 					id
 					name
 				}
+				editors {
+					id
+					name
+				}
+				viewers {
+					id
+					name
+				}
+				blockedGroups {
+					id
+					name
+				}
 			}
 		}
 	}
@@ -66114,6 +66537,18 @@ const UpdateRiskDocument = `mutation UpdateRisk ($updateRiskId: ID!, $input: Upd
 			updatedAt
 			updatedBy
 			program {
+				id
+				name
+			}
+			editors {
+				id
+				name
+			}
+			viewers {
+				id
+				name
+			}
+			blockedGroups {
 				id
 				name
 			}

@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
@@ -358,15 +359,64 @@ func (ru *RiskUpdate) AddActionplans(a ...*ActionPlan) *RiskUpdate {
 	return ru.AddActionplanIDs(ids...)
 }
 
-// SetProgramID sets the "program" edge to the Program entity by ID.
-func (ru *RiskUpdate) SetProgramID(id string) *RiskUpdate {
-	ru.mutation.SetProgramID(id)
+// AddProgramIDs adds the "program" edge to the Program entity by IDs.
+func (ru *RiskUpdate) AddProgramIDs(ids ...string) *RiskUpdate {
+	ru.mutation.AddProgramIDs(ids...)
 	return ru
 }
 
-// SetProgram sets the "program" edge to the Program entity.
-func (ru *RiskUpdate) SetProgram(p *Program) *RiskUpdate {
-	return ru.SetProgramID(p.ID)
+// AddProgram adds the "program" edges to the Program entity.
+func (ru *RiskUpdate) AddProgram(p ...*Program) *RiskUpdate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return ru.AddProgramIDs(ids...)
+}
+
+// AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
+func (ru *RiskUpdate) AddViewerIDs(ids ...string) *RiskUpdate {
+	ru.mutation.AddViewerIDs(ids...)
+	return ru
+}
+
+// AddViewers adds the "viewers" edges to the Group entity.
+func (ru *RiskUpdate) AddViewers(g ...*Group) *RiskUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ru.AddViewerIDs(ids...)
+}
+
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (ru *RiskUpdate) AddEditorIDs(ids ...string) *RiskUpdate {
+	ru.mutation.AddEditorIDs(ids...)
+	return ru
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (ru *RiskUpdate) AddEditors(g ...*Group) *RiskUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ru.AddEditorIDs(ids...)
+}
+
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (ru *RiskUpdate) AddBlockedGroupIDs(ids ...string) *RiskUpdate {
+	ru.mutation.AddBlockedGroupIDs(ids...)
+	return ru
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (ru *RiskUpdate) AddBlockedGroups(g ...*Group) *RiskUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ru.AddBlockedGroupIDs(ids...)
 }
 
 // Mutation returns the RiskMutation object of the builder.
@@ -437,10 +487,88 @@ func (ru *RiskUpdate) RemoveActionplans(a ...*ActionPlan) *RiskUpdate {
 	return ru.RemoveActionplanIDs(ids...)
 }
 
-// ClearProgram clears the "program" edge to the Program entity.
+// ClearProgram clears all "program" edges to the Program entity.
 func (ru *RiskUpdate) ClearProgram() *RiskUpdate {
 	ru.mutation.ClearProgram()
 	return ru
+}
+
+// RemoveProgramIDs removes the "program" edge to Program entities by IDs.
+func (ru *RiskUpdate) RemoveProgramIDs(ids ...string) *RiskUpdate {
+	ru.mutation.RemoveProgramIDs(ids...)
+	return ru
+}
+
+// RemoveProgram removes "program" edges to Program entities.
+func (ru *RiskUpdate) RemoveProgram(p ...*Program) *RiskUpdate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return ru.RemoveProgramIDs(ids...)
+}
+
+// ClearViewers clears all "viewers" edges to the Group entity.
+func (ru *RiskUpdate) ClearViewers() *RiskUpdate {
+	ru.mutation.ClearViewers()
+	return ru
+}
+
+// RemoveViewerIDs removes the "viewers" edge to Group entities by IDs.
+func (ru *RiskUpdate) RemoveViewerIDs(ids ...string) *RiskUpdate {
+	ru.mutation.RemoveViewerIDs(ids...)
+	return ru
+}
+
+// RemoveViewers removes "viewers" edges to Group entities.
+func (ru *RiskUpdate) RemoveViewers(g ...*Group) *RiskUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ru.RemoveViewerIDs(ids...)
+}
+
+// ClearEditors clears all "editors" edges to the Group entity.
+func (ru *RiskUpdate) ClearEditors() *RiskUpdate {
+	ru.mutation.ClearEditors()
+	return ru
+}
+
+// RemoveEditorIDs removes the "editors" edge to Group entities by IDs.
+func (ru *RiskUpdate) RemoveEditorIDs(ids ...string) *RiskUpdate {
+	ru.mutation.RemoveEditorIDs(ids...)
+	return ru
+}
+
+// RemoveEditors removes "editors" edges to Group entities.
+func (ru *RiskUpdate) RemoveEditors(g ...*Group) *RiskUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ru.RemoveEditorIDs(ids...)
+}
+
+// ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
+func (ru *RiskUpdate) ClearBlockedGroups() *RiskUpdate {
+	ru.mutation.ClearBlockedGroups()
+	return ru
+}
+
+// RemoveBlockedGroupIDs removes the "blocked_groups" edge to Group entities by IDs.
+func (ru *RiskUpdate) RemoveBlockedGroupIDs(ids ...string) *RiskUpdate {
+	ru.mutation.RemoveBlockedGroupIDs(ids...)
+	return ru
+}
+
+// RemoveBlockedGroups removes "blocked_groups" edges to Group entities.
+func (ru *RiskUpdate) RemoveBlockedGroups(g ...*Group) *RiskUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ru.RemoveBlockedGroupIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -501,9 +629,6 @@ func (ru *RiskUpdate) check() error {
 		if err := risk.LikelihoodValidator(v); err != nil {
 			return &ValidationError{Name: "likelihood", err: fmt.Errorf(`generated: validator failed for field "Risk.likelihood": %w`, err)}
 		}
-	}
-	if ru.mutation.ProgramCleared() && len(ru.mutation.ProgramIDs()) > 0 {
-		return errors.New(`generated: clearing a required unique edge "Risk.program"`)
 	}
 	return nil
 }
@@ -770,30 +895,191 @@ func (ru *RiskUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if ru.mutation.ProgramCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
+			Rel:     sqlgraph.M2M,
 			Inverse: true,
 			Table:   risk.ProgramTable,
-			Columns: []string{risk.ProgramColumn},
+			Columns: risk.ProgramPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ru.schemaConfig.Risk
+		edge.Schema = ru.schemaConfig.ProgramRisks
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ru.mutation.RemovedProgramIDs(); len(nodes) > 0 && !ru.mutation.ProgramCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   risk.ProgramTable,
+			Columns: risk.ProgramPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ru.schemaConfig.ProgramRisks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := ru.mutation.ProgramIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
+			Rel:     sqlgraph.M2M,
 			Inverse: true,
 			Table:   risk.ProgramTable,
-			Columns: []string{risk.ProgramColumn},
+			Columns: risk.ProgramPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ru.schemaConfig.Risk
+		edge.Schema = ru.schemaConfig.ProgramRisks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ru.mutation.ViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   risk.ViewersTable,
+			Columns: risk.ViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ru.schemaConfig.RiskViewers
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ru.mutation.RemovedViewersIDs(); len(nodes) > 0 && !ru.mutation.ViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   risk.ViewersTable,
+			Columns: risk.ViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ru.schemaConfig.RiskViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ru.mutation.ViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   risk.ViewersTable,
+			Columns: risk.ViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ru.schemaConfig.RiskViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ru.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   risk.EditorsTable,
+			Columns: risk.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ru.schemaConfig.RiskEditors
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ru.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !ru.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   risk.EditorsTable,
+			Columns: risk.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ru.schemaConfig.RiskEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ru.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   risk.EditorsTable,
+			Columns: risk.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ru.schemaConfig.RiskEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ru.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   risk.BlockedGroupsTable,
+			Columns: risk.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ru.schemaConfig.RiskBlockedGroups
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ru.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !ru.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   risk.BlockedGroupsTable,
+			Columns: risk.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ru.schemaConfig.RiskBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ru.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   risk.BlockedGroupsTable,
+			Columns: risk.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ru.schemaConfig.RiskBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1144,15 +1430,64 @@ func (ruo *RiskUpdateOne) AddActionplans(a ...*ActionPlan) *RiskUpdateOne {
 	return ruo.AddActionplanIDs(ids...)
 }
 
-// SetProgramID sets the "program" edge to the Program entity by ID.
-func (ruo *RiskUpdateOne) SetProgramID(id string) *RiskUpdateOne {
-	ruo.mutation.SetProgramID(id)
+// AddProgramIDs adds the "program" edge to the Program entity by IDs.
+func (ruo *RiskUpdateOne) AddProgramIDs(ids ...string) *RiskUpdateOne {
+	ruo.mutation.AddProgramIDs(ids...)
 	return ruo
 }
 
-// SetProgram sets the "program" edge to the Program entity.
-func (ruo *RiskUpdateOne) SetProgram(p *Program) *RiskUpdateOne {
-	return ruo.SetProgramID(p.ID)
+// AddProgram adds the "program" edges to the Program entity.
+func (ruo *RiskUpdateOne) AddProgram(p ...*Program) *RiskUpdateOne {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return ruo.AddProgramIDs(ids...)
+}
+
+// AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
+func (ruo *RiskUpdateOne) AddViewerIDs(ids ...string) *RiskUpdateOne {
+	ruo.mutation.AddViewerIDs(ids...)
+	return ruo
+}
+
+// AddViewers adds the "viewers" edges to the Group entity.
+func (ruo *RiskUpdateOne) AddViewers(g ...*Group) *RiskUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ruo.AddViewerIDs(ids...)
+}
+
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (ruo *RiskUpdateOne) AddEditorIDs(ids ...string) *RiskUpdateOne {
+	ruo.mutation.AddEditorIDs(ids...)
+	return ruo
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (ruo *RiskUpdateOne) AddEditors(g ...*Group) *RiskUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ruo.AddEditorIDs(ids...)
+}
+
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (ruo *RiskUpdateOne) AddBlockedGroupIDs(ids ...string) *RiskUpdateOne {
+	ruo.mutation.AddBlockedGroupIDs(ids...)
+	return ruo
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (ruo *RiskUpdateOne) AddBlockedGroups(g ...*Group) *RiskUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ruo.AddBlockedGroupIDs(ids...)
 }
 
 // Mutation returns the RiskMutation object of the builder.
@@ -1223,10 +1558,88 @@ func (ruo *RiskUpdateOne) RemoveActionplans(a ...*ActionPlan) *RiskUpdateOne {
 	return ruo.RemoveActionplanIDs(ids...)
 }
 
-// ClearProgram clears the "program" edge to the Program entity.
+// ClearProgram clears all "program" edges to the Program entity.
 func (ruo *RiskUpdateOne) ClearProgram() *RiskUpdateOne {
 	ruo.mutation.ClearProgram()
 	return ruo
+}
+
+// RemoveProgramIDs removes the "program" edge to Program entities by IDs.
+func (ruo *RiskUpdateOne) RemoveProgramIDs(ids ...string) *RiskUpdateOne {
+	ruo.mutation.RemoveProgramIDs(ids...)
+	return ruo
+}
+
+// RemoveProgram removes "program" edges to Program entities.
+func (ruo *RiskUpdateOne) RemoveProgram(p ...*Program) *RiskUpdateOne {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return ruo.RemoveProgramIDs(ids...)
+}
+
+// ClearViewers clears all "viewers" edges to the Group entity.
+func (ruo *RiskUpdateOne) ClearViewers() *RiskUpdateOne {
+	ruo.mutation.ClearViewers()
+	return ruo
+}
+
+// RemoveViewerIDs removes the "viewers" edge to Group entities by IDs.
+func (ruo *RiskUpdateOne) RemoveViewerIDs(ids ...string) *RiskUpdateOne {
+	ruo.mutation.RemoveViewerIDs(ids...)
+	return ruo
+}
+
+// RemoveViewers removes "viewers" edges to Group entities.
+func (ruo *RiskUpdateOne) RemoveViewers(g ...*Group) *RiskUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ruo.RemoveViewerIDs(ids...)
+}
+
+// ClearEditors clears all "editors" edges to the Group entity.
+func (ruo *RiskUpdateOne) ClearEditors() *RiskUpdateOne {
+	ruo.mutation.ClearEditors()
+	return ruo
+}
+
+// RemoveEditorIDs removes the "editors" edge to Group entities by IDs.
+func (ruo *RiskUpdateOne) RemoveEditorIDs(ids ...string) *RiskUpdateOne {
+	ruo.mutation.RemoveEditorIDs(ids...)
+	return ruo
+}
+
+// RemoveEditors removes "editors" edges to Group entities.
+func (ruo *RiskUpdateOne) RemoveEditors(g ...*Group) *RiskUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ruo.RemoveEditorIDs(ids...)
+}
+
+// ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
+func (ruo *RiskUpdateOne) ClearBlockedGroups() *RiskUpdateOne {
+	ruo.mutation.ClearBlockedGroups()
+	return ruo
+}
+
+// RemoveBlockedGroupIDs removes the "blocked_groups" edge to Group entities by IDs.
+func (ruo *RiskUpdateOne) RemoveBlockedGroupIDs(ids ...string) *RiskUpdateOne {
+	ruo.mutation.RemoveBlockedGroupIDs(ids...)
+	return ruo
+}
+
+// RemoveBlockedGroups removes "blocked_groups" edges to Group entities.
+func (ruo *RiskUpdateOne) RemoveBlockedGroups(g ...*Group) *RiskUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ruo.RemoveBlockedGroupIDs(ids...)
 }
 
 // Where appends a list predicates to the RiskUpdate builder.
@@ -1300,9 +1713,6 @@ func (ruo *RiskUpdateOne) check() error {
 		if err := risk.LikelihoodValidator(v); err != nil {
 			return &ValidationError{Name: "likelihood", err: fmt.Errorf(`generated: validator failed for field "Risk.likelihood": %w`, err)}
 		}
-	}
-	if ruo.mutation.ProgramCleared() && len(ruo.mutation.ProgramIDs()) > 0 {
-		return errors.New(`generated: clearing a required unique edge "Risk.program"`)
 	}
 	return nil
 }
@@ -1586,30 +1996,191 @@ func (ruo *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) 
 	}
 	if ruo.mutation.ProgramCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
+			Rel:     sqlgraph.M2M,
 			Inverse: true,
 			Table:   risk.ProgramTable,
-			Columns: []string{risk.ProgramColumn},
+			Columns: risk.ProgramPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ruo.schemaConfig.Risk
+		edge.Schema = ruo.schemaConfig.ProgramRisks
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ruo.mutation.RemovedProgramIDs(); len(nodes) > 0 && !ruo.mutation.ProgramCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   risk.ProgramTable,
+			Columns: risk.ProgramPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ruo.schemaConfig.ProgramRisks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := ruo.mutation.ProgramIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
+			Rel:     sqlgraph.M2M,
 			Inverse: true,
 			Table:   risk.ProgramTable,
-			Columns: []string{risk.ProgramColumn},
+			Columns: risk.ProgramPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = ruo.schemaConfig.Risk
+		edge.Schema = ruo.schemaConfig.ProgramRisks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ruo.mutation.ViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   risk.ViewersTable,
+			Columns: risk.ViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ruo.schemaConfig.RiskViewers
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ruo.mutation.RemovedViewersIDs(); len(nodes) > 0 && !ruo.mutation.ViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   risk.ViewersTable,
+			Columns: risk.ViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ruo.schemaConfig.RiskViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ruo.mutation.ViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   risk.ViewersTable,
+			Columns: risk.ViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ruo.schemaConfig.RiskViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ruo.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   risk.EditorsTable,
+			Columns: risk.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ruo.schemaConfig.RiskEditors
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ruo.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !ruo.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   risk.EditorsTable,
+			Columns: risk.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ruo.schemaConfig.RiskEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ruo.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   risk.EditorsTable,
+			Columns: risk.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ruo.schemaConfig.RiskEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ruo.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   risk.BlockedGroupsTable,
+			Columns: risk.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ruo.schemaConfig.RiskBlockedGroups
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ruo.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !ruo.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   risk.BlockedGroupsTable,
+			Columns: risk.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ruo.schemaConfig.RiskBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ruo.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   risk.BlockedGroupsTable,
+			Columns: risk.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ruo.schemaConfig.RiskBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

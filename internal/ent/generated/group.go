@@ -84,13 +84,19 @@ type GroupEdges struct {
 	ProgramEditors []*Program `json:"program_editors,omitempty"`
 	// ProgramBlockedGroups holds the value of the program_blocked_groups edge.
 	ProgramBlockedGroups []*Program `json:"program_blocked_groups,omitempty"`
+	// RiskViewers holds the value of the risk_viewers edge.
+	RiskViewers []*Risk `json:"risk_viewers,omitempty"`
+	// RiskEditors holds the value of the risk_editors edge.
+	RiskEditors []*Risk `json:"risk_editors,omitempty"`
+	// RiskBlockedGroups holds the value of the risk_blocked_groups edge.
+	RiskBlockedGroups []*Risk `json:"risk_blocked_groups,omitempty"`
 	// Members holds the value of the members edge.
 	Members []*GroupMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [15]bool
+	loadedTypes [18]bool
 	// totalCount holds the count of the edges above.
-	totalCount [15]map[string]int
+	totalCount [18]map[string]int
 
 	namedUsers                       map[string][]*User
 	namedEvents                      map[string][]*Event
@@ -104,6 +110,9 @@ type GroupEdges struct {
 	namedProgramViewers              map[string][]*Program
 	namedProgramEditors              map[string][]*Program
 	namedProgramBlockedGroups        map[string][]*Program
+	namedRiskViewers                 map[string][]*Risk
+	namedRiskEditors                 map[string][]*Risk
+	namedRiskBlockedGroups           map[string][]*Risk
 	namedMembers                     map[string][]*GroupMembership
 }
 
@@ -237,10 +246,37 @@ func (e GroupEdges) ProgramBlockedGroupsOrErr() ([]*Program, error) {
 	return nil, &NotLoadedError{edge: "program_blocked_groups"}
 }
 
+// RiskViewersOrErr returns the RiskViewers value or an error if the edge
+// was not loaded in eager-loading.
+func (e GroupEdges) RiskViewersOrErr() ([]*Risk, error) {
+	if e.loadedTypes[14] {
+		return e.RiskViewers, nil
+	}
+	return nil, &NotLoadedError{edge: "risk_viewers"}
+}
+
+// RiskEditorsOrErr returns the RiskEditors value or an error if the edge
+// was not loaded in eager-loading.
+func (e GroupEdges) RiskEditorsOrErr() ([]*Risk, error) {
+	if e.loadedTypes[15] {
+		return e.RiskEditors, nil
+	}
+	return nil, &NotLoadedError{edge: "risk_editors"}
+}
+
+// RiskBlockedGroupsOrErr returns the RiskBlockedGroups value or an error if the edge
+// was not loaded in eager-loading.
+func (e GroupEdges) RiskBlockedGroupsOrErr() ([]*Risk, error) {
+	if e.loadedTypes[16] {
+		return e.RiskBlockedGroups, nil
+	}
+	return nil, &NotLoadedError{edge: "risk_blocked_groups"}
+}
+
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) MembersOrErr() ([]*GroupMembership, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[17] {
 		return e.Members, nil
 	}
 	return nil, &NotLoadedError{edge: "members"}
@@ -445,6 +481,21 @@ func (gr *Group) QueryProgramEditors() *ProgramQuery {
 // QueryProgramBlockedGroups queries the "program_blocked_groups" edge of the Group entity.
 func (gr *Group) QueryProgramBlockedGroups() *ProgramQuery {
 	return NewGroupClient(gr.config).QueryProgramBlockedGroups(gr)
+}
+
+// QueryRiskViewers queries the "risk_viewers" edge of the Group entity.
+func (gr *Group) QueryRiskViewers() *RiskQuery {
+	return NewGroupClient(gr.config).QueryRiskViewers(gr)
+}
+
+// QueryRiskEditors queries the "risk_editors" edge of the Group entity.
+func (gr *Group) QueryRiskEditors() *RiskQuery {
+	return NewGroupClient(gr.config).QueryRiskEditors(gr)
+}
+
+// QueryRiskBlockedGroups queries the "risk_blocked_groups" edge of the Group entity.
+func (gr *Group) QueryRiskBlockedGroups() *RiskQuery {
+	return NewGroupClient(gr.config).QueryRiskBlockedGroups(gr)
 }
 
 // QueryMembers queries the "members" edge of the Group entity.
@@ -805,6 +856,78 @@ func (gr *Group) appendNamedProgramBlockedGroups(name string, edges ...*Program)
 		gr.Edges.namedProgramBlockedGroups[name] = []*Program{}
 	} else {
 		gr.Edges.namedProgramBlockedGroups[name] = append(gr.Edges.namedProgramBlockedGroups[name], edges...)
+	}
+}
+
+// NamedRiskViewers returns the RiskViewers named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (gr *Group) NamedRiskViewers(name string) ([]*Risk, error) {
+	if gr.Edges.namedRiskViewers == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := gr.Edges.namedRiskViewers[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (gr *Group) appendNamedRiskViewers(name string, edges ...*Risk) {
+	if gr.Edges.namedRiskViewers == nil {
+		gr.Edges.namedRiskViewers = make(map[string][]*Risk)
+	}
+	if len(edges) == 0 {
+		gr.Edges.namedRiskViewers[name] = []*Risk{}
+	} else {
+		gr.Edges.namedRiskViewers[name] = append(gr.Edges.namedRiskViewers[name], edges...)
+	}
+}
+
+// NamedRiskEditors returns the RiskEditors named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (gr *Group) NamedRiskEditors(name string) ([]*Risk, error) {
+	if gr.Edges.namedRiskEditors == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := gr.Edges.namedRiskEditors[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (gr *Group) appendNamedRiskEditors(name string, edges ...*Risk) {
+	if gr.Edges.namedRiskEditors == nil {
+		gr.Edges.namedRiskEditors = make(map[string][]*Risk)
+	}
+	if len(edges) == 0 {
+		gr.Edges.namedRiskEditors[name] = []*Risk{}
+	} else {
+		gr.Edges.namedRiskEditors[name] = append(gr.Edges.namedRiskEditors[name], edges...)
+	}
+}
+
+// NamedRiskBlockedGroups returns the RiskBlockedGroups named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (gr *Group) NamedRiskBlockedGroups(name string) ([]*Risk, error) {
+	if gr.Edges.namedRiskBlockedGroups == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := gr.Edges.namedRiskBlockedGroups[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (gr *Group) appendNamedRiskBlockedGroups(name string, edges ...*Risk) {
+	if gr.Edges.namedRiskBlockedGroups == nil {
+		gr.Edges.namedRiskBlockedGroups = make(map[string][]*Risk)
+	}
+	if len(edges) == 0 {
+		gr.Edges.namedRiskBlockedGroups[name] = []*Risk{}
+	} else {
+		gr.Edges.namedRiskBlockedGroups[name] = append(gr.Edges.namedRiskBlockedGroups[name], edges...)
 	}
 }
 

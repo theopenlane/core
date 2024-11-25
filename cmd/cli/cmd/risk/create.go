@@ -2,6 +2,7 @@ package risk
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/spf13/cobra"
 
@@ -26,7 +27,7 @@ func init() {
 	createCmd.Flags().StringP("name", "n", "", "name of the risk")
 	createCmd.Flags().StringP("description", "d", "", "description of the risk")
 	createCmd.Flags().StringP("status", "s", "", "status of the risk")
-	createCmd.Flags().StringP("program", "p", "", "program ID")
+	createCmd.Flags().StringSliceP("programs", "p", []string{}, "program ID(s) associated with the risk")
 	createCmd.Flags().StringP("type", "t", "", "type of the risk")
 	createCmd.Flags().StringP("business-costs", "b", "", "business costs associated with the risk")
 	createCmd.Flags().StringP("impact", "m", "", "impact of the risk")
@@ -44,10 +45,8 @@ func createValidation() (input openlaneclient.CreateRiskInput, err error) {
 		return input, cmd.NewRequiredFieldMissingError("name")
 	}
 
-	input.ProgramID = cmd.Config.String("program")
-	if len(input.ProgramID) == 0 {
-		return input, cmd.NewRequiredFieldMissingError("program")
-	}
+	input.ProgramIDs = cmd.Config.Strings("programs")
+	fmt.Println(input.ProgramIDs)
 
 	riskType := cmd.Config.String("type")
 	if riskType != "" {

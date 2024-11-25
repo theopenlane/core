@@ -73,8 +73,8 @@ func (suite *GraphTestSuite) TestQueryRisk() {
 			if tc.queryID == "" {
 				resp, err := tc.client.CreateRisk(testUser1.UserCtx,
 					openlaneclient.CreateRiskInput{
-						Name:      "Risk",
-						ProgramID: program.ID,
+						Name:       "Risk",
+						ProgramIDs: []string{program.ID},
 					})
 				require.NoError(t, err)
 				require.NotNil(t, resp)
@@ -99,7 +99,9 @@ func (suite *GraphTestSuite) TestQueryRisk() {
 
 			assert.Equal(t, tc.queryID, resp.Risk.ID)
 			assert.NotEmpty(t, resp.Risk.Name)
-			assert.NotEmpty(t, resp.Risk.Program.ID)
+
+			require.Len(t, resp.Risk.Program, 1)
+			assert.NotEmpty(t, resp.Risk.Program[0].ID)
 		})
 	}
 }
@@ -124,13 +126,13 @@ func (suite *GraphTestSuite) TestQueryRisks() {
 			expectedResults: 2,
 		},
 		{
-			name:            "happy path, using read only user of the same org, no access to the program",
+			name:            "happy path, using read only user of the same org, no programs or groups associated",
 			client:          suite.client.api,
 			ctx:             viewOnlyUser.UserCtx,
 			expectedResults: 0,
 		},
 		{
-			name:            "happy path, no access to the program",
+			name:            "happy path, no access to the program or group",
 			client:          suite.client.apiWithToken,
 			ctx:             context.Background(),
 			expectedResults: 0,
@@ -163,13 +165,18 @@ func (suite *GraphTestSuite) TestQueryRisks() {
 func (suite *GraphTestSuite) TestMutationCreateRisk() {
 	t := suite.T()
 
-	program := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	program1 := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	program2 := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	programAnotherUser := (&ProgramBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
-	// add adminUser to the program so that they can create a Risk
-	(&ProgramMemberBuilder{client: suite.client, ProgramID: program.ID,
+	// add adminUser to the program so that they can create a risk associated with the program1
+	(&ProgramMemberBuilder{client: suite.client, ProgramID: program1.ID,
 		UserID: adminUser.ID, Role: enums.RoleAdmin.String()}).
 		MustNew(testUser1.UserCtx, t)
+
+	// create groups to be associated with the risk
+	blockedGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	viewerGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -181,8 +188,7 @@ func (suite *GraphTestSuite) TestMutationCreateRisk() {
 		{
 			name: "happy path, minimal input",
 			request: openlaneclient.CreateRiskInput{
-				Name:      "Risk",
-				ProgramID: program.ID,
+				Name: "Risk",
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -200,7 +206,18 @@ func (suite *GraphTestSuite) TestMutationCreateRisk() {
 				Mitigation:    lo.ToPtr("did the thing"),
 				Satisfies:     lo.ToPtr("controls"),
 				Details:       map[string]interface{}{"stuff": "things"},
-				ProgramID:     program.ID,
+				ProgramIDs:    []string{program1.ID, program2.ID}, // multiple programs
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
+			name: "add groups",
+			request: openlaneclient.CreateRiskInput{
+				Name:            "Test Procedure",
+				EditorIDs:       []string{testUser1.GroupID},
+				BlockedGroupIDs: []string{blockedGroup.ID},
+				ViewerIDs:       []string{viewerGroup.ID},
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -208,8 +225,7 @@ func (suite *GraphTestSuite) TestMutationCreateRisk() {
 		{
 			name: "happy path, using pat",
 			request: openlaneclient.CreateRiskInput{
-				Name:      "Risk",
-				ProgramID: program.ID,
+				Name: "Risk",
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
@@ -217,18 +233,15 @@ func (suite *GraphTestSuite) TestMutationCreateRisk() {
 		{
 			name: "using api token",
 			request: openlaneclient.CreateRiskInput{
-				Name:      "Risk",
-				ProgramID: program.ID,
+				Name: "Risk",
 			},
-			client:      suite.client.apiWithToken,
-			ctx:         context.Background(),
-			expectedErr: notAuthorizedErrorMsg, // api token does not have the necessary permissions to create a Risk under a program
+			client: suite.client.apiWithToken,
+			ctx:    context.Background(),
 		},
 		{
 			name: "user not authorized, not enough permissions",
 			request: openlaneclient.CreateRiskInput{
-				Name:      "Risk",
-				ProgramID: program.ID,
+				Name: "Risk",
 			},
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
@@ -237,35 +250,34 @@ func (suite *GraphTestSuite) TestMutationCreateRisk() {
 		{
 			name: "user authorized, they were added to the program",
 			request: openlaneclient.CreateRiskInput{
-				Name:      "Risk",
-				ProgramID: program.ID,
+				Name:       "Risk",
+				ProgramIDs: []string{program1.ID},
 			},
 			client: suite.client.api,
 			ctx:    adminUser.UserCtx,
 		},
 		{
-			name: "missing required program id",
+			name: "user authorized, user not authorized to one of the programs",
 			request: openlaneclient.CreateRiskInput{
-				Name: "Risk",
+				Name:       "Risk",
+				ProgramIDs: []string{program1.ID, program2.ID},
 			},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
-			expectedErr: "unable to complete the create",
+			ctx:         adminUser.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
-			name: "missing required name",
-			request: openlaneclient.CreateRiskInput{
-				ProgramID: program.ID,
-			},
+			name:        "missing required name",
+			request:     openlaneclient.CreateRiskInput{},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
 			expectedErr: "value is less than the required length",
 		},
 		{
-			name: "user not authorized, no permissions to the program",
+			name: "user not authorized, no permissions to one of the programs",
 			request: openlaneclient.CreateRiskInput{
-				Name:      "Risk",
-				ProgramID: programAnotherUser.ID,
+				Name:       "Risk",
+				ProgramIDs: []string{programAnotherUser.ID, program1.ID},
 			},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
@@ -292,8 +304,16 @@ func (suite *GraphTestSuite) TestMutationCreateRisk() {
 			assert.Equal(t, tc.request.Name, resp.CreateRisk.Risk.Name)
 
 			// ensure the program is set
-			require.NotEmpty(t, resp.CreateRisk.Risk.Program)
-			assert.Equal(t, tc.request.ProgramID, resp.CreateRisk.Risk.Program.ID)
+			if len(tc.request.ProgramIDs) > 0 {
+				require.NotEmpty(t, resp.CreateRisk.Risk.Program)
+				require.Len(t, resp.CreateRisk.Risk.Program, len(tc.request.ProgramIDs))
+
+				for i, p := range resp.CreateRisk.Risk.Program {
+					assert.Equal(t, tc.request.ProgramIDs[i], p.ID)
+				}
+			} else {
+				assert.Empty(t, resp.CreateRisk.Risk.Program)
+			}
 
 			if tc.request.Description != nil {
 				assert.Equal(t, *tc.request.Description, *resp.CreateRisk.Risk.Description)
@@ -348,6 +368,27 @@ func (suite *GraphTestSuite) TestMutationCreateRisk() {
 			} else {
 				assert.Empty(t, resp.CreateRisk.Risk.Details)
 			}
+
+			if len(tc.request.EditorIDs) > 0 {
+				require.Len(t, resp.CreateRisk.Risk.Editors, 1)
+				for _, edge := range resp.CreateRisk.Risk.Editors {
+					assert.Equal(t, testUser1.GroupID, edge.ID)
+				}
+			}
+
+			if len(tc.request.BlockedGroupIDs) > 0 {
+				require.Len(t, resp.CreateRisk.Risk.BlockedGroups, 1)
+				for _, edge := range resp.CreateRisk.Risk.BlockedGroups {
+					assert.Equal(t, blockedGroup.ID, edge.ID)
+				}
+			}
+
+			if len(tc.request.ViewerIDs) > 0 {
+				require.Len(t, resp.CreateRisk.Risk.Viewers, 1)
+				for _, edge := range resp.CreateRisk.Risk.Viewers {
+					assert.Equal(t, viewerGroup.ID, edge.ID)
+				}
+			}
 		})
 	}
 }
@@ -357,6 +398,18 @@ func (suite *GraphTestSuite) TestMutationUpdateRisk() {
 
 	program := (&ProgramBuilder{client: suite.client, EditorIDs: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
 	risk := (&RiskBuilder{client: suite.client, ProgramID: program.ID}).MustNew(testUser1.UserCtx, t)
+
+	// create another admin user and add them to the same organization and group as testUser1
+	// this will allow us to test the group editor/viewer permissions
+	anotherAdminUser := suite.userBuilder(context.Background())
+	suite.addUserToOrganization(&anotherAdminUser, enums.RoleAdmin, testUser1.OrganizationID)
+
+	(&GroupMemberBuilder{client: suite.client, UserID: anotherAdminUser.ID, GroupID: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
+
+	// ensure the user does not currently have access to the risk
+	res, err := suite.client.api.GetRiskByID(anotherAdminUser.UserCtx, risk.ID)
+	require.Error(t, err)
+	require.Nil(t, res)
 
 	testCases := []struct {
 		name        string
@@ -368,7 +421,8 @@ func (suite *GraphTestSuite) TestMutationUpdateRisk() {
 		{
 			name: "happy path, update field",
 			request: openlaneclient.UpdateRiskInput{
-				Description: lo.ToPtr("Updated description"),
+				Description:  lo.ToPtr("Updated description"),
+				AddViewerIDs: []string{testUser1.GroupID},
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -450,6 +504,19 @@ func (suite *GraphTestSuite) TestMutationUpdateRisk() {
 
 			if tc.request.Details != nil {
 				assert.Equal(t, tc.request.Details, resp.UpdateRisk.Risk.Details)
+			}
+
+			if len(tc.request.AddViewerIDs) > 0 {
+				require.Len(t, resp.UpdateRisk.Risk.Viewers, 1)
+				for _, edge := range resp.UpdateRisk.Risk.Viewers {
+					assert.Equal(t, testUser1.GroupID, edge.ID)
+				}
+
+				// ensure the user has access to the risk now
+				res, err := suite.client.api.GetRiskByID(anotherAdminUser.UserCtx, risk.ID)
+				require.NoError(t, err)
+				require.NotEmpty(t, res)
+				assert.Equal(t, risk.ID, res.Risk.ID)
 			}
 		})
 	}

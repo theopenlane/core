@@ -2305,7 +2305,6 @@ var (
 		{Name: "satisfies", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "details", Type: field.TypeJSON, Nullable: true},
 		{Name: "control_objective_risks", Type: field.TypeString, Nullable: true},
-		{Name: "program_risks", Type: field.TypeString},
 	}
 	// RisksTable holds the schema information for the "risks" table.
 	RisksTable = &schema.Table{
@@ -2318,12 +2317,6 @@ var (
 				Columns:    []*schema.Column{RisksColumns[19]},
 				RefColumns: []*schema.Column{ControlObjectivesColumns[0]},
 				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "risks_programs_risks",
-				Columns:    []*schema.Column{RisksColumns[20]},
-				RefColumns: []*schema.Column{ProgramsColumns[0]},
-				OnDelete:   schema.NoAction,
 			},
 		},
 	}
@@ -4383,6 +4376,31 @@ var (
 			},
 		},
 	}
+	// ProgramRisksColumns holds the columns for the "program_risks" table.
+	ProgramRisksColumns = []*schema.Column{
+		{Name: "program_id", Type: field.TypeString},
+		{Name: "risk_id", Type: field.TypeString},
+	}
+	// ProgramRisksTable holds the schema information for the "program_risks" table.
+	ProgramRisksTable = &schema.Table{
+		Name:       "program_risks",
+		Columns:    ProgramRisksColumns,
+		PrimaryKey: []*schema.Column{ProgramRisksColumns[0], ProgramRisksColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "program_risks_program_id",
+				Columns:    []*schema.Column{ProgramRisksColumns[0]},
+				RefColumns: []*schema.Column{ProgramsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "program_risks_risk_id",
+				Columns:    []*schema.Column{ProgramRisksColumns[1]},
+				RefColumns: []*schema.Column{RisksColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// ProgramTasksColumns holds the columns for the "program_tasks" table.
 	ProgramTasksColumns = []*schema.Column{
 		{Name: "program_id", Type: field.TypeString},
@@ -4604,6 +4622,81 @@ var (
 				Symbol:     "risk_actionplans_action_plan_id",
 				Columns:    []*schema.Column{RiskActionplansColumns[1]},
 				RefColumns: []*schema.Column{ActionPlansColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// RiskViewersColumns holds the columns for the "risk_viewers" table.
+	RiskViewersColumns = []*schema.Column{
+		{Name: "risk_id", Type: field.TypeString},
+		{Name: "group_id", Type: field.TypeString},
+	}
+	// RiskViewersTable holds the schema information for the "risk_viewers" table.
+	RiskViewersTable = &schema.Table{
+		Name:       "risk_viewers",
+		Columns:    RiskViewersColumns,
+		PrimaryKey: []*schema.Column{RiskViewersColumns[0], RiskViewersColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "risk_viewers_risk_id",
+				Columns:    []*schema.Column{RiskViewersColumns[0]},
+				RefColumns: []*schema.Column{RisksColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "risk_viewers_group_id",
+				Columns:    []*schema.Column{RiskViewersColumns[1]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// RiskEditorsColumns holds the columns for the "risk_editors" table.
+	RiskEditorsColumns = []*schema.Column{
+		{Name: "risk_id", Type: field.TypeString},
+		{Name: "group_id", Type: field.TypeString},
+	}
+	// RiskEditorsTable holds the schema information for the "risk_editors" table.
+	RiskEditorsTable = &schema.Table{
+		Name:       "risk_editors",
+		Columns:    RiskEditorsColumns,
+		PrimaryKey: []*schema.Column{RiskEditorsColumns[0], RiskEditorsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "risk_editors_risk_id",
+				Columns:    []*schema.Column{RiskEditorsColumns[0]},
+				RefColumns: []*schema.Column{RisksColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "risk_editors_group_id",
+				Columns:    []*schema.Column{RiskEditorsColumns[1]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// RiskBlockedGroupsColumns holds the columns for the "risk_blocked_groups" table.
+	RiskBlockedGroupsColumns = []*schema.Column{
+		{Name: "risk_id", Type: field.TypeString},
+		{Name: "group_id", Type: field.TypeString},
+	}
+	// RiskBlockedGroupsTable holds the schema information for the "risk_blocked_groups" table.
+	RiskBlockedGroupsTable = &schema.Table{
+		Name:       "risk_blocked_groups",
+		Columns:    RiskBlockedGroupsColumns,
+		PrimaryKey: []*schema.Column{RiskBlockedGroupsColumns[0], RiskBlockedGroupsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "risk_blocked_groups_risk_id",
+				Columns:    []*schema.Column{RiskBlockedGroupsColumns[0]},
+				RefColumns: []*schema.Column{RisksColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "risk_blocked_groups_group_id",
+				Columns:    []*schema.Column{RiskBlockedGroupsColumns[1]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 		},
@@ -5069,6 +5162,7 @@ var (
 		ProgramControlobjectivesTable,
 		ProgramPoliciesTable,
 		ProgramProceduresTable,
+		ProgramRisksTable,
 		ProgramTasksTable,
 		ProgramNotesTable,
 		ProgramFilesTable,
@@ -5078,6 +5172,9 @@ var (
 		ProgramEditorsTable,
 		ProgramBlockedGroupsTable,
 		RiskActionplansTable,
+		RiskViewersTable,
+		RiskEditorsTable,
+		RiskBlockedGroupsTable,
 		StandardControlobjectivesTable,
 		StandardControlsTable,
 		StandardActionplansTable,
@@ -5223,7 +5320,6 @@ func init() {
 		Table: "program_membership_history",
 	}
 	RisksTable.ForeignKeys[0].RefTable = ControlObjectivesTable
-	RisksTable.ForeignKeys[1].RefTable = ProgramsTable
 	RiskHistoryTable.Annotation = &entsql.Annotation{
 		Table: "risk_history",
 	}
@@ -5366,6 +5462,8 @@ func init() {
 	ProgramPoliciesTable.ForeignKeys[1].RefTable = InternalPoliciesTable
 	ProgramProceduresTable.ForeignKeys[0].RefTable = ProgramsTable
 	ProgramProceduresTable.ForeignKeys[1].RefTable = ProceduresTable
+	ProgramRisksTable.ForeignKeys[0].RefTable = ProgramsTable
+	ProgramRisksTable.ForeignKeys[1].RefTable = RisksTable
 	ProgramTasksTable.ForeignKeys[0].RefTable = ProgramsTable
 	ProgramTasksTable.ForeignKeys[1].RefTable = TasksTable
 	ProgramNotesTable.ForeignKeys[0].RefTable = ProgramsTable
@@ -5384,6 +5482,12 @@ func init() {
 	ProgramBlockedGroupsTable.ForeignKeys[1].RefTable = GroupsTable
 	RiskActionplansTable.ForeignKeys[0].RefTable = RisksTable
 	RiskActionplansTable.ForeignKeys[1].RefTable = ActionPlansTable
+	RiskViewersTable.ForeignKeys[0].RefTable = RisksTable
+	RiskViewersTable.ForeignKeys[1].RefTable = GroupsTable
+	RiskEditorsTable.ForeignKeys[0].RefTable = RisksTable
+	RiskEditorsTable.ForeignKeys[1].RefTable = GroupsTable
+	RiskBlockedGroupsTable.ForeignKeys[0].RefTable = RisksTable
+	RiskBlockedGroupsTable.ForeignKeys[1].RefTable = GroupsTable
 	StandardControlobjectivesTable.ForeignKeys[0].RefTable = StandardsTable
 	StandardControlobjectivesTable.ForeignKeys[1].RefTable = ControlObjectivesTable
 	StandardControlsTable.ForeignKeys[0].RefTable = StandardsTable

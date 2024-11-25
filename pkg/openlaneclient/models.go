@@ -3298,6 +3298,9 @@ type CreateGroupInput struct {
 	ProgramViewerIDs              []string                 `json:"programViewerIDs,omitempty"`
 	ProgramEditorIDs              []string                 `json:"programEditorIDs,omitempty"`
 	ProgramBlockedGroupIDs        []string                 `json:"programBlockedGroupIDs,omitempty"`
+	RiskViewerIDs                 []string                 `json:"riskViewerIDs,omitempty"`
+	RiskEditorIDs                 []string                 `json:"riskEditorIDs,omitempty"`
+	RiskBlockedGroupIDs           []string                 `json:"riskBlockedGroupIDs,omitempty"`
 	CreateGroupSettings           *CreateGroupSettingInput `json:"createGroupSettings,omitempty"`
 }
 
@@ -3697,11 +3700,14 @@ type CreateRiskInput struct {
 	// which controls are satisfied by the risk
 	Satisfies *string `json:"satisfies,omitempty"`
 	// json data for the risk document
-	Details       map[string]interface{} `json:"details,omitempty"`
-	ControlIDs    []string               `json:"controlIDs,omitempty"`
-	ProcedureIDs  []string               `json:"procedureIDs,omitempty"`
-	ActionplanIDs []string               `json:"actionplanIDs,omitempty"`
-	ProgramID     string                 `json:"programID"`
+	Details         map[string]interface{} `json:"details,omitempty"`
+	ControlIDs      []string               `json:"controlIDs,omitempty"`
+	ProcedureIDs    []string               `json:"procedureIDs,omitempty"`
+	ActionplanIDs   []string               `json:"actionplanIDs,omitempty"`
+	ProgramIDs      []string               `json:"programIDs,omitempty"`
+	ViewerIDs       []string               `json:"viewerIDs,omitempty"`
+	EditorIDs       []string               `json:"editorIDs,omitempty"`
+	BlockedGroupIDs []string               `json:"blockedGroupIDs,omitempty"`
 }
 
 // CreateStandardInput is used for create Standard object.
@@ -8799,6 +8805,9 @@ type Group struct {
 	ProgramViewers              []*Program         `json:"programViewers,omitempty"`
 	ProgramEditors              []*Program         `json:"programEditors,omitempty"`
 	ProgramBlockedGroups        []*Program         `json:"programBlockedGroups,omitempty"`
+	RiskViewers                 []*Risk            `json:"riskViewers,omitempty"`
+	RiskEditors                 []*Risk            `json:"riskEditors,omitempty"`
+	RiskBlockedGroups           []*Risk            `json:"riskBlockedGroups,omitempty"`
 	Members                     []*GroupMembership `json:"members,omitempty"`
 }
 
@@ -10062,6 +10071,15 @@ type GroupWhereInput struct {
 	// program_blocked_groups edge predicates
 	HasProgramBlockedGroups     *bool                `json:"hasProgramBlockedGroups,omitempty"`
 	HasProgramBlockedGroupsWith []*ProgramWhereInput `json:"hasProgramBlockedGroupsWith,omitempty"`
+	// risk_viewers edge predicates
+	HasRiskViewers     *bool             `json:"hasRiskViewers,omitempty"`
+	HasRiskViewersWith []*RiskWhereInput `json:"hasRiskViewersWith,omitempty"`
+	// risk_editors edge predicates
+	HasRiskEditors     *bool             `json:"hasRiskEditors,omitempty"`
+	HasRiskEditorsWith []*RiskWhereInput `json:"hasRiskEditorsWith,omitempty"`
+	// risk_blocked_groups edge predicates
+	HasRiskBlockedGroups     *bool             `json:"hasRiskBlockedGroups,omitempty"`
+	HasRiskBlockedGroupsWith []*RiskWhereInput `json:"hasRiskBlockedGroupsWith,omitempty"`
 	// members edge predicates
 	HasMembers     *bool                        `json:"hasMembers,omitempty"`
 	HasMembersWith []*GroupMembershipWhereInput `json:"hasMembersWith,omitempty"`
@@ -17079,7 +17097,13 @@ type Risk struct {
 	Control     []*Control             `json:"control,omitempty"`
 	Procedure   []*Procedure           `json:"procedure,omitempty"`
 	Actionplans []*ActionPlan          `json:"actionplans,omitempty"`
-	Program     *Program               `json:"program"`
+	Program     []*Program             `json:"program,omitempty"`
+	// provides view access to the risk to members of the group
+	Viewers []*Group `json:"viewers,omitempty"`
+	// provides edit access to the risk to members of the group
+	Editors []*Group `json:"editors,omitempty"`
+	// groups that are blocked from viewing or editing the risk
+	BlockedGroups []*Group `json:"blockedGroups,omitempty"`
 }
 
 func (Risk) IsNode() {}
@@ -17675,6 +17699,15 @@ type RiskWhereInput struct {
 	// program edge predicates
 	HasProgram     *bool                `json:"hasProgram,omitempty"`
 	HasProgramWith []*ProgramWhereInput `json:"hasProgramWith,omitempty"`
+	// viewers edge predicates
+	HasViewers     *bool              `json:"hasViewers,omitempty"`
+	HasViewersWith []*GroupWhereInput `json:"hasViewersWith,omitempty"`
+	// editors edge predicates
+	HasEditors     *bool              `json:"hasEditors,omitempty"`
+	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
+	// blocked_groups edge predicates
+	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
+	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
 }
 
 type SearchResultConnection struct {
@@ -21262,6 +21295,15 @@ type UpdateGroupInput struct {
 	AddProgramBlockedGroupIDs           []string                      `json:"addProgramBlockedGroupIDs,omitempty"`
 	RemoveProgramBlockedGroupIDs        []string                      `json:"removeProgramBlockedGroupIDs,omitempty"`
 	ClearProgramBlockedGroups           *bool                         `json:"clearProgramBlockedGroups,omitempty"`
+	AddRiskViewerIDs                    []string                      `json:"addRiskViewerIDs,omitempty"`
+	RemoveRiskViewerIDs                 []string                      `json:"removeRiskViewerIDs,omitempty"`
+	ClearRiskViewers                    *bool                         `json:"clearRiskViewers,omitempty"`
+	AddRiskEditorIDs                    []string                      `json:"addRiskEditorIDs,omitempty"`
+	RemoveRiskEditorIDs                 []string                      `json:"removeRiskEditorIDs,omitempty"`
+	ClearRiskEditors                    *bool                         `json:"clearRiskEditors,omitempty"`
+	AddRiskBlockedGroupIDs              []string                      `json:"addRiskBlockedGroupIDs,omitempty"`
+	RemoveRiskBlockedGroupIDs           []string                      `json:"removeRiskBlockedGroupIDs,omitempty"`
+	ClearRiskBlockedGroups              *bool                         `json:"clearRiskBlockedGroups,omitempty"`
 	AddGroupMembers                     []*CreateGroupMembershipInput `json:"addGroupMembers,omitempty"`
 	UpdateGroupSettings                 *UpdateGroupSettingInput      `json:"updateGroupSettings,omitempty"`
 }
@@ -21896,18 +21938,29 @@ type UpdateRiskInput struct {
 	Satisfies      *string `json:"satisfies,omitempty"`
 	ClearSatisfies *bool   `json:"clearSatisfies,omitempty"`
 	// json data for the risk document
-	Details             map[string]interface{} `json:"details,omitempty"`
-	ClearDetails        *bool                  `json:"clearDetails,omitempty"`
-	AddControlIDs       []string               `json:"addControlIDs,omitempty"`
-	RemoveControlIDs    []string               `json:"removeControlIDs,omitempty"`
-	ClearControl        *bool                  `json:"clearControl,omitempty"`
-	AddProcedureIDs     []string               `json:"addProcedureIDs,omitempty"`
-	RemoveProcedureIDs  []string               `json:"removeProcedureIDs,omitempty"`
-	ClearProcedure      *bool                  `json:"clearProcedure,omitempty"`
-	AddActionplanIDs    []string               `json:"addActionplanIDs,omitempty"`
-	RemoveActionplanIDs []string               `json:"removeActionplanIDs,omitempty"`
-	ClearActionplans    *bool                  `json:"clearActionplans,omitempty"`
-	ProgramID           *string                `json:"programID,omitempty"`
+	Details               map[string]interface{} `json:"details,omitempty"`
+	ClearDetails          *bool                  `json:"clearDetails,omitempty"`
+	AddControlIDs         []string               `json:"addControlIDs,omitempty"`
+	RemoveControlIDs      []string               `json:"removeControlIDs,omitempty"`
+	ClearControl          *bool                  `json:"clearControl,omitempty"`
+	AddProcedureIDs       []string               `json:"addProcedureIDs,omitempty"`
+	RemoveProcedureIDs    []string               `json:"removeProcedureIDs,omitempty"`
+	ClearProcedure        *bool                  `json:"clearProcedure,omitempty"`
+	AddActionplanIDs      []string               `json:"addActionplanIDs,omitempty"`
+	RemoveActionplanIDs   []string               `json:"removeActionplanIDs,omitempty"`
+	ClearActionplans      *bool                  `json:"clearActionplans,omitempty"`
+	AddProgramIDs         []string               `json:"addProgramIDs,omitempty"`
+	RemoveProgramIDs      []string               `json:"removeProgramIDs,omitempty"`
+	ClearProgram          *bool                  `json:"clearProgram,omitempty"`
+	AddViewerIDs          []string               `json:"addViewerIDs,omitempty"`
+	RemoveViewerIDs       []string               `json:"removeViewerIDs,omitempty"`
+	ClearViewers          *bool                  `json:"clearViewers,omitempty"`
+	AddEditorIDs          []string               `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs       []string               `json:"removeEditorIDs,omitempty"`
+	ClearEditors          *bool                  `json:"clearEditors,omitempty"`
+	AddBlockedGroupIDs    []string               `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs []string               `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups    *bool                  `json:"clearBlockedGroups,omitempty"`
 }
 
 // UpdateStandardInput is used for update Standard object.

@@ -1116,6 +1116,42 @@ func (gr *Group) ProgramBlockedGroups(ctx context.Context) (result []*Program, e
 	return result, err
 }
 
+func (gr *Group) RiskViewers(ctx context.Context) (result []*Risk, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = gr.NamedRiskViewers(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = gr.Edges.RiskViewersOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = gr.QueryRiskViewers().All(ctx)
+	}
+	return result, err
+}
+
+func (gr *Group) RiskEditors(ctx context.Context) (result []*Risk, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = gr.NamedRiskEditors(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = gr.Edges.RiskEditorsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = gr.QueryRiskEditors().All(ctx)
+	}
+	return result, err
+}
+
+func (gr *Group) RiskBlockedGroups(ctx context.Context) (result []*Risk, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = gr.NamedRiskBlockedGroups(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = gr.Edges.RiskBlockedGroupsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = gr.QueryRiskBlockedGroups().All(ctx)
+	}
+	return result, err
+}
+
 func (gr *Group) Members(ctx context.Context) (result []*GroupMembership, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = gr.NamedMembers(graphql.GetFieldContext(ctx).Field.Alias)
@@ -2333,10 +2369,50 @@ func (r *Risk) Actionplans(ctx context.Context) (result []*ActionPlan, err error
 	return result, err
 }
 
-func (r *Risk) Program(ctx context.Context) (*Program, error) {
-	result, err := r.Edges.ProgramOrErr()
+func (r *Risk) Program(ctx context.Context) (result []*Program, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = r.NamedProgram(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = r.Edges.ProgramOrErr()
+	}
 	if IsNotLoaded(err) {
-		result, err = r.QueryProgram().Only(ctx)
+		result, err = r.QueryProgram().All(ctx)
+	}
+	return result, err
+}
+
+func (r *Risk) Viewers(ctx context.Context) (result []*Group, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = r.NamedViewers(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = r.Edges.ViewersOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = r.QueryViewers().All(ctx)
+	}
+	return result, err
+}
+
+func (r *Risk) Editors(ctx context.Context) (result []*Group, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = r.NamedEditors(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = r.Edges.EditorsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = r.QueryEditors().All(ctx)
+	}
+	return result, err
+}
+
+func (r *Risk) BlockedGroups(ctx context.Context) (result []*Group, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = r.NamedBlockedGroups(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = r.Edges.BlockedGroupsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = r.QueryBlockedGroups().All(ctx)
 	}
 	return result, err
 }

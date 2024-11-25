@@ -33,6 +33,8 @@ func init() {
 	updateCmd.Flags().StringP("likelihood", "l", "", "likelihood of the risk")
 	updateCmd.Flags().StringP("mitigation", "g", "", "mitigation for the risk")
 	updateCmd.Flags().StringP("satisfies", "a", "", "which controls are satisfied by the risk")
+	updateCmd.Flags().StringSlice("add-programs", []string{}, "add program(s) to the risk")
+	updateCmd.Flags().StringSlice("remove-programs", []string{}, "remove program(s) from the risk")
 }
 
 // updateValidation validates the required fields for the command
@@ -82,6 +84,16 @@ func updateValidation() (id string, input openlaneclient.UpdateRiskInput, err er
 	satisfies := cmd.Config.String("satisfies")
 	if satisfies != "" {
 		input.Satisfies = &satisfies
+	}
+
+	addPrograms := cmd.Config.Strings("add-programs")
+	if len(addPrograms) > 0 {
+		input.AddProgramIDs = addPrograms
+	}
+
+	removePrograms := cmd.Config.Strings("remove-programs")
+	if len(removePrograms) > 0 {
+		input.RemoveProgramIDs = removePrograms
 	}
 
 	return id, input, nil

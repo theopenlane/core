@@ -15,6 +15,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
@@ -26,20 +27,27 @@ import (
 // RiskQuery is the builder for querying Risk entities.
 type RiskQuery struct {
 	config
-	ctx                  *QueryContext
-	order                []risk.OrderOption
-	inters               []Interceptor
-	predicates           []predicate.Risk
-	withControl          *ControlQuery
-	withProcedure        *ProcedureQuery
-	withActionplans      *ActionPlanQuery
-	withProgram          *ProgramQuery
-	withFKs              bool
-	loadTotal            []func(context.Context, []*Risk) error
-	modifiers            []func(*sql.Selector)
-	withNamedControl     map[string]*ControlQuery
-	withNamedProcedure   map[string]*ProcedureQuery
-	withNamedActionplans map[string]*ActionPlanQuery
+	ctx                    *QueryContext
+	order                  []risk.OrderOption
+	inters                 []Interceptor
+	predicates             []predicate.Risk
+	withControl            *ControlQuery
+	withProcedure          *ProcedureQuery
+	withActionplans        *ActionPlanQuery
+	withProgram            *ProgramQuery
+	withViewers            *GroupQuery
+	withEditors            *GroupQuery
+	withBlockedGroups      *GroupQuery
+	withFKs                bool
+	loadTotal              []func(context.Context, []*Risk) error
+	modifiers              []func(*sql.Selector)
+	withNamedControl       map[string]*ControlQuery
+	withNamedProcedure     map[string]*ProcedureQuery
+	withNamedActionplans   map[string]*ActionPlanQuery
+	withNamedProgram       map[string]*ProgramQuery
+	withNamedViewers       map[string]*GroupQuery
+	withNamedEditors       map[string]*GroupQuery
+	withNamedBlockedGroups map[string]*GroupQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -165,11 +173,86 @@ func (rq *RiskQuery) QueryProgram() *ProgramQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(risk.Table, risk.FieldID, selector),
 			sqlgraph.To(program.Table, program.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, risk.ProgramTable, risk.ProgramColumn),
+			sqlgraph.Edge(sqlgraph.M2M, true, risk.ProgramTable, risk.ProgramPrimaryKey...),
 		)
 		schemaConfig := rq.schemaConfig
 		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.Risk
+		step.Edge.Schema = schemaConfig.ProgramRisks
+		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryViewers chains the current query on the "viewers" edge.
+func (rq *RiskQuery) QueryViewers() *GroupQuery {
+	query := (&GroupClient{config: rq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := rq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := rq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, risk.ViewersTable, risk.ViewersPrimaryKey...),
+		)
+		schemaConfig := rq.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.RiskViewers
+		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEditors chains the current query on the "editors" edge.
+func (rq *RiskQuery) QueryEditors() *GroupQuery {
+	query := (&GroupClient{config: rq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := rq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := rq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, risk.EditorsTable, risk.EditorsPrimaryKey...),
+		)
+		schemaConfig := rq.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.RiskEditors
+		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryBlockedGroups chains the current query on the "blocked_groups" edge.
+func (rq *RiskQuery) QueryBlockedGroups() *GroupQuery {
+	query := (&GroupClient{config: rq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := rq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := rq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, risk.BlockedGroupsTable, risk.BlockedGroupsPrimaryKey...),
+		)
+		schemaConfig := rq.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.RiskBlockedGroups
 		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -363,15 +446,18 @@ func (rq *RiskQuery) Clone() *RiskQuery {
 		return nil
 	}
 	return &RiskQuery{
-		config:          rq.config,
-		ctx:             rq.ctx.Clone(),
-		order:           append([]risk.OrderOption{}, rq.order...),
-		inters:          append([]Interceptor{}, rq.inters...),
-		predicates:      append([]predicate.Risk{}, rq.predicates...),
-		withControl:     rq.withControl.Clone(),
-		withProcedure:   rq.withProcedure.Clone(),
-		withActionplans: rq.withActionplans.Clone(),
-		withProgram:     rq.withProgram.Clone(),
+		config:            rq.config,
+		ctx:               rq.ctx.Clone(),
+		order:             append([]risk.OrderOption{}, rq.order...),
+		inters:            append([]Interceptor{}, rq.inters...),
+		predicates:        append([]predicate.Risk{}, rq.predicates...),
+		withControl:       rq.withControl.Clone(),
+		withProcedure:     rq.withProcedure.Clone(),
+		withActionplans:   rq.withActionplans.Clone(),
+		withProgram:       rq.withProgram.Clone(),
+		withViewers:       rq.withViewers.Clone(),
+		withEditors:       rq.withEditors.Clone(),
+		withBlockedGroups: rq.withBlockedGroups.Clone(),
 		// clone intermediate query.
 		sql:       rq.sql.Clone(),
 		path:      rq.path,
@@ -420,6 +506,39 @@ func (rq *RiskQuery) WithProgram(opts ...func(*ProgramQuery)) *RiskQuery {
 		opt(query)
 	}
 	rq.withProgram = query
+	return rq
+}
+
+// WithViewers tells the query-builder to eager-load the nodes that are connected to
+// the "viewers" edge. The optional arguments are used to configure the query builder of the edge.
+func (rq *RiskQuery) WithViewers(opts ...func(*GroupQuery)) *RiskQuery {
+	query := (&GroupClient{config: rq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	rq.withViewers = query
+	return rq
+}
+
+// WithEditors tells the query-builder to eager-load the nodes that are connected to
+// the "editors" edge. The optional arguments are used to configure the query builder of the edge.
+func (rq *RiskQuery) WithEditors(opts ...func(*GroupQuery)) *RiskQuery {
+	query := (&GroupClient{config: rq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	rq.withEditors = query
+	return rq
+}
+
+// WithBlockedGroups tells the query-builder to eager-load the nodes that are connected to
+// the "blocked_groups" edge. The optional arguments are used to configure the query builder of the edge.
+func (rq *RiskQuery) WithBlockedGroups(opts ...func(*GroupQuery)) *RiskQuery {
+	query := (&GroupClient{config: rq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	rq.withBlockedGroups = query
 	return rq
 }
 
@@ -508,16 +627,16 @@ func (rq *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 		nodes       = []*Risk{}
 		withFKs     = rq.withFKs
 		_spec       = rq.querySpec()
-		loadedTypes = [4]bool{
+		loadedTypes = [7]bool{
 			rq.withControl != nil,
 			rq.withProcedure != nil,
 			rq.withActionplans != nil,
 			rq.withProgram != nil,
+			rq.withViewers != nil,
+			rq.withEditors != nil,
+			rq.withBlockedGroups != nil,
 		}
 	)
-	if rq.withProgram != nil {
-		withFKs = true
-	}
 	if withFKs {
 		_spec.Node.Columns = append(_spec.Node.Columns, risk.ForeignKeys...)
 	}
@@ -566,8 +685,30 @@ func (rq *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 		}
 	}
 	if query := rq.withProgram; query != nil {
-		if err := rq.loadProgram(ctx, query, nodes, nil,
-			func(n *Risk, e *Program) { n.Edges.Program = e }); err != nil {
+		if err := rq.loadProgram(ctx, query, nodes,
+			func(n *Risk) { n.Edges.Program = []*Program{} },
+			func(n *Risk, e *Program) { n.Edges.Program = append(n.Edges.Program, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := rq.withViewers; query != nil {
+		if err := rq.loadViewers(ctx, query, nodes,
+			func(n *Risk) { n.Edges.Viewers = []*Group{} },
+			func(n *Risk, e *Group) { n.Edges.Viewers = append(n.Edges.Viewers, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := rq.withEditors; query != nil {
+		if err := rq.loadEditors(ctx, query, nodes,
+			func(n *Risk) { n.Edges.Editors = []*Group{} },
+			func(n *Risk, e *Group) { n.Edges.Editors = append(n.Edges.Editors, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := rq.withBlockedGroups; query != nil {
+		if err := rq.loadBlockedGroups(ctx, query, nodes,
+			func(n *Risk) { n.Edges.BlockedGroups = []*Group{} },
+			func(n *Risk, e *Group) { n.Edges.BlockedGroups = append(n.Edges.BlockedGroups, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -589,6 +730,34 @@ func (rq *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 		if err := rq.loadActionplans(ctx, query, nodes,
 			func(n *Risk) { n.appendNamedActionplans(name) },
 			func(n *Risk, e *ActionPlan) { n.appendNamedActionplans(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range rq.withNamedProgram {
+		if err := rq.loadProgram(ctx, query, nodes,
+			func(n *Risk) { n.appendNamedProgram(name) },
+			func(n *Risk, e *Program) { n.appendNamedProgram(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range rq.withNamedViewers {
+		if err := rq.loadViewers(ctx, query, nodes,
+			func(n *Risk) { n.appendNamedViewers(name) },
+			func(n *Risk, e *Group) { n.appendNamedViewers(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range rq.withNamedEditors {
+		if err := rq.loadEditors(ctx, query, nodes,
+			func(n *Risk) { n.appendNamedEditors(name) },
+			func(n *Risk, e *Group) { n.appendNamedEditors(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range rq.withNamedBlockedGroups {
+		if err := rq.loadBlockedGroups(ctx, query, nodes,
+			func(n *Risk) { n.appendNamedBlockedGroups(name) },
+			func(n *Risk, e *Group) { n.appendNamedBlockedGroups(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -787,33 +956,249 @@ func (rq *RiskQuery) loadActionplans(ctx context.Context, query *ActionPlanQuery
 	return nil
 }
 func (rq *RiskQuery) loadProgram(ctx context.Context, query *ProgramQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Program)) error {
-	ids := make([]string, 0, len(nodes))
-	nodeids := make(map[string][]*Risk)
-	for i := range nodes {
-		if nodes[i].program_risks == nil {
-			continue
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Risk)
+	nids := make(map[string]map[*Risk]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
 		}
-		fk := *nodes[i].program_risks
-		if _, ok := nodeids[fk]; !ok {
-			ids = append(ids, fk)
-		}
-		nodeids[fk] = append(nodeids[fk], nodes[i])
 	}
-	if len(ids) == 0 {
-		return nil
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(risk.ProgramTable)
+		joinT.Schema(rq.schemaConfig.ProgramRisks)
+		s.Join(joinT).On(s.C(program.FieldID), joinT.C(risk.ProgramPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(risk.ProgramPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(risk.ProgramPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
 	}
-	query.Where(program.IDIn(ids...))
-	neighbors, err := query.All(ctx)
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Risk]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Program](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		nodes, ok := nodeids[n.ID]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "program_risks" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected "program" node returned %v`, n.ID)
 		}
-		for i := range nodes {
-			assign(nodes[i], n)
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (rq *RiskQuery) loadViewers(ctx context.Context, query *GroupQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Group)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Risk)
+	nids := make(map[string]map[*Risk]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(risk.ViewersTable)
+		joinT.Schema(rq.schemaConfig.RiskViewers)
+		s.Join(joinT).On(s.C(group.FieldID), joinT.C(risk.ViewersPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(risk.ViewersPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(risk.ViewersPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Risk]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Group](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "viewers" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (rq *RiskQuery) loadEditors(ctx context.Context, query *GroupQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Group)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Risk)
+	nids := make(map[string]map[*Risk]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(risk.EditorsTable)
+		joinT.Schema(rq.schemaConfig.RiskEditors)
+		s.Join(joinT).On(s.C(group.FieldID), joinT.C(risk.EditorsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(risk.EditorsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(risk.EditorsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Risk]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Group](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "editors" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (rq *RiskQuery) loadBlockedGroups(ctx context.Context, query *GroupQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Group)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Risk)
+	nids := make(map[string]map[*Risk]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(risk.BlockedGroupsTable)
+		joinT.Schema(rq.schemaConfig.RiskBlockedGroups)
+		s.Join(joinT).On(s.C(group.FieldID), joinT.C(risk.BlockedGroupsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(risk.BlockedGroupsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(risk.BlockedGroupsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Risk]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Group](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "blocked_groups" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
 		}
 	}
 	return nil
@@ -956,6 +1341,62 @@ func (rq *RiskQuery) WithNamedActionplans(name string, opts ...func(*ActionPlanQ
 		rq.withNamedActionplans = make(map[string]*ActionPlanQuery)
 	}
 	rq.withNamedActionplans[name] = query
+	return rq
+}
+
+// WithNamedProgram tells the query-builder to eager-load the nodes that are connected to the "program"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (rq *RiskQuery) WithNamedProgram(name string, opts ...func(*ProgramQuery)) *RiskQuery {
+	query := (&ProgramClient{config: rq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if rq.withNamedProgram == nil {
+		rq.withNamedProgram = make(map[string]*ProgramQuery)
+	}
+	rq.withNamedProgram[name] = query
+	return rq
+}
+
+// WithNamedViewers tells the query-builder to eager-load the nodes that are connected to the "viewers"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (rq *RiskQuery) WithNamedViewers(name string, opts ...func(*GroupQuery)) *RiskQuery {
+	query := (&GroupClient{config: rq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if rq.withNamedViewers == nil {
+		rq.withNamedViewers = make(map[string]*GroupQuery)
+	}
+	rq.withNamedViewers[name] = query
+	return rq
+}
+
+// WithNamedEditors tells the query-builder to eager-load the nodes that are connected to the "editors"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (rq *RiskQuery) WithNamedEditors(name string, opts ...func(*GroupQuery)) *RiskQuery {
+	query := (&GroupClient{config: rq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if rq.withNamedEditors == nil {
+		rq.withNamedEditors = make(map[string]*GroupQuery)
+	}
+	rq.withNamedEditors[name] = query
+	return rq
+}
+
+// WithNamedBlockedGroups tells the query-builder to eager-load the nodes that are connected to the "blocked_groups"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (rq *RiskQuery) WithNamedBlockedGroups(name string, opts ...func(*GroupQuery)) *RiskQuery {
+	query := (&GroupClient{config: rq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if rq.withNamedBlockedGroups == nil {
+		rq.withNamedBlockedGroups = make(map[string]*GroupQuery)
+	}
+	rq.withNamedBlockedGroups[name] = query
 	return rq
 }
 

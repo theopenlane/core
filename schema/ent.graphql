@@ -3984,6 +3984,9 @@ input CreateGroupInput {
   programViewerIDs: [ID!]
   programEditorIDs: [ID!]
   programBlockedGroupIDs: [ID!]
+  riskViewerIDs: [ID!]
+  riskEditorIDs: [ID!]
+  riskBlockedGroupIDs: [ID!]
 }
 """
 CreateGroupMembershipInput is used for create GroupMembership object.
@@ -4593,7 +4596,10 @@ input CreateRiskInput {
   controlIDs: [ID!]
   procedureIDs: [ID!]
   actionplanIDs: [ID!]
-  programID: ID!
+  programIDs: [ID!]
+  viewerIDs: [ID!]
+  editorIDs: [ID!]
+  blockedGroupIDs: [ID!]
 }
 """
 CreateStandardInput is used for create Standard object.
@@ -10774,6 +10780,9 @@ type Group implements Node {
   programViewers: [Program!]
   programEditors: [Program!]
   programBlockedGroups: [Program!]
+  riskViewers: [Risk!]
+  riskEditors: [Risk!]
+  riskBlockedGroups: [Risk!]
   members: [GroupMembership!]
 }
 """
@@ -12316,6 +12325,21 @@ input GroupWhereInput {
   """
   hasProgramBlockedGroups: Boolean
   hasProgramBlockedGroupsWith: [ProgramWhereInput!]
+  """
+  risk_viewers edge predicates
+  """
+  hasRiskViewers: Boolean
+  hasRiskViewersWith: [RiskWhereInput!]
+  """
+  risk_editors edge predicates
+  """
+  hasRiskEditors: Boolean
+  hasRiskEditorsWith: [RiskWhereInput!]
+  """
+  risk_blocked_groups edge predicates
+  """
+  hasRiskBlockedGroups: Boolean
+  hasRiskBlockedGroupsWith: [RiskWhereInput!]
   """
   members edge predicates
   """
@@ -22940,7 +22964,19 @@ type Risk implements Node {
   control: [Control!]
   procedure: [Procedure!]
   actionplans: [ActionPlan!]
-  program: Program!
+  program: [Program!]
+  """
+  provides view access to the risk to members of the group
+  """
+  viewers: [Group!]
+  """
+  provides edit access to the risk to members of the group
+  """
+  editors: [Group!]
+  """
+  groups that are blocked from viewing or editing the risk
+  """
+  blockedGroups: [Group!]
 }
 """
 A connection to a list of items.
@@ -23667,6 +23703,21 @@ input RiskWhereInput {
   """
   hasProgram: Boolean
   hasProgramWith: [ProgramWhereInput!]
+  """
+  viewers edge predicates
+  """
+  hasViewers: Boolean
+  hasViewersWith: [GroupWhereInput!]
+  """
+  editors edge predicates
+  """
+  hasEditors: Boolean
+  hasEditorsWith: [GroupWhereInput!]
+  """
+  blocked_groups edge predicates
+  """
+  hasBlockedGroups: Boolean
+  hasBlockedGroupsWith: [GroupWhereInput!]
 }
 type Standard implements Node {
   id: ID!
@@ -28045,6 +28096,15 @@ input UpdateGroupInput {
   addProgramBlockedGroupIDs: [ID!]
   removeProgramBlockedGroupIDs: [ID!]
   clearProgramBlockedGroups: Boolean
+  addRiskViewerIDs: [ID!]
+  removeRiskViewerIDs: [ID!]
+  clearRiskViewers: Boolean
+  addRiskEditorIDs: [ID!]
+  removeRiskEditorIDs: [ID!]
+  clearRiskEditors: Boolean
+  addRiskBlockedGroupIDs: [ID!]
+  removeRiskBlockedGroupIDs: [ID!]
+  clearRiskBlockedGroups: Boolean
 }
 """
 UpdateGroupMembershipInput is used for update GroupMembership object.
@@ -28879,7 +28939,18 @@ input UpdateRiskInput {
   addActionplanIDs: [ID!]
   removeActionplanIDs: [ID!]
   clearActionplans: Boolean
-  programID: ID
+  addProgramIDs: [ID!]
+  removeProgramIDs: [ID!]
+  clearProgram: Boolean
+  addViewerIDs: [ID!]
+  removeViewerIDs: [ID!]
+  clearViewers: Boolean
+  addEditorIDs: [ID!]
+  removeEditorIDs: [ID!]
+  clearEditors: Boolean
+  addBlockedGroupIDs: [ID!]
+  removeBlockedGroupIDs: [ID!]
+  clearBlockedGroups: Boolean
 }
 """
 UpdateStandardInput is used for update Standard object.

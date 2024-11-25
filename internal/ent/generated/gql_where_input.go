@@ -25614,6 +25614,18 @@ type GroupWhereInput struct {
 	HasProgramBlockedGroups     *bool                `json:"hasProgramBlockedGroups,omitempty"`
 	HasProgramBlockedGroupsWith []*ProgramWhereInput `json:"hasProgramBlockedGroupsWith,omitempty"`
 
+	// "risk_viewers" edge predicates.
+	HasRiskViewers     *bool             `json:"hasRiskViewers,omitempty"`
+	HasRiskViewersWith []*RiskWhereInput `json:"hasRiskViewersWith,omitempty"`
+
+	// "risk_editors" edge predicates.
+	HasRiskEditors     *bool             `json:"hasRiskEditors,omitempty"`
+	HasRiskEditorsWith []*RiskWhereInput `json:"hasRiskEditorsWith,omitempty"`
+
+	// "risk_blocked_groups" edge predicates.
+	HasRiskBlockedGroups     *bool             `json:"hasRiskBlockedGroups,omitempty"`
+	HasRiskBlockedGroupsWith []*RiskWhereInput `json:"hasRiskBlockedGroupsWith,omitempty"`
+
 	// "members" edge predicates.
 	HasMembers     *bool                        `json:"hasMembers,omitempty"`
 	HasMembersWith []*GroupMembershipWhereInput `json:"hasMembersWith,omitempty"`
@@ -26320,6 +26332,60 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, group.HasProgramBlockedGroupsWith(with...))
+	}
+	if i.HasRiskViewers != nil {
+		p := group.HasRiskViewers()
+		if !*i.HasRiskViewers {
+			p = group.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasRiskViewersWith) > 0 {
+		with := make([]predicate.Risk, 0, len(i.HasRiskViewersWith))
+		for _, w := range i.HasRiskViewersWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasRiskViewersWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, group.HasRiskViewersWith(with...))
+	}
+	if i.HasRiskEditors != nil {
+		p := group.HasRiskEditors()
+		if !*i.HasRiskEditors {
+			p = group.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasRiskEditorsWith) > 0 {
+		with := make([]predicate.Risk, 0, len(i.HasRiskEditorsWith))
+		for _, w := range i.HasRiskEditorsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasRiskEditorsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, group.HasRiskEditorsWith(with...))
+	}
+	if i.HasRiskBlockedGroups != nil {
+		p := group.HasRiskBlockedGroups()
+		if !*i.HasRiskBlockedGroups {
+			p = group.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasRiskBlockedGroupsWith) > 0 {
+		with := make([]predicate.Risk, 0, len(i.HasRiskBlockedGroupsWith))
+		for _, w := range i.HasRiskBlockedGroupsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasRiskBlockedGroupsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, group.HasRiskBlockedGroupsWith(with...))
 	}
 	if i.HasMembers != nil {
 		p := group.HasMembers()
@@ -52883,6 +52949,18 @@ type RiskWhereInput struct {
 	// "program" edge predicates.
 	HasProgram     *bool                `json:"hasProgram,omitempty"`
 	HasProgramWith []*ProgramWhereInput `json:"hasProgramWith,omitempty"`
+
+	// "viewers" edge predicates.
+	HasViewers     *bool              `json:"hasViewers,omitempty"`
+	HasViewersWith []*GroupWhereInput `json:"hasViewersWith,omitempty"`
+
+	// "editors" edge predicates.
+	HasEditors     *bool              `json:"hasEditors,omitempty"`
+	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
+
+	// "blocked_groups" edge predicates.
+	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
+	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -53628,6 +53706,60 @@ func (i *RiskWhereInput) P() (predicate.Risk, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, risk.HasProgramWith(with...))
+	}
+	if i.HasViewers != nil {
+		p := risk.HasViewers()
+		if !*i.HasViewers {
+			p = risk.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasViewersWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasViewersWith))
+		for _, w := range i.HasViewersWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasViewersWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, risk.HasViewersWith(with...))
+	}
+	if i.HasEditors != nil {
+		p := risk.HasEditors()
+		if !*i.HasEditors {
+			p = risk.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasEditorsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasEditorsWith))
+		for _, w := range i.HasEditorsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasEditorsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, risk.HasEditorsWith(with...))
+	}
+	if i.HasBlockedGroups != nil {
+		p := risk.HasBlockedGroups()
+		if !*i.HasBlockedGroups {
+			p = risk.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasBlockedGroupsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasBlockedGroupsWith))
+		for _, w := range i.HasBlockedGroupsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasBlockedGroupsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, risk.HasBlockedGroupsWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
