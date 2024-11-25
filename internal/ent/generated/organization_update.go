@@ -37,6 +37,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
@@ -671,6 +672,21 @@ func (ou *OrganizationUpdate) AddInternalpolicies(i ...*InternalPolicy) *Organiz
 	return ou.AddInternalpolicyIDs(ids...)
 }
 
+// AddRiskIDs adds the "risks" edge to the Risk entity by IDs.
+func (ou *OrganizationUpdate) AddRiskIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.AddRiskIDs(ids...)
+	return ou
+}
+
+// AddRisks adds the "risks" edges to the Risk entity.
+func (ou *OrganizationUpdate) AddRisks(r ...*Risk) *OrganizationUpdate {
+	ids := make([]string, len(r))
+	for i := range r {
+		ids[i] = r[i].ID
+	}
+	return ou.AddRiskIDs(ids...)
+}
+
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
 func (ou *OrganizationUpdate) AddMemberIDs(ids ...string) *OrganizationUpdate {
 	ou.mutation.AddMemberIDs(ids...)
@@ -1283,6 +1299,27 @@ func (ou *OrganizationUpdate) RemoveInternalpolicies(i ...*InternalPolicy) *Orga
 		ids[j] = i[j].ID
 	}
 	return ou.RemoveInternalpolicyIDs(ids...)
+}
+
+// ClearRisks clears all "risks" edges to the Risk entity.
+func (ou *OrganizationUpdate) ClearRisks() *OrganizationUpdate {
+	ou.mutation.ClearRisks()
+	return ou
+}
+
+// RemoveRiskIDs removes the "risks" edge to Risk entities by IDs.
+func (ou *OrganizationUpdate) RemoveRiskIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.RemoveRiskIDs(ids...)
+	return ou
+}
+
+// RemoveRisks removes "risks" edges to Risk entities.
+func (ou *OrganizationUpdate) RemoveRisks(r ...*Risk) *OrganizationUpdate {
+	ids := make([]string, len(r))
+	for i := range r {
+		ids[i] = r[i].ID
+	}
+	return ou.RemoveRiskIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -2847,6 +2884,54 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if ou.mutation.RisksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.RisksTable,
+			Columns: []string{organization.RisksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Risk
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.RemovedRisksIDs(); len(nodes) > 0 && !ou.mutation.RisksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.RisksTable,
+			Columns: []string{organization.RisksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Risk
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.RisksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.RisksTable,
+			Columns: []string{organization.RisksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Risk
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if ou.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -3530,6 +3615,21 @@ func (ouo *OrganizationUpdateOne) AddInternalpolicies(i ...*InternalPolicy) *Org
 	return ouo.AddInternalpolicyIDs(ids...)
 }
 
+// AddRiskIDs adds the "risks" edge to the Risk entity by IDs.
+func (ouo *OrganizationUpdateOne) AddRiskIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.AddRiskIDs(ids...)
+	return ouo
+}
+
+// AddRisks adds the "risks" edges to the Risk entity.
+func (ouo *OrganizationUpdateOne) AddRisks(r ...*Risk) *OrganizationUpdateOne {
+	ids := make([]string, len(r))
+	for i := range r {
+		ids[i] = r[i].ID
+	}
+	return ouo.AddRiskIDs(ids...)
+}
+
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
 func (ouo *OrganizationUpdateOne) AddMemberIDs(ids ...string) *OrganizationUpdateOne {
 	ouo.mutation.AddMemberIDs(ids...)
@@ -4142,6 +4242,27 @@ func (ouo *OrganizationUpdateOne) RemoveInternalpolicies(i ...*InternalPolicy) *
 		ids[j] = i[j].ID
 	}
 	return ouo.RemoveInternalpolicyIDs(ids...)
+}
+
+// ClearRisks clears all "risks" edges to the Risk entity.
+func (ouo *OrganizationUpdateOne) ClearRisks() *OrganizationUpdateOne {
+	ouo.mutation.ClearRisks()
+	return ouo
+}
+
+// RemoveRiskIDs removes the "risks" edge to Risk entities by IDs.
+func (ouo *OrganizationUpdateOne) RemoveRiskIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.RemoveRiskIDs(ids...)
+	return ouo
+}
+
+// RemoveRisks removes "risks" edges to Risk entities.
+func (ouo *OrganizationUpdateOne) RemoveRisks(r ...*Risk) *OrganizationUpdateOne {
+	ids := make([]string, len(r))
+	for i := range r {
+		ids[i] = r[i].ID
+	}
+	return ouo.RemoveRiskIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -5731,6 +5852,54 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 			},
 		}
 		edge.Schema = ouo.schemaConfig.InternalPolicy
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ouo.mutation.RisksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.RisksTable,
+			Columns: []string{organization.RisksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Risk
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.RemovedRisksIDs(); len(nodes) > 0 && !ouo.mutation.RisksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.RisksTable,
+			Columns: []string{organization.RisksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Risk
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.RisksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.RisksTable,
+			Columns: []string{organization.RisksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Risk
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

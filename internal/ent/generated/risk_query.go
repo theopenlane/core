@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/group"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
@@ -34,6 +35,7 @@ type RiskQuery struct {
 	withControl            *ControlQuery
 	withProcedure          *ProcedureQuery
 	withActionplans        *ActionPlanQuery
+	withOwner              *OrganizationQuery
 	withProgram            *ProgramQuery
 	withViewers            *GroupQuery
 	withEditors            *GroupQuery
@@ -153,6 +155,31 @@ func (rq *RiskQuery) QueryActionplans() *ActionPlanQuery {
 		schemaConfig := rq.schemaConfig
 		step.To.Schema = schemaConfig.ActionPlan
 		step.Edge.Schema = schemaConfig.RiskActionplans
+		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryOwner chains the current query on the "owner" edge.
+func (rq *RiskQuery) QueryOwner() *OrganizationQuery {
+	query := (&OrganizationClient{config: rq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := rq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := rq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, selector),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, risk.OwnerTable, risk.OwnerColumn),
+		)
+		schemaConfig := rq.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.Risk
 		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -454,6 +481,7 @@ func (rq *RiskQuery) Clone() *RiskQuery {
 		withControl:       rq.withControl.Clone(),
 		withProcedure:     rq.withProcedure.Clone(),
 		withActionplans:   rq.withActionplans.Clone(),
+		withOwner:         rq.withOwner.Clone(),
 		withProgram:       rq.withProgram.Clone(),
 		withViewers:       rq.withViewers.Clone(),
 		withEditors:       rq.withEditors.Clone(),
@@ -495,6 +523,17 @@ func (rq *RiskQuery) WithActionplans(opts ...func(*ActionPlanQuery)) *RiskQuery 
 		opt(query)
 	}
 	rq.withActionplans = query
+	return rq
+}
+
+// WithOwner tells the query-builder to eager-load the nodes that are connected to
+// the "owner" edge. The optional arguments are used to configure the query builder of the edge.
+func (rq *RiskQuery) WithOwner(opts ...func(*OrganizationQuery)) *RiskQuery {
+	query := (&OrganizationClient{config: rq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	rq.withOwner = query
 	return rq
 }
 
@@ -627,10 +666,11 @@ func (rq *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 		nodes       = []*Risk{}
 		withFKs     = rq.withFKs
 		_spec       = rq.querySpec()
-		loadedTypes = [7]bool{
+		loadedTypes = [8]bool{
 			rq.withControl != nil,
 			rq.withProcedure != nil,
 			rq.withActionplans != nil,
+			rq.withOwner != nil,
 			rq.withProgram != nil,
 			rq.withViewers != nil,
 			rq.withEditors != nil,
@@ -681,6 +721,12 @@ func (rq *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 		if err := rq.loadActionplans(ctx, query, nodes,
 			func(n *Risk) { n.Edges.Actionplans = []*ActionPlan{} },
 			func(n *Risk, e *ActionPlan) { n.Edges.Actionplans = append(n.Edges.Actionplans, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := rq.withOwner; query != nil {
+		if err := rq.loadOwner(ctx, query, nodes, nil,
+			func(n *Risk, e *Organization) { n.Edges.Owner = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -951,6 +997,35 @@ func (rq *RiskQuery) loadActionplans(ctx context.Context, query *ActionPlanQuery
 		}
 		for kn := range nodes {
 			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (rq *RiskQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Organization)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Risk)
+	for i := range nodes {
+		fk := nodes[i].OwnerID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(organization.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "owner_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
 		}
 	}
 	return nil
@@ -1233,6 +1308,9 @@ func (rq *RiskQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != risk.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if rq.withOwner != nil {
+			_spec.Node.AddColumnOnce(risk.FieldOwnerID)
 		}
 	}
 	if ps := rq.predicates; len(ps) > 0 {

@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/pkg/enums"
 )
@@ -55,6 +56,8 @@ type Risk struct {
 	Satisfies string `json:"satisfies,omitempty"`
 	// json data for the risk document
 	Details map[string]interface{} `json:"details,omitempty"`
+	// the ID of the organization owner of the risk
+	OwnerID string `json:"owner_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the RiskQuery when eager-loading is set.
 	Edges                   RiskEdges `json:"edges"`
@@ -70,6 +73,8 @@ type RiskEdges struct {
 	Procedure []*Procedure `json:"procedure,omitempty"`
 	// Actionplans holds the value of the actionplans edge.
 	Actionplans []*ActionPlan `json:"actionplans,omitempty"`
+	// Owner holds the value of the owner edge.
+	Owner *Organization `json:"owner,omitempty"`
 	// Program holds the value of the program edge.
 	Program []*Program `json:"program,omitempty"`
 	// provides view access to the risk to members of the group
@@ -80,9 +85,9 @@ type RiskEdges struct {
 	BlockedGroups []*Group `json:"blocked_groups,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [7]bool
+	loadedTypes [8]bool
 	// totalCount holds the count of the edges above.
-	totalCount [7]map[string]int
+	totalCount [8]map[string]int
 
 	namedControl       map[string][]*Control
 	namedProcedure     map[string][]*Procedure
@@ -120,10 +125,21 @@ func (e RiskEdges) ActionplansOrErr() ([]*ActionPlan, error) {
 	return nil, &NotLoadedError{edge: "actionplans"}
 }
 
+// OwnerOrErr returns the Owner value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e RiskEdges) OwnerOrErr() (*Organization, error) {
+	if e.Owner != nil {
+		return e.Owner, nil
+	} else if e.loadedTypes[3] {
+		return nil, &NotFoundError{label: organization.Label}
+	}
+	return nil, &NotLoadedError{edge: "owner"}
+}
+
 // ProgramOrErr returns the Program value or an error if the edge
 // was not loaded in eager-loading.
 func (e RiskEdges) ProgramOrErr() ([]*Program, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[4] {
 		return e.Program, nil
 	}
 	return nil, &NotLoadedError{edge: "program"}
@@ -132,7 +148,7 @@ func (e RiskEdges) ProgramOrErr() ([]*Program, error) {
 // ViewersOrErr returns the Viewers value or an error if the edge
 // was not loaded in eager-loading.
 func (e RiskEdges) ViewersOrErr() ([]*Group, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[5] {
 		return e.Viewers, nil
 	}
 	return nil, &NotLoadedError{edge: "viewers"}
@@ -141,7 +157,7 @@ func (e RiskEdges) ViewersOrErr() ([]*Group, error) {
 // EditorsOrErr returns the Editors value or an error if the edge
 // was not loaded in eager-loading.
 func (e RiskEdges) EditorsOrErr() ([]*Group, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[6] {
 		return e.Editors, nil
 	}
 	return nil, &NotLoadedError{edge: "editors"}
@@ -150,7 +166,7 @@ func (e RiskEdges) EditorsOrErr() ([]*Group, error) {
 // BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e RiskEdges) BlockedGroupsOrErr() ([]*Group, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[7] {
 		return e.BlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "blocked_groups"}
@@ -163,7 +179,7 @@ func (*Risk) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case risk.FieldTags, risk.FieldDetails:
 			values[i] = new([]byte)
-		case risk.FieldID, risk.FieldCreatedBy, risk.FieldUpdatedBy, risk.FieldDeletedBy, risk.FieldMappingID, risk.FieldName, risk.FieldDescription, risk.FieldStatus, risk.FieldRiskType, risk.FieldBusinessCosts, risk.FieldImpact, risk.FieldLikelihood, risk.FieldMitigation, risk.FieldSatisfies:
+		case risk.FieldID, risk.FieldCreatedBy, risk.FieldUpdatedBy, risk.FieldDeletedBy, risk.FieldMappingID, risk.FieldName, risk.FieldDescription, risk.FieldStatus, risk.FieldRiskType, risk.FieldBusinessCosts, risk.FieldImpact, risk.FieldLikelihood, risk.FieldMitigation, risk.FieldSatisfies, risk.FieldOwnerID:
 			values[i] = new(sql.NullString)
 		case risk.FieldCreatedAt, risk.FieldUpdatedAt, risk.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -302,6 +318,12 @@ func (r *Risk) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field details: %w", err)
 				}
 			}
+		case risk.FieldOwnerID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
+			} else if value.Valid {
+				r.OwnerID = value.String
+			}
 		case risk.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field control_objective_risks", values[i])
@@ -335,6 +357,11 @@ func (r *Risk) QueryProcedure() *ProcedureQuery {
 // QueryActionplans queries the "actionplans" edge of the Risk entity.
 func (r *Risk) QueryActionplans() *ActionPlanQuery {
 	return NewRiskClient(r.config).QueryActionplans(r)
+}
+
+// QueryOwner queries the "owner" edge of the Risk entity.
+func (r *Risk) QueryOwner() *OrganizationQuery {
+	return NewRiskClient(r.config).QueryOwner(r)
 }
 
 // QueryProgram queries the "program" edge of the Risk entity.
@@ -433,6 +460,9 @@ func (r *Risk) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("details=")
 	builder.WriteString(fmt.Sprintf("%v", r.Details))
+	builder.WriteString(", ")
+	builder.WriteString("owner_id=")
+	builder.WriteString(r.OwnerID)
 	builder.WriteByte(')')
 	return builder.String()
 }

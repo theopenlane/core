@@ -105,6 +105,8 @@ const (
 	EdgeProcedures = "procedures"
 	// EdgeInternalpolicies holds the string denoting the internalpolicies edge name in mutations.
 	EdgeInternalpolicies = "internalpolicies"
+	// EdgeRisks holds the string denoting the risks edge name in mutations.
+	EdgeRisks = "risks"
 	// EdgeMembers holds the string denoting the members edge name in mutations.
 	EdgeMembers = "members"
 	// Table holds the table name of the organization in the database.
@@ -301,6 +303,13 @@ const (
 	InternalpoliciesInverseTable = "internal_policies"
 	// InternalpoliciesColumn is the table column denoting the internalpolicies relation/edge.
 	InternalpoliciesColumn = "owner_id"
+	// RisksTable is the table that holds the risks relation/edge.
+	RisksTable = "risks"
+	// RisksInverseTable is the table name for the Risk entity.
+	// It exists in this package in order to avoid circular dependency with the "risk" package.
+	RisksInverseTable = "risks"
+	// RisksColumn is the table column denoting the risks relation/edge.
+	RisksColumn = "owner_id"
 	// MembersTable is the table that holds the members relation/edge.
 	MembersTable = "org_memberships"
 	// MembersInverseTable is the table name for the OrgMembership entity.
@@ -880,6 +889,20 @@ func ByInternalpolicies(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption 
 	}
 }
 
+// ByRisksCount orders the results by risks count.
+func ByRisksCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newRisksStep(), opts...)
+	}
+}
+
+// ByRisks orders the results by risks terms.
+func ByRisks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newRisksStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByMembersCount orders the results by members count.
 func ByMembersCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1101,6 +1124,13 @@ func newInternalpoliciesStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(InternalpoliciesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, InternalpoliciesTable, InternalpoliciesColumn),
+	)
+}
+func newRisksStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(RisksInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, RisksTable, RisksColumn),
 	)
 }
 func newMembersStep() *sqlgraph.Step {

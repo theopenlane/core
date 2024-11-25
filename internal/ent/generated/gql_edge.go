@@ -1937,6 +1937,18 @@ func (o *Organization) Internalpolicies(ctx context.Context) (result []*Internal
 	return result, err
 }
 
+func (o *Organization) Risks(ctx context.Context) (result []*Risk, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = o.NamedRisks(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = o.Edges.RisksOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = o.QueryRisks().All(ctx)
+	}
+	return result, err
+}
+
 func (o *Organization) Members(ctx context.Context) (result []*OrgMembership, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
 		result, err = o.NamedMembers(graphql.GetFieldContext(ctx).Field.Alias)
@@ -2365,6 +2377,14 @@ func (r *Risk) Actionplans(ctx context.Context) (result []*ActionPlan, err error
 	}
 	if IsNotLoaded(err) {
 		result, err = r.QueryActionplans().All(ctx)
+	}
+	return result, err
+}
+
+func (r *Risk) Owner(ctx context.Context) (*Organization, error) {
+	result, err := r.Edges.OwnerOrErr()
+	if IsNotLoaded(err) {
+		result, err = r.QueryOwner().Only(ctx)
 	}
 	return result, err
 }

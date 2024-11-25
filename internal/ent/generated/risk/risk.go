@@ -54,12 +54,16 @@ const (
 	FieldSatisfies = "satisfies"
 	// FieldDetails holds the string denoting the details field in the database.
 	FieldDetails = "details"
+	// FieldOwnerID holds the string denoting the owner_id field in the database.
+	FieldOwnerID = "owner_id"
 	// EdgeControl holds the string denoting the control edge name in mutations.
 	EdgeControl = "control"
 	// EdgeProcedure holds the string denoting the procedure edge name in mutations.
 	EdgeProcedure = "procedure"
 	// EdgeActionplans holds the string denoting the actionplans edge name in mutations.
 	EdgeActionplans = "actionplans"
+	// EdgeOwner holds the string denoting the owner edge name in mutations.
+	EdgeOwner = "owner"
 	// EdgeProgram holds the string denoting the program edge name in mutations.
 	EdgeProgram = "program"
 	// EdgeViewers holds the string denoting the viewers edge name in mutations.
@@ -85,6 +89,13 @@ const (
 	// ActionplansInverseTable is the table name for the ActionPlan entity.
 	// It exists in this package in order to avoid circular dependency with the "actionplan" package.
 	ActionplansInverseTable = "action_plans"
+	// OwnerTable is the table that holds the owner relation/edge.
+	OwnerTable = "risks"
+	// OwnerInverseTable is the table name for the Organization entity.
+	// It exists in this package in order to avoid circular dependency with the "organization" package.
+	OwnerInverseTable = "organizations"
+	// OwnerColumn is the table column denoting the owner relation/edge.
+	OwnerColumn = "owner_id"
 	// ProgramTable is the table that holds the program relation/edge. The primary key declared below.
 	ProgramTable = "program_risks"
 	// ProgramInverseTable is the table name for the Program entity.
@@ -128,6 +139,7 @@ var Columns = []string{
 	FieldMitigation,
 	FieldSatisfies,
 	FieldDetails,
+	FieldOwnerID,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "risks"
@@ -181,7 +193,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [8]ent.Hook
+	Hooks        [9]ent.Hook
 	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -196,6 +208,8 @@ var (
 	DefaultTags []string
 	// NameValidator is a validator for the "name" field. It is called by the builders before save.
 	NameValidator func(string) error
+	// OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	OwnerIDValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -312,6 +326,11 @@ func BySatisfies(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSatisfies, opts...).ToFunc()
 }
 
+// ByOwnerID orders the results by the owner_id field.
+func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
+}
+
 // ByControlCount orders the results by control count.
 func ByControlCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -351,6 +370,13 @@ func ByActionplansCount(opts ...sql.OrderTermOption) OrderOption {
 func ByActionplans(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newActionplansStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByOwnerField orders the results by owner field.
+func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newOwnerStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -428,6 +454,13 @@ func newActionplansStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ActionplansInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, ActionplansTable, ActionplansPrimaryKey...),
+	)
+}
+func newOwnerStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(OwnerInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
 	)
 }
 func newProgramStep() *sqlgraph.Step {

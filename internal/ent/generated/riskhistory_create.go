@@ -284,6 +284,12 @@ func (rhc *RiskHistoryCreate) SetDetails(m map[string]interface{}) *RiskHistoryC
 	return rhc
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (rhc *RiskHistoryCreate) SetOwnerID(s string) *RiskHistoryCreate {
+	rhc.mutation.SetOwnerID(s)
+	return rhc
+}
+
 // SetID sets the "id" field.
 func (rhc *RiskHistoryCreate) SetID(s string) *RiskHistoryCreate {
 	rhc.mutation.SetID(s)
@@ -414,6 +420,9 @@ func (rhc *RiskHistoryCreate) check() error {
 			return &ValidationError{Name: "likelihood", err: fmt.Errorf(`generated: validator failed for field "RiskHistory.likelihood": %w`, err)}
 		}
 	}
+	if _, ok := rhc.mutation.OwnerID(); !ok {
+		return &ValidationError{Name: "owner_id", err: errors.New(`generated: missing required field "RiskHistory.owner_id"`)}
+	}
 	return nil
 }
 
@@ -533,6 +542,10 @@ func (rhc *RiskHistoryCreate) createSpec() (*RiskHistory, *sqlgraph.CreateSpec) 
 	if value, ok := rhc.mutation.Details(); ok {
 		_spec.SetField(riskhistory.FieldDetails, field.TypeJSON, value)
 		_node.Details = value
+	}
+	if value, ok := rhc.mutation.OwnerID(); ok {
+		_spec.SetField(riskhistory.FieldOwnerID, field.TypeString, value)
+		_node.OwnerID = value
 	}
 	return _node, _spec
 }

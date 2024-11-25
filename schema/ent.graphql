@@ -4349,6 +4349,7 @@ input CreateOrganizationInput {
   programIDs: [ID!]
   procedureIDs: [ID!]
   internalpolicyIDs: [ID!]
+  riskIDs: [ID!]
 }
 """
 CreateOrganizationSettingInput is used for create OrganizationSetting object.
@@ -4596,6 +4597,7 @@ input CreateRiskInput {
   controlIDs: [ID!]
   procedureIDs: [ID!]
   actionplanIDs: [ID!]
+  ownerID: ID!
   programIDs: [ID!]
   viewerIDs: [ID!]
   editorIDs: [ID!]
@@ -17070,6 +17072,7 @@ type Organization implements Node {
   programs: [Program!]
   procedures: [Procedure!]
   internalpolicies: [InternalPolicy!]
+  risks: [Risk!]
   members: [OrgMembership!]
 }
 """
@@ -18486,6 +18489,11 @@ input OrganizationWhereInput {
   """
   hasInternalpolicies: Boolean
   hasInternalpoliciesWith: [InternalPolicyWhereInput!]
+  """
+  risks edge predicates
+  """
+  hasRisks: Boolean
+  hasRisksWith: [RiskWhereInput!]
   """
   members edge predicates
   """
@@ -22961,9 +22969,14 @@ type Risk implements Node {
   json data for the risk document
   """
   details: Map
+  """
+  the ID of the organization owner of the risk
+  """
+  ownerID: ID!
   control: [Control!]
   procedure: [Procedure!]
   actionplans: [ActionPlan!]
+  owner: Organization!
   program: [Program!]
   """
   provides view access to the risk to members of the group
@@ -23063,6 +23076,10 @@ type RiskHistory implements Node {
   json data for the risk document
   """
   details: Map
+  """
+  the ID of the organization owner of the risk
+  """
+  ownerID: String!
 }
 """
 A connection to a list of items.
@@ -23410,6 +23427,22 @@ input RiskHistoryWhereInput {
   satisfiesNotNil: Boolean
   satisfiesEqualFold: String
   satisfiesContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
 }
 """
 RiskRiskImpact is enum for the field impact
@@ -23684,6 +23717,22 @@ input RiskWhereInput {
   satisfiesEqualFold: String
   satisfiesContainsFold: String
   """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
   control edge predicates
   """
   hasControl: Boolean
@@ -23698,6 +23747,11 @@ input RiskWhereInput {
   """
   hasActionplans: Boolean
   hasActionplansWith: [ActionPlanWhereInput!]
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
   """
   program edge predicates
   """
@@ -28593,6 +28647,9 @@ input UpdateOrganizationInput {
   addInternalpolicyIDs: [ID!]
   removeInternalpolicyIDs: [ID!]
   clearInternalpolicies: Boolean
+  addRiskIDs: [ID!]
+  removeRiskIDs: [ID!]
+  clearRisks: Boolean
 }
 """
 UpdateOrganizationSettingInput is used for update OrganizationSetting object.
@@ -28939,6 +28996,7 @@ input UpdateRiskInput {
   addActionplanIDs: [ID!]
   removeActionplanIDs: [ID!]
   clearActionplans: Boolean
+  ownerID: ID
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearProgram: Boolean

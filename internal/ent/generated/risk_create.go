@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/group"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
@@ -254,6 +255,12 @@ func (rc *RiskCreate) SetDetails(m map[string]interface{}) *RiskCreate {
 	return rc
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (rc *RiskCreate) SetOwnerID(s string) *RiskCreate {
+	rc.mutation.SetOwnerID(s)
+	return rc
+}
+
 // SetID sets the "id" field.
 func (rc *RiskCreate) SetID(s string) *RiskCreate {
 	rc.mutation.SetID(s)
@@ -311,6 +318,11 @@ func (rc *RiskCreate) AddActionplans(a ...*ActionPlan) *RiskCreate {
 		ids[i] = a[i].ID
 	}
 	return rc.AddActionplanIDs(ids...)
+}
+
+// SetOwner sets the "owner" edge to the Organization entity.
+func (rc *RiskCreate) SetOwner(o *Organization) *RiskCreate {
+	return rc.SetOwnerID(o.ID)
 }
 
 // AddProgramIDs adds the "program" edge to the Program entity by IDs.
@@ -476,6 +488,17 @@ func (rc *RiskCreate) check() error {
 			return &ValidationError{Name: "likelihood", err: fmt.Errorf(`generated: validator failed for field "Risk.likelihood": %w`, err)}
 		}
 	}
+	if _, ok := rc.mutation.OwnerID(); !ok {
+		return &ValidationError{Name: "owner_id", err: errors.New(`generated: missing required field "Risk.owner_id"`)}
+	}
+	if v, ok := rc.mutation.OwnerID(); ok {
+		if err := risk.OwnerIDValidator(v); err != nil {
+			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Risk.owner_id": %w`, err)}
+		}
+	}
+	if len(rc.mutation.OwnerIDs()) == 0 {
+		return &ValidationError{Name: "owner", err: errors.New(`generated: missing required edge "Risk.owner"`)}
+	}
 	return nil
 }
 
@@ -633,6 +656,24 @@ func (rc *RiskCreate) createSpec() (*Risk, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := rc.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   risk.OwnerTable,
+			Columns: []string{risk.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = rc.schemaConfig.Risk
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.OwnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := rc.mutation.ProgramIDs(); len(nodes) > 0 {

@@ -42670,6 +42670,10 @@ type OrganizationWhereInput struct {
 	HasInternalpolicies     *bool                       `json:"hasInternalpolicies,omitempty"`
 	HasInternalpoliciesWith []*InternalPolicyWhereInput `json:"hasInternalpoliciesWith,omitempty"`
 
+	// "risks" edge predicates.
+	HasRisks     *bool             `json:"hasRisks,omitempty"`
+	HasRisksWith []*RiskWhereInput `json:"hasRisksWith,omitempty"`
+
 	// "members" edge predicates.
 	HasMembers     *bool                      `json:"hasMembers,omitempty"`
 	HasMembersWith []*OrgMembershipWhereInput `json:"hasMembersWith,omitempty"`
@@ -43682,6 +43686,24 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, organization.HasInternalpoliciesWith(with...))
+	}
+	if i.HasRisks != nil {
+		p := organization.HasRisks()
+		if !*i.HasRisks {
+			p = organization.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasRisksWith) > 0 {
+		with := make([]predicate.Risk, 0, len(i.HasRisksWith))
+		for _, w := range i.HasRisksWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasRisksWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, organization.HasRisksWith(with...))
 	}
 	if i.HasMembers != nil {
 		p := organization.HasMembers()
@@ -52934,6 +52956,21 @@ type RiskWhereInput struct {
 	SatisfiesEqualFold    *string  `json:"satisfiesEqualFold,omitempty"`
 	SatisfiesContainsFold *string  `json:"satisfiesContainsFold,omitempty"`
 
+	// "owner_id" field predicates.
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIDGT           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIDGTE          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIDLT           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIDLTE          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+
 	// "control" edge predicates.
 	HasControl     *bool                `json:"hasControl,omitempty"`
 	HasControlWith []*ControlWhereInput `json:"hasControlWith,omitempty"`
@@ -52945,6 +52982,10 @@ type RiskWhereInput struct {
 	// "actionplans" edge predicates.
 	HasActionplans     *bool                   `json:"hasActionplans,omitempty"`
 	HasActionplansWith []*ActionPlanWhereInput `json:"hasActionplansWith,omitempty"`
+
+	// "owner" edge predicates.
+	HasOwner     *bool                     `json:"hasOwner,omitempty"`
+	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
 
 	// "program" edge predicates.
 	HasProgram     *bool                `json:"hasProgram,omitempty"`
@@ -53634,6 +53675,45 @@ func (i *RiskWhereInput) P() (predicate.Risk, error) {
 	if i.SatisfiesContainsFold != nil {
 		predicates = append(predicates, risk.SatisfiesContainsFold(*i.SatisfiesContainsFold))
 	}
+	if i.OwnerID != nil {
+		predicates = append(predicates, risk.OwnerIDEQ(*i.OwnerID))
+	}
+	if i.OwnerIDNEQ != nil {
+		predicates = append(predicates, risk.OwnerIDNEQ(*i.OwnerIDNEQ))
+	}
+	if len(i.OwnerIDIn) > 0 {
+		predicates = append(predicates, risk.OwnerIDIn(i.OwnerIDIn...))
+	}
+	if len(i.OwnerIDNotIn) > 0 {
+		predicates = append(predicates, risk.OwnerIDNotIn(i.OwnerIDNotIn...))
+	}
+	if i.OwnerIDGT != nil {
+		predicates = append(predicates, risk.OwnerIDGT(*i.OwnerIDGT))
+	}
+	if i.OwnerIDGTE != nil {
+		predicates = append(predicates, risk.OwnerIDGTE(*i.OwnerIDGTE))
+	}
+	if i.OwnerIDLT != nil {
+		predicates = append(predicates, risk.OwnerIDLT(*i.OwnerIDLT))
+	}
+	if i.OwnerIDLTE != nil {
+		predicates = append(predicates, risk.OwnerIDLTE(*i.OwnerIDLTE))
+	}
+	if i.OwnerIDContains != nil {
+		predicates = append(predicates, risk.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, risk.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
+	}
+	if i.OwnerIDHasSuffix != nil {
+		predicates = append(predicates, risk.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
+	}
+	if i.OwnerIDEqualFold != nil {
+		predicates = append(predicates, risk.OwnerIDEqualFold(*i.OwnerIDEqualFold))
+	}
+	if i.OwnerIDContainsFold != nil {
+		predicates = append(predicates, risk.OwnerIDContainsFold(*i.OwnerIDContainsFold))
+	}
 
 	if i.HasControl != nil {
 		p := risk.HasControl()
@@ -53688,6 +53768,24 @@ func (i *RiskWhereInput) P() (predicate.Risk, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, risk.HasActionplansWith(with...))
+	}
+	if i.HasOwner != nil {
+		p := risk.HasOwner()
+		if !*i.HasOwner {
+			p = risk.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasOwnerWith) > 0 {
+		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		for _, w := range i.HasOwnerWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasOwnerWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, risk.HasOwnerWith(with...))
 	}
 	if i.HasProgram != nil {
 		p := risk.HasProgram()
@@ -54042,6 +54140,21 @@ type RiskHistoryWhereInput struct {
 	SatisfiesNotNil       bool     `json:"satisfiesNotNil,omitempty"`
 	SatisfiesEqualFold    *string  `json:"satisfiesEqualFold,omitempty"`
 	SatisfiesContainsFold *string  `json:"satisfiesContainsFold,omitempty"`
+
+	// "owner_id" field predicates.
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIDGT           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIDGTE          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIDLT           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIDLTE          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -54795,6 +54908,45 @@ func (i *RiskHistoryWhereInput) P() (predicate.RiskHistory, error) {
 	}
 	if i.SatisfiesContainsFold != nil {
 		predicates = append(predicates, riskhistory.SatisfiesContainsFold(*i.SatisfiesContainsFold))
+	}
+	if i.OwnerID != nil {
+		predicates = append(predicates, riskhistory.OwnerIDEQ(*i.OwnerID))
+	}
+	if i.OwnerIDNEQ != nil {
+		predicates = append(predicates, riskhistory.OwnerIDNEQ(*i.OwnerIDNEQ))
+	}
+	if len(i.OwnerIDIn) > 0 {
+		predicates = append(predicates, riskhistory.OwnerIDIn(i.OwnerIDIn...))
+	}
+	if len(i.OwnerIDNotIn) > 0 {
+		predicates = append(predicates, riskhistory.OwnerIDNotIn(i.OwnerIDNotIn...))
+	}
+	if i.OwnerIDGT != nil {
+		predicates = append(predicates, riskhistory.OwnerIDGT(*i.OwnerIDGT))
+	}
+	if i.OwnerIDGTE != nil {
+		predicates = append(predicates, riskhistory.OwnerIDGTE(*i.OwnerIDGTE))
+	}
+	if i.OwnerIDLT != nil {
+		predicates = append(predicates, riskhistory.OwnerIDLT(*i.OwnerIDLT))
+	}
+	if i.OwnerIDLTE != nil {
+		predicates = append(predicates, riskhistory.OwnerIDLTE(*i.OwnerIDLTE))
+	}
+	if i.OwnerIDContains != nil {
+		predicates = append(predicates, riskhistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, riskhistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
+	}
+	if i.OwnerIDHasSuffix != nil {
+		predicates = append(predicates, riskhistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
+	}
+	if i.OwnerIDEqualFold != nil {
+		predicates = append(predicates, riskhistory.OwnerIDEqualFold(*i.OwnerIDEqualFold))
+	}
+	if i.OwnerIDContainsFold != nil {
+		predicates = append(predicates, riskhistory.OwnerIDContainsFold(*i.OwnerIDContainsFold))
 	}
 
 	switch len(predicates) {

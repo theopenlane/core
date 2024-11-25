@@ -3449,6 +3449,7 @@ type AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks struct {
 	Mitigation    *string                "json:\"mitigation,omitempty\" graphql:\"mitigation\""
 	Satisfies     *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
 	Details       map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
+	OwnerID       string                 "json:\"ownerID\" graphql:\"ownerID\""
 }
 
 func (t *AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks) GetDeletedBy() *string {
@@ -3516,6 +3517,12 @@ func (t *AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks) GetDetails() map[
 		t = &AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks{}
 	}
 	return t.Details
+}
+func (t *AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks) GetOwnerID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks{}
+	}
+	return t.OwnerID
 }
 
 type AdminSearch_AdminSearch_Nodes_RiskSearchResult struct {
@@ -55101,6 +55108,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					mitigation
 					satisfies
 					details
+					ownerID
 				}
 			}
 			... on StandardSearchResult {

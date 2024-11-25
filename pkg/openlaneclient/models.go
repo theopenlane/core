@@ -3548,6 +3548,7 @@ type CreateOrganizationInput struct {
 	ProgramIDs                 []string                        `json:"programIDs,omitempty"`
 	ProcedureIDs               []string                        `json:"procedureIDs,omitempty"`
 	InternalpolicyIDs          []string                        `json:"internalpolicyIDs,omitempty"`
+	RiskIDs                    []string                        `json:"riskIDs,omitempty"`
 	CreateOrgSettings          *CreateOrganizationSettingInput `json:"createOrgSettings,omitempty"`
 }
 
@@ -3704,6 +3705,7 @@ type CreateRiskInput struct {
 	ControlIDs      []string               `json:"controlIDs,omitempty"`
 	ProcedureIDs    []string               `json:"procedureIDs,omitempty"`
 	ActionplanIDs   []string               `json:"actionplanIDs,omitempty"`
+	OwnerID         string                 `json:"ownerID"`
 	ProgramIDs      []string               `json:"programIDs,omitempty"`
 	ViewerIDs       []string               `json:"viewerIDs,omitempty"`
 	EditorIDs       []string               `json:"editorIDs,omitempty"`
@@ -14021,6 +14023,7 @@ type Organization struct {
 	Programs                []*Program                `json:"programs,omitempty"`
 	Procedures              []*Procedure              `json:"procedures,omitempty"`
 	Internalpolicies        []*InternalPolicy         `json:"internalpolicies,omitempty"`
+	Risks                   []*Risk                   `json:"risks,omitempty"`
 	Members                 []*OrgMembership          `json:"members,omitempty"`
 }
 
@@ -15166,6 +15169,9 @@ type OrganizationWhereInput struct {
 	// internalpolicies edge predicates
 	HasInternalpolicies     *bool                       `json:"hasInternalpolicies,omitempty"`
 	HasInternalpoliciesWith []*InternalPolicyWhereInput `json:"hasInternalpoliciesWith,omitempty"`
+	// risks edge predicates
+	HasRisks     *bool             `json:"hasRisks,omitempty"`
+	HasRisksWith []*RiskWhereInput `json:"hasRisksWith,omitempty"`
 	// members edge predicates
 	HasMembers     *bool                      `json:"hasMembers,omitempty"`
 	HasMembersWith []*OrgMembershipWhereInput `json:"hasMembersWith,omitempty"`
@@ -17093,11 +17099,14 @@ type Risk struct {
 	// which controls are satisfied by the risk
 	Satisfies *string `json:"satisfies,omitempty"`
 	// json data for the risk document
-	Details     map[string]interface{} `json:"details,omitempty"`
-	Control     []*Control             `json:"control,omitempty"`
-	Procedure   []*Procedure           `json:"procedure,omitempty"`
-	Actionplans []*ActionPlan          `json:"actionplans,omitempty"`
-	Program     []*Program             `json:"program,omitempty"`
+	Details map[string]interface{} `json:"details,omitempty"`
+	// the ID of the organization owner of the risk
+	OwnerID     string        `json:"ownerID"`
+	Control     []*Control    `json:"control,omitempty"`
+	Procedure   []*Procedure  `json:"procedure,omitempty"`
+	Actionplans []*ActionPlan `json:"actionplans,omitempty"`
+	Owner       *Organization `json:"owner"`
+	Program     []*Program    `json:"program,omitempty"`
 	// provides view access to the risk to members of the group
 	Viewers []*Group `json:"viewers,omitempty"`
 	// provides edit access to the risk to members of the group
@@ -17177,6 +17186,8 @@ type RiskHistory struct {
 	Satisfies *string `json:"satisfies,omitempty"`
 	// json data for the risk document
 	Details map[string]interface{} `json:"details,omitempty"`
+	// the ID of the organization owner of the risk
+	OwnerID string `json:"ownerID"`
 }
 
 func (RiskHistory) IsNode() {}
@@ -17451,6 +17462,20 @@ type RiskHistoryWhereInput struct {
 	SatisfiesNotNil       *bool    `json:"satisfiesNotNil,omitempty"`
 	SatisfiesEqualFold    *string  `json:"satisfiesEqualFold,omitempty"`
 	SatisfiesContainsFold *string  `json:"satisfiesContainsFold,omitempty"`
+	// owner_id field predicates
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 }
 
 type RiskSearchResult struct {
@@ -17687,6 +17712,20 @@ type RiskWhereInput struct {
 	SatisfiesNotNil       *bool    `json:"satisfiesNotNil,omitempty"`
 	SatisfiesEqualFold    *string  `json:"satisfiesEqualFold,omitempty"`
 	SatisfiesContainsFold *string  `json:"satisfiesContainsFold,omitempty"`
+	// owner_id field predicates
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 	// control edge predicates
 	HasControl     *bool                `json:"hasControl,omitempty"`
 	HasControlWith []*ControlWhereInput `json:"hasControlWith,omitempty"`
@@ -17696,6 +17735,9 @@ type RiskWhereInput struct {
 	// actionplans edge predicates
 	HasActionplans     *bool                   `json:"hasActionplans,omitempty"`
 	HasActionplansWith []*ActionPlanWhereInput `json:"hasActionplansWith,omitempty"`
+	// owner edge predicates
+	HasOwner     *bool                     `json:"hasOwner,omitempty"`
+	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
 	// program edge predicates
 	HasProgram     *bool                `json:"hasProgram,omitempty"`
 	HasProgramWith []*ProgramWhereInput `json:"hasProgramWith,omitempty"`
@@ -21690,6 +21732,9 @@ type UpdateOrganizationInput struct {
 	AddInternalpolicyIDs             []string                        `json:"addInternalpolicyIDs,omitempty"`
 	RemoveInternalpolicyIDs          []string                        `json:"removeInternalpolicyIDs,omitempty"`
 	ClearInternalpolicies            *bool                           `json:"clearInternalpolicies,omitempty"`
+	AddRiskIDs                       []string                        `json:"addRiskIDs,omitempty"`
+	RemoveRiskIDs                    []string                        `json:"removeRiskIDs,omitempty"`
+	ClearRisks                       *bool                           `json:"clearRisks,omitempty"`
 	AddOrgMembers                    []*CreateOrgMembershipInput     `json:"addOrgMembers,omitempty"`
 	UpdateOrgSettings                *UpdateOrganizationSettingInput `json:"updateOrgSettings,omitempty"`
 }
@@ -21949,6 +21994,7 @@ type UpdateRiskInput struct {
 	AddActionplanIDs      []string               `json:"addActionplanIDs,omitempty"`
 	RemoveActionplanIDs   []string               `json:"removeActionplanIDs,omitempty"`
 	ClearActionplans      *bool                  `json:"clearActionplans,omitempty"`
+	OwnerID               *string                `json:"ownerID,omitempty"`
 	AddProgramIDs         []string               `json:"addProgramIDs,omitempty"`
 	RemoveProgramIDs      []string               `json:"removeProgramIDs,omitempty"`
 	ClearProgram          *bool                  `json:"clearProgram,omitempty"`

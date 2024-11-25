@@ -38,6 +38,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
@@ -84,6 +85,7 @@ type OrganizationQuery struct {
 	withPrograms                     *ProgramQuery
 	withProcedures                   *ProcedureQuery
 	withInternalpolicies             *InternalPolicyQuery
+	withRisks                        *RiskQuery
 	withMembers                      *OrgMembershipQuery
 	loadTotal                        []func(context.Context, []*Organization) error
 	modifiers                        []func(*sql.Selector)
@@ -115,6 +117,7 @@ type OrganizationQuery struct {
 	withNamedPrograms                map[string]*ProgramQuery
 	withNamedProcedures              map[string]*ProcedureQuery
 	withNamedInternalpolicies        map[string]*InternalPolicyQuery
+	withNamedRisks                   map[string]*RiskQuery
 	withNamedMembers                 map[string]*OrgMembershipQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -902,6 +905,31 @@ func (oq *OrganizationQuery) QueryInternalpolicies() *InternalPolicyQuery {
 	return query
 }
 
+// QueryRisks chains the current query on the "risks" edge.
+func (oq *OrganizationQuery) QueryRisks() *RiskQuery {
+	query := (&RiskClient{config: oq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := oq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := oq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(risk.Table, risk.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.RisksTable, organization.RisksColumn),
+		)
+		schemaConfig := oq.schemaConfig
+		step.To.Schema = schemaConfig.Risk
+		step.Edge.Schema = schemaConfig.Risk
+		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryMembers chains the current query on the "members" edge.
 func (oq *OrganizationQuery) QueryMembers() *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: oq.config}).Query()
@@ -1149,6 +1177,7 @@ func (oq *OrganizationQuery) Clone() *OrganizationQuery {
 		withPrograms:                oq.withPrograms.Clone(),
 		withProcedures:              oq.withProcedures.Clone(),
 		withInternalpolicies:        oq.withInternalpolicies.Clone(),
+		withRisks:                   oq.withRisks.Clone(),
 		withMembers:                 oq.withMembers.Clone(),
 		// clone intermediate query.
 		sql:       oq.sql.Clone(),
@@ -1487,6 +1516,17 @@ func (oq *OrganizationQuery) WithInternalpolicies(opts ...func(*InternalPolicyQu
 	return oq
 }
 
+// WithRisks tells the query-builder to eager-load the nodes that are connected to
+// the "risks" edge. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithRisks(opts ...func(*RiskQuery)) *OrganizationQuery {
+	query := (&RiskClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	oq.withRisks = query
+	return oq
+}
+
 // WithMembers tells the query-builder to eager-load the nodes that are connected to
 // the "members" edge. The optional arguments are used to configure the query builder of the edge.
 func (oq *OrganizationQuery) WithMembers(opts ...func(*OrgMembershipQuery)) *OrganizationQuery {
@@ -1582,7 +1622,7 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = oq.querySpec()
-		loadedTypes = [31]bool{
+		loadedTypes = [32]bool{
 			oq.withParent != nil,
 			oq.withChildren != nil,
 			oq.withGroups != nil,
@@ -1613,6 +1653,7 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			oq.withPrograms != nil,
 			oq.withProcedures != nil,
 			oq.withInternalpolicies != nil,
+			oq.withRisks != nil,
 			oq.withMembers != nil,
 		}
 	)
@@ -1857,6 +1898,13 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	if query := oq.withRisks; query != nil {
+		if err := oq.loadRisks(ctx, query, nodes,
+			func(n *Organization) { n.Edges.Risks = []*Risk{} },
+			func(n *Organization, e *Risk) { n.Edges.Risks = append(n.Edges.Risks, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := oq.withMembers; query != nil {
 		if err := oq.loadMembers(ctx, query, nodes,
 			func(n *Organization) { n.Edges.Members = []*OrgMembership{} },
@@ -2057,6 +2105,13 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := oq.loadInternalpolicies(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedInternalpolicies(name) },
 			func(n *Organization, e *InternalPolicy) { n.appendNamedInternalpolicies(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range oq.withNamedRisks {
+		if err := oq.loadRisks(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedRisks(name) },
+			func(n *Organization, e *Risk) { n.appendNamedRisks(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -3167,6 +3222,37 @@ func (oq *OrganizationQuery) loadInternalpolicies(ctx context.Context, query *In
 	}
 	return nil
 }
+func (oq *OrganizationQuery) loadRisks(ctx context.Context, query *RiskQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Risk)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(risk.FieldOwnerID)
+	}
+	query.Where(predicate.Risk(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.RisksColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (oq *OrganizationQuery) loadMembers(ctx context.Context, query *OrgMembershipQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *OrgMembership)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Organization)
@@ -3688,6 +3774,20 @@ func (oq *OrganizationQuery) WithNamedInternalpolicies(name string, opts ...func
 		oq.withNamedInternalpolicies = make(map[string]*InternalPolicyQuery)
 	}
 	oq.withNamedInternalpolicies[name] = query
+	return oq
+}
+
+// WithNamedRisks tells the query-builder to eager-load the nodes that are connected to the "risks"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithNamedRisks(name string, opts ...func(*RiskQuery)) *OrganizationQuery {
+	query := (&RiskClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if oq.withNamedRisks == nil {
+		oq.withNamedRisks = make(map[string]*RiskQuery)
+	}
+	oq.withNamedRisks[name] = query
 	return oq
 }
 

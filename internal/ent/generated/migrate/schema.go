@@ -2305,6 +2305,7 @@ var (
 		{Name: "satisfies", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "details", Type: field.TypeJSON, Nullable: true},
 		{Name: "control_objective_risks", Type: field.TypeString, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString},
 	}
 	// RisksTable holds the schema information for the "risks" table.
 	RisksTable = &schema.Table{
@@ -2317,6 +2318,12 @@ var (
 				Columns:    []*schema.Column{RisksColumns[19]},
 				RefColumns: []*schema.Column{ControlObjectivesColumns[0]},
 				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "risks_organizations_risks",
+				Columns:    []*schema.Column{RisksColumns[20]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.NoAction,
 			},
 		},
 	}
@@ -2344,6 +2351,7 @@ var (
 		{Name: "mitigation", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "satisfies", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "details", Type: field.TypeJSON, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString},
 	}
 	// RiskHistoryTable holds the schema information for the "risk_history" table.
 	RiskHistoryTable = &schema.Table{
@@ -5320,6 +5328,7 @@ func init() {
 		Table: "program_membership_history",
 	}
 	RisksTable.ForeignKeys[0].RefTable = ControlObjectivesTable
+	RisksTable.ForeignKeys[1].RefTable = OrganizationsTable
 	RiskHistoryTable.Annotation = &entsql.Annotation{
 		Table: "risk_history",
 	}

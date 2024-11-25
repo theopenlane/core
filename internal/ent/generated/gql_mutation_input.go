@@ -4688,6 +4688,7 @@ type CreateOrganizationInput struct {
 	ProgramIDs                 []string
 	ProcedureIDs               []string
 	InternalpolicyIDs          []string
+	RiskIDs                    []string
 }
 
 // Mutate applies the CreateOrganizationInput on the OrganizationMutation builder.
@@ -4795,6 +4796,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.InternalpolicyIDs; len(v) > 0 {
 		m.AddInternalpolicyIDs(v...)
 	}
+	if v := i.RiskIDs; len(v) > 0 {
+		m.AddRiskIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateOrganizationInput on the OrganizationCreate builder.
@@ -4894,6 +4898,9 @@ type UpdateOrganizationInput struct {
 	ClearInternalpolicies            bool
 	AddInternalpolicyIDs             []string
 	RemoveInternalpolicyIDs          []string
+	ClearRisks                       bool
+	AddRiskIDs                       []string
+	RemoveRiskIDs                    []string
 }
 
 // Mutate applies the UpdateOrganizationInput on the OrganizationMutation builder.
@@ -5164,6 +5171,15 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveInternalpolicyIDs; len(v) > 0 {
 		m.RemoveInternalpolicyIDs(v...)
+	}
+	if i.ClearRisks {
+		m.ClearRisks()
+	}
+	if v := i.AddRiskIDs; len(v) > 0 {
+		m.AddRiskIDs(v...)
+	}
+	if v := i.RemoveRiskIDs; len(v) > 0 {
+		m.RemoveRiskIDs(v...)
 	}
 }
 
@@ -6237,6 +6253,7 @@ type CreateRiskInput struct {
 	ControlIDs      []string
 	ProcedureIDs    []string
 	ActionplanIDs   []string
+	OwnerID         string
 	ProgramIDs      []string
 	ViewerIDs       []string
 	EditorIDs       []string
@@ -6285,6 +6302,7 @@ func (i *CreateRiskInput) Mutate(m *RiskMutation) {
 	if v := i.ActionplanIDs; len(v) > 0 {
 		m.AddActionplanIDs(v...)
 	}
+	m.SetOwnerID(i.OwnerID)
 	if v := i.ProgramIDs; len(v) > 0 {
 		m.AddProgramIDs(v...)
 	}
@@ -6338,6 +6356,7 @@ type UpdateRiskInput struct {
 	ClearActionplans      bool
 	AddActionplanIDs      []string
 	RemoveActionplanIDs   []string
+	OwnerID               *string
 	ClearProgram          bool
 	AddProgramIDs         []string
 	RemoveProgramIDs      []string
@@ -6446,6 +6465,9 @@ func (i *UpdateRiskInput) Mutate(m *RiskMutation) {
 	}
 	if v := i.RemoveActionplanIDs; len(v) > 0 {
 		m.RemoveActionplanIDs(v...)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
 	}
 	if i.ClearProgram {
 		m.ClearProgram()

@@ -3379,11 +3379,13 @@ func init() {
 
 	risk.Hooks[4] = riskMixinHooks4[1]
 
-	risk.Hooks[5] = riskHooks[0]
+	risk.Hooks[5] = riskMixinHooks4[2]
 
-	risk.Hooks[6] = riskHooks[1]
+	risk.Hooks[6] = riskHooks[0]
 
-	risk.Hooks[7] = riskHooks[2]
+	risk.Hooks[7] = riskHooks[1]
+
+	risk.Hooks[8] = riskHooks[2]
 	riskMixinInters1 := riskMixin[1].Interceptors()
 	riskMixinInters4 := riskMixin[4].Interceptors()
 	riskInters := schema.Risk{}.Interceptors()
@@ -3420,6 +3422,10 @@ func init() {
 	riskDescName := riskFields[0].Descriptor()
 	// risk.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	risk.NameValidator = riskDescName.Validators[0].(func(string) error)
+	// riskDescOwnerID is the schema descriptor for owner_id field.
+	riskDescOwnerID := riskFields[10].Descriptor()
+	// risk.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	risk.OwnerIDValidator = riskDescOwnerID.Validators[0].(func(string) error)
 	// riskDescID is the schema descriptor for id field.
 	riskDescID := riskMixinFields2[0].Descriptor()
 	// risk.DefaultID holds the default value on creation for the id field.

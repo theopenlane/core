@@ -1912,6 +1912,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			risk.FieldMitigation:    {Type: field.TypeString, Column: risk.FieldMitigation},
 			risk.FieldSatisfies:     {Type: field.TypeString, Column: risk.FieldSatisfies},
 			risk.FieldDetails:       {Type: field.TypeJSON, Column: risk.FieldDetails},
+			risk.FieldOwnerID:       {Type: field.TypeString, Column: risk.FieldOwnerID},
 		},
 	}
 	graph.Nodes[63] = &sqlgraph.Node{
@@ -1946,6 +1947,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			riskhistory.FieldMitigation:    {Type: field.TypeString, Column: riskhistory.FieldMitigation},
 			riskhistory.FieldSatisfies:     {Type: field.TypeString, Column: riskhistory.FieldSatisfies},
 			riskhistory.FieldDetails:       {Type: field.TypeJSON, Column: riskhistory.FieldDetails},
+			riskhistory.FieldOwnerID:       {Type: field.TypeString, Column: riskhistory.FieldOwnerID},
 		},
 	}
 	graph.Nodes[64] = &sqlgraph.Node{
@@ -4546,6 +4548,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"InternalPolicy",
 	)
 	graph.MustAddE(
+		"risks",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.RisksTable,
+			Columns: []string{organization.RisksColumn},
+			Bidi:    false,
+		},
+		"Organization",
+		"Risk",
+	)
+	graph.MustAddE(
 		"members",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -5012,6 +5026,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Risk",
 		"ActionPlan",
+	)
+	graph.MustAddE(
+		"owner",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   risk.OwnerTable,
+			Columns: []string{risk.OwnerColumn},
+			Bidi:    false,
+		},
+		"Risk",
+		"Organization",
 	)
 	graph.MustAddE(
 		"program",
@@ -14133,6 +14159,20 @@ func (f *OrganizationFilter) WhereHasInternalpoliciesWith(preds ...predicate.Int
 	})))
 }
 
+// WhereHasRisks applies a predicate to check if query has an edge risks.
+func (f *OrganizationFilter) WhereHasRisks() {
+	f.Where(entql.HasEdge("risks"))
+}
+
+// WhereHasRisksWith applies a predicate to check if query has an edge risks with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasRisksWith(preds ...predicate.Risk) {
+	f.Where(entql.HasEdgeWith("risks", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasMembers applies a predicate to check if query has an edge members.
 func (f *OrganizationFilter) WhereHasMembers() {
 	f.Where(entql.HasEdge("members"))
@@ -16112,6 +16152,11 @@ func (f *RiskFilter) WhereDetails(p entql.BytesP) {
 	f.Where(p.Field(risk.FieldDetails))
 }
 
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *RiskFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(risk.FieldOwnerID))
+}
+
 // WhereHasControl applies a predicate to check if query has an edge control.
 func (f *RiskFilter) WhereHasControl() {
 	f.Where(entql.HasEdge("control"))
@@ -16148,6 +16193,20 @@ func (f *RiskFilter) WhereHasActionplans() {
 // WhereHasActionplansWith applies a predicate to check if query has an edge actionplans with a given conditions (other predicates).
 func (f *RiskFilter) WhereHasActionplansWith(preds ...predicate.ActionPlan) {
 	f.Where(entql.HasEdgeWith("actionplans", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasOwner applies a predicate to check if query has an edge owner.
+func (f *RiskFilter) WhereHasOwner() {
+	f.Where(entql.HasEdge("owner"))
+}
+
+// WhereHasOwnerWith applies a predicate to check if query has an edge owner with a given conditions (other predicates).
+func (f *RiskFilter) WhereHasOwnerWith(preds ...predicate.Organization) {
+	f.Where(entql.HasEdgeWith("owner", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -16353,6 +16412,11 @@ func (f *RiskHistoryFilter) WhereSatisfies(p entql.StringP) {
 // WhereDetails applies the entql json.RawMessage predicate on the details field.
 func (f *RiskHistoryFilter) WhereDetails(p entql.BytesP) {
 	f.Where(p.Field(riskhistory.FieldDetails))
+}
+
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *RiskHistoryFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(riskhistory.FieldOwnerID))
 }
 
 // addPredicate implements the predicateAdder interface.

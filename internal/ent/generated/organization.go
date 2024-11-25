@@ -117,13 +117,15 @@ type OrganizationEdges struct {
 	Procedures []*Procedure `json:"procedures,omitempty"`
 	// Internalpolicies holds the value of the internalpolicies edge.
 	Internalpolicies []*InternalPolicy `json:"internalpolicies,omitempty"`
+	// Risks holds the value of the risks edge.
+	Risks []*Risk `json:"risks,omitempty"`
 	// Members holds the value of the members edge.
 	Members []*OrgMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [31]bool
+	loadedTypes [32]bool
 	// totalCount holds the count of the edges above.
-	totalCount [31]map[string]int
+	totalCount [32]map[string]int
 
 	namedChildren                map[string][]*Organization
 	namedGroups                  map[string][]*Group
@@ -153,6 +155,7 @@ type OrganizationEdges struct {
 	namedPrograms                map[string][]*Program
 	namedProcedures              map[string][]*Procedure
 	namedInternalpolicies        map[string][]*InternalPolicy
+	namedRisks                   map[string][]*Risk
 	namedMembers                 map[string][]*OrgMembership
 }
 
@@ -430,10 +433,19 @@ func (e OrganizationEdges) InternalpoliciesOrErr() ([]*InternalPolicy, error) {
 	return nil, &NotLoadedError{edge: "internalpolicies"}
 }
 
+// RisksOrErr returns the Risks value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) RisksOrErr() ([]*Risk, error) {
+	if e.loadedTypes[30] {
+		return e.Risks, nil
+	}
+	return nil, &NotLoadedError{edge: "risks"}
+}
+
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) MembersOrErr() ([]*OrgMembership, error) {
-	if e.loadedTypes[30] {
+	if e.loadedTypes[31] {
 		return e.Members, nil
 	}
 	return nil, &NotLoadedError{edge: "members"}
@@ -727,6 +739,11 @@ func (o *Organization) QueryProcedures() *ProcedureQuery {
 // QueryInternalpolicies queries the "internalpolicies" edge of the Organization entity.
 func (o *Organization) QueryInternalpolicies() *InternalPolicyQuery {
 	return NewOrganizationClient(o.config).QueryInternalpolicies(o)
+}
+
+// QueryRisks queries the "risks" edge of the Organization entity.
+func (o *Organization) QueryRisks() *RiskQuery {
+	return NewOrganizationClient(o.config).QueryRisks(o)
 }
 
 // QueryMembers queries the "members" edge of the Organization entity.
@@ -1476,6 +1493,30 @@ func (o *Organization) appendNamedInternalpolicies(name string, edges ...*Intern
 		o.Edges.namedInternalpolicies[name] = []*InternalPolicy{}
 	} else {
 		o.Edges.namedInternalpolicies[name] = append(o.Edges.namedInternalpolicies[name], edges...)
+	}
+}
+
+// NamedRisks returns the Risks named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (o *Organization) NamedRisks(name string) ([]*Risk, error) {
+	if o.Edges.namedRisks == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := o.Edges.namedRisks[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (o *Organization) appendNamedRisks(name string, edges ...*Risk) {
+	if o.Edges.namedRisks == nil {
+		o.Edges.namedRisks = make(map[string][]*Risk)
+	}
+	if len(edges) == 0 {
+		o.Edges.namedRisks[name] = []*Risk{}
+	} else {
+		o.Edges.namedRisks[name] = append(o.Edges.namedRisks[name], edges...)
 	}
 }
 

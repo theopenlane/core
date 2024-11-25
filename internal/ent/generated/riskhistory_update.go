@@ -309,6 +309,20 @@ func (rhu *RiskHistoryUpdate) ClearDetails() *RiskHistoryUpdate {
 	return rhu
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (rhu *RiskHistoryUpdate) SetOwnerID(s string) *RiskHistoryUpdate {
+	rhu.mutation.SetOwnerID(s)
+	return rhu
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (rhu *RiskHistoryUpdate) SetNillableOwnerID(s *string) *RiskHistoryUpdate {
+	if s != nil {
+		rhu.SetOwnerID(*s)
+	}
+	return rhu
+}
+
 // Mutation returns the RiskHistoryMutation object of the builder.
 func (rhu *RiskHistoryUpdate) Mutation() *RiskHistoryMutation {
 	return rhu.mutation
@@ -489,6 +503,9 @@ func (rhu *RiskHistoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if rhu.mutation.DetailsCleared() {
 		_spec.ClearField(riskhistory.FieldDetails, field.TypeJSON)
+	}
+	if value, ok := rhu.mutation.OwnerID(); ok {
+		_spec.SetField(riskhistory.FieldOwnerID, field.TypeString, value)
 	}
 	_spec.Node.Schema = rhu.schemaConfig.RiskHistory
 	ctx = internal.NewSchemaConfigContext(ctx, rhu.schemaConfig)
@@ -790,6 +807,20 @@ func (rhuo *RiskHistoryUpdateOne) ClearDetails() *RiskHistoryUpdateOne {
 	return rhuo
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (rhuo *RiskHistoryUpdateOne) SetOwnerID(s string) *RiskHistoryUpdateOne {
+	rhuo.mutation.SetOwnerID(s)
+	return rhuo
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (rhuo *RiskHistoryUpdateOne) SetNillableOwnerID(s *string) *RiskHistoryUpdateOne {
+	if s != nil {
+		rhuo.SetOwnerID(*s)
+	}
+	return rhuo
+}
+
 // Mutation returns the RiskHistoryMutation object of the builder.
 func (rhuo *RiskHistoryUpdateOne) Mutation() *RiskHistoryMutation {
 	return rhuo.mutation
@@ -1000,6 +1031,9 @@ func (rhuo *RiskHistoryUpdateOne) sqlSave(ctx context.Context) (_node *RiskHisto
 	}
 	if rhuo.mutation.DetailsCleared() {
 		_spec.ClearField(riskhistory.FieldDetails, field.TypeJSON)
+	}
+	if value, ok := rhuo.mutation.OwnerID(); ok {
+		_spec.SetField(riskhistory.FieldOwnerID, field.TypeString, value)
 	}
 	_spec.Node.Schema = rhuo.schemaConfig.RiskHistory
 	ctx = internal.NewSchemaConfigContext(ctx, rhuo.schemaConfig)

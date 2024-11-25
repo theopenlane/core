@@ -60,6 +60,8 @@ const (
 	FieldSatisfies = "satisfies"
 	// FieldDetails holds the string denoting the details field in the database.
 	FieldDetails = "details"
+	// FieldOwnerID holds the string denoting the owner_id field in the database.
+	FieldOwnerID = "owner_id"
 	// Table holds the table name of the riskhistory in the database.
 	Table = "risk_history"
 )
@@ -88,6 +90,7 @@ var Columns = []string{
 	FieldMitigation,
 	FieldSatisfies,
 	FieldDetails,
+	FieldOwnerID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -260,6 +263,11 @@ func ByMitigation(opts ...sql.OrderTermOption) OrderOption {
 // BySatisfies orders the results by the satisfies field.
 func BySatisfies(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSatisfies, opts...).ToFunc()
+}
+
+// ByOwnerID orders the results by the owner_id field.
+func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
 }
 
 var (
