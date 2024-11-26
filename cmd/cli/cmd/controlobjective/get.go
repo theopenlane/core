@@ -28,6 +28,7 @@ func get(ctx context.Context) error {
 	client, err := cmd.SetupClientWithAuth(ctx)
 	cobra.CheckErr(err)
 	defer cmd.StoreSessionCookies(client)
+
 	// filter options
 	id := cmd.Config.String("id")
 

@@ -89,6 +89,7 @@ func jsonOutput(out any) error {
 func tableOutput(out []openlaneclient.ControlObjective) {
 	// create a table writer
 	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "Name", "Program(s)", "Description", "Status", "Type", "Version", "ControlNumber", "Family", "Class", "Source", "MappedFrameworks")
+
 	for _, i := range out {
 		programs := []string{}
 
