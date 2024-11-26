@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/privacy"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
+	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/entitlement"
@@ -552,6 +553,13 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 	if exists, err := FromContext(ctx).Risk.Query().Where((risk.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if riskCount, err := FromContext(ctx).Risk.Delete().Where(risk.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			log.Debug().Err(err).Int("count", riskCount).Msg("deleting risk")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).ControlObjective.Query().Where((controlobjective.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if controlobjectiveCount, err := FromContext(ctx).ControlObjective.Delete().Where(controlobjective.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", controlobjectiveCount).Msg("deleting controlobjective")
 			return err
 		}
 	}

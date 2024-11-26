@@ -119,13 +119,15 @@ type OrganizationEdges struct {
 	Internalpolicies []*InternalPolicy `json:"internalpolicies,omitempty"`
 	// Risks holds the value of the risks edge.
 	Risks []*Risk `json:"risks,omitempty"`
+	// Controlobjectives holds the value of the controlobjectives edge.
+	Controlobjectives []*ControlObjective `json:"controlobjectives,omitempty"`
 	// Members holds the value of the members edge.
 	Members []*OrgMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [32]bool
+	loadedTypes [33]bool
 	// totalCount holds the count of the edges above.
-	totalCount [32]map[string]int
+	totalCount [33]map[string]int
 
 	namedChildren                map[string][]*Organization
 	namedGroups                  map[string][]*Group
@@ -156,6 +158,7 @@ type OrganizationEdges struct {
 	namedProcedures              map[string][]*Procedure
 	namedInternalpolicies        map[string][]*InternalPolicy
 	namedRisks                   map[string][]*Risk
+	namedControlobjectives       map[string][]*ControlObjective
 	namedMembers                 map[string][]*OrgMembership
 }
 
@@ -442,10 +445,19 @@ func (e OrganizationEdges) RisksOrErr() ([]*Risk, error) {
 	return nil, &NotLoadedError{edge: "risks"}
 }
 
+// ControlobjectivesOrErr returns the Controlobjectives value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) ControlobjectivesOrErr() ([]*ControlObjective, error) {
+	if e.loadedTypes[31] {
+		return e.Controlobjectives, nil
+	}
+	return nil, &NotLoadedError{edge: "controlobjectives"}
+}
+
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) MembersOrErr() ([]*OrgMembership, error) {
-	if e.loadedTypes[31] {
+	if e.loadedTypes[32] {
 		return e.Members, nil
 	}
 	return nil, &NotLoadedError{edge: "members"}
@@ -744,6 +756,11 @@ func (o *Organization) QueryInternalpolicies() *InternalPolicyQuery {
 // QueryRisks queries the "risks" edge of the Organization entity.
 func (o *Organization) QueryRisks() *RiskQuery {
 	return NewOrganizationClient(o.config).QueryRisks(o)
+}
+
+// QueryControlobjectives queries the "controlobjectives" edge of the Organization entity.
+func (o *Organization) QueryControlobjectives() *ControlObjectiveQuery {
+	return NewOrganizationClient(o.config).QueryControlobjectives(o)
 }
 
 // QueryMembers queries the "members" edge of the Organization entity.
@@ -1517,6 +1534,30 @@ func (o *Organization) appendNamedRisks(name string, edges ...*Risk) {
 		o.Edges.namedRisks[name] = []*Risk{}
 	} else {
 		o.Edges.namedRisks[name] = append(o.Edges.namedRisks[name], edges...)
+	}
+}
+
+// NamedControlobjectives returns the Controlobjectives named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (o *Organization) NamedControlobjectives(name string) ([]*ControlObjective, error) {
+	if o.Edges.namedControlobjectives == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := o.Edges.namedControlobjectives[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (o *Organization) appendNamedControlobjectives(name string, edges ...*ControlObjective) {
+	if o.Edges.namedControlobjectives == nil {
+		o.Edges.namedControlobjectives = make(map[string][]*ControlObjective)
+	}
+	if len(edges) == 0 {
+		o.Edges.namedControlobjectives[name] = []*ControlObjective{}
+	} else {
+		o.Edges.namedControlobjectives[name] = append(o.Edges.namedControlobjectives[name], edges...)
 	}
 }
 

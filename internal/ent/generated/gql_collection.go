@@ -1379,6 +1379,60 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
+		case "owner":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: co.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			co.withOwner = query
+			if _, ok := fieldSeen[controlobjective.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, controlobjective.FieldOwnerID)
+				fieldSeen[controlobjective.FieldOwnerID] = struct{}{}
+			}
+
+		case "blockedGroups":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&GroupClient{config: co.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
+				return err
+			}
+			co.WithNamedBlockedGroups(alias, func(wq *GroupQuery) {
+				*wq = *query
+			})
+
+		case "editors":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&GroupClient{config: co.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
+				return err
+			}
+			co.WithNamedEditors(alias, func(wq *GroupQuery) {
+				*wq = *query
+			})
+
+		case "viewers":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&GroupClient{config: co.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
+				return err
+			}
+			co.WithNamedViewers(alias, func(wq *GroupQuery) {
+				*wq = *query
+			})
+
 		case "policy":
 			var (
 				alias = field.Alias
@@ -1529,6 +1583,11 @@ func (co *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 			if _, ok := fieldSeen[controlobjective.FieldTags]; !ok {
 				selectedFields = append(selectedFields, controlobjective.FieldTags)
 				fieldSeen[controlobjective.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[controlobjective.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, controlobjective.FieldOwnerID)
+				fieldSeen[controlobjective.FieldOwnerID] = struct{}{}
 			}
 		case "name":
 			if _, ok := fieldSeen[controlobjective.FieldName]; !ok {
@@ -1696,6 +1755,11 @@ func (coh *ControlObjectiveHistoryQuery) collectField(ctx context.Context, oneNo
 			if _, ok := fieldSeen[controlobjectivehistory.FieldTags]; !ok {
 				selectedFields = append(selectedFields, controlobjectivehistory.FieldTags)
 				fieldSeen[controlobjectivehistory.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[controlobjectivehistory.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, controlobjectivehistory.FieldOwnerID)
+				fieldSeen[controlobjectivehistory.FieldOwnerID] = struct{}{}
 			}
 		case "name":
 			if _, ok := fieldSeen[controlobjectivehistory.FieldName]; !ok {
@@ -5362,6 +5426,45 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				*wq = *query
 			})
 
+		case "controlobjectiveViewers":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ControlObjectiveClient{config: gr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, controlobjectiveImplementors)...); err != nil {
+				return err
+			}
+			gr.WithNamedControlobjectiveViewers(alias, func(wq *ControlObjectiveQuery) {
+				*wq = *query
+			})
+
+		case "controlobjectiveEditors":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ControlObjectiveClient{config: gr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, controlobjectiveImplementors)...); err != nil {
+				return err
+			}
+			gr.WithNamedControlobjectiveEditors(alias, func(wq *ControlObjectiveQuery) {
+				*wq = *query
+			})
+
+		case "controlobjectiveBlockedGroups":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ControlObjectiveClient{config: gr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, controlobjectiveImplementors)...); err != nil {
+				return err
+			}
+			gr.WithNamedControlobjectiveBlockedGroups(alias, func(wq *ControlObjectiveQuery) {
+				*wq = *query
+			})
+
 		case "members":
 			var (
 				alias = field.Alias
@@ -6931,6 +7034,32 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 				fieldSeen[internalpolicy.FieldOwnerID] = struct{}{}
 			}
 
+		case "blockedGroups":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&GroupClient{config: ip.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
+				return err
+			}
+			ip.WithNamedBlockedGroups(alias, func(wq *GroupQuery) {
+				*wq = *query
+			})
+
+		case "editors":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&GroupClient{config: ip.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
+				return err
+			}
+			ip.WithNamedEditors(alias, func(wq *GroupQuery) {
+				*wq = *query
+			})
+
 		case "controlobjectives":
 			var (
 				alias = field.Alias
@@ -7006,32 +7135,6 @@ func (ip *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 				return err
 			}
 			ip.WithNamedPrograms(alias, func(wq *ProgramQuery) {
-				*wq = *query
-			})
-
-		case "editors":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&GroupClient{config: ip.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
-				return err
-			}
-			ip.WithNamedEditors(alias, func(wq *GroupQuery) {
-				*wq = *query
-			})
-
-		case "blockedGroups":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&GroupClient{config: ip.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
-				return err
-			}
-			ip.WithNamedBlockedGroups(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -9312,6 +9415,19 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				*wq = *query
 			})
 
+		case "controlobjectives":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ControlObjectiveClient{config: o.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, controlobjectiveImplementors)...); err != nil {
+				return err
+			}
+			o.WithNamedControlobjectives(alias, func(wq *ControlObjectiveQuery) {
+				*wq = *query
+			})
+
 		case "members":
 			var (
 				alias = field.Alias
@@ -10148,6 +10264,32 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				fieldSeen[procedure.FieldOwnerID] = struct{}{}
 			}
 
+		case "blockedGroups":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&GroupClient{config: pr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
+				return err
+			}
+			pr.WithNamedBlockedGroups(alias, func(wq *GroupQuery) {
+				*wq = *query
+			})
+
+		case "editors":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&GroupClient{config: pr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
+				return err
+			}
+			pr.WithNamedEditors(alias, func(wq *GroupQuery) {
+				*wq = *query
+			})
+
 		case "control":
 			var (
 				alias = field.Alias
@@ -10223,32 +10365,6 @@ func (pr *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				return err
 			}
 			pr.WithNamedPrograms(alias, func(wq *ProgramQuery) {
-				*wq = *query
-			})
-
-		case "editors":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&GroupClient{config: pr.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
-				return err
-			}
-			pr.WithNamedEditors(alias, func(wq *GroupQuery) {
-				*wq = *query
-			})
-
-		case "blockedGroups":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&GroupClient{config: pr.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
-				return err
-			}
-			pr.WithNamedBlockedGroups(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -10576,6 +10692,45 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				fieldSeen[program.FieldOwnerID] = struct{}{}
 			}
 
+		case "blockedGroups":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&GroupClient{config: pr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
+				return err
+			}
+			pr.WithNamedBlockedGroups(alias, func(wq *GroupQuery) {
+				*wq = *query
+			})
+
+		case "editors":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&GroupClient{config: pr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
+				return err
+			}
+			pr.WithNamedEditors(alias, func(wq *GroupQuery) {
+				*wq = *query
+			})
+
+		case "viewers":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&GroupClient{config: pr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
+				return err
+			}
+			pr.WithNamedViewers(alias, func(wq *GroupQuery) {
+				*wq = *query
+			})
+
 		case "controls":
 			var (
 				alias = field.Alias
@@ -10742,45 +10897,6 @@ func (pr *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				return err
 			}
 			pr.WithNamedUsers(alias, func(wq *UserQuery) {
-				*wq = *query
-			})
-
-		case "viewers":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&GroupClient{config: pr.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
-				return err
-			}
-			pr.WithNamedViewers(alias, func(wq *GroupQuery) {
-				*wq = *query
-			})
-
-		case "editors":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&GroupClient{config: pr.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
-				return err
-			}
-			pr.WithNamedEditors(alias, func(wq *GroupQuery) {
-				*wq = *query
-			})
-
-		case "blockedGroups":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&GroupClient{config: pr.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
-				return err
-			}
-			pr.WithNamedBlockedGroups(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 
@@ -11355,6 +11471,60 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
+		case "owner":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: r.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			r.withOwner = query
+			if _, ok := fieldSeen[risk.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, risk.FieldOwnerID)
+				fieldSeen[risk.FieldOwnerID] = struct{}{}
+			}
+
+		case "blockedGroups":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&GroupClient{config: r.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
+				return err
+			}
+			r.WithNamedBlockedGroups(alias, func(wq *GroupQuery) {
+				*wq = *query
+			})
+
+		case "editors":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&GroupClient{config: r.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
+				return err
+			}
+			r.WithNamedEditors(alias, func(wq *GroupQuery) {
+				*wq = *query
+			})
+
+		case "viewers":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&GroupClient{config: r.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
+				return err
+			}
+			r.WithNamedViewers(alias, func(wq *GroupQuery) {
+				*wq = *query
+			})
+
 		case "control":
 			var (
 				alias = field.Alias
@@ -11394,22 +11564,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				*wq = *query
 			})
 
-		case "owner":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&OrganizationClient{config: r.config}).Query()
-			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
-				return err
-			}
-			r.withOwner = query
-			if _, ok := fieldSeen[risk.FieldOwnerID]; !ok {
-				selectedFields = append(selectedFields, risk.FieldOwnerID)
-				fieldSeen[risk.FieldOwnerID] = struct{}{}
-			}
-
-		case "program":
+		case "programs":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -11418,46 +11573,7 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, programImplementors)...); err != nil {
 				return err
 			}
-			r.WithNamedProgram(alias, func(wq *ProgramQuery) {
-				*wq = *query
-			})
-
-		case "viewers":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&GroupClient{config: r.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
-				return err
-			}
-			r.WithNamedViewers(alias, func(wq *GroupQuery) {
-				*wq = *query
-			})
-
-		case "editors":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&GroupClient{config: r.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
-				return err
-			}
-			r.WithNamedEditors(alias, func(wq *GroupQuery) {
-				*wq = *query
-			})
-
-		case "blockedGroups":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&GroupClient{config: r.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
-				return err
-			}
-			r.WithNamedBlockedGroups(alias, func(wq *GroupQuery) {
+			r.WithNamedPrograms(alias, func(wq *ProgramQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -11494,6 +11610,11 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			if _, ok := fieldSeen[risk.FieldTags]; !ok {
 				selectedFields = append(selectedFields, risk.FieldTags)
 				fieldSeen[risk.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[risk.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, risk.FieldOwnerID)
+				fieldSeen[risk.FieldOwnerID] = struct{}{}
 			}
 		case "name":
 			if _, ok := fieldSeen[risk.FieldName]; !ok {
@@ -11544,11 +11665,6 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			if _, ok := fieldSeen[risk.FieldDetails]; !ok {
 				selectedFields = append(selectedFields, risk.FieldDetails)
 				fieldSeen[risk.FieldDetails] = struct{}{}
-			}
-		case "ownerID":
-			if _, ok := fieldSeen[risk.FieldOwnerID]; !ok {
-				selectedFields = append(selectedFields, risk.FieldOwnerID)
-				fieldSeen[risk.FieldOwnerID] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -11662,6 +11778,11 @@ func (rh *RiskHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 				selectedFields = append(selectedFields, riskhistory.FieldTags)
 				fieldSeen[riskhistory.FieldTags] = struct{}{}
 			}
+		case "ownerID":
+			if _, ok := fieldSeen[riskhistory.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, riskhistory.FieldOwnerID)
+				fieldSeen[riskhistory.FieldOwnerID] = struct{}{}
+			}
 		case "name":
 			if _, ok := fieldSeen[riskhistory.FieldName]; !ok {
 				selectedFields = append(selectedFields, riskhistory.FieldName)
@@ -11711,11 +11832,6 @@ func (rh *RiskHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if _, ok := fieldSeen[riskhistory.FieldDetails]; !ok {
 				selectedFields = append(selectedFields, riskhistory.FieldDetails)
 				fieldSeen[riskhistory.FieldDetails] = struct{}{}
-			}
-		case "ownerID":
-			if _, ok := fieldSeen[riskhistory.FieldOwnerID]; !ok {
-				selectedFields = append(selectedFields, riskhistory.FieldOwnerID)
-				fieldSeen[riskhistory.FieldOwnerID] = struct{}{}
 			}
 		case "id":
 		case "__typename":

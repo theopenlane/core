@@ -77,6 +77,12 @@ const (
 	EdgeRiskEditors = "risk_editors"
 	// EdgeRiskBlockedGroups holds the string denoting the risk_blocked_groups edge name in mutations.
 	EdgeRiskBlockedGroups = "risk_blocked_groups"
+	// EdgeControlobjectiveViewers holds the string denoting the controlobjective_viewers edge name in mutations.
+	EdgeControlobjectiveViewers = "controlobjective_viewers"
+	// EdgeControlobjectiveEditors holds the string denoting the controlobjective_editors edge name in mutations.
+	EdgeControlobjectiveEditors = "controlobjective_editors"
+	// EdgeControlobjectiveBlockedGroups holds the string denoting the controlobjective_blocked_groups edge name in mutations.
+	EdgeControlobjectiveBlockedGroups = "controlobjective_blocked_groups"
 	// EdgeMembers holds the string denoting the members edge name in mutations.
 	EdgeMembers = "members"
 	// Table holds the table name of the group in the database.
@@ -172,6 +178,21 @@ const (
 	// RiskBlockedGroupsInverseTable is the table name for the Risk entity.
 	// It exists in this package in order to avoid circular dependency with the "risk" package.
 	RiskBlockedGroupsInverseTable = "risks"
+	// ControlobjectiveViewersTable is the table that holds the controlobjective_viewers relation/edge. The primary key declared below.
+	ControlobjectiveViewersTable = "control_objective_viewers"
+	// ControlobjectiveViewersInverseTable is the table name for the ControlObjective entity.
+	// It exists in this package in order to avoid circular dependency with the "controlobjective" package.
+	ControlobjectiveViewersInverseTable = "control_objectives"
+	// ControlobjectiveEditorsTable is the table that holds the controlobjective_editors relation/edge. The primary key declared below.
+	ControlobjectiveEditorsTable = "control_objective_editors"
+	// ControlobjectiveEditorsInverseTable is the table name for the ControlObjective entity.
+	// It exists in this package in order to avoid circular dependency with the "controlobjective" package.
+	ControlobjectiveEditorsInverseTable = "control_objectives"
+	// ControlobjectiveBlockedGroupsTable is the table that holds the controlobjective_blocked_groups relation/edge. The primary key declared below.
+	ControlobjectiveBlockedGroupsTable = "control_objective_blocked_groups"
+	// ControlobjectiveBlockedGroupsInverseTable is the table name for the ControlObjective entity.
+	// It exists in this package in order to avoid circular dependency with the "controlobjective" package.
+	ControlobjectiveBlockedGroupsInverseTable = "control_objectives"
 	// MembersTable is the table that holds the members relation/edge.
 	MembersTable = "group_memberships"
 	// MembersInverseTable is the table name for the GroupMembership entity.
@@ -243,6 +264,15 @@ var (
 	// RiskBlockedGroupsPrimaryKey and RiskBlockedGroupsColumn2 are the table columns denoting the
 	// primary key for the risk_blocked_groups relation (M2M).
 	RiskBlockedGroupsPrimaryKey = []string{"risk_id", "group_id"}
+	// ControlobjectiveViewersPrimaryKey and ControlobjectiveViewersColumn2 are the table columns denoting the
+	// primary key for the controlobjective_viewers relation (M2M).
+	ControlobjectiveViewersPrimaryKey = []string{"control_objective_id", "group_id"}
+	// ControlobjectiveEditorsPrimaryKey and ControlobjectiveEditorsColumn2 are the table columns denoting the
+	// primary key for the controlobjective_editors relation (M2M).
+	ControlobjectiveEditorsPrimaryKey = []string{"control_objective_id", "group_id"}
+	// ControlobjectiveBlockedGroupsPrimaryKey and ControlobjectiveBlockedGroupsColumn2 are the table columns denoting the
+	// primary key for the controlobjective_blocked_groups relation (M2M).
+	ControlobjectiveBlockedGroupsPrimaryKey = []string{"control_objective_id", "group_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -583,6 +613,48 @@ func ByRiskBlockedGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption
 	}
 }
 
+// ByControlobjectiveViewersCount orders the results by controlobjective_viewers count.
+func ByControlobjectiveViewersCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newControlobjectiveViewersStep(), opts...)
+	}
+}
+
+// ByControlobjectiveViewers orders the results by controlobjective_viewers terms.
+func ByControlobjectiveViewers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newControlobjectiveViewersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByControlobjectiveEditorsCount orders the results by controlobjective_editors count.
+func ByControlobjectiveEditorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newControlobjectiveEditorsStep(), opts...)
+	}
+}
+
+// ByControlobjectiveEditors orders the results by controlobjective_editors terms.
+func ByControlobjectiveEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newControlobjectiveEditorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByControlobjectiveBlockedGroupsCount orders the results by controlobjective_blocked_groups count.
+func ByControlobjectiveBlockedGroupsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newControlobjectiveBlockedGroupsStep(), opts...)
+	}
+}
+
+// ByControlobjectiveBlockedGroups orders the results by controlobjective_blocked_groups terms.
+func ByControlobjectiveBlockedGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newControlobjectiveBlockedGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByMembersCount orders the results by members count.
 func ByMembersCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -713,6 +785,27 @@ func newRiskBlockedGroupsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(RiskBlockedGroupsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, RiskBlockedGroupsTable, RiskBlockedGroupsPrimaryKey...),
+	)
+}
+func newControlobjectiveViewersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ControlobjectiveViewersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ControlobjectiveViewersTable, ControlobjectiveViewersPrimaryKey...),
+	)
+}
+func newControlobjectiveEditorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ControlobjectiveEditorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ControlobjectiveEditorsTable, ControlobjectiveEditorsPrimaryKey...),
+	)
+}
+func newControlobjectiveBlockedGroupsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ControlobjectiveBlockedGroupsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ControlobjectiveBlockedGroupsTable, ControlobjectiveBlockedGroupsPrimaryKey...),
 	)
 }
 func newMembersStep() *sqlgraph.Step {

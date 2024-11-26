@@ -14,8 +14,10 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
@@ -128,6 +130,20 @@ func (cou *ControlObjectiveUpdate) AppendTags(s []string) *ControlObjectiveUpdat
 // ClearTags clears the value of the "tags" field.
 func (cou *ControlObjectiveUpdate) ClearTags() *ControlObjectiveUpdate {
 	cou.mutation.ClearTags()
+	return cou
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (cou *ControlObjectiveUpdate) SetOwnerID(s string) *ControlObjectiveUpdate {
+	cou.mutation.SetOwnerID(s)
+	return cou
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (cou *ControlObjectiveUpdate) SetNillableOwnerID(s *string) *ControlObjectiveUpdate {
+	if s != nil {
+		cou.SetOwnerID(*s)
+	}
 	return cou
 }
 
@@ -337,6 +353,56 @@ func (cou *ControlObjectiveUpdate) ClearDetails() *ControlObjectiveUpdate {
 	return cou
 }
 
+// SetOwner sets the "owner" edge to the Organization entity.
+func (cou *ControlObjectiveUpdate) SetOwner(o *Organization) *ControlObjectiveUpdate {
+	return cou.SetOwnerID(o.ID)
+}
+
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (cou *ControlObjectiveUpdate) AddBlockedGroupIDs(ids ...string) *ControlObjectiveUpdate {
+	cou.mutation.AddBlockedGroupIDs(ids...)
+	return cou
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (cou *ControlObjectiveUpdate) AddBlockedGroups(g ...*Group) *ControlObjectiveUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return cou.AddBlockedGroupIDs(ids...)
+}
+
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (cou *ControlObjectiveUpdate) AddEditorIDs(ids ...string) *ControlObjectiveUpdate {
+	cou.mutation.AddEditorIDs(ids...)
+	return cou
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (cou *ControlObjectiveUpdate) AddEditors(g ...*Group) *ControlObjectiveUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return cou.AddEditorIDs(ids...)
+}
+
+// AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
+func (cou *ControlObjectiveUpdate) AddViewerIDs(ids ...string) *ControlObjectiveUpdate {
+	cou.mutation.AddViewerIDs(ids...)
+	return cou
+}
+
+// AddViewers adds the "viewers" edges to the Group entity.
+func (cou *ControlObjectiveUpdate) AddViewers(g ...*Group) *ControlObjectiveUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return cou.AddViewerIDs(ids...)
+}
+
 // AddPolicyIDs adds the "policy" edge to the InternalPolicy entity by IDs.
 func (cou *ControlObjectiveUpdate) AddPolicyIDs(ids ...string) *ControlObjectiveUpdate {
 	cou.mutation.AddPolicyIDs(ids...)
@@ -475,6 +541,75 @@ func (cou *ControlObjectiveUpdate) AddPrograms(p ...*Program) *ControlObjectiveU
 // Mutation returns the ControlObjectiveMutation object of the builder.
 func (cou *ControlObjectiveUpdate) Mutation() *ControlObjectiveMutation {
 	return cou.mutation
+}
+
+// ClearOwner clears the "owner" edge to the Organization entity.
+func (cou *ControlObjectiveUpdate) ClearOwner() *ControlObjectiveUpdate {
+	cou.mutation.ClearOwner()
+	return cou
+}
+
+// ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
+func (cou *ControlObjectiveUpdate) ClearBlockedGroups() *ControlObjectiveUpdate {
+	cou.mutation.ClearBlockedGroups()
+	return cou
+}
+
+// RemoveBlockedGroupIDs removes the "blocked_groups" edge to Group entities by IDs.
+func (cou *ControlObjectiveUpdate) RemoveBlockedGroupIDs(ids ...string) *ControlObjectiveUpdate {
+	cou.mutation.RemoveBlockedGroupIDs(ids...)
+	return cou
+}
+
+// RemoveBlockedGroups removes "blocked_groups" edges to Group entities.
+func (cou *ControlObjectiveUpdate) RemoveBlockedGroups(g ...*Group) *ControlObjectiveUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return cou.RemoveBlockedGroupIDs(ids...)
+}
+
+// ClearEditors clears all "editors" edges to the Group entity.
+func (cou *ControlObjectiveUpdate) ClearEditors() *ControlObjectiveUpdate {
+	cou.mutation.ClearEditors()
+	return cou
+}
+
+// RemoveEditorIDs removes the "editors" edge to Group entities by IDs.
+func (cou *ControlObjectiveUpdate) RemoveEditorIDs(ids ...string) *ControlObjectiveUpdate {
+	cou.mutation.RemoveEditorIDs(ids...)
+	return cou
+}
+
+// RemoveEditors removes "editors" edges to Group entities.
+func (cou *ControlObjectiveUpdate) RemoveEditors(g ...*Group) *ControlObjectiveUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return cou.RemoveEditorIDs(ids...)
+}
+
+// ClearViewers clears all "viewers" edges to the Group entity.
+func (cou *ControlObjectiveUpdate) ClearViewers() *ControlObjectiveUpdate {
+	cou.mutation.ClearViewers()
+	return cou
+}
+
+// RemoveViewerIDs removes the "viewers" edge to Group entities by IDs.
+func (cou *ControlObjectiveUpdate) RemoveViewerIDs(ids ...string) *ControlObjectiveUpdate {
+	cou.mutation.RemoveViewerIDs(ids...)
+	return cou
+}
+
+// RemoveViewers removes "viewers" edges to Group entities.
+func (cou *ControlObjectiveUpdate) RemoveViewers(g ...*Group) *ControlObjectiveUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return cou.RemoveViewerIDs(ids...)
 }
 
 // ClearPolicy clears all "policy" edges to the InternalPolicy entity.
@@ -708,6 +843,24 @@ func (cou *ControlObjectiveUpdate) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (cou *ControlObjectiveUpdate) check() error {
+	if v, ok := cou.mutation.OwnerID(); ok {
+		if err := controlobjective.OwnerIDValidator(v); err != nil {
+			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "ControlObjective.owner_id": %w`, err)}
+		}
+	}
+	if v, ok := cou.mutation.Name(); ok {
+		if err := controlobjective.NameValidator(v); err != nil {
+			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "ControlObjective.name": %w`, err)}
+		}
+	}
+	if cou.mutation.OwnerCleared() && len(cou.mutation.OwnerIDs()) > 0 {
+		return errors.New(`generated: clearing a required unique edge "ControlObjective.owner"`)
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (cou *ControlObjectiveUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ControlObjectiveUpdate {
 	cou.modifiers = append(cou.modifiers, modifiers...)
@@ -715,6 +868,9 @@ func (cou *ControlObjectiveUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder
 }
 
 func (cou *ControlObjectiveUpdate) sqlSave(ctx context.Context) (n int, err error) {
+	if err := cou.check(); err != nil {
+		return n, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(controlobjective.Table, controlobjective.Columns, sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString))
 	if ps := cou.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -826,6 +982,181 @@ func (cou *ControlObjectiveUpdate) sqlSave(ctx context.Context) (n int, err erro
 	}
 	if cou.mutation.DetailsCleared() {
 		_spec.ClearField(controlobjective.FieldDetails, field.TypeJSON)
+	}
+	if cou.mutation.OwnerCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   controlobjective.OwnerTable,
+			Columns: []string{controlobjective.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cou.schemaConfig.ControlObjective
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cou.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   controlobjective.OwnerTable,
+			Columns: []string{controlobjective.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cou.schemaConfig.ControlObjective
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if cou.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlobjective.BlockedGroupsTable,
+			Columns: controlobjective.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cou.schemaConfig.ControlObjectiveBlockedGroups
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cou.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !cou.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlobjective.BlockedGroupsTable,
+			Columns: controlobjective.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cou.schemaConfig.ControlObjectiveBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cou.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlobjective.BlockedGroupsTable,
+			Columns: controlobjective.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cou.schemaConfig.ControlObjectiveBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if cou.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlobjective.EditorsTable,
+			Columns: controlobjective.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cou.schemaConfig.ControlObjectiveEditors
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cou.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !cou.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlobjective.EditorsTable,
+			Columns: controlobjective.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cou.schemaConfig.ControlObjectiveEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cou.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlobjective.EditorsTable,
+			Columns: controlobjective.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cou.schemaConfig.ControlObjectiveEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if cou.mutation.ViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlobjective.ViewersTable,
+			Columns: controlobjective.ViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cou.schemaConfig.ControlObjectiveViewers
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cou.mutation.RemovedViewersIDs(); len(nodes) > 0 && !cou.mutation.ViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlobjective.ViewersTable,
+			Columns: controlobjective.ViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cou.schemaConfig.ControlObjectiveViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := cou.mutation.ViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlobjective.ViewersTable,
+			Columns: controlobjective.ViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cou.schemaConfig.ControlObjectiveViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if cou.mutation.PolicyCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1373,6 +1704,20 @@ func (couo *ControlObjectiveUpdateOne) ClearTags() *ControlObjectiveUpdateOne {
 	return couo
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (couo *ControlObjectiveUpdateOne) SetOwnerID(s string) *ControlObjectiveUpdateOne {
+	couo.mutation.SetOwnerID(s)
+	return couo
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (couo *ControlObjectiveUpdateOne) SetNillableOwnerID(s *string) *ControlObjectiveUpdateOne {
+	if s != nil {
+		couo.SetOwnerID(*s)
+	}
+	return couo
+}
+
 // SetName sets the "name" field.
 func (couo *ControlObjectiveUpdateOne) SetName(s string) *ControlObjectiveUpdateOne {
 	couo.mutation.SetName(s)
@@ -1579,6 +1924,56 @@ func (couo *ControlObjectiveUpdateOne) ClearDetails() *ControlObjectiveUpdateOne
 	return couo
 }
 
+// SetOwner sets the "owner" edge to the Organization entity.
+func (couo *ControlObjectiveUpdateOne) SetOwner(o *Organization) *ControlObjectiveUpdateOne {
+	return couo.SetOwnerID(o.ID)
+}
+
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (couo *ControlObjectiveUpdateOne) AddBlockedGroupIDs(ids ...string) *ControlObjectiveUpdateOne {
+	couo.mutation.AddBlockedGroupIDs(ids...)
+	return couo
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (couo *ControlObjectiveUpdateOne) AddBlockedGroups(g ...*Group) *ControlObjectiveUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return couo.AddBlockedGroupIDs(ids...)
+}
+
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (couo *ControlObjectiveUpdateOne) AddEditorIDs(ids ...string) *ControlObjectiveUpdateOne {
+	couo.mutation.AddEditorIDs(ids...)
+	return couo
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (couo *ControlObjectiveUpdateOne) AddEditors(g ...*Group) *ControlObjectiveUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return couo.AddEditorIDs(ids...)
+}
+
+// AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
+func (couo *ControlObjectiveUpdateOne) AddViewerIDs(ids ...string) *ControlObjectiveUpdateOne {
+	couo.mutation.AddViewerIDs(ids...)
+	return couo
+}
+
+// AddViewers adds the "viewers" edges to the Group entity.
+func (couo *ControlObjectiveUpdateOne) AddViewers(g ...*Group) *ControlObjectiveUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return couo.AddViewerIDs(ids...)
+}
+
 // AddPolicyIDs adds the "policy" edge to the InternalPolicy entity by IDs.
 func (couo *ControlObjectiveUpdateOne) AddPolicyIDs(ids ...string) *ControlObjectiveUpdateOne {
 	couo.mutation.AddPolicyIDs(ids...)
@@ -1717,6 +2112,75 @@ func (couo *ControlObjectiveUpdateOne) AddPrograms(p ...*Program) *ControlObject
 // Mutation returns the ControlObjectiveMutation object of the builder.
 func (couo *ControlObjectiveUpdateOne) Mutation() *ControlObjectiveMutation {
 	return couo.mutation
+}
+
+// ClearOwner clears the "owner" edge to the Organization entity.
+func (couo *ControlObjectiveUpdateOne) ClearOwner() *ControlObjectiveUpdateOne {
+	couo.mutation.ClearOwner()
+	return couo
+}
+
+// ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
+func (couo *ControlObjectiveUpdateOne) ClearBlockedGroups() *ControlObjectiveUpdateOne {
+	couo.mutation.ClearBlockedGroups()
+	return couo
+}
+
+// RemoveBlockedGroupIDs removes the "blocked_groups" edge to Group entities by IDs.
+func (couo *ControlObjectiveUpdateOne) RemoveBlockedGroupIDs(ids ...string) *ControlObjectiveUpdateOne {
+	couo.mutation.RemoveBlockedGroupIDs(ids...)
+	return couo
+}
+
+// RemoveBlockedGroups removes "blocked_groups" edges to Group entities.
+func (couo *ControlObjectiveUpdateOne) RemoveBlockedGroups(g ...*Group) *ControlObjectiveUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return couo.RemoveBlockedGroupIDs(ids...)
+}
+
+// ClearEditors clears all "editors" edges to the Group entity.
+func (couo *ControlObjectiveUpdateOne) ClearEditors() *ControlObjectiveUpdateOne {
+	couo.mutation.ClearEditors()
+	return couo
+}
+
+// RemoveEditorIDs removes the "editors" edge to Group entities by IDs.
+func (couo *ControlObjectiveUpdateOne) RemoveEditorIDs(ids ...string) *ControlObjectiveUpdateOne {
+	couo.mutation.RemoveEditorIDs(ids...)
+	return couo
+}
+
+// RemoveEditors removes "editors" edges to Group entities.
+func (couo *ControlObjectiveUpdateOne) RemoveEditors(g ...*Group) *ControlObjectiveUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return couo.RemoveEditorIDs(ids...)
+}
+
+// ClearViewers clears all "viewers" edges to the Group entity.
+func (couo *ControlObjectiveUpdateOne) ClearViewers() *ControlObjectiveUpdateOne {
+	couo.mutation.ClearViewers()
+	return couo
+}
+
+// RemoveViewerIDs removes the "viewers" edge to Group entities by IDs.
+func (couo *ControlObjectiveUpdateOne) RemoveViewerIDs(ids ...string) *ControlObjectiveUpdateOne {
+	couo.mutation.RemoveViewerIDs(ids...)
+	return couo
+}
+
+// RemoveViewers removes "viewers" edges to Group entities.
+func (couo *ControlObjectiveUpdateOne) RemoveViewers(g ...*Group) *ControlObjectiveUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return couo.RemoveViewerIDs(ids...)
 }
 
 // ClearPolicy clears all "policy" edges to the InternalPolicy entity.
@@ -1963,6 +2427,24 @@ func (couo *ControlObjectiveUpdateOne) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (couo *ControlObjectiveUpdateOne) check() error {
+	if v, ok := couo.mutation.OwnerID(); ok {
+		if err := controlobjective.OwnerIDValidator(v); err != nil {
+			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "ControlObjective.owner_id": %w`, err)}
+		}
+	}
+	if v, ok := couo.mutation.Name(); ok {
+		if err := controlobjective.NameValidator(v); err != nil {
+			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "ControlObjective.name": %w`, err)}
+		}
+	}
+	if couo.mutation.OwnerCleared() && len(couo.mutation.OwnerIDs()) > 0 {
+		return errors.New(`generated: clearing a required unique edge "ControlObjective.owner"`)
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (couo *ControlObjectiveUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ControlObjectiveUpdateOne {
 	couo.modifiers = append(couo.modifiers, modifiers...)
@@ -1970,6 +2452,9 @@ func (couo *ControlObjectiveUpdateOne) Modify(modifiers ...func(u *sql.UpdateBui
 }
 
 func (couo *ControlObjectiveUpdateOne) sqlSave(ctx context.Context) (_node *ControlObjective, err error) {
+	if err := couo.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(controlobjective.Table, controlobjective.Columns, sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString))
 	id, ok := couo.mutation.ID()
 	if !ok {
@@ -2098,6 +2583,181 @@ func (couo *ControlObjectiveUpdateOne) sqlSave(ctx context.Context) (_node *Cont
 	}
 	if couo.mutation.DetailsCleared() {
 		_spec.ClearField(controlobjective.FieldDetails, field.TypeJSON)
+	}
+	if couo.mutation.OwnerCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   controlobjective.OwnerTable,
+			Columns: []string{controlobjective.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = couo.schemaConfig.ControlObjective
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := couo.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   controlobjective.OwnerTable,
+			Columns: []string{controlobjective.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = couo.schemaConfig.ControlObjective
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if couo.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlobjective.BlockedGroupsTable,
+			Columns: controlobjective.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = couo.schemaConfig.ControlObjectiveBlockedGroups
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := couo.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !couo.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlobjective.BlockedGroupsTable,
+			Columns: controlobjective.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = couo.schemaConfig.ControlObjectiveBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := couo.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlobjective.BlockedGroupsTable,
+			Columns: controlobjective.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = couo.schemaConfig.ControlObjectiveBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if couo.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlobjective.EditorsTable,
+			Columns: controlobjective.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = couo.schemaConfig.ControlObjectiveEditors
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := couo.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !couo.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlobjective.EditorsTable,
+			Columns: controlobjective.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = couo.schemaConfig.ControlObjectiveEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := couo.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlobjective.EditorsTable,
+			Columns: controlobjective.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = couo.schemaConfig.ControlObjectiveEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if couo.mutation.ViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlobjective.ViewersTable,
+			Columns: controlobjective.ViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = couo.schemaConfig.ControlObjectiveViewers
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := couo.mutation.RemovedViewersIDs(); len(nodes) > 0 && !couo.mutation.ViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlobjective.ViewersTable,
+			Columns: controlobjective.ViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = couo.schemaConfig.ControlObjectiveViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := couo.mutation.ViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlobjective.ViewersTable,
+			Columns: controlobjective.ViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = couo.schemaConfig.ControlObjectiveViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if couo.mutation.PolicyCleared() {
 		edge := &sqlgraph.EdgeSpec{

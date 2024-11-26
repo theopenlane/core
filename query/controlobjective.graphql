@@ -67,6 +67,22 @@ mutation CreateControlObjective($input: CreateControlObjectiveInput!) {
       updatedAt
       updatedBy
       version
+      programs {
+        id
+        name
+      }
+      editors {
+        id
+        name
+      }
+      viewers {
+        id
+        name
+      }
+      blockedGroups {
+        id
+        name
+      }
     }
   }
 }
@@ -98,6 +114,22 @@ query GetAllControlObjectives {
         updatedAt
         updatedBy
         version
+        programs {
+          id
+          name
+        }
+        editors {
+          id
+          name
+        }
+        viewers {
+          id
+          name
+        }
+        blockedGroups {
+          id
+          name
+        }
       }
     }
   }
@@ -121,6 +153,22 @@ query GetControlObjectiveByID($controlObjectiveId: ID!) {
     updatedAt
     updatedBy
     version
+    programs {
+      id
+      name
+    }
+    editors {
+      id
+      name
+    }
+    viewers {
+      id
+      name
+    }
+    blockedGroups {
+      id
+      name
+    }
   }
 }
 
@@ -145,6 +193,22 @@ query GetControlObjectives($where: ControlObjectiveWhereInput) {
         updatedAt
         updatedBy
         version
+        programs {
+          id
+          name
+        }
+        editors {
+          id
+          name
+        }
+        viewers {
+          id
+          name
+        }
+        blockedGroups {
+          id
+          name
+        }
       }
     }
   }
@@ -169,6 +233,22 @@ mutation UpdateControlObjective($updateControlObjectiveId: ID!, $input: UpdateCo
       updatedAt
       updatedBy
       version
+      programs {
+        id
+        name
+      }
+      editors {
+        id
+        name
+      }
+      viewers {
+        id
+        name
+      }
+      blockedGroups {
+        id
+        name
+      }
     }
   }
 }

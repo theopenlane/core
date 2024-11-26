@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -465,6 +466,51 @@ func (gc *GroupCreate) AddRiskBlockedGroups(r ...*Risk) *GroupCreate {
 		ids[i] = r[i].ID
 	}
 	return gc.AddRiskBlockedGroupIDs(ids...)
+}
+
+// AddControlobjectiveViewerIDs adds the "controlobjective_viewers" edge to the ControlObjective entity by IDs.
+func (gc *GroupCreate) AddControlobjectiveViewerIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddControlobjectiveViewerIDs(ids...)
+	return gc
+}
+
+// AddControlobjectiveViewers adds the "controlobjective_viewers" edges to the ControlObjective entity.
+func (gc *GroupCreate) AddControlobjectiveViewers(c ...*ControlObjective) *GroupCreate {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return gc.AddControlobjectiveViewerIDs(ids...)
+}
+
+// AddControlobjectiveEditorIDs adds the "controlobjective_editors" edge to the ControlObjective entity by IDs.
+func (gc *GroupCreate) AddControlobjectiveEditorIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddControlobjectiveEditorIDs(ids...)
+	return gc
+}
+
+// AddControlobjectiveEditors adds the "controlobjective_editors" edges to the ControlObjective entity.
+func (gc *GroupCreate) AddControlobjectiveEditors(c ...*ControlObjective) *GroupCreate {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return gc.AddControlobjectiveEditorIDs(ids...)
+}
+
+// AddControlobjectiveBlockedGroupIDs adds the "controlobjective_blocked_groups" edge to the ControlObjective entity by IDs.
+func (gc *GroupCreate) AddControlobjectiveBlockedGroupIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddControlobjectiveBlockedGroupIDs(ids...)
+	return gc
+}
+
+// AddControlobjectiveBlockedGroups adds the "controlobjective_blocked_groups" edges to the ControlObjective entity.
+func (gc *GroupCreate) AddControlobjectiveBlockedGroups(c ...*ControlObjective) *GroupCreate {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return gc.AddControlobjectiveBlockedGroupIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the GroupMembership entity by IDs.
@@ -967,6 +1013,57 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = gc.schemaConfig.RiskBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.ControlobjectiveViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ControlobjectiveViewersTable,
+			Columns: group.ControlobjectiveViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.ControlObjectiveViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.ControlobjectiveEditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ControlobjectiveEditorsTable,
+			Columns: group.ControlobjectiveEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.ControlObjectiveEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.ControlobjectiveBlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ControlobjectiveBlockedGroupsTable,
+			Columns: group.ControlobjectiveBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.ControlObjectiveBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

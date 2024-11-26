@@ -12,8 +12,10 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
@@ -130,6 +132,12 @@ func (coc *ControlObjectiveCreate) SetNillableMappingID(s *string) *ControlObjec
 // SetTags sets the "tags" field.
 func (coc *ControlObjectiveCreate) SetTags(s []string) *ControlObjectiveCreate {
 	coc.mutation.SetTags(s)
+	return coc
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (coc *ControlObjectiveCreate) SetOwnerID(s string) *ControlObjectiveCreate {
+	coc.mutation.SetOwnerID(s)
 	return coc
 }
 
@@ -283,6 +291,56 @@ func (coc *ControlObjectiveCreate) SetNillableID(s *string) *ControlObjectiveCre
 		coc.SetID(*s)
 	}
 	return coc
+}
+
+// SetOwner sets the "owner" edge to the Organization entity.
+func (coc *ControlObjectiveCreate) SetOwner(o *Organization) *ControlObjectiveCreate {
+	return coc.SetOwnerID(o.ID)
+}
+
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (coc *ControlObjectiveCreate) AddBlockedGroupIDs(ids ...string) *ControlObjectiveCreate {
+	coc.mutation.AddBlockedGroupIDs(ids...)
+	return coc
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (coc *ControlObjectiveCreate) AddBlockedGroups(g ...*Group) *ControlObjectiveCreate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return coc.AddBlockedGroupIDs(ids...)
+}
+
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (coc *ControlObjectiveCreate) AddEditorIDs(ids ...string) *ControlObjectiveCreate {
+	coc.mutation.AddEditorIDs(ids...)
+	return coc
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (coc *ControlObjectiveCreate) AddEditors(g ...*Group) *ControlObjectiveCreate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return coc.AddEditorIDs(ids...)
+}
+
+// AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
+func (coc *ControlObjectiveCreate) AddViewerIDs(ids ...string) *ControlObjectiveCreate {
+	coc.mutation.AddViewerIDs(ids...)
+	return coc
+}
+
+// AddViewers adds the "viewers" edges to the Group entity.
+func (coc *ControlObjectiveCreate) AddViewers(g ...*Group) *ControlObjectiveCreate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return coc.AddViewerIDs(ids...)
 }
 
 // AddPolicyIDs adds the "policy" edge to the InternalPolicy entity by IDs.
@@ -497,8 +555,24 @@ func (coc *ControlObjectiveCreate) check() error {
 	if _, ok := coc.mutation.MappingID(); !ok {
 		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "ControlObjective.mapping_id"`)}
 	}
+	if _, ok := coc.mutation.OwnerID(); !ok {
+		return &ValidationError{Name: "owner_id", err: errors.New(`generated: missing required field "ControlObjective.owner_id"`)}
+	}
+	if v, ok := coc.mutation.OwnerID(); ok {
+		if err := controlobjective.OwnerIDValidator(v); err != nil {
+			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "ControlObjective.owner_id": %w`, err)}
+		}
+	}
 	if _, ok := coc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "ControlObjective.name"`)}
+	}
+	if v, ok := coc.mutation.Name(); ok {
+		if err := controlobjective.NameValidator(v); err != nil {
+			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "ControlObjective.name": %w`, err)}
+		}
+	}
+	if len(coc.mutation.OwnerIDs()) == 0 {
+		return &ValidationError{Name: "owner", err: errors.New(`generated: missing required edge "ControlObjective.owner"`)}
 	}
 	return nil
 }
@@ -611,6 +685,75 @@ func (coc *ControlObjectiveCreate) createSpec() (*ControlObjective, *sqlgraph.Cr
 	if value, ok := coc.mutation.Details(); ok {
 		_spec.SetField(controlobjective.FieldDetails, field.TypeJSON, value)
 		_node.Details = value
+	}
+	if nodes := coc.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   controlobjective.OwnerTable,
+			Columns: []string{controlobjective.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = coc.schemaConfig.ControlObjective
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.OwnerID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := coc.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlobjective.BlockedGroupsTable,
+			Columns: controlobjective.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = coc.schemaConfig.ControlObjectiveBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := coc.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlobjective.EditorsTable,
+			Columns: controlobjective.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = coc.schemaConfig.ControlObjectiveEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := coc.mutation.ViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   controlobjective.ViewersTable,
+			Columns: controlobjective.ViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = coc.schemaConfig.ControlObjectiveViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := coc.mutation.PolicyIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

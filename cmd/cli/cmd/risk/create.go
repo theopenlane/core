@@ -2,7 +2,6 @@ package risk
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/spf13/cobra"
 
@@ -46,7 +45,6 @@ func createValidation() (input openlaneclient.CreateRiskInput, err error) {
 	}
 
 	input.ProgramIDs = cmd.Config.Strings("programs")
-	fmt.Println(input.ProgramIDs)
 
 	riskType := cmd.Config.String("type")
 	if riskType != "" {

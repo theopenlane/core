@@ -15,7 +15,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
@@ -65,10 +64,6 @@ func (InternalPolicy) Edges() []ent.Edge {
 		edge.To("tasks", Task.Type),
 		edge.From("programs", Program.Type).
 			Ref("policies"),
-		edge.To("editors", Group.Type).
-			Comment("provides edit access to the policy to members of the group"),
-		edge.To("blocked_groups", Group.Type).
-			Comment("groups that are blocked from viewing or editing the policy"),
 	}
 }
 
@@ -81,6 +76,8 @@ func (InternalPolicy) Mixin() []ent.Mixin {
 		emixin.TagMixin{},
 		// all policies must be associated to an organization
 		NewOrgOwnMixinWithRef("internalpolicies"),
+		// add group edit permissions to the procedure
+		NewGroupPermissionsMixin(false),
 	}
 }
 
@@ -99,23 +96,17 @@ func (InternalPolicy) Annotations() []schema.Annotation {
 
 // Hooks of the InternalPolicy
 func (InternalPolicy) Hooks() []ent.Hook {
-	hooks := []ent.Hook{
+	return []ent.Hook{
 		hook.On(
 			hooks.HookOrgOwnedTuples(false),
 			ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
 		),
 	}
-
-	hooks = append(hooks, groupWriteOnlyHooks...)
-
-	return hooks
 }
 
 // Interceptors of the InternalPolicy
 func (InternalPolicy) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{
-		interceptors.FilterListQuery(),
-	}
+	return []ent.Interceptor{}
 }
 
 // Policy of the InternalPolicy

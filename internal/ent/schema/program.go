@@ -66,6 +66,8 @@ func (Program) Mixin() []ent.Mixin {
 		emixin.TagMixin{},
 		// all programs must be associated to an organization
 		NewOrgOwnMixinWithRef("programs"),
+		// add group permissions to the program
+		NewGroupPermissionsMixin(true),
 	}
 }
 
@@ -101,12 +103,6 @@ func (Program) Edges() []ent.Edge {
 		edge.From("users", User.Type).
 			Ref("programs").
 			Through("members", ProgramMembership.Type),
-		edge.To("viewers", Group.Type).
-			Comment("provides view access to the program to members of the group"),
-		edge.To("editors", Group.Type).
-			Comment("provides edit access to the program to members of the group"),
-		edge.To("blocked_groups", Group.Type).
-			Comment("groups that are blocked from viewing or editing the program"),
 	}
 }
 
@@ -139,13 +135,9 @@ func (Program) Annotations() []schema.Annotation {
 
 // Hooks of the Program
 func (Program) Hooks() []ent.Hook {
-	hooks := []ent.Hook{
+	return []ent.Hook{
 		hooks.HookProgramAuthz(),
 	}
-
-	hooks = append(hooks, groupReadWriteHooks...)
-
-	return hooks
 }
 
 // Interceptors of the Program

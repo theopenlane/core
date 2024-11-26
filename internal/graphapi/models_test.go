@@ -297,6 +297,14 @@ type RiskBuilder struct {
 	ProgramID string
 }
 
+type ControlObjectiveBuilder struct {
+	client *client
+
+	// Fields
+	Name      string
+	ProgramID string
+}
+
 // MustNew organization builder is used to create, without authz checks, orgs in the database
 func (o *OrganizationBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Organization {
 	// no auth, so allow policy
@@ -982,4 +990,28 @@ func (r *RiskBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Risk {
 		SaveX(ctx)
 
 	return risk
+}
+
+// MustNew control objective builder is used to create, without authz checks, control objectives in the database
+func (c *ControlObjectiveBuilder) MustNew(ctx context.Context, t *testing.T) *ent.ControlObjective {
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+
+	// add client to context
+	ctx = ent.NewContext(ctx, c.client.db)
+
+	if c.Name == "" {
+		c.Name = gofakeit.AppName()
+	}
+
+	mutation := c.client.db.ControlObjective.Create().
+		SetName(c.Name)
+
+	if c.ProgramID != "" {
+		mutation.AddProgramIDs(c.ProgramID)
+	}
+
+	co := mutation.
+		SaveX(ctx)
+
+	return co
 }

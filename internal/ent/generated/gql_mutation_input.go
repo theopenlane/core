@@ -843,6 +843,10 @@ type CreateControlObjectiveInput struct {
 	Source               *string
 	MappedFrameworks     *string
 	Details              map[string]interface{}
+	OwnerID              string
+	BlockedGroupIDs      []string
+	EditorIDs            []string
+	ViewerIDs            []string
 	PolicyIDs            []string
 	ControlIDs           []string
 	ProcedureIDs         []string
@@ -889,6 +893,16 @@ func (i *CreateControlObjectiveInput) Mutate(m *ControlObjectiveMutation) {
 	}
 	if v := i.Details; v != nil {
 		m.SetDetails(v)
+	}
+	m.SetOwnerID(i.OwnerID)
+	if v := i.BlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.EditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.ViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
 	}
 	if v := i.PolicyIDs; len(v) > 0 {
 		m.AddPolicyIDs(v...)
@@ -951,6 +965,16 @@ type UpdateControlObjectiveInput struct {
 	MappedFrameworks          *string
 	ClearDetails              bool
 	Details                   map[string]interface{}
+	OwnerID                   *string
+	ClearBlockedGroups        bool
+	AddBlockedGroupIDs        []string
+	RemoveBlockedGroupIDs     []string
+	ClearEditors              bool
+	AddEditorIDs              []string
+	RemoveEditorIDs           []string
+	ClearViewers              bool
+	AddViewerIDs              []string
+	RemoveViewerIDs           []string
 	ClearPolicy               bool
 	AddPolicyIDs              []string
 	RemovePolicyIDs           []string
@@ -1053,6 +1077,36 @@ func (i *UpdateControlObjectiveInput) Mutate(m *ControlObjectiveMutation) {
 	}
 	if v := i.Details; v != nil {
 		m.SetDetails(v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if i.ClearBlockedGroups {
+		m.ClearBlockedGroups()
+	}
+	if v := i.AddBlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
+		m.RemoveBlockedGroupIDs(v...)
+	}
+	if i.ClearEditors {
+		m.ClearEditors()
+	}
+	if v := i.AddEditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.RemoveEditorIDs; len(v) > 0 {
+		m.RemoveEditorIDs(v...)
+	}
+	if i.ClearViewers {
+		m.ClearViewers()
+	}
+	if v := i.AddViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
+	if v := i.RemoveViewerIDs; len(v) > 0 {
+		m.RemoveViewerIDs(v...)
 	}
 	if i.ClearPolicy {
 		m.ClearPolicy()
@@ -2823,29 +2877,32 @@ func (c *FileUpdateOne) SetInput(i UpdateFileInput) *FileUpdateOne {
 
 // CreateGroupInput represents a mutation input for creating groups.
 type CreateGroupInput struct {
-	Tags                          []string
-	Name                          string
-	Description                   *string
-	GravatarLogoURL               *string
-	LogoURL                       *string
-	DisplayName                   *string
-	OwnerID                       *string
-	SettingID                     string
-	UserIDs                       []string
-	EventIDs                      []string
-	IntegrationIDs                []string
-	FileIDs                       []string
-	TaskIDs                       []string
-	ProcedureEditorIDs            []string
-	ProcedureBlockedGroupIDs      []string
-	InternalpolicyEditorIDs       []string
-	InternalpolicyBlockedGroupIDs []string
-	ProgramViewerIDs              []string
-	ProgramEditorIDs              []string
-	ProgramBlockedGroupIDs        []string
-	RiskViewerIDs                 []string
-	RiskEditorIDs                 []string
-	RiskBlockedGroupIDs           []string
+	Tags                            []string
+	Name                            string
+	Description                     *string
+	GravatarLogoURL                 *string
+	LogoURL                         *string
+	DisplayName                     *string
+	OwnerID                         *string
+	SettingID                       string
+	UserIDs                         []string
+	EventIDs                        []string
+	IntegrationIDs                  []string
+	FileIDs                         []string
+	TaskIDs                         []string
+	ProcedureEditorIDs              []string
+	ProcedureBlockedGroupIDs        []string
+	InternalpolicyEditorIDs         []string
+	InternalpolicyBlockedGroupIDs   []string
+	ProgramViewerIDs                []string
+	ProgramEditorIDs                []string
+	ProgramBlockedGroupIDs          []string
+	RiskViewerIDs                   []string
+	RiskEditorIDs                   []string
+	RiskBlockedGroupIDs             []string
+	ControlobjectiveViewerIDs       []string
+	ControlobjectiveEditorIDs       []string
+	ControlobjectiveBlockedGroupIDs []string
 }
 
 // Mutate applies the CreateGroupInput on the GroupMutation builder.
@@ -2915,6 +2972,15 @@ func (i *CreateGroupInput) Mutate(m *GroupMutation) {
 	if v := i.RiskBlockedGroupIDs; len(v) > 0 {
 		m.AddRiskBlockedGroupIDs(v...)
 	}
+	if v := i.ControlobjectiveViewerIDs; len(v) > 0 {
+		m.AddControlobjectiveViewerIDs(v...)
+	}
+	if v := i.ControlobjectiveEditorIDs; len(v) > 0 {
+		m.AddControlobjectiveEditorIDs(v...)
+	}
+	if v := i.ControlobjectiveBlockedGroupIDs; len(v) > 0 {
+		m.AddControlobjectiveBlockedGroupIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateGroupInput on the GroupCreate builder.
@@ -2925,65 +2991,74 @@ func (c *GroupCreate) SetInput(i CreateGroupInput) *GroupCreate {
 
 // UpdateGroupInput represents a mutation input for updating groups.
 type UpdateGroupInput struct {
-	ClearTags                           bool
-	Tags                                []string
-	AppendTags                          []string
-	Name                                *string
-	ClearDescription                    bool
-	Description                         *string
-	ClearGravatarLogoURL                bool
-	GravatarLogoURL                     *string
-	ClearLogoURL                        bool
-	LogoURL                             *string
-	DisplayName                         *string
-	ClearOwner                          bool
-	OwnerID                             *string
-	SettingID                           *string
-	ClearUsers                          bool
-	AddUserIDs                          []string
-	RemoveUserIDs                       []string
-	ClearEvents                         bool
-	AddEventIDs                         []string
-	RemoveEventIDs                      []string
-	ClearIntegrations                   bool
-	AddIntegrationIDs                   []string
-	RemoveIntegrationIDs                []string
-	ClearFiles                          bool
-	AddFileIDs                          []string
-	RemoveFileIDs                       []string
-	ClearTasks                          bool
-	AddTaskIDs                          []string
-	RemoveTaskIDs                       []string
-	ClearProcedureEditors               bool
-	AddProcedureEditorIDs               []string
-	RemoveProcedureEditorIDs            []string
-	ClearProcedureBlockedGroups         bool
-	AddProcedureBlockedGroupIDs         []string
-	RemoveProcedureBlockedGroupIDs      []string
-	ClearInternalpolicyEditors          bool
-	AddInternalpolicyEditorIDs          []string
-	RemoveInternalpolicyEditorIDs       []string
-	ClearInternalpolicyBlockedGroups    bool
-	AddInternalpolicyBlockedGroupIDs    []string
-	RemoveInternalpolicyBlockedGroupIDs []string
-	ClearProgramViewers                 bool
-	AddProgramViewerIDs                 []string
-	RemoveProgramViewerIDs              []string
-	ClearProgramEditors                 bool
-	AddProgramEditorIDs                 []string
-	RemoveProgramEditorIDs              []string
-	ClearProgramBlockedGroups           bool
-	AddProgramBlockedGroupIDs           []string
-	RemoveProgramBlockedGroupIDs        []string
-	ClearRiskViewers                    bool
-	AddRiskViewerIDs                    []string
-	RemoveRiskViewerIDs                 []string
-	ClearRiskEditors                    bool
-	AddRiskEditorIDs                    []string
-	RemoveRiskEditorIDs                 []string
-	ClearRiskBlockedGroups              bool
-	AddRiskBlockedGroupIDs              []string
-	RemoveRiskBlockedGroupIDs           []string
+	ClearTags                             bool
+	Tags                                  []string
+	AppendTags                            []string
+	Name                                  *string
+	ClearDescription                      bool
+	Description                           *string
+	ClearGravatarLogoURL                  bool
+	GravatarLogoURL                       *string
+	ClearLogoURL                          bool
+	LogoURL                               *string
+	DisplayName                           *string
+	ClearOwner                            bool
+	OwnerID                               *string
+	SettingID                             *string
+	ClearUsers                            bool
+	AddUserIDs                            []string
+	RemoveUserIDs                         []string
+	ClearEvents                           bool
+	AddEventIDs                           []string
+	RemoveEventIDs                        []string
+	ClearIntegrations                     bool
+	AddIntegrationIDs                     []string
+	RemoveIntegrationIDs                  []string
+	ClearFiles                            bool
+	AddFileIDs                            []string
+	RemoveFileIDs                         []string
+	ClearTasks                            bool
+	AddTaskIDs                            []string
+	RemoveTaskIDs                         []string
+	ClearProcedureEditors                 bool
+	AddProcedureEditorIDs                 []string
+	RemoveProcedureEditorIDs              []string
+	ClearProcedureBlockedGroups           bool
+	AddProcedureBlockedGroupIDs           []string
+	RemoveProcedureBlockedGroupIDs        []string
+	ClearInternalpolicyEditors            bool
+	AddInternalpolicyEditorIDs            []string
+	RemoveInternalpolicyEditorIDs         []string
+	ClearInternalpolicyBlockedGroups      bool
+	AddInternalpolicyBlockedGroupIDs      []string
+	RemoveInternalpolicyBlockedGroupIDs   []string
+	ClearProgramViewers                   bool
+	AddProgramViewerIDs                   []string
+	RemoveProgramViewerIDs                []string
+	ClearProgramEditors                   bool
+	AddProgramEditorIDs                   []string
+	RemoveProgramEditorIDs                []string
+	ClearProgramBlockedGroups             bool
+	AddProgramBlockedGroupIDs             []string
+	RemoveProgramBlockedGroupIDs          []string
+	ClearRiskViewers                      bool
+	AddRiskViewerIDs                      []string
+	RemoveRiskViewerIDs                   []string
+	ClearRiskEditors                      bool
+	AddRiskEditorIDs                      []string
+	RemoveRiskEditorIDs                   []string
+	ClearRiskBlockedGroups                bool
+	AddRiskBlockedGroupIDs                []string
+	RemoveRiskBlockedGroupIDs             []string
+	ClearControlobjectiveViewers          bool
+	AddControlobjectiveViewerIDs          []string
+	RemoveControlobjectiveViewerIDs       []string
+	ClearControlobjectiveEditors          bool
+	AddControlobjectiveEditorIDs          []string
+	RemoveControlobjectiveEditorIDs       []string
+	ClearControlobjectiveBlockedGroups    bool
+	AddControlobjectiveBlockedGroupIDs    []string
+	RemoveControlobjectiveBlockedGroupIDs []string
 }
 
 // Mutate applies the UpdateGroupInput on the GroupMutation builder.
@@ -3164,6 +3239,33 @@ func (i *UpdateGroupInput) Mutate(m *GroupMutation) {
 	}
 	if v := i.RemoveRiskBlockedGroupIDs; len(v) > 0 {
 		m.RemoveRiskBlockedGroupIDs(v...)
+	}
+	if i.ClearControlobjectiveViewers {
+		m.ClearControlobjectiveViewers()
+	}
+	if v := i.AddControlobjectiveViewerIDs; len(v) > 0 {
+		m.AddControlobjectiveViewerIDs(v...)
+	}
+	if v := i.RemoveControlobjectiveViewerIDs; len(v) > 0 {
+		m.RemoveControlobjectiveViewerIDs(v...)
+	}
+	if i.ClearControlobjectiveEditors {
+		m.ClearControlobjectiveEditors()
+	}
+	if v := i.AddControlobjectiveEditorIDs; len(v) > 0 {
+		m.AddControlobjectiveEditorIDs(v...)
+	}
+	if v := i.RemoveControlobjectiveEditorIDs; len(v) > 0 {
+		m.RemoveControlobjectiveEditorIDs(v...)
+	}
+	if i.ClearControlobjectiveBlockedGroups {
+		m.ClearControlobjectiveBlockedGroups()
+	}
+	if v := i.AddControlobjectiveBlockedGroupIDs; len(v) > 0 {
+		m.AddControlobjectiveBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveControlobjectiveBlockedGroupIDs; len(v) > 0 {
+		m.RemoveControlobjectiveBlockedGroupIDs(v...)
 	}
 }
 
@@ -3631,14 +3733,14 @@ type CreateInternalPolicyInput struct {
 	Background          *string
 	Details             map[string]interface{}
 	OwnerID             *string
+	BlockedGroupIDs     []string
+	EditorIDs           []string
 	ControlobjectiveIDs []string
 	ControlIDs          []string
 	ProcedureIDs        []string
 	NarrativeIDs        []string
 	TaskIDs             []string
 	ProgramIDs          []string
-	EditorIDs           []string
-	BlockedGroupIDs     []string
 }
 
 // Mutate applies the CreateInternalPolicyInput on the InternalPolicyMutation builder.
@@ -3671,6 +3773,12 @@ func (i *CreateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
+	if v := i.BlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.EditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
 	if v := i.ControlobjectiveIDs; len(v) > 0 {
 		m.AddControlobjectiveIDs(v...)
 	}
@@ -3688,12 +3796,6 @@ func (i *CreateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	}
 	if v := i.ProgramIDs; len(v) > 0 {
 		m.AddProgramIDs(v...)
-	}
-	if v := i.EditorIDs; len(v) > 0 {
-		m.AddEditorIDs(v...)
-	}
-	if v := i.BlockedGroupIDs; len(v) > 0 {
-		m.AddBlockedGroupIDs(v...)
 	}
 }
 
@@ -3725,6 +3827,12 @@ type UpdateInternalPolicyInput struct {
 	Details                   map[string]interface{}
 	ClearOwner                bool
 	OwnerID                   *string
+	ClearBlockedGroups        bool
+	AddBlockedGroupIDs        []string
+	RemoveBlockedGroupIDs     []string
+	ClearEditors              bool
+	AddEditorIDs              []string
+	RemoveEditorIDs           []string
 	ClearControlobjectives    bool
 	AddControlobjectiveIDs    []string
 	RemoveControlobjectiveIDs []string
@@ -3743,12 +3851,6 @@ type UpdateInternalPolicyInput struct {
 	ClearPrograms             bool
 	AddProgramIDs             []string
 	RemoveProgramIDs          []string
-	ClearEditors              bool
-	AddEditorIDs              []string
-	RemoveEditorIDs           []string
-	ClearBlockedGroups        bool
-	AddBlockedGroupIDs        []string
-	RemoveBlockedGroupIDs     []string
 }
 
 // Mutate applies the UpdateInternalPolicyInput on the InternalPolicyMutation builder.
@@ -3813,6 +3915,24 @@ func (i *UpdateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
+	if i.ClearBlockedGroups {
+		m.ClearBlockedGroups()
+	}
+	if v := i.AddBlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
+		m.RemoveBlockedGroupIDs(v...)
+	}
+	if i.ClearEditors {
+		m.ClearEditors()
+	}
+	if v := i.AddEditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.RemoveEditorIDs; len(v) > 0 {
+		m.RemoveEditorIDs(v...)
+	}
 	if i.ClearControlobjectives {
 		m.ClearControlobjectives()
 	}
@@ -3866,24 +3986,6 @@ func (i *UpdateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	}
 	if v := i.RemoveProgramIDs; len(v) > 0 {
 		m.RemoveProgramIDs(v...)
-	}
-	if i.ClearEditors {
-		m.ClearEditors()
-	}
-	if v := i.AddEditorIDs; len(v) > 0 {
-		m.AddEditorIDs(v...)
-	}
-	if v := i.RemoveEditorIDs; len(v) > 0 {
-		m.RemoveEditorIDs(v...)
-	}
-	if i.ClearBlockedGroups {
-		m.ClearBlockedGroups()
-	}
-	if v := i.AddBlockedGroupIDs; len(v) > 0 {
-		m.AddBlockedGroupIDs(v...)
-	}
-	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
-		m.RemoveBlockedGroupIDs(v...)
 	}
 }
 
@@ -4689,6 +4791,7 @@ type CreateOrganizationInput struct {
 	ProcedureIDs               []string
 	InternalpolicyIDs          []string
 	RiskIDs                    []string
+	ControlobjectiveIDs        []string
 }
 
 // Mutate applies the CreateOrganizationInput on the OrganizationMutation builder.
@@ -4799,6 +4902,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.RiskIDs; len(v) > 0 {
 		m.AddRiskIDs(v...)
 	}
+	if v := i.ControlobjectiveIDs; len(v) > 0 {
+		m.AddControlobjectiveIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateOrganizationInput on the OrganizationCreate builder.
@@ -4901,6 +5007,9 @@ type UpdateOrganizationInput struct {
 	ClearRisks                       bool
 	AddRiskIDs                       []string
 	RemoveRiskIDs                    []string
+	ClearControlobjectives           bool
+	AddControlobjectiveIDs           []string
+	RemoveControlobjectiveIDs        []string
 }
 
 // Mutate applies the UpdateOrganizationInput on the OrganizationMutation builder.
@@ -5180,6 +5289,15 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveRiskIDs; len(v) > 0 {
 		m.RemoveRiskIDs(v...)
+	}
+	if i.ClearControlobjectives {
+		m.ClearControlobjectives()
+	}
+	if v := i.AddControlobjectiveIDs; len(v) > 0 {
+		m.AddControlobjectiveIDs(v...)
+	}
+	if v := i.RemoveControlobjectiveIDs; len(v) > 0 {
+		m.RemoveControlobjectiveIDs(v...)
 	}
 }
 
@@ -5520,14 +5638,14 @@ type CreateProcedureInput struct {
 	Satisfies         *string
 	Details           map[string]interface{}
 	OwnerID           *string
+	BlockedGroupIDs   []string
+	EditorIDs         []string
 	ControlIDs        []string
 	InternalpolicyIDs []string
 	NarrativeIDs      []string
 	RiskIDs           []string
 	TaskIDs           []string
 	ProgramIDs        []string
-	EditorIDs         []string
-	BlockedGroupIDs   []string
 }
 
 // Mutate applies the CreateProcedureInput on the ProcedureMutation builder.
@@ -5563,6 +5681,12 @@ func (i *CreateProcedureInput) Mutate(m *ProcedureMutation) {
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
+	if v := i.BlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.EditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
 	if v := i.ControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)
 	}
@@ -5580,12 +5704,6 @@ func (i *CreateProcedureInput) Mutate(m *ProcedureMutation) {
 	}
 	if v := i.ProgramIDs; len(v) > 0 {
 		m.AddProgramIDs(v...)
-	}
-	if v := i.EditorIDs; len(v) > 0 {
-		m.AddEditorIDs(v...)
-	}
-	if v := i.BlockedGroupIDs; len(v) > 0 {
-		m.AddBlockedGroupIDs(v...)
 	}
 }
 
@@ -5619,6 +5737,12 @@ type UpdateProcedureInput struct {
 	Details                 map[string]interface{}
 	ClearOwner              bool
 	OwnerID                 *string
+	ClearBlockedGroups      bool
+	AddBlockedGroupIDs      []string
+	RemoveBlockedGroupIDs   []string
+	ClearEditors            bool
+	AddEditorIDs            []string
+	RemoveEditorIDs         []string
 	ClearControl            bool
 	AddControlIDs           []string
 	RemoveControlIDs        []string
@@ -5637,12 +5761,6 @@ type UpdateProcedureInput struct {
 	ClearPrograms           bool
 	AddProgramIDs           []string
 	RemoveProgramIDs        []string
-	ClearEditors            bool
-	AddEditorIDs            []string
-	RemoveEditorIDs         []string
-	ClearBlockedGroups      bool
-	AddBlockedGroupIDs      []string
-	RemoveBlockedGroupIDs   []string
 }
 
 // Mutate applies the UpdateProcedureInput on the ProcedureMutation builder.
@@ -5713,6 +5831,24 @@ func (i *UpdateProcedureInput) Mutate(m *ProcedureMutation) {
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
+	if i.ClearBlockedGroups {
+		m.ClearBlockedGroups()
+	}
+	if v := i.AddBlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
+		m.RemoveBlockedGroupIDs(v...)
+	}
+	if i.ClearEditors {
+		m.ClearEditors()
+	}
+	if v := i.AddEditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.RemoveEditorIDs; len(v) > 0 {
+		m.RemoveEditorIDs(v...)
+	}
 	if i.ClearControl {
 		m.ClearControl()
 	}
@@ -5767,24 +5903,6 @@ func (i *UpdateProcedureInput) Mutate(m *ProcedureMutation) {
 	if v := i.RemoveProgramIDs; len(v) > 0 {
 		m.RemoveProgramIDs(v...)
 	}
-	if i.ClearEditors {
-		m.ClearEditors()
-	}
-	if v := i.AddEditorIDs; len(v) > 0 {
-		m.AddEditorIDs(v...)
-	}
-	if v := i.RemoveEditorIDs; len(v) > 0 {
-		m.RemoveEditorIDs(v...)
-	}
-	if i.ClearBlockedGroups {
-		m.ClearBlockedGroups()
-	}
-	if v := i.AddBlockedGroupIDs; len(v) > 0 {
-		m.AddBlockedGroupIDs(v...)
-	}
-	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
-		m.RemoveBlockedGroupIDs(v...)
-	}
 }
 
 // SetInput applies the change-set in the UpdateProcedureInput on the ProcedureUpdate builder.
@@ -5811,6 +5929,9 @@ type CreateProgramInput struct {
 	AuditorWriteComments *bool
 	AuditorReadComments  *bool
 	OwnerID              *string
+	BlockedGroupIDs      []string
+	EditorIDs            []string
+	ViewerIDs            []string
 	ControlIDs           []string
 	SubcontrolIDs        []string
 	ControlobjectiveIDs  []string
@@ -5824,9 +5945,6 @@ type CreateProgramInput struct {
 	ActionplanIDs        []string
 	StandardIDs          []string
 	UserIDs              []string
-	ViewerIDs            []string
-	EditorIDs            []string
-	BlockedGroupIDs      []string
 }
 
 // Mutate applies the CreateProgramInput on the ProgramMutation builder.
@@ -5858,6 +5976,15 @@ func (i *CreateProgramInput) Mutate(m *ProgramMutation) {
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
+	}
+	if v := i.BlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.EditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.ViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
 	}
 	if v := i.ControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)
@@ -5898,15 +6025,6 @@ func (i *CreateProgramInput) Mutate(m *ProgramMutation) {
 	if v := i.UserIDs; len(v) > 0 {
 		m.AddUserIDs(v...)
 	}
-	if v := i.ViewerIDs; len(v) > 0 {
-		m.AddViewerIDs(v...)
-	}
-	if v := i.EditorIDs; len(v) > 0 {
-		m.AddEditorIDs(v...)
-	}
-	if v := i.BlockedGroupIDs; len(v) > 0 {
-		m.AddBlockedGroupIDs(v...)
-	}
 }
 
 // SetInput applies the change-set in the CreateProgramInput on the ProgramCreate builder.
@@ -5933,6 +6051,15 @@ type UpdateProgramInput struct {
 	AuditorReadComments       *bool
 	ClearOwner                bool
 	OwnerID                   *string
+	ClearBlockedGroups        bool
+	AddBlockedGroupIDs        []string
+	RemoveBlockedGroupIDs     []string
+	ClearEditors              bool
+	AddEditorIDs              []string
+	RemoveEditorIDs           []string
+	ClearViewers              bool
+	AddViewerIDs              []string
+	RemoveViewerIDs           []string
 	ClearControls             bool
 	AddControlIDs             []string
 	RemoveControlIDs          []string
@@ -5972,15 +6099,6 @@ type UpdateProgramInput struct {
 	ClearUsers                bool
 	AddUserIDs                []string
 	RemoveUserIDs             []string
-	ClearViewers              bool
-	AddViewerIDs              []string
-	RemoveViewerIDs           []string
-	ClearEditors              bool
-	AddEditorIDs              []string
-	RemoveEditorIDs           []string
-	ClearBlockedGroups        bool
-	AddBlockedGroupIDs        []string
-	RemoveBlockedGroupIDs     []string
 }
 
 // Mutate applies the UpdateProgramInput on the ProgramMutation builder.
@@ -6032,6 +6150,33 @@ func (i *UpdateProgramInput) Mutate(m *ProgramMutation) {
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
+	}
+	if i.ClearBlockedGroups {
+		m.ClearBlockedGroups()
+	}
+	if v := i.AddBlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
+		m.RemoveBlockedGroupIDs(v...)
+	}
+	if i.ClearEditors {
+		m.ClearEditors()
+	}
+	if v := i.AddEditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.RemoveEditorIDs; len(v) > 0 {
+		m.RemoveEditorIDs(v...)
+	}
+	if i.ClearViewers {
+		m.ClearViewers()
+	}
+	if v := i.AddViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
+	if v := i.RemoveViewerIDs; len(v) > 0 {
+		m.RemoveViewerIDs(v...)
 	}
 	if i.ClearControls {
 		m.ClearControls()
@@ -6150,33 +6295,6 @@ func (i *UpdateProgramInput) Mutate(m *ProgramMutation) {
 	if v := i.RemoveUserIDs; len(v) > 0 {
 		m.RemoveUserIDs(v...)
 	}
-	if i.ClearViewers {
-		m.ClearViewers()
-	}
-	if v := i.AddViewerIDs; len(v) > 0 {
-		m.AddViewerIDs(v...)
-	}
-	if v := i.RemoveViewerIDs; len(v) > 0 {
-		m.RemoveViewerIDs(v...)
-	}
-	if i.ClearEditors {
-		m.ClearEditors()
-	}
-	if v := i.AddEditorIDs; len(v) > 0 {
-		m.AddEditorIDs(v...)
-	}
-	if v := i.RemoveEditorIDs; len(v) > 0 {
-		m.RemoveEditorIDs(v...)
-	}
-	if i.ClearBlockedGroups {
-		m.ClearBlockedGroups()
-	}
-	if v := i.AddBlockedGroupIDs; len(v) > 0 {
-		m.AddBlockedGroupIDs(v...)
-	}
-	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
-		m.RemoveBlockedGroupIDs(v...)
-	}
 }
 
 // SetInput applies the change-set in the UpdateProgramInput on the ProgramUpdate builder.
@@ -6250,14 +6368,14 @@ type CreateRiskInput struct {
 	Mitigation      *string
 	Satisfies       *string
 	Details         map[string]interface{}
+	OwnerID         string
+	BlockedGroupIDs []string
+	EditorIDs       []string
+	ViewerIDs       []string
 	ControlIDs      []string
 	ProcedureIDs    []string
 	ActionplanIDs   []string
-	OwnerID         string
 	ProgramIDs      []string
-	ViewerIDs       []string
-	EditorIDs       []string
-	BlockedGroupIDs []string
 }
 
 // Mutate applies the CreateRiskInput on the RiskMutation builder.
@@ -6293,6 +6411,16 @@ func (i *CreateRiskInput) Mutate(m *RiskMutation) {
 	if v := i.Details; v != nil {
 		m.SetDetails(v)
 	}
+	m.SetOwnerID(i.OwnerID)
+	if v := i.BlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.EditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.ViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
 	if v := i.ControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)
 	}
@@ -6302,18 +6430,8 @@ func (i *CreateRiskInput) Mutate(m *RiskMutation) {
 	if v := i.ActionplanIDs; len(v) > 0 {
 		m.AddActionplanIDs(v...)
 	}
-	m.SetOwnerID(i.OwnerID)
 	if v := i.ProgramIDs; len(v) > 0 {
 		m.AddProgramIDs(v...)
-	}
-	if v := i.ViewerIDs; len(v) > 0 {
-		m.AddViewerIDs(v...)
-	}
-	if v := i.EditorIDs; len(v) > 0 {
-		m.AddEditorIDs(v...)
-	}
-	if v := i.BlockedGroupIDs; len(v) > 0 {
-		m.AddBlockedGroupIDs(v...)
 	}
 }
 
@@ -6347,6 +6465,16 @@ type UpdateRiskInput struct {
 	Satisfies             *string
 	ClearDetails          bool
 	Details               map[string]interface{}
+	OwnerID               *string
+	ClearBlockedGroups    bool
+	AddBlockedGroupIDs    []string
+	RemoveBlockedGroupIDs []string
+	ClearEditors          bool
+	AddEditorIDs          []string
+	RemoveEditorIDs       []string
+	ClearViewers          bool
+	AddViewerIDs          []string
+	RemoveViewerIDs       []string
 	ClearControl          bool
 	AddControlIDs         []string
 	RemoveControlIDs      []string
@@ -6356,19 +6484,9 @@ type UpdateRiskInput struct {
 	ClearActionplans      bool
 	AddActionplanIDs      []string
 	RemoveActionplanIDs   []string
-	OwnerID               *string
-	ClearProgram          bool
+	ClearPrograms         bool
 	AddProgramIDs         []string
 	RemoveProgramIDs      []string
-	ClearViewers          bool
-	AddViewerIDs          []string
-	RemoveViewerIDs       []string
-	ClearEditors          bool
-	AddEditorIDs          []string
-	RemoveEditorIDs       []string
-	ClearBlockedGroups    bool
-	AddBlockedGroupIDs    []string
-	RemoveBlockedGroupIDs []string
 }
 
 // Mutate applies the UpdateRiskInput on the RiskMutation builder.
@@ -6439,6 +6557,36 @@ func (i *UpdateRiskInput) Mutate(m *RiskMutation) {
 	if v := i.Details; v != nil {
 		m.SetDetails(v)
 	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if i.ClearBlockedGroups {
+		m.ClearBlockedGroups()
+	}
+	if v := i.AddBlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
+		m.RemoveBlockedGroupIDs(v...)
+	}
+	if i.ClearEditors {
+		m.ClearEditors()
+	}
+	if v := i.AddEditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.RemoveEditorIDs; len(v) > 0 {
+		m.RemoveEditorIDs(v...)
+	}
+	if i.ClearViewers {
+		m.ClearViewers()
+	}
+	if v := i.AddViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
+	if v := i.RemoveViewerIDs; len(v) > 0 {
+		m.RemoveViewerIDs(v...)
+	}
 	if i.ClearControl {
 		m.ClearControl()
 	}
@@ -6466,44 +6614,14 @@ func (i *UpdateRiskInput) Mutate(m *RiskMutation) {
 	if v := i.RemoveActionplanIDs; len(v) > 0 {
 		m.RemoveActionplanIDs(v...)
 	}
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
-	}
-	if i.ClearProgram {
-		m.ClearProgram()
+	if i.ClearPrograms {
+		m.ClearPrograms()
 	}
 	if v := i.AddProgramIDs; len(v) > 0 {
 		m.AddProgramIDs(v...)
 	}
 	if v := i.RemoveProgramIDs; len(v) > 0 {
 		m.RemoveProgramIDs(v...)
-	}
-	if i.ClearViewers {
-		m.ClearViewers()
-	}
-	if v := i.AddViewerIDs; len(v) > 0 {
-		m.AddViewerIDs(v...)
-	}
-	if v := i.RemoveViewerIDs; len(v) > 0 {
-		m.RemoveViewerIDs(v...)
-	}
-	if i.ClearEditors {
-		m.ClearEditors()
-	}
-	if v := i.AddEditorIDs; len(v) > 0 {
-		m.AddEditorIDs(v...)
-	}
-	if v := i.RemoveEditorIDs; len(v) > 0 {
-		m.RemoveEditorIDs(v...)
-	}
-	if i.ClearBlockedGroups {
-		m.ClearBlockedGroups()
-	}
-	if v := i.AddBlockedGroupIDs; len(v) > 0 {
-		m.AddBlockedGroupIDs(v...)
-	}
-	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
-		m.RemoveBlockedGroupIDs(v...)
 	}
 }
 

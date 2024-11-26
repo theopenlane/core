@@ -333,6 +333,9 @@ func (coh *ControlObjectiveHistory) changes(new *ControlObjectiveHistory) []Chan
 	if !reflect.DeepEqual(coh.Tags, new.Tags) {
 		changes = append(changes, NewChange(controlobjectivehistory.FieldTags, coh.Tags, new.Tags))
 	}
+	if !reflect.DeepEqual(coh.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(controlobjectivehistory.FieldOwnerID, coh.OwnerID, new.OwnerID))
+	}
 	if !reflect.DeepEqual(coh.Name, new.Name) {
 		changes = append(changes, NewChange(controlobjectivehistory.FieldName, coh.Name, new.Name))
 	}
@@ -2076,6 +2079,9 @@ func (rh *RiskHistory) changes(new *RiskHistory) []Change {
 	if !reflect.DeepEqual(rh.Tags, new.Tags) {
 		changes = append(changes, NewChange(riskhistory.FieldTags, rh.Tags, new.Tags))
 	}
+	if !reflect.DeepEqual(rh.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(riskhistory.FieldOwnerID, rh.OwnerID, new.OwnerID))
+	}
 	if !reflect.DeepEqual(rh.Name, new.Name) {
 		changes = append(changes, NewChange(riskhistory.FieldName, rh.Name, new.Name))
 	}
@@ -2105,9 +2111,6 @@ func (rh *RiskHistory) changes(new *RiskHistory) []Change {
 	}
 	if !reflect.DeepEqual(rh.Details, new.Details) {
 		changes = append(changes, NewChange(riskhistory.FieldDetails, rh.Details, new.Details))
-	}
-	if !reflect.DeepEqual(rh.OwnerID, new.OwnerID) {
-		changes = append(changes, NewChange(riskhistory.FieldOwnerID, rh.OwnerID, new.OwnerID))
 	}
 	return changes
 }

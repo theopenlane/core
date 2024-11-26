@@ -88,13 +88,12 @@ func jsonOutput(out any) error {
 // tableOutput prints the output in a table format
 func tableOutput(out []openlaneclient.Risk) {
 	// create a table writer
-	// TODO: add additional columns to the table writer
 	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "Name", "Program(s)", "RiskType", "BusinessCosts", "Impact", "Likelihood", "Mitigation", "Satisfies")
 
 	for _, i := range out {
 		programs := []string{}
 
-		for _, p := range i.Program {
+		for _, p := range i.Programs {
 			programs = append(programs, p.Name)
 		}
 

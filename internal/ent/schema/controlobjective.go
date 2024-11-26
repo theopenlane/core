@@ -1,14 +1,20 @@
 package schema
 
 import (
+	"context"
+
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	emixin "github.com/theopenlane/entx/mixin"
+	"github.com/theopenlane/iam/entfga"
 
+	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/mixin"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
 
 // ControlObjective defines the controlobjective schema.
@@ -20,6 +26,7 @@ type ControlObjective struct {
 func (ControlObjective) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("name").
+			NotEmpty().
 			Comment("the name of the control objective"),
 		field.Text("description").
 			Optional().
@@ -79,6 +86,16 @@ func (ControlObjective) Mixin() []ent.Mixin {
 		mixin.SoftDeleteMixin{},
 		emixin.IDMixin{},
 		emixin.TagMixin{},
+		// control objectives inherit permissions from the associated programs, but must have an organization as well
+		// this mixin will add the owner_id field using the OrgHook but not organization tuples are created
+		// it will also create program parent tuples for the control objective when a program is associated to the control objectives
+		NewObjectOwnedMixin(ObjectOwnedMixin{
+			FieldNames:            []string{"program_id"},
+			WithOrganizationOwner: true,
+			Ref:                   "controlobjectives",
+		}),
+		// add groups permissions with viewer, editor, and blocked groups
+		NewGroupPermissionsMixin(true),
 	}
 }
 
@@ -88,5 +105,31 @@ func (ControlObjective) Annotations() []schema.Annotation {
 		entgql.RelayConnection(),
 		entgql.QueryField(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
+		entfga.Annotations{
+			ObjectType: "controlobjective", // check access to the controlobjective for update/delete
+		},
+	}
+}
+
+// Policy of the ControlObjective
+func (ControlObjective) Policy() ent.Policy {
+	return privacy.Policy{
+		Mutation: privacy.MutationPolicy{
+			rule.CanCreateObjectsInProgram(), // if mutation contains program_id, check access
+			privacy.OnMutationOperation( // if there is no program_id, check access for create in org
+				rule.CanCreateObjectsInOrg(),
+				ent.OpCreate,
+			),
+			privacy.ControlObjectiveMutationRuleFunc(func(ctx context.Context, m *generated.ControlObjectiveMutation) error {
+				return m.CheckAccessForEdit(ctx) // check access for edit
+			}),
+			privacy.AlwaysDenyRule(),
+		},
+		Query: privacy.QueryPolicy{
+			privacy.ControlObjectiveQueryRuleFunc(func(ctx context.Context, q *generated.ControlObjectiveQuery) error {
+				return q.CheckAccess(ctx)
+			}),
+			privacy.AlwaysDenyRule(),
+		},
 	}
 }

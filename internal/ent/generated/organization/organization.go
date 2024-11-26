@@ -107,6 +107,8 @@ const (
 	EdgeInternalpolicies = "internalpolicies"
 	// EdgeRisks holds the string denoting the risks edge name in mutations.
 	EdgeRisks = "risks"
+	// EdgeControlobjectives holds the string denoting the controlobjectives edge name in mutations.
+	EdgeControlobjectives = "controlobjectives"
 	// EdgeMembers holds the string denoting the members edge name in mutations.
 	EdgeMembers = "members"
 	// Table holds the table name of the organization in the database.
@@ -310,6 +312,13 @@ const (
 	RisksInverseTable = "risks"
 	// RisksColumn is the table column denoting the risks relation/edge.
 	RisksColumn = "owner_id"
+	// ControlobjectivesTable is the table that holds the controlobjectives relation/edge.
+	ControlobjectivesTable = "control_objectives"
+	// ControlobjectivesInverseTable is the table name for the ControlObjective entity.
+	// It exists in this package in order to avoid circular dependency with the "controlobjective" package.
+	ControlobjectivesInverseTable = "control_objectives"
+	// ControlobjectivesColumn is the table column denoting the controlobjectives relation/edge.
+	ControlobjectivesColumn = "owner_id"
 	// MembersTable is the table that holds the members relation/edge.
 	MembersTable = "org_memberships"
 	// MembersInverseTable is the table name for the OrgMembership entity.
@@ -903,6 +912,20 @@ func ByRisks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByControlobjectivesCount orders the results by controlobjectives count.
+func ByControlobjectivesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newControlobjectivesStep(), opts...)
+	}
+}
+
+// ByControlobjectives orders the results by controlobjectives terms.
+func ByControlobjectives(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newControlobjectivesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByMembersCount orders the results by members count.
 func ByMembersCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1131,6 +1154,13 @@ func newRisksStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(RisksInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, RisksTable, RisksColumn),
+	)
+}
+func newControlobjectivesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ControlobjectivesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ControlobjectivesTable, ControlobjectivesColumn),
 	)
 }
 func newMembersStep() *sqlgraph.Step {

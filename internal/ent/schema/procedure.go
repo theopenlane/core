@@ -15,7 +15,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
@@ -70,10 +69,6 @@ func (Procedure) Edges() []ent.Edge {
 		edge.To("tasks", Task.Type),
 		edge.From("programs", Program.Type).
 			Ref("procedures"),
-		edge.To("editors", Group.Type).
-			Comment("provides edit access to the procedure to members of the group"),
-		edge.To("blocked_groups", Group.Type).
-			Comment("groups that are blocked from viewing or editing the procedure"),
 	}
 }
 
@@ -85,6 +80,8 @@ func (Procedure) Mixin() []ent.Mixin {
 		emixin.IDMixin{},
 		emixin.TagMixin{},
 		NewOrgOwnMixinWithRef("procedures"),
+		// add group edit permissions to the procedure
+		NewGroupPermissionsMixin(false),
 	}
 }
 
@@ -103,23 +100,17 @@ func (Procedure) Annotations() []schema.Annotation {
 
 // Hooks of the Procedure
 func (Procedure) Hooks() []ent.Hook {
-	hooks := []ent.Hook{
+	return []ent.Hook{
 		hook.On(
 			hooks.HookOrgOwnedTuples(false),
 			ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
 		),
 	}
-
-	hooks = append(hooks, groupWriteOnlyHooks...)
-
-	return hooks
 }
 
 // Interceptors of the Procedure
 func (Procedure) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{
-		interceptors.FilterListQuery(),
-	}
+	return []ent.Interceptor{}
 }
 
 // Policy of the Procedure

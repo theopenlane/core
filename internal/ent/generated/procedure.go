@@ -67,6 +67,10 @@ type Procedure struct {
 type ProcedureEdges struct {
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
+	// groups that are blocked from viewing or editing the risk
+	BlockedGroups []*Group `json:"blocked_groups,omitempty"`
+	// provides edit access to the risk to members of the group
+	Editors []*Group `json:"editors,omitempty"`
 	// Control holds the value of the control edge.
 	Control []*Control `json:"control,omitempty"`
 	// Internalpolicy holds the value of the internalpolicy edge.
@@ -79,24 +83,20 @@ type ProcedureEdges struct {
 	Tasks []*Task `json:"tasks,omitempty"`
 	// Programs holds the value of the programs edge.
 	Programs []*Program `json:"programs,omitempty"`
-	// provides edit access to the procedure to members of the group
-	Editors []*Group `json:"editors,omitempty"`
-	// groups that are blocked from viewing or editing the procedure
-	BlockedGroups []*Group `json:"blocked_groups,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [9]bool
 	// totalCount holds the count of the edges above.
 	totalCount [9]map[string]int
 
+	namedBlockedGroups  map[string][]*Group
+	namedEditors        map[string][]*Group
 	namedControl        map[string][]*Control
 	namedInternalpolicy map[string][]*InternalPolicy
 	namedNarratives     map[string][]*Narrative
 	namedRisks          map[string][]*Risk
 	namedTasks          map[string][]*Task
 	namedPrograms       map[string][]*Program
-	namedEditors        map[string][]*Group
-	namedBlockedGroups  map[string][]*Group
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -110,10 +110,28 @@ func (e ProcedureEdges) OwnerOrErr() (*Organization, error) {
 	return nil, &NotLoadedError{edge: "owner"}
 }
 
+// BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
+// was not loaded in eager-loading.
+func (e ProcedureEdges) BlockedGroupsOrErr() ([]*Group, error) {
+	if e.loadedTypes[1] {
+		return e.BlockedGroups, nil
+	}
+	return nil, &NotLoadedError{edge: "blocked_groups"}
+}
+
+// EditorsOrErr returns the Editors value or an error if the edge
+// was not loaded in eager-loading.
+func (e ProcedureEdges) EditorsOrErr() ([]*Group, error) {
+	if e.loadedTypes[2] {
+		return e.Editors, nil
+	}
+	return nil, &NotLoadedError{edge: "editors"}
+}
+
 // ControlOrErr returns the Control value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProcedureEdges) ControlOrErr() ([]*Control, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[3] {
 		return e.Control, nil
 	}
 	return nil, &NotLoadedError{edge: "control"}
@@ -122,7 +140,7 @@ func (e ProcedureEdges) ControlOrErr() ([]*Control, error) {
 // InternalpolicyOrErr returns the Internalpolicy value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProcedureEdges) InternalpolicyOrErr() ([]*InternalPolicy, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[4] {
 		return e.Internalpolicy, nil
 	}
 	return nil, &NotLoadedError{edge: "internalpolicy"}
@@ -131,7 +149,7 @@ func (e ProcedureEdges) InternalpolicyOrErr() ([]*InternalPolicy, error) {
 // NarrativesOrErr returns the Narratives value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProcedureEdges) NarrativesOrErr() ([]*Narrative, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[5] {
 		return e.Narratives, nil
 	}
 	return nil, &NotLoadedError{edge: "narratives"}
@@ -140,7 +158,7 @@ func (e ProcedureEdges) NarrativesOrErr() ([]*Narrative, error) {
 // RisksOrErr returns the Risks value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProcedureEdges) RisksOrErr() ([]*Risk, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[6] {
 		return e.Risks, nil
 	}
 	return nil, &NotLoadedError{edge: "risks"}
@@ -149,7 +167,7 @@ func (e ProcedureEdges) RisksOrErr() ([]*Risk, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProcedureEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[7] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -158,28 +176,10 @@ func (e ProcedureEdges) TasksOrErr() ([]*Task, error) {
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProcedureEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[8] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
-}
-
-// EditorsOrErr returns the Editors value or an error if the edge
-// was not loaded in eager-loading.
-func (e ProcedureEdges) EditorsOrErr() ([]*Group, error) {
-	if e.loadedTypes[7] {
-		return e.Editors, nil
-	}
-	return nil, &NotLoadedError{edge: "editors"}
-}
-
-// BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
-// was not loaded in eager-loading.
-func (e ProcedureEdges) BlockedGroupsOrErr() ([]*Group, error) {
-	if e.loadedTypes[8] {
-		return e.BlockedGroups, nil
-	}
-	return nil, &NotLoadedError{edge: "blocked_groups"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -362,6 +362,16 @@ func (pr *Procedure) QueryOwner() *OrganizationQuery {
 	return NewProcedureClient(pr.config).QueryOwner(pr)
 }
 
+// QueryBlockedGroups queries the "blocked_groups" edge of the Procedure entity.
+func (pr *Procedure) QueryBlockedGroups() *GroupQuery {
+	return NewProcedureClient(pr.config).QueryBlockedGroups(pr)
+}
+
+// QueryEditors queries the "editors" edge of the Procedure entity.
+func (pr *Procedure) QueryEditors() *GroupQuery {
+	return NewProcedureClient(pr.config).QueryEditors(pr)
+}
+
 // QueryControl queries the "control" edge of the Procedure entity.
 func (pr *Procedure) QueryControl() *ControlQuery {
 	return NewProcedureClient(pr.config).QueryControl(pr)
@@ -390,16 +400,6 @@ func (pr *Procedure) QueryTasks() *TaskQuery {
 // QueryPrograms queries the "programs" edge of the Procedure entity.
 func (pr *Procedure) QueryPrograms() *ProgramQuery {
 	return NewProcedureClient(pr.config).QueryPrograms(pr)
-}
-
-// QueryEditors queries the "editors" edge of the Procedure entity.
-func (pr *Procedure) QueryEditors() *GroupQuery {
-	return NewProcedureClient(pr.config).QueryEditors(pr)
-}
-
-// QueryBlockedGroups queries the "blocked_groups" edge of the Procedure entity.
-func (pr *Procedure) QueryBlockedGroups() *GroupQuery {
-	return NewProcedureClient(pr.config).QueryBlockedGroups(pr)
 }
 
 // Update returns a builder for updating this Procedure.
@@ -480,6 +480,54 @@ func (pr *Procedure) String() string {
 	builder.WriteString(fmt.Sprintf("%v", pr.Details))
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (pr *Procedure) NamedBlockedGroups(name string) ([]*Group, error) {
+	if pr.Edges.namedBlockedGroups == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := pr.Edges.namedBlockedGroups[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (pr *Procedure) appendNamedBlockedGroups(name string, edges ...*Group) {
+	if pr.Edges.namedBlockedGroups == nil {
+		pr.Edges.namedBlockedGroups = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		pr.Edges.namedBlockedGroups[name] = []*Group{}
+	} else {
+		pr.Edges.namedBlockedGroups[name] = append(pr.Edges.namedBlockedGroups[name], edges...)
+	}
+}
+
+// NamedEditors returns the Editors named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (pr *Procedure) NamedEditors(name string) ([]*Group, error) {
+	if pr.Edges.namedEditors == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := pr.Edges.namedEditors[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (pr *Procedure) appendNamedEditors(name string, edges ...*Group) {
+	if pr.Edges.namedEditors == nil {
+		pr.Edges.namedEditors = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		pr.Edges.namedEditors[name] = []*Group{}
+	} else {
+		pr.Edges.namedEditors[name] = append(pr.Edges.namedEditors[name], edges...)
+	}
 }
 
 // NamedControl returns the Control named value or an error if the edge was not
@@ -623,54 +671,6 @@ func (pr *Procedure) appendNamedPrograms(name string, edges ...*Program) {
 		pr.Edges.namedPrograms[name] = []*Program{}
 	} else {
 		pr.Edges.namedPrograms[name] = append(pr.Edges.namedPrograms[name], edges...)
-	}
-}
-
-// NamedEditors returns the Editors named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (pr *Procedure) NamedEditors(name string) ([]*Group, error) {
-	if pr.Edges.namedEditors == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := pr.Edges.namedEditors[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (pr *Procedure) appendNamedEditors(name string, edges ...*Group) {
-	if pr.Edges.namedEditors == nil {
-		pr.Edges.namedEditors = make(map[string][]*Group)
-	}
-	if len(edges) == 0 {
-		pr.Edges.namedEditors[name] = []*Group{}
-	} else {
-		pr.Edges.namedEditors[name] = append(pr.Edges.namedEditors[name], edges...)
-	}
-}
-
-// NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (pr *Procedure) NamedBlockedGroups(name string) ([]*Group, error) {
-	if pr.Edges.namedBlockedGroups == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := pr.Edges.namedBlockedGroups[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (pr *Procedure) appendNamedBlockedGroups(name string, edges ...*Group) {
-	if pr.Edges.namedBlockedGroups == nil {
-		pr.Edges.namedBlockedGroups = make(map[string][]*Group)
-	}
-	if len(edges) == 0 {
-		pr.Edges.namedBlockedGroups[name] = []*Group{}
-	} else {
-		pr.Edges.namedBlockedGroups[name] = append(pr.Edges.namedBlockedGroups[name], edges...)
 	}
 }
 
