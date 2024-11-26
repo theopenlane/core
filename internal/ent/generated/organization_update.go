@@ -29,6 +29,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
+	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/oauthprovider"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -703,6 +704,21 @@ func (ou *OrganizationUpdate) AddControlobjectives(c ...*ControlObjective) *Orga
 	return ou.AddControlobjectiveIDs(ids...)
 }
 
+// AddNarrativeIDs adds the "narratives" edge to the Narrative entity by IDs.
+func (ou *OrganizationUpdate) AddNarrativeIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.AddNarrativeIDs(ids...)
+	return ou
+}
+
+// AddNarratives adds the "narratives" edges to the Narrative entity.
+func (ou *OrganizationUpdate) AddNarratives(n ...*Narrative) *OrganizationUpdate {
+	ids := make([]string, len(n))
+	for i := range n {
+		ids[i] = n[i].ID
+	}
+	return ou.AddNarrativeIDs(ids...)
+}
+
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
 func (ou *OrganizationUpdate) AddMemberIDs(ids ...string) *OrganizationUpdate {
 	ou.mutation.AddMemberIDs(ids...)
@@ -1357,6 +1373,27 @@ func (ou *OrganizationUpdate) RemoveControlobjectives(c ...*ControlObjective) *O
 		ids[i] = c[i].ID
 	}
 	return ou.RemoveControlobjectiveIDs(ids...)
+}
+
+// ClearNarratives clears all "narratives" edges to the Narrative entity.
+func (ou *OrganizationUpdate) ClearNarratives() *OrganizationUpdate {
+	ou.mutation.ClearNarratives()
+	return ou
+}
+
+// RemoveNarrativeIDs removes the "narratives" edge to Narrative entities by IDs.
+func (ou *OrganizationUpdate) RemoveNarrativeIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.RemoveNarrativeIDs(ids...)
+	return ou
+}
+
+// RemoveNarratives removes "narratives" edges to Narrative entities.
+func (ou *OrganizationUpdate) RemoveNarratives(n ...*Narrative) *OrganizationUpdate {
+	ids := make([]string, len(n))
+	for i := range n {
+		ids[i] = n[i].ID
+	}
+	return ou.RemoveNarrativeIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -3017,6 +3054,54 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if ou.mutation.NarrativesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.NarrativesTable,
+			Columns: []string{organization.NarrativesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Narrative
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.RemovedNarrativesIDs(); len(nodes) > 0 && !ou.mutation.NarrativesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.NarrativesTable,
+			Columns: []string{organization.NarrativesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Narrative
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.NarrativesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.NarrativesTable,
+			Columns: []string{organization.NarrativesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Narrative
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if ou.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -3730,6 +3815,21 @@ func (ouo *OrganizationUpdateOne) AddControlobjectives(c ...*ControlObjective) *
 	return ouo.AddControlobjectiveIDs(ids...)
 }
 
+// AddNarrativeIDs adds the "narratives" edge to the Narrative entity by IDs.
+func (ouo *OrganizationUpdateOne) AddNarrativeIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.AddNarrativeIDs(ids...)
+	return ouo
+}
+
+// AddNarratives adds the "narratives" edges to the Narrative entity.
+func (ouo *OrganizationUpdateOne) AddNarratives(n ...*Narrative) *OrganizationUpdateOne {
+	ids := make([]string, len(n))
+	for i := range n {
+		ids[i] = n[i].ID
+	}
+	return ouo.AddNarrativeIDs(ids...)
+}
+
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
 func (ouo *OrganizationUpdateOne) AddMemberIDs(ids ...string) *OrganizationUpdateOne {
 	ouo.mutation.AddMemberIDs(ids...)
@@ -4384,6 +4484,27 @@ func (ouo *OrganizationUpdateOne) RemoveControlobjectives(c ...*ControlObjective
 		ids[i] = c[i].ID
 	}
 	return ouo.RemoveControlobjectiveIDs(ids...)
+}
+
+// ClearNarratives clears all "narratives" edges to the Narrative entity.
+func (ouo *OrganizationUpdateOne) ClearNarratives() *OrganizationUpdateOne {
+	ouo.mutation.ClearNarratives()
+	return ouo
+}
+
+// RemoveNarrativeIDs removes the "narratives" edge to Narrative entities by IDs.
+func (ouo *OrganizationUpdateOne) RemoveNarrativeIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.RemoveNarrativeIDs(ids...)
+	return ouo
+}
+
+// RemoveNarratives removes "narratives" edges to Narrative entities.
+func (ouo *OrganizationUpdateOne) RemoveNarratives(n ...*Narrative) *OrganizationUpdateOne {
+	ids := make([]string, len(n))
+	for i := range n {
+		ids[i] = n[i].ID
+	}
+	return ouo.RemoveNarrativeIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -6069,6 +6190,54 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 			},
 		}
 		edge.Schema = ouo.schemaConfig.ControlObjective
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ouo.mutation.NarrativesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.NarrativesTable,
+			Columns: []string{organization.NarrativesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Narrative
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.RemovedNarrativesIDs(); len(nodes) > 0 && !ouo.mutation.NarrativesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.NarrativesTable,
+			Columns: []string{organization.NarrativesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Narrative
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.NarrativesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.NarrativesTable,
+			Columns: []string{organization.NarrativesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Narrative
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

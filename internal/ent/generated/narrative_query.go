@@ -5,6 +5,7 @@ package generated
 import (
 	"context"
 	"database/sql/driver"
+	"errors"
 	"fmt"
 	"math"
 
@@ -14,8 +15,10 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
@@ -30,18 +33,25 @@ type NarrativeQuery struct {
 	order                     []narrative.OrderOption
 	inters                    []Interceptor
 	predicates                []predicate.Narrative
+	withOwner                 *OrganizationQuery
+	withBlockedGroups         *GroupQuery
+	withEditors               *GroupQuery
+	withViewers               *GroupQuery
 	withPolicy                *InternalPolicyQuery
 	withControl               *ControlQuery
 	withProcedure             *ProcedureQuery
 	withControlobjective      *ControlObjectiveQuery
-	withProgram               *ProgramQuery
+	withPrograms              *ProgramQuery
 	loadTotal                 []func(context.Context, []*Narrative) error
 	modifiers                 []func(*sql.Selector)
+	withNamedBlockedGroups    map[string]*GroupQuery
+	withNamedEditors          map[string]*GroupQuery
+	withNamedViewers          map[string]*GroupQuery
 	withNamedPolicy           map[string]*InternalPolicyQuery
 	withNamedControl          map[string]*ControlQuery
 	withNamedProcedure        map[string]*ProcedureQuery
 	withNamedControlobjective map[string]*ControlObjectiveQuery
-	withNamedProgram          map[string]*ProgramQuery
+	withNamedPrograms         map[string]*ProgramQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -76,6 +86,106 @@ func (nq *NarrativeQuery) Unique(unique bool) *NarrativeQuery {
 func (nq *NarrativeQuery) Order(o ...narrative.OrderOption) *NarrativeQuery {
 	nq.order = append(nq.order, o...)
 	return nq
+}
+
+// QueryOwner chains the current query on the "owner" edge.
+func (nq *NarrativeQuery) QueryOwner() *OrganizationQuery {
+	query := (&OrganizationClient{config: nq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := nq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := nq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(narrative.Table, narrative.FieldID, selector),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, narrative.OwnerTable, narrative.OwnerColumn),
+		)
+		schemaConfig := nq.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.Narrative
+		fromU = sqlgraph.SetNeighbors(nq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryBlockedGroups chains the current query on the "blocked_groups" edge.
+func (nq *NarrativeQuery) QueryBlockedGroups() *GroupQuery {
+	query := (&GroupClient{config: nq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := nq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := nq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(narrative.Table, narrative.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, narrative.BlockedGroupsTable, narrative.BlockedGroupsPrimaryKey...),
+		)
+		schemaConfig := nq.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.NarrativeBlockedGroups
+		fromU = sqlgraph.SetNeighbors(nq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEditors chains the current query on the "editors" edge.
+func (nq *NarrativeQuery) QueryEditors() *GroupQuery {
+	query := (&GroupClient{config: nq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := nq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := nq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(narrative.Table, narrative.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, narrative.EditorsTable, narrative.EditorsPrimaryKey...),
+		)
+		schemaConfig := nq.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.NarrativeEditors
+		fromU = sqlgraph.SetNeighbors(nq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryViewers chains the current query on the "viewers" edge.
+func (nq *NarrativeQuery) QueryViewers() *GroupQuery {
+	query := (&GroupClient{config: nq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := nq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := nq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(narrative.Table, narrative.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, narrative.ViewersTable, narrative.ViewersPrimaryKey...),
+		)
+		schemaConfig := nq.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.NarrativeViewers
+		fromU = sqlgraph.SetNeighbors(nq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryPolicy chains the current query on the "policy" edge.
@@ -178,8 +288,8 @@ func (nq *NarrativeQuery) QueryControlobjective() *ControlObjectiveQuery {
 	return query
 }
 
-// QueryProgram chains the current query on the "program" edge.
-func (nq *NarrativeQuery) QueryProgram() *ProgramQuery {
+// QueryPrograms chains the current query on the "programs" edge.
+func (nq *NarrativeQuery) QueryPrograms() *ProgramQuery {
 	query := (&ProgramClient{config: nq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := nq.prepareQuery(ctx); err != nil {
@@ -192,7 +302,7 @@ func (nq *NarrativeQuery) QueryProgram() *ProgramQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(narrative.Table, narrative.FieldID, selector),
 			sqlgraph.To(program.Table, program.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, narrative.ProgramTable, narrative.ProgramPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, narrative.ProgramsTable, narrative.ProgramsPrimaryKey...),
 		)
 		schemaConfig := nq.schemaConfig
 		step.To.Schema = schemaConfig.Program
@@ -395,16 +505,64 @@ func (nq *NarrativeQuery) Clone() *NarrativeQuery {
 		order:                append([]narrative.OrderOption{}, nq.order...),
 		inters:               append([]Interceptor{}, nq.inters...),
 		predicates:           append([]predicate.Narrative{}, nq.predicates...),
+		withOwner:            nq.withOwner.Clone(),
+		withBlockedGroups:    nq.withBlockedGroups.Clone(),
+		withEditors:          nq.withEditors.Clone(),
+		withViewers:          nq.withViewers.Clone(),
 		withPolicy:           nq.withPolicy.Clone(),
 		withControl:          nq.withControl.Clone(),
 		withProcedure:        nq.withProcedure.Clone(),
 		withControlobjective: nq.withControlobjective.Clone(),
-		withProgram:          nq.withProgram.Clone(),
+		withPrograms:         nq.withPrograms.Clone(),
 		// clone intermediate query.
 		sql:       nq.sql.Clone(),
 		path:      nq.path,
 		modifiers: append([]func(*sql.Selector){}, nq.modifiers...),
 	}
+}
+
+// WithOwner tells the query-builder to eager-load the nodes that are connected to
+// the "owner" edge. The optional arguments are used to configure the query builder of the edge.
+func (nq *NarrativeQuery) WithOwner(opts ...func(*OrganizationQuery)) *NarrativeQuery {
+	query := (&OrganizationClient{config: nq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	nq.withOwner = query
+	return nq
+}
+
+// WithBlockedGroups tells the query-builder to eager-load the nodes that are connected to
+// the "blocked_groups" edge. The optional arguments are used to configure the query builder of the edge.
+func (nq *NarrativeQuery) WithBlockedGroups(opts ...func(*GroupQuery)) *NarrativeQuery {
+	query := (&GroupClient{config: nq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	nq.withBlockedGroups = query
+	return nq
+}
+
+// WithEditors tells the query-builder to eager-load the nodes that are connected to
+// the "editors" edge. The optional arguments are used to configure the query builder of the edge.
+func (nq *NarrativeQuery) WithEditors(opts ...func(*GroupQuery)) *NarrativeQuery {
+	query := (&GroupClient{config: nq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	nq.withEditors = query
+	return nq
+}
+
+// WithViewers tells the query-builder to eager-load the nodes that are connected to
+// the "viewers" edge. The optional arguments are used to configure the query builder of the edge.
+func (nq *NarrativeQuery) WithViewers(opts ...func(*GroupQuery)) *NarrativeQuery {
+	query := (&GroupClient{config: nq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	nq.withViewers = query
+	return nq
 }
 
 // WithPolicy tells the query-builder to eager-load the nodes that are connected to
@@ -451,14 +609,14 @@ func (nq *NarrativeQuery) WithControlobjective(opts ...func(*ControlObjectiveQue
 	return nq
 }
 
-// WithProgram tells the query-builder to eager-load the nodes that are connected to
-// the "program" edge. The optional arguments are used to configure the query builder of the edge.
-func (nq *NarrativeQuery) WithProgram(opts ...func(*ProgramQuery)) *NarrativeQuery {
+// WithPrograms tells the query-builder to eager-load the nodes that are connected to
+// the "programs" edge. The optional arguments are used to configure the query builder of the edge.
+func (nq *NarrativeQuery) WithPrograms(opts ...func(*ProgramQuery)) *NarrativeQuery {
 	query := (&ProgramClient{config: nq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	nq.withProgram = query
+	nq.withPrograms = query
 	return nq
 }
 
@@ -533,6 +691,12 @@ func (nq *NarrativeQuery) prepareQuery(ctx context.Context) error {
 		}
 		nq.sql = prev
 	}
+	if narrative.Policy == nil {
+		return errors.New("generated: uninitialized narrative.Policy (forgotten import generated/runtime?)")
+	}
+	if err := narrative.Policy.EvalQuery(ctx, nq); err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -540,12 +704,16 @@ func (nq *NarrativeQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Na
 	var (
 		nodes       = []*Narrative{}
 		_spec       = nq.querySpec()
-		loadedTypes = [5]bool{
+		loadedTypes = [9]bool{
+			nq.withOwner != nil,
+			nq.withBlockedGroups != nil,
+			nq.withEditors != nil,
+			nq.withViewers != nil,
 			nq.withPolicy != nil,
 			nq.withControl != nil,
 			nq.withProcedure != nil,
 			nq.withControlobjective != nil,
-			nq.withProgram != nil,
+			nq.withPrograms != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -570,6 +738,33 @@ func (nq *NarrativeQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Na
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
+	}
+	if query := nq.withOwner; query != nil {
+		if err := nq.loadOwner(ctx, query, nodes, nil,
+			func(n *Narrative, e *Organization) { n.Edges.Owner = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := nq.withBlockedGroups; query != nil {
+		if err := nq.loadBlockedGroups(ctx, query, nodes,
+			func(n *Narrative) { n.Edges.BlockedGroups = []*Group{} },
+			func(n *Narrative, e *Group) { n.Edges.BlockedGroups = append(n.Edges.BlockedGroups, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := nq.withEditors; query != nil {
+		if err := nq.loadEditors(ctx, query, nodes,
+			func(n *Narrative) { n.Edges.Editors = []*Group{} },
+			func(n *Narrative, e *Group) { n.Edges.Editors = append(n.Edges.Editors, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := nq.withViewers; query != nil {
+		if err := nq.loadViewers(ctx, query, nodes,
+			func(n *Narrative) { n.Edges.Viewers = []*Group{} },
+			func(n *Narrative, e *Group) { n.Edges.Viewers = append(n.Edges.Viewers, e) }); err != nil {
+			return nil, err
+		}
 	}
 	if query := nq.withPolicy; query != nil {
 		if err := nq.loadPolicy(ctx, query, nodes,
@@ -601,10 +796,31 @@ func (nq *NarrativeQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Na
 			return nil, err
 		}
 	}
-	if query := nq.withProgram; query != nil {
-		if err := nq.loadProgram(ctx, query, nodes,
-			func(n *Narrative) { n.Edges.Program = []*Program{} },
-			func(n *Narrative, e *Program) { n.Edges.Program = append(n.Edges.Program, e) }); err != nil {
+	if query := nq.withPrograms; query != nil {
+		if err := nq.loadPrograms(ctx, query, nodes,
+			func(n *Narrative) { n.Edges.Programs = []*Program{} },
+			func(n *Narrative, e *Program) { n.Edges.Programs = append(n.Edges.Programs, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range nq.withNamedBlockedGroups {
+		if err := nq.loadBlockedGroups(ctx, query, nodes,
+			func(n *Narrative) { n.appendNamedBlockedGroups(name) },
+			func(n *Narrative, e *Group) { n.appendNamedBlockedGroups(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range nq.withNamedEditors {
+		if err := nq.loadEditors(ctx, query, nodes,
+			func(n *Narrative) { n.appendNamedEditors(name) },
+			func(n *Narrative, e *Group) { n.appendNamedEditors(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range nq.withNamedViewers {
+		if err := nq.loadViewers(ctx, query, nodes,
+			func(n *Narrative) { n.appendNamedViewers(name) },
+			func(n *Narrative, e *Group) { n.appendNamedViewers(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -636,10 +852,10 @@ func (nq *NarrativeQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Na
 			return nil, err
 		}
 	}
-	for name, query := range nq.withNamedProgram {
-		if err := nq.loadProgram(ctx, query, nodes,
-			func(n *Narrative) { n.appendNamedProgram(name) },
-			func(n *Narrative, e *Program) { n.appendNamedProgram(name, e) }); err != nil {
+	for name, query := range nq.withNamedPrograms {
+		if err := nq.loadPrograms(ctx, query, nodes,
+			func(n *Narrative) { n.appendNamedPrograms(name) },
+			func(n *Narrative, e *Program) { n.appendNamedPrograms(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -651,6 +867,221 @@ func (nq *NarrativeQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Na
 	return nodes, nil
 }
 
+func (nq *NarrativeQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*Narrative, init func(*Narrative), assign func(*Narrative, *Organization)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Narrative)
+	for i := range nodes {
+		fk := nodes[i].OwnerID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(organization.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "owner_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (nq *NarrativeQuery) loadBlockedGroups(ctx context.Context, query *GroupQuery, nodes []*Narrative, init func(*Narrative), assign func(*Narrative, *Group)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Narrative)
+	nids := make(map[string]map[*Narrative]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(narrative.BlockedGroupsTable)
+		joinT.Schema(nq.schemaConfig.NarrativeBlockedGroups)
+		s.Join(joinT).On(s.C(group.FieldID), joinT.C(narrative.BlockedGroupsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(narrative.BlockedGroupsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(narrative.BlockedGroupsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Narrative]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Group](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "blocked_groups" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (nq *NarrativeQuery) loadEditors(ctx context.Context, query *GroupQuery, nodes []*Narrative, init func(*Narrative), assign func(*Narrative, *Group)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Narrative)
+	nids := make(map[string]map[*Narrative]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(narrative.EditorsTable)
+		joinT.Schema(nq.schemaConfig.NarrativeEditors)
+		s.Join(joinT).On(s.C(group.FieldID), joinT.C(narrative.EditorsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(narrative.EditorsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(narrative.EditorsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Narrative]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Group](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "editors" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (nq *NarrativeQuery) loadViewers(ctx context.Context, query *GroupQuery, nodes []*Narrative, init func(*Narrative), assign func(*Narrative, *Group)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Narrative)
+	nids := make(map[string]map[*Narrative]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(narrative.ViewersTable)
+		joinT.Schema(nq.schemaConfig.NarrativeViewers)
+		s.Join(joinT).On(s.C(group.FieldID), joinT.C(narrative.ViewersPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(narrative.ViewersPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(narrative.ViewersPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Narrative]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Group](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "viewers" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (nq *NarrativeQuery) loadPolicy(ctx context.Context, query *InternalPolicyQuery, nodes []*Narrative, init func(*Narrative), assign func(*Narrative, *InternalPolicy)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Narrative)
@@ -899,7 +1330,7 @@ func (nq *NarrativeQuery) loadControlobjective(ctx context.Context, query *Contr
 	}
 	return nil
 }
-func (nq *NarrativeQuery) loadProgram(ctx context.Context, query *ProgramQuery, nodes []*Narrative, init func(*Narrative), assign func(*Narrative, *Program)) error {
+func (nq *NarrativeQuery) loadPrograms(ctx context.Context, query *ProgramQuery, nodes []*Narrative, init func(*Narrative), assign func(*Narrative, *Program)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Narrative)
 	nids := make(map[string]map[*Narrative]struct{})
@@ -911,12 +1342,12 @@ func (nq *NarrativeQuery) loadProgram(ctx context.Context, query *ProgramQuery, 
 		}
 	}
 	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(narrative.ProgramTable)
+		joinT := sql.Table(narrative.ProgramsTable)
 		joinT.Schema(nq.schemaConfig.ProgramNarratives)
-		s.Join(joinT).On(s.C(program.FieldID), joinT.C(narrative.ProgramPrimaryKey[0]))
-		s.Where(sql.InValues(joinT.C(narrative.ProgramPrimaryKey[1]), edgeIDs...))
+		s.Join(joinT).On(s.C(program.FieldID), joinT.C(narrative.ProgramsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(narrative.ProgramsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
-		s.Select(joinT.C(narrative.ProgramPrimaryKey[1]))
+		s.Select(joinT.C(narrative.ProgramsPrimaryKey[1]))
 		s.AppendSelect(columns...)
 		s.SetDistinct(false)
 	})
@@ -953,7 +1384,7 @@ func (nq *NarrativeQuery) loadProgram(ctx context.Context, query *ProgramQuery, 
 	for _, n := range neighbors {
 		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected "program" node returned %v`, n.ID)
+			return fmt.Errorf(`unexpected "programs" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -991,6 +1422,9 @@ func (nq *NarrativeQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != narrative.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if nq.withOwner != nil {
+			_spec.Node.AddColumnOnce(narrative.FieldOwnerID)
 		}
 	}
 	if ps := nq.predicates; len(ps) > 0 {
@@ -1060,6 +1494,48 @@ func (nq *NarrativeQuery) Modify(modifiers ...func(s *sql.Selector)) *NarrativeS
 	return nq.Select()
 }
 
+// WithNamedBlockedGroups tells the query-builder to eager-load the nodes that are connected to the "blocked_groups"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (nq *NarrativeQuery) WithNamedBlockedGroups(name string, opts ...func(*GroupQuery)) *NarrativeQuery {
+	query := (&GroupClient{config: nq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if nq.withNamedBlockedGroups == nil {
+		nq.withNamedBlockedGroups = make(map[string]*GroupQuery)
+	}
+	nq.withNamedBlockedGroups[name] = query
+	return nq
+}
+
+// WithNamedEditors tells the query-builder to eager-load the nodes that are connected to the "editors"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (nq *NarrativeQuery) WithNamedEditors(name string, opts ...func(*GroupQuery)) *NarrativeQuery {
+	query := (&GroupClient{config: nq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if nq.withNamedEditors == nil {
+		nq.withNamedEditors = make(map[string]*GroupQuery)
+	}
+	nq.withNamedEditors[name] = query
+	return nq
+}
+
+// WithNamedViewers tells the query-builder to eager-load the nodes that are connected to the "viewers"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (nq *NarrativeQuery) WithNamedViewers(name string, opts ...func(*GroupQuery)) *NarrativeQuery {
+	query := (&GroupClient{config: nq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if nq.withNamedViewers == nil {
+		nq.withNamedViewers = make(map[string]*GroupQuery)
+	}
+	nq.withNamedViewers[name] = query
+	return nq
+}
+
 // WithNamedPolicy tells the query-builder to eager-load the nodes that are connected to the "policy"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
 func (nq *NarrativeQuery) WithNamedPolicy(name string, opts ...func(*InternalPolicyQuery)) *NarrativeQuery {
@@ -1116,17 +1592,17 @@ func (nq *NarrativeQuery) WithNamedControlobjective(name string, opts ...func(*C
 	return nq
 }
 
-// WithNamedProgram tells the query-builder to eager-load the nodes that are connected to the "program"
+// WithNamedPrograms tells the query-builder to eager-load the nodes that are connected to the "programs"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (nq *NarrativeQuery) WithNamedProgram(name string, opts ...func(*ProgramQuery)) *NarrativeQuery {
+func (nq *NarrativeQuery) WithNamedPrograms(name string, opts ...func(*ProgramQuery)) *NarrativeQuery {
 	query := (&ProgramClient{config: nq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if nq.withNamedProgram == nil {
-		nq.withNamedProgram = make(map[string]*ProgramQuery)
+	if nq.withNamedPrograms == nil {
+		nq.withNamedPrograms = make(map[string]*ProgramQuery)
 	}
-	nq.withNamedProgram[name] = query
+	nq.withNamedPrograms[name] = query
 	return nq
 }
 

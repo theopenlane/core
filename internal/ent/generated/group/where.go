@@ -1592,6 +1592,93 @@ func HasControlobjectiveBlockedGroupsWith(preds ...predicate.ControlObjective) p
 	})
 }
 
+// HasNarrativeViewers applies the HasEdge predicate on the "narrative_viewers" edge.
+func HasNarrativeViewers() predicate.Group {
+	return predicate.Group(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, NarrativeViewersTable, NarrativeViewersPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Narrative
+		step.Edge.Schema = schemaConfig.NarrativeViewers
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasNarrativeViewersWith applies the HasEdge predicate on the "narrative_viewers" edge with a given conditions (other predicates).
+func HasNarrativeViewersWith(preds ...predicate.Narrative) predicate.Group {
+	return predicate.Group(func(s *sql.Selector) {
+		step := newNarrativeViewersStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Narrative
+		step.Edge.Schema = schemaConfig.NarrativeViewers
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasNarrativeEditors applies the HasEdge predicate on the "narrative_editors" edge.
+func HasNarrativeEditors() predicate.Group {
+	return predicate.Group(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, NarrativeEditorsTable, NarrativeEditorsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Narrative
+		step.Edge.Schema = schemaConfig.NarrativeEditors
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasNarrativeEditorsWith applies the HasEdge predicate on the "narrative_editors" edge with a given conditions (other predicates).
+func HasNarrativeEditorsWith(preds ...predicate.Narrative) predicate.Group {
+	return predicate.Group(func(s *sql.Selector) {
+		step := newNarrativeEditorsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Narrative
+		step.Edge.Schema = schemaConfig.NarrativeEditors
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasNarrativeBlockedGroups applies the HasEdge predicate on the "narrative_blocked_groups" edge.
+func HasNarrativeBlockedGroups() predicate.Group {
+	return predicate.Group(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, NarrativeBlockedGroupsTable, NarrativeBlockedGroupsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Narrative
+		step.Edge.Schema = schemaConfig.NarrativeBlockedGroups
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasNarrativeBlockedGroupsWith applies the HasEdge predicate on the "narrative_blocked_groups" edge with a given conditions (other predicates).
+func HasNarrativeBlockedGroupsWith(preds ...predicate.Narrative) predicate.Group {
+	return predicate.Group(func(s *sql.Selector) {
+		step := newNarrativeBlockedGroupsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Narrative
+		step.Edge.Schema = schemaConfig.NarrativeBlockedGroups
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasMembers applies the HasEdge predicate on the "members" edge.
 func HasMembers() predicate.Group {
 	return predicate.Group(func(s *sql.Selector) {

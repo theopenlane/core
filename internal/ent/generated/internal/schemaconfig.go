@@ -86,6 +86,9 @@ type SchemaConfig struct {
 	Invite                           string // Invite table.
 	InviteEvents                     string // Invite-events->Event table.
 	Narrative                        string // Narrative table.
+	NarrativeBlockedGroups           string // Narrative-blocked_groups->Group table.
+	NarrativeEditors                 string // Narrative-editors->Group table.
+	NarrativeViewers                 string // Narrative-viewers->Group table.
 	NarrativeHistory                 string // NarrativeHistory table.
 	Note                             string // Note table.
 	NoteHistory                      string // NoteHistory table.

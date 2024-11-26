@@ -12,8 +12,10 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 )
@@ -129,6 +131,12 @@ func (nc *NarrativeCreate) SetTags(s []string) *NarrativeCreate {
 	return nc
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (nc *NarrativeCreate) SetOwnerID(s string) *NarrativeCreate {
+	nc.mutation.SetOwnerID(s)
+	return nc
+}
+
 // SetName sets the "name" field.
 func (nc *NarrativeCreate) SetName(s string) *NarrativeCreate {
 	nc.mutation.SetName(s)
@@ -181,6 +189,56 @@ func (nc *NarrativeCreate) SetNillableID(s *string) *NarrativeCreate {
 		nc.SetID(*s)
 	}
 	return nc
+}
+
+// SetOwner sets the "owner" edge to the Organization entity.
+func (nc *NarrativeCreate) SetOwner(o *Organization) *NarrativeCreate {
+	return nc.SetOwnerID(o.ID)
+}
+
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (nc *NarrativeCreate) AddBlockedGroupIDs(ids ...string) *NarrativeCreate {
+	nc.mutation.AddBlockedGroupIDs(ids...)
+	return nc
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (nc *NarrativeCreate) AddBlockedGroups(g ...*Group) *NarrativeCreate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return nc.AddBlockedGroupIDs(ids...)
+}
+
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (nc *NarrativeCreate) AddEditorIDs(ids ...string) *NarrativeCreate {
+	nc.mutation.AddEditorIDs(ids...)
+	return nc
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (nc *NarrativeCreate) AddEditors(g ...*Group) *NarrativeCreate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return nc.AddEditorIDs(ids...)
+}
+
+// AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
+func (nc *NarrativeCreate) AddViewerIDs(ids ...string) *NarrativeCreate {
+	nc.mutation.AddViewerIDs(ids...)
+	return nc
+}
+
+// AddViewers adds the "viewers" edges to the Group entity.
+func (nc *NarrativeCreate) AddViewers(g ...*Group) *NarrativeCreate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return nc.AddViewerIDs(ids...)
 }
 
 // AddPolicyIDs adds the "policy" edge to the InternalPolicy entity by IDs.
@@ -243,14 +301,14 @@ func (nc *NarrativeCreate) AddControlobjective(c ...*ControlObjective) *Narrativ
 	return nc.AddControlobjectiveIDs(ids...)
 }
 
-// AddProgramIDs adds the "program" edge to the Program entity by IDs.
+// AddProgramIDs adds the "programs" edge to the Program entity by IDs.
 func (nc *NarrativeCreate) AddProgramIDs(ids ...string) *NarrativeCreate {
 	nc.mutation.AddProgramIDs(ids...)
 	return nc
 }
 
-// AddProgram adds the "program" edges to the Program entity.
-func (nc *NarrativeCreate) AddProgram(p ...*Program) *NarrativeCreate {
+// AddPrograms adds the "programs" edges to the Program entity.
+func (nc *NarrativeCreate) AddPrograms(p ...*Program) *NarrativeCreate {
 	ids := make([]string, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
@@ -335,8 +393,24 @@ func (nc *NarrativeCreate) check() error {
 	if _, ok := nc.mutation.MappingID(); !ok {
 		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "Narrative.mapping_id"`)}
 	}
+	if _, ok := nc.mutation.OwnerID(); !ok {
+		return &ValidationError{Name: "owner_id", err: errors.New(`generated: missing required field "Narrative.owner_id"`)}
+	}
+	if v, ok := nc.mutation.OwnerID(); ok {
+		if err := narrative.OwnerIDValidator(v); err != nil {
+			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Narrative.owner_id": %w`, err)}
+		}
+	}
 	if _, ok := nc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "Narrative.name"`)}
+	}
+	if v, ok := nc.mutation.Name(); ok {
+		if err := narrative.NameValidator(v); err != nil {
+			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Narrative.name": %w`, err)}
+		}
+	}
+	if len(nc.mutation.OwnerIDs()) == 0 {
+		return &ValidationError{Name: "owner", err: errors.New(`generated: missing required edge "Narrative.owner"`)}
 	}
 	return nil
 }
@@ -422,6 +496,75 @@ func (nc *NarrativeCreate) createSpec() (*Narrative, *sqlgraph.CreateSpec) {
 		_spec.SetField(narrative.FieldDetails, field.TypeJSON, value)
 		_node.Details = value
 	}
+	if nodes := nc.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   narrative.OwnerTable,
+			Columns: []string{narrative.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nc.schemaConfig.Narrative
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.OwnerID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := nc.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   narrative.BlockedGroupsTable,
+			Columns: narrative.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nc.schemaConfig.NarrativeBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := nc.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   narrative.EditorsTable,
+			Columns: narrative.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nc.schemaConfig.NarrativeEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := nc.mutation.ViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   narrative.ViewersTable,
+			Columns: narrative.ViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nc.schemaConfig.NarrativeViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := nc.mutation.PolicyIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -490,12 +633,12 @@ func (nc *NarrativeCreate) createSpec() (*Narrative, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := nc.mutation.ProgramIDs(); len(nodes) > 0 {
+	if nodes := nc.mutation.ProgramsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   narrative.ProgramTable,
-			Columns: narrative.ProgramPrimaryKey,
+			Table:   narrative.ProgramsTable,
+			Columns: narrative.ProgramsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),

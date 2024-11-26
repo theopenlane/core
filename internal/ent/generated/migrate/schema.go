@@ -1551,12 +1551,21 @@ var (
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "satisfies", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "details", Type: field.TypeJSON, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString},
 	}
 	// NarrativesTable holds the schema information for the "narratives" table.
 	NarrativesTable = &schema.Table{
 		Name:       "narratives",
 		Columns:    NarrativesColumns,
 		PrimaryKey: []*schema.Column{NarrativesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "narratives_organizations_narratives",
+				Columns:    []*schema.Column{NarrativesColumns[13]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
 	}
 	// NarrativeHistoryColumns holds the columns for the "narrative_history" table.
 	NarrativeHistoryColumns = []*schema.Column{
@@ -1572,6 +1581,7 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "satisfies", Type: field.TypeString, Nullable: true, Size: 2147483647},
@@ -3992,6 +4002,81 @@ var (
 			},
 		},
 	}
+	// NarrativeBlockedGroupsColumns holds the columns for the "narrative_blocked_groups" table.
+	NarrativeBlockedGroupsColumns = []*schema.Column{
+		{Name: "narrative_id", Type: field.TypeString},
+		{Name: "group_id", Type: field.TypeString},
+	}
+	// NarrativeBlockedGroupsTable holds the schema information for the "narrative_blocked_groups" table.
+	NarrativeBlockedGroupsTable = &schema.Table{
+		Name:       "narrative_blocked_groups",
+		Columns:    NarrativeBlockedGroupsColumns,
+		PrimaryKey: []*schema.Column{NarrativeBlockedGroupsColumns[0], NarrativeBlockedGroupsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "narrative_blocked_groups_narrative_id",
+				Columns:    []*schema.Column{NarrativeBlockedGroupsColumns[0]},
+				RefColumns: []*schema.Column{NarrativesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "narrative_blocked_groups_group_id",
+				Columns:    []*schema.Column{NarrativeBlockedGroupsColumns[1]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// NarrativeEditorsColumns holds the columns for the "narrative_editors" table.
+	NarrativeEditorsColumns = []*schema.Column{
+		{Name: "narrative_id", Type: field.TypeString},
+		{Name: "group_id", Type: field.TypeString},
+	}
+	// NarrativeEditorsTable holds the schema information for the "narrative_editors" table.
+	NarrativeEditorsTable = &schema.Table{
+		Name:       "narrative_editors",
+		Columns:    NarrativeEditorsColumns,
+		PrimaryKey: []*schema.Column{NarrativeEditorsColumns[0], NarrativeEditorsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "narrative_editors_narrative_id",
+				Columns:    []*schema.Column{NarrativeEditorsColumns[0]},
+				RefColumns: []*schema.Column{NarrativesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "narrative_editors_group_id",
+				Columns:    []*schema.Column{NarrativeEditorsColumns[1]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// NarrativeViewersColumns holds the columns for the "narrative_viewers" table.
+	NarrativeViewersColumns = []*schema.Column{
+		{Name: "narrative_id", Type: field.TypeString},
+		{Name: "group_id", Type: field.TypeString},
+	}
+	// NarrativeViewersTable holds the schema information for the "narrative_viewers" table.
+	NarrativeViewersTable = &schema.Table{
+		Name:       "narrative_viewers",
+		Columns:    NarrativeViewersColumns,
+		PrimaryKey: []*schema.Column{NarrativeViewersColumns[0], NarrativeViewersColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "narrative_viewers_narrative_id",
+				Columns:    []*schema.Column{NarrativeViewersColumns[0]},
+				RefColumns: []*schema.Column{NarrativesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "narrative_viewers_group_id",
+				Columns:    []*schema.Column{NarrativeViewersColumns[1]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// OhAuthTooTokenEventsColumns holds the columns for the "oh_auth_too_token_events" table.
 	OhAuthTooTokenEventsColumns = []*schema.Column{
 		{Name: "oh_auth_too_token_id", Type: field.TypeString},
@@ -5237,6 +5322,9 @@ var (
 		InternalPolicyNarrativesTable,
 		InternalPolicyTasksTable,
 		InviteEventsTable,
+		NarrativeBlockedGroupsTable,
+		NarrativeEditorsTable,
+		NarrativeViewersTable,
 		OhAuthTooTokenEventsTable,
 		OrgMembershipEventsTable,
 		OrganizationPersonalAccessTokensTable,
@@ -5372,6 +5460,7 @@ func init() {
 		Table: "internal_policy_history",
 	}
 	InvitesTable.ForeignKeys[0].RefTable = OrganizationsTable
+	NarrativesTable.ForeignKeys[0].RefTable = OrganizationsTable
 	NarrativeHistoryTable.Annotation = &entsql.Annotation{
 		Table: "narrative_history",
 	}
@@ -5526,6 +5615,12 @@ func init() {
 	InternalPolicyTasksTable.ForeignKeys[1].RefTable = TasksTable
 	InviteEventsTable.ForeignKeys[0].RefTable = InvitesTable
 	InviteEventsTable.ForeignKeys[1].RefTable = EventsTable
+	NarrativeBlockedGroupsTable.ForeignKeys[0].RefTable = NarrativesTable
+	NarrativeBlockedGroupsTable.ForeignKeys[1].RefTable = GroupsTable
+	NarrativeEditorsTable.ForeignKeys[0].RefTable = NarrativesTable
+	NarrativeEditorsTable.ForeignKeys[1].RefTable = GroupsTable
+	NarrativeViewersTable.ForeignKeys[0].RefTable = NarrativesTable
+	NarrativeViewersTable.ForeignKeys[1].RefTable = GroupsTable
 	OhAuthTooTokenEventsTable.ForeignKeys[0].RefTable = OhAuthTooTokensTable
 	OhAuthTooTokenEventsTable.ForeignKeys[1].RefTable = EventsTable
 	OrgMembershipEventsTable.ForeignKeys[0].RefTable = OrgMembershipsTable

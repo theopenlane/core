@@ -159,6 +159,12 @@ func (nhc *NarrativeHistoryCreate) SetTags(s []string) *NarrativeHistoryCreate {
 	return nhc
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (nhc *NarrativeHistoryCreate) SetOwnerID(s string) *NarrativeHistoryCreate {
+	nhc.mutation.SetOwnerID(s)
+	return nhc
+}
+
 // SetName sets the "name" field.
 func (nhc *NarrativeHistoryCreate) SetName(s string) *NarrativeHistoryCreate {
 	nhc.mutation.SetName(s)
@@ -220,7 +226,9 @@ func (nhc *NarrativeHistoryCreate) Mutation() *NarrativeHistoryMutation {
 
 // Save creates the NarrativeHistory in the database.
 func (nhc *NarrativeHistoryCreate) Save(ctx context.Context) (*NarrativeHistory, error) {
-	nhc.defaults()
+	if err := nhc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, nhc.sqlSave, nhc.mutation, nhc.hooks)
 }
 
@@ -247,20 +255,32 @@ func (nhc *NarrativeHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (nhc *NarrativeHistoryCreate) defaults() {
+func (nhc *NarrativeHistoryCreate) defaults() error {
 	if _, ok := nhc.mutation.HistoryTime(); !ok {
+		if narrativehistory.DefaultHistoryTime == nil {
+			return fmt.Errorf("generated: uninitialized narrativehistory.DefaultHistoryTime (forgotten import generated/runtime?)")
+		}
 		v := narrativehistory.DefaultHistoryTime()
 		nhc.mutation.SetHistoryTime(v)
 	}
 	if _, ok := nhc.mutation.CreatedAt(); !ok {
+		if narrativehistory.DefaultCreatedAt == nil {
+			return fmt.Errorf("generated: uninitialized narrativehistory.DefaultCreatedAt (forgotten import generated/runtime?)")
+		}
 		v := narrativehistory.DefaultCreatedAt()
 		nhc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := nhc.mutation.UpdatedAt(); !ok {
+		if narrativehistory.DefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized narrativehistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := narrativehistory.DefaultUpdatedAt()
 		nhc.mutation.SetUpdatedAt(v)
 	}
 	if _, ok := nhc.mutation.MappingID(); !ok {
+		if narrativehistory.DefaultMappingID == nil {
+			return fmt.Errorf("generated: uninitialized narrativehistory.DefaultMappingID (forgotten import generated/runtime?)")
+		}
 		v := narrativehistory.DefaultMappingID()
 		nhc.mutation.SetMappingID(v)
 	}
@@ -269,9 +289,13 @@ func (nhc *NarrativeHistoryCreate) defaults() {
 		nhc.mutation.SetTags(v)
 	}
 	if _, ok := nhc.mutation.ID(); !ok {
+		if narrativehistory.DefaultID == nil {
+			return fmt.Errorf("generated: uninitialized narrativehistory.DefaultID (forgotten import generated/runtime?)")
+		}
 		v := narrativehistory.DefaultID()
 		nhc.mutation.SetID(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -289,6 +313,9 @@ func (nhc *NarrativeHistoryCreate) check() error {
 	}
 	if _, ok := nhc.mutation.MappingID(); !ok {
 		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "NarrativeHistory.mapping_id"`)}
+	}
+	if _, ok := nhc.mutation.OwnerID(); !ok {
+		return &ValidationError{Name: "owner_id", err: errors.New(`generated: missing required field "NarrativeHistory.owner_id"`)}
 	}
 	if _, ok := nhc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "NarrativeHistory.name"`)}
@@ -372,6 +399,10 @@ func (nhc *NarrativeHistoryCreate) createSpec() (*NarrativeHistory, *sqlgraph.Cr
 	if value, ok := nhc.mutation.Tags(); ok {
 		_spec.SetField(narrativehistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
+	}
+	if value, ok := nhc.mutation.OwnerID(); ok {
+		_spec.SetField(narrativehistory.FieldOwnerID, field.TypeString, value)
+		_node.OwnerID = value
 	}
 	if value, ok := nhc.mutation.Name(); ok {
 		_spec.SetField(narrativehistory.FieldName, field.TypeString, value)

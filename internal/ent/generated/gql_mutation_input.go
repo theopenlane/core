@@ -2903,6 +2903,9 @@ type CreateGroupInput struct {
 	ControlobjectiveViewerIDs       []string
 	ControlobjectiveEditorIDs       []string
 	ControlobjectiveBlockedGroupIDs []string
+	NarrativeViewerIDs              []string
+	NarrativeEditorIDs              []string
+	NarrativeBlockedGroupIDs        []string
 }
 
 // Mutate applies the CreateGroupInput on the GroupMutation builder.
@@ -2980,6 +2983,15 @@ func (i *CreateGroupInput) Mutate(m *GroupMutation) {
 	}
 	if v := i.ControlobjectiveBlockedGroupIDs; len(v) > 0 {
 		m.AddControlobjectiveBlockedGroupIDs(v...)
+	}
+	if v := i.NarrativeViewerIDs; len(v) > 0 {
+		m.AddNarrativeViewerIDs(v...)
+	}
+	if v := i.NarrativeEditorIDs; len(v) > 0 {
+		m.AddNarrativeEditorIDs(v...)
+	}
+	if v := i.NarrativeBlockedGroupIDs; len(v) > 0 {
+		m.AddNarrativeBlockedGroupIDs(v...)
 	}
 }
 
@@ -3059,6 +3071,15 @@ type UpdateGroupInput struct {
 	ClearControlobjectiveBlockedGroups    bool
 	AddControlobjectiveBlockedGroupIDs    []string
 	RemoveControlobjectiveBlockedGroupIDs []string
+	ClearNarrativeViewers                 bool
+	AddNarrativeViewerIDs                 []string
+	RemoveNarrativeViewerIDs              []string
+	ClearNarrativeEditors                 bool
+	AddNarrativeEditorIDs                 []string
+	RemoveNarrativeEditorIDs              []string
+	ClearNarrativeBlockedGroups           bool
+	AddNarrativeBlockedGroupIDs           []string
+	RemoveNarrativeBlockedGroupIDs        []string
 }
 
 // Mutate applies the UpdateGroupInput on the GroupMutation builder.
@@ -3266,6 +3287,33 @@ func (i *UpdateGroupInput) Mutate(m *GroupMutation) {
 	}
 	if v := i.RemoveControlobjectiveBlockedGroupIDs; len(v) > 0 {
 		m.RemoveControlobjectiveBlockedGroupIDs(v...)
+	}
+	if i.ClearNarrativeViewers {
+		m.ClearNarrativeViewers()
+	}
+	if v := i.AddNarrativeViewerIDs; len(v) > 0 {
+		m.AddNarrativeViewerIDs(v...)
+	}
+	if v := i.RemoveNarrativeViewerIDs; len(v) > 0 {
+		m.RemoveNarrativeViewerIDs(v...)
+	}
+	if i.ClearNarrativeEditors {
+		m.ClearNarrativeEditors()
+	}
+	if v := i.AddNarrativeEditorIDs; len(v) > 0 {
+		m.AddNarrativeEditorIDs(v...)
+	}
+	if v := i.RemoveNarrativeEditorIDs; len(v) > 0 {
+		m.RemoveNarrativeEditorIDs(v...)
+	}
+	if i.ClearNarrativeBlockedGroups {
+		m.ClearNarrativeBlockedGroups()
+	}
+	if v := i.AddNarrativeBlockedGroupIDs; len(v) > 0 {
+		m.AddNarrativeBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveNarrativeBlockedGroupIDs; len(v) > 0 {
+		m.RemoveNarrativeBlockedGroupIDs(v...)
 	}
 }
 
@@ -4112,6 +4160,10 @@ type CreateNarrativeInput struct {
 	Description         *string
 	Satisfies           *string
 	Details             map[string]interface{}
+	OwnerID             string
+	BlockedGroupIDs     []string
+	EditorIDs           []string
+	ViewerIDs           []string
 	PolicyIDs           []string
 	ControlIDs          []string
 	ProcedureIDs        []string
@@ -4133,6 +4185,16 @@ func (i *CreateNarrativeInput) Mutate(m *NarrativeMutation) {
 	}
 	if v := i.Details; v != nil {
 		m.SetDetails(v)
+	}
+	m.SetOwnerID(i.OwnerID)
+	if v := i.BlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.EditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.ViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
 	}
 	if v := i.PolicyIDs; len(v) > 0 {
 		m.AddPolicyIDs(v...)
@@ -4169,6 +4231,16 @@ type UpdateNarrativeInput struct {
 	Satisfies                 *string
 	ClearDetails              bool
 	Details                   map[string]interface{}
+	OwnerID                   *string
+	ClearBlockedGroups        bool
+	AddBlockedGroupIDs        []string
+	RemoveBlockedGroupIDs     []string
+	ClearEditors              bool
+	AddEditorIDs              []string
+	RemoveEditorIDs           []string
+	ClearViewers              bool
+	AddViewerIDs              []string
+	RemoveViewerIDs           []string
 	ClearPolicy               bool
 	AddPolicyIDs              []string
 	RemovePolicyIDs           []string
@@ -4181,7 +4253,7 @@ type UpdateNarrativeInput struct {
 	ClearControlobjective     bool
 	AddControlobjectiveIDs    []string
 	RemoveControlobjectiveIDs []string
-	ClearProgram              bool
+	ClearPrograms             bool
 	AddProgramIDs             []string
 	RemoveProgramIDs          []string
 }
@@ -4217,6 +4289,36 @@ func (i *UpdateNarrativeInput) Mutate(m *NarrativeMutation) {
 	}
 	if v := i.Details; v != nil {
 		m.SetDetails(v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if i.ClearBlockedGroups {
+		m.ClearBlockedGroups()
+	}
+	if v := i.AddBlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
+		m.RemoveBlockedGroupIDs(v...)
+	}
+	if i.ClearEditors {
+		m.ClearEditors()
+	}
+	if v := i.AddEditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.RemoveEditorIDs; len(v) > 0 {
+		m.RemoveEditorIDs(v...)
+	}
+	if i.ClearViewers {
+		m.ClearViewers()
+	}
+	if v := i.AddViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
+	if v := i.RemoveViewerIDs; len(v) > 0 {
+		m.RemoveViewerIDs(v...)
 	}
 	if i.ClearPolicy {
 		m.ClearPolicy()
@@ -4254,8 +4356,8 @@ func (i *UpdateNarrativeInput) Mutate(m *NarrativeMutation) {
 	if v := i.RemoveControlobjectiveIDs; len(v) > 0 {
 		m.RemoveControlobjectiveIDs(v...)
 	}
-	if i.ClearProgram {
-		m.ClearProgram()
+	if i.ClearPrograms {
+		m.ClearPrograms()
 	}
 	if v := i.AddProgramIDs; len(v) > 0 {
 		m.AddProgramIDs(v...)
@@ -4792,6 +4894,7 @@ type CreateOrganizationInput struct {
 	InternalpolicyIDs          []string
 	RiskIDs                    []string
 	ControlobjectiveIDs        []string
+	NarrativeIDs               []string
 }
 
 // Mutate applies the CreateOrganizationInput on the OrganizationMutation builder.
@@ -4905,6 +5008,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.ControlobjectiveIDs; len(v) > 0 {
 		m.AddControlobjectiveIDs(v...)
 	}
+	if v := i.NarrativeIDs; len(v) > 0 {
+		m.AddNarrativeIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateOrganizationInput on the OrganizationCreate builder.
@@ -5010,6 +5116,9 @@ type UpdateOrganizationInput struct {
 	ClearControlobjectives           bool
 	AddControlobjectiveIDs           []string
 	RemoveControlobjectiveIDs        []string
+	ClearNarratives                  bool
+	AddNarrativeIDs                  []string
+	RemoveNarrativeIDs               []string
 }
 
 // Mutate applies the UpdateOrganizationInput on the OrganizationMutation builder.
@@ -5298,6 +5407,15 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveControlobjectiveIDs; len(v) > 0 {
 		m.RemoveControlobjectiveIDs(v...)
+	}
+	if i.ClearNarratives {
+		m.ClearNarratives()
+	}
+	if v := i.AddNarrativeIDs; len(v) > 0 {
+		m.AddNarrativeIDs(v...)
+	}
+	if v := i.RemoveNarrativeIDs; len(v) > 0 {
+		m.RemoveNarrativeIDs(v...)
 	}
 }
 

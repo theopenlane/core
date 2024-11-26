@@ -46,6 +46,22 @@ mutation CreateNarrative($input: CreateNarrativeInput!) {
       tags
       updatedAt
       updatedBy
+      programs {
+        id
+        name
+      }
+      editors {
+        id
+        name
+      }
+      viewers {
+        id
+        name
+      }
+      blockedGroups {
+        id
+        name
+      }
     }
   }
 }
@@ -70,6 +86,22 @@ query GetAllNarratives {
         tags
         updatedAt
         updatedBy
+        programs {
+          id
+          name
+        }
+        editors {
+          id
+          name
+        }
+        viewers {
+          id
+          name
+        }
+        blockedGroups {
+          id
+          name
+        }
       }
     }
   }
@@ -86,6 +118,22 @@ query GetNarrativeByID($narrativeId: ID!) {
     tags
     updatedAt
     updatedBy
+    programs {
+      id
+      name
+    }
+    editors {
+      id
+      name
+    }
+    viewers {
+      id
+      name
+    }
+    blockedGroups {
+      id
+      name
+    }
   }
 }
 
@@ -103,6 +151,22 @@ query GetNarratives($where: NarrativeWhereInput) {
         tags
         updatedAt
         updatedBy
+        programs {
+          id
+          name
+        }
+        editors {
+          id
+          name
+        }
+        viewers {
+          id
+          name
+        }
+        blockedGroups {
+          id
+          name
+        }
       }
     }
   }
@@ -120,6 +184,22 @@ mutation UpdateNarrative($updateNarrativeId: ID!, $input: UpdateNarrativeInput!)
       tags
       updatedAt
       updatedBy
+      programs {
+        id
+        name
+      }
+      editors {
+        id
+        name
+      }
+      viewers {
+        id
+        name
+      }
+      blockedGroups {
+        id
+        name
+      }
     }
   }
 }
