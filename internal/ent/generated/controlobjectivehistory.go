@@ -41,6 +41,8 @@ type ControlObjectiveHistory struct {
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// the ID of the organization owner of the object
+	OwnerID string `json:"owner_id,omitempty"`
 	// the name of the control objective
 	Name string `json:"name,omitempty"`
 	// description of the control objective
@@ -75,7 +77,7 @@ func (*ControlObjectiveHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case controlobjectivehistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case controlobjectivehistory.FieldID, controlobjectivehistory.FieldRef, controlobjectivehistory.FieldCreatedBy, controlobjectivehistory.FieldUpdatedBy, controlobjectivehistory.FieldDeletedBy, controlobjectivehistory.FieldMappingID, controlobjectivehistory.FieldName, controlobjectivehistory.FieldDescription, controlobjectivehistory.FieldStatus, controlobjectivehistory.FieldControlObjectiveType, controlobjectivehistory.FieldVersion, controlobjectivehistory.FieldControlNumber, controlobjectivehistory.FieldFamily, controlobjectivehistory.FieldClass, controlobjectivehistory.FieldSource, controlobjectivehistory.FieldMappedFrameworks:
+		case controlobjectivehistory.FieldID, controlobjectivehistory.FieldRef, controlobjectivehistory.FieldCreatedBy, controlobjectivehistory.FieldUpdatedBy, controlobjectivehistory.FieldDeletedBy, controlobjectivehistory.FieldMappingID, controlobjectivehistory.FieldOwnerID, controlobjectivehistory.FieldName, controlobjectivehistory.FieldDescription, controlobjectivehistory.FieldStatus, controlobjectivehistory.FieldControlObjectiveType, controlobjectivehistory.FieldVersion, controlobjectivehistory.FieldControlNumber, controlobjectivehistory.FieldFamily, controlobjectivehistory.FieldClass, controlobjectivehistory.FieldSource, controlobjectivehistory.FieldMappedFrameworks:
 			values[i] = new(sql.NullString)
 		case controlobjectivehistory.FieldHistoryTime, controlobjectivehistory.FieldCreatedAt, controlobjectivehistory.FieldUpdatedAt, controlobjectivehistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -167,6 +169,12 @@ func (coh *ControlObjectiveHistory) assignValues(columns []string, values []any)
 				if err := json.Unmarshal(*value, &coh.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
+			}
+		case controlobjectivehistory.FieldOwnerID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
+			} else if value.Valid {
+				coh.OwnerID = value.String
 			}
 		case controlobjectivehistory.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -304,6 +312,9 @@ func (coh *ControlObjectiveHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", coh.Tags))
+	builder.WriteString(", ")
+	builder.WriteString("owner_id=")
+	builder.WriteString(coh.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(coh.Name)

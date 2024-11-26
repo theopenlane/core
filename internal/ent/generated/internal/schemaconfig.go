@@ -22,6 +22,9 @@ type SchemaConfig struct {
 	ControlTasks                     string // Control-tasks->Task table.
 	ControlHistory                   string // ControlHistory table.
 	ControlObjective                 string // ControlObjective table.
+	ControlObjectiveBlockedGroups    string // ControlObjective-blocked_groups->Group table.
+	ControlObjectiveEditors          string // ControlObjective-editors->Group table.
+	ControlObjectiveViewers          string // ControlObjective-viewers->Group table.
 	ControlObjectiveNarratives       string // ControlObjective-narratives->Narrative table.
 	ControlObjectiveTasks            string // ControlObjective-tasks->Task table.
 	ControlObjectiveHistory          string // ControlObjectiveHistory table.
@@ -73,12 +76,12 @@ type SchemaConfig struct {
 	IntegrationWebhooks              string // Integration-webhooks->Webhook table.
 	IntegrationHistory               string // IntegrationHistory table.
 	InternalPolicy                   string // InternalPolicy table.
+	InternalPolicyBlockedGroups      string // InternalPolicy-blocked_groups->Group table.
+	InternalPolicyEditors            string // InternalPolicy-editors->Group table.
 	InternalPolicyControlobjectives  string // InternalPolicy-controlobjectives->ControlObjective table.
 	InternalPolicyProcedures         string // InternalPolicy-procedures->Procedure table.
 	InternalPolicyNarratives         string // InternalPolicy-narratives->Narrative table.
 	InternalPolicyTasks              string // InternalPolicy-tasks->Task table.
-	InternalPolicyEditors            string // InternalPolicy-editors->Group table.
-	InternalPolicyBlockedGroups      string // InternalPolicy-blocked_groups->Group table.
 	InternalPolicyHistory            string // InternalPolicyHistory table.
 	Invite                           string // Invite table.
 	InviteEvents                     string // Invite-events->Event table.
@@ -107,13 +110,16 @@ type SchemaConfig struct {
 	PersonalAccessToken              string // PersonalAccessToken table.
 	PersonalAccessTokenEvents        string // PersonalAccessToken-events->Event table.
 	Procedure                        string // Procedure table.
+	ProcedureBlockedGroups           string // Procedure-blocked_groups->Group table.
+	ProcedureEditors                 string // Procedure-editors->Group table.
 	ProcedureNarratives              string // Procedure-narratives->Narrative table.
 	ProcedureRisks                   string // Procedure-risks->Risk table.
 	ProcedureTasks                   string // Procedure-tasks->Task table.
-	ProcedureEditors                 string // Procedure-editors->Group table.
-	ProcedureBlockedGroups           string // Procedure-blocked_groups->Group table.
 	ProcedureHistory                 string // ProcedureHistory table.
 	Program                          string // Program table.
+	ProgramBlockedGroups             string // Program-blocked_groups->Group table.
+	ProgramEditors                   string // Program-editors->Group table.
+	ProgramViewers                   string // Program-viewers->Group table.
 	ProgramControls                  string // Program-controls->Control table.
 	ProgramSubcontrols               string // Program-subcontrols->Subcontrol table.
 	ProgramControlobjectives         string // Program-controlobjectives->ControlObjective table.
@@ -125,17 +131,14 @@ type SchemaConfig struct {
 	ProgramFiles                     string // Program-files->File table.
 	ProgramNarratives                string // Program-narratives->Narrative table.
 	ProgramActionplans               string // Program-actionplans->ActionPlan table.
-	ProgramViewers                   string // Program-viewers->Group table.
-	ProgramEditors                   string // Program-editors->Group table.
-	ProgramBlockedGroups             string // Program-blocked_groups->Group table.
 	ProgramHistory                   string // ProgramHistory table.
 	ProgramMembership                string // ProgramMembership table.
 	ProgramMembershipHistory         string // ProgramMembershipHistory table.
 	Risk                             string // Risk table.
-	RiskActionplans                  string // Risk-actionplans->ActionPlan table.
-	RiskViewers                      string // Risk-viewers->Group table.
-	RiskEditors                      string // Risk-editors->Group table.
 	RiskBlockedGroups                string // Risk-blocked_groups->Group table.
+	RiskEditors                      string // Risk-editors->Group table.
+	RiskViewers                      string // Risk-viewers->Group table.
+	RiskActionplans                  string // Risk-actionplans->ActionPlan table.
 	RiskHistory                      string // RiskHistory table.
 	Standard                         string // Standard table.
 	StandardControlobjectives        string // Standard-controlobjectives->ControlObjective table.

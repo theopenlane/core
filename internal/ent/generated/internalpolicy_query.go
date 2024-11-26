@@ -35,24 +35,24 @@ type InternalPolicyQuery struct {
 	inters                     []Interceptor
 	predicates                 []predicate.InternalPolicy
 	withOwner                  *OrganizationQuery
+	withBlockedGroups          *GroupQuery
+	withEditors                *GroupQuery
 	withControlobjectives      *ControlObjectiveQuery
 	withControls               *ControlQuery
 	withProcedures             *ProcedureQuery
 	withNarratives             *NarrativeQuery
 	withTasks                  *TaskQuery
 	withPrograms               *ProgramQuery
-	withEditors                *GroupQuery
-	withBlockedGroups          *GroupQuery
 	loadTotal                  []func(context.Context, []*InternalPolicy) error
 	modifiers                  []func(*sql.Selector)
+	withNamedBlockedGroups     map[string]*GroupQuery
+	withNamedEditors           map[string]*GroupQuery
 	withNamedControlobjectives map[string]*ControlObjectiveQuery
 	withNamedControls          map[string]*ControlQuery
 	withNamedProcedures        map[string]*ProcedureQuery
 	withNamedNarratives        map[string]*NarrativeQuery
 	withNamedTasks             map[string]*TaskQuery
 	withNamedPrograms          map[string]*ProgramQuery
-	withNamedEditors           map[string]*GroupQuery
-	withNamedBlockedGroups     map[string]*GroupQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -108,6 +108,56 @@ func (ipq *InternalPolicyQuery) QueryOwner() *OrganizationQuery {
 		schemaConfig := ipq.schemaConfig
 		step.To.Schema = schemaConfig.Organization
 		step.Edge.Schema = schemaConfig.InternalPolicy
+		fromU = sqlgraph.SetNeighbors(ipq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryBlockedGroups chains the current query on the "blocked_groups" edge.
+func (ipq *InternalPolicyQuery) QueryBlockedGroups() *GroupQuery {
+	query := (&GroupClient{config: ipq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := ipq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := ipq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, internalpolicy.BlockedGroupsTable, internalpolicy.BlockedGroupsPrimaryKey...),
+		)
+		schemaConfig := ipq.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.InternalPolicyBlockedGroups
+		fromU = sqlgraph.SetNeighbors(ipq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEditors chains the current query on the "editors" edge.
+func (ipq *InternalPolicyQuery) QueryEditors() *GroupQuery {
+	query := (&GroupClient{config: ipq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := ipq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := ipq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, internalpolicy.EditorsTable, internalpolicy.EditorsPrimaryKey...),
+		)
+		schemaConfig := ipq.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.InternalPolicyEditors
 		fromU = sqlgraph.SetNeighbors(ipq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -258,56 +308,6 @@ func (ipq *InternalPolicyQuery) QueryPrograms() *ProgramQuery {
 		schemaConfig := ipq.schemaConfig
 		step.To.Schema = schemaConfig.Program
 		step.Edge.Schema = schemaConfig.ProgramPolicies
-		fromU = sqlgraph.SetNeighbors(ipq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryEditors chains the current query on the "editors" edge.
-func (ipq *InternalPolicyQuery) QueryEditors() *GroupQuery {
-	query := (&GroupClient{config: ipq.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := ipq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := ipq.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, selector),
-			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, internalpolicy.EditorsTable, internalpolicy.EditorsPrimaryKey...),
-		)
-		schemaConfig := ipq.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.InternalPolicyEditors
-		fromU = sqlgraph.SetNeighbors(ipq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryBlockedGroups chains the current query on the "blocked_groups" edge.
-func (ipq *InternalPolicyQuery) QueryBlockedGroups() *GroupQuery {
-	query := (&GroupClient{config: ipq.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := ipq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := ipq.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, selector),
-			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, internalpolicy.BlockedGroupsTable, internalpolicy.BlockedGroupsPrimaryKey...),
-		)
-		schemaConfig := ipq.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.InternalPolicyBlockedGroups
 		fromU = sqlgraph.SetNeighbors(ipq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -507,14 +507,14 @@ func (ipq *InternalPolicyQuery) Clone() *InternalPolicyQuery {
 		inters:                append([]Interceptor{}, ipq.inters...),
 		predicates:            append([]predicate.InternalPolicy{}, ipq.predicates...),
 		withOwner:             ipq.withOwner.Clone(),
+		withBlockedGroups:     ipq.withBlockedGroups.Clone(),
+		withEditors:           ipq.withEditors.Clone(),
 		withControlobjectives: ipq.withControlobjectives.Clone(),
 		withControls:          ipq.withControls.Clone(),
 		withProcedures:        ipq.withProcedures.Clone(),
 		withNarratives:        ipq.withNarratives.Clone(),
 		withTasks:             ipq.withTasks.Clone(),
 		withPrograms:          ipq.withPrograms.Clone(),
-		withEditors:           ipq.withEditors.Clone(),
-		withBlockedGroups:     ipq.withBlockedGroups.Clone(),
 		// clone intermediate query.
 		sql:       ipq.sql.Clone(),
 		path:      ipq.path,
@@ -530,6 +530,28 @@ func (ipq *InternalPolicyQuery) WithOwner(opts ...func(*OrganizationQuery)) *Int
 		opt(query)
 	}
 	ipq.withOwner = query
+	return ipq
+}
+
+// WithBlockedGroups tells the query-builder to eager-load the nodes that are connected to
+// the "blocked_groups" edge. The optional arguments are used to configure the query builder of the edge.
+func (ipq *InternalPolicyQuery) WithBlockedGroups(opts ...func(*GroupQuery)) *InternalPolicyQuery {
+	query := (&GroupClient{config: ipq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	ipq.withBlockedGroups = query
+	return ipq
+}
+
+// WithEditors tells the query-builder to eager-load the nodes that are connected to
+// the "editors" edge. The optional arguments are used to configure the query builder of the edge.
+func (ipq *InternalPolicyQuery) WithEditors(opts ...func(*GroupQuery)) *InternalPolicyQuery {
+	query := (&GroupClient{config: ipq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	ipq.withEditors = query
 	return ipq
 }
 
@@ -596,28 +618,6 @@ func (ipq *InternalPolicyQuery) WithPrograms(opts ...func(*ProgramQuery)) *Inter
 		opt(query)
 	}
 	ipq.withPrograms = query
-	return ipq
-}
-
-// WithEditors tells the query-builder to eager-load the nodes that are connected to
-// the "editors" edge. The optional arguments are used to configure the query builder of the edge.
-func (ipq *InternalPolicyQuery) WithEditors(opts ...func(*GroupQuery)) *InternalPolicyQuery {
-	query := (&GroupClient{config: ipq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	ipq.withEditors = query
-	return ipq
-}
-
-// WithBlockedGroups tells the query-builder to eager-load the nodes that are connected to
-// the "blocked_groups" edge. The optional arguments are used to configure the query builder of the edge.
-func (ipq *InternalPolicyQuery) WithBlockedGroups(opts ...func(*GroupQuery)) *InternalPolicyQuery {
-	query := (&GroupClient{config: ipq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	ipq.withBlockedGroups = query
 	return ipq
 }
 
@@ -707,14 +707,14 @@ func (ipq *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) 
 		_spec       = ipq.querySpec()
 		loadedTypes = [9]bool{
 			ipq.withOwner != nil,
+			ipq.withBlockedGroups != nil,
+			ipq.withEditors != nil,
 			ipq.withControlobjectives != nil,
 			ipq.withControls != nil,
 			ipq.withProcedures != nil,
 			ipq.withNarratives != nil,
 			ipq.withTasks != nil,
 			ipq.withPrograms != nil,
-			ipq.withEditors != nil,
-			ipq.withBlockedGroups != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -743,6 +743,20 @@ func (ipq *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) 
 	if query := ipq.withOwner; query != nil {
 		if err := ipq.loadOwner(ctx, query, nodes, nil,
 			func(n *InternalPolicy, e *Organization) { n.Edges.Owner = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := ipq.withBlockedGroups; query != nil {
+		if err := ipq.loadBlockedGroups(ctx, query, nodes,
+			func(n *InternalPolicy) { n.Edges.BlockedGroups = []*Group{} },
+			func(n *InternalPolicy, e *Group) { n.Edges.BlockedGroups = append(n.Edges.BlockedGroups, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := ipq.withEditors; query != nil {
+		if err := ipq.loadEditors(ctx, query, nodes,
+			func(n *InternalPolicy) { n.Edges.Editors = []*Group{} },
+			func(n *InternalPolicy, e *Group) { n.Edges.Editors = append(n.Edges.Editors, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -790,17 +804,17 @@ func (ipq *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) 
 			return nil, err
 		}
 	}
-	if query := ipq.withEditors; query != nil {
-		if err := ipq.loadEditors(ctx, query, nodes,
-			func(n *InternalPolicy) { n.Edges.Editors = []*Group{} },
-			func(n *InternalPolicy, e *Group) { n.Edges.Editors = append(n.Edges.Editors, e) }); err != nil {
+	for name, query := range ipq.withNamedBlockedGroups {
+		if err := ipq.loadBlockedGroups(ctx, query, nodes,
+			func(n *InternalPolicy) { n.appendNamedBlockedGroups(name) },
+			func(n *InternalPolicy, e *Group) { n.appendNamedBlockedGroups(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := ipq.withBlockedGroups; query != nil {
-		if err := ipq.loadBlockedGroups(ctx, query, nodes,
-			func(n *InternalPolicy) { n.Edges.BlockedGroups = []*Group{} },
-			func(n *InternalPolicy, e *Group) { n.Edges.BlockedGroups = append(n.Edges.BlockedGroups, e) }); err != nil {
+	for name, query := range ipq.withNamedEditors {
+		if err := ipq.loadEditors(ctx, query, nodes,
+			func(n *InternalPolicy) { n.appendNamedEditors(name) },
+			func(n *InternalPolicy, e *Group) { n.appendNamedEditors(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -846,20 +860,6 @@ func (ipq *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) 
 			return nil, err
 		}
 	}
-	for name, query := range ipq.withNamedEditors {
-		if err := ipq.loadEditors(ctx, query, nodes,
-			func(n *InternalPolicy) { n.appendNamedEditors(name) },
-			func(n *InternalPolicy, e *Group) { n.appendNamedEditors(name, e) }); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range ipq.withNamedBlockedGroups {
-		if err := ipq.loadBlockedGroups(ctx, query, nodes,
-			func(n *InternalPolicy) { n.appendNamedBlockedGroups(name) },
-			func(n *InternalPolicy, e *Group) { n.appendNamedBlockedGroups(name, e) }); err != nil {
-			return nil, err
-		}
-	}
 	for i := range ipq.loadTotal {
 		if err := ipq.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
@@ -893,6 +893,130 @@ func (ipq *InternalPolicyQuery) loadOwner(ctx context.Context, query *Organizati
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (ipq *InternalPolicyQuery) loadBlockedGroups(ctx context.Context, query *GroupQuery, nodes []*InternalPolicy, init func(*InternalPolicy), assign func(*InternalPolicy, *Group)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*InternalPolicy)
+	nids := make(map[string]map[*InternalPolicy]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(internalpolicy.BlockedGroupsTable)
+		joinT.Schema(ipq.schemaConfig.InternalPolicyBlockedGroups)
+		s.Join(joinT).On(s.C(group.FieldID), joinT.C(internalpolicy.BlockedGroupsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(internalpolicy.BlockedGroupsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(internalpolicy.BlockedGroupsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*InternalPolicy]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Group](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "blocked_groups" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (ipq *InternalPolicyQuery) loadEditors(ctx context.Context, query *GroupQuery, nodes []*InternalPolicy, init func(*InternalPolicy), assign func(*InternalPolicy, *Group)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*InternalPolicy)
+	nids := make(map[string]map[*InternalPolicy]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(internalpolicy.EditorsTable)
+		joinT.Schema(ipq.schemaConfig.InternalPolicyEditors)
+		s.Join(joinT).On(s.C(group.FieldID), joinT.C(internalpolicy.EditorsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(internalpolicy.EditorsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(internalpolicy.EditorsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*InternalPolicy]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Group](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "editors" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
 		}
 	}
 	return nil
@@ -1238,130 +1362,6 @@ func (ipq *InternalPolicyQuery) loadPrograms(ctx context.Context, query *Program
 	}
 	return nil
 }
-func (ipq *InternalPolicyQuery) loadEditors(ctx context.Context, query *GroupQuery, nodes []*InternalPolicy, init func(*InternalPolicy), assign func(*InternalPolicy, *Group)) error {
-	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[string]*InternalPolicy)
-	nids := make(map[string]map[*InternalPolicy]struct{})
-	for i, node := range nodes {
-		edgeIDs[i] = node.ID
-		byID[node.ID] = node
-		if init != nil {
-			init(node)
-		}
-	}
-	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(internalpolicy.EditorsTable)
-		joinT.Schema(ipq.schemaConfig.InternalPolicyEditors)
-		s.Join(joinT).On(s.C(group.FieldID), joinT.C(internalpolicy.EditorsPrimaryKey[1]))
-		s.Where(sql.InValues(joinT.C(internalpolicy.EditorsPrimaryKey[0]), edgeIDs...))
-		columns := s.SelectedColumns()
-		s.Select(joinT.C(internalpolicy.EditorsPrimaryKey[0]))
-		s.AppendSelect(columns...)
-		s.SetDistinct(false)
-	})
-	if err := query.prepareQuery(ctx); err != nil {
-		return err
-	}
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
-			assign := spec.Assign
-			values := spec.ScanValues
-			spec.ScanValues = func(columns []string) ([]any, error) {
-				values, err := values(columns[1:])
-				if err != nil {
-					return nil, err
-				}
-				return append([]any{new(sql.NullString)}, values...), nil
-			}
-			spec.Assign = func(columns []string, values []any) error {
-				outValue := values[0].(*sql.NullString).String
-				inValue := values[1].(*sql.NullString).String
-				if nids[inValue] == nil {
-					nids[inValue] = map[*InternalPolicy]struct{}{byID[outValue]: {}}
-					return assign(columns[1:], values[1:])
-				}
-				nids[inValue][byID[outValue]] = struct{}{}
-				return nil
-			}
-		})
-	})
-	neighbors, err := withInterceptors[[]*Group](ctx, query, qr, query.inters)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		nodes, ok := nids[n.ID]
-		if !ok {
-			return fmt.Errorf(`unexpected "editors" node returned %v`, n.ID)
-		}
-		for kn := range nodes {
-			assign(kn, n)
-		}
-	}
-	return nil
-}
-func (ipq *InternalPolicyQuery) loadBlockedGroups(ctx context.Context, query *GroupQuery, nodes []*InternalPolicy, init func(*InternalPolicy), assign func(*InternalPolicy, *Group)) error {
-	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[string]*InternalPolicy)
-	nids := make(map[string]map[*InternalPolicy]struct{})
-	for i, node := range nodes {
-		edgeIDs[i] = node.ID
-		byID[node.ID] = node
-		if init != nil {
-			init(node)
-		}
-	}
-	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(internalpolicy.BlockedGroupsTable)
-		joinT.Schema(ipq.schemaConfig.InternalPolicyBlockedGroups)
-		s.Join(joinT).On(s.C(group.FieldID), joinT.C(internalpolicy.BlockedGroupsPrimaryKey[1]))
-		s.Where(sql.InValues(joinT.C(internalpolicy.BlockedGroupsPrimaryKey[0]), edgeIDs...))
-		columns := s.SelectedColumns()
-		s.Select(joinT.C(internalpolicy.BlockedGroupsPrimaryKey[0]))
-		s.AppendSelect(columns...)
-		s.SetDistinct(false)
-	})
-	if err := query.prepareQuery(ctx); err != nil {
-		return err
-	}
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
-			assign := spec.Assign
-			values := spec.ScanValues
-			spec.ScanValues = func(columns []string) ([]any, error) {
-				values, err := values(columns[1:])
-				if err != nil {
-					return nil, err
-				}
-				return append([]any{new(sql.NullString)}, values...), nil
-			}
-			spec.Assign = func(columns []string, values []any) error {
-				outValue := values[0].(*sql.NullString).String
-				inValue := values[1].(*sql.NullString).String
-				if nids[inValue] == nil {
-					nids[inValue] = map[*InternalPolicy]struct{}{byID[outValue]: {}}
-					return assign(columns[1:], values[1:])
-				}
-				nids[inValue][byID[outValue]] = struct{}{}
-				return nil
-			}
-		})
-	})
-	neighbors, err := withInterceptors[[]*Group](ctx, query, qr, query.inters)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		nodes, ok := nids[n.ID]
-		if !ok {
-			return fmt.Errorf(`unexpected "blocked_groups" node returned %v`, n.ID)
-		}
-		for kn := range nodes {
-			assign(kn, n)
-		}
-	}
-	return nil
-}
 
 func (ipq *InternalPolicyQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := ipq.querySpec()
@@ -1464,6 +1464,34 @@ func (ipq *InternalPolicyQuery) Modify(modifiers ...func(s *sql.Selector)) *Inte
 	return ipq.Select()
 }
 
+// WithNamedBlockedGroups tells the query-builder to eager-load the nodes that are connected to the "blocked_groups"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (ipq *InternalPolicyQuery) WithNamedBlockedGroups(name string, opts ...func(*GroupQuery)) *InternalPolicyQuery {
+	query := (&GroupClient{config: ipq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if ipq.withNamedBlockedGroups == nil {
+		ipq.withNamedBlockedGroups = make(map[string]*GroupQuery)
+	}
+	ipq.withNamedBlockedGroups[name] = query
+	return ipq
+}
+
+// WithNamedEditors tells the query-builder to eager-load the nodes that are connected to the "editors"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (ipq *InternalPolicyQuery) WithNamedEditors(name string, opts ...func(*GroupQuery)) *InternalPolicyQuery {
+	query := (&GroupClient{config: ipq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if ipq.withNamedEditors == nil {
+		ipq.withNamedEditors = make(map[string]*GroupQuery)
+	}
+	ipq.withNamedEditors[name] = query
+	return ipq
+}
+
 // WithNamedControlobjectives tells the query-builder to eager-load the nodes that are connected to the "controlobjectives"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
 func (ipq *InternalPolicyQuery) WithNamedControlobjectives(name string, opts ...func(*ControlObjectiveQuery)) *InternalPolicyQuery {
@@ -1545,34 +1573,6 @@ func (ipq *InternalPolicyQuery) WithNamedPrograms(name string, opts ...func(*Pro
 		ipq.withNamedPrograms = make(map[string]*ProgramQuery)
 	}
 	ipq.withNamedPrograms[name] = query
-	return ipq
-}
-
-// WithNamedEditors tells the query-builder to eager-load the nodes that are connected to the "editors"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (ipq *InternalPolicyQuery) WithNamedEditors(name string, opts ...func(*GroupQuery)) *InternalPolicyQuery {
-	query := (&GroupClient{config: ipq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if ipq.withNamedEditors == nil {
-		ipq.withNamedEditors = make(map[string]*GroupQuery)
-	}
-	ipq.withNamedEditors[name] = query
-	return ipq
-}
-
-// WithNamedBlockedGroups tells the query-builder to eager-load the nodes that are connected to the "blocked_groups"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (ipq *InternalPolicyQuery) WithNamedBlockedGroups(name string, opts ...func(*GroupQuery)) *InternalPolicyQuery {
-	query := (&GroupClient{config: ipq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if ipq.withNamedBlockedGroups == nil {
-		ipq.withNamedBlockedGroups = make(map[string]*GroupQuery)
-	}
-	ipq.withNamedBlockedGroups[name] = query
 	return ipq
 }
 

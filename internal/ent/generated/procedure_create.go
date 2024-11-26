@@ -275,6 +275,36 @@ func (pc *ProcedureCreate) SetOwner(o *Organization) *ProcedureCreate {
 	return pc.SetOwnerID(o.ID)
 }
 
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (pc *ProcedureCreate) AddBlockedGroupIDs(ids ...string) *ProcedureCreate {
+	pc.mutation.AddBlockedGroupIDs(ids...)
+	return pc
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (pc *ProcedureCreate) AddBlockedGroups(g ...*Group) *ProcedureCreate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return pc.AddBlockedGroupIDs(ids...)
+}
+
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (pc *ProcedureCreate) AddEditorIDs(ids ...string) *ProcedureCreate {
+	pc.mutation.AddEditorIDs(ids...)
+	return pc
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (pc *ProcedureCreate) AddEditors(g ...*Group) *ProcedureCreate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return pc.AddEditorIDs(ids...)
+}
+
 // AddControlIDs adds the "control" edge to the Control entity by IDs.
 func (pc *ProcedureCreate) AddControlIDs(ids ...string) *ProcedureCreate {
 	pc.mutation.AddControlIDs(ids...)
@@ -363,36 +393,6 @@ func (pc *ProcedureCreate) AddPrograms(p ...*Program) *ProcedureCreate {
 		ids[i] = p[i].ID
 	}
 	return pc.AddProgramIDs(ids...)
-}
-
-// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
-func (pc *ProcedureCreate) AddEditorIDs(ids ...string) *ProcedureCreate {
-	pc.mutation.AddEditorIDs(ids...)
-	return pc
-}
-
-// AddEditors adds the "editors" edges to the Group entity.
-func (pc *ProcedureCreate) AddEditors(g ...*Group) *ProcedureCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
-	}
-	return pc.AddEditorIDs(ids...)
-}
-
-// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
-func (pc *ProcedureCreate) AddBlockedGroupIDs(ids ...string) *ProcedureCreate {
-	pc.mutation.AddBlockedGroupIDs(ids...)
-	return pc
-}
-
-// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
-func (pc *ProcedureCreate) AddBlockedGroups(g ...*Group) *ProcedureCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
-	}
-	return pc.AddBlockedGroupIDs(ids...)
 }
 
 // Mutation returns the ProcedureMutation object of the builder.
@@ -607,6 +607,40 @@ func (pc *ProcedureCreate) createSpec() (*Procedure, *sqlgraph.CreateSpec) {
 		_node.OwnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := pc.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   procedure.BlockedGroupsTable,
+			Columns: procedure.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pc.schemaConfig.ProcedureBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := pc.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   procedure.EditorsTable,
+			Columns: procedure.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pc.schemaConfig.ProcedureEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := pc.mutation.ControlIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -704,40 +738,6 @@ func (pc *ProcedureCreate) createSpec() (*Procedure, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = pc.schemaConfig.ProgramProcedures
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := pc.mutation.EditorsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   procedure.EditorsTable,
-			Columns: procedure.EditorsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = pc.schemaConfig.ProcedureEditors
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := pc.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   procedure.BlockedGroupsTable,
-			Columns: procedure.BlockedGroupsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = pc.schemaConfig.ProcedureBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

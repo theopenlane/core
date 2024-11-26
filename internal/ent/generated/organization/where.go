@@ -1871,6 +1871,35 @@ func HasRisksWith(preds ...predicate.Risk) predicate.Organization {
 	})
 }
 
+// HasControlobjectives applies the HasEdge predicate on the "controlobjectives" edge.
+func HasControlobjectives() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ControlobjectivesTable, ControlobjectivesColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.ControlObjective
+		step.Edge.Schema = schemaConfig.ControlObjective
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasControlobjectivesWith applies the HasEdge predicate on the "controlobjectives" edge with a given conditions (other predicates).
+func HasControlobjectivesWith(preds ...predicate.ControlObjective) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newControlobjectivesStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.ControlObjective
+		step.Edge.Schema = schemaConfig.ControlObjective
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasMembers applies the HasEdge predicate on the "members" edge.
 func HasMembers() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {

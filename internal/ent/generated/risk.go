@@ -36,6 +36,8 @@ type Risk struct {
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// the ID of the organization owner of the object
+	OwnerID string `json:"owner_id,omitempty"`
 	// the name of the risk
 	Name string `json:"name,omitempty"`
 	// description of the risk
@@ -56,8 +58,6 @@ type Risk struct {
 	Satisfies string `json:"satisfies,omitempty"`
 	// json data for the risk document
 	Details map[string]interface{} `json:"details,omitempty"`
-	// the ID of the organization owner of the risk
-	OwnerID string `json:"owner_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the RiskQuery when eager-loading is set.
 	Edges                   RiskEdges `json:"edges"`
@@ -67,41 +67,79 @@ type Risk struct {
 
 // RiskEdges holds the relations/edges for other nodes in the graph.
 type RiskEdges struct {
+	// Owner holds the value of the owner edge.
+	Owner *Organization `json:"owner,omitempty"`
+	// groups that are blocked from viewing or editing the risk
+	BlockedGroups []*Group `json:"blocked_groups,omitempty"`
+	// provides edit access to the risk to members of the group
+	Editors []*Group `json:"editors,omitempty"`
+	// provides view access to the risk to members of the group
+	Viewers []*Group `json:"viewers,omitempty"`
 	// Control holds the value of the control edge.
 	Control []*Control `json:"control,omitempty"`
 	// Procedure holds the value of the procedure edge.
 	Procedure []*Procedure `json:"procedure,omitempty"`
 	// Actionplans holds the value of the actionplans edge.
 	Actionplans []*ActionPlan `json:"actionplans,omitempty"`
-	// Owner holds the value of the owner edge.
-	Owner *Organization `json:"owner,omitempty"`
-	// Program holds the value of the program edge.
-	Program []*Program `json:"program,omitempty"`
-	// provides view access to the risk to members of the group
-	Viewers []*Group `json:"viewers,omitempty"`
-	// provides edit access to the risk to members of the group
-	Editors []*Group `json:"editors,omitempty"`
-	// groups that are blocked from viewing or editing the risk
-	BlockedGroups []*Group `json:"blocked_groups,omitempty"`
+	// Programs holds the value of the programs edge.
+	Programs []*Program `json:"programs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [8]bool
 	// totalCount holds the count of the edges above.
 	totalCount [8]map[string]int
 
+	namedBlockedGroups map[string][]*Group
+	namedEditors       map[string][]*Group
+	namedViewers       map[string][]*Group
 	namedControl       map[string][]*Control
 	namedProcedure     map[string][]*Procedure
 	namedActionplans   map[string][]*ActionPlan
-	namedProgram       map[string][]*Program
-	namedViewers       map[string][]*Group
-	namedEditors       map[string][]*Group
-	namedBlockedGroups map[string][]*Group
+	namedPrograms      map[string][]*Program
+}
+
+// OwnerOrErr returns the Owner value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e RiskEdges) OwnerOrErr() (*Organization, error) {
+	if e.Owner != nil {
+		return e.Owner, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: organization.Label}
+	}
+	return nil, &NotLoadedError{edge: "owner"}
+}
+
+// BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
+// was not loaded in eager-loading.
+func (e RiskEdges) BlockedGroupsOrErr() ([]*Group, error) {
+	if e.loadedTypes[1] {
+		return e.BlockedGroups, nil
+	}
+	return nil, &NotLoadedError{edge: "blocked_groups"}
+}
+
+// EditorsOrErr returns the Editors value or an error if the edge
+// was not loaded in eager-loading.
+func (e RiskEdges) EditorsOrErr() ([]*Group, error) {
+	if e.loadedTypes[2] {
+		return e.Editors, nil
+	}
+	return nil, &NotLoadedError{edge: "editors"}
+}
+
+// ViewersOrErr returns the Viewers value or an error if the edge
+// was not loaded in eager-loading.
+func (e RiskEdges) ViewersOrErr() ([]*Group, error) {
+	if e.loadedTypes[3] {
+		return e.Viewers, nil
+	}
+	return nil, &NotLoadedError{edge: "viewers"}
 }
 
 // ControlOrErr returns the Control value or an error if the edge
 // was not loaded in eager-loading.
 func (e RiskEdges) ControlOrErr() ([]*Control, error) {
-	if e.loadedTypes[0] {
+	if e.loadedTypes[4] {
 		return e.Control, nil
 	}
 	return nil, &NotLoadedError{edge: "control"}
@@ -110,7 +148,7 @@ func (e RiskEdges) ControlOrErr() ([]*Control, error) {
 // ProcedureOrErr returns the Procedure value or an error if the edge
 // was not loaded in eager-loading.
 func (e RiskEdges) ProcedureOrErr() ([]*Procedure, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[5] {
 		return e.Procedure, nil
 	}
 	return nil, &NotLoadedError{edge: "procedure"}
@@ -119,57 +157,19 @@ func (e RiskEdges) ProcedureOrErr() ([]*Procedure, error) {
 // ActionplansOrErr returns the Actionplans value or an error if the edge
 // was not loaded in eager-loading.
 func (e RiskEdges) ActionplansOrErr() ([]*ActionPlan, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[6] {
 		return e.Actionplans, nil
 	}
 	return nil, &NotLoadedError{edge: "actionplans"}
 }
 
-// OwnerOrErr returns the Owner value or an error if the edge
-// was not loaded in eager-loading, or loaded but was not found.
-func (e RiskEdges) OwnerOrErr() (*Organization, error) {
-	if e.Owner != nil {
-		return e.Owner, nil
-	} else if e.loadedTypes[3] {
-		return nil, &NotFoundError{label: organization.Label}
-	}
-	return nil, &NotLoadedError{edge: "owner"}
-}
-
-// ProgramOrErr returns the Program value or an error if the edge
+// ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
-func (e RiskEdges) ProgramOrErr() ([]*Program, error) {
-	if e.loadedTypes[4] {
-		return e.Program, nil
-	}
-	return nil, &NotLoadedError{edge: "program"}
-}
-
-// ViewersOrErr returns the Viewers value or an error if the edge
-// was not loaded in eager-loading.
-func (e RiskEdges) ViewersOrErr() ([]*Group, error) {
-	if e.loadedTypes[5] {
-		return e.Viewers, nil
-	}
-	return nil, &NotLoadedError{edge: "viewers"}
-}
-
-// EditorsOrErr returns the Editors value or an error if the edge
-// was not loaded in eager-loading.
-func (e RiskEdges) EditorsOrErr() ([]*Group, error) {
-	if e.loadedTypes[6] {
-		return e.Editors, nil
-	}
-	return nil, &NotLoadedError{edge: "editors"}
-}
-
-// BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
-// was not loaded in eager-loading.
-func (e RiskEdges) BlockedGroupsOrErr() ([]*Group, error) {
+func (e RiskEdges) ProgramsOrErr() ([]*Program, error) {
 	if e.loadedTypes[7] {
-		return e.BlockedGroups, nil
+		return e.Programs, nil
 	}
-	return nil, &NotLoadedError{edge: "blocked_groups"}
+	return nil, &NotLoadedError{edge: "programs"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -179,7 +179,7 @@ func (*Risk) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case risk.FieldTags, risk.FieldDetails:
 			values[i] = new([]byte)
-		case risk.FieldID, risk.FieldCreatedBy, risk.FieldUpdatedBy, risk.FieldDeletedBy, risk.FieldMappingID, risk.FieldName, risk.FieldDescription, risk.FieldStatus, risk.FieldRiskType, risk.FieldBusinessCosts, risk.FieldImpact, risk.FieldLikelihood, risk.FieldMitigation, risk.FieldSatisfies, risk.FieldOwnerID:
+		case risk.FieldID, risk.FieldCreatedBy, risk.FieldUpdatedBy, risk.FieldDeletedBy, risk.FieldMappingID, risk.FieldOwnerID, risk.FieldName, risk.FieldDescription, risk.FieldStatus, risk.FieldRiskType, risk.FieldBusinessCosts, risk.FieldImpact, risk.FieldLikelihood, risk.FieldMitigation, risk.FieldSatisfies:
 			values[i] = new(sql.NullString)
 		case risk.FieldCreatedAt, risk.FieldUpdatedAt, risk.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -256,6 +256,12 @@ func (r *Risk) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
+		case risk.FieldOwnerID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
+			} else if value.Valid {
+				r.OwnerID = value.String
+			}
 		case risk.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
@@ -318,12 +324,6 @@ func (r *Risk) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field details: %w", err)
 				}
 			}
-		case risk.FieldOwnerID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
-			} else if value.Valid {
-				r.OwnerID = value.String
-			}
 		case risk.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field control_objective_risks", values[i])
@@ -344,6 +344,26 @@ func (r *Risk) Value(name string) (ent.Value, error) {
 	return r.selectValues.Get(name)
 }
 
+// QueryOwner queries the "owner" edge of the Risk entity.
+func (r *Risk) QueryOwner() *OrganizationQuery {
+	return NewRiskClient(r.config).QueryOwner(r)
+}
+
+// QueryBlockedGroups queries the "blocked_groups" edge of the Risk entity.
+func (r *Risk) QueryBlockedGroups() *GroupQuery {
+	return NewRiskClient(r.config).QueryBlockedGroups(r)
+}
+
+// QueryEditors queries the "editors" edge of the Risk entity.
+func (r *Risk) QueryEditors() *GroupQuery {
+	return NewRiskClient(r.config).QueryEditors(r)
+}
+
+// QueryViewers queries the "viewers" edge of the Risk entity.
+func (r *Risk) QueryViewers() *GroupQuery {
+	return NewRiskClient(r.config).QueryViewers(r)
+}
+
 // QueryControl queries the "control" edge of the Risk entity.
 func (r *Risk) QueryControl() *ControlQuery {
 	return NewRiskClient(r.config).QueryControl(r)
@@ -359,29 +379,9 @@ func (r *Risk) QueryActionplans() *ActionPlanQuery {
 	return NewRiskClient(r.config).QueryActionplans(r)
 }
 
-// QueryOwner queries the "owner" edge of the Risk entity.
-func (r *Risk) QueryOwner() *OrganizationQuery {
-	return NewRiskClient(r.config).QueryOwner(r)
-}
-
-// QueryProgram queries the "program" edge of the Risk entity.
-func (r *Risk) QueryProgram() *ProgramQuery {
-	return NewRiskClient(r.config).QueryProgram(r)
-}
-
-// QueryViewers queries the "viewers" edge of the Risk entity.
-func (r *Risk) QueryViewers() *GroupQuery {
-	return NewRiskClient(r.config).QueryViewers(r)
-}
-
-// QueryEditors queries the "editors" edge of the Risk entity.
-func (r *Risk) QueryEditors() *GroupQuery {
-	return NewRiskClient(r.config).QueryEditors(r)
-}
-
-// QueryBlockedGroups queries the "blocked_groups" edge of the Risk entity.
-func (r *Risk) QueryBlockedGroups() *GroupQuery {
-	return NewRiskClient(r.config).QueryBlockedGroups(r)
+// QueryPrograms queries the "programs" edge of the Risk entity.
+func (r *Risk) QueryPrograms() *ProgramQuery {
+	return NewRiskClient(r.config).QueryPrograms(r)
 }
 
 // Update returns a builder for updating this Risk.
@@ -431,6 +431,9 @@ func (r *Risk) String() string {
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", r.Tags))
 	builder.WriteString(", ")
+	builder.WriteString("owner_id=")
+	builder.WriteString(r.OwnerID)
+	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(r.Name)
 	builder.WriteString(", ")
@@ -460,11 +463,80 @@ func (r *Risk) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("details=")
 	builder.WriteString(fmt.Sprintf("%v", r.Details))
-	builder.WriteString(", ")
-	builder.WriteString("owner_id=")
-	builder.WriteString(r.OwnerID)
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (r *Risk) NamedBlockedGroups(name string) ([]*Group, error) {
+	if r.Edges.namedBlockedGroups == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := r.Edges.namedBlockedGroups[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (r *Risk) appendNamedBlockedGroups(name string, edges ...*Group) {
+	if r.Edges.namedBlockedGroups == nil {
+		r.Edges.namedBlockedGroups = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		r.Edges.namedBlockedGroups[name] = []*Group{}
+	} else {
+		r.Edges.namedBlockedGroups[name] = append(r.Edges.namedBlockedGroups[name], edges...)
+	}
+}
+
+// NamedEditors returns the Editors named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (r *Risk) NamedEditors(name string) ([]*Group, error) {
+	if r.Edges.namedEditors == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := r.Edges.namedEditors[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (r *Risk) appendNamedEditors(name string, edges ...*Group) {
+	if r.Edges.namedEditors == nil {
+		r.Edges.namedEditors = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		r.Edges.namedEditors[name] = []*Group{}
+	} else {
+		r.Edges.namedEditors[name] = append(r.Edges.namedEditors[name], edges...)
+	}
+}
+
+// NamedViewers returns the Viewers named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (r *Risk) NamedViewers(name string) ([]*Group, error) {
+	if r.Edges.namedViewers == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := r.Edges.namedViewers[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (r *Risk) appendNamedViewers(name string, edges ...*Group) {
+	if r.Edges.namedViewers == nil {
+		r.Edges.namedViewers = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		r.Edges.namedViewers[name] = []*Group{}
+	} else {
+		r.Edges.namedViewers[name] = append(r.Edges.namedViewers[name], edges...)
+	}
 }
 
 // NamedControl returns the Control named value or an error if the edge was not
@@ -539,99 +611,27 @@ func (r *Risk) appendNamedActionplans(name string, edges ...*ActionPlan) {
 	}
 }
 
-// NamedProgram returns the Program named value or an error if the edge was not
+// NamedPrograms returns the Programs named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (r *Risk) NamedProgram(name string) ([]*Program, error) {
-	if r.Edges.namedProgram == nil {
+func (r *Risk) NamedPrograms(name string) ([]*Program, error) {
+	if r.Edges.namedPrograms == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := r.Edges.namedProgram[name]
+	nodes, ok := r.Edges.namedPrograms[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (r *Risk) appendNamedProgram(name string, edges ...*Program) {
-	if r.Edges.namedProgram == nil {
-		r.Edges.namedProgram = make(map[string][]*Program)
+func (r *Risk) appendNamedPrograms(name string, edges ...*Program) {
+	if r.Edges.namedPrograms == nil {
+		r.Edges.namedPrograms = make(map[string][]*Program)
 	}
 	if len(edges) == 0 {
-		r.Edges.namedProgram[name] = []*Program{}
+		r.Edges.namedPrograms[name] = []*Program{}
 	} else {
-		r.Edges.namedProgram[name] = append(r.Edges.namedProgram[name], edges...)
-	}
-}
-
-// NamedViewers returns the Viewers named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (r *Risk) NamedViewers(name string) ([]*Group, error) {
-	if r.Edges.namedViewers == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := r.Edges.namedViewers[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (r *Risk) appendNamedViewers(name string, edges ...*Group) {
-	if r.Edges.namedViewers == nil {
-		r.Edges.namedViewers = make(map[string][]*Group)
-	}
-	if len(edges) == 0 {
-		r.Edges.namedViewers[name] = []*Group{}
-	} else {
-		r.Edges.namedViewers[name] = append(r.Edges.namedViewers[name], edges...)
-	}
-}
-
-// NamedEditors returns the Editors named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (r *Risk) NamedEditors(name string) ([]*Group, error) {
-	if r.Edges.namedEditors == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := r.Edges.namedEditors[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (r *Risk) appendNamedEditors(name string, edges ...*Group) {
-	if r.Edges.namedEditors == nil {
-		r.Edges.namedEditors = make(map[string][]*Group)
-	}
-	if len(edges) == 0 {
-		r.Edges.namedEditors[name] = []*Group{}
-	} else {
-		r.Edges.namedEditors[name] = append(r.Edges.namedEditors[name], edges...)
-	}
-}
-
-// NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (r *Risk) NamedBlockedGroups(name string) ([]*Group, error) {
-	if r.Edges.namedBlockedGroups == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := r.Edges.namedBlockedGroups[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (r *Risk) appendNamedBlockedGroups(name string, edges ...*Group) {
-	if r.Edges.namedBlockedGroups == nil {
-		r.Edges.namedBlockedGroups = make(map[string][]*Group)
-	}
-	if len(edges) == 0 {
-		r.Edges.namedBlockedGroups[name] = []*Group{}
-	} else {
-		r.Edges.namedBlockedGroups[name] = append(r.Edges.namedBlockedGroups[name], edges...)
+		r.Edges.namedPrograms[name] = append(r.Edges.namedPrograms[name], edges...)
 	}
 }
 

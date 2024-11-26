@@ -294,6 +294,51 @@ func (pu *ProgramUpdate) SetOwner(o *Organization) *ProgramUpdate {
 	return pu.SetOwnerID(o.ID)
 }
 
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (pu *ProgramUpdate) AddBlockedGroupIDs(ids ...string) *ProgramUpdate {
+	pu.mutation.AddBlockedGroupIDs(ids...)
+	return pu
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (pu *ProgramUpdate) AddBlockedGroups(g ...*Group) *ProgramUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return pu.AddBlockedGroupIDs(ids...)
+}
+
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (pu *ProgramUpdate) AddEditorIDs(ids ...string) *ProgramUpdate {
+	pu.mutation.AddEditorIDs(ids...)
+	return pu
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (pu *ProgramUpdate) AddEditors(g ...*Group) *ProgramUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return pu.AddEditorIDs(ids...)
+}
+
+// AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
+func (pu *ProgramUpdate) AddViewerIDs(ids ...string) *ProgramUpdate {
+	pu.mutation.AddViewerIDs(ids...)
+	return pu
+}
+
+// AddViewers adds the "viewers" edges to the Group entity.
+func (pu *ProgramUpdate) AddViewers(g ...*Group) *ProgramUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return pu.AddViewerIDs(ids...)
+}
+
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
 func (pu *ProgramUpdate) AddControlIDs(ids ...string) *ProgramUpdate {
 	pu.mutation.AddControlIDs(ids...)
@@ -489,51 +534,6 @@ func (pu *ProgramUpdate) AddUsers(u ...*User) *ProgramUpdate {
 	return pu.AddUserIDs(ids...)
 }
 
-// AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
-func (pu *ProgramUpdate) AddViewerIDs(ids ...string) *ProgramUpdate {
-	pu.mutation.AddViewerIDs(ids...)
-	return pu
-}
-
-// AddViewers adds the "viewers" edges to the Group entity.
-func (pu *ProgramUpdate) AddViewers(g ...*Group) *ProgramUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
-	}
-	return pu.AddViewerIDs(ids...)
-}
-
-// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
-func (pu *ProgramUpdate) AddEditorIDs(ids ...string) *ProgramUpdate {
-	pu.mutation.AddEditorIDs(ids...)
-	return pu
-}
-
-// AddEditors adds the "editors" edges to the Group entity.
-func (pu *ProgramUpdate) AddEditors(g ...*Group) *ProgramUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
-	}
-	return pu.AddEditorIDs(ids...)
-}
-
-// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
-func (pu *ProgramUpdate) AddBlockedGroupIDs(ids ...string) *ProgramUpdate {
-	pu.mutation.AddBlockedGroupIDs(ids...)
-	return pu
-}
-
-// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
-func (pu *ProgramUpdate) AddBlockedGroups(g ...*Group) *ProgramUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
-	}
-	return pu.AddBlockedGroupIDs(ids...)
-}
-
 // AddMemberIDs adds the "members" edge to the ProgramMembership entity by IDs.
 func (pu *ProgramUpdate) AddMemberIDs(ids ...string) *ProgramUpdate {
 	pu.mutation.AddMemberIDs(ids...)
@@ -558,6 +558,69 @@ func (pu *ProgramUpdate) Mutation() *ProgramMutation {
 func (pu *ProgramUpdate) ClearOwner() *ProgramUpdate {
 	pu.mutation.ClearOwner()
 	return pu
+}
+
+// ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
+func (pu *ProgramUpdate) ClearBlockedGroups() *ProgramUpdate {
+	pu.mutation.ClearBlockedGroups()
+	return pu
+}
+
+// RemoveBlockedGroupIDs removes the "blocked_groups" edge to Group entities by IDs.
+func (pu *ProgramUpdate) RemoveBlockedGroupIDs(ids ...string) *ProgramUpdate {
+	pu.mutation.RemoveBlockedGroupIDs(ids...)
+	return pu
+}
+
+// RemoveBlockedGroups removes "blocked_groups" edges to Group entities.
+func (pu *ProgramUpdate) RemoveBlockedGroups(g ...*Group) *ProgramUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return pu.RemoveBlockedGroupIDs(ids...)
+}
+
+// ClearEditors clears all "editors" edges to the Group entity.
+func (pu *ProgramUpdate) ClearEditors() *ProgramUpdate {
+	pu.mutation.ClearEditors()
+	return pu
+}
+
+// RemoveEditorIDs removes the "editors" edge to Group entities by IDs.
+func (pu *ProgramUpdate) RemoveEditorIDs(ids ...string) *ProgramUpdate {
+	pu.mutation.RemoveEditorIDs(ids...)
+	return pu
+}
+
+// RemoveEditors removes "editors" edges to Group entities.
+func (pu *ProgramUpdate) RemoveEditors(g ...*Group) *ProgramUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return pu.RemoveEditorIDs(ids...)
+}
+
+// ClearViewers clears all "viewers" edges to the Group entity.
+func (pu *ProgramUpdate) ClearViewers() *ProgramUpdate {
+	pu.mutation.ClearViewers()
+	return pu
+}
+
+// RemoveViewerIDs removes the "viewers" edge to Group entities by IDs.
+func (pu *ProgramUpdate) RemoveViewerIDs(ids ...string) *ProgramUpdate {
+	pu.mutation.RemoveViewerIDs(ids...)
+	return pu
+}
+
+// RemoveViewers removes "viewers" edges to Group entities.
+func (pu *ProgramUpdate) RemoveViewers(g ...*Group) *ProgramUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return pu.RemoveViewerIDs(ids...)
 }
 
 // ClearControls clears all "controls" edges to the Control entity.
@@ -833,69 +896,6 @@ func (pu *ProgramUpdate) RemoveUsers(u ...*User) *ProgramUpdate {
 	return pu.RemoveUserIDs(ids...)
 }
 
-// ClearViewers clears all "viewers" edges to the Group entity.
-func (pu *ProgramUpdate) ClearViewers() *ProgramUpdate {
-	pu.mutation.ClearViewers()
-	return pu
-}
-
-// RemoveViewerIDs removes the "viewers" edge to Group entities by IDs.
-func (pu *ProgramUpdate) RemoveViewerIDs(ids ...string) *ProgramUpdate {
-	pu.mutation.RemoveViewerIDs(ids...)
-	return pu
-}
-
-// RemoveViewers removes "viewers" edges to Group entities.
-func (pu *ProgramUpdate) RemoveViewers(g ...*Group) *ProgramUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
-	}
-	return pu.RemoveViewerIDs(ids...)
-}
-
-// ClearEditors clears all "editors" edges to the Group entity.
-func (pu *ProgramUpdate) ClearEditors() *ProgramUpdate {
-	pu.mutation.ClearEditors()
-	return pu
-}
-
-// RemoveEditorIDs removes the "editors" edge to Group entities by IDs.
-func (pu *ProgramUpdate) RemoveEditorIDs(ids ...string) *ProgramUpdate {
-	pu.mutation.RemoveEditorIDs(ids...)
-	return pu
-}
-
-// RemoveEditors removes "editors" edges to Group entities.
-func (pu *ProgramUpdate) RemoveEditors(g ...*Group) *ProgramUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
-	}
-	return pu.RemoveEditorIDs(ids...)
-}
-
-// ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
-func (pu *ProgramUpdate) ClearBlockedGroups() *ProgramUpdate {
-	pu.mutation.ClearBlockedGroups()
-	return pu
-}
-
-// RemoveBlockedGroupIDs removes the "blocked_groups" edge to Group entities by IDs.
-func (pu *ProgramUpdate) RemoveBlockedGroupIDs(ids ...string) *ProgramUpdate {
-	pu.mutation.RemoveBlockedGroupIDs(ids...)
-	return pu
-}
-
-// RemoveBlockedGroups removes "blocked_groups" edges to Group entities.
-func (pu *ProgramUpdate) RemoveBlockedGroups(g ...*Group) *ProgramUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
-	}
-	return pu.RemoveBlockedGroupIDs(ids...)
-}
-
 // ClearMembers clears all "members" edges to the ProgramMembership entity.
 func (pu *ProgramUpdate) ClearMembers() *ProgramUpdate {
 	pu.mutation.ClearMembers()
@@ -1097,6 +1097,150 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			},
 		}
 		edge.Schema = pu.schemaConfig.Program
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if pu.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   program.BlockedGroupsTable,
+			Columns: program.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pu.schemaConfig.ProgramBlockedGroups
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !pu.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   program.BlockedGroupsTable,
+			Columns: program.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pu.schemaConfig.ProgramBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   program.BlockedGroupsTable,
+			Columns: program.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pu.schemaConfig.ProgramBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if pu.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   program.EditorsTable,
+			Columns: program.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pu.schemaConfig.ProgramEditors
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !pu.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   program.EditorsTable,
+			Columns: program.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pu.schemaConfig.ProgramEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   program.EditorsTable,
+			Columns: program.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pu.schemaConfig.ProgramEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if pu.mutation.ViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   program.ViewersTable,
+			Columns: program.ViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pu.schemaConfig.ProgramViewers
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.RemovedViewersIDs(); len(nodes) > 0 && !pu.mutation.ViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   program.ViewersTable,
+			Columns: program.ViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pu.schemaConfig.ProgramViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.ViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   program.ViewersTable,
+			Columns: program.ViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = pu.schemaConfig.ProgramViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1747,150 +1891,6 @@ func (pu *ProgramUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if pu.mutation.ViewersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   program.ViewersTable,
-			Columns: program.ViewersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = pu.schemaConfig.ProgramViewers
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := pu.mutation.RemovedViewersIDs(); len(nodes) > 0 && !pu.mutation.ViewersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   program.ViewersTable,
-			Columns: program.ViewersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = pu.schemaConfig.ProgramViewers
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := pu.mutation.ViewersIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   program.ViewersTable,
-			Columns: program.ViewersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = pu.schemaConfig.ProgramViewers
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if pu.mutation.EditorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   program.EditorsTable,
-			Columns: program.EditorsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = pu.schemaConfig.ProgramEditors
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := pu.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !pu.mutation.EditorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   program.EditorsTable,
-			Columns: program.EditorsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = pu.schemaConfig.ProgramEditors
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := pu.mutation.EditorsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   program.EditorsTable,
-			Columns: program.EditorsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = pu.schemaConfig.ProgramEditors
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if pu.mutation.BlockedGroupsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   program.BlockedGroupsTable,
-			Columns: program.BlockedGroupsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = pu.schemaConfig.ProgramBlockedGroups
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := pu.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !pu.mutation.BlockedGroupsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   program.BlockedGroupsTable,
-			Columns: program.BlockedGroupsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = pu.schemaConfig.ProgramBlockedGroups
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := pu.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   program.BlockedGroupsTable,
-			Columns: program.BlockedGroupsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = pu.schemaConfig.ProgramBlockedGroups
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
 	if pu.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -2208,6 +2208,51 @@ func (puo *ProgramUpdateOne) SetOwner(o *Organization) *ProgramUpdateOne {
 	return puo.SetOwnerID(o.ID)
 }
 
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (puo *ProgramUpdateOne) AddBlockedGroupIDs(ids ...string) *ProgramUpdateOne {
+	puo.mutation.AddBlockedGroupIDs(ids...)
+	return puo
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (puo *ProgramUpdateOne) AddBlockedGroups(g ...*Group) *ProgramUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return puo.AddBlockedGroupIDs(ids...)
+}
+
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (puo *ProgramUpdateOne) AddEditorIDs(ids ...string) *ProgramUpdateOne {
+	puo.mutation.AddEditorIDs(ids...)
+	return puo
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (puo *ProgramUpdateOne) AddEditors(g ...*Group) *ProgramUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return puo.AddEditorIDs(ids...)
+}
+
+// AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
+func (puo *ProgramUpdateOne) AddViewerIDs(ids ...string) *ProgramUpdateOne {
+	puo.mutation.AddViewerIDs(ids...)
+	return puo
+}
+
+// AddViewers adds the "viewers" edges to the Group entity.
+func (puo *ProgramUpdateOne) AddViewers(g ...*Group) *ProgramUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return puo.AddViewerIDs(ids...)
+}
+
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
 func (puo *ProgramUpdateOne) AddControlIDs(ids ...string) *ProgramUpdateOne {
 	puo.mutation.AddControlIDs(ids...)
@@ -2403,51 +2448,6 @@ func (puo *ProgramUpdateOne) AddUsers(u ...*User) *ProgramUpdateOne {
 	return puo.AddUserIDs(ids...)
 }
 
-// AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
-func (puo *ProgramUpdateOne) AddViewerIDs(ids ...string) *ProgramUpdateOne {
-	puo.mutation.AddViewerIDs(ids...)
-	return puo
-}
-
-// AddViewers adds the "viewers" edges to the Group entity.
-func (puo *ProgramUpdateOne) AddViewers(g ...*Group) *ProgramUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
-	}
-	return puo.AddViewerIDs(ids...)
-}
-
-// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
-func (puo *ProgramUpdateOne) AddEditorIDs(ids ...string) *ProgramUpdateOne {
-	puo.mutation.AddEditorIDs(ids...)
-	return puo
-}
-
-// AddEditors adds the "editors" edges to the Group entity.
-func (puo *ProgramUpdateOne) AddEditors(g ...*Group) *ProgramUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
-	}
-	return puo.AddEditorIDs(ids...)
-}
-
-// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
-func (puo *ProgramUpdateOne) AddBlockedGroupIDs(ids ...string) *ProgramUpdateOne {
-	puo.mutation.AddBlockedGroupIDs(ids...)
-	return puo
-}
-
-// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
-func (puo *ProgramUpdateOne) AddBlockedGroups(g ...*Group) *ProgramUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
-	}
-	return puo.AddBlockedGroupIDs(ids...)
-}
-
 // AddMemberIDs adds the "members" edge to the ProgramMembership entity by IDs.
 func (puo *ProgramUpdateOne) AddMemberIDs(ids ...string) *ProgramUpdateOne {
 	puo.mutation.AddMemberIDs(ids...)
@@ -2472,6 +2472,69 @@ func (puo *ProgramUpdateOne) Mutation() *ProgramMutation {
 func (puo *ProgramUpdateOne) ClearOwner() *ProgramUpdateOne {
 	puo.mutation.ClearOwner()
 	return puo
+}
+
+// ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
+func (puo *ProgramUpdateOne) ClearBlockedGroups() *ProgramUpdateOne {
+	puo.mutation.ClearBlockedGroups()
+	return puo
+}
+
+// RemoveBlockedGroupIDs removes the "blocked_groups" edge to Group entities by IDs.
+func (puo *ProgramUpdateOne) RemoveBlockedGroupIDs(ids ...string) *ProgramUpdateOne {
+	puo.mutation.RemoveBlockedGroupIDs(ids...)
+	return puo
+}
+
+// RemoveBlockedGroups removes "blocked_groups" edges to Group entities.
+func (puo *ProgramUpdateOne) RemoveBlockedGroups(g ...*Group) *ProgramUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return puo.RemoveBlockedGroupIDs(ids...)
+}
+
+// ClearEditors clears all "editors" edges to the Group entity.
+func (puo *ProgramUpdateOne) ClearEditors() *ProgramUpdateOne {
+	puo.mutation.ClearEditors()
+	return puo
+}
+
+// RemoveEditorIDs removes the "editors" edge to Group entities by IDs.
+func (puo *ProgramUpdateOne) RemoveEditorIDs(ids ...string) *ProgramUpdateOne {
+	puo.mutation.RemoveEditorIDs(ids...)
+	return puo
+}
+
+// RemoveEditors removes "editors" edges to Group entities.
+func (puo *ProgramUpdateOne) RemoveEditors(g ...*Group) *ProgramUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return puo.RemoveEditorIDs(ids...)
+}
+
+// ClearViewers clears all "viewers" edges to the Group entity.
+func (puo *ProgramUpdateOne) ClearViewers() *ProgramUpdateOne {
+	puo.mutation.ClearViewers()
+	return puo
+}
+
+// RemoveViewerIDs removes the "viewers" edge to Group entities by IDs.
+func (puo *ProgramUpdateOne) RemoveViewerIDs(ids ...string) *ProgramUpdateOne {
+	puo.mutation.RemoveViewerIDs(ids...)
+	return puo
+}
+
+// RemoveViewers removes "viewers" edges to Group entities.
+func (puo *ProgramUpdateOne) RemoveViewers(g ...*Group) *ProgramUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return puo.RemoveViewerIDs(ids...)
 }
 
 // ClearControls clears all "controls" edges to the Control entity.
@@ -2747,69 +2810,6 @@ func (puo *ProgramUpdateOne) RemoveUsers(u ...*User) *ProgramUpdateOne {
 	return puo.RemoveUserIDs(ids...)
 }
 
-// ClearViewers clears all "viewers" edges to the Group entity.
-func (puo *ProgramUpdateOne) ClearViewers() *ProgramUpdateOne {
-	puo.mutation.ClearViewers()
-	return puo
-}
-
-// RemoveViewerIDs removes the "viewers" edge to Group entities by IDs.
-func (puo *ProgramUpdateOne) RemoveViewerIDs(ids ...string) *ProgramUpdateOne {
-	puo.mutation.RemoveViewerIDs(ids...)
-	return puo
-}
-
-// RemoveViewers removes "viewers" edges to Group entities.
-func (puo *ProgramUpdateOne) RemoveViewers(g ...*Group) *ProgramUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
-	}
-	return puo.RemoveViewerIDs(ids...)
-}
-
-// ClearEditors clears all "editors" edges to the Group entity.
-func (puo *ProgramUpdateOne) ClearEditors() *ProgramUpdateOne {
-	puo.mutation.ClearEditors()
-	return puo
-}
-
-// RemoveEditorIDs removes the "editors" edge to Group entities by IDs.
-func (puo *ProgramUpdateOne) RemoveEditorIDs(ids ...string) *ProgramUpdateOne {
-	puo.mutation.RemoveEditorIDs(ids...)
-	return puo
-}
-
-// RemoveEditors removes "editors" edges to Group entities.
-func (puo *ProgramUpdateOne) RemoveEditors(g ...*Group) *ProgramUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
-	}
-	return puo.RemoveEditorIDs(ids...)
-}
-
-// ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
-func (puo *ProgramUpdateOne) ClearBlockedGroups() *ProgramUpdateOne {
-	puo.mutation.ClearBlockedGroups()
-	return puo
-}
-
-// RemoveBlockedGroupIDs removes the "blocked_groups" edge to Group entities by IDs.
-func (puo *ProgramUpdateOne) RemoveBlockedGroupIDs(ids ...string) *ProgramUpdateOne {
-	puo.mutation.RemoveBlockedGroupIDs(ids...)
-	return puo
-}
-
-// RemoveBlockedGroups removes "blocked_groups" edges to Group entities.
-func (puo *ProgramUpdateOne) RemoveBlockedGroups(g ...*Group) *ProgramUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
-	}
-	return puo.RemoveBlockedGroupIDs(ids...)
-}
-
 // ClearMembers clears all "members" edges to the ProgramMembership entity.
 func (puo *ProgramUpdateOne) ClearMembers() *ProgramUpdateOne {
 	puo.mutation.ClearMembers()
@@ -3041,6 +3041,150 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 			},
 		}
 		edge.Schema = puo.schemaConfig.Program
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if puo.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   program.BlockedGroupsTable,
+			Columns: program.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = puo.schemaConfig.ProgramBlockedGroups
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !puo.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   program.BlockedGroupsTable,
+			Columns: program.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = puo.schemaConfig.ProgramBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   program.BlockedGroupsTable,
+			Columns: program.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = puo.schemaConfig.ProgramBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if puo.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   program.EditorsTable,
+			Columns: program.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = puo.schemaConfig.ProgramEditors
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !puo.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   program.EditorsTable,
+			Columns: program.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = puo.schemaConfig.ProgramEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   program.EditorsTable,
+			Columns: program.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = puo.schemaConfig.ProgramEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if puo.mutation.ViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   program.ViewersTable,
+			Columns: program.ViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = puo.schemaConfig.ProgramViewers
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.RemovedViewersIDs(); len(nodes) > 0 && !puo.mutation.ViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   program.ViewersTable,
+			Columns: program.ViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = puo.schemaConfig.ProgramViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.ViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   program.ViewersTable,
+			Columns: program.ViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = puo.schemaConfig.ProgramViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3688,150 +3832,6 @@ func (puo *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err e
 		edge.Target.Fields = specE.Fields
 		if specE.ID.Value != nil {
 			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if puo.mutation.ViewersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   program.ViewersTable,
-			Columns: program.ViewersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = puo.schemaConfig.ProgramViewers
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := puo.mutation.RemovedViewersIDs(); len(nodes) > 0 && !puo.mutation.ViewersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   program.ViewersTable,
-			Columns: program.ViewersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = puo.schemaConfig.ProgramViewers
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := puo.mutation.ViewersIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   program.ViewersTable,
-			Columns: program.ViewersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = puo.schemaConfig.ProgramViewers
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if puo.mutation.EditorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   program.EditorsTable,
-			Columns: program.EditorsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = puo.schemaConfig.ProgramEditors
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := puo.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !puo.mutation.EditorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   program.EditorsTable,
-			Columns: program.EditorsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = puo.schemaConfig.ProgramEditors
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := puo.mutation.EditorsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   program.EditorsTable,
-			Columns: program.EditorsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = puo.schemaConfig.ProgramEditors
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if puo.mutation.BlockedGroupsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   program.BlockedGroupsTable,
-			Columns: program.BlockedGroupsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = puo.schemaConfig.ProgramBlockedGroups
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := puo.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !puo.mutation.BlockedGroupsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   program.BlockedGroupsTable,
-			Columns: program.BlockedGroupsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = puo.schemaConfig.ProgramBlockedGroups
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := puo.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   program.BlockedGroupsTable,
-			Columns: program.BlockedGroupsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = puo.schemaConfig.ProgramBlockedGroups
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}

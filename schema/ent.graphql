@@ -2183,6 +2183,10 @@ type ControlObjective implements Node {
   """
   tags: [String!]
   """
+  the ID of the organization owner of the object
+  """
+  ownerID: ID!
+  """
   the name of the control objective
   """
   name: String!
@@ -2226,6 +2230,19 @@ type ControlObjective implements Node {
   json data including details of the control objective
   """
   details: Map
+  owner: Organization!
+  """
+  groups that are blocked from viewing or editing the risk
+  """
+  blockedGroups: [Group!]
+  """
+  provides edit access to the risk to members of the group
+  """
+  editors: [Group!]
+  """
+  provides view access to the risk to members of the group
+  """
+  viewers: [Group!]
   policy: [InternalPolicy!]
   controls: [Control!]
   procedures: [Procedure!]
@@ -2281,6 +2298,10 @@ type ControlObjectiveHistory implements Node {
   tags associated with the object
   """
   tags: [String!]
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: String!
   """
   the name of the control objective
   """
@@ -2514,6 +2535,22 @@ input ControlObjectiveHistoryWhereInput {
   deletedByNotNil: Boolean
   deletedByEqualFold: String
   deletedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
   """
   name field predicates
   """
@@ -2808,6 +2845,22 @@ input ControlObjectiveWhereInput {
   deletedByEqualFold: String
   deletedByContainsFold: String
   """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
   name field predicates
   """
   name: String
@@ -2985,6 +3038,26 @@ input ControlObjectiveWhereInput {
   mappedFrameworksNotNil: Boolean
   mappedFrameworksEqualFold: String
   mappedFrameworksContainsFold: String
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  blocked_groups edge predicates
+  """
+  hasBlockedGroups: Boolean
+  hasBlockedGroupsWith: [GroupWhereInput!]
+  """
+  editors edge predicates
+  """
+  hasEditors: Boolean
+  hasEditorsWith: [GroupWhereInput!]
+  """
+  viewers edge predicates
+  """
+  hasViewers: Boolean
+  hasViewersWith: [GroupWhereInput!]
   """
   policy edge predicates
   """
@@ -3616,6 +3689,10 @@ input CreateControlObjectiveInput {
   json data including details of the control objective
   """
   details: Map
+  ownerID: ID!
+  blockedGroupIDs: [ID!]
+  editorIDs: [ID!]
+  viewerIDs: [ID!]
   policyIDs: [ID!]
   controlIDs: [ID!]
   procedureIDs: [ID!]
@@ -3987,6 +4064,9 @@ input CreateGroupInput {
   riskViewerIDs: [ID!]
   riskEditorIDs: [ID!]
   riskBlockedGroupIDs: [ID!]
+  controlobjectiveViewerIDs: [ID!]
+  controlobjectiveEditorIDs: [ID!]
+  controlobjectiveBlockedGroupIDs: [ID!]
 }
 """
 CreateGroupMembershipInput is used for create GroupMembership object.
@@ -4120,14 +4200,14 @@ input CreateInternalPolicyInput {
   """
   details: Map
   ownerID: ID
+  blockedGroupIDs: [ID!]
+  editorIDs: [ID!]
   controlobjectiveIDs: [ID!]
   controlIDs: [ID!]
   procedureIDs: [ID!]
   narrativeIDs: [ID!]
   taskIDs: [ID!]
   programIDs: [ID!]
-  editorIDs: [ID!]
-  blockedGroupIDs: [ID!]
 }
 """
 CreateInviteInput is used for create Invite object.
@@ -4350,6 +4430,7 @@ input CreateOrganizationInput {
   procedureIDs: [ID!]
   internalpolicyIDs: [ID!]
   riskIDs: [ID!]
+  controlobjectiveIDs: [ID!]
 }
 """
 CreateOrganizationSettingInput is used for create OrganizationSetting object.
@@ -4468,14 +4549,14 @@ input CreateProcedureInput {
   """
   details: Map
   ownerID: ID
+  blockedGroupIDs: [ID!]
+  editorIDs: [ID!]
   controlIDs: [ID!]
   internalpolicyIDs: [ID!]
   narrativeIDs: [ID!]
   riskIDs: [ID!]
   taskIDs: [ID!]
   programIDs: [ID!]
-  editorIDs: [ID!]
-  blockedGroupIDs: [ID!]
 }
 """
 CreateProgramInput is used for create Program object.
@@ -4519,6 +4600,9 @@ input CreateProgramInput {
   """
   auditorReadComments: Boolean
   ownerID: ID
+  blockedGroupIDs: [ID!]
+  editorIDs: [ID!]
+  viewerIDs: [ID!]
   controlIDs: [ID!]
   subcontrolIDs: [ID!]
   controlobjectiveIDs: [ID!]
@@ -4532,9 +4616,6 @@ input CreateProgramInput {
   actionplanIDs: [ID!]
   standardIDs: [ID!]
   userIDs: [ID!]
-  viewerIDs: [ID!]
-  editorIDs: [ID!]
-  blockedGroupIDs: [ID!]
 }
 """
 CreateProgramMembershipInput is used for create ProgramMembership object.
@@ -4594,14 +4675,14 @@ input CreateRiskInput {
   json data for the risk document
   """
   details: Map
+  ownerID: ID!
+  blockedGroupIDs: [ID!]
+  editorIDs: [ID!]
+  viewerIDs: [ID!]
   controlIDs: [ID!]
   procedureIDs: [ID!]
   actionplanIDs: [ID!]
-  ownerID: ID!
   programIDs: [ID!]
-  viewerIDs: [ID!]
-  editorIDs: [ID!]
-  blockedGroupIDs: [ID!]
 }
 """
 CreateStandardInput is used for create Standard object.
@@ -10785,6 +10866,9 @@ type Group implements Node {
   riskViewers: [Risk!]
   riskEditors: [Risk!]
   riskBlockedGroups: [Risk!]
+  controlobjectiveViewers: [ControlObjective!]
+  controlobjectiveEditors: [ControlObjective!]
+  controlobjectiveBlockedGroups: [ControlObjective!]
   members: [GroupMembership!]
 }
 """
@@ -12343,6 +12427,21 @@ input GroupWhereInput {
   hasRiskBlockedGroups: Boolean
   hasRiskBlockedGroupsWith: [RiskWhereInput!]
   """
+  controlobjective_viewers edge predicates
+  """
+  hasControlobjectiveViewers: Boolean
+  hasControlobjectiveViewersWith: [ControlObjectiveWhereInput!]
+  """
+  controlobjective_editors edge predicates
+  """
+  hasControlobjectiveEditors: Boolean
+  hasControlobjectiveEditorsWith: [ControlObjectiveWhereInput!]
+  """
+  controlobjective_blocked_groups edge predicates
+  """
+  hasControlobjectiveBlockedGroups: Boolean
+  hasControlobjectiveBlockedGroupsWith: [ControlObjectiveWhereInput!]
+  """
   members edge predicates
   """
   hasMembers: Boolean
@@ -13518,20 +13617,20 @@ type InternalPolicy implements Node {
   """
   details: Map
   owner: Organization
+  """
+  groups that are blocked from viewing or editing the risk
+  """
+  blockedGroups: [Group!]
+  """
+  provides edit access to the risk to members of the group
+  """
+  editors: [Group!]
   controlobjectives: [ControlObjective!]
   controls: [Control!]
   procedures: [Procedure!]
   narratives: [Narrative!]
   tasks: [Task!]
   programs: [Program!]
-  """
-  provides edit access to the policy to members of the group
-  """
-  editors: [Group!]
-  """
-  groups that are blocked from viewing or editing the policy
-  """
-  blockedGroups: [Group!]
 }
 """
 A connection to a list of items.
@@ -14208,6 +14307,16 @@ input InternalPolicyWhereInput {
   hasOwner: Boolean
   hasOwnerWith: [OrganizationWhereInput!]
   """
+  blocked_groups edge predicates
+  """
+  hasBlockedGroups: Boolean
+  hasBlockedGroupsWith: [GroupWhereInput!]
+  """
+  editors edge predicates
+  """
+  hasEditors: Boolean
+  hasEditorsWith: [GroupWhereInput!]
+  """
   controlobjectives edge predicates
   """
   hasControlobjectives: Boolean
@@ -14237,16 +14346,6 @@ input InternalPolicyWhereInput {
   """
   hasPrograms: Boolean
   hasProgramsWith: [ProgramWhereInput!]
-  """
-  editors edge predicates
-  """
-  hasEditors: Boolean
-  hasEditorsWith: [GroupWhereInput!]
-  """
-  blocked_groups edge predicates
-  """
-  hasBlockedGroups: Boolean
-  hasBlockedGroupsWith: [GroupWhereInput!]
 }
 type Invite implements Node {
   id: ID!
@@ -17073,6 +17172,7 @@ type Organization implements Node {
   procedures: [Procedure!]
   internalpolicies: [InternalPolicy!]
   risks: [Risk!]
+  controlobjectives: [ControlObjective!]
   members: [OrgMembership!]
 }
 """
@@ -18495,6 +18595,11 @@ input OrganizationWhereInput {
   hasRisks: Boolean
   hasRisksWith: [RiskWhereInput!]
   """
+  controlobjectives edge predicates
+  """
+  hasControlobjectives: Boolean
+  hasControlobjectivesWith: [ControlObjectiveWhereInput!]
+  """
   members edge predicates
   """
   hasMembers: Boolean
@@ -18811,20 +18916,20 @@ type Procedure implements Node {
   """
   details: Map
   owner: Organization
+  """
+  groups that are blocked from viewing or editing the risk
+  """
+  blockedGroups: [Group!]
+  """
+  provides edit access to the risk to members of the group
+  """
+  editors: [Group!]
   control: [Control!]
   internalpolicy: [InternalPolicy!]
   narratives: [Narrative!]
   risks: [Risk!]
   tasks: [Task!]
   programs: [Program!]
-  """
-  provides edit access to the procedure to members of the group
-  """
-  editors: [Group!]
-  """
-  groups that are blocked from viewing or editing the procedure
-  """
-  blockedGroups: [Group!]
 }
 """
 A connection to a list of items.
@@ -19541,6 +19646,16 @@ input ProcedureWhereInput {
   hasOwner: Boolean
   hasOwnerWith: [OrganizationWhereInput!]
   """
+  blocked_groups edge predicates
+  """
+  hasBlockedGroups: Boolean
+  hasBlockedGroupsWith: [GroupWhereInput!]
+  """
+  editors edge predicates
+  """
+  hasEditors: Boolean
+  hasEditorsWith: [GroupWhereInput!]
+  """
   control edge predicates
   """
   hasControl: Boolean
@@ -19570,16 +19685,6 @@ input ProcedureWhereInput {
   """
   hasPrograms: Boolean
   hasProgramsWith: [ProgramWhereInput!]
-  """
-  editors edge predicates
-  """
-  hasEditors: Boolean
-  hasEditorsWith: [GroupWhereInput!]
-  """
-  blocked_groups edge predicates
-  """
-  hasBlockedGroups: Boolean
-  hasBlockedGroupsWith: [GroupWhereInput!]
 }
 type Program implements Node {
   id: ID!
@@ -19630,6 +19735,18 @@ type Program implements Node {
   """
   auditorReadComments: Boolean!
   owner: Organization
+  """
+  groups that are blocked from viewing or editing the risk
+  """
+  blockedGroups: [Group!]
+  """
+  provides edit access to the risk to members of the group
+  """
+  editors: [Group!]
+  """
+  provides view access to the risk to members of the group
+  """
+  viewers: [Group!]
   controls: [Control!]
   subcontrols: [Subcontrol!]
   controlobjectives: [ControlObjective!]
@@ -19646,18 +19763,6 @@ type Program implements Node {
   """
   standards: [Standard!]
   users: [User!]
-  """
-  provides view access to the program to members of the group
-  """
-  viewers: [Group!]
-  """
-  provides edit access to the program to members of the group
-  """
-  editors: [Group!]
-  """
-  groups that are blocked from viewing or editing the program
-  """
-  blockedGroups: [Group!]
   members: [ProgramMembership!]
 }
 """
@@ -20694,6 +20799,21 @@ input ProgramWhereInput {
   hasOwner: Boolean
   hasOwnerWith: [OrganizationWhereInput!]
   """
+  blocked_groups edge predicates
+  """
+  hasBlockedGroups: Boolean
+  hasBlockedGroupsWith: [GroupWhereInput!]
+  """
+  editors edge predicates
+  """
+  hasEditors: Boolean
+  hasEditorsWith: [GroupWhereInput!]
+  """
+  viewers edge predicates
+  """
+  hasViewers: Boolean
+  hasViewersWith: [GroupWhereInput!]
+  """
   controls edge predicates
   """
   hasControls: Boolean
@@ -20758,21 +20878,6 @@ input ProgramWhereInput {
   """
   hasUsers: Boolean
   hasUsersWith: [UserWhereInput!]
-  """
-  viewers edge predicates
-  """
-  hasViewers: Boolean
-  hasViewersWith: [GroupWhereInput!]
-  """
-  editors edge predicates
-  """
-  hasEditors: Boolean
-  hasEditorsWith: [GroupWhereInput!]
-  """
-  blocked_groups edge predicates
-  """
-  hasBlockedGroups: Boolean
-  hasBlockedGroupsWith: [GroupWhereInput!]
   """
   members edge predicates
   """
@@ -22930,6 +23035,10 @@ type Risk implements Node {
   """
   tags: [String!]
   """
+  the ID of the organization owner of the object
+  """
+  ownerID: ID!
+  """
   the name of the risk
   """
   name: String!
@@ -22969,27 +23078,23 @@ type Risk implements Node {
   json data for the risk document
   """
   details: Map
-  """
-  the ID of the organization owner of the risk
-  """
-  ownerID: ID!
-  control: [Control!]
-  procedure: [Procedure!]
-  actionplans: [ActionPlan!]
   owner: Organization!
-  program: [Program!]
   """
-  provides view access to the risk to members of the group
+  groups that are blocked from viewing or editing the risk
   """
-  viewers: [Group!]
+  blockedGroups: [Group!]
   """
   provides edit access to the risk to members of the group
   """
   editors: [Group!]
   """
-  groups that are blocked from viewing or editing the risk
+  provides view access to the risk to members of the group
   """
-  blockedGroups: [Group!]
+  viewers: [Group!]
+  control: [Control!]
+  procedure: [Procedure!]
+  actionplans: [ActionPlan!]
+  programs: [Program!]
 }
 """
 A connection to a list of items.
@@ -23037,6 +23142,10 @@ type RiskHistory implements Node {
   """
   tags: [String!]
   """
+  the ID of the organization owner of the object
+  """
+  ownerID: String!
+  """
   the name of the risk
   """
   name: String!
@@ -23076,10 +23185,6 @@ type RiskHistory implements Node {
   json data for the risk document
   """
   details: Map
-  """
-  the ID of the organization owner of the risk
-  """
-  ownerID: String!
 }
 """
 A connection to a list of items.
@@ -23286,6 +23391,22 @@ input RiskHistoryWhereInput {
   deletedByEqualFold: String
   deletedByContainsFold: String
   """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
   name field predicates
   """
   name: String
@@ -23427,22 +23548,6 @@ input RiskHistoryWhereInput {
   satisfiesNotNil: Boolean
   satisfiesEqualFold: String
   satisfiesContainsFold: String
-  """
-  owner_id field predicates
-  """
-  ownerID: String
-  ownerIDNEQ: String
-  ownerIDIn: [String!]
-  ownerIDNotIn: [String!]
-  ownerIDGT: String
-  ownerIDGTE: String
-  ownerIDLT: String
-  ownerIDLTE: String
-  ownerIDContains: String
-  ownerIDHasPrefix: String
-  ownerIDHasSuffix: String
-  ownerIDEqualFold: String
-  ownerIDContainsFold: String
 }
 """
 RiskRiskImpact is enum for the field impact
@@ -23574,6 +23679,22 @@ input RiskWhereInput {
   deletedByNotNil: Boolean
   deletedByEqualFold: String
   deletedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
   """
   name field predicates
   """
@@ -23717,21 +23838,25 @@ input RiskWhereInput {
   satisfiesEqualFold: String
   satisfiesContainsFold: String
   """
-  owner_id field predicates
+  owner edge predicates
   """
-  ownerID: ID
-  ownerIDNEQ: ID
-  ownerIDIn: [ID!]
-  ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
-  ownerIDContains: ID
-  ownerIDHasPrefix: ID
-  ownerIDHasSuffix: ID
-  ownerIDEqualFold: ID
-  ownerIDContainsFold: ID
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  blocked_groups edge predicates
+  """
+  hasBlockedGroups: Boolean
+  hasBlockedGroupsWith: [GroupWhereInput!]
+  """
+  editors edge predicates
+  """
+  hasEditors: Boolean
+  hasEditorsWith: [GroupWhereInput!]
+  """
+  viewers edge predicates
+  """
+  hasViewers: Boolean
+  hasViewersWith: [GroupWhereInput!]
   """
   control edge predicates
   """
@@ -23748,30 +23873,10 @@ input RiskWhereInput {
   hasActionplans: Boolean
   hasActionplansWith: [ActionPlanWhereInput!]
   """
-  owner edge predicates
+  programs edge predicates
   """
-  hasOwner: Boolean
-  hasOwnerWith: [OrganizationWhereInput!]
-  """
-  program edge predicates
-  """
-  hasProgram: Boolean
-  hasProgramWith: [ProgramWhereInput!]
-  """
-  viewers edge predicates
-  """
-  hasViewers: Boolean
-  hasViewersWith: [GroupWhereInput!]
-  """
-  editors edge predicates
-  """
-  hasEditors: Boolean
-  hasEditorsWith: [GroupWhereInput!]
-  """
-  blocked_groups edge predicates
-  """
-  hasBlockedGroups: Boolean
-  hasBlockedGroupsWith: [GroupWhereInput!]
+  hasPrograms: Boolean
+  hasProgramsWith: [ProgramWhereInput!]
 }
 type Standard implements Node {
   id: ID!
@@ -27611,6 +27716,16 @@ input UpdateControlObjectiveInput {
   """
   details: Map
   clearDetails: Boolean
+  ownerID: ID
+  addBlockedGroupIDs: [ID!]
+  removeBlockedGroupIDs: [ID!]
+  clearBlockedGroups: Boolean
+  addEditorIDs: [ID!]
+  removeEditorIDs: [ID!]
+  clearEditors: Boolean
+  addViewerIDs: [ID!]
+  removeViewerIDs: [ID!]
+  clearViewers: Boolean
   addPolicyIDs: [ID!]
   removePolicyIDs: [ID!]
   clearPolicy: Boolean
@@ -28159,6 +28274,15 @@ input UpdateGroupInput {
   addRiskBlockedGroupIDs: [ID!]
   removeRiskBlockedGroupIDs: [ID!]
   clearRiskBlockedGroups: Boolean
+  addControlobjectiveViewerIDs: [ID!]
+  removeControlobjectiveViewerIDs: [ID!]
+  clearControlobjectiveViewers: Boolean
+  addControlobjectiveEditorIDs: [ID!]
+  removeControlobjectiveEditorIDs: [ID!]
+  clearControlobjectiveEditors: Boolean
+  addControlobjectiveBlockedGroupIDs: [ID!]
+  removeControlobjectiveBlockedGroupIDs: [ID!]
+  clearControlobjectiveBlockedGroups: Boolean
 }
 """
 UpdateGroupMembershipInput is used for update GroupMembership object.
@@ -28320,6 +28444,12 @@ input UpdateInternalPolicyInput {
   clearDetails: Boolean
   ownerID: ID
   clearOwner: Boolean
+  addBlockedGroupIDs: [ID!]
+  removeBlockedGroupIDs: [ID!]
+  clearBlockedGroups: Boolean
+  addEditorIDs: [ID!]
+  removeEditorIDs: [ID!]
+  clearEditors: Boolean
   addControlobjectiveIDs: [ID!]
   removeControlobjectiveIDs: [ID!]
   clearControlobjectives: Boolean
@@ -28338,12 +28468,6 @@ input UpdateInternalPolicyInput {
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearPrograms: Boolean
-  addEditorIDs: [ID!]
-  removeEditorIDs: [ID!]
-  clearEditors: Boolean
-  addBlockedGroupIDs: [ID!]
-  removeBlockedGroupIDs: [ID!]
-  clearBlockedGroups: Boolean
 }
 """
 UpdateInviteInput is used for update Invite object.
@@ -28650,6 +28774,9 @@ input UpdateOrganizationInput {
   addRiskIDs: [ID!]
   removeRiskIDs: [ID!]
   clearRisks: Boolean
+  addControlobjectiveIDs: [ID!]
+  removeControlobjectiveIDs: [ID!]
+  clearControlobjectives: Boolean
 }
 """
 UpdateOrganizationSettingInput is used for update OrganizationSetting object.
@@ -28798,6 +28925,12 @@ input UpdateProcedureInput {
   clearDetails: Boolean
   ownerID: ID
   clearOwner: Boolean
+  addBlockedGroupIDs: [ID!]
+  removeBlockedGroupIDs: [ID!]
+  clearBlockedGroups: Boolean
+  addEditorIDs: [ID!]
+  removeEditorIDs: [ID!]
+  clearEditors: Boolean
   addControlIDs: [ID!]
   removeControlIDs: [ID!]
   clearControl: Boolean
@@ -28816,12 +28949,6 @@ input UpdateProcedureInput {
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearPrograms: Boolean
-  addEditorIDs: [ID!]
-  removeEditorIDs: [ID!]
-  clearEditors: Boolean
-  addBlockedGroupIDs: [ID!]
-  removeBlockedGroupIDs: [ID!]
-  clearBlockedGroups: Boolean
 }
 """
 UpdateProgramInput is used for update Program object.
@@ -28871,6 +28998,15 @@ input UpdateProgramInput {
   auditorReadComments: Boolean
   ownerID: ID
   clearOwner: Boolean
+  addBlockedGroupIDs: [ID!]
+  removeBlockedGroupIDs: [ID!]
+  clearBlockedGroups: Boolean
+  addEditorIDs: [ID!]
+  removeEditorIDs: [ID!]
+  clearEditors: Boolean
+  addViewerIDs: [ID!]
+  removeViewerIDs: [ID!]
+  clearViewers: Boolean
   addControlIDs: [ID!]
   removeControlIDs: [ID!]
   clearControls: Boolean
@@ -28910,15 +29046,6 @@ input UpdateProgramInput {
   addUserIDs: [ID!]
   removeUserIDs: [ID!]
   clearUsers: Boolean
-  addViewerIDs: [ID!]
-  removeViewerIDs: [ID!]
-  clearViewers: Boolean
-  addEditorIDs: [ID!]
-  removeEditorIDs: [ID!]
-  clearEditors: Boolean
-  addBlockedGroupIDs: [ID!]
-  removeBlockedGroupIDs: [ID!]
-  clearBlockedGroups: Boolean
 }
 """
 UpdateProgramMembershipInput is used for update ProgramMembership object.
@@ -28987,6 +29114,16 @@ input UpdateRiskInput {
   """
   details: Map
   clearDetails: Boolean
+  ownerID: ID
+  addBlockedGroupIDs: [ID!]
+  removeBlockedGroupIDs: [ID!]
+  clearBlockedGroups: Boolean
+  addEditorIDs: [ID!]
+  removeEditorIDs: [ID!]
+  clearEditors: Boolean
+  addViewerIDs: [ID!]
+  removeViewerIDs: [ID!]
+  clearViewers: Boolean
   addControlIDs: [ID!]
   removeControlIDs: [ID!]
   clearControl: Boolean
@@ -28996,19 +29133,9 @@ input UpdateRiskInput {
   addActionplanIDs: [ID!]
   removeActionplanIDs: [ID!]
   clearActionplans: Boolean
-  ownerID: ID
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
-  clearProgram: Boolean
-  addViewerIDs: [ID!]
-  removeViewerIDs: [ID!]
-  clearViewers: Boolean
-  addEditorIDs: [ID!]
-  removeEditorIDs: [ID!]
-  clearEditors: Boolean
-  addBlockedGroupIDs: [ID!]
-  removeBlockedGroupIDs: [ID!]
-  clearBlockedGroups: Boolean
+  clearPrograms: Boolean
 }
 """
 UpdateStandardInput is used for update Standard object.

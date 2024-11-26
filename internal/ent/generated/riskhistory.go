@@ -42,6 +42,8 @@ type RiskHistory struct {
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// the ID of the organization owner of the object
+	OwnerID string `json:"owner_id,omitempty"`
 	// the name of the risk
 	Name string `json:"name,omitempty"`
 	// description of the risk
@@ -61,9 +63,7 @@ type RiskHistory struct {
 	// which controls are satisfied by the risk
 	Satisfies string `json:"satisfies,omitempty"`
 	// json data for the risk document
-	Details map[string]interface{} `json:"details,omitempty"`
-	// the ID of the organization owner of the risk
-	OwnerID      string `json:"owner_id,omitempty"`
+	Details      map[string]interface{} `json:"details,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -76,7 +76,7 @@ func (*RiskHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case riskhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case riskhistory.FieldID, riskhistory.FieldRef, riskhistory.FieldCreatedBy, riskhistory.FieldUpdatedBy, riskhistory.FieldDeletedBy, riskhistory.FieldMappingID, riskhistory.FieldName, riskhistory.FieldDescription, riskhistory.FieldStatus, riskhistory.FieldRiskType, riskhistory.FieldBusinessCosts, riskhistory.FieldImpact, riskhistory.FieldLikelihood, riskhistory.FieldMitigation, riskhistory.FieldSatisfies, riskhistory.FieldOwnerID:
+		case riskhistory.FieldID, riskhistory.FieldRef, riskhistory.FieldCreatedBy, riskhistory.FieldUpdatedBy, riskhistory.FieldDeletedBy, riskhistory.FieldMappingID, riskhistory.FieldOwnerID, riskhistory.FieldName, riskhistory.FieldDescription, riskhistory.FieldStatus, riskhistory.FieldRiskType, riskhistory.FieldBusinessCosts, riskhistory.FieldImpact, riskhistory.FieldLikelihood, riskhistory.FieldMitigation, riskhistory.FieldSatisfies:
 			values[i] = new(sql.NullString)
 		case riskhistory.FieldHistoryTime, riskhistory.FieldCreatedAt, riskhistory.FieldUpdatedAt, riskhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -169,6 +169,12 @@ func (rh *RiskHistory) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
+		case riskhistory.FieldOwnerID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
+			} else if value.Valid {
+				rh.OwnerID = value.String
+			}
 		case riskhistory.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
@@ -230,12 +236,6 @@ func (rh *RiskHistory) assignValues(columns []string, values []any) error {
 				if err := json.Unmarshal(*value, &rh.Details); err != nil {
 					return fmt.Errorf("unmarshal field details: %w", err)
 				}
-			}
-		case riskhistory.FieldOwnerID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
-			} else if value.Valid {
-				rh.OwnerID = value.String
 			}
 		default:
 			rh.selectValues.Set(columns[i], values[i])
@@ -306,6 +306,9 @@ func (rh *RiskHistory) String() string {
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", rh.Tags))
 	builder.WriteString(", ")
+	builder.WriteString("owner_id=")
+	builder.WriteString(rh.OwnerID)
+	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(rh.Name)
 	builder.WriteString(", ")
@@ -335,9 +338,6 @@ func (rh *RiskHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("details=")
 	builder.WriteString(fmt.Sprintf("%v", rh.Details))
-	builder.WriteString(", ")
-	builder.WriteString("owner_id=")
-	builder.WriteString(rh.OwnerID)
 	builder.WriteByte(')')
 	return builder.String()
 }

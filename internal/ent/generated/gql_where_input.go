@@ -7167,6 +7167,21 @@ type ControlObjectiveWhereInput struct {
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 
+	// "owner_id" field predicates.
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIDGT           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIDGTE          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIDLT           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIDLTE          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+
 	// "name" field predicates.
 	Name             *string  `json:"name,omitempty"`
 	NameNEQ          *string  `json:"nameNEQ,omitempty"`
@@ -7334,6 +7349,22 @@ type ControlObjectiveWhereInput struct {
 	MappedFrameworksNotNil       bool     `json:"mappedFrameworksNotNil,omitempty"`
 	MappedFrameworksEqualFold    *string  `json:"mappedFrameworksEqualFold,omitempty"`
 	MappedFrameworksContainsFold *string  `json:"mappedFrameworksContainsFold,omitempty"`
+
+	// "owner" edge predicates.
+	HasOwner     *bool                     `json:"hasOwner,omitempty"`
+	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+
+	// "blocked_groups" edge predicates.
+	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
+	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
+
+	// "editors" edge predicates.
+	HasEditors     *bool              `json:"hasEditors,omitempty"`
+	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
+
+	// "viewers" edge predicates.
+	HasViewers     *bool              `json:"hasViewers,omitempty"`
+	HasViewersWith []*GroupWhereInput `json:"hasViewersWith,omitempty"`
 
 	// "policy" edge predicates.
 	HasPolicy     *bool                       `json:"hasPolicy,omitempty"`
@@ -7697,6 +7728,45 @@ func (i *ControlObjectiveWhereInput) P() (predicate.ControlObjective, error) {
 	}
 	if i.DeletedByContainsFold != nil {
 		predicates = append(predicates, controlobjective.DeletedByContainsFold(*i.DeletedByContainsFold))
+	}
+	if i.OwnerID != nil {
+		predicates = append(predicates, controlobjective.OwnerIDEQ(*i.OwnerID))
+	}
+	if i.OwnerIDNEQ != nil {
+		predicates = append(predicates, controlobjective.OwnerIDNEQ(*i.OwnerIDNEQ))
+	}
+	if len(i.OwnerIDIn) > 0 {
+		predicates = append(predicates, controlobjective.OwnerIDIn(i.OwnerIDIn...))
+	}
+	if len(i.OwnerIDNotIn) > 0 {
+		predicates = append(predicates, controlobjective.OwnerIDNotIn(i.OwnerIDNotIn...))
+	}
+	if i.OwnerIDGT != nil {
+		predicates = append(predicates, controlobjective.OwnerIDGT(*i.OwnerIDGT))
+	}
+	if i.OwnerIDGTE != nil {
+		predicates = append(predicates, controlobjective.OwnerIDGTE(*i.OwnerIDGTE))
+	}
+	if i.OwnerIDLT != nil {
+		predicates = append(predicates, controlobjective.OwnerIDLT(*i.OwnerIDLT))
+	}
+	if i.OwnerIDLTE != nil {
+		predicates = append(predicates, controlobjective.OwnerIDLTE(*i.OwnerIDLTE))
+	}
+	if i.OwnerIDContains != nil {
+		predicates = append(predicates, controlobjective.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, controlobjective.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
+	}
+	if i.OwnerIDHasSuffix != nil {
+		predicates = append(predicates, controlobjective.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
+	}
+	if i.OwnerIDEqualFold != nil {
+		predicates = append(predicates, controlobjective.OwnerIDEqualFold(*i.OwnerIDEqualFold))
+	}
+	if i.OwnerIDContainsFold != nil {
+		predicates = append(predicates, controlobjective.OwnerIDContainsFold(*i.OwnerIDContainsFold))
 	}
 	if i.Name != nil {
 		predicates = append(predicates, controlobjective.NameEQ(*i.Name))
@@ -8143,6 +8213,78 @@ func (i *ControlObjectiveWhereInput) P() (predicate.ControlObjective, error) {
 		predicates = append(predicates, controlobjective.MappedFrameworksContainsFold(*i.MappedFrameworksContainsFold))
 	}
 
+	if i.HasOwner != nil {
+		p := controlobjective.HasOwner()
+		if !*i.HasOwner {
+			p = controlobjective.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasOwnerWith) > 0 {
+		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		for _, w := range i.HasOwnerWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasOwnerWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, controlobjective.HasOwnerWith(with...))
+	}
+	if i.HasBlockedGroups != nil {
+		p := controlobjective.HasBlockedGroups()
+		if !*i.HasBlockedGroups {
+			p = controlobjective.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasBlockedGroupsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasBlockedGroupsWith))
+		for _, w := range i.HasBlockedGroupsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasBlockedGroupsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, controlobjective.HasBlockedGroupsWith(with...))
+	}
+	if i.HasEditors != nil {
+		p := controlobjective.HasEditors()
+		if !*i.HasEditors {
+			p = controlobjective.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasEditorsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasEditorsWith))
+		for _, w := range i.HasEditorsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasEditorsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, controlobjective.HasEditorsWith(with...))
+	}
+	if i.HasViewers != nil {
+		p := controlobjective.HasViewers()
+		if !*i.HasViewers {
+			p = controlobjective.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasViewersWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasViewersWith))
+		for _, w := range i.HasViewersWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasViewersWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, controlobjective.HasViewersWith(with...))
+	}
 	if i.HasPolicy != nil {
 		p := controlobjective.HasPolicy()
 		if !*i.HasPolicy {
@@ -8453,6 +8595,21 @@ type ControlObjectiveHistoryWhereInput struct {
 	DeletedByNotNil       bool     `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+
+	// "owner_id" field predicates.
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIDGT           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIDGTE          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIDLT           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIDLTE          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 
 	// "name" field predicates.
 	Name             *string  `json:"name,omitempty"`
@@ -9029,6 +9186,45 @@ func (i *ControlObjectiveHistoryWhereInput) P() (predicate.ControlObjectiveHisto
 	}
 	if i.DeletedByContainsFold != nil {
 		predicates = append(predicates, controlobjectivehistory.DeletedByContainsFold(*i.DeletedByContainsFold))
+	}
+	if i.OwnerID != nil {
+		predicates = append(predicates, controlobjectivehistory.OwnerIDEQ(*i.OwnerID))
+	}
+	if i.OwnerIDNEQ != nil {
+		predicates = append(predicates, controlobjectivehistory.OwnerIDNEQ(*i.OwnerIDNEQ))
+	}
+	if len(i.OwnerIDIn) > 0 {
+		predicates = append(predicates, controlobjectivehistory.OwnerIDIn(i.OwnerIDIn...))
+	}
+	if len(i.OwnerIDNotIn) > 0 {
+		predicates = append(predicates, controlobjectivehistory.OwnerIDNotIn(i.OwnerIDNotIn...))
+	}
+	if i.OwnerIDGT != nil {
+		predicates = append(predicates, controlobjectivehistory.OwnerIDGT(*i.OwnerIDGT))
+	}
+	if i.OwnerIDGTE != nil {
+		predicates = append(predicates, controlobjectivehistory.OwnerIDGTE(*i.OwnerIDGTE))
+	}
+	if i.OwnerIDLT != nil {
+		predicates = append(predicates, controlobjectivehistory.OwnerIDLT(*i.OwnerIDLT))
+	}
+	if i.OwnerIDLTE != nil {
+		predicates = append(predicates, controlobjectivehistory.OwnerIDLTE(*i.OwnerIDLTE))
+	}
+	if i.OwnerIDContains != nil {
+		predicates = append(predicates, controlobjectivehistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, controlobjectivehistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
+	}
+	if i.OwnerIDHasSuffix != nil {
+		predicates = append(predicates, controlobjectivehistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
+	}
+	if i.OwnerIDEqualFold != nil {
+		predicates = append(predicates, controlobjectivehistory.OwnerIDEqualFold(*i.OwnerIDEqualFold))
+	}
+	if i.OwnerIDContainsFold != nil {
+		predicates = append(predicates, controlobjectivehistory.OwnerIDContainsFold(*i.OwnerIDContainsFold))
 	}
 	if i.Name != nil {
 		predicates = append(predicates, controlobjectivehistory.NameEQ(*i.Name))
@@ -25626,6 +25822,18 @@ type GroupWhereInput struct {
 	HasRiskBlockedGroups     *bool             `json:"hasRiskBlockedGroups,omitempty"`
 	HasRiskBlockedGroupsWith []*RiskWhereInput `json:"hasRiskBlockedGroupsWith,omitempty"`
 
+	// "controlobjective_viewers" edge predicates.
+	HasControlobjectiveViewers     *bool                         `json:"hasControlobjectiveViewers,omitempty"`
+	HasControlobjectiveViewersWith []*ControlObjectiveWhereInput `json:"hasControlobjectiveViewersWith,omitempty"`
+
+	// "controlobjective_editors" edge predicates.
+	HasControlobjectiveEditors     *bool                         `json:"hasControlobjectiveEditors,omitempty"`
+	HasControlobjectiveEditorsWith []*ControlObjectiveWhereInput `json:"hasControlobjectiveEditorsWith,omitempty"`
+
+	// "controlobjective_blocked_groups" edge predicates.
+	HasControlobjectiveBlockedGroups     *bool                         `json:"hasControlobjectiveBlockedGroups,omitempty"`
+	HasControlobjectiveBlockedGroupsWith []*ControlObjectiveWhereInput `json:"hasControlobjectiveBlockedGroupsWith,omitempty"`
+
 	// "members" edge predicates.
 	HasMembers     *bool                        `json:"hasMembers,omitempty"`
 	HasMembersWith []*GroupMembershipWhereInput `json:"hasMembersWith,omitempty"`
@@ -26386,6 +26594,60 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, group.HasRiskBlockedGroupsWith(with...))
+	}
+	if i.HasControlobjectiveViewers != nil {
+		p := group.HasControlobjectiveViewers()
+		if !*i.HasControlobjectiveViewers {
+			p = group.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasControlobjectiveViewersWith) > 0 {
+		with := make([]predicate.ControlObjective, 0, len(i.HasControlobjectiveViewersWith))
+		for _, w := range i.HasControlobjectiveViewersWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasControlobjectiveViewersWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, group.HasControlobjectiveViewersWith(with...))
+	}
+	if i.HasControlobjectiveEditors != nil {
+		p := group.HasControlobjectiveEditors()
+		if !*i.HasControlobjectiveEditors {
+			p = group.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasControlobjectiveEditorsWith) > 0 {
+		with := make([]predicate.ControlObjective, 0, len(i.HasControlobjectiveEditorsWith))
+		for _, w := range i.HasControlobjectiveEditorsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasControlobjectiveEditorsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, group.HasControlobjectiveEditorsWith(with...))
+	}
+	if i.HasControlobjectiveBlockedGroups != nil {
+		p := group.HasControlobjectiveBlockedGroups()
+		if !*i.HasControlobjectiveBlockedGroups {
+			p = group.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasControlobjectiveBlockedGroupsWith) > 0 {
+		with := make([]predicate.ControlObjective, 0, len(i.HasControlobjectiveBlockedGroupsWith))
+		for _, w := range i.HasControlobjectiveBlockedGroupsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasControlobjectiveBlockedGroupsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, group.HasControlobjectiveBlockedGroupsWith(with...))
 	}
 	if i.HasMembers != nil {
 		p := group.HasMembers()
@@ -32891,6 +33153,14 @@ type InternalPolicyWhereInput struct {
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
 
+	// "blocked_groups" edge predicates.
+	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
+	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
+
+	// "editors" edge predicates.
+	HasEditors     *bool              `json:"hasEditors,omitempty"`
+	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
+
 	// "controlobjectives" edge predicates.
 	HasControlobjectives     *bool                         `json:"hasControlobjectives,omitempty"`
 	HasControlobjectivesWith []*ControlObjectiveWhereInput `json:"hasControlobjectivesWith,omitempty"`
@@ -32914,14 +33184,6 @@ type InternalPolicyWhereInput struct {
 	// "programs" edge predicates.
 	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
 	HasProgramsWith []*ProgramWhereInput `json:"hasProgramsWith,omitempty"`
-
-	// "editors" edge predicates.
-	HasEditors     *bool              `json:"hasEditors,omitempty"`
-	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
-
-	// "blocked_groups" edge predicates.
-	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
-	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -33623,6 +33885,42 @@ func (i *InternalPolicyWhereInput) P() (predicate.InternalPolicy, error) {
 		}
 		predicates = append(predicates, internalpolicy.HasOwnerWith(with...))
 	}
+	if i.HasBlockedGroups != nil {
+		p := internalpolicy.HasBlockedGroups()
+		if !*i.HasBlockedGroups {
+			p = internalpolicy.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasBlockedGroupsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasBlockedGroupsWith))
+		for _, w := range i.HasBlockedGroupsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasBlockedGroupsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, internalpolicy.HasBlockedGroupsWith(with...))
+	}
+	if i.HasEditors != nil {
+		p := internalpolicy.HasEditors()
+		if !*i.HasEditors {
+			p = internalpolicy.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasEditorsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasEditorsWith))
+		for _, w := range i.HasEditorsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasEditorsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, internalpolicy.HasEditorsWith(with...))
+	}
 	if i.HasControlobjectives != nil {
 		p := internalpolicy.HasControlobjectives()
 		if !*i.HasControlobjectives {
@@ -33730,42 +34028,6 @@ func (i *InternalPolicyWhereInput) P() (predicate.InternalPolicy, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, internalpolicy.HasProgramsWith(with...))
-	}
-	if i.HasEditors != nil {
-		p := internalpolicy.HasEditors()
-		if !*i.HasEditors {
-			p = internalpolicy.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasEditorsWith) > 0 {
-		with := make([]predicate.Group, 0, len(i.HasEditorsWith))
-		for _, w := range i.HasEditorsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasEditorsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, internalpolicy.HasEditorsWith(with...))
-	}
-	if i.HasBlockedGroups != nil {
-		p := internalpolicy.HasBlockedGroups()
-		if !*i.HasBlockedGroups {
-			p = internalpolicy.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasBlockedGroupsWith) > 0 {
-		with := make([]predicate.Group, 0, len(i.HasBlockedGroupsWith))
-		for _, w := range i.HasBlockedGroupsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasBlockedGroupsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, internalpolicy.HasBlockedGroupsWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -42674,6 +42936,10 @@ type OrganizationWhereInput struct {
 	HasRisks     *bool             `json:"hasRisks,omitempty"`
 	HasRisksWith []*RiskWhereInput `json:"hasRisksWith,omitempty"`
 
+	// "controlobjectives" edge predicates.
+	HasControlobjectives     *bool                         `json:"hasControlobjectives,omitempty"`
+	HasControlobjectivesWith []*ControlObjectiveWhereInput `json:"hasControlobjectivesWith,omitempty"`
+
 	// "members" edge predicates.
 	HasMembers     *bool                      `json:"hasMembers,omitempty"`
 	HasMembersWith []*OrgMembershipWhereInput `json:"hasMembersWith,omitempty"`
@@ -43704,6 +43970,24 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, organization.HasRisksWith(with...))
+	}
+	if i.HasControlobjectives != nil {
+		p := organization.HasControlobjectives()
+		if !*i.HasControlobjectives {
+			p = organization.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasControlobjectivesWith) > 0 {
+		with := make([]predicate.ControlObjective, 0, len(i.HasControlobjectivesWith))
+		for _, w := range i.HasControlobjectivesWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasControlobjectivesWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, organization.HasControlobjectivesWith(with...))
 	}
 	if i.HasMembers != nil {
 		p := organization.HasMembers()
@@ -47362,6 +47646,14 @@ type ProcedureWhereInput struct {
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
 
+	// "blocked_groups" edge predicates.
+	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
+	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
+
+	// "editors" edge predicates.
+	HasEditors     *bool              `json:"hasEditors,omitempty"`
+	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
+
 	// "control" edge predicates.
 	HasControl     *bool                `json:"hasControl,omitempty"`
 	HasControlWith []*ControlWhereInput `json:"hasControlWith,omitempty"`
@@ -47385,14 +47677,6 @@ type ProcedureWhereInput struct {
 	// "programs" edge predicates.
 	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
 	HasProgramsWith []*ProgramWhereInput `json:"hasProgramsWith,omitempty"`
-
-	// "editors" edge predicates.
-	HasEditors     *bool              `json:"hasEditors,omitempty"`
-	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
-
-	// "blocked_groups" edge predicates.
-	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
-	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -48139,6 +48423,42 @@ func (i *ProcedureWhereInput) P() (predicate.Procedure, error) {
 		}
 		predicates = append(predicates, procedure.HasOwnerWith(with...))
 	}
+	if i.HasBlockedGroups != nil {
+		p := procedure.HasBlockedGroups()
+		if !*i.HasBlockedGroups {
+			p = procedure.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasBlockedGroupsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasBlockedGroupsWith))
+		for _, w := range i.HasBlockedGroupsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasBlockedGroupsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, procedure.HasBlockedGroupsWith(with...))
+	}
+	if i.HasEditors != nil {
+		p := procedure.HasEditors()
+		if !*i.HasEditors {
+			p = procedure.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasEditorsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasEditorsWith))
+		for _, w := range i.HasEditorsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasEditorsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, procedure.HasEditorsWith(with...))
+	}
 	if i.HasControl != nil {
 		p := procedure.HasControl()
 		if !*i.HasControl {
@@ -48246,42 +48566,6 @@ func (i *ProcedureWhereInput) P() (predicate.Procedure, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, procedure.HasProgramsWith(with...))
-	}
-	if i.HasEditors != nil {
-		p := procedure.HasEditors()
-		if !*i.HasEditors {
-			p = procedure.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasEditorsWith) > 0 {
-		with := make([]predicate.Group, 0, len(i.HasEditorsWith))
-		for _, w := range i.HasEditorsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasEditorsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, procedure.HasEditorsWith(with...))
-	}
-	if i.HasBlockedGroups != nil {
-		p := procedure.HasBlockedGroups()
-		if !*i.HasBlockedGroups {
-			p = procedure.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasBlockedGroupsWith) > 0 {
-		with := make([]predicate.Group, 0, len(i.HasBlockedGroupsWith))
-		for _, w := range i.HasBlockedGroupsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasBlockedGroupsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, procedure.HasBlockedGroupsWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -49602,6 +49886,18 @@ type ProgramWhereInput struct {
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
 
+	// "blocked_groups" edge predicates.
+	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
+	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
+
+	// "editors" edge predicates.
+	HasEditors     *bool              `json:"hasEditors,omitempty"`
+	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
+
+	// "viewers" edge predicates.
+	HasViewers     *bool              `json:"hasViewers,omitempty"`
+	HasViewersWith []*GroupWhereInput `json:"hasViewersWith,omitempty"`
+
 	// "controls" edge predicates.
 	HasControls     *bool                `json:"hasControls,omitempty"`
 	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
@@ -49653,18 +49949,6 @@ type ProgramWhereInput struct {
 	// "users" edge predicates.
 	HasUsers     *bool             `json:"hasUsers,omitempty"`
 	HasUsersWith []*UserWhereInput `json:"hasUsersWith,omitempty"`
-
-	// "viewers" edge predicates.
-	HasViewers     *bool              `json:"hasViewers,omitempty"`
-	HasViewersWith []*GroupWhereInput `json:"hasViewersWith,omitempty"`
-
-	// "editors" edge predicates.
-	HasEditors     *bool              `json:"hasEditors,omitempty"`
-	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
-
-	// "blocked_groups" edge predicates.
-	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
-	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
 
 	// "members" edge predicates.
 	HasMembers     *bool                          `json:"hasMembers,omitempty"`
@@ -50235,6 +50519,60 @@ func (i *ProgramWhereInput) P() (predicate.Program, error) {
 		}
 		predicates = append(predicates, program.HasOwnerWith(with...))
 	}
+	if i.HasBlockedGroups != nil {
+		p := program.HasBlockedGroups()
+		if !*i.HasBlockedGroups {
+			p = program.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasBlockedGroupsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasBlockedGroupsWith))
+		for _, w := range i.HasBlockedGroupsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasBlockedGroupsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, program.HasBlockedGroupsWith(with...))
+	}
+	if i.HasEditors != nil {
+		p := program.HasEditors()
+		if !*i.HasEditors {
+			p = program.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasEditorsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasEditorsWith))
+		for _, w := range i.HasEditorsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasEditorsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, program.HasEditorsWith(with...))
+	}
+	if i.HasViewers != nil {
+		p := program.HasViewers()
+		if !*i.HasViewers {
+			p = program.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasViewersWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasViewersWith))
+		for _, w := range i.HasViewersWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasViewersWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, program.HasViewersWith(with...))
+	}
 	if i.HasControls != nil {
 		p := program.HasControls()
 		if !*i.HasControls {
@@ -50468,60 +50806,6 @@ func (i *ProgramWhereInput) P() (predicate.Program, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, program.HasUsersWith(with...))
-	}
-	if i.HasViewers != nil {
-		p := program.HasViewers()
-		if !*i.HasViewers {
-			p = program.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasViewersWith) > 0 {
-		with := make([]predicate.Group, 0, len(i.HasViewersWith))
-		for _, w := range i.HasViewersWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasViewersWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, program.HasViewersWith(with...))
-	}
-	if i.HasEditors != nil {
-		p := program.HasEditors()
-		if !*i.HasEditors {
-			p = program.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasEditorsWith) > 0 {
-		with := make([]predicate.Group, 0, len(i.HasEditorsWith))
-		for _, w := range i.HasEditorsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasEditorsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, program.HasEditorsWith(with...))
-	}
-	if i.HasBlockedGroups != nil {
-		p := program.HasBlockedGroups()
-		if !*i.HasBlockedGroups {
-			p = program.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasBlockedGroupsWith) > 0 {
-		with := make([]predicate.Group, 0, len(i.HasBlockedGroupsWith))
-		for _, w := range i.HasBlockedGroupsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasBlockedGroupsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, program.HasBlockedGroupsWith(with...))
 	}
 	if i.HasMembers != nil {
 		p := program.HasMembers()
@@ -52823,6 +53107,21 @@ type RiskWhereInput struct {
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 
+	// "owner_id" field predicates.
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIDGT           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIDGTE          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIDLT           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIDLTE          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+
 	// "name" field predicates.
 	Name             *string  `json:"name,omitempty"`
 	NameNEQ          *string  `json:"nameNEQ,omitempty"`
@@ -52956,20 +53255,21 @@ type RiskWhereInput struct {
 	SatisfiesEqualFold    *string  `json:"satisfiesEqualFold,omitempty"`
 	SatisfiesContainsFold *string  `json:"satisfiesContainsFold,omitempty"`
 
-	// "owner_id" field predicates.
-	OwnerID             *string  `json:"ownerID,omitempty"`
-	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
-	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
-	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
-	OwnerIDGT           *string  `json:"ownerIDGT,omitempty"`
-	OwnerIDGTE          *string  `json:"ownerIDGTE,omitempty"`
-	OwnerIDLT           *string  `json:"ownerIDLT,omitempty"`
-	OwnerIDLTE          *string  `json:"ownerIDLTE,omitempty"`
-	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
-	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
-	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
-	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
-	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// "owner" edge predicates.
+	HasOwner     *bool                     `json:"hasOwner,omitempty"`
+	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+
+	// "blocked_groups" edge predicates.
+	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
+	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
+
+	// "editors" edge predicates.
+	HasEditors     *bool              `json:"hasEditors,omitempty"`
+	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
+
+	// "viewers" edge predicates.
+	HasViewers     *bool              `json:"hasViewers,omitempty"`
+	HasViewersWith []*GroupWhereInput `json:"hasViewersWith,omitempty"`
 
 	// "control" edge predicates.
 	HasControl     *bool                `json:"hasControl,omitempty"`
@@ -52983,25 +53283,9 @@ type RiskWhereInput struct {
 	HasActionplans     *bool                   `json:"hasActionplans,omitempty"`
 	HasActionplansWith []*ActionPlanWhereInput `json:"hasActionplansWith,omitempty"`
 
-	// "owner" edge predicates.
-	HasOwner     *bool                     `json:"hasOwner,omitempty"`
-	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
-
-	// "program" edge predicates.
-	HasProgram     *bool                `json:"hasProgram,omitempty"`
-	HasProgramWith []*ProgramWhereInput `json:"hasProgramWith,omitempty"`
-
-	// "viewers" edge predicates.
-	HasViewers     *bool              `json:"hasViewers,omitempty"`
-	HasViewersWith []*GroupWhereInput `json:"hasViewersWith,omitempty"`
-
-	// "editors" edge predicates.
-	HasEditors     *bool              `json:"hasEditors,omitempty"`
-	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
-
-	// "blocked_groups" edge predicates.
-	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
-	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
+	// "programs" edge predicates.
+	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
+	HasProgramsWith []*ProgramWhereInput `json:"hasProgramsWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -53329,6 +53613,45 @@ func (i *RiskWhereInput) P() (predicate.Risk, error) {
 	}
 	if i.DeletedByContainsFold != nil {
 		predicates = append(predicates, risk.DeletedByContainsFold(*i.DeletedByContainsFold))
+	}
+	if i.OwnerID != nil {
+		predicates = append(predicates, risk.OwnerIDEQ(*i.OwnerID))
+	}
+	if i.OwnerIDNEQ != nil {
+		predicates = append(predicates, risk.OwnerIDNEQ(*i.OwnerIDNEQ))
+	}
+	if len(i.OwnerIDIn) > 0 {
+		predicates = append(predicates, risk.OwnerIDIn(i.OwnerIDIn...))
+	}
+	if len(i.OwnerIDNotIn) > 0 {
+		predicates = append(predicates, risk.OwnerIDNotIn(i.OwnerIDNotIn...))
+	}
+	if i.OwnerIDGT != nil {
+		predicates = append(predicates, risk.OwnerIDGT(*i.OwnerIDGT))
+	}
+	if i.OwnerIDGTE != nil {
+		predicates = append(predicates, risk.OwnerIDGTE(*i.OwnerIDGTE))
+	}
+	if i.OwnerIDLT != nil {
+		predicates = append(predicates, risk.OwnerIDLT(*i.OwnerIDLT))
+	}
+	if i.OwnerIDLTE != nil {
+		predicates = append(predicates, risk.OwnerIDLTE(*i.OwnerIDLTE))
+	}
+	if i.OwnerIDContains != nil {
+		predicates = append(predicates, risk.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, risk.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
+	}
+	if i.OwnerIDHasSuffix != nil {
+		predicates = append(predicates, risk.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
+	}
+	if i.OwnerIDEqualFold != nil {
+		predicates = append(predicates, risk.OwnerIDEqualFold(*i.OwnerIDEqualFold))
+	}
+	if i.OwnerIDContainsFold != nil {
+		predicates = append(predicates, risk.OwnerIDContainsFold(*i.OwnerIDContainsFold))
 	}
 	if i.Name != nil {
 		predicates = append(predicates, risk.NameEQ(*i.Name))
@@ -53675,46 +53998,79 @@ func (i *RiskWhereInput) P() (predicate.Risk, error) {
 	if i.SatisfiesContainsFold != nil {
 		predicates = append(predicates, risk.SatisfiesContainsFold(*i.SatisfiesContainsFold))
 	}
-	if i.OwnerID != nil {
-		predicates = append(predicates, risk.OwnerIDEQ(*i.OwnerID))
-	}
-	if i.OwnerIDNEQ != nil {
-		predicates = append(predicates, risk.OwnerIDNEQ(*i.OwnerIDNEQ))
-	}
-	if len(i.OwnerIDIn) > 0 {
-		predicates = append(predicates, risk.OwnerIDIn(i.OwnerIDIn...))
-	}
-	if len(i.OwnerIDNotIn) > 0 {
-		predicates = append(predicates, risk.OwnerIDNotIn(i.OwnerIDNotIn...))
-	}
-	if i.OwnerIDGT != nil {
-		predicates = append(predicates, risk.OwnerIDGT(*i.OwnerIDGT))
-	}
-	if i.OwnerIDGTE != nil {
-		predicates = append(predicates, risk.OwnerIDGTE(*i.OwnerIDGTE))
-	}
-	if i.OwnerIDLT != nil {
-		predicates = append(predicates, risk.OwnerIDLT(*i.OwnerIDLT))
-	}
-	if i.OwnerIDLTE != nil {
-		predicates = append(predicates, risk.OwnerIDLTE(*i.OwnerIDLTE))
-	}
-	if i.OwnerIDContains != nil {
-		predicates = append(predicates, risk.OwnerIDContains(*i.OwnerIDContains))
-	}
-	if i.OwnerIDHasPrefix != nil {
-		predicates = append(predicates, risk.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
-	}
-	if i.OwnerIDHasSuffix != nil {
-		predicates = append(predicates, risk.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
-	}
-	if i.OwnerIDEqualFold != nil {
-		predicates = append(predicates, risk.OwnerIDEqualFold(*i.OwnerIDEqualFold))
-	}
-	if i.OwnerIDContainsFold != nil {
-		predicates = append(predicates, risk.OwnerIDContainsFold(*i.OwnerIDContainsFold))
-	}
 
+	if i.HasOwner != nil {
+		p := risk.HasOwner()
+		if !*i.HasOwner {
+			p = risk.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasOwnerWith) > 0 {
+		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		for _, w := range i.HasOwnerWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasOwnerWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, risk.HasOwnerWith(with...))
+	}
+	if i.HasBlockedGroups != nil {
+		p := risk.HasBlockedGroups()
+		if !*i.HasBlockedGroups {
+			p = risk.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasBlockedGroupsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasBlockedGroupsWith))
+		for _, w := range i.HasBlockedGroupsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasBlockedGroupsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, risk.HasBlockedGroupsWith(with...))
+	}
+	if i.HasEditors != nil {
+		p := risk.HasEditors()
+		if !*i.HasEditors {
+			p = risk.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasEditorsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasEditorsWith))
+		for _, w := range i.HasEditorsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasEditorsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, risk.HasEditorsWith(with...))
+	}
+	if i.HasViewers != nil {
+		p := risk.HasViewers()
+		if !*i.HasViewers {
+			p = risk.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasViewersWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasViewersWith))
+		for _, w := range i.HasViewersWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasViewersWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, risk.HasViewersWith(with...))
+	}
 	if i.HasControl != nil {
 		p := risk.HasControl()
 		if !*i.HasControl {
@@ -53769,95 +54125,23 @@ func (i *RiskWhereInput) P() (predicate.Risk, error) {
 		}
 		predicates = append(predicates, risk.HasActionplansWith(with...))
 	}
-	if i.HasOwner != nil {
-		p := risk.HasOwner()
-		if !*i.HasOwner {
+	if i.HasPrograms != nil {
+		p := risk.HasPrograms()
+		if !*i.HasPrograms {
 			p = risk.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasOwnerWith) > 0 {
-		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
-		for _, w := range i.HasOwnerWith {
+	if len(i.HasProgramsWith) > 0 {
+		with := make([]predicate.Program, 0, len(i.HasProgramsWith))
+		for _, w := range i.HasProgramsWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasOwnerWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasProgramsWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, risk.HasOwnerWith(with...))
-	}
-	if i.HasProgram != nil {
-		p := risk.HasProgram()
-		if !*i.HasProgram {
-			p = risk.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasProgramWith) > 0 {
-		with := make([]predicate.Program, 0, len(i.HasProgramWith))
-		for _, w := range i.HasProgramWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasProgramWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, risk.HasProgramWith(with...))
-	}
-	if i.HasViewers != nil {
-		p := risk.HasViewers()
-		if !*i.HasViewers {
-			p = risk.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasViewersWith) > 0 {
-		with := make([]predicate.Group, 0, len(i.HasViewersWith))
-		for _, w := range i.HasViewersWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasViewersWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, risk.HasViewersWith(with...))
-	}
-	if i.HasEditors != nil {
-		p := risk.HasEditors()
-		if !*i.HasEditors {
-			p = risk.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasEditorsWith) > 0 {
-		with := make([]predicate.Group, 0, len(i.HasEditorsWith))
-		for _, w := range i.HasEditorsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasEditorsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, risk.HasEditorsWith(with...))
-	}
-	if i.HasBlockedGroups != nil {
-		p := risk.HasBlockedGroups()
-		if !*i.HasBlockedGroups {
-			p = risk.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasBlockedGroupsWith) > 0 {
-		with := make([]predicate.Group, 0, len(i.HasBlockedGroupsWith))
-		for _, w := range i.HasBlockedGroupsWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasBlockedGroupsWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, risk.HasBlockedGroupsWith(with...))
+		predicates = append(predicates, risk.HasProgramsWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -54008,6 +54292,21 @@ type RiskHistoryWhereInput struct {
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
 
+	// "owner_id" field predicates.
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIDGT           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIDGTE          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIDLT           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIDLTE          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+
 	// "name" field predicates.
 	Name             *string  `json:"name,omitempty"`
 	NameNEQ          *string  `json:"nameNEQ,omitempty"`
@@ -54140,21 +54439,6 @@ type RiskHistoryWhereInput struct {
 	SatisfiesNotNil       bool     `json:"satisfiesNotNil,omitempty"`
 	SatisfiesEqualFold    *string  `json:"satisfiesEqualFold,omitempty"`
 	SatisfiesContainsFold *string  `json:"satisfiesContainsFold,omitempty"`
-
-	// "owner_id" field predicates.
-	OwnerID             *string  `json:"ownerID,omitempty"`
-	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
-	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
-	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
-	OwnerIDGT           *string  `json:"ownerIDGT,omitempty"`
-	OwnerIDGTE          *string  `json:"ownerIDGTE,omitempty"`
-	OwnerIDLT           *string  `json:"ownerIDLT,omitempty"`
-	OwnerIDLTE          *string  `json:"ownerIDLTE,omitempty"`
-	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
-	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
-	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
-	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
-	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -54564,6 +54848,45 @@ func (i *RiskHistoryWhereInput) P() (predicate.RiskHistory, error) {
 	if i.DeletedByContainsFold != nil {
 		predicates = append(predicates, riskhistory.DeletedByContainsFold(*i.DeletedByContainsFold))
 	}
+	if i.OwnerID != nil {
+		predicates = append(predicates, riskhistory.OwnerIDEQ(*i.OwnerID))
+	}
+	if i.OwnerIDNEQ != nil {
+		predicates = append(predicates, riskhistory.OwnerIDNEQ(*i.OwnerIDNEQ))
+	}
+	if len(i.OwnerIDIn) > 0 {
+		predicates = append(predicates, riskhistory.OwnerIDIn(i.OwnerIDIn...))
+	}
+	if len(i.OwnerIDNotIn) > 0 {
+		predicates = append(predicates, riskhistory.OwnerIDNotIn(i.OwnerIDNotIn...))
+	}
+	if i.OwnerIDGT != nil {
+		predicates = append(predicates, riskhistory.OwnerIDGT(*i.OwnerIDGT))
+	}
+	if i.OwnerIDGTE != nil {
+		predicates = append(predicates, riskhistory.OwnerIDGTE(*i.OwnerIDGTE))
+	}
+	if i.OwnerIDLT != nil {
+		predicates = append(predicates, riskhistory.OwnerIDLT(*i.OwnerIDLT))
+	}
+	if i.OwnerIDLTE != nil {
+		predicates = append(predicates, riskhistory.OwnerIDLTE(*i.OwnerIDLTE))
+	}
+	if i.OwnerIDContains != nil {
+		predicates = append(predicates, riskhistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, riskhistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
+	}
+	if i.OwnerIDHasSuffix != nil {
+		predicates = append(predicates, riskhistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
+	}
+	if i.OwnerIDEqualFold != nil {
+		predicates = append(predicates, riskhistory.OwnerIDEqualFold(*i.OwnerIDEqualFold))
+	}
+	if i.OwnerIDContainsFold != nil {
+		predicates = append(predicates, riskhistory.OwnerIDContainsFold(*i.OwnerIDContainsFold))
+	}
 	if i.Name != nil {
 		predicates = append(predicates, riskhistory.NameEQ(*i.Name))
 	}
@@ -54908,45 +55231,6 @@ func (i *RiskHistoryWhereInput) P() (predicate.RiskHistory, error) {
 	}
 	if i.SatisfiesContainsFold != nil {
 		predicates = append(predicates, riskhistory.SatisfiesContainsFold(*i.SatisfiesContainsFold))
-	}
-	if i.OwnerID != nil {
-		predicates = append(predicates, riskhistory.OwnerIDEQ(*i.OwnerID))
-	}
-	if i.OwnerIDNEQ != nil {
-		predicates = append(predicates, riskhistory.OwnerIDNEQ(*i.OwnerIDNEQ))
-	}
-	if len(i.OwnerIDIn) > 0 {
-		predicates = append(predicates, riskhistory.OwnerIDIn(i.OwnerIDIn...))
-	}
-	if len(i.OwnerIDNotIn) > 0 {
-		predicates = append(predicates, riskhistory.OwnerIDNotIn(i.OwnerIDNotIn...))
-	}
-	if i.OwnerIDGT != nil {
-		predicates = append(predicates, riskhistory.OwnerIDGT(*i.OwnerIDGT))
-	}
-	if i.OwnerIDGTE != nil {
-		predicates = append(predicates, riskhistory.OwnerIDGTE(*i.OwnerIDGTE))
-	}
-	if i.OwnerIDLT != nil {
-		predicates = append(predicates, riskhistory.OwnerIDLT(*i.OwnerIDLT))
-	}
-	if i.OwnerIDLTE != nil {
-		predicates = append(predicates, riskhistory.OwnerIDLTE(*i.OwnerIDLTE))
-	}
-	if i.OwnerIDContains != nil {
-		predicates = append(predicates, riskhistory.OwnerIDContains(*i.OwnerIDContains))
-	}
-	if i.OwnerIDHasPrefix != nil {
-		predicates = append(predicates, riskhistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
-	}
-	if i.OwnerIDHasSuffix != nil {
-		predicates = append(predicates, riskhistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
-	}
-	if i.OwnerIDEqualFold != nil {
-		predicates = append(predicates, riskhistory.OwnerIDEqualFold(*i.OwnerIDEqualFold))
-	}
-	if i.OwnerIDContainsFold != nil {
-		predicates = append(predicates, riskhistory.OwnerIDContainsFold(*i.OwnerIDContainsFold))
 	}
 
 	switch len(predicates) {

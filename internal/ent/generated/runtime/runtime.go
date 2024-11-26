@@ -426,18 +426,47 @@ func init() {
 	// controlhistory.DefaultID holds the default value on creation for the id field.
 	controlhistory.DefaultID = controlhistoryDescID.Default.(func() string)
 	controlobjectiveMixin := schema.ControlObjective{}.Mixin()
+	controlobjective.Policy = privacy.NewPolicies(schema.ControlObjective{})
+	controlobjective.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := controlobjective.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
 	controlobjectiveMixinHooks0 := controlobjectiveMixin[0].Hooks()
 	controlobjectiveMixinHooks1 := controlobjectiveMixin[1].Hooks()
-	controlobjective.Hooks[0] = controlobjectiveMixinHooks0[0]
-	controlobjective.Hooks[1] = controlobjectiveMixinHooks1[0]
+	controlobjectiveMixinHooks4 := controlobjectiveMixin[4].Hooks()
+	controlobjectiveMixinHooks5 := controlobjectiveMixin[5].Hooks()
+
+	controlobjective.Hooks[1] = controlobjectiveMixinHooks0[0]
+
+	controlobjective.Hooks[2] = controlobjectiveMixinHooks1[0]
+
+	controlobjective.Hooks[3] = controlobjectiveMixinHooks4[0]
+
+	controlobjective.Hooks[4] = controlobjectiveMixinHooks4[1]
+
+	controlobjective.Hooks[5] = controlobjectiveMixinHooks4[2]
+
+	controlobjective.Hooks[6] = controlobjectiveMixinHooks5[0]
+
+	controlobjective.Hooks[7] = controlobjectiveMixinHooks5[1]
+
+	controlobjective.Hooks[8] = controlobjectiveMixinHooks5[2]
 	controlobjectiveMixinInters1 := controlobjectiveMixin[1].Interceptors()
+	controlobjectiveMixinInters4 := controlobjectiveMixin[4].Interceptors()
 	controlobjective.Interceptors[0] = controlobjectiveMixinInters1[0]
+	controlobjective.Interceptors[1] = controlobjectiveMixinInters4[0]
 	controlobjectiveMixinFields0 := controlobjectiveMixin[0].Fields()
 	_ = controlobjectiveMixinFields0
 	controlobjectiveMixinFields2 := controlobjectiveMixin[2].Fields()
 	_ = controlobjectiveMixinFields2
 	controlobjectiveMixinFields3 := controlobjectiveMixin[3].Fields()
 	_ = controlobjectiveMixinFields3
+	controlobjectiveMixinFields4 := controlobjectiveMixin[4].Fields()
+	_ = controlobjectiveMixinFields4
 	controlobjectiveFields := schema.ControlObjective{}.Fields()
 	_ = controlobjectiveFields
 	// controlobjectiveDescCreatedAt is the schema descriptor for created_at field.
@@ -458,10 +487,29 @@ func init() {
 	controlobjectiveDescTags := controlobjectiveMixinFields3[0].Descriptor()
 	// controlobjective.DefaultTags holds the default value on creation for the tags field.
 	controlobjective.DefaultTags = controlobjectiveDescTags.Default.([]string)
+	// controlobjectiveDescOwnerID is the schema descriptor for owner_id field.
+	controlobjectiveDescOwnerID := controlobjectiveMixinFields4[0].Descriptor()
+	// controlobjective.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	controlobjective.OwnerIDValidator = controlobjectiveDescOwnerID.Validators[0].(func(string) error)
+	// controlobjectiveDescName is the schema descriptor for name field.
+	controlobjectiveDescName := controlobjectiveFields[0].Descriptor()
+	// controlobjective.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	controlobjective.NameValidator = controlobjectiveDescName.Validators[0].(func(string) error)
 	// controlobjectiveDescID is the schema descriptor for id field.
 	controlobjectiveDescID := controlobjectiveMixinFields2[0].Descriptor()
 	// controlobjective.DefaultID holds the default value on creation for the id field.
 	controlobjective.DefaultID = controlobjectiveDescID.Default.(func() string)
+	controlobjectivehistory.Policy = privacy.NewPolicies(schema.ControlObjectiveHistory{})
+	controlobjectivehistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := controlobjectivehistory.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	controlobjectivehistoryInters := schema.ControlObjectiveHistory{}.Interceptors()
+	controlobjectivehistory.Interceptors[0] = controlobjectivehistoryInters[0]
 	controlobjectivehistoryFields := schema.ControlObjectiveHistory{}.Fields()
 	_ = controlobjectivehistoryFields
 	// controlobjectivehistoryDescHistoryTime is the schema descriptor for history_time field.
@@ -2036,6 +2084,7 @@ func init() {
 	internalpolicyMixinHooks0 := internalpolicyMixin[0].Hooks()
 	internalpolicyMixinHooks1 := internalpolicyMixin[1].Hooks()
 	internalpolicyMixinHooks4 := internalpolicyMixin[4].Hooks()
+	internalpolicyMixinHooks5 := internalpolicyMixin[5].Hooks()
 	internalpolicyHooks := schema.InternalPolicy{}.Hooks()
 
 	internalpolicy.Hooks[1] = internalpolicyMixinHooks0[0]
@@ -2044,17 +2093,15 @@ func init() {
 
 	internalpolicy.Hooks[3] = internalpolicyMixinHooks4[0]
 
-	internalpolicy.Hooks[4] = internalpolicyHooks[0]
+	internalpolicy.Hooks[4] = internalpolicyMixinHooks5[0]
 
-	internalpolicy.Hooks[5] = internalpolicyHooks[1]
+	internalpolicy.Hooks[5] = internalpolicyMixinHooks5[1]
 
-	internalpolicy.Hooks[6] = internalpolicyHooks[2]
+	internalpolicy.Hooks[6] = internalpolicyHooks[0]
 	internalpolicyMixinInters1 := internalpolicyMixin[1].Interceptors()
 	internalpolicyMixinInters4 := internalpolicyMixin[4].Interceptors()
-	internalpolicyInters := schema.InternalPolicy{}.Interceptors()
 	internalpolicy.Interceptors[0] = internalpolicyMixinInters1[0]
 	internalpolicy.Interceptors[1] = internalpolicyMixinInters4[0]
-	internalpolicy.Interceptors[2] = internalpolicyInters[0]
 	internalpolicyMixinFields0 := internalpolicyMixin[0].Fields()
 	_ = internalpolicyMixinFields0
 	internalpolicyMixinFields2 := internalpolicyMixin[2].Fields()
@@ -3041,6 +3088,7 @@ func init() {
 	procedureMixinHooks0 := procedureMixin[0].Hooks()
 	procedureMixinHooks1 := procedureMixin[1].Hooks()
 	procedureMixinHooks4 := procedureMixin[4].Hooks()
+	procedureMixinHooks5 := procedureMixin[5].Hooks()
 	procedureHooks := schema.Procedure{}.Hooks()
 
 	procedure.Hooks[1] = procedureMixinHooks0[0]
@@ -3049,17 +3097,15 @@ func init() {
 
 	procedure.Hooks[3] = procedureMixinHooks4[0]
 
-	procedure.Hooks[4] = procedureHooks[0]
+	procedure.Hooks[4] = procedureMixinHooks5[0]
 
-	procedure.Hooks[5] = procedureHooks[1]
+	procedure.Hooks[5] = procedureMixinHooks5[1]
 
-	procedure.Hooks[6] = procedureHooks[2]
+	procedure.Hooks[6] = procedureHooks[0]
 	procedureMixinInters1 := procedureMixin[1].Interceptors()
 	procedureMixinInters4 := procedureMixin[4].Interceptors()
-	procedureInters := schema.Procedure{}.Interceptors()
 	procedure.Interceptors[0] = procedureMixinInters1[0]
 	procedure.Interceptors[1] = procedureMixinInters4[0]
-	procedure.Interceptors[2] = procedureInters[0]
 	procedureMixinFields0 := procedureMixin[0].Fields()
 	_ = procedureMixinFields0
 	procedureMixinFields2 := procedureMixin[2].Fields()
@@ -3152,6 +3198,7 @@ func init() {
 	programMixinHooks0 := programMixin[0].Hooks()
 	programMixinHooks2 := programMixin[2].Hooks()
 	programMixinHooks4 := programMixin[4].Hooks()
+	programMixinHooks5 := programMixin[5].Hooks()
 	programHooks := schema.Program{}.Hooks()
 
 	program.Hooks[1] = programMixinHooks0[0]
@@ -3160,13 +3207,13 @@ func init() {
 
 	program.Hooks[3] = programMixinHooks4[0]
 
-	program.Hooks[4] = programHooks[0]
+	program.Hooks[4] = programMixinHooks5[0]
 
-	program.Hooks[5] = programHooks[1]
+	program.Hooks[5] = programMixinHooks5[1]
 
-	program.Hooks[6] = programHooks[2]
+	program.Hooks[6] = programMixinHooks5[2]
 
-	program.Hooks[7] = programHooks[3]
+	program.Hooks[7] = programHooks[0]
 	programMixinInters2 := programMixin[2].Interceptors()
 	programMixinInters4 := programMixin[4].Interceptors()
 	programInters := schema.Program{}.Interceptors()
@@ -3369,7 +3416,7 @@ func init() {
 	riskMixinHooks0 := riskMixin[0].Hooks()
 	riskMixinHooks1 := riskMixin[1].Hooks()
 	riskMixinHooks4 := riskMixin[4].Hooks()
-	riskHooks := schema.Risk{}.Hooks()
+	riskMixinHooks5 := riskMixin[5].Hooks()
 
 	risk.Hooks[1] = riskMixinHooks0[0]
 
@@ -3381,23 +3428,23 @@ func init() {
 
 	risk.Hooks[5] = riskMixinHooks4[2]
 
-	risk.Hooks[6] = riskHooks[0]
+	risk.Hooks[6] = riskMixinHooks5[0]
 
-	risk.Hooks[7] = riskHooks[1]
+	risk.Hooks[7] = riskMixinHooks5[1]
 
-	risk.Hooks[8] = riskHooks[2]
+	risk.Hooks[8] = riskMixinHooks5[2]
 	riskMixinInters1 := riskMixin[1].Interceptors()
 	riskMixinInters4 := riskMixin[4].Interceptors()
-	riskInters := schema.Risk{}.Interceptors()
 	risk.Interceptors[0] = riskMixinInters1[0]
 	risk.Interceptors[1] = riskMixinInters4[0]
-	risk.Interceptors[2] = riskInters[0]
 	riskMixinFields0 := riskMixin[0].Fields()
 	_ = riskMixinFields0
 	riskMixinFields2 := riskMixin[2].Fields()
 	_ = riskMixinFields2
 	riskMixinFields3 := riskMixin[3].Fields()
 	_ = riskMixinFields3
+	riskMixinFields4 := riskMixin[4].Fields()
+	_ = riskMixinFields4
 	riskFields := schema.Risk{}.Fields()
 	_ = riskFields
 	// riskDescCreatedAt is the schema descriptor for created_at field.
@@ -3418,14 +3465,14 @@ func init() {
 	riskDescTags := riskMixinFields3[0].Descriptor()
 	// risk.DefaultTags holds the default value on creation for the tags field.
 	risk.DefaultTags = riskDescTags.Default.([]string)
+	// riskDescOwnerID is the schema descriptor for owner_id field.
+	riskDescOwnerID := riskMixinFields4[0].Descriptor()
+	// risk.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	risk.OwnerIDValidator = riskDescOwnerID.Validators[0].(func(string) error)
 	// riskDescName is the schema descriptor for name field.
 	riskDescName := riskFields[0].Descriptor()
 	// risk.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	risk.NameValidator = riskDescName.Validators[0].(func(string) error)
-	// riskDescOwnerID is the schema descriptor for owner_id field.
-	riskDescOwnerID := riskFields[10].Descriptor()
-	// risk.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
-	risk.OwnerIDValidator = riskDescOwnerID.Validators[0].(func(string) error)
 	// riskDescID is the schema descriptor for id field.
 	riskDescID := riskMixinFields2[0].Descriptor()
 	// risk.DefaultID holds the default value on creation for the id field.

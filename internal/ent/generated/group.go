@@ -90,30 +90,39 @@ type GroupEdges struct {
 	RiskEditors []*Risk `json:"risk_editors,omitempty"`
 	// RiskBlockedGroups holds the value of the risk_blocked_groups edge.
 	RiskBlockedGroups []*Risk `json:"risk_blocked_groups,omitempty"`
+	// ControlobjectiveViewers holds the value of the controlobjective_viewers edge.
+	ControlobjectiveViewers []*ControlObjective `json:"controlobjective_viewers,omitempty"`
+	// ControlobjectiveEditors holds the value of the controlobjective_editors edge.
+	ControlobjectiveEditors []*ControlObjective `json:"controlobjective_editors,omitempty"`
+	// ControlobjectiveBlockedGroups holds the value of the controlobjective_blocked_groups edge.
+	ControlobjectiveBlockedGroups []*ControlObjective `json:"controlobjective_blocked_groups,omitempty"`
 	// Members holds the value of the members edge.
 	Members []*GroupMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [18]bool
+	loadedTypes [21]bool
 	// totalCount holds the count of the edges above.
-	totalCount [18]map[string]int
+	totalCount [21]map[string]int
 
-	namedUsers                       map[string][]*User
-	namedEvents                      map[string][]*Event
-	namedIntegrations                map[string][]*Integration
-	namedFiles                       map[string][]*File
-	namedTasks                       map[string][]*Task
-	namedProcedureEditors            map[string][]*Procedure
-	namedProcedureBlockedGroups      map[string][]*Procedure
-	namedInternalpolicyEditors       map[string][]*InternalPolicy
-	namedInternalpolicyBlockedGroups map[string][]*InternalPolicy
-	namedProgramViewers              map[string][]*Program
-	namedProgramEditors              map[string][]*Program
-	namedProgramBlockedGroups        map[string][]*Program
-	namedRiskViewers                 map[string][]*Risk
-	namedRiskEditors                 map[string][]*Risk
-	namedRiskBlockedGroups           map[string][]*Risk
-	namedMembers                     map[string][]*GroupMembership
+	namedUsers                         map[string][]*User
+	namedEvents                        map[string][]*Event
+	namedIntegrations                  map[string][]*Integration
+	namedFiles                         map[string][]*File
+	namedTasks                         map[string][]*Task
+	namedProcedureEditors              map[string][]*Procedure
+	namedProcedureBlockedGroups        map[string][]*Procedure
+	namedInternalpolicyEditors         map[string][]*InternalPolicy
+	namedInternalpolicyBlockedGroups   map[string][]*InternalPolicy
+	namedProgramViewers                map[string][]*Program
+	namedProgramEditors                map[string][]*Program
+	namedProgramBlockedGroups          map[string][]*Program
+	namedRiskViewers                   map[string][]*Risk
+	namedRiskEditors                   map[string][]*Risk
+	namedRiskBlockedGroups             map[string][]*Risk
+	namedControlobjectiveViewers       map[string][]*ControlObjective
+	namedControlobjectiveEditors       map[string][]*ControlObjective
+	namedControlobjectiveBlockedGroups map[string][]*ControlObjective
+	namedMembers                       map[string][]*GroupMembership
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -273,10 +282,37 @@ func (e GroupEdges) RiskBlockedGroupsOrErr() ([]*Risk, error) {
 	return nil, &NotLoadedError{edge: "risk_blocked_groups"}
 }
 
+// ControlobjectiveViewersOrErr returns the ControlobjectiveViewers value or an error if the edge
+// was not loaded in eager-loading.
+func (e GroupEdges) ControlobjectiveViewersOrErr() ([]*ControlObjective, error) {
+	if e.loadedTypes[17] {
+		return e.ControlobjectiveViewers, nil
+	}
+	return nil, &NotLoadedError{edge: "controlobjective_viewers"}
+}
+
+// ControlobjectiveEditorsOrErr returns the ControlobjectiveEditors value or an error if the edge
+// was not loaded in eager-loading.
+func (e GroupEdges) ControlobjectiveEditorsOrErr() ([]*ControlObjective, error) {
+	if e.loadedTypes[18] {
+		return e.ControlobjectiveEditors, nil
+	}
+	return nil, &NotLoadedError{edge: "controlobjective_editors"}
+}
+
+// ControlobjectiveBlockedGroupsOrErr returns the ControlobjectiveBlockedGroups value or an error if the edge
+// was not loaded in eager-loading.
+func (e GroupEdges) ControlobjectiveBlockedGroupsOrErr() ([]*ControlObjective, error) {
+	if e.loadedTypes[19] {
+		return e.ControlobjectiveBlockedGroups, nil
+	}
+	return nil, &NotLoadedError{edge: "controlobjective_blocked_groups"}
+}
+
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) MembersOrErr() ([]*GroupMembership, error) {
-	if e.loadedTypes[17] {
+	if e.loadedTypes[20] {
 		return e.Members, nil
 	}
 	return nil, &NotLoadedError{edge: "members"}
@@ -496,6 +532,21 @@ func (gr *Group) QueryRiskEditors() *RiskQuery {
 // QueryRiskBlockedGroups queries the "risk_blocked_groups" edge of the Group entity.
 func (gr *Group) QueryRiskBlockedGroups() *RiskQuery {
 	return NewGroupClient(gr.config).QueryRiskBlockedGroups(gr)
+}
+
+// QueryControlobjectiveViewers queries the "controlobjective_viewers" edge of the Group entity.
+func (gr *Group) QueryControlobjectiveViewers() *ControlObjectiveQuery {
+	return NewGroupClient(gr.config).QueryControlobjectiveViewers(gr)
+}
+
+// QueryControlobjectiveEditors queries the "controlobjective_editors" edge of the Group entity.
+func (gr *Group) QueryControlobjectiveEditors() *ControlObjectiveQuery {
+	return NewGroupClient(gr.config).QueryControlobjectiveEditors(gr)
+}
+
+// QueryControlobjectiveBlockedGroups queries the "controlobjective_blocked_groups" edge of the Group entity.
+func (gr *Group) QueryControlobjectiveBlockedGroups() *ControlObjectiveQuery {
+	return NewGroupClient(gr.config).QueryControlobjectiveBlockedGroups(gr)
 }
 
 // QueryMembers queries the "members" edge of the Group entity.
@@ -928,6 +979,78 @@ func (gr *Group) appendNamedRiskBlockedGroups(name string, edges ...*Risk) {
 		gr.Edges.namedRiskBlockedGroups[name] = []*Risk{}
 	} else {
 		gr.Edges.namedRiskBlockedGroups[name] = append(gr.Edges.namedRiskBlockedGroups[name], edges...)
+	}
+}
+
+// NamedControlobjectiveViewers returns the ControlobjectiveViewers named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (gr *Group) NamedControlobjectiveViewers(name string) ([]*ControlObjective, error) {
+	if gr.Edges.namedControlobjectiveViewers == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := gr.Edges.namedControlobjectiveViewers[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (gr *Group) appendNamedControlobjectiveViewers(name string, edges ...*ControlObjective) {
+	if gr.Edges.namedControlobjectiveViewers == nil {
+		gr.Edges.namedControlobjectiveViewers = make(map[string][]*ControlObjective)
+	}
+	if len(edges) == 0 {
+		gr.Edges.namedControlobjectiveViewers[name] = []*ControlObjective{}
+	} else {
+		gr.Edges.namedControlobjectiveViewers[name] = append(gr.Edges.namedControlobjectiveViewers[name], edges...)
+	}
+}
+
+// NamedControlobjectiveEditors returns the ControlobjectiveEditors named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (gr *Group) NamedControlobjectiveEditors(name string) ([]*ControlObjective, error) {
+	if gr.Edges.namedControlobjectiveEditors == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := gr.Edges.namedControlobjectiveEditors[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (gr *Group) appendNamedControlobjectiveEditors(name string, edges ...*ControlObjective) {
+	if gr.Edges.namedControlobjectiveEditors == nil {
+		gr.Edges.namedControlobjectiveEditors = make(map[string][]*ControlObjective)
+	}
+	if len(edges) == 0 {
+		gr.Edges.namedControlobjectiveEditors[name] = []*ControlObjective{}
+	} else {
+		gr.Edges.namedControlobjectiveEditors[name] = append(gr.Edges.namedControlobjectiveEditors[name], edges...)
+	}
+}
+
+// NamedControlobjectiveBlockedGroups returns the ControlobjectiveBlockedGroups named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (gr *Group) NamedControlobjectiveBlockedGroups(name string) ([]*ControlObjective, error) {
+	if gr.Edges.namedControlobjectiveBlockedGroups == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := gr.Edges.namedControlobjectiveBlockedGroups[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (gr *Group) appendNamedControlobjectiveBlockedGroups(name string, edges ...*ControlObjective) {
+	if gr.Edges.namedControlobjectiveBlockedGroups == nil {
+		gr.Edges.namedControlobjectiveBlockedGroups = make(map[string][]*ControlObjective)
+	}
+	if len(edges) == 0 {
+		gr.Edges.namedControlobjectiveBlockedGroups[name] = []*ControlObjective{}
+	} else {
+		gr.Edges.namedControlobjectiveBlockedGroups[name] = append(gr.Edges.namedControlobjectiveBlockedGroups[name], edges...)
 	}
 }
 

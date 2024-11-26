@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -34,46 +35,52 @@ import (
 // GroupQuery is the builder for querying Group entities.
 type GroupQuery struct {
 	config
-	ctx                                  *QueryContext
-	order                                []group.OrderOption
-	inters                               []Interceptor
-	predicates                           []predicate.Group
-	withOwner                            *OrganizationQuery
-	withSetting                          *GroupSettingQuery
-	withUsers                            *UserQuery
-	withEvents                           *EventQuery
-	withIntegrations                     *IntegrationQuery
-	withFiles                            *FileQuery
-	withTasks                            *TaskQuery
-	withProcedureEditors                 *ProcedureQuery
-	withProcedureBlockedGroups           *ProcedureQuery
-	withInternalpolicyEditors            *InternalPolicyQuery
-	withInternalpolicyBlockedGroups      *InternalPolicyQuery
-	withProgramViewers                   *ProgramQuery
-	withProgramEditors                   *ProgramQuery
-	withProgramBlockedGroups             *ProgramQuery
-	withRiskViewers                      *RiskQuery
-	withRiskEditors                      *RiskQuery
-	withRiskBlockedGroups                *RiskQuery
-	withMembers                          *GroupMembershipQuery
-	loadTotal                            []func(context.Context, []*Group) error
-	modifiers                            []func(*sql.Selector)
-	withNamedUsers                       map[string]*UserQuery
-	withNamedEvents                      map[string]*EventQuery
-	withNamedIntegrations                map[string]*IntegrationQuery
-	withNamedFiles                       map[string]*FileQuery
-	withNamedTasks                       map[string]*TaskQuery
-	withNamedProcedureEditors            map[string]*ProcedureQuery
-	withNamedProcedureBlockedGroups      map[string]*ProcedureQuery
-	withNamedInternalpolicyEditors       map[string]*InternalPolicyQuery
-	withNamedInternalpolicyBlockedGroups map[string]*InternalPolicyQuery
-	withNamedProgramViewers              map[string]*ProgramQuery
-	withNamedProgramEditors              map[string]*ProgramQuery
-	withNamedProgramBlockedGroups        map[string]*ProgramQuery
-	withNamedRiskViewers                 map[string]*RiskQuery
-	withNamedRiskEditors                 map[string]*RiskQuery
-	withNamedRiskBlockedGroups           map[string]*RiskQuery
-	withNamedMembers                     map[string]*GroupMembershipQuery
+	ctx                                    *QueryContext
+	order                                  []group.OrderOption
+	inters                                 []Interceptor
+	predicates                             []predicate.Group
+	withOwner                              *OrganizationQuery
+	withSetting                            *GroupSettingQuery
+	withUsers                              *UserQuery
+	withEvents                             *EventQuery
+	withIntegrations                       *IntegrationQuery
+	withFiles                              *FileQuery
+	withTasks                              *TaskQuery
+	withProcedureEditors                   *ProcedureQuery
+	withProcedureBlockedGroups             *ProcedureQuery
+	withInternalpolicyEditors              *InternalPolicyQuery
+	withInternalpolicyBlockedGroups        *InternalPolicyQuery
+	withProgramViewers                     *ProgramQuery
+	withProgramEditors                     *ProgramQuery
+	withProgramBlockedGroups               *ProgramQuery
+	withRiskViewers                        *RiskQuery
+	withRiskEditors                        *RiskQuery
+	withRiskBlockedGroups                  *RiskQuery
+	withControlobjectiveViewers            *ControlObjectiveQuery
+	withControlobjectiveEditors            *ControlObjectiveQuery
+	withControlobjectiveBlockedGroups      *ControlObjectiveQuery
+	withMembers                            *GroupMembershipQuery
+	loadTotal                              []func(context.Context, []*Group) error
+	modifiers                              []func(*sql.Selector)
+	withNamedUsers                         map[string]*UserQuery
+	withNamedEvents                        map[string]*EventQuery
+	withNamedIntegrations                  map[string]*IntegrationQuery
+	withNamedFiles                         map[string]*FileQuery
+	withNamedTasks                         map[string]*TaskQuery
+	withNamedProcedureEditors              map[string]*ProcedureQuery
+	withNamedProcedureBlockedGroups        map[string]*ProcedureQuery
+	withNamedInternalpolicyEditors         map[string]*InternalPolicyQuery
+	withNamedInternalpolicyBlockedGroups   map[string]*InternalPolicyQuery
+	withNamedProgramViewers                map[string]*ProgramQuery
+	withNamedProgramEditors                map[string]*ProgramQuery
+	withNamedProgramBlockedGroups          map[string]*ProgramQuery
+	withNamedRiskViewers                   map[string]*RiskQuery
+	withNamedRiskEditors                   map[string]*RiskQuery
+	withNamedRiskBlockedGroups             map[string]*RiskQuery
+	withNamedControlobjectiveViewers       map[string]*ControlObjectiveQuery
+	withNamedControlobjectiveEditors       map[string]*ControlObjectiveQuery
+	withNamedControlobjectiveBlockedGroups map[string]*ControlObjectiveQuery
+	withNamedMembers                       map[string]*GroupMembershipQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -535,6 +542,81 @@ func (gq *GroupQuery) QueryRiskBlockedGroups() *RiskQuery {
 	return query
 }
 
+// QueryControlobjectiveViewers chains the current query on the "controlobjective_viewers" edge.
+func (gq *GroupQuery) QueryControlobjectiveViewers() *ControlObjectiveQuery {
+	query := (&ControlObjectiveClient{config: gq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := gq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := gq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, selector),
+			sqlgraph.To(controlobjective.Table, controlobjective.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.ControlobjectiveViewersTable, group.ControlobjectiveViewersPrimaryKey...),
+		)
+		schemaConfig := gq.schemaConfig
+		step.To.Schema = schemaConfig.ControlObjective
+		step.Edge.Schema = schemaConfig.ControlObjectiveViewers
+		fromU = sqlgraph.SetNeighbors(gq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryControlobjectiveEditors chains the current query on the "controlobjective_editors" edge.
+func (gq *GroupQuery) QueryControlobjectiveEditors() *ControlObjectiveQuery {
+	query := (&ControlObjectiveClient{config: gq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := gq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := gq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, selector),
+			sqlgraph.To(controlobjective.Table, controlobjective.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.ControlobjectiveEditorsTable, group.ControlobjectiveEditorsPrimaryKey...),
+		)
+		schemaConfig := gq.schemaConfig
+		step.To.Schema = schemaConfig.ControlObjective
+		step.Edge.Schema = schemaConfig.ControlObjectiveEditors
+		fromU = sqlgraph.SetNeighbors(gq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryControlobjectiveBlockedGroups chains the current query on the "controlobjective_blocked_groups" edge.
+func (gq *GroupQuery) QueryControlobjectiveBlockedGroups() *ControlObjectiveQuery {
+	query := (&ControlObjectiveClient{config: gq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := gq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := gq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, selector),
+			sqlgraph.To(controlobjective.Table, controlobjective.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.ControlobjectiveBlockedGroupsTable, group.ControlobjectiveBlockedGroupsPrimaryKey...),
+		)
+		schemaConfig := gq.schemaConfig
+		step.To.Schema = schemaConfig.ControlObjective
+		step.Edge.Schema = schemaConfig.ControlObjectiveBlockedGroups
+		fromU = sqlgraph.SetNeighbors(gq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryMembers chains the current query on the "members" edge.
 func (gq *GroupQuery) QueryMembers() *GroupMembershipQuery {
 	query := (&GroupMembershipClient{config: gq.config}).Query()
@@ -747,29 +829,32 @@ func (gq *GroupQuery) Clone() *GroupQuery {
 		return nil
 	}
 	return &GroupQuery{
-		config:                          gq.config,
-		ctx:                             gq.ctx.Clone(),
-		order:                           append([]group.OrderOption{}, gq.order...),
-		inters:                          append([]Interceptor{}, gq.inters...),
-		predicates:                      append([]predicate.Group{}, gq.predicates...),
-		withOwner:                       gq.withOwner.Clone(),
-		withSetting:                     gq.withSetting.Clone(),
-		withUsers:                       gq.withUsers.Clone(),
-		withEvents:                      gq.withEvents.Clone(),
-		withIntegrations:                gq.withIntegrations.Clone(),
-		withFiles:                       gq.withFiles.Clone(),
-		withTasks:                       gq.withTasks.Clone(),
-		withProcedureEditors:            gq.withProcedureEditors.Clone(),
-		withProcedureBlockedGroups:      gq.withProcedureBlockedGroups.Clone(),
-		withInternalpolicyEditors:       gq.withInternalpolicyEditors.Clone(),
-		withInternalpolicyBlockedGroups: gq.withInternalpolicyBlockedGroups.Clone(),
-		withProgramViewers:              gq.withProgramViewers.Clone(),
-		withProgramEditors:              gq.withProgramEditors.Clone(),
-		withProgramBlockedGroups:        gq.withProgramBlockedGroups.Clone(),
-		withRiskViewers:                 gq.withRiskViewers.Clone(),
-		withRiskEditors:                 gq.withRiskEditors.Clone(),
-		withRiskBlockedGroups:           gq.withRiskBlockedGroups.Clone(),
-		withMembers:                     gq.withMembers.Clone(),
+		config:                            gq.config,
+		ctx:                               gq.ctx.Clone(),
+		order:                             append([]group.OrderOption{}, gq.order...),
+		inters:                            append([]Interceptor{}, gq.inters...),
+		predicates:                        append([]predicate.Group{}, gq.predicates...),
+		withOwner:                         gq.withOwner.Clone(),
+		withSetting:                       gq.withSetting.Clone(),
+		withUsers:                         gq.withUsers.Clone(),
+		withEvents:                        gq.withEvents.Clone(),
+		withIntegrations:                  gq.withIntegrations.Clone(),
+		withFiles:                         gq.withFiles.Clone(),
+		withTasks:                         gq.withTasks.Clone(),
+		withProcedureEditors:              gq.withProcedureEditors.Clone(),
+		withProcedureBlockedGroups:        gq.withProcedureBlockedGroups.Clone(),
+		withInternalpolicyEditors:         gq.withInternalpolicyEditors.Clone(),
+		withInternalpolicyBlockedGroups:   gq.withInternalpolicyBlockedGroups.Clone(),
+		withProgramViewers:                gq.withProgramViewers.Clone(),
+		withProgramEditors:                gq.withProgramEditors.Clone(),
+		withProgramBlockedGroups:          gq.withProgramBlockedGroups.Clone(),
+		withRiskViewers:                   gq.withRiskViewers.Clone(),
+		withRiskEditors:                   gq.withRiskEditors.Clone(),
+		withRiskBlockedGroups:             gq.withRiskBlockedGroups.Clone(),
+		withControlobjectiveViewers:       gq.withControlobjectiveViewers.Clone(),
+		withControlobjectiveEditors:       gq.withControlobjectiveEditors.Clone(),
+		withControlobjectiveBlockedGroups: gq.withControlobjectiveBlockedGroups.Clone(),
+		withMembers:                       gq.withMembers.Clone(),
 		// clone intermediate query.
 		sql:       gq.sql.Clone(),
 		path:      gq.path,
@@ -964,6 +1049,39 @@ func (gq *GroupQuery) WithRiskBlockedGroups(opts ...func(*RiskQuery)) *GroupQuer
 	return gq
 }
 
+// WithControlobjectiveViewers tells the query-builder to eager-load the nodes that are connected to
+// the "controlobjective_viewers" edge. The optional arguments are used to configure the query builder of the edge.
+func (gq *GroupQuery) WithControlobjectiveViewers(opts ...func(*ControlObjectiveQuery)) *GroupQuery {
+	query := (&ControlObjectiveClient{config: gq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	gq.withControlobjectiveViewers = query
+	return gq
+}
+
+// WithControlobjectiveEditors tells the query-builder to eager-load the nodes that are connected to
+// the "controlobjective_editors" edge. The optional arguments are used to configure the query builder of the edge.
+func (gq *GroupQuery) WithControlobjectiveEditors(opts ...func(*ControlObjectiveQuery)) *GroupQuery {
+	query := (&ControlObjectiveClient{config: gq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	gq.withControlobjectiveEditors = query
+	return gq
+}
+
+// WithControlobjectiveBlockedGroups tells the query-builder to eager-load the nodes that are connected to
+// the "controlobjective_blocked_groups" edge. The optional arguments are used to configure the query builder of the edge.
+func (gq *GroupQuery) WithControlobjectiveBlockedGroups(opts ...func(*ControlObjectiveQuery)) *GroupQuery {
+	query := (&ControlObjectiveClient{config: gq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	gq.withControlobjectiveBlockedGroups = query
+	return gq
+}
+
 // WithMembers tells the query-builder to eager-load the nodes that are connected to
 // the "members" edge. The optional arguments are used to configure the query builder of the edge.
 func (gq *GroupQuery) WithMembers(opts ...func(*GroupMembershipQuery)) *GroupQuery {
@@ -1059,7 +1177,7 @@ func (gq *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 	var (
 		nodes       = []*Group{}
 		_spec       = gq.querySpec()
-		loadedTypes = [18]bool{
+		loadedTypes = [21]bool{
 			gq.withOwner != nil,
 			gq.withSetting != nil,
 			gq.withUsers != nil,
@@ -1077,6 +1195,9 @@ func (gq *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 			gq.withRiskViewers != nil,
 			gq.withRiskEditors != nil,
 			gq.withRiskBlockedGroups != nil,
+			gq.withControlobjectiveViewers != nil,
+			gq.withControlobjectiveEditors != nil,
+			gq.withControlobjectiveBlockedGroups != nil,
 			gq.withMembers != nil,
 		}
 	)
@@ -1226,6 +1347,33 @@ func (gq *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 			return nil, err
 		}
 	}
+	if query := gq.withControlobjectiveViewers; query != nil {
+		if err := gq.loadControlobjectiveViewers(ctx, query, nodes,
+			func(n *Group) { n.Edges.ControlobjectiveViewers = []*ControlObjective{} },
+			func(n *Group, e *ControlObjective) {
+				n.Edges.ControlobjectiveViewers = append(n.Edges.ControlobjectiveViewers, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := gq.withControlobjectiveEditors; query != nil {
+		if err := gq.loadControlobjectiveEditors(ctx, query, nodes,
+			func(n *Group) { n.Edges.ControlobjectiveEditors = []*ControlObjective{} },
+			func(n *Group, e *ControlObjective) {
+				n.Edges.ControlobjectiveEditors = append(n.Edges.ControlobjectiveEditors, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := gq.withControlobjectiveBlockedGroups; query != nil {
+		if err := gq.loadControlobjectiveBlockedGroups(ctx, query, nodes,
+			func(n *Group) { n.Edges.ControlobjectiveBlockedGroups = []*ControlObjective{} },
+			func(n *Group, e *ControlObjective) {
+				n.Edges.ControlobjectiveBlockedGroups = append(n.Edges.ControlobjectiveBlockedGroups, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	if query := gq.withMembers; query != nil {
 		if err := gq.loadMembers(ctx, query, nodes,
 			func(n *Group) { n.Edges.Members = []*GroupMembership{} },
@@ -1335,6 +1483,27 @@ func (gq *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 		if err := gq.loadRiskBlockedGroups(ctx, query, nodes,
 			func(n *Group) { n.appendNamedRiskBlockedGroups(name) },
 			func(n *Group, e *Risk) { n.appendNamedRiskBlockedGroups(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range gq.withNamedControlobjectiveViewers {
+		if err := gq.loadControlobjectiveViewers(ctx, query, nodes,
+			func(n *Group) { n.appendNamedControlobjectiveViewers(name) },
+			func(n *Group, e *ControlObjective) { n.appendNamedControlobjectiveViewers(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range gq.withNamedControlobjectiveEditors {
+		if err := gq.loadControlobjectiveEditors(ctx, query, nodes,
+			func(n *Group) { n.appendNamedControlobjectiveEditors(name) },
+			func(n *Group, e *ControlObjective) { n.appendNamedControlobjectiveEditors(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range gq.withNamedControlobjectiveBlockedGroups {
+		if err := gq.loadControlobjectiveBlockedGroups(ctx, query, nodes,
+			func(n *Group) { n.appendNamedControlobjectiveBlockedGroups(name) },
+			func(n *Group, e *ControlObjective) { n.appendNamedControlobjectiveBlockedGroups(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2308,6 +2477,192 @@ func (gq *GroupQuery) loadRiskBlockedGroups(ctx context.Context, query *RiskQuer
 	}
 	return nil
 }
+func (gq *GroupQuery) loadControlobjectiveViewers(ctx context.Context, query *ControlObjectiveQuery, nodes []*Group, init func(*Group), assign func(*Group, *ControlObjective)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Group)
+	nids := make(map[string]map[*Group]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(group.ControlobjectiveViewersTable)
+		joinT.Schema(gq.schemaConfig.ControlObjectiveViewers)
+		s.Join(joinT).On(s.C(controlobjective.FieldID), joinT.C(group.ControlobjectiveViewersPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(group.ControlobjectiveViewersPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(group.ControlobjectiveViewersPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Group]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*ControlObjective](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "controlobjective_viewers" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (gq *GroupQuery) loadControlobjectiveEditors(ctx context.Context, query *ControlObjectiveQuery, nodes []*Group, init func(*Group), assign func(*Group, *ControlObjective)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Group)
+	nids := make(map[string]map[*Group]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(group.ControlobjectiveEditorsTable)
+		joinT.Schema(gq.schemaConfig.ControlObjectiveEditors)
+		s.Join(joinT).On(s.C(controlobjective.FieldID), joinT.C(group.ControlobjectiveEditorsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(group.ControlobjectiveEditorsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(group.ControlobjectiveEditorsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Group]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*ControlObjective](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "controlobjective_editors" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (gq *GroupQuery) loadControlobjectiveBlockedGroups(ctx context.Context, query *ControlObjectiveQuery, nodes []*Group, init func(*Group), assign func(*Group, *ControlObjective)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Group)
+	nids := make(map[string]map[*Group]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(group.ControlobjectiveBlockedGroupsTable)
+		joinT.Schema(gq.schemaConfig.ControlObjectiveBlockedGroups)
+		s.Join(joinT).On(s.C(controlobjective.FieldID), joinT.C(group.ControlobjectiveBlockedGroupsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(group.ControlobjectiveBlockedGroupsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(group.ControlobjectiveBlockedGroupsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Group]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*ControlObjective](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "controlobjective_blocked_groups" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (gq *GroupQuery) loadMembers(ctx context.Context, query *GroupMembershipQuery, nodes []*Group, init func(*Group), assign func(*Group, *GroupMembership)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Group)
@@ -2647,6 +3002,48 @@ func (gq *GroupQuery) WithNamedRiskBlockedGroups(name string, opts ...func(*Risk
 		gq.withNamedRiskBlockedGroups = make(map[string]*RiskQuery)
 	}
 	gq.withNamedRiskBlockedGroups[name] = query
+	return gq
+}
+
+// WithNamedControlobjectiveViewers tells the query-builder to eager-load the nodes that are connected to the "controlobjective_viewers"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (gq *GroupQuery) WithNamedControlobjectiveViewers(name string, opts ...func(*ControlObjectiveQuery)) *GroupQuery {
+	query := (&ControlObjectiveClient{config: gq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if gq.withNamedControlobjectiveViewers == nil {
+		gq.withNamedControlobjectiveViewers = make(map[string]*ControlObjectiveQuery)
+	}
+	gq.withNamedControlobjectiveViewers[name] = query
+	return gq
+}
+
+// WithNamedControlobjectiveEditors tells the query-builder to eager-load the nodes that are connected to the "controlobjective_editors"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (gq *GroupQuery) WithNamedControlobjectiveEditors(name string, opts ...func(*ControlObjectiveQuery)) *GroupQuery {
+	query := (&ControlObjectiveClient{config: gq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if gq.withNamedControlobjectiveEditors == nil {
+		gq.withNamedControlobjectiveEditors = make(map[string]*ControlObjectiveQuery)
+	}
+	gq.withNamedControlobjectiveEditors[name] = query
+	return gq
+}
+
+// WithNamedControlobjectiveBlockedGroups tells the query-builder to eager-load the nodes that are connected to the "controlobjective_blocked_groups"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (gq *GroupQuery) WithNamedControlobjectiveBlockedGroups(name string, opts ...func(*ControlObjectiveQuery)) *GroupQuery {
+	query := (&ControlObjectiveClient{config: gq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if gq.withNamedControlobjectiveBlockedGroups == nil {
+		gq.withNamedControlobjectiveBlockedGroups = make(map[string]*ControlObjectiveQuery)
+	}
+	gq.withNamedControlobjectiveBlockedGroups[name] = query
 	return gq
 }
 

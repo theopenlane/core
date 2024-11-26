@@ -288,6 +288,7 @@ var (
 		{Name: "mapped_frameworks", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "details", Type: field.TypeJSON, Nullable: true},
 		{Name: "control_controlobjectives", Type: field.TypeString, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString},
 	}
 	// ControlObjectivesTable holds the schema information for the "control_objectives" table.
 	ControlObjectivesTable = &schema.Table{
@@ -300,6 +301,12 @@ var (
 				Columns:    []*schema.Column{ControlObjectivesColumns[20]},
 				RefColumns: []*schema.Column{ControlsColumns[0]},
 				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "control_objectives_organizations_controlobjectives",
+				Columns:    []*schema.Column{ControlObjectivesColumns[21]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.NoAction,
 			},
 		},
 	}
@@ -317,6 +324,7 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "status", Type: field.TypeString, Nullable: true},
@@ -2341,6 +2349,7 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "status", Type: field.TypeString, Nullable: true},
@@ -2351,7 +2360,6 @@ var (
 		{Name: "mitigation", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "satisfies", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "details", Type: field.TypeJSON, Nullable: true},
-		{Name: "owner_id", Type: field.TypeString},
 	}
 	// RiskHistoryTable holds the schema information for the "risk_history" table.
 	RiskHistoryTable = &schema.Table{
@@ -3234,6 +3242,81 @@ var (
 			},
 		},
 	}
+	// ControlObjectiveBlockedGroupsColumns holds the columns for the "control_objective_blocked_groups" table.
+	ControlObjectiveBlockedGroupsColumns = []*schema.Column{
+		{Name: "control_objective_id", Type: field.TypeString},
+		{Name: "group_id", Type: field.TypeString},
+	}
+	// ControlObjectiveBlockedGroupsTable holds the schema information for the "control_objective_blocked_groups" table.
+	ControlObjectiveBlockedGroupsTable = &schema.Table{
+		Name:       "control_objective_blocked_groups",
+		Columns:    ControlObjectiveBlockedGroupsColumns,
+		PrimaryKey: []*schema.Column{ControlObjectiveBlockedGroupsColumns[0], ControlObjectiveBlockedGroupsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "control_objective_blocked_groups_control_objective_id",
+				Columns:    []*schema.Column{ControlObjectiveBlockedGroupsColumns[0]},
+				RefColumns: []*schema.Column{ControlObjectivesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "control_objective_blocked_groups_group_id",
+				Columns:    []*schema.Column{ControlObjectiveBlockedGroupsColumns[1]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// ControlObjectiveEditorsColumns holds the columns for the "control_objective_editors" table.
+	ControlObjectiveEditorsColumns = []*schema.Column{
+		{Name: "control_objective_id", Type: field.TypeString},
+		{Name: "group_id", Type: field.TypeString},
+	}
+	// ControlObjectiveEditorsTable holds the schema information for the "control_objective_editors" table.
+	ControlObjectiveEditorsTable = &schema.Table{
+		Name:       "control_objective_editors",
+		Columns:    ControlObjectiveEditorsColumns,
+		PrimaryKey: []*schema.Column{ControlObjectiveEditorsColumns[0], ControlObjectiveEditorsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "control_objective_editors_control_objective_id",
+				Columns:    []*schema.Column{ControlObjectiveEditorsColumns[0]},
+				RefColumns: []*schema.Column{ControlObjectivesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "control_objective_editors_group_id",
+				Columns:    []*schema.Column{ControlObjectiveEditorsColumns[1]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// ControlObjectiveViewersColumns holds the columns for the "control_objective_viewers" table.
+	ControlObjectiveViewersColumns = []*schema.Column{
+		{Name: "control_objective_id", Type: field.TypeString},
+		{Name: "group_id", Type: field.TypeString},
+	}
+	// ControlObjectiveViewersTable holds the schema information for the "control_objective_viewers" table.
+	ControlObjectiveViewersTable = &schema.Table{
+		Name:       "control_objective_viewers",
+		Columns:    ControlObjectiveViewersColumns,
+		PrimaryKey: []*schema.Column{ControlObjectiveViewersColumns[0], ControlObjectiveViewersColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "control_objective_viewers_control_objective_id",
+				Columns:    []*schema.Column{ControlObjectiveViewersColumns[0]},
+				RefColumns: []*schema.Column{ControlObjectivesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "control_objective_viewers_group_id",
+				Columns:    []*schema.Column{ControlObjectiveViewersColumns[1]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// ControlObjectiveNarrativesColumns holds the columns for the "control_objective_narratives" table.
 	ControlObjectiveNarrativesColumns = []*schema.Column{
 		{Name: "control_objective_id", Type: field.TypeString},
@@ -3734,6 +3817,56 @@ var (
 			},
 		},
 	}
+	// InternalPolicyBlockedGroupsColumns holds the columns for the "internal_policy_blocked_groups" table.
+	InternalPolicyBlockedGroupsColumns = []*schema.Column{
+		{Name: "internal_policy_id", Type: field.TypeString},
+		{Name: "group_id", Type: field.TypeString},
+	}
+	// InternalPolicyBlockedGroupsTable holds the schema information for the "internal_policy_blocked_groups" table.
+	InternalPolicyBlockedGroupsTable = &schema.Table{
+		Name:       "internal_policy_blocked_groups",
+		Columns:    InternalPolicyBlockedGroupsColumns,
+		PrimaryKey: []*schema.Column{InternalPolicyBlockedGroupsColumns[0], InternalPolicyBlockedGroupsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "internal_policy_blocked_groups_internal_policy_id",
+				Columns:    []*schema.Column{InternalPolicyBlockedGroupsColumns[0]},
+				RefColumns: []*schema.Column{InternalPoliciesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "internal_policy_blocked_groups_group_id",
+				Columns:    []*schema.Column{InternalPolicyBlockedGroupsColumns[1]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// InternalPolicyEditorsColumns holds the columns for the "internal_policy_editors" table.
+	InternalPolicyEditorsColumns = []*schema.Column{
+		{Name: "internal_policy_id", Type: field.TypeString},
+		{Name: "group_id", Type: field.TypeString},
+	}
+	// InternalPolicyEditorsTable holds the schema information for the "internal_policy_editors" table.
+	InternalPolicyEditorsTable = &schema.Table{
+		Name:       "internal_policy_editors",
+		Columns:    InternalPolicyEditorsColumns,
+		PrimaryKey: []*schema.Column{InternalPolicyEditorsColumns[0], InternalPolicyEditorsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "internal_policy_editors_internal_policy_id",
+				Columns:    []*schema.Column{InternalPolicyEditorsColumns[0]},
+				RefColumns: []*schema.Column{InternalPoliciesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "internal_policy_editors_group_id",
+				Columns:    []*schema.Column{InternalPolicyEditorsColumns[1]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// InternalPolicyControlobjectivesColumns holds the columns for the "internal_policy_controlobjectives" table.
 	InternalPolicyControlobjectivesColumns = []*schema.Column{
 		{Name: "internal_policy_id", Type: field.TypeString},
@@ -3830,56 +3963,6 @@ var (
 				Symbol:     "internal_policy_tasks_task_id",
 				Columns:    []*schema.Column{InternalPolicyTasksColumns[1]},
 				RefColumns: []*schema.Column{TasksColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-		},
-	}
-	// InternalPolicyEditorsColumns holds the columns for the "internal_policy_editors" table.
-	InternalPolicyEditorsColumns = []*schema.Column{
-		{Name: "internal_policy_id", Type: field.TypeString},
-		{Name: "group_id", Type: field.TypeString},
-	}
-	// InternalPolicyEditorsTable holds the schema information for the "internal_policy_editors" table.
-	InternalPolicyEditorsTable = &schema.Table{
-		Name:       "internal_policy_editors",
-		Columns:    InternalPolicyEditorsColumns,
-		PrimaryKey: []*schema.Column{InternalPolicyEditorsColumns[0], InternalPolicyEditorsColumns[1]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "internal_policy_editors_internal_policy_id",
-				Columns:    []*schema.Column{InternalPolicyEditorsColumns[0]},
-				RefColumns: []*schema.Column{InternalPoliciesColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-			{
-				Symbol:     "internal_policy_editors_group_id",
-				Columns:    []*schema.Column{InternalPolicyEditorsColumns[1]},
-				RefColumns: []*schema.Column{GroupsColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-		},
-	}
-	// InternalPolicyBlockedGroupsColumns holds the columns for the "internal_policy_blocked_groups" table.
-	InternalPolicyBlockedGroupsColumns = []*schema.Column{
-		{Name: "internal_policy_id", Type: field.TypeString},
-		{Name: "group_id", Type: field.TypeString},
-	}
-	// InternalPolicyBlockedGroupsTable holds the schema information for the "internal_policy_blocked_groups" table.
-	InternalPolicyBlockedGroupsTable = &schema.Table{
-		Name:       "internal_policy_blocked_groups",
-		Columns:    InternalPolicyBlockedGroupsColumns,
-		PrimaryKey: []*schema.Column{InternalPolicyBlockedGroupsColumns[0], InternalPolicyBlockedGroupsColumns[1]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "internal_policy_blocked_groups_internal_policy_id",
-				Columns:    []*schema.Column{InternalPolicyBlockedGroupsColumns[0]},
-				RefColumns: []*schema.Column{InternalPoliciesColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-			{
-				Symbol:     "internal_policy_blocked_groups_group_id",
-				Columns:    []*schema.Column{InternalPolicyBlockedGroupsColumns[1]},
-				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 		},
@@ -4134,6 +4217,56 @@ var (
 			},
 		},
 	}
+	// ProcedureBlockedGroupsColumns holds the columns for the "procedure_blocked_groups" table.
+	ProcedureBlockedGroupsColumns = []*schema.Column{
+		{Name: "procedure_id", Type: field.TypeString},
+		{Name: "group_id", Type: field.TypeString},
+	}
+	// ProcedureBlockedGroupsTable holds the schema information for the "procedure_blocked_groups" table.
+	ProcedureBlockedGroupsTable = &schema.Table{
+		Name:       "procedure_blocked_groups",
+		Columns:    ProcedureBlockedGroupsColumns,
+		PrimaryKey: []*schema.Column{ProcedureBlockedGroupsColumns[0], ProcedureBlockedGroupsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "procedure_blocked_groups_procedure_id",
+				Columns:    []*schema.Column{ProcedureBlockedGroupsColumns[0]},
+				RefColumns: []*schema.Column{ProceduresColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "procedure_blocked_groups_group_id",
+				Columns:    []*schema.Column{ProcedureBlockedGroupsColumns[1]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// ProcedureEditorsColumns holds the columns for the "procedure_editors" table.
+	ProcedureEditorsColumns = []*schema.Column{
+		{Name: "procedure_id", Type: field.TypeString},
+		{Name: "group_id", Type: field.TypeString},
+	}
+	// ProcedureEditorsTable holds the schema information for the "procedure_editors" table.
+	ProcedureEditorsTable = &schema.Table{
+		Name:       "procedure_editors",
+		Columns:    ProcedureEditorsColumns,
+		PrimaryKey: []*schema.Column{ProcedureEditorsColumns[0], ProcedureEditorsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "procedure_editors_procedure_id",
+				Columns:    []*schema.Column{ProcedureEditorsColumns[0]},
+				RefColumns: []*schema.Column{ProceduresColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "procedure_editors_group_id",
+				Columns:    []*schema.Column{ProcedureEditorsColumns[1]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// ProcedureNarrativesColumns holds the columns for the "procedure_narratives" table.
 	ProcedureNarrativesColumns = []*schema.Column{
 		{Name: "procedure_id", Type: field.TypeString},
@@ -4209,51 +4342,76 @@ var (
 			},
 		},
 	}
-	// ProcedureEditorsColumns holds the columns for the "procedure_editors" table.
-	ProcedureEditorsColumns = []*schema.Column{
-		{Name: "procedure_id", Type: field.TypeString},
+	// ProgramBlockedGroupsColumns holds the columns for the "program_blocked_groups" table.
+	ProgramBlockedGroupsColumns = []*schema.Column{
+		{Name: "program_id", Type: field.TypeString},
 		{Name: "group_id", Type: field.TypeString},
 	}
-	// ProcedureEditorsTable holds the schema information for the "procedure_editors" table.
-	ProcedureEditorsTable = &schema.Table{
-		Name:       "procedure_editors",
-		Columns:    ProcedureEditorsColumns,
-		PrimaryKey: []*schema.Column{ProcedureEditorsColumns[0], ProcedureEditorsColumns[1]},
+	// ProgramBlockedGroupsTable holds the schema information for the "program_blocked_groups" table.
+	ProgramBlockedGroupsTable = &schema.Table{
+		Name:       "program_blocked_groups",
+		Columns:    ProgramBlockedGroupsColumns,
+		PrimaryKey: []*schema.Column{ProgramBlockedGroupsColumns[0], ProgramBlockedGroupsColumns[1]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "procedure_editors_procedure_id",
-				Columns:    []*schema.Column{ProcedureEditorsColumns[0]},
-				RefColumns: []*schema.Column{ProceduresColumns[0]},
+				Symbol:     "program_blocked_groups_program_id",
+				Columns:    []*schema.Column{ProgramBlockedGroupsColumns[0]},
+				RefColumns: []*schema.Column{ProgramsColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 			{
-				Symbol:     "procedure_editors_group_id",
-				Columns:    []*schema.Column{ProcedureEditorsColumns[1]},
+				Symbol:     "program_blocked_groups_group_id",
+				Columns:    []*schema.Column{ProgramBlockedGroupsColumns[1]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 		},
 	}
-	// ProcedureBlockedGroupsColumns holds the columns for the "procedure_blocked_groups" table.
-	ProcedureBlockedGroupsColumns = []*schema.Column{
-		{Name: "procedure_id", Type: field.TypeString},
+	// ProgramEditorsColumns holds the columns for the "program_editors" table.
+	ProgramEditorsColumns = []*schema.Column{
+		{Name: "program_id", Type: field.TypeString},
 		{Name: "group_id", Type: field.TypeString},
 	}
-	// ProcedureBlockedGroupsTable holds the schema information for the "procedure_blocked_groups" table.
-	ProcedureBlockedGroupsTable = &schema.Table{
-		Name:       "procedure_blocked_groups",
-		Columns:    ProcedureBlockedGroupsColumns,
-		PrimaryKey: []*schema.Column{ProcedureBlockedGroupsColumns[0], ProcedureBlockedGroupsColumns[1]},
+	// ProgramEditorsTable holds the schema information for the "program_editors" table.
+	ProgramEditorsTable = &schema.Table{
+		Name:       "program_editors",
+		Columns:    ProgramEditorsColumns,
+		PrimaryKey: []*schema.Column{ProgramEditorsColumns[0], ProgramEditorsColumns[1]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "procedure_blocked_groups_procedure_id",
-				Columns:    []*schema.Column{ProcedureBlockedGroupsColumns[0]},
-				RefColumns: []*schema.Column{ProceduresColumns[0]},
+				Symbol:     "program_editors_program_id",
+				Columns:    []*schema.Column{ProgramEditorsColumns[0]},
+				RefColumns: []*schema.Column{ProgramsColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 			{
-				Symbol:     "procedure_blocked_groups_group_id",
-				Columns:    []*schema.Column{ProcedureBlockedGroupsColumns[1]},
+				Symbol:     "program_editors_group_id",
+				Columns:    []*schema.Column{ProgramEditorsColumns[1]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// ProgramViewersColumns holds the columns for the "program_viewers" table.
+	ProgramViewersColumns = []*schema.Column{
+		{Name: "program_id", Type: field.TypeString},
+		{Name: "group_id", Type: field.TypeString},
+	}
+	// ProgramViewersTable holds the schema information for the "program_viewers" table.
+	ProgramViewersTable = &schema.Table{
+		Name:       "program_viewers",
+		Columns:    ProgramViewersColumns,
+		PrimaryKey: []*schema.Column{ProgramViewersColumns[0], ProgramViewersColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "program_viewers_program_id",
+				Columns:    []*schema.Column{ProgramViewersColumns[0]},
+				RefColumns: []*schema.Column{ProgramsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "program_viewers_group_id",
+				Columns:    []*schema.Column{ProgramViewersColumns[1]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
@@ -4534,126 +4692,26 @@ var (
 			},
 		},
 	}
-	// ProgramViewersColumns holds the columns for the "program_viewers" table.
-	ProgramViewersColumns = []*schema.Column{
-		{Name: "program_id", Type: field.TypeString},
-		{Name: "group_id", Type: field.TypeString},
-	}
-	// ProgramViewersTable holds the schema information for the "program_viewers" table.
-	ProgramViewersTable = &schema.Table{
-		Name:       "program_viewers",
-		Columns:    ProgramViewersColumns,
-		PrimaryKey: []*schema.Column{ProgramViewersColumns[0], ProgramViewersColumns[1]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "program_viewers_program_id",
-				Columns:    []*schema.Column{ProgramViewersColumns[0]},
-				RefColumns: []*schema.Column{ProgramsColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-			{
-				Symbol:     "program_viewers_group_id",
-				Columns:    []*schema.Column{ProgramViewersColumns[1]},
-				RefColumns: []*schema.Column{GroupsColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-		},
-	}
-	// ProgramEditorsColumns holds the columns for the "program_editors" table.
-	ProgramEditorsColumns = []*schema.Column{
-		{Name: "program_id", Type: field.TypeString},
-		{Name: "group_id", Type: field.TypeString},
-	}
-	// ProgramEditorsTable holds the schema information for the "program_editors" table.
-	ProgramEditorsTable = &schema.Table{
-		Name:       "program_editors",
-		Columns:    ProgramEditorsColumns,
-		PrimaryKey: []*schema.Column{ProgramEditorsColumns[0], ProgramEditorsColumns[1]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "program_editors_program_id",
-				Columns:    []*schema.Column{ProgramEditorsColumns[0]},
-				RefColumns: []*schema.Column{ProgramsColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-			{
-				Symbol:     "program_editors_group_id",
-				Columns:    []*schema.Column{ProgramEditorsColumns[1]},
-				RefColumns: []*schema.Column{GroupsColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-		},
-	}
-	// ProgramBlockedGroupsColumns holds the columns for the "program_blocked_groups" table.
-	ProgramBlockedGroupsColumns = []*schema.Column{
-		{Name: "program_id", Type: field.TypeString},
-		{Name: "group_id", Type: field.TypeString},
-	}
-	// ProgramBlockedGroupsTable holds the schema information for the "program_blocked_groups" table.
-	ProgramBlockedGroupsTable = &schema.Table{
-		Name:       "program_blocked_groups",
-		Columns:    ProgramBlockedGroupsColumns,
-		PrimaryKey: []*schema.Column{ProgramBlockedGroupsColumns[0], ProgramBlockedGroupsColumns[1]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "program_blocked_groups_program_id",
-				Columns:    []*schema.Column{ProgramBlockedGroupsColumns[0]},
-				RefColumns: []*schema.Column{ProgramsColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-			{
-				Symbol:     "program_blocked_groups_group_id",
-				Columns:    []*schema.Column{ProgramBlockedGroupsColumns[1]},
-				RefColumns: []*schema.Column{GroupsColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-		},
-	}
-	// RiskActionplansColumns holds the columns for the "risk_actionplans" table.
-	RiskActionplansColumns = []*schema.Column{
+	// RiskBlockedGroupsColumns holds the columns for the "risk_blocked_groups" table.
+	RiskBlockedGroupsColumns = []*schema.Column{
 		{Name: "risk_id", Type: field.TypeString},
-		{Name: "action_plan_id", Type: field.TypeString},
+		{Name: "group_id", Type: field.TypeString},
 	}
-	// RiskActionplansTable holds the schema information for the "risk_actionplans" table.
-	RiskActionplansTable = &schema.Table{
-		Name:       "risk_actionplans",
-		Columns:    RiskActionplansColumns,
-		PrimaryKey: []*schema.Column{RiskActionplansColumns[0], RiskActionplansColumns[1]},
+	// RiskBlockedGroupsTable holds the schema information for the "risk_blocked_groups" table.
+	RiskBlockedGroupsTable = &schema.Table{
+		Name:       "risk_blocked_groups",
+		Columns:    RiskBlockedGroupsColumns,
+		PrimaryKey: []*schema.Column{RiskBlockedGroupsColumns[0], RiskBlockedGroupsColumns[1]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "risk_actionplans_risk_id",
-				Columns:    []*schema.Column{RiskActionplansColumns[0]},
+				Symbol:     "risk_blocked_groups_risk_id",
+				Columns:    []*schema.Column{RiskBlockedGroupsColumns[0]},
 				RefColumns: []*schema.Column{RisksColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 			{
-				Symbol:     "risk_actionplans_action_plan_id",
-				Columns:    []*schema.Column{RiskActionplansColumns[1]},
-				RefColumns: []*schema.Column{ActionPlansColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-		},
-	}
-	// RiskViewersColumns holds the columns for the "risk_viewers" table.
-	RiskViewersColumns = []*schema.Column{
-		{Name: "risk_id", Type: field.TypeString},
-		{Name: "group_id", Type: field.TypeString},
-	}
-	// RiskViewersTable holds the schema information for the "risk_viewers" table.
-	RiskViewersTable = &schema.Table{
-		Name:       "risk_viewers",
-		Columns:    RiskViewersColumns,
-		PrimaryKey: []*schema.Column{RiskViewersColumns[0], RiskViewersColumns[1]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "risk_viewers_risk_id",
-				Columns:    []*schema.Column{RiskViewersColumns[0]},
-				RefColumns: []*schema.Column{RisksColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-			{
-				Symbol:     "risk_viewers_group_id",
-				Columns:    []*schema.Column{RiskViewersColumns[1]},
+				Symbol:     "risk_blocked_groups_group_id",
+				Columns:    []*schema.Column{RiskBlockedGroupsColumns[1]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
@@ -4684,27 +4742,52 @@ var (
 			},
 		},
 	}
-	// RiskBlockedGroupsColumns holds the columns for the "risk_blocked_groups" table.
-	RiskBlockedGroupsColumns = []*schema.Column{
+	// RiskViewersColumns holds the columns for the "risk_viewers" table.
+	RiskViewersColumns = []*schema.Column{
 		{Name: "risk_id", Type: field.TypeString},
 		{Name: "group_id", Type: field.TypeString},
 	}
-	// RiskBlockedGroupsTable holds the schema information for the "risk_blocked_groups" table.
-	RiskBlockedGroupsTable = &schema.Table{
-		Name:       "risk_blocked_groups",
-		Columns:    RiskBlockedGroupsColumns,
-		PrimaryKey: []*schema.Column{RiskBlockedGroupsColumns[0], RiskBlockedGroupsColumns[1]},
+	// RiskViewersTable holds the schema information for the "risk_viewers" table.
+	RiskViewersTable = &schema.Table{
+		Name:       "risk_viewers",
+		Columns:    RiskViewersColumns,
+		PrimaryKey: []*schema.Column{RiskViewersColumns[0], RiskViewersColumns[1]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "risk_blocked_groups_risk_id",
-				Columns:    []*schema.Column{RiskBlockedGroupsColumns[0]},
+				Symbol:     "risk_viewers_risk_id",
+				Columns:    []*schema.Column{RiskViewersColumns[0]},
 				RefColumns: []*schema.Column{RisksColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 			{
-				Symbol:     "risk_blocked_groups_group_id",
-				Columns:    []*schema.Column{RiskBlockedGroupsColumns[1]},
+				Symbol:     "risk_viewers_group_id",
+				Columns:    []*schema.Column{RiskViewersColumns[1]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// RiskActionplansColumns holds the columns for the "risk_actionplans" table.
+	RiskActionplansColumns = []*schema.Column{
+		{Name: "risk_id", Type: field.TypeString},
+		{Name: "action_plan_id", Type: field.TypeString},
+	}
+	// RiskActionplansTable holds the schema information for the "risk_actionplans" table.
+	RiskActionplansTable = &schema.Table{
+		Name:       "risk_actionplans",
+		Columns:    RiskActionplansColumns,
+		PrimaryKey: []*schema.Column{RiskActionplansColumns[0], RiskActionplansColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "risk_actionplans_risk_id",
+				Columns:    []*schema.Column{RiskActionplansColumns[0]},
+				RefColumns: []*schema.Column{RisksColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "risk_actionplans_action_plan_id",
+				Columns:    []*schema.Column{RiskActionplansColumns[1]},
+				RefColumns: []*schema.Column{ActionPlansColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 		},
@@ -5124,6 +5207,9 @@ var (
 		ControlRisksTable,
 		ControlActionplansTable,
 		ControlTasksTable,
+		ControlObjectiveBlockedGroupsTable,
+		ControlObjectiveEditorsTable,
+		ControlObjectiveViewersTable,
 		ControlObjectiveNarrativesTable,
 		ControlObjectiveTasksTable,
 		DocumentDataFilesTable,
@@ -5144,12 +5230,12 @@ var (
 		IntegrationOauth2tokensTable,
 		IntegrationEventsTable,
 		IntegrationWebhooksTable,
+		InternalPolicyBlockedGroupsTable,
+		InternalPolicyEditorsTable,
 		InternalPolicyControlobjectivesTable,
 		InternalPolicyProceduresTable,
 		InternalPolicyNarrativesTable,
 		InternalPolicyTasksTable,
-		InternalPolicyEditorsTable,
-		InternalPolicyBlockedGroupsTable,
 		InviteEventsTable,
 		OhAuthTooTokenEventsTable,
 		OrgMembershipEventsTable,
@@ -5160,11 +5246,14 @@ var (
 		OrganizationTasksTable,
 		OrganizationSettingFilesTable,
 		PersonalAccessTokenEventsTable,
+		ProcedureBlockedGroupsTable,
+		ProcedureEditorsTable,
 		ProcedureNarrativesTable,
 		ProcedureRisksTable,
 		ProcedureTasksTable,
-		ProcedureEditorsTable,
-		ProcedureBlockedGroupsTable,
+		ProgramBlockedGroupsTable,
+		ProgramEditorsTable,
+		ProgramViewersTable,
 		ProgramControlsTable,
 		ProgramSubcontrolsTable,
 		ProgramControlobjectivesTable,
@@ -5176,13 +5265,10 @@ var (
 		ProgramFilesTable,
 		ProgramNarrativesTable,
 		ProgramActionplansTable,
-		ProgramViewersTable,
-		ProgramEditorsTable,
-		ProgramBlockedGroupsTable,
-		RiskActionplansTable,
-		RiskViewersTable,
-		RiskEditorsTable,
 		RiskBlockedGroupsTable,
+		RiskEditorsTable,
+		RiskViewersTable,
+		RiskActionplansTable,
 		StandardControlobjectivesTable,
 		StandardControlsTable,
 		StandardActionplansTable,
@@ -5214,6 +5300,7 @@ func init() {
 		Table: "control_history",
 	}
 	ControlObjectivesTable.ForeignKeys[0].RefTable = ControlsTable
+	ControlObjectivesTable.ForeignKeys[1].RefTable = OrganizationsTable
 	ControlObjectiveHistoryTable.Annotation = &entsql.Annotation{
 		Table: "control_objective_history",
 	}
@@ -5379,6 +5466,12 @@ func init() {
 	ControlActionplansTable.ForeignKeys[1].RefTable = ActionPlansTable
 	ControlTasksTable.ForeignKeys[0].RefTable = ControlsTable
 	ControlTasksTable.ForeignKeys[1].RefTable = TasksTable
+	ControlObjectiveBlockedGroupsTable.ForeignKeys[0].RefTable = ControlObjectivesTable
+	ControlObjectiveBlockedGroupsTable.ForeignKeys[1].RefTable = GroupsTable
+	ControlObjectiveEditorsTable.ForeignKeys[0].RefTable = ControlObjectivesTable
+	ControlObjectiveEditorsTable.ForeignKeys[1].RefTable = GroupsTable
+	ControlObjectiveViewersTable.ForeignKeys[0].RefTable = ControlObjectivesTable
+	ControlObjectiveViewersTable.ForeignKeys[1].RefTable = GroupsTable
 	ControlObjectiveNarrativesTable.ForeignKeys[0].RefTable = ControlObjectivesTable
 	ControlObjectiveNarrativesTable.ForeignKeys[1].RefTable = NarrativesTable
 	ControlObjectiveTasksTable.ForeignKeys[0].RefTable = ControlObjectivesTable
@@ -5419,6 +5512,10 @@ func init() {
 	IntegrationEventsTable.ForeignKeys[1].RefTable = EventsTable
 	IntegrationWebhooksTable.ForeignKeys[0].RefTable = IntegrationsTable
 	IntegrationWebhooksTable.ForeignKeys[1].RefTable = WebhooksTable
+	InternalPolicyBlockedGroupsTable.ForeignKeys[0].RefTable = InternalPoliciesTable
+	InternalPolicyBlockedGroupsTable.ForeignKeys[1].RefTable = GroupsTable
+	InternalPolicyEditorsTable.ForeignKeys[0].RefTable = InternalPoliciesTable
+	InternalPolicyEditorsTable.ForeignKeys[1].RefTable = GroupsTable
 	InternalPolicyControlobjectivesTable.ForeignKeys[0].RefTable = InternalPoliciesTable
 	InternalPolicyControlobjectivesTable.ForeignKeys[1].RefTable = ControlObjectivesTable
 	InternalPolicyProceduresTable.ForeignKeys[0].RefTable = InternalPoliciesTable
@@ -5427,10 +5524,6 @@ func init() {
 	InternalPolicyNarrativesTable.ForeignKeys[1].RefTable = NarrativesTable
 	InternalPolicyTasksTable.ForeignKeys[0].RefTable = InternalPoliciesTable
 	InternalPolicyTasksTable.ForeignKeys[1].RefTable = TasksTable
-	InternalPolicyEditorsTable.ForeignKeys[0].RefTable = InternalPoliciesTable
-	InternalPolicyEditorsTable.ForeignKeys[1].RefTable = GroupsTable
-	InternalPolicyBlockedGroupsTable.ForeignKeys[0].RefTable = InternalPoliciesTable
-	InternalPolicyBlockedGroupsTable.ForeignKeys[1].RefTable = GroupsTable
 	InviteEventsTable.ForeignKeys[0].RefTable = InvitesTable
 	InviteEventsTable.ForeignKeys[1].RefTable = EventsTable
 	OhAuthTooTokenEventsTable.ForeignKeys[0].RefTable = OhAuthTooTokensTable
@@ -5451,16 +5544,22 @@ func init() {
 	OrganizationSettingFilesTable.ForeignKeys[1].RefTable = FilesTable
 	PersonalAccessTokenEventsTable.ForeignKeys[0].RefTable = PersonalAccessTokensTable
 	PersonalAccessTokenEventsTable.ForeignKeys[1].RefTable = EventsTable
+	ProcedureBlockedGroupsTable.ForeignKeys[0].RefTable = ProceduresTable
+	ProcedureBlockedGroupsTable.ForeignKeys[1].RefTable = GroupsTable
+	ProcedureEditorsTable.ForeignKeys[0].RefTable = ProceduresTable
+	ProcedureEditorsTable.ForeignKeys[1].RefTable = GroupsTable
 	ProcedureNarrativesTable.ForeignKeys[0].RefTable = ProceduresTable
 	ProcedureNarrativesTable.ForeignKeys[1].RefTable = NarrativesTable
 	ProcedureRisksTable.ForeignKeys[0].RefTable = ProceduresTable
 	ProcedureRisksTable.ForeignKeys[1].RefTable = RisksTable
 	ProcedureTasksTable.ForeignKeys[0].RefTable = ProceduresTable
 	ProcedureTasksTable.ForeignKeys[1].RefTable = TasksTable
-	ProcedureEditorsTable.ForeignKeys[0].RefTable = ProceduresTable
-	ProcedureEditorsTable.ForeignKeys[1].RefTable = GroupsTable
-	ProcedureBlockedGroupsTable.ForeignKeys[0].RefTable = ProceduresTable
-	ProcedureBlockedGroupsTable.ForeignKeys[1].RefTable = GroupsTable
+	ProgramBlockedGroupsTable.ForeignKeys[0].RefTable = ProgramsTable
+	ProgramBlockedGroupsTable.ForeignKeys[1].RefTable = GroupsTable
+	ProgramEditorsTable.ForeignKeys[0].RefTable = ProgramsTable
+	ProgramEditorsTable.ForeignKeys[1].RefTable = GroupsTable
+	ProgramViewersTable.ForeignKeys[0].RefTable = ProgramsTable
+	ProgramViewersTable.ForeignKeys[1].RefTable = GroupsTable
 	ProgramControlsTable.ForeignKeys[0].RefTable = ProgramsTable
 	ProgramControlsTable.ForeignKeys[1].RefTable = ControlsTable
 	ProgramSubcontrolsTable.ForeignKeys[0].RefTable = ProgramsTable
@@ -5483,20 +5582,14 @@ func init() {
 	ProgramNarrativesTable.ForeignKeys[1].RefTable = NarrativesTable
 	ProgramActionplansTable.ForeignKeys[0].RefTable = ProgramsTable
 	ProgramActionplansTable.ForeignKeys[1].RefTable = ActionPlansTable
-	ProgramViewersTable.ForeignKeys[0].RefTable = ProgramsTable
-	ProgramViewersTable.ForeignKeys[1].RefTable = GroupsTable
-	ProgramEditorsTable.ForeignKeys[0].RefTable = ProgramsTable
-	ProgramEditorsTable.ForeignKeys[1].RefTable = GroupsTable
-	ProgramBlockedGroupsTable.ForeignKeys[0].RefTable = ProgramsTable
-	ProgramBlockedGroupsTable.ForeignKeys[1].RefTable = GroupsTable
-	RiskActionplansTable.ForeignKeys[0].RefTable = RisksTable
-	RiskActionplansTable.ForeignKeys[1].RefTable = ActionPlansTable
-	RiskViewersTable.ForeignKeys[0].RefTable = RisksTable
-	RiskViewersTable.ForeignKeys[1].RefTable = GroupsTable
-	RiskEditorsTable.ForeignKeys[0].RefTable = RisksTable
-	RiskEditorsTable.ForeignKeys[1].RefTable = GroupsTable
 	RiskBlockedGroupsTable.ForeignKeys[0].RefTable = RisksTable
 	RiskBlockedGroupsTable.ForeignKeys[1].RefTable = GroupsTable
+	RiskEditorsTable.ForeignKeys[0].RefTable = RisksTable
+	RiskEditorsTable.ForeignKeys[1].RefTable = GroupsTable
+	RiskViewersTable.ForeignKeys[0].RefTable = RisksTable
+	RiskViewersTable.ForeignKeys[1].RefTable = GroupsTable
+	RiskActionplansTable.ForeignKeys[0].RefTable = RisksTable
+	RiskActionplansTable.ForeignKeys[1].RefTable = ActionPlansTable
 	StandardControlobjectivesTable.ForeignKeys[0].RefTable = StandardsTable
 	StandardControlobjectivesTable.ForeignKeys[1].RefTable = ControlObjectivesTable
 	StandardControlsTable.ForeignKeys[0].RefTable = StandardsTable

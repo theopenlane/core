@@ -226,6 +226,7 @@ func adminSearchControlObjectives(ctx context.Context, query string) ([]*generat
 				likeQuery := "%" + query + "%"
 				s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
 			},
+			controlobjective.OwnerIDContainsFold(query),              // search by OwnerID
 			controlobjective.NameContainsFold(query),                 // search by Name
 			controlobjective.DescriptionContainsFold(query),          // search by Description
 			controlobjective.StatusContainsFold(query),               // search by Status
@@ -238,7 +239,7 @@ func adminSearchControlObjectives(ctx context.Context, query string) ([]*generat
 			controlobjective.MappedFrameworksContainsFold(query),     // search by MappedFrameworks
 			func(s *sql.Selector) {
 				likeQuery := "%" + query + "%"
-				s.Where(sql.ExprP("(details)::text LIKE $14", likeQuery)) // search by Details
+				s.Where(sql.ExprP("(details)::text LIKE $15", likeQuery)) // search by Details
 			},
 		),
 	).All(ctx)
@@ -998,6 +999,7 @@ func adminSearchRisks(ctx context.Context, query string) ([]*generated.Risk, err
 				likeQuery := "%" + query + "%"
 				s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
 			},
+			risk.OwnerIDContainsFold(query),       // search by OwnerID
 			risk.NameContainsFold(query),          // search by Name
 			risk.DescriptionContainsFold(query),   // search by Description
 			risk.StatusContainsFold(query),        // search by Status
@@ -1007,9 +1009,8 @@ func adminSearchRisks(ctx context.Context, query string) ([]*generated.Risk, err
 			risk.SatisfiesContainsFold(query),     // search by Satisfies
 			func(s *sql.Selector) {
 				likeQuery := "%" + query + "%"
-				s.Where(sql.ExprP("(details)::text LIKE $11", likeQuery)) // search by Details
+				s.Where(sql.ExprP("(details)::text LIKE $12", likeQuery)) // search by Details
 			},
-			risk.OwnerIDContainsFold(query), // search by OwnerID
 		),
 	).All(ctx)
 }

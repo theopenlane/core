@@ -15,6 +15,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
+	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entitlement"
 	"github.com/theopenlane/core/internal/ent/generated/entitlementplan"
@@ -86,6 +87,7 @@ type OrganizationQuery struct {
 	withProcedures                   *ProcedureQuery
 	withInternalpolicies             *InternalPolicyQuery
 	withRisks                        *RiskQuery
+	withControlobjectives            *ControlObjectiveQuery
 	withMembers                      *OrgMembershipQuery
 	loadTotal                        []func(context.Context, []*Organization) error
 	modifiers                        []func(*sql.Selector)
@@ -118,6 +120,7 @@ type OrganizationQuery struct {
 	withNamedProcedures              map[string]*ProcedureQuery
 	withNamedInternalpolicies        map[string]*InternalPolicyQuery
 	withNamedRisks                   map[string]*RiskQuery
+	withNamedControlobjectives       map[string]*ControlObjectiveQuery
 	withNamedMembers                 map[string]*OrgMembershipQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -930,6 +933,31 @@ func (oq *OrganizationQuery) QueryRisks() *RiskQuery {
 	return query
 }
 
+// QueryControlobjectives chains the current query on the "controlobjectives" edge.
+func (oq *OrganizationQuery) QueryControlobjectives() *ControlObjectiveQuery {
+	query := (&ControlObjectiveClient{config: oq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := oq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := oq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(controlobjective.Table, controlobjective.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.ControlobjectivesTable, organization.ControlobjectivesColumn),
+		)
+		schemaConfig := oq.schemaConfig
+		step.To.Schema = schemaConfig.ControlObjective
+		step.Edge.Schema = schemaConfig.ControlObjective
+		fromU = sqlgraph.SetNeighbors(oq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryMembers chains the current query on the "members" edge.
 func (oq *OrganizationQuery) QueryMembers() *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: oq.config}).Query()
@@ -1178,6 +1206,7 @@ func (oq *OrganizationQuery) Clone() *OrganizationQuery {
 		withProcedures:              oq.withProcedures.Clone(),
 		withInternalpolicies:        oq.withInternalpolicies.Clone(),
 		withRisks:                   oq.withRisks.Clone(),
+		withControlobjectives:       oq.withControlobjectives.Clone(),
 		withMembers:                 oq.withMembers.Clone(),
 		// clone intermediate query.
 		sql:       oq.sql.Clone(),
@@ -1527,6 +1556,17 @@ func (oq *OrganizationQuery) WithRisks(opts ...func(*RiskQuery)) *OrganizationQu
 	return oq
 }
 
+// WithControlobjectives tells the query-builder to eager-load the nodes that are connected to
+// the "controlobjectives" edge. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithControlobjectives(opts ...func(*ControlObjectiveQuery)) *OrganizationQuery {
+	query := (&ControlObjectiveClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	oq.withControlobjectives = query
+	return oq
+}
+
 // WithMembers tells the query-builder to eager-load the nodes that are connected to
 // the "members" edge. The optional arguments are used to configure the query builder of the edge.
 func (oq *OrganizationQuery) WithMembers(opts ...func(*OrgMembershipQuery)) *OrganizationQuery {
@@ -1622,7 +1662,7 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = oq.querySpec()
-		loadedTypes = [32]bool{
+		loadedTypes = [33]bool{
 			oq.withParent != nil,
 			oq.withChildren != nil,
 			oq.withGroups != nil,
@@ -1654,6 +1694,7 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			oq.withProcedures != nil,
 			oq.withInternalpolicies != nil,
 			oq.withRisks != nil,
+			oq.withControlobjectives != nil,
 			oq.withMembers != nil,
 		}
 	)
@@ -1905,6 +1946,15 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	if query := oq.withControlobjectives; query != nil {
+		if err := oq.loadControlobjectives(ctx, query, nodes,
+			func(n *Organization) { n.Edges.Controlobjectives = []*ControlObjective{} },
+			func(n *Organization, e *ControlObjective) {
+				n.Edges.Controlobjectives = append(n.Edges.Controlobjectives, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	if query := oq.withMembers; query != nil {
 		if err := oq.loadMembers(ctx, query, nodes,
 			func(n *Organization) { n.Edges.Members = []*OrgMembership{} },
@@ -2112,6 +2162,13 @@ func (oq *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := oq.loadRisks(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedRisks(name) },
 			func(n *Organization, e *Risk) { n.appendNamedRisks(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range oq.withNamedControlobjectives {
+		if err := oq.loadControlobjectives(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedControlobjectives(name) },
+			func(n *Organization, e *ControlObjective) { n.appendNamedControlobjectives(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -3253,6 +3310,37 @@ func (oq *OrganizationQuery) loadRisks(ctx context.Context, query *RiskQuery, no
 	}
 	return nil
 }
+func (oq *OrganizationQuery) loadControlobjectives(ctx context.Context, query *ControlObjectiveQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *ControlObjective)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(controlobjective.FieldOwnerID)
+	}
+	query.Where(predicate.ControlObjective(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.ControlobjectivesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (oq *OrganizationQuery) loadMembers(ctx context.Context, query *OrgMembershipQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *OrgMembership)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Organization)
@@ -3788,6 +3876,20 @@ func (oq *OrganizationQuery) WithNamedRisks(name string, opts ...func(*RiskQuery
 		oq.withNamedRisks = make(map[string]*RiskQuery)
 	}
 	oq.withNamedRisks[name] = query
+	return oq
+}
+
+// WithNamedControlobjectives tells the query-builder to eager-load the nodes that are connected to the "controlobjectives"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (oq *OrganizationQuery) WithNamedControlobjectives(name string, opts ...func(*ControlObjectiveQuery)) *OrganizationQuery {
+	query := (&ControlObjectiveClient{config: oq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if oq.withNamedControlobjectives == nil {
+		oq.withNamedControlobjectives = make(map[string]*ControlObjectiveQuery)
+	}
+	oq.withNamedControlobjectives[name] = query
 	return oq
 }
 

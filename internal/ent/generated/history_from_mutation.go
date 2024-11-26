@@ -896,6 +896,10 @@ func (m *ControlObjectiveMutation) CreateHistoryFromCreate(ctx context.Context) 
 		create = create.SetTags(tags)
 	}
 
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
 	if name, exists := m.Name(); exists {
 		create = create.SetName(name)
 	}
@@ -1018,6 +1022,12 @@ func (m *ControlObjectiveMutation) CreateHistoryFromUpdate(ctx context.Context) 
 			create = create.SetTags(controlobjective.Tags)
 		}
 
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(controlobjective.OwnerID)
+		}
+
 		if name, exists := m.Name(); exists {
 			create = create.SetName(name)
 		} else {
@@ -1124,6 +1134,7 @@ func (m *ControlObjectiveMutation) CreateHistoryFromDelete(ctx context.Context) 
 			SetDeletedBy(controlobjective.DeletedBy).
 			SetMappingID(controlobjective.MappingID).
 			SetTags(controlobjective.Tags).
+			SetOwnerID(controlobjective.OwnerID).
 			SetName(controlobjective.Name).
 			SetDescription(controlobjective.Description).
 			SetStatus(controlobjective.Status).
@@ -6962,6 +6973,10 @@ func (m *RiskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetTags(tags)
 	}
 
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
 	if name, exists := m.Name(); exists {
 		create = create.SetName(name)
 	}
@@ -7000,10 +7015,6 @@ func (m *RiskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if details, exists := m.Details(); exists {
 		create = create.SetDetails(details)
-	}
-
-	if ownerID, exists := m.OwnerID(); exists {
-		create = create.SetOwnerID(ownerID)
 	}
 
 	_, err := create.Save(ctx)
@@ -7084,6 +7095,12 @@ func (m *RiskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetTags(risk.Tags)
 		}
 
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(risk.OwnerID)
+		}
+
 		if name, exists := m.Name(); exists {
 			create = create.SetName(name)
 		} else {
@@ -7144,12 +7161,6 @@ func (m *RiskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDetails(risk.Details)
 		}
 
-		if ownerID, exists := m.OwnerID(); exists {
-			create = create.SetOwnerID(ownerID)
-		} else {
-			create = create.SetOwnerID(risk.OwnerID)
-		}
-
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -7190,6 +7201,7 @@ func (m *RiskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDeletedBy(risk.DeletedBy).
 			SetMappingID(risk.MappingID).
 			SetTags(risk.Tags).
+			SetOwnerID(risk.OwnerID).
 			SetName(risk.Name).
 			SetDescription(risk.Description).
 			SetStatus(risk.Status).
@@ -7200,7 +7212,6 @@ func (m *RiskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetMitigation(risk.Mitigation).
 			SetSatisfies(risk.Satisfies).
 			SetDetails(risk.Details).
-			SetOwnerID(risk.OwnerID).
 			Save(ctx)
 		if err != nil {
 			return err

@@ -25,8 +25,6 @@ func CanCreateObjectsInProgram() privacy.MutationRuleFunc {
 			return privacy.Skipf("no program set on request, skipping")
 		}
 
-		log.Debug().Msg("checking mutation access")
-
 		relation := fgax.CanEdit
 
 		userID, err := auth.GetUserIDFromContext(ctx)
@@ -34,8 +32,8 @@ func CanCreateObjectsInProgram() privacy.MutationRuleFunc {
 			return err
 		}
 
-		log.Info().Str("relation", relation).
-			Strs("program_id", pIDs).
+		log.Debug().Str("relation", relation).
+			Strs("program_ids", pIDs).
 			Msg("checking relationship tuples")
 
 		for _, pID := range pIDs {
@@ -75,12 +73,16 @@ func CanCreateObjectsInProgram() privacy.MutationRuleFunc {
 	})
 }
 
-// getOwnerIDFromEntMutation extracts the object id from a the mutation
+// getProgramIDFromEntMutation extracts the program id from a the mutation
 // by attempting to cast the mutation to a risk mutation
 // if additional object types are needed, they should be added to this function
 func getProgramIDFromEntMutation(m generated.Mutation) ([]string, error) {
 	if o, ok := m.(*generated.RiskMutation); ok {
-		return o.ProgramIDs(), nil
+		return o.ProgramsIDs(), nil
+	}
+
+	if o, ok := m.(*generated.ControlObjectiveMutation); ok {
+		return o.ProgramsIDs(), nil
 	}
 
 	return nil, nil

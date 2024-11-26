@@ -301,6 +301,36 @@ func (ipu *InternalPolicyUpdate) SetOwner(o *Organization) *InternalPolicyUpdate
 	return ipu.SetOwnerID(o.ID)
 }
 
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (ipu *InternalPolicyUpdate) AddBlockedGroupIDs(ids ...string) *InternalPolicyUpdate {
+	ipu.mutation.AddBlockedGroupIDs(ids...)
+	return ipu
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (ipu *InternalPolicyUpdate) AddBlockedGroups(g ...*Group) *InternalPolicyUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ipu.AddBlockedGroupIDs(ids...)
+}
+
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (ipu *InternalPolicyUpdate) AddEditorIDs(ids ...string) *InternalPolicyUpdate {
+	ipu.mutation.AddEditorIDs(ids...)
+	return ipu
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (ipu *InternalPolicyUpdate) AddEditors(g ...*Group) *InternalPolicyUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ipu.AddEditorIDs(ids...)
+}
+
 // AddControlobjectiveIDs adds the "controlobjectives" edge to the ControlObjective entity by IDs.
 func (ipu *InternalPolicyUpdate) AddControlobjectiveIDs(ids ...string) *InternalPolicyUpdate {
 	ipu.mutation.AddControlobjectiveIDs(ids...)
@@ -391,36 +421,6 @@ func (ipu *InternalPolicyUpdate) AddPrograms(p ...*Program) *InternalPolicyUpdat
 	return ipu.AddProgramIDs(ids...)
 }
 
-// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
-func (ipu *InternalPolicyUpdate) AddEditorIDs(ids ...string) *InternalPolicyUpdate {
-	ipu.mutation.AddEditorIDs(ids...)
-	return ipu
-}
-
-// AddEditors adds the "editors" edges to the Group entity.
-func (ipu *InternalPolicyUpdate) AddEditors(g ...*Group) *InternalPolicyUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
-	}
-	return ipu.AddEditorIDs(ids...)
-}
-
-// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
-func (ipu *InternalPolicyUpdate) AddBlockedGroupIDs(ids ...string) *InternalPolicyUpdate {
-	ipu.mutation.AddBlockedGroupIDs(ids...)
-	return ipu
-}
-
-// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
-func (ipu *InternalPolicyUpdate) AddBlockedGroups(g ...*Group) *InternalPolicyUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
-	}
-	return ipu.AddBlockedGroupIDs(ids...)
-}
-
 // Mutation returns the InternalPolicyMutation object of the builder.
 func (ipu *InternalPolicyUpdate) Mutation() *InternalPolicyMutation {
 	return ipu.mutation
@@ -430,6 +430,48 @@ func (ipu *InternalPolicyUpdate) Mutation() *InternalPolicyMutation {
 func (ipu *InternalPolicyUpdate) ClearOwner() *InternalPolicyUpdate {
 	ipu.mutation.ClearOwner()
 	return ipu
+}
+
+// ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
+func (ipu *InternalPolicyUpdate) ClearBlockedGroups() *InternalPolicyUpdate {
+	ipu.mutation.ClearBlockedGroups()
+	return ipu
+}
+
+// RemoveBlockedGroupIDs removes the "blocked_groups" edge to Group entities by IDs.
+func (ipu *InternalPolicyUpdate) RemoveBlockedGroupIDs(ids ...string) *InternalPolicyUpdate {
+	ipu.mutation.RemoveBlockedGroupIDs(ids...)
+	return ipu
+}
+
+// RemoveBlockedGroups removes "blocked_groups" edges to Group entities.
+func (ipu *InternalPolicyUpdate) RemoveBlockedGroups(g ...*Group) *InternalPolicyUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ipu.RemoveBlockedGroupIDs(ids...)
+}
+
+// ClearEditors clears all "editors" edges to the Group entity.
+func (ipu *InternalPolicyUpdate) ClearEditors() *InternalPolicyUpdate {
+	ipu.mutation.ClearEditors()
+	return ipu
+}
+
+// RemoveEditorIDs removes the "editors" edge to Group entities by IDs.
+func (ipu *InternalPolicyUpdate) RemoveEditorIDs(ids ...string) *InternalPolicyUpdate {
+	ipu.mutation.RemoveEditorIDs(ids...)
+	return ipu
+}
+
+// RemoveEditors removes "editors" edges to Group entities.
+func (ipu *InternalPolicyUpdate) RemoveEditors(g ...*Group) *InternalPolicyUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ipu.RemoveEditorIDs(ids...)
 }
 
 // ClearControlobjectives clears all "controlobjectives" edges to the ControlObjective entity.
@@ -556,48 +598,6 @@ func (ipu *InternalPolicyUpdate) RemovePrograms(p ...*Program) *InternalPolicyUp
 		ids[i] = p[i].ID
 	}
 	return ipu.RemoveProgramIDs(ids...)
-}
-
-// ClearEditors clears all "editors" edges to the Group entity.
-func (ipu *InternalPolicyUpdate) ClearEditors() *InternalPolicyUpdate {
-	ipu.mutation.ClearEditors()
-	return ipu
-}
-
-// RemoveEditorIDs removes the "editors" edge to Group entities by IDs.
-func (ipu *InternalPolicyUpdate) RemoveEditorIDs(ids ...string) *InternalPolicyUpdate {
-	ipu.mutation.RemoveEditorIDs(ids...)
-	return ipu
-}
-
-// RemoveEditors removes "editors" edges to Group entities.
-func (ipu *InternalPolicyUpdate) RemoveEditors(g ...*Group) *InternalPolicyUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
-	}
-	return ipu.RemoveEditorIDs(ids...)
-}
-
-// ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
-func (ipu *InternalPolicyUpdate) ClearBlockedGroups() *InternalPolicyUpdate {
-	ipu.mutation.ClearBlockedGroups()
-	return ipu
-}
-
-// RemoveBlockedGroupIDs removes the "blocked_groups" edge to Group entities by IDs.
-func (ipu *InternalPolicyUpdate) RemoveBlockedGroupIDs(ids ...string) *InternalPolicyUpdate {
-	ipu.mutation.RemoveBlockedGroupIDs(ids...)
-	return ipu
-}
-
-// RemoveBlockedGroups removes "blocked_groups" edges to Group entities.
-func (ipu *InternalPolicyUpdate) RemoveBlockedGroups(g ...*Group) *InternalPolicyUpdate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
-	}
-	return ipu.RemoveBlockedGroupIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -787,6 +787,102 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 			},
 		}
 		edge.Schema = ipu.schemaConfig.InternalPolicy
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ipu.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.BlockedGroupsTable,
+			Columns: internalpolicy.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipu.schemaConfig.InternalPolicyBlockedGroups
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ipu.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !ipu.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.BlockedGroupsTable,
+			Columns: internalpolicy.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipu.schemaConfig.InternalPolicyBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ipu.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.BlockedGroupsTable,
+			Columns: internalpolicy.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipu.schemaConfig.InternalPolicyBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ipu.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.EditorsTable,
+			Columns: internalpolicy.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipu.schemaConfig.InternalPolicyEditors
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ipu.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !ipu.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.EditorsTable,
+			Columns: internalpolicy.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipu.schemaConfig.InternalPolicyEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ipu.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.EditorsTable,
+			Columns: internalpolicy.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipu.schemaConfig.InternalPolicyEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1080,102 +1176,6 @@ func (ipu *InternalPolicyUpdate) sqlSave(ctx context.Context) (n int, err error)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if ipu.mutation.EditorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   internalpolicy.EditorsTable,
-			Columns: internalpolicy.EditorsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ipu.schemaConfig.InternalPolicyEditors
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := ipu.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !ipu.mutation.EditorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   internalpolicy.EditorsTable,
-			Columns: internalpolicy.EditorsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ipu.schemaConfig.InternalPolicyEditors
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := ipu.mutation.EditorsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   internalpolicy.EditorsTable,
-			Columns: internalpolicy.EditorsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ipu.schemaConfig.InternalPolicyEditors
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if ipu.mutation.BlockedGroupsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   internalpolicy.BlockedGroupsTable,
-			Columns: internalpolicy.BlockedGroupsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ipu.schemaConfig.InternalPolicyBlockedGroups
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := ipu.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !ipu.mutation.BlockedGroupsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   internalpolicy.BlockedGroupsTable,
-			Columns: internalpolicy.BlockedGroupsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ipu.schemaConfig.InternalPolicyBlockedGroups
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := ipu.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   internalpolicy.BlockedGroupsTable,
-			Columns: internalpolicy.BlockedGroupsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ipu.schemaConfig.InternalPolicyBlockedGroups
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
 	_spec.Node.Schema = ipu.schemaConfig.InternalPolicy
 	ctx = internal.NewSchemaConfigContext(ctx, ipu.schemaConfig)
 	_spec.AddModifiers(ipu.modifiers...)
@@ -1461,6 +1461,36 @@ func (ipuo *InternalPolicyUpdateOne) SetOwner(o *Organization) *InternalPolicyUp
 	return ipuo.SetOwnerID(o.ID)
 }
 
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (ipuo *InternalPolicyUpdateOne) AddBlockedGroupIDs(ids ...string) *InternalPolicyUpdateOne {
+	ipuo.mutation.AddBlockedGroupIDs(ids...)
+	return ipuo
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (ipuo *InternalPolicyUpdateOne) AddBlockedGroups(g ...*Group) *InternalPolicyUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ipuo.AddBlockedGroupIDs(ids...)
+}
+
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (ipuo *InternalPolicyUpdateOne) AddEditorIDs(ids ...string) *InternalPolicyUpdateOne {
+	ipuo.mutation.AddEditorIDs(ids...)
+	return ipuo
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (ipuo *InternalPolicyUpdateOne) AddEditors(g ...*Group) *InternalPolicyUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ipuo.AddEditorIDs(ids...)
+}
+
 // AddControlobjectiveIDs adds the "controlobjectives" edge to the ControlObjective entity by IDs.
 func (ipuo *InternalPolicyUpdateOne) AddControlobjectiveIDs(ids ...string) *InternalPolicyUpdateOne {
 	ipuo.mutation.AddControlobjectiveIDs(ids...)
@@ -1551,36 +1581,6 @@ func (ipuo *InternalPolicyUpdateOne) AddPrograms(p ...*Program) *InternalPolicyU
 	return ipuo.AddProgramIDs(ids...)
 }
 
-// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
-func (ipuo *InternalPolicyUpdateOne) AddEditorIDs(ids ...string) *InternalPolicyUpdateOne {
-	ipuo.mutation.AddEditorIDs(ids...)
-	return ipuo
-}
-
-// AddEditors adds the "editors" edges to the Group entity.
-func (ipuo *InternalPolicyUpdateOne) AddEditors(g ...*Group) *InternalPolicyUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
-	}
-	return ipuo.AddEditorIDs(ids...)
-}
-
-// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
-func (ipuo *InternalPolicyUpdateOne) AddBlockedGroupIDs(ids ...string) *InternalPolicyUpdateOne {
-	ipuo.mutation.AddBlockedGroupIDs(ids...)
-	return ipuo
-}
-
-// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
-func (ipuo *InternalPolicyUpdateOne) AddBlockedGroups(g ...*Group) *InternalPolicyUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
-	}
-	return ipuo.AddBlockedGroupIDs(ids...)
-}
-
 // Mutation returns the InternalPolicyMutation object of the builder.
 func (ipuo *InternalPolicyUpdateOne) Mutation() *InternalPolicyMutation {
 	return ipuo.mutation
@@ -1590,6 +1590,48 @@ func (ipuo *InternalPolicyUpdateOne) Mutation() *InternalPolicyMutation {
 func (ipuo *InternalPolicyUpdateOne) ClearOwner() *InternalPolicyUpdateOne {
 	ipuo.mutation.ClearOwner()
 	return ipuo
+}
+
+// ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
+func (ipuo *InternalPolicyUpdateOne) ClearBlockedGroups() *InternalPolicyUpdateOne {
+	ipuo.mutation.ClearBlockedGroups()
+	return ipuo
+}
+
+// RemoveBlockedGroupIDs removes the "blocked_groups" edge to Group entities by IDs.
+func (ipuo *InternalPolicyUpdateOne) RemoveBlockedGroupIDs(ids ...string) *InternalPolicyUpdateOne {
+	ipuo.mutation.RemoveBlockedGroupIDs(ids...)
+	return ipuo
+}
+
+// RemoveBlockedGroups removes "blocked_groups" edges to Group entities.
+func (ipuo *InternalPolicyUpdateOne) RemoveBlockedGroups(g ...*Group) *InternalPolicyUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ipuo.RemoveBlockedGroupIDs(ids...)
+}
+
+// ClearEditors clears all "editors" edges to the Group entity.
+func (ipuo *InternalPolicyUpdateOne) ClearEditors() *InternalPolicyUpdateOne {
+	ipuo.mutation.ClearEditors()
+	return ipuo
+}
+
+// RemoveEditorIDs removes the "editors" edge to Group entities by IDs.
+func (ipuo *InternalPolicyUpdateOne) RemoveEditorIDs(ids ...string) *InternalPolicyUpdateOne {
+	ipuo.mutation.RemoveEditorIDs(ids...)
+	return ipuo
+}
+
+// RemoveEditors removes "editors" edges to Group entities.
+func (ipuo *InternalPolicyUpdateOne) RemoveEditors(g ...*Group) *InternalPolicyUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ipuo.RemoveEditorIDs(ids...)
 }
 
 // ClearControlobjectives clears all "controlobjectives" edges to the ControlObjective entity.
@@ -1716,48 +1758,6 @@ func (ipuo *InternalPolicyUpdateOne) RemovePrograms(p ...*Program) *InternalPoli
 		ids[i] = p[i].ID
 	}
 	return ipuo.RemoveProgramIDs(ids...)
-}
-
-// ClearEditors clears all "editors" edges to the Group entity.
-func (ipuo *InternalPolicyUpdateOne) ClearEditors() *InternalPolicyUpdateOne {
-	ipuo.mutation.ClearEditors()
-	return ipuo
-}
-
-// RemoveEditorIDs removes the "editors" edge to Group entities by IDs.
-func (ipuo *InternalPolicyUpdateOne) RemoveEditorIDs(ids ...string) *InternalPolicyUpdateOne {
-	ipuo.mutation.RemoveEditorIDs(ids...)
-	return ipuo
-}
-
-// RemoveEditors removes "editors" edges to Group entities.
-func (ipuo *InternalPolicyUpdateOne) RemoveEditors(g ...*Group) *InternalPolicyUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
-	}
-	return ipuo.RemoveEditorIDs(ids...)
-}
-
-// ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
-func (ipuo *InternalPolicyUpdateOne) ClearBlockedGroups() *InternalPolicyUpdateOne {
-	ipuo.mutation.ClearBlockedGroups()
-	return ipuo
-}
-
-// RemoveBlockedGroupIDs removes the "blocked_groups" edge to Group entities by IDs.
-func (ipuo *InternalPolicyUpdateOne) RemoveBlockedGroupIDs(ids ...string) *InternalPolicyUpdateOne {
-	ipuo.mutation.RemoveBlockedGroupIDs(ids...)
-	return ipuo
-}
-
-// RemoveBlockedGroups removes "blocked_groups" edges to Group entities.
-func (ipuo *InternalPolicyUpdateOne) RemoveBlockedGroups(g ...*Group) *InternalPolicyUpdateOne {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
-	}
-	return ipuo.RemoveBlockedGroupIDs(ids...)
 }
 
 // Where appends a list predicates to the InternalPolicyUpdate builder.
@@ -1977,6 +1977,102 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 			},
 		}
 		edge.Schema = ipuo.schemaConfig.InternalPolicy
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ipuo.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.BlockedGroupsTable,
+			Columns: internalpolicy.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipuo.schemaConfig.InternalPolicyBlockedGroups
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ipuo.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !ipuo.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.BlockedGroupsTable,
+			Columns: internalpolicy.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipuo.schemaConfig.InternalPolicyBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ipuo.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.BlockedGroupsTable,
+			Columns: internalpolicy.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipuo.schemaConfig.InternalPolicyBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ipuo.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.EditorsTable,
+			Columns: internalpolicy.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipuo.schemaConfig.InternalPolicyEditors
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ipuo.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !ipuo.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.EditorsTable,
+			Columns: internalpolicy.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipuo.schemaConfig.InternalPolicyEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ipuo.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.EditorsTable,
+			Columns: internalpolicy.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipuo.schemaConfig.InternalPolicyEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2265,102 +2361,6 @@ func (ipuo *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Intern
 			},
 		}
 		edge.Schema = ipuo.schemaConfig.ProgramPolicies
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if ipuo.mutation.EditorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   internalpolicy.EditorsTable,
-			Columns: internalpolicy.EditorsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ipuo.schemaConfig.InternalPolicyEditors
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := ipuo.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !ipuo.mutation.EditorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   internalpolicy.EditorsTable,
-			Columns: internalpolicy.EditorsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ipuo.schemaConfig.InternalPolicyEditors
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := ipuo.mutation.EditorsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   internalpolicy.EditorsTable,
-			Columns: internalpolicy.EditorsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ipuo.schemaConfig.InternalPolicyEditors
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if ipuo.mutation.BlockedGroupsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   internalpolicy.BlockedGroupsTable,
-			Columns: internalpolicy.BlockedGroupsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ipuo.schemaConfig.InternalPolicyBlockedGroups
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := ipuo.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !ipuo.mutation.BlockedGroupsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   internalpolicy.BlockedGroupsTable,
-			Columns: internalpolicy.BlockedGroupsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ipuo.schemaConfig.InternalPolicyBlockedGroups
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := ipuo.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   internalpolicy.BlockedGroupsTable,
-			Columns: internalpolicy.BlockedGroupsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ipuo.schemaConfig.InternalPolicyBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

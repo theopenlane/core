@@ -66,6 +66,10 @@ func filterType(ctx context.Context) string {
 			"updateGroup",
 			"createGroupMembership",
 			"updateGroupMembership",
+			"createProgramMembership",
+			"updateProgramMembership",
+			"createProgram",
+			"updateProgram",
 			"organization",
 		}
 
@@ -80,7 +84,7 @@ func filterType(ctx context.Context) string {
 	}
 
 	switch qCtx.Type {
-	case "OrgMembership", "GroupMembership", "Group":
+	case "OrgMembership", "GroupMembership", "Group", "ProgramMembership", "Program":
 		return "org"
 	case "Organization":
 		return "" // no filter because this is filtered at the org level

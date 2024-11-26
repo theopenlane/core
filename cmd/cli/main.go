@@ -7,6 +7,7 @@ import (
 	// they must all be imported in main
 	_ "github.com/theopenlane/core/cmd/cli/cmd/apitokens"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/contact"
+	_ "github.com/theopenlane/core/cmd/cli/cmd/controlobjective"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/entitlementplan"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/entitlementplanfeatures"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/entitlements"
@@ -43,6 +44,7 @@ import (
 	_ "github.com/theopenlane/core/cmd/cli/cmd/webhook"
 
 	// history commands
+	_ "github.com/theopenlane/core/cmd/cli/cmd/controlobjectivehistory"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/documentdatahistory"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/entitlementhistory"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/entityhistory"

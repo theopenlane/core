@@ -13,7 +13,6 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
@@ -61,9 +60,6 @@ func (Risk) Fields() []ent.Field {
 		field.JSON("details", map[string]interface{}{}).
 			Optional().
 			Comment("json data for the risk document"),
-		field.String("owner_id").
-			NotEmpty().
-			Comment("the ID of the organization owner of the risk"),
 	}
 }
 
@@ -75,19 +71,8 @@ func (Risk) Edges() []ent.Edge {
 		edge.From("procedure", Procedure.Type).
 			Ref("risks"),
 		edge.To("actionplans", ActionPlan.Type),
-		edge.From("owner", Organization.Type).
-			Field("owner_id").
-			Required().
-			Unique(). // risk must be associated to a single organization
-			Ref("risks"),
-		edge.From("program", Program.Type).
+		edge.From("programs", Program.Type).
 			Ref("risks"), // risk can be associated to 1:m programs, this allow permission inheritance from the program(s)
-		edge.To("viewers", Group.Type).
-			Comment("provides view access to the risk to members of the group"),
-		edge.To("editors", Group.Type).
-			Comment("provides edit access to the risk to members of the group"),
-		edge.To("blocked_groups", Group.Type).
-			Comment("groups that are blocked from viewing or editing the risk"),
 	}
 }
 
@@ -102,9 +87,13 @@ func (Risk) Mixin() []ent.Mixin {
 		// this mixin will add the owner_id field using the OrgHook but not organization tuples are created
 		// it will also create program parent tuples for the risk when a program is associated to the risk
 		NewObjectOwnedMixin(ObjectOwnedMixin{
-			FieldNames: []string{"program_id"},
-			HookFuncs:  []HookFunc{orgHookCreateFunc, defaultObjectHookFunc, defaultTupleUpdateFunc},
-		})}
+			FieldNames:            []string{"program_id"},
+			WithOrganizationOwner: true,
+			Ref:                   "risks",
+		}),
+		// add groups permissions with viewer, editor, and blocked groups
+		NewGroupPermissionsMixin(true),
+	}
 }
 
 // Annotations of the Risk
@@ -117,22 +106,6 @@ func (Risk) Annotations() []schema.Annotation {
 			ObjectType:   "risk", // check access to the risk for update/delete
 			IncludeHooks: false,
 		},
-	}
-}
-
-// Hooks of the Risk
-func (Risk) Hooks() []ent.Hook {
-	var hooks []ent.Hook
-
-	hooks = append(hooks, groupReadWriteHooks...)
-
-	return hooks
-}
-
-// Interceptors of the Risk
-func (Risk) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{
-		interceptors.FilterListQuery(),
 	}
 }
 

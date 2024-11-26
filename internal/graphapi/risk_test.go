@@ -101,8 +101,8 @@ func (suite *GraphTestSuite) TestQueryRisk() {
 			assert.Equal(t, tc.queryID, resp.Risk.ID)
 			assert.NotEmpty(t, resp.Risk.Name)
 
-			require.Len(t, resp.Risk.Program, 1)
-			assert.NotEmpty(t, resp.Risk.Program[0].ID)
+			require.Len(t, resp.Risk.Programs, 1)
+			assert.NotEmpty(t, resp.Risk.Programs[0].ID)
 		})
 	}
 }
@@ -307,14 +307,14 @@ func (suite *GraphTestSuite) TestMutationCreateRisk() {
 
 			// ensure the program is set
 			if len(tc.request.ProgramIDs) > 0 {
-				require.NotEmpty(t, resp.CreateRisk.Risk.Program)
-				require.Len(t, resp.CreateRisk.Risk.Program, len(tc.request.ProgramIDs))
+				require.NotEmpty(t, resp.CreateRisk.Risk.Programs)
+				require.Len(t, resp.CreateRisk.Risk.Programs, len(tc.request.ProgramIDs))
 
-				for i, p := range resp.CreateRisk.Risk.Program {
+				for i, p := range resp.CreateRisk.Risk.Programs {
 					assert.Equal(t, tc.request.ProgramIDs[i], p.ID)
 				}
 			} else {
-				assert.Empty(t, resp.CreateRisk.Risk.Program)
+				assert.Empty(t, resp.CreateRisk.Risk.Programs)
 			}
 
 			if tc.request.Description != nil {
@@ -429,37 +429,37 @@ func (suite *GraphTestSuite) TestMutationUpdateRisk() {
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
 		},
-		// {
-		// 	name: "happy path, update multiple fields",
-		// 	request: openlaneclient.UpdateRiskInput{
-		// 		Satisfies:  lo.ToPtr("Updated controls"),
-		// 		Status:     lo.ToPtr("mitigated"),
-		// 		Tags:       []string{"tag1", "tag2"},
-		// 		Mitigation: lo.ToPtr("Updated mitigation"),
-		// 		Impact:     &enums.RiskImpactModerate,
-		// 		Likelihood: &enums.RiskLikelihoodLow,
-		// 	},
-		// 	client: suite.client.apiWithPAT,
-		// 	ctx:    context.Background(),
-		// },
-		// {
-		// 	name: "update not allowed, not permissions in same org",
-		// 	request: openlaneclient.UpdateRiskInput{
-		// 		Likelihood: &enums.RiskLikelihoodLow,
-		// 	},
-		// 	client:      suite.client.api,
-		// 	ctx:         viewOnlyUser.UserCtx,
-		// 	expectedErr: notFoundErrorMsg,
-		// },
-		// {
-		// 	name: "update not allowed, no permissions",
-		// 	request: openlaneclient.UpdateRiskInput{
-		// 		Likelihood: &enums.RiskLikelihoodLow,
-		// 	},
-		// 	client:      suite.client.api,
-		// 	ctx:         testUser2.UserCtx,
-		// 	expectedErr: notFoundErrorMsg,
-		// },
+		{
+			name: "happy path, update multiple fields",
+			request: openlaneclient.UpdateRiskInput{
+				Satisfies:  lo.ToPtr("Updated controls"),
+				Status:     lo.ToPtr("mitigated"),
+				Tags:       []string{"tag1", "tag2"},
+				Mitigation: lo.ToPtr("Updated mitigation"),
+				Impact:     &enums.RiskImpactModerate,
+				Likelihood: &enums.RiskLikelihoodLow,
+			},
+			client: suite.client.apiWithPAT,
+			ctx:    context.Background(),
+		},
+		{
+			name: "update not allowed, not permissions in same org",
+			request: openlaneclient.UpdateRiskInput{
+				Likelihood: &enums.RiskLikelihoodLow,
+			},
+			client:      suite.client.api,
+			ctx:         viewOnlyUser.UserCtx,
+			expectedErr: notFoundErrorMsg,
+		},
+		{
+			name: "update not allowed, no permissions",
+			request: openlaneclient.UpdateRiskInput{
+				Likelihood: &enums.RiskLikelihoodLow,
+			},
+			client:      suite.client.api,
+			ctx:         testUser2.UserCtx,
+			expectedErr: notFoundErrorMsg,
+		},
 	}
 
 	for _, tc := range testCases {

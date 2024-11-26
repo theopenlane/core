@@ -122,6 +122,20 @@ func (cohu *ControlObjectiveHistoryUpdate) ClearTags() *ControlObjectiveHistoryU
 	return cohu
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (cohu *ControlObjectiveHistoryUpdate) SetOwnerID(s string) *ControlObjectiveHistoryUpdate {
+	cohu.mutation.SetOwnerID(s)
+	return cohu
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (cohu *ControlObjectiveHistoryUpdate) SetNillableOwnerID(s *string) *ControlObjectiveHistoryUpdate {
+	if s != nil {
+		cohu.SetOwnerID(*s)
+	}
+	return cohu
+}
+
 // SetName sets the "name" field.
 func (cohu *ControlObjectiveHistoryUpdate) SetName(s string) *ControlObjectiveHistoryUpdate {
 	cohu.mutation.SetName(s)
@@ -335,7 +349,9 @@ func (cohu *ControlObjectiveHistoryUpdate) Mutation() *ControlObjectiveHistoryMu
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (cohu *ControlObjectiveHistoryUpdate) Save(ctx context.Context) (int, error) {
-	cohu.defaults()
+	if err := cohu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, cohu.sqlSave, cohu.mutation, cohu.hooks)
 }
 
@@ -362,11 +378,15 @@ func (cohu *ControlObjectiveHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (cohu *ControlObjectiveHistoryUpdate) defaults() {
+func (cohu *ControlObjectiveHistoryUpdate) defaults() error {
 	if _, ok := cohu.mutation.UpdatedAt(); !ok && !cohu.mutation.UpdatedAtCleared() {
+		if controlobjectivehistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized controlobjectivehistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := controlobjectivehistory.UpdateDefaultUpdatedAt()
 		cohu.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
@@ -427,6 +447,9 @@ func (cohu *ControlObjectiveHistoryUpdate) sqlSave(ctx context.Context) (n int, 
 	}
 	if cohu.mutation.TagsCleared() {
 		_spec.ClearField(controlobjectivehistory.FieldTags, field.TypeJSON)
+	}
+	if value, ok := cohu.mutation.OwnerID(); ok {
+		_spec.SetField(controlobjectivehistory.FieldOwnerID, field.TypeString, value)
 	}
 	if value, ok := cohu.mutation.Name(); ok {
 		_spec.SetField(controlobjectivehistory.FieldName, field.TypeString, value)
@@ -602,6 +625,20 @@ func (cohuo *ControlObjectiveHistoryUpdateOne) AppendTags(s []string) *ControlOb
 // ClearTags clears the value of the "tags" field.
 func (cohuo *ControlObjectiveHistoryUpdateOne) ClearTags() *ControlObjectiveHistoryUpdateOne {
 	cohuo.mutation.ClearTags()
+	return cohuo
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (cohuo *ControlObjectiveHistoryUpdateOne) SetOwnerID(s string) *ControlObjectiveHistoryUpdateOne {
+	cohuo.mutation.SetOwnerID(s)
+	return cohuo
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (cohuo *ControlObjectiveHistoryUpdateOne) SetNillableOwnerID(s *string) *ControlObjectiveHistoryUpdateOne {
+	if s != nil {
+		cohuo.SetOwnerID(*s)
+	}
 	return cohuo
 }
 
@@ -831,7 +868,9 @@ func (cohuo *ControlObjectiveHistoryUpdateOne) Select(field string, fields ...st
 
 // Save executes the query and returns the updated ControlObjectiveHistory entity.
 func (cohuo *ControlObjectiveHistoryUpdateOne) Save(ctx context.Context) (*ControlObjectiveHistory, error) {
-	cohuo.defaults()
+	if err := cohuo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, cohuo.sqlSave, cohuo.mutation, cohuo.hooks)
 }
 
@@ -858,11 +897,15 @@ func (cohuo *ControlObjectiveHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (cohuo *ControlObjectiveHistoryUpdateOne) defaults() {
+func (cohuo *ControlObjectiveHistoryUpdateOne) defaults() error {
 	if _, ok := cohuo.mutation.UpdatedAt(); !ok && !cohuo.mutation.UpdatedAtCleared() {
+		if controlobjectivehistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized controlobjectivehistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := controlobjectivehistory.UpdateDefaultUpdatedAt()
 		cohuo.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
@@ -940,6 +983,9 @@ func (cohuo *ControlObjectiveHistoryUpdateOne) sqlSave(ctx context.Context) (_no
 	}
 	if cohuo.mutation.TagsCleared() {
 		_spec.ClearField(controlobjectivehistory.FieldTags, field.TypeJSON)
+	}
+	if value, ok := cohuo.mutation.OwnerID(); ok {
+		_spec.SetField(controlobjectivehistory.FieldOwnerID, field.TypeString, value)
 	}
 	if value, ok := cohuo.mutation.Name(); ok {
 		_spec.SetField(controlobjectivehistory.FieldName, field.TypeString, value)

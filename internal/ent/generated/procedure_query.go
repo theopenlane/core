@@ -35,25 +35,25 @@ type ProcedureQuery struct {
 	inters                  []Interceptor
 	predicates              []predicate.Procedure
 	withOwner               *OrganizationQuery
+	withBlockedGroups       *GroupQuery
+	withEditors             *GroupQuery
 	withControl             *ControlQuery
 	withInternalpolicy      *InternalPolicyQuery
 	withNarratives          *NarrativeQuery
 	withRisks               *RiskQuery
 	withTasks               *TaskQuery
 	withPrograms            *ProgramQuery
-	withEditors             *GroupQuery
-	withBlockedGroups       *GroupQuery
 	withFKs                 bool
 	loadTotal               []func(context.Context, []*Procedure) error
 	modifiers               []func(*sql.Selector)
+	withNamedBlockedGroups  map[string]*GroupQuery
+	withNamedEditors        map[string]*GroupQuery
 	withNamedControl        map[string]*ControlQuery
 	withNamedInternalpolicy map[string]*InternalPolicyQuery
 	withNamedNarratives     map[string]*NarrativeQuery
 	withNamedRisks          map[string]*RiskQuery
 	withNamedTasks          map[string]*TaskQuery
 	withNamedPrograms       map[string]*ProgramQuery
-	withNamedEditors        map[string]*GroupQuery
-	withNamedBlockedGroups  map[string]*GroupQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -109,6 +109,56 @@ func (pq *ProcedureQuery) QueryOwner() *OrganizationQuery {
 		schemaConfig := pq.schemaConfig
 		step.To.Schema = schemaConfig.Organization
 		step.Edge.Schema = schemaConfig.Procedure
+		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryBlockedGroups chains the current query on the "blocked_groups" edge.
+func (pq *ProcedureQuery) QueryBlockedGroups() *GroupQuery {
+	query := (&GroupClient{config: pq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := pq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(procedure.Table, procedure.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, procedure.BlockedGroupsTable, procedure.BlockedGroupsPrimaryKey...),
+		)
+		schemaConfig := pq.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.ProcedureBlockedGroups
+		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEditors chains the current query on the "editors" edge.
+func (pq *ProcedureQuery) QueryEditors() *GroupQuery {
+	query := (&GroupClient{config: pq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := pq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(procedure.Table, procedure.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, procedure.EditorsTable, procedure.EditorsPrimaryKey...),
+		)
+		schemaConfig := pq.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.ProcedureEditors
 		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -259,56 +309,6 @@ func (pq *ProcedureQuery) QueryPrograms() *ProgramQuery {
 		schemaConfig := pq.schemaConfig
 		step.To.Schema = schemaConfig.Program
 		step.Edge.Schema = schemaConfig.ProgramProcedures
-		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryEditors chains the current query on the "editors" edge.
-func (pq *ProcedureQuery) QueryEditors() *GroupQuery {
-	query := (&GroupClient{config: pq.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := pq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := pq.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(procedure.Table, procedure.FieldID, selector),
-			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, procedure.EditorsTable, procedure.EditorsPrimaryKey...),
-		)
-		schemaConfig := pq.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.ProcedureEditors
-		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryBlockedGroups chains the current query on the "blocked_groups" edge.
-func (pq *ProcedureQuery) QueryBlockedGroups() *GroupQuery {
-	query := (&GroupClient{config: pq.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := pq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := pq.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(procedure.Table, procedure.FieldID, selector),
-			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, procedure.BlockedGroupsTable, procedure.BlockedGroupsPrimaryKey...),
-		)
-		schemaConfig := pq.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.ProcedureBlockedGroups
 		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -508,14 +508,14 @@ func (pq *ProcedureQuery) Clone() *ProcedureQuery {
 		inters:             append([]Interceptor{}, pq.inters...),
 		predicates:         append([]predicate.Procedure{}, pq.predicates...),
 		withOwner:          pq.withOwner.Clone(),
+		withBlockedGroups:  pq.withBlockedGroups.Clone(),
+		withEditors:        pq.withEditors.Clone(),
 		withControl:        pq.withControl.Clone(),
 		withInternalpolicy: pq.withInternalpolicy.Clone(),
 		withNarratives:     pq.withNarratives.Clone(),
 		withRisks:          pq.withRisks.Clone(),
 		withTasks:          pq.withTasks.Clone(),
 		withPrograms:       pq.withPrograms.Clone(),
-		withEditors:        pq.withEditors.Clone(),
-		withBlockedGroups:  pq.withBlockedGroups.Clone(),
 		// clone intermediate query.
 		sql:       pq.sql.Clone(),
 		path:      pq.path,
@@ -531,6 +531,28 @@ func (pq *ProcedureQuery) WithOwner(opts ...func(*OrganizationQuery)) *Procedure
 		opt(query)
 	}
 	pq.withOwner = query
+	return pq
+}
+
+// WithBlockedGroups tells the query-builder to eager-load the nodes that are connected to
+// the "blocked_groups" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *ProcedureQuery) WithBlockedGroups(opts ...func(*GroupQuery)) *ProcedureQuery {
+	query := (&GroupClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	pq.withBlockedGroups = query
+	return pq
+}
+
+// WithEditors tells the query-builder to eager-load the nodes that are connected to
+// the "editors" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *ProcedureQuery) WithEditors(opts ...func(*GroupQuery)) *ProcedureQuery {
+	query := (&GroupClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	pq.withEditors = query
 	return pq
 }
 
@@ -597,28 +619,6 @@ func (pq *ProcedureQuery) WithPrograms(opts ...func(*ProgramQuery)) *ProcedureQu
 		opt(query)
 	}
 	pq.withPrograms = query
-	return pq
-}
-
-// WithEditors tells the query-builder to eager-load the nodes that are connected to
-// the "editors" edge. The optional arguments are used to configure the query builder of the edge.
-func (pq *ProcedureQuery) WithEditors(opts ...func(*GroupQuery)) *ProcedureQuery {
-	query := (&GroupClient{config: pq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	pq.withEditors = query
-	return pq
-}
-
-// WithBlockedGroups tells the query-builder to eager-load the nodes that are connected to
-// the "blocked_groups" edge. The optional arguments are used to configure the query builder of the edge.
-func (pq *ProcedureQuery) WithBlockedGroups(opts ...func(*GroupQuery)) *ProcedureQuery {
-	query := (&GroupClient{config: pq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	pq.withBlockedGroups = query
 	return pq
 }
 
@@ -709,14 +709,14 @@ func (pq *ProcedureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pr
 		_spec       = pq.querySpec()
 		loadedTypes = [9]bool{
 			pq.withOwner != nil,
+			pq.withBlockedGroups != nil,
+			pq.withEditors != nil,
 			pq.withControl != nil,
 			pq.withInternalpolicy != nil,
 			pq.withNarratives != nil,
 			pq.withRisks != nil,
 			pq.withTasks != nil,
 			pq.withPrograms != nil,
-			pq.withEditors != nil,
-			pq.withBlockedGroups != nil,
 		}
 	)
 	if withFKs {
@@ -748,6 +748,20 @@ func (pq *ProcedureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pr
 	if query := pq.withOwner; query != nil {
 		if err := pq.loadOwner(ctx, query, nodes, nil,
 			func(n *Procedure, e *Organization) { n.Edges.Owner = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := pq.withBlockedGroups; query != nil {
+		if err := pq.loadBlockedGroups(ctx, query, nodes,
+			func(n *Procedure) { n.Edges.BlockedGroups = []*Group{} },
+			func(n *Procedure, e *Group) { n.Edges.BlockedGroups = append(n.Edges.BlockedGroups, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := pq.withEditors; query != nil {
+		if err := pq.loadEditors(ctx, query, nodes,
+			func(n *Procedure) { n.Edges.Editors = []*Group{} },
+			func(n *Procedure, e *Group) { n.Edges.Editors = append(n.Edges.Editors, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -793,17 +807,17 @@ func (pq *ProcedureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pr
 			return nil, err
 		}
 	}
-	if query := pq.withEditors; query != nil {
-		if err := pq.loadEditors(ctx, query, nodes,
-			func(n *Procedure) { n.Edges.Editors = []*Group{} },
-			func(n *Procedure, e *Group) { n.Edges.Editors = append(n.Edges.Editors, e) }); err != nil {
+	for name, query := range pq.withNamedBlockedGroups {
+		if err := pq.loadBlockedGroups(ctx, query, nodes,
+			func(n *Procedure) { n.appendNamedBlockedGroups(name) },
+			func(n *Procedure, e *Group) { n.appendNamedBlockedGroups(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := pq.withBlockedGroups; query != nil {
-		if err := pq.loadBlockedGroups(ctx, query, nodes,
-			func(n *Procedure) { n.Edges.BlockedGroups = []*Group{} },
-			func(n *Procedure, e *Group) { n.Edges.BlockedGroups = append(n.Edges.BlockedGroups, e) }); err != nil {
+	for name, query := range pq.withNamedEditors {
+		if err := pq.loadEditors(ctx, query, nodes,
+			func(n *Procedure) { n.appendNamedEditors(name) },
+			func(n *Procedure, e *Group) { n.appendNamedEditors(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -849,20 +863,6 @@ func (pq *ProcedureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pr
 			return nil, err
 		}
 	}
-	for name, query := range pq.withNamedEditors {
-		if err := pq.loadEditors(ctx, query, nodes,
-			func(n *Procedure) { n.appendNamedEditors(name) },
-			func(n *Procedure, e *Group) { n.appendNamedEditors(name, e) }); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range pq.withNamedBlockedGroups {
-		if err := pq.loadBlockedGroups(ctx, query, nodes,
-			func(n *Procedure) { n.appendNamedBlockedGroups(name) },
-			func(n *Procedure, e *Group) { n.appendNamedBlockedGroups(name, e) }); err != nil {
-			return nil, err
-		}
-	}
 	for i := range pq.loadTotal {
 		if err := pq.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
@@ -896,6 +896,130 @@ func (pq *ProcedureQuery) loadOwner(ctx context.Context, query *OrganizationQuer
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (pq *ProcedureQuery) loadBlockedGroups(ctx context.Context, query *GroupQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *Group)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Procedure)
+	nids := make(map[string]map[*Procedure]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(procedure.BlockedGroupsTable)
+		joinT.Schema(pq.schemaConfig.ProcedureBlockedGroups)
+		s.Join(joinT).On(s.C(group.FieldID), joinT.C(procedure.BlockedGroupsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(procedure.BlockedGroupsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(procedure.BlockedGroupsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Procedure]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Group](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "blocked_groups" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (pq *ProcedureQuery) loadEditors(ctx context.Context, query *GroupQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *Group)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Procedure)
+	nids := make(map[string]map[*Procedure]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(procedure.EditorsTable)
+		joinT.Schema(pq.schemaConfig.ProcedureEditors)
+		s.Join(joinT).On(s.C(group.FieldID), joinT.C(procedure.EditorsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(procedure.EditorsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(procedure.EditorsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Procedure]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Group](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "editors" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
 		}
 	}
 	return nil
@@ -1272,130 +1396,6 @@ func (pq *ProcedureQuery) loadPrograms(ctx context.Context, query *ProgramQuery,
 	}
 	return nil
 }
-func (pq *ProcedureQuery) loadEditors(ctx context.Context, query *GroupQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *Group)) error {
-	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[string]*Procedure)
-	nids := make(map[string]map[*Procedure]struct{})
-	for i, node := range nodes {
-		edgeIDs[i] = node.ID
-		byID[node.ID] = node
-		if init != nil {
-			init(node)
-		}
-	}
-	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(procedure.EditorsTable)
-		joinT.Schema(pq.schemaConfig.ProcedureEditors)
-		s.Join(joinT).On(s.C(group.FieldID), joinT.C(procedure.EditorsPrimaryKey[1]))
-		s.Where(sql.InValues(joinT.C(procedure.EditorsPrimaryKey[0]), edgeIDs...))
-		columns := s.SelectedColumns()
-		s.Select(joinT.C(procedure.EditorsPrimaryKey[0]))
-		s.AppendSelect(columns...)
-		s.SetDistinct(false)
-	})
-	if err := query.prepareQuery(ctx); err != nil {
-		return err
-	}
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
-			assign := spec.Assign
-			values := spec.ScanValues
-			spec.ScanValues = func(columns []string) ([]any, error) {
-				values, err := values(columns[1:])
-				if err != nil {
-					return nil, err
-				}
-				return append([]any{new(sql.NullString)}, values...), nil
-			}
-			spec.Assign = func(columns []string, values []any) error {
-				outValue := values[0].(*sql.NullString).String
-				inValue := values[1].(*sql.NullString).String
-				if nids[inValue] == nil {
-					nids[inValue] = map[*Procedure]struct{}{byID[outValue]: {}}
-					return assign(columns[1:], values[1:])
-				}
-				nids[inValue][byID[outValue]] = struct{}{}
-				return nil
-			}
-		})
-	})
-	neighbors, err := withInterceptors[[]*Group](ctx, query, qr, query.inters)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		nodes, ok := nids[n.ID]
-		if !ok {
-			return fmt.Errorf(`unexpected "editors" node returned %v`, n.ID)
-		}
-		for kn := range nodes {
-			assign(kn, n)
-		}
-	}
-	return nil
-}
-func (pq *ProcedureQuery) loadBlockedGroups(ctx context.Context, query *GroupQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *Group)) error {
-	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[string]*Procedure)
-	nids := make(map[string]map[*Procedure]struct{})
-	for i, node := range nodes {
-		edgeIDs[i] = node.ID
-		byID[node.ID] = node
-		if init != nil {
-			init(node)
-		}
-	}
-	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(procedure.BlockedGroupsTable)
-		joinT.Schema(pq.schemaConfig.ProcedureBlockedGroups)
-		s.Join(joinT).On(s.C(group.FieldID), joinT.C(procedure.BlockedGroupsPrimaryKey[1]))
-		s.Where(sql.InValues(joinT.C(procedure.BlockedGroupsPrimaryKey[0]), edgeIDs...))
-		columns := s.SelectedColumns()
-		s.Select(joinT.C(procedure.BlockedGroupsPrimaryKey[0]))
-		s.AppendSelect(columns...)
-		s.SetDistinct(false)
-	})
-	if err := query.prepareQuery(ctx); err != nil {
-		return err
-	}
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
-			assign := spec.Assign
-			values := spec.ScanValues
-			spec.ScanValues = func(columns []string) ([]any, error) {
-				values, err := values(columns[1:])
-				if err != nil {
-					return nil, err
-				}
-				return append([]any{new(sql.NullString)}, values...), nil
-			}
-			spec.Assign = func(columns []string, values []any) error {
-				outValue := values[0].(*sql.NullString).String
-				inValue := values[1].(*sql.NullString).String
-				if nids[inValue] == nil {
-					nids[inValue] = map[*Procedure]struct{}{byID[outValue]: {}}
-					return assign(columns[1:], values[1:])
-				}
-				nids[inValue][byID[outValue]] = struct{}{}
-				return nil
-			}
-		})
-	})
-	neighbors, err := withInterceptors[[]*Group](ctx, query, qr, query.inters)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		nodes, ok := nids[n.ID]
-		if !ok {
-			return fmt.Errorf(`unexpected "blocked_groups" node returned %v`, n.ID)
-		}
-		for kn := range nodes {
-			assign(kn, n)
-		}
-	}
-	return nil
-}
 
 func (pq *ProcedureQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := pq.querySpec()
@@ -1498,6 +1498,34 @@ func (pq *ProcedureQuery) Modify(modifiers ...func(s *sql.Selector)) *ProcedureS
 	return pq.Select()
 }
 
+// WithNamedBlockedGroups tells the query-builder to eager-load the nodes that are connected to the "blocked_groups"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (pq *ProcedureQuery) WithNamedBlockedGroups(name string, opts ...func(*GroupQuery)) *ProcedureQuery {
+	query := (&GroupClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if pq.withNamedBlockedGroups == nil {
+		pq.withNamedBlockedGroups = make(map[string]*GroupQuery)
+	}
+	pq.withNamedBlockedGroups[name] = query
+	return pq
+}
+
+// WithNamedEditors tells the query-builder to eager-load the nodes that are connected to the "editors"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (pq *ProcedureQuery) WithNamedEditors(name string, opts ...func(*GroupQuery)) *ProcedureQuery {
+	query := (&GroupClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if pq.withNamedEditors == nil {
+		pq.withNamedEditors = make(map[string]*GroupQuery)
+	}
+	pq.withNamedEditors[name] = query
+	return pq
+}
+
 // WithNamedControl tells the query-builder to eager-load the nodes that are connected to the "control"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
 func (pq *ProcedureQuery) WithNamedControl(name string, opts ...func(*ControlQuery)) *ProcedureQuery {
@@ -1579,34 +1607,6 @@ func (pq *ProcedureQuery) WithNamedPrograms(name string, opts ...func(*ProgramQu
 		pq.withNamedPrograms = make(map[string]*ProgramQuery)
 	}
 	pq.withNamedPrograms[name] = query
-	return pq
-}
-
-// WithNamedEditors tells the query-builder to eager-load the nodes that are connected to the "editors"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (pq *ProcedureQuery) WithNamedEditors(name string, opts ...func(*GroupQuery)) *ProcedureQuery {
-	query := (&GroupClient{config: pq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if pq.withNamedEditors == nil {
-		pq.withNamedEditors = make(map[string]*GroupQuery)
-	}
-	pq.withNamedEditors[name] = query
-	return pq
-}
-
-// WithNamedBlockedGroups tells the query-builder to eager-load the nodes that are connected to the "blocked_groups"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (pq *ProcedureQuery) WithNamedBlockedGroups(name string, opts ...func(*GroupQuery)) *ProcedureQuery {
-	query := (&GroupClient{config: pq.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if pq.withNamedBlockedGroups == nil {
-		pq.withNamedBlockedGroups = make(map[string]*GroupQuery)
-	}
-	pq.withNamedBlockedGroups[name] = query
 	return pq
 }
 

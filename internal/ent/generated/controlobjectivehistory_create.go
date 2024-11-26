@@ -159,6 +159,12 @@ func (cohc *ControlObjectiveHistoryCreate) SetTags(s []string) *ControlObjective
 	return cohc
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (cohc *ControlObjectiveHistoryCreate) SetOwnerID(s string) *ControlObjectiveHistoryCreate {
+	cohc.mutation.SetOwnerID(s)
+	return cohc
+}
+
 // SetName sets the "name" field.
 func (cohc *ControlObjectiveHistoryCreate) SetName(s string) *ControlObjectiveHistoryCreate {
 	cohc.mutation.SetName(s)
@@ -318,7 +324,9 @@ func (cohc *ControlObjectiveHistoryCreate) Mutation() *ControlObjectiveHistoryMu
 
 // Save creates the ControlObjectiveHistory in the database.
 func (cohc *ControlObjectiveHistoryCreate) Save(ctx context.Context) (*ControlObjectiveHistory, error) {
-	cohc.defaults()
+	if err := cohc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, cohc.sqlSave, cohc.mutation, cohc.hooks)
 }
 
@@ -345,20 +353,32 @@ func (cohc *ControlObjectiveHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (cohc *ControlObjectiveHistoryCreate) defaults() {
+func (cohc *ControlObjectiveHistoryCreate) defaults() error {
 	if _, ok := cohc.mutation.HistoryTime(); !ok {
+		if controlobjectivehistory.DefaultHistoryTime == nil {
+			return fmt.Errorf("generated: uninitialized controlobjectivehistory.DefaultHistoryTime (forgotten import generated/runtime?)")
+		}
 		v := controlobjectivehistory.DefaultHistoryTime()
 		cohc.mutation.SetHistoryTime(v)
 	}
 	if _, ok := cohc.mutation.CreatedAt(); !ok {
+		if controlobjectivehistory.DefaultCreatedAt == nil {
+			return fmt.Errorf("generated: uninitialized controlobjectivehistory.DefaultCreatedAt (forgotten import generated/runtime?)")
+		}
 		v := controlobjectivehistory.DefaultCreatedAt()
 		cohc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := cohc.mutation.UpdatedAt(); !ok {
+		if controlobjectivehistory.DefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized controlobjectivehistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := controlobjectivehistory.DefaultUpdatedAt()
 		cohc.mutation.SetUpdatedAt(v)
 	}
 	if _, ok := cohc.mutation.MappingID(); !ok {
+		if controlobjectivehistory.DefaultMappingID == nil {
+			return fmt.Errorf("generated: uninitialized controlobjectivehistory.DefaultMappingID (forgotten import generated/runtime?)")
+		}
 		v := controlobjectivehistory.DefaultMappingID()
 		cohc.mutation.SetMappingID(v)
 	}
@@ -367,9 +387,13 @@ func (cohc *ControlObjectiveHistoryCreate) defaults() {
 		cohc.mutation.SetTags(v)
 	}
 	if _, ok := cohc.mutation.ID(); !ok {
+		if controlobjectivehistory.DefaultID == nil {
+			return fmt.Errorf("generated: uninitialized controlobjectivehistory.DefaultID (forgotten import generated/runtime?)")
+		}
 		v := controlobjectivehistory.DefaultID()
 		cohc.mutation.SetID(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -387,6 +411,9 @@ func (cohc *ControlObjectiveHistoryCreate) check() error {
 	}
 	if _, ok := cohc.mutation.MappingID(); !ok {
 		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "ControlObjectiveHistory.mapping_id"`)}
+	}
+	if _, ok := cohc.mutation.OwnerID(); !ok {
+		return &ValidationError{Name: "owner_id", err: errors.New(`generated: missing required field "ControlObjectiveHistory.owner_id"`)}
 	}
 	if _, ok := cohc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "ControlObjectiveHistory.name"`)}
@@ -470,6 +497,10 @@ func (cohc *ControlObjectiveHistoryCreate) createSpec() (*ControlObjectiveHistor
 	if value, ok := cohc.mutation.Tags(); ok {
 		_spec.SetField(controlobjectivehistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
+	}
+	if value, ok := cohc.mutation.OwnerID(); ok {
+		_spec.SetField(controlobjectivehistory.FieldOwnerID, field.TypeString, value)
+		_node.OwnerID = value
 	}
 	if value, ok := cohc.mutation.Name(); ok {
 		_spec.SetField(controlobjectivehistory.FieldName, field.TypeString, value)

@@ -62,6 +62,7 @@ query AdminSearch($query: String!) {
           deletedBy
           id
           tags
+          ownerID
           name
           description
           status
@@ -342,6 +343,7 @@ query AdminSearch($query: String!) {
           deletedBy
           id
           tags
+          ownerID
           name
           description
           status
@@ -350,7 +352,6 @@ query AdminSearch($query: String!) {
           mitigation
           satisfies
           details
-          ownerID
         }
       }
       ... on StandardSearchResult {

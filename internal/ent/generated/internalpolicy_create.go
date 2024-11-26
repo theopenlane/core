@@ -261,6 +261,36 @@ func (ipc *InternalPolicyCreate) SetOwner(o *Organization) *InternalPolicyCreate
 	return ipc.SetOwnerID(o.ID)
 }
 
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (ipc *InternalPolicyCreate) AddBlockedGroupIDs(ids ...string) *InternalPolicyCreate {
+	ipc.mutation.AddBlockedGroupIDs(ids...)
+	return ipc
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (ipc *InternalPolicyCreate) AddBlockedGroups(g ...*Group) *InternalPolicyCreate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ipc.AddBlockedGroupIDs(ids...)
+}
+
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (ipc *InternalPolicyCreate) AddEditorIDs(ids ...string) *InternalPolicyCreate {
+	ipc.mutation.AddEditorIDs(ids...)
+	return ipc
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (ipc *InternalPolicyCreate) AddEditors(g ...*Group) *InternalPolicyCreate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return ipc.AddEditorIDs(ids...)
+}
+
 // AddControlobjectiveIDs adds the "controlobjectives" edge to the ControlObjective entity by IDs.
 func (ipc *InternalPolicyCreate) AddControlobjectiveIDs(ids ...string) *InternalPolicyCreate {
 	ipc.mutation.AddControlobjectiveIDs(ids...)
@@ -349,36 +379,6 @@ func (ipc *InternalPolicyCreate) AddPrograms(p ...*Program) *InternalPolicyCreat
 		ids[i] = p[i].ID
 	}
 	return ipc.AddProgramIDs(ids...)
-}
-
-// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
-func (ipc *InternalPolicyCreate) AddEditorIDs(ids ...string) *InternalPolicyCreate {
-	ipc.mutation.AddEditorIDs(ids...)
-	return ipc
-}
-
-// AddEditors adds the "editors" edges to the Group entity.
-func (ipc *InternalPolicyCreate) AddEditors(g ...*Group) *InternalPolicyCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
-	}
-	return ipc.AddEditorIDs(ids...)
-}
-
-// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
-func (ipc *InternalPolicyCreate) AddBlockedGroupIDs(ids ...string) *InternalPolicyCreate {
-	ipc.mutation.AddBlockedGroupIDs(ids...)
-	return ipc
-}
-
-// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
-func (ipc *InternalPolicyCreate) AddBlockedGroups(g ...*Group) *InternalPolicyCreate {
-	ids := make([]string, len(g))
-	for i := range g {
-		ids[i] = g[i].ID
-	}
-	return ipc.AddBlockedGroupIDs(ids...)
 }
 
 // Mutation returns the InternalPolicyMutation object of the builder.
@@ -589,6 +589,40 @@ func (ipc *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.Create
 		_node.OwnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := ipc.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.BlockedGroupsTable,
+			Columns: internalpolicy.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipc.schemaConfig.InternalPolicyBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ipc.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   internalpolicy.EditorsTable,
+			Columns: internalpolicy.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ipc.schemaConfig.InternalPolicyEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := ipc.mutation.ControlobjectivesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -686,40 +720,6 @@ func (ipc *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.Create
 			},
 		}
 		edge.Schema = ipc.schemaConfig.ProgramPolicies
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := ipc.mutation.EditorsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   internalpolicy.EditorsTable,
-			Columns: internalpolicy.EditorsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ipc.schemaConfig.InternalPolicyEditors
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := ipc.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   internalpolicy.BlockedGroupsTable,
-			Columns: internalpolicy.BlockedGroupsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = ipc.schemaConfig.InternalPolicyBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
