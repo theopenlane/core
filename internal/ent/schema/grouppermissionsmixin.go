@@ -35,7 +35,7 @@ func NewGroupPermissionsMixin(viewPermissions bool) GroupPermissionsMixin {
 	}
 }
 
-// Fields of the ObjectOwnedMixin
+// Edges of the GroupPermissionsMixin
 func (g GroupPermissionsMixin) Edges() []ent.Edge {
 	blockEdge := edge.To("blocked_groups", Group.Type).
 		Comment("groups that are blocked from viewing or editing the risk")
@@ -56,6 +56,7 @@ func (g GroupPermissionsMixin) Edges() []ent.Edge {
 	return edges
 }
 
+// Hooks of the GroupPermissionsMixin
 func (g GroupPermissionsMixin) Hooks() []ent.Hook {
 	var hooks []ent.Hook
 

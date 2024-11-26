@@ -20,7 +20,6 @@ var getCmd = &cobra.Command{
 func init() {
 	command.AddCommand(getCmd)
 	getCmd.Flags().StringP("id", "i", "", "controlObjective id to query")
-
 }
 
 // get an existing controlObjective in the platform
