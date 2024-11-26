@@ -2106,6 +2106,9 @@ func (rh *RiskHistory) changes(new *RiskHistory) []Change {
 	if !reflect.DeepEqual(rh.Details, new.Details) {
 		changes = append(changes, NewChange(riskhistory.FieldDetails, rh.Details, new.Details))
 	}
+	if !reflect.DeepEqual(rh.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(riskhistory.FieldOwnerID, rh.OwnerID, new.OwnerID))
+	}
 	return changes
 }
 

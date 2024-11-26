@@ -237,9 +237,9 @@ func getAddedParentIDsFromEntMutation(ctx context.Context, m ent.Mutation, paren
 		// check if the edge is the parent field or the parent field pluralized
 		if e == parentEdge || e == parentEdge+"s" {
 			// we need to parse the graphql input to get the ids
-			field := goUpper.ToGo(parentField) + "s"
+			field := goUpper.ToGo(parentField)
 			if m.Op() != ent.OpCreate {
-				field = "Add" + goUpper.ToGo(parentField) + "s"
+				field = "Add" + field
 			}
 
 			return parseGraphqlInputForEdgeIDs(ctx, field)
@@ -263,9 +263,9 @@ func getRemovedParentIDsFromEntMutation(ctx context.Context, m ent.Mutation, par
 		parentEdge := strings.ReplaceAll(parentField, "_id", "")
 		if e == parentEdge || e == parentEdge+"s" {
 			// we need to parse the graphql input to get the ids
-			field := goUpper.ToGo(parentField) + "s"
+			field := goUpper.ToGo(parentField)
 			if m.Op() != ent.OpCreate {
-				field = "Remove" + goUpper.ToGo(parentField) + "s"
+				field = "Remove" + field
 			}
 
 			return parseGraphqlInputForEdgeIDs(ctx, field)
@@ -278,6 +278,10 @@ func getRemovedParentIDsFromEntMutation(ctx context.Context, m ent.Mutation, par
 // parseGraphqlInputForEdgeIDs parses the graphql input to get the ids for the parent field
 func parseGraphqlInputForEdgeIDs(ctx context.Context, parentField string) ([]string, error) {
 	fCtx := graphql.GetFieldContext(ctx)
+
+	if fCtx == nil || fCtx.Args == nil {
+		return nil, nil
+	}
 
 	// check if the input is set
 	input, ok := fCtx.Args["input"]
@@ -297,7 +301,17 @@ func parseGraphqlInputForEdgeIDs(ctx context.Context, parentField string) ([]str
 	}
 
 	// check for the edge
-	out := v[parentField]
+	out, ok := v[parentField+"s"] // plural first
+	if !ok {
+		out, ok = v[parentField] // check for singular
+		if !ok {
+			return nil, nil
+		} else {
+			if strOut, ok := out.(string); ok {
+				return []string{strOut}, nil
+			}
+		}
+	}
 
 	tmp, err = json.Marshal(out)
 	if err != nil {

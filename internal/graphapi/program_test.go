@@ -408,7 +408,7 @@ func (suite *GraphTestSuite) TestMutationUpdateProgram() {
 	// add add user to the viewer group
 	(&GroupMemberBuilder{client: suite.client, UserID: viewOnlyUser.ID, GroupID: viewerGroup.ID}).MustNew(testUser1.UserCtx, t)
 
-	// ensure the user doesnt currently have access to the program
+	// ensure the user does not currently have access to the program
 	res, err := suite.client.api.GetProgramByID(viewOnlyUser.UserCtx, program.ID)
 	require.Error(t, err)
 	require.Nil(t, res)

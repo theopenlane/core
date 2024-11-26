@@ -30,6 +30,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
+	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
@@ -544,6 +545,13 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 	if exists, err := FromContext(ctx).InternalPolicy.Query().Where((internalpolicy.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if internalpolicyCount, err := FromContext(ctx).InternalPolicy.Delete().Where(internalpolicy.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			log.Debug().Err(err).Int("count", internalpolicyCount).Msg("deleting internalpolicy")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).Risk.Query().Where((risk.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if riskCount, err := FromContext(ctx).Risk.Delete().Where(risk.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", riskCount).Msg("deleting risk")
 			return err
 		}
 	}

@@ -38,7 +38,7 @@ import (
 // 	Name string
 // }
 
-// // MustNew OBJECT builder is used to create, without authz checks, OBJECTTs in the database
+// // MustNew OBJECT builder is used to create, without authz checks, OBJECTs in the database
 // func (e *OBJECTBuilder) MustNew(ctx context.Context, t *testing.T) *ent.OBJECT {
 // 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
@@ -126,7 +126,7 @@ func (suite *GraphTestSuite) TestQueryOBJECT() {
 	}
 }
 
-func (suite *GraphTestSuite) TestQueryOBJECTTs() {
+func (suite *GraphTestSuite) TestQueryOBJECTs() {
 	t := suite.T()
 
 	// create multiple objects to be queried using testUser1
@@ -164,7 +164,7 @@ func (suite *GraphTestSuite) TestQueryOBJECTTs() {
 			expectedResults: 2,
 		},
 		{
-			name:            "another user, no OBJECTTs should be returned",
+			name:            "another user, no OBJECTs should be returned",
 			client:          suite.client.api,
 			ctx:             testUser2.UserCtx,
 			expectedResults: 0,
@@ -173,11 +173,11 @@ func (suite *GraphTestSuite) TestQueryOBJECTTs() {
 
 	for _, tc := range testCases {
 		t.Run("List "+tc.name, func(t *testing.T) {
-			resp, err := tc.client.GetAllOBJECTTs(tc.ctx)
+			resp, err := tc.client.GetAllOBJECTs(tc.ctx)
 			require.NoError(t, err)
 			require.NotNil(t, resp)
 
-			assert.Len(t, resp.OBJECTTs.Edges, tc.expectedResults)
+			assert.Len(t, resp.OBJECTs.Edges, tc.expectedResults)
 		})
 	}
 }

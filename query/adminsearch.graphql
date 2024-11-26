@@ -350,6 +350,7 @@ query AdminSearch($query: String!) {
           mitigation
           satisfies
           details
+          ownerID
         }
       }
       ... on StandardSearchResult {

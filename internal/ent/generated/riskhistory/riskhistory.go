@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"time"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/pkg/enums"
@@ -59,6 +60,8 @@ const (
 	FieldSatisfies = "satisfies"
 	// FieldDetails holds the string denoting the details field in the database.
 	FieldDetails = "details"
+	// FieldOwnerID holds the string denoting the owner_id field in the database.
+	FieldOwnerID = "owner_id"
 	// Table holds the table name of the riskhistory in the database.
 	Table = "risk_history"
 )
@@ -87,6 +90,7 @@ var Columns = []string{
 	FieldMitigation,
 	FieldSatisfies,
 	FieldDetails,
+	FieldOwnerID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -99,7 +103,15 @@ func ValidColumn(column string) bool {
 	return false
 }
 
+// Note that the variables below are initialized by the runtime
+// package on the initialization of the application. Therefore,
+// it should be imported in the main as follows:
+//
+//	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
+	Hooks        [1]ent.Hook
+	Interceptors [1]ent.Interceptor
+	Policy       ent.Policy
 	// DefaultHistoryTime holds the default value on creation for the "history_time" field.
 	DefaultHistoryTime func() time.Time
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -126,6 +138,8 @@ func OperationValidator(o history.OpType) error {
 	}
 }
 
+const DefaultImpact enums.RiskImpact = "MODERATE"
+
 // ImpactValidator is a validator for the "impact" field enum values. It is called by the builders before save.
 func ImpactValidator(i enums.RiskImpact) error {
 	switch i.String() {
@@ -135,6 +149,8 @@ func ImpactValidator(i enums.RiskImpact) error {
 		return fmt.Errorf("riskhistory: invalid enum value for impact field: %q", i)
 	}
 }
+
+const DefaultLikelihood enums.RiskLikelihood = "LIKELY"
 
 // LikelihoodValidator is a validator for the "likelihood" field enum values. It is called by the builders before save.
 func LikelihoodValidator(l enums.RiskLikelihood) error {
@@ -247,6 +263,11 @@ func ByMitigation(opts ...sql.OrderTermOption) OrderOption {
 // BySatisfies orders the results by the satisfies field.
 func BySatisfies(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSatisfies, opts...).ToFunc()
+}
+
+// ByOwnerID orders the results by the owner_id field.
+func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
 }
 
 var (

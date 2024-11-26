@@ -259,6 +259,18 @@ type ProgramBuilder struct {
 	// Create Edges
 	WithProcedure bool
 	WithPolicy    bool
+	// Add Permissions
+	EditorIDs       string
+	BlockedGroupIDs string
+}
+
+type ProgramMemberBuilder struct {
+	client *client
+
+	// Fields
+	UserID    string
+	ProgramID string
+	Role      string
 }
 
 type ProcedureBuilder struct {
@@ -275,6 +287,14 @@ type InternalPolicyBuilder struct {
 	// Fields
 	Name    string
 	GroupID string
+}
+
+type RiskBuilder struct {
+	client *client
+
+	// Fields
+	Name      string
+	ProgramID string
 }
 
 // MustNew organization builder is used to create, without authz checks, orgs in the database
@@ -855,10 +875,47 @@ func (p *ProgramBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Program
 		mutation.AddPolicyIDs(policy.ID)
 	}
 
+	if p.EditorIDs != "" {
+		mutation.AddEditorIDs(p.EditorIDs)
+	}
+
+	if p.BlockedGroupIDs != "" {
+		mutation.AddBlockedGroupIDs(p.BlockedGroupIDs)
+	}
+
 	program := mutation.
 		SaveX(ctx)
 
 	return program
+}
+
+// MustNew user builder is used to create, without authz checks, program members in the database
+func (pm *ProgramMemberBuilder) MustNew(ctx context.Context, t *testing.T) *ent.ProgramMembership {
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+
+	if pm.ProgramID == "" {
+		program := (&ProgramBuilder{client: pm.client}).MustNew(ctx, t)
+		pm.ProgramID = program.ID
+	}
+
+	if pm.UserID == "" {
+		// first create an org member
+		orgMember := (&OrgMemberBuilder{client: pm.client, OrgID: testUser1.OrganizationID}).MustNew(testUser1.UserCtx, t)
+		pm.UserID = orgMember.UserID
+	}
+
+	mutation := pm.client.db.ProgramMembership.Create().
+		SetUserID(pm.UserID).
+		SetProgramID(pm.ProgramID)
+
+	if pm.Role != "" {
+		mutation.SetRole(*enums.ToRole(pm.Role))
+	}
+
+	programMember := mutation.
+		SaveX(ctx)
+
+	return programMember
 }
 
 // MustNew procedure builder is used to create, without authz checks, procedures in the database
@@ -901,4 +958,28 @@ func (p *InternalPolicyBuilder) MustNew(ctx context.Context, t *testing.T) *ent.
 		SaveX(ctx)
 
 	return policy
+}
+
+// MustNew risk builder is used to create, without authz checks, risks in the database
+func (r *RiskBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Risk {
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+
+	// add client to context
+	ctx = ent.NewContext(ctx, r.client.db)
+
+	if r.Name == "" {
+		r.Name = gofakeit.AppName()
+	}
+
+	mutation := r.client.db.Risk.Create().
+		SetName(r.Name)
+
+	if r.ProgramID != "" {
+		mutation.AddProgramIDs(r.ProgramID)
+	}
+
+	risk := mutation.
+		SaveX(ctx)
+
+	return risk
 }

@@ -1009,6 +1009,7 @@ func adminSearchRisks(ctx context.Context, query string) ([]*generated.Risk, err
 				likeQuery := "%" + query + "%"
 				s.Where(sql.ExprP("(details)::text LIKE $11", likeQuery)) // search by Details
 			},
+			risk.OwnerIDContainsFold(query), // search by OwnerID
 		),
 	).All(ctx)
 }

@@ -271,6 +271,12 @@ type OpenlaneGraphClient interface {
 	GetProgramByID(ctx context.Context, programID string, interceptors ...clientv2.RequestInterceptor) (*GetProgramByID, error)
 	GetPrograms(ctx context.Context, where *ProgramWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetPrograms, error)
 	UpdateProgram(ctx context.Context, updateProgramID string, input UpdateProgramInput, interceptors ...clientv2.RequestInterceptor) (*UpdateProgram, error)
+	AddUserToProgramWithRole(ctx context.Context, input CreateProgramMembershipInput, interceptors ...clientv2.RequestInterceptor) (*AddUserToProgramWithRole, error)
+	CreateBulkCSVProgramMembers(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVProgramMembers, error)
+	CreateBulkProgramMembers(ctx context.Context, input []*CreateProgramMembershipInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkProgramMembers, error)
+	GetProgramMembersByProgramID(ctx context.Context, where *ProgramMembershipWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetProgramMembersByProgramID, error)
+	RemoveUserFromProgram(ctx context.Context, deleteProgramMembershipID string, interceptors ...clientv2.RequestInterceptor) (*RemoveUserFromProgram, error)
+	UpdateUserRoleInProgram(ctx context.Context, updateProgramMemberID string, input UpdateProgramMembershipInput, interceptors ...clientv2.RequestInterceptor) (*UpdateUserRoleInProgram, error)
 	GetAllProgramHistories(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllProgramHistories, error)
 	GetProgramHistories(ctx context.Context, where *ProgramHistoryWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetProgramHistories, error)
 	CreateBulkCSVProgramMembership(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVProgramMembership, error)
@@ -3443,6 +3449,7 @@ type AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks struct {
 	Mitigation    *string                "json:\"mitigation,omitempty\" graphql:\"mitigation\""
 	Satisfies     *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
 	Details       map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
+	OwnerID       string                 "json:\"ownerID\" graphql:\"ownerID\""
 }
 
 func (t *AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks) GetDeletedBy() *string {
@@ -3510,6 +3517,12 @@ func (t *AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks) GetDetails() map[
 		t = &AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks{}
 	}
 	return t.Details
+}
+func (t *AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks) GetOwnerID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_RiskSearchResult_Risks{}
+	}
+	return t.OwnerID
 }
 
 type AdminSearch_AdminSearch_Nodes_RiskSearchResult struct {
@@ -36571,6 +36584,598 @@ func (t *UpdateProgram_UpdateProgram) GetProgram() *UpdateProgram_UpdateProgram_
 	return &t.Program
 }
 
+type AddUserToProgramWithRole_CreateProgramMembership_ProgramMembership_Program struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *AddUserToProgramWithRole_CreateProgramMembership_ProgramMembership_Program) GetID() string {
+	if t == nil {
+		t = &AddUserToProgramWithRole_CreateProgramMembership_ProgramMembership_Program{}
+	}
+	return t.ID
+}
+func (t *AddUserToProgramWithRole_CreateProgramMembership_ProgramMembership_Program) GetName() string {
+	if t == nil {
+		t = &AddUserToProgramWithRole_CreateProgramMembership_ProgramMembership_Program{}
+	}
+	return t.Name
+}
+
+type AddUserToProgramWithRole_CreateProgramMembership_ProgramMembership_User struct {
+	DisplayName string  "json:\"displayName\" graphql:\"displayName\""
+	Email       string  "json:\"email\" graphql:\"email\""
+	FirstName   *string "json:\"firstName,omitempty\" graphql:\"firstName\""
+	ID          string  "json:\"id\" graphql:\"id\""
+	LastName    *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+}
+
+func (t *AddUserToProgramWithRole_CreateProgramMembership_ProgramMembership_User) GetDisplayName() string {
+	if t == nil {
+		t = &AddUserToProgramWithRole_CreateProgramMembership_ProgramMembership_User{}
+	}
+	return t.DisplayName
+}
+func (t *AddUserToProgramWithRole_CreateProgramMembership_ProgramMembership_User) GetEmail() string {
+	if t == nil {
+		t = &AddUserToProgramWithRole_CreateProgramMembership_ProgramMembership_User{}
+	}
+	return t.Email
+}
+func (t *AddUserToProgramWithRole_CreateProgramMembership_ProgramMembership_User) GetFirstName() *string {
+	if t == nil {
+		t = &AddUserToProgramWithRole_CreateProgramMembership_ProgramMembership_User{}
+	}
+	return t.FirstName
+}
+func (t *AddUserToProgramWithRole_CreateProgramMembership_ProgramMembership_User) GetID() string {
+	if t == nil {
+		t = &AddUserToProgramWithRole_CreateProgramMembership_ProgramMembership_User{}
+	}
+	return t.ID
+}
+func (t *AddUserToProgramWithRole_CreateProgramMembership_ProgramMembership_User) GetLastName() *string {
+	if t == nil {
+		t = &AddUserToProgramWithRole_CreateProgramMembership_ProgramMembership_User{}
+	}
+	return t.LastName
+}
+
+type AddUserToProgramWithRole_CreateProgramMembership_ProgramMembership struct {
+	ProgramID string                                                                     "json:\"programID\" graphql:\"programID\""
+	Program   AddUserToProgramWithRole_CreateProgramMembership_ProgramMembership_Program "json:\"program\" graphql:\"program\""
+	ID        string                                                                     "json:\"id\" graphql:\"id\""
+	Role      enums.Role                                                                 "json:\"role\" graphql:\"role\""
+	UserID    string                                                                     "json:\"userID\" graphql:\"userID\""
+	User      AddUserToProgramWithRole_CreateProgramMembership_ProgramMembership_User    "json:\"user\" graphql:\"user\""
+}
+
+func (t *AddUserToProgramWithRole_CreateProgramMembership_ProgramMembership) GetProgramID() string {
+	if t == nil {
+		t = &AddUserToProgramWithRole_CreateProgramMembership_ProgramMembership{}
+	}
+	return t.ProgramID
+}
+func (t *AddUserToProgramWithRole_CreateProgramMembership_ProgramMembership) GetProgram() *AddUserToProgramWithRole_CreateProgramMembership_ProgramMembership_Program {
+	if t == nil {
+		t = &AddUserToProgramWithRole_CreateProgramMembership_ProgramMembership{}
+	}
+	return &t.Program
+}
+func (t *AddUserToProgramWithRole_CreateProgramMembership_ProgramMembership) GetID() string {
+	if t == nil {
+		t = &AddUserToProgramWithRole_CreateProgramMembership_ProgramMembership{}
+	}
+	return t.ID
+}
+func (t *AddUserToProgramWithRole_CreateProgramMembership_ProgramMembership) GetRole() *enums.Role {
+	if t == nil {
+		t = &AddUserToProgramWithRole_CreateProgramMembership_ProgramMembership{}
+	}
+	return &t.Role
+}
+func (t *AddUserToProgramWithRole_CreateProgramMembership_ProgramMembership) GetUserID() string {
+	if t == nil {
+		t = &AddUserToProgramWithRole_CreateProgramMembership_ProgramMembership{}
+	}
+	return t.UserID
+}
+func (t *AddUserToProgramWithRole_CreateProgramMembership_ProgramMembership) GetUser() *AddUserToProgramWithRole_CreateProgramMembership_ProgramMembership_User {
+	if t == nil {
+		t = &AddUserToProgramWithRole_CreateProgramMembership_ProgramMembership{}
+	}
+	return &t.User
+}
+
+type AddUserToProgramWithRole_CreateProgramMembership struct {
+	ProgramMembership AddUserToProgramWithRole_CreateProgramMembership_ProgramMembership "json:\"programMembership\" graphql:\"programMembership\""
+}
+
+func (t *AddUserToProgramWithRole_CreateProgramMembership) GetProgramMembership() *AddUserToProgramWithRole_CreateProgramMembership_ProgramMembership {
+	if t == nil {
+		t = &AddUserToProgramWithRole_CreateProgramMembership{}
+	}
+	return &t.ProgramMembership
+}
+
+type CreateBulkCSVProgramMembers_CreateBulkCSVProgramMembership_ProgramMemberships_Program struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateBulkCSVProgramMembers_CreateBulkCSVProgramMembership_ProgramMemberships_Program) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVProgramMembers_CreateBulkCSVProgramMembership_ProgramMemberships_Program{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVProgramMembers_CreateBulkCSVProgramMembership_ProgramMemberships_Program) GetName() string {
+	if t == nil {
+		t = &CreateBulkCSVProgramMembers_CreateBulkCSVProgramMembership_ProgramMemberships_Program{}
+	}
+	return t.Name
+}
+
+type CreateBulkCSVProgramMembers_CreateBulkCSVProgramMembership_ProgramMemberships_User struct {
+	DisplayName string  "json:\"displayName\" graphql:\"displayName\""
+	Email       string  "json:\"email\" graphql:\"email\""
+	FirstName   *string "json:\"firstName,omitempty\" graphql:\"firstName\""
+	ID          string  "json:\"id\" graphql:\"id\""
+	LastName    *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+}
+
+func (t *CreateBulkCSVProgramMembers_CreateBulkCSVProgramMembership_ProgramMemberships_User) GetDisplayName() string {
+	if t == nil {
+		t = &CreateBulkCSVProgramMembers_CreateBulkCSVProgramMembership_ProgramMemberships_User{}
+	}
+	return t.DisplayName
+}
+func (t *CreateBulkCSVProgramMembers_CreateBulkCSVProgramMembership_ProgramMemberships_User) GetEmail() string {
+	if t == nil {
+		t = &CreateBulkCSVProgramMembers_CreateBulkCSVProgramMembership_ProgramMemberships_User{}
+	}
+	return t.Email
+}
+func (t *CreateBulkCSVProgramMembers_CreateBulkCSVProgramMembership_ProgramMemberships_User) GetFirstName() *string {
+	if t == nil {
+		t = &CreateBulkCSVProgramMembers_CreateBulkCSVProgramMembership_ProgramMemberships_User{}
+	}
+	return t.FirstName
+}
+func (t *CreateBulkCSVProgramMembers_CreateBulkCSVProgramMembership_ProgramMemberships_User) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVProgramMembers_CreateBulkCSVProgramMembership_ProgramMemberships_User{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVProgramMembers_CreateBulkCSVProgramMembership_ProgramMemberships_User) GetLastName() *string {
+	if t == nil {
+		t = &CreateBulkCSVProgramMembers_CreateBulkCSVProgramMembership_ProgramMemberships_User{}
+	}
+	return t.LastName
+}
+
+type CreateBulkCSVProgramMembers_CreateBulkCSVProgramMembership_ProgramMemberships struct {
+	ProgramID string                                                                                "json:\"programID\" graphql:\"programID\""
+	Program   CreateBulkCSVProgramMembers_CreateBulkCSVProgramMembership_ProgramMemberships_Program "json:\"program\" graphql:\"program\""
+	ID        string                                                                                "json:\"id\" graphql:\"id\""
+	Role      enums.Role                                                                            "json:\"role\" graphql:\"role\""
+	UserID    string                                                                                "json:\"userID\" graphql:\"userID\""
+	User      CreateBulkCSVProgramMembers_CreateBulkCSVProgramMembership_ProgramMemberships_User    "json:\"user\" graphql:\"user\""
+}
+
+func (t *CreateBulkCSVProgramMembers_CreateBulkCSVProgramMembership_ProgramMemberships) GetProgramID() string {
+	if t == nil {
+		t = &CreateBulkCSVProgramMembers_CreateBulkCSVProgramMembership_ProgramMemberships{}
+	}
+	return t.ProgramID
+}
+func (t *CreateBulkCSVProgramMembers_CreateBulkCSVProgramMembership_ProgramMemberships) GetProgram() *CreateBulkCSVProgramMembers_CreateBulkCSVProgramMembership_ProgramMemberships_Program {
+	if t == nil {
+		t = &CreateBulkCSVProgramMembers_CreateBulkCSVProgramMembership_ProgramMemberships{}
+	}
+	return &t.Program
+}
+func (t *CreateBulkCSVProgramMembers_CreateBulkCSVProgramMembership_ProgramMemberships) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVProgramMembers_CreateBulkCSVProgramMembership_ProgramMemberships{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVProgramMembers_CreateBulkCSVProgramMembership_ProgramMemberships) GetRole() *enums.Role {
+	if t == nil {
+		t = &CreateBulkCSVProgramMembers_CreateBulkCSVProgramMembership_ProgramMemberships{}
+	}
+	return &t.Role
+}
+func (t *CreateBulkCSVProgramMembers_CreateBulkCSVProgramMembership_ProgramMemberships) GetUserID() string {
+	if t == nil {
+		t = &CreateBulkCSVProgramMembers_CreateBulkCSVProgramMembership_ProgramMemberships{}
+	}
+	return t.UserID
+}
+func (t *CreateBulkCSVProgramMembers_CreateBulkCSVProgramMembership_ProgramMemberships) GetUser() *CreateBulkCSVProgramMembers_CreateBulkCSVProgramMembership_ProgramMemberships_User {
+	if t == nil {
+		t = &CreateBulkCSVProgramMembers_CreateBulkCSVProgramMembership_ProgramMemberships{}
+	}
+	return &t.User
+}
+
+type CreateBulkCSVProgramMembers_CreateBulkCSVProgramMembership struct {
+	ProgramMemberships []*CreateBulkCSVProgramMembers_CreateBulkCSVProgramMembership_ProgramMemberships "json:\"programMemberships,omitempty\" graphql:\"programMemberships\""
+}
+
+func (t *CreateBulkCSVProgramMembers_CreateBulkCSVProgramMembership) GetProgramMemberships() []*CreateBulkCSVProgramMembers_CreateBulkCSVProgramMembership_ProgramMemberships {
+	if t == nil {
+		t = &CreateBulkCSVProgramMembers_CreateBulkCSVProgramMembership{}
+	}
+	return t.ProgramMemberships
+}
+
+type CreateBulkProgramMembers_CreateBulkProgramMembership_ProgramMemberships_Program struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateBulkProgramMembers_CreateBulkProgramMembership_ProgramMemberships_Program) GetID() string {
+	if t == nil {
+		t = &CreateBulkProgramMembers_CreateBulkProgramMembership_ProgramMemberships_Program{}
+	}
+	return t.ID
+}
+func (t *CreateBulkProgramMembers_CreateBulkProgramMembership_ProgramMemberships_Program) GetName() string {
+	if t == nil {
+		t = &CreateBulkProgramMembers_CreateBulkProgramMembership_ProgramMemberships_Program{}
+	}
+	return t.Name
+}
+
+type CreateBulkProgramMembers_CreateBulkProgramMembership_ProgramMemberships_User struct {
+	DisplayName string  "json:\"displayName\" graphql:\"displayName\""
+	Email       string  "json:\"email\" graphql:\"email\""
+	FirstName   *string "json:\"firstName,omitempty\" graphql:\"firstName\""
+	ID          string  "json:\"id\" graphql:\"id\""
+	LastName    *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+}
+
+func (t *CreateBulkProgramMembers_CreateBulkProgramMembership_ProgramMemberships_User) GetDisplayName() string {
+	if t == nil {
+		t = &CreateBulkProgramMembers_CreateBulkProgramMembership_ProgramMemberships_User{}
+	}
+	return t.DisplayName
+}
+func (t *CreateBulkProgramMembers_CreateBulkProgramMembership_ProgramMemberships_User) GetEmail() string {
+	if t == nil {
+		t = &CreateBulkProgramMembers_CreateBulkProgramMembership_ProgramMemberships_User{}
+	}
+	return t.Email
+}
+func (t *CreateBulkProgramMembers_CreateBulkProgramMembership_ProgramMemberships_User) GetFirstName() *string {
+	if t == nil {
+		t = &CreateBulkProgramMembers_CreateBulkProgramMembership_ProgramMemberships_User{}
+	}
+	return t.FirstName
+}
+func (t *CreateBulkProgramMembers_CreateBulkProgramMembership_ProgramMemberships_User) GetID() string {
+	if t == nil {
+		t = &CreateBulkProgramMembers_CreateBulkProgramMembership_ProgramMemberships_User{}
+	}
+	return t.ID
+}
+func (t *CreateBulkProgramMembers_CreateBulkProgramMembership_ProgramMemberships_User) GetLastName() *string {
+	if t == nil {
+		t = &CreateBulkProgramMembers_CreateBulkProgramMembership_ProgramMemberships_User{}
+	}
+	return t.LastName
+}
+
+type CreateBulkProgramMembers_CreateBulkProgramMembership_ProgramMemberships struct {
+	ProgramID string                                                                          "json:\"programID\" graphql:\"programID\""
+	Program   CreateBulkProgramMembers_CreateBulkProgramMembership_ProgramMemberships_Program "json:\"program\" graphql:\"program\""
+	ID        string                                                                          "json:\"id\" graphql:\"id\""
+	Role      enums.Role                                                                      "json:\"role\" graphql:\"role\""
+	UserID    string                                                                          "json:\"userID\" graphql:\"userID\""
+	User      CreateBulkProgramMembers_CreateBulkProgramMembership_ProgramMemberships_User    "json:\"user\" graphql:\"user\""
+}
+
+func (t *CreateBulkProgramMembers_CreateBulkProgramMembership_ProgramMemberships) GetProgramID() string {
+	if t == nil {
+		t = &CreateBulkProgramMembers_CreateBulkProgramMembership_ProgramMemberships{}
+	}
+	return t.ProgramID
+}
+func (t *CreateBulkProgramMembers_CreateBulkProgramMembership_ProgramMemberships) GetProgram() *CreateBulkProgramMembers_CreateBulkProgramMembership_ProgramMemberships_Program {
+	if t == nil {
+		t = &CreateBulkProgramMembers_CreateBulkProgramMembership_ProgramMemberships{}
+	}
+	return &t.Program
+}
+func (t *CreateBulkProgramMembers_CreateBulkProgramMembership_ProgramMemberships) GetID() string {
+	if t == nil {
+		t = &CreateBulkProgramMembers_CreateBulkProgramMembership_ProgramMemberships{}
+	}
+	return t.ID
+}
+func (t *CreateBulkProgramMembers_CreateBulkProgramMembership_ProgramMemberships) GetRole() *enums.Role {
+	if t == nil {
+		t = &CreateBulkProgramMembers_CreateBulkProgramMembership_ProgramMemberships{}
+	}
+	return &t.Role
+}
+func (t *CreateBulkProgramMembers_CreateBulkProgramMembership_ProgramMemberships) GetUserID() string {
+	if t == nil {
+		t = &CreateBulkProgramMembers_CreateBulkProgramMembership_ProgramMemberships{}
+	}
+	return t.UserID
+}
+func (t *CreateBulkProgramMembers_CreateBulkProgramMembership_ProgramMemberships) GetUser() *CreateBulkProgramMembers_CreateBulkProgramMembership_ProgramMemberships_User {
+	if t == nil {
+		t = &CreateBulkProgramMembers_CreateBulkProgramMembership_ProgramMemberships{}
+	}
+	return &t.User
+}
+
+type CreateBulkProgramMembers_CreateBulkProgramMembership struct {
+	ProgramMemberships []*CreateBulkProgramMembers_CreateBulkProgramMembership_ProgramMemberships "json:\"programMemberships,omitempty\" graphql:\"programMemberships\""
+}
+
+func (t *CreateBulkProgramMembers_CreateBulkProgramMembership) GetProgramMemberships() []*CreateBulkProgramMembers_CreateBulkProgramMembership_ProgramMemberships {
+	if t == nil {
+		t = &CreateBulkProgramMembers_CreateBulkProgramMembership{}
+	}
+	return t.ProgramMemberships
+}
+
+type GetProgramMembersByProgramID_ProgramMemberships_Edges_Node_Program struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetProgramMembersByProgramID_ProgramMemberships_Edges_Node_Program) GetID() string {
+	if t == nil {
+		t = &GetProgramMembersByProgramID_ProgramMemberships_Edges_Node_Program{}
+	}
+	return t.ID
+}
+func (t *GetProgramMembersByProgramID_ProgramMemberships_Edges_Node_Program) GetName() string {
+	if t == nil {
+		t = &GetProgramMembersByProgramID_ProgramMemberships_Edges_Node_Program{}
+	}
+	return t.Name
+}
+
+type GetProgramMembersByProgramID_ProgramMemberships_Edges_Node_User struct {
+	DisplayName string  "json:\"displayName\" graphql:\"displayName\""
+	Email       string  "json:\"email\" graphql:\"email\""
+	FirstName   *string "json:\"firstName,omitempty\" graphql:\"firstName\""
+	ID          string  "json:\"id\" graphql:\"id\""
+	LastName    *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+}
+
+func (t *GetProgramMembersByProgramID_ProgramMemberships_Edges_Node_User) GetDisplayName() string {
+	if t == nil {
+		t = &GetProgramMembersByProgramID_ProgramMemberships_Edges_Node_User{}
+	}
+	return t.DisplayName
+}
+func (t *GetProgramMembersByProgramID_ProgramMemberships_Edges_Node_User) GetEmail() string {
+	if t == nil {
+		t = &GetProgramMembersByProgramID_ProgramMemberships_Edges_Node_User{}
+	}
+	return t.Email
+}
+func (t *GetProgramMembersByProgramID_ProgramMemberships_Edges_Node_User) GetFirstName() *string {
+	if t == nil {
+		t = &GetProgramMembersByProgramID_ProgramMemberships_Edges_Node_User{}
+	}
+	return t.FirstName
+}
+func (t *GetProgramMembersByProgramID_ProgramMemberships_Edges_Node_User) GetID() string {
+	if t == nil {
+		t = &GetProgramMembersByProgramID_ProgramMemberships_Edges_Node_User{}
+	}
+	return t.ID
+}
+func (t *GetProgramMembersByProgramID_ProgramMemberships_Edges_Node_User) GetLastName() *string {
+	if t == nil {
+		t = &GetProgramMembersByProgramID_ProgramMemberships_Edges_Node_User{}
+	}
+	return t.LastName
+}
+
+type GetProgramMembersByProgramID_ProgramMemberships_Edges_Node struct {
+	ProgramID string                                                             "json:\"programID\" graphql:\"programID\""
+	Program   GetProgramMembersByProgramID_ProgramMemberships_Edges_Node_Program "json:\"program\" graphql:\"program\""
+	ID        string                                                             "json:\"id\" graphql:\"id\""
+	Role      enums.Role                                                         "json:\"role\" graphql:\"role\""
+	UserID    string                                                             "json:\"userID\" graphql:\"userID\""
+	User      GetProgramMembersByProgramID_ProgramMemberships_Edges_Node_User    "json:\"user\" graphql:\"user\""
+}
+
+func (t *GetProgramMembersByProgramID_ProgramMemberships_Edges_Node) GetProgramID() string {
+	if t == nil {
+		t = &GetProgramMembersByProgramID_ProgramMemberships_Edges_Node{}
+	}
+	return t.ProgramID
+}
+func (t *GetProgramMembersByProgramID_ProgramMemberships_Edges_Node) GetProgram() *GetProgramMembersByProgramID_ProgramMemberships_Edges_Node_Program {
+	if t == nil {
+		t = &GetProgramMembersByProgramID_ProgramMemberships_Edges_Node{}
+	}
+	return &t.Program
+}
+func (t *GetProgramMembersByProgramID_ProgramMemberships_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetProgramMembersByProgramID_ProgramMemberships_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetProgramMembersByProgramID_ProgramMemberships_Edges_Node) GetRole() *enums.Role {
+	if t == nil {
+		t = &GetProgramMembersByProgramID_ProgramMemberships_Edges_Node{}
+	}
+	return &t.Role
+}
+func (t *GetProgramMembersByProgramID_ProgramMemberships_Edges_Node) GetUserID() string {
+	if t == nil {
+		t = &GetProgramMembersByProgramID_ProgramMemberships_Edges_Node{}
+	}
+	return t.UserID
+}
+func (t *GetProgramMembersByProgramID_ProgramMemberships_Edges_Node) GetUser() *GetProgramMembersByProgramID_ProgramMemberships_Edges_Node_User {
+	if t == nil {
+		t = &GetProgramMembersByProgramID_ProgramMemberships_Edges_Node{}
+	}
+	return &t.User
+}
+
+type GetProgramMembersByProgramID_ProgramMemberships_Edges struct {
+	Node *GetProgramMembersByProgramID_ProgramMemberships_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetProgramMembersByProgramID_ProgramMemberships_Edges) GetNode() *GetProgramMembersByProgramID_ProgramMemberships_Edges_Node {
+	if t == nil {
+		t = &GetProgramMembersByProgramID_ProgramMemberships_Edges{}
+	}
+	return t.Node
+}
+
+type GetProgramMembersByProgramID_ProgramMemberships struct {
+	Edges []*GetProgramMembersByProgramID_ProgramMemberships_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetProgramMembersByProgramID_ProgramMemberships) GetEdges() []*GetProgramMembersByProgramID_ProgramMemberships_Edges {
+	if t == nil {
+		t = &GetProgramMembersByProgramID_ProgramMemberships{}
+	}
+	return t.Edges
+}
+
+type RemoveUserFromProgram_DeleteProgramMembership struct {
+	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
+}
+
+func (t *RemoveUserFromProgram_DeleteProgramMembership) GetDeletedID() string {
+	if t == nil {
+		t = &RemoveUserFromProgram_DeleteProgramMembership{}
+	}
+	return t.DeletedID
+}
+
+type UpdateUserRoleInProgram_UpdateProgramMembership_ProgramMembership_Program struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateUserRoleInProgram_UpdateProgramMembership_ProgramMembership_Program) GetID() string {
+	if t == nil {
+		t = &UpdateUserRoleInProgram_UpdateProgramMembership_ProgramMembership_Program{}
+	}
+	return t.ID
+}
+func (t *UpdateUserRoleInProgram_UpdateProgramMembership_ProgramMembership_Program) GetName() string {
+	if t == nil {
+		t = &UpdateUserRoleInProgram_UpdateProgramMembership_ProgramMembership_Program{}
+	}
+	return t.Name
+}
+
+type UpdateUserRoleInProgram_UpdateProgramMembership_ProgramMembership_User struct {
+	DisplayName string  "json:\"displayName\" graphql:\"displayName\""
+	Email       string  "json:\"email\" graphql:\"email\""
+	FirstName   *string "json:\"firstName,omitempty\" graphql:\"firstName\""
+	ID          string  "json:\"id\" graphql:\"id\""
+	LastName    *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+}
+
+func (t *UpdateUserRoleInProgram_UpdateProgramMembership_ProgramMembership_User) GetDisplayName() string {
+	if t == nil {
+		t = &UpdateUserRoleInProgram_UpdateProgramMembership_ProgramMembership_User{}
+	}
+	return t.DisplayName
+}
+func (t *UpdateUserRoleInProgram_UpdateProgramMembership_ProgramMembership_User) GetEmail() string {
+	if t == nil {
+		t = &UpdateUserRoleInProgram_UpdateProgramMembership_ProgramMembership_User{}
+	}
+	return t.Email
+}
+func (t *UpdateUserRoleInProgram_UpdateProgramMembership_ProgramMembership_User) GetFirstName() *string {
+	if t == nil {
+		t = &UpdateUserRoleInProgram_UpdateProgramMembership_ProgramMembership_User{}
+	}
+	return t.FirstName
+}
+func (t *UpdateUserRoleInProgram_UpdateProgramMembership_ProgramMembership_User) GetID() string {
+	if t == nil {
+		t = &UpdateUserRoleInProgram_UpdateProgramMembership_ProgramMembership_User{}
+	}
+	return t.ID
+}
+func (t *UpdateUserRoleInProgram_UpdateProgramMembership_ProgramMembership_User) GetLastName() *string {
+	if t == nil {
+		t = &UpdateUserRoleInProgram_UpdateProgramMembership_ProgramMembership_User{}
+	}
+	return t.LastName
+}
+
+type UpdateUserRoleInProgram_UpdateProgramMembership_ProgramMembership struct {
+	ProgramID string                                                                    "json:\"programID\" graphql:\"programID\""
+	Program   UpdateUserRoleInProgram_UpdateProgramMembership_ProgramMembership_Program "json:\"program\" graphql:\"program\""
+	ID        string                                                                    "json:\"id\" graphql:\"id\""
+	Role      enums.Role                                                                "json:\"role\" graphql:\"role\""
+	UserID    string                                                                    "json:\"userID\" graphql:\"userID\""
+	User      UpdateUserRoleInProgram_UpdateProgramMembership_ProgramMembership_User    "json:\"user\" graphql:\"user\""
+}
+
+func (t *UpdateUserRoleInProgram_UpdateProgramMembership_ProgramMembership) GetProgramID() string {
+	if t == nil {
+		t = &UpdateUserRoleInProgram_UpdateProgramMembership_ProgramMembership{}
+	}
+	return t.ProgramID
+}
+func (t *UpdateUserRoleInProgram_UpdateProgramMembership_ProgramMembership) GetProgram() *UpdateUserRoleInProgram_UpdateProgramMembership_ProgramMembership_Program {
+	if t == nil {
+		t = &UpdateUserRoleInProgram_UpdateProgramMembership_ProgramMembership{}
+	}
+	return &t.Program
+}
+func (t *UpdateUserRoleInProgram_UpdateProgramMembership_ProgramMembership) GetID() string {
+	if t == nil {
+		t = &UpdateUserRoleInProgram_UpdateProgramMembership_ProgramMembership{}
+	}
+	return t.ID
+}
+func (t *UpdateUserRoleInProgram_UpdateProgramMembership_ProgramMembership) GetRole() *enums.Role {
+	if t == nil {
+		t = &UpdateUserRoleInProgram_UpdateProgramMembership_ProgramMembership{}
+	}
+	return &t.Role
+}
+func (t *UpdateUserRoleInProgram_UpdateProgramMembership_ProgramMembership) GetUserID() string {
+	if t == nil {
+		t = &UpdateUserRoleInProgram_UpdateProgramMembership_ProgramMembership{}
+	}
+	return t.UserID
+}
+func (t *UpdateUserRoleInProgram_UpdateProgramMembership_ProgramMembership) GetUser() *UpdateUserRoleInProgram_UpdateProgramMembership_ProgramMembership_User {
+	if t == nil {
+		t = &UpdateUserRoleInProgram_UpdateProgramMembership_ProgramMembership{}
+	}
+	return &t.User
+}
+
+type UpdateUserRoleInProgram_UpdateProgramMembership struct {
+	ProgramMembership UpdateUserRoleInProgram_UpdateProgramMembership_ProgramMembership "json:\"programMembership\" graphql:\"programMembership\""
+}
+
+func (t *UpdateUserRoleInProgram_UpdateProgramMembership) GetProgramMembership() *UpdateUserRoleInProgram_UpdateProgramMembership_ProgramMembership {
+	if t == nil {
+		t = &UpdateUserRoleInProgram_UpdateProgramMembership{}
+	}
+	return &t.ProgramMembership
+}
+
 type GetAllProgramHistories_ProgramHistories_Edges_Node struct {
 	AuditorReadComments  bool                "json:\"auditorReadComments\" graphql:\"auditorReadComments\""
 	AuditorReady         bool                "json:\"auditorReady\" graphql:\"auditorReady\""
@@ -37854,23 +38459,99 @@ func (t *CreateBulkRisk_CreateBulkRisk) GetRisks() []*CreateBulkRisk_CreateBulkR
 	return t.Risks
 }
 
+type CreateRisk_CreateRisk_Risk_Program struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateRisk_CreateRisk_Risk_Program) GetID() string {
+	if t == nil {
+		t = &CreateRisk_CreateRisk_Risk_Program{}
+	}
+	return t.ID
+}
+func (t *CreateRisk_CreateRisk_Risk_Program) GetName() string {
+	if t == nil {
+		t = &CreateRisk_CreateRisk_Risk_Program{}
+	}
+	return t.Name
+}
+
+type CreateRisk_CreateRisk_Risk_Editors struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateRisk_CreateRisk_Risk_Editors) GetID() string {
+	if t == nil {
+		t = &CreateRisk_CreateRisk_Risk_Editors{}
+	}
+	return t.ID
+}
+func (t *CreateRisk_CreateRisk_Risk_Editors) GetName() string {
+	if t == nil {
+		t = &CreateRisk_CreateRisk_Risk_Editors{}
+	}
+	return t.Name
+}
+
+type CreateRisk_CreateRisk_Risk_Viewers struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateRisk_CreateRisk_Risk_Viewers) GetID() string {
+	if t == nil {
+		t = &CreateRisk_CreateRisk_Risk_Viewers{}
+	}
+	return t.ID
+}
+func (t *CreateRisk_CreateRisk_Risk_Viewers) GetName() string {
+	if t == nil {
+		t = &CreateRisk_CreateRisk_Risk_Viewers{}
+	}
+	return t.Name
+}
+
+type CreateRisk_CreateRisk_Risk_BlockedGroups struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateRisk_CreateRisk_Risk_BlockedGroups) GetID() string {
+	if t == nil {
+		t = &CreateRisk_CreateRisk_Risk_BlockedGroups{}
+	}
+	return t.ID
+}
+func (t *CreateRisk_CreateRisk_Risk_BlockedGroups) GetName() string {
+	if t == nil {
+		t = &CreateRisk_CreateRisk_Risk_BlockedGroups{}
+	}
+	return t.Name
+}
+
 type CreateRisk_CreateRisk_Risk struct {
-	BusinessCosts *string                "json:\"businessCosts,omitempty\" graphql:\"businessCosts\""
-	CreatedAt     *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description   *string                "json:\"description,omitempty\" graphql:\"description\""
-	Details       map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
-	ID            string                 "json:\"id\" graphql:\"id\""
-	Impact        *enums.RiskImpact      "json:\"impact,omitempty\" graphql:\"impact\""
-	Likelihood    *enums.RiskLikelihood  "json:\"likelihood,omitempty\" graphql:\"likelihood\""
-	Mitigation    *string                "json:\"mitigation,omitempty\" graphql:\"mitigation\""
-	Name          string                 "json:\"name\" graphql:\"name\""
-	RiskType      *string                "json:\"riskType,omitempty\" graphql:\"riskType\""
-	Satisfies     *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Status        *string                "json:\"status,omitempty\" graphql:\"status\""
-	Tags          []string               "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt     *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	BusinessCosts *string                                     "json:\"businessCosts,omitempty\" graphql:\"businessCosts\""
+	CreatedAt     *time.Time                                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description   *string                                     "json:\"description,omitempty\" graphql:\"description\""
+	Details       map[string]interface{}                      "json:\"details,omitempty\" graphql:\"details\""
+	ID            string                                      "json:\"id\" graphql:\"id\""
+	Impact        *enums.RiskImpact                           "json:\"impact,omitempty\" graphql:\"impact\""
+	Likelihood    *enums.RiskLikelihood                       "json:\"likelihood,omitempty\" graphql:\"likelihood\""
+	Mitigation    *string                                     "json:\"mitigation,omitempty\" graphql:\"mitigation\""
+	Name          string                                      "json:\"name\" graphql:\"name\""
+	RiskType      *string                                     "json:\"riskType,omitempty\" graphql:\"riskType\""
+	Satisfies     *string                                     "json:\"satisfies,omitempty\" graphql:\"satisfies\""
+	Status        *string                                     "json:\"status,omitempty\" graphql:\"status\""
+	Tags          []string                                    "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt     *time.Time                                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Program       []*CreateRisk_CreateRisk_Risk_Program       "json:\"program,omitempty\" graphql:\"program\""
+	Editors       []*CreateRisk_CreateRisk_Risk_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
+	Viewers       []*CreateRisk_CreateRisk_Risk_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
+	BlockedGroups []*CreateRisk_CreateRisk_Risk_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 }
 
 func (t *CreateRisk_CreateRisk_Risk) GetBusinessCosts() *string {
@@ -37969,6 +38650,30 @@ func (t *CreateRisk_CreateRisk_Risk) GetUpdatedBy() *string {
 	}
 	return t.UpdatedBy
 }
+func (t *CreateRisk_CreateRisk_Risk) GetProgram() []*CreateRisk_CreateRisk_Risk_Program {
+	if t == nil {
+		t = &CreateRisk_CreateRisk_Risk{}
+	}
+	return t.Program
+}
+func (t *CreateRisk_CreateRisk_Risk) GetEditors() []*CreateRisk_CreateRisk_Risk_Editors {
+	if t == nil {
+		t = &CreateRisk_CreateRisk_Risk{}
+	}
+	return t.Editors
+}
+func (t *CreateRisk_CreateRisk_Risk) GetViewers() []*CreateRisk_CreateRisk_Risk_Viewers {
+	if t == nil {
+		t = &CreateRisk_CreateRisk_Risk{}
+	}
+	return t.Viewers
+}
+func (t *CreateRisk_CreateRisk_Risk) GetBlockedGroups() []*CreateRisk_CreateRisk_Risk_BlockedGroups {
+	if t == nil {
+		t = &CreateRisk_CreateRisk_Risk{}
+	}
+	return t.BlockedGroups
+}
 
 type CreateRisk_CreateRisk struct {
 	Risk CreateRisk_CreateRisk_Risk "json:\"risk\" graphql:\"risk\""
@@ -37992,23 +38697,99 @@ func (t *DeleteRisk_DeleteRisk) GetDeletedID() string {
 	return t.DeletedID
 }
 
+type GetAllRisks_Risks_Edges_Node_Program struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetAllRisks_Risks_Edges_Node_Program) GetID() string {
+	if t == nil {
+		t = &GetAllRisks_Risks_Edges_Node_Program{}
+	}
+	return t.ID
+}
+func (t *GetAllRisks_Risks_Edges_Node_Program) GetName() string {
+	if t == nil {
+		t = &GetAllRisks_Risks_Edges_Node_Program{}
+	}
+	return t.Name
+}
+
+type GetAllRisks_Risks_Edges_Node_Editors struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetAllRisks_Risks_Edges_Node_Editors) GetID() string {
+	if t == nil {
+		t = &GetAllRisks_Risks_Edges_Node_Editors{}
+	}
+	return t.ID
+}
+func (t *GetAllRisks_Risks_Edges_Node_Editors) GetName() string {
+	if t == nil {
+		t = &GetAllRisks_Risks_Edges_Node_Editors{}
+	}
+	return t.Name
+}
+
+type GetAllRisks_Risks_Edges_Node_Viewers struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetAllRisks_Risks_Edges_Node_Viewers) GetID() string {
+	if t == nil {
+		t = &GetAllRisks_Risks_Edges_Node_Viewers{}
+	}
+	return t.ID
+}
+func (t *GetAllRisks_Risks_Edges_Node_Viewers) GetName() string {
+	if t == nil {
+		t = &GetAllRisks_Risks_Edges_Node_Viewers{}
+	}
+	return t.Name
+}
+
+type GetAllRisks_Risks_Edges_Node_BlockedGroups struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetAllRisks_Risks_Edges_Node_BlockedGroups) GetID() string {
+	if t == nil {
+		t = &GetAllRisks_Risks_Edges_Node_BlockedGroups{}
+	}
+	return t.ID
+}
+func (t *GetAllRisks_Risks_Edges_Node_BlockedGroups) GetName() string {
+	if t == nil {
+		t = &GetAllRisks_Risks_Edges_Node_BlockedGroups{}
+	}
+	return t.Name
+}
+
 type GetAllRisks_Risks_Edges_Node struct {
-	BusinessCosts *string                "json:\"businessCosts,omitempty\" graphql:\"businessCosts\""
-	CreatedAt     *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description   *string                "json:\"description,omitempty\" graphql:\"description\""
-	Details       map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
-	ID            string                 "json:\"id\" graphql:\"id\""
-	Impact        *enums.RiskImpact      "json:\"impact,omitempty\" graphql:\"impact\""
-	Likelihood    *enums.RiskLikelihood  "json:\"likelihood,omitempty\" graphql:\"likelihood\""
-	Mitigation    *string                "json:\"mitigation,omitempty\" graphql:\"mitigation\""
-	Name          string                 "json:\"name\" graphql:\"name\""
-	RiskType      *string                "json:\"riskType,omitempty\" graphql:\"riskType\""
-	Satisfies     *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Status        *string                "json:\"status,omitempty\" graphql:\"status\""
-	Tags          []string               "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt     *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	BusinessCosts *string                                       "json:\"businessCosts,omitempty\" graphql:\"businessCosts\""
+	CreatedAt     *time.Time                                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description   *string                                       "json:\"description,omitempty\" graphql:\"description\""
+	Details       map[string]interface{}                        "json:\"details,omitempty\" graphql:\"details\""
+	ID            string                                        "json:\"id\" graphql:\"id\""
+	Impact        *enums.RiskImpact                             "json:\"impact,omitempty\" graphql:\"impact\""
+	Likelihood    *enums.RiskLikelihood                         "json:\"likelihood,omitempty\" graphql:\"likelihood\""
+	Mitigation    *string                                       "json:\"mitigation,omitempty\" graphql:\"mitigation\""
+	Name          string                                        "json:\"name\" graphql:\"name\""
+	RiskType      *string                                       "json:\"riskType,omitempty\" graphql:\"riskType\""
+	Satisfies     *string                                       "json:\"satisfies,omitempty\" graphql:\"satisfies\""
+	Status        *string                                       "json:\"status,omitempty\" graphql:\"status\""
+	Tags          []string                                      "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt     *time.Time                                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Program       []*GetAllRisks_Risks_Edges_Node_Program       "json:\"program,omitempty\" graphql:\"program\""
+	Editors       []*GetAllRisks_Risks_Edges_Node_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
+	Viewers       []*GetAllRisks_Risks_Edges_Node_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
+	BlockedGroups []*GetAllRisks_Risks_Edges_Node_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 }
 
 func (t *GetAllRisks_Risks_Edges_Node) GetBusinessCosts() *string {
@@ -38107,6 +38888,30 @@ func (t *GetAllRisks_Risks_Edges_Node) GetUpdatedBy() *string {
 	}
 	return t.UpdatedBy
 }
+func (t *GetAllRisks_Risks_Edges_Node) GetProgram() []*GetAllRisks_Risks_Edges_Node_Program {
+	if t == nil {
+		t = &GetAllRisks_Risks_Edges_Node{}
+	}
+	return t.Program
+}
+func (t *GetAllRisks_Risks_Edges_Node) GetEditors() []*GetAllRisks_Risks_Edges_Node_Editors {
+	if t == nil {
+		t = &GetAllRisks_Risks_Edges_Node{}
+	}
+	return t.Editors
+}
+func (t *GetAllRisks_Risks_Edges_Node) GetViewers() []*GetAllRisks_Risks_Edges_Node_Viewers {
+	if t == nil {
+		t = &GetAllRisks_Risks_Edges_Node{}
+	}
+	return t.Viewers
+}
+func (t *GetAllRisks_Risks_Edges_Node) GetBlockedGroups() []*GetAllRisks_Risks_Edges_Node_BlockedGroups {
+	if t == nil {
+		t = &GetAllRisks_Risks_Edges_Node{}
+	}
+	return t.BlockedGroups
+}
 
 type GetAllRisks_Risks_Edges struct {
 	Node *GetAllRisks_Risks_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
@@ -38130,23 +38935,99 @@ func (t *GetAllRisks_Risks) GetEdges() []*GetAllRisks_Risks_Edges {
 	return t.Edges
 }
 
+type GetRiskByID_Risk_Program struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetRiskByID_Risk_Program) GetID() string {
+	if t == nil {
+		t = &GetRiskByID_Risk_Program{}
+	}
+	return t.ID
+}
+func (t *GetRiskByID_Risk_Program) GetName() string {
+	if t == nil {
+		t = &GetRiskByID_Risk_Program{}
+	}
+	return t.Name
+}
+
+type GetRiskByID_Risk_Editors struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetRiskByID_Risk_Editors) GetID() string {
+	if t == nil {
+		t = &GetRiskByID_Risk_Editors{}
+	}
+	return t.ID
+}
+func (t *GetRiskByID_Risk_Editors) GetName() string {
+	if t == nil {
+		t = &GetRiskByID_Risk_Editors{}
+	}
+	return t.Name
+}
+
+type GetRiskByID_Risk_Viewers struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetRiskByID_Risk_Viewers) GetID() string {
+	if t == nil {
+		t = &GetRiskByID_Risk_Viewers{}
+	}
+	return t.ID
+}
+func (t *GetRiskByID_Risk_Viewers) GetName() string {
+	if t == nil {
+		t = &GetRiskByID_Risk_Viewers{}
+	}
+	return t.Name
+}
+
+type GetRiskByID_Risk_BlockedGroups struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetRiskByID_Risk_BlockedGroups) GetID() string {
+	if t == nil {
+		t = &GetRiskByID_Risk_BlockedGroups{}
+	}
+	return t.ID
+}
+func (t *GetRiskByID_Risk_BlockedGroups) GetName() string {
+	if t == nil {
+		t = &GetRiskByID_Risk_BlockedGroups{}
+	}
+	return t.Name
+}
+
 type GetRiskByID_Risk struct {
-	BusinessCosts *string                "json:\"businessCosts,omitempty\" graphql:\"businessCosts\""
-	CreatedAt     *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description   *string                "json:\"description,omitempty\" graphql:\"description\""
-	Details       map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
-	ID            string                 "json:\"id\" graphql:\"id\""
-	Impact        *enums.RiskImpact      "json:\"impact,omitempty\" graphql:\"impact\""
-	Likelihood    *enums.RiskLikelihood  "json:\"likelihood,omitempty\" graphql:\"likelihood\""
-	Mitigation    *string                "json:\"mitigation,omitempty\" graphql:\"mitigation\""
-	Name          string                 "json:\"name\" graphql:\"name\""
-	RiskType      *string                "json:\"riskType,omitempty\" graphql:\"riskType\""
-	Satisfies     *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Status        *string                "json:\"status,omitempty\" graphql:\"status\""
-	Tags          []string               "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt     *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	BusinessCosts *string                           "json:\"businessCosts,omitempty\" graphql:\"businessCosts\""
+	CreatedAt     *time.Time                        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description   *string                           "json:\"description,omitempty\" graphql:\"description\""
+	Details       map[string]interface{}            "json:\"details,omitempty\" graphql:\"details\""
+	ID            string                            "json:\"id\" graphql:\"id\""
+	Impact        *enums.RiskImpact                 "json:\"impact,omitempty\" graphql:\"impact\""
+	Likelihood    *enums.RiskLikelihood             "json:\"likelihood,omitempty\" graphql:\"likelihood\""
+	Mitigation    *string                           "json:\"mitigation,omitempty\" graphql:\"mitigation\""
+	Name          string                            "json:\"name\" graphql:\"name\""
+	RiskType      *string                           "json:\"riskType,omitempty\" graphql:\"riskType\""
+	Satisfies     *string                           "json:\"satisfies,omitempty\" graphql:\"satisfies\""
+	Status        *string                           "json:\"status,omitempty\" graphql:\"status\""
+	Tags          []string                          "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt     *time.Time                        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Program       []*GetRiskByID_Risk_Program       "json:\"program,omitempty\" graphql:\"program\""
+	Editors       []*GetRiskByID_Risk_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
+	Viewers       []*GetRiskByID_Risk_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
+	BlockedGroups []*GetRiskByID_Risk_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 }
 
 func (t *GetRiskByID_Risk) GetBusinessCosts() *string {
@@ -38245,24 +39126,124 @@ func (t *GetRiskByID_Risk) GetUpdatedBy() *string {
 	}
 	return t.UpdatedBy
 }
+func (t *GetRiskByID_Risk) GetProgram() []*GetRiskByID_Risk_Program {
+	if t == nil {
+		t = &GetRiskByID_Risk{}
+	}
+	return t.Program
+}
+func (t *GetRiskByID_Risk) GetEditors() []*GetRiskByID_Risk_Editors {
+	if t == nil {
+		t = &GetRiskByID_Risk{}
+	}
+	return t.Editors
+}
+func (t *GetRiskByID_Risk) GetViewers() []*GetRiskByID_Risk_Viewers {
+	if t == nil {
+		t = &GetRiskByID_Risk{}
+	}
+	return t.Viewers
+}
+func (t *GetRiskByID_Risk) GetBlockedGroups() []*GetRiskByID_Risk_BlockedGroups {
+	if t == nil {
+		t = &GetRiskByID_Risk{}
+	}
+	return t.BlockedGroups
+}
+
+type GetRisks_Risks_Edges_Node_Program struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetRisks_Risks_Edges_Node_Program) GetID() string {
+	if t == nil {
+		t = &GetRisks_Risks_Edges_Node_Program{}
+	}
+	return t.ID
+}
+func (t *GetRisks_Risks_Edges_Node_Program) GetName() string {
+	if t == nil {
+		t = &GetRisks_Risks_Edges_Node_Program{}
+	}
+	return t.Name
+}
+
+type GetRisks_Risks_Edges_Node_Editors struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetRisks_Risks_Edges_Node_Editors) GetID() string {
+	if t == nil {
+		t = &GetRisks_Risks_Edges_Node_Editors{}
+	}
+	return t.ID
+}
+func (t *GetRisks_Risks_Edges_Node_Editors) GetName() string {
+	if t == nil {
+		t = &GetRisks_Risks_Edges_Node_Editors{}
+	}
+	return t.Name
+}
+
+type GetRisks_Risks_Edges_Node_Viewers struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetRisks_Risks_Edges_Node_Viewers) GetID() string {
+	if t == nil {
+		t = &GetRisks_Risks_Edges_Node_Viewers{}
+	}
+	return t.ID
+}
+func (t *GetRisks_Risks_Edges_Node_Viewers) GetName() string {
+	if t == nil {
+		t = &GetRisks_Risks_Edges_Node_Viewers{}
+	}
+	return t.Name
+}
+
+type GetRisks_Risks_Edges_Node_BlockedGroups struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetRisks_Risks_Edges_Node_BlockedGroups) GetID() string {
+	if t == nil {
+		t = &GetRisks_Risks_Edges_Node_BlockedGroups{}
+	}
+	return t.ID
+}
+func (t *GetRisks_Risks_Edges_Node_BlockedGroups) GetName() string {
+	if t == nil {
+		t = &GetRisks_Risks_Edges_Node_BlockedGroups{}
+	}
+	return t.Name
+}
 
 type GetRisks_Risks_Edges_Node struct {
-	BusinessCosts *string                "json:\"businessCosts,omitempty\" graphql:\"businessCosts\""
-	CreatedAt     *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description   *string                "json:\"description,omitempty\" graphql:\"description\""
-	Details       map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
-	ID            string                 "json:\"id\" graphql:\"id\""
-	Impact        *enums.RiskImpact      "json:\"impact,omitempty\" graphql:\"impact\""
-	Likelihood    *enums.RiskLikelihood  "json:\"likelihood,omitempty\" graphql:\"likelihood\""
-	Mitigation    *string                "json:\"mitigation,omitempty\" graphql:\"mitigation\""
-	Name          string                 "json:\"name\" graphql:\"name\""
-	RiskType      *string                "json:\"riskType,omitempty\" graphql:\"riskType\""
-	Satisfies     *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Status        *string                "json:\"status,omitempty\" graphql:\"status\""
-	Tags          []string               "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt     *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	BusinessCosts *string                                    "json:\"businessCosts,omitempty\" graphql:\"businessCosts\""
+	CreatedAt     *time.Time                                 "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description   *string                                    "json:\"description,omitempty\" graphql:\"description\""
+	Details       map[string]interface{}                     "json:\"details,omitempty\" graphql:\"details\""
+	ID            string                                     "json:\"id\" graphql:\"id\""
+	Impact        *enums.RiskImpact                          "json:\"impact,omitempty\" graphql:\"impact\""
+	Likelihood    *enums.RiskLikelihood                      "json:\"likelihood,omitempty\" graphql:\"likelihood\""
+	Mitigation    *string                                    "json:\"mitigation,omitempty\" graphql:\"mitigation\""
+	Name          string                                     "json:\"name\" graphql:\"name\""
+	RiskType      *string                                    "json:\"riskType,omitempty\" graphql:\"riskType\""
+	Satisfies     *string                                    "json:\"satisfies,omitempty\" graphql:\"satisfies\""
+	Status        *string                                    "json:\"status,omitempty\" graphql:\"status\""
+	Tags          []string                                   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt     *time.Time                                 "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                                    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Program       []*GetRisks_Risks_Edges_Node_Program       "json:\"program,omitempty\" graphql:\"program\""
+	Editors       []*GetRisks_Risks_Edges_Node_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
+	Viewers       []*GetRisks_Risks_Edges_Node_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
+	BlockedGroups []*GetRisks_Risks_Edges_Node_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 }
 
 func (t *GetRisks_Risks_Edges_Node) GetBusinessCosts() *string {
@@ -38361,6 +39342,30 @@ func (t *GetRisks_Risks_Edges_Node) GetUpdatedBy() *string {
 	}
 	return t.UpdatedBy
 }
+func (t *GetRisks_Risks_Edges_Node) GetProgram() []*GetRisks_Risks_Edges_Node_Program {
+	if t == nil {
+		t = &GetRisks_Risks_Edges_Node{}
+	}
+	return t.Program
+}
+func (t *GetRisks_Risks_Edges_Node) GetEditors() []*GetRisks_Risks_Edges_Node_Editors {
+	if t == nil {
+		t = &GetRisks_Risks_Edges_Node{}
+	}
+	return t.Editors
+}
+func (t *GetRisks_Risks_Edges_Node) GetViewers() []*GetRisks_Risks_Edges_Node_Viewers {
+	if t == nil {
+		t = &GetRisks_Risks_Edges_Node{}
+	}
+	return t.Viewers
+}
+func (t *GetRisks_Risks_Edges_Node) GetBlockedGroups() []*GetRisks_Risks_Edges_Node_BlockedGroups {
+	if t == nil {
+		t = &GetRisks_Risks_Edges_Node{}
+	}
+	return t.BlockedGroups
+}
 
 type GetRisks_Risks_Edges struct {
 	Node *GetRisks_Risks_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
@@ -38384,23 +39389,99 @@ func (t *GetRisks_Risks) GetEdges() []*GetRisks_Risks_Edges {
 	return t.Edges
 }
 
+type UpdateRisk_UpdateRisk_Risk_Program struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateRisk_UpdateRisk_Risk_Program) GetID() string {
+	if t == nil {
+		t = &UpdateRisk_UpdateRisk_Risk_Program{}
+	}
+	return t.ID
+}
+func (t *UpdateRisk_UpdateRisk_Risk_Program) GetName() string {
+	if t == nil {
+		t = &UpdateRisk_UpdateRisk_Risk_Program{}
+	}
+	return t.Name
+}
+
+type UpdateRisk_UpdateRisk_Risk_Editors struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateRisk_UpdateRisk_Risk_Editors) GetID() string {
+	if t == nil {
+		t = &UpdateRisk_UpdateRisk_Risk_Editors{}
+	}
+	return t.ID
+}
+func (t *UpdateRisk_UpdateRisk_Risk_Editors) GetName() string {
+	if t == nil {
+		t = &UpdateRisk_UpdateRisk_Risk_Editors{}
+	}
+	return t.Name
+}
+
+type UpdateRisk_UpdateRisk_Risk_Viewers struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateRisk_UpdateRisk_Risk_Viewers) GetID() string {
+	if t == nil {
+		t = &UpdateRisk_UpdateRisk_Risk_Viewers{}
+	}
+	return t.ID
+}
+func (t *UpdateRisk_UpdateRisk_Risk_Viewers) GetName() string {
+	if t == nil {
+		t = &UpdateRisk_UpdateRisk_Risk_Viewers{}
+	}
+	return t.Name
+}
+
+type UpdateRisk_UpdateRisk_Risk_BlockedGroups struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateRisk_UpdateRisk_Risk_BlockedGroups) GetID() string {
+	if t == nil {
+		t = &UpdateRisk_UpdateRisk_Risk_BlockedGroups{}
+	}
+	return t.ID
+}
+func (t *UpdateRisk_UpdateRisk_Risk_BlockedGroups) GetName() string {
+	if t == nil {
+		t = &UpdateRisk_UpdateRisk_Risk_BlockedGroups{}
+	}
+	return t.Name
+}
+
 type UpdateRisk_UpdateRisk_Risk struct {
-	BusinessCosts *string                "json:\"businessCosts,omitempty\" graphql:\"businessCosts\""
-	CreatedAt     *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy     *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description   *string                "json:\"description,omitempty\" graphql:\"description\""
-	Details       map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
-	ID            string                 "json:\"id\" graphql:\"id\""
-	Impact        *enums.RiskImpact      "json:\"impact,omitempty\" graphql:\"impact\""
-	Likelihood    *enums.RiskLikelihood  "json:\"likelihood,omitempty\" graphql:\"likelihood\""
-	Mitigation    *string                "json:\"mitigation,omitempty\" graphql:\"mitigation\""
-	Name          string                 "json:\"name\" graphql:\"name\""
-	RiskType      *string                "json:\"riskType,omitempty\" graphql:\"riskType\""
-	Satisfies     *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Status        *string                "json:\"status,omitempty\" graphql:\"status\""
-	Tags          []string               "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt     *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy     *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	BusinessCosts *string                                     "json:\"businessCosts,omitempty\" graphql:\"businessCosts\""
+	CreatedAt     *time.Time                                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description   *string                                     "json:\"description,omitempty\" graphql:\"description\""
+	Details       map[string]interface{}                      "json:\"details,omitempty\" graphql:\"details\""
+	ID            string                                      "json:\"id\" graphql:\"id\""
+	Impact        *enums.RiskImpact                           "json:\"impact,omitempty\" graphql:\"impact\""
+	Likelihood    *enums.RiskLikelihood                       "json:\"likelihood,omitempty\" graphql:\"likelihood\""
+	Mitigation    *string                                     "json:\"mitigation,omitempty\" graphql:\"mitigation\""
+	Name          string                                      "json:\"name\" graphql:\"name\""
+	RiskType      *string                                     "json:\"riskType,omitempty\" graphql:\"riskType\""
+	Satisfies     *string                                     "json:\"satisfies,omitempty\" graphql:\"satisfies\""
+	Status        *string                                     "json:\"status,omitempty\" graphql:\"status\""
+	Tags          []string                                    "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt     *time.Time                                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Program       []*UpdateRisk_UpdateRisk_Risk_Program       "json:\"program,omitempty\" graphql:\"program\""
+	Editors       []*UpdateRisk_UpdateRisk_Risk_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
+	Viewers       []*UpdateRisk_UpdateRisk_Risk_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
+	BlockedGroups []*UpdateRisk_UpdateRisk_Risk_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 }
 
 func (t *UpdateRisk_UpdateRisk_Risk) GetBusinessCosts() *string {
@@ -38498,6 +39579,30 @@ func (t *UpdateRisk_UpdateRisk_Risk) GetUpdatedBy() *string {
 		t = &UpdateRisk_UpdateRisk_Risk{}
 	}
 	return t.UpdatedBy
+}
+func (t *UpdateRisk_UpdateRisk_Risk) GetProgram() []*UpdateRisk_UpdateRisk_Risk_Program {
+	if t == nil {
+		t = &UpdateRisk_UpdateRisk_Risk{}
+	}
+	return t.Program
+}
+func (t *UpdateRisk_UpdateRisk_Risk) GetEditors() []*UpdateRisk_UpdateRisk_Risk_Editors {
+	if t == nil {
+		t = &UpdateRisk_UpdateRisk_Risk{}
+	}
+	return t.Editors
+}
+func (t *UpdateRisk_UpdateRisk_Risk) GetViewers() []*UpdateRisk_UpdateRisk_Risk_Viewers {
+	if t == nil {
+		t = &UpdateRisk_UpdateRisk_Risk{}
+	}
+	return t.Viewers
+}
+func (t *UpdateRisk_UpdateRisk_Risk) GetBlockedGroups() []*UpdateRisk_UpdateRisk_Risk_BlockedGroups {
+	if t == nil {
+		t = &UpdateRisk_UpdateRisk_Risk{}
+	}
+	return t.BlockedGroups
 }
 
 type UpdateRisk_UpdateRisk struct {
@@ -52154,6 +53259,72 @@ func (t *UpdateProgram) GetUpdateProgram() *UpdateProgram_UpdateProgram {
 	return &t.UpdateProgram
 }
 
+type AddUserToProgramWithRole struct {
+	CreateProgramMembership AddUserToProgramWithRole_CreateProgramMembership "json:\"createProgramMembership\" graphql:\"createProgramMembership\""
+}
+
+func (t *AddUserToProgramWithRole) GetCreateProgramMembership() *AddUserToProgramWithRole_CreateProgramMembership {
+	if t == nil {
+		t = &AddUserToProgramWithRole{}
+	}
+	return &t.CreateProgramMembership
+}
+
+type CreateBulkCSVProgramMembers struct {
+	CreateBulkCSVProgramMembership CreateBulkCSVProgramMembers_CreateBulkCSVProgramMembership "json:\"createBulkCSVProgramMembership\" graphql:\"createBulkCSVProgramMembership\""
+}
+
+func (t *CreateBulkCSVProgramMembers) GetCreateBulkCSVProgramMembership() *CreateBulkCSVProgramMembers_CreateBulkCSVProgramMembership {
+	if t == nil {
+		t = &CreateBulkCSVProgramMembers{}
+	}
+	return &t.CreateBulkCSVProgramMembership
+}
+
+type CreateBulkProgramMembers struct {
+	CreateBulkProgramMembership CreateBulkProgramMembers_CreateBulkProgramMembership "json:\"createBulkProgramMembership\" graphql:\"createBulkProgramMembership\""
+}
+
+func (t *CreateBulkProgramMembers) GetCreateBulkProgramMembership() *CreateBulkProgramMembers_CreateBulkProgramMembership {
+	if t == nil {
+		t = &CreateBulkProgramMembers{}
+	}
+	return &t.CreateBulkProgramMembership
+}
+
+type GetProgramMembersByProgramID struct {
+	ProgramMemberships GetProgramMembersByProgramID_ProgramMemberships "json:\"programMemberships\" graphql:\"programMemberships\""
+}
+
+func (t *GetProgramMembersByProgramID) GetProgramMemberships() *GetProgramMembersByProgramID_ProgramMemberships {
+	if t == nil {
+		t = &GetProgramMembersByProgramID{}
+	}
+	return &t.ProgramMemberships
+}
+
+type RemoveUserFromProgram struct {
+	DeleteProgramMembership RemoveUserFromProgram_DeleteProgramMembership "json:\"deleteProgramMembership\" graphql:\"deleteProgramMembership\""
+}
+
+func (t *RemoveUserFromProgram) GetDeleteProgramMembership() *RemoveUserFromProgram_DeleteProgramMembership {
+	if t == nil {
+		t = &RemoveUserFromProgram{}
+	}
+	return &t.DeleteProgramMembership
+}
+
+type UpdateUserRoleInProgram struct {
+	UpdateProgramMembership UpdateUserRoleInProgram_UpdateProgramMembership "json:\"updateProgramMembership\" graphql:\"updateProgramMembership\""
+}
+
+func (t *UpdateUserRoleInProgram) GetUpdateProgramMembership() *UpdateUserRoleInProgram_UpdateProgramMembership {
+	if t == nil {
+		t = &UpdateUserRoleInProgram{}
+	}
+	return &t.UpdateProgramMembership
+}
+
 type GetAllProgramHistories struct {
 	ProgramHistories GetAllProgramHistories_ProgramHistories "json:\"programHistories\" graphql:\"programHistories\""
 }
@@ -53937,6 +55108,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					mitigation
 					satisfies
 					details
+					ownerID
 				}
 			}
 			... on StandardSearchResult {
@@ -64374,6 +65546,233 @@ func (c *Client) UpdateProgram(ctx context.Context, updateProgramID string, inpu
 	return &res, nil
 }
 
+const AddUserToProgramWithRoleDocument = `mutation AddUserToProgramWithRole ($input: CreateProgramMembershipInput!) {
+	createProgramMembership(input: $input) {
+		programMembership {
+			programID
+			program {
+				id
+				name
+			}
+			id
+			role
+			userID
+			user {
+				displayName
+				email
+				firstName
+				id
+				lastName
+			}
+		}
+	}
+}
+`
+
+func (c *Client) AddUserToProgramWithRole(ctx context.Context, input CreateProgramMembershipInput, interceptors ...clientv2.RequestInterceptor) (*AddUserToProgramWithRole, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res AddUserToProgramWithRole
+	if err := c.Client.Post(ctx, "AddUserToProgramWithRole", AddUserToProgramWithRoleDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkCSVProgramMembersDocument = `mutation CreateBulkCSVProgramMembers ($input: Upload!) {
+	createBulkCSVProgramMembership(input: $input) {
+		programMemberships {
+			programID
+			program {
+				id
+				name
+			}
+			id
+			role
+			userID
+			user {
+				displayName
+				email
+				firstName
+				id
+				lastName
+			}
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkCSVProgramMembers(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVProgramMembers, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkCSVProgramMembers
+	if err := c.Client.Post(ctx, "CreateBulkCSVProgramMembers", CreateBulkCSVProgramMembersDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkProgramMembersDocument = `mutation CreateBulkProgramMembers ($input: [CreateProgramMembershipInput!]) {
+	createBulkProgramMembership(input: $input) {
+		programMemberships {
+			programID
+			program {
+				id
+				name
+			}
+			id
+			role
+			userID
+			user {
+				displayName
+				email
+				firstName
+				id
+				lastName
+			}
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkProgramMembers(ctx context.Context, input []*CreateProgramMembershipInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkProgramMembers, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkProgramMembers
+	if err := c.Client.Post(ctx, "CreateBulkProgramMembers", CreateBulkProgramMembersDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetProgramMembersByProgramIDDocument = `query GetProgramMembersByProgramID ($where: ProgramMembershipWhereInput) {
+	programMemberships(where: $where) {
+		edges {
+			node {
+				programID
+				program {
+					id
+					name
+				}
+				id
+				role
+				userID
+				user {
+					displayName
+					email
+					firstName
+					id
+					lastName
+				}
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetProgramMembersByProgramID(ctx context.Context, where *ProgramMembershipWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetProgramMembersByProgramID, error) {
+	vars := map[string]any{
+		"where": where,
+	}
+
+	var res GetProgramMembersByProgramID
+	if err := c.Client.Post(ctx, "GetProgramMembersByProgramID", GetProgramMembersByProgramIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const RemoveUserFromProgramDocument = `mutation RemoveUserFromProgram ($deleteProgramMembershipId: ID!) {
+	deleteProgramMembership(id: $deleteProgramMembershipId) {
+		deletedID
+	}
+}
+`
+
+func (c *Client) RemoveUserFromProgram(ctx context.Context, deleteProgramMembershipID string, interceptors ...clientv2.RequestInterceptor) (*RemoveUserFromProgram, error) {
+	vars := map[string]any{
+		"deleteProgramMembershipId": deleteProgramMembershipID,
+	}
+
+	var res RemoveUserFromProgram
+	if err := c.Client.Post(ctx, "RemoveUserFromProgram", RemoveUserFromProgramDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateUserRoleInProgramDocument = `mutation UpdateUserRoleInProgram ($updateProgramMemberId: ID!, $input: UpdateProgramMembershipInput!) {
+	updateProgramMembership(id: $updateProgramMemberId, input: $input) {
+		programMembership {
+			programID
+			program {
+				id
+				name
+			}
+			id
+			role
+			userID
+			user {
+				displayName
+				email
+				firstName
+				id
+				lastName
+			}
+		}
+	}
+}
+`
+
+func (c *Client) UpdateUserRoleInProgram(ctx context.Context, updateProgramMemberID string, input UpdateProgramMembershipInput, interceptors ...clientv2.RequestInterceptor) (*UpdateUserRoleInProgram, error) {
+	vars := map[string]any{
+		"updateProgramMemberId": updateProgramMemberID,
+		"input":                 input,
+	}
+
+	var res UpdateUserRoleInProgram
+	if err := c.Client.Post(ctx, "UpdateUserRoleInProgram", UpdateUserRoleInProgramDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const GetAllProgramHistoriesDocument = `query GetAllProgramHistories {
 	programHistories {
 		edges {
@@ -64893,6 +66292,22 @@ const CreateRiskDocument = `mutation CreateRisk ($input: CreateRiskInput!) {
 			tags
 			updatedAt
 			updatedBy
+			program {
+				id
+				name
+			}
+			editors {
+				id
+				name
+			}
+			viewers {
+				id
+				name
+			}
+			blockedGroups {
+				id
+				name
+			}
 		}
 	}
 }
@@ -64959,6 +66374,22 @@ const GetAllRisksDocument = `query GetAllRisks {
 				tags
 				updatedAt
 				updatedBy
+				program {
+					id
+					name
+				}
+				editors {
+					id
+					name
+				}
+				viewers {
+					id
+					name
+				}
+				blockedGroups {
+					id
+					name
+				}
 			}
 		}
 	}
@@ -64998,6 +66429,22 @@ const GetRiskByIDDocument = `query GetRiskByID ($riskId: ID!) {
 		tags
 		updatedAt
 		updatedBy
+		program {
+			id
+			name
+		}
+		editors {
+			id
+			name
+		}
+		viewers {
+			id
+			name
+		}
+		blockedGroups {
+			id
+			name
+		}
 	}
 }
 `
@@ -65039,6 +66486,22 @@ const GetRisksDocument = `query GetRisks ($where: RiskWhereInput) {
 				tags
 				updatedAt
 				updatedBy
+				program {
+					id
+					name
+				}
+				editors {
+					id
+					name
+				}
+				viewers {
+					id
+					name
+				}
+				blockedGroups {
+					id
+					name
+				}
 			}
 		}
 	}
@@ -65081,6 +66544,22 @@ const UpdateRiskDocument = `mutation UpdateRisk ($updateRiskId: ID!, $input: Upd
 			tags
 			updatedAt
 			updatedBy
+			program {
+				id
+				name
+			}
+			editors {
+				id
+				name
+			}
+			viewers {
+				id
+				name
+			}
+			blockedGroups {
+				id
+				name
+			}
 		}
 	}
 }
@@ -68678,6 +70157,12 @@ var DocumentOperationNames = map[string]string{
 	GetProgramByIDDocument:                        "GetProgramByID",
 	GetProgramsDocument:                           "GetPrograms",
 	UpdateProgramDocument:                         "UpdateProgram",
+	AddUserToProgramWithRoleDocument:              "AddUserToProgramWithRole",
+	CreateBulkCSVProgramMembersDocument:           "CreateBulkCSVProgramMembers",
+	CreateBulkProgramMembersDocument:              "CreateBulkProgramMembers",
+	GetProgramMembersByProgramIDDocument:          "GetProgramMembersByProgramID",
+	RemoveUserFromProgramDocument:                 "RemoveUserFromProgram",
+	UpdateUserRoleInProgramDocument:               "UpdateUserRoleInProgram",
 	GetAllProgramHistoriesDocument:                "GetAllProgramHistories",
 	GetProgramHistoriesDocument:                   "GetProgramHistories",
 	CreateBulkCSVProgramMembershipDocument:        "CreateBulkCSVProgramMembership",

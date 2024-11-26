@@ -104,19 +104,40 @@ type control
     define can_view: [user] or can_view from parent
     define can_edit: [user] or can_edit from parent
     define can_delete: [user] or can_delete from parent
-    define parent: [program]
+    define parent: [user, service, program]
+    define viewer: [group#member]
+    define editor: [group#member]
+    define blocked: [user, group#member]
 type subcontrol
   relations
     define can_view: [user] or can_view from parent
     define can_edit: [user] or can_edit from parent
     define can_delete: [user] or can_delete from parent
-    define parent: [program]
+    define parent: [user, service, program]
+    define viewer: [group#member]
+    define editor: [group#member]
+    define blocked: [user, group#member]
 type control_objective
   relations
     define can_view: [user] or can_view from parent
     define can_edit: [user] or can_edit from parent
     define can_delete: [user] or can_delete from parent
-    define parent: [program]
+    define parent: [user, service, program]
+    define viewer: [group#member]
+    define editor: [group#member]
+    define blocked: [user, group#member]
+# risks are associated with an organization but do not inherit access from the organization
+# the risk creator will be made the admin of the risk and all other access will be assigned via
+# a program or a group
+type risk
+  relations
+    define can_view: [user] or ((can_view from parent or viewer) but not blocked)
+    define can_edit: [user] or ((can_edit from parent or editor) but not blocked)
+    define can_delete: [user] or ((can_delete from parent or editor) but not blocked)
+    define parent: [user, service, program]
+    define viewer: [group#member]
+    define editor: [group#member]
+    define blocked: [user, group#member]
 # policies are always assigned to an organization and by default all org members can view
 # groups can be used to exclude users from being able to view a internalpolicy
 # groups can be used to give edit (or delete) access to users

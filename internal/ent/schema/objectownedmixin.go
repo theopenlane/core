@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
+	"github.com/theopenlane/iam/fgax"
 )
 
 // ObjectOwnedMixin is a mixin for object owned entities
@@ -260,4 +261,36 @@ func getObjectType(kind any) string {
 	objectType := reflect.TypeOf(kind).String()
 
 	return strings.ToLower(strings.ReplaceAll(strings.ReplaceAll(objectType, "func(schema.", ""), ")", ""))
+}
+
+// groupReadWriteHooks are the hooks that are used to add the editor, blocked, and viewer tuples
+// based on a group
+var groupReadWriteHooks = append(groupWriteOnlyHooks, groupReadOnlyHooks...)
+
+// groupReadOnlyHooks are the hooks that are used to add the viewer tuples
+// based on a group
+var groupReadOnlyHooks = []ent.Hook{
+	hook.On(
+		hooks.HookRelationTuples(map[string]string{
+			"viewer_id": "group",
+		}, fgax.ViewerRelation), // add viewer tuples for associated groups
+		ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
+	),
+}
+
+// groupWriteOnlyHooks are the hooks that are used to add the editor and blocked tuples
+// based on a group
+var groupWriteOnlyHooks = []ent.Hook{
+	hook.On(
+		hooks.HookRelationTuples(map[string]string{
+			"editor_id": "group",
+		}, fgax.EditorRelation), // add editor tuples for associated groups
+		ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
+	),
+	hook.On(
+		hooks.HookRelationTuples(map[string]string{
+			"blocked_group_id": "group",
+		}, fgax.BlockedRelation), // add block tuples for associated groups
+		ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
+	),
 }

@@ -133,6 +133,9 @@ type SchemaConfig struct {
 	ProgramMembershipHistory         string // ProgramMembershipHistory table.
 	Risk                             string // Risk table.
 	RiskActionplans                  string // Risk-actionplans->ActionPlan table.
+	RiskViewers                      string // Risk-viewers->Group table.
+	RiskEditors                      string // Risk-editors->Group table.
+	RiskBlockedGroups                string // Risk-blocked_groups->Group table.
 	RiskHistory                      string // RiskHistory table.
 	Standard                         string // Standard table.
 	StandardControlobjectives        string // Standard-controlobjectives->ControlObjective table.

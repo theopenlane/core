@@ -7002,6 +7002,10 @@ func (m *RiskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetDetails(details)
 	}
 
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -7140,6 +7144,12 @@ func (m *RiskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDetails(risk.Details)
 		}
 
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(risk.OwnerID)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -7190,6 +7200,7 @@ func (m *RiskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetMitigation(risk.Mitigation).
 			SetSatisfies(risk.Satisfies).
 			SetDetails(risk.Details).
+			SetOwnerID(risk.OwnerID).
 			Save(ctx)
 		if err != nil {
 			return err

@@ -284,6 +284,12 @@ func (rhc *RiskHistoryCreate) SetDetails(m map[string]interface{}) *RiskHistoryC
 	return rhc
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (rhc *RiskHistoryCreate) SetOwnerID(s string) *RiskHistoryCreate {
+	rhc.mutation.SetOwnerID(s)
+	return rhc
+}
+
 // SetID sets the "id" field.
 func (rhc *RiskHistoryCreate) SetID(s string) *RiskHistoryCreate {
 	rhc.mutation.SetID(s)
@@ -305,7 +311,9 @@ func (rhc *RiskHistoryCreate) Mutation() *RiskHistoryMutation {
 
 // Save creates the RiskHistory in the database.
 func (rhc *RiskHistoryCreate) Save(ctx context.Context) (*RiskHistory, error) {
-	rhc.defaults()
+	if err := rhc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, rhc.sqlSave, rhc.mutation, rhc.hooks)
 }
 
@@ -332,20 +340,32 @@ func (rhc *RiskHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (rhc *RiskHistoryCreate) defaults() {
+func (rhc *RiskHistoryCreate) defaults() error {
 	if _, ok := rhc.mutation.HistoryTime(); !ok {
+		if riskhistory.DefaultHistoryTime == nil {
+			return fmt.Errorf("generated: uninitialized riskhistory.DefaultHistoryTime (forgotten import generated/runtime?)")
+		}
 		v := riskhistory.DefaultHistoryTime()
 		rhc.mutation.SetHistoryTime(v)
 	}
 	if _, ok := rhc.mutation.CreatedAt(); !ok {
+		if riskhistory.DefaultCreatedAt == nil {
+			return fmt.Errorf("generated: uninitialized riskhistory.DefaultCreatedAt (forgotten import generated/runtime?)")
+		}
 		v := riskhistory.DefaultCreatedAt()
 		rhc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := rhc.mutation.UpdatedAt(); !ok {
+		if riskhistory.DefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized riskhistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := riskhistory.DefaultUpdatedAt()
 		rhc.mutation.SetUpdatedAt(v)
 	}
 	if _, ok := rhc.mutation.MappingID(); !ok {
+		if riskhistory.DefaultMappingID == nil {
+			return fmt.Errorf("generated: uninitialized riskhistory.DefaultMappingID (forgotten import generated/runtime?)")
+		}
 		v := riskhistory.DefaultMappingID()
 		rhc.mutation.SetMappingID(v)
 	}
@@ -353,10 +373,22 @@ func (rhc *RiskHistoryCreate) defaults() {
 		v := riskhistory.DefaultTags
 		rhc.mutation.SetTags(v)
 	}
+	if _, ok := rhc.mutation.Impact(); !ok {
+		v := riskhistory.DefaultImpact
+		rhc.mutation.SetImpact(v)
+	}
+	if _, ok := rhc.mutation.Likelihood(); !ok {
+		v := riskhistory.DefaultLikelihood
+		rhc.mutation.SetLikelihood(v)
+	}
 	if _, ok := rhc.mutation.ID(); !ok {
+		if riskhistory.DefaultID == nil {
+			return fmt.Errorf("generated: uninitialized riskhistory.DefaultID (forgotten import generated/runtime?)")
+		}
 		v := riskhistory.DefaultID()
 		rhc.mutation.SetID(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -387,6 +419,9 @@ func (rhc *RiskHistoryCreate) check() error {
 		if err := riskhistory.LikelihoodValidator(v); err != nil {
 			return &ValidationError{Name: "likelihood", err: fmt.Errorf(`generated: validator failed for field "RiskHistory.likelihood": %w`, err)}
 		}
+	}
+	if _, ok := rhc.mutation.OwnerID(); !ok {
+		return &ValidationError{Name: "owner_id", err: errors.New(`generated: missing required field "RiskHistory.owner_id"`)}
 	}
 	return nil
 }
@@ -507,6 +542,10 @@ func (rhc *RiskHistoryCreate) createSpec() (*RiskHistory, *sqlgraph.CreateSpec) 
 	if value, ok := rhc.mutation.Details(); ok {
 		_spec.SetField(riskhistory.FieldDetails, field.TypeJSON, value)
 		_node.Details = value
+	}
+	if value, ok := rhc.mutation.OwnerID(); ok {
+		_spec.SetField(riskhistory.FieldOwnerID, field.TypeString, value)
+		_node.OwnerID = value
 	}
 	return _node, _spec
 }

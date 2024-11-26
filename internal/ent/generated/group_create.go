@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 )
@@ -419,6 +420,51 @@ func (gc *GroupCreate) AddProgramBlockedGroups(p ...*Program) *GroupCreate {
 		ids[i] = p[i].ID
 	}
 	return gc.AddProgramBlockedGroupIDs(ids...)
+}
+
+// AddRiskViewerIDs adds the "risk_viewers" edge to the Risk entity by IDs.
+func (gc *GroupCreate) AddRiskViewerIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddRiskViewerIDs(ids...)
+	return gc
+}
+
+// AddRiskViewers adds the "risk_viewers" edges to the Risk entity.
+func (gc *GroupCreate) AddRiskViewers(r ...*Risk) *GroupCreate {
+	ids := make([]string, len(r))
+	for i := range r {
+		ids[i] = r[i].ID
+	}
+	return gc.AddRiskViewerIDs(ids...)
+}
+
+// AddRiskEditorIDs adds the "risk_editors" edge to the Risk entity by IDs.
+func (gc *GroupCreate) AddRiskEditorIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddRiskEditorIDs(ids...)
+	return gc
+}
+
+// AddRiskEditors adds the "risk_editors" edges to the Risk entity.
+func (gc *GroupCreate) AddRiskEditors(r ...*Risk) *GroupCreate {
+	ids := make([]string, len(r))
+	for i := range r {
+		ids[i] = r[i].ID
+	}
+	return gc.AddRiskEditorIDs(ids...)
+}
+
+// AddRiskBlockedGroupIDs adds the "risk_blocked_groups" edge to the Risk entity by IDs.
+func (gc *GroupCreate) AddRiskBlockedGroupIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddRiskBlockedGroupIDs(ids...)
+	return gc
+}
+
+// AddRiskBlockedGroups adds the "risk_blocked_groups" edges to the Risk entity.
+func (gc *GroupCreate) AddRiskBlockedGroups(r ...*Risk) *GroupCreate {
+	ids := make([]string, len(r))
+	for i := range r {
+		ids[i] = r[i].ID
+	}
+	return gc.AddRiskBlockedGroupIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the GroupMembership entity by IDs.
@@ -870,6 +916,57 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = gc.schemaConfig.ProgramBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.RiskViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.RiskViewersTable,
+			Columns: group.RiskViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.RiskViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.RiskEditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.RiskEditorsTable,
+			Columns: group.RiskEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.RiskEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.RiskBlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.RiskBlockedGroupsTable,
+			Columns: group.RiskBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.RiskBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

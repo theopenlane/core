@@ -5323,6 +5323,45 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				*wq = *query
 			})
 
+		case "riskViewers":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&RiskClient{config: gr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, riskImplementors)...); err != nil {
+				return err
+			}
+			gr.WithNamedRiskViewers(alias, func(wq *RiskQuery) {
+				*wq = *query
+			})
+
+		case "riskEditors":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&RiskClient{config: gr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, riskImplementors)...); err != nil {
+				return err
+			}
+			gr.WithNamedRiskEditors(alias, func(wq *RiskQuery) {
+				*wq = *query
+			})
+
+		case "riskBlockedGroups":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&RiskClient{config: gr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, riskImplementors)...); err != nil {
+				return err
+			}
+			gr.WithNamedRiskBlockedGroups(alias, func(wq *RiskQuery) {
+				*wq = *query
+			})
+
 		case "members":
 			var (
 				alias = field.Alias
@@ -9260,6 +9299,19 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				*wq = *query
 			})
 
+		case "risks":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&RiskClient{config: o.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, riskImplementors)...); err != nil {
+				return err
+			}
+			o.WithNamedRisks(alias, func(wq *RiskQuery) {
+				*wq = *query
+			})
+
 		case "members":
 			var (
 				alias = field.Alias
@@ -11342,6 +11394,21 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				*wq = *query
 			})
 
+		case "owner":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: r.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			r.withOwner = query
+			if _, ok := fieldSeen[risk.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, risk.FieldOwnerID)
+				fieldSeen[risk.FieldOwnerID] = struct{}{}
+			}
+
 		case "program":
 			var (
 				alias = field.Alias
@@ -11352,6 +11419,45 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				return err
 			}
 			r.WithNamedProgram(alias, func(wq *ProgramQuery) {
+				*wq = *query
+			})
+
+		case "viewers":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&GroupClient{config: r.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
+				return err
+			}
+			r.WithNamedViewers(alias, func(wq *GroupQuery) {
+				*wq = *query
+			})
+
+		case "editors":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&GroupClient{config: r.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
+				return err
+			}
+			r.WithNamedEditors(alias, func(wq *GroupQuery) {
+				*wq = *query
+			})
+
+		case "blockedGroups":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&GroupClient{config: r.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
+				return err
+			}
+			r.WithNamedBlockedGroups(alias, func(wq *GroupQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -11438,6 +11544,11 @@ func (r *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 			if _, ok := fieldSeen[risk.FieldDetails]; !ok {
 				selectedFields = append(selectedFields, risk.FieldDetails)
 				fieldSeen[risk.FieldDetails] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[risk.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, risk.FieldOwnerID)
+				fieldSeen[risk.FieldOwnerID] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -11600,6 +11711,11 @@ func (rh *RiskHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if _, ok := fieldSeen[riskhistory.FieldDetails]; !ok {
 				selectedFields = append(selectedFields, riskhistory.FieldDetails)
 				fieldSeen[riskhistory.FieldDetails] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[riskhistory.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, riskhistory.FieldOwnerID)
+				fieldSeen[riskhistory.FieldOwnerID] = struct{}{}
 			}
 		case "id":
 		case "__typename":

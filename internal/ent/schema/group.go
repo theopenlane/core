@@ -108,6 +108,12 @@ func (Group) Edges() []ent.Edge {
 			Ref("editors"),
 		edge.From("program_blocked_groups", Program.Type).
 			Ref("blocked_groups"),
+		edge.From("risk_viewers", Risk.Type).
+			Ref("viewers"),
+		edge.From("risk_editors", Risk.Type).
+			Ref("editors"),
+		edge.From("risk_blocked_groups", Risk.Type).
+			Ref("blocked_groups"),
 	}
 }
 

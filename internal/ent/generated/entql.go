@@ -1912,6 +1912,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			risk.FieldMitigation:    {Type: field.TypeString, Column: risk.FieldMitigation},
 			risk.FieldSatisfies:     {Type: field.TypeString, Column: risk.FieldSatisfies},
 			risk.FieldDetails:       {Type: field.TypeJSON, Column: risk.FieldDetails},
+			risk.FieldOwnerID:       {Type: field.TypeString, Column: risk.FieldOwnerID},
 		},
 	}
 	graph.Nodes[63] = &sqlgraph.Node{
@@ -1946,6 +1947,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			riskhistory.FieldMitigation:    {Type: field.TypeString, Column: riskhistory.FieldMitigation},
 			riskhistory.FieldSatisfies:     {Type: field.TypeString, Column: riskhistory.FieldSatisfies},
 			riskhistory.FieldDetails:       {Type: field.TypeJSON, Column: riskhistory.FieldDetails},
+			riskhistory.FieldOwnerID:       {Type: field.TypeString, Column: riskhistory.FieldOwnerID},
 		},
 	}
 	graph.Nodes[64] = &sqlgraph.Node{
@@ -3682,6 +3684,42 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Program",
 	)
 	graph.MustAddE(
+		"risk_viewers",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.RiskViewersTable,
+			Columns: group.RiskViewersPrimaryKey,
+			Bidi:    false,
+		},
+		"Group",
+		"Risk",
+	)
+	graph.MustAddE(
+		"risk_editors",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.RiskEditorsTable,
+			Columns: group.RiskEditorsPrimaryKey,
+			Bidi:    false,
+		},
+		"Group",
+		"Risk",
+	)
+	graph.MustAddE(
+		"risk_blocked_groups",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.RiskBlockedGroupsTable,
+			Columns: group.RiskBlockedGroupsPrimaryKey,
+			Bidi:    false,
+		},
+		"Group",
+		"Risk",
+	)
+	graph.MustAddE(
 		"members",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -4510,6 +4548,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"InternalPolicy",
 	)
 	graph.MustAddE(
+		"risks",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.RisksTable,
+			Columns: []string{organization.RisksColumn},
+			Bidi:    false,
+		},
+		"Organization",
+		"Risk",
+	)
+	graph.MustAddE(
 		"members",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -4978,6 +5028,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"ActionPlan",
 	)
 	graph.MustAddE(
+		"owner",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   risk.OwnerTable,
+			Columns: []string{risk.OwnerColumn},
+			Bidi:    false,
+		},
+		"Risk",
+		"Organization",
+	)
+	graph.MustAddE(
 		"program",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -4988,6 +5050,42 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Risk",
 		"Program",
+	)
+	graph.MustAddE(
+		"viewers",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   risk.ViewersTable,
+			Columns: risk.ViewersPrimaryKey,
+			Bidi:    false,
+		},
+		"Risk",
+		"Group",
+	)
+	graph.MustAddE(
+		"editors",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   risk.EditorsTable,
+			Columns: risk.EditorsPrimaryKey,
+			Bidi:    false,
+		},
+		"Risk",
+		"Group",
+	)
+	graph.MustAddE(
+		"blocked_groups",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   risk.BlockedGroupsTable,
+			Columns: risk.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+		},
+		"Risk",
+		"Group",
 	)
 	graph.MustAddE(
 		"controlobjectives",
@@ -10588,6 +10686,48 @@ func (f *GroupFilter) WhereHasProgramBlockedGroupsWith(preds ...predicate.Progra
 	})))
 }
 
+// WhereHasRiskViewers applies a predicate to check if query has an edge risk_viewers.
+func (f *GroupFilter) WhereHasRiskViewers() {
+	f.Where(entql.HasEdge("risk_viewers"))
+}
+
+// WhereHasRiskViewersWith applies a predicate to check if query has an edge risk_viewers with a given conditions (other predicates).
+func (f *GroupFilter) WhereHasRiskViewersWith(preds ...predicate.Risk) {
+	f.Where(entql.HasEdgeWith("risk_viewers", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasRiskEditors applies a predicate to check if query has an edge risk_editors.
+func (f *GroupFilter) WhereHasRiskEditors() {
+	f.Where(entql.HasEdge("risk_editors"))
+}
+
+// WhereHasRiskEditorsWith applies a predicate to check if query has an edge risk_editors with a given conditions (other predicates).
+func (f *GroupFilter) WhereHasRiskEditorsWith(preds ...predicate.Risk) {
+	f.Where(entql.HasEdgeWith("risk_editors", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasRiskBlockedGroups applies a predicate to check if query has an edge risk_blocked_groups.
+func (f *GroupFilter) WhereHasRiskBlockedGroups() {
+	f.Where(entql.HasEdge("risk_blocked_groups"))
+}
+
+// WhereHasRiskBlockedGroupsWith applies a predicate to check if query has an edge risk_blocked_groups with a given conditions (other predicates).
+func (f *GroupFilter) WhereHasRiskBlockedGroupsWith(preds ...predicate.Risk) {
+	f.Where(entql.HasEdgeWith("risk_blocked_groups", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasMembers applies a predicate to check if query has an edge members.
 func (f *GroupFilter) WhereHasMembers() {
 	f.Where(entql.HasEdge("members"))
@@ -14019,6 +14159,20 @@ func (f *OrganizationFilter) WhereHasInternalpoliciesWith(preds ...predicate.Int
 	})))
 }
 
+// WhereHasRisks applies a predicate to check if query has an edge risks.
+func (f *OrganizationFilter) WhereHasRisks() {
+	f.Where(entql.HasEdge("risks"))
+}
+
+// WhereHasRisksWith applies a predicate to check if query has an edge risks with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasRisksWith(preds ...predicate.Risk) {
+	f.Where(entql.HasEdgeWith("risks", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasMembers applies a predicate to check if query has an edge members.
 func (f *OrganizationFilter) WhereHasMembers() {
 	f.Where(entql.HasEdge("members"))
@@ -15998,6 +16152,11 @@ func (f *RiskFilter) WhereDetails(p entql.BytesP) {
 	f.Where(p.Field(risk.FieldDetails))
 }
 
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *RiskFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(risk.FieldOwnerID))
+}
+
 // WhereHasControl applies a predicate to check if query has an edge control.
 func (f *RiskFilter) WhereHasControl() {
 	f.Where(entql.HasEdge("control"))
@@ -16040,6 +16199,20 @@ func (f *RiskFilter) WhereHasActionplansWith(preds ...predicate.ActionPlan) {
 	})))
 }
 
+// WhereHasOwner applies a predicate to check if query has an edge owner.
+func (f *RiskFilter) WhereHasOwner() {
+	f.Where(entql.HasEdge("owner"))
+}
+
+// WhereHasOwnerWith applies a predicate to check if query has an edge owner with a given conditions (other predicates).
+func (f *RiskFilter) WhereHasOwnerWith(preds ...predicate.Organization) {
+	f.Where(entql.HasEdgeWith("owner", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasProgram applies a predicate to check if query has an edge program.
 func (f *RiskFilter) WhereHasProgram() {
 	f.Where(entql.HasEdge("program"))
@@ -16048,6 +16221,48 @@ func (f *RiskFilter) WhereHasProgram() {
 // WhereHasProgramWith applies a predicate to check if query has an edge program with a given conditions (other predicates).
 func (f *RiskFilter) WhereHasProgramWith(preds ...predicate.Program) {
 	f.Where(entql.HasEdgeWith("program", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasViewers applies a predicate to check if query has an edge viewers.
+func (f *RiskFilter) WhereHasViewers() {
+	f.Where(entql.HasEdge("viewers"))
+}
+
+// WhereHasViewersWith applies a predicate to check if query has an edge viewers with a given conditions (other predicates).
+func (f *RiskFilter) WhereHasViewersWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("viewers", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasEditors applies a predicate to check if query has an edge editors.
+func (f *RiskFilter) WhereHasEditors() {
+	f.Where(entql.HasEdge("editors"))
+}
+
+// WhereHasEditorsWith applies a predicate to check if query has an edge editors with a given conditions (other predicates).
+func (f *RiskFilter) WhereHasEditorsWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("editors", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasBlockedGroups applies a predicate to check if query has an edge blocked_groups.
+func (f *RiskFilter) WhereHasBlockedGroups() {
+	f.Where(entql.HasEdge("blocked_groups"))
+}
+
+// WhereHasBlockedGroupsWith applies a predicate to check if query has an edge blocked_groups with a given conditions (other predicates).
+func (f *RiskFilter) WhereHasBlockedGroupsWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("blocked_groups", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -16197,6 +16412,11 @@ func (f *RiskHistoryFilter) WhereSatisfies(p entql.StringP) {
 // WhereDetails applies the entql json.RawMessage predicate on the details field.
 func (f *RiskHistoryFilter) WhereDetails(p entql.BytesP) {
 	f.Where(p.Field(riskhistory.FieldDetails))
+}
+
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *RiskHistoryFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(riskhistory.FieldOwnerID))
 }
 
 // addPredicate implements the predicateAdder interface.

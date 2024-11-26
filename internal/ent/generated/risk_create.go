@@ -12,6 +12,8 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/group"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
@@ -253,6 +255,12 @@ func (rc *RiskCreate) SetDetails(m map[string]interface{}) *RiskCreate {
 	return rc
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (rc *RiskCreate) SetOwnerID(s string) *RiskCreate {
+	rc.mutation.SetOwnerID(s)
+	return rc
+}
+
 // SetID sets the "id" field.
 func (rc *RiskCreate) SetID(s string) *RiskCreate {
 	rc.mutation.SetID(s)
@@ -312,6 +320,11 @@ func (rc *RiskCreate) AddActionplans(a ...*ActionPlan) *RiskCreate {
 	return rc.AddActionplanIDs(ids...)
 }
 
+// SetOwner sets the "owner" edge to the Organization entity.
+func (rc *RiskCreate) SetOwner(o *Organization) *RiskCreate {
+	return rc.SetOwnerID(o.ID)
+}
+
 // AddProgramIDs adds the "program" edge to the Program entity by IDs.
 func (rc *RiskCreate) AddProgramIDs(ids ...string) *RiskCreate {
 	rc.mutation.AddProgramIDs(ids...)
@@ -325,6 +338,51 @@ func (rc *RiskCreate) AddProgram(p ...*Program) *RiskCreate {
 		ids[i] = p[i].ID
 	}
 	return rc.AddProgramIDs(ids...)
+}
+
+// AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
+func (rc *RiskCreate) AddViewerIDs(ids ...string) *RiskCreate {
+	rc.mutation.AddViewerIDs(ids...)
+	return rc
+}
+
+// AddViewers adds the "viewers" edges to the Group entity.
+func (rc *RiskCreate) AddViewers(g ...*Group) *RiskCreate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return rc.AddViewerIDs(ids...)
+}
+
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (rc *RiskCreate) AddEditorIDs(ids ...string) *RiskCreate {
+	rc.mutation.AddEditorIDs(ids...)
+	return rc
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (rc *RiskCreate) AddEditors(g ...*Group) *RiskCreate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return rc.AddEditorIDs(ids...)
+}
+
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (rc *RiskCreate) AddBlockedGroupIDs(ids ...string) *RiskCreate {
+	rc.mutation.AddBlockedGroupIDs(ids...)
+	return rc
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (rc *RiskCreate) AddBlockedGroups(g ...*Group) *RiskCreate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return rc.AddBlockedGroupIDs(ids...)
 }
 
 // Mutation returns the RiskMutation object of the builder.
@@ -389,6 +447,14 @@ func (rc *RiskCreate) defaults() error {
 		v := risk.DefaultTags
 		rc.mutation.SetTags(v)
 	}
+	if _, ok := rc.mutation.Impact(); !ok {
+		v := risk.DefaultImpact
+		rc.mutation.SetImpact(v)
+	}
+	if _, ok := rc.mutation.Likelihood(); !ok {
+		v := risk.DefaultLikelihood
+		rc.mutation.SetLikelihood(v)
+	}
 	if _, ok := rc.mutation.ID(); !ok {
 		if risk.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized risk.DefaultID (forgotten import generated/runtime?)")
@@ -407,6 +473,11 @@ func (rc *RiskCreate) check() error {
 	if _, ok := rc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "Risk.name"`)}
 	}
+	if v, ok := rc.mutation.Name(); ok {
+		if err := risk.NameValidator(v); err != nil {
+			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Risk.name": %w`, err)}
+		}
+	}
 	if v, ok := rc.mutation.Impact(); ok {
 		if err := risk.ImpactValidator(v); err != nil {
 			return &ValidationError{Name: "impact", err: fmt.Errorf(`generated: validator failed for field "Risk.impact": %w`, err)}
@@ -416,6 +487,17 @@ func (rc *RiskCreate) check() error {
 		if err := risk.LikelihoodValidator(v); err != nil {
 			return &ValidationError{Name: "likelihood", err: fmt.Errorf(`generated: validator failed for field "Risk.likelihood": %w`, err)}
 		}
+	}
+	if _, ok := rc.mutation.OwnerID(); !ok {
+		return &ValidationError{Name: "owner_id", err: errors.New(`generated: missing required field "Risk.owner_id"`)}
+	}
+	if v, ok := rc.mutation.OwnerID(); ok {
+		if err := risk.OwnerIDValidator(v); err != nil {
+			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Risk.owner_id": %w`, err)}
+		}
+	}
+	if len(rc.mutation.OwnerIDs()) == 0 {
+		return &ValidationError{Name: "owner", err: errors.New(`generated: missing required edge "Risk.owner"`)}
 	}
 	return nil
 }
@@ -576,6 +658,24 @@ func (rc *RiskCreate) createSpec() (*Risk, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := rc.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   risk.OwnerTable,
+			Columns: []string{risk.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = rc.schemaConfig.Risk
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.OwnerID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := rc.mutation.ProgramIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -588,6 +688,57 @@ func (rc *RiskCreate) createSpec() (*Risk, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = rc.schemaConfig.ProgramRisks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := rc.mutation.ViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   risk.ViewersTable,
+			Columns: risk.ViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = rc.schemaConfig.RiskViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := rc.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   risk.EditorsTable,
+			Columns: risk.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = rc.schemaConfig.RiskEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := rc.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   risk.BlockedGroupsTable,
+			Columns: risk.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = rc.schemaConfig.RiskBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

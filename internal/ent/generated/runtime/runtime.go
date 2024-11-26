@@ -3357,12 +3357,41 @@ func init() {
 	// programmembershiphistory.DefaultID holds the default value on creation for the id field.
 	programmembershiphistory.DefaultID = programmembershiphistoryDescID.Default.(func() string)
 	riskMixin := schema.Risk{}.Mixin()
+	risk.Policy = privacy.NewPolicies(schema.Risk{})
+	risk.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := risk.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
 	riskMixinHooks0 := riskMixin[0].Hooks()
 	riskMixinHooks1 := riskMixin[1].Hooks()
-	risk.Hooks[0] = riskMixinHooks0[0]
-	risk.Hooks[1] = riskMixinHooks1[0]
+	riskMixinHooks4 := riskMixin[4].Hooks()
+	riskHooks := schema.Risk{}.Hooks()
+
+	risk.Hooks[1] = riskMixinHooks0[0]
+
+	risk.Hooks[2] = riskMixinHooks1[0]
+
+	risk.Hooks[3] = riskMixinHooks4[0]
+
+	risk.Hooks[4] = riskMixinHooks4[1]
+
+	risk.Hooks[5] = riskMixinHooks4[2]
+
+	risk.Hooks[6] = riskHooks[0]
+
+	risk.Hooks[7] = riskHooks[1]
+
+	risk.Hooks[8] = riskHooks[2]
 	riskMixinInters1 := riskMixin[1].Interceptors()
+	riskMixinInters4 := riskMixin[4].Interceptors()
+	riskInters := schema.Risk{}.Interceptors()
 	risk.Interceptors[0] = riskMixinInters1[0]
+	risk.Interceptors[1] = riskMixinInters4[0]
+	risk.Interceptors[2] = riskInters[0]
 	riskMixinFields0 := riskMixin[0].Fields()
 	_ = riskMixinFields0
 	riskMixinFields2 := riskMixin[2].Fields()
@@ -3389,10 +3418,29 @@ func init() {
 	riskDescTags := riskMixinFields3[0].Descriptor()
 	// risk.DefaultTags holds the default value on creation for the tags field.
 	risk.DefaultTags = riskDescTags.Default.([]string)
+	// riskDescName is the schema descriptor for name field.
+	riskDescName := riskFields[0].Descriptor()
+	// risk.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	risk.NameValidator = riskDescName.Validators[0].(func(string) error)
+	// riskDescOwnerID is the schema descriptor for owner_id field.
+	riskDescOwnerID := riskFields[10].Descriptor()
+	// risk.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	risk.OwnerIDValidator = riskDescOwnerID.Validators[0].(func(string) error)
 	// riskDescID is the schema descriptor for id field.
 	riskDescID := riskMixinFields2[0].Descriptor()
 	// risk.DefaultID holds the default value on creation for the id field.
 	risk.DefaultID = riskDescID.Default.(func() string)
+	riskhistory.Policy = privacy.NewPolicies(schema.RiskHistory{})
+	riskhistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := riskhistory.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	riskhistoryInters := schema.RiskHistory{}.Interceptors()
+	riskhistory.Interceptors[0] = riskhistoryInters[0]
 	riskhistoryFields := schema.RiskHistory{}.Fields()
 	_ = riskhistoryFields
 	// riskhistoryDescHistoryTime is the schema descriptor for history_time field.
