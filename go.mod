@@ -12,7 +12,7 @@ require (
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
 	github.com/Yamashou/gqlgenc v0.26.2
 	github.com/alicebob/miniredis/v2 v2.33.0
-	github.com/alitto/pond/v2 v2.1.4
+	github.com/alitto/pond/v2 v2.1.5
 	github.com/aws/aws-sdk-go-v2/config v1.28.5
 	github.com/aws/aws-sdk-go-v2/credentials v1.17.46
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.69.0
