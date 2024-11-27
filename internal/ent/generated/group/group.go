@@ -83,6 +83,12 @@ const (
 	EdgeControlobjectiveEditors = "controlobjective_editors"
 	// EdgeControlobjectiveBlockedGroups holds the string denoting the controlobjective_blocked_groups edge name in mutations.
 	EdgeControlobjectiveBlockedGroups = "controlobjective_blocked_groups"
+	// EdgeNarrativeViewers holds the string denoting the narrative_viewers edge name in mutations.
+	EdgeNarrativeViewers = "narrative_viewers"
+	// EdgeNarrativeEditors holds the string denoting the narrative_editors edge name in mutations.
+	EdgeNarrativeEditors = "narrative_editors"
+	// EdgeNarrativeBlockedGroups holds the string denoting the narrative_blocked_groups edge name in mutations.
+	EdgeNarrativeBlockedGroups = "narrative_blocked_groups"
 	// EdgeMembers holds the string denoting the members edge name in mutations.
 	EdgeMembers = "members"
 	// Table holds the table name of the group in the database.
@@ -193,6 +199,21 @@ const (
 	// ControlobjectiveBlockedGroupsInverseTable is the table name for the ControlObjective entity.
 	// It exists in this package in order to avoid circular dependency with the "controlobjective" package.
 	ControlobjectiveBlockedGroupsInverseTable = "control_objectives"
+	// NarrativeViewersTable is the table that holds the narrative_viewers relation/edge. The primary key declared below.
+	NarrativeViewersTable = "narrative_viewers"
+	// NarrativeViewersInverseTable is the table name for the Narrative entity.
+	// It exists in this package in order to avoid circular dependency with the "narrative" package.
+	NarrativeViewersInverseTable = "narratives"
+	// NarrativeEditorsTable is the table that holds the narrative_editors relation/edge. The primary key declared below.
+	NarrativeEditorsTable = "narrative_editors"
+	// NarrativeEditorsInverseTable is the table name for the Narrative entity.
+	// It exists in this package in order to avoid circular dependency with the "narrative" package.
+	NarrativeEditorsInverseTable = "narratives"
+	// NarrativeBlockedGroupsTable is the table that holds the narrative_blocked_groups relation/edge. The primary key declared below.
+	NarrativeBlockedGroupsTable = "narrative_blocked_groups"
+	// NarrativeBlockedGroupsInverseTable is the table name for the Narrative entity.
+	// It exists in this package in order to avoid circular dependency with the "narrative" package.
+	NarrativeBlockedGroupsInverseTable = "narratives"
 	// MembersTable is the table that holds the members relation/edge.
 	MembersTable = "group_memberships"
 	// MembersInverseTable is the table name for the GroupMembership entity.
@@ -273,6 +294,15 @@ var (
 	// ControlobjectiveBlockedGroupsPrimaryKey and ControlobjectiveBlockedGroupsColumn2 are the table columns denoting the
 	// primary key for the controlobjective_blocked_groups relation (M2M).
 	ControlobjectiveBlockedGroupsPrimaryKey = []string{"control_objective_id", "group_id"}
+	// NarrativeViewersPrimaryKey and NarrativeViewersColumn2 are the table columns denoting the
+	// primary key for the narrative_viewers relation (M2M).
+	NarrativeViewersPrimaryKey = []string{"narrative_id", "group_id"}
+	// NarrativeEditorsPrimaryKey and NarrativeEditorsColumn2 are the table columns denoting the
+	// primary key for the narrative_editors relation (M2M).
+	NarrativeEditorsPrimaryKey = []string{"narrative_id", "group_id"}
+	// NarrativeBlockedGroupsPrimaryKey and NarrativeBlockedGroupsColumn2 are the table columns denoting the
+	// primary key for the narrative_blocked_groups relation (M2M).
+	NarrativeBlockedGroupsPrimaryKey = []string{"narrative_id", "group_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -655,6 +685,48 @@ func ByControlobjectiveBlockedGroups(term sql.OrderTerm, terms ...sql.OrderTerm)
 	}
 }
 
+// ByNarrativeViewersCount orders the results by narrative_viewers count.
+func ByNarrativeViewersCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newNarrativeViewersStep(), opts...)
+	}
+}
+
+// ByNarrativeViewers orders the results by narrative_viewers terms.
+func ByNarrativeViewers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newNarrativeViewersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByNarrativeEditorsCount orders the results by narrative_editors count.
+func ByNarrativeEditorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newNarrativeEditorsStep(), opts...)
+	}
+}
+
+// ByNarrativeEditors orders the results by narrative_editors terms.
+func ByNarrativeEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newNarrativeEditorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByNarrativeBlockedGroupsCount orders the results by narrative_blocked_groups count.
+func ByNarrativeBlockedGroupsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newNarrativeBlockedGroupsStep(), opts...)
+	}
+}
+
+// ByNarrativeBlockedGroups orders the results by narrative_blocked_groups terms.
+func ByNarrativeBlockedGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newNarrativeBlockedGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByMembersCount orders the results by members count.
 func ByMembersCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -806,6 +878,27 @@ func newControlobjectiveBlockedGroupsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ControlobjectiveBlockedGroupsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, ControlobjectiveBlockedGroupsTable, ControlobjectiveBlockedGroupsPrimaryKey...),
+	)
+}
+func newNarrativeViewersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(NarrativeViewersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, NarrativeViewersTable, NarrativeViewersPrimaryKey...),
+	)
+}
+func newNarrativeEditorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(NarrativeEditorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, NarrativeEditorsTable, NarrativeEditorsPrimaryKey...),
+	)
+}
+func newNarrativeBlockedGroupsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(NarrativeBlockedGroupsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, NarrativeBlockedGroupsTable, NarrativeBlockedGroupsPrimaryKey...),
 	)
 }
 func newMembersStep() *sqlgraph.Step {

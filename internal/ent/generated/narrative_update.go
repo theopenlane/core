@@ -14,8 +14,10 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
@@ -127,6 +129,20 @@ func (nu *NarrativeUpdate) ClearTags() *NarrativeUpdate {
 	return nu
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (nu *NarrativeUpdate) SetOwnerID(s string) *NarrativeUpdate {
+	nu.mutation.SetOwnerID(s)
+	return nu
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (nu *NarrativeUpdate) SetNillableOwnerID(s *string) *NarrativeUpdate {
+	if s != nil {
+		nu.SetOwnerID(*s)
+	}
+	return nu
+}
+
 // SetName sets the "name" field.
 func (nu *NarrativeUpdate) SetName(s string) *NarrativeUpdate {
 	nu.mutation.SetName(s)
@@ -193,6 +209,56 @@ func (nu *NarrativeUpdate) ClearDetails() *NarrativeUpdate {
 	return nu
 }
 
+// SetOwner sets the "owner" edge to the Organization entity.
+func (nu *NarrativeUpdate) SetOwner(o *Organization) *NarrativeUpdate {
+	return nu.SetOwnerID(o.ID)
+}
+
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (nu *NarrativeUpdate) AddBlockedGroupIDs(ids ...string) *NarrativeUpdate {
+	nu.mutation.AddBlockedGroupIDs(ids...)
+	return nu
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (nu *NarrativeUpdate) AddBlockedGroups(g ...*Group) *NarrativeUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return nu.AddBlockedGroupIDs(ids...)
+}
+
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (nu *NarrativeUpdate) AddEditorIDs(ids ...string) *NarrativeUpdate {
+	nu.mutation.AddEditorIDs(ids...)
+	return nu
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (nu *NarrativeUpdate) AddEditors(g ...*Group) *NarrativeUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return nu.AddEditorIDs(ids...)
+}
+
+// AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
+func (nu *NarrativeUpdate) AddViewerIDs(ids ...string) *NarrativeUpdate {
+	nu.mutation.AddViewerIDs(ids...)
+	return nu
+}
+
+// AddViewers adds the "viewers" edges to the Group entity.
+func (nu *NarrativeUpdate) AddViewers(g ...*Group) *NarrativeUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return nu.AddViewerIDs(ids...)
+}
+
 // AddPolicyIDs adds the "policy" edge to the InternalPolicy entity by IDs.
 func (nu *NarrativeUpdate) AddPolicyIDs(ids ...string) *NarrativeUpdate {
 	nu.mutation.AddPolicyIDs(ids...)
@@ -253,14 +319,14 @@ func (nu *NarrativeUpdate) AddControlobjective(c ...*ControlObjective) *Narrativ
 	return nu.AddControlobjectiveIDs(ids...)
 }
 
-// AddProgramIDs adds the "program" edge to the Program entity by IDs.
+// AddProgramIDs adds the "programs" edge to the Program entity by IDs.
 func (nu *NarrativeUpdate) AddProgramIDs(ids ...string) *NarrativeUpdate {
 	nu.mutation.AddProgramIDs(ids...)
 	return nu
 }
 
-// AddProgram adds the "program" edges to the Program entity.
-func (nu *NarrativeUpdate) AddProgram(p ...*Program) *NarrativeUpdate {
+// AddPrograms adds the "programs" edges to the Program entity.
+func (nu *NarrativeUpdate) AddPrograms(p ...*Program) *NarrativeUpdate {
 	ids := make([]string, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
@@ -271,6 +337,75 @@ func (nu *NarrativeUpdate) AddProgram(p ...*Program) *NarrativeUpdate {
 // Mutation returns the NarrativeMutation object of the builder.
 func (nu *NarrativeUpdate) Mutation() *NarrativeMutation {
 	return nu.mutation
+}
+
+// ClearOwner clears the "owner" edge to the Organization entity.
+func (nu *NarrativeUpdate) ClearOwner() *NarrativeUpdate {
+	nu.mutation.ClearOwner()
+	return nu
+}
+
+// ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
+func (nu *NarrativeUpdate) ClearBlockedGroups() *NarrativeUpdate {
+	nu.mutation.ClearBlockedGroups()
+	return nu
+}
+
+// RemoveBlockedGroupIDs removes the "blocked_groups" edge to Group entities by IDs.
+func (nu *NarrativeUpdate) RemoveBlockedGroupIDs(ids ...string) *NarrativeUpdate {
+	nu.mutation.RemoveBlockedGroupIDs(ids...)
+	return nu
+}
+
+// RemoveBlockedGroups removes "blocked_groups" edges to Group entities.
+func (nu *NarrativeUpdate) RemoveBlockedGroups(g ...*Group) *NarrativeUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return nu.RemoveBlockedGroupIDs(ids...)
+}
+
+// ClearEditors clears all "editors" edges to the Group entity.
+func (nu *NarrativeUpdate) ClearEditors() *NarrativeUpdate {
+	nu.mutation.ClearEditors()
+	return nu
+}
+
+// RemoveEditorIDs removes the "editors" edge to Group entities by IDs.
+func (nu *NarrativeUpdate) RemoveEditorIDs(ids ...string) *NarrativeUpdate {
+	nu.mutation.RemoveEditorIDs(ids...)
+	return nu
+}
+
+// RemoveEditors removes "editors" edges to Group entities.
+func (nu *NarrativeUpdate) RemoveEditors(g ...*Group) *NarrativeUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return nu.RemoveEditorIDs(ids...)
+}
+
+// ClearViewers clears all "viewers" edges to the Group entity.
+func (nu *NarrativeUpdate) ClearViewers() *NarrativeUpdate {
+	nu.mutation.ClearViewers()
+	return nu
+}
+
+// RemoveViewerIDs removes the "viewers" edge to Group entities by IDs.
+func (nu *NarrativeUpdate) RemoveViewerIDs(ids ...string) *NarrativeUpdate {
+	nu.mutation.RemoveViewerIDs(ids...)
+	return nu
+}
+
+// RemoveViewers removes "viewers" edges to Group entities.
+func (nu *NarrativeUpdate) RemoveViewers(g ...*Group) *NarrativeUpdate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return nu.RemoveViewerIDs(ids...)
 }
 
 // ClearPolicy clears all "policy" edges to the InternalPolicy entity.
@@ -357,20 +492,20 @@ func (nu *NarrativeUpdate) RemoveControlobjective(c ...*ControlObjective) *Narra
 	return nu.RemoveControlobjectiveIDs(ids...)
 }
 
-// ClearProgram clears all "program" edges to the Program entity.
-func (nu *NarrativeUpdate) ClearProgram() *NarrativeUpdate {
-	nu.mutation.ClearProgram()
+// ClearPrograms clears all "programs" edges to the Program entity.
+func (nu *NarrativeUpdate) ClearPrograms() *NarrativeUpdate {
+	nu.mutation.ClearPrograms()
 	return nu
 }
 
-// RemoveProgramIDs removes the "program" edge to Program entities by IDs.
+// RemoveProgramIDs removes the "programs" edge to Program entities by IDs.
 func (nu *NarrativeUpdate) RemoveProgramIDs(ids ...string) *NarrativeUpdate {
 	nu.mutation.RemoveProgramIDs(ids...)
 	return nu
 }
 
-// RemoveProgram removes "program" edges to Program entities.
-func (nu *NarrativeUpdate) RemoveProgram(p ...*Program) *NarrativeUpdate {
+// RemovePrograms removes "programs" edges to Program entities.
+func (nu *NarrativeUpdate) RemovePrograms(p ...*Program) *NarrativeUpdate {
 	ids := make([]string, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
@@ -420,6 +555,24 @@ func (nu *NarrativeUpdate) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (nu *NarrativeUpdate) check() error {
+	if v, ok := nu.mutation.OwnerID(); ok {
+		if err := narrative.OwnerIDValidator(v); err != nil {
+			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Narrative.owner_id": %w`, err)}
+		}
+	}
+	if v, ok := nu.mutation.Name(); ok {
+		if err := narrative.NameValidator(v); err != nil {
+			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Narrative.name": %w`, err)}
+		}
+	}
+	if nu.mutation.OwnerCleared() && len(nu.mutation.OwnerIDs()) > 0 {
+		return errors.New(`generated: clearing a required unique edge "Narrative.owner"`)
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (nu *NarrativeUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *NarrativeUpdate {
 	nu.modifiers = append(nu.modifiers, modifiers...)
@@ -427,6 +580,9 @@ func (nu *NarrativeUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *Narr
 }
 
 func (nu *NarrativeUpdate) sqlSave(ctx context.Context) (n int, err error) {
+	if err := nu.check(); err != nil {
+		return n, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(narrative.Table, narrative.Columns, sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString))
 	if ps := nu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -496,6 +652,181 @@ func (nu *NarrativeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if nu.mutation.DetailsCleared() {
 		_spec.ClearField(narrative.FieldDetails, field.TypeJSON)
+	}
+	if nu.mutation.OwnerCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   narrative.OwnerTable,
+			Columns: []string{narrative.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nu.schemaConfig.Narrative
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := nu.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   narrative.OwnerTable,
+			Columns: []string{narrative.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nu.schemaConfig.Narrative
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if nu.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   narrative.BlockedGroupsTable,
+			Columns: narrative.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nu.schemaConfig.NarrativeBlockedGroups
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := nu.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !nu.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   narrative.BlockedGroupsTable,
+			Columns: narrative.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nu.schemaConfig.NarrativeBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := nu.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   narrative.BlockedGroupsTable,
+			Columns: narrative.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nu.schemaConfig.NarrativeBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if nu.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   narrative.EditorsTable,
+			Columns: narrative.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nu.schemaConfig.NarrativeEditors
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := nu.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !nu.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   narrative.EditorsTable,
+			Columns: narrative.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nu.schemaConfig.NarrativeEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := nu.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   narrative.EditorsTable,
+			Columns: narrative.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nu.schemaConfig.NarrativeEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if nu.mutation.ViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   narrative.ViewersTable,
+			Columns: narrative.ViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nu.schemaConfig.NarrativeViewers
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := nu.mutation.RemovedViewersIDs(); len(nodes) > 0 && !nu.mutation.ViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   narrative.ViewersTable,
+			Columns: narrative.ViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nu.schemaConfig.NarrativeViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := nu.mutation.ViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   narrative.ViewersTable,
+			Columns: narrative.ViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nu.schemaConfig.NarrativeViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if nu.mutation.PolicyCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -689,12 +1020,12 @@ func (nu *NarrativeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if nu.mutation.ProgramCleared() {
+	if nu.mutation.ProgramsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   narrative.ProgramTable,
-			Columns: narrative.ProgramPrimaryKey,
+			Table:   narrative.ProgramsTable,
+			Columns: narrative.ProgramsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
@@ -703,12 +1034,12 @@ func (nu *NarrativeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		edge.Schema = nu.schemaConfig.ProgramNarratives
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := nu.mutation.RemovedProgramIDs(); len(nodes) > 0 && !nu.mutation.ProgramCleared() {
+	if nodes := nu.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !nu.mutation.ProgramsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   narrative.ProgramTable,
-			Columns: narrative.ProgramPrimaryKey,
+			Table:   narrative.ProgramsTable,
+			Columns: narrative.ProgramsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
@@ -720,12 +1051,12 @@ func (nu *NarrativeUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := nu.mutation.ProgramIDs(); len(nodes) > 0 {
+	if nodes := nu.mutation.ProgramsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   narrative.ProgramTable,
-			Columns: narrative.ProgramPrimaryKey,
+			Table:   narrative.ProgramsTable,
+			Columns: narrative.ProgramsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
@@ -851,6 +1182,20 @@ func (nuo *NarrativeUpdateOne) ClearTags() *NarrativeUpdateOne {
 	return nuo
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (nuo *NarrativeUpdateOne) SetOwnerID(s string) *NarrativeUpdateOne {
+	nuo.mutation.SetOwnerID(s)
+	return nuo
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (nuo *NarrativeUpdateOne) SetNillableOwnerID(s *string) *NarrativeUpdateOne {
+	if s != nil {
+		nuo.SetOwnerID(*s)
+	}
+	return nuo
+}
+
 // SetName sets the "name" field.
 func (nuo *NarrativeUpdateOne) SetName(s string) *NarrativeUpdateOne {
 	nuo.mutation.SetName(s)
@@ -917,6 +1262,56 @@ func (nuo *NarrativeUpdateOne) ClearDetails() *NarrativeUpdateOne {
 	return nuo
 }
 
+// SetOwner sets the "owner" edge to the Organization entity.
+func (nuo *NarrativeUpdateOne) SetOwner(o *Organization) *NarrativeUpdateOne {
+	return nuo.SetOwnerID(o.ID)
+}
+
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (nuo *NarrativeUpdateOne) AddBlockedGroupIDs(ids ...string) *NarrativeUpdateOne {
+	nuo.mutation.AddBlockedGroupIDs(ids...)
+	return nuo
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (nuo *NarrativeUpdateOne) AddBlockedGroups(g ...*Group) *NarrativeUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return nuo.AddBlockedGroupIDs(ids...)
+}
+
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (nuo *NarrativeUpdateOne) AddEditorIDs(ids ...string) *NarrativeUpdateOne {
+	nuo.mutation.AddEditorIDs(ids...)
+	return nuo
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (nuo *NarrativeUpdateOne) AddEditors(g ...*Group) *NarrativeUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return nuo.AddEditorIDs(ids...)
+}
+
+// AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
+func (nuo *NarrativeUpdateOne) AddViewerIDs(ids ...string) *NarrativeUpdateOne {
+	nuo.mutation.AddViewerIDs(ids...)
+	return nuo
+}
+
+// AddViewers adds the "viewers" edges to the Group entity.
+func (nuo *NarrativeUpdateOne) AddViewers(g ...*Group) *NarrativeUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return nuo.AddViewerIDs(ids...)
+}
+
 // AddPolicyIDs adds the "policy" edge to the InternalPolicy entity by IDs.
 func (nuo *NarrativeUpdateOne) AddPolicyIDs(ids ...string) *NarrativeUpdateOne {
 	nuo.mutation.AddPolicyIDs(ids...)
@@ -977,14 +1372,14 @@ func (nuo *NarrativeUpdateOne) AddControlobjective(c ...*ControlObjective) *Narr
 	return nuo.AddControlobjectiveIDs(ids...)
 }
 
-// AddProgramIDs adds the "program" edge to the Program entity by IDs.
+// AddProgramIDs adds the "programs" edge to the Program entity by IDs.
 func (nuo *NarrativeUpdateOne) AddProgramIDs(ids ...string) *NarrativeUpdateOne {
 	nuo.mutation.AddProgramIDs(ids...)
 	return nuo
 }
 
-// AddProgram adds the "program" edges to the Program entity.
-func (nuo *NarrativeUpdateOne) AddProgram(p ...*Program) *NarrativeUpdateOne {
+// AddPrograms adds the "programs" edges to the Program entity.
+func (nuo *NarrativeUpdateOne) AddPrograms(p ...*Program) *NarrativeUpdateOne {
 	ids := make([]string, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
@@ -995,6 +1390,75 @@ func (nuo *NarrativeUpdateOne) AddProgram(p ...*Program) *NarrativeUpdateOne {
 // Mutation returns the NarrativeMutation object of the builder.
 func (nuo *NarrativeUpdateOne) Mutation() *NarrativeMutation {
 	return nuo.mutation
+}
+
+// ClearOwner clears the "owner" edge to the Organization entity.
+func (nuo *NarrativeUpdateOne) ClearOwner() *NarrativeUpdateOne {
+	nuo.mutation.ClearOwner()
+	return nuo
+}
+
+// ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
+func (nuo *NarrativeUpdateOne) ClearBlockedGroups() *NarrativeUpdateOne {
+	nuo.mutation.ClearBlockedGroups()
+	return nuo
+}
+
+// RemoveBlockedGroupIDs removes the "blocked_groups" edge to Group entities by IDs.
+func (nuo *NarrativeUpdateOne) RemoveBlockedGroupIDs(ids ...string) *NarrativeUpdateOne {
+	nuo.mutation.RemoveBlockedGroupIDs(ids...)
+	return nuo
+}
+
+// RemoveBlockedGroups removes "blocked_groups" edges to Group entities.
+func (nuo *NarrativeUpdateOne) RemoveBlockedGroups(g ...*Group) *NarrativeUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return nuo.RemoveBlockedGroupIDs(ids...)
+}
+
+// ClearEditors clears all "editors" edges to the Group entity.
+func (nuo *NarrativeUpdateOne) ClearEditors() *NarrativeUpdateOne {
+	nuo.mutation.ClearEditors()
+	return nuo
+}
+
+// RemoveEditorIDs removes the "editors" edge to Group entities by IDs.
+func (nuo *NarrativeUpdateOne) RemoveEditorIDs(ids ...string) *NarrativeUpdateOne {
+	nuo.mutation.RemoveEditorIDs(ids...)
+	return nuo
+}
+
+// RemoveEditors removes "editors" edges to Group entities.
+func (nuo *NarrativeUpdateOne) RemoveEditors(g ...*Group) *NarrativeUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return nuo.RemoveEditorIDs(ids...)
+}
+
+// ClearViewers clears all "viewers" edges to the Group entity.
+func (nuo *NarrativeUpdateOne) ClearViewers() *NarrativeUpdateOne {
+	nuo.mutation.ClearViewers()
+	return nuo
+}
+
+// RemoveViewerIDs removes the "viewers" edge to Group entities by IDs.
+func (nuo *NarrativeUpdateOne) RemoveViewerIDs(ids ...string) *NarrativeUpdateOne {
+	nuo.mutation.RemoveViewerIDs(ids...)
+	return nuo
+}
+
+// RemoveViewers removes "viewers" edges to Group entities.
+func (nuo *NarrativeUpdateOne) RemoveViewers(g ...*Group) *NarrativeUpdateOne {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return nuo.RemoveViewerIDs(ids...)
 }
 
 // ClearPolicy clears all "policy" edges to the InternalPolicy entity.
@@ -1081,20 +1545,20 @@ func (nuo *NarrativeUpdateOne) RemoveControlobjective(c ...*ControlObjective) *N
 	return nuo.RemoveControlobjectiveIDs(ids...)
 }
 
-// ClearProgram clears all "program" edges to the Program entity.
-func (nuo *NarrativeUpdateOne) ClearProgram() *NarrativeUpdateOne {
-	nuo.mutation.ClearProgram()
+// ClearPrograms clears all "programs" edges to the Program entity.
+func (nuo *NarrativeUpdateOne) ClearPrograms() *NarrativeUpdateOne {
+	nuo.mutation.ClearPrograms()
 	return nuo
 }
 
-// RemoveProgramIDs removes the "program" edge to Program entities by IDs.
+// RemoveProgramIDs removes the "programs" edge to Program entities by IDs.
 func (nuo *NarrativeUpdateOne) RemoveProgramIDs(ids ...string) *NarrativeUpdateOne {
 	nuo.mutation.RemoveProgramIDs(ids...)
 	return nuo
 }
 
-// RemoveProgram removes "program" edges to Program entities.
-func (nuo *NarrativeUpdateOne) RemoveProgram(p ...*Program) *NarrativeUpdateOne {
+// RemovePrograms removes "programs" edges to Program entities.
+func (nuo *NarrativeUpdateOne) RemovePrograms(p ...*Program) *NarrativeUpdateOne {
 	ids := make([]string, len(p))
 	for i := range p {
 		ids[i] = p[i].ID
@@ -1157,6 +1621,24 @@ func (nuo *NarrativeUpdateOne) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (nuo *NarrativeUpdateOne) check() error {
+	if v, ok := nuo.mutation.OwnerID(); ok {
+		if err := narrative.OwnerIDValidator(v); err != nil {
+			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Narrative.owner_id": %w`, err)}
+		}
+	}
+	if v, ok := nuo.mutation.Name(); ok {
+		if err := narrative.NameValidator(v); err != nil {
+			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Narrative.name": %w`, err)}
+		}
+	}
+	if nuo.mutation.OwnerCleared() && len(nuo.mutation.OwnerIDs()) > 0 {
+		return errors.New(`generated: clearing a required unique edge "Narrative.owner"`)
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (nuo *NarrativeUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *NarrativeUpdateOne {
 	nuo.modifiers = append(nuo.modifiers, modifiers...)
@@ -1164,6 +1646,9 @@ func (nuo *NarrativeUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *
 }
 
 func (nuo *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, err error) {
+	if err := nuo.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(narrative.Table, narrative.Columns, sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString))
 	id, ok := nuo.mutation.ID()
 	if !ok {
@@ -1250,6 +1735,181 @@ func (nuo *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, e
 	}
 	if nuo.mutation.DetailsCleared() {
 		_spec.ClearField(narrative.FieldDetails, field.TypeJSON)
+	}
+	if nuo.mutation.OwnerCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   narrative.OwnerTable,
+			Columns: []string{narrative.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nuo.schemaConfig.Narrative
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := nuo.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   narrative.OwnerTable,
+			Columns: []string{narrative.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nuo.schemaConfig.Narrative
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if nuo.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   narrative.BlockedGroupsTable,
+			Columns: narrative.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nuo.schemaConfig.NarrativeBlockedGroups
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := nuo.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !nuo.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   narrative.BlockedGroupsTable,
+			Columns: narrative.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nuo.schemaConfig.NarrativeBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := nuo.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   narrative.BlockedGroupsTable,
+			Columns: narrative.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nuo.schemaConfig.NarrativeBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if nuo.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   narrative.EditorsTable,
+			Columns: narrative.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nuo.schemaConfig.NarrativeEditors
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := nuo.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !nuo.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   narrative.EditorsTable,
+			Columns: narrative.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nuo.schemaConfig.NarrativeEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := nuo.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   narrative.EditorsTable,
+			Columns: narrative.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nuo.schemaConfig.NarrativeEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if nuo.mutation.ViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   narrative.ViewersTable,
+			Columns: narrative.ViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nuo.schemaConfig.NarrativeViewers
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := nuo.mutation.RemovedViewersIDs(); len(nodes) > 0 && !nuo.mutation.ViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   narrative.ViewersTable,
+			Columns: narrative.ViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nuo.schemaConfig.NarrativeViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := nuo.mutation.ViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   narrative.ViewersTable,
+			Columns: narrative.ViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = nuo.schemaConfig.NarrativeViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if nuo.mutation.PolicyCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1443,12 +2103,12 @@ func (nuo *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, e
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if nuo.mutation.ProgramCleared() {
+	if nuo.mutation.ProgramsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   narrative.ProgramTable,
-			Columns: narrative.ProgramPrimaryKey,
+			Table:   narrative.ProgramsTable,
+			Columns: narrative.ProgramsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
@@ -1457,12 +2117,12 @@ func (nuo *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, e
 		edge.Schema = nuo.schemaConfig.ProgramNarratives
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := nuo.mutation.RemovedProgramIDs(); len(nodes) > 0 && !nuo.mutation.ProgramCleared() {
+	if nodes := nuo.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !nuo.mutation.ProgramsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   narrative.ProgramTable,
-			Columns: narrative.ProgramPrimaryKey,
+			Table:   narrative.ProgramsTable,
+			Columns: narrative.ProgramsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
@@ -1474,12 +2134,12 @@ func (nuo *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, e
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := nuo.mutation.ProgramIDs(); len(nodes) > 0 {
+	if nodes := nuo.mutation.ProgramsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
-			Table:   narrative.ProgramTable,
-			Columns: narrative.ProgramPrimaryKey,
+			Table:   narrative.ProgramsTable,
+			Columns: narrative.ProgramsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),

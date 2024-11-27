@@ -4802,6 +4802,10 @@ func (m *NarrativeMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetTags(tags)
 	}
 
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
 	if name, exists := m.Name(); exists {
 		create = create.SetName(name)
 	}
@@ -4896,6 +4900,12 @@ func (m *NarrativeMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetTags(narrative.Tags)
 		}
 
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(narrative.OwnerID)
+		}
+
 		if name, exists := m.Name(); exists {
 			create = create.SetName(name)
 		} else {
@@ -4960,6 +4970,7 @@ func (m *NarrativeMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDeletedBy(narrative.DeletedBy).
 			SetMappingID(narrative.MappingID).
 			SetTags(narrative.Tags).
+			SetOwnerID(narrative.OwnerID).
 			SetName(narrative.Name).
 			SetDescription(narrative.Description).
 			SetSatisfies(narrative.Satisfies).

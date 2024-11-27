@@ -4309,6 +4309,9 @@ input CreateGroupInput {
 	controlobjectiveViewerIDs: [ID!]
 	controlobjectiveEditorIDs: [ID!]
 	controlobjectiveBlockedGroupIDs: [ID!]
+	narrativeViewerIDs: [ID!]
+	narrativeEditorIDs: [ID!]
+	narrativeBlockedGroupIDs: [ID!]
 	createGroupSettings: CreateGroupSettingInput
 }
 """
@@ -4506,6 +4509,10 @@ input CreateNarrativeInput {
 	json data for the narrative document
 	"""
 	details: Map
+	ownerID: ID!
+	blockedGroupIDs: [ID!]
+	editorIDs: [ID!]
+	viewerIDs: [ID!]
 	policyIDs: [ID!]
 	controlIDs: [ID!]
 	procedureIDs: [ID!]
@@ -4674,6 +4681,7 @@ input CreateOrganizationInput {
 	internalpolicyIDs: [ID!]
 	riskIDs: [ID!]
 	controlobjectiveIDs: [ID!]
+	narrativeIDs: [ID!]
 	createOrgSettings: CreateOrganizationSettingInput
 }
 """
@@ -11437,6 +11445,9 @@ type Group implements Node {
 	controlobjectiveViewers: [ControlObjective!]
 	controlobjectiveEditors: [ControlObjective!]
 	controlobjectiveBlockedGroups: [ControlObjective!]
+	narrativeViewers: [Narrative!]
+	narrativeEditors: [Narrative!]
+	narrativeBlockedGroups: [Narrative!]
 	members: [GroupMembership!]
 }
 """
@@ -13125,6 +13136,21 @@ input GroupWhereInput {
 	"""
 	hasControlobjectiveBlockedGroups: Boolean
 	hasControlobjectiveBlockedGroupsWith: [ControlObjectiveWhereInput!]
+	"""
+	narrative_viewers edge predicates
+	"""
+	hasNarrativeViewers: Boolean
+	hasNarrativeViewersWith: [NarrativeWhereInput!]
+	"""
+	narrative_editors edge predicates
+	"""
+	hasNarrativeEditors: Boolean
+	hasNarrativeEditorsWith: [NarrativeWhereInput!]
+	"""
+	narrative_blocked_groups edge predicates
+	"""
+	hasNarrativeBlockedGroups: Boolean
+	hasNarrativeBlockedGroupsWith: [NarrativeWhereInput!]
 	"""
 	members edge predicates
 	"""
@@ -17456,6 +17482,10 @@ type Narrative implements Node {
 	"""
 	tags: [String!]
 	"""
+	the ID of the organization owner of the object
+	"""
+	ownerID: ID!
+	"""
 	the name of the narrative
 	"""
 	name: String!
@@ -17471,11 +17501,24 @@ type Narrative implements Node {
 	json data for the narrative document
 	"""
 	details: Map
+	owner: Organization!
+	"""
+	groups that are blocked from viewing or editing the risk
+	"""
+	blockedGroups: [Group!]
+	"""
+	provides edit access to the risk to members of the group
+	"""
+	editors: [Group!]
+	"""
+	provides view access to the risk to members of the group
+	"""
+	viewers: [Group!]
 	policy: [InternalPolicy!]
 	control: [Control!]
 	procedure: [Procedure!]
 	controlobjective: [ControlObjective!]
-	program: [Program!]
+	programs: [Program!]
 }
 """
 Return response for createBulkNarrative mutation
@@ -17549,6 +17592,10 @@ type NarrativeHistory implements Node {
 	tags associated with the object
 	"""
 	tags: [String!]
+	"""
+	the ID of the organization owner of the object
+	"""
+	ownerID: String!
 	"""
 	the name of the narrative
 	"""
@@ -17755,6 +17802,22 @@ input NarrativeHistoryWhereInput {
 	deletedByEqualFold: String
 	deletedByContainsFold: String
 	"""
+	owner_id field predicates
+	"""
+	ownerID: String
+	ownerIDNEQ: String
+	ownerIDIn: [String!]
+	ownerIDNotIn: [String!]
+	ownerIDGT: String
+	ownerIDGTE: String
+	ownerIDLT: String
+	ownerIDLTE: String
+	ownerIDContains: String
+	ownerIDHasPrefix: String
+	ownerIDHasSuffix: String
+	ownerIDEqualFold: String
+	ownerIDContainsFold: String
+	"""
 	name field predicates
 	"""
 	name: String
@@ -17934,6 +17997,22 @@ input NarrativeWhereInput {
 	deletedByEqualFold: String
 	deletedByContainsFold: String
 	"""
+	owner_id field predicates
+	"""
+	ownerID: ID
+	ownerIDNEQ: ID
+	ownerIDIn: [ID!]
+	ownerIDNotIn: [ID!]
+	ownerIDGT: ID
+	ownerIDGTE: ID
+	ownerIDLT: ID
+	ownerIDLTE: ID
+	ownerIDContains: ID
+	ownerIDHasPrefix: ID
+	ownerIDHasSuffix: ID
+	ownerIDEqualFold: ID
+	ownerIDContainsFold: ID
+	"""
 	name field predicates
 	"""
 	name: String
@@ -17986,6 +18065,26 @@ input NarrativeWhereInput {
 	satisfiesEqualFold: String
 	satisfiesContainsFold: String
 	"""
+	owner edge predicates
+	"""
+	hasOwner: Boolean
+	hasOwnerWith: [OrganizationWhereInput!]
+	"""
+	blocked_groups edge predicates
+	"""
+	hasBlockedGroups: Boolean
+	hasBlockedGroupsWith: [GroupWhereInput!]
+	"""
+	editors edge predicates
+	"""
+	hasEditors: Boolean
+	hasEditorsWith: [GroupWhereInput!]
+	"""
+	viewers edge predicates
+	"""
+	hasViewers: Boolean
+	hasViewersWith: [GroupWhereInput!]
+	"""
 	policy edge predicates
 	"""
 	hasPolicy: Boolean
@@ -18006,10 +18105,10 @@ input NarrativeWhereInput {
 	hasControlobjective: Boolean
 	hasControlobjectiveWith: [ControlObjectiveWhereInput!]
 	"""
-	program edge predicates
+	programs edge predicates
 	"""
-	hasProgram: Boolean
-	hasProgramWith: [ProgramWhereInput!]
+	hasPrograms: Boolean
+	hasProgramsWith: [ProgramWhereInput!]
 }
 """
 An object with an ID.
@@ -20119,6 +20218,7 @@ type Organization implements Node {
 	internalpolicies: [InternalPolicy!]
 	risks: [Risk!]
 	controlobjectives: [ControlObjective!]
+	narratives: [Narrative!]
 	members: [OrgMembership!]
 }
 """
@@ -21623,6 +21723,11 @@ input OrganizationWhereInput {
 	"""
 	hasControlobjectives: Boolean
 	hasControlobjectivesWith: [ControlObjectiveWhereInput!]
+	"""
+	narratives edge predicates
+	"""
+	hasNarratives: Boolean
+	hasNarrativesWith: [NarrativeWhereInput!]
 	"""
 	members edge predicates
 	"""
@@ -32784,6 +32889,15 @@ input UpdateGroupInput {
 	addControlobjectiveBlockedGroupIDs: [ID!]
 	removeControlobjectiveBlockedGroupIDs: [ID!]
 	clearControlobjectiveBlockedGroups: Boolean
+	addNarrativeViewerIDs: [ID!]
+	removeNarrativeViewerIDs: [ID!]
+	clearNarrativeViewers: Boolean
+	addNarrativeEditorIDs: [ID!]
+	removeNarrativeEditorIDs: [ID!]
+	clearNarrativeEditors: Boolean
+	addNarrativeBlockedGroupIDs: [ID!]
+	removeNarrativeBlockedGroupIDs: [ID!]
+	clearNarrativeBlockedGroups: Boolean
 	addGroupMembers: [CreateGroupMembershipInput!]
 	updateGroupSettings: UpdateGroupSettingInput
 }
@@ -33027,6 +33141,16 @@ input UpdateNarrativeInput {
 	"""
 	details: Map
 	clearDetails: Boolean
+	ownerID: ID
+	addBlockedGroupIDs: [ID!]
+	removeBlockedGroupIDs: [ID!]
+	clearBlockedGroups: Boolean
+	addEditorIDs: [ID!]
+	removeEditorIDs: [ID!]
+	clearEditors: Boolean
+	addViewerIDs: [ID!]
+	removeViewerIDs: [ID!]
+	clearViewers: Boolean
 	addPolicyIDs: [ID!]
 	removePolicyIDs: [ID!]
 	clearPolicy: Boolean
@@ -33041,7 +33165,7 @@ input UpdateNarrativeInput {
 	clearControlobjective: Boolean
 	addProgramIDs: [ID!]
 	removeProgramIDs: [ID!]
-	clearProgram: Boolean
+	clearPrograms: Boolean
 }
 """
 UpdateNoteInput is used for update Note object.
@@ -33280,6 +33404,9 @@ input UpdateOrganizationInput {
 	addControlobjectiveIDs: [ID!]
 	removeControlobjectiveIDs: [ID!]
 	clearControlobjectives: Boolean
+	addNarrativeIDs: [ID!]
+	removeNarrativeIDs: [ID!]
+	clearNarratives: Boolean
 	addOrgMembers: [CreateOrgMembershipInput!]
 	updateOrgSettings: UpdateOrganizationSettingInput
 }

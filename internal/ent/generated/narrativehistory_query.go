@@ -4,6 +4,7 @@ package generated
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"math"
 
@@ -331,6 +332,12 @@ func (nhq *NarrativeHistoryQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		nhq.sql = prev
+	}
+	if narrativehistory.Policy == nil {
+		return errors.New("generated: uninitialized narrativehistory.Policy (forgotten import generated/runtime?)")
+	}
+	if err := narrativehistory.Policy.EvalQuery(ctx, nhq); err != nil {
+		return err
 	}
 	return nil
 }

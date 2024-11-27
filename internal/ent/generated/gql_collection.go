@@ -5465,6 +5465,45 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				*wq = *query
 			})
 
+		case "narrativeViewers":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&NarrativeClient{config: gr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, narrativeImplementors)...); err != nil {
+				return err
+			}
+			gr.WithNamedNarrativeViewers(alias, func(wq *NarrativeQuery) {
+				*wq = *query
+			})
+
+		case "narrativeEditors":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&NarrativeClient{config: gr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, narrativeImplementors)...); err != nil {
+				return err
+			}
+			gr.WithNamedNarrativeEditors(alias, func(wq *NarrativeQuery) {
+				*wq = *query
+			})
+
+		case "narrativeBlockedGroups":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&NarrativeClient{config: gr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, narrativeImplementors)...); err != nil {
+				return err
+			}
+			gr.WithNamedNarrativeBlockedGroups(alias, func(wq *NarrativeQuery) {
+				*wq = *query
+			})
+
 		case "members":
 			var (
 				alias = field.Alias
@@ -7592,6 +7631,60 @@ func (n *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
+		case "owner":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: n.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			n.withOwner = query
+			if _, ok := fieldSeen[narrative.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, narrative.FieldOwnerID)
+				fieldSeen[narrative.FieldOwnerID] = struct{}{}
+			}
+
+		case "blockedGroups":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&GroupClient{config: n.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
+				return err
+			}
+			n.WithNamedBlockedGroups(alias, func(wq *GroupQuery) {
+				*wq = *query
+			})
+
+		case "editors":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&GroupClient{config: n.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
+				return err
+			}
+			n.WithNamedEditors(alias, func(wq *GroupQuery) {
+				*wq = *query
+			})
+
+		case "viewers":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&GroupClient{config: n.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
+				return err
+			}
+			n.WithNamedViewers(alias, func(wq *GroupQuery) {
+				*wq = *query
+			})
+
 		case "policy":
 			var (
 				alias = field.Alias
@@ -7644,7 +7737,7 @@ func (n *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				*wq = *query
 			})
 
-		case "program":
+		case "programs":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
@@ -7653,7 +7746,7 @@ func (n *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, programImplementors)...); err != nil {
 				return err
 			}
-			n.WithNamedProgram(alias, func(wq *ProgramQuery) {
+			n.WithNamedPrograms(alias, func(wq *ProgramQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -7690,6 +7783,11 @@ func (n *NarrativeQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 			if _, ok := fieldSeen[narrative.FieldTags]; !ok {
 				selectedFields = append(selectedFields, narrative.FieldTags)
 				fieldSeen[narrative.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[narrative.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, narrative.FieldOwnerID)
+				fieldSeen[narrative.FieldOwnerID] = struct{}{}
 			}
 		case "name":
 			if _, ok := fieldSeen[narrative.FieldName]; !ok {
@@ -7822,6 +7920,11 @@ func (nh *NarrativeHistoryQuery) collectField(ctx context.Context, oneNode bool,
 			if _, ok := fieldSeen[narrativehistory.FieldTags]; !ok {
 				selectedFields = append(selectedFields, narrativehistory.FieldTags)
 				fieldSeen[narrativehistory.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[narrativehistory.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, narrativehistory.FieldOwnerID)
+				fieldSeen[narrativehistory.FieldOwnerID] = struct{}{}
 			}
 		case "name":
 			if _, ok := fieldSeen[narrativehistory.FieldName]; !ok {
@@ -9425,6 +9528,19 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				return err
 			}
 			o.WithNamedControlobjectives(alias, func(wq *ControlObjectiveQuery) {
+				*wq = *query
+			})
+
+		case "narratives":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&NarrativeClient{config: o.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, narrativeImplementors)...); err != nil {
+				return err
+			}
+			o.WithNamedNarratives(alias, func(wq *NarrativeQuery) {
 				*wq = *query
 			})
 

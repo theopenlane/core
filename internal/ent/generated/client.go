@@ -7002,6 +7002,63 @@ func (c *GroupClient) QueryControlobjectiveBlockedGroups(gr *Group) *ControlObje
 	return query
 }
 
+// QueryNarrativeViewers queries the narrative_viewers edge of a Group.
+func (c *GroupClient) QueryNarrativeViewers(gr *Group) *NarrativeQuery {
+	query := (&NarrativeClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := gr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, id),
+			sqlgraph.To(narrative.Table, narrative.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.NarrativeViewersTable, group.NarrativeViewersPrimaryKey...),
+		)
+		schemaConfig := gr.schemaConfig
+		step.To.Schema = schemaConfig.Narrative
+		step.Edge.Schema = schemaConfig.NarrativeViewers
+		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryNarrativeEditors queries the narrative_editors edge of a Group.
+func (c *GroupClient) QueryNarrativeEditors(gr *Group) *NarrativeQuery {
+	query := (&NarrativeClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := gr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, id),
+			sqlgraph.To(narrative.Table, narrative.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.NarrativeEditorsTable, group.NarrativeEditorsPrimaryKey...),
+		)
+		schemaConfig := gr.schemaConfig
+		step.To.Schema = schemaConfig.Narrative
+		step.Edge.Schema = schemaConfig.NarrativeEditors
+		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryNarrativeBlockedGroups queries the narrative_blocked_groups edge of a Group.
+func (c *GroupClient) QueryNarrativeBlockedGroups(gr *Group) *NarrativeQuery {
+	query := (&NarrativeClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := gr.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, id),
+			sqlgraph.To(narrative.Table, narrative.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.NarrativeBlockedGroupsTable, group.NarrativeBlockedGroupsPrimaryKey...),
+		)
+		schemaConfig := gr.schemaConfig
+		step.To.Schema = schemaConfig.Narrative
+		step.Edge.Schema = schemaConfig.NarrativeBlockedGroups
+		fromV = sqlgraph.Neighbors(gr.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryMembers queries the members edge of a Group.
 func (c *GroupClient) QueryMembers(gr *Group) *GroupMembershipQuery {
 	query := (&GroupMembershipClient{config: c.config}).Query()
@@ -9211,6 +9268,82 @@ func (c *NarrativeClient) GetX(ctx context.Context, id string) *Narrative {
 	return obj
 }
 
+// QueryOwner queries the owner edge of a Narrative.
+func (c *NarrativeClient) QueryOwner(n *Narrative) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := n.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(narrative.Table, narrative.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, narrative.OwnerTable, narrative.OwnerColumn),
+		)
+		schemaConfig := n.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.Narrative
+		fromV = sqlgraph.Neighbors(n.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryBlockedGroups queries the blocked_groups edge of a Narrative.
+func (c *NarrativeClient) QueryBlockedGroups(n *Narrative) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := n.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(narrative.Table, narrative.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, narrative.BlockedGroupsTable, narrative.BlockedGroupsPrimaryKey...),
+		)
+		schemaConfig := n.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.NarrativeBlockedGroups
+		fromV = sqlgraph.Neighbors(n.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEditors queries the editors edge of a Narrative.
+func (c *NarrativeClient) QueryEditors(n *Narrative) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := n.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(narrative.Table, narrative.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, narrative.EditorsTable, narrative.EditorsPrimaryKey...),
+		)
+		schemaConfig := n.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.NarrativeEditors
+		fromV = sqlgraph.Neighbors(n.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryViewers queries the viewers edge of a Narrative.
+func (c *NarrativeClient) QueryViewers(n *Narrative) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := n.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(narrative.Table, narrative.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, narrative.ViewersTable, narrative.ViewersPrimaryKey...),
+		)
+		schemaConfig := n.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.NarrativeViewers
+		fromV = sqlgraph.Neighbors(n.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryPolicy queries the policy edge of a Narrative.
 func (c *NarrativeClient) QueryPolicy(n *Narrative) *InternalPolicyQuery {
 	query := (&InternalPolicyClient{config: c.config}).Query()
@@ -9287,15 +9420,15 @@ func (c *NarrativeClient) QueryControlobjective(n *Narrative) *ControlObjectiveQ
 	return query
 }
 
-// QueryProgram queries the program edge of a Narrative.
-func (c *NarrativeClient) QueryProgram(n *Narrative) *ProgramQuery {
+// QueryPrograms queries the programs edge of a Narrative.
+func (c *NarrativeClient) QueryPrograms(n *Narrative) *ProgramQuery {
 	query := (&ProgramClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := n.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(narrative.Table, narrative.FieldID, id),
 			sqlgraph.To(program.Table, program.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, narrative.ProgramTable, narrative.ProgramPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2M, true, narrative.ProgramsTable, narrative.ProgramsPrimaryKey...),
 		)
 		schemaConfig := n.schemaConfig
 		step.To.Schema = schemaConfig.Program
@@ -9443,12 +9576,14 @@ func (c *NarrativeHistoryClient) GetX(ctx context.Context, id string) *Narrative
 
 // Hooks returns the client hooks.
 func (c *NarrativeHistoryClient) Hooks() []Hook {
-	return c.hooks.NarrativeHistory
+	hooks := c.hooks.NarrativeHistory
+	return append(hooks[:len(hooks):len(hooks)], narrativehistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
 func (c *NarrativeHistoryClient) Interceptors() []Interceptor {
-	return c.inters.NarrativeHistory
+	inters := c.inters.NarrativeHistory
+	return append(inters[:len(inters):len(inters)], narrativehistory.Interceptors[:]...)
 }
 
 func (c *NarrativeHistoryClient) mutate(ctx context.Context, m *NarrativeHistoryMutation) (Value, error) {
@@ -11309,6 +11444,25 @@ func (c *OrganizationClient) QueryControlobjectives(o *Organization) *ControlObj
 		schemaConfig := o.schemaConfig
 		step.To.Schema = schemaConfig.ControlObjective
 		step.Edge.Schema = schemaConfig.ControlObjective
+		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryNarratives queries the narratives edge of a Organization.
+func (c *OrganizationClient) QueryNarratives(o *Organization) *NarrativeQuery {
+	query := (&NarrativeClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := o.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(narrative.Table, narrative.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.NarrativesTable, organization.NarrativesColumn),
+		)
+		schemaConfig := o.schemaConfig
+		step.To.Schema = schemaConfig.Narrative
+		step.Edge.Schema = schemaConfig.Narrative
 		fromV = sqlgraph.Neighbors(o.driver.Dialect(), step)
 		return fromV, nil
 	}

@@ -27,6 +27,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
+	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/oauthprovider"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -744,6 +745,21 @@ func (oc *OrganizationCreate) AddControlobjectives(c ...*ControlObjective) *Orga
 		ids[i] = c[i].ID
 	}
 	return oc.AddControlobjectiveIDs(ids...)
+}
+
+// AddNarrativeIDs adds the "narratives" edge to the Narrative entity by IDs.
+func (oc *OrganizationCreate) AddNarrativeIDs(ids ...string) *OrganizationCreate {
+	oc.mutation.AddNarrativeIDs(ids...)
+	return oc
+}
+
+// AddNarratives adds the "narratives" edges to the Narrative entity.
+func (oc *OrganizationCreate) AddNarratives(n ...*Narrative) *OrganizationCreate {
+	ids := make([]string, len(n))
+	for i := range n {
+		ids[i] = n[i].ID
+	}
+	return oc.AddNarrativeIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -1513,6 +1529,23 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			},
 		}
 		edge.Schema = oc.schemaConfig.ControlObjective
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := oc.mutation.NarrativesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.NarrativesTable,
+			Columns: []string{organization.NarrativesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = oc.schemaConfig.Narrative
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

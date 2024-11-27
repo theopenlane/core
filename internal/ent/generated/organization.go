@@ -121,13 +121,15 @@ type OrganizationEdges struct {
 	Risks []*Risk `json:"risks,omitempty"`
 	// Controlobjectives holds the value of the controlobjectives edge.
 	Controlobjectives []*ControlObjective `json:"controlobjectives,omitempty"`
+	// Narratives holds the value of the narratives edge.
+	Narratives []*Narrative `json:"narratives,omitempty"`
 	// Members holds the value of the members edge.
 	Members []*OrgMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [33]bool
+	loadedTypes [34]bool
 	// totalCount holds the count of the edges above.
-	totalCount [33]map[string]int
+	totalCount [34]map[string]int
 
 	namedChildren                map[string][]*Organization
 	namedGroups                  map[string][]*Group
@@ -159,6 +161,7 @@ type OrganizationEdges struct {
 	namedInternalpolicies        map[string][]*InternalPolicy
 	namedRisks                   map[string][]*Risk
 	namedControlobjectives       map[string][]*ControlObjective
+	namedNarratives              map[string][]*Narrative
 	namedMembers                 map[string][]*OrgMembership
 }
 
@@ -454,10 +457,19 @@ func (e OrganizationEdges) ControlobjectivesOrErr() ([]*ControlObjective, error)
 	return nil, &NotLoadedError{edge: "controlobjectives"}
 }
 
+// NarrativesOrErr returns the Narratives value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) NarrativesOrErr() ([]*Narrative, error) {
+	if e.loadedTypes[32] {
+		return e.Narratives, nil
+	}
+	return nil, &NotLoadedError{edge: "narratives"}
+}
+
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) MembersOrErr() ([]*OrgMembership, error) {
-	if e.loadedTypes[32] {
+	if e.loadedTypes[33] {
 		return e.Members, nil
 	}
 	return nil, &NotLoadedError{edge: "members"}
@@ -761,6 +773,11 @@ func (o *Organization) QueryRisks() *RiskQuery {
 // QueryControlobjectives queries the "controlobjectives" edge of the Organization entity.
 func (o *Organization) QueryControlobjectives() *ControlObjectiveQuery {
 	return NewOrganizationClient(o.config).QueryControlobjectives(o)
+}
+
+// QueryNarratives queries the "narratives" edge of the Organization entity.
+func (o *Organization) QueryNarratives() *NarrativeQuery {
+	return NewOrganizationClient(o.config).QueryNarratives(o)
 }
 
 // QueryMembers queries the "members" edge of the Organization entity.
@@ -1558,6 +1575,30 @@ func (o *Organization) appendNamedControlobjectives(name string, edges ...*Contr
 		o.Edges.namedControlobjectives[name] = []*ControlObjective{}
 	} else {
 		o.Edges.namedControlobjectives[name] = append(o.Edges.namedControlobjectives[name], edges...)
+	}
+}
+
+// NamedNarratives returns the Narratives named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (o *Organization) NamedNarratives(name string) ([]*Narrative, error) {
+	if o.Edges.namedNarratives == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := o.Edges.namedNarratives[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (o *Organization) appendNamedNarratives(name string, edges ...*Narrative) {
+	if o.Edges.namedNarratives == nil {
+		o.Edges.namedNarratives = make(map[string][]*Narrative)
+	}
+	if len(edges) == 0 {
+		o.Edges.namedNarratives[name] = []*Narrative{}
+	} else {
+		o.Edges.namedNarratives[name] = append(o.Edges.namedNarratives[name], edges...)
 	}
 }
 

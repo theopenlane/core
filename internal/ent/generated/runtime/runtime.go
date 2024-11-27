@@ -2278,18 +2278,47 @@ func init() {
 	// invite.DefaultID holds the default value on creation for the id field.
 	invite.DefaultID = inviteDescID.Default.(func() string)
 	narrativeMixin := schema.Narrative{}.Mixin()
+	narrative.Policy = privacy.NewPolicies(schema.Narrative{})
+	narrative.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := narrative.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
 	narrativeMixinHooks0 := narrativeMixin[0].Hooks()
 	narrativeMixinHooks1 := narrativeMixin[1].Hooks()
-	narrative.Hooks[0] = narrativeMixinHooks0[0]
-	narrative.Hooks[1] = narrativeMixinHooks1[0]
+	narrativeMixinHooks4 := narrativeMixin[4].Hooks()
+	narrativeMixinHooks5 := narrativeMixin[5].Hooks()
+
+	narrative.Hooks[1] = narrativeMixinHooks0[0]
+
+	narrative.Hooks[2] = narrativeMixinHooks1[0]
+
+	narrative.Hooks[3] = narrativeMixinHooks4[0]
+
+	narrative.Hooks[4] = narrativeMixinHooks4[1]
+
+	narrative.Hooks[5] = narrativeMixinHooks4[2]
+
+	narrative.Hooks[6] = narrativeMixinHooks5[0]
+
+	narrative.Hooks[7] = narrativeMixinHooks5[1]
+
+	narrative.Hooks[8] = narrativeMixinHooks5[2]
 	narrativeMixinInters1 := narrativeMixin[1].Interceptors()
+	narrativeMixinInters4 := narrativeMixin[4].Interceptors()
 	narrative.Interceptors[0] = narrativeMixinInters1[0]
+	narrative.Interceptors[1] = narrativeMixinInters4[0]
 	narrativeMixinFields0 := narrativeMixin[0].Fields()
 	_ = narrativeMixinFields0
 	narrativeMixinFields2 := narrativeMixin[2].Fields()
 	_ = narrativeMixinFields2
 	narrativeMixinFields3 := narrativeMixin[3].Fields()
 	_ = narrativeMixinFields3
+	narrativeMixinFields4 := narrativeMixin[4].Fields()
+	_ = narrativeMixinFields4
 	narrativeFields := schema.Narrative{}.Fields()
 	_ = narrativeFields
 	// narrativeDescCreatedAt is the schema descriptor for created_at field.
@@ -2310,10 +2339,29 @@ func init() {
 	narrativeDescTags := narrativeMixinFields3[0].Descriptor()
 	// narrative.DefaultTags holds the default value on creation for the tags field.
 	narrative.DefaultTags = narrativeDescTags.Default.([]string)
+	// narrativeDescOwnerID is the schema descriptor for owner_id field.
+	narrativeDescOwnerID := narrativeMixinFields4[0].Descriptor()
+	// narrative.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	narrative.OwnerIDValidator = narrativeDescOwnerID.Validators[0].(func(string) error)
+	// narrativeDescName is the schema descriptor for name field.
+	narrativeDescName := narrativeFields[0].Descriptor()
+	// narrative.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	narrative.NameValidator = narrativeDescName.Validators[0].(func(string) error)
 	// narrativeDescID is the schema descriptor for id field.
 	narrativeDescID := narrativeMixinFields2[0].Descriptor()
 	// narrative.DefaultID holds the default value on creation for the id field.
 	narrative.DefaultID = narrativeDescID.Default.(func() string)
+	narrativehistory.Policy = privacy.NewPolicies(schema.NarrativeHistory{})
+	narrativehistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := narrativehistory.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	narrativehistoryInters := schema.NarrativeHistory{}.Interceptors()
+	narrativehistory.Interceptors[0] = narrativehistoryInters[0]
 	narrativehistoryFields := schema.NarrativeHistory{}.Fields()
 	_ = narrativehistoryFields
 	// narrativehistoryDescHistoryTime is the schema descriptor for history_time field.

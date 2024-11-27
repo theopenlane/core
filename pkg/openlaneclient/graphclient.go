@@ -2824,6 +2824,7 @@ type AdminSearch_AdminSearch_Nodes_NarrativeSearchResult_Narratives struct {
 	DeletedBy   *string                "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	ID          string                 "json:\"id\" graphql:\"id\""
 	Tags        []string               "json:\"tags,omitempty\" graphql:\"tags\""
+	OwnerID     string                 "json:\"ownerID\" graphql:\"ownerID\""
 	Name        string                 "json:\"name\" graphql:\"name\""
 	Description *string                "json:\"description,omitempty\" graphql:\"description\""
 	Satisfies   *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
@@ -2847,6 +2848,12 @@ func (t *AdminSearch_AdminSearch_Nodes_NarrativeSearchResult_Narratives) GetTags
 		t = &AdminSearch_AdminSearch_Nodes_NarrativeSearchResult_Narratives{}
 	}
 	return t.Tags
+}
+func (t *AdminSearch_AdminSearch_Nodes_NarrativeSearchResult_Narratives) GetOwnerID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_NarrativeSearchResult_Narratives{}
+	}
+	return t.OwnerID
 }
 func (t *AdminSearch_AdminSearch_Nodes_NarrativeSearchResult_Narratives) GetName() string {
 	if t == nil {
@@ -27524,17 +27531,93 @@ func (t *CreateBulkNarrative_CreateBulkNarrative) GetNarratives() []*CreateBulkN
 	return t.Narratives
 }
 
+type CreateNarrative_CreateNarrative_Narrative_Programs struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateNarrative_CreateNarrative_Narrative_Programs) GetID() string {
+	if t == nil {
+		t = &CreateNarrative_CreateNarrative_Narrative_Programs{}
+	}
+	return t.ID
+}
+func (t *CreateNarrative_CreateNarrative_Narrative_Programs) GetName() string {
+	if t == nil {
+		t = &CreateNarrative_CreateNarrative_Narrative_Programs{}
+	}
+	return t.Name
+}
+
+type CreateNarrative_CreateNarrative_Narrative_Editors struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateNarrative_CreateNarrative_Narrative_Editors) GetID() string {
+	if t == nil {
+		t = &CreateNarrative_CreateNarrative_Narrative_Editors{}
+	}
+	return t.ID
+}
+func (t *CreateNarrative_CreateNarrative_Narrative_Editors) GetName() string {
+	if t == nil {
+		t = &CreateNarrative_CreateNarrative_Narrative_Editors{}
+	}
+	return t.Name
+}
+
+type CreateNarrative_CreateNarrative_Narrative_Viewers struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateNarrative_CreateNarrative_Narrative_Viewers) GetID() string {
+	if t == nil {
+		t = &CreateNarrative_CreateNarrative_Narrative_Viewers{}
+	}
+	return t.ID
+}
+func (t *CreateNarrative_CreateNarrative_Narrative_Viewers) GetName() string {
+	if t == nil {
+		t = &CreateNarrative_CreateNarrative_Narrative_Viewers{}
+	}
+	return t.Name
+}
+
+type CreateNarrative_CreateNarrative_Narrative_BlockedGroups struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateNarrative_CreateNarrative_Narrative_BlockedGroups) GetID() string {
+	if t == nil {
+		t = &CreateNarrative_CreateNarrative_Narrative_BlockedGroups{}
+	}
+	return t.ID
+}
+func (t *CreateNarrative_CreateNarrative_Narrative_BlockedGroups) GetName() string {
+	if t == nil {
+		t = &CreateNarrative_CreateNarrative_Narrative_BlockedGroups{}
+	}
+	return t.Name
+}
+
 type CreateNarrative_CreateNarrative_Narrative struct {
-	CreatedAt   *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description *string                "json:\"description,omitempty\" graphql:\"description\""
-	Details     map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
-	ID          string                 "json:\"id\" graphql:\"id\""
-	Name        string                 "json:\"name\" graphql:\"name\""
-	Satisfies   *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Tags        []string               "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt   *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt     *time.Time                                                 "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                                                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description   *string                                                    "json:\"description,omitempty\" graphql:\"description\""
+	Details       map[string]interface{}                                     "json:\"details,omitempty\" graphql:\"details\""
+	ID            string                                                     "json:\"id\" graphql:\"id\""
+	Name          string                                                     "json:\"name\" graphql:\"name\""
+	Satisfies     *string                                                    "json:\"satisfies,omitempty\" graphql:\"satisfies\""
+	Tags          []string                                                   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt     *time.Time                                                 "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                                                    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Programs      []*CreateNarrative_CreateNarrative_Narrative_Programs      "json:\"programs,omitempty\" graphql:\"programs\""
+	Editors       []*CreateNarrative_CreateNarrative_Narrative_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
+	Viewers       []*CreateNarrative_CreateNarrative_Narrative_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
+	BlockedGroups []*CreateNarrative_CreateNarrative_Narrative_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 }
 
 func (t *CreateNarrative_CreateNarrative_Narrative) GetCreatedAt() *time.Time {
@@ -27597,6 +27680,30 @@ func (t *CreateNarrative_CreateNarrative_Narrative) GetUpdatedBy() *string {
 	}
 	return t.UpdatedBy
 }
+func (t *CreateNarrative_CreateNarrative_Narrative) GetPrograms() []*CreateNarrative_CreateNarrative_Narrative_Programs {
+	if t == nil {
+		t = &CreateNarrative_CreateNarrative_Narrative{}
+	}
+	return t.Programs
+}
+func (t *CreateNarrative_CreateNarrative_Narrative) GetEditors() []*CreateNarrative_CreateNarrative_Narrative_Editors {
+	if t == nil {
+		t = &CreateNarrative_CreateNarrative_Narrative{}
+	}
+	return t.Editors
+}
+func (t *CreateNarrative_CreateNarrative_Narrative) GetViewers() []*CreateNarrative_CreateNarrative_Narrative_Viewers {
+	if t == nil {
+		t = &CreateNarrative_CreateNarrative_Narrative{}
+	}
+	return t.Viewers
+}
+func (t *CreateNarrative_CreateNarrative_Narrative) GetBlockedGroups() []*CreateNarrative_CreateNarrative_Narrative_BlockedGroups {
+	if t == nil {
+		t = &CreateNarrative_CreateNarrative_Narrative{}
+	}
+	return t.BlockedGroups
+}
 
 type CreateNarrative_CreateNarrative struct {
 	Narrative CreateNarrative_CreateNarrative_Narrative "json:\"narrative\" graphql:\"narrative\""
@@ -27620,17 +27727,93 @@ func (t *DeleteNarrative_DeleteNarrative) GetDeletedID() string {
 	return t.DeletedID
 }
 
+type GetAllNarratives_Narratives_Edges_Node_Programs struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetAllNarratives_Narratives_Edges_Node_Programs) GetID() string {
+	if t == nil {
+		t = &GetAllNarratives_Narratives_Edges_Node_Programs{}
+	}
+	return t.ID
+}
+func (t *GetAllNarratives_Narratives_Edges_Node_Programs) GetName() string {
+	if t == nil {
+		t = &GetAllNarratives_Narratives_Edges_Node_Programs{}
+	}
+	return t.Name
+}
+
+type GetAllNarratives_Narratives_Edges_Node_Editors struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetAllNarratives_Narratives_Edges_Node_Editors) GetID() string {
+	if t == nil {
+		t = &GetAllNarratives_Narratives_Edges_Node_Editors{}
+	}
+	return t.ID
+}
+func (t *GetAllNarratives_Narratives_Edges_Node_Editors) GetName() string {
+	if t == nil {
+		t = &GetAllNarratives_Narratives_Edges_Node_Editors{}
+	}
+	return t.Name
+}
+
+type GetAllNarratives_Narratives_Edges_Node_Viewers struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetAllNarratives_Narratives_Edges_Node_Viewers) GetID() string {
+	if t == nil {
+		t = &GetAllNarratives_Narratives_Edges_Node_Viewers{}
+	}
+	return t.ID
+}
+func (t *GetAllNarratives_Narratives_Edges_Node_Viewers) GetName() string {
+	if t == nil {
+		t = &GetAllNarratives_Narratives_Edges_Node_Viewers{}
+	}
+	return t.Name
+}
+
+type GetAllNarratives_Narratives_Edges_Node_BlockedGroups struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetAllNarratives_Narratives_Edges_Node_BlockedGroups) GetID() string {
+	if t == nil {
+		t = &GetAllNarratives_Narratives_Edges_Node_BlockedGroups{}
+	}
+	return t.ID
+}
+func (t *GetAllNarratives_Narratives_Edges_Node_BlockedGroups) GetName() string {
+	if t == nil {
+		t = &GetAllNarratives_Narratives_Edges_Node_BlockedGroups{}
+	}
+	return t.Name
+}
+
 type GetAllNarratives_Narratives_Edges_Node struct {
-	CreatedAt   *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description *string                "json:\"description,omitempty\" graphql:\"description\""
-	Details     map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
-	ID          string                 "json:\"id\" graphql:\"id\""
-	Name        string                 "json:\"name\" graphql:\"name\""
-	Satisfies   *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Tags        []string               "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt   *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt     *time.Time                                              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                                                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description   *string                                                 "json:\"description,omitempty\" graphql:\"description\""
+	Details       map[string]interface{}                                  "json:\"details,omitempty\" graphql:\"details\""
+	ID            string                                                  "json:\"id\" graphql:\"id\""
+	Name          string                                                  "json:\"name\" graphql:\"name\""
+	Satisfies     *string                                                 "json:\"satisfies,omitempty\" graphql:\"satisfies\""
+	Tags          []string                                                "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt     *time.Time                                              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                                                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Programs      []*GetAllNarratives_Narratives_Edges_Node_Programs      "json:\"programs,omitempty\" graphql:\"programs\""
+	Editors       []*GetAllNarratives_Narratives_Edges_Node_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
+	Viewers       []*GetAllNarratives_Narratives_Edges_Node_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
+	BlockedGroups []*GetAllNarratives_Narratives_Edges_Node_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 }
 
 func (t *GetAllNarratives_Narratives_Edges_Node) GetCreatedAt() *time.Time {
@@ -27693,6 +27876,30 @@ func (t *GetAllNarratives_Narratives_Edges_Node) GetUpdatedBy() *string {
 	}
 	return t.UpdatedBy
 }
+func (t *GetAllNarratives_Narratives_Edges_Node) GetPrograms() []*GetAllNarratives_Narratives_Edges_Node_Programs {
+	if t == nil {
+		t = &GetAllNarratives_Narratives_Edges_Node{}
+	}
+	return t.Programs
+}
+func (t *GetAllNarratives_Narratives_Edges_Node) GetEditors() []*GetAllNarratives_Narratives_Edges_Node_Editors {
+	if t == nil {
+		t = &GetAllNarratives_Narratives_Edges_Node{}
+	}
+	return t.Editors
+}
+func (t *GetAllNarratives_Narratives_Edges_Node) GetViewers() []*GetAllNarratives_Narratives_Edges_Node_Viewers {
+	if t == nil {
+		t = &GetAllNarratives_Narratives_Edges_Node{}
+	}
+	return t.Viewers
+}
+func (t *GetAllNarratives_Narratives_Edges_Node) GetBlockedGroups() []*GetAllNarratives_Narratives_Edges_Node_BlockedGroups {
+	if t == nil {
+		t = &GetAllNarratives_Narratives_Edges_Node{}
+	}
+	return t.BlockedGroups
+}
 
 type GetAllNarratives_Narratives_Edges struct {
 	Node *GetAllNarratives_Narratives_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
@@ -27716,17 +27923,93 @@ func (t *GetAllNarratives_Narratives) GetEdges() []*GetAllNarratives_Narratives_
 	return t.Edges
 }
 
+type GetNarrativeByID_Narrative_Programs struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetNarrativeByID_Narrative_Programs) GetID() string {
+	if t == nil {
+		t = &GetNarrativeByID_Narrative_Programs{}
+	}
+	return t.ID
+}
+func (t *GetNarrativeByID_Narrative_Programs) GetName() string {
+	if t == nil {
+		t = &GetNarrativeByID_Narrative_Programs{}
+	}
+	return t.Name
+}
+
+type GetNarrativeByID_Narrative_Editors struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetNarrativeByID_Narrative_Editors) GetID() string {
+	if t == nil {
+		t = &GetNarrativeByID_Narrative_Editors{}
+	}
+	return t.ID
+}
+func (t *GetNarrativeByID_Narrative_Editors) GetName() string {
+	if t == nil {
+		t = &GetNarrativeByID_Narrative_Editors{}
+	}
+	return t.Name
+}
+
+type GetNarrativeByID_Narrative_Viewers struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetNarrativeByID_Narrative_Viewers) GetID() string {
+	if t == nil {
+		t = &GetNarrativeByID_Narrative_Viewers{}
+	}
+	return t.ID
+}
+func (t *GetNarrativeByID_Narrative_Viewers) GetName() string {
+	if t == nil {
+		t = &GetNarrativeByID_Narrative_Viewers{}
+	}
+	return t.Name
+}
+
+type GetNarrativeByID_Narrative_BlockedGroups struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetNarrativeByID_Narrative_BlockedGroups) GetID() string {
+	if t == nil {
+		t = &GetNarrativeByID_Narrative_BlockedGroups{}
+	}
+	return t.ID
+}
+func (t *GetNarrativeByID_Narrative_BlockedGroups) GetName() string {
+	if t == nil {
+		t = &GetNarrativeByID_Narrative_BlockedGroups{}
+	}
+	return t.Name
+}
+
 type GetNarrativeByID_Narrative struct {
-	CreatedAt   *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description *string                "json:\"description,omitempty\" graphql:\"description\""
-	Details     map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
-	ID          string                 "json:\"id\" graphql:\"id\""
-	Name        string                 "json:\"name\" graphql:\"name\""
-	Satisfies   *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Tags        []string               "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt   *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt     *time.Time                                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description   *string                                     "json:\"description,omitempty\" graphql:\"description\""
+	Details       map[string]interface{}                      "json:\"details,omitempty\" graphql:\"details\""
+	ID            string                                      "json:\"id\" graphql:\"id\""
+	Name          string                                      "json:\"name\" graphql:\"name\""
+	Satisfies     *string                                     "json:\"satisfies,omitempty\" graphql:\"satisfies\""
+	Tags          []string                                    "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt     *time.Time                                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Programs      []*GetNarrativeByID_Narrative_Programs      "json:\"programs,omitempty\" graphql:\"programs\""
+	Editors       []*GetNarrativeByID_Narrative_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
+	Viewers       []*GetNarrativeByID_Narrative_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
+	BlockedGroups []*GetNarrativeByID_Narrative_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 }
 
 func (t *GetNarrativeByID_Narrative) GetCreatedAt() *time.Time {
@@ -27789,18 +28072,118 @@ func (t *GetNarrativeByID_Narrative) GetUpdatedBy() *string {
 	}
 	return t.UpdatedBy
 }
+func (t *GetNarrativeByID_Narrative) GetPrograms() []*GetNarrativeByID_Narrative_Programs {
+	if t == nil {
+		t = &GetNarrativeByID_Narrative{}
+	}
+	return t.Programs
+}
+func (t *GetNarrativeByID_Narrative) GetEditors() []*GetNarrativeByID_Narrative_Editors {
+	if t == nil {
+		t = &GetNarrativeByID_Narrative{}
+	}
+	return t.Editors
+}
+func (t *GetNarrativeByID_Narrative) GetViewers() []*GetNarrativeByID_Narrative_Viewers {
+	if t == nil {
+		t = &GetNarrativeByID_Narrative{}
+	}
+	return t.Viewers
+}
+func (t *GetNarrativeByID_Narrative) GetBlockedGroups() []*GetNarrativeByID_Narrative_BlockedGroups {
+	if t == nil {
+		t = &GetNarrativeByID_Narrative{}
+	}
+	return t.BlockedGroups
+}
+
+type GetNarratives_Narratives_Edges_Node_Programs struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetNarratives_Narratives_Edges_Node_Programs) GetID() string {
+	if t == nil {
+		t = &GetNarratives_Narratives_Edges_Node_Programs{}
+	}
+	return t.ID
+}
+func (t *GetNarratives_Narratives_Edges_Node_Programs) GetName() string {
+	if t == nil {
+		t = &GetNarratives_Narratives_Edges_Node_Programs{}
+	}
+	return t.Name
+}
+
+type GetNarratives_Narratives_Edges_Node_Editors struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetNarratives_Narratives_Edges_Node_Editors) GetID() string {
+	if t == nil {
+		t = &GetNarratives_Narratives_Edges_Node_Editors{}
+	}
+	return t.ID
+}
+func (t *GetNarratives_Narratives_Edges_Node_Editors) GetName() string {
+	if t == nil {
+		t = &GetNarratives_Narratives_Edges_Node_Editors{}
+	}
+	return t.Name
+}
+
+type GetNarratives_Narratives_Edges_Node_Viewers struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetNarratives_Narratives_Edges_Node_Viewers) GetID() string {
+	if t == nil {
+		t = &GetNarratives_Narratives_Edges_Node_Viewers{}
+	}
+	return t.ID
+}
+func (t *GetNarratives_Narratives_Edges_Node_Viewers) GetName() string {
+	if t == nil {
+		t = &GetNarratives_Narratives_Edges_Node_Viewers{}
+	}
+	return t.Name
+}
+
+type GetNarratives_Narratives_Edges_Node_BlockedGroups struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetNarratives_Narratives_Edges_Node_BlockedGroups) GetID() string {
+	if t == nil {
+		t = &GetNarratives_Narratives_Edges_Node_BlockedGroups{}
+	}
+	return t.ID
+}
+func (t *GetNarratives_Narratives_Edges_Node_BlockedGroups) GetName() string {
+	if t == nil {
+		t = &GetNarratives_Narratives_Edges_Node_BlockedGroups{}
+	}
+	return t.Name
+}
 
 type GetNarratives_Narratives_Edges_Node struct {
-	CreatedAt   *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description *string                "json:\"description,omitempty\" graphql:\"description\""
-	Details     map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
-	ID          string                 "json:\"id\" graphql:\"id\""
-	Name        string                 "json:\"name\" graphql:\"name\""
-	Satisfies   *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Tags        []string               "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt   *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt     *time.Time                                           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                                              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description   *string                                              "json:\"description,omitempty\" graphql:\"description\""
+	Details       map[string]interface{}                               "json:\"details,omitempty\" graphql:\"details\""
+	ID            string                                               "json:\"id\" graphql:\"id\""
+	Name          string                                               "json:\"name\" graphql:\"name\""
+	Satisfies     *string                                              "json:\"satisfies,omitempty\" graphql:\"satisfies\""
+	Tags          []string                                             "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt     *time.Time                                           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                                              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Programs      []*GetNarratives_Narratives_Edges_Node_Programs      "json:\"programs,omitempty\" graphql:\"programs\""
+	Editors       []*GetNarratives_Narratives_Edges_Node_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
+	Viewers       []*GetNarratives_Narratives_Edges_Node_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
+	BlockedGroups []*GetNarratives_Narratives_Edges_Node_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 }
 
 func (t *GetNarratives_Narratives_Edges_Node) GetCreatedAt() *time.Time {
@@ -27863,6 +28246,30 @@ func (t *GetNarratives_Narratives_Edges_Node) GetUpdatedBy() *string {
 	}
 	return t.UpdatedBy
 }
+func (t *GetNarratives_Narratives_Edges_Node) GetPrograms() []*GetNarratives_Narratives_Edges_Node_Programs {
+	if t == nil {
+		t = &GetNarratives_Narratives_Edges_Node{}
+	}
+	return t.Programs
+}
+func (t *GetNarratives_Narratives_Edges_Node) GetEditors() []*GetNarratives_Narratives_Edges_Node_Editors {
+	if t == nil {
+		t = &GetNarratives_Narratives_Edges_Node{}
+	}
+	return t.Editors
+}
+func (t *GetNarratives_Narratives_Edges_Node) GetViewers() []*GetNarratives_Narratives_Edges_Node_Viewers {
+	if t == nil {
+		t = &GetNarratives_Narratives_Edges_Node{}
+	}
+	return t.Viewers
+}
+func (t *GetNarratives_Narratives_Edges_Node) GetBlockedGroups() []*GetNarratives_Narratives_Edges_Node_BlockedGroups {
+	if t == nil {
+		t = &GetNarratives_Narratives_Edges_Node{}
+	}
+	return t.BlockedGroups
+}
 
 type GetNarratives_Narratives_Edges struct {
 	Node *GetNarratives_Narratives_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
@@ -27886,17 +28293,93 @@ func (t *GetNarratives_Narratives) GetEdges() []*GetNarratives_Narratives_Edges 
 	return t.Edges
 }
 
+type UpdateNarrative_UpdateNarrative_Narrative_Programs struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateNarrative_UpdateNarrative_Narrative_Programs) GetID() string {
+	if t == nil {
+		t = &UpdateNarrative_UpdateNarrative_Narrative_Programs{}
+	}
+	return t.ID
+}
+func (t *UpdateNarrative_UpdateNarrative_Narrative_Programs) GetName() string {
+	if t == nil {
+		t = &UpdateNarrative_UpdateNarrative_Narrative_Programs{}
+	}
+	return t.Name
+}
+
+type UpdateNarrative_UpdateNarrative_Narrative_Editors struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateNarrative_UpdateNarrative_Narrative_Editors) GetID() string {
+	if t == nil {
+		t = &UpdateNarrative_UpdateNarrative_Narrative_Editors{}
+	}
+	return t.ID
+}
+func (t *UpdateNarrative_UpdateNarrative_Narrative_Editors) GetName() string {
+	if t == nil {
+		t = &UpdateNarrative_UpdateNarrative_Narrative_Editors{}
+	}
+	return t.Name
+}
+
+type UpdateNarrative_UpdateNarrative_Narrative_Viewers struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateNarrative_UpdateNarrative_Narrative_Viewers) GetID() string {
+	if t == nil {
+		t = &UpdateNarrative_UpdateNarrative_Narrative_Viewers{}
+	}
+	return t.ID
+}
+func (t *UpdateNarrative_UpdateNarrative_Narrative_Viewers) GetName() string {
+	if t == nil {
+		t = &UpdateNarrative_UpdateNarrative_Narrative_Viewers{}
+	}
+	return t.Name
+}
+
+type UpdateNarrative_UpdateNarrative_Narrative_BlockedGroups struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateNarrative_UpdateNarrative_Narrative_BlockedGroups) GetID() string {
+	if t == nil {
+		t = &UpdateNarrative_UpdateNarrative_Narrative_BlockedGroups{}
+	}
+	return t.ID
+}
+func (t *UpdateNarrative_UpdateNarrative_Narrative_BlockedGroups) GetName() string {
+	if t == nil {
+		t = &UpdateNarrative_UpdateNarrative_Narrative_BlockedGroups{}
+	}
+	return t.Name
+}
+
 type UpdateNarrative_UpdateNarrative_Narrative struct {
-	CreatedAt   *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy   *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description *string                "json:\"description,omitempty\" graphql:\"description\""
-	Details     map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
-	ID          string                 "json:\"id\" graphql:\"id\""
-	Name        string                 "json:\"name\" graphql:\"name\""
-	Satisfies   *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Tags        []string               "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt   *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy   *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	CreatedAt     *time.Time                                                 "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy     *string                                                    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description   *string                                                    "json:\"description,omitempty\" graphql:\"description\""
+	Details       map[string]interface{}                                     "json:\"details,omitempty\" graphql:\"details\""
+	ID            string                                                     "json:\"id\" graphql:\"id\""
+	Name          string                                                     "json:\"name\" graphql:\"name\""
+	Satisfies     *string                                                    "json:\"satisfies,omitempty\" graphql:\"satisfies\""
+	Tags          []string                                                   "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt     *time.Time                                                 "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy     *string                                                    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Programs      []*UpdateNarrative_UpdateNarrative_Narrative_Programs      "json:\"programs,omitempty\" graphql:\"programs\""
+	Editors       []*UpdateNarrative_UpdateNarrative_Narrative_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
+	Viewers       []*UpdateNarrative_UpdateNarrative_Narrative_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
+	BlockedGroups []*UpdateNarrative_UpdateNarrative_Narrative_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 }
 
 func (t *UpdateNarrative_UpdateNarrative_Narrative) GetCreatedAt() *time.Time {
@@ -27958,6 +28441,30 @@ func (t *UpdateNarrative_UpdateNarrative_Narrative) GetUpdatedBy() *string {
 		t = &UpdateNarrative_UpdateNarrative_Narrative{}
 	}
 	return t.UpdatedBy
+}
+func (t *UpdateNarrative_UpdateNarrative_Narrative) GetPrograms() []*UpdateNarrative_UpdateNarrative_Narrative_Programs {
+	if t == nil {
+		t = &UpdateNarrative_UpdateNarrative_Narrative{}
+	}
+	return t.Programs
+}
+func (t *UpdateNarrative_UpdateNarrative_Narrative) GetEditors() []*UpdateNarrative_UpdateNarrative_Narrative_Editors {
+	if t == nil {
+		t = &UpdateNarrative_UpdateNarrative_Narrative{}
+	}
+	return t.Editors
+}
+func (t *UpdateNarrative_UpdateNarrative_Narrative) GetViewers() []*UpdateNarrative_UpdateNarrative_Narrative_Viewers {
+	if t == nil {
+		t = &UpdateNarrative_UpdateNarrative_Narrative{}
+	}
+	return t.Viewers
+}
+func (t *UpdateNarrative_UpdateNarrative_Narrative) GetBlockedGroups() []*UpdateNarrative_UpdateNarrative_Narrative_BlockedGroups {
+	if t == nil {
+		t = &UpdateNarrative_UpdateNarrative_Narrative{}
+	}
+	return t.BlockedGroups
 }
 
 type UpdateNarrative_UpdateNarrative struct {
@@ -55504,6 +56011,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					deletedBy
 					id
 					tags
+					ownerID
 					name
 					description
 					satisfies
@@ -63224,6 +63732,22 @@ const CreateNarrativeDocument = `mutation CreateNarrative ($input: CreateNarrati
 			tags
 			updatedAt
 			updatedBy
+			programs {
+				id
+				name
+			}
+			editors {
+				id
+				name
+			}
+			viewers {
+				id
+				name
+			}
+			blockedGroups {
+				id
+				name
+			}
 		}
 	}
 }
@@ -63284,6 +63808,22 @@ const GetAllNarrativesDocument = `query GetAllNarratives {
 				tags
 				updatedAt
 				updatedBy
+				programs {
+					id
+					name
+				}
+				editors {
+					id
+					name
+				}
+				viewers {
+					id
+					name
+				}
+				blockedGroups {
+					id
+					name
+				}
 			}
 		}
 	}
@@ -63317,6 +63857,22 @@ const GetNarrativeByIDDocument = `query GetNarrativeByID ($narrativeId: ID!) {
 		tags
 		updatedAt
 		updatedBy
+		programs {
+			id
+			name
+		}
+		editors {
+			id
+			name
+		}
+		viewers {
+			id
+			name
+		}
+		blockedGroups {
+			id
+			name
+		}
 	}
 }
 `
@@ -63352,6 +63908,22 @@ const GetNarrativesDocument = `query GetNarratives ($where: NarrativeWhereInput)
 				tags
 				updatedAt
 				updatedBy
+				programs {
+					id
+					name
+				}
+				editors {
+					id
+					name
+				}
+				viewers {
+					id
+					name
+				}
+				blockedGroups {
+					id
+					name
+				}
 			}
 		}
 	}
@@ -63388,6 +63960,22 @@ const UpdateNarrativeDocument = `mutation UpdateNarrative ($updateNarrativeId: I
 			tags
 			updatedAt
 			updatedBy
+			programs {
+				id
+				name
+			}
+			editors {
+				id
+				name
+			}
+			viewers {
+				id
+				name
+			}
+			blockedGroups {
+				id
+				name
+			}
 		}
 	}
 }

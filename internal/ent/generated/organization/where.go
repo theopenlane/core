@@ -1900,6 +1900,35 @@ func HasControlobjectivesWith(preds ...predicate.ControlObjective) predicate.Org
 	})
 }
 
+// HasNarratives applies the HasEdge predicate on the "narratives" edge.
+func HasNarratives() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, NarrativesTable, NarrativesColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Narrative
+		step.Edge.Schema = schemaConfig.Narrative
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasNarrativesWith applies the HasEdge predicate on the "narratives" edge with a given conditions (other predicates).
+func HasNarrativesWith(preds ...predicate.Narrative) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newNarrativesStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Narrative
+		step.Edge.Schema = schemaConfig.Narrative
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasMembers applies the HasEdge predicate on the "members" edge.
 func HasMembers() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {

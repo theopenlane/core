@@ -122,6 +122,20 @@ func (nhu *NarrativeHistoryUpdate) ClearTags() *NarrativeHistoryUpdate {
 	return nhu
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (nhu *NarrativeHistoryUpdate) SetOwnerID(s string) *NarrativeHistoryUpdate {
+	nhu.mutation.SetOwnerID(s)
+	return nhu
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (nhu *NarrativeHistoryUpdate) SetNillableOwnerID(s *string) *NarrativeHistoryUpdate {
+	if s != nil {
+		nhu.SetOwnerID(*s)
+	}
+	return nhu
+}
+
 // SetName sets the "name" field.
 func (nhu *NarrativeHistoryUpdate) SetName(s string) *NarrativeHistoryUpdate {
 	nhu.mutation.SetName(s)
@@ -195,7 +209,9 @@ func (nhu *NarrativeHistoryUpdate) Mutation() *NarrativeHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (nhu *NarrativeHistoryUpdate) Save(ctx context.Context) (int, error) {
-	nhu.defaults()
+	if err := nhu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, nhu.sqlSave, nhu.mutation, nhu.hooks)
 }
 
@@ -222,11 +238,15 @@ func (nhu *NarrativeHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (nhu *NarrativeHistoryUpdate) defaults() {
+func (nhu *NarrativeHistoryUpdate) defaults() error {
 	if _, ok := nhu.mutation.UpdatedAt(); !ok && !nhu.mutation.UpdatedAtCleared() {
+		if narrativehistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized narrativehistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := narrativehistory.UpdateDefaultUpdatedAt()
 		nhu.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
@@ -287,6 +307,9 @@ func (nhu *NarrativeHistoryUpdate) sqlSave(ctx context.Context) (n int, err erro
 	}
 	if nhu.mutation.TagsCleared() {
 		_spec.ClearField(narrativehistory.FieldTags, field.TypeJSON)
+	}
+	if value, ok := nhu.mutation.OwnerID(); ok {
+		_spec.SetField(narrativehistory.FieldOwnerID, field.TypeString, value)
 	}
 	if value, ok := nhu.mutation.Name(); ok {
 		_spec.SetField(narrativehistory.FieldName, field.TypeString, value)
@@ -423,6 +446,20 @@ func (nhuo *NarrativeHistoryUpdateOne) ClearTags() *NarrativeHistoryUpdateOne {
 	return nhuo
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (nhuo *NarrativeHistoryUpdateOne) SetOwnerID(s string) *NarrativeHistoryUpdateOne {
+	nhuo.mutation.SetOwnerID(s)
+	return nhuo
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (nhuo *NarrativeHistoryUpdateOne) SetNillableOwnerID(s *string) *NarrativeHistoryUpdateOne {
+	if s != nil {
+		nhuo.SetOwnerID(*s)
+	}
+	return nhuo
+}
+
 // SetName sets the "name" field.
 func (nhuo *NarrativeHistoryUpdateOne) SetName(s string) *NarrativeHistoryUpdateOne {
 	nhuo.mutation.SetName(s)
@@ -509,7 +546,9 @@ func (nhuo *NarrativeHistoryUpdateOne) Select(field string, fields ...string) *N
 
 // Save executes the query and returns the updated NarrativeHistory entity.
 func (nhuo *NarrativeHistoryUpdateOne) Save(ctx context.Context) (*NarrativeHistory, error) {
-	nhuo.defaults()
+	if err := nhuo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, nhuo.sqlSave, nhuo.mutation, nhuo.hooks)
 }
 
@@ -536,11 +575,15 @@ func (nhuo *NarrativeHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (nhuo *NarrativeHistoryUpdateOne) defaults() {
+func (nhuo *NarrativeHistoryUpdateOne) defaults() error {
 	if _, ok := nhuo.mutation.UpdatedAt(); !ok && !nhuo.mutation.UpdatedAtCleared() {
+		if narrativehistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized narrativehistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := narrativehistory.UpdateDefaultUpdatedAt()
 		nhuo.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
@@ -618,6 +661,9 @@ func (nhuo *NarrativeHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Narr
 	}
 	if nhuo.mutation.TagsCleared() {
 		_spec.ClearField(narrativehistory.FieldTags, field.TypeJSON)
+	}
+	if value, ok := nhuo.mutation.OwnerID(); ok {
+		_spec.SetField(narrativehistory.FieldOwnerID, field.TypeString, value)
 	}
 	if value, ok := nhuo.mutation.Name(); ok {
 		_spec.SetField(narrativehistory.FieldName, field.TypeString, value)

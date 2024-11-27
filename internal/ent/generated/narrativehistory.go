@@ -41,6 +41,8 @@ type NarrativeHistory struct {
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// the ID of the organization owner of the object
+	OwnerID string `json:"owner_id,omitempty"`
 	// the name of the narrative
 	Name string `json:"name,omitempty"`
 	// the description of the narrative
@@ -61,7 +63,7 @@ func (*NarrativeHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case narrativehistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case narrativehistory.FieldID, narrativehistory.FieldRef, narrativehistory.FieldCreatedBy, narrativehistory.FieldUpdatedBy, narrativehistory.FieldDeletedBy, narrativehistory.FieldMappingID, narrativehistory.FieldName, narrativehistory.FieldDescription, narrativehistory.FieldSatisfies:
+		case narrativehistory.FieldID, narrativehistory.FieldRef, narrativehistory.FieldCreatedBy, narrativehistory.FieldUpdatedBy, narrativehistory.FieldDeletedBy, narrativehistory.FieldMappingID, narrativehistory.FieldOwnerID, narrativehistory.FieldName, narrativehistory.FieldDescription, narrativehistory.FieldSatisfies:
 			values[i] = new(sql.NullString)
 		case narrativehistory.FieldHistoryTime, narrativehistory.FieldCreatedAt, narrativehistory.FieldUpdatedAt, narrativehistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -153,6 +155,12 @@ func (nh *NarrativeHistory) assignValues(columns []string, values []any) error {
 				if err := json.Unmarshal(*value, &nh.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
+			}
+		case narrativehistory.FieldOwnerID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
+			} else if value.Valid {
+				nh.OwnerID = value.String
 			}
 		case narrativehistory.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -248,6 +256,9 @@ func (nh *NarrativeHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", nh.Tags))
+	builder.WriteString(", ")
+	builder.WriteString("owner_id=")
+	builder.WriteString(nh.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(nh.Name)

@@ -109,6 +109,8 @@ const (
 	EdgeRisks = "risks"
 	// EdgeControlobjectives holds the string denoting the controlobjectives edge name in mutations.
 	EdgeControlobjectives = "controlobjectives"
+	// EdgeNarratives holds the string denoting the narratives edge name in mutations.
+	EdgeNarratives = "narratives"
 	// EdgeMembers holds the string denoting the members edge name in mutations.
 	EdgeMembers = "members"
 	// Table holds the table name of the organization in the database.
@@ -319,6 +321,13 @@ const (
 	ControlobjectivesInverseTable = "control_objectives"
 	// ControlobjectivesColumn is the table column denoting the controlobjectives relation/edge.
 	ControlobjectivesColumn = "owner_id"
+	// NarrativesTable is the table that holds the narratives relation/edge.
+	NarrativesTable = "narratives"
+	// NarrativesInverseTable is the table name for the Narrative entity.
+	// It exists in this package in order to avoid circular dependency with the "narrative" package.
+	NarrativesInverseTable = "narratives"
+	// NarrativesColumn is the table column denoting the narratives relation/edge.
+	NarrativesColumn = "owner_id"
 	// MembersTable is the table that holds the members relation/edge.
 	MembersTable = "org_memberships"
 	// MembersInverseTable is the table name for the OrgMembership entity.
@@ -926,6 +935,20 @@ func ByControlobjectives(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption
 	}
 }
 
+// ByNarrativesCount orders the results by narratives count.
+func ByNarrativesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newNarrativesStep(), opts...)
+	}
+}
+
+// ByNarratives orders the results by narratives terms.
+func ByNarratives(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newNarrativesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByMembersCount orders the results by members count.
 func ByMembersCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1161,6 +1184,13 @@ func newControlobjectivesStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ControlobjectivesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, ControlobjectivesTable, ControlobjectivesColumn),
+	)
+}
+func newNarrativesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(NarrativesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, NarrativesTable, NarrativesColumn),
 	)
 }
 func newMembersStep() *sqlgraph.Step {

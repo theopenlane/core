@@ -22,6 +22,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
+	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
@@ -560,6 +561,13 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 	if exists, err := FromContext(ctx).ControlObjective.Query().Where((controlobjective.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if controlobjectiveCount, err := FromContext(ctx).ControlObjective.Delete().Where(controlobjective.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			log.Debug().Err(err).Int("count", controlobjectiveCount).Msg("deleting controlobjective")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).Narrative.Query().Where((narrative.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if narrativeCount, err := FromContext(ctx).Narrative.Delete().Where(narrative.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", narrativeCount).Msg("deleting narrative")
 			return err
 		}
 	}

@@ -25,6 +25,7 @@ func init() {
 	updateCmd.Flags().StringP("id", "i", "", "risk id to update")
 
 	// command line flags for the update command
+	updateCmd.Flags().StringP("name", "n", "", "name of the risk")
 	updateCmd.Flags().StringP("description", "d", "", "description of the risk")
 	updateCmd.Flags().StringP("status", "s", "", "status of the risk")
 	updateCmd.Flags().StringP("type", "t", "", "type of the risk")
@@ -46,6 +47,11 @@ func updateValidation() (id string, input openlaneclient.UpdateRiskInput, err er
 
 	// validation of required fields for the update command
 	// output the input struct with the required fields and optional fields based on the command line flags
+	name := cmd.Config.String("name")
+	if name != "" {
+		input.Name = &name
+	}
+
 	description := cmd.Config.String("description")
 	if description != "" {
 		input.Description = &description

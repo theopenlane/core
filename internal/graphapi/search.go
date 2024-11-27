@@ -712,12 +712,13 @@ func adminSearchNarratives(ctx context.Context, query string) ([]*generated.Narr
 				likeQuery := "%" + query + "%"
 				s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
 			},
+			narrative.OwnerIDContainsFold(query),     // search by OwnerID
 			narrative.NameContainsFold(query),        // search by Name
 			narrative.DescriptionContainsFold(query), // search by Description
 			narrative.SatisfiesContainsFold(query),   // search by Satisfies
 			func(s *sql.Selector) {
 				likeQuery := "%" + query + "%"
-				s.Where(sql.ExprP("(details)::text LIKE $7", likeQuery)) // search by Details
+				s.Where(sql.ExprP("(details)::text LIKE $8", likeQuery)) // search by Details
 			},
 		),
 	).All(ctx)

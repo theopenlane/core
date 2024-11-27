@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
@@ -511,6 +512,51 @@ func (gc *GroupCreate) AddControlobjectiveBlockedGroups(c ...*ControlObjective) 
 		ids[i] = c[i].ID
 	}
 	return gc.AddControlobjectiveBlockedGroupIDs(ids...)
+}
+
+// AddNarrativeViewerIDs adds the "narrative_viewers" edge to the Narrative entity by IDs.
+func (gc *GroupCreate) AddNarrativeViewerIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddNarrativeViewerIDs(ids...)
+	return gc
+}
+
+// AddNarrativeViewers adds the "narrative_viewers" edges to the Narrative entity.
+func (gc *GroupCreate) AddNarrativeViewers(n ...*Narrative) *GroupCreate {
+	ids := make([]string, len(n))
+	for i := range n {
+		ids[i] = n[i].ID
+	}
+	return gc.AddNarrativeViewerIDs(ids...)
+}
+
+// AddNarrativeEditorIDs adds the "narrative_editors" edge to the Narrative entity by IDs.
+func (gc *GroupCreate) AddNarrativeEditorIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddNarrativeEditorIDs(ids...)
+	return gc
+}
+
+// AddNarrativeEditors adds the "narrative_editors" edges to the Narrative entity.
+func (gc *GroupCreate) AddNarrativeEditors(n ...*Narrative) *GroupCreate {
+	ids := make([]string, len(n))
+	for i := range n {
+		ids[i] = n[i].ID
+	}
+	return gc.AddNarrativeEditorIDs(ids...)
+}
+
+// AddNarrativeBlockedGroupIDs adds the "narrative_blocked_groups" edge to the Narrative entity by IDs.
+func (gc *GroupCreate) AddNarrativeBlockedGroupIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddNarrativeBlockedGroupIDs(ids...)
+	return gc
+}
+
+// AddNarrativeBlockedGroups adds the "narrative_blocked_groups" edges to the Narrative entity.
+func (gc *GroupCreate) AddNarrativeBlockedGroups(n ...*Narrative) *GroupCreate {
+	ids := make([]string, len(n))
+	for i := range n {
+		ids[i] = n[i].ID
+	}
+	return gc.AddNarrativeBlockedGroupIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the GroupMembership entity by IDs.
@@ -1064,6 +1110,57 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = gc.schemaConfig.ControlObjectiveBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.NarrativeViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.NarrativeViewersTable,
+			Columns: group.NarrativeViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.NarrativeViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.NarrativeEditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.NarrativeEditorsTable,
+			Columns: group.NarrativeEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.NarrativeEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.NarrativeBlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.NarrativeBlockedGroupsTable,
+			Columns: group.NarrativeBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.NarrativeBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

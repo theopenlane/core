@@ -1,4 +1,4 @@
-h1:0huuGW7N64WUhLrY2A3WasuT6fmhrcNwh34rzNYr5R4=
+h1:VWu5haUzuojjmboCX9JLM/o8JCLUzv8+o9vjxB7OMNk=
 20240827061437_init.sql h1:9pQTZIsiDF3hW0HraVTzaU3M25iiy3MdxvhsZosxgvo=
 20241014185633_object_upload.sql h1:0lzY0vj0gav3gMHGc8gm793zPeSQSMMHjt4c2V+7Eok=
 20241108062010_compliance.sql h1:vmJyf1VhoKSRw9zRQKXsRtWJEEUYDbqZmpkyp89O/Tc=
@@ -8,3 +8,4 @@ h1:0huuGW7N64WUhLrY2A3WasuT6fmhrcNwh34rzNYr5R4=
 20241121200811_policy_procedure_program_edges.sql h1:K5HuAgBqYM2CMYpb8Gc9rgQrOxdLeD8BwXtRkti9Ud0=
 20241125224127_risks.sql h1:zqgRud+GNfsz9niYb3u1VSzhpeMW+ghGzJXwhVytuXk=
 20241126203308_control_objectives.sql h1:e2DUn9RTWOR8fJl3PGdQ/YgzLfj585nNTeTiuvkAh+A=
+20241126232456_narratives.sql h1:DhXbazPI/iSE0tDUGMoS/WHKXtQfO04v9b6qQPZ4aoQ=

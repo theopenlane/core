@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
@@ -59,6 +60,9 @@ type GroupQuery struct {
 	withControlobjectiveViewers            *ControlObjectiveQuery
 	withControlobjectiveEditors            *ControlObjectiveQuery
 	withControlobjectiveBlockedGroups      *ControlObjectiveQuery
+	withNarrativeViewers                   *NarrativeQuery
+	withNarrativeEditors                   *NarrativeQuery
+	withNarrativeBlockedGroups             *NarrativeQuery
 	withMembers                            *GroupMembershipQuery
 	loadTotal                              []func(context.Context, []*Group) error
 	modifiers                              []func(*sql.Selector)
@@ -80,6 +84,9 @@ type GroupQuery struct {
 	withNamedControlobjectiveViewers       map[string]*ControlObjectiveQuery
 	withNamedControlobjectiveEditors       map[string]*ControlObjectiveQuery
 	withNamedControlobjectiveBlockedGroups map[string]*ControlObjectiveQuery
+	withNamedNarrativeViewers              map[string]*NarrativeQuery
+	withNamedNarrativeEditors              map[string]*NarrativeQuery
+	withNamedNarrativeBlockedGroups        map[string]*NarrativeQuery
 	withNamedMembers                       map[string]*GroupMembershipQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -617,6 +624,81 @@ func (gq *GroupQuery) QueryControlobjectiveBlockedGroups() *ControlObjectiveQuer
 	return query
 }
 
+// QueryNarrativeViewers chains the current query on the "narrative_viewers" edge.
+func (gq *GroupQuery) QueryNarrativeViewers() *NarrativeQuery {
+	query := (&NarrativeClient{config: gq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := gq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := gq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, selector),
+			sqlgraph.To(narrative.Table, narrative.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.NarrativeViewersTable, group.NarrativeViewersPrimaryKey...),
+		)
+		schemaConfig := gq.schemaConfig
+		step.To.Schema = schemaConfig.Narrative
+		step.Edge.Schema = schemaConfig.NarrativeViewers
+		fromU = sqlgraph.SetNeighbors(gq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryNarrativeEditors chains the current query on the "narrative_editors" edge.
+func (gq *GroupQuery) QueryNarrativeEditors() *NarrativeQuery {
+	query := (&NarrativeClient{config: gq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := gq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := gq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, selector),
+			sqlgraph.To(narrative.Table, narrative.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.NarrativeEditorsTable, group.NarrativeEditorsPrimaryKey...),
+		)
+		schemaConfig := gq.schemaConfig
+		step.To.Schema = schemaConfig.Narrative
+		step.Edge.Schema = schemaConfig.NarrativeEditors
+		fromU = sqlgraph.SetNeighbors(gq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryNarrativeBlockedGroups chains the current query on the "narrative_blocked_groups" edge.
+func (gq *GroupQuery) QueryNarrativeBlockedGroups() *NarrativeQuery {
+	query := (&NarrativeClient{config: gq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := gq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := gq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, selector),
+			sqlgraph.To(narrative.Table, narrative.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.NarrativeBlockedGroupsTable, group.NarrativeBlockedGroupsPrimaryKey...),
+		)
+		schemaConfig := gq.schemaConfig
+		step.To.Schema = schemaConfig.Narrative
+		step.Edge.Schema = schemaConfig.NarrativeBlockedGroups
+		fromU = sqlgraph.SetNeighbors(gq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryMembers chains the current query on the "members" edge.
 func (gq *GroupQuery) QueryMembers() *GroupMembershipQuery {
 	query := (&GroupMembershipClient{config: gq.config}).Query()
@@ -854,6 +936,9 @@ func (gq *GroupQuery) Clone() *GroupQuery {
 		withControlobjectiveViewers:       gq.withControlobjectiveViewers.Clone(),
 		withControlobjectiveEditors:       gq.withControlobjectiveEditors.Clone(),
 		withControlobjectiveBlockedGroups: gq.withControlobjectiveBlockedGroups.Clone(),
+		withNarrativeViewers:              gq.withNarrativeViewers.Clone(),
+		withNarrativeEditors:              gq.withNarrativeEditors.Clone(),
+		withNarrativeBlockedGroups:        gq.withNarrativeBlockedGroups.Clone(),
 		withMembers:                       gq.withMembers.Clone(),
 		// clone intermediate query.
 		sql:       gq.sql.Clone(),
@@ -1082,6 +1167,39 @@ func (gq *GroupQuery) WithControlobjectiveBlockedGroups(opts ...func(*ControlObj
 	return gq
 }
 
+// WithNarrativeViewers tells the query-builder to eager-load the nodes that are connected to
+// the "narrative_viewers" edge. The optional arguments are used to configure the query builder of the edge.
+func (gq *GroupQuery) WithNarrativeViewers(opts ...func(*NarrativeQuery)) *GroupQuery {
+	query := (&NarrativeClient{config: gq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	gq.withNarrativeViewers = query
+	return gq
+}
+
+// WithNarrativeEditors tells the query-builder to eager-load the nodes that are connected to
+// the "narrative_editors" edge. The optional arguments are used to configure the query builder of the edge.
+func (gq *GroupQuery) WithNarrativeEditors(opts ...func(*NarrativeQuery)) *GroupQuery {
+	query := (&NarrativeClient{config: gq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	gq.withNarrativeEditors = query
+	return gq
+}
+
+// WithNarrativeBlockedGroups tells the query-builder to eager-load the nodes that are connected to
+// the "narrative_blocked_groups" edge. The optional arguments are used to configure the query builder of the edge.
+func (gq *GroupQuery) WithNarrativeBlockedGroups(opts ...func(*NarrativeQuery)) *GroupQuery {
+	query := (&NarrativeClient{config: gq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	gq.withNarrativeBlockedGroups = query
+	return gq
+}
+
 // WithMembers tells the query-builder to eager-load the nodes that are connected to
 // the "members" edge. The optional arguments are used to configure the query builder of the edge.
 func (gq *GroupQuery) WithMembers(opts ...func(*GroupMembershipQuery)) *GroupQuery {
@@ -1177,7 +1295,7 @@ func (gq *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 	var (
 		nodes       = []*Group{}
 		_spec       = gq.querySpec()
-		loadedTypes = [21]bool{
+		loadedTypes = [24]bool{
 			gq.withOwner != nil,
 			gq.withSetting != nil,
 			gq.withUsers != nil,
@@ -1198,6 +1316,9 @@ func (gq *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 			gq.withControlobjectiveViewers != nil,
 			gq.withControlobjectiveEditors != nil,
 			gq.withControlobjectiveBlockedGroups != nil,
+			gq.withNarrativeViewers != nil,
+			gq.withNarrativeEditors != nil,
+			gq.withNarrativeBlockedGroups != nil,
 			gq.withMembers != nil,
 		}
 	)
@@ -1374,6 +1495,29 @@ func (gq *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 			return nil, err
 		}
 	}
+	if query := gq.withNarrativeViewers; query != nil {
+		if err := gq.loadNarrativeViewers(ctx, query, nodes,
+			func(n *Group) { n.Edges.NarrativeViewers = []*Narrative{} },
+			func(n *Group, e *Narrative) { n.Edges.NarrativeViewers = append(n.Edges.NarrativeViewers, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := gq.withNarrativeEditors; query != nil {
+		if err := gq.loadNarrativeEditors(ctx, query, nodes,
+			func(n *Group) { n.Edges.NarrativeEditors = []*Narrative{} },
+			func(n *Group, e *Narrative) { n.Edges.NarrativeEditors = append(n.Edges.NarrativeEditors, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := gq.withNarrativeBlockedGroups; query != nil {
+		if err := gq.loadNarrativeBlockedGroups(ctx, query, nodes,
+			func(n *Group) { n.Edges.NarrativeBlockedGroups = []*Narrative{} },
+			func(n *Group, e *Narrative) {
+				n.Edges.NarrativeBlockedGroups = append(n.Edges.NarrativeBlockedGroups, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	if query := gq.withMembers; query != nil {
 		if err := gq.loadMembers(ctx, query, nodes,
 			func(n *Group) { n.Edges.Members = []*GroupMembership{} },
@@ -1504,6 +1648,27 @@ func (gq *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 		if err := gq.loadControlobjectiveBlockedGroups(ctx, query, nodes,
 			func(n *Group) { n.appendNamedControlobjectiveBlockedGroups(name) },
 			func(n *Group, e *ControlObjective) { n.appendNamedControlobjectiveBlockedGroups(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range gq.withNamedNarrativeViewers {
+		if err := gq.loadNarrativeViewers(ctx, query, nodes,
+			func(n *Group) { n.appendNamedNarrativeViewers(name) },
+			func(n *Group, e *Narrative) { n.appendNamedNarrativeViewers(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range gq.withNamedNarrativeEditors {
+		if err := gq.loadNarrativeEditors(ctx, query, nodes,
+			func(n *Group) { n.appendNamedNarrativeEditors(name) },
+			func(n *Group, e *Narrative) { n.appendNamedNarrativeEditors(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range gq.withNamedNarrativeBlockedGroups {
+		if err := gq.loadNarrativeBlockedGroups(ctx, query, nodes,
+			func(n *Group) { n.appendNamedNarrativeBlockedGroups(name) },
+			func(n *Group, e *Narrative) { n.appendNamedNarrativeBlockedGroups(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2663,6 +2828,192 @@ func (gq *GroupQuery) loadControlobjectiveBlockedGroups(ctx context.Context, que
 	}
 	return nil
 }
+func (gq *GroupQuery) loadNarrativeViewers(ctx context.Context, query *NarrativeQuery, nodes []*Group, init func(*Group), assign func(*Group, *Narrative)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Group)
+	nids := make(map[string]map[*Group]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(group.NarrativeViewersTable)
+		joinT.Schema(gq.schemaConfig.NarrativeViewers)
+		s.Join(joinT).On(s.C(narrative.FieldID), joinT.C(group.NarrativeViewersPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(group.NarrativeViewersPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(group.NarrativeViewersPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Group]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Narrative](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "narrative_viewers" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (gq *GroupQuery) loadNarrativeEditors(ctx context.Context, query *NarrativeQuery, nodes []*Group, init func(*Group), assign func(*Group, *Narrative)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Group)
+	nids := make(map[string]map[*Group]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(group.NarrativeEditorsTable)
+		joinT.Schema(gq.schemaConfig.NarrativeEditors)
+		s.Join(joinT).On(s.C(narrative.FieldID), joinT.C(group.NarrativeEditorsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(group.NarrativeEditorsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(group.NarrativeEditorsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Group]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Narrative](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "narrative_editors" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (gq *GroupQuery) loadNarrativeBlockedGroups(ctx context.Context, query *NarrativeQuery, nodes []*Group, init func(*Group), assign func(*Group, *Narrative)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Group)
+	nids := make(map[string]map[*Group]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(group.NarrativeBlockedGroupsTable)
+		joinT.Schema(gq.schemaConfig.NarrativeBlockedGroups)
+		s.Join(joinT).On(s.C(narrative.FieldID), joinT.C(group.NarrativeBlockedGroupsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(group.NarrativeBlockedGroupsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(group.NarrativeBlockedGroupsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Group]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Narrative](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "narrative_blocked_groups" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (gq *GroupQuery) loadMembers(ctx context.Context, query *GroupMembershipQuery, nodes []*Group, init func(*Group), assign func(*Group, *GroupMembership)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Group)
@@ -3044,6 +3395,48 @@ func (gq *GroupQuery) WithNamedControlobjectiveBlockedGroups(name string, opts .
 		gq.withNamedControlobjectiveBlockedGroups = make(map[string]*ControlObjectiveQuery)
 	}
 	gq.withNamedControlobjectiveBlockedGroups[name] = query
+	return gq
+}
+
+// WithNamedNarrativeViewers tells the query-builder to eager-load the nodes that are connected to the "narrative_viewers"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (gq *GroupQuery) WithNamedNarrativeViewers(name string, opts ...func(*NarrativeQuery)) *GroupQuery {
+	query := (&NarrativeClient{config: gq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if gq.withNamedNarrativeViewers == nil {
+		gq.withNamedNarrativeViewers = make(map[string]*NarrativeQuery)
+	}
+	gq.withNamedNarrativeViewers[name] = query
+	return gq
+}
+
+// WithNamedNarrativeEditors tells the query-builder to eager-load the nodes that are connected to the "narrative_editors"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (gq *GroupQuery) WithNamedNarrativeEditors(name string, opts ...func(*NarrativeQuery)) *GroupQuery {
+	query := (&NarrativeClient{config: gq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if gq.withNamedNarrativeEditors == nil {
+		gq.withNamedNarrativeEditors = make(map[string]*NarrativeQuery)
+	}
+	gq.withNamedNarrativeEditors[name] = query
+	return gq
+}
+
+// WithNamedNarrativeBlockedGroups tells the query-builder to eager-load the nodes that are connected to the "narrative_blocked_groups"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (gq *GroupQuery) WithNamedNarrativeBlockedGroups(name string, opts ...func(*NarrativeQuery)) *GroupQuery {
+	query := (&NarrativeClient{config: gq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if gq.withNamedNarrativeBlockedGroups == nil {
+		gq.withNamedNarrativeBlockedGroups = make(map[string]*NarrativeQuery)
+	}
+	gq.withNamedNarrativeBlockedGroups[name] = query
 	return gq
 }
 

@@ -1455,6 +1455,9 @@ func (nh *NarrativeHistory) changes(new *NarrativeHistory) []Change {
 	if !reflect.DeepEqual(nh.Tags, new.Tags) {
 		changes = append(changes, NewChange(narrativehistory.FieldTags, nh.Tags, new.Tags))
 	}
+	if !reflect.DeepEqual(nh.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(narrativehistory.FieldOwnerID, nh.OwnerID, new.OwnerID))
+	}
 	if !reflect.DeepEqual(nh.Name, new.Name) {
 		changes = append(changes, NewChange(narrativehistory.FieldName, nh.Name, new.Name))
 	}
