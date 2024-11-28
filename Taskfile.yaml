@@ -24,7 +24,6 @@ env:
   TEST_DB_CONTAINER_EXPIRY: "2" # in minutes
   TEST_FGA_URL: "localhost:8080"
   ENV: config
-  GODEBUG: gotypesalias=0 # remove once the backport fixes the types.Alias bug
   GOFLAGS: -buildvcs=false
 
 tasks:
@@ -42,7 +41,7 @@ tasks:
   go:lint:
     desc: runs golangci-lint, the most annoying opinionated linter ever
     cmds:
-      - golangci-lint run --config=.golangci.yaml --verbose --fast --fix
+      - golangci-lint run --config=.golangci.yaml --verbose --fast --fix --show-stats
 
   go:lint:ci:
     desc: runs golangci-lint, the most annoying opinionated linter ever, for CI

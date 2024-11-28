@@ -1,5 +1,7 @@
 <div align="center">
 
+![](assets/logo.png)
+
 [![Go Report Card](https://goreportcard.com/badge/github.com/theopenlane/core)](https://goreportcard.com/report/github.com/theopenlane/core)
 [![Build status](https://badge.buildkite.com/a3a38b934ca2bb7fc771e19bc5a986a1452fa2962e4e1c63bf.svg?branch=main)](https://buildkite.com/theopenlane/core)
 [![Go Reference](https://pkg.go.dev/badge/github.com/theopenlane/core.svg)](https://pkg.go.dev/github.com/theopenlane/core)
@@ -8,10 +10,20 @@
 
 </div>
 
-# openlane
-
 This repository houses the core server and orchestration elements which are at
-the heart of the [openlane](https://theopenlane.io) cloud service.
+the heart of the [openlane](https://www.theopenlane.io) cloud service, which is targeted for public beta towards the end of 2024 or early 2025. Our initial featureset includes:
+
+- Creation of new programs that include pre-built templates, controls, risks, etc., from standards like SOC2, ISO27001, NIST800-53, and more
+- Automated Task assignments and configurable workflows
+- Questionnaire creation, customization, and automation for easier internal and external interactions with your staff, auditors, and vendors
+- Notification customizations, channel definitions, comments and histories on all your objects
+- Easy to use documentation editors and storage for Policies and Procedures, or whatever documentation is needed
+.... and more!
+
+We have our sights set on additional features such as:
+- Trust Center and vanity domains
+- Automated Evidence collection
+- Continuous GRC features
 
 ## Features
 
@@ -29,7 +41,7 @@ On top of this powerful core we also have an incredible amount of pluggable,
 extensible services:
 
 - Authentication: we today support password, OAuth2 / Social login providers
-  (Github, Google), Passkeys as well as standard OIDC Discovery flows
+  (Github, Google), Passkeys as well as standard OIDC Discovery flows (NOTE: you will need to create your own github or google client secrets and leverage them to take advantage of this capability)
 - Multi-factor: built-in 2FA mechanisms, TOTP
 - Authorization: extensible and flexible permissions constructs via openFGA
   based on Google Zanzibar
@@ -167,4 +179,12 @@ Helm chart which can be found [here](https://github.com/theopenlane/helm-charts)
 
 ## Contributing
 
-See the [contributing](.github/CONTRIBUTING.md) guide for more information
+See the [contributing](.github/CONTRIBUTING.md) guide for more information.
+
+## UI
+
+We have additionally open-sourced the [Openlane UI](https://github.com/theopenlane/openlane-ui) and you can run / use this technology locally (or host it on your own servers) but we have not undergone efforts to ensure things such as links to our Terms of Service or Privacy policy, or other prioritiary branding or assets owned by theopenlane, Inc., are fully configurable or removable.
+
+## Sponsoring
+
+If any of our code or projects have helped you or you just want to help us out, we massively appreciate a sponsorship on our github project of any level!
