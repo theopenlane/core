@@ -1,6 +1,6 @@
 run:
   timeout: 15m
-  allow-serial-runners: true
+  allow-parallel-runners: true
   concurrency: 0
   tests: false
 linters-settings:
@@ -38,13 +38,13 @@ linters:
     - whitespace
     - wsl
 issues:
-  exclude-use-default: true
   exclude-dirs:
     - pkg/testutils/*
     - .buildkite/*
     - .github/*
     - docker/*
     - internal/ent/generated/*
+    - internal/ent/templates/*
     - jsonschema/templates/*
     - pkg/objects/mocks/*
     - schema/*
@@ -56,6 +56,7 @@ issues:
     - db/migrations/*
     - db/migrations-goose-postgres/*
     - pkg/entitlements/test/*
+    - cmd/cli/cmd/*
   exclude-files:
     - internal/graphapi/gen_server.go
     - internal/graphapi/gen_models.go
