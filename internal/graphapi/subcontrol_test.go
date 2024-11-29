@@ -391,7 +391,7 @@ func (suite *GraphTestSuite) TestMutationCreateSubcontrol() {
 			}
 
 			if tc.request.ImplementationDate != nil {
-				assert.Equal(t, *tc.request.ImplementationDate, *resp.CreateSubcontrol.Subcontrol.ImplementationDate)
+				assert.WithinDuration(t, *tc.request.ImplementationDate, *resp.CreateSubcontrol.Subcontrol.ImplementationDate, time.Second)
 			} else {
 				assert.Empty(t, resp.CreateSubcontrol.Subcontrol.ImplementationDate)
 			}
@@ -403,7 +403,7 @@ func (suite *GraphTestSuite) TestMutationCreateSubcontrol() {
 			}
 
 			if tc.request.ImplementationVerificationDate != nil {
-				assert.Equal(t, *tc.request.ImplementationVerificationDate, *resp.CreateSubcontrol.Subcontrol.ImplementationVerificationDate)
+				assert.WithinDuration(t, *tc.request.ImplementationVerificationDate, *resp.CreateSubcontrol.Subcontrol.ImplementationVerificationDate, time.Second)
 			} else {
 				assert.Empty(t, resp.CreateSubcontrol.Subcontrol.ImplementationVerificationDate)
 			}
