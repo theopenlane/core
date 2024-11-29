@@ -313,6 +313,14 @@ type NarrativeBuilder struct {
 	ProgramID string
 }
 
+type SubcontrolBuilder struct {
+	client *client
+
+	// Fields
+	Name      string
+	ProgramID string
+}
+
 // MustNew organization builder is used to create, without authz checks, orgs in the database
 func (o *OrganizationBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Organization {
 	// no auth, so allow policy
@@ -1046,4 +1054,28 @@ func (n *NarrativeBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Narra
 		SaveX(ctx)
 
 	return narrative
+}
+
+// MustNew subcontrol builder is used to create, without authz checks, subcontrols in the database
+func (n *SubcontrolBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Subcontrol {
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+
+	// add client to context
+	ctx = ent.NewContext(ctx, n.client.db)
+
+	if n.Name == "" {
+		n.Name = gofakeit.AppName()
+	}
+
+	mutation := n.client.db.Subcontrol.Create().
+		SetName(n.Name)
+
+	if n.ProgramID != "" {
+		mutation.AddProgramIDs(n.ProgramID)
+	}
+
+	sc := mutation.
+		SaveX(ctx)
+
+	return sc
 }

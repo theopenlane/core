@@ -102,13 +102,19 @@ type GroupEdges struct {
 	NarrativeEditors []*Narrative `json:"narrative_editors,omitempty"`
 	// NarrativeBlockedGroups holds the value of the narrative_blocked_groups edge.
 	NarrativeBlockedGroups []*Narrative `json:"narrative_blocked_groups,omitempty"`
+	// SubcontrolViewers holds the value of the subcontrol_viewers edge.
+	SubcontrolViewers []*Subcontrol `json:"subcontrol_viewers,omitempty"`
+	// SubcontrolEditors holds the value of the subcontrol_editors edge.
+	SubcontrolEditors []*Subcontrol `json:"subcontrol_editors,omitempty"`
+	// SubcontrolBlockedGroups holds the value of the subcontrol_blocked_groups edge.
+	SubcontrolBlockedGroups []*Subcontrol `json:"subcontrol_blocked_groups,omitempty"`
 	// Members holds the value of the members edge.
 	Members []*GroupMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [24]bool
+	loadedTypes [27]bool
 	// totalCount holds the count of the edges above.
-	totalCount [24]map[string]int
+	totalCount [27]map[string]int
 
 	namedUsers                         map[string][]*User
 	namedEvents                        map[string][]*Event
@@ -131,6 +137,9 @@ type GroupEdges struct {
 	namedNarrativeViewers              map[string][]*Narrative
 	namedNarrativeEditors              map[string][]*Narrative
 	namedNarrativeBlockedGroups        map[string][]*Narrative
+	namedSubcontrolViewers             map[string][]*Subcontrol
+	namedSubcontrolEditors             map[string][]*Subcontrol
+	namedSubcontrolBlockedGroups       map[string][]*Subcontrol
 	namedMembers                       map[string][]*GroupMembership
 }
 
@@ -345,10 +354,37 @@ func (e GroupEdges) NarrativeBlockedGroupsOrErr() ([]*Narrative, error) {
 	return nil, &NotLoadedError{edge: "narrative_blocked_groups"}
 }
 
+// SubcontrolViewersOrErr returns the SubcontrolViewers value or an error if the edge
+// was not loaded in eager-loading.
+func (e GroupEdges) SubcontrolViewersOrErr() ([]*Subcontrol, error) {
+	if e.loadedTypes[23] {
+		return e.SubcontrolViewers, nil
+	}
+	return nil, &NotLoadedError{edge: "subcontrol_viewers"}
+}
+
+// SubcontrolEditorsOrErr returns the SubcontrolEditors value or an error if the edge
+// was not loaded in eager-loading.
+func (e GroupEdges) SubcontrolEditorsOrErr() ([]*Subcontrol, error) {
+	if e.loadedTypes[24] {
+		return e.SubcontrolEditors, nil
+	}
+	return nil, &NotLoadedError{edge: "subcontrol_editors"}
+}
+
+// SubcontrolBlockedGroupsOrErr returns the SubcontrolBlockedGroups value or an error if the edge
+// was not loaded in eager-loading.
+func (e GroupEdges) SubcontrolBlockedGroupsOrErr() ([]*Subcontrol, error) {
+	if e.loadedTypes[25] {
+		return e.SubcontrolBlockedGroups, nil
+	}
+	return nil, &NotLoadedError{edge: "subcontrol_blocked_groups"}
+}
+
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) MembersOrErr() ([]*GroupMembership, error) {
-	if e.loadedTypes[23] {
+	if e.loadedTypes[26] {
 		return e.Members, nil
 	}
 	return nil, &NotLoadedError{edge: "members"}
@@ -598,6 +634,21 @@ func (gr *Group) QueryNarrativeEditors() *NarrativeQuery {
 // QueryNarrativeBlockedGroups queries the "narrative_blocked_groups" edge of the Group entity.
 func (gr *Group) QueryNarrativeBlockedGroups() *NarrativeQuery {
 	return NewGroupClient(gr.config).QueryNarrativeBlockedGroups(gr)
+}
+
+// QuerySubcontrolViewers queries the "subcontrol_viewers" edge of the Group entity.
+func (gr *Group) QuerySubcontrolViewers() *SubcontrolQuery {
+	return NewGroupClient(gr.config).QuerySubcontrolViewers(gr)
+}
+
+// QuerySubcontrolEditors queries the "subcontrol_editors" edge of the Group entity.
+func (gr *Group) QuerySubcontrolEditors() *SubcontrolQuery {
+	return NewGroupClient(gr.config).QuerySubcontrolEditors(gr)
+}
+
+// QuerySubcontrolBlockedGroups queries the "subcontrol_blocked_groups" edge of the Group entity.
+func (gr *Group) QuerySubcontrolBlockedGroups() *SubcontrolQuery {
+	return NewGroupClient(gr.config).QuerySubcontrolBlockedGroups(gr)
 }
 
 // QueryMembers queries the "members" edge of the Group entity.
@@ -1174,6 +1225,78 @@ func (gr *Group) appendNamedNarrativeBlockedGroups(name string, edges ...*Narrat
 		gr.Edges.namedNarrativeBlockedGroups[name] = []*Narrative{}
 	} else {
 		gr.Edges.namedNarrativeBlockedGroups[name] = append(gr.Edges.namedNarrativeBlockedGroups[name], edges...)
+	}
+}
+
+// NamedSubcontrolViewers returns the SubcontrolViewers named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (gr *Group) NamedSubcontrolViewers(name string) ([]*Subcontrol, error) {
+	if gr.Edges.namedSubcontrolViewers == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := gr.Edges.namedSubcontrolViewers[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (gr *Group) appendNamedSubcontrolViewers(name string, edges ...*Subcontrol) {
+	if gr.Edges.namedSubcontrolViewers == nil {
+		gr.Edges.namedSubcontrolViewers = make(map[string][]*Subcontrol)
+	}
+	if len(edges) == 0 {
+		gr.Edges.namedSubcontrolViewers[name] = []*Subcontrol{}
+	} else {
+		gr.Edges.namedSubcontrolViewers[name] = append(gr.Edges.namedSubcontrolViewers[name], edges...)
+	}
+}
+
+// NamedSubcontrolEditors returns the SubcontrolEditors named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (gr *Group) NamedSubcontrolEditors(name string) ([]*Subcontrol, error) {
+	if gr.Edges.namedSubcontrolEditors == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := gr.Edges.namedSubcontrolEditors[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (gr *Group) appendNamedSubcontrolEditors(name string, edges ...*Subcontrol) {
+	if gr.Edges.namedSubcontrolEditors == nil {
+		gr.Edges.namedSubcontrolEditors = make(map[string][]*Subcontrol)
+	}
+	if len(edges) == 0 {
+		gr.Edges.namedSubcontrolEditors[name] = []*Subcontrol{}
+	} else {
+		gr.Edges.namedSubcontrolEditors[name] = append(gr.Edges.namedSubcontrolEditors[name], edges...)
+	}
+}
+
+// NamedSubcontrolBlockedGroups returns the SubcontrolBlockedGroups named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (gr *Group) NamedSubcontrolBlockedGroups(name string) ([]*Subcontrol, error) {
+	if gr.Edges.namedSubcontrolBlockedGroups == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := gr.Edges.namedSubcontrolBlockedGroups[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (gr *Group) appendNamedSubcontrolBlockedGroups(name string, edges ...*Subcontrol) {
+	if gr.Edges.namedSubcontrolBlockedGroups == nil {
+		gr.Edges.namedSubcontrolBlockedGroups = make(map[string][]*Subcontrol)
+	}
+	if len(edges) == 0 {
+		gr.Edges.namedSubcontrolBlockedGroups[name] = []*Subcontrol{}
+	} else {
+		gr.Edges.namedSubcontrolBlockedGroups[name] = append(gr.Edges.namedSubcontrolBlockedGroups[name], edges...)
 	}
 }
 

@@ -1,0 +1,10 @@
+-- Modify "subcontrol_history" table
+ALTER TABLE "subcontrol_history" ADD COLUMN "owner_id" character varying NOT NULL;
+-- Modify "subcontrols" table
+ALTER TABLE "subcontrols" ADD COLUMN "owner_id" character varying NOT NULL, ADD COLUMN "user_subcontrols" character varying NULL, ADD CONSTRAINT "subcontrols_organizations_subcontrols" FOREIGN KEY ("owner_id") REFERENCES "organizations" ("id") ON UPDATE NO ACTION ON DELETE NO ACTION, ADD CONSTRAINT "subcontrols_users_subcontrols" FOREIGN KEY ("user_subcontrols") REFERENCES "users" ("id") ON UPDATE NO ACTION ON DELETE SET NULL;
+-- Create "subcontrol_blocked_groups" table
+CREATE TABLE "subcontrol_blocked_groups" ("subcontrol_id" character varying NOT NULL, "group_id" character varying NOT NULL, PRIMARY KEY ("subcontrol_id", "group_id"), CONSTRAINT "subcontrol_blocked_groups_group_id" FOREIGN KEY ("group_id") REFERENCES "groups" ("id") ON UPDATE NO ACTION ON DELETE CASCADE, CONSTRAINT "subcontrol_blocked_groups_subcontrol_id" FOREIGN KEY ("subcontrol_id") REFERENCES "subcontrols" ("id") ON UPDATE NO ACTION ON DELETE CASCADE);
+-- Create "subcontrol_editors" table
+CREATE TABLE "subcontrol_editors" ("subcontrol_id" character varying NOT NULL, "group_id" character varying NOT NULL, PRIMARY KEY ("subcontrol_id", "group_id"), CONSTRAINT "subcontrol_editors_group_id" FOREIGN KEY ("group_id") REFERENCES "groups" ("id") ON UPDATE NO ACTION ON DELETE CASCADE, CONSTRAINT "subcontrol_editors_subcontrol_id" FOREIGN KEY ("subcontrol_id") REFERENCES "subcontrols" ("id") ON UPDATE NO ACTION ON DELETE CASCADE);
+-- Create "subcontrol_viewers" table
+CREATE TABLE "subcontrol_viewers" ("subcontrol_id" character varying NOT NULL, "group_id" character varying NOT NULL, PRIMARY KEY ("subcontrol_id", "group_id"), CONSTRAINT "subcontrol_viewers_group_id" FOREIGN KEY ("group_id") REFERENCES "groups" ("id") ON UPDATE NO ACTION ON DELETE CASCADE, CONSTRAINT "subcontrol_viewers_subcontrol_id" FOREIGN KEY ("subcontrol_id") REFERENCES "subcontrols" ("id") ON UPDATE NO ACTION ON DELETE CASCADE);

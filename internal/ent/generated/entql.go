@@ -2038,6 +2038,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			subcontrol.FieldDeletedBy:                      {Type: field.TypeString, Column: subcontrol.FieldDeletedBy},
 			subcontrol.FieldMappingID:                      {Type: field.TypeString, Column: subcontrol.FieldMappingID},
 			subcontrol.FieldTags:                           {Type: field.TypeJSON, Column: subcontrol.FieldTags},
+			subcontrol.FieldOwnerID:                        {Type: field.TypeString, Column: subcontrol.FieldOwnerID},
 			subcontrol.FieldName:                           {Type: field.TypeString, Column: subcontrol.FieldName},
 			subcontrol.FieldDescription:                    {Type: field.TypeString, Column: subcontrol.FieldDescription},
 			subcontrol.FieldStatus:                         {Type: field.TypeString, Column: subcontrol.FieldStatus},
@@ -2078,6 +2079,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			subcontrolhistory.FieldDeletedBy:                      {Type: field.TypeString, Column: subcontrolhistory.FieldDeletedBy},
 			subcontrolhistory.FieldMappingID:                      {Type: field.TypeString, Column: subcontrolhistory.FieldMappingID},
 			subcontrolhistory.FieldTags:                           {Type: field.TypeJSON, Column: subcontrolhistory.FieldTags},
+			subcontrolhistory.FieldOwnerID:                        {Type: field.TypeString, Column: subcontrolhistory.FieldOwnerID},
 			subcontrolhistory.FieldName:                           {Type: field.TypeString, Column: subcontrolhistory.FieldName},
 			subcontrolhistory.FieldDescription:                    {Type: field.TypeString, Column: subcontrolhistory.FieldDescription},
 			subcontrolhistory.FieldStatus:                         {Type: field.TypeString, Column: subcontrolhistory.FieldStatus},
@@ -3844,6 +3846,42 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Narrative",
 	)
 	graph.MustAddE(
+		"subcontrol_viewers",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.SubcontrolViewersTable,
+			Columns: group.SubcontrolViewersPrimaryKey,
+			Bidi:    false,
+		},
+		"Group",
+		"Subcontrol",
+	)
+	graph.MustAddE(
+		"subcontrol_editors",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.SubcontrolEditorsTable,
+			Columns: group.SubcontrolEditorsPrimaryKey,
+			Bidi:    false,
+		},
+		"Group",
+		"Subcontrol",
+	)
+	graph.MustAddE(
+		"subcontrol_blocked_groups",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.SubcontrolBlockedGroupsTable,
+			Columns: group.SubcontrolBlockedGroupsPrimaryKey,
+			Bidi:    false,
+		},
+		"Group",
+		"Subcontrol",
+	)
+	graph.MustAddE(
 		"members",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -4756,6 +4794,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Narrative",
 	)
 	graph.MustAddE(
+		"subcontrols",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.SubcontrolsTable,
+			Columns: []string{organization.SubcontrolsColumn},
+			Bidi:    false,
+		},
+		"Organization",
+		"Subcontrol",
+	)
+	graph.MustAddE(
 		"members",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -5344,6 +5394,54 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Program",
 	)
 	graph.MustAddE(
+		"owner",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   subcontrol.OwnerTable,
+			Columns: []string{subcontrol.OwnerColumn},
+			Bidi:    false,
+		},
+		"Subcontrol",
+		"Organization",
+	)
+	graph.MustAddE(
+		"blocked_groups",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   subcontrol.BlockedGroupsTable,
+			Columns: subcontrol.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+		},
+		"Subcontrol",
+		"Group",
+	)
+	graph.MustAddE(
+		"editors",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   subcontrol.EditorsTable,
+			Columns: subcontrol.EditorsPrimaryKey,
+			Bidi:    false,
+		},
+		"Subcontrol",
+		"Group",
+	)
+	graph.MustAddE(
+		"viewers",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   subcontrol.ViewersTable,
+			Columns: subcontrol.ViewersPrimaryKey,
+			Bidi:    false,
+		},
+		"Subcontrol",
+		"Group",
+	)
+	graph.MustAddE(
 		"control",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -5354,18 +5452,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Subcontrol",
 		"Control",
-	)
-	graph.MustAddE(
-		"user",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   subcontrol.UserTable,
-			Columns: subcontrol.UserPrimaryKey,
-			Bidi:    false,
-		},
-		"Subcontrol",
-		"User",
 	)
 	graph.MustAddE(
 		"tasks",
@@ -5742,10 +5828,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"subcontrols",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   user.SubcontrolsTable,
-			Columns: user.SubcontrolsPrimaryKey,
+			Columns: []string{user.SubcontrolsColumn},
 			Bidi:    false,
 		},
 		"User",
@@ -11074,6 +11160,48 @@ func (f *GroupFilter) WhereHasNarrativeBlockedGroupsWith(preds ...predicate.Narr
 	})))
 }
 
+// WhereHasSubcontrolViewers applies a predicate to check if query has an edge subcontrol_viewers.
+func (f *GroupFilter) WhereHasSubcontrolViewers() {
+	f.Where(entql.HasEdge("subcontrol_viewers"))
+}
+
+// WhereHasSubcontrolViewersWith applies a predicate to check if query has an edge subcontrol_viewers with a given conditions (other predicates).
+func (f *GroupFilter) WhereHasSubcontrolViewersWith(preds ...predicate.Subcontrol) {
+	f.Where(entql.HasEdgeWith("subcontrol_viewers", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasSubcontrolEditors applies a predicate to check if query has an edge subcontrol_editors.
+func (f *GroupFilter) WhereHasSubcontrolEditors() {
+	f.Where(entql.HasEdge("subcontrol_editors"))
+}
+
+// WhereHasSubcontrolEditorsWith applies a predicate to check if query has an edge subcontrol_editors with a given conditions (other predicates).
+func (f *GroupFilter) WhereHasSubcontrolEditorsWith(preds ...predicate.Subcontrol) {
+	f.Where(entql.HasEdgeWith("subcontrol_editors", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasSubcontrolBlockedGroups applies a predicate to check if query has an edge subcontrol_blocked_groups.
+func (f *GroupFilter) WhereHasSubcontrolBlockedGroups() {
+	f.Where(entql.HasEdge("subcontrol_blocked_groups"))
+}
+
+// WhereHasSubcontrolBlockedGroupsWith applies a predicate to check if query has an edge subcontrol_blocked_groups with a given conditions (other predicates).
+func (f *GroupFilter) WhereHasSubcontrolBlockedGroupsWith(preds ...predicate.Subcontrol) {
+	f.Where(entql.HasEdgeWith("subcontrol_blocked_groups", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasMembers applies a predicate to check if query has an edge members.
 func (f *GroupFilter) WhereHasMembers() {
 	f.Where(entql.HasEdge("members"))
@@ -14613,6 +14741,20 @@ func (f *OrganizationFilter) WhereHasNarrativesWith(preds ...predicate.Narrative
 	})))
 }
 
+// WhereHasSubcontrols applies a predicate to check if query has an edge subcontrols.
+func (f *OrganizationFilter) WhereHasSubcontrols() {
+	f.Where(entql.HasEdge("subcontrols"))
+}
+
+// WhereHasSubcontrolsWith applies a predicate to check if query has an edge subcontrols with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasSubcontrolsWith(preds ...predicate.Subcontrol) {
+	f.Where(entql.HasEdgeWith("subcontrols", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasMembers applies a predicate to check if query has an edge members.
 func (f *OrganizationFilter) WhereHasMembers() {
 	f.Where(entql.HasEdge("members"))
@@ -17284,6 +17426,11 @@ func (f *SubcontrolFilter) WhereTags(p entql.BytesP) {
 	f.Where(p.Field(subcontrol.FieldTags))
 }
 
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *SubcontrolFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(subcontrol.FieldOwnerID))
+}
+
 // WhereName applies the entql string predicate on the name field.
 func (f *SubcontrolFilter) WhereName(p entql.StringP) {
 	f.Where(p.Field(subcontrol.FieldName))
@@ -17364,6 +17511,62 @@ func (f *SubcontrolFilter) WhereDetails(p entql.BytesP) {
 	f.Where(p.Field(subcontrol.FieldDetails))
 }
 
+// WhereHasOwner applies a predicate to check if query has an edge owner.
+func (f *SubcontrolFilter) WhereHasOwner() {
+	f.Where(entql.HasEdge("owner"))
+}
+
+// WhereHasOwnerWith applies a predicate to check if query has an edge owner with a given conditions (other predicates).
+func (f *SubcontrolFilter) WhereHasOwnerWith(preds ...predicate.Organization) {
+	f.Where(entql.HasEdgeWith("owner", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasBlockedGroups applies a predicate to check if query has an edge blocked_groups.
+func (f *SubcontrolFilter) WhereHasBlockedGroups() {
+	f.Where(entql.HasEdge("blocked_groups"))
+}
+
+// WhereHasBlockedGroupsWith applies a predicate to check if query has an edge blocked_groups with a given conditions (other predicates).
+func (f *SubcontrolFilter) WhereHasBlockedGroupsWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("blocked_groups", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasEditors applies a predicate to check if query has an edge editors.
+func (f *SubcontrolFilter) WhereHasEditors() {
+	f.Where(entql.HasEdge("editors"))
+}
+
+// WhereHasEditorsWith applies a predicate to check if query has an edge editors with a given conditions (other predicates).
+func (f *SubcontrolFilter) WhereHasEditorsWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("editors", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasViewers applies a predicate to check if query has an edge viewers.
+func (f *SubcontrolFilter) WhereHasViewers() {
+	f.Where(entql.HasEdge("viewers"))
+}
+
+// WhereHasViewersWith applies a predicate to check if query has an edge viewers with a given conditions (other predicates).
+func (f *SubcontrolFilter) WhereHasViewersWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("viewers", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasControl applies a predicate to check if query has an edge control.
 func (f *SubcontrolFilter) WhereHasControl() {
 	f.Where(entql.HasEdge("control"))
@@ -17372,20 +17575,6 @@ func (f *SubcontrolFilter) WhereHasControl() {
 // WhereHasControlWith applies a predicate to check if query has an edge control with a given conditions (other predicates).
 func (f *SubcontrolFilter) WhereHasControlWith(preds ...predicate.Control) {
 	f.Where(entql.HasEdgeWith("control", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
-// WhereHasUser applies a predicate to check if query has an edge user.
-func (f *SubcontrolFilter) WhereHasUser() {
-	f.Where(entql.HasEdge("user"))
-}
-
-// WhereHasUserWith applies a predicate to check if query has an edge user with a given conditions (other predicates).
-func (f *SubcontrolFilter) WhereHasUserWith(preds ...predicate.User) {
-	f.Where(entql.HasEdgeWith("user", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -17527,6 +17716,11 @@ func (f *SubcontrolHistoryFilter) WhereMappingID(p entql.StringP) {
 // WhereTags applies the entql json.RawMessage predicate on the tags field.
 func (f *SubcontrolHistoryFilter) WhereTags(p entql.BytesP) {
 	f.Where(p.Field(subcontrolhistory.FieldTags))
+}
+
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *SubcontrolHistoryFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(subcontrolhistory.FieldOwnerID))
 }
 
 // WhereName applies the entql string predicate on the name field.

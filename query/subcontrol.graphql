@@ -82,6 +82,22 @@ mutation CreateSubcontrol($input: CreateSubcontrolInput!) {
       updatedAt
       updatedBy
       version
+      programs {
+        id
+        name
+      }
+      editors {
+        id
+        name
+      }
+      viewers {
+        id
+        name
+      }
+      blockedGroups {
+        id
+        name
+      }
     }
   }
 }
@@ -118,6 +134,22 @@ query GetAllSubcontrols {
         updatedAt
         updatedBy
         version
+        programs {
+          id
+          name
+        }
+        editors {
+          id
+          name
+        }
+        viewers {
+          id
+          name
+        }
+        blockedGroups {
+          id
+          name
+        }
       }
     }
   }
@@ -146,6 +178,22 @@ query GetSubcontrolByID($subcontrolId: ID!) {
     updatedAt
     updatedBy
     version
+    programs {
+      id
+      name
+    }
+    editors {
+      id
+      name
+    }
+    viewers {
+      id
+      name
+    }
+    blockedGroups {
+      id
+      name
+    }
   }
 }
 
@@ -175,6 +223,22 @@ query GetSubcontrols($where: SubcontrolWhereInput) {
         updatedAt
         updatedBy
         version
+        programs {
+          id
+          name
+        }
+        editors {
+          id
+          name
+        }
+        viewers {
+          id
+          name
+        }
+        blockedGroups {
+          id
+          name
+        }
       }
     }
   }
@@ -204,6 +268,22 @@ mutation UpdateSubcontrol($updateSubcontrolId: ID!, $input: UpdateSubcontrolInpu
       updatedAt
       updatedBy
       version
+      programs {
+        id
+        name
+      }
+      editors {
+        id
+        name
+      }
+      viewers {
+        id
+        name
+      }
+      blockedGroups {
+        id
+        name
+      }
     }
   }
 }

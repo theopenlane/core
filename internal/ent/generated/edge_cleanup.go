@@ -33,6 +33,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
@@ -568,6 +569,13 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 	if exists, err := FromContext(ctx).Narrative.Query().Where((narrative.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if narrativeCount, err := FromContext(ctx).Narrative.Delete().Where(narrative.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			log.Debug().Err(err).Int("count", narrativeCount).Msg("deleting narrative")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).Subcontrol.Query().Where((subcontrol.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if subcontrolCount, err := FromContext(ctx).Subcontrol.Delete().Where(subcontrol.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", subcontrolCount).Msg("deleting subcontrol")
 			return err
 		}
 	}

@@ -89,5 +89,9 @@ func getProgramIDFromEntMutation(m generated.Mutation) ([]string, error) {
 		return o.ProgramsIDs(), nil
 	}
 
+	if o, ok := m.(*generated.SubcontrolMutation); ok {
+		return o.ProgramsIDs(), nil
+	}
+
 	return nil, nil
 }

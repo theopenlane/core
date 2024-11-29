@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/note"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 )
 
@@ -35,6 +36,8 @@ type Subcontrol struct {
 	MappingID string `json:"mapping_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// the ID of the organization owner of the object
+	OwnerID string `json:"owner_id,omitempty"`
 	// the name of the subcontrol
 	Name string `json:"name,omitempty"`
 	// description of the subcontrol
@@ -72,15 +75,22 @@ type Subcontrol struct {
 	Edges                         SubcontrolEdges `json:"edges"`
 	control_objective_subcontrols *string
 	note_subcontrols              *string
+	user_subcontrols              *string
 	selectValues                  sql.SelectValues
 }
 
 // SubcontrolEdges holds the relations/edges for other nodes in the graph.
 type SubcontrolEdges struct {
+	// Owner holds the value of the owner edge.
+	Owner *Organization `json:"owner,omitempty"`
+	// groups that are blocked from viewing or editing the risk
+	BlockedGroups []*Group `json:"blocked_groups,omitempty"`
+	// provides edit access to the risk to members of the group
+	Editors []*Group `json:"editors,omitempty"`
+	// provides view access to the risk to members of the group
+	Viewers []*Group `json:"viewers,omitempty"`
 	// Control holds the value of the control edge.
 	Control []*Control `json:"control,omitempty"`
-	// User holds the value of the user edge.
-	User []*User `json:"user,omitempty"`
 	// Tasks holds the value of the tasks edge.
 	Tasks []*Task `json:"tasks,omitempty"`
 	// Notes holds the value of the notes edge.
@@ -89,38 +99,69 @@ type SubcontrolEdges struct {
 	Programs []*Program `json:"programs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [5]bool
+	loadedTypes [8]bool
 	// totalCount holds the count of the edges above.
-	totalCount [5]map[string]int
+	totalCount [8]map[string]int
 
-	namedControl  map[string][]*Control
-	namedUser     map[string][]*User
-	namedTasks    map[string][]*Task
-	namedPrograms map[string][]*Program
+	namedBlockedGroups map[string][]*Group
+	namedEditors       map[string][]*Group
+	namedViewers       map[string][]*Group
+	namedControl       map[string][]*Control
+	namedTasks         map[string][]*Task
+	namedPrograms      map[string][]*Program
+}
+
+// OwnerOrErr returns the Owner value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e SubcontrolEdges) OwnerOrErr() (*Organization, error) {
+	if e.Owner != nil {
+		return e.Owner, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: organization.Label}
+	}
+	return nil, &NotLoadedError{edge: "owner"}
+}
+
+// BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
+// was not loaded in eager-loading.
+func (e SubcontrolEdges) BlockedGroupsOrErr() ([]*Group, error) {
+	if e.loadedTypes[1] {
+		return e.BlockedGroups, nil
+	}
+	return nil, &NotLoadedError{edge: "blocked_groups"}
+}
+
+// EditorsOrErr returns the Editors value or an error if the edge
+// was not loaded in eager-loading.
+func (e SubcontrolEdges) EditorsOrErr() ([]*Group, error) {
+	if e.loadedTypes[2] {
+		return e.Editors, nil
+	}
+	return nil, &NotLoadedError{edge: "editors"}
+}
+
+// ViewersOrErr returns the Viewers value or an error if the edge
+// was not loaded in eager-loading.
+func (e SubcontrolEdges) ViewersOrErr() ([]*Group, error) {
+	if e.loadedTypes[3] {
+		return e.Viewers, nil
+	}
+	return nil, &NotLoadedError{edge: "viewers"}
 }
 
 // ControlOrErr returns the Control value or an error if the edge
 // was not loaded in eager-loading.
 func (e SubcontrolEdges) ControlOrErr() ([]*Control, error) {
-	if e.loadedTypes[0] {
+	if e.loadedTypes[4] {
 		return e.Control, nil
 	}
 	return nil, &NotLoadedError{edge: "control"}
 }
 
-// UserOrErr returns the User value or an error if the edge
-// was not loaded in eager-loading.
-func (e SubcontrolEdges) UserOrErr() ([]*User, error) {
-	if e.loadedTypes[1] {
-		return e.User, nil
-	}
-	return nil, &NotLoadedError{edge: "user"}
-}
-
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e SubcontrolEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[5] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -131,7 +172,7 @@ func (e SubcontrolEdges) TasksOrErr() ([]*Task, error) {
 func (e SubcontrolEdges) NotesOrErr() (*Note, error) {
 	if e.Notes != nil {
 		return e.Notes, nil
-	} else if e.loadedTypes[3] {
+	} else if e.loadedTypes[6] {
 		return nil, &NotFoundError{label: note.Label}
 	}
 	return nil, &NotLoadedError{edge: "notes"}
@@ -140,7 +181,7 @@ func (e SubcontrolEdges) NotesOrErr() (*Note, error) {
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e SubcontrolEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[7] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
@@ -153,13 +194,15 @@ func (*Subcontrol) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case subcontrol.FieldTags, subcontrol.FieldDetails:
 			values[i] = new([]byte)
-		case subcontrol.FieldID, subcontrol.FieldCreatedBy, subcontrol.FieldUpdatedBy, subcontrol.FieldDeletedBy, subcontrol.FieldMappingID, subcontrol.FieldName, subcontrol.FieldDescription, subcontrol.FieldStatus, subcontrol.FieldSubcontrolType, subcontrol.FieldVersion, subcontrol.FieldSubcontrolNumber, subcontrol.FieldFamily, subcontrol.FieldClass, subcontrol.FieldSource, subcontrol.FieldMappedFrameworks, subcontrol.FieldImplementationEvidence, subcontrol.FieldImplementationStatus, subcontrol.FieldImplementationVerification:
+		case subcontrol.FieldID, subcontrol.FieldCreatedBy, subcontrol.FieldUpdatedBy, subcontrol.FieldDeletedBy, subcontrol.FieldMappingID, subcontrol.FieldOwnerID, subcontrol.FieldName, subcontrol.FieldDescription, subcontrol.FieldStatus, subcontrol.FieldSubcontrolType, subcontrol.FieldVersion, subcontrol.FieldSubcontrolNumber, subcontrol.FieldFamily, subcontrol.FieldClass, subcontrol.FieldSource, subcontrol.FieldMappedFrameworks, subcontrol.FieldImplementationEvidence, subcontrol.FieldImplementationStatus, subcontrol.FieldImplementationVerification:
 			values[i] = new(sql.NullString)
 		case subcontrol.FieldCreatedAt, subcontrol.FieldUpdatedAt, subcontrol.FieldDeletedAt, subcontrol.FieldImplementationDate, subcontrol.FieldImplementationVerificationDate:
 			values[i] = new(sql.NullTime)
 		case subcontrol.ForeignKeys[0]: // control_objective_subcontrols
 			values[i] = new(sql.NullString)
 		case subcontrol.ForeignKeys[1]: // note_subcontrols
+			values[i] = new(sql.NullString)
+		case subcontrol.ForeignKeys[2]: // user_subcontrols
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -231,6 +274,12 @@ func (s *Subcontrol) assignValues(columns []string, values []any) error {
 				if err := json.Unmarshal(*value, &s.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
+			}
+		case subcontrol.FieldOwnerID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
+			} else if value.Valid {
+				s.OwnerID = value.String
 			}
 		case subcontrol.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -344,6 +393,13 @@ func (s *Subcontrol) assignValues(columns []string, values []any) error {
 				s.note_subcontrols = new(string)
 				*s.note_subcontrols = value.String
 			}
+		case subcontrol.ForeignKeys[2]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field user_subcontrols", values[i])
+			} else if value.Valid {
+				s.user_subcontrols = new(string)
+				*s.user_subcontrols = value.String
+			}
 		default:
 			s.selectValues.Set(columns[i], values[i])
 		}
@@ -357,14 +413,29 @@ func (s *Subcontrol) Value(name string) (ent.Value, error) {
 	return s.selectValues.Get(name)
 }
 
+// QueryOwner queries the "owner" edge of the Subcontrol entity.
+func (s *Subcontrol) QueryOwner() *OrganizationQuery {
+	return NewSubcontrolClient(s.config).QueryOwner(s)
+}
+
+// QueryBlockedGroups queries the "blocked_groups" edge of the Subcontrol entity.
+func (s *Subcontrol) QueryBlockedGroups() *GroupQuery {
+	return NewSubcontrolClient(s.config).QueryBlockedGroups(s)
+}
+
+// QueryEditors queries the "editors" edge of the Subcontrol entity.
+func (s *Subcontrol) QueryEditors() *GroupQuery {
+	return NewSubcontrolClient(s.config).QueryEditors(s)
+}
+
+// QueryViewers queries the "viewers" edge of the Subcontrol entity.
+func (s *Subcontrol) QueryViewers() *GroupQuery {
+	return NewSubcontrolClient(s.config).QueryViewers(s)
+}
+
 // QueryControl queries the "control" edge of the Subcontrol entity.
 func (s *Subcontrol) QueryControl() *ControlQuery {
 	return NewSubcontrolClient(s.config).QueryControl(s)
-}
-
-// QueryUser queries the "user" edge of the Subcontrol entity.
-func (s *Subcontrol) QueryUser() *UserQuery {
-	return NewSubcontrolClient(s.config).QueryUser(s)
 }
 
 // QueryTasks queries the "tasks" edge of the Subcontrol entity.
@@ -429,6 +500,9 @@ func (s *Subcontrol) String() string {
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", s.Tags))
 	builder.WriteString(", ")
+	builder.WriteString("owner_id=")
+	builder.WriteString(s.OwnerID)
+	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(s.Name)
 	builder.WriteString(", ")
@@ -480,6 +554,78 @@ func (s *Subcontrol) String() string {
 	return builder.String()
 }
 
+// NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (s *Subcontrol) NamedBlockedGroups(name string) ([]*Group, error) {
+	if s.Edges.namedBlockedGroups == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := s.Edges.namedBlockedGroups[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (s *Subcontrol) appendNamedBlockedGroups(name string, edges ...*Group) {
+	if s.Edges.namedBlockedGroups == nil {
+		s.Edges.namedBlockedGroups = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		s.Edges.namedBlockedGroups[name] = []*Group{}
+	} else {
+		s.Edges.namedBlockedGroups[name] = append(s.Edges.namedBlockedGroups[name], edges...)
+	}
+}
+
+// NamedEditors returns the Editors named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (s *Subcontrol) NamedEditors(name string) ([]*Group, error) {
+	if s.Edges.namedEditors == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := s.Edges.namedEditors[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (s *Subcontrol) appendNamedEditors(name string, edges ...*Group) {
+	if s.Edges.namedEditors == nil {
+		s.Edges.namedEditors = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		s.Edges.namedEditors[name] = []*Group{}
+	} else {
+		s.Edges.namedEditors[name] = append(s.Edges.namedEditors[name], edges...)
+	}
+}
+
+// NamedViewers returns the Viewers named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (s *Subcontrol) NamedViewers(name string) ([]*Group, error) {
+	if s.Edges.namedViewers == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := s.Edges.namedViewers[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (s *Subcontrol) appendNamedViewers(name string, edges ...*Group) {
+	if s.Edges.namedViewers == nil {
+		s.Edges.namedViewers = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		s.Edges.namedViewers[name] = []*Group{}
+	} else {
+		s.Edges.namedViewers[name] = append(s.Edges.namedViewers[name], edges...)
+	}
+}
+
 // NamedControl returns the Control named value or an error if the edge was not
 // loaded in eager-loading with this name.
 func (s *Subcontrol) NamedControl(name string) ([]*Control, error) {
@@ -501,30 +647,6 @@ func (s *Subcontrol) appendNamedControl(name string, edges ...*Control) {
 		s.Edges.namedControl[name] = []*Control{}
 	} else {
 		s.Edges.namedControl[name] = append(s.Edges.namedControl[name], edges...)
-	}
-}
-
-// NamedUser returns the User named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (s *Subcontrol) NamedUser(name string) ([]*User, error) {
-	if s.Edges.namedUser == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := s.Edges.namedUser[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (s *Subcontrol) appendNamedUser(name string, edges ...*User) {
-	if s.Edges.namedUser == nil {
-		s.Edges.namedUser = make(map[string][]*User)
-	}
-	if len(edges) == 0 {
-		s.Edges.namedUser[name] = []*User{}
-	} else {
-		s.Edges.namedUser[name] = append(s.Edges.namedUser[name], edges...)
 	}
 }
 

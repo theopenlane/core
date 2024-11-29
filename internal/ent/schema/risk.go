@@ -103,8 +103,7 @@ func (Risk) Annotations() []schema.Annotation {
 		entgql.QueryField(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 		entfga.Annotations{
-			ObjectType:   "risk", // check access to the risk for update/delete
-			IncludeHooks: false,
+			ObjectType: "risk", // check access to the risk for update/delete
 		},
 	}
 }

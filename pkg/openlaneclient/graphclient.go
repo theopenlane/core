@@ -3660,6 +3660,7 @@ type AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols struct {
 	DeletedBy                  *string                "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	ID                         string                 "json:\"id\" graphql:\"id\""
 	Tags                       []string               "json:\"tags,omitempty\" graphql:\"tags\""
+	OwnerID                    string                 "json:\"ownerID\" graphql:\"ownerID\""
 	Name                       string                 "json:\"name\" graphql:\"name\""
 	Description                *string                "json:\"description,omitempty\" graphql:\"description\""
 	Status                     *string                "json:\"status,omitempty\" graphql:\"status\""
@@ -3693,6 +3694,12 @@ func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetTa
 		t = &AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols{}
 	}
 	return t.Tags
+}
+func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetOwnerID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols{}
+	}
+	return t.OwnerID
 }
 func (t *AdminSearch_AdminSearch_Nodes_SubcontrolSearchResult_Subcontrols) GetName() string {
 	if t == nil {
@@ -43903,29 +43910,105 @@ func (t *CreateBulkSubcontrol_CreateBulkSubcontrol) GetSubcontrols() []*CreateBu
 	return t.Subcontrols
 }
 
+type CreateSubcontrol_CreateSubcontrol_Subcontrol_Programs struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol_Programs) GetID() string {
+	if t == nil {
+		t = &CreateSubcontrol_CreateSubcontrol_Subcontrol_Programs{}
+	}
+	return t.ID
+}
+func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol_Programs) GetName() string {
+	if t == nil {
+		t = &CreateSubcontrol_CreateSubcontrol_Subcontrol_Programs{}
+	}
+	return t.Name
+}
+
+type CreateSubcontrol_CreateSubcontrol_Subcontrol_Editors struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol_Editors) GetID() string {
+	if t == nil {
+		t = &CreateSubcontrol_CreateSubcontrol_Subcontrol_Editors{}
+	}
+	return t.ID
+}
+func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol_Editors) GetName() string {
+	if t == nil {
+		t = &CreateSubcontrol_CreateSubcontrol_Subcontrol_Editors{}
+	}
+	return t.Name
+}
+
+type CreateSubcontrol_CreateSubcontrol_Subcontrol_Viewers struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol_Viewers) GetID() string {
+	if t == nil {
+		t = &CreateSubcontrol_CreateSubcontrol_Subcontrol_Viewers{}
+	}
+	return t.ID
+}
+func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol_Viewers) GetName() string {
+	if t == nil {
+		t = &CreateSubcontrol_CreateSubcontrol_Subcontrol_Viewers{}
+	}
+	return t.Name
+}
+
+type CreateSubcontrol_CreateSubcontrol_Subcontrol_BlockedGroups struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol_BlockedGroups) GetID() string {
+	if t == nil {
+		t = &CreateSubcontrol_CreateSubcontrol_Subcontrol_BlockedGroups{}
+	}
+	return t.ID
+}
+func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol_BlockedGroups) GetName() string {
+	if t == nil {
+		t = &CreateSubcontrol_CreateSubcontrol_Subcontrol_BlockedGroups{}
+	}
+	return t.Name
+}
+
 type CreateSubcontrol_CreateSubcontrol_Subcontrol struct {
-	Class                          *string                "json:\"class,omitempty\" graphql:\"class\""
-	CreatedAt                      *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy                      *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description                    *string                "json:\"description,omitempty\" graphql:\"description\""
-	Details                        map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
-	Family                         *string                "json:\"family,omitempty\" graphql:\"family\""
-	ID                             string                 "json:\"id\" graphql:\"id\""
-	ImplementationDate             *time.Time             "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
-	ImplementationEvidence         *string                "json:\"implementationEvidence,omitempty\" graphql:\"implementationEvidence\""
-	ImplementationStatus           *string                "json:\"implementationStatus,omitempty\" graphql:\"implementationStatus\""
-	ImplementationVerification     *string                "json:\"implementationVerification,omitempty\" graphql:\"implementationVerification\""
-	ImplementationVerificationDate *time.Time             "json:\"implementationVerificationDate,omitempty\" graphql:\"implementationVerificationDate\""
-	MappedFrameworks               *string                "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
-	Name                           string                 "json:\"name\" graphql:\"name\""
-	Source                         *string                "json:\"source,omitempty\" graphql:\"source\""
-	Status                         *string                "json:\"status,omitempty\" graphql:\"status\""
-	SubcontrolNumber               *string                "json:\"subcontrolNumber,omitempty\" graphql:\"subcontrolNumber\""
-	SubcontrolType                 *string                "json:\"subcontrolType,omitempty\" graphql:\"subcontrolType\""
-	Tags                           []string               "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt                      *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy                      *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version                        *string                "json:\"version,omitempty\" graphql:\"version\""
+	Class                          *string                                                       "json:\"class,omitempty\" graphql:\"class\""
+	CreatedAt                      *time.Time                                                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                      *string                                                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description                    *string                                                       "json:\"description,omitempty\" graphql:\"description\""
+	Details                        map[string]interface{}                                        "json:\"details,omitempty\" graphql:\"details\""
+	Family                         *string                                                       "json:\"family,omitempty\" graphql:\"family\""
+	ID                             string                                                        "json:\"id\" graphql:\"id\""
+	ImplementationDate             *time.Time                                                    "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
+	ImplementationEvidence         *string                                                       "json:\"implementationEvidence,omitempty\" graphql:\"implementationEvidence\""
+	ImplementationStatus           *string                                                       "json:\"implementationStatus,omitempty\" graphql:\"implementationStatus\""
+	ImplementationVerification     *string                                                       "json:\"implementationVerification,omitempty\" graphql:\"implementationVerification\""
+	ImplementationVerificationDate *time.Time                                                    "json:\"implementationVerificationDate,omitempty\" graphql:\"implementationVerificationDate\""
+	MappedFrameworks               *string                                                       "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
+	Name                           string                                                        "json:\"name\" graphql:\"name\""
+	Source                         *string                                                       "json:\"source,omitempty\" graphql:\"source\""
+	Status                         *string                                                       "json:\"status,omitempty\" graphql:\"status\""
+	SubcontrolNumber               *string                                                       "json:\"subcontrolNumber,omitempty\" graphql:\"subcontrolNumber\""
+	SubcontrolType                 *string                                                       "json:\"subcontrolType,omitempty\" graphql:\"subcontrolType\""
+	Tags                           []string                                                      "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt                      *time.Time                                                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                      *string                                                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Version                        *string                                                       "json:\"version,omitempty\" graphql:\"version\""
+	Programs                       []*CreateSubcontrol_CreateSubcontrol_Subcontrol_Programs      "json:\"programs,omitempty\" graphql:\"programs\""
+	Editors                        []*CreateSubcontrol_CreateSubcontrol_Subcontrol_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
+	Viewers                        []*CreateSubcontrol_CreateSubcontrol_Subcontrol_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
+	BlockedGroups                  []*CreateSubcontrol_CreateSubcontrol_Subcontrol_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 }
 
 func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetClass() *string {
@@ -44060,6 +44143,30 @@ func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetVersion() *string {
 	}
 	return t.Version
 }
+func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetPrograms() []*CreateSubcontrol_CreateSubcontrol_Subcontrol_Programs {
+	if t == nil {
+		t = &CreateSubcontrol_CreateSubcontrol_Subcontrol{}
+	}
+	return t.Programs
+}
+func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetEditors() []*CreateSubcontrol_CreateSubcontrol_Subcontrol_Editors {
+	if t == nil {
+		t = &CreateSubcontrol_CreateSubcontrol_Subcontrol{}
+	}
+	return t.Editors
+}
+func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetViewers() []*CreateSubcontrol_CreateSubcontrol_Subcontrol_Viewers {
+	if t == nil {
+		t = &CreateSubcontrol_CreateSubcontrol_Subcontrol{}
+	}
+	return t.Viewers
+}
+func (t *CreateSubcontrol_CreateSubcontrol_Subcontrol) GetBlockedGroups() []*CreateSubcontrol_CreateSubcontrol_Subcontrol_BlockedGroups {
+	if t == nil {
+		t = &CreateSubcontrol_CreateSubcontrol_Subcontrol{}
+	}
+	return t.BlockedGroups
+}
 
 type CreateSubcontrol_CreateSubcontrol struct {
 	Subcontrol CreateSubcontrol_CreateSubcontrol_Subcontrol "json:\"subcontrol\" graphql:\"subcontrol\""
@@ -44083,29 +44190,105 @@ func (t *DeleteSubcontrol_DeleteSubcontrol) GetDeletedID() string {
 	return t.DeletedID
 }
 
+type GetAllSubcontrols_Subcontrols_Edges_Node_Programs struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetAllSubcontrols_Subcontrols_Edges_Node_Programs) GetID() string {
+	if t == nil {
+		t = &GetAllSubcontrols_Subcontrols_Edges_Node_Programs{}
+	}
+	return t.ID
+}
+func (t *GetAllSubcontrols_Subcontrols_Edges_Node_Programs) GetName() string {
+	if t == nil {
+		t = &GetAllSubcontrols_Subcontrols_Edges_Node_Programs{}
+	}
+	return t.Name
+}
+
+type GetAllSubcontrols_Subcontrols_Edges_Node_Editors struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetAllSubcontrols_Subcontrols_Edges_Node_Editors) GetID() string {
+	if t == nil {
+		t = &GetAllSubcontrols_Subcontrols_Edges_Node_Editors{}
+	}
+	return t.ID
+}
+func (t *GetAllSubcontrols_Subcontrols_Edges_Node_Editors) GetName() string {
+	if t == nil {
+		t = &GetAllSubcontrols_Subcontrols_Edges_Node_Editors{}
+	}
+	return t.Name
+}
+
+type GetAllSubcontrols_Subcontrols_Edges_Node_Viewers struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetAllSubcontrols_Subcontrols_Edges_Node_Viewers) GetID() string {
+	if t == nil {
+		t = &GetAllSubcontrols_Subcontrols_Edges_Node_Viewers{}
+	}
+	return t.ID
+}
+func (t *GetAllSubcontrols_Subcontrols_Edges_Node_Viewers) GetName() string {
+	if t == nil {
+		t = &GetAllSubcontrols_Subcontrols_Edges_Node_Viewers{}
+	}
+	return t.Name
+}
+
+type GetAllSubcontrols_Subcontrols_Edges_Node_BlockedGroups struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetAllSubcontrols_Subcontrols_Edges_Node_BlockedGroups) GetID() string {
+	if t == nil {
+		t = &GetAllSubcontrols_Subcontrols_Edges_Node_BlockedGroups{}
+	}
+	return t.ID
+}
+func (t *GetAllSubcontrols_Subcontrols_Edges_Node_BlockedGroups) GetName() string {
+	if t == nil {
+		t = &GetAllSubcontrols_Subcontrols_Edges_Node_BlockedGroups{}
+	}
+	return t.Name
+}
+
 type GetAllSubcontrols_Subcontrols_Edges_Node struct {
-	Class                          *string                "json:\"class,omitempty\" graphql:\"class\""
-	CreatedAt                      *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy                      *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description                    *string                "json:\"description,omitempty\" graphql:\"description\""
-	Details                        map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
-	Family                         *string                "json:\"family,omitempty\" graphql:\"family\""
-	ID                             string                 "json:\"id\" graphql:\"id\""
-	ImplementationDate             *time.Time             "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
-	ImplementationEvidence         *string                "json:\"implementationEvidence,omitempty\" graphql:\"implementationEvidence\""
-	ImplementationStatus           *string                "json:\"implementationStatus,omitempty\" graphql:\"implementationStatus\""
-	ImplementationVerification     *string                "json:\"implementationVerification,omitempty\" graphql:\"implementationVerification\""
-	ImplementationVerificationDate *time.Time             "json:\"implementationVerificationDate,omitempty\" graphql:\"implementationVerificationDate\""
-	MappedFrameworks               *string                "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
-	Name                           string                 "json:\"name\" graphql:\"name\""
-	Source                         *string                "json:\"source,omitempty\" graphql:\"source\""
-	Status                         *string                "json:\"status,omitempty\" graphql:\"status\""
-	SubcontrolNumber               *string                "json:\"subcontrolNumber,omitempty\" graphql:\"subcontrolNumber\""
-	SubcontrolType                 *string                "json:\"subcontrolType,omitempty\" graphql:\"subcontrolType\""
-	Tags                           []string               "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt                      *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy                      *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version                        *string                "json:\"version,omitempty\" graphql:\"version\""
+	Class                          *string                                                   "json:\"class,omitempty\" graphql:\"class\""
+	CreatedAt                      *time.Time                                                "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                      *string                                                   "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description                    *string                                                   "json:\"description,omitempty\" graphql:\"description\""
+	Details                        map[string]interface{}                                    "json:\"details,omitempty\" graphql:\"details\""
+	Family                         *string                                                   "json:\"family,omitempty\" graphql:\"family\""
+	ID                             string                                                    "json:\"id\" graphql:\"id\""
+	ImplementationDate             *time.Time                                                "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
+	ImplementationEvidence         *string                                                   "json:\"implementationEvidence,omitempty\" graphql:\"implementationEvidence\""
+	ImplementationStatus           *string                                                   "json:\"implementationStatus,omitempty\" graphql:\"implementationStatus\""
+	ImplementationVerification     *string                                                   "json:\"implementationVerification,omitempty\" graphql:\"implementationVerification\""
+	ImplementationVerificationDate *time.Time                                                "json:\"implementationVerificationDate,omitempty\" graphql:\"implementationVerificationDate\""
+	MappedFrameworks               *string                                                   "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
+	Name                           string                                                    "json:\"name\" graphql:\"name\""
+	Source                         *string                                                   "json:\"source,omitempty\" graphql:\"source\""
+	Status                         *string                                                   "json:\"status,omitempty\" graphql:\"status\""
+	SubcontrolNumber               *string                                                   "json:\"subcontrolNumber,omitempty\" graphql:\"subcontrolNumber\""
+	SubcontrolType                 *string                                                   "json:\"subcontrolType,omitempty\" graphql:\"subcontrolType\""
+	Tags                           []string                                                  "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt                      *time.Time                                                "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                      *string                                                   "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Version                        *string                                                   "json:\"version,omitempty\" graphql:\"version\""
+	Programs                       []*GetAllSubcontrols_Subcontrols_Edges_Node_Programs      "json:\"programs,omitempty\" graphql:\"programs\""
+	Editors                        []*GetAllSubcontrols_Subcontrols_Edges_Node_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
+	Viewers                        []*GetAllSubcontrols_Subcontrols_Edges_Node_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
+	BlockedGroups                  []*GetAllSubcontrols_Subcontrols_Edges_Node_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 }
 
 func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetClass() *string {
@@ -44240,6 +44423,30 @@ func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetVersion() *string {
 	}
 	return t.Version
 }
+func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetPrograms() []*GetAllSubcontrols_Subcontrols_Edges_Node_Programs {
+	if t == nil {
+		t = &GetAllSubcontrols_Subcontrols_Edges_Node{}
+	}
+	return t.Programs
+}
+func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetEditors() []*GetAllSubcontrols_Subcontrols_Edges_Node_Editors {
+	if t == nil {
+		t = &GetAllSubcontrols_Subcontrols_Edges_Node{}
+	}
+	return t.Editors
+}
+func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetViewers() []*GetAllSubcontrols_Subcontrols_Edges_Node_Viewers {
+	if t == nil {
+		t = &GetAllSubcontrols_Subcontrols_Edges_Node{}
+	}
+	return t.Viewers
+}
+func (t *GetAllSubcontrols_Subcontrols_Edges_Node) GetBlockedGroups() []*GetAllSubcontrols_Subcontrols_Edges_Node_BlockedGroups {
+	if t == nil {
+		t = &GetAllSubcontrols_Subcontrols_Edges_Node{}
+	}
+	return t.BlockedGroups
+}
 
 type GetAllSubcontrols_Subcontrols_Edges struct {
 	Node *GetAllSubcontrols_Subcontrols_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
@@ -44263,29 +44470,105 @@ func (t *GetAllSubcontrols_Subcontrols) GetEdges() []*GetAllSubcontrols_Subcontr
 	return t.Edges
 }
 
+type GetSubcontrolByID_Subcontrol_Programs struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetSubcontrolByID_Subcontrol_Programs) GetID() string {
+	if t == nil {
+		t = &GetSubcontrolByID_Subcontrol_Programs{}
+	}
+	return t.ID
+}
+func (t *GetSubcontrolByID_Subcontrol_Programs) GetName() string {
+	if t == nil {
+		t = &GetSubcontrolByID_Subcontrol_Programs{}
+	}
+	return t.Name
+}
+
+type GetSubcontrolByID_Subcontrol_Editors struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetSubcontrolByID_Subcontrol_Editors) GetID() string {
+	if t == nil {
+		t = &GetSubcontrolByID_Subcontrol_Editors{}
+	}
+	return t.ID
+}
+func (t *GetSubcontrolByID_Subcontrol_Editors) GetName() string {
+	if t == nil {
+		t = &GetSubcontrolByID_Subcontrol_Editors{}
+	}
+	return t.Name
+}
+
+type GetSubcontrolByID_Subcontrol_Viewers struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetSubcontrolByID_Subcontrol_Viewers) GetID() string {
+	if t == nil {
+		t = &GetSubcontrolByID_Subcontrol_Viewers{}
+	}
+	return t.ID
+}
+func (t *GetSubcontrolByID_Subcontrol_Viewers) GetName() string {
+	if t == nil {
+		t = &GetSubcontrolByID_Subcontrol_Viewers{}
+	}
+	return t.Name
+}
+
+type GetSubcontrolByID_Subcontrol_BlockedGroups struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetSubcontrolByID_Subcontrol_BlockedGroups) GetID() string {
+	if t == nil {
+		t = &GetSubcontrolByID_Subcontrol_BlockedGroups{}
+	}
+	return t.ID
+}
+func (t *GetSubcontrolByID_Subcontrol_BlockedGroups) GetName() string {
+	if t == nil {
+		t = &GetSubcontrolByID_Subcontrol_BlockedGroups{}
+	}
+	return t.Name
+}
+
 type GetSubcontrolByID_Subcontrol struct {
-	Class                          *string                "json:\"class,omitempty\" graphql:\"class\""
-	CreatedAt                      *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy                      *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description                    *string                "json:\"description,omitempty\" graphql:\"description\""
-	Details                        map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
-	Family                         *string                "json:\"family,omitempty\" graphql:\"family\""
-	ID                             string                 "json:\"id\" graphql:\"id\""
-	ImplementationDate             *time.Time             "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
-	ImplementationEvidence         *string                "json:\"implementationEvidence,omitempty\" graphql:\"implementationEvidence\""
-	ImplementationStatus           *string                "json:\"implementationStatus,omitempty\" graphql:\"implementationStatus\""
-	ImplementationVerification     *string                "json:\"implementationVerification,omitempty\" graphql:\"implementationVerification\""
-	ImplementationVerificationDate *time.Time             "json:\"implementationVerificationDate,omitempty\" graphql:\"implementationVerificationDate\""
-	MappedFrameworks               *string                "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
-	Name                           string                 "json:\"name\" graphql:\"name\""
-	Source                         *string                "json:\"source,omitempty\" graphql:\"source\""
-	Status                         *string                "json:\"status,omitempty\" graphql:\"status\""
-	SubcontrolNumber               *string                "json:\"subcontrolNumber,omitempty\" graphql:\"subcontrolNumber\""
-	SubcontrolType                 *string                "json:\"subcontrolType,omitempty\" graphql:\"subcontrolType\""
-	Tags                           []string               "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt                      *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy                      *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version                        *string                "json:\"version,omitempty\" graphql:\"version\""
+	Class                          *string                                       "json:\"class,omitempty\" graphql:\"class\""
+	CreatedAt                      *time.Time                                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                      *string                                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description                    *string                                       "json:\"description,omitempty\" graphql:\"description\""
+	Details                        map[string]interface{}                        "json:\"details,omitempty\" graphql:\"details\""
+	Family                         *string                                       "json:\"family,omitempty\" graphql:\"family\""
+	ID                             string                                        "json:\"id\" graphql:\"id\""
+	ImplementationDate             *time.Time                                    "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
+	ImplementationEvidence         *string                                       "json:\"implementationEvidence,omitempty\" graphql:\"implementationEvidence\""
+	ImplementationStatus           *string                                       "json:\"implementationStatus,omitempty\" graphql:\"implementationStatus\""
+	ImplementationVerification     *string                                       "json:\"implementationVerification,omitempty\" graphql:\"implementationVerification\""
+	ImplementationVerificationDate *time.Time                                    "json:\"implementationVerificationDate,omitempty\" graphql:\"implementationVerificationDate\""
+	MappedFrameworks               *string                                       "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
+	Name                           string                                        "json:\"name\" graphql:\"name\""
+	Source                         *string                                       "json:\"source,omitempty\" graphql:\"source\""
+	Status                         *string                                       "json:\"status,omitempty\" graphql:\"status\""
+	SubcontrolNumber               *string                                       "json:\"subcontrolNumber,omitempty\" graphql:\"subcontrolNumber\""
+	SubcontrolType                 *string                                       "json:\"subcontrolType,omitempty\" graphql:\"subcontrolType\""
+	Tags                           []string                                      "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt                      *time.Time                                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                      *string                                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Version                        *string                                       "json:\"version,omitempty\" graphql:\"version\""
+	Programs                       []*GetSubcontrolByID_Subcontrol_Programs      "json:\"programs,omitempty\" graphql:\"programs\""
+	Editors                        []*GetSubcontrolByID_Subcontrol_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
+	Viewers                        []*GetSubcontrolByID_Subcontrol_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
+	BlockedGroups                  []*GetSubcontrolByID_Subcontrol_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 }
 
 func (t *GetSubcontrolByID_Subcontrol) GetClass() *string {
@@ -44420,30 +44703,130 @@ func (t *GetSubcontrolByID_Subcontrol) GetVersion() *string {
 	}
 	return t.Version
 }
+func (t *GetSubcontrolByID_Subcontrol) GetPrograms() []*GetSubcontrolByID_Subcontrol_Programs {
+	if t == nil {
+		t = &GetSubcontrolByID_Subcontrol{}
+	}
+	return t.Programs
+}
+func (t *GetSubcontrolByID_Subcontrol) GetEditors() []*GetSubcontrolByID_Subcontrol_Editors {
+	if t == nil {
+		t = &GetSubcontrolByID_Subcontrol{}
+	}
+	return t.Editors
+}
+func (t *GetSubcontrolByID_Subcontrol) GetViewers() []*GetSubcontrolByID_Subcontrol_Viewers {
+	if t == nil {
+		t = &GetSubcontrolByID_Subcontrol{}
+	}
+	return t.Viewers
+}
+func (t *GetSubcontrolByID_Subcontrol) GetBlockedGroups() []*GetSubcontrolByID_Subcontrol_BlockedGroups {
+	if t == nil {
+		t = &GetSubcontrolByID_Subcontrol{}
+	}
+	return t.BlockedGroups
+}
+
+type GetSubcontrols_Subcontrols_Edges_Node_Programs struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetSubcontrols_Subcontrols_Edges_Node_Programs) GetID() string {
+	if t == nil {
+		t = &GetSubcontrols_Subcontrols_Edges_Node_Programs{}
+	}
+	return t.ID
+}
+func (t *GetSubcontrols_Subcontrols_Edges_Node_Programs) GetName() string {
+	if t == nil {
+		t = &GetSubcontrols_Subcontrols_Edges_Node_Programs{}
+	}
+	return t.Name
+}
+
+type GetSubcontrols_Subcontrols_Edges_Node_Editors struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetSubcontrols_Subcontrols_Edges_Node_Editors) GetID() string {
+	if t == nil {
+		t = &GetSubcontrols_Subcontrols_Edges_Node_Editors{}
+	}
+	return t.ID
+}
+func (t *GetSubcontrols_Subcontrols_Edges_Node_Editors) GetName() string {
+	if t == nil {
+		t = &GetSubcontrols_Subcontrols_Edges_Node_Editors{}
+	}
+	return t.Name
+}
+
+type GetSubcontrols_Subcontrols_Edges_Node_Viewers struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetSubcontrols_Subcontrols_Edges_Node_Viewers) GetID() string {
+	if t == nil {
+		t = &GetSubcontrols_Subcontrols_Edges_Node_Viewers{}
+	}
+	return t.ID
+}
+func (t *GetSubcontrols_Subcontrols_Edges_Node_Viewers) GetName() string {
+	if t == nil {
+		t = &GetSubcontrols_Subcontrols_Edges_Node_Viewers{}
+	}
+	return t.Name
+}
+
+type GetSubcontrols_Subcontrols_Edges_Node_BlockedGroups struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetSubcontrols_Subcontrols_Edges_Node_BlockedGroups) GetID() string {
+	if t == nil {
+		t = &GetSubcontrols_Subcontrols_Edges_Node_BlockedGroups{}
+	}
+	return t.ID
+}
+func (t *GetSubcontrols_Subcontrols_Edges_Node_BlockedGroups) GetName() string {
+	if t == nil {
+		t = &GetSubcontrols_Subcontrols_Edges_Node_BlockedGroups{}
+	}
+	return t.Name
+}
 
 type GetSubcontrols_Subcontrols_Edges_Node struct {
-	Class                          *string                "json:\"class,omitempty\" graphql:\"class\""
-	CreatedAt                      *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy                      *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description                    *string                "json:\"description,omitempty\" graphql:\"description\""
-	Details                        map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
-	Family                         *string                "json:\"family,omitempty\" graphql:\"family\""
-	ID                             string                 "json:\"id\" graphql:\"id\""
-	ImplementationDate             *time.Time             "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
-	ImplementationEvidence         *string                "json:\"implementationEvidence,omitempty\" graphql:\"implementationEvidence\""
-	ImplementationStatus           *string                "json:\"implementationStatus,omitempty\" graphql:\"implementationStatus\""
-	ImplementationVerification     *string                "json:\"implementationVerification,omitempty\" graphql:\"implementationVerification\""
-	ImplementationVerificationDate *time.Time             "json:\"implementationVerificationDate,omitempty\" graphql:\"implementationVerificationDate\""
-	MappedFrameworks               *string                "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
-	Name                           string                 "json:\"name\" graphql:\"name\""
-	Source                         *string                "json:\"source,omitempty\" graphql:\"source\""
-	Status                         *string                "json:\"status,omitempty\" graphql:\"status\""
-	SubcontrolNumber               *string                "json:\"subcontrolNumber,omitempty\" graphql:\"subcontrolNumber\""
-	SubcontrolType                 *string                "json:\"subcontrolType,omitempty\" graphql:\"subcontrolType\""
-	Tags                           []string               "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt                      *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy                      *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version                        *string                "json:\"version,omitempty\" graphql:\"version\""
+	Class                          *string                                                "json:\"class,omitempty\" graphql:\"class\""
+	CreatedAt                      *time.Time                                             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                      *string                                                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description                    *string                                                "json:\"description,omitempty\" graphql:\"description\""
+	Details                        map[string]interface{}                                 "json:\"details,omitempty\" graphql:\"details\""
+	Family                         *string                                                "json:\"family,omitempty\" graphql:\"family\""
+	ID                             string                                                 "json:\"id\" graphql:\"id\""
+	ImplementationDate             *time.Time                                             "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
+	ImplementationEvidence         *string                                                "json:\"implementationEvidence,omitempty\" graphql:\"implementationEvidence\""
+	ImplementationStatus           *string                                                "json:\"implementationStatus,omitempty\" graphql:\"implementationStatus\""
+	ImplementationVerification     *string                                                "json:\"implementationVerification,omitempty\" graphql:\"implementationVerification\""
+	ImplementationVerificationDate *time.Time                                             "json:\"implementationVerificationDate,omitempty\" graphql:\"implementationVerificationDate\""
+	MappedFrameworks               *string                                                "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
+	Name                           string                                                 "json:\"name\" graphql:\"name\""
+	Source                         *string                                                "json:\"source,omitempty\" graphql:\"source\""
+	Status                         *string                                                "json:\"status,omitempty\" graphql:\"status\""
+	SubcontrolNumber               *string                                                "json:\"subcontrolNumber,omitempty\" graphql:\"subcontrolNumber\""
+	SubcontrolType                 *string                                                "json:\"subcontrolType,omitempty\" graphql:\"subcontrolType\""
+	Tags                           []string                                               "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt                      *time.Time                                             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                      *string                                                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Version                        *string                                                "json:\"version,omitempty\" graphql:\"version\""
+	Programs                       []*GetSubcontrols_Subcontrols_Edges_Node_Programs      "json:\"programs,omitempty\" graphql:\"programs\""
+	Editors                        []*GetSubcontrols_Subcontrols_Edges_Node_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
+	Viewers                        []*GetSubcontrols_Subcontrols_Edges_Node_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
+	BlockedGroups                  []*GetSubcontrols_Subcontrols_Edges_Node_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 }
 
 func (t *GetSubcontrols_Subcontrols_Edges_Node) GetClass() *string {
@@ -44578,6 +44961,30 @@ func (t *GetSubcontrols_Subcontrols_Edges_Node) GetVersion() *string {
 	}
 	return t.Version
 }
+func (t *GetSubcontrols_Subcontrols_Edges_Node) GetPrograms() []*GetSubcontrols_Subcontrols_Edges_Node_Programs {
+	if t == nil {
+		t = &GetSubcontrols_Subcontrols_Edges_Node{}
+	}
+	return t.Programs
+}
+func (t *GetSubcontrols_Subcontrols_Edges_Node) GetEditors() []*GetSubcontrols_Subcontrols_Edges_Node_Editors {
+	if t == nil {
+		t = &GetSubcontrols_Subcontrols_Edges_Node{}
+	}
+	return t.Editors
+}
+func (t *GetSubcontrols_Subcontrols_Edges_Node) GetViewers() []*GetSubcontrols_Subcontrols_Edges_Node_Viewers {
+	if t == nil {
+		t = &GetSubcontrols_Subcontrols_Edges_Node{}
+	}
+	return t.Viewers
+}
+func (t *GetSubcontrols_Subcontrols_Edges_Node) GetBlockedGroups() []*GetSubcontrols_Subcontrols_Edges_Node_BlockedGroups {
+	if t == nil {
+		t = &GetSubcontrols_Subcontrols_Edges_Node{}
+	}
+	return t.BlockedGroups
+}
 
 type GetSubcontrols_Subcontrols_Edges struct {
 	Node *GetSubcontrols_Subcontrols_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
@@ -44601,29 +45008,105 @@ func (t *GetSubcontrols_Subcontrols) GetEdges() []*GetSubcontrols_Subcontrols_Ed
 	return t.Edges
 }
 
+type UpdateSubcontrol_UpdateSubcontrol_Subcontrol_Programs struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol_Programs) GetID() string {
+	if t == nil {
+		t = &UpdateSubcontrol_UpdateSubcontrol_Subcontrol_Programs{}
+	}
+	return t.ID
+}
+func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol_Programs) GetName() string {
+	if t == nil {
+		t = &UpdateSubcontrol_UpdateSubcontrol_Subcontrol_Programs{}
+	}
+	return t.Name
+}
+
+type UpdateSubcontrol_UpdateSubcontrol_Subcontrol_Editors struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol_Editors) GetID() string {
+	if t == nil {
+		t = &UpdateSubcontrol_UpdateSubcontrol_Subcontrol_Editors{}
+	}
+	return t.ID
+}
+func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol_Editors) GetName() string {
+	if t == nil {
+		t = &UpdateSubcontrol_UpdateSubcontrol_Subcontrol_Editors{}
+	}
+	return t.Name
+}
+
+type UpdateSubcontrol_UpdateSubcontrol_Subcontrol_Viewers struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol_Viewers) GetID() string {
+	if t == nil {
+		t = &UpdateSubcontrol_UpdateSubcontrol_Subcontrol_Viewers{}
+	}
+	return t.ID
+}
+func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol_Viewers) GetName() string {
+	if t == nil {
+		t = &UpdateSubcontrol_UpdateSubcontrol_Subcontrol_Viewers{}
+	}
+	return t.Name
+}
+
+type UpdateSubcontrol_UpdateSubcontrol_Subcontrol_BlockedGroups struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol_BlockedGroups) GetID() string {
+	if t == nil {
+		t = &UpdateSubcontrol_UpdateSubcontrol_Subcontrol_BlockedGroups{}
+	}
+	return t.ID
+}
+func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol_BlockedGroups) GetName() string {
+	if t == nil {
+		t = &UpdateSubcontrol_UpdateSubcontrol_Subcontrol_BlockedGroups{}
+	}
+	return t.Name
+}
+
 type UpdateSubcontrol_UpdateSubcontrol_Subcontrol struct {
-	Class                          *string                "json:\"class,omitempty\" graphql:\"class\""
-	CreatedAt                      *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy                      *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description                    *string                "json:\"description,omitempty\" graphql:\"description\""
-	Details                        map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
-	Family                         *string                "json:\"family,omitempty\" graphql:\"family\""
-	ID                             string                 "json:\"id\" graphql:\"id\""
-	ImplementationDate             *time.Time             "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
-	ImplementationEvidence         *string                "json:\"implementationEvidence,omitempty\" graphql:\"implementationEvidence\""
-	ImplementationStatus           *string                "json:\"implementationStatus,omitempty\" graphql:\"implementationStatus\""
-	ImplementationVerification     *string                "json:\"implementationVerification,omitempty\" graphql:\"implementationVerification\""
-	ImplementationVerificationDate *time.Time             "json:\"implementationVerificationDate,omitempty\" graphql:\"implementationVerificationDate\""
-	MappedFrameworks               *string                "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
-	Name                           string                 "json:\"name\" graphql:\"name\""
-	Source                         *string                "json:\"source,omitempty\" graphql:\"source\""
-	Status                         *string                "json:\"status,omitempty\" graphql:\"status\""
-	SubcontrolNumber               *string                "json:\"subcontrolNumber,omitempty\" graphql:\"subcontrolNumber\""
-	SubcontrolType                 *string                "json:\"subcontrolType,omitempty\" graphql:\"subcontrolType\""
-	Tags                           []string               "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt                      *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy                      *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version                        *string                "json:\"version,omitempty\" graphql:\"version\""
+	Class                          *string                                                       "json:\"class,omitempty\" graphql:\"class\""
+	CreatedAt                      *time.Time                                                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                      *string                                                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description                    *string                                                       "json:\"description,omitempty\" graphql:\"description\""
+	Details                        map[string]interface{}                                        "json:\"details,omitempty\" graphql:\"details\""
+	Family                         *string                                                       "json:\"family,omitempty\" graphql:\"family\""
+	ID                             string                                                        "json:\"id\" graphql:\"id\""
+	ImplementationDate             *time.Time                                                    "json:\"implementationDate,omitempty\" graphql:\"implementationDate\""
+	ImplementationEvidence         *string                                                       "json:\"implementationEvidence,omitempty\" graphql:\"implementationEvidence\""
+	ImplementationStatus           *string                                                       "json:\"implementationStatus,omitempty\" graphql:\"implementationStatus\""
+	ImplementationVerification     *string                                                       "json:\"implementationVerification,omitempty\" graphql:\"implementationVerification\""
+	ImplementationVerificationDate *time.Time                                                    "json:\"implementationVerificationDate,omitempty\" graphql:\"implementationVerificationDate\""
+	MappedFrameworks               *string                                                       "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
+	Name                           string                                                        "json:\"name\" graphql:\"name\""
+	Source                         *string                                                       "json:\"source,omitempty\" graphql:\"source\""
+	Status                         *string                                                       "json:\"status,omitempty\" graphql:\"status\""
+	SubcontrolNumber               *string                                                       "json:\"subcontrolNumber,omitempty\" graphql:\"subcontrolNumber\""
+	SubcontrolType                 *string                                                       "json:\"subcontrolType,omitempty\" graphql:\"subcontrolType\""
+	Tags                           []string                                                      "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt                      *time.Time                                                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                      *string                                                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Version                        *string                                                       "json:\"version,omitempty\" graphql:\"version\""
+	Programs                       []*UpdateSubcontrol_UpdateSubcontrol_Subcontrol_Programs      "json:\"programs,omitempty\" graphql:\"programs\""
+	Editors                        []*UpdateSubcontrol_UpdateSubcontrol_Subcontrol_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
+	Viewers                        []*UpdateSubcontrol_UpdateSubcontrol_Subcontrol_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
+	BlockedGroups                  []*UpdateSubcontrol_UpdateSubcontrol_Subcontrol_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 }
 
 func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetClass() *string {
@@ -44757,6 +45240,30 @@ func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetVersion() *string {
 		t = &UpdateSubcontrol_UpdateSubcontrol_Subcontrol{}
 	}
 	return t.Version
+}
+func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetPrograms() []*UpdateSubcontrol_UpdateSubcontrol_Subcontrol_Programs {
+	if t == nil {
+		t = &UpdateSubcontrol_UpdateSubcontrol_Subcontrol{}
+	}
+	return t.Programs
+}
+func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetEditors() []*UpdateSubcontrol_UpdateSubcontrol_Subcontrol_Editors {
+	if t == nil {
+		t = &UpdateSubcontrol_UpdateSubcontrol_Subcontrol{}
+	}
+	return t.Editors
+}
+func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetViewers() []*UpdateSubcontrol_UpdateSubcontrol_Subcontrol_Viewers {
+	if t == nil {
+		t = &UpdateSubcontrol_UpdateSubcontrol_Subcontrol{}
+	}
+	return t.Viewers
+}
+func (t *UpdateSubcontrol_UpdateSubcontrol_Subcontrol) GetBlockedGroups() []*UpdateSubcontrol_UpdateSubcontrol_Subcontrol_BlockedGroups {
+	if t == nil {
+		t = &UpdateSubcontrol_UpdateSubcontrol_Subcontrol{}
+	}
+	return t.BlockedGroups
 }
 
 type UpdateSubcontrol_UpdateSubcontrol struct {
@@ -56149,6 +56656,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					deletedBy
 					id
 					tags
+					ownerID
 					name
 					description
 					status
@@ -68622,6 +69130,22 @@ const CreateSubcontrolDocument = `mutation CreateSubcontrol ($input: CreateSubco
 			updatedAt
 			updatedBy
 			version
+			programs {
+				id
+				name
+			}
+			editors {
+				id
+				name
+			}
+			viewers {
+				id
+				name
+			}
+			blockedGroups {
+				id
+				name
+			}
 		}
 	}
 }
@@ -68694,6 +69218,22 @@ const GetAllSubcontrolsDocument = `query GetAllSubcontrols {
 				updatedAt
 				updatedBy
 				version
+				programs {
+					id
+					name
+				}
+				editors {
+					id
+					name
+				}
+				viewers {
+					id
+					name
+				}
+				blockedGroups {
+					id
+					name
+				}
 			}
 		}
 	}
@@ -68739,6 +69279,22 @@ const GetSubcontrolByIDDocument = `query GetSubcontrolByID ($subcontrolId: ID!) 
 		updatedAt
 		updatedBy
 		version
+		programs {
+			id
+			name
+		}
+		editors {
+			id
+			name
+		}
+		viewers {
+			id
+			name
+		}
+		blockedGroups {
+			id
+			name
+		}
 	}
 }
 `
@@ -68786,6 +69342,22 @@ const GetSubcontrolsDocument = `query GetSubcontrols ($where: SubcontrolWhereInp
 				updatedAt
 				updatedBy
 				version
+				programs {
+					id
+					name
+				}
+				editors {
+					id
+					name
+				}
+				viewers {
+					id
+					name
+				}
+				blockedGroups {
+					id
+					name
+				}
 			}
 		}
 	}
@@ -68834,6 +69406,22 @@ const UpdateSubcontrolDocument = `mutation UpdateSubcontrol ($updateSubcontrolId
 			updatedAt
 			updatedBy
 			version
+			programs {
+				id
+				name
+			}
+			editors {
+				id
+				name
+			}
+			viewers {
+				id
+				name
+			}
+			blockedGroups {
+				id
+				name
+			}
 		}
 	}
 }

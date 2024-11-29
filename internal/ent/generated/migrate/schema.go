@@ -2479,6 +2479,8 @@ var (
 		{Name: "details", Type: field.TypeJSON, Nullable: true},
 		{Name: "control_objective_subcontrols", Type: field.TypeString, Nullable: true},
 		{Name: "note_subcontrols", Type: field.TypeString, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString},
+		{Name: "user_subcontrols", Type: field.TypeString, Nullable: true},
 	}
 	// SubcontrolsTable holds the schema information for the "subcontrols" table.
 	SubcontrolsTable = &schema.Table{
@@ -2498,6 +2500,18 @@ var (
 				RefColumns: []*schema.Column{NotesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
+			{
+				Symbol:     "subcontrols_organizations_subcontrols",
+				Columns:    []*schema.Column{SubcontrolsColumns[27]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "subcontrols_users_subcontrols",
+				Columns:    []*schema.Column{SubcontrolsColumns[28]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
 		},
 	}
 	// SubcontrolHistoryColumns holds the columns for the "subcontrol_history" table.
@@ -2514,6 +2528,7 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "status", Type: field.TypeString, Nullable: true},
@@ -4977,6 +4992,81 @@ var (
 			},
 		},
 	}
+	// SubcontrolBlockedGroupsColumns holds the columns for the "subcontrol_blocked_groups" table.
+	SubcontrolBlockedGroupsColumns = []*schema.Column{
+		{Name: "subcontrol_id", Type: field.TypeString},
+		{Name: "group_id", Type: field.TypeString},
+	}
+	// SubcontrolBlockedGroupsTable holds the schema information for the "subcontrol_blocked_groups" table.
+	SubcontrolBlockedGroupsTable = &schema.Table{
+		Name:       "subcontrol_blocked_groups",
+		Columns:    SubcontrolBlockedGroupsColumns,
+		PrimaryKey: []*schema.Column{SubcontrolBlockedGroupsColumns[0], SubcontrolBlockedGroupsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "subcontrol_blocked_groups_subcontrol_id",
+				Columns:    []*schema.Column{SubcontrolBlockedGroupsColumns[0]},
+				RefColumns: []*schema.Column{SubcontrolsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "subcontrol_blocked_groups_group_id",
+				Columns:    []*schema.Column{SubcontrolBlockedGroupsColumns[1]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// SubcontrolEditorsColumns holds the columns for the "subcontrol_editors" table.
+	SubcontrolEditorsColumns = []*schema.Column{
+		{Name: "subcontrol_id", Type: field.TypeString},
+		{Name: "group_id", Type: field.TypeString},
+	}
+	// SubcontrolEditorsTable holds the schema information for the "subcontrol_editors" table.
+	SubcontrolEditorsTable = &schema.Table{
+		Name:       "subcontrol_editors",
+		Columns:    SubcontrolEditorsColumns,
+		PrimaryKey: []*schema.Column{SubcontrolEditorsColumns[0], SubcontrolEditorsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "subcontrol_editors_subcontrol_id",
+				Columns:    []*schema.Column{SubcontrolEditorsColumns[0]},
+				RefColumns: []*schema.Column{SubcontrolsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "subcontrol_editors_group_id",
+				Columns:    []*schema.Column{SubcontrolEditorsColumns[1]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// SubcontrolViewersColumns holds the columns for the "subcontrol_viewers" table.
+	SubcontrolViewersColumns = []*schema.Column{
+		{Name: "subcontrol_id", Type: field.TypeString},
+		{Name: "group_id", Type: field.TypeString},
+	}
+	// SubcontrolViewersTable holds the schema information for the "subcontrol_viewers" table.
+	SubcontrolViewersTable = &schema.Table{
+		Name:       "subcontrol_viewers",
+		Columns:    SubcontrolViewersColumns,
+		PrimaryKey: []*schema.Column{SubcontrolViewersColumns[0], SubcontrolViewersColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "subcontrol_viewers_subcontrol_id",
+				Columns:    []*schema.Column{SubcontrolViewersColumns[0]},
+				RefColumns: []*schema.Column{SubcontrolsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "subcontrol_viewers_group_id",
+				Columns:    []*schema.Column{SubcontrolViewersColumns[1]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// SubcontrolTasksColumns holds the columns for the "subcontrol_tasks" table.
 	SubcontrolTasksColumns = []*schema.Column{
 		{Name: "subcontrol_id", Type: field.TypeString},
@@ -5123,31 +5213,6 @@ var (
 				Symbol:     "user_actionplans_action_plan_id",
 				Columns:    []*schema.Column{UserActionplansColumns[1]},
 				RefColumns: []*schema.Column{ActionPlansColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-		},
-	}
-	// UserSubcontrolsColumns holds the columns for the "user_subcontrols" table.
-	UserSubcontrolsColumns = []*schema.Column{
-		{Name: "user_id", Type: field.TypeString},
-		{Name: "subcontrol_id", Type: field.TypeString},
-	}
-	// UserSubcontrolsTable holds the schema information for the "user_subcontrols" table.
-	UserSubcontrolsTable = &schema.Table{
-		Name:       "user_subcontrols",
-		Columns:    UserSubcontrolsColumns,
-		PrimaryKey: []*schema.Column{UserSubcontrolsColumns[0], UserSubcontrolsColumns[1]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "user_subcontrols_user_id",
-				Columns:    []*schema.Column{UserSubcontrolsColumns[0]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-			{
-				Symbol:     "user_subcontrols_subcontrol_id",
-				Columns:    []*schema.Column{UserSubcontrolsColumns[1]},
-				RefColumns: []*schema.Column{SubcontrolsColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 		},
@@ -5361,13 +5426,15 @@ var (
 		StandardControlsTable,
 		StandardActionplansTable,
 		StandardProgramsTable,
+		SubcontrolBlockedGroupsTable,
+		SubcontrolEditorsTable,
+		SubcontrolViewersTable,
 		SubcontrolTasksTable,
 		SubscriberEventsTable,
 		TemplateFilesTable,
 		UserFilesTable,
 		UserEventsTable,
 		UserActionplansTable,
-		UserSubcontrolsTable,
 		UserSettingFilesTable,
 		WebhookEventsTable,
 	}
@@ -5513,6 +5580,8 @@ func init() {
 	}
 	SubcontrolsTable.ForeignKeys[0].RefTable = ControlObjectivesTable
 	SubcontrolsTable.ForeignKeys[1].RefTable = NotesTable
+	SubcontrolsTable.ForeignKeys[2].RefTable = OrganizationsTable
+	SubcontrolsTable.ForeignKeys[3].RefTable = UsersTable
 	SubcontrolHistoryTable.Annotation = &entsql.Annotation{
 		Table: "subcontrol_history",
 	}
@@ -5693,6 +5762,12 @@ func init() {
 	StandardActionplansTable.ForeignKeys[1].RefTable = ActionPlansTable
 	StandardProgramsTable.ForeignKeys[0].RefTable = StandardsTable
 	StandardProgramsTable.ForeignKeys[1].RefTable = ProgramsTable
+	SubcontrolBlockedGroupsTable.ForeignKeys[0].RefTable = SubcontrolsTable
+	SubcontrolBlockedGroupsTable.ForeignKeys[1].RefTable = GroupsTable
+	SubcontrolEditorsTable.ForeignKeys[0].RefTable = SubcontrolsTable
+	SubcontrolEditorsTable.ForeignKeys[1].RefTable = GroupsTable
+	SubcontrolViewersTable.ForeignKeys[0].RefTable = SubcontrolsTable
+	SubcontrolViewersTable.ForeignKeys[1].RefTable = GroupsTable
 	SubcontrolTasksTable.ForeignKeys[0].RefTable = SubcontrolsTable
 	SubcontrolTasksTable.ForeignKeys[1].RefTable = TasksTable
 	SubscriberEventsTable.ForeignKeys[0].RefTable = SubscribersTable
@@ -5705,8 +5780,6 @@ func init() {
 	UserEventsTable.ForeignKeys[1].RefTable = EventsTable
 	UserActionplansTable.ForeignKeys[0].RefTable = UsersTable
 	UserActionplansTable.ForeignKeys[1].RefTable = ActionPlansTable
-	UserSubcontrolsTable.ForeignKeys[0].RefTable = UsersTable
-	UserSubcontrolsTable.ForeignKeys[1].RefTable = SubcontrolsTable
 	UserSettingFilesTable.ForeignKeys[0].RefTable = UserSettingsTable
 	UserSettingFilesTable.ForeignKeys[1].RefTable = FilesTable
 	WebhookEventsTable.ForeignKeys[0].RefTable = WebhooksTable

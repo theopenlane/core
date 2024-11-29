@@ -11,11 +11,12 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/note"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // SubcontrolCreate is the builder for creating a Subcontrol entity.
@@ -126,6 +127,12 @@ func (sc *SubcontrolCreate) SetNillableMappingID(s *string) *SubcontrolCreate {
 // SetTags sets the "tags" field.
 func (sc *SubcontrolCreate) SetTags(s []string) *SubcontrolCreate {
 	sc.mutation.SetTags(s)
+	return sc
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (sc *SubcontrolCreate) SetOwnerID(s string) *SubcontrolCreate {
+	sc.mutation.SetOwnerID(s)
 	return sc
 }
 
@@ -351,6 +358,56 @@ func (sc *SubcontrolCreate) SetNillableID(s *string) *SubcontrolCreate {
 	return sc
 }
 
+// SetOwner sets the "owner" edge to the Organization entity.
+func (sc *SubcontrolCreate) SetOwner(o *Organization) *SubcontrolCreate {
+	return sc.SetOwnerID(o.ID)
+}
+
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (sc *SubcontrolCreate) AddBlockedGroupIDs(ids ...string) *SubcontrolCreate {
+	sc.mutation.AddBlockedGroupIDs(ids...)
+	return sc
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (sc *SubcontrolCreate) AddBlockedGroups(g ...*Group) *SubcontrolCreate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return sc.AddBlockedGroupIDs(ids...)
+}
+
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (sc *SubcontrolCreate) AddEditorIDs(ids ...string) *SubcontrolCreate {
+	sc.mutation.AddEditorIDs(ids...)
+	return sc
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (sc *SubcontrolCreate) AddEditors(g ...*Group) *SubcontrolCreate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return sc.AddEditorIDs(ids...)
+}
+
+// AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
+func (sc *SubcontrolCreate) AddViewerIDs(ids ...string) *SubcontrolCreate {
+	sc.mutation.AddViewerIDs(ids...)
+	return sc
+}
+
+// AddViewers adds the "viewers" edges to the Group entity.
+func (sc *SubcontrolCreate) AddViewers(g ...*Group) *SubcontrolCreate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return sc.AddViewerIDs(ids...)
+}
+
 // AddControlIDs adds the "control" edge to the Control entity by IDs.
 func (sc *SubcontrolCreate) AddControlIDs(ids ...string) *SubcontrolCreate {
 	sc.mutation.AddControlIDs(ids...)
@@ -364,21 +421,6 @@ func (sc *SubcontrolCreate) AddControl(c ...*Control) *SubcontrolCreate {
 		ids[i] = c[i].ID
 	}
 	return sc.AddControlIDs(ids...)
-}
-
-// AddUserIDs adds the "user" edge to the User entity by IDs.
-func (sc *SubcontrolCreate) AddUserIDs(ids ...string) *SubcontrolCreate {
-	sc.mutation.AddUserIDs(ids...)
-	return sc
-}
-
-// AddUser adds the "user" edges to the User entity.
-func (sc *SubcontrolCreate) AddUser(u ...*User) *SubcontrolCreate {
-	ids := make([]string, len(u))
-	for i := range u {
-		ids[i] = u[i].ID
-	}
-	return sc.AddUserIDs(ids...)
 }
 
 // AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
@@ -507,8 +549,24 @@ func (sc *SubcontrolCreate) check() error {
 	if _, ok := sc.mutation.MappingID(); !ok {
 		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "Subcontrol.mapping_id"`)}
 	}
+	if _, ok := sc.mutation.OwnerID(); !ok {
+		return &ValidationError{Name: "owner_id", err: errors.New(`generated: missing required field "Subcontrol.owner_id"`)}
+	}
+	if v, ok := sc.mutation.OwnerID(); ok {
+		if err := subcontrol.OwnerIDValidator(v); err != nil {
+			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Subcontrol.owner_id": %w`, err)}
+		}
+	}
 	if _, ok := sc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "Subcontrol.name"`)}
+	}
+	if v, ok := sc.mutation.Name(); ok {
+		if err := subcontrol.NameValidator(v); err != nil {
+			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Subcontrol.name": %w`, err)}
+		}
+	}
+	if len(sc.mutation.OwnerIDs()) == 0 {
+		return &ValidationError{Name: "owner", err: errors.New(`generated: missing required edge "Subcontrol.owner"`)}
 	}
 	return nil
 }
@@ -642,6 +700,75 @@ func (sc *SubcontrolCreate) createSpec() (*Subcontrol, *sqlgraph.CreateSpec) {
 		_spec.SetField(subcontrol.FieldDetails, field.TypeJSON, value)
 		_node.Details = value
 	}
+	if nodes := sc.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   subcontrol.OwnerTable,
+			Columns: []string{subcontrol.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = sc.schemaConfig.Subcontrol
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.OwnerID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := sc.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   subcontrol.BlockedGroupsTable,
+			Columns: subcontrol.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = sc.schemaConfig.SubcontrolBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := sc.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   subcontrol.EditorsTable,
+			Columns: subcontrol.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = sc.schemaConfig.SubcontrolEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := sc.mutation.ViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   subcontrol.ViewersTable,
+			Columns: subcontrol.ViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = sc.schemaConfig.SubcontrolViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := sc.mutation.ControlIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -654,23 +781,6 @@ func (sc *SubcontrolCreate) createSpec() (*Subcontrol, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = sc.schemaConfig.ControlSubcontrols
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := sc.mutation.UserIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   subcontrol.UserTable,
-			Columns: subcontrol.UserPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = sc.schemaConfig.UserSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

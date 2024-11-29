@@ -1,14 +1,20 @@
 package schema
 
 import (
+	"context"
+
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	emixin "github.com/theopenlane/entx/mixin"
+	"github.com/theopenlane/iam/entfga"
 
+	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/mixin"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
 
 // Subcontrol defines the file schema.
@@ -20,6 +26,7 @@ type Subcontrol struct {
 func (Subcontrol) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("name").
+			NotEmpty().
 			Comment("the name of the subcontrol"),
 		field.Text("description").
 			Optional().
@@ -74,8 +81,6 @@ func (Subcontrol) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("control", Control.Type).
 			Ref("subcontrols"),
-		edge.From("user", User.Type).
-			Ref("subcontrols"),
 		edge.To("tasks", Task.Type),
 		edge.From("notes", Note.Type).
 			Unique().
@@ -92,6 +97,15 @@ func (Subcontrol) Mixin() []ent.Mixin {
 		mixin.SoftDeleteMixin{},
 		emixin.IDMixin{},
 		emixin.TagMixin{},
+		// subcontrols can inherit permissions from the program
+		// and must be owned by an organization
+		NewObjectOwnedMixin(ObjectOwnedMixin{
+			FieldNames:            []string{"program_id"},
+			WithOrganizationOwner: true,
+			Ref:                   "subcontrols",
+		}),
+		// add groups permissions with viewer, editor, and blocked groups
+		NewGroupPermissionsMixin(true),
 	}
 }
 
@@ -101,5 +115,31 @@ func (Subcontrol) Annotations() []schema.Annotation {
 		entgql.RelayConnection(),
 		entgql.QueryField(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
+		entfga.Annotations{
+			ObjectType: "subcontrol", // check access to the risk for update/delete
+		},
+	}
+}
+
+// Policy of the Subcontrol
+func (Subcontrol) Policy() ent.Policy {
+	return privacy.Policy{
+		Mutation: privacy.MutationPolicy{
+			rule.CanCreateObjectsInProgram(), // if mutation contains program_id, check access
+			privacy.OnMutationOperation( // if there is no program_id, check access for create in org
+				rule.CanCreateObjectsInOrg(),
+				ent.OpCreate,
+			),
+			privacy.SubcontrolMutationRuleFunc(func(ctx context.Context, m *generated.SubcontrolMutation) error {
+				return m.CheckAccessForEdit(ctx) // check access for edit
+			}),
+			privacy.AlwaysDenyRule(),
+		},
+		Query: privacy.QueryPolicy{
+			privacy.SubcontrolQueryRuleFunc(func(ctx context.Context, q *generated.SubcontrolQuery) error {
+				return q.CheckAccess(ctx)
+			}),
+			privacy.AlwaysDenyRule(),
+		},
 	}
 }

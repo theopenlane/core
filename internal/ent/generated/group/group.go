@@ -89,6 +89,12 @@ const (
 	EdgeNarrativeEditors = "narrative_editors"
 	// EdgeNarrativeBlockedGroups holds the string denoting the narrative_blocked_groups edge name in mutations.
 	EdgeNarrativeBlockedGroups = "narrative_blocked_groups"
+	// EdgeSubcontrolViewers holds the string denoting the subcontrol_viewers edge name in mutations.
+	EdgeSubcontrolViewers = "subcontrol_viewers"
+	// EdgeSubcontrolEditors holds the string denoting the subcontrol_editors edge name in mutations.
+	EdgeSubcontrolEditors = "subcontrol_editors"
+	// EdgeSubcontrolBlockedGroups holds the string denoting the subcontrol_blocked_groups edge name in mutations.
+	EdgeSubcontrolBlockedGroups = "subcontrol_blocked_groups"
 	// EdgeMembers holds the string denoting the members edge name in mutations.
 	EdgeMembers = "members"
 	// Table holds the table name of the group in the database.
@@ -214,6 +220,21 @@ const (
 	// NarrativeBlockedGroupsInverseTable is the table name for the Narrative entity.
 	// It exists in this package in order to avoid circular dependency with the "narrative" package.
 	NarrativeBlockedGroupsInverseTable = "narratives"
+	// SubcontrolViewersTable is the table that holds the subcontrol_viewers relation/edge. The primary key declared below.
+	SubcontrolViewersTable = "subcontrol_viewers"
+	// SubcontrolViewersInverseTable is the table name for the Subcontrol entity.
+	// It exists in this package in order to avoid circular dependency with the "subcontrol" package.
+	SubcontrolViewersInverseTable = "subcontrols"
+	// SubcontrolEditorsTable is the table that holds the subcontrol_editors relation/edge. The primary key declared below.
+	SubcontrolEditorsTable = "subcontrol_editors"
+	// SubcontrolEditorsInverseTable is the table name for the Subcontrol entity.
+	// It exists in this package in order to avoid circular dependency with the "subcontrol" package.
+	SubcontrolEditorsInverseTable = "subcontrols"
+	// SubcontrolBlockedGroupsTable is the table that holds the subcontrol_blocked_groups relation/edge. The primary key declared below.
+	SubcontrolBlockedGroupsTable = "subcontrol_blocked_groups"
+	// SubcontrolBlockedGroupsInverseTable is the table name for the Subcontrol entity.
+	// It exists in this package in order to avoid circular dependency with the "subcontrol" package.
+	SubcontrolBlockedGroupsInverseTable = "subcontrols"
 	// MembersTable is the table that holds the members relation/edge.
 	MembersTable = "group_memberships"
 	// MembersInverseTable is the table name for the GroupMembership entity.
@@ -303,6 +324,15 @@ var (
 	// NarrativeBlockedGroupsPrimaryKey and NarrativeBlockedGroupsColumn2 are the table columns denoting the
 	// primary key for the narrative_blocked_groups relation (M2M).
 	NarrativeBlockedGroupsPrimaryKey = []string{"narrative_id", "group_id"}
+	// SubcontrolViewersPrimaryKey and SubcontrolViewersColumn2 are the table columns denoting the
+	// primary key for the subcontrol_viewers relation (M2M).
+	SubcontrolViewersPrimaryKey = []string{"subcontrol_id", "group_id"}
+	// SubcontrolEditorsPrimaryKey and SubcontrolEditorsColumn2 are the table columns denoting the
+	// primary key for the subcontrol_editors relation (M2M).
+	SubcontrolEditorsPrimaryKey = []string{"subcontrol_id", "group_id"}
+	// SubcontrolBlockedGroupsPrimaryKey and SubcontrolBlockedGroupsColumn2 are the table columns denoting the
+	// primary key for the subcontrol_blocked_groups relation (M2M).
+	SubcontrolBlockedGroupsPrimaryKey = []string{"subcontrol_id", "group_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -727,6 +757,48 @@ func ByNarrativeBlockedGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderO
 	}
 }
 
+// BySubcontrolViewersCount orders the results by subcontrol_viewers count.
+func BySubcontrolViewersCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newSubcontrolViewersStep(), opts...)
+	}
+}
+
+// BySubcontrolViewers orders the results by subcontrol_viewers terms.
+func BySubcontrolViewers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSubcontrolViewersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// BySubcontrolEditorsCount orders the results by subcontrol_editors count.
+func BySubcontrolEditorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newSubcontrolEditorsStep(), opts...)
+	}
+}
+
+// BySubcontrolEditors orders the results by subcontrol_editors terms.
+func BySubcontrolEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSubcontrolEditorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// BySubcontrolBlockedGroupsCount orders the results by subcontrol_blocked_groups count.
+func BySubcontrolBlockedGroupsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newSubcontrolBlockedGroupsStep(), opts...)
+	}
+}
+
+// BySubcontrolBlockedGroups orders the results by subcontrol_blocked_groups terms.
+func BySubcontrolBlockedGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSubcontrolBlockedGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByMembersCount orders the results by members count.
 func ByMembersCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -899,6 +971,27 @@ func newNarrativeBlockedGroupsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(NarrativeBlockedGroupsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, NarrativeBlockedGroupsTable, NarrativeBlockedGroupsPrimaryKey...),
+	)
+}
+func newSubcontrolViewersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SubcontrolViewersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, SubcontrolViewersTable, SubcontrolViewersPrimaryKey...),
+	)
+}
+func newSubcontrolEditorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SubcontrolEditorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, SubcontrolEditorsTable, SubcontrolEditorsPrimaryKey...),
+	)
+}
+func newSubcontrolBlockedGroupsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SubcontrolBlockedGroupsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, SubcontrolBlockedGroupsTable, SubcontrolBlockedGroupsPrimaryKey...),
 	)
 }
 func newMembersStep() *sqlgraph.Step {

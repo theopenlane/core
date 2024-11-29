@@ -174,11 +174,13 @@ const (
 	// ActionplansInverseTable is the table name for the ActionPlan entity.
 	// It exists in this package in order to avoid circular dependency with the "actionplan" package.
 	ActionplansInverseTable = "action_plans"
-	// SubcontrolsTable is the table that holds the subcontrols relation/edge. The primary key declared below.
-	SubcontrolsTable = "user_subcontrols"
+	// SubcontrolsTable is the table that holds the subcontrols relation/edge.
+	SubcontrolsTable = "subcontrols"
 	// SubcontrolsInverseTable is the table name for the Subcontrol entity.
 	// It exists in this package in order to avoid circular dependency with the "subcontrol" package.
 	SubcontrolsInverseTable = "subcontrols"
+	// SubcontrolsColumn is the table column denoting the subcontrols relation/edge.
+	SubcontrolsColumn = "user_subcontrols"
 	// AssignerTasksTable is the table that holds the assigner_tasks relation/edge.
 	AssignerTasksTable = "tasks"
 	// AssignerTasksInverseTable is the table name for the Task entity.
@@ -263,9 +265,6 @@ var (
 	// ActionplansPrimaryKey and ActionplansColumn2 are the table columns denoting the
 	// primary key for the actionplans relation (M2M).
 	ActionplansPrimaryKey = []string{"user_id", "action_plan_id"}
-	// SubcontrolsPrimaryKey and SubcontrolsColumn2 are the table columns denoting the
-	// primary key for the subcontrols relation (M2M).
-	SubcontrolsPrimaryKey = []string{"user_id", "subcontrol_id"}
 	// ProgramsPrimaryKey and ProgramsColumn2 are the table columns denoting the
 	// primary key for the programs relation (M2M).
 	ProgramsPrimaryKey = []string{"user_id", "program_id"}
@@ -791,7 +790,7 @@ func newSubcontrolsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(SubcontrolsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, SubcontrolsTable, SubcontrolsPrimaryKey...),
+		sqlgraph.Edge(sqlgraph.O2M, false, SubcontrolsTable, SubcontrolsColumn),
 	)
 }
 func newAssignerTasksStep() *sqlgraph.Step {

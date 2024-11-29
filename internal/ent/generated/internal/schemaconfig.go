@@ -150,6 +150,9 @@ type SchemaConfig struct {
 	StandardPrograms                 string // Standard-programs->Program table.
 	StandardHistory                  string // StandardHistory table.
 	Subcontrol                       string // Subcontrol table.
+	SubcontrolBlockedGroups          string // Subcontrol-blocked_groups->Group table.
+	SubcontrolEditors                string // Subcontrol-editors->Group table.
+	SubcontrolViewers                string // Subcontrol-viewers->Group table.
 	SubcontrolTasks                  string // Subcontrol-tasks->Task table.
 	SubcontrolHistory                string // SubcontrolHistory table.
 	Subscriber                       string // Subscriber table.
@@ -164,7 +167,6 @@ type SchemaConfig struct {
 	UserFiles                        string // User-files->File table.
 	UserEvents                       string // User-events->Event table.
 	UserActionplans                  string // User-actionplans->ActionPlan table.
-	UserSubcontrols                  string // User-subcontrols->Subcontrol table.
 	UserHistory                      string // UserHistory table.
 	UserSetting                      string // UserSetting table.
 	UserSettingFiles                 string // UserSetting-files->File table.

@@ -20,6 +20,7 @@ type Standard struct {
 func (Standard) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("name").
+			NotEmpty().
 			Comment("the name of the standard body, e.g. TSC, NIST, SOC, HITRUST, FedRamp, etc."),
 		field.Text("description").
 			Optional().

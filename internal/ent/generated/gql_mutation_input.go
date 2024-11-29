@@ -2906,6 +2906,9 @@ type CreateGroupInput struct {
 	NarrativeViewerIDs              []string
 	NarrativeEditorIDs              []string
 	NarrativeBlockedGroupIDs        []string
+	SubcontrolViewerIDs             []string
+	SubcontrolEditorIDs             []string
+	SubcontrolBlockedGroupIDs       []string
 }
 
 // Mutate applies the CreateGroupInput on the GroupMutation builder.
@@ -2992,6 +2995,15 @@ func (i *CreateGroupInput) Mutate(m *GroupMutation) {
 	}
 	if v := i.NarrativeBlockedGroupIDs; len(v) > 0 {
 		m.AddNarrativeBlockedGroupIDs(v...)
+	}
+	if v := i.SubcontrolViewerIDs; len(v) > 0 {
+		m.AddSubcontrolViewerIDs(v...)
+	}
+	if v := i.SubcontrolEditorIDs; len(v) > 0 {
+		m.AddSubcontrolEditorIDs(v...)
+	}
+	if v := i.SubcontrolBlockedGroupIDs; len(v) > 0 {
+		m.AddSubcontrolBlockedGroupIDs(v...)
 	}
 }
 
@@ -3080,6 +3092,15 @@ type UpdateGroupInput struct {
 	ClearNarrativeBlockedGroups           bool
 	AddNarrativeBlockedGroupIDs           []string
 	RemoveNarrativeBlockedGroupIDs        []string
+	ClearSubcontrolViewers                bool
+	AddSubcontrolViewerIDs                []string
+	RemoveSubcontrolViewerIDs             []string
+	ClearSubcontrolEditors                bool
+	AddSubcontrolEditorIDs                []string
+	RemoveSubcontrolEditorIDs             []string
+	ClearSubcontrolBlockedGroups          bool
+	AddSubcontrolBlockedGroupIDs          []string
+	RemoveSubcontrolBlockedGroupIDs       []string
 }
 
 // Mutate applies the UpdateGroupInput on the GroupMutation builder.
@@ -3314,6 +3335,33 @@ func (i *UpdateGroupInput) Mutate(m *GroupMutation) {
 	}
 	if v := i.RemoveNarrativeBlockedGroupIDs; len(v) > 0 {
 		m.RemoveNarrativeBlockedGroupIDs(v...)
+	}
+	if i.ClearSubcontrolViewers {
+		m.ClearSubcontrolViewers()
+	}
+	if v := i.AddSubcontrolViewerIDs; len(v) > 0 {
+		m.AddSubcontrolViewerIDs(v...)
+	}
+	if v := i.RemoveSubcontrolViewerIDs; len(v) > 0 {
+		m.RemoveSubcontrolViewerIDs(v...)
+	}
+	if i.ClearSubcontrolEditors {
+		m.ClearSubcontrolEditors()
+	}
+	if v := i.AddSubcontrolEditorIDs; len(v) > 0 {
+		m.AddSubcontrolEditorIDs(v...)
+	}
+	if v := i.RemoveSubcontrolEditorIDs; len(v) > 0 {
+		m.RemoveSubcontrolEditorIDs(v...)
+	}
+	if i.ClearSubcontrolBlockedGroups {
+		m.ClearSubcontrolBlockedGroups()
+	}
+	if v := i.AddSubcontrolBlockedGroupIDs; len(v) > 0 {
+		m.AddSubcontrolBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveSubcontrolBlockedGroupIDs; len(v) > 0 {
+		m.RemoveSubcontrolBlockedGroupIDs(v...)
 	}
 }
 
@@ -4895,6 +4943,7 @@ type CreateOrganizationInput struct {
 	RiskIDs                    []string
 	ControlobjectiveIDs        []string
 	NarrativeIDs               []string
+	SubcontrolIDs              []string
 }
 
 // Mutate applies the CreateOrganizationInput on the OrganizationMutation builder.
@@ -5011,6 +5060,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.NarrativeIDs; len(v) > 0 {
 		m.AddNarrativeIDs(v...)
 	}
+	if v := i.SubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateOrganizationInput on the OrganizationCreate builder.
@@ -5119,6 +5171,9 @@ type UpdateOrganizationInput struct {
 	ClearNarratives                  bool
 	AddNarrativeIDs                  []string
 	RemoveNarrativeIDs               []string
+	ClearSubcontrols                 bool
+	AddSubcontrolIDs                 []string
+	RemoveSubcontrolIDs              []string
 }
 
 // Mutate applies the UpdateOrganizationInput on the OrganizationMutation builder.
@@ -5416,6 +5471,15 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveNarrativeIDs; len(v) > 0 {
 		m.RemoveNarrativeIDs(v...)
+	}
+	if i.ClearSubcontrols {
+		m.ClearSubcontrols()
+	}
+	if v := i.AddSubcontrolIDs; len(v) > 0 {
+		m.AddSubcontrolIDs(v...)
+	}
+	if v := i.RemoveSubcontrolIDs; len(v) > 0 {
+		m.RemoveSubcontrolIDs(v...)
 	}
 }
 
@@ -7018,8 +7082,11 @@ type CreateSubcontrolInput struct {
 	ImplementationVerification     *string
 	ImplementationVerificationDate *time.Time
 	Details                        map[string]interface{}
+	OwnerID                        string
+	BlockedGroupIDs                []string
+	EditorIDs                      []string
+	ViewerIDs                      []string
 	ControlIDs                     []string
-	UserIDs                        []string
 	TaskIDs                        []string
 	NotesID                        *string
 	ProgramIDs                     []string
@@ -7076,11 +7143,18 @@ func (i *CreateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	if v := i.Details; v != nil {
 		m.SetDetails(v)
 	}
+	m.SetOwnerID(i.OwnerID)
+	if v := i.BlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.EditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.ViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
 	if v := i.ControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)
-	}
-	if v := i.UserIDs; len(v) > 0 {
-		m.AddUserIDs(v...)
 	}
 	if v := i.TaskIDs; len(v) > 0 {
 		m.AddTaskIDs(v...)
@@ -7135,12 +7209,19 @@ type UpdateSubcontrolInput struct {
 	ImplementationVerificationDate      *time.Time
 	ClearDetails                        bool
 	Details                             map[string]interface{}
+	OwnerID                             *string
+	ClearBlockedGroups                  bool
+	AddBlockedGroupIDs                  []string
+	RemoveBlockedGroupIDs               []string
+	ClearEditors                        bool
+	AddEditorIDs                        []string
+	RemoveEditorIDs                     []string
+	ClearViewers                        bool
+	AddViewerIDs                        []string
+	RemoveViewerIDs                     []string
 	ClearControl                        bool
 	AddControlIDs                       []string
 	RemoveControlIDs                    []string
-	ClearUser                           bool
-	AddUserIDs                          []string
-	RemoveUserIDs                       []string
 	ClearTasks                          bool
 	AddTaskIDs                          []string
 	RemoveTaskIDs                       []string
@@ -7255,6 +7336,36 @@ func (i *UpdateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	if v := i.Details; v != nil {
 		m.SetDetails(v)
 	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if i.ClearBlockedGroups {
+		m.ClearBlockedGroups()
+	}
+	if v := i.AddBlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
+		m.RemoveBlockedGroupIDs(v...)
+	}
+	if i.ClearEditors {
+		m.ClearEditors()
+	}
+	if v := i.AddEditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.RemoveEditorIDs; len(v) > 0 {
+		m.RemoveEditorIDs(v...)
+	}
+	if i.ClearViewers {
+		m.ClearViewers()
+	}
+	if v := i.AddViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
+	if v := i.RemoveViewerIDs; len(v) > 0 {
+		m.RemoveViewerIDs(v...)
+	}
 	if i.ClearControl {
 		m.ClearControl()
 	}
@@ -7263,15 +7374,6 @@ func (i *UpdateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	}
 	if v := i.RemoveControlIDs; len(v) > 0 {
 		m.RemoveControlIDs(v...)
-	}
-	if i.ClearUser {
-		m.ClearUser()
-	}
-	if v := i.AddUserIDs; len(v) > 0 {
-		m.AddUserIDs(v...)
-	}
-	if v := i.RemoveUserIDs; len(v) > 0 {
-		m.RemoveUserIDs(v...)
 	}
 	if i.ClearTasks {
 		m.ClearTasks()

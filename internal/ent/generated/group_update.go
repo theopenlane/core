@@ -26,6 +26,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 
@@ -575,6 +576,51 @@ func (gu *GroupUpdate) AddNarrativeBlockedGroups(n ...*Narrative) *GroupUpdate {
 	return gu.AddNarrativeBlockedGroupIDs(ids...)
 }
 
+// AddSubcontrolViewerIDs adds the "subcontrol_viewers" edge to the Subcontrol entity by IDs.
+func (gu *GroupUpdate) AddSubcontrolViewerIDs(ids ...string) *GroupUpdate {
+	gu.mutation.AddSubcontrolViewerIDs(ids...)
+	return gu
+}
+
+// AddSubcontrolViewers adds the "subcontrol_viewers" edges to the Subcontrol entity.
+func (gu *GroupUpdate) AddSubcontrolViewers(s ...*Subcontrol) *GroupUpdate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return gu.AddSubcontrolViewerIDs(ids...)
+}
+
+// AddSubcontrolEditorIDs adds the "subcontrol_editors" edge to the Subcontrol entity by IDs.
+func (gu *GroupUpdate) AddSubcontrolEditorIDs(ids ...string) *GroupUpdate {
+	gu.mutation.AddSubcontrolEditorIDs(ids...)
+	return gu
+}
+
+// AddSubcontrolEditors adds the "subcontrol_editors" edges to the Subcontrol entity.
+func (gu *GroupUpdate) AddSubcontrolEditors(s ...*Subcontrol) *GroupUpdate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return gu.AddSubcontrolEditorIDs(ids...)
+}
+
+// AddSubcontrolBlockedGroupIDs adds the "subcontrol_blocked_groups" edge to the Subcontrol entity by IDs.
+func (gu *GroupUpdate) AddSubcontrolBlockedGroupIDs(ids ...string) *GroupUpdate {
+	gu.mutation.AddSubcontrolBlockedGroupIDs(ids...)
+	return gu
+}
+
+// AddSubcontrolBlockedGroups adds the "subcontrol_blocked_groups" edges to the Subcontrol entity.
+func (gu *GroupUpdate) AddSubcontrolBlockedGroups(s ...*Subcontrol) *GroupUpdate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return gu.AddSubcontrolBlockedGroupIDs(ids...)
+}
+
 // AddMemberIDs adds the "members" edge to the GroupMembership entity by IDs.
 func (gu *GroupUpdate) AddMemberIDs(ids ...string) *GroupUpdate {
 	gu.mutation.AddMemberIDs(ids...)
@@ -1046,6 +1092,69 @@ func (gu *GroupUpdate) RemoveNarrativeBlockedGroups(n ...*Narrative) *GroupUpdat
 		ids[i] = n[i].ID
 	}
 	return gu.RemoveNarrativeBlockedGroupIDs(ids...)
+}
+
+// ClearSubcontrolViewers clears all "subcontrol_viewers" edges to the Subcontrol entity.
+func (gu *GroupUpdate) ClearSubcontrolViewers() *GroupUpdate {
+	gu.mutation.ClearSubcontrolViewers()
+	return gu
+}
+
+// RemoveSubcontrolViewerIDs removes the "subcontrol_viewers" edge to Subcontrol entities by IDs.
+func (gu *GroupUpdate) RemoveSubcontrolViewerIDs(ids ...string) *GroupUpdate {
+	gu.mutation.RemoveSubcontrolViewerIDs(ids...)
+	return gu
+}
+
+// RemoveSubcontrolViewers removes "subcontrol_viewers" edges to Subcontrol entities.
+func (gu *GroupUpdate) RemoveSubcontrolViewers(s ...*Subcontrol) *GroupUpdate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return gu.RemoveSubcontrolViewerIDs(ids...)
+}
+
+// ClearSubcontrolEditors clears all "subcontrol_editors" edges to the Subcontrol entity.
+func (gu *GroupUpdate) ClearSubcontrolEditors() *GroupUpdate {
+	gu.mutation.ClearSubcontrolEditors()
+	return gu
+}
+
+// RemoveSubcontrolEditorIDs removes the "subcontrol_editors" edge to Subcontrol entities by IDs.
+func (gu *GroupUpdate) RemoveSubcontrolEditorIDs(ids ...string) *GroupUpdate {
+	gu.mutation.RemoveSubcontrolEditorIDs(ids...)
+	return gu
+}
+
+// RemoveSubcontrolEditors removes "subcontrol_editors" edges to Subcontrol entities.
+func (gu *GroupUpdate) RemoveSubcontrolEditors(s ...*Subcontrol) *GroupUpdate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return gu.RemoveSubcontrolEditorIDs(ids...)
+}
+
+// ClearSubcontrolBlockedGroups clears all "subcontrol_blocked_groups" edges to the Subcontrol entity.
+func (gu *GroupUpdate) ClearSubcontrolBlockedGroups() *GroupUpdate {
+	gu.mutation.ClearSubcontrolBlockedGroups()
+	return gu
+}
+
+// RemoveSubcontrolBlockedGroupIDs removes the "subcontrol_blocked_groups" edge to Subcontrol entities by IDs.
+func (gu *GroupUpdate) RemoveSubcontrolBlockedGroupIDs(ids ...string) *GroupUpdate {
+	gu.mutation.RemoveSubcontrolBlockedGroupIDs(ids...)
+	return gu
+}
+
+// RemoveSubcontrolBlockedGroups removes "subcontrol_blocked_groups" edges to Subcontrol entities.
+func (gu *GroupUpdate) RemoveSubcontrolBlockedGroups(s ...*Subcontrol) *GroupUpdate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return gu.RemoveSubcontrolBlockedGroupIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the GroupMembership entity.
@@ -2308,6 +2417,150 @@ func (gu *GroupUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if gu.mutation.SubcontrolViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.SubcontrolViewersTable,
+			Columns: group.SubcontrolViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.SubcontrolViewers
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := gu.mutation.RemovedSubcontrolViewersIDs(); len(nodes) > 0 && !gu.mutation.SubcontrolViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.SubcontrolViewersTable,
+			Columns: group.SubcontrolViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.SubcontrolViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := gu.mutation.SubcontrolViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.SubcontrolViewersTable,
+			Columns: group.SubcontrolViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.SubcontrolViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if gu.mutation.SubcontrolEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.SubcontrolEditorsTable,
+			Columns: group.SubcontrolEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.SubcontrolEditors
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := gu.mutation.RemovedSubcontrolEditorsIDs(); len(nodes) > 0 && !gu.mutation.SubcontrolEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.SubcontrolEditorsTable,
+			Columns: group.SubcontrolEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.SubcontrolEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := gu.mutation.SubcontrolEditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.SubcontrolEditorsTable,
+			Columns: group.SubcontrolEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.SubcontrolEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if gu.mutation.SubcontrolBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.SubcontrolBlockedGroupsTable,
+			Columns: group.SubcontrolBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.SubcontrolBlockedGroups
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := gu.mutation.RemovedSubcontrolBlockedGroupsIDs(); len(nodes) > 0 && !gu.mutation.SubcontrolBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.SubcontrolBlockedGroupsTable,
+			Columns: group.SubcontrolBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.SubcontrolBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := gu.mutation.SubcontrolBlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.SubcontrolBlockedGroupsTable,
+			Columns: group.SubcontrolBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gu.schemaConfig.SubcontrolBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if gu.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -2909,6 +3162,51 @@ func (guo *GroupUpdateOne) AddNarrativeBlockedGroups(n ...*Narrative) *GroupUpda
 	return guo.AddNarrativeBlockedGroupIDs(ids...)
 }
 
+// AddSubcontrolViewerIDs adds the "subcontrol_viewers" edge to the Subcontrol entity by IDs.
+func (guo *GroupUpdateOne) AddSubcontrolViewerIDs(ids ...string) *GroupUpdateOne {
+	guo.mutation.AddSubcontrolViewerIDs(ids...)
+	return guo
+}
+
+// AddSubcontrolViewers adds the "subcontrol_viewers" edges to the Subcontrol entity.
+func (guo *GroupUpdateOne) AddSubcontrolViewers(s ...*Subcontrol) *GroupUpdateOne {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return guo.AddSubcontrolViewerIDs(ids...)
+}
+
+// AddSubcontrolEditorIDs adds the "subcontrol_editors" edge to the Subcontrol entity by IDs.
+func (guo *GroupUpdateOne) AddSubcontrolEditorIDs(ids ...string) *GroupUpdateOne {
+	guo.mutation.AddSubcontrolEditorIDs(ids...)
+	return guo
+}
+
+// AddSubcontrolEditors adds the "subcontrol_editors" edges to the Subcontrol entity.
+func (guo *GroupUpdateOne) AddSubcontrolEditors(s ...*Subcontrol) *GroupUpdateOne {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return guo.AddSubcontrolEditorIDs(ids...)
+}
+
+// AddSubcontrolBlockedGroupIDs adds the "subcontrol_blocked_groups" edge to the Subcontrol entity by IDs.
+func (guo *GroupUpdateOne) AddSubcontrolBlockedGroupIDs(ids ...string) *GroupUpdateOne {
+	guo.mutation.AddSubcontrolBlockedGroupIDs(ids...)
+	return guo
+}
+
+// AddSubcontrolBlockedGroups adds the "subcontrol_blocked_groups" edges to the Subcontrol entity.
+func (guo *GroupUpdateOne) AddSubcontrolBlockedGroups(s ...*Subcontrol) *GroupUpdateOne {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return guo.AddSubcontrolBlockedGroupIDs(ids...)
+}
+
 // AddMemberIDs adds the "members" edge to the GroupMembership entity by IDs.
 func (guo *GroupUpdateOne) AddMemberIDs(ids ...string) *GroupUpdateOne {
 	guo.mutation.AddMemberIDs(ids...)
@@ -3380,6 +3678,69 @@ func (guo *GroupUpdateOne) RemoveNarrativeBlockedGroups(n ...*Narrative) *GroupU
 		ids[i] = n[i].ID
 	}
 	return guo.RemoveNarrativeBlockedGroupIDs(ids...)
+}
+
+// ClearSubcontrolViewers clears all "subcontrol_viewers" edges to the Subcontrol entity.
+func (guo *GroupUpdateOne) ClearSubcontrolViewers() *GroupUpdateOne {
+	guo.mutation.ClearSubcontrolViewers()
+	return guo
+}
+
+// RemoveSubcontrolViewerIDs removes the "subcontrol_viewers" edge to Subcontrol entities by IDs.
+func (guo *GroupUpdateOne) RemoveSubcontrolViewerIDs(ids ...string) *GroupUpdateOne {
+	guo.mutation.RemoveSubcontrolViewerIDs(ids...)
+	return guo
+}
+
+// RemoveSubcontrolViewers removes "subcontrol_viewers" edges to Subcontrol entities.
+func (guo *GroupUpdateOne) RemoveSubcontrolViewers(s ...*Subcontrol) *GroupUpdateOne {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return guo.RemoveSubcontrolViewerIDs(ids...)
+}
+
+// ClearSubcontrolEditors clears all "subcontrol_editors" edges to the Subcontrol entity.
+func (guo *GroupUpdateOne) ClearSubcontrolEditors() *GroupUpdateOne {
+	guo.mutation.ClearSubcontrolEditors()
+	return guo
+}
+
+// RemoveSubcontrolEditorIDs removes the "subcontrol_editors" edge to Subcontrol entities by IDs.
+func (guo *GroupUpdateOne) RemoveSubcontrolEditorIDs(ids ...string) *GroupUpdateOne {
+	guo.mutation.RemoveSubcontrolEditorIDs(ids...)
+	return guo
+}
+
+// RemoveSubcontrolEditors removes "subcontrol_editors" edges to Subcontrol entities.
+func (guo *GroupUpdateOne) RemoveSubcontrolEditors(s ...*Subcontrol) *GroupUpdateOne {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return guo.RemoveSubcontrolEditorIDs(ids...)
+}
+
+// ClearSubcontrolBlockedGroups clears all "subcontrol_blocked_groups" edges to the Subcontrol entity.
+func (guo *GroupUpdateOne) ClearSubcontrolBlockedGroups() *GroupUpdateOne {
+	guo.mutation.ClearSubcontrolBlockedGroups()
+	return guo
+}
+
+// RemoveSubcontrolBlockedGroupIDs removes the "subcontrol_blocked_groups" edge to Subcontrol entities by IDs.
+func (guo *GroupUpdateOne) RemoveSubcontrolBlockedGroupIDs(ids ...string) *GroupUpdateOne {
+	guo.mutation.RemoveSubcontrolBlockedGroupIDs(ids...)
+	return guo
+}
+
+// RemoveSubcontrolBlockedGroups removes "subcontrol_blocked_groups" edges to Subcontrol entities.
+func (guo *GroupUpdateOne) RemoveSubcontrolBlockedGroups(s ...*Subcontrol) *GroupUpdateOne {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return guo.RemoveSubcontrolBlockedGroupIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the GroupMembership entity.
@@ -4667,6 +5028,150 @@ func (guo *GroupUpdateOne) sqlSave(ctx context.Context) (_node *Group, err error
 			},
 		}
 		edge.Schema = guo.schemaConfig.NarrativeBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if guo.mutation.SubcontrolViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.SubcontrolViewersTable,
+			Columns: group.SubcontrolViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.SubcontrolViewers
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := guo.mutation.RemovedSubcontrolViewersIDs(); len(nodes) > 0 && !guo.mutation.SubcontrolViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.SubcontrolViewersTable,
+			Columns: group.SubcontrolViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.SubcontrolViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := guo.mutation.SubcontrolViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.SubcontrolViewersTable,
+			Columns: group.SubcontrolViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.SubcontrolViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if guo.mutation.SubcontrolEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.SubcontrolEditorsTable,
+			Columns: group.SubcontrolEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.SubcontrolEditors
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := guo.mutation.RemovedSubcontrolEditorsIDs(); len(nodes) > 0 && !guo.mutation.SubcontrolEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.SubcontrolEditorsTable,
+			Columns: group.SubcontrolEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.SubcontrolEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := guo.mutation.SubcontrolEditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.SubcontrolEditorsTable,
+			Columns: group.SubcontrolEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.SubcontrolEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if guo.mutation.SubcontrolBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.SubcontrolBlockedGroupsTable,
+			Columns: group.SubcontrolBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.SubcontrolBlockedGroups
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := guo.mutation.RemovedSubcontrolBlockedGroupsIDs(); len(nodes) > 0 && !guo.mutation.SubcontrolBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.SubcontrolBlockedGroupsTable,
+			Columns: group.SubcontrolBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.SubcontrolBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := guo.mutation.SubcontrolBlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.SubcontrolBlockedGroupsTable,
+			Columns: group.SubcontrolBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = guo.schemaConfig.SubcontrolBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

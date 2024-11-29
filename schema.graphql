@@ -4312,6 +4312,9 @@ input CreateGroupInput {
 	narrativeViewerIDs: [ID!]
 	narrativeEditorIDs: [ID!]
 	narrativeBlockedGroupIDs: [ID!]
+	subcontrolViewerIDs: [ID!]
+	subcontrolEditorIDs: [ID!]
+	subcontrolBlockedGroupIDs: [ID!]
 	createGroupSettings: CreateGroupSettingInput
 }
 """
@@ -4682,6 +4685,7 @@ input CreateOrganizationInput {
 	riskIDs: [ID!]
 	controlobjectiveIDs: [ID!]
 	narrativeIDs: [ID!]
+	subcontrolIDs: [ID!]
 	createOrgSettings: CreateOrganizationSettingInput
 }
 """
@@ -5064,8 +5068,11 @@ input CreateSubcontrolInput {
 	json data details of the subcontrol
 	"""
 	details: Map
+	ownerID: ID!
+	blockedGroupIDs: [ID!]
+	editorIDs: [ID!]
+	viewerIDs: [ID!]
 	controlIDs: [ID!]
-	userIDs: [ID!]
 	taskIDs: [ID!]
 	notesID: ID
 	programIDs: [ID!]
@@ -11448,6 +11455,9 @@ type Group implements Node {
 	narrativeViewers: [Narrative!]
 	narrativeEditors: [Narrative!]
 	narrativeBlockedGroups: [Narrative!]
+	subcontrolViewers: [Subcontrol!]
+	subcontrolEditors: [Subcontrol!]
+	subcontrolBlockedGroups: [Subcontrol!]
 	members: [GroupMembership!]
 }
 """
@@ -13151,6 +13161,21 @@ input GroupWhereInput {
 	"""
 	hasNarrativeBlockedGroups: Boolean
 	hasNarrativeBlockedGroupsWith: [NarrativeWhereInput!]
+	"""
+	subcontrol_viewers edge predicates
+	"""
+	hasSubcontrolViewers: Boolean
+	hasSubcontrolViewersWith: [SubcontrolWhereInput!]
+	"""
+	subcontrol_editors edge predicates
+	"""
+	hasSubcontrolEditors: Boolean
+	hasSubcontrolEditorsWith: [SubcontrolWhereInput!]
+	"""
+	subcontrol_blocked_groups edge predicates
+	"""
+	hasSubcontrolBlockedGroups: Boolean
+	hasSubcontrolBlockedGroupsWith: [SubcontrolWhereInput!]
 	"""
 	members edge predicates
 	"""
@@ -20219,6 +20244,7 @@ type Organization implements Node {
 	risks: [Risk!]
 	controlobjectives: [ControlObjective!]
 	narratives: [Narrative!]
+	subcontrols: [Subcontrol!]
 	members: [OrgMembership!]
 }
 """
@@ -21728,6 +21754,11 @@ input OrganizationWhereInput {
 	"""
 	hasNarratives: Boolean
 	hasNarrativesWith: [NarrativeWhereInput!]
+	"""
+	subcontrols edge predicates
+	"""
+	hasSubcontrols: Boolean
+	hasSubcontrolsWith: [SubcontrolWhereInput!]
 	"""
 	members edge predicates
 	"""
@@ -29112,6 +29143,10 @@ type Subcontrol implements Node {
 	"""
 	tags: [String!]
 	"""
+	the ID of the organization owner of the object
+	"""
+	ownerID: ID!
+	"""
 	the name of the subcontrol
 	"""
 	name: String!
@@ -29175,8 +29210,20 @@ type Subcontrol implements Node {
 	json data details of the subcontrol
 	"""
 	details: Map
+	owner: Organization!
+	"""
+	groups that are blocked from viewing or editing the risk
+	"""
+	blockedGroups: [Group!]
+	"""
+	provides edit access to the risk to members of the group
+	"""
+	editors: [Group!]
+	"""
+	provides view access to the risk to members of the group
+	"""
+	viewers: [Group!]
 	control: [Control!]
-	user: [User!]
 	tasks: [Task!]
 	notes: Note
 	programs: [Program!]
@@ -29253,6 +29300,10 @@ type SubcontrolHistory implements Node {
 	tags associated with the object
 	"""
 	tags: [String!]
+	"""
+	the ID of the organization owner of the object
+	"""
+	ownerID: String!
 	"""
 	the name of the subcontrol
 	"""
@@ -29506,6 +29557,22 @@ input SubcontrolHistoryWhereInput {
 	deletedByNotNil: Boolean
 	deletedByEqualFold: String
 	deletedByContainsFold: String
+	"""
+	owner_id field predicates
+	"""
+	ownerID: String
+	ownerIDNEQ: String
+	ownerIDIn: [String!]
+	ownerIDNotIn: [String!]
+	ownerIDGT: String
+	ownerIDGTE: String
+	ownerIDLT: String
+	ownerIDLTE: String
+	ownerIDContains: String
+	ownerIDHasPrefix: String
+	ownerIDHasSuffix: String
+	ownerIDEqualFold: String
+	ownerIDContainsFold: String
 	"""
 	name field predicates
 	"""
@@ -29892,6 +29959,22 @@ input SubcontrolWhereInput {
 	deletedByEqualFold: String
 	deletedByContainsFold: String
 	"""
+	owner_id field predicates
+	"""
+	ownerID: ID
+	ownerIDNEQ: ID
+	ownerIDIn: [ID!]
+	ownerIDNotIn: [ID!]
+	ownerIDGT: ID
+	ownerIDGTE: ID
+	ownerIDLT: ID
+	ownerIDLTE: ID
+	ownerIDContains: ID
+	ownerIDHasPrefix: ID
+	ownerIDHasSuffix: ID
+	ownerIDEqualFold: ID
+	ownerIDContainsFold: ID
+	"""
 	name field predicates
 	"""
 	name: String
@@ -30150,15 +30233,30 @@ input SubcontrolWhereInput {
 	implementationVerificationDateIsNil: Boolean
 	implementationVerificationDateNotNil: Boolean
 	"""
+	owner edge predicates
+	"""
+	hasOwner: Boolean
+	hasOwnerWith: [OrganizationWhereInput!]
+	"""
+	blocked_groups edge predicates
+	"""
+	hasBlockedGroups: Boolean
+	hasBlockedGroupsWith: [GroupWhereInput!]
+	"""
+	editors edge predicates
+	"""
+	hasEditors: Boolean
+	hasEditorsWith: [GroupWhereInput!]
+	"""
+	viewers edge predicates
+	"""
+	hasViewers: Boolean
+	hasViewersWith: [GroupWhereInput!]
+	"""
 	control edge predicates
 	"""
 	hasControl: Boolean
 	hasControlWith: [ControlWhereInput!]
-	"""
-	user edge predicates
-	"""
-	hasUser: Boolean
-	hasUserWith: [UserWhereInput!]
 	"""
 	tasks edge predicates
 	"""
@@ -32898,6 +32996,15 @@ input UpdateGroupInput {
 	addNarrativeBlockedGroupIDs: [ID!]
 	removeNarrativeBlockedGroupIDs: [ID!]
 	clearNarrativeBlockedGroups: Boolean
+	addSubcontrolViewerIDs: [ID!]
+	removeSubcontrolViewerIDs: [ID!]
+	clearSubcontrolViewers: Boolean
+	addSubcontrolEditorIDs: [ID!]
+	removeSubcontrolEditorIDs: [ID!]
+	clearSubcontrolEditors: Boolean
+	addSubcontrolBlockedGroupIDs: [ID!]
+	removeSubcontrolBlockedGroupIDs: [ID!]
+	clearSubcontrolBlockedGroups: Boolean
 	addGroupMembers: [CreateGroupMembershipInput!]
 	updateGroupSettings: UpdateGroupSettingInput
 }
@@ -33407,6 +33514,9 @@ input UpdateOrganizationInput {
 	addNarrativeIDs: [ID!]
 	removeNarrativeIDs: [ID!]
 	clearNarratives: Boolean
+	addSubcontrolIDs: [ID!]
+	removeSubcontrolIDs: [ID!]
+	clearSubcontrols: Boolean
 	addOrgMembers: [CreateOrgMembershipInput!]
 	updateOrgSettings: UpdateOrganizationSettingInput
 }
@@ -33936,12 +34046,19 @@ input UpdateSubcontrolInput {
 	"""
 	details: Map
 	clearDetails: Boolean
+	ownerID: ID
+	addBlockedGroupIDs: [ID!]
+	removeBlockedGroupIDs: [ID!]
+	clearBlockedGroups: Boolean
+	addEditorIDs: [ID!]
+	removeEditorIDs: [ID!]
+	clearEditors: Boolean
+	addViewerIDs: [ID!]
+	removeViewerIDs: [ID!]
+	clearViewers: Boolean
 	addControlIDs: [ID!]
 	removeControlIDs: [ID!]
 	clearControl: Boolean
-	addUserIDs: [ID!]
-	removeUserIDs: [ID!]
-	clearUser: Boolean
 	addTaskIDs: [ID!]
 	removeTaskIDs: [ID!]
 	clearTasks: Boolean

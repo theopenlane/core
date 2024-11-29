@@ -1079,6 +1079,7 @@ func adminSearchSubcontrols(ctx context.Context, query string) ([]*generated.Sub
 				likeQuery := "%" + query + "%"
 				s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
 			},
+			subcontrol.OwnerIDContainsFold(query),                    // search by OwnerID
 			subcontrol.NameContainsFold(query),                       // search by Name
 			subcontrol.DescriptionContainsFold(query),                // search by Description
 			subcontrol.StatusContainsFold(query),                     // search by Status
@@ -1094,7 +1095,7 @@ func adminSearchSubcontrols(ctx context.Context, query string) ([]*generated.Sub
 			subcontrol.ImplementationVerificationContainsFold(query), // search by ImplementationVerification
 			func(s *sql.Selector) {
 				likeQuery := "%" + query + "%"
-				s.Where(sql.ExprP("(details)::text LIKE $17", likeQuery)) // search by Details
+				s.Where(sql.ExprP("(details)::text LIKE $18", likeQuery)) // search by Details
 			},
 		),
 	).All(ctx)

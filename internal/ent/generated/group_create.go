@@ -23,6 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 )
@@ -557,6 +558,51 @@ func (gc *GroupCreate) AddNarrativeBlockedGroups(n ...*Narrative) *GroupCreate {
 		ids[i] = n[i].ID
 	}
 	return gc.AddNarrativeBlockedGroupIDs(ids...)
+}
+
+// AddSubcontrolViewerIDs adds the "subcontrol_viewers" edge to the Subcontrol entity by IDs.
+func (gc *GroupCreate) AddSubcontrolViewerIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddSubcontrolViewerIDs(ids...)
+	return gc
+}
+
+// AddSubcontrolViewers adds the "subcontrol_viewers" edges to the Subcontrol entity.
+func (gc *GroupCreate) AddSubcontrolViewers(s ...*Subcontrol) *GroupCreate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return gc.AddSubcontrolViewerIDs(ids...)
+}
+
+// AddSubcontrolEditorIDs adds the "subcontrol_editors" edge to the Subcontrol entity by IDs.
+func (gc *GroupCreate) AddSubcontrolEditorIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddSubcontrolEditorIDs(ids...)
+	return gc
+}
+
+// AddSubcontrolEditors adds the "subcontrol_editors" edges to the Subcontrol entity.
+func (gc *GroupCreate) AddSubcontrolEditors(s ...*Subcontrol) *GroupCreate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return gc.AddSubcontrolEditorIDs(ids...)
+}
+
+// AddSubcontrolBlockedGroupIDs adds the "subcontrol_blocked_groups" edge to the Subcontrol entity by IDs.
+func (gc *GroupCreate) AddSubcontrolBlockedGroupIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddSubcontrolBlockedGroupIDs(ids...)
+	return gc
+}
+
+// AddSubcontrolBlockedGroups adds the "subcontrol_blocked_groups" edges to the Subcontrol entity.
+func (gc *GroupCreate) AddSubcontrolBlockedGroups(s ...*Subcontrol) *GroupCreate {
+	ids := make([]string, len(s))
+	for i := range s {
+		ids[i] = s[i].ID
+	}
+	return gc.AddSubcontrolBlockedGroupIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the GroupMembership entity by IDs.
@@ -1161,6 +1207,57 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = gc.schemaConfig.NarrativeBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.SubcontrolViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.SubcontrolViewersTable,
+			Columns: group.SubcontrolViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.SubcontrolViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.SubcontrolEditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.SubcontrolEditorsTable,
+			Columns: group.SubcontrolEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.SubcontrolEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.SubcontrolBlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.SubcontrolBlockedGroupsTable,
+			Columns: group.SubcontrolBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.SubcontrolBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
