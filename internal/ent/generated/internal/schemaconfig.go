@@ -14,6 +14,9 @@ type SchemaConfig struct {
 	ContactFiles                     string // Contact-files->File table.
 	ContactHistory                   string // ContactHistory table.
 	Control                          string // Control table.
+	ControlBlockedGroups             string // Control-blocked_groups->Group table.
+	ControlEditors                   string // Control-editors->Group table.
+	ControlViewers                   string // Control-viewers->Group table.
 	ControlProcedures                string // Control-procedures->Procedure table.
 	ControlSubcontrols               string // Control-subcontrols->Subcontrol table.
 	ControlNarratives                string // Control-narratives->Narrative table.

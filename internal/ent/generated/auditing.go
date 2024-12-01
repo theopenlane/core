@@ -246,6 +246,9 @@ func (ch *ControlHistory) changes(new *ControlHistory) []Change {
 	if !reflect.DeepEqual(ch.Tags, new.Tags) {
 		changes = append(changes, NewChange(controlhistory.FieldTags, ch.Tags, new.Tags))
 	}
+	if !reflect.DeepEqual(ch.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(controlhistory.FieldOwnerID, ch.OwnerID, new.OwnerID))
+	}
 	if !reflect.DeepEqual(ch.Name, new.Name) {
 		changes = append(changes, NewChange(controlhistory.FieldName, ch.Name, new.Name))
 	}

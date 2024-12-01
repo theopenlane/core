@@ -89,6 +89,12 @@ const (
 	EdgeNarrativeEditors = "narrative_editors"
 	// EdgeNarrativeBlockedGroups holds the string denoting the narrative_blocked_groups edge name in mutations.
 	EdgeNarrativeBlockedGroups = "narrative_blocked_groups"
+	// EdgeControlViewers holds the string denoting the control_viewers edge name in mutations.
+	EdgeControlViewers = "control_viewers"
+	// EdgeControlEditors holds the string denoting the control_editors edge name in mutations.
+	EdgeControlEditors = "control_editors"
+	// EdgeControlBlockedGroups holds the string denoting the control_blocked_groups edge name in mutations.
+	EdgeControlBlockedGroups = "control_blocked_groups"
 	// EdgeMembers holds the string denoting the members edge name in mutations.
 	EdgeMembers = "members"
 	// Table holds the table name of the group in the database.
@@ -214,6 +220,21 @@ const (
 	// NarrativeBlockedGroupsInverseTable is the table name for the Narrative entity.
 	// It exists in this package in order to avoid circular dependency with the "narrative" package.
 	NarrativeBlockedGroupsInverseTable = "narratives"
+	// ControlViewersTable is the table that holds the control_viewers relation/edge. The primary key declared below.
+	ControlViewersTable = "control_viewers"
+	// ControlViewersInverseTable is the table name for the Control entity.
+	// It exists in this package in order to avoid circular dependency with the "control" package.
+	ControlViewersInverseTable = "controls"
+	// ControlEditorsTable is the table that holds the control_editors relation/edge. The primary key declared below.
+	ControlEditorsTable = "control_editors"
+	// ControlEditorsInverseTable is the table name for the Control entity.
+	// It exists in this package in order to avoid circular dependency with the "control" package.
+	ControlEditorsInverseTable = "controls"
+	// ControlBlockedGroupsTable is the table that holds the control_blocked_groups relation/edge. The primary key declared below.
+	ControlBlockedGroupsTable = "control_blocked_groups"
+	// ControlBlockedGroupsInverseTable is the table name for the Control entity.
+	// It exists in this package in order to avoid circular dependency with the "control" package.
+	ControlBlockedGroupsInverseTable = "controls"
 	// MembersTable is the table that holds the members relation/edge.
 	MembersTable = "group_memberships"
 	// MembersInverseTable is the table name for the GroupMembership entity.
@@ -303,6 +324,15 @@ var (
 	// NarrativeBlockedGroupsPrimaryKey and NarrativeBlockedGroupsColumn2 are the table columns denoting the
 	// primary key for the narrative_blocked_groups relation (M2M).
 	NarrativeBlockedGroupsPrimaryKey = []string{"narrative_id", "group_id"}
+	// ControlViewersPrimaryKey and ControlViewersColumn2 are the table columns denoting the
+	// primary key for the control_viewers relation (M2M).
+	ControlViewersPrimaryKey = []string{"control_id", "group_id"}
+	// ControlEditorsPrimaryKey and ControlEditorsColumn2 are the table columns denoting the
+	// primary key for the control_editors relation (M2M).
+	ControlEditorsPrimaryKey = []string{"control_id", "group_id"}
+	// ControlBlockedGroupsPrimaryKey and ControlBlockedGroupsColumn2 are the table columns denoting the
+	// primary key for the control_blocked_groups relation (M2M).
+	ControlBlockedGroupsPrimaryKey = []string{"control_id", "group_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -727,6 +757,48 @@ func ByNarrativeBlockedGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderO
 	}
 }
 
+// ByControlViewersCount orders the results by control_viewers count.
+func ByControlViewersCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newControlViewersStep(), opts...)
+	}
+}
+
+// ByControlViewers orders the results by control_viewers terms.
+func ByControlViewers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newControlViewersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByControlEditorsCount orders the results by control_editors count.
+func ByControlEditorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newControlEditorsStep(), opts...)
+	}
+}
+
+// ByControlEditors orders the results by control_editors terms.
+func ByControlEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newControlEditorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByControlBlockedGroupsCount orders the results by control_blocked_groups count.
+func ByControlBlockedGroupsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newControlBlockedGroupsStep(), opts...)
+	}
+}
+
+// ByControlBlockedGroups orders the results by control_blocked_groups terms.
+func ByControlBlockedGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newControlBlockedGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByMembersCount orders the results by members count.
 func ByMembersCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -899,6 +971,27 @@ func newNarrativeBlockedGroupsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(NarrativeBlockedGroupsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, NarrativeBlockedGroupsTable, NarrativeBlockedGroupsPrimaryKey...),
+	)
+}
+func newControlViewersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ControlViewersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ControlViewersTable, ControlViewersPrimaryKey...),
+	)
+}
+func newControlEditorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ControlEditorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ControlEditorsTable, ControlEditorsPrimaryKey...),
+	)
+}
+func newControlBlockedGroupsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ControlBlockedGroupsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ControlBlockedGroupsTable, ControlBlockedGroupsPrimaryKey...),
 	)
 }
 func newMembersStep() *sqlgraph.Step {

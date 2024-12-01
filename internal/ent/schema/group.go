@@ -126,6 +126,12 @@ func (Group) Edges() []ent.Edge {
 			Ref("editors"),
 		edge.From("narrative_blocked_groups", Narrative.Type).
 			Ref("blocked_groups"),
+		edge.From("control_viewers", Control.Type).
+			Ref("viewers"),
+		edge.From("control_editors", Control.Type).
+			Ref("editors"),
+		edge.From("control_blocked_groups", Control.Type).
+			Ref("blocked_groups"),
 	}
 }
 

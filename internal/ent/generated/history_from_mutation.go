@@ -590,6 +590,10 @@ func (m *ControlMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetTags(tags)
 	}
 
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
 	if name, exists := m.Name(); exists {
 		create = create.SetName(name)
 	}
@@ -716,6 +720,12 @@ func (m *ControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetTags(control.Tags)
 		}
 
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(control.OwnerID)
+		}
+
 		if name, exists := m.Name(); exists {
 			create = create.SetName(name)
 		} else {
@@ -828,6 +838,7 @@ func (m *ControlMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDeletedBy(control.DeletedBy).
 			SetMappingID(control.MappingID).
 			SetTags(control.Tags).
+			SetOwnerID(control.OwnerID).
 			SetName(control.Name).
 			SetDescription(control.Description).
 			SetStatus(control.Status).

@@ -361,18 +361,47 @@ func init() {
 	// contacthistory.DefaultID holds the default value on creation for the id field.
 	contacthistory.DefaultID = contacthistoryDescID.Default.(func() string)
 	controlMixin := schema.Control{}.Mixin()
+	control.Policy = privacy.NewPolicies(schema.Control{})
+	control.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := control.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
 	controlMixinHooks0 := controlMixin[0].Hooks()
 	controlMixinHooks1 := controlMixin[1].Hooks()
-	control.Hooks[0] = controlMixinHooks0[0]
-	control.Hooks[1] = controlMixinHooks1[0]
+	controlMixinHooks4 := controlMixin[4].Hooks()
+	controlMixinHooks5 := controlMixin[5].Hooks()
+
+	control.Hooks[1] = controlMixinHooks0[0]
+
+	control.Hooks[2] = controlMixinHooks1[0]
+
+	control.Hooks[3] = controlMixinHooks4[0]
+
+	control.Hooks[4] = controlMixinHooks4[1]
+
+	control.Hooks[5] = controlMixinHooks4[2]
+
+	control.Hooks[6] = controlMixinHooks5[0]
+
+	control.Hooks[7] = controlMixinHooks5[1]
+
+	control.Hooks[8] = controlMixinHooks5[2]
 	controlMixinInters1 := controlMixin[1].Interceptors()
+	controlMixinInters4 := controlMixin[4].Interceptors()
 	control.Interceptors[0] = controlMixinInters1[0]
+	control.Interceptors[1] = controlMixinInters4[0]
 	controlMixinFields0 := controlMixin[0].Fields()
 	_ = controlMixinFields0
 	controlMixinFields2 := controlMixin[2].Fields()
 	_ = controlMixinFields2
 	controlMixinFields3 := controlMixin[3].Fields()
 	_ = controlMixinFields3
+	controlMixinFields4 := controlMixin[4].Fields()
+	_ = controlMixinFields4
 	controlFields := schema.Control{}.Fields()
 	_ = controlFields
 	// controlDescCreatedAt is the schema descriptor for created_at field.
@@ -393,10 +422,29 @@ func init() {
 	controlDescTags := controlMixinFields3[0].Descriptor()
 	// control.DefaultTags holds the default value on creation for the tags field.
 	control.DefaultTags = controlDescTags.Default.([]string)
+	// controlDescOwnerID is the schema descriptor for owner_id field.
+	controlDescOwnerID := controlMixinFields4[0].Descriptor()
+	// control.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	control.OwnerIDValidator = controlDescOwnerID.Validators[0].(func(string) error)
+	// controlDescName is the schema descriptor for name field.
+	controlDescName := controlFields[0].Descriptor()
+	// control.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	control.NameValidator = controlDescName.Validators[0].(func(string) error)
 	// controlDescID is the schema descriptor for id field.
 	controlDescID := controlMixinFields2[0].Descriptor()
 	// control.DefaultID holds the default value on creation for the id field.
 	control.DefaultID = controlDescID.Default.(func() string)
+	controlhistory.Policy = privacy.NewPolicies(schema.ControlHistory{})
+	controlhistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := controlhistory.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	controlhistoryInters := schema.ControlHistory{}.Interceptors()
+	controlhistory.Interceptors[0] = controlhistoryInters[0]
 	controlhistoryFields := schema.ControlHistory{}.Fields()
 	_ = controlhistoryFields
 	// controlhistoryDescHistoryTime is the schema descriptor for history_time field.
