@@ -122,6 +122,20 @@ func (chu *ControlHistoryUpdate) ClearTags() *ControlHistoryUpdate {
 	return chu
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (chu *ControlHistoryUpdate) SetOwnerID(s string) *ControlHistoryUpdate {
+	chu.mutation.SetOwnerID(s)
+	return chu
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (chu *ControlHistoryUpdate) SetNillableOwnerID(s *string) *ControlHistoryUpdate {
+	if s != nil {
+		chu.SetOwnerID(*s)
+	}
+	return chu
+}
+
 // SetName sets the "name" field.
 func (chu *ControlHistoryUpdate) SetName(s string) *ControlHistoryUpdate {
 	chu.mutation.SetName(s)
@@ -355,7 +369,9 @@ func (chu *ControlHistoryUpdate) Mutation() *ControlHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (chu *ControlHistoryUpdate) Save(ctx context.Context) (int, error) {
-	chu.defaults()
+	if err := chu.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, chu.sqlSave, chu.mutation, chu.hooks)
 }
 
@@ -382,11 +398,15 @@ func (chu *ControlHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (chu *ControlHistoryUpdate) defaults() {
+func (chu *ControlHistoryUpdate) defaults() error {
 	if _, ok := chu.mutation.UpdatedAt(); !ok && !chu.mutation.UpdatedAtCleared() {
+		if controlhistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized controlhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := controlhistory.UpdateDefaultUpdatedAt()
 		chu.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
@@ -447,6 +467,9 @@ func (chu *ControlHistoryUpdate) sqlSave(ctx context.Context) (n int, err error)
 	}
 	if chu.mutation.TagsCleared() {
 		_spec.ClearField(controlhistory.FieldTags, field.TypeJSON)
+	}
+	if value, ok := chu.mutation.OwnerID(); ok {
+		_spec.SetField(controlhistory.FieldOwnerID, field.TypeString, value)
 	}
 	if value, ok := chu.mutation.Name(); ok {
 		_spec.SetField(controlhistory.FieldName, field.TypeString, value)
@@ -628,6 +651,20 @@ func (chuo *ControlHistoryUpdateOne) AppendTags(s []string) *ControlHistoryUpdat
 // ClearTags clears the value of the "tags" field.
 func (chuo *ControlHistoryUpdateOne) ClearTags() *ControlHistoryUpdateOne {
 	chuo.mutation.ClearTags()
+	return chuo
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (chuo *ControlHistoryUpdateOne) SetOwnerID(s string) *ControlHistoryUpdateOne {
+	chuo.mutation.SetOwnerID(s)
+	return chuo
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (chuo *ControlHistoryUpdateOne) SetNillableOwnerID(s *string) *ControlHistoryUpdateOne {
+	if s != nil {
+		chuo.SetOwnerID(*s)
+	}
 	return chuo
 }
 
@@ -877,7 +914,9 @@ func (chuo *ControlHistoryUpdateOne) Select(field string, fields ...string) *Con
 
 // Save executes the query and returns the updated ControlHistory entity.
 func (chuo *ControlHistoryUpdateOne) Save(ctx context.Context) (*ControlHistory, error) {
-	chuo.defaults()
+	if err := chuo.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, chuo.sqlSave, chuo.mutation, chuo.hooks)
 }
 
@@ -904,11 +943,15 @@ func (chuo *ControlHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (chuo *ControlHistoryUpdateOne) defaults() {
+func (chuo *ControlHistoryUpdateOne) defaults() error {
 	if _, ok := chuo.mutation.UpdatedAt(); !ok && !chuo.mutation.UpdatedAtCleared() {
+		if controlhistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized controlhistory.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := controlhistory.UpdateDefaultUpdatedAt()
 		chuo.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
@@ -986,6 +1029,9 @@ func (chuo *ControlHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Contro
 	}
 	if chuo.mutation.TagsCleared() {
 		_spec.ClearField(controlhistory.FieldTags, field.TypeJSON)
+	}
+	if value, ok := chuo.mutation.OwnerID(); ok {
+		_spec.SetField(controlhistory.FieldOwnerID, field.TypeString, value)
 	}
 	if value, ok := chuo.mutation.Name(); ok {
 		_spec.SetField(controlhistory.FieldName, field.TypeString, value)

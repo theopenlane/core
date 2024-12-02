@@ -1,14 +1,20 @@
 package schema
 
 import (
+	"context"
+
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	emixin "github.com/theopenlane/entx/mixin"
+	"github.com/theopenlane/iam/entfga"
 
+	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/mixin"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
 
 // Control defines the control schema.
@@ -20,6 +26,7 @@ type Control struct {
 func (Control) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("name").
+			NotEmpty().
 			Comment("the name of the control"),
 		field.Text("description").
 			Optional().
@@ -81,6 +88,15 @@ func (Control) Mixin() []ent.Mixin {
 		mixin.SoftDeleteMixin{},
 		emixin.IDMixin{},
 		emixin.TagMixin{},
+		// controls must be associated with an organization but do not inherit permissions from the organization
+		// controls can inherit permissions from the associated programs
+		NewObjectOwnedMixin(ObjectOwnedMixin{
+			FieldNames:            []string{"program_id"},
+			WithOrganizationOwner: true,
+			Ref:                   "controls",
+		}),
+		// add groups permissions with viewer, editor, and blocked groups
+		NewGroupPermissionsMixin(true),
 	}
 }
 
@@ -90,5 +106,31 @@ func (Control) Annotations() []schema.Annotation {
 		entgql.RelayConnection(),
 		entgql.QueryField(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
+		entfga.Annotations{
+			ObjectType: "control", // check access to the control for update/delete
+		},
+	}
+}
+
+// Policy of the Control
+func (Control) Policy() ent.Policy {
+	return privacy.Policy{
+		Mutation: privacy.MutationPolicy{
+			rule.CanCreateObjectsInProgram(), // if mutation contains program_id, check access
+			privacy.OnMutationOperation( // if there is no program_id, check access for create in org
+				rule.CanCreateObjectsInOrg(), // TODO (sfunk): update to allow create access based on groups
+				ent.OpCreate,
+			),
+			privacy.ControlMutationRuleFunc(func(ctx context.Context, m *generated.ControlMutation) error {
+				return m.CheckAccessForEdit(ctx) // check access for edit
+			}),
+			privacy.AlwaysDenyRule(),
+		},
+		Query: privacy.QueryPolicy{
+			privacy.ControlQueryRuleFunc(func(ctx context.Context, q *generated.ControlQuery) error {
+				return q.CheckAccess(ctx)
+			}),
+			privacy.AlwaysDenyRule(),
+		},
 	}
 }

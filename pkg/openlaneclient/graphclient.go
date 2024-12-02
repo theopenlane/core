@@ -1647,6 +1647,7 @@ type AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls struct {
 	DeletedBy        *string                "json:\"deletedBy,omitempty\" graphql:\"deletedBy\""
 	ID               string                 "json:\"id\" graphql:\"id\""
 	Tags             []string               "json:\"tags,omitempty\" graphql:\"tags\""
+	OwnerID          string                 "json:\"ownerID\" graphql:\"ownerID\""
 	Name             string                 "json:\"name\" graphql:\"name\""
 	Description      *string                "json:\"description,omitempty\" graphql:\"description\""
 	Status           *string                "json:\"status,omitempty\" graphql:\"status\""
@@ -1678,6 +1679,12 @@ func (t *AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls) GetTags() [
 		t = &AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls{}
 	}
 	return t.Tags
+}
+func (t *AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls) GetOwnerID() string {
+	if t == nil {
+		t = &AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls{}
+	}
+	return t.OwnerID
 }
 func (t *AdminSearch_AdminSearch_Nodes_ControlSearchResult_Controls) GetName() string {
 	if t == nil {
@@ -6334,25 +6341,101 @@ func (t *CreateBulkControl_CreateBulkControl) GetControls() []*CreateBulkControl
 	return t.Controls
 }
 
+type CreateControl_CreateControl_Control_Programs struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateControl_CreateControl_Control_Programs) GetID() string {
+	if t == nil {
+		t = &CreateControl_CreateControl_Control_Programs{}
+	}
+	return t.ID
+}
+func (t *CreateControl_CreateControl_Control_Programs) GetName() string {
+	if t == nil {
+		t = &CreateControl_CreateControl_Control_Programs{}
+	}
+	return t.Name
+}
+
+type CreateControl_CreateControl_Control_Editors struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateControl_CreateControl_Control_Editors) GetID() string {
+	if t == nil {
+		t = &CreateControl_CreateControl_Control_Editors{}
+	}
+	return t.ID
+}
+func (t *CreateControl_CreateControl_Control_Editors) GetName() string {
+	if t == nil {
+		t = &CreateControl_CreateControl_Control_Editors{}
+	}
+	return t.Name
+}
+
+type CreateControl_CreateControl_Control_Viewers struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateControl_CreateControl_Control_Viewers) GetID() string {
+	if t == nil {
+		t = &CreateControl_CreateControl_Control_Viewers{}
+	}
+	return t.ID
+}
+func (t *CreateControl_CreateControl_Control_Viewers) GetName() string {
+	if t == nil {
+		t = &CreateControl_CreateControl_Control_Viewers{}
+	}
+	return t.Name
+}
+
+type CreateControl_CreateControl_Control_BlockedGroups struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateControl_CreateControl_Control_BlockedGroups) GetID() string {
+	if t == nil {
+		t = &CreateControl_CreateControl_Control_BlockedGroups{}
+	}
+	return t.ID
+}
+func (t *CreateControl_CreateControl_Control_BlockedGroups) GetName() string {
+	if t == nil {
+		t = &CreateControl_CreateControl_Control_BlockedGroups{}
+	}
+	return t.Name
+}
+
 type CreateControl_CreateControl_Control struct {
-	Class            *string                "json:\"class,omitempty\" graphql:\"class\""
-	ControlNumber    *string                "json:\"controlNumber,omitempty\" graphql:\"controlNumber\""
-	ControlType      *string                "json:\"controlType,omitempty\" graphql:\"controlType\""
-	CreatedAt        *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy        *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description      *string                "json:\"description,omitempty\" graphql:\"description\""
-	Details          map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
-	Family           *string                "json:\"family,omitempty\" graphql:\"family\""
-	ID               string                 "json:\"id\" graphql:\"id\""
-	MappedFrameworks *string                "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
-	Name             string                 "json:\"name\" graphql:\"name\""
-	Satisfies        *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Source           *string                "json:\"source,omitempty\" graphql:\"source\""
-	Status           *string                "json:\"status,omitempty\" graphql:\"status\""
-	Tags             []string               "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt        *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy        *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version          *string                "json:\"version,omitempty\" graphql:\"version\""
+	Class            *string                                              "json:\"class,omitempty\" graphql:\"class\""
+	ControlNumber    *string                                              "json:\"controlNumber,omitempty\" graphql:\"controlNumber\""
+	ControlType      *string                                              "json:\"controlType,omitempty\" graphql:\"controlType\""
+	CreatedAt        *time.Time                                           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string                                              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description      *string                                              "json:\"description,omitempty\" graphql:\"description\""
+	Details          map[string]interface{}                               "json:\"details,omitempty\" graphql:\"details\""
+	Family           *string                                              "json:\"family,omitempty\" graphql:\"family\""
+	ID               string                                               "json:\"id\" graphql:\"id\""
+	MappedFrameworks *string                                              "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
+	Name             string                                               "json:\"name\" graphql:\"name\""
+	Satisfies        *string                                              "json:\"satisfies,omitempty\" graphql:\"satisfies\""
+	Source           *string                                              "json:\"source,omitempty\" graphql:\"source\""
+	Status           *string                                              "json:\"status,omitempty\" graphql:\"status\""
+	Tags             []string                                             "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt        *time.Time                                           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string                                              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Version          *string                                              "json:\"version,omitempty\" graphql:\"version\""
+	Programs         []*CreateControl_CreateControl_Control_Programs      "json:\"programs,omitempty\" graphql:\"programs\""
+	Editors          []*CreateControl_CreateControl_Control_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
+	Viewers          []*CreateControl_CreateControl_Control_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
+	BlockedGroups    []*CreateControl_CreateControl_Control_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 }
 
 func (t *CreateControl_CreateControl_Control) GetClass() *string {
@@ -6463,6 +6546,30 @@ func (t *CreateControl_CreateControl_Control) GetVersion() *string {
 	}
 	return t.Version
 }
+func (t *CreateControl_CreateControl_Control) GetPrograms() []*CreateControl_CreateControl_Control_Programs {
+	if t == nil {
+		t = &CreateControl_CreateControl_Control{}
+	}
+	return t.Programs
+}
+func (t *CreateControl_CreateControl_Control) GetEditors() []*CreateControl_CreateControl_Control_Editors {
+	if t == nil {
+		t = &CreateControl_CreateControl_Control{}
+	}
+	return t.Editors
+}
+func (t *CreateControl_CreateControl_Control) GetViewers() []*CreateControl_CreateControl_Control_Viewers {
+	if t == nil {
+		t = &CreateControl_CreateControl_Control{}
+	}
+	return t.Viewers
+}
+func (t *CreateControl_CreateControl_Control) GetBlockedGroups() []*CreateControl_CreateControl_Control_BlockedGroups {
+	if t == nil {
+		t = &CreateControl_CreateControl_Control{}
+	}
+	return t.BlockedGroups
+}
 
 type CreateControl_CreateControl struct {
 	Control CreateControl_CreateControl_Control "json:\"control\" graphql:\"control\""
@@ -6486,25 +6593,101 @@ func (t *DeleteControl_DeleteControl) GetDeletedID() string {
 	return t.DeletedID
 }
 
+type GetAllControls_Controls_Edges_Node_Programs struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetAllControls_Controls_Edges_Node_Programs) GetID() string {
+	if t == nil {
+		t = &GetAllControls_Controls_Edges_Node_Programs{}
+	}
+	return t.ID
+}
+func (t *GetAllControls_Controls_Edges_Node_Programs) GetName() string {
+	if t == nil {
+		t = &GetAllControls_Controls_Edges_Node_Programs{}
+	}
+	return t.Name
+}
+
+type GetAllControls_Controls_Edges_Node_Editors struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetAllControls_Controls_Edges_Node_Editors) GetID() string {
+	if t == nil {
+		t = &GetAllControls_Controls_Edges_Node_Editors{}
+	}
+	return t.ID
+}
+func (t *GetAllControls_Controls_Edges_Node_Editors) GetName() string {
+	if t == nil {
+		t = &GetAllControls_Controls_Edges_Node_Editors{}
+	}
+	return t.Name
+}
+
+type GetAllControls_Controls_Edges_Node_Viewers struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetAllControls_Controls_Edges_Node_Viewers) GetID() string {
+	if t == nil {
+		t = &GetAllControls_Controls_Edges_Node_Viewers{}
+	}
+	return t.ID
+}
+func (t *GetAllControls_Controls_Edges_Node_Viewers) GetName() string {
+	if t == nil {
+		t = &GetAllControls_Controls_Edges_Node_Viewers{}
+	}
+	return t.Name
+}
+
+type GetAllControls_Controls_Edges_Node_BlockedGroups struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetAllControls_Controls_Edges_Node_BlockedGroups) GetID() string {
+	if t == nil {
+		t = &GetAllControls_Controls_Edges_Node_BlockedGroups{}
+	}
+	return t.ID
+}
+func (t *GetAllControls_Controls_Edges_Node_BlockedGroups) GetName() string {
+	if t == nil {
+		t = &GetAllControls_Controls_Edges_Node_BlockedGroups{}
+	}
+	return t.Name
+}
+
 type GetAllControls_Controls_Edges_Node struct {
-	Class            *string                "json:\"class,omitempty\" graphql:\"class\""
-	ControlNumber    *string                "json:\"controlNumber,omitempty\" graphql:\"controlNumber\""
-	ControlType      *string                "json:\"controlType,omitempty\" graphql:\"controlType\""
-	CreatedAt        *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy        *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description      *string                "json:\"description,omitempty\" graphql:\"description\""
-	Details          map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
-	Family           *string                "json:\"family,omitempty\" graphql:\"family\""
-	ID               string                 "json:\"id\" graphql:\"id\""
-	MappedFrameworks *string                "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
-	Name             string                 "json:\"name\" graphql:\"name\""
-	Satisfies        *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Source           *string                "json:\"source,omitempty\" graphql:\"source\""
-	Status           *string                "json:\"status,omitempty\" graphql:\"status\""
-	Tags             []string               "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt        *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy        *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version          *string                "json:\"version,omitempty\" graphql:\"version\""
+	Class            *string                                             "json:\"class,omitempty\" graphql:\"class\""
+	ControlNumber    *string                                             "json:\"controlNumber,omitempty\" graphql:\"controlNumber\""
+	ControlType      *string                                             "json:\"controlType,omitempty\" graphql:\"controlType\""
+	CreatedAt        *time.Time                                          "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string                                             "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description      *string                                             "json:\"description,omitempty\" graphql:\"description\""
+	Details          map[string]interface{}                              "json:\"details,omitempty\" graphql:\"details\""
+	Family           *string                                             "json:\"family,omitempty\" graphql:\"family\""
+	ID               string                                              "json:\"id\" graphql:\"id\""
+	MappedFrameworks *string                                             "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
+	Name             string                                              "json:\"name\" graphql:\"name\""
+	Satisfies        *string                                             "json:\"satisfies,omitempty\" graphql:\"satisfies\""
+	Source           *string                                             "json:\"source,omitempty\" graphql:\"source\""
+	Status           *string                                             "json:\"status,omitempty\" graphql:\"status\""
+	Tags             []string                                            "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt        *time.Time                                          "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string                                             "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Version          *string                                             "json:\"version,omitempty\" graphql:\"version\""
+	Programs         []*GetAllControls_Controls_Edges_Node_Programs      "json:\"programs,omitempty\" graphql:\"programs\""
+	Editors          []*GetAllControls_Controls_Edges_Node_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
+	Viewers          []*GetAllControls_Controls_Edges_Node_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
+	BlockedGroups    []*GetAllControls_Controls_Edges_Node_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 }
 
 func (t *GetAllControls_Controls_Edges_Node) GetClass() *string {
@@ -6615,6 +6798,30 @@ func (t *GetAllControls_Controls_Edges_Node) GetVersion() *string {
 	}
 	return t.Version
 }
+func (t *GetAllControls_Controls_Edges_Node) GetPrograms() []*GetAllControls_Controls_Edges_Node_Programs {
+	if t == nil {
+		t = &GetAllControls_Controls_Edges_Node{}
+	}
+	return t.Programs
+}
+func (t *GetAllControls_Controls_Edges_Node) GetEditors() []*GetAllControls_Controls_Edges_Node_Editors {
+	if t == nil {
+		t = &GetAllControls_Controls_Edges_Node{}
+	}
+	return t.Editors
+}
+func (t *GetAllControls_Controls_Edges_Node) GetViewers() []*GetAllControls_Controls_Edges_Node_Viewers {
+	if t == nil {
+		t = &GetAllControls_Controls_Edges_Node{}
+	}
+	return t.Viewers
+}
+func (t *GetAllControls_Controls_Edges_Node) GetBlockedGroups() []*GetAllControls_Controls_Edges_Node_BlockedGroups {
+	if t == nil {
+		t = &GetAllControls_Controls_Edges_Node{}
+	}
+	return t.BlockedGroups
+}
 
 type GetAllControls_Controls_Edges struct {
 	Node *GetAllControls_Controls_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
@@ -6638,25 +6845,101 @@ func (t *GetAllControls_Controls) GetEdges() []*GetAllControls_Controls_Edges {
 	return t.Edges
 }
 
+type GetControlByID_Control_Programs struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetControlByID_Control_Programs) GetID() string {
+	if t == nil {
+		t = &GetControlByID_Control_Programs{}
+	}
+	return t.ID
+}
+func (t *GetControlByID_Control_Programs) GetName() string {
+	if t == nil {
+		t = &GetControlByID_Control_Programs{}
+	}
+	return t.Name
+}
+
+type GetControlByID_Control_Editors struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetControlByID_Control_Editors) GetID() string {
+	if t == nil {
+		t = &GetControlByID_Control_Editors{}
+	}
+	return t.ID
+}
+func (t *GetControlByID_Control_Editors) GetName() string {
+	if t == nil {
+		t = &GetControlByID_Control_Editors{}
+	}
+	return t.Name
+}
+
+type GetControlByID_Control_Viewers struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetControlByID_Control_Viewers) GetID() string {
+	if t == nil {
+		t = &GetControlByID_Control_Viewers{}
+	}
+	return t.ID
+}
+func (t *GetControlByID_Control_Viewers) GetName() string {
+	if t == nil {
+		t = &GetControlByID_Control_Viewers{}
+	}
+	return t.Name
+}
+
+type GetControlByID_Control_BlockedGroups struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetControlByID_Control_BlockedGroups) GetID() string {
+	if t == nil {
+		t = &GetControlByID_Control_BlockedGroups{}
+	}
+	return t.ID
+}
+func (t *GetControlByID_Control_BlockedGroups) GetName() string {
+	if t == nil {
+		t = &GetControlByID_Control_BlockedGroups{}
+	}
+	return t.Name
+}
+
 type GetControlByID_Control struct {
-	Class            *string                "json:\"class,omitempty\" graphql:\"class\""
-	ControlNumber    *string                "json:\"controlNumber,omitempty\" graphql:\"controlNumber\""
-	ControlType      *string                "json:\"controlType,omitempty\" graphql:\"controlType\""
-	CreatedAt        *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy        *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description      *string                "json:\"description,omitempty\" graphql:\"description\""
-	Details          map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
-	Family           *string                "json:\"family,omitempty\" graphql:\"family\""
-	ID               string                 "json:\"id\" graphql:\"id\""
-	MappedFrameworks *string                "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
-	Name             string                 "json:\"name\" graphql:\"name\""
-	Satisfies        *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Source           *string                "json:\"source,omitempty\" graphql:\"source\""
-	Status           *string                "json:\"status,omitempty\" graphql:\"status\""
-	Tags             []string               "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt        *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy        *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version          *string                "json:\"version,omitempty\" graphql:\"version\""
+	Class            *string                                 "json:\"class,omitempty\" graphql:\"class\""
+	ControlNumber    *string                                 "json:\"controlNumber,omitempty\" graphql:\"controlNumber\""
+	ControlType      *string                                 "json:\"controlType,omitempty\" graphql:\"controlType\""
+	CreatedAt        *time.Time                              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string                                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description      *string                                 "json:\"description,omitempty\" graphql:\"description\""
+	Details          map[string]interface{}                  "json:\"details,omitempty\" graphql:\"details\""
+	Family           *string                                 "json:\"family,omitempty\" graphql:\"family\""
+	ID               string                                  "json:\"id\" graphql:\"id\""
+	MappedFrameworks *string                                 "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
+	Name             string                                  "json:\"name\" graphql:\"name\""
+	Satisfies        *string                                 "json:\"satisfies,omitempty\" graphql:\"satisfies\""
+	Source           *string                                 "json:\"source,omitempty\" graphql:\"source\""
+	Status           *string                                 "json:\"status,omitempty\" graphql:\"status\""
+	Tags             []string                                "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt        *time.Time                              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string                                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Version          *string                                 "json:\"version,omitempty\" graphql:\"version\""
+	Programs         []*GetControlByID_Control_Programs      "json:\"programs,omitempty\" graphql:\"programs\""
+	Editors          []*GetControlByID_Control_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
+	Viewers          []*GetControlByID_Control_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
+	BlockedGroups    []*GetControlByID_Control_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 }
 
 func (t *GetControlByID_Control) GetClass() *string {
@@ -6767,26 +7050,126 @@ func (t *GetControlByID_Control) GetVersion() *string {
 	}
 	return t.Version
 }
+func (t *GetControlByID_Control) GetPrograms() []*GetControlByID_Control_Programs {
+	if t == nil {
+		t = &GetControlByID_Control{}
+	}
+	return t.Programs
+}
+func (t *GetControlByID_Control) GetEditors() []*GetControlByID_Control_Editors {
+	if t == nil {
+		t = &GetControlByID_Control{}
+	}
+	return t.Editors
+}
+func (t *GetControlByID_Control) GetViewers() []*GetControlByID_Control_Viewers {
+	if t == nil {
+		t = &GetControlByID_Control{}
+	}
+	return t.Viewers
+}
+func (t *GetControlByID_Control) GetBlockedGroups() []*GetControlByID_Control_BlockedGroups {
+	if t == nil {
+		t = &GetControlByID_Control{}
+	}
+	return t.BlockedGroups
+}
+
+type GetControls_Controls_Edges_Node_Programs struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetControls_Controls_Edges_Node_Programs) GetID() string {
+	if t == nil {
+		t = &GetControls_Controls_Edges_Node_Programs{}
+	}
+	return t.ID
+}
+func (t *GetControls_Controls_Edges_Node_Programs) GetName() string {
+	if t == nil {
+		t = &GetControls_Controls_Edges_Node_Programs{}
+	}
+	return t.Name
+}
+
+type GetControls_Controls_Edges_Node_Editors struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetControls_Controls_Edges_Node_Editors) GetID() string {
+	if t == nil {
+		t = &GetControls_Controls_Edges_Node_Editors{}
+	}
+	return t.ID
+}
+func (t *GetControls_Controls_Edges_Node_Editors) GetName() string {
+	if t == nil {
+		t = &GetControls_Controls_Edges_Node_Editors{}
+	}
+	return t.Name
+}
+
+type GetControls_Controls_Edges_Node_Viewers struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetControls_Controls_Edges_Node_Viewers) GetID() string {
+	if t == nil {
+		t = &GetControls_Controls_Edges_Node_Viewers{}
+	}
+	return t.ID
+}
+func (t *GetControls_Controls_Edges_Node_Viewers) GetName() string {
+	if t == nil {
+		t = &GetControls_Controls_Edges_Node_Viewers{}
+	}
+	return t.Name
+}
+
+type GetControls_Controls_Edges_Node_BlockedGroups struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetControls_Controls_Edges_Node_BlockedGroups) GetID() string {
+	if t == nil {
+		t = &GetControls_Controls_Edges_Node_BlockedGroups{}
+	}
+	return t.ID
+}
+func (t *GetControls_Controls_Edges_Node_BlockedGroups) GetName() string {
+	if t == nil {
+		t = &GetControls_Controls_Edges_Node_BlockedGroups{}
+	}
+	return t.Name
+}
 
 type GetControls_Controls_Edges_Node struct {
-	Class            *string                "json:\"class,omitempty\" graphql:\"class\""
-	ControlNumber    *string                "json:\"controlNumber,omitempty\" graphql:\"controlNumber\""
-	ControlType      *string                "json:\"controlType,omitempty\" graphql:\"controlType\""
-	CreatedAt        *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy        *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description      *string                "json:\"description,omitempty\" graphql:\"description\""
-	Details          map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
-	Family           *string                "json:\"family,omitempty\" graphql:\"family\""
-	ID               string                 "json:\"id\" graphql:\"id\""
-	MappedFrameworks *string                "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
-	Name             string                 "json:\"name\" graphql:\"name\""
-	Satisfies        *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Source           *string                "json:\"source,omitempty\" graphql:\"source\""
-	Status           *string                "json:\"status,omitempty\" graphql:\"status\""
-	Tags             []string               "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt        *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy        *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version          *string                "json:\"version,omitempty\" graphql:\"version\""
+	Class            *string                                          "json:\"class,omitempty\" graphql:\"class\""
+	ControlNumber    *string                                          "json:\"controlNumber,omitempty\" graphql:\"controlNumber\""
+	ControlType      *string                                          "json:\"controlType,omitempty\" graphql:\"controlType\""
+	CreatedAt        *time.Time                                       "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string                                          "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description      *string                                          "json:\"description,omitempty\" graphql:\"description\""
+	Details          map[string]interface{}                           "json:\"details,omitempty\" graphql:\"details\""
+	Family           *string                                          "json:\"family,omitempty\" graphql:\"family\""
+	ID               string                                           "json:\"id\" graphql:\"id\""
+	MappedFrameworks *string                                          "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
+	Name             string                                           "json:\"name\" graphql:\"name\""
+	Satisfies        *string                                          "json:\"satisfies,omitempty\" graphql:\"satisfies\""
+	Source           *string                                          "json:\"source,omitempty\" graphql:\"source\""
+	Status           *string                                          "json:\"status,omitempty\" graphql:\"status\""
+	Tags             []string                                         "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt        *time.Time                                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string                                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Version          *string                                          "json:\"version,omitempty\" graphql:\"version\""
+	Programs         []*GetControls_Controls_Edges_Node_Programs      "json:\"programs,omitempty\" graphql:\"programs\""
+	Editors          []*GetControls_Controls_Edges_Node_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
+	Viewers          []*GetControls_Controls_Edges_Node_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
+	BlockedGroups    []*GetControls_Controls_Edges_Node_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 }
 
 func (t *GetControls_Controls_Edges_Node) GetClass() *string {
@@ -6897,6 +7280,30 @@ func (t *GetControls_Controls_Edges_Node) GetVersion() *string {
 	}
 	return t.Version
 }
+func (t *GetControls_Controls_Edges_Node) GetPrograms() []*GetControls_Controls_Edges_Node_Programs {
+	if t == nil {
+		t = &GetControls_Controls_Edges_Node{}
+	}
+	return t.Programs
+}
+func (t *GetControls_Controls_Edges_Node) GetEditors() []*GetControls_Controls_Edges_Node_Editors {
+	if t == nil {
+		t = &GetControls_Controls_Edges_Node{}
+	}
+	return t.Editors
+}
+func (t *GetControls_Controls_Edges_Node) GetViewers() []*GetControls_Controls_Edges_Node_Viewers {
+	if t == nil {
+		t = &GetControls_Controls_Edges_Node{}
+	}
+	return t.Viewers
+}
+func (t *GetControls_Controls_Edges_Node) GetBlockedGroups() []*GetControls_Controls_Edges_Node_BlockedGroups {
+	if t == nil {
+		t = &GetControls_Controls_Edges_Node{}
+	}
+	return t.BlockedGroups
+}
 
 type GetControls_Controls_Edges struct {
 	Node *GetControls_Controls_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
@@ -6920,25 +7327,101 @@ func (t *GetControls_Controls) GetEdges() []*GetControls_Controls_Edges {
 	return t.Edges
 }
 
+type UpdateControl_UpdateControl_Control_Programs struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateControl_UpdateControl_Control_Programs) GetID() string {
+	if t == nil {
+		t = &UpdateControl_UpdateControl_Control_Programs{}
+	}
+	return t.ID
+}
+func (t *UpdateControl_UpdateControl_Control_Programs) GetName() string {
+	if t == nil {
+		t = &UpdateControl_UpdateControl_Control_Programs{}
+	}
+	return t.Name
+}
+
+type UpdateControl_UpdateControl_Control_Editors struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateControl_UpdateControl_Control_Editors) GetID() string {
+	if t == nil {
+		t = &UpdateControl_UpdateControl_Control_Editors{}
+	}
+	return t.ID
+}
+func (t *UpdateControl_UpdateControl_Control_Editors) GetName() string {
+	if t == nil {
+		t = &UpdateControl_UpdateControl_Control_Editors{}
+	}
+	return t.Name
+}
+
+type UpdateControl_UpdateControl_Control_Viewers struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateControl_UpdateControl_Control_Viewers) GetID() string {
+	if t == nil {
+		t = &UpdateControl_UpdateControl_Control_Viewers{}
+	}
+	return t.ID
+}
+func (t *UpdateControl_UpdateControl_Control_Viewers) GetName() string {
+	if t == nil {
+		t = &UpdateControl_UpdateControl_Control_Viewers{}
+	}
+	return t.Name
+}
+
+type UpdateControl_UpdateControl_Control_BlockedGroups struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateControl_UpdateControl_Control_BlockedGroups) GetID() string {
+	if t == nil {
+		t = &UpdateControl_UpdateControl_Control_BlockedGroups{}
+	}
+	return t.ID
+}
+func (t *UpdateControl_UpdateControl_Control_BlockedGroups) GetName() string {
+	if t == nil {
+		t = &UpdateControl_UpdateControl_Control_BlockedGroups{}
+	}
+	return t.Name
+}
+
 type UpdateControl_UpdateControl_Control struct {
-	Class            *string                "json:\"class,omitempty\" graphql:\"class\""
-	ControlNumber    *string                "json:\"controlNumber,omitempty\" graphql:\"controlNumber\""
-	ControlType      *string                "json:\"controlType,omitempty\" graphql:\"controlType\""
-	CreatedAt        *time.Time             "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy        *string                "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description      *string                "json:\"description,omitempty\" graphql:\"description\""
-	Details          map[string]interface{} "json:\"details,omitempty\" graphql:\"details\""
-	Family           *string                "json:\"family,omitempty\" graphql:\"family\""
-	ID               string                 "json:\"id\" graphql:\"id\""
-	MappedFrameworks *string                "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
-	Name             string                 "json:\"name\" graphql:\"name\""
-	Satisfies        *string                "json:\"satisfies,omitempty\" graphql:\"satisfies\""
-	Source           *string                "json:\"source,omitempty\" graphql:\"source\""
-	Status           *string                "json:\"status,omitempty\" graphql:\"status\""
-	Tags             []string               "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt        *time.Time             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy        *string                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	Version          *string                "json:\"version,omitempty\" graphql:\"version\""
+	Class            *string                                              "json:\"class,omitempty\" graphql:\"class\""
+	ControlNumber    *string                                              "json:\"controlNumber,omitempty\" graphql:\"controlNumber\""
+	ControlType      *string                                              "json:\"controlType,omitempty\" graphql:\"controlType\""
+	CreatedAt        *time.Time                                           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string                                              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description      *string                                              "json:\"description,omitempty\" graphql:\"description\""
+	Details          map[string]interface{}                               "json:\"details,omitempty\" graphql:\"details\""
+	Family           *string                                              "json:\"family,omitempty\" graphql:\"family\""
+	ID               string                                               "json:\"id\" graphql:\"id\""
+	MappedFrameworks *string                                              "json:\"mappedFrameworks,omitempty\" graphql:\"mappedFrameworks\""
+	Name             string                                               "json:\"name\" graphql:\"name\""
+	Satisfies        *string                                              "json:\"satisfies,omitempty\" graphql:\"satisfies\""
+	Source           *string                                              "json:\"source,omitempty\" graphql:\"source\""
+	Status           *string                                              "json:\"status,omitempty\" graphql:\"status\""
+	Tags             []string                                             "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt        *time.Time                                           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string                                              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	Version          *string                                              "json:\"version,omitempty\" graphql:\"version\""
+	Programs         []*UpdateControl_UpdateControl_Control_Programs      "json:\"programs,omitempty\" graphql:\"programs\""
+	Editors          []*UpdateControl_UpdateControl_Control_Editors       "json:\"editors,omitempty\" graphql:\"editors\""
+	Viewers          []*UpdateControl_UpdateControl_Control_Viewers       "json:\"viewers,omitempty\" graphql:\"viewers\""
+	BlockedGroups    []*UpdateControl_UpdateControl_Control_BlockedGroups "json:\"blockedGroups,omitempty\" graphql:\"blockedGroups\""
 }
 
 func (t *UpdateControl_UpdateControl_Control) GetClass() *string {
@@ -7048,6 +7531,30 @@ func (t *UpdateControl_UpdateControl_Control) GetVersion() *string {
 		t = &UpdateControl_UpdateControl_Control{}
 	}
 	return t.Version
+}
+func (t *UpdateControl_UpdateControl_Control) GetPrograms() []*UpdateControl_UpdateControl_Control_Programs {
+	if t == nil {
+		t = &UpdateControl_UpdateControl_Control{}
+	}
+	return t.Programs
+}
+func (t *UpdateControl_UpdateControl_Control) GetEditors() []*UpdateControl_UpdateControl_Control_Editors {
+	if t == nil {
+		t = &UpdateControl_UpdateControl_Control{}
+	}
+	return t.Editors
+}
+func (t *UpdateControl_UpdateControl_Control) GetViewers() []*UpdateControl_UpdateControl_Control_Viewers {
+	if t == nil {
+		t = &UpdateControl_UpdateControl_Control{}
+	}
+	return t.Viewers
+}
+func (t *UpdateControl_UpdateControl_Control) GetBlockedGroups() []*UpdateControl_UpdateControl_Control_BlockedGroups {
+	if t == nil {
+		t = &UpdateControl_UpdateControl_Control{}
+	}
+	return t.BlockedGroups
 }
 
 type UpdateControl_UpdateControl struct {
@@ -55815,6 +56322,7 @@ const AdminSearchDocument = `query AdminSearch ($query: String!) {
 					deletedBy
 					id
 					tags
+					ownerID
 					name
 					description
 					status
@@ -56933,6 +57441,22 @@ const CreateControlDocument = `mutation CreateControl ($input: CreateControlInpu
 			updatedAt
 			updatedBy
 			version
+			programs {
+				id
+				name
+			}
+			editors {
+				id
+				name
+			}
+			viewers {
+				id
+				name
+			}
+			blockedGroups {
+				id
+				name
+			}
 		}
 	}
 }
@@ -57001,6 +57525,22 @@ const GetAllControlsDocument = `query GetAllControls {
 				updatedAt
 				updatedBy
 				version
+				programs {
+					id
+					name
+				}
+				editors {
+					id
+					name
+				}
+				viewers {
+					id
+					name
+				}
+				blockedGroups {
+					id
+					name
+				}
 			}
 		}
 	}
@@ -57042,6 +57582,22 @@ const GetControlByIDDocument = `query GetControlByID ($controlId: ID!) {
 		updatedAt
 		updatedBy
 		version
+		programs {
+			id
+			name
+		}
+		editors {
+			id
+			name
+		}
+		viewers {
+			id
+			name
+		}
+		blockedGroups {
+			id
+			name
+		}
 	}
 }
 `
@@ -57085,6 +57641,22 @@ const GetControlsDocument = `query GetControls ($where: ControlWhereInput) {
 				updatedAt
 				updatedBy
 				version
+				programs {
+					id
+					name
+				}
+				editors {
+					id
+					name
+				}
+				viewers {
+					id
+					name
+				}
+				blockedGroups {
+					id
+					name
+				}
 			}
 		}
 	}
@@ -57129,6 +57701,22 @@ const UpdateControlDocument = `mutation UpdateControl ($updateControlId: ID!, $i
 			updatedAt
 			updatedBy
 			version
+			programs {
+				id
+				name
+			}
+			editors {
+				id
+				name
+			}
+			viewers {
+				id
+				name
+			}
+			blockedGroups {
+				id
+				name
+			}
 		}
 	}
 }

@@ -132,6 +132,7 @@ func (suite *GraphTestSuite) TestMutationCreateTFASetting() {
 			// Make sure provided values match
 			assert.Equal(t, tc.input.TotpAllowed, resp.CreateTFASetting.TfaSetting.TotpAllowed)
 			assert.Empty(t, resp.CreateTFASetting.TfaSetting.RecoveryCodes)
+			require.NotEmpty(t, resp.CreateTFASetting.TfaSetting.Owner)
 			assert.Equal(t, tc.userID, resp.CreateTFASetting.TfaSetting.Owner.ID)
 
 			// make sure user setting was not updated

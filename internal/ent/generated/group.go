@@ -102,13 +102,19 @@ type GroupEdges struct {
 	NarrativeEditors []*Narrative `json:"narrative_editors,omitempty"`
 	// NarrativeBlockedGroups holds the value of the narrative_blocked_groups edge.
 	NarrativeBlockedGroups []*Narrative `json:"narrative_blocked_groups,omitempty"`
+	// ControlViewers holds the value of the control_viewers edge.
+	ControlViewers []*Control `json:"control_viewers,omitempty"`
+	// ControlEditors holds the value of the control_editors edge.
+	ControlEditors []*Control `json:"control_editors,omitempty"`
+	// ControlBlockedGroups holds the value of the control_blocked_groups edge.
+	ControlBlockedGroups []*Control `json:"control_blocked_groups,omitempty"`
 	// Members holds the value of the members edge.
 	Members []*GroupMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [24]bool
+	loadedTypes [27]bool
 	// totalCount holds the count of the edges above.
-	totalCount [24]map[string]int
+	totalCount [27]map[string]int
 
 	namedUsers                         map[string][]*User
 	namedEvents                        map[string][]*Event
@@ -131,6 +137,9 @@ type GroupEdges struct {
 	namedNarrativeViewers              map[string][]*Narrative
 	namedNarrativeEditors              map[string][]*Narrative
 	namedNarrativeBlockedGroups        map[string][]*Narrative
+	namedControlViewers                map[string][]*Control
+	namedControlEditors                map[string][]*Control
+	namedControlBlockedGroups          map[string][]*Control
 	namedMembers                       map[string][]*GroupMembership
 }
 
@@ -345,10 +354,37 @@ func (e GroupEdges) NarrativeBlockedGroupsOrErr() ([]*Narrative, error) {
 	return nil, &NotLoadedError{edge: "narrative_blocked_groups"}
 }
 
+// ControlViewersOrErr returns the ControlViewers value or an error if the edge
+// was not loaded in eager-loading.
+func (e GroupEdges) ControlViewersOrErr() ([]*Control, error) {
+	if e.loadedTypes[23] {
+		return e.ControlViewers, nil
+	}
+	return nil, &NotLoadedError{edge: "control_viewers"}
+}
+
+// ControlEditorsOrErr returns the ControlEditors value or an error if the edge
+// was not loaded in eager-loading.
+func (e GroupEdges) ControlEditorsOrErr() ([]*Control, error) {
+	if e.loadedTypes[24] {
+		return e.ControlEditors, nil
+	}
+	return nil, &NotLoadedError{edge: "control_editors"}
+}
+
+// ControlBlockedGroupsOrErr returns the ControlBlockedGroups value or an error if the edge
+// was not loaded in eager-loading.
+func (e GroupEdges) ControlBlockedGroupsOrErr() ([]*Control, error) {
+	if e.loadedTypes[25] {
+		return e.ControlBlockedGroups, nil
+	}
+	return nil, &NotLoadedError{edge: "control_blocked_groups"}
+}
+
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) MembersOrErr() ([]*GroupMembership, error) {
-	if e.loadedTypes[23] {
+	if e.loadedTypes[26] {
 		return e.Members, nil
 	}
 	return nil, &NotLoadedError{edge: "members"}
@@ -598,6 +634,21 @@ func (gr *Group) QueryNarrativeEditors() *NarrativeQuery {
 // QueryNarrativeBlockedGroups queries the "narrative_blocked_groups" edge of the Group entity.
 func (gr *Group) QueryNarrativeBlockedGroups() *NarrativeQuery {
 	return NewGroupClient(gr.config).QueryNarrativeBlockedGroups(gr)
+}
+
+// QueryControlViewers queries the "control_viewers" edge of the Group entity.
+func (gr *Group) QueryControlViewers() *ControlQuery {
+	return NewGroupClient(gr.config).QueryControlViewers(gr)
+}
+
+// QueryControlEditors queries the "control_editors" edge of the Group entity.
+func (gr *Group) QueryControlEditors() *ControlQuery {
+	return NewGroupClient(gr.config).QueryControlEditors(gr)
+}
+
+// QueryControlBlockedGroups queries the "control_blocked_groups" edge of the Group entity.
+func (gr *Group) QueryControlBlockedGroups() *ControlQuery {
+	return NewGroupClient(gr.config).QueryControlBlockedGroups(gr)
 }
 
 // QueryMembers queries the "members" edge of the Group entity.
@@ -1174,6 +1225,78 @@ func (gr *Group) appendNamedNarrativeBlockedGroups(name string, edges ...*Narrat
 		gr.Edges.namedNarrativeBlockedGroups[name] = []*Narrative{}
 	} else {
 		gr.Edges.namedNarrativeBlockedGroups[name] = append(gr.Edges.namedNarrativeBlockedGroups[name], edges...)
+	}
+}
+
+// NamedControlViewers returns the ControlViewers named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (gr *Group) NamedControlViewers(name string) ([]*Control, error) {
+	if gr.Edges.namedControlViewers == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := gr.Edges.namedControlViewers[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (gr *Group) appendNamedControlViewers(name string, edges ...*Control) {
+	if gr.Edges.namedControlViewers == nil {
+		gr.Edges.namedControlViewers = make(map[string][]*Control)
+	}
+	if len(edges) == 0 {
+		gr.Edges.namedControlViewers[name] = []*Control{}
+	} else {
+		gr.Edges.namedControlViewers[name] = append(gr.Edges.namedControlViewers[name], edges...)
+	}
+}
+
+// NamedControlEditors returns the ControlEditors named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (gr *Group) NamedControlEditors(name string) ([]*Control, error) {
+	if gr.Edges.namedControlEditors == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := gr.Edges.namedControlEditors[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (gr *Group) appendNamedControlEditors(name string, edges ...*Control) {
+	if gr.Edges.namedControlEditors == nil {
+		gr.Edges.namedControlEditors = make(map[string][]*Control)
+	}
+	if len(edges) == 0 {
+		gr.Edges.namedControlEditors[name] = []*Control{}
+	} else {
+		gr.Edges.namedControlEditors[name] = append(gr.Edges.namedControlEditors[name], edges...)
+	}
+}
+
+// NamedControlBlockedGroups returns the ControlBlockedGroups named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (gr *Group) NamedControlBlockedGroups(name string) ([]*Control, error) {
+	if gr.Edges.namedControlBlockedGroups == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := gr.Edges.namedControlBlockedGroups[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (gr *Group) appendNamedControlBlockedGroups(name string, edges ...*Control) {
+	if gr.Edges.namedControlBlockedGroups == nil {
+		gr.Edges.namedControlBlockedGroups = make(map[string][]*Control)
+	}
+	if len(edges) == 0 {
+		gr.Edges.namedControlBlockedGroups[name] = []*Control{}
+	} else {
+		gr.Edges.namedControlBlockedGroups[name] = append(gr.Edges.namedControlBlockedGroups[name], edges...)
 	}
 }
 

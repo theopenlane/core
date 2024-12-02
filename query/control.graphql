@@ -70,6 +70,22 @@ mutation CreateControl($input: CreateControlInput!) {
       updatedAt
       updatedBy
       version
+      programs {
+        id
+        name
+      }
+      editors {
+        id
+        name
+      }
+      viewers {
+        id
+        name
+      }
+      blockedGroups {
+        id
+        name
+      }
     }
   }
 }
@@ -102,6 +118,22 @@ query GetAllControls {
         updatedAt
         updatedBy
         version
+        programs {
+          id
+          name
+        }
+        editors {
+          id
+          name
+        }
+        viewers {
+          id
+          name
+        }
+        blockedGroups {
+          id
+          name
+        }
       }
     }
   }
@@ -126,6 +158,22 @@ query GetControlByID($controlId: ID!) {
     updatedAt
     updatedBy
     version
+    programs {
+      id
+      name
+    }
+    editors {
+      id
+      name
+    }
+    viewers {
+      id
+      name
+    }
+    blockedGroups {
+      id
+      name
+    }
   }
 }
 
@@ -151,6 +199,22 @@ query GetControls($where: ControlWhereInput) {
         updatedAt
         updatedBy
         version
+        programs {
+          id
+          name
+        }
+        editors {
+          id
+          name
+        }
+        viewers {
+          id
+          name
+        }
+        blockedGroups {
+          id
+          name
+        }
       }
     }
   }
@@ -176,6 +240,22 @@ mutation UpdateControl($updateControlId: ID!, $input: UpdateControlInput!) {
       updatedAt
       updatedBy
       version
+      programs {
+        id
+        name
+      }
+      editors {
+        id
+        name
+      }
+      viewers {
+        id
+        name
+      }
+      blockedGroups {
+        id
+        name
+      }
     }
   }
 }

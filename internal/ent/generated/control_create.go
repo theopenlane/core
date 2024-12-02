@@ -13,7 +13,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
@@ -130,6 +132,12 @@ func (cc *ControlCreate) SetNillableMappingID(s *string) *ControlCreate {
 // SetTags sets the "tags" field.
 func (cc *ControlCreate) SetTags(s []string) *ControlCreate {
 	cc.mutation.SetTags(s)
+	return cc
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (cc *ControlCreate) SetOwnerID(s string) *ControlCreate {
+	cc.mutation.SetOwnerID(s)
 	return cc
 }
 
@@ -297,6 +305,56 @@ func (cc *ControlCreate) SetNillableID(s *string) *ControlCreate {
 		cc.SetID(*s)
 	}
 	return cc
+}
+
+// SetOwner sets the "owner" edge to the Organization entity.
+func (cc *ControlCreate) SetOwner(o *Organization) *ControlCreate {
+	return cc.SetOwnerID(o.ID)
+}
+
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (cc *ControlCreate) AddBlockedGroupIDs(ids ...string) *ControlCreate {
+	cc.mutation.AddBlockedGroupIDs(ids...)
+	return cc
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (cc *ControlCreate) AddBlockedGroups(g ...*Group) *ControlCreate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return cc.AddBlockedGroupIDs(ids...)
+}
+
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (cc *ControlCreate) AddEditorIDs(ids ...string) *ControlCreate {
+	cc.mutation.AddEditorIDs(ids...)
+	return cc
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (cc *ControlCreate) AddEditors(g ...*Group) *ControlCreate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return cc.AddEditorIDs(ids...)
+}
+
+// AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
+func (cc *ControlCreate) AddViewerIDs(ids ...string) *ControlCreate {
+	cc.mutation.AddViewerIDs(ids...)
+	return cc
+}
+
+// AddViewers adds the "viewers" edges to the Group entity.
+func (cc *ControlCreate) AddViewers(g ...*Group) *ControlCreate {
+	ids := make([]string, len(g))
+	for i := range g {
+		ids[i] = g[i].ID
+	}
+	return cc.AddViewerIDs(ids...)
 }
 
 // AddProcedureIDs adds the "procedures" edge to the Procedure entity by IDs.
@@ -511,8 +569,24 @@ func (cc *ControlCreate) check() error {
 	if _, ok := cc.mutation.MappingID(); !ok {
 		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "Control.mapping_id"`)}
 	}
+	if _, ok := cc.mutation.OwnerID(); !ok {
+		return &ValidationError{Name: "owner_id", err: errors.New(`generated: missing required field "Control.owner_id"`)}
+	}
+	if v, ok := cc.mutation.OwnerID(); ok {
+		if err := control.OwnerIDValidator(v); err != nil {
+			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Control.owner_id": %w`, err)}
+		}
+	}
 	if _, ok := cc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "Control.name"`)}
+	}
+	if v, ok := cc.mutation.Name(); ok {
+		if err := control.NameValidator(v); err != nil {
+			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Control.name": %w`, err)}
+		}
+	}
+	if len(cc.mutation.OwnerIDs()) == 0 {
+		return &ValidationError{Name: "owner", err: errors.New(`generated: missing required edge "Control.owner"`)}
 	}
 	return nil
 }
@@ -629,6 +703,75 @@ func (cc *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 	if value, ok := cc.mutation.Details(); ok {
 		_spec.SetField(control.FieldDetails, field.TypeJSON, value)
 		_node.Details = value
+	}
+	if nodes := cc.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   control.OwnerTable,
+			Columns: []string{control.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cc.schemaConfig.Control
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.OwnerID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := cc.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   control.BlockedGroupsTable,
+			Columns: control.BlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cc.schemaConfig.ControlBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := cc.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   control.EditorsTable,
+			Columns: control.EditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cc.schemaConfig.ControlEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := cc.mutation.ViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   control.ViewersTable,
+			Columns: control.ViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = cc.schemaConfig.ControlViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := cc.mutation.ProceduresIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
