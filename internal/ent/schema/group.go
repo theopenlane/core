@@ -28,17 +28,6 @@ type Group struct {
 	ent.Schema
 }
 
-// Mixin of the Group
-func (Group) Mixin() []ent.Mixin {
-	return []ent.Mixin{
-		emixin.AuditMixin{},
-		mixin.SoftDeleteMixin{},
-		emixin.IDMixin{},
-		emixin.TagMixin{},
-		NewOrgOwnMixinWithRef("groups"),
-	}
-}
-
 // Fields of the Group
 func (Group) Fields() []ent.Field {
 	return []ent.Field{
@@ -94,6 +83,7 @@ func (Group) Edges() []ent.Edge {
 		edge.To("integrations", Integration.Type),
 		edge.To("files", File.Type),
 		edge.To("tasks", Task.Type),
+<<<<<<< Updated upstream
 		edge.From("procedure_editors", Procedure.Type).
 			Ref("editors"),
 		edge.From("procedure_blocked_groups", Procedure.Type).
@@ -126,6 +116,61 @@ func (Group) Edges() []ent.Edge {
 			Ref("editors"),
 		edge.From("narrative_blocked_groups", Narrative.Type).
 			Ref("blocked_groups"),
+=======
+	}
+}
+
+// Mixin of the Group
+func (Group) Mixin() []ent.Mixin {
+	return []ent.Mixin{
+		emixin.AuditMixin{},
+		mixin.SoftDeleteMixin{},
+		emixin.IDMixin{},
+		emixin.TagMixin{},
+		NewOrgOwnMixinWithRef("groups"),
+		// add group based create permissions, back reference to the organization
+		NewGroupBasedCreateAccessMixin(false),
+		// Add the reverse edges for m:m relationships permissions based on the groups
+		GroupPermissionsEdgesMixin{
+			EdgeInfo: []EdgeInfo{
+				{
+					Name:            "procedure",
+					Type:            Procedure.Type,
+					ViewPermissions: false,
+				},
+				{
+					Name:            "internalpolicy",
+					Type:            InternalPolicy.Type,
+					ViewPermissions: false,
+				},
+				{
+					Name:            "program",
+					Type:            Program.Type,
+					ViewPermissions: true,
+				},
+				{
+					Name:            "risk",
+					Type:            Risk.Type,
+					ViewPermissions: true,
+				},
+				{
+					Name:            "control",
+					Type:            Control.Type,
+					ViewPermissions: true,
+				},
+				{
+					Name:            "controlobjective",
+					Type:            ControlObjective.Type,
+					ViewPermissions: true,
+				},
+				{
+					Name:            "narrative",
+					Type:            Narrative.Type,
+					ViewPermissions: true,
+				},
+			},
+		},
+>>>>>>> Stashed changes
 	}
 }
 
@@ -167,7 +212,7 @@ func (Group) Policy() ent.Policy {
 	return privacy.Policy{
 		Mutation: privacy.MutationPolicy{
 			privacy.OnMutationOperation(
-				rule.CanCreateObjectsInOrg(),
+				rule.CheckGroupBasedObjectCreationAccess(),
 				ent.OpCreate,
 			),
 			privacy.OnMutationOperation(

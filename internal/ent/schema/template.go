@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/mixin"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -109,6 +110,10 @@ func (Template) Annotations() []schema.Annotation {
 func (Template) Policy() ent.Policy {
 	return privacy.Policy{
 		Mutation: privacy.MutationPolicy{
+			privacy.OnMutationOperation(
+				rule.CheckGroupBasedObjectCreationAccess(),
+				ent.OpCreate,
+			),
 			privacy.TemplateMutationRuleFunc(func(ctx context.Context, m *generated.TemplateMutation) error {
 				return m.CheckAccessForEdit(ctx)
 			}),

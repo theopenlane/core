@@ -94,7 +94,7 @@ func (Narrative) Policy() ent.Policy {
 		Mutation: privacy.MutationPolicy{
 			rule.CanCreateObjectsInProgram(), // if mutation contains program_id, check access
 			privacy.OnMutationOperation( // if there is no program_id, check access for create in org
-				rule.CanCreateObjectsInOrg(),
+				rule.CheckGroupBasedObjectCreationAccess(),
 				ent.OpCreate,
 			),
 			privacy.NarrativeMutationRuleFunc(func(ctx context.Context, m *generated.NarrativeMutation) error {

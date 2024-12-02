@@ -146,11 +146,12 @@ func (suite *GraphTestSuite) TestMutationCreateInternalPolicy() {
 	anotherGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
-		name        string
-		request     openlaneclient.CreateInternalPolicyInput
-		client      *openlaneclient.OpenlaneClient
-		ctx         context.Context
-		expectedErr string
+		name          string
+		request       openlaneclient.CreateInternalPolicyInput
+		addGroupToOrg bool
+		client        *openlaneclient.OpenlaneClient
+		ctx           context.Context
+		expectedErr   string
 	}{
 		{
 			name: "happy path, minimal input",
@@ -223,6 +224,15 @@ func (suite *GraphTestSuite) TestMutationCreateInternalPolicy() {
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
+			name: "user now authorized, added to group with creator permissions",
+			request: openlaneclient.CreateInternalPolicyInput{
+				Name: "Test InternalPolicy",
+			},
+			addGroupToOrg: true,
+			client:        suite.client.api,
+			ctx:           viewOnlyUser.UserCtx,
+		},
+		{
 			name: "missing required field",
 			request: openlaneclient.CreateInternalPolicyInput{
 				Description: lo.ToPtr("instructions on how to release a new version"),
@@ -235,6 +245,14 @@ func (suite *GraphTestSuite) TestMutationCreateInternalPolicy() {
 
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
+			if tc.addGroupToOrg {
+				_, err := suite.client.api.UpdateOrganization(testUser1.UserCtx, testUser1.OrganizationID,
+					openlaneclient.UpdateOrganizationInput{
+						AddInternalPolicyCreatorIDs: []string{viewOnlyUser.GroupID},
+					})
+				require.NoError(t, err)
+			}
+
 			resp, err := tc.client.CreateInternalPolicy(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
 				require.Error(t, err)

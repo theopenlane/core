@@ -90,5 +90,34 @@ func (Control) Annotations() []schema.Annotation {
 		entgql.RelayConnection(),
 		entgql.QueryField(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
+<<<<<<< Updated upstream
+=======
+		entfga.Annotations{
+			ObjectType: "control", // check access to the control for update/delete
+		},
+	}
+}
+
+// Policy of the Control
+func (Control) Policy() ent.Policy {
+	return privacy.Policy{
+		Mutation: privacy.MutationPolicy{
+			rule.CanCreateObjectsInProgram(), // if mutation contains program_id, check access
+			privacy.OnMutationOperation( // if there is no program_id, check access for create in org for the object
+				rule.CheckGroupBasedObjectCreationAccess(),
+				ent.OpCreate,
+			),
+			privacy.ControlMutationRuleFunc(func(ctx context.Context, m *generated.ControlMutation) error {
+				return m.CheckAccessForEdit(ctx) // check access for edit
+			}),
+			privacy.AlwaysDenyRule(),
+		},
+		Query: privacy.QueryPolicy{
+			privacy.ControlQueryRuleFunc(func(ctx context.Context, q *generated.ControlQuery) error {
+				return q.CheckAccess(ctx)
+			}),
+			privacy.AlwaysDenyRule(),
+		},
+>>>>>>> Stashed changes
 	}
 }

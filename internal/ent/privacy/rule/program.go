@@ -53,7 +53,7 @@ func CanCreateObjectsInProgram() privacy.MutationRuleFunc {
 			if !access {
 				log.Debug().Str("relation", relation).
 					Str("program_id", pID).
-					Msg("access allowed")
+					Msg("access not allowed")
 
 				// no matter the operation, if the user does not have access to the program
 				// deny the mutation

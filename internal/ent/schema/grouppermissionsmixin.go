@@ -1,6 +1,8 @@
 package schema
 
 import (
+	"fmt"
+
 	"entgo.io/ent"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/mixin"
@@ -13,19 +15,28 @@ import (
 // This allows for editor + blocked_groups, and optionally viewer groups
 // to be added as edges to the entity. The hooks are added to create the tuples in
 // FGA for the groups
-// After adding this mixin to a schema, you must also add the other edge to the group schema, e.g.
-//
-//	edge.From("risk_viewers", Risk.Type).
-//	    Ref("viewers"),
-//	edge.From("risk_editors", Risk.Type).
-//		Ref("editors"),
-//	edge.From("risk_blocked_groups", Risk.Type).
-//		Ref("blocked_groups"),
+// After adding this mixin to a schema, you must also add the other edge the edge info
+// on the group schema to allow for m:m relationships
 type GroupPermissionsMixin struct {
 	mixin.Schema
 
 	// ViewPermissions adds view permission for a group
 	ViewPermissions bool
+}
+
+// GroupPermissionsEdgesMixin is a mixin for the reverse edges on the group schema
+// this should be used in conjunction with the GroupPermissionsMixin on the entity schema
+type GroupPermissionsEdgesMixin struct {
+	mixin.Schema
+
+	EdgeInfo []EdgeInfo
+}
+
+// EdgeInfo is used to define the edge information for the reverse edges (group schema)
+type EdgeInfo struct {
+	Name            string
+	ViewPermissions bool
+	Type            any
 }
 
 // NewGroupPermissionsMixin creates a new GroupPermissionsMixin with optional viewer permissions
@@ -57,16 +68,14 @@ func (g GroupPermissionsMixin) Edges() []ent.Edge {
 }
 
 // Hooks of the GroupPermissionsMixin
-func (g GroupPermissionsMixin) Hooks() []ent.Hook {
-	var hooks []ent.Hook
-
+func (g GroupPermissionsMixin) Hooks() (hooks []ent.Hook) {
 	hooks = append(hooks, groupWriteOnlyHooks...)
 
 	if g.ViewPermissions {
 		hooks = append(hooks, groupReadOnlyHooks...)
 	}
 
-	return hooks
+	return
 }
 
 // groupReadWriteHooks are the hooks that are used to add the editor, blocked, and viewer tuples
@@ -99,4 +108,30 @@ var groupWriteOnlyHooks = []ent.Hook{
 		}, fgax.BlockedRelation), // add block tuples for associated groups
 		ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
 	),
+}
+
+// Edges of the GroupPermissionsEdgesMixin
+func (g GroupPermissionsEdgesMixin) Edges() []ent.Edge {
+	var edges []ent.Edge
+
+	for _, schema := range g.EdgeInfo {
+		var defaultReverseEdges = []ent.Edge{
+			edge.From(fmt.Sprintf("%s_editors", schema.Name), schema.Type).
+				Ref("editors"),
+			edge.From(fmt.Sprintf("%s_blocked_groups", schema.Name), schema.Type).
+				Ref("blocked_groups"),
+		}
+
+		edges = append(edges, defaultReverseEdges...)
+
+		// add the view edge if the view permissions are enabled
+		if schema.ViewPermissions {
+			viewerEdge := edge.From(fmt.Sprintf("%s_viewers", schema.Name), schema.Type).
+				Ref("viewers")
+
+			edges = append(edges, viewerEdge)
+		}
+	}
+
+	return edges
 }

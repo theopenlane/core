@@ -180,11 +180,12 @@ func (suite *GraphTestSuite) TestMutationCreateRisk() {
 	viewerGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
-		name        string
-		request     openlaneclient.CreateRiskInput
-		client      *openlaneclient.OpenlaneClient
-		ctx         context.Context
-		expectedErr string
+		name          string
+		request       openlaneclient.CreateRiskInput
+		addGroupToOrg bool
+		client        *openlaneclient.OpenlaneClient
+		ctx           context.Context
+		expectedErr   string
 	}{
 		{
 			name: "happy path, minimal input",
@@ -250,6 +251,15 @@ func (suite *GraphTestSuite) TestMutationCreateRisk() {
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
+			name: "user now authorized, added group to org",
+			request: openlaneclient.CreateRiskInput{
+				Name: "Risk",
+			},
+			addGroupToOrg: true,
+			client:        suite.client.api,
+			ctx:           viewOnlyUser.UserCtx,
+		},
+		{
 			name: "user authorized, they were added to the program",
 			request: openlaneclient.CreateRiskInput{
 				Name:       "Risk",
@@ -289,6 +299,14 @@ func (suite *GraphTestSuite) TestMutationCreateRisk() {
 
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
+			if tc.addGroupToOrg {
+				_, err := suite.client.api.UpdateOrganization(testUser1.UserCtx, testUser1.OrganizationID,
+					openlaneclient.UpdateOrganizationInput{
+						AddRiskCreatorIDs: []string{viewOnlyUser.GroupID},
+					})
+				require.NoError(t, err)
+			}
+
 			resp, err := tc.client.CreateRisk(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
 				require.Error(t, err)

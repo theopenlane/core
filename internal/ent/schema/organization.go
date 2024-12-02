@@ -154,6 +154,8 @@ func (Organization) Edges() []ent.Edge {
 		edge.To("secrets", Hush.Type),
 		edge.To("features", Feature.Type),
 		edge.To("files", File.Type),
+
+		// Organization owns the following entities
 		edge.To("entitlementplans", EntitlementPlan.Type).
 			Annotations(entx.CascadeAnnotationField("Owner")),
 		edge.To("entitlementplanfeatures", EntitlementPlanFeature.Type).
@@ -220,6 +222,8 @@ func (Organization) Mixin() []ent.Mixin {
 		emixin.IDMixin{},
 		emixin.TagMixin{},
 		mixin.SoftDeleteMixin{},
+		// add group based create permissions
+		NewGroupBasedCreateAccessMixin(true),
 	}
 }
 

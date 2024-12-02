@@ -118,7 +118,7 @@ func (Procedure) Policy() ent.Policy {
 	return privacy.Policy{
 		Mutation: privacy.MutationPolicy{
 			privacy.OnMutationOperation(
-				rule.CanCreateObjectsInOrg(),
+				rule.CheckGroupBasedObjectCreationAccess(),
 				ent.OpCreate,
 			),
 			privacy.OnMutationOperation(
