@@ -184,6 +184,7 @@ func adminSearchControls(ctx context.Context, query string) ([]*generated.Contro
 				likeQuery := "%" + query + "%"
 				s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
 			},
+			control.OwnerIDContainsFold(query),          // search by OwnerID
 			control.NameContainsFold(query),             // search by Name
 			control.DescriptionContainsFold(query),      // search by Description
 			control.StatusContainsFold(query),           // search by Status
@@ -197,7 +198,7 @@ func adminSearchControls(ctx context.Context, query string) ([]*generated.Contro
 			control.MappedFrameworksContainsFold(query), // search by MappedFrameworks
 			func(s *sql.Selector) {
 				likeQuery := "%" + query + "%"
-				s.Where(sql.ExprP("(details)::text LIKE $15", likeQuery)) // search by Details
+				s.Where(sql.ExprP("(details)::text LIKE $16", likeQuery)) // search by Details
 			},
 		),
 	).All(ctx)

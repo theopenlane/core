@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
+	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entitlement"
@@ -760,6 +761,21 @@ func (oc *OrganizationCreate) AddNarratives(n ...*Narrative) *OrganizationCreate
 		ids[i] = n[i].ID
 	}
 	return oc.AddNarrativeIDs(ids...)
+}
+
+// AddControlIDs adds the "controls" edge to the Control entity by IDs.
+func (oc *OrganizationCreate) AddControlIDs(ids ...string) *OrganizationCreate {
+	oc.mutation.AddControlIDs(ids...)
+	return oc
+}
+
+// AddControls adds the "controls" edges to the Control entity.
+func (oc *OrganizationCreate) AddControls(c ...*Control) *OrganizationCreate {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return oc.AddControlIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -1546,6 +1562,23 @@ func (oc *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			},
 		}
 		edge.Schema = oc.schemaConfig.Narrative
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := oc.mutation.ControlsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ControlsTable,
+			Columns: []string{organization.ControlsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = oc.schemaConfig.Control
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -1448,6 +1448,8 @@ type Control struct {
 	DeletedBy *string    `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// the ID of the organization owner of the object
+	OwnerID string `json:"ownerID"`
 	// the name of the control
 	Name string `json:"name"`
 	// description of the control
@@ -1471,16 +1473,23 @@ type Control struct {
 	// mapped frameworks
 	MappedFrameworks *string `json:"mappedFrameworks,omitempty"`
 	// json data including details of the control
-	Details           map[string]interface{} `json:"details,omitempty"`
-	Procedures        []*Procedure           `json:"procedures,omitempty"`
-	Subcontrols       []*Subcontrol          `json:"subcontrols,omitempty"`
-	Controlobjectives []*ControlObjective    `json:"controlobjectives,omitempty"`
-	Standard          []*Standard            `json:"standard,omitempty"`
-	Narratives        []*Narrative           `json:"narratives,omitempty"`
-	Risks             []*Risk                `json:"risks,omitempty"`
-	Actionplans       []*ActionPlan          `json:"actionplans,omitempty"`
-	Tasks             []*Task                `json:"tasks,omitempty"`
-	Programs          []*Program             `json:"programs,omitempty"`
+	Details map[string]interface{} `json:"details,omitempty"`
+	Owner   *Organization          `json:"owner"`
+	// groups that are blocked from viewing or editing the risk
+	BlockedGroups []*Group `json:"blockedGroups,omitempty"`
+	// provides edit access to the risk to members of the group
+	Editors []*Group `json:"editors,omitempty"`
+	// provides view access to the risk to members of the group
+	Viewers           []*Group            `json:"viewers,omitempty"`
+	Procedures        []*Procedure        `json:"procedures,omitempty"`
+	Subcontrols       []*Subcontrol       `json:"subcontrols,omitempty"`
+	Controlobjectives []*ControlObjective `json:"controlobjectives,omitempty"`
+	Standard          []*Standard         `json:"standard,omitempty"`
+	Narratives        []*Narrative        `json:"narratives,omitempty"`
+	Risks             []*Risk             `json:"risks,omitempty"`
+	Actionplans       []*ActionPlan       `json:"actionplans,omitempty"`
+	Tasks             []*Task             `json:"tasks,omitempty"`
+	Programs          []*Program          `json:"programs,omitempty"`
 }
 
 func (Control) IsNode() {}
@@ -1534,6 +1543,8 @@ type ControlHistory struct {
 	DeletedBy   *string        `json:"deletedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// the ID of the organization owner of the object
+	OwnerID string `json:"ownerID"`
 	// the name of the control
 	Name string `json:"name"`
 	// description of the control
@@ -1708,6 +1719,20 @@ type ControlHistoryWhereInput struct {
 	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// owner_id field predicates
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
@@ -2768,6 +2793,20 @@ type ControlWhereInput struct {
 	DeletedByNotNil       *bool    `json:"deletedByNotNil,omitempty"`
 	DeletedByEqualFold    *string  `json:"deletedByEqualFold,omitempty"`
 	DeletedByContainsFold *string  `json:"deletedByContainsFold,omitempty"`
+	// owner_id field predicates
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
@@ -2942,6 +2981,18 @@ type ControlWhereInput struct {
 	MappedFrameworksNotNil       *bool    `json:"mappedFrameworksNotNil,omitempty"`
 	MappedFrameworksEqualFold    *string  `json:"mappedFrameworksEqualFold,omitempty"`
 	MappedFrameworksContainsFold *string  `json:"mappedFrameworksContainsFold,omitempty"`
+	// owner edge predicates
+	HasOwner     *bool                     `json:"hasOwner,omitempty"`
+	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+	// blocked_groups edge predicates
+	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
+	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
+	// editors edge predicates
+	HasEditors     *bool              `json:"hasEditors,omitempty"`
+	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
+	// viewers edge predicates
+	HasViewers     *bool              `json:"hasViewers,omitempty"`
+	HasViewersWith []*GroupWhereInput `json:"hasViewersWith,omitempty"`
 	// procedures edge predicates
 	HasProcedures     *bool                  `json:"hasProcedures,omitempty"`
 	HasProceduresWith []*ProcedureWhereInput `json:"hasProceduresWith,omitempty"`
@@ -3066,6 +3117,10 @@ type CreateControlInput struct {
 	MappedFrameworks *string `json:"mappedFrameworks,omitempty"`
 	// json data including details of the control
 	Details             map[string]interface{} `json:"details,omitempty"`
+	OwnerID             string                 `json:"ownerID"`
+	BlockedGroupIDs     []string               `json:"blockedGroupIDs,omitempty"`
+	EditorIDs           []string               `json:"editorIDs,omitempty"`
+	ViewerIDs           []string               `json:"viewerIDs,omitempty"`
 	ProcedureIDs        []string               `json:"procedureIDs,omitempty"`
 	SubcontrolIDs       []string               `json:"subcontrolIDs,omitempty"`
 	ControlobjectiveIDs []string               `json:"controlobjectiveIDs,omitempty"`
@@ -3362,6 +3417,9 @@ type CreateGroupInput struct {
 	NarrativeViewerIDs              []string                 `json:"narrativeViewerIDs,omitempty"`
 	NarrativeEditorIDs              []string                 `json:"narrativeEditorIDs,omitempty"`
 	NarrativeBlockedGroupIDs        []string                 `json:"narrativeBlockedGroupIDs,omitempty"`
+	ControlViewerIDs                []string                 `json:"controlViewerIDs,omitempty"`
+	ControlEditorIDs                []string                 `json:"controlEditorIDs,omitempty"`
+	ControlBlockedGroupIDs          []string                 `json:"controlBlockedGroupIDs,omitempty"`
 	CreateGroupSettings             *CreateGroupSettingInput `json:"createGroupSettings,omitempty"`
 }
 
@@ -3616,6 +3674,7 @@ type CreateOrganizationInput struct {
 	RiskIDs                    []string                        `json:"riskIDs,omitempty"`
 	ControlobjectiveIDs        []string                        `json:"controlobjectiveIDs,omitempty"`
 	NarrativeIDs               []string                        `json:"narrativeIDs,omitempty"`
+	ControlIDs                 []string                        `json:"controlIDs,omitempty"`
 	CreateOrgSettings          *CreateOrganizationSettingInput `json:"createOrgSettings,omitempty"`
 }
 
@@ -8883,6 +8942,9 @@ type Group struct {
 	NarrativeViewers              []*Narrative        `json:"narrativeViewers,omitempty"`
 	NarrativeEditors              []*Narrative        `json:"narrativeEditors,omitempty"`
 	NarrativeBlockedGroups        []*Narrative        `json:"narrativeBlockedGroups,omitempty"`
+	ControlViewers                []*Control          `json:"controlViewers,omitempty"`
+	ControlEditors                []*Control          `json:"controlEditors,omitempty"`
+	ControlBlockedGroups          []*Control          `json:"controlBlockedGroups,omitempty"`
 	Members                       []*GroupMembership  `json:"members,omitempty"`
 }
 
@@ -10173,6 +10235,15 @@ type GroupWhereInput struct {
 	// narrative_blocked_groups edge predicates
 	HasNarrativeBlockedGroups     *bool                  `json:"hasNarrativeBlockedGroups,omitempty"`
 	HasNarrativeBlockedGroupsWith []*NarrativeWhereInput `json:"hasNarrativeBlockedGroupsWith,omitempty"`
+	// control_viewers edge predicates
+	HasControlViewers     *bool                `json:"hasControlViewers,omitempty"`
+	HasControlViewersWith []*ControlWhereInput `json:"hasControlViewersWith,omitempty"`
+	// control_editors edge predicates
+	HasControlEditors     *bool                `json:"hasControlEditors,omitempty"`
+	HasControlEditorsWith []*ControlWhereInput `json:"hasControlEditorsWith,omitempty"`
+	// control_blocked_groups edge predicates
+	HasControlBlockedGroups     *bool                `json:"hasControlBlockedGroups,omitempty"`
+	HasControlBlockedGroupsWith []*ControlWhereInput `json:"hasControlBlockedGroupsWith,omitempty"`
 	// members edge predicates
 	HasMembers     *bool                        `json:"hasMembers,omitempty"`
 	HasMembersWith []*GroupMembershipWhereInput `json:"hasMembersWith,omitempty"`
@@ -14168,6 +14239,7 @@ type Organization struct {
 	Risks                   []*Risk                   `json:"risks,omitempty"`
 	Controlobjectives       []*ControlObjective       `json:"controlobjectives,omitempty"`
 	Narratives              []*Narrative              `json:"narratives,omitempty"`
+	Controls                []*Control                `json:"controls,omitempty"`
 	Members                 []*OrgMembership          `json:"members,omitempty"`
 }
 
@@ -15322,6 +15394,9 @@ type OrganizationWhereInput struct {
 	// narratives edge predicates
 	HasNarratives     *bool                  `json:"hasNarratives,omitempty"`
 	HasNarrativesWith []*NarrativeWhereInput `json:"hasNarrativesWith,omitempty"`
+	// controls edge predicates
+	HasControls     *bool                `json:"hasControls,omitempty"`
+	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
 	// members edge predicates
 	HasMembers     *bool                      `json:"hasMembers,omitempty"`
 	HasMembersWith []*OrgMembershipWhereInput `json:"hasMembersWith,omitempty"`
@@ -20997,6 +21072,16 @@ type UpdateControlInput struct {
 	// json data including details of the control
 	Details                   map[string]interface{} `json:"details,omitempty"`
 	ClearDetails              *bool                  `json:"clearDetails,omitempty"`
+	OwnerID                   *string                `json:"ownerID,omitempty"`
+	AddBlockedGroupIDs        []string               `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs     []string               `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups        *bool                  `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs              []string               `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs           []string               `json:"removeEditorIDs,omitempty"`
+	ClearEditors              *bool                  `json:"clearEditors,omitempty"`
+	AddViewerIDs              []string               `json:"addViewerIDs,omitempty"`
+	RemoveViewerIDs           []string               `json:"removeViewerIDs,omitempty"`
+	ClearViewers              *bool                  `json:"clearViewers,omitempty"`
 	AddProcedureIDs           []string               `json:"addProcedureIDs,omitempty"`
 	RemoveProcedureIDs        []string               `json:"removeProcedureIDs,omitempty"`
 	ClearProcedures           *bool                  `json:"clearProcedures,omitempty"`
@@ -21524,6 +21609,15 @@ type UpdateGroupInput struct {
 	AddNarrativeBlockedGroupIDs           []string                      `json:"addNarrativeBlockedGroupIDs,omitempty"`
 	RemoveNarrativeBlockedGroupIDs        []string                      `json:"removeNarrativeBlockedGroupIDs,omitempty"`
 	ClearNarrativeBlockedGroups           *bool                         `json:"clearNarrativeBlockedGroups,omitempty"`
+	AddControlViewerIDs                   []string                      `json:"addControlViewerIDs,omitempty"`
+	RemoveControlViewerIDs                []string                      `json:"removeControlViewerIDs,omitempty"`
+	ClearControlViewers                   *bool                         `json:"clearControlViewers,omitempty"`
+	AddControlEditorIDs                   []string                      `json:"addControlEditorIDs,omitempty"`
+	RemoveControlEditorIDs                []string                      `json:"removeControlEditorIDs,omitempty"`
+	ClearControlEditors                   *bool                         `json:"clearControlEditors,omitempty"`
+	AddControlBlockedGroupIDs             []string                      `json:"addControlBlockedGroupIDs,omitempty"`
+	RemoveControlBlockedGroupIDs          []string                      `json:"removeControlBlockedGroupIDs,omitempty"`
+	ClearControlBlockedGroups             *bool                         `json:"clearControlBlockedGroups,omitempty"`
 	AddGroupMembers                       []*CreateGroupMembershipInput `json:"addGroupMembers,omitempty"`
 	UpdateGroupSettings                   *UpdateGroupSettingInput      `json:"updateGroupSettings,omitempty"`
 }
@@ -21929,6 +22023,9 @@ type UpdateOrganizationInput struct {
 	AddNarrativeIDs                  []string                        `json:"addNarrativeIDs,omitempty"`
 	RemoveNarrativeIDs               []string                        `json:"removeNarrativeIDs,omitempty"`
 	ClearNarratives                  *bool                           `json:"clearNarratives,omitempty"`
+	AddControlIDs                    []string                        `json:"addControlIDs,omitempty"`
+	RemoveControlIDs                 []string                        `json:"removeControlIDs,omitempty"`
+	ClearControls                    *bool                           `json:"clearControls,omitempty"`
 	AddOrgMembers                    []*CreateOrgMembershipInput     `json:"addOrgMembers,omitempty"`
 	UpdateOrgSettings                *UpdateOrganizationSettingInput `json:"updateOrgSettings,omitempty"`
 }

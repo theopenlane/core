@@ -1797,6 +1797,10 @@ type Control implements Node {
 	"""
 	tags: [String!]
 	"""
+	the ID of the organization owner of the object
+	"""
+	ownerID: ID!
+	"""
 	the name of the control
 	"""
 	name: String!
@@ -1844,6 +1848,19 @@ type Control implements Node {
 	json data including details of the control
 	"""
 	details: Map
+	owner: Organization!
+	"""
+	groups that are blocked from viewing or editing the risk
+	"""
+	blockedGroups: [Group!]
+	"""
+	provides edit access to the risk to members of the group
+	"""
+	editors: [Group!]
+	"""
+	provides view access to the risk to members of the group
+	"""
+	viewers: [Group!]
 	procedures: [Procedure!]
 	subcontrols: [Subcontrol!]
 	controlobjectives: [ControlObjective!]
@@ -1926,6 +1943,10 @@ type ControlHistory implements Node {
 	tags associated with the object
 	"""
 	tags: [String!]
+	"""
+	the ID of the organization owner of the object
+	"""
+	ownerID: String!
 	"""
 	the name of the control
 	"""
@@ -2163,6 +2184,22 @@ input ControlHistoryWhereInput {
 	deletedByNotNil: Boolean
 	deletedByEqualFold: String
 	deletedByContainsFold: String
+	"""
+	owner_id field predicates
+	"""
+	ownerID: String
+	ownerIDNEQ: String
+	ownerIDIn: [String!]
+	ownerIDNotIn: [String!]
+	ownerIDGT: String
+	ownerIDGTE: String
+	ownerIDLT: String
+	ownerIDLTE: String
+	ownerIDContains: String
+	ownerIDHasPrefix: String
+	ownerIDHasSuffix: String
+	ownerIDEqualFold: String
+	ownerIDContainsFold: String
 	"""
 	name field predicates
 	"""
@@ -3460,6 +3497,22 @@ input ControlWhereInput {
 	deletedByEqualFold: String
 	deletedByContainsFold: String
 	"""
+	owner_id field predicates
+	"""
+	ownerID: ID
+	ownerIDNEQ: ID
+	ownerIDIn: [ID!]
+	ownerIDNotIn: [ID!]
+	ownerIDGT: ID
+	ownerIDGTE: ID
+	ownerIDLT: ID
+	ownerIDLTE: ID
+	ownerIDContains: ID
+	ownerIDHasPrefix: ID
+	ownerIDHasSuffix: ID
+	ownerIDEqualFold: ID
+	ownerIDContainsFold: ID
+	"""
 	name field predicates
 	"""
 	name: String
@@ -3655,6 +3708,26 @@ input ControlWhereInput {
 	mappedFrameworksNotNil: Boolean
 	mappedFrameworksEqualFold: String
 	mappedFrameworksContainsFold: String
+	"""
+	owner edge predicates
+	"""
+	hasOwner: Boolean
+	hasOwnerWith: [OrganizationWhereInput!]
+	"""
+	blocked_groups edge predicates
+	"""
+	hasBlockedGroups: Boolean
+	hasBlockedGroupsWith: [GroupWhereInput!]
+	"""
+	editors edge predicates
+	"""
+	hasEditors: Boolean
+	hasEditorsWith: [GroupWhereInput!]
+	"""
+	viewers edge predicates
+	"""
+	hasViewers: Boolean
+	hasViewersWith: [GroupWhereInput!]
 	"""
 	procedures edge predicates
 	"""
@@ -3867,6 +3940,10 @@ input CreateControlInput {
 	json data including details of the control
 	"""
 	details: Map
+	ownerID: ID!
+	blockedGroupIDs: [ID!]
+	editorIDs: [ID!]
+	viewerIDs: [ID!]
 	procedureIDs: [ID!]
 	subcontrolIDs: [ID!]
 	controlobjectiveIDs: [ID!]
@@ -4312,6 +4389,9 @@ input CreateGroupInput {
 	narrativeViewerIDs: [ID!]
 	narrativeEditorIDs: [ID!]
 	narrativeBlockedGroupIDs: [ID!]
+	controlViewerIDs: [ID!]
+	controlEditorIDs: [ID!]
+	controlBlockedGroupIDs: [ID!]
 	createGroupSettings: CreateGroupSettingInput
 }
 """
@@ -4682,6 +4762,7 @@ input CreateOrganizationInput {
 	riskIDs: [ID!]
 	controlobjectiveIDs: [ID!]
 	narrativeIDs: [ID!]
+	controlIDs: [ID!]
 	createOrgSettings: CreateOrganizationSettingInput
 }
 """
@@ -11448,6 +11529,9 @@ type Group implements Node {
 	narrativeViewers: [Narrative!]
 	narrativeEditors: [Narrative!]
 	narrativeBlockedGroups: [Narrative!]
+	controlViewers: [Control!]
+	controlEditors: [Control!]
+	controlBlockedGroups: [Control!]
 	members: [GroupMembership!]
 }
 """
@@ -13151,6 +13235,21 @@ input GroupWhereInput {
 	"""
 	hasNarrativeBlockedGroups: Boolean
 	hasNarrativeBlockedGroupsWith: [NarrativeWhereInput!]
+	"""
+	control_viewers edge predicates
+	"""
+	hasControlViewers: Boolean
+	hasControlViewersWith: [ControlWhereInput!]
+	"""
+	control_editors edge predicates
+	"""
+	hasControlEditors: Boolean
+	hasControlEditorsWith: [ControlWhereInput!]
+	"""
+	control_blocked_groups edge predicates
+	"""
+	hasControlBlockedGroups: Boolean
+	hasControlBlockedGroupsWith: [ControlWhereInput!]
 	"""
 	members edge predicates
 	"""
@@ -20219,6 +20318,7 @@ type Organization implements Node {
 	risks: [Risk!]
 	controlobjectives: [ControlObjective!]
 	narratives: [Narrative!]
+	controls: [Control!]
 	members: [OrgMembership!]
 }
 """
@@ -21728,6 +21828,11 @@ input OrganizationWhereInput {
 	"""
 	hasNarratives: Boolean
 	hasNarrativesWith: [NarrativeWhereInput!]
+	"""
+	controls edge predicates
+	"""
+	hasControls: Boolean
+	hasControlsWith: [ControlWhereInput!]
 	"""
 	members edge predicates
 	"""
@@ -32228,6 +32333,16 @@ input UpdateControlInput {
 	"""
 	details: Map
 	clearDetails: Boolean
+	ownerID: ID
+	addBlockedGroupIDs: [ID!]
+	removeBlockedGroupIDs: [ID!]
+	clearBlockedGroups: Boolean
+	addEditorIDs: [ID!]
+	removeEditorIDs: [ID!]
+	clearEditors: Boolean
+	addViewerIDs: [ID!]
+	removeViewerIDs: [ID!]
+	clearViewers: Boolean
 	addProcedureIDs: [ID!]
 	removeProcedureIDs: [ID!]
 	clearProcedures: Boolean
@@ -32898,6 +33013,15 @@ input UpdateGroupInput {
 	addNarrativeBlockedGroupIDs: [ID!]
 	removeNarrativeBlockedGroupIDs: [ID!]
 	clearNarrativeBlockedGroups: Boolean
+	addControlViewerIDs: [ID!]
+	removeControlViewerIDs: [ID!]
+	clearControlViewers: Boolean
+	addControlEditorIDs: [ID!]
+	removeControlEditorIDs: [ID!]
+	clearControlEditors: Boolean
+	addControlBlockedGroupIDs: [ID!]
+	removeControlBlockedGroupIDs: [ID!]
+	clearControlBlockedGroups: Boolean
 	addGroupMembers: [CreateGroupMembershipInput!]
 	updateGroupSettings: UpdateGroupSettingInput
 }
@@ -33407,6 +33531,9 @@ input UpdateOrganizationInput {
 	addNarrativeIDs: [ID!]
 	removeNarrativeIDs: [ID!]
 	clearNarratives: Boolean
+	addControlIDs: [ID!]
+	removeControlIDs: [ID!]
+	clearControls: Boolean
 	addOrgMembers: [CreateOrgMembershipInput!]
 	updateOrgSettings: UpdateOrganizationSettingInput
 }
