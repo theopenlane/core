@@ -1,8 +1,6 @@
 package schema
 
 import (
-	"context"
-
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
@@ -12,8 +10,8 @@ import (
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/mixin"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
 )
@@ -102,32 +100,20 @@ func (Risk) Annotations() []schema.Annotation {
 		entgql.RelayConnection(),
 		entgql.QueryField(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
-		entfga.Annotations{
-			ObjectType:   "risk", // check access to the risk for update/delete
-			IncludeHooks: false,
-		},
+		entfga.SelfAccessChecks(),
 	}
 }
 
 // Policy of the Risk
 func (Risk) Policy() ent.Policy {
-	return privacy.Policy{
-		Mutation: privacy.MutationPolicy{
+	return policy.NewPolicy(
+		policy.WithQueryRules(
+			policy.CheckReadAccess[*generated.RiskQuery](),
+		),
+		policy.WithMutationRules(
 			rule.CanCreateObjectsInProgram(), // if mutation contains program_id, check access
-			privacy.OnMutationOperation( // if there is no program_id, check access for create in org
-				rule.CheckGroupBasedObjectCreationAccess(),
-				ent.OpCreate,
-			),
-			privacy.RiskMutationRuleFunc(func(ctx context.Context, m *generated.RiskMutation) error {
-				return m.CheckAccessForEdit(ctx) // check access for edit
-			}),
-			privacy.AlwaysDenyRule(),
-		},
-		Query: privacy.QueryPolicy{
-			privacy.RiskQueryRuleFunc(func(ctx context.Context, q *generated.RiskQuery) error {
-				return q.CheckAccess(ctx)
-			}),
-			privacy.AlwaysDenyRule(),
-		},
-	}
+			policy.CheckCreateAccess(),
+			policy.CheckEditAccess[*generated.RiskMutation](),
+		),
+	)
 }

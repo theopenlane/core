@@ -1,8 +1,6 @@
 package schema
 
 import (
-	"context"
-
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
@@ -16,11 +14,10 @@ import (
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
 
 // Group holds the schema definition for the Group entity
@@ -160,41 +157,7 @@ func (Group) Annotations() []schema.Annotation {
 				},
 			},
 		),
-		entfga.Annotations{
-			ObjectType:   "group",
-			IncludeHooks: false,
-		},
-	}
-}
-
-// Policy of the group
-func (Group) Policy() ent.Policy {
-	return privacy.Policy{
-		Mutation: privacy.MutationPolicy{
-			privacy.OnMutationOperation(
-				rule.CheckGroupBasedObjectCreationAccess(),
-				ent.OpCreate,
-			),
-			privacy.OnMutationOperation(
-				privacy.GroupMutationRuleFunc(func(ctx context.Context, m *generated.GroupMutation) error {
-					return m.CheckAccessForEdit(ctx)
-				}),
-				ent.OpUpdate|ent.OpUpdateOne,
-			),
-			privacy.OnMutationOperation(
-				privacy.GroupMutationRuleFunc(func(ctx context.Context, m *generated.GroupMutation) error {
-					return m.CheckAccessForDelete(ctx)
-				}),
-				ent.OpDelete|ent.OpDeleteOne,
-			),
-			privacy.AlwaysDenyRule(),
-		},
-		Query: privacy.QueryPolicy{
-			privacy.GroupQueryRuleFunc(func(ctx context.Context, q *generated.GroupQuery) error {
-				return q.CheckAccess(ctx)
-			}),
-			privacy.AlwaysDenyRule(),
-		},
+		entfga.SelfAccessChecks(),
 	}
 }
 
@@ -211,4 +174,17 @@ func (Group) Hooks() []ent.Hook {
 		hooks.HookGroupAuthz(),
 		hooks.HookGroup(),
 	}
+}
+
+// Policy of the group
+func (Group) Policy() ent.Policy {
+	return policy.NewPolicy(
+		policy.WithQueryRules(
+			policy.CheckReadAccess[*generated.GroupQuery](),
+		),
+		policy.WithMutationRules(
+			policy.CheckCreateAccess(),
+			policy.CheckEditAndDeleteAccess[*generated.GroupMutation](),
+		),
+	)
 }

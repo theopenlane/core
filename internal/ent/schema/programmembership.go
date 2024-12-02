@@ -1,8 +1,6 @@
 package schema
 
 import (
-	"context"
-
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
@@ -15,9 +13,9 @@ import (
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/mixin"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -59,11 +57,7 @@ func (ProgramMembership) Annotations() []schema.Annotation {
 		entgql.RelayConnection(),
 		entgql.QueryField(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
-		entfga.Annotations{
-			ObjectType:   "program",
-			IncludeHooks: true,
-			IDField:      "ProgramID",
-		},
+		entfga.MembershipChecks("program"),
 	}
 }
 
@@ -93,18 +87,12 @@ func (ProgramMembership) Hooks() []ent.Hook {
 
 // // Policy of the ProgramMembership
 func (ProgramMembership) Policy() ent.Policy {
-	return privacy.Policy{
-		Mutation: privacy.MutationPolicy{
-			privacy.ProgramMembershipMutationRuleFunc(func(ctx context.Context, m *generated.ProgramMembershipMutation) error {
-				return m.CheckAccessForEdit(ctx)
-			}),
-			privacy.AlwaysDenyRule(),
-		},
-		Query: privacy.QueryPolicy{
-			privacy.ProgramMembershipQueryRuleFunc(func(ctx context.Context, q *generated.ProgramMembershipQuery) error {
-				return q.CheckAccess(ctx)
-			}),
-			privacy.AlwaysDenyRule(),
-		},
-	}
+	return policy.NewPolicy(
+		policy.WithQueryRules(
+			policy.CheckReadAccess[*generated.ProgramMembershipQuery](),
+		),
+		policy.WithMutationRules(
+			policy.CheckEditAccess[*generated.ProgramMembershipMutation](),
+		),
+	)
 }

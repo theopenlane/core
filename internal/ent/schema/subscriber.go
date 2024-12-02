@@ -1,7 +1,6 @@
 package schema
 
 import (
-	"context"
 	"net/mail"
 	"regexp"
 
@@ -19,9 +18,9 @@ import (
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/mixin"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 )
@@ -129,13 +128,7 @@ func (Subscriber) Annotations() []schema.Annotation {
 		entgql.QueryField(),
 		entgql.RelayConnection(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
-		entfga.Annotations{
-			ObjectType:      "organization",
-			IncludeHooks:    false,
-			OrgOwnedField:   true,
-			NillableIDField: true,
-			IDField:         "OwnerID",
-		},
+		entfga.OrganizationInheritedChecks(),
 		history.Annotations{
 			Exclude: true,
 		},
@@ -144,22 +137,16 @@ func (Subscriber) Annotations() []schema.Annotation {
 
 // Policy of the Subscriber
 func (Subscriber) Policy() ent.Policy {
-	return privacy.Policy{
-		Mutation: privacy.MutationPolicy{
+	return policy.NewPolicy(
+		policy.WithQueryRules(
 			rule.AllowIfContextHasPrivacyTokenOfType(&token.SignUpToken{}),
 			rule.AllowIfContextHasPrivacyTokenOfType(&token.VerifyToken{}),
-			privacy.SubscriberMutationRuleFunc(func(ctx context.Context, m *generated.SubscriberMutation) error {
-				return m.CheckAccessForEdit(ctx)
-			}),
-			privacy.AlwaysDenyRule(),
-		},
-		Query: privacy.QueryPolicy{
+			policy.CheckReadAccess[*generated.SubscriberQuery](),
+		),
+		policy.WithMutationRules(
 			rule.AllowIfContextHasPrivacyTokenOfType(&token.SignUpToken{}),
 			rule.AllowIfContextHasPrivacyTokenOfType(&token.VerifyToken{}),
-			privacy.SubscriberQueryRuleFunc(func(ctx context.Context, q *generated.SubscriberQuery) error {
-				return q.CheckAccess(ctx)
-			}),
-			privacy.AlwaysDenyRule(),
-		},
-	}
+			policy.CheckEditAccess[*generated.SubscriberMutation](),
+		),
+	)
 }

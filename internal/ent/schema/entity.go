@@ -1,8 +1,6 @@
 package schema
 
 import (
-	"context"
-
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
@@ -16,9 +14,9 @@ import (
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/mixin"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/validator"
 )
 
@@ -108,13 +106,7 @@ func (Entity) Annotations() []schema.Annotation {
 		entgql.QueryField(),
 		entgql.RelayConnection(),
 		entgql.Mutations(entgql.MutationCreate(), entgql.MutationUpdate()),
-		entfga.Annotations{
-			ObjectType:      "organization",
-			IncludeHooks:    false,
-			NillableIDField: true,
-			OrgOwnedField:   true,
-			IDField:         "OwnerID",
-		},
+		entfga.OrganizationInheritedChecks(),
 	}
 }
 
@@ -132,19 +124,12 @@ func (Entity) Interceptors() []ent.Interceptor {
 
 // Policy of the Entity
 func (Entity) Policy() ent.Policy {
-	return privacy.Policy{
-		Mutation: privacy.MutationPolicy{
-			privacy.EntityMutationRuleFunc(func(ctx context.Context, m *generated.EntityMutation) error {
-				return m.CheckAccessForEdit(ctx)
-			}),
-
-			privacy.AlwaysDenyRule(),
-		},
-		Query: privacy.QueryPolicy{
-			privacy.EntityQueryRuleFunc(func(ctx context.Context, q *generated.EntityQuery) error {
-				return q.CheckAccess(ctx)
-			}),
-			privacy.AlwaysDenyRule(),
-		},
-	}
+	return policy.NewPolicy(
+		policy.WithQueryRules(
+			policy.CheckReadAccess[*generated.EntityQuery](),
+		),
+		policy.WithMutationRules(
+			policy.CheckEditAccess[*generated.EntityMutation](),
+		),
+	)
 }

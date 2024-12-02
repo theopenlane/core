@@ -6,16 +6,16 @@ import (
 )
 
 var (
-	// prePolicy is executed before privacy policy.
+	// prePolicy is executed before privacy policy
 	prePolicy = privacy.Policy{
 		Query:    privacy.QueryPolicy{},
 		Mutation: privacy.MutationPolicy{},
 	}
 
-	// postPolicy is executed after privacy policy.
+	// postPolicy is executed after privacy policy
 	postPolicy = privacy.Policy{
 		Query: privacy.QueryPolicy{
-			privacy.AlwaysAllowRule(),
+			privacy.AlwaysDenyRule(),
 		},
 		Mutation: privacy.MutationPolicy{
 			privacy.AlwaysDenyRule(),
@@ -69,9 +69,11 @@ func NewPolicy(opts ...PolicyOption) ent.Policy {
 		pre:  prePolicy,
 		post: postPolicy,
 	}
+
 	for _, opt := range opts {
 		opt(&policies)
 	}
+
 	return privacy.Policy{
 		Query:    policies.queryPolicy(),
 		Mutation: policies.mutationPolicy(),
@@ -82,6 +84,7 @@ func (policies policies) queryPolicy() privacy.QueryPolicy {
 	policy := append(privacy.QueryPolicy(nil), policies.pre.Query...)
 	policy = append(policy, policies.query...)
 	policy = append(policy, policies.post.Query...)
+
 	return policy
 }
 
@@ -89,5 +92,6 @@ func (policies policies) mutationPolicy() privacy.MutationPolicy {
 	policy := append(privacy.MutationPolicy(nil), policies.pre.Mutation...)
 	policy = append(policy, policies.mutation...)
 	policy = append(policy, policies.post.Mutation...)
+
 	return policy
 }

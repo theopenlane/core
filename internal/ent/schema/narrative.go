@@ -1,8 +1,6 @@
 package schema
 
 import (
-	"context"
-
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
@@ -12,8 +10,8 @@ import (
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/mixin"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
 
@@ -82,31 +80,20 @@ func (Narrative) Annotations() []schema.Annotation {
 		entgql.RelayConnection(),
 		entgql.QueryField(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
-		entfga.Annotations{
-			ObjectType: "narrative", // check access to the narrative for update/delete
-		},
+		entfga.SelfAccessChecks(),
 	}
 }
 
 // Policy of the Narrative
 func (Narrative) Policy() ent.Policy {
-	return privacy.Policy{
-		Mutation: privacy.MutationPolicy{
+	return policy.NewPolicy(
+		policy.WithQueryRules(
+			policy.CheckReadAccess[*generated.NarrativeQuery](),
+		),
+		policy.WithMutationRules(
 			rule.CanCreateObjectsInProgram(), // if mutation contains program_id, check access
-			privacy.OnMutationOperation( // if there is no program_id, check access for create in org
-				rule.CheckGroupBasedObjectCreationAccess(),
-				ent.OpCreate,
-			),
-			privacy.NarrativeMutationRuleFunc(func(ctx context.Context, m *generated.NarrativeMutation) error {
-				return m.CheckAccessForEdit(ctx) // check access for edit
-			}),
-			privacy.AlwaysDenyRule(),
-		},
-		Query: privacy.QueryPolicy{
-			privacy.NarrativeQueryRuleFunc(func(ctx context.Context, q *generated.NarrativeQuery) error {
-				return q.CheckAccess(ctx)
-			}),
-			privacy.AlwaysDenyRule(),
-		},
-	}
+			policy.CheckCreateAccess(),
+			policy.CheckEditAccess[*generated.NarrativeMutation](),
+		),
+	)
 }

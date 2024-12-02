@@ -1,8 +1,6 @@
 package schema
 
 import (
-	"context"
-
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
@@ -10,9 +8,9 @@ import (
 	"entgo.io/ent/schema/field"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/mixin"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
 	emixin "github.com/theopenlane/entx/mixin"
 	"github.com/theopenlane/iam/entfga"
@@ -102,10 +100,7 @@ func (Task) Annotations() []schema.Annotation {
 		entgql.QueryField(),
 		entgql.RelayConnection(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
-		entfga.Annotations{
-			ObjectType:   "task",
-			IncludeHooks: false,
-		},
+		entfga.SelfAccessChecks(),
 	}
 }
 
@@ -124,18 +119,12 @@ func (Task) Interceptors() []ent.Interceptor {
 
 // Policy of the Task
 func (Task) Policy() ent.Policy {
-	return privacy.Policy{
-		Mutation: privacy.MutationPolicy{
-			privacy.TaskMutationRuleFunc(func(ctx context.Context, m *generated.TaskMutation) error {
-				return m.CheckAccessForEdit(ctx)
-			}),
-			privacy.AlwaysDenyRule(),
-		},
-		Query: privacy.QueryPolicy{
-			privacy.TaskQueryRuleFunc(func(ctx context.Context, q *generated.TaskQuery) error {
-				return q.CheckAccess(ctx)
-			}),
-			privacy.AlwaysDenyRule(),
-		},
-	}
+	return policy.NewPolicy(
+		policy.WithQueryRules(
+			policy.CheckReadAccess[*generated.TaskQuery](),
+		),
+		policy.WithMutationRules(
+			policy.CheckEditAccess[*generated.TaskMutation](),
+		),
+	)
 }

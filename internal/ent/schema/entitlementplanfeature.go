@@ -1,8 +1,6 @@
 package schema
 
 import (
-	"context"
-
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
@@ -15,8 +13,8 @@ import (
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/mixin"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
 
 // EntitlementPlanFeature holds the schema definition for the EntitlementPlanFeature entity
@@ -83,13 +81,7 @@ func (EntitlementPlanFeature) Annotations() []schema.Annotation {
 		entgql.QueryField(),
 		entgql.RelayConnection(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
-		entfga.Annotations{
-			ObjectType:      "organization",
-			IncludeHooks:    false,
-			NillableIDField: true,
-			OrgOwnedField:   true,
-			IDField:         "OwnerID",
-		},
+		entfga.OrganizationInheritedChecks(),
 	}
 }
 
@@ -105,19 +97,12 @@ func (EntitlementPlanFeature) Interceptors() []ent.Interceptor {
 
 // Policy of the EntitlementPlan
 func (EntitlementPlanFeature) Policy() ent.Policy {
-	return privacy.Policy{
-		Mutation: privacy.MutationPolicy{
-			privacy.EntitlementPlanFeatureMutationRuleFunc(func(ctx context.Context, m *generated.EntitlementPlanFeatureMutation) error {
-				return m.CheckAccessForEdit(ctx)
-			}),
-
-			privacy.AlwaysDenyRule(),
-		},
-		Query: privacy.QueryPolicy{
-			privacy.EntitlementPlanFeatureQueryRuleFunc(func(ctx context.Context, q *generated.EntitlementPlanFeatureQuery) error {
-				return q.CheckAccess(ctx)
-			}),
-			privacy.AlwaysDenyRule(),
-		},
-	}
+	return policy.NewPolicy(
+		policy.WithQueryRules(
+			policy.CheckReadAccess[*generated.EntitlementPlanFeatureQuery](),
+		),
+		policy.WithMutationRules(
+			policy.CheckEditAccess[*generated.EntitlementPlanFeatureMutation](),
+		),
+	)
 }

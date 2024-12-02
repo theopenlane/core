@@ -1,8 +1,6 @@
 package schema
 
 import (
-	"context"
-
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
@@ -14,8 +12,8 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/customtypes"
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/mixin"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
 
 // OauthProvider holds the schema definition for the OauthProvider entity
@@ -63,13 +61,7 @@ func (OauthProvider) Annotations() []schema.Annotation {
 		entgql.RelayConnection(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
 		entx.QueryGenSkip(true),
-		entfga.Annotations{
-			ObjectType:      "organization",
-			IncludeHooks:    false,
-			NillableIDField: true,
-			OrgOwnedField:   true,
-			IDField:         "OwnerID",
-		},
+		entfga.OrganizationInheritedChecks(),
 	}
 }
 
@@ -86,19 +78,12 @@ func (OauthProvider) Mixin() []ent.Mixin {
 
 // Policy of the OauthProvider
 func (OauthProvider) Policy() ent.Policy {
-	return privacy.Policy{
-		Mutation: privacy.MutationPolicy{
-			privacy.OauthProviderMutationRuleFunc(func(ctx context.Context, m *generated.OauthProviderMutation) error {
-				return m.CheckAccessForEdit(ctx)
-			}),
-
-			privacy.AlwaysDenyRule(),
-		},
-		Query: privacy.QueryPolicy{
-			privacy.OauthProviderQueryRuleFunc(func(ctx context.Context, q *generated.OauthProviderQuery) error {
-				return q.CheckAccess(ctx)
-			}),
-			privacy.AlwaysDenyRule(),
-		},
-	}
+	return policy.NewPolicy(
+		policy.WithQueryRules(
+			policy.CheckReadAccess[*generated.OauthProviderQuery](),
+		),
+		policy.WithMutationRules(
+			policy.CheckEditAccess[*generated.OauthProviderMutation](),
+		),
+	)
 }

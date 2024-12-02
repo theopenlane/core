@@ -58,7 +58,11 @@ func TestHandlerTestSuite(t *testing.T) {
 }
 
 func (suite *HandlerTestSuite) SetupSuite() {
-	zerolog.SetGlobalLevel(zerolog.Disabled)
+	if testing.Verbose() {
+		zerolog.SetGlobalLevel(zerolog.ErrorLevel)
+	} else {
+		zerolog.SetGlobalLevel(zerolog.Disabled)
+	}
 
 	// setup db container
 	suite.tf = entdb.NewTestFixture()

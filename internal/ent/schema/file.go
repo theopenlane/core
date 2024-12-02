@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/mixin"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
 
 // File defines the file schema.
@@ -116,17 +117,17 @@ func (File) Annotations() []schema.Annotation {
 		entgql.RelayConnection(),
 		entgql.QueryField(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
-		entfga.Annotations{
-			ObjectType:   "file",
-			IncludeHooks: false,
-		},
+		entfga.SelfAccessChecks(),
 	}
 }
 
 // Policy of the File
 func (File) Policy() ent.Policy {
-	return privacy.Policy{
-		Mutation: privacy.MutationPolicy{
+	return policy.NewPolicy(
+		policy.WithQueryRules(
+			policy.CheckReadAccess[*generated.FileQuery](),
+		),
+		policy.WithMutationRules(
 			privacy.OnMutationOperation(
 				privacy.FileMutationRuleFunc(func(ctx context.Context, m *generated.FileMutation) error {
 					return m.CheckAccessForEdit(ctx)
@@ -135,12 +136,6 @@ func (File) Policy() ent.Policy {
 				ent.OpDelete|ent.OpDeleteOne|ent.OpUpdate|ent.OpUpdateOne,
 			),
 			privacy.AlwaysAllowRule(),
-		},
-		Query: privacy.QueryPolicy{
-			privacy.FileQueryRuleFunc(func(ctx context.Context, q *generated.FileQuery) error {
-				return q.CheckAccess(ctx)
-			}),
-			privacy.AlwaysDenyRule(),
-		},
-	}
+		),
+	)
 }

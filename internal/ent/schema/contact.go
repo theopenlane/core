@@ -1,7 +1,6 @@
 package schema
 
 import (
-	"context"
 	"net/mail"
 
 	"entgo.io/contrib/entgql"
@@ -16,8 +15,8 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/mixin"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/pkg/enums"
 )
@@ -102,13 +101,7 @@ func (Contact) Annotations() []schema.Annotation {
 		entgql.QueryField(),
 		entgql.RelayConnection(),
 		entgql.Mutations(entgql.MutationCreate(), (entgql.MutationUpdate())),
-		entfga.Annotations{
-			ObjectType:      "organization",
-			IncludeHooks:    false,
-			NillableIDField: true,
-			OrgOwnedField:   true,
-			IDField:         "OwnerID",
-		},
+		entfga.OrganizationInheritedChecks(),
 	}
 }
 
@@ -124,19 +117,12 @@ func (Contact) Interceptors() []ent.Interceptor {
 
 // Policy of the Contact
 func (Contact) Policy() ent.Policy {
-	return privacy.Policy{
-		Mutation: privacy.MutationPolicy{
-			privacy.ContactMutationRuleFunc(func(ctx context.Context, m *generated.ContactMutation) error {
-				return m.CheckAccessForEdit(ctx)
-			}),
-
-			privacy.AlwaysDenyRule(),
-		},
-		Query: privacy.QueryPolicy{
-			privacy.ContactQueryRuleFunc(func(ctx context.Context, q *generated.ContactQuery) error {
-				return q.CheckAccess(ctx)
-			}),
-			privacy.AlwaysDenyRule(),
-		},
-	}
+	return policy.NewPolicy(
+		policy.WithQueryRules(
+			policy.CheckReadAccess[*generated.ContactQuery](),
+		),
+		policy.WithMutationRules(
+			policy.CheckEditAccess[*generated.ContactMutation](),
+		),
+	)
 }
