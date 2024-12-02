@@ -3340,28 +3340,37 @@ type CreateGroupInput struct {
 	// The group's displayed 'friendly' name
 	DisplayName                     *string                  `json:"displayName,omitempty"`
 	OwnerID                         *string                  `json:"ownerID,omitempty"`
+	ControlCreatorIDs               []string                 `json:"controlCreatorIDs,omitempty"`
+	ControlObjectiveCreatorIDs      []string                 `json:"controlObjectiveCreatorIDs,omitempty"`
+	GroupCreatorIDs                 []string                 `json:"groupCreatorIDs,omitempty"`
+	InternalPolicyCreatorIDs        []string                 `json:"internalPolicyCreatorIDs,omitempty"`
+	NarrativeCreatorIDs             []string                 `json:"narrativeCreatorIDs,omitempty"`
+	ProcedureCreatorIDs             []string                 `json:"procedureCreatorIDs,omitempty"`
+	ProgramCreatorIDs               []string                 `json:"programCreatorIDs,omitempty"`
+	RiskCreatorIDs                  []string                 `json:"riskCreatorIDs,omitempty"`
+	TemplateCreatorIDs              []string                 `json:"templateCreatorIDs,omitempty"`
+	ProcedureEditorIDs              []string                 `json:"procedureEditorIDs,omitempty"`
+	ProcedureBlockedGroupIDs        []string                 `json:"procedureBlockedGroupIDs,omitempty"`
+	InternalpolicyEditorIDs         []string                 `json:"internalpolicyEditorIDs,omitempty"`
+	InternalpolicyBlockedGroupIDs   []string                 `json:"internalpolicyBlockedGroupIDs,omitempty"`
+	ProgramEditorIDs                []string                 `json:"programEditorIDs,omitempty"`
+	ProgramBlockedGroupIDs          []string                 `json:"programBlockedGroupIDs,omitempty"`
+	ProgramViewerIDs                []string                 `json:"programViewerIDs,omitempty"`
+	RiskEditorIDs                   []string                 `json:"riskEditorIDs,omitempty"`
+	RiskBlockedGroupIDs             []string                 `json:"riskBlockedGroupIDs,omitempty"`
+	RiskViewerIDs                   []string                 `json:"riskViewerIDs,omitempty"`
+	ControlobjectiveEditorIDs       []string                 `json:"controlobjectiveEditorIDs,omitempty"`
+	ControlobjectiveBlockedGroupIDs []string                 `json:"controlobjectiveBlockedGroupIDs,omitempty"`
+	ControlobjectiveViewerIDs       []string                 `json:"controlobjectiveViewerIDs,omitempty"`
+	NarrativeEditorIDs              []string                 `json:"narrativeEditorIDs,omitempty"`
+	NarrativeBlockedGroupIDs        []string                 `json:"narrativeBlockedGroupIDs,omitempty"`
+	NarrativeViewerIDs              []string                 `json:"narrativeViewerIDs,omitempty"`
 	SettingID                       string                   `json:"settingID"`
 	UserIDs                         []string                 `json:"userIDs,omitempty"`
 	EventIDs                        []string                 `json:"eventIDs,omitempty"`
 	IntegrationIDs                  []string                 `json:"integrationIDs,omitempty"`
 	FileIDs                         []string                 `json:"fileIDs,omitempty"`
 	TaskIDs                         []string                 `json:"taskIDs,omitempty"`
-	ProcedureEditorIDs              []string                 `json:"procedureEditorIDs,omitempty"`
-	ProcedureBlockedGroupIDs        []string                 `json:"procedureBlockedGroupIDs,omitempty"`
-	InternalpolicyEditorIDs         []string                 `json:"internalpolicyEditorIDs,omitempty"`
-	InternalpolicyBlockedGroupIDs   []string                 `json:"internalpolicyBlockedGroupIDs,omitempty"`
-	ProgramViewerIDs                []string                 `json:"programViewerIDs,omitempty"`
-	ProgramEditorIDs                []string                 `json:"programEditorIDs,omitempty"`
-	ProgramBlockedGroupIDs          []string                 `json:"programBlockedGroupIDs,omitempty"`
-	RiskViewerIDs                   []string                 `json:"riskViewerIDs,omitempty"`
-	RiskEditorIDs                   []string                 `json:"riskEditorIDs,omitempty"`
-	RiskBlockedGroupIDs             []string                 `json:"riskBlockedGroupIDs,omitempty"`
-	ControlobjectiveViewerIDs       []string                 `json:"controlobjectiveViewerIDs,omitempty"`
-	ControlobjectiveEditorIDs       []string                 `json:"controlobjectiveEditorIDs,omitempty"`
-	ControlobjectiveBlockedGroupIDs []string                 `json:"controlobjectiveBlockedGroupIDs,omitempty"`
-	NarrativeViewerIDs              []string                 `json:"narrativeViewerIDs,omitempty"`
-	NarrativeEditorIDs              []string                 `json:"narrativeEditorIDs,omitempty"`
-	NarrativeBlockedGroupIDs        []string                 `json:"narrativeBlockedGroupIDs,omitempty"`
 	CreateGroupSettings             *CreateGroupSettingInput `json:"createGroupSettings,omitempty"`
 }
 
@@ -3585,6 +3594,15 @@ type CreateOrganizationInput struct {
 	AvatarRemoteURL *string `json:"avatarRemoteURL,omitempty"`
 	// Whether the organization has a dedicated database
 	DedicatedDb                *bool                           `json:"dedicatedDb,omitempty"`
+	ControlCreatorIDs          []string                        `json:"controlCreatorIDs,omitempty"`
+	ControlObjectiveCreatorIDs []string                        `json:"controlObjectiveCreatorIDs,omitempty"`
+	GroupCreatorIDs            []string                        `json:"groupCreatorIDs,omitempty"`
+	InternalPolicyCreatorIDs   []string                        `json:"internalPolicyCreatorIDs,omitempty"`
+	NarrativeCreatorIDs        []string                        `json:"narrativeCreatorIDs,omitempty"`
+	ProcedureCreatorIDs        []string                        `json:"procedureCreatorIDs,omitempty"`
+	ProgramCreatorIDs          []string                        `json:"programCreatorIDs,omitempty"`
+	RiskCreatorIDs             []string                        `json:"riskCreatorIDs,omitempty"`
+	TemplateCreatorIDs         []string                        `json:"templateCreatorIDs,omitempty"`
 	ParentID                   *string                         `json:"parentID,omitempty"`
 	GroupIDs                   []string                        `json:"groupIDs,omitempty"`
 	TemplateIDs                []string                        `json:"templateIDs,omitempty"`
@@ -8861,28 +8879,37 @@ type Group struct {
 	// The group's displayed 'friendly' name
 	DisplayName                   string              `json:"displayName"`
 	Owner                         *Organization       `json:"owner,omitempty"`
+	ControlCreators               []*Organization     `json:"controlCreators,omitempty"`
+	ControlObjectiveCreators      []*Organization     `json:"controlObjectiveCreators,omitempty"`
+	GroupCreators                 []*Organization     `json:"groupCreators,omitempty"`
+	InternalPolicyCreators        []*Organization     `json:"internalPolicyCreators,omitempty"`
+	NarrativeCreators             []*Organization     `json:"narrativeCreators,omitempty"`
+	ProcedureCreators             []*Organization     `json:"procedureCreators,omitempty"`
+	ProgramCreators               []*Organization     `json:"programCreators,omitempty"`
+	RiskCreators                  []*Organization     `json:"riskCreators,omitempty"`
+	TemplateCreators              []*Organization     `json:"templateCreators,omitempty"`
+	ProcedureEditors              []*Procedure        `json:"procedureEditors,omitempty"`
+	ProcedureBlockedGroups        []*Procedure        `json:"procedureBlockedGroups,omitempty"`
+	InternalpolicyEditors         []*InternalPolicy   `json:"internalpolicyEditors,omitempty"`
+	InternalpolicyBlockedGroups   []*InternalPolicy   `json:"internalpolicyBlockedGroups,omitempty"`
+	ProgramEditors                []*Program          `json:"programEditors,omitempty"`
+	ProgramBlockedGroups          []*Program          `json:"programBlockedGroups,omitempty"`
+	ProgramViewers                []*Program          `json:"programViewers,omitempty"`
+	RiskEditors                   []*Risk             `json:"riskEditors,omitempty"`
+	RiskBlockedGroups             []*Risk             `json:"riskBlockedGroups,omitempty"`
+	RiskViewers                   []*Risk             `json:"riskViewers,omitempty"`
+	ControlobjectiveEditors       []*ControlObjective `json:"controlobjectiveEditors,omitempty"`
+	ControlobjectiveBlockedGroups []*ControlObjective `json:"controlobjectiveBlockedGroups,omitempty"`
+	ControlobjectiveViewers       []*ControlObjective `json:"controlobjectiveViewers,omitempty"`
+	NarrativeEditors              []*Narrative        `json:"narrativeEditors,omitempty"`
+	NarrativeBlockedGroups        []*Narrative        `json:"narrativeBlockedGroups,omitempty"`
+	NarrativeViewers              []*Narrative        `json:"narrativeViewers,omitempty"`
 	Setting                       *GroupSetting       `json:"setting"`
 	Users                         []*User             `json:"users,omitempty"`
 	Events                        []*Event            `json:"events,omitempty"`
 	Integrations                  []*Integration      `json:"integrations,omitempty"`
 	Files                         []*File             `json:"files,omitempty"`
 	Tasks                         []*Task             `json:"tasks,omitempty"`
-	ProcedureEditors              []*Procedure        `json:"procedureEditors,omitempty"`
-	ProcedureBlockedGroups        []*Procedure        `json:"procedureBlockedGroups,omitempty"`
-	InternalpolicyEditors         []*InternalPolicy   `json:"internalpolicyEditors,omitempty"`
-	InternalpolicyBlockedGroups   []*InternalPolicy   `json:"internalpolicyBlockedGroups,omitempty"`
-	ProgramViewers                []*Program          `json:"programViewers,omitempty"`
-	ProgramEditors                []*Program          `json:"programEditors,omitempty"`
-	ProgramBlockedGroups          []*Program          `json:"programBlockedGroups,omitempty"`
-	RiskViewers                   []*Risk             `json:"riskViewers,omitempty"`
-	RiskEditors                   []*Risk             `json:"riskEditors,omitempty"`
-	RiskBlockedGroups             []*Risk             `json:"riskBlockedGroups,omitempty"`
-	ControlobjectiveViewers       []*ControlObjective `json:"controlobjectiveViewers,omitempty"`
-	ControlobjectiveEditors       []*ControlObjective `json:"controlobjectiveEditors,omitempty"`
-	ControlobjectiveBlockedGroups []*ControlObjective `json:"controlobjectiveBlockedGroups,omitempty"`
-	NarrativeViewers              []*Narrative        `json:"narrativeViewers,omitempty"`
-	NarrativeEditors              []*Narrative        `json:"narrativeEditors,omitempty"`
-	NarrativeBlockedGroups        []*Narrative        `json:"narrativeBlockedGroups,omitempty"`
 	Members                       []*GroupMembership  `json:"members,omitempty"`
 }
 
@@ -10107,6 +10134,81 @@ type GroupWhereInput struct {
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+	// control_creators edge predicates
+	HasControlCreators     *bool                     `json:"hasControlCreators,omitempty"`
+	HasControlCreatorsWith []*OrganizationWhereInput `json:"hasControlCreatorsWith,omitempty"`
+	// control_objective_creators edge predicates
+	HasControlObjectiveCreators     *bool                     `json:"hasControlObjectiveCreators,omitempty"`
+	HasControlObjectiveCreatorsWith []*OrganizationWhereInput `json:"hasControlObjectiveCreatorsWith,omitempty"`
+	// group_creators edge predicates
+	HasGroupCreators     *bool                     `json:"hasGroupCreators,omitempty"`
+	HasGroupCreatorsWith []*OrganizationWhereInput `json:"hasGroupCreatorsWith,omitempty"`
+	// internal_policy_creators edge predicates
+	HasInternalPolicyCreators     *bool                     `json:"hasInternalPolicyCreators,omitempty"`
+	HasInternalPolicyCreatorsWith []*OrganizationWhereInput `json:"hasInternalPolicyCreatorsWith,omitempty"`
+	// narrative_creators edge predicates
+	HasNarrativeCreators     *bool                     `json:"hasNarrativeCreators,omitempty"`
+	HasNarrativeCreatorsWith []*OrganizationWhereInput `json:"hasNarrativeCreatorsWith,omitempty"`
+	// procedure_creators edge predicates
+	HasProcedureCreators     *bool                     `json:"hasProcedureCreators,omitempty"`
+	HasProcedureCreatorsWith []*OrganizationWhereInput `json:"hasProcedureCreatorsWith,omitempty"`
+	// program_creators edge predicates
+	HasProgramCreators     *bool                     `json:"hasProgramCreators,omitempty"`
+	HasProgramCreatorsWith []*OrganizationWhereInput `json:"hasProgramCreatorsWith,omitempty"`
+	// risk_creators edge predicates
+	HasRiskCreators     *bool                     `json:"hasRiskCreators,omitempty"`
+	HasRiskCreatorsWith []*OrganizationWhereInput `json:"hasRiskCreatorsWith,omitempty"`
+	// template_creators edge predicates
+	HasTemplateCreators     *bool                     `json:"hasTemplateCreators,omitempty"`
+	HasTemplateCreatorsWith []*OrganizationWhereInput `json:"hasTemplateCreatorsWith,omitempty"`
+	// procedure_editors edge predicates
+	HasProcedureEditors     *bool                  `json:"hasProcedureEditors,omitempty"`
+	HasProcedureEditorsWith []*ProcedureWhereInput `json:"hasProcedureEditorsWith,omitempty"`
+	// procedure_blocked_groups edge predicates
+	HasProcedureBlockedGroups     *bool                  `json:"hasProcedureBlockedGroups,omitempty"`
+	HasProcedureBlockedGroupsWith []*ProcedureWhereInput `json:"hasProcedureBlockedGroupsWith,omitempty"`
+	// internalpolicy_editors edge predicates
+	HasInternalpolicyEditors     *bool                       `json:"hasInternalpolicyEditors,omitempty"`
+	HasInternalpolicyEditorsWith []*InternalPolicyWhereInput `json:"hasInternalpolicyEditorsWith,omitempty"`
+	// internalpolicy_blocked_groups edge predicates
+	HasInternalpolicyBlockedGroups     *bool                       `json:"hasInternalpolicyBlockedGroups,omitempty"`
+	HasInternalpolicyBlockedGroupsWith []*InternalPolicyWhereInput `json:"hasInternalpolicyBlockedGroupsWith,omitempty"`
+	// program_editors edge predicates
+	HasProgramEditors     *bool                `json:"hasProgramEditors,omitempty"`
+	HasProgramEditorsWith []*ProgramWhereInput `json:"hasProgramEditorsWith,omitempty"`
+	// program_blocked_groups edge predicates
+	HasProgramBlockedGroups     *bool                `json:"hasProgramBlockedGroups,omitempty"`
+	HasProgramBlockedGroupsWith []*ProgramWhereInput `json:"hasProgramBlockedGroupsWith,omitempty"`
+	// program_viewers edge predicates
+	HasProgramViewers     *bool                `json:"hasProgramViewers,omitempty"`
+	HasProgramViewersWith []*ProgramWhereInput `json:"hasProgramViewersWith,omitempty"`
+	// risk_editors edge predicates
+	HasRiskEditors     *bool             `json:"hasRiskEditors,omitempty"`
+	HasRiskEditorsWith []*RiskWhereInput `json:"hasRiskEditorsWith,omitempty"`
+	// risk_blocked_groups edge predicates
+	HasRiskBlockedGroups     *bool             `json:"hasRiskBlockedGroups,omitempty"`
+	HasRiskBlockedGroupsWith []*RiskWhereInput `json:"hasRiskBlockedGroupsWith,omitempty"`
+	// risk_viewers edge predicates
+	HasRiskViewers     *bool             `json:"hasRiskViewers,omitempty"`
+	HasRiskViewersWith []*RiskWhereInput `json:"hasRiskViewersWith,omitempty"`
+	// controlobjective_editors edge predicates
+	HasControlobjectiveEditors     *bool                         `json:"hasControlobjectiveEditors,omitempty"`
+	HasControlobjectiveEditorsWith []*ControlObjectiveWhereInput `json:"hasControlobjectiveEditorsWith,omitempty"`
+	// controlobjective_blocked_groups edge predicates
+	HasControlobjectiveBlockedGroups     *bool                         `json:"hasControlobjectiveBlockedGroups,omitempty"`
+	HasControlobjectiveBlockedGroupsWith []*ControlObjectiveWhereInput `json:"hasControlobjectiveBlockedGroupsWith,omitempty"`
+	// controlobjective_viewers edge predicates
+	HasControlobjectiveViewers     *bool                         `json:"hasControlobjectiveViewers,omitempty"`
+	HasControlobjectiveViewersWith []*ControlObjectiveWhereInput `json:"hasControlobjectiveViewersWith,omitempty"`
+	// narrative_editors edge predicates
+	HasNarrativeEditors     *bool                  `json:"hasNarrativeEditors,omitempty"`
+	HasNarrativeEditorsWith []*NarrativeWhereInput `json:"hasNarrativeEditorsWith,omitempty"`
+	// narrative_blocked_groups edge predicates
+	HasNarrativeBlockedGroups     *bool                  `json:"hasNarrativeBlockedGroups,omitempty"`
+	HasNarrativeBlockedGroupsWith []*NarrativeWhereInput `json:"hasNarrativeBlockedGroupsWith,omitempty"`
+	// narrative_viewers edge predicates
+	HasNarrativeViewers     *bool                  `json:"hasNarrativeViewers,omitempty"`
+	HasNarrativeViewersWith []*NarrativeWhereInput `json:"hasNarrativeViewersWith,omitempty"`
 	// setting edge predicates
 	HasSetting     *bool                     `json:"hasSetting,omitempty"`
 	HasSettingWith []*GroupSettingWhereInput `json:"hasSettingWith,omitempty"`
@@ -10125,54 +10227,6 @@ type GroupWhereInput struct {
 	// tasks edge predicates
 	HasTasks     *bool             `json:"hasTasks,omitempty"`
 	HasTasksWith []*TaskWhereInput `json:"hasTasksWith,omitempty"`
-	// procedure_editors edge predicates
-	HasProcedureEditors     *bool                  `json:"hasProcedureEditors,omitempty"`
-	HasProcedureEditorsWith []*ProcedureWhereInput `json:"hasProcedureEditorsWith,omitempty"`
-	// procedure_blocked_groups edge predicates
-	HasProcedureBlockedGroups     *bool                  `json:"hasProcedureBlockedGroups,omitempty"`
-	HasProcedureBlockedGroupsWith []*ProcedureWhereInput `json:"hasProcedureBlockedGroupsWith,omitempty"`
-	// internalpolicy_editors edge predicates
-	HasInternalpolicyEditors     *bool                       `json:"hasInternalpolicyEditors,omitempty"`
-	HasInternalpolicyEditorsWith []*InternalPolicyWhereInput `json:"hasInternalpolicyEditorsWith,omitempty"`
-	// internalpolicy_blocked_groups edge predicates
-	HasInternalpolicyBlockedGroups     *bool                       `json:"hasInternalpolicyBlockedGroups,omitempty"`
-	HasInternalpolicyBlockedGroupsWith []*InternalPolicyWhereInput `json:"hasInternalpolicyBlockedGroupsWith,omitempty"`
-	// program_viewers edge predicates
-	HasProgramViewers     *bool                `json:"hasProgramViewers,omitempty"`
-	HasProgramViewersWith []*ProgramWhereInput `json:"hasProgramViewersWith,omitempty"`
-	// program_editors edge predicates
-	HasProgramEditors     *bool                `json:"hasProgramEditors,omitempty"`
-	HasProgramEditorsWith []*ProgramWhereInput `json:"hasProgramEditorsWith,omitempty"`
-	// program_blocked_groups edge predicates
-	HasProgramBlockedGroups     *bool                `json:"hasProgramBlockedGroups,omitempty"`
-	HasProgramBlockedGroupsWith []*ProgramWhereInput `json:"hasProgramBlockedGroupsWith,omitempty"`
-	// risk_viewers edge predicates
-	HasRiskViewers     *bool             `json:"hasRiskViewers,omitempty"`
-	HasRiskViewersWith []*RiskWhereInput `json:"hasRiskViewersWith,omitempty"`
-	// risk_editors edge predicates
-	HasRiskEditors     *bool             `json:"hasRiskEditors,omitempty"`
-	HasRiskEditorsWith []*RiskWhereInput `json:"hasRiskEditorsWith,omitempty"`
-	// risk_blocked_groups edge predicates
-	HasRiskBlockedGroups     *bool             `json:"hasRiskBlockedGroups,omitempty"`
-	HasRiskBlockedGroupsWith []*RiskWhereInput `json:"hasRiskBlockedGroupsWith,omitempty"`
-	// controlobjective_viewers edge predicates
-	HasControlobjectiveViewers     *bool                         `json:"hasControlobjectiveViewers,omitempty"`
-	HasControlobjectiveViewersWith []*ControlObjectiveWhereInput `json:"hasControlobjectiveViewersWith,omitempty"`
-	// controlobjective_editors edge predicates
-	HasControlobjectiveEditors     *bool                         `json:"hasControlobjectiveEditors,omitempty"`
-	HasControlobjectiveEditorsWith []*ControlObjectiveWhereInput `json:"hasControlobjectiveEditorsWith,omitempty"`
-	// controlobjective_blocked_groups edge predicates
-	HasControlobjectiveBlockedGroups     *bool                         `json:"hasControlobjectiveBlockedGroups,omitempty"`
-	HasControlobjectiveBlockedGroupsWith []*ControlObjectiveWhereInput `json:"hasControlobjectiveBlockedGroupsWith,omitempty"`
-	// narrative_viewers edge predicates
-	HasNarrativeViewers     *bool                  `json:"hasNarrativeViewers,omitempty"`
-	HasNarrativeViewersWith []*NarrativeWhereInput `json:"hasNarrativeViewersWith,omitempty"`
-	// narrative_editors edge predicates
-	HasNarrativeEditors     *bool                  `json:"hasNarrativeEditors,omitempty"`
-	HasNarrativeEditorsWith []*NarrativeWhereInput `json:"hasNarrativeEditorsWith,omitempty"`
-	// narrative_blocked_groups edge predicates
-	HasNarrativeBlockedGroups     *bool                  `json:"hasNarrativeBlockedGroups,omitempty"`
-	HasNarrativeBlockedGroupsWith []*NarrativeWhereInput `json:"hasNarrativeBlockedGroupsWith,omitempty"`
 	// members edge predicates
 	HasMembers     *bool                        `json:"hasMembers,omitempty"`
 	HasMembersWith []*GroupMembershipWhereInput `json:"hasMembersWith,omitempty"`
@@ -14134,7 +14188,25 @@ type Organization struct {
 	// URL of the user's remote avatar
 	AvatarRemoteURL *string `json:"avatarRemoteURL,omitempty"`
 	// Whether the organization has a dedicated database
-	DedicatedDb             bool                      `json:"dedicatedDb"`
+	DedicatedDb bool `json:"dedicatedDb"`
+	// groups that are allowed to create controls
+	ControlCreators []*Group `json:"controlCreators,omitempty"`
+	// groups that are allowed to create control_objectives
+	ControlObjectiveCreators []*Group `json:"controlObjectiveCreators,omitempty"`
+	// groups that are allowed to create groups
+	GroupCreators []*Group `json:"groupCreators,omitempty"`
+	// groups that are allowed to create internal_policys
+	InternalPolicyCreators []*Group `json:"internalPolicyCreators,omitempty"`
+	// groups that are allowed to create narratives
+	NarrativeCreators []*Group `json:"narrativeCreators,omitempty"`
+	// groups that are allowed to create procedures
+	ProcedureCreators []*Group `json:"procedureCreators,omitempty"`
+	// groups that are allowed to create programs
+	ProgramCreators []*Group `json:"programCreators,omitempty"`
+	// groups that are allowed to create risks
+	RiskCreators []*Group `json:"riskCreators,omitempty"`
+	// groups that are allowed to create templates
+	TemplateCreators        []*Group                  `json:"templateCreators,omitempty"`
 	Parent                  *Organization             `json:"parent,omitempty"`
 	Children                *OrganizationConnection   `json:"children"`
 	Groups                  []*Group                  `json:"groups,omitempty"`
@@ -15223,6 +15295,33 @@ type OrganizationWhereInput struct {
 	AvatarRemoteURLNotNil       *bool    `json:"avatarRemoteURLNotNil,omitempty"`
 	AvatarRemoteURLEqualFold    *string  `json:"avatarRemoteURLEqualFold,omitempty"`
 	AvatarRemoteURLContainsFold *string  `json:"avatarRemoteURLContainsFold,omitempty"`
+	// control_creators edge predicates
+	HasControlCreators     *bool              `json:"hasControlCreators,omitempty"`
+	HasControlCreatorsWith []*GroupWhereInput `json:"hasControlCreatorsWith,omitempty"`
+	// control_objective_creators edge predicates
+	HasControlObjectiveCreators     *bool              `json:"hasControlObjectiveCreators,omitempty"`
+	HasControlObjectiveCreatorsWith []*GroupWhereInput `json:"hasControlObjectiveCreatorsWith,omitempty"`
+	// group_creators edge predicates
+	HasGroupCreators     *bool              `json:"hasGroupCreators,omitempty"`
+	HasGroupCreatorsWith []*GroupWhereInput `json:"hasGroupCreatorsWith,omitempty"`
+	// internal_policy_creators edge predicates
+	HasInternalPolicyCreators     *bool              `json:"hasInternalPolicyCreators,omitempty"`
+	HasInternalPolicyCreatorsWith []*GroupWhereInput `json:"hasInternalPolicyCreatorsWith,omitempty"`
+	// narrative_creators edge predicates
+	HasNarrativeCreators     *bool              `json:"hasNarrativeCreators,omitempty"`
+	HasNarrativeCreatorsWith []*GroupWhereInput `json:"hasNarrativeCreatorsWith,omitempty"`
+	// procedure_creators edge predicates
+	HasProcedureCreators     *bool              `json:"hasProcedureCreators,omitempty"`
+	HasProcedureCreatorsWith []*GroupWhereInput `json:"hasProcedureCreatorsWith,omitempty"`
+	// program_creators edge predicates
+	HasProgramCreators     *bool              `json:"hasProgramCreators,omitempty"`
+	HasProgramCreatorsWith []*GroupWhereInput `json:"hasProgramCreatorsWith,omitempty"`
+	// risk_creators edge predicates
+	HasRiskCreators     *bool              `json:"hasRiskCreators,omitempty"`
+	HasRiskCreatorsWith []*GroupWhereInput `json:"hasRiskCreatorsWith,omitempty"`
+	// template_creators edge predicates
+	HasTemplateCreators     *bool              `json:"hasTemplateCreators,omitempty"`
+	HasTemplateCreatorsWith []*GroupWhereInput `json:"hasTemplateCreatorsWith,omitempty"`
 	// parent edge predicates
 	HasParent     *bool                     `json:"hasParent,omitempty"`
 	HasParentWith []*OrganizationWhereInput `json:"hasParentWith,omitempty"`
@@ -21460,6 +21559,81 @@ type UpdateGroupInput struct {
 	DisplayName                           *string                       `json:"displayName,omitempty"`
 	OwnerID                               *string                       `json:"ownerID,omitempty"`
 	ClearOwner                            *bool                         `json:"clearOwner,omitempty"`
+	AddControlCreatorIDs                  []string                      `json:"addControlCreatorIDs,omitempty"`
+	RemoveControlCreatorIDs               []string                      `json:"removeControlCreatorIDs,omitempty"`
+	ClearControlCreators                  *bool                         `json:"clearControlCreators,omitempty"`
+	AddControlObjectiveCreatorIDs         []string                      `json:"addControlObjectiveCreatorIDs,omitempty"`
+	RemoveControlObjectiveCreatorIDs      []string                      `json:"removeControlObjectiveCreatorIDs,omitempty"`
+	ClearControlObjectiveCreators         *bool                         `json:"clearControlObjectiveCreators,omitempty"`
+	AddGroupCreatorIDs                    []string                      `json:"addGroupCreatorIDs,omitempty"`
+	RemoveGroupCreatorIDs                 []string                      `json:"removeGroupCreatorIDs,omitempty"`
+	ClearGroupCreators                    *bool                         `json:"clearGroupCreators,omitempty"`
+	AddInternalPolicyCreatorIDs           []string                      `json:"addInternalPolicyCreatorIDs,omitempty"`
+	RemoveInternalPolicyCreatorIDs        []string                      `json:"removeInternalPolicyCreatorIDs,omitempty"`
+	ClearInternalPolicyCreators           *bool                         `json:"clearInternalPolicyCreators,omitempty"`
+	AddNarrativeCreatorIDs                []string                      `json:"addNarrativeCreatorIDs,omitempty"`
+	RemoveNarrativeCreatorIDs             []string                      `json:"removeNarrativeCreatorIDs,omitempty"`
+	ClearNarrativeCreators                *bool                         `json:"clearNarrativeCreators,omitempty"`
+	AddProcedureCreatorIDs                []string                      `json:"addProcedureCreatorIDs,omitempty"`
+	RemoveProcedureCreatorIDs             []string                      `json:"removeProcedureCreatorIDs,omitempty"`
+	ClearProcedureCreators                *bool                         `json:"clearProcedureCreators,omitempty"`
+	AddProgramCreatorIDs                  []string                      `json:"addProgramCreatorIDs,omitempty"`
+	RemoveProgramCreatorIDs               []string                      `json:"removeProgramCreatorIDs,omitempty"`
+	ClearProgramCreators                  *bool                         `json:"clearProgramCreators,omitempty"`
+	AddRiskCreatorIDs                     []string                      `json:"addRiskCreatorIDs,omitempty"`
+	RemoveRiskCreatorIDs                  []string                      `json:"removeRiskCreatorIDs,omitempty"`
+	ClearRiskCreators                     *bool                         `json:"clearRiskCreators,omitempty"`
+	AddTemplateCreatorIDs                 []string                      `json:"addTemplateCreatorIDs,omitempty"`
+	RemoveTemplateCreatorIDs              []string                      `json:"removeTemplateCreatorIDs,omitempty"`
+	ClearTemplateCreators                 *bool                         `json:"clearTemplateCreators,omitempty"`
+	AddProcedureEditorIDs                 []string                      `json:"addProcedureEditorIDs,omitempty"`
+	RemoveProcedureEditorIDs              []string                      `json:"removeProcedureEditorIDs,omitempty"`
+	ClearProcedureEditors                 *bool                         `json:"clearProcedureEditors,omitempty"`
+	AddProcedureBlockedGroupIDs           []string                      `json:"addProcedureBlockedGroupIDs,omitempty"`
+	RemoveProcedureBlockedGroupIDs        []string                      `json:"removeProcedureBlockedGroupIDs,omitempty"`
+	ClearProcedureBlockedGroups           *bool                         `json:"clearProcedureBlockedGroups,omitempty"`
+	AddInternalpolicyEditorIDs            []string                      `json:"addInternalpolicyEditorIDs,omitempty"`
+	RemoveInternalpolicyEditorIDs         []string                      `json:"removeInternalpolicyEditorIDs,omitempty"`
+	ClearInternalpolicyEditors            *bool                         `json:"clearInternalpolicyEditors,omitempty"`
+	AddInternalpolicyBlockedGroupIDs      []string                      `json:"addInternalpolicyBlockedGroupIDs,omitempty"`
+	RemoveInternalpolicyBlockedGroupIDs   []string                      `json:"removeInternalpolicyBlockedGroupIDs,omitempty"`
+	ClearInternalpolicyBlockedGroups      *bool                         `json:"clearInternalpolicyBlockedGroups,omitempty"`
+	AddProgramEditorIDs                   []string                      `json:"addProgramEditorIDs,omitempty"`
+	RemoveProgramEditorIDs                []string                      `json:"removeProgramEditorIDs,omitempty"`
+	ClearProgramEditors                   *bool                         `json:"clearProgramEditors,omitempty"`
+	AddProgramBlockedGroupIDs             []string                      `json:"addProgramBlockedGroupIDs,omitempty"`
+	RemoveProgramBlockedGroupIDs          []string                      `json:"removeProgramBlockedGroupIDs,omitempty"`
+	ClearProgramBlockedGroups             *bool                         `json:"clearProgramBlockedGroups,omitempty"`
+	AddProgramViewerIDs                   []string                      `json:"addProgramViewerIDs,omitempty"`
+	RemoveProgramViewerIDs                []string                      `json:"removeProgramViewerIDs,omitempty"`
+	ClearProgramViewers                   *bool                         `json:"clearProgramViewers,omitempty"`
+	AddRiskEditorIDs                      []string                      `json:"addRiskEditorIDs,omitempty"`
+	RemoveRiskEditorIDs                   []string                      `json:"removeRiskEditorIDs,omitempty"`
+	ClearRiskEditors                      *bool                         `json:"clearRiskEditors,omitempty"`
+	AddRiskBlockedGroupIDs                []string                      `json:"addRiskBlockedGroupIDs,omitempty"`
+	RemoveRiskBlockedGroupIDs             []string                      `json:"removeRiskBlockedGroupIDs,omitempty"`
+	ClearRiskBlockedGroups                *bool                         `json:"clearRiskBlockedGroups,omitempty"`
+	AddRiskViewerIDs                      []string                      `json:"addRiskViewerIDs,omitempty"`
+	RemoveRiskViewerIDs                   []string                      `json:"removeRiskViewerIDs,omitempty"`
+	ClearRiskViewers                      *bool                         `json:"clearRiskViewers,omitempty"`
+	AddControlobjectiveEditorIDs          []string                      `json:"addControlobjectiveEditorIDs,omitempty"`
+	RemoveControlobjectiveEditorIDs       []string                      `json:"removeControlobjectiveEditorIDs,omitempty"`
+	ClearControlobjectiveEditors          *bool                         `json:"clearControlobjectiveEditors,omitempty"`
+	AddControlobjectiveBlockedGroupIDs    []string                      `json:"addControlobjectiveBlockedGroupIDs,omitempty"`
+	RemoveControlobjectiveBlockedGroupIDs []string                      `json:"removeControlobjectiveBlockedGroupIDs,omitempty"`
+	ClearControlobjectiveBlockedGroups    *bool                         `json:"clearControlobjectiveBlockedGroups,omitempty"`
+	AddControlobjectiveViewerIDs          []string                      `json:"addControlobjectiveViewerIDs,omitempty"`
+	RemoveControlobjectiveViewerIDs       []string                      `json:"removeControlobjectiveViewerIDs,omitempty"`
+	ClearControlobjectiveViewers          *bool                         `json:"clearControlobjectiveViewers,omitempty"`
+	AddNarrativeEditorIDs                 []string                      `json:"addNarrativeEditorIDs,omitempty"`
+	RemoveNarrativeEditorIDs              []string                      `json:"removeNarrativeEditorIDs,omitempty"`
+	ClearNarrativeEditors                 *bool                         `json:"clearNarrativeEditors,omitempty"`
+	AddNarrativeBlockedGroupIDs           []string                      `json:"addNarrativeBlockedGroupIDs,omitempty"`
+	RemoveNarrativeBlockedGroupIDs        []string                      `json:"removeNarrativeBlockedGroupIDs,omitempty"`
+	ClearNarrativeBlockedGroups           *bool                         `json:"clearNarrativeBlockedGroups,omitempty"`
+	AddNarrativeViewerIDs                 []string                      `json:"addNarrativeViewerIDs,omitempty"`
+	RemoveNarrativeViewerIDs              []string                      `json:"removeNarrativeViewerIDs,omitempty"`
+	ClearNarrativeViewers                 *bool                         `json:"clearNarrativeViewers,omitempty"`
 	SettingID                             *string                       `json:"settingID,omitempty"`
 	AddUserIDs                            []string                      `json:"addUserIDs,omitempty"`
 	RemoveUserIDs                         []string                      `json:"removeUserIDs,omitempty"`
@@ -21476,54 +21650,6 @@ type UpdateGroupInput struct {
 	AddTaskIDs                            []string                      `json:"addTaskIDs,omitempty"`
 	RemoveTaskIDs                         []string                      `json:"removeTaskIDs,omitempty"`
 	ClearTasks                            *bool                         `json:"clearTasks,omitempty"`
-	AddProcedureEditorIDs                 []string                      `json:"addProcedureEditorIDs,omitempty"`
-	RemoveProcedureEditorIDs              []string                      `json:"removeProcedureEditorIDs,omitempty"`
-	ClearProcedureEditors                 *bool                         `json:"clearProcedureEditors,omitempty"`
-	AddProcedureBlockedGroupIDs           []string                      `json:"addProcedureBlockedGroupIDs,omitempty"`
-	RemoveProcedureBlockedGroupIDs        []string                      `json:"removeProcedureBlockedGroupIDs,omitempty"`
-	ClearProcedureBlockedGroups           *bool                         `json:"clearProcedureBlockedGroups,omitempty"`
-	AddInternalpolicyEditorIDs            []string                      `json:"addInternalpolicyEditorIDs,omitempty"`
-	RemoveInternalpolicyEditorIDs         []string                      `json:"removeInternalpolicyEditorIDs,omitempty"`
-	ClearInternalpolicyEditors            *bool                         `json:"clearInternalpolicyEditors,omitempty"`
-	AddInternalpolicyBlockedGroupIDs      []string                      `json:"addInternalpolicyBlockedGroupIDs,omitempty"`
-	RemoveInternalpolicyBlockedGroupIDs   []string                      `json:"removeInternalpolicyBlockedGroupIDs,omitempty"`
-	ClearInternalpolicyBlockedGroups      *bool                         `json:"clearInternalpolicyBlockedGroups,omitempty"`
-	AddProgramViewerIDs                   []string                      `json:"addProgramViewerIDs,omitempty"`
-	RemoveProgramViewerIDs                []string                      `json:"removeProgramViewerIDs,omitempty"`
-	ClearProgramViewers                   *bool                         `json:"clearProgramViewers,omitempty"`
-	AddProgramEditorIDs                   []string                      `json:"addProgramEditorIDs,omitempty"`
-	RemoveProgramEditorIDs                []string                      `json:"removeProgramEditorIDs,omitempty"`
-	ClearProgramEditors                   *bool                         `json:"clearProgramEditors,omitempty"`
-	AddProgramBlockedGroupIDs             []string                      `json:"addProgramBlockedGroupIDs,omitempty"`
-	RemoveProgramBlockedGroupIDs          []string                      `json:"removeProgramBlockedGroupIDs,omitempty"`
-	ClearProgramBlockedGroups             *bool                         `json:"clearProgramBlockedGroups,omitempty"`
-	AddRiskViewerIDs                      []string                      `json:"addRiskViewerIDs,omitempty"`
-	RemoveRiskViewerIDs                   []string                      `json:"removeRiskViewerIDs,omitempty"`
-	ClearRiskViewers                      *bool                         `json:"clearRiskViewers,omitempty"`
-	AddRiskEditorIDs                      []string                      `json:"addRiskEditorIDs,omitempty"`
-	RemoveRiskEditorIDs                   []string                      `json:"removeRiskEditorIDs,omitempty"`
-	ClearRiskEditors                      *bool                         `json:"clearRiskEditors,omitempty"`
-	AddRiskBlockedGroupIDs                []string                      `json:"addRiskBlockedGroupIDs,omitempty"`
-	RemoveRiskBlockedGroupIDs             []string                      `json:"removeRiskBlockedGroupIDs,omitempty"`
-	ClearRiskBlockedGroups                *bool                         `json:"clearRiskBlockedGroups,omitempty"`
-	AddControlobjectiveViewerIDs          []string                      `json:"addControlobjectiveViewerIDs,omitempty"`
-	RemoveControlobjectiveViewerIDs       []string                      `json:"removeControlobjectiveViewerIDs,omitempty"`
-	ClearControlobjectiveViewers          *bool                         `json:"clearControlobjectiveViewers,omitempty"`
-	AddControlobjectiveEditorIDs          []string                      `json:"addControlobjectiveEditorIDs,omitempty"`
-	RemoveControlobjectiveEditorIDs       []string                      `json:"removeControlobjectiveEditorIDs,omitempty"`
-	ClearControlobjectiveEditors          *bool                         `json:"clearControlobjectiveEditors,omitempty"`
-	AddControlobjectiveBlockedGroupIDs    []string                      `json:"addControlobjectiveBlockedGroupIDs,omitempty"`
-	RemoveControlobjectiveBlockedGroupIDs []string                      `json:"removeControlobjectiveBlockedGroupIDs,omitempty"`
-	ClearControlobjectiveBlockedGroups    *bool                         `json:"clearControlobjectiveBlockedGroups,omitempty"`
-	AddNarrativeViewerIDs                 []string                      `json:"addNarrativeViewerIDs,omitempty"`
-	RemoveNarrativeViewerIDs              []string                      `json:"removeNarrativeViewerIDs,omitempty"`
-	ClearNarrativeViewers                 *bool                         `json:"clearNarrativeViewers,omitempty"`
-	AddNarrativeEditorIDs                 []string                      `json:"addNarrativeEditorIDs,omitempty"`
-	RemoveNarrativeEditorIDs              []string                      `json:"removeNarrativeEditorIDs,omitempty"`
-	ClearNarrativeEditors                 *bool                         `json:"clearNarrativeEditors,omitempty"`
-	AddNarrativeBlockedGroupIDs           []string                      `json:"addNarrativeBlockedGroupIDs,omitempty"`
-	RemoveNarrativeBlockedGroupIDs        []string                      `json:"removeNarrativeBlockedGroupIDs,omitempty"`
-	ClearNarrativeBlockedGroups           *bool                         `json:"clearNarrativeBlockedGroups,omitempty"`
 	AddGroupMembers                       []*CreateGroupMembershipInput `json:"addGroupMembers,omitempty"`
 	UpdateGroupSettings                   *UpdateGroupSettingInput      `json:"updateGroupSettings,omitempty"`
 }
@@ -21840,6 +21966,33 @@ type UpdateOrganizationInput struct {
 	// URL of the user's remote avatar
 	AvatarRemoteURL                  *string                         `json:"avatarRemoteURL,omitempty"`
 	ClearAvatarRemoteURL             *bool                           `json:"clearAvatarRemoteURL,omitempty"`
+	AddControlCreatorIDs             []string                        `json:"addControlCreatorIDs,omitempty"`
+	RemoveControlCreatorIDs          []string                        `json:"removeControlCreatorIDs,omitempty"`
+	ClearControlCreators             *bool                           `json:"clearControlCreators,omitempty"`
+	AddControlObjectiveCreatorIDs    []string                        `json:"addControlObjectiveCreatorIDs,omitempty"`
+	RemoveControlObjectiveCreatorIDs []string                        `json:"removeControlObjectiveCreatorIDs,omitempty"`
+	ClearControlObjectiveCreators    *bool                           `json:"clearControlObjectiveCreators,omitempty"`
+	AddGroupCreatorIDs               []string                        `json:"addGroupCreatorIDs,omitempty"`
+	RemoveGroupCreatorIDs            []string                        `json:"removeGroupCreatorIDs,omitempty"`
+	ClearGroupCreators               *bool                           `json:"clearGroupCreators,omitempty"`
+	AddInternalPolicyCreatorIDs      []string                        `json:"addInternalPolicyCreatorIDs,omitempty"`
+	RemoveInternalPolicyCreatorIDs   []string                        `json:"removeInternalPolicyCreatorIDs,omitempty"`
+	ClearInternalPolicyCreators      *bool                           `json:"clearInternalPolicyCreators,omitempty"`
+	AddNarrativeCreatorIDs           []string                        `json:"addNarrativeCreatorIDs,omitempty"`
+	RemoveNarrativeCreatorIDs        []string                        `json:"removeNarrativeCreatorIDs,omitempty"`
+	ClearNarrativeCreators           *bool                           `json:"clearNarrativeCreators,omitempty"`
+	AddProcedureCreatorIDs           []string                        `json:"addProcedureCreatorIDs,omitempty"`
+	RemoveProcedureCreatorIDs        []string                        `json:"removeProcedureCreatorIDs,omitempty"`
+	ClearProcedureCreators           *bool                           `json:"clearProcedureCreators,omitempty"`
+	AddProgramCreatorIDs             []string                        `json:"addProgramCreatorIDs,omitempty"`
+	RemoveProgramCreatorIDs          []string                        `json:"removeProgramCreatorIDs,omitempty"`
+	ClearProgramCreators             *bool                           `json:"clearProgramCreators,omitempty"`
+	AddRiskCreatorIDs                []string                        `json:"addRiskCreatorIDs,omitempty"`
+	RemoveRiskCreatorIDs             []string                        `json:"removeRiskCreatorIDs,omitempty"`
+	ClearRiskCreators                *bool                           `json:"clearRiskCreators,omitempty"`
+	AddTemplateCreatorIDs            []string                        `json:"addTemplateCreatorIDs,omitempty"`
+	RemoveTemplateCreatorIDs         []string                        `json:"removeTemplateCreatorIDs,omitempty"`
+	ClearTemplateCreators            *bool                           `json:"clearTemplateCreators,omitempty"`
 	AddGroupIDs                      []string                        `json:"addGroupIDs,omitempty"`
 	RemoveGroupIDs                   []string                        `json:"removeGroupIDs,omitempty"`
 	ClearGroups                      *bool                           `json:"clearGroups,omitempty"`

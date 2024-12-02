@@ -83,40 +83,6 @@ func (Group) Edges() []ent.Edge {
 		edge.To("integrations", Integration.Type),
 		edge.To("files", File.Type),
 		edge.To("tasks", Task.Type),
-<<<<<<< Updated upstream
-		edge.From("procedure_editors", Procedure.Type).
-			Ref("editors"),
-		edge.From("procedure_blocked_groups", Procedure.Type).
-			Ref("blocked_groups"),
-		edge.From("internalpolicy_editors", InternalPolicy.Type).
-			Ref("editors"),
-		edge.From("internalpolicy_blocked_groups", InternalPolicy.Type).
-			Ref("blocked_groups"),
-		edge.From("program_viewers", Program.Type).
-			Ref("viewers"),
-		edge.From("program_editors", Program.Type).
-			Ref("editors"),
-		edge.From("program_blocked_groups", Program.Type).
-			Ref("blocked_groups"),
-		edge.From("risk_viewers", Risk.Type).
-			Ref("viewers"),
-		edge.From("risk_editors", Risk.Type).
-			Ref("editors"),
-		edge.From("risk_blocked_groups", Risk.Type).
-			Ref("blocked_groups"),
-		edge.From("controlobjective_viewers", ControlObjective.Type).
-			Ref("viewers"),
-		edge.From("controlobjective_editors", ControlObjective.Type).
-			Ref("editors"),
-		edge.From("controlobjective_blocked_groups", ControlObjective.Type).
-			Ref("blocked_groups"),
-		edge.From("narrative_viewers", Narrative.Type).
-			Ref("viewers"),
-		edge.From("narrative_editors", Narrative.Type).
-			Ref("editors"),
-		edge.From("narrative_blocked_groups", Narrative.Type).
-			Ref("blocked_groups"),
-=======
 	}
 }
 
@@ -154,11 +120,6 @@ func (Group) Mixin() []ent.Mixin {
 					ViewPermissions: true,
 				},
 				{
-					Name:            "control",
-					Type:            Control.Type,
-					ViewPermissions: true,
-				},
-				{
 					Name:            "controlobjective",
 					Type:            ControlObjective.Type,
 					ViewPermissions: true,
@@ -170,7 +131,6 @@ func (Group) Mixin() []ent.Mixin {
 				},
 			},
 		},
->>>>>>> Stashed changes
 	}
 }
 

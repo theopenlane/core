@@ -233,6 +233,381 @@ func (gc *GroupCreate) SetOwner(o *Organization) *GroupCreate {
 	return gc.SetOwnerID(o.ID)
 }
 
+// AddControlCreatorIDs adds the "control_creators" edge to the Organization entity by IDs.
+func (gc *GroupCreate) AddControlCreatorIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddControlCreatorIDs(ids...)
+	return gc
+}
+
+// AddControlCreators adds the "control_creators" edges to the Organization entity.
+func (gc *GroupCreate) AddControlCreators(o ...*Organization) *GroupCreate {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return gc.AddControlCreatorIDs(ids...)
+}
+
+// AddControlObjectiveCreatorIDs adds the "control_objective_creators" edge to the Organization entity by IDs.
+func (gc *GroupCreate) AddControlObjectiveCreatorIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddControlObjectiveCreatorIDs(ids...)
+	return gc
+}
+
+// AddControlObjectiveCreators adds the "control_objective_creators" edges to the Organization entity.
+func (gc *GroupCreate) AddControlObjectiveCreators(o ...*Organization) *GroupCreate {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return gc.AddControlObjectiveCreatorIDs(ids...)
+}
+
+// AddGroupCreatorIDs adds the "group_creators" edge to the Organization entity by IDs.
+func (gc *GroupCreate) AddGroupCreatorIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddGroupCreatorIDs(ids...)
+	return gc
+}
+
+// AddGroupCreators adds the "group_creators" edges to the Organization entity.
+func (gc *GroupCreate) AddGroupCreators(o ...*Organization) *GroupCreate {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return gc.AddGroupCreatorIDs(ids...)
+}
+
+// AddInternalPolicyCreatorIDs adds the "internal_policy_creators" edge to the Organization entity by IDs.
+func (gc *GroupCreate) AddInternalPolicyCreatorIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddInternalPolicyCreatorIDs(ids...)
+	return gc
+}
+
+// AddInternalPolicyCreators adds the "internal_policy_creators" edges to the Organization entity.
+func (gc *GroupCreate) AddInternalPolicyCreators(o ...*Organization) *GroupCreate {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return gc.AddInternalPolicyCreatorIDs(ids...)
+}
+
+// AddNarrativeCreatorIDs adds the "narrative_creators" edge to the Organization entity by IDs.
+func (gc *GroupCreate) AddNarrativeCreatorIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddNarrativeCreatorIDs(ids...)
+	return gc
+}
+
+// AddNarrativeCreators adds the "narrative_creators" edges to the Organization entity.
+func (gc *GroupCreate) AddNarrativeCreators(o ...*Organization) *GroupCreate {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return gc.AddNarrativeCreatorIDs(ids...)
+}
+
+// AddProcedureCreatorIDs adds the "procedure_creators" edge to the Organization entity by IDs.
+func (gc *GroupCreate) AddProcedureCreatorIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddProcedureCreatorIDs(ids...)
+	return gc
+}
+
+// AddProcedureCreators adds the "procedure_creators" edges to the Organization entity.
+func (gc *GroupCreate) AddProcedureCreators(o ...*Organization) *GroupCreate {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return gc.AddProcedureCreatorIDs(ids...)
+}
+
+// AddProgramCreatorIDs adds the "program_creators" edge to the Organization entity by IDs.
+func (gc *GroupCreate) AddProgramCreatorIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddProgramCreatorIDs(ids...)
+	return gc
+}
+
+// AddProgramCreators adds the "program_creators" edges to the Organization entity.
+func (gc *GroupCreate) AddProgramCreators(o ...*Organization) *GroupCreate {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return gc.AddProgramCreatorIDs(ids...)
+}
+
+// AddRiskCreatorIDs adds the "risk_creators" edge to the Organization entity by IDs.
+func (gc *GroupCreate) AddRiskCreatorIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddRiskCreatorIDs(ids...)
+	return gc
+}
+
+// AddRiskCreators adds the "risk_creators" edges to the Organization entity.
+func (gc *GroupCreate) AddRiskCreators(o ...*Organization) *GroupCreate {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return gc.AddRiskCreatorIDs(ids...)
+}
+
+// AddTemplateCreatorIDs adds the "template_creators" edge to the Organization entity by IDs.
+func (gc *GroupCreate) AddTemplateCreatorIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddTemplateCreatorIDs(ids...)
+	return gc
+}
+
+// AddTemplateCreators adds the "template_creators" edges to the Organization entity.
+func (gc *GroupCreate) AddTemplateCreators(o ...*Organization) *GroupCreate {
+	ids := make([]string, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return gc.AddTemplateCreatorIDs(ids...)
+}
+
+// AddProcedureEditorIDs adds the "procedure_editors" edge to the Procedure entity by IDs.
+func (gc *GroupCreate) AddProcedureEditorIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddProcedureEditorIDs(ids...)
+	return gc
+}
+
+// AddProcedureEditors adds the "procedure_editors" edges to the Procedure entity.
+func (gc *GroupCreate) AddProcedureEditors(p ...*Procedure) *GroupCreate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return gc.AddProcedureEditorIDs(ids...)
+}
+
+// AddProcedureBlockedGroupIDs adds the "procedure_blocked_groups" edge to the Procedure entity by IDs.
+func (gc *GroupCreate) AddProcedureBlockedGroupIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddProcedureBlockedGroupIDs(ids...)
+	return gc
+}
+
+// AddProcedureBlockedGroups adds the "procedure_blocked_groups" edges to the Procedure entity.
+func (gc *GroupCreate) AddProcedureBlockedGroups(p ...*Procedure) *GroupCreate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return gc.AddProcedureBlockedGroupIDs(ids...)
+}
+
+// AddInternalpolicyEditorIDs adds the "internalpolicy_editors" edge to the InternalPolicy entity by IDs.
+func (gc *GroupCreate) AddInternalpolicyEditorIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddInternalpolicyEditorIDs(ids...)
+	return gc
+}
+
+// AddInternalpolicyEditors adds the "internalpolicy_editors" edges to the InternalPolicy entity.
+func (gc *GroupCreate) AddInternalpolicyEditors(i ...*InternalPolicy) *GroupCreate {
+	ids := make([]string, len(i))
+	for j := range i {
+		ids[j] = i[j].ID
+	}
+	return gc.AddInternalpolicyEditorIDs(ids...)
+}
+
+// AddInternalpolicyBlockedGroupIDs adds the "internalpolicy_blocked_groups" edge to the InternalPolicy entity by IDs.
+func (gc *GroupCreate) AddInternalpolicyBlockedGroupIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddInternalpolicyBlockedGroupIDs(ids...)
+	return gc
+}
+
+// AddInternalpolicyBlockedGroups adds the "internalpolicy_blocked_groups" edges to the InternalPolicy entity.
+func (gc *GroupCreate) AddInternalpolicyBlockedGroups(i ...*InternalPolicy) *GroupCreate {
+	ids := make([]string, len(i))
+	for j := range i {
+		ids[j] = i[j].ID
+	}
+	return gc.AddInternalpolicyBlockedGroupIDs(ids...)
+}
+
+// AddProgramEditorIDs adds the "program_editors" edge to the Program entity by IDs.
+func (gc *GroupCreate) AddProgramEditorIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddProgramEditorIDs(ids...)
+	return gc
+}
+
+// AddProgramEditors adds the "program_editors" edges to the Program entity.
+func (gc *GroupCreate) AddProgramEditors(p ...*Program) *GroupCreate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return gc.AddProgramEditorIDs(ids...)
+}
+
+// AddProgramBlockedGroupIDs adds the "program_blocked_groups" edge to the Program entity by IDs.
+func (gc *GroupCreate) AddProgramBlockedGroupIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddProgramBlockedGroupIDs(ids...)
+	return gc
+}
+
+// AddProgramBlockedGroups adds the "program_blocked_groups" edges to the Program entity.
+func (gc *GroupCreate) AddProgramBlockedGroups(p ...*Program) *GroupCreate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return gc.AddProgramBlockedGroupIDs(ids...)
+}
+
+// AddProgramViewerIDs adds the "program_viewers" edge to the Program entity by IDs.
+func (gc *GroupCreate) AddProgramViewerIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddProgramViewerIDs(ids...)
+	return gc
+}
+
+// AddProgramViewers adds the "program_viewers" edges to the Program entity.
+func (gc *GroupCreate) AddProgramViewers(p ...*Program) *GroupCreate {
+	ids := make([]string, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return gc.AddProgramViewerIDs(ids...)
+}
+
+// AddRiskEditorIDs adds the "risk_editors" edge to the Risk entity by IDs.
+func (gc *GroupCreate) AddRiskEditorIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddRiskEditorIDs(ids...)
+	return gc
+}
+
+// AddRiskEditors adds the "risk_editors" edges to the Risk entity.
+func (gc *GroupCreate) AddRiskEditors(r ...*Risk) *GroupCreate {
+	ids := make([]string, len(r))
+	for i := range r {
+		ids[i] = r[i].ID
+	}
+	return gc.AddRiskEditorIDs(ids...)
+}
+
+// AddRiskBlockedGroupIDs adds the "risk_blocked_groups" edge to the Risk entity by IDs.
+func (gc *GroupCreate) AddRiskBlockedGroupIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddRiskBlockedGroupIDs(ids...)
+	return gc
+}
+
+// AddRiskBlockedGroups adds the "risk_blocked_groups" edges to the Risk entity.
+func (gc *GroupCreate) AddRiskBlockedGroups(r ...*Risk) *GroupCreate {
+	ids := make([]string, len(r))
+	for i := range r {
+		ids[i] = r[i].ID
+	}
+	return gc.AddRiskBlockedGroupIDs(ids...)
+}
+
+// AddRiskViewerIDs adds the "risk_viewers" edge to the Risk entity by IDs.
+func (gc *GroupCreate) AddRiskViewerIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddRiskViewerIDs(ids...)
+	return gc
+}
+
+// AddRiskViewers adds the "risk_viewers" edges to the Risk entity.
+func (gc *GroupCreate) AddRiskViewers(r ...*Risk) *GroupCreate {
+	ids := make([]string, len(r))
+	for i := range r {
+		ids[i] = r[i].ID
+	}
+	return gc.AddRiskViewerIDs(ids...)
+}
+
+// AddControlobjectiveEditorIDs adds the "controlobjective_editors" edge to the ControlObjective entity by IDs.
+func (gc *GroupCreate) AddControlobjectiveEditorIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddControlobjectiveEditorIDs(ids...)
+	return gc
+}
+
+// AddControlobjectiveEditors adds the "controlobjective_editors" edges to the ControlObjective entity.
+func (gc *GroupCreate) AddControlobjectiveEditors(c ...*ControlObjective) *GroupCreate {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return gc.AddControlobjectiveEditorIDs(ids...)
+}
+
+// AddControlobjectiveBlockedGroupIDs adds the "controlobjective_blocked_groups" edge to the ControlObjective entity by IDs.
+func (gc *GroupCreate) AddControlobjectiveBlockedGroupIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddControlobjectiveBlockedGroupIDs(ids...)
+	return gc
+}
+
+// AddControlobjectiveBlockedGroups adds the "controlobjective_blocked_groups" edges to the ControlObjective entity.
+func (gc *GroupCreate) AddControlobjectiveBlockedGroups(c ...*ControlObjective) *GroupCreate {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return gc.AddControlobjectiveBlockedGroupIDs(ids...)
+}
+
+// AddControlobjectiveViewerIDs adds the "controlobjective_viewers" edge to the ControlObjective entity by IDs.
+func (gc *GroupCreate) AddControlobjectiveViewerIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddControlobjectiveViewerIDs(ids...)
+	return gc
+}
+
+// AddControlobjectiveViewers adds the "controlobjective_viewers" edges to the ControlObjective entity.
+func (gc *GroupCreate) AddControlobjectiveViewers(c ...*ControlObjective) *GroupCreate {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return gc.AddControlobjectiveViewerIDs(ids...)
+}
+
+// AddNarrativeEditorIDs adds the "narrative_editors" edge to the Narrative entity by IDs.
+func (gc *GroupCreate) AddNarrativeEditorIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddNarrativeEditorIDs(ids...)
+	return gc
+}
+
+// AddNarrativeEditors adds the "narrative_editors" edges to the Narrative entity.
+func (gc *GroupCreate) AddNarrativeEditors(n ...*Narrative) *GroupCreate {
+	ids := make([]string, len(n))
+	for i := range n {
+		ids[i] = n[i].ID
+	}
+	return gc.AddNarrativeEditorIDs(ids...)
+}
+
+// AddNarrativeBlockedGroupIDs adds the "narrative_blocked_groups" edge to the Narrative entity by IDs.
+func (gc *GroupCreate) AddNarrativeBlockedGroupIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddNarrativeBlockedGroupIDs(ids...)
+	return gc
+}
+
+// AddNarrativeBlockedGroups adds the "narrative_blocked_groups" edges to the Narrative entity.
+func (gc *GroupCreate) AddNarrativeBlockedGroups(n ...*Narrative) *GroupCreate {
+	ids := make([]string, len(n))
+	for i := range n {
+		ids[i] = n[i].ID
+	}
+	return gc.AddNarrativeBlockedGroupIDs(ids...)
+}
+
+// AddNarrativeViewerIDs adds the "narrative_viewers" edge to the Narrative entity by IDs.
+func (gc *GroupCreate) AddNarrativeViewerIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddNarrativeViewerIDs(ids...)
+	return gc
+}
+
+// AddNarrativeViewers adds the "narrative_viewers" edges to the Narrative entity.
+func (gc *GroupCreate) AddNarrativeViewers(n ...*Narrative) *GroupCreate {
+	ids := make([]string, len(n))
+	for i := range n {
+		ids[i] = n[i].ID
+	}
+	return gc.AddNarrativeViewerIDs(ids...)
+}
+
 // SetSettingID sets the "setting" edge to the GroupSetting entity by ID.
 func (gc *GroupCreate) SetSettingID(id string) *GroupCreate {
 	gc.mutation.SetSettingID(id)
@@ -317,246 +692,6 @@ func (gc *GroupCreate) AddTasks(t ...*Task) *GroupCreate {
 		ids[i] = t[i].ID
 	}
 	return gc.AddTaskIDs(ids...)
-}
-
-// AddProcedureEditorIDs adds the "procedure_editors" edge to the Procedure entity by IDs.
-func (gc *GroupCreate) AddProcedureEditorIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddProcedureEditorIDs(ids...)
-	return gc
-}
-
-// AddProcedureEditors adds the "procedure_editors" edges to the Procedure entity.
-func (gc *GroupCreate) AddProcedureEditors(p ...*Procedure) *GroupCreate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return gc.AddProcedureEditorIDs(ids...)
-}
-
-// AddProcedureBlockedGroupIDs adds the "procedure_blocked_groups" edge to the Procedure entity by IDs.
-func (gc *GroupCreate) AddProcedureBlockedGroupIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddProcedureBlockedGroupIDs(ids...)
-	return gc
-}
-
-// AddProcedureBlockedGroups adds the "procedure_blocked_groups" edges to the Procedure entity.
-func (gc *GroupCreate) AddProcedureBlockedGroups(p ...*Procedure) *GroupCreate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return gc.AddProcedureBlockedGroupIDs(ids...)
-}
-
-// AddInternalpolicyEditorIDs adds the "internalpolicy_editors" edge to the InternalPolicy entity by IDs.
-func (gc *GroupCreate) AddInternalpolicyEditorIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddInternalpolicyEditorIDs(ids...)
-	return gc
-}
-
-// AddInternalpolicyEditors adds the "internalpolicy_editors" edges to the InternalPolicy entity.
-func (gc *GroupCreate) AddInternalpolicyEditors(i ...*InternalPolicy) *GroupCreate {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
-	}
-	return gc.AddInternalpolicyEditorIDs(ids...)
-}
-
-// AddInternalpolicyBlockedGroupIDs adds the "internalpolicy_blocked_groups" edge to the InternalPolicy entity by IDs.
-func (gc *GroupCreate) AddInternalpolicyBlockedGroupIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddInternalpolicyBlockedGroupIDs(ids...)
-	return gc
-}
-
-// AddInternalpolicyBlockedGroups adds the "internalpolicy_blocked_groups" edges to the InternalPolicy entity.
-func (gc *GroupCreate) AddInternalpolicyBlockedGroups(i ...*InternalPolicy) *GroupCreate {
-	ids := make([]string, len(i))
-	for j := range i {
-		ids[j] = i[j].ID
-	}
-	return gc.AddInternalpolicyBlockedGroupIDs(ids...)
-}
-
-// AddProgramViewerIDs adds the "program_viewers" edge to the Program entity by IDs.
-func (gc *GroupCreate) AddProgramViewerIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddProgramViewerIDs(ids...)
-	return gc
-}
-
-// AddProgramViewers adds the "program_viewers" edges to the Program entity.
-func (gc *GroupCreate) AddProgramViewers(p ...*Program) *GroupCreate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return gc.AddProgramViewerIDs(ids...)
-}
-
-// AddProgramEditorIDs adds the "program_editors" edge to the Program entity by IDs.
-func (gc *GroupCreate) AddProgramEditorIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddProgramEditorIDs(ids...)
-	return gc
-}
-
-// AddProgramEditors adds the "program_editors" edges to the Program entity.
-func (gc *GroupCreate) AddProgramEditors(p ...*Program) *GroupCreate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return gc.AddProgramEditorIDs(ids...)
-}
-
-// AddProgramBlockedGroupIDs adds the "program_blocked_groups" edge to the Program entity by IDs.
-func (gc *GroupCreate) AddProgramBlockedGroupIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddProgramBlockedGroupIDs(ids...)
-	return gc
-}
-
-// AddProgramBlockedGroups adds the "program_blocked_groups" edges to the Program entity.
-func (gc *GroupCreate) AddProgramBlockedGroups(p ...*Program) *GroupCreate {
-	ids := make([]string, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
-	}
-	return gc.AddProgramBlockedGroupIDs(ids...)
-}
-
-// AddRiskViewerIDs adds the "risk_viewers" edge to the Risk entity by IDs.
-func (gc *GroupCreate) AddRiskViewerIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddRiskViewerIDs(ids...)
-	return gc
-}
-
-// AddRiskViewers adds the "risk_viewers" edges to the Risk entity.
-func (gc *GroupCreate) AddRiskViewers(r ...*Risk) *GroupCreate {
-	ids := make([]string, len(r))
-	for i := range r {
-		ids[i] = r[i].ID
-	}
-	return gc.AddRiskViewerIDs(ids...)
-}
-
-// AddRiskEditorIDs adds the "risk_editors" edge to the Risk entity by IDs.
-func (gc *GroupCreate) AddRiskEditorIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddRiskEditorIDs(ids...)
-	return gc
-}
-
-// AddRiskEditors adds the "risk_editors" edges to the Risk entity.
-func (gc *GroupCreate) AddRiskEditors(r ...*Risk) *GroupCreate {
-	ids := make([]string, len(r))
-	for i := range r {
-		ids[i] = r[i].ID
-	}
-	return gc.AddRiskEditorIDs(ids...)
-}
-
-// AddRiskBlockedGroupIDs adds the "risk_blocked_groups" edge to the Risk entity by IDs.
-func (gc *GroupCreate) AddRiskBlockedGroupIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddRiskBlockedGroupIDs(ids...)
-	return gc
-}
-
-// AddRiskBlockedGroups adds the "risk_blocked_groups" edges to the Risk entity.
-func (gc *GroupCreate) AddRiskBlockedGroups(r ...*Risk) *GroupCreate {
-	ids := make([]string, len(r))
-	for i := range r {
-		ids[i] = r[i].ID
-	}
-	return gc.AddRiskBlockedGroupIDs(ids...)
-}
-
-// AddControlobjectiveViewerIDs adds the "controlobjective_viewers" edge to the ControlObjective entity by IDs.
-func (gc *GroupCreate) AddControlobjectiveViewerIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddControlobjectiveViewerIDs(ids...)
-	return gc
-}
-
-// AddControlobjectiveViewers adds the "controlobjective_viewers" edges to the ControlObjective entity.
-func (gc *GroupCreate) AddControlobjectiveViewers(c ...*ControlObjective) *GroupCreate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
-	}
-	return gc.AddControlobjectiveViewerIDs(ids...)
-}
-
-// AddControlobjectiveEditorIDs adds the "controlobjective_editors" edge to the ControlObjective entity by IDs.
-func (gc *GroupCreate) AddControlobjectiveEditorIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddControlobjectiveEditorIDs(ids...)
-	return gc
-}
-
-// AddControlobjectiveEditors adds the "controlobjective_editors" edges to the ControlObjective entity.
-func (gc *GroupCreate) AddControlobjectiveEditors(c ...*ControlObjective) *GroupCreate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
-	}
-	return gc.AddControlobjectiveEditorIDs(ids...)
-}
-
-// AddControlobjectiveBlockedGroupIDs adds the "controlobjective_blocked_groups" edge to the ControlObjective entity by IDs.
-func (gc *GroupCreate) AddControlobjectiveBlockedGroupIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddControlobjectiveBlockedGroupIDs(ids...)
-	return gc
-}
-
-// AddControlobjectiveBlockedGroups adds the "controlobjective_blocked_groups" edges to the ControlObjective entity.
-func (gc *GroupCreate) AddControlobjectiveBlockedGroups(c ...*ControlObjective) *GroupCreate {
-	ids := make([]string, len(c))
-	for i := range c {
-		ids[i] = c[i].ID
-	}
-	return gc.AddControlobjectiveBlockedGroupIDs(ids...)
-}
-
-// AddNarrativeViewerIDs adds the "narrative_viewers" edge to the Narrative entity by IDs.
-func (gc *GroupCreate) AddNarrativeViewerIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddNarrativeViewerIDs(ids...)
-	return gc
-}
-
-// AddNarrativeViewers adds the "narrative_viewers" edges to the Narrative entity.
-func (gc *GroupCreate) AddNarrativeViewers(n ...*Narrative) *GroupCreate {
-	ids := make([]string, len(n))
-	for i := range n {
-		ids[i] = n[i].ID
-	}
-	return gc.AddNarrativeViewerIDs(ids...)
-}
-
-// AddNarrativeEditorIDs adds the "narrative_editors" edge to the Narrative entity by IDs.
-func (gc *GroupCreate) AddNarrativeEditorIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddNarrativeEditorIDs(ids...)
-	return gc
-}
-
-// AddNarrativeEditors adds the "narrative_editors" edges to the Narrative entity.
-func (gc *GroupCreate) AddNarrativeEditors(n ...*Narrative) *GroupCreate {
-	ids := make([]string, len(n))
-	for i := range n {
-		ids[i] = n[i].ID
-	}
-	return gc.AddNarrativeEditorIDs(ids...)
-}
-
-// AddNarrativeBlockedGroupIDs adds the "narrative_blocked_groups" edge to the Narrative entity by IDs.
-func (gc *GroupCreate) AddNarrativeBlockedGroupIDs(ids ...string) *GroupCreate {
-	gc.mutation.AddNarrativeBlockedGroupIDs(ids...)
-	return gc
-}
-
-// AddNarrativeBlockedGroups adds the "narrative_blocked_groups" edges to the Narrative entity.
-func (gc *GroupCreate) AddNarrativeBlockedGroups(n ...*Narrative) *GroupCreate {
-	ids := make([]string, len(n))
-	for i := range n {
-		ids[i] = n[i].ID
-	}
-	return gc.AddNarrativeBlockedGroupIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the GroupMembership entity by IDs.
@@ -785,6 +920,431 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 		_node.OwnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := gc.mutation.ControlCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ControlCreatorsTable,
+			Columns: group.ControlCreatorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.OrganizationControlCreators
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.ControlObjectiveCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ControlObjectiveCreatorsTable,
+			Columns: group.ControlObjectiveCreatorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.OrganizationControlObjectiveCreators
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.GroupCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.GroupCreatorsTable,
+			Columns: group.GroupCreatorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.OrganizationGroupCreators
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.InternalPolicyCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.InternalPolicyCreatorsTable,
+			Columns: group.InternalPolicyCreatorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.OrganizationInternalPolicyCreators
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.NarrativeCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.NarrativeCreatorsTable,
+			Columns: group.NarrativeCreatorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.OrganizationNarrativeCreators
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.ProcedureCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ProcedureCreatorsTable,
+			Columns: group.ProcedureCreatorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.OrganizationProcedureCreators
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.ProgramCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ProgramCreatorsTable,
+			Columns: group.ProgramCreatorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.OrganizationProgramCreators
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.RiskCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.RiskCreatorsTable,
+			Columns: group.RiskCreatorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.OrganizationRiskCreators
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.TemplateCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.TemplateCreatorsTable,
+			Columns: group.TemplateCreatorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.OrganizationTemplateCreators
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.ProcedureEditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ProcedureEditorsTable,
+			Columns: group.ProcedureEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.ProcedureEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.ProcedureBlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ProcedureBlockedGroupsTable,
+			Columns: group.ProcedureBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.ProcedureBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.InternalpolicyEditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.InternalpolicyEditorsTable,
+			Columns: group.InternalpolicyEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.InternalPolicyEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.InternalpolicyBlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.InternalpolicyBlockedGroupsTable,
+			Columns: group.InternalpolicyBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.InternalPolicyBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.ProgramEditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ProgramEditorsTable,
+			Columns: group.ProgramEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.ProgramEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.ProgramBlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ProgramBlockedGroupsTable,
+			Columns: group.ProgramBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.ProgramBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.ProgramViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ProgramViewersTable,
+			Columns: group.ProgramViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.ProgramViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.RiskEditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.RiskEditorsTable,
+			Columns: group.RiskEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.RiskEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.RiskBlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.RiskBlockedGroupsTable,
+			Columns: group.RiskBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.RiskBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.RiskViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.RiskViewersTable,
+			Columns: group.RiskViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.RiskViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.ControlobjectiveEditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ControlobjectiveEditorsTable,
+			Columns: group.ControlobjectiveEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.ControlObjectiveEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.ControlobjectiveBlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ControlobjectiveBlockedGroupsTable,
+			Columns: group.ControlobjectiveBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.ControlObjectiveBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.ControlobjectiveViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ControlobjectiveViewersTable,
+			Columns: group.ControlobjectiveViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.ControlObjectiveViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.NarrativeEditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.NarrativeEditorsTable,
+			Columns: group.NarrativeEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.NarrativeEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.NarrativeBlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.NarrativeBlockedGroupsTable,
+			Columns: group.NarrativeBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.NarrativeBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.NarrativeViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.NarrativeViewersTable,
+			Columns: group.NarrativeViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.NarrativeViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := gc.mutation.SettingIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
@@ -889,278 +1449,6 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = gc.schemaConfig.GroupTasks
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := gc.mutation.ProcedureEditorsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.ProcedureEditorsTable,
-			Columns: group.ProcedureEditorsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = gc.schemaConfig.ProcedureEditors
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := gc.mutation.ProcedureBlockedGroupsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.ProcedureBlockedGroupsTable,
-			Columns: group.ProcedureBlockedGroupsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = gc.schemaConfig.ProcedureBlockedGroups
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := gc.mutation.InternalpolicyEditorsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.InternalpolicyEditorsTable,
-			Columns: group.InternalpolicyEditorsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = gc.schemaConfig.InternalPolicyEditors
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := gc.mutation.InternalpolicyBlockedGroupsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.InternalpolicyBlockedGroupsTable,
-			Columns: group.InternalpolicyBlockedGroupsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = gc.schemaConfig.InternalPolicyBlockedGroups
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := gc.mutation.ProgramViewersIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.ProgramViewersTable,
-			Columns: group.ProgramViewersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = gc.schemaConfig.ProgramViewers
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := gc.mutation.ProgramEditorsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.ProgramEditorsTable,
-			Columns: group.ProgramEditorsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = gc.schemaConfig.ProgramEditors
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := gc.mutation.ProgramBlockedGroupsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.ProgramBlockedGroupsTable,
-			Columns: group.ProgramBlockedGroupsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = gc.schemaConfig.ProgramBlockedGroups
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := gc.mutation.RiskViewersIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.RiskViewersTable,
-			Columns: group.RiskViewersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = gc.schemaConfig.RiskViewers
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := gc.mutation.RiskEditorsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.RiskEditorsTable,
-			Columns: group.RiskEditorsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = gc.schemaConfig.RiskEditors
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := gc.mutation.RiskBlockedGroupsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.RiskBlockedGroupsTable,
-			Columns: group.RiskBlockedGroupsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = gc.schemaConfig.RiskBlockedGroups
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := gc.mutation.ControlobjectiveViewersIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.ControlobjectiveViewersTable,
-			Columns: group.ControlobjectiveViewersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = gc.schemaConfig.ControlObjectiveViewers
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := gc.mutation.ControlobjectiveEditorsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.ControlobjectiveEditorsTable,
-			Columns: group.ControlobjectiveEditorsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = gc.schemaConfig.ControlObjectiveEditors
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := gc.mutation.ControlobjectiveBlockedGroupsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.ControlobjectiveBlockedGroupsTable,
-			Columns: group.ControlobjectiveBlockedGroupsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = gc.schemaConfig.ControlObjectiveBlockedGroups
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := gc.mutation.NarrativeViewersIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.NarrativeViewersTable,
-			Columns: group.NarrativeViewersPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = gc.schemaConfig.NarrativeViewers
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := gc.mutation.NarrativeEditorsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.NarrativeEditorsTable,
-			Columns: group.NarrativeEditorsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = gc.schemaConfig.NarrativeEditors
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := gc.mutation.NarrativeBlockedGroupsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   group.NarrativeBlockedGroupsTable,
-			Columns: group.NarrativeBlockedGroupsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = gc.schemaConfig.NarrativeBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

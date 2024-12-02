@@ -4290,28 +4290,37 @@ input CreateGroupInput {
 	"""
 	displayName: String
 	ownerID: ID
+	controlCreatorIDs: [ID!]
+	controlObjectiveCreatorIDs: [ID!]
+	groupCreatorIDs: [ID!]
+	internalPolicyCreatorIDs: [ID!]
+	narrativeCreatorIDs: [ID!]
+	procedureCreatorIDs: [ID!]
+	programCreatorIDs: [ID!]
+	riskCreatorIDs: [ID!]
+	templateCreatorIDs: [ID!]
+	procedureEditorIDs: [ID!]
+	procedureBlockedGroupIDs: [ID!]
+	internalpolicyEditorIDs: [ID!]
+	internalpolicyBlockedGroupIDs: [ID!]
+	programEditorIDs: [ID!]
+	programBlockedGroupIDs: [ID!]
+	programViewerIDs: [ID!]
+	riskEditorIDs: [ID!]
+	riskBlockedGroupIDs: [ID!]
+	riskViewerIDs: [ID!]
+	controlobjectiveEditorIDs: [ID!]
+	controlobjectiveBlockedGroupIDs: [ID!]
+	controlobjectiveViewerIDs: [ID!]
+	narrativeEditorIDs: [ID!]
+	narrativeBlockedGroupIDs: [ID!]
+	narrativeViewerIDs: [ID!]
 	settingID: ID!
 	userIDs: [ID!]
 	eventIDs: [ID!]
 	integrationIDs: [ID!]
 	fileIDs: [ID!]
 	taskIDs: [ID!]
-	procedureEditorIDs: [ID!]
-	procedureBlockedGroupIDs: [ID!]
-	internalpolicyEditorIDs: [ID!]
-	internalpolicyBlockedGroupIDs: [ID!]
-	programViewerIDs: [ID!]
-	programEditorIDs: [ID!]
-	programBlockedGroupIDs: [ID!]
-	riskViewerIDs: [ID!]
-	riskEditorIDs: [ID!]
-	riskBlockedGroupIDs: [ID!]
-	controlobjectiveViewerIDs: [ID!]
-	controlobjectiveEditorIDs: [ID!]
-	controlobjectiveBlockedGroupIDs: [ID!]
-	narrativeViewerIDs: [ID!]
-	narrativeEditorIDs: [ID!]
-	narrativeBlockedGroupIDs: [ID!]
 	createGroupSettings: CreateGroupSettingInput
 }
 """
@@ -4651,6 +4660,15 @@ input CreateOrganizationInput {
 	Whether the organization has a dedicated database
 	"""
 	dedicatedDb: Boolean
+	controlCreatorIDs: [ID!]
+	controlObjectiveCreatorIDs: [ID!]
+	groupCreatorIDs: [ID!]
+	internalPolicyCreatorIDs: [ID!]
+	narrativeCreatorIDs: [ID!]
+	procedureCreatorIDs: [ID!]
+	programCreatorIDs: [ID!]
+	riskCreatorIDs: [ID!]
+	templateCreatorIDs: [ID!]
 	parentID: ID
 	groupIDs: [ID!]
 	templateIDs: [ID!]
@@ -11426,28 +11444,37 @@ type Group implements Node {
 	"""
 	displayName: String!
 	owner: Organization
+	controlCreators: [Organization!]
+	controlObjectiveCreators: [Organization!]
+	groupCreators: [Organization!]
+	internalPolicyCreators: [Organization!]
+	narrativeCreators: [Organization!]
+	procedureCreators: [Organization!]
+	programCreators: [Organization!]
+	riskCreators: [Organization!]
+	templateCreators: [Organization!]
+	procedureEditors: [Procedure!]
+	procedureBlockedGroups: [Procedure!]
+	internalpolicyEditors: [InternalPolicy!]
+	internalpolicyBlockedGroups: [InternalPolicy!]
+	programEditors: [Program!]
+	programBlockedGroups: [Program!]
+	programViewers: [Program!]
+	riskEditors: [Risk!]
+	riskBlockedGroups: [Risk!]
+	riskViewers: [Risk!]
+	controlobjectiveEditors: [ControlObjective!]
+	controlobjectiveBlockedGroups: [ControlObjective!]
+	controlobjectiveViewers: [ControlObjective!]
+	narrativeEditors: [Narrative!]
+	narrativeBlockedGroups: [Narrative!]
+	narrativeViewers: [Narrative!]
 	setting: GroupSetting!
 	users: [User!]
 	events: [Event!]
 	integrations: [Integration!]
 	files: [File!]
 	tasks: [Task!]
-	procedureEditors: [Procedure!]
-	procedureBlockedGroups: [Procedure!]
-	internalpolicyEditors: [InternalPolicy!]
-	internalpolicyBlockedGroups: [InternalPolicy!]
-	programViewers: [Program!]
-	programEditors: [Program!]
-	programBlockedGroups: [Program!]
-	riskViewers: [Risk!]
-	riskEditors: [Risk!]
-	riskBlockedGroups: [Risk!]
-	controlobjectiveViewers: [ControlObjective!]
-	controlobjectiveEditors: [ControlObjective!]
-	controlobjectiveBlockedGroups: [ControlObjective!]
-	narrativeViewers: [Narrative!]
-	narrativeEditors: [Narrative!]
-	narrativeBlockedGroups: [Narrative!]
 	members: [GroupMembership!]
 }
 """
@@ -13042,6 +13069,131 @@ input GroupWhereInput {
 	hasOwner: Boolean
 	hasOwnerWith: [OrganizationWhereInput!]
 	"""
+	control_creators edge predicates
+	"""
+	hasControlCreators: Boolean
+	hasControlCreatorsWith: [OrganizationWhereInput!]
+	"""
+	control_objective_creators edge predicates
+	"""
+	hasControlObjectiveCreators: Boolean
+	hasControlObjectiveCreatorsWith: [OrganizationWhereInput!]
+	"""
+	group_creators edge predicates
+	"""
+	hasGroupCreators: Boolean
+	hasGroupCreatorsWith: [OrganizationWhereInput!]
+	"""
+	internal_policy_creators edge predicates
+	"""
+	hasInternalPolicyCreators: Boolean
+	hasInternalPolicyCreatorsWith: [OrganizationWhereInput!]
+	"""
+	narrative_creators edge predicates
+	"""
+	hasNarrativeCreators: Boolean
+	hasNarrativeCreatorsWith: [OrganizationWhereInput!]
+	"""
+	procedure_creators edge predicates
+	"""
+	hasProcedureCreators: Boolean
+	hasProcedureCreatorsWith: [OrganizationWhereInput!]
+	"""
+	program_creators edge predicates
+	"""
+	hasProgramCreators: Boolean
+	hasProgramCreatorsWith: [OrganizationWhereInput!]
+	"""
+	risk_creators edge predicates
+	"""
+	hasRiskCreators: Boolean
+	hasRiskCreatorsWith: [OrganizationWhereInput!]
+	"""
+	template_creators edge predicates
+	"""
+	hasTemplateCreators: Boolean
+	hasTemplateCreatorsWith: [OrganizationWhereInput!]
+	"""
+	procedure_editors edge predicates
+	"""
+	hasProcedureEditors: Boolean
+	hasProcedureEditorsWith: [ProcedureWhereInput!]
+	"""
+	procedure_blocked_groups edge predicates
+	"""
+	hasProcedureBlockedGroups: Boolean
+	hasProcedureBlockedGroupsWith: [ProcedureWhereInput!]
+	"""
+	internalpolicy_editors edge predicates
+	"""
+	hasInternalpolicyEditors: Boolean
+	hasInternalpolicyEditorsWith: [InternalPolicyWhereInput!]
+	"""
+	internalpolicy_blocked_groups edge predicates
+	"""
+	hasInternalpolicyBlockedGroups: Boolean
+	hasInternalpolicyBlockedGroupsWith: [InternalPolicyWhereInput!]
+	"""
+	program_editors edge predicates
+	"""
+	hasProgramEditors: Boolean
+	hasProgramEditorsWith: [ProgramWhereInput!]
+	"""
+	program_blocked_groups edge predicates
+	"""
+	hasProgramBlockedGroups: Boolean
+	hasProgramBlockedGroupsWith: [ProgramWhereInput!]
+	"""
+	program_viewers edge predicates
+	"""
+	hasProgramViewers: Boolean
+	hasProgramViewersWith: [ProgramWhereInput!]
+	"""
+	risk_editors edge predicates
+	"""
+	hasRiskEditors: Boolean
+	hasRiskEditorsWith: [RiskWhereInput!]
+	"""
+	risk_blocked_groups edge predicates
+	"""
+	hasRiskBlockedGroups: Boolean
+	hasRiskBlockedGroupsWith: [RiskWhereInput!]
+	"""
+	risk_viewers edge predicates
+	"""
+	hasRiskViewers: Boolean
+	hasRiskViewersWith: [RiskWhereInput!]
+	"""
+	controlobjective_editors edge predicates
+	"""
+	hasControlobjectiveEditors: Boolean
+	hasControlobjectiveEditorsWith: [ControlObjectiveWhereInput!]
+	"""
+	controlobjective_blocked_groups edge predicates
+	"""
+	hasControlobjectiveBlockedGroups: Boolean
+	hasControlobjectiveBlockedGroupsWith: [ControlObjectiveWhereInput!]
+	"""
+	controlobjective_viewers edge predicates
+	"""
+	hasControlobjectiveViewers: Boolean
+	hasControlobjectiveViewersWith: [ControlObjectiveWhereInput!]
+	"""
+	narrative_editors edge predicates
+	"""
+	hasNarrativeEditors: Boolean
+	hasNarrativeEditorsWith: [NarrativeWhereInput!]
+	"""
+	narrative_blocked_groups edge predicates
+	"""
+	hasNarrativeBlockedGroups: Boolean
+	hasNarrativeBlockedGroupsWith: [NarrativeWhereInput!]
+	"""
+	narrative_viewers edge predicates
+	"""
+	hasNarrativeViewers: Boolean
+	hasNarrativeViewersWith: [NarrativeWhereInput!]
+	"""
 	setting edge predicates
 	"""
 	hasSetting: Boolean
@@ -13071,86 +13223,6 @@ input GroupWhereInput {
 	"""
 	hasTasks: Boolean
 	hasTasksWith: [TaskWhereInput!]
-	"""
-	procedure_editors edge predicates
-	"""
-	hasProcedureEditors: Boolean
-	hasProcedureEditorsWith: [ProcedureWhereInput!]
-	"""
-	procedure_blocked_groups edge predicates
-	"""
-	hasProcedureBlockedGroups: Boolean
-	hasProcedureBlockedGroupsWith: [ProcedureWhereInput!]
-	"""
-	internalpolicy_editors edge predicates
-	"""
-	hasInternalpolicyEditors: Boolean
-	hasInternalpolicyEditorsWith: [InternalPolicyWhereInput!]
-	"""
-	internalpolicy_blocked_groups edge predicates
-	"""
-	hasInternalpolicyBlockedGroups: Boolean
-	hasInternalpolicyBlockedGroupsWith: [InternalPolicyWhereInput!]
-	"""
-	program_viewers edge predicates
-	"""
-	hasProgramViewers: Boolean
-	hasProgramViewersWith: [ProgramWhereInput!]
-	"""
-	program_editors edge predicates
-	"""
-	hasProgramEditors: Boolean
-	hasProgramEditorsWith: [ProgramWhereInput!]
-	"""
-	program_blocked_groups edge predicates
-	"""
-	hasProgramBlockedGroups: Boolean
-	hasProgramBlockedGroupsWith: [ProgramWhereInput!]
-	"""
-	risk_viewers edge predicates
-	"""
-	hasRiskViewers: Boolean
-	hasRiskViewersWith: [RiskWhereInput!]
-	"""
-	risk_editors edge predicates
-	"""
-	hasRiskEditors: Boolean
-	hasRiskEditorsWith: [RiskWhereInput!]
-	"""
-	risk_blocked_groups edge predicates
-	"""
-	hasRiskBlockedGroups: Boolean
-	hasRiskBlockedGroupsWith: [RiskWhereInput!]
-	"""
-	controlobjective_viewers edge predicates
-	"""
-	hasControlobjectiveViewers: Boolean
-	hasControlobjectiveViewersWith: [ControlObjectiveWhereInput!]
-	"""
-	controlobjective_editors edge predicates
-	"""
-	hasControlobjectiveEditors: Boolean
-	hasControlobjectiveEditorsWith: [ControlObjectiveWhereInput!]
-	"""
-	controlobjective_blocked_groups edge predicates
-	"""
-	hasControlobjectiveBlockedGroups: Boolean
-	hasControlobjectiveBlockedGroupsWith: [ControlObjectiveWhereInput!]
-	"""
-	narrative_viewers edge predicates
-	"""
-	hasNarrativeViewers: Boolean
-	hasNarrativeViewersWith: [NarrativeWhereInput!]
-	"""
-	narrative_editors edge predicates
-	"""
-	hasNarrativeEditors: Boolean
-	hasNarrativeEditorsWith: [NarrativeWhereInput!]
-	"""
-	narrative_blocked_groups edge predicates
-	"""
-	hasNarrativeBlockedGroups: Boolean
-	hasNarrativeBlockedGroupsWith: [NarrativeWhereInput!]
 	"""
 	members edge predicates
 	"""
@@ -20156,6 +20228,42 @@ type Organization implements Node {
 	Whether the organization has a dedicated database
 	"""
 	dedicatedDb: Boolean!
+	"""
+	groups that are allowed to create controls
+	"""
+	controlCreators: [Group!]
+	"""
+	groups that are allowed to create control_objectives
+	"""
+	controlObjectiveCreators: [Group!]
+	"""
+	groups that are allowed to create groups
+	"""
+	groupCreators: [Group!]
+	"""
+	groups that are allowed to create internal_policys
+	"""
+	internalPolicyCreators: [Group!]
+	"""
+	groups that are allowed to create narratives
+	"""
+	narrativeCreators: [Group!]
+	"""
+	groups that are allowed to create procedures
+	"""
+	procedureCreators: [Group!]
+	"""
+	groups that are allowed to create programs
+	"""
+	programCreators: [Group!]
+	"""
+	groups that are allowed to create risks
+	"""
+	riskCreators: [Group!]
+	"""
+	groups that are allowed to create templates
+	"""
+	templateCreators: [Group!]
 	parent: Organization
 	children(
 		"""
@@ -21563,6 +21671,51 @@ input OrganizationWhereInput {
 	avatarRemoteURLNotNil: Boolean
 	avatarRemoteURLEqualFold: String
 	avatarRemoteURLContainsFold: String
+	"""
+	control_creators edge predicates
+	"""
+	hasControlCreators: Boolean
+	hasControlCreatorsWith: [GroupWhereInput!]
+	"""
+	control_objective_creators edge predicates
+	"""
+	hasControlObjectiveCreators: Boolean
+	hasControlObjectiveCreatorsWith: [GroupWhereInput!]
+	"""
+	group_creators edge predicates
+	"""
+	hasGroupCreators: Boolean
+	hasGroupCreatorsWith: [GroupWhereInput!]
+	"""
+	internal_policy_creators edge predicates
+	"""
+	hasInternalPolicyCreators: Boolean
+	hasInternalPolicyCreatorsWith: [GroupWhereInput!]
+	"""
+	narrative_creators edge predicates
+	"""
+	hasNarrativeCreators: Boolean
+	hasNarrativeCreatorsWith: [GroupWhereInput!]
+	"""
+	procedure_creators edge predicates
+	"""
+	hasProcedureCreators: Boolean
+	hasProcedureCreatorsWith: [GroupWhereInput!]
+	"""
+	program_creators edge predicates
+	"""
+	hasProgramCreators: Boolean
+	hasProgramCreatorsWith: [GroupWhereInput!]
+	"""
+	risk_creators edge predicates
+	"""
+	hasRiskCreators: Boolean
+	hasRiskCreatorsWith: [GroupWhereInput!]
+	"""
+	template_creators edge predicates
+	"""
+	hasTemplateCreators: Boolean
+	hasTemplateCreatorsWith: [GroupWhereInput!]
 	"""
 	parent edge predicates
 	"""
@@ -32834,6 +32987,81 @@ input UpdateGroupInput {
 	displayName: String
 	ownerID: ID
 	clearOwner: Boolean
+	addControlCreatorIDs: [ID!]
+	removeControlCreatorIDs: [ID!]
+	clearControlCreators: Boolean
+	addControlObjectiveCreatorIDs: [ID!]
+	removeControlObjectiveCreatorIDs: [ID!]
+	clearControlObjectiveCreators: Boolean
+	addGroupCreatorIDs: [ID!]
+	removeGroupCreatorIDs: [ID!]
+	clearGroupCreators: Boolean
+	addInternalPolicyCreatorIDs: [ID!]
+	removeInternalPolicyCreatorIDs: [ID!]
+	clearInternalPolicyCreators: Boolean
+	addNarrativeCreatorIDs: [ID!]
+	removeNarrativeCreatorIDs: [ID!]
+	clearNarrativeCreators: Boolean
+	addProcedureCreatorIDs: [ID!]
+	removeProcedureCreatorIDs: [ID!]
+	clearProcedureCreators: Boolean
+	addProgramCreatorIDs: [ID!]
+	removeProgramCreatorIDs: [ID!]
+	clearProgramCreators: Boolean
+	addRiskCreatorIDs: [ID!]
+	removeRiskCreatorIDs: [ID!]
+	clearRiskCreators: Boolean
+	addTemplateCreatorIDs: [ID!]
+	removeTemplateCreatorIDs: [ID!]
+	clearTemplateCreators: Boolean
+	addProcedureEditorIDs: [ID!]
+	removeProcedureEditorIDs: [ID!]
+	clearProcedureEditors: Boolean
+	addProcedureBlockedGroupIDs: [ID!]
+	removeProcedureBlockedGroupIDs: [ID!]
+	clearProcedureBlockedGroups: Boolean
+	addInternalpolicyEditorIDs: [ID!]
+	removeInternalpolicyEditorIDs: [ID!]
+	clearInternalpolicyEditors: Boolean
+	addInternalpolicyBlockedGroupIDs: [ID!]
+	removeInternalpolicyBlockedGroupIDs: [ID!]
+	clearInternalpolicyBlockedGroups: Boolean
+	addProgramEditorIDs: [ID!]
+	removeProgramEditorIDs: [ID!]
+	clearProgramEditors: Boolean
+	addProgramBlockedGroupIDs: [ID!]
+	removeProgramBlockedGroupIDs: [ID!]
+	clearProgramBlockedGroups: Boolean
+	addProgramViewerIDs: [ID!]
+	removeProgramViewerIDs: [ID!]
+	clearProgramViewers: Boolean
+	addRiskEditorIDs: [ID!]
+	removeRiskEditorIDs: [ID!]
+	clearRiskEditors: Boolean
+	addRiskBlockedGroupIDs: [ID!]
+	removeRiskBlockedGroupIDs: [ID!]
+	clearRiskBlockedGroups: Boolean
+	addRiskViewerIDs: [ID!]
+	removeRiskViewerIDs: [ID!]
+	clearRiskViewers: Boolean
+	addControlobjectiveEditorIDs: [ID!]
+	removeControlobjectiveEditorIDs: [ID!]
+	clearControlobjectiveEditors: Boolean
+	addControlobjectiveBlockedGroupIDs: [ID!]
+	removeControlobjectiveBlockedGroupIDs: [ID!]
+	clearControlobjectiveBlockedGroups: Boolean
+	addControlobjectiveViewerIDs: [ID!]
+	removeControlobjectiveViewerIDs: [ID!]
+	clearControlobjectiveViewers: Boolean
+	addNarrativeEditorIDs: [ID!]
+	removeNarrativeEditorIDs: [ID!]
+	clearNarrativeEditors: Boolean
+	addNarrativeBlockedGroupIDs: [ID!]
+	removeNarrativeBlockedGroupIDs: [ID!]
+	clearNarrativeBlockedGroups: Boolean
+	addNarrativeViewerIDs: [ID!]
+	removeNarrativeViewerIDs: [ID!]
+	clearNarrativeViewers: Boolean
 	settingID: ID
 	addUserIDs: [ID!]
 	removeUserIDs: [ID!]
@@ -32850,54 +33078,6 @@ input UpdateGroupInput {
 	addTaskIDs: [ID!]
 	removeTaskIDs: [ID!]
 	clearTasks: Boolean
-	addProcedureEditorIDs: [ID!]
-	removeProcedureEditorIDs: [ID!]
-	clearProcedureEditors: Boolean
-	addProcedureBlockedGroupIDs: [ID!]
-	removeProcedureBlockedGroupIDs: [ID!]
-	clearProcedureBlockedGroups: Boolean
-	addInternalpolicyEditorIDs: [ID!]
-	removeInternalpolicyEditorIDs: [ID!]
-	clearInternalpolicyEditors: Boolean
-	addInternalpolicyBlockedGroupIDs: [ID!]
-	removeInternalpolicyBlockedGroupIDs: [ID!]
-	clearInternalpolicyBlockedGroups: Boolean
-	addProgramViewerIDs: [ID!]
-	removeProgramViewerIDs: [ID!]
-	clearProgramViewers: Boolean
-	addProgramEditorIDs: [ID!]
-	removeProgramEditorIDs: [ID!]
-	clearProgramEditors: Boolean
-	addProgramBlockedGroupIDs: [ID!]
-	removeProgramBlockedGroupIDs: [ID!]
-	clearProgramBlockedGroups: Boolean
-	addRiskViewerIDs: [ID!]
-	removeRiskViewerIDs: [ID!]
-	clearRiskViewers: Boolean
-	addRiskEditorIDs: [ID!]
-	removeRiskEditorIDs: [ID!]
-	clearRiskEditors: Boolean
-	addRiskBlockedGroupIDs: [ID!]
-	removeRiskBlockedGroupIDs: [ID!]
-	clearRiskBlockedGroups: Boolean
-	addControlobjectiveViewerIDs: [ID!]
-	removeControlobjectiveViewerIDs: [ID!]
-	clearControlobjectiveViewers: Boolean
-	addControlobjectiveEditorIDs: [ID!]
-	removeControlobjectiveEditorIDs: [ID!]
-	clearControlobjectiveEditors: Boolean
-	addControlobjectiveBlockedGroupIDs: [ID!]
-	removeControlobjectiveBlockedGroupIDs: [ID!]
-	clearControlobjectiveBlockedGroups: Boolean
-	addNarrativeViewerIDs: [ID!]
-	removeNarrativeViewerIDs: [ID!]
-	clearNarrativeViewers: Boolean
-	addNarrativeEditorIDs: [ID!]
-	removeNarrativeEditorIDs: [ID!]
-	clearNarrativeEditors: Boolean
-	addNarrativeBlockedGroupIDs: [ID!]
-	removeNarrativeBlockedGroupIDs: [ID!]
-	clearNarrativeBlockedGroups: Boolean
 	addGroupMembers: [CreateGroupMembershipInput!]
 	updateGroupSettings: UpdateGroupSettingInput
 }
@@ -33318,6 +33498,33 @@ input UpdateOrganizationInput {
 	"""
 	avatarRemoteURL: String
 	clearAvatarRemoteURL: Boolean
+	addControlCreatorIDs: [ID!]
+	removeControlCreatorIDs: [ID!]
+	clearControlCreators: Boolean
+	addControlObjectiveCreatorIDs: [ID!]
+	removeControlObjectiveCreatorIDs: [ID!]
+	clearControlObjectiveCreators: Boolean
+	addGroupCreatorIDs: [ID!]
+	removeGroupCreatorIDs: [ID!]
+	clearGroupCreators: Boolean
+	addInternalPolicyCreatorIDs: [ID!]
+	removeInternalPolicyCreatorIDs: [ID!]
+	clearInternalPolicyCreators: Boolean
+	addNarrativeCreatorIDs: [ID!]
+	removeNarrativeCreatorIDs: [ID!]
+	clearNarrativeCreators: Boolean
+	addProcedureCreatorIDs: [ID!]
+	removeProcedureCreatorIDs: [ID!]
+	clearProcedureCreators: Boolean
+	addProgramCreatorIDs: [ID!]
+	removeProgramCreatorIDs: [ID!]
+	clearProgramCreators: Boolean
+	addRiskCreatorIDs: [ID!]
+	removeRiskCreatorIDs: [ID!]
+	clearRiskCreators: Boolean
+	addTemplateCreatorIDs: [ID!]
+	removeTemplateCreatorIDs: [ID!]
+	clearTemplateCreators: Boolean
 	addGroupIDs: [ID!]
 	removeGroupIDs: [ID!]
 	clearGroups: Boolean

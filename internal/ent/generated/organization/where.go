@@ -972,6 +972,267 @@ func DedicatedDbNEQ(v bool) predicate.Organization {
 	return predicate.Organization(sql.FieldNEQ(FieldDedicatedDb, v))
 }
 
+// HasControlCreators applies the HasEdge predicate on the "control_creators" edge.
+func HasControlCreators() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, ControlCreatorsTable, ControlCreatorsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.OrganizationControlCreators
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasControlCreatorsWith applies the HasEdge predicate on the "control_creators" edge with a given conditions (other predicates).
+func HasControlCreatorsWith(preds ...predicate.Group) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newControlCreatorsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.OrganizationControlCreators
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasControlObjectiveCreators applies the HasEdge predicate on the "control_objective_creators" edge.
+func HasControlObjectiveCreators() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, ControlObjectiveCreatorsTable, ControlObjectiveCreatorsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.OrganizationControlObjectiveCreators
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasControlObjectiveCreatorsWith applies the HasEdge predicate on the "control_objective_creators" edge with a given conditions (other predicates).
+func HasControlObjectiveCreatorsWith(preds ...predicate.Group) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newControlObjectiveCreatorsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.OrganizationControlObjectiveCreators
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasGroupCreators applies the HasEdge predicate on the "group_creators" edge.
+func HasGroupCreators() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, GroupCreatorsTable, GroupCreatorsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.OrganizationGroupCreators
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasGroupCreatorsWith applies the HasEdge predicate on the "group_creators" edge with a given conditions (other predicates).
+func HasGroupCreatorsWith(preds ...predicate.Group) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newGroupCreatorsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.OrganizationGroupCreators
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasInternalPolicyCreators applies the HasEdge predicate on the "internal_policy_creators" edge.
+func HasInternalPolicyCreators() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, InternalPolicyCreatorsTable, InternalPolicyCreatorsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.OrganizationInternalPolicyCreators
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasInternalPolicyCreatorsWith applies the HasEdge predicate on the "internal_policy_creators" edge with a given conditions (other predicates).
+func HasInternalPolicyCreatorsWith(preds ...predicate.Group) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newInternalPolicyCreatorsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.OrganizationInternalPolicyCreators
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasNarrativeCreators applies the HasEdge predicate on the "narrative_creators" edge.
+func HasNarrativeCreators() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, NarrativeCreatorsTable, NarrativeCreatorsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.OrganizationNarrativeCreators
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasNarrativeCreatorsWith applies the HasEdge predicate on the "narrative_creators" edge with a given conditions (other predicates).
+func HasNarrativeCreatorsWith(preds ...predicate.Group) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newNarrativeCreatorsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.OrganizationNarrativeCreators
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasProcedureCreators applies the HasEdge predicate on the "procedure_creators" edge.
+func HasProcedureCreators() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, ProcedureCreatorsTable, ProcedureCreatorsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.OrganizationProcedureCreators
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasProcedureCreatorsWith applies the HasEdge predicate on the "procedure_creators" edge with a given conditions (other predicates).
+func HasProcedureCreatorsWith(preds ...predicate.Group) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newProcedureCreatorsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.OrganizationProcedureCreators
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasProgramCreators applies the HasEdge predicate on the "program_creators" edge.
+func HasProgramCreators() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, ProgramCreatorsTable, ProgramCreatorsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.OrganizationProgramCreators
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasProgramCreatorsWith applies the HasEdge predicate on the "program_creators" edge with a given conditions (other predicates).
+func HasProgramCreatorsWith(preds ...predicate.Group) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newProgramCreatorsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.OrganizationProgramCreators
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasRiskCreators applies the HasEdge predicate on the "risk_creators" edge.
+func HasRiskCreators() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, RiskCreatorsTable, RiskCreatorsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.OrganizationRiskCreators
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasRiskCreatorsWith applies the HasEdge predicate on the "risk_creators" edge with a given conditions (other predicates).
+func HasRiskCreatorsWith(preds ...predicate.Group) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newRiskCreatorsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.OrganizationRiskCreators
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasTemplateCreators applies the HasEdge predicate on the "template_creators" edge.
+func HasTemplateCreators() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, TemplateCreatorsTable, TemplateCreatorsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.OrganizationTemplateCreators
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasTemplateCreatorsWith applies the HasEdge predicate on the "template_creators" edge with a given conditions (other predicates).
+func HasTemplateCreatorsWith(preds ...predicate.Group) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newTemplateCreatorsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.OrganizationTemplateCreators
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasParent applies the HasEdge predicate on the "parent" edge.
 func HasParent() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {

@@ -4127,6 +4127,231 @@ var (
 			},
 		},
 	}
+	// OrganizationControlCreatorsColumns holds the columns for the "organization_control_creators" table.
+	OrganizationControlCreatorsColumns = []*schema.Column{
+		{Name: "organization_id", Type: field.TypeString},
+		{Name: "group_id", Type: field.TypeString},
+	}
+	// OrganizationControlCreatorsTable holds the schema information for the "organization_control_creators" table.
+	OrganizationControlCreatorsTable = &schema.Table{
+		Name:       "organization_control_creators",
+		Columns:    OrganizationControlCreatorsColumns,
+		PrimaryKey: []*schema.Column{OrganizationControlCreatorsColumns[0], OrganizationControlCreatorsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "organization_control_creators_organization_id",
+				Columns:    []*schema.Column{OrganizationControlCreatorsColumns[0]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "organization_control_creators_group_id",
+				Columns:    []*schema.Column{OrganizationControlCreatorsColumns[1]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// OrganizationControlObjectiveCreatorsColumns holds the columns for the "organization_control_objective_creators" table.
+	OrganizationControlObjectiveCreatorsColumns = []*schema.Column{
+		{Name: "organization_id", Type: field.TypeString},
+		{Name: "group_id", Type: field.TypeString},
+	}
+	// OrganizationControlObjectiveCreatorsTable holds the schema information for the "organization_control_objective_creators" table.
+	OrganizationControlObjectiveCreatorsTable = &schema.Table{
+		Name:       "organization_control_objective_creators",
+		Columns:    OrganizationControlObjectiveCreatorsColumns,
+		PrimaryKey: []*schema.Column{OrganizationControlObjectiveCreatorsColumns[0], OrganizationControlObjectiveCreatorsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "organization_control_objective_creators_organization_id",
+				Columns:    []*schema.Column{OrganizationControlObjectiveCreatorsColumns[0]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "organization_control_objective_creators_group_id",
+				Columns:    []*schema.Column{OrganizationControlObjectiveCreatorsColumns[1]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// OrganizationGroupCreatorsColumns holds the columns for the "organization_group_creators" table.
+	OrganizationGroupCreatorsColumns = []*schema.Column{
+		{Name: "organization_id", Type: field.TypeString},
+		{Name: "group_id", Type: field.TypeString},
+	}
+	// OrganizationGroupCreatorsTable holds the schema information for the "organization_group_creators" table.
+	OrganizationGroupCreatorsTable = &schema.Table{
+		Name:       "organization_group_creators",
+		Columns:    OrganizationGroupCreatorsColumns,
+		PrimaryKey: []*schema.Column{OrganizationGroupCreatorsColumns[0], OrganizationGroupCreatorsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "organization_group_creators_organization_id",
+				Columns:    []*schema.Column{OrganizationGroupCreatorsColumns[0]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "organization_group_creators_group_id",
+				Columns:    []*schema.Column{OrganizationGroupCreatorsColumns[1]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// OrganizationInternalPolicyCreatorsColumns holds the columns for the "organization_internal_policy_creators" table.
+	OrganizationInternalPolicyCreatorsColumns = []*schema.Column{
+		{Name: "organization_id", Type: field.TypeString},
+		{Name: "group_id", Type: field.TypeString},
+	}
+	// OrganizationInternalPolicyCreatorsTable holds the schema information for the "organization_internal_policy_creators" table.
+	OrganizationInternalPolicyCreatorsTable = &schema.Table{
+		Name:       "organization_internal_policy_creators",
+		Columns:    OrganizationInternalPolicyCreatorsColumns,
+		PrimaryKey: []*schema.Column{OrganizationInternalPolicyCreatorsColumns[0], OrganizationInternalPolicyCreatorsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "organization_internal_policy_creators_organization_id",
+				Columns:    []*schema.Column{OrganizationInternalPolicyCreatorsColumns[0]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "organization_internal_policy_creators_group_id",
+				Columns:    []*schema.Column{OrganizationInternalPolicyCreatorsColumns[1]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// OrganizationNarrativeCreatorsColumns holds the columns for the "organization_narrative_creators" table.
+	OrganizationNarrativeCreatorsColumns = []*schema.Column{
+		{Name: "organization_id", Type: field.TypeString},
+		{Name: "group_id", Type: field.TypeString},
+	}
+	// OrganizationNarrativeCreatorsTable holds the schema information for the "organization_narrative_creators" table.
+	OrganizationNarrativeCreatorsTable = &schema.Table{
+		Name:       "organization_narrative_creators",
+		Columns:    OrganizationNarrativeCreatorsColumns,
+		PrimaryKey: []*schema.Column{OrganizationNarrativeCreatorsColumns[0], OrganizationNarrativeCreatorsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "organization_narrative_creators_organization_id",
+				Columns:    []*schema.Column{OrganizationNarrativeCreatorsColumns[0]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "organization_narrative_creators_group_id",
+				Columns:    []*schema.Column{OrganizationNarrativeCreatorsColumns[1]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// OrganizationProcedureCreatorsColumns holds the columns for the "organization_procedure_creators" table.
+	OrganizationProcedureCreatorsColumns = []*schema.Column{
+		{Name: "organization_id", Type: field.TypeString},
+		{Name: "group_id", Type: field.TypeString},
+	}
+	// OrganizationProcedureCreatorsTable holds the schema information for the "organization_procedure_creators" table.
+	OrganizationProcedureCreatorsTable = &schema.Table{
+		Name:       "organization_procedure_creators",
+		Columns:    OrganizationProcedureCreatorsColumns,
+		PrimaryKey: []*schema.Column{OrganizationProcedureCreatorsColumns[0], OrganizationProcedureCreatorsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "organization_procedure_creators_organization_id",
+				Columns:    []*schema.Column{OrganizationProcedureCreatorsColumns[0]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "organization_procedure_creators_group_id",
+				Columns:    []*schema.Column{OrganizationProcedureCreatorsColumns[1]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// OrganizationProgramCreatorsColumns holds the columns for the "organization_program_creators" table.
+	OrganizationProgramCreatorsColumns = []*schema.Column{
+		{Name: "organization_id", Type: field.TypeString},
+		{Name: "group_id", Type: field.TypeString},
+	}
+	// OrganizationProgramCreatorsTable holds the schema information for the "organization_program_creators" table.
+	OrganizationProgramCreatorsTable = &schema.Table{
+		Name:       "organization_program_creators",
+		Columns:    OrganizationProgramCreatorsColumns,
+		PrimaryKey: []*schema.Column{OrganizationProgramCreatorsColumns[0], OrganizationProgramCreatorsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "organization_program_creators_organization_id",
+				Columns:    []*schema.Column{OrganizationProgramCreatorsColumns[0]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "organization_program_creators_group_id",
+				Columns:    []*schema.Column{OrganizationProgramCreatorsColumns[1]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// OrganizationRiskCreatorsColumns holds the columns for the "organization_risk_creators" table.
+	OrganizationRiskCreatorsColumns = []*schema.Column{
+		{Name: "organization_id", Type: field.TypeString},
+		{Name: "group_id", Type: field.TypeString},
+	}
+	// OrganizationRiskCreatorsTable holds the schema information for the "organization_risk_creators" table.
+	OrganizationRiskCreatorsTable = &schema.Table{
+		Name:       "organization_risk_creators",
+		Columns:    OrganizationRiskCreatorsColumns,
+		PrimaryKey: []*schema.Column{OrganizationRiskCreatorsColumns[0], OrganizationRiskCreatorsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "organization_risk_creators_organization_id",
+				Columns:    []*schema.Column{OrganizationRiskCreatorsColumns[0]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "organization_risk_creators_group_id",
+				Columns:    []*schema.Column{OrganizationRiskCreatorsColumns[1]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// OrganizationTemplateCreatorsColumns holds the columns for the "organization_template_creators" table.
+	OrganizationTemplateCreatorsColumns = []*schema.Column{
+		{Name: "organization_id", Type: field.TypeString},
+		{Name: "group_id", Type: field.TypeString},
+	}
+	// OrganizationTemplateCreatorsTable holds the schema information for the "organization_template_creators" table.
+	OrganizationTemplateCreatorsTable = &schema.Table{
+		Name:       "organization_template_creators",
+		Columns:    OrganizationTemplateCreatorsColumns,
+		PrimaryKey: []*schema.Column{OrganizationTemplateCreatorsColumns[0], OrganizationTemplateCreatorsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "organization_template_creators_organization_id",
+				Columns:    []*schema.Column{OrganizationTemplateCreatorsColumns[0]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "organization_template_creators_group_id",
+				Columns:    []*schema.Column{OrganizationTemplateCreatorsColumns[1]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// OrganizationPersonalAccessTokensColumns holds the columns for the "organization_personal_access_tokens" table.
 	OrganizationPersonalAccessTokensColumns = []*schema.Column{
 		{Name: "organization_id", Type: field.TypeString},
@@ -5327,6 +5552,15 @@ var (
 		NarrativeViewersTable,
 		OhAuthTooTokenEventsTable,
 		OrgMembershipEventsTable,
+		OrganizationControlCreatorsTable,
+		OrganizationControlObjectiveCreatorsTable,
+		OrganizationGroupCreatorsTable,
+		OrganizationInternalPolicyCreatorsTable,
+		OrganizationNarrativeCreatorsTable,
+		OrganizationProcedureCreatorsTable,
+		OrganizationProgramCreatorsTable,
+		OrganizationRiskCreatorsTable,
+		OrganizationTemplateCreatorsTable,
 		OrganizationPersonalAccessTokensTable,
 		OrganizationEventsTable,
 		OrganizationSecretsTable,
@@ -5625,6 +5859,24 @@ func init() {
 	OhAuthTooTokenEventsTable.ForeignKeys[1].RefTable = EventsTable
 	OrgMembershipEventsTable.ForeignKeys[0].RefTable = OrgMembershipsTable
 	OrgMembershipEventsTable.ForeignKeys[1].RefTable = EventsTable
+	OrganizationControlCreatorsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	OrganizationControlCreatorsTable.ForeignKeys[1].RefTable = GroupsTable
+	OrganizationControlObjectiveCreatorsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	OrganizationControlObjectiveCreatorsTable.ForeignKeys[1].RefTable = GroupsTable
+	OrganizationGroupCreatorsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	OrganizationGroupCreatorsTable.ForeignKeys[1].RefTable = GroupsTable
+	OrganizationInternalPolicyCreatorsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	OrganizationInternalPolicyCreatorsTable.ForeignKeys[1].RefTable = GroupsTable
+	OrganizationNarrativeCreatorsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	OrganizationNarrativeCreatorsTable.ForeignKeys[1].RefTable = GroupsTable
+	OrganizationProcedureCreatorsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	OrganizationProcedureCreatorsTable.ForeignKeys[1].RefTable = GroupsTable
+	OrganizationProgramCreatorsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	OrganizationProgramCreatorsTable.ForeignKeys[1].RefTable = GroupsTable
+	OrganizationRiskCreatorsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	OrganizationRiskCreatorsTable.ForeignKeys[1].RefTable = GroupsTable
+	OrganizationTemplateCreatorsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	OrganizationTemplateCreatorsTable.ForeignKeys[1].RefTable = GroupsTable
 	OrganizationPersonalAccessTokensTable.ForeignKeys[0].RefTable = OrganizationsTable
 	OrganizationPersonalAccessTokensTable.ForeignKeys[1].RefTable = PersonalAccessTokensTable
 	OrganizationEventsTable.ForeignKeys[0].RefTable = OrganizationsTable

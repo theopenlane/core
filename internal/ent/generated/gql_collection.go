@@ -5220,6 +5220,331 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				fieldSeen[group.FieldOwnerID] = struct{}{}
 			}
 
+		case "controlCreators":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: gr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			gr.WithNamedControlCreators(alias, func(wq *OrganizationQuery) {
+				*wq = *query
+			})
+
+		case "controlObjectiveCreators":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: gr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			gr.WithNamedControlObjectiveCreators(alias, func(wq *OrganizationQuery) {
+				*wq = *query
+			})
+
+		case "groupCreators":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: gr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			gr.WithNamedGroupCreators(alias, func(wq *OrganizationQuery) {
+				*wq = *query
+			})
+
+		case "internalPolicyCreators":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: gr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			gr.WithNamedInternalPolicyCreators(alias, func(wq *OrganizationQuery) {
+				*wq = *query
+			})
+
+		case "narrativeCreators":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: gr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			gr.WithNamedNarrativeCreators(alias, func(wq *OrganizationQuery) {
+				*wq = *query
+			})
+
+		case "procedureCreators":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: gr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			gr.WithNamedProcedureCreators(alias, func(wq *OrganizationQuery) {
+				*wq = *query
+			})
+
+		case "programCreators":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: gr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			gr.WithNamedProgramCreators(alias, func(wq *OrganizationQuery) {
+				*wq = *query
+			})
+
+		case "riskCreators":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: gr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			gr.WithNamedRiskCreators(alias, func(wq *OrganizationQuery) {
+				*wq = *query
+			})
+
+		case "templateCreators":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: gr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			gr.WithNamedTemplateCreators(alias, func(wq *OrganizationQuery) {
+				*wq = *query
+			})
+
+		case "procedureEditors":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ProcedureClient{config: gr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, procedureImplementors)...); err != nil {
+				return err
+			}
+			gr.WithNamedProcedureEditors(alias, func(wq *ProcedureQuery) {
+				*wq = *query
+			})
+
+		case "procedureBlockedGroups":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ProcedureClient{config: gr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, procedureImplementors)...); err != nil {
+				return err
+			}
+			gr.WithNamedProcedureBlockedGroups(alias, func(wq *ProcedureQuery) {
+				*wq = *query
+			})
+
+		case "internalpolicyEditors":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&InternalPolicyClient{config: gr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, internalpolicyImplementors)...); err != nil {
+				return err
+			}
+			gr.WithNamedInternalpolicyEditors(alias, func(wq *InternalPolicyQuery) {
+				*wq = *query
+			})
+
+		case "internalpolicyBlockedGroups":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&InternalPolicyClient{config: gr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, internalpolicyImplementors)...); err != nil {
+				return err
+			}
+			gr.WithNamedInternalpolicyBlockedGroups(alias, func(wq *InternalPolicyQuery) {
+				*wq = *query
+			})
+
+		case "programEditors":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ProgramClient{config: gr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, programImplementors)...); err != nil {
+				return err
+			}
+			gr.WithNamedProgramEditors(alias, func(wq *ProgramQuery) {
+				*wq = *query
+			})
+
+		case "programBlockedGroups":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ProgramClient{config: gr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, programImplementors)...); err != nil {
+				return err
+			}
+			gr.WithNamedProgramBlockedGroups(alias, func(wq *ProgramQuery) {
+				*wq = *query
+			})
+
+		case "programViewers":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ProgramClient{config: gr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, programImplementors)...); err != nil {
+				return err
+			}
+			gr.WithNamedProgramViewers(alias, func(wq *ProgramQuery) {
+				*wq = *query
+			})
+
+		case "riskEditors":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&RiskClient{config: gr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, riskImplementors)...); err != nil {
+				return err
+			}
+			gr.WithNamedRiskEditors(alias, func(wq *RiskQuery) {
+				*wq = *query
+			})
+
+		case "riskBlockedGroups":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&RiskClient{config: gr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, riskImplementors)...); err != nil {
+				return err
+			}
+			gr.WithNamedRiskBlockedGroups(alias, func(wq *RiskQuery) {
+				*wq = *query
+			})
+
+		case "riskViewers":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&RiskClient{config: gr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, riskImplementors)...); err != nil {
+				return err
+			}
+			gr.WithNamedRiskViewers(alias, func(wq *RiskQuery) {
+				*wq = *query
+			})
+
+		case "controlobjectiveEditors":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ControlObjectiveClient{config: gr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, controlobjectiveImplementors)...); err != nil {
+				return err
+			}
+			gr.WithNamedControlobjectiveEditors(alias, func(wq *ControlObjectiveQuery) {
+				*wq = *query
+			})
+
+		case "controlobjectiveBlockedGroups":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ControlObjectiveClient{config: gr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, controlobjectiveImplementors)...); err != nil {
+				return err
+			}
+			gr.WithNamedControlobjectiveBlockedGroups(alias, func(wq *ControlObjectiveQuery) {
+				*wq = *query
+			})
+
+		case "controlobjectiveViewers":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ControlObjectiveClient{config: gr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, controlobjectiveImplementors)...); err != nil {
+				return err
+			}
+			gr.WithNamedControlobjectiveViewers(alias, func(wq *ControlObjectiveQuery) {
+				*wq = *query
+			})
+
+		case "narrativeEditors":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&NarrativeClient{config: gr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, narrativeImplementors)...); err != nil {
+				return err
+			}
+			gr.WithNamedNarrativeEditors(alias, func(wq *NarrativeQuery) {
+				*wq = *query
+			})
+
+		case "narrativeBlockedGroups":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&NarrativeClient{config: gr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, narrativeImplementors)...); err != nil {
+				return err
+			}
+			gr.WithNamedNarrativeBlockedGroups(alias, func(wq *NarrativeQuery) {
+				*wq = *query
+			})
+
+		case "narrativeViewers":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&NarrativeClient{config: gr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, narrativeImplementors)...); err != nil {
+				return err
+			}
+			gr.WithNamedNarrativeViewers(alias, func(wq *NarrativeQuery) {
+				*wq = *query
+			})
+
 		case "setting":
 			var (
 				alias = field.Alias
@@ -5293,214 +5618,6 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				return err
 			}
 			gr.WithNamedTasks(alias, func(wq *TaskQuery) {
-				*wq = *query
-			})
-
-		case "procedureEditors":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&ProcedureClient{config: gr.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, procedureImplementors)...); err != nil {
-				return err
-			}
-			gr.WithNamedProcedureEditors(alias, func(wq *ProcedureQuery) {
-				*wq = *query
-			})
-
-		case "procedureBlockedGroups":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&ProcedureClient{config: gr.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, procedureImplementors)...); err != nil {
-				return err
-			}
-			gr.WithNamedProcedureBlockedGroups(alias, func(wq *ProcedureQuery) {
-				*wq = *query
-			})
-
-		case "internalpolicyEditors":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&InternalPolicyClient{config: gr.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, internalpolicyImplementors)...); err != nil {
-				return err
-			}
-			gr.WithNamedInternalpolicyEditors(alias, func(wq *InternalPolicyQuery) {
-				*wq = *query
-			})
-
-		case "internalpolicyBlockedGroups":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&InternalPolicyClient{config: gr.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, internalpolicyImplementors)...); err != nil {
-				return err
-			}
-			gr.WithNamedInternalpolicyBlockedGroups(alias, func(wq *InternalPolicyQuery) {
-				*wq = *query
-			})
-
-		case "programViewers":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&ProgramClient{config: gr.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, programImplementors)...); err != nil {
-				return err
-			}
-			gr.WithNamedProgramViewers(alias, func(wq *ProgramQuery) {
-				*wq = *query
-			})
-
-		case "programEditors":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&ProgramClient{config: gr.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, programImplementors)...); err != nil {
-				return err
-			}
-			gr.WithNamedProgramEditors(alias, func(wq *ProgramQuery) {
-				*wq = *query
-			})
-
-		case "programBlockedGroups":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&ProgramClient{config: gr.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, programImplementors)...); err != nil {
-				return err
-			}
-			gr.WithNamedProgramBlockedGroups(alias, func(wq *ProgramQuery) {
-				*wq = *query
-			})
-
-		case "riskViewers":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&RiskClient{config: gr.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, riskImplementors)...); err != nil {
-				return err
-			}
-			gr.WithNamedRiskViewers(alias, func(wq *RiskQuery) {
-				*wq = *query
-			})
-
-		case "riskEditors":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&RiskClient{config: gr.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, riskImplementors)...); err != nil {
-				return err
-			}
-			gr.WithNamedRiskEditors(alias, func(wq *RiskQuery) {
-				*wq = *query
-			})
-
-		case "riskBlockedGroups":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&RiskClient{config: gr.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, riskImplementors)...); err != nil {
-				return err
-			}
-			gr.WithNamedRiskBlockedGroups(alias, func(wq *RiskQuery) {
-				*wq = *query
-			})
-
-		case "controlobjectiveViewers":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&ControlObjectiveClient{config: gr.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, controlobjectiveImplementors)...); err != nil {
-				return err
-			}
-			gr.WithNamedControlobjectiveViewers(alias, func(wq *ControlObjectiveQuery) {
-				*wq = *query
-			})
-
-		case "controlobjectiveEditors":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&ControlObjectiveClient{config: gr.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, controlobjectiveImplementors)...); err != nil {
-				return err
-			}
-			gr.WithNamedControlobjectiveEditors(alias, func(wq *ControlObjectiveQuery) {
-				*wq = *query
-			})
-
-		case "controlobjectiveBlockedGroups":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&ControlObjectiveClient{config: gr.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, controlobjectiveImplementors)...); err != nil {
-				return err
-			}
-			gr.WithNamedControlobjectiveBlockedGroups(alias, func(wq *ControlObjectiveQuery) {
-				*wq = *query
-			})
-
-		case "narrativeViewers":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&NarrativeClient{config: gr.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, narrativeImplementors)...); err != nil {
-				return err
-			}
-			gr.WithNamedNarrativeViewers(alias, func(wq *NarrativeQuery) {
-				*wq = *query
-			})
-
-		case "narrativeEditors":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&NarrativeClient{config: gr.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, narrativeImplementors)...); err != nil {
-				return err
-			}
-			gr.WithNamedNarrativeEditors(alias, func(wq *NarrativeQuery) {
-				*wq = *query
-			})
-
-		case "narrativeBlockedGroups":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&NarrativeClient{config: gr.config}).Query()
-			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, narrativeImplementors)...); err != nil {
-				return err
-			}
-			gr.WithNamedNarrativeBlockedGroups(alias, func(wq *NarrativeQuery) {
 				*wq = *query
 			})
 
@@ -9039,6 +9156,123 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
+		case "controlCreators":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&GroupClient{config: o.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
+				return err
+			}
+			o.WithNamedControlCreators(alias, func(wq *GroupQuery) {
+				*wq = *query
+			})
+
+		case "controlObjectiveCreators":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&GroupClient{config: o.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
+				return err
+			}
+			o.WithNamedControlObjectiveCreators(alias, func(wq *GroupQuery) {
+				*wq = *query
+			})
+
+		case "groupCreators":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&GroupClient{config: o.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
+				return err
+			}
+			o.WithNamedGroupCreators(alias, func(wq *GroupQuery) {
+				*wq = *query
+			})
+
+		case "internalPolicyCreators":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&GroupClient{config: o.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
+				return err
+			}
+			o.WithNamedInternalPolicyCreators(alias, func(wq *GroupQuery) {
+				*wq = *query
+			})
+
+		case "narrativeCreators":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&GroupClient{config: o.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
+				return err
+			}
+			o.WithNamedNarrativeCreators(alias, func(wq *GroupQuery) {
+				*wq = *query
+			})
+
+		case "procedureCreators":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&GroupClient{config: o.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
+				return err
+			}
+			o.WithNamedProcedureCreators(alias, func(wq *GroupQuery) {
+				*wq = *query
+			})
+
+		case "programCreators":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&GroupClient{config: o.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
+				return err
+			}
+			o.WithNamedProgramCreators(alias, func(wq *GroupQuery) {
+				*wq = *query
+			})
+
+		case "riskCreators":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&GroupClient{config: o.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
+				return err
+			}
+			o.WithNamedRiskCreators(alias, func(wq *GroupQuery) {
+				*wq = *query
+			})
+
+		case "templateCreators":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&GroupClient{config: o.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
+				return err
+			}
+			o.WithNamedTemplateCreators(alias, func(wq *GroupQuery) {
+				*wq = *query
+			})
+
 		case "parent":
 			var (
 				alias = field.Alias
@@ -9097,10 +9331,10 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[1] == nil {
-								nodes[i].Edges.totalCount[1] = make(map[string]int)
+							if nodes[i].Edges.totalCount[10] == nil {
+								nodes[i].Edges.totalCount[10] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[1][alias] = n
+							nodes[i].Edges.totalCount[10][alias] = n
 						}
 						return nil
 					})
@@ -9108,10 +9342,10 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 					o.loadTotal = append(o.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Children)
-							if nodes[i].Edges.totalCount[1] == nil {
-								nodes[i].Edges.totalCount[1] = make(map[string]int)
+							if nodes[i].Edges.totalCount[10] == nil {
+								nodes[i].Edges.totalCount[10] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[1][alias] = n
+							nodes[i].Edges.totalCount[10][alias] = n
 						}
 						return nil
 					})

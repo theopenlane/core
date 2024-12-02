@@ -45,6 +45,24 @@ const (
 	FieldAvatarRemoteURL = "avatar_remote_url"
 	// FieldDedicatedDb holds the string denoting the dedicated_db field in the database.
 	FieldDedicatedDb = "dedicated_db"
+	// EdgeControlCreators holds the string denoting the control_creators edge name in mutations.
+	EdgeControlCreators = "control_creators"
+	// EdgeControlObjectiveCreators holds the string denoting the control_objective_creators edge name in mutations.
+	EdgeControlObjectiveCreators = "control_objective_creators"
+	// EdgeGroupCreators holds the string denoting the group_creators edge name in mutations.
+	EdgeGroupCreators = "group_creators"
+	// EdgeInternalPolicyCreators holds the string denoting the internal_policy_creators edge name in mutations.
+	EdgeInternalPolicyCreators = "internal_policy_creators"
+	// EdgeNarrativeCreators holds the string denoting the narrative_creators edge name in mutations.
+	EdgeNarrativeCreators = "narrative_creators"
+	// EdgeProcedureCreators holds the string denoting the procedure_creators edge name in mutations.
+	EdgeProcedureCreators = "procedure_creators"
+	// EdgeProgramCreators holds the string denoting the program_creators edge name in mutations.
+	EdgeProgramCreators = "program_creators"
+	// EdgeRiskCreators holds the string denoting the risk_creators edge name in mutations.
+	EdgeRiskCreators = "risk_creators"
+	// EdgeTemplateCreators holds the string denoting the template_creators edge name in mutations.
+	EdgeTemplateCreators = "template_creators"
 	// EdgeParent holds the string denoting the parent edge name in mutations.
 	EdgeParent = "parent"
 	// EdgeChildren holds the string denoting the children edge name in mutations.
@@ -115,6 +133,51 @@ const (
 	EdgeMembers = "members"
 	// Table holds the table name of the organization in the database.
 	Table = "organizations"
+	// ControlCreatorsTable is the table that holds the control_creators relation/edge. The primary key declared below.
+	ControlCreatorsTable = "organization_control_creators"
+	// ControlCreatorsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	ControlCreatorsInverseTable = "groups"
+	// ControlObjectiveCreatorsTable is the table that holds the control_objective_creators relation/edge. The primary key declared below.
+	ControlObjectiveCreatorsTable = "organization_control_objective_creators"
+	// ControlObjectiveCreatorsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	ControlObjectiveCreatorsInverseTable = "groups"
+	// GroupCreatorsTable is the table that holds the group_creators relation/edge. The primary key declared below.
+	GroupCreatorsTable = "organization_group_creators"
+	// GroupCreatorsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	GroupCreatorsInverseTable = "groups"
+	// InternalPolicyCreatorsTable is the table that holds the internal_policy_creators relation/edge. The primary key declared below.
+	InternalPolicyCreatorsTable = "organization_internal_policy_creators"
+	// InternalPolicyCreatorsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	InternalPolicyCreatorsInverseTable = "groups"
+	// NarrativeCreatorsTable is the table that holds the narrative_creators relation/edge. The primary key declared below.
+	NarrativeCreatorsTable = "organization_narrative_creators"
+	// NarrativeCreatorsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	NarrativeCreatorsInverseTable = "groups"
+	// ProcedureCreatorsTable is the table that holds the procedure_creators relation/edge. The primary key declared below.
+	ProcedureCreatorsTable = "organization_procedure_creators"
+	// ProcedureCreatorsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	ProcedureCreatorsInverseTable = "groups"
+	// ProgramCreatorsTable is the table that holds the program_creators relation/edge. The primary key declared below.
+	ProgramCreatorsTable = "organization_program_creators"
+	// ProgramCreatorsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	ProgramCreatorsInverseTable = "groups"
+	// RiskCreatorsTable is the table that holds the risk_creators relation/edge. The primary key declared below.
+	RiskCreatorsTable = "organization_risk_creators"
+	// RiskCreatorsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	RiskCreatorsInverseTable = "groups"
+	// TemplateCreatorsTable is the table that holds the template_creators relation/edge. The primary key declared below.
+	TemplateCreatorsTable = "organization_template_creators"
+	// TemplateCreatorsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	TemplateCreatorsInverseTable = "groups"
 	// ParentTable is the table that holds the parent relation/edge.
 	ParentTable = "organizations"
 	// ParentColumn is the table column denoting the parent relation/edge.
@@ -358,6 +421,33 @@ var Columns = []string{
 }
 
 var (
+	// ControlCreatorsPrimaryKey and ControlCreatorsColumn2 are the table columns denoting the
+	// primary key for the control_creators relation (M2M).
+	ControlCreatorsPrimaryKey = []string{"organization_id", "group_id"}
+	// ControlObjectiveCreatorsPrimaryKey and ControlObjectiveCreatorsColumn2 are the table columns denoting the
+	// primary key for the control_objective_creators relation (M2M).
+	ControlObjectiveCreatorsPrimaryKey = []string{"organization_id", "group_id"}
+	// GroupCreatorsPrimaryKey and GroupCreatorsColumn2 are the table columns denoting the
+	// primary key for the group_creators relation (M2M).
+	GroupCreatorsPrimaryKey = []string{"organization_id", "group_id"}
+	// InternalPolicyCreatorsPrimaryKey and InternalPolicyCreatorsColumn2 are the table columns denoting the
+	// primary key for the internal_policy_creators relation (M2M).
+	InternalPolicyCreatorsPrimaryKey = []string{"organization_id", "group_id"}
+	// NarrativeCreatorsPrimaryKey and NarrativeCreatorsColumn2 are the table columns denoting the
+	// primary key for the narrative_creators relation (M2M).
+	NarrativeCreatorsPrimaryKey = []string{"organization_id", "group_id"}
+	// ProcedureCreatorsPrimaryKey and ProcedureCreatorsColumn2 are the table columns denoting the
+	// primary key for the procedure_creators relation (M2M).
+	ProcedureCreatorsPrimaryKey = []string{"organization_id", "group_id"}
+	// ProgramCreatorsPrimaryKey and ProgramCreatorsColumn2 are the table columns denoting the
+	// primary key for the program_creators relation (M2M).
+	ProgramCreatorsPrimaryKey = []string{"organization_id", "group_id"}
+	// RiskCreatorsPrimaryKey and RiskCreatorsColumn2 are the table columns denoting the
+	// primary key for the risk_creators relation (M2M).
+	RiskCreatorsPrimaryKey = []string{"organization_id", "group_id"}
+	// TemplateCreatorsPrimaryKey and TemplateCreatorsColumn2 are the table columns denoting the
+	// primary key for the template_creators relation (M2M).
+	TemplateCreatorsPrimaryKey = []string{"organization_id", "group_id"}
 	// PersonalAccessTokensPrimaryKey and PersonalAccessTokensColumn2 are the table columns denoting the
 	// primary key for the personal_access_tokens relation (M2M).
 	PersonalAccessTokensPrimaryKey = []string{"organization_id", "personal_access_token_id"}
@@ -394,7 +484,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [5]ent.Hook
+	Hooks        [14]ent.Hook
 	Interceptors [2]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -499,6 +589,132 @@ func ByAvatarRemoteURL(opts ...sql.OrderTermOption) OrderOption {
 // ByDedicatedDb orders the results by the dedicated_db field.
 func ByDedicatedDb(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDedicatedDb, opts...).ToFunc()
+}
+
+// ByControlCreatorsCount orders the results by control_creators count.
+func ByControlCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newControlCreatorsStep(), opts...)
+	}
+}
+
+// ByControlCreators orders the results by control_creators terms.
+func ByControlCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newControlCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByControlObjectiveCreatorsCount orders the results by control_objective_creators count.
+func ByControlObjectiveCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newControlObjectiveCreatorsStep(), opts...)
+	}
+}
+
+// ByControlObjectiveCreators orders the results by control_objective_creators terms.
+func ByControlObjectiveCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newControlObjectiveCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByGroupCreatorsCount orders the results by group_creators count.
+func ByGroupCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newGroupCreatorsStep(), opts...)
+	}
+}
+
+// ByGroupCreators orders the results by group_creators terms.
+func ByGroupCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newGroupCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByInternalPolicyCreatorsCount orders the results by internal_policy_creators count.
+func ByInternalPolicyCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newInternalPolicyCreatorsStep(), opts...)
+	}
+}
+
+// ByInternalPolicyCreators orders the results by internal_policy_creators terms.
+func ByInternalPolicyCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newInternalPolicyCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByNarrativeCreatorsCount orders the results by narrative_creators count.
+func ByNarrativeCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newNarrativeCreatorsStep(), opts...)
+	}
+}
+
+// ByNarrativeCreators orders the results by narrative_creators terms.
+func ByNarrativeCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newNarrativeCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByProcedureCreatorsCount orders the results by procedure_creators count.
+func ByProcedureCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newProcedureCreatorsStep(), opts...)
+	}
+}
+
+// ByProcedureCreators orders the results by procedure_creators terms.
+func ByProcedureCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newProcedureCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByProgramCreatorsCount orders the results by program_creators count.
+func ByProgramCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newProgramCreatorsStep(), opts...)
+	}
+}
+
+// ByProgramCreators orders the results by program_creators terms.
+func ByProgramCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newProgramCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByRiskCreatorsCount orders the results by risk_creators count.
+func ByRiskCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newRiskCreatorsStep(), opts...)
+	}
+}
+
+// ByRiskCreators orders the results by risk_creators terms.
+func ByRiskCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newRiskCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByTemplateCreatorsCount orders the results by template_creators count.
+func ByTemplateCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newTemplateCreatorsStep(), opts...)
+	}
+}
+
+// ByTemplateCreators orders the results by template_creators terms.
+func ByTemplateCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTemplateCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
 }
 
 // ByParentField orders the results by parent field.
@@ -961,6 +1177,69 @@ func ByMembers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newMembersStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
+}
+func newControlCreatorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ControlCreatorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, ControlCreatorsTable, ControlCreatorsPrimaryKey...),
+	)
+}
+func newControlObjectiveCreatorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ControlObjectiveCreatorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, ControlObjectiveCreatorsTable, ControlObjectiveCreatorsPrimaryKey...),
+	)
+}
+func newGroupCreatorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(GroupCreatorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, GroupCreatorsTable, GroupCreatorsPrimaryKey...),
+	)
+}
+func newInternalPolicyCreatorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(InternalPolicyCreatorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, InternalPolicyCreatorsTable, InternalPolicyCreatorsPrimaryKey...),
+	)
+}
+func newNarrativeCreatorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(NarrativeCreatorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, NarrativeCreatorsTable, NarrativeCreatorsPrimaryKey...),
+	)
+}
+func newProcedureCreatorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ProcedureCreatorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, ProcedureCreatorsTable, ProcedureCreatorsPrimaryKey...),
+	)
+}
+func newProgramCreatorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ProgramCreatorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, ProgramCreatorsTable, ProgramCreatorsPrimaryKey...),
+	)
+}
+func newRiskCreatorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(RiskCreatorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, RiskCreatorsTable, RiskCreatorsPrimaryKey...),
+	)
+}
+func newTemplateCreatorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TemplateCreatorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, TemplateCreatorsTable, TemplateCreatorsPrimaryKey...),
+	)
 }
 func newParentStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
