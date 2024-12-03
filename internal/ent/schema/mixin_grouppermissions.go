@@ -15,8 +15,8 @@ import (
 // This allows for editor + blocked_groups, and optionally viewer groups
 // to be added as edges to the entity. The hooks are added to create the tuples in
 // FGA for the groups
-// After adding this mixin to a schema, you must also add the other edge the edge info
-// on the group schema to allow for m:m relationships
+// After adding this mixin to a schema, you must also update the EdgeInfo
+// to include the reverse edges on the group schema
 type GroupPermissionsMixin struct {
 	mixin.Schema
 

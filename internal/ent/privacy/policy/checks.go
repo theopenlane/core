@@ -5,10 +5,11 @@ import (
 
 	"entgo.io/ent"
 	"github.com/rs/zerolog/log"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
+
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
 
 // CheckCreateAccess checks if the user has access to create an object in the org

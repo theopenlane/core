@@ -6,11 +6,12 @@ import (
 
 	"github.com/rs/zerolog/log"
 	"github.com/stoewer/go-strcase"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
-	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/iam/fgax"
 )
 
 // CheckGroupBasedObjectCreationAccess is a rule that returns allow decision if user has

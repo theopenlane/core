@@ -111,13 +111,17 @@ func (d UserSetting) Interceptors() []ent.Interceptor {
 func (UserSetting) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			policy.DenyQueryIfNotAuthenticated(),
+			// always allow and allow interceptors to filter out users
 			privacy.AlwaysAllowRule(),
 		),
 		policy.WithOnMutationRules(
 			ent.OpUpdateOne|ent.OpUpdate,
 			rule.AllowIfContextHasPrivacyTokenOfType(&token.VerifyToken{}),
 			rule.AllowIfSelf(),
+		),
+		policy.WithOnMutationRules(
+			ent.OpCreate,
+			privacy.AlwaysAllowRule(),
 		),
 	)
 }

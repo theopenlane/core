@@ -5,6 +5,7 @@ import (
 	"reflect"
 
 	"entgo.io/ent/entql"
+
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 )

@@ -213,10 +213,12 @@ func (User) Annotations() []schema.Annotation {
 func (User) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
-			policy.DenyQueryIfNotAuthenticated(),
+			// interceptors are setup to filter users outside of the organization
 			privacy.AlwaysAllowRule(),
 		),
 		policy.WithOnMutationRules(
+			// the user hook has update operations on user create so we need to allow email
+			// token sign up for update operations as well
 			ent.OpCreate|ent.OpUpdateOne,
 			rule.AllowIfContextHasPrivacyTokenOfType(&token.SignUpToken{}),
 			rule.AllowIfContextHasPrivacyTokenOfType(&token.OrgInviteToken{}),

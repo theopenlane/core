@@ -2,6 +2,7 @@ package policy
 
 import (
 	"entgo.io/ent"
+
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 )
 
@@ -48,6 +49,7 @@ func WithMutationRules(rules ...privacy.MutationRule) PolicyOption {
 // WithOnQueryRules adds query rules to policy for specific operations.
 func WithOnMutationRules(op ent.Op, rules ...privacy.MutationRule) PolicyOption {
 	opRules := []privacy.MutationRule{}
+
 	for _, rule := range rules {
 		r := privacy.OnMutationOperation(
 			rule,

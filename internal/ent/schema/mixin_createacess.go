@@ -14,6 +14,7 @@ import (
 
 // createObjectTypes is a list of object types that access can be granted specifically for creation
 // outside of the normal organization edit permissions
+// TODO (sfunk): see if we can pull the annotations from the other schemas to make this dynamic
 var createObjectTypes = []string{
 	"control",
 	"control_objective",
