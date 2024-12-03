@@ -313,6 +313,14 @@ type NarrativeBuilder struct {
 	ProgramID string
 }
 
+type ControlBuilder struct {
+	client *client
+
+	// Fields
+	Name      string
+	ProgramID string
+}
+
 // MustNew organization builder is used to create, without authz checks, orgs in the database
 func (o *OrganizationBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Organization {
 	// no auth, so allow policy
@@ -1046,4 +1054,28 @@ func (n *NarrativeBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Narra
 		SaveX(ctx)
 
 	return narrative
+}
+
+// MustNew control builder is used to create, without authz checks, controls in the database
+func (c *ControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Control {
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+
+	// add client to context
+	ctx = ent.NewContext(ctx, c.client.db)
+
+	if c.Name == "" {
+		c.Name = gofakeit.AppName()
+	}
+
+	mutation := c.client.db.Control.Create().
+		SetName(c.Name)
+
+	if c.ProgramID != "" {
+		mutation.AddProgramIDs(c.ProgramID)
+	}
+
+	control := mutation.
+		SaveX(ctx)
+
+	return control
 }

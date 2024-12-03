@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
+	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entitlement"
@@ -852,6 +853,21 @@ func (ou *OrganizationUpdate) AddNarratives(n ...*Narrative) *OrganizationUpdate
 		ids[i] = n[i].ID
 	}
 	return ou.AddNarrativeIDs(ids...)
+}
+
+// AddControlIDs adds the "controls" edge to the Control entity by IDs.
+func (ou *OrganizationUpdate) AddControlIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.AddControlIDs(ids...)
+	return ou
+}
+
+// AddControls adds the "controls" edges to the Control entity.
+func (ou *OrganizationUpdate) AddControls(c ...*Control) *OrganizationUpdate {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return ou.AddControlIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -1718,6 +1734,27 @@ func (ou *OrganizationUpdate) RemoveNarratives(n ...*Narrative) *OrganizationUpd
 		ids[i] = n[i].ID
 	}
 	return ou.RemoveNarrativeIDs(ids...)
+}
+
+// ClearControls clears all "controls" edges to the Control entity.
+func (ou *OrganizationUpdate) ClearControls() *OrganizationUpdate {
+	ou.mutation.ClearControls()
+	return ou
+}
+
+// RemoveControlIDs removes the "controls" edge to Control entities by IDs.
+func (ou *OrganizationUpdate) RemoveControlIDs(ids ...string) *OrganizationUpdate {
+	ou.mutation.RemoveControlIDs(ids...)
+	return ou
+}
+
+// RemoveControls removes "controls" edges to Control entities.
+func (ou *OrganizationUpdate) RemoveControls(c ...*Control) *OrganizationUpdate {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return ou.RemoveControlIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -3858,6 +3895,54 @@ func (ou *OrganizationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if ou.mutation.ControlsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ControlsTable,
+			Columns: []string{organization.ControlsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Control
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.RemovedControlsIDs(); len(nodes) > 0 && !ou.mutation.ControlsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ControlsTable,
+			Columns: []string{organization.ControlsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Control
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ou.mutation.ControlsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ControlsTable,
+			Columns: []string{organization.ControlsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ou.schemaConfig.Control
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if ou.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -4719,6 +4804,21 @@ func (ouo *OrganizationUpdateOne) AddNarratives(n ...*Narrative) *OrganizationUp
 		ids[i] = n[i].ID
 	}
 	return ouo.AddNarrativeIDs(ids...)
+}
+
+// AddControlIDs adds the "controls" edge to the Control entity by IDs.
+func (ouo *OrganizationUpdateOne) AddControlIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.AddControlIDs(ids...)
+	return ouo
+}
+
+// AddControls adds the "controls" edges to the Control entity.
+func (ouo *OrganizationUpdateOne) AddControls(c ...*Control) *OrganizationUpdateOne {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return ouo.AddControlIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -5585,6 +5685,27 @@ func (ouo *OrganizationUpdateOne) RemoveNarratives(n ...*Narrative) *Organizatio
 		ids[i] = n[i].ID
 	}
 	return ouo.RemoveNarrativeIDs(ids...)
+}
+
+// ClearControls clears all "controls" edges to the Control entity.
+func (ouo *OrganizationUpdateOne) ClearControls() *OrganizationUpdateOne {
+	ouo.mutation.ClearControls()
+	return ouo
+}
+
+// RemoveControlIDs removes the "controls" edge to Control entities by IDs.
+func (ouo *OrganizationUpdateOne) RemoveControlIDs(ids ...string) *OrganizationUpdateOne {
+	ouo.mutation.RemoveControlIDs(ids...)
+	return ouo
+}
+
+// RemoveControls removes "controls" edges to Control entities.
+func (ouo *OrganizationUpdateOne) RemoveControls(c ...*Control) *OrganizationUpdateOne {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return ouo.RemoveControlIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -7750,6 +7871,54 @@ func (ouo *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizat
 			},
 		}
 		edge.Schema = ouo.schemaConfig.Narrative
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if ouo.mutation.ControlsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ControlsTable,
+			Columns: []string{organization.ControlsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Control
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.RemovedControlsIDs(); len(nodes) > 0 && !ouo.mutation.ControlsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ControlsTable,
+			Columns: []string{organization.ControlsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Control
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ouo.mutation.ControlsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ControlsTable,
+			Columns: []string{organization.ControlsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = ouo.schemaConfig.Control
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

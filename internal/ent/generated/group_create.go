@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/file"
@@ -561,6 +562,51 @@ func (gc *GroupCreate) AddControlobjectiveViewers(c ...*ControlObjective) *Group
 		ids[i] = c[i].ID
 	}
 	return gc.AddControlobjectiveViewerIDs(ids...)
+}
+
+// AddControlEditorIDs adds the "control_editors" edge to the Control entity by IDs.
+func (gc *GroupCreate) AddControlEditorIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddControlEditorIDs(ids...)
+	return gc
+}
+
+// AddControlEditors adds the "control_editors" edges to the Control entity.
+func (gc *GroupCreate) AddControlEditors(c ...*Control) *GroupCreate {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return gc.AddControlEditorIDs(ids...)
+}
+
+// AddControlBlockedGroupIDs adds the "control_blocked_groups" edge to the Control entity by IDs.
+func (gc *GroupCreate) AddControlBlockedGroupIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddControlBlockedGroupIDs(ids...)
+	return gc
+}
+
+// AddControlBlockedGroups adds the "control_blocked_groups" edges to the Control entity.
+func (gc *GroupCreate) AddControlBlockedGroups(c ...*Control) *GroupCreate {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return gc.AddControlBlockedGroupIDs(ids...)
+}
+
+// AddControlViewerIDs adds the "control_viewers" edge to the Control entity by IDs.
+func (gc *GroupCreate) AddControlViewerIDs(ids ...string) *GroupCreate {
+	gc.mutation.AddControlViewerIDs(ids...)
+	return gc
+}
+
+// AddControlViewers adds the "control_viewers" edges to the Control entity.
+func (gc *GroupCreate) AddControlViewers(c ...*Control) *GroupCreate {
+	ids := make([]string, len(c))
+	for i := range c {
+		ids[i] = c[i].ID
+	}
+	return gc.AddControlViewerIDs(ids...)
 }
 
 // AddNarrativeEditorIDs adds the "narrative_editors" edge to the Narrative entity by IDs.
@@ -1289,6 +1335,57 @@ func (gc *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = gc.schemaConfig.ControlObjectiveViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.ControlEditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ControlEditorsTable,
+			Columns: group.ControlEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.ControlEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.ControlBlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ControlBlockedGroupsTable,
+			Columns: group.ControlBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.ControlBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := gc.mutation.ControlViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ControlViewersTable,
+			Columns: group.ControlViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = gc.schemaConfig.ControlViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

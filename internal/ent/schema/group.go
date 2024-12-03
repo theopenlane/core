@@ -122,6 +122,11 @@ func (Group) Mixin() []ent.Mixin {
 					ViewPermissions: true,
 				},
 				{
+					Name:            "control",
+					Type:            Control.Type,
+					ViewPermissions: true,
+				},
+				{
 					Name:            "narrative",
 					Type:            Narrative.Type,
 					ViewPermissions: true,

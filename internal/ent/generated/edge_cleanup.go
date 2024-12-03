@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/privacy"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
+	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
@@ -568,6 +569,13 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 	if exists, err := FromContext(ctx).Narrative.Query().Where((narrative.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if narrativeCount, err := FromContext(ctx).Narrative.Delete().Where(narrative.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			log.Debug().Err(err).Int("count", narrativeCount).Msg("deleting narrative")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).Control.Query().Where((control.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if controlCount, err := FromContext(ctx).Control.Delete().Where(control.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", controlCount).Msg("deleting control")
 			return err
 		}
 	}

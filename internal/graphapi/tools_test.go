@@ -77,12 +77,10 @@ func (suite *GraphTestSuite) SetupSuite() {
 
 	// setup openFGA container
 	suite.ofgaTF = fgatest.NewFGATestcontainer(context.Background(), fgatest.WithModelFile(fgaModelFile))
-}
-
-func (suite *GraphTestSuite) SetupTest() {
-	t := suite.T()
 
 	ctx := context.Background()
+
+	t := suite.T()
 
 	// setup fga client
 	fgaClient, err := suite.ofgaTF.NewFgaClient(ctx)
@@ -148,22 +146,31 @@ func (suite *GraphTestSuite) SetupTest() {
 	require.NoError(t, err)
 
 	suite.client = c
+}
 
+func (suite *GraphTestSuite) SetupTest() {
+	ctx := context.Background()
 	// setup test data
 	suite.setupTestData(ctx)
 }
 
 func (suite *GraphTestSuite) TearDownTest() {
-	err := suite.client.db.Close()
-	require.NoError(suite.T(), err)
+
 }
 
 func (suite *GraphTestSuite) TearDownSuite() {
+	t := suite.T()
+
+	// close the database connection
+	err := suite.client.db.Close()
+	require.NoError(t, err)
+
+	// close the database container
 	testutils.TeardownFixture(suite.tf)
 
 	// terminate all fga containers
-	err := suite.ofgaTF.TeardownFixture()
-	require.NoError(suite.T(), err)
+	err = suite.ofgaTF.TeardownFixture()
+	require.NoError(t, err)
 }
 
 // expectUpload sets up the mock object store to expect an upload and related operations

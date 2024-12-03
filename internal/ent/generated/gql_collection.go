@@ -933,6 +933,60 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
+		case "owner":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: c.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			c.withOwner = query
+			if _, ok := fieldSeen[control.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, control.FieldOwnerID)
+				fieldSeen[control.FieldOwnerID] = struct{}{}
+			}
+
+		case "blockedGroups":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&GroupClient{config: c.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
+				return err
+			}
+			c.WithNamedBlockedGroups(alias, func(wq *GroupQuery) {
+				*wq = *query
+			})
+
+		case "editors":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&GroupClient{config: c.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
+				return err
+			}
+			c.WithNamedEditors(alias, func(wq *GroupQuery) {
+				*wq = *query
+			})
+
+		case "viewers":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&GroupClient{config: c.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
+				return err
+			}
+			c.WithNamedViewers(alias, func(wq *GroupQuery) {
+				*wq = *query
+			})
+
 		case "procedures":
 			var (
 				alias = field.Alias
@@ -1083,6 +1137,11 @@ func (c *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			if _, ok := fieldSeen[control.FieldTags]; !ok {
 				selectedFields = append(selectedFields, control.FieldTags)
 				fieldSeen[control.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[control.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, control.FieldOwnerID)
+				fieldSeen[control.FieldOwnerID] = struct{}{}
 			}
 		case "name":
 			if _, ok := fieldSeen[control.FieldName]; !ok {
@@ -1255,6 +1314,11 @@ func (ch *ControlHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 			if _, ok := fieldSeen[controlhistory.FieldTags]; !ok {
 				selectedFields = append(selectedFields, controlhistory.FieldTags)
 				fieldSeen[controlhistory.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[controlhistory.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, controlhistory.FieldOwnerID)
+				fieldSeen[controlhistory.FieldOwnerID] = struct{}{}
 			}
 		case "name":
 			if _, ok := fieldSeen[controlhistory.FieldName]; !ok {
@@ -5503,6 +5567,45 @@ func (gr *GroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *gra
 				return err
 			}
 			gr.WithNamedControlobjectiveViewers(alias, func(wq *ControlObjectiveQuery) {
+				*wq = *query
+			})
+
+		case "controlEditors":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ControlClient{config: gr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, controlImplementors)...); err != nil {
+				return err
+			}
+			gr.WithNamedControlEditors(alias, func(wq *ControlQuery) {
+				*wq = *query
+			})
+
+		case "controlBlockedGroups":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ControlClient{config: gr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, controlImplementors)...); err != nil {
+				return err
+			}
+			gr.WithNamedControlBlockedGroups(alias, func(wq *ControlQuery) {
+				*wq = *query
+			})
+
+		case "controlViewers":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ControlClient{config: gr.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, controlImplementors)...); err != nil {
+				return err
+			}
+			gr.WithNamedControlViewers(alias, func(wq *ControlQuery) {
 				*wq = *query
 			})
 
@@ -9775,6 +9878,19 @@ func (o *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				return err
 			}
 			o.WithNamedNarratives(alias, func(wq *NarrativeQuery) {
+				*wq = *query
+			})
+
+		case "controls":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ControlClient{config: o.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, controlImplementors)...); err != nil {
+				return err
+			}
+			o.WithNamedControls(alias, func(wq *ControlQuery) {
 				*wq = *query
 			})
 

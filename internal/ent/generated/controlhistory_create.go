@@ -159,6 +159,12 @@ func (chc *ControlHistoryCreate) SetTags(s []string) *ControlHistoryCreate {
 	return chc
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (chc *ControlHistoryCreate) SetOwnerID(s string) *ControlHistoryCreate {
+	chc.mutation.SetOwnerID(s)
+	return chc
+}
+
 // SetName sets the "name" field.
 func (chc *ControlHistoryCreate) SetName(s string) *ControlHistoryCreate {
 	chc.mutation.SetName(s)
@@ -332,7 +338,9 @@ func (chc *ControlHistoryCreate) Mutation() *ControlHistoryMutation {
 
 // Save creates the ControlHistory in the database.
 func (chc *ControlHistoryCreate) Save(ctx context.Context) (*ControlHistory, error) {
-	chc.defaults()
+	if err := chc.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, chc.sqlSave, chc.mutation, chc.hooks)
 }
 
@@ -359,20 +367,32 @@ func (chc *ControlHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (chc *ControlHistoryCreate) defaults() {
+func (chc *ControlHistoryCreate) defaults() error {
 	if _, ok := chc.mutation.HistoryTime(); !ok {
+		if controlhistory.DefaultHistoryTime == nil {
+			return fmt.Errorf("generated: uninitialized controlhistory.DefaultHistoryTime (forgotten import generated/runtime?)")
+		}
 		v := controlhistory.DefaultHistoryTime()
 		chc.mutation.SetHistoryTime(v)
 	}
 	if _, ok := chc.mutation.CreatedAt(); !ok {
+		if controlhistory.DefaultCreatedAt == nil {
+			return fmt.Errorf("generated: uninitialized controlhistory.DefaultCreatedAt (forgotten import generated/runtime?)")
+		}
 		v := controlhistory.DefaultCreatedAt()
 		chc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := chc.mutation.UpdatedAt(); !ok {
+		if controlhistory.DefaultUpdatedAt == nil {
+			return fmt.Errorf("generated: uninitialized controlhistory.DefaultUpdatedAt (forgotten import generated/runtime?)")
+		}
 		v := controlhistory.DefaultUpdatedAt()
 		chc.mutation.SetUpdatedAt(v)
 	}
 	if _, ok := chc.mutation.MappingID(); !ok {
+		if controlhistory.DefaultMappingID == nil {
+			return fmt.Errorf("generated: uninitialized controlhistory.DefaultMappingID (forgotten import generated/runtime?)")
+		}
 		v := controlhistory.DefaultMappingID()
 		chc.mutation.SetMappingID(v)
 	}
@@ -381,9 +401,13 @@ func (chc *ControlHistoryCreate) defaults() {
 		chc.mutation.SetTags(v)
 	}
 	if _, ok := chc.mutation.ID(); !ok {
+		if controlhistory.DefaultID == nil {
+			return fmt.Errorf("generated: uninitialized controlhistory.DefaultID (forgotten import generated/runtime?)")
+		}
 		v := controlhistory.DefaultID()
 		chc.mutation.SetID(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -401,6 +425,9 @@ func (chc *ControlHistoryCreate) check() error {
 	}
 	if _, ok := chc.mutation.MappingID(); !ok {
 		return &ValidationError{Name: "mapping_id", err: errors.New(`generated: missing required field "ControlHistory.mapping_id"`)}
+	}
+	if _, ok := chc.mutation.OwnerID(); !ok {
+		return &ValidationError{Name: "owner_id", err: errors.New(`generated: missing required field "ControlHistory.owner_id"`)}
 	}
 	if _, ok := chc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "ControlHistory.name"`)}
@@ -484,6 +511,10 @@ func (chc *ControlHistoryCreate) createSpec() (*ControlHistory, *sqlgraph.Create
 	if value, ok := chc.mutation.Tags(); ok {
 		_spec.SetField(controlhistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
+	}
+	if value, ok := chc.mutation.OwnerID(); ok {
+		_spec.SetField(controlhistory.FieldOwnerID, field.TypeString, value)
+		_node.OwnerID = value
 	}
 	if value, ok := chc.mutation.Name(); ok {
 		_spec.SetField(controlhistory.FieldName, field.TypeString, value)

@@ -204,6 +204,7 @@ var (
 		{Name: "details", Type: field.TypeJSON, Nullable: true},
 		{Name: "control_objective_controls", Type: field.TypeString, Nullable: true},
 		{Name: "internal_policy_controls", Type: field.TypeString, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString},
 	}
 	// ControlsTable holds the schema information for the "controls" table.
 	ControlsTable = &schema.Table{
@@ -223,6 +224,12 @@ var (
 				RefColumns: []*schema.Column{InternalPoliciesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
+			{
+				Symbol:     "controls_organizations_controls",
+				Columns:    []*schema.Column{ControlsColumns[23]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
 		},
 	}
 	// ControlHistoryColumns holds the columns for the "control_history" table.
@@ -239,6 +246,7 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "mapping_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "status", Type: field.TypeString, Nullable: true},
@@ -3102,6 +3110,81 @@ var (
 			},
 		},
 	}
+	// ControlBlockedGroupsColumns holds the columns for the "control_blocked_groups" table.
+	ControlBlockedGroupsColumns = []*schema.Column{
+		{Name: "control_id", Type: field.TypeString},
+		{Name: "group_id", Type: field.TypeString},
+	}
+	// ControlBlockedGroupsTable holds the schema information for the "control_blocked_groups" table.
+	ControlBlockedGroupsTable = &schema.Table{
+		Name:       "control_blocked_groups",
+		Columns:    ControlBlockedGroupsColumns,
+		PrimaryKey: []*schema.Column{ControlBlockedGroupsColumns[0], ControlBlockedGroupsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "control_blocked_groups_control_id",
+				Columns:    []*schema.Column{ControlBlockedGroupsColumns[0]},
+				RefColumns: []*schema.Column{ControlsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "control_blocked_groups_group_id",
+				Columns:    []*schema.Column{ControlBlockedGroupsColumns[1]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// ControlEditorsColumns holds the columns for the "control_editors" table.
+	ControlEditorsColumns = []*schema.Column{
+		{Name: "control_id", Type: field.TypeString},
+		{Name: "group_id", Type: field.TypeString},
+	}
+	// ControlEditorsTable holds the schema information for the "control_editors" table.
+	ControlEditorsTable = &schema.Table{
+		Name:       "control_editors",
+		Columns:    ControlEditorsColumns,
+		PrimaryKey: []*schema.Column{ControlEditorsColumns[0], ControlEditorsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "control_editors_control_id",
+				Columns:    []*schema.Column{ControlEditorsColumns[0]},
+				RefColumns: []*schema.Column{ControlsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "control_editors_group_id",
+				Columns:    []*schema.Column{ControlEditorsColumns[1]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// ControlViewersColumns holds the columns for the "control_viewers" table.
+	ControlViewersColumns = []*schema.Column{
+		{Name: "control_id", Type: field.TypeString},
+		{Name: "group_id", Type: field.TypeString},
+	}
+	// ControlViewersTable holds the schema information for the "control_viewers" table.
+	ControlViewersTable = &schema.Table{
+		Name:       "control_viewers",
+		Columns:    ControlViewersColumns,
+		PrimaryKey: []*schema.Column{ControlViewersColumns[0], ControlViewersColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "control_viewers_control_id",
+				Columns:    []*schema.Column{ControlViewersColumns[0]},
+				RefColumns: []*schema.Column{ControlsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "control_viewers_group_id",
+				Columns:    []*schema.Column{ControlViewersColumns[1]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// ControlProceduresColumns holds the columns for the "control_procedures" table.
 	ControlProceduresColumns = []*schema.Column{
 		{Name: "control_id", Type: field.TypeString},
@@ -5511,6 +5594,9 @@ var (
 		WebhooksTable,
 		WebhookHistoryTable,
 		ContactFilesTable,
+		ControlBlockedGroupsTable,
+		ControlEditorsTable,
+		ControlViewersTable,
 		ControlProceduresTable,
 		ControlSubcontrolsTable,
 		ControlNarrativesTable,
@@ -5618,6 +5704,7 @@ func init() {
 	}
 	ControlsTable.ForeignKeys[0].RefTable = ControlObjectivesTable
 	ControlsTable.ForeignKeys[1].RefTable = InternalPoliciesTable
+	ControlsTable.ForeignKeys[2].RefTable = OrganizationsTable
 	ControlHistoryTable.Annotation = &entsql.Annotation{
 		Table: "control_history",
 	}
@@ -5777,6 +5864,12 @@ func init() {
 	}
 	ContactFilesTable.ForeignKeys[0].RefTable = ContactsTable
 	ContactFilesTable.ForeignKeys[1].RefTable = FilesTable
+	ControlBlockedGroupsTable.ForeignKeys[0].RefTable = ControlsTable
+	ControlBlockedGroupsTable.ForeignKeys[1].RefTable = GroupsTable
+	ControlEditorsTable.ForeignKeys[0].RefTable = ControlsTable
+	ControlEditorsTable.ForeignKeys[1].RefTable = GroupsTable
+	ControlViewersTable.ForeignKeys[0].RefTable = ControlsTable
+	ControlViewersTable.ForeignKeys[1].RefTable = GroupsTable
 	ControlProceduresTable.ForeignKeys[0].RefTable = ControlsTable
 	ControlProceduresTable.ForeignKeys[1].RefTable = ProceduresTable
 	ControlSubcontrolsTable.ForeignKeys[0].RefTable = ControlsTable
