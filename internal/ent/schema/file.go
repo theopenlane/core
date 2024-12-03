@@ -1,8 +1,6 @@
 package schema
 
 import (
-	"context"
-
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
@@ -127,14 +125,12 @@ func (File) Policy() ent.Policy {
 		policy.WithQueryRules(
 			entfga.CheckReadAccess[*generated.FileQuery](),
 		),
+		policy.WithOnMutationRules(
+			// check permissions on delete and update operations, creation is handled by the parent object
+			ent.OpDelete|ent.OpDeleteOne|ent.OpUpdate|ent.OpUpdateOne,
+			entfga.CheckEditAccess[*generated.FileMutation](),
+		),
 		policy.WithMutationRules(
-			privacy.OnMutationOperation(
-				privacy.FileMutationRuleFunc(func(ctx context.Context, m *generated.FileMutation) error {
-					return m.CheckAccessForEdit(ctx)
-				}),
-				// check permissions on delete and update operations, creation is handled by the parent object
-				ent.OpDelete|ent.OpDeleteOne|ent.OpUpdate|ent.OpUpdateOne,
-			),
 			privacy.AlwaysAllowRule(),
 		),
 	)

@@ -5,35 +5,31 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 )
 
-var (
-	// prePolicy is executed before privacy policy
-	prePolicy = privacy.Policy{
-		Query:    privacy.QueryPolicy{},
-		Mutation: privacy.MutationPolicy{},
-	}
+// prePolicy is executed before privacy policy
+var prePolicy = privacy.Policy{
+	Query:    privacy.QueryPolicy{},
+	Mutation: privacy.MutationPolicy{},
+}
 
-	// postPolicy is executed after privacy policy
-	postPolicy = privacy.Policy{
-		Query: privacy.QueryPolicy{
-			privacy.AlwaysDenyRule(),
-		},
-		Mutation: privacy.MutationPolicy{
-			privacy.AlwaysDenyRule(),
-		},
-	}
-)
+// postPolicy is executed after privacy policy
+var postPolicy = privacy.Policy{
+	Query: privacy.QueryPolicy{
+		privacy.AlwaysDenyRule(),
+	},
+	Mutation: privacy.MutationPolicy{
+		privacy.AlwaysDenyRule(),
+	},
+}
 
-type (
-	// PolicyOption configures policy creation.
-	PolicyOption func(*policies)
+// PolicyOption configures policy creation.
+type PolicyOption func(*policies)
 
-	// policies aggregate policy options.
-	policies struct {
-		query     privacy.QueryPolicy
-		mutation  privacy.MutationPolicy
-		pre, post privacy.Policy
-	}
-)
+// policies aggregate policy options.
+type policies struct {
+	query     privacy.QueryPolicy
+	mutation  privacy.MutationPolicy
+	pre, post privacy.Policy
+}
 
 // WithQueryRules adds query rules to policy.
 func WithQueryRules(rules ...privacy.QueryRule) PolicyOption {
@@ -46,6 +42,23 @@ func WithQueryRules(rules ...privacy.QueryRule) PolicyOption {
 func WithMutationRules(rules ...privacy.MutationRule) PolicyOption {
 	return func(policies *policies) {
 		policies.mutation = append(policies.mutation, rules...)
+	}
+}
+
+// WithOnQueryRules adds query rules to policy for specific operations.
+func WithOnMutationRules(op ent.Op, rules ...privacy.MutationRule) PolicyOption {
+	opRules := []privacy.MutationRule{}
+	for _, rule := range rules {
+		r := privacy.OnMutationOperation(
+			rule,
+			op,
+		)
+
+		opRules = append(opRules, r)
+	}
+
+	return func(policies *policies) {
+		policies.mutation = append(policies.mutation, opRules...)
 	}
 }
 

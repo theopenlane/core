@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/pkg/enums"
@@ -210,33 +211,23 @@ func (User) Annotations() []schema.Annotation {
 
 // Policy of the User
 func (User) Policy() ent.Policy {
-	return privacy.Policy{
-		Mutation: privacy.MutationPolicy{
-			privacy.OnMutationOperation(
-				privacy.MutationPolicy{
-					rule.AllowIfContextHasPrivacyTokenOfType(&token.SignUpToken{}),
-					rule.AllowIfContextHasPrivacyTokenOfType(&token.OrgInviteToken{}),
-					rule.AllowIfContextHasPrivacyTokenOfType(&token.OauthTooToken{}),
-					rule.AllowIfSelf(),
-					privacy.AlwaysDenyRule(),
-				},
-				// the user hook has update operations on user create so we need to allow email token sign up for update
-				// operations as well
-				ent.OpCreate|ent.OpUpdateOne,
-			),
-			privacy.OnMutationOperation(
-				privacy.MutationPolicy{
-					rule.AllowIfSelf(),
-					privacy.AlwaysDenyRule(),
-				},
-				ent.OpUpdateOne|ent.OpUpdate|ent.OpDeleteOne|ent.OpDelete,
-			),
-		},
-		Query: privacy.QueryPolicy{
-			// Privacy will be always allow, but interceptors will filter the queries
+	return policy.NewPolicy(
+		policy.WithQueryRules(
+			policy.DenyQueryIfNotAuthenticated(),
 			privacy.AlwaysAllowRule(),
-		},
-	}
+		),
+		policy.WithOnMutationRules(
+			ent.OpCreate|ent.OpUpdateOne,
+			rule.AllowIfContextHasPrivacyTokenOfType(&token.SignUpToken{}),
+			rule.AllowIfContextHasPrivacyTokenOfType(&token.OrgInviteToken{}),
+			rule.AllowIfContextHasPrivacyTokenOfType(&token.OauthTooToken{}),
+			rule.AllowIfSelf(),
+		),
+		policy.WithOnMutationRules(
+			ent.OpUpdate|ent.OpDeleteOne|ent.OpDelete,
+			rule.AllowIfSelf(),
+		),
+	)
 }
 
 func (User) Hooks() []ent.Hook {

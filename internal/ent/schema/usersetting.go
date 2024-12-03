@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/pkg/enums"
@@ -108,21 +109,15 @@ func (d UserSetting) Interceptors() []ent.Interceptor {
 }
 
 func (UserSetting) Policy() ent.Policy {
-	return privacy.Policy{
-		Mutation: privacy.MutationPolicy{
-			privacy.OnMutationOperation(
-				privacy.MutationPolicy{
-					rule.AllowIfContextHasPrivacyTokenOfType(&token.VerifyToken{}),
-					rule.AllowIfSelf(),
-					privacy.AlwaysDenyRule(),
-				},
-				// only resolvers exist for update operations
-				ent.OpUpdateOne|ent.OpUpdate,
-			),
-		},
-		Query: privacy.QueryPolicy{
-			// Privacy will be always allow, but interceptors will filter the queries
+	return policy.NewPolicy(
+		policy.WithQueryRules(
+			policy.DenyQueryIfNotAuthenticated(),
 			privacy.AlwaysAllowRule(),
-		},
-	}
+		),
+		policy.WithOnMutationRules(
+			ent.OpUpdateOne|ent.OpUpdate,
+			rule.AllowIfContextHasPrivacyTokenOfType(&token.VerifyToken{}),
+			rule.AllowIfSelf(),
+		),
+	)
 }
